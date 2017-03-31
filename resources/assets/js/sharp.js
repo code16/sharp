@@ -1,13 +1,16 @@
 import Vue from 'vue';
-import ElementUI from 'element-ui';
 import Form from './components/Form';
 
-Vue.use(ElementUI);
+
+
+window.Vue = Vue;
+
 
 
 new Vue({
     el:"#app",
     components: {
-        'sharp-form':Form
+        [Form.name]:Form,
+        //[List.name]:List
     }
 });

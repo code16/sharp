@@ -1,15 +1,16 @@
 <script>
-    import Fields from './Fields';
+    import Fields from './fields';
 
     export default {
+        name:'SharpField',
         props: {
+            fieldKey: {
+                type: String
+            },
             fieldType: {
                 type: String
             },
             fieldProps:{
-                type: Object
-            },
-            fieldAttrs: {
                 type: Object
             },
             disabled: {
@@ -17,14 +18,16 @@
             }
         },
         components: Fields,
-        render(createElement) {
-            console.log('rendering field', this.fieldType);
-            return createElement(this.fieldType,{
+        mounted() {
+            //console.log(this);
+        },
+        render(h) {
+            return h(this.fieldType,{
                 props : {
+                    fieldKey:this.fieldKey,
                     ...this.fieldProps,
-                    disabled : this.disabled
+                    disabled : this.disabled,
                 },
-                attrs : this.fieldAttrs
             });
         }
     }
