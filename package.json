@@ -4,11 +4,15 @@
     "dev": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "watch": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "hot": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "production": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+    "production": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "element-dev": "node_modules/element-theme/bin/element-theme -c ./resources/assets/theme/element-vars.css -o ./resources/assets/theme/sharp",
+    "element-watch": "node_modules/element-theme/bin/element-theme -c -w ./resources/assets/theme/element-vars.css -o ./resources/assets/theme/sharp"
   },
   "devDependencies": {
     "axios": "^0.15.2",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "element-theme": "^0.7.1",
+    "element-theme-default": "^1.2.7",
     "jquery": "^3.1.0",
     "laravel-mix": "^0.8.8",
     "vue": "^2.2.4"
