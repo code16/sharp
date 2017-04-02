@@ -1,7 +1,9 @@
 export default {
     listItemTemplate: {
+        wrapIn: 'li',
+        propagateEvents: ['click'],
         props: {
-            item: {
+            item: { // contains all passed props
                 type: Object,
                 required : true
             }

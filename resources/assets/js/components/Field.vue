@@ -12,9 +12,6 @@
             },
             fieldProps:{
                 type: Object
-            },
-            disabled: {
-                type: Boolean
             }
         },
         components: Fields,
@@ -25,8 +22,7 @@
             return h(this.fieldType,{
                 props : {
                     fieldKey:this.fieldKey,
-                    ...this.fieldProps,
-                    disabled : this.disabled,
+                    ...this.fieldProps
                 },
             });
         }

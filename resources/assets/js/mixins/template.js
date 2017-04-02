@@ -1,32 +1,13 @@
-//
-//
-
-class Template {
-    constructor(fieldKey, templateName) {
-        this.fieldKey = fieldKey;
-        this.templateName = templateName;
-    }
-
-    get compName() {
-        return `sharp-template-${this.templateName}-${this.fieldKey}`;
-    }
-
-    get exists() {
-        return !!Vue.options.components[this.compName];
-    }
-
-    get compNameOrDefault() {
-        return this.exists ? this.compName: null;
-    }
-}
-
-
+import Template from '../app/models/Template';
 
 export default {
+    computed: {
+
+    },
     methods: {
-        template: function(fieldKey, templateName) {
-            return new Template(this.fieldKey || fieldKey,
-                                this.templateName || templateName);
-        }
+        template(fieldKey, templateName) {
+            let tpl=new Template(fieldKey, templateName);
+            return tpl;
+        },
     }
 };

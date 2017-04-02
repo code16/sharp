@@ -1,22 +1,21 @@
 <template>
-    <component v-if="curTemplate.exists"
-               :is="curTemplate.compName">
+    <component v-if="template.exists"
+               :is="template.compName">
     </component>
 </template>
 
 <script>
-    import { Template } from '../mixins';
+    import Template from '../app/models/Template';
 
     export default {
         name: 'SharpTemplate',
-        mixins: [ Template ],
         props: {
             fieldKey: String,
             name: String
         },
         computed: {
-            curTemplate() {
-                return this.template();
+            template() {
+                return new Template(this.fieldKey, this.name);
             }
         }
     }

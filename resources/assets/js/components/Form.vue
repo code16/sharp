@@ -14,14 +14,12 @@
 <script>
     import FieldContainer from './FieldContainer';
 
-    import util from '../util';
-    import { Template } from '../mixins';
-    import TemplateDefinition from '../template-definition';
+    import Template from '../app/models/Template';
+    import TemplateController from '../app/controllers/TemplateController';
+
 
     export default {
         name:'SharpForm',
-
-        mixins:[ Template ],
 
         components: {
             [FieldContainer.name]:FieldContainer
@@ -33,51 +31,41 @@
             }
         },
         methods: {
-            compileTemplates() {
-                // loop through form descriptor
-                // if key is template type && exist
-                for(let field of this.fields) {
-                    for(let fieldProp of Object.keys(field)) {
-                        if(util.isTemplateProp(fieldProp)) {
-                            let templateName = fieldProp;
-
-                            let res=Vue.compile(field[templateName]);
-                            let compName=this.template(field.key, util.parseTemplateName(templateName)).compName;
-
-                            let mixins = [];
-
-                            if(fieldProp in TemplateDefinition) {
-                                mixins.push(TemplateDefinition[templateName]);
-                            }
-                            else {
-                                console.warn(`${templateName} haven't any definition`);
-                            }
-
-                            Vue.component(compName, {
-                                mixins,
-                                render: res.render
-                            });
-                        }
-                    }
-                }
-            }
+            
+        },
+        computed: {
         },
         mounted() {
             // GET fields
             this.fields = [
                 {
-                    type:'sharp-autocomplete',
+                    type:'SharpAutocomplete',
                     key:'name',
+                    mode:'local',
+                    localValues: [
+                        { value: 'Antoine', surname: 'Guingand' },
+                        { value: 'Robert', surname: 'Martin' },
+                        { value: 'François', surname: 'Leforestier' },
+                        { value: 'Fernand', surname: 'Coli' }
+                    ],
                     listItemTemplate:`
-                    <li>
-                        <div>{{item.name}}</div>
-                        <div>{{item.surname}}</div>
-                    </li>
-                    `
+                        <span class="value">{{ item.value }}</span>
+                        <span class="surname">{{ item.surname }}</span>
+                    `,
+                   // disabled: true
+                   conditionalDisplay: 'advanced_search'
                 }
-            ]
-            console.log(this);
-            this.compileTemplates();
+            ];
+            
+            for(let field of this.fields) {
+                for(let fieldPropName of Object.keys(field)) {
+
+                    if(Template.isTemplateProp(fieldPropName)) {
+                        TemplateController.compileAndRegisterComponent(field.key, fieldPropName, field[fieldPropName]);
+                    }
+                }
+            }
+
         }
     }
 </script>
