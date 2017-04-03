@@ -11403,10 +11403,10 @@ module.exports = exports['default'];
         return str.charAt(0).toUpperCase() + str.slice(1);
     },
     log: function log(str) {
-        console.log('SHARP : ' + str);
+        console.log('SHARP : ' + str, arguments.slice(1));
     },
     warn: function warn(str) {
-        console.warn('SHARP : ' + str);
+        console.warn('SHARP : ' + str, arguments.slice(1));
     }
 });
 
@@ -14022,6 +14022,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__FieldContainer___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__FieldContainer__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_models_Template__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_controllers_TemplateController__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__fields__ = __webpack_require__(56);
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //
@@ -14037,6 +14038,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+
+
 
 
 
@@ -14050,12 +14055,36 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     data: function data() {
         return {
-            fields: null
+            fields: []
         };
     },
 
-    methods: {},
-    computed: {},
+    computed: {
+        displayableFields: function displayableFields() {
+            return this.fields.filter(function (field, i) {
+                if (!field) return util.warn('Field at index ' + i + ' is null or empty : ', field), false;
+                if (!field.key) return util.warn('Field at index ' + i + ' doesn\'t have a key : ', field), false;
+                if (!field.type) return false;
+                if (!(field.type in __WEBPACK_IMPORTED_MODULE_3__fields__["a" /* default */])) return util.warn('Field \'' + field.key + '\' have a unknown type (' + field.type + ')'), false;
+
+                return true;
+            });
+        }
+    },
+    methods: {
+        acceptCondition: function acceptCondition(field) {
+            if (!field.conditionalDisplay) return true;
+
+            var regex = /(\!)(\w+):((\w+,?)*)/;
+            var matches = regex.exec(field.conditionalDisplay);
+            var neg = !!matches[1];
+            var key = matches[2];
+            var values = matches[3] ? matches[3].split(',') : null;
+
+            if (values) {} else {}
+            return true;
+        }
+    },
     mounted: function mounted() {
         // GET fields
         this.fields = [{
@@ -14065,7 +14094,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             localValues: [{ value: 'Antoine', surname: 'Guingand' }, { value: 'Robert', surname: 'Martin' }, { value: 'François', surname: 'Leforestier' }, { value: 'Fernand', surname: 'Coli' }],
             listItemTemplate: '\n                    <span class="value">{{ item.value }}</span>\n                    <span class="surname">{{ item.surname }}</span>\n                ',
             // disabled: true
-            conditionalDisplay: 'advanced_search'
+            conditionalDisplay: '!advanced_search:red,blue,orange'
+        }, {
+            key: '!advanced_search',
+            value: true
         }];
 
         var _iteratorNormalCompletion = true;
@@ -47309,8 +47341,8 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', _vm._l((_vm.fields), function(field) {
-    return _c('sharp-field-container', {
+  return _c('div', [_vm._l((_vm.displayableFields), function(field) {
+    return [(_vm.acceptCondition(field)) ? _c('sharp-field-container', {
       attrs: {
         "field-key": field.key,
         "field-type": field.type,
@@ -47319,8 +47351,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "help-message": field.helpMessage,
         "read-only": field.readOnly
       }
-    })
-  }))
+    }) : _vm._e()]
+  })], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

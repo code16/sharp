@@ -7,9 +7,9 @@ export default {
     },
 
     log(str) {
-        console.log(`SHARP : ${str}`);
+        console.log(`SHARP : ${str}`, arguments.slice(1));
     },
     warn(str) {
-        console.warn(`SHARP : ${str}`);
+        console.warn(`SHARP : ${str}`, arguments.slice(1));
     }
 }

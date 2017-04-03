@@ -1,13 +1,15 @@
 <template>
     <div>  <!--TODO système grille-->
-        <sharp-field-container v-for="field in fields"
-                               :field-key="field.key"
-                               :field-type="field.type"
-                               :field-props="field"
-                               :label="field.label"
-                               :help-message="field.helpMessage"
-                               :read-only="field.readOnly">
-        </sharp-field-container>
+        <template v-for="field in displayableFields">
+            <sharp-field-container v-if="acceptCondition(field)"
+                                   :field-key="field.key"
+                                   :field-type="field.type"
+                                   :field-props="field"
+                                   :label="field.label"
+                                   :help-message="field.helpMessage"
+                                   :read-only="field.readOnly">
+            </sharp-field-container>
+        </template>
     </div>
 </template>
 
@@ -17,6 +19,7 @@
     import Template from '../app/models/Template';
     import TemplateController from '../app/controllers/TemplateController';
 
+    import Fields from './fields';
 
     export default {
         name:'SharpForm',
@@ -27,13 +30,44 @@
 
         data() {
             return {
-                fields:null
+                fields:[]
+            }
+        },
+        computed: {
+            displayableFields() {
+                return this.fields.filter((field, i) => {
+                    if(!field)
+                        return util.warn(`Field at index ${i} is null or empty : `,field),false;
+                    if(!field.key)
+                        return util.warn(`Field at index ${i} doesn't have a key : `,field),false;
+                    if(!field.type)
+                        return false;
+                    if(!(field.type in Fields))
+                        return util.warn(`Field '${field.key}' have a unknown type (${field.type})`),false;
+                    
+                    return true;
+                })
             }
         },
         methods: {
-            
-        },
-        computed: {
+            acceptCondition(field) {
+                if(!field.conditionalDisplay)
+                    return true;
+                
+                let regex=/(\!)(\w+):((\w+,?)*)/;
+                let matches = regex.exec(field.conditionalDisplay);
+                let neg = !!matches[1];
+                let key = matches[2];
+                let values = matches[3] ? matches[3].split(',') : null;
+
+                if(values) {
+
+                }
+                else {
+                    
+                }
+                return true;
+            }
         },
         mounted() {
             // GET fields
@@ -53,7 +87,11 @@
                         <span class="surname">{{ item.surname }}</span>
                     `,
                    // disabled: true
-                   conditionalDisplay: 'advanced_search'
+                   conditionalDisplay: '!advanced_search:red,blue,orange'
+                },
+                {
+                    key: '!advanced_search',
+                    value: true
                 }
             ];
             
