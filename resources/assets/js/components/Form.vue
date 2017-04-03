@@ -1,22 +1,26 @@
 <template>
-    <div>  <!--TODO système grille-->
-        <sharp-field-container v-for="field in fields"
-                               :field-key="field.key"
-                               :field-type="field.type"
-                               :field-props="field"
-                               :label="field.label"
-                               :help-message="field.helpMessage"
-                               :read-only="field.readOnly">
-        </sharp-field-container>
+    <div>
+        <template v-if="layout.length == 1">
+            <sharp-grid :rows="[layout[0].columns]">
+                <template scope="column">
+                    <sharp-fields-layout v-if="fields" :fields="column.item.fields" :all="fields"></sharp-fields-layout>
+                </template>
+            </sharp-grid>
+        </template>
+        <template v-else>
+
+        </template>
     </div>
 </template>
 
 <script>
-    import FieldContainer from './FieldContainer';
-
     import util from '../util';
     import { Template } from '../mixins';
     import TemplateDefinition from '../template-definition';
+
+    import Grid from './Grid';
+    import FieldsLayout from './FieldsLayout';
+    import layout from '../layout';
 
     export default {
         name:'SharpForm',
@@ -24,12 +28,15 @@
         mixins:[ Template ],
 
         components: {
-            [FieldContainer.name]:FieldContainer
+
+            [Grid.name]:Grid,
+            [FieldsLayout.name]:FieldsLayout
         },
 
         data() {
             return {
-                fields:null
+                fields:null,
+                layout
             }
         },
         methods: {
@@ -64,20 +71,34 @@
         },
         mounted() {
             // GET fields
-            this.fields = [
-                {
-                    type:'sharp-autocomplete',
-                    key:'name',
-                    listItemTemplate:`
-                    <li>
-                        <div>{{item.name}}</div>
-                        <div>{{item.surname}}</div>
-                    </li>
-                    `
+            this.fields = {
+                'A':{
+                    type:'SharpTextInput'
+                },
+                'B':{
+                    type:'SharpTextInput'
+                },
+                'C':{
+                    type:'SharpTextInput'
+                },
+                'D':{
+                    type:'SharpTextInput'
+                },
+                'E':{
+                    type:'SharpTextInput'
+                },
+                'F':{
+                    type:'SharpTextInput'
+                },
+                'G':{
+                    type:'SharpTextInput'
+                },
+                'H':{
+                    type:'SharpTextInput'
                 }
-            ]
-            console.log(this);
-            this.compileTemplates();
+            }
+
+
         }
     }
 </script>
