@@ -1,10 +1,11 @@
 <template>
     <div>
-        <sharp-template :field-key="fieldKey" name="result-item"/>
+        <sharp-template :field-key="fieldKey" name="resultItem"/>
         <el-autocomplete v-model="value" trigger-on-focus
                          :fetch-suggestions="collectSuggestions"
                          :placeholder="placeholder"
                          :custom-item="listItemTemplate.compNameOrDefault"
+                         @select="handleSelect"
                          :disabled="disabled">
         </el-autocomplete>
     </div>
@@ -14,12 +15,12 @@
     import SharpTemplate from '../Template.vue';
     import { Autocomplete } from 'element-ui';
 
-    import { Template } from '../../mixins';
+    import Template from '../../app/models/Template';
+    import SearchStrategy from '../../app/models/SearchStrategy';
+
 
     export default {
         name:'SharpAutocomplete',
-
-        mixins: [Template],
         components: {
             [Autocomplete.name]:Autocomplete,
             [SharpTemplate.name]:SharpTemplate
@@ -31,7 +32,7 @@
             mode: String,
             localValues: Array,
             placeholder: String,
-            remoteEndPoint: String,
+            remoteEndpoint: String,
             remoteMethod:String,
             remoteSearchAttribute: {
                 type: String,
@@ -46,39 +47,47 @@
         },
         data() {
             return {
-                value:'',
-                suggestions:this.localValues
+                value: '',
+                localSearchStrategy:null,
             }
         },
         computed: {
             isRemote() {
-                return !!this.remoteEndPoint;
+                return this.mode === 'remote';
             },
             listItemTemplate() {
-                return this.template(this.fieldKey, 'list-item');
+                return new Template(this.fieldKey, 'listItem');
+            },
+            filteredSuggestions() {
+                return this.localSearchStrategy.search(this.value);
             }
         },
         methods: {
             collectSuggestions(querystring, cb) {
-                cb([
-                    {name:'Antoine', surname:'Guingand'}
-                ]);
-                if (!this.isRemote)
-                    return;
-
-                axios[this.remoteMethod.toLowerCase()](this.remoteEndPoint, {
-                    searchAttribute: this.searchAttribute
-                })
-                    .then(response => {
-                        this.options = response.data;
-                    })
-                    .catch(
+                if (this.mode === 'local') {
+                    cb(this.filteredSuggestions);
+                }
+                else if(this.mode === 'remote') {
+                    axios[this.remoteMethod.toLowerCase()](this.remoteEndpoint, {
+                        searchAttribute: this.searchAttribute
+                    }).then(response => {
+                        cb(response.data);
+                    }).catch(
                         // some error callback
                     );
+                }
+            },
+            handleSelect(item) {
+                console.log(item);
             }
         },
         mounted() {
-            //debugger;
+            if(this.mode === 'local') {
+                this.localSearchStrategy = new SearchStrategy({
+                    list:this.localValues,
+                    minQueryLength:2
+                });
+            }
         }
     }
 </script>
