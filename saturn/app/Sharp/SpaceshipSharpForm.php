@@ -2,31 +2,30 @@
 
 namespace App\Sharp;
 
+use Code16\Sharp\Form\BuildsSharpFormFields;
+use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpFormData;
+use Code16\Sharp\Http\WithSharpFormContext;
 
 class SpaceshipSharpForm implements SharpForm, SharpFormData
 {
     use WithSharpFormContext;
 
-    use WithSharpEloquentUpdater;
+    use BuildsSharpFormFields;
 
-    function fields(): array
+//    use WithSharpEloquentUpdater;
+
+    function buildForm(): void
     {
-        // Context is sent by the front-end as param
-        // /sharp/api/form/{key}?create
-        // /sharp/api/form/{key}?update={id}
-        if($this->context()->isUpdate()) {
+        $this->addField(
+            SharpFormTextField::make("name")
+                ->setLabel("Name")
+        );
 
-        }
-
-        if($this->context()->isCreation()) {
-
-        }
-
-        if($this->context()->updateId()) {
-
-        }
+//        if($this->context()->isUpdate()) {
+//
+//        }
     }
 
     /**
@@ -42,14 +41,17 @@ class SpaceshipSharpForm implements SharpForm, SharpFormData
 
     function update($id, array $data): bool
     {
+        return true;
     }
 
     function store(array $data): bool
     {
+        return true;
     }
 
     function delete($id): bool
     {
+        return true;
     }
 
 }
