@@ -3,6 +3,7 @@
 namespace App\Sharp;
 
 use Code16\Sharp\Form\BuildsSharpFormFields;
+use Code16\Sharp\Form\BuildsSharpFormLayout;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpFormData;
@@ -13,6 +14,8 @@ class SpaceshipSharpForm implements SharpForm, SharpFormData
     use WithSharpFormContext;
 
     use BuildsSharpFormFields;
+
+    use BuildsSharpFormLayout;
 
 //    use WithSharpEloquentUpdater;
 
@@ -26,6 +29,16 @@ class SpaceshipSharpForm implements SharpForm, SharpFormData
 //        if($this->context()->isUpdate()) {
 //
 //        }
+
+//        $this->addTab("Content")
+//            ->addColumn()...
+
+        $this->addColumn(5)
+            ->withField("name")
+            ->withFields("first_name|xs:6,4", "last_name|xs:6,8")
+            ->withFieldset("dates", function($fieldset) {
+                return $fieldset->withFields("start_date", "end_date");
+            });
     }
 
     /**
@@ -53,5 +66,4 @@ class SpaceshipSharpForm implements SharpForm, SharpFormData
     {
         return true;
     }
-
 }

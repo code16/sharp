@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Tests\Feature\Api;
 
 use Code16\Sharp\Form\BuildsSharpFormFields;
+use Code16\Sharp\Form\BuildsSharpFormLayout;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpFormData;
@@ -37,6 +38,8 @@ abstract class BaseApiTest extends SharpTestCase
 class PersonSharpForm implements SharpFormData, SharpForm
 {
     use BuildsSharpFormFields;
+
+    use BuildsSharpFormLayout;
 
     function buildForm()
     {
