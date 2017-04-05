@@ -34,8 +34,8 @@ class SpaceshipSharpForm implements SharpForm, SharpFormData
 //            ->addColumn()...
 
         $this->addColumn(5)
-            ->withField("name")
-            ->withFields("first_name|xs:6,4", "last_name|xs:6,8")
+            ->withSingleField("name")
+            ->withFields("first_name|4,6", "last_name|8,6")
             ->withFieldset("dates", function($fieldset) {
                 return $fieldset->withFields("start_date", "end_date");
             });

@@ -2,12 +2,12 @@
 
 namespace Code16\Sharp\Form\Layout;
 
-class FormLayoutTab
+class FormLayoutTab implements HasLayout
 {
     /**
      * @var string
      */
-    protected $label;
+    protected $title;
 
     /**
      * @var array
@@ -15,11 +15,11 @@ class FormLayoutTab
     protected $columns = [];
 
     /**
-     * @param string $label
+     * @param string $title
      */
-    function __construct(string $label)
+    function __construct(string $title)
     {
-        $this->label = $label;
+        $this->title = $title;
     }
 
     /**
@@ -29,6 +29,19 @@ class FormLayoutTab
     public function addColumn(int $size): FormLayoutColumn
     {
         return $this->addColumnLayout(new FormLayoutColumn($size));
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            "title" => $this->title,
+            "columns" => collect($this->columns)->map(function($column) {
+                return $column->toArray();
+            })->all()
+        ];
     }
 
     /**

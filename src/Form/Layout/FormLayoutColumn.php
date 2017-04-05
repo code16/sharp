@@ -2,8 +2,10 @@
 
 namespace Code16\Sharp\Form\Layout;
 
-class FormLayoutColumn
+class FormLayoutColumn implements HasLayout
 {
+    use HasFieldRows;
+
     /**
      * @var int
      */
@@ -13,8 +15,6 @@ class FormLayoutColumn
      * @var array
      */
     protected $fieldsets = [];
-
-    use hasFields;
 
     /**
      * @param int $size
@@ -42,12 +42,19 @@ class FormLayoutColumn
 
     /**
      * @param FormLayoutFieldset $fieldset
-     * @return FormLayoutFieldset
      */
-    private function addFieldsetLayout(FormLayoutFieldset $fieldset): FormLayoutFieldset
+    private function addFieldsetLayout(FormLayoutFieldset $fieldset)
     {
-        $this->fieldsets[] = $fieldset;
+        $this->rows[] = [$fieldset];
+    }
 
-        return $fieldset;
+    /**
+     * @return array
+     */
+    function toArray(): array
+    {
+        return [
+            "size" => $this->size
+        ] + $this->fieldsToArray();
     }
 }
