@@ -45,6 +45,14 @@ abstract class SharpFormField
      */
     protected function __construct(string $key, string $type)
     {
+        if(!trim($key)) {
+            throw new \InvalidArgumentException("A field key must be provided");
+        }
+
+        if(!trim($type)) {
+            throw new \InvalidArgumentException("A field type must be provided");
+        }
+
         $this->key = $key;
         $this->type = $type;
     }
@@ -105,13 +113,28 @@ abstract class SharpFormField
     }
 
     /**
+     * Create the properties array for the field, using parent::makeArray()
+     *
      * @return array
      */
-    public function toArray()
+    public abstract function toArray(): array;
+
+    /**
+     * @return array
+     */
+    protected function makeArray(array $childArray)
     {
-        return [
+        return collect([
             "key" => $this->key,
-            "label" => $this->label
-        ];
+            "type" => $this->type,
+            "label" => $this->label,
+            "readOnly" => $this->readOnly,
+            "conditionalDisplay" => $this->conditionalDisplay,
+            "helpMessage" => $this->helpMessage,
+            "extraStyle" => $this->extraStyle,
+        ] + $childArray)
+            ->filter(function($value) {
+                return !is_null($value);
+            })->all();
     }
 }

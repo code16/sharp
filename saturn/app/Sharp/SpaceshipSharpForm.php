@@ -16,7 +16,7 @@ class SpaceshipSharpForm implements SharpForm, SharpFormData
 
 //    use WithSharpEloquentUpdater;
 
-    function buildForm(): void
+    function buildForm()
     {
         $this->addField(
             SharpFormTextField::make("name")

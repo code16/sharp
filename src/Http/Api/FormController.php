@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Api;
 
+use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpFormData;
 use Illuminate\Routing\Controller;
 
@@ -15,12 +16,13 @@ class FormController extends Controller
      */
     public function show($key, $id)
     {
-        $form = $this->getFormDataInstance($key);
+        $form = $this->getFormFieldsInstance($key);
+        $formData = $this->getFormDataInstance($key);
 
         return response()->json([
-            "fields" => [],
+            "fields" => $form->fields(),
             "layout" => [],
-            "data" => $form->get($id)
+            "data" => $formData->get($id)
         ]);
     }
 
@@ -51,6 +53,16 @@ class FormController extends Controller
             ->store(request()->all()); // TODO ->only on actual presented fields
 
         return response()->json(["ok" => true]);
+    }
+
+    /**
+     * @param string $key
+     * @return SharpForm
+     */
+    protected function getFormFieldsInstance(string $key): SharpForm
+    {
+        $formClass = config("sharp.entities.{$key}.form");
+        return app($formClass);
     }
 
     /**

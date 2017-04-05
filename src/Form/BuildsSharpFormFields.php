@@ -36,7 +36,7 @@ trait BuildsSharpFormFields
     /**
      * Build the form, using `addField()`.
      */
-    function buildForm(): void {}
+    function buildForm() {}
 
     /**
      * Add a field.
@@ -46,5 +46,6 @@ trait BuildsSharpFormFields
     function addField(SharpFormField $field)
     {
         $this->fields[] = $field;
+        $this->formBuilt = false;
     }
 }

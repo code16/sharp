@@ -5,7 +5,7 @@ namespace Code16\Sharp\Tests\Feature\Api;
 class ApiControllerTest extends BaseApiTest
 {
     /** @test */
-    public function we_can_show_an_entity_data()
+    public function we_can_get_form_data_for_an_entity()
     {
         $this->buildTheWorld();
 
@@ -13,6 +13,21 @@ class ApiControllerTest extends BaseApiTest
             ->assertStatus(200)
             ->assertJson(["data" => [
                 "name" => "John Wayne"
+            ]]);
+    }
+
+    /** @test */
+    public function we_can_get_form_fields_for_an_entity()
+    {
+        $this->buildTheWorld();
+
+        $this->json('get', '/sharp/api/form/person/1')
+            ->assertStatus(200)
+            ->assertJson(["fields" => [
+                [
+                    "key" => "name",
+                    "type" => "text"
+                ]
             ]]);
     }
 

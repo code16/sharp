@@ -57,11 +57,11 @@ class SharpFormTextField extends SharpFormField
     /**
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
-        return parent::toArray() + [
+        return parent::makeArray([
             "inputType" => $this->inputType,
             "placeholder" => $this->placeholder,
-        ];
+        ]);
     }
 }
