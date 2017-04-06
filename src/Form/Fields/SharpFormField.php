@@ -2,6 +2,9 @@
 
 namespace Code16\Sharp\Form\Fields;
 
+use Code16\Sharp\Form\Exceptions\SharpFormFieldValidationException;
+use Illuminate\Support\Facades\Validator;
+
 abstract class SharpFormField
 {
     /**
@@ -45,14 +48,6 @@ abstract class SharpFormField
      */
     protected function __construct(string $key, string $type)
     {
-        if(!trim($key)) {
-            throw new \InvalidArgumentException("A field key must be provided");
-        }
-
-        if(!trim($type)) {
-            throw new \InvalidArgumentException("A field type must be provided");
-        }
-
         $this->key = $key;
         $this->type = $type;
     }
@@ -113,18 +108,46 @@ abstract class SharpFormField
     }
 
     /**
-     * Create the properties array for the field, using parent::makeArray()
+     * Create the properties array for the field, using parent::buildArray()
      *
      * @return array
      */
     public abstract function toArray(): array;
 
     /**
+     * Return specific validation rules.
+     *
      * @return array
      */
-    protected function makeArray(array $childArray)
+    protected function validationRules()
     {
-        return collect([
+        return [];
+    }
+
+    /**
+     * Throw an exception in case of invalid attribute value.
+     * @param array $properties
+     * @throws SharpFormFieldValidationException
+     */
+    protected function validate(array $properties)
+    {
+        $validator = Validator::make($properties, [
+            'key' => 'required',
+            'type' => 'required',
+        ] + $this->validationRules());
+
+        if ($validator->fails()) {
+            throw new SharpFormFieldValidationException($validator->errors());
+        }
+    }
+
+    /**
+     * @param array $childArray
+     * @return array
+     */
+    protected function buildArray(array $childArray)
+    {
+        $array = collect([
             "key" => $this->key,
             "type" => $this->type,
             "label" => $this->label,
@@ -136,5 +159,9 @@ abstract class SharpFormField
             ->filter(function($value) {
                 return !is_null($value);
             })->all();
+
+        $this->validate($array);
+
+        return $array;
     }
 }

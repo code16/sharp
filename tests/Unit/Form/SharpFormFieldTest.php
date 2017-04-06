@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Tests\Unit\Form;
 
+use Code16\Sharp\Form\Exceptions\SharpFormFieldValidationException;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Tests\SharpTestCase;
 
@@ -10,15 +11,15 @@ class SharpFormFieldTest extends SharpTestCase
     /** @test */
     function we_must_define_a_key()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        SomeTestFormField::make("");
+        $this->expectException(SharpFormFieldValidationException::class);
+        SomeTestFormField::make("")->toArray();
     }
 
     /** @test */
     function we_must_define_a_type()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        SomeTestFormField::make("name", "");
+        $this->expectException(SharpFormFieldValidationException::class);
+        SomeTestFormField::make("name", "")->toArray();
     }
 
     /** @test */
@@ -114,6 +115,6 @@ class SomeTestFormField extends SharpFormField
 
     public function toArray(): array
     {
-        return parent::makeArray([]);
+        return parent::buildArray([]);
     }
 }

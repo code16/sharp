@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Tests\Unit\Form;
 
 use Carbon\Carbon;
+use Code16\Sharp\Form\Exceptions\SharpFormFieldValidationException;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Tests\SharpTestCase;
@@ -68,6 +69,28 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
                 "searchMinChars" => 3
             ], $formField->toArray()
         );
+    }
+
+    /** @test */
+    function we_cant_define_a_local_autocomplete_without_local_values()
+    {
+        $this->expectException(SharpFormFieldValidationException::class);
+
+        SharpFormAutocompleteField::make("field", "local")
+            ->setListItemTemplate("LIT")
+            ->setResultItemTemplate("RIT")
+            ->toArray();
+    }
+
+    /** @test */
+    function we_cant_define_a_remote_autocomplete_without_remoteEndpoint()
+    {
+        $this->expectException(SharpFormFieldValidationException::class);
+
+        SharpFormAutocompleteField::make("field", "remote")
+            ->setListItemTemplate("LIT")
+            ->setResultItemTemplate("RIT")
+            ->toArray();
     }
 
     /**

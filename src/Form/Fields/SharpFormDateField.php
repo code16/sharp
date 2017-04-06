@@ -165,13 +165,30 @@ class SharpFormDateField extends SharpFormField
         return $this;
     }
 
+    /**
+     * @return array
+     */
+    protected function validationRules()
+    {
+        return [
+            "hasDate" => "required|boolean",
+            "hasTime" => "required|boolean",
+            "minDate" => "date_format:Y-m-d",
+            "startDate" => "required|date_format:Y-m-d",
+            "displayFormat" => "required",
+            "maxDate" => "date_format:Y-m-d",
+            "minTime" => "regex:/[0-9]{2}:[0-9]{2}/",
+            "maxTime" => "regex:/[0-9]{2}:[0-9]{2}/",
+            "stepTime" => "integer|min:1|max:60",
+        ];
+    }
 
     /**
      * @return array
      */
     public function toArray(): array
     {
-        return parent::makeArray([
+        return parent::buildArray([
             "hasDate" => $this->hasDate,
             "hasTime" => $this->hasTime,
             "startDate" => $this->startDate,

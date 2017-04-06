@@ -45,9 +45,19 @@ class SharpFormTextField extends SharpFormField
     /**
      * @return array
      */
+    protected function validationRules()
+    {
+        return [
+            "inputType" => "required|in:text,password",
+        ];
+    }
+
+    /**
+     * @return array
+     */
     public function toArray(): array
     {
-        return parent::makeArray([
+        return parent::buildArray([
             "inputType" => $this->inputType,
             "placeholder" => $this->placeholder,
         ]);

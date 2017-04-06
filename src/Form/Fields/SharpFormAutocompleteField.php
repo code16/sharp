@@ -182,9 +182,28 @@ class SharpFormAutocompleteField extends SharpFormField
     /**
      * @return array
      */
+    protected function validationRules()
+    {
+        return [
+            "mode" => "required|in:local,remote",
+            "itemIdAttribute" => "required",
+            "listItemTemplate" => "required",
+            "resultItemTemplate" => "required",
+            "searchMinChars" => "required|integer",
+            "localValues" => "required_if:mode,local|array",
+            "searchKeys" => "required_if:mode,local|array",
+            "remoteEndpoint" => "required_if:mode,remote",
+            "remoteMethod" => "required_if:mode,remote|in:GET,POST",
+            "remoteSearchAttribute" => "required_if:mode,remote",
+        ];
+    }
+
+    /**
+     * @return array
+     */
     public function toArray(): array
     {
-        return parent::makeArray([
+        return parent::buildArray([
             "mode" => $this->mode,
             "placeholder" => $this->placeholder,
             "localValues" => $this->localValues,
