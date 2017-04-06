@@ -42,8 +42,8 @@ class SpaceshipSharpForm implements SharpForm, SharpFormData
         $this->addField(
             SharpFormAutocompleteField::make("type_id", "local")
                 ->setLabel("Ship type")
-                ->setListItemTemplate("")
-                ->setResultItemTemplate("")
+                ->setListItemTemplatePath("/sharp/templates/spaceshipType_list")
+                ->setResultItemTemplatePath("/sharp/templates/spaceshipType_result")
                 ->setLocalValues(
                     SpaceshipType::orderBy("label")->get()->pluck("label", "id")
                 )

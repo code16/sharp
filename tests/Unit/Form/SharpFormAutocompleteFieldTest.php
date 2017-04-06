@@ -23,7 +23,8 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
                 "key" => "field", "type" => "autocomplete",
                 "mode" => "local", "searchKeys" => ["value"],
                 "remoteMethod" => "GET", "itemIdAttribute" => "id",
-                "listItemTemplate" => "LIT", "resultItemTemplate" => "RIT",
+                "listItemTemplate" => resource_path("views/LIT"),
+                "resultItemTemplate" => resource_path("views/RIT"),
                 "searchMinChars" => 1, "localValues" => $localValues,
                 "remoteSearchAttribute" => "query"
             ], $defaultFormField->toArray()
@@ -34,8 +35,8 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
     function we_can_define_remote_attributes()
     {
         $formField = SharpFormAutocompleteField::make("field", "remote")
-            ->setListItemTemplate("LIT")
-            ->setResultItemTemplate("RIT")
+            ->setListItemTemplatePath("LIT")
+            ->setResultItemTemplatePath("RIT")
             ->setRemoteMethodPOST()
             ->setRemoteEndpoint("endpoint")
             ->setRemoteSearchAttribute("attribute");
@@ -77,8 +78,8 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
         $this->expectException(SharpFormFieldValidationException::class);
 
         SharpFormAutocompleteField::make("field", "local")
-            ->setListItemTemplate("LIT")
-            ->setResultItemTemplate("RIT")
+            ->setListItemTemplatePath("LIT")
+            ->setResultItemTemplatePath("RIT")
             ->toArray();
     }
 
@@ -88,8 +89,8 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
         $this->expectException(SharpFormFieldValidationException::class);
 
         SharpFormAutocompleteField::make("field", "remote")
-            ->setListItemTemplate("LIT")
-            ->setResultItemTemplate("RIT")
+            ->setListItemTemplatePath("LIT")
+            ->setResultItemTemplatePath("RIT")
             ->toArray();
     }
 
@@ -100,8 +101,8 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
     private function getDefaultLocalAutocomplete($localValues = null)
     {
         return SharpFormAutocompleteField::make("field", "local")
-            ->setListItemTemplate("LIT")
-            ->setResultItemTemplate("RIT")
+            ->setListItemTemplatePath("LIT")
+            ->setResultItemTemplatePath("RIT")
             ->setLocalValues($localValues ?: [
                 "id" => 1, "name" => "bob"
             ]);

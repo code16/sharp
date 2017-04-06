@@ -147,12 +147,12 @@ class SharpFormAutocompleteField extends SharpFormField
     }
 
     /**
-     * @param string $listItemTemplate
+     * @param string $listItemTemplatePath
      * @return $this
      */
-    public function setListItemTemplate(string $listItemTemplate)
+    public function setListItemTemplatePath(string $listItemTemplatePath)
     {
-        $this->listItemTemplate = $listItemTemplate;
+        $this->listItemTemplate = resource_path("views/" . $listItemTemplatePath);
 
         return $this;
     }
@@ -161,9 +161,9 @@ class SharpFormAutocompleteField extends SharpFormField
      * @param string $resultItemTemplate
      * @return $this
      */
-    public function setResultItemTemplate(string $resultItemTemplate)
+    public function setResultItemTemplatePath(string $resultItemTemplate)
     {
-        $this->resultItemTemplate = $resultItemTemplate;
+        $this->resultItemTemplate = resource_path("views/" . $resultItemTemplate);
 
         return $this;
     }
