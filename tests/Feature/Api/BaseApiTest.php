@@ -44,6 +44,9 @@ class PersonSharpForm implements SharpFormData, SharpForm
     function buildForm()
     {
         $this->addField(SharpFormTextField::make("name"));
+
+        $this->addColumn(6)
+            ->withSingleField("name");
     }
 
     function get($id): array

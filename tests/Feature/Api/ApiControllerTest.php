@@ -32,6 +32,29 @@ class ApiControllerTest extends BaseApiTest
     }
 
     /** @test */
+    public function we_can_get_form_layout_for_an_entity()
+    {
+        $this->buildTheWorld();
+
+        $this->json('get', '/sharp/api/form/person/1')
+            ->assertStatus(200)
+            ->assertJson(["layout" => [
+                [
+                    "columns" => [
+                        [
+                            "size" => 6,
+                            "fields" => [
+                                [
+                                    ["key" => "name"]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]]);
+    }
+
+    /** @test */
     public function we_can_update_an_entity()
     {
         $this->buildTheWorld();
