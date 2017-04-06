@@ -16,7 +16,7 @@ class BuildsSharpFormFieldsTest extends SharpTestCase
         $form->addField(SharpFormTextField::make("name"));
         $form->addField(SharpFormTextField::make("first_name"));
 
-        $this->assertCount(2, $form->fields());
+        $this->assertCount(2, $form->buildForm());
     }
 
     /** @test */
@@ -28,11 +28,11 @@ class BuildsSharpFormFieldsTest extends SharpTestCase
 
         $this->assertArraySubset(
             ["key" => "name", "type" => "text"],
-            $form->fields()[0]
+            $form->buildForm()[0]
         );
         $this->assertArraySubset(
             ["key" => "first_name", "type" => "text"],
-            $form->fields()[1]
+            $form->buildForm()[1]
         );
     }
 }

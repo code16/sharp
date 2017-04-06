@@ -17,7 +17,7 @@ trait BuildsSharpFormLayout
      *
      * @return array
      */
-    function formLayout(): array
+    function buildLayout(): array
     {
         return collect($this->tabs)->map(function($tab) {
             return $tab->toArray();

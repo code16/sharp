@@ -9,19 +9,21 @@ use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpFormData;
-use Code16\Sharp\Http\WithSharpFormContext;
 
 class SpaceshipSharpForm implements SharpForm, SharpFormData
 {
-//    use WithSharpFormContext;
-
     use BuildsSharpFormFields;
 
     use BuildsSharpFormLayout;
 
 //    use WithSharpEloquentUpdater;
 
-    function buildForm()
+    /**
+     * Get the fields array representation.
+     *
+     * @return array
+     */
+    function fields(): array
     {
         $this->addField(
             SharpFormTextField::make("name")
@@ -49,12 +51,24 @@ class SpaceshipSharpForm implements SharpForm, SharpFormData
                 )
         );
 
+        return $this->buildForm();
+    }
+
+    /**
+     * Return the form fields layout.
+     *
+     * @return array
+     */
+    function formLayout(): array
+    {
         $this->addColumn(6)
             ->withSingleField("name")
             ->withSingleField("type_id")
             ->withFieldset("Technical details", function($fieldset) {
                 return $fieldset->withFields("capacity|4,6", "construction_date|8,6");
             });
+
+        return $this->buildLayout();
     }
 
     /**

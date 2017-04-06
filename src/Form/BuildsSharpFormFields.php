@@ -12,31 +12,16 @@ trait BuildsSharpFormFields
     protected $fields;
 
     /**
-     * @var bool
-     */
-    protected $formBuilt = false;
-
-    /**
      * Get the fields array representation.
      *
      * @return array
      */
-    function fields(): array
+    function buildForm(): array
     {
-        if(!$this->formBuilt) {
-            $this->buildForm();
-            $this->formBuilt = true;
-        }
-
         return collect($this->fields)->map(function($field) {
             return $field->toArray();
         })->all();
     }
-
-    /**
-     * Build the form, using `addField()`.
-     */
-    function buildForm() {}
 
     /**
      * Add a field.
@@ -46,6 +31,5 @@ trait BuildsSharpFormFields
     function addField(SharpFormField $field)
     {
         $this->fields[] = $field;
-        $this->formBuilt = false;
     }
 }

@@ -14,7 +14,7 @@ class BuildsSharpFormLayoutTest extends SharpTestCase
         $form = $this->getObjectForTrait(BuildsSharpFormLayout::class);
         $form->addTab("label");
 
-        $this->assertCount(1, $form->formLayout());
+        $this->assertCount(1, $form->buildLayout());
     }
 
     /** @test */
@@ -23,7 +23,7 @@ class BuildsSharpFormLayoutTest extends SharpTestCase
         $form = $this->getObjectForTrait(BuildsSharpFormLayout::class);
         $form->addColumn(2);
 
-        $this->assertCount(1, $form->formLayout());
+        $this->assertCount(1, $form->buildLayout());
     }
 
     /** @test */
@@ -34,7 +34,7 @@ class BuildsSharpFormLayoutTest extends SharpTestCase
 
         $this->assertArraySubset(
             ["title" => "label", "columns" => []],
-            $form->formLayout()[0]
+            $form->buildLayout()[0]
         );
 
         $form2 = $this->getObjectForTrait(BuildsSharpFormLayout::class);
@@ -44,7 +44,7 @@ class BuildsSharpFormLayoutTest extends SharpTestCase
             "columns" => [
                 ["size" => 2]
             ]],
-            $form2->formLayout()[0]
+            $form2->buildLayout()[0]
         );
     }
 }
