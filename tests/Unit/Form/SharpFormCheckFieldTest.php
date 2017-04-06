@@ -1,0 +1,21 @@
+<?php
+
+namespace Code16\Sharp\Tests\Unit\Form;
+
+use Code16\Sharp\Form\Fields\SharpFormCheckField;
+use Code16\Sharp\Tests\SharpTestCase;
+
+class SharpFormCheckFieldTest extends SharpTestCase
+{
+    /** @test */
+    function only_default_values_are_set()
+    {
+        $formField = SharpFormCheckField::make("check", "text");
+
+        $this->assertEquals([
+                "key" => "check", "type" => "check",
+                "text" => "text"
+            ], $formField->toArray()
+        );
+    }
+}
