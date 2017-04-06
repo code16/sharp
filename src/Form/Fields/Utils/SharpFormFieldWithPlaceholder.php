@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Form\Fields\Utils;
 
-trait WithPlaceholder
+trait SharpFormFieldWithPlaceholder
 {
     /**
      * @var string

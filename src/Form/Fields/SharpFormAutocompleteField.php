@@ -2,11 +2,11 @@
 
 namespace Code16\Sharp\Form\Fields;
 
-use Code16\Sharp\Form\Fields\Utils\WithPlaceholder;
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 
 class SharpFormAutocompleteField extends SharpFormField
 {
-    use WithPlaceholder;
+    use SharpFormFieldWithPlaceholder;
 
     /**
      * @var string

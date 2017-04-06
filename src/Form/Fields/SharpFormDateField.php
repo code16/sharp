@@ -2,10 +2,12 @@
 
 namespace Code16\Sharp\Form\Fields;
 
-use Carbon\Carbon;
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDate;
 
 class SharpFormDateField extends SharpFormField
 {
+    use SharpFormFieldWithDate;
+
     /**
      * @var bool
      */
@@ -15,16 +17,6 @@ class SharpFormDateField extends SharpFormField
      * @var bool
      */
     protected $hasTime = false;
-
-    /**
-     * @var string
-     */
-    protected $minDate;
-
-    /**
-     * @var string
-     */
-    protected $maxDate;
 
     /**
      * @var string
@@ -40,17 +32,6 @@ class SharpFormDateField extends SharpFormField
      * @var int
      */
     protected $stepTime = 30;
-
-    /**
-     * @var string
-     */
-    protected $startDate;
-
-    /**
-     * @var string
-     */
-    protected $displayFormat = "yyyy-mm-dd";
-
 
     /**
      * @param string $key
@@ -82,28 +63,6 @@ class SharpFormDateField extends SharpFormField
     public function setHasTime($hasTime = true)
     {
         $this->hasTime = $hasTime;
-
-        return $this;
-    }
-
-    /**
-     * @param Carbon $minDate
-     * @return $this
-     */
-    public function setMinDate(Carbon $minDate)
-    {
-        $this->minDate = $this->formatDate($minDate);
-
-        return $this;
-    }
-
-    /**
-     * @param Carbon $maxDate
-     * @return $this
-     */
-    public function setMaxDate(Carbon $maxDate)
-    {
-        $this->maxDate = $this->formatDate($maxDate);
 
         return $this;
     }
@@ -144,28 +103,6 @@ class SharpFormDateField extends SharpFormField
     }
 
     /**
-     * @param Carbon $startDate
-     * @return $this
-     */
-    public function setStartDate(Carbon $startDate)
-    {
-        $this->startDate = $this->formatDate($startDate);
-
-        return $this;
-    }
-
-    /**
-     * @param string $displayFormat
-     * @return $this
-     */
-    public function setDisplayFormat(string $displayFormat)
-    {
-        $this->displayFormat = $displayFormat;
-
-        return $this;
-    }
-
-    /**
      * @return array
      */
     protected function validationRules()
@@ -199,15 +136,6 @@ class SharpFormDateField extends SharpFormField
             "stepTime" => $this->stepTime,
             "displayFormat" => $this->displayFormat,
         ]);
-    }
-
-    /**
-     * @param Carbon $date
-     * @return string
-     */
-    private function formatDate(Carbon $date)
-    {
-        return $date->format("Y-m-d");
     }
 
     /**
