@@ -59,7 +59,7 @@ abstract class SharpFormField
 
     /**
      * @param string $label
-     * @return SharpFormField
+     * @return static
      */
     public function setLabel(string $label)
     {
@@ -70,7 +70,7 @@ abstract class SharpFormField
 
     /**
      * @param string $helpMessage
-     * @return SharpFormField
+     * @return static
      */
     public function setHelpMessage(string $helpMessage)
     {
@@ -81,7 +81,7 @@ abstract class SharpFormField
 
     /**
      * @param string $conditionalDisplay
-     * @return SharpFormField
+     * @return static
      */
     public function setConditionalDisplay(string $conditionalDisplay)
     {
@@ -92,7 +92,7 @@ abstract class SharpFormField
 
     /**
      * @param bool $readOnly
-     * @return SharpFormField
+     * @return static
      */
     public function setReadOnly(bool $readOnly = true)
     {
@@ -103,7 +103,7 @@ abstract class SharpFormField
 
     /**
      * @param string $style
-     * @return SharpFormField
+     * @return static
      */
     public function setExtraStyle(string $style)
     {

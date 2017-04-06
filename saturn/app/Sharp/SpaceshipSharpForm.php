@@ -4,6 +4,7 @@ namespace App\Sharp;
 
 use Code16\Sharp\Form\BuildsSharpFormFields;
 use Code16\Sharp\Form\BuildsSharpFormLayout;
+use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpFormData;
@@ -11,7 +12,7 @@ use Code16\Sharp\Http\WithSharpFormContext;
 
 class SpaceshipSharpForm implements SharpForm, SharpFormData
 {
-    use WithSharpFormContext;
+//    use WithSharpFormContext;
 
     use BuildsSharpFormFields;
 
@@ -26,18 +27,31 @@ class SpaceshipSharpForm implements SharpForm, SharpFormData
                 ->setLabel("Name")
         );
 
-//        if($this->context()->isUpdate()) {
-//
-//        }
+        $this->addField(
+            SharpFormTextField::make("capacity")
+                ->setLabel("Capacity")
+        );
 
-//        $this->addTab("Content")
-//            ->addColumn()...
+        $this->addField(
+            SharpFormDateField::make("construction_date")
+                ->setLabel("Construction date")
+                ->setHasTime(false)
+        );
 
-        $this->addColumn(5)
+        $this->addField(
+            SharpFormAutocompleteField::make("type_id", "local")
+                ->setLabel("Ship type")
+                ->setItemKeyAttribute()
+                ->setListItemTemplate()
+                ->setResultItemTemplate()
+                ->setLocalValues()
+        );
+
+        $this->addColumn(6)
             ->withSingleField("name")
-            ->withFields("first_name|4,6", "last_name|8,6")
-            ->withFieldset("dates", function($fieldset) {
-                return $fieldset->withFields("start_date", "end_date");
+            ->withSingleField("type_id")
+            ->withFieldset("Technical details", function($fieldset) {
+                return $fieldset->withFields("capacity|4,6", "construction_date|8,6");
             });
     }
 
