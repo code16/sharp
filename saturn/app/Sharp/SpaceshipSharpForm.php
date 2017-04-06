@@ -4,6 +4,7 @@ namespace App\Sharp;
 
 use Code16\Sharp\Form\BuildsSharpFormFields;
 use Code16\Sharp\Form\BuildsSharpFormLayout;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\SharpForm;
@@ -41,10 +42,11 @@ class SpaceshipSharpForm implements SharpForm, SharpFormData
         $this->addField(
             SharpFormAutocompleteField::make("type_id", "local")
                 ->setLabel("Ship type")
-                ->setItemKeyAttribute()
-                ->setListItemTemplate()
-                ->setResultItemTemplate()
-                ->setLocalValues()
+                ->setListItemTemplate("")
+                ->setResultItemTemplate("")
+                ->setLocalValues(
+                    SpaceshipType::orderBy("label")->get()->pluck("label", "id")
+                )
         );
 
         $this->addColumn(6)

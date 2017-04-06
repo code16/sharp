@@ -2,17 +2,16 @@
 
 namespace Code16\Sharp\Form\Fields;
 
+use Code16\Sharp\Form\Fields\Utils\WithPlaceholder;
+
 class SharpFormTextField extends SharpFormField
 {
-    /**
-     * @var string
-     */
-    protected $inputType = "text";
+    use WithPlaceholder;
 
     /**
      * @var string
      */
-    protected $placeholder;
+    protected $inputType = "text";
 
     /**
      * @param string $key
@@ -39,17 +38,6 @@ class SharpFormTextField extends SharpFormField
     public function setInputTypePassword()
     {
         $this->inputType = "password";
-
-        return $this;
-    }
-
-    /**
-     * @param string $placeholder
-     * @return $this
-     */
-    public function setPlaceholder(string $placeholder)
-    {
-        $this->placeholder = $placeholder;
 
         return $this;
     }
