@@ -2,15 +2,13 @@
 
 namespace App\Sharp;
 
-use Code16\Sharp\Form\Eloquent\SharpFormEloquent;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentTransformer;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\SharpForm;
-use Illuminate\Database\Eloquent\Model;
 
-class SpaceshipSharpForm extends SharpForm implements SharpFormEloquent
+class SpaceshipSharpForm extends SharpForm
 {
 //    use WithSharpEloquentUpdater;
 
@@ -25,7 +23,7 @@ class SpaceshipSharpForm extends SharpForm implements SharpFormEloquent
 
         $this->addField(
             SharpFormTextField::make("capacity")
-                ->setLabel("Capacity")
+                ->setLabel("Capacity (thousands)")
         );
 
         $this->addField(
@@ -55,9 +53,14 @@ class SpaceshipSharpForm extends SharpForm implements SharpFormEloquent
             });
     }
 
-    function findModel($id): Model
+    function find($id): array
     {
-        return Spaceship::findOrFail($id);
+        return $this->setCustomTransformer("capacity", function($spaceship) {
+            return $spaceship->capacity / 1000;
+
+        })->transform(
+            Spaceship::findOrFail($id)
+        );
     }
 
     function update($id, array $data): bool

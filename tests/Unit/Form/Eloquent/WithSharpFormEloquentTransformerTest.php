@@ -2,12 +2,11 @@
 
 namespace Code16\Sharp\Tests\Unit\Form\Eloquent;
 
-use Code16\Sharp\Form\Eloquent\SharpFormEloquent;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentTransformer;
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Form\Transformers\SharpAttributeTransformer;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\SharpTestCase;
-use \Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Schema;
@@ -154,17 +153,53 @@ class WithSharpFormEloquentTransformerTest extends SharpTestCase
             ], $form->find($person1->id)
         );
     }
+
+    /** @test */
+    function we_can_use_a_closure_as_a_custom_transformer()
+    {
+        $person = Person::create([
+            "name" => "John Wayne"
+        ]);
+
+        $form = new WithSharpFormEloquentTransformerTestForm();
+        $form->setCustomTransformer("name", function($person) {
+            return strtoupper($person->name);
+        });
+
+        $this->assertArraySubset(
+            ["name" => "JOHN WAYNE"],
+            $form->find($person->id)
+        );
+    }
+
+    /** @test */
+    function we_can_use_a_class_as_a_custom_transformer()
+    {
+        $person = Person::create([
+            "name" => "John Wayne"
+        ]);
+
+        $form = new WithSharpFormEloquentTransformerTestForm();
+        $form->setCustomTransformer("name", SharpAttributeUppercaseTransformer::class);
+
+        $this->assertArraySubset(
+            ["name" => "JOHN WAYNE"],
+            $form->find($person->id)
+        );
+    }
 }
 
-class WithSharpFormEloquentTransformerTestForm extends SharpForm implements SharpFormEloquent
+class WithSharpFormEloquentTransformerTestForm extends SharpForm
 {
     use WithSharpFormEloquentTransformer;
 
-    function findModel($id): Model
+    function find($id): array
     {
-        return Person::whereId($id)
-            ->with(["sons", "elderSon", "mother", "friends"])
-            ->firstOrFail();
+        return $this->transform(
+            Person::whereId($id)
+                ->with(["sons", "elderSon", "mother", "friends"])
+                ->firstOrFail()
+        );
     }
 
     function update($id, array $data): bool { return false; }
@@ -172,4 +207,12 @@ class WithSharpFormEloquentTransformerTestForm extends SharpForm implements Shar
     function delete($id): bool { return false; }
     function buildFormLayout() {}
     function buildFormFields() {}
+}
+
+class SharpAttributeUppercaseTransformer implements SharpAttributeTransformer
+{
+    function apply($instance, string $attribute)
+    {
+        return strtoupper($instance->$attribute);
+    }
 }
