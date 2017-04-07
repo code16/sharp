@@ -1,0 +1,117 @@
+<?php
+
+namespace Code16\Sharp\Tests\Feature\Api;
+
+class ApiControllerTest extends BaseApiTest
+{
+    /** @test */
+    public function we_can_get_form_data_for_an_entity()
+    {
+        $this->buildTheWorld();
+
+        $this->json('get', '/sharp/api/form/person/1')
+            ->assertStatus(200)
+            ->assertJson(["data" => [
+                "name" => "John Wayne"
+            ]]);
+    }
+
+    /** @test */
+    public function we_wont_get_entity_attribute_for_a_non_form_data()
+    {
+        $this->buildTheWorld();
+
+        $result = $this->json('get', '/sharp/api/form/person/1');
+
+        $this->assertArrayHasKey("name", $result->json()["data"]);
+        $this->assertArrayNotHasKey("job", $result->json()["data"]);
+    }
+
+    /** @test */
+    public function we_can_get_form_fields_for_an_entity()
+    {
+        $this->buildTheWorld();
+
+        $this->json('get', '/sharp/api/form/person/1')
+            ->assertStatus(200)
+            ->assertJson(["fields" => [
+                [
+                    "key" => "name",
+                    "type" => "text"
+                ]
+            ]]);
+    }
+
+    /** @test */
+    public function we_can_get_form_layout_for_an_entity()
+    {
+        $this->buildTheWorld();
+
+        $this->json('get', '/sharp/api/form/person/1')
+            ->assertStatus(200)
+            ->assertJson(["layout" => [
+                [
+                    "columns" => [
+                        [
+                            "size" => 6,
+                            "fields" => [
+                                [
+                                    ["key" => "name"]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]]);
+    }
+
+    /** @test */
+    public function we_can_update_an_entity()
+    {
+        $this->buildTheWorld();
+
+        $this->json('post', '/sharp/api/form/person/1', [
+            "name" => "Jane Fonda"
+        ])->assertStatus(200)
+            ->assertJson(["ok" => true]);
+    }
+
+    /** @test */
+    public function we_can_validate_an_entity_before_update()
+    {
+        $this->buildTheWorld(true);
+
+        $this->json('post', '/sharp/api/form/person/1', [
+            "age" => 22
+        ])->assertStatus(422)
+            ->assertJson([
+                "name" => [
+                    "The name field is required."
+                ]
+            ]);
+    }
+
+    /** @test */
+    public function we_can_store_a_new_entity()
+    {
+        $this->buildTheWorld();
+
+        $this->json('post', '/sharp/api/form/person', [
+            "name" => "Jane Fonda"
+        ])->assertStatus(200)
+            ->assertJson(["ok" => true]);
+    }
+
+    /** @test */
+    public function applicative_exception_is_returned_as_417()
+    {
+        $this->buildTheWorld();
+
+        $this->json('post', '/sharp/api/form/person/notanid', [
+            "name" => "Jane Fonda"
+        ])->assertStatus(417)
+            ->assertJson([
+                "message" => "notanid is not a valid id"
+            ]);
+    }
+}
