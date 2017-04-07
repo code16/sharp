@@ -16,13 +16,12 @@ class FormController extends Controller
      */
     public function show($key, $id)
     {
-        $form = $this->getFormFieldsInstance($key);
-        $formData = $this->getFormDataInstance($key);
+        $form = $this->getFormInstance($key);
 
         return response()->json([
             "fields" => $form->fields(),
             "layout" => $form->formLayout(),
-            "data" => $formData->get($id)
+            "data" => $form->get($id)
         ]);
     }
 
@@ -35,7 +34,7 @@ class FormController extends Controller
     {
         $this->validateRequest($key);
 
-        $this->getFormDataInstance($key)
+        $this->getFormInstance($key)
             ->update($id, request()->all()); // TODO ->only on actual presented fields
 
         return response()->json(["ok" => true]);
@@ -49,7 +48,7 @@ class FormController extends Controller
     {
         $this->validateRequest($key);
 
-        $this->getFormDataInstance($key)
+        $this->getFormInstance($key)
             ->store(request()->all()); // TODO ->only on actual presented fields
 
         return response()->json(["ok" => true]);
@@ -59,19 +58,9 @@ class FormController extends Controller
      * @param string $key
      * @return SharpForm
      */
-    protected function getFormFieldsInstance(string $key): SharpForm
+    protected function getFormInstance(string $key): SharpForm
     {
         $formClass = config("sharp.entities.{$key}.form");
-        return app($formClass);
-    }
-
-    /**
-     * @param string $key
-     * @return SharpFormData
-     */
-    protected function getFormDataInstance(string $key): SharpFormData
-    {
-        $formClass = config("sharp.entities.{$key}.data");
         return app($formClass);
     }
 

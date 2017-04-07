@@ -2,28 +2,16 @@
 
 namespace App\Sharp;
 
-use Code16\Sharp\Form\BuildsSharpFormFields;
-use Code16\Sharp\Form\BuildsSharpFormLayout;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\SharpForm;
-use Code16\Sharp\Form\SharpFormData;
 
-class SpaceshipSharpForm implements SharpForm, SharpFormData
+class SpaceshipSharpForm extends SharpForm
 {
-    use BuildsSharpFormFields;
-
-    use BuildsSharpFormLayout;
-
 //    use WithSharpEloquentUpdater;
 
-    /**
-     * Get the fields array representation.
-     *
-     * @return array
-     */
-    function fields(): array
+    function buildFormFields()
     {
         $this->addField(
             SharpFormTextField::make("name")
@@ -50,16 +38,9 @@ class SpaceshipSharpForm implements SharpForm, SharpFormData
                     SpaceshipType::orderBy("label")->get()->pluck("label", "id")
                 )
         );
-
-        return $this->buildForm();
     }
 
-    /**
-     * Return the form fields layout.
-     *
-     * @return array
-     */
-    function formLayout(): array
+    function buildFormLayout()
     {
         $this->addColumn(6)
             ->withSingleField("name")
@@ -67,8 +48,6 @@ class SpaceshipSharpForm implements SharpForm, SharpFormData
             ->withFieldset("Technical details", function($fieldset) {
                 return $fieldset->withFields("capacity|4,6", "construction_date|8,6");
             });
-
-        return $this->buildLayout();
     }
 
     /**
