@@ -11,7 +11,7 @@ abstract class SharpForm
     /**
      * @var array
      */
-    protected $fields;
+    protected $fields = [];
 
     /**
      * @var array
@@ -60,6 +60,23 @@ abstract class SharpForm
         return collect($this->tabs)->map(function($tab) {
             return $tab->toArray();
         })->all();
+    }
+
+    /**
+     * Return the entity instance, as an array.
+     *
+     * @param $id
+     * @return array
+     */
+    function instance($id): array
+    {
+        return collect($this->find($id))
+            // Filter model attributes on actual form fields
+            ->only(
+                collect($this->fields())
+                    ->pluck("key")
+                    ->all()
+            )->all();
     }
 
     /**

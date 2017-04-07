@@ -21,7 +21,7 @@ class PersonSharpForm extends SharpForm
 
     function find($id): array
     {
-        return ["name" => "John Wayne"];
+        return ["name" => "John Wayne", "job" => "actor"];
     }
 
     function update($id, array $data): bool

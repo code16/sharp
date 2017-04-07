@@ -17,6 +17,17 @@ class ApiControllerTest extends BaseApiTest
     }
 
     /** @test */
+    public function we_wont_get_entity_attribute_for_a_non_form_data()
+    {
+        $this->buildTheWorld();
+
+        $result = $this->json('get', '/sharp/api/form/person/1');
+
+        $this->assertArrayHasKey("name", $result->json()["data"]);
+        $this->assertArrayNotHasKey("job", $result->json()["data"]);
+    }
+
+    /** @test */
     public function we_can_get_form_fields_for_an_entity()
     {
         $this->buildTheWorld();
