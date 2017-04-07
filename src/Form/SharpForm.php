@@ -113,7 +113,7 @@ abstract class SharpForm
      * @param $id
      * @return array
      */
-    abstract function get($id): array;
+    abstract function find($id): array;
 
     /**
      * @param $id

@@ -47,7 +47,7 @@ class SharpFormFieldsTest extends SharpTestCase
 
 abstract class FormFieldsTestForm extends SharpForm
 {
-    function get($id): array { return []; }
+    function find($id): array { return []; }
     function update($id, array $data): bool { return false; }
     function store(array $data): bool { return false; }
     function delete($id): bool { return false; }

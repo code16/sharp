@@ -21,7 +21,7 @@ class FormController extends Controller
         return response()->json([
             "fields" => $form->fields(),
             "layout" => $form->formLayout(),
-            "data" => $form->get($id)
+            "data" => $form->find($id)
         ]);
     }
 

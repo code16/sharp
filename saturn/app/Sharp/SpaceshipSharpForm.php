@@ -2,14 +2,19 @@
 
 namespace App\Sharp;
 
+use Code16\Sharp\Form\Eloquent\SharpFormEloquent;
+use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentTransformer;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\SharpForm;
+use Illuminate\Database\Eloquent\Model;
 
-class SpaceshipSharpForm extends SharpForm
+class SpaceshipSharpForm extends SharpForm implements SharpFormEloquent
 {
 //    use WithSharpEloquentUpdater;
+
+    use WithSharpFormEloquentTransformer;
 
     function buildFormFields()
     {
@@ -50,15 +55,9 @@ class SpaceshipSharpForm extends SharpForm
             });
     }
 
-    /**
-     * Retrieve a Model for the form and pack all its data as JSON.
-     *
-     * @param $id
-     * @return array
-     */
-    function get($id): array
+    function findModel($id): Model
     {
-        return Spaceship::findOrFail($id)->toArray();
+        return Spaceship::findOrFail($id);
     }
 
     function update($id, array $data): bool

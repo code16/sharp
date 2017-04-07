@@ -67,7 +67,7 @@ class FormLayoutTest extends SharpTestCase
 
 abstract class FormLayoutTestForm extends SharpForm
 {
-    function get($id): array { return []; }
+    function find($id): array { return []; }
     function update($id, array $data): bool { return false; }
     function store(array $data): bool { return false; }
     function delete($id): bool { return false; }

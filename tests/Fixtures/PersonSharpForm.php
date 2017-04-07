@@ -19,7 +19,7 @@ class PersonSharpForm extends SharpForm
             ->withSingleField("name");
     }
 
-    function get($id): array
+    function find($id): array
     {
         return ["name" => "John Wayne"];
     }
