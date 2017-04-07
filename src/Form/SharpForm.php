@@ -72,11 +72,20 @@ abstract class SharpForm
     {
         return collect($this->find($id))
             // Filter model attributes on actual form fields
-            ->only(
-                collect($this->fields())
-                    ->pluck("key")
-                    ->all()
-            )->all();
+            ->only($this->getFieldKeys())
+            ->all();
+    }
+
+    /**
+     * Return the key attribute of all fields defined in the form.
+     *
+     * @return array
+     */
+    function getFieldKeys(): array
+    {
+        return collect($this->fields())
+            ->pluck("key")
+            ->all();
     }
 
     /**
