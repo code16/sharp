@@ -9,12 +9,12 @@ export default [
                         {
                             "key": "A",
                             "size": 4,
-                            "size-xs": 6
+                            "sizeXS": 6
                         },
                         {
                             "key": "B",
                             "size": 8,
-                            "size-xs": 6
+                            "sizeXS": 6
                         }
                     ],
                     [
@@ -64,6 +64,10 @@ export default [
                             "key": "G"
                         }, {
                             "key": "H"
+                        }
+                    ], [
+                        {
+                            "key" : "name"
                         }
                     ]
                 ]

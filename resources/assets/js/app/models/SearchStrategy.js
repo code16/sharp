@@ -16,7 +16,7 @@ class SearchStrategy {
             threshold: 0.0,
             distance: 0,
             maxPatternLength: 64,
-        }
+        };
 
         this.fuse = new Fuse(list, this.options);
 

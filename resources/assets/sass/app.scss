@@ -1,0 +1,9 @@
+@import 'node_modules/bootstrap/scss/bootstrap';
+
+body {
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.multiselect__input {
+  @extend .form-control;
+}

@@ -1,6 +1,6 @@
 import Autocomplete from './Autocomplete';
 import Textarea from './Textarea';
-import TextInput from './TextInput';
+import TextInput from './Text';
 import Password from './Password';
 import Markdown from './Markdown';
 
@@ -11,7 +11,7 @@ export const NameAssociation = {
     'Password'     : Password.name,
     'Textarea'     : Textarea.name,
     'Markdown'     : Markdown.name
-}
+};
 
 export default {
     [Autocomplete.name]:Autocomplete,

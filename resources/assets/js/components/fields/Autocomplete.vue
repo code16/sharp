@@ -1,19 +1,14 @@
 <template>
     <div>
-        <sharp-template :field-key="fieldKey" name="resultItem"/>
-        <el-autocomplete v-model="value" trigger-on-focus
-                         :fetch-suggestions="collectSuggestions"
-                         :placeholder="placeholder"
-                         :custom-item="listItemTemplate.compNameOrDefault"
-                         @select="handleSelect"
-                         :disabled="disabled">
-        </el-autocomplete>
+        <sharp-template :field-key="fieldKey" name="resultItem"></sharp-template>
+        <multiselect v-model="value" :options="options">
+        </multiselect>
     </div>
 </template>
 
 <script>
     import SharpTemplate from '../Template.vue';
-    import { Autocomplete } from 'element-ui';
+    import Multiselect from 'vue-multiselect';
 
     import Template from '../../app/models/Template';
     import SearchStrategy from '../../app/models/SearchStrategy';
@@ -22,7 +17,7 @@
     export default {
         name:'SharpAutocomplete',
         components: {
-            [Autocomplete.name]:Autocomplete,
+            Multiselect,
             [SharpTemplate.name]:SharpTemplate
         },
 
@@ -47,8 +42,10 @@
         },
         data() {
             return {
-                value: '',
-                localSearchStrategy:null,
+                value: null,
+                options: [],
+
+                localSearchStrategy: null,
             }
         },
         computed: {
@@ -91,3 +88,10 @@
         }
     }
 </script>
+
+
+<style>
+    .el-autocomplete {
+        display: block;
+    }
+</style>

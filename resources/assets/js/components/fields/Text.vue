@@ -1,19 +1,10 @@
 <template>
-    <el-input :type="inputType" :placeholder="placeholder" v-model="input" :disabled="disabled">
-
-    </el-input>
+    <input v-if="inputType==='text'" class="form-control"  type="text" :placeholder="placeholder" :disabled="disabled">
 </template>
 
 <script>
-    import { Input } from 'element-ui';
-
-
     export default {
-        name:'SharpTextInput',
-
-        components: {
-            [Input.name]:Input
-        },
+        name:'SharpText',
 
         props: {
             value: {
