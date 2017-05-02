@@ -1,6 +1,5 @@
 <template>
-    <component v-if="template.exists"
-               :is="template.compName">
+    <component v-if="exists" :is="template.compName" :props="templateProps">
     </component>
 </template>
 
@@ -11,12 +10,25 @@
         name: 'SharpTemplate',
         props: {
             fieldKey: String,
+            templateProps: {
+                type:Object,
+                default() { return {} }
+            },
             name: String
         },
-        computed: {
-            template() {
-                return new Template(this.fieldKey, this.name);
+        data() {
+            return {
+                template: null,
+                exists: false
             }
+        },
+        watch: {
+            'template.exists'(val) {
+                this.exists = val;
+            }
+        },
+        created() {
+            this.template = new Template(this.fieldKey, this.name)
         }
     }
 </script>

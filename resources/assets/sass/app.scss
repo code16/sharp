@@ -1,5 +1,6 @@
 @import 'node_modules/bootstrap/scss/bootstrap';
 
-.multiselect__input {
-  @extend .form-control;
-}
+@import 'components/Autocomplete';
+
+
+

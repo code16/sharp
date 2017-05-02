@@ -1,4 +1,4 @@
-export default [
+export const layout = [
     {
         "title": "Tab1",
         "columns": [
@@ -74,4 +74,56 @@ export default [
             }
         ]
     }
-]
+];
+
+export const data = {
+    "A":"Valeur texte"
+};
+
+export const fields = {
+    'A':{
+        type:'text',
+        label: 'Mon Label'
+    },
+    'B':{
+        type:'text',
+        label: '\u00A0'
+    },
+    'C':{
+        type:'text'
+    },
+    'D':{
+        type:'text'
+    },
+    'E':{
+        type:'text'
+    },
+    'F':{
+        type:'text'
+    },
+    'G':{
+        type:'text'
+    },
+    'H':{
+        type:'text'
+    },
+    'name':{
+        type:'autocomplete',
+        mode:'local',
+        localValues: [
+            { id:'A', value: 'Antoine', surname: 'Guingand' },
+            { id:'B', value: 'Robert', surname: 'Martin' },
+            { id:'C', value: 'François', surname: 'Leforestier' },
+            { id:'D', value: 'Fernand', surname: 'Coli' }
+        ],
+        listItemTemplate:`
+                            <span class="value">{{ props.value }}</span>
+                            <span class="surname">{{ props.surname }}</span>
+                        `,
+        // disabled: true
+        conditionalDisplay: '!advanced_search:red,blue,orange'
+    },
+    'advanced_search':{
+        type:'check'
+    }
+};

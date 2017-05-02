@@ -1,0 +1,37 @@
+.SharpAutocomplete {
+
+  .multiselect {
+
+    &--active {
+      .multiselect__tags {
+        border-color: $input-border-focus !important;
+      }
+    }
+
+    .multiselect__tags {
+      border-color: $input-border-color;
+      border-radius: $input-border-radius;
+    }
+
+    .multiselect__option {
+      &--selected {
+        color: $dropdown-link-active-color;
+        background: $dropdown-link-active-bg;
+        &:after {
+          color: $dropdown-link-active-color;
+          background: $dropdown-link-active-bg;
+        }
+      }
+
+      &--highlight {
+        color: $autocomplete-option-hover-color;
+        background: $autocomplete-option-hover-bg;
+        &:after {
+          color: $autocomplete-option-hover-color;
+          background: $autocomplete-option-hover-bg;
+        }
+      }
+    }
+
+  }
+}

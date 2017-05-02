@@ -4,9 +4,8 @@ const { mix } = require('laravel-mix');
 
 mix.autoload({})
     .js('resources/assets/js/sharp.js', 'public/js')
-    .styles(['resources/assets/theme/sharp/index.css'],'public/css/theme.css')
     .sass('resources/assets/sass/app.scss', 'public/css/sharp.css')
-    .copy('node_modules/bootstrap/dist/css/bootstrap-grid.css', 'public/css/bootstrap-grid.css')
+    .copy('node_modules/vue-multiselect/dist/vue-multiselect.min.css', 'public/css/vue-multiselect.min.css')
     .webpackConfig({
         resolve: {
             alias: {

@@ -1,5 +1,5 @@
 <template>
-    <input v-if="inputType==='text'" class="form-control"  type="text" :placeholder="placeholder" :disabled="disabled">
+    <input class="form-control" type="text" :placeholder="placeholder" :disabled="disabled">
 </template>
 
 <script>

@@ -35,8 +35,12 @@ class TemplateController {
             }
 
             Vue.component(compName, {
+                props:{
+                    props:Object
+                },
                 mixins,
                 mounted() {
+                    //console.log(this);
                     if(definition.propagateEvents) {
                         for(let event of definition.propagateEvents) {
                             this.$el.addEventListener(event, ()=>{

@@ -1,7 +1,10 @@
 <template>
-    <div>
+    <div class="SharpAutocomplete">
         <sharp-template :field-key="fieldKey" name="resultItem"></sharp-template>
-        <multiselect v-model="value" :options="options">
+        <multiselect v-model="value" :options="localValues" label="value" :track-by="itemIdAttribute">
+            <template slot="option" scope="props">
+                <sharp-template :field-key="fieldKey" :template-props="props.option" name="listItem"></sharp-template>
+            </template>
         </multiselect>
     </div>
 </template>
@@ -33,7 +36,10 @@
                 type: String,
                 default: 'query'
             },
-            itemKeyAttribute:String,
+            itemIdAttribute: {
+                type:String,
+                default: 'id'
+            },
             searchMinBar: {
                 type: Number,
                 default: 1
@@ -43,8 +49,6 @@
         data() {
             return {
                 value: null,
-                options: [],
-
                 localSearchStrategy: null,
             }
         },
@@ -88,10 +92,3 @@
         }
     }
 </script>
-
-
-<style>
-    .el-autocomplete {
-        display: block;
-    }
-</style>

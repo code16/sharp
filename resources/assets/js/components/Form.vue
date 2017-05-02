@@ -30,7 +30,8 @@
     import FieldsLayout from './FieldsLayout';
     import FieldContainer from './FieldContainer';
 
-    import layout from '../layout';
+    import * as testForm from '../_test-form';
+    import { NameAssociation as fieldCompNames } from './fields/index';
 
     export default {
         name:'SharpForm',
@@ -38,13 +39,14 @@
         components: {
             [Grid.name]:Grid,
             [FieldsLayout.name]:FieldsLayout,
-            [FieldContainer.name]:FieldContainer,
+            [FieldContainer.name]:FieldContainer
         },
 
         data() {
             return {
-                fields:null,
-                layout,
+                fields:testForm.fields,
+                data:testForm.data,
+                layout:testForm.layout
             }
         },
         computed: {
@@ -56,7 +58,7 @@
                         return util.warn(`Field at index ${i} doesn't have a key : `,field),false;
                     if(!field.type)
                         return util.warn(`Field at index ${i} doesn't have a type : `,field),false;
-                    if(!(field.type in Fields))
+                    if(!(field.type in fieldCompNames))
                         return util.warn(`Field '${field.key}' have a unknown type (${field.type})`),false;
                     
                     return true;
@@ -84,56 +86,7 @@
             }
         },
         mounted() {
-            // GET fields
-            this.fields = {
-                'A':{
-                    type:'SharpTextInput',
-                    label: 'Mon Label'
-                },
-                'B':{
-                    type:'SharpTextInput',
-                    label: '\u00A0'
-                },
-                'C':{
-                    type:'SharpTextInput'
-                },
-                'D':{
-                    type:'SharpTextInput'
-                },
-                'E':{
-                    type:'SharpTextInput'
-                },
-                'F':{
-                    type:'SharpTextInput'
-                },
-                'G':{
-                    type:'SharpTextInput'
-                },
-                'H':{
-                    type:'SharpTextInput'
-                },
-                'name':{
-                    type:'SharpAutocomplete',
-                    mode:'local',
-                    localValues: [
-                        { value: 'Antoine', surname: 'Guingand' },
-                        { value: 'Robert', surname: 'Martin' },
-                        { value: 'François', surname: 'Leforestier' },
-                        { value: 'Fernand', surname: 'Coli' }
-                    ],
-                    listItemTemplate:`
-                            <span class="value">{{ item.value }}</span>
-                            <span class="surname">{{ item.surname }}</span>
-                        `,
-                    // disabled: true
-                    conditionalDisplay: '!advanced_search:red,blue,orange'
-                },
-                'advanced_search':{
-                    type:'Check',
-                    value: true
-                }
-            };
-
+            /** compile templates */
             for(let fieldKey of Object.keys(this.fields)) {
                 let field=this.fields[fieldKey];
                 for (let fieldPropName of Object.keys(field)) {
