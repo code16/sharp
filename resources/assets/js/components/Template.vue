@@ -1,6 +1,6 @@
 <template>
-    <component v-if="exists" :is="template.compName" :props="templateProps">
-    </component>
+    <rendered-template v-if="exists" :comp-name="template.compName" :template-data="templateData">
+    </rendered-template>
 </template>
 
 <script>
@@ -8,13 +8,23 @@
 
     export default {
         name: 'SharpTemplate',
+
+        components: {
+            RenderedTemplate: {
+                functional: true,
+                render(createElement, { props }) {
+                    //console.log(arguments);
+                    return createElement(props.compName, {
+                        props: props.templateData
+                    });
+                }
+            }
+        },
+
         props: {
             fieldKey: String,
-            templateProps: {
-                type:Object,
-                default() { return {} }
-            },
-            name: String
+            name: String,
+            templateData: Object
         },
         data() {
             return {
@@ -23,12 +33,15 @@
             }
         },
         watch: {
-            'template.exists'(val) {
+            'template.exists': function(val) {
                 this.exists = val;
             }
         },
         created() {
-            this.template = new Template(this.fieldKey, this.name)
+            this.template = new Template(this.fieldKey, this.name);
+        },
+        mounted() {
+            //console.log(this);
         }
     }
 </script>

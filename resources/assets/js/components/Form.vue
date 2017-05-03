@@ -92,7 +92,11 @@
                 for (let fieldPropName of Object.keys(field)) {
 
                     if (Template.isTemplateProp(fieldPropName)) {
-                        TemplateController.compileAndRegisterComponent(fieldKey, fieldPropName, field[fieldPropName]);
+                        TemplateController.compileAndRegisterComponent(fieldKey, {
+                            templateName: fieldPropName,
+                            templateValue: field[fieldPropName],
+                            templateProps: field.templateProps
+                        });
                     }
                 }
             }

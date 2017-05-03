@@ -7,49 +7,37 @@ class TemplateController {
     /**
      * 
      * @param {*} fieldKey Value of the property `key` of the field (ex: city)
-     * @param {*} fieldPropName Name of the current evaluated field Property (ex: listItemTemplate)
-     * @param {*} fieldPropValue Value of the current evaluated field Property (ex: `<div>{{city}}</div>`)
+     * @param templateName
+     * @param templateValue
+     * @param templateProps
      */
-    static compileAndRegisterComponent(fieldKey, fieldPropName, fieldPropValue)  {
-        if(!Template.isTemplateProp(fieldPropName)) 
-            return;
+    static compileAndRegisterComponent(fieldKey, { templateName, templateValue, templateProps })  {
 
-        let template = new Template(fieldKey, Template.parseTemplateName(fieldPropName));
+        let template = new Template(fieldKey, Template.parseTemplateName(templateName));
         let compName = template.compName;
 
         if(!template.exists) {
-            let definition = TemplateDefinition[fieldPropName];
+            /*
+            let definition = TemplateDefinition[name];
         
             let mixins = [];
             let wrapper = 'div';
+
 
             if(definition) {
                 mixins.push(definition);
                 if(definition.wrapIn)
                     wrapper = definition.wrapIn;
                 else
-                    util.log(`wrapper element (\`wrapIn\`) is not set in '${fieldPropName}' definition (default div)`);
+                    util.log(`wrapper element (\`wrapIn\`) is not set in '${name}' definition (default div)`);
             }
             else {
-                util.warn(`'${fieldPropName}' doesn't match any definition`);
-            }
+                util.warn(`'${name}' doesn't match any definition`);
+            }*/
 
             Vue.component(compName, {
-                props:{
-                    props:Object
-                },
-                mixins,
-                mounted() {
-                    //console.log(this);
-                    if(definition.propagateEvents) {
-                        for(let event of definition.propagateEvents) {
-                            this.$el.addEventListener(event, ()=>{
-                                this.$emit(event);
-                            }, false);
-                        }
-                    }
-                },
-                ...Vue.compile(`<${wrapper}>${fieldPropValue}</${wrapper}>`)
+                template: `<div>${templateValue}</div>`,
+                props: templateProps
             });
         }
 

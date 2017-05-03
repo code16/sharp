@@ -1,11 +1,15 @@
 <template>
     <div class="SharpAutocomplete">
-        <sharp-template :field-key="fieldKey" name="resultItem"></sharp-template>
-        <multiselect v-model="value" :options="localValues" label="value" :track-by="itemIdAttribute">
+        <multiselect v-model="value" :options="labelledSuggestions" label="__searchLabel" :track-by="itemIdAttribute"
+                     :internal-search="localSearch" :placeholder="placeholder" :loading="isLoading"
+                     @search-change="updateSuggestions" ref="multiselect">
             <template slot="option" scope="props">
-                <sharp-template :field-key="fieldKey" :template-props="props.option" name="listItem"></sharp-template>
+                <sharp-template :field-key="fieldKey" :template="listItemTemplate"
+                                :template-data="props.option" name="listItem"></sharp-template>
             </template>
         </multiselect>
+        <sharp-template class="SharpAutocomplete__result-item" :field-key="fieldKey" name="resultItem"
+                        :template-data="value" ref="resultItem"></sharp-template>
     </div>
 </template>
 
@@ -28,7 +32,10 @@
             fieldKey: String,
 
             mode: String,
-            localValues: Array,
+            localValues: {
+                type: Array,
+                default:()=>[]
+            },
             placeholder: String,
             remoteEndpoint: String,
             remoteMethod:String,
@@ -40,55 +47,66 @@
                 type:String,
                 default: 'id'
             },
-            searchMinBar: {
+            searchMinChars: {
                 type: Number,
                 default: 1
             },
-            disabled:Boolean
+            searchKeys: {
+                type: Array,
+                default:()=>['value']
+            },
+            disabled:Boolean,
+            listItemTemplate: String
         },
         data() {
             return {
                 value: null,
-                localSearchStrategy: null,
+                suggestions: this.localValues,
+                isLoading: false,
+                localSearch: false,
             }
         },
         computed: {
             isRemote() {
                 return this.mode === 'remote';
             },
-            listItemTemplate() {
-                return new Template(this.fieldKey, 'listItem');
-            },
-            filteredSuggestions() {
-                return this.localSearchStrategy.search(this.value);
+            labelledSuggestions() {
+                return this.suggestions.map(s=>{
+                    s.__searchLabel = this.searchKeys.reduce((label, key, i) => {
+                        if(i)
+                            return `${label} ${s[key]}`;
+                        return s[key];
+                    },'');
+                    return s;
+                });
             }
         },
         methods: {
-            collectSuggestions(querystring, cb) {
-                if (this.mode === 'local') {
-                    cb(this.filteredSuggestions);
-                }
-                else if(this.mode === 'remote') {
-                    axios[this.remoteMethod.toLowerCase()](this.remoteEndpoint, {
-                        searchAttribute: this.searchAttribute
-                    }).then(response => {
-                        cb(response.data);
-                    }).catch(
-                        // some error callback
+            updateSuggestions(query) {
+                if(this.isRemote) {
+                    this.isLoading = true;
+                    const call = (method,endpoint,attribute) =>
+                        method === 'GET' ?
+                            axios.get(endpoint,{
+                            params: {
+                                [attribute]:query
+                            }
+                        }): axios.post(endpoint,{
+                            [attribute]:query
+                        }
                     );
+                    call(this.remoteMethod, this.remoteEndpoint, this.remoteSearchAttribute)
+                        .then(response => {
+                            this.isLoading = false;
+                            this.suggestions = response.data;
+                        }).catch(
+                            // some error callback
+                        );
+                }
+                else {
+                    this.localSearch = query.length >= this.searchMinChars;
                 }
             },
-            handleSelect(item) {
-                console.log(item);
-            }
         },
-        mounted() {
-            if(this.mode === 'local') {
-                this.localSearchStrategy = new SearchStrategy({
-                    list:this.localValues,
-                    minQueryLength:2
-                });
-            }
-        }
     }
 </script>

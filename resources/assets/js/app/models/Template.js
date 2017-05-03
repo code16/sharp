@@ -17,7 +17,7 @@ class Template {
     }
 
     get compName() {
-        return util.hyphenate(`SharpTemplate${this.name}${this.fieldKey}`);
+        return `SharpTemplate${this.name}${this.fieldKey}`;
     }
 
     get exists() {

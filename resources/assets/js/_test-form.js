@@ -110,6 +110,8 @@ export const fields = {
     'name':{
         type:'autocomplete',
         mode:'local',
+        placeholder: 'Selectionnez un nom',
+        searchMinChars:3,
         localValues: [
             { id:'A', value: 'Antoine', surname: 'Guingand' },
             { id:'B', value: 'Robert', surname: 'Martin' },
@@ -117,9 +119,14 @@ export const fields = {
             { id:'D', value: 'Fernand', surname: 'Coli' }
         ],
         listItemTemplate:`
-                            <span class="value">{{ props.value }}</span>
-                            <span class="surname">{{ props.surname }}</span>
+                            <span class="value">{{ value }}</span>
+                            <span class="surname">{{ surname }}</span>
                         `,
+        resultItemTemplate:`
+                            Résultat : {{ value }} {{ surname }}
+                        `,
+        templateProps: ['value', 'surname'],
+        searchKeys: ['value', 'surname'],
         // disabled: true
         conditionalDisplay: '!advanced_search:red,blue,orange'
     },
