@@ -69,6 +69,10 @@ export const layout = [
                         {
                             "key" : "name"
                         }
+                    ], [
+                        {
+                            "key" : "myimage"
+                        }
                     ]
                 ]
             }
@@ -119,6 +123,7 @@ export const fields = {
             { id:'D', value: 'Fernand', surname: 'Coli' }
         ],
         listItemTemplate:`
+                            <img src="https://i.ytimg.com/vi/wSTt04rOwa8/maxresdefault.jpg" width="50px">
                             <span class="value">{{ value }}</span>
                             <span class="surname">{{ surname }}</span>
                         `,
@@ -130,7 +135,10 @@ export const fields = {
         // disabled: true
         conditionalDisplay: '!advanced_search:red,blue,orange'
     },
-    'advanced_search':{
-        type:'check'
+    'myimage': {
+        type: 'upload',
+        maxFileSize: 6,
+        fileFilter: ['jpg','png'],
+        thumbnail:'150x150'
     }
 };

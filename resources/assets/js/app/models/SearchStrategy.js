@@ -1,7 +1,7 @@
 import Fuse from 'fuse.js';
 
 class SearchStrategy {
-    constructor({list, minQueryLength}) {
+    constructor({list, minQueryLength, searchKeys}) {
         this.options = {
             caseSensitive:false,
             include: [],
@@ -11,7 +11,7 @@ class SearchStrategy {
             matchAllTokens: false,
             findAllMatches: false,
             id: null,
-            keys: ['value'],
+            keys: searchKeys || ['value'],
             location: 0,
             threshold: 0.0,
             distance: 0,

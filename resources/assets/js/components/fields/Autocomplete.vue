@@ -1,15 +1,30 @@
 <template>
     <div class="SharpAutocomplete">
-        <multiselect v-model="value" :options="labelledSuggestions" label="__searchLabel" :track-by="itemIdAttribute"
-                     :internal-search="localSearch" :placeholder="placeholder" :loading="isLoading"
-                     @search-change="updateSuggestions" ref="multiselect">
+        <div v-if="state=='valuated'" class="SharpAutocomplete__result-item">
+            <sharp-template :field-key="fieldKey"
+                            name="resultItem" :template-data="value">
+            </sharp-template>
+            <div class="SharpAutocomplete__close-btn-container" @click="handleCloseClick">
+                <button type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+        <multiselect v-else
+                     v-model="value"
+                     :options="suggestions"
+                     :track-by="itemIdAttribute"
+                     :internal-search="false"
+                     :placeholder="placeholder"
+                     :loading="state=='loading'"
+                     selectLabel="" selectedLabel="" deselectLabel=""
+                     @search-change="updateSuggestions"
+                     @select="handleSelect"
+                     ref="multiselect">
             <template slot="option" scope="props">
-                <sharp-template :field-key="fieldKey" :template="listItemTemplate"
-                                :template-data="props.option" name="listItem"></sharp-template>
+                <sharp-template :field-key="fieldKey" :template-data="props.option" name="listItem"></sharp-template>
             </template>
         </multiselect>
-        <sharp-template class="SharpAutocomplete__result-item" :field-key="fieldKey" name="resultItem"
-                        :template-data="value" ref="resultItem"></sharp-template>
     </div>
 </template>
 
@@ -55,6 +70,7 @@
                 type: Array,
                 default:()=>['value']
             },
+            inline:Boolean,
             disabled:Boolean,
             listItemTemplate: String
         },
@@ -63,28 +79,23 @@
                 value: null,
                 suggestions: this.localValues,
                 isLoading: false,
-                localSearch: false,
+                searchStrategy: new SearchStrategy({
+                    list: this.localValues,
+                    minQueryLength: this.searchMinChars,
+                    searchKeys: this.searchKeys
+                }),
+                state:'initial'
             }
         },
         computed: {
             isRemote() {
                 return this.mode === 'remote';
-            },
-            labelledSuggestions() {
-                return this.suggestions.map(s=>{
-                    s.__searchLabel = this.searchKeys.reduce((label, key, i) => {
-                        if(i)
-                            return `${label} ${s[key]}`;
-                        return s[key];
-                    },'');
-                    return s;
-                });
             }
         },
         methods: {
             updateSuggestions(query) {
                 if(this.isRemote) {
-                    this.isLoading = true;
+                    this.state = 'loading';
                     const call = (method,endpoint,attribute) =>
                         method === 'GET' ?
                             axios.get(endpoint,{
@@ -97,16 +108,29 @@
                     );
                     call(this.remoteMethod, this.remoteEndpoint, this.remoteSearchAttribute)
                         .then(response => {
-                            this.isLoading = false;
+                            this.state = 'searching';
                             this.suggestions = response.data;
                         }).catch(
                             // some error callback
                         );
                 }
                 else {
-                    this.localSearch = query.length >= this.searchMinChars;
+                    this.suggestions = this.searchStrategy.search(query);
+                    this.state = 'searching';
                 }
             },
+            handleSelect() {
+                this.state = 'valuated';
+            },
+            handleCloseClick() {
+                console.log('focus');
+                this.state = this.inline ? 'searching' : 'initial';
+
+                this.value=null;
+                this.$nextTick(()=>{
+                    this.$refs.multiselect.activate();
+                });
+            }
         },
     }
 </script>
