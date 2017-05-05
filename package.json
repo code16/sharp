@@ -13,10 +13,6 @@
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "jquery": "^3.1.0",
     "laravel-mix": "^0.11.4",
-    "vue": "^2.3.2",
-    "vue2-dropzone": "^2.2.6"
-  },
-  "dependencies": {
     "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
     "bootstrap": "4.0.0-alpha.6",
@@ -24,6 +20,10 @@
     "fuse.js": "^2.6.2",
     "mime-types": "^2.1.15",
     "simplemde": "^1.11.2",
+    "vue-clip": "^1.0.0",
     "vue-multiselect": "next"
+  },
+  "dependencies": {
+    "vue": "^2.3.2"
   }
 }

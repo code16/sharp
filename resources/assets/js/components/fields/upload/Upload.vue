@@ -1,31 +1,18 @@
 <template>
-    <div class="SharpUpload">
-        <dropzone :id="`dropzone_${fieldKey}`"
-                  url="http://jsonplaceholder.typicode.com/posts"
-                  ref="dropzone">
-        </dropzone>
-    </div>
+    <sharp-vue-clip :options="options"></sharp-vue-clip>
 </template>
 
 <script>
-    import Dropzone from 'vue2-dropzone/src/index';
+    import SharpVueClip from './VueClip';
 
     export default {
         name: 'SharpUpload',
         components: {
-            Dropzone
+            SharpVueClip
         },
+
         props: {
-            fieldKey: String,
-            maxFileSize: Number,
-            fileFilter: Array,
-            thumbnail: String
-        },
-        data() {
-            return {
-                showButton:true,
-                dz:null
-            }
+
         },
         computed: {
             options() {
@@ -35,7 +22,7 @@
                 opt.uploadMultiple = false;
                 if (this.fileFilter) {
                     opt.acceptedFiles = {
-                        extensions: this.acceptedFiles,
+                        extensions: this.fileFilter,
                         message: "L'extension est invalide"
                     }
                 }
@@ -53,11 +40,6 @@
 
                 return opt;
             }
-        },
-        methods: {
-            init(upload) {
-                this.dz = this.$refs.dropzone;
-            }
-        },
+        }
     }
 </script>
