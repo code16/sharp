@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <label>{{label}}</label>
+    <div class="form-group">
+        <label v-html="label"></label>
         <sharp-field :field-key="fieldKey"
                      :field-type="fieldType"
                      :field-props="fieldProps"
@@ -15,6 +15,10 @@
 
     export default {
         name:'SharpFieldContainer',
+        components: {
+            [Field.name]:Field
+        },
+
         props : {
             fieldKey: {
                 type: String,
@@ -35,9 +39,12 @@
             readOnly: {
                 type: Boolean
             }
-        },
-        components: {
-            'sharp-field':Field
         }
     }
 </script>
+
+<style>
+    .el-form-item {
+        margin: 0;
+    }
+</style>

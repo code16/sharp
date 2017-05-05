@@ -1,19 +1,15 @@
 <template>
-    <el-input type="textarea" :rows="rows"
-              :placeholder="placeholder"
-              v-model="textarea" :disabled="disabled">
-    </el-input>
+    <textarea name="" id="" cols="30" rows="10"></textarea>
+    <!--<el-input type="textarea" :rows="rows"-->
+              <!--:placeholder="placeholder"-->
+              <!--v-model="textarea" :disabled="disabled">-->
+    <!--</el-input>-->
 </template>
 
 <script>
-    import { Input } from 'element-ui';
 
     export default {
         name:'SharpTextarea',
-
-        components: {
-            [Input.name]:Input
-        },
 
         props: {
             value: {

@@ -1,5 +1,5 @@
 <script>
-    import Fields from './fields';
+    import Fields, { NameAssociation as fieldsCompName } from './fields/index';
 
     export default {
         name:'SharpField',
@@ -19,11 +19,11 @@
             //console.log(this);
         },
         render(h) {
-            return h(this.fieldType,{
+            return h(fieldsCompName[this.fieldType],{
                 props : {
                     fieldKey:this.fieldKey,
                     ...this.fieldProps
-                },
+                }
             });
         }
     }

@@ -4,11 +4,15 @@ const { mix } = require('laravel-mix');
 
 mix.autoload({})
     .js('resources/assets/js/sharp.js', 'public/js')
-    .styles(['resources/assets/theme/sharp/index.css'],'public/css/theme.css')
-    .webpackConfig({
+    .sass('resources/assets/sass/app.scss', 'public/css/sharp.css')
+    .copy('node_modules/vue-multiselect/dist/vue-multiselect.min.css', 'public/css/vue-multiselect.min.css')
+    .options({
+        extractVueStyles:true
+    })
+    /*.webpackConfig({
         resolve: {
             alias: {
                 'vue$': 'vue/dist/vue.esm.js'
             }
         }
-    });
+    });*/

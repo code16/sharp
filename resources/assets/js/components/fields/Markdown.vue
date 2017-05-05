@@ -6,8 +6,7 @@
     import SimpleMDE from 'simplemde';
 
     export default {
-        name: 'SharpMarkdown',
-
+        name: 'SharpMarkdown'
     }
 
 </script>

@@ -1,14 +1,14 @@
 <script>
-    import TextInput from './TextInput';
+    import Text from './Text';
     export default {
         name: 'SharpPassword',
         functional: true,
         components: {
-            [TextInput.name]:TextInput
+            [Text.name]:Text
         },
         render(h, ctx) {
             ctx.data.props.inputType = 'password';
-            return h(TextInput.name, ctx.data);
+            return h(Text.name, ctx.data);
         }
     }
 </script>

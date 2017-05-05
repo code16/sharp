@@ -1,17 +1,14 @@
 <template>
-    <sharp-grid :rows="fields">
+    <sharp-grid :rows="layout">
         <template scope="field">
-            <sharp-field-container v-if="!field.item.fieldset"
-                                   :field-key="field.item.key"
-                                   :field-props="all[field.item.key]"
-                                   :field-type="all[field.item.key].type"
-                                   :label="all[field.item.key].label"
-                                   :help-message="all[field.item.key].helpMessage"
-                                   :read-only="all[field.item.key].readOnly">
-            </sharp-field-container>
+            <slot v-if="!field.item.fieldset" :item="field.item"></slot>
             <fieldset v-else>
                 <legend>{{field.item.fieldset}}</legend>
-                <sharp-fields-layout :fields="field.item.fields" :all="all"></sharp-fields-layout>
+                <sharp-fields-layout :layout="field.item.fields">
+                    <template scope="fieldset">
+                        <slot :item="fieldset.item"></slot>
+                    </template>
+                </sharp-fields-layout>
             </fieldset>
         </template>
     </sharp-grid>
@@ -29,12 +26,8 @@
         },
 
         props: {
-            fields: { // 2D array fields [ligne][col]
+            layout: { // 2D array fields [ligne][col]
                 type: Array,
-                required: true
-            },
-            all: { // all fields
-                type: Object,
                 required: true
             }
         }
