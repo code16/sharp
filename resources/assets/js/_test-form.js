@@ -138,7 +138,7 @@ export const fields = {
     'myimage': {
         type: 'upload',
         maxFileSize: 6,
-        fileFilter: ['jpg','png'],
+        fileFilter: ['.jpg','.png'],
         thumbnail:'150x150'
     }
 };

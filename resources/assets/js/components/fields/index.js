@@ -4,7 +4,7 @@ import SharpText from './Text';
 import SharpPassword from './Password';
 import SharpMarkdown from './Markdown';
 import SharpNumber from './Number';
-import SharpUpload from './upload/VueClip';
+import SharpUpload from './upload/Upload';
 import SharpTagInput from './TagInput';
 import SharpDate from './Date';
 import SharpCheck from './Check';

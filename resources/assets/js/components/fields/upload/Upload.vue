@@ -12,7 +12,9 @@
         },
 
         props: {
-
+            url: String,
+            fileFilter: Array,
+            maxFileSize: Number
         },
         computed: {
             options() {

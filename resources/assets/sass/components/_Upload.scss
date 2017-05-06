@@ -1,3 +1,7 @@
 .SharpUpload {
   @extend .form-control;
+
+  .progress-bar {
+    transition: width 2s;
+  }
 }
