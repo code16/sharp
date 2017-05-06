@@ -9,7 +9,7 @@
             <button type="button" class="close" aria-label="Close" @click="remove()">
                 <span aria-hidden="true">&times;</span>
             </button>
-            <div class="progress" v-if="file.status == 'added'">
+            <div class="progress" v-show="showProgressBar">
                 <div class="progress-bar" role="progressbar" :style="{width:`${progress}%`}" :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
         </template>
@@ -25,12 +25,14 @@
 
         extends: VueClip,
 
-        props: {
-
-        },
         data() {
             return {
-
+                showProgressBar: false
+            }
+        },
+        watch: {
+            'file.status'(status) {
+                typeof this[status] === 'function' && this[status]();
             }
         },
         computed: {
@@ -42,6 +44,18 @@
             }
         },
         methods: {
+            // status callbacks
+            added() {
+                this.showProgressBar = true;
+            },
+            error() {
+                this.showProgressBar = false
+            },
+            success() {
+                setTimeout(()=>this.showProgressBar = false, 1000);
+            },
+
+            // actions
             remove() {
                 this.removeFile(this.file);
                 this.files.splice(0,1);
