@@ -11277,7 +11277,7 @@ var Component = __webpack_require__(0)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\FieldContainer.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/FieldContainer.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] FieldContainer.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -11311,7 +11311,7 @@ var Component = __webpack_require__(0)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\Grid.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/Grid.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Grid.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -11345,7 +11345,7 @@ var Component = __webpack_require__(0)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\fields\\Text.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/Text.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Text.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -11428,12 +11428,17 @@ new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__fields_index__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins__ = __webpack_require__(143);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpField',
+    mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins__["a" /* FieldValue */], __WEBPACK_IMPORTED_MODULE_1__mixins__["b" /* UpdateData */]],
+    components: __WEBPACK_IMPORTED_MODULE_0__fields_index__["b" /* default */],
+
     props: {
         fieldKey: {
             type: String
@@ -11445,15 +11450,22 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             type: Object
         }
     },
-    components: __WEBPACK_IMPORTED_MODULE_0__fields_index__["b" /* default */],
     mounted: function mounted() {
         //console.log(this);
     },
     render: function render(h) {
+        var _this = this;
+
         return h(__WEBPACK_IMPORTED_MODULE_0__fields_index__["a" /* NameAssociation */][this.fieldType], {
             props: _extends({
-                fieldKey: this.fieldKey
-            }, this.fieldProps)
+                fieldKey: this.fieldKey,
+                value: this.value
+            }, this.fieldProps),
+            on: {
+                input: function input(val) {
+                    _this.updateData(_this.fieldKey, val);
+                }
+            }
         });
     }
 });
@@ -11466,6 +11478,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Field__ = __webpack_require__(108);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Field___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Field__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins__ = __webpack_require__(143);
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //
@@ -11480,13 +11493,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpFieldContainer',
     components: _defineProperty({}, __WEBPACK_IMPORTED_MODULE_0__Field___default.a.name, __WEBPACK_IMPORTED_MODULE_0__Field___default.a),
-
+    mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins__["a" /* FieldValue */], __WEBPACK_IMPORTED_MODULE_1__mixins__["b" /* UpdateData */]],
     props: {
         fieldKey: {
             type: String,
@@ -11599,6 +11615,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 
 
@@ -11650,6 +11668,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
             if (values) {} else {}
             return true;
+        },
+        updateData: function updateData(key, value) {
+            this.data[key] = value;
         }
     },
     mounted: function mounted() {
@@ -11709,6 +11730,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 }
             }
         }
+
+        window.form = this;
     }
 });
 
@@ -11867,6 +11890,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -11882,6 +11910,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     props: {
         fieldKey: String,
+
+        value: [String, Number],
 
         mode: String,
         localValues: {
@@ -11917,7 +11947,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     data: function data() {
         return {
-            value: null,
+            query: '',
             suggestions: this.localValues,
             isLoading: false,
             searchStrategy: new __WEBPACK_IMPORTED_MODULE_3__app_models_SearchStrategy__["a" /* default */]({
@@ -11925,18 +11955,38 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 minQueryLength: this.searchMinChars,
                 searchKeys: this.searchKeys
             }),
-            state: 'initial'
+            state: this.value ? 'valuated' : 'initial'
         };
     },
 
     computed: {
         isRemote: function isRemote() {
             return this.mode === 'remote';
+        },
+        valueObject: function valueObject() {
+            var _this = this;
+
+            if (!this.value) return null;
+
+            if (this.isRemote) return this.value;
+
+            return this.localValues.find(function (v) {
+                return v[_this.itemIdAttribute] === _this.value;
+            });
+        },
+        hideDropdown: function hideDropdown() {
+            return this.query.length < this.searchMinChars;
+        },
+        dynamicSuggestions: function dynamicSuggestions() {
+            return this.hideDropdown ? [null] : this.suggestions;
         }
     },
     methods: {
         updateSuggestions: function updateSuggestions(query) {
-            var _this = this;
+            var _this2 = this;
+
+            this.query = query;
+            if (this.hideDropdown) return;
 
             if (this.isRemote) {
                 this.state = 'loading';
@@ -11946,26 +11996,33 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     }) : axios.post(endpoint, _defineProperty({}, attribute, query));
                 };
                 call(this.remoteMethod, this.remoteEndpoint, this.remoteSearchAttribute).then(function (response) {
-                    _this.state = 'searching';
-                    _this.suggestions = response.data;
+                    _this2.state = 'searching';
+                    _this2.suggestions = response.data;
                 }).catch();
             } else {
                 this.suggestions = this.searchStrategy.search(query);
                 this.state = 'searching';
             }
         },
-        handleSelect: function handleSelect() {
+        handleSelect: function handleSelect(value) {
             this.state = 'valuated';
+            this.$emit('input', value[this.itemIdAttribute]);
         },
-        handleCloseClick: function handleCloseClick() {
-            var _this2 = this;
+        handleInput: function handleInput(value) {},
+        handleDropdownOpen: function handleDropdownOpen() {
+            this.suggestions = [];
+        },
+        handleDropdownClose: function handleDropdownClose() {
+            if (this.state === 'searching') this.state = 'initial';
+        },
+        handleResetClick: function handleResetClick() {
+            var _this3 = this;
 
-            console.log('focus');
             this.state = this.inline ? 'searching' : 'initial';
 
-            this.value = null;
+            this.$emit('input', null);
             this.$nextTick(function () {
-                _this2.$refs.multiselect.activate();
+                _this3.$refs.multiselect.activate();
             });
         }
     }
@@ -12001,6 +12058,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpPassword',
     functional: true,
@@ -12021,6 +12079,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpText',
@@ -12037,9 +12098,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     data: function data() {
-        return {
-            input: this.value
-        };
+        return {};
+    },
+
+    methods: {
+        handleInput: function handleInput(e) {
+            this.$emit('input', e.target.value);
+        }
     }
 });
 
@@ -12100,11 +12165,13 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
     components: {
         SharpVueClip: __WEBPACK_IMPORTED_MODULE_0__VueClip___default.a
     },
-
     props: {
+        value: Object,
+
         url: String,
         fileFilter: Array,
-        maxFileSize: Number
+        maxFileSize: Number,
+        thumbnail: String
     },
     computed: {
         options: function options() {
@@ -12146,6 +12213,9 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_clip_src_components_Clip_index__ = __webpack_require__(107);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_clip_src_File__ = __webpack_require__(105);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 //
 //
 //
@@ -12165,6 +12235,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -12172,6 +12253,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     name: 'SharpVueClip',
 
     extends: __WEBPACK_IMPORTED_MODULE_0_vue_clip_src_components_Clip_index__["a" /* default */],
+
+    props: {
+        value: Object
+    },
 
     data: function data() {
         return {
@@ -12187,6 +12272,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     computed: {
         file: function file() {
             return this.files[0];
+        },
+        imageSrc: function imageSrc() {
+            return this.file.thumbnail || this.file.dataUrl;
+        },
+        size: function size() {
+            var size = parseFloat((this.file.size / 1024).toFixed(2));
+            return size.toLocaleString() + ' MB';
         },
         progress: function progress() {
             return Math.floor(this.file.progress);
@@ -12206,6 +12298,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             setTimeout(function () {
                 return _this.showProgressBar = false;
             }, 1000);
+
+            //let data = JSON.parse(this.file.xhrResponse.responseText);
+            var data = {
+                name: "_imageid_.jpg"
+            };
+
+            this.$parent.$emit('input', _extends({
+                uploaded: true
+            }, data));
         },
 
 
@@ -12213,7 +12314,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         remove: function remove() {
             this.removeFile(this.file);
             this.files.splice(0, 1);
+
+            this.$parent.$emit('input', null);
         }
+    },
+    created: function created() {
+        if (!this.value) return;
+
+        this.files.push(new __WEBPACK_IMPORTED_MODULE_1_vue_clip_src_File__["a" /* default */](_extends({}, this.value, {
+            upload: {}
+        })));
+        this.file.thumbnail = this.value.thumbnail;
     }
 });
 
@@ -12271,17 +12382,23 @@ var layout = [{
 }];
 
 var data = {
-    "A": "Valeur texte"
+    "A": "Valeur texte", B: '', C: '', D: '', E: '', F: '', G: '', H: '',
+    "name": "B",
+    "myimage": {
+        name: "doggo.jpg",
+        size: 14550,
+        thumbnail: "https://i.ytimg.com/vi/wSTt04rOwa8/maxresdefault.jpg"
+    }
 };
 
 var fields = {
     'A': {
         type: 'text',
-        label: 'Mon Label'
+        label: 'Texte'
     },
     'B': {
-        type: 'text',
-        label: "\xA0"
+        type: 'password',
+        label: 'Mot de passe'
     },
     'C': {
         type: 'text'
@@ -12306,18 +12423,20 @@ var fields = {
         mode: 'local',
         placeholder: 'Selectionnez un nom',
         searchMinChars: 3,
-        localValues: [{ id: 'A', value: 'Antoine', surname: 'Guingand' }, { id: 'B', value: 'Robert', surname: 'Martin' }, { id: 'C', value: 'François', surname: 'Leforestier' }, { id: 'D', value: 'Fernand', surname: 'Coli' }],
-        listItemTemplate: "\n                            <img src=\"https://i.ytimg.com/vi/wSTt04rOwa8/maxresdefault.jpg\" width=\"50px\">\n                            <span class=\"value\">{{ value }}</span>\n                            <span class=\"surname\">{{ surname }}</span>\n                        ",
-        resultItemTemplate: "\n                            R\xE9sultat : {{ value }} {{ surname }}\n                        ",
-        templateProps: ['value', 'surname'],
-        searchKeys: ['value', 'surname'],
+        localValues: [{ id: 'A', name: 'Antoine', surname: 'Guingand' }, { id: 'B', name: 'Robert', surname: 'Martin' }, { id: 'C', name: 'François', surname: 'Leforestier' }, { id: 'D', name: 'Fernand', surname: 'Coli' }],
+        listItemTemplate: "\n                            <img src=\"https://i.ytimg.com/vi/wSTt04rOwa8/maxresdefault.jpg\" width=\"50px\">\n                            <span class=\"name\">{{ name }}</span>\n                            <span class=\"surname\">{{ surname }}</span>\n                        ",
+        resultItemTemplate: "\n                            R\xE9sultat : {{ name }} {{ surname }}\n                        ",
+        inline: true,
+        templateProps: ['name', 'surname'],
+        searchKeys: ['name', 'surname'],
+        itemIdAttribute: 'id',
         // disabled: true
         conditionalDisplay: '!advanced_search:red,blue,orange'
     },
     'myimage': {
         type: 'upload',
         maxFileSize: 6,
-        fileFilter: ['.jpg', '.png'],
+        fileFilter: ['.jpg', '.jpeg', '.png'],
         thumbnail: '150x150'
     }
 };
@@ -12366,9 +12485,9 @@ var TemplateController = function () {
             if (!template.exists) {
                 /*
                 let definition = TemplateDefinition[name];
-                          let mixins = [];
+                         let mixins = [];
                 let wrapper = 'div';
-                    if(definition) {
+                  if(definition) {
                     mixins.push(definition);
                     if(definition.wrapIn)
                         wrapper = definition.wrapIn;
@@ -25216,7 +25335,7 @@ var Component = __webpack_require__(0)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\Field.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/Field.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -25249,7 +25368,7 @@ var Component = __webpack_require__(0)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\FieldsLayout.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/FieldsLayout.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] FieldsLayout.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -25283,7 +25402,7 @@ var Component = __webpack_require__(0)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\Form.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/Form.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Form.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -25317,7 +25436,7 @@ var Component = __webpack_require__(0)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\Template.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/Template.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Template.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -25351,7 +25470,7 @@ var Component = __webpack_require__(0)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\fields\\Autocomplete.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/Autocomplete.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Autocomplete.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -25385,7 +25504,7 @@ var Component = __webpack_require__(0)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\fields\\Check.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/Check.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 
 module.exports = Component.exports
@@ -25405,7 +25524,7 @@ var Component = __webpack_require__(0)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\fields\\Date.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/Date.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 
 module.exports = Component.exports
@@ -25425,7 +25544,7 @@ var Component = __webpack_require__(0)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\fields\\Markdown.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/Markdown.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Markdown.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -25459,7 +25578,7 @@ var Component = __webpack_require__(0)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\fields\\Number.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/Number.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 
 module.exports = Component.exports
@@ -25479,7 +25598,7 @@ var Component = __webpack_require__(0)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\fields\\Password.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/Password.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -25512,7 +25631,7 @@ var Component = __webpack_require__(0)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\fields\\TagInput.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/TagInput.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 
 module.exports = Component.exports
@@ -25532,7 +25651,7 @@ var Component = __webpack_require__(0)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\fields\\Textarea.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/Textarea.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Textarea.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -25566,7 +25685,7 @@ var Component = __webpack_require__(0)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\fields\\upload\\Upload.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/upload/Upload.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Upload.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -25600,7 +25719,7 @@ var Component = __webpack_require__(0)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\fields\\upload\\VueClip.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/upload/VueClip.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] VueClip.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -25643,9 +25762,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('input', {
     staticClass: "form-control",
     attrs: {
-      "type": "text",
+      "type": _vm.inputType,
       "placeholder": _vm.placeholder,
       "disabled": _vm.disabled
+    },
+    domProps: {
+      "value": _vm.value
+    },
+    on: {
+      "input": _vm.handleInput
     }
   })
 },staticRenderFns: []}
@@ -25663,35 +25788,53 @@ if (false) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "SharpAutocomplete"
-  }, [(_vm.state == 'valuated') ? _c('div', {
+    staticClass: "SharpAutocomplete",
+    class: ("SharpAutocomplete--" + _vm.state)
+  }, [_c('div', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.state == 'valuated'),
+      expression: "state=='valuated'"
+    }],
     staticClass: "SharpAutocomplete__result-item"
   }, [_c('sharp-template', {
     attrs: {
       "field-key": _vm.fieldKey,
       "name": "resultItem",
-      "template-data": _vm.value
+      "template-data": _vm.valueObject
     }
   }), _vm._v(" "), _c('div', {
     staticClass: "SharpAutocomplete__close-btn-container",
     on: {
-      "click": _vm.handleCloseClick
+      "click": _vm.handleResetClick
     }
-  }, [_vm._m(0)])], 1) : _c('multiselect', {
+  }, [_vm._m(0)])], 1), _vm._v(" "), _c('multiselect', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.state != 'valuated'),
+      expression: "state!='valuated'"
+    }],
     ref: "multiselect",
     attrs: {
-      "options": _vm.suggestions,
+      "value": _vm.valueObject,
+      "options": _vm.dynamicSuggestions,
       "track-by": _vm.itemIdAttribute,
       "internal-search": false,
       "placeholder": _vm.placeholder,
       "loading": _vm.state == 'loading',
+      "max": _vm.hideDropdown ? -1 : 1,
       "selectLabel": "",
       "selectedLabel": "",
       "deselectLabel": ""
     },
     on: {
       "search-change": _vm.updateSuggestions,
-      "select": _vm.handleSelect
+      "select": _vm.handleSelect,
+      "input": _vm.handleInput,
+      "open": _vm.handleDropdownOpen,
+      "close": _vm.handleDropdownClose
     },
     scopedSlots: _vm._u([
       ["option", function(props) {
@@ -25703,15 +25846,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           }
         })]
       }]
-    ]),
-    model: {
-      value: (_vm.value),
-      callback: function($$v) {
-        _vm.value = $$v
-      },
-      expression: "value"
-    }
-  })], 1)
+    ])
+  }, [_c('template', {
+    slot: "noResult"
+  }, [_vm._v("Aucun résultats")])], 2)], 1)
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('button', {
     staticClass: "close",
@@ -25771,6 +25909,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "field-key": _vm.fieldKey,
       "field-type": _vm.fieldType,
       "field-props": _vm.fieldProps,
+      "value": _vm.value,
+      "update-data": _vm.updateData,
       "disabled": _vm.readOnly
     }
   }), _vm._v(" "), _c('div', [_vm._v(_vm._s(_vm.helpMessage))])], 1)
@@ -25794,9 +25934,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }, _vm._l((row), function(col, j) {
       return _c('div', {
         class: _vm.colClass[i][j]
-      }, [_vm._t("default", null, {
-        item: col
-      })], 2)
+      }, [_vm._t("default", null, null, col)], 2)
     }))
   }))
 },staticRenderFns: []}
@@ -25834,7 +25972,7 @@ if (false) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "container"
+    staticClass: "Form container"
   }, [(_vm.layout.length == 1) ? _c('sharp-grid', {
     attrs: {
       "rows": [_vm.layout[0].columns]
@@ -25843,18 +25981,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       ["default", function(column) {
         return [(_vm.fields) ? _c('sharp-fields-layout', {
           attrs: {
-            "layout": column.item.fields
+            "layout": column.fields
           },
           scopedSlots: _vm._u([
             ["default", function(field) {
-              return [(_vm.acceptCondition(_vm.fields[field.item.key])) ? _c('sharp-field-container', {
+              return [(_vm.acceptCondition(_vm.fields[field.key])) ? _c('sharp-field-container', {
                 attrs: {
-                  "field-key": field.item.key,
-                  "field-props": _vm.fields[field.item.key],
-                  "field-type": _vm.fields[field.item.key].type,
-                  "label": _vm.fields[field.item.key].label,
-                  "help-message": _vm.fields[field.item.key].helpMessage,
-                  "read-only": _vm.fields[field.item.key].readOnly
+                  "field-key": field.key,
+                  "field-props": _vm.fields[field.key],
+                  "field-type": _vm.fields[field.key].type,
+                  "value": _vm.data[field.key],
+                  "label": _vm.fields[field.key].label,
+                  "help-message": _vm.fields[field.key].helpMessage,
+                  "read-only": _vm.fields[field.key].readOnly,
+                  "updateData": _vm.updateData
                 }
               }) : _vm._e()]
             }]
@@ -25879,7 +26019,8 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('sharp-vue-clip', {
     attrs: {
-      "options": _vm.options
+      "options": _vm.options,
+      "value": _vm.value
     }
   })
 },staticRenderFns: []}
@@ -25896,7 +26037,9 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('form', {
+  return _c('div', {
+    staticClass: "form-control"
+  }, [_c('form', {
     staticClass: "SharpUpload dropzone"
   }, [_c('div', {
     directives: [{
@@ -25910,26 +26053,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "type": "button"
     }
-  }, [_vm._v("Importer...")])]), _vm._v(" "), (_vm.file) ? [_c('img', {
+  }, [_vm._v("Importer...")])]), _vm._v(" "), (_vm.file) ? [_c('div', {
+    staticClass: "SharpUpload__container"
+  }, [_c('div', {
+    staticClass: "SharpUpload__thumbnail"
+  }, [(!!_vm.imageSrc) ? _c('img', {
     attrs: {
-      "src": _vm.file.dataUrl
+      "src": _vm.imageSrc,
+      "width": _vm.options.thumbnailWidth,
+      "height": _vm.options.thumbnailHeight
     }
-  }), _vm._v("\n        " + _vm._s(_vm.file.name) + " " + _vm._s(_vm.file.status) + "\n        "), _c('button', {
-    staticClass: "close",
-    attrs: {
-      "type": "button",
-      "aria-label": "Close"
-    },
-    on: {
-      "click": function($event) {
-        _vm.remove()
-      }
-    }
-  }, [_c('span', {
-    attrs: {
-      "aria-hidden": "true"
-    }
-  }, [_vm._v("×")])]), _vm._v(" "), _c('div', {
+  }) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "SharpUpload__infos"
+  }, [_c('h3', [_vm._v(_vm._s(_vm.file.name))]), _vm._v(" "), _c('div', [_vm._v(_vm._s(_vm.size))]), _vm._v(" "), _c('div', {
     directives: [{
       name: "show",
       rawName: "v-show",
@@ -25948,13 +26084,28 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "aria-valuemin": "0",
       "aria-valuemax": "100"
     }
-  })])] : _vm._e(), _vm._v(" "), _c('div', {
+  })])])]), _vm._v(" "), _c('button', {
+    staticClass: "close",
+    attrs: {
+      "type": "button",
+      "aria-label": "Close"
+    },
+    on: {
+      "click": function($event) {
+        _vm.remove()
+      }
+    }
+  }, [_c('span', {
+    attrs: {
+      "aria-hidden": "true"
+    }
+  }, [_vm._v("×")])])] : _vm._e(), _vm._v(" "), _c('div', {
     ref: "clip-preview-template",
     staticClass: "clip-preview-template",
     staticStyle: {
       "display": "none"
     }
-  }, [_c('div')])], 2)
+  }, [_c('div')])], 2)])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -25975,17 +26126,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     },
     scopedSlots: _vm._u([
       ["default", function(field) {
-        return [(!field.item.fieldset) ? _vm._t("default", null, {
-          item: field.item
-        }) : _c('fieldset', [_c('legend', [_vm._v(_vm._s(field.item.fieldset))]), _vm._v(" "), _c('sharp-fields-layout', {
+        return [(!field.fieldset) ? _vm._t("default", null, null, field) : _c('fieldset', [_c('legend', [_vm._v(_vm._s(field.fieldset))]), _vm._v(" "), _c('sharp-fields-layout', {
           attrs: {
-            "layout": field.item.fields
+            "layout": field.fields
           },
           scopedSlots: _vm._u([
             ["default", function(fieldset) {
-              return [_vm._t("default", null, {
-                item: fieldset.item
-              })]
+              return [_vm._t("default", null, null, fieldset)]
             }]
           ])
         })], 1)]
@@ -35658,6 +35805,66 @@ module.exports = Vue$3;
 __webpack_require__(43);
 module.exports = __webpack_require__(44);
 
+
+/***/ }),
+/* 137 */,
+/* 138 */,
+/* 139 */,
+/* 140 */,
+/* 141 */,
+/* 142 */,
+/* 143 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__template__ = __webpack_require__(144);
+/* unused harmony reexport Template */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__field__ = __webpack_require__(146);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_1__field__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__field__["b"]; });
+
+
+
+/***/ }),
+/* 144 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__app_models_Template__ = __webpack_require__(7);
+
+
+/* unused harmony default export */ var _unused_webpack_default_export = ({
+    computed: {},
+    methods: {
+        template: function template(fieldKey, templateName) {
+            var tpl = new __WEBPACK_IMPORTED_MODULE_0__app_models_Template__["a" /* default */](fieldKey, templateName);
+            return tpl;
+        }
+    }
+});
+
+/***/ }),
+/* 145 */,
+/* 146 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FieldValue; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return UpdateData; });
+var FieldValue = {
+    props: {
+        value: {
+            type: [String, Number, Boolean, Object, Array]
+        },
+        updateData: Function
+    }
+};
+
+var UpdateData = {
+    props: {
+        updateData: Function
+    }
+};
 
 /***/ })
 /******/ ]);

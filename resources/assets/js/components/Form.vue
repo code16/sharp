@@ -1,16 +1,18 @@
 <template>
-    <div class="container">
+    <div class="Form container">
         <sharp-grid v-if="layout.length == 1" :rows="[layout[0].columns]">
             <template scope="column">
-                <sharp-fields-layout v-if="fields" :layout="column.item.fields">
+                <sharp-fields-layout v-if="fields" :layout="column.fields">
                     <template scope="field">
-                        <sharp-field-container v-if="acceptCondition(fields[field.item.key])"
-                                               :field-key="field.item.key"
-                                               :field-props="fields[field.item.key]"
-                                               :field-type="fields[field.item.key].type"
-                                               :label="fields[field.item.key].label"
-                                               :help-message="fields[field.item.key].helpMessage"
-                                               :read-only="fields[field.item.key].readOnly">
+                        <sharp-field-container v-if="acceptCondition(fields[field.key])"
+                                               :field-key="field.key"
+                                               :field-props="fields[field.key]"
+                                               :field-type="fields[field.key].type"
+                                               :value="data[field.key]"
+                                               :label="fields[field.key].label"
+                                               :help-message="fields[field.key].helpMessage"
+                                               :read-only="fields[field.key].readOnly"
+                                               :updateData="updateData">
                         </sharp-field-container>
                     </template>
                 </sharp-fields-layout>
@@ -83,6 +85,9 @@
                     
                 }
                 return true;
+            },
+            updateData(key,value) {
+                this.data[key] = value;
             }
         },
         mounted() {
@@ -100,6 +105,8 @@
                     }
                 }
             }
+
+            window.form = this;
         }
     }
 </script>

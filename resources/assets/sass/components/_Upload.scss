@@ -1,7 +1,37 @@
 .SharpUpload {
-  @extend .form-control;
+  position: relative;
+  margin:0;
 
-  .progress-bar {
-    transition: width .5s;
+  &__container {
+    display:flex;
+
+    .SharpUpload__thumbnail {
+      width:150px;
+      height:150px;
+      display:flex;
+      align-items: center;
+      margin-right: 1em;
+      img {
+        display:block;
+        margin: auto;
+        width:auto;
+        height:auto;
+        max-width:150px;
+        max-height:150px;
+      }
+    }
+
+    .SharpUpload__infos {
+      flex:1;
+      .progress-bar {
+        transition: width .5s;
+      }
+    }
+  }
+
+  .close {
+    position:absolute;
+    top:0;
+    right:0;
   }
 }

@@ -1,5 +1,6 @@
 <script>
     import Text from './Text';
+
     export default {
         name: 'SharpPassword',
         functional: true,

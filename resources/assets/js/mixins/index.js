@@ -1,6 +1,3 @@
-import Template from './template.js';
+export {default as Template} from './template';
+export * from './field';
 
-
-export {
-    Template
-};

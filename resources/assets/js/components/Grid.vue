@@ -2,7 +2,7 @@
     <div>
         <div v-for="(row,i) in rows" class="row">
             <div v-for="(col,j) in row" :class="colClass[i][j]">
-                <slot :item="col"></slot>
+                <slot v-bind="col"></slot>
             </div>
         </div>
     </div>

@@ -81,17 +81,23 @@ export const layout = [
 ];
 
 export const data = {
-    "A":"Valeur texte"
+    "A":"Valeur texte",B:'',C:'',D:'',E:'',F:'',G:'',H:'',
+    "name":"B",
+    "myimage": {
+        name:"doggo.jpg",
+        size:14550,
+        thumbnail:"https://i.ytimg.com/vi/wSTt04rOwa8/maxresdefault.jpg"
+    }
 };
 
 export const fields = {
     'A':{
         type:'text',
-        label: 'Mon Label'
+        label: 'Texte'
     },
     'B':{
-        type:'text',
-        label: '\u00A0'
+        type:'password',
+        label: 'Mot de passe'
     },
     'C':{
         type:'text'
@@ -117,28 +123,30 @@ export const fields = {
         placeholder: 'Selectionnez un nom',
         searchMinChars:3,
         localValues: [
-            { id:'A', value: 'Antoine', surname: 'Guingand' },
-            { id:'B', value: 'Robert', surname: 'Martin' },
-            { id:'C', value: 'François', surname: 'Leforestier' },
-            { id:'D', value: 'Fernand', surname: 'Coli' }
+            { id:'A', name: 'Antoine', surname: 'Guingand' },
+            { id:'B', name: 'Robert', surname: 'Martin' },
+            { id:'C', name: 'François', surname: 'Leforestier' },
+            { id:'D', name: 'Fernand', surname: 'Coli' }
         ],
         listItemTemplate:`
                             <img src="https://i.ytimg.com/vi/wSTt04rOwa8/maxresdefault.jpg" width="50px">
-                            <span class="value">{{ value }}</span>
+                            <span class="name">{{ name }}</span>
                             <span class="surname">{{ surname }}</span>
                         `,
         resultItemTemplate:`
-                            Résultat : {{ value }} {{ surname }}
+                            Résultat : {{ name }} {{ surname }}
                         `,
-        templateProps: ['value', 'surname'],
-        searchKeys: ['value', 'surname'],
+        inline:true,
+        templateProps: ['name', 'surname'],
+        searchKeys: ['name', 'surname'],
+        itemIdAttribute:'id',
         // disabled: true
         conditionalDisplay: '!advanced_search:red,blue,orange'
     },
     'myimage': {
         type: 'upload',
         maxFileSize: 6,
-        fileFilter: ['.jpg','.png'],
+        fileFilter: ['.jpg','.jpeg','.png'],
         thumbnail:'150x150'
     }
 };

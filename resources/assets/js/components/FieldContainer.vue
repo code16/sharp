@@ -4,6 +4,8 @@
         <sharp-field :field-key="fieldKey"
                      :field-type="fieldType"
                      :field-props="fieldProps"
+                     :value="value"
+                     :update-data="updateData"
                      :disabled="readOnly">
         </sharp-field>
         <div>{{helpMessage}}</div>
@@ -12,13 +14,14 @@
 
 <script>
     import Field from './Field';
+    import { FieldValue, UpdateData } from '../mixins';
 
     export default {
         name:'SharpFieldContainer',
         components: {
             [Field.name]:Field
         },
-
+        mixins: [FieldValue, UpdateData],
         props : {
             fieldKey: {
                 type: String,

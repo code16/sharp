@@ -1,5 +1,5 @@
 <template>
-    <sharp-vue-clip :options="options"></sharp-vue-clip>
+    <sharp-vue-clip :options="options" :value="value"></sharp-vue-clip>
 </template>
 
 <script>
@@ -10,11 +10,13 @@
         components: {
             SharpVueClip
         },
-
         props: {
+            value: Object,
+
             url: String,
             fileFilter: Array,
-            maxFileSize: Number
+            maxFileSize: Number,
+            thumbnail: String
         },
         computed: {
             options() {

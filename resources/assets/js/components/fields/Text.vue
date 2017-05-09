@@ -1,5 +1,8 @@
 <template>
-    <input class="form-control" type="text" :placeholder="placeholder" :disabled="disabled">
+    <input :type="inputType" class="form-control"
+           :value="value"  :placeholder="placeholder" :disabled="disabled"
+           @input="handleInput"
+    >
 </template>
 
 <script>
@@ -18,8 +21,11 @@
             }
         },
         data() {
-            return {
-                input: this.value
+            return {}
+        },
+        methods: {
+            handleInput(e) {
+                this.$emit('input',e.target.value);
             }
         }
     }

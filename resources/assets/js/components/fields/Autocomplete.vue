@@ -1,29 +1,34 @@
 <template>
-    <div class="SharpAutocomplete">
-        <div v-if="state=='valuated'" class="SharpAutocomplete__result-item">
+    <div class="SharpAutocomplete" :class="`SharpAutocomplete--${state}`">
+        <div v-show="state=='valuated'" class="SharpAutocomplete__result-item">
             <sharp-template :field-key="fieldKey"
-                            name="resultItem" :template-data="value">
+                            name="resultItem" :template-data="valueObject">
             </sharp-template>
-            <div class="SharpAutocomplete__close-btn-container" @click="handleCloseClick">
+            <div class="SharpAutocomplete__close-btn-container" @click="handleResetClick">
                 <button type="button" class="close" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
         </div>
-        <multiselect v-else
-                     v-model="value"
-                     :options="suggestions"
+        <multiselect v-show="state!='valuated'"
+                     :value="valueObject"
+                     :options="dynamicSuggestions"
                      :track-by="itemIdAttribute"
                      :internal-search="false"
                      :placeholder="placeholder"
                      :loading="state=='loading'"
+                     :max="hideDropdown ? -1 : 1"
                      selectLabel="" selectedLabel="" deselectLabel=""
                      @search-change="updateSuggestions"
                      @select="handleSelect"
+                     @input="handleInput"
+                     @open="handleDropdownOpen"
+                     @close="handleDropdownClose"
                      ref="multiselect">
             <template slot="option" scope="props">
                 <sharp-template :field-key="fieldKey" :template-data="props.option" name="listItem"></sharp-template>
             </template>
+            <template slot="noResult">Aucun résultats</template>
         </multiselect>
     </div>
 </template>
@@ -45,6 +50,8 @@
 
         props: {
             fieldKey: String,
+
+            value: [String, Number],
 
             mode: String,
             localValues: {
@@ -70,13 +77,13 @@
                 type: Array,
                 default:()=>['value']
             },
-            inline:Boolean,
-            disabled:Boolean,
+            inline: Boolean,
+            disabled: Boolean,
             listItemTemplate: String
         },
         data() {
             return {
-                value: null,
+                query: '',
                 suggestions: this.localValues,
                 isLoading: false,
                 searchStrategy: new SearchStrategy({
@@ -84,16 +91,35 @@
                     minQueryLength: this.searchMinChars,
                     searchKeys: this.searchKeys
                 }),
-                state:'initial'
+                state: this.value?'valuated':'initial'
             }
         },
         computed: {
             isRemote() {
                 return this.mode === 'remote';
+            },
+            valueObject() {
+                if(!this.value)
+                    return null;
+
+                if(this.isRemote)
+                    return this.value;
+
+                return this.localValues.find(v=>v[this.itemIdAttribute]===this.value);
+            },
+            hideDropdown() {
+                return this.query.length < this.searchMinChars;
+            },
+            dynamicSuggestions() {
+                return this.hideDropdown ? [null] : this.suggestions;
             }
         },
         methods: {
             updateSuggestions(query) {
+                this.query = query;
+                if(this.hideDropdown)
+                    return;
+
                 if(this.isRemote) {
                     this.state = 'loading';
                     const call = (method,endpoint,attribute) =>
@@ -119,14 +145,25 @@
                     this.state = 'searching';
                 }
             },
-            handleSelect() {
+
+            handleSelect(value) {
                 this.state = 'valuated';
+                this.$emit('input', value[this.itemIdAttribute]);
             },
-            handleCloseClick() {
-                console.log('focus');
+            handleInput(value) {
+
+            },
+            handleDropdownOpen() {
+                this.suggestions = [];
+            },
+            handleDropdownClose() {
+                if(this.state === 'searching')
+                    this.state = 'initial';
+            },
+            handleResetClick() {
                 this.state = this.inline ? 'searching' : 'initial';
 
-                this.value=null;
+                this.$emit('input', null);
                 this.$nextTick(()=>{
                     this.$refs.multiselect.activate();
                 });
