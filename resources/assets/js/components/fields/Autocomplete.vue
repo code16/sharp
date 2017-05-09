@@ -22,7 +22,6 @@
                      @search-change="updateSuggestions"
                      @select="handleSelect"
                      @input="handleInput"
-                     @open="handleDropdownOpen"
                      @close="handleDropdownClose"
                      ref="multiselect">
             <template slot="option" scope="props">
@@ -77,7 +76,6 @@
                 type: Array,
                 default:()=>['value']
             },
-            inline: Boolean,
             disabled: Boolean,
             listItemTemplate: String
         },
@@ -153,15 +151,12 @@
             handleInput(value) {
 
             },
-            handleDropdownOpen() {
-                this.suggestions = [];
-            },
             handleDropdownClose() {
                 if(this.state === 'searching')
                     this.state = 'initial';
             },
             handleResetClick() {
-                this.state = this.inline ? 'searching' : 'initial';
+                this.state = 'searching';
 
                 this.$emit('input', null);
                 this.$nextTick(()=>{

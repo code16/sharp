@@ -11894,7 +11894,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
 
 
 
@@ -11941,7 +11940,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 return ['value'];
             }
         },
-        inline: Boolean,
         disabled: Boolean,
         listItemTemplate: String
     },
@@ -12009,16 +12007,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             this.$emit('input', value[this.itemIdAttribute]);
         },
         handleInput: function handleInput(value) {},
-        handleDropdownOpen: function handleDropdownOpen() {
-            this.suggestions = [];
-        },
         handleDropdownClose: function handleDropdownClose() {
             if (this.state === 'searching') this.state = 'initial';
         },
         handleResetClick: function handleResetClick() {
             var _this3 = this;
 
-            this.state = this.inline ? 'searching' : 'initial';
+            this.state = 'searching';
 
             this.$emit('input', null);
             this.$nextTick(function () {
@@ -25833,7 +25828,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "search-change": _vm.updateSuggestions,
       "select": _vm.handleSelect,
       "input": _vm.handleInput,
-      "open": _vm.handleDropdownOpen,
       "close": _vm.handleDropdownClose
     },
     scopedSlots: _vm._u([
