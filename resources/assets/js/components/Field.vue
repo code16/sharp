@@ -1,11 +1,19 @@
 <script>
     import Fields, { NameAssociation as fieldCompName } from './fields/index';
-    import { FieldValue, UpdateData } from '../mixins';
+    import { FieldValue } from '../mixins';
 
     export default {
         name:'SharpField',
-        mixins: [FieldValue, UpdateData],
+        mixins: [FieldValue],
         components: Fields,
+
+        inject: ['updateData'],
+
+        provide() {
+            let provide = {};
+            Vue.util.defineReactive(provide,'value',this.value);
+            return provide;
+        },
 
         props: {
             fieldKey: {
@@ -25,7 +33,7 @@
             return h(fieldCompName[this.fieldType],{
                 props : {
                     fieldKey:this.fieldKey,
-                    value:this.value,
+                    fieldLayout:this.fieldLayout,
                     ...this.fieldProps
                 },
                 on: {

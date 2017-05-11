@@ -25,29 +25,30 @@
     };
 
     export default {
-        name: 'SharpFieldDisplayer',
+        name: 'SharpFieldDisplay',
         functional: true,
 
         render(h, { props }) {
-            let { fieldKey, fields, data, ...sharedProps } = props;
-            let field = fields[fieldKey];
+            console.log(arguments);
+            let { fieldKey, contextFields, contextData, ...sharedProps } = props;
+            let field = contextFields[fieldKey];
 
-            if(!(fieldKey in fields)) {
-                util.error(`Field displayer : Can't find a field with key '${fieldKey}' in 'fields'`,fields);
+            if(!(fieldKey in contextFields)) {
+                util.error(`Field displayer : Can't find a field with key '${fieldKey}' in 'fields'`,contextFields);
                 return null;
             }
-            else if(!(fieldKey in data)) {
-                util.error(`Field displayer : Can't find key '${fieldKey}' in 'data'`,fields);
+            else if(!(fieldKey in contextData)) {
+                util.error(`Field displayer : Can't find key '${fieldKey}' in 'data'`,contextData);
                 return null;
             }
 
-            return acceptCondition(fields, data, field.conditionalDisplay) ?
+            return acceptCondition(contextFields, contextData, field.conditionalDisplay) ?
                    h(FieldContainer.name,{
                         props: {
                             fieldKey,
                             fieldProps: field,
                             fieldType: field.type,
-                            value: data[fieldKey],
+                            value: contextData[fieldKey],
                             label: field.label,
                             helpMessage: field.helpMessage,
                             readOnly: field.readOnly,

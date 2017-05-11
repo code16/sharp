@@ -10,6 +10,9 @@
         components: {
             SharpVueClip
         },
+
+        inject: ['value'],
+
         props: {
             value: Object,
 

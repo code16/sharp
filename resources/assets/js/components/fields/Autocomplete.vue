@@ -47,6 +47,8 @@
             [SharpTemplate.name]:SharpTemplate
         },
 
+        inject:['value'],
+
         props: {
             fieldKey: String,
 

@@ -3,17 +3,11 @@
         <sharp-grid v-if="layout.length == 1" :rows="[layout[0].columns]">
             <template scope="column">
                 <sharp-fields-layout v-if="fields" :layout="column.fields">
-                    <template scope="field">
-                        <sharp-field-container v-if="acceptCondition(fields[field.key])"
-                                               :field-key="field.key"
-                                               :field-props="fields[field.key]"
-                                               :field-type="fields[field.key].type"
-                                               :value="data[field.key]"
-                                               :label="fields[field.key].label"
-                                               :help-message="fields[field.key].helpMessage"
-                                               :read-only="fields[field.key].readOnly"
-                                               :updateData="updateData">
-                        </sharp-field-container>
+                    <template scope="fieldLayout">
+                        <sharp-field-display :field-key="fieldLayout.key"
+                                             :context-fields="fields"
+                                             :context-data="data">
+                        </sharp-field-display>
                     </template>
                 </sharp-fields-layout>
             </template>
@@ -31,6 +25,7 @@
     import Grid from './Grid';
     import FieldsLayout from './FieldsLayout';
     import FieldContainer from './FieldContainer';
+    import FieldDisplay from './FieldDisplay';
 
     import * as testForm from '../_test-form';
     import { NameAssociation as fieldCompNames } from './fields/index';
@@ -41,7 +36,8 @@
         components: {
             [Grid.name]:Grid,
             [FieldsLayout.name]:FieldsLayout,
-            [FieldContainer.name]:FieldContainer
+            [FieldContainer.name]:FieldContainer,
+            [FieldDisplay.name]:FieldDisplay
         },
 
         data() {
@@ -69,21 +65,6 @@
         },
         methods: {
             acceptCondition(field) {
-                if(!field.conditionalDisplay)
-                    return true;
-                
-                let regex=/(\!)(\w+):?((\w+,?)*)/;
-                let matches = regex.exec(field.conditionalDisplay);
-                let neg = !!matches[1];
-                let key = matches[2];
-                let values = matches[3] ? matches[3].split(',') : null;
-
-                if(values) {
-
-                }
-                else {
-                    
-                }
                 return true;
             },
             updateData(key,value) {

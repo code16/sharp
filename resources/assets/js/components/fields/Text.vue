@@ -9,6 +9,8 @@
     export default {
         name:'SharpText',
 
+        inject: ['value'],
+
         props: {
             value: {
                 type: String,

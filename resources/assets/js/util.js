@@ -13,5 +13,8 @@ export default {
     },
     warn() {
         this.callConsole('warn', ...arguments);
+    },
+    error() {
+        this.callConsole('error', ...arguments);
     }
 }

@@ -81,7 +81,8 @@ export const layout = [
 ];
 
 export const data = {
-    "A":"Valeur texte",B:'',C:'',D:'',E:'',F:'',G:'',H:'',
+    "A":"Valeur texte",
+    B:'',C:'',D:'',E:'',F:'',G:'',H:'',
     "name":"B",
     "myimage": {
         name:"doggo.jpg",
@@ -141,12 +142,21 @@ export const fields = {
         searchKeys: ['name', 'surname'],
         itemIdAttribute:'id',
         // disabled: true
-        conditionalDisplay: '!advanced_search:red,blue,orange'
     },
     'myimage': {
         type: 'upload',
         maxFileSize: 6,
         fileFilter: ['.jpg','.jpeg','.png'],
-        thumbnail:'150x150'
-    }
+        thumbnail:'150x150',
+        conditionalDisplay: {
+            not: 0,
+            key: 'name',
+            values: ['A','B']
+        }
+    },
+    /*'mylist': {
+        itemFields: [
+            ''
+        ]
+    }*/
 };

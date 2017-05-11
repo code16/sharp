@@ -5,7 +5,6 @@
                      :field-type="fieldType"
                      :field-props="fieldProps"
                      :value="value"
-                     :update-data="updateData"
                      :disabled="readOnly">
         </sharp-field>
         <div>{{helpMessage}}</div>
@@ -14,14 +13,14 @@
 
 <script>
     import Field from './Field';
-    import { FieldValue, UpdateData } from '../mixins';
+    import { FieldValue } from '../mixins';
 
     export default {
         name:'SharpFieldContainer',
         components: {
             [Field.name]:Field
         },
-        mixins: [FieldValue, UpdateData],
+        mixins: [FieldValue],
         props : {
             fieldKey: {
                 type: String,
@@ -33,6 +32,11 @@
             fieldProps: {
                 type: Object
             },
+
+            fieldLayout: {
+                type: Object
+            },
+
             label: {
                 type: String
             },
@@ -45,9 +49,3 @@
         }
     }
 </script>
-
-<style>
-    .el-form-item {
-        margin: 0;
-    }
-</style>
