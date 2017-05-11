@@ -1,0 +1,10 @@
+.SharpList {
+  &__add-button {
+    width:100%
+  }
+  &__item {
+    &--collapsed {
+      background: #f5f5f5;
+    }
+  }
+}

@@ -36,7 +36,9 @@
 
         extends: VueClip,
 
-        inject: ['value'],
+        props: {
+            value: Object
+        },
 
         data() {
             return {

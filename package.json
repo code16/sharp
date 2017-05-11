@@ -11,20 +11,25 @@
   "devDependencies": {
     "axios": "^0.15.2",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
     "bootstrap": "4.0.0-alpha.6",
     "cross-env": "3.1.3",
     "fuse.js": "^2.6.2",
     "jquery": "^3.1.0",
     "laravel-mix": "^0.11.4",
     "mime-types": "^2.1.15",
+    "moment": "^2.18.1",
     "simplemde": "^1.11.2",
     "vue-clip": "^1.0.0",
     "vue-multiselect": "next"
   },
   "dependencies": {
     "vue": "^2.3.2",
-    "vuedraggable": "^2.10.0"
+    "vue2-timepicker": "^0.1.4",
+    "vuedraggable": "^2.10.0",
+    "vuejs-datepicker": "^0.7.11"
   }
 }

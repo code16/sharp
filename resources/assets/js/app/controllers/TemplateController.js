@@ -17,25 +17,11 @@ class TemplateController {
         let compName = template.compName;
 
         if(!template.exists) {
-            /*
-            let definition = TemplateDefinition[name];
-        
-            let mixins = [];
-            let wrapper = 'div';
 
-
-            if(definition) {
-                mixins.push(definition);
-                if(definition.wrapIn)
-                    wrapper = definition.wrapIn;
-                else
-                    util.log(`wrapper element (\`wrapIn\`) is not set in '${name}' definition (default div)`);
-            }
-            else {
-                util.warn(`'${name}' doesn't match any definition`);
-            }*/
+            let definition = TemplateDefinition[templateName];
 
             Vue.component(compName, {
+                mixins:[definition||{}],
                 template: `<div>${templateValue}</div>`,
                 props: templateProps
             });

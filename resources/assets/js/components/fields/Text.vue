@@ -9,12 +9,9 @@
     export default {
         name:'SharpText',
 
-        inject: ['value'],
-
         props: {
-            value: {
-                type: String,
-            },
+            value: String,
+
             placeholder: String,
             disabled: Boolean,
             inputType: {

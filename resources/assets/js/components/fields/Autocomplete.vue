@@ -47,8 +47,6 @@
             [SharpTemplate.name]:SharpTemplate
         },
 
-        inject:['value'],
-
         props: {
             fieldKey: String,
 
@@ -160,7 +158,7 @@
             handleResetClick() {
                 this.state = 'searching';
 
-                this.$emit('input', null);
+                this.$emit('input', '');
                 this.$nextTick(()=>{
                     this.$refs.multiselect.activate();
                 });

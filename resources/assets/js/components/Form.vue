@@ -6,7 +6,9 @@
                     <template scope="fieldLayout">
                         <sharp-field-display :field-key="fieldLayout.key"
                                              :context-fields="fields"
-                                             :context-data="data">
+                                             :context-data="data"
+                                             :field-layout="fieldLayout"
+                                             :update-data="updateData">
                         </sharp-field-display>
                     </template>
                 </sharp-fields-layout>
@@ -24,11 +26,10 @@
 
     import Grid from './Grid';
     import FieldsLayout from './FieldsLayout';
-    import FieldContainer from './FieldContainer';
-    import FieldDisplay from './FieldDisplay';
 
     import * as testForm from '../_test-form';
     import { NameAssociation as fieldCompNames } from './fields/index';
+
 
     export default {
         name:'SharpForm',
@@ -36,8 +37,6 @@
         components: {
             [Grid.name]:Grid,
             [FieldsLayout.name]:FieldsLayout,
-            [FieldContainer.name]:FieldContainer,
-            [FieldDisplay.name]:FieldDisplay
         },
 
         data() {
@@ -64,9 +63,6 @@
             }
         },
         methods: {
-            acceptCondition(field) {
-                return true;
-            },
             updateData(key,value) {
                 this.data[key] = value;
             }

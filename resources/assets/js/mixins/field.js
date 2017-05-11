@@ -6,9 +6,3 @@ export const FieldValue = {
         updateData: Function
     }
 };
-
-export const UpdateData = {
-    props: {
-        updateData: Function
-    }
-};

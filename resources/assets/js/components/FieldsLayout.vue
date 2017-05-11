@@ -1,10 +1,10 @@
 <template>
     <sharp-grid :rows="layout">
-        <template scope="field">
-            <slot v-if="!field.fieldset" v-bind="field"></slot>
+        <template scope="fieldLayout">
+            <slot v-if="!fieldLayout.fieldset" v-bind="fieldLayout"></slot>
             <fieldset v-else>
-                <legend>{{field.fieldset}}</legend>
-                <sharp-fields-layout :layout="field.fields">
+                <legend>{{fieldLayout.fieldset}}</legend>
+                <sharp-fields-layout :layout="fieldLayout.fields">
                     <template scope="fieldset">
                         <slot v-bind="fieldset"></slot>
                     </template>
@@ -16,12 +16,10 @@
 
 <script>
     import Grid from './Grid';
-    import FieldContainer from './FieldContainer';
     export default {
         name:'SharpFieldsLayout',
 
         components: {
-            [FieldContainer.name]:FieldContainer,
             [Grid.name]:Grid
         },
 

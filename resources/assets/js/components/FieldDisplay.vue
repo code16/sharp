@@ -1,6 +1,6 @@
 <script>
-    import FieldContainer from './FieldContainer';
     import util from '../util';
+    import FieldContainer from './FieldContainer';
 
     const acceptCondition = (fields, data, condition) => {
         if(!condition)
@@ -28,8 +28,14 @@
         name: 'SharpFieldDisplay',
         functional: true,
 
+//        props: {
+//            fieldKey: String,
+//            contextFields:Object,
+//            contextData:Object,
+//             ... callbacks
+//        },
+
         render(h, { props }) {
-            console.log(arguments);
             let { fieldKey, contextFields, contextData, ...sharedProps } = props;
             let field = contextFields[fieldKey];
 
@@ -43,18 +49,17 @@
             }
 
             return acceptCondition(contextFields, contextData, field.conditionalDisplay) ?
-                   h(FieldContainer.name,{
-                        props: {
-                            fieldKey,
-                            fieldProps: field,
-                            fieldType: field.type,
-                            value: contextData[fieldKey],
-                            label: field.label,
-                            helpMessage: field.helpMessage,
-                            readOnly: field.readOnly,
-                            ...sharedProps
-                        }
-                   }) : null;
+                h(FieldContainer,{
+                    props: {
+                        fieldKey,
+                        fieldProps: field,
+                        fieldType: field.type,
+                        value: contextData[fieldKey],
+                        label: field.label,
+                        helpMessage: field.helpMessage,
+                        ...sharedProps
+                    }
+                }) : null;
         }
     }
 </script>

@@ -6,9 +6,11 @@ import SharpMarkdown from './Markdown';
 import SharpNumber from './Number';
 import SharpUpload from './upload/Upload';
 import SharpTagInput from './TagInput';
-import SharpDate from './Date';
+import SharpDate from './date/Date';
 import SharpCheck from './Check';
+import SharpList from './List';
 
+//debugger
 
 export const NameAssociation = {
     'autocomplete' : SharpAutocomplete.name,
@@ -21,6 +23,7 @@ export const NameAssociation = {
     'taginput'     : SharpTagInput.name,
     'date'         : SharpDate.name,
     'check'        : SharpCheck.name,
+    'list'         : SharpList.name,
 };
 
 export default {
@@ -34,4 +37,5 @@ export default {
     [SharpTagInput.name] : SharpTagInput,
     [SharpDate.name] : SharpDate,
     [SharpCheck.name] : SharpCheck,
+    [SharpList.name] : SharpList,
 };

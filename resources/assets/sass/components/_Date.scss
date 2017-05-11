@@ -1,0 +1,14 @@
+.SharpDate {
+  display:flex;
+  &__picker {
+
+    &--time {
+      width:auto;
+      input.display-time {
+        @extend .form-control;
+        height:auto;
+      }
+    }
+  }
+
+}

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="SharpGrid">
         <div v-for="(row,i) in rows" class="row">
             <div v-for="(col,j) in row" :class="colClass[i][j]">
                 <slot v-bind="col"></slot>

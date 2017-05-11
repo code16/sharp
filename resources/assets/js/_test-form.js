@@ -23,7 +23,7 @@ export const layout = [
                             "fields": [
                                 [
                                     {
-                                        "key": "C"
+                                        "key": "date"
                                     },
                                     {
                                         "key": "D"
@@ -44,32 +44,36 @@ export const layout = [
                 "fields": [
                     [
                         {
-                            "key": "F",
+                            "key": "mylist",
                             "item": [
                                 [
                                     {
-                                        "key": "F1"
+                                        "key": "name"
                                     }, {
-                                    "key": "F2"
+                                    "key": "surname"
                                 }
                                 ], [
                                     {
-                                        "key": "F3"
+                                        "key": "age"
                                     }
                                 ]
                             ]
                         }
                     ], [
                         {
-                            "key": "G"
+                            "key": "show_autocomplete"
                         }, {
-                            "key": "H"
+                            "key": "show_upload"
                         }
                     ], [
                         {
                             "key" : "name"
                         }
                     ], [
+                        {
+                            "key": "admin_password"
+                        }
+                    ],[
                         {
                             "key" : "myimage"
                         }
@@ -82,13 +86,20 @@ export const layout = [
 
 export const data = {
     "A":"Valeur texte",
-    B:'',C:'',D:'',E:'',F:'',G:'',H:'',
+    B:'',D:'',E:'',
+    "date":'',
+    "show_autocomplete":true,
+    "show_upload":true,
     "name":"B",
+    "admin_password":"",
     "myimage": {
         name:"doggo.jpg",
         size:14550,
         thumbnail:"https://i.ytimg.com/vi/wSTt04rOwa8/maxresdefault.jpg"
-    }
+    },
+    "mylist": [{
+        name:'', surname:'', age:''
+    }]
 };
 
 export const fields = {
@@ -100,8 +111,8 @@ export const fields = {
         type:'password',
         label: 'Mot de passe'
     },
-    'C':{
-        type:'text'
+    'date':{
+        type:'date'
     },
     'D':{
         type:'text'
@@ -109,14 +120,13 @@ export const fields = {
     'E':{
         type:'text'
     },
-    'F':{
-        type:'text'
+    'show_autocomplete': {
+        type:'check',
+        text:'Afficher Autocomplete'
     },
-    'G':{
-        type:'text'
-    },
-    'H':{
-        type:'text'
+    'show_upload': {
+        type:'check',
+        text:'Afficher Upload'
     },
     'name':{
         type:'autocomplete',
@@ -141,7 +151,17 @@ export const fields = {
         templateProps: ['name', 'surname'],
         searchKeys: ['name', 'surname'],
         itemIdAttribute:'id',
-        // disabled: true
+        conditionalDisplay: {
+            key: 'show_autocomplete',
+        },
+    },
+    'admin_password': {
+        type:'password',
+        conditionalDisplay: {
+            not:1,
+            key:'name',
+            values:['C','D']
+        }
     },
     'myimage': {
         type: 'upload',
@@ -149,14 +169,29 @@ export const fields = {
         fileFilter: ['.jpg','.jpeg','.png'],
         thumbnail:'150x150',
         conditionalDisplay: {
-            not: 0,
-            key: 'name',
-            values: ['A','B']
-        }
+            key: 'show_upload',
+        },
     },
-    /*'mylist': {
-        itemFields: [
-            ''
-        ]
-    }*/
+    'mylist': {
+        type:'list',
+        label:'Super liste',
+        sortable: true,
+        maxItemCount:5,
+        collapsedItemTemplate:"{{ name && surname ? `${name} ${surname}` : `Nouvelle personne n°${$index}` }}",
+        templateProps: ['name','surname','age'],
+        itemFields: {
+            'name': {
+                label:'Nom',
+                type:'text',
+            },
+            'surname': {
+                label:'Prénom',
+                type:'text'
+            },
+            'age': {
+                label:'Âge',
+                type:'text'
+            }
+        }
+    }
 };
