@@ -6,6 +6,12 @@
         name:'SharpField',
         components: Fields,
 
+        provide() {
+            return {
+                $field: this
+            }
+        },
+
         props: {
             fieldKey: String,
             fieldType:  String,
@@ -23,7 +29,7 @@
                 return null;
             }
 
-            console.log(fieldCompName[this.fieldType]);
+            //console.log(fieldCompName[this.fieldType]);
 
             return h(fieldCompName[this.fieldType],{
                 props : {

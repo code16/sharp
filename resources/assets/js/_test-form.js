@@ -84,7 +84,7 @@ export const layout = [
 export const data = {
     "A":"Valeur texte",
     B:'',D:'',E:'',
-    "date":'2017-05-13 12:30:06',
+    "date":'2017-04-12 12:30:06',
     "show_autocomplete":true,
     "show_upload":true,
     "name":"B",

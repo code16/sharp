@@ -7,6 +7,8 @@ window.Vue = Vue;
 
 Vue.component(FieldDisplay.name, FieldDisplay);
 
+
+
 new Vue({
     el:"#app",
     components: {

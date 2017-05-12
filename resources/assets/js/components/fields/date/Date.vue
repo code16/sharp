@@ -5,6 +5,7 @@
                      :class="pickerClass('date', !hasTime)"
                      language="fr"
                      :value="dateObject"
+                     :format="datepickerFormat"
                      @selected="updateDate"
                      @closed="onDatepickerClose"
                      @opened="onDatepickerOpen"
@@ -23,6 +24,7 @@
     import DatePicker from 'vuejs-datepicker';
     import TimePicker from 'vue2-timepicker';
 
+    import moment from 'moment';
 
     export default {
         name:'SharpDate',
@@ -30,8 +32,11 @@
             DatePicker,
             TimePicker
         },
+
+        inject:['$field'],
+
         props: {
-            value: String,
+            value: [Object, String],
 
             hasDate: {
                 type:Boolean,
@@ -40,12 +45,19 @@
             hasTime: {
                 type:Boolean,
                 default:false
+            },
+
+            displayFormat: {
+                type: String,
+                default:'DD/MM/YYYY'
             }
         },
         data() {
             return {
-                dateActive:false, dateFocused:false,
-                timeActive:false, timeFocused:false,
+                dateActive:false,
+                dateFocused:false,
+                timeActive:false,
+                timeFocused:false,
             }
         },
         computed: {
@@ -57,25 +69,21 @@
                     'SharpDate--time-focused':this.timeFocused,
                 }
             },
-            str() {
-                let splitted = this.value.split(' ');
-                return {
-                    date: splitted[0] || '',
-                    time: splitted[1] || ''
-                }
+            moment() {
+                return moment(this.value);
             },
             dateObject() {
-                let dateValues = this.str.date.split('-');
-                if(dateValues.length === 3)
-                    return new Date(dateValues[0], dateValues[1], dateValues[2]);
-                return null;
+                return this.moment.toDate();
             },
             timeObject() {
-                let timeValues = this.str.time.split(':');
-                //debugger
-                if(timeValues.length === 3)
-                    return { HH:timeValues[0], mm:timeValues[1], ss:timeValues[2] };
-                return null;
+                return {
+                    HH: this.moment.hours(),
+                    mm: this.moment.minutes(),
+                    ss: this.moment.seconds()
+                }
+            },
+            datepickerFormat() {
+                return this.displayFormat.replace(/Y|D/g,m=>({'Y':'y','D':'d'}[m]));
             }
         },
         methods: {
@@ -99,24 +107,42 @@
                 this.timeActive=false;
                 console.log('timepicker close');
             },
-
+            onDateInput(val) {
+                console.log(val);
+                let m=moment(val, this.momentValidationFormat);
+                if(!m.isValid()) {
+                    this.$field.$emit('error', 'Format de la date invalide');
+                }
+                else
+                    this.$field.$emit('ok');
+            },
+            onTimeInput(val) {
+                if(!moment(val, this.displayFormat).isValid()) {
+                    this.$field.$emit('error', "Format de l'heure invalide");
+                }
+                else
+                    this.$field.$emit('ok');
+            },
             updateDate(date) {
-                let d=`${date.getYear()}-${date.getMonth()}-${date.getDay()}`;
-                if(this.str.time)
-                    d+=this.str.time;
-                this.$emit('input', d);
+                this.moment.set({
+                    year:date.getFullYear(),
+                    month:date.getMonth(),
+                    date:date.getDate()
+                });
+                this.$emit('input', this.moment);
             },
             updateTime({ data }) {
-                let d='';
-                if(this.str.date)
-                    d+=`${this.str.date} `;
-                d+=`${data.HH}:${data.mm}:${data.ss}`;
-                this.$emit('input', d);
+                this.moment.set({
+                    hour:data.HH,
+                    minute:data.mm,
+                    second:data.ss,
+                });
+                this.$emit('input', this.moment);
             },
             pickerClass(label,isAlone) {
                 return [
-                    `Sharp__picker__${label}`, {
-                        [`Sharp__picker__${label}--alone`]:isAlone
+                    `SharpDate__picker__${label}`, {
+                        [`SharpDate__picker__${label}--alone`]:isAlone
                     }
                 ]
             }
@@ -131,6 +157,9 @@
 
                 $timeInput.addEventListener('focus', _=>this.timeFocused=true);
                 $timeInput.addEventListener('blur', _=>this.timeFocused=false);
+
+                $timeInput.addEventListener('input', e=>this.onTimeInput(e.target.value));
+
                 $timeInput.readOnly = false;
 
                 document.addEventListener('click', (e) => {
@@ -143,7 +172,10 @@
             if(this.$refs.datepicker) {
                 let $dateInput = this.$refs.datepicker.$el.querySelector('input');
                 $dateInput.addEventListener('focus', _=>this.dateFocused=true);
-                $dateInput.addEventListener('blur', _=>this.dateFocused = false);
+                $dateInput.addEventListener('blur', _=>this.dateFocused=false);
+
+                $dateInput.addEventListener('input', e=>this.onDateInput(e.target.value));
+
                 $dateInput.readOnly = false;
             }
 

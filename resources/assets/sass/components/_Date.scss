@@ -18,7 +18,9 @@
       }
 
       &--alone {
-        border-radius: $input-border-radius;
+        input {
+          border-radius: $input-border-radius;
+        }
       }
     }
     &__time {
@@ -38,10 +40,11 @@
       }
 
       &--alone {
-        border-radius: $input-border-radius;
+        input.display-time {
+          border-radius: $input-border-radius;
+        }
       }
 
     }
   }
-
 }
