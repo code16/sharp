@@ -13141,8 +13141,6 @@ var layout = [{
             "fieldset": "dates",
             "fields": [[{
                 "key": "date"
-            }, {
-                "key": "D"
             }], [{
                 "key": "E"
             }]]
@@ -13175,7 +13173,7 @@ var layout = [{
 var data = {
     "A": "Valeur texte",
     B: '', D: '', E: '',
-    "date": '',
+    "date": '2017-05-13 12:30:06',
     "show_autocomplete": true,
     "show_upload": true,
     "name": "B",
@@ -38866,6 +38864,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuejs_datepicker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vuejs_datepicker__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue2_timepicker__ = __webpack_require__(155);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue2_timepicker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue2_timepicker__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -38882,8 +38890,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-
-//import moment from 'moment';
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpDate',
@@ -38892,32 +38898,127 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         TimePicker: __WEBPACK_IMPORTED_MODULE_1_vue2_timepicker___default.a
     },
     props: {
-        value: String
+        value: String,
+
+        hasDate: {
+            type: Boolean,
+            default: true
+        },
+        hasTime: {
+            type: Boolean,
+            default: false
+        }
+    },
+    data: function data() {
+        return {
+            dateActive: false, dateFocused: false,
+            timeActive: false, timeFocused: false
+        };
+    },
+
+    computed: {
+        rootClasses: function rootClasses() {
+            return {
+                'SharpDate--date-active': this.dateActive,
+                'SharpDate--time-active': this.timeActive,
+                'SharpDate--date-focused': this.dateFocused,
+                'SharpDate--time-focused': this.timeFocused
+            };
+        },
+        str: function str() {
+            var splitted = this.value.split(' ');
+            return {
+                date: splitted[0] || '',
+                time: splitted[1] || ''
+            };
+        },
+        dateObject: function dateObject() {
+            var dateValues = this.str.date.split('-');
+            if (dateValues.length === 3) return new Date(dateValues[0], dateValues[1], dateValues[2]);
+            return null;
+        },
+        timeObject: function timeObject() {
+            var timeValues = this.str.time.split(':');
+            //debugger
+            if (timeValues.length === 3) return { HH: timeValues[0], mm: timeValues[1], ss: timeValues[2] };
+            return null;
+        }
     },
     methods: {
+        /// Datepicker events
         onDatepickerOpen: function onDatepickerOpen() {
+            this.dateActive = true;
             console.log('datepicker open');
         },
         onDatepickerClose: function onDatepickerClose() {
+            this.dateActive = false;
             console.log('datepicker close');
         },
+
+
+        /// Timepicker events
         onTimepickerOpen: function onTimepickerOpen() {
+            this.timeActive = true;
             console.log('timepicker open');
             this.$refs.datepicker.close();
         },
         onTimepickerClose: function onTimepickerClose() {
+            this.timeActive = false;
             console.log('timepicker close');
+        },
+        updateDate: function updateDate(date) {
+            var d = date.getYear() + '-' + date.getMonth() + '-' + date.getDay();
+            if (this.str.time) d += this.str.time;
+            this.$emit('input', d);
+        },
+        updateTime: function updateTime(_ref) {
+            var data = _ref.data;
+
+            var d = '';
+            if (this.str.date) d += this.str.date + ' ';
+            d += data.HH + ':' + data.mm + ':' + data.ss;
+            this.$emit('input', d);
+        },
+        pickerClass: function pickerClass(label, isAlone) {
+            return ['Sharp__picker__' + label, _defineProperty({}, 'Sharp__picker__' + label + '--alone', isAlone)];
         }
     },
     mounted: function mounted() {
         var _this = this;
 
-        this.$refs.datepicker.$watch('showDayView', function (val) {
-            val ? _this.onDatepickerOpen() : _this.onDatepickerClose();
-        });
-        this.$refs.timepicker.$watch('showDropdown', function (val) {
-            val ? _this.onTimepickerOpen() : _this.onTimepickerClose();
-        });
+        if (this.$refs.timepicker) {
+            this.$refs.timepicker.$watch('showDropdown', function (val) {
+                val ? _this.onTimepickerOpen() : _this.onTimepickerClose();
+            });
+
+            var $timeInput = this.$refs.timepicker.$el.querySelector('input');
+
+            $timeInput.addEventListener('focus', function (_) {
+                return _this.timeFocused = true;
+            });
+            $timeInput.addEventListener('blur', function (_) {
+                return _this.timeFocused = false;
+            });
+            $timeInput.readOnly = false;
+
+            document.addEventListener('click', function (e) {
+                if (!_this.$refs.timepicker.$el.contains(e.target)) {
+                    _this.$refs.timepicker.showDropdown = false;
+                }
+            }, false);
+        }
+
+        if (this.$refs.datepicker) {
+            var $dateInput = this.$refs.datepicker.$el.querySelector('input');
+            $dateInput.addEventListener('focus', function (_) {
+                return _this.dateFocused = true;
+            });
+            $dateInput.addEventListener('blur', function (_) {
+                return _this.dateFocused = false;
+            });
+            $dateInput.readOnly = false;
+        }
+
         console.log(this);
     }
 });
@@ -38966,18 +39067,32 @@ module.exports = Component.exports
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "SharpDate"
-  }, [_c('date-picker', {
+    staticClass: "SharpDate",
+    class: _vm.rootClasses
+  }, [(_vm.hasDate) ? _c('date-picker', {
     ref: "datepicker",
-    staticClass: "SharpDate__picker SharpDate__picker--date",
+    staticClass: "SharpDate__picker",
+    class: _vm.pickerClass('date', !_vm.hasTime),
     attrs: {
-      "input-class": "form-control",
-      "language": "fr"
+      "language": "fr",
+      "value": _vm.dateObject
+    },
+    on: {
+      "selected": _vm.updateDate,
+      "closed": _vm.onDatepickerClose,
+      "opened": _vm.onDatepickerOpen
     }
-  }), _vm._v(" "), _c('time-picker', {
+  }) : _vm._e(), _vm._v(" "), (_vm.hasTime) ? _c('time-picker', {
     ref: "timepicker",
-    staticClass: "SharpDate__picker SharpDate__picker--time"
-  })], 1)
+    staticClass: "SharpDate__picker",
+    class: _vm.pickerClass('time', !_vm.hasDate),
+    attrs: {
+      "value": _vm.timeObject
+    },
+    on: {
+      "change": _vm.updateTime
+    }
+  }) : _vm._e()], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

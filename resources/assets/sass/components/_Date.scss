@@ -1,13 +1,46 @@
 .SharpDate {
   display:flex;
-  &__picker {
+  &--time-focused {
+    .SharpDate__picker--date {
+      input {
+        border-right-color: $input-border-focus;
+      }
+    }
+  }
 
-    &--time {
+  &__picker {
+    flex:1;
+    &__date {
+      input {
+        @extend .form-control;
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+      }
+
+      &--alone {
+        border-radius: $input-border-radius;
+      }
+    }
+    &__time {
       width:auto;
+
       input.display-time {
         @extend .form-control;
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+        border-left-width: 0;
+
         height:auto;
       }
+
+      .time-picker-overlay {
+        display:none;
+      }
+
+      &--alone {
+        border-radius: $input-border-radius;
+      }
+
     }
   }
 
