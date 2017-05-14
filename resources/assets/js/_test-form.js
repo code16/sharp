@@ -108,9 +108,6 @@ export const fields = {
         type:'password',
         label: 'Mot de passe'
     },
-    'date':{
-        type:'date',
-    },
     'D':{
         type:'text'
     },
@@ -190,5 +187,10 @@ export const fields = {
                 type:'text'
             }
         }
-    }
+    },
+    'date':{
+        type:'date',
+        hasTime:true,
+        minDate:'2017-03-15'
+    },
 };

@@ -1,28 +1,29 @@
 <template>
-    <div class="SharpDate" :class="rootClasses">
-        <date-picker v-if="hasDate"
-                     class="SharpDate__picker"
-                     :class="pickerClass('date', !hasTime)"
-                     language="fr"
-                     :value="dateObject"
-                     :format="datepickerFormat"
-                     @selected="updateDate"
-                     @closed="onDatepickerClose"
-                     @opened="onDatepickerOpen"
-                     ref="datepicker">
-        </date-picker>
-        <time-picker v-if="hasTime"
-                     class="SharpDate__picker"
-                     :class="pickerClass('time', !hasDate)"
-                     :value="timeObject" @change="updateTime"
-                     ref="timepicker">
-        </time-picker>
+    <div class="SharpDate">
+        <input class="form-control" :value="inputValue" @input="handleInput" @focus="showPicker=true"
+               @blur="handleBlur" @keydown.up.prevent="increase" @keydown.down.prevent="decrease">
+        <div class="SharpDate__picker" v-show="showPicker">
+            <date-picker v-if="hasDate"
+                        class="SharpDate__picker-inner SharpDate__date"
+                        language="fr"
+                        inline monday-first
+                        :value="dateObject"
+                        @selected="handleDateSelect">
+            </date-picker>
+            <sharp-time-picker v-if="hasTime"
+                                class=" SharpDate__time"
+                                :value="timeObject" 
+                                :active="showPicker"
+                                :format="displayFormat"
+                                @change="handleTimeSelect">
+            </sharp-time-picker>
+        </div>
     </div>
 </template>
 
 <script>
     import DatePicker from 'vuejs-datepicker';
-    import TimePicker from 'vue2-timepicker';
+    import SharpTimePicker from './Timepicker';
 
     import moment from 'moment';
 
@@ -30,7 +31,7 @@
         name:'SharpDate',
         components: {
             DatePicker,
-            TimePicker
+            SharpTimePicker
         },
 
         inject:['$field'],
@@ -46,29 +47,20 @@
                 type:Boolean,
                 default:false
             },
-
+            minDate: String,
+            maxDate: String,
             displayFormat: {
                 type: String,
-                default:'DD/MM/YYYY'
+                default:'DD/MM/YYYY HH:mm:ss'
             }
         },
         data() {
             return {
-                dateActive:false,
-                dateFocused:false,
-                timeActive:false,
-                timeFocused:false,
+                showPicker:false,
+                haveError:false
             }
         },
         computed: {
-            rootClasses() {
-                return {
-                    'SharpDate--date-active':this.dateActive,
-                    'SharpDate--time-active':this.timeActive,
-                    'SharpDate--date-focused':this.dateFocused,
-                    'SharpDate--time-focused':this.timeFocused,
-                }
-            },
             moment() {
                 return moment(this.value);
             },
@@ -77,109 +69,116 @@
             },
             timeObject() {
                 return {
-                    HH: this.moment.hours(),
-                    mm: this.moment.minutes(),
-                    ss: this.moment.seconds()
+                    HH: this.moment.format('HH'),
+                    mm: this.moment.format('mm'),
+                    ss: this.moment.format('ss')
                 }
             },
-            datepickerFormat() {
-                return this.displayFormat.replace(/Y|D/g,m=>({'Y':'y','D':'d'}[m]));
-            }
+            inputValue() {
+                return this.moment.format(this.displayFormat);
+            },
+            minDateFormatted() { return moment(this.minDate).format('DD MMM YYYY') },
+            maxDateFormatted() { return moment(this.maxDate).format('DD MMM YYYY') }
         },
         methods: {
-            /// Datepicker events
-            onDatepickerOpen() {
-                this.dateActive=true;
-                console.log('datepicker open');
-            },
-            onDatepickerClose() {
-                this.dateActive=false;
-                console.log('datepicker close');
-            },
-
-            /// Timepicker events
-            onTimepickerOpen() {
-                this.timeActive=true;
-                console.log('timepicker open');
-                this.$refs.datepicker.close();
-            },
-            onTimepickerClose() {
-                this.timeActive=false;
-                console.log('timepicker close');
-            },
-            onDateInput(val) {
-                console.log(val);
-                let m=moment(val, this.momentValidationFormat);
-                if(!m.isValid()) {
-                    this.$field.$emit('error', 'Format de la date invalide');
-                }
-                else
-                    this.$field.$emit('ok');
-            },
-            onTimeInput(val) {
-                if(!moment(val, this.displayFormat).isValid()) {
-                    this.$field.$emit('error', "Format de l'heure invalide");
-                }
-                else
-                    this.$field.$emit('ok');
-            },
-            updateDate(date) {
+            handleDateSelect(date) {
                 this.moment.set({
                     year:date.getFullYear(),
                     month:date.getMonth(),
                     date:date.getDate()
                 });
-                this.$emit('input', this.moment);
+                let boundsError = this.dateOutOfBounds(this.moment);
+                if(boundsError)
+                    this.$field.$emit('alert','dateOutOfBounds','error',boundsError);
+                else
+                    this.$emit('input', this.moment);
             },
-            updateTime({ data }) {
+            handleTimeSelect({ data }) {
                 this.moment.set({
                     hour:data.HH,
                     minute:data.mm,
                     second:data.ss,
                 });
-                this.$emit('input', this.moment);
+                let boundsError = false;
+                if(boundsError)
+                    this.$field.$emit('alert','timeOutOfBounds','error',boundsError);
+                else
+                    this.$emit('input', this.moment);
             },
-            pickerClass(label,isAlone) {
-                return [
-                    `SharpDate__picker__${label}`, {
-                        [`SharpDate__picker__${label}--alone`]:isAlone
-                    }
-                ]
+            handleInput(e) {
+                let m = moment(e.target.value, this.displayFormat, true);
+                if(!m.isValid()) {
+                    this.$field.$emit('error', "Format de l'heure invalide");
+                }
+                else {
+                    this.$field.$emit('ok');
+                    this.$emit('input', m);
+                }
+            },
+            dateOutOfBounds(m) {
+                return !(!this.minDate || m.isAfter(this.minDate)) ? 
+                            `La date doit être supérieur au ${this.minDateFormatted}` :
+                       !(!this.maxDate || m.isBefore(this.maxDate)) ? 
+                            `La date doit être inférieur au ${this.maxDateFormatted}` :
+                       false;
+            },
+            handleBlur() {
+                this.$field.$emit('clear');
+            },
+            increase(e) {
+                let pos = e.target.selectionStart;
+                let s=this.changeOnArrowPressed(pos, 1);
+                if(s)
+                    this.$nextTick(_=>e.target.setSelectionRange(s.selectStart,s.selectEnd));
+            },
+            decrease(e) {
+                let pos = e.target.selectionStart;
+                let s=this.changeOnArrowPressed(pos, -1);
+                if(s)
+                    this.$nextTick(_=>e.target.setSelectionRange(s.selectStart,s.selectEnd));
+            },
+            add(amount, key) {
+                this.moment.add.apply(this.moment,arguments);
+                let boundsError;
+                if(['years','months','days'].includes(key) && (boundsError=this.dateOutOfBounds(this.moment))) {
+                    this.$field.$emit('alert','dateOutOfBounds','error',boundsError);
+                }
+                else this.$field.$emit('alert-clear','dateOutOfBounds');
+                this.$emit('input',this.moment);
+            },
+            updateMoment(ch, amount) {
+                //console.log('add',ch,amount);
+                switch(ch) {
+                    case 'H': this.add(amount,'hours'); break;
+                    case 'm': this.add(amount,'minutes'); break;
+                    case 's': this.add(amount,'seconds'); break;
+                    case 'Y': this.add(amount,'years'); break;
+                    case 'M': this.add(amount,'months'); break;
+                    case 'D': this.add(amount,'days'); break;
+                    default: return false;
+                }
+                return true;
+            },
+            changeOnArrowPressed(pos,amount) {
+                let lookupPos=pos;
+                if(!this.updateMoment(this.displayFormat[pos],amount) && pos) {
+                    lookupPos=pos-1;
+                    if(!this.updateMoment(this.displayFormat[pos-1],amount))
+                        return null;
+                }
+                let ch=this.displayFormat[lookupPos];
+                return {
+                    selectStart:this.displayFormat.indexOf(ch),
+                    selectEnd:this.displayFormat.lastIndexOf(ch)+1
+                };
             }
         },
         mounted() {
-            if(this.$refs.timepicker) {
-                this.$refs.timepicker.$watch('showDropdown',val=>{
-                    val ? this.onTimepickerOpen() : this.onTimepickerClose();
-                });
-
-                let $timeInput = this.$refs.timepicker.$el.querySelector('input');
-
-                $timeInput.addEventListener('focus', _=>this.timeFocused=true);
-                $timeInput.addEventListener('blur', _=>this.timeFocused=false);
-
-                $timeInput.addEventListener('input', e=>this.onTimeInput(e.target.value));
-
-                $timeInput.readOnly = false;
-
-                document.addEventListener('click', (e) => {
-                    if (!this.$refs.timepicker.$el.contains(e.target)) {
-                        this.$refs.timepicker.showDropdown = false;
-                    }
-                }, false);
-            }
-
-            if(this.$refs.datepicker) {
-                let $dateInput = this.$refs.datepicker.$el.querySelector('input');
-                $dateInput.addEventListener('focus', _=>this.dateFocused=true);
-                $dateInput.addEventListener('blur', _=>this.dateFocused=false);
-
-                $dateInput.addEventListener('input', e=>this.onDateInput(e.target.value));
-
-                $dateInput.readOnly = false;
-            }
-
-            console.log(this);
+            document.addEventListener('click', (e) => {
+                if (!this.$el.contains(e.target)) {
+                    this.showPicker = false;
+                }
+            }, false);
         }
     }
 </script>
