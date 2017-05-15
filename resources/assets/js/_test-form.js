@@ -33,6 +33,11 @@ export const layout = [
                                 ]
                             ]
                         }
+                    ],
+                    [
+                        {
+                            "key":"mdeditor",
+                        }
                     ]
                 ]
             },
@@ -89,6 +94,7 @@ export const data = {
     "show_upload":true,
     "name":"B",
     "admin_password":"",
+    "mdeditor":"",
     "myimage": {
         name:"doggo.jpg",
         size:14550,
@@ -193,4 +199,8 @@ export const fields = {
         hasTime:true,
         minDate:'2017-03-15'
     },
+    'mdeditor': {
+        type: 'markdown',
+        placeholder:'super editeur'
+    }
 };

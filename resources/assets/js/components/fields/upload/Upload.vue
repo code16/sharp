@@ -3,7 +3,9 @@
 </template>
 
 <script>
+    import Vue from 'vue';
     import SharpVueClip from './VueClip';
+    import Messages from '../../../messages';
 
     export default {
         name: 'SharpUpload',
@@ -28,23 +30,18 @@
                 if (this.fileFilter) {
                     opt.acceptedFiles = {
                         extensions: this.fileFilter,
-                        message: "L'extension est invalide"
+                        message: Messages.uploadFileBadExtension
                     }
                 }
                 if (this.maxFileSize) {
                     opt.maxFilesize = {
                         limit: this.maxFileSize,
-                        message: "Le fichier sélectionné est trop grand"
+                        message: Messages.uploadFileTooBig
                     }
-                }
-                if (this.thumbnail) {
-                    let [width, height] = this.thumbnail.split('x');
-                    opt.thumbnailWidth = width;
-                    opt.thumbnailHeight = height;
                 }
 
                 return opt;
             }
         }
-    }
+    };
 </script>

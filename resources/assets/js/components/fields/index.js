@@ -2,7 +2,7 @@ import SharpAutocomplete from './Autocomplete';
 import SharpTextarea from './Textarea';
 import SharpText from './Text';
 import SharpPassword from './Password';
-import SharpMarkdown from './Markdown';
+import SharpMarkdown from './markdown/Markdown';
 import SharpNumber from './Number';
 import SharpUpload from './upload/Upload';
 import SharpTagInput from './TagInput';

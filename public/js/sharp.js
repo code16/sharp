@@ -14295,8 +14295,8 @@ module.exports = function(module) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Text___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__Text__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Password__ = __webpack_require__(250);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Password___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__Password__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Markdown__ = __webpack_require__(248);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Markdown___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__Markdown__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__markdown_Markdown__ = __webpack_require__(288);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__markdown_Markdown___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__markdown_Markdown__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Number__ = __webpack_require__(249);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Number___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__Number__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__upload_Upload__ = __webpack_require__(255);
@@ -14333,7 +14333,7 @@ var NameAssociation = {
     'text': __WEBPACK_IMPORTED_MODULE_2__Text___default.a.name,
     'password': __WEBPACK_IMPORTED_MODULE_3__Password___default.a.name,
     'textarea': __WEBPACK_IMPORTED_MODULE_1__Textarea___default.a.name,
-    'markdown': __WEBPACK_IMPORTED_MODULE_4__Markdown___default.a.name,
+    'markdown': __WEBPACK_IMPORTED_MODULE_4__markdown_Markdown___default.a.name,
     'number': __WEBPACK_IMPORTED_MODULE_5__Number___default.a.name,
     'upload': __WEBPACK_IMPORTED_MODULE_6__upload_Upload___default.a.name,
     'taginput': __WEBPACK_IMPORTED_MODULE_7__TagInput___default.a.name,
@@ -14342,7 +14342,7 @@ var NameAssociation = {
     'list': __WEBPACK_IMPORTED_MODULE_10__List___default.a.name
 };
 
-/* harmony default export */ __webpack_exports__["b"] = (_SharpAutocomplete$na = {}, _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_0__Autocomplete___default.a.name, __WEBPACK_IMPORTED_MODULE_0__Autocomplete___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_2__Text___default.a.name, __WEBPACK_IMPORTED_MODULE_2__Text___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_3__Password___default.a.name, __WEBPACK_IMPORTED_MODULE_3__Password___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_1__Textarea___default.a.name, __WEBPACK_IMPORTED_MODULE_1__Textarea___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_4__Markdown___default.a.name, __WEBPACK_IMPORTED_MODULE_4__Markdown___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_5__Number___default.a.name, __WEBPACK_IMPORTED_MODULE_5__Number___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_6__upload_Upload___default.a.name, __WEBPACK_IMPORTED_MODULE_6__upload_Upload___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_7__TagInput___default.a.name, __WEBPACK_IMPORTED_MODULE_7__TagInput___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_8__date_Date___default.a.name, __WEBPACK_IMPORTED_MODULE_8__date_Date___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_9__Check___default.a.name, __WEBPACK_IMPORTED_MODULE_9__Check___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_10__List___default.a.name, __WEBPACK_IMPORTED_MODULE_10__List___default.a), _SharpAutocomplete$na);
+/* harmony default export */ __webpack_exports__["b"] = (_SharpAutocomplete$na = {}, _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_0__Autocomplete___default.a.name, __WEBPACK_IMPORTED_MODULE_0__Autocomplete___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_2__Text___default.a.name, __WEBPACK_IMPORTED_MODULE_2__Text___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_3__Password___default.a.name, __WEBPACK_IMPORTED_MODULE_3__Password___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_1__Textarea___default.a.name, __WEBPACK_IMPORTED_MODULE_1__Textarea___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_4__markdown_Markdown___default.a.name, __WEBPACK_IMPORTED_MODULE_4__markdown_Markdown___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_5__Number___default.a.name, __WEBPACK_IMPORTED_MODULE_5__Number___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_6__upload_Upload___default.a.name, __WEBPACK_IMPORTED_MODULE_6__upload_Upload___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_7__TagInput___default.a.name, __WEBPACK_IMPORTED_MODULE_7__TagInput___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_8__date_Date___default.a.name, __WEBPACK_IMPORTED_MODULE_8__date_Date___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_9__Check___default.a.name, __WEBPACK_IMPORTED_MODULE_9__Check___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_10__List___default.a.name, __WEBPACK_IMPORTED_MODULE_10__List___default.a), _SharpAutocomplete$na);
 
 /***/ }),
 /* 27 */
@@ -27000,7 +27000,7 @@ var Component = __webpack_require__(1)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\FieldsLayout.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/FieldsLayout.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] FieldsLayout.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -27034,7 +27034,7 @@ var Component = __webpack_require__(1)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\Grid.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/Grid.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Grid.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -27068,7 +27068,7 @@ var Component = __webpack_require__(1)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\Template.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/Template.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Template.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -27102,7 +27102,7 @@ var Component = __webpack_require__(1)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\fields\\Text.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/Text.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Text.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -27128,7 +27128,7 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(275);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(274);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_Form__ = __webpack_require__(244);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_Form___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_Form__);
@@ -27635,8 +27635,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
 
 
 
@@ -27675,39 +27673,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
     },
     methods: {
-        addAlert: function addAlert(id, type, msg) {
-            if (!this.alerts.find(function (a) {
-                return a.id === id;
-            })) this.alerts.push({ id: id, msg: msg, type: type });
-        },
-        clearAlert: function clearAlert(id) {
-            var index = this.alerts.findIndex(function (a) {
-                return a.id === id;
-            });
-            if (index >= 0) this.alerts.splice(index, 1);
-        },
-        alertClass: function alertClass(type) {
-            switch (type) {
-                case 'error':
-                    return 'alert-danger';
-                case 'success':
-                    return 'alert-success';
-                default:
-                    return 'alert-info';
-            }
-        },
         setError: function setError(error) {
             this.state = 'error';
             this.stateMessage = error;
         },
         setOk: function setOk() {
             this.state = 'ok';
-            this.alertMessages = [];
             this.stateMessage = '';
         },
         clear: function clear() {
             this.state = 'classic';
-            this.alertMessages = [];
             this.stateMessage = '';
         }
     }
@@ -28445,25 +28420,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 });
 
 /***/ }),
-/* 176 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_simplemde__ = __webpack_require__(235);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_simplemde___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_simplemde__);
-//
-//
-//
-//
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    name: 'SharpMarkdown'
-});
-
-/***/ }),
+/* 176 */,
 /* 177 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -28619,8 +28576,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             type: Boolean,
             default: false
         },
-        minDate: String,
-        maxDate: String,
         displayFormat: {
             type: String,
             default: 'DD/MM/YYYY HH:mm:ss'
@@ -28628,8 +28583,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     data: function data() {
         return {
-            showPicker: false,
-            haveError: false
+            showPicker: false
         };
     },
 
@@ -28649,12 +28603,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         inputValue: function inputValue() {
             return this.moment.format(this.displayFormat);
-        },
-        minDateFormatted: function minDateFormatted() {
-            return __WEBPACK_IMPORTED_MODULE_2_moment___default()(this.minDate).format('DD MMM YYYY');
-        },
-        maxDateFormatted: function maxDateFormatted() {
-            return __WEBPACK_IMPORTED_MODULE_2_moment___default()(this.maxDate).format('DD MMM YYYY');
         }
     },
     methods: {
@@ -28664,8 +28612,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 month: date.getMonth(),
                 date: date.getDate()
             });
-            var boundsError = this.dateOutOfBounds(this.moment);
-            if (boundsError) this.$field.$emit('alert', 'dateOutOfBounds', 'error', boundsError);else this.$emit('input', this.moment);
+            this.$emit('input', this.moment);
         },
         handleTimeSelect: function handleTimeSelect(_ref) {
             var data = _ref.data;
@@ -28675,8 +28622,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 minute: data.mm,
                 second: data.ss
             });
-            var boundsError = false;
-            if (boundsError) this.$field.$emit('alert', 'timeOutOfBounds', 'error', boundsError);else this.$emit('input', this.moment);
+            this.$emit('input', this.moment);
         },
         handleInput: function handleInput(e) {
             var m = __WEBPACK_IMPORTED_MODULE_2_moment___default()(e.target.value, this.displayFormat, true);
@@ -28686,9 +28632,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.$field.$emit('ok');
                 this.$emit('input', m);
             }
-        },
-        dateOutOfBounds: function dateOutOfBounds(m) {
-            return !(!this.minDate || m.isAfter(this.minDate)) ? 'La date doit \xEAtre sup\xE9rieur au ' + this.minDateFormatted : !(!this.maxDate || m.isBefore(this.maxDate)) ? 'La date doit \xEAtre inf\xE9rieur au ' + this.maxDateFormatted : false;
         },
         handleBlur: function handleBlur() {
             this.$field.$emit('clear');
@@ -28709,10 +28652,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         add: function add(amount, key) {
             this.moment.add.apply(this.moment, arguments);
-            var boundsError = void 0;
-            if (['years', 'months', 'days'].includes(key) && (boundsError = this.dateOutOfBounds(this.moment))) {
-                this.$field.$emit('alert', 'dateOutOfBounds', 'error', boundsError);
-            } else this.$field.$emit('alert-clear', 'dateOutOfBounds');
             this.$emit('input', this.moment);
         },
         updateMoment: function updateMoment(ch, amount) {
@@ -28765,7 +28704,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue2_timepicker__ = __webpack_require__(274);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue2_timepicker__ = __webpack_require__(275);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue2_timepicker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue2_timepicker__);
 //
 //
@@ -28864,21 +28803,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__VueClip__ = __webpack_require__(256);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__VueClip___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__VueClip__);
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(274);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__VueClip__ = __webpack_require__(256);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__VueClip___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__VueClip__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__messages__ = __webpack_require__(293);
+//
+//
+//
+//
 
-//
-//
-//
-//
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpUpload',
     components: {
-        SharpVueClip: __WEBPACK_IMPORTED_MODULE_0__VueClip___default.a
+        SharpVueClip: __WEBPACK_IMPORTED_MODULE_1__VueClip___default.a
     },
 
     props: {
@@ -28898,23 +28840,14 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
             if (this.fileFilter) {
                 opt.acceptedFiles = {
                     extensions: this.fileFilter,
-                    message: "L'extension est invalide"
+                    message: __WEBPACK_IMPORTED_MODULE_2__messages__["a" /* default */].uploadFileBadExtension
                 };
             }
             if (this.maxFileSize) {
                 opt.maxFilesize = {
                     limit: this.maxFileSize,
-                    message: "Le fichier sélectionné est trop grand"
+                    message: __WEBPACK_IMPORTED_MODULE_2__messages__["a" /* default */].uploadFileTooBig
                 };
-            }
-            if (this.thumbnail) {
-                var _thumbnail$split = this.thumbnail.split('x'),
-                    _thumbnail$split2 = _slicedToArray(_thumbnail$split, 2),
-                    width = _thumbnail$split2[0],
-                    height = _thumbnail$split2[1];
-
-                opt.thumbnailWidth = width;
-                opt.thumbnailHeight = height;
             }
 
             return opt;
@@ -28993,7 +28926,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return this.file.thumbnail || this.file.dataUrl;
         },
         size: function size() {
-            var size = parseFloat((this.file.size / 1024).toFixed(2));
+            console.log(this.file.size);
+            var size = parseFloat(this.file.size.toFixed(2)) / 1024;
             return size.toLocaleString() + ' MB';
         },
         progress: function progress() {
@@ -29016,6 +28950,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             }, 1000);
 
             //let data = JSON.parse(this.file.xhrResponse.responseText);
+            var xhr = this.file.xhrResponse;
             var data = {
                 name: "_imageid_.jpg"
             };
@@ -29023,6 +28958,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             this.$parent.$emit('input', _extends({
                 uploaded: true
             }, data));
+            this.$emit('success', data);
         },
 
 
@@ -29071,6 +29007,8 @@ var layout = [{
             }], [{
                 "key": "E"
             }]]
+        }], [{
+            "key": "mdeditor"
         }]]
     }, {
         "size": 7,
@@ -29105,6 +29043,7 @@ var data = {
     "show_upload": true,
     "name": "B",
     "admin_password": "",
+    "mdeditor": "",
     "myimage": {
         name: "doggo.jpg",
         size: 14550,
@@ -29197,6 +29136,10 @@ var fields = {
         type: 'date',
         hasTime: true,
         minDate: '2017-03-15'
+    },
+    'mdeditor': {
+        type: 'markdown',
+        placeholder: 'super editeur'
     }
 };
 
@@ -43763,7 +43706,7 @@ var Component = __webpack_require__(1)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\node_modules\\vue2-timepicker\\src\\vue-timepicker.vue"
+Component.options.__file = "/Users/antoine/code/sharp/node_modules/vue2-timepicker/src/vue-timepicker.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] vue-timepicker.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -43797,7 +43740,7 @@ var Component = __webpack_require__(1)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\Field.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/Field.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -43830,7 +43773,7 @@ var Component = __webpack_require__(1)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\FieldContainer.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/FieldContainer.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] FieldContainer.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -43864,7 +43807,7 @@ var Component = __webpack_require__(1)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\FieldDisplay.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/FieldDisplay.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -43897,7 +43840,7 @@ var Component = __webpack_require__(1)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\Form.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/Form.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Form.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -43931,7 +43874,7 @@ var Component = __webpack_require__(1)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\fields\\Autocomplete.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/Autocomplete.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Autocomplete.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -43965,7 +43908,7 @@ var Component = __webpack_require__(1)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\fields\\Check.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/Check.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Check.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -43999,7 +43942,7 @@ var Component = __webpack_require__(1)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\fields\\List.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/List.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] List.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -44020,40 +43963,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 248 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(176),
-  /* template */
-  __webpack_require__(258),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\fields\\Markdown.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Markdown.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-1d0a5e23", Component.options)
-  } else {
-    hotAPI.reload("data-v-1d0a5e23", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
+/* 248 */,
 /* 249 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -44067,7 +43977,7 @@ var Component = __webpack_require__(1)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\fields\\Number.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/Number.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 
 module.exports = Component.exports
@@ -44087,7 +43997,7 @@ var Component = __webpack_require__(1)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\fields\\Password.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/Password.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -44120,7 +44030,7 @@ var Component = __webpack_require__(1)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\fields\\TagInput.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/TagInput.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 
 module.exports = Component.exports
@@ -44140,7 +44050,7 @@ var Component = __webpack_require__(1)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\fields\\Textarea.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/Textarea.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Textarea.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -44174,7 +44084,7 @@ var Component = __webpack_require__(1)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\fields\\date\\Date.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/date/Date.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Date.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -44208,7 +44118,7 @@ var Component = __webpack_require__(1)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\fields\\date\\Timepicker.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/date/Timepicker.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Timepicker.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -44242,7 +44152,7 @@ var Component = __webpack_require__(1)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\fields\\upload\\Upload.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/upload/Upload.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Upload.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -44276,7 +44186,7 @@ var Component = __webpack_require__(1)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Travail\\Documents\\Developplan\\Projets\\sharp\\resources\\assets\\js\\components\\fields\\upload\\VueClip.vue"
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/upload/VueClip.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] VueClip.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -44460,21 +44370,7 @@ if (false) {
 }
 
 /***/ }),
-/* 258 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c("div")
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-1d0a5e23", module.exports)
-  }
-}
-
-/***/ }),
+/* 258 */,
 /* 259 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -44637,9 +44533,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "error": _vm.setError,
       "ok": _vm.setOk,
-      "clear": _vm.clear,
-      "alert": _vm.addAlert,
-      "alert-clear": _vm.clearAlert
+      "clear": _vm.clear
     }
   }, 'sharp-field', _vm.$props)), _vm._v(" "), _c('div', {
     staticClass: "form-control-feedback"
@@ -45182,13 +45076,6 @@ if (false) {
 
 /***/ }),
 /* 274 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(240)
-
-
-/***/ }),
-/* 275 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54826,6 +54713,13 @@ module.exports = Vue$3;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(16)))
 
 /***/ }),
+/* 275 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(240)
+
+
+/***/ }),
 /* 276 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -55178,6 +55072,337 @@ get:function(){return T(this,"a",{value:7}).a}})).a})?function(e,t,r){var n=F(V,
 __webpack_require__(163);
 module.exports = __webpack_require__(164);
 
+
+/***/ }),
+/* 280 */,
+/* 281 */,
+/* 282 */,
+/* 283 */,
+/* 284 */,
+/* 285 */,
+/* 286 */,
+/* 287 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_simplemde__ = __webpack_require__(235);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_simplemde___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_simplemde__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__MarkdownUpload__ = __webpack_require__(291);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__MarkdownUpload___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__MarkdownUpload__);
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: 'SharpMarkdown',
+    props: {
+        value: String,
+
+        placeholder: String,
+        toolbar: Array,
+        height: Number,
+        maxImageSize: Number
+    },
+    data: function data() {
+        return {
+            simplemde: null,
+            uploadWidgets: []
+        };
+    },
+
+    computed: {
+        style: function style() {
+            var s = {};
+            if (this.height) s.height = this.height + 'px';
+            return s;
+        }
+    },
+    methods: {
+        insertUploadImage: function insertUploadImage(_ref) {
+            var codemirror = _ref.codemirror;
+
+            var pos = codemirror.getCursor();
+            var uploadIdx = this.uploadWidgets.length;
+            var selection = codemirror.getSelection(' ');
+
+            var lh = codemirror.getLineHandle(pos.line);
+            /*if(lh.widgets || (lh.widgets && lh.widgets.length)) {
+                codemirror.focus();
+                return;
+            }*/
+
+            var widgets = this.uploadWidgets;
+
+            var uploader = new __WEBPACK_IMPORTED_MODULE_1__MarkdownUpload___default.a({
+                propsData: {
+                    onSuccess: function onSuccess(file) {},
+                    onAdded: function onAdded() {
+                        codemirror.refresh();
+                    },
+                    onRemoved: function onRemoved() {
+                        codemirror.removeLineWidget(widgets[uploadIdx]);
+                        widgets.splice(uploadIdx, 1);
+                        codemirror.focus();
+                    }
+                }
+            });
+
+            if (selection) codemirror.replaceSelection('');
+
+            var from = codemirror.getCursor('from'),
+                to = codemirror.getCursor('to');
+            console.log(from, to);
+            codemirror.replaceRange('\n\n', to);
+            var mpos = { line: from.line + 1, ch: from.ch + 1 };
+            codemirror.markText(mpos, mpos, { replacedWith: uploader.$mount().$el, clearWhenEmpty: false });
+            codemirror.setCursor({ line: to.line + 1, ch: 0 });
+            codemirror.focus();
+
+            //this.uploadWidgets.push(widget);
+        }
+    },
+    mounted: function mounted() {
+        this.simplemde = new __WEBPACK_IMPORTED_MODULE_0_simplemde___default.a({
+            element: this.$refs.textarea,
+            initialValue: this.value,
+            placeholder: this.placeholder,
+            spellChecker: false,
+            toolbar: this.toolbar
+        });
+        var imageBtn = this.simplemde.options.toolbar.find(function (btn) {
+            return btn.name === 'image';
+        });
+        if (imageBtn) {
+            imageBtn.action = this.insertUploadImage;
+        }
+
+        var cm = this.simplemde.codemirror;
+        /*cm.on('change', () => {
+            cm.eachLine(line=>{
+                //if(line.widgets)
+                console.log(line,line.widgets);
+            });
+        });*/
+        //console.log(cm);
+    }
+});
+
+/***/ }),
+/* 288 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(287),
+  /* template */
+  __webpack_require__(289),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/markdown/Markdown.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Markdown.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-b524126a", Component.options)
+  } else {
+    hotAPI.reload("data-v-b524126a", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 289 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "SharpMarkdown",
+    style: (_vm.style)
+  }, [_c('textarea', {
+    ref: "textarea"
+  })])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-b524126a", module.exports)
+  }
+}
+
+/***/ }),
+/* 290 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(274);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__upload_VueClip__ = __webpack_require__(256);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__upload_VueClip___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__upload_VueClip__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__messages__ = __webpack_require__(293);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = (__WEBPACK_IMPORTED_MODULE_0_vue___default.a.extend({
+    props: {
+        value: Object,
+        maxFileSize: Number,
+
+        onSuccess: Function,
+        onRemoved: Function,
+        onAdded: Function
+    },
+    components: {
+        SharpVueClip: __WEBPACK_IMPORTED_MODULE_1__upload_VueClip___default.a
+    },
+    data: function data() {
+        return {
+            show: false
+        };
+    },
+
+    computed: {
+        options: function options() {
+            return {
+                url: 'http://jsonplaceholder.typicode.com/posts',
+                uploadMultiple: false,
+                acceptedFiles: {
+                    extensions: ['image/*'],
+                    message: __WEBPACK_IMPORTED_MODULE_2__messages__["a" /* default */].uploadFileBadExtension
+                },
+                maxFilesize: {
+                    limit: this.maxFileSize,
+                    message: __WEBPACK_IMPORTED_MODULE_2__messages__["a" /* default */].uploadFileTooBig
+                }
+            };
+        },
+        dropzone: function dropzone() {
+            return this.$refs.vueclip.uploader._uploader;
+        },
+        fileInput: function fileInput() {
+            return this.dropzone.hiddenFileInput;
+        }
+    },
+    methods: {
+        onAddedFile: function onAddedFile() {
+            var _this = this;
+
+            this.show = true;
+            this.$nextTick(function (_) {
+                _this.onAdded();
+            });
+        }
+    },
+    mounted: function mounted() {
+        this.fileInput.click();
+        console.log(this);
+    }
+}));
+
+/***/ }),
+/* 291 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(290),
+  /* template */
+  __webpack_require__(292),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/markdown/MarkdownUpload.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] MarkdownUpload.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-21f5c62c", Component.options)
+  } else {
+    hotAPI.reload("data-v-21f5c62c", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 292 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('sharp-vue-clip', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.show),
+      expression: "show"
+    }],
+    ref: "vueclip",
+    staticClass: "SharpMarkdownUpload",
+    attrs: {
+      "options": _vm.options,
+      "value": _vm.value,
+      "on-removed-file": _vm.onRemoved,
+      "on-added-file": _vm.onAddedFile
+    }
+  })
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-21f5c62c", module.exports)
+  }
+}
+
+/***/ }),
+/* 293 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ({
+    uploadFileTooBig: "Le fichier sélectionné est trop grand",
+    uploadFileBadExtension: "L'extension est invalide"
+});
 
 /***/ })
 /******/ ]);

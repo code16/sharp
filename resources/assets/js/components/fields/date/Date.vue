@@ -47,8 +47,6 @@
                 type:Boolean,
                 default:false
             },
-            minDate: String,
-            maxDate: String,
             displayFormat: {
                 type: String,
                 default:'DD/MM/YYYY HH:mm:ss'
@@ -56,8 +54,7 @@
         },
         data() {
             return {
-                showPicker:false,
-                haveError:false
+                showPicker:false
             }
         },
         computed: {
@@ -77,8 +74,6 @@
             inputValue() {
                 return this.moment.format(this.displayFormat);
             },
-            minDateFormatted() { return moment(this.minDate).format('DD MMM YYYY') },
-            maxDateFormatted() { return moment(this.maxDate).format('DD MMM YYYY') }
         },
         methods: {
             handleDateSelect(date) {
@@ -87,11 +82,7 @@
                     month:date.getMonth(),
                     date:date.getDate()
                 });
-                let boundsError = this.dateOutOfBounds(this.moment);
-                if(boundsError)
-                    this.$field.$emit('alert','dateOutOfBounds','error',boundsError);
-                else
-                    this.$emit('input', this.moment);
+                this.$emit('input', this.moment);
             },
             handleTimeSelect({ data }) {
                 this.moment.set({
@@ -99,11 +90,7 @@
                     minute:data.mm,
                     second:data.ss,
                 });
-                let boundsError = false;
-                if(boundsError)
-                    this.$field.$emit('alert','timeOutOfBounds','error',boundsError);
-                else
-                    this.$emit('input', this.moment);
+                this.$emit('input', this.moment);
             },
             handleInput(e) {
                 let m = moment(e.target.value, this.displayFormat, true);
@@ -114,13 +101,6 @@
                     this.$field.$emit('ok');
                     this.$emit('input', m);
                 }
-            },
-            dateOutOfBounds(m) {
-                return !(!this.minDate || m.isAfter(this.minDate)) ? 
-                            `La date doit être supérieur au ${this.minDateFormatted}` :
-                       !(!this.maxDate || m.isBefore(this.maxDate)) ? 
-                            `La date doit être inférieur au ${this.maxDateFormatted}` :
-                       false;
             },
             handleBlur() {
                 this.$field.$emit('clear');
@@ -139,11 +119,6 @@
             },
             add(amount, key) {
                 this.moment.add.apply(this.moment,arguments);
-                let boundsError;
-                if(['years','months','days'].includes(key) && (boundsError=this.dateOutOfBounds(this.moment))) {
-                    this.$field.$emit('alert','dateOutOfBounds','error',boundsError);
-                }
-                else this.$field.$emit('alert-clear','dateOutOfBounds');
                 this.$emit('input',this.moment);
             },
             updateMoment(ch, amount) {

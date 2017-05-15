@@ -58,7 +58,8 @@
                 return this.file.thumbnail || this.file.dataUrl;
             },
             size() {
-                let size = parseFloat((this.file.size/1024).toFixed(2));
+                console.log(this.file.size);
+                let size = parseFloat((this.file.size).toFixed(2))/1024;
                 return `${size.toLocaleString()} MB`;
             },
             progress() {
@@ -77,6 +78,7 @@
                 setTimeout(()=>this.showProgressBar = false, 1000);
 
                 //let data = JSON.parse(this.file.xhrResponse.responseText);
+                let xhr = this.file.xhrResponse;
                 let data = {
                     name:"_imageid_.jpg"
                 };
@@ -85,6 +87,8 @@
                     uploaded:true,
                     ...data
                 });
+                this.$emit('success',data);
+
             },
 
             // actions
