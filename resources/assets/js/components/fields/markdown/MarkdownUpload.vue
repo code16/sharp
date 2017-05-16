@@ -1,8 +1,9 @@
 <template>
         <sharp-vue-clip v-show="show"
                         :options="options" :value="value"
-                        :on-removed-file="onRemoved"
-                        :on-added-file="onAddedFile"
+                        :on-removed-file="_=>onRemoved(marker)"
+                        :on-added-file="_=>onAddedFile(marker)"
+                        @success="data=>onSuccess(marker,data)"
                         class="SharpMarkdownUpload"
                         ref="vueclip">
         </sharp-vue-clip>
@@ -20,7 +21,9 @@
 
             onSuccess:Function,
             onRemoved:Function,
-            onAdded:Function
+            onAdded:Function,
+
+            marker:Object
         },
         components: {
             SharpVueClip
@@ -58,11 +61,18 @@
                 this.$nextTick(_=>{
                     this.onAdded();
                 })
-            }
-        },
-        mounted() {
-            this.fileInput.click();
-            console.log(this);
+            },
+            checkCancelled() {
+                if(!this.show)
+                    this.onRemoved(this.marker);
+                document.body.onfocus = null;
+            },
+            inputClick() {
+                this.fileInput.click();
+                document.body.onfocus = _ => {
+                    setTimeout(this.checkCancelled, 100);
+                };
+            },
         }
     });
 </script>

@@ -88,7 +88,6 @@
                     ...data
                 });
                 this.$emit('success',data);
-
             },
 
             // actions

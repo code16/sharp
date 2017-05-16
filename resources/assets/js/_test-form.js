@@ -201,6 +201,7 @@ export const fields = {
     },
     'mdeditor': {
         type: 'markdown',
+        height:150,
         placeholder:'super editeur'
     }
 };
