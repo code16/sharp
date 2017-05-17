@@ -37943,7 +37943,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     methods: {
         handleCheck: function handleCheck(e) {
-            console.log(e);
             this.$emit('input', e.target.checked);
         }
     }
@@ -38141,7 +38140,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     name: 'SharpText',
 
     props: {
-        value: String,
+        value: [String, Number],
 
         placeholder: String,
         disabled: Boolean,
@@ -38501,6 +38500,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+var noop = function noop() {};
+
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpMarkdown',
     props: {
@@ -38514,28 +38515,38 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             simplemde: null,
-            cursorPos: 0
+            cursorPos: 0,
+            lastKeydown: 0,
+            onNextBackspace: noop
         };
     },
 
     methods: {
-        createUploader: function createUploader(cm, selection) {
+        createUploader: function createUploader(cm) {
             return new __WEBPACK_IMPORTED_MODULE_1__MarkdownUpload___default.a({
                 propsData: {
-                    onSuccess: function onSuccess(marker, file) {
-                        var find = marker.find();
-                        console.log(marker);
-                        cm.replaceRange('[' + (selection || '') + '](' + file.name + ')', find.from, find.to);
+                    onSuccess: function onSuccess(file) {
+                        var find = this.marker.find();
+                        //console.log(this.marker);
+                        var content = cm.getLine(find.from.line);
+                        cm.replaceRange(content.replace(/\(.*?\)/, '(' + file.name + ')'), find.from, find.to);
                     },
                     onAdded: function onAdded() {
                         cm.refresh();
                         cm.focus();
                     },
-                    onRemoved: function onRemoved(marker) {
-                        var find = marker.find(),
+                    onRemoved: function onRemoved() {
+                        if (this.marker.explicitlyCleared) return;
+                        this.remove();
+                    }
+                },
+                methods: {
+                    remove: function remove() {
+                        this.marker.inclusiveLeft = this.marker.inclusiveRight = false;
+                        var find = this.marker.find(),
                             line = find.from.line;
-                        marker.clear();
-                        cm.replaceRange('', { line: line, ch: 0 }, { line: line + 1, ch: 0 });
+                        cm.replaceRange('', find.from, { line: line + 1, ch: 0 });
+                        this.marker.inclusiveLeft = this.marker.inclusiveRight = true;
                         cm.focus();
                     }
                 }
@@ -38548,6 +38559,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var selection = cm.getSelection(' ');
             var curLineContent = cm.getLine(this.cursorPos.line);
 
+            if (selection) {
+                cm.replaceSelection('');
+                curLineContent = cm.getLine(this.cursorPos.line);
+                //console.log(selection);
+            }
+
             if (curLineContent.length) {
                 cm.replaceRange('\n', {
                     line: this.cursorPos.line,
@@ -38558,10 +38575,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             cm.getInputField().blur();
 
-            cm.replaceRange('![]()\n', this.cursorPos);
+            var md = '![' + (selection || '') + ']()';
+
+            cm.replaceRange(md + '\n', this.cursorPos);
             cm.setCursor(this.cursorPos.line - 1, 0);
             var from = this.cursorPos,
-                to = { line: this.cursorPos.line, ch: this.cursorPos.ch + 5 };
+                to = { line: this.cursorPos.line, ch: this.cursorPos.ch + md.length };
 
             var uploader = this.createUploader(cm);
             uploader.marker = cm.markText(from, to, {
@@ -38571,18 +38590,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 inclusiveLeft: true
             });
 
-            uploader.marker.on('beforeCursorEnter', function () {
-                console.log('cursor enter', JSON.stringify(cm.getCursor()));
-            });
+            uploader.marker.on('beforeCursorEnter', this.uploadBeforeCursorEnter(uploader));
             uploader.inputClick();
 
             cm.setCursor(this.cursorPos.line + 1, 0);
+        },
+        uploadBeforeCursorEnter: function uploadBeforeCursorEnter(uploader) {
+            var _this = this;
+
+            return function (_) {
+                console.log(_this.lastKeydown.keyCode, _this.cursorPos.line);
+                if (_this.lastKeydown.keyCode === 8 && _this.cursorPos.line === 1) {
+                    _this.onNextBackspace = uploader.remove.bind(uploader);
+                }
+                _this.cursorEntered = true;
+            };
         },
         onCursorActivity: function onCursorActivity(cm) {
             this.cursorPos = cm.getCursor();
         },
         onChange: function onChange(cm) {
+            console.log('change');
             this.$emit('input', this.simplemde.value());
+        },
+        onBeforeChange: function onBeforeChange(cm, change) {
+            console.log('beforeChange', arguments, this.cursorEntered);
+        },
+        onKeydown: function onKeydown(cm, e) {
+            console.log('key down');
+            this.lastKeydown = e;
+        },
+        onKeyHandled: function onKeyHandled(cm, name, e) {
+            console.log('key handled', arguments);
+            if (__WEBPACK_IMPORTED_MODULE_2_codemirror___default.a.keyMap.default[name] === 'undo') {} else if (name === 'Backspace') {
+                this.onNextBackspace();
+                this.onNextBackspace = noop;
+            }
         },
         codemirrorOn: function codemirrorOn(eventName, callback, immediate) {
             immediate && callback(this.simplemde.codemirror);
@@ -38609,6 +38652,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         this.codemirrorOn('cursorActivity', this.onCursorActivity, true);
         this.codemirrorOn('change', this.onChange, true);
+        this.codemirrorOn('beforeChange', this.onBeforeChange);
+
+        this.codemirrorOn('keydown', this.onKeydown);
+        this.codemirrorOn('keyHandled', this.onKeyHandled);
     }
 });
 
@@ -38623,6 +38670,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__upload_VueClip__ = __webpack_require__(165);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__upload_VueClip___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__upload_VueClip__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__messages__ = __webpack_require__(28);
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -38655,7 +38708,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     data: function data() {
         return {
-            show: false
+            show: false,
+            removed: false
         };
     },
 
@@ -38691,7 +38745,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         checkCancelled: function checkCancelled() {
-            if (!this.show) this.onRemoved(this.marker);
+            if (!this.show) this.onRemoved();
             document.body.onfocus = null;
         },
         inputClick: function inputClick() {
@@ -38802,6 +38856,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -38834,7 +38894,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return this.file.thumbnail || this.file.dataUrl;
         },
         size: function size() {
-            console.log(this.file.size);
+            //console.log(this.file.size);
             var size = parseFloat(this.file.size.toFixed(2)) / 1024;
             return size.toLocaleString() + ' MB';
         },
@@ -38899,27 +38959,26 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 var layout = [{
     "title": "Tab1",
     "columns": [{
-        "size": 5,
+        "size": 7,
         "fields": [[{
             "key": "A",
             "size": 4,
             "sizeXS": 6
         }, {
             "key": "B",
-            "size": 8,
             "sizeXS": 6
         }], [{
             "fieldset": "dates",
             "fields": [[{
                 "key": "date"
             }], [{
-                "key": "E"
+                "key": "number"
             }]]
         }], [{
             "key": "mdeditor"
         }]]
     }, {
-        "size": 7,
+        "size": 5,
         "fields": [[{
             "key": "mylist",
             "item": [[{
@@ -38945,7 +39004,8 @@ var layout = [{
 
 var data = {
     "A": "Valeur texte",
-    B: '', D: '', E: '',
+    "B": '',
+    "number": 1,
     "date": '2017-04-12 12:30:06',
     "show_autocomplete": true,
     "show_upload": true,
@@ -38971,11 +39031,12 @@ var fields = {
         type: 'password',
         label: 'Mot de passe'
     },
-    'D': {
-        type: 'text'
-    },
-    'E': {
-        type: 'text'
+    'number': {
+        type: 'number',
+        showControls: false,
+        min: 1,
+        max: 10,
+        step: 2
     },
     'show_autocomplete': {
         type: 'check',
@@ -39047,7 +39108,7 @@ var fields = {
     },
     'mdeditor': {
         type: 'markdown',
-        height: 150,
+        height: 250,
         placeholder: 'super editeur'
     }
 };
@@ -53877,7 +53938,7 @@ module.exports = Component.exports
 
 var Component = __webpack_require__(1)(
   /* script */
-  null,
+  __webpack_require__(291),
   /* template */
   null,
   /* scopeId */
@@ -53887,6 +53948,19 @@ var Component = __webpack_require__(1)(
 )
 Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/fields/Number.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-2451567d", Component.options)
+  } else {
+    hotAPI.reload("data-v-2451567d", Component.options)
+  }
+})()}
 
 module.exports = Component.exports
 
@@ -54328,13 +54402,27 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "options": _vm.options,
       "value": _vm.value,
-      "on-removed-file": function (_) { return _vm.onRemoved(_vm.marker); },
-      "on-added-file": function (_) { return _vm.onAddedFile(_vm.marker); }
+      "on-added-file": function (_) { return _vm.onAddedFile(); }
     },
     on: {
-      "success": function (data) { return _vm.onSuccess(_vm.marker, data); }
+      "success": function (data) { return _vm.onSuccess(data); }
     }
-  })
+  }, [_c('template', {
+    slot: "removeButton"
+  }, [_c('button', {
+    staticClass: "close",
+    attrs: {
+      "type": "button",
+      "aria-label": "Close"
+    },
+    on: {
+      "click": function (_) { return _vm.onRemoved(); }
+    }
+  }, [_c('span', {
+    attrs: {
+      "aria-hidden": "true"
+    }
+  }, [_vm._v("×")])])])], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -54683,7 +54771,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "aria-valuemin": "0",
       "aria-valuemax": "100"
     }
-  })])])]), _vm._v(" "), _c('button', {
+  })])])]), _vm._v(" "), _vm._t("removeButton"), _vm._v(" "), (!_vm.$slots.removeButton) ? [_c('button', {
     staticClass: "close",
     attrs: {
       "type": "button",
@@ -54698,7 +54786,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "aria-hidden": "true"
     }
-  }, [_vm._v("×")])])] : _vm._e(), _vm._v(" "), _c('div', {
+  }, [_vm._v("×")])])] : _vm._e()] : _vm._e(), _vm._v(" "), _c('div', {
     ref: "clip-preview-template",
     staticClass: "clip-preview-template",
     staticStyle: {
@@ -55427,6 +55515,50 @@ get:function(){return T(this,"a",{value:7}).a}})).a})?function(e,t,r){var n=F(V,
 __webpack_require__(166);
 module.exports = __webpack_require__(167);
 
+
+/***/ }),
+/* 284 */,
+/* 285 */,
+/* 286 */,
+/* 287 */,
+/* 288 */,
+/* 289 */,
+/* 290 */,
+/* 291 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Text__ = __webpack_require__(164);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Text___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Text__);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: 'SharpNumber',
+    functional: true,
+    components: _defineProperty({}, __WEBPACK_IMPORTED_MODULE_0__Text___default.a.name, __WEBPACK_IMPORTED_MODULE_0__Text___default.a),
+    render: function render(h, _ref) {
+        var _ref$props = _ref.props,
+            step = _ref$props.step,
+            min = _ref$props.min,
+            max = _ref$props.max,
+            showControls = _ref$props.showControls,
+            data = _ref.data;
+
+        return h(__WEBPACK_IMPORTED_MODULE_0__Text___default.a.name, {
+            'class': _extends({
+                'hide-controls': !showControls }, data['class']),
+            props: _extends({
+                inputType: 'number' }, data.props),
+            attrs: _extends({
+                step: step, min: min, max: max }, data.attrs)
+        });
+    }
+});
 
 /***/ })
 /******/ ]);

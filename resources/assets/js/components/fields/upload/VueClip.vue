@@ -7,22 +7,28 @@
             <template v-if="file">
                 <div class="SharpUpload__container">
                     <div class="SharpUpload__thumbnail">
-                        <img v-if="!!imageSrc" :src="imageSrc" :width="options.thumbnailWidth" :height="options.thumbnailHeight">
+                        <img v-if="!!imageSrc" :src="imageSrc" :width="options.thumbnailWidth"
+                             :height="options.thumbnailHeight">
                     </div>
                     <div class="SharpUpload__infos">
                         <h3>{{ file.name }}</h3>
                         <div>{{ size }}</div>
                         <div class="progress" v-show="showProgressBar">
-                            <div class="progress-bar" role="progressbar" :style="{width:`${progress}%`}" :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress-bar" role="progressbar" :style="{width:`${progress}%`}"
+                                 :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                     </div>
                 </div>
-
-                <button type="button" class="close" aria-label="Close" @click="remove()">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <slot name="removeButton"></slot>
+                <template v-if="!$slots.removeButton">
+                    <button type="button" class="close" aria-label="Close" @click="remove()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </template>
             </template>
-            <div ref="clip-preview-template" class="clip-preview-template" style="display: none;"><div></div></div>
+            <div ref="clip-preview-template" class="clip-preview-template" style="display: none;">
+                <div></div>
+            </div>
         </form>
     </div>
 </template>
@@ -58,8 +64,8 @@
                 return this.file.thumbnail || this.file.dataUrl;
             },
             size() {
-                console.log(this.file.size);
-                let size = parseFloat((this.file.size).toFixed(2))/1024;
+                //console.log(this.file.size);
+                let size = parseFloat((this.file.size).toFixed(2)) / 1024;
                 return `${size.toLocaleString()} MB`;
             },
             progress() {
@@ -75,31 +81,31 @@
                 this.showProgressBar = false
             },
             success() {
-                setTimeout(()=>this.showProgressBar = false, 1000);
+                setTimeout(() => this.showProgressBar = false, 1000);
 
                 //let data = JSON.parse(this.file.xhrResponse.responseText);
                 let xhr = this.file.xhrResponse;
                 let data = {
-                    name:"_imageid_.jpg"
+                    name: "_imageid_.jpg"
                 };
 
                 this.$parent.$emit('input', {
-                    uploaded:true,
+                    uploaded: true,
                     ...data
                 });
-                this.$emit('success',data);
+                this.$emit('success', data);
             },
 
             // actions
             remove() {
                 this.removeFile(this.file);
-                this.files.splice(0,1);
+                this.files.splice(0, 1);
 
                 this.$parent.$emit('input', null);
             }
         },
         created() {
-            if(!this.value)
+            if (!this.value)
                 return;
 
             this.files.push(new File({

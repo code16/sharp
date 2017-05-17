@@ -10,7 +10,7 @@
         name:'SharpText',
 
         props: {
-            value: String,
+            value: [String, Number],
 
             placeholder: String,
             disabled: Boolean,

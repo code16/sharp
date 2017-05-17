@@ -9,6 +9,8 @@
     import MarkdownUpload from './MarkdownUpload';
     import CodeMirror from 'codemirror';
 
+    const noop = ()=>{};
+
     export default {
         name: 'SharpMarkdown',
         props: {
@@ -23,25 +25,36 @@
             return {
                 simplemde:null,
                 cursorPos:0,
+                lastKeydown:0,
+                onNextBackspace:noop
             }
         },
         methods : {
-            createUploader(cm, selection) {
+            createUploader(cm) {
                 return new MarkdownUpload({
                     propsData: {
-                        onSuccess(marker, file) {
-                            let find = marker.find();
-                            console.log(marker);
-                            cm.replaceRange(`[${selection||''}](${file.name})`,find.from,find.to);
+                        onSuccess(file) {
+                            let find = this.marker.find();
+                            //console.log(this.marker);
+                            let content = cm.getLine(find.from.line);
+                            cm.replaceRange(content.replace(/\(.*?\)/,`(${file.name})`),find.from,find.to);
                         },
                         onAdded() {
                             cm.refresh();
                             cm.focus();
                         },
-                        onRemoved(marker) {
-                            let find = marker.find(), line=find.from.line;
-                            marker.clear();
-                            cm.replaceRange('',{line,ch:0},{line:line+1,ch:0});
+                        onRemoved() {
+                            if(this.marker.explicitlyCleared)
+                                return;
+                            this.remove();
+                        }
+                    },
+                    methods: {
+                        remove() {
+                            this.marker.inclusiveLeft = this.marker.inclusiveRight = false;
+                            let find = this.marker.find(), line = find.from.line;
+                            cm.replaceRange('',find.from,{line:line+1, ch:0});
+                            this.marker.inclusiveLeft = this.marker.inclusiveRight = true;
                             cm.focus();
                         }
                     }
@@ -51,6 +64,12 @@
                 let cm = codemirror;
                 let selection = cm.getSelection(' ');
                 let curLineContent = cm.getLine(this.cursorPos.line);
+
+                if(selection) {
+                    cm.replaceSelection('');
+                    curLineContent = cm.getLine(this.cursorPos.line);
+                    //console.log(selection);
+                }
 
                 if(curLineContent.length) {
                     cm.replaceRange('\n', {
@@ -62,9 +81,11 @@
 
                 cm.getInputField().blur();
 
-                cm.replaceRange('![]()\n',this.cursorPos);
+                let md = `![${selection||''}]()`;
+
+                cm.replaceRange(`${md}\n`,this.cursorPos);
                 cm.setCursor(this.cursorPos.line-1,0);
-                let from = this.cursorPos, to = { line:this.cursorPos.line, ch:this.cursorPos.ch+5 };
+                let from = this.cursorPos, to = { line:this.cursorPos.line, ch:this.cursorPos.ch+md.length };
 
                 let uploader = this.createUploader(cm);
                 uploader.marker = cm.markText(from, to, {
@@ -74,18 +95,43 @@
                     inclusiveLeft: true,
                 });
 
-                uploader.marker.on('beforeCursorEnter',function() {
-                    console.log('cursor enter', JSON.stringify(cm.getCursor()));
-                });
+                uploader.marker.on('beforeCursorEnter',this.uploadBeforeCursorEnter(uploader));
                 uploader.inputClick();
 
                 cm.setCursor(this.cursorPos.line+1, 0);
+            },
+            uploadBeforeCursorEnter(uploader) {
+                return _ => {
+                    console.log(this.lastKeydown.keyCode, this.cursorPos.line);
+                    if(this.lastKeydown.keyCode === 8 && this.cursorPos.line === 1) {
+                        this.onNextBackspace = uploader.remove.bind(uploader);
+                    }
+                    this.cursorEntered=true;
+                }
             },
             onCursorActivity(cm) {
                 this.cursorPos = cm.getCursor();
             },
             onChange(cm) {
+                console.log('change');
                 this.$emit('input', this.simplemde.value());
+            },
+            onBeforeChange(cm, change) {
+                console.log('beforeChange',arguments, this.cursorEntered);
+            },
+            onKeydown(cm, e) {
+                console.log('key down');
+                this.lastKeydown = e;
+            },
+            onKeyHandled(cm, name, e) {
+                console.log('key handled',arguments);
+                if(CodeMirror.keyMap.default[name] === 'undo') {
+
+                }
+                else if(name === 'Backspace') {
+                    this.onNextBackspace();
+                    this.onNextBackspace = noop;
+                }
             },
             codemirrorOn(eventName, callback, immediate) {
                 immediate && callback(this.simplemde.codemirror);
@@ -110,6 +156,10 @@
 
             this.codemirrorOn('cursorActivity', this.onCursorActivity, true);
             this.codemirrorOn('change', this.onChange, true);
+            this.codemirrorOn('beforeChange',this.onBeforeChange);
+
+            this.codemirrorOn('keydown', this.onKeydown);
+            this.codemirrorOn('keyHandled', this.onKeyHandled);
         }
     }
 </script>

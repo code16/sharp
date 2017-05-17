@@ -15,7 +15,6 @@
         },
         methods: {
             handleCheck(e) {
-                console.log(e);
                 this.$emit('input', e.target.checked);
             }
         }

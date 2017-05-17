@@ -3,7 +3,7 @@ export const layout = [
         "title": "Tab1",
         "columns": [
             {
-                "size": 5,
+                "size": 7,
                 "fields": [
                     [
                         {
@@ -13,7 +13,6 @@ export const layout = [
                         },
                         {
                             "key": "B",
-                            "size": 8,
                             "sizeXS": 6
                         }
                     ],
@@ -28,7 +27,7 @@ export const layout = [
                                 ],
                                 [
                                     {
-                                        "key": "E"
+                                        "key": "number"
                                     }
                                 ]
                             ]
@@ -42,7 +41,7 @@ export const layout = [
                 ]
             },
             {
-                "size": 7,
+                "size": 5,
                 "fields": [
                     [
                         {
@@ -88,7 +87,8 @@ export const layout = [
 
 export const data = {
     "A":"Valeur texte",
-    B:'',D:'',E:'',
+    "B":'',
+    "number":1,
     "date":'2017-04-12 12:30:06',
     "show_autocomplete":true,
     "show_upload":true,
@@ -114,11 +114,12 @@ export const fields = {
         type:'password',
         label: 'Mot de passe'
     },
-    'D':{
-        type:'text'
-    },
-    'E':{
-        type:'text'
+    'number':{
+        type:'number',
+        showControls:false,
+        min:1,
+        max:10,
+        step:2,
     },
     'show_autocomplete': {
         type:'check',
@@ -201,7 +202,8 @@ export const fields = {
     },
     'mdeditor': {
         type: 'markdown',
-        height:150,
-        placeholder:'super editeur'
+        height:250,
+        placeholder:'super editeur',
+        //toolbar: ["bold", "italic", "heading", "|", "quote"]
     }
 };

@@ -1,12 +1,18 @@
 <template>
-        <sharp-vue-clip v-show="show"
-                        :options="options" :value="value"
-                        :on-removed-file="_=>onRemoved(marker)"
-                        :on-added-file="_=>onAddedFile(marker)"
-                        @success="data=>onSuccess(marker,data)"
-                        class="SharpMarkdownUpload"
-                        ref="vueclip">
-        </sharp-vue-clip>
+    <sharp-vue-clip v-show="show"
+        :options="options"
+        :value="value"
+        :on-added-file="_=>onAddedFile()"
+        @success="data=>onSuccess(data)"
+        class="SharpMarkdownUpload"
+        ref="vueclip"
+    >
+        <template slot="removeButton">
+            <button type="button" class="close" aria-label="Close" @click="_=>onRemoved()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </template>
+    </sharp-vue-clip>
 </template>
 
 <script>
@@ -30,7 +36,8 @@
         },
         data() {
             return {
-                show:false
+                show:false,
+                removed:false
             }
         },
         computed: {
@@ -64,7 +71,7 @@
             },
             checkCancelled() {
                 if(!this.show)
-                    this.onRemoved(this.marker);
+                    this.onRemoved();
                 document.body.onfocus = null;
             },
             inputClick() {

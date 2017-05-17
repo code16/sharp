@@ -10,3 +10,11 @@
 @import 'components/Date';
 @import 'components/Markdown';
 @import 'components/MarkdownUpload';
+
+input[type="number"].hide-controls {
+  &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  -moz-appearance: textfield;
+}
