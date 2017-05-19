@@ -6,28 +6,36 @@
             </button>
         </div>
         <draggable :options="dragOptions" :list="list" class="list-group">
-            <li v-for="(listItemData, i) in list" class="SharpList__item list-group-item" :class="{'SharpList__item--collapsed':collapsed}">
-                <template v-if="collapsed">
-                    <sharp-template :field-key="fieldKey"
-                                    :template-data="collapsedItemData(listItemData)"
-                                    name="collapsedItem">
-                    </sharp-template>
-                </template>
-                <template v-else>
-                    <sharp-fields-layout :layout="fieldLayout.item">
-                        <template scope="itemFieldLayout">
-                            <sharp-field-display :field-key="itemFieldLayout.key"
-                                                 :context-fields="itemFields"
-                                                 :context-data="listItemData"
-                                                 :update-data="update(i)">
-                            </sharp-field-display>
-                        </template>
-                    </sharp-fields-layout>
-                    <button class="btn-link" @click="remove(i)">Supprimer</button>
-                </template>
-            </li>
+            <transition-group name="expand" tag="div">
+                <li v-for="(listItemData, i) in list" :key="listItemData[indexSymbol]"
+                    class="SharpList__item list-group-item" :class="{'SharpList__item--collapsed':collapsed}">
+                    <template v-if="collapsed">
+                        <sharp-template :field-key="fieldKey"
+                                        :template-data="collapsedItemData(listItemData)"
+                                        name="collapsedItem">
+                        </sharp-template>
+                    </template>
+                    <template v-else>
+                        <sharp-fields-layout :layout="fieldLayout.item">
+                            <template scope="itemFieldLayout">
+                                <sharp-field-display :field-key="itemFieldLayout.key"
+                                                     :context-fields="itemFields"
+                                                     :context-data="listItemData"
+                                                     :update-data="update(i)">
+                                </sharp-field-display>
+                            </template>
+                        </sharp-fields-layout>
+                        <button class="btn-link" @click="remove(i)">Supprimer</button>
+                        <div v-if="i<list.length-1 && showAddButton" class="SharpList__new-item-zone">
+                            <button class="btn btn-secondary" @click="insertNewItem(i)">+</button>
+                        </div>
+                    </template>
+                </li>
+                <button v-if="showAddButton" type="button" :key="-1"
+                        class="SharpList__add-button btn btn-secondary"
+                        @click="add">{{addText}}</button>
+            </transition-group>
         </draggable>
-        <button v-show="showAddButton" type="button" class="SharpList__add-button btn btn-secondary" @click="add">{{addText}}</button>
     </div>
 </template>
 <script>
@@ -79,8 +87,9 @@
         },
         data() {
             return {
-                list:this.value,
+                list:[],
                 dragActive:false,
+                lastIndex: this.value.length,
             }
         },
         computed: {
@@ -95,16 +104,27 @@
             showAddButton() {
                 return !this.dragActive && this.list.length<this.maxItemCount;
             },
+            dragIndexSymbol() {
+                return Symbol('dragIndex');
+            },
             indexSymbol() {
                 return Symbol('index');
             }
         },
         methods: {
+            indexedList() {
+                return this.value.map((v,i)=>({[this.indexSymbol]:i,...v}));
+            },
             createItem() {
                 return Object.keys(this.itemFields).reduce((res, itemKey) => {
                     res[itemKey] = null;
                     return res;
-                },{});
+                },{
+                    [this.indexSymbol]:this.lastIndex++
+                });
+            },
+            insertNewItem(i) {
+                this.list.splice(i+1, 0, this.createItem());
             },
             add() {
                 this.list.push(this.createItem());
@@ -118,15 +138,15 @@
                 }
             },
             collapsedItemData(itemData) {
-                return {$index:itemData[this.indexSymbol], ...itemData};
+                return {$index:itemData[this.dragIndexSymbol], ...itemData};
             },
             toggleDrag() {
                 this.dragActive = !this.dragActive;
-                this.list.forEach((item,i)=> {
-                    item[this.indexSymbol] = i;
-                    return item;
-                });
+                this.list.forEach((item,i) => item[this.dragIndexSymbol] = i);
             }
+        },
+        created() {
+            this.list = this.indexedList();
         }
     }
 </script>

@@ -9,6 +9,7 @@ import SharpTagInput from './TagInput';
 import SharpDate from './date/Date';
 import SharpCheck from './Check';
 import SharpList from './List';
+import SharpSelect from './Select';
 
 //debugger
 
@@ -24,6 +25,7 @@ export const NameAssociation = {
     'date'         : SharpDate.name,
     'check'        : SharpCheck.name,
     'list'         : SharpList.name,
+    'select'       : SharpSelect.name
 };
 
 export default {
@@ -38,4 +40,5 @@ export default {
     [SharpDate.name] : SharpDate,
     [SharpCheck.name] : SharpCheck,
     [SharpList.name] : SharpList,
+    [SharpSelect.name] : SharpSelect
 };

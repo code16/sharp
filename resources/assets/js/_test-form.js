@@ -78,6 +78,11 @@ export const layout = [
                         {
                             "key" : "myimage"
                         }
+                    ],
+                    [
+                        {
+                            "key" : "select"
+                        }
                     ]
                 ]
             }
@@ -102,7 +107,9 @@ export const data = {
     },
     "mylist": [{
         name:'', surname:'', age:''
-    }]
+    }],
+    //"select": [1,3]
+    "select":1
 };
 
 export const fields = {
@@ -205,5 +212,13 @@ export const fields = {
         height:250,
         placeholder:'super editeur',
         //toolbar: ["bold", "italic", "heading", "|", "quote"]
+    },
+    'select': {
+        type:'select',
+        //multiple:true,
+        display:'dropdown',
+        options: [
+            {id:0,label:'Jérôme'}, {id:1,label:'François'}, {id:2,label:'Raymond'}, {id:3,label:'Claude'}, {id:4,label:'Antoine'}, {id:5,label:'Félicité'}
+        ]
     }
 };

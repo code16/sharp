@@ -3,13 +3,13 @@
         <input class="form-control" :value="inputValue" @input="handleInput" @focus="showPicker=true"
                @blur="handleBlur" @keydown.up.prevent="increase" @keydown.down.prevent="decrease">
         <div class="SharpDate__picker" v-show="showPicker">
-            <date-picker v-if="hasDate"
+            <sharp-date-picker v-if="hasDate"
                         class="SharpDate__picker-inner SharpDate__date"
                         language="fr"
                         inline monday-first
                         :value="dateObject"
                         @selected="handleDateSelect">
-            </date-picker>
+            </sharp-date-picker>
             <sharp-time-picker v-if="hasTime"
                                 class=" SharpDate__time"
                                 :value="timeObject" 
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-    import DatePicker from 'vuejs-datepicker';
+    import SharpDatePicker from './Datepicker';
     import SharpTimePicker from './Timepicker';
 
     import moment from 'moment';
@@ -31,7 +31,7 @@
     export default {
         name:'SharpDate',
         components: {
-            DatePicker,
+            SharpDatePicker,
             SharpTimePicker
         },
 

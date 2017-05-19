@@ -9,13 +9,28 @@
             util.error(`Conditional display : can't find a field with key '${condition.key}' in 'fields'`, condition);
             return true;
         }
-        let { not, key, values } = condition;
+        let { not, key, values, operator } = condition;
         let field = fields[key];
         let res = true;
         let value = data[key];
 
-        if(field.type === 'autocomplete' || field.type === 'dropdown')
-            res = values.includes(value);
+        if(field.type === 'autocomplete' || field.type === 'select') {
+            if(!operator || operator==='or') {
+                res = values.includes(value);
+            }
+            else if(operator==='and') {
+                if(field.type !== 'select' || field.type === 'select' && !field.multiple) {
+                    util.error(`Conditional display : Unable to process operator 'and' for field \`${key}\` (only available with multiple select)`, condition, field);
+                    return;
+                }
+                let arrayValue = value;
+                res = values.every(v=>arrayValue.includes(v));
+            }
+            else {
+                util.error(`Conditional display : unknown operator '${operator}'`, condition);
+                return true;
+            }
+        }
         else if(field.type === 'check')
             res = value;
         else

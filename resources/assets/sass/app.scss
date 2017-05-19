@@ -1,7 +1,6 @@
 @import 'node_modules/bootstrap/scss/bootstrap';
 
 
-@import 'variables';
 @import 'components/Autocomplete';
 @import 'components/Upload';
 @import 'components/Form';
@@ -10,6 +9,10 @@
 @import 'components/Date';
 @import 'components/Markdown';
 @import 'components/MarkdownUpload';
+@import 'components/Select';
+
+// overriding default vendor components style
+@import 'components/Multiselect';
 
 input[type="number"].hide-controls {
   &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
@@ -17,4 +20,9 @@ input[type="number"].hide-controls {
     margin: 0;
   }
   -moz-appearance: textfield;
+}
+
+.expand-enter, .expand-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
 }

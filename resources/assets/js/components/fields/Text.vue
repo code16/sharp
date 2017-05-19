@@ -6,6 +6,7 @@
 </template>
 
 <script>
+    import Vue from 'vue';
     export default {
         name:'SharpText',
 
@@ -14,10 +15,10 @@
 
             placeholder: String,
             disabled: Boolean,
-            inputType: {
-                type: String,
-                default: 'text'
-            }
+            inputType:  {
+                type:String,
+                default:'text'
+            },
         },
         data() {
             return {}
@@ -28,5 +29,4 @@
             }
         }
     }
-
 </script>

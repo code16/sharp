@@ -4,9 +4,6 @@
     export default {
         name: 'SharpNumber',
         functional: true,
-        components: {
-            [Text.name]:Text
-        },
         render(h, {props: {step, min, max, showControls}, data }) {
             return h(Text.name, {
                 'class': {
