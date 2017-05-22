@@ -26,15 +26,10 @@ class PersonSharpForm extends SharpForm
 
     function update($id, array $data): bool
     {
-        if(!intval($id)) {
+        if(!is_null($id) && !intval($id)) {
             throw new SharpFormException("$id is not a valid id");
         }
 
-        return true;
-    }
-
-    function store(array $data): bool
-    {
         return true;
     }
 

@@ -4,6 +4,7 @@ namespace App\Sharp;
 
 use App\Spaceship;
 use App\SpaceshipType;
+use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentTransformer;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
@@ -12,7 +13,7 @@ use Code16\Sharp\Form\SharpForm;
 
 class SpaceshipSharpForm extends SharpForm
 {
-//    use WithSharpEloquentUpdater;
+    use WithSharpFormEloquentUpdater;
 
     use WithSharpFormEloquentTransformer;
 
@@ -67,12 +68,11 @@ class SpaceshipSharpForm extends SharpForm
 
     function update($id, array $data): bool
     {
-        return true;
-    }
+        $instance = $id ? Spaceship::findOrFail($id) : new Spaceship;
 
-    function store(array $data): bool
-    {
-        return true;
+        return $this->setCustomUpdater("capacity", function($spaceship, $value) {
+            return $value * 1000;
+        })->save($instance, $data);
     }
 
     function delete($id): bool

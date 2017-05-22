@@ -49,7 +49,6 @@ abstract class FormFieldsTestForm extends SharpForm
 {
     function find($id): array { return []; }
     function update($id, array $data): bool { return false; }
-    function store(array $data): bool { return false; }
     function delete($id): bool { return false; }
     function buildFormLayout() {}
 }

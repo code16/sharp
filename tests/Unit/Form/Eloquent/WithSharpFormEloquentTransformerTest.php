@@ -6,39 +6,9 @@ use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentTransformer;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\Transformers\SharpAttributeTransformer;
 use Code16\Sharp\Tests\Fixtures\Person;
-use Code16\Sharp\Tests\SharpTestCase;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\Schema;
 
-class WithSharpFormEloquentTransformerTest extends SharpTestCase
+class WithSharpFormEloquentTransformerTest extends SharpFormEloquentBaseTest
 {
-    use DatabaseTransactions;
-
-    protected function getEnvironmentSetUp($app)
-    {
-        // Setup default database to use sqlite :memory:
-        $app['config']->set('database.default', 'testbench');
-        $app['config']->set('database.connections.testbench', [
-            'driver' => 'sqlite',
-            'database' => ':memory:',
-            'prefix' => '',
-        ]);
-
-        Schema::create('people', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->unsignedInteger("mother_id")->nullable();
-            $table->timestamps();
-        });
-
-        Schema::create('friends', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger("person1_id");
-            $table->unsignedInteger("person2_id");
-            $table->timestamps();
-        });
-    }
 
     /** @test */
     function we_can_retrieve_an_array_version_of_a_model()
@@ -203,7 +173,7 @@ class WithSharpFormEloquentTransformerTestForm extends SharpForm
     }
 
     function update($id, array $data): bool { return false; }
-    function store(array $data): bool { return false; }
+    function newInstance() { return null; }
     function delete($id): bool { return false; }
     function buildFormLayout() {}
     function buildFormFields() {}

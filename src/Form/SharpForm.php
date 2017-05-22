@@ -5,6 +5,7 @@ namespace Code16\Sharp\Form;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
+use Illuminate\Database\Eloquent\Model;
 
 abstract class SharpForm
 {
@@ -89,6 +90,17 @@ abstract class SharpForm
     }
 
     /**
+     * @param string $key
+     * @return string
+     */
+    function findFieldTypeByKey(string $key)
+    {
+        return collect($this->fields())
+            ->where("key", $key)
+            ->first()["type"];
+    }
+
+    /**
      * Add a field.
      *
      * @param SharpFormField $field
@@ -134,6 +146,15 @@ abstract class SharpForm
     }
 
     /**
+     * @param array $data
+     * @return bool
+     */
+    public function store(array $data): bool
+    {
+        return $this->update(null, $data);
+    }
+
+    /**
      * Retrieve a Model for the form and pack all its data as JSON.
      *
      * @param $id
@@ -147,12 +168,6 @@ abstract class SharpForm
      * @return bool
      */
     abstract function update($id, array $data): bool;
-
-    /**
-     * @param array $data
-     * @return bool
-     */
-    abstract function store(array $data): bool;
 
     /**
      * @param $id
