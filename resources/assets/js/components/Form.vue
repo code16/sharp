@@ -1,36 +1,50 @@
 <template>
-    <div>  <!--TODO système grille-->
-        <template v-for="field in displayableFields">
-            <sharp-field-container v-if="acceptCondition(field)"
-                                   :field-key="field.key"
-                                   :field-type="field.type"
-                                   :field-props="field"
-                                   :label="field.label"
-                                   :help-message="field.helpMessage"
-                                   :read-only="field.readOnly">
-            </sharp-field-container>
-        </template>
+    <div>
+        <sharp-grid v-if="layout.length == 1" :rows="[layout[0].columns]">
+            <template scope="column">
+                <sharp-fields-layout v-if="fields" :fields="column.item.fields">
+                    <template scope="field">
+                        <sharp-field-container v-if="acceptCondition(fields[field.item.key])"
+                                               :field-key="field.item.key"
+                                               :field-props="fields[field.item.key]"
+                                               :field-type="fields[field.item.key].type"
+                                               :label=fields[field.item.key].label"
+                                               :help-message="fields[field.item.key].helpMessage"
+                                               :read-only="fields[field.item.key].readOnly">
+                        </sharp-field-container>
+                    </template>
+                </sharp-fields-layout>
+            </template>
+        </sharp-grid>
     </div>
 </template>
 
 <script>
-    import FieldContainer from './FieldContainer';
+    import util from '../util';
+    import TemplateDefinition from '../template-definition';
 
     import Template from '../app/models/Template';
     import TemplateController from '../app/controllers/TemplateController';
 
     import Fields from './fields';
 
+    import Grid from './Grid';
+    import FieldsLayout from './FieldsLayout';
+    import layout from '../layout';
+
     export default {
         name:'SharpForm',
 
         components: {
-            [FieldContainer.name]:FieldContainer
+
+            [Grid.name]:Grid,
+            [FieldsLayout.name]:FieldsLayout
         },
 
         data() {
             return {
-                fields:[]
+                fields:[],
+                layout,
             }
         },
         computed: {
@@ -41,7 +55,7 @@
                     if(!field.key)
                         return util.warn(`Field at index ${i} doesn't have a key : `,field),false;
                     if(!field.type)
-                        return false;
+                        return util.warn(`Field at index ${i} doesn't have a type : `,field),false;
                     if(!(field.type in Fields))
                         return util.warn(`Field '${field.key}' have a unknown type (${field.type})`),false;
                     
@@ -54,7 +68,7 @@
                 if(!field.conditionalDisplay)
                     return true;
                 
-                let regex=/(\!)(\w+):((\w+,?)*)/;
+                let regex=/(\!)(\w+):?((\w+,?)*)/;
                 let matches = regex.exec(field.conditionalDisplay);
                 let neg = !!matches[1];
                 let key = matches[2];
@@ -71,10 +85,33 @@
         },
         mounted() {
             // GET fields
-            this.fields = [
-                {
+            this.fields = {
+                'A':{
+                    type:'SharpTextInput'
+                },
+                'B':{
+                    type:'SharpTextInput'
+                },
+                'C':{
+                    type:'SharpTextInput'
+                },
+                'D':{
+                    type:'SharpTextInput'
+                },
+                'E':{
+                    type:'SharpTextInput'
+                },
+                'F':{
+                    type:'SharpTextInput'
+                },
+                'G':{
+                    type:'SharpTextInput'
+                },
+                'H':{
+                    type:'SharpTextInput'
+                },
+                'name':{
                     type:'SharpAutocomplete',
-                    key:'name',
                     mode:'local',
                     localValues: [
                         { value: 'Antoine', surname: 'Guingand' },
@@ -83,27 +120,26 @@
                         { value: 'Fernand', surname: 'Coli' }
                     ],
                     listItemTemplate:`
-                        <span class="value">{{ item.value }}</span>
-                        <span class="surname">{{ item.surname }}</span>
-                    `,
-                   // disabled: true
-                   conditionalDisplay: '!advanced_search:red,blue,orange'
+                            <span class="value">{{ item.value }}</span>
+                            <span class="surname">{{ item.surname }}</span>
+                        `,
+                    // disabled: true
+                    conditionalDisplay: '!advanced_search:red,blue,orange'
                 },
-                {
-                    key: '!advanced_search',
+                'advanced_search':{
+                    type:'Check',
                     value: true
                 }
-            ];
-            
-            for(let field of this.fields) {
-                for(let fieldPropName of Object.keys(field)) {
+            }
 
-                    if(Template.isTemplateProp(fieldPropName)) {
+            for(let field of this.fields) {
+                for (let fieldPropName of Object.keys(field)) {
+
+                    if (Template.isTemplateProp(fieldPropName)) {
                         TemplateController.compileAndRegisterComponent(field.key, fieldPropName, field[fieldPropName]);
                     }
                 }
             }
-
         }
     }
 </script>
