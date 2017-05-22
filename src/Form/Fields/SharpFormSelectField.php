@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Form\Fields;
 
-class SharpFormDropdownField extends SharpFormField
+class SharpFormSelectField extends SharpFormField
 {
     /**
      * @var array
@@ -18,6 +18,11 @@ class SharpFormDropdownField extends SharpFormField
      * @var bool
      */
     protected $clearable = false;
+
+    /**
+     * @var string
+     */
+    protected $display = "list";
 
     /**
      * @param string $key
@@ -55,6 +60,26 @@ class SharpFormDropdownField extends SharpFormField
     }
 
     /**
+     * @return $this
+     */
+    public function setDisplayAsList()
+    {
+        $this->display = "list";
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setDisplayAsDropdown()
+    {
+        $this->display = "dropdown";
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     protected function validationRules()
@@ -62,7 +87,8 @@ class SharpFormDropdownField extends SharpFormField
         return [
             "values" => "required|array",
             "multiple" => "boolean",
-            "clearable" => "boolean"
+            "clearable" => "boolean",
+            "display" => "required|in:list,dropdown"
         ];
     }
 
@@ -74,7 +100,8 @@ class SharpFormDropdownField extends SharpFormField
         return parent::buildArray([
             "values" => $this->values,
             "multiple" => $this->multiple,
-            "clearable" => $this->clearable
+            "clearable" => $this->clearable,
+            "display" => $this->display
         ]);
     }
 }

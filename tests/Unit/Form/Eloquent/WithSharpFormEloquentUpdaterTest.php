@@ -4,7 +4,7 @@ namespace Code16\Sharp\Tests\Unit\Form\Eloquent;
 
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
-use Code16\Sharp\Form\Fields\SharpFormDropdownField;
+use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Tests\Fixtures\Person;
@@ -92,11 +92,11 @@ class WithSharpFormEloquentUpdaterTestForm extends SharpForm
     function buildFormFields()
     {
         $this->addField(SharpFormTextField::make("name"));
-        $this->addField(SharpFormDropdownField::make(
+        $this->addField(SharpFormSelectField::make(
             "mother_id",
             Person::all()->pluck("name", "id")->all()
         ));
-        $this->addField(SharpFormDropdownField::make(
+        $this->addField(SharpFormSelectField::make(
             "elderSon",
             Person::all()->pluck("name", "id")->all()
         ));
