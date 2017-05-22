@@ -4,7 +4,6 @@ namespace Code16\Sharp\Form\Eloquent;
 
 use Closure;
 use Code16\Sharp\Form\Eloquent\Exceptions\SharpFormEloquentUpdateException;
-use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Transformers\SharpAttributeUpdater;
 
 trait WithSharpFormEloquentUpdater
@@ -33,7 +32,7 @@ trait WithSharpFormEloquentUpdater
 
                 function update($instance, string $attribute, $value)
                 {
-                    return call_user_func($this->closure, [$instance, $value]);
+                    return call_user_func($this->closure, $instance, $value);
                 }
             };
 
@@ -56,6 +55,8 @@ trait WithSharpFormEloquentUpdater
      */
     function save($instance, array $data): bool
     {
+        $relationships = [];
+
         foreach($data as $attribute => $value) {
             if (isset($this->updaters[$attribute])) {
                 // Handle custom updater
@@ -66,11 +67,40 @@ trait WithSharpFormEloquentUpdater
             } else {
                 // Standard updater, depending on field type and relationship
                 $value = $this->formatValue($value, $attribute);
-                $instance->$attribute = $value;
+
+                if(method_exists($instance, $attribute)) {
+                    // This is an Eloquent relationship
+                    $relationships[$attribute] = [
+                        "relation_type" => get_class($instance->$attribute()),
+                        "value" => $value
+                    ];
+
+                } else {
+                    $instance->$attribute = $value;
+                }
             }
         }
 
+        // End of "normal" attribute, we save the model before handling relationships
         $instance->save();
+
+        // Next, handle relationships
+        if(sizeof($relationships)) {
+            $instanceMustBeSaved = false;
+
+            foreach ($relationships as $attribute => $relation) {
+                $relationshipUpdater = app('Code16\Sharp\Form\Eloquent\Relationships\Update'
+                    . (new \ReflectionClass($relation["relation_type"]))->getShortName()
+                    . 'Relation');
+
+                $instanceMustBeSaved = $relationshipUpdater->update($instance, $attribute, $relation["value"])
+                    || $instanceMustBeSaved;
+            }
+
+            if($instanceMustBeSaved) {
+                $instance->save();
+            }
+        }
 
         return true;
     }
