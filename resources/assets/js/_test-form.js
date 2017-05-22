@@ -100,10 +100,11 @@ export const data = {
     "name":"B",
     "admin_password":"",
     "mdeditor":"",
+    "myimage": null,
     "myimage": {
         name:"doggo.jpg",
         size:14550,
-        thumbnail:"https://i.ytimg.com/vi/wSTt04rOwa8/maxresdefault.jpg"
+        thumbnail:"img/chien.jpg"
     },
     "mylist": [{
         name:'', surname:'', age:''
@@ -175,10 +176,12 @@ export const fields = {
         type: 'upload',
         maxFileSize: 6,
         fileFilter: ['.jpg','.jpeg','.png'],
-        thumbnail:'150x150',
+        ratioX: 16,
+        ratioY: 9,
         conditionalDisplay: {
             key: 'show_upload',
         },
+
     },
     'mylist': {
         type:'list',

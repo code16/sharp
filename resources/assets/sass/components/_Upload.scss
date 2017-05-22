@@ -4,19 +4,16 @@
 
   &__container {
     display:flex;
-
+    height:150px;
     .SharpUpload__thumbnail {
-      width:150px;
-      height:150px;
-      display:flex;
-      align-items: center;
+      flex-basis:33%;
+      align-self: center;
       margin-right: 1em;
       img {
         display:block;
         margin: auto;
-        width:auto;
         height:auto;
-        max-width:150px;
+        width:100%;
         max-height:150px;
       }
     }
@@ -26,6 +23,9 @@
       .progress-bar {
         transition: width .5s;
       }
+      display:flex;
+      flex-flow: column;
+      justify-content: space-between;
     }
   }
 

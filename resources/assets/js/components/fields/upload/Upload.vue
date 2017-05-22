@@ -1,5 +1,5 @@
 <template>
-    <sharp-vue-clip :options="options" :value="value"></sharp-vue-clip>
+    <sharp-vue-clip :options="options" :value="value" :ratioX="ratioX" :ratioY="ratioY"></sharp-vue-clip>
 </template>
 
 <script>
@@ -19,7 +19,10 @@
             url: String,
             fileFilter: Array,
             maxFileSize: Number,
-            thumbnail: String
+            thumbnail: String,
+
+            ratioX:Number,
+            ratioY:Number
         },
         computed: {
             options() {

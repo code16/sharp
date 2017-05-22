@@ -5,7 +5,7 @@
     "watch": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "hot": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
     "production": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "stats": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=production node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js --json | tail -n +3 > stats.json",
+    "stats": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js --json | tail -n +3 > stats.json",
     "show-stats": "npm run stats && webpack-bundle-size-analyzer stats.json"
   },
   "devDependencies": {
@@ -27,7 +27,9 @@
     "vue-multiselect": "next"
   },
   "dependencies": {
+    "bootstrap-vue": "^0.16.1",
     "vue": "^2.3.2",
+    "vue-cropperjs": "^2.1.1",
     "vue2-timepicker": "^0.1.4",
     "vuedraggable": "^2.10.0",
     "vuejs-datepicker": "^0.7.11"
