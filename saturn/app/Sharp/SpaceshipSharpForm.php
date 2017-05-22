@@ -2,6 +2,8 @@
 
 namespace App\Sharp;
 
+use App\Spaceship;
+use App\SpaceshipType;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentTransformer;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;

@@ -2,6 +2,7 @@
 
 namespace App\Sharp;
 
+use Code16\Sharp\Http\WithSharpFormContext;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SpaceshipSharpValidator extends FormRequest
