@@ -111,19 +111,11 @@ class WithSharpFormEloquentUpdaterTestForm extends SharpForm
     function buildFormLayout() {}
     function buildFormFields()
     {
+        $peopleList = Person::all()->pluck("name", "id")->all();
         $this->addField(SharpFormTextField::make("name"));
-        $this->addField(SharpFormSelectField::make(
-            "mother_id",
-            Person::all()->pluck("name", "id")->all()
-        ));
-        $this->addField(SharpFormSelectField::make(
-            "mother",
-            Person::all()->pluck("name", "id")->all()
-        ));
-        $this->addField(SharpFormSelectField::make(
-            "elderSon",
-            Person::all()->pluck("name", "id")->all()
-        ));
+        $this->addField(SharpFormSelectField::make("mother_id", $peopleList));
+        $this->addField(SharpFormSelectField::make("mother", $peopleList));
+        $this->addField(SharpFormSelectField::make("elderSon", $peopleList));
     }
 }
 

@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Tests\Unit\Form\Eloquent\Relationships;
 
-use Code16\Sharp\Form\Eloquent\Relationships\UpdateBelongsToRelation;
+use Code16\Sharp\Form\Eloquent\Relationships\BelongsToRelationUpdater;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
 
@@ -15,7 +15,7 @@ class UpdateBelongsToRelationTest extends SharpFormEloquentBaseTest
         $mother = Person::create(["name" => "Jane Wayne"]);
         $person = Person::create(["name" => "John Wayne"]);
 
-        $updater = new UpdateBelongsToRelation();
+        $updater = new BelongsToRelationUpdater();
 
         $updater->update($person, "mother", $mother->id);
 

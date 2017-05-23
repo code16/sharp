@@ -18,7 +18,7 @@ class SharpFormSelectFieldTest extends SharpTestCase
         $formField = $this->getDefaultSelect($values);
 
         $this->assertEquals([
-                "key" => "field", "type" => "dropdown",
+                "key" => "field", "type" => "select",
                 "values" => $values, "multiple" => false,
                 "clearable" => false, "display" => "list"
             ], $formField->toArray()

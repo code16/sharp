@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Tests\Unit\Form\Eloquent\Relationships;
 
-use Code16\Sharp\Form\Eloquent\Relationships\UpdateHasOneRelation;
+use Code16\Sharp\Form\Eloquent\Relationships\HasOneRelationUpdater;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
 
@@ -15,7 +15,7 @@ class UpdateHasOneRelationTest extends SharpFormEloquentBaseTest
         $mother = Person::create(["name" => "Jane Wayne"]);
         $son = Person::create(["name" => "John Wayne"]);
 
-        $updater = new UpdateHasOneRelation();
+        $updater = new HasOneRelationUpdater();
 
         $updater->update($mother, "elderSon", $son->id);
 

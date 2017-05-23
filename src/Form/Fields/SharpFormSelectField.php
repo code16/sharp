@@ -31,7 +31,7 @@ class SharpFormSelectField extends SharpFormField
      */
     public static function make(string $key, array $values)
     {
-        $instance = new static($key, 'dropdown');
+        $instance = new static($key, 'select');
         $instance->values = $values;
 
         return $instance;

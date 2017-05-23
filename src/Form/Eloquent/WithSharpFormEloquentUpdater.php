@@ -89,9 +89,10 @@ trait WithSharpFormEloquentUpdater
             throw new SharpFormEloquentUpdateException("Attribute [$attribute] does not match a form field");
         }
 
-        // TODO handle special fields
+        $valueFormatter = app('Code16\Sharp\Form\Eloquent\Formatters\\'
+            . ucfirst($fieldType) . 'Formatter');
 
-        return $value;
+        return $valueFormatter->format($value);
     }
 
     /**
@@ -144,9 +145,9 @@ trait WithSharpFormEloquentUpdater
     protected function saveRelationships(Model $instance, array $relationships)
     {
         foreach ($relationships as $attribute => $relation) {
-            $relationshipUpdater = app('Code16\Sharp\Form\Eloquent\Relationships\Update'
+            $relationshipUpdater = app('Code16\Sharp\Form\Eloquent\Relationships\\'
                 . (new \ReflectionClass($relation["relation_type"]))->getShortName()
-                . 'Relation');
+                . 'RelationUpdater');
 
             $relationshipUpdater->update($instance, $attribute, $relation["value"]);
         }
