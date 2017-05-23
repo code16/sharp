@@ -30,7 +30,12 @@ abstract class SharpFormField
     /**
      * @var string
      */
-    protected $conditionalDisplay;
+    protected $conditionalDisplayOperator = "and";
+
+    /**
+     * @var array
+     */
+    protected $conditionalDisplayFields;
 
     /**
      * @var bool
@@ -75,12 +80,41 @@ abstract class SharpFormField
     }
 
     /**
-     * @param string $conditionalDisplay
+     * @param string $fieldKey
+     * @param array|string|boolean $values
      * @return static
      */
-    public function setConditionalDisplay(string $conditionalDisplay)
+    public function addConditionalDisplay(string $fieldKey, $values = true)
     {
-        $this->conditionalDisplay = $conditionalDisplay;
+        if(substr($fieldKey, 0, 1) === "!") {
+            $fieldKey = substr($fieldKey, 1);
+            $values = false;
+        }
+
+        $this->conditionalDisplayFields[] = [
+            "key" => $fieldKey,
+            "values" => $values
+        ];
+
+        return $this;
+    }
+
+    /**
+     * @return static
+     */
+    public function setConditionalDisplayOrOperator()
+    {
+        $this->conditionalDisplayOperator = "or";
+
+        return $this;
+    }
+
+    /**
+     * @return static
+     */
+    public function setConditionalDisplayAndOperator()
+    {
+        $this->conditionalDisplayOperator = "and";
 
         return $this;
     }
@@ -152,7 +186,7 @@ abstract class SharpFormField
             "type" => $this->type,
             "label" => $this->label,
             "readOnly" => $this->readOnly,
-            "conditionalDisplay" => $this->conditionalDisplay,
+            "conditionalDisplay" => $this->buildConditionalDisplayArray(),
             "helpMessage" => $this->helpMessage,
             "extraStyle" => $this->extraStyle,
         ] + $childArray)
@@ -163,5 +197,20 @@ abstract class SharpFormField
         $this->validate($array);
 
         return $array;
+    }
+
+    /**
+     * @return array|null
+     */
+    private function buildConditionalDisplayArray()
+    {
+        if(!sizeof($this->conditionalDisplayFields)) {
+            return null;
+        }
+
+        return [
+            "operator" => $this->conditionalDisplayOperator,
+            "fields" => $this->conditionalDisplayFields
+        ];
     }
 }

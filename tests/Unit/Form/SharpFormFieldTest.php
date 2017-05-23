@@ -72,12 +72,36 @@ class SharpFormFieldTest extends SharpTestCase
     function we_can_define_conditionalDisplay()
     {
         $formField = SomeTestFormField::make("name")
-            ->setConditionalDisplay("display");
+            ->setConditionalDisplayOrOperator()
+            ->addConditionalDisplay("is_displayed")
+            ->addConditionalDisplay("color", ["blue", "red"])
+            ->addConditionalDisplay("size", "!xl")
+            ->addConditionalDisplay("!hidden")
+            ->addConditionalDisplay("really_hidden", false);
 
-        $this->assertArraySubset(
-            ["conditionalDisplay" => "display"],
-            $formField->toArray()
-        );
+        $this->assertArraySubset([
+            "conditionalDisplay" => [
+                "operator" => "or",
+                "fields" => [
+                    [
+                        "key" => "is_displayed",
+                        "values" => true
+                    ], [
+                        "key" => "color",
+                        "values" => ["blue", "red"]
+                    ], [
+                        "key" => "size",
+                        "values" => "!xl"
+                    ], [
+                        "key" => "hidden",
+                        "values" => false
+                    ], [
+                        "key" => "really_hidden",
+                        "values" => false
+                    ]
+                ]
+            ]
+        ], $formField->toArray());
     }
 
     /** @test */
