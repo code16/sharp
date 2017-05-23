@@ -7,7 +7,7 @@ class SharpFormSelectField extends SharpFormField
     /**
      * @var array
      */
-    protected $values;
+    protected $options;
 
     /**
      * @var bool
@@ -26,13 +26,13 @@ class SharpFormSelectField extends SharpFormField
 
     /**
      * @param string $key
-     * @param array $values
+     * @param array $options
      * @return static
      */
-    public static function make(string $key, array $values)
+    public static function make(string $key, array $options)
     {
         $instance = new static($key, 'select');
-        $instance->values = $values;
+        $instance->options = $options;
 
         return $instance;
     }
@@ -85,7 +85,7 @@ class SharpFormSelectField extends SharpFormField
     protected function validationRules()
     {
         return [
-            "values" => "required|array",
+            "options" => "required|array",
             "multiple" => "boolean",
             "clearable" => "boolean",
             "display" => "required|in:list,dropdown"
@@ -98,7 +98,7 @@ class SharpFormSelectField extends SharpFormField
     public function toArray(): array
     {
         return parent::buildArray([
-            "values" => $this->values,
+            "options" => $this->options,
             "multiple" => $this->multiple,
             "clearable" => $this->clearable,
             "display" => $this->display

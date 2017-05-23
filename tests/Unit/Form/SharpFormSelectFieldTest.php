@@ -10,16 +10,16 @@ class SharpFormSelectFieldTest extends SharpTestCase
     /** @test */
     function only_default_values_are_set()
     {
-        $values = [
+        $options = [
             "1" => "Elem 1",
             "2" => "Elem 2"
         ];
 
-        $formField = $this->getDefaultSelect($values);
+        $formField = $this->getDefaultSelect($options);
 
         $this->assertEquals([
                 "key" => "field", "type" => "select",
-                "values" => $values, "multiple" => false,
+                "options" => $options, "multiple" => false,
                 "clearable" => false, "display" => "list"
             ], $formField->toArray()
         );
@@ -74,12 +74,12 @@ class SharpFormSelectFieldTest extends SharpTestCase
     }
 
     /**
-     * @param array|null $values
+     * @param array|null $options
      * @return SharpFormSelectField
      */
-    private function getDefaultSelect($values = null)
+    private function getDefaultSelect($options = null)
     {
-        return SharpFormSelectField::make("field", $values ?: [
+        return SharpFormSelectField::make("field", $options ?: [
             "1" => "Elem 1",
             "2" => "Elem 2"
         ]);
