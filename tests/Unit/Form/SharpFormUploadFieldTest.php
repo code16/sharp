@@ -22,10 +22,10 @@ class SharpFormUploadFieldTest extends SharpTestCase
     function we_can_define_maxFileSize()
     {
         $formField = SharpFormUploadField::make("text")
-            ->setMaxFileSize("500k");
+            ->setMaxFileSize(.5);
 
         $this->assertArraySubset(
-            ["maxFileSize" => "500k"],
+            ["maxFileSize" => 0.5],
             $formField->toArray()
         );
     }
@@ -50,6 +50,18 @@ class SharpFormUploadFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ["thumbnail" => "800x600"],
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_cropRatio()
+    {
+        $formField = SharpFormUploadField::make("text")
+            ->setCropRatio("16:9");
+
+        $this->assertArraySubset(
+            ["ratioX" => 16, "ratioY" => 9],
             $formField->toArray()
         );
     }

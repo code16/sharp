@@ -26,7 +26,7 @@ class SharpFormMarkdownField extends SharpFormField
     protected $showToolbar = true;
 
     /**
-     * @var int
+     * @var float
      */
     protected $maxImageSize = 2;
 
@@ -71,10 +71,10 @@ class SharpFormMarkdownField extends SharpFormField
     }
 
     /**
-     * @param int $sizeInMB
+     * @param float $sizeInMB
      * @return static
      */
-    public function setMaxImageSize(int $sizeInMB)
+    public function setMaxImageSize(float $sizeInMB)
     {
         $this->maxImageSize = $sizeInMB;
 
@@ -88,6 +88,8 @@ class SharpFormMarkdownField extends SharpFormField
     {
         return [
             "height" => "integer",
+            "toolbar" => "array|nullable",
+            "maxImageSize" => "numeric",
         ];
     }
 

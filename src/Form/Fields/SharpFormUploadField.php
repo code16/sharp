@@ -5,7 +5,7 @@ namespace Code16\Sharp\Form\Fields;
 class SharpFormUploadField extends SharpFormField
 {
     /**
-     * @var string
+     * @var float
      */
     protected $maxFileSize;
 
@@ -20,6 +20,11 @@ class SharpFormUploadField extends SharpFormField
     protected $thumbnail;
 
     /**
+     * @var string
+     */
+    protected $cropRatio;
+
+    /**
      * @param string $key
      * @return static
      */
@@ -29,19 +34,19 @@ class SharpFormUploadField extends SharpFormField
     }
 
     /**
-     * @param string $maxFileSize
-     * @return $this
+     * @param float $maxFileSizeInMB
+     * @return static
      */
-    public function setMaxFileSize(string $maxFileSize)
+    public function setMaxFileSize(float $maxFileSizeInMB)
     {
-        $this->maxFileSize = $maxFileSize;
+        $this->maxFileSize = $maxFileSizeInMB;
 
         return $this;
     }
 
     /**
      * @param string $fileFilter
-     * @return $this
+     * @return static
      */
     public function setFileFilter(string $fileFilter)
     {
@@ -51,7 +56,7 @@ class SharpFormUploadField extends SharpFormField
     }
 
     /**
-     * @return $this
+     * @return static
      */
     public function setFileFilterImages()
     {
@@ -61,8 +66,19 @@ class SharpFormUploadField extends SharpFormField
     }
 
     /**
+     * @param string $ratio 16:9, 1:1, ...
+     * @return static
+     */
+    public function setCropRatio(string $ratio)
+    {
+        $this->cropRatio = explode(":", $ratio);
+
+        return $this;
+    }
+
+    /**
      * @param string $thumbnail
-     * @return $this
+     * @return static
      */
     public function setThumbnail(string $thumbnail)
     {
@@ -79,6 +95,9 @@ class SharpFormUploadField extends SharpFormField
     {
         return [
             "thumbnail" => "regex:/[0-9]+x[0-9]+/",
+            "maxFileSize" => "numeric",
+            "ratioX" => "integer|nullable",
+            "ratioY" => "integer|nullable",
         ];
     }
 
@@ -90,7 +109,9 @@ class SharpFormUploadField extends SharpFormField
         return parent::buildArray([
             "maxFileSize" => $this->maxFileSize,
             "fileFilter" => $this->fileFilter,
-            "thumbnail" => $this->thumbnail
+            "thumbnail" => $this->thumbnail,
+            "ratioX" => $this->cropRatio ? $this->cropRatio[0] : null,
+            "ratioY" => $this->cropRatio ? $this->cropRatio[1] : null,
         ]);
     }
 }
