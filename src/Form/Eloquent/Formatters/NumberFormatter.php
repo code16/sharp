@@ -2,8 +2,9 @@
 
 namespace Code16\Sharp\Form\Eloquent\Formatters;
 
-class SelectFormatter
+class NumberFormatter
 {
+
     /**
      * @param $value
      * @param array $options
@@ -11,6 +12,6 @@ class SelectFormatter
      */
     public function format($value, array $options = [])
     {
-        return $value;
+        return (int)$value;
     }
 }

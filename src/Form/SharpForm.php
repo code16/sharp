@@ -91,13 +91,13 @@ abstract class SharpForm
 
     /**
      * @param string $key
-     * @return string
+     * @return array
      */
-    function findFieldTypeByKey(string $key)
+    function findFieldByKey(string $key)
     {
         return collect($this->fields())
             ->where("key", $key)
-            ->first()["type"];
+            ->first();
     }
 
     /**

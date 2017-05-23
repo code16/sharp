@@ -7,9 +7,10 @@ abstract class AbstractSimpleFormatter
 
     /**
      * @param $value
+     * @param array $options
      * @return mixed
      */
-    public function format($value)
+    public function format($value, array $options = [])
     {
         return $value;
     }

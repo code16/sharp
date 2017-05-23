@@ -83,14 +83,14 @@ trait WithSharpFormEloquentUpdater
      */
     protected function formatValue($value, string $attribute)
     {
-        $fieldType = $this->findFieldTypeByKey($attribute);
+        $field = $this->findFieldByKey($attribute);
 
-        if(!$fieldType) {
+        if(!$field) {
             throw new SharpFormEloquentUpdateException("Attribute [$attribute] does not match a form field");
         }
 
         $valueFormatter = app('Code16\Sharp\Form\Eloquent\Formatters\\'
-            . ucfirst($fieldType) . 'Formatter');
+            . ucfirst($field["type"]) . 'Formatter');
 
         return $valueFormatter->format($value);
     }

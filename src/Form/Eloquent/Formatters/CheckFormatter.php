@@ -2,8 +2,9 @@
 
 namespace Code16\Sharp\Form\Eloquent\Formatters;
 
-class SelectFormatter
+class CheckFormatter
 {
+
     /**
      * @param $value
      * @param array $options
@@ -11,6 +12,12 @@ class SelectFormatter
      */
     public function format($value, array $options = [])
     {
-        return $value;
+        if(is_string($value) && strlen($value)) {
+            return !in_array($value, [
+                "false", "0", "off"
+            ]);
+        }
+
+        return !! $value;
     }
 }
