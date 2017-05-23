@@ -4,44 +4,28 @@ namespace Code16\Sharp\Form\Eloquent;
 
 use Closure;
 use Code16\Sharp\Form\Eloquent\Exceptions\SharpFormEloquentUpdateException;
-use Code16\Sharp\Form\Transformers\SharpAttributeUpdater;
+use Code16\Sharp\Form\Transformers\SharpAttributeValuator;
+use Illuminate\Database\Eloquent\Model;
 
 trait WithSharpFormEloquentUpdater
 {
     /**
      * @var array
      */
-    protected $updaters = [];
+    protected $valuators = [];
 
     /**
      * @param string $attribute
-     * @param string|Closure $updater
+     * @param string|Closure $valuator
      * @return $this
      */
-    function setCustomUpdater(string $attribute, $updater)
+    function setCustomValuator(string $attribute, $valuator)
     {
-        if($updater instanceof Closure) {
-            // Normalize updater to a regular SharpAttributeUpdater instance
-            $updater = new class($updater) implements SharpAttributeUpdater {
-                private $closure;
+        $valuator = $valuator instanceof Closure
+            ? $this->normalizeToSharpAttributeValuator($valuator)
+            : app($valuator);
 
-                function __construct($closure)
-                {
-                    $this->closure = $closure;
-                }
-
-                function update($instance, string $attribute, $value)
-                {
-                    return call_user_func($this->closure, $instance, $value);
-                }
-            };
-
-        } else {
-            // Class name given; get an instance
-            $updater = app($updater);
-        }
-
-        $this->updaters[$attribute] = $updater;
+        $this->valuators[$attribute] = $valuator;
 
         return $this;
     }
@@ -49,62 +33,54 @@ trait WithSharpFormEloquentUpdater
     /**
      * Update an Eloquent Model with $data.
      *
-     * @param $instance
+     * @param Model $instance
      * @param array $data
      * @return bool
      */
-    function save($instance, array $data): bool
+    function save(Model $instance, array $data): bool
     {
         $relationships = [];
 
         foreach($data as $attribute => $value) {
-            if (isset($this->updaters[$attribute])) {
-                // Handle custom updater
-                $instance->$attribute = $this->updaters[$attribute]->update(
+            $value = $this->formatValue($value, $attribute);
+
+            if ($customValuator = $this->customValuator($attribute)) {
+                $instance->$attribute = $customValuator->getValue(
                     $instance, $attribute, $value
                 );
 
-            } else {
-                // Standard updater, depending on field type and relationship
-                $value = $this->formatValue($value, $attribute);
-
-                if(method_exists($instance, $attribute)) {
-                    // This is an Eloquent relationship
-                    $relationships[$attribute] = [
-                        "relation_type" => get_class($instance->$attribute()),
-                        "value" => $value
-                    ];
-
-                } else {
-                    $instance->$attribute = $value;
-                }
+                continue;
             }
+
+            if($this->isRelationship($instance, $attribute)) {
+                $relationships[$attribute] = [
+                    "relation_type" => get_class($instance->$attribute()),
+                    "value" => $value
+                ];
+
+                continue;
+            }
+
+            $instance->$attribute = $value;
         }
 
-        // End of "normal" attribute, we save the model before handling relationships
+        // End of "normal" attributes, we save the model before handling relationships
         $instance->save();
 
         // Next, handle relationships
-        if(sizeof($relationships)) {
-            $instanceMustBeSaved = false;
-
-            foreach ($relationships as $attribute => $relation) {
-                $relationshipUpdater = app('Code16\Sharp\Form\Eloquent\Relationships\Update'
-                    . (new \ReflectionClass($relation["relation_type"]))->getShortName()
-                    . 'Relation');
-
-                $instanceMustBeSaved = $relationshipUpdater->update($instance, $attribute, $relation["value"])
-                    || $instanceMustBeSaved;
-            }
-
-            if($instanceMustBeSaved) {
-                $instance->save();
-            }
-        }
+        $this->saveRelationships($instance, $relationships);
 
         return true;
     }
 
+    /**
+     * Return a DB compatible value depending on the field type.
+     *
+     * @param $value
+     * @param string $attribute
+     * @return mixed
+     * @throws SharpFormEloquentUpdateException
+     */
     protected function formatValue($value, string $attribute)
     {
         $fieldType = $this->findFieldTypeByKey($attribute);
@@ -116,5 +92,63 @@ trait WithSharpFormEloquentUpdater
         // TODO handle special fields
 
         return $value;
+    }
+
+    /**
+     * @param Closure $closure
+     * @return SharpAttributeValuator
+     */
+    protected function normalizeToSharpAttributeValuator(Closure $closure): SharpAttributeValuator
+    {
+        return new class($closure) implements SharpAttributeValuator
+        {
+            private $closure;
+
+            function __construct($closure)
+            {
+                $this->closure = $closure;
+            }
+
+            function getValue($instance, string $attribute, $value)
+            {
+                return call_user_func($this->closure, $instance, $value);
+            }
+        };
+    }
+
+    /**
+     * @param string $attribute
+     * @return SharpAttributeValuator|null
+     */
+    protected function customValuator($attribute)
+    {
+        return isset($this->valuators[$attribute])
+            ? $this->valuators[$attribute]
+            : null;
+    }
+
+    /**
+     * @param Model $instance
+     * @param string $attribute
+     * @return bool
+     */
+    protected function isRelationship($instance, $attribute): bool
+    {
+        return method_exists($instance, $attribute);
+    }
+
+    /**
+     * @param Model $instance
+     * @param array $relationships
+     */
+    protected function saveRelationships(Model $instance, array $relationships)
+    {
+        foreach ($relationships as $attribute => $relation) {
+            $relationshipUpdater = app('Code16\Sharp\Form\Eloquent\Relationships\Update'
+                . (new \ReflectionClass($relation["relation_type"]))->getShortName()
+                . 'Relation');
+
+            $relationshipUpdater->update($instance, $attribute, $relation["value"]);
+        }
     }
 }

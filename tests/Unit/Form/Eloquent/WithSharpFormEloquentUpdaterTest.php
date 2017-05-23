@@ -6,7 +6,7 @@ use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\SharpForm;
-use Code16\Sharp\Form\Transformers\SharpAttributeUpdater;
+use Code16\Sharp\Form\Transformers\SharpAttributeValuator;
 use Code16\Sharp\Tests\Fixtures\Person;
 
 class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
@@ -29,25 +29,39 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
     }
 
     /** @test */
-    function we_can_update_a_belongsTo_attribute_with_foreign_key_name()
+    function we_can_use_a_closure_as_a_custom_updater()
     {
-        $mother = Person::create(["name" => "Jane Wayne"]);
         $person = Person::create(["name" => "John Wayne"]);
 
         $form = new WithSharpFormEloquentUpdaterTestForm();
-
-        $this->assertTrue(
-            $form->update($person->id, ["mother_id" => $mother->id])
-        );
+        $form->setCustomValuator("name", function($person, $value) {
+            return strtoupper($value);
+        });
+        $form->update($person->id, ["name" => "John Richard Wayne"]);
 
         $this->assertDatabaseHas("people", [
             "id" => $person->id,
-            "mother_id" => $mother->id
+            "name" => "JOHN RICHARD WAYNE"
         ]);
     }
 
     /** @test */
-    function we_can_update_a_belongsTo_attribute_with_relation_name()
+    function we_can_use_a_class_as_a_custom_updater()
+    {
+        $person = Person::create(["name" => "John Wayne"]);
+
+        $form = new WithSharpFormEloquentUpdaterTestForm();
+        $form->setCustomValuator("name", SharpAttributeUppercaseValuator::class);
+        $form->update($person->id, ["name" => "John Richard Wayne"]);
+
+        $this->assertDatabaseHas("people", [
+            "id" => $person->id,
+            "name" => "JOHN RICHARD WAYNE"
+        ]);
+    }
+
+    /** @test */
+    function we_can_update_a_belongsTo_attribute()
     {
         $mother = Person::create(["name" => "Jane Wayne"]);
         $person = Person::create(["name" => "John Wayne"]);
@@ -79,38 +93,6 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $this->assertDatabaseHas("people", [
             "id" => $son->id,
             "mother_id" => $mother->id
-        ]);
-    }
-
-    /** @test */
-    function we_can_use_a_closure_as_a_custom_updater()
-    {
-        $person = Person::create(["name" => "John Wayne"]);
-
-        $form = new WithSharpFormEloquentUpdaterTestForm();
-        $form->setCustomUpdater("name", function($person, $value) {
-            return strtoupper($value);
-        });
-        $form->update($person->id, ["name" => "John Richard Wayne"]);
-
-        $this->assertDatabaseHas("people", [
-            "id" => $person->id,
-            "name" => "JOHN RICHARD WAYNE"
-        ]);
-    }
-
-    /** @test */
-    function we_can_use_a_class_as_a_custom_updater()
-    {
-        $person = Person::create(["name" => "John Wayne"]);
-
-        $form = new WithSharpFormEloquentUpdaterTestForm();
-        $form->setCustomUpdater("name", SharpAttributeUppercaseUpdater::class);
-        $form->update($person->id, ["name" => "John Richard Wayne"]);
-
-        $this->assertDatabaseHas("people", [
-            "id" => $person->id,
-            "name" => "JOHN RICHARD WAYNE"
         ]);
     }
 }
@@ -145,9 +127,9 @@ class WithSharpFormEloquentUpdaterTestForm extends SharpForm
     }
 }
 
-class SharpAttributeUppercaseUpdater implements SharpAttributeUpdater
+class SharpAttributeUppercaseValuator implements SharpAttributeValuator
 {
-    function update($instance, string $attribute, $value)
+    function getValue($instance, string $attribute, $value)
     {
         return strtoupper($value);
     }

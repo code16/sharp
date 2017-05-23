@@ -19,26 +19,9 @@ trait WithSharpFormEloquentTransformer
      */
     function setCustomTransformer(string $attribute, $transformer)
     {
-        if($transformer instanceof Closure) {
-            // Normalize transformer to a regular SharpAttributeTransformer instance
-            $transformer = new class($transformer) implements SharpAttributeTransformer {
-                private $closure;
-
-                function __construct($closure)
-                {
-                    $this->closure = $closure;
-                }
-
-                function apply($instance, string $attribute)
-                {
-                    return call_user_func($this->closure, $instance);
-                }
-            };
-
-        } else {
-            // Class name given; get an instance
-            $transformer = app($transformer);
-        }
+        $transformer = $transformer instanceof Closure
+            ? $this->normalizeToSharpAttributeTransformer($transformer)
+            : app($transformer);
 
         $this->transformers[$attribute] = $transformer;
 
@@ -61,5 +44,27 @@ trait WithSharpFormEloquentTransformer
         }
 
         return $array;
+    }
+
+    /**
+     * @param Closure $closure
+     * @return SharpAttributeTransformer
+     */
+    protected function normalizeToSharpAttributeTransformer(Closure $closure)
+    {
+        return new class($closure) implements SharpAttributeTransformer
+        {
+            private $closure;
+
+            function __construct($closure)
+            {
+                $this->closure = $closure;
+            }
+
+            function apply($instance, string $attribute)
+            {
+                return call_user_func($this->closure, $instance);
+            }
+        };
     }
 }

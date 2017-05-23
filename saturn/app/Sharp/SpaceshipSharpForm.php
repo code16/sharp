@@ -70,8 +70,9 @@ class SpaceshipSharpForm extends SharpForm
     {
         $instance = $id ? Spaceship::findOrFail($id) : new Spaceship;
 
-        return $this->setCustomUpdater("capacity", function($spaceship, $value) {
+        return $this->setCustomValuator("capacity", function($spaceship, $value) {
             return $value * 1000;
+
         })->save($instance, $data);
     }
 
