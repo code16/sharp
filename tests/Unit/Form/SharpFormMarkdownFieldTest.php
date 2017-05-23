@@ -13,7 +13,9 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
         $formField = SharpFormMarkdownField::make("text");
 
         $this->assertEquals([
-                "key" => "text", "type" => "markdown"
+                "key" => "text", "type" => "markdown", "toolbar" => [
+                    "bold", "italic", "|", "unordered-list", "ordered-list", "|", "link"
+                ], "maxImageSize" => 2
             ], $formField->toArray()
         );
     }
@@ -28,5 +30,27 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
             ["height" => 50],
             $formField->toArray()
         );
+    }
+
+    /** @test */
+    function we_can_define_maxImageSize()
+    {
+        $formField = SharpFormMarkdownField::make("text")
+            ->setMaxImageSize(50);
+
+        $this->assertArraySubset(
+            ["maxImageSize" => 50],
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_hide_toolbar()
+    {
+        $formField = SharpFormMarkdownField::make("text")
+            ->setHeight(50)
+            ->hideToolbar();
+
+        $this->assertArrayNotHasKey("toolbar", $formField->toArray());
     }
 }

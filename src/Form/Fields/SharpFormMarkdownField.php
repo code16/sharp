@@ -14,6 +14,23 @@ class SharpFormMarkdownField extends SharpFormField
     protected $height;
 
     /**
+     * @var array
+     */
+    protected $toolbar = [
+        "bold", "italic", "|", "unordered-list", "ordered-list", "|", "link"
+    ];
+
+    /**
+     * @var bool
+     */
+    protected $showToolbar = true;
+
+    /**
+     * @var int
+     */
+    protected $maxImageSize = 2;
+
+    /**
      * @param string $key
      * @return static
      */
@@ -24,11 +41,42 @@ class SharpFormMarkdownField extends SharpFormField
 
     /**
      * @param int $height
-     * @return $this
+     * @return static
      */
     public function setHeight(int $height)
     {
         $this->height = $height;
+
+        return $this;
+    }
+
+    /**
+     * @return static
+     */
+    public function hideToolbar()
+    {
+        $this->showToolbar = false;
+
+        return $this;
+    }
+
+    /**
+     * @return static
+     */
+    public function showToolbar()
+    {
+        $this->showToolbar = true;
+
+        return $this;
+    }
+
+    /**
+     * @param int $sizeInMB
+     * @return static
+     */
+    public function setMaxImageSize(int $sizeInMB)
+    {
+        $this->maxImageSize = $sizeInMB;
 
         return $this;
     }
@@ -50,7 +98,9 @@ class SharpFormMarkdownField extends SharpFormField
     {
         return parent::buildArray([
             "height" => $this->height,
+            "toolbar" => $this->showToolbar ? $this->toolbar : null,
             "placeholder" => $this->placeholder,
+            "maxImageSize" => $this->maxImageSize,
         ]);
     }
 }
