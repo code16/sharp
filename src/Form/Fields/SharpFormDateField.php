@@ -19,14 +19,19 @@ class SharpFormDateField extends SharpFormField
     protected $hasTime = false;
 
     /**
-     * @var string
+     * @var bool
      */
-    protected $minTime;
+    protected $mondayFirst = false;
 
     /**
      * @var string
      */
-    protected $maxTime;
+    protected $minTime = '00:00';
+
+    /**
+     * @var string
+     */
+    protected $maxTime = '23:59';
 
     /**
      * @var int
@@ -39,10 +44,7 @@ class SharpFormDateField extends SharpFormField
      */
     public static function make(string $key)
     {
-        $instance = new static($key, 'date');
-        $instance->startDate = date("Y-m-d");
-
-        return $instance;
+        return new static($key, 'date');
     }
 
     /**
@@ -65,6 +67,26 @@ class SharpFormDateField extends SharpFormField
         $this->hasTime = $hasTime;
 
         return $this;
+    }
+
+    /**
+     * @param bool $mondayFirst
+     * @return $this
+     */
+    public function setMondayFirst(bool $mondayFirst = true)
+    {
+        $this->mondayFirst = $mondayFirst;
+
+        return $this;
+    }
+
+    /**
+     * @param bool $sundayFirst
+     * @return $this
+     */
+    public function setSundayFirst(bool $sundayFirst = true)
+    {
+        return $this->setMondayFirst(!$sundayFirst);
     }
 
     /**
@@ -110,13 +132,11 @@ class SharpFormDateField extends SharpFormField
         return [
             "hasDate" => "required|boolean",
             "hasTime" => "required|boolean",
-            "minDate" => "date_format:Y-m-d",
-            "startDate" => "required|date_format:Y-m-d",
             "displayFormat" => "required",
-            "maxDate" => "date_format:Y-m-d",
             "minTime" => "regex:/[0-9]{2}:[0-9]{2}/",
             "maxTime" => "regex:/[0-9]{2}:[0-9]{2}/",
             "stepTime" => "integer|min:1|max:60",
+            "mondayFirst" => "required|boolean",
         ];
     }
 
@@ -128,12 +148,10 @@ class SharpFormDateField extends SharpFormField
         return parent::buildArray([
             "hasDate" => $this->hasDate,
             "hasTime" => $this->hasTime,
-            "startDate" => $this->startDate,
-            "minDate" => $this->minDate,
-            "maxDate" => $this->maxDate,
             "minTime" => $this->minTime,
             "maxTime" => $this->maxTime,
             "stepTime" => $this->stepTime,
+            "mondayFirst" => $this->mondayFirst,
             "displayFormat" => $this->displayFormat,
         ]);
     }

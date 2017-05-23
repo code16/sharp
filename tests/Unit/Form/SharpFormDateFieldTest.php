@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Tests\Unit\Form;
 
-use Carbon\Carbon;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Tests\SharpTestCase;
 
@@ -16,8 +15,9 @@ class SharpFormDateFieldTest extends SharpTestCase
         $this->assertEquals([
                 "key" => "date", "type" => "date",
                 "hasDate" => true, "hasTime" => false,
-                "startDate" => date("Y-m-d"), "stepTime" => 30,
-                "displayFormat" => "yyyy-mm-dd"
+                "minTime" => '00:00', "maxTime" => '23:59',
+                "stepTime" => 30, "displayFormat" => "yyyy-mm-dd",
+                "mondayFirst" => false
             ], $defaultFormField->toArray()
         );
     }
@@ -52,24 +52,11 @@ class SharpFormDateFieldTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_define_min_and_max_date_and_time()
+    function we_can_define_min_and_max_time()
     {
-        $date1 = Carbon::today();
-        $date2 = Carbon::tomorrow();
-
-        $dateFormField = SharpFormDateField::make("date")
-            ->setMinDate($date1)
-            ->setMaxDate($date2);
-
         $dateTimeFormField = SharpFormDateField::make("date")
             ->setMinTime(8)
             ->setMaxTime(20, 30);
-
-        $this->assertArraySubset([
-                "minDate" => $date1->format("Y-m-d"),
-                "maxDate" => $date2->format("Y-m-d"),
-            ], $dateFormField->toArray()
-        );
 
         $this->assertArraySubset([
                 "minTime" => "08:00",
@@ -91,15 +78,13 @@ class SharpFormDateFieldTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_define_a_start_date()
+    function we_can_define_monday_as_first_day_of_week()
     {
-        $date = Carbon::yesterday();
-
         $dateFormField = SharpFormDateField::make("date")
-            ->setStartDate($date);
+            ->setMondayFirst();
 
         $this->assertArraySubset(
-            ["startDate" => $date->format("Y-m-d")],
+            ["mondayFirst" => true],
             $dateFormField->toArray()
         );
     }
