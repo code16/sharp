@@ -55,7 +55,7 @@
                 fields: null,//testForm.fields,
                 data: null,//testForm.data,
                 layout: null,//testForm.layout
-                ready:true
+                ready:false
             }
         },
         computed: {
@@ -78,10 +78,10 @@
             },
             getForm() {
                 return axios.get(this.apiPath)
-                    .then(response => {
-                        this.fields = response.fields;
-                        this.layout = response.layout;
-                        this.data = response.data;
+                    .then(({data: {fields, layout, data}}) => {
+                        this.fields = fields;
+                        this.layout = layout;
+                        this.data = data;
 
                         this.ready=true;
                     });
@@ -113,6 +113,7 @@
                 this.getForm().then(_=>this.parseTemplates());
             }
             else this.parseTemplates();
+            window.form =this;
         }
     }
 </script>
