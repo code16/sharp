@@ -5,24 +5,35 @@
     "watch": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "hot": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
     "production": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "element-dev": "node node_modules/element-theme/bin/element-theme -c ./resources/assets/theme/element-vars.css -o ./resources/assets/theme/sharp",
-    "element-watch": "node node_modules/element-theme/bin/element-theme -c -w ./resources/assets/theme/element-vars.css -o ./resources/assets/theme/sharp"
+    "stats": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js --json | tail -n +4 > stats.json",
+    "show-stats": "npm run stats && webpack-bundle-size-analyzer stats.json"
   },
   "devDependencies": {
     "axios": "^0.15.2",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
-    "element-theme": "^0.7.1",
-    "element-theme-default": "^1.2.7",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "bootstrap": "4.0.0-alpha.6",
+    "bootstrap-vue": "^0.16.1",
+    "cross-env": "3.1.3",
+    "fuse.js": "^2.6.2",
     "jquery": "^3.1.0",
-    "laravel-mix": "^0.8.8",
-    "vue": "^2.2.4"
+    "laravel-mix": "^0.11.4",
+    "mime-types": "^2.1.15",
+    "moment": "^2.18.1",
+    "simplemde": "^1.11.2",
+    "uglify-js": "git://github.com/mishoo/UglifyJS2#harmony-v2.8.22",
+    "uglifyjs-webpack-plugin": "^0.4.3",
+    "vue-clip": "^1.0.0",
+    "vue-cropperjs": "^2.1.1",
+    "vue-multiselect": "next",
+    "vue2-timepicker": "^0.1.4",
+    "vuedraggable": "^2.10.0",
+    "vuejs-datepicker": "^0.7.11"
   },
   "dependencies": {
-    "babel-polyfill": "^6.23.0",
-    "cross-env": "3.1.3",
-    "element-ui": "^1.2.7",
-    "fuse.js": "^2.6.2",
-    "simplemde": "^1.11.2",
-    "vue-multiselect": "next"
+    "vue": "^2.3.2"
   }
 }

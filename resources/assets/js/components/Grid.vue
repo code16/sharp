@@ -1,28 +1,49 @@
 <template>
-    <div>
-        <el-row v-for="row in rows" :gutter="20">
-            <el-col v-for="col in row" :span="col.size ? col.size*2 : 24/row.length">
-                <slot :item="col"></slot>
-            </el-col>
-        </el-row>
+    <div class="SharpGrid">
+        <div v-for="(row,i) in rows" class="row">
+            <div v-for="(col,j) in row" :class="colClass[i][j]">
+                <slot v-bind="col"></slot>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-    import { Row, Col } from 'element-ui';
 
     export default {
         name:'SharpGrid',
-        components: {
-            [Row.name]:Row,
-            [Col.name]:Col
-        },
 
         props: {
             rows: { // 2D array [ligne][col]
                 type: Array,
                 required: true
             }
-        }
+        },
+        computed : {
+            colClass() {
+                let res=[];
+                for(let i=0;i<this.rows.length;i++) {
+                    res[i] = [];
+                    let equals=false;
+                    for(let j=0;j<this.rows[i].length;j++) {
+                        let col = this.rows[i][j];
+                        if(equals || !col.size) {
+                            if(!equals) {
+                                res[i].fill('col-sm');
+                                equals = true;
+                            }
+                            res[i][j] = 'col-sm';
+                        }
+                        else {
+                            res[i][j] = `col-sm-${col.size}`;
+                            if(col.sizeXS) {
+                                res[i][j] += ` col-${col.sizeXS}`;
+                            }
+                        }
+                    }
+                }
+                return res;
+            }
+        },
     }
 </script>

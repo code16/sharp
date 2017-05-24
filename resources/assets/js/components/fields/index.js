@@ -1,22 +1,44 @@
-import Autocomplete from './Autocomplete';
-import Textarea from './Textarea';
-import TextInput from './TextInput';
-import Password from './Password';
-import Markdown from './Markdown';
+import SharpAutocomplete from './Autocomplete';
+import SharpTextarea from './Textarea';
+import SharpText from './Text';
+import SharpPassword from './Password';
+import SharpMarkdown from './markdown/Markdown';
+import SharpNumber from './Number';
+import SharpUpload from './upload/Upload';
+import SharpTagInput from './TagInput';
+import SharpDate from './date/Date';
+import SharpCheck from './Check';
+import SharpList from './List';
+import SharpSelect from './Select';
 
+//debugger
 
 export const NameAssociation = {
-    'Autocomplete' : Autocomplete.name,
-    'Text'         : TextInput.name,
-    'Password'     : Password.name,
-    'Textarea'     : Textarea.name,
-    'Markdown'     : Markdown.name
-}
+    'autocomplete' : SharpAutocomplete.name,
+    'text'         : SharpText.name,
+    'password'     : SharpPassword.name,
+    'textarea'     : SharpTextarea.name,
+    'markdown'     : SharpMarkdown.name,
+    'number'       : SharpNumber.name,
+    'upload'       : SharpUpload.name,
+    'taginput'     : SharpTagInput.name,
+    'date'         : SharpDate.name,
+    'check'        : SharpCheck.name,
+    'list'         : SharpList.name,
+    'select'       : SharpSelect.name
+};
 
 export default {
-    [Autocomplete.name]:Autocomplete,
-    [TextInput.name]:TextInput,
-    [Password.name]:Password,
-    [Textarea.name]:Textarea,
-    [Markdown.name]:Markdown
+    [SharpAutocomplete.name] : SharpAutocomplete,
+    [SharpText.name] : SharpText,
+    [SharpPassword.name] : SharpPassword,
+    [SharpTextarea.name] : SharpTextarea,
+    [SharpMarkdown.name] : SharpMarkdown,
+    [SharpNumber.name] : SharpNumber,
+    [SharpUpload.name] : SharpUpload,
+    [SharpTagInput.name] : SharpTagInput,
+    [SharpDate.name] : SharpDate,
+    [SharpCheck.name] : SharpCheck,
+    [SharpList.name] : SharpList,
+    [SharpSelect.name] : SharpSelect
 };

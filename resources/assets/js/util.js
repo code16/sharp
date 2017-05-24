@@ -5,11 +5,16 @@ export default {
     capitalize(str) {
         return str.charAt(0).toUpperCase() + str.slice(1);
     },
-
-    log(str) {
-        console.log(`SHARP : ${str}`, arguments.slice(1));
+    callConsole(func, str, ...data) {
+        console[func](`SHARP : ${str}`, ...data);
     },
-    warn(str) {
-        console.warn(`SHARP : ${str}`, arguments.slice(1));
-    }
+    log() {
+        this.callConsole('log', ...arguments);
+    },
+    warn() {
+        this.callConsole('warn', ...arguments);
+    },
+    error() {
+        this.callConsole('error', ...arguments);
+    },
 }

@@ -1,19 +1,40 @@
 <template>
-    <div>
-        <sharp-template :field-key="fieldKey" name="resultItem"/>
-        <el-autocomplete v-model="value" trigger-on-focus
-                         :fetch-suggestions="collectSuggestions"
-                         :placeholder="placeholder"
-                         :custom-item="listItemTemplate.compNameOrDefault"
-                         @select="handleSelect"
-                         :disabled="disabled">
-        </el-autocomplete>
+    <div class="SharpAutocomplete" :class="`SharpAutocomplete--${state}`">
+        <div v-show="state=='valuated'" class="SharpAutocomplete__result-item form-control">
+            <sharp-template :field-key="fieldKey"
+                            name="resultItem" :template-data="valueObject">
+            </sharp-template>
+            <div class="SharpAutocomplete__close-btn-container" @click="handleResetClick">
+                <button type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+        <multiselect v-show="state!='valuated'"
+                     :value="valueObject"
+                     :options="dynamicSuggestions"
+                     :track-by="itemIdAttribute"
+                     :internal-search="false"
+                     :placeholder="placeholder"
+                     :loading="state=='loading'"
+                     :max="hideDropdown ? -1 : 1"
+                     selectLabel="" selectedLabel="" deselectLabel=""
+                     @search-change="updateSuggestions"
+                     @select="handleSelect"
+                     @input="handleInput"
+                     @close="handleDropdownClose"
+                     ref="multiselect">
+            <template slot="option" scope="props">
+                <sharp-template :field-key="fieldKey" :template-data="props.option" name="listItem"></sharp-template>
+            </template>
+            <template slot="noResult">Aucun résultats</template>
+        </multiselect>
     </div>
 </template>
 
 <script>
     import SharpTemplate from '../Template.vue';
-    import { Autocomplete } from 'element-ui';
+    import Multiselect from 'vue-multiselect';
 
     import Template from '../../app/models/Template';
     import SearchStrategy from '../../app/models/SearchStrategy';
@@ -22,15 +43,20 @@
     export default {
         name:'SharpAutocomplete',
         components: {
-            [Autocomplete.name]:Autocomplete,
+            Multiselect,
             [SharpTemplate.name]:SharpTemplate
         },
 
         props: {
             fieldKey: String,
 
+            value: [String, Number],
+
             mode: String,
-            localValues: Array,
+            localValues: {
+                type: Array,
+                default:()=>[]
+            },
             placeholder: String,
             remoteEndpoint: String,
             remoteMethod:String,
@@ -38,56 +64,105 @@
                 type: String,
                 default: 'query'
             },
-            itemKeyAttribute:String,
-            searchMinBar: {
+            itemIdAttribute: {
+                type:String,
+                default: 'id'
+            },
+            searchMinChars: {
                 type: Number,
                 default: 1
             },
-            disabled:Boolean
+            searchKeys: {
+                type: Array,
+                default:()=>['value']
+            },
+            disabled: Boolean,
+            listItemTemplate: String
         },
         data() {
             return {
-                value: '',
-                localSearchStrategy:null,
+                query: '',
+                suggestions: this.localValues,
+                isLoading: false,
+                searchStrategy: new SearchStrategy({
+                    list: this.localValues,
+                    minQueryLength: this.searchMinChars,
+                    searchKeys: this.searchKeys
+                }),
+                state: this.value?'valuated':'initial'
             }
         },
         computed: {
             isRemote() {
                 return this.mode === 'remote';
             },
-            listItemTemplate() {
-                return new Template(this.fieldKey, 'listItem');
+            valueObject() {
+                if(!this.value)
+                    return null;
+
+                if(this.isRemote)
+                    return this.value;
+
+                return this.localValues.find(v=>v[this.itemIdAttribute]===this.value);
             },
-            filteredSuggestions() {
-                return this.localSearchStrategy.search(this.value);
+            hideDropdown() {
+                return this.query.length < this.searchMinChars;
+            },
+            dynamicSuggestions() {
+                return this.hideDropdown ? [null] : this.suggestions;
             }
         },
         methods: {
-            collectSuggestions(querystring, cb) {
-                if (this.mode === 'local') {
-                    cb(this.filteredSuggestions);
-                }
-                else if(this.mode === 'remote') {
-                    axios[this.remoteMethod.toLowerCase()](this.remoteEndpoint, {
-                        searchAttribute: this.searchAttribute
-                    }).then(response => {
-                        cb(response.data);
-                    }).catch(
-                        // some error callback
+            updateSuggestions(query) {
+                this.query = query;
+                if(this.hideDropdown)
+                    return;
+
+                if(this.isRemote) {
+                    this.state = 'loading';
+                    const call = (method,endpoint,attribute) =>
+                        method === 'GET' ?
+                            axios.get(endpoint,{
+                            params: {
+                                [attribute]:query
+                            }
+                        }): axios.post(endpoint,{
+                            [attribute]:query
+                        }
                     );
+                    call(this.remoteMethod, this.remoteEndpoint, this.remoteSearchAttribute)
+                        .then(response => {
+                            this.state = 'searching';
+                            this.suggestions = response.data;
+                        }).catch(
+                            // some error callback
+                        );
+                }
+                else {
+                    this.suggestions = this.searchStrategy.search(query);
+                    this.state = 'searching';
                 }
             },
-            handleSelect(item) {
-                console.log(item);
-            }
-        },
-        mounted() {
-            if(this.mode === 'local') {
-                this.localSearchStrategy = new SearchStrategy({
-                    list:this.localValues,
-                    minQueryLength:2
+
+            handleSelect(value) {
+                this.state = 'valuated';
+                this.$emit('input', value[this.itemIdAttribute]);
+            },
+            handleInput(value) {
+
+            },
+            handleDropdownClose() {
+                if(this.state === 'searching')
+                    this.state = 'initial';
+            },
+            handleResetClick() {
+                this.state = 'searching';
+
+                this.$emit('input', '');
+                this.$nextTick(()=>{
+                    this.$refs.multiselect.activate();
                 });
             }
-        }
+        },
     }
 </script>

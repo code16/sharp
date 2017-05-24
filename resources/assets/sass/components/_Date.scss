@@ -1,0 +1,22 @@
+.SharpDate {
+  position: relative;
+
+  &__picker {
+    position: absolute;
+    z-index: 2;
+    padding:1em;
+    display:flex;
+    background: #eee;
+
+      .SharpDate__time {
+        .dropdown {
+          height:100%;
+          top:0;
+          .select-list {
+            height:100%;
+          }
+        }
+      }
+    
+  }
+}

@@ -1,17 +1,15 @@
 <template>
-    <div>
+    <div class="Form container">
         <sharp-grid v-if="layout.length == 1" :rows="[layout[0].columns]">
             <template scope="column">
-                <sharp-fields-layout v-if="fields" :fields="column.item.fields">
-                    <template scope="field">
-                        <sharp-field-container v-if="acceptCondition(fields[field.item.key])"
-                                               :field-key="field.item.key"
-                                               :field-props="fields[field.item.key]"
-                                               :field-type="fields[field.item.key].type"
-                                               :label=fields[field.item.key].label"
-                                               :help-message="fields[field.item.key].helpMessage"
-                                               :read-only="fields[field.item.key].readOnly">
-                        </sharp-field-container>
+                <sharp-fields-layout v-if="fields" :layout="column.fields">
+                    <template scope="fieldLayout">
+                        <sharp-field-display :field-key="fieldLayout.key"
+                                             :context-fields="fields"
+                                             :context-data="data"
+                                             :field-layout="fieldLayout"
+                                             :update-data="updateData">
+                        </sharp-field-display>
                     </template>
                 </sharp-fields-layout>
             </template>
@@ -22,124 +20,89 @@
 <script>
     import util from '../util';
     import TemplateDefinition from '../template-definition';
+    import { API_PATH } from '../consts';
 
     import Template from '../app/models/Template';
     import TemplateController from '../app/controllers/TemplateController';
 
-    import Fields from './fields';
-
     import Grid from './Grid';
     import FieldsLayout from './FieldsLayout';
-    import layout from '../layout';
+
+    import * as testForm from '../_test-form';
+    import { NameAssociation as fieldCompNames } from './fields/index';
+
 
     export default {
         name:'SharpForm',
 
         components: {
-
             [Grid.name]:Grid,
             [FieldsLayout.name]:FieldsLayout
         },
 
+        props:{
+            entityKey: String,
+            instanceId: String,
+        },
+
         data() {
             return {
-                fields:[],
-                layout,
+                fields:testForm.fields,
+                data:testForm.data,
+                layout:testForm.layout
             }
         },
         computed: {
             displayableFields() {
                 return this.fields.filter((field, i) => {
-                    if(!field)
-                        return util.warn(`Field at index ${i} is null or empty : `,field),false;
-                    if(!field.key)
-                        return util.warn(`Field at index ${i} doesn't have a key : `,field),false;
-                    if(!field.type)
-                        return util.warn(`Field at index ${i} doesn't have a type : `,field),false;
-                    if(!(field.type in Fields))
-                        return util.warn(`Field '${field.key}' have a unknown type (${field.type})`),false;
-                    
+                    if(!(field.type in fieldCompNames))
+                        return util.error(`Field '${field.key}' have a unknown type (${field.type})`), false;
                     return true;
                 })
+            },
+            apiPath() {
+                let path = `${API_PATH}/form/${this.entityKey}`;
+                if(this.instanceId) path+=`/${this.instanceId}`;
+                return path;
             }
         },
         methods: {
-            acceptCondition(field) {
-                if(!field.conditionalDisplay)
-                    return true;
-                
-                let regex=/(\!)(\w+):?((\w+,?)*)/;
-                let matches = regex.exec(field.conditionalDisplay);
-                let neg = !!matches[1];
-                let key = matches[2];
-                let values = matches[3] ? matches[3].split(',') : null;
+            updateData(key,value) {
+                this.data[key] = value;
+            },
+            getForm() {
+                return axios.get(this.apiPath)
+                    .then(response => {
+                        Object.assign(this, response);
+                    });
+            },
+            postForm() {
+                return axios.post(this.apiPath)
+                    .then(response => {
 
-                if(values) {
+                    });
+            },
+            parseTemplates() {
+                for(let fieldKey of Object.keys(this.fields)) {
+                    let field=this.fields[fieldKey];
+                    for (let fieldPropName of Object.keys(field)) {
 
-                }
-                else {
-                    
-                }
-                return true;
-            }
-        },
-        mounted() {
-            // GET fields
-            this.fields = {
-                'A':{
-                    type:'SharpTextInput'
-                },
-                'B':{
-                    type:'SharpTextInput'
-                },
-                'C':{
-                    type:'SharpTextInput'
-                },
-                'D':{
-                    type:'SharpTextInput'
-                },
-                'E':{
-                    type:'SharpTextInput'
-                },
-                'F':{
-                    type:'SharpTextInput'
-                },
-                'G':{
-                    type:'SharpTextInput'
-                },
-                'H':{
-                    type:'SharpTextInput'
-                },
-                'name':{
-                    type:'SharpAutocomplete',
-                    mode:'local',
-                    localValues: [
-                        { value: 'Antoine', surname: 'Guingand' },
-                        { value: 'Robert', surname: 'Martin' },
-                        { value: 'François', surname: 'Leforestier' },
-                        { value: 'Fernand', surname: 'Coli' }
-                    ],
-                    listItemTemplate:`
-                            <span class="value">{{ item.value }}</span>
-                            <span class="surname">{{ item.surname }}</span>
-                        `,
-                    // disabled: true
-                    conditionalDisplay: '!advanced_search:red,blue,orange'
-                },
-                'advanced_search':{
-                    type:'Check',
-                    value: true
-                }
-            }
-
-            for(let field of this.fields) {
-                for (let fieldPropName of Object.keys(field)) {
-
-                    if (Template.isTemplateProp(fieldPropName)) {
-                        TemplateController.compileAndRegisterComponent(field.key, fieldPropName, field[fieldPropName]);
+                        if (Template.isTemplateProp(fieldPropName)) {
+                            TemplateController.compileAndRegisterComponent(fieldKey, {
+                                templateName: fieldPropName,
+                                templateValue: field[fieldPropName],
+                                templateProps: field.templateProps
+                            });
+                        }
                     }
                 }
             }
+        },
+        mounted() {
+            if(this.entityKey) {
+                this.getForm().then(_=>this.parseTemplates());
+            }
+            else this.parseTemplates();
         }
     }
 </script>

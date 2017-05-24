@@ -1,0 +1,32 @@
+<template>
+    <input :type="inputType" class="form-control"
+           :value="value"  :placeholder="placeholder" :disabled="disabled"
+           @input="handleInput"
+    >
+</template>
+
+<script>
+    import Vue from 'vue';
+    export default {
+        name:'SharpText',
+
+        props: {
+            value: [String, Number],
+
+            placeholder: String,
+            disabled: Boolean,
+            inputType:  {
+                type:String,
+                default:'text'
+            },
+        },
+        data() {
+            return {}
+        },
+        methods: {
+            handleInput(e) {
+                this.$emit('input',e.target.value);
+            }
+        }
+    }
+</script>

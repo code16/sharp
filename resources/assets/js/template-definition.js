@@ -1,12 +1,10 @@
 export default {
     listItemTemplate: {
-        wrapIn: 'li',
-        propagateEvents: ['click'],
+
+    },
+    collapsedItemTemplate: {
         props: {
-            item: { // contains all passed props
-                type: Object,
-                required : true
-            }
+            $index: Number
         }
     }
 }

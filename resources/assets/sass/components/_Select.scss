@@ -1,0 +1,15 @@
+.SharpSelect {
+  &__remove-btn {
+    position: absolute;
+    width: 40px;
+    height: 38px;
+    right: 1px;
+    top: 1px;
+    padding: 4px 8px;
+    text-align: center;
+
+    &:after {
+      content:"×";
+    }
+  }
+}

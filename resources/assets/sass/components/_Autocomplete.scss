@@ -1,0 +1,22 @@
+.SharpAutocomplete {
+  position: relative;
+  font-size: 1rem;
+
+  &__close-btn-container {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    width: 40px;
+    height: 100%;
+    text-align: center;
+
+    button.close {
+      height: 100%;
+      width: 100%;
+      outline: none;
+      span {
+        vertical-align: super;
+      }
+    }
+  }
+}
