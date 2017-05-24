@@ -35,7 +35,7 @@ class SpaceshipSharpForm extends SharpForm
                 ->setHasTime(false)
         );
 
-        $this->addField(
+        /*$this->addField(
             SharpFormAutocompleteField::make("type_id", "local")
                 ->setLabel("Ship type")
                 ->setListItemTemplatePath("/sharp/templates/spaceshipType_list")
@@ -43,7 +43,7 @@ class SpaceshipSharpForm extends SharpForm
                 ->setLocalValues(
                     SpaceshipType::orderBy("label")->get()->pluck("label", "id")->all()
                 )
-        );
+        );*/
     }
 
     function buildFormLayout()

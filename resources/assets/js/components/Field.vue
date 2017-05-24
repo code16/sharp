@@ -29,7 +29,7 @@
                 return null;
             }
 
-            let { key, fieldProps } = this.fieldProps;
+            let { key, ...fieldProps } = this.fieldProps;
 
             //console.log(fieldCompName[this.fieldType]);
 
@@ -38,7 +38,7 @@
                     fieldKey:this.fieldKey,
                     fieldLayout:this.fieldLayout,
                     value:this.value,
-                    fieldProps
+                    ...fieldProps
                 },
                 on: {
                     input: val => {
