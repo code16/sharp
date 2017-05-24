@@ -81,12 +81,14 @@ abstract class SharpForm
      *
      * @return array
      */
-    public function newInstance(): array
+    public function newInstance()
     {
-        return collect($this->create())
+        $data = collect($this->create())
             // Filter model attributes on actual form fields
             ->only($this->getFieldKeys())
             ->all();
+
+        return sizeof($data) ? $data : null;
     }
 
     /**

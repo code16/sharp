@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
+use Illuminate\Support\Collection;
 
 class SharpFormAutocompleteField extends SharpFormField
 {
@@ -14,7 +15,7 @@ class SharpFormAutocompleteField extends SharpFormField
     protected $mode;
 
     /**
-     * @var array
+     * @var Collection|array
      */
     protected $localValues;
 
@@ -72,10 +73,10 @@ class SharpFormAutocompleteField extends SharpFormField
     }
 
     /**
-     * @param array $localValues
+     * @param array|Collection $localValues
      * @return $this
      */
-    public function setLocalValues(array $localValues)
+    public function setLocalValues($localValues)
     {
         $this->localValues = $localValues;
 

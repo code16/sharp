@@ -3,7 +3,7 @@
 @section("content")
 
     <div id="sharp-app">
-        <sharp-form entityKey="{{ $entityKey }}" instanceId=" {{ $instanceId ?? "" }}"></sharp-form>
+        <sharp-form entity-key="{{ $entityKey }}" instance-id="{{ $instanceId ?? "" }}"></sharp-form>
     </div>
 
 @endsection
