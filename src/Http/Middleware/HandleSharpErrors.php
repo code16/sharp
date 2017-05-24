@@ -21,6 +21,7 @@ class HandleSharpErrors
         $response = $next($request);
 
         if($response->exception && $response->exception instanceof SharpFormException) {
+            // This is an applicative exception, we return it as a 417
             return response()->json([
                 "message" => $response->exception->getMessage()
             ], 417);
