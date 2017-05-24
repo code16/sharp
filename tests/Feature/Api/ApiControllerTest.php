@@ -17,6 +17,18 @@ class ApiControllerTest extends BaseApiTest
     }
 
     /** @test */
+    public function we_can_get_form_initial_data_for_an_entity_in_creation()
+    {
+        $this->buildTheWorld();
+
+        $this->json('get', '/sharp/api/form/person')
+            ->assertStatus(200)
+            ->assertJson(["data" => [
+                "name" => "default name"
+            ]]);
+    }
+
+    /** @test */
     public function we_wont_get_entity_attribute_for_a_non_form_data()
     {
         $this->buildTheWorld();

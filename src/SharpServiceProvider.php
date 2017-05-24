@@ -11,7 +11,13 @@ class SharpServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        include __DIR__.'/routes.php';
+        $this->loadRoutesFrom(__DIR__.'/routes.php');
+
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'sharp');
+
+        $this->publishes([
+            __DIR__.'/../resources/assets/dist' => public_path('vendor/sharp')
+        ], 'assets');
     }
 
     public function register()

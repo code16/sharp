@@ -177,7 +177,6 @@ class WithSharpFormEloquentTransformerTestForm extends SharpForm
     }
 
     function update($id, array $data): bool { return false; }
-    function newInstance() { return null; }
     function delete($id): bool { return false; }
     function buildFormLayout() {}
     function buildFormFields() {}

@@ -1,14 +1,13 @@
 {
-  "name": "laravel/laravel",
-  "description": "The Laravel Framework.",
+  "name": "code16/saturn",
+  "description": "Sharp functional test app",
   "keywords": [
-    "framework",
-    "laravel"
+    "sharp", "laravel"
   ],
   "license": "MIT",
   "type": "project",
   "require": {
-    "php": ">=5.6.4",
+    "php": ">=7.0.0",
     "laravel/framework": "5.4.*",
     "laravel/tinker": "~1.0"
   },
@@ -22,7 +21,8 @@
       "database"
     ],
     "psr-4": {
-      "App\\": "app/"
+      "App\\": "app/",
+      "Code16\\Sharp\\": "../src/"
     }
   },
   "autoload-dev": {

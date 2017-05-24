@@ -3,53 +3,67 @@
 namespace Code16\Sharp\Http\Api;
 
 use Code16\Sharp\Form\SharpForm;
-use Code16\Sharp\Form\SharpFormData;
 use Illuminate\Routing\Controller;
 
 class FormController extends Controller
 {
 
     /**
-     * @param string $key
-     * @param string $id
+     * @param string $entityKey
+     * @param string $instanceId
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show($key, $id)
+    public function edit($entityKey, $instanceId)
     {
-        $form = $this->getFormInstance($key);
+        $form = $this->getFormInstance($entityKey);
 
         return response()->json([
             "fields" => $form->fields(),
             "layout" => $form->formLayout(),
-            "data" => $form->instance($id)
+            "data" => $form->instance($instanceId)
         ]);
     }
 
     /**
-     * @param string $key
-     * @param string $id
+     * @param string $entityKey
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update($key, $id)
+    public function create($entityKey)
     {
-        $this->validateRequest($key);
+        $form = $this->getFormInstance($entityKey);
 
-        $form = $this->getFormInstance($key);
+        return response()->json([
+            "fields" => $form->fields(),
+            "layout" => $form->formLayout(),
+            "data" => $form->newInstance()
+        ]);
+    }
 
-        $form->update($id, request()->only($form->getFieldKeys()));
+    /**
+     * @param string $entityKey
+     * @param string $instanceId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update($entityKey, $instanceId)
+    {
+        $this->validateRequest($entityKey);
+
+        $form = $this->getFormInstance($entityKey);
+
+        $form->update($instanceId, request()->only($form->getFieldKeys()));
 
         return response()->json(["ok" => true]);
     }
 
     /**
-     * @param string $key
+     * @param string $entityKey
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store($key)
+    public function store($entityKey)
     {
-        $this->validateRequest($key);
+        $this->validateRequest($entityKey);
 
-        $form = $this->getFormInstance($key);
+        $form = $this->getFormInstance($entityKey);
 
         $form->store(request()->only($form->getFieldKeys()));
 
@@ -57,20 +71,20 @@ class FormController extends Controller
     }
 
     /**
-     * @param string $key
+     * @param string $entityKey
      * @return SharpForm
      */
-    protected function getFormInstance(string $key): SharpForm
+    protected function getFormInstance(string $entityKey): SharpForm
     {
-        return app(config("sharp.entities.{$key}.form"));
+        return app(config("sharp.entities.{$entityKey}.form"));
     }
 
     /**
-     * @param string $key
+     * @param string $entityKey
      */
-    protected function validateRequest(string $key)
+    protected function validateRequest(string $entityKey)
     {
-        $validatorClass = config("sharp.entities.{$key}.validator");
+        $validatorClass = config("sharp.entities.{$entityKey}.validator");
 
         if(class_exists($validatorClass)) {
             // Validation is automatically called (FormRequest)

@@ -38,4 +38,11 @@ class PersonSharpForm extends SharpForm
     {
         return true;
     }
+
+    function create(): array
+    {
+        return [
+            "name" => "default name"
+        ];
+    }
 }

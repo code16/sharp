@@ -5,7 +5,6 @@ namespace Code16\Sharp\Form;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
-use Illuminate\Database\Eloquent\Model;
 
 abstract class SharpForm
 {
@@ -72,6 +71,19 @@ abstract class SharpForm
     function instance($id): array
     {
         return collect($this->find($id))
+            // Filter model attributes on actual form fields
+            ->only($this->getFieldKeys())
+            ->all();
+    }
+
+    /**
+     * Return a new entity instance, as an array.
+     *
+     * @return array
+     */
+    public function newInstance(): array
+    {
+        return collect($this->create())
             // Filter model attributes on actual form fields
             ->only($this->getFieldKeys())
             ->all();
@@ -152,6 +164,16 @@ abstract class SharpForm
     public function store(array $data): bool
     {
         return $this->update(null, $data);
+    }
+
+    /**
+     * Pack new Model data as JSON.
+     *
+     * @return array
+     */
+    public function create(): array
+    {
+        return [];
     }
 
     /**

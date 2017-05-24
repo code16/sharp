@@ -56,6 +56,11 @@ class SpaceshipSharpForm extends SharpForm
             });
     }
 
+//    function create()
+//    {
+//        return $this->transform(new Spaceship);
+//    }
+
     function find($id): array
     {
         return $this->setCustomTransformer("capacity", function($spaceship) {

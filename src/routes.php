@@ -6,17 +6,35 @@ Route::group([
     'namespace' => 'Code16\Sharp\Http\Api'
 ], function() {
 
+    Route::get("/form/{entityKey}")
+        ->name("code16.sharp.api.form.create")
+        ->uses('FormController@create');
 
-    Route::get("/form/{key}/{id}")
-        ->name("code16.sharp.api.form")
-        ->uses('FormController@show');
+    Route::get("/form/{entityKey}/{instanceId}")
+        ->name("code16.sharp.api.form.edit")
+        ->uses('FormController@edit');
 
-    Route::post("/form/{key}/{id}")
+    Route::post("/form/{entityKey}/{instanceId}")
         ->name("code16.sharp.api.form.update")
         ->uses('FormController@update');
 
-    Route::post("/form/{key}")
+    Route::post("/form/{entityKey}")
         ->name("code16.sharp.api.form.store")
         ->uses('FormController@store');
+
+});
+
+Route::group([
+    'prefix' => '/sharp',
+    'namespace' => 'Code16\Sharp\Http'
+], function() {
+
+    Route::get('/form/{entityKey}/{instanceId}')
+        ->name("code16.sharp.edit")
+        ->uses('FrontFormController@edit');
+
+    Route::get('/form/{entityKey}')
+        ->name("code16.sharp.create")
+        ->uses('FrontFormController@create');
 
 });
