@@ -11,6 +11,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        $types = factory(\App\SpaceshipType::class, 10)->create();
+
+        foreach($types as $type) {
+            factory(\App\Spaceship::class, 2)->create([
+                "type_id" => $type->id
+            ]);
+        }
     }
 }

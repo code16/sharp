@@ -41,7 +41,7 @@ class SpaceshipSharpForm extends SharpForm
                 ->setListItemTemplatePath("/sharp/templates/spaceshipType_list")
                 ->setResultItemTemplatePath("/sharp/templates/spaceshipType_result")
                 ->setLocalValues(
-                    SpaceshipType::orderBy("label")->get()->pluck("label", "id")
+                    SpaceshipType::orderBy("label")->get()->pluck("label", "id")->all()
                 )
         );
     }
