@@ -2,12 +2,8 @@
 
 namespace Code16\Sharp\Form\Fields;
 
-use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDate;
-
 class SharpFormDateField extends SharpFormField
 {
-    use SharpFormFieldWithDate;
-
     /**
      * @var bool
      */
@@ -37,6 +33,11 @@ class SharpFormDateField extends SharpFormField
      * @var int
      */
     protected $stepTime = 30;
+
+    /**
+     * @var string
+     */
+    protected $displayFormat = "YYYY-MM-DD";
 
     /**
      * @param string $key
@@ -120,6 +121,17 @@ class SharpFormDateField extends SharpFormField
     public function setStepTime(int $step)
     {
         $this->stepTime = $step;
+
+        return $this;
+    }
+
+    /**
+     * @param string $displayFormat
+     * @return $this
+     */
+    public function setDisplayFormat(string $displayFormat)
+    {
+        $this->displayFormat = $displayFormat;
 
         return $this;
     }

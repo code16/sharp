@@ -16,7 +16,7 @@ class SharpFormDateFieldTest extends SharpTestCase
                 "key" => "date", "type" => "date",
                 "hasDate" => true, "hasTime" => false,
                 "minTime" => '00:00', "maxTime" => '23:59',
-                "stepTime" => 30, "displayFormat" => "yyyy-mm-dd",
+                "stepTime" => 30, "displayFormat" => "YYYY-MM-DD",
                 "mondayFirst" => false
             ], $defaultFormField->toArray()
         );
@@ -93,10 +93,10 @@ class SharpFormDateFieldTest extends SharpTestCase
     function we_can_define_a_display_format()
     {
         $dateFormField = SharpFormDateField::make("date")
-            ->setDisplayFormat("dd/mm/yyyy");
+            ->setDisplayFormat("DD/MM/YYYY");
 
         $this->assertArraySubset(
-            ["displayFormat" => "dd/mm/yyyy"],
+            ["displayFormat" => "DD/MM/YYYY"],
             $dateFormField->toArray()
         );
     }
