@@ -1,19 +1,24 @@
 <template>
     <div class="Form container">
-        <sharp-grid v-if="layout.length == 1" :rows="[layout[0].columns]">
-            <template scope="column">
-                <sharp-fields-layout v-if="fields" :layout="column.fields">
-                    <template scope="fieldLayout">
-                        <sharp-field-display :field-key="fieldLayout.key"
-                                             :context-fields="fields"
-                                             :context-data="data"
-                                             :field-layout="fieldLayout"
-                                             :update-data="updateData">
-                        </sharp-field-display>
-                    </template>
-                </sharp-fields-layout>
-            </template>
-        </sharp-grid>
+        <template v-if="ready">
+            <sharp-grid v-if="layout.length == 1" :rows="[layout[0].columns]">
+                <template scope="column">
+                    <sharp-fields-layout v-if="fields" :layout="column.fields">
+                        <template scope="fieldLayout">
+                            <sharp-field-display :field-key="fieldLayout.key"
+                                                 :context-fields="fields"
+                                                 :context-data="data"
+                                                 :field-layout="fieldLayout"
+                                                 :update-data="updateData">
+                            </sharp-field-display>
+                        </template>
+                    </sharp-fields-layout>
+                </template>
+            </sharp-grid>
+        </template>
+        <template v-else>
+            Form loading...
+        </template>
     </div>
 </template>
 
@@ -47,9 +52,10 @@
 
         data() {
             return {
-                fields:testForm.fields,
-                data:testForm.data,
-                layout:testForm.layout
+                fields: null,//testForm.fields,
+                data: null,//testForm.data,
+                layout: null,//testForm.layout
+                ready:true
             }
         },
         computed: {
@@ -73,7 +79,11 @@
             getForm() {
                 return axios.get(this.apiPath)
                     .then(response => {
-                        Object.assign(this, response);
+                        this.fields = response.fields;
+                        this.layout = response.layout;
+                        this.data = response.data;
+
+                        this.ready=true;
                     });
             },
             postForm() {

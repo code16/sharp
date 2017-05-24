@@ -43,9 +43,14 @@
             let field = fields[condField.key];
             let value = data[condField.key];
 
+            if(!value) {
+                res = true;
+                continue;
+            }
+
             if(field.type === 'autocomplete' || field.type === 'select' || field.type === 'taginput') {
                 let isSingleSelect = field.type === 'select' && !field.multiple;
-                res = computeSelectCondition(condField.values, value, );
+                res = computeSelectCondition(condField.values, value, isSingleSelect);
             }
             else if(field.type === 'check') {
                 if(typeof value !== "boolean") {
@@ -91,14 +96,16 @@
             let { fieldKey, contextFields, contextData, ...sharedProps } = props;
             let field = contextFields[fieldKey];
 
+            contextData = (contextData||{});
+
             if(!(fieldKey in contextFields)) {
                 util.error(`Field displayer : Can't find a field with key '${fieldKey}' in 'fields'`,contextFields);
                 return null;
             }
-            else if(!(fieldKey in contextData)) {
+            /*else if(!(fieldKey in contextData)) {
                 util.error(`Field displayer : Can't find key '${fieldKey}' in 'data'`,contextData);
                 return null;
-            }
+            }*/
 
             return acceptCondition(contextFields, contextData, field.conditionalDisplay) ?
                 h(FieldContainer,{
