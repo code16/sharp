@@ -42,7 +42,7 @@ abstract class SharpForm
 
         return collect($this->fields)->map(function($field) {
             return $field->toArray();
-        })->all();
+        })->keyBy("key")->all();
     }
 
     /**

@@ -35,12 +35,12 @@ class SharpFormFieldsTest extends SharpTestCase
         };
 
         $this->assertArraySubset(
-            ["key" => "name", "type" => "text"],
-            $form->fields()[0]
+            ["type" => "text"],
+            $form->fields()["name"]
         );
         $this->assertArraySubset(
-            ["key" => "first_name", "type" => "text"],
-            $form->fields()[1]
+            ["type" => "text"],
+            $form->fields()["first_name"]
         );
     }
 }
