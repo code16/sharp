@@ -5,7 +5,7 @@
     "watch": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "hot": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
     "production": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "stats": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js --json | tail -n +3 > stats.json",
+    "stats": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js --json | tail -n +4 > stats.json",
     "show-stats": "npm run stats && webpack-bundle-size-analyzer stats.json"
   },
   "devDependencies": {
@@ -16,6 +16,7 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "bootstrap": "4.0.0-alpha.6",
+    "bootstrap-vue": "^0.16.1",
     "cross-env": "3.1.3",
     "fuse.js": "^2.6.2",
     "jquery": "^3.1.0",
@@ -23,15 +24,16 @@
     "mime-types": "^2.1.15",
     "moment": "^2.18.1",
     "simplemde": "^1.11.2",
+    "uglify-js": "git://github.com/mishoo/UglifyJS2#harmony-v2.8.22",
+    "uglifyjs-webpack-plugin": "^0.4.3",
     "vue-clip": "^1.0.0",
-    "vue-multiselect": "next"
-  },
-  "dependencies": {
-    "bootstrap-vue": "^0.16.1",
-    "vue": "^2.3.2",
     "vue-cropperjs": "^2.1.1",
+    "vue-multiselect": "next",
     "vue2-timepicker": "^0.1.4",
     "vuedraggable": "^2.10.0",
     "vuejs-datepicker": "^0.7.11"
+  },
+  "dependencies": {
+    "vue": "^2.3.2"
   }
 }

@@ -1,6 +1,6 @@
 <template>
     <div class="SharpAutocomplete" :class="`SharpAutocomplete--${state}`">
-        <div v-show="state=='valuated'" class="SharpAutocomplete__result-item">
+        <div v-show="state=='valuated'" class="SharpAutocomplete__result-item form-control">
             <sharp-template :field-key="fieldKey"
                             name="resultItem" :template-data="valueObject">
             </sharp-template>

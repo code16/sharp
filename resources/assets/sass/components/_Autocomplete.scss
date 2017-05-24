@@ -2,10 +2,6 @@
   position: relative;
   font-size: 1rem;
 
-  &__result-item {
-    @extend .form-control;
-  }
-
   &__close-btn-container {
     position: absolute;
     top: 1px;

@@ -1,29 +1,63 @@
-@import 'node_modules/bootstrap/scss/bootstrap';
+@import 'node_modules/bootstrap/scss/variables';
 
+@-ms-viewport { width: device-width; }
 
-@import 'components/Autocomplete';
-@import 'components/Upload';
-@import 'components/Form';
-@import 'components/Grid';
-@import 'components/List';
-@import 'components/Date';
-@import 'components/Markdown';
-@import 'components/MarkdownUpload';
-@import 'components/Select';
-@import 'components/Modal';
-
-// overriding default vendor components style
-@import 'components/Multiselect';
-
-input[type="number"].hide-controls {
-  &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  -moz-appearance: textfield;
+html {
+  font-family: sans-serif;
+  line-height: 1.15;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -ms-overflow-style: scrollbar;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
-.expand-enter, .expand-leave-to /* .fade-leave-active in <2.1.8 */ {
-  opacity: 0;
-  transform: translateY(30px);
+body {
+  margin: 0;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  font-weight: $font-weight-base;
+  line-height: $line-height-base;
+  color: $body-color;
+  background-color: $body-bg;
+}
+
+@import 'node_modules/bootstrap/scss/bootstrap-reboot';
+
+#sharp-app {
+
+  @import 'node_modules/bootstrap/scss/bootstrap-grid';
+
+  @import 'node_modules/bootstrap/scss/forms';
+  @import 'node_modules/bootstrap/scss/buttons';
+  @import 'node_modules/bootstrap/scss/modal';
+  @import 'node_modules/bootstrap/scss/progress';
+  @import 'node_modules/bootstrap/scss/list-group';
+  @import 'node_modules/bootstrap/scss/close';
+
+  @import 'components/Autocomplete';
+  @import 'components/Upload';
+  @import 'components/Form';
+  @import 'components/Grid';
+  @import 'components/List';
+  @import 'components/Date';
+  @import 'components/Markdown';
+  @import 'components/MarkdownUpload';
+  @import 'components/Select';
+  @import 'components/Modal';
+
+  // overriding default vendor components style&
+  @import 'components/Multiselect';
+
+  input[type="number"].hide-controls {
+    &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    -moz-appearance: textfield;
+  }
+
+  .expand-enter, .expand-leave-to /* .fade-leave-active in <2.1.8 */ {
+    opacity: 0;
+    transform: translateY(30px);
+  }
 }

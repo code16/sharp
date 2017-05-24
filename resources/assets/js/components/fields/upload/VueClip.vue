@@ -35,8 +35,9 @@
             </div>
         </form>
         <template v-if="!!originalImageSrc">
-            <b-modal v-model="showEditModal" @ok="imageEditOk" @shown="editModalShown">
-                <vue-cropper ref="cropper" :view-mode="2" drag-mode="crop"  :aspect-ratio="ratioX/ratioY"
+            <b-modal v-model="showEditModal" @ok="imageEditOk" @shown="editModalShown" :close-on-backdrop="false">
+                <vue-cropper ref="cropper" class="SharpUpload__modal-vue-cropper"
+                             :view-mode="2" drag-mode="crop"  :aspect-ratio="ratioX/ratioY"
                              :auto-crop-area="1" :zoomable="false" :guides="false"
                              :background="true" :rotatable="true" :src="originalImageSrc" alt="Source image">
                 </vue-cropper>
@@ -48,11 +49,13 @@
 </template>
 
 <script>
-    import VueClip from './vue-clip/components/Clip';
-    import File from './vue-clip/File';
+    import VueClip from '../../vendor/vue-clip/components/Clip';
+    import File from '../../vendor/vue-clip/File';
 
-    import bModal from 'bootstrap-vue/lib/components/modal';
+    import bModal from '../../vendor/bootstrap-vue/components/modal';
     import VueCropper from 'vue-cropperjs';
+
+    import rotateResize from './rotate';
 
     export default {
         name: 'SharpVueClip',
@@ -74,7 +77,7 @@
                 showProgressBar: false,
                 showEditModal: false,
                 croppedImg: null,
-                resized: false
+                resized: false,
             }
         },
         watch: {
@@ -93,9 +96,13 @@
                 return this.croppedImg || this.originalImageSrc;
             },
             size() {
-                //console.log(this.file.size);
-                let size = parseFloat((this.file.size).toFixed(2)) / 1024;
-                return `${size.toLocaleString()} MB`;
+                let prepend;
+                let size = (parseFloat((this.file.size).toFixed(2))/1024)/1024;
+                if(size < 0.1) {
+                    prepend='<';
+                    size = 0.1;
+                }
+                return `${prepend}${size.toLocaleString()} MB`;
             },
             progress() {
                 return Math.floor(this.file.progress);
@@ -144,7 +151,14 @@
                 this.removeFile(this.file);
                 this.files.splice(0, 1);
 
+                this.resetEdit();
+
                 this.$parent.$emit('input', null);
+            },
+
+            resetEdit() {
+                this.croppedImg = null;
+                this.resized = false;
             },
 
             imageEditOk() {
@@ -164,7 +178,7 @@
             },
 
             rotate(degree) {
-                this.$refs.cropper.rotate(degree);
+                rotateResize(this.$refs.cropper.cropper, degree);
             },
 
             editModalShown() {
@@ -193,7 +207,7 @@
             this.file.thumbnail = this.value.thumbnail;
         },
         mounted() {
-            console.log(this);
+            console.log(this.$refs.cropper);
         }
     }
 </script>

@@ -100,7 +100,7 @@ export const data = {
     "name":"B",
     "admin_password":"",
     "mdeditor":"",
-    "myimage": null,
+    //"myimage": null,
     "myimage": {
         name:"doggo.jpg",
         size:14550,
@@ -161,15 +161,21 @@ export const fields = {
         searchKeys: ['name', 'surname'],
         itemIdAttribute:'id',
         conditionalDisplay: {
-            key: 'show_autocomplete',
+            operator:'or',
+            fields: [{
+                key:'show_autocomplete',
+                values: true
+            }]
         },
     },
     'admin_password': {
         type:'password',
         conditionalDisplay: {
-            not:1,
-            key:'name',
-            values:['C','D']
+            operator: 'or',
+            fields: [{
+                key:'name',
+                values:['C','D']
+            }]
         }
     },
     'myimage': {
@@ -179,9 +185,12 @@ export const fields = {
         ratioX: 16,
         ratioY: 9,
         conditionalDisplay: {
-            key: 'show_upload',
+            operator:'or',
+            fields: [{
+                key:'show_upload',
+                values: true
+            }]
         },
-
     },
     'mylist': {
         type:'list',
@@ -208,7 +217,7 @@ export const fields = {
     'date':{
         type:'date',
         hasTime:true,
-        minDate:'2017-03-15'
+        stepTime:20
     },
     'mdeditor': {
         type: 'markdown',

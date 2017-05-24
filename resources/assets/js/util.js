@@ -16,5 +16,5 @@ export default {
     },
     error() {
         this.callConsole('error', ...arguments);
-    }
+    },
 }

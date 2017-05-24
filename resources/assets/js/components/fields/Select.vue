@@ -8,11 +8,11 @@
                      :hide-selected="multiple"
                      :close-on-select="!multiple"
                      :custom-label="multiselectLabel"
-                     :taggable="true"
+                     :taggable="taggable"
                      :placeholder="placeholder"
                      @input="handleInput" ref="multiselect">
             <template v-if="!multiple && value!=null">
-                <div slot="carret" @mousedown.stop.prevent="remove()" class="SharpSelect__select"></div>
+                <div slot="carret" @mousedown.stop.prevent="remove()" class="SharpSelect__remove-btn close"></div>
             </template>
         </multiselect>
         <div v-else>
@@ -62,7 +62,10 @@
                 type:Boolean,
                 default: false
             },
-
+            taggable: {
+                type: Boolean,
+                default: false
+            },
             placeholder: {
                 type:String,
                 default: '-'

@@ -1,5 +1,5 @@
 {
-  "/public/js/sharp.js": "/public/js/sharp.js",
-  "/public/css/sharp.css": "/public/css/sharp.css",
-  "public/css/vendor.css": "public/css/vendor.css"
+  "/resources/assets/dist/sharp.js": "/resources/assets/dist/sharp.js",
+  "/resources/assets/dist/sharp-only.css": "/resources/assets/dist/sharp-only.css",
+  "resources/assets/dist/sharp.css": "resources/assets/dist/sharp.css"
 }

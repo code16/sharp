@@ -15,6 +15,7 @@
                                 :value="timeObject" 
                                 :active="showPicker"
                                 :format="displayFormat"
+                                :minute-interval="stepTime"
                                 @change="handleTimeSelect">
             </sharp-time-picker>
         </div>
@@ -26,7 +27,6 @@
     import SharpTimePicker from './Timepicker';
 
     import moment from 'moment';
-
 
     export default {
         name:'SharpDate',
@@ -50,7 +50,11 @@
             },
             displayFormat: {
                 type: String,
-                default:'DD/MM/YYYY HH:mm:ss'
+                default:'DD/MM/YYYY HH:mm'
+            },
+            stepTime: {
+                type:Number,
+                default:30
             }
         },
         data() {

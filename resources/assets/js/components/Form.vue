@@ -20,6 +20,7 @@
 <script>
     import util from '../util';
     import TemplateDefinition from '../template-definition';
+    import { API_PATH } from '../consts';
 
     import Template from '../app/models/Template';
     import TemplateController from '../app/controllers/TemplateController';
@@ -36,7 +37,12 @@
 
         components: {
             [Grid.name]:Grid,
-            [FieldsLayout.name]:FieldsLayout,
+            [FieldsLayout.name]:FieldsLayout
+        },
+
+        props:{
+            entityKey: String,
+            instanceId: String,
         },
 
         data() {
@@ -49,41 +55,54 @@
         computed: {
             displayableFields() {
                 return this.fields.filter((field, i) => {
-                    if(!field)
-                        return util.warn(`Field at index ${i} is null or empty : `,field),false;
-                    if(!field.key)
-                        return util.warn(`Field at index ${i} doesn't have a key : `,field),false;
-                    if(!field.type)
-                        return util.warn(`Field at index ${i} doesn't have a type : `,field),false;
                     if(!(field.type in fieldCompNames))
-                        return util.warn(`Field '${field.key}' have a unknown type (${field.type})`),false;
-                    
+                        return util.error(`Field '${field.key}' have a unknown type (${field.type})`), false;
                     return true;
                 })
+            },
+            apiPath() {
+                let path = `${API_PATH}/form/${this.entityKey}`;
+                if(this.instanceId) path+=`/${this.instanceId}`;
+                return path;
             }
         },
         methods: {
             updateData(key,value) {
                 this.data[key] = value;
-            }
-        },
-        mounted() {
-            /** compile templates */
-            for(let fieldKey of Object.keys(this.fields)) {
-                let field=this.fields[fieldKey];
-                for (let fieldPropName of Object.keys(field)) {
+            },
+            getForm() {
+                return axios.get(this.apiPath)
+                    .then(response => {
+                        Object.assign(this, response);
+                    });
+            },
+            postForm() {
+                return axios.post(this.apiPath)
+                    .then(response => {
 
-                    if (Template.isTemplateProp(fieldPropName)) {
-                        TemplateController.compileAndRegisterComponent(fieldKey, {
-                            templateName: fieldPropName,
-                            templateValue: field[fieldPropName],
-                            templateProps: field.templateProps
-                        });
+                    });
+            },
+            parseTemplates() {
+                for(let fieldKey of Object.keys(this.fields)) {
+                    let field=this.fields[fieldKey];
+                    for (let fieldPropName of Object.keys(field)) {
+
+                        if (Template.isTemplateProp(fieldPropName)) {
+                            TemplateController.compileAndRegisterComponent(fieldKey, {
+                                templateName: fieldPropName,
+                                templateValue: field[fieldPropName],
+                                templateProps: field.templateProps
+                            });
+                        }
                     }
                 }
             }
-
-            window.form = this;
+        },
+        mounted() {
+            if(this.entityKey) {
+                this.getForm().then(_=>this.parseTemplates());
+            }
+            else this.parseTemplates();
         }
     }
 </script>

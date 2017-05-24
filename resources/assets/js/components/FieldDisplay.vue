@@ -2,41 +2,78 @@
     import util from '../util';
     import FieldContainer from './FieldContainer';
 
+    const computeSelectCondition = (condValues, fieldValue, isSingleSelect) => {
+        if (Array.isArray(condValues)) {
+            return isSingleSelect
+                ? condValues.some(val => val == fieldValue)
+                : condValues.some(val => fieldValue.includes(val));
+        }
+        // 'values' is a string
+        if (condValues[0] === '!') {
+            if (fieldValue && fieldValue.length) {
+                return isSingleSelect
+                    ? values == value
+                    : !value.includes(condField.values.substring(1));
+            }
+            return false;
+        }
+        // 'values' is not negative
+        if (value && value.length) {
+            return value.includes(condField.values)
+        }
+        return true;
+    };
+
+    const computeCondition = (fields, data, condition) => {
+        let res = true;
+
+        let { operator } = condition;
+
+        if(!(operator==='or' || operator==='and')) {
+            util.error(`Conditional display : unknown operator '${operator}'`, condition);
+            return true;
+        }
+
+        for(let condField of condition.fields) {
+            if(!(condField.key in fields)) {
+                util.error(`Conditional display : can't find a field with key '${condition.key}' in 'fields'`, condition);
+                res = true;
+            }
+
+            let field = fields[condField.key];
+            let value = data[condField.key];
+
+            if(field.type === 'autocomplete' || field.type === 'select' || field.type === 'taginput') {
+                let isSingleSelect = field.type === 'select' && !field.multiple;
+                res = computeSelectCondition(condField.values, value, );
+            }
+            else if(field.type === 'check') {
+                if(typeof value !== "boolean") {
+                    util.error(`Conditional display : 'values' must be a boolean for a 'check' field ('${condField.key}')`,condition,field);
+                    res = true;
+                }
+                else res = value === condField.values;
+            }
+            else {
+                util.error(`Conditional display : unprocessable field type '${field.type}'`, field);
+                res = true;
+            }
+
+            if(operator==='and' && !res)
+                return false;
+            if(operator==='or' && res)
+                return true;
+        }
+
+        return res;
+    };
+
     const acceptCondition = (fields, data, condition) => {
         if(!condition)
             return true;
-        if(!(condition.key in fields)) {
-            util.error(`Conditional display : can't find a field with key '${condition.key}' in 'fields'`, condition);
-            return true;
-        }
-        let { not, key, values, operator } = condition;
-        let field = fields[key];
-        let res = true;
-        let value = data[key];
 
-        if(field.type === 'autocomplete' || field.type === 'select') {
-            if(!operator || operator==='or') {
-                res = values.includes(value);
-            }
-            else if(operator==='and') {
-                if(field.type !== 'select' || field.type === 'select' && !field.multiple) {
-                    util.error(`Conditional display : Unable to process operator 'and' for field \`${key}\` (only available with multiple select)`, condition, field);
-                    return;
-                }
-                let arrayValue = value;
-                res = values.every(v=>arrayValue.includes(v));
-            }
-            else {
-                util.error(`Conditional display : unknown operator '${operator}'`, condition);
-                return true;
-            }
-        }
-        else if(field.type === 'check')
-            res = value;
-        else
-            return true;
 
-        return not ? !res : res;
+        return computeCondition(fields,data,condition);
     };
 
     export default {

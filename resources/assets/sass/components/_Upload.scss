@@ -5,15 +5,17 @@
   &__container {
     display:flex;
     height:150px;
+
     .SharpUpload__thumbnail {
       flex-basis:33%;
       align-self: center;
       margin-right: 1em;
       img {
         display:block;
-        margin: auto;
+        margin:auto;
         height:auto;
-        width:100%;
+        width:auto;
+        max-width:100%;
         max-height:150px;
       }
     }
@@ -27,6 +29,14 @@
       flex-flow: column;
       justify-content: space-between;
     }
+  }
+
+  &__modal-vue-cropper {
+    @include media-breakpoint-up(xs) { max-height: 250px; }
+    @include media-breakpoint-up(sm) { max-height: 300px; }
+    @include media-breakpoint-up(md) { max-height: 400px; }
+    @include media-breakpoint-up(md) { max-height: 500px; }
+
   }
 
   .close {
