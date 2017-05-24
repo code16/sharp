@@ -47,8 +47,7 @@ class ApiControllerTest extends BaseApiTest
         $this->json('get', '/sharp/api/form/person/1')
             ->assertStatus(200)
             ->assertJson(["fields" => [
-                [
-                    "key" => "name",
+                "name" => [
                     "type" => "text"
                 ]
             ]]);
