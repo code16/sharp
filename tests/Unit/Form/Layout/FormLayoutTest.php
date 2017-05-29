@@ -18,7 +18,7 @@ class FormLayoutTest extends SharpTestCase
             }
         };
 
-        $this->assertCount(1, $form->formLayout());
+        $this->assertCount(1, $form->formLayout()["tabs"]);
     }
 
     /** @test */
@@ -31,7 +31,7 @@ class FormLayoutTest extends SharpTestCase
             }
         };
 
-        $this->assertCount(1, $form->formLayout());
+        $this->assertCount(1, $form->formLayout()["tabs"][0]["columns"]);
     }
 
     /** @test */
@@ -46,7 +46,7 @@ class FormLayoutTest extends SharpTestCase
 
         $this->assertArraySubset(
             ["title" => "label", "columns" => []],
-            $form->formLayout()[0]
+            $form->formLayout()["tabs"][0]
         );
 
         $form2 = new class extends FormLayoutTestForm {
@@ -60,8 +60,21 @@ class FormLayoutTest extends SharpTestCase
             "columns" => [
                 ["size" => 2]
             ]],
-            $form2->formLayout()[0]
+            $form2->formLayout()["tabs"][0]
         );
+    }
+
+    /** @test */
+    function we_can_set_tabbed_to_false()
+    {
+        $form = new class extends FormLayoutTestForm {
+            function buildFormLayout()
+            {
+                $this->addTab("label")->setTabbed(false);
+            }
+        };
+
+        $this->assertFalse($form->formLayout()["tabbed"]);
     }
 }
 

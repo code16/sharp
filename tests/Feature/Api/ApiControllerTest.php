@@ -61,7 +61,9 @@ class ApiControllerTest extends BaseApiTest
         $this->json('get', '/sharp/api/form/person/1')
             ->assertStatus(200)
             ->assertJson(["layout" => [
-                [
+                "tabbed" => true,
+                "tabs" => [[
+                    "title" => "one",
                     "columns" => [
                         [
                             "size" => 6,
@@ -72,7 +74,7 @@ class ApiControllerTest extends BaseApiTest
                             ]
                         ]
                     ]
-                ]
+                ]]
             ]]);
     }
 

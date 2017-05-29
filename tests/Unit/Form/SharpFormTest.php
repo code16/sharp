@@ -44,28 +44,31 @@ class SharpFormTest extends SharpTestCase
             }
         };
 
-        $this->assertEquals([[
-            "title" => "one",
-            "columns" => [[
-                "size" => 6,
-                "fields" => [[
-                    [
-                        "key" => "name",
-                        "size" => 12,
-                        "sizeXS" => 12
-                    ]
-                ]]
-            ], [
-                "size" => 6,
-                "fields" => [[
-                    [
-                        "key" => "age",
-                        "size" => 12,
-                        "sizeXS" => 12
-                    ]
+        $this->assertEquals([
+            "tabbed" => true,
+            "tabs" => [[
+                "title" => "one",
+                "columns" => [[
+                    "size" => 6,
+                    "fields" => [[
+                        [
+                            "key" => "name",
+                            "size" => 12,
+                            "sizeXS" => 12
+                        ]
+                    ]]
+                ], [
+                    "size" => 6,
+                    "fields" => [[
+                        [
+                            "key" => "age",
+                            "size" => 12,
+                            "sizeXS" => 12
+                        ]
+                    ]]
                 ]]
             ]]
-        ]], $form->formLayout());
+        ], $form->formLayout());
     }
 
     /** @test */

@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Form;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
-use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 
 abstract class SharpForm
@@ -17,6 +16,11 @@ abstract class SharpForm
      * @var array
      */
     protected $tabs = [];
+
+    /**
+     * @var bool
+     */
+    protected $tabbed = true;
 
     /**
      * @var bool
@@ -57,9 +61,12 @@ abstract class SharpForm
             $this->layoutBuilt = true;
         }
 
-        return collect($this->tabs)->map(function($tab) {
-            return $tab->toArray();
-        })->all();
+        return [
+            "tabbed" => $this->tabbed,
+            "tabs" => collect($this->tabs)->map(function($tab) {
+                return $tab->toArray();
+            })->all()
+        ];
     }
 
     /**
@@ -160,6 +167,17 @@ abstract class SharpForm
         if($callback) {
             $callback($column);
         }
+
+        return $this;
+    }
+
+    /**
+     * @param bool $tabbed
+     * @return $this
+     */
+    protected function setTabbed(bool $tabbed = true)
+    {
+        $this->tabbed = $tabbed;
 
         return $this;
     }
