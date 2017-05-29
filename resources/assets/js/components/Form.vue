@@ -1,20 +1,30 @@
 <template>
     <div class="Form container">
         <template v-if="ready">
-            <sharp-grid v-if="layout.length == 1" :rows="[layout[0].columns]">
-                <template scope="column">
-                    <sharp-fields-layout v-if="fields" :layout="column.fields">
-                        <template scope="fieldLayout">
-                            <sharp-field-display :field-key="fieldLayout.key"
-                                                 :context-fields="fields"
-                                                 :context-data="data"
-                                                 :field-layout="fieldLayout"
-                                                 :update-data="updateData">
-                            </sharp-field-display>
-                        </template>
-                    </sharp-fields-layout>
-                </template>
-            </sharp-grid>
+            <template v-if="layout.tabbed && layout.tabs.length>1">
+                <b-tabs pills v-model="tabIndex">
+                    <b-tab v-for="(tab,i) in layout.tabs" :title="tab.title" :key="i">
+                        <sharp-form-tab-content
+                                :columns="tab.columns"
+                                :fields="fields"
+                                :data="data"
+                                :update-data="updateData"
+                        >
+                        </sharp-form-tab-content>
+                    </b-tab>
+                </b-tabs>
+            </template>
+            <template v-else>
+                <div v-for="tab in layout.tabs">
+                    <sharp-form-tab-content
+                            :columns="tab.columns"
+                            :fields="fields"
+                            :data="data"
+                            :update-data="updateData"
+                    >
+                    </sharp-form-tab-content>
+                </div>
+            </template>
         </template>
         <template v-else>
             Form loading...
@@ -26,23 +36,28 @@
     import util from '../util';
     import TemplateDefinition from '../template-definition';
     import { API_PATH } from '../consts';
+    import testableForm from '../mixins/testable-form';
 
     import Template from '../app/models/Template';
     import TemplateController from '../app/controllers/TemplateController';
 
-    import Grid from './Grid';
-    import FieldsLayout from './FieldsLayout';
-
-    import * as testForm from '../_test-form';
     import { NameAssociation as fieldCompNames } from './fields/index';
+
+    import FormTabContent from './FormTabContent';
+    import bTabs from './vendor/bootstrap-vue/components/tabs'
+    import bTab from './vendor/bootstrap-vue/components/tab'
 
 
     export default {
         name:'SharpForm',
 
+        mixins: [
+            testableForm
+        ],
+
         components: {
-            [Grid.name]:Grid,
-            [FieldsLayout.name]:FieldsLayout
+            [FormTabContent.name]: FormTabContent,
+            bTab, bTabs
         },
 
         props:{
@@ -52,9 +67,10 @@
 
         data() {
             return {
-                fields: null,//testForm.fields,
-                data: null,//testForm.data,
-                layout: null,//testForm.layout
+                fields: null,
+                data: null,
+                layout: null,
+                tabIndex:0,
                 ready:false
             }
         },
@@ -77,14 +93,17 @@
                 this.data[key] = value;
             },
             getForm() {
-                return axios.get(this.apiPath)
+                return new Promise((resolve,reject) =>
+                    axios.get(this.apiPath)
                     .then(({data: {fields, layout, data}}) => {
                         this.fields = fields;
                         this.layout = layout;
                         this.data = data;
 
                         this.ready=true;
-                    });
+                        resolve();
+                    })
+                );
             },
             postForm() {
                 return axios.post(this.apiPath)
@@ -101,19 +120,18 @@
                             TemplateController.compileAndRegisterComponent(fieldKey, {
                                 templateName: fieldPropName,
                                 templateValue: field[fieldPropName],
-                                templateProps: field.templateProps
                             });
                         }
                     }
                 }
             }
         },
-        mounted() {
-            if(this.entityKey) {
+        created() {
+            if(this.entityKey != null) {
                 this.getForm().then(_=>this.parseTemplates());
             }
-            else this.parseTemplates();
-            window.form =this;
+            else util.error('no entity key provided');
+            window.form = this;
         }
     }
 </script>

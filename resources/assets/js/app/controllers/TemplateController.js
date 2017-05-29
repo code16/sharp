@@ -11,7 +11,7 @@ class TemplateController {
      * @param templateValue
      * @param templateProps
      */
-    static compileAndRegisterComponent(fieldKey, { templateName, templateValue, templateProps })  {
+    static compileAndRegisterComponent(fieldKey, { templateName, templateValue })  {
 
         let template = new Template(fieldKey, Template.parseTemplateName(templateName));
         let compName = template.compName;
@@ -20,10 +20,16 @@ class TemplateController {
 
             let definition = TemplateDefinition[templateName];
 
+
             Vue.component(compName, {
-                mixins:[definition||{}],
-                template: `<div>${templateValue}</div>`,
-                props: templateProps
+                functional:true,
+                render(h, ctx) {
+                    return h({
+                        mixins: [definition||{}],
+                        template:`<div>${templateValue}</div>`,
+                        props: Object.keys(ctx.props)
+                    }, ctx.data);
+                }
             });
         }
 

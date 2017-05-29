@@ -1,94 +1,102 @@
-export const layout = [
-    {
-        "title": "Tab1",
-        "columns": [
-            {
-                "size": 7,
-                "fields": [
-                    [
-                        {
-                            "key": "A",
-                            "size": 4,
-                            "sizeXS": 6
-                        },
-                        {
-                            "key": "B",
-                            "sizeXS": 6
-                        }
-                    ],
-                    [
-                        {
-                            "legend": "dates",
-                            "fields": [
-                                [
-                                    {
-                                        "key": "date"
-                                    }
-                                ],
-                                [
-                                    {
-                                        "key": "number"
-                                    }
+export const layout = {
+    "tabbed":true,
+    "tabs":
+    [
+        {
+            "title": "Tab1",
+            "columns": [
+                {
+                    "size": 7,
+                    "fields": [
+                        [
+                            {
+                                "key": "A",
+                                "size": 4,
+                                "sizeXS": 6
+                            },
+                            {
+                                "key": "B",
+                                "sizeXS": 6
+                            }
+                        ],
+                        [
+                            {
+                                "legend": "dates",
+                                "fields": [
+                                    [
+                                        {
+                                            "key": "date"
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "key": "number"
+                                        }
+                                    ]
                                 ]
-                            ]
-                        }
-                    ],
-                    [
-                        {
-                            "key":"mdeditor",
-                        }
+                            }
+                        ],
+                        [
+                            {
+                                "key":"mdeditor",
+                            }
+                        ]
                     ]
-                ]
-            },
-            {
-                "size": 5,
-                "fields": [
-                    [
-                        {
-                            "key": "mylist",
-                            "item": [
-                                [
-                                    {
-                                        "key": "name"
-                                    }, {
-                                    "key": "surname"
-                                }
-                                ], [
-                                    {
-                                        "key": "age"
+                },
+                {
+                    "size": 5,
+                    "fields": [
+                        [
+                            {
+                                "key": "mylist",
+                                "item": [
+                                    [
+                                        {
+                                            "key": "name"
+                                        }, {
+                                        "key": "surname"
                                     }
+                                    ], [
+                                        {
+                                            "key": "age"
+                                        }
+                                    ]
                                 ]
-                            ]
-                        }
-                    ], [
-                        {
-                            "key": "show_autocomplete"
-                        }, {
-                            "key": "show_upload"
-                        }
-                    ], [
-                        {
-                            "key" : "name"
-                        }
-                    ], [
-                        {
-                            "key": "admin_password"
-                        }
-                    ],[
-                        {
-                            "key" : "myimage"
-                        }
-                    ],
-                    [
-                        {
-                            "key" : "select"
-                        }
+                            }
+                        ], [
+                            {
+                                "key": "show_autocomplete"
+                            }, {
+                                "key": "show_upload"
+                            }
+                        ], [
+                            {
+                                "key" : "name"
+                            }
+                        ], [
+                            {
+                                "key": "admin_password"
+                            }
+                        ],[
+                            {
+                                "key" : "myimage"
+                            }
+                        ],
+                        [
+                            {
+                                "key" : "select"
+                            }
+                        ]
                     ]
-                ]
-            }
-        ]
-    }
-];
+                }
+            ]
+        },
+        {
+            title:'tab2',
+            columns:[]
+        }
+    ]
+};
 
 export const data = {
     "A":"Valeur texte",
@@ -157,7 +165,6 @@ export const fields = {
                             Résultat : {{ name }} {{ surname }}
                         `,
         inline:true,
-        templateProps: ['name', 'surname'],
         searchKeys: ['name', 'surname'],
         itemIdAttribute:'id',
         conditionalDisplay: {
