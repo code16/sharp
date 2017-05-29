@@ -15,6 +15,7 @@
                 render(h, { props }) {
                     const { template, templateProps, templateData } = props;
                     return h({
+                            name: 'AAA',
                             template:`<div>${template}</div>`,
                             props: templateProps
                         }, {
@@ -33,7 +34,7 @@
         computed: {
             templateProps() {
                 return Object.keys(this.templateData);
-            }
+            },
         }
     }
 </script>

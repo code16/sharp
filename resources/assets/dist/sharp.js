@@ -19501,80 +19501,7 @@ module.exports = Vue$3;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
 
 /***/ }),
-/* 13 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util__ = __webpack_require__(8);
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-
-
-var Template = function () {
-    function Template(fieldKey, templateName) {
-        _classCallCheck(this, Template);
-
-        this.fieldKey = fieldKey;
-        this.name = templateName;
-    }
-
-    _createClass(Template, [{
-        key: 'name',
-        get: function get() {
-            return this._name;
-        },
-        set: function set(name) {
-            this._name = __WEBPACK_IMPORTED_MODULE_0__util__["a" /* default */].capitalize(name);
-        }
-    }, {
-        key: 'fieldKey',
-        get: function get() {
-            return this._fieldKey;
-        },
-        set: function set(fieldKey) {
-            this._fieldKey = __WEBPACK_IMPORTED_MODULE_0__util__["a" /* default */].capitalize(fieldKey);
-        }
-    }, {
-        key: 'compName',
-        get: function get() {
-            return 'SharpTemplate' + this.name + this.fieldKey;
-        }
-    }, {
-        key: 'exists',
-        get: function get() {
-            return !!Vue.options.components[this.compName];
-        }
-    }, {
-        key: 'compNameOrDefault',
-        get: function get() {
-            return this.exists ? this.compName : null;
-        }
-
-        // static utils
-
-    }], [{
-        key: 'isTemplateProp',
-        value: function isTemplateProp(fieldPropName) {
-            return (/^.+Template$/.test(fieldPropName)
-            );
-        }
-    }, {
-        key: 'parseTemplateName',
-        value: function parseTemplateName(fieldPropName) {
-            var result = /^(.+)Template$/.exec(fieldPropName);
-            if (result.length > 1) return result[1];
-            return null;
-        }
-    }]);
-
-    return Template;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (Template);
-
-/***/ }),
+/* 13 */,
 /* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -20365,7 +20292,7 @@ var File = function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony default export */ __webpack_exports__["a"] = ({
+/* unused harmony default export */ var _unused_webpack_default_export = ({
     listItemTemplate: {},
     collapsedItemTemplate: {
         props: {
@@ -23917,15 +23844,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__template_definition__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__consts__ = __webpack_require__(116);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mixins_testable_form__ = __webpack_require__(226);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_models_Template__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_controllers_TemplateController__ = __webpack_require__(110);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__fields_index__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__FormTabContent__ = __webpack_require__(230);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__FormTabContent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__FormTabContent__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__vendor_bootstrap_vue_components_tabs__ = __webpack_require__(231);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__vendor_bootstrap_vue_components_tabs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__vendor_bootstrap_vue_components_tabs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__vendor_bootstrap_vue_components_tab__ = __webpack_require__(235);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__vendor_bootstrap_vue_components_tab___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__vendor_bootstrap_vue_components_tab__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__fields_index__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__FormTabContent__ = __webpack_require__(230);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__FormTabContent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__FormTabContent__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__vendor_bootstrap_vue_components_tabs__ = __webpack_require__(231);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__vendor_bootstrap_vue_components_tabs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__vendor_bootstrap_vue_components_tabs__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__vendor_bootstrap_vue_components_tab__ = __webpack_require__(235);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__vendor_bootstrap_vue_components_tab___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__vendor_bootstrap_vue_components_tab__);
 var _components;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -23976,15 +23901,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-
-
-
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpForm',
 
     mixins: [__WEBPACK_IMPORTED_MODULE_3__mixins_testable_form__["a" /* default */]],
 
-    components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_7__FormTabContent___default.a.name, __WEBPACK_IMPORTED_MODULE_7__FormTabContent___default.a), _defineProperty(_components, 'bTab', __WEBPACK_IMPORTED_MODULE_9__vendor_bootstrap_vue_components_tab___default.a), _defineProperty(_components, 'bTabs', __WEBPACK_IMPORTED_MODULE_8__vendor_bootstrap_vue_components_tabs___default.a), _components),
+    components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_5__FormTabContent___default.a.name, __WEBPACK_IMPORTED_MODULE_5__FormTabContent___default.a), _defineProperty(_components, 'bTab', __WEBPACK_IMPORTED_MODULE_7__vendor_bootstrap_vue_components_tab___default.a), _defineProperty(_components, 'bTabs', __WEBPACK_IMPORTED_MODULE_6__vendor_bootstrap_vue_components_tabs___default.a), _components),
 
     props: {
         entityKey: String,
@@ -24004,7 +23926,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     computed: {
         displayableFields: function displayableFields() {
             return this.fields.filter(function (field, i) {
-                if (!(field.type in __WEBPACK_IMPORTED_MODULE_6__fields_index__["a" /* NameAssociation */])) return __WEBPACK_IMPORTED_MODULE_0__util__["a" /* default */].error('Field \'' + field.key + '\' have a unknown type (' + field.type + ')'), false;
+                if (!(field.type in __WEBPACK_IMPORTED_MODULE_4__fields_index__["a" /* NameAssociation */])) return __WEBPACK_IMPORTED_MODULE_0__util__["a" /* default */].error('Field \'' + field.key + '\' have a unknown type (' + field.type + ')'), false;
                 return true;
             });
         },
@@ -24021,89 +23943,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         getForm: function getForm() {
             var _this = this;
 
-            return new Promise(function (resolve, reject) {
-                return axios.get(_this.apiPath).then(function (_ref) {
-                    var _ref$data = _ref.data,
-                        fields = _ref$data.fields,
-                        layout = _ref$data.layout,
-                        data = _ref$data.data;
+            return axios.get(this.apiPath).then(function (_ref) {
+                var _ref$data = _ref.data,
+                    fields = _ref$data.fields,
+                    layout = _ref$data.layout,
+                    data = _ref$data.data;
 
-                    _this.fields = fields;
-                    _this.layout = layout;
-                    _this.data = data;
+                _this.fields = fields;
+                _this.layout = layout;
+                _this.data = data;
 
-                    _this.ready = true;
-                    resolve();
-                });
+                _this.ready = true;
             });
         },
         postForm: function postForm() {
             return axios.post(this.apiPath).then(function (response) {});
-        },
-        parseTemplates: function parseTemplates() {
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
-
-            try {
-                for (var _iterator = Object.keys(this.fields)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                    var fieldKey = _step.value;
-
-                    var field = this.fields[fieldKey];
-                    var _iteratorNormalCompletion2 = true;
-                    var _didIteratorError2 = false;
-                    var _iteratorError2 = undefined;
-
-                    try {
-                        for (var _iterator2 = Object.keys(field)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                            var fieldPropName = _step2.value;
-
-
-                            if (__WEBPACK_IMPORTED_MODULE_4__app_models_Template__["a" /* default */].isTemplateProp(fieldPropName)) {
-                                __WEBPACK_IMPORTED_MODULE_5__app_controllers_TemplateController__["a" /* default */].compileAndRegisterComponent(fieldKey, {
-                                    templateName: fieldPropName,
-                                    templateValue: field[fieldPropName]
-                                });
-                            }
-                        }
-                    } catch (err) {
-                        _didIteratorError2 = true;
-                        _iteratorError2 = err;
-                    } finally {
-                        try {
-                            if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                                _iterator2.return();
-                            }
-                        } finally {
-                            if (_didIteratorError2) {
-                                throw _iteratorError2;
-                            }
-                        }
-                    }
-                }
-            } catch (err) {
-                _didIteratorError = true;
-                _iteratorError = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion && _iterator.return) {
-                        _iterator.return();
-                    }
-                } finally {
-                    if (_didIteratorError) {
-                        throw _iteratorError;
-                    }
-                }
-            }
         }
     },
     created: function created() {
-        var _this2 = this;
-
         if (this.entityKey != null) {
-            this.getForm().then(function (_) {
-                return _this2.parseTemplates();
-            });
+            this.getForm();
         } else __WEBPACK_IMPORTED_MODULE_0__util__["a" /* default */].error('no entity key provided');
         window.form = this;
     }
@@ -24169,14 +24028,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__app_models_Template__ = __webpack_require__(13);
 //
 //
 //
 //
 //
-
-
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpTemplate',
@@ -24184,39 +24042,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     components: {
         RenderedTemplate: {
             functional: true,
-            render: function render(createElement, _ref) {
+            render: function render(h, _ref) {
                 var props = _ref.props;
+                var template = props.template,
+                    templateProps = props.templateProps,
+                    templateData = props.templateData;
 
-                //console.log(arguments);
-                return createElement(props.compName, {
-                    props: props.templateData
+                return h({
+                    name: 'AAA',
+                    template: '<div>' + template + '</div>',
+                    props: templateProps
+                }, {
+                    props: templateData
                 });
             }
         }
     },
 
     props: {
-        fieldKey: String,
         name: String,
-        templateData: Object
-    },
-    data: function data() {
-        return {
-            template: null,
-            exists: false
-        };
+        templateData: Object,
+        template: String
     },
 
-    watch: {
-        'template.exists': function templateExists(val) {
-            this.exists = val;
+    computed: {
+        templateProps: function templateProps() {
+            return Object.keys(this.templateData);
         }
-    },
-    created: function created() {
-        this.template = new __WEBPACK_IMPORTED_MODULE_0__app_models_Template__["a" /* default */](this.fieldKey, this.name);
-    },
-    mounted: function mounted() {
-        //console.log(this);
     }
 });
 
@@ -24230,8 +24082,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Template_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Template_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_multiselect__ = __webpack_require__(60);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_multiselect___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_multiselect__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_models_Template__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_models_SearchStrategy__ = __webpack_require__(111);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_models_SearchStrategy__ = __webpack_require__(111);
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //
@@ -24266,9 +24117,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-
 
 
 
@@ -24315,14 +24163,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             }
         },
         disabled: Boolean,
-        listItemTemplate: String
+        listItemTemplate: String,
+        resultItemTemplate: String
     },
     data: function data() {
         return {
             query: '',
             suggestions: this.localValues,
             isLoading: false,
-            searchStrategy: new __WEBPACK_IMPORTED_MODULE_3__app_models_SearchStrategy__["a" /* default */]({
+            searchStrategy: new __WEBPACK_IMPORTED_MODULE_2__app_models_SearchStrategy__["a" /* default */]({
                 list: this.localValues,
                 minQueryLength: this.searchMinChars,
                 searchKeys: this.searchKeys
@@ -24443,9 +24292,6 @@ var _components;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-//
-//
-//
 //
 //
 //
@@ -25439,7 +25285,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     computed: {
         options: function options() {
             return {
-                url: 'http://jsonplaceholder.typicode.com/posts',
+                url: UPLOAD_URL,
                 uploadMultiple: false,
                 acceptedFiles: {
                     extensions: ['image/*'],
@@ -25493,10 +25339,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__VueClip__ = __webpack_require__(59);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__VueClip___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__VueClip__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__messages__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__consts__ = __webpack_require__(116);
 //
 //
 //
 //
+
+
 
 
 
@@ -25523,7 +25372,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         options: function options() {
             var opt = {};
 
-            opt.url = 'http://jsonplaceholder.typicode.com/posts';
+            opt.url = __WEBPACK_IMPORTED_MODULE_3__consts__["b" /* UPLOAD_URL */];
             opt.uploadMultiple = false;
             if (this.fileFilter) {
                 opt.acceptedFiles = {
@@ -26409,71 +26258,7 @@ var fields = {
 };
 
 /***/ }),
-/* 110 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_Template__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__template_definition__ = __webpack_require__(38);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util__ = __webpack_require__(8);
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-
-
-
-
-
-var TemplateController = function () {
-    function TemplateController() {
-        _classCallCheck(this, TemplateController);
-    }
-
-    _createClass(TemplateController, null, [{
-        key: 'compileAndRegisterComponent',
-
-        /**
-         * 
-         * @param {*} fieldKey Value of the property `key` of the field (ex: city)
-         * @param templateName
-         * @param templateValue
-         * @param templateProps
-         */
-        value: function compileAndRegisterComponent(fieldKey, _ref) {
-            var templateName = _ref.templateName,
-                templateValue = _ref.templateValue;
-
-
-            var template = new __WEBPACK_IMPORTED_MODULE_0__models_Template__["a" /* default */](fieldKey, __WEBPACK_IMPORTED_MODULE_0__models_Template__["a" /* default */].parseTemplateName(templateName));
-            var compName = template.compName;
-
-            if (!template.exists) {
-
-                var definition = __WEBPACK_IMPORTED_MODULE_1__template_definition__["a" /* default */][templateName];
-
-                Vue.component(compName, {
-                    functional: true,
-                    render: function render(h, ctx) {
-                        return h({
-                            mixins: [definition || {}],
-                            template: '<div>' + templateValue + '</div>',
-                            props: Object.keys(ctx.props)
-                        }, ctx.data);
-                    }
-                });
-            }
-
-            return compName;
-        }
-    }]);
-
-    return TemplateController;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (TemplateController);
-
-/***/ }),
+/* 110 */,
 /* 111 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -27251,7 +27036,9 @@ component.methods.removeAllFiles = function (cancelQueued) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return API_PATH; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return UPLOAD_URL; });
 var API_PATH = '/sharp/api';
+var UPLOAD_URL = API_PATH + '/form/upload';
 
 /***/ }),
 /* 117 */
@@ -50861,8 +50648,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "SharpAutocomplete__result-item form-control"
   }, [_c('sharp-template', {
     attrs: {
-      "field-key": _vm.fieldKey,
       "name": "resultItem",
+      "template": _vm.resultItemTemplate,
       "template-data": _vm.valueObject
     }
   }), _vm._v(" "), _c('div', {
@@ -50894,9 +50681,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       ["option", function(props) {
         return [_c('sharp-template', {
           attrs: {
-            "field-key": _vm.fieldKey,
-            "template-data": props.option,
-            "name": "listItem"
+            "name": "listItem",
+            "template": _vm.listItemTemplate,
+            "template-data": props.option
           }
         })]
       }]
@@ -51141,12 +50928,13 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return (_vm.exists) ? _c('rendered-template', {
+  return _c('rendered-template', {
     attrs: {
-      "comp-name": _vm.template.compName,
-      "template-data": _vm.templateData
+      "template": _vm.template,
+      "template-data": _vm.templateData,
+      "template-props": _vm.templateProps
     }
-  }) : _vm._e()
+  })
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -51511,9 +51299,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }, [(_vm.collapsed) ? [_c('sharp-template', {
       attrs: {
-        "field-key": _vm.fieldKey,
-        "template-data": _vm.collapsedItemData(listItemData),
-        "name": "collapsedItem"
+        "name": "collapsedItem",
+        "template": _vm.collapsedItemTemplate,
+        "template-data": _vm.collapsedItemData(listItemData)
       }
     })] : [_c('sharp-fields-layout', {
       attrs: {
