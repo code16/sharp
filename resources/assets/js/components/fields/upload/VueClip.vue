@@ -96,7 +96,7 @@
                 return this.croppedImg || this.originalImageSrc;
             },
             size() {
-                let prepend;
+                let prepend = '';
                 let size = (parseFloat((this.file.size).toFixed(2))/1024)/1024;
                 if(size < 0.1) {
                     prepend='<';
@@ -119,12 +119,7 @@
             success() {
                 setTimeout(() => this.showProgressBar = false, 1000);
 
-                //let data = JSON.parse(this.file.xhrResponse.responseText);
-                let xhr = this.file.xhrResponse;
-                let data = {
-                    name: "_imageid_.jpg"
-                };
-
+                let data = JSON.parse(this.file.xhrResponse.responseText);
 
                 this.$emit('success', data);
 
@@ -207,7 +202,8 @@
             this.file.thumbnail = this.value.thumbnail;
         },
         mounted() {
-            console.log(this.$refs.cropper);
+            console.log(this);
+            //console.log(this.$refs.cropper);
         }
     }
 </script>

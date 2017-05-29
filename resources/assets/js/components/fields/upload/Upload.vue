@@ -18,7 +18,6 @@
         props: {
             value: Object,
 
-            url: String,
             fileFilter: Array,
             maxFileSize: Number,
             thumbnail: String,

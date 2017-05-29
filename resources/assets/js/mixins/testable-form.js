@@ -10,7 +10,6 @@ export default {
             this.data = data;
             this.layout = layout;
 
-            this.parseTemplates();
             this.ready = true;
         }
     }
