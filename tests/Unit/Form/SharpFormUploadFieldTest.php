@@ -37,7 +37,23 @@ class SharpFormUploadFieldTest extends SharpTestCase
             ->setFileFilter("jpg");
 
         $this->assertArraySubset(
-            ["fileFilter" => ["jpg"]],
+            ["fileFilter" => [".jpg"]],
+            $formField->toArray()
+        );
+
+        $formField = SharpFormUploadField::make("text")
+            ->setFileFilter("jpg, gif");
+
+        $this->assertArraySubset(
+            ["fileFilter" => [".jpg", ".gif"]],
+            $formField->toArray()
+        );
+
+        $formField = SharpFormUploadField::make("text")
+            ->setFileFilter(["jpg", "gif "]);
+
+        $this->assertArraySubset(
+            ["fileFilter" => [".jpg", ".gif"]],
             $formField->toArray()
         );
     }

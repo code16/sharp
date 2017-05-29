@@ -12,7 +12,7 @@ class SharpFormUploadField extends SharpFormField
     /**
      * @var string
      */
-    protected $fileFilter;
+    protected $fileFilter = null;
 
     /**
      * @var string
@@ -40,12 +40,12 @@ class SharpFormUploadField extends SharpFormField
     }
 
     /**
-     * @param string $fileFilter
+     * @param string|array $fileFilter
      * @return static
      */
-    public function setFileFilter(string $fileFilter)
+    public function setFileFilter($fileFilter)
     {
-        $this->fileFilter = $fileFilter;
+        $this->fileFilter = $this->formatFileFilter($fileFilter);
 
         return $this;
     }
@@ -55,7 +55,7 @@ class SharpFormUploadField extends SharpFormField
      */
     public function setFileFilterImages()
     {
-        $this->fileFilter = "jpg,jpeg,gif,png";
+        $this->setFileFilter([".jpg",".jpeg",".gif",".png"]);
 
         return $this;
     }
@@ -91,9 +91,25 @@ class SharpFormUploadField extends SharpFormField
     {
         return parent::buildArray([
             "maxFileSize" => $this->maxFileSize,
-            "fileFilter" => $this->fileFilter ? explode(",", $this->fileFilter) : null,
+            "fileFilter" => $this->fileFilter,
             "ratioX" => $this->cropRatio ? (int)$this->cropRatio[0] : null,
             "ratioY" => $this->cropRatio ? (int)$this->cropRatio[1] : null,
         ]);
+    }
+
+    private function formatFileFilter($fileFilter)
+    {
+        if(!is_array($fileFilter)) {
+            $fileFilter = explode(",", $fileFilter);
+        }
+
+        return collect($fileFilter)->map(function($filter) {
+            $filter = trim($filter);
+            if(substr($filter, 0, 1) != ".") {
+                $filter = ".$filter";
+            }
+            return $filter;
+
+        })->all();
     }
 }
