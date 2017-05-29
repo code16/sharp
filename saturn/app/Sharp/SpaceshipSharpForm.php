@@ -25,20 +25,26 @@ class SpaceshipSharpForm extends SharpForm
 
         )->addField(
             SharpFormTextField::make("capacity")
-                ->setLabel("Capacity (thousands)")
+                ->setLabel("Capacity (x1000)")
 
         )->addField(
             SharpFormDateField::make("construction_date")
                 ->setLabel("Construction date")
+                ->setDisplayFormat("YYYY/MM/DD")
                 ->setHasTime(false)
 
         )->addField(
             SharpFormAutocompleteField::make("type_id", "local")
                 ->setLabel("Ship type")
-                ->setListItemTemplatePath("/sharp/templates/spaceshipType_list")
-                ->setResultItemTemplatePath("/sharp/templates/spaceshipType_result")
+                ->setListItemTemplatePath("/sharp/templates/spaceshipType_list.vue")
+                ->setResultItemTemplatePath("/sharp/templates/spaceshipType_result.vue")
                 ->setLocalValues(
-                    SpaceshipType::orderBy("label")->get()->pluck("label", "id")->all()
+                    SpaceshipType::orderBy("label")->get()->map(function($item) {
+                        return [
+                            "id" => $item->id,
+                            "label" => $item->label
+                        ];
+                    })->all()
                 )
         );
     }
