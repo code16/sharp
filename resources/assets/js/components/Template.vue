@@ -1,47 +1,39 @@
 <template>
-    <rendered-template v-if="exists" :comp-name="template.compName" :template-data="templateData">
+    <rendered-template :template="template"
+                       :template-data="templateData"
+                       :template-props="templateProps">
     </rendered-template>
 </template>
 
 <script>
-    import Template from '../app/models/Template';
-
     export default {
         name: 'SharpTemplate',
 
         components: {
             RenderedTemplate: {
                 functional: true,
-                render(createElement, { props }) {
-                    //console.log(arguments);
-                    return createElement(props.compName, {
-                        props: props.templateData
+                render(h, { props }) {
+                    const { template, templateProps, templateData } = props;
+                    return h({
+                            template:`<div>${template}</div>`,
+                            props: templateProps
+                        }, {
+                        props: templateData
                     });
                 }
             }
         },
 
         props: {
-            fieldKey: String,
             name: String,
-            templateData: Object
+            templateData: Object,
+            template: String,
         },
-        data() {
-            return {
-                template: null,
-                exists: false
+
+        computed: {
+            templateProps() {
+                return Object.keys(this.templateData);
             }
-        },
-        watch: {
-            'template.exists': function(val) {
-                this.exists = val;
-            }
-        },
-        created() {
-            this.template = new Template(this.fieldKey, this.name);
-        },
-        mounted() {
-            //console.log(this);
         }
     }
 </script>
