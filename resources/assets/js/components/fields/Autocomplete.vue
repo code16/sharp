@@ -1,9 +1,7 @@
 <template>
     <div class="SharpAutocomplete" :class="`SharpAutocomplete--${state}`">
         <div v-if="state=='valuated'" class="SharpAutocomplete__result-item form-control">
-            <sharp-template :field-key="fieldKey"
-                            name="resultItem" :template-data="valueObject">
-            </sharp-template>
+            <sharp-template name="resultItem" :template="resultItemTemplate" :template-data="valueObject"></sharp-template>
             <div class="SharpAutocomplete__close-btn-container" @click="handleResetClick">
                 <button type="button" class="close" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -25,7 +23,7 @@
                      @close="handleDropdownClose"
                      ref="multiselect">
             <template slot="option" scope="props">
-                <sharp-template :field-key="fieldKey" :template-data="props.option" name="listItem"></sharp-template>
+                <sharp-template name="listItem" :template="listItemTemplate" :template-data="props.option"></sharp-template>
             </template>
             <template slot="noResult">Aucun résultats</template>
         </multiselect>
@@ -36,7 +34,6 @@
     import SharpTemplate from '../Template.vue';
     import Multiselect from 'vue-multiselect';
 
-    import Template from '../../app/models/Template';
     import SearchStrategy from '../../app/models/SearchStrategy';
 
 
@@ -77,7 +74,8 @@
                 default:()=>['value']
             },
             disabled: Boolean,
-            listItemTemplate: String
+            listItemTemplate: String,
+            resultItemTemplate: String
         },
         data() {
             return {

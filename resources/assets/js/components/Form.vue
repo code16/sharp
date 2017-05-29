@@ -38,9 +38,6 @@
     import { API_PATH } from '../consts';
     import testableForm from '../mixins/testable-form';
 
-    import Template from '../app/models/Template';
-    import TemplateController from '../app/controllers/TemplateController';
-
     import { NameAssociation as fieldCompNames } from './fields/index';
 
     import FormTabContent from './FormTabContent';
@@ -93,17 +90,14 @@
                 this.data[key] = value;
             },
             getForm() {
-                return new Promise((resolve,reject) =>
-                    axios.get(this.apiPath)
+                return axios.get(this.apiPath)
                     .then(({data: {fields, layout, data}}) => {
                         this.fields = fields;
                         this.layout = layout;
                         this.data = data;
 
                         this.ready=true;
-                        resolve();
-                    })
-                );
+                    });
             },
             postForm() {
                 return axios.post(this.apiPath)
@@ -111,24 +105,10 @@
 
                     });
             },
-            parseTemplates() {
-                for(let fieldKey of Object.keys(this.fields)) {
-                    let field=this.fields[fieldKey];
-                    for (let fieldPropName of Object.keys(field)) {
-
-                        if (Template.isTemplateProp(fieldPropName)) {
-                            TemplateController.compileAndRegisterComponent(fieldKey, {
-                                templateName: fieldPropName,
-                                templateValue: field[fieldPropName],
-                            });
-                        }
-                    }
-                }
-            }
         },
         created() {
             if(this.entityKey != null) {
-                this.getForm().then(_=>this.parseTemplates());
+                this.getForm();
             }
             else util.error('no entity key provided');
             window.form = this;

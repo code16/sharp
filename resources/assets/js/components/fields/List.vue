@@ -10,10 +10,7 @@
                 <li v-for="(listItemData, i) in list" :key="listItemData[indexSymbol]"
                     class="SharpList__item list-group-item" :class="{'SharpList__item--collapsed':collapsed}">
                     <template v-if="collapsed">
-                        <sharp-template :field-key="fieldKey"
-                                        :template-data="collapsedItemData(listItemData)"
-                                        name="collapsedItem">
-                        </sharp-template>
+                        <sharp-template name="collapsedItem" :template="collapsedItemTemplate" :template-data="collapsedItemData(listItemData)"></sharp-template>
                     </template>
                     <template v-else>
                         <sharp-fields-layout :layout="fieldLayout.item">
@@ -83,7 +80,7 @@
                 required: true,
             },
             collapsedItemTemplate: String,
-            maxItemCount: Number,
+            maxItemCount: Number
         },
         data() {
             return {
