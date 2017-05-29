@@ -3,4 +3,4 @@ vendor
 .idea
 composer.lock
 yarn.lock
-resources/assets/theme/sharp
+/public

@@ -23916,14 +23916,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__template_definition__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__consts__ = __webpack_require__(116);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_models_Template__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_controllers_TemplateController__ = __webpack_require__(110);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Grid__ = __webpack_require__(55);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Grid___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__Grid__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__FieldsLayout__ = __webpack_require__(54);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__FieldsLayout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__FieldsLayout__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__test_form__ = __webpack_require__(109);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__fields_index__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mixins_testable_form__ = __webpack_require__(226);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_models_Template__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_controllers_TemplateController__ = __webpack_require__(110);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__fields_index__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__FormTabContent__ = __webpack_require__(230);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__FormTabContent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__FormTabContent__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__vendor_bootstrap_vue_components_tabs__ = __webpack_require__(231);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__vendor_bootstrap_vue_components_tabs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__vendor_bootstrap_vue_components_tabs__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__vendor_bootstrap_vue_components_tab__ = __webpack_require__(235);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__vendor_bootstrap_vue_components_tab___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__vendor_bootstrap_vue_components_tab__);
 var _components;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -23952,6 +23954,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -23969,7 +23982,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpForm',
 
-    components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_5__Grid___default.a.name, __WEBPACK_IMPORTED_MODULE_5__Grid___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_6__FieldsLayout___default.a.name, __WEBPACK_IMPORTED_MODULE_6__FieldsLayout___default.a), _components),
+    mixins: [__WEBPACK_IMPORTED_MODULE_3__mixins_testable_form__["a" /* default */]],
+
+    components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_7__FormTabContent___default.a.name, __WEBPACK_IMPORTED_MODULE_7__FormTabContent___default.a), _defineProperty(_components, 'bTab', __WEBPACK_IMPORTED_MODULE_9__vendor_bootstrap_vue_components_tab___default.a), _defineProperty(_components, 'bTabs', __WEBPACK_IMPORTED_MODULE_8__vendor_bootstrap_vue_components_tabs___default.a), _components),
 
     props: {
         entityKey: String,
@@ -23978,9 +23993,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     data: function data() {
         return {
-            fields: null, //testForm.fields,
-            data: null, //testForm.data,
-            layout: null, //testForm.layout
+            fields: null,
+            data: null,
+            layout: null,
+            tabIndex: 0,
             ready: false
         };
     },
@@ -23988,7 +24004,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     computed: {
         displayableFields: function displayableFields() {
             return this.fields.filter(function (field, i) {
-                if (!(field.type in __WEBPACK_IMPORTED_MODULE_8__fields_index__["a" /* NameAssociation */])) return __WEBPACK_IMPORTED_MODULE_0__util__["a" /* default */].error('Field \'' + field.key + '\' have a unknown type (' + field.type + ')'), false;
+                if (!(field.type in __WEBPACK_IMPORTED_MODULE_6__fields_index__["a" /* NameAssociation */])) return __WEBPACK_IMPORTED_MODULE_0__util__["a" /* default */].error('Field \'' + field.key + '\' have a unknown type (' + field.type + ')'), false;
                 return true;
             });
         },
@@ -24005,17 +24021,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         getForm: function getForm() {
             var _this = this;
 
-            return axios.get(this.apiPath).then(function (_ref) {
-                var _ref$data = _ref.data,
-                    fields = _ref$data.fields,
-                    layout = _ref$data.layout,
-                    data = _ref$data.data;
+            return new Promise(function (resolve, reject) {
+                return axios.get(_this.apiPath).then(function (_ref) {
+                    var _ref$data = _ref.data,
+                        fields = _ref$data.fields,
+                        layout = _ref$data.layout,
+                        data = _ref$data.data;
 
-                _this.fields = fields;
-                _this.layout = layout;
-                _this.data = data;
+                    _this.fields = fields;
+                    _this.layout = layout;
+                    _this.data = data;
 
-                _this.ready = true;
+                    _this.ready = true;
+                    resolve();
+                });
             });
         },
         postForm: function postForm() {
@@ -24040,11 +24059,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                             var fieldPropName = _step2.value;
 
 
-                            if (__WEBPACK_IMPORTED_MODULE_3__app_models_Template__["a" /* default */].isTemplateProp(fieldPropName)) {
-                                __WEBPACK_IMPORTED_MODULE_4__app_controllers_TemplateController__["a" /* default */].compileAndRegisterComponent(fieldKey, {
+                            if (__WEBPACK_IMPORTED_MODULE_4__app_models_Template__["a" /* default */].isTemplateProp(fieldPropName)) {
+                                __WEBPACK_IMPORTED_MODULE_5__app_controllers_TemplateController__["a" /* default */].compileAndRegisterComponent(fieldKey, {
                                     templateName: fieldPropName,
-                                    templateValue: field[fieldPropName],
-                                    templateProps: field.templateProps
+                                    templateValue: field[fieldPropName]
                                 });
                             }
                         }
@@ -24079,14 +24097,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             }
         }
     },
-    mounted: function mounted() {
+    created: function created() {
         var _this2 = this;
 
-        if (this.entityKey) {
+        if (this.entityKey != null) {
             this.getForm().then(function (_) {
                 return _this2.parseTemplates();
             });
-        } else this.parseTemplates();
+        } else __WEBPACK_IMPORTED_MODULE_0__util__["a" /* default */].error('no entity key provided');
         window.form = this;
     }
 });
@@ -26203,56 +26221,62 @@ var FOCUS_SELECTOR = ['button:not([disabled]):not([style*="display: none"]):not(
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* unused harmony export layout */
-/* unused harmony export data */
-/* unused harmony export fields */
-var layout = [{
-    "title": "Tab1",
-    "columns": [{
-        "size": 7,
-        "fields": [[{
-            "key": "A",
-            "size": 4,
-            "sizeXS": 6
-        }, {
-            "key": "B",
-            "sizeXS": 6
-        }], [{
-            "legend": "dates",
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return layout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return data; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return fields; });
+var layout = {
+    "tabbed": true,
+    "tabs": [{
+        "title": "Tab1",
+        "columns": [{
+            "size": 7,
             "fields": [[{
-                "key": "date"
-            }], [{
-                "key": "number"
-            }]]
-        }], [{
-            "key": "mdeditor"
-        }]]
-    }, {
-        "size": 5,
-        "fields": [[{
-            "key": "mylist",
-            "item": [[{
-                "key": "name"
+                "key": "A",
+                "size": 4,
+                "sizeXS": 6
             }, {
-                "key": "surname"
+                "key": "B",
+                "sizeXS": 6
             }], [{
-                "key": "age"
+                "legend": "dates",
+                "fields": [[{
+                    "key": "date"
+                }], [{
+                    "key": "number"
+                }]]
+            }], [{
+                "key": "mdeditor"
             }]]
-        }], [{
-            "key": "show_autocomplete"
         }, {
-            "key": "show_upload"
-        }], [{
-            "key": "name"
-        }], [{
-            "key": "admin_password"
-        }], [{
-            "key": "myimage"
-        }], [{
-            "key": "select"
-        }]]
+            "size": 5,
+            "fields": [[{
+                "key": "mylist",
+                "item": [[{
+                    "key": "name"
+                }, {
+                    "key": "surname"
+                }], [{
+                    "key": "age"
+                }]]
+            }], [{
+                "key": "show_autocomplete"
+            }, {
+                "key": "show_upload"
+            }], [{
+                "key": "name"
+            }], [{
+                "key": "admin_password"
+            }], [{
+                "key": "myimage"
+            }], [{
+                "key": "select"
+            }]]
+        }]
+    }, {
+        title: 'tab2',
+        columns: []
     }]
-}];
+};
 
 var data = {
     "A": "Valeur texte",
@@ -26310,7 +26334,6 @@ var fields = {
         listItemTemplate: "\n                            <img src=\"https://i.ytimg.com/vi/wSTt04rOwa8/maxresdefault.jpg\" width=\"50px\">\n                            <span class=\"name\">{{ name }}</span>\n                            <span class=\"surname\">{{ surname }}</span>\n                        ",
         resultItemTemplate: "\n                            R\xE9sultat : {{ name }} {{ surname }}\n                        ",
         inline: true,
-        templateProps: ['name', 'surname'],
         searchKeys: ['name', 'surname'],
         itemIdAttribute: 'id',
         conditionalDisplay: {
@@ -26419,8 +26442,7 @@ var TemplateController = function () {
          */
         value: function compileAndRegisterComponent(fieldKey, _ref) {
             var templateName = _ref.templateName,
-                templateValue = _ref.templateValue,
-                templateProps = _ref.templateProps;
+                templateValue = _ref.templateValue;
 
 
             var template = new __WEBPACK_IMPORTED_MODULE_0__models_Template__["a" /* default */](fieldKey, __WEBPACK_IMPORTED_MODULE_0__models_Template__["a" /* default */].parseTemplateName(templateName));
@@ -26431,9 +26453,14 @@ var TemplateController = function () {
                 var definition = __WEBPACK_IMPORTED_MODULE_1__template_definition__["a" /* default */][templateName];
 
                 Vue.component(compName, {
-                    mixins: [definition || {}],
-                    template: '<div>' + templateValue + '</div>',
-                    props: templateProps
+                    functional: true,
+                    render: function render(h, ctx) {
+                        return h({
+                            mixins: [definition || {}],
+                            template: '<div>' + templateValue + '</div>',
+                            props: Object.keys(ctx.props)
+                        }, ctx.data);
+                    }
                 });
             }
 
@@ -50830,13 +50857,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('div', {
     staticClass: "SharpAutocomplete",
     class: ("SharpAutocomplete--" + _vm.state)
-  }, [_c('div', {
-    directives: [{
-      name: "show",
-      rawName: "v-show",
-      value: (_vm.state == 'valuated'),
-      expression: "state=='valuated'"
-    }],
+  }, [(_vm.state == 'valuated') ? _c('div', {
     staticClass: "SharpAutocomplete__result-item form-control"
   }, [_c('sharp-template', {
     attrs: {
@@ -50849,13 +50870,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.handleResetClick
     }
-  }, [_vm._m(0)])], 1), _vm._v(" "), _c('multiselect', {
-    directives: [{
-      name: "show",
-      rawName: "v-show",
-      value: (_vm.state != 'valuated'),
-      expression: "state!='valuated'"
-    }],
+  }, [_vm._m(0)])], 1) : _vm._e(), _vm._v(" "), (_vm.state != 'valuated') ? _c('multiselect', {
     ref: "multiselect",
     attrs: {
       "value": _vm.valueObject,
@@ -50888,7 +50903,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     ])
   }, [_c('template', {
     slot: "noResult"
-  }, [_vm._v("Aucun résultats")])], 2)], 1)
+  }, [_vm._v("Aucun résultats")])], 2) : _vm._e()], 1)
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('button', {
     staticClass: "close",
@@ -51148,33 +51163,41 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "Form container"
-  }, [(_vm.ready) ? [(_vm.layout.length == 1) ? _c('sharp-grid', {
+  }, [(_vm.ready) ? [(_vm.layout.tabbed && _vm.layout.tabs.length > 1) ? [_c('b-tabs', {
     attrs: {
-      "rows": [_vm.layout[0].columns]
+      "pills": ""
     },
-    scopedSlots: _vm._u([
-      ["default", function(column) {
-        return [(_vm.fields) ? _c('sharp-fields-layout', {
-          attrs: {
-            "layout": column.fields
-          },
-          scopedSlots: _vm._u([
-            ["default", function(fieldLayout) {
-              return [_c('sharp-field-display', {
-                attrs: {
-                  "field-key": fieldLayout.key,
-                  "context-fields": _vm.fields,
-                  "context-data": _vm.data,
-                  "field-layout": fieldLayout,
-                  "update-data": _vm.updateData
-                }
-              })]
-            }]
-          ])
-        }) : _vm._e()]
-      }]
-    ])
-  }) : _vm._e()] : [_vm._v("\n        Form loading...\n    ")]], 2)
+    model: {
+      value: (_vm.tabIndex),
+      callback: function($$v) {
+        _vm.tabIndex = $$v
+      },
+      expression: "tabIndex"
+    }
+  }, _vm._l((_vm.layout.tabs), function(tab, i) {
+    return _c('b-tab', {
+      key: i,
+      attrs: {
+        "title": tab.title
+      }
+    }, [_c('sharp-form-tab-content', {
+      attrs: {
+        "columns": tab.columns,
+        "fields": _vm.fields,
+        "data": _vm.data,
+        "update-data": _vm.updateData
+      }
+    })], 1)
+  }))] : _vm._l((_vm.layout.tabs), function(tab) {
+    return _c('div', [_c('sharp-form-tab-content', {
+      attrs: {
+        "columns": tab.columns,
+        "fields": _vm.fields,
+        "data": _vm.data,
+        "update-data": _vm.updateData
+      }
+    })], 1)
+  })] : [_vm._v("\n        Form loading...\n    ")]], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -52150,6 +52173,773 @@ get:function(){return T(this,"a",{value:7}).a}})).a})?function(e,t,r){var n=F(V,
 __webpack_require__(62);
 module.exports = __webpack_require__(63);
 
+
+/***/ }),
+/* 225 */,
+/* 226 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__test_form__ = __webpack_require__(109);
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    props: {
+        test: Boolean
+    },
+    mounted: function mounted() {
+        if (this.test) {
+            this.fields = __WEBPACK_IMPORTED_MODULE_0__test_form__["a" /* fields */];
+            this.data = __WEBPACK_IMPORTED_MODULE_0__test_form__["b" /* data */];
+            this.layout = __WEBPACK_IMPORTED_MODULE_0__test_form__["c" /* layout */];
+
+            this.parseTemplates();
+            this.ready = true;
+        }
+    }
+});
+
+/***/ }),
+/* 227 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Grid__ = __webpack_require__(55);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Grid___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Grid__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__FieldsLayout__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__FieldsLayout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__FieldsLayout__);
+var _components;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: 'SharpFormTabContent',
+    components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_0__Grid___default.a.name, __WEBPACK_IMPORTED_MODULE_0__Grid___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_1__FieldsLayout___default.a.name, __WEBPACK_IMPORTED_MODULE_1__FieldsLayout___default.a), _components),
+    props: {
+        columns: Array, fields: Object, data: Object, updateData: Function
+    }
+});
+
+/***/ }),
+/* 228 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_observe_dom__ = __webpack_require__(229);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            currentTab: this.value,
+            tabs: []
+        };
+    },
+
+    props: {
+        id: {
+            type: String,
+            default: ''
+        },
+        tag: {
+            type: String,
+            default: 'div'
+        },
+        noFade: {
+            type: Boolean,
+            default: false
+        },
+        card: {
+            type: Boolean,
+            default: false
+        },
+        small: {
+            type: Boolean,
+            default: false
+        },
+        value: {
+            type: Number,
+            default: 0
+        },
+        pills: {
+            type: Boolean,
+            default: false
+        },
+        lazy: {
+            type: Boolean,
+            default: false
+        },
+        bottom: {
+            type: Boolean,
+            default: false
+        }
+    },
+    watch: {
+        currentTab: function currentTab(val, old) {
+            if (val === old) {
+                return;
+            }
+
+            this.$root.$emit('changed::tab', this, val, this.tabs[val]);
+            this.$emit('input', val);
+            this.tabs[val].$emit('click');
+        },
+        value: function value(val, old) {
+            if (val === old) {
+                return;
+            }
+
+            this.setTab(val);
+        },
+        fade: function fade(val, old) {
+            var _this = this;
+
+            if (val === old) {
+                return;
+            }
+
+            this.tabs.forEach(function (item) {
+                _this.$set(item, 'fade', val);
+            });
+        }
+    },
+    computed: {
+        fade: function fade() {
+            return !this.noFade;
+        },
+        navStyle: function navStyle() {
+            return this.pills ? 'pills' : 'tabs';
+        }
+    },
+    methods: {
+        /**
+         * Util: Return the sign of a number (as -1, 0, or 1)
+         */
+        sign: function sign(x) {
+            return x === 0 ? 0 : x > 0 ? 1 : -1;
+        },
+
+
+        /**
+         * Move to next tab
+         */
+        nextTab: function nextTab() {
+            this.setTab(this.currentTab, false, 1);
+        },
+
+
+        /**
+         * Move to previous tab
+         */
+        previousTab: function previousTab() {
+            this.setTab(this.currentTab, false, -1);
+        },
+
+
+        /**
+         * Set active tab on the tabs collection and the child 'tab' component
+         */
+        setTab: function setTab(index, force, offset) {
+            offset = offset || 0;
+
+            // Prevent setting same tab!
+            if (!force && index + offset === this.currentTab) {
+                return;
+            }
+
+            var tab = this.tabs[index + offset];
+
+            // Don't go beyond indexes!
+            if (!tab) {
+                return;
+            }
+
+            // Ignore or Skip disabled
+            if (tab.disabled) {
+                if (offset) {
+                    // Skip to next non disabled tab in offset direction (recursive)
+                    this.setTab(index, force, offset + this.sign(offset));
+                }
+                return;
+            }
+
+            // Deactivate previous active tab
+            if (this.tabs[this.currentTab]) {
+                this.$set(this.tabs[this.currentTab], 'localActive', false);
+            }
+
+            // Set new tab as active
+            this.$set(tab, 'localActive', true);
+
+            // Update currentTab
+            this.currentTab = index + offset;
+        },
+
+
+        /**
+         * Dynamically update tabs
+         */
+        updateTabs: function updateTabs() {
+            var _this2 = this;
+
+            // Probe tabs
+            if (this.$slots.default) {
+                this.tabs = this.$slots.default.filter(function (tab) {
+                    return tab.componentInstance || false;
+                }).map(function (tab) {
+                    return tab.componentInstance;
+                });
+            } else {
+                this.tabs = [];
+            }
+
+            this.tabs.forEach(function (tab) {
+                _this2.$set(tab, 'fade', _this2.fade);
+                _this2.$set(tab, 'lazy', _this2.lazy);
+            });
+
+            // Set initial active tab
+            var tabIndex = this.currentTab;
+
+            if (this.currentTab === null || this.currentTab === undefined) {
+                this.tabs.forEach(function (tab, index) {
+                    if (tab.active) {
+                        tabIndex = index;
+                    }
+                });
+            }
+
+            // Workaround to fix problem when currentTab is removed
+            var offset = 0;
+            if (tabIndex > this.tabs.length - 1) {
+                offset = -1;
+            }
+
+            this.setTab(tabIndex || 0, true, offset);
+        }
+    },
+    mounted: function mounted() {
+        this.updateTabs();
+
+        // Observe Child changes so we can notify tabs change
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__utils_observe_dom__["a" /* default */])(this.$refs.tabsContainer, this.updateTabs.bind(this), { subtree: false });
+    }
+});
+
+/***/ }),
+/* 229 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = observeDOM;
+/**
+ * Observe a DOM element changes, falls back to eventListener mode
+ * @param {Element} el The DOM element to observe
+ * @param {Function} callback callback to be called on change
+ * @param {object} [opts={childList: true, subtree: true}] observe options
+ * @see http://stackoverflow.com/questions/3219758
+ */
+function observeDOM(el, callback, opts) {
+    var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+    var eventListenerSupported = window.addEventListener;
+
+    if (MutationObserver) {
+        // Define a new observer
+        var obs = new MutationObserver(function (mutations) {
+            if (mutations[0].addedNodes.length > 0 || mutations[0].removedNodes.length > 0) {
+                callback();
+            }
+        });
+
+        // Have the observer observe foo for changes in children
+        obs.observe(el, Object.assign({ childList: true, subtree: true }, opts));
+    } else if (eventListenerSupported) {
+        el.addEventListener('DOMNodeInserted', callback, false);
+        el.addEventListener('DOMNodeRemoved', callback, false);
+    }
+}
+
+/***/ }),
+/* 230 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(227),
+  /* template */
+  __webpack_require__(232),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/FormTabContent.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] FormTabContent.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-2abedacc", Component.options)
+  } else {
+    hotAPI.reload("data-v-2abedacc", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 231 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(228),
+  /* template */
+  __webpack_require__(233),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/vendor/bootstrap-vue/components/tabs.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] tabs.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-609a784c", Component.options)
+  } else {
+    hotAPI.reload("data-v-609a784c", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 232 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('sharp-grid', {
+    attrs: {
+      "rows": [_vm.columns]
+    },
+    scopedSlots: _vm._u([
+      ["default", function(column) {
+        return [(_vm.fields) ? _c('sharp-fields-layout', {
+          attrs: {
+            "layout": column.fields
+          },
+          scopedSlots: _vm._u([
+            ["default", function(fieldLayout) {
+              return [_c('sharp-field-display', {
+                attrs: {
+                  "field-key": fieldLayout.key,
+                  "context-fields": _vm.fields,
+                  "context-data": _vm.data,
+                  "field-layout": fieldLayout,
+                  "update-data": _vm.updateData
+                }
+              })]
+            }]
+          ])
+        }) : _vm._e()]
+      }]
+    ])
+  })
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-2abedacc", module.exports)
+  }
+}
+
+/***/ }),
+/* 233 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c(_vm.tag, {
+    tag: "component",
+    staticClass: "tabs",
+    attrs: {
+      "id": _vm.id || null
+    }
+  }, [(_vm.bottom) ? _c('div', {
+    ref: "tabsContainer",
+    class: ['tab-content', {
+      'card-block': _vm.card
+    }]
+  }, [_vm._t("default"), _vm._v(" "), (!_vm.tabs || !_vm.tabs.length) ? _vm._t("empty") : _vm._e()], 2) : _vm._e(), _vm._v(" "), _c('div', {
+    class: {
+      'card-header': _vm.card
+    }
+  }, [_c('ul', {
+    class: ['nav', 'nav-' + _vm.navStyle, _vm.card ? 'card-header-' + _vm.navStyle : null],
+    attrs: {
+      "role": "tablist",
+      "tabindex": "0",
+      "aria-setsize": _vm.tabs.length,
+      "aria-posinset": _vm.currentTab + 1
+    },
+    on: {
+      "keydown": [function($event) {
+        if (!('button' in $event) && _vm._k($event.keyCode, "left", 37)) { return null; }
+        if ('button' in $event && $event.button !== 0) { return null; }
+        _vm.previousTab($event)
+      }, function($event) {
+        if (!('button' in $event) && _vm._k($event.keyCode, "up", 38)) { return null; }
+        _vm.previousTab($event)
+      }, function($event) {
+        if (!('button' in $event) && _vm._k($event.keyCode, "right", 39)) { return null; }
+        if ('button' in $event && $event.button !== 2) { return null; }
+        _vm.nextTab($event)
+      }, function($event) {
+        if (!('button' in $event) && _vm._k($event.keyCode, "down", 40)) { return null; }
+        _vm.nextTab($event)
+      }, function($event) {
+        if (!('button' in $event) && _vm._k($event.keyCode, "left", 37)) { return null; }
+        if (!$event.shiftKey) { return null; }
+        if ('button' in $event && $event.button !== 0) { return null; }
+        _vm.setTab(-1, false, 1)
+      }, function($event) {
+        if (!('button' in $event) && _vm._k($event.keyCode, "up", 38)) { return null; }
+        if (!$event.shiftKey) { return null; }
+        _vm.setTab(-1, false, 1)
+      }, function($event) {
+        if (!('button' in $event) && _vm._k($event.keyCode, "right", 39)) { return null; }
+        if (!$event.shiftKey) { return null; }
+        if ('button' in $event && $event.button !== 2) { return null; }
+        _vm.setTab(_vm.tabs.length, false, -1)
+      }, function($event) {
+        if (!('button' in $event) && _vm._k($event.keyCode, "down", 40)) { return null; }
+        if (!$event.shiftKey) { return null; }
+        _vm.setTab(_vm.tabs.length, false, -1)
+      }]
+    }
+  }, [_vm._l((_vm.tabs), function(tab, index) {
+    return _c('li', {
+      staticClass: "nav-item",
+      attrs: {
+        "role": "presentation"
+      }
+    }, [(!tab.headHtml) ? _c('a', {
+      class: ['nav-link', {
+        small: _vm.small,
+        active: tab.localActive,
+        disabled: tab.disabled
+      }],
+      attrs: {
+        "href": tab.href,
+        "role": "tab",
+        "aria-selected": tab.localActive ? 'true' : 'false',
+        "aria-controls": tab.id || null,
+        "id": tab.controlledBy || null,
+        "tabindex": "-1"
+      },
+      domProps: {
+        "innerHTML": _vm._s(tab.title)
+      },
+      on: {
+        "click": function($event) {
+          $event.preventDefault();
+          $event.stopPropagation();
+          _vm.setTab(index)
+        },
+        "keydown": [function($event) {
+          if (!('button' in $event) && _vm._k($event.keyCode, "space", 32)) { return null; }
+          $event.preventDefault();
+          $event.stopPropagation();
+          _vm.setTab(index)
+        }, function($event) {
+          if (!('button' in $event) && _vm._k($event.keyCode, "enter", 13)) { return null; }
+          $event.preventDefault();
+          $event.stopPropagation();
+          _vm.setTab(index)
+        }]
+      }
+    }) : _c('div', {
+      class: ['tab-head', {
+        small: _vm.small,
+        active: tab.localActive,
+        disabled: tab.disabled
+      }],
+      attrs: {
+        "role": "heading",
+        "tabindex": "-1"
+      },
+      domProps: {
+        "innerHTML": _vm._s(tab.headHtml)
+      }
+    })])
+  }), _vm._v(" "), _vm._t("tabs")], 2)]), _vm._v(" "), (!_vm.bottom) ? _c('div', {
+    ref: "tabsContainer",
+    class: ['tab-content', {
+      'card-block': _vm.card
+    }]
+  }, [_vm._t("default"), _vm._v(" "), (!_vm.tabs || !_vm.tabs.length) ? _vm._t("empty") : _vm._e()], 2) : _vm._e()])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-609a784c", module.exports)
+  }
+}
+
+/***/ }),
+/* 234 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    methods: {
+        enter: function enter() {
+            this.show = true;
+        },
+        beforeLeave: function beforeLeave() {
+            this.show = false;
+        }
+    },
+    data: function data() {
+        return {
+            fade: false,
+            localActive: false,
+            lazy: true,
+            show: false
+        };
+    },
+
+    computed: {
+        controlledBy: function controlledBy() {
+            return this.buttonId || (this.id ? this.id + '__BV_tab_button__' : null);
+        }
+    },
+    props: {
+        id: {
+            type: String,
+            default: ''
+        },
+        tag: {
+            type: String,
+            default: 'div'
+        },
+        buttonId: {
+            type: String,
+            default: ''
+        },
+        title: {
+            type: String,
+            default: ''
+        },
+        headHtml: {
+            type: String,
+            default: null
+        },
+        disabled: {
+            type: Boolean,
+            default: false
+        },
+        active: {
+            type: Boolean,
+            default: false
+        },
+        href: {
+            type: String,
+            default: '#'
+        }
+    }
+});
+
+/***/ }),
+/* 235 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(234),
+  /* template */
+  __webpack_require__(236),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/vendor/bootstrap-vue/components/tab.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] tab.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-a883ab2e", Component.options)
+  } else {
+    hotAPI.reload("data-v-a883ab2e", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 236 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('transition', {
+    attrs: {
+      "mode": "out-in"
+    },
+    on: {
+      "enter": _vm.enter,
+      "before-leave": _vm.beforeLeave
+    }
+  }, [(_vm.localActive || !_vm.lazy) ? _c(_vm.tag, {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.localActive || _vm.lazy),
+      expression: "localActive || lazy"
+    }],
+    ref: "panel",
+    tag: "component",
+    class: ['tab-pane', {
+      show: _vm.show,
+      fade: _vm.fade,
+      disabled: _vm.disabled,
+      active: _vm.localActive
+    }],
+    attrs: {
+      "id": _vm.id || null,
+      "role": "tabpanel",
+      "aria-hidden": _vm.localActive ? 'false' : 'true',
+      "aria-expanded": _vm.localActive ? 'true' : 'false',
+      "aria-lablelledby": _vm.controlledBy || null
+    }
+  }, [_vm._t("default")], 2) : _vm._e()], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-a883ab2e", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);
