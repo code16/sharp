@@ -37,6 +37,7 @@ class SpaceshipSharpForm extends SharpForm
         )->addField(
             SharpFormAutocompleteField::make("type_id", "local")
                 ->setLabel("Ship type")
+                ->setSearchKeys(["label"])
                 ->setListItemTemplatePath("/sharp/templates/spaceshipType_list.vue")
                 ->setResultItemTemplatePath("/sharp/templates/spaceshipType_result.vue")
                 ->setLocalValues(
