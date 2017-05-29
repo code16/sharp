@@ -7,6 +7,8 @@
     import SharpVueClip from './VueClip';
     import Messages from '../../../messages';
 
+    import { UPLOAD_URL } from '../../../consts';
+
     export default {
         name: 'SharpUpload',
         components: {
@@ -28,7 +30,7 @@
             options() {
                 let opt = {};
 
-                opt.url = 'http://jsonplaceholder.typicode.com/posts';
+                opt.url = UPLOAD_URL;
                 opt.uploadMultiple = false;
                 if (this.fileFilter) {
                     opt.acceptedFiles = {

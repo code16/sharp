@@ -43,7 +43,7 @@
         computed: {
             options() {
                 return {
-                    url:'http://jsonplaceholder.typicode.com/posts',
+                    url:UPLOAD_URL,
                     uploadMultiple:false,
                     acceptedFiles: {
                         extensions: ['image/*'],
@@ -52,7 +52,7 @@
                     maxFilesize: {
                         limit: this.maxFileSize,
                         message: Messages.uploadFileTooBig
-                    },
+                    }
                 }
             },
             dropzone() {
