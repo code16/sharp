@@ -23845,7 +23845,7 @@ var acceptCondition = function acceptCondition(fields, data, condition) {
         contextData = contextData || {};
 
         if (!(fieldKey in contextFields)) {
-            __WEBPACK_IMPORTED_MODULE_0__util__["a" /* default */].error('Field displayer : Can\'t find a field with key \'' + fieldKey + '\' in \'fields\'', contextFields);
+            __WEBPACK_IMPORTED_MODULE_0__util__["a" /* default */].error('Field displayer (\'layout\') : Can\'t find a field with key \'' + fieldKey + '\' in \'fields\'', contextFields);
             return null;
         }
         /*else if(!(fieldKey in contextData)) {
@@ -24844,8 +24844,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -24864,6 +24862,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             textarea: this.value
         };
+    },
+
+    methods: {
+        handleInput: function handleInput(e) {
+            this.$emit('input', e.target.value);
+        }
     }
 });
 
@@ -50912,11 +50916,18 @@ if (false) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('textarea', {
+    staticClass: "form-control",
     attrs: {
-      "name": "",
-      "id": "",
-      "cols": "30",
-      "rows": "10"
+      "cols": _vm.cols,
+      "rows": _vm.rows,
+      "placeholder": _vm.placeholder,
+      "disabled": _vm.disabled
+    },
+    domProps: {
+      "value": _vm.value
+    },
+    on: {
+      "input": _vm.handleInput
     }
   })
 },staticRenderFns: []}

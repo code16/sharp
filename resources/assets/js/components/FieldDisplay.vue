@@ -99,7 +99,7 @@
             contextData = (contextData||{});
 
             if(!(fieldKey in contextFields)) {
-                util.error(`Field displayer : Can't find a field with key '${fieldKey}' in 'fields'`,contextFields);
+                util.error(`Field displayer ('layout') : Can't find a field with key '${fieldKey}' in 'fields'`,contextFields);
                 return null;
             }
             /*else if(!(fieldKey in contextData)) {
