@@ -22,20 +22,17 @@ class SpaceshipSharpForm extends SharpForm
         $this->addField(
             SharpFormTextField::make("name")
                 ->setLabel("Name")
-        );
 
-        $this->addField(
+        )->addField(
             SharpFormTextField::make("capacity")
                 ->setLabel("Capacity (thousands)")
-        );
 
-        $this->addField(
+        )->addField(
             SharpFormDateField::make("construction_date")
                 ->setLabel("Construction date")
                 ->setHasTime(false)
-        );
 
-        $this->addField(
+        )->addField(
             SharpFormAutocompleteField::make("type_id", "local")
                 ->setLabel("Ship type")
                 ->setListItemTemplatePath("/sharp/templates/spaceshipType_list")
@@ -48,12 +45,13 @@ class SpaceshipSharpForm extends SharpForm
 
     function buildFormLayout()
     {
-        $this->addColumn(6)
-            ->withSingleField("name")
-            ->withSingleField("type_id")
-            ->withFieldset("Technical details", function($fieldset) {
-                return $fieldset->withFields("capacity|4,6", "construction_date|8,6");
-            });
+        $this->addColumn(6, function($column) {
+            $column->withSingleField("name")
+                ->withSingleField("type_id")
+                ->withFieldset("Technical details", function($fieldset) {
+                    return $fieldset->withFields("capacity|4,6", "construction_date|8,6");
+                });
+        });
     }
 
 //    function create()

@@ -29,11 +29,13 @@ class FormLayoutColumn implements HasLayout
      * @param \Closure $callback
      * @return $this
      */
-    public function withFieldset(string $name, \Closure $callback)
+    public function withFieldset(string $name, \Closure $callback = null)
     {
         $fieldset = new FormLayoutFieldset($name);
 
-        $callback($fieldset);
+        if($callback) {
+            $callback($fieldset);
+        }
 
         $this->addFieldsetLayout($fieldset);
 

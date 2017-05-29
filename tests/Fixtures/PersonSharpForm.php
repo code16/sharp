@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Tests\Fixtures;
 
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpFormException;
 
@@ -15,8 +16,9 @@ class PersonSharpForm extends SharpForm
 
     function buildFormLayout()
     {
-        $this->addColumn(6)
-            ->withSingleField("name");
+        $this->addColumn(6, function(FormLayoutColumn $column) {
+            return $column->withSingleField("name");
+        });
     }
 
     function find($id): array

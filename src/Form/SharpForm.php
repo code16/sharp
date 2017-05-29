@@ -118,40 +118,57 @@ abstract class SharpForm
      * Add a field.
      *
      * @param SharpFormField $field
+     * @return $this
      */
     protected function addField(SharpFormField $field)
     {
         $this->fields[] = $field;
         $this->formBuilt = false;
+
+        return $this;
     }
 
     /**
      * @param string $label
-     * @return FormLayoutTab
+     * @param \Closure|null $callback
+     * @return $this
      */
-    protected function addTab(string $label): FormLayoutTab
+    protected function addTab(string $label, \Closure $callback = null)
     {
         $this->layoutBuilt = false;
 
-        return $this->addTabLayout(new FormLayoutTab($label));
+        $tab = $this->addTabLayout(new FormLayoutTab($label));
+
+        if($callback) {
+            $callback($tab);
+        }
+
+        return $this;
     }
 
     /**
      * @param int $size
-     * @return FormLayoutColumn
+     * @param \Closure|null $callback
+     * @return $this
      */
-    protected function addColumn(int $size): FormLayoutColumn
+    protected function addColumn(int $size, \Closure $callback = null)
     {
         $this->layoutBuilt = false;
 
-        return $this->getLonelyTab()->addColumn($size);
+        $column = $this->getLonelyTab()->addColumn($size);
+
+        if($callback) {
+            $callback($column);
+        }
+
+        return $this;
     }
 
     /**
      * @param FormLayoutTab $tab
      * @return FormLayoutTab
      */
-    protected function addTabLayout(FormLayoutTab $tab): FormLayoutTab
+    private function addTabLayout(FormLayoutTab $tab): FormLayoutTab
     {
         $this->tabs[] = $tab;
 
@@ -161,7 +178,7 @@ abstract class SharpForm
     /**
      * @return FormLayoutTab
      */
-    protected function getLonelyTab()
+    private function getLonelyTab()
     {
         if(!sizeof($this->tabs)) {
             $this->addTabLayout(new FormLayoutTab("one"));
