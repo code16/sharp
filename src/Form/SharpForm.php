@@ -143,20 +143,31 @@ abstract class SharpForm
     protected function addColumn(int $size): FormLayoutColumn
     {
         $this->layoutBuilt = false;
-        $tab = $this->addTab("one");
 
-        return $tab->addColumn($size);
+        return $this->getLonelyTab()->addColumn($size);
     }
 
     /**
      * @param FormLayoutTab $tab
      * @return FormLayoutTab
      */
-    private function addTabLayout(FormLayoutTab $tab): FormLayoutTab
+    protected function addTabLayout(FormLayoutTab $tab): FormLayoutTab
     {
         $this->tabs[] = $tab;
 
         return $tab;
+    }
+
+    /**
+     * @return FormLayoutTab
+     */
+    protected function getLonelyTab()
+    {
+        if(!sizeof($this->tabs)) {
+            $this->addTabLayout(new FormLayoutTab("one"));
+        }
+
+        return $this->tabs[0];
     }
 
     /**

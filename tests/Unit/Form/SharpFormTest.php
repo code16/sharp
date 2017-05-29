@@ -1,0 +1,104 @@
+<?php
+
+namespace Code16\Sharp\Tests\Unit\Form;
+
+use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Tests\SharpTestCase;
+
+class SharpFormTest extends SharpTestCase
+{
+    /** @test */
+    function we_can_get_fields()
+    {
+        $form = new class extends SharpForm {
+            function find($id): array {}
+            function update($id, array $data): bool {}
+            function delete($id): bool {}
+            function buildFormFields()
+            {
+                $this->addField(SharpFormTextField::make("name"));
+            }
+            function buildFormLayout() {}
+        };
+
+        $this->assertEquals(["name" => [
+            "key" => "name",
+            "type" => "text",
+            "inputType" => "text"
+        ]], $form->fields());
+    }
+
+    /** @test */
+    function we_can_get_layout()
+    {
+        $form = new class extends SharpForm {
+            function find($id): array {}
+            function update($id, array $data): bool {}
+            function delete($id): bool {}
+            function buildFormFields()
+            {
+                $this->addField(SharpFormTextField::make("name"));
+                $this->addField(SharpFormTextField::make("age"));
+            }
+            function buildFormLayout()
+            {
+                $this->addColumn(6)
+                    ->withSingleField("name");
+                $this->addColumn(6)
+                    ->withSingleField("age");
+            }
+        };
+
+        $this->assertEquals([[
+            "title" => "one",
+            "columns" => [[
+                "size" => 6,
+                "fields" => [[
+                    [
+                        "key" => "name",
+                        "size" => 12,
+                        "sizeXS" => 12
+                    ]
+                ]]
+            ], [
+                "size" => 6,
+                "fields" => [[
+                    [
+                        "key" => "age",
+                        "size" => 12,
+                        "sizeXS" => 12
+                    ]
+                ]]
+            ]]
+        ]], $form->formLayout());
+    }
+
+    /** @test */
+    function we_can_get_instance()
+    {
+        $form = new class extends SharpForm {
+            function find($id): array
+            {
+                return [
+                    "name" => "John Wayne",
+                    "age" => 22,
+                    "job" => "actor"
+                ];
+            }
+            function update($id, array $data): bool {}
+            function delete($id): bool {}
+            function buildFormFields()
+            {
+                $this->addField(SharpFormTextField::make("name"));
+                $this->addField(SharpFormTextField::make("age"));
+            }
+            function buildFormLayout() {}
+        };
+
+        $this->assertEquals([
+            "name" => "John Wayne",
+            "age" => 22
+        ], $form->instance(1));
+    }
+}
