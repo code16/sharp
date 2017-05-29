@@ -16,9 +16,10 @@ class UploadUtil
     public function findAvailableName(string $dirPath, string $fileName, string $disk = "local")
     {
         $k = 1;
-        $baseFileName = $this->normalizeName($fileName);
 
-        list($fileName, $ext) = $this->explodeExtension($fileName);
+        list($baseFileName, $ext) = $this->explodeExtension($fileName);
+
+        $baseFileName = $this->normalizeName($baseFileName);
 
         while (Storage::disk($disk)->exists("$dirPath/$fileName")) {
             $fileName = $baseFileName . "-" . ($k++) . $ext;
@@ -46,9 +47,17 @@ class UploadUtil
     /**
      * @return string
      */
-    public function getTmpUploadDirectory()
+    public function getTmpUploadDirectoryName()
     {
-        $dir = storage_path(config("sharp.uploads.tmp_dir"));
+        return config("sharp.uploads.tmp_dir");
+    }
+
+    /**
+     * @return string
+     */
+    public function getTmpUploadDirectoryPath()
+    {
+        $dir = storage_path("app/" . $this->getTmpUploadDirectoryName());
 
         if (!file_exists($dir)) {
             mkdir($dir, 0777, true);

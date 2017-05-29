@@ -25,12 +25,12 @@ class FormUploadController extends Controller
         }
 
         $filename = $uploadUtil->findAvailableName(
-            $uploadUtil->getTmpUploadDirectory(),
+            $uploadUtil->getTmpUploadDirectoryName(),
             $file->getClientOriginalName(),
             "local"
         );
 
-        $file->move($uploadUtil->getTmpUploadDirectory(), $filename);
+        $file->move($uploadUtil->getTmpUploadDirectoryPath(), $filename);
 
         return response()->json([
             "name" => $filename
