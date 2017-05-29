@@ -119,8 +119,8 @@
             success() {
                 setTimeout(() => this.showProgressBar = false, 1000);
 
-                let data = JSON.parse(this.file.xhrResponse.responseText);
-
+                //let data = JSON.parse(this.file.xhrResponse.responseText);
+                let data = {name:'__image_id__'};
                 this.$emit('success', data);
 
                 if(this.ratioX && this.ratioY) {
