@@ -1,9 +1,7 @@
 <template>
-    <textarea name="" id="" cols="30" rows="10"></textarea>
-    <!--<el-input type="textarea" :rows="rows"-->
-              <!--:placeholder="placeholder"-->
-              <!--v-model="textarea" :disabled="disabled">-->
-    <!--</el-input>-->
+    <textarea class="form-control" :cols="cols" :rows="rows" :placeholder="placeholder" :disabled="disabled"
+              :value="value" @input="handleInput">
+    </textarea>
 </template>
 
 <script>
@@ -23,6 +21,11 @@
         data() {
             return {
                 textarea: this.value
+            }
+        },
+        methods: {
+            handleInput(e) {
+                this.$emit('input', e.target.value);
             }
         }
     }

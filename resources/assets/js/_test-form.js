@@ -18,7 +18,7 @@ export const layout = [
                     ],
                     [
                         {
-                            "fieldset": "dates",
+                            "legend": "dates",
                             "fields": [
                                 [
                                     {

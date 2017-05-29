@@ -1,9 +1,9 @@
 <template>
     <sharp-grid :rows="layout">
         <template scope="fieldLayout">
-            <slot v-if="!fieldLayout.fieldset" v-bind="fieldLayout"></slot>
+            <slot v-if="!fieldLayout.legend" v-bind="fieldLayout"></slot>
             <fieldset v-else>
-                <legend>{{fieldLayout.fieldset}}</legend>
+                <legend>{{fieldLayout.legend}}</legend>
                 <sharp-fields-layout :layout="fieldLayout.fields">
                     <template scope="fieldset">
                         <slot v-bind="fieldset"></slot>
