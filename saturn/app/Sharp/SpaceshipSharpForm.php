@@ -9,6 +9,7 @@ use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentTransformer;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\SharpForm;
 
 class SpaceshipSharpForm extends SharpForm
@@ -46,6 +47,12 @@ class SpaceshipSharpForm extends SharpForm
                         ];
                     })->all()
                 )
+
+        )->addField(
+            SharpFormUploadField::make("picture")
+                ->setLabel("Picture")
+                ->setFileFilterImages()
+                ->setCropRatio("1:1")
         );
     }
 
@@ -57,6 +64,8 @@ class SpaceshipSharpForm extends SharpForm
                 ->withFieldset("Technical details", function($fieldset) {
                     return $fieldset->withFields("capacity|4,6", "construction_date|8,6");
                 });
+        })->addColumn(6, function($column) {
+            $column->withSingleField("picture");
         });
     }
 

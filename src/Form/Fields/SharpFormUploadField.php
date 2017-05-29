@@ -17,11 +17,6 @@ class SharpFormUploadField extends SharpFormField
     /**
      * @var string
      */
-    protected $thumbnail;
-
-    /**
-     * @var string
-     */
     protected $cropRatio;
 
     /**
@@ -76,17 +71,6 @@ class SharpFormUploadField extends SharpFormField
         return $this;
     }
 
-    /**
-     * @param string $thumbnail
-     * @return static
-     */
-    public function setThumbnail(string $thumbnail)
-    {
-        $this->thumbnail = $thumbnail;
-
-        return $this;
-    }
-
 
     /**
      * @return array
@@ -94,7 +78,6 @@ class SharpFormUploadField extends SharpFormField
     protected function validationRules()
     {
         return [
-            "thumbnail" => "regex:/[0-9]+x[0-9]+/",
             "maxFileSize" => "numeric",
             "ratioX" => "integer|nullable",
             "ratioY" => "integer|nullable",
@@ -108,10 +91,9 @@ class SharpFormUploadField extends SharpFormField
     {
         return parent::buildArray([
             "maxFileSize" => $this->maxFileSize,
-            "fileFilter" => $this->fileFilter,
-            "thumbnail" => $this->thumbnail,
-            "ratioX" => $this->cropRatio ? $this->cropRatio[0] : null,
-            "ratioY" => $this->cropRatio ? $this->cropRatio[1] : null,
+            "fileFilter" => $this->fileFilter ? explode(",", $this->fileFilter) : null,
+            "ratioX" => $this->cropRatio ? (int)$this->cropRatio[0] : null,
+            "ratioY" => $this->cropRatio ? (int)$this->cropRatio[1] : null,
         ]);
     }
 }

@@ -37,19 +37,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
             ->setFileFilter("jpg");
 
         $this->assertArraySubset(
-            ["fileFilter" => "jpg"],
-            $formField->toArray()
-        );
-    }
-
-    /** @test */
-    function we_can_define_thumbnail()
-    {
-        $formField = SharpFormUploadField::make("text")
-            ->setThumbnail("800x600");
-
-        $this->assertArraySubset(
-            ["thumbnail" => "800x600"],
+            ["fileFilter" => ["jpg"]],
             $formField->toArray()
         );
     }

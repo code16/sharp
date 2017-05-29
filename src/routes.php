@@ -22,6 +22,10 @@ Route::group([
         ->name("code16.sharp.api.form.store")
         ->uses('FormController@store');
 
+    Route::post('/form/upload')
+        ->name("code16.sharp.api.form.upload")
+        ->uses('FormUploadController@store');
+
 });
 
 Route::group([
