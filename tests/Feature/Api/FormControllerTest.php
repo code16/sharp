@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
-class ApiControllerTest extends BaseApiTest
+class FormControllerTest extends BaseApiTest
 {
     /** @test */
     public function we_can_get_form_data_for_an_entity()
