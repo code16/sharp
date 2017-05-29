@@ -108,12 +108,12 @@ export const data = {
     "name":"B",
     "admin_password":"",
     "mdeditor":"",
-    //"myimage": null,
-    "myimage": {
+    "myimage": null,
+    /*"myimage": {
         name:"doggo.jpg",
         size:14550,
         thumbnail:"img/chien.jpg"
-    },
+    },*/
     "mylist": [{
         name:'', surname:'', age:''
     }],
