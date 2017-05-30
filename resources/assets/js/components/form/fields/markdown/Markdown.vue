@@ -145,6 +145,7 @@
                 placeholder: this.placeholder,
                 spellChecker: false,
                 toolbar: this.toolbar,
+                autoDownloadFontAwesome: false
             });
 
             let imageBtn = mde.options.toolbar.find(btn => btn.name === 'image');

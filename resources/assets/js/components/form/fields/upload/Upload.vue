@@ -1,20 +1,23 @@
 <template>
-    <sharp-vue-clip :options="options" :value="value" :ratioX="ratioX" :ratioY="ratioY"></sharp-vue-clip>
+    <sharp-vue-clip :options="options" :value="value" :ratioX="ratioX" :ratioY="ratioY"
+                    @error="$field.$emit('error',$event)"
+                    @reset="$field.$emit('clear')">
+    </sharp-vue-clip>
 </template>
 
 <script>
     import Vue from 'vue';
     import SharpVueClip from './VueClip';
-    import Messages from '../../../messages';
+    import Messages from '../../../../messages';
 
-    import { UPLOAD_URL } from '../../../consts';
+    import { UPLOAD_URL } from '../../../../consts';
 
     export default {
         name: 'SharpUpload',
         components: {
             SharpVueClip
         },
-
+        inject: ['$field'],
         props: {
             value: Object,
 
@@ -46,6 +49,9 @@
 
                 return opt;
             }
+        },
+        methods:{
+            onError(e) { this.$field.$emit('error',e); }
         }
     };
 </script>

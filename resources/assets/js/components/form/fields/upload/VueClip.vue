@@ -82,7 +82,7 @@
         },
         watch: {
             'file.status'(status) {
-                typeof this[status] === 'function' && this[status]();
+                (status in this.statusFunction) && this.statusFunction[status]();
             },
         },
         computed: {
@@ -96,49 +96,44 @@
                 return this.croppedImg || this.originalImageSrc;
             },
             size() {
-                let prepend = '';
                 let size = (parseFloat((this.file.size).toFixed(2))/1024)/1024;
-                if(size < 0.1) {
-                    prepend='<';
-                    size = 0.1;
-                }
-                return `${prepend}${size.toLocaleString()} MB`;
+                let res = '';
+                if(size<0.1) { res+='<'; size=0.1 }
+                res += size.toLocaleString();
+                return `${res} MB`;
             },
             progress() {
                 return Math.floor(this.file.progress);
             },
+            statusFunction() {
+                return { error:this.onStatusError, success:this.onStatusSuccess, added:this.onStatusAdded }
+            }
         },
         methods: {
             // status callbacks
-            added() {
-                this.showProgressBar = true
+            onStatusAdded() {
+                this.showProgressBar = true;
+                this.$emit('reset');
             },
-            error() {
-                this.showProgressBar = false
+            onStatusError() {
+                this.showProgressBar = false;
+                let msg = this.file.errorMessage;
+                this.remove();
+                this.$emit('error', msg);
             },
-            success() {
+            onStatusSuccess() {
                 setTimeout(() => this.showProgressBar = false, 1000);
 
-                //let data = JSON.parse(this.file.xhrResponse.responseText);
-                let data = {name:'__image_id__'};
+                let data = JSON.parse(this.file.xhrResponse.responseText);
                 this.$emit('success', data);
 
+                let value = { uploaded:true, ...data };
+
                 if(this.ratioX && this.ratioY) {
-                    this.$nextTick(()=>{
-                        this.updateCroppedImage();
-                        this.$parent.$emit('input', {
-                            uploaded: true,
-                            cropData: this.getCropData(),
-                            ...data
-                        });
-                    });
+                    this.updateCroppedImage();
+                    value.cropData = this.getCropData();
                 }
-                else {
-                    this.$parent.$emit('input', {
-                        uploaded: true,
-                        ...data
-                    });
-                }
+                this.$parent.$emit('input',value);
             },
 
             // actions
@@ -149,6 +144,7 @@
                 this.resetEdit();
 
                 this.$parent.$emit('input', null);
+                this.$emit('reset');
             },
 
             resetEdit() {
@@ -201,9 +197,5 @@
             }));
             this.file.thumbnail = this.value.thumbnail;
         },
-        mounted() {
-            console.log(this);
-            //console.log(this.$refs.cropper);
-        }
     }
 </script>

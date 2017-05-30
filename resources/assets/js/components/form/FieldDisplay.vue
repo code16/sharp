@@ -1,5 +1,5 @@
 <script>
-    import util from '../util';
+    import util from '../../util';
     import FieldContainer from './FieldContainer';
 
     const computeSelectCondition = (condValues, fieldValue, isSingleSelect) => {

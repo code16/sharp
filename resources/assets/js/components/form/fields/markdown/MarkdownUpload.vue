@@ -18,7 +18,7 @@
 <script>
     import Vue from 'vue';
     import SharpVueClip from '../upload/VueClip';
-    import Messages from '../../../messages';
+    import Messages from '../../../../messages';
 
     export default Vue.extend({
         props: {

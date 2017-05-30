@@ -34,7 +34,7 @@
     import SharpTemplate from '../Template.vue';
     import Multiselect from 'vue-multiselect';
 
-    import SearchStrategy from '../../app/models/SearchStrategy';
+    import SearchStrategy from '../../../app/models/SearchStrategy';
 
 
     export default {
