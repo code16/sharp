@@ -89,7 +89,7 @@
 //            fieldKey: String,
 //            contextFields:Object,
 //            contextData:Object,
-//             ... callbacks
+//             ... callbacks, error
 //        },
 
         render(h, { props }) {

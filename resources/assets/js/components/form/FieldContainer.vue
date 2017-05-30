@@ -28,12 +28,9 @@
         props : {
             ...Field.props,
 
-            label: {
-                type: String
-            },
-            helpMessage: {
-                type: Array
-            }
+            label: String,
+            helpMessage: Array,
+            fieldErrors: Array
         },
         data() {
             return {
@@ -46,6 +43,9 @@
             value() {
                 if(this.state === 'error')
                     this.clear();
+            },
+            fieldErrors([e]) {
+                e && this.setError(e);
             }
         },
         computed: {

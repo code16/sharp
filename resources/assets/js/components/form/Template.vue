@@ -1,5 +1,6 @@
 <template>
-    <rendered-template :template="template"
+    <rendered-template :name="name"
+                       :template="template"
                        :template-data="templateData"
                        :template-props="templateProps">
     </rendered-template>
@@ -13,9 +14,9 @@
             RenderedTemplate: {
                 functional: true,
                 render(h, { props }) {
-                    const { template, templateProps, templateData } = props;
+                    const { name ,template, templateProps, templateData } = props;
                     return h({
-                            name: 'AAA',
+                            name: `SharpTemplate${name}`,
                             template:`<div>${template}</div>`,
                             props: templateProps
                         }, {

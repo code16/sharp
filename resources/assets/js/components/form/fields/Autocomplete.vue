@@ -1,7 +1,7 @@
 <template>
     <div class="SharpAutocomplete" :class="`SharpAutocomplete--${state}`">
         <div v-if="state=='valuated'" class="SharpAutocomplete__result-item form-control">
-            <sharp-template name="resultItem" :template="resultItemTemplate" :template-data="valueObject"></sharp-template>
+            <sharp-template name="ResultItem" :template="resultItemTemplate" :template-data="valueObject"></sharp-template>
             <div class="SharpAutocomplete__close-btn-container" @click="handleResetClick">
                 <button type="button" class="close" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -23,7 +23,7 @@
                      @close="handleDropdownClose"
                      ref="multiselect">
             <template slot="option" scope="props">
-                <sharp-template name="listItem" :template="listItemTemplate" :template-data="props.option"></sharp-template>
+                <sharp-template name="ListItem" :template="listItemTemplate" :template-data="props.option"></sharp-template>
             </template>
             <template slot="noResult">Aucun résultats</template>
         </multiselect>
