@@ -11,6 +11,7 @@ use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Form\SharpFormException;
 
 class SpaceshipSharpForm extends SharpForm
 {
@@ -88,6 +89,10 @@ class SpaceshipSharpForm extends SharpForm
     function update($id, array $data): bool
     {
         $instance = $id ? Spaceship::findOrFail($id) : new Spaceship;
+
+        if($data["name"] == "error") {
+            throw new SharpFormException("Le nom ne peut pas être «error»");
+        }
 
         return $this->setCustomValuator("capacity", function($spaceship, $value) {
             return $value * 1000;
