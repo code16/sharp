@@ -4,16 +4,16 @@ namespace Code16\Sharp\Utils;
 
 use Illuminate\Support\Facades\Storage;
 
-class UploadUtil
+class FileUtil
 {
 
     /**
-     * @param string $dirPath
      * @param string $fileName
+     * @param string $path
      * @param string $disk
      * @return string
      */
-    public function findAvailableName(string $dirPath, string $fileName, string $disk = "local")
+    public function findAvailableName(string $fileName, string $path = "", string $disk = "local")
     {
         $k = 1;
 
@@ -21,7 +21,7 @@ class UploadUtil
 
         $baseFileName = $this->normalizeName($baseFileName);
 
-        while (Storage::disk($disk)->exists("$dirPath/$fileName")) {
+        while (Storage::disk($disk)->exists("$path/$fileName")) {
             $fileName = $baseFileName . "-" . ($k++) . $ext;
         }
 
@@ -42,28 +42,6 @@ class UploadUtil
         }
 
         return [$fileName, $ext];
-    }
-
-    /**
-     * @return string
-     */
-    public function getTmpUploadDirectoryName()
-    {
-        return config("sharp.uploads.tmp_dir");
-    }
-
-    /**
-     * @return string
-     */
-    public function getTmpUploadDirectoryPath()
-    {
-        $dir = storage_path("app/" . $this->getTmpUploadDirectoryName());
-
-        if (!file_exists($dir)) {
-            mkdir($dir, 0777, true);
-        }
-
-        return $dir;
     }
 
     /**

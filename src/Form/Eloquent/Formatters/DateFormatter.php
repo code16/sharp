@@ -9,10 +9,9 @@ class DateFormatter
 
     /**
      * @param $value
-     * @param array $options
      * @return mixed
      */
-    public function format($value, array $options = [])
+    public function format($value)
     {
         return Carbon::parse($value);
     }

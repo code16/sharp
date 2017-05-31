@@ -12,7 +12,10 @@ class FormUploadControllerTest extends SharpTestCase
     {
         parent::setUp();
 
-        config(['sharp.uploads.tmp_dir' => 'tmp']);
+        config(['filesystems.disks.sharp_uploads' => [
+            'driver' => 'local',
+            'root' => storage_path('app/tmp'),
+        ]]);
 
         File::deleteDirectory(storage_path("app/tmp"));
     }

@@ -55,6 +55,8 @@ class SpaceshipSharpForm extends SharpForm
                 ->setLabel("Picture")
                 ->setFileFilterImages()
                 ->setCropRatio("1:1")
+                ->setStorageDisk("local")
+                ->setStorageBasePath("data/Spaceship/{id}")
         );
     }
 

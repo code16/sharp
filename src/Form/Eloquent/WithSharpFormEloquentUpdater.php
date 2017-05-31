@@ -6,6 +6,7 @@ use Closure;
 use Code16\Sharp\Form\Eloquent\Exceptions\SharpFormEloquentUpdateException;
 use Code16\Sharp\Form\Transformers\SharpAttributeValuator;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 trait WithSharpFormEloquentUpdater
 {
@@ -39,38 +40,71 @@ trait WithSharpFormEloquentUpdater
      */
     function save(Model $instance, array $data): bool
     {
+        $delayedAttributes = [];
         $relationships = [];
 
         foreach($data as $attribute => $value) {
-            $value = $this->formatValue($value, $attribute);
-
-            if ($customValuator = $this->customValuator($attribute)) {
-                $instance->$attribute = $customValuator->getValue(
-                    $instance, $attribute, $value
-                );
-
-                continue;
-            }
 
             if($this->isRelationship($instance, $attribute)) {
                 $relationships[$attribute] = [
                     "relation_type" => get_class($instance->$attribute()),
-                    "value" => $value
+                    "value" => $this->formatValueAccordingToFieldType($value, $attribute, $instance)
                 ];
 
                 continue;
             }
 
-            $instance->$attribute = $value;
+            try {
+                $value = $this->formatValueAccordingToFieldType($value, $attribute, $instance);
+
+            } catch(ModelNotFoundException $ex) {
+                 // We try to format a field which needs the instance to be persisted.
+                // For example: the UploadFormatter needs a persisted instance if
+                // its storagePath contains a parameter, like {id}. We delay the valuate.
+                $delayedAttributes[$attribute] = $value;
+
+                continue;
+            }
+
+            $this->valuateAttribute($instance, $attribute, $value);
         }
 
-        // End of "normal" attributes, we save the model before handling relationships
+        // End of "normal" attributes.
         $instance->save();
 
-        // Next, handle relationships
+        // Next, handle delayed attributes
+        foreach($delayedAttributes as $attribute => $value) {
+            $this->valuateAttribute(
+                $instance, $attribute, $this->formatValueAccordingToFieldType($value, $attribute, $instance)
+            );
+        }
+
+        $instance->save();
+
+        // Finally, handle relationships.
         $this->saveRelationships($instance, $relationships);
 
         return true;
+    }
+
+    /**
+     * Valuates the $attribute with $value
+     *
+     * @param Model $instance
+     * @param string $attribute
+     * @param $value
+     */
+    protected function valuateAttribute(Model $instance, string $attribute, $value)
+    {
+        if ($customValuator = $this->customValuator($attribute)) {
+            $instance->$attribute = $customValuator->getValue(
+                $instance, $attribute, $value
+            );
+
+            return;
+        }
+
+        $instance->$attribute = $value;
     }
 
     /**
@@ -78,10 +112,11 @@ trait WithSharpFormEloquentUpdater
      *
      * @param $value
      * @param string $attribute
+     * @param Model $instance
      * @return mixed
      * @throws SharpFormEloquentUpdateException
      */
-    protected function formatValue($value, string $attribute)
+    protected function formatValueAccordingToFieldType($value, string $attribute, Model $instance)
     {
         $field = $this->findFieldByKey($attribute);
 
@@ -90,9 +125,9 @@ trait WithSharpFormEloquentUpdater
         }
 
         $valueFormatter = app('Code16\Sharp\Form\Eloquent\Formatters\\'
-            . ucfirst($field["type"]) . 'Formatter');
+            . ucfirst($field->type()) . 'Formatter');
 
-        return $valueFormatter->format($value);
+        return $valueFormatter->format($value, $field, $instance);
     }
 
     /**

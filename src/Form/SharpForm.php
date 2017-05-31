@@ -39,10 +39,7 @@ abstract class SharpForm
      */
     function fields(): array
     {
-        if(!$this->formBuilt) {
-            $this->buildFormFields();
-            $this->formBuilt = true;
-        }
+        $this->checkFormIsBuilt();
 
         return collect($this->fields)->map(function($field) {
             return $field->toArray();
@@ -112,13 +109,13 @@ abstract class SharpForm
 
     /**
      * @param string $key
-     * @return array
+     * @return SharpFormField
      */
     function findFieldByKey(string $key)
     {
-        return collect($this->fields())
-            ->where("key", $key)
-            ->first();
+        $this->checkFormIsBuilt();
+
+        return collect($this->fields)->where("key", $key)->first();
     }
 
     /**
@@ -205,6 +202,14 @@ abstract class SharpForm
         return $this->tabs[0];
     }
 
+    private function checkFormIsBuilt()
+    {
+        if (!$this->formBuilt) {
+            $this->buildFormFields();
+            $this->formBuilt = true;
+        }
+    }
+
     /**
      * @param array $data
      * @return bool
@@ -221,7 +226,11 @@ abstract class SharpForm
      */
     public function create(): array
     {
-        return [];
+        return collect($this->getFieldKeys())
+            ->flip()
+            ->map(function() {
+                return null;
+            })->all();
     }
 
     /**
