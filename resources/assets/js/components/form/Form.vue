@@ -14,7 +14,8 @@
                                                          :context-fields="fields"
                                                          :context-data="data"
                                                          :field-layout="fieldLayout"
-                                                         :update-data="updateData">
+                                                         :update-data="updateData"
+                                                         :field-errors="errors[fieldLayout.key]">
                                     </sharp-field-display>
                                 </template>
                             </sharp-fields-layout>
@@ -27,8 +28,6 @@
             Chargement du formulaire...
         </template>
     </div>
-
-
 </template>
 
 <script>
@@ -68,6 +67,7 @@
                 data: null,
                 layout: null,
                 ready: false,
+                errors:{},
                 tabIndex: 0,
             }
         },
@@ -96,7 +96,13 @@
                 return axios.post(this.apiPath, this.data)
                     .then(response => {
 
-                    });
+                    })
+                    .catch(({response}) => {
+                        if(response.status===422)
+                            this.errors = response.data || {};
+                        else if(response.status===417)
+                            alert(response.data.message)
+                    })
             },
         },
         created() {

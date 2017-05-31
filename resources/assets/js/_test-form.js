@@ -86,6 +86,11 @@ export const layout = {
                             {
                                 "key" : "select"
                             }
+                        ],
+                        [
+                            {
+                                "key":"html"
+                            }
                         ]
                     ]
                 }
@@ -118,7 +123,11 @@ export const data = {
         name:'', surname:'', age:''
     }],
     //"select": [1,3]
-    "select":1
+    "select":1,
+    "html": {
+        title: 'Salut',
+        paragraphe: 'Comment ça va?'
+    }
 };
 
 export const fields = {
@@ -239,5 +248,9 @@ export const fields = {
         options: [
             {id:0,label:'Jérôme'}, {id:1,label:'François'}, {id:2,label:'Raymond'}, {id:3,label:'Claude'}, {id:4,label:'Antoine'}, {id:5,label:'Félicité'}
         ]
+    },
+    'html': {
+        type:'html',
+        template:'<h4>{{title}}</h4><p>{{paragraphe}}</p>'
     }
 };
