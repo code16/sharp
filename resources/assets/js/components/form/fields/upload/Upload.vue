@@ -46,7 +46,6 @@
                         message: Messages.uploadFileTooBig
                     }
                 }
-
                 return opt;
             }
         },

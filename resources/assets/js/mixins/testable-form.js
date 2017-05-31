@@ -1,4 +1,4 @@
-import { fields, data, layout } from '../_test-form';
+import { fields, data, layout, errors } from '../_test-form';
 
 export default {
     props: {
@@ -11,6 +11,9 @@ export default {
             this.layout = layout;
 
             this.ready = true;
+            this.$nextTick(_=> {
+                this.errors = errors;
+            });
         }
     }
 }

@@ -35,11 +35,13 @@
             </div>
         </form>
         <template v-if="!!originalImageSrc">
-            <b-modal v-model="showEditModal" @ok="imageEditOk" @shown="editModalShown" :close-on-backdrop="false">
+            <b-modal v-model="showEditModal" @ok="onEditModalOk" @shown="onEditModalShown" :close-on-backdrop="false">
                 <vue-cropper ref="cropper" class="SharpUpload__modal-vue-cropper"
                              :view-mode="2" drag-mode="crop"  :aspect-ratio="ratioX/ratioY"
                              :auto-crop-area="1" :zoomable="false" :guides="false"
-                             :background="true" :rotatable="true" :src="originalImageSrc" alt="Source image">
+                             :background="true" :rotatable="true" :src="originalImageSrc"
+                             :ready="onCropperReady"
+                             alt="Source image">
                 </vue-cropper>
                 <button class="btn btn-primary" @click="rotate(90)"><i class="fa fa-rotate-right"></i></button>
                 <button class="btn btn-primary" @click="rotate(-90)"><i class="fa fa-rotate-left"></i></button>
@@ -127,13 +129,8 @@
                 let data = JSON.parse(this.file.xhrResponse.responseText);
                 this.$emit('success', data);
 
-                let value = { uploaded:true, ...data };
-
-                if(this.ratioX && this.ratioY) {
-                    this.updateCroppedImage();
-                    value.cropData = this.getCropData();
-                }
-                this.$parent.$emit('input',value);
+                this.$parent.$emit('input',{ uploaded:true, ...data });
+                this.isCropperReady() && this.onCropperReady();
             },
 
             // actions
@@ -152,8 +149,35 @@
                 this.resized = false;
             },
 
-            imageEditOk() {
+            onEditModalShown() {
+                if(!this.resized) {
+                    this.$nextTick(()=>{
+                        let cropper = this.$refs.cropper.cropper;
+
+                        cropper.resize();
+                        cropper.reset();
+                        this.resized=true;
+                    });
+                }
+            },
+
+            onEditModalOk() {
                 this.updateCroppedImage();
+                this.updateCropData();
+            },
+
+            isCropperReady() {
+                return this.$refs.cropper && this.$refs.cropper.cropper.ready;
+            },
+
+            onCropperReady() {
+                if(this.ratioX && this.ratioY) {
+                    this.updateCroppedImage();
+                    this.updateCropData();
+                }
+            },
+
+            updateCropData() {
                 this.$parent.$emit('input', {
                     ...this.value,
                     cropData: this.getCropData(),
@@ -172,17 +196,7 @@
                 rotateResize(this.$refs.cropper.cropper, degree);
             },
 
-            editModalShown() {
-                if(!this.resized) {
-                    this.$nextTick(()=>{
-                        let cropper = this.$refs.cropper.cropper;
 
-                        cropper.resize();
-                        cropper.reset();
-                        this.resized=true;
-                    });
-                }
-            }
         },
         created() {
             this.options.thumbnailWidth = null;

@@ -6,7 +6,7 @@ export const layout = {
             "title": "Tab1",
             "columns": [
                 {
-                    "size": 7,
+                    "size": 6,
                     "fields": [
                         [
                             {
@@ -44,7 +44,7 @@ export const layout = {
                     ]
                 },
                 {
-                    "size": 5,
+                    "size": 6,
                     "fields": [
                         [
                             {
@@ -63,42 +63,29 @@ export const layout = {
                                     ]
                                 ]
                             }
-                        ], [
-                            {
-                                "key": "show_autocomplete"
-                            }, {
-                                "key": "show_upload"
-                            }
-                        ], [
-                            {
-                                "key" : "name"
-                            }
-                        ], [
-                            {
-                                "key": "admin_password"
-                            }
-                        ],[
-                            {
-                                "key" : "myimage"
-                            }
                         ],
-                        [
-                            {
-                                "key" : "select"
-                            }
-                        ],
-                        [
-                            {
-                                "key":"html"
-                            }
-                        ]
+                        [{"key": "show_autocomplete"}],
+                        [{"key" : "name"}],
+                        [{"key": "admin_password"}],
+                        [{"key": "show_upload_1"},{"key": "show_upload_2"}],
+                        [{"key" : "myimage"}],
+                        [{"key" : "select"}],
+                        [{"key":"show_html"}],
+                        [{"key":"html"}]
                     ]
                 }
             ]
         },
         {
             title:'tab2',
-            columns:[]
+            columns:[
+                {
+                    "size":12,
+                    "fields": [
+                        [{"key":"test_tab_2"}]
+                    ]
+                }
+            ]
         }
     ]
 };
@@ -107,12 +94,13 @@ export const data = {
     "A":"Valeur texte",
     "B":'',
     "number":1,
-    "date":'2017-04-12 12:30:06',
+    "date":null,
     "show_autocomplete":true,
-    "show_upload":true,
     "name":"B",
     "admin_password":"",
     "mdeditor":"",
+    "show_upload_1":true,
+    "show_upload_2":false,
     "myimage": null,
     /*"myimage": {
         name:"doggo.jpg",
@@ -122,12 +110,14 @@ export const data = {
     "mylist": [{
         name:'', surname:'', age:''
     }],
-    //"select": [1,3]
-    "select":1,
+    "select": [1,3],
+    //"select":1,
+    "show_html": true,
     "html": {
         title: 'Salut',
-        paragraphe: 'Comment ça va?'
-    }
+        paragraphe: "Le select au dessus doit avoir François et Claude pour que je m'affiche"
+    },
+    "test_tab_2": 'aaa'
 };
 
 export const fields = {
@@ -186,6 +176,7 @@ export const fields = {
     },
     'admin_password': {
         type:'password',
+        label:'Mot de passe pour les administrateur',
         conditionalDisplay: {
             operator: 'or',
             fields: [{
@@ -193,6 +184,14 @@ export const fields = {
                 values:['C','D']
             }]
         }
+    },
+    'show_upload_1': {
+        type: 'check',
+        label: "Appuyer pour afficher l'upload"
+    },
+    'show_upload_2': {
+        type: 'check',
+        label: "Ou ici"
     },
     'myimage': {
         type: 'upload',
@@ -203,7 +202,10 @@ export const fields = {
         conditionalDisplay: {
             operator:'or',
             fields: [{
-                key:'show_upload',
+                key:'show_upload_1',
+                values: true
+            },{
+                key:'show_upload_2',
                 values: true
             }]
         },
@@ -233,7 +235,8 @@ export const fields = {
     'date':{
         type:'date',
         hasTime:true,
-        stepTime:20
+        stepTime:20,
+        minTime:'8:20'
     },
     'mdeditor': {
         type: 'markdown',
@@ -243,14 +246,37 @@ export const fields = {
     },
     'select': {
         type:'select',
-        //multiple:true,
+        multiple:true,
         display:'dropdown',
         options: [
             {id:0,label:'Jérôme'}, {id:1,label:'François'}, {id:2,label:'Raymond'}, {id:3,label:'Claude'}, {id:4,label:'Antoine'}, {id:5,label:'Félicité'}
         ]
     },
+    'show_html': {
+        type:'check',
+        text:'Show HTML field'
+    },
     'html': {
         type:'html',
-        template:'<h4>{{title}}</h4><p>{{paragraphe}}</p>'
+        template:'<h4>{{title}}</h4><p>{{paragraphe}}</p>',
+        conditionalDisplay: {
+            operator: 'and',
+            fields: [{
+                key: 'select',
+                values: [1,3]
+            },{
+                key:'show_html',
+                values: true
+            }
+            ]
+        }
+    },
+    'test_tab_2': {
+        type:'text',
+        label:'Input de test ;)'
     }
+};
+
+export const errors = {
+    'test_tab_2': ['Erreur de test']
 };
