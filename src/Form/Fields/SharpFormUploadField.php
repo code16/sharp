@@ -20,6 +20,16 @@ class SharpFormUploadField extends SharpFormField
     protected $cropRatio;
 
     /**
+     * @var string
+     */
+    protected $storageDisk = "local";
+
+    /**
+     * @var string
+     */
+    protected $storageBasePath = "data";
+
+    /**
      * @param string $key
      * @return static
      */
@@ -69,6 +79,44 @@ class SharpFormUploadField extends SharpFormField
         $this->cropRatio = explode(":", $ratio);
 
         return $this;
+    }
+
+    /**
+     * @param string $storageDisk
+     * @return static
+     */
+    public function setStorageDisk(string $storageDisk)
+    {
+        $this->storageDisk = $storageDisk;
+
+        return $this;
+    }
+
+    /**
+     * @param string $storageBasePath
+     * @return static
+     */
+    public function setStorageBasePath(string $storageBasePath)
+    {
+        $this->storageBasePath = $storageBasePath;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function storageDisk(): string
+    {
+        return $this->storageDisk;
+    }
+
+    /**
+     * @return string
+     */
+    public function storageBasePath(): string
+    {
+        return $this->storageBasePath;
     }
 
 

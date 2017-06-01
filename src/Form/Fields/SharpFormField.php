@@ -10,7 +10,7 @@ abstract class SharpFormField
     /**
      * @var string
      */
-    protected $key;
+    public $key;
 
     /**
      * @var string
@@ -147,6 +147,14 @@ abstract class SharpFormField
      * @return array
      */
     public abstract function toArray(): array;
+
+    /**
+     * @return string
+     */
+    public function type(): string
+    {
+        return $this->type;
+    }
 
     /**
      * Return specific validation rules.

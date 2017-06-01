@@ -10,6 +10,7 @@ use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
+use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpFormException;
 
@@ -55,20 +56,29 @@ class SpaceshipSharpForm extends SharpForm
                 ->setLabel("Picture")
                 ->setFileFilterImages()
                 ->setCropRatio("1:1")
+                ->setStorageDisk("local")
+                ->setStorageBasePath("data/Spaceship/{id}")
         );
     }
 
     function buildFormLayout()
     {
-        $this->addColumn(6, function($column) {
-            $column->withSingleField("name")
-                ->withSingleField("type_id")
-                ->withFieldset("Technical details", function($fieldset) {
+        $this->addTab("tab 1", function(FormLayoutTab $tab) {
+            $tab->addColumn(6, function($column) {
+                $column->withSingleField("name")
+                    ->withSingleField("type_id");
+            })->addColumn(6, function($column) {
+                $column->withSingleField("picture");
+            });
+
+        })->addTab("tab 2", function(FormLayoutTab $tab) {
+            $tab->addColumn(6, function($column) {
+                $column->withFieldset("Technical details", function($fieldset) {
                     return $fieldset->withFields("capacity|4,6", "construction_date|8,6");
                 });
-        })->addColumn(6, function($column) {
-            $column->withSingleField("picture");
+            });
         });
+
     }
 
 //    function create()

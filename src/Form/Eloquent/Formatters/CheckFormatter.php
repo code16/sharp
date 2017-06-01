@@ -7,10 +7,9 @@ class CheckFormatter
 
     /**
      * @param $value
-     * @param array $options
      * @return mixed
      */
-    public function format($value, array $options = [])
+    public function format($value)
     {
         if(is_string($value) && strlen($value)) {
             return !in_array($value, [

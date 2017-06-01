@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Http\Api;
 
-use Code16\Sharp\Utils\UploadUtil;
+use Code16\Sharp\Utils\FileUtil;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -12,11 +12,11 @@ class FormUploadController extends Controller
 
     /**
      * @param Request $request
-     * @param UploadUtil $uploadUtil
+     * @param FileUtil $fileUtil
      * @return \Illuminate\Http\JsonResponse
      * @throws FileNotFoundException
      */
-    public function store(Request $request, UploadUtil $uploadUtil)
+    public function store(Request $request, FileUtil $fileUtil)
     {
         $file = $request->file('file');
 
@@ -24,13 +24,11 @@ class FormUploadController extends Controller
             throw new FileNotFoundException;
         }
 
-        $filename = $uploadUtil->findAvailableName(
-            $uploadUtil->getTmpUploadDirectoryName(),
-            $file->getClientOriginalName(),
-            "local"
+        $filename = $fileUtil->findAvailableName(
+            $file->getClientOriginalName(), '', 'sharp_uploads'
         );
 
-        $file->move($uploadUtil->getTmpUploadDirectoryPath(), $filename);
+        $file->storeAs('', $filename, 'sharp_uploads');
 
         return response()->json([
             "name" => $filename
