@@ -2,7 +2,9 @@
 
 namespace Code16\Sharp\Form\Eloquent\Formatters;
 
-abstract class AbstractSimpleFormatter
+use Carbon\Carbon;
+
+class DateFormatter
 {
 
     /**
@@ -11,6 +13,6 @@ abstract class AbstractSimpleFormatter
      */
     public function format($value)
     {
-        return $value;
+        return Carbon::parse($value);
     }
 }

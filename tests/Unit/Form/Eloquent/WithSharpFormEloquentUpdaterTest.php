@@ -95,6 +95,21 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
             "mother_id" => $mother->id
         ]);
     }
+
+//    /** @test */
+//    function we_handle_delayed_attributes()
+//    {
+//        $person = Person::create(["name" => "John Wayne"]);
+//
+//        $form = new WithSharpFormEloquentUpdaterTestForm();
+//        $form->setCustomValuator("name", SharpAttributeUppercaseValuator::class);
+//        $form->update($person->id, ["name" => "John Richard Wayne"]);
+//
+//        $this->assertDatabaseHas("people", [
+//            "id" => $person->id,
+//            "name" => "JOHN RICHARD WAYNE"
+//        ]);
+//    }
 }
 
 class WithSharpFormEloquentUpdaterTestForm extends SharpForm

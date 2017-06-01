@@ -24,11 +24,18 @@ class FormLayoutTab implements HasLayout
 
     /**
      * @param int $size
-     * @return FormLayoutColumn
+     * @param \Closure|null $callback
+     * @return $this
      */
-    public function addColumn(int $size): FormLayoutColumn
+    public function addColumn(int $size, \Closure $callback = null)
     {
-        return $this->addColumnLayout(new FormLayoutColumn($size));
+        $column = $this->addColumnLayout(new FormLayoutColumn($size));
+
+        if($callback) {
+            $callback($column);
+        }
+
+        return $this;
     }
 
     /**
@@ -48,7 +55,7 @@ class FormLayoutTab implements HasLayout
      * @param FormLayoutColumn $column
      * @return FormLayoutColumn
      */
-    private function addColumnLayout(FormLayoutColumn $column): FormLayoutColumn
+    public function addColumnLayout(FormLayoutColumn $column): FormLayoutColumn
     {
         $this->columns[] = $column;
 
