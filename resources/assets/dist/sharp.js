@@ -23509,7 +23509,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
     },
     mounted: function mounted() {
-        console.log(this);
+        //console.log(this);
     }
 });
 
@@ -52861,12 +52861,14 @@ if (false) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vendor_bootstrap_vue_components_tabs__ = __webpack_require__(232);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vendor_bootstrap_vue_components_tabs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__vendor_bootstrap_vue_components_tabs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vendor_bootstrap_vue_components_tab__ = __webpack_require__(231);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vendor_bootstrap_vue_components_tab___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__vendor_bootstrap_vue_components_tab__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Tabs__ = __webpack_require__(254);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Tabs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Tabs__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Tab__ = __webpack_require__(253);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Tab___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Tab__);
+var _components;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -52887,50 +52889,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-
-
-
-var Title = __WEBPACK_IMPORTED_MODULE_2_vue___default.a.extend({
-    template: '<span :class="{hasError:hasError}">{{title}}</span>',
-    props: ['title', 'hasError']
-});
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpFormLayout',
     props: {
         layout: Object
     },
-    components: {
-        bTab: {
-            extends: __WEBPACK_IMPORTED_MODULE_1__vendor_bootstrap_vue_components_tab___default.a,
-            provide: function provide() {
-                return {
-                    $tab: this
-                };
-            },
-
-            methods: {
-                setError: function setError() {
-                    this.$emit('error');
-                },
-                clearError: function clearError() {
-                    this.$emit('clear');
-                }
-            },
-            mounted: function mounted() {
-                console.log(this);
-            }
-        },
-        bTabs: __WEBPACK_IMPORTED_MODULE_0__vendor_bootstrap_vue_components_tabs___default.a
-    },
-    computed: {
-        tabs: function tabs() {
-            return this.layout.tabs.map(function (tab) {
-                tab.titleComp = new Title({ propsData: tab }).$mount();
-                return tab;
-            });
-        }
-    }
+    components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_0__Tabs___default.a.name, __WEBPACK_IMPORTED_MODULE_0__Tabs___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_1__Tab___default.a.name, __WEBPACK_IMPORTED_MODULE_1__Tab___default.a), _components),
+    computed: {}
 });
 
 /***/ }),
@@ -52974,15 +52940,15 @@ module.exports = Component.exports
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "SharpFormLayout"
-  }, [(_vm.layout.tabbed && _vm.layout.tabs.length > 1) ? [_c('b-tabs', {
+  }, [(_vm.layout.tabbed && _vm.layout.tabs.length > 1) ? [_c('sharp-b-tabs', {
     attrs: {
       "pills": ""
     }
-  }, _vm._l((_vm.tabs), function(tab, i) {
-    return _c('b-tab', {
+  }, _vm._l((_vm.layout.tabs), function(tab, i) {
+    return _c('sharp-b-tab', {
       key: i,
       attrs: {
-        "title": tab.titleComp.$el.outerHtml
+        "title": tab.title
       }
     }, [_vm._t("default", null, null, tab)], 2)
   }))] : _vm._l((_vm.layout.tabs), function(tab) {
@@ -53077,6 +53043,284 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
      require("vue-hot-reload-api").rerender("data-v-d15102f0", module.exports)
+  }
+}
+
+/***/ }),
+/* 243 */,
+/* 244 */,
+/* 245 */,
+/* 246 */,
+/* 247 */,
+/* 248 */,
+/* 249 */,
+/* 250 */,
+/* 251 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_vendor_bootstrap_vue_components_tab__ = __webpack_require__(231);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_vendor_bootstrap_vue_components_tab___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__form_vendor_bootstrap_vue_components_tab__);
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: 'SharpBTab',
+    extends: __WEBPACK_IMPORTED_MODULE_0__form_vendor_bootstrap_vue_components_tab___default.a,
+    provide: function provide() {
+        return {
+            $tab: this
+        };
+    },
+    data: function data() {
+        return {
+            errors: {}
+        };
+    },
+
+    methods: {
+        setError: function setError(fieldKey) {
+            this.errors[fieldKey] = true;
+        },
+        clearError: function clearError(fieldKey) {
+            this.$delete(this.errors, fieldKey);
+        }
+    }
+});
+
+/***/ }),
+/* 252 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_vendor_bootstrap_vue_components_tabs__ = __webpack_require__(232);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_vendor_bootstrap_vue_components_tabs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__form_vendor_bootstrap_vue_components_tabs__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: 'SharpBTabs',
+    extends: __WEBPACK_IMPORTED_MODULE_0__form_vendor_bootstrap_vue_components_tabs___default.a
+});
+
+/***/ }),
+/* 253 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(251),
+  /* template */
+  null,
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/Tab.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-743b62f3", Component.options)
+  } else {
+    hotAPI.reload("data-v-743b62f3", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 254 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(252),
+  /* template */
+  __webpack_require__(255),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/Tabs.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Tabs.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-16dc9c90", Component.options)
+  } else {
+    hotAPI.reload("data-v-16dc9c90", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 255 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "SharpTabs tabs",
+    attrs: {
+      "id": _vm.id || null
+    }
+  }, [_c('div', [_c('ul', {
+    class: ['nav', 'nav-' + _vm.navStyle],
+    attrs: {
+      "role": "tablist",
+      "tabindex": "0",
+      "aria-setsize": _vm.tabs.length,
+      "aria-posinset": _vm.currentTab + 1
+    },
+    on: {
+      "keydown": [function($event) {
+        if (!('button' in $event) && _vm._k($event.keyCode, "left", 37)) { return null; }
+        if ('button' in $event && $event.button !== 0) { return null; }
+        _vm.previousTab($event)
+      }, function($event) {
+        if (!('button' in $event) && _vm._k($event.keyCode, "up", 38)) { return null; }
+        _vm.previousTab($event)
+      }, function($event) {
+        if (!('button' in $event) && _vm._k($event.keyCode, "right", 39)) { return null; }
+        if ('button' in $event && $event.button !== 2) { return null; }
+        _vm.nextTab($event)
+      }, function($event) {
+        if (!('button' in $event) && _vm._k($event.keyCode, "down", 40)) { return null; }
+        _vm.nextTab($event)
+      }, function($event) {
+        if (!('button' in $event) && _vm._k($event.keyCode, "left", 37)) { return null; }
+        if (!$event.shiftKey) { return null; }
+        if ('button' in $event && $event.button !== 0) { return null; }
+        _vm.setTab(-1, false, 1)
+      }, function($event) {
+        if (!('button' in $event) && _vm._k($event.keyCode, "up", 38)) { return null; }
+        if (!$event.shiftKey) { return null; }
+        _vm.setTab(-1, false, 1)
+      }, function($event) {
+        if (!('button' in $event) && _vm._k($event.keyCode, "right", 39)) { return null; }
+        if (!$event.shiftKey) { return null; }
+        if ('button' in $event && $event.button !== 2) { return null; }
+        _vm.setTab(_vm.tabs.length, false, -1)
+      }, function($event) {
+        if (!('button' in $event) && _vm._k($event.keyCode, "down", 40)) { return null; }
+        if (!$event.shiftKey) { return null; }
+        _vm.setTab(_vm.tabs.length, false, -1)
+      }]
+    }
+  }, [_vm._l((_vm.tabs), function(tab, index) {
+    return _c('li', {
+      staticClass: "nav-item",
+      class: {
+        'has-error': tab.hasError
+      },
+      attrs: {
+        "role": "presentation"
+      }
+    }, [_c('a', {
+      class: ['nav-link', {
+        small: _vm.small,
+        active: tab.localActive,
+        disabled: tab.disabled
+      }],
+      attrs: {
+        "href": tab.href,
+        "role": "tab",
+        "aria-selected": tab.localActive ? 'true' : 'false',
+        "aria-controls": tab.id || null,
+        "id": tab.controlledBy || null,
+        "tabindex": "-1"
+      },
+      domProps: {
+        "innerHTML": _vm._s(tab.title)
+      },
+      on: {
+        "click": function($event) {
+          $event.preventDefault();
+          $event.stopPropagation();
+          _vm.setTab(index)
+        },
+        "keydown": [function($event) {
+          if (!('button' in $event) && _vm._k($event.keyCode, "space", 32)) { return null; }
+          $event.preventDefault();
+          $event.stopPropagation();
+          _vm.setTab(index)
+        }, function($event) {
+          if (!('button' in $event) && _vm._k($event.keyCode, "enter", 13)) { return null; }
+          $event.preventDefault();
+          $event.stopPropagation();
+          _vm.setTab(index)
+        }]
+      }
+    })])
+  }), _vm._v(" "), _vm._t("tabs")], 2)]), _vm._v(" "), _c('div', {
+    ref: "tabsContainer",
+    staticClass: "tab-content"
+  }, [_vm._t("default"), _vm._v(" "), (!_vm.tabs || !_vm.tabs.length) ? _vm._t("empty") : _vm._e()], 2)])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-16dc9c90", module.exports)
   }
 }
 
