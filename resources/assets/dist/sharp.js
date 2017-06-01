@@ -23496,7 +23496,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         setError: function setError(error) {
             this.state = 'error';
             this.stateMessage = error;
-            this.$tab && this.$tab.setError();
+            this.$tab && this.$tab.setError(this.fieldKey);
         },
         setOk: function setOk() {
             this.state = 'ok';
@@ -23505,7 +23505,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         clear: function clear() {
             this.state = 'classic';
             this.stateMessage = '';
-            this.$tab && this.$tab.clearError();
+            this.$tab && this.$tab.clearError(this.fieldKey);
         }
     },
     mounted: function mounted() {
@@ -53078,9 +53078,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
 
+    computed: {
+        hasError: function hasError() {
+            return Object.keys(this.errors).length > 0;
+        }
+    },
     methods: {
         setError: function setError(fieldKey) {
-            this.errors[fieldKey] = true;
+            this.$set(this.errors, fieldKey, true);
         },
         clearError: function clearError(fieldKey) {
             this.$delete(this.errors, fieldKey);
