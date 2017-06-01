@@ -40,6 +40,7 @@ trait WithSharpFormEloquentUpdater
      */
     function save(Model $instance, array $data): bool
     {
+        // TODO extract to EloquentModelUpdater + extends to hasMany, belongsToMany, ...
         $delayedAttributes = [];
         $relationships = [];
 
@@ -78,7 +79,6 @@ trait WithSharpFormEloquentUpdater
                 $instance, $attribute, $this->formatValueAccordingToFieldType($value, $attribute, $instance)
             );
         }
-
         $instance->save();
 
         // Finally, handle relationships.

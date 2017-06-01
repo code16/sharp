@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Form;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
+use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 
 abstract class SharpForm
@@ -159,7 +160,9 @@ abstract class SharpForm
     {
         $this->layoutBuilt = false;
 
-        $column = $this->getLonelyTab()->addColumn($size);
+        $column = $this->getLonelyTab()->addColumnLayout(
+            new FormLayoutColumn($size)
+        );
 
         if($callback) {
             $callback($column);
