@@ -68,7 +68,7 @@
             setError(error) {
                 this.state = 'error';
                 this.stateMessage = error;
-                this.$tab && this.$tab.setError();
+                this.$tab && this.$tab.setError(this.fieldKey);
             },
             setOk() {
                 this.state = 'ok';
@@ -77,7 +77,7 @@
             clear() {
                 this.state = 'classic';
                 this.stateMessage = '';
-                this.$tab && this.$tab.clearError();
+                this.$tab && this.$tab.clearError(this.fieldKey);
             }
         },
         mounted() {

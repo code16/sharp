@@ -28,6 +28,7 @@ class SpaceshipSharpValidator extends FormRequest
     {
         return [
             'name' => 'required',
+            'type_id' => 'required',
             "capacity" => "integer|min:10|nullable"
         ];
     }
