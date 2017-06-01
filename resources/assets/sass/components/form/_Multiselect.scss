@@ -1,68 +1,60 @@
-.SharpAutocomplete, .SharpSelect {
-  .multiselect {
+.multiselect--active {
+  .multiselect__tags {
+    border-color: $input-border-focus;
+  }
+}
+input.multiselect__input {
+  font-family: sans-serif;
+}
 
+.multiselect__tags {
+  border-color: $input-border-color;
+  border-radius: $input-border-radius;
+  min-height: 0;
+  padding: $input-padding-y $input-padding-x;
+  padding-right: 40px;
+}
 
-  input.multiselect__input {
-    font-family: sans-serif;
+.multiselect__input {
+  margin: 0;
+  padding: 0;
+  font-size: $font-size-base;
+  &::placeholder {
+    color: $input-color-placeholder;
+    opacity: 1;
+  }
+}
+
+.multiselect__content {
+
+  .multiselect__element {
+    .multiselect__option {
+      font-size: $font-size-base;
+      &:after {
+        display: none;
+      }
+      &--highlight, &--highlight:after {
+        color: $dropdown-link-hover-color;
+        background: $dropdown-link-hover-bg;
+      }
+    }
   }
 
-  .multiselect__tags {
-      @extend .form-control;
-      border-color: $input-border-color;
-      border-radius: $input-border-radius;
-      min-height: 0;
-      padding: $input-padding-y $input-padding-x;
-      padding-right: 40px;
-    }
-    &--active {
-      .multiselect__tags {
-        border-color: $input-border-focus;
-      }
-    }
+}
 
-    .multiselect__input {
-      margin: 0;
-      padding: 0;
-      font-size: $font-size-base;
-      &::placeholder {
-        color: $input-color-placeholder;
-        opacity: 1;
-      }
-    }
+.multiselect__single {
+  margin-bottom:0;
+  font-size: $font-size-base;
+}
 
-    .multiselect__content {
+.multiselect__tag {
+  margin-bottom:0;
+}
 
-      .multiselect__element {
-        .multiselect__option {
-          font-size: $font-size-base;
-          &:after {
-            display: none;
-          }
-          &--highlight, &--highlight:after {
-            color: $dropdown-link-hover-color;
-            background: $dropdown-link-hover-bg;
-          }
-        }
-      }
-
-    }
-
-    .multiselect__single {
-      margin-bottom:0;
-      font-size: $font-size-base;
-    }
-
-    .multiselect__tag {
-      margin-bottom:0;
-    }
-
-    .multiselect__spinner {
-      right: 2px;
-      width: 40px;
-      &:after, &:before {
-        border-color:$brand-primary transparent transparent;
-      }
-    }
-
+.multiselect__spinner {
+  right: 2px;
+  width: 40px;
+  &:after, &:before {
+    border-color:$brand-primary transparent transparent;
   }
 }

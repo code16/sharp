@@ -1,0 +1,11 @@
+.SharpActionBar {
+  padding: 1em 0;
+  .left {
+    display: flex;
+    justify-content: flex-start;
+  }
+  .right {
+    display: flex;
+    justify-content: flex-end;
+  }
+}

@@ -29,6 +29,11 @@
                 onNextBackspace:noop
             }
         },
+        watch: {
+            value(val) {
+                this.simplemde.value(val);
+            }
+        },
         methods : {
             createUploader(cm) {
                 return new MarkdownUpload({
@@ -113,7 +118,6 @@
                 this.cursorPos = cm.getCursor();
             },
             onChange(cm) {
-                console.log('change');
                 this.$emit('input', this.simplemde.value());
             },
             onBeforeChange(cm, change) {
@@ -161,6 +165,8 @@
 
             this.codemirrorOn('keydown', this.onKeydown);
             this.codemirrorOn('keyHandled', this.onKeyHandled);
+
+            console.log(this);
         }
     }
 </script>

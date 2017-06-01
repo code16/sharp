@@ -13,9 +13,15 @@ Vue.component(FieldDisplay.name, FieldDisplay);
 
 new Vue({
     el:"#sharp-app",
+
+    provide() {
+        return {
+            isSharp:true
+        }
+    },
+
     components: {
         [ActionView.name]:ActionView,
         [Form.name]:Form,
-        //[List.name]:List
     }
 });

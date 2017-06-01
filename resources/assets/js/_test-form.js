@@ -91,62 +91,67 @@ export const layout = {
 };
 
 export const data = {
-    "A":"Valeur texte",
-    "B":'',
-    "number":1,
-    "date":null,
-    "show_autocomplete":true,
-    "name":"B",
-    "admin_password":"",
-    "mdeditor":"",
-    "show_upload_1":true,
-    "show_upload_2":false,
-    "myimage": null,
-    /*"myimage": {
-        name:"doggo.jpg",
-        size:14550,
-        thumbnail:"img/chien.jpg"
-    },*/
-    "mylist": [{
+    A:"Valeur texte",
+    B:'',
+    number:1,
+    date:null,
+    show_autocomplete:true,
+    name:null,
+    admin_password:"",
+    // mdeditor:"Salut",
+    mdeditor: {
+        fr:"Français",
+        en:"Anglais",
+        de:"Allemand"
+    },
+    show_upload_1:true,
+    show_upload_2:false,
+    myimage: null,
+    // myimage: {
+    //     name:"doggo.jpg",
+    //     size:14550,
+    //     thumbnail:"img/chien.jpg"
+    // },
+    mylist: [{
         name:'', surname:'', age:''
     }],
-    "select": [1,3],
-    //"select":1,
-    "show_html": true,
-    "html": {
+    select: [1,3],
+    //select:1,
+    show_html: true,
+    html: {
         title: 'Salut',
         paragraphe: "Le select au dessus doit avoir François et Claude pour que je m'affiche"
     },
-    "test_tab_2": 'aaa'
+    test_tab_2: 'aaa'
 };
 
 export const fields = {
-    'A':{
+    A:{
         type:'text',
         label: 'Texte'
     },
-    'B':{
+    B:{
         type:'password',
         label: 'Mot de passe'
     },
-    'number':{
+    number:{
         type:'number',
         showControls:false,
         min:1,
         max:10,
         step:2,
     },
-    'show_autocomplete': {
+    show_autocomplete: {
         type:'check',
         text:'Afficher Autocomplete'
     },
-    'show_upload': {
+    show_upload: {
         type:'check',
         text:'Afficher Upload'
     },
-    'name':{
+    name:{
         type:'autocomplete',
-        mode:'local',
+        mode:'remote',
         placeholder: 'Selectionnez un nom',
         searchMinChars:3,
         localValues: [
@@ -174,7 +179,7 @@ export const fields = {
             }]
         },
     },
-    'admin_password': {
+    admin_password: {
         type:'password',
         label:'Mot de passe pour les administrateur',
         conditionalDisplay: {
@@ -185,15 +190,15 @@ export const fields = {
             }]
         }
     },
-    'show_upload_1': {
+    show_upload_1: {
         type: 'check',
         label: "Appuyer pour afficher l'upload"
     },
-    'show_upload_2': {
+    show_upload_2: {
         type: 'check',
         label: "Ou ici"
     },
-    'myimage': {
+    myimage: {
         type: 'upload',
         maxFileSize: 6,
         fileFilter: ['.jpg','.jpeg','.png'],
@@ -210,7 +215,7 @@ export const fields = {
             }]
         },
     },
-    'mylist': {
+    mylist: {
         type:'list',
         label:'Super liste',
         sortable: true,
@@ -232,19 +237,20 @@ export const fields = {
             }
         }
     },
-    'date':{
+    date:{
         type:'date',
         hasTime:true,
         stepTime:20,
         minTime:'8:20'
     },
-    'mdeditor': {
+    mdeditor: {
         type: 'markdown',
         height:250,
         placeholder:'super editeur',
+        localized:true,
         //toolbar: ["bold", "italic", "heading", "|", "quote"]
     },
-    'select': {
+    select: {
         type:'select',
         multiple:true,
         display:'dropdown',
@@ -252,11 +258,11 @@ export const fields = {
             {id:0,label:'Jérôme'}, {id:1,label:'François'}, {id:2,label:'Raymond'}, {id:3,label:'Claude'}, {id:4,label:'Antoine'}, {id:5,label:'Félicité'}
         ]
     },
-    'show_html': {
+    show_html: {
         type:'check',
         text:'Show HTML field'
     },
-    'html': {
+    html: {
         type:'html',
         template:'<h4>{{title}}</h4><p>{{paragraphe}}</p>',
         conditionalDisplay: {
@@ -271,12 +277,16 @@ export const fields = {
             ]
         }
     },
-    'test_tab_2': {
+    test_tab_2: {
         type:'text',
         label:'Input de test ;)'
     }
 };
 
 export const errors = {
-    'test_tab_2': ['Erreur de test']
+    test_tab_2: ['Erreur de test']
+};
+
+export const config = {
+    locales: ['fr','en','de']
 };

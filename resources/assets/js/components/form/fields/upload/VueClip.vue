@@ -51,10 +51,10 @@
 </template>
 
 <script>
-    import VueClip from '../../vendor/vue-clip/components/Clip';
-    import File from '../../vendor/vue-clip/File';
+    import VueClip from '../../../vendor/vue-clip/components/Clip/index';
+    import File from '../../../vendor/vue-clip/File';
 
-    import bModal from '../../vendor/bootstrap-vue/components/modal';
+    import bModal from '../../../vendor/bootstrap-vue/components/modal';
     import VueCropper from 'vue-cropperjs';
 
     import rotateResize from './rotate';

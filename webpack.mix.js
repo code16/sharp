@@ -6,8 +6,8 @@ const fs = require('fs-extra');
 mix.autoload({})
     .setPublicPath('resources/assets/dist')
 
-    .copy('node_modules/vue-clip/src', 'resources/assets/js/components/form/vendor/vue-clip')
-    .copy('node_modules/bootstrap-vue/lib', 'resources/assets/js/components/form/vendor/bootstrap-vue')
+    .copy('node_modules/vue-clip/src', 'resources/assets/js/components/vendor/vue-clip')
+    .copy('node_modules/bootstrap-vue/lib', 'resources/assets/js/components/vendor/bootstrap-vue')
     .js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
 
     .copy('node_modules/font-awesome/fonts','resources/assets/dist/fonts')

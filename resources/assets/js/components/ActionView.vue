@@ -1,18 +1,24 @@
 <template>
     <div class="SharpActionView container">
-        <div class="SharpActionView__action-bar">
-            <button class="btn btn-primary" @click="$emit('main-button-click')">{{mainButtonText}}</button>
-        </div>
+        <sharp-action-bar>
+            <template slot="left">
+                <slot name="action-bar-left"></slot>
+            </template>
+            <template slot="right">
+                <slot name="action-bar-right"></slot>
+            </template>
+        </sharp-action-bar>
         <slot></slot>
     </div>
 </template>
 
 <script>
+    import ActionBar from './ActionBar';
+
     export default {
         name:'SharpActionView',
-        props: {
-            mainButtonText:String,
-            mainButtonAction:Function
+        components:{
+            [ActionBar.name]: ActionBar
         }
     }
 </script>
