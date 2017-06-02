@@ -8,6 +8,8 @@ use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentTransformer;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
+use Code16\Sharp\Form\Fields\SharpFormSelectField;
+use Code16\Sharp\Form\Fields\SharpFormTextareaField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
@@ -58,6 +60,29 @@ class SpaceshipSharpForm extends SharpForm
                 ->setCropRatio("1:1")
                 ->setStorageDisk("local")
                 ->setStorageBasePath("data/Spaceship/{id}")
+
+        )->addField(
+            SharpFormListField::make("reviews")
+                ->setLabel("Technical reviews")
+                ->addItemField(
+                    SharpFormDateField::make("starts_at")
+                        ->setLabel("Date")
+                        ->setDisplayFormat("YYYY/MM/DD HH:mm")
+                        ->setHasTime(true)
+                )->addItemField(
+                    SharpFormSelectField::make("status", [
+                        "ok" => "Passed", "ko" => "Failed"
+                    ])->setLabel("Status")
+                    ->setDisplayAsList()
+                )->addItemField(
+                    SharpFormTextareaField::make("comment")
+                        ->setLabel("Comment")
+                        ->addConditionalDisplay("status", "ko")
+                )->setItemLayout(function($item) {
+                    $item->withSingleField("starts_at")
+                        ->withSingleField("status")
+                        ->withSingleField("comment");
+                })
         );
     }
 

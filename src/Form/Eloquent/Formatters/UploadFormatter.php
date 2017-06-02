@@ -53,6 +53,8 @@ class UploadFormatter
                 $storedFileName, $fileContent
             );
 
+            // TODO : handle transformations (crop and rotations)
+
             return $storedFileName;
         }
     }

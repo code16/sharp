@@ -11,4 +11,10 @@ class Spaceship extends Model
     {
         return $this->belongsTo(SpaceshipType::class);
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(TechnicalReview::class)
+            ->orderBy("starts_at");
+    }
 }
