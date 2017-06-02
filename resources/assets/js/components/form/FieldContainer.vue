@@ -1,5 +1,5 @@
 <template>
-    <div class="form-group" :class="formGroupClasses">
+    <div class="form-group" :class="formGroupClasses" :style="extraStyle">
         <label v-html="label" class="form-control-label"></label>
         <template v-if="alerts.length">
             <div v-for="alert in alerts" class="alert" :class="alertClass(alert.type)" role="alert">
@@ -25,18 +25,21 @@
         components: {
             [Field.name]:Field
         },
+
+        inject:['$tab'],
+
         props : {
             ...Field.props,
 
             label: String,
-            helpMessage: Array,
+            helpMessage: String,
             fieldErrors: Array
         },
         data() {
             return {
                 state:'classic',
                 stateMessage:'',
-                alerts:[]
+                alerts:[],
             }
         },
         watch: {
@@ -44,8 +47,10 @@
                 if(this.state === 'error')
                     this.clear();
             },
-            fieldErrors([e]) {
-                e && this.setError(e);
+            fieldErrors([error]) {
+                if(typeof error === 'string') {
+                    this.setError(error);
+                }
             }
         },
         computed: {
@@ -54,12 +59,16 @@
                     'has-danger': this.state==='error',
                     'has-success': this.state==='ok'
                 }
+            },
+            extraStyle() {
+                return this.fieldProps.extraStyle;
             }
         },
         methods: {
             setError(error) {
                 this.state = 'error';
                 this.stateMessage = error;
+                this.$tab && this.$tab.setError(this.fieldKey);
             },
             setOk() {
                 this.state = 'ok';
@@ -68,7 +77,11 @@
             clear() {
                 this.state = 'classic';
                 this.stateMessage = '';
+                this.$tab && this.$tab.clearError(this.fieldKey);
             }
+        },
+        mounted() {
+            //console.log(this);
         }
     }
 </script>

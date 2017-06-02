@@ -11,9 +11,10 @@
         // 'values' is a string
         if (condValues[0] === '!') {
             if (fieldValue && fieldValue.length) {
+                let condVal = condField.values.substring(1);
                 return isSingleSelect
-                    ? values == value
-                    : !value.includes(condField.values.substring(1));
+                    ? condVal != value
+                    : !value.includes(condVal);
             }
             return false;
         }
@@ -21,7 +22,7 @@
         if (value && value.length) {
             return value.includes(condField.values)
         }
-        return true;
+        return false;
     };
 
     const computeCondition = (fields, data, condition) => {
@@ -43,21 +44,17 @@
             let field = fields[condField.key];
             let value = data[condField.key];
 
-            if(!value) {
-                res = true;
-                continue;
-            }
 
             if(field.type === 'autocomplete' || field.type === 'select' || field.type === 'taginput') {
                 let isSingleSelect = field.type === 'select' && !field.multiple;
                 res = computeSelectCondition(condField.values, value, isSingleSelect);
             }
             else if(field.type === 'check') {
-                if(typeof value !== "boolean") {
+                if(typeof condField.values !== "boolean") {
                     util.error(`Conditional display : 'values' must be a boolean for a 'check' field ('${condField.key}')`,condition,field);
                     res = true;
                 }
-                else res = value === condField.values;
+                else res = (value == condField.values);
             }
             else {
                 util.error(`Conditional display : unprocessable field type '${field.type}'`, field);

@@ -15,7 +15,8 @@
                                                          :context-data="data"
                                                          :field-layout="fieldLayout"
                                                          :update-data="updateData"
-                                                         :field-errors="errors[fieldLayout.key]">
+                                                         :field-errors="errors[fieldLayout.key]"
+                                                         :set-tab-error="tab.setError">
                                     </sharp-field-display>
                                 </template>
                             </sharp-fields-layout>
@@ -68,7 +69,7 @@
                 layout: null,
                 ready: false,
                 errors:{},
-                tabIndex: 0,
+                tabIndex: 0
             }
         },
         computed: {
@@ -76,21 +77,24 @@
                 let path = `${API_PATH}/form/${this.entityKey}`;
                 if(this.instanceId) path+=`/${this.instanceId}`;
                 return path;
-            }
+            },
         },
         methods: {
             updateData(key,value) {
-                this.data[key] = value;
+                this.$set(this.data,key,value);
             },
             getForm() {
-                return axios.get(this.apiPath)
+                return new Promise((resolve, reject)=>
+                    axios.get(this.apiPath)
                     .then(({data: {fields, layout, data}}) => {
                         this.fields = fields;
                         this.layout = layout;
                         this.data = data;
 
                         this.ready=true;
-                    });
+                        resolve();
+                    })
+                );
             },
             postForm() {
                 return axios.post(this.apiPath, this.data)
@@ -104,10 +108,11 @@
                             alert(response.data.message)
                     })
             },
+
         },
         created() {
             if(this.entityKey != null) {
-                this.getForm();
+                this.getForm().then()
             }
             else util.error('no entity key provided');
             window.form = this;

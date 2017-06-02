@@ -1,0 +1,15 @@
+.SharpTabs {
+  .nav-item {
+    &.has-error {
+
+      .nav-link {
+        padding-right: 0.5em;
+        &:after {
+          content: "•";
+          color: red;
+          padding-left:0.5em;
+        }
+      }
+    }
+  }
+}
