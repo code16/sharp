@@ -11,6 +11,6 @@
 
 <script>
     export default {
-        name: 'SharpActionBar'
+        name: 'SharpActionBar',
     }
 </script>

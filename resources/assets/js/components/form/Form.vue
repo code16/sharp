@@ -1,54 +1,42 @@
 <template>
-    <component :is="actionViewOrDefault">
-        <template slot="action-bar-left">
-            <sharp-locale-selector v-if="ready && config.locales"
-                                   v-model="locale"
-                                   :locales="config.locales">
-            </sharp-locale-selector>
+    <div class="SharpForm container">
+        <template v-if="ready">
+            <sharp-form-layout :layout="layout">
+                <!-- Tab -->
+                <template scope="tab">
+                    <sharp-grid :rows="[tab.columns]">
+                        <!-- column -->
+                        <template scope="column">
+                            <sharp-fields-layout v-if="fields" :layout="column.fields">
+                                <!-- field -->
+                                <template scope="fieldLayout">
+                                    <sharp-field-display :field-key="fieldLayout.key"
+                                                         :context-fields="fields"
+                                                         :context-data="data"
+                                                         :field-layout="fieldLayout"
+                                                         :update-data="updateData"
+                                                         :field-errors="errors[fieldLayout.key]"
+                                                         :locale="locale">
+                                    </sharp-field-display>
+                                </template>
+                            </sharp-fields-layout>
+                        </template>
+                    </sharp-grid>
+                </template>
+            </sharp-form-layout>
         </template>
-        <template slot="action-bar-right">
-            <button class="btn btn-primary" @click="postForm">Valider</button>
+        <template v-else>
+            Chargement du formulaire...
         </template>
-        <div class="SharpForm container">
-            <template v-if="ready">
-                <sharp-form-layout :layout="layout">
-                    <!-- Tab -->
-                    <template scope="tab">
-                        <sharp-grid :rows="[tab.columns]">
-                            <!-- column -->
-                            <template scope="column">
-                                <sharp-fields-layout v-if="fields" :layout="column.fields">
-                                    <!-- field -->
-                                    <template scope="fieldLayout">
-                                        <sharp-field-display :field-key="fieldLayout.key"
-                                                             :context-fields="fields"
-                                                             :context-data="data"
-                                                             :field-layout="fieldLayout"
-                                                             :update-data="updateData"
-                                                             :field-errors="errors[fieldLayout.key]"
-                                                             :locale="locale">
-                                        </sharp-field-display>
-                                    </template>
-                                </sharp-fields-layout>
-                            </template>
-                        </sharp-grid>
-                    </template>
-                </sharp-form-layout>
-            </template>
-            <template v-else>
-                Chargement du formulaire...
-            </template>
-        </div>
-    </component>
+    </div>
 </template>
 
 <script>
     import util from '../../util';
     import { API_PATH } from '../../consts';
 
-    import { testableForm, ActionViewMixin } from '../../mixins/index';
+    import { testableForm } from '../../mixins/index';
 
-    import ActionView from '../ActionView';
     import FormLayout from './FormLayout'
     import Grid from './Grid';
     import FieldsLayout from './FieldsLayout.vue';
@@ -59,21 +47,23 @@
 
         mixins: [
             testableForm,
-            ActionViewMixin
         ],
 
         components: {
             [FormLayout.name]: FormLayout,
             [FieldsLayout.name]: FieldsLayout,
             [Grid.name]: Grid,
-            [ActionView.name]: ActionView,
             [LocaleSelector.name]: LocaleSelector
         },
 
         props:{
             entityKey: String,
             instanceId: String,
+
+            submitButton: String
         },
+
+        inject:['actionsBus'],
 
         provide() {
             return {
@@ -140,16 +130,21 @@
                             alert(response.data.message)
                     })
             },
+            init() {
+                if(this.entityKey != null) {
+                    this.getForm();
+                }
+                else util.error('no entity key provided');
 
+                if(this.actionsBus) {
+                    this.actionsBus.$on('main-button-clicked', _=>{
+                        this.postForm();
+                    });
+                }
+            }
         },
         created() {
-            if(this.entityKey != null) {
-                this.getForm().then()
-            }
-            else util.error('no entity key provided');
-            window.form = this;
+            this.init();
         },
-        mounted() {
-        }
     }
 </script>

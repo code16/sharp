@@ -25,6 +25,10 @@
             clearError(fieldKey) {
                 this.$delete(this.errors,fieldKey);
             }
+        },
+        created() {
+            this.$on('error', key=>this.setError(key));
+            this.$on('clear', key=>this.clearError(key));
         }
     }
 </script>
