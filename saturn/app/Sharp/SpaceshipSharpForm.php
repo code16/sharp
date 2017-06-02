@@ -8,6 +8,7 @@ use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentTransformer;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
+use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
@@ -93,7 +94,8 @@ class SpaceshipSharpForm extends SharpForm
                 $column->withSingleField("name")
                     ->withSingleField("type_id");
             })->addColumn(6, function($column) {
-                $column->withSingleField("picture");
+                $column->withSingleField("picture")
+                    ->withSingleField("reviews");
             });
 
         })->addTab("tab 2", function(FormLayoutTab $tab) {
