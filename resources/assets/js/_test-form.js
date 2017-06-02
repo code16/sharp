@@ -1,4 +1,8 @@
-export const layout = {
+//
+const localized = true;
+//
+
+const layout = {
     "tabbed":true,
     "tabs":
     [
@@ -90,7 +94,19 @@ export const layout = {
     ]
 };
 
-export const data = {
+const localizedData = {
+    A: {
+        fr:'Un texte en français',
+        en:'English text',
+        de:'Deutsch arbeit'
+    },
+    mdeditor: {
+        fr:"Français",
+        en:"Anglais",
+        de:"Allemand"
+    }
+};
+const defaultData = {
     A:"Valeur texte",
     B:'',
     number:1,
@@ -98,12 +114,7 @@ export const data = {
     show_autocomplete:true,
     name:null,
     admin_password:"",
-    // mdeditor:"Salut",
-    mdeditor: {
-        fr:"Français",
-        en:"Anglais",
-        de:"Allemand"
-    },
+    mdeditor:"Salut",
     show_upload_1:true,
     show_upload_2:false,
     myimage: null,
@@ -125,7 +136,12 @@ export const data = {
     test_tab_2: 'aaa'
 };
 
-export const fields = {
+const errors = {
+    test_tab_2: ['Erreur de test']
+};
+
+let data = defaultData;
+let fields = {
     A:{
         type:'text',
         label: 'Texte'
@@ -247,7 +263,6 @@ export const fields = {
         type: 'markdown',
         height:250,
         placeholder:'super editeur',
-        localized:true,
         //toolbar: ["bold", "italic", "heading", "|", "quote"]
     },
     select: {
@@ -282,11 +297,12 @@ export const fields = {
         label:'Input de test ;)'
     }
 };
+let config = {};
 
-export const errors = {
-    test_tab_2: ['Erreur de test']
-};
+if(localized) {
+    config.locales = ['fr','en','de'];
+    Object.keys(fields).forEach(k=>k in localizedData && (fields[k].localized = true));
+    data = Object.assign(defaultData, localizedData);
+}
 
-export const config = {
-    locales: ['fr','en','de']
-};
+export { fields, data, layout, config, errors }

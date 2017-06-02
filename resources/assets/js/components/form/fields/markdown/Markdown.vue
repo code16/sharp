@@ -19,7 +19,9 @@
             placeholder:String,
             toolbar:Array,
             height:Number,
-            maxImageSize:Number
+            maxImageSize:Number,
+
+            locale:String
         },
         data() {
             return {
@@ -30,8 +32,9 @@
             }
         },
         watch: {
-            value(val) {
-                this.simplemde.value(val);
+            /// On form locale change
+            locale() {
+                this.simplemde.value(this.value);
             }
         },
         methods : {

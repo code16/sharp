@@ -79,12 +79,14 @@ const acceptCondition = (fields, data, condition) => {
 const getValue = (form, field, value, locale) => {
 
     if(Array.isArray(form.config.locales) && field.localized) {
-        console.log(form, field, value, locale);
+        //console.log(form, field, value, locale);
         return value[locale];
     }
 
     return value;
 };
+
+
 
 export default {
     name: 'SharpFieldDisplay',
@@ -100,7 +102,7 @@ export default {
     inject:['$form'],
 
     render(h, { props, injections }) {
-        let { fieldKey, contextFields, contextData, ...sharedProps } = props;
+        let { fieldKey, contextFields, contextData, locale, ...sharedProps } = props;
         let { $form } = injections;
 
         let field = contextFields[fieldKey];
@@ -115,9 +117,9 @@ export default {
             h(FieldContainer,{
                 props: {
                     fieldKey,
-                    fieldProps: field,
+                    fieldProps: {...field, locale},
                     fieldType: field.type,
-                    value: getValue($form, field, value, props.locale),
+                    value: getValue($form, field, value, locale),
                     label: field.label,
                     helpMessage: field.helpMessage,
                     ...sharedProps

@@ -107,15 +107,15 @@
                     this.$set(this.data[key],this.locale,value);
                 }
                 else this.$set(this.data,key,value);
-
             },
             mount({fields, layout, data, config}) {
                 this.fields = fields;
                 this.layout = layout;
                 this.data = data || {};
                 this.config = config || {};
-                if(config.locales)
-                    this.locale = config.locales[0];
+
+                if(this.config.locales)
+                    this.locale = this.config.locales[0];
             },
             getForm() {
                 return new Promise((resolve, reject)=>

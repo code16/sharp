@@ -19,6 +19,6 @@
         name:'SharpActionView',
         components:{
             [ActionBar.name]: ActionBar
-        }
+        },
     }
 </script>
