@@ -40,7 +40,6 @@ trait WithSharpFormEloquentUpdater
      */
     function save(Model $instance, array $data): bool
     {
-        // TODO extract to EloquentModelUpdater + extends to hasMany, belongsToMany, ...
         $delayedAttributes = [];
         $relationships = [];
 
@@ -59,7 +58,7 @@ trait WithSharpFormEloquentUpdater
                 $value = $this->formatValueAccordingToFieldType($value, $attribute, $instance);
 
             } catch(ModelNotFoundException $ex) {
-                 // We try to format a field which needs the instance to be persisted.
+                // We try to format a field which needs the instance to be persisted.
                 // For example: the UploadFormatter needs a persisted instance if
                 // its storagePath contains a parameter, like {id}. We delay the valuate.
                 $delayedAttributes[$attribute] = $value;
