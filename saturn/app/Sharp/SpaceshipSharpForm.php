@@ -65,7 +65,7 @@ class SpaceshipSharpForm extends SharpForm
         )->addField(
             SharpFormListField::make("reviews")
                 ->setLabel("Technical reviews")
-                ->setAddable()
+                ->setAddable()->setRemovable()
                 ->addItemField(
                     SharpFormDateField::make("starts_at")
                         ->setLabel("Date")
@@ -94,8 +94,7 @@ class SpaceshipSharpForm extends SharpForm
                 $column->withSingleField("picture")
                     ->withSingleField("reviews", function($item) {
                         $item->withSingleField("starts_at")
-                            ->withSingleField("status")
-                            ->withSingleField("comment");
+                            ->withFields("status|5", "comment|7");
                     });
             });
 
