@@ -25,7 +25,7 @@
                                 </sharp-field-display>
                             </template>
                         </sharp-fields-layout>
-                        <button v-if="removable" class="btn-link" @click="remove(i)">Supprimer</button>
+                        <button v-if="removable" class="btn-link" @click="remove(i)">{{removeText}}</button>
                         <div v-if="i<list.length-1 && showAddButton" class="SharpList__new-item-zone">
                             <button class="btn btn-secondary" @click="insertNewItem(i)">+</button>
                         </div>

@@ -51336,7 +51336,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           _vm.remove(i)
         }
       }
-    }, [_vm._v("Supprimer")]) : _vm._e(), _vm._v(" "), (i < _vm.list.length - 1 && _vm.showAddButton) ? _c('div', {
+    }, [_vm._v(_vm._s(_vm.removeText))]) : _vm._e(), _vm._v(" "), (i < _vm.list.length - 1 && _vm.showAddButton) ? _c('div', {
       staticClass: "SharpList__new-item-zone"
     }, [_c('button', {
       staticClass: "btn btn-secondary",
