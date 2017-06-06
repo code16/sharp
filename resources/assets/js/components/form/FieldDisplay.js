@@ -10,16 +10,16 @@ const computeSelectCondition = (condValues, fieldValue, isSingleSelect) => {
     // 'values' is a string
     if (condValues[0] === '!') {
         if (fieldValue && fieldValue.length) {
-            let condVal = condField.values.substring(1);
+            let condVal = condValues.substring(1);
             return isSingleSelect
-                ? condVal != value
-                : !value.includes(condVal);
+                ? condVal != fieldValue
+                : !fieldValue.includes(condVal);
         }
         return false;
     }
     // 'values' is not negative
-    if (value && value.length) {
-        return value.includes(condField.values)
+    if (fieldValue && fieldValue.length) {
+        return isSingleSelect ? condValues === fieldValue : fieldValue.includes(condValues);
     }
     return false;
 };

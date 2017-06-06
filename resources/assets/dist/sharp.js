@@ -31500,14 +31500,14 @@ var computeSelectCondition = function computeSelectCondition(condValues, fieldVa
     // 'values' is a string
     if (condValues[0] === '!') {
         if (fieldValue && fieldValue.length) {
-            var condVal = condField.values.substring(1);
-            return isSingleSelect ? condVal != value : !value.includes(condVal);
+            var condVal = condValues.substring(1);
+            return isSingleSelect ? condVal != fieldValue : !fieldValue.includes(condVal);
         }
         return false;
     }
     // 'values' is not negative
-    if (value && value.length) {
-        return value.includes(condField.values);
+    if (fieldValue && fieldValue.length) {
+        return isSingleSelect ? condValues === fieldValue : fieldValue.includes(condValues);
     }
     return false;
 };
@@ -31529,24 +31529,24 @@ var computeCondition = function computeCondition(fields, data, condition) {
 
     try {
         for (var _iterator = condition.fields[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var _condField = _step.value;
+            var condField = _step.value;
 
-            if (!(_condField.key in fields)) {
+            if (!(condField.key in fields)) {
                 __WEBPACK_IMPORTED_MODULE_0__util__["a" /* default */].error('Conditional display : can\'t find a field with key \'' + condition.key + '\' in \'fields\'', condition);
                 res = true;
             }
 
-            var field = fields[_condField.key];
-            var _value = data[_condField.key];
+            var field = fields[condField.key];
+            var value = data[condField.key];
 
             if (field.type === 'autocomplete' || field.type === 'select' || field.type === 'taginput') {
                 var isSingleSelect = field.type === 'select' && !field.multiple || field.type === 'autocomplete';
-                res = computeSelectCondition(_condField.values, _value, isSingleSelect);
+                res = computeSelectCondition(condField.values, value, isSingleSelect);
             } else if (field.type === 'check') {
-                if (typeof _condField.values !== "boolean") {
-                    __WEBPACK_IMPORTED_MODULE_0__util__["a" /* default */].error('Conditional display : \'values\' must be a boolean for a \'check\' field (\'' + _condField.key + '\')', condition, field);
+                if (typeof condField.values !== "boolean") {
+                    __WEBPACK_IMPORTED_MODULE_0__util__["a" /* default */].error('Conditional display : \'values\' must be a boolean for a \'check\' field (\'' + condField.key + '\')', condition, field);
                     res = true;
-                } else res = _value == _condField.values;
+                } else res = value == condField.values;
             } else {
                 __WEBPACK_IMPORTED_MODULE_0__util__["a" /* default */].error('Conditional display : unprocessable field type \'' + field.type + '\'', field);
                 res = true;
