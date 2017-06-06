@@ -2,6 +2,25 @@
   position: relative;
   font-size: 1rem;
 
+  &__multiselect {
+    &--hide-dropdown {
+      .multiselect__content {
+        display: none;
+      }
+    }
+  }
+
+  &--remote {
+    .multiselect__select {
+      display: none;
+    }
+
+    .multiselect__tags {
+      padding-right: $input-padding-x;
+    }
+  }
+
+
   &__close-btn-container {
     position: absolute;
     top: 1px;

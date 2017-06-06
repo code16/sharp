@@ -1,5 +1,5 @@
 <template>
-    <div class="SharpAutocomplete" :class="`SharpAutocomplete--${state}`">
+    <div class="SharpAutocomplete" :class="[`SharpAutocomplete--${state}`,{'SharpAutocomplete--remote':isRemote}]">
         <div v-if="state=='valuated'" class="SharpAutocomplete__result-item form-control">
             <sharp-template name="ResultItem" :template="resultItemTemplate" :template-data="valueObject"></sharp-template>
             <div class="SharpAutocomplete__close-btn-container" @click="handleResetClick">
@@ -9,6 +9,8 @@
             </div>
         </div>
         <multiselect v-if="state!='valuated'"
+                     class="SharpAutocomplete__multiselect"
+                     :class="{'SharpAutocomplete__multiselect--hide-dropdown':hideDropdown}"
                      :value="valueObject"
                      :options="dynamicSuggestions"
                      :track-by="itemIdAttribute"
@@ -104,7 +106,7 @@
                 return this.localValues.find(v=>v[this.itemIdAttribute]===this.value);
             },
             hideDropdown() {
-                return this.query.length < this.searchMinChars;
+                return this.isRemote ? this.query.length < this.searchMinChars : false;
             },
             dynamicSuggestions() {
                 return this.hideDropdown ? [null] : this.suggestions;

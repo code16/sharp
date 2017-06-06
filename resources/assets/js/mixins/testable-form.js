@@ -1,4 +1,4 @@
-import { fields, data, layout, errors } from '../_test-form';
+import * as testForm from '../_test-form';
 
 export default {
     props: {
@@ -6,13 +6,11 @@ export default {
     },
     mounted() {
         if(this.test) {
-            this.fields = fields;
-            this.data = data;
-            this.layout = layout;
+            this.mount(testForm);
 
             this.ready = true;
             this.$nextTick(_=> {
-                this.errors = errors;
+                this.errors = testForm.errors;
             });
         }
     }

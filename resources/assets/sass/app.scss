@@ -18,6 +18,10 @@ $fa-font-path: '/vendor/sharp/fonts';
   @import 'node_modules/bootstrap/scss/close';
   @import 'node_modules/bootstrap/scss/nav';
   @import 'node_modules/bootstrap/scss/modal';
+  @import 'node_modules/bootstrap/scss/dropdown';
+
+  // overriding default vendor components style
+  @import 'components/form/Multiselect';
 
   @import 'components/form/Autocomplete';
   @import 'components/form/Upload';
@@ -29,12 +33,12 @@ $fa-font-path: '/vendor/sharp/fonts';
   @import 'components/form/MarkdownUpload';
   @import 'components/form/Select';
   @import 'components/form/Modal';
-
-  // overriding default vendor components style
-  @import 'components/form/Multiselect';
+  @import 'components/form/FieldContainer';
 
   @import 'components/ActionView';
+  @import 'components/ActionBar';
   @import 'components/Tabs';
+  @import 'components/LocaleSelector';
 
 
   input[type="number"].hide-controls {
@@ -45,10 +49,8 @@ $fa-font-path: '/vendor/sharp/fonts';
     -moz-appearance: textfield;
   }
 
-  .expand-enter, .expand-leave-to /* .fade-leave-active in <2.1.8 */ {
-    opacity: 0;
-    transform: translateY(30px);
-  }
+
+
 }
 
 .modal-open {

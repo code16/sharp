@@ -1,12 +1,27 @@
 .SharpList {
   position:relative;
   &__add-button {
-    width:100%
+    width:100%;
+    &--no-transition {
+      transition: unset;
+    }
   }
   &__item {
-    transition: all 600ms;
+    &.expand-enter-active, &.expand-enter-active {
+      transition: all 600ms;
+    }
+
+    &.expand-enter, &.expand-leave-to  {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
     &--collapsed {
       background: #f5f5f5;
+    }
+
+    &--no-transition {
+      transition: unset;
     }
   }
 

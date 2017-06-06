@@ -8,7 +8,9 @@
         <draggable :options="dragOptions" :list="list" class="list-group">
             <transition-group name="expand" tag="div">
                 <li v-for="(listItemData, i) in list" :key="listItemData[indexSymbol]"
-                    class="SharpList__item list-group-item" :class="{'SharpList__item--collapsed':collapsed}">
+                    class="SharpList__item list-group-item"
+                    :class="{'SharpList__item--collapsed':collapsed}"
+                >
                     <template v-if="collapsed">
                         <sharp-template name="CollapsedItem" :template="collapsedItemTemplate" :template-data="collapsedItemData(listItemData)"></sharp-template>
                     </template>
@@ -18,7 +20,8 @@
                                 <sharp-field-display :field-key="itemFieldLayout.key"
                                                      :context-fields="itemFields"
                                                      :context-data="listItemData"
-                                                     :update-data="update(i)">
+                                                     :update-data="update(i)"
+                                                     :locale="locale">
                                 </sharp-field-display>
                             </template>
                         </sharp-fields-layout>
@@ -36,13 +39,16 @@
     </div>
 </template>
 <script>
-   import Draggable from 'vuedraggable';
+    import Draggable from 'vuedraggable';
    import FieldsLayout from '../FieldsLayout';
    import Template from '../Template';
+
+    const noop = ()=>{};
 
     export default {
         name: 'SharpList',
 
+        inject:['$form'],
 
         components: {
             Draggable,
@@ -80,13 +86,25 @@
                 required: true,
             },
             collapsedItemTemplate: String,
-            maxItemCount: Number
+            maxItemCount: Number,
+
+            locale:String
         },
         data() {
             return {
                 list:[],
-                dragActive:false,
-                lastIndex: this.value.length,
+                dragActive: false,
+                lastIndex: 0,
+
+                transitionActive: false,
+            }
+        },
+        watch: {
+            locale() {
+                if(this.value == null) {
+                    this.initList();
+                }
+                else this.list = this.value;
             }
         },
         computed: {
@@ -108,13 +126,20 @@
                 return Symbol('index');
             }
         },
+
         methods: {
             indexedList() {
-                return this.value.map((v,i)=>({[this.indexSymbol]:i,...v}));
+                return (this.value||[]).map((v,i)=>({[this.indexSymbol]:i,...v}));
             },
             createItem() {
                 return Object.keys(this.itemFields).reduce((res, itemKey) => {
-                    res[itemKey] = null;
+                    if(this.itemFields[itemKey].localized) {
+                        res[itemKey] = this.$form.config.locales.reduce((res, l)=>{
+                            res[l] = null;
+                            return res;
+                        },{});
+                    }
+                    else res[itemKey] = null;
                     return res;
                 },{
                     [this.indexSymbol]:this.lastIndex++
@@ -131,7 +156,10 @@
             },
             update(i) {
                 return (key, value) => {
-                    this.list[i][key] = value;
+                    if(this.itemFields[key].localized) {
+                        this.list[i][key][this.locale] = value;
+                    }
+                    else this.list[i][key] = value;
                 }
             },
             collapsedItemData(itemData) {
@@ -140,10 +168,22 @@
             toggleDrag() {
                 this.dragActive = !this.dragActive;
                 this.list.forEach((item,i) => item[this.dragIndexSymbol] = i);
+            },
+
+            initList() {
+                this.list = this.indexedList();
+                this.lastIndex = this.list.length;
+                // make value === list, to update changes
+                this.$emit('input', this.list);
+            },
+
+            beforeTransition(el,done) {
+                console.log(el);
             }
+
         },
         created() {
-            this.list = this.indexedList();
+            this.initList();
         }
     }
 </script>

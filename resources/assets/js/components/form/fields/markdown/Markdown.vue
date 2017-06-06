@@ -19,7 +19,9 @@
             placeholder:String,
             toolbar:Array,
             height:Number,
-            maxImageSize:Number
+            maxImageSize:Number,
+
+            locale:String
         },
         data() {
             return {
@@ -27,6 +29,12 @@
                 cursorPos:0,
                 lastKeydown:0,
                 onNextBackspace:noop
+            }
+        },
+        watch: {
+            /// On form locale change
+            locale() {
+                this.simplemde.value(this.value);
             }
         },
         methods : {
@@ -113,11 +121,10 @@
                 this.cursorPos = cm.getCursor();
             },
             onChange(cm) {
-                console.log('change');
                 this.$emit('input', this.simplemde.value());
             },
             onBeforeChange(cm, change) {
-                console.log('beforeChange',arguments, this.cursorEntered);
+               // console.log('beforeChange',arguments, this.cursorEntered);
             },
             onKeydown(cm, e) {
                 console.log('key down');
@@ -161,6 +168,8 @@
 
             this.codemirrorOn('keydown', this.onKeydown);
             this.codemirrorOn('keyHandled', this.onKeyHandled);
+
+            //console.log(this);
         }
     }
 </script>

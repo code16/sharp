@@ -16,7 +16,7 @@
                                                          :field-layout="fieldLayout"
                                                          :update-data="updateData"
                                                          :field-errors="errors[fieldLayout.key]"
-                                                         :set-tab-error="tab.setError">
+                                                         :locale="locale">
                                     </sharp-field-display>
                                 </template>
                             </sharp-fields-layout>
@@ -34,32 +34,42 @@
 <script>
     import util from '../../util';
     import { API_PATH } from '../../consts';
-    import testableForm from '../../mixins/testable-form';
 
-    import { NameAssociation as fieldCompNames } from './fields/index';
+    import { testableForm } from '../../mixins/index';
 
-    import ActionView from '../ActionView';
     import FormLayout from './FormLayout'
     import Grid from './Grid';
     import FieldsLayout from './FieldsLayout.vue';
 
 
+    import axios from 'axios';
+
     export default {
         name:'SharpForm',
 
         mixins: [
-            testableForm
+            testableForm,
         ],
 
         components: {
             [FormLayout.name]: FormLayout,
             [FieldsLayout.name]: FieldsLayout,
-            [Grid.name]: Grid
+            [Grid.name]: Grid,
         },
 
         props:{
             entityKey: String,
             instanceId: String,
+
+            submitButton: String
+        },
+
+        inject:['actionsBus'],
+
+        provide() {
+            return {
+                $form:this
+            }
         },
 
         data() {
@@ -67,9 +77,12 @@
                 fields: null,
                 data: null,
                 layout: null,
+                config: null,
+
                 ready: false,
                 errors:{},
-                tabIndex: 0
+
+                locale: ''
             }
         },
         computed: {
@@ -81,16 +94,27 @@
         },
         methods: {
             updateData(key,value) {
-                this.$set(this.data,key,value);
+                if(this.fields[key].localized) {
+                    this.$set(this.data[key],this.locale,value);
+                }
+                else this.$set(this.data,key,value);
+            },
+            mount({fields, layout, data, config}) {
+                this.fields = fields;
+                this.layout = layout;
+                this.data = data || {};
+                this.config = config || {};
+                this.actionsBus.$emit('setup-locales', this.config.locales);
+
+                if(this.config.locales) {
+                    this.actionsBus.$emit('locale-changed', this.config.locales[0]);
+                }
             },
             getForm() {
                 return new Promise((resolve, reject)=>
                     axios.get(this.apiPath)
-                    .then(({data: {fields, layout, data}}) => {
-                        this.fields = fields;
-                        this.layout = layout;
-                        this.data = data;
-
+                    .then(({data}) => {
+                        this.mount(data);
                         this.ready=true;
                         resolve();
                     })
@@ -108,19 +132,25 @@
                             alert(response.data.message)
                     })
             },
+            init() {
+                //this.actionsBus.$on('setup-locales',_=>console.log('setup locales'));
+                if(this.entityKey != null) {
+                    this.getForm();
+                }
+                else util.error('no entity key provided');
 
+                this.actionsBus.$on('main-button-clicked', _=>{
+                    this.postForm();
+                });
+
+                this.actionsBus.$on('locale-changed', newLocale => this.locale=newLocale);
+            }
         },
         created() {
-            if(this.entityKey != null) {
-                this.getForm().then()
-            }
-            else util.error('no entity key provided');
-            window.form = this;
+            this.init();
+            console.log(this);
         },
         mounted() {
-            if(this.$parent && this.$parent.$options.name === ActionView.name) {
-                this.$parent.$on('main-button-click', this.postForm);
-            }
         }
     }
 </script>

@@ -1,1 +1,1 @@
-export * from './field';
+export { default as testableForm } from './testable-form';

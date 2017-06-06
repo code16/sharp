@@ -1,5 +1,5 @@
 <script>
-    import bTab from './form/vendor/bootstrap-vue/components/tab';
+    import bTab from './vendor/bootstrap-vue/components/tab';
     export default {
         name:'SharpBTab',
         extends:bTab,
@@ -25,6 +25,10 @@
             clearError(fieldKey) {
                 this.$delete(this.errors,fieldKey);
             }
+        },
+        created() {
+            this.$on('error', key=>this.setError(key));
+            this.$on('clear', key=>this.clearError(key));
         }
     }
 </script>

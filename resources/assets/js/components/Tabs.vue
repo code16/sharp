@@ -41,7 +41,7 @@
 </template>
 
 <script>
-    import bTabs from './form/vendor/bootstrap-vue/components/tabs';
+    import bTabs from './vendor/bootstrap-vue/components/tabs';
 
     export default {
         name:'SharpBTabs',

@@ -1,18 +1,42 @@
 <template>
     <div class="SharpActionView container">
-        <div class="SharpActionView__action-bar">
-            <button class="btn btn-primary" @click="$emit('main-button-click')">{{mainButtonText}}</button>
-        </div>
+        <component v-if="barComp" :is="barComp"></component>
         <slot></slot>
     </div>
 </template>
 
 <script>
+    import ActionBars, { NameAssociation as actionBarCompName } from './action-bar/index';
+    import EventBus from './EventBus';
+
+
     export default {
         name:'SharpActionView',
+        components: ActionBars,
+
+        provide() {
+            return {
+                actionsBus: new EventBus({name:'SharpActionsEventBus'}),
+            }
+        },
+
         props: {
-            mainButtonText:String,
-            mainButtonAction:Function
-        }
+            context:{
+                type:String,
+                required:true
+            }
+        },
+
+        data() {
+            return {
+            }
+        },
+        computed: {
+            barComp() {
+                return actionBarCompName[this.context];
+            }
+        },
+        methods: {
+        },
     }
 </script>

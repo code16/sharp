@@ -1,6 +1,8 @@
 <template>
-    <div class="form-group" :class="formGroupClasses" :style="extraStyle">
-        <label v-html="label" class="form-control-label"></label>
+    <div class="SharpFieldContainer form-group" :class="formGroupClasses" :style="extraStyle">
+        <label class="form-control-label" v-show="label">
+            {{label}} <span v-if="fieldProps.localized" class="SharpFieldContainer__label-locale">({{fieldProps.locale}})</span>
+        </label>
         <template v-if="alerts.length">
             <div v-for="alert in alerts" class="alert" :class="alertClass(alert.type)" role="alert">
                 {{alert.msg}}
@@ -62,13 +64,15 @@
             },
             extraStyle() {
                 return this.fieldProps.extraStyle;
-            }
+            },
         },
         methods: {
             setError(error) {
                 this.state = 'error';
                 this.stateMessage = error;
-                this.$tab && this.$tab.setError(this.fieldKey);
+                if(this.$tab) {
+                    this.$tab.$emit('error', this.fieldKey);
+                }
             },
             setOk() {
                 this.state = 'ok';
@@ -77,7 +81,9 @@
             clear() {
                 this.state = 'classic';
                 this.stateMessage = '';
-                this.$tab && this.$tab.clearError(this.fieldKey);
+                if(this.$tab) {
+                    this.$tab.$emit('clear', this.fieldKey);
+                }
             }
         },
         mounted() {
