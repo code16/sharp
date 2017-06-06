@@ -3,7 +3,7 @@
 </template>
 
 <script>
-    import Template from '../Template';
+    import Template from '../../Template';
 
     export default {
         name: 'SharpHtml',

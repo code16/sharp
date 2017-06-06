@@ -41,7 +41,7 @@
 <script>
     import Draggable from 'vuedraggable';
    import FieldsLayout from '../FieldsLayout';
-   import Template from '../Template';
+   import Template from '../../Template';
 
     const noop = ()=>{};
 

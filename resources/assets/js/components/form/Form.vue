@@ -1,7 +1,7 @@
 <template>
     <div class="SharpForm container">
         <template v-if="ready">
-            <sharp-form-layout :layout="layout">
+            <sharp-tabbed-layout :layout="layout">
                 <!-- Tab -->
                 <template scope="tab">
                     <sharp-grid :rows="[tab.columns]">
@@ -14,16 +14,16 @@
                                                          :context-fields="fields"
                                                          :context-data="data"
                                                          :field-layout="fieldLayout"
-                                                         :update-data="updateData"
                                                          :field-errors="errors[fieldLayout.key]"
-                                                         :locale="locale">
+                                                         :locale="locale"
+                                                         :update-data="updateData">
                                     </sharp-field-display>
                                 </template>
                             </sharp-fields-layout>
                         </template>
                     </sharp-grid>
                 </template>
-            </sharp-form-layout>
+            </sharp-tabbed-layout>
         </template>
         <template v-else>
             Chargement du formulaire...
@@ -37,8 +37,10 @@
 
     import { testableForm } from '../../mixins/index';
 
-    import FormLayout from './FormLayout'
-    import Grid from './Grid';
+    import DynamicView from '../DynamicViewMixin';
+
+    import TabbedLayout from '../TabbedLayout'
+    import Grid from '../Grid';
     import FieldsLayout from './FieldsLayout.vue';
 
 
@@ -46,13 +48,11 @@
 
     export default {
         name:'SharpForm',
+        extends: DynamicView,
 
-        mixins: [
-            testableForm,
-        ],
-
+        mixins: [testableForm],
         components: {
-            [FormLayout.name]: FormLayout,
+            [TabbedLayout.name]: TabbedLayout,
             [FieldsLayout.name]: FieldsLayout,
             [Grid.name]: Grid,
         },
@@ -75,13 +75,8 @@
         data() {
             return {
                 fields: null,
-                data: null,
-                layout: null,
                 config: null,
-
-                ready: false,
                 errors:{},
-
                 locale: ''
             }
         },
@@ -110,37 +105,20 @@
                     this.actionsBus.$emit('locale-changed', this.config.locales[0]);
                 }
             },
-            getForm() {
-                return new Promise((resolve, reject)=>
-                    axios.get(this.apiPath)
-                    .then(({data}) => {
-                        this.mount(data);
-                        this.ready=true;
-                        resolve();
-                    })
-                );
-            },
-            postForm() {
-                return axios.post(this.apiPath, this.data)
-                    .then(response => {
-
-                    })
-                    .catch(({response}) => {
-                        if(response.status===422)
-                            this.errors = response.data || {};
-                        else if(response.status===417)
-                            alert(response.data.message)
-                    })
+            handleError({response}) {
+                if(response.status===422)
+                    this.errors = response.data || {};
+                else if(response.status===417)
+                    alert(response.data.message)
             },
             init() {
-                //this.actionsBus.$on('setup-locales',_=>console.log('setup locales'));
                 if(this.entityKey != null) {
-                    this.getForm();
+                    this.get();
                 }
                 else util.error('no entity key provided');
 
                 this.actionsBus.$on('main-button-clicked', _=>{
-                    this.postForm();
+                    this.post().catch(handleError);
                 });
 
                 this.actionsBus.$on('locale-changed', newLocale => this.locale=newLocale);
@@ -148,9 +126,6 @@
         },
         created() {
             this.init();
-            console.log(this);
         },
-        mounted() {
-        }
     }
 </script>
