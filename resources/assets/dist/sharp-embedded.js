@@ -28946,10 +28946,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 
 
 
+
+var noop = function noop() {};
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpList',
@@ -28998,7 +29002,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return {
             list: [],
             dragActive: false,
-            lastIndex: 0
+            lastIndex: 0,
+
+            transitionActive: false
         };
     },
 
@@ -29063,7 +29069,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             var _this3 = this;
 
             return function (key, value) {
-                _this3.list[i][key] = value;
+                if (_this3.itemFields[key].localized) {
+                    _this3.list[i][key][_this3.locale] = value;
+                } else _this3.list[i][key] = value;
             };
         },
         collapsedItemData: function collapsedItemData(itemData) {
@@ -29082,6 +29090,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             this.lastIndex = this.list.length;
             // make value === list, to update changes
             this.$emit('input', this.list);
+        },
+        beforeTransition: function beforeTransition(el, done) {
+            console.log(el);
         }
     },
     created: function created() {
@@ -31239,7 +31250,7 @@ var defaultData = {
     //     thumbnail:"img/chien.jpg"
     // },
     mylist: [{
-        name: '', surname: '', age: ''
+        name: { en: null, fr: null, de: null }, surname: '', age: ''
     }],
     select: [1, 3],
     //select:1,
@@ -31345,7 +31356,8 @@ var fields = {
         itemFields: {
             'name': {
                 label: 'Nom',
-                type: 'text'
+                type: 'text',
+                localized: true
             },
             'surname': {
                 label: 'Prénom',
@@ -53335,7 +53347,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_2__components_form_FieldDisplay__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_2__components_form_FieldDisplay__["a" /* default */]);
 
 new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
-    el: '#sharp-context',
+    el: '#sharp-app',
     components: _defineProperty({}, __WEBPACK_IMPORTED_MODULE_1__components_form_EmbeddedForm___default.a.name, __WEBPACK_IMPORTED_MODULE_1__components_form_EmbeddedForm___default.a)
 });
 

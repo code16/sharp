@@ -8,7 +8,7 @@ $fa-font-path: '/vendor/sharp/fonts';
 
 
 
-#sharp-app, #sharp-context {
+#sharp-app {
   @import 'node_modules/bootstrap/scss/grid';
 
   @import 'node_modules/bootstrap/scss/forms';

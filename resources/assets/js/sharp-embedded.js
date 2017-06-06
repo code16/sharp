@@ -6,7 +6,7 @@ import FieldDisplay from './components/form/FieldDisplay';
 Vue.component(FieldDisplay.name, FieldDisplay);
 
 new Vue({
-    el:'#sharp-context',
+    el:'#sharp-app',
     components: {
         [EmbeddedForm.name]:EmbeddedForm
     }

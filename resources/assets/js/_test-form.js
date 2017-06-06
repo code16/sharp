@@ -129,7 +129,7 @@ const defaultData = {
     //     thumbnail:"img/chien.jpg"
     // },
     mylist: [{
-        name:'', surname:'', age:''
+        name:{en:null,fr:null,de:null}, surname:'', age:''
     }],
     select: [1,3],
     //select:1,
@@ -247,6 +247,7 @@ let fields = {
             'name': {
                 label:'Nom',
                 type:'text',
+                localized:true
             },
             'surname': {
                 label:'Prénom',
