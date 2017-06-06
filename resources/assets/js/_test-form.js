@@ -104,6 +104,11 @@ const localizedData = {
         fr:"Français",
         en:"Anglais",
         de:"Allemand"
+    },
+    mylist: {
+        fr:null,
+        en:null,
+        de:null
     }
 };
 const defaultData = {
@@ -251,7 +256,7 @@ let fields = {
                 label:'Âge',
                 type:'text'
             }
-        }
+        },
     },
     date:{
         type:'date',
@@ -288,8 +293,7 @@ let fields = {
             },{
                 key:'show_html',
                 values: true
-            }
-            ]
+            }]
         }
     },
     test_tab_2: {

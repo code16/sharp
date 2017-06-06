@@ -8,7 +8,7 @@ $fa-font-path: '/vendor/sharp/fonts';
 
 
 
-#sharp-app {
+#sharp-app, #sharp-context {
   @import 'node_modules/bootstrap/scss/grid';
 
   @import 'node_modules/bootstrap/scss/forms';
@@ -33,6 +33,7 @@ $fa-font-path: '/vendor/sharp/fonts';
   @import 'components/form/MarkdownUpload';
   @import 'components/form/Select';
   @import 'components/form/Modal';
+  @import 'components/form/FieldContainer';
 
   @import 'components/ActionView';
   @import 'components/ActionBar';
@@ -48,10 +49,8 @@ $fa-font-path: '/vendor/sharp/fonts';
     -moz-appearance: textfield;
   }
 
-  .expand-enter, .expand-leave-to /* .fade-leave-active in <2.1.8 */ {
-    opacity: 0;
-    transform: translateY(30px);
-  }
+
+
 }
 
 .modal-open {

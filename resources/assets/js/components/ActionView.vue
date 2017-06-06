@@ -6,8 +6,9 @@
 </template>
 
 <script>
-    import ActionBars, { NameAssociation as relativeActionBar } from './action-bar/index';
+    import ActionBars, { NameAssociation as actionBarCompName } from './action-bar/index';
     import EventBus from './EventBus';
+
 
     export default {
         name:'SharpActionView',
@@ -18,25 +19,24 @@
                 actionsBus: new EventBus({name:'SharpActionsEventBus'}),
             }
         },
+
+        props: {
+            context:{
+                type:String,
+                required:true
+            }
+        },
+
         data() {
             return {
-                barComp: null,
+            }
+        },
+        computed: {
+            barComp() {
+                return actionBarCompName[this.context];
             }
         },
         methods: {
         },
-        computed: {
-            viewComp() {
-                return this.$slots.default[0].componentInstance;
-            },
-        },
-        mounted() {
-            console.log(this);
-            console.log(relativeActionBar);
-
-            if(this.viewComp) {
-                this.barComp = relativeActionBar[this.viewComp.$options.name];
-            }
-        }
     }
 </script>

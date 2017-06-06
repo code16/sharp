@@ -34,7 +34,7 @@
         },
         computed: {
             filteredLocales() {
-                return this.locales;//.filter(l => l!==this.value);
+                return this.locales;
             }
         }
     }

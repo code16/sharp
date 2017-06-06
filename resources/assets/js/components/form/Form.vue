@@ -40,7 +40,9 @@
     import FormLayout from './FormLayout'
     import Grid from './Grid';
     import FieldsLayout from './FieldsLayout.vue';
-    import LocaleSelector from '../LocaleSelector';
+
+
+    import axios from 'axios';
 
     export default {
         name:'SharpForm',
@@ -53,7 +55,6 @@
             [FormLayout.name]: FormLayout,
             [FieldsLayout.name]: FieldsLayout,
             [Grid.name]: Grid,
-            [LocaleSelector.name]: LocaleSelector
         },
 
         props:{
@@ -103,15 +104,16 @@
                 this.layout = layout;
                 this.data = data || {};
                 this.config = config || {};
+                this.actionsBus.$emit('setup-locales', this.config.locales);
 
-                if(this.config.locales)
-                    this.locale = this.config.locales[0];
+                if(this.config.locales) {
+                    this.actionsBus.$emit('locale-changed', this.config.locales[0]);
+                }
             },
             getForm() {
                 return new Promise((resolve, reject)=>
                     axios.get(this.apiPath)
                     .then(({data}) => {
-
                         this.mount(data);
                         this.ready=true;
                         resolve();
@@ -131,20 +133,24 @@
                     })
             },
             init() {
+                //this.actionsBus.$on('setup-locales',_=>console.log('setup locales'));
                 if(this.entityKey != null) {
                     this.getForm();
                 }
                 else util.error('no entity key provided');
 
-                if(this.actionsBus) {
-                    this.actionsBus.$on('main-button-clicked', _=>{
-                        this.postForm();
-                    });
-                }
+                this.actionsBus.$on('main-button-clicked', _=>{
+                    this.postForm();
+                });
+
+                this.actionsBus.$on('locale-changed', newLocale => this.locale=newLocale);
             }
         },
         created() {
             this.init();
+            console.log(this);
         },
+        mounted() {
+        }
     }
 </script>

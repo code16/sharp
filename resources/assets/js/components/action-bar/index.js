@@ -1,9 +1,8 @@
-import Form from '../form/Form';
 import ActionBarForm from './ActionBarForm';
 
 
 export const NameAssociation = {
-   [Form.name] : ActionBarForm.name
+   'form' : ActionBarForm.name
 };
 
 export default {

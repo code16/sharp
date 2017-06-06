@@ -18,7 +18,8 @@
                                 <sharp-field-display :field-key="itemFieldLayout.key"
                                                      :context-fields="itemFields"
                                                      :context-data="listItemData"
-                                                     :update-data="update(i)">
+                                                     :update-data="update(i)"
+                                                     :locale="locale">
                                 </sharp-field-display>
                             </template>
                         </sharp-fields-layout>
@@ -43,6 +44,7 @@
     export default {
         name: 'SharpList',
 
+        inject:['$form'],
 
         components: {
             Draggable,
@@ -80,13 +82,23 @@
                 required: true,
             },
             collapsedItemTemplate: String,
-            maxItemCount: Number
+            maxItemCount: Number,
+
+            locale:String
         },
         data() {
             return {
                 list:[],
-                dragActive:false,
-                lastIndex: this.value.length,
+                dragActive: false,
+                lastIndex: 0,
+            }
+        },
+        watch: {
+            locale() {
+                if(this.value == null) {
+                    this.initList();
+                }
+                else this.list = this.value;
             }
         },
         computed: {
@@ -108,13 +120,20 @@
                 return Symbol('index');
             }
         },
+
         methods: {
             indexedList() {
-                return this.value.map((v,i)=>({[this.indexSymbol]:i,...v}));
+                return (this.value||[]).map((v,i)=>({[this.indexSymbol]:i,...v}));
             },
             createItem() {
                 return Object.keys(this.itemFields).reduce((res, itemKey) => {
-                    res[itemKey] = null;
+                    if(this.itemFields[itemKey].localized) {
+                        res[itemKey] = this.$form.config.locales.reduce((res, l)=>{
+                            res[l] = null;
+                            return res;
+                        },{});
+                    }
+                    else res[itemKey] = null;
                     return res;
                 },{
                     [this.indexSymbol]:this.lastIndex++
@@ -140,10 +159,17 @@
             toggleDrag() {
                 this.dragActive = !this.dragActive;
                 this.list.forEach((item,i) => item[this.dragIndexSymbol] = i);
+            },
+
+            initList() {
+                this.list = this.indexedList();
+                this.lastIndex = this.list.length;
+                // make value === list, to update changes
+                this.$emit('input', this.list);
             }
         },
         created() {
-            this.list = this.indexedList();
+            this.initList();
         }
     }
 </script>

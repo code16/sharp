@@ -124,7 +124,7 @@
                 this.$emit('input', this.simplemde.value());
             },
             onBeforeChange(cm, change) {
-                console.log('beforeChange',arguments, this.cursorEntered);
+               // console.log('beforeChange',arguments, this.cursorEntered);
             },
             onKeydown(cm, e) {
                 console.log('key down');

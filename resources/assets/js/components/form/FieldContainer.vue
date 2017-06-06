@@ -1,6 +1,8 @@
 <template>
-    <div class="form-group" :class="formGroupClasses" :style="extraStyle">
-        <label v-html="label" class="form-control-label"></label>
+    <div class="SharpFieldContainer form-group" :class="formGroupClasses" :style="extraStyle">
+        <label class="form-control-label" v-show="label">
+            {{label}} <span v-if="fieldProps.localized" class="SharpFieldContainer__label-locale">({{fieldProps.locale}})</span>
+        </label>
         <template v-if="alerts.length">
             <div v-for="alert in alerts" class="alert" :class="alertClass(alert.type)" role="alert">
                 {{alert.msg}}
@@ -62,7 +64,7 @@
             },
             extraStyle() {
                 return this.fieldProps.extraStyle;
-            }
+            },
         },
         methods: {
             setError(error) {
