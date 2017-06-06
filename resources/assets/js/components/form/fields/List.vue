@@ -25,7 +25,7 @@
                                 </sharp-field-display>
                             </template>
                         </sharp-fields-layout>
-                        <button class="btn-link" @click="remove(i)">Supprimer</button>
+                        <button v-if="removable" class="btn-link" @click="remove(i)">Supprimer</button>
                         <div v-if="i<list.length-1 && showAddButton" class="SharpList__new-item-zone">
                             <button class="btn btn-secondary" @click="insertNewItem(i)">+</button>
                         </div>
@@ -117,7 +117,7 @@
                 return this.dragActive;
             },
             showAddButton() {
-                return !this.dragActive && this.list.length<this.maxItemCount;
+                return !this.dragActive && this.addable && (this.list.length<this.maxItemCount || !this.maxItemCount);
             },
             dragIndexSymbol() {
                 return Symbol('dragIndex');

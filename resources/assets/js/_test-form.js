@@ -240,7 +240,9 @@ let fields = {
         type:'list',
         label:'Super liste',
         sortable: true,
-        maxItemCount:5,
+        addable: true,
+        removable: true,
+        //maxItemCount:5,
         collapsedItemTemplate:"{{ name && surname ? `${name} ${surname}` : `Nouvelle personne n°${$index}` }}",
         templateProps: ['name','surname','age'],
         itemFields: {
