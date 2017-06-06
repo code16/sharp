@@ -52643,7 +52643,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('textarea', {
     staticClass: "form-control",
     attrs: {
-      "cols": _vm.cols,
       "rows": _vm.rows,
       "placeholder": _vm.placeholder,
       "disabled": _vm.disabled

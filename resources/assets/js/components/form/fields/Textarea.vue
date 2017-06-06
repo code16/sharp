@@ -1,5 +1,5 @@
 <template>
-    <textarea class="form-control" :cols="cols" :rows="rows" :placeholder="placeholder" :disabled="disabled"
+    <textarea class="form-control" :rows="rows" :placeholder="placeholder" :disabled="disabled"
               :value="value" @input="handleInput">
     </textarea>
 </template>
@@ -16,7 +16,7 @@
             placeholder: String,
             disabled: Boolean,
 
-            rows: Number
+            rows: Number,
         },
         data() {
             return {
