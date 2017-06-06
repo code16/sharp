@@ -19,7 +19,5 @@ class HasOneRelationUpdater
         $relatedModel->find($value)->setAttribute(
             $foreignKeyName, $instance->id
         )->save();
-
-        return false;
     }
 }

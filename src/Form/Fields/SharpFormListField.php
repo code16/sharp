@@ -34,6 +34,11 @@ class SharpFormListField extends SharpFormField
     /**
      * @var string
      */
+    protected $itemIdAttribute = "id";
+
+    /**
+     * @var string
+     */
     protected $orderAttribute = null;
 
     /**
@@ -165,12 +170,21 @@ class SharpFormListField extends SharpFormField
     }
 
     /**
-     * @param \Closure|null $callback
+     * @param string $key
+     * @return SharpFormField
+     */
+    public function findItemFormFieldByKey(string $key)
+    {
+        return collect($this->itemFields)->where("key", $key)->first();
+    }
+
+    /**
+     * @param string $itemIdAttribute
      * @return static
      */
-    public function setItemLayout(\Closure $callback = null)
+    public function setItemIdAttribute(string $itemIdAttribute)
     {
-        $callback(new FormLayoutColumn(12));
+        $this->itemIdAttribute = $itemIdAttribute;
 
         return $this;
     }
@@ -183,6 +197,7 @@ class SharpFormListField extends SharpFormField
     {
         return [
             "itemFields" => "required|array",
+            "itemIdAttribute" => "required",
             "addable" => "boolean",
             "removable" => "boolean",
             "sortable" => "boolean",
@@ -203,6 +218,7 @@ class SharpFormListField extends SharpFormField
             "removeText" => $this->removeText,
             "collapsedItemTemplate" => $this->collapsedItemTemplate,
             "maxItemCount" => $this->maxItemCount,
+            "itemIdAttribute" => $this->itemIdAttribute,
             "itemFields" => collect($this->itemFields)->map(function($field) {
                 return $field->toArray();
             })->keyBy("key")->all()

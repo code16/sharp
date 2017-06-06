@@ -116,7 +116,16 @@ abstract class SharpForm
     {
         $this->checkFormIsBuilt();
 
-        return collect($this->fields)->where("key", $key)->first();
+        $fields = collect($this->fields);
+
+        if(strpos($key, ".") !== false) {
+            list($key, $itemKey) = explode(".", $key);
+            $listField = $fields->where("key", $key)->first();
+
+            return $listField->findItemFormFieldByKey($itemKey);
+        }
+
+        return $fields->where("key", $key)->first();
     }
 
     /**

@@ -6,7 +6,7 @@ use Code16\Sharp\Form\Eloquent\Relationships\HasOneRelationUpdater;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
 
-class UpdateHasOneRelationTest extends SharpFormEloquentBaseTest
+class HasOneRelationUpdaterTest extends SharpFormEloquentBaseTest
 {
     
     /** @test */

@@ -65,7 +65,9 @@ class SpaceshipSharpForm extends SharpForm
         )->addField(
             SharpFormListField::make("reviews")
                 ->setLabel("Technical reviews")
-                ->setAddable()->setRemovable()
+                ->setAddable()
+                ->setRemovable()
+                ->setItemIdAttribute("id")
                 ->addItemField(
                     SharpFormDateField::make("starts_at")
                         ->setLabel("Date")
