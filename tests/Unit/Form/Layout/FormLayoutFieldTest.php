@@ -38,4 +38,26 @@ class FormLayoutFieldTest extends SharpTestCase
         );
     }
 
+    /** @test */
+    function we_can_define_a_sublayout_for_a_field()
+    {
+        $formTab = new FormLayoutField('name', function($item) {
+            $item->withSingleField("age")
+                ->withSingleField("size");
+        });
+
+        $this->assertArraySubset([
+            "key" => "name",
+            "item" => [[
+                [
+                    "key" => "age",
+                ]
+            ], [
+                [
+                    "key" => "size",
+                ]
+            ]]
+        ], $formTab->toArray());
+    }
+
 }

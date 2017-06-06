@@ -2,6 +2,12 @@
 
 namespace Code16\Sharp\Form\Layout;
 
+/**
+ * Represents one field layout.
+ *
+ * Class FormLayoutField
+ * @package Code16\Sharp\Form\Layout
+ */
 class FormLayoutField implements HasLayout
 {
     /**
@@ -20,9 +26,14 @@ class FormLayoutField implements HasLayout
     protected $sizeXS = 12;
 
     /**
+     * @var array
+     */
+    protected $itemLayout;
+
+    /**
      * @param string $fieldKey
      */
-    function __construct(string $fieldKey)
+    function __construct(string $fieldKey, \Closure $subLayoutCallback = null)
     {
         if(strpos($fieldKey, "|")) {
             list($this->fieldKey, $sizes) = explode("|", $fieldKey);
@@ -39,6 +50,12 @@ class FormLayoutField implements HasLayout
         } else {
             $this->fieldKey = $fieldKey;
         }
+
+        if($subLayoutCallback) {
+            $itemFormLayout = new FormLayoutColumn(12);
+            $subLayoutCallback($itemFormLayout);
+            $this->itemLayout = $itemFormLayout->toArray()["fields"];
+        }
     }
 
     /**
@@ -50,6 +67,6 @@ class FormLayoutField implements HasLayout
             "key" => $this->fieldKey,
             "size" => $this->size,
             "sizeXS" => $this->sizeXS
-        ];
+        ] + ($this->itemLayout ? ["item" => $this->itemLayout] : []);
     }
 }

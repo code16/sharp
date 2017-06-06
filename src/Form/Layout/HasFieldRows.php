@@ -13,10 +13,10 @@ trait HasFieldRows
      * @param string $fieldKey
      * @return $this
      */
-    public function withSingleField(string $fieldKey)
+    public function withSingleField(string $fieldKey, \Closure $subLayoutCallback = null)
     {
         $this->addRowLayout([
-            new FormLayoutField($fieldKey)
+            new FormLayoutField($fieldKey, $subLayoutCallback)
         ]);
 
         return $this;
