@@ -19,7 +19,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
 
         $form = new WithSharpFormEloquentUpdaterTestForm();
 
-        $this->assertTrue(
+        $this->assertNotNull(
             $form->update($person->id, ["name" => "Claire Trevor"])
         );
 
@@ -84,7 +84,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
 
         $form = new WithSharpFormEloquentUpdaterTestForm();
 
-        $this->assertTrue(
+        $this->assertNotNull(
             $form->update($person->id, ["mother" => $mother->id])
         );
 
@@ -102,7 +102,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
 
         $form = new WithSharpFormEloquentUpdaterTestForm();
 
-        $this->assertTrue(
+        $this->assertNotNull(
             $form->update($mother->id, ["elderSon" => $son->id])
         );
 
@@ -120,7 +120,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
 
         $form = new WithSharpFormEloquentUpdaterTestForm();
 
-        $this->assertTrue(
+        $this->assertNotNull(
             $form->update($mother->id, [
                 "sons" => [
                     ["id" => $son->id, "name" => "John Wayne"],
@@ -175,12 +175,12 @@ class WithSharpFormEloquentUpdaterTestForm extends SharpForm
     use WithSharpFormEloquentUpdater;
 
     function find($id): array { return []; }
-    function update($id, array $data): bool
+    function update($id, array $data)
     {
         $instance = $id ? Person::findOrFail($id) : new Person;
         return $this->save($instance, $data);
     }
-    function delete($id): bool { return false; }
+    function delete($id) { return false; }
     function buildFormLayout() {}
     function buildFormFields()
     {

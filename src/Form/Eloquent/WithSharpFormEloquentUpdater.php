@@ -36,9 +36,9 @@ trait WithSharpFormEloquentUpdater
      *
      * @param Model $instance
      * @param array $plainData
-     * @return bool
+     * @return Model
      */
-    function save(Model $instance, array $plainData): bool
+    function save(Model $instance, array $plainData)
     {
         return app(EloquentModelUpdater::class)
             ->update($instance, $this->buildData($plainData));

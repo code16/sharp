@@ -121,7 +121,7 @@ class SpaceshipSharpForm extends SharpForm
             return $spaceship->capacity / 1000;
 
         })->transform(
-            Spaceship::findOrFail($id)
+            Spaceship::with("reviews")->findOrFail($id)
         );
     }
 

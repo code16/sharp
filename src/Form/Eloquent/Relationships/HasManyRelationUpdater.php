@@ -3,10 +3,13 @@
 namespace Code16\Sharp\Form\Eloquent\Relationships;
 
 use Code16\Sharp\Form\Eloquent\EloquentModelUpdater;
-use Code16\Sharp\Form\Eloquent\Request\UpdateRequestData;
 
 class HasManyRelationUpdater
 {
+    /**
+     * @var array
+     */
+    protected $handledIds = [];
 
     /**
      * @param $instance
@@ -20,18 +23,36 @@ class HasManyRelationUpdater
         $foreignKeyName = $instance->$attribute()->getForeignKeyName();
         $relatedModelKeyName = $relatedModel->getKeyName();
 
+        // Add / update sent items
         foreach($value as $item) {
-            $id = $item->findItem($relatedModelKeyName)->value();
+            $id = $this->findItemId($item, $relatedModelKeyName);
 
             $relatedInstance = $id
                 ? $relatedModel->find($id)
                 : $relatedModel->newInstance();
 
-            app(EloquentModelUpdater::class)->update($relatedInstance, $item);
-
             $relatedInstance->setAttribute(
                 $foreignKeyName, $instance->id
-            )->save();
+            );
+
+            $model = app(EloquentModelUpdater::class)->update($relatedInstance, $item);
+            $this->handledIds[] = $model->getAttribute($relatedModelKeyName);
         }
+
+        // Remove unsent items
+        $relatedModel->where($foreignKeyName, $instance->id)
+            ->whereNotIn($relatedModelKeyName, $this->handledIds)
+            ->delete();
+    }
+
+    private function findItemId($item, $relatedModelKeyName)
+    {
+        $id = $item->findItem($relatedModelKeyName)->value();
+
+        if($id) {
+            $this->handledIds[] = $id;
+        }
+
+        return $id;
     }
 }

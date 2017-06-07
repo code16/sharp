@@ -12,15 +12,16 @@ class EloquentModelUpdater
     /**
      * @param Model $instance
      * @param UpdateRequestData $data
-     * @return bool
+     * @return Model
      */
-    function update(Model $instance, UpdateRequestData $data): bool
+    function update($instance, UpdateRequestData $data)
     {
         $delayedAttributes = [];
         $relationships = [];
 
         foreach($data->items() as $item) {
 
+            // Only update referenced fields
             if(! $item->formField()) continue;
 
             if($this->isRelationship($instance, $item->attribute())) {
@@ -60,7 +61,7 @@ class EloquentModelUpdater
         // Finally, handle relationships.
         $this->saveRelationships($instance, $relationships);
 
-        return true;
+        return $instance;
     }
 
     /**
@@ -71,17 +72,15 @@ class EloquentModelUpdater
      * @param $value
      * @param null $valuator
      */
-    protected function valuateAttribute(Model $instance, string $attribute, $value, $valuator = null)
+    protected function valuateAttribute($instance, string $attribute, $value, $valuator = null)
     {
         if ($valuator) {
-            $instance->$attribute = $valuator->getValue(
+            $value = $valuator->getValue(
                 $instance, $attribute, $value
             );
-
-            return;
         }
 
-        $instance->$attribute = $value;
+        $instance->setAttribute($attribute, $value);
     }
 
     /**

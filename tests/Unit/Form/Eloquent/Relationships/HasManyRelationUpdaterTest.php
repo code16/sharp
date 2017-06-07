@@ -55,7 +55,28 @@ class HasManyRelationUpdaterTest extends SharpFormEloquentBaseTest
         ]);
     }
 
-    // TODO test and code item delete
+//    /** @test */
+//    function we_can_delete_an_existing_related_item_in_a_hasMany_relation()
+//    {
+//        $mother = Person::create(["name" => "Jane Wayne"]);
+//        $son1 = Person::create(["name" => "John Wayne", "mother_id" => $mother->id]);
+//        $son2 = Person::create(["name" => "Mary Wayne", "mother_id" => $mother->id]);
+//
+//        $updater = new HasManyRelationUpdater();
+//
+//        $updater->update($mother, "sons", $this->formatData([[
+//            "id" => [
+//                "value" => $son1->id, "valuator" => null, "field" => null
+//            ], "name" => [
+//                "value" => "John Wayne", "valuator" => null, "field" => SharpFormTextField::make("name")
+//            ]
+//        ]]));
+//
+//        $this->assertDatabaseMissing("people", [
+//            "id" => $son2->id,
+//            "mother_id" => $mother->id
+//        ]);
+//    }
 
     private function formatData(array $data)
     {
