@@ -91,6 +91,9 @@
                 if(this.instanceId) path+=`/${this.instanceId}`;
                 return path;
             },
+            localized() {
+                return this.config && Array.isArray(this.config.locales);
+            }
         },
         methods: {
             updateData(key,value) {

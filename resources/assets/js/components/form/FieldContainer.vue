@@ -1,7 +1,7 @@
 <template>
     <div class="SharpFieldContainer form-group" :class="formGroupClasses" :style="extraStyle">
         <label class="form-control-label" v-show="label">
-            {{label}} <span v-if="fieldProps.localized" class="SharpFieldContainer__label-locale">({{fieldProps.locale}})</span>
+            {{label}} <span v-if="showLocale" class="SharpFieldContainer__label-locale">({{fieldProps.locale}})</span>
         </label>
         <template v-if="alerts.length">
             <div v-for="alert in alerts" class="alert" :class="alertClass(alert.type)" role="alert">
@@ -28,7 +28,7 @@
             [Field.name]:Field
         },
 
-        inject:['$tab'],
+        inject:['$form','$tab'],
 
         props : {
             ...Field.props,
@@ -65,6 +65,9 @@
             extraStyle() {
                 return this.fieldProps.extraStyle;
             },
+            showLocale() {
+                return this.$form.localized && this.fieldProps.localized;
+            }
         },
         methods: {
             setError(error) {
