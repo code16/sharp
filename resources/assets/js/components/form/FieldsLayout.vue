@@ -16,6 +16,7 @@
 
 <script>
     import Grid from '../Grid';
+
     export default {
         name:'SharpFieldsLayout',
 

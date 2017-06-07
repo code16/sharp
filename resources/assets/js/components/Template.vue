@@ -34,7 +34,7 @@
 
         computed: {
             templateProps() {
-                return Object.keys(this.templateData);
+                return Object.keys(this.templateData||{});
             },
         }
     }

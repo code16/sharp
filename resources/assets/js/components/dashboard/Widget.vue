@@ -1,3 +1,10 @@
+<template>
+    <div class="card">
+        <div class="card-block">
+            <component :is="widgetComp" v-bind="exposedProps"></component>
+        </div>
+    </div>
+</template>
 <script>
     import Widgets, { NameAssociation as widgetCompName } from './widgets/index';
 
@@ -11,10 +18,13 @@
             value:Object
         },
 
-        render(h) {
-            h(widgetCompName[this.widgetType], {
-                props: { ...this.widgetProps, value:this.value }
-            })
-        }
+        computed: {
+            widgetComp() {
+                return widgetCompName[this.widgetType]
+            },
+            exposedProps() {
+                return { ...this.widgetProps, value:this.value }
+            }
+        },
     }
 </script>

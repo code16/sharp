@@ -28083,6 +28083,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
         fieldProps: Object,
         fieldLayout: Object,
         value: [String, Number, Boolean, Object, Array],
+        locale: String,
         updateData: Function
     },
     mounted: function mounted() {
@@ -28100,13 +28101,13 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
             key = _fieldProps.key,
             fieldProps = _objectWithoutProperties(_fieldProps, ['key']);
 
-        //console.log(fieldCompName[this.fieldType]);
-
         return h(__WEBPACK_IMPORTED_MODULE_0__fields_index__["b" /* NameAssociation */][this.fieldType], {
             props: _extends({
                 fieldKey: this.fieldKey,
                 fieldLayout: this.fieldLayout,
-                value: this.value
+                fieldErrors: this.fieldErrors,
+                value: this.value,
+                locale: this.locale
             }, fieldProps),
             on: {
                 input: function input(val) {
@@ -28125,8 +28126,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Field__ = __webpack_require__(185);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Field___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Field__);
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins_index__ = __webpack_require__(122);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -28154,18 +28154,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpFieldContainer',
 
+    mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins_index__["b" /* ErrorNode */]],
+
     components: _defineProperty({}, __WEBPACK_IMPORTED_MODULE_0__Field___default.a.name, __WEBPACK_IMPORTED_MODULE_0__Field___default.a),
 
-    inject: ['$tab'],
+    inject: ['$tab', '$form'],
 
     props: _extends({}, __WEBPACK_IMPORTED_MODULE_0__Field___default.a.props, {
 
         label: String,
-        helpMessage: String,
-        fieldErrors: Array
+        helpMessage: String
     }),
     data: function data() {
         return {
@@ -28179,12 +28181,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: function value() {
             if (this.state === 'error') this.clear();
         },
-        fieldErrors: function fieldErrors(_ref) {
-            var _ref2 = _slicedToArray(_ref, 1),
-                error = _ref2[0];
 
-            if (typeof error === 'string') {
-                this.setError(error);
+        '$form.errors': {
+            immediate: true,
+            handler: function handler(errors) {
+                var error = errors[this.mergedErrorIdentifier];
+                if (Array.isArray(error)) {
+                    this.setError(error[0]);
+                }
             }
         }
     },
@@ -28252,6 +28256,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpFieldsLayout',
 
@@ -28287,6 +28292,7 @@ var _components;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
 //
 //
 //
@@ -28369,9 +28375,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             var path = __WEBPACK_IMPORTED_MODULE_1__consts__["a" /* API_PATH */] + '/form/' + this.entityKey;
             if (this.instanceId) path += '/' + this.instanceId;
             return path;
+        },
+        localized: function localized() {
+            return this.config && Array.isArray(this.config.locales);
         }
     },
     methods: {
+        fieldErrors: function fieldErrors(key) {
+            if (this.fields[key].localized) {
+                return (this.errors[key] || {})[this.locale];
+            }
+            return this.errors[key];
+        },
         updateData: function updateData(key, value) {
             if (this.fields[key].localized) {
                 this.$set(this.data[key], this.locale, value);
@@ -28387,11 +28402,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             this.layout = layout;
             this.data = data || {};
             this.config = config || {};
-            this.actionsBus.$emit('setup-locales', this.config.locales);
 
-            if (this.config.locales) {
-                this.actionsBus.$emit('locale-changed', this.config.locales[0]);
-            }
+            this.setupActions();
         },
         handleError: function handleError(_ref2) {
             var response = _ref2.response;
@@ -28408,10 +28420,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             this.actionsBus.$on('main-button-clicked', function (_) {
                 _this.post().catch(handleError);
             });
-
             this.actionsBus.$on('locale-changed', function (newLocale) {
                 return _this.locale = newLocale;
             });
+        },
+        setupActions: function setupActions() {
+            this.actionsBus.$emit('setup-locales', this.config.locales);
+
+            if (this.config.locales) {
+                this.actionsBus.$emit('locale-changed', this.config.locales[0]);
+            }
         }
     },
     created: function created() {
@@ -28655,216 +28673,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 });
 
 /***/ }),
-/* 95 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuedraggable__ = __webpack_require__(235);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuedraggable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vuedraggable__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__FieldsLayout__ = __webpack_require__(54);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__FieldsLayout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__FieldsLayout__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Template__ = __webpack_require__(279);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Template___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__Template__);
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _components;
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-
-
-var noop = function noop() {};
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    name: 'SharpList',
-
-    inject: ['$form'],
-
-    components: (_components = {
-        Draggable: __WEBPACK_IMPORTED_MODULE_0_vuedraggable___default.a
-    }, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_1__FieldsLayout___default.a.name, __WEBPACK_IMPORTED_MODULE_1__FieldsLayout___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_2__Template___default.a.name, __WEBPACK_IMPORTED_MODULE_2__Template___default.a), _components),
-
-    props: {
-        fieldKey: String,
-        fieldLayout: Object,
-        value: Array,
-
-        addable: {
-            type: Boolean,
-            default: true
-        },
-        sortable: {
-            type: Boolean,
-            default: false
-        },
-        removable: {
-            type: Boolean,
-            default: false
-        },
-        addText: {
-            type: String,
-            default: 'Ajouter un élément'
-        },
-        removeText: {
-            type: String,
-            default: "Supprimer l'élément"
-        },
-        itemFields: {
-            type: Object,
-            required: true
-        },
-        collapsedItemTemplate: String,
-        maxItemCount: Number,
-
-        locale: String
-    },
-    data: function data() {
-        return {
-            list: [],
-            dragActive: false,
-            lastIndex: 0,
-
-            transitionActive: false
-        };
-    },
-
-    watch: {
-        locale: function locale() {
-            if (this.value == null) {
-                this.initList();
-            } else this.list = this.value;
-        }
-    },
-    computed: {
-        dragOptions: function dragOptions() {
-            return {
-                disabled: !this.dragActive
-            };
-        },
-        collapsed: function collapsed() {
-            return this.dragActive;
-        },
-        showAddButton: function showAddButton() {
-            return !this.dragActive && this.addable && (this.list.length < this.maxItemCount || !this.maxItemCount);
-        },
-        dragIndexSymbol: function dragIndexSymbol() {
-            return Symbol('dragIndex');
-        },
-        indexSymbol: function indexSymbol() {
-            return Symbol('index');
-        }
-    },
-
-    methods: {
-        indexedList: function indexedList() {
-            var _this = this;
-
-            return (this.value || []).map(function (v, i) {
-                return _extends(_defineProperty({}, _this.indexSymbol, i), v);
-            });
-        },
-        createItem: function createItem() {
-            var _this2 = this;
-
-            return Object.keys(this.itemFields).reduce(function (res, itemKey) {
-                if (_this2.itemFields[itemKey].localized) {
-                    res[itemKey] = _this2.$form.config.locales.reduce(function (res, l) {
-                        res[l] = null;
-                        return res;
-                    }, {});
-                } else res[itemKey] = null;
-                return res;
-            }, _defineProperty({}, this.indexSymbol, this.lastIndex++));
-        },
-        insertNewItem: function insertNewItem(i) {
-            this.list.splice(i + 1, 0, this.createItem());
-        },
-        add: function add() {
-            this.list.push(this.createItem());
-        },
-        remove: function remove(i) {
-            this.list.splice(i, 1);
-        },
-        update: function update(i) {
-            var _this3 = this;
-
-            return function (key, value) {
-                if (_this3.itemFields[key].localized) {
-                    _this3.list[i][key][_this3.locale] = value;
-                } else _this3.list[i][key] = value;
-            };
-        },
-        collapsedItemData: function collapsedItemData(itemData) {
-            return _extends({ $index: itemData[this.dragIndexSymbol] }, itemData);
-        },
-        toggleDrag: function toggleDrag() {
-            var _this4 = this;
-
-            this.dragActive = !this.dragActive;
-            this.list.forEach(function (item, i) {
-                return item[_this4.dragIndexSymbol] = i;
-            });
-        },
-        initList: function initList() {
-            this.list = this.indexedList();
-            this.lastIndex = this.list.length;
-            // make value === list, to update changes
-            this.$emit('input', this.list);
-        },
-        beforeTransition: function beforeTransition(el, done) {
-            console.log(el);
-        }
-    },
-    created: function created() {
-        this.initList();
-    }
-});
-
-/***/ }),
+/* 95 */,
 /* 96 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -30988,7 +30797,9 @@ var localizedData = {
         de: "Allemand"
     },
     mylist: {
-        fr: null,
+        fr: [{
+            name: '', surname: '', age: ''
+        }],
         en: null,
         de: null
     }
@@ -31011,7 +30822,7 @@ var defaultData = {
     //     thumbnail:"img/chien.jpg"
     // },
     mylist: [{
-        name: { en: null, fr: null, de: null }, surname: '', age: ''
+        name: '', surname: '', age: ''
     }],
     select: [1, 3],
     //select:1,
@@ -31024,7 +30835,8 @@ var defaultData = {
 };
 
 var errors = {
-    test_tab_2: ['Erreur de test']
+    test_tab_2: ['Erreur de test'],
+    'mylist.fr.0.name': ['Nom trop nul']
 };
 
 var data = defaultData;
@@ -31119,8 +30931,7 @@ var fields = {
         itemFields: {
             'name': {
                 label: 'Nom',
-                type: 'text',
-                localized: true
+                type: 'text'
             },
             'surname': {
                 label: 'Prénom',
@@ -31346,12 +31157,17 @@ var acceptCondition = function acceptCondition(fields, data, condition) {
 
 var getValue = function getValue(form, field, value, locale) {
 
-    if (Array.isArray(form.config.locales) && field.localized) {
+    if (form.localized && field.localized) {
         //console.log(form, field, value, locale);
         return value[locale];
     }
 
     return value;
+};
+
+var getIdentifier = function getIdentifier(identifier, field, locale) {
+    if (field.localized) return identifier + '.' + locale;
+    return identifier;
 };
 
 /* harmony default export */ __webpack_exports__["a"] = ({
@@ -31374,8 +31190,8 @@ var getValue = function getValue(form, field, value, locale) {
         var fieldKey = props.fieldKey,
             contextFields = props.contextFields,
             contextData = props.contextData,
-            locale = props.locale,
-            sharedProps = _objectWithoutProperties(props, ['fieldKey', 'contextFields', 'contextData', 'locale']);
+            errorIdentifier = props.errorIdentifier,
+            sharedProps = _objectWithoutProperties(props, ['fieldKey', 'contextFields', 'contextData', 'errorIdentifier']);
 
         var $form = injections.$form;
 
@@ -31391,11 +31207,12 @@ var getValue = function getValue(form, field, value, locale) {
         return acceptCondition(contextFields, contextData, field.conditionalDisplay) ? h(__WEBPACK_IMPORTED_MODULE_1__FieldContainer___default.a, {
             props: _extends({
                 fieldKey: fieldKey,
-                fieldProps: _extends({}, field, { locale: locale }),
+                fieldProps: field,
                 fieldType: field.type,
-                value: getValue($form, field, value, locale),
+                value: getValue($form, field, value, props.locale),
                 label: field.label,
-                helpMessage: field.helpMessage
+                helpMessage: field.helpMessage,
+                errorIdentifier: getIdentifier(errorIdentifier, field, props.locale)
             }, sharedProps)
         }) : null;
     }
@@ -31426,8 +31243,8 @@ var getValue = function getValue(form, field, value, locale) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__date_Date___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__date_Date__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__Check__ = __webpack_require__(56);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__Check___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__Check__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__List__ = __webpack_require__(191);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__List___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__List__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__list_List__ = __webpack_require__(586);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__list_List___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__list_List__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__Select__ = __webpack_require__(57);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__Select___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11__Select__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__Html__ = __webpack_require__(190);
@@ -31464,12 +31281,12 @@ var NameAssociation = {
     'taginput': __WEBPACK_IMPORTED_MODULE_7__TagInput___default.a.name,
     'date': __WEBPACK_IMPORTED_MODULE_8__date_Date___default.a.name,
     'check': __WEBPACK_IMPORTED_MODULE_9__Check___default.a.name,
-    'list': __WEBPACK_IMPORTED_MODULE_10__List___default.a.name,
+    'list': __WEBPACK_IMPORTED_MODULE_10__list_List___default.a.name,
     'select': __WEBPACK_IMPORTED_MODULE_11__Select___default.a.name,
     'html': __WEBPACK_IMPORTED_MODULE_12__Html___default.a.name
 };
 
-/* harmony default export */ __webpack_exports__["a"] = (_SharpAutocomplete$na = {}, _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_0__Autocomplete___default.a.name, __WEBPACK_IMPORTED_MODULE_0__Autocomplete___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_2__Text___default.a.name, __WEBPACK_IMPORTED_MODULE_2__Text___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_3__Password___default.a.name, __WEBPACK_IMPORTED_MODULE_3__Password___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_1__Textarea___default.a.name, __WEBPACK_IMPORTED_MODULE_1__Textarea___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_4__markdown_Markdown___default.a.name, __WEBPACK_IMPORTED_MODULE_4__markdown_Markdown___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_5__Number___default.a.name, __WEBPACK_IMPORTED_MODULE_5__Number___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_6__upload_Upload___default.a.name, __WEBPACK_IMPORTED_MODULE_6__upload_Upload___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_7__TagInput___default.a.name, __WEBPACK_IMPORTED_MODULE_7__TagInput___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_8__date_Date___default.a.name, __WEBPACK_IMPORTED_MODULE_8__date_Date___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_9__Check___default.a.name, __WEBPACK_IMPORTED_MODULE_9__Check___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_10__List___default.a.name, __WEBPACK_IMPORTED_MODULE_10__List___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_11__Select___default.a.name, __WEBPACK_IMPORTED_MODULE_11__Select___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_12__Html___default.a.name, __WEBPACK_IMPORTED_MODULE_12__Html___default.a), _SharpAutocomplete$na);
+/* harmony default export */ __webpack_exports__["a"] = (_SharpAutocomplete$na = {}, _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_0__Autocomplete___default.a.name, __WEBPACK_IMPORTED_MODULE_0__Autocomplete___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_2__Text___default.a.name, __WEBPACK_IMPORTED_MODULE_2__Text___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_3__Password___default.a.name, __WEBPACK_IMPORTED_MODULE_3__Password___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_1__Textarea___default.a.name, __WEBPACK_IMPORTED_MODULE_1__Textarea___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_4__markdown_Markdown___default.a.name, __WEBPACK_IMPORTED_MODULE_4__markdown_Markdown___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_5__Number___default.a.name, __WEBPACK_IMPORTED_MODULE_5__Number___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_6__upload_Upload___default.a.name, __WEBPACK_IMPORTED_MODULE_6__upload_Upload___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_7__TagInput___default.a.name, __WEBPACK_IMPORTED_MODULE_7__TagInput___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_8__date_Date___default.a.name, __WEBPACK_IMPORTED_MODULE_8__date_Date___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_9__Check___default.a.name, __WEBPACK_IMPORTED_MODULE_9__Check___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_10__list_List___default.a.name, __WEBPACK_IMPORTED_MODULE_10__list_List___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_11__Select___default.a.name, __WEBPACK_IMPORTED_MODULE_11__Select___default.a), _defineProperty(_SharpAutocomplete$na, __WEBPACK_IMPORTED_MODULE_12__Html___default.a.name, __WEBPACK_IMPORTED_MODULE_12__Html___default.a), _SharpAutocomplete$na);
 
 /***/ }),
 /* 118 */
@@ -32138,7 +31955,11 @@ component.methods.removeAllFiles = function (cancelQueued) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__testable_form__ = __webpack_require__(123);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__testable_form__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__testable_dashboard__ = __webpack_require__(283);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__testable_dashboard__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_1__testable_dashboard__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ErrorNode__ = __webpack_require__(583);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_2__ErrorNode__["a"]; });
+
+
 
 
 
@@ -50502,40 +50323,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 191 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(95),
-  /* template */
-  __webpack_require__(206),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/form/fields/List.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] List.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-08b5140a", Component.options)
-  } else {
-    hotAPI.reload("data-v-08b5140a", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
+/* 191 */,
 /* 192 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -51004,103 +50792,7 @@ if (false) {
 }
 
 /***/ }),
-/* 206 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "SharpList"
-  }, [(_vm.sortable && _vm.list.length) ? _c('div', {
-    staticClass: "text-right"
-  }, [_c('button', {
-    staticClass: "btn btn-outline-primary",
-    class: {
-      active: _vm.dragActive
-    },
-    attrs: {
-      "type": "button"
-    },
-    on: {
-      "click": _vm.toggleDrag
-    }
-  }, [_vm._v("\n            " + _vm._s(_vm.dragActive ? 'Ok' : 'Trier') + "\n        ")])]) : _vm._e(), _vm._v(" "), _c('draggable', {
-    staticClass: "list-group",
-    attrs: {
-      "options": _vm.dragOptions,
-      "list": _vm.list
-    }
-  }, [_c('transition-group', {
-    attrs: {
-      "name": "expand",
-      "tag": "div"
-    }
-  }, [_vm._l((_vm.list), function(listItemData, i) {
-    return _c('li', {
-      key: listItemData[_vm.indexSymbol],
-      staticClass: "SharpList__item list-group-item",
-      class: {
-        'SharpList__item--collapsed': _vm.collapsed
-      }
-    }, [(_vm.collapsed) ? [_c('sharp-template', {
-      attrs: {
-        "name": "CollapsedItem",
-        "template": _vm.collapsedItemTemplate,
-        "template-data": _vm.collapsedItemData(listItemData)
-      }
-    })] : [_c('sharp-fields-layout', {
-      attrs: {
-        "layout": _vm.fieldLayout.item
-      },
-      scopedSlots: _vm._u([
-        ["default", function(itemFieldLayout) {
-          return [_c('sharp-field-display', {
-            attrs: {
-              "field-key": itemFieldLayout.key,
-              "context-fields": _vm.itemFields,
-              "context-data": listItemData,
-              "update-data": _vm.update(i),
-              "locale": _vm.locale
-            }
-          })]
-        }]
-      ])
-    }), _vm._v(" "), (_vm.removable) ? _c('button', {
-      staticClass: "btn-link",
-      on: {
-        "click": function($event) {
-          _vm.remove(i)
-        }
-      }
-    }, [_vm._v(_vm._s(_vm.removeText))]) : _vm._e(), _vm._v(" "), (i < _vm.list.length - 1 && _vm.showAddButton) ? _c('div', {
-      staticClass: "SharpList__new-item-zone"
-    }, [_c('button', {
-      staticClass: "btn btn-secondary",
-      on: {
-        "click": function($event) {
-          _vm.insertNewItem(i)
-        }
-      }
-    }, [_vm._v("+")])]) : _vm._e()]], 2)
-  }), _vm._v(" "), (_vm.showAddButton) ? _c('button', {
-    key: -1,
-    staticClass: "SharpList__add-button btn btn-secondary",
-    attrs: {
-      "type": "button"
-    },
-    on: {
-      "click": _vm.add
-    }
-  }, [_vm._v(_vm._s(_vm.addText))]) : _vm._e()], 2)], 1)], 1)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-08b5140a", module.exports)
-  }
-}
-
-/***/ }),
+/* 206 */,
 /* 207 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -51905,7 +51597,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "form-control-label"
   }, [_vm._v("\n        " + _vm._s(_vm.label) + " "), (_vm.fieldProps.localized) ? _c('span', {
     staticClass: "SharpFieldContainer__label-locale"
-  }, [_vm._v("(" + _vm._s(_vm.fieldProps.locale) + ")")]) : _vm._e()]), _vm._v(" "), (_vm.alerts.length) ? _vm._l((_vm.alerts), function(alert) {
+  }, [_vm._v("(" + _vm._s(_vm.locale) + ")")]) : _vm._e()]), _vm._v(" "), (_vm.alerts.length) ? _vm._l((_vm.alerts), function(alert) {
     return _c('div', {
       staticClass: "alert",
       class: _vm.alertClass(alert.type),
@@ -52081,7 +51773,7 @@ if (false) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "SharpForm container"
+    staticClass: "SharpForm"
   }, [(_vm.ready) ? [_c('sharp-tabbed-layout', {
     attrs: {
       "layout": _vm.layout
@@ -52106,8 +51798,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
                         "context-fields": _vm.fields,
                         "context-data": _vm.data,
                         "field-layout": fieldLayout,
-                        "field-errors": _vm.errors[fieldLayout.key],
                         "locale": _vm.locale,
+                        "error-identifier": fieldLayout.key,
+                        "is-error-root": true,
                         "update-data": _vm.updateData
                       }
                     })]
@@ -53029,14 +52722,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     methods: {
+        setupActions: function setupActions() {
+            void 0;
+        },
         init: function init() {
             var _this = this;
 
-            if (!this.test) this.getForm();
+            if (!this.test) this.get();
 
             if (this.submitButton) {
                 document.querySelector(this.submitButton).addEventListener('click', function (e) {
-                    _this.postForm();
+                    _this.post();
                 });
             }
         }
@@ -53449,7 +53145,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     computed: {
         templateProps: function templateProps() {
-            return Object.keys(this.templateData);
+            return Object.keys(this.templateData || {});
         }
     }
 });
@@ -53492,8 +53188,14 @@ var layout = {
         columns: [{
             widgets: [[{
                 key: 'SuperPanel'
-            }, {
+            }], [{
+                key: 'PieChart'
+            }]]
+        }, {
+            widgets: [[{
                 key: 'Panel2'
+            }], [{
+                key: 'LineChart'
             }]]
         }]
     }]
@@ -53504,11 +53206,32 @@ var data = {};
 var widgets = {
     SuperPanel: {
         type: 'panel',
-        template: '\n            <pre>Lorem ipsum de d e dz dez dez dez dezdez d ez dez dez\ndezdezd\nezd\nezd\nezdezdededededededede</pre>\n        '
+        template: '\n            Lorem Elsass ipsum ac Christkindelsm\xE4rik munster Wurschtsalad ge\xEFz habitant turpis hopla Richard\xA0Schirmeck Gal. quam. sit m\xE9t\xE9or geht\'s id turpis, amet, m\xE4nele ornare Strasbourg semper libero.\n        ',
+        url: '/embedded.html'
     },
     Panel2: {
         type: 'panel',
-        template: 'aaa'
+        template: 'Panel 2'
+    },
+    PieChart: {
+        type: 'chart',
+        display: 'pie',
+        labels: ['VueJs', 'EmberJs', 'ReactJs', 'AngularJs'],
+        datasets: [{
+            backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
+            data: [40, 20, 80, 10]
+        }]
+    },
+    LineChart: {
+        type: 'chart',
+        display: 'line',
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [{
+            label: 'Data One',
+            backgroundColor: '#f87979',
+            data: [40, 39, 10, 40, 39, 80, 40]
+        }],
+        title: 'Super graphe'
     }
 };
 
@@ -53532,6 +53255,731 @@ var widgets = {
         }
     }
 });
+
+/***/ }),
+/* 284 */,
+/* 285 */,
+/* 286 */,
+/* 287 */,
+/* 288 */,
+/* 289 */,
+/* 290 */,
+/* 291 */,
+/* 292 */,
+/* 293 */,
+/* 294 */,
+/* 295 */,
+/* 296 */,
+/* 297 */,
+/* 298 */,
+/* 299 */,
+/* 300 */,
+/* 301 */,
+/* 302 */,
+/* 303 */,
+/* 304 */,
+/* 305 */,
+/* 306 */,
+/* 307 */,
+/* 308 */,
+/* 309 */,
+/* 310 */,
+/* 311 */,
+/* 312 */,
+/* 313 */,
+/* 314 */,
+/* 315 */,
+/* 316 */,
+/* 317 */,
+/* 318 */,
+/* 319 */,
+/* 320 */,
+/* 321 */,
+/* 322 */,
+/* 323 */,
+/* 324 */,
+/* 325 */,
+/* 326 */,
+/* 327 */,
+/* 328 */,
+/* 329 */,
+/* 330 */,
+/* 331 */,
+/* 332 */,
+/* 333 */,
+/* 334 */,
+/* 335 */,
+/* 336 */,
+/* 337 */,
+/* 338 */,
+/* 339 */,
+/* 340 */,
+/* 341 */,
+/* 342 */,
+/* 343 */,
+/* 344 */,
+/* 345 */,
+/* 346 */,
+/* 347 */,
+/* 348 */,
+/* 349 */,
+/* 350 */,
+/* 351 */,
+/* 352 */,
+/* 353 */,
+/* 354 */,
+/* 355 */,
+/* 356 */,
+/* 357 */,
+/* 358 */,
+/* 359 */,
+/* 360 */,
+/* 361 */,
+/* 362 */,
+/* 363 */,
+/* 364 */,
+/* 365 */,
+/* 366 */,
+/* 367 */,
+/* 368 */,
+/* 369 */,
+/* 370 */,
+/* 371 */,
+/* 372 */,
+/* 373 */,
+/* 374 */,
+/* 375 */,
+/* 376 */,
+/* 377 */,
+/* 378 */,
+/* 379 */,
+/* 380 */,
+/* 381 */,
+/* 382 */,
+/* 383 */,
+/* 384 */,
+/* 385 */,
+/* 386 */,
+/* 387 */,
+/* 388 */,
+/* 389 */,
+/* 390 */,
+/* 391 */,
+/* 392 */,
+/* 393 */,
+/* 394 */,
+/* 395 */,
+/* 396 */,
+/* 397 */,
+/* 398 */,
+/* 399 */,
+/* 400 */,
+/* 401 */,
+/* 402 */,
+/* 403 */,
+/* 404 */,
+/* 405 */,
+/* 406 */,
+/* 407 */,
+/* 408 */,
+/* 409 */,
+/* 410 */,
+/* 411 */,
+/* 412 */,
+/* 413 */,
+/* 414 */,
+/* 415 */,
+/* 416 */,
+/* 417 */,
+/* 418 */,
+/* 419 */,
+/* 420 */,
+/* 421 */,
+/* 422 */,
+/* 423 */,
+/* 424 */,
+/* 425 */,
+/* 426 */,
+/* 427 */,
+/* 428 */,
+/* 429 */,
+/* 430 */,
+/* 431 */,
+/* 432 */,
+/* 433 */,
+/* 434 */,
+/* 435 */,
+/* 436 */,
+/* 437 */,
+/* 438 */,
+/* 439 */,
+/* 440 */,
+/* 441 */,
+/* 442 */,
+/* 443 */,
+/* 444 */,
+/* 445 */,
+/* 446 */,
+/* 447 */,
+/* 448 */,
+/* 449 */,
+/* 450 */,
+/* 451 */,
+/* 452 */,
+/* 453 */,
+/* 454 */,
+/* 455 */,
+/* 456 */,
+/* 457 */,
+/* 458 */,
+/* 459 */,
+/* 460 */,
+/* 461 */,
+/* 462 */,
+/* 463 */,
+/* 464 */,
+/* 465 */,
+/* 466 */,
+/* 467 */,
+/* 468 */,
+/* 469 */,
+/* 470 */,
+/* 471 */,
+/* 472 */,
+/* 473 */,
+/* 474 */,
+/* 475 */,
+/* 476 */,
+/* 477 */,
+/* 478 */,
+/* 479 */,
+/* 480 */,
+/* 481 */,
+/* 482 */,
+/* 483 */,
+/* 484 */,
+/* 485 */,
+/* 486 */,
+/* 487 */,
+/* 488 */,
+/* 489 */,
+/* 490 */,
+/* 491 */,
+/* 492 */,
+/* 493 */,
+/* 494 */,
+/* 495 */,
+/* 496 */,
+/* 497 */,
+/* 498 */,
+/* 499 */,
+/* 500 */,
+/* 501 */,
+/* 502 */,
+/* 503 */,
+/* 504 */,
+/* 505 */,
+/* 506 */,
+/* 507 */,
+/* 508 */,
+/* 509 */,
+/* 510 */,
+/* 511 */,
+/* 512 */,
+/* 513 */,
+/* 514 */,
+/* 515 */,
+/* 516 */,
+/* 517 */,
+/* 518 */,
+/* 519 */,
+/* 520 */,
+/* 521 */,
+/* 522 */,
+/* 523 */,
+/* 524 */,
+/* 525 */,
+/* 526 */,
+/* 527 */,
+/* 528 */,
+/* 529 */,
+/* 530 */,
+/* 531 */,
+/* 532 */,
+/* 533 */,
+/* 534 */,
+/* 535 */,
+/* 536 */,
+/* 537 */,
+/* 538 */,
+/* 539 */,
+/* 540 */,
+/* 541 */,
+/* 542 */,
+/* 543 */,
+/* 544 */,
+/* 545 */,
+/* 546 */,
+/* 547 */,
+/* 548 */,
+/* 549 */,
+/* 550 */,
+/* 551 */,
+/* 552 */,
+/* 553 */,
+/* 554 */,
+/* 555 */,
+/* 556 */,
+/* 557 */,
+/* 558 */,
+/* 559 */,
+/* 560 */,
+/* 561 */,
+/* 562 */,
+/* 563 */,
+/* 564 */,
+/* 565 */,
+/* 566 */,
+/* 567 */,
+/* 568 */,
+/* 569 */,
+/* 570 */,
+/* 571 */,
+/* 572 */,
+/* 573 */,
+/* 574 */,
+/* 575 */,
+/* 576 */,
+/* 577 */,
+/* 578 */,
+/* 579 */,
+/* 580 */,
+/* 581 */,
+/* 582 */,
+/* 583 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ({
+    props: {
+        errorIdentifier: {
+            type: [String, Number],
+            required: true
+        },
+        isErrorRoot: Boolean
+    },
+    computed: {
+        mergedErrorIdentifier: function mergedErrorIdentifier() {
+            if (this.isErrorRoot) return this.errorIdentifier;
+
+            var errorComp = this.$parent;
+            while (errorComp && errorComp.mergedErrorIdentifier == null) {
+                errorComp = errorComp.$parent;
+            }
+            var ascendantIdentifier = '';
+            if (errorComp) {
+                ascendantIdentifier = errorComp.mergedErrorIdentifier + '.';
+            }
+
+            return '' + ascendantIdentifier + this.errorIdentifier;
+        }
+    }
+});
+
+/***/ }),
+/* 584 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuedraggable__ = __webpack_require__(235);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuedraggable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vuedraggable__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ListItem__ = __webpack_require__(587);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ListItem___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__ListItem__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Template__ = __webpack_require__(279);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Template___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__Template__);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _components;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+var noop = function noop() {};
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: 'SharpList',
+
+    inject: ['$form'],
+
+    components: (_components = {
+        Draggable: __WEBPACK_IMPORTED_MODULE_0_vuedraggable___default.a
+    }, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_1__ListItem___default.a.name, __WEBPACK_IMPORTED_MODULE_1__ListItem___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_2__Template___default.a.name, __WEBPACK_IMPORTED_MODULE_2__Template___default.a), _components),
+
+    props: {
+        fieldKey: String,
+        fieldLayout: Object,
+        value: Array,
+
+        addable: {
+            type: Boolean,
+            default: true
+        },
+        sortable: {
+            type: Boolean,
+            default: false
+        },
+        removable: {
+            type: Boolean,
+            default: false
+        },
+        addText: {
+            type: String,
+            default: 'Ajouter un élément'
+        },
+        removeText: {
+            type: String,
+            default: "Supprimer l'élément"
+        },
+        itemFields: {
+            type: Object,
+            required: true
+        },
+        collapsedItemTemplate: String,
+        maxItemCount: Number,
+
+        locale: String
+    },
+    data: function data() {
+        return {
+            list: [],
+            dragActive: false,
+            lastIndex: 0,
+
+            transitionActive: false
+        };
+    },
+
+    watch: {
+        locale: function locale() {
+            if (this.value == null) {
+                this.initList();
+            } else this.list = this.value;
+        }
+    },
+    computed: {
+        dragOptions: function dragOptions() {
+            return {
+                disabled: !this.dragActive
+            };
+        },
+        collapsed: function collapsed() {
+            return this.dragActive;
+        },
+        showAddButton: function showAddButton() {
+            return !this.dragActive && this.addable && (this.list.length < this.maxItemCount || !this.maxItemCount);
+        },
+        dragIndexSymbol: function dragIndexSymbol() {
+            return Symbol('dragIndex');
+        },
+        indexSymbol: function indexSymbol() {
+            return Symbol('index');
+        }
+    },
+    methods: {
+        indexedList: function indexedList() {
+            var _this = this;
+
+            return (this.value || []).map(function (v, i) {
+                return _extends(_defineProperty({}, _this.indexSymbol, i), v);
+            });
+        },
+        createItem: function createItem() {
+            var _this2 = this;
+
+            return Object.keys(this.itemFields).reduce(function (res, itemKey) {
+                if (_this2.itemFields[itemKey].localized) {
+                    res[itemKey] = _this2.$form.config.locales.reduce(function (res, l) {
+                        res[l] = null;
+                        return res;
+                    }, {});
+                } else res[itemKey] = null;
+                return res;
+            }, _defineProperty({}, this.indexSymbol, this.lastIndex++));
+        },
+        insertNewItem: function insertNewItem(i) {
+            this.list.splice(i + 1, 0, this.createItem());
+        },
+        add: function add() {
+            this.list.push(this.createItem());
+        },
+        remove: function remove(i) {
+            this.list.splice(i, 1);
+        },
+        update: function update(i) {
+            var _this3 = this;
+
+            return function (key, value) {
+                if (_this3.itemFields[key].localized) {
+                    _this3.list[i][key][_this3.locale] = value;
+                } else _this3.list[i][key] = value;
+            };
+        },
+        collapsedItemData: function collapsedItemData(itemData) {
+            return _extends({ $index: itemData[this.dragIndexSymbol] }, itemData);
+        },
+        toggleDrag: function toggleDrag() {
+            var _this4 = this;
+
+            this.dragActive = !this.dragActive;
+            this.list.forEach(function (item, i) {
+                return item[_this4.dragIndexSymbol] = i;
+            });
+        },
+        initList: function initList() {
+            this.list = this.indexedList();
+            this.lastIndex = this.list.length;
+            // make value === list, to update changes
+            this.$emit('input', this.list);
+        },
+        beforeTransition: function beforeTransition(el, done) {
+            console.log(el);
+        }
+    },
+    created: function created() {
+        this.initList();
+    }
+});
+
+/***/ }),
+/* 585 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__FieldsLayout__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__FieldsLayout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__FieldsLayout__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins_index__ = __webpack_require__(122);
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: 'SharpListItem',
+    extends: __WEBPACK_IMPORTED_MODULE_0__FieldsLayout___default.a,
+    mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins_index__["b" /* ErrorNode */]]
+});
+
+/***/ }),
+/* 586 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(584),
+  /* template */
+  __webpack_require__(588),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/form/fields/list/List.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] List.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-57db47bc", Component.options)
+  } else {
+    hotAPI.reload("data-v-57db47bc", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 587 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(585),
+  /* template */
+  null,
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/form/fields/list/ListItem.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-04deb656", Component.options)
+  } else {
+    hotAPI.reload("data-v-04deb656", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 588 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "SharpList"
+  }, [(_vm.sortable && _vm.list.length) ? _c('div', {
+    staticClass: "text-right"
+  }, [_c('button', {
+    staticClass: "btn btn-outline-primary",
+    class: {
+      active: _vm.dragActive
+    },
+    attrs: {
+      "type": "button"
+    },
+    on: {
+      "click": _vm.toggleDrag
+    }
+  }, [_vm._v("\n            " + _vm._s(_vm.dragActive ? 'Ok' : 'Trier') + "\n        ")])]) : _vm._e(), _vm._v(" "), _c('draggable', {
+    staticClass: "list-group",
+    attrs: {
+      "options": _vm.dragOptions,
+      "list": _vm.list
+    }
+  }, [_c('transition-group', {
+    attrs: {
+      "name": "expand",
+      "tag": "div"
+    }
+  }, [_vm._l((_vm.list), function(listItemData, i) {
+    return _c('li', {
+      key: listItemData[_vm.indexSymbol],
+      staticClass: "SharpList__item list-group-item",
+      class: {
+        'SharpList__item--collapsed': _vm.collapsed
+      }
+    }, [(_vm.collapsed) ? [_c('sharp-template', {
+      attrs: {
+        "name": "CollapsedItem",
+        "template": _vm.collapsedItemTemplate,
+        "template-data": _vm.collapsedItemData(listItemData)
+      }
+    })] : [_c('sharp-list-item', {
+      attrs: {
+        "layout": _vm.fieldLayout.item,
+        "error-identifier": i
+      },
+      scopedSlots: _vm._u([
+        ["default", function(itemFieldLayout) {
+          return [_c('sharp-field-display', {
+            attrs: {
+              "field-key": itemFieldLayout.key,
+              "context-fields": _vm.itemFields,
+              "context-data": listItemData,
+              "error-identifier": itemFieldLayout.key,
+              "update-data": _vm.update(i),
+              "locale": _vm.locale
+            }
+          })]
+        }]
+      ])
+    }), _vm._v(" "), (_vm.removable) ? _c('button', {
+      staticClass: "btn-link",
+      on: {
+        "click": function($event) {
+          _vm.remove(i)
+        }
+      }
+    }, [_vm._v(_vm._s(_vm.removeText))]) : _vm._e(), _vm._v(" "), (i < _vm.list.length - 1 && _vm.showAddButton) ? _c('div', {
+      staticClass: "SharpList__new-item-zone"
+    }, [_c('button', {
+      staticClass: "btn btn-secondary",
+      on: {
+        "click": function($event) {
+          _vm.insertNewItem(i)
+        }
+      }
+    }, [_vm._v("+")])]) : _vm._e()]], 2)
+  }), _vm._v(" "), (_vm.showAddButton) ? _c('button', {
+    key: -1,
+    staticClass: "SharpList__add-button btn btn-secondary",
+    attrs: {
+      "type": "button"
+    },
+    on: {
+      "click": _vm.add
+    }
+  }, [_vm._v(_vm._s(_vm.addText))]) : _vm._e()], 2)], 1)], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-57db47bc", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

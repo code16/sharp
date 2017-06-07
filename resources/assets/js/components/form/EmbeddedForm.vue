@@ -14,13 +14,14 @@
             }
         },
         methods: {
+            setupActions() { void(0) },
             init() {
                 if(!this.test)
-                    this.getForm();
+                    this.get();
 
                 if(this.submitButton) {
                     document.querySelector(this.submitButton).addEventListener('click',e => {
-                        this.postForm();
+                        this.post();
                     });
                 }
             }

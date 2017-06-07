@@ -11,7 +11,7 @@ export default {
     },
     methods: {
         get() {
-            if(this.test)return;
+            if(this.test) return;
             return new Promise((resolve, reject) => {
                 axios.get(this.apiPath).then(({data})=>{
                     this.mount(data);

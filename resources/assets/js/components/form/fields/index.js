@@ -8,7 +8,7 @@ import SharpUpload from './upload/Upload';
 import SharpTagInput from './TagInput';
 import SharpDate from './date/Date';
 import SharpCheck from './Check';
-import SharpList from './List';
+import SharpList from './list/List';
 import SharpSelect from './Select';
 import SharpHtml from './Html';
 

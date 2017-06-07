@@ -1,5 +1,5 @@
 <template>
-    <div class="SharpForm container">
+    <div class="SharpForm">
         <template v-if="ready">
             <sharp-tabbed-layout :layout="layout">
                 <!-- Tab -->
@@ -14,8 +14,9 @@
                                                          :context-fields="fields"
                                                          :context-data="data"
                                                          :field-layout="fieldLayout"
-                                                         :field-errors="errors[fieldLayout.key]"
                                                          :locale="locale"
+                                                         :error-identifier="fieldLayout.key"
+                                                         :is-error-root="true"
                                                          :update-data="updateData">
                                     </sharp-field-display>
                                 </template>
@@ -86,8 +87,17 @@
                 if(this.instanceId) path+=`/${this.instanceId}`;
                 return path;
             },
+            localized() {
+                return this.config && Array.isArray(this.config.locales);
+            }
         },
         methods: {
+            fieldErrors(key) {
+                if(this.fields[key].localized) {
+                    return (this.errors[key]||{})[this.locale];
+                }
+                return this.errors[key];
+            },
             updateData(key,value) {
                 if(this.fields[key].localized) {
                     this.$set(this.data[key],this.locale,value);
@@ -99,11 +109,8 @@
                 this.layout = layout;
                 this.data = data || {};
                 this.config = config || {};
-                this.actionsBus.$emit('setup-locales', this.config.locales);
 
-                if(this.config.locales) {
-                    this.actionsBus.$emit('locale-changed', this.config.locales[0]);
-                }
+                this.setupActions();
             },
             handleError({response}) {
                 if(response.status===422)
@@ -120,12 +127,19 @@
                 this.actionsBus.$on('main-button-clicked', _=>{
                     this.post().catch(handleError);
                 });
-
                 this.actionsBus.$on('locale-changed', newLocale => this.locale=newLocale);
-            }
+            },
+
+            setupActions(){
+                this.actionsBus.$emit('setup-locales', this.config.locales);
+
+                if(this.config.locales) {
+                    this.actionsBus.$emit('locale-changed', this.config.locales[0]);
+                }
+            },
         },
         created() {
             this.init();
-        },
+        }
     }
 </script>

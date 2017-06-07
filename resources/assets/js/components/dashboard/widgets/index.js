@@ -1,5 +1,5 @@
 import SharpWidgetPanel from './Panel';
-import SharpWidgetChart from './Chart';
+import SharpWidgetChart from './chart/Chart';
 
 export const NameAssociation = {
     'chart': SharpWidgetChart.name,

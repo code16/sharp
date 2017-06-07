@@ -34,7 +34,9 @@
     "vuejs-datepicker": "^0.7.11"
   },
   "dependencies": {
+    "chart.js": "^2.6.0",
     "font-awesome": "^4.7.0",
-    "vue": "^2.3.2"
+    "vue": "^2.3.2",
+    "vue-chartjs": "^2.6.4"
   }
 }
