@@ -55,6 +55,8 @@ class HasManyRelationUpdaterTest extends SharpFormEloquentBaseTest
         ]);
     }
 
+    // TODO test and code item delete
+
     private function formatData(array $data)
     {
         $itemsData = [];
@@ -74,6 +76,4 @@ class HasManyRelationUpdaterTest extends SharpFormEloquentBaseTest
 
         return $itemsData;
     }
-
-    // TODO test and code item delete
 }

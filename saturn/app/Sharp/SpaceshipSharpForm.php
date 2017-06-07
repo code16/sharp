@@ -130,7 +130,7 @@ class SpaceshipSharpForm extends SharpForm
         $instance = $id ? Spaceship::findOrFail($id) : new Spaceship;
 
         if($data["name"] == "error") {
-            throw new SharpFormException("Le nom ne peut pas être «error»");
+            throw new SharpFormException("Name can't be «error»");
         }
 
         return $this->setCustomValuator("capacity", function($spaceship, $value) {
