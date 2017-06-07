@@ -78,7 +78,7 @@ const acceptCondition = (fields, data, condition) => {
 
 const getValue = (form, field, value, locale) => {
 
-    if(Array.isArray(form.config.locales) && field.localized) {
+    if(form.localized && field.localized) {
         //console.log(form, field, value, locale);
         return value[locale];
     }

@@ -88,6 +88,8 @@
             collapsedItemTemplate: String,
             maxItemCount: Number,
 
+            itemIdAttribute: String,
+
             locale:String
         },
         data() {
@@ -133,7 +135,7 @@
             },
             createItem() {
                 return Object.keys(this.itemFields).reduce((res, itemKey) => {
-                    if(this.itemFields[itemKey].localized) {
+                    if(this.$form.localized && this.itemFields[itemKey].localized) {
                         res[itemKey] = this.$form.config.locales.reduce((res, l)=>{
                             res[l] = null;
                             return res;
@@ -142,6 +144,7 @@
                     else res[itemKey] = null;
                     return res;
                 },{
+                    [this.itemIdAttribute]:null,
                     [this.indexSymbol]:this.lastIndex++
                 });
             },

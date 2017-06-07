@@ -28225,7 +28225,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     components: _defineProperty({}, __WEBPACK_IMPORTED_MODULE_0__Field___default.a.name, __WEBPACK_IMPORTED_MODULE_0__Field___default.a),
 
-    inject: ['$tab'],
+    inject: ['$form', '$tab'],
 
     props: _extends({}, __WEBPACK_IMPORTED_MODULE_0__Field___default.a.props, {
 
@@ -28263,6 +28263,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         },
         extraStyle: function extraStyle() {
             return this.fieldProps.extraStyle;
+        },
+        showLocale: function showLocale() {
+            return this.$form.localized && this.fieldProps.localized;
         }
     },
     methods: {
@@ -28437,6 +28440,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             var path = __WEBPACK_IMPORTED_MODULE_1__consts__["a" /* API_PATH */] + '/form/' + this.entityKey;
             if (this.instanceId) path += '/' + this.instanceId;
             return path;
+        },
+        localized: function localized() {
+            return this.config && Array.isArray(this.config.locales);
         }
     },
     methods: {
@@ -28995,6 +29001,8 @@ var noop = function noop() {};
         collapsedItemTemplate: String,
         maxItemCount: Number,
 
+        itemIdAttribute: String,
+
         locale: String
     },
     data: function data() {
@@ -29043,17 +29051,18 @@ var noop = function noop() {};
             });
         },
         createItem: function createItem() {
-            var _this2 = this;
+            var _this2 = this,
+                _Object$keys$reduce;
 
             return Object.keys(this.itemFields).reduce(function (res, itemKey) {
-                if (_this2.itemFields[itemKey].localized) {
+                if (_this2.$form.localized && _this2.itemFields[itemKey].localized) {
                     res[itemKey] = _this2.$form.config.locales.reduce(function (res, l) {
                         res[l] = null;
                         return res;
                     }, {});
                 } else res[itemKey] = null;
                 return res;
-            }, _defineProperty({}, this.indexSymbol, this.lastIndex++));
+            }, (_Object$keys$reduce = {}, _defineProperty(_Object$keys$reduce, this.itemIdAttribute, null), _defineProperty(_Object$keys$reduce, this.indexSymbol, this.lastIndex++), _Object$keys$reduce));
         },
         insertNewItem: function insertNewItem(i) {
             this.list.splice(i + 1, 0, this.createItem());
@@ -31163,7 +31172,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "config", function() { return config; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "errors", function() { return errors; });
 //
-var localized = true;
+var localized = false;
 //
 
 var layout = {
@@ -31246,7 +31255,8 @@ var defaultData = {
     //     thumbnail:"img/chien.jpg"
     // },
     mylist: [{
-        name: { en: null, fr: null, de: null }, surname: '', age: ''
+        id: 1,
+        name: localized ? { en: null, fr: null, de: null } : '', surname: '', age: ''
     }],
     select: [1, 3],
     //select:1,
@@ -31365,7 +31375,8 @@ var fields = {
                 label: 'Âge',
                 type: 'text'
             }
-        }
+        },
+        itemIdAttribute: 'id'
     },
     date: {
         type: 'date',
@@ -31581,7 +31592,7 @@ var acceptCondition = function acceptCondition(fields, data, condition) {
 
 var getValue = function getValue(form, field, value, locale) {
 
-    if (Array.isArray(form.config.locales) && field.localized) {
+    if (form.localized && field.localized) {
         //console.log(form, field, value, locale);
         return value[locale];
     }
@@ -52189,7 +52200,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       expression: "label"
     }],
     staticClass: "form-control-label"
-  }, [_vm._v("\n        " + _vm._s(_vm.label) + " "), (_vm.fieldProps.localized) ? _c('span', {
+  }, [_vm._v("\n        " + _vm._s(_vm.label) + " "), (_vm.showLocale) ? _c('span', {
     staticClass: "SharpFieldContainer__label-locale"
   }, [_vm._v("(" + _vm._s(_vm.fieldProps.locale) + ")")]) : _vm._e()]), _vm._v(" "), (_vm.alerts.length) ? _vm._l((_vm.alerts), function(alert) {
     return _c('div', {

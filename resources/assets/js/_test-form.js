@@ -1,5 +1,5 @@
 //
-const localized = true;
+const localized = false;
 //
 
 const layout = {
@@ -129,7 +129,8 @@ const defaultData = {
     //     thumbnail:"img/chien.jpg"
     // },
     mylist: [{
-        name:{en:null,fr:null,de:null}, surname:'', age:''
+        id:1,
+        name:localized?{en:null,fr:null,de:null}:'', surname:'', age:''
     }],
     select: [1,3],
     //select:1,
@@ -260,6 +261,7 @@ let fields = {
                 type:'text'
             }
         },
+        itemIdAttribute:'id'
     },
     date:{
         type:'date',
