@@ -2,72 +2,57 @@
 
 namespace Code16\Sharp\Form\Eloquent;
 
+use Code16\Sharp\Form\Eloquent\Request\UpdateRequestData;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class SharpModelUpdater
+class EloquentModelUpdater
 {
 
     /**
      * @param Model $instance
-     * @param array $data
+     * @param UpdateRequestData $data
      * @return bool
      */
-    function update(Model $instance, array $data): bool
+    function update(Model $instance, UpdateRequestData $data): bool
     {
         $delayedAttributes = [];
         $relationships = [];
 
-        foreach($data as $attribute => $valueData) {
+        foreach($data->items() as $item) {
 
-            $value = $valueData["value"];
-            $valuator = $valueData["valuator"];
-            $field = $valueData["field"];
+            if(! $item->formField()) continue;
 
-            if(!$field) {
-                continue;
-            }
-
-            $formatter = app('Code16\Sharp\Form\Eloquent\Formatters\\'
-                . ucfirst($field->type()) . 'Formatter');
-
-            if($this->isRelationship($instance, $attribute)) {
-                $relationships[$attribute] = [
-                    "relation_type" => get_class($instance->$attribute()),
-                    "value" => $formatter->format($value, $field, $instance)
-                ];
+            if($this->isRelationship($instance, $item->attribute())) {
+                $relationships[] = $item;
 
                 continue;
             }
 
             try {
-                $value = $formatter->format($value, $field, $instance);
+                $value = $item->formattedValue($instance);
 
             } catch(ModelNotFoundException $ex) {
                 // We try to format a field which needs the instance to be persisted.
                 // For example: the UploadFormatter needs a persisted instance if
                 // its storagePath contains a parameter, like {id}. We delay the valuate.
-                $delayedAttributes[$attribute] = $valueData;
+                $delayedAttributes[] = $item;
 
                 continue;
             }
 
-            $this->valuateAttribute($instance, $attribute, $value, $valuator);
+            $this->valuateAttribute($instance, $item->attribute(), $value, $item->valuator());
         }
 
         // End of "normal" attributes.
         $instance->save();
 
         // Next, handle delayed attributes
-        foreach($delayedAttributes as $attribute => $valueData) {
-            $value = $valueData["value"];
-            $valuator = $valueData["valuator"];
-            $field = $valueData["field"];
-            $formatter = app('Code16\Sharp\Form\Eloquent\Formatters\\'
-                . ucfirst($field->type()) . 'Formatter');
-
+        foreach($delayedAttributes as $dataItem) {
             $this->valuateAttribute(
-                $instance, $attribute, $formatter->format($value, $field, $instance), $valuator
+                $instance, $dataItem->attribute(),
+                $dataItem->formattedValue($instance),
+                $dataItem->valuator()
             );
         }
         $instance->save();
@@ -113,14 +98,18 @@ class SharpModelUpdater
      * @param Model $instance
      * @param array $relationships
      */
-    protected function saveRelationships(Model $instance, array $relationships)
+    protected function saveRelationships($instance, array $relationships)
     {
-        foreach ($relationships as $attribute => $relation) {
+        foreach ($relationships as $dataItem) {
+            $type = get_class($instance->{$dataItem->attribute()}());
+
             $relationshipUpdater = app('Code16\Sharp\Form\Eloquent\Relationships\\'
-                . (new \ReflectionClass($relation["relation_type"]))->getShortName()
+                . (new \ReflectionClass($type))->getShortName()
                 . 'RelationUpdater');
 
-            $relationshipUpdater->update($instance, $attribute, $relation["value"]);
+            $relationshipUpdater->update(
+                $instance, $dataItem->attribute(), $dataItem->formattedValue($instance)
+            );
         }
     }
 }

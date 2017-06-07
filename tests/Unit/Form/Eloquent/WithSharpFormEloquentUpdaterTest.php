@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Tests\Unit\Form\Eloquent;
 
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
+use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\SharpForm;
@@ -29,7 +30,22 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
     }
 
     /** @test */
-    function we_can_use_a_closure_as_a_custom_updater()
+    function undeclared_fields_are_ignored()
+    {
+        $person = Person::create(["name" => "John Wayne"]);
+
+        $form = new WithSharpFormEloquentUpdaterTestForm();
+
+        $form->update($person->id, ["id" => 1200, "job" => "Actor"]);
+
+        $this->assertDatabaseHas("people", [
+            "id" => $person->id,
+            "name" => "John Wayne"
+        ]);
+    }
+
+    /** @test */
+    function we_can_use_a_closure_as_a_custom_valuator()
     {
         $person = Person::create(["name" => "John Wayne"]);
 
@@ -46,7 +62,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
     }
 
     /** @test */
-    function we_can_use_a_class_as_a_custom_updater()
+    function we_can_use_a_class_as_a_custom_valuator()
     {
         $person = Person::create(["name" => "John Wayne"]);
 
@@ -96,20 +112,62 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         ]);
     }
 
-//    /** @test */
-//    function we_handle_delayed_attributes()
-//    {
-//        $person = Person::create(["name" => "John Wayne"]);
-//
-//        $form = new WithSharpFormEloquentUpdaterTestForm();
-//        $form->setCustomValuator("name", SharpAttributeUppercaseValuator::class);
-//        $form->update($person->id, ["name" => "John Richard Wayne"]);
-//
-//        $this->assertDatabaseHas("people", [
-//            "id" => $person->id,
-//            "name" => "JOHN RICHARD WAYNE"
-//        ]);
-//    }
+    /** @test */
+    function we_can_update_a_hasMany_attribute()
+    {
+        $mother = Person::create(["name" => "Jane Wayne"]);
+        $son = Person::create(["name" => "AAA"]);
+
+        $form = new WithSharpFormEloquentUpdaterTestForm();
+
+        $this->assertTrue(
+            $form->update($mother->id, [
+                "sons" => [
+                    ["id" => $son->id, "name" => "John Wayne"],
+                    ["id" => null, "name" => "Mary Wayne"],
+                ]
+            ])
+        );
+
+        $this->assertDatabaseHas("people", [
+            "id" => $son->id,
+            "mother_id" => $mother->id,
+            "name" => "John Wayne"
+        ]);
+
+        $this->assertDatabaseHas("people", [
+            "mother_id" => $mother->id,
+            "name" => "Mary Wayne"
+        ]);
+    }
+
+    /** @test */
+    function we_can_use_a_custom_valuator_in_a_hasMany_relation()
+    {
+        $mother = Person::create(["name" => "Jane Wayne"]);
+
+        $form = new WithSharpFormEloquentUpdaterTestForm();
+        $form->setCustomValuator("sons.name", function($person, $value) {
+            return strtoupper($value);
+        });
+        $form->update($mother->id, [
+            "sons" => [
+                ["id" => null, "name" => "John Wayne"],
+                ["id" => null, "name" => "Mary Wayne"],
+            ]
+        ]);
+
+        $this->assertDatabaseHas("people", [
+            "mother_id" => $mother->id,
+            "name" => "JOHN WAYNE"
+        ]);
+
+        $this->assertDatabaseHas("people", [
+            "mother_id" => $mother->id,
+            "name" => "MARY WAYNE"
+        ]);
+    }
+
 }
 
 class WithSharpFormEloquentUpdaterTestForm extends SharpForm
@@ -131,6 +189,10 @@ class WithSharpFormEloquentUpdaterTestForm extends SharpForm
         $this->addField(SharpFormSelectField::make("mother_id", $peopleList));
         $this->addField(SharpFormSelectField::make("mother", $peopleList));
         $this->addField(SharpFormSelectField::make("elderSon", $peopleList));
+        $this->addField(
+            SharpFormListField::make("sons")
+                ->addItemField(SharpFormTextField::make("name"))
+        );
     }
 }
 
