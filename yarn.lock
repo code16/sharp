@@ -1285,6 +1285,26 @@ charenc@~0.0.1:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/charenc/-/charenc-0.0.2.tgz#c0a1d2f3a7092e03774bfa83f14c0fc5790a8667"
 
+chart.js@^2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-2.6.0.tgz#308f9a4b0bfed5a154c14f5deb1d9470d22abe71"
+  dependencies:
+    chartjs-color "^2.1.0"
+    moment "^2.10.6"
+
+chartjs-color-string@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/chartjs-color-string/-/chartjs-color-string-0.4.0.tgz#57748d4530ae28d8db0a5492182ba06dfdf2f468"
+  dependencies:
+    color-name "^1.0.0"
+
+chartjs-color@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/chartjs-color/-/chartjs-color-2.1.0.tgz#9c39ac830ccd98996ae80c9f11086ff12c98a756"
+  dependencies:
+    chartjs-color-string "^0.4.0"
+    color-convert "^0.5.3"
+
 chokidar@1.6.1, chokidar@^1.4.3, chokidar@^1.6.0, chokidar@^1.6.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-1.6.1.tgz#2f4447ab5e96e50fb3d789fd90d4c72e0e4c70c2"
@@ -1403,6 +1423,14 @@ codemirror-spell-checker@*:
 codemirror@*:
   version "5.25.0"
   resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.25.0.tgz#78e06939c7bb41f65707b8aa9c5328111948b756"
+
+color-convert@^0.5.3:
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-0.5.3.tgz#bdb6c69ce660fadffe0b0007cc447e1b9f7282bd"
+
+color-name@^1.0.0:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.2.tgz#5c8ab72b64bd2215d617ae9559ebb148475cf98d"
 
 colors@1.0.3:
   version "1.0.3"
@@ -3887,7 +3915,7 @@ mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0, mkd
   dependencies:
     minimist "0.0.8"
 
-moment@^2.18.1:
+moment@^2.10.6, moment@^2.18.1:
   version "2.18.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.18.1.tgz#c36193dd3ce1c2eed2adb7c802dbbc77a81b1c0f"
 
@@ -5744,6 +5772,12 @@ vm-browserify@0.0.4:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-0.0.4.tgz#5d7ea45bbef9e4a6ff65f95438e0a87c357d5a73"
   dependencies:
     indexof "0.0.1"
+
+vue-chartjs@^2.6.4:
+  version "2.6.4"
+  resolved "https://registry.yarnpkg.com/vue-chartjs/-/vue-chartjs-2.6.4.tgz#ffb2b31349c09aac599def227b3e66ffe19f2d64"
+  dependencies:
+    lodash "^4.17.4"
 
 vue-clip@^1.0.0:
   version "1.0.0"

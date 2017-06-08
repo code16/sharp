@@ -18,6 +18,7 @@
             fieldProps: Object,
             fieldLayout: Object,
             value: [String, Number, Boolean, Object, Array],
+            locale: String,
             updateData: Function
         },
         mounted() {
@@ -31,13 +32,14 @@
 
             let { key, ...fieldProps } = this.fieldProps;
 
-            //console.log(fieldCompName[this.fieldType]);
 
             return h(fieldCompName[this.fieldType],{
                 props : {
                     fieldKey:this.fieldKey,
                     fieldLayout:this.fieldLayout,
+                    fieldErrors:this.fieldErrors,
                     value:this.value,
+                    locale:this.locale,
                     ...fieldProps
                 },
                 on: {

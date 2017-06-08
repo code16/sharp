@@ -1,5 +1,5 @@
 //
-const localized = false;
+const localized = true;
 //
 
 const layout = {
@@ -106,7 +106,9 @@ const localizedData = {
         de:"Allemand"
     },
     mylist: {
-        fr:null,
+        fr:[{
+            name:'', surname:'', age:''
+        }],
         en:null,
         de:null
     }
@@ -129,8 +131,7 @@ const defaultData = {
     //     thumbnail:"img/chien.jpg"
     // },
     mylist: [{
-        id:1,
-        name:localized?{en:null,fr:null,de:null}:'', surname:'', age:''
+        name:'', surname:'', age:''
     }],
     select: [1,3],
     //select:1,
@@ -143,7 +144,8 @@ const defaultData = {
 };
 
 const errors = {
-    test_tab_2: ['Erreur de test']
+    test_tab_2: ['Erreur de test'],
+    'mylist.fr.0.name': ['Nom trop nul']
 };
 
 let data = defaultData;
@@ -250,7 +252,6 @@ let fields = {
             'name': {
                 label:'Nom',
                 type:'text',
-                localized:true
             },
             'surname': {
                 label:'Prénom',
@@ -261,7 +262,6 @@ let fields = {
                 type:'text'
             }
         },
-        itemIdAttribute:'id'
     },
     date:{
         type:'date',

@@ -1,7 +1,7 @@
 <template>
     <div class="SharpFieldContainer form-group" :class="formGroupClasses" :style="extraStyle">
         <label class="form-control-label" v-show="label">
-            {{label}} <span v-if="showLocale" class="SharpFieldContainer__label-locale">({{fieldProps.locale}})</span>
+            {{label}} <span v-if="fieldProps.localized" class="SharpFieldContainer__label-locale">({{locale}})</span>
         </label>
         <template v-if="alerts.length">
             <div v-for="alert in alerts" class="alert" :class="alertClass(alert.type)" role="alert">
@@ -20,22 +20,24 @@
 
 <script>
     import Field from './Field';
+    import {ErrorNode} from '../../mixins/index';
 
     export default {
         name: 'SharpFieldContainer',
+
+        mixins: [ ErrorNode ],
 
         components: {
             [Field.name]:Field
         },
 
-        inject:['$form','$tab'],
+        inject:['$tab', '$form'],
 
         props : {
             ...Field.props,
 
             label: String,
             helpMessage: String,
-            fieldErrors: Array
         },
         data() {
             return {
@@ -49,11 +51,15 @@
                 if(this.state === 'error')
                     this.clear();
             },
-            fieldErrors([error]) {
-                if(typeof error === 'string') {
-                    this.setError(error);
+            '$form.errors': {
+                immediate:true,
+                handler(errors) {
+                    let error = errors[this.mergedErrorIdentifier];
+                    if(Array.isArray(error)) {
+                        this.setError(error[0]);
+                    }
                 }
-            }
+            },
         },
         computed: {
             formGroupClasses() {
@@ -65,9 +71,6 @@
             extraStyle() {
                 return this.fieldProps.extraStyle;
             },
-            showLocale() {
-                return this.$form.localized && this.fieldProps.localized;
-            }
         },
         methods: {
             setError(error) {

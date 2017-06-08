@@ -1,6 +1,5 @@
 const { mix } = require('laravel-mix');
 const webpack = require('webpack');
-const path = require('path');
 const fs = require('fs-extra');
 
 mix.autoload({})

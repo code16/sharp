@@ -33,7 +33,7 @@
 </template>
 
 <script>
-    import SharpTemplate from '../Template.vue';
+    import SharpTemplate from '../../Template.vue';
     import Multiselect from 'vue-multiselect';
 
     import SearchStrategy from '../../../app/models/SearchStrategy';

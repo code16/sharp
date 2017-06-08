@@ -15,7 +15,8 @@
 </template>
 
 <script>
-    import Grid from './Grid';
+    import Grid from '../Grid';
+
     export default {
         name:'SharpFieldsLayout',
 

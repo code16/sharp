@@ -1,7 +1,7 @@
 <template>
-    <div class="SharpForm container">
+    <div class="SharpForm">
         <template v-if="ready">
-            <sharp-form-layout :layout="layout">
+            <sharp-tabbed-layout :layout="layout">
                 <!-- Tab -->
                 <template scope="tab">
                     <sharp-grid :rows="[tab.columns]">
@@ -14,16 +14,17 @@
                                                          :context-fields="fields"
                                                          :context-data="data"
                                                          :field-layout="fieldLayout"
-                                                         :update-data="updateData"
-                                                         :field-errors="errors[fieldLayout.key]"
-                                                         :locale="locale">
+                                                         :locale="locale"
+                                                         :error-identifier="fieldLayout.key"
+                                                         :is-error-root="true"
+                                                         :update-data="updateData">
                                     </sharp-field-display>
                                 </template>
                             </sharp-fields-layout>
                         </template>
                     </sharp-grid>
                 </template>
-            </sharp-form-layout>
+            </sharp-tabbed-layout>
         </template>
         <template v-else>
             Chargement du formulaire...
@@ -37,8 +38,10 @@
 
     import { testableForm } from '../../mixins/index';
 
-    import FormLayout from './FormLayout'
-    import Grid from './Grid';
+    import DynamicView from '../DynamicViewMixin';
+
+    import TabbedLayout from '../TabbedLayout'
+    import Grid from '../Grid';
     import FieldsLayout from './FieldsLayout.vue';
 
 
@@ -46,13 +49,11 @@
 
     export default {
         name:'SharpForm',
+        extends: DynamicView,
 
-        mixins: [
-            testableForm,
-        ],
-
+        mixins: [testableForm],
         components: {
-            [FormLayout.name]: FormLayout,
+            [TabbedLayout.name]: TabbedLayout,
             [FieldsLayout.name]: FieldsLayout,
             [Grid.name]: Grid,
         },
@@ -75,13 +76,8 @@
         data() {
             return {
                 fields: null,
-                data: null,
-                layout: null,
                 config: null,
-
-                ready: false,
                 errors:{},
-
                 locale: ''
             }
         },
@@ -96,6 +92,12 @@
             }
         },
         methods: {
+            fieldErrors(key) {
+                if(this.fields[key].localized) {
+                    return (this.errors[key]||{})[this.locale];
+                }
+                return this.errors[key];
+            },
             updateData(key,value) {
                 if(this.fields[key].localized) {
                     this.$set(this.data[key],this.locale,value);
@@ -107,53 +109,37 @@
                 this.layout = layout;
                 this.data = data || {};
                 this.config = config || {};
+
+                this.setupActions();
+            },
+            handleError({response}) {
+                if(response.status===422)
+                    this.errors = response.data || {};
+                else if(response.status===417)
+                    alert(response.data.message)
+            },
+            init() {
+                if(this.entityKey != null) {
+                    this.get();
+                }
+                else util.error('no entity key provided');
+
+                this.actionsBus.$on('main-button-clicked', _=>{
+                    this.post().catch(handleError);
+                });
+                this.actionsBus.$on('locale-changed', newLocale => this.locale=newLocale);
+            },
+
+            setupActions(){
                 this.actionsBus.$emit('setup-locales', this.config.locales);
 
                 if(this.config.locales) {
                     this.actionsBus.$emit('locale-changed', this.config.locales[0]);
                 }
             },
-            getForm() {
-                return new Promise((resolve, reject)=>
-                    axios.get(this.apiPath)
-                    .then(({data}) => {
-                        this.mount(data);
-                        this.ready=true;
-                        resolve();
-                    })
-                );
-            },
-            postForm() {
-                return axios.post(this.apiPath, this.data)
-                    .then(response => {
-
-                    })
-                    .catch(({response}) => {
-                        if(response.status===422)
-                            this.errors = response.data || {};
-                        else if(response.status===417)
-                            alert(response.data.message)
-                    })
-            },
-            init() {
-                //this.actionsBus.$on('setup-locales',_=>console.log('setup locales'));
-                if(this.entityKey != null) {
-                    this.getForm();
-                }
-                else util.error('no entity key provided');
-
-                this.actionsBus.$on('main-button-clicked', _=>{
-                    this.postForm();
-                });
-
-                this.actionsBus.$on('locale-changed', newLocale => this.locale=newLocale);
-            }
         },
         created() {
             this.init();
-            console.log(this);
-        },
-        mounted() {
         }
     }
 </script>

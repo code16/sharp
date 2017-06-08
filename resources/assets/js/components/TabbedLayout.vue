@@ -1,5 +1,5 @@
 <template>
-    <div class="SharpFormLayout">
+    <div class="SharpTabbedLayout">
         <template v-if="layout.tabbed && layout.tabs.length>1">
             <sharp-b-tabs pills>
                 <sharp-b-tab v-for="(tab,i) in layout.tabs" :title="tab.title" :key="i">
@@ -16,11 +16,11 @@
 </template>
 
 <script>
-    import Tabs from '../Tabs';
-    import Tab from '../Tab';
+    import Tabs from './Tabs';
+    import Tab from './Tab';
 
     export default {
-        name:'SharpFormLayout',
+        name:'SharpTabbedLayout',
         props : {
             layout: Object,
         },

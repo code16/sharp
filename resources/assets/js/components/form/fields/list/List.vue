@@ -15,16 +15,17 @@
                         <sharp-template name="CollapsedItem" :template="collapsedItemTemplate" :template-data="collapsedItemData(listItemData)"></sharp-template>
                     </template>
                     <template v-else>
-                        <sharp-fields-layout :layout="fieldLayout.item">
+                        <sharp-list-item :layout="fieldLayout.item" :error-identifier="i">
                             <template scope="itemFieldLayout">
                                 <sharp-field-display :field-key="itemFieldLayout.key"
                                                      :context-fields="itemFields"
                                                      :context-data="listItemData"
+                                                     :error-identifier="itemFieldLayout.key"
                                                      :update-data="update(i)"
                                                      :locale="locale">
                                 </sharp-field-display>
                             </template>
-                        </sharp-fields-layout>
+                        </sharp-list-item>
                         <button v-if="removable" class="btn-link" @click="remove(i)">{{removeText}}</button>
                         <div v-if="i<list.length-1 && showAddButton" class="SharpList__new-item-zone">
                             <button class="btn btn-secondary" @click="insertNewItem(i)">+</button>
@@ -40,10 +41,11 @@
 </template>
 <script>
     import Draggable from 'vuedraggable';
-   import FieldsLayout from '../FieldsLayout';
-   import Template from '../Template';
+   import ListItem from './ListItem';
+   import Template from '../../../Template';
 
     const noop = ()=>{};
+
 
     export default {
         name: 'SharpList',
@@ -52,7 +54,7 @@
 
         components: {
             Draggable,
-            [FieldsLayout.name]:FieldsLayout,
+            [ListItem.name]:ListItem,
             [Template.name]:Template
         },
 
@@ -128,7 +130,6 @@
                 return Symbol('index');
             }
         },
-
         methods: {
             indexedList() {
                 return (this.value||[]).map((v,i)=>({[this.indexSymbol]:i,...v}));
