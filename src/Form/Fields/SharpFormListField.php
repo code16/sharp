@@ -2,8 +2,6 @@
 
 namespace Code16\Sharp\Form\Fields;
 
-use Code16\Sharp\Form\Layout\FormLayoutColumn;
-
 class SharpFormListField extends SharpFormField
 {
     /**

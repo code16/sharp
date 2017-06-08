@@ -45,6 +45,11 @@ class HasManyRelationUpdater
             ->delete();
     }
 
+    /**
+     * @param $item
+     * @param $relatedModelKeyName
+     * @return mixed
+     */
     private function findItemId($item, $relatedModelKeyName)
     {
         $id = $item->findItem($relatedModelKeyName)->value();
