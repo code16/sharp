@@ -5,6 +5,7 @@ namespace Code16\Sharp\Tests\Unit\Form\Eloquent;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
+use Code16\Sharp\Form\Fields\SharpFormTagsField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\Transformers\SharpAttributeValuator;
@@ -142,6 +143,28 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
     }
 
     /** @test */
+    function we_can_update_a_belongsToMany_attribute()
+    {
+        $person1 = Person::create(["name" => "John Ford"]);
+        $person2 = Person::create(["name" => "John Wayne"]);
+
+        $form = new WithSharpFormEloquentUpdaterTestForm();
+
+        $this->assertNotNull(
+            $form->update($person1->id, [
+                "friends" => [
+                    $person2->id
+                ]
+            ])
+        );
+
+        $this->assertDatabaseHas("friends", [
+            "person1_id" => $person1->id,
+            "person2_id" => $person2->id,
+        ]);
+    }
+
+    /** @test */
     function we_can_use_a_custom_valuator_in_a_hasMany_relation()
     {
         $mother = Person::create(["name" => "Jane Wayne"]);
@@ -193,6 +216,7 @@ class WithSharpFormEloquentUpdaterTestForm extends SharpForm
             SharpFormListField::make("sons")
                 ->addItemField(SharpFormTextField::make("name"))
         );
+        $this->addField(SharpFormTagsField::make("friends", $peopleList));
     }
 }
 

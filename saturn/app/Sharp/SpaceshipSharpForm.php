@@ -125,7 +125,7 @@ class SpaceshipSharpForm extends SharpForm
         );
     }
 
-    function update($id, array $data): bool
+    function update($id, array $data)
     {
         $instance = $id ? Spaceship::findOrFail($id) : new Spaceship;
 
@@ -133,14 +133,13 @@ class SpaceshipSharpForm extends SharpForm
             throw new SharpFormException("Name can't be «error»");
         }
 
-        return $this->setCustomValuator("capacity", function($spaceship, $value) {
+        $this->setCustomValuator("capacity", function($spaceship, $value) {
             return $value * 1000;
 
         })->save($instance, $data);
     }
 
-    function delete($id): bool
+    function delete($id)
     {
-        return true;
     }
 }
