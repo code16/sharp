@@ -5,7 +5,7 @@ import SharpPassword from './Password';
 import SharpMarkdown from './markdown/Markdown';
 import SharpNumber from './Number';
 import SharpUpload from './upload/Upload';
-import SharpTagInput from './TagInput';
+import SharpTagInput from './Tags';
 import SharpDate from './date/Date';
 import SharpCheck from './Check';
 import SharpList from './list/List';
@@ -22,7 +22,7 @@ export const NameAssociation = {
     'markdown'     : SharpMarkdown.name,
     'number'       : SharpNumber.name,
     'upload'       : SharpUpload.name,
-    'taginput'     : SharpTagInput.name,
+    'tags'         : SharpTagInput.name,
     'date'         : SharpDate.name,
     'check'        : SharpCheck.name,
     'list'         : SharpList.name,

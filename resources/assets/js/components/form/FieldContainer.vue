@@ -8,7 +8,7 @@
                 {{alert.msg}}
             </div>
         </template>
-        <sharp-field v-bind="$props" 
+        <sharp-field v-bind="exposedProps"
                      @error="setError" 
                      @ok="setOk" 
                      @clear="clear">
@@ -71,6 +71,10 @@
             extraStyle() {
                 return this.fieldProps.extraStyle;
             },
+            exposedProps() {
+                const { errorIdentifier, isErrorRoot, ...exposedProps } = this.$props;
+                return exposedProps;
+            }
         },
         methods: {
             setError(error) {

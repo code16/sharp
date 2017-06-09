@@ -8,7 +8,6 @@
                      :hide-selected="multiple"
                      :close-on-select="!multiple"
                      :custom-label="multiselectLabel"
-                     :taggable="taggable"
                      :placeholder="placeholder"
                      @input="handleInput" ref="multiselect">
             <template v-if="!multiple && value!=null">
@@ -60,10 +59,6 @@
             },
             clearable: {
                 type:Boolean,
-                default: false
-            },
-            taggable: {
-                type: Boolean,
                 default: false
             },
             placeholder: {

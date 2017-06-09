@@ -44,7 +44,8 @@ const layout = {
                             {
                                 "key":"mdeditor",
                             }
-                        ]
+                        ],
+                        [{key:'tags'}]
                     ]
                 },
                 {
@@ -133,6 +134,7 @@ const defaultData = {
     mylist: [{
         name:'', surname:'', age:''
     }],
+    tags:[],
     select: [1,3],
     //select:1,
     show_html: true,
@@ -274,6 +276,15 @@ let fields = {
         height:250,
         placeholder:'super editeur',
         //toolbar: ["bold", "italic", "heading", "|", "quote"]
+    },
+    tags: {
+        type:'tags',
+        creatable: true,
+        createText: 'Ajouter ce tag',
+        maxTagCount: 5,
+        options: [
+            {id:0,label:'Jérôme'}, {id:1,label:'François'}, {id:2,label:'Raymond'}, {id:3,label:'Claude'}, {id:4,label:'Antoine'}, {id:5,label:'Félicité'}
+        ]
     },
     select: {
         type:'select',

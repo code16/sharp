@@ -4,9 +4,9 @@
     export default {
         name: 'SharpPassword',
         functional: true,
-        render(h, ctx) {
-            ctx.data.props.inputType = 'password';
-            return h(Text.name, ctx.data);
+        render(h, {data}) {
+            data.props.inputType = 'password';
+            return h(Text.name, data);
         }
     }
 </script>

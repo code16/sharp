@@ -37,7 +37,6 @@
                 props : {
                     fieldKey:this.fieldKey,
                     fieldLayout:this.fieldLayout,
-                    fieldErrors:this.fieldErrors,
                     value:this.value,
                     locale:this.locale,
                     ...fieldProps
