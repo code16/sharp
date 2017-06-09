@@ -66,12 +66,7 @@ class SpaceshipSharpForm extends SharpForm
 
         )->addField(
             SharpFormTagsField::make("pilots",
-                    Pilot::orderBy("name")->get()->map(function($item) {
-                        return [
-                            "id" => $item->id,
-                            "label" => $item->name
-                        ];
-                    })->all()
+                    Pilot::orderBy("name")->get()->pluck("name", "id")->all()
                 )
                 ->setLabel("Pilots")
                 ->setCreatable(true)
