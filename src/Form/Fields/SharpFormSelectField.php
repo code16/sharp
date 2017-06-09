@@ -84,6 +84,14 @@ class SharpFormSelectField extends SharpFormField
     }
 
     /**
+     * @return bool
+     */
+    public function multiple()
+    {
+        return $this->multiple;
+    }
+
+    /**
      * @return array
      */
     protected function validationRules()
