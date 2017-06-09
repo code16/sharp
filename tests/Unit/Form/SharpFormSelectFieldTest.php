@@ -19,7 +19,10 @@ class SharpFormSelectFieldTest extends SharpTestCase
 
         $this->assertEquals([
                 "key" => "field", "type" => "select",
-                "options" => $options, "multiple" => false,
+                "options" => [
+                    ["id" => "1", "label" => "Elem 1"],
+                    ["id" => "2", "label" => "Elem 2"],
+                ], "multiple" => false,
                 "clearable" => false, "display" => "list"
             ], $formField->toArray()
         );

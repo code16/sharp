@@ -32,7 +32,11 @@ class SharpFormSelectField extends SharpFormField
     public static function make(string $key, array $options)
     {
         $instance = new static($key, 'select');
-        $instance->options = $options;
+        $instance->options = collect($options)->map(function($label, $id) {
+            return [
+                "id" => $id, "label" => $label
+            ];
+        })->values()->all();
 
         return $instance;
     }
@@ -77,6 +81,14 @@ class SharpFormSelectField extends SharpFormField
         $this->display = "dropdown";
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function multiple()
+    {
+        return $this->multiple;
     }
 
     /**

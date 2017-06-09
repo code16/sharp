@@ -116,7 +116,16 @@ abstract class SharpForm
     {
         $this->checkFormIsBuilt();
 
-        return collect($this->fields)->where("key", $key)->first();
+        $fields = collect($this->fields);
+
+        if(strpos($key, ".") !== false) {
+            list($key, $itemKey) = explode(".", $key);
+            $listField = $fields->where("key", $key)->first();
+
+            return $listField->findItemFormFieldByKey($itemKey);
+        }
+
+        return $fields->where("key", $key)->first();
     }
 
     /**
@@ -247,15 +256,13 @@ abstract class SharpForm
     /**
      * @param $id
      * @param array $data
-     * @return bool
      */
-    abstract function update($id, array $data): bool;
+    abstract function update($id, array $data);
 
     /**
      * @param $id
-     * @return bool
      */
-    abstract function delete($id): bool;
+    abstract function delete($id);
 
     /**
      * Build form fields using ->addField()

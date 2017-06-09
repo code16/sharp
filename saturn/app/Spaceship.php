@@ -17,4 +17,9 @@ class Spaceship extends Model
         return $this->hasMany(TechnicalReview::class)
             ->orderBy("starts_at");
     }
+
+    public function pilots()
+    {
+        return $this->belongsToMany(Pilot::class);
+    }
 }
