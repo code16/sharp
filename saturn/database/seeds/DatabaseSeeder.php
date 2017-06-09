@@ -14,9 +14,15 @@ class DatabaseSeeder extends Seeder
         $types = factory(\App\SpaceshipType::class, 10)->create();
 
         foreach($types as $type) {
-            factory(\App\Spaceship::class, 2)->create([
+            $spaceships = factory(\App\Spaceship::class, 2)->create([
                 "type_id" => $type->id
             ]);
+
+            foreach($spaceships as $spaceship) {
+                factory(\App\TechnicalReview::class, rand(1, 2))->create([
+                    "spaceship_id" => $spaceship->id
+                ]);
+            }
         }
     }
 }

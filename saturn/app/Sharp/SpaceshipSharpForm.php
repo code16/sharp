@@ -133,10 +133,11 @@ class SpaceshipSharpForm extends SharpForm
             throw new SharpFormException("Name can't be «error»");
         }
 
-        $this->setCustomValuator("capacity", function($spaceship, $value) {
-            return $value * 1000;
-
-        })->save($instance, $data);
+        $this->setCustomValuator("capacity", function ($spaceship, $value) {
+                return $value * 1000;
+            })
+//            ->ignore("tags")
+            ->save($instance, $data);
     }
 
     function delete($id)

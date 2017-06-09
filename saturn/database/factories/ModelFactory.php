@@ -25,3 +25,13 @@ $factory->define(\App\Spaceship::class, function (Faker\Generator $faker) {
         'construction_date' => $faker->date()
     ];
 });
+
+$factory->define(\App\TechnicalReview::class, function (Faker\Generator $faker) {
+    $status = $faker->boolean ? "ok" : "ko";
+
+    return [
+        'status' => $status,
+        'comment' => $status == "ko" ? $faker->sentence : null,
+        'starts_at' => $faker->dateTimeThisYear
+    ];
+});

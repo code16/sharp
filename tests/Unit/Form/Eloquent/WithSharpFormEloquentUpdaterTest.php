@@ -153,10 +153,37 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $this->assertNotNull(
             $form->update($person1->id, [
                 "friends" => [
-                    $person2->id
+                    ["id" => $person2->id]
                 ]
             ])
         );
+
+        $this->assertDatabaseHas("friends", [
+            "person1_id" => $person1->id,
+            "person2_id" => $person2->id,
+        ]);
+    }
+
+    /** @test */
+    function we_can_create_a_new_related_in_a_belongsToMany_attribute()
+    {
+        $person1 = Person::create(["name" => "John Ford"]);
+
+        $form = new WithSharpFormEloquentUpdaterTestForm();
+
+        $this->assertNotNull(
+            $form->update($person1->id, [
+                "friends" => [
+                    ["id" => null, "label" => "John Wayne"]
+                ]
+            ])
+        );
+
+        $this->assertDatabaseHas("people", [
+            "name" => "John Wayne"
+        ]);
+
+        $person2 = Person::where("name", "John Wayne")->first();
 
         $this->assertDatabaseHas("friends", [
             "person1_id" => $person1->id,
@@ -216,7 +243,11 @@ class WithSharpFormEloquentUpdaterTestForm extends SharpForm
             SharpFormListField::make("sons")
                 ->addItemField(SharpFormTextField::make("name"))
         );
-        $this->addField(SharpFormTagsField::make("friends", $peopleList));
+        $this->addField(
+            SharpFormTagsField::make("friends", $peopleList)
+                ->setCreatable()
+                ->setCreateAttribute("name")
+        );
     }
 }
 

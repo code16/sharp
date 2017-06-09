@@ -89,6 +89,7 @@ trait WithSharpFormEloquentUpdater
             $field = $this->findFieldByKey($attribute);
 
             if($field instanceof SharpFormListField) {
+                // We have to build an UpdateRequestData object for each item
                 $listValue = [];
 
                 foreach ($value as $item) {

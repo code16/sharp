@@ -15,6 +15,11 @@ class SharpFormTagsField extends SharpFormField
     protected $createText = "New...";
 
     /**
+     * @var string
+     */
+    protected $createAttribute = null;
+
+    /**
      * @var int
      */
     protected $maxTagCount = null;
@@ -64,6 +69,17 @@ class SharpFormTagsField extends SharpFormField
     }
 
     /**
+     * @param string $createAttribute
+     * @return static
+     */
+    public function setCreateAttribute(string $createAttribute)
+    {
+        $this->createAttribute = $createAttribute;
+
+        return $this;
+    }
+
+    /**
      * @param int $maxTagCount
      * @return static
      */
@@ -72,6 +88,22 @@ class SharpFormTagsField extends SharpFormField
         $this->maxTagCount = $maxTagCount;
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function creatable()
+    {
+        return $this->creatable;
+    }
+
+    /**
+     * @return string
+     */
+    public function createAttribute()
+    {
+        return $this->createAttribute;
     }
 
     /**
