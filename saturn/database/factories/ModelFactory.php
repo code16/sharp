@@ -26,6 +26,12 @@ $factory->define(\App\Spaceship::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->define(\App\Pilot::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->name,
+    ];
+});
+
 $factory->define(\App\TechnicalReview::class, function (Faker\Generator $faker) {
     $status = $faker->boolean ? "ok" : "ko";
 

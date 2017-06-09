@@ -2,6 +2,7 @@
 
 namespace App\Sharp;
 
+use App\Pilot;
 use App\Spaceship;
 use App\SpaceshipType;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
@@ -10,6 +11,7 @@ use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
+use Code16\Sharp\Form\Fields\SharpFormTagsField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
@@ -63,6 +65,20 @@ class SpaceshipSharpForm extends SharpForm
                 ->setStorageBasePath("data/Spaceship/{id}")
 
         )->addField(
+            SharpFormTagsField::make("pilots",
+                    Pilot::orderBy("name")->get()->map(function($item) {
+                        return [
+                            "id" => $item->id,
+                            "label" => $item->name
+                        ];
+                    })->all()
+                )
+                ->setLabel("Pilots")
+                ->setCreatable(true)
+                ->setCreateAttribute("name")
+                ->setMaxTagCount(4)
+
+        )->addField(
             SharpFormListField::make("reviews")
                 ->setLabel("Technical reviews")
                 ->setAddable()
@@ -91,7 +107,8 @@ class SpaceshipSharpForm extends SharpForm
         $this->addTab("tab 1", function(FormLayoutTab $tab) {
             $tab->addColumn(6, function($column) {
                 $column->withSingleField("name")
-                    ->withSingleField("type_id");
+                    ->withSingleField("type_id")
+                    ->withSingleField("pilots");
             })->addColumn(6, function($column) {
                 $column->withSingleField("picture")
                     ->withSingleField("reviews", function($item) {
