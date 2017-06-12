@@ -6,8 +6,16 @@
                  :tag-placeholder="createText"
                  :max="maxTagCount"
                  :taggable="creatable"
-                 searchable hide-selected
-                 @input="v=>$emit('input',v)">
+                 :close-on-select="false"
+
+                 label="label"
+                 multiple searchable hide-selected
+                 selectLabel="" selectedLabel="" deselectLabel=""
+                 @input="v=>$emit('input',v)"
+                 @tag="handleNewTag">
+        <template slot="maxElements">
+            Maximum de {{maxTagCount}} éléments atteint
+        </template>
     </multiselect>
 </template>
 
@@ -17,14 +25,20 @@
     export default {
         name:'SharpTags',
         components: {
-            Multipleselect
+            Multiselect
         },
         props : {
+            value:Array,
             options:Array,
             placeholder:String,
-            tagMaxCount:Number,
+            maxTagCount:Number,
             createText:String,
             creatable:true,
+        },
+        methods: {
+            handleNewTag(val) {
+                this.value.push({id:null,label:val});
+            }
         }
     }
 </script>

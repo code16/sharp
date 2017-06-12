@@ -28804,6 +28804,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_multiselect__ = __webpack_require__(77);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_multiselect___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_multiselect__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_models_SearchStrategy__ = __webpack_require__(151);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_axios__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_axios__);
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //
@@ -28839,7 +28841,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
+
+
 
 
 
@@ -28935,9 +28938,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             if (this.isRemote) {
                 this.state = 'loading';
                 var call = function call(method, endpoint, attribute) {
-                    return method === 'GET' ? axios.get(endpoint, {
+                    return method === 'GET' ? __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get(endpoint, {
                         params: _defineProperty({}, attribute, query)
-                    }) : axios.post(endpoint, _defineProperty({}, attribute, query));
+                    }) : __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post(endpoint, _defineProperty({}, attribute, query));
                 };
                 call(this.remoteMethod, this.remoteEndpoint, this.remoteSearchAttribute).then(function (response) {
                     _this2.state = 'searching';
@@ -29228,20 +29231,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpTags',
     components: {
-        Multipleselect: Multipleselect
+        Multiselect: __WEBPACK_IMPORTED_MODULE_0_vue_multiselect___default.a
     },
     props: {
+        value: Array,
         options: Array,
         placeholder: String,
-        tagMaxCount: Number,
+        maxTagCount: Number,
         createText: String,
         creatable: true
+    },
+    methods: {
+        handleNewTag: function handleNewTag(val) {
+            this.value.push({ id: null, label: val });
+        }
     }
 });
 
@@ -31526,7 +31543,7 @@ var fields = {
     },
     name: {
         type: 'autocomplete',
-        mode: 'remote',
+        mode: 'local',
         placeholder: 'Selectionnez un nom',
         searchMinChars: 3,
         localValues: [{ id: 'A', name: 'Antoine', surname: 'Guingand' }, { id: 'B', name: 'Robert', surname: 'Martin' }, { id: 'C', name: 'François', surname: 'Leforestier' }, { id: 'D', name: 'Fernand', surname: 'Coli' }],
@@ -52851,10 +52868,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "internal-search": false,
       "placeholder": _vm.placeholder,
       "loading": _vm.state == 'loading',
-      "max": _vm.hideDropdown ? -1 : 1,
-      "selectLabel": "",
-      "selectedLabel": "",
-      "deselectLabel": ""
+      "max": _vm.hideDropdown ? -1 : 1
     },
     on: {
       "search-change": _vm.updateSuggestions,
@@ -54012,13 +54026,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "tag-placeholder": _vm.createText,
       "max": _vm.maxTagCount,
       "taggable": _vm.creatable,
+      "close-on-select": false,
+      "label": "label",
+      "multiple": "",
       "searchable": "",
-      "hide-selected": ""
+      "hide-selected": "",
+      "selectLabel": "",
+      "selectedLabel": "",
+      "deselectLabel": ""
     },
     on: {
-      "input": function (v) { return _vm.$emit('input', v); }
+      "input": function (v) { return _vm.$emit('input', v); },
+      "tag": _vm.handleNewTag
     }
-  })
+  }, [_c('template', {
+    slot: "maxElements"
+  }, [_vm._v("\n        Maximum de " + _vm._s(_vm.maxTagCount) + " éléments atteint\n    ")])], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

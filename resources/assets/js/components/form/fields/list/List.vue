@@ -33,7 +33,7 @@
                     </template>
                 </li>
                 <button v-if="showAddButton" type="button" :key="-1"
-                        class="SharpList__add-button btn btn-secondary"
+                        class="SharpList__add-button btn btn-secondary" style=""
                         @click="add">{{addText}}</button>
             </transition-group>
         </draggable>

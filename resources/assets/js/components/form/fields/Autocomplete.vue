@@ -18,7 +18,6 @@
                      :placeholder="placeholder"
                      :loading="state=='loading'"
                      :max="hideDropdown ? -1 : 1"
-                     selectLabel="" selectedLabel="" deselectLabel=""
                      @search-change="updateSuggestions"
                      @select="handleSelect"
                      @input="handleInput"
@@ -38,6 +37,7 @@
 
     import SearchStrategy from '../../../app/models/SearchStrategy';
 
+    import axios from 'axios';
 
     export default {
         name:'SharpAutocomplete',
@@ -128,8 +128,7 @@
                             }
                         }): axios.post(endpoint,{
                             [attribute]:query
-                        }
-                    );
+                        });
                     call(this.remoteMethod, this.remoteEndpoint, this.remoteSearchAttribute)
                         .then(response => {
                             this.state = 'searching';

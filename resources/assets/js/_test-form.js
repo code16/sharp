@@ -177,7 +177,7 @@ let fields = {
     },
     name:{
         type:'autocomplete',
-        mode:'remote',
+        mode:'local',
         placeholder: 'Selectionnez un nom',
         searchMinChars:3,
         localValues: [

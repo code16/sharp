@@ -5,10 +5,16 @@
     &--no-transition {
       transition: unset;
     }
+    transition: all 300ms;
   }
+
   &__item {
-    &.expand-enter-active, &.expand-enter-active {
-      transition: all 600ms;
+    &.expand-enter-active {
+      transition: all 400ms;
+    }
+
+    &.expand-leave-active {
+      transition: all 200ms;
     }
 
     &.expand-enter, &.expand-leave-to  {
