@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Form\Eloquent;
 
 use Closure;
+use Code16\Sharp\Form\Eloquent\Transformers\EloquentTagsTransformer;
 use Code16\Sharp\Form\Transformers\SharpAttributeTransformer;
 
 trait WithSharpFormEloquentTransformer
@@ -22,6 +23,21 @@ trait WithSharpFormEloquentTransformer
         $transformer = $transformer instanceof Closure
             ? $this->normalizeToSharpAttributeTransformer($transformer)
             : app($transformer);
+
+        $this->transformers[$attribute] = $transformer;
+
+        return $this;
+    }
+
+    /**
+     * @param string $attribute
+     * @param string|Closure $labelAttribute
+     * @param string $idAttribute
+     * @return $this
+     */
+    function setTagsTransformer(string $attribute, $labelAttribute, $idAttribute = "id")
+    {
+        $transformer = new EloquentTagsTransformer($labelAttribute, $idAttribute);
 
         $this->transformers[$attribute] = $transformer;
 
@@ -50,7 +66,7 @@ trait WithSharpFormEloquentTransformer
      * @param Closure $closure
      * @return SharpAttributeTransformer
      */
-    protected function normalizeToSharpAttributeTransformer(Closure $closure)
+    public static function normalizeToSharpAttributeTransformer(Closure $closure)
     {
         return new class($closure) implements SharpAttributeTransformer
         {

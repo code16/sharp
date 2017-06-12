@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pilot extends Model
 {
-    //
+    protected $fillable = ["name"];
 }
