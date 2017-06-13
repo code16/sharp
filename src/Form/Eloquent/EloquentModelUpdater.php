@@ -90,7 +90,7 @@ class EloquentModelUpdater
      */
     protected function isRelationship($instance, $attribute): bool
     {
-        return method_exists($instance, $attribute);
+        return strpos($attribute, ":") !== false || method_exists($instance, $attribute);
     }
 
     /**
@@ -100,7 +100,8 @@ class EloquentModelUpdater
     protected function saveRelationships($instance, array $relationships)
     {
         foreach ($relationships as $dataItem) {
-            $type = get_class($instance->{$dataItem->attribute()}());
+            $attribute = explode(":", $dataItem->attribute())[0];
+            $type = get_class($instance->{$attribute}());
 
             $relationshipUpdater = app('Code16\Sharp\Form\Eloquent\Relationships\\'
                 . (new \ReflectionClass($type))->getShortName()

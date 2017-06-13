@@ -24,4 +24,19 @@ class HasOneRelationUpdaterTest extends SharpFormEloquentBaseTest
             "mother_id" => $mother->id
         ]);
     }
+
+    /** @test */
+    function we_can_create_a_hasOne_related()
+    {
+        $mother = Person::create(["name" => "Jane Wayne"]);
+
+        $updater = new HasOneRelationUpdater();
+
+        $updater->update($mother, "elderSon:name", "John Wayne");
+
+        $this->assertDatabaseHas("people", [
+            "name" => "John Wayne",
+            "mother_id" => $mother->id
+        ]);
+    }
 }

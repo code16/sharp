@@ -218,6 +218,84 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         ]);
     }
 
+//    /** @test */
+//    function we_can_update_a_morphOne_attribute()
+//    {
+//        $mother = Person::create(["name" => "Jane Wayne"]);
+//        $son = Person::create(["name" => "John Wayne"]);
+//
+//        $form = new WithSharpFormEloquentUpdaterTestForm();
+//
+//        $this->assertNotNull(
+//            $form->update($mother->id, ["elderSon" => $son->id])
+//        );
+//
+//        $this->assertDatabaseHas("people", [
+//            "id" => $son->id,
+//            "mother_id" => $mother->id
+//        ]);
+//    }
+
+    /** @test */
+    function the_relation_separator_is_properly_handled_in_a_belongsTo_case()
+    {
+        $mother = Person::create(["name" => "AAA"]);
+        $son = Person::create(["name" => "John Wayne", "mother_id" => $mother->id]);
+
+        $form = new WithSharpFormEloquentUpdaterTestForm();
+
+        $form->update($son->id, [
+            "mother:name" => "Jane Wayne",
+            "mother:age" => 92
+        ]);
+
+        $this->assertDatabaseHas("people", [
+            "id" => $mother->id,
+            "age" => 92,
+            "name" => "Jane Wayne"
+        ]);
+    }
+
+    /** @test */
+    function the_relation_separator_is_properly_handled_in_a_hasOne_case()
+    {
+        $mother = Person::create(["name" => "Jane Wayne"]);
+        $son = Person::create(["name" => "AAA", "mother_id" => $mother->id]);
+
+        $form = new WithSharpFormEloquentUpdaterTestForm();
+
+        $form->update($mother->id, [
+            "elderSon:name" => "John Wayne",
+            "elderSon:age" => 52
+        ]);
+
+        $this->assertDatabaseHas("people", [
+            "id" => $son->id,
+            "name" => "John Wayne",
+            "age" => 52,
+            "mother_id" => $mother->id
+        ]);
+    }
+
+    /** @test */
+    function the_relation_separator_is_properly_handled_in_a_hasOne_creation_case()
+    {
+        $mother = Person::create(["name" => "Jane Wayne"]);
+
+        $form = new WithSharpFormEloquentUpdaterTestForm();
+
+        $form->update($mother->id, [
+            "elderSon:name" => "John Wayne",
+            "elderSon:age" => 52
+        ]);
+
+        $this->assertDatabaseHas("people", [
+            "name" => "John Wayne",
+            "age" => 52,
+            "mother_id" => $mother->id
+        ]);
+    }
+
 }
 
 class WithSharpFormEloquentUpdaterTestForm extends SharpForm
@@ -236,6 +314,7 @@ class WithSharpFormEloquentUpdaterTestForm extends SharpForm
     {
         $peopleList = Person::all()->pluck("name", "id")->all();
         $this->addField(SharpFormTextField::make("name"));
+        $this->addField(SharpFormTextField::make("age"));
         $this->addField(SharpFormSelectField::make("mother_id", $peopleList));
         $this->addField(SharpFormSelectField::make("mother", $peopleList));
         $this->addField(SharpFormSelectField::make("elderSon", $peopleList));
@@ -248,6 +327,11 @@ class WithSharpFormEloquentUpdaterTestForm extends SharpForm
                 ->setCreatable()
                 ->setCreateAttribute("name")
         );
+        $this->addField(SharpFormTextField::make("mother:name"));
+        $this->addField(SharpFormTextField::make("mother:age"));
+        $this->addField(SharpFormTextField::make("elderSon:name"));
+        $this->addField(SharpFormTextField::make("elderSon:age"));
+        $this->addField(SharpFormTextField::make("picture:file"));
     }
 }
 

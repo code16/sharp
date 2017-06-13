@@ -27,4 +27,9 @@ class Person extends Model
     {
         return $this->belongsToMany(Person::class, "friends", "person1_id", "person2_id");
     }
+
+    public function picture()
+    {
+        return $this->morphOne(Picture::class, "picturable");
+    }
 }

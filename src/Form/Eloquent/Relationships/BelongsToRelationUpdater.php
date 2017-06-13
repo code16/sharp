@@ -12,6 +12,17 @@ class BelongsToRelationUpdater
      */
     public function update($instance, $attribute, $value)
     {
+        if(strpos($attribute, ":") !== false) {
+            // This is a relation attribute update case (eg: mother:name)
+            list($attribute, $subAttribute) = explode(":", $attribute);
+
+            $instance->$attribute()->update([
+                $subAttribute => $value
+            ]);
+
+            return;
+        }
+
         $instance->$attribute()->associate($value);
         $instance->save();
     }
