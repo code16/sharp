@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp;
 
+use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Middleware\AddSharpContext;
 use Code16\Sharp\Http\Middleware\HandleSharpErrors;
 use Code16\Sharp\Http\SharpContext;
@@ -33,5 +34,9 @@ class SharpServiceProvider extends ServiceProvider
         $this->app->singleton(
             SharpContext::class, SharpContext::class
         );
+
+        $this->commands([
+            CreateUploadsMigration::class
+        ]);
     }
 }
