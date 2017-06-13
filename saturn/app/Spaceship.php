@@ -22,4 +22,17 @@ class Spaceship extends Model
     {
         return $this->belongsToMany(Pilot::class);
     }
+
+    public function picture()
+    {
+        return $this->morphOne(Media::class, "model")
+            ->where("model_key", "picture");
+    }
+
+    public function getDefaultAttributesFor($attribute)
+    {
+        return $attribute == "picture"
+            ? ["model_key" => "picture"]
+            : [];
+    }
 }

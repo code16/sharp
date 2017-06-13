@@ -17,14 +17,18 @@ class HasOneRelationUpdater
             list($attribute, $subAttribute) = explode(":", $attribute);
 
             if($instance->$attribute) {
-                $instance->$attribute()->update([
-                    $subAttribute => $value
-                ]);
+                $instance->$attribute->$subAttribute = $value;
+                $instance->$attribute->save();
 
             } else {
-                $instance->$attribute()->create([
-                    $subAttribute => $value
-                ]);
+                // Creation
+                $defaultAttributes = method_exists($instance, 'getDefaultAttributesFor')
+                    ? $instance->getDefaultAttributesFor($attribute)
+                    : [];
+
+                $instance->$attribute()->create(
+                    $defaultAttributes + [$subAttribute => $value]
+                );
 
                 // Force relation reload, in case there is
                 // more attributes to update in the request

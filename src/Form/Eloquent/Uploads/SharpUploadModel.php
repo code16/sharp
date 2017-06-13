@@ -42,16 +42,16 @@ class SharpUploadModel extends Model
 //        return null;
 //    }
 
-    /**
-     * @return $this
-     */
-    function getFileAttribute()
-    {
-        // The attribute "file" represents the file itself. In this
-        // case, it's the whole Model object, which plays 2 roles:
-        // list item and file item.
-        return $this;
-    }
+//    /**
+//     * @return $this
+//     */
+//    function getFileAttribute()
+//    {
+//        // The attribute "file" represents the file itself. In this
+//        // case, it's the whole Model object, which plays 2 roles:
+//        // list item and file item.
+//        return $this;
+//    }
 
     /**
      * @param string $key

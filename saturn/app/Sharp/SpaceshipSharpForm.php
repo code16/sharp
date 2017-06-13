@@ -15,6 +15,8 @@ use Code16\Sharp\Form\Fields\SharpFormTagsField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
+use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpFormException;
@@ -52,12 +54,16 @@ class SpaceshipSharpForm extends SharpForm
                 )
 
         )->addField(
-            SharpFormUploadField::make("picture")
+            SharpFormUploadField::make("picture:file_name")
                 ->setLabel("Picture")
                 ->setFileFilterImages()
                 ->setCropRatio("1:1")
                 ->setStorageDisk("local")
                 ->setStorageBasePath("data/Spaceship/{id}")
+
+        )->addField(
+            SharpFormTextField::make("picture:legend")
+                ->setLabel("Legend")
 
         )->addField(
             SharpFormTagsField::make("pilots",
@@ -89,27 +95,48 @@ class SpaceshipSharpForm extends SharpForm
                         ->setLabel("Comment")
                         ->addConditionalDisplay("status", "ko")
                 )
+        )->addField(
+            SharpFormListField::make("pictures")
+                ->setLabel("Additional pictures")
+                ->setAddable()->setAddText("Add a picture")
+                ->setRemovable()
+                ->setItemIdAttribute("id")
+                ->addItemField(
+                    SharpFormUploadField::make("file")
+                        ->setFileFilterImages()
+                        ->setCropRatio("16:9")
+                        ->setStorageDisk("local")
+                        ->setStorageBasePath("data/Spaceship/{id}/pictures")
+                )->addItemField(
+                    SharpFormTextField::make("legend")
+                        ->setPlaceholder("Legend")
+                )
         );
     }
 
     function buildFormLayout()
     {
         $this->addTab("tab 1", function(FormLayoutTab $tab) {
-            $tab->addColumn(6, function($column) {
+            $tab->addColumn(6, function(FormLayoutColumn $column) {
                 $column->withSingleField("name")
                     ->withSingleField("type_id")
                     ->withSingleField("pilots");
-            })->addColumn(6, function($column) {
-                $column->withSingleField("picture")
-                    ->withSingleField("reviews", function($item) {
-                        $item->withSingleField("starts_at")
+            })->addColumn(6, function(FormLayoutColumn $column) {
+                $column->withSingleField("picture:file_name")
+                    ->withSingleField("picture:legend")
+//                    ->withSingleField("pictures", function(FormLayoutColumn $listItem) {
+//                        $listItem->withSingleField("file")
+//                            ->withFields("legend");
+//                    })
+                    ->withSingleField("reviews", function(FormLayoutColumn $listItem) {
+                        $listItem->withSingleField("starts_at")
                             ->withFields("status|5", "comment|7");
                     });
             });
 
         })->addTab("tab 2", function(FormLayoutTab $tab) {
-            $tab->addColumn(6, function($column) {
-                $column->withFieldset("Technical details", function($fieldset) {
+            $tab->addColumn(6, function(FormLayoutColumn $column) {
+                $column->withFieldset("Technical details", function(FormLayoutFieldset $fieldset) {
                     return $fieldset->withFields("capacity|4,6", "construction_date|8,6");
                 });
             });
@@ -128,8 +155,16 @@ class SpaceshipSharpForm extends SharpForm
                 return $spaceship->capacity / 1000;
             })
             ->setTagsTransformer("pilots", "name")
+//            ->setCustomTransformer("picture", function($spaceship) {
+//                if(!$spaceship->picture) return null;
+//                return [
+//                    "name" => basename($spaceship->picture),
+////                    "thumbnail" => "",
+//                    "size" => 12
+//                ];
+//            })
             ->transform(
-                Spaceship::with(["reviews", "pilots"])->findOrFail($id)
+                Spaceship::with(["reviews", "pilots", "picture"])->findOrFail($id)
             );
     }
 

@@ -218,23 +218,21 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         ]);
     }
 
-//    /** @test */
-//    function we_can_update_a_morphOne_attribute()
-//    {
-//        $mother = Person::create(["name" => "Jane Wayne"]);
-//        $son = Person::create(["name" => "John Wayne"]);
-//
-//        $form = new WithSharpFormEloquentUpdaterTestForm();
-//
-//        $this->assertNotNull(
-//            $form->update($mother->id, ["elderSon" => $son->id])
-//        );
-//
-//        $this->assertDatabaseHas("people", [
-//            "id" => $son->id,
-//            "mother_id" => $mother->id
-//        ]);
-//    }
+    /** @test */
+    function we_can_update_a_morphOne_attribute()
+    {
+        $person = Person::create(["name" => "John Wayne"]);
+
+        $form = new WithSharpFormEloquentUpdaterTestForm();
+
+        $form->update($person->id, ["picture:file" => "picture"]);
+
+        $this->assertDatabaseHas("pictures", [
+            "picturable_type" => Person::class,
+            "picturable_id" => $person->id,
+            "file" => "picture",
+        ]);
+    }
 
     /** @test */
     function the_relation_separator_is_properly_handled_in_a_belongsTo_case()
