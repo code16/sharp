@@ -48,12 +48,7 @@ class SpaceshipSharpForm extends SharpForm
                 ->setListItemTemplatePath("/sharp/templates/spaceshipType_list.vue")
                 ->setResultItemTemplatePath("/sharp/templates/spaceshipType_result.vue")
                 ->setLocalValues(
-                    SpaceshipType::orderBy("label")->get()->map(function($item) {
-                        return [
-                            "id" => $item->id,
-                            "label" => $item->label
-                        ];
-                    })->all()
+                    SpaceshipType::orderBy("label")->get()->pluck("label", "id")->all()
                 )
 
         )->addField(
@@ -130,11 +125,12 @@ class SpaceshipSharpForm extends SharpForm
     function find($id): array
     {
         return $this->setCustomTransformer("capacity", function($spaceship) {
-            return $spaceship->capacity / 1000;
-
-        })->transform(
-            Spaceship::with("reviews")->findOrFail($id)
-        );
+                return $spaceship->capacity / 1000;
+            })
+            ->setTagsTransformer("pilots", "name")
+            ->transform(
+                Spaceship::with(["reviews", "pilots"])->findOrFail($id)
+            );
     }
 
     function update($id, array $data)

@@ -22,7 +22,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
     function only_default_values_are_set()
     {
         $localValues = [
-            "id" => 1, "name" => "bob"
+            1  => "bob"
         ];
 
         $defaultFormField = $this->getDefaultLocalAutocomplete($localValues);
@@ -33,7 +33,9 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
                 "remoteMethod" => "GET", "itemIdAttribute" => "id",
                 "listItemTemplate" => "LIT-content",
                 "resultItemTemplate" => "RIT-content",
-                "searchMinChars" => 1, "localValues" => $localValues,
+                "searchMinChars" => 1, "localValues" => [
+                    ["id" => 1, "label" => "bob"]
+                ],
                 "remoteSearchAttribute" => "query"
             ], $defaultFormField->toArray()
         );
@@ -126,7 +128,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
             ->setListItemTemplatePath("LIT.vue")
             ->setResultItemTemplatePath("RIT.vue")
             ->setLocalValues($localValues ?: [
-                "id" => 1, "name" => "bob"
+                1  => "bob"
             ]);
     }
 

@@ -78,7 +78,11 @@ class SharpFormAutocompleteField extends SharpFormField
      */
     public function setLocalValues($localValues)
     {
-        $this->localValues = $localValues;
+        $this->localValues = collect($localValues)->map(function($label, $id) {
+            return [
+                "id" => $id, "label" => $label
+            ];
+        })->values()->all();
 
         return $this;
     }
