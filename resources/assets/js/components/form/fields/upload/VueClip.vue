@@ -125,8 +125,11 @@
             },
             onStatusSuccess() {
                 setTimeout(() => this.showProgressBar = false, 1000);
-
-                let data = JSON.parse(this.file.xhrResponse.responseText);
+                let data = {};
+                try {
+                    data = JSON.parse(this.file.xhrResponse.responseText);
+                }
+                catch(e) { console.log(e); }
                 this.$emit('success', data);
 
                 this.$parent.$emit('input',{ uploaded:true, ...data });

@@ -28740,7 +28740,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             } else __WEBPACK_IMPORTED_MODULE_0__util__["a" /* default */].error('no entity key provided');
 
             this.actionsBus.$on('main-button-clicked', function (_) {
-                _this.post().catch(handleError);
+                _this.post().catch(_this.handleError);
             });
             this.actionsBus.$on('locale-changed', function (newLocale) {
                 return _this.locale = newLocale;
@@ -29330,9 +29330,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         rows: Number
     },
     data: function data() {
-        return {
-            textarea: this.value
-        };
+        return {};
     },
 
     methods: {
@@ -30158,6 +30156,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__upload_VueClip__ = __webpack_require__(76);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__upload_VueClip___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__upload_VueClip__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__messages__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__consts__ = __webpack_require__(50);
 //
 //
 //
@@ -30175,6 +30174,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -30204,7 +30204,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     computed: {
         options: function options() {
             return {
-                url: UPLOAD_URL,
+                url: __WEBPACK_IMPORTED_MODULE_3__consts__["b" /* UPLOAD_URL */],
                 uploadMultiple: false,
                 acceptedFiles: {
                     extensions: ['image/*'],
@@ -30466,8 +30466,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             setTimeout(function () {
                 return _this.showProgressBar = false;
             }, 1000);
-
-            var data = JSON.parse(this.file.xhrResponse.responseText);
+            var data = {};
+            try {
+                data = JSON.parse(this.file.xhrResponse.responseText);
+            } catch (e) {
+                console.log(e);
+            }
             this.$emit('success', data);
 
             this.$parent.$emit('input', _extends({ uploaded: true }, data));

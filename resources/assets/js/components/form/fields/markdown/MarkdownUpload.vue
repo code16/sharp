@@ -19,6 +19,7 @@
     import Vue from 'vue';
     import SharpVueClip from '../upload/VueClip';
     import Messages from '../../../../messages';
+    import { UPLOAD_URL } from '../../../../consts';
 
     export default Vue.extend({
         props: {
