@@ -125,6 +125,7 @@
             },
             onStatusSuccess() {
                 setTimeout(() => this.showProgressBar = false, 1000);
+                debugger;
                 let data = {};
                 try {
                     data = JSON.parse(this.file.xhrResponse.responseText);
@@ -132,8 +133,11 @@
                 catch(e) { console.log(e); }
                 this.$emit('success', data);
 
-                this.$parent.$emit('input',{ uploaded:true, ...data });
-                this.isCropperReady() && this.onCropperReady();
+                data.uploaded = true;
+                this.$parent.$emit('input',data);
+                this.$nextTick(_=>{
+                    this.isCropperReady() && this.onCropperReady();
+                });
             },
 
             // actions

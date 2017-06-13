@@ -30310,11 +30310,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return opt;
         }
     },
-    methods: {
-        onError: function onError(e) {
-            this.$field.$emit('error', e);
-        }
-    }
+    methods: {}
 });
 
 /***/ }),
@@ -30466,6 +30462,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             setTimeout(function () {
                 return _this.showProgressBar = false;
             }, 1000);
+            debugger;
             var data = {};
             try {
                 data = JSON.parse(this.file.xhrResponse.responseText);
@@ -30474,8 +30471,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             }
             this.$emit('success', data);
 
-            this.$parent.$emit('input', _extends({ uploaded: true }, data));
-            this.isCropperReady() && this.onCropperReady();
+            data.uploaded = true;
+            this.$parent.$emit('input', data);
+            this.$nextTick(function (_) {
+                _this.isCropperReady() && _this.onCropperReady();
+            });
         },
 
 
