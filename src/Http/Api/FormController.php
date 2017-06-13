@@ -50,7 +50,7 @@ class FormController extends Controller
 
         $form = $this->getFormInstance($entityKey);
 
-        $form->update($instanceId, request()->only($form->getFieldKeys()));
+        $form->update($instanceId, request()->intersect($form->getFieldKeys()));
 
         return response()->json(["ok" => true]);
     }

@@ -32,6 +32,7 @@ class FormLayoutField implements HasLayout
 
     /**
      * @param string $fieldKey
+     * @param \Closure|null $subLayoutCallback
      */
     function __construct(string $fieldKey, \Closure $subLayoutCallback = null)
     {

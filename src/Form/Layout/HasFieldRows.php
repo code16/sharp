@@ -11,6 +11,7 @@ trait HasFieldRows
 
     /**
      * @param string $fieldKey
+     * @param \Closure|null $subLayoutCallback
      * @return $this
      */
     public function withSingleField(string $fieldKey, \Closure $subLayoutCallback = null)
