@@ -125,7 +125,6 @@
             },
             onStatusSuccess() {
                 setTimeout(() => this.showProgressBar = false, 1000);
-                debugger;
                 let data = {};
                 try {
                     data = JSON.parse(this.file.xhrResponse.responseText);
