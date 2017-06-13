@@ -54,7 +54,7 @@ $fa-font-path: '/vendor/sharp/fonts';
 
 .modal-open {
   overflow: hidden;
-  .modal {
+  .modal.show {
     display: block!important;
     overflow-x: hidden!important;
     overflow-y: auto!important;

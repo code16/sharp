@@ -6,8 +6,8 @@
             </div>
             <template v-if="file">
                 <div class="SharpUpload__container">
-                    <div class="SharpUpload__thumbnail">
-                        <img v-if="!!imageSrc" :src="imageSrc">
+                    <div class="SharpUpload__thumbnail" v-if="!!imageSrc">
+                        <img :src="imageSrc">
                     </div>
                     <div class="SharpUpload__infos">
                         <div>
