@@ -53,7 +53,7 @@ class SharpUploadModel extends Model
     {
         return [
             "file" => $this->getFileAttribute()
-        ] + $this->getAttribute("custom_properties");
+        ] + $this->getAttribute("custom_properties") ?? [];
     }
 
 
