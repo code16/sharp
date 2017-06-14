@@ -15,9 +15,7 @@
                  @input="handleInput"
                  @tag="handleNewTag"
                  ref="multiselect">
-        <template slot="maxElements">
-            Maximum de {{maxTagCount}} éléments atteint
-        </template>
+        <template slot="maxElements">{{maxText}}</template>
     </multiselect>
 </template>
 
@@ -46,6 +44,7 @@
             options:Array,
             placeholder:String,
             maxTagCount:Number,
+            maxText:String,
             createText:String,
             creatable:true,
         },

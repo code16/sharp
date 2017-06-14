@@ -9,10 +9,12 @@
                      :close-on-select="!multiple"
                      :custom-label="multiselectLabel"
                      :placeholder="placeholder"
+                     :max="maxSelected"
                      @input="handleInput" ref="multiselect">
             <template v-if="!multiple && value!=null">
                 <div slot="carret" @mousedown.stop.prevent="remove()" class="SharpSelect__remove-btn close"></div>
             </template>
+            <template slot="maxElements">{{maxText}}</template>
         </multiselect>
         <div v-else>
             <template v-if="multiple">
@@ -64,7 +66,9 @@
             placeholder: {
                 type:String,
                 default: '-'
-            }
+            },
+            maxText: String,
+            maxSelected: Number
         },
 
         data() {
