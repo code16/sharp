@@ -50,7 +50,6 @@
             }
         },
         methods:{
-            onError(e) { this.$field.$emit('error',e); }
         }
     };
 </script>

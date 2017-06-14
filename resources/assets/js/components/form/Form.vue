@@ -125,7 +125,7 @@
                 else util.error('no entity key provided');
 
                 this.actionsBus.$on('main-button-clicked', _=>{
-                    this.post().catch(handleError);
+                    this.post().catch(this.handleError);
                 });
                 this.actionsBus.$on('locale-changed', newLocale => this.locale=newLocale);
             },

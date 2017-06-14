@@ -19,9 +19,7 @@
             rows: Number,
         },
         data() {
-            return {
-                textarea: this.value
-            }
+            return { }
         },
         methods: {
             handleInput(e) {
