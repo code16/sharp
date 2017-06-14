@@ -11,8 +11,10 @@
                  label="label"
                  multiple searchable hide-selected
                  selectLabel="" selectedLabel="" deselectLabel=""
+                 @search-change="handleTextInput"
                  @input="handleInput"
-                 @tag="handleNewTag">
+                 @tag="handleNewTag"
+                 ref="multiselect">
         <template slot="maxElements">
             Maximum de {{maxTagCount}} éléments atteint
         </template>
@@ -23,9 +25,9 @@
     import Multiselect from 'vue-multiselect';
 
     class LabelledItem {
-        constructor(tag) {
-            this.id = tag.id;
-            this.label = tag.label;
+        constructor(item) {
+            this.id = item.id;
+            this.label = item.label;
         }
         set internalId(id) { this._internalId = id; }
         get internalId() { return this._internalId; }
@@ -81,7 +83,12 @@
             handleInput(val) {
                 this.tags = val;
             },
-
+            handleTextInput(text) {
+                if(text.length > 0 && this.$refs.multiselect.filteredOptions.length > 1) {
+                    this.$refs.multiselect.pointer=1;
+                }
+                else this.$refs.multiselect.pointer=0
+            },
             onTagsChanged() {
                 this.$emit('input',this.tags.map(t => new Tag(t)));
             }

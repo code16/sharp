@@ -1,6 +1,7 @@
 .SharpTags {
   .multiselect__option {
     &:after {
+      content: attr(data-select);
       display: block !important;
     }
   }
