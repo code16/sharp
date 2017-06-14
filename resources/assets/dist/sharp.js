@@ -33348,15 +33348,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 //
 //
 //
+//
+//
 
 
 
 var LabelledItem = function () {
-    function LabelledItem(tag) {
+    function LabelledItem(item) {
         _classCallCheck(this, LabelledItem);
 
-        this.id = tag.id;
-        this.label = tag.label;
+        this.id = item.id;
+        this.label = item.label;
     }
 
     _createClass(LabelledItem, [{
@@ -33445,6 +33447,11 @@ var Tag = function (_LabelledItem2) {
         },
         handleInput: function handleInput(val) {
             this.tags = val;
+        },
+        handleTextInput: function handleTextInput(text) {
+            if (text.length > 0 && this.$refs.multiselect.filteredOptions.length > 1) {
+                this.$refs.multiselect.pointer = 1;
+            } else this.$refs.multiselect.pointer = 0;
         },
         onTagsChanged: function onTagsChanged() {
             this.$emit('input', this.tags.map(function (t) {
@@ -34337,7 +34344,6 @@ var noop = function noop() {};
         this.codemirrorOn('keydown', this.onKeydown);
         this.codemirrorOn('keyHandled', this.onKeyHandled);
 
-        console.log(this);
         //console.log(this);
     }
 });
@@ -76968,6 +76974,7 @@ if (false) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('multiselect', {
+    ref: "multiselect",
     staticClass: "SharpTags",
     attrs: {
       "value": _vm.tags,
@@ -76987,6 +76994,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "deselectLabel": ""
     },
     on: {
+      "search-change": _vm.handleTextInput,
       "input": _vm.handleInput,
       "tag": _vm.handleNewTag
     }
