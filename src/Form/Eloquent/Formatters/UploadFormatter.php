@@ -54,8 +54,15 @@ class UploadFormatter
 
             // TODO : handle transformations (crop and rotations)
 
-            return $storedFileName;
+            return [
+                "path" => $storedFileName,
+                "size" => $this->filesystem->disk($field->storageDisk())->size($storedFileName),
+                "mime" => $this->filesystem->disk($field->storageDisk())->mimeType($storedFileName),
+                "disk" => $field->storageDisk()
+            ];
         }
+
+        return null;
     }
 
     /**

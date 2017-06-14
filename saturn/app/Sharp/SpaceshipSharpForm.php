@@ -54,7 +54,7 @@ class SpaceshipSharpForm extends SharpForm
                 )
 
         )->addField(
-            SharpFormUploadField::make("picture:file_name")
+            SharpFormUploadField::make("picture:file")
                 ->setLabel("Picture")
                 ->setFileFilterImages()
                 ->setCropRatio("1:1")
@@ -102,7 +102,7 @@ class SpaceshipSharpForm extends SharpForm
                 ->setRemovable()
                 ->setItemIdAttribute("id")
                 ->addItemField(
-                    SharpFormUploadField::make("file_name")
+                    SharpFormUploadField::make("file")
                         ->setFileFilterImages()
                         ->setCropRatio("16:9")
                         ->setStorageDisk("local")
@@ -126,11 +126,11 @@ class SpaceshipSharpForm extends SharpForm
                             ->withFields("status|5", "comment|7");
                     });
             })->addColumn(6, function(FormLayoutColumn $column) {
-                $column->withSingleField("picture:file_name")
+                $column->withSingleField("picture:file")
                     ->withSingleField("picture:legend")
                     ->withSingleField("pictures", function(FormLayoutColumn $listItem) {
-                        $listItem->withSingleField("file_name")
-                            ->withFields("legend");
+                        $listItem->withSingleField("file")
+                            ->withSingleField("legend");
                     });
             });
 
@@ -155,17 +155,6 @@ class SpaceshipSharpForm extends SharpForm
                 return $spaceship->capacity / 1000;
             })
             ->setTagsTransformer("pilots", "name")
-//            ->setCustomTransformer("picture:legend", function($spaceship) {
-//                return $spaceship->picture ? $spaceship->picture->legend : null;
-//            })
-//            ->setCustomTransformer("picture:file_name", function($spaceship) {
-//                if(!$spaceship->picture) return null;
-//                return [
-//                    "name" => basename($spaceship->picture->file_name),
-////                    "thumbnail" => "",
-//                    "size" => 12
-//                ];
-//            })
             ->transform(
                 Spaceship::with("reviews", "pilots", "picture", "pictures")->findOrFail($id)
             );

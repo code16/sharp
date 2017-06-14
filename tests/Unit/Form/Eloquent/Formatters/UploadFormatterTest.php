@@ -32,17 +32,21 @@ class UploadFormatterTest extends SharpFormEloquentBaseTest
     /** @test */
     function we_can_format_value()
     {
-        $fileName = $this->uploadedFile();
+        $file = $this->uploadedFile();
         $formatter = app(UploadFormatter::class);
 
         $formField = SharpFormUploadField::make("file")
             ->setStorageDisk("local")
             ->setStorageBasePath("data/Test");
 
-        $this->assertEquals(
-            "data/Test/$fileName",
+        $this->assertEquals([
+                "path" => "data/Test/{$file[0]}",
+                "size" => $file[1],
+                "mime" => "image/png",
+                "disk" => "local"
+            ],
             $formatter->format([
-                "name" => $fileName,
+                "name" => $file[0],
                 "uploaded" => true
             ], $formField, new Person)
         );
@@ -51,7 +55,7 @@ class UploadFormatterTest extends SharpFormEloquentBaseTest
     /** @test */
     function newly_uploaded_file_is_moved_to_the_configured_disk_and_directory()
     {
-        $fileName = $this->uploadedFile();
+        $fileName = $this->uploadedFile()[0];
         $formatter = app(UploadFormatter::class);
 
         $formField = SharpFormUploadField::make("file")
@@ -69,7 +73,7 @@ class UploadFormatterTest extends SharpFormEloquentBaseTest
     /** @test */
     function we_throw_an_exception_if_a_newly_uploaded_file_needs_a_modelId_in_path_with_a_non_existing_model()
     {
-        $fileName = $this->uploadedFile();
+        $fileName = $this->uploadedFile()[0];
         $formatter = app(UploadFormatter::class);
 
         $formField = SharpFormUploadField::make("file")
@@ -87,7 +91,7 @@ class UploadFormatterTest extends SharpFormEloquentBaseTest
     /** @test */
     function we_substitute_parameters_with_model_attributes_in_storage_base_path()
     {
-        $fileName = $this->uploadedFile();
+        $fileName = $this->uploadedFile()[0];
         $formatter = app(UploadFormatter::class);
 
         $formField = SharpFormUploadField::make("file")
@@ -98,8 +102,8 @@ class UploadFormatterTest extends SharpFormEloquentBaseTest
             "name" => "john"
         ]);
 
-        $this->assertEquals(
-            "data/Test/{$person->id}/{$person->name}/$fileName",
+        $this->assertArraySubset(
+            ["path" => "data/Test/{$person->id}/{$person->name}/$fileName"],
             $formatter->format([
                 "name" => $fileName,
                 "uploaded" => true
@@ -109,8 +113,11 @@ class UploadFormatterTest extends SharpFormEloquentBaseTest
 
     private function uploadedFile()
     {
-        return basename(
-            (new \Illuminate\Http\Testing\FileFactory)->image("image.jpg", 600, 600)->store("tmp")
-        );
+        $file = (new \Illuminate\Http\Testing\FileFactory)->image("image.jpg", 600, 600);
+
+        return [
+            basename($file->store("tmp")),
+            $file->getSize()
+        ];
     }
 }

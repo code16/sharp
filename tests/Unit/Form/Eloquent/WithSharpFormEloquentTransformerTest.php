@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Tests\Unit\Form\Eloquent;
 
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentTransformer;
+use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\Transformers\SharpAttributeTransformer;
 use Code16\Sharp\Tests\Fixtures\Person;
@@ -129,6 +130,58 @@ class WithSharpFormEloquentTransformerTest extends SharpFormEloquentBaseTest
     }
 
     /** @test */
+    function morphOne_is_handled()
+    {
+        $person = Person::create(["name" => "John Wayne"]);
+        $person->picture()->create(["file" => "test.jpg"]);
+
+        $form = new WithSharpFormEloquentTransformerTestForm();
+
+        $this->assertArraySubset([
+                "picture" => ["file" => "test.jpg"],
+            ], $form->find($person->id)
+        );
+    }
+
+    /** @test */
+    function morphMany_is_handled()
+    {
+        $person = Person::create(["name" => "John Wayne"]);
+        $person->pictures()->create(["file" => "test.jpg"]);
+
+        $form = new WithSharpFormEloquentTransformerTestForm();
+
+        $this->assertArraySubset([
+                "pictures" => [["file" => "test.jpg"]],
+            ], $form->find($person->id)
+        );
+    }
+
+    /** @test */
+    function we_handle_the_relation_separator()
+    {
+        $mother = Person::create(["name" => "Jane Wayne"]);
+        $son = Person::create(["name" => "AAA", "mother_id" => $mother->id]);
+        $person = Person::create(["name" => "BBB"]);
+
+        $form = new class extends WithSharpFormEloquentTransformerTestForm {
+            function buildFormFields() {
+                $this->addField(SharpFormTextField::make("mother:name"));
+            }
+        };
+
+        $this->assertArraySubset([
+                "mother:name" => "Jane Wayne"
+            ], $form->find($son->id)
+        );
+
+        $this->assertArraySubset([
+                "mother:name" => null
+            ], $form->find($person->id)
+        );
+    }
+
+    /** @test */
     function we_can_use_a_closure_as_a_custom_transformer()
     {
         $person = Person::create([
@@ -153,7 +206,7 @@ class WithSharpFormEloquentTransformerTest extends SharpFormEloquentBaseTest
             "name" => "John Wayne"
         ]);
 
-        $form = new WithSharpFormEloquentTransformerTestForm();
+        $form = new WithSharpFormEloquentTransformerTestForm;
         $form->setCustomTransformer("name", SharpAttributeUppercaseTransformer::class);
 
         $this->assertArraySubset(
@@ -171,7 +224,7 @@ class WithSharpFormEloquentTransformerTestForm extends SharpForm
     {
         return $this->transform(
             Person::whereId($id)
-                ->with(["sons", "elderSon", "mother", "friends"])
+                ->with(["sons", "elderSon", "mother", "friends", "picture", "pictures"])
                 ->firstOrFail()
         );
     }

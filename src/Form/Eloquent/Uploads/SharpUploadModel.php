@@ -15,43 +15,46 @@ class SharpUploadModel extends Model
         'custom_properties' => 'array',
     ];
 
-    protected $hidden = [
-        "updated_at", "created_at", "custom_properties",
-        "model_id", "model_type", "model_key"
-    ];
-
-
     public function model()
     {
         return $this->morphTo('model');
     }
 
-//    /**
-//     * Return the full path of a file.
-//     *
-//     * @return mixed
-//     */
-//    function getSharpFilePath()
-//    {
-//        if ($this->model_type) {
-//            $type = substr($this->model_type, strrpos($this->model_type, '\\') + 1);
-//
-//            return "$type/{$this->model_id}/{$this->file_name}";
-//        }
-//
-//        return null;
-//    }
+    /**
+     * @param array $value
+     */
+    function setFileAttribute(array $value = null)
+    {
+        if(!$value) return;
 
-//    /**
-//     * @return $this
-//     */
-//    function getFileAttribute()
-//    {
-//        // The attribute "file" represents the file itself. In this
-//        // case, it's the whole Model object, which plays 2 roles:
-//        // list item and file item.
-//        return $this;
-//    }
+        $this->setAttribute('file_name', basename($value["path"]));
+        $this->setAttribute('size', $value["size"]);
+        $this->setAttribute('mime_type', $value["mime"]);
+        $this->setAttribute('disk', $value["disk"]);
+    }
+
+    /**
+     * @return array
+     */
+    function getFileAttribute()
+    {
+        return [
+            "name" => $this->getAttribute("file_name"),
+            "thumbnail" => "",
+            "size" => $this->getAttribute("size"),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    function toArray()
+    {
+        return [
+            "file" => $this->getFileAttribute()
+        ] + $this->getAttribute("custom_properties");
+    }
+
 
     /**
      * @param string $key
@@ -106,12 +109,6 @@ class SharpUploadModel extends Model
             "order", "created_at", "updated_at", "file"
         ]);
     }
-
-    public function toArray()
-    {
-        return parent::toArray() + $this->getAttribute("custom_properties");
-    }
-
 
 
 //    /**

@@ -54,6 +54,19 @@ trait WithSharpFormEloquentTransformer
     {
         $array = $model->toArray();
 
+        // Handle relation separator `:`
+        collect($this->getFieldKeys())->filter(function($key) {
+            return strpos($key, ':') !== false;
+
+        })->map(function($key) {
+            return array_merge([$key], explode(':', $key));
+
+        })->each(function($key) use(&$array, $model) {
+            // For each one, we create a "relation:attribute" key
+            // in the returned array
+            $array[$key[0]] = $model->{$key[1]} ? $model->{$key[1]}->{$key[2]} : null;
+        });
+
         // Apply transformers
         foreach($this->transformers as $attribute => $transformer) {
             $array[$attribute] = $transformer->apply($model, $attribute);
