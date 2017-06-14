@@ -33228,6 +33228,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -33261,7 +33263,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         placeholder: {
             type: String,
             default: '-'
-        }
+        },
+        maxText: String,
+        maxSelected: Number
     },
 
     data: function data() {
@@ -33348,8 +33352,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 //
 //
 //
-//
-//
 
 
 
@@ -33408,6 +33410,7 @@ var Tag = function (_LabelledItem2) {
         options: Array,
         placeholder: String,
         maxTagCount: Number,
+        maxText: String,
         createText: String,
         creatable: true
     },
@@ -76641,7 +76644,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "hide-selected": _vm.multiple,
       "close-on-select": !_vm.multiple,
       "custom-label": _vm.multiselectLabel,
-      "placeholder": _vm.placeholder
+      "placeholder": _vm.placeholder,
+      "max": _vm.maxSelected
     },
     on: {
       "input": _vm.handleInput
@@ -76656,7 +76660,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     },
     slot: "carret"
-  })] : _vm._e()], 2) : _c('div', [(_vm.multiple) ? _vm._l((_vm.options), function(option) {
+  })] : _vm._e(), _vm._v(" "), _c('template', {
+    slot: "maxElements"
+  }, [_vm._v(_vm._s(_vm.maxText))])], 2) : _c('div', [(_vm.multiple) ? _vm._l((_vm.options), function(option) {
     return _c('sharp-check', {
       key: option.id,
       attrs: {
@@ -77000,7 +77006,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('template', {
     slot: "maxElements"
-  }, [_vm._v("\n        Maximum de " + _vm._s(_vm.maxTagCount) + " éléments atteint\n    ")])], 2)
+  }, [_vm._v(_vm._s(_vm.maxText))])], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
