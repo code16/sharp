@@ -19,7 +19,7 @@
                             </div>
                         </div>
                         <div v-if="!!originalImageSrc">
-                            <button type="button" class="btn btn-secondary" @click="showEditModal=true">Modifier</button>
+                            <button type="button" class="btn btn-secondary" @click="onEditButtonClick">Modifier</button>
                         </div>
                     </div>
                 </div>
@@ -98,6 +98,9 @@
                 return this.croppedImg || this.originalImageSrc;
             },
             size() {
+                if(this.file.size == null) {
+                    return '--';
+                }
                 let size = (parseFloat((this.file.size).toFixed(2))/1024)/1024;
                 let res = '';
                 if(size<0.1) { res+='<'; size=0.1 }
@@ -155,6 +158,11 @@
                 this.resized = false;
             },
 
+            onEditButtonClick() {
+                this.showEditModal = true;
+                this.file.croppable = true;
+            },
+
             onEditModalShown() {
                 if(!this.resized) {
                     this.$nextTick(()=>{
@@ -191,7 +199,8 @@
             },
 
             updateCroppedImage() {
-                this.croppedImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
+                if(this.file.croppable)
+                    this.croppedImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
             },
 
             getCropData() {
@@ -201,8 +210,6 @@
             rotate(degree) {
                 rotateResize(this.$refs.cropper.cropper, degree);
             },
-
-
         },
         created() {
             this.options.thumbnailWidth = null;
@@ -216,6 +223,7 @@
                 upload: {}
             }));
             this.file.thumbnail = this.value.thumbnail;
+            this.file.croppable = false;
         },
     }
 </script>

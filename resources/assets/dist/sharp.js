@@ -34635,6 +34635,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return this.croppedImg || this.originalImageSrc;
         },
         size: function size() {
+            if (this.file.size == null) {
+                return '--';
+            }
             var size = parseFloat(this.file.size.toFixed(2)) / 1024 / 1024;
             var res = '';
             if (size < 0.1) {
@@ -34698,6 +34701,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             this.croppedImg = null;
             this.resized = false;
         },
+        onEditButtonClick: function onEditButtonClick() {
+            this.showEditModal = true;
+            this.file.croppable = true;
+        },
         onEditModalShown: function onEditModalShown() {
             var _this2 = this;
 
@@ -34730,7 +34737,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             }));
         },
         updateCroppedImage: function updateCroppedImage() {
-            this.croppedImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
+            if (this.file.croppable) this.croppedImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
         },
         getCropData: function getCropData() {
             return this.$refs.cropper.getData(true);
@@ -34749,6 +34756,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             upload: {}
         })));
         this.file.thumbnail = this.value.thumbnail;
+        this.file.croppable = false;
     }
 });
 
@@ -76890,9 +76898,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "type": "button"
     },
     on: {
-      "click": function($event) {
-        _vm.showEditModal = true
-      }
+      "click": _vm.onEditButtonClick
     }
   }, [_vm._v("Modifier")])]) : _vm._e()])]), _vm._v(" "), _vm._t("removeButton"), _vm._v(" "), (!_vm.$slots.removeButton) ? [_c('button', {
     staticClass: "close",
