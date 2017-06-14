@@ -80,6 +80,7 @@
                 showEditModal: false,
                 croppedImg: null,
                 resized: false,
+                croppable: false
             }
         },
         watch: {
@@ -137,6 +138,7 @@
 
                 data.uploaded = true;
                 this.$parent.$emit('input',data);
+                this.croppable = true;
                 this.$nextTick(_=>{
                     this.isCropperReady() && this.onCropperReady();
                 });
@@ -192,15 +194,18 @@
             },
 
             updateCropData() {
-                this.$parent.$emit('input', {
-                    ...this.value,
-                    cropData: this.getCropData(),
-                });
+                if(this.croppable) {
+                    this.$parent.$emit('input', {
+                        ...this.value,
+                        cropData: this.getCropData(),
+                    });
+                }
             },
 
             updateCroppedImage() {
-                if(this.file.croppable)
+                if(this.croppable) {
                     this.croppedImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
+                }
             },
 
             getCropData() {
@@ -223,7 +228,6 @@
                 upload: {}
             }));
             this.file.thumbnail = this.value.thumbnail;
-            this.file.croppable = false;
         },
     }
 </script>

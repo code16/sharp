@@ -34615,7 +34615,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             showProgressBar: false,
             showEditModal: false,
             croppedImg: null,
-            resized: false
+            resized: false,
+            croppable: false
         };
     },
 
@@ -34681,6 +34682,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
             data.uploaded = true;
             this.$parent.$emit('input', data);
+            this.croppable = true;
             this.$nextTick(function (_) {
                 _this.isCropperReady() && _this.onCropperReady();
             });
@@ -34732,12 +34734,16 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             }
         },
         updateCropData: function updateCropData() {
-            this.$parent.$emit('input', _extends({}, this.value, {
-                cropData: this.getCropData()
-            }));
+            if (this.croppable) {
+                this.$parent.$emit('input', _extends({}, this.value, {
+                    cropData: this.getCropData()
+                }));
+            }
         },
         updateCroppedImage: function updateCroppedImage() {
-            if (this.file.croppable) this.croppedImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
+            if (this.croppable) {
+                this.croppedImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
+            }
         },
         getCropData: function getCropData() {
             return this.$refs.cropper.getData(true);
@@ -34756,7 +34762,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             upload: {}
         })));
         this.file.thumbnail = this.value.thumbnail;
-        this.file.croppable = false;
     }
 });
 
