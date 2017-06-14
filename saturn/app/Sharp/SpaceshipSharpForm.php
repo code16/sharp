@@ -155,6 +155,9 @@ class SpaceshipSharpForm extends SharpForm
                 return $spaceship->capacity / 1000;
             })
             ->setTagsTransformer("pilots", "name")
+//            ->setCustomTransformer("picture:legend", function($spaceship) {
+//                return $spaceship->picture ? $spaceship->picture->legend : null;
+//            })
 //            ->setCustomTransformer("picture:file_name", function($spaceship) {
 //                if(!$spaceship->picture) return null;
 //                return [
@@ -164,7 +167,7 @@ class SpaceshipSharpForm extends SharpForm
 //                ];
 //            })
             ->transform(
-                Spaceship::with(["reviews", "pilots", "picture"])->findOrFail($id)
+                Spaceship::with("reviews", "pilots", "picture", "pictures")->findOrFail($id)
             );
     }
 

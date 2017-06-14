@@ -20,7 +20,6 @@ class HasManyRelationUpdater
     public function update($instance, $attribute, $value)
     {
         $relatedModel = $instance->$attribute()->getRelated();
-        $foreignKeyName = $instance->$attribute()->getForeignKeyName();
         $relatedModelKeyName = $relatedModel->getKeyName();
 
         // Add / update sent items
@@ -43,8 +42,7 @@ class HasManyRelationUpdater
         }
 
         // Remove unsent items
-        $relatedModel->where($foreignKeyName, $instance->id)
-            ->whereNotIn($relatedModelKeyName, $this->handledIds)
+        $instance->$attribute()->whereNotIn($relatedModelKeyName, $this->handledIds)
             ->delete();
     }
 

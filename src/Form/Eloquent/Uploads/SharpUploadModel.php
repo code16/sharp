@@ -15,15 +15,15 @@ class SharpUploadModel extends Model
         'custom_properties' => 'array',
     ];
 
-    /**
-     * @var array
-     */
-    protected $custom_properties;
+    protected $hidden = [
+        "updated_at", "created_at", "custom_properties",
+        "model_id", "model_type", "model_key"
+    ];
 
 
     public function model()
     {
-        return $this->morphTo();
+        return $this->morphTo('model');
     }
 
 //    /**
@@ -60,7 +60,7 @@ class SharpUploadModel extends Model
     public function getAttribute($key)
     {
         if(!$this->isRealAttribute($key)) {
-            return $this->custom_properties[$key] ?? null;
+            return $this->getAttribute("custom_properties")[$key] ?? null;
         }
 
         return parent::getAttribute($key);
@@ -87,7 +87,7 @@ class SharpUploadModel extends Model
      */
     private function updateCustomProperty($key, $value)
     {
-        $properties = $this->custom_properties;
+        $properties = $this->getAttribute("custom_properties");
         $properties[$key] = $value;
         $this->setAttribute("custom_properties", $properties);
 
@@ -106,6 +106,13 @@ class SharpUploadModel extends Model
             "order", "created_at", "updated_at", "file"
         ]);
     }
+
+    public function toArray()
+    {
+        return parent::toArray() + $this->getAttribute("custom_properties");
+    }
+
+
 
 //    /**
 //     * @param int $width
