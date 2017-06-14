@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Form\Eloquent\Relationships;
 
 use Code16\Sharp\Form\Eloquent\EloquentModelUpdater;
+use Code16\Sharp\Form\Eloquent\Request\UpdateRequestData;
 
 class HasManyRelationUpdater
 {
@@ -15,7 +16,6 @@ class HasManyRelationUpdater
      * @param $instance
      * @param string $attribute
      * @param array $value
-     * @return bool
      */
     public function update($instance, $attribute, $value)
     {
@@ -26,14 +26,17 @@ class HasManyRelationUpdater
         // Add / update sent items
         foreach($value as $item) {
             $id = $this->findItemId($item, $relatedModelKeyName);
+            $relatedInstance = $instance->$attribute()->findOrNew($id);
 
-            $relatedInstance = $id
-                ? $relatedModel->find($id)
-                : $relatedModel->newInstance();
-
-            $relatedInstance->setAttribute(
-                $foreignKeyName, $instance->id
-            );
+            if(!$relatedInstance->exists) {
+                // Creation: we call the optional getDefaultAttributesFor($attribute)
+                // on the model, to get some default values for required attributes
+                $relatedInstance->fill(
+                    method_exists($instance, 'getDefaultAttributesFor')
+                        ? $instance->getDefaultAttributesFor($attribute)
+                        : []
+                );
+            }
 
             $model = app(EloquentModelUpdater::class)->update($relatedInstance, $item);
             $this->handledIds[] = $model->getAttribute($relatedModelKeyName);
@@ -46,7 +49,7 @@ class HasManyRelationUpdater
     }
 
     /**
-     * @param $item
+     * @param UpdateRequestData $item
      * @param $relatedModelKeyName
      * @return mixed
      */

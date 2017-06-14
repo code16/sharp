@@ -117,18 +117,16 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
     function we_can_update_a_hasMany_attribute()
     {
         $mother = Person::create(["name" => "Jane Wayne"]);
-        $son = Person::create(["name" => "AAA"]);
+        $son = Person::create(["name" => "AAA", "mother_id" => $mother->id]);
 
         $form = new WithSharpFormEloquentUpdaterTestForm();
 
-        $this->assertNotNull(
-            $form->update($mother->id, [
-                "sons" => [
-                    ["id" => $son->id, "name" => "John Wayne"],
-                    ["id" => null, "name" => "Mary Wayne"],
-                ]
-            ])
-        );
+        $form->update($mother->id, [
+            "sons" => [
+                ["id" => $son->id, "name" => "John Wayne"],
+                ["id" => null, "name" => "Mary Wayne"],
+            ]
+        ]);
 
         $this->assertDatabaseHas("people", [
             "id" => $son->id,

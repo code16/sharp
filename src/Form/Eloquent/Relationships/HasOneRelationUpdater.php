@@ -21,7 +21,8 @@ class HasOneRelationUpdater
                 $instance->$attribute->save();
 
             } else {
-                // Creation
+                // Creation: we call the optional getDefaultAttributesFor($attribute)
+                // on the model, to get some default values for required attributes
                 $defaultAttributes = method_exists($instance, 'getDefaultAttributesFor')
                     ? $instance->getDefaultAttributesFor($attribute)
                     : [];

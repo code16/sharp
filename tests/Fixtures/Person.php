@@ -32,4 +32,9 @@ class Person extends Model
     {
         return $this->morphOne(Picture::class, "picturable");
     }
+
+    public function pictures()
+    {
+        return $this->morphMany(Picture::class, "picturable");
+    }
 }

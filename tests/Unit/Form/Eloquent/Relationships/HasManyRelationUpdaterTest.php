@@ -10,6 +10,7 @@ use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
 
 class HasManyRelationUpdaterTest extends SharpFormEloquentBaseTest
 {
+    use TestWithSharpList;
     
     /** @test */
     function we_can_update_a_hasMany_relation()
@@ -76,25 +77,5 @@ class HasManyRelationUpdaterTest extends SharpFormEloquentBaseTest
             "id" => $son2->id,
             "mother_id" => $mother->id
         ]);
-    }
-
-    private function formatData(array $data)
-    {
-        $itemsData = [];
-
-        foreach($data as $item) {
-            $itemData = new UpdateRequestData;
-
-            foreach ($item as $attribute => $value) {
-                $itemData->add($attribute)
-                    ->setValue($value["value"])
-                    ->setValuator($value["valuator"])
-                    ->setFormField($value["field"]);
-            }
-
-            $itemsData[] = $itemData;
-        }
-
-        return $itemsData;
     }
 }

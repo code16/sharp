@@ -102,11 +102,11 @@ class SpaceshipSharpForm extends SharpForm
                 ->setRemovable()
                 ->setItemIdAttribute("id")
                 ->addItemField(
-                    SharpFormUploadField::make("file")
+                    SharpFormUploadField::make("file_name")
                         ->setFileFilterImages()
                         ->setCropRatio("16:9")
                         ->setStorageDisk("local")
-                        ->setStorageBasePath("data/Spaceship/{id}/pictures")
+                        ->setStorageBasePath("data/Pictures/{id}")
                 )->addItemField(
                     SharpFormTextField::make("legend")
                         ->setPlaceholder("Legend")
@@ -120,17 +120,17 @@ class SpaceshipSharpForm extends SharpForm
             $tab->addColumn(6, function(FormLayoutColumn $column) {
                 $column->withSingleField("name")
                     ->withSingleField("type_id")
-                    ->withSingleField("pilots");
-            })->addColumn(6, function(FormLayoutColumn $column) {
-                $column->withSingleField("picture:file_name")
-                    ->withSingleField("picture:legend")
-//                    ->withSingleField("pictures", function(FormLayoutColumn $listItem) {
-//                        $listItem->withSingleField("file")
-//                            ->withFields("legend");
-//                    })
+                    ->withSingleField("pilots")
                     ->withSingleField("reviews", function(FormLayoutColumn $listItem) {
                         $listItem->withSingleField("starts_at")
                             ->withFields("status|5", "comment|7");
+                    });
+            })->addColumn(6, function(FormLayoutColumn $column) {
+                $column->withSingleField("picture:file_name")
+                    ->withSingleField("picture:legend")
+                    ->withSingleField("pictures", function(FormLayoutColumn $listItem) {
+                        $listItem->withSingleField("file_name")
+                            ->withFields("legend");
                     });
             });
 
@@ -155,10 +155,10 @@ class SpaceshipSharpForm extends SharpForm
                 return $spaceship->capacity / 1000;
             })
             ->setTagsTransformer("pilots", "name")
-//            ->setCustomTransformer("picture", function($spaceship) {
+//            ->setCustomTransformer("picture:file_name", function($spaceship) {
 //                if(!$spaceship->picture) return null;
 //                return [
-//                    "name" => basename($spaceship->picture),
+//                    "name" => basename($spaceship->picture->file_name),
 ////                    "thumbnail" => "",
 //                    "size" => 12
 //                ];

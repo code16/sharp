@@ -21,7 +21,6 @@ class UploadFormatter
     private $fileUtil;
 
     /**
-     * UploadFormatter constructor.
      * @param FilesystemManager $filesystem
      * @param FileUtil $uploadUtil
      */
