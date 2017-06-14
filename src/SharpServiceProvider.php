@@ -7,6 +7,7 @@ use Code16\Sharp\Http\Middleware\AddSharpContext;
 use Code16\Sharp\Http\Middleware\HandleSharpErrors;
 use Code16\Sharp\Http\SharpContext;
 use Illuminate\Support\ServiceProvider;
+use Intervention\Image\ImageServiceProviderLaravel5;
 
 class SharpServiceProvider extends ServiceProvider
 {
@@ -38,5 +39,7 @@ class SharpServiceProvider extends ServiceProvider
         $this->commands([
             CreateUploadsMigration::class
         ]);
+
+        $this->app->register(ImageServiceProviderLaravel5::class);
     }
 }

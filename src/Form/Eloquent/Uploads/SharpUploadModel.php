@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Form\Eloquent\Uploads;
 
+use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\Thumbnail;
 use Illuminate\Database\Eloquent\Model;
 
 class SharpUploadModel extends Model
@@ -27,7 +28,7 @@ class SharpUploadModel extends Model
     {
         if(!$value) return;
 
-        $this->setAttribute('file_name', basename($value["path"]));
+        $this->setAttribute('file_name', $value["path"]);
         $this->setAttribute('size', $value["size"]);
         $this->setAttribute('mime_type', $value["mime"]);
         $this->setAttribute('disk', $value["disk"]);
@@ -40,7 +41,7 @@ class SharpUploadModel extends Model
     {
         return [
             "name" => $this->getAttribute("file_name"),
-            "thumbnail" => "",
+            "thumbnail" => $this->thumbnail(200, 200),
             "size" => $this->getAttribute("size"),
         ];
     }
@@ -110,38 +111,14 @@ class SharpUploadModel extends Model
         ]);
     }
 
-
-//    /**
-//     * @param int $width
-//     * @param int|null $height
-//     * @param array $filters
-//     * @return string
-//     */
-//    public function thumbnail($width, $height=null, $filters = [])
-//    {
-//        return (new Thumbnail($this))->thumbnail($width, $height, $filters);
-//    }
-//
-//    /**
-//     * @param int $width
-//     * @param int $height
-//     * @param array $filters
-//     * @return string
-//     */
-//    public function fitThumbnail($width, $height, $filters = [])
-//    {
-//        return $this->thumbnail($width, $height, [
-//                "fit" => ["w"=>$width, "h"=>$height]
-//            ] + $filters);
-//    }
-//
-//    /**
-//     * @param int $width
-//     * @param int $height
-//     * @return string
-//     */
-//    public function fitAndGreyscaleThumbnail($width, $height)
-//    {
-//        return $this->fitThumbnail($width, $height, ["greyscale" => []]);
-//    }
+    /**
+     * @param int $width
+     * @param int|null $height
+     * @param array $filters
+     * @return string
+     */
+    public function thumbnail($width, $height=null, $filters = [])
+    {
+        return (new Thumbnail($this))->make($width, $height, $filters);
+    }
 }
