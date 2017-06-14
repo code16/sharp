@@ -22,6 +22,16 @@ class SharpFormSelectField extends SharpFormField
     /**
      * @var string
      */
+    protected $maxText = "Maximum selected items count reached";
+
+    /**
+     * @var int
+     */
+    protected $maxSelected = null;
+
+    /**
+     * @var string
+     */
     protected $display = "list";
 
     /**
@@ -84,6 +94,38 @@ class SharpFormSelectField extends SharpFormField
     }
 
     /**
+     * @param int $maxSelected
+     * @return $this
+     */
+    public function setMaxSelected(int $maxSelected)
+    {
+        $this->maxSelected = $maxSelected;
+
+        return $this;
+    }
+
+    /**
+     * @return static
+     */
+    public function setMaxSelectedUnlimited()
+    {
+        $this->maxSelected = null;
+
+        return $this;
+    }
+
+    /**
+     * @param string $maxText
+     * @return $this
+     */
+    public function setMaxText(string $maxText)
+    {
+        $this->maxText = $maxText;
+
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function multiple()
@@ -100,7 +142,8 @@ class SharpFormSelectField extends SharpFormField
             "options" => "required|array",
             "multiple" => "boolean",
             "clearable" => "boolean",
-            "display" => "required|in:list,dropdown"
+            "display" => "required|in:list,dropdown",
+            "maxSelected" => "int"
         ];
     }
 
@@ -113,7 +156,9 @@ class SharpFormSelectField extends SharpFormField
             "options" => $this->options,
             "multiple" => $this->multiple,
             "clearable" => $this->clearable,
-            "display" => $this->display
+            "display" => $this->display,
+            "maxSelected" => $this->maxSelected,
+            "maxText" => $this->maxText,
         ]);
     }
 }

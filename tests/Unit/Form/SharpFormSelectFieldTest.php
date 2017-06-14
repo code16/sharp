@@ -23,7 +23,8 @@ class SharpFormSelectFieldTest extends SharpTestCase
                     ["id" => "1", "label" => "Elem 1"],
                     ["id" => "2", "label" => "Elem 2"],
                 ], "multiple" => false,
-                "clearable" => false, "display" => "list"
+                "clearable" => false, "display" => "list",
+                "maxText" => "Maximum selected items count reached"
             ], $formField->toArray()
         );
     }
@@ -36,6 +37,30 @@ class SharpFormSelectFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ["multiple" => true],
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_maxSelected()
+    {
+        $formField = $this->getDefaultSelect()
+            ->setMaxSelected(12);
+
+        $this->assertArraySubset(
+            ["maxSelected" => 12],
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_maxText()
+    {
+        $formField = $this->getDefaultSelect()
+            ->setMaxText("Oh yeah?");
+
+        $this->assertArraySubset(
+            ["maxText" => "Oh yeah?"],
             $formField->toArray()
         );
     }

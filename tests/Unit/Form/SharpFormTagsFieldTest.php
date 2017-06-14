@@ -23,7 +23,7 @@ class SharpFormTagsFieldTest extends SharpTestCase
                     ["id" => "1", "label" => "Elem 1"],
                     ["id" => "2", "label" => "Elem 2"],
                 ], "creatable" => false,
-                "createText" => "New..."
+                "createText" => "New...", "maxText" => "Maximum items count reached"
             ], $formField->toArray()
         );
     }
@@ -60,6 +60,18 @@ class SharpFormTagsFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ["maxTagCount" => 2],
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_maxText()
+    {
+        $formField = $this->getDefaultTags()
+            ->setMaxText("Oh yeah?");
+
+        $this->assertArraySubset(
+            ["maxText" => "Oh yeah?"],
             $formField->toArray()
         );
     }

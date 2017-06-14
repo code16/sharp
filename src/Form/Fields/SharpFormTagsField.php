@@ -25,6 +25,11 @@ class SharpFormTagsField extends SharpFormField
     protected $maxTagCount = null;
 
     /**
+     * @var string
+     */
+    protected $maxText = "Maximum items count reached";
+
+    /**
      * @var array
      */
     protected $options = [];
@@ -91,6 +96,27 @@ class SharpFormTagsField extends SharpFormField
     }
 
     /**
+     * @return static
+     */
+    public function setMaxTagCountUnlimited()
+    {
+        $this->maxTagCount = null;
+
+        return $this;
+    }
+
+    /**
+     * @param string $maxText
+     * @return $this
+     */
+    public function setMaxText(string $maxText)
+    {
+        $this->maxText = $maxText;
+
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function creatable()
@@ -127,6 +153,7 @@ class SharpFormTagsField extends SharpFormField
             "creatable" => $this->creatable,
             "createText" => $this->createText,
             "maxTagCount" => $this->maxTagCount,
+            "maxText" => $this->maxText,
             "options" => $this->options
         ]);
     }
