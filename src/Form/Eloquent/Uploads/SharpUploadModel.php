@@ -41,7 +41,7 @@ class SharpUploadModel extends Model
     {
         return [
             "name" => $this->getAttribute("file_name"),
-            "thumbnail" => $this->thumbnail(200, 200),
+            "thumbnail" => $this->thumbnail(null, 150),
             "size" => $this->getAttribute("size"),
         ];
     }
@@ -52,6 +52,7 @@ class SharpUploadModel extends Model
     function toArray()
     {
         return [
+            "id" => $this->getAttribute("id"),
             "file" => $this->getFileAttribute()
         ] + $this->getAttribute("custom_properties") ?? [];
     }
