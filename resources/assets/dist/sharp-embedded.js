@@ -29184,6 +29184,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_multiselect__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_multiselect___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_multiselect__);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 //
 //
 //
@@ -29207,6 +29215,51 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 
+
+var LabelledItem = function () {
+    function LabelledItem(tag) {
+        _classCallCheck(this, LabelledItem);
+
+        this.id = tag.id;
+        this.label = tag.label;
+    }
+
+    _createClass(LabelledItem, [{
+        key: 'internalId',
+        set: function set(id) {
+            this._internalId = id;
+        },
+        get: function get() {
+            return this._internalId;
+        }
+    }]);
+
+    return LabelledItem;
+}();
+
+var Option = function (_LabelledItem) {
+    _inherits(Option, _LabelledItem);
+
+    function Option() {
+        _classCallCheck(this, Option);
+
+        return _possibleConstructorReturn(this, (Option.__proto__ || Object.getPrototypeOf(Option)).apply(this, arguments));
+    }
+
+    return Option;
+}(LabelledItem);
+
+var Tag = function (_LabelledItem2) {
+    _inherits(Tag, _LabelledItem2);
+
+    function Tag() {
+        _classCallCheck(this, Tag);
+
+        return _possibleConstructorReturn(this, (Tag.__proto__ || Object.getPrototypeOf(Tag)).apply(this, arguments));
+    }
+
+    return Tag;
+}(LabelledItem);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpTags',
@@ -29230,35 +29283,43 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     computed: {
         indexedOptions: function indexedOptions() {
-            return this.patch(this.options);
+            return this.options.map(this.patchOption);
         }
     },
     watch: {
-        tags: function tags(_tags) {
-            if (this.lastIndex) {
-                this.$emit('input', _tags.map(function (t) {
-                    return { id: t.id, label: t.label };
-                }));
-            }
-        }
+        tags: 'onTagsChanged'
     },
     methods: {
-        patch: function patch(array) {
-            return array.map(function (o, i) {
-                o.internalId = i;
-                return o;
+        patchOption: function patchOption(option, index) {
+            var patchedOption = new Option(option);
+            patchedOption.internalId = index;
+            return patchedOption;
+        },
+        patchTag: function patchTag(tag) {
+            var matchedOption = this.indexedOptions.find(function (o) {
+                return o.id === tag.id;
             });
+            var patchedTag = new Tag(tag);
+            patchedTag.internalId = matchedOption ? matchedOption.internalId : this.lastIndex++;
+            return patchedTag;
         },
         handleNewTag: function handleNewTag(val) {
-            this.tags.push({ id: null, label: val, internalId: this.lastIndex++ });
+            var newTag = new Tag({ id: null, label: val });
+            newTag.internalId = this.lastIndex++;
+            this.tags.push(newTag);
         },
         handleInput: function handleInput(val) {
             this.tags = val;
+        },
+        onTagsChanged: function onTagsChanged() {
+            this.$emit('input', this.tags.map(function (t) {
+                return new Tag(t);
+            }));
         }
     },
-    mounted: function mounted() {
-        this.tags = this.patch(this.value);
-        this.lastIndex = this.options.length + this.tags.length;
+    created: function created() {
+        this.lastIndex += this.options.length;
+        this.tags = this.value.map(this.patchTag);
     }
 });
 
@@ -30141,6 +30202,7 @@ var noop = function noop() {};
         this.codemirrorOn('keydown', this.onKeydown);
         this.codemirrorOn('keyHandled', this.onKeyHandled);
 
+        console.log(this);
         //console.log(this);
     }
 });
@@ -30462,7 +30524,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             setTimeout(function () {
                 return _this.showProgressBar = false;
             }, 1000);
-            debugger;
             var data = {};
             try {
                 data = JSON.parse(this.file.xhrResponse.responseText);
@@ -52785,7 +52846,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "max": _vm.maxTagCount,
       "taggable": _vm.creatable,
       "close-on-select": false,
-      "track-by": "internalId",
+      "track-by": "_internalId",
       "label": "label",
       "multiple": "",
       "searchable": "",
