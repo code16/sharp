@@ -7,7 +7,7 @@
                  :max="maxTagCount"
                  :taggable="creatable"
                  :close-on-select="false"
-                 track-by="internalId"
+                 track-by="_internalId"
                  label="label"
                  multiple searchable hide-selected
                  selectLabel="" selectedLabel="" deselectLabel=""
@@ -21,6 +21,18 @@
 
 <script>
     import Multiselect from 'vue-multiselect';
+
+    class LabelledItem {
+        constructor(tag) {
+            this.id = tag.id;
+            this.label = tag.label;
+        }
+        set internalId(id) { this._internalId = id; }
+        get internalId() { return this._internalId; }
+    }
+
+    class Option extends LabelledItem { }
+    class Tag extends LabelledItem { }
 
     export default {
         name:'SharpTags',
@@ -43,33 +55,40 @@
         },
         computed: {
             indexedOptions() {
-                return this.patch(this.options);
+                return this.options.map(this.patchOption);
             },
         },
         watch: {
-            tags(tags) {
-                if(this.lastIndex) {
-                    this.$emit('input',tags.map(t =>({id:t.id, label:t.label})));
-                }
-            }
+            tags:'onTagsChanged'
         },
         methods: {
-            patch(array) {
-                return array.map((o,i) => {
-                    o.internalId = i;
-                    return o;
-                });
+            patchOption(option, index) {
+                let patchedOption = new Option(option);
+                patchedOption.internalId = index;
+                return patchedOption;
+            },
+            patchTag(tag) {
+                let matchedOption = this.indexedOptions.find(o=>o.id===tag.id);
+                let patchedTag = new Tag(tag);
+                patchedTag.internalId = matchedOption ? matchedOption.internalId : this.lastIndex++;
+                return patchedTag;
             },
             handleNewTag(val) {
-                this.tags.push({id:null,label:val,internalId:this.lastIndex++});
+                let newTag = new Tag({id:null, label:val});
+                newTag.internalId = this.lastIndex++;
+                this.tags.push(newTag);
             },
             handleInput(val) {
                 this.tags = val;
+            },
+
+            onTagsChanged() {
+                this.$emit('input',this.tags.map(t => new Tag(t)));
             }
         },
-        mounted() {
-            this.tags = this.patch(this.value);
-            this.lastIndex = this.options.length + this.tags.length;
+        created() {
+            this.lastIndex += this.options.length;
+            this.tags = this.value.map(this.patchTag);
         }
     }
 </script>
