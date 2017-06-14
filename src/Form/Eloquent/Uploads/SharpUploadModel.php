@@ -73,7 +73,9 @@ class SharpUploadModel extends Model
      */
     public function setAttribute($key, $value)
     {
+        dump("set $key");
         if(!$this->isRealAttribute($key)) {
+            dump("set CP $key");
             return $this->updateCustomProperty($key, $value);
         }
 
@@ -89,7 +91,7 @@ class SharpUploadModel extends Model
     {
         $properties = $this->custom_properties;
         $properties[$key] = $value;
-        $this->custom_properties = $properties;
+        $this->setAttribute("custom_properties", $properties);
 
         return $this;
     }
