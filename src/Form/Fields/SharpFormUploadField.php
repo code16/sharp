@@ -106,7 +106,7 @@ class SharpFormUploadField extends SharpFormField
     /**
      * @return string
      */
-    public function storageDisk(): string
+    public function storageDisk()
     {
         return $this->storageDisk;
     }
@@ -114,9 +114,17 @@ class SharpFormUploadField extends SharpFormField
     /**
      * @return string
      */
-    public function storageBasePath(): string
+    public function storageBasePath()
     {
         return $this->storageBasePath;
+    }
+
+    /**
+     * @return string
+     */
+    public function cropRatio()
+    {
+        return $this->cropRatio;
     }
 
 

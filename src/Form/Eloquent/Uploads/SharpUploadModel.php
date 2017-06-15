@@ -26,12 +26,24 @@ class SharpUploadModel extends Model
      */
     function setFileAttribute(array $value = null)
     {
-        if(!$value) return;
+        if(is_null($value)) {
+            // TODO delete
+        }
 
-        $this->setAttribute('file_name', $value["path"]);
-        $this->setAttribute('size', $value["size"]);
-        $this->setAttribute('mime_type', $value["mime"]);
-        $this->setAttribute('disk', $value["disk"]);
+        if(empty($value)) {
+            return;
+        }
+
+        if(isset($value["path"])) {
+            $this->setAttribute('file_name', $value["path"]);
+            $this->setAttribute('size', $value["size"]);
+            $this->setAttribute('mime_type', $value["mime"]);
+            $this->setAttribute('disk', $value["disk"]);
+        }
+
+        if($value["transformed"] ?? false && $this->exists) {
+            (new Thumbnail($this))->destroyAllThumbnails();
+        }
     }
 
     /**

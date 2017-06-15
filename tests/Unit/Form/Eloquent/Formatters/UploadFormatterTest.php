@@ -43,7 +43,8 @@ class UploadFormatterTest extends SharpFormEloquentBaseTest
                 "path" => "data/Test/{$file[0]}",
                 "size" => $file[1],
                 "mime" => "image/png",
-                "disk" => "local"
+                "disk" => "local",
+                "transformed" => false
             ],
             $formatter->format([
                 "name" => $file[0],
@@ -111,6 +112,34 @@ class UploadFormatterTest extends SharpFormEloquentBaseTest
         );
     }
 
+    /** @test */
+    function we_handle_crop_transformation_on_upload()
+    {
+        $file = $this->uploadedFile();
+        $formatter = app(UploadFormatter::class);
+
+        $formField = SharpFormUploadField::make("file")
+            ->setStorageDisk("local")
+            ->setStorageBasePath("data/Test")
+            ->setCropRatio("16:9");
+
+        $this->assertArraySubset([
+            "path" => "data/Test/{$file[0]}",
+            "transformed" => true
+        ],
+            $formatter->format([
+                "name" => $file[0],
+                "uploaded" => true,
+                "cropData" => [
+                    "height" => .8, "width" => .6, "x" => 0, "y" => .1,
+                ]
+            ], $formField, new Person)
+        );
+    }
+
+    /**
+     * @return array
+     */
     private function uploadedFile()
     {
         $file = (new \Illuminate\Http\Testing\FileFactory)->image("image.jpg", 600, 600);
