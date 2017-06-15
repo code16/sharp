@@ -34705,7 +34705,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         },
         onEditButtonClick: function onEditButtonClick() {
             this.showEditModal = true;
-            this.file.croppable = true;
+            this.croppable = true;
         },
         onEditModalShown: function onEditModalShown() {
             var _this2 = this;
