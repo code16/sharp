@@ -1,25 +1,42 @@
 $fa-font-path: '/vendor/sharp/fonts';
 @import "node_modules/font-awesome/scss/font-awesome";
 
+
+$css--reset: false;
+$css--typography:false;
+$css--font-face:false;
+
+@import 'node_modules/carbon-components/scss/components/loading/loading';
+
+
 //bootstrap-reboot include mixins and variables
-@import 'node_modules/bootstrap/scss/bootstrap-reboot';
+//@import 'node_modules/bootstrap/scss/bootstrap-reboot';
 
-// TODO : find a way to put this in `#sharp-app`
+@import 'node_modules/carbon-components/scss/globals/scss/css--body';
+@import 'node_modules/carbon-components/scss/globals/scss/layer';
 
-
+@import 'node_modules/bootstrap/scss/mixins/hover';
+@import 'node_modules/bootstrap/scss/mixins/grid';
+@import 'node_modules/bootstrap/scss/mixins/grid-framework';
+@import 'node_modules/bootstrap/scss/mixins/breakpoints';
+@import 'node_modules/bootstrap/scss/variables';
+@import 'node_modules/bootstrap/scss/reboot';
 
 #sharp-app {
   @import 'node_modules/bootstrap/scss/grid';
 
-  @import 'node_modules/bootstrap/scss/forms';
-  @import 'node_modules/bootstrap/scss/buttons';
-  @import 'node_modules/bootstrap/scss/progress';
-  @import 'node_modules/bootstrap/scss/list-group';
-  @import 'node_modules/bootstrap/scss/close';
-  @import 'node_modules/bootstrap/scss/nav';
-  @import 'node_modules/bootstrap/scss/modal';
-  @import 'node_modules/bootstrap/scss/dropdown';
-  @import 'node_modules/bootstrap/scss/card';
+  //@import 'node_modules/bootstrap/scss/forms';
+  //@import 'node_modules/bootstrap/scss/buttons';
+  //@import 'node_modules/bootstrap/scss/progress';
+  //@import 'node_modules/bootstrap/scss/list-group';
+  //@import 'node_modules/bootstrap/scss/close';
+  //@import 'node_modules/bootstrap/scss/nav';
+  //@import 'node_modules/bootstrap/scss/modal';
+  //@import 'node_modules/bootstrap/scss/dropdown';
+  //@import 'node_modules/bootstrap/scss/card';
+
+
+  // Carbon Components
 
   // overriding default vendor components style
   @import 'components/form/Multiselect';
@@ -42,6 +59,9 @@ $fa-font-path: '/vendor/sharp/fonts';
   @import 'components/Tabs';
   @import 'components/LocaleSelector';
 
+  @import 'components/Button';
+  @import 'components/Module';
+
 
   input[type="number"].hide-controls {
     &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
@@ -52,11 +72,21 @@ $fa-font-path: '/vendor/sharp/fonts';
   }
 }
 
+
 .modal-open {
   overflow: hidden;
-  .modal.show {
-    display: block!important;
-    overflow-x: hidden!important;
-    overflow-y: auto!important;
+  .modal {
+    &.show {
+      display: block!important;
+      overflow-x: hidden!important;
+      overflow-y: auto!important;
+    }
+  }
+}
+
+#glasspane {
+  display: none;
+  .bx--loading-overlay {
+    z-index: 9999;
   }
 }

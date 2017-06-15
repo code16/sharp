@@ -1,39 +1,46 @@
 <template>
     <div class="SharpList">
-        <div v-if="sortable && list.length" class="text-right">
-            <button type="button" class="btn btn-outline-primary" :class="{active:dragActive}" @click="toggleDrag">
+        <div v-if="sortable && list.length > 1" class="text-right">
+            <button type="button" class="SharpButton SharpButton--outline-primary" :class="{active:dragActive}" @click="toggleDrag">
                 {{dragActive ? 'Ok' : 'Trier'}}
             </button>
         </div>
-        <draggable :options="dragOptions" :list="list" class="list-group">
+        <draggable :options="dragOptions" :list="list">
             <transition-group name="expand" tag="div">
-                <li v-for="(listItemData, i) in list" :key="listItemData[indexSymbol]"
-                    class="SharpList__item list-group-item"
+                <div v-for="(listItemData, i) in list" :key="listItemData[indexSymbol]"
+                    class="SharpList__item
+                           SharpModule"
                     :class="{'SharpList__item--collapsed':collapsed}"
                 >
-                    <template v-if="collapsed">
-                        <sharp-template name="CollapsedItem" :template="collapsedItemTemplate" :template-data="collapsedItemData(listItemData)"></sharp-template>
-                    </template>
-                    <template v-else>
-                        <sharp-list-item :layout="fieldLayout.item" :error-identifier="i">
-                            <template scope="itemFieldLayout">
-                                <sharp-field-display :field-key="itemFieldLayout.key"
-                                                     :context-fields="itemFields"
-                                                     :context-data="listItemData"
-                                                     :error-identifier="itemFieldLayout.key"
-                                                     :update-data="update(i)"
-                                                     :locale="locale">
-                                </sharp-field-display>
+                    <div class="SharpModule__inner">
+                        <div class="SharpModule__content">
+
+                            <template v-if="collapsed && collapsedItemTemplate">
+                                <sharp-template name="CollapsedItem" :template="collapsedItemTemplate" :template-data="collapsedItemData(listItemData)"></sharp-template>
                             </template>
-                        </sharp-list-item>
-                        <button v-if="removable" class="btn-link" @click="remove(i)">{{removeText}}</button>
-                        <div v-if="i<list.length-1 && showAddButton" class="SharpList__new-item-zone">
-                            <button class="btn btn-secondary" @click="insertNewItem(i)">+</button>
+                            <template v-else>
+                                <sharp-list-item :layout="fieldLayout.item" :error-identifier="i">
+                                    <template scope="itemFieldLayout">
+                                        <sharp-field-display :field-key="itemFieldLayout.key"
+                                                             :context-fields="itemFields"
+                                                             :context-data="listItemData"
+                                                             :error-identifier="itemFieldLayout.key"
+                                                             :update-data="update(i)"
+                                                             :locale="locale">
+                                        </sharp-field-display>
+                                    </template>
+                                </sharp-list-item>
+                                <button v-if="removable" class="SharpButton SharpButton--danger" @click="remove(i)">{{removeText}}</button>
+                                <div v-if="i<list.length-1 && showAddButton" class="SharpList__new-item-zone">
+                                    <button class="SharpButton SharpButton--secondary" @click="insertNewItem(i)">+</button>
+                                </div>
+                            </template>
+
                         </div>
-                    </template>
-                </li>
+                    </div>
+                </div>
                 <button v-if="showAddButton" type="button" :key="-1"
-                        class="SharpList__add-button btn btn-secondary" style=""
+                        class="SharpList__add-button SharpButton SharpButton--secondary" style=""
                         @click="add">{{addText}}</button>
             </transition-group>
         </draggable>

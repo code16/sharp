@@ -226,7 +226,7 @@ let fields = {
     },
     myimage: {
         type: 'upload',
-        maxFileSize: 6,
+        maxFileSize: 300,
         fileFilter: ['.jpg','.jpeg','.png'],
         ratioX: 16,
         ratioY: 9,
@@ -248,7 +248,7 @@ let fields = {
         addable: true,
         removable: true,
         //maxItemCount:5,
-        collapsedItemTemplate:"{{ name && surname ? `${name} ${surname}` : `Nouvelle personne n°${$index}` }}",
+        //collapsedItemTemplate:"{{ name && surname ? `${name} ${surname}` : `Nouvelle personne n°${$index}` }}",
         templateProps: ['name','surname','age'],
         itemFields: {
             'name': {

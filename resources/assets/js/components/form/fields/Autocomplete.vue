@@ -2,7 +2,7 @@
     <div class="SharpAutocomplete" :class="[`SharpAutocomplete--${state}`,{'SharpAutocomplete--remote':isRemote}]">
         <div v-if="state=='valuated'" class="SharpAutocomplete__result-item form-control">
             <sharp-template name="ResultItem" :template="resultItemTemplate" :template-data="valueObject"></sharp-template>
-            <div class="SharpAutocomplete__close-btn-container" @click="handleResetClick">
+            <div class="SharpAutocomplete__close-btn--container" @click="handleResetClick">
                 <button type="button" class="close" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

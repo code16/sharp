@@ -1,0 +1,57 @@
+.SharpModule {
+  @include reset;
+
+  display: flex;
+  flex-direction: column;
+  padding: rem(10px);
+  flex: 1 0 auto;
+  margin: 0;
+
+  &__inner {
+    @include layer('raised');
+    background-color: $ui-01;
+    border: 1px solid transparent;
+
+    .SharpModule__header {
+      display: flex;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid $ui-04;
+
+      .SharpModule__title {
+        @include font-size('14');
+        @include font-smoothing;
+        letter-spacing: 0;
+        font-weight: 700;
+        color: $text-01;
+      }
+    }
+
+    .SharpModule__content {
+      display: flex;
+      flex-direction: column;
+      flex: 3;
+      padding: 1.5rem;
+
+      &--centered {
+        align-items: center;
+        justify-content: center;
+        padding: 5rem;
+      }
+
+      &--scrollable {
+        max-height: rem(300px);
+        overflow-y: scroll;
+        margin-bottom: 2rem;
+      }
+    }
+  }
+
+  &--single {
+    //max-width: rem(500px);
+  }
+
+  &--double {
+    //max-width: rem(1000px);
+  }
+}

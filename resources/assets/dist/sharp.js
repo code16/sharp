@@ -26307,18 +26307,25 @@ module.exports = function bind(fn, thisArg) {
             var _this = this;
 
             if (this.test) return;
-            return new Promise(function (resolve, reject) {
-                __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(_this.apiPath).then(function (_ref) {
-                    var data = _ref.data;
-
-                    _this.mount(data);
-                    _this.ready = true;
-                    resolve();
-                });
+            return __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(this.apiPath).then(function (response) {
+                _this.mount(response.data);
+                _this.ready = true;
+                return Promise.resolve(response);
+            }).catch(function (error) {
+                return Promise.reject(error);
             });
         },
         post: function post() {
-            return __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post(this.apiPath, this.data);
+            var _this2 = this;
+
+            this.glasspane.show();
+            return __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post(this.apiPath, this.data).then(function (response) {
+                _this2.glasspane.hide();
+                return Promise.resolve(response);
+            }).catch(function (error) {
+                _this2.glasspane.hide();
+                return Promise.reject(error);
+            });
         }
     }
 });
@@ -30581,12 +30588,16 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_
 new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
     el: "#sharp-app",
 
-    provide: function provide() {
-        return {
-            isSharp: true
-        };
+    provide: {
+        glasspane: {
+            show: function show() {
+                document.getElementById('glasspane').style.display = 'block';
+            },
+            hide: function hide() {
+                document.getElementById('glasspane').style.display = 'none';
+            }
+        }
     },
-
 
     components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_3__components_ActionView___default.a.name, __WEBPACK_IMPORTED_MODULE_3__components_ActionView___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_1__components_form_Form___default.a.name, __WEBPACK_IMPORTED_MODULE_1__components_form_Form___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_4__components_dashboard_Dashboard___default.a.name, __WEBPACK_IMPORTED_MODULE_4__components_dashboard_Dashboard___default.a), _components)
 });
@@ -32244,7 +32255,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     data: function data() {
         return {
             locales: null,
-            locale: ''
+            locale: '',
+
+            submitDisabled: false
         };
     },
     created: function created() {
@@ -32255,6 +32268,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
         this.actionsBus.$on('locale-changed', function (newLocale) {
             return _this.locale = newLocale;
+        });
+
+        this.actionsBus.$on('enable-submit', function (_) {
+            return _this.submitDisabled = false;
+        });
+        this.actionsBus.$on('disable-submit', function (_) {
+            return _this.submitDisabled = true;
         });
     }
 });
@@ -32811,7 +32831,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         submitButton: String
     },
 
-    inject: ['actionsBus'],
+    inject: ['actionsBus', 'glasspane'],
 
     provide: function provide() {
         return {
@@ -32891,6 +32911,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     created: function created() {
         this.init();
+        console.log(this);
     }
 });
 
@@ -33986,6 +34007,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -34604,6 +34632,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         bModal: __WEBPACK_IMPORTED_MODULE_2__vendor_bootstrap_vue_components_modal___default.a
     },
 
+    inject: ['actionsBus'],
+
     props: {
         ratioX: Number,
         ratioY: Number,
@@ -34659,12 +34689,16 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         onStatusAdded: function onStatusAdded() {
             this.showProgressBar = true;
             this.$emit('reset');
+
+            this.actionsBus.$emit('disable-submit');
         },
         onStatusError: function onStatusError() {
             this.showProgressBar = false;
             var msg = this.file.errorMessage;
             this.remove();
             this.$emit('error', msg);
+
+            this.actionsBus.$emit('enable-submit');
         },
         onStatusSuccess: function onStatusSuccess() {
             var _this = this;
@@ -34682,6 +34716,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
             data.uploaded = true;
             this.$parent.$emit('input', data);
+            this.actionsBus.$emit('enable-submit');
+
             this.croppable = true;
             this.$nextTick(function (_) {
                 _this.isCropperReady() && _this.onCropperReady();
@@ -35974,7 +36010,7 @@ var fields = {
     },
     myimage: {
         type: 'upload',
-        maxFileSize: 6,
+        maxFileSize: 300,
         fileFilter: ['.jpg', '.jpeg', '.png'],
         ratioX: 16,
         ratioY: 9,
@@ -35996,7 +36032,7 @@ var fields = {
         addable: true,
         removable: true,
         //maxItemCount:5,
-        collapsedItemTemplate: "{{ name && surname ? `${name} ${surname}` : `Nouvelle personne n°${$index}` }}",
+        //collapsedItemTemplate:"{{ name && surname ? `${name} ${surname}` : `Nouvelle personne n°${$index}` }}",
         templateProps: ['name', 'surname', 'age'],
         itemFields: {
             'name': {
@@ -75524,7 +75560,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }) : _vm._e()], 1), _vm._v(" "), _c('template', {
     slot: "right"
   }, [_c('button', {
-    staticClass: "btn btn-primary",
+    staticClass: "SharpButton SharpButton--primary",
+    attrs: {
+      "disabled": _vm.submitDisabled
+    },
     on: {
       "click": function($event) {
         _vm.emitAction('main-button-clicked')
@@ -76335,10 +76374,10 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "SharpList"
-  }, [(_vm.sortable && _vm.list.length) ? _c('div', {
+  }, [(_vm.sortable && _vm.list.length > 1) ? _c('div', {
     staticClass: "text-right"
   }, [_c('button', {
-    staticClass: "btn btn-outline-primary",
+    staticClass: "SharpButton SharpButton--outline-primary",
     class: {
       active: _vm.dragActive
     },
@@ -76349,7 +76388,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "click": _vm.toggleDrag
     }
   }, [_vm._v("\n            " + _vm._s(_vm.dragActive ? 'Ok' : 'Trier') + "\n        ")])]) : _vm._e(), _vm._v(" "), _c('draggable', {
-    staticClass: "list-group",
     attrs: {
       "options": _vm.dragOptions,
       "list": _vm.list
@@ -76360,13 +76398,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "tag": "div"
     }
   }, [_vm._l((_vm.list), function(listItemData, i) {
-    return _c('li', {
+    return _c('div', {
       key: listItemData[_vm.indexSymbol],
-      staticClass: "SharpList__item list-group-item",
+      staticClass: "SharpList__item\n                       SharpModule",
       class: {
         'SharpList__item--collapsed': _vm.collapsed
       }
-    }, [(_vm.collapsed) ? [_c('sharp-template', {
+    }, [_c('div', {
+      staticClass: "SharpModule__inner"
+    }, [_c('div', {
+      staticClass: "SharpModule__content"
+    }, [(_vm.collapsed && _vm.collapsedItemTemplate) ? [_c('sharp-template', {
       attrs: {
         "name": "CollapsedItem",
         "template": _vm.collapsedItemTemplate,
@@ -76392,7 +76434,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }]
       ])
     }), _vm._v(" "), (_vm.removable) ? _c('button', {
-      staticClass: "btn-link",
+      staticClass: "SharpButton SharpButton--danger",
       on: {
         "click": function($event) {
           _vm.remove(i)
@@ -76401,16 +76443,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }, [_vm._v(_vm._s(_vm.removeText))]) : _vm._e(), _vm._v(" "), (i < _vm.list.length - 1 && _vm.showAddButton) ? _c('div', {
       staticClass: "SharpList__new-item-zone"
     }, [_c('button', {
-      staticClass: "btn btn-secondary",
+      staticClass: "SharpButton SharpButton--secondary",
       on: {
         "click": function($event) {
           _vm.insertNewItem(i)
         }
       }
-    }, [_vm._v("+")])]) : _vm._e()]], 2)
+    }, [_vm._v("+")])]) : _vm._e()]], 2)])])
   }), _vm._v(" "), (_vm.showAddButton) ? _c('button', {
     key: -1,
-    staticClass: "SharpList__add-button btn btn-secondary",
+    staticClass: "SharpList__add-button SharpButton SharpButton--secondary",
     attrs: {
       "type": "button"
     },
@@ -76862,7 +76904,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       expression: "!file"
     }]
   }, [_c('button', {
-    staticClass: "dz-message btn btn-primary",
+    staticClass: "dz-message SharpButton SharpButton--primary",
     attrs: {
       "type": "button"
     }
@@ -76898,7 +76940,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "aria-valuemax": "100"
     }
   })])]), _vm._v(" "), (!!_vm.originalImageSrc) ? _c('div', [_c('button', {
-    staticClass: "btn btn-secondary",
+    staticClass: "SharpButton SharpButton--secondary",
     attrs: {
       "type": "button"
     },
@@ -76958,7 +77000,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "alt": "Source image"
     }
   }), _vm._v(" "), _c('button', {
-    staticClass: "btn btn-primary",
+    staticClass: "SharpButton SharpButton--primary",
     on: {
       "click": function($event) {
         _vm.rotate(90)
@@ -76967,7 +77009,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('i', {
     staticClass: "fa fa-rotate-right"
   })]), _vm._v(" "), _c('button', {
-    staticClass: "btn btn-primary",
+    staticClass: "SharpButton SharpButton--primary",
     on: {
       "click": function($event) {
         _vm.rotate(-90)
@@ -77201,7 +77243,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "template-data": _vm.valueObject
     }
   }), _vm._v(" "), _c('div', {
-    staticClass: "SharpAutocomplete__close-btn-container",
+    staticClass: "SharpAutocomplete__close-btn--container",
     on: {
       "click": _vm.handleResetClick
     }

@@ -2,7 +2,7 @@
     <div class="form-control">
         <form class="SharpUpload dropzone">
             <div v-show="!file">
-                <button type="button" class="dz-message btn btn-primary">Importer...</button>
+                <button type="button" class="dz-message SharpButton SharpButton--primary">Importer...</button>
             </div>
             <template v-if="file">
                 <div class="SharpUpload__container">
@@ -19,7 +19,7 @@
                             </div>
                         </div>
                         <div v-if="!!originalImageSrc">
-                            <button type="button" class="btn btn-secondary" @click="onEditButtonClick">Modifier</button>
+                            <button type="button" class="SharpButton SharpButton--secondary" @click="onEditButtonClick">Modifier</button>
                         </div>
                     </div>
                 </div>
@@ -43,8 +43,8 @@
                              :ready="onCropperReady"
                              alt="Source image">
                 </vue-cropper>
-                <button class="btn btn-primary" @click="rotate(90)"><i class="fa fa-rotate-right"></i></button>
-                <button class="btn btn-primary" @click="rotate(-90)"><i class="fa fa-rotate-left"></i></button>
+                <button class="SharpButton SharpButton--primary" @click="rotate(90)"><i class="fa fa-rotate-right"></i></button>
+                <button class="SharpButton SharpButton--primary" @click="rotate(-90)"><i class="fa fa-rotate-left"></i></button>
             </b-modal>
         </template>
     </div>
@@ -67,6 +67,8 @@
         components: {
             bModal
         },
+
+        inject : ['actionsBus'],
 
         props: {
             ratioX: Number,
@@ -120,12 +122,16 @@
             onStatusAdded() {
                 this.showProgressBar = true;
                 this.$emit('reset');
+
+                this.actionsBus.$emit('disable-submit');
             },
             onStatusError() {
                 this.showProgressBar = false;
                 let msg = this.file.errorMessage;
                 this.remove();
                 this.$emit('error', msg);
+
+                this.actionsBus.$emit('enable-submit');
             },
             onStatusSuccess() {
                 setTimeout(() => this.showProgressBar = false, 1000);
@@ -138,6 +144,8 @@
 
                 data.uploaded = true;
                 this.$parent.$emit('input',data);
+                this.actionsBus.$emit('enable-submit');
+
                 this.croppable = true;
                 this.$nextTick(_=>{
                     this.isCropperReady() && this.onCropperReady();
