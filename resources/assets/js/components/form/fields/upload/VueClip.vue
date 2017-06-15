@@ -162,7 +162,7 @@
 
             onEditButtonClick() {
                 this.showEditModal = true;
-                this.file.croppable = true;
+                this.croppable = true;
             },
 
             onEditModalShown() {
