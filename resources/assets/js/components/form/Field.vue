@@ -22,7 +22,7 @@
             updateData: Function
         },
         mounted() {
-            //console.log(this);
+            console.log(this);
         },
         render(h) {
             if(!(this.fieldType in fieldCompName)) {
@@ -44,6 +44,9 @@
                 on: {
                     input: val => {
                         this.updateData(this.fieldKey,val);
+                    },
+                    blur: _ => {
+                        this.fieldProps.focused = false;
                     }
                 }
             });

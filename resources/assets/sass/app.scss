@@ -12,31 +12,27 @@ $css--font-face:false;
 //bootstrap-reboot include mixins and variables
 //@import 'node_modules/bootstrap/scss/bootstrap-reboot';
 
-@import 'node_modules/carbon-components/scss/globals/scss/css--body';
 @import 'node_modules/carbon-components/scss/globals/scss/layer';
+@import 'node_modules/carbon-components/scss/globals/scss/typography';
+@import 'node_modules/carbon-components/scss/globals/scss/helper-mixins';
+@import 'node_modules/carbon-components/scss/globals/scss/layout';
 
 @import 'node_modules/bootstrap/scss/mixins/hover';
 @import 'node_modules/bootstrap/scss/mixins/grid';
 @import 'node_modules/bootstrap/scss/mixins/grid-framework';
 @import 'node_modules/bootstrap/scss/mixins/breakpoints';
 @import 'node_modules/bootstrap/scss/variables';
+@import 'node_modules/bootstrap/scss/normalize';
 @import 'node_modules/bootstrap/scss/reboot';
 
+
 #sharp-app {
+  @include reset;
+  color: $text-01;
+  background-color: $ui-02;
+  line-height: 1;
+
   @import 'node_modules/bootstrap/scss/grid';
-
-  //@import 'node_modules/bootstrap/scss/forms';
-  //@import 'node_modules/bootstrap/scss/buttons';
-  //@import 'node_modules/bootstrap/scss/progress';
-  //@import 'node_modules/bootstrap/scss/list-group';
-  //@import 'node_modules/bootstrap/scss/close';
-  //@import 'node_modules/bootstrap/scss/nav';
-  //@import 'node_modules/bootstrap/scss/modal';
-  //@import 'node_modules/bootstrap/scss/dropdown';
-  //@import 'node_modules/bootstrap/scss/card';
-
-
-  // Carbon Components
 
   // overriding default vendor components style
   @import 'components/form/Multiselect';
@@ -53,6 +49,8 @@ $css--font-face:false;
   @import 'components/form/Modal';
   @import 'components/form/FieldContainer';
   @import 'components/form/Tags';
+  @import 'components/form/Text';
+  @import 'components/form/Check';
 
   @import 'components/ActionView';
   @import 'components/ActionBar';
@@ -61,6 +59,7 @@ $css--font-face:false;
 
   @import 'components/Button';
   @import 'components/Module';
+  @import 'components/Dropdown';
 
 
   input[type="number"].hide-controls {

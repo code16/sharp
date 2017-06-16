@@ -23,6 +23,7 @@
     transition-timing-function: ease-in;
   }
 
+  @include reset;
   @include font-smoothing;
   //@include letter-spacing;
   cursor: pointer;

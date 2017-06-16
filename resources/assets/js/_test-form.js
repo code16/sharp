@@ -267,6 +267,7 @@ let fields = {
     },
     date:{
         type:'date',
+        label:'date',
         hasTime:true,
         stepTime:20,
         minTime:'8:20'

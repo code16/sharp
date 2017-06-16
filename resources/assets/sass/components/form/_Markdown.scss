@@ -1,5 +1,10 @@
+@import '../Module';
+
 .SharpMarkdown {
-  .CodeMirror {
-    //height: 300px;
+  @extend .SharpModule;
+
+  .editor-toolbar {
+    @extend .SharpModule__header;
   }
+
 }

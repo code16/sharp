@@ -1,6 +1,6 @@
 <template>
     <div class="SharpSelect">
-        <multiselect v-if="display==='dropdown'"
+        <sharp-multiselect v-if="display==='dropdown'"
                      :value="value"
                      :searchable="false"
                      :options="multiselectOptions"
@@ -15,7 +15,7 @@
                 <div slot="carret" @mousedown.stop.prevent="remove()" class="SharpSelect__remove-btn close"></div>
             </template>
             <template slot="maxElements">{{maxText}}</template>
-        </multiselect>
+        </sharp-multiselect>
         <div v-else>
             <template v-if="multiple">
                 <sharp-check v-for="option in options" :value="checked(option.id)" @input="c=>handleCheckboxChanged(c,option.id)"
@@ -34,13 +34,13 @@
 </template>
 
 <script>
-    import Multiselect from 'vue-multiselect';
+    import Multiselect from '../../Multiselect';
     import SharpCheck from './Check.vue';
 
     export default {
         name:'SharpSelect',
         components: {
-            Multiselect,
+            [Multiselect.name]:Multiselect,
             SharpCheck
         },
 

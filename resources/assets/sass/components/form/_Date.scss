@@ -1,5 +1,11 @@
+@import "./Text";
+
 .SharpDate {
   position: relative;
+
+  &__input {
+    @extend .SharpText;
+  }
 
   &__picker {
     position: absolute;
