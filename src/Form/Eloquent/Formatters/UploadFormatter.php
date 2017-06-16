@@ -172,10 +172,10 @@ class UploadFormatter
         $img = $this->imageManager->make($fileContent);
 
         $img->crop(
-            (int)$img->width() * $cropData["width"],
-            (int)$img->height() * $cropData["height"],
-            (int)$img->width() * $cropData["x"],
-            (int)$img->height() * $cropData["y"]
+            intval(round($img->width() * $cropData["width"])),
+            intval(round($img->height() * $cropData["height"])),
+            intval(round($img->width() * $cropData["x"])),
+            intval(round($img->height() * $cropData["y"]))
         );
 
         return $img->encode();
