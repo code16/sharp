@@ -194,10 +194,22 @@
             },
 
             updateCropData() {
+
+                let cropData = this.getCropData();
+                let imgData = this.getImageData();
+
+                let relativeData = {
+                    width: cropData.width / imgData.naturalWidth,
+                    height: cropData.height / imgData.naturalHeight,
+                    x: cropData.x / imgData.naturalWidth,
+                    y: cropData.y / imgData.naturalHeight,
+                    rotate: cropData.rotate
+                };
+
                 if(this.croppable) {
                     this.$parent.$emit('input', {
                         ...this.value,
-                        cropData: this.getCropData(),
+                        cropData: relativeData,
                     });
                 }
             },
@@ -210,6 +222,10 @@
 
             getCropData() {
                 return this.$refs.cropper.getData(true);
+            },
+
+            getImageData() {
+                return this.$refs.cropper.getImageData();
             },
 
             rotate(degree) {
