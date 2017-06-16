@@ -15,7 +15,7 @@ mix.autoload({})
     .styles([
         'resources/assets/dist/.bin/sharp-app.css',
         //'node_modules/vue-multiselect/dist/vue-multiselect.min.css',
-        //'node_modules/simplemde/dist/simplemde.min.css',
+        'node_modules/simplemde/dist/simplemde.min.css',
     ], 'resources/assets/dist/sharp.css')
     .webpackConfig({
         plugins: [

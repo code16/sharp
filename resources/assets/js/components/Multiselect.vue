@@ -12,7 +12,8 @@
                     </svg>`
                 }, {
                     slot:'carret'
-                })
+                }),
+                ...ctx.children
             ])
         }
     }

@@ -1,5 +1,5 @@
 <template>
-    <multiselect class="SharpTags"
+    <sharp-multiselect class="SharpTags"
                  :value="tags"
                  :options="indexedOptions"
                  :placeholder="placeholder"
@@ -16,11 +16,11 @@
                  @tag="handleNewTag"
                  ref="multiselect">
         <template slot="maxElements">{{maxText}}</template>
-    </multiselect>
+    </sharp-multiselect>
 </template>
 
 <script>
-    import Multiselect from 'vue-multiselect';
+    import Multiselect from '../../Multiselect';
 
     class LabelledItem {
         constructor(item) {
@@ -37,7 +37,7 @@
     export default {
         name:'SharpTags',
         components: {
-            Multiselect
+            [Multiselect.name]:Multiselect
         },
         props : {
             value:Array,
