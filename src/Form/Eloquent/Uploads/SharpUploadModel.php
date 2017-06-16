@@ -26,15 +26,18 @@ class SharpUploadModel extends Model
      */
     function setFileAttribute(array $value = null)
     {
-        if(is_null($value)) {
-            // TODO delete
+        if(is_null($value) && $this->exists) {
+            $value = [
+                'path' => null, 'size' => null,
+                'mime' => null, 'disk' => null
+            ];
         }
 
         if(empty($value)) {
             return;
         }
 
-        if(isset($value["path"])) {
+        if(array_key_exists("path", $value)) {
             $this->setAttribute('file_name', $value["path"]);
             $this->setAttribute('size', $value["size"]);
             $this->setAttribute('mime_type', $value["mime"]);
@@ -47,15 +50,16 @@ class SharpUploadModel extends Model
     }
 
     /**
-     * @return array
+     * @return array|null
      */
     function getFileAttribute()
     {
-        return [
+        $filename = $this->getAttribute("file_name");
+        return $filename ? [
             "name" => $this->getAttribute("file_name"),
             "thumbnail" => $this->thumbnail(null, 150),
             "size" => $this->getAttribute("size"),
-        ];
+        ] : null;
     }
 
     /**

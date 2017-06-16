@@ -7,6 +7,7 @@ use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Testing\FileFactory;
 use Illuminate\Support\Facades\File;
 
 class UploadFormatterTest extends SharpFormEloquentBaseTest
@@ -142,7 +143,7 @@ class UploadFormatterTest extends SharpFormEloquentBaseTest
      */
     private function uploadedFile()
     {
-        $file = (new \Illuminate\Http\Testing\FileFactory)->image("image.jpg", 600, 600);
+        $file = (new FileFactory)->image("image.png", 600, 600);
 
         return [
             basename($file->store("tmp")),

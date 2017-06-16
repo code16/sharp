@@ -90,7 +90,7 @@ class UploadFormatter
         }
 
         // No change made
-        return [];
+        return is_null($value) ? null : [];
     }
 
     /**
