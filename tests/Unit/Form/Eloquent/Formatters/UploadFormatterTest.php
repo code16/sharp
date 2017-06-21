@@ -28,6 +28,7 @@ class UploadFormatterTest extends SharpFormEloquentBaseTest
         ]]);
 
         File::deleteDirectory(storage_path("app/tmp"));
+        File::deleteDirectory(storage_path("app/data"));
     }
 
     /** @test */
@@ -137,6 +138,26 @@ class UploadFormatterTest extends SharpFormEloquentBaseTest
             ], $formField, new Person)
         );
     }
+
+//    /** @test */
+//    function upload_files_are_deleted_on_remove()
+//    {
+//        $fileName = $this->uploadedFile()[0];
+//        $formatter = app(UploadFormatter::class);
+//
+//        $formField = SharpFormUploadField::make("file")
+//            ->setStorageDisk("local")
+//            ->setStorageBasePath("data/Test");
+//
+//        $formatter->format([
+//            "name" => $fileName,
+//            "uploaded" => true
+//        ], $formField, new Person);
+//
+//        $formatter->format(null, $formField, new Person);
+//
+//        $this->assertFalse(file_exists(storage_path("app/data/Test/$fileName")));
+//    }
 
     /**
      * @return array
