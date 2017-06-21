@@ -171,6 +171,10 @@ class UploadFormatter
     {
         $img = $this->imageManager->make($fileContent);
 
+        if($cropData["rotate"]) {
+            $img->rotate($cropData["rotate"]);
+        }
+
         $img->crop(
             intval(round($img->width() * $cropData["width"])),
             intval(round($img->height() * $cropData["height"])),
