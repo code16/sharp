@@ -43,8 +43,8 @@
                              :ready="onCropperReady"
                              alt="Source image">
                 </vue-cropper>
-                <button class="btn btn-primary" @click="rotate(90)"><i class="fa fa-rotate-right"></i></button>
                 <button class="btn btn-primary" @click="rotate(-90)"><i class="fa fa-rotate-left"></i></button>
+                <button class="btn btn-primary" @click="rotate(90)"><i class="fa fa-rotate-right"></i></button>
             </b-modal>
         </template>
     </div>
@@ -203,7 +203,7 @@
                     height: cropData.height / imgData.naturalHeight,
                     x: cropData.x / imgData.naturalWidth,
                     y: cropData.y / imgData.naturalHeight,
-                    rotate: cropData.rotate
+                    rotate: cropData.rotate * -1
                 };
 
                 if(this.croppable) {
