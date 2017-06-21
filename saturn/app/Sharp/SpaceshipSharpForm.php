@@ -100,6 +100,7 @@ class SpaceshipSharpForm extends SharpForm
                 ->setLabel("Additional pictures")
                 ->setAddable()->setAddText("Add a picture")
                 ->setRemovable()
+                ->setSortable()
                 ->setItemIdAttribute("id")
                 ->addItemField(
                     SharpFormUploadField::make("file")

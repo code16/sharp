@@ -5,6 +5,7 @@ namespace Code16\Sharp\Form\Eloquent\Uploads\Thumbnails;
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\FilesystemManager;
+use Illuminate\Support\Facades\File;
 use Intervention\Image\Exception\NotReadableException;
 use Intervention\Image\ImageManager;
 
@@ -53,6 +54,14 @@ class Thumbnail
             basename($this->uploadModel->file_name),
             $width, $height, $filters, $quality
         );
+    }
+
+    public function destroyAllThumbnails()
+    {
+        $thumbnailPath = config("sharp.uploads.thumbnails_dir");
+        $destinationRelativeBasePath = dirname($this->uploadModel->file_name);
+
+        File::deleteDirectory(public_path("$thumbnailPath/$destinationRelativeBasePath"), true);
     }
 
     /**
@@ -116,10 +125,10 @@ class Thumbnail
                 $sourceImg->save($thumbFile, $quality);
 
             } catch(FileNotFoundException $ex) {
-                throw $ex;
+                return null;
 
             } catch(NotReadableException $ex) {
-                throw $ex;
+                return null;
             }
         }
 

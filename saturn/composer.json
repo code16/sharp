@@ -39,12 +39,10 @@
       "php artisan key:generate"
     ],
     "post-install-cmd": [
-      "rm -rf vendor/code16/sharp && ln -s ../ vendor/code16/sharp",
       "Illuminate\\Foundation\\ComposerScripts::postInstall",
       "php artisan optimize"
     ],
     "post-update-cmd": [
-      "rm -rf vendor/code16/sharp && ln -s ../ vendor/code16/sharp",
       "Illuminate\\Foundation\\ComposerScripts::postUpdate",
       "php artisan optimize"
     ]

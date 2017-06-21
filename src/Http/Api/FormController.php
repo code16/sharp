@@ -50,7 +50,7 @@ class FormController extends Controller
 
         $form = $this->getFormInstance($entityKey);
 
-        $form->update($instanceId, request()->intersect($form->getFieldKeys()));
+        $form->update($instanceId, $this->requestData($form));
 
         return response()->json(["ok" => true]);
     }
@@ -90,5 +90,16 @@ class FormController extends Controller
             // Validation is automatically called (FormRequest)
             app($validatorClass);
         }
+    }
+
+    /**
+     * @param $form
+     * @return array
+     */
+    protected function requestData($form): array
+    {
+        return collect(request()->all())->filter(function ($item, $key) use ($form) {
+            return in_array($key, $form->getFieldKeys());
+        })->all();
     }
 }

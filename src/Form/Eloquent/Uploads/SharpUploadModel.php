@@ -26,24 +26,40 @@ class SharpUploadModel extends Model
      */
     function setFileAttribute(array $value = null)
     {
-        if(!$value) return;
+        if(is_null($value) && $this->exists) {
+            $value = [
+                'path' => null, 'size' => null,
+                'mime' => null, 'disk' => null
+            ];
+        }
 
-        $this->setAttribute('file_name', $value["path"]);
-        $this->setAttribute('size', $value["size"]);
-        $this->setAttribute('mime_type', $value["mime"]);
-        $this->setAttribute('disk', $value["disk"]);
+        if(empty($value)) {
+            return;
+        }
+
+        if(array_key_exists("path", $value)) {
+            $this->setAttribute('file_name', $value["path"]);
+            $this->setAttribute('size', $value["size"]);
+            $this->setAttribute('mime_type', $value["mime"]);
+            $this->setAttribute('disk', $value["disk"]);
+        }
+
+        if($value["transformed"] ?? false && $this->exists) {
+            (new Thumbnail($this))->destroyAllThumbnails();
+        }
     }
 
     /**
-     * @return array
+     * @return array|null
      */
     function getFileAttribute()
     {
-        return [
+        $filename = $this->getAttribute("file_name");
+        return $filename ? [
             "name" => $this->getAttribute("file_name"),
-            "thumbnail" => $this->thumbnail(200, 200),
+            "thumbnail" => $this->thumbnail(null, 150),
             "size" => $this->getAttribute("size"),
-        ];
+        ] : null;
     }
 
     /**
@@ -52,8 +68,9 @@ class SharpUploadModel extends Model
     function toArray()
     {
         return [
+            "id" => $this->getAttribute("id"),
             "file" => $this->getFileAttribute()
-        ] + $this->getAttribute("custom_properties");
+        ] + $this->getAttribute("custom_properties") ?? [];
     }
 
 

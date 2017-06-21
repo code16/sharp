@@ -7,6 +7,7 @@ use Code16\Sharp\Utils\FileUtil;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Filesystem\FilesystemManager;
+use Intervention\Image\ImageManager;
 
 class UploadFormatter
 {
@@ -21,20 +22,26 @@ class UploadFormatter
     private $fileUtil;
 
     /**
+     * @var ImageManager
+     */
+    private $imageManager;
+
+    /**
      * @param FilesystemManager $filesystem
      * @param FileUtil $uploadUtil
      */
-    public function __construct(FilesystemManager $filesystem, FileUtil $uploadUtil)
+    public function __construct(FilesystemManager $filesystem, FileUtil $uploadUtil, ImageManager $imageManager)
     {
         $this->filesystem = $filesystem;
         $this->fileUtil = $uploadUtil;
+        $this->imageManager = $imageManager;
     }
 
     /**
      * @param $value
      * @param SharpFormUploadField $field
      * @param Model $instance
-     * @return mixed
+     * @return array
      */
     public function format($value, SharpFormUploadField $field, Model $instance)
     {
@@ -46,32 +53,63 @@ class UploadFormatter
                 $value["name"]
             );
 
+            if($transformed = $this->isTransformed($value, $field)) {
+                // Handle transformations on the uploads disk for performance
+                $fileContent = $this->handleImageTransformations($fileContent, $value["cropData"]);
+            }
+
             $storedFileName = $this->getStoragePath($value["name"], $field, $instance);
 
             $this->filesystem->disk($field->storageDisk())->put(
                 $storedFileName, $fileContent
             );
 
-            // TODO : handle transformations (crop and rotations)
-
             return [
                 "path" => $storedFileName,
                 "size" => $this->filesystem->disk($field->storageDisk())->size($storedFileName),
                 "mime" => $this->filesystem->disk($field->storageDisk())->mimeType($storedFileName),
-                "disk" => $field->storageDisk()
+                "disk" => $field->storageDisk(),
+                "transformed" => $transformed
             ];
         }
 
-        return null;
+        if($this->isTransformed($value, $field)) {
+            // Just transform image, without updating value in DB
+            $fileContent = $this->filesystem->disk($field->storageDisk())->get(
+                $value["name"]
+            );
+
+            $this->filesystem->disk($field->storageDisk())->put(
+                $value["name"],
+                $this->handleImageTransformations($fileContent, $value["cropData"])
+            );
+
+            return [
+                "transformed" => true
+            ];
+        }
+
+        // No change made
+        return is_null($value) ? null : [];
     }
 
     /**
-     * @param $value
+     * @param array $value
      * @return bool
      */
     protected function isUploaded($value): bool
     {
         return isset($value["uploaded"]) && $value["uploaded"];
+    }
+
+    /**
+     * @param array $value
+     * @param SharpFormUploadField $field
+     * @return bool
+     */
+    protected function isTransformed($value, SharpFormUploadField $field): bool
+    {
+        return isset($value["cropData"]) && $field->cropRatio();
     }
 
     /**
@@ -122,5 +160,24 @@ class UploadFormatter
         }
 
         return $basePath;
+    }
+
+    /**
+     * @param $fileContent
+     * @param array $cropData
+     * @return \Intervention\Image\Image
+     */
+    protected function handleImageTransformations($fileContent, array $cropData)
+    {
+        $img = $this->imageManager->make($fileContent);
+
+        $img->crop(
+            intval(round($img->width() * $cropData["width"])),
+            intval(round($img->height() * $cropData["height"])),
+            intval(round($img->width() * $cropData["x"])),
+            intval(round($img->height() * $cropData["y"]))
+        );
+
+        return $img->encode();
     }
 }
