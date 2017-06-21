@@ -1,10 +1,7 @@
-@import '../Module';
+
 
 .SharpMarkdown {
   @extend .SharpModule;
-  @extend .SharpModule__inner;
-
-  padding:0 !important;
 
   .editor-toolbar {
     @extend .SharpModule__header;
@@ -16,6 +13,7 @@
     @extend .SharpModule__content;
     border: none;
     border-radius: 0;
+    padding: 1rem !important;
   }
 
 }

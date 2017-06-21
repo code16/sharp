@@ -8,9 +8,9 @@
 </head>
 <body>
     <div id="glasspane">
-        <div class="bx--loading-overlay">
-            <div data-loading class="bx--loading">
-                <svg class="bx--loading__svg" viewBox="-75 -75 150 150">
+        <div class="SharpLoading__overlay">
+            <div data-loading class="SharpLoading__container">
+                <svg class="SharpLoading__svg" viewBox="-75 -75 150 150">
                     <circle cx="0" cy="0" r="37.5" />
                 </svg>
             </div>

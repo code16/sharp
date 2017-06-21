@@ -1,5 +1,6 @@
+
+
 .SharpList {
-  position:relative;
   &__add-button {
     width:100%;
     /*&--no-transition {
@@ -8,7 +9,14 @@
     transition: unset;
   }
 
+  .SharpButton {
+    align-self: center;
+  }
+
   &__item {
+    @extend .SharpModule;
+    position: relative;
+
     &.expand-enter-active {
       transition: all 400ms;
     }
@@ -48,7 +56,7 @@
     button {
       padding-top:0;
       padding-bottom: 0;
-      height:2em;
+      height:100%
     }
   }
 }

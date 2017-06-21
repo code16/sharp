@@ -32860,6 +32860,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -33938,8 +33939,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
 
 
 
@@ -34125,6 +34124,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__MarkdownUpload___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__MarkdownUpload__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_codemirror__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_codemirror___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_codemirror__);
+//
+//
 //
 //
 //
@@ -34488,6 +34489,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__rotate__ = __webpack_require__(233);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+//
+//
 //
 //
 //
@@ -35757,11 +35760,11 @@ var fields = {
     },
     show_upload_1: {
         type: 'check',
-        label: "Appuyer pour afficher l'upload"
+        text: "Appuyer pour afficher l'upload"
     },
     show_upload_2: {
         type: 'check',
-        label: "Ou ici"
+        text: "Ou ici"
     },
     myimage: {
         type: 'upload',
@@ -75931,7 +75934,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
   }, [_vm._l((_vm.list), function(listItemData, i) {
     return _vm._c('div', {
       key: listItemData[_vm.indexSymbol],
-      staticClass: "SharpList__item\n                       SharpModule",
+      staticClass: "SharpList__item",
       class: {
         'SharpList__item--collapsed': _vm.collapsed
       }
@@ -75965,13 +75968,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
         }]
       ])
     }), _vm._v(" "), (_vm.removable) ? _vm._c('button', {
-      staticClass: "SharpButton SharpButton--danger",
+      staticClass: "SharpButton SharpButton--danger SharpButton--sm",
       on: {
         "click": function($event) {
           _vm.remove(i)
         }
       }
-    }, [_vm._v(_vm._s(_vm.removeText))]) : _vm._e(), _vm._v(" "), (i < _vm.list.length - 1 && _vm.showAddButton) ? _vm._c('div', {
+    }, [_vm._v(_vm._s(_vm.removeText))]) : _vm._e()]], 2)]), _vm._v(" "), (i < _vm.list.length - 1 && _vm.showAddButton && !_vm.collapsed) ? _vm._c('div', {
       staticClass: "SharpList__new-item-zone"
     }, [_vm._c('button', {
       staticClass: "SharpButton SharpButton--secondary",
@@ -75980,7 +75983,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
           _vm.insertNewItem(i)
         }
       }
-    }, [_vm._v("+")])]) : _vm._e()]], 2)])])
+    }, [_vm._v("Insert")])]) : _vm._e()])
   }), _vm._v(" "), (_vm.showAddButton) ? _vm._c('button', {
     key: -1,
     staticClass: "SharpList__add-button SharpButton SharpButton--secondary",
@@ -76295,9 +76298,11 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
   return _vm._c('div', {
     staticClass: "SharpMarkdown"
+  }, [_vm._c('div', {
+    staticClass: "SharpModule__inner"
   }, [_vm._c('textarea', {
     ref: "textarea"
-  })])
+  })])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -76461,21 +76466,29 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
       "click": _vm.onEditButtonClick
     }
   }, [_vm._v("Modifier")])]) : _vm._e()])]), _vm._v(" "), _vm._t("removeButton"), _vm._v(" "), (!_vm.$slots.removeButton) ? [_vm._c('button', {
-    staticClass: "close",
+    staticClass: "SharpUpload__close-button",
     attrs: {
-      "type": "button",
-      "aria-label": "Close"
+      "type": "button"
     },
     on: {
       "click": function($event) {
         _vm.remove()
       }
     }
-  }, [_vm._c('span', {
+  }, [_vm._c('svg', {
+    staticClass: "SharpUpload__close-icon",
     attrs: {
-      "aria-hidden": "true"
+      "aria-label": "close",
+      "width": "10",
+      "height": "10",
+      "viewBox": "0 0 10 10",
+      "fill-rule": "evenodd"
     }
-  }, [_vm._v("×")])])] : _vm._e()] : _vm._e(), _vm._v(" "), _vm._c('div', {
+  }, [_vm._c('path', {
+    attrs: {
+      "d": "M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"
+    }
+  })])])] : _vm._e()] : _vm._e(), _vm._v(" "), _vm._c('div', {
     ref: "clip-preview-template",
     staticClass: "clip-preview-template",
     staticStyle: {
@@ -76712,19 +76725,35 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
       'SharpAutocomplete--remote': _vm.isRemote
     }]
   }, [(_vm.state == 'valuated') ? _vm._c('div', {
-    staticClass: "SharpAutocomplete__result-item form-control"
+    staticClass: "SharpAutocomplete__result-item"
   }, [_vm._c('sharp-template', {
     attrs: {
       "name": "ResultItem",
       "template": _vm.resultItemTemplate,
       "template-data": _vm.valueObject
     }
-  }), _vm._v(" "), _vm._c('div', {
-    staticClass: "SharpAutocomplete__close-btn--container",
+  }), _vm._v(" "), _vm._c('button', {
+    staticClass: "SharpAutocomplete__result-item__close-button",
+    attrs: {
+      "type": "button"
+    },
     on: {
       "click": _vm.handleResetClick
     }
-  }, [_vm._m(0)])], 1) : _vm._e(), _vm._v(" "), (_vm.state != 'valuated') ? _vm._c('multiselect', {
+  }, [_vm._c('svg', {
+    staticClass: "SharpAutocomplete__result-item__close-icon",
+    attrs: {
+      "aria-label": "close",
+      "width": "10",
+      "height": "10",
+      "viewBox": "0 0 10 10",
+      "fill-rule": "evenodd"
+    }
+  }, [_vm._c('path', {
+    attrs: {
+      "d": "M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"
+    }
+  })])])], 1) : _vm._e(), _vm._v(" "), (_vm.state != 'valuated') ? _vm._c('multiselect', {
     ref: "multiselect",
     staticClass: "SharpAutocomplete__multiselect",
     class: {
@@ -76759,19 +76788,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
   }, [_vm._c('template', {
     slot: "noResult"
   }, [_vm._v("Aucun résultats")])], 2) : _vm._e()], 1)
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;
-  return _vm._c('button', {
-    staticClass: "close",
-    attrs: {
-      "type": "button",
-      "aria-label": "Close"
-    }
-  }, [_vm._c('span', {
-    attrs: {
-      "aria-hidden": "true"
-    }
-  }, [_vm._v("×")])])
-}]}
+},staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()

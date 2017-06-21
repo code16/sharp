@@ -8,8 +8,7 @@
         <draggable :options="dragOptions" :list="list">
             <transition-group name="expand" tag="div">
                 <div v-for="(listItemData, i) in list" :key="listItemData[indexSymbol]"
-                    class="SharpList__item
-                           SharpModule"
+                    class="SharpList__item"
                     :class="{'SharpList__item--collapsed':collapsed}"
                 >
                     <div class="SharpModule__inner">
@@ -30,13 +29,12 @@
                                         </sharp-field-display>
                                     </template>
                                 </sharp-list-item>
-                                <button v-if="removable" class="SharpButton SharpButton--danger" @click="remove(i)">{{removeText}}</button>
-                                <div v-if="i<list.length-1 && showAddButton" class="SharpList__new-item-zone">
-                                    <button class="SharpButton SharpButton--secondary" @click="insertNewItem(i)">+</button>
-                                </div>
+                                <button v-if="removable" class="SharpButton SharpButton--danger SharpButton--sm" @click="remove(i)">{{removeText}}</button>
                             </template>
-
                         </div>
+                    </div>
+                    <div v-if="i<list.length-1 && showAddButton && !collapsed" class="SharpList__new-item-zone">
+                        <button class="SharpButton SharpButton--secondary" @click="insertNewItem(i)">Insert</button>
                     </div>
                 </div>
                 <button v-if="showAddButton" type="button" :key="-1"

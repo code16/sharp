@@ -26,6 +26,8 @@ $css--font-face:false;
 @import 'node_modules/bootstrap/scss/reboot';
 
 
+$input-label-weight: 400;
+$button-border-width: 1px;
 
 #sharp-app {
   @include reset;
@@ -38,6 +40,21 @@ $css--font-face:false;
   // overriding default vendor components style
   @import 'components/form/Multiselect';
 
+  @import 'components/ActionView';
+  @import 'components/ActionBar';
+  @import 'components/Tabs';
+  @import 'components/LocaleSelector';
+
+  // from carbon design
+  @import 'components/Button';
+  @import 'components/Module';
+  @import 'components/Dropdown';
+  @import 'components/Tag';
+  @import 'components/Notification';
+
+  // Form components
+  @import 'components/form/Text';
+  @import 'components/form/Multiselect';
   @import 'components/form/Autocomplete';
   @import 'components/form/Upload';
   @import 'components/form/Form';
@@ -50,17 +67,7 @@ $css--font-face:false;
   @import 'components/form/Modal';
   @import 'components/form/FieldContainer';
   @import 'components/form/Tags';
-  @import 'components/form/Text';
   @import 'components/form/Check';
-
-  @import 'components/ActionView';
-  @import 'components/ActionBar';
-  @import 'components/Tabs';
-  @import 'components/LocaleSelector';
-
-  @import 'components/Button';
-  @import 'components/Module';
-  @import 'components/Dropdown';
 
 
   input[type="number"].hide-controls {

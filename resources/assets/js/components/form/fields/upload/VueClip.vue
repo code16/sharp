@@ -25,8 +25,10 @@
                 </div>
                 <slot name="removeButton"></slot>
                 <template v-if="!$slots.removeButton">
-                    <button type="button" class="close" aria-label="Close" @click="remove()">
-                        <span aria-hidden="true">&times;</span>
+                    <button class="SharpUpload__close-button" type="button" @click="remove()">
+                        <svg class="SharpUpload__close-icon" aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd">
+                            <path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
+                        </svg>
                     </button>
                 </template>
             </template>

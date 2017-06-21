@@ -1,6 +1,8 @@
 <template>
     <div class="SharpMarkdown">
-        <textarea ref="textarea"></textarea>
+        <div class="SharpModule__inner">
+            <textarea ref="textarea"></textarea>
+        </div>
     </div>
 </template>
 

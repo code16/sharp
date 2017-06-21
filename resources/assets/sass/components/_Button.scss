@@ -43,6 +43,9 @@
   white-space: nowrap;
   line-height: 16px;
 
+  // Sharp specific
+  text-transform: uppercase;
+
   &:disabled {
     cursor: not-allowed;
     opacity: .5;
@@ -61,7 +64,7 @@
 
   &--secondary {
     @include button-theme(
-      transparent, // bg-color
+      rgba($brand-02, 0.1), // bg-color
       $brand-01,   // border-color
       $brand-01,   // font-color
       $brand-01,   // hover-bg-color
@@ -112,6 +115,16 @@
     &:focus > .bx--btn__icon {
       fill: $inverse-01;
     }
+  }
+
+  &--sm {
+    height: 2rem;
+    padding: $button-padding-sm;
+    letter-spacing: 0;
+  }
+
+  &--secondary + &--primary {
+    margin-left: 1rem;
   }
 
 }

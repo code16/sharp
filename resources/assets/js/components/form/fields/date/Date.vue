@@ -1,4 +1,4 @@
-<template>
+    <template>
     <div class="SharpDate">
         <input class="SharpDate__input" :value="inputValue" @input="handleInput" @focus="forceShowPicker"
                @blur="handleBlur" @keydown.up.prevent="increase" @keydown.down.prevent="decrease" ref="input">

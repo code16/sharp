@@ -1,6 +1,4 @@
-@import '../Dropdown';
-@import './Text';
-@import '../Tag';
+@import '../../mixins/dropdown';
 
 .multiselect {
   @extend .SharpDropdown;
@@ -89,6 +87,8 @@
     .multiselect__tag {
       position: relative;
       padding: 4px 26px 4px 10px;
+      margin-top: 0;
+      margin-bottom: 0;
     }
   }
 

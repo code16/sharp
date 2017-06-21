@@ -218,11 +218,11 @@ let fields = {
     },
     show_upload_1: {
         type: 'check',
-        label: "Appuyer pour afficher l'upload"
+        text: "Appuyer pour afficher l'upload"
     },
     show_upload_2: {
         type: 'check',
-        label: "Ou ici"
+        text: "Ou ici"
     },
     myimage: {
         type: 'upload',

@@ -1,3 +1,5 @@
+
+
 .SharpForm {
   .close {
     font-weight: normal;
@@ -10,13 +12,13 @@
 
   &--form-item {
     flex: 1;
-    margin-right: 1rem;
+    //margin-right: 1rem;
     margin-bottom: 1.5rem;
 
-    &:last-of-type {
+    /*&:last-of-type {
       margin-right: 0;
       margin-bottom: 0;
-    }
+    }*/
   }
 
   &--label {
@@ -26,6 +28,7 @@
     display: inline-block;
     vertical-align: baseline;
     margin-bottom: rem(10px);
+    text-transform: uppercase;
   }
 
   &--label--disabled {

@@ -1,6 +1,18 @@
+
+
+
 .SharpUpload {
+  @extend .SharpModule;
+  @extend .SharpModule__content;
+  //display: flex;
+  //justify-content: space-between;
+
   position: relative;
   margin:0;
+
+  .dz-image-preview {
+    display:none;
+  }
 
   &__container {
     display:flex;
@@ -35,12 +47,13 @@
     @include media-breakpoint-up(sm) { max-height: 300px; }
     @include media-breakpoint-up(md) { max-height: 400px; }
     @include media-breakpoint-up(md) { max-height: 500px; }
-
   }
 
-  .close {
-    position:absolute;
-    top:0;
-    right:0;
+  &__close-button {
+    @extend .SharpNotification__toast__close-button;
+  }
+
+  &__close-icon {
+    @extend .SharpNotification__toast__icon;
   }
 }
