@@ -198,12 +198,20 @@
                 let cropData = this.getCropData();
                 let imgData = this.getImageData();
 
+                let rw=imgData.naturalWidth, rh=imgData.naturalHeight;
+
+                if(Math.abs(cropData.rotate)%180) {
+                    rw = imgData.naturalHeight;
+                    rh = imgData.naturalWidth;
+                }
+                //console.log('img', rw, rh, imgData.naturalWidth, imgData.naturalHeight);
+                //console.log('crop', cropData.width, cropData.height);
                 let relativeData = {
-                    width: cropData.width / imgData.naturalWidth,
-                    height: cropData.height / imgData.naturalHeight,
-                    x: cropData.x / imgData.naturalWidth,
-                    y: cropData.y / imgData.naturalHeight,
-                    rotate: cropData.rotate * -1
+                    width: cropData.width / rw,
+                    height: cropData.height / rh,
+                    x: cropData.x / rw,
+                    y: cropData.y / rh,
+                    rotate: cropData.rotate * -1 // counterclockwise
                 };
 
                 if(this.croppable) {
