@@ -9,6 +9,7 @@
 <body>
     @yield('content')
 
+    <script src="/vendor/sharp/lang.js?locale={{ app()->getLocale() }}"></script>
     <script src="/vendor/sharp/sharp.js"></script>
 </body>
 </html>

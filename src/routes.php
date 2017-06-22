@@ -1,5 +1,6 @@
 <?php
 
+// API routes
 Route::group([
     'prefix' => '/sharp/api',
     'middleware' => ['sharp_context', 'sharp_errors'],
@@ -28,6 +29,7 @@ Route::group([
 
 });
 
+// Web routes
 Route::group([
     'prefix' => '/sharp',
     'namespace' => 'Code16\Sharp\Http'
@@ -42,3 +44,8 @@ Route::group([
         ->uses('FrontFormController@create');
 
 });
+
+// Localization
+Route::get('/vendor/sharp/lang.js')
+    ->name('assets.lang')
+    ->uses('Code16\Sharp\Http\LangController@index');
