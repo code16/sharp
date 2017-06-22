@@ -17,7 +17,7 @@ class SharpFormDateFieldTest extends SharpTestCase
                 "hasDate" => true, "hasTime" => false,
                 "minTime" => '00:00', "maxTime" => '23:59',
                 "stepTime" => 30, "displayFormat" => "YYYY-MM-DD",
-                "mondayFirst" => false
+                "mondayFirst" => false, "language" => $this->app->getLocale()
             ], $defaultFormField->toArray()
         );
     }

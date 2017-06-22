@@ -40,12 +40,20 @@ class SharpFormDateField extends SharpFormField
     protected $displayFormat = "YYYY-MM-DD";
 
     /**
+     * @var string
+     */
+    protected $language = null;
+
+    /**
      * @param string $key
      * @return static
      */
     public static function make(string $key)
     {
-        return new static($key, 'date');
+        $field = new static($key, 'date');
+        $field->language = app()->getLocale();
+
+        return $field;
     }
 
     /**
@@ -165,6 +173,7 @@ class SharpFormDateField extends SharpFormField
             "stepTime" => $this->stepTime,
             "mondayFirst" => $this->mondayFirst,
             "displayFormat" => $this->displayFormat,
+            "language" => $this->language
         ]);
     }
 
