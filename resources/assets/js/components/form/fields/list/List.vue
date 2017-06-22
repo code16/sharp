@@ -1,10 +1,10 @@
 <template>
     <div class="SharpList">
-        <div v-if="sortable && list.length > 1" class="text-right">
-            <button type="button" class="SharpButton SharpButton--outline-primary" :class="{active:dragActive}" @click="toggleDrag">
+        <template v-if="sortable && list.length > 1">
+            <button type="button" class="SharpButton SharpButton--secondary SharpList__sort-button" :class="{active:dragActive}" @click="toggleDrag">
                 {{dragActive ? 'Ok' : 'Trier'}}
             </button>
-        </div>
+        </template>
         <draggable :options="dragOptions" :list="list">
             <transition-group name="expand" tag="div">
                 <div v-for="(listItemData, i) in list" :key="listItemData[indexSymbol]"
@@ -29,16 +29,16 @@
                                         </sharp-field-display>
                                     </template>
                                 </sharp-list-item>
-                                <button v-if="!readOnly && removable" class="SharpButton SharpButton--danger SharpButton--sm" @click="remove(i)">Supprimer</button>
+                                <button v-if="!disabled && removable" class="SharpButton SharpButton--danger SharpButton--sm" @click="remove(i)">Supprimer</button>
                             </template>
                         </div>
                     </div>
-                    <div v-if="!readOnly && showAddButton && i<list.length-1" class="SharpList__new-item-zone">
+                    <div v-if="!disabled && showAddButton && i<list.length-1" class="SharpList__new-item-zone">
                         <button class="SharpButton SharpButton--secondary" @click="insertNewItem(i)">Insert</button>
                     </div>
                 </div>
-                <button v-if="!readOnly && showAddButton" type="button" :key="-1"
-                        class="SharpList__add-button SharpButton SharpButton--secondary" style=""
+                <button v-if="!disabled && showAddButton" type="button" :key="-1"
+                        class="SharpButton SharpButton--secondary SharpList__add-button" style=""
                         @click="add">{{addText}}</button>
             </transition-group>
         </draggable>
@@ -113,9 +113,20 @@
             }
         },
         computed: {
+            readOnlyItemFields() {
+                console.log('readOnly item fields');
+                let res = JSON.parse(JSON.stringify(this.itemFields));
+                for(let fieldKey of Object.keys(res)) {
+                    res[fieldKey].readOnly = true;
+                }
+                return res;
+            },
+            disabled() {
+                return this.readOnly || this.dragActive;
+            },
             updatedItemFields() {
-                if(this.readOnly) {
-                    Object.keys(this.itemFields).forEach(k=>this.$set(this.itemFields[k],'readOnly',true));
+                if(this.readOnly || this.dragActive) {
+                    return this.readOnlyItemFields;
                 }
                 return this.itemFields;
             },
@@ -123,7 +134,7 @@
                 return { disabled:!this.dragActive };
             },
             showAddButton() {
-                return !this.dragActive && this.addable && (this.list.length<this.maxItemCount || !this.maxItemCount);
+                return this.addable && (this.list.length<this.maxItemCount || !this.maxItemCount);
             },
             dragIndexSymbol() {
                 return Symbol('dragIndex');

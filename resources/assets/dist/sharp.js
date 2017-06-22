@@ -33742,7 +33742,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         forceShowPicker: function forceShowPicker() {
             this.showPicker = true;
-            this.force = true;
+            //this.force = true;
         }
     },
     mounted: function mounted() {
@@ -34068,13 +34068,42 @@ var noop = function noop() {};
         }
     },
     computed: {
-        updatedItemFields: function updatedItemFields() {
-            var _this = this;
+        readOnlyItemFields: function readOnlyItemFields() {
+            console.log('readOnly item fields');
+            var res = JSON.parse(JSON.stringify(this.itemFields));
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
 
-            if (this.readOnly) {
-                Object.keys(this.itemFields).forEach(function (k) {
-                    return _this.$set(_this.itemFields[k], 'readOnly', true);
-                });
+            try {
+                for (var _iterator = Object.keys(res)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var fieldKey = _step.value;
+
+                    res[fieldKey].readOnly = true;
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+
+            return res;
+        },
+        disabled: function disabled() {
+            return this.readOnly || this.dragActive;
+        },
+        updatedItemFields: function updatedItemFields() {
+            if (this.readOnly || this.dragActive) {
+                return this.readOnlyItemFields;
             }
             return this.itemFields;
         },
@@ -34082,7 +34111,7 @@ var noop = function noop() {};
             return { disabled: !this.dragActive };
         },
         showAddButton: function showAddButton() {
-            return !this.dragActive && this.addable && (this.list.length < this.maxItemCount || !this.maxItemCount);
+            return this.addable && (this.list.length < this.maxItemCount || !this.maxItemCount);
         },
         dragIndexSymbol: function dragIndexSymbol() {
             return Symbol('dragIndex');
@@ -34093,19 +34122,19 @@ var noop = function noop() {};
     },
     methods: {
         indexedList: function indexedList() {
-            var _this2 = this;
+            var _this = this;
 
             return (this.value || []).map(function (v, i) {
-                return _extends(_defineProperty({}, _this2.indexSymbol, i), v);
+                return _extends(_defineProperty({}, _this.indexSymbol, i), v);
             });
         },
         createItem: function createItem() {
-            var _this3 = this,
+            var _this2 = this,
                 _Object$keys$reduce;
 
             return Object.keys(this.itemFields).reduce(function (res, itemKey) {
-                if (_this3.$form.localized && _this3.itemFields[itemKey].localized) {
-                    res[itemKey] = _this3.$form.config.locales.reduce(function (res, l) {
+                if (_this2.$form.localized && _this2.itemFields[itemKey].localized) {
+                    res[itemKey] = _this2.$form.config.locales.reduce(function (res, l) {
                         res[l] = null;
                         return res;
                     }, {});
@@ -34123,23 +34152,23 @@ var noop = function noop() {};
             this.list.splice(i, 1);
         },
         update: function update(i) {
-            var _this4 = this;
+            var _this3 = this;
 
             return function (key, value) {
-                if (_this4.itemFields[key].localized) {
-                    _this4.list[i][key][_this4.locale] = value;
-                } else _this4.list[i][key] = value;
+                if (_this3.itemFields[key].localized) {
+                    _this3.list[i][key][_this3.locale] = value;
+                } else _this3.list[i][key] = value;
             };
         },
         collapsedItemData: function collapsedItemData(itemData) {
             return _extends({ $index: itemData[this.dragIndexSymbol] }, itemData);
         },
         toggleDrag: function toggleDrag() {
-            var _this5 = this;
+            var _this4 = this;
 
             this.dragActive = !this.dragActive;
             this.list.forEach(function (item, i) {
-                return item[_this5.dragIndexSymbol] = i;
+                return item[_this4.dragIndexSymbol] = i;
             });
         },
         initList: function initList() {
@@ -34687,6 +34716,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         },
         statusFunction: function statusFunction() {
             return { error: this.onStatusError, success: this.onStatusSuccess, added: this.onStatusAdded };
+        },
+        fileName: function fileName() {
+            var splitted = this.file.name.split('/');
+            return splitted.length ? splitted[splitted.length - 1] : '';
         }
     },
     methods: {
@@ -76027,10 +76060,8 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
   return _vm._c('div', {
     staticClass: "SharpList"
-  }, [(_vm.sortable && _vm.list.length > 1) ? _vm._c('div', {
-    staticClass: "text-right"
-  }, [_vm._c('button', {
-    staticClass: "SharpButton SharpButton--outline-primary",
+  }, [(_vm.sortable && _vm.list.length > 1) ? [_vm._c('button', {
+    staticClass: "SharpButton SharpButton--secondary SharpList__sort-button",
     class: {
       active: _vm.dragActive
     },
@@ -76040,7 +76071,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
     on: {
       "click": _vm.toggleDrag
     }
-  }, [_vm._v("\n            " + _vm._s(_vm.dragActive ? 'Ok' : 'Trier') + "\n        ")])]) : _vm._e(), _vm._v(" "), _vm._c('draggable', {
+  }, [_vm._v("\n            " + _vm._s(_vm.dragActive ? 'Ok' : 'Trier') + "\n        ")])] : _vm._e(), _vm._v(" "), _vm._c('draggable', {
     attrs: {
       "options": _vm.dragOptions,
       "list": _vm.list
@@ -76086,14 +76117,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
           })]
         }]
       ])
-    }), _vm._v(" "), (!_vm.readOnly && _vm.removable) ? _vm._c('button', {
+    }), _vm._v(" "), (!_vm.disabled && _vm.removable) ? _vm._c('button', {
       staticClass: "SharpButton SharpButton--danger SharpButton--sm",
       on: {
         "click": function($event) {
           _vm.remove(i)
         }
       }
-    }, [_vm._v("Supprimer")]) : _vm._e()]], 2)]), _vm._v(" "), (!_vm.readOnly && _vm.showAddButton && i < _vm.list.length - 1) ? _vm._c('div', {
+    }, [_vm._v("Supprimer")]) : _vm._e()]], 2)]), _vm._v(" "), (!_vm.disabled && _vm.showAddButton && i < _vm.list.length - 1) ? _vm._c('div', {
       staticClass: "SharpList__new-item-zone"
     }, [_vm._c('button', {
       staticClass: "SharpButton SharpButton--secondary",
@@ -76103,16 +76134,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
         }
       }
     }, [_vm._v("Insert")])]) : _vm._e()])
-  }), _vm._v(" "), (!_vm.readOnly && _vm.showAddButton) ? _vm._c('button', {
+  }), _vm._v(" "), (!_vm.disabled && _vm.showAddButton) ? _vm._c('button', {
     key: -1,
-    staticClass: "SharpList__add-button SharpButton SharpButton--secondary",
+    staticClass: "SharpButton SharpButton--secondary SharpList__add-button",
     attrs: {
       "type": "button"
     },
     on: {
       "click": _vm.add
     }
-  }, [_vm._v(_vm._s(_vm.addText))]) : _vm._e()], 2)], 1)], 1)
+  }, [_vm._v(_vm._s(_vm.addText))]) : _vm._e()], 2)], 1)], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -76539,9 +76570,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
       'SharpUpload--empty': !_vm.file
     }
   }, [_vm._c('div', {
-    staticClass: "SharpModule__inner"
+    staticClass: "SharpUpload__inner"
   }, [_vm._c('div', {
-    staticClass: "SharpModule__content"
+    staticClass: "SharpUpload__content"
   }, [_vm._c('form', {
     directives: [{
       name: "show",
@@ -76568,7 +76599,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
     staticClass: "SharpUpload__infos"
   }, [_vm._c('div', [_vm._c('label', {
     staticClass: "form-control-label"
-  }, [_vm._v(_vm._s(_vm.file.name))]), _vm._v(" "), _vm._c('div', [_vm._v(_vm._s(_vm.size))]), _vm._v(" "), _vm._c('div', {
+  }, [_vm._v(_vm._s(_vm.fileName))]), _vm._v(" "), _vm._c('div', [_vm._v(_vm._s(_vm.size))]), _vm._v(" "), _vm._c('div', {
     directives: [{
       name: "show",
       rawName: "v-show",

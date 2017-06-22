@@ -1,5 +1,13 @@
 .SharpUpload {
-  @extend .SharpModule;
+  &:not(.SharpUpload--empty) {
+    @extend .SharpModule;
+    .SharpUpload__inner {
+      @extend .SharpModule__inner;
+    }
+    .SharpUpload__content {
+      @extend .SharpModule__content;
+    }
+  }
 
   &--empty {
     .SharpModule__content {

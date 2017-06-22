@@ -1,10 +1,17 @@
 .SharpList {
+
   &__add-button {
     width:100%;
     /*&--no-transition {
       transition: unset;
     }*/
     transition: unset;
+  }
+  &__sort-button {
+    position:absolute;
+    right:0;
+    top:0;
+    z-index:1;
   }
 
   //remove item button

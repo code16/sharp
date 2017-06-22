@@ -182,7 +182,7 @@
             },
             forceShowPicker() {
                 this.showPicker = true;
-                this.force = true;
+                //this.force = true;
             }
         },
         mounted() {

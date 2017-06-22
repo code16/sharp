@@ -1,7 +1,7 @@
 <template>
     <div class="SharpUpload" :class="{'SharpUpload--empty':!file}">
-        <div class="SharpModule__inner">
-            <div class="SharpModule__content">
+        <div class="SharpUpload__inner">
+            <div class="SharpUpload__content">
                 <form v-show="!file" class="dropzone">
                     <button type="button" class="dz-message SharpButton SharpButton--secondary SharpUpload__upload-button" :disabled="readOnly">Importer...</button>
                 </form>
@@ -12,7 +12,7 @@
                         </div>
                         <div class="SharpUpload__infos">
                             <div>
-                                <label class="form-control-label">{{ file.name }}</label>
+                                <label class="form-control-label">{{ fileName }}</label>
                                 <div>{{ size }}</div>
                                 <div class="progress" v-show="showProgressBar">
                                     <div class="progress-bar" role="progressbar" :style="{width:`${progress}%`}"
@@ -119,6 +119,11 @@
             },
             statusFunction() {
                 return { error:this.onStatusError, success:this.onStatusSuccess, added:this.onStatusAdded }
+            },
+
+            fileName() {
+                let splitted = this.file.name.split('/');
+                return splitted.length ? splitted[splitted.length-1] : '';
             }
         },
         methods: {

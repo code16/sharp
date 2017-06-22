@@ -64,7 +64,7 @@
 
   &--secondary {
     @include button-theme(
-      rgba($brand-02, 0.1), // bg-color
+      $ui-01, // bg-color
       $brand-01,   // border-color
       $brand-01,   // font-color
       $brand-01,   // hover-bg-color
