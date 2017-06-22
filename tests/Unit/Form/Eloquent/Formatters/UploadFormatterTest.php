@@ -133,7 +133,7 @@ class UploadFormatterTest extends SharpFormEloquentBaseTest
                 "name" => $file[0],
                 "uploaded" => true,
                 "cropData" => [
-                    "height" => .8, "width" => .6, "x" => 0, "y" => .1,
+                    "height" => .8, "width" => .6, "x" => 0, "y" => .1, "rotate" => 0
                 ]
             ], $formField, new Person)
         );

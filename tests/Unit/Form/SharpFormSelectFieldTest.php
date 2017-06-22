@@ -24,7 +24,6 @@ class SharpFormSelectFieldTest extends SharpTestCase
                     ["id" => "2", "label" => "Elem 2"],
                 ], "multiple" => false,
                 "clearable" => false, "display" => "list",
-                "maxText" => "Maximum selected items count reached"
             ], $formField->toArray()
         );
     }
@@ -49,18 +48,6 @@ class SharpFormSelectFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ["maxSelected" => 12],
-            $formField->toArray()
-        );
-    }
-
-    /** @test */
-    function we_can_define_maxText()
-    {
-        $formField = $this->getDefaultSelect()
-            ->setMaxText("Oh yeah?");
-
-        $this->assertArraySubset(
-            ["maxText" => "Oh yeah?"],
             $formField->toArray()
         );
     }

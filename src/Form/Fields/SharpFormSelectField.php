@@ -20,11 +20,6 @@ class SharpFormSelectField extends SharpFormField
     protected $clearable = false;
 
     /**
-     * @var string
-     */
-    protected $maxText = "Maximum selected items count reached";
-
-    /**
      * @var int
      */
     protected $maxSelected = null;
@@ -115,17 +110,6 @@ class SharpFormSelectField extends SharpFormField
     }
 
     /**
-     * @param string $maxText
-     * @return $this
-     */
-    public function setMaxText(string $maxText)
-    {
-        $this->maxText = $maxText;
-
-        return $this;
-    }
-
-    /**
      * @return bool
      */
     public function multiple()
@@ -158,7 +142,6 @@ class SharpFormSelectField extends SharpFormField
             "clearable" => $this->clearable,
             "display" => $this->display,
             "maxSelected" => $this->maxSelected,
-            "maxText" => $this->maxText,
         ]);
     }
 }

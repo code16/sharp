@@ -27,11 +27,6 @@ class SharpFormListField extends SharpFormField
     /**
      * @var string
      */
-    protected $removeText = "Remove";
-
-    /**
-     * @var string
-     */
     protected $itemIdAttribute = "id";
 
     /**
@@ -53,11 +48,6 @@ class SharpFormListField extends SharpFormField
      * @var array
      */
     protected $itemFields = [];
-
-    /**
-     * @var array
-     */
-    protected $itemLayout = [];
 
     /**
      * @param string $key
@@ -108,17 +98,6 @@ class SharpFormListField extends SharpFormField
     public function setAddText(string $addText)
     {
         $this->addText = $addText;
-
-        return $this;
-    }
-
-    /**
-     * @param string $removeText
-     * @return static
-     */
-    public function setRemoveText(string $removeText)
-    {
-        $this->removeText = $removeText;
 
         return $this;
     }
@@ -187,6 +166,14 @@ class SharpFormListField extends SharpFormField
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function orderAttribute()
+    {
+        return $this->orderAttribute;
+    }
+
 
     /**
      * @return array
@@ -213,7 +200,6 @@ class SharpFormListField extends SharpFormField
             "removable" => $this->removable,
             "sortable" => $this->sortable,
             "addText" => $this->addText,
-            "removeText" => $this->removeText,
             "collapsedItemTemplate" => $this->collapsedItemTemplate,
             "maxItemCount" => $this->maxItemCount,
             "itemIdAttribute" => $this->itemIdAttribute,
