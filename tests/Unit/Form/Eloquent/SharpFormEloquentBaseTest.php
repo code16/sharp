@@ -25,6 +25,7 @@ abstract class SharpFormEloquentBaseTest extends SharpTestCase
             $table->increments('id');
             $table->string('name');
             $table->unsignedTinyInteger('age')->nullable();
+            $table->unsignedTinyInteger('order')->nullable();
             $table->unsignedInteger("mother_id")->nullable();
             $table->timestamps();
         });

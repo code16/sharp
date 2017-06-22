@@ -108,7 +108,10 @@ class EloquentModelUpdater
                 . 'RelationUpdater');
 
             $relationshipUpdater->update(
-                $instance, $dataItem->attribute(), $dataItem->formattedValue($instance)
+                $instance,
+                $dataItem->attribute(),
+                $dataItem->formattedValue($instance),
+                $dataItem->formField()
             );
         }
     }

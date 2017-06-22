@@ -57,6 +57,35 @@ class HasManyRelationUpdaterTest extends SharpFormEloquentBaseTest
     }
 
     /** @test */
+    function the_optional_getDefaultAttributesFor_method_is_called_on_an_item_creation()
+    {
+        $mother = new class extends Person {
+            protected $table = "people";
+            function getDefaultAttributesFor($attribute) {
+                return $attribute == "sons" ? ["age" => 18] : [];
+            }
+        };
+        $mother->name = "Jane Wayne";
+        $mother->save();
+
+        $updater = new HasManyRelationUpdater();
+
+        $updater->update($mother, "sons", $this->formatData([[
+            "id" => [
+                "value" => null, "valuator" => null, "field" => null
+            ], "name" => [
+                "value" => "John Wayne", "valuator" => null, "field" => SharpFormTextField::make("name")
+            ]
+        ]]));
+
+        $this->assertDatabaseHas("people", [
+            "mother_id" => $mother->id,
+            "name" => "John Wayne",
+            "age" => 18
+        ]);
+    }
+
+    /** @test */
     function we_can_delete_an_existing_related_item_in_a_hasMany_relation()
     {
         $mother = Person::create(["name" => "Jane Wayne"]);

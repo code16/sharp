@@ -174,6 +174,14 @@ class SharpFormListField extends SharpFormField
         return $this->orderAttribute;
     }
 
+    /**
+     * @return bool
+     */
+    public function isSortable(): bool
+    {
+        return $this->sortable;
+    }
+
 
     /**
      * @return array
