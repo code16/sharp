@@ -9,6 +9,14 @@
     border-radius: 0;
   }
 
+  &--read-only {
+    .editor-toolbar > a {
+      pointer-events: none;
+      cursor: default;
+      opacity: 0.6;
+    }
+  }
+
   .CodeMirror {
     @extend .SharpModule__content;
     border: none;

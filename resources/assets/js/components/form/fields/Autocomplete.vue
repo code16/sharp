@@ -18,6 +18,7 @@
                      :internal-search="false"
                      :placeholder="placeholder"
                      :loading="state=='loading'"
+                     :disabled="readOnly"
                      :max="hideDropdown ? -1 : 1"
                      @search-change="updateSuggestions"
                      @select="handleSelect"
@@ -76,7 +77,7 @@
                 type: Array,
                 default:()=>['value']
             },
-            disabled: Boolean,
+            readOnly: Boolean,
             listItemTemplate: String,
             resultItemTemplate: String
         },

@@ -9,19 +9,19 @@
             <transition-group name="expand" tag="div">
                 <div v-for="(listItemData, i) in list" :key="listItemData[indexSymbol]"
                     class="SharpList__item"
-                    :class="{'SharpList__item--collapsed':collapsed}"
+                    :class="{'SharpList__item--collapsed':dragActive}"
                 >
                     <div class="SharpModule__inner">
                         <div class="SharpModule__content">
 
-                            <template v-if="collapsed && collapsedItemTemplate">
+                            <template v-if="dragActive && collapsedItemTemplate">
                                 <sharp-template name="CollapsedItem" :template="collapsedItemTemplate" :template-data="collapsedItemData(listItemData)"></sharp-template>
                             </template>
                             <template v-else>
                                 <sharp-list-item :layout="fieldLayout.item" :error-identifier="i">
                                     <template scope="itemFieldLayout">
                                         <sharp-field-display :field-key="itemFieldLayout.key"
-                                                             :context-fields="itemFields"
+                                                             :context-fields="updatedItemFields"
                                                              :context-data="listItemData"
                                                              :error-identifier="itemFieldLayout.key"
                                                              :update-data="update(i)"
@@ -29,15 +29,15 @@
                                         </sharp-field-display>
                                     </template>
                                 </sharp-list-item>
-                                <button v-if="removable" class="SharpButton SharpButton--danger SharpButton--sm" @click="remove(i)">{{removeText}}</button>
+                                <button v-if="!readOnly && removable" class="SharpButton SharpButton--danger SharpButton--sm" @click="remove(i)">Supprimer</button>
                             </template>
                         </div>
                     </div>
-                    <div v-if="i<list.length-1 && showAddButton && !collapsed" class="SharpList__new-item-zone">
+                    <div v-if="!readOnly && showAddButton && i<list.length-1" class="SharpList__new-item-zone">
                         <button class="SharpButton SharpButton--secondary" @click="insertNewItem(i)">Insert</button>
                     </div>
                 </div>
-                <button v-if="showAddButton" type="button" :key="-1"
+                <button v-if="!readOnly && showAddButton" type="button" :key="-1"
                         class="SharpList__add-button SharpButton SharpButton--secondary" style=""
                         @click="add">{{addText}}</button>
             </transition-group>
@@ -84,10 +84,6 @@
                 type:String,
                 default:'Ajouter un élément'
             },
-            removeText: {
-                type:String,
-                default:"Supprimer l'élément"
-            },
             itemFields: {
                 type: Object,
                 required: true,
@@ -96,7 +92,7 @@
             maxItemCount: Number,
 
             itemIdAttribute: String,
-
+            readOnly:Boolean,
             locale:String
         },
         data() {
@@ -117,13 +113,14 @@
             }
         },
         computed: {
-            dragOptions() {
-                return {
-                    disabled:!this.dragActive
-                };
+            updatedItemFields() {
+                if(this.readOnly) {
+                    Object.keys(this.itemFields).forEach(k=>this.$set(this.itemFields[k],'readOnly',true));
+                }
+                return this.itemFields;
             },
-            collapsed() {
-                return this.dragActive;
+            dragOptions() {
+                return { disabled:!this.dragActive };
             },
             showAddButton() {
                 return !this.dragActive && this.addable && (this.list.length<this.maxItemCount || !this.maxItemCount);

@@ -1,7 +1,14 @@
     <template>
     <div class="SharpDate">
-        <input class="SharpDate__input" :value="inputValue" @input="handleInput" @focus="forceShowPicker"
-               @blur="handleBlur" @keydown.up.prevent="increase" @keydown.down.prevent="decrease" ref="input">
+        <input class="SharpDate__input"
+               :value="inputValue"
+               :disabled="readOnly"
+               @input="handleInput"
+               @focus="forceShowPicker"
+               @blur="handleBlur"
+               @keydown.up.prevent="increase"
+               @keydown.down.prevent="decrease"
+               ref="input">
         <div class="SharpDate__picker" v-show="showPicker">
             <sharp-date-picker v-if="hasDate"
                                class="SharpDate__picker-inner SharpDate__date"
@@ -63,7 +70,9 @@
                 default:30
             },
             minTime: String,
-            maxTime: String
+            maxTime: String,
+
+            readOnly: Boolean
         },
         data() {
             return {

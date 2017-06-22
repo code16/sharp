@@ -64,10 +64,11 @@ $button-border-width: 1px;
   @import 'components/form/Markdown';
   @import 'components/form/MarkdownUpload';
   @import 'components/form/Select';
-  @import 'components/form/Modal';
+  @import 'components/Modal';
   @import 'components/form/FieldContainer';
   @import 'components/form/Tags';
   @import 'components/form/Check';
+  @import 'components/form/Textarea';
 
 
   input[type="number"].hide-controls {
@@ -79,7 +80,7 @@ $button-border-width: 1px;
   }
 }
 
-
+/*
 .modal-open {
   overflow: hidden;
   .modal {
@@ -89,7 +90,7 @@ $button-border-width: 1px;
       overflow-y: auto!important;
     }
   }
-}
+}*/
 
 #glasspane {
   display: none;

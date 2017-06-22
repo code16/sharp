@@ -1,5 +1,6 @@
 //
 const localized = true;
+const readOnly = false;
 //
 
 const layout = {
@@ -253,7 +254,7 @@ let fields = {
         itemFields: {
             'name': {
                 label:'Nom',
-                type:'text',
+                type:'text'
             },
             'surname': {
                 label:'Prénom',
@@ -324,6 +325,10 @@ if(localized) {
     config.locales = ['fr','en','de'];
     Object.keys(fields).forEach(k=>k in localizedData && (fields[k].localized = true));
     data = Object.assign(defaultData, localizedData);
+}
+
+if(readOnly) {
+    Object.keys(fields).forEach(k=>fields[k].readOnly=true);
 }
 
 export { fields, data, layout, config, errors }

@@ -22,7 +22,7 @@
             updateData: Function
         },
         mounted() {
-            console.log(this);
+            //console.log(this);
         },
         render(h) {
             if(!(this.fieldType in fieldCompName)) {
@@ -43,7 +43,10 @@
                 },
                 on: {
                     input: val => {
-                        this.updateData(this.fieldKey,val);
+                        if(this.fieldProps.readOnly)
+                            util.warn(`SharpField '${this.fieldKey}', can't update because is readOnly`);
+                        else
+                            this.updateData(this.fieldKey,val);
                     },
                     blur: _ => {
                         this.fieldProps.focused = false;

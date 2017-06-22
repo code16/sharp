@@ -1,17 +1,25 @@
-
-
-
 .SharpUpload {
   @extend .SharpModule;
-  @extend .SharpModule__content;
-  //display: flex;
-  //justify-content: space-between;
+
+  &--empty {
+    .SharpModule__content {
+      padding:0 !important;
+    }
+  }
 
   position: relative;
   margin:0;
 
+  .dropzone {
+    margin:0;
+  }
+
   .dz-image-preview {
     display:none;
+  }
+
+  &__upload-button {
+    width: 100%;
   }
 
   &__container {

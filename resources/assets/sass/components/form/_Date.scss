@@ -1,10 +1,39 @@
-
-
 .SharpDate {
   position: relative;
+  display: flex;
+  align-items: flex-start;
 
   &__input {
-    @extend .SharpText;
+    @include reset;
+    @include font-size('14');
+    display: block;
+    position: relative;
+    height: rem(40px);
+    //max-width: 9rem;
+    padding: 0 1rem;
+    background-color: $field-01;
+    color: $text-01;
+    border: 1px solid transparent;
+
+    width: 100%;
+
+    &:focus,
+    &.bx--focused {
+      @include focus-outline('border');
+    }
+
+    &:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    &:disabled:hover {
+      border: 1px solid transparent;
+    }
+
+    &::-webkit-input-placeholder {
+      color: $text-03;
+    }
   }
 
   &__picker {

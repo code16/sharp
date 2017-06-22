@@ -29,13 +29,13 @@
                         let col = this.rows[i][j];
                         if(equals || !col.size) {
                             if(!equals) {
-                                res[i].fill('col-sm');
+                                res[i].fill('col-md');
                                 equals = true;
                             }
-                            res[i][j] = 'col-sm';
+                            res[i][j] = 'col-md';
                         }
                         else {
-                            res[i][j] = `col-sm-${col.size}`;
+                            res[i][j] = `col-md-${col.size}`;
                             if(col.sizeXS) {
                                 res[i][j] += ` col-${col.sizeXS}`;
                             }

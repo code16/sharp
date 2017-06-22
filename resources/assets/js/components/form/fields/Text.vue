@@ -1,6 +1,6 @@
 <template>
     <input :type="inputType" class="SharpText"
-           :value="value"  :placeholder="placeholder" :disabled="disabled"
+           :value="value"  :placeholder="placeholder" :disabled="readOnly"
            @input="handleInput" ref="input"
     >
 </template>
@@ -18,7 +18,7 @@
             value: [String, Number],
 
             placeholder: String,
-            disabled: Boolean,
+            readOnly: Boolean,
             inputType:  {
                 type:String,
                 default:'text'

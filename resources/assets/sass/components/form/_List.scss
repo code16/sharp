@@ -1,5 +1,3 @@
-
-
 .SharpList {
   &__add-button {
     width:100%;
@@ -9,8 +7,10 @@
     transition: unset;
   }
 
-  .SharpButton {
+  //remove item button
+  .SharpButton--danger {
     align-self: center;
+    font-size: .75rem;
   }
 
   &__item {

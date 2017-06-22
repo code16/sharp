@@ -54,6 +54,10 @@
     font-weight: 700;
     line-height: 1.5;
 
+    &:empty {
+      display:none;
+    }
+
     &::before {
       content: '*';
       display: inline-block;
