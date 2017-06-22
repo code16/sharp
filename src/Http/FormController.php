@@ -4,7 +4,7 @@ namespace Code16\Sharp\Http;
 
 use Illuminate\Routing\Controller;
 
-class FrontFormController extends Controller
+class FormController extends Controller
 {
 
     /**

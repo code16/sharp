@@ -35,17 +35,21 @@ Route::group([
     'namespace' => 'Code16\Sharp\Http'
 ], function() {
 
+    Route::get('/list/{entityKey}')
+        ->name("code16.sharp.list")
+        ->uses('ListController@show');
+
     Route::get('/form/{entityKey}/{instanceId}')
         ->name("code16.sharp.edit")
-        ->uses('FrontFormController@edit');
+        ->uses('FormController@edit');
 
     Route::get('/form/{entityKey}')
         ->name("code16.sharp.create")
-        ->uses('FrontFormController@create');
+        ->uses('FormController@create');
 
 });
 
 // Localization
 Route::get('/vendor/sharp/lang.js')
-    ->name('assets.lang')
+    ->name('code16.sharp.assets.lang')
     ->uses('Code16\Sharp\Http\LangController@index');
