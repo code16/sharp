@@ -2,9 +2,11 @@
 
 namespace Code16\Sharp\Http\Api;
 
+use Code16\Sharp\EntitiesList\EntitiesListQueryParams;
+use Code16\Sharp\EntitiesList\SharpEntitiesList;
 use Illuminate\Routing\Controller;
 
-class ListController extends Controller
+class EntitiesListController extends Controller
 {
 
     /**
@@ -16,17 +18,17 @@ class ListController extends Controller
         $list = $this->getListInstance($entityKey);
 
         return response()->json([
-            "columns" => $list->columns(),
+            "containers" => $list->dataContainers(),
             "layout" => $list->listLayout(),
-            "data" => $list->data()
+            "data" => $list->data(new EntitiesListQueryParams())
         ]);
     }
 
     /**
      * @param string $entityKey
-     * @return SharpList
+     * @return SharpEntitiesList
      */
-    protected function getListInstance(string $entityKey): SharpList
+    protected function getListInstance(string $entityKey): SharpEntitiesList
     {
         return app(config("sharp.entities.{$entityKey}.list"));
     }

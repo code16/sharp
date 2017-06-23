@@ -22,7 +22,7 @@ class EntitiesListLayoutColumn
     /**
      * @var boolean
      */
-    protected $largeOnly;
+    protected $largeOnly = false;
 
     /**
      * @param string $key

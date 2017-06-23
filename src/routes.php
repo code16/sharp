@@ -7,6 +7,10 @@ Route::group([
     'namespace' => 'Code16\Sharp\Http\Api'
 ], function() {
 
+    Route::get("/list/{entityKey}")
+        ->name("code16.sharp.api.list")
+        ->uses('EntitiesListController@show');
+
     Route::get("/form/{entityKey}")
         ->name("code16.sharp.api.form.create")
         ->uses('FormController@create');
