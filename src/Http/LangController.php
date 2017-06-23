@@ -30,7 +30,6 @@ class LangController extends Controller
         });
 
         header('Content-Type: text/javascript');
-        echo('window.i18n = ' . json_encode($strings) . ';');
-        exit();
+        return 'window.i18n = ' . json_encode($strings) . ';';
     }
 }
