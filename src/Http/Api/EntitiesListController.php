@@ -20,7 +20,8 @@ class EntitiesListController extends Controller
         return response()->json([
             "containers" => $list->dataContainers(),
             "layout" => $list->listLayout(),
-            "data" => $list->data(new EntitiesListQueryParams())
+            "data" => $list->data(new EntitiesListQueryParams()),
+            "config" => $list->listConfig()
         ]);
     }
 

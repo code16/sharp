@@ -12,8 +12,8 @@ class EntitiesListControllerTest extends BaseApiTest
         $this->json('get', '/sharp/api/list/person')
             ->assertStatus(200)
             ->assertJson(["data" => [
-                [/*"id" => 1, */"name" => "John <b>Wayne</b>", "age" => 22],
-                [/*"id" => 2, */"name" => "Mary <b>Wayne</b>", "age" => 26],
+                ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
+                ["id" => 2, "name" => "Mary <b>Wayne</b>", "age" => 26],
             ]]);
     }
 
@@ -67,17 +67,17 @@ class EntitiesListControllerTest extends BaseApiTest
                 ]
             ]]);
     }
-//
-//    /** @test */
-//    public function applicative_exception_is_returned_as_417()
-//    {
-//        $this->buildTheWorld();
-//
-//        $this->json('post', '/sharp/api/form/person/notanid', [
-//            "name" => "Jane Fonda"
-//        ])->assertStatus(417)
-//            ->assertJson([
-//                "message" => "notanid is not a valid id"
-//            ]);
-//    }
+
+    /** @test */
+    public function we_can_get_list_config_for_an_entity()
+    {
+        $this->buildTheWorld();
+
+        $this->json('get', '/sharp/api/list/person')
+            ->assertStatus(200)
+            ->assertJson(["config" => [
+                "instanceIdAttribute" => "id",
+                "displayMode" => "list"
+            ]]);
+    }
 }

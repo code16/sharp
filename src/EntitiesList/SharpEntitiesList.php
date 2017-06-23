@@ -28,6 +28,16 @@ abstract class SharpEntitiesList
     protected $layoutBuilt = false;
 
     /**
+     * @var string
+     */
+    protected $instanceIdAttribute = "id";
+
+    /**
+     * @var string
+     */
+    protected $displayMode = "list";
+
+    /**
      * Get the SharpListDataContainer array representation.
      *
      * @return array
@@ -71,9 +81,23 @@ abstract class SharpEntitiesList
         return collect($this->getListData($params))
             ->map(function($row) use($keys) {
                 // Filter model attributes on actual form fields
-                return collect($row)->only($keys)->all();
-            })
-            ->all();
+                return collect($row)->only(
+                    array_merge([$this->instanceIdAttribute], $keys)
+                )->all();
+            })->all();
+    }
+
+    /**
+     * Return the data config values.
+     *
+     * @return array
+     */
+    function listConfig(): array
+    {
+        return [
+            "instanceIdAttribute" => $this->instanceIdAttribute,
+            "displayMode" => $this->displayMode,
+        ];
     }
 
     /**
