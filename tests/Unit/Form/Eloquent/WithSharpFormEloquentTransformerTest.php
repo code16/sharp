@@ -5,12 +5,8 @@ namespace Code16\Sharp\Tests\Unit\Form\Eloquent;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentTransformer;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\SharpForm;
-use Code16\Sharp\Form\Transformers\SharpAttributeTransformer;
 use Code16\Sharp\Tests\Fixtures\Person;
-use Code16\Sharp\Tests\SharpTestCase;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\Schema;
+use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 
 class WithSharpFormEloquentTransformerTest extends SharpFormEloquentBaseTest
 {

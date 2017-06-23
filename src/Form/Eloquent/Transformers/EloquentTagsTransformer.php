@@ -3,7 +3,7 @@
 namespace Code16\Sharp\Form\Eloquent\Transformers;
 
 use Closure;
-use Code16\Sharp\Form\Transformers\SharpAttributeTransformer;
+use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 
 class EloquentTagsTransformer implements SharpAttributeTransformer
 {

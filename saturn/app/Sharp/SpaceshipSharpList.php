@@ -4,11 +4,13 @@ namespace App\Sharp;
 
 use App\Spaceship;
 use Code16\Sharp\EntitiesList\containers\EntitiesListDataContainer;
+use Code16\Sharp\EntitiesList\Eloquent\WithSharpEntitiesListEloquentTransformer;
 use Code16\Sharp\EntitiesList\EntitiesListQueryParams;
 use Code16\Sharp\EntitiesList\SharpEntitiesList;
 
 class SpaceshipSharpList extends SharpEntitiesList
 {
+    use WithSharpEntitiesListEloquentTransformer;
 
     function buildListDataContainers()
     {
@@ -61,7 +63,7 @@ class SpaceshipSharpList extends SharpEntitiesList
             ->setCustomTransformer("pilots", function($spaceship) {
                 return $spaceship->pilots->pluck("name")->implode("<br>");
             })
-            ->setUploadTransformer("picture", ["width" => 100])
+//            ->setUploadTransformer("picture", ["width" => 100])
             ->transform(
                 Spaceship::with("picture", "type", "pilots")->get()
             );

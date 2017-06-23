@@ -129,7 +129,7 @@ abstract class SharpEntitiesList
         }
     }
 
-    private function getDataContainersKeys()
+    protected function getDataContainersKeys()
     {
         return collect($this->dataContainers())
             ->pluck("key")

@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\Form\Transformers;
+namespace Code16\Sharp\Utils\Transformers;
 
 interface SharpAttributeTransformer
 {

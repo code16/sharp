@@ -3,7 +3,7 @@
 namespace Code16\Sharp\Form\Eloquent\Request;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
-use Code16\Sharp\Form\Transformers\SharpAttributeValuator;
+use Code16\Sharp\Utils\Transformers\SharpAttributeValuator;
 
 class UpdateRequestDataItem
 {
