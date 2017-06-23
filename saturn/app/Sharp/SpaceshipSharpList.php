@@ -3,6 +3,8 @@
 namespace App\Sharp;
 
 use App\Spaceship;
+use Code16\Sharp\EntitiesList\containers\EntitiesListDataContainer;
+use Code16\Sharp\EntitiesList\EntitiesListQueryParams;
 use Code16\Sharp\EntitiesList\SharpEntitiesList;
 
 class SpaceshipSharpList extends SharpEntitiesList
@@ -11,38 +13,27 @@ class SpaceshipSharpList extends SharpEntitiesList
     function buildListDataContainers()
     {
         $this->addDataContainer(
-            SharpListDataContainer::make("picture")
-                ->setLabel("")
-                ->setRenderer(SharpUploadListRenderer::class, ["width" => 100])
+            EntitiesListDataContainer::make("picture")
 
         )->addDataContainer(
-            SharpListDataContainer::make("name")
+            EntitiesListDataContainer::make("name")
                 ->setLabel("Name")
                 ->setSortable()
 
         )->addDataContainer(
-            SharpListDataContainer::make("capacity")
+            EntitiesListDataContainer::make("capacity")
                 ->setLabel("Capacity")
                 ->setSortable()
-                ->setRenderer(function($spaceship) {
-                    return number_format($spaceship->capacity / 1000, 0) . "k";
-                })
 
         )->addDataContainer(
-            SharpListDataContainer::make("type")
+            EntitiesListDataContainer::make("type")
                 ->setLabel("Type")
                 ->setSortable()
-                ->setRenderer(function($spaceship) {
-                    return $spaceship->type->label;
-                })
 
         )->addDataContainer(
-            SharpListDataContainer::make("pilots")
+            EntitiesListDataContainer::make("pilots")
                 ->setLabel("Pilots")
                 ->setHtml()
-                ->setRenderer(function($spaceship) {
-                    return $spaceship->pilots->pluck("name")->implode("<br>");
-                })
         );
     }
 
@@ -59,10 +50,20 @@ class SpaceshipSharpList extends SharpEntitiesList
 //    {
 //    }
 
-    function getListData(SharpListQueryParams $params)
+    function getListData(EntitiesListQueryParams $params)
     {
-        return $this->transform(
-            Spaceship::with("picture", "type", "pilots")->get()
-        );
+        return $this->setCustomTransformer("capacity", function($spaceship) {
+                return number_format($spaceship->capacity / 1000, 0) . "k";
+            })
+            ->setCustomTransformer("type", function($spaceship) {
+                return $spaceship->type->label;
+            })
+            ->setCustomTransformer("pilots", function($spaceship) {
+                return $spaceship->pilots->pluck("name")->implode("<br>");
+            })
+            ->setUploadTransformer("picture", ["width" => 100])
+            ->transform(
+                Spaceship::with("picture", "type", "pilots")->get()
+            );
     }
 }

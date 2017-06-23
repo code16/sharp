@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\EntitiesList;
 
+use Code16\Sharp\EntitiesList\containers\EntitiesListDataContainer;
+use Code16\Sharp\EntitiesList\layout\EntitiesListLayoutColumn;
 
 abstract class SharpEntitiesList
 {
@@ -9,6 +11,11 @@ abstract class SharpEntitiesList
      * @var array
      */
     protected $containers = [];
+
+    /**
+     * @var array
+     */
+    protected $columns = [];
 
     /**
      * @var bool
@@ -21,16 +28,16 @@ abstract class SharpEntitiesList
     protected $layoutBuilt = false;
 
     /**
-     * Get the SharpListColumn array representation.
+     * Get the SharpListDataContainer array representation.
      *
      * @return array
      */
-    function columns(): array
+    function dataContainers(): array
     {
         $this->checkListIsBuilt();
 
-        return collect($this->containers)->map(function($column) {
-            return $column->toArray();
+        return collect($this->containers)->map(function(EntitiesListDataContainer $container) {
+            return $container->toArray();
         })->keyBy("key")->all();
     }
 
@@ -46,35 +53,36 @@ abstract class SharpEntitiesList
             $this->layoutBuilt = true;
         }
 
-        return [
-            "tabbed" => $this->tabbed,
-            "tabs" => collect($this->tabs)->map(function($tab) {
-                return $tab->toArray();
-            })->all()
-        ];
+        return collect($this->columns)->map(function(EntitiesListLayoutColumn $column) {
+            return $column->toArray();
+        })->all();
     }
 
     /**
      * Return data, as an array.
      *
-     * @param SharpListQueryParams $params
+     * @param EntitiesListQueryParams $params
      * @return array
      */
-    function data(SharpListQueryParams $params): array
+    function data(EntitiesListQueryParams $params): array
     {
+        $keys = $this->getDataContainersKeys();
+
         return collect($this->getListData($params))
-            // Filter model attributes on actual form fields
-            //->only($this->getFieldKeys())
+            ->map(function($row) use($keys) {
+                // Filter model attributes on actual form fields
+                return collect($row)->only($keys)->all();
+            })
             ->all();
     }
 
     /**
      * Add a data container.
      *
-     * @param SharpListDataContainer $container
+     * @param EntitiesListDataContainer $container
      * @return $this
      */
-    protected function addDataContainer(SharpListDataContainer $container)
+    protected function addDataContainer(EntitiesListDataContainer $container)
     {
         $this->containers[] = $container;
         $this->listBuilt = false;
@@ -92,7 +100,7 @@ abstract class SharpEntitiesList
     {
         $this->layoutBuilt = false;
 
-
+        $this->columns[] = new EntitiesListLayoutColumn($label, $size, $sizeXS);
 
         return $this;
     }
@@ -106,7 +114,9 @@ abstract class SharpEntitiesList
     {
         $this->layoutBuilt = false;
 
-
+        $column = new EntitiesListLayoutColumn($label, $size);
+        $column->setLargeOnly(true);
+        $this->columns[] = $column;
 
         return $this;
     }
@@ -119,13 +129,20 @@ abstract class SharpEntitiesList
         }
     }
 
+    private function getDataContainersKeys()
+    {
+        return collect($this->dataContainers())
+            ->pluck("key")
+            ->all();
+    }
+
     /**
      * Retrieve all rows data as array.
      *
-     * @param SharpListQueryParams $params
+     * @param EntitiesListQueryParams $params
      * @return array
      */
-    abstract function getListData(SharpListQueryParams $params): array;
+    abstract function getListData(EntitiesListQueryParams $params);
 
     /**
      * Build list containers using ->addDataContainer()
