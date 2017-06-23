@@ -5,7 +5,7 @@ namespace Code16\Sharp\Form\Eloquent\Transformers;
 use Closure;
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 
-class EloquentTagsTransformer implements SharpAttributeTransformer
+class EloquentFormTagsTransformer implements SharpAttributeTransformer
 {
     /**
      * @var string

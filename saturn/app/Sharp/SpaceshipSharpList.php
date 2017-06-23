@@ -26,6 +26,7 @@ class SpaceshipSharpList extends SharpEntitiesList
             EntitiesListDataContainer::make("capacity")
                 ->setLabel("Capacity")
                 ->setSortable()
+                ->setHtml(false)
 
         )->addDataContainer(
             EntitiesListDataContainer::make("type")
@@ -63,7 +64,7 @@ class SpaceshipSharpList extends SharpEntitiesList
             ->setCustomTransformer("pilots", function($spaceship) {
                 return $spaceship->pilots->pluck("name")->implode("<br>");
             })
-//            ->setUploadTransformer("picture", ["width" => 100])
+            ->setUploadTransformer("picture", 100)
             ->transform(
                 Spaceship::with("picture", "type", "pilots")->get()
             );

@@ -26,7 +26,7 @@ class SharpEntitiesListTest extends SharpTestCase
             "key" => "name",
             "label" => "Name",
             "sortable" => false,
-            "html" => false,
+            "html" => true,
         ]], $list->dataContainers());
     }
 

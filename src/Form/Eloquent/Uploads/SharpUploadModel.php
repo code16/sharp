@@ -129,12 +129,12 @@ class SharpUploadModel extends Model
     }
 
     /**
-     * @param int $width
+     * @param int|null $width
      * @param int|null $height
      * @param array $filters
      * @return string
      */
-    public function thumbnail($width, $height=null, $filters = [])
+    public function thumbnail($width=null, $height=null, $filters=[])
     {
         return (new Thumbnail($this))->make($width, $height, $filters);
     }

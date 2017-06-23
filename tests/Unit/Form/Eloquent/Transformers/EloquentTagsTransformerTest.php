@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Tests\Unit\Form\Eloquent\Transformers;
 
-use Code16\Sharp\Form\Eloquent\Transformers\EloquentTagsTransformer;
+use Code16\Sharp\Form\Eloquent\Transformers\EloquentFormTagsTransformer;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
 
@@ -17,7 +17,7 @@ class EloquentTagsTransformerTest extends SharpFormEloquentBaseTest
         $friend2 = Person::create(["name" => "Jane Wayne"]);
         $person->friends()->sync([$friend1->id, $friend2->id]);
 
-        $transformer = new EloquentTagsTransformer("name", "id");
+        $transformer = new EloquentFormTagsTransformer("name", "id");
 
         $this->assertEquals([
             ["id" => $friend1->id, "label" => "John Wayne"],
@@ -33,7 +33,7 @@ class EloquentTagsTransformerTest extends SharpFormEloquentBaseTest
         $friend2 = Person::create(["name" => "Jane Wayne"]);
         $person->friends()->sync([$friend1->id, $friend2->id]);
 
-        $transformer = new EloquentTagsTransformer(function($person) {
+        $transformer = new EloquentFormTagsTransformer(function($person) {
             return $person->id . " - " . $person->name;
         }, "id");
 

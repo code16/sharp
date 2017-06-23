@@ -23,7 +23,7 @@ class EntitiesListDataContainer
     /**
      * @var boolean
      */
-    protected $html = false;
+    protected $html = true;
 
     /**
      * @param string $key

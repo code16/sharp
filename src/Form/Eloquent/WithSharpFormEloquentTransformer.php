@@ -3,7 +3,7 @@
 namespace Code16\Sharp\Form\Eloquent;
 
 use Closure;
-use Code16\Sharp\Form\Eloquent\Transformers\EloquentTagsTransformer;
+use Code16\Sharp\Form\Eloquent\Transformers\EloquentFormTagsTransformer;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 trait WithSharpFormEloquentTransformer
@@ -18,9 +18,9 @@ trait WithSharpFormEloquentTransformer
      */
     function setTagsTransformer(string $attribute, $labelAttribute, $idAttribute = "id")
     {
-        $transformer = new EloquentTagsTransformer($labelAttribute, $idAttribute);
-
-        $this->transformers[$attribute] = $transformer;
+        $this->transformers[$attribute] = new EloquentFormTagsTransformer(
+            $labelAttribute, $idAttribute
+        );
 
         return $this;
     }
