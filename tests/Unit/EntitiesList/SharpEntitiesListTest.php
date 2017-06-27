@@ -84,11 +84,31 @@ class SharpEntitiesListTest extends SharpTestCase
             ["name" => "Mary Wayne", "age" => 26],
         ], $form->data(new EntitiesListQueryParams()));
     }
+
+    /** @test */
+    function we_can_get_list_config()
+    {
+        $list = new class extends SharpEntitiesListTestList {
+            function buildListConfig()
+            {
+                $this->setSearchable()
+                    ->setPaginated();
+            }
+        };
+
+        $this->assertEquals([
+            "searchable" => true,
+            "paginated" => true,
+            "instanceIdAttribute" => "id",
+            "displayMode" => "list"
+        ], $list->listConfig());
+    }
 }
 
 abstract class SharpEntitiesListTestList extends SharpEntitiesList
 {
     function buildListDataContainers() {}
     function buildListLayout() {}
+    function buildListConfig() {}
     function getListData(EntitiesListQueryParams $params) { return []; }
 }

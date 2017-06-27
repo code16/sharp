@@ -53,4 +53,14 @@ class PersonSharpEntitiesList extends SharpEntitiesList
         $this->addColumn("name", 6, 12)
             ->addColumnLarge("age", 6);
     }
+
+    /**
+     * Build list config
+     *
+     * @return void
+     */
+    function buildListConfig()
+    {
+        $this->setSearchable();
+    }
 }

@@ -38,6 +38,16 @@ abstract class SharpEntitiesList
     protected $displayMode = "list";
 
     /**
+     * @var bool
+     */
+    protected $searchable = false;
+
+    /**
+     * @var bool
+     */
+    protected $paginated = false;
+
+    /**
      * Get the SharpListDataContainer array representation.
      *
      * @return array
@@ -94,10 +104,58 @@ abstract class SharpEntitiesList
      */
     function listConfig(): array
     {
+        $this->buildListConfig();
+
         return [
             "instanceIdAttribute" => $this->instanceIdAttribute,
             "displayMode" => $this->displayMode,
+            "searchable" => $this->searchable,
+            "paginated" => $this->paginated,
         ];
+    }
+
+    /**
+     * @param string $instanceIdAttribute
+     * @return $this
+     */
+    public function setInstanceIdAttribute(string $instanceIdAttribute)
+    {
+        $this->instanceIdAttribute = $instanceIdAttribute;
+
+        return $this;
+    }
+
+    /**
+     * @param string $displayMode
+     * @return $this
+     */
+    public function setDisplayMode(string $displayMode)
+    {
+        $this->displayMode = $displayMode;
+
+        return $this;
+    }
+
+    /**
+     * @param bool $searchable
+     * @return $this
+     */
+    public function setSearchable(bool $searchable = true)
+    {
+        $this->searchable = $searchable;
+
+        return $this;
+    }
+
+    /**
+     * @param bool $paginated
+     * @return $this
+     */
+    public function setPaginated(bool $paginated = true)
+    {
+        $this->paginated = $paginated;
+
+        return $this;
     }
 
     /**
@@ -181,4 +239,11 @@ abstract class SharpEntitiesList
      * @return void
      */
     abstract function buildListLayout();
+
+    /**
+     * Build list config
+     *
+     * @return void
+     */
+    abstract function buildListConfig();
 }

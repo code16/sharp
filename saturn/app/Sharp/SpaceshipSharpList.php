@@ -40,6 +40,13 @@ class SpaceshipSharpList extends SharpEntitiesList
         );
     }
 
+    function buildListConfig()
+    {
+        $this->setInstanceIdAttribute("id")
+            ->setSearchable()
+            ->setPaginated();
+    }
+
     function buildListLayout()
     {
         $this->addColumn("picture", 1, 2)

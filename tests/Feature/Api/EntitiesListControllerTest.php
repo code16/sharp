@@ -77,7 +77,9 @@ class EntitiesListControllerTest extends BaseApiTest
             ->assertStatus(200)
             ->assertJson(["config" => [
                 "instanceIdAttribute" => "id",
-                "displayMode" => "list"
+                "displayMode" => "list",
+                "searchable" => true,
+                "paginated" => false
             ]]);
     }
 }

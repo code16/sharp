@@ -61,4 +61,5 @@ class WithSharpEntitiesEloquentTransformerTestList extends SharpEntitiesList
 
     function buildListDataContainers() {}
     function buildListLayout() {}
+    function buildListConfig() {}
 }
