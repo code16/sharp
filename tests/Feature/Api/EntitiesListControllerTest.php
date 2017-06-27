@@ -12,8 +12,10 @@ class EntitiesListControllerTest extends BaseApiTest
         $this->json('get', '/sharp/api/list/person')
             ->assertStatus(200)
             ->assertJson(["data" => [
-                ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
-                ["id" => 2, "name" => "Mary <b>Wayne</b>", "age" => 26],
+                "items" => [
+                    ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
+                    ["id" => 2, "name" => "Mary <b>Wayne</b>", "age" => 26],
+                ]
             ]]);
     }
 
@@ -24,7 +26,7 @@ class EntitiesListControllerTest extends BaseApiTest
 
         $result = $this->json('get', '/sharp/api/list/person');
 
-        $this->assertArrayNotHasKey("job", $result->json()["data"][0]);
+        $this->assertArrayNotHasKey("job", $result->json()["data"]["items"][0]);
     }
 
     /** @test */

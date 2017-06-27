@@ -88,13 +88,16 @@ abstract class SharpEntitiesList
     {
         $keys = $this->getDataContainersKeys();
 
-        return collect($this->getListData($params))
-            ->map(function($row) use($keys) {
-                // Filter model attributes on actual form fields
-                return collect($row)->only(
-                    array_merge([$this->instanceIdAttribute], $keys)
-                )->all();
-            })->all();
+        return [
+            "items" =>
+                collect($this->getListData($params))
+                    ->map(function($row) use($keys) {
+                        // Filter model attributes on actual form fields
+                        return collect($row)->only(
+                            array_merge([$this->instanceIdAttribute], $keys)
+                        )->all();
+                    })->all()
+        ];
     }
 
     /**

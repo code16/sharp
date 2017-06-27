@@ -80,10 +80,39 @@ class SharpEntitiesListTest extends SharpTestCase
         };
 
         $this->assertEquals([
-            ["name" => "John Wayne", "age" => 22],
-            ["name" => "Mary Wayne", "age" => 26],
+            "items" => [
+                ["name" => "John Wayne", "age" => 22],
+                ["name" => "Mary Wayne", "age" => 26],
+            ]
         ], $form->data(new EntitiesListQueryParams()));
     }
+
+//    /** @test */
+//    function we_can_get_paginated_list_data()
+//    {
+//        $form = new class extends SharpEntitiesListTestList {
+//            function getListData(EntitiesListQueryParams $params): array
+//            {
+//                return [
+//                    ["name" => "John Wayne", "age" => 22, "job" => "actor"],
+//                    ["name" => "Mary Wayne", "age" => 26, "job" => "truck driver"]
+//                ];
+//            }
+//            function buildListDataContainers()
+//            {
+//                $this->addDataContainer(
+//                    EntitiesListDataContainer::make("name")
+//                )->addDataContainer(
+//                    EntitiesListDataContainer::make("age")
+//                );
+//            }
+//        };
+//
+//        $this->assertEquals([
+//            ["name" => "John Wayne", "age" => 22],
+//            ["name" => "Mary Wayne", "age" => 26],
+//        ], $form->data(new EntitiesListQueryParams()));
+//    }
 
     /** @test */
     function we_can_get_list_config()
