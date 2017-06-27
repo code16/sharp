@@ -20,6 +20,21 @@ class EntitiesListControllerTest extends BaseApiTest
     }
 
     /** @test */
+    public function we_can_get_paginated_list_data_for_an_entity()
+    {
+        $this->buildTheWorld();
+
+        $this->json('get', '/sharp/api/list/person?paginated')
+            ->assertStatus(200)
+            ->assertJson(["data" => [
+                "items" => [
+                    ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
+                    ["id" => 2, "name" => "Mary <b>Wayne</b>", "age" => 26],
+                ], "page" => 1, "totalCount" => 20, "pageSize" => 2
+            ]]);
+    }
+
+    /** @test */
     public function we_wont_get_entity_attribute_for_a_non_form_data()
     {
         $this->buildTheWorld();

@@ -26,13 +26,34 @@ class WithSharpEntitiesEloquentTransformerTest extends SharpFormEloquentBaseTest
     }
 
     /** @test */
+    function we_can_retrieve_an_array_version_of_a_models_paginator()
+    {
+        Person::create(["name" => "A"]);
+        Person::create(["name" => "B"]);
+        Person::create(["name" => "C"]);
+        Person::create(["name" => "D"]);
+        Person::create(["name" => "E"]);
+
+        $list = new class extends WithSharpEntitiesEloquentTransformerTestList {
+            function getListData(EntitiesListQueryParams $params) {
+                return $this->transform(Person::paginate(2));
+            }
+        };
+
+        $this->assertArraySubset(
+            [["name" => "A"], ["name" => "B"]],
+            $list->getListData(new EntitiesListQueryParams())->items()
+        );
+    }
+
+    /** @test */
     function we_handle_the_relation_separator()
     {
         $mother = Person::create(["name" => "Jane Wayne"]);
         Person::create(["name" => "Mary Wayne", "mother_id" => $mother->id]);
         Person::create(["name" => "John Wayne"]);
 
-        $form = new class extends WithSharpEntitiesEloquentTransformerTestList {
+        $list = new class extends WithSharpEntitiesEloquentTransformerTestList {
             function buildListDataContainers() {
                 $this->addDataContainer(EntitiesListDataContainer::make("mother:name"));
             }
@@ -40,12 +61,12 @@ class WithSharpEntitiesEloquentTransformerTest extends SharpFormEloquentBaseTest
 
         $this->assertArraySubset(
             ["name" => "Mary Wayne", "mother:name" => "Jane Wayne"],
-            $form->getListData(new EntitiesListQueryParams())[1]
+            $list->getListData(new EntitiesListQueryParams())[1]
         );
 
         $this->assertArraySubset(
             ["name" => "John Wayne", "mother:name" => null],
-            $form->getListData(new EntitiesListQueryParams())[2]
+            $list->getListData(new EntitiesListQueryParams())[2]
         );
     }
 }

@@ -4,6 +4,7 @@ namespace Code16\Sharp\EntitiesList;
 
 use Code16\Sharp\EntitiesList\containers\EntitiesListDataContainer;
 use Code16\Sharp\EntitiesList\layout\EntitiesListLayoutColumn;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 abstract class SharpEntitiesList
 {
@@ -87,17 +88,25 @@ abstract class SharpEntitiesList
     function data(EntitiesListQueryParams $params): array
     {
         $keys = $this->getDataContainersKeys();
+        $items = $this->getListData($params);
+
+        if($items instanceof LengthAwarePaginator) {
+            $page = $items->currentPage();
+            $totalCount = $items->total();
+            $pageSize = $items->perPage();
+            $items = $items->items();
+        }
 
         return [
             "items" =>
-                collect($this->getListData($params))
+                collect($items)
                     ->map(function($row) use($keys) {
                         // Filter model attributes on actual form fields
                         return collect($row)->only(
                             array_merge([$this->instanceIdAttribute], $keys)
                         )->all();
                     })->all()
-        ];
+        ] + (isset($page) ? compact('page', 'totalCount', 'pageSize') : []);
     }
 
     /**

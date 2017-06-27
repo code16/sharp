@@ -73,7 +73,7 @@ class SpaceshipSharpList extends SharpEntitiesList
             })
             ->setUploadTransformer("picture", 100)
             ->transform(
-                Spaceship::with("picture", "type", "pilots")->get()
+                Spaceship::with("picture", "type", "pilots")->paginate(10)
             );
     }
 }

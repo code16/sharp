@@ -5,6 +5,7 @@ namespace Code16\Sharp\Tests\Fixtures;
 use Code16\Sharp\EntitiesList\containers\EntitiesListDataContainer;
 use Code16\Sharp\EntitiesList\EntitiesListQueryParams;
 use Code16\Sharp\EntitiesList\SharpEntitiesList;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class PersonSharpEntitiesList extends SharpEntitiesList
 {
@@ -13,14 +14,20 @@ class PersonSharpEntitiesList extends SharpEntitiesList
      * Retrieve all rows data as array.
      *
      * @param EntitiesListQueryParams $params
-     * @return array
+     * @return array|LengthAwarePaginator
      */
     function getListData(EntitiesListQueryParams $params)
     {
-        return [
+        $items = [
             ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22, "job" => "actor"],
             ["id" => 2, "name" => "Mary <b>Wayne</b>", "age" => 26, "job" => "truck driver"],
         ];
+
+        if(request()->getQueryString() == "paginated") {
+            return new LengthAwarePaginator($items, 20, 2, 1);
+        }
+
+        return $items;
     }
 
     /**

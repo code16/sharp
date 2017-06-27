@@ -6,6 +6,7 @@ use Code16\Sharp\EntitiesList\containers\EntitiesListDataContainer;
 use Code16\Sharp\EntitiesList\EntitiesListQueryParams;
 use Code16\Sharp\EntitiesList\SharpEntitiesList;
 use Code16\Sharp\Tests\SharpTestCase;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class SharpEntitiesListTest extends SharpTestCase
 {
@@ -87,32 +88,36 @@ class SharpEntitiesListTest extends SharpTestCase
         ], $form->data(new EntitiesListQueryParams()));
     }
 
-//    /** @test */
-//    function we_can_get_paginated_list_data()
-//    {
-//        $form = new class extends SharpEntitiesListTestList {
-//            function getListData(EntitiesListQueryParams $params): array
-//            {
-//                return [
-//                    ["name" => "John Wayne", "age" => 22, "job" => "actor"],
-//                    ["name" => "Mary Wayne", "age" => 26, "job" => "truck driver"]
-//                ];
-//            }
-//            function buildListDataContainers()
-//            {
-//                $this->addDataContainer(
-//                    EntitiesListDataContainer::make("name")
-//                )->addDataContainer(
-//                    EntitiesListDataContainer::make("age")
-//                );
-//            }
-//        };
-//
-//        $this->assertEquals([
-//            ["name" => "John Wayne", "age" => 22],
-//            ["name" => "Mary Wayne", "age" => 26],
-//        ], $form->data(new EntitiesListQueryParams()));
-//    }
+    /** @test */
+    function we_can_get_paginated_list_data()
+    {
+        $form = new class extends SharpEntitiesListTestList {
+            function getListData(EntitiesListQueryParams $params)
+            {
+                $data = [
+                    ["name" => "John Wayne", "age" => 22, "job" => "actor"],
+                    ["name" => "Mary Wayne", "age" => 26, "job" => "truck driver"]
+                ];
+
+                return new LengthAwarePaginator($data, 10, 2, 1);
+            }
+            function buildListDataContainers()
+            {
+                $this->addDataContainer(
+                    EntitiesListDataContainer::make("name")
+                )->addDataContainer(
+                    EntitiesListDataContainer::make("age")
+                );
+            }
+        };
+
+        $this->assertEquals([
+            "items" => [
+                ["name" => "John Wayne", "age" => 22],
+                ["name" => "Mary Wayne", "age" => 26],
+            ], "page" => 1, "pageSize" => 2, "totalCount" => 10
+        ], $form->data(new EntitiesListQueryParams()));
+    }
 
     /** @test */
     function we_can_get_list_config()
