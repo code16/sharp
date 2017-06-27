@@ -134,7 +134,9 @@ class SharpEntitiesListTest extends SharpTestCase
             "searchable" => true,
             "paginated" => true,
             "instanceIdAttribute" => "id",
-            "displayMode" => "list"
+            "displayMode" => "list",
+            "defaultSort" => null,
+            "defaultSortDir" => null
         ], $list->listConfig());
     }
 }

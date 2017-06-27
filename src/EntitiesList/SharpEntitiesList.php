@@ -49,6 +49,16 @@ abstract class SharpEntitiesList
     protected $paginated = false;
 
     /**
+     * @var string
+     */
+    protected $defaultSort;
+
+    /**
+     * @var string
+     */
+    protected $defaultSortDir;
+
+    /**
      * Get the SharpListDataContainer array representation.
      *
      * @return array
@@ -82,13 +92,14 @@ abstract class SharpEntitiesList
     /**
      * Return data, as an array.
      *
-     * @param EntitiesListQueryParams $params
      * @return array
      */
-    function data(EntitiesListQueryParams $params): array
+    function data(): array
     {
         $keys = $this->getDataContainersKeys();
-        $items = $this->getListData($params);
+        $items = $this->getListData(
+            EntitiesListQueryParams::createFromRequest($this->defaultSort, $this->defaultSortDir)
+        );
 
         if($items instanceof LengthAwarePaginator) {
             $page = $items->currentPage();
@@ -123,6 +134,8 @@ abstract class SharpEntitiesList
             "displayMode" => $this->displayMode,
             "searchable" => $this->searchable,
             "paginated" => $this->paginated,
+            "defaultSort" => $this->defaultSort,
+            "defaultSortDir" => $this->defaultSortDir,
         ];
     }
 
@@ -155,6 +168,19 @@ abstract class SharpEntitiesList
     public function setSearchable(bool $searchable = true)
     {
         $this->searchable = $searchable;
+
+        return $this;
+    }
+
+    /**
+     * @param string $sortBy
+     * @param string $sortDir
+     * @return $this
+     */
+    public function setDefaultSort(string $sortBy, string $sortDir = "asc")
+    {
+        $this->defaultSort = $sortBy;
+        $this->defaultSortDir = $sortDir;
 
         return $this;
     }

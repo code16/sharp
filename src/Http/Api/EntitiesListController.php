@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Http\Api;
 
-use Code16\Sharp\EntitiesList\EntitiesListQueryParams;
 use Code16\Sharp\EntitiesList\SharpEntitiesList;
 use Illuminate\Routing\Controller;
 
@@ -20,7 +19,7 @@ class EntitiesListController extends Controller
         return response()->json([
             "containers" => $list->dataContainers(),
             "layout" => $list->listLayout(),
-            "data" => $list->data(new EntitiesListQueryParams()),
+            "data" => $list->data(),
             "config" => $list->listConfig()
         ]);
     }

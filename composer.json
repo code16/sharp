@@ -1,6 +1,6 @@
 {
   "name": "code16/sharp",
-  "description": "A kind of CMS for developers who hate CMS",
+  "description": "Let's call it a Laravel Content Management Framework",
   "authors": [{
     "name": "Philippe Lonchampt"
   }, {

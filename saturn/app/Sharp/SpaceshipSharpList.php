@@ -34,7 +34,7 @@ class SpaceshipSharpList extends SharpEntitiesList
                 ->setSortable()
 
         )->addDataContainer(
-            EntitiesListDataContainer::make("pilots")
+            EntitiesListDataContainer::make("pilots.name")
                 ->setLabel("Pilots")
                 ->setHtml()
         );
@@ -44,6 +44,7 @@ class SpaceshipSharpList extends SharpEntitiesList
     {
         $this->setInstanceIdAttribute("id")
             ->setSearchable()
+            ->setDefaultSort("name", "asc")
             ->setPaginated();
     }
 
@@ -62,6 +63,21 @@ class SpaceshipSharpList extends SharpEntitiesList
 
     function getListData(EntitiesListQueryParams $params)
     {
+        $spaceships = Spaceship::with("picture", "type", "pilots");
+
+        if($params->hasSearch()) {
+            $spaceships->select("spaceships.*")
+                ->leftJoin("pilot_spaceship", "spaceships.id", "=", "pilot_spaceship.spaceship_id")
+                ->leftJoin("pilots", "pilots.id", "=", "pilot_spaceship.pilot_id");
+
+            foreach($params->searchWords() as $word) {
+                $spaceships->where(function ($query) use ($word) {
+                    $query->orWhere("spaceships.name", "like", $word)
+                        ->orWhere('pilots.name', 'like', $word);
+                });
+            }
+        }
+
         return $this->setCustomTransformer("capacity", function($spaceship) {
                 return number_format($spaceship->capacity / 1000, 0) . "k";
             })
@@ -73,7 +89,8 @@ class SpaceshipSharpList extends SharpEntitiesList
             })
             ->setUploadTransformer("picture", 100)
             ->transform(
-                Spaceship::with("picture", "type", "pilots")->paginate(10)
+                $spaceships->orderBy($params->sortedBy(), $params->sortedDir())
+                    ->paginate(10)
             );
     }
 }
