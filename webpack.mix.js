@@ -2,11 +2,16 @@ const { mix } = require('laravel-mix');
 const webpack = require('webpack');
 const fs = require('fs-extra');
 
-mix.autoload({})
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
+
+mix.autoload({}).options({
+        extractVueStyles:true
+    })
     .setPublicPath('resources/assets/dist')
 
     .copy('node_modules/vue-clip/src', 'resources/assets/js/components/vendor/vue-clip')
     .copy('node_modules/bootstrap-vue/lib', 'resources/assets/js/components/vendor/bootstrap-vue')
+    .copy('node_modules/vue2-timepicker/src', 'resources/assets/js/components/vendor/vue2-timepicker')
     .js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
     //.js('resources/assets/js/sharp-embedded.js', 'resources/assets/dist/sharp-embedded.js')
 
@@ -19,6 +24,7 @@ mix.autoload({})
     ], 'resources/assets/dist/sharp.css')
     .webpackConfig({
         plugins: [
+            new ExtractTextPlugin('styles.css'),
             new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
             new webpack.WatchIgnorePlugin([/\/vendor\//]) //Do not watch files which are inside a 'vendor/' directories
         ]

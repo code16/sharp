@@ -11,14 +11,14 @@
                ref="input">
         <div class="SharpDate__picker" v-show="showPicker">
             <sharp-date-picker v-if="hasDate"
-                               class="SharpDate__picker-inner SharpDate__date"
+                               class=""
                                language="fr"
                                inline monday-first
                                :value="dateObject"
                                @selected="handleDateSelect">
             </sharp-date-picker>
             <sharp-time-picker v-if="hasTime"
-                               class=" SharpDate__time"
+                               class="SharpDate__time"
                                :value="timeObject"
                                :active="showPicker"
                                :format="displayFormat"
@@ -187,10 +187,9 @@
         },
         mounted() {
             document.addEventListener('click', (e) => {
-                if (!this.$el.contains(e.target) && this.showPicker && !this.force) {
+                if (!this.$el.contains(e.target) && this.showPicker) {
                     this.showPicker = false;
                 }
-                this.force = false;
             }, false);
 
 

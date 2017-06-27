@@ -24,7 +24,8 @@
 </template>
 
 <script>
-    import TimePicker from 'vue2-timepicker';
+    import TimePicker from '../../../vendor/vue2-timepicker/vue-timepicker';
+
     import moment from 'moment';
 
     const {
