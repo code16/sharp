@@ -1,5 +1,6 @@
 <template>
     <sharp-vue-clip :options="options" :value="value" :ratioX="ratioX" :ratioY="ratioY"
+                    :read-only="readOnly"
                     @error="$field.$emit('error',$event)"
                     @reset="$field.$emit('clear')">
     </sharp-vue-clip>
@@ -26,7 +27,9 @@
             thumbnail: String,
 
             ratioX:Number,
-            ratioY:Number
+            ratioY:Number,
+
+            readOnly: Boolean
         },
         computed: {
             options() {

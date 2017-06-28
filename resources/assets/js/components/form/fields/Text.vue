@@ -1,20 +1,24 @@
 <template>
-    <input :type="inputType" class="form-control"
-           :value="value"  :placeholder="placeholder" :disabled="disabled"
-           @input="handleInput"
+    <input :type="inputType" class="SharpText"
+           :value="value"  :placeholder="placeholder" :disabled="readOnly"
+           @input="handleInput" ref="input"
     >
 </template>
 
 <script>
     import Vue from 'vue';
+    import { Focusable } from '../../../mixins';
+
     export default {
         name:'SharpText',
+
+        mixins: [Focusable],
 
         props: {
             value: [String, Number],
 
             placeholder: String,
-            disabled: Boolean,
+            readOnly: Boolean,
             inputType:  {
                 type:String,
                 default:'text'
@@ -27,6 +31,10 @@
             handleInput(e) {
                 this.$emit('input',e.target.value);
             }
+        },
+
+        mounted() {
+            this.setFocusable(this.$refs.input);
         }
     }
 </script>

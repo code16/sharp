@@ -1318,6 +1318,18 @@ capture-stack-trace@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/capture-stack-trace/-/capture-stack-trace-1.0.0.tgz#4a6fa07399c26bba47f0b2496b4d0fb408c5550d"
 
+carbon-components@^7.10.2:
+  version "7.10.2"
+  resolved "https://registry.yarnpkg.com/carbon-components/-/carbon-components-7.10.2.tgz#3989c0ca79a4c70e3d4889aa2ef44912121daa40"
+  dependencies:
+    carbon-icons "^6.0.4"
+    flatpickr "2.6.3"
+    lodash.debounce "^4.0.8"
+
+carbon-icons@^6.0.4:
+  version "6.0.4"
+  resolved "https://registry.yarnpkg.com/carbon-icons/-/carbon-icons-6.0.4.tgz#5c222d94cd445cea494413b0b1b4a3e867a17ce6"
+
 cardinal@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/cardinal/-/cardinal-1.0.0.tgz#50e21c1b0aa37729f9377def196b5a9cec932ee9"
@@ -2536,6 +2548,10 @@ find-versions@^1.0.0:
 first-chunk-stream@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/first-chunk-stream/-/first-chunk-stream-1.0.0.tgz#59bfb50cd905f60d7c394cd3d9acaab4e6ad934e"
+
+flatpickr@2.6.3:
+  version "2.6.3"
+  resolved "https://registry.yarnpkg.com/flatpickr/-/flatpickr-2.6.3.tgz#457357532deb135f3da64b425bf4435737961564"
 
 flatten@^1.0.2:
   version "1.0.2"
@@ -4142,6 +4158,10 @@ lodash.clonedeep@^3.0.0:
 lodash.clonedeep@^4.3.2:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
+
+lodash.debounce@^4.0.8:
+  version "4.0.8"
+  resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
 
 lodash.defaults@^3.1.2:
   version "3.1.2"
@@ -6526,13 +6546,9 @@ vue-template-compiler@^2.0.0, vue-template-compiler@^2.2.6:
     de-indent "^1.0.2"
     he "^1.1.0"
 
-vue-template-es2015-compiler@1.3.2:
+vue-template-es2015-compiler@1.3.2, vue-template-es2015-compiler@^1.2.2:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.3.2.tgz#c04080227514929ba540de7a7a93ac430467bdc0"
-
-vue-template-es2015-compiler@^1.2.2:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.5.1.tgz#0c36cc57aa3a9ec13e846342cb14a72fcac8bd93"
 
 vue2-timepicker@^0.1.4:
   version "0.1.4"

@@ -65,7 +65,6 @@ const computeCondition = (fields, data, condition) => {
         if(operator==='or' && res)
             return true;
     }
-
     return res;
 };
 

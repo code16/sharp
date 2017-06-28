@@ -1,0 +1,59 @@
+.SharpCheck {
+  &__label {
+    @include reset;
+    @include font-smoothing;
+    @include font-size('14');
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    .SharpCheck__input {
+      @include hidden;
+    }
+
+    .SharpCheck__appearance {
+      display: inline-block;
+      height: rem(18px);
+      width: rem(18px);
+      margin-right: .5rem;
+      background-color: $ui-01;
+      border-radius: 2px;
+      border: 2px solid $ui-05;
+    }
+
+    .SharpCheck__input:checked + .SharpCheck__appearance,
+    .SharpCheck__input:checked + .SharpCheck__label .SharpCheck__appearance {
+      display: flex;
+      align-items: baseline;
+      background-color: $brand-01;
+      border-color: $brand-01;
+    }
+
+    .SharpCheck__input:disabled + .SharpCheck__appearance,
+    .SharpCheck__input:disabled ~ .SharpCheck__label-text {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .SharpCheck__input:focus + .SharpCheck__appearance {
+      @include focus-outline('blurred');
+    }
+
+    .SharpCheck__checkmark {
+      display: none;
+      fill: $inverse-01;
+      width: rem(15px);
+      height: rem(15px);
+    }
+
+    .SharpCheck__input:checked + .SharpCheck__appearance .SharpCheck__checkmark {
+      display: block;
+
+      @-moz-document url-prefix() {
+        & {
+          stroke: $brand-01;
+        }
+      }
+    }
+  }
+}

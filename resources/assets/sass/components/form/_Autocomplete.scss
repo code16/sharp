@@ -1,6 +1,23 @@
+
+
+
 .SharpAutocomplete {
   position: relative;
   font-size: 1rem;
+
+  &__result-item {
+    @extend .SharpText;
+    display: inline-flex !important;
+    justify-content: space-between;
+    align-items: center;
+    &__close-button {
+      @extend .SharpNotification__inline__close-button;
+    }
+
+    &__close-icon {
+      @extend .SharpNotification__inline__close-icon;
+    }
+  }
 
   &__multiselect {
     &--hide-dropdown {

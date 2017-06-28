@@ -1,13 +1,4 @@
 .SharpLocaleSelector {
-  &__item, &__current {
-    text-transform: uppercase;
-  }
-  &__item {
-    &--selected {
-      background: $gray-lighter;
-    }
-  }
-  .dropdown-menu {
-    min-width: 0;
-  }
+  text-transform: uppercase;
+  width: 4.5rem;
 }

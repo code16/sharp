@@ -1,6 +1,6 @@
 <template>
-    <div class="SharpFieldContainer form-group" :class="formGroupClasses" :style="extraStyle">
-        <label class="form-control-label" v-show="label">
+    <div class="SharpFieldContainer SharpForm--form-item" :class="formGroupClasses" :style="extraStyle">
+        <label class="SharpForm--label" v-show="label" @click="triggerFocus">
             {{label}} <span v-if="fieldProps.localized" class="SharpFieldContainer__label-locale">({{locale}})</span>
         </label>
         <template v-if="alerts.length">
@@ -11,10 +11,13 @@
         <sharp-field v-bind="exposedProps"
                      @error="setError" 
                      @ok="setOk" 
-                     @clear="clear">
+                     @clear="clear"
+                     @blur="handleBlur">
         </sharp-field>
-        <div class="form-control-feedback">{{stateMessage}}</div>
-        <small class="form-text text-muted">{{helpMessage}}</small>
+        <div class="SharpForm--form-requirement">{{stateMessage}}</div>
+
+        <!--TODO help message class-->
+        <small class="">{{helpMessage}}</small>
     </div>
 </template>
 
@@ -64,8 +67,8 @@
         computed: {
             formGroupClasses() {
                 return {
-                    'has-danger': this.state==='error',
-                    'has-success': this.state==='ok'
+                    'SharpForm--form-item--danger': this.state==='error',
+                    'SharpForm--form-item--success': this.state==='ok'
                 }
             },
             extraStyle() {
@@ -94,6 +97,12 @@
                 if(this.$tab) {
                     this.$tab.$emit('clear', this.fieldKey);
                 }
+            },
+            triggerFocus() {
+                this.$set(this.fieldProps,'focused',true);
+            },
+            handleBlur() {
+                this.$set(this.fieldProps,'focused',false);
             }
         },
         mounted() {

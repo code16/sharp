@@ -1,39 +1,44 @@
 <template>
     <div class="SharpList">
-        <div v-if="sortable && list.length" class="text-right">
-            <button type="button" class="btn btn-outline-primary" :class="{active:dragActive}" @click="toggleDrag">
+        <template v-if="sortable && list.length > 1">
+            <button type="button" class="SharpButton SharpButton--secondary SharpList__sort-button" :class="{active:dragActive}" @click="toggleDrag">
                 {{dragActive ? 'Ok' : 'Trier'}}
             </button>
-        </div>
-        <draggable :options="dragOptions" :list="list" class="list-group">
+        </template>
+        <draggable :options="dragOptions" :list="list">
             <transition-group name="expand" tag="div">
-                <li v-for="(listItemData, i) in list" :key="listItemData[indexSymbol]"
-                    class="SharpList__item list-group-item"
-                    :class="{'SharpList__item--collapsed':collapsed}"
+                <div v-for="(listItemData, i) in list" :key="listItemData[indexSymbol]"
+                    class="SharpList__item"
+                    :class="{'SharpList__item--collapsed':dragActive}"
                 >
-                    <template v-if="collapsed">
-                        <sharp-template name="CollapsedItem" :template="collapsedItemTemplate" :template-data="collapsedItemData(listItemData)"></sharp-template>
-                    </template>
-                    <template v-else>
-                        <sharp-list-item :layout="fieldLayout.item" :error-identifier="i">
-                            <template scope="itemFieldLayout">
-                                <sharp-field-display :field-key="itemFieldLayout.key"
-                                                     :context-fields="itemFields"
-                                                     :context-data="listItemData"
-                                                     :error-identifier="itemFieldLayout.key"
-                                                     :update-data="update(i)"
-                                                     :locale="locale">
-                                </sharp-field-display>
+                    <div class="SharpModule__inner">
+                        <div class="SharpModule__content">
+
+                            <template v-if="dragActive && collapsedItemTemplate">
+                                <sharp-template name="CollapsedItem" :template="collapsedItemTemplate" :template-data="collapsedItemData(listItemData)"></sharp-template>
                             </template>
-                        </sharp-list-item>
-                        <button v-if="removable" class="btn-link" @click="remove(i)">{{removeText}}</button>
-                        <div v-if="i<list.length-1 && showAddButton" class="SharpList__new-item-zone">
-                            <button class="btn btn-secondary" @click="insertNewItem(i)">+</button>
+                            <template v-else>
+                                <sharp-list-item :layout="fieldLayout.item" :error-identifier="i">
+                                    <template scope="itemFieldLayout">
+                                        <sharp-field-display :field-key="itemFieldLayout.key"
+                                                             :context-fields="updatedItemFields"
+                                                             :context-data="listItemData"
+                                                             :error-identifier="itemFieldLayout.key"
+                                                             :update-data="update(i)"
+                                                             :locale="locale">
+                                        </sharp-field-display>
+                                    </template>
+                                </sharp-list-item>
+                                <button v-if="!disabled && removable" class="SharpButton SharpButton--danger SharpButton--sm" @click="remove(i)">Supprimer</button>
+                            </template>
                         </div>
-                    </template>
-                </li>
-                <button v-if="showAddButton" type="button" :key="-1"
-                        class="SharpList__add-button btn btn-secondary" style=""
+                    </div>
+                    <div v-if="!disabled && showAddButton && i<list.length-1" class="SharpList__new-item-zone">
+                        <button class="SharpButton SharpButton--secondary" @click="insertNewItem(i)">Insert</button>
+                    </div>
+                </div>
+                <button v-if="!disabled && showAddButton" type="button" :key="-1"
+                        class="SharpButton SharpButton--secondary SharpList__add-button" style=""
                         @click="add">{{addText}}</button>
             </transition-group>
         </draggable>
@@ -79,10 +84,6 @@
                 type:String,
                 default:'Ajouter un élément'
             },
-            removeText: {
-                type:String,
-                default:"Supprimer l'élément"
-            },
             itemFields: {
                 type: Object,
                 required: true,
@@ -91,7 +92,7 @@
             maxItemCount: Number,
 
             itemIdAttribute: String,
-
+            readOnly:Boolean,
             locale:String
         },
         data() {
@@ -112,16 +113,28 @@
             }
         },
         computed: {
-            dragOptions() {
-                return {
-                    disabled:!this.dragActive
-                };
+            readOnlyItemFields() {
+                console.log('readOnly item fields');
+                let res = JSON.parse(JSON.stringify(this.itemFields));
+                for(let fieldKey of Object.keys(res)) {
+                    res[fieldKey].readOnly = true;
+                }
+                return res;
             },
-            collapsed() {
-                return this.dragActive;
+            disabled() {
+                return this.readOnly || this.dragActive;
+            },
+            updatedItemFields() {
+                if(this.readOnly || this.dragActive) {
+                    return this.readOnlyItemFields;
+                }
+                return this.itemFields;
+            },
+            dragOptions() {
+                return { disabled:!this.dragActive };
             },
             showAddButton() {
-                return !this.dragActive && this.addable && (this.list.length<this.maxItemCount || !this.maxItemCount);
+                return this.addable && (this.list.length<this.maxItemCount || !this.maxItemCount);
             },
             dragIndexSymbol() {
                 return Symbol('dragIndex');

@@ -1,6 +1,8 @@
 <template>
-    <div class="SharpMarkdown">
-        <textarea ref="textarea"></textarea>
+    <div class="SharpMarkdown" :class="{'SharpMarkdown--read-only':readOnly}">
+        <div class="SharpModule__inner">
+            <textarea ref="textarea"></textarea>
+        </div>
     </div>
 </template>
 
@@ -20,6 +22,8 @@
             toolbar:Array,
             height:Number,
             maxImageSize:Number,
+
+            readOnly: Boolean,
 
             locale:String
         },
@@ -159,6 +163,11 @@
             (imageBtn||{}).action = this.insertUploadImage;
 
             mde.codemirror.setSize('auto',this.height);
+
+            if(this.readOnly) {
+                mde.codemirror.setOption('readOnly', true);
+                mde.options.toolbar.forEach(icon => typeof icon === 'object' && (icon.action = noop));
+            }
 
             this.simplemde = mde;
 

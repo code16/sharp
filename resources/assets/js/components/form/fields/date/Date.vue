@@ -1,17 +1,24 @@
-<template>
+    <template>
     <div class="SharpDate">
-        <input class="form-control" :value="inputValue" @input="handleInput" @focus="showPicker=true"
-               @blur="handleBlur" @keydown.up.prevent="increase" @keydown.down.prevent="decrease">
+        <input class="SharpDate__input"
+               :value="inputValue"
+               :disabled="readOnly"
+               @input="handleInput"
+               @focus="forceShowPicker"
+               @blur="handleBlur"
+               @keydown.up.prevent="increase"
+               @keydown.down.prevent="decrease"
+               ref="input">
         <div class="SharpDate__picker" v-show="showPicker">
             <sharp-date-picker v-if="hasDate"
-                               class="SharpDate__picker-inner SharpDate__date"
+                               class=""
                                language="fr"
                                inline monday-first
                                :value="dateObject"
                                @selected="handleDateSelect">
             </sharp-date-picker>
             <sharp-time-picker v-if="hasTime"
-                               class=" SharpDate__time"
+                               class="SharpDate__time"
                                :value="timeObject"
                                :active="showPicker"
                                :format="displayFormat"
@@ -27,6 +34,8 @@
     import SharpDatePicker from './Datepicker';
     import SharpTimePicker from './Timepicker';
 
+    import { Focusable } from '../../../../mixins';
+
     import moment from 'moment';
 
     export default {
@@ -37,6 +46,8 @@
         },
 
         inject:['$field'],
+
+        mixins: [Focusable],
 
         props: {
             value: {
@@ -59,11 +70,14 @@
                 default:30
             },
             minTime: String,
-            maxTime: String
+            maxTime: String,
+
+            readOnly: Boolean
         },
         data() {
             return {
-                showPicker:false
+                showPicker:false,
+                force:false
             }
         },
         computed: {
@@ -165,14 +179,21 @@
                     start:this.displayFormat.indexOf(ch),
                     end:this.displayFormat.lastIndexOf(ch)+1
                 };
+            },
+            forceShowPicker() {
+                this.showPicker = true;
+                //this.force = true;
             }
         },
         mounted() {
             document.addEventListener('click', (e) => {
-                if (!this.$el.contains(e.target)) {
+                if (!this.$el.contains(e.target) && this.showPicker) {
                     this.showPicker = false;
                 }
             }, false);
+
+
+            this.setFocusable(this.$refs.input);
         }
     }
 </script>

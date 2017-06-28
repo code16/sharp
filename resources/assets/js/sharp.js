@@ -11,9 +11,10 @@ Vue.component(FieldDisplay.name, FieldDisplay);
 new Vue({
     el:"#sharp-app",
 
-    provide() {
-        return {
-            isSharp:true
+    provide: {
+        glasspane: {
+            show() { document.getElementById('glasspane').style.display = 'block' },
+            hide() { document.getElementById('glasspane').style.display = 'none' }
         }
     },
 
@@ -23,3 +24,7 @@ new Vue({
         [Dashboard.name]:Dashboard
     }
 });
+
+
+
+

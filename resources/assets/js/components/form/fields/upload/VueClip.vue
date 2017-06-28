@@ -1,41 +1,40 @@
 <template>
-    <div class="form-control">
-        <form class="SharpUpload dropzone">
-            <div v-show="!file">
-                <button type="button" class="dz-message btn btn-primary">Importer...</button>
-            </div>
-            <template v-if="file">
-                <div class="SharpUpload__container">
-                    <div class="SharpUpload__thumbnail" v-if="!!imageSrc">
-                        <img :src="imageSrc">
-                    </div>
-                    <div class="SharpUpload__infos">
-                        <div>
-                            <label class="form-control-label">{{ file.name }}</label>
-                            <div>{{ size }}</div>
-                            <div class="progress" v-show="showProgressBar">
-                                <div class="progress-bar" role="progressbar" :style="{width:`${progress}%`}"
-                                     :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"></div>
+    <div class="SharpUpload" :class="{'SharpUpload--empty':!file}">
+        <div class="SharpUpload__inner">
+            <div class="SharpUpload__content">
+                <form v-show="!file" class="dropzone">
+                    <button type="button" class="dz-message SharpButton SharpButton--secondary SharpUpload__upload-button" :disabled="readOnly">Importer...</button>
+                </form>
+                <template v-if="file">
+                    <div class="SharpUpload__container">
+                        <div class="SharpUpload__thumbnail" v-if="!!imageSrc">
+                            <img :src="imageSrc">
+                        </div>
+                        <div class="SharpUpload__infos">
+                            <div>
+                                <label class="SharpUpload__info">{{ fileName }}</label>
+                                <div class="SharpUpload__info">{{ size }}</div>
+                                <div class="progress" v-show="showProgressBar">
+                                    <div class="progress-bar" role="progressbar" :style="{width:`${progress}%`}"
+                                         :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <template v-if="!!originalImageSrc">
+                                    <button type="button" class="SharpButton SharpButton--sm SharpButton--secondary" @click="onEditButtonClick">Modifier</button>
+                                </template>
+                                <button type="button" class="SharpButton SharpButton--sm SharpButton--secondary SharpButton--danger" @click="remove()">Supprimer</button>
                             </div>
                         </div>
-                        <div v-if="!!originalImageSrc">
-                            <button type="button" class="btn btn-secondary" @click="onEditButtonClick">Modifier</button>
-                        </div>
                     </div>
-                </div>
-                <slot name="removeButton"></slot>
-                <template v-if="!$slots.removeButton">
-                    <button type="button" class="close" aria-label="Close" @click="remove()">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </template>
-            </template>
-            <div ref="clip-preview-template" class="clip-preview-template" style="display: none;">
-                <div></div>
+                <div ref="clip-preview-template" class="clip-preview-template" style="display: none;">
+                    <div></div>
+                </div>
             </div>
-        </form>
+        </div>
         <template v-if="!!originalImageSrc">
-            <b-modal v-model="showEditModal" @ok="onEditModalOk" @shown="onEditModalShown" :close-on-backdrop="false">
+            <sharp-modal v-model="showEditModal" @ok="onEditModalOk" @shown="onEditModalShown" :close-on-backdrop="false">
                 <vue-cropper ref="cropper" class="SharpUpload__modal-vue-cropper"
                              :view-mode="2" drag-mode="crop"  :aspect-ratio="ratioX/ratioY"
                              :auto-crop-area="1" :zoomable="false" :guides="false"
@@ -43,9 +42,11 @@
                              :ready="onCropperReady"
                              alt="Source image">
                 </vue-cropper>
-                <button class="btn btn-primary" @click="rotate(-90)"><i class="fa fa-rotate-left"></i></button>
-                <button class="btn btn-primary" @click="rotate(90)"><i class="fa fa-rotate-right"></i></button>
-            </b-modal>
+                <div>
+                    <button class="SharpButton SharpButton--primary" @click="rotate(-90)"><i class="fa fa-rotate-left"></i></button>
+                    <button class="SharpButton SharpButton--primary" @click="rotate(90)"><i class="fa fa-rotate-right"></i></button>
+                </div>
+            </sharp-modal>
         </template>
     </div>
 </template>
@@ -54,7 +55,8 @@
     import VueClip from '../../../vendor/vue-clip/components/Clip/index';
     import File from '../../../vendor/vue-clip/File';
 
-    import bModal from '../../../vendor/bootstrap-vue/components/modal';
+    import Modal from '../../../Modal';
+
     import VueCropper from 'vue-cropperjs';
 
     import rotateResize from './rotate';
@@ -65,13 +67,17 @@
         extends: VueClip,
 
         components: {
-            bModal
+            [Modal.name]: Modal
         },
+
+        inject : ['actionsBus'],
 
         props: {
             ratioX: Number,
             ratioY: Number,
-            value: Object
+            value: Object,
+
+            readOnly: Boolean
         },
 
         data() {
@@ -113,6 +119,11 @@
             },
             statusFunction() {
                 return { error:this.onStatusError, success:this.onStatusSuccess, added:this.onStatusAdded }
+            },
+
+            fileName() {
+                let splitted = this.file.name.split('/');
+                return splitted.length ? splitted[splitted.length-1] : '';
             }
         },
         methods: {
@@ -120,12 +131,16 @@
             onStatusAdded() {
                 this.showProgressBar = true;
                 this.$emit('reset');
+
+                this.actionsBus.$emit('disable-submit');
             },
             onStatusError() {
                 this.showProgressBar = false;
                 let msg = this.file.errorMessage;
                 this.remove();
                 this.$emit('error', msg);
+
+                this.actionsBus.$emit('enable-submit');
             },
             onStatusSuccess() {
                 setTimeout(() => this.showProgressBar = false, 1000);
@@ -138,6 +153,8 @@
 
                 data.uploaded = true;
                 this.$parent.$emit('input',data);
+                this.actionsBus.$emit('enable-submit');
+
                 this.croppable = true;
                 this.$nextTick(_=>{
                     this.isCropperReady() && this.onCropperReady();
@@ -153,6 +170,7 @@
 
                 this.$parent.$emit('input', null);
                 this.$emit('reset');
+                this.$emit('removed');
             },
 
             resetEdit() {

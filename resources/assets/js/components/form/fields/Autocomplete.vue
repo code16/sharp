@@ -1,12 +1,13 @@
 <template>
     <div class="SharpAutocomplete" :class="[`SharpAutocomplete--${state}`,{'SharpAutocomplete--remote':isRemote}]">
-        <div v-if="state=='valuated'" class="SharpAutocomplete__result-item form-control">
+        <div v-if="state=='valuated'" class="SharpAutocomplete__result-item">
             <sharp-template name="ResultItem" :template="resultItemTemplate" :template-data="valueObject"></sharp-template>
-            <div class="SharpAutocomplete__close-btn-container" @click="handleResetClick">
-                <button type="button" class="close" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+            <button class="SharpAutocomplete__result-item__close-button" type="button" @click="handleResetClick">
+                <svg class="SharpAutocomplete__result-item__close-icon"
+                     aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd">
+                    <path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
+                </svg>
+            </button>
         </div>
         <multiselect v-if="state!='valuated'"
                      class="SharpAutocomplete__multiselect"
@@ -17,6 +18,7 @@
                      :internal-search="false"
                      :placeholder="placeholder"
                      :loading="state=='loading'"
+                     :disabled="readOnly"
                      :max="hideDropdown ? -1 : 1"
                      @search-change="updateSuggestions"
                      @select="handleSelect"
@@ -75,7 +77,7 @@
                 type: Array,
                 default:()=>['value']
             },
-            disabled: Boolean,
+            readOnly: Boolean,
             listItemTemplate: String,
             resultItemTemplate: String
         },

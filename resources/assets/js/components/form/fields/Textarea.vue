@@ -1,5 +1,5 @@
 <template>
-    <textarea class="form-control" :rows="rows" :placeholder="placeholder" :disabled="disabled"
+    <textarea class="SharpTextarea" :rows="rows" :placeholder="placeholder" :disabled="disabled"
               :value="value" @input="handleInput">
     </textarea>
 </template>

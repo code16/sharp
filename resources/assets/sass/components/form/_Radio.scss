@@ -1,0 +1,46 @@
+.SharpRadio {
+  @include hidden;
+  &__label {
+    @include font-size('14');
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 1rem;
+  }
+
+  &__appearance {
+    @include reset;
+    background-color: $inverse-01;
+    border-radius: 50%;
+    border: 2px solid $ui-05;
+    height: rem(18px);
+    width: rem(18px);
+    margin-right: rem(10px);
+  }
+}
+
+.SharpRadio:checked + .SharpRadio__label .SharpRadio__appearance {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-color: $brand-01;
+
+  &:before {
+    content: '';
+    display: inline-block;
+    position: relative;
+    width: .5rem;
+    height: .5rem;
+    border-radius: 50%;
+    background-color: $brand-01;
+  }
+}
+
+.SharpRadio:disabled + .SharpRadio__label {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.SharpRadio:focus + .SharpRadio__label .SharpRadio__appearance {
+  @include focus-outline('blurred');
+}

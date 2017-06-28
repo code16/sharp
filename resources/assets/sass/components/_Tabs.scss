@@ -1,15 +1,100 @@
 .SharpTabs {
-  .nav-item {
-    &.has-error {
+  &__nav {
+    display: flex;
+    justify-content: center;
+    height: rem(40px);
+    margin-bottom: 1em;
+    .SharpTabs__nav-link {
+      @include reset;
+      @include font-smoothing;
+      @include font-size('14');
+      background-color: transparent;
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      margin: 0;
+      text-decoration: none;
+      border: 1px solid $brand-01;
+      color: $brand-01;
 
-      .nav-link {
-        padding-right: 0.5em;
+      &:focus {
+        outline: 1px solid transparent;
+        box-shadow: 0 2px 0 0 $color__blue-20, 0 -2px 0 0 $color__blue-20;
+        z-index: 2;
+      }
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &:focus {
+        border-color: $brand-02;
+        //text-decoration: underline;
+      }
+
+      &:hover,
+      &:active {
+        background-color: $brand-02;
+        border-color: $brand-02;
+        color: $inverse-01;
+      }
+
+      &:not(:last-of-type) {
+        border-right: none;
+      }
+
+      &:first-of-type {
+        border-bottom-left-radius: 8px;
+        border-top-left-radius: 8px;
+
+        &:hover {
+          border-color: $brand-02;
+        }
+
+        &:focus {
+          box-shadow: -2px 0 0 0 $color__blue-20, 0 2px 0 0 $color__blue-20, 0 -2px 0 0 $color__blue-20;
+          z-index: 0;
+        }
+      }
+
+      &:last-of-type {
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+
+        &:hover {
+          border-color: $brand-02;
+        }
+
+        &:focus {
+          box-shadow: 2px 0 0 0 $color__blue-20, 0 2px 0 0 $color__blue-20, 0 -2px 0 0 $color__blue-20;
+          z-index: 0;
+        }
+      }
+
+      &--active {
+        background-color: $brand-01;
+        color: $inverse-01;
+        font-weight: 400;
+        outline: 1px solid transparent;
+
+        &:hover {
+          border-color: $brand-01;
+        }
+      }
+
+
+      &--has-error {
+        //padding-right: 0.5em;
         &:after {
           content: "•";
           color: red;
-          padding-left:0.5em;
+          padding-left:0.5rem;
+          display: inline-block;
+          text-decoration: none !important;
         }
       }
     }
+
   }
+
 }
