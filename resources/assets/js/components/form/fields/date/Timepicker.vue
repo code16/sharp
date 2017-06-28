@@ -1,23 +1,25 @@
 <template>
     <span class="time-picker">
+        <header>
+            <span class="hint" v-text="hourType"></span>
+            <span class="hint" v-text="minuteType"></span>
+        </header>
         <div class="dropdown">
             <div class="select-list">
                 <ul class="hours" ref="hours">
-                    <li class="hint" v-text="hourType"></li>
                     <li v-for="hr in croppedHours" v-text="hr" :class="{active: hour === hr}" @click.stop="select2('hour', hr)"></li>
                 </ul>
                 <ul class="minutes" ref="minutes">
-                    <li class="hint" v-text="minuteType"></li>
                     <li v-for="m in croppedMinutes" v-text="m" :class="{active: minute === m}" @click.stop="select2('minute', m)"></li>
                 </ul>
-                <ul class="seconds" ref="seconds" v-if="secondType">
-                    <li class="hint" v-text="secondType"></li>
-                    <li v-for="s in seconds" v-text="s" :class="{active: second === s}" @click.stop="select2('second', s)"></li>
-                </ul>
-                <ul class="apms" v-if="apmType">
-                    <li class="hint" v-text="apmType"></li>
-                    <li v-for="a in apms" v-text="a" :class="{active: apm === a}" @click.stop="select2('apm', a)"></li>
-                </ul>
+                <!--<ul class="seconds" ref="seconds" v-if="secondType">-->
+                    <!--<li class="hint" v-text="secondType"></li>-->
+                    <!--<li v-for="s in seconds" v-text="s" :class="{active: second === s}" @click.stop="select2('second', s)"></li>-->
+                <!--</ul>-->
+                <!--<ul class="apms" v-if="apmType">-->
+                    <!--<li class="hint" v-text="apmType"></li>-->
+                    <!--<li v-for="a in apms" v-text="a" :class="{active: apm === a}" @click.stop="select2('apm', a)"></li>-->
+                <!--</ul>-->
             </div>
         </div>
     </span>

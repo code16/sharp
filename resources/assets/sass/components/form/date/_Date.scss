@@ -42,14 +42,77 @@
 
   .SharpDate__picker {
     position: absolute;
+    display: flex;
+    height: rem(230px);
     z-index: 100;
+    margin-top: -1px;
+    @include layer('pop-out');
+
     .SharpDate__time {
+      background: #fff;
+      width: 10em;
+      padding: .875rem 0 .25rem;
+      @include font-size('12');
+
+      header {
+        width: 100%;
+        height: rem(25px);
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        .hint {
+          font-weight: bold;
+          text-transform: uppercase;
+        }
+      }
+
       .dropdown {
-        position:absolute;
-        height:100%;
+        flex:1;
+        box-shadow:none;
+        height:auto;
         top:0;
         .select-list {
-          height:100%;
+          height:rem(230px) - .875rem - rem(25px);
+          display: flex;
+          overflow: hidden;
+          flex-flow: row nowrap;
+          align-items: stretch;
+          justify-content: space-between;
+
+          ul {
+            flex: 1;
+            overflow-x: hidden;
+            overflow-y: auto;
+            list-style-type: none;
+
+            padding: 0;
+            margin: 0;
+
+            li {
+              height: rem(25px);
+
+              display: flex;
+              align-items: center;
+              justify-content: center;
+
+              cursor: default;
+
+              &:not(.hint):hover {
+                background: $ui-04;
+                cursor: pointer;
+              }
+
+              &.active {
+                background: $brand-01;
+                color: $inverse-01;
+                border: 2px solid transparent;
+              }
+
+
+            }
+
+          }
+
         }
       }
     }
@@ -65,7 +128,9 @@
       border-radius: 0;
       border: none;
       overflow: hidden;
-      margin-top: -1px;
+      //margin-top: -1px;
+
+      box-shadow: none;
 
       &:before,
       &:after {

@@ -2,10 +2,8 @@ const { mix } = require('laravel-mix');
 const webpack = require('webpack');
 const fs = require('fs-extra');
 
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
-
 mix.autoload({}).options({
-        extractVueStyles:true
+        extractVueStyles:'.bin/vendor-components.css'
     })
     .setPublicPath('resources/assets/dist')
 
@@ -24,7 +22,6 @@ mix.autoload({}).options({
     ], 'resources/assets/dist/sharp.css')
     .webpackConfig({
         plugins: [
-            new ExtractTextPlugin('styles.css'),
             new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
             new webpack.WatchIgnorePlugin([/\/vendor\//]) //Do not watch files which are inside a 'vendor/' directories
         ]

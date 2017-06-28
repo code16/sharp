@@ -33295,6 +33295,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -35843,7 +35845,7 @@ if (readOnly) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fuse_js__ = __webpack_require__(329);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fuse_js__ = __webpack_require__(331);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fuse_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_fuse_js__);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -37208,7 +37210,7 @@ function fromByteArray (uint8) {
 
 
 var base64 = __webpack_require__(242)
-var ieee754 = __webpack_require__(330)
+var ieee754 = __webpack_require__(332)
 var isArray = __webpack_require__(244)
 
 exports.Buffer = Buffer
@@ -58360,6 +58362,18 @@ module.exports = function() {
 
 /***/ }),
 /* 329 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 330 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 331 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -59190,7 +59204,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 330 */
+/* 332 */
 /***/ (function(module, exports) {
 
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -59278,18 +59292,6 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-
-/***/ }),
-/* 331 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 332 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
 
 /***/ }),
 /* 333 */
@@ -75100,7 +75102,7 @@ module.exports = Component.exports
 
 
 /* styles */
-__webpack_require__(332)
+__webpack_require__(330)
 
 var Component = __webpack_require__(0)(
   /* script */
@@ -75206,7 +75208,7 @@ module.exports = Component.exports
 
 
 /* styles */
-__webpack_require__(331)
+__webpack_require__(329)
 
 var Component = __webpack_require__(0)(
   /* script */
@@ -77254,19 +77256,24 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
   return _vm._c('span', {
     staticClass: "time-picker"
-  }, [_vm._c('div', {
+  }, [_vm._c('header', [_vm._c('span', {
+    staticClass: "hint",
+    domProps: {
+      "textContent": _vm._s(_vm.hourType)
+    }
+  }), _vm._v(" "), _vm._c('span', {
+    staticClass: "hint",
+    domProps: {
+      "textContent": _vm._s(_vm.minuteType)
+    }
+  })]), _vm._v(" "), _vm._c('div', {
     staticClass: "dropdown"
   }, [_vm._c('div', {
     staticClass: "select-list"
   }, [_vm._c('ul', {
     ref: "hours",
     staticClass: "hours"
-  }, [_vm._c('li', {
-    staticClass: "hint",
-    domProps: {
-      "textContent": _vm._s(_vm.hourType)
-    }
-  }), _vm._v(" "), _vm._l((_vm.croppedHours), function(hr) {
+  }, _vm._l((_vm.croppedHours), function(hr) {
     return _vm._c('li', {
       class: {
         active: _vm.hour === hr
@@ -77281,15 +77288,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
         }
       }
     })
-  })], 2), _vm._v(" "), _vm._c('ul', {
+  })), _vm._v(" "), _vm._c('ul', {
     ref: "minutes",
     staticClass: "minutes"
-  }, [_vm._c('li', {
-    staticClass: "hint",
-    domProps: {
-      "textContent": _vm._s(_vm.minuteType)
-    }
-  }), _vm._v(" "), _vm._l((_vm.croppedMinutes), function(m) {
+  }, _vm._l((_vm.croppedMinutes), function(m) {
     return _vm._c('li', {
       class: {
         active: _vm.minute === m
@@ -77304,52 +77306,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
         }
       }
     })
-  })], 2), _vm._v(" "), (_vm.secondType) ? _vm._c('ul', {
-    ref: "seconds",
-    staticClass: "seconds"
-  }, [_vm._c('li', {
-    staticClass: "hint",
-    domProps: {
-      "textContent": _vm._s(_vm.secondType)
-    }
-  }), _vm._v(" "), _vm._l((_vm.seconds), function(s) {
-    return _vm._c('li', {
-      class: {
-        active: _vm.second === s
-      },
-      domProps: {
-        "textContent": _vm._s(s)
-      },
-      on: {
-        "click": function($event) {
-          $event.stopPropagation();
-          _vm.select2('second', s)
-        }
-      }
-    })
-  })], 2) : _vm._e(), _vm._v(" "), (_vm.apmType) ? _vm._c('ul', {
-    staticClass: "apms"
-  }, [_vm._c('li', {
-    staticClass: "hint",
-    domProps: {
-      "textContent": _vm._s(_vm.apmType)
-    }
-  }), _vm._v(" "), _vm._l((_vm.apms), function(a) {
-    return _vm._c('li', {
-      class: {
-        active: _vm.apm === a
-      },
-      domProps: {
-        "textContent": _vm._s(a)
-      },
-      on: {
-        "click": function($event) {
-          $event.stopPropagation();
-          _vm.select2('apm', a)
-        }
-      }
-    })
-  })], 2) : _vm._e()])])])
+  }))])])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
