@@ -13,7 +13,7 @@
                 }, {
                     slot:'carret'
                 }),
-                ...ctx.children
+                ...(ctx.children||[])
             ])
         }
     }

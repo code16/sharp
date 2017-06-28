@@ -12,8 +12,8 @@
                         </div>
                         <div class="SharpUpload__infos">
                             <div>
-                                <label class="form-control-label">{{ fileName }}</label>
-                                <div>{{ size }}</div>
+                                <label class="SharpUpload__info">{{ fileName }}</label>
+                                <div class="SharpUpload__info">{{ size }}</div>
                                 <div class="progress" v-show="showProgressBar">
                                     <div class="progress-bar" role="progressbar" :style="{width:`${progress}%`}"
                                          :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"></div>
@@ -21,9 +21,9 @@
                             </div>
                             <div>
                                 <template v-if="!!originalImageSrc">
-                                    <button type="button" class="SharpButton SharpButton--secondary" @click="onEditButtonClick">Modifier</button>
+                                    <button type="button" class="SharpButton SharpButton--sm SharpButton--secondary" @click="onEditButtonClick">Modifier</button>
                                 </template>
-                                <button type="button" class="SharpButton SharpButton--secondary SharpButton--danger" @click="remove()">Supprimer</button>
+                                <button type="button" class="SharpButton SharpButton--sm SharpButton--secondary SharpButton--danger" @click="remove()">Supprimer</button>
                             </div>
                         </div>
                     </div>

@@ -56,7 +56,8 @@
 
       header {
         width: 100%;
-        height: rem(25px);
+        height: rem(28px);
+        margin-bottom: 1rem;
         display: flex;
         align-items: center;
         justify-content: space-around;
@@ -67,12 +68,12 @@
       }
 
       .dropdown {
-        flex:1;
         box-shadow:none;
         height:auto;
         top:0;
+
         .select-list {
-          height:rem(230px) - .875rem - rem(25px);
+          height:rem(230px) - .875rem - rem(28px) - 1rem;
           display: flex;
           overflow: hidden;
           flex-flow: row nowrap;
@@ -103,7 +104,7 @@
               }
 
               &.active {
-                background: $brand-01;
+                background: $brand-01 !important;
                 color: $inverse-01;
                 border: 2px solid transparent;
               }
@@ -179,7 +180,7 @@
           text-transform: uppercase;
           padding: 0;
           &:hover {
-            background: $ui-02;
+            color: $brand-01;
             cursor: pointer;
           }
         }
@@ -295,6 +296,10 @@
             .month, .year {
               flex-basis: 33.333333%;
               text-align: center;
+
+              display: flex;
+              align-items: center;
+              justify-content: center;
 
               &:focus {
                 outline: none;

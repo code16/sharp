@@ -31153,12 +31153,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Multiselect__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Multiselect___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Multiselect__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -31169,21 +31167,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpLocaleSelector',
-    components: {},
+    components: _defineProperty({}, __WEBPACK_IMPORTED_MODULE_0__Multiselect___default.a.name, __WEBPACK_IMPORTED_MODULE_0__Multiselect___default.a),
     props: {
         locales: Array,
         value: String
     },
-    computed: {
-        filteredLocales: function filteredLocales() {
-            return this.locales;
-        },
-        currentLocaleIndex: function currentLocaleIndex() {
-            return this.locales.indexOf(this.value);
-        }
-    }
+    computed: {}
 });
 
 /***/ }),
@@ -31246,7 +31239,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             template: '\n                <svg class="multiselect__select" width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd">\n                    <path d="M10 0L5 5 0 0z"></path>\n                </svg>'
         }, {
             slot: 'carret'
-        })].concat(_toConsumableArray(ctx.children)));
+        })].concat(_toConsumableArray(ctx.children || [])));
     }
 });
 
@@ -32500,6 +32493,7 @@ var _components;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
 //
 //
 //
@@ -76612,26 +76606,29 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
         "input": function (c) { return _vm.handleCheckboxChanged(c, option.id); }
       }
     })
-  }) : _vm._l((_vm.options), function(option) {
-    return _vm._c('div', {
-      staticClass: "form-check"
-    }, [_vm._c('label', {
-      staticClass: "form-check-label"
-    }, [_vm._c('input', {
-      staticClass: "form-check-input",
+  }) : _vm._c('div', {
+    staticClass: "SharpSelect__radio-button-group"
+  }, [_vm._l((_vm.options), function(option) {
+    return [_vm._c('input', {
+      staticClass: "SharpRadio",
       attrs: {
-        "type": "radio"
+        "type": "radio",
+        "tabindex": "0"
       },
       domProps: {
         "checked": _vm.value === option.id
-      },
+      }
+    }), _vm._v(" "), _vm._c('label', {
+      staticClass: "SharpRadio__label",
       on: {
         "click": function($event) {
           _vm.handleRadioClicked(option.id)
         }
       }
-    }), _vm._v(" " + _vm._s(option.label) + "\n                ")])])
-  })], 2)], 1)
+    }, [_vm._c('span', {
+      staticClass: "SharpRadio__appearance"
+    }), _vm._v("\n                    " + _vm._s(option.label) + "\n                ")])]
+  })], 2)], 2)], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -76699,7 +76696,19 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
-  return _vm._c('div', [_vm._v("TODO Locale selector")])
+  return _vm._c('sharp-multiselect', {
+    staticClass: "SharpLocaleSelector",
+    attrs: {
+      "options": _vm.locales,
+      "searchable": false,
+      "value": _vm.value
+    },
+    on: {
+      "input": function($event) {
+        _vm.$emit('input', $event)
+      }
+    }
+  })
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -76797,8 +76806,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
   })]) : _vm._e(), _vm._v(" "), _vm._c('div', {
     staticClass: "SharpUpload__infos"
   }, [_vm._c('div', [_vm._c('label', {
-    staticClass: "form-control-label"
-  }, [_vm._v(_vm._s(_vm.fileName))]), _vm._v(" "), _vm._c('div', [_vm._v(_vm._s(_vm.size))]), _vm._v(" "), _vm._c('div', {
+    staticClass: "SharpUpload__info"
+  }, [_vm._v(_vm._s(_vm.fileName))]), _vm._v(" "), _vm._c('div', {
+    staticClass: "SharpUpload__info"
+  }, [_vm._v(_vm._s(_vm.size))]), _vm._v(" "), _vm._c('div', {
     directives: [{
       name: "show",
       rawName: "v-show",
@@ -76818,7 +76829,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
       "aria-valuemax": "100"
     }
   })])]), _vm._v(" "), _vm._c('div', [(!!_vm.originalImageSrc) ? [_vm._c('button', {
-    staticClass: "SharpButton SharpButton--secondary",
+    staticClass: "SharpButton SharpButton--sm SharpButton--secondary",
     attrs: {
       "type": "button"
     },
@@ -76826,7 +76837,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
       "click": _vm.onEditButtonClick
     }
   }, [_vm._v("Modifier")])] : _vm._e(), _vm._v(" "), _vm._c('button', {
-    staticClass: "SharpButton SharpButton--secondary SharpButton--danger",
+    staticClass: "SharpButton SharpButton--sm SharpButton--secondary SharpButton--danger",
     attrs: {
       "type": "button"
     },

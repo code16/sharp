@@ -1,4 +1,5 @@
 .SharpUpload {
+
   &:not(.SharpUpload--empty) {
     @extend .SharpModule;
     .SharpUpload__inner {
@@ -55,6 +56,13 @@
       display:flex;
       flex-flow: column;
       justify-content: space-between;
+      > * {
+        margin: .2em 0;
+      }
+
+      .SharpUpload__info {
+        @include font-size('14');
+      }
     }
   }
 

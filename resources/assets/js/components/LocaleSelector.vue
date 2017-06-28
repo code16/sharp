@@ -1,34 +1,25 @@
 <template>
-    <div>TODO Locale selector</div>
-    <!--<b-dropdown class="SharpLocaleSelector">-->
-        <!--<span slot="text" class="SharpLocaleSelector__current">-->
-            <!--{{value}}-->
-        <!--</span>-->
-        <!--<b-dropdown-header>Choisissez une langue</b-dropdown-header>-->
-        <!--<b-dropdown-item v-for="locale in filteredLocales"-->
-                         <!--class="SharpLocaleSelector__item" :class="{'SharpLocaleSelector__item&#45;&#45;selected':value===locale}"-->
-                         <!--@click="$emit('input',locale)"-->
-                         <!--v-text="locale" :key="locale">-->
-        <!--</b-dropdown-item>-->
-    <!--</b-dropdown>-->
+    <sharp-multiselect class="SharpLocaleSelector"
+                       :options="locales"
+                       :searchable="false"
+                       :value="value"
+                       @input="$emit('input',$event)">
+    </sharp-multiselect>
 </template>
 
 <script>
+    import Multiselect from './Multiselect';
+
     export default {
         name: 'SharpLocaleSelector',
         components: {
+            [Multiselect.name]: Multiselect
         },
         props: {
             locales: Array,
             value: String
         },
         computed: {
-            filteredLocales() {
-                return this.locales;
-            },
-            currentLocaleIndex() {
-                return this.locales.indexOf(this.value);
-            }
         }
     }
 </script>

@@ -40,17 +40,19 @@ $button-border-width: 1px;
   // overriding default vendor components style
   @import 'components/form/Multiselect';
 
-  @import 'components/ActionView';
-  @import 'components/ActionBar';
-  @import 'components/Tabs';
-  @import 'components/LocaleSelector';
-
   // from carbon design
   @import 'components/Button';
   @import 'components/Module';
   @import 'components/Dropdown';
   @import 'components/Tag';
   @import 'components/Notification';
+
+  // Action bar and viewer
+  @import 'components/ActionView';
+  @import 'components/ActionBar';
+  @import 'components/Tabs';
+  @import 'components/LocaleSelector';
+
 
   // Form components
   @import 'components/form/Text';
@@ -69,6 +71,7 @@ $button-border-width: 1px;
   @import 'components/form/Tags';
   @import 'components/form/Check';
   @import 'components/form/Textarea';
+  @import 'components/form/Radio';
 
 
   input[type="number"].hide-controls {

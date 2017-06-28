@@ -7,6 +7,10 @@
   flex: 1 0 auto;
   margin: 0;
 
+  &:first-of-type {
+    padding: 0;
+  }
+
   &__inner {
     @include layer('raised');
     background-color: $ui-01;

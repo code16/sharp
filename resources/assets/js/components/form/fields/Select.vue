@@ -25,14 +25,15 @@
                              :text="option.label" :key="option.id">
                 </sharp-check>
             </template>
-            <template v-else>
-                <div class="form-check" v-for="option in options">
-                    <label class="form-check-label">
-                        <input class="form-check-input" type="radio" :checked="value===option.id"
-                               @click="handleRadioClicked(option.id)"> {{option.label}}
+            <div v-else class="SharpSelect__radio-button-group">
+                <template v-for="option in options">
+                    <input class="SharpRadio" type="radio" :checked="value===option.id" tabindex="0">
+                    <label class="SharpRadio__label" @click="handleRadioClicked(option.id)">
+                        <span class="SharpRadio__appearance"></span>
+                        {{option.label}}
                     </label>
-                </div>
-            </template>
+                </template>
+            </div>
         </div>
     </div>
 </template>
@@ -73,7 +74,7 @@
             },
             maxText: String,
             maxSelected: Number,
-            readOnly: Boolean
+            readOnly: Boolean,
         },
 
         data() {

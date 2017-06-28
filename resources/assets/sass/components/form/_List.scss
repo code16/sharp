@@ -17,12 +17,26 @@
   //remove item button
   .SharpButton--danger {
     align-self: center;
-    font-size: .75rem;
   }
 
   &__item {
     @extend .SharpModule;
+    padding: 0;
+    border-bottom: 1px solid $ui-02;
     position: relative;
+
+    .SharpUpload {
+      &__inner {
+        box-shadow: none !important;
+      }
+      &__content {
+        padding: 0 !important;
+      }
+    }
+
+    &:last-of-type {
+      padding-bottom: rem(10px);
+    }
 
     &.expand-enter-active {
       transition: all 400ms;
