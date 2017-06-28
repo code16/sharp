@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Tests\Unit\Form\Eloquent\Relationships;
 
-use Code16\Sharp\Form\Eloquent\Relationships\HasOneRelationUpdater;
 use Code16\Sharp\Form\Eloquent\Relationships\MorphOneRelationUpdater;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
@@ -44,4 +43,21 @@ class MorphOneRelationUpdaterTest extends SharpFormEloquentBaseTest
             "file" => "test.jpg",
         ]);
     }
+
+    /** @test */
+    function we_ignore_a_morphOne_related_if_null()
+    {
+        $person = Person::create(["name" => "John Wayne"]);
+
+        $updater = new MorphOneRelationUpdater();
+
+        $updater->update($person, "picture:file", null);
+
+//        $this->assertDatabaseHas("pictures", [
+//            "picturable_type" => Person::class,
+//            "picturable_id" => $person->id,
+//            "file" => "test.jpg",
+//        ]);
+    }
+
 }

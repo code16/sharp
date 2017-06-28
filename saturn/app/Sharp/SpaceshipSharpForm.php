@@ -5,6 +5,7 @@ namespace App\Sharp;
 use App\Pilot;
 use App\Spaceship;
 use App\SpaceshipType;
+use Code16\Sharp\Exceptions\Form\SharpFormException;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
@@ -19,7 +20,6 @@ use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
-use Code16\Sharp\Form\SharpFormException;
 
 class SpaceshipSharpForm extends SharpForm
 {
