@@ -5,7 +5,6 @@ namespace Code16\Sharp\Http\Middleware;
 use Closure;
 use Code16\Sharp\Exceptions\Auth\SharpAuthenticationException;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Http\JsonResponse;
@@ -39,10 +38,7 @@ class CheckSharpAuthorizations
 
     public function handle(Request $request, Closure $next)
     {
-        try {
-            $this->auth->guard($this->getSharpGuard())->authenticate();
-
-        } catch(AuthenticationException $ex) {
+        if(!$this->auth->guard($this->getSharpGuard())->check()) {
             $this->forbid();
         }
 

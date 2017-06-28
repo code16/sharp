@@ -2,6 +2,10 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
+use Code16\Sharp\Tests\Fixtures\User;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Facades\Auth;
+
 class AuthorizationsTest extends BaseApiTest
 {
     /** @test */
@@ -16,6 +20,36 @@ class AuthorizationsTest extends BaseApiTest
     public function unauthenticated_user_are_redirected_on_a_web_call()
     {
         $this->buildTheWorld(false, false);
+
+        $this->get('/sharp/list/person')->assertStatus(302);
+    }
+
+    /** @test */
+    public function we_can_configure_a_custom_auth_guard()
+    {
+        $this->buildTheWorld();
+
+        $authGuard = new AuthorizationsTestGuard(true);
+
+        Auth::extend('sharp', function() use($authGuard) {
+            return $authGuard;
+        });
+
+        $this->app['config']->set(
+            'sharp.auth.guard',
+            'sharp'
+        );
+
+        $this->app['config']->set([
+            'auth.guards.sharp' => [
+                'driver' => 'sharp',
+                'provider' => 'users',
+            ]
+        ]);
+
+        $this->get('/sharp/list/person')->assertStatus(200);
+
+        $authGuard->setInvalid();
 
         $this->get('/sharp/list/person')->assertStatus(302);
     }
@@ -80,5 +114,41 @@ class AuthorizationsTest extends BaseApiTest
                 "view" => true,
             ]
         ]);
+    }
+}
+
+class AuthorizationsTestGuard implements \Illuminate\Contracts\Auth\Guard
+{
+    private $isValid;
+
+    public function __construct(bool $isValid)
+    {
+        $this->isValid = $isValid;
+    }
+    public function check()
+    {
+       return $this->isValid;
+    }
+    public function guest()
+    {
+        return !$this->isValid;
+    }
+    public function user()
+    {
+        return $this->isValid ? new User() : null;
+    }
+    public function id()
+    {
+        return $this->isValid ? 1 : null;
+    }
+    public function validate(array $credentials = [])
+    {
+        return true;
+    }
+    public function setUser(Authenticatable $user) {}
+
+    public function setInvalid()
+    {
+        $this->isValid = false;
     }
 }
