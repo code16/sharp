@@ -178,5 +178,6 @@ class SpaceshipSharpForm extends SharpForm
 
     function delete($id)
     {
+        Spaceship::findOrFail($id)->delete();
     }
 }

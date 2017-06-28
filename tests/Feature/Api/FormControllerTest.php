@@ -90,6 +90,16 @@ class FormControllerTest extends BaseApiTest
     }
 
     /** @test */
+    public function we_can_delete_an_entity()
+    {
+        $this->buildTheWorld();
+
+        $this->json('delete', '/sharp/api/form/person/1')
+            ->assertStatus(200)
+            ->assertJson(["ok" => true]);
+    }
+
+    /** @test */
     public function we_can_validate_an_entity_before_update()
     {
         $this->buildTheWorld(true);

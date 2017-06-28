@@ -23,6 +23,10 @@ Route::group([
         ->name("code16.sharp.api.form.update")
         ->uses('FormController@update');
 
+    Route::delete("/form/{entityKey}/{instanceId}")
+        ->name("code16.sharp.api.form.delete")
+        ->uses('FormController@delete');
+
     Route::post("/form/{entityKey}")
         ->name("code16.sharp.api.form.store")
         ->uses('FormController@store');

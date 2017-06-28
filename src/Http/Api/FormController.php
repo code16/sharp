@@ -72,6 +72,20 @@ class FormController extends Controller
 
     /**
      * @param string $entityKey
+     * @param string $instanceId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete($entityKey, $instanceId)
+    {
+        $form = $this->getFormInstance($entityKey);
+
+        $form->delete($instanceId);
+
+        return response()->json(["ok" => true]);
+    }
+
+    /**
+     * @param string $entityKey
      * @return SharpForm
      */
     protected function getFormInstance(string $entityKey): SharpForm
