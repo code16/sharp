@@ -48,7 +48,7 @@
                             <span class="cell day"
                                      v-for="day in days"
                                      track-by="timestamp"
-                                     v-bind:class="{ 'selected':day.isSelected, 'disabled':day.isDisabled, 'highlighted': day.isHighlighted, 'today': day.date === currDay}"
+                                     v-bind:class="{ 'selected':day.isSelected, 'disabled':day.isDisabled, 'highlighted': day.isHighlighted, 'today': isToday(day)}"
                                      @click="selectDate(day)">{{ day.date }}
                             </span>
                             <span class="cell day blank" v-for="d in remainingDays"></span>
@@ -99,10 +99,20 @@
         <div class="SharpDate__calendar" v-show="showYearView" :class="{open:showYearView}" v-bind:style="calendarStyle">
             <header>
                 <span @click="previousDecade" class="prev"
-                      v-bind:class="{ 'disabled' : previousDecadeDisabled(currDate) }">&lt;</span>
-                <span>{{ getDecade() }}</span>
+                      v-bind:class="{ 'disabled' : previousDecadeDisabled(currDate) }">
+                    <svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd">
+                        <path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path>
+                    </svg>
+                </span>
+                <span class="up">
+                    <span class="SharpDate__cur-decade">{{ getDecade() }}</span>
+                </span>
                 <span @click="nextDecade" class="next"
-                      v-bind:class="{ 'disabled' : nextMonthDisabled(currDate) }">&gt;</span>
+                      v-bind:class="{ 'disabled' : nextMonthDisabled(currDate) }">
+                    <svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd">
+                        <path d="M0 10.6L4.7 6 0 1.4 1.4 0l6.1 6-6.1 6z"></path>
+                    </svg>
+                </span>
             </header>
             <div class="SharpDate__innerContainer">
                 <div class="SharpDate__rContainer">
@@ -130,10 +140,16 @@
             remainingDays() {
                 let rem = 35 - this.days.length - this.blankDays;
                 return rem < 0 ? 0 : rem;
-            }
+            },
         },
 
         methods: {
+            isToday(day) {
+                let now = new Date();
+                let nowDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+                //if(day.isSelected) console.log(day.timestamp, nowDay, day.timestamp === nowDay);
+                return day.timestamp === nowDay;
+            },
             init() {
                 if (this.value) {
                     this.setValue(this.value)

@@ -90,8 +90,11 @@
       & > header {
         @extend .flatpickr-month;
 
-        .SharpDate__cur-month, .SharpDate__cur-year {
+        .SharpDate__cur-month, .SharpDate__cur-year, .SharpDate__cur-decade {
           @extend .cur-month;
+          &:hover {
+            background: none !important;
+          }
         }
 
         width: 100%;
@@ -133,7 +136,7 @@
       .day {
         @extend .flatpickr-day;
       }
-      .SharpDate__dayContainer, .SharpDate__monthContainer {
+      .SharpDate__dayContainer, .SharpDate__monthContainer, .SharpDate__yearContainer {
         @extend .dayContainer;
       }
       //
@@ -222,12 +225,27 @@
             }
           }
 
-          .SharpDate__monthContainer {
+          .SharpDate__monthContainer, .SharpDate__yearContainer {
             justify-content: space-between;
-            width: 100%;
-            .month {
+            .month, .year {
               flex-basis: 33.333333%;
               text-align: center;
+
+              &:focus {
+                outline: none;
+                background: $ui-04;
+              }
+
+              &:hover {
+                background: $ui-03;
+                cursor: pointer;
+              }
+
+              &.selected {
+                background: $brand-01;
+                color: $inverse-01;
+                border: 2px solid transparent;
+              }
             }
           }
 

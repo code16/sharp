@@ -33221,6 +33221,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -33235,6 +33245,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     methods: {
+        isToday: function isToday(day) {
+            var now = new Date();
+            var nowDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+            //if(day.isSelected) console.log(day.timestamp, nowDay, day.timestamp === nowDay);
+            return day.timestamp === nowDay;
+        },
         init: function init() {
             if (this.value) {
                 this.setValue(this.value);
@@ -75788,7 +75804,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
     return _vm._c('span', {
       staticClass: "cell day",
       class: {
-        'selected': day.isSelected, 'disabled': day.isDisabled, 'highlighted': day.isHighlighted, 'today': day.date === _vm.currDay
+        'selected': day.isSelected, 'disabled': day.isDisabled, 'highlighted': day.isHighlighted, 'today': _vm.isToday(day)
       },
       attrs: {
         "track-by": "timestamp"
@@ -75902,7 +75918,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
     on: {
       "click": _vm.previousDecade
     }
-  }, [_vm._v("<")]), _vm._v(" "), _vm._c('span', [_vm._v(_vm._s(_vm.getDecade()))]), _vm._v(" "), _vm._c('span', {
+  }, [_vm._c('svg', {
+    attrs: {
+      "width": "8",
+      "height": "12",
+      "viewBox": "0 0 8 12",
+      "fill-rule": "evenodd"
+    }
+  }, [_vm._c('path', {
+    attrs: {
+      "d": "M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"
+    }
+  })])]), _vm._v(" "), _vm._c('span', {
+    staticClass: "up"
+  }, [_vm._c('span', {
+    staticClass: "SharpDate__cur-decade"
+  }, [_vm._v(_vm._s(_vm.getDecade()))])]), _vm._v(" "), _vm._c('span', {
     staticClass: "next",
     class: {
       'disabled': _vm.nextMonthDisabled(_vm.currDate)
@@ -75910,7 +75941,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
     on: {
       "click": _vm.nextDecade
     }
-  }, [_vm._v(">")])]), _vm._v(" "), _vm._c('div', {
+  }, [_vm._c('svg', {
+    attrs: {
+      "width": "8",
+      "height": "12",
+      "viewBox": "0 0 8 12",
+      "fill-rule": "evenodd"
+    }
+  }, [_vm._c('path', {
+    attrs: {
+      "d": "M0 10.6L4.7 6 0 1.4 1.4 0l6.1 6-6.1 6z"
+    }
+  })])])]), _vm._v(" "), _vm._c('div', {
     staticClass: "SharpDate__innerContainer"
   }, [_vm._c('div', {
     staticClass: "SharpDate__rContainer"
