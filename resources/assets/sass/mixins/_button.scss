@@ -1,0 +1,30 @@
+@mixin button-theme($bg-color, $border-color, $font-color, $hover-bg-color, $icon-color) {
+  background-color: $bg-color;
+  border-width: $button-border-width;
+  border-style: solid;
+  border-color: $border-color;
+  color: $font-color;
+
+  &:focus,
+  &:hover {
+    background-color: $hover-bg-color;
+  }
+
+  &:focus {
+    border: $button-border-width solid $ui-02;
+    outline: $button-border-width solid $hover-bg-color;
+  }
+
+  &:disabled:hover,
+  &:disabled:focus {
+    background-color: $bg-color;
+  }
+
+  &:active {
+    background-color: darken($bg-color, 20%);
+  }
+
+  .bx--btn__icon {
+    fill: $icon-color;
+  }
+}

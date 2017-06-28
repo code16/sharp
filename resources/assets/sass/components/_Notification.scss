@@ -1,0 +1,175 @@
+@import '../mixins/notification';
+
+.SharpNotification {
+  // Inline notification style
+  // http://carbondesignsystem.com/components/notification/code
+  &__inline {
+    @include reset;
+    @include font-smoothing;
+    @include font-size('14');
+    display: flex;
+    justify-content: space-between;
+    background-color: transparent;
+    padding: .75rem 1rem;
+    min-height: rem(40px);
+    color: $text-03;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+
+    &--error {
+      @include inline-notification--color($support-01);
+    }
+    &--success {
+      @include inline-notification--color($support-02);
+    }
+
+    &--info {
+      @include inline-notification--color($support-04);
+    }
+
+    &--warning {
+      @include inline-notification--color($support-03);
+    }
+
+    &__details {
+      display: flex;
+      align-items: center;
+    }
+
+    &__icon {
+      height: 16px;
+      width: 16px;
+      min-width: 22px;
+    }
+
+    &__text-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0 1rem;
+
+      @media (max-width: 640px) {
+        flex-direction: column;
+        width: 100%;
+      }
+    }
+
+    &__title {
+      @include font-size('14');
+      font-weight: 700;
+      margin-right: .25rem;
+      line-height: 1.125;
+    }
+
+    &__subtitle {
+      @include font-size('14');
+      line-height: 1.125;
+    }
+
+    &__close-button {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      height: 16px;
+      width: 12px;
+      position: relative;
+
+      &:focus {
+        @include focus-outline('border');
+      }
+    }
+
+    &__close-icon {
+      height: 10px;
+      width: 10px;
+      fill: $text-03;
+      position: absolute;
+      top: 3px;
+      right: 1px;
+    }
+  }
+
+  // Toast notification style
+  &__toast {
+    @include reset;
+    @include font-smoothing;
+    @include box-shadow('small');
+    display: flex;
+    justify-content: space-between;
+    width: 16.875rem;
+    padding-top: 1rem;
+    padding-bottom: .5rem;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    background-color: $inverse-01;
+    color: $text-01;
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+    margin-right: 1rem;
+
+    &:first-child {
+      margin-top: 1rem;
+    }
+
+    &--error {
+      @include notification--color($support-01);
+    }
+
+    &--success {
+      @include notification--color($support-02);
+    }
+
+    &--info {
+      @include notification--color($support-04);
+    }
+
+    &--warning {
+      @include notification--color($support-03);
+    }
+
+    &__close-button {
+      background-color: $inverse-01;
+      border: none;
+      cursor: pointer;
+      margin: 0;
+      width: 12px;
+      height: 12px;
+      position: relative;
+
+      &:focus {
+        @include focus-outline('border');
+      }
+    }
+
+    &__icon {
+      height: 10px;
+      width: 10px;
+      fill: $text-03;
+      position: absolute;
+      top: 1px;
+      right: 1px;
+    }
+
+    &__title {
+      @include font-size('14');
+      font-weight: 700;
+      letter-spacing: 0;
+      line-height: 1;
+      padding-bottom: .125rem;
+    }
+
+    &__subtitle {
+      @include font-size('12');
+      color: $text-03;
+      margin-top: 0;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    &__caption {
+      @include font-size('12');
+      color: $text-03;
+      line-height: 1;
+    }
+  }
+}

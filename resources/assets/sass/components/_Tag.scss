@@ -1,0 +1,19 @@
+@import "../mixins/tag";
+
+.SharpTag {
+  @include font-size('12');
+  display: inline-flex;
+  align-items: center;
+  padding: 0 .625rem;
+  height: 1.25rem;
+  margin: .1875rem;
+  border-radius: rem(15px);
+
+  &:not(:first-child) {
+    margin-left: 0;
+  }
+
+  &--default {
+    @include tag-theme($color__teal-10, $color__teal-60);
+  }
+}

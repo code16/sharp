@@ -65,7 +65,7 @@
             submitButton: String
         },
 
-        inject:['actionsBus'],
+        inject:['actionsBus', 'glasspane'],
 
         provide() {
             return {
@@ -140,6 +140,7 @@
         },
         created() {
             this.init();
+            console.log(this);
         }
     }
 </script>

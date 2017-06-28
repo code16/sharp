@@ -1,74 +1,80 @@
 <template>
     <div class="SharpSelect">
-        <multiselect v-if="display==='dropdown'"
-                     :value="value"
-                     :searchable="false"
-                     :options="multiselectOptions"
-                     :multiple="multiple"
-                     :hide-selected="multiple"
-                     :close-on-select="!multiple"
-                     :custom-label="multiselectLabel"
-                     :placeholder="placeholder"
-                     :max="maxSelected"
-                     @input="handleInput" ref="multiselect">
+        <sharp-multiselect
+                v-if="display==='dropdown'"
+                :value="value"
+                :searchable="false"
+                :options="multiselectOptions"
+                :multiple="multiple"
+                :hide-selected="multiple"
+                :close-on-select="!multiple"
+                :custom-label="multiselectLabel"
+                :placeholder="placeholder"
+                :disabled="readOnly"
+                :max="maxSelected"
+                @input="handleInput" ref="multiselect">
             <template v-if="!multiple && value!=null">
                 <div slot="carret" @mousedown.stop.prevent="remove()" class="SharpSelect__remove-btn close"></div>
             </template>
             <template slot="maxElements">{{maxText}}</template>
-        </multiselect>
+        </sharp-multiselect>
         <div v-else>
             <template v-if="multiple">
-                <sharp-check v-for="option in options" :value="checked(option.id)" @input="c=>handleCheckboxChanged(c,option.id)"
+                <sharp-check v-for="option in options" :value="checked(option.id)"
+                             @input="c=>handleCheckboxChanged(c,option.id)"
                              :text="option.label" :key="option.id">
                 </sharp-check>
             </template>
-            <template v-else>
-                <div class="form-check" v-for="option in options">
-                    <label class="form-check-label">
-                        <input class="form-check-input" type="radio" :checked="value===option.id" @click="handleRadioClicked(option.id)"> {{option.label}}
+            <div v-else class="SharpSelect__radio-button-group">
+                <template v-for="option in options">
+                    <input class="SharpRadio" type="radio" :checked="value===option.id" tabindex="0">
+                    <label class="SharpRadio__label" @click="handleRadioClicked(option.id)">
+                        <span class="SharpRadio__appearance"></span>
+                        {{option.label}}
                     </label>
-                </div>
-            </template>
+                </template>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-    import Multiselect from 'vue-multiselect';
+    import Multiselect from '../../Multiselect';
     import SharpCheck from './Check.vue';
 
     export default {
-        name:'SharpSelect',
+        name: 'SharpSelect',
         components: {
-            Multiselect,
+            [Multiselect.name]: Multiselect,
             SharpCheck
         },
 
         props: {
-            value: [Array,String, Number],
+            value: [Array, String, Number],
 
             options: {
-                type:Array,
-                required:true
+                type: Array,
+                required: true
             },
             multiple: {
-                type:Boolean,
+                type: Boolean,
                 default: false
             },
             display: {
-                type:String,
-                default:'dropdown'
+                type: String,
+                default: 'dropdown'
             },
             clearable: {
-                type:Boolean,
+                type: Boolean,
                 default: false
             },
             placeholder: {
-                type:String,
+                type: String,
                 default: '-'
             },
             maxText: String,
-            maxSelected: Number
+            maxSelected: Number,
+            readOnly: Boolean,
         },
 
         data() {
@@ -78,13 +84,13 @@
         },
         computed: {
             multiselectOptions() {
-                return this.options.map(o=>o.id);
+                return this.options.map(o => o.id);
             },
             optionsLabel() {
-                if(this.display !== 'dropdown')
+                if (this.display !== 'dropdown')
                     return;
 
-                return this.options.reduce((map,opt) => {
+                return this.options.reduce((map, opt) => {
                     map[opt.id] = opt.label;
                     return map;
                 }, {});
@@ -105,11 +111,11 @@
             },
             handleCheckboxChanged(checked, optId) {
                 let newValue = this.value;
-                if(checked)
+                if (checked)
                     newValue.push(optId);
                 else
                     newValue = this.value.filter(val => val !== optId);
-                this.$emit('input',newValue);
+                this.$emit('input', newValue);
             },
             handleRadioClicked(optId) {
                 this.$emit('input', optId);

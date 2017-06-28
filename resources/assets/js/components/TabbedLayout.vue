@@ -1,7 +1,7 @@
 <template>
     <div class="SharpTabbedLayout">
         <template v-if="layout.tabbed && layout.tabs.length>1">
-            <sharp-b-tabs pills>
+            <sharp-b-tabs>
                 <sharp-b-tab v-for="(tab,i) in layout.tabs" :title="tab.title" :key="i">
                     <slot v-bind="tab"></slot>
                 </sharp-b-tab>

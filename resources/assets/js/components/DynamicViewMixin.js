@@ -12,16 +12,25 @@ export default {
     methods: {
         get() {
             if(this.test) return;
-            return new Promise((resolve, reject) => {
-                axios.get(this.apiPath).then(({data})=>{
-                    this.mount(data);
+            return axios.get(this.apiPath).then(response=>{
+                    this.mount(response.data);
                     this.ready = true;
-                    resolve();
+                    return Promise.resolve(response);
+                })
+                .catch(error=>{
+                    return Promise.reject(error);
                 });
-            });
         },
         post() {
-            return axios.post(this.apiPath, this.data);
+            this.glasspane.show();
+            return axios.post(this.apiPath, this.data).then(response=>{
+                    this.glasspane.hide();
+                    return Promise.resolve(response);
+                })
+                .catch(error=>{
+                    this.glasspane.hide();
+                    return Promise.reject(error);
+                });
         }
     }
 }

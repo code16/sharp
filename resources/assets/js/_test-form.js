@@ -1,5 +1,6 @@
 //
 const localized = true;
+const readOnly = false;
 //
 
 const layout = {
@@ -218,15 +219,15 @@ let fields = {
     },
     show_upload_1: {
         type: 'check',
-        label: "Appuyer pour afficher l'upload"
+        text: "Appuyer pour afficher l'upload"
     },
     show_upload_2: {
         type: 'check',
-        label: "Ou ici"
+        text: "Ou ici"
     },
     myimage: {
         type: 'upload',
-        maxFileSize: 6,
+        maxFileSize: 300,
         fileFilter: ['.jpg','.jpeg','.png'],
         ratioX: 16,
         ratioY: 9,
@@ -248,12 +249,12 @@ let fields = {
         addable: true,
         removable: true,
         //maxItemCount:5,
-        collapsedItemTemplate:"{{ name && surname ? `${name} ${surname}` : `Nouvelle personne n°${$index}` }}",
+        //collapsedItemTemplate:"{{ name && surname ? `${name} ${surname}` : `Nouvelle personne n°${$index}` }}",
         templateProps: ['name','surname','age'],
         itemFields: {
             'name': {
                 label:'Nom',
-                type:'text',
+                type:'text'
             },
             'surname': {
                 label:'Prénom',
@@ -267,6 +268,7 @@ let fields = {
     },
     date:{
         type:'date',
+        label:'date',
         hasTime:true,
         stepTime:20,
         minTime:'8:20'
@@ -323,6 +325,10 @@ if(localized) {
     config.locales = ['fr','en','de'];
     Object.keys(fields).forEach(k=>k in localizedData && (fields[k].localized = true));
     data = Object.assign(defaultData, localizedData);
+}
+
+if(readOnly) {
+    Object.keys(fields).forEach(k=>fields[k].readOnly=true);
 }
 
 export { fields, data, layout, config, errors }
