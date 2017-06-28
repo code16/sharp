@@ -3,7 +3,7 @@
 // API routes
 Route::group([
     'prefix' => '/sharp/api',
-    'middleware' => ['sharp_authorizations', 'sharp_context', 'sharp_errors'],
+    'middleware' => ['sharp_errors', 'sharp_authorizations', 'sharp_context'],
     'namespace' => 'Code16\Sharp\Http\Api'
 ], function() {
 
@@ -43,17 +43,26 @@ Route::group([
     'namespace' => 'Code16\Sharp\Http'
 ], function() {
 
-    Route::get('/list/{entityKey}')
-        ->name("code16.sharp.list")
-        ->uses('ListController@show');
+    Route::get('/login')
+        ->name("code16.sharp.login")
+        ->uses('LoginController@create');
 
-    Route::get('/form/{entityKey}/{instanceId}')
-        ->name("code16.sharp.edit")
-        ->uses('FormController@edit');
+    Route::group([
+        'middleware' => ['sharp_errors', 'sharp_authorizations'],
+    ], function() {
 
-    Route::get('/form/{entityKey}')
-        ->name("code16.sharp.create")
-        ->uses('FormController@create');
+        Route::get('/list/{entityKey}')
+            ->name("code16.sharp.list")
+            ->uses('ListController@show');
+
+        Route::get('/form/{entityKey}/{instanceId}')
+            ->name("code16.sharp.edit")
+            ->uses('FormController@edit');
+
+        Route::get('/form/{entityKey}')
+            ->name("code16.sharp.create")
+            ->uses('FormController@create');
+    });
 
 });
 

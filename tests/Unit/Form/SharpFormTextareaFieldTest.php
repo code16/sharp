@@ -2,9 +2,8 @@
 
 namespace Code16\Sharp\Tests\Unit\Form;
 
-use Code16\Sharp\Form\Exceptions\SharpFormFieldValidationException;
+use Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
-use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\SharpTestCase;
 
 class SharpFormTextareaFieldTest extends SharpTestCase

@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Form\Fields;
 
-use Code16\Sharp\Form\Exceptions\SharpFormFieldValidationException;
+use Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException;
 use Illuminate\Support\Facades\Validator;
 
 abstract class SharpFormField

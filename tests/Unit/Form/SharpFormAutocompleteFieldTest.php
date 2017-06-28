@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Tests\Unit\Form;
 
-use Code16\Sharp\Form\Exceptions\SharpFormFieldValidationException;
+use Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Tests\SharpTestCase;
 

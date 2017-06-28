@@ -1,10 +1,11 @@
 <?php
 
-namespace Code16\Sharp\Form\Exceptions;
+namespace Code16\Sharp\Exceptions\Form;
 
+use Code16\Sharp\Exceptions\SharpException;
 use Illuminate\Support\MessageBag;
 
-class SharpFormFieldValidationException extends \Exception
+class SharpFormFieldValidationException extends SharpException
 {
 
     /**

@@ -2,10 +2,10 @@
 
 namespace Code16\Sharp\Tests\Fixtures;
 
+use Code16\Sharp\Exceptions\Form\SharpFormException;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpForm;
-use Code16\Sharp\Form\SharpFormException;
 
 class PersonSharpForm extends SharpForm
 {

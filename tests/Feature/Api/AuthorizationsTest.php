@@ -5,6 +5,22 @@ namespace Code16\Sharp\Tests\Feature\Api;
 class AuthorizationsTest extends BaseApiTest
 {
     /** @test */
+    public function unauthenticated_user_wont_pass_on_an_api_call()
+    {
+        $this->buildTheWorld(false, false);
+
+        $this->json('get', '/sharp/api/list/person')->assertStatus(401);
+    }
+
+    /** @test */
+    public function unauthenticated_user_are_redirected_on_a_web_call()
+    {
+        $this->buildTheWorld(false, false);
+
+        $this->get('/sharp/list/person')->assertStatus(302);
+    }
+
+    /** @test */
     public function we_can_configure_global_authorizations()
     {
         $this->buildTheWorld();

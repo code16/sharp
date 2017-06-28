@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Tests\Unit\Form;
 
-use Code16\Sharp\Form\Exceptions\SharpFormFieldValidationException;
 use Code16\Sharp\Form\Fields\SharpFormNumberField;
 use Code16\Sharp\Tests\SharpTestCase;
 

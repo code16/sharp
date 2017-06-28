@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     "entities" => [
         "spaceship" => [
             "list" => \App\Sharp\SpaceshipSharpList::class,
@@ -13,8 +14,13 @@ return [
             ]
         ]
     ],
+
     "uploads" => [
         "tmp_dir" => env("SHARP_UPLOADS_TMP_DIR", "tmp"),
         "thumbnails_dir" => env("SHARP_UPLOADS_THUMBS_DIR", "thumbnails"),
-    ]
+    ],
+
+//    "auth" => [
+//        "guard" => "sharp"
+//    ]
 ];

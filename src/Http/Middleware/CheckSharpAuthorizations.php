@@ -3,7 +3,9 @@
 namespace Code16\Sharp\Http\Middleware;
 
 use Closure;
-use Illuminate\Auth\Access\AuthorizationException;
+use Code16\Sharp\Exceptions\Auth\SharpAuthenticationException;
+use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Http\JsonResponse;
@@ -35,45 +37,75 @@ class CheckSharpAuthorizations
         $this->gate = $gate;
     }
 
-    public function handle(Request $request, Closure $next, $guard = null)
+    public function handle(Request $request, Closure $next)
     {
-//        $this->auth->authenticate();
+        try {
+            $this->auth->guard($this->getSharpGuard())->authenticate();
 
-        $entityKey = $request->segment(4);
-        $globalAuthorizations = $this->getGlobalAuthorizations($entityKey);
+        } catch(AuthenticationException $ex) {
+            $this->forbid();
+        }
+
+        list($entityKey, $instanceId) = $this->determineEntityKeys($request);
         $ability = $this->determineAbility($request);
+        $globalAuthorizations = $this->getGlobalAuthorizations($entityKey);
 
-        if(isset($globalAuthorizations[$ability]) && !$globalAuthorizations[$ability]) {
+        // Check global authorization
+        if (isset($globalAuthorizations[$ability]) && !$globalAuthorizations[$ability]) {
             // Forbidden
             $this->deny();
         }
-//            $this->gate->authorize("sharp.{$ability}", $request->segment(5));
 
-        return $this->addAuthorizationsToResponse($next($request), $globalAuthorizations);
+        // Check policy authorization
+//        $this->gate->authorize("sharp.{$ability}", $instanceId);
+
+        if($request->wantsJson()) {
+            // Add authorization to the JSON returned
+            $response = $next($request);
+
+            return $response->status() == 200
+                ? $this->addAuthorizationsToJsonResponse($response, $globalAuthorizations)
+                : $response;
+        }
+
+        return $next($request);
     }
 
-    private function getGlobalAuthorizations(string $entityKey)
+    protected function getGlobalAuthorizations(string $entityKey)
     {
         return config("sharp.entities.{$entityKey}.authorizations");
     }
 
-    private function deny()
+    protected function getSharpGuard()
     {
-        throw new AuthorizationException("Unauthorized action");
+        return config("sharp.auth.guard", config("auth.defaults.guard"));
     }
 
-    private function determineAbility(Request $request)
+    protected function forbid()
+    {
+        throw new SharpAuthenticationException("Unauthenticated user");
+    }
+
+    protected function deny()
+    {
+        throw new SharpAuthorizationException("Unauthorized action");
+    }
+
+    protected function determineAbility(Request $request)
     {
         switch($request->route()->getName()) {
             case "code16.sharp.api.list":
+            case "code16.sharp.list":
                 return "view";
 
             case "code16.sharp.api.form.create":
             case "code16.sharp.api.form.store":
+            case "code16.sharp.create":
                 return "create";
 
             case "code16.sharp.api.form.edit":
             case "code16.sharp.api.form.update":
+            case "code16.sharp.edit":
                 return "update";
 
             case "code16.sharp.api.form.delete":
@@ -83,7 +115,18 @@ class CheckSharpAuthorizations
         return null;
     }
 
-    private function addAuthorizationsToResponse(JsonResponse $jsonResponse, $globalAuthorizations)
+    protected function determineEntityKeys(Request $request)
+    {
+        if(str_contains($request->route()->getName(), '.api.')) {
+            // Api route, eg: code16.sharp.api.form.update
+            return [$request->segment(4), $request->segment(5)];
+        }
+
+        // Web route, eg: code16.sharp.form
+        return [$request->segment(3), $request->segment(4)];
+    }
+
+    protected function addAuthorizationsToJsonResponse(JsonResponse $jsonResponse, $globalAuthorizations)
     {
         $data = $jsonResponse->getData();
 
