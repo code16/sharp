@@ -5,8 +5,8 @@ namespace App\Sharp;
 use App\Pilot;
 use App\Spaceship;
 use App\SpaceshipType;
-use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentTransformer;
+use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
@@ -172,7 +172,7 @@ class SpaceshipSharpForm extends SharpForm
         $this->setCustomValuator("capacity", function ($spaceship, $value) {
                 return $value * 1000;
             })
-//            ->ignore("tags")
+//            ->ignore("pilots")
             ->save($instance, $data);
     }
 

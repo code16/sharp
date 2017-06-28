@@ -16,6 +16,11 @@ trait WithSharpFormEloquentUpdater
     protected $valuators = [];
 
     /**
+     * @var array
+     */
+    protected $ignoredAttributes = [];
+
+    /**
      * @param string $attribute
      * @param string|Closure $valuator
      * @return $this
@@ -27,6 +32,17 @@ trait WithSharpFormEloquentUpdater
             : app($valuator);
 
         $this->valuators[$attribute] = $valuator;
+
+        return $this;
+    }
+
+    /**
+     * @param string|array $attribute
+     * @return $this
+     */
+    function ignore($attribute)
+    {
+        $this->ignoredAttributes += (array)$attribute;
 
         return $this;
     }
@@ -86,6 +102,12 @@ trait WithSharpFormEloquentUpdater
         $data = new UpdateRequestData;
 
         foreach ($plainData as $attribute => $value) {
+
+            if(in_array($attribute, $this->ignoredAttributes)) {
+                // Ignore this attribute
+                continue;
+            }
+
             $field = $this->findFieldByKey($attribute);
 
             if($field instanceof SharpFormListField) {

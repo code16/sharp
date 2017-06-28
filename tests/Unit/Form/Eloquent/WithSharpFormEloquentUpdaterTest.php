@@ -46,6 +46,50 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
     }
 
     /** @test */
+    function we_can_manually_ignore_a_field()
+    {
+        $person = Person::create(["name" => "A", "age" => 21]);
+
+        $form = new class extends WithSharpFormEloquentUpdaterTestForm {
+            function update($id, array $data)
+            {
+                return $this->ignore("age")
+                    ->save(Person::findOrFail($id), $data);
+            }
+        };
+
+        $form->update($person->id, ["name" => "John Wayne", "age" => 40]);
+
+        $this->assertDatabaseHas("people", [
+            "id" => $person->id,
+            "name" => "John Wayne",
+            "age" => 21
+        ]);
+    }
+
+    /** @test */
+    function we_can_manually_ignore_multiple_fields()
+    {
+        $person = Person::create(["name" => "A", "age" => 21]);
+
+        $form = new class extends WithSharpFormEloquentUpdaterTestForm {
+            function update($id, array $data)
+            {
+                return $this->ignore(["name", "age"])
+                    ->save(Person::findOrFail($id), $data);
+            }
+        };
+
+        $form->update($person->id, ["name" => "John Wayne", "age" => 40]);
+
+        $this->assertDatabaseHas("people", [
+            "id" => $person->id,
+            "name" => "A",
+            "age" => 21
+        ]);
+    }
+
+    /** @test */
     function we_can_use_a_closure_as_a_custom_valuator()
     {
         $person = Person::create(["name" => "John Wayne"]);
