@@ -4,8 +4,10 @@ namespace Code16\Sharp;
 
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Middleware\AddSharpContext;
+use Code16\Sharp\Http\Middleware\CheckSharpAuthorizations;
 use Code16\Sharp\Http\Middleware\HandleSharpErrors;
 use Code16\Sharp\Http\SharpContext;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Intervention\Image\ImageServiceProviderLaravel5;
 
@@ -28,10 +30,12 @@ class SharpServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app['router']->aliasMiddleware(
-            'sharp_errors', HandleSharpErrors::class
-        );
+            'sharp_authorizations', CheckSharpAuthorizations::class
 
-        $this->app['router']->aliasMiddleware(
+        )->aliasMiddleware(
+            'sharp_errors', HandleSharpErrors::class
+
+        )->aliasMiddleware(
             'sharp_context', AddSharpContext::class
         );
 
@@ -44,5 +48,16 @@ class SharpServiceProvider extends ServiceProvider
         ]);
 
         $this->app->register(ImageServiceProviderLaravel5::class);
+
+        $this->registerPolicies();
+    }
+
+    private function registerPolicies()
+    {
+        foreach((array)config("sharp.entities") as $entityKey => $config) {
+            if(isset($config["policy"])) {
+                Gate::policy("sharp.{$entityKey}", $config["policy"]);
+            }
+        }
     }
 }

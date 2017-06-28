@@ -3,7 +3,7 @@
 // API routes
 Route::group([
     'prefix' => '/sharp/api',
-    'middleware' => ['sharp_context', 'sharp_errors'],
+    'middleware' => ['sharp_authorizations', 'sharp_context', 'sharp_errors'],
     'namespace' => 'Code16\Sharp\Http\Api'
 ], function() {
 
@@ -31,11 +31,11 @@ Route::group([
         ->name("code16.sharp.api.form.store")
         ->uses('FormController@store');
 
-    Route::post('/upload')
-        ->name("code16.sharp.api.form.upload")
-        ->uses('FormUploadController@store');
-
 });
+
+Route::post('/sharp/api/upload')
+    ->name("code16.sharp.api.form.upload")
+    ->uses('Code16\Sharp\Http\Api\FormUploadController@store');
 
 // Web routes
 Route::group([
