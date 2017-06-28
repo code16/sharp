@@ -11,6 +11,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        factory(\App\User::class)->create([
+            "email" => "test@example.com"
+        ]);
+
         $types = factory(\App\SpaceshipType::class, 10)->create();
 
         $pilots = factory(\App\Pilot::class, 10)->create();

@@ -115,6 +115,7 @@ class AuthorizationsTest extends BaseApiTest
             ]
         ]);
     }
+
 }
 
 class AuthorizationsTestGuard implements \Illuminate\Contracts\Auth\Guard

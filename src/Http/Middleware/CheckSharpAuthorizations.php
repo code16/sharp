@@ -53,14 +53,18 @@ class CheckSharpAuthorizations
         }
 
         // Check policy authorization
-//        $this->gate->authorize("sharp.{$ability}", $instanceId);
+        if($this->hasPolicyFor($entityKey)) {
+            $this->gate->authorize("sharp.{$entityKey}.{$ability}", $instanceId);
+        }
 
         if($request->wantsJson()) {
             // Add authorization to the JSON returned
             $response = $next($request);
 
             return $response->status() == 200
-                ? $this->addAuthorizationsToJsonResponse($response, $globalAuthorizations)
+                ? $this->addAuthorizationsToJsonResponse(
+                    $response, $globalAuthorizations, $entityKey, $instanceId
+                )
                 : $response;
         }
 
@@ -122,18 +126,36 @@ class CheckSharpAuthorizations
         return [$request->segment(3), $request->segment(4)];
     }
 
-    protected function addAuthorizationsToJsonResponse(JsonResponse $jsonResponse, $globalAuthorizations)
+    protected function addAuthorizationsToJsonResponse(
+        JsonResponse $jsonResponse, $globalAuthorizations, $entityKey, $instanceId
+    )
     {
+        $policies = [];
+        if($this->hasPolicyFor($entityKey)) {
+            $policies = [
+                "view" => $this->gate->check("sharp.{$entityKey}.view", $instanceId),
+                "create" => $this->gate->check("sharp.{$entityKey}.create"),
+                "update" => $this->gate->check("sharp.{$entityKey}.update", $instanceId),
+                "delete" => $this->gate->check("sharp.{$entityKey}.delete", $instanceId)
+            ];
+        }
+
         $data = $jsonResponse->getData();
 
         $data->authorizations = array_merge(
             ["view" => true, "create" => true, "update" => true, "delete" => true],
+            $policies,
             (array)$globalAuthorizations
         );
 
         $jsonResponse->setData($data);
 
         return $jsonResponse;
+    }
+
+    private function hasPolicyFor($entityKey)
+    {
+        return config("sharp.entities.{$entityKey}.policy") != null;
     }
 
 }

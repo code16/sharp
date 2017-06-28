@@ -10,21 +10,34 @@ class SpaceshipPolicy
     use HandlesAuthorization;
 
     /**
-     * Create a new policy instance.
+     * @return bool
      */
-    public function __construct()
+    public function view(User $user, $spaceshipId)
     {
-        //
+        return true;
     }
 
     /**
-     * Determine if the given spaceship can be updated by the user.
-     *
      * @return bool
      */
     public function update(User $user, $spaceshipId)
     {
-        dd("ok");
-//        return $user->id === $post->user_id;
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function create(User $user)
+    {
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function delete(User $user, $spaceshipId)
+    {
+        return false;
     }
 }

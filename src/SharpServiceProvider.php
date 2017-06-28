@@ -25,6 +25,8 @@ class SharpServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../resources/assets/dist' => public_path('vendor/sharp')
         ], 'assets');
+
+        $this->registerPolicies();
     }
 
     public function register()
@@ -48,16 +50,34 @@ class SharpServiceProvider extends ServiceProvider
         ]);
 
         $this->app->register(ImageServiceProviderLaravel5::class);
-
-        $this->registerPolicies();
     }
 
-    private function registerPolicies()
+    protected function registerPolicies()
     {
         foreach((array)config("sharp.entities") as $entityKey => $config) {
             if(isset($config["policy"])) {
-                Gate::policy("sharp.{$entityKey}", $config["policy"]);
+                foreach(['view', 'update', 'create', 'delete'] as $action) {
+                    $this->definePolicy($entityKey, $config["policy"], $action);
+                }
             }
+        }
+    }
+
+    /**
+     * @param string $entityKey
+     * @param string $policy
+     * @param string $action
+     */
+    protected function definePolicy($entityKey, $policy, $action)
+    {
+        if(method_exists(app($policy), $action)) {
+            Gate::define("sharp.{$entityKey}.{$action}", $policy . "@{$action}");
+
+        } else {
+            // No policy = true by default
+            Gate::define("sharp.{$entityKey}.{$action}", function () {
+                return true;
+            });
         }
     }
 }
