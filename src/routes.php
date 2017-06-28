@@ -3,7 +3,7 @@
 // API routes
 Route::group([
     'prefix' => '/sharp/api',
-    'middleware' => ['sharp_errors', 'sharp_authorizations', 'sharp_context'],
+    'middleware' => ['web', 'sharp_errors', 'sharp_authorizations', 'sharp_context'],
     'namespace' => 'Code16\Sharp\Http\Api'
 ], function() {
 
@@ -40,12 +40,17 @@ Route::post('/sharp/api/upload')
 // Web routes
 Route::group([
     'prefix' => '/sharp',
+    'middleware' => ['web'],
     'namespace' => 'Code16\Sharp\Http'
 ], function() {
 
     Route::get('/login')
         ->name("code16.sharp.login")
         ->uses('LoginController@create');
+
+    Route::post('/login')
+        ->name("code16.sharp.login.post")
+        ->uses('LoginController@store');
 
     Route::group([
         'middleware' => ['sharp_errors', 'sharp_authorizations'],

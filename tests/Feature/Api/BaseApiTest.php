@@ -32,5 +32,11 @@ abstract class BaseApiTest extends SharpTestCase
         if($login) {
             $this->actingAs(new User);
         }
+
+        $this->app['config']->set(
+            'app.key', 'base64:'.base64_encode(random_bytes(
+                $this->app['config']['app.cipher'] == 'AES-128-CBC' ? 16 : 32
+            ))
+        );
     }
 }
