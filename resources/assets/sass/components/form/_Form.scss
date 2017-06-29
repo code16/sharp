@@ -36,7 +36,7 @@
   }
 
   &--form-item--danger {
-    input, textarea, select {
+    input, textarea, select, .SharpDropdown__text {
       box-shadow: 0 2px 0px 0px $support-01;
     }
     .SharpForm--form-requirement {

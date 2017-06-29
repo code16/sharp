@@ -16,7 +16,6 @@
                                                          :field-layout="fieldLayout"
                                                          :locale="locale"
                                                          :error-identifier="fieldLayout.key"
-                                                         :is-error-root="true"
                                                          :update-data="updateData">
                                     </sharp-field-display>
                                 </template>
@@ -25,9 +24,6 @@
                     </sharp-grid>
                 </template>
             </sharp-tabbed-layout>
-        </template>
-        <template v-else>
-            Chargement du formulaire...
         </template>
     </div>
 </template>

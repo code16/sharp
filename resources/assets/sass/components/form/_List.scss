@@ -68,16 +68,14 @@
     z-index:3;
     position:absolute;
     //background: rgba(255,0,0,0.3);
-    height:2em;
-    margin-bottom:-1em;
+    height:2rem;
+    margin-bottom:-1rem;
     bottom:0;
     left:0;
     right:0;
-    text-align: center;
+    text-align: left;
     button {
-      padding-top:0;
-      padding-bottom: 0;
-      height:100%
+      margin-left:-2rem;
     }
   }
 }

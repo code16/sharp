@@ -3,14 +3,10 @@ export default {
         errorIdentifier:{
             type:[String, Number],
             required:true
-        },
-        isErrorRoot: Boolean
+        }
     },
     computed: {
         mergedErrorIdentifier() {
-            if(this.isErrorRoot)
-                return this.errorIdentifier;
-
             let errorComp = this.$parent;
             while(errorComp && errorComp.mergedErrorIdentifier == null) {
                 errorComp = errorComp.$parent;

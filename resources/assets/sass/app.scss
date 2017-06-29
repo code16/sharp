@@ -3,20 +3,14 @@ $fa-font-path: '/vendor/sharp/fonts';
 
 
 $css--reset: true;
-$css--typography:false;
-$css--font-face:false;
 
-@import 'node_modules/carbon-components/scss/components/loading/loading';
-
-
-//bootstrap-reboot include mixins and variables
-//@import 'node_modules/bootstrap/scss/bootstrap-reboot';
-
+@import 'node_modules/carbon-components/scss/globals/scss/colors';
+@import 'node_modules/carbon-components/scss/globals/scss/vars';
 @import 'node_modules/carbon-components/scss/globals/scss/layer';
 @import 'node_modules/carbon-components/scss/globals/scss/typography';
 @import 'node_modules/carbon-components/scss/globals/scss/helper-mixins';
 @import 'node_modules/carbon-components/scss/globals/scss/layout';
-
+@import 'node_modules/carbon-components/scss/globals/scss/css--reset';
 
 @import 'node_modules/bootstrap/scss/mixins/hover';
 @import 'node_modules/bootstrap/scss/mixins/grid';
@@ -25,13 +19,8 @@ $css--font-face:false;
 @import 'node_modules/bootstrap/scss/variables';
 @import 'node_modules/bootstrap/scss/utilities/flex';
 
-//@import 'node_modules/bootstrap/scss/normalize';
-body {
-  font-family: $font-family-base;
-}
 
-
-@import 'node_modules/carbon-components/scss/globals/scss/css--reset';
+@import 'components/loading/Loading';
 
 $input-label-weight: 400;
 $button-border-width: 1px;
@@ -41,6 +30,8 @@ $button-border-width: 1px;
   color: $text-01;
   background-color: $ui-02;
   line-height: 1;
+
+  font-family: $font-family-base;
 
   @import 'node_modules/bootstrap/scss/grid';
 
@@ -59,7 +50,6 @@ $button-border-width: 1px;
   @import 'components/ActionBar';
   @import 'components/Tabs';
   @import 'components/LocaleSelector';
-
 
   // Form components
   @import 'components/form/Text';
@@ -87,24 +77,5 @@ $button-border-width: 1px;
       margin: 0;
     }
     -moz-appearance: textfield;
-  }
-}
-
-/*
-.modal-open {
-  overflow: hidden;
-  .modal {
-    &.show {
-      display: block!important;
-      overflow-x: hidden!important;
-      overflow-y: auto!important;
-    }
-  }
-}*/
-
-#glasspane {
-  display: none;
-  .bx--loading-overlay {
-    z-index: 9999;
   }
 }

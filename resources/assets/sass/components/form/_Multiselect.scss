@@ -44,6 +44,7 @@
 
   .multiselect__input {
     @extend .SharpText;
+    box-shadow: none;
   }
 
   .multiselect__input, .multiselect__single {

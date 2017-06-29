@@ -34,7 +34,7 @@
                         </div>
                     </div>
                     <div v-if="!disabled && showAddButton && i<list.length-1" class="SharpList__new-item-zone">
-                        <button class="SharpButton SharpButton--secondary" @click="insertNewItem(i)">Insert</button>
+                        <button class="SharpButton SharpButton--secondary SharpButton--sm" @click="insertNewItem(i)">Insert</button>
                     </div>
                 </div>
                 <button v-if="!disabled && showAddButton" type="button" :key="-1"
