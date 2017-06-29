@@ -19,13 +19,22 @@
                         </div>
                     @endif
 
-                    <div>
-                        <input type="text" id="login" name="login" value="{{ old('login') }}">
+                    <div class="SharpFieldContainer SharpForm--form-item">
+                        <label class="SharpForm--label" for="login">
+                            Login
+                        </label>
+                        <input type="text" name="login" id="login" class="SharpText" value="{{ old('login') }}">
                     </div>
-                    <div>
-                        <input type="password" id="password" name="password">
+
+                    <div class="SharpFieldContainer SharpForm--form-item">
+                        <label class="SharpForm--label" for="password">
+                            Password
+                        </label>
+                        <input type="password" name="password" id="password" class="SharpText">
                     </div>
-                    <button type="submit">Login</button>
+                    <button type="submit" class="SharpButton SharpButton--primary">
+                        Login
+                    </button>
                 </div>
             </form>
         </div>
