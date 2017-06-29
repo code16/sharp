@@ -15,6 +15,7 @@ mix.autoload({}).options({
 
     .copy('node_modules/font-awesome/fonts','resources/assets/dist/fonts/font-awesome')
     .sass('resources/assets/sass/app.scss', 'resources/assets/dist/.bin/sharp-app.css')
+    .sass('resources/assets/sass/cms.scss', 'resources/assets/dist/sharp-cms.css')
     .styles([
         'resources/assets/dist/.bin/sharp-app.css',
         //'node_modules/vue-multiselect/dist/vue-multiselect.min.css',

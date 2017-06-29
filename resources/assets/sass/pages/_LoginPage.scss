@@ -1,0 +1,10 @@
+.Sharp__login-page {
+  display: flex;
+  align-items: center;
+  min-height:100%;
+  @include media-breakpoint-down(xs) {
+    .container {
+      width:100%
+    }
+  }
+}

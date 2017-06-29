@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Sharp</title>
     <link rel="stylesheet" href="/vendor/sharp/sharp.css">
+    <link rel="stylesheet" href="/vendor/sharp/sharp-cms.css">
 </head>
 <body>
     <div id="glasspane">
