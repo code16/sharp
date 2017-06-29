@@ -12,7 +12,9 @@
                         <div class="SharpModule">
                             <div class="SharpModule__inner">
                                 <div class="SharpModule__header">
-                                    <h1 class="SharpModule__title">Connexion à Sharp</h1>
+                                    <h1 class="SharpModule__title">
+                                        @lang('sharp::login.title')
+                                    </h1>
                                 </div>
                                 <div class="SharpModule__content">
                                     @if ($errors->any())
@@ -27,14 +29,14 @@
                                     @endif
 
                                     <div class="SharpFieldContainer SharpForm--form-item">
-                                        <input type="text" name="login" id="login" class="SharpText" value="{{ old('login') }}" placeholder="login">
+                                        <input type="text" name="login" id="login" class="SharpText" value="{{ old('login') }}" placeholder="@lang('sharp::login.login_field')">
                                     </div>
 
                                     <div class="SharpFieldContainer SharpForm--form-item">
-                                        <input type="password" name="password" id="password" class="SharpText" placeholder="password">
+                                        <input type="password" name="password" id="password" class="SharpText" placeholder="@lang('sharp::login.password_field')">
                                     </div>
                                     <button type="submit" class="SharpButton SharpButton--primary">
-                                        Login
+                                        @lang('sharp::login.button')
                                     </button>
                                 </div>
                             </div>
