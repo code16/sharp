@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\Http\Middleware;
+namespace Code16\Sharp\Http\Middleware\Api;
 
 use Closure;
 use Code16\Sharp\Exceptions\Auth\SharpAuthenticationException;
@@ -8,7 +8,7 @@ use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Code16\Sharp\Exceptions\Form\SharpFormException;
 use Code16\Sharp\Exceptions\SharpException;
 
-class HandleSharpErrors
+class HandleSharpApiErrors
 {
 
     /**
@@ -22,17 +22,9 @@ class HandleSharpErrors
         $response = $next($request);
 
         if($response->exception instanceof SharpException) {
-
-            if($request->wantsJson()) {
-                return response()->json([
-                    "message" => $response->exception->getMessage()
-                ], $this->getHttpCodeFor($response->exception));
-            }
-
-            if($response->exception instanceof SharpAuthenticationException) {
-                // Web redirect to login page
-                return redirect()->route("code16.sharp.login");
-            }
+            return response()->json([
+                "message" => $response->exception->getMessage()
+            ], $this->getHttpCodeFor($response->exception));
         }
 
         return $response;

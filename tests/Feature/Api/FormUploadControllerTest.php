@@ -2,11 +2,10 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
-use Code16\Sharp\Tests\SharpTestCase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
 
-class FormUploadControllerTest extends SharpTestCase
+class FormUploadControllerTest extends BaseApiTest
 {
     protected function setUp()
     {
@@ -18,6 +17,9 @@ class FormUploadControllerTest extends SharpTestCase
         ]]);
 
         File::deleteDirectory(storage_path("app/tmp"));
+
+        // Must use this to login & set APP_KEY
+        $this->buildTheWorld();
     }
 
     /** @test */

@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\Http\Middleware;
+namespace Code16\Sharp\Http\Middleware\Api;
 
 use Closure;
 use Code16\Sharp\Http\SharpContext;

@@ -3,7 +3,7 @@
 // API routes
 Route::group([
     'prefix' => '/sharp/api',
-    'middleware' => ['web', 'sharp_errors', 'sharp_authorizations', 'sharp_context'],
+    'middleware' => ['web', 'sharp_api_errors', 'sharp_api_authorizations', 'sharp_api_context'],
     'namespace' => 'Code16\Sharp\Http\Api'
 ], function() {
 
@@ -33,10 +33,6 @@ Route::group([
 
 });
 
-Route::post('/sharp/api/upload')
-    ->name("code16.sharp.api.form.upload")
-    ->uses('Code16\Sharp\Http\Api\FormUploadController@store');
-
 // Web routes
 Route::group([
     'prefix' => '/sharp',
@@ -44,16 +40,22 @@ Route::group([
     'namespace' => 'Code16\Sharp\Http'
 ], function() {
 
-    Route::get('/login')
-        ->name("code16.sharp.login")
-        ->uses('LoginController@create');
+    Route::group([
+        'middleware' => ['sharp_guest'],
+    ], function() {
 
-    Route::post('/login')
-        ->name("code16.sharp.login.post")
-        ->uses('LoginController@store');
+        Route::get('/login')
+            ->name("code16.sharp.login")
+            ->uses('LoginController@create');
+
+        Route::post('/login')
+            ->name("code16.sharp.login.post")
+            ->uses('LoginController@store');
+
+    });
 
     Route::group([
-        'middleware' => ['sharp_errors', 'sharp_authorizations'],
+        'middleware' => ['sharp_auth'],
     ], function() {
 
         Route::get('/list/{entityKey}')
@@ -67,6 +69,10 @@ Route::group([
         Route::get('/form/{entityKey}')
             ->name("code16.sharp.create")
             ->uses('FormController@create');
+
+        Route::post('/api/upload')
+            ->name("code16.sharp.api.form.upload")
+            ->uses('Api\FormUploadController@store');
     });
 
 });
