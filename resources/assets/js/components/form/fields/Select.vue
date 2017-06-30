@@ -1,5 +1,5 @@
 <template>
-    <div class="SharpSelect">
+    <div class="SharpSelect" :class="{'SharpSelect--multiple':multiple}">
         <sharp-multiselect
                 v-if="display==='dropdown'"
                 :value="value"
@@ -16,7 +16,6 @@
             <template v-if="!multiple && value!=null">
                 <div slot="carret" @mousedown.stop.prevent="remove()" class="SharpSelect__remove-btn close"></div>
             </template>
-            <template slot="maxElements">{{maxText}}</template>
         </sharp-multiselect>
         <div v-else>
             <template v-if="multiple">

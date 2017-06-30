@@ -1,31 +1,42 @@
 <template>
-    <div>
-        <div v-show="false">
-            <slot></slot>
-        </div>
-        <sharp-multiselect :options="options"></sharp-multiselect>
+    <div class="SharpDropdown" :class="{'SharpDropdown--open':opened}" tabindex="0" @focus="opened=true" @blur="opened=false">
+        <li class="SharpDropdown__text" >{{text}}</li>
+        <dropdown-arrow class="SharpDropdown__arrow"></dropdown-arrow>
+        <li>
+            <ul class="SharpDropdown__list">
+                <slot></slot>
+            </ul>
+        </li>
     </div>
 </template>
 
 <script>
-    import Multiselect from '../Multiselect';
+    import DropdownArrow from './Arrow';
 
     export default {
         name: 'SharpDropdown',
         components: {
-            [Multiselect.name]: Multiselect
+            DropdownArrow
         },
-        computed: {
-            options() {
-                let slots = this.$slots.default;
-                //console.log(slots);
-                if(slots)
-                    return slots.map(vnode=>vnode.componentInstance.$el.innerText);
-                return [];
+        provide() {
+            return  {
+                $dropdown: this
+            }
+        },
+        props: {
+            text: String
+        },
+        data() {
+            return {
+                opened: false
+            }
+        },
+        methods:{
+            toggle() {
+                this.opened = !this.opened;
             }
         },
         mounted() {
-            console.log(this.$slots.default);
         }
     }
 </script>

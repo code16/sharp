@@ -114,15 +114,23 @@
                 else if(response.status===417)
                     alert(response.data.message)
             },
+            delete() {
+                axios.delete(this.apiPath);
+            },
             init() {
                 if(this.entityKey != null) {
                     this.get();
                 }
                 else util.error('no entity key provided');
 
-                this.actionsBus.$on('main-button-clicked', _=>{
+                this.actionsBus.$on('submit', _=>{
                     this.post().catch(this.handleError);
                 });
+
+                this.actionsBus.$on('delete', _=>{
+                    this.delete();
+                });
+
                 this.actionsBus.$on('locale-changed', newLocale => this.locale=newLocale);
             },
 

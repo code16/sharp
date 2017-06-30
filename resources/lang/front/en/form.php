@@ -6,8 +6,11 @@ return [
     'list.insert_button' => 'Insert',
 
     'upload.browse_button' => 'Browse...',
+    'upload.remove_button' => 'Remove',
+    'upload.edit_button' => 'Edit',
 
     'multiselect.placeholder' => 'Select option',
+    'multiselect.max_text' => 'Maximum items selected',
 
     'markdown.icons.bold.title' => 'Bold',
     'markdown.icons.italic.title' => 'Italic',

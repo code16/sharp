@@ -11,6 +11,8 @@
     import MarkdownUpload from './MarkdownUpload';
     import CodeMirror from 'codemirror';
 
+    import { lang } from '../../../../mixins/Localization';
+
     const noop = ()=>{};
 
     export default {
@@ -27,6 +29,8 @@
 
             locale:String
         },
+        inject: [ 'xsrfToken' ],
+
         data() {
             return {
                 simplemde:null,
@@ -59,7 +63,8 @@
                             if(this.marker.explicitlyCleared)
                                 return;
                             this.remove();
-                        }
+                        },
+                        xsrfToken: this.xsrfToken
                     },
                     methods: {
                         remove() {
@@ -147,10 +152,29 @@
             codemirrorOn(eventName, callback, immediate) {
                 immediate && callback(this.simplemde.codemirror);
                 this.simplemde.codemirror.on(eventName, callback);
+            },
+
+            localizeToolbar() {
+                this.simplemde.toolbar.forEach(icon => {
+                    if(typeof icon === 'object') {
+                        let lName = icon.name.replace(/-/g,'_');
+                        icon.title = lang(`form.markdown.icons.${lName}.title`);
+                    }
+                });
+                this.$el.querySelector('.editor-toolbar').remove();
+                this.simplemde.createToolbar();
+            },
+            setReadOnly() {
+                this.simplemde.codemirror.setOption('readOnly', true);
+                this.simplemde.toolbar.forEach(icon => typeof icon === 'object' && (icon.action = noop));
+            },
+            bindImageAction() {
+                let imageBtn = this.simplemde.toolbar.find(btn => btn.name === 'image');
+                (imageBtn||{}).action = this.insertUploadImage;
             }
         },
         mounted() {
-            let mde = new SimpleMDE({
+            this.simplemde = new SimpleMDE({
                 element: this.$refs.textarea,
                 initialValue: this.value,
                 placeholder: this.placeholder,
@@ -159,25 +183,22 @@
                 autoDownloadFontAwesome: false
             });
 
-            let imageBtn = mde.options.toolbar.find(btn => btn.name === 'image');
-            (imageBtn||{}).action = this.insertUploadImage;
-
-            mde.codemirror.setSize('auto',this.height);
+            this.simplemde.codemirror.setSize('auto',this.height);
 
             if(this.readOnly) {
-                mde.codemirror.setOption('readOnly', true);
-                mde.options.toolbar.forEach(icon => typeof icon === 'object' && (icon.action = noop));
+                this.setReadOnly();
             }
+            /// Custom mde setup
+            this.localizeToolbar();
+            this.bindImageAction();
 
-            this.simplemde = mde;
-
+            //// CM events bindings
             this.codemirrorOn('cursorActivity', this.onCursorActivity, true);
             this.codemirrorOn('change', this.onChange, true);
             this.codemirrorOn('beforeChange',this.onBeforeChange);
 
             this.codemirrorOn('keydown', this.onKeydown);
             this.codemirrorOn('keyHandled', this.onKeyHandled);
-
             //console.log(this);
         }
     }

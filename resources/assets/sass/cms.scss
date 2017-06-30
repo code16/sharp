@@ -1,7 +1,16 @@
-html, body, #sharp-app {
-  min-height: 100%;
+html, body {
+  height: 100%;
+}
+
+@import 'node_modules/carbon-components/scss/globals/scss/colors';
+@import 'node_modules/carbon-components/scss/globals/scss/vars';
+
+body {
+  background-color: $ui-02;
 }
 
 @import 'node_modules/bootstrap/scss/variables';
 @import 'node_modules/bootstrap/scss/mixins';
+
 @import 'pages/LoginPage';
+@import 'pages/FormPage';

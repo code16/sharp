@@ -11,8 +11,8 @@
                ref="input">
         <div class="SharpDate__picker" v-show="showPicker">
             <sharp-date-picker v-if="hasDate"
-                               class=""
-                               language="fr"
+                               class="SharpDate__date"
+                               :language="language"
                                inline monday-first
                                :value="dateObject"
                                @selected="handleDateSelect">
@@ -34,7 +34,7 @@
     import SharpDatePicker from './Datepicker';
     import SharpTimePicker from './Timepicker';
 
-    import { Focusable } from '../../../../mixins';
+    import { Focusable, Localization } from '../../../../mixins';
 
     import moment from 'moment';
 
@@ -47,7 +47,7 @@
 
         inject:['$field'],
 
-        mixins: [Focusable],
+        mixins: [ Focusable, Localization ],
 
         props: {
             value: {

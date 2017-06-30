@@ -8,4 +8,28 @@
     display: flex;
     justify-content: flex-end;
   }
+
+  &__actions-dropdown {
+    .SharpDropdown__list {
+      width: auto;
+      right:0;
+    }
+    width: 2rem;
+    .SharpDropdown__text {
+      border: none;
+      height: 100%;
+    }
+
+    .SharpDropdown__arrow {
+      right: .75rem;
+    }
+
+    .SharpDropdown__link {
+      padding-right: 1rem;
+      &:hover {
+        @extend .SharpDropdown__link:focus;
+      }
+    }
+
+  }
 }

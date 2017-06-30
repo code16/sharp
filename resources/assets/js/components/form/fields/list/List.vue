@@ -29,25 +29,27 @@
                                         </sharp-field-display>
                                     </template>
                                 </sharp-list-item>
-                                <button v-if="!disabled && removable" class="SharpButton SharpButton--danger SharpButton--sm" @click="remove(i)">Supprimer</button>
+                                <button v-if="!disabled && removable" class="SharpButton SharpButton--danger SharpButton--sm" @click="remove(i)">{{ l('form.list.remove_button') }}</button>
                             </template>
                         </div>
                     </div>
                     <div v-if="!disabled && showAddButton && i<list.length-1" class="SharpList__new-item-zone">
-                        <button class="SharpButton SharpButton--secondary SharpButton--sm" @click="insertNewItem(i)">Insert</button>
+                        <button class="SharpButton SharpButton--secondary SharpButton--sm" @click="insertNewItem(i)">{{ l('form.list.insert_button') }}</button>
                     </div>
                 </div>
-                <button v-if="!disabled && showAddButton" type="button" :key="-1"
-                        class="SharpButton SharpButton--secondary SharpList__add-button" style=""
-                        @click="add">{{addText}}</button>
             </transition-group>
+            <button v-if="!disabled && showAddButton" type="button" :key="-1"
+                    class="SharpButton SharpButton--secondary SharpList__add-button" style=""
+                    @click="add">{{addText}}</button>
         </draggable>
     </div>
 </template>
 <script>
     import Draggable from 'vuedraggable';
-   import ListItem from './ListItem';
-   import Template from '../../../Template';
+    import ListItem from './ListItem';
+    import Template from '../../../Template';
+
+    import { Localization } from '../../../../mixins';
 
     const noop = ()=>{};
 
@@ -55,7 +57,9 @@
     export default {
         name: 'SharpList',
 
-        inject:['$form'],
+        inject: ['$form'],
+
+        mixins: [ Localization ],
 
         components: {
             Draggable,

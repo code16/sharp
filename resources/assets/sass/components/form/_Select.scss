@@ -18,4 +18,10 @@
     align-items: center;
     margin-top: rem(6px);
   }
+
+  &--multiple {
+    .multiselect__tags {
+      padding-bottom: rem(9px) - .1875rem;
+    }
+  }
 }

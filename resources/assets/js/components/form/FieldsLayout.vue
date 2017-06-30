@@ -2,13 +2,19 @@
     <sharp-grid :rows="layout">
         <template scope="fieldLayout">
             <slot v-if="!fieldLayout.legend" v-bind="fieldLayout"></slot>
-            <fieldset v-else>
-                <legend>{{fieldLayout.legend}}</legend>
-                <sharp-fields-layout :layout="fieldLayout.fields">
-                    <template scope="fieldset">
-                        <slot v-bind="fieldset"></slot>
-                    </template>
-                </sharp-fields-layout>
+            <fieldset class="SharpForm--fieldset" v-else>
+                <div class="SharpModule__inner">
+                    <div class="SharpModule__header">
+                        <legend class="SharpModule__title">{{fieldLayout.legend}}</legend>
+                    </div>
+                    <div class="SharpModule__content">
+                        <sharp-fields-layout :layout="fieldLayout.fields">
+                            <template scope="fieldset">
+                                <slot v-bind="fieldset"></slot>
+                            </template>
+                        </sharp-fields-layout>
+                    </div>
+                </div>
             </fieldset>
         </template>
     </sharp-grid>

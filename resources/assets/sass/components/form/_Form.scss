@@ -8,6 +8,8 @@
   &--fieldset {
     @include reset;
     margin-bottom: 2rem;
+
+    @extend .SharpModule;
   }
 
   &--form-item {

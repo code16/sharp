@@ -15,9 +15,12 @@
     import Vue from 'vue';
     import SharpVueClip from '../upload/VueClip';
     import Messages from '../../../../messages';
-    import {UPLOAD_URL} from '../../../../consts';
+
+    import { UPLOAD_URL } from '../../../../consts';
+    import { UploadXSRF } from '../../../../mixins';
 
     export default Vue.extend({
+        mixins: [ UploadXSRF ],
         props: {
             value: Object,
             maxFileSize: Number,
@@ -26,7 +29,9 @@
             onRemoved: Function,
             onAdded: Function,
 
-            marker: Object
+            marker: Object,
+
+            xsrfToken: String
         },
         components: {
             SharpVueClip
@@ -39,7 +44,7 @@
         },
         computed: {
             options() {
-                return {
+                return this.patchXsrf({
                     url: UPLOAD_URL,
                     uploadMultiple: false,
                     acceptedFiles: {
@@ -50,7 +55,7 @@
                         limit: this.maxFileSize,
                         message: Messages.uploadFileTooBig
                     }
-                }
+                });
             },
             dropzone() {
                 return this.$refs.vueclip.uploader._uploader;

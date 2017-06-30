@@ -1,4 +1,6 @@
 .SharpUpload {
+  position: relative;
+  margin:0;
 
   &:not(.SharpUpload--empty) {
     @extend .SharpModule;
@@ -16,15 +18,21 @@
     }
   }
 
-  position: relative;
-  margin:0;
-
   .dropzone {
     margin:0;
   }
 
   .dz-image-preview {
     display:none;
+  }
+
+  &__close-button {
+    @extend .SharpNotification__inline__close-button;
+    display: none;
+  }
+
+  &__close-icon {
+    @extend .SharpNotification__inline__close-icon;
   }
 
   &__upload-button {

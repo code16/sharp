@@ -12,13 +12,17 @@
     import Messages from '../../../../messages';
 
     import { UPLOAD_URL } from '../../../../consts';
+    import { UploadXSRF } from '../../../../mixins';
 
     export default {
         name: 'SharpUpload',
         components: {
             SharpVueClip
         },
-        inject: ['$field'],
+
+        mixins: [ UploadXSRF ],
+        inject: [ '$field', 'xsrfToken' ],
+
         props: {
             value: Object,
 
@@ -49,6 +53,7 @@
                         message: Messages.uploadFileTooBig
                     }
                 }
+                this.patchXsrf(opt);
                 return opt;
             }
         },

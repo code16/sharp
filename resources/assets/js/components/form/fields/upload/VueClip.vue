@@ -3,7 +3,9 @@
         <div class="SharpUpload__inner">
             <div class="SharpUpload__content">
                 <form v-show="!file" class="dropzone">
-                    <button type="button" class="dz-message SharpButton SharpButton--secondary SharpUpload__upload-button" :disabled="readOnly">Importer...</button>
+                    <button type="button" class="dz-message SharpButton SharpButton--secondary SharpUpload__upload-button" :disabled="readOnly">
+                        {{ l('form.upload.browse_button') }}
+                    </button>
                 </form>
                 <template v-if="file">
                     <div class="SharpUpload__container">
@@ -21,11 +23,22 @@
                             </div>
                             <div>
                                 <template v-if="!!originalImageSrc">
-                                    <button type="button" class="SharpButton SharpButton--sm SharpButton--secondary" @click="onEditButtonClick">Modifier</button>
+                                    <button type="button" class="SharpButton SharpButton--sm SharpButton--secondary" @click="onEditButtonClick">
+                                        {{ l('form.upload.edit_button') }}
+                                    </button>
                                 </template>
-                                <button type="button" class="SharpButton SharpButton--sm SharpButton--secondary SharpButton--danger" @click="remove()">Supprimer</button>
+                                <button type="button" class="SharpButton SharpButton--sm SharpButton--secondary SharpButton--danger SharpUpload__remove-button"
+                                        @click="remove()">
+                                    {{ l('form.upload.remove_button') }}
+                                </button>
                             </div>
                         </div>
+                        <button class="SharpUpload__close-button" type="button" @click="remove()">
+                            <svg class="SharpUpload__close-icon"
+                                 aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd">
+                                <path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
+                            </svg>
+                        </button>
                     </div>
                 </template>
                 <div ref="clip-preview-template" class="clip-preview-template" style="display: none;">
@@ -54,12 +67,11 @@
 <script>
     import VueClip from '../../../vendor/vue-clip/components/Clip/index';
     import File from '../../../vendor/vue-clip/File';
-
     import Modal from '../../../Modal';
-
     import VueCropper from 'vue-cropperjs';
-
     import rotateResize from './rotate';
+
+    import { Localization } from '../../../../mixins';
 
     export default {
         name: 'SharpVueClip',
@@ -70,7 +82,9 @@
             [Modal.name]: Modal
         },
 
-        inject : ['actionsBus'],
+        inject : [ 'actionsBus' ],
+
+        mixins: [ Localization ],
 
         props: {
             ratioX: Number,
@@ -271,5 +285,8 @@
             }));
             this.file.thumbnail = this.value.thumbnail;
         },
+        beforeDestroy() {
+            this.uploader._uploader.destroy();
+        }
     }
 </script>

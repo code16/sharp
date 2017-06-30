@@ -3,7 +3,7 @@
             class="SharpTags"
             :value="tags"
             :options="indexedOptions"
-            :placeholder="placeholder"
+            :placeholder="dynamicPlaceholder"
             :tag-placeholder="createText"
             :max="maxTagCount"
             :taggable="creatable"
@@ -17,7 +17,6 @@
             @input="handleInput"
             @tag="handleNewTag"
             ref="multiselect">
-        <template slot="maxElements">{{maxText}}</template>
     </sharp-multiselect>
 </template>
 
@@ -72,6 +71,9 @@
             indexedOptions() {
                 return this.options.map(this.patchOption);
             },
+            dynamicPlaceholder() {
+                return this.tags.length < (this.maxTagCount || Infinity) ? this.placeholder : "";
+            }
         },
         watch: {
             tags: 'onTagsChanged'
@@ -109,6 +111,7 @@
         created() {
             this.lastIndex += this.options.length;
             this.tags = this.value.map(this.patchTag);
+            console.log(this);
         }
     }
 </script>

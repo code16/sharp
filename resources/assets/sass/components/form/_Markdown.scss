@@ -10,11 +10,12 @@
   }
 
   &--read-only {
-    .editor-toolbar > a {
-      pointer-events: none;
-      cursor: default;
-      opacity: 0.6;
+    .CodeMirror {
+      opacity: 0.8;
     }
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.8;
   }
 
   .CodeMirror {

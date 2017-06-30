@@ -28,15 +28,11 @@ $button-border-width: 1px;
 #sharp-app {
   @include reset;
   color: $text-01;
-  background-color: $ui-02;
   line-height: 1;
 
   font-family: $font-family-base;
 
   @import 'node_modules/bootstrap/scss/grid';
-
-  // overriding default vendor components style
-  @import 'components/form/Multiselect';
 
   // from carbon design
   @import 'components/Button';
@@ -45,15 +41,21 @@ $button-border-width: 1px;
   @import 'components/Tag';
   @import 'components/Notification';
 
+
+
   // Action bar and viewer
   @import 'components/ActionView';
   @import 'components/ActionBar';
   @import 'components/Tabs';
   @import 'components/LocaleSelector';
 
+
+  // overriding default vendor components style
+  @import 'components/form/Multiselect';
+
+
   // Form components
   @import 'components/form/Text';
-  @import 'components/form/Multiselect';
   @import 'components/form/Autocomplete';
   @import 'components/form/Upload';
   @import 'components/form/Form';

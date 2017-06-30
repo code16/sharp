@@ -2,10 +2,6 @@
 
   &__add-button {
     width:100%;
-    /*&--no-transition {
-      transition: unset;
-    }*/
-    transition: unset;
   }
   &__sort-button {
     position:absolute;
@@ -25,6 +21,10 @@
     border-bottom: 1px solid $ui-02;
     position: relative;
 
+    .SharpForm--label {
+      @include font-size('12');
+    }
+
     .SharpUpload {
       &__inner {
         box-shadow: none !important;
@@ -32,6 +32,15 @@
       &__content {
         padding: 0 !important;
       }
+
+      &__remove-button {
+        display: none;
+      }
+
+      &__close-button {
+        display: initial;
+      }
+
     }
 
     &:last-of-type {

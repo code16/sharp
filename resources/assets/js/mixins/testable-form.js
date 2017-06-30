@@ -12,6 +12,7 @@ export default {
             this.$nextTick(_=> {
                 this.errors = testForm.errors;
             });
+            this.glasspane.$emit('hide');
         }
     }
 }

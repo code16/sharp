@@ -44,7 +44,7 @@
         name:'SharpBTabs',
         extends:bTabs,
         mounted() {
-            console.log(this);
+            //console.log(this);
         }
     }
 </script>

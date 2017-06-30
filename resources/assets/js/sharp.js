@@ -6,16 +6,19 @@ import Dashboard from './components/dashboard/Dashboard';
 
 import SharpLoading from './components/Loading';
 
+import axios from 'axios';
+import cookies from 'axios/lib/helpers/cookies';
+
 // prevent recursive components import
 Vue.component(FieldDisplay.name, FieldDisplay);
-
-
-const glasspane = new SharpLoading({ el: '#glasspane' });
 
 new Vue({
     el:"#sharp-app",
 
-    provide: { glasspane },
+    provide: {
+        glasspane: new SharpLoading({ el: '#glasspane' }),
+        xsrfToken: cookies.read(axios.defaults.xsrfCookieName),
+    },
 
     components: {
         [ActionView.name]:ActionView,

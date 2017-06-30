@@ -64,7 +64,7 @@ const layout = {
                                     }
                                     ], [
                                         {
-                                            "key": "age"
+                                            "key": "profile"
                                         }
                                     ]
                                 ]
@@ -133,7 +133,7 @@ const defaultData = {
     //     thumbnail:"img/chien.jpg"
     // },
     mylist: [{
-        name:'', surname:'', age:''
+        name:'', surname:'', profile: null
     }],
     tags:[],
     select: [1,3],
@@ -260,9 +260,11 @@ let fields = {
                 label:'Prénom',
                 type:'text'
             },
-            'age': {
-                label:'Âge',
-                type:'text'
+            'profile': {
+                label:'Image de profile',
+                type:'upload',
+                maxFileSize: 300,
+                fileFilter: ['.jpg','.jpeg','.png'],
             }
         },
     },
@@ -277,6 +279,7 @@ let fields = {
         type: 'markdown',
         height:250,
         placeholder:'super editeur',
+        //readOnly: true
         //toolbar: ["bold", "italic", "heading", "|", "quote"]
     },
     tags: {
