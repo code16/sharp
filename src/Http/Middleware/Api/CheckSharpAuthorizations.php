@@ -61,7 +61,7 @@ class CheckSharpAuthorizations
             // Add authorization to the JSON returned
             $response = $next($request);
 
-            return $response->status() == 200
+            return $response->status() == 200 && $request->method() == 'GET'
                 ? $this->addAuthorizationsToJsonResponse(
                     $response, $globalAuthorizations, $entityKey, $instanceId
                 )

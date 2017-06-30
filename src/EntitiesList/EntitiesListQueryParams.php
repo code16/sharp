@@ -34,7 +34,7 @@ class EntitiesListQueryParams
         $instance = new static;
         $instance->search = request("search");
         $instance->page = request("page");
-        $instance->sortedBy = request("sorted") ?: $defaultSortedBy;
+        $instance->sortedBy = request("sort") ?: $defaultSortedBy;
         $instance->sortedDir = request("dir") ?: $defaultSortedDir;
 
         return $instance;

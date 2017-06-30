@@ -57,8 +57,9 @@ class SpaceshipSharpList extends SharpEntitiesList
             ->addColumnLarge("pilots", 4);
     }
 
-//    function commands()
+//    function buildCommands()
 //    {
+//        $this->addEntityCommand()
 //    }
 
     function getListData(EntitiesListQueryParams $params)

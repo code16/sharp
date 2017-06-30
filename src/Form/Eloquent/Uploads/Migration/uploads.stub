@@ -19,7 +19,7 @@ class DummyClass extends Migration
             $table->string('model_key')->nullable();
             $table->string('file_name')->nullable();
             $table->string('mime_type')->nullable();
-            $table->string('disk')->default('local');
+            $table->string('disk')->default('local')->nullable();
             $table->unsignedInteger('size')->nullable();
             $table->text('custom_properties')->nullable();
             $table->unsignedInteger('order')->nullable();
