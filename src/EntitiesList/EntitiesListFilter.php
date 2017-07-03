@@ -11,6 +11,11 @@ abstract class EntitiesListFilter
     protected $currentValue;
 
     /**
+     * @var bool
+     */
+    protected $multiple = false;
+
+    /**
      * @return array|string
      */
     public function currentValue()
@@ -21,6 +26,11 @@ abstract class EntitiesListFilter
     public function setCurrentValue($value)
     {
         $this->currentValue = $value;
+    }
+
+    public function multiple()
+    {
+        return $this->multiple;
     }
 
     abstract public function values();

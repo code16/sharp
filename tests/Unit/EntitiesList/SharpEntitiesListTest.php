@@ -157,7 +157,10 @@ class SharpEntitiesListTest extends SharpTestCase
         };
 
         $this->assertArraySubset([
-            "filter_test" => [1 => "A", 2 => "B"],
+            "filter_test" => [
+                "multiple" => false,
+                "values" => [1 => "A", 2 => "B"]
+            ]
         ], $list->listConfig());
     }
 }

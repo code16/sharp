@@ -145,7 +145,10 @@ abstract class SharpEntitiesList
         ];
 
         foreach((array)$this->filterHandlers as $filterName => $handler) {
-            $config["filter_$filterName"] = $handler->values();
+            $config["filter_$filterName"] = [
+                "multiple" => $handler->multiple(),
+                "values" => $handler->values()
+            ];
         }
 
         return $config;
