@@ -47,15 +47,31 @@ class EntitiesListQueryParamsTest extends SharpTestCase
         );
     }
 
-    private function buildParams($p=1,$s="",$sb=null,$sd=null)
+    /** @test */
+    function we_can_find_a_filter_value()
     {
-        return new class($p, $s, $sb, $sd) extends EntitiesListQueryParams  {
-            public function __construct($p, $s, $sb, $sd)
+        $this->assertEquals(
+            "1",
+            $this->buildParams(1, "", null, null, ["type" => 1])->filterFor("type")
+        );
+
+        $this->assertNull(
+            $this->buildParams()->filterFor("type")
+        );
+    }
+
+    private function buildParams($p=1, $s="", $sb=null, $sd=null, $f=null)
+    {
+        return new class($p, $s, $sb, $sd, $f) extends EntitiesListQueryParams  {
+            public function __construct($p, $s, $sb, $sd, $f)
             {
                 $this->page = $p;
                 $this->search = $s;
                 $this->sortedBy = $sb;
                 $this->sortedDir = $sd;
+                if($f) {
+                    $this->filters = $f;
+                }
             }
         };
     }

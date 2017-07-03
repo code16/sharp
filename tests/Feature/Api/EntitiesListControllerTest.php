@@ -24,13 +24,41 @@ class EntitiesListControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->json('get', '/sharp/api/list/person?paginated')
+        $this->json('get', '/sharp/api/list/person?paginated=1')
             ->assertStatus(200)
-            ->assertJson(["data" => [
+            ->assertJsonFragment(["data" => [
                 "items" => [
                     ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
                     ["id" => 2, "name" => "Mary <b>Wayne</b>", "age" => 26],
                 ], "page" => 1, "totalCount" => 20, "pageSize" => 2
+            ]]);
+    }
+
+    /** @test */
+    public function we_can_search_for_an_entity()
+    {
+        $this->buildTheWorld();
+
+        $this->json('get', '/sharp/api/list/person?search=john')
+            ->assertStatus(200)
+            ->assertJsonFragment(["data" => [
+                "items" => [
+                    ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
+                ]
+            ]]);
+    }
+
+    /** @test */
+    public function we_can_filter_entities()
+    {
+        $this->buildTheWorld();
+
+        $this->json('get', '/sharp/api/list/person?filter_age=22')
+            ->assertStatus(200)
+            ->assertJsonFragment(["data" => [
+                "items" => [
+                    ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
+                ]
             ]]);
     }
 

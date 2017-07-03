@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Tests\Unit\EntitiesList\Eloquent;
 
-use Code16\Sharp\EntitiesList\containers\EntitiesListDataContainer;
+use Code16\Sharp\EntitiesList\Containers\EntitiesListDataContainer;
 use Code16\Sharp\EntitiesList\Eloquent\WithSharpEntitiesListEloquentTransformer;
 use Code16\Sharp\EntitiesList\EntitiesListQueryParams;
 use Code16\Sharp\EntitiesList\SharpEntitiesList;

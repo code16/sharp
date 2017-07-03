@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Tests\Fixtures;
 
-use Code16\Sharp\EntitiesList\containers\EntitiesListDataContainer;
+use Code16\Sharp\EntitiesList\Containers\EntitiesListDataContainer;
 use Code16\Sharp\EntitiesList\EntitiesListQueryParams;
 use Code16\Sharp\EntitiesList\SharpEntitiesList;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -23,7 +23,19 @@ class PersonSharpEntitiesList extends SharpEntitiesList
             ["id" => 2, "name" => "Mary <b>Wayne</b>", "age" => 26, "job" => "truck driver"],
         ];
 
-        if(request()->getQueryString() == "paginated") {
+        if($params->hasSearch()) {
+            $items = collect($items)->filter(function($item) use($params) {
+                return str_contains(strtolower($item["name"]), $params->searchWords(false));
+            })->all();
+        }
+
+        if($params->filterFor("age")) {
+            $items = collect($items)->filter(function($item) use($params) {
+                return $item["age"] == $params->filterFor("age");
+            })->all();
+        }
+
+        if(request()->has("paginated")) {
             return new LengthAwarePaginator($items, 20, 2, 1);
         }
 

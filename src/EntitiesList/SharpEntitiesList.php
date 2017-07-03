@@ -2,8 +2,8 @@
 
 namespace Code16\Sharp\EntitiesList;
 
-use Code16\Sharp\EntitiesList\containers\EntitiesListDataContainer;
-use Code16\Sharp\EntitiesList\layout\EntitiesListLayoutColumn;
+use Code16\Sharp\EntitiesList\Containers\EntitiesListDataContainer;
+use Code16\Sharp\EntitiesList\Layout\EntitiesListLayoutColumn;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 abstract class SharpEntitiesList
@@ -57,6 +57,11 @@ abstract class SharpEntitiesList
      * @var string
      */
     protected $defaultSortDir;
+
+    /**
+     * @var array
+     */
+    protected $filterHandlers;
 
     /**
      * Get the SharpListDataContainer array representation.
@@ -130,7 +135,7 @@ abstract class SharpEntitiesList
     {
         $this->buildListConfig();
 
-        return [
+        $config = [
             "instanceIdAttribute" => $this->instanceIdAttribute,
             "displayMode" => $this->displayMode,
             "searchable" => $this->searchable,
@@ -138,6 +143,12 @@ abstract class SharpEntitiesList
             "defaultSort" => $this->defaultSort,
             "defaultSortDir" => $this->defaultSortDir,
         ];
+
+        foreach((array)$this->filterHandlers as $filterName => $handler) {
+            $config["filter_$filterName"] = $handler->values();
+        }
+
+        return $config;
     }
 
     /**
@@ -240,6 +251,27 @@ abstract class SharpEntitiesList
         $this->columns[] = $column;
 
         return $this;
+    }
+
+    /**
+     * @param string $filterName
+     * @param EntitiesListFilter $filterHandler
+     * @return $this
+     */
+    protected function addFilter(string $filterName, EntitiesListFilter $filterHandler)
+    {
+        $this->filterHandlers[$filterName] = $filterHandler;
+
+        return $this;
+    }
+
+    /**
+     * @param string $filterName
+     * @return string|array
+     */
+    protected function filterValue(string $filterName)
+    {
+        return $this->filterHandlers[$filterName]->currentValue();
     }
 
     private function checkListIsBuilt()

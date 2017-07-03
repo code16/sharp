@@ -2,7 +2,8 @@
 
 namespace Code16\Sharp\Tests\Unit\EntitiesList;
 
-use Code16\Sharp\EntitiesList\containers\EntitiesListDataContainer;
+use Code16\Sharp\EntitiesList\Containers\EntitiesListDataContainer;
+use Code16\Sharp\EntitiesList\EntitiesListFilter;
 use Code16\Sharp\EntitiesList\EntitiesListQueryParams;
 use Code16\Sharp\EntitiesList\SharpEntitiesList;
 use Code16\Sharp\Tests\SharpTestCase;
@@ -137,6 +138,26 @@ class SharpEntitiesListTest extends SharpTestCase
             "displayMode" => "list",
             "defaultSort" => null,
             "defaultSortDir" => null
+        ], $list->listConfig());
+    }
+
+    /** @test */
+    function we_can_get_list_filters_config()
+    {
+        $list = new class extends SharpEntitiesListTestList {
+            function buildListConfig()
+            {
+                $this->addFilter("test", new class extends EntitiesListFilter {
+                    public function values()
+                    {
+                        return [1 => "A", 2 => "B"];
+                    }
+                });
+            }
+        };
+
+        $this->assertArraySubset([
+            "filter_test" => [1 => "A", 2 => "B"],
         ], $list->listConfig());
     }
 }
