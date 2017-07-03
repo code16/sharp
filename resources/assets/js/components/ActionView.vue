@@ -48,7 +48,7 @@
         },
         methods: {
             showMainModal(props) {
-                let {text, okCallback, okCloseOnly, isError} = props;
+                let {text, okCallback, okCloseOnly, isError, ...sharedProps} = props;
 
                 this.mainModalText = text;
                 this.$refs.mainModal.show();
@@ -59,7 +59,7 @@
                 }
 
                 this.mainModalProps = {
-                    ...props,
+                    ...sharedProps,
                     okOnly:okCloseOnly,
                     noCloseOnBackdrop:okCloseOnly,
                     noCloseOnEsc:okCloseOnly,

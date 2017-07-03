@@ -1,6 +1,6 @@
 <?php
 
 return [
-    '401.title': 'Unauthenticated',
-    '403.title': 'Unauthorized'
+    '401.title' => 'Unauthenticated',
+    '403.title' => 'Unauthorized'
 ]

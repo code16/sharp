@@ -36040,6 +36040,8 @@ module.exports = (
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins_Localization__ = __webpack_require__(52);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 
 
 
@@ -36088,25 +36090,25 @@ module.exports = (
         __WEBPACK_IMPORTED_MODULE_0_axios___default.a.interceptors.response.use(function (response) {
             return response;
         }, function (error) {
+
+            var modalOptions = {
+                title: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__mixins_Localization__["a" /* lang */])('modals.' + error.response.status),
+                text: error.response.data.message,
+                isError: true
+            };
+
             switch (error.response.status) {
                 case 401:
-                    _this3.actionsBus.$emit('showMainModal', {
-                        title: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__mixins_Localization__["a" /* lang */])('modals.401'),
-                        text: "Vous n'êtes plus connecté",
+                    _this3.actionsBus.$emit('showMainModal', _extends({}, modalOptions, {
                         okCallback: function okCallback() {
                             location.href = '/sharp/login';
-                        },
-
-                        isError: true
-                    });
+                        }
+                    }));
                     break;
                 case 403:
-                    _this3.actionsBus.$emit('showMainModal', {
-                        title: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__mixins_Localization__["a" /* lang */])('modals.401'),
-                        text: "Vous nêtes pas autorisé à effectuer cette action",
-                        okCloseOnly: true,
-                        isError: true
-                    });
+                    _this3.actionsBus.$emit('showMainModal', _extends({}, modalOptions, {
+                        okCloseOnly: true
+                    }));
                     break;
             }
             return Promise.reject(error);
@@ -41083,6 +41085,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_vue__);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //
@@ -41137,8 +41141,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             var text = props.text,
                 okCallback = props.okCallback,
                 okCloseOnly = props.okCloseOnly,
-                isError = props.isError;
-
+                isError = props.isError,
+                sharedProps = _objectWithoutProperties(props, ['text', 'okCallback', 'okCloseOnly', 'isError']);
 
             this.mainModalText = text;
             this.$refs.mainModal.show();
@@ -41148,7 +41152,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 this.$refs.mainModal.$on('ok', okCallback);
             }
 
-            this.mainModalProps = _extends({}, props, {
+            this.mainModalProps = _extends({}, sharedProps, {
                 okOnly: okCloseOnly,
                 noCloseOnBackdrop: okCloseOnly,
                 noCloseOnEsc: okCloseOnly,
@@ -41306,6 +41310,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -41318,6 +41324,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             SharpModal: true,
             'SharpModal--error': ctx.props.isError
         });
+
+        var _ctx$props = ctx.props,
+            isError = _ctx$props.isError,
+            exposedProps = _objectWithoutProperties(_ctx$props, ['isError']);
+
+        ctx.props = exposedProps;
 
         return h(__WEBPACK_IMPORTED_MODULE_0__vendor_bootstrap_vue_components_modal___default.a, ctx.data, [h({
             name: 'SharpModalTitle',

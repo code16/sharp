@@ -13,6 +13,9 @@
                 'SharpModal--error': ctx.props.isError
             };
 
+            let { isError, ...exposedProps } = ctx.props;
+            ctx.props = exposedProps;
+
             return h(bModal, ctx.data, [
                 h({
                     name: 'SharpModalTitle',

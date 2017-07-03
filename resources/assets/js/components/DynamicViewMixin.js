@@ -39,21 +39,24 @@ export default {
     },
     created() {
         axios.interceptors.response.use(response => response, error => {
+
+            let modalOptions = {
+                title: lang(`modals.${error.response.status}`),
+                text: error.response.data.message,
+                isError: true
+            };
+
             switch(error.response.status) {
                 case 401: this.actionsBus.$emit('showMainModal', {
-                    title: lang('modals.401'),
-                    text: "Vous n'êtes plus connecté",
+                    ...modalOptions,
                     okCallback() {
                         location.href = '/sharp/login';
                     },
-                    isError: true
                 });
                     break;
                 case 403: this.actionsBus.$emit('showMainModal', {
-                    title: lang('modals.401'),
-                    text: "Vous nêtes pas autorisé à effectuer cette action",
+                    ...modalOptions,
                     okCloseOnly:true,
-                    isError: true
                 });
                     break;
             }
