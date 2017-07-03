@@ -1,5 +1,8 @@
 .SharpActionBar {
-  padding: 1em 0;
+  margin-top: 1em;
+  margin-bottom: 1em;
+
+  height: 2.5rem;
   .left {
     display: flex;
     justify-content: flex-start;
@@ -10,6 +13,7 @@
   }
 
   &__actions-dropdown {
+    //align-items: stretch;
     .SharpDropdown__list {
       width: auto;
       right:0;

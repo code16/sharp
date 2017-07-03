@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { lang } from '../mixins/Localization';
+
 export default {
     data() {
         return {
@@ -36,6 +38,28 @@ export default {
         }
     },
     created() {
+        axios.interceptors.response.use(response => response, error => {
+            switch(error.response.status) {
+                case 401: this.actionsBus.$emit('showMainModal', {
+                    title: lang('modals.401'),
+                    text: "Vous n'êtes plus connecté",
+                    okCallback() {
+                        location.href = '/sharp/login';
+                    },
+                    isError: true
+                });
+                    break;
+                case 403: this.actionsBus.$emit('showMainModal', {
+                    title: lang('modals.401'),
+                    text: "Vous nêtes pas autorisé à effectuer cette action",
+                    okCloseOnly:true,
+                    isError: true
+                });
+                    break;
+            }
+            return Promise.reject(error);
+        });
+
         this.glasspane.$emit('show');
     }
 }
