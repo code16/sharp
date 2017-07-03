@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\EntitiesList\layout;
+namespace Code16\Sharp\EntitiesList\Layout;
 
 class EntitiesListLayoutColumn
 {

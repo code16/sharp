@@ -2,8 +2,10 @@
 
 namespace App\Sharp;
 
+use App\Sharp\Filters\SpaceshipPilotsFilter;
+use App\Sharp\Filters\SpaceshipTypeFilter;
 use App\Spaceship;
-use Code16\Sharp\EntitiesList\containers\EntitiesListDataContainer;
+use Code16\Sharp\EntitiesList\Containers\EntitiesListDataContainer;
 use Code16\Sharp\EntitiesList\Eloquent\WithSharpEntitiesListEloquentTransformer;
 use Code16\Sharp\EntitiesList\EntitiesListQueryParams;
 use Code16\Sharp\EntitiesList\SharpEntitiesList;
@@ -45,6 +47,8 @@ class SpaceshipSharpList extends SharpEntitiesList
         $this->setInstanceIdAttribute("id")
             ->setSearchable()
             ->setDefaultSort("name", "asc")
+            ->addFilter("type", new SpaceshipTypeFilter)
+            ->addFilter("pilots", new SpaceshipPilotsFilter)
             ->setPaginated();
     }
 
@@ -66,16 +70,30 @@ class SpaceshipSharpList extends SharpEntitiesList
     {
         $spaceships = Spaceship::with("picture", "type", "pilots");
 
-        if($params->hasSearch()) {
+//        if($this->filterValue("type")) {
+//            $spaceships->where("type", $this->filterValue("type"));
+//        }
+
+        if($params->filterFor("type")) {
+            $spaceships->where("type_id", $params->filterFor("type"));
+        }
+
+        if($params->hasSearch() || $params->filterFor("pilots")) {
             $spaceships->select("spaceships.*")
                 ->leftJoin("pilot_spaceship", "spaceships.id", "=", "pilot_spaceship.spaceship_id")
                 ->leftJoin("pilots", "pilots.id", "=", "pilot_spaceship.pilot_id");
 
-            foreach($params->searchWords() as $word) {
-                $spaceships->where(function ($query) use ($word) {
-                    $query->orWhere("spaceships.name", "like", $word)
-                        ->orWhere('pilots.name', 'like', $word);
-                });
+            if ($params->filterFor("pilots")) {
+                $spaceships->whereIn("pilots.id", $params->filterFor("pilots"));
+            }
+
+            if ($params->hasSearch()) {
+                foreach ($params->searchWords() as $word) {
+                    $spaceships->where(function ($query) use ($word) {
+                        $query->orWhere("spaceships.name", "like", $word)
+                            ->orWhere('pilots.name', 'like', $word);
+                    });
+                }
             }
         }
 
@@ -85,7 +103,7 @@ class SpaceshipSharpList extends SharpEntitiesList
             ->setCustomTransformer("type", function($spaceship) {
                 return $spaceship->type->label;
             })
-            ->setCustomTransformer("pilots", function($spaceship) {
+            ->setCustomTransformer("pilots.name", function($spaceship) {
                 return $spaceship->pilots->pluck("name")->implode("<br>");
             })
             ->setUploadTransformer("picture", 100)

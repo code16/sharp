@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\EntitiesList\containers;
+namespace Code16\Sharp\EntitiesList\Containers;
 
 class EntitiesListDataContainer
 {

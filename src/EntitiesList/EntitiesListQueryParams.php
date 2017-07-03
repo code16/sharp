@@ -25,6 +25,11 @@ class EntitiesListQueryParams
     protected $sortedDir;
 
     /**
+     * @var array
+     */
+    protected $filters;
+
+    /**
      * @param string|null $defaultSortedBy
      * @param string|null $defaultSortedDir
      * @return static
@@ -36,6 +41,14 @@ class EntitiesListQueryParams
         $instance->page = request("page");
         $instance->sortedBy = request("sort") ?: $defaultSortedBy;
         $instance->sortedDir = request("dir") ?: $defaultSortedDir;
+
+        collect(request()->except(["search", "page", "sort", "dir"]))
+            ->filter(function($value, $name) {
+                return starts_with($name, "filter_");
+
+            })->each(function($value, $name) use($instance) {
+               $instance->filters[substr($name, strlen("filter_"))] = $value;
+            });
 
         return $instance;
     }
@@ -95,6 +108,15 @@ class EntitiesListQueryParams
         }
 
         return $terms;
+    }
+
+    /**
+     * @param string $filterName
+     * @return mixed|null
+     */
+    public function filterFor(string $filterName)
+    {
+        return $this->filters[$filterName] ?? null;
     }
 
 }
