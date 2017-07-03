@@ -2,36 +2,15 @@
 
 namespace Code16\Sharp\EntitiesList;
 
-abstract class EntitiesListFilter
+interface EntitiesListFilter
 {
+    /**
+     * @return bool
+     */
+    public function multiple();
 
     /**
-     * @var string|array
+     * @return array
      */
-    protected $currentValue;
-
-    /**
-     * @var bool
-     */
-    protected $multiple = false;
-
-    /**
-     * @return array|string
-     */
-    public function currentValue()
-    {
-        return $this->currentValue;
-    }
-
-    public function setCurrentValue($value)
-    {
-        $this->currentValue = $value;
-    }
-
-    public function multiple()
-    {
-        return $this->multiple;
-    }
-
-    abstract public function values();
+    public function values();
 }

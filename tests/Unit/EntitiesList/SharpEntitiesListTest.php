@@ -147,11 +147,9 @@ class SharpEntitiesListTest extends SharpTestCase
         $list = new class extends SharpEntitiesListTestList {
             function buildListConfig()
             {
-                $this->addFilter("test", new class extends EntitiesListFilter {
-                    public function values()
-                    {
-                        return [1 => "A", 2 => "B"];
-                    }
+                $this->addFilter("test", new class implements EntitiesListFilter {
+                    public function values() { return [1 => "A", 2 => "B"]; }
+                    public function multiple() { return false; }
                 });
             }
         };

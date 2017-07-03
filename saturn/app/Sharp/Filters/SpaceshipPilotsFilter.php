@@ -5,13 +5,22 @@ namespace App\Sharp\Filters;
 use App\Pilot;
 use Code16\Sharp\EntitiesList\EntitiesListFilter;
 
-class SpaceshipPilotsFilter extends EntitiesListFilter
+class SpaceshipPilotsFilter implements EntitiesListFilter
 {
-    protected $multiple = true;
-
+    /**
+     * @return array
+     */
     public function values()
     {
         return Pilot::orderBy("name")
             ->pluck("name", "id");
+    }
+
+    /**
+     * @return bool
+     */
+    public function multiple()
+    {
+        return true;
     }
 }
