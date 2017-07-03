@@ -53,8 +53,8 @@ class CheckSharpAuthorizations
         }
 
         // Check policy authorization
-        if($this->hasPolicyFor($entityKey)) {
-            $this->gate->authorize("sharp.{$entityKey}.{$ability}", $instanceId);
+        if($this->hasPolicyFor($entityKey) && !$this->gate->check("sharp.{$entityKey}.{$ability}", $instanceId)) {
+            $this->deny();
         }
 
         if($request->wantsJson()) {
