@@ -85,7 +85,7 @@ class SpaceshipSharpList extends SharpEntitiesList
             ->setCustomTransformer("type", function($spaceship) {
                 return $spaceship->type->label;
             })
-            ->setCustomTransformer("pilots", function($spaceship) {
+            ->setCustomTransformer("pilots.name", function($spaceship) {
                 return $spaceship->pilots->pluck("name")->implode("<br>");
             })
             ->setUploadTransformer("picture", 100)
