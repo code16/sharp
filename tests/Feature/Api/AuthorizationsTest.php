@@ -157,6 +157,41 @@ class AuthorizationsTest extends BaseApiTest
         ]);
     }
 
+    /** @test */
+    public function global_authorizations_are_true_by_default()
+    {
+        $this->buildTheWorld();
+
+        // Create
+        $this->json('get', '/sharp/api/form/person')->assertJson([
+            "authorizations" => [
+                "delete" => true,
+                "update" => true,
+                "create" => true,
+                "view" => true,
+            ]
+        ]);
+
+        // Edit
+        $this->json('get', '/sharp/api/form/person/1')->assertJson([
+            "authorizations" => [
+                "delete" => true,
+                "update" => true,
+                "create" => true,
+                "view" => true,
+            ]
+        ]);
+
+        // List
+        $this->json('get', '/sharp/api/list/person')->assertJson([
+            "authorizations" => [
+                "update" => true,
+                "create" => true,
+                "view" => true,
+            ]
+        ]);
+    }
+
 }
 
 class AuthorizationsTestGuard implements \Illuminate\Contracts\Auth\Guard
