@@ -62,16 +62,16 @@ class AppendListAuthorizations
                     }
                 }
             }
+        }
 
-            $authorizations = array_merge(
-                ["view" => true, "create" => true, "update" => true],
-                $authorizations
-            );
-            
-            foreach($missingAbilities as $missingAbility) {
-                if(sizeof($authorizations[$missingAbility]) == 0) {
-                    $authorizations[$missingAbility] = false;
-                }
+        $authorizations = array_merge(
+            ["view" => true, "create" => true, "update" => true],
+            $authorizations
+        );
+
+        foreach(["view", "update"] as $missingAbility) {
+            if(sizeof($authorizations[$missingAbility]) == 0) {
+                $authorizations[$missingAbility] = false;
             }
         }
         

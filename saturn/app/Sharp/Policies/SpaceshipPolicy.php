@@ -3,11 +3,9 @@
 namespace App\Sharp\Policies;
 
 use App\User;
-use Illuminate\Auth\Access\HandlesAuthorization;
 
 class SpaceshipPolicy
 {
-    use HandlesAuthorization;
 
     /**
      * @return bool
