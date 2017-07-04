@@ -5,6 +5,7 @@ namespace Code16\Sharp\Tests\Unit\EntitiesList;
 use Code16\Sharp\EntitiesList\Containers\EntitiesListDataContainer;
 use Code16\Sharp\EntitiesList\EntitiesListFilter;
 use Code16\Sharp\EntitiesList\EntitiesListQueryParams;
+use Code16\Sharp\EntitiesList\EntitiesListState;
 use Code16\Sharp\EntitiesList\SharpEntitiesList;
 use Code16\Sharp\Tests\SharpTestCase;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -86,7 +87,7 @@ class SharpEntitiesListTest extends SharpTestCase
                 ["name" => "John Wayne", "age" => 22],
                 ["name" => "Mary Wayne", "age" => 26],
             ]
-        ], $form->data(new EntitiesListQueryParams()));
+        ], $form->data());
     }
 
     /** @test */
@@ -117,7 +118,7 @@ class SharpEntitiesListTest extends SharpTestCase
                 ["name" => "John Wayne", "age" => 22],
                 ["name" => "Mary Wayne", "age" => 26],
             ], "page" => 1, "pageSize" => 2, "totalCount" => 10
-        ], $form->data(new EntitiesListQueryParams()));
+        ], $form->data());
     }
 
     /** @test */
@@ -160,6 +161,91 @@ class SharpEntitiesListTest extends SharpTestCase
                 "values" => [1 => "A", 2 => "B"]
             ]
         ], $list->listConfig());
+    }
+
+    /** @test */
+    function we_can_get_list_entity_state_config_with_a_class()
+    {
+        $list = new class extends SharpEntitiesListTestList {
+            function buildListConfig()
+            {
+                $this->addEntityState("_state", new class extends EntitiesListState {
+                    protected function buildStates()
+                    {
+                        $this->addState("test1", "Test 1", "blue");
+                        $this->addState("test2", "Test 2", "red");
+                    }
+                });
+            }
+        };
+
+        $this->assertArraySubset([
+            "state" => [
+                "attribute" => "_state",
+                "values" => [
+                    ["value"=>"test1", "label"=>"Test 1", "color"=>"blue"],
+                    ["value"=>"test2", "label"=>"Test 2", "color"=>"red"],
+                ]
+            ]
+        ], $list->listConfig());
+    }
+
+    /** @test */
+    function we_can_get_list_entity_state_config_with_an_array()
+    {
+        $list = new class extends SharpEntitiesListTestList {
+            function buildListConfig()
+            {
+                $this->addEntityState("_state", [
+                    "test1" => ["Test 1", "blue"],
+                    "test2" => ["Test 2", "red"]
+                ]);
+            }
+        };
+
+        $this->assertArraySubset([
+            "state" => [
+                "attribute" => "_state",
+                "values" => [
+                    ["value"=>"test1", "label"=>"Test 1", "color"=>"blue"],
+                    ["value"=>"test2", "label"=>"Test 2", "color"=>"red"],
+                ]
+            ]
+        ], $list->listConfig());
+    }
+
+    /** @test */
+    function entity_state_attribute_is_added_the_entity_data()
+    {
+        $form = new class extends SharpEntitiesListTestList {
+            function getListData(EntitiesListQueryParams $params): array
+            {
+                return [
+                    ["name" => "John Wayne", "state" => true],
+                    ["name" => "Mary Wayne", "state" => false]
+                ];
+            }
+            function buildListDataContainers()
+            {
+                $this->addDataContainer(
+                    EntitiesListDataContainer::make("name")
+                );
+            }
+            function buildListConfig()
+            {
+                $this->addEntityState("state", [
+                    true => ["Visible", "blue"],
+                    false => ["Invisible", "red"]
+                ]);
+            }
+        };
+
+        $this->assertEquals([
+            "items" => [
+                ["name" => "John Wayne", "state" => true],
+                ["name" => "Mary Wayne", "state" => false],
+            ]
+        ], $form->data());
     }
 }
 

@@ -64,6 +64,16 @@ abstract class SharpEntitiesList
     protected $filterHandlers;
 
     /**
+     * @var string
+     */
+    protected $entityStateAttribute;
+
+    /**
+     * @var array
+     */
+    protected $entityStates;
+
+    /**
      * Get the SharpListDataContainer array representation.
      *
      * @return array
@@ -120,7 +130,11 @@ abstract class SharpEntitiesList
                     ->map(function($row) use($keys) {
                         // Filter model attributes on actual form fields
                         return collect($row)->only(
-                            array_merge([$this->instanceIdAttribute], $keys)
+                            array_merge(
+                                $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
+                                [$this->instanceIdAttribute],
+                                $keys
+                            )
                         )->all();
                     })->all()
         ] + (isset($page) ? compact('page', 'totalCount', 'pageSize') : []);
@@ -148,6 +162,20 @@ abstract class SharpEntitiesList
             $config["filter_$filterName"] = [
                 "multiple" => $handler->multiple(),
                 "values" => $handler->values()
+            ];
+        }
+
+        if($this->entityStateAttribute) {
+            $config["state"] = [
+                "attribute" => $this->entityStateAttribute,
+                "values" => collect($this->entityStates)
+                    ->map(function($state, $key) {
+                        return [
+                            "value" => $key,
+                            "label" => $state[0],
+                            "color" => $state[1]
+                        ];
+                    })->values()->all()
             ];
         }
 
@@ -275,6 +303,22 @@ abstract class SharpEntitiesList
     protected function filterValue(string $filterName)
     {
         return $this->filterHandlers[$filterName]->currentValue();
+    }
+
+    /**
+     * @param string $stateAttribute
+     * @param EntitiesListState|array $stateHandler
+     * @return $this
+     */
+    protected function addEntityState(string $stateAttribute, $stateHandler)
+    {
+        $this->entityStateAttribute = $stateAttribute;
+
+        $this->entityStates = $stateHandler instanceof EntitiesListState
+            ? $stateHandler->states()
+            : $stateHandler;
+
+        return $this;
     }
 
     private function checkListIsBuilt()
