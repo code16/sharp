@@ -56,17 +56,28 @@ class AppendListAuthorizations
                 foreach($missingAbilities as $missingAbility) {
                     if($this->gate->check("sharp.{$entityKey}.{$missingAbility}", $instanceId)) {
                         $authorizations[$missingAbility][] = $instanceId;
+
+                    } elseif(!isset($authorizations[$missingAbility])) {
+                        $authorizations[$missingAbility] = [];
                     }
+                }
+            }
+
+            $authorizations = array_merge(
+                ["view" => true, "create" => true, "update" => true],
+                $authorizations
+            );
+            
+            foreach($missingAbilities as $missingAbility) {
+                if(sizeof($authorizations[$missingAbility]) == 0) {
+                    $authorizations[$missingAbility] = false;
                 }
             }
         }
         
         $data = $jsonResponse->getData();
 
-        $data->authorizations = array_merge(
-            ["view" => true, "create" => true, "update" => true],
-            $authorizations
-        );
+        $data->authorizations = $authorizations;
 
         $jsonResponse->setData($data);
 

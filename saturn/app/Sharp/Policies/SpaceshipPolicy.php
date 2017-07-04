@@ -14,7 +14,7 @@ class SpaceshipPolicy
      */
     public function view(User $user, $spaceshipId)
     {
-        return true;
+        return $spaceshipId%2 == 0 || $spaceshipId > 10;
     }
 
     /**
@@ -22,7 +22,7 @@ class SpaceshipPolicy
      */
     public function update(User $user, $spaceshipId)
     {
-        return true;
+        return $spaceshipId%2 == 0;
     }
 
     /**
