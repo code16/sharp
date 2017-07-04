@@ -38,6 +38,9 @@
   .multiselect__tags {
     @extend .SharpDropdown__text;
 
+    display: flex;
+    align-items: center;
+
     padding-top: rem(9px);
     padding-bottom: rem(9px);
     cursor: default;

@@ -1,4 +1,10 @@
 .SharpModal {
+  &.SharpModal--error {
+    .modal .modal-dialog {
+      border-top: $support-01 4px solid;
+    }
+  }
+
   .modal {
     @include reset;
     position: fixed;
@@ -23,6 +29,7 @@
       transition: opacity 200ms;
       visibility: visible;
     }
+
 
     // &__container {
     .modal-dialog {
@@ -52,12 +59,11 @@
       }
     }
 
+
     //&__header {
     .modal-header {
       margin-bottom: rem(24px);
     }
-
-
 
     //&__content {
     .modal-body {
@@ -66,6 +72,10 @@
       > * {
         @include reset;
       }
+    }
+
+    .modal-content {
+      outline: none;
     }
 
     //&__footer {

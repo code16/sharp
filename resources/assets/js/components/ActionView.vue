@@ -2,6 +2,9 @@
     <div class="SharpActionView container">
         <component v-if="barComp" :is="barComp"></component>
         <slot></slot>
+        <sharp-modal ref="mainModal" v-bind="mainModalProps">
+            {{mainModalText}}
+        </sharp-modal>
     </div>
 </template>
 
@@ -9,10 +12,15 @@
     import ActionBars, { NameAssociation as actionBarCompName } from './action-bar/index';
     import EventBus from './EventBus';
 
+    import Modal from './Modal';
+    import Vue from 'vue';
 
     export default {
         name:'SharpActionView',
-        components: ActionBars,
+        components: {
+            [Modal.name]: Modal,
+            ...ActionBars,
+        },
 
         provide() {
             return {
@@ -29,6 +37,8 @@
 
         data() {
             return {
+                mainModalText:"",
+                mainModalProps: {}
             }
         },
         computed: {
@@ -37,6 +47,28 @@
             }
         },
         methods: {
+            showMainModal(props) {
+                let {text, okCallback, okCloseOnly, isError, ...sharedProps} = props;
+
+                this.mainModalText = text;
+                this.$refs.mainModal.show();
+
+                this.$refs.mainModal.$off('ok');
+                if(okCallback) {
+                    this.$refs.mainModal.$on('ok', okCallback);
+                }
+
+                this.mainModalProps = {
+                    ...sharedProps,
+                    okOnly:okCloseOnly,
+                    noCloseOnBackdrop:okCloseOnly,
+                    noCloseOnEsc:okCloseOnly,
+                    isError
+                }
+            }
         },
+        mounted() {
+            this._provided.actionsBus.$on('showMainModal', this.showMainModal);
+        }
     }
 </script>

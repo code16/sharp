@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { lang } from '../mixins/Localization';
+
 export default {
     data() {
         return {
@@ -36,6 +38,31 @@ export default {
         }
     },
     created() {
+        axios.interceptors.response.use(response => response, error => {
+
+            let modalOptions = {
+                title: lang(`modals.${error.response.status}`),
+                text: error.response.data.message,
+                isError: true
+            };
+
+            switch(error.response.status) {
+                case 401: this.actionsBus.$emit('showMainModal', {
+                    ...modalOptions,
+                    okCallback() {
+                        location.href = '/sharp/login';
+                    },
+                });
+                    break;
+                case 403: this.actionsBus.$emit('showMainModal', {
+                    ...modalOptions,
+                    okCloseOnly:true,
+                });
+                    break;
+            }
+            return Promise.reject(error);
+        });
+
         this.glasspane.$emit('show');
     }
 }

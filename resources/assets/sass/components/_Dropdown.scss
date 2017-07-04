@@ -73,11 +73,6 @@
     }
   }
 
-/*
-  &--selected {
-    display: none;
-  }
-*/
   &--open {
     .SharpDropdown__arrow {
       @include SharpDropdownOpenArrow;
