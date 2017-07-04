@@ -17,7 +17,7 @@ export default {
             return axios.get(this.apiPath).then(response=>{
                     this.mount(response.data);
                     this.ready = true;
-                this.glasspane.$emit('hide');
+                    this.glasspane.$emit('hide');
                     return Promise.resolve(response);
                 })
                 .catch(error=>{

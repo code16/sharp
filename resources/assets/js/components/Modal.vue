@@ -6,7 +6,7 @@
         functional: true,
 
         render(h, ctx) {
-            console.log(ctx);
+            //console.log(ctx);
             ctx.data['class'] = {
                 ...ctx.data['class'],
                 SharpModal: true,

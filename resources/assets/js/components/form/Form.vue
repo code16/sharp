@@ -32,7 +32,7 @@
     import util from '../../util';
     import { API_PATH } from '../../consts';
 
-    import { testableForm } from '../../mixins/index';
+    import { testableForm, ActionEvents } from '../../mixins/index';
 
     import DynamicView from '../DynamicViewMixin';
 
@@ -47,7 +47,7 @@
         name:'SharpForm',
         extends: DynamicView,
 
-        mixins: [testableForm],
+        mixins: [testableForm, ActionEvents],
         components: {
             [TabbedLayout.name]: TabbedLayout,
             [FieldsLayout.name]: FieldsLayout,
@@ -105,8 +105,6 @@
                 this.layout = layout;
                 this.data = data || {};
                 this.config = config || {};
-
-                this.setupActions();
             },
             handleError({response}) {
                 if(response.status===422)
@@ -118,33 +116,28 @@
                 axios.delete(this.apiPath);
             },
             init() {
-                if(this.entityKey != null) {
-                    this.get();
+                if(this.entityKey) {
+                    this.get().then(_=>this.setupActions());
                 }
                 else util.error('no entity key provided');
-
-                this.actionsBus.$on('submit', _=>{
-                    this.post().catch(this.handleError);
-                });
-
-                this.actionsBus.$on('delete', _=>{
-                    this.delete();
-                });
-
-                this.actionsBus.$on('locale-changed', newLocale => this.locale=newLocale);
             },
 
             setupActions(){
-                this.actionsBus.$emit('setup-locales', this.config.locales);
+                console.log('setup actions')
+                this.actionsBus.$emit('setupLocales', this.config.locales);
 
                 if(this.config.locales) {
-                    this.actionsBus.$emit('locale-changed', this.config.locales[0]);
+                    this.actionsBus.$emit('localeChanged', this.config.locales[0]);
                 }
             },
         },
+        actions: {
+            submit() { this.post().catch(this.handleError) },
+            localeChanged(newLocale) { this.locale = newLocale },
+            delete: 'delete',
+        },
         created() {
             this.init();
-            console.log(this);
         }
     }
 </script>

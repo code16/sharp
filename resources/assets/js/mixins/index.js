@@ -4,6 +4,7 @@ import ErrorNode from './ErrorNode';
 import Focusable from './Focusable';
 import UploadXSRF from './UploadXSRF';
 import Localization from './Localization';
+import ActionEvents from './ActionEvents';
 
 export {
     testableForm,
@@ -11,5 +12,6 @@ export {
     ErrorNode,
     Focusable,
     UploadXSRF,
-    Localization
+    Localization,
+    ActionEvents
 }

@@ -1,19 +1,19 @@
 <template>
-    <div class="SharpEntitiesList">
+    <div class="SharpEntitiesList SharpEntitiesList--border">
         <template v-if="ready">
-            <div class="SharpEntitiesList__head">
+            <div class="SharpEntitiesList__thead">
                 <div class="SharpEntitiesList__row SharpEntitiesList__row--header">
-                    <div class="SharpEntitiesList__th" v-for="container in containers">
-                        {{ container.label }}
+                    <div class="SharpEntitiesList__th" v-for="contLayout in layout">
+                        {{ containers[contLayout.key].label }}
                     </div>
                 </div>
             </div>
             <div class="SharpEntitiesList__tbody">
                 <div class="SharpEntitiesList__row" v-for="item in data.items">
-                    <div class="SharpEntitiesList__td" v-for="(container, contKey) in containers">
-                        <span v-if="container.html" v-html="item[contKey]"></span>
+                    <div class="SharpEntitiesList__td" v-for="contLayout in layout">
+                        <span v-if="containers[contLayout.key].html" v-html="item[contLayout.key]"></span>
                         <template v-else>
-                            {{ item[contKey] }}
+                            {{ item[contLayout.key] }}
                         </template>
                     </div>
                 </div>
@@ -24,10 +24,21 @@
 
 <script>
     import DynamicView from '../DynamicViewMixin';
+    import { API_PATH } from '../../consts';
+    import util from '../../util';
 
     export default {
         name:'SharpEntitiesList',
         extends: DynamicView,
+
+        inject:['ActionsBus', 'glasspane'],
+
+        props: {
+            entityKey: {
+                type: String,
+                required: true
+            }
+        },
 
         data() {
             return {
@@ -42,7 +53,7 @@
         },
         computed: {
             apiPath() {
-
+                return `${API_PATH}/list/${this.entityKey}`;
             },
             apiParams() {
                 if(!this.ready)
@@ -59,7 +70,7 @@
             },
             instanceIdAttribute() {
                 return (this.config||{}).instanceIdAttribute;
-            }
+            },
         },
         methods: {
             mount({ containers, layout, data, config }) {
@@ -67,7 +78,18 @@
                 this.layout = layout;
                 this.data = data || {};
                 this.config = config || {};
+            },
+            verify() {
+                for(let contLayout of this.layout) {
+                    if(!(contLayout.key in this.containers)) {
+                        util.error(`EntitiesList: unknown container "${contLayout.key}" (in layout)`);
+                        this.ready = false;
+                    }
+                }
             }
+        },
+        created() {
+            this.get().then(_=>this.verify());
         }
     }
 </script>

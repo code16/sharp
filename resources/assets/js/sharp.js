@@ -1,5 +1,7 @@
-import Vue from 'vue';
+//import Vue from 'vue';
 import VueRouter from 'vue-router';
+
+window.Vue = require('vue');
 
 import ActionView from './components/ActionView';
 import Form from './components/form/Form';
@@ -15,9 +17,11 @@ import cookies from 'axios/lib/helpers/cookies';
 // prevent recursive components import
 Vue.component(FieldDisplay.name, FieldDisplay);
 
-Vue.use(VueRouter);
+//Vue.use(VueRouter);
 
-new Vue({
+
+
+window.instance = new Vue({
     el:"#sharp-app",
 
     provide: {

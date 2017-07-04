@@ -72,6 +72,7 @@ $button-border-width: 1px;
   @import 'components/form/Textarea';
   @import 'components/form/Radio';
 
+  @import 'components/list/EntitiesList';
 
   input[type="number"].hide-controls {
     &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
