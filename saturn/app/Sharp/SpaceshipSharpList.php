@@ -63,18 +63,9 @@ class SpaceshipSharpList extends SharpEntitiesList
             ->addColumnLarge("pilots.name", 4);
     }
 
-//    function buildCommands()
-//    {
-//        $this->addEntityCommand()
-//    }
-
     function getListData(EntitiesListQueryParams $params)
     {
         $spaceships = Spaceship::with("picture", "type", "pilots");
-
-//        if($this->filterValue("type")) {
-//            $spaceships->where("type", $this->filterValue("type"));
-//        }
 
         if($params->filterFor("type")) {
             $spaceships->where("type_id", $params->filterFor("type"));

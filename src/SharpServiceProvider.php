@@ -4,7 +4,8 @@ namespace Code16\Sharp;
 
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Middleware\Api\AddSharpContext;
-use Code16\Sharp\Http\Middleware\Api\CheckSharpAuthorizations;
+use Code16\Sharp\Http\Middleware\Api\AppendFormAuthorizations;
+use Code16\Sharp\Http\Middleware\Api\AppendListAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors;
 use Code16\Sharp\Http\Middleware\CheckIsSharpAuthenticated;
 use Code16\Sharp\Http\Middleware\CheckIsSharpGuest;
@@ -34,7 +35,10 @@ class SharpServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app['router']->aliasMiddleware(
-            'sharp_api_authorizations', CheckSharpAuthorizations::class
+            'sharp_api_append_form_authorizations', AppendFormAuthorizations::class
+
+        )->aliasMiddleware(
+            'sharp_api_append_list_authorizations', AppendListAuthorizations::class
 
         )->aliasMiddleware(
             'sharp_api_errors', HandleSharpApiErrors::class
