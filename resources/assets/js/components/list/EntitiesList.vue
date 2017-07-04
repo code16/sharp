@@ -1,6 +1,24 @@
 <template>
-    <div>
-
+    <div class="SharpEntitiesList">
+        <template v-if="ready">
+            <div class="SharpEntitiesList__head">
+                <div class="SharpEntitiesList__row SharpEntitiesList__row--header">
+                    <div class="SharpEntitiesList__th" v-for="container in containers">
+                        {{ container.label }}
+                    </div>
+                </div>
+            </div>
+            <div class="SharpEntitiesList__tbody">
+                <div class="SharpEntitiesList__row" v-for="item in data.items">
+                    <div class="SharpEntitiesList__td" v-for="(container, contKey) in containers">
+                        <span v-if="container.html" v-html="item[contKey]"></span>
+                        <template v-else>
+                            {{ item[contKey] }}
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </template>
     </div>
 </template>
 
@@ -38,6 +56,9 @@
                     params.dir = this.sortDir;
                 }
                 return params;
+            },
+            instanceIdAttribute() {
+                return (this.config||{}).instanceIdAttribute;
             }
         },
         methods: {

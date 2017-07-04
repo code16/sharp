@@ -90936,6 +90936,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -90968,6 +90986,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 params.dir = this.sortDir;
             }
             return params;
+        },
+        instanceIdAttribute: function instanceIdAttribute() {
+            return (this.config || {}).instanceIdAttribute;
         }
     },
     methods: {
@@ -91024,7 +91045,31 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
-  return _vm._c('div')
+  return _vm._c('div', {
+    staticClass: "SharpEntitiesList"
+  }, [(_vm.ready) ? [_vm._c('div', {
+    staticClass: "SharpEntitiesList__head"
+  }, [_vm._c('div', {
+    staticClass: "SharpEntitiesList__row SharpEntitiesList__row--header"
+  }, _vm._l((_vm.containers), function(container) {
+    return _vm._c('div', {
+      staticClass: "SharpEntitiesList__th"
+    }, [_vm._v("\n                    " + _vm._s(container.label) + "\n                ")])
+  }))]), _vm._v(" "), _vm._c('div', {
+    staticClass: "SharpEntitiesList__tbody"
+  }, _vm._l((_vm.data.items), function(item) {
+    return _vm._c('div', {
+      staticClass: "SharpEntitiesList__row"
+    }, _vm._l((_vm.containers), function(container, contKey) {
+      return _vm._c('div', {
+        staticClass: "SharpEntitiesList__td"
+      }, [(container.html) ? _vm._c('span', {
+        domProps: {
+          "innerHTML": _vm._s(item[contKey])
+        }
+      }) : [_vm._v("\n                        " + _vm._s(item[contKey]) + "\n                    ")]], 2)
+    }))
+  }))] : _vm._e()], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

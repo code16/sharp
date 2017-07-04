@@ -1,0 +1,103 @@
+@import '../../mixins/entities-list';
+
+.SharpEntitiesList {
+  @include reset;
+  display: table;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  min-width: 500px;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-bottom: 5rem;
+  background-color: transparent;
+
+  &--border {
+    border: 1px solid $ui-04;
+    background-color: $ui-01;
+  }
+
+  &--condensed {
+    .SharpEntitiesList__td {
+      @include padding-td--condensed;
+    }
+  }
+
+  &__input {
+    @include hidden;
+  }
+
+  &--selection {
+    .SharpEntities__row:hover:not(.SharpEntitiesList__row--header) {
+      background-color: rgba($brand-02, .1);
+      cursor: pointer;
+    }
+  }
+
+  &__row {
+    display: table-row;
+    border-bottom: 1px solid $ui-04;
+    transition: $transition--base $bx--standard-easing;
+
+    &__input:checked + & {
+      background-color: rgba($brand-02, .1);
+    }
+
+    &--header {
+      border-bottom: 2px solid $brand-01;
+      cursor: inherit;
+    }
+
+    &:focus:not(.SharpEntitiesList__row--header) {
+      @include focus-outline('border');
+    }
+  }
+
+  &__thead {
+    display: table-header-group;
+    vertical-align: middle;
+  }
+
+  &__th {
+    @include reset;
+    @include padding-th;
+    display: table-cell;
+    font-size: rem(12px);
+    font-weight: 700;
+    height: rem(40px);
+    letter-spacing: 1px;
+    text-align: left;
+    text-transform: uppercase;
+    vertical-align: middle;
+  }
+
+  &__tbody {
+    display: table-row-group;
+    vertical-align: middle;
+  }
+
+  &__td {
+    @include reset;
+    @include font-size('14');
+    @include line-height('body');
+    @include padding-td;
+    position: relative;
+    display: table-cell;
+  }
+
+
+  &__svg {
+    display: inline-block;
+    fill: transparent;
+    vertical-align: middle;
+    transition: $transition--base $bx--standard-easing;
+  }
+
+  &__row:hover .SharpEntities__svg {
+    fill: rgba($brand-02, .1);
+  }
+
+  &__input:checked + .SharpEntities__row .SharpEntities__svg {
+    fill: $brand-02;
+  }
+}
