@@ -4,6 +4,7 @@ namespace App\Sharp;
 
 use App\Sharp\Filters\SpaceshipPilotsFilter;
 use App\Sharp\Filters\SpaceshipTypeFilter;
+use App\Sharp\States\SpaceshipEntityState;
 use App\Spaceship;
 use Code16\Sharp\EntitiesList\Containers\EntitiesListDataContainer;
 use Code16\Sharp\EntitiesList\Eloquent\WithSharpEntitiesListEloquentTransformer;
@@ -49,6 +50,7 @@ class SpaceshipSharpList extends SharpEntitiesList
             ->setDefaultSort("name", "asc")
             ->addFilter("type", new SpaceshipTypeFilter)
             ->addFilter("pilots", new SpaceshipPilotsFilter)
+            ->addEntityState("state", new SpaceshipEntityState)
             ->setPaginated();
     }
 
@@ -61,18 +63,9 @@ class SpaceshipSharpList extends SharpEntitiesList
             ->addColumnLarge("pilots.name", 4);
     }
 
-//    function buildCommands()
-//    {
-//        $this->addEntityCommand()
-//    }
-
     function getListData(EntitiesListQueryParams $params)
     {
         $spaceships = Spaceship::with("picture", "type", "pilots");
-
-//        if($this->filterValue("type")) {
-//            $spaceships->where("type", $this->filterValue("type"));
-//        }
 
         if($params->filterFor("type")) {
             $spaceships->where("type_id", $params->filterFor("type"));

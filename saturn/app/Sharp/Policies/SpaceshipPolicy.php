@@ -3,18 +3,16 @@
 namespace App\Sharp\Policies;
 
 use App\User;
-use Illuminate\Auth\Access\HandlesAuthorization;
 
 class SpaceshipPolicy
 {
-    use HandlesAuthorization;
 
     /**
      * @return bool
      */
     public function view(User $user, $spaceshipId)
     {
-        return true;
+        return $spaceshipId%2 == 0 || $spaceshipId > 10;
     }
 
     /**
@@ -22,7 +20,7 @@ class SpaceshipPolicy
      */
     public function update(User $user, $spaceshipId)
     {
-        return true;
+        return $spaceshipId%2 == 0;
     }
 
     /**

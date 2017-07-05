@@ -19,7 +19,7 @@ class PolicyAuthorizationsTest extends BaseApiTest
         $this->buildTheWorld();
 
         // Update policy returns true
-        $this->json('post', '/sharp/api/form/person/50', [])->assertStatus(200);
+        $this->json('post', '/sharp/api/form/person/1', [])->assertStatus(200);
         $this->json('get', '/sharp/api/list/person')->assertStatus(200);
 
         // Create has no policy, and should therefore return 200
@@ -28,14 +28,17 @@ class PolicyAuthorizationsTest extends BaseApiTest
 
         // Delete policy returns false
         $this->json('delete', '/sharp/api/form/person/50')->assertStatus(403);
+
+        // Update policy with an id > 1 returns 403
+        $this->json('post', '/sharp/api/form/person/10', [])->assertStatus(403);
     }
 
     /** @test */
-    public function policy_authorizations_are_appended_to_the_response()
+    public function policy_authorizations_are_appended_to_the_response_on_a_form_case()
     {
         $this->buildTheWorld();
 
-        $this->json('get', '/sharp/api/list/person')->assertJson([
+        $this->json('get', '/sharp/api/form/person')->assertJson([
             "authorizations" => [
                 "delete" => false,
                 "update" => true,
@@ -43,10 +46,42 @@ class PolicyAuthorizationsTest extends BaseApiTest
                 "view" => true,
             ]
         ]);
+
+        $this->json('get', '/sharp/api/form/person/1')->assertJson([
+            "authorizations" => [
+                "delete" => false,
+                "update" => true,
+                "create" => true,
+                "view" => true,
+            ]
+        ]);
+
+        $this->json('get', '/sharp/api/form/person/10')->assertJson([
+            "authorizations" => [
+                "delete" => false,
+                "update" => false,
+                "create" => true,
+                "view" => true,
+            ]
+        ]);
     }
 
     /** @test */
-    public function global_authorizations_override_policies_()
+    public function policy_authorizations_are_appended_to_the_response_on_a_list_case()
+    {
+        $this->buildTheWorld();
+
+        $this->json('get', '/sharp/api/list/person')->assertJson([
+            "authorizations" => [
+                "update" => [1],
+                "create" => true,
+                "view" => [1,2],
+            ]
+        ]);
+    }
+
+    /** @test */
+    public function global_authorizations_override_policies()
     {
         $this->buildTheWorld();
 
@@ -57,7 +92,7 @@ class PolicyAuthorizationsTest extends BaseApiTest
             ]
         );
 
-        $this->json('get', '/sharp/api/list/person')->assertJson([
+        $this->json('get', '/sharp/api/form/person')->assertJson([
             "authorizations" => [
                 "delete" => true,
                 "update" => false,
@@ -72,7 +107,7 @@ class AuthorizationsTestPersonPolicy
 {
     public function view(User $user, $id) { return true; }
 
-    public function update(User $user, $id) { return true; }
+    public function update(User $user, $id) { return $id < 2; }
 
     public function delete(User $user, $id) { return false; }
 }

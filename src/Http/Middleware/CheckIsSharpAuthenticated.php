@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Http\Middleware;
 
 use Closure;
+use Code16\Sharp\Exceptions\Auth\SharpAuthenticationException;
 use Illuminate\Contracts\Auth\Factory as Auth;
 
 class CheckIsSharpAuthenticated
@@ -24,14 +25,19 @@ class CheckIsSharpAuthenticated
     }
 
     /**
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string|null  $guard
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
+     * @param  string|null $guard
      * @return mixed
+     * @throws SharpAuthenticationException
      */
     public function handle($request, Closure $next, $guard = null)
     {
         if(!$this->auth->guard($this->getSharpGuard())->check()) {
+            if($request->wantsJson()) {
+                throw new SharpAuthenticationException("Unauthenticated user");
+            }
+
             return redirect()->route("code16.sharp.login");
         }
 

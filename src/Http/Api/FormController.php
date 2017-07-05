@@ -3,9 +3,8 @@
 namespace Code16\Sharp\Http\Api;
 
 use Code16\Sharp\Form\SharpForm;
-use Illuminate\Routing\Controller;
 
-class FormController extends Controller
+class FormController extends ApiController
 {
 
     /**
@@ -15,6 +14,8 @@ class FormController extends Controller
      */
     public function edit($entityKey, $instanceId)
     {
+        $this->checkAuthorization("view", $entityKey, $instanceId);
+
         $form = $this->getFormInstance($entityKey);
 
         return response()->json([
@@ -30,6 +31,8 @@ class FormController extends Controller
      */
     public function create($entityKey)
     {
+        $this->checkAuthorization("create", $entityKey);
+
         $form = $this->getFormInstance($entityKey);
 
         return response()->json([
@@ -46,6 +49,8 @@ class FormController extends Controller
      */
     public function update($entityKey, $instanceId)
     {
+        $this->checkAuthorization("update", $entityKey, $instanceId);
+
         $this->validateRequest($entityKey);
 
         $form = $this->getFormInstance($entityKey);
@@ -61,6 +66,8 @@ class FormController extends Controller
      */
     public function store($entityKey)
     {
+        $this->checkAuthorization("create", $entityKey);
+
         $this->validateRequest($entityKey);
 
         $form = $this->getFormInstance($entityKey);
@@ -77,6 +84,8 @@ class FormController extends Controller
      */
     public function delete($entityKey, $instanceId)
     {
+        $this->checkAuthorization("delete", $entityKey, $instanceId);
+
         $form = $this->getFormInstance($entityKey);
 
         $form->delete($instanceId);
