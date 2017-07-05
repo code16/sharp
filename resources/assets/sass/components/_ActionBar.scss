@@ -3,17 +3,21 @@
   margin-bottom: 1em;
 
   height: 2.5rem;
-  .left {
+
+  .left, .right {
     display: flex;
+    align-items: center;
+  }
+
+  .left {
     justify-content: flex-start;
   }
   .right {
-    display: flex;
     justify-content: flex-end;
   }
 
   &__actions-dropdown {
-    //align-items: stretch;
+    align-self: stretch;
     .SharpDropdown__list {
       width: auto;
       right:0;

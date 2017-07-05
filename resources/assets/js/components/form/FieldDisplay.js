@@ -1,4 +1,4 @@
-import util from '../../util';
+import * as util from '../../util';
 import FieldContainer from './FieldContainer';
 
 const computeSelectCondition = (condValues, fieldValue, isSingleSelect) => {

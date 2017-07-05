@@ -1,4 +1,4 @@
-import util from '../util';
+import * as util from '../util';
 
 export default {
     created() {
@@ -18,10 +18,10 @@ export default {
                     continue;
                 }
 
-                this.actionsBus.$on(actionName, () => this[action].apply(this,arguments));
+                this.actionsBus.$on(actionName, (...args) => this[action].apply(this,args));
             }
             else if(typeof action === 'function') {
-                this.actionsBus.$on(actionName, () => action.apply(this,arguments));
+                this.actionsBus.$on(actionName, (...args) => action.apply(this,args));
             }
             else util.error(`${this.$options.name} (ActionEvents) : unprocessable action type (only function on string)`);
         }

@@ -5,6 +5,8 @@ import Focusable from './Focusable';
 import UploadXSRF from './UploadXSRF';
 import Localization from './Localization';
 import ActionEvents from './ActionEvents';
+import ReadOnlyFields from './ReadOnlyFields';
+import QueryTree from './QueryTree';
 
 export {
     testableForm,
@@ -13,5 +15,7 @@ export {
     Focusable,
     UploadXSRF,
     Localization,
-    ActionEvents
+    ActionEvents,
+    ReadOnlyFields,
+    QueryTree
 }

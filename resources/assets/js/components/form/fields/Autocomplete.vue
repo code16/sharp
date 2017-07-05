@@ -1,5 +1,8 @@
 <template>
-    <div class="SharpAutocomplete" :class="[`SharpAutocomplete--${state}`,{'SharpAutocomplete--remote':isRemote}]">
+    <div class="SharpAutocomplete"
+         :class="[`SharpAutocomplete--${state}`,
+                 {'SharpAutocomplete--remote':isRemote},
+                 {'SharpAutocomplete--disabled':readOnly}]">
         <div v-if="state=='valuated'" class="SharpAutocomplete__result-item">
             <sharp-template name="ResultItem" :template="resultItemTemplate" :template-data="valueObject"></sharp-template>
             <button class="SharpAutocomplete__result-item__close-button" type="button" @click="handleResetClick">

@@ -9,7 +9,7 @@
                 </div>
             </div>
             <div class="SharpEntitiesList__tbody">
-                <div class="SharpEntitiesList__row" v-for="item in data.items">
+                <div class="SharpEntitiesList__row" v-for="item in data.items" @click="rowClicked(item.id)">
                     <div class="SharpEntitiesList__td" v-for="contLayout in layout">
                         <span v-if="containers[contLayout.key].html" v-html="item[contLayout.key]"></span>
                         <template v-else>
@@ -25,13 +25,19 @@
 <script>
     import DynamicView from '../DynamicViewMixin';
     import { API_PATH } from '../../consts';
-    import util from '../../util';
+    import * as util from '../../util';
+
+    import { ActionEvents } from '../../mixins';
+
+    import * as qs from '../../helpers/querystring';
 
     export default {
         name:'SharpEntitiesList',
         extends: DynamicView,
 
-        inject:['ActionsBus', 'glasspane'],
+        inject: ['actionsBus', 'glasspane', 'params'],
+
+        mixins: [ ActionEvents ],
 
         props: {
             entityKey: {
@@ -86,10 +92,34 @@
                         this.ready = false;
                     }
                 }
+            },
+            rowClicked(instanceId) {
+                location.href = `/sharp/form/${this.entityKey}/${instanceId}`;
+            },
+            setupActionBar() {
+                this.actionsBus.$emit('setup', {
+                    itemsCount: this.data.items.length
+                });
+            }
+        },
+        actions: {
+            searchChanged(input, updateHistory=true) {
+                console.log('entities list search changed');
+                this.search = input;
+
+                if(updateHistory) {
+                    history.pushState(null, null, qs.serialize(this.apiParams));
+                }
             }
         },
         created() {
-            this.get().then(_=>this.verify());
+            this.get().then(_=>{
+                this.verify();
+                this.setupActionBar();
+            });
+
+            let { search } = this.params;
+            this.actionsBus.$emit('searchChanged', search, false);
         }
     }
 </script>

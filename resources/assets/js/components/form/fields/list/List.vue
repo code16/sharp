@@ -6,14 +6,13 @@
             </button>
         </template>
         <draggable :options="dragOptions" :list="list">
-            <transition-group name="expand" tag="div">
+            <transition-group name="expand">
                 <div v-for="(listItemData, i) in list" :key="listItemData[indexSymbol]"
                     class="SharpList__item"
                     :class="{'SharpList__item--collapsed':dragActive}"
                 >
                     <div class="SharpModule__inner">
                         <div class="SharpModule__content">
-
                             <template v-if="dragActive && collapsedItemTemplate">
                                 <sharp-template name="CollapsedItem" :template="collapsedItemTemplate" :template-data="collapsedItemData(listItemData)"></sharp-template>
                             </template>
@@ -38,10 +37,13 @@
                     </div>
                 </div>
             </transition-group>
-            <button v-if="!disabled && showAddButton" type="button" :key="-1"
-                    class="SharpButton SharpButton--secondary SharpList__add-button" style=""
-                    @click="add">{{addText}}</button>
+            <template slot="footer">
+                <button v-if="!disabled && showAddButton" type="button" :key="-1"
+                        class="SharpButton SharpButton--secondary SharpList__add-button" style=""
+                        @click="add">{{addText}}</button>
+            </template>
         </draggable>
+        <em v-if="readOnly && !list.length" class="SharpList__empty-alert">{{l('form.list.empty')}}</em>
     </div>
 </template>
 <script>
@@ -49,17 +51,16 @@
     import ListItem from './ListItem';
     import Template from '../../../Template';
 
-    import { Localization } from '../../../../mixins';
+    import { Localization, ReadOnlyFields } from '../../../../mixins';
 
     const noop = ()=>{};
-
 
     export default {
         name: 'SharpList',
 
         inject: ['$form'],
 
-        mixins: [ Localization ],
+        mixins: [ Localization, ReadOnlyFields('itemFields') ],
 
         components: {
             Draggable,
@@ -117,20 +118,12 @@
             }
         },
         computed: {
-            readOnlyItemFields() {
-                console.log('readOnly item fields');
-                let res = JSON.parse(JSON.stringify(this.itemFields));
-                for(let fieldKey of Object.keys(res)) {
-                    res[fieldKey].readOnly = true;
-                }
-                return res;
-            },
             disabled() {
                 return this.readOnly || this.dragActive;
             },
             updatedItemFields() {
                 if(this.readOnly || this.dragActive) {
-                    return this.readOnlyItemFields;
+                    return this.readOnlyFields;
                 }
                 return this.itemFields;
             },

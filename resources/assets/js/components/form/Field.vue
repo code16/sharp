@@ -1,6 +1,6 @@
 <script>
     import Fields, { NameAssociation as fieldCompName } from './fields/index';
-    import util from '../../util';
+    import * as util from '../../util';
 
     export default {
         name:'SharpField',

@@ -18,9 +18,11 @@ export default {
     methods: {
         setFocusable(elm) {
             this.$focusableElm = elm;
-            this.$focusableElm.addEventListener('blur',_=>{
-                this.$field.$emit('blur');
-            });
+            if(this.$field) {
+                this.$focusableElm.addEventListener('blur',_=>{
+                    this.$field.$emit('blur');
+                });
+            }
         }
     }
 

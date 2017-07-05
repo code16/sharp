@@ -4,6 +4,7 @@ return [
 
     'list.remove_button' => 'Remove',
     'list.insert_button' => 'Insert',
+    'list.empty' => 'Empty list',
 
     'upload.browse_button' => 'Browse...',
     'upload.remove_button' => 'Remove',

@@ -1,5 +1,5 @@
 <template>
-    <textarea class="SharpTextarea" :rows="rows" :placeholder="placeholder" :disabled="disabled"
+    <textarea class="SharpTextarea" :rows="rows" :placeholder="placeholder" :disabled="readOnly"
               :value="value" @input="handleInput">
     </textarea>
 </template>
@@ -14,7 +14,7 @@
                 type: String,
             },
             placeholder: String,
-            disabled: Boolean,
+            readOnly: Boolean,
 
             rows: Number,
         },

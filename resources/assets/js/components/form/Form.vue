@@ -11,7 +11,7 @@
                                 <!-- field -->
                                 <template scope="fieldLayout">
                                     <sharp-field-display :field-key="fieldLayout.key"
-                                                         :context-fields="fields"
+                                                         :context-fields="isReadOnly ? readOnlyFields : fields"
                                                          :context-data="data"
                                                          :field-layout="fieldLayout"
                                                          :locale="locale"
@@ -29,10 +29,10 @@
 </template>
 
 <script>
-    import util from '../../util';
+    import * as util from '../../util';
     import { API_PATH } from '../../consts';
 
-    import { testableForm, ActionEvents } from '../../mixins/index';
+    import { testableForm, ActionEvents, ReadOnlyFields } from '../../mixins';
 
     import DynamicView from '../DynamicViewMixin';
 
@@ -47,7 +47,7 @@
         name:'SharpForm',
         extends: DynamicView,
 
-        mixins: [testableForm, ActionEvents],
+        mixins: [testableForm, ActionEvents, ReadOnlyFields('fields')],
         components: {
             [TabbedLayout.name]: TabbedLayout,
             [FieldsLayout.name]: FieldsLayout,
@@ -73,6 +73,8 @@
             return {
                 fields: null,
                 config: null,
+                authorizations: null,
+
                 errors:{},
                 locale: ''
             }
@@ -85,6 +87,13 @@
             },
             localized() {
                 return this.config && Array.isArray(this.config.locales);
+            },
+            isCreation() {
+                return !this.instanceId;
+            },
+
+            isReadOnly() {
+                return !(this.isCreation ? this.authorizations.create : this.authorizations.update);
             }
         },
         methods: {
@@ -100,11 +109,12 @@
                 }
                 else this.$set(this.data,key,value);
             },
-            mount({fields, layout, data, config}) {
+            mount({fields, layout, data, config, authorizations}) {
                 this.fields = fields;
                 this.layout = layout;
                 this.data = data || {};
                 this.config = config || {};
+                this.authorizations = authorizations;
             },
             handleError({response}) {
                 if(response.status===422)
@@ -117,14 +127,20 @@
             },
             init() {
                 if(this.entityKey) {
-                    this.get().then(_=>this.setupActions());
+                    this.get().then(_=>this.setupActionBar());
                 }
                 else util.error('no entity key provided');
             },
 
-            setupActions(){
-                console.log('setup actions')
-                this.actionsBus.$emit('setupLocales', this.config.locales);
+            setupActionBar() {
+                const submitButtonVisible = this.isCreation ? this.authorizations.create : this.authorizations.update;
+
+                this.actionsBus.$emit('setup', {
+                    locales: null, //this.config.locales,
+                    submitButtonVisible,
+                    deleteButtonVisible: this.authorizations.delete,
+                    backButton: this.isReadOnly
+                });
 
                 if(this.config.locales) {
                     this.actionsBus.$emit('localeChanged', this.config.locales[0]);
@@ -132,11 +148,18 @@
             },
         },
         actions: {
-            submit() { this.post().catch(this.handleError) },
-            localeChanged(newLocale) { this.locale = newLocale },
+            submit() {
+                this.post().catch(this.handleError)
+            },
+            cancel() {
+                location.href = `/sharp/list/${this.entityKey}`;
+            },
+            localeChanged(newLocale) {
+                this.locale = newLocale;
+            },
             delete: 'delete',
         },
-        created() {
+        mounted() {
             this.init();
         }
     }

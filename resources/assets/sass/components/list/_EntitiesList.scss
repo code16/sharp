@@ -51,6 +51,12 @@
     &:focus:not(.SharpEntitiesList__row--header) {
       @include focus-outline('border');
     }
+
+    &:hover:not(.SharpEntitiesList__row--header) {
+      background-color: $ui-02;
+      cursor: pointer;
+    }
+
   }
 
   &__thead {

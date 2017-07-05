@@ -3,6 +3,7 @@ $fa-font-path: '/vendor/sharp/fonts';
 
 
 $css--reset: true;
+$css--typography: true;
 
 @import 'node_modules/carbon-components/scss/globals/scss/colors';
 @import 'node_modules/carbon-components/scss/globals/scss/vars';
@@ -31,6 +32,8 @@ $button-border-width: 1px;
   line-height: 1;
 
   font-family: $font-family-base;
+
+  @import 'node_modules/carbon-components/scss/globals/scss/css--typography';
 
   @import 'node_modules/bootstrap/scss/grid';
 

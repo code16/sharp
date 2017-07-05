@@ -108,13 +108,12 @@ const localizedData = {
         de:"Allemand"
     },
     mylist: {
-        fr:[{
-            name:'', surname:'', age:''
-        }],
+        fr:null,
         en:null,
         de:null
     }
 };
+
 const defaultData = {
     A:"Valeur texte",
     B:'',
@@ -132,9 +131,7 @@ const defaultData = {
     //     size:14550,
     //     thumbnail:"img/chien.jpg"
     // },
-    mylist: [{
-        name:'', surname:'', profile: null
-    }],
+    mylist: [],
     tags:[],
     select: [1,3],
     //select:1,
@@ -148,7 +145,7 @@ const defaultData = {
 
 const errors = {
     test_tab_2: ['Erreur de test'],
-    'mylist.fr.0.name': ['Nom trop nul']
+   // 'mylist.fr.0.name': ['Nom trop nul']
 };
 
 let data = defaultData;
@@ -248,6 +245,7 @@ let fields = {
         sortable: true,
         addable: true,
         removable: true,
+        itemIdAttribute: 'id',
         //maxItemCount:5,
         //collapsedItemTemplate:"{{ name && surname ? `${name} ${surname}` : `Nouvelle personne n°${$index}` }}",
         templateProps: ['name','surname','age'],
@@ -324,6 +322,10 @@ let fields = {
 };
 let config = {};
 
+let authorizations = {
+    view:true, delete:true, create: true, update: true
+};
+
 if(localized) {
     config.locales = ['fr','en','de'];
     Object.keys(fields).forEach(k=>k in localizedData && (fields[k].localized = true));
@@ -334,4 +336,11 @@ if(readOnly) {
     Object.keys(fields).forEach(k=>fields[k].readOnly=true);
 }
 
-export { fields, data, layout, config, errors }
+export {
+    fields,
+    data,
+    layout,
+    config,
+    authorizations,
+    errors
+};

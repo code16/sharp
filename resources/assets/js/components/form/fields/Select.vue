@@ -21,12 +21,12 @@
             <template v-if="multiple">
                 <sharp-check v-for="option in options" :value="checked(option.id)"
                              @input="c=>handleCheckboxChanged(c,option.id)"
-                             :text="option.label" :key="option.id">
+                             :text="option.label" :disabled="readOnly" :key="option.id">
                 </sharp-check>
             </template>
             <div v-else class="SharpSelect__radio-button-group">
                 <template v-for="option in options">
-                    <input class="SharpRadio" type="radio" :checked="value===option.id" tabindex="0">
+                    <input class="SharpRadio" type="radio" :checked="value===option.id" tabindex="0" :disabled="readOnly">
                     <label class="SharpRadio__label" @click="handleRadioClicked(option.id)">
                         <span class="SharpRadio__appearance"></span>
                         {{option.label}}

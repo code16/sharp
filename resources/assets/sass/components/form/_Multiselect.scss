@@ -17,6 +17,17 @@
     }
   }
 
+  &--disabled {
+    opacity: .5;
+    cursor: not-allowed !important;
+    outline: none !important;
+    .multiselect__tags {
+      .multiselect__tag-icon {
+        cursor: not-allowed !important;
+      }
+    }
+  }
+
   &.multiselect--above {
 
     &.multiselect--active {
@@ -40,6 +51,7 @@
 
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
 
     padding-top: rem(9px);
     padding-bottom: rem(9px);

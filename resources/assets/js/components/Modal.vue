@@ -1,6 +1,6 @@
 <script>
     import bModal from './vendor/bootstrap-vue/components/modal';
-
+    import { QueryTree } from '../mixins';
     export default {
         name:'SharpModal',
         functional: true,
@@ -15,6 +15,10 @@
 
             let { isError, ...exposedProps } = ctx.props;
             ctx.props = exposedProps;
+
+
+            bModal.name = 'SharpModal';
+
 
             return h(bModal, ctx.data, [
                 h({
@@ -31,11 +35,16 @@
                         </button>
                     </div>
                     `,
+                    mixins: [ QueryTree ],
                     props: { title: String, okOnly: Boolean },
+                    computed: {
+                        $modal() {
+                            return this.findAscendant('SharpModal');
+                        }
+                    },
                     methods: {
                         hide() {
-                            console.log(this);
-                            this.$parent.hide();
+                            this.$modal.hide();
                         }
                     }
                 }, {
