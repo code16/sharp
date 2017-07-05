@@ -69,9 +69,9 @@ abstract class SharpEntitiesList
     protected $entityStateAttribute;
 
     /**
-     * @var array
+     * @var EntitiesListState
      */
-    protected $entityStates;
+    protected $entityStateHandler;
 
     /**
      * Get the SharpListDataContainer array representation.
@@ -168,7 +168,7 @@ abstract class SharpEntitiesList
         if($this->entityStateAttribute) {
             $config["state"] = [
                 "attribute" => $this->entityStateAttribute,
-                "values" => collect($this->entityStates)
+                "values" => collect($this->entityStateHandler->states())
                     ->map(function($state, $key) {
                         return [
                             "value" => $key,
@@ -307,18 +307,23 @@ abstract class SharpEntitiesList
 
     /**
      * @param string $stateAttribute
-     * @param EntitiesListState|array $stateHandler
+     * @param EntitiesListState $stateHandler
      * @return $this
      */
-    protected function addEntityState(string $stateAttribute, $stateHandler)
+    protected function setEntityStateHandler(string $stateAttribute, EntitiesListState $stateHandler)
     {
         $this->entityStateAttribute = $stateAttribute;
-
-        $this->entityStates = $stateHandler instanceof EntitiesListState
-            ? $stateHandler->states()
-            : $stateHandler;
+        $this->entityStateHandler = $stateHandler;
 
         return $this;
+    }
+
+    /**
+     * @return EntitiesListState
+     */
+    public function entityStateHandler()
+    {
+        return $this->entityStateHandler;
     }
 
     private function checkListIsBuilt()

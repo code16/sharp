@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Tests\Fixtures;
 
-use Code16\Sharp\Exceptions\Form\SharpFormException;
+use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpForm;
@@ -30,7 +30,7 @@ class PersonSharpForm extends SharpForm
     {
         if(!is_null($id) && !intval($id)) {
             // Throw an applicative exception
-            throw new SharpFormException("$id is not a valid id");
+            throw new SharpApplicativeException("$id is not a valid id");
         }
 
         return true;

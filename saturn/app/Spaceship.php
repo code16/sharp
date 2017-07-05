@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Spaceship extends Model
 {
+    protected $guarded = [];
 
     public function type()
     {

@@ -2,10 +2,7 @@
 
 namespace Code16\Sharp\Http\Api;
 
-use Code16\Sharp\EntitiesList\SharpEntitiesList;
-use Illuminate\Routing\Controller;
-
-class EntitiesListController extends Controller
+class EntitiesListController extends ApiController
 {
 
     /**
@@ -22,14 +19,5 @@ class EntitiesListController extends Controller
             "data" => $list->data(),
             "config" => $list->listConfig()
         ]);
-    }
-
-    /**
-     * @param string $entityKey
-     * @return SharpEntitiesList
-     */
-    protected function getListInstance(string $entityKey): SharpEntitiesList
-    {
-        return app(config("sharp.entities.{$entityKey}.list"));
     }
 }

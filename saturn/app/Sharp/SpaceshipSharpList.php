@@ -50,7 +50,7 @@ class SpaceshipSharpList extends SharpEntitiesList
             ->setDefaultSort("name", "asc")
             ->addFilter("type", new SpaceshipTypeFilter)
             ->addFilter("pilots", new SpaceshipPilotsFilter)
-            ->addEntityState("state", new SpaceshipEntityState)
+            ->setEntityStateHandler("state", new SpaceshipEntityState)
             ->setPaginated();
     }
 

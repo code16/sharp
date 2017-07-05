@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\EntitiesList;
 
+use Code16\Sharp\Exceptions\EntitiesList\InvalidEntityStateException;
+
 abstract class EntitiesListState
 {
     /**
@@ -25,6 +27,17 @@ abstract class EntitiesListState
         return $this->states;
     }
 
+    public function update($instanceId, $stateId)
+    {
+        $this->buildStates();
+
+        if(!in_array($stateId, array_keys($this->states))) {
+            throw new InvalidEntityStateException($stateId);
+        }
+
+        return $this->updateState($instanceId, $stateId);
+    }
+
     /**
      * @param string $key
      * @param string $label
@@ -36,4 +49,5 @@ abstract class EntitiesListState
     }
 
     abstract protected function buildStates();
+    abstract protected function updateState($instanceId, $stateId);
 }

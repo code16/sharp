@@ -5,7 +5,7 @@ namespace App\Sharp;
 use App\Pilot;
 use App\Spaceship;
 use App\SpaceshipType;
-use Code16\Sharp\Exceptions\Form\SharpFormException;
+use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
@@ -166,7 +166,7 @@ class SpaceshipSharpForm extends SharpForm
         $instance = $id ? Spaceship::findOrFail($id) : new Spaceship;
 
         if($data["name"] == "error") {
-            throw new SharpFormException("Name can't be «error»");
+            throw new SharpApplicativeException("Name can't be «error»");
         }
 
         $this->setCustomValuator("capacity", function ($spaceship, $value) {
