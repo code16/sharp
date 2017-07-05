@@ -15,7 +15,7 @@
     "watch": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "hot": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
     "production": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "stats": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js --json | tail -n +4 > stats.json",
+    "stats": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js --json | tail -n +6 > stats.json",
     "show-stats": "npm run stats && webpack-bundle-size-analyzer stats.json"
   },
   "devDependencies": {
@@ -52,6 +52,6 @@
     "chart.js": "^2.6.0",
     "font-awesome": "^4.7.0",
     "vue": "^2.3.2",
-    "vue-chartjs": "^2.6.4"
+    "vue-template-compiler": "^2.3.4"
   }
 }

@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Form from './components/form/Form';
 import FieldDisplay from './components/form/FieldDisplay';
 import ActionView from './components/ActionView';
-import Dashboard from './components/dashboard/Dashboard';
+//import Dashboard from './components/dashboard/Dashboard';
 
 import SharpLoading from './components/Loading';
 
@@ -23,7 +23,7 @@ new Vue({
     components: {
         [ActionView.name]:ActionView,
         [Form.name]:Form,
-        [Dashboard.name]:Dashboard
+        //[Dashboard.name]:Dashboard
     },
 });
 
