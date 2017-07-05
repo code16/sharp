@@ -27,6 +27,39 @@ class EntityStateControllerTest extends SharpTestCase
     }
 
     /** @test */
+    public function we_can_return_a_reload_action_on_state_update()
+    {
+        $this->buildTheWorld();
+
+        $this->json('post', '/sharp/api/list/person/state/1', [
+            "attribute" => "state",
+            "value" => "ok_reload"
+        ])
+            ->assertStatus(200)
+            ->assertJson([
+                "action" => "reload",
+                "value" => "ok_reload",
+            ]);
+    }
+
+    /** @test */
+    public function we_can_return_a_refresh_listed_items_action_on_state_update()
+    {
+        $this->buildTheWorld();
+
+        $this->json('post', '/sharp/api/list/person/state/1', [
+                "attribute" => "state",
+                "value" => "ok_refresh_items"
+            ])
+            ->assertStatus(200)
+            ->assertJson([
+                "action" => "refresh",
+                "items" => [1],
+                "value" => "ok_refresh_items",
+            ]);
+    }
+
+    /** @test */
     public function we_cant_update_the_state_of_an_entity_with_a_wrong_stateId()
     {
         $this->buildTheWorld();
@@ -81,16 +114,28 @@ class EntityStatePersonSharpEntitiesList extends PersonSharpEntitiesList {
 
     function buildListConfig()
     {
-        $this->setEntityStateHandler("state", new class extends EntitiesListState {
+        $this->setEntityStateHandler("state", new class() extends EntitiesListState {
+
             protected function buildStates()
             {
                 $this->addState("ok", "OK", "blue");
+                $this->addState("ok_reload", "OK", "blue");
+                $this->addState("ok_refresh_items", "OK", "blue");
                 $this->addState("ko", "KO2", "red");
             }
+
             protected function updateState($instanceId, $stateId)
             {
-                if($stateId != "ok") {
+                if($stateId == "ko") {
                     throw new SharpApplicativeException("Nope");
+                }
+
+                if($stateId == "ok_reload") {
+                    return $this->reload();
+                }
+
+                if($stateId == "ok_refresh_items") {
+                    return $this->refresh([$instanceId]);
                 }
             }
         });

@@ -22,6 +22,7 @@ class SpaceshipEntityState extends EntitiesListState
             "state" => $stateId
         ]);
 
-        return true;
+//        return $this->reload();
+//        return $this->refresh()->withData([]);
     }
 }

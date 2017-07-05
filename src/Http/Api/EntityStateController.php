@@ -18,8 +18,8 @@ class EntityStateController extends ApiController
         $list->buildListConfig();
         $stateValue = request("value");
 
-        $list->entityStateHandler()->update($instanceId, $stateValue);
+        $returned = $list->entityStateHandler()->update($instanceId, $stateValue);
 
-        return response()->json(["action" => "refresh", "value" => $stateValue]);
+        return response()->json(array_merge($returned, ["value" => $stateValue]));
     }
 }

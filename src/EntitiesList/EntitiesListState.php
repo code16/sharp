@@ -35,7 +35,7 @@ abstract class EntitiesListState
             throw new InvalidEntityStateException($stateId);
         }
 
-        return $this->updateState($instanceId, $stateId);
+        return $this->updateState($instanceId, $stateId) ?: $this->refresh();
     }
 
     /**
@@ -48,6 +48,42 @@ abstract class EntitiesListState
         $this->states[$key] = [$label, $color];
     }
 
+    /**
+     * Send back a reload action to the client.
+     * TODO: generalize to Commands
+     *
+     * @return array
+     */
+    protected function reload()
+    {
+        return ["action" => "reload"];
+    }
+
+    /**
+     * Send back a refresh action to the client.
+     * TODO: generalize to Commands
+     *
+     * @param array|null $entityIds
+     * @return array
+     */
+    protected function refresh(array $entityIds = null)
+    {
+        // TODO find a way to load data for entities with $entityIds
+        return array_merge(
+            ["action" => "refresh"],
+            $entityIds ? ["items" => $entityIds] : []
+        );
+    }
+
+    /**
+     * @return mixed
+     */
     abstract protected function buildStates();
+
+    /**
+     * @param string $instanceId
+     * @param string $stateId
+     * @return mixed
+     */
     abstract protected function updateState($instanceId, $stateId);
 }

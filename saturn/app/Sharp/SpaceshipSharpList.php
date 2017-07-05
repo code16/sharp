@@ -65,7 +65,7 @@ class SpaceshipSharpList extends SharpEntitiesList
 
     function getListData(EntitiesListQueryParams $params)
     {
-        $spaceships = Spaceship::with("picture", "type", "pilots");
+        $spaceships = Spaceship::orderBy($params->sortedBy(), $params->sortedDir());
 
         if($params->filterFor("type")) {
             $spaceships->where("type_id", $params->filterFor("type"));
@@ -101,7 +101,7 @@ class SpaceshipSharpList extends SharpEntitiesList
             })
             ->setUploadTransformer("picture", 100)
             ->transform(
-                $spaceships->orderBy($params->sortedBy(), $params->sortedDir())
+                $spaceships->with("picture", "type", "pilots")
                     ->paginate(10)
             );
     }
