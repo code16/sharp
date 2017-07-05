@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateSpaceshipsTable extends Migration
 {
@@ -25,6 +25,7 @@ class CreateSpaceshipsTable extends Migration
             $table->unsignedInteger('capacity');
             $table->date('construction_date')->nullable();
             $table->unsignedInteger('type_id');
+            $table->string('state')->default("inactive");
             $table->timestamps();
         });
     }

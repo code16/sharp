@@ -3,20 +3,23 @@
 // API routes
 Route::group([
     'prefix' => '/sharp/api',
-    'middleware' => ['web', 'sharp_api_errors', 'sharp_api_authorizations', 'sharp_api_context'],
+    'middleware' => ['web', 'sharp_api_errors', 'sharp_auth', 'sharp_api_context'],
     'namespace' => 'Code16\Sharp\Http\Api'
 ], function() {
 
     Route::get("/list/{entityKey}")
         ->name("code16.sharp.api.list")
+        ->middleware('sharp_api_append_list_authorizations')
         ->uses('EntitiesListController@show');
 
     Route::get("/form/{entityKey}")
         ->name("code16.sharp.api.form.create")
+        ->middleware('sharp_api_append_form_authorizations')
         ->uses('FormController@create');
 
     Route::get("/form/{entityKey}/{instanceId}")
         ->name("code16.sharp.api.form.edit")
+        ->middleware('sharp_api_append_form_authorizations')
         ->uses('FormController@edit');
 
     Route::post("/form/{entityKey}/{instanceId}")
