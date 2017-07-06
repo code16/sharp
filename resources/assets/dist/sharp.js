@@ -28562,6 +28562,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -28582,6 +28596,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         };
     },
 
+    methods: {
+        closeClicked: function closeClicked() {
+            this.actionsBus.$emit('searchChanged', '', { updateHistory: false, updateData: false });
+            this.$refs.search.focus();
+        }
+    },
     actions: {
         setup: function setup(config) {
             var itemsCount = config.itemsCount;
@@ -31472,12 +31492,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         searchChanged: function searchChanged(input) {
             var _this = this;
 
-            var _ref2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : { updateData: true, updateHistory: true },
-                updateData = _ref2.updateData,
-                updateHistory = _ref2.updateHistory;
+            var _ref2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+                _ref2$updateData = _ref2.updateData,
+                updateData = _ref2$updateData === undefined ? true : _ref2$updateData,
+                _ref2$updateHistory = _ref2.updateHistory,
+                updateHistory = _ref2$updateHistory === undefined ? true : _ref2$updateHistory;
 
-            console.log('entities list search changed', updateHistory);
+            console.log('entities list search changed', input, updateData, updateHistory);
+
             this.search = input;
+            if (this.page > 1) {
+                updateHistory = updateData = true;
+                this.page = 1;
+            }
 
             if (updateData) {
                 __WEBPACK_IMPORTED_MODULE_5_axios___default.a.get('/sharp/api/list/' + this.entityKey, {
@@ -54570,17 +54597,74 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
     slot: "left"
   }, [_vm._c('span', [_vm._v(_vm._s(_vm.itemsCount) + " " + _vm._s(_vm.l('action_bar.list.items_count')))])]), _vm._v(" "), _vm._c('template', {
     slot: "right"
-  }, [_vm._c('sharp-text', {
+  }, [_vm._c('div', {
+    staticClass: "SharpSearch SharpSearch--sm",
     attrs: {
+      "role": "search"
+    }
+  }, [_vm._c('svg', {
+    staticClass: "SharpSearch__magnifier",
+    attrs: {
+      "width": "16",
+      "height": "16",
+      "viewBox": "0 0 16 16",
+      "fill-rule": "evenodd"
+    }
+  }, [_vm._c('path', {
+    attrs: {
+      "d": "M6 2c2.2 0 4 1.8 4 4s-1.8 4-4 4-4-1.8-4-4 1.8-4 4-4zm0-2C2.7 0 0 2.7 0 6s2.7 6 6 6 6-2.7 6-6-2.7-6-6-6zM16 13.8L13.8 16l-3.6-3.6 2.2-2.2z"
+    }
+  }), _vm._v(" "), _vm._c('path', {
+    attrs: {
+      "d": "M16 13.8L13.8 16l-3.6-3.6 2.2-2.2z"
+    }
+  })]), _vm._v(" "), _vm._c('label', {
+    staticClass: "SharpSearch__label",
+    attrs: {
+      "id": "ab-search-label",
+      "for": "ab-search-input"
+    }
+  }, [_vm._v(_vm._s(_vm.l('action_bar.list.search.placeholder')))]), _vm._v(" "), _vm._c('input', {
+    ref: "search",
+    staticClass: "SharpSearch__input",
+    attrs: {
+      "type": "text",
+      "id": "ab-search-input",
+      "role": "search",
+      "placeholder": _vm.l('action_bar.list.search.placeholder'),
+      "aria-labelledby": "ab-search-label"
+    },
+    domProps: {
       "value": _vm.search
     },
-    nativeOn: {
+    on: {
       "keyup": function($event) {
         if (!('button' in $event) && _vm._k($event.keyCode, "enter", 13)) { return null; }
         _vm.emitAction('searchChanged', $event.target.value)
+      },
+      "input": function($event) {
+        _vm.search = $event.target.value
       }
     }
-  })], 1)], 2)
+  }), _vm._v(" "), _vm._c('svg', {
+    staticClass: "SharpSearch__close",
+    class: {
+      'SharpSearch__close--hidden': !_vm.search.length
+    },
+    attrs: {
+      "width": "16",
+      "height": "16",
+      "viewBox": "0 0 16 16",
+      "fill-rule": "evenodd"
+    },
+    on: {
+      "click": _vm.closeClicked
+    }
+  }, [_vm._c('path', {
+    attrs: {
+      "d": "M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm3.5 10.1l-1.4 1.4L8 9.4l-2.1 2.1-1.4-1.4L6.6 8 4.5 5.9l1.4-1.4L8 6.6l2.1-2.1 1.4 1.4L9.4 8l2.1 2.1z"
+    }
+  })])])])], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

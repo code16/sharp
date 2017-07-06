@@ -21,6 +21,7 @@
   &:disabled {
     opacity: .5;
     cursor: not-allowed;
+    outline: none !important;
   }
 
   &:disabled:hover {

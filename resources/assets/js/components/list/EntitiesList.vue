@@ -107,9 +107,14 @@
             }
         },
         actions: {
-            searchChanged(input, {updateData, updateHistory}={updateData:true, updateHistory:true}) {
-                console.log('entities list search changed', updateHistory);
+            searchChanged(input, {updateData=true, updateHistory=true}={}) {
+                console.log('entities list search changed', input, updateData, updateHistory);
+
                 this.search = input;
+                if(this.page>1)  {
+                    updateHistory = updateData = true;
+                    this.page = 1;
+                }
 
                 if(updateData) {
                     axios.get(`/sharp/api/list/${this.entityKey}`, {
