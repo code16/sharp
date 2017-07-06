@@ -4,7 +4,7 @@
             <span>{{ itemsCount }} {{ l('action_bar.list.items_count') }}</span>
         </template>
         <template slot="right">
-            <sharp-text :value="search" @keyup.enter="s=>emitAction('searchChanged',s)"></sharp-text>
+            <sharp-text :value="search" @keyup.enter.native="emitAction('searchChanged',$event.target.value)"></sharp-text>
         </template>
     </sharp-action-bar>
 </template>

@@ -1,8 +1,8 @@
 function parse() {
     if(location.search.length<2) return {};
-    return decodeURIComponent(location.search).substring(1).split('&').reduce((res, pair) => {
+    return location.search.substring(1).split('&').reduce((res, pair) => {
         let [ key, value ] = pair.split('=');
-        res[key] = value;
+        res[decodeURIComponent(key)] = decodeURIComponent(value);
         return res;
     },{});
 }

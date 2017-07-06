@@ -20594,36 +20594,39 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             var _this = this;
 
             if (this.test) return;
-            return __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(this.apiPath).then(function (response) {
+
+            return __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(this.apiPath, { params: this.apiParams }).then(function (response) {
                 _this.mount(response.data);
                 _this.ready = true;
-                _this.glasspane.$emit('hide');
                 return Promise.resolve(response);
             }).catch(function (error) {
-                _this.glasspane.$emit('hide');
                 return Promise.reject(error);
             });
         },
         post: function post() {
-            var _this2 = this;
-
-            this.glasspane.$emit('show');
             return __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post(this.apiPath, this.data).then(function (response) {
-                _this2.glasspane.$emit('hide');
                 return Promise.resolve(response);
             }).catch(function (error) {
-                _this2.glasspane.$emit('hide');
                 return Promise.reject(error);
             });
         }
     },
     created: function created() {
-        var _this3 = this;
+        var _this2 = this;
+
+        __WEBPACK_IMPORTED_MODULE_0_axios___default.a.interceptors.request.use(function (config) {
+            //console.log('request interceptor', config);
+            _this2.glasspane.$emit('show');
+            return config;
+        }, function (error) {
+            return Promise.reject(error);
+        });
 
         __WEBPACK_IMPORTED_MODULE_0_axios___default.a.interceptors.response.use(function (response) {
+            _this2.glasspane.$emit('hide');
             return response;
         }, function (error) {
-
+            _this2.glasspane.$emit('hide');
             var modalOptions = {
                 title: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__mixins_Localization__["a" /* lang */])('modals.' + error.response.status),
                 text: error.response.data.message,
@@ -20632,14 +20635,14 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
             switch (error.response.status) {
                 case 401:
-                    _this3.actionsBus.$emit('showMainModal', _extends({}, modalOptions, {
+                    _this2.actionsBus.$emit('showMainModal', _extends({}, modalOptions, {
                         okCallback: function okCallback() {
                             location.href = '/sharp/login';
                         }
                     }));
                     break;
                 case 403:
-                    _this3.actionsBus.$emit('showMainModal', _extends({}, modalOptions, {
+                    _this2.actionsBus.$emit('showMainModal', _extends({}, modalOptions, {
                         okCloseOnly: true
                     }));
                     break;
@@ -31329,6 +31332,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mixins__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__helpers_querystring__ = __webpack_require__(292);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_axios__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_axios__);
 //
 //
 //
@@ -31353,6 +31358,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
+
 
 
 
@@ -31394,7 +31401,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return __WEBPACK_IMPORTED_MODULE_1__consts__["a" /* API_PATH */] + '/list/' + this.entityKey;
         },
         apiParams: function apiParams() {
-            if (!this.ready) return;
+            if (!this.ready) return this.params;
 
             var params = {};
             if (this.config.paginated) params.page = this.page;
@@ -31420,6 +31427,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.layout = layout;
             this.data = data || {};
             this.config = config || {};
+
+            this.page = this.data.page;
         },
         verify: function verify() {
             var _iteratorNormalCompletion = true;
@@ -31461,27 +31470,45 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     actions: {
         searchChanged: function searchChanged(input) {
-            var updateHistory = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+            var _this = this;
 
-            console.log('entities list search changed');
+            var _ref2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : { updateData: true, updateHistory: true },
+                updateData = _ref2.updateData,
+                updateHistory = _ref2.updateHistory;
+
+            console.log('entities list search changed', updateHistory);
             this.search = input;
 
+            if (updateData) {
+                __WEBPACK_IMPORTED_MODULE_5_axios___default.a.get('/sharp/api/list/' + this.entityKey, {
+                    params: this.apiParams
+                }).then(function (_ref3) {
+                    var data = _ref3.data.data;
+
+                    _this.data = data;
+                    _this.setupActionBar();
+                });
+            }
             if (updateHistory) {
                 history.pushState(null, null, __WEBPACK_IMPORTED_MODULE_4__helpers_querystring__["b" /* serialize */](this.apiParams));
             }
         }
     },
     created: function created() {
-        var _this = this;
+        var _this2 = this;
 
         this.get().then(function (_) {
-            _this.verify();
-            _this.setupActionBar();
+            _this2.verify();
+            _this2.setupActionBar();
         });
 
-        var search = this.params.search;
+        var _params = this.params,
+            search = _params.search,
+            page = _params.page;
 
-        this.actionsBus.$emit('searchChanged', search, false);
+        this.actionsBus.$emit('searchChanged', search, { updateData: false, updateHistory: false });
+
+        this.page = page;
     }
 });
 
@@ -54547,10 +54574,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
     attrs: {
       "value": _vm.search
     },
-    on: {
+    nativeOn: {
       "keyup": function($event) {
         if (!('button' in $event) && _vm._k($event.keyCode, "enter", 13)) { return null; }
-        (function (s) { return _vm.emitAction('searchChanged', s); })($event)
+        _vm.emitAction('searchChanged', $event.target.value)
       }
     }
   })], 1)], 2)
@@ -56453,13 +56480,13 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 
 function parse() {
     if (location.search.length < 2) return {};
-    return decodeURIComponent(location.search).substring(1).split('&').reduce(function (res, pair) {
+    return location.search.substring(1).split('&').reduce(function (res, pair) {
         var _pair$split = pair.split('='),
             _pair$split2 = _slicedToArray(_pair$split, 2),
             key = _pair$split2[0],
             value = _pair$split2[1];
 
-        res[key] = value;
+        res[decodeURIComponent(key)] = decodeURIComponent(value);
         return res;
     }, {});
 }

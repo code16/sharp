@@ -14,32 +14,38 @@ export default {
     methods: {
         get() {
             if(this.test) return;
-            return axios.get(this.apiPath).then(response=>{
+
+            return axios.get(this.apiPath, { params: this.apiParams }).then(response=>{
                     this.mount(response.data);
                     this.ready = true;
-                    this.glasspane.$emit('hide');
                     return Promise.resolve(response);
                 })
                 .catch(error=>{
-                    this.glasspane.$emit('hide');
                     return Promise.reject(error);
                 });
         },
         post() {
-            this.glasspane.$emit('show');
             return axios.post(this.apiPath, this.data).then(response=>{
-                this.glasspane.$emit('hide');
                     return Promise.resolve(response);
                 })
                 .catch(error=>{
-                    this.glasspane.$emit('hide');
                     return Promise.reject(error);
                 });
         }
     },
     created() {
-        axios.interceptors.response.use(response => response, error => {
 
+        axios.interceptors.request.use(config => {
+            //console.log('request interceptor', config);
+            this.glasspane.$emit('show');
+            return config;
+        }, error => Promise.reject(error));
+
+        axios.interceptors.response.use(response => {
+            this.glasspane.$emit('hide');
+            return response;
+        }, error => {
+            this.glasspane.$emit('hide');
             let modalOptions = {
                 title: lang(`modals.${error.response.status}`),
                 text: error.response.data.message,

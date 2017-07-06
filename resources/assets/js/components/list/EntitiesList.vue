@@ -31,6 +31,8 @@
 
     import * as qs from '../../helpers/querystring';
 
+    import axios from 'axios';
+
     export default {
         name:'SharpEntitiesList',
         extends: DynamicView,
@@ -63,7 +65,7 @@
             },
             apiParams() {
                 if(!this.ready)
-                    return;
+                    return this.params;
 
                 let params = {};
                 if(this.config.paginated) params.page = this.page;
@@ -84,6 +86,8 @@
                 this.layout = layout;
                 this.data = data || {};
                 this.config = config || {};
+
+                this.page = this.data.page;
             },
             verify() {
                 for(let contLayout of this.layout) {
@@ -103,10 +107,19 @@
             }
         },
         actions: {
-            searchChanged(input, updateHistory=true) {
-                console.log('entities list search changed');
+            searchChanged(input, {updateData, updateHistory}={updateData:true, updateHistory:true}) {
+                console.log('entities list search changed', updateHistory);
                 this.search = input;
 
+                if(updateData) {
+                    axios.get(`/sharp/api/list/${this.entityKey}`, {
+                            params:this.apiParams
+                        })
+                        .then(({data:{ data }})=>{
+                            this.data = data;
+                            this.setupActionBar();
+                        });
+                }
                 if(updateHistory) {
                     history.pushState(null, null, qs.serialize(this.apiParams));
                 }
@@ -118,8 +131,10 @@
                 this.setupActionBar();
             });
 
-            let { search } = this.params;
-            this.actionsBus.$emit('searchChanged', search, false);
+            let { search, page } = this.params;
+            this.actionsBus.$emit('searchChanged', search, {updateData: false, updateHistory: false});
+
+            this.page = page;
         }
     }
 </script>
