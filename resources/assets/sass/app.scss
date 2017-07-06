@@ -1,7 +1,3 @@
-$fa-font-path: '/vendor/sharp/fonts';
-@import "node_modules/font-awesome/scss/font-awesome";
-
-
 $css--reset: true;
 $css--typography: true;
 
@@ -45,7 +41,6 @@ $button-border-width: 1px;
   @import 'components/Notification';
 
 
-
   // Action bar and viewer
   @import 'components/ActionView';
   @import 'components/ActionBar';
@@ -77,6 +72,7 @@ $button-border-width: 1px;
 
   @import 'components/list/EntitiesList';
   @import 'components/Search';
+  @import 'components/list/Pagination';
 
   input[type="number"].hide-controls {
     &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {

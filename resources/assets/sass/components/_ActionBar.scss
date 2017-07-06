@@ -38,6 +38,11 @@
         @extend .SharpDropdown__link:focus;
       }
     }
+  }
 
+  &__search.SharpSearch {
+    .SharpSearch__close {
+      right: 3.5rem;
+    }
   }
 }

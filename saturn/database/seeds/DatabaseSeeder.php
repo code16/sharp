@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         $pilots = factory(\App\Pilot::class, 10)->create();
 
         foreach($types as $type) {
-            $spaceships = factory(\App\Spaceship::class, 2)->create([
+            $spaceships = factory(\App\Spaceship::class, 20)->create([
                 "type_id" => $type->id
             ]);
 

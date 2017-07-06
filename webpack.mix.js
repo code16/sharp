@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const fs = require('fs-extra');
 
 mix.autoload({}).options({
-        extractVueStyles:'.bin/vendor-components.css'
+       // extractVueStyles:'.bin/vendor-components.css'
     })
     .setPublicPath('resources/assets/dist')
 
@@ -13,10 +13,13 @@ mix.autoload({}).options({
     .js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
     //.js('resources/assets/js/sharp-embedded.js', 'resources/assets/dist/sharp-embedded.js')
 
-    .copy('node_modules/font-awesome/fonts','resources/assets/dist/fonts/font-awesome')
+    .copy('node_modules/font-awesome/fonts','resources/assets/dist/fonts')
+    //.copy('node_modules/carbon-icons/dist/carbon-icons.svg','resources/assets/dist/fonts/carbon-icons.svg')
     .sass('resources/assets/sass/app.scss', 'resources/assets/dist/.bin/sharp-app.css')
+    .sass('resources/assets/sass/vendors.scss', 'resources/assets/dist/.bin/vendors.css')
     .sass('resources/assets/sass/cms.scss', 'resources/assets/dist/sharp-cms.css')
     .styles([
+        'resources/assets/dist/.bin/vendors.css',
         'resources/assets/dist/.bin/sharp-app.css',
         //'node_modules/vue-multiselect/dist/vue-multiselect.min.css',
         'node_modules/simplemde/dist/simplemde.min.css',

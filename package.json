@@ -49,6 +49,7 @@
   },
   "dependencies": {
     "carbon-components": "^7.10.2",
+    "carbon-icons": "^6.0.6",
     "chart.js": "^2.6.0",
     "font-awesome": "^4.7.0",
     "vue": "^2.3.4",
