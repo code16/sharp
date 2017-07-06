@@ -65,7 +65,8 @@ class SpaceshipSharpList extends SharpEntitiesList
 
     function getListData(EntitiesListQueryParams $params)
     {
-        $spaceships = Spaceship::orderBy($params->sortedBy(), $params->sortedDir());
+        $spaceships = Spaceship::select("spaceships.*")->distinct()
+            ->orderBy($params->sortedBy(), $params->sortedDir());
 
         if($params->filterFor("type")) {
             $spaceships->where("type_id", $params->filterFor("type"));
