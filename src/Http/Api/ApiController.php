@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Api;
 
+use Code16\Sharp\EntitiesList\SharpEntitiesList;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Routing\Controller;
@@ -25,6 +26,15 @@ abstract class ApiController extends Controller
         if($this->isSpecificallyForbidden($ability, $entityKey, $instanceId)) {
             $this->deny();
         }
+    }
+
+    /**
+     * @param string $entityKey
+     * @return SharpEntitiesList
+     */
+    protected function getListInstance(string $entityKey): SharpEntitiesList
+    {
+        return app(config("sharp.entities.{$entityKey}.list"));
     }
 
     private function isGloballyForbidden(string $ability, string $entityKey, $instanceId): bool

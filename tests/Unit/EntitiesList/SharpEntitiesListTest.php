@@ -169,12 +169,13 @@ class SharpEntitiesListTest extends SharpTestCase
         $list = new class extends SharpEntitiesListTestList {
             function buildListConfig()
             {
-                $this->addEntityState("_state", new class extends EntitiesListState {
+                $this->setEntityStateHandler("_state", new class extends EntitiesListState {
                     protected function buildStates()
                     {
                         $this->addState("test1", "Test 1", "blue");
                         $this->addState("test2", "Test 2", "red");
                     }
+                    protected function updateState($instanceId, $stateId) {}
                 });
             }
         };
@@ -190,29 +191,6 @@ class SharpEntitiesListTest extends SharpTestCase
         ], $list->listConfig());
     }
 
-    /** @test */
-    function we_can_get_list_entity_state_config_with_an_array()
-    {
-        $list = new class extends SharpEntitiesListTestList {
-            function buildListConfig()
-            {
-                $this->addEntityState("_state", [
-                    "test1" => ["Test 1", "blue"],
-                    "test2" => ["Test 2", "red"]
-                ]);
-            }
-        };
-
-        $this->assertArraySubset([
-            "state" => [
-                "attribute" => "_state",
-                "values" => [
-                    ["value"=>"test1", "label"=>"Test 1", "color"=>"blue"],
-                    ["value"=>"test2", "label"=>"Test 2", "color"=>"red"],
-                ]
-            ]
-        ], $list->listConfig());
-    }
 
     /** @test */
     function entity_state_attribute_is_added_the_entity_data()
@@ -233,10 +211,14 @@ class SharpEntitiesListTest extends SharpTestCase
             }
             function buildListConfig()
             {
-                $this->addEntityState("state", [
-                    true => ["Visible", "blue"],
-                    false => ["Invisible", "red"]
-                ]);
+                $this->setEntityStateHandler("state", new class extends EntitiesListState {
+                    protected function buildStates()
+                    {
+                        $this->addState(true, "Test 1", "blue");
+                        $this->addState(false, "Test 2", "red");
+                    }
+                    protected function updateState($instanceId, $stateId) {}
+                });
             }
         };
 
