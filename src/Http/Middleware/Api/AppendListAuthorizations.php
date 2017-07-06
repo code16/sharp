@@ -66,7 +66,7 @@ class AppendListAuthorizations
             }
 
             foreach($missingAbilities as $missingAbility) {
-                if(sizeof($authorizations[$missingAbility]) == 0) {
+                if(isset($authorizations[$missingAbility]) && sizeof($authorizations[$missingAbility]) == 0) {
                     $authorizations[$missingAbility] = false;
                 }
             }
