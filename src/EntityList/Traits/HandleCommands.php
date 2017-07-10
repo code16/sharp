@@ -3,6 +3,8 @@
 namespace Code16\Sharp\EntityList\Traits;
 
 use Code16\Sharp\EntityList\Commands\Command;
+use Code16\Sharp\EntityList\Commands\EntityCommand;
+use Code16\Sharp\EntityList\Commands\InstanceCommand;
 
 trait HandleCommands
 {
@@ -34,5 +36,29 @@ trait HandleCommands
                 "type" => $handler->type()
             ];
         }
+    }
+
+    /**
+     * @param string $commandKey
+     * @return EntityCommand|null
+     */
+    public function entityCommandHandler(string $commandKey)
+    {
+        return isset($this->commandHandlers[$commandKey])
+                && $this->commandHandlers[$commandKey]->type() == "entity"
+            ? $this->commandHandlers[$commandKey]
+            : null;
+    }
+
+    /**
+     * @param string $commandKey
+     * @return InstanceCommand|null
+     */
+    public function instanceCommandHandler(string $commandKey)
+    {
+        return isset($this->commandHandlers[$commandKey])
+        && $this->commandHandlers[$commandKey]->type() == "instance"
+            ? $this->commandHandlers[$commandKey]
+            : null;
     }
 }

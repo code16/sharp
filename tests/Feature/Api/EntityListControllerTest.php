@@ -2,8 +2,15 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
-class EntitiesListControllerTest extends BaseApiTest
+class EntityListControllerTest extends BaseApiTest
 {
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->login();
+    }
+
+
     /** @test */
     public function we_can_get_list_data_for_an_entity()
     {

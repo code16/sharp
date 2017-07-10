@@ -6,6 +6,13 @@ use Code16\Sharp\Tests\Fixtures\User;
 
 class PolicyAuthorizationsTest extends BaseApiTest
 {
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->login();
+    }
+
+
     protected function getPackageProviders($app)
     {
         $app['config']['sharp.entities.person.policy'] = AuthorizationsTestPersonPolicy::class;

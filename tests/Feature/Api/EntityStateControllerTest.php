@@ -5,10 +5,8 @@ namespace Code16\Sharp\Tests\Feature\Api;
 use Code16\Sharp\EntityList\EntityState;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
-use Code16\Sharp\Tests\Fixtures\User;
-use Code16\Sharp\Tests\SharpTestCase;
 
-class EntityStateControllerTest extends SharpTestCase
+class EntityStateControllerTest extends BaseApiTest
 {
     /** @test */
     public function we_can_update_the_state_of_an_entity()
@@ -95,17 +93,12 @@ class EntityStateControllerTest extends SharpTestCase
 
     protected function buildTheWorld()
     {
-        $this->actingAs(new User);
+        parent::buildTheWorld();
+        $this->login();
 
         $this->app['config']->set(
             'sharp.entities.person.list',
             EntityStatePersonSharpEntitiesList::class
-        );
-
-        $this->app['config']->set(
-            'app.key', 'base64:'.base64_encode(random_bytes(
-                $this->app['config']['app.cipher'] == 'AES-128-CBC' ? 16 : 32
-            ))
         );
     }
 }

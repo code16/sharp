@@ -11,7 +11,7 @@ class AuthorizationsTest extends BaseApiTest
     /** @test */
     public function unauthenticated_user_wont_pass_on_an_api_call()
     {
-        $this->buildTheWorld(false, false);
+        $this->buildTheWorld();
 
         $this->json('get', '/sharp/api/list/person')->assertStatus(401);
     }
@@ -19,7 +19,7 @@ class AuthorizationsTest extends BaseApiTest
     /** @test */
     public function unauthenticated_user_are_redirected_on_a_web_call()
     {
-        $this->buildTheWorld(false, false);
+        $this->buildTheWorld();
 
         $this->get('/sharp/list/person')->assertStatus(302);
     }
@@ -28,6 +28,7 @@ class AuthorizationsTest extends BaseApiTest
     public function we_can_configure_a_custom_auth_guard()
     {
         $this->buildTheWorld();
+        $this->login();
 
         $authGuard = new AuthorizationsTestGuard(true);
 
@@ -60,6 +61,7 @@ class AuthorizationsTest extends BaseApiTest
     public function we_can_configure_global_authorizations()
     {
         $this->buildTheWorld();
+        $this->login();
 
         $this->app['config']->set(
             'sharp.entities.person.authorizations', [
@@ -87,6 +89,7 @@ class AuthorizationsTest extends BaseApiTest
     public function default_global_authorizations_is_handled()
     {
         $this->buildTheWorld();
+        $this->login();
 
         $this->app['config']->set(
             'sharp.entities.person.authorizations', [
@@ -107,6 +110,7 @@ class AuthorizationsTest extends BaseApiTest
     public function global_authorizations_are_appended_to_the_response_on_a_form_get_request()
     {
         $this->buildTheWorld();
+        $this->login();
 
         $this->app['config']->set(
             'sharp.entities.person.authorizations', [
@@ -140,6 +144,7 @@ class AuthorizationsTest extends BaseApiTest
     public function global_authorizations_are_appended_to_the_response_on_a_list_get_request()
     {
         $this->buildTheWorld();
+        $this->login();
 
         $this->app['config']->set(
             'sharp.entities.person.authorizations', [
@@ -161,6 +166,7 @@ class AuthorizationsTest extends BaseApiTest
     public function global_authorizations_are_true_by_default()
     {
         $this->buildTheWorld();
+        $this->login();
 
         // Create
         $this->json('get', '/sharp/api/form/person')->assertJson([

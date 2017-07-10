@@ -20,6 +20,7 @@ class FormUploadControllerTest extends BaseApiTest
 
         // Must use this to login & set APP_KEY
         $this->buildTheWorld();
+        $this->login();
     }
 
     /** @test */
