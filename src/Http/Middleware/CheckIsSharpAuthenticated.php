@@ -38,7 +38,7 @@ class CheckIsSharpAuthenticated
                 throw new SharpAuthenticationException("Unauthenticated user");
             }
 
-            return redirect()->route("code16.sharp.login");
+            return redirect()->guest(route("code16.sharp.login"));
         }
 
         return $next($request);
