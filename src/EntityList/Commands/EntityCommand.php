@@ -12,4 +12,9 @@ abstract class EntityCommand extends Command
     {
         return "entity";
     }
+
+    /**
+     * @return array
+     */
+    public abstract function execute();
 }

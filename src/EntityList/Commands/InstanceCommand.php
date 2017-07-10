@@ -12,4 +12,10 @@ abstract class InstanceCommand extends Command
     {
         return "instance";
     }
+
+    /**
+     * @param string $instanceId
+     * @return array
+     */
+    public abstract function execute($instanceId);
 }

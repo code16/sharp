@@ -20,6 +20,10 @@ Route::group([
         ->name("code16.sharp.api.list.command.entity")
         ->uses('EntityCommandController@update');
 
+    Route::post("/list/{entityKey}/command/{commandKey}/{instanceId}")
+        ->name("code16.sharp.api.list.command.instance")
+        ->uses('InstanceCommandController@update');
+
     Route::get("/form/{entityKey}")
         ->name("code16.sharp.api.form.create")
         ->middleware('sharp_api_append_form_authorizations')

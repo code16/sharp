@@ -20,11 +20,13 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function label(): string {
                         return "My Entity Command";
                     }
+                    public function execute() {}
                 });
                 $this->addEntityCommand("instanceCommand", new class extends InstanceCommand {
                     public function label(): string {
                         return "My Instance Command";
                     }
+                    public function execute($instanceId) {}
                 });
             }
         };

@@ -15,14 +15,24 @@ trait HandleCommands
 
     /**
      * @param string $commandName
-     * @param string|Command $commandHandler
+     * @param string|EntityCommand $commandHandler
      * @return $this
      */
     protected function addEntityCommand(string $commandName, $commandHandler)
     {
-        $this->commandHandlers[$commandName] = $commandHandler instanceof Command
-            ? $commandHandler
-            : app($commandHandler);
+        $this->addCommand($commandName, $commandHandler);
+
+        return $this;
+    }
+
+    /**
+     * @param string $commandName
+     * @param string|InstanceCommand $commandHandler
+     * @return $this
+     */
+    protected function addInstanceCommand(string $commandName, $commandHandler)
+    {
+        $this->addCommand($commandName, $commandHandler);
 
         return $this;
     }
@@ -60,5 +70,19 @@ trait HandleCommands
         && $this->commandHandlers[$commandKey]->type() == "instance"
             ? $this->commandHandlers[$commandKey]
             : null;
+    }
+
+    /**
+     * @param string $commandName
+     * @param string|Command $commandHandler
+     * @return $this
+     */
+    private function addCommand(string $commandName, $commandHandler)
+    {
+        $this->commandHandlers[$commandName] = $commandHandler instanceof Command
+            ? $commandHandler
+            : app($commandHandler);
+
+        return $this;
     }
 }
