@@ -16,6 +16,16 @@ abstract class Command
             "message" => $message
         ];
     }
+    /**
+     * @return array
+     */
+    protected function reload()
+    {
+        return [
+            "action" => "reload"
+        ];
+    }
+
 
     /**
      * @return string

@@ -42,6 +42,32 @@ class CommandControllerTest extends BaseApiTest
             ]);
     }
 
+    /** @test */
+    public function we_can_call_an_reload_entity_command()
+    {
+        $this->buildTheWorld();
+        $this->disableExceptionHandling();
+
+        $this->json('post', '/sharp/api/list/person/command/entity_reload')
+            ->assertStatus(200)
+            ->assertJson([
+                "action" => "reload"
+            ]);
+    }
+
+    /** @test */
+    public function we_can_call_an_reload_instance_command()
+    {
+        $this->buildTheWorld();
+        $this->disableExceptionHandling();
+
+        $this->json('post', '/sharp/api/list/person/command/instance_reload/1')
+            ->assertStatus(200)
+            ->assertJson([
+                "action" => "reload"
+            ]);
+    }
+
     protected function buildTheWorld()
     {
         parent::buildTheWorld();
@@ -67,6 +93,17 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
             public function label(): string { return "label"; }
             public function execute($instanceId) {
                 return $this->info("ok");
+            }
+        })->addEntityCommand("entity_reload", new class() extends EntityCommand {
+            public function label(): string { return "label"; }
+            public function execute() {
+                return $this->reload();
+            }
+
+        })->addInstanceCommand("instance_reload", new class() extends InstanceCommand {
+            public function label(): string { return "label"; }
+            public function execute($instanceId) {
+                return $this->reload();
             }
         });
     }
