@@ -40,6 +40,13 @@ abstract class Command
         ];
     }
 
+    /**
+     * @return string|null
+     */
+    public function confirmationText()
+    {
+        return null;
+    }
 
     /**
      * @return string

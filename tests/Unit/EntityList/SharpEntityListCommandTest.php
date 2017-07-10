@@ -45,4 +45,67 @@ class SharpEntityListCommandTest extends SharpTestCase
             ]
         ], $list->listConfig());
     }
+
+    /** @test */
+    function we_can_get_list_entity_command_config_with_a_class()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig()
+            {
+                $this->addEntityCommand("entityCommand", SharpEntityListCommandTestCommand::class);
+            }
+        };
+
+        $this->assertArraySubset([
+            "commands" => [
+                [
+                    "key" => "entityCommand",
+                    "label" => "My Entity Command",
+                    "type" => "entity"
+                ]
+            ]
+        ], $list->listConfig());
+    }
+
+    /** @test */
+    function we_can_get_ask_for_a_confirmation_on_a_command()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig()
+            {
+                $this->addEntityCommand("entityCommand", new class extends EntityCommand {
+                    public function label(): string {
+                        return "My Entity Command";
+                    }
+                    public function confirmationText() {
+                        return "Sure?";
+                    }
+                    public function execute() {}
+
+                });
+            }
+        };
+
+        $this->assertArraySubset([
+            "commands" => [
+                [
+                    "key" => "entityCommand",
+                    "label" => "My Entity Command",
+                    "type" => "entity",
+                    "confirmation" => "Sure?"
+                ]
+            ]
+        ], $list->listConfig());
+    }
+}
+
+class SharpEntityListCommandTestCommand extends EntityCommand
+{
+
+    public function label(): string
+    {
+        return "My Entity Command";
+    }
+
+    public function execute() {}
 }

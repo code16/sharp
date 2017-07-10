@@ -43,7 +43,8 @@ trait HandleCommands
             $config["commands"][] = [
                 "key" => $commandName,
                 "label" => $handler->label(),
-                "type" => $handler->type()
+                "type" => $handler->type(),
+                "confirmation" => $handler->confirmationText() ?: null
             ];
         }
     }
