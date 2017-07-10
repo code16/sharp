@@ -6,38 +6,38 @@ use App\Sharp\Filters\SpaceshipPilotsFilter;
 use App\Sharp\Filters\SpaceshipTypeFilter;
 use App\Sharp\States\SpaceshipEntityState;
 use App\Spaceship;
-use Code16\Sharp\EntitiesList\Containers\EntitiesListDataContainer;
-use Code16\Sharp\EntitiesList\Eloquent\WithSharpEntitiesListEloquentTransformer;
-use Code16\Sharp\EntitiesList\EntitiesListQueryParams;
-use Code16\Sharp\EntitiesList\SharpEntitiesList;
+use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
+use Code16\Sharp\EntityList\Eloquent\WithSharpEntityListEloquentTransformer;
+use Code16\Sharp\EntityList\EntityListQueryParams;
+use Code16\Sharp\EntityList\SharpEntityList;
 
-class SpaceshipSharpList extends SharpEntitiesList
+class SpaceshipSharpList extends SharpEntityList
 {
-    use WithSharpEntitiesListEloquentTransformer;
+    use WithSharpEntityListEloquentTransformer;
 
     function buildListDataContainers()
     {
         $this->addDataContainer(
-            EntitiesListDataContainer::make("picture")
+            EntityListDataContainer::make("picture")
 
         )->addDataContainer(
-            EntitiesListDataContainer::make("name")
+            EntityListDataContainer::make("name")
                 ->setLabel("Name")
                 ->setSortable()
 
         )->addDataContainer(
-            EntitiesListDataContainer::make("capacity")
+            EntityListDataContainer::make("capacity")
                 ->setLabel("Capacity")
                 ->setSortable()
                 ->setHtml(false)
 
         )->addDataContainer(
-            EntitiesListDataContainer::make("type")
+            EntityListDataContainer::make("type")
                 ->setLabel("Type")
                 ->setSortable()
 
         )->addDataContainer(
-            EntitiesListDataContainer::make("pilots.name")
+            EntityListDataContainer::make("pilots.name")
                 ->setLabel("Pilots")
                 ->setHtml()
         );
@@ -64,7 +64,7 @@ class SpaceshipSharpList extends SharpEntitiesList
             ->addColumnLarge("pilots.name", 4);
     }
 
-    function getListData(EntitiesListQueryParams $params)
+    function getListData(EntityListQueryParams $params)
     {
         $spaceships = Spaceship::select("spaceships.*")->distinct()
             ->orderBy($params->sortedBy(), $params->sortedDir());

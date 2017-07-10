@@ -1,8 +1,8 @@
 <?php
 
-namespace Code16\Sharp\EntitiesList;
+namespace Code16\Sharp\EntityList;
 
-class EntitiesListQueryParams
+class EntityListQueryParams
 {
     /**
      * @var int

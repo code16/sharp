@@ -1,12 +1,12 @@
 <?php
 
-namespace Code16\Sharp\EntitiesList;
+namespace Code16\Sharp\EntityList;
 
-use Code16\Sharp\EntitiesList\Containers\EntitiesListDataContainer;
-use Code16\Sharp\EntitiesList\Layout\EntitiesListLayoutColumn;
+use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
+use Code16\Sharp\EntityList\Layout\EntityListLayoutColumn;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-abstract class SharpEntitiesList
+abstract class SharpEntityList
 {
     /**
      * @var array
@@ -69,7 +69,7 @@ abstract class SharpEntitiesList
     protected $entityStateAttribute;
 
     /**
-     * @var EntitiesListState
+     * @var EntityListState
      */
     protected $entityStateHandler;
 
@@ -82,7 +82,7 @@ abstract class SharpEntitiesList
     {
         $this->checkListIsBuilt();
 
-        return collect($this->containers)->map(function(EntitiesListDataContainer $container) {
+        return collect($this->containers)->map(function(EntityListDataContainer $container) {
             return $container->toArray();
         })->keyBy("key")->all();
     }
@@ -99,7 +99,7 @@ abstract class SharpEntitiesList
             $this->layoutBuilt = true;
         }
 
-        return collect($this->columns)->map(function(EntitiesListLayoutColumn $column) {
+        return collect($this->columns)->map(function(EntityListLayoutColumn $column) {
             return $column->toArray();
         })->all();
     }
@@ -114,7 +114,7 @@ abstract class SharpEntitiesList
         $keys = $this->getDataContainersKeys();
         $config = $this->listConfig();
         $items = $this->getListData(
-            EntitiesListQueryParams::createFromRequest($config["defaultSort"], $config["defaultSortDir"])
+            EntityListQueryParams::createFromRequest($config["defaultSort"], $config["defaultSortDir"])
         );
 
         if($items instanceof LengthAwarePaginator) {
@@ -242,10 +242,10 @@ abstract class SharpEntitiesList
     /**
      * Add a data container.
      *
-     * @param EntitiesListDataContainer $container
+     * @param EntityListDataContainer $container
      * @return $this
      */
-    protected function addDataContainer(EntitiesListDataContainer $container)
+    protected function addDataContainer(EntityListDataContainer $container)
     {
         $this->containers[] = $container;
         $this->listBuilt = false;
@@ -263,7 +263,7 @@ abstract class SharpEntitiesList
     {
         $this->layoutBuilt = false;
 
-        $this->columns[] = new EntitiesListLayoutColumn($label, $size, $sizeXS);
+        $this->columns[] = new EntityListLayoutColumn($label, $size, $sizeXS);
 
         return $this;
     }
@@ -277,7 +277,7 @@ abstract class SharpEntitiesList
     {
         $this->layoutBuilt = false;
 
-        $column = new EntitiesListLayoutColumn($label, $size);
+        $column = new EntityListLayoutColumn($label, $size);
         $column->setLargeOnly(true);
         $this->columns[] = $column;
 
@@ -286,12 +286,12 @@ abstract class SharpEntitiesList
 
     /**
      * @param string $filterName
-     * @param string|EntitiesListFilter $filterHandler
+     * @param string|EntityListFilter $filterHandler
      * @return $this
      */
     protected function addFilter(string $filterName, $filterHandler)
     {
-        if(!$filterHandler instanceof EntitiesListFilter) {
+        if(!$filterHandler instanceof EntityListFilter) {
             $filterHandler = app($filterHandler);
         }
 
@@ -311,12 +311,12 @@ abstract class SharpEntitiesList
 
     /**
      * @param string $stateAttribute
-     * @param EntitiesListState|string $stateHandler
+     * @param EntityListState|string $stateHandler
      * @return $this
      */
     protected function setEntityState(string $stateAttribute, $stateHandler)
     {
-        if(!$stateHandler instanceof EntitiesListState) {
+        if(!$stateHandler instanceof EntityListState) {
             $stateHandler = app($stateHandler);
         }
 
@@ -327,7 +327,7 @@ abstract class SharpEntitiesList
     }
 
     /**
-     * @return EntitiesListState
+     * @return EntityListState
      */
     public function entityStateHandler()
     {
@@ -352,10 +352,10 @@ abstract class SharpEntitiesList
     /**
      * Retrieve all rows data as array.
      *
-     * @param EntitiesListQueryParams $params
+     * @param EntityListQueryParams $params
      * @return array
      */
-    abstract function getListData(EntitiesListQueryParams $params);
+    abstract function getListData(EntityListQueryParams $params);
 
     /**
      * Build list containers using ->addDataContainer()

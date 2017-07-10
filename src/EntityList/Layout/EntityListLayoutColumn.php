@@ -1,8 +1,8 @@
 <?php
 
-namespace Code16\Sharp\EntitiesList\Layout;
+namespace Code16\Sharp\EntityList\Layout;
 
-class EntitiesListLayoutColumn
+class EntityListLayoutColumn
 {
     /**
      * @var string

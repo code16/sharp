@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
-use Code16\Sharp\Tests\Fixtures\PersonSharpEntitiesList;
+use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
 use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
 use Code16\Sharp\Tests\Fixtures\PersonSharpValidator;
 use Code16\Sharp\Tests\Fixtures\User;
@@ -14,7 +14,7 @@ abstract class BaseApiTest extends SharpTestCase
     {
         $this->app['config']->set(
             'sharp.entities.person.list',
-            PersonSharpEntitiesList::class
+            PersonSharpEntityList::class
         );
 
         $this->app['config']->set(

@@ -10,7 +10,7 @@ Route::group([
     Route::get("/list/{entityKey}")
         ->name("code16.sharp.api.list")
         ->middleware('sharp_api_append_list_authorizations')
-        ->uses('EntitiesListController@show');
+        ->uses('EntityListController@show');
 
     Route::post("/list/{entityKey}/state/{instanceId}")
         ->name("code16.sharp.api.list.state")

@@ -1,10 +1,10 @@
 <?php
 
-namespace Code16\Sharp\EntitiesList\Eloquent\Transformers;
+namespace Code16\Sharp\EntityList\Eloquent\Transformers;
 
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 
-class EloquentEntitiesListUploadTransformer implements SharpAttributeTransformer
+class EloquentEntityListUploadTransformer implements SharpAttributeTransformer
 {
     /**
      * @var string

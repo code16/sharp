@@ -2,11 +2,11 @@
 
 namespace Code16\Sharp\Tests\Unit\EntitiesList;
 
-use Code16\Sharp\EntitiesList\Containers\EntitiesListDataContainer;
-use Code16\Sharp\EntitiesList\EntitiesListFilter;
-use Code16\Sharp\EntitiesList\EntitiesListQueryParams;
-use Code16\Sharp\EntitiesList\EntitiesListState;
-use Code16\Sharp\EntitiesList\SharpEntitiesList;
+use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
+use Code16\Sharp\EntityList\EntityListFilter;
+use Code16\Sharp\EntityList\EntityListQueryParams;
+use Code16\Sharp\EntityList\EntityListState;
+use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Tests\SharpTestCase;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -15,11 +15,11 @@ class SharpEntitiesListTest extends SharpTestCase
     /** @test */
     function we_can_get_containers()
     {
-        $list = new class extends SharpEntitiesListTestList {
+        $list = new class extends SharpEntityListTestList {
             function buildListDataContainers()
             {
                 $this->addDataContainer(
-                    EntitiesListDataContainer::make("name")
+                    EntityListDataContainer::make("name")
                         ->setLabel("Name")
                 );
             }
@@ -36,13 +36,13 @@ class SharpEntitiesListTest extends SharpTestCase
     /** @test */
     function we_can_get_layout()
     {
-        $list = new class extends SharpEntitiesListTestList {
+        $list = new class extends SharpEntityListTestList {
             function buildListDataContainers()
             {
                 $this->addDataContainer(
-                    EntitiesListDataContainer::make("name")
+                    EntityListDataContainer::make("name")
                 )->addDataContainer(
-                    EntitiesListDataContainer::make("age")
+                    EntityListDataContainer::make("age")
                 );
             }
             function buildListLayout()
@@ -64,8 +64,8 @@ class SharpEntitiesListTest extends SharpTestCase
     /** @test */
     function we_can_get_list_data()
     {
-        $form = new class extends SharpEntitiesListTestList {
-            function getListData(EntitiesListQueryParams $params): array
+        $form = new class extends SharpEntityListTestList {
+            function getListData(EntityListQueryParams $params): array
             {
                 return [
                     ["name" => "John Wayne", "age" => 22, "job" => "actor"],
@@ -75,9 +75,9 @@ class SharpEntitiesListTest extends SharpTestCase
             function buildListDataContainers()
             {
                 $this->addDataContainer(
-                    EntitiesListDataContainer::make("name")
+                    EntityListDataContainer::make("name")
                 )->addDataContainer(
-                    EntitiesListDataContainer::make("age")
+                    EntityListDataContainer::make("age")
                 );
             }
         };
@@ -93,8 +93,8 @@ class SharpEntitiesListTest extends SharpTestCase
     /** @test */
     function we_can_get_paginated_list_data()
     {
-        $form = new class extends SharpEntitiesListTestList {
-            function getListData(EntitiesListQueryParams $params)
+        $form = new class extends SharpEntityListTestList {
+            function getListData(EntityListQueryParams $params)
             {
                 $data = [
                     ["name" => "John Wayne", "age" => 22, "job" => "actor"],
@@ -106,9 +106,9 @@ class SharpEntitiesListTest extends SharpTestCase
             function buildListDataContainers()
             {
                 $this->addDataContainer(
-                    EntitiesListDataContainer::make("name")
+                    EntityListDataContainer::make("name")
                 )->addDataContainer(
-                    EntitiesListDataContainer::make("age")
+                    EntityListDataContainer::make("age")
                 );
             }
         };
@@ -124,7 +124,7 @@ class SharpEntitiesListTest extends SharpTestCase
     /** @test */
     function we_can_get_list_config()
     {
-        $list = new class extends SharpEntitiesListTestList {
+        $list = new class extends SharpEntityListTestList {
             function buildListConfig()
             {
                 $this->setSearchable()
@@ -145,10 +145,10 @@ class SharpEntitiesListTest extends SharpTestCase
     /** @test */
     function we_can_get_list_filters_config_with_an_instance()
     {
-        $list = new class extends SharpEntitiesListTestList {
+        $list = new class extends SharpEntityListTestList {
             function buildListConfig()
             {
-                $this->addFilter("test", new class implements EntitiesListFilter {
+                $this->addFilter("test", new class implements EntityListFilter {
                     public function values() { return [1 => "A", 2 => "B"]; }
                     public function multiple() { return false; }
                 });
@@ -166,10 +166,10 @@ class SharpEntitiesListTest extends SharpTestCase
     /** @test */
     function we_can_get_list_filters_config_with_a_class_name()
     {
-        $list = new class extends SharpEntitiesListTestList {
+        $list = new class extends SharpEntityListTestList {
             function buildListConfig()
             {
-                $this->addFilter("test", SharpEntitiesListTestFilter::class);
+                $this->addFilter("test", SharpEntityListTestFilter::class);
             }
         };
 
@@ -184,10 +184,10 @@ class SharpEntitiesListTest extends SharpTestCase
     /** @test */
     function we_can_get_list_entity_state_config_with_an_instance()
     {
-        $list = new class extends SharpEntitiesListTestList {
+        $list = new class extends SharpEntityListTestList {
             function buildListConfig()
             {
-                $this->setEntityState("_state", new class extends EntitiesListState {
+                $this->setEntityState("_state", new class extends EntityListState {
                     protected function buildStates()
                     {
                         $this->addState("test1", "Test 1", "blue");
@@ -213,8 +213,8 @@ class SharpEntitiesListTest extends SharpTestCase
     /** @test */
     function entity_state_attribute_is_added_the_entity_data()
     {
-        $form = new class extends SharpEntitiesListTestList {
-            function getListData(EntitiesListQueryParams $params): array
+        $form = new class extends SharpEntityListTestList {
+            function getListData(EntityListQueryParams $params): array
             {
                 return [
                     ["name" => "John Wayne", "state" => true],
@@ -224,12 +224,12 @@ class SharpEntitiesListTest extends SharpTestCase
             function buildListDataContainers()
             {
                 $this->addDataContainer(
-                    EntitiesListDataContainer::make("name")
+                    EntityListDataContainer::make("name")
                 );
             }
             function buildListConfig()
             {
-                $this->setEntityState("state", new class extends EntitiesListState {
+                $this->setEntityState("state", new class extends EntityListState {
                     protected function buildStates()
                     {
                         $this->addState(true, "Test 1", "blue");
@@ -249,15 +249,15 @@ class SharpEntitiesListTest extends SharpTestCase
     }
 }
 
-abstract class SharpEntitiesListTestList extends SharpEntitiesList
+abstract class SharpEntityListTestList extends SharpEntityList
 {
     function buildListDataContainers() {}
     function buildListLayout() {}
     function buildListConfig() {}
-    function getListData(EntitiesListQueryParams $params) { return []; }
+    function getListData(EntityListQueryParams $params) { return []; }
 }
 
-class SharpEntitiesListTestFilter implements EntitiesListFilter {
+class SharpEntityListTestFilter implements EntityListFilter {
     public function values() {
         return [1 => "A", 2 => "B"];
     }

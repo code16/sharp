@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Http\Api;
 
-use Code16\Sharp\EntitiesList\SharpEntitiesList;
+use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Routing\Controller;
@@ -30,9 +30,9 @@ abstract class ApiController extends Controller
 
     /**
      * @param string $entityKey
-     * @return SharpEntitiesList
+     * @return SharpEntityList
      */
-    protected function getListInstance(string $entityKey): SharpEntitiesList
+    protected function getListInstance(string $entityKey): SharpEntityList
     {
         return app(config("sharp.entities.{$entityKey}.list"));
     }

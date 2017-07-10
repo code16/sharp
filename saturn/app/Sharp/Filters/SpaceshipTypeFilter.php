@@ -3,9 +3,9 @@
 namespace App\Sharp\Filters;
 
 use App\SpaceshipType;
-use Code16\Sharp\EntitiesList\EntitiesListFilter;
+use Code16\Sharp\EntityList\EntityListFilter;
 
-class SpaceshipTypeFilter implements EntitiesListFilter
+class SpaceshipTypeFilter implements EntityListFilter
 {
 
     public function values()

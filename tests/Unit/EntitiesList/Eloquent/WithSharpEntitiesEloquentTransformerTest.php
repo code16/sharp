@@ -2,10 +2,10 @@
 
 namespace Code16\Sharp\Tests\Unit\EntitiesList\Eloquent;
 
-use Code16\Sharp\EntitiesList\Containers\EntitiesListDataContainer;
-use Code16\Sharp\EntitiesList\Eloquent\WithSharpEntitiesListEloquentTransformer;
-use Code16\Sharp\EntitiesList\EntitiesListQueryParams;
-use Code16\Sharp\EntitiesList\SharpEntitiesList;
+use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
+use Code16\Sharp\EntityList\Eloquent\WithSharpEntityListEloquentTransformer;
+use Code16\Sharp\EntityList\EntityListQueryParams;
+use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
 
@@ -17,11 +17,11 @@ class WithSharpEntitiesEloquentTransformerTest extends SharpFormEloquentBaseTest
         Person::create(["name" => "John Wayne"]);
         Person::create(["name" => "Mary Wayne"]);
 
-        $list = new WithSharpEntitiesEloquentTransformerTestList();
+        $list = new WithSharpEntityEloquentTransformerTestList();
 
         $this->assertArraySubset(
             [["name" => "John Wayne"], ["name" => "Mary Wayne"]],
-            $list->getListData(new EntitiesListQueryParams())
+            $list->getListData(new EntityListQueryParams())
         );
     }
 
@@ -34,15 +34,15 @@ class WithSharpEntitiesEloquentTransformerTest extends SharpFormEloquentBaseTest
         Person::create(["name" => "D"]);
         Person::create(["name" => "E"]);
 
-        $list = new class extends WithSharpEntitiesEloquentTransformerTestList {
-            function getListData(EntitiesListQueryParams $params) {
+        $list = new class extends WithSharpEntityEloquentTransformerTestList {
+            function getListData(EntityListQueryParams $params) {
                 return $this->transform(Person::paginate(2));
             }
         };
 
         $this->assertArraySubset(
             [["name" => "A"], ["name" => "B"]],
-            $list->getListData(new EntitiesListQueryParams())->items()
+            $list->getListData(new EntityListQueryParams())->items()
         );
     }
 
@@ -53,29 +53,29 @@ class WithSharpEntitiesEloquentTransformerTest extends SharpFormEloquentBaseTest
         Person::create(["name" => "Mary Wayne", "mother_id" => $mother->id]);
         Person::create(["name" => "John Wayne"]);
 
-        $list = new class extends WithSharpEntitiesEloquentTransformerTestList {
+        $list = new class extends WithSharpEntityEloquentTransformerTestList {
             function buildListDataContainers() {
-                $this->addDataContainer(EntitiesListDataContainer::make("mother:name"));
+                $this->addDataContainer(EntityListDataContainer::make("mother:name"));
             }
         };
 
         $this->assertArraySubset(
             ["name" => "Mary Wayne", "mother:name" => "Jane Wayne"],
-            $list->getListData(new EntitiesListQueryParams())[1]
+            $list->getListData(new EntityListQueryParams())[1]
         );
 
         $this->assertArraySubset(
             ["name" => "John Wayne", "mother:name" => null],
-            $list->getListData(new EntitiesListQueryParams())[2]
+            $list->getListData(new EntityListQueryParams())[2]
         );
     }
 }
 
-class WithSharpEntitiesEloquentTransformerTestList extends SharpEntitiesList
+class WithSharpEntityEloquentTransformerTestList extends SharpEntityList
 {
-    use WithSharpEntitiesListEloquentTransformer;
+    use WithSharpEntityListEloquentTransformer;
 
-    function getListData(EntitiesListQueryParams $params)
+    function getListData(EntityListQueryParams $params)
     {
         return $this->transform(Person::all());
     }

@@ -1,10 +1,10 @@
 <?php
 
-namespace Code16\Sharp\EntitiesList;
+namespace Code16\Sharp\EntityList;
 
-use Code16\Sharp\Exceptions\EntitiesList\InvalidEntityStateException;
+use Code16\Sharp\Exceptions\EntityList\InvalidEntityStateException;
 
-abstract class EntitiesListState
+abstract class EntityListState
 {
     /**
      * @var array

@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Tests\Unit\EntitiesList;
 
-use Code16\Sharp\EntitiesList\EntitiesListQueryParams;
+use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\Tests\SharpTestCase;
 
 class EntitiesListQueryParamsTest extends SharpTestCase
@@ -62,7 +62,7 @@ class EntitiesListQueryParamsTest extends SharpTestCase
 
     private function buildParams($p=1, $s="", $sb=null, $sd=null, $f=null)
     {
-        return new class($p, $s, $sb, $sd, $f) extends EntitiesListQueryParams  {
+        return new class($p, $s, $sb, $sd, $f) extends EntityListQueryParams  {
             public function __construct($p, $s, $sb, $sd, $f)
             {
                 $this->page = $p;

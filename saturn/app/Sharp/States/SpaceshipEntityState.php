@@ -3,9 +3,9 @@
 namespace App\Sharp\States;
 
 use App\Spaceship;
-use Code16\Sharp\EntitiesList\EntitiesListState;
+use Code16\Sharp\EntityList\EntityListState;
 
-class SpaceshipEntityState extends EntitiesListState
+class SpaceshipEntityState extends EntityListState
 {
 
     protected function buildStates()

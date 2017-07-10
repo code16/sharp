@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Http\Api;
 
-class EntitiesListController extends ApiController
+class EntityListController extends ApiController
 {
 
     /**

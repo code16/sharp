@@ -1,14 +1,14 @@
 <?php
 
-namespace Code16\Sharp\EntitiesList\Eloquent;
+namespace Code16\Sharp\EntityList\Eloquent;
 
-use Code16\Sharp\EntitiesList\Eloquent\Transformers\EloquentEntitiesListUploadTransformer;
+use Code16\Sharp\EntityList\Eloquent\Transformers\EloquentEntityListUploadTransformer;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
-trait WithSharpEntitiesListEloquentTransformer
+trait WithSharpEntityListEloquentTransformer
 {
     use WithCustomTransformers;
 
@@ -47,7 +47,7 @@ trait WithSharpEntitiesListEloquentTransformer
      */
     function setUploadTransformer(string $attribute, int $width = null, int $height = null, array $filters = [])
     {
-        $this->transformers[$attribute] = new EloquentEntitiesListUploadTransformer(
+        $this->transformers[$attribute] = new EloquentEntityListUploadTransformer(
             $attribute, $width, $height, $filters
         );
 
