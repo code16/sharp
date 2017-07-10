@@ -21,6 +21,9 @@
     "classmap": [
       "database"
     ],
+    "files": [
+      "../src/sharp_helper.php"
+    ],
     "psr-4": {
       "App\\": "app/",
       "Code16\\Sharp\\": "../src/"

@@ -16,6 +16,11 @@ use Intervention\Image\ImageServiceProviderLaravel5;
 
 class SharpServiceProvider extends ServiceProvider
 {
+    /**
+     * @var string
+     */
+    const VERSION = '4.0.0b';
+
     public function boot()
     {
         $this->loadRoutesFrom(__DIR__.'/routes.php');

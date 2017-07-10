@@ -20,6 +20,7 @@
   },
   "autoload": {
     "files": [
+      "src/sharp_helper.php"
     ],
     "psr-4": {
       "Code16\\Sharp\\": "src/"
