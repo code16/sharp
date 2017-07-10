@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\EntitiesList\Eloquent;
+namespace Code16\Sharp\Tests\Unit\EntityList\Eloquent;
 
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\Eloquent\WithSharpEntityListEloquentTransformer;
@@ -9,7 +9,7 @@ use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
 
-class WithSharpEntitiesEloquentTransformerTest extends SharpFormEloquentBaseTest
+class WithSharpEntityEloquentTransformerTest extends SharpFormEloquentBaseTest
 {
     /** @test */
     function we_can_retrieve_an_array_version_of_a_models_collection()

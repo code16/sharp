@@ -4,7 +4,7 @@ namespace Code16\Sharp\EntityList;
 
 use Code16\Sharp\Exceptions\EntityList\InvalidEntityStateException;
 
-abstract class EntityListState
+abstract class EntityState
 {
     /**
      * @var array

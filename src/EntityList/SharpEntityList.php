@@ -4,10 +4,15 @@ namespace Code16\Sharp\EntityList;
 
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\Layout\EntityListLayoutColumn;
+use Code16\Sharp\EntityList\Traits\HandleCommands;
+use Code16\Sharp\EntityList\Traits\HandleEntityState;
+use Code16\Sharp\EntityList\Traits\HandleFilters;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 abstract class SharpEntityList
 {
+    use HandleFilters, HandleEntityState, HandleCommands;
+
     /**
      * @var array
      */
@@ -57,21 +62,6 @@ abstract class SharpEntityList
      * @var string
      */
     protected $defaultSortDir;
-
-    /**
-     * @var array
-     */
-    protected $filterHandlers;
-
-    /**
-     * @var string
-     */
-    protected $entityStateAttribute;
-
-    /**
-     * @var EntityListState
-     */
-    protected $entityStateHandler;
 
     /**
      * Get the SharpListDataContainer array representation.
@@ -158,26 +148,9 @@ abstract class SharpEntityList
             "defaultSortDir" => $this->defaultSortDir,
         ];
 
-        foreach((array)$this->filterHandlers as $filterName => $handler) {
-            $config["filter_$filterName"] = [
-                "multiple" => $handler->multiple(),
-                "values" => $handler->values()
-            ];
-        }
+        $this->appendFiltersToConfig($config);
 
-        if($this->entityStateAttribute) {
-            $config["state"] = [
-                "attribute" => $this->entityStateAttribute,
-                "values" => collect($this->entityStateHandler->states())
-                    ->map(function($state, $key) {
-                        return [
-                            "value" => $key,
-                            "label" => $state[0],
-                            "color" => $state[1]
-                        ];
-                    })->values()->all()
-            ];
-        }
+        $this->appendEntityStateToConfig($config);
 
         return $config;
     }
@@ -282,56 +255,6 @@ abstract class SharpEntityList
         $this->columns[] = $column;
 
         return $this;
-    }
-
-    /**
-     * @param string $filterName
-     * @param string|EntityListFilter $filterHandler
-     * @return $this
-     */
-    protected function addFilter(string $filterName, $filterHandler)
-    {
-        if(!$filterHandler instanceof EntityListFilter) {
-            $filterHandler = app($filterHandler);
-        }
-
-        $this->filterHandlers[$filterName] = $filterHandler;
-
-        return $this;
-    }
-
-    /**
-     * @param string $filterName
-     * @return string|array
-     */
-    protected function filterValue(string $filterName)
-    {
-        return $this->filterHandlers[$filterName]->currentValue();
-    }
-
-    /**
-     * @param string $stateAttribute
-     * @param EntityListState|string $stateHandler
-     * @return $this
-     */
-    protected function setEntityState(string $stateAttribute, $stateHandler)
-    {
-        if(!$stateHandler instanceof EntityListState) {
-            $stateHandler = app($stateHandler);
-        }
-
-        $this->entityStateAttribute = $stateAttribute;
-        $this->entityStateHandler = $stateHandler;
-
-        return $this;
-    }
-
-    /**
-     * @return EntityListState
-     */
-    public function entityStateHandler()
-    {
-        return $this->entityStateHandler;
     }
 
     private function checkListIsBuilt()

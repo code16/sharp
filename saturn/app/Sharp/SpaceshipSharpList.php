@@ -2,6 +2,7 @@
 
 namespace App\Sharp;
 
+use App\Sharp\Commands\SpaceshipSynchronize;
 use App\Sharp\Filters\SpaceshipPilotsFilter;
 use App\Sharp\Filters\SpaceshipTypeFilter;
 use App\Sharp\States\SpaceshipEntityState;
@@ -48,7 +49,7 @@ class SpaceshipSharpList extends SharpEntityList
         $this->setInstanceIdAttribute("id")
             ->setSearchable()
             ->setDefaultSort("name", "asc")
-//            ->addEntityCommand("synchronize", "Synchronize gizmoflags", SpaceshipSynchronize::class)
+            ->addEntityCommand("synchronize", SpaceshipSynchronize::class)
             ->addFilter("type", SpaceshipTypeFilter::class)
             ->addFilter("pilots", SpaceshipPilotsFilter::class)
             ->setEntityState("state", SpaceshipEntityState::class)

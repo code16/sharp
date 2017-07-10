@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\EntitiesList;
+namespace Code16\Sharp\Tests\Unit\EntityList;
 
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\Tests\SharpTestCase;

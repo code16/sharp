@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
-use Code16\Sharp\EntityList\EntityListState;
+use Code16\Sharp\EntityList\EntityState;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
 use Code16\Sharp\Tests\Fixtures\User;
@@ -114,7 +114,7 @@ class EntityStatePersonSharpEntitiesList extends PersonSharpEntityList {
 
     function buildListConfig()
     {
-        $this->setEntityState("state", new class() extends EntityListState {
+        $this->setEntityState("state", new class() extends EntityState {
 
             protected function buildStates()
             {
