@@ -139,26 +139,4 @@ class SharpEntityListTest extends SharpTestCase
             "defaultSortDir" => null
         ], $list->listConfig());
     }
-
-//    /** @test */
-//    function we_can_get_list_entity_command_config_with_an_instance()
-//    {
-//        $list = new class extends SharpEntityDefaultTestList {
-//            function buildListConfig()
-//            {
-//                $this->addEntityCommand("_command", new class extends EntityCommand {
-//                });
-//            }
-//        };
-//
-//        $this->assertArraySubset([
-//            "commands" => [
-//                [
-//                    "key" => "_command",
-//                    "label" => "My Command",
-//                    "type" => "entity"
-//                ]
-//            ]
-//        ], $list->listConfig());
-//    }
 }

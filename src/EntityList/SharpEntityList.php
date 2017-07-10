@@ -152,6 +152,8 @@ abstract class SharpEntityList
 
         $this->appendEntityStateToConfig($config);
 
+        $this->appendCommandsToConfig($config);
+
         return $config;
     }
 
