@@ -143,7 +143,7 @@ class SharpEntitiesListTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_get_list_filters_config()
+    function we_can_get_list_filters_config_with_an_instance()
     {
         $list = new class extends SharpEntitiesListTestList {
             function buildListConfig()
@@ -164,12 +164,30 @@ class SharpEntitiesListTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_get_list_entity_state_config_with_a_class()
+    function we_can_get_list_filters_config_with_a_class_name()
     {
         $list = new class extends SharpEntitiesListTestList {
             function buildListConfig()
             {
-                $this->setEntityStateHandler("_state", new class extends EntitiesListState {
+                $this->addFilter("test", SharpEntitiesListTestFilter::class);
+            }
+        };
+
+        $this->assertArraySubset([
+            "filter_test" => [
+                "multiple" => false,
+                "values" => [1 => "A", 2 => "B"]
+            ]
+        ], $list->listConfig());
+    }
+
+    /** @test */
+    function we_can_get_list_entity_state_config_with_an_instance()
+    {
+        $list = new class extends SharpEntitiesListTestList {
+            function buildListConfig()
+            {
+                $this->setEntityState("_state", new class extends EntitiesListState {
                     protected function buildStates()
                     {
                         $this->addState("test1", "Test 1", "blue");
@@ -211,7 +229,7 @@ class SharpEntitiesListTest extends SharpTestCase
             }
             function buildListConfig()
             {
-                $this->setEntityStateHandler("state", new class extends EntitiesListState {
+                $this->setEntityState("state", new class extends EntitiesListState {
                     protected function buildStates()
                     {
                         $this->addState(true, "Test 1", "blue");
@@ -237,4 +255,13 @@ abstract class SharpEntitiesListTestList extends SharpEntitiesList
     function buildListLayout() {}
     function buildListConfig() {}
     function getListData(EntitiesListQueryParams $params) { return []; }
+}
+
+class SharpEntitiesListTestFilter implements EntitiesListFilter {
+    public function values() {
+        return [1 => "A", 2 => "B"];
+    }
+    public function multiple() {
+        return false;
+    }
 }

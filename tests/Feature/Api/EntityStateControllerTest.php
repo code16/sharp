@@ -114,7 +114,7 @@ class EntityStatePersonSharpEntitiesList extends PersonSharpEntitiesList {
 
     function buildListConfig()
     {
-        $this->setEntityStateHandler("state", new class() extends EntitiesListState {
+        $this->setEntityState("state", new class() extends EntitiesListState {
 
             protected function buildStates()
             {

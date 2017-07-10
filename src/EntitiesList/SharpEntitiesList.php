@@ -286,11 +286,15 @@ abstract class SharpEntitiesList
 
     /**
      * @param string $filterName
-     * @param EntitiesListFilter $filterHandler
+     * @param string|EntitiesListFilter $filterHandler
      * @return $this
      */
-    protected function addFilter(string $filterName, EntitiesListFilter $filterHandler)
+    protected function addFilter(string $filterName, $filterHandler)
     {
+        if(!$filterHandler instanceof EntitiesListFilter) {
+            $filterHandler = app($filterHandler);
+        }
+
         $this->filterHandlers[$filterName] = $filterHandler;
 
         return $this;
@@ -307,11 +311,15 @@ abstract class SharpEntitiesList
 
     /**
      * @param string $stateAttribute
-     * @param EntitiesListState $stateHandler
+     * @param EntitiesListState|string $stateHandler
      * @return $this
      */
-    protected function setEntityStateHandler(string $stateAttribute, EntitiesListState $stateHandler)
+    protected function setEntityState(string $stateAttribute, $stateHandler)
     {
+        if(!$stateHandler instanceof EntitiesListState) {
+            $stateHandler = app($stateHandler);
+        }
+
         $this->entityStateAttribute = $stateAttribute;
         $this->entityStateHandler = $stateHandler;
 
