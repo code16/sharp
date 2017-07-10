@@ -16,6 +16,7 @@ abstract class Command
             "message" => $message
         ];
     }
+
     /**
      * @return array
      */
@@ -23,6 +24,19 @@ abstract class Command
     {
         return [
             "action" => "reload"
+        ];
+    }
+
+    /**
+     * @param string $bladeView
+     * @param array $params
+     * @return array
+     */
+    protected function view(string $bladeView, array $params = [])
+    {
+        return [
+            "action" => "view",
+            "html" => view($bladeView, $params)->render()
         ];
     }
 

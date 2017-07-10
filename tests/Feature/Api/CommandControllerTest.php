@@ -44,7 +44,7 @@ class CommandControllerTest extends BaseApiTest
     }
 
     /** @test */
-    public function we_can_call_an_reload_entity_command()
+    public function we_can_call_a_reload_entity_command()
     {
         $this->buildTheWorld();
         $this->disableExceptionHandling();
@@ -57,7 +57,7 @@ class CommandControllerTest extends BaseApiTest
     }
 
     /** @test */
-    public function we_can_call_an_reload_instance_command()
+    public function we_can_call_a_reload_instance_command()
     {
         $this->buildTheWorld();
         $this->disableExceptionHandling();
@@ -66,6 +66,32 @@ class CommandControllerTest extends BaseApiTest
             ->assertStatus(200)
             ->assertJson([
                 "action" => "reload"
+            ]);
+    }
+
+    /** @test */
+    public function we_can_call_a_view_entity_command()
+    {
+        $this->buildTheWorld();
+        $this->disableExceptionHandling();
+
+        $this->json('post', '/sharp/api/list/person/command/entity_view')
+            ->assertStatus(200)
+            ->assertJson([
+                "action" => "view",
+            ]);
+    }
+
+    /** @test */
+    public function we_can_call_a_view_instance_command()
+    {
+        $this->buildTheWorld();
+        $this->disableExceptionHandling();
+
+        $this->json('post', '/sharp/api/list/person/command/instance_view/1')
+            ->assertStatus(200)
+            ->assertJson([
+                "action" => "view",
             ]);
     }
 
@@ -107,6 +133,7 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
             public function execute($instanceId) {
                 return $this->info("ok");
             }
+
         })->addEntityCommand("entity_reload", new class() extends EntityCommand {
             public function label(): string { return "label"; }
             public function execute() {
@@ -118,11 +145,25 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
             public function execute($instanceId) {
                 return $this->reload();
             }
+
+        })->addEntityCommand("entity_view", new class() extends EntityCommand {
+            public function label(): string { return "label"; }
+            public function execute() {
+                return $this->view("welcome");
+            }
+
+        })->addInstanceCommand("instance_view", new class() extends InstanceCommand {
+            public function label(): string { return "label"; }
+            public function execute($instanceId) {
+                return $this->view("welcome");
+            }
+
         })->addInstanceCommand("entity_exception", new class() extends EntityCommand {
             public function label(): string { return "label"; }
             public function execute() {
                 throw new SharpApplicativeException("error");
             }
         });
+
     }
 }
