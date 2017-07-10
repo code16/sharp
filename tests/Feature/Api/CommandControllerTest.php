@@ -4,6 +4,7 @@ namespace Code16\Sharp\Tests\Feature\Api;
 
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
 
 class CommandControllerTest extends BaseApiTest
@@ -68,6 +69,18 @@ class CommandControllerTest extends BaseApiTest
             ]);
     }
 
+    /** @test */
+    public function applicative_exception_returns_a_417_as_always()
+    {
+        $this->buildTheWorld();
+
+        $this->json('post', '/sharp/api/list/person/command/entity_exception')
+            ->assertStatus(417)
+            ->assertJson([
+                "message" => "error"
+            ]);
+    }
+
     protected function buildTheWorld()
     {
         parent::buildTheWorld();
@@ -104,6 +117,11 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
             public function label(): string { return "label"; }
             public function execute($instanceId) {
                 return $this->reload();
+            }
+        })->addInstanceCommand("entity_exception", new class() extends EntityCommand {
+            public function label(): string { return "label"; }
+            public function execute() {
+                throw new SharpApplicativeException("error");
             }
         });
     }
