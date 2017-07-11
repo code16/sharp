@@ -72,7 +72,7 @@ class FormController extends ApiController
 
         $form = $this->getFormInstance($entityKey);
 
-        $form->store(request()->only($form->getFieldKeys()));
+        $form->store(request()->only($form->getDataKeys()));
 
         return response()->json(["ok" => true]);
     }
@@ -122,7 +122,7 @@ class FormController extends ApiController
     protected function requestData($form): array
     {
         return collect(request()->all())->filter(function ($item, $key) use ($form) {
-            return in_array($key, $form->getFieldKeys());
+            return in_array($key, $form->getDataKeys());
         })->all();
     }
 }

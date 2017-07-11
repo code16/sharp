@@ -4,11 +4,9 @@ namespace Code16\Sharp\Form\Eloquent;
 
 use Closure;
 use Code16\Sharp\Form\Eloquent\Transformers\EloquentFormTagsTransformer;
-use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
-trait WithSharpFormEloquentTransformer
+trait WithFormEloquentTransformers
 {
-    use WithCustomTransformers;
 
     /**
      * @param string $attribute
@@ -23,18 +21,5 @@ trait WithSharpFormEloquentTransformer
         );
 
         return $this;
-    }
-
-    /**
-     * Retrieve a Model for the form and pack all its data as JSON.
-     *
-     * @param $model
-     * @return array
-     */
-    function transform($model): array
-    {
-        return $this->applyTransformers(
-            collect($this->getFieldKeys()), $model, $model->toArray()
-        );
     }
 }

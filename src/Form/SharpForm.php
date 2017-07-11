@@ -77,7 +77,7 @@ abstract class SharpForm
     {
         return collect($this->find($id))
             // Filter model attributes on actual form fields
-            ->only($this->getFieldKeys())
+            ->only($this->getDataKeys())
             ->all();
     }
 
@@ -90,7 +90,7 @@ abstract class SharpForm
     {
         $data = collect($this->create())
             // Filter model attributes on actual form fields
-            ->only($this->getFieldKeys())
+            ->only($this->getDataKeys())
             ->all();
 
         return sizeof($data) ? $data : null;
@@ -101,7 +101,7 @@ abstract class SharpForm
      *
      * @return array
      */
-    function getFieldKeys(): array
+    function getDataKeys(): array
     {
         return collect($this->fields())
             ->pluck("key")
@@ -238,7 +238,7 @@ abstract class SharpForm
      */
     public function create(): array
     {
-        return collect($this->getFieldKeys())
+        return collect($this->getDataKeys())
             ->flip()
             ->map(function() {
                 return null;
