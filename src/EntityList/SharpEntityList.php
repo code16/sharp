@@ -103,7 +103,7 @@ abstract class SharpEntityList
      */
     function data($items = null): array
     {
-        $keys = $this->getDataContainersKeys();
+        $keys = $this->getDataKeys();
         $config = $this->listConfig();
         $items = $items ?: $this->getListData(
             EntityListQueryParams::createFromRequest($config["defaultSort"], $config["defaultSortDir"])
@@ -269,7 +269,7 @@ abstract class SharpEntityList
         }
     }
 
-    protected function getDataContainersKeys()
+    protected function getDataKeys()
     {
         return collect($this->dataContainers())
             ->pluck("key")

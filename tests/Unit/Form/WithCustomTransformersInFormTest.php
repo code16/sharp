@@ -1,14 +1,15 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Eloquent;
+namespace Code16\Sharp\Tests\Unit\Form;
 
-use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentTransformer;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Tests\Fixtures\Person;
+use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
+use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
-class WithSharpFormEloquentTransformerTest extends SharpFormEloquentBaseTest
+class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
 {
 
     /** @test */
@@ -18,7 +19,7 @@ class WithSharpFormEloquentTransformerTest extends SharpFormEloquentBaseTest
             "name" => "John Wayne"
         ]);
 
-        $form = new WithSharpFormEloquentTransformerTestForm();
+        $form = new WithCustomTransformersTestForm();
 
         $this->assertArraySubset([
                 "name" => "John Wayne"
@@ -38,7 +39,7 @@ class WithSharpFormEloquentTransformerTest extends SharpFormEloquentBaseTest
             "mother_id" => $mother->id
         ]);
 
-        $form = new WithSharpFormEloquentTransformerTestForm();
+        $form = new WithCustomTransformersTestForm();
 
         $this->assertArraySubset([
                 "mother_id" => $person->mother_id,
@@ -59,7 +60,7 @@ class WithSharpFormEloquentTransformerTest extends SharpFormEloquentBaseTest
             "mother_id" => $mother->id
         ]);
 
-        $form = new WithSharpFormEloquentTransformerTestForm();
+        $form = new WithCustomTransformersTestForm();
 
         $this->assertArraySubset([
             "elder_son" => ["id" => $son->id, "name" => $son->name],
@@ -84,7 +85,7 @@ class WithSharpFormEloquentTransformerTest extends SharpFormEloquentBaseTest
             "mother_id" => $mother->id
         ]);
 
-        $form = new WithSharpFormEloquentTransformerTestForm();
+        $form = new WithCustomTransformersTestForm();
 
         $this->assertArraySubset([
                 "sons" => [
@@ -114,7 +115,7 @@ class WithSharpFormEloquentTransformerTest extends SharpFormEloquentBaseTest
             $person2->id, $person3->id
         ]);
 
-        $form = new WithSharpFormEloquentTransformerTestForm();
+        $form = new WithCustomTransformersTestForm();
 
         $this->assertArraySubset([
                 "friends" => [
@@ -131,7 +132,7 @@ class WithSharpFormEloquentTransformerTest extends SharpFormEloquentBaseTest
         $person = Person::create(["name" => "John Wayne"]);
         $person->picture()->create(["file" => "test.jpg"]);
 
-        $form = new WithSharpFormEloquentTransformerTestForm();
+        $form = new WithCustomTransformersTestForm();
 
         $this->assertArraySubset([
                 "picture" => ["file" => "test.jpg"],
@@ -145,7 +146,7 @@ class WithSharpFormEloquentTransformerTest extends SharpFormEloquentBaseTest
         $person = Person::create(["name" => "John Wayne"]);
         $person->pictures()->create(["file" => "test.jpg"]);
 
-        $form = new WithSharpFormEloquentTransformerTestForm();
+        $form = new WithCustomTransformersTestForm();
 
         $this->assertArraySubset([
                 "pictures" => [["file" => "test.jpg"]],
@@ -160,7 +161,7 @@ class WithSharpFormEloquentTransformerTest extends SharpFormEloquentBaseTest
         $son = Person::create(["name" => "AAA", "mother_id" => $mother->id]);
         $person = Person::create(["name" => "BBB"]);
 
-        $form = new class extends WithSharpFormEloquentTransformerTestForm {
+        $form = new class extends WithCustomTransformersTestForm {
             function buildFormFields() {
                 $this->addField(SharpFormTextField::make("mother:name"));
             }
@@ -184,7 +185,7 @@ class WithSharpFormEloquentTransformerTest extends SharpFormEloquentBaseTest
             "name" => "John Wayne"
         ]);
 
-        $form = new WithSharpFormEloquentTransformerTestForm();
+        $form = new WithCustomTransformersTestForm();
         $form->setCustomTransformer("name", function($person) {
             return strtoupper($person->name);
         });
@@ -202,7 +203,7 @@ class WithSharpFormEloquentTransformerTest extends SharpFormEloquentBaseTest
             "name" => "John Wayne"
         ]);
 
-        $form = new WithSharpFormEloquentTransformerTestForm;
+        $form = new WithCustomTransformersTestForm;
         $form->setCustomTransformer("name", SharpAttributeUppercaseTransformer::class);
 
         $this->assertArraySubset(
@@ -212,9 +213,9 @@ class WithSharpFormEloquentTransformerTest extends SharpFormEloquentBaseTest
     }
 }
 
-class WithSharpFormEloquentTransformerTestForm extends SharpForm
+class WithCustomTransformersTestForm extends SharpForm
 {
-    use WithSharpFormEloquentTransformer;
+    use WithCustomTransformers;
 
     function find($id): array
     {

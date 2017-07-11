@@ -3,6 +3,8 @@
 namespace Code16\Sharp\Utils\Transformers;
 
 use Closure;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 /**
@@ -35,10 +37,44 @@ trait WithCustomTransformers
     }
 
     /**
+     * Transforms a model or a models collection into an array.
+     *
+     * @param Collection|array|LengthAwarePaginatorContract|stdClass $models
+     * @return array|LengthAwarePaginator
+     */
+    function transform($models)
+    {
+        if($models instanceof LengthAwarePaginatorContract) {
+            return new LengthAwarePaginator(
+                $this->transform($models->items()),
+                $models->total(),
+                $models->perPage(),
+                $models->currentPage()
+            );
+        }
+
+        if(is_array($models)) {
+            $models = collect($models);
+        }
+
+        if($models instanceof Collection) {
+            return $models->map(function($model) {
+                return $this->applyTransformers(
+                    collect($this->getDataKeys()), $model, $model->toArray()
+                );
+            })->all();
+        }
+
+        return $this->applyTransformers(
+            collect($this->getDataKeys()), $models, $models->toArray()
+        );
+    }
+
+    /**
      * @param Closure $closure
      * @return SharpAttributeTransformer
      */
-    public static function normalizeToSharpAttributeTransformer(Closure $closure)
+    protected static function normalizeToSharpAttributeTransformer(Closure $closure)
     {
         return new class($closure) implements SharpAttributeTransformer
         {

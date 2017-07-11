@@ -9,13 +9,14 @@ use App\Sharp\Filters\SpaceshipTypeFilter;
 use App\Sharp\States\SpaceshipEntityState;
 use App\Spaceship;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
-use Code16\Sharp\EntityList\Eloquent\WithSharpEntityListEloquentTransformer;
+use Code16\Sharp\EntityList\Eloquent\WithEntityListEloquentTransformers;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
+use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 class SpaceshipSharpList extends SharpEntityList
 {
-    use WithSharpEntityListEloquentTransformer;
+    use WithCustomTransformers, WithEntityListEloquentTransformers;
 
     function buildListDataContainers()
     {
