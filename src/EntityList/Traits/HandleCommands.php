@@ -40,14 +40,18 @@ trait HandleCommands
     protected function appendCommandsToConfig(array &$config)
     {
         foreach($this->commandHandlers as $commandName => $handler) {
-            $handler->buildForm();
+            $formFields = $handler->form();
+            $formLayout = $formFields ? $handler->formLayout() : null;
 
             $config["commands"][] = [
                 "key" => $commandName,
                 "label" => $handler->label(),
                 "type" => $handler->type(),
                 "confirmation" => $handler->confirmationText() ?: null,
-                "form" => $handler->form() ?: null
+                "form" => $formFields ? [
+                    "fields" => $formFields,
+                    "layout" => $formLayout
+                ] : null
             ];
         }
     }

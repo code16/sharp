@@ -5,6 +5,7 @@ namespace Code16\Sharp\Tests\Unit\EntityList;
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Tests\Unit\EntityList\Utils\SharpEntityDefaultTestList;
 
@@ -112,6 +113,9 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function buildForm() {
                         $this->addField(SharpFormTextField::make("message"));
                     }
+                    public function buildFormLayout(FormLayoutColumn &$column) {
+                        $column->withSingleField("message");
+                    }
                     public function execute() {}
                 });
             }
@@ -124,10 +128,48 @@ class SharpEntityListCommandTest extends SharpTestCase
                     "label" => "My Entity Command",
                     "type" => "entity",
                     "form" => [
-                        "message" => [
-                            "key" => "message",
-                            "type" => "text",
-                            "inputType" => "text"
+                        "fields" => [
+                            "message" => [
+                                "key" => "message",
+                                "type" => "text",
+                                "inputType" => "text"
+                            ]
+                        ],
+                        "layout" => [
+                            [["key" => "message", "size" => 12, "sizeXS" => 12]]
+                        ]
+                    ]
+                ]
+            ]
+        ], $list->listConfig());
+    }
+
+    /** @test */
+    function if_no_form_layout_is_configured_a_default_is_provided()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig()
+            {
+                $this->addEntityCommand("entityCommand", new class extends EntityCommand {
+                    public function label(): string {
+                        return "My Entity Command";
+                    }
+                    public function buildForm() {
+                        $this->addField(SharpFormTextField::make("message"));
+                        $this->addField(SharpFormTextField::make("message2"));
+                    }
+                    public function execute() {}
+                });
+            }
+        };
+
+        $this->assertArraySubset([
+            "commands" => [
+                [
+                    "form" => [
+                        "layout" => [
+                            [["key" => "message", "size" => 12, "sizeXS" => 12]],
+                            [["key" => "message2", "size" => 12, "sizeXS" => 12]],
                         ]
                     ]
                 ]

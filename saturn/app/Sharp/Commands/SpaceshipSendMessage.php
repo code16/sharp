@@ -38,8 +38,11 @@ class SpaceshipSendMessage extends InstanceCommand
             SharpFormCheckField::make("now", "Send right now?")
                 ->setHelpMessage("Otherwise it will be sent next night.")
         );
-
-//        return $column->withSingleField("message")
-//            ->withSingleField("now");
     }
+
+//    function buildFormLayout(FormLayoutColumn &$column)
+//    {
+//        $column->withSingleField("message")
+//            ->withSingleField("now");
+//    }
 }

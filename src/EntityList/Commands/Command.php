@@ -3,6 +3,7 @@
 namespace Code16\Sharp\EntityList\Commands;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
+use Code16\Sharp\Form\Layout\FormLayoutColumn;
 
 abstract class Command
 {
@@ -87,13 +88,45 @@ abstract class Command
     }
 
     /**
+     * Build the optional Command form layout.
+     *
+     * @param FormLayoutColumn $column
+     */
+    public function buildFormLayout(FormLayoutColumn &$column)
+    {
+    }
+
+    /**
      * @return array
      */
     public function form()
     {
+        $this->buildForm();
+
         return collect($this->fields)->map(function($field) {
             return $field->toArray();
         })->keyBy("key")->all();
+    }
+
+    /**
+     * @return array|null
+     */
+    public function formLayout()
+    {
+        if(!$this->fields) {
+            return null;
+        }
+
+        $column = new FormLayoutColumn(12);
+        $this->buildFormLayout($column);
+
+        if(empty($column->fieldsToArray()["fields"])) {
+            foreach($this->fields as $field) {
+                $column->withSingleField($field->key());
+            }
+        }
+
+        return $column->fieldsToArray()["fields"];
     }
 
     /**

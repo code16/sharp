@@ -157,6 +157,14 @@ abstract class SharpFormField
     }
 
     /**
+     * @return string
+     */
+    public function key(): string
+    {
+        return $this->key;
+    }
+
+    /**
      * Return specific validation rules.
      *
      * @return array
