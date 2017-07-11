@@ -4,6 +4,7 @@ namespace Code16\Sharp\Tests\Unit\EntityList;
 
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Tests\Unit\EntityList\Utils\SharpEntityDefaultTestList;
 
@@ -93,6 +94,42 @@ class SharpEntityListCommandTest extends SharpTestCase
                     "label" => "My Entity Command",
                     "type" => "entity",
                     "confirmation" => "Sure?"
+                ]
+            ]
+        ], $list->listConfig());
+    }
+
+    /** @test */
+    function we_can_define_a_form_on_a_command()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig()
+            {
+                $this->addEntityCommand("entityCommand", new class extends EntityCommand {
+                    public function label(): string {
+                        return "My Entity Command";
+                    }
+                    public function buildForm() {
+                        $this->addField(SharpFormTextField::make("message"));
+                    }
+                    public function execute() {}
+                });
+            }
+        };
+
+        $this->assertArraySubset([
+            "commands" => [
+                [
+                    "key" => "entityCommand",
+                    "label" => "My Entity Command",
+                    "type" => "entity",
+                    "form" => [
+                        "message" => [
+                            "key" => "message",
+                            "type" => "text",
+                            "inputType" => "text"
+                        ]
+                    ]
                 ]
             ]
         ], $list->listConfig());

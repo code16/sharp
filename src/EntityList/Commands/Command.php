@@ -2,8 +2,14 @@
 
 namespace Code16\Sharp\EntityList\Commands;
 
+use Code16\Sharp\Form\Fields\SharpFormField;
+
 abstract class Command
 {
+    /**
+     * @var array
+     */
+    protected $fields;
 
     /**
      * @param string $message
@@ -53,11 +59,41 @@ abstract class Command
     }
 
     /**
+     * Add a form field.
+     *
+     * @param SharpFormField $field
+     * @return $this
+     */
+    protected function addField(SharpFormField $field)
+    {
+        $this->fields[] = $field;
+
+        return $this;
+    }
+
+    /**
      * @return string|null
      */
     public function confirmationText()
     {
         return null;
+    }
+
+    /**
+     * Build the optional Command form, calling ->addField()
+     */
+    public function buildForm()
+    {
+    }
+
+    /**
+     * @return array
+     */
+    public function form()
+    {
+        return collect($this->fields)->map(function($field) {
+            return $field->toArray();
+        })->keyBy("key")->all();
     }
 
     /**

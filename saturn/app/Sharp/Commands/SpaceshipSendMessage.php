@@ -3,6 +3,8 @@
 namespace App\Sharp\Commands;
 
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\Form\Fields\SharpFormCheckField;
+use Code16\Sharp\Form\Fields\SharpFormTextareaField;
 
 class SpaceshipSendMessage extends InstanceCommand
 {
@@ -24,5 +26,20 @@ class SpaceshipSendMessage extends InstanceCommand
         // TODO execute method
 
         return $this->refresh($instanceId);
+    }
+
+    function buildForm()
+    {
+        $this->addField(
+            SharpFormTextareaField::make("message")
+                ->setLabel("Message")
+
+        )->addField(
+            SharpFormCheckField::make("now", "Send right now?")
+                ->setHelpMessage("Otherwise it will be sent next night.")
+        );
+
+//        return $column->withSingleField("message")
+//            ->withSingleField("now");
     }
 }

@@ -17,11 +17,13 @@ trait HandleCommandReturn
     {
         if($returnedValue["action"] == "refresh") {
             // We have to load and build items from ids
-            $returnedValue["items"] = $list->getListData(
-                EntityListQueryParams::createFromArrayOfIds(
-                    $returnedValue["items"]
+            $returnedValue["items"] = $list->data(
+                $list->getListData(
+                    EntityListQueryParams::createFromArrayOfIds(
+                        $returnedValue["items"]
+                    )
                 )
-            );
+            )["items"];
         }
 
         return response()->json(

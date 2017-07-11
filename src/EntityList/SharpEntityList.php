@@ -8,6 +8,7 @@ use Code16\Sharp\EntityList\Traits\HandleCommands;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\EntityList\Traits\HandleFilters;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 abstract class SharpEntityList
 {
@@ -97,13 +98,14 @@ abstract class SharpEntityList
     /**
      * Return data, as an array.
      *
+     * @param array|Collection|null $items
      * @return array
      */
-    function data(): array
+    function data($items = null): array
     {
         $keys = $this->getDataContainersKeys();
         $config = $this->listConfig();
-        $items = $this->getListData(
+        $items = $items ?: $this->getListData(
             EntityListQueryParams::createFromRequest($config["defaultSort"], $config["defaultSortDir"])
         );
 
