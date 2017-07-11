@@ -1,6 +1,6 @@
 # Sharp 4
 
-> Sharp is under heavy development. It should be out and fully documented in a few weeks.
+> Sharp is under heavy development. It should be out and fully documented in a few weeks. This documentation is very WIP.
 
 Sharp is not a CMS: it's a content management framework, a toolset which provides help building a CMS section in a website, with some rules in mind:
 - the public website should not have any knowledge of the CMS;
@@ -149,9 +149,9 @@ In a more realistic project, you'll want to transform your data before sending i
 
 The `setCustomTransformer()` function takes the key of the attribute to transform, and either a `Closure` or the full name of a class which must implement `Code16\Sharp\Utils\Transformers\SharpAttributeTransformer`.
 
-The `transform` function must be called 
+The `transform` function must be called after, and will apply all transformers on your list.
 
-> Note that transformers need your models (spaceships, here) to allow a direct access to their attributes, like for instance `spaceship->capacity`.
+> Note that transformers need your models (spaceships, here) to allow a direct access to their attributes, like for instance `spaceship->capacity`, and to implement `Illuminate\Contracts\Support\Arrayable` interface.
 
 
 #### The : operator
