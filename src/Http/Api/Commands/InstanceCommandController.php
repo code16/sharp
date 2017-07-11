@@ -22,7 +22,7 @@ class InstanceCommandController extends ApiController
         $list->buildListConfig();
 
         return $this->returnAsJson(
-            $list, $list->instanceCommandHandler($commandKey)->execute($instanceId)
+            $list, $list->instanceCommandHandler($commandKey)->execute($instanceId, request()->all())
         );
     }
 }

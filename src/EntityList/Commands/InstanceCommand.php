@@ -15,7 +15,8 @@ abstract class InstanceCommand extends Command
 
     /**
      * @param string $instanceId
+     * @param array $params
      * @return array
      */
-    public abstract function execute($instanceId);
+    public abstract function execute($instanceId, array $params = []);
 }

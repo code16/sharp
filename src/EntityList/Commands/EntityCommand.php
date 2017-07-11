@@ -14,7 +14,8 @@ abstract class EntityCommand extends Command
     }
 
     /**
+     * @param array $params
      * @return array
      */
-    public abstract function execute();
+    public abstract function execute(array $params = []);
 }

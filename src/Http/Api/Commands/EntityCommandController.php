@@ -21,7 +21,7 @@ class EntityCommandController extends ApiController
         $list->buildListConfig();
 
         return $this->returnAsJson(
-            $list, $list->entityCommandHandler($commandKey)->execute()
+            $list, $list->entityCommandHandler($commandKey)->execute(request()->all())
         );
     }
 }

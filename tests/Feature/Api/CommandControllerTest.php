@@ -116,6 +116,16 @@ class CommandControllerTest extends BaseApiTest
     }
 
     /** @test */
+    public function we_can_call_a_form_entity_command()
+    {
+        $this->buildTheWorld();
+        $this->disableExceptionHandling();
+
+        $this->json('post', '/sharp/api/list/person/command/entity_form', ["name" => "John"])
+            ->assertStatus(200);
+    }
+
+    /** @test */
     public function applicative_exception_returns_a_417_as_always()
     {
         $this->buildTheWorld();
@@ -124,6 +134,20 @@ class CommandControllerTest extends BaseApiTest
             ->assertStatus(417)
             ->assertJson([
                 "message" => "error"
+            ]);
+    }
+
+    /** @test */
+    public function we_get_a_422_when_posting_invalid_data_for_a_command_with_a_form()
+    {
+        $this->buildTheWorld();
+
+        $this->json('post', '/sharp/api/list/person/command/entity_form')
+            ->assertStatus(422)
+            ->assertJson([
+                "name" => [
+                    "The name field is required."
+                ]
             ]);
     }
 
@@ -144,44 +168,51 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
     {
         $this->addEntityCommand("entity_info", new class() extends EntityCommand {
             public function label(): string { return "label"; }
-            public function execute() {
+            public function execute(array $params = []) {
                 return $this->info("ok");
             }
 
         })->addInstanceCommand("instance_info", new class() extends InstanceCommand {
             public function label(): string { return "label"; }
-            public function execute($instanceId) {
+            public function execute($instanceId, array $params = []) {
                 return $this->info("ok");
             }
 
         })->addEntityCommand("entity_reload", new class() extends EntityCommand {
             public function label(): string { return "label"; }
-            public function execute() {
+            public function execute(array $params = []) {
                 return $this->reload();
             }
 
         })->addEntityCommand("entity_view", new class() extends EntityCommand {
             public function label(): string { return "label"; }
-            public function execute() {
+            public function execute(array $params = []) {
                 return $this->view("welcome");
             }
 
         })->addEntityCommand("entity_refresh", new class() extends EntityCommand {
             public function label(): string { return "label"; }
-            public function execute() {
+            public function execute(array $params = []) {
                 return $this->refresh([1, 2]);
             }
 
         })->addInstanceCommand("instance_refresh", new class() extends InstanceCommand {
             public function label(): string { return "label"; }
-            public function execute($instanceId) {
+            public function execute($instanceId, array $params = []) {
                 return $this->refresh(1);
             }
 
         })->addInstanceCommand("entity_exception", new class() extends EntityCommand {
             public function label(): string { return "label"; }
-            public function execute() {
+            public function execute(array $params = []) {
                 throw new SharpApplicativeException("error");
+            }
+
+        })->addEntityCommand("entity_form", new class() extends EntityCommand {
+            public function label(): string { return "label"; }
+            public function execute(array $params = []) {
+                $this->validate($params, ["name"=>"required"]);
+                return $this->reload();
             }
         });
 

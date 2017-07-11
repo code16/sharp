@@ -4,6 +4,9 @@ namespace Code16\Sharp\EntityList\Commands;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Illuminate\Contracts\Validation\Factory as Validator;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 
 abstract class Command
 {
@@ -127,6 +130,25 @@ abstract class Command
         }
 
         return $column->fieldsToArray()["fields"];
+    }
+
+    /**
+     * Validates the request in a form case.
+     *
+     * @param array $params
+     * @param array $rules
+     * @param array $messages
+     * @throws ValidationException
+     */
+    public function validate(array $params, array $rules, array $messages = [])
+    {
+        $validator = app(Validator::class)->make($params, $rules, $messages);
+
+        if ($validator->fails()) {
+            throw new ValidationException(
+                $validator, new JsonResponse($validator->errors()->getMessages(), 422)
+            );
+        }
     }
 
     /**

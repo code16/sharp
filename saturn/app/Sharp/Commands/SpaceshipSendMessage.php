@@ -19,10 +19,15 @@ class SpaceshipSendMessage extends InstanceCommand
 
     /**
      * @param string $instanceId
+     * @param array $params
      * @return array
      */
-    public function execute($instanceId)
+    public function execute($instanceId, array $params = [])
     {
+        $this->validate($params, [
+            "message" => "required"
+        ]);
+
         // TODO execute method
 
         return $this->refresh($instanceId);
@@ -39,10 +44,4 @@ class SpaceshipSendMessage extends InstanceCommand
                 ->setHelpMessage("Otherwise it will be sent next night.")
         );
     }
-
-//    function buildFormLayout(FormLayoutColumn &$column)
-//    {
-//        $column->withSingleField("message")
-//            ->withSingleField("now");
-//    }
 }

@@ -22,13 +22,13 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function label(): string {
                         return "My Entity Command";
                     }
-                    public function execute() {}
+                    public function execute(array $params = []) {}
                 });
                 $this->addEntityCommand("instanceCommand", new class extends InstanceCommand {
                     public function label(): string {
                         return "My Instance Command";
                     }
-                    public function execute($instanceId) {}
+                    public function execute($instanceId, array $params = []) {}
                 });
             }
         };
@@ -82,7 +82,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function confirmationText() {
                         return "Sure?";
                     }
-                    public function execute() {}
+                    public function execute(array $params = []) {}
 
                 });
             }
@@ -116,7 +116,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function buildFormLayout(FormLayoutColumn &$column) {
                         $column->withSingleField("message");
                     }
-                    public function execute() {}
+                    public function execute(array $params = []) {}
                 });
             }
         };
@@ -158,7 +158,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                         $this->addField(SharpFormTextField::make("message"));
                         $this->addField(SharpFormTextField::make("message2"));
                     }
-                    public function execute() {}
+                    public function execute(array $params = []) {}
                 });
             }
         };
@@ -186,5 +186,5 @@ class SharpEntityListCommandTestCommand extends EntityCommand
         return "My Entity Command";
     }
 
-    public function execute() {}
+    public function execute(array $params = []) {}
 }
