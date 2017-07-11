@@ -3,7 +3,7 @@
 namespace App\Sharp\States;
 
 use App\Spaceship;
-use Code16\Sharp\EntityList\EntityState;
+use Code16\Sharp\EntityList\Commands\EntityState;
 
 class SpaceshipEntityState extends EntityState
 {
@@ -22,7 +22,6 @@ class SpaceshipEntityState extends EntityState
             "state" => $stateId
         ]);
 
-//        return $this->reload();
-//        return $this->refresh()->withData([]);
+        return $this->refresh($instanceId);
     }
 }

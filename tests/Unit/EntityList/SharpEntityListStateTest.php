@@ -2,9 +2,9 @@
 
 namespace Code16\Sharp\Tests\Unit\EntityList;
 
+use Code16\Sharp\EntityList\Commands\EntityState;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\EntityListQueryParams;
-use Code16\Sharp\EntityList\EntityState;
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Tests\Unit\EntityList\Utils\SharpEntityDefaultTestList;
 

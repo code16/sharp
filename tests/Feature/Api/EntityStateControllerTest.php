@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
-use Code16\Sharp\EntityList\EntityState;
+use Code16\Sharp\EntityList\Commands\EntityState;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
 

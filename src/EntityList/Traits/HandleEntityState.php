@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\EntityList\Traits;
 
-use Code16\Sharp\EntityList\EntityState;
+use Code16\Sharp\EntityList\Commands\EntityState;
 
 trait HandleEntityState
 {
