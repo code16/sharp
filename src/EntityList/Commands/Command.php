@@ -8,6 +8,13 @@ use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * Base class for Commands. Handle returns (info, refresh, reload...),
+ * form creation, and validation.
+ *
+ * Class Command
+ * @package Code16\Sharp\EntityList\Commands
+ */
 abstract class Command
 {
     /**
@@ -150,14 +157,4 @@ abstract class Command
             );
         }
     }
-
-    /**
-     * @return string
-     */
-    public abstract function type(): string;
-
-    /**
-     * @return string
-     */
-    public abstract function label(): string;
 }

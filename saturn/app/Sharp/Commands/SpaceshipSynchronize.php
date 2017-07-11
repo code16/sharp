@@ -16,9 +16,10 @@ class SpaceshipSynchronize extends EntityCommand
     }
 
     /**
+     * @param array $params
      * @return array
      */
-    public function execute()
+    public function execute(array $params = [])
     {
         return $this->info("Gamma spectrum synchronized!");
     }

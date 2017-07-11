@@ -1,10 +1,16 @@
 <?php
 
-namespace Code16\Sharp\EntityList;
+namespace Code16\Sharp\EntityList\Commands;
 
-use Code16\Sharp\EntityList\Commands\Command;
 use Code16\Sharp\Exceptions\EntityList\InvalidEntityStateException;
+use Exception;
 
+/**
+ * Base class for applicative Entity States.
+ *
+ * Class EntityState
+ * @package Code16\Sharp\EntityList\Commands
+ */
 abstract class EntityState extends Command
 {
     /**
@@ -43,26 +49,34 @@ abstract class EntityState extends Command
      * @param string $key
      * @param string $label
      * @param string|null $color
+     * @return $this
      */
     protected function addState(string $key, string $label, string $color = null)
     {
         $this->states[$key] = [$label, $color];
+
+        return $this;
     }
 
     /**
-     * @return string
+     * @param string $bladeView
+     * @param array $params
+     * @return array|void
+     * @throws Exception
      */
-    public function type(): string
+    protected function view(string $bladeView, array $params = [])
     {
-        return "state";
+        throw new Exception("View return type is not supported for a state.");
     }
 
     /**
-     * @return string
+     * @param string $message
+     * @return array|void
+     * @throws Exception
      */
-    public function label(): string
+    protected function info(string $message)
     {
-        return "";
+        throw new Exception("Info return type is not supported for a state.");
     }
 
     /**

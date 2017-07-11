@@ -50,11 +50,13 @@ class SpaceshipSharpList extends SharpEntityList
         $this->setInstanceIdAttribute("id")
             ->setSearchable()
             ->setDefaultSort("name", "asc")
-            ->addEntityCommand("synchronize", SpaceshipSynchronize::class)
-            ->addInstanceCommand("message", SpaceshipSendMessage::class)
             ->addFilter("type", SpaceshipTypeFilter::class)
             ->addFilter("pilots", SpaceshipPilotsFilter::class)
+
+            ->addEntityCommand("synchronize", SpaceshipSynchronize::class)
+            ->addInstanceCommand("message", SpaceshipSendMessage::class)
             ->setEntityState("state", SpaceshipEntityState::class)
+
             ->setPaginated();
     }
 
