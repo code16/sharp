@@ -1,8 +1,8 @@
 <?php
 
-namespace Code16\Sharp\Http\Api;
+namespace Code16\Sharp\Http\Api\Commands;
 
-use Code16\Sharp\Http\Api\Traits\HandleCommandReturn;
+use Code16\Sharp\Http\Api\ApiController;
 
 class EntityCommandController extends ApiController
 {

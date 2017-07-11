@@ -14,15 +14,15 @@ Route::group([
 
     Route::post("/list/{entityKey}/state/{instanceId}")
         ->name("code16.sharp.api.list.state")
-        ->uses('EntityStateController@update');
+        ->uses('Commands\EntityStateController@update');
 
     Route::post("/list/{entityKey}/command/{commandKey}")
         ->name("code16.sharp.api.list.command.entity")
-        ->uses('EntityCommandController@update');
+        ->uses('Commands\EntityCommandController@update');
 
     Route::post("/list/{entityKey}/command/{commandKey}/{instanceId}")
         ->name("code16.sharp.api.list.command.instance")
-        ->uses('InstanceCommandController@update');
+        ->uses('Commands\InstanceCommandController@update');
 
     Route::get("/form/{entityKey}")
         ->name("code16.sharp.api.form.create")

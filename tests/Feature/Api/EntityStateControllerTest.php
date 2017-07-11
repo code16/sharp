@@ -52,7 +52,13 @@ class EntityStateControllerTest extends BaseApiTest
             ->assertStatus(200)
             ->assertJson([
                 "action" => "refresh",
-                "items" => [1],
+                "items" => [
+                    [
+                        "id" => 1,
+                        "name" => "John <b>Wayne</b>",
+                        "age" => 22
+                    ]
+                ],
                 "value" => "ok_refresh_items",
             ]);
     }
@@ -128,7 +134,7 @@ class EntityStatePersonSharpEntitiesList extends PersonSharpEntityList {
                 }
 
                 if($stateId == "ok_refresh_items") {
-                    return $this->refresh([$instanceId]);
+                    return $this->refresh($instanceId);
                 }
             }
         });

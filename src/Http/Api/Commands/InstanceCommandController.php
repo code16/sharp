@@ -1,8 +1,8 @@
 <?php
 
-namespace Code16\Sharp\Http\Api;
+namespace Code16\Sharp\Http\Api\Commands;
 
-use Code16\Sharp\Http\Api\Traits\HandleCommandReturn;
+use Code16\Sharp\Http\Api\ApiController;
 
 class InstanceCommandController extends ApiController
 {
@@ -16,7 +16,7 @@ class InstanceCommandController extends ApiController
      */
     public function update($entityKey, $commandKey, $instanceId)
     {
-        $this->checkAuthorization("update", $entityKey);
+        $this->checkAuthorization("update", $entityKey, $instanceId);
 
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();

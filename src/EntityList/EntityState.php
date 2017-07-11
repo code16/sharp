@@ -2,9 +2,10 @@
 
 namespace Code16\Sharp\EntityList;
 
+use Code16\Sharp\EntityList\Commands\Command;
 use Code16\Sharp\Exceptions\EntityList\InvalidEntityStateException;
 
-abstract class EntityState
+abstract class EntityState extends Command
 {
     /**
      * @var array
@@ -35,7 +36,7 @@ abstract class EntityState
             throw new InvalidEntityStateException($stateId);
         }
 
-        return $this->updateState($instanceId, $stateId) ?: $this->refresh();
+        return $this->updateState($instanceId, $stateId) ?: $this->refresh($instanceId);
     }
 
     /**
@@ -49,30 +50,19 @@ abstract class EntityState
     }
 
     /**
-     * Send back a reload action to the client.
-     * TODO: generalize to Commands
-     *
-     * @return array
+     * @return string
      */
-    protected function reload()
+    public function type(): string
     {
-        return ["action" => "reload"];
+        return "state";
     }
 
     /**
-     * Send back a refresh action to the client.
-     * TODO: generalize to Commands
-     *
-     * @param array|null $entityIds
-     * @return array
+     * @return string
      */
-    protected function refresh(array $entityIds = null)
+    public function label(): string
     {
-        // TODO find a way to load data for entities with $entityIds
-        return array_merge(
-            ["action" => "refresh"],
-            $entityIds ? ["items" => $entityIds] : []
-        );
+        return "";
     }
 
     /**

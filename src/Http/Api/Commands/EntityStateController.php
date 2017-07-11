@@ -1,9 +1,12 @@
 <?php
 
-namespace Code16\Sharp\Http\Api;
+namespace Code16\Sharp\Http\Api\Commands;
+
+use Code16\Sharp\Http\Api\ApiController;
 
 class EntityStateController extends ApiController
 {
+    use HandleCommandReturn;
 
     /**
      * @param string $entityKey
@@ -18,8 +21,12 @@ class EntityStateController extends ApiController
         $list->buildListConfig();
         $stateValue = request("value");
 
-        $returned = $list->entityStateHandler()->update($instanceId, $stateValue);
-
-        return response()->json(array_merge($returned, ["value" => $stateValue]));
+        return $this->returnAsJson(
+            $list,
+            array_merge(
+                $list->entityStateHandler()->update($instanceId, $stateValue),
+                ["value" => $stateValue]
+            )
+        );
     }
 }
