@@ -96,6 +96,52 @@ class CommandControllerTest extends BaseApiTest
     }
 
     /** @test */
+    public function we_can_call_a_refresh_entity_command()
+    {
+        $this->buildTheWorld();
+        $this->disableExceptionHandling();
+
+        $this->json('post', '/sharp/api/list/person/command/entity_refresh')
+            ->assertStatus(200)
+            ->assertJson([
+                "action" => "refresh",
+                "items" => [
+                    [
+                        "id" => 1,
+                        "name" => "John <b>Wayne</b>",
+                        "age" => 22
+                    ], [
+                        "id" => 2,
+                        "name" => "Mary <b>Wayne</b>",
+                        "age" => 26
+                    ]
+                ]
+            ]);
+    }
+
+    /** @test */
+    public function we_can_call_a_refresh_instance_command()
+    {
+        $this->buildTheWorld();
+        $this->disableExceptionHandling();
+
+        $json = $this->json('post', '/sharp/api/list/person/command/instance_refresh/1')
+            ->assertStatus(200)
+            ->assertJson([
+                "action" => "refresh",
+                "items" => [
+                    [
+                        "id" => 1,
+                        "name" => "John <b>Wayne</b>",
+                        "age" => 22
+                    ]
+                ]
+            ])->decodeResponseJson();
+
+        $this->assertCount(1, $json["items"]);
+    }
+
+    /** @test */
     public function applicative_exception_returns_a_417_as_always()
     {
         $this->buildTheWorld();
@@ -156,6 +202,18 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
             public function label(): string { return "label"; }
             public function execute($instanceId) {
                 return $this->view("welcome");
+            }
+
+        })->addEntityCommand("entity_refresh", new class() extends EntityCommand {
+            public function label(): string { return "label"; }
+            public function execute() {
+                return $this->refresh([1, 2]);
+            }
+
+        })->addInstanceCommand("instance_refresh", new class() extends InstanceCommand {
+            public function label(): string { return "label"; }
+            public function execute($instanceId) {
+                return $this->refresh(1);
             }
 
         })->addInstanceCommand("entity_exception", new class() extends EntityCommand {

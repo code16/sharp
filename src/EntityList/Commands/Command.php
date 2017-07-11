@@ -28,6 +28,18 @@ abstract class Command
     }
 
     /**
+     * @param mixed $ids
+     * @return array
+     */
+    protected function refresh($ids)
+    {
+        return [
+            "action" => "refresh",
+            "items" => (array)$ids
+        ];
+    }
+
+    /**
      * @param string $bladeView
      * @param array $params
      * @return array

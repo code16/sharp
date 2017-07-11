@@ -2,8 +2,11 @@
 
 namespace Code16\Sharp\Http\Api;
 
+use Code16\Sharp\Http\Api\Traits\HandleCommandReturn;
+
 class InstanceCommandController extends ApiController
 {
+    use HandleCommandReturn;
 
     /**
      * @param string $entityKey
@@ -18,8 +21,8 @@ class InstanceCommandController extends ApiController
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
 
-        return response()->json(
-            $list->instanceCommandHandler($commandKey)->execute($instanceId)
+        return $this->returnAsJson(
+            $list, $list->instanceCommandHandler($commandKey)->execute($instanceId)
         );
     }
 }

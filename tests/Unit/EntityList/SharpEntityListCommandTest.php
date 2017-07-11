@@ -68,7 +68,7 @@ class SharpEntityListCommandTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_get_ask_for_a_confirmation_on_a_command()
+    function we_can_ask_for_a_confirmation_on_a_command()
     {
         $list = new class extends SharpEntityDefaultTestList {
             function buildListConfig()

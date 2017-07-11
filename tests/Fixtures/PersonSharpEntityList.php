@@ -35,6 +35,12 @@ class PersonSharpEntityList extends SharpEntityList
             })->all();
         }
 
+        if(count($params->specificIds())) {
+            $items = collect($items)->filter(function($item) use($params) {
+                return in_array($item["id"], $params->specificIds());
+            })->all();
+        }
+
         if(request()->has("paginated")) {
             return new LengthAwarePaginator($items, 20, 2, 1);
         }

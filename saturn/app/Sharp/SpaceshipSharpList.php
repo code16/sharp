@@ -2,6 +2,7 @@
 
 namespace App\Sharp;
 
+use App\Sharp\Commands\SpaceshipSendMessage;
 use App\Sharp\Commands\SpaceshipSynchronize;
 use App\Sharp\Filters\SpaceshipPilotsFilter;
 use App\Sharp\Filters\SpaceshipTypeFilter;
@@ -50,6 +51,7 @@ class SpaceshipSharpList extends SharpEntityList
             ->setSearchable()
             ->setDefaultSort("name", "asc")
             ->addEntityCommand("synchronize", SpaceshipSynchronize::class)
+            ->addInstanceCommand("message", SpaceshipSendMessage::class)
             ->addFilter("type", SpaceshipTypeFilter::class)
             ->addFilter("pilots", SpaceshipPilotsFilter::class)
             ->setEntityState("state", SpaceshipEntityState::class)
@@ -67,8 +69,15 @@ class SpaceshipSharpList extends SharpEntityList
 
     function getListData(EntityListQueryParams $params)
     {
-        $spaceships = Spaceship::select("spaceships.*")->distinct()
-            ->orderBy($params->sortedBy(), $params->sortedDir());
+        $spaceships = Spaceship::select("spaceships.*")->distinct();
+
+        if($params->specificIds()) {
+            $spaceships->whereIn("id", $params->specificIds());
+        }
+
+        if($params->sortedBy()) {
+            $spaceships->orderBy($params->sortedBy(), $params->sortedDir());
+        }
 
         if($params->filterFor("type")) {
             $spaceships->where("type_id", $params->filterFor("type"));

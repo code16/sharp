@@ -30,6 +30,11 @@ class EntityListQueryParams
     protected $filters;
 
     /**
+     * @var array
+     */
+    protected $specificIds;
+
+    /**
      * @param string|null $defaultSortedBy
      * @param string|null $defaultSortedDir
      * @return static
@@ -49,6 +54,14 @@ class EntityListQueryParams
             })->each(function($value, $name) use($instance) {
                $instance->filters[substr($name, strlen("filter_"))] = $value;
             });
+
+        return $instance;
+    }
+
+    public static function createFromArrayOfIds(array $ids)
+    {
+        $instance = new static;
+        $instance->specificIds = $ids;
 
         return $instance;
     }
@@ -117,6 +130,14 @@ class EntityListQueryParams
     public function filterFor(string $filterName)
     {
         return $this->filters[$filterName] ?? null;
+    }
+
+    /**
+     * @return array
+     */
+    public function specificIds()
+    {
+        return (array)$this->specificIds;
     }
 
 }
