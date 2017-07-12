@@ -151,6 +151,20 @@ class CommandControllerTest extends BaseApiTest
             ]);
     }
 
+    /** @test */
+    public function we_cant_call_an_instance_command_without_update_authorization()
+    {
+        $this->buildTheWorld();
+
+//        $this->app['config']->set(
+//            'sharp.entities.person.form',
+//            PersonSharpForm::class
+//        );
+
+        $this->json('post', '/sharp/api/list/person/command/instance_info/1')
+            ->assertStatus(403);
+    }
+
     protected function buildTheWorld()
     {
         parent::buildTheWorld();

@@ -2,6 +2,8 @@
 
 namespace App\Sharp;
 
+use App\Sharp\Commands\SpaceshipPreview;
+use App\Sharp\Commands\SpaceshipReload;
 use App\Sharp\Commands\SpaceshipSendMessage;
 use App\Sharp\Commands\SpaceshipSynchronize;
 use App\Sharp\Filters\SpaceshipPilotsFilter;
@@ -43,6 +45,10 @@ class SpaceshipSharpList extends SharpEntityList
             EntityListDataContainer::make("pilots.name")
                 ->setLabel("Pilots")
                 ->setHtml()
+
+        )->addDataContainer(
+            EntityListDataContainer::make("messages_sent_count")
+                ->setLabel("Messages sent")
         );
     }
 
@@ -55,7 +61,9 @@ class SpaceshipSharpList extends SharpEntityList
             ->addFilter("pilots", SpaceshipPilotsFilter::class)
 
             ->addEntityCommand("synchronize", SpaceshipSynchronize::class)
+            ->addEntityCommand("reload", SpaceshipReload::class)
             ->addInstanceCommand("message", SpaceshipSendMessage::class)
+            ->addInstanceCommand("preview", SpaceshipPreview::class)
             ->setEntityState("state", SpaceshipEntityState::class)
 
             ->setPaginated();
@@ -65,9 +73,10 @@ class SpaceshipSharpList extends SharpEntityList
     {
         $this->addColumn("picture", 1, 2)
             ->addColumn("name", 3, 5)
-            ->addColumnLarge("capacity", 2)
-            ->addColumn("type", 2, 5)
-            ->addColumnLarge("pilots.name", 4);
+            ->addColumnLarge("capacity", 1)
+            ->addColumn("type", 2, 4)
+            ->addColumnLarge("pilots.name", 4)
+            ->addColumn("messages_sent_count", 1);
     }
 
     function getListData(EntityListQueryParams $params)

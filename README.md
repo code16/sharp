@@ -67,6 +67,6 @@ We'll get into all those classes in this document. The important thing to notice
 4. Building an Entity Form
 5. All form inputs
 6. The Dashboard
-7. Authorizations
+7. Authentication and authorizations
 8. Handling data localization
 9. Extending Sharp

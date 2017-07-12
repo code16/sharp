@@ -4,7 +4,7 @@ namespace App\Sharp\Commands;
 
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 
-class SpaceshipSynchronize extends EntityCommand
+class SpaceshipReload extends EntityCommand
 {
 
     /**
@@ -12,7 +12,7 @@ class SpaceshipSynchronize extends EntityCommand
      */
     public function label(): string
     {
-        return "Synchronize the gamma-spectrum";
+        return "Reload full list";
     }
 
     /**
@@ -21,13 +21,6 @@ class SpaceshipSynchronize extends EntityCommand
      */
     public function execute(array $params = [])
     {
-        return $this->info("Gamma spectrum synchronized!");
+        return $this->reload();
     }
-
-    public function confirmationText()
-    {
-        return "Sure, really?";
-    }
-
-
 }

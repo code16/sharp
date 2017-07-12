@@ -2,6 +2,7 @@
 
 namespace App\Sharp\Commands;
 
+use App\Spaceship;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
@@ -28,7 +29,8 @@ class SpaceshipSendMessage extends InstanceCommand
             "message" => "required"
         ]);
 
-        // TODO execute method
+        Spaceship::where("id", $instanceId)
+            ->increment('messages_sent_count');
 
         return $this->refresh($instanceId);
     }
@@ -44,4 +46,9 @@ class SpaceshipSendMessage extends InstanceCommand
                 ->setHelpMessage("Otherwise it will be sent next night.")
         );
     }
+
+//    public function authorize($instanceId)
+//    {
+//        return $instanceId%2 == 0 && $instanceId <= 10;
+//    }
 }
