@@ -8,7 +8,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 /**
- * This trait allows a class to handle a custom transformers array
+ * This trait allows a class to handle a custom transformers array.
  *
  * Trait WithCustomTransformers
  * @package Code16\Sharp\Utils\Transformers
@@ -60,13 +60,13 @@ trait WithCustomTransformers
         if($models instanceof Collection) {
             return $models->map(function($model) {
                 return $this->applyTransformers(
-                    collect($this->getDataKeys()), $model, $model->toArray()
+                    collect($this->getDataKeys()), $model
                 );
             })->all();
         }
 
         return $this->applyTransformers(
-            collect($this->getDataKeys()), $models, $models->toArray()
+            collect($this->getDataKeys()), $models
         );
     }
 
@@ -95,11 +95,12 @@ trait WithCustomTransformers
     /**
      * @param Collection $keys keys which are meant to be in the final array
      * @param object $model the base model (Eloquent for instance)
-     * @param array $array the initial model array representation
      * @return array
      */
-    protected function applyTransformers(Collection $keys, $model, $array)
+    protected function applyTransformers(Collection $keys, $model)
     {
+        $array = $model->toArray();
+
         // Handle relation separator `:`
         $keys->filter(function ($key) {
             return strpos($key, ':') !== false;
