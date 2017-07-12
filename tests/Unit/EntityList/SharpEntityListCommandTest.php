@@ -33,6 +33,8 @@ class SharpEntityListCommandTest extends SharpTestCase
             }
         };
 
+        $list->buildListConfig();
+
         $this->assertArraySubset([
             "commands" => [
                 [
@@ -44,7 +46,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                     "key" => "instanceCommand",
                     "label" => "My Instance Command",
                     "type" => "instance",
-                    "authorization" => true
+                    "authorization" => []
                 ]
             ]
         ], $list->listConfig());
@@ -59,6 +61,8 @@ class SharpEntityListCommandTest extends SharpTestCase
                 $this->addEntityCommand("entityCommand", SharpEntityListCommandTestCommand::class);
             }
         };
+
+        $list->buildListConfig();
 
         $this->assertArraySubset([
             "commands" => [
@@ -89,6 +93,8 @@ class SharpEntityListCommandTest extends SharpTestCase
                 });
             }
         };
+
+        $list->buildListConfig();
 
         $this->assertArraySubset([
             "commands" => [
@@ -122,6 +128,8 @@ class SharpEntityListCommandTest extends SharpTestCase
                 });
             }
         };
+
+        $list->buildListConfig();
 
         $this->assertArraySubset([
             "commands" => [
@@ -165,6 +173,8 @@ class SharpEntityListCommandTest extends SharpTestCase
             }
         };
 
+        $list->buildListConfig();
+
         $this->assertArraySubset([
             "commands" => [
                 [
@@ -180,7 +190,7 @@ class SharpEntityListCommandTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_handle_authorization_in_the_command()
+    function we_can_handle_authorization_in_an_entity_command()
     {
         $list = new class extends SharpEntityDefaultTestList {
             function buildListConfig()
@@ -197,6 +207,8 @@ class SharpEntityListCommandTest extends SharpTestCase
             }
         };
 
+        $list->buildListConfig();
+
         $this->assertArraySubset([
             "commands" => [
                 [
@@ -204,6 +216,42 @@ class SharpEntityListCommandTest extends SharpTestCase
                     "label" => "My Entity Command",
                     "type" => "entity",
                     "authorization" => false,
+                ]
+            ]
+        ], $list->listConfig());
+    }
+
+    /** @test */
+    function we_can_handle_authorization_in_an_instance_command()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig()
+            {
+                $this->addInstanceCommand("command", new class extends InstanceCommand {
+                    public function label(): string {
+                        return "My Instance Command";
+                    }
+                    public function authorizeFor($instanceId): bool {
+                        return $instanceId < 3;
+                    }
+                    public function execute($instanceId, array $params = []) {}
+                });
+            }
+        };
+
+        $list->buildListConfig();
+        $list->data([
+            ["id" => 1], ["id" => 2], ["id" => 3],
+            ["id" => 4], ["id" => 5], ["id" => 6],
+        ]);
+
+        $this->assertArraySubset([
+            "commands" => [
+                [
+                    "key" => "command",
+                    "label" => "My Instance Command",
+                    "type" => "instance",
+                    "authorization" => [1,2],
                 ]
             ]
         ], $list->listConfig());

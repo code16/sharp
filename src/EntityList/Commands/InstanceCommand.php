@@ -6,6 +6,11 @@ abstract class InstanceCommand extends Command
 {
 
     /**
+     * @var array
+     */
+    protected $authorizedInstances = [];
+
+    /**
      * @return string
      */
     public function type(): string
@@ -28,5 +33,21 @@ abstract class InstanceCommand extends Command
     public function authorizeFor($instanceId): bool
     {
         return true;
+    }
+
+    public function checkAndStoreAuthorizationFor($instanceId)
+    {
+        if($this->authorizeFor($instanceId)) {
+            $this->authorizedInstances[] = $instanceId;
+        }
+    }
+
+    public function getGlobalAuthorization()
+    {
+        if(!$this->authorize()) {
+            return false;
+        }
+
+        return $this->authorizedInstances;
     }
 }

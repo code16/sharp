@@ -130,6 +130,8 @@ class SharpEntityListTest extends SharpTestCase
             }
         };
 
+        $list->buildListConfig();
+
         $this->assertEquals([
             "searchable" => true,
             "paginated" => true,

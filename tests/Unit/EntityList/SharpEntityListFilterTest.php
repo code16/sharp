@@ -22,6 +22,8 @@ class SharpEntityListFilterTest extends SharpTestCase
             }
         };
 
+        $list->buildListConfig();
+
         $this->assertArraySubset([
             "filters" => [
                 [
@@ -42,6 +44,8 @@ class SharpEntityListFilterTest extends SharpTestCase
                 $this->addFilter("test", SharpEntityListTestFilter::class);
             }
         };
+
+        $list->buildListConfig();
 
         $this->assertArraySubset([
             "filters" => [

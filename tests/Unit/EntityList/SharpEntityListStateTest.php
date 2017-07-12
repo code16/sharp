@@ -27,6 +27,8 @@ class SharpEntityListStateTest extends SharpTestCase
             }
         };
 
+        $list->buildListConfig();
+
         $this->assertArraySubset([
             "state" => [
                 "attribute" => "_state",
@@ -48,6 +50,8 @@ class SharpEntityListStateTest extends SharpTestCase
             }
         };
 
+        $list->buildListConfig();
+
         $this->assertArraySubset([
             "state" => [
                 "attribute" => "_state",
@@ -62,7 +66,7 @@ class SharpEntityListStateTest extends SharpTestCase
     /** @test */
     function entity_state_attribute_is_added_the_entity_data()
     {
-        $form = new class extends SharpEntityDefaultTestList {
+        $list = new class extends SharpEntityDefaultTestList {
             function getListData(EntityListQueryParams $params): array
             {
                 return [
@@ -89,12 +93,14 @@ class SharpEntityListStateTest extends SharpTestCase
             }
         };
 
+        $list->buildListConfig();
+
         $this->assertEquals([
             "items" => [
                 ["name" => "John Wayne", "state" => true],
                 ["name" => "Mary Wayne", "state" => false],
             ]
-        ], $form->data());
+        ], $list->data());
     }
 }
 

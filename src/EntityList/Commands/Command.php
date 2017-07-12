@@ -87,9 +87,17 @@ abstract class Command
      *
      * @return bool
      */
-    public function authorize():bool
+    public function authorize(): bool
     {
         return true;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGlobalAuthorization()
+    {
+        return $this->authorize();
     }
 
     /**

@@ -12,6 +12,7 @@ class EntityListController extends ApiController
     public function show($entityKey)
     {
         $list = $this->getListInstance($entityKey);
+        $list->buildListConfig();
 
         return response()->json([
             "containers" => $list->dataContainers(),

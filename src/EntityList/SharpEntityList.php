@@ -104,9 +104,10 @@ abstract class SharpEntityList
     function data($items = null): array
     {
         $keys = $this->getDataKeys();
-        $config = $this->listConfig();
+
+//        $this->buildListConfig();
         $items = $items ?: $this->getListData(
-            EntityListQueryParams::createFromRequest($config["defaultSort"], $config["defaultSortDir"])
+            EntityListQueryParams::createFromRequest($this->defaultSort, $this->defaultSortDir)
         );
 
         if($items instanceof LengthAwarePaginator) {
@@ -116,11 +117,16 @@ abstract class SharpEntityList
             $items = $items->items();
         }
 
-//        collect($this->commandHandlers)->filter(function($commandHandler) {
-//            return $commandHandler->type() == "instance";
-//        })->each(function($commandHandler) {
-//            dump($commandHandler->authorize());
-//        });
+        collect($this->commandHandlers)->filter(function($commandHandler) {
+            return $commandHandler->type() == "instance" && $commandHandler->authorize();
+
+        })->each(function($commandHandler) use($items) {
+            foreach ($items as $item) {
+                $commandHandler->checkAndStoreAuthorizationFor(
+                    $item[$this->instanceIdAttribute]
+                );
+            }
+        });
 
         return [
             "items" =>
@@ -145,7 +151,7 @@ abstract class SharpEntityList
      */
     function listConfig(): array
     {
-        $this->buildListConfig();
+//        $this->buildListConfig();
 
         $config = [
             "instanceIdAttribute" => $this->instanceIdAttribute,

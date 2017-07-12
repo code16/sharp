@@ -52,7 +52,7 @@ trait HandleCommands
                     "fields" => $formFields,
                     "layout" => $formLayout
                 ] : null,
-                "authorization" => $handler->authorize()
+                "authorization" => $handler->getGlobalAuthorization()
             ];
         }
     }
