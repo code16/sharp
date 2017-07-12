@@ -55,7 +55,8 @@ trait HandleEntityState
                             "label" => $state[0],
                             "color" => $state[1]
                         ];
-                    })->values()->all()
+                    })->values()->all(),
+                "authorization" => $this->entityStateHandler->getGlobalAuthorization()
             ];
         }
     }

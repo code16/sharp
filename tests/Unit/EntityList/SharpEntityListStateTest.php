@@ -70,8 +70,8 @@ class SharpEntityListStateTest extends SharpTestCase
             function getListData(EntityListQueryParams $params): array
             {
                 return [
-                    ["name" => "John Wayne", "state" => true],
-                    ["name" => "Mary Wayne", "state" => false]
+                    ["id" => 1, "name" => "John Wayne", "state" => true],
+                    ["id" => 2, "name" => "Mary Wayne", "state" => false]
                 ];
             }
             function buildListDataContainers()
@@ -97,10 +97,46 @@ class SharpEntityListStateTest extends SharpTestCase
 
         $this->assertEquals([
             "items" => [
-                ["name" => "John Wayne", "state" => true],
-                ["name" => "Mary Wayne", "state" => false],
+                ["id" => 1, "name" => "John Wayne", "state" => true],
+                ["id" => 2, "name" => "Mary Wayne", "state" => false],
             ]
         ], $list->data());
+    }
+
+    /** @test */
+    function we_can_handle_authorization_in_a_state()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig()
+            {
+                $this->setEntityState("_state", new class extends EntityState {
+                    protected function buildStates()
+                    {
+                        $this->addState(1, "Test 1", "blue");
+                    }
+                    public function authorizeFor($instanceId): bool {
+                        return $instanceId < 3;
+                    }
+                    protected function updateState($instanceId, $stateId) {}
+                });
+            }
+        };
+
+        $list->buildListConfig();
+        $list->data([
+            ["id" => 1], ["id" => 2], ["id" => 3],
+            ["id" => 4], ["id" => 5], ["id" => 6],
+        ]);
+
+        $this->assertArraySubset([
+            "state" => [
+                "attribute" => "_state",
+                "values" => [
+                    ["value"=>"1", "label"=>"Test 1", "color"=>"blue"],
+                ],
+                "authorization" => [1,2]
+            ]
+        ], $list->listConfig());
     }
 }
 

@@ -11,7 +11,7 @@ use Exception;
  * Class EntityState
  * @package Code16\Sharp\EntityList\Commands
  */
-abstract class EntityState extends Command
+abstract class EntityState extends InstanceCommand
 {
     /**
      * @var array
@@ -32,17 +32,6 @@ abstract class EntityState extends Command
         $this->buildStates();
 
         return $this->states;
-    }
-
-    public function update($instanceId, $stateId)
-    {
-        $this->buildStates();
-
-        if(!in_array($stateId, array_keys($this->states))) {
-            throw new InvalidEntityStateException($stateId);
-        }
-
-        return $this->updateState($instanceId, $stateId) ?: $this->refresh($instanceId);
     }
 
     /**
@@ -77,6 +66,24 @@ abstract class EntityState extends Command
     protected function info(string $message)
     {
         throw new Exception("Info return type is not supported for a state.");
+    }
+
+    /**
+     * @param string $instanceId
+     * @param array $params
+     * @return array
+     * @throws InvalidEntityStateException
+     */
+    public function execute($instanceId, array $params = [])
+    {
+        $stateId = $params["value"];
+        $this->buildStates();
+
+        if(!in_array($stateId, array_keys($this->states))) {
+            throw new InvalidEntityStateException($stateId);
+        }
+
+        return $this->updateState($instanceId, $stateId) ?: $this->refresh($instanceId);
     }
 
     /**

@@ -117,10 +117,16 @@ abstract class SharpEntityList
             $items = $items->items();
         }
 
-        collect($this->commandHandlers)->filter(function($commandHandler) {
-            return $commandHandler->type() == "instance" && $commandHandler->authorize();
+        $instanceHandlers = collect($this->commandHandlers)
+            ->filter(function($commandHandler) {
+                return $commandHandler->type() == "instance" && $commandHandler->authorize();
+            });
 
-        })->each(function($commandHandler) use($items) {
+        if($this->entityStateHandler) {
+            $instanceHandlers->push($this->entityStateHandler);
+        }
+
+        $instanceHandlers->each(function($commandHandler) use($items) {
             foreach ($items as $item) {
                 $commandHandler->checkAndStoreAuthorizationFor(
                     $item[$this->instanceIdAttribute]

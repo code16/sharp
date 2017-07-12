@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Api\Commands;
 
+use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Code16\Sharp\Http\Api\ApiController;
 
 class EntityStateController extends ApiController
@@ -12,20 +13,23 @@ class EntityStateController extends ApiController
      * @param string $entityKey
      * @param string $instanceId
      * @return \Illuminate\Http\JsonResponse
+     * @throws SharpAuthorizationException
      */
     public function update($entityKey, $instanceId)
     {
-        $this->checkAuthorization("update", $entityKey, $instanceId);
-
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
-        $stateValue = request("value");
+
+        if(!$list->entityStateHandler()->authorize()
+            || !$list->entityStateHandler()->authorizeFor($instanceId)) {
+            throw new SharpAuthorizationException();
+        }
 
         return $this->returnAsJson(
             $list,
             array_merge(
-                $list->entityStateHandler()->update($instanceId, $stateValue),
-                ["value" => $stateValue]
+                $list->entityStateHandler()->execute($instanceId, request()->only("value")),
+                ["value" => request("value")]
             )
         );
     }

@@ -12,6 +12,7 @@ class EntityStateControllerTest extends BaseApiTest
     public function we_can_update_the_state_of_an_entity()
     {
         $this->buildTheWorld();
+        $this->disableExceptionHandling();
 
         $this->json('post', '/sharp/api/list/person/state/1', [
                 "attribute" => "state",
@@ -97,6 +98,22 @@ class EntityStateControllerTest extends BaseApiTest
             ->assertStatus(417);
     }
 
+    /** @test */
+    public function we_cant_update_the_state_if_unauthorized()
+    {
+        $this->buildTheWorld();
+
+        $this->app['config']->set(
+            'sharp.entities.person.list',
+            EntityStatePersonSharpEntitiesList::class
+        );
+
+        $this->json('post', '/sharp/api/list/person/state/100', [
+            "attribute" => "state",
+            "value" => "anything"
+        ])->assertStatus(403);
+    }
+
     protected function buildTheWorld()
     {
         parent::buildTheWorld();
@@ -136,6 +153,11 @@ class EntityStatePersonSharpEntitiesList extends PersonSharpEntityList {
                 if($stateId == "ok_refresh_items") {
                     return $this->refresh($instanceId);
                 }
+            }
+
+            public function authorizeFor($instanceId): bool
+            {
+                return $instanceId != 100;
             }
         });
     }
