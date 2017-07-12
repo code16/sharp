@@ -83,6 +83,16 @@ abstract class Command
     }
 
     /**
+     * Check if the current user is allowed to use this Command.
+     *
+     * @return bool
+     */
+    public function authorize():bool
+    {
+        return true;
+    }
+
+    /**
      * @return string|null
      */
     public function confirmationText()

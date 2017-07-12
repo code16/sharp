@@ -31,23 +31,7 @@ class AuthenticationTest extends BaseApiTest
         $this->buildTheWorld();
         $this->login();
 
-        $authGuard = new AuthenticationTestGuard(true);
-
-        Auth::extend('sharp', function() use($authGuard) {
-            return $authGuard;
-        });
-
-        $this->app['config']->set(
-            'sharp.auth.guard',
-            'sharp'
-        );
-
-        $this->app['config']->set([
-            'auth.guards.sharp' => [
-                'driver' => 'sharp',
-                'provider' => 'users',
-            ]
-        ]);
+        $authGuard = $this->configureCustomAuthGuard();
 
         $this->get('/sharp/list/person')->assertStatus(200);
         $this->json('get', '/sharp/api/list/person')->assertStatus(200);
@@ -63,6 +47,10 @@ class AuthenticationTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
+        // We use our custom guard to avoid the need of a DB (otherwise
+        // this code would fail on the logout() stage)
+        $this->configureCustomAuthGuard();
+
         $this->app['config']->set(
             'sharp.auth.check',
             AuthenticationTestCheck::class
@@ -75,6 +63,32 @@ class AuthenticationTest extends BaseApiTest
         $this->actingAs(new User(["name" => "John"]));
         $this->get('/sharp/list/person')->assertStatus(200);
         $this->json('get', '/sharp/api/list/person')->assertStatus(200);
+    }
+
+    /**
+     * @return AuthenticationTestGuard
+     */
+    protected function configureCustomAuthGuard(): AuthenticationTestGuard
+    {
+        $authGuard = new AuthenticationTestGuard(true);
+
+        Auth::extend('sharp', function () use ($authGuard) {
+            return $authGuard;
+        });
+
+        $this->app['config']->set(
+            'sharp.auth.guard',
+            'sharp'
+        );
+
+        $this->app['config']->set([
+            'auth.guards.sharp' => [
+                'driver' => 'sharp',
+                'provider' => 'users',
+            ]
+        ]);
+
+        return $authGuard;
     }
 
 }
@@ -97,7 +111,7 @@ class AuthenticationTestGuard implements \Illuminate\Contracts\Auth\Guard
     }
     public function user()
     {
-        return $this->isValid ? new User() : null;
+        return $this->isValid ? auth()->user() : null;
     }
     public function id()
     {
@@ -112,6 +126,10 @@ class AuthenticationTestGuard implements \Illuminate\Contracts\Auth\Guard
     public function setInvalid()
     {
         $this->isValid = false;
+    }
+
+    public function logout()
+    {
     }
 }
 

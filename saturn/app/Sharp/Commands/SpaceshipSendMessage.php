@@ -47,12 +47,7 @@ class SpaceshipSendMessage extends InstanceCommand
         );
     }
 
-    public function authorize()
-    {
-        return auth()->user()->isAdmin();
-    }
-
-    public function authorizeFor($instanceId)
+    public function authorizeFor($instanceId): bool
     {
         return $instanceId%2 == 0 && $instanceId <= 10;
     }

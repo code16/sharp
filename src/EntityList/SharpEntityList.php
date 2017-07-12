@@ -116,6 +116,12 @@ abstract class SharpEntityList
             $items = $items->items();
         }
 
+//        collect($this->commandHandlers)->filter(function($commandHandler) {
+//            return $commandHandler->type() == "instance";
+//        })->each(function($commandHandler) {
+//            dump($commandHandler->authorize());
+//        });
+
         return [
             "items" =>
                 collect($items)

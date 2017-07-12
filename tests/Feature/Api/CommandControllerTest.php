@@ -151,19 +151,26 @@ class CommandControllerTest extends BaseApiTest
             ]);
     }
 
-//    /** @test */
-//    public function we_cant_call_an_instance_command_without_update_authorization()
-//    {
-//        $this->buildTheWorld();
-//
-////        $this->app['config']->set(
-////            'sharp.entities.person.form',
-////            PersonSharpForm::class
-////        );
-//
-//        $this->json('post', '/sharp/api/list/person/command/instance_info/1')
-//            ->assertStatus(403);
-//    }
+    /** @test */
+    public function we_cant_call_an_unauthorized_entity_command()
+    {
+        $this->buildTheWorld();
+
+        $this->json('post', '/sharp/api/list/person/command/entity_unauthorized')
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function we_cant_call_an_unauthorized_instance_command()
+    {
+        $this->buildTheWorld();
+
+        $this->json('post', '/sharp/api/list/person/command/instance_unauthorized_odd_id/1')
+            ->assertStatus(403);
+
+        $this->json('post', '/sharp/api/list/person/command/instance_unauthorized_odd_id/2')
+            ->assertStatus(200);
+    }
 
     protected function buildTheWorld()
     {
@@ -226,6 +233,20 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
             public function label(): string { return "label"; }
             public function execute(array $params = []) {
                 $this->validate($params, ["name"=>"required"]);
+                return $this->reload();
+            }
+
+        })->addInstanceCommand("entity_unauthorized", new class() extends EntityCommand {
+            public function label(): string { return "label"; }
+            public function authorize(): bool { return false; }
+            public function execute(array $params = []) {
+                return $this->reload();
+            }
+
+        })->addInstanceCommand("instance_unauthorized_odd_id", new class() extends InstanceCommand {
+            public function label(): string { return "label"; }
+            public function authorizeFor($instanceId): bool { return $instanceId%2==0; }
+            public function execute($instanceId, array $params = []) {
                 return $this->reload();
             }
         });

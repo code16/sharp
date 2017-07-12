@@ -38,11 +38,13 @@ class SharpEntityListCommandTest extends SharpTestCase
                 [
                     "key" => "entityCommand",
                     "label" => "My Entity Command",
-                    "type" => "entity"
+                    "type" => "entity",
+                    "authorization" => true
                 ], [
                     "key" => "instanceCommand",
                     "label" => "My Instance Command",
-                    "type" => "instance"
+                    "type" => "instance",
+                    "authorization" => true
                 ]
             ]
         ], $list->listConfig());
@@ -172,6 +174,36 @@ class SharpEntityListCommandTest extends SharpTestCase
                             [["key" => "message2", "size" => 12, "sizeXS" => 12]],
                         ]
                     ]
+                ]
+            ]
+        ], $list->listConfig());
+    }
+
+    /** @test */
+    function we_can_handle_authorization_in_the_command()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig()
+            {
+                $this->addEntityCommand("entityCommand", new class extends EntityCommand {
+                    public function label(): string {
+                        return "My Entity Command";
+                    }
+                    public function authorize(): bool {
+                        return false;
+                    }
+                    public function execute(array $params = []) {}
+                });
+            }
+        };
+
+        $this->assertArraySubset([
+            "commands" => [
+                [
+                    "key" => "entityCommand",
+                    "label" => "My Entity Command",
+                    "type" => "entity",
+                    "authorization" => false,
                 ]
             ]
         ], $list->listConfig());

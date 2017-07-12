@@ -34,6 +34,8 @@ class CheckIsSharpAuthenticated
     public function handle($request, Closure $next, $guard = null)
     {
         if(!$this->userIsAllowedToUseSharp()) {
+            $this->auth->guard($this->getSharpGuard())->logout();
+
             if($request->wantsJson()) {
                 throw new SharpAuthenticationException("Unauthenticated user");
             }
