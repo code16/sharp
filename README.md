@@ -59,5 +59,14 @@ As we can see, each `entity` (like `spaceship`, here), can define:
 
 We'll get into all those classes in this document. The important thing to notice is that Sharp provides base classes to handle all the wiring (and more), but as we'll see, the applicative code is totally up to you.
 
+## Full documentation
+
 1. [Building an Entity List](docs/building-entity-list.md)
-2. 
+2. Filters
+3. Commands and Entity State
+4. Building an Entity Form
+5. All form inputs
+6. The Dashboard
+7. Authorizations
+8. Handling data localization
+9. Extending Sharp
