@@ -47,8 +47,13 @@ class SpaceshipSendMessage extends InstanceCommand
         );
     }
 
-//    public function authorize($instanceId)
-//    {
-//        return $instanceId%2 == 0 && $instanceId <= 10;
-//    }
+    public function authorize()
+    {
+        return auth()->user()->isAdmin();
+    }
+
+    public function authorizeFor($instanceId)
+    {
+        return $instanceId%2 == 0 && $instanceId <= 10;
+    }
 }

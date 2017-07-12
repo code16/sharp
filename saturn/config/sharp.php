@@ -20,7 +20,8 @@ return [
         "thumbnails_dir" => env("SHARP_UPLOADS_THUMBS_DIR", "thumbnails"),
     ],
 
-//    "auth" => [
-//        "guard" => "sharp"
-//    ]
+    "auth" => [
+        "check" => \App\Sharp\Auth\SharpAuthCheck::class,
+        "guard" => "sharp"
+    ]
 ];

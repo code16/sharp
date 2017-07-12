@@ -51,7 +51,8 @@ trait HandleCommands
                 "form" => $formFields ? [
                     "fields" => $formFields,
                     "layout" => $formLayout
-                ] : null
+                ] : null,
+//                "authorization" => $handler->authorize()
             ];
         }
     }

@@ -24,11 +24,18 @@ class LoginController extends Controller
             "password" => "required",
         ]);
 
-        if(auth()->guard($this->getSharpGuard())->attempt([
+        $guard = auth()->guard($this->getSharpGuard());
+
+        if($guard->attempt([
             $this->getSharpLoginAttribute() => request('login'),
             $this->getSharpPasswordAttribute() => request('password')
         ])) {
-            return redirect()->intended('/');
+            $check = $this->getSharpAuthCheck();
+            if(is_null($check) || $check->allowUserInSharp($guard->user())) {
+                return redirect()->intended('/');
+            }
+
+            $guard->logout();
         }
 
         return back()->with("invalid", true)->withInput();
@@ -47,5 +54,10 @@ class LoginController extends Controller
     protected function getSharpPasswordAttribute()
     {
         return config("sharp.auth.password_attribute", "password");
+    }
+
+    protected function getSharpAuthCheck()
+    {
+        return config("sharp.auth.check") ? app(config("sharp.auth.check")) : null;
     }
 }
