@@ -18,12 +18,20 @@ return [
     ],
 
     "menu" => [
-        "equipment" => [
+        [
             "label" => "Equipment",
             "entities" => [
                 "spaceship" => [
                     "label" => "Spaceships",
                     "icon" => "fa-space-shuttle"
+                ]
+            ]
+        ], [
+            "label" => "Equipment TEST",
+            "entities" => [
+                "spaceship" => [
+                    "label" => "Spaceships TEST",
+                    "icon" => "fa-plane"
                 ]
             ]
         ]

@@ -7,12 +7,14 @@ use App\User;
 class SpaceshipPolicy
 {
 
-    public function entity(User $user, string $category)
+    public function entity(User $user)
     {
-
+        return true;
     }
 
     /**
+     * @param User $user
+     * @param $spaceshipId
      * @return bool
      */
     public function view(User $user, $spaceshipId)
@@ -21,6 +23,8 @@ class SpaceshipPolicy
     }
 
     /**
+     * @param User $user
+     * @param $spaceshipId
      * @return bool
      */
     public function update(User $user, $spaceshipId)
@@ -37,6 +41,8 @@ class SpaceshipPolicy
     }
 
     /**
+     * @param User $user
+     * @param $spaceshipId
      * @return bool
      */
     public function delete(User $user, $spaceshipId)

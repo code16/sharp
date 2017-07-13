@@ -17,9 +17,11 @@ class MenuViewComposer
     public function compose(View $view)
     {
         $categories = new Collection;
-        
-        foreach(config("sharp.menu") as $categoryKey => $category) {
-            $categories->push(new MenuCategory($categoryKey, $category));
+
+        if(config("sharp.menu")) {
+            foreach (config("sharp.menu") as $category) {
+                $categories->push(new MenuCategory($category));
+            }
         }
 
         $sharpMenu = [
@@ -35,17 +37,13 @@ class MenuViewComposer
 class MenuCategory 
 {
     /** @var string */
-    public $key;
-
-    /** @var string */
     public $label;
 
     /** @var array */
     public $entities;
 
-    public function __construct(string $key, array $category)
+    public function __construct(array $category)
     {
-        $this->key = $key;
         $this->label = $category["label"] ?? "Unnamed category";
 
         foreach((array)$category["entities"] as $entityKey => $entity) {

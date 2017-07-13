@@ -17,13 +17,23 @@ abstract class ApiController extends Controller
      */
     protected function checkAuthorization(string $ability, string $entityKey, $instanceId = null)
     {
-        // Check global authorization for a non GET request
+        // Check entity-level policy authorization
+        $this->checkEntityLevelAuthorization($entityKey);
+
+        // Check global authorization
         if ($this->isGloballyForbidden($ability, $entityKey, $instanceId)) {
             $this->deny();
         }
 
-        // Check policy authorization for a non GET request
+        // Check policy authorization
         if($this->isSpecificallyForbidden($ability, $entityKey, $instanceId)) {
+            $this->deny();
+        }
+    }
+
+    protected function checkEntityLevelAuthorization(string $entityKey)
+    {
+        if($this->isSpecificallyForbidden("entity", $entityKey)) {
             $this->deny();
         }
     }
@@ -54,7 +64,7 @@ abstract class ApiController extends Controller
             && !$globalAuthorizations[$ability];
     }
 
-    private function isSpecificallyForbidden(string $ability, string $entityKey, $instanceId): bool
+    private function isSpecificallyForbidden(string $ability, string $entityKey, $instanceId = null): bool
     {
         if(!$this->hasPolicyFor($entityKey)) {
             return false;
@@ -66,7 +76,7 @@ abstract class ApiController extends Controller
                 && !app(Gate::class)->check("sharp.{$entityKey}.{$ability}", $instanceId);
         }
 
-        if($ability == "create") {
+        if(in_array($ability, ["entity", "create"])) {
             return !app(Gate::class)->check("sharp.{$entityKey}.{$ability}");
         }
     }

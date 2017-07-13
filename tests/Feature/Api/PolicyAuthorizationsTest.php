@@ -12,7 +12,6 @@ class PolicyAuthorizationsTest extends BaseApiTest
         $this->login();
     }
 
-
     protected function getPackageProviders($app)
     {
         $app['config']['sharp.entities.person.policy'] = AuthorizationsTestPersonPolicy::class;
@@ -108,10 +107,28 @@ class PolicyAuthorizationsTest extends BaseApiTest
             ]
         ]);
     }
+
+    /** @test */
+    public function entity_policy_can_be_set_to_handle_whole_entity_visibility()
+    {
+        $this->buildTheWorld();
+        $this->actingAs(new User(["name" => "Unauthorized-User"]));
+
+        $this->json('get', '/sharp/api/form/person')->assertStatus(403);
+        $this->json('post', '/sharp/api/form/person/1', [])->assertStatus(403);
+        $this->json('get', '/sharp/api/list/person')->assertStatus(403);
+        $this->json('post', '/sharp/api/form/person', [])->assertStatus(403);
+        $this->json('delete', '/sharp/api/form/person/50')->assertStatus(403);
+    }
 }
 
 class AuthorizationsTestPersonPolicy
 {
+    public function entity(User $user)
+    {
+        return $user->name != "Unauthorized-User";
+    }
+
     public function view(User $user, $id) { return true; }
 
     public function update(User $user, $id) { return $id < 2; }

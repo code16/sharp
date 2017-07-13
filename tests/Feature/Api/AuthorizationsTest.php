@@ -6,7 +6,7 @@ class AuthorizationsTest extends BaseApiTest
 {
 
     /** @test */
-    public function we_can_configure_global_authorizations()
+    public function we_can_configure_global_authorizations_on_entities()
     {
         $this->buildTheWorld();
         $this->login();
@@ -34,7 +34,7 @@ class AuthorizationsTest extends BaseApiTest
     }
 
     /** @test */
-    public function default_global_authorizations_is_handled()
+    public function default_global_authorizations_on_entity_is_handled()
     {
         $this->buildTheWorld();
         $this->login();

@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp;
 
+use Code16\Sharp\Auth\SharpGate;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Composers\MenuViewComposer;
 use Code16\Sharp\Http\Middleware\Api\AddSharpContext;
@@ -11,6 +12,7 @@ use Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors;
 use Code16\Sharp\Http\Middleware\CheckIsSharpAuthenticated;
 use Code16\Sharp\Http\Middleware\CheckIsSharpGuest;
 use Code16\Sharp\Http\SharpContext;
+use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Intervention\Image\ImageServiceProviderLaravel5;
@@ -68,6 +70,11 @@ class SharpServiceProvider extends ServiceProvider
             SharpContext::class, SharpContext::class
         );
 
+        // Override Laravel's Gate to handle Sharp's ability to define a custom Guard
+        $this->app->singleton(GateContract::class, function ($app) {
+            return new SharpGate($app);
+        });
+
         $this->commands([
             CreateUploadsMigration::class
         ]);
@@ -79,7 +86,7 @@ class SharpServiceProvider extends ServiceProvider
     {
         foreach((array)config("sharp.entities") as $entityKey => $config) {
             if(isset($config["policy"])) {
-                foreach(['view', 'update', 'create', 'delete'] as $action) {
+                foreach(['entity', 'view', 'update', 'create', 'delete'] as $action) {
                     $this->definePolicy($entityKey, $config["policy"], $action);
                 }
             }
