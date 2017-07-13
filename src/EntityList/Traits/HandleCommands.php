@@ -5,6 +5,7 @@ namespace Code16\Sharp\EntityList\Traits;
 use Code16\Sharp\EntityList\Commands\Command;
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Illuminate\Support\Collection;
 
 trait HandleCommands
 {
@@ -37,6 +38,11 @@ trait HandleCommands
         return $this;
     }
 
+    /**
+     * Append the commands to the config returned to the front.
+     *
+     * @param array $config
+     */
     protected function appendCommandsToConfig(array &$config)
     {
         foreach($this->commandHandlers as $commandName => $handler) {
@@ -55,6 +61,35 @@ trait HandleCommands
                 "authorization" => $handler->getGlobalAuthorization()
             ];
         }
+    }
+
+    /**
+     * Set the value of authorization key for instance commands and entity state,
+     * which is an array of ids from the $items collection.
+     *
+     * @param Collection $items
+     */
+    protected function addInstanceCommandsAuthorizationsToConfigForItems($items)
+    {
+        // Take all instance commands...
+        $instanceHandlers = collect($this->commandHandlers)
+            ->filter(function($commandHandler) {
+                return $commandHandler->type() == "instance" && $commandHandler->authorize();
+            });
+
+        // ... and Entity State is present...
+        if($this->entityStateHandler) {
+            $instanceHandlers->push($this->entityStateHandler);
+        }
+
+        // ... and for each of them, set authorization for every $item
+        $instanceHandlers->each(function($commandHandler) use($items) {
+            foreach ($items as $item) {
+                $commandHandler->checkAndStoreAuthorizationFor(
+                    $item[$this->instanceIdAttribute]
+                );
+            }
+        });
     }
 
     /**

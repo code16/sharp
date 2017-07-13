@@ -103,9 +103,6 @@ abstract class SharpEntityList
      */
     function data($items = null): array
     {
-        $keys = $this->getDataKeys();
-
-//        $this->buildListConfig();
         $items = $items ?: $this->getListData(
             EntityListQueryParams::createFromRequest($this->defaultSort, $this->defaultSortDir)
         );
@@ -117,22 +114,9 @@ abstract class SharpEntityList
             $items = $items->items();
         }
 
-        $instanceHandlers = collect($this->commandHandlers)
-            ->filter(function($commandHandler) {
-                return $commandHandler->type() == "instance" && $commandHandler->authorize();
-            });
+        $this->addInstanceCommandsAuthorizationsToConfigForItems($items);
 
-        if($this->entityStateHandler) {
-            $instanceHandlers->push($this->entityStateHandler);
-        }
-
-        $instanceHandlers->each(function($commandHandler) use($items) {
-            foreach ($items as $item) {
-                $commandHandler->checkAndStoreAuthorizationFor(
-                    $item[$this->instanceIdAttribute]
-                );
-            }
-        });
+        $keys = $this->getDataKeys();
 
         return [
             "items" =>
@@ -157,8 +141,6 @@ abstract class SharpEntityList
      */
     function listConfig(): array
     {
-//        $this->buildListConfig();
-
         $config = [
             "instanceIdAttribute" => $this->instanceIdAttribute,
             "displayMode" => $this->displayMode,
