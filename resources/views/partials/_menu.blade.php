@@ -20,7 +20,7 @@
             <ul>
                 @foreach($category->entities as $entity)
                     <li>
-                        <a href="{{ route("code16.sharp.list", $entity->key) }}">
+                        <a href="{{ route("code16.sharp.list", $entity->key) }}" class="{{ $entityKey==$entity->key ? "current" : ""}}">
                             @if($entity->icon)
                                 <i class="fa {{ $entity->icon }}"></i>
                             @endif

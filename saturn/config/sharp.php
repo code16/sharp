@@ -14,6 +14,16 @@ return [
 //                "delete" => false,
 //                "create" => false,
             ]
+        ],
+        "user" => [
+            "list" => \App\Sharp\UserSharpList::class,
+            "policy" => \App\Sharp\Policies\UserPolicy::class,
+            "authorizations" => [
+                "delete" => false,
+                "create" => false,
+                "update" => false,
+                "view" => false
+            ]
         ]
     ],
 
@@ -27,14 +37,27 @@ return [
                 ]
             ]
         ], [
-            "label" => "Equipment TEST",
+            "label" => "Admin",
             "entities" => [
-                "spaceship" => [
-                    "label" => "Spaceships TEST",
-                    "icon" => "fa-plane"
+                "user" => [
+                    "label" => "Users",
+                    "icon" => "fa-user-o"
                 ]
             ]
-        ]
+        ],
+//        [
+//            "label" => "Test",
+//            "entities" => [
+//                "spaceship" => [
+//                    "label" => "Spaceships",
+//                    "icon" => "fa-plane"
+//                ],
+//                "user" => [
+//                    "label" => "Users",
+//                    "icon" => "fa-envelope"
+//                ]
+//            ]
+//        ]
     ],
 
     "uploads" => [
