@@ -2,6 +2,8 @@
 
 return [
 
+    "name" => "Saturn",
+
     "entities" => [
         "spaceship" => [
             "list" => \App\Sharp\SpaceshipSharpList::class,
@@ -15,6 +17,18 @@ return [
         ]
     ],
 
+    "menu" => [
+        "equipment" => [
+            "label" => "Equipment",
+            "entities" => [
+                "spaceship" => [
+                    "label" => "Spaceships",
+                    "icon" => "fa-space-shuttle"
+                ]
+            ]
+        ]
+    ],
+
     "uploads" => [
         "tmp_dir" => env("SHARP_UPLOADS_TMP_DIR", "tmp"),
         "thumbnails_dir" => env("SHARP_UPLOADS_THUMBS_DIR", "thumbnails"),
@@ -22,6 +36,9 @@ return [
 
     "auth" => [
         "check" => \App\Sharp\Auth\SharpAuthCheck::class,
-        "guard" => "sharp"
+        "guard" => "sharp",
+        "login_attribute" => "email",
+        "password_attribute" => "password",
+        "display_attribute" => "name",
     ]
 ];

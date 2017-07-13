@@ -7,6 +7,11 @@ use App\User;
 class SpaceshipPolicy
 {
 
+    public function entity(User $user, string $category)
+    {
+
+    }
+
     /**
      * @return bool
      */

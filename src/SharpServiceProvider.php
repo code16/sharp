@@ -3,6 +3,7 @@
 namespace Code16\Sharp;
 
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
+use Code16\Sharp\Http\Composers\MenuViewComposer;
 use Code16\Sharp\Http\Middleware\Api\AddSharpContext;
 use Code16\Sharp\Http\Middleware\Api\AppendFormAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendListAuthorizations;
@@ -35,6 +36,11 @@ class SharpServiceProvider extends ServiceProvider
         ], 'assets');
 
         $this->registerPolicies();
+
+        view()->composer(
+            ['sharp::form', 'sharp::list'],
+            MenuViewComposer::class
+        );
     }
 
     public function register()
