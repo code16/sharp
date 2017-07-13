@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp;
 
+use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Auth\SharpGate;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Composers\MenuViewComposer;
@@ -68,6 +69,10 @@ class SharpServiceProvider extends ServiceProvider
 
         $this->app->singleton(
             SharpContext::class, SharpContext::class
+        );
+
+        $this->app->singleton(
+            SharpAuthorizationManager::class, SharpAuthorizationManager::class
         );
 
         // Override Laravel's Gate to handle Sharp's ability to define a custom Guard

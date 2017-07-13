@@ -19,8 +19,12 @@ class MenuViewComposer
         $categories = new Collection;
 
         if(config("sharp.menu")) {
-            foreach (config("sharp.menu") as $category) {
-                $categories->push(new MenuCategory($category));
+            foreach (config("sharp.menu") as $categoryConfig) {
+                $category = new MenuCategory($categoryConfig);
+
+                if(sizeof($category->entities)) {
+                    $categories->push($category);
+                }
             }
         }
 
@@ -47,7 +51,9 @@ class MenuCategory
         $this->label = $category["label"] ?? "Unnamed category";
 
         foreach((array)$category["entities"] as $entityKey => $entity) {
-            $this->entities[] = new MenuEntity($entityKey, $entity);
+            if(sharp_has_ability("entity", $entityKey)) {
+                $this->entities[] = new MenuEntity($entityKey, $entity);
+            }
         }
     }
 }

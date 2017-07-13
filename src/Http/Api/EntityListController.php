@@ -11,7 +11,7 @@ class EntityListController extends ApiController
      */
     public function show($entityKey)
     {
-        $this->checkEntityLevelAuthorization($entityKey);
+        sharp_check_ability("entity", $entityKey);
 
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();

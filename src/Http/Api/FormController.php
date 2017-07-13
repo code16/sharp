@@ -14,7 +14,7 @@ class FormController extends ApiController
      */
     public function edit($entityKey, $instanceId)
     {
-        $this->checkAuthorization("view", $entityKey, $instanceId);
+        sharp_check_ability("view", $entityKey, $instanceId);
 
         $form = $this->getFormInstance($entityKey);
 
@@ -31,7 +31,7 @@ class FormController extends ApiController
      */
     public function create($entityKey)
     {
-        $this->checkAuthorization("create", $entityKey);
+        sharp_check_ability("create", $entityKey);
 
         $form = $this->getFormInstance($entityKey);
 
@@ -49,7 +49,7 @@ class FormController extends ApiController
      */
     public function update($entityKey, $instanceId)
     {
-        $this->checkAuthorization("update", $entityKey, $instanceId);
+        sharp_check_ability("update", $entityKey, $instanceId);
 
         $this->validateRequest($entityKey);
 
@@ -66,7 +66,7 @@ class FormController extends ApiController
      */
     public function store($entityKey)
     {
-        $this->checkAuthorization("create", $entityKey);
+        sharp_check_ability("create", $entityKey);
 
         $this->validateRequest($entityKey);
 
@@ -84,7 +84,7 @@ class FormController extends ApiController
      */
     public function delete($entityKey, $instanceId)
     {
-        $this->checkAuthorization("delete", $entityKey, $instanceId);
+        sharp_check_ability("delete", $entityKey, $instanceId);
 
         $form = $this->getFormInstance($entityKey);
 
