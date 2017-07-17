@@ -6,6 +6,7 @@ use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
 use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
+use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Tests\SharpTestCase;
 
 class SharpDashboardTest extends SharpTestCase
@@ -127,6 +128,32 @@ class SharpDashboardTest extends SharpTestCase
                     ]
                 ], "labels" => [
                     "a", "b", "c"
+                ]
+            ]
+        ], $dashboard->data());
+    }
+
+    /** @test */
+    function we_can_get_panel_widget_data()
+    {
+        $dashboard = new class extends SharpDashboardTestDashboard {
+            protected function buildWidgets()
+            {
+                $this->addWidget(
+                    SharpPanelWidget::make("widget")->setInlineTemplate('<b>Hello {{user}}</b>')
+                );
+            }
+            protected function buildWidgetsData()
+            {
+                $this->setPanelData("widget", ["user" => "John Wayne"]);
+            }
+        };
+
+        $this->assertEquals([
+            "widget" => [
+                "key" => "widget",
+                "data" => [
+                    "user" => "John Wayne"
                 ]
             ]
         ], $dashboard->data());

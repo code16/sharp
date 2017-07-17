@@ -138,9 +138,15 @@ abstract class SharpDashboard
                 ];
             });
 
-        // TODO Then, panel widgets data
-
-        return $data->all();
+        // Then, panel widgets data
+        return $data->merge(
+            collect($this->panelWidgetsData)->map(function($value, $key) {
+                return [
+                    "key" => $key,
+                    "data" => $value
+                ];
+            })
+        )->all();
     }
 
     /**

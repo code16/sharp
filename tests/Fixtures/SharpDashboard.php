@@ -6,6 +6,7 @@ use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
 use Code16\Sharp\Dashboard\SharpDashboard as AbstractSharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
+use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 
 class SharpDashboard extends AbstractSharpDashboard
 {
@@ -18,9 +19,10 @@ class SharpDashboard extends AbstractSharpDashboard
         $this->addWidget(
             SharpBarGraphWidget::make("bars")
         )->addWidget(
-            SharpBarGraphWidget::make("bars2")
+            SharpPanelWidget::make("panel")
+                ->setInlineTemplate("<b>test</b>")
         )->addWidget(
-            SharpBarGraphWidget::make("bars3")
+            SharpBarGraphWidget::make("bars2")
         );
     }
 
@@ -31,8 +33,8 @@ class SharpDashboard extends AbstractSharpDashboard
     {
         $this->addFullWidthWidget("bars")
             ->addRow(function(DashboardLayoutRow $row) {
-                $row->addWidget(4, "bars2")
-                    ->addWidget(8, "bars3");
+                $row->addWidget(4, "panel")
+                    ->addWidget(8, "bars2");
             });
     }
 
@@ -46,10 +48,8 @@ class SharpDashboard extends AbstractSharpDashboard
             "bars2",
             SharpGraphWidgetDataSet::make(["a" => 10, "b" => 20, "c" => 30])
                 ->setLabel("Bars 2")
-        )->addGraphDataSet(
-            "bars3",
-            SharpGraphWidgetDataSet::make(["a" => 10, "b" => 20, "c" => 30])
-                ->setLabel("Bars 3")
+        )->setPanelData(
+            "panel", ["name" => "John Wayne"]
         );
     }
 }
