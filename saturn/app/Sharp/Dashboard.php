@@ -17,9 +17,14 @@ class Dashboard extends SharpDashboard
         $this->addWidget(
             SharpBarGraphWidget::make("capacities")
                 ->setTitle("Spaceships by capacity")
+//            \Code16\Sharp\Dashboard\Widgets\SharpPieGraphWidget::make("capacities")
+//                ->setTitle("Spaceships by capacity")
+//            \Code16\Sharp\Dashboard\Widgets\SharpLineGraphWidget::make("capacities")
+//                ->setTitle("Spaceships by capacity")
         )->addWidget(
             SharpPanelWidget::make("activeSpaceships")
                 ->setInlineTemplate("<h1>{{count}}</h1> spaceships in activity")
+                ->setLink('spaceships')
         )->addWidget(
             SharpPanelWidget::make("inactiveSpaceships")
                 ->setInlineTemplate("<h1>{{count}}</h1> inactive spaceships")
@@ -63,6 +68,15 @@ class Dashboard extends SharpDashboard
         )->setPanelData(
             "inactiveSpaceships", ["count" => $spaceships->where("state", "inactive")->first()->count]
         );
+
+//        $this->addGraphDataSet(
+//            "capacities",
+//            SharpGraphWidgetDataSet::make($capacities->map(function($value) {
+//                return $value * rand(1, 3);
+//            }))
+//                ->setLabel("Capacities 2")
+//                ->setColor("blue")
+//        );
     }
 
 }

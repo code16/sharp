@@ -24,6 +24,11 @@ abstract class SharpWidget
     protected $title;
 
     /**
+     * @var string
+     */
+    protected $link;
+
+    /**
      * @param string $key
      * @param string $type
      */
@@ -35,13 +40,32 @@ abstract class SharpWidget
 
     /**
      * @param string $title
-     * @return static
+     * @return $this
      */
     public function setTitle(string $title)
     {
         $this->title = $title;
 
         return $this;
+    }
+
+    /**
+     * @param string $entityKey
+     * @param string|null $instanceId
+     * @return $this
+     */
+    public function setLink(string $entityKey, string $instanceId = null)
+    {
+        $this->link = $instanceId
+            ? route("code16.sharp.api.form.edit", compact('entityKey', 'instanceId'))
+            : route("code16.sharp.api.list", compact('entityKey'));
+
+        return $this;
+    }
+
+    public function unsetLink()
+    {
+        $this->link = null;
     }
 
     /**
@@ -72,6 +96,7 @@ abstract class SharpWidget
             "key" => $this->key,
             "type" => $this->type,
             "title" => $this->title,
+            "link" => $this->link
         ] + $childArray)
         ->filter(function($value) {
             return !is_null($value);
