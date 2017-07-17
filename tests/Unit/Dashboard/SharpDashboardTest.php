@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Tests\Unit\Dashboard;
 
+use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
 use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
 use Code16\Sharp\Tests\SharpTestCase;
@@ -26,52 +27,38 @@ class SharpDashboardTest extends SharpTestCase
             "display" => "bar"
         ]], $dashboard->widgets());
     }
-//
-//    /** @test */
-//    function we_can_get_layout()
-//    {
-//        $form = new class extends SharpFormTestForm {
-//            function buildFormFields()
-//            {
-//                $this->addField(SharpFormTextField::make("name"))
-//                    ->addField(SharpFormTextField::make("age"));
-//            }
-//            function buildFormLayout()
-//            {
-//                $this->addColumn(6, function($column) {
-//                    $column->withSingleField("name");
-//                })->addColumn(6, function($column) {
-//                    $column->withSingleField("age");
-//                });
-//            }
-//        };
-//
-//        $this->assertEquals([
-//            "tabbed" => true,
-//            "tabs" => [[
-//                "title" => "one",
-//                "columns" => [[
-//                    "size" => 6,
-//                    "fields" => [[
-//                        [
-//                            "key" => "name",
-//                            "size" => 12,
-//                            "sizeXS" => 12
-//                        ]
-//                    ]]
-//                ], [
-//                    "size" => 6,
-//                    "fields" => [[
-//                        [
-//                            "key" => "age",
-//                            "size" => 12,
-//                            "sizeXS" => 12
-//                        ]
-//                    ]]
-//                ]]
-//            ]]
-//        ], $form->formLayout());
-//    }
+
+    /** @test */
+    function we_can_get_widgets_layout()
+    {
+        $dashboard = new class extends SharpDashboardTestDashboard {
+            protected function buildWidgets()
+            {
+                $this->addWidget(SharpBarGraphWidget::make("widget"))
+                    ->addWidget(SharpBarGraphWidget::make("widget2"))
+                    ->addWidget(SharpBarGraphWidget::make("widget3"));
+            }
+            protected function buildWidgetsLayout()
+            {
+                $this->addFullWidthWidget("widget")
+                    ->addRow(function(DashboardLayoutRow $row) {
+                        $row->addWidget(4, "widget2")
+                            ->addWidget(8, "widget3");
+                    });
+            }
+        };
+
+        $this->assertEquals([
+            "rows" => [
+                [
+                    ["key" => "widget", "size" => 12]
+                ], [
+                    ["key" => "widget2", "size" => 4],
+                    ["key" => "widget3", "size" => 8],
+                ]
+            ]
+        ], $dashboard->widgetsLayout());
+    }
 //
 //    /** @test */
 //    function we_can_get_instance()
@@ -99,6 +86,9 @@ class SharpDashboardTest extends SharpTestCase
 //    }
 }
 
-abstract class SharpDashboardTestDashboard extends SharpDashboard
+class SharpDashboardTestDashboard extends SharpDashboard
 {
+    protected function buildWidgets() {}
+    protected function buildWidgetsLayout() {}
+    protected function getWidgetsData() { return []; }
 }

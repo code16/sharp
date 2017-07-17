@@ -91,4 +91,9 @@ abstract class SharpWidget
     {
         return [];
     }
+
+    /**
+     * @return array
+     */
+    public abstract function toArray();
 }

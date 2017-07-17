@@ -18,8 +18,8 @@ class DashboardController extends ApiController
 
         return response()->json([
             "widgets" => $dashboard->widgets(),
-//            "layout" => $dashboard->widgetsLayout(),
-//            "data" => $dashboard->data(),
+            "layout" => $dashboard->widgetsLayout(),
+            "data" => $dashboard->data(),
         ]);
     }
 }

@@ -19,7 +19,11 @@ class Dashboard extends SharpDashboard
 
     function buildWidgetsLayout()
     {
-        $this->addFullWidthWidget("capacities");
+        $this->addFullWidthWidget("capacities")
+            ->addRow(function($row) {
+                $row->addWidget(6, "capacities")
+                    ->addWidget(6, "capacities");
+            });
     }
 
     function getWidgetsData()
