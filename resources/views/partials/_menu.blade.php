@@ -5,7 +5,7 @@
     <li>
         <i class="fa fa-user"></i>
         {{ $sharpMenu->user }}
-        <a href="#"><i class="fa fa-sign-out"></i></a>
+        <a href="{{ route("code16.sharp.logout") }}"><i class="fa fa-sign-out"></i></a>
     </li>
 
     <li>

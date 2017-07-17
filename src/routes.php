@@ -73,6 +73,10 @@ Route::group([
         'middleware' => ['sharp_auth'],
     ], function() {
 
+        Route::get('/logout')
+            ->name("code16.sharp.logout")
+            ->uses('LoginController@destroy');
+
         Route::get('/list/{entityKey}')
             ->name("code16.sharp.list")
             ->uses('ListController@show');

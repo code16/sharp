@@ -41,6 +41,13 @@ class LoginController extends Controller
         return back()->with("invalid", true)->withInput();
     }
 
+    public function destroy()
+    {
+        auth()->guard($this->getSharpGuard())->logout();
+
+        return redirect()->route("code16.sharp.login");
+    }
+
     protected function getSharpGuard()
     {
         return config("sharp.auth.guard", config("auth.defaults.guard"));
