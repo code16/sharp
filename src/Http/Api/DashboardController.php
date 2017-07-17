@@ -2,8 +2,6 @@
 
 namespace Code16\Sharp\Http\Api;
 
-use Code16\Sharp\Dashboard\SharpDashboard;
-
 class DashboardController extends ApiController
 {
 
@@ -23,15 +21,5 @@ class DashboardController extends ApiController
 //            "layout" => $dashboard->widgetsLayout(),
 //            "data" => $dashboard->data(),
         ]);
-    }
-
-    /**
-     * @return SharpDashboard|null
-     */
-    protected function getDashboardInstance()
-    {
-        $dashboardClass = config("sharp.dashboard");
-
-        return $dashboardClass ? app($dashboardClass) : null;
     }
 }

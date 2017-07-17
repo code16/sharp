@@ -2,8 +2,6 @@
 
 namespace Code16\Sharp\Http\Api;
 
-use Code16\Sharp\Form\SharpForm;
-
 class FormController extends ApiController
 {
 
@@ -91,15 +89,6 @@ class FormController extends ApiController
         $form->delete($instanceId);
 
         return response()->json(["ok" => true]);
-    }
-
-    /**
-     * @param string $entityKey
-     * @return SharpForm
-     */
-    protected function getFormInstance(string $entityKey): SharpForm
-    {
-        return app(config("sharp.entities.{$entityKey}.form"));
     }
 
     /**
