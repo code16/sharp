@@ -6,6 +6,7 @@ use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
 use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
+use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Illuminate\Support\Facades\DB;
 
 class Dashboard extends SharpDashboard
@@ -16,13 +17,13 @@ class Dashboard extends SharpDashboard
         $this->addWidget(
             SharpBarGraphWidget::make("capacities")
                 ->setTitle("Spaceships by capacity")
-        )/*->addWidget(
+        )->addWidget(
             SharpPanelWidget::make("activeSpaceships")
                 ->setInlineTemplate("<h1>{{count}}</h1> spaceships in activity")
         )->addWidget(
             SharpPanelWidget::make("inactiveSpaceships")
                 ->setInlineTemplate("<h1>{{count}}</h1> inactive spaceships")
-        )*/;
+        );
     }
 
     function buildWidgetsLayout()
@@ -55,19 +56,13 @@ class Dashboard extends SharpDashboard
             SharpGraphWidgetDataSet::make($capacities)
                 ->setLabel("Capacities")
                 ->setColor("red")
-        )->addGraphDataSet(
-            "capacities",
-            SharpGraphWidgetDataSet::make($capacities)
-                ->setLabel("Capacities")
-                ->setColor("blue")
-        );
 
-//        )->setPanelData(
-//            "activeSpaceships", ["count" => $spaceships->where("state", "active")->count]
-//
-//        )->setPanelData(
-//            "inactiveSpaceships", ["count" => $spaceships->where("state", "inactive")->count]
-//        );
+        )->setPanelData(
+            "activeSpaceships", ["count" => $spaceships->where("state", "active")->first()->count]
+
+        )->setPanelData(
+            "inactiveSpaceships", ["count" => $spaceships->where("state", "inactive")->first()->count]
+        );
     }
 
 }
