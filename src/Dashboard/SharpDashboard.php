@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Dashboard;
 
 use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
+use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpWidget;
 
 abstract class SharpDashboard
@@ -22,6 +23,16 @@ abstract class SharpDashboard
      * @var array
      */
     protected $widgets = [];
+
+    /**
+     * @var array
+     */
+    protected $graphWidgetDataSets = [];
+
+    /**
+     * @var array
+     */
+    protected $panelWidgetsData = [];
 
     /**
      * @var array
@@ -107,16 +118,53 @@ abstract class SharpDashboard
     /**
      * Return data, as an array.
      *
-     * @param array|Collection|null $items
      * @return array
      */
-    function data($items = null): array
+    function data(): array
     {
-        $items = $items ?: $this->getWidgetsData();
+        $this->buildWidgetsData();
 
-        return [
-            "widgets" => $items
-        ];
+        // First, graph widgets dataSets
+        $data = collect($this->graphWidgetDataSets)
+            ->map(function(array $dataSets, string $key) {
+                $dataSetsValues = collect($dataSets)->map->toArray();
+
+                return [
+                    "key" => $key,
+                    "datasets" => $dataSetsValues->map(function($dataSet) {
+                        return array_except($dataSet, "labels");
+                    })->all(),
+                    "labels" => $dataSetsValues->first()["labels"]
+                ];
+            });
+
+        // TODO Then, panel widgets data
+
+        return $data->all();
+    }
+
+    /**
+     * @param string $graphWidgetKey
+     * @param SharpGraphWidgetDataSet $dataSet
+     * @return $this
+     */
+    protected function addGraphDataSet(string $graphWidgetKey, SharpGraphWidgetDataSet $dataSet)
+    {
+        $this->graphWidgetDataSets[$graphWidgetKey][] = $dataSet;
+
+        return $this;
+    }
+
+    /**
+     * @param string $panelWidgetKey
+     * @param array $data
+     * @return $this
+     */
+    protected function setPanelData(string $panelWidgetKey, array $data)
+    {
+        $this->panelWidgetsData[$panelWidgetKey] = $data;
+
+        return $this;
     }
 
     private function checkDashboardIsBuilt()
@@ -138,9 +186,7 @@ abstract class SharpDashboard
     protected abstract function buildWidgetsLayout();
 
     /**
-     * Return dashboard's widgets data as an array.
-     *
-     * @return array
+     * Build dashboard's widgets data, using ->addGraphDataSet and ->setPanelData
      */
-    protected abstract function getWidgetsData();
+    protected abstract function buildWidgetsData();
 }

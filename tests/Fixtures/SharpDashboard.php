@@ -5,6 +5,7 @@ namespace Code16\Sharp\Tests\Fixtures;
 use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
 use Code16\Sharp\Dashboard\SharpDashboard as AbstractSharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
+use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 
 class SharpDashboard extends AbstractSharpDashboard
 {
@@ -35,21 +36,20 @@ class SharpDashboard extends AbstractSharpDashboard
             });
     }
 
-    /**
-     * Return dashboard's widgets data as an array.
-     *
-     * @return array
-     */
-    protected function getWidgetsData()
+    protected function buildWidgetsData()
     {
-        return [
-            "bars1" => [
-                "a" => 10, "b" => 20, "c" => 30,
-            ], "bars2" => [
-                "a" => 10, "b" => 20, "c" => 30,
-            ], "bars3" => [
-                "a" => 10, "b" => 20, "c" => 30,
-            ],
-        ];
+        $this->addGraphDataSet(
+            "bars1",
+            SharpGraphWidgetDataSet::make(["a" => 10, "b" => 20, "c" => 30])
+                ->setLabel("Bars 1")
+        )->addGraphDataSet(
+            "bars2",
+            SharpGraphWidgetDataSet::make(["a" => 10, "b" => 20, "c" => 30])
+                ->setLabel("Bars 2")
+        )->addGraphDataSet(
+            "bars3",
+            SharpGraphWidgetDataSet::make(["a" => 10, "b" => 20, "c" => 30])
+                ->setLabel("Bars 3")
+        );
     }
 }
