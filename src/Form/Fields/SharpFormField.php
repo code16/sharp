@@ -176,6 +176,7 @@ abstract class SharpFormField
 
     /**
      * Throw an exception in case of invalid attribute value.
+     *
      * @param array $properties
      * @throws SharpFormFieldValidationException
      */

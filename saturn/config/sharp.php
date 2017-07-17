@@ -10,10 +10,10 @@ return [
             "form" => \App\Sharp\SpaceshipSharpForm::class,
             "validator" => \App\Sharp\SpaceshipSharpValidator::class,
             "policy" => \App\Sharp\Policies\SpaceshipPolicy::class,
-            "authorizations" => [
+//            "authorizations" => [
 //                "delete" => false,
 //                "create" => false,
-            ]
+//            ]
         ],
         "user" => [
             "list" => \App\Sharp\UserSharpList::class,
@@ -59,6 +59,8 @@ return [
 //            ]
 //        ]
     ],
+
+    "dashboard" => \App\Sharp\Dashboard::class,
 
     "uploads" => [
         "tmp_dir" => env("SHARP_UPLOADS_TMP_DIR", "tmp"),
