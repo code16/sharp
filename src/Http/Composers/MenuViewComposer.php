@@ -31,10 +31,19 @@ class MenuViewComposer
         $sharpMenu = [
             "name" => config("sharp.name", "Sharp"),
             "user" => sharp_user()->{config("sharp.auth.display_attribute", "name")},
+            "dashboard" => $this->hasDashboard(),
             "categories" => $categories
         ];
 
         $view->with('sharpMenu', (object)$sharpMenu);
+    }
+
+    /**
+     * @return bool
+     */
+    private function hasDashboard()
+    {
+        return !!config("sharp.dashboard", false);
     }
 }
 
