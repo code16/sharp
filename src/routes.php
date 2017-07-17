@@ -73,6 +73,10 @@ Route::group([
         'middleware' => ['sharp_auth'],
     ], function() {
 
+        Route::get('/')
+            ->name("code16.sharp.dashboard")
+            ->uses('DashboardController@index');
+
         Route::get('/logout')
             ->name("code16.sharp.logout")
             ->uses('LoginController@destroy');

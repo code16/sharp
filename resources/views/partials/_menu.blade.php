@@ -9,8 +9,10 @@
     </li>
 
     <li>
-        <i class="fa fa-dashboard"></i>
-        Dashboard {{-- <--i18 this--}}
+        <a href="{{ route("code16.sharp.dashboard") }}">
+            <i class="fa fa-dashboard"></i>
+            Dashboard {{-- <--i18 this--}}
+        </a>
     </li>
 
     @foreach($sharpMenu->categories as $category)
