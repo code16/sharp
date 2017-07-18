@@ -12,7 +12,7 @@
         <li>
             <a href="{{ route("code16.sharp.dashboard") }}" class="{{ ($dashboard ?? false) ? "current" : ""}}">
                 <i class="fa fa-dashboard"></i>
-                Dashboard {{-- <--i18 this--}}
+                Dashboard {{-- <-- TODO i18 this --}}
             </a>
         </li>
     @endif
