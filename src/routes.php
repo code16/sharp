@@ -9,7 +9,6 @@ Route::group([
 
     Route::get("/dashboard")
         ->name("code16.sharp.api.dashboard")
-//        ->middleware('sharp_api_append_form_authorizations')
         ->uses('DashboardController@index');
 
     Route::get("/list/{entityKey}")

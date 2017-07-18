@@ -3,9 +3,9 @@
 namespace App\Sharp\Filters;
 
 use App\SpaceshipType;
-use Code16\Sharp\EntityList\EntityListFilter;
+use Code16\Sharp\EntityList\EntityListRequiredFilter;
 
-class SpaceshipTypeFilter implements EntityListFilter
+class SpaceshipTypeFilter implements EntityListRequiredFilter
 {
 
     public function values()
@@ -14,11 +14,8 @@ class SpaceshipTypeFilter implements EntityListFilter
             ->pluck("label", "id");
     }
 
-    /**
-     * @return bool
-     */
-    public function multiple()
+    public function defaultValue()
     {
-        return false;
+        return SpaceshipType::orderBy("label")->first()->id;
     }
 }
