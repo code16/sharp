@@ -2,13 +2,15 @@
 
 namespace Code16\Sharp\Dashboard\Widgets;
 
+use Code16\Sharp\Form\Fields\SharpFormHtmlField;
+
 class SharpPanelWidget extends SharpWidget
 {
 
     /**
-     * @var string
+     * @var SharpFormHtmlField
      */
-    protected $inlineTemplate;
+    protected $htmlFormField;
 
     /**
      * @param string $key
@@ -17,6 +19,7 @@ class SharpPanelWidget extends SharpWidget
     public static function make(string $key)
     {
         $widget = new static($key, 'panel');
+        $widget->htmlFormField = SharpFormHtmlField::make('panel');
 
         return $widget;
     }
@@ -27,19 +30,19 @@ class SharpPanelWidget extends SharpWidget
     public function toArray(): array
     {
         return parent::buildArray([
-            "template" => $this->inlineTemplate
+            "template" => $this->htmlFormField->template()
         ]);
     }
 
     /**
-     * @param string $template
+     * @param string $templatePath
      * @return $this
      */
-    public function setTemplatePath(string $template)
+    public function setTemplatePath(string $templatePath)
     {
-        return $this->setInlineTemplate(
-            file_get_contents(resource_path("views/" . $template))
-        );
+        $this->htmlFormField->setTemplatePath($templatePath);
+
+        return $this;
     }
 
     /**
@@ -48,7 +51,7 @@ class SharpPanelWidget extends SharpWidget
      */
     public function setInlineTemplate(string $template)
     {
-        $this->inlineTemplate = $template;
+        $this->htmlFormField->setInlineTemplate($template);
 
         return $this;
     }
