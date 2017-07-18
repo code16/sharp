@@ -129,7 +129,13 @@ class EntityListQueryParams
      */
     public function filterFor(string $filterName)
     {
-        return $this->filters[$filterName] ?? null;
+        if(!isset($this->filters[$filterName])) {
+            return null;
+        }
+
+        return str_contains($this->filters[$filterName], ",")
+            ? explode(",", $this->filters[$filterName])
+            : $this->filters[$filterName];
     }
 
     /**

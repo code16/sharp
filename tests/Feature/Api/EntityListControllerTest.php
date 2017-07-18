@@ -64,7 +64,22 @@ class EntityListControllerTest extends BaseApiTest
             ->assertStatus(200)
             ->assertJsonFragment(["data" => [
                 "items" => [
+                    ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22]
+                ]
+            ]]);
+    }
+
+    /** @test */
+    public function we_can_filter_with_multiple_values_on_entities()
+    {
+        $this->buildTheWorld();
+
+        $this->json('get', '/sharp/api/list/person?filter_age_multiple=22,26')
+            ->assertStatus(200)
+            ->assertJsonFragment(["data" => [
+                "items" => [
                     ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
+                    ["id" => 2, "name" => "Mary <b>Wayne</b>", "age" => 26]
                 ]
             ]]);
     }

@@ -3,6 +3,8 @@
 namespace Code16\Sharp\Tests\Fixtures;
 
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
+use Code16\Sharp\EntityList\EntityListFilter;
+use Code16\Sharp\EntityList\EntityListMultipleFilter;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -32,6 +34,12 @@ class PersonSharpEntityList extends SharpEntityList
         if($params->filterFor("age")) {
             $items = collect($items)->filter(function($item) use($params) {
                 return $item["age"] == $params->filterFor("age");
+            })->all();
+        }
+
+        if($params->filterFor("age_multiple")) {
+            $items = collect($items)->filter(function($item) use($params) {
+                return in_array($item["age"], $params->filterFor("age_multiple"));
             })->all();
         }
 
@@ -86,6 +94,25 @@ class PersonSharpEntityList extends SharpEntityList
      */
     function buildListConfig()
     {
-        $this->setSearchable();
+        $this->setSearchable()
+            ->addFilter("age", PersonSharpEntityListAgeFilter::class)
+            ->addFilter("age_multiple", PersonSharpEntityListAgeMultipleFilter::class);
     }
+}
+
+class PersonSharpEntityListAgeFilter implements EntityListFilter
+{
+    /**
+     * @return array
+     */
+    public function values()
+    {
+        return [22=>22, 23=>23, 24=>24, 25=>25, 26=>26];
+    }
+}
+
+class PersonSharpEntityListAgeMultipleFilter
+    extends PersonSharpEntityListAgeFilter
+    implements EntityListMultipleFilter
+{
 }
