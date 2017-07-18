@@ -13,7 +13,7 @@ Route::group([
 
     Route::get("/list/{entityKey}")
         ->name("code16.sharp.api.list")
-        ->middleware('sharp_api_append_list_authorizations')
+        ->middleware(['sharp_api_append_list_authorizations', 'sharp_save_list_params'])
         ->uses('EntityListController@show');
 
     Route::post("/list/{entityKey}/state/{instanceId}")
@@ -87,6 +87,7 @@ Route::group([
 
         Route::get('/list/{entityKey}')
             ->name("code16.sharp.list")
+            ->middleware('sharp_restore_list_params')
             ->uses('ListController@show');
 
         Route::get('/form/{entityKey}/{instanceId}')
