@@ -32,7 +32,7 @@ class LoginController extends Controller
         ])) {
             $check = $this->getSharpAuthCheck();
             if(is_null($check) || $check->allowUserInSharp($guard->user())) {
-                return redirect()->intended('/');
+                return redirect()->intended('/sharp');
             }
 
             $guard->logout();
