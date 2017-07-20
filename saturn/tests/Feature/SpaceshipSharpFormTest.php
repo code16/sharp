@@ -90,4 +90,20 @@ class SpaceshipSharpFormTest extends TestCase
         ]);
     }
 
+    /** @test */
+    public function we_can_create_a_spaceship()
+    {
+        $this->loginAsSharpUser(factory(User::class)->create(["group" => "sharp"]));
+
+        $this->storeSharpForm("spaceship", array_merge(factory(Spaceship::class)->make()->toArray(), [
+            "name" => "test_create",
+            "capacity" => 10
+        ]))->assertStatus(200);
+
+        $this->assertDatabaseHas("spaceships", [
+            "name" => "test_create",
+            "capacity" => 10000
+        ]);
+    }
+
 }

@@ -115,6 +115,19 @@ trait SharpAssertions
     }
 
     /**
+     * @param string $entityKey
+     * @param array $data
+     * @return mixed
+     */
+    protected function storeSharpForm(string $entityKey, array $data)
+    {
+        return $this->json(
+            'POST', route("code16.sharp.api.form.store", $entityKey),
+            $data
+        );
+    }
+
+    /**
      * @param $user
      */
     protected function loginAsSharpUser($user)
