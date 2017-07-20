@@ -224,11 +224,10 @@ abstract class SharpForm
 
     /**
      * @param array $data
-     * @return bool
      */
-    public function store(array $data): bool
+    public function store(array $data)
     {
-        return $this->update(null, $data);
+        $this->update(null, $data);
     }
 
     /**
