@@ -50,7 +50,7 @@
         },
         methods: {
             closeClicked() {
-                this.actionsBus.$emit('searchChanged','',{ updateHistory: false, updateData: false });
+                this.actionsBus.$emit('searchChanged','',{ isInput:false });
                 this.$refs.search.focus();
             },
             emitSearch() {

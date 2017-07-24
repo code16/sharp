@@ -28914,7 +28914,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     methods: {
         closeClicked: function closeClicked() {
-            this.actionsBus.$emit('searchChanged', '', { updateHistory: false, updateData: false });
+            this.actionsBus.$emit('searchChanged', '', { isInput: false });
             this.$refs.search.focus();
         },
         emitSearch: function emitSearch() {
@@ -31852,9 +31852,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         updateData: function updateData() {
             var _this = this;
 
-            __WEBPACK_IMPORTED_MODULE_6_axios___default.a.get('/sharp/api/list/' + this.entityKey, {
-                params: this.apiParams
-            }).then(function (_ref2) {
+            this.get().then(function (_ref2) {
                 var data = _ref2.data.data;
 
                 _this.data = data;
@@ -31862,27 +31860,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             });
         },
         updateHistory: function updateHistory() {
-            history.pushState(null, null, __WEBPACK_IMPORTED_MODULE_5__helpers_querystring__["b" /* serialize */](this.apiParams));
+            history.pushState(this.apiParams, null, __WEBPACK_IMPORTED_MODULE_5__helpers_querystring__["b" /* serialize */](this.apiParams));
+        },
+        bindParams: function bindParams() {
+            var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.params;
+            var search = params.search,
+                page = params.page,
+                sort = params.sort,
+                dir = params.dir;
+
+            this.actionsBus.$emit('searchChanged', search, { isInput: false });
+
+            this.page = page;
+            this.sortedBy = sort;
+            this.sortDir = dir;
         }
     },
     actions: {
         searchChanged: function searchChanged(input) {
             var _ref3 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-                _ref3$updateData = _ref3.updateData,
-                updateData = _ref3$updateData === undefined ? true : _ref3$updateData,
-                _ref3$updateHistory = _ref3.updateHistory,
-                updateHistory = _ref3$updateHistory === undefined ? true : _ref3$updateHistory;
+                _ref3$isInput = _ref3.isInput,
+                isInput = _ref3$isInput === undefined ? true : _ref3$isInput;
 
-            console.log('entities list search changed', input, updateData, updateHistory);
+            console.log('entities list search changed', input, isInput);
 
             this.search = input;
-            if (this.page > 1) {
-                updateHistory = updateData = true;
-                this.page = 1;
+            if (isInput) {
+                this.page > 1 && (this.page = 1);
+                this.update();
             }
-
-            updateData && this.updateData();
-            updateHistory && this.updateHistory();
         }
     },
     created: function created() {
@@ -31893,18 +31899,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             _this2.setupActionBar();
         });
 
-        var _params = this.params,
-            search = _params.search,
-            page = _params.page,
-            sort = _params.sort,
-            dir = _params.dir;
+        this.bindParams();
 
-        this.actionsBus.$emit('searchChanged', search, { updateData: false, updateHistory: false });
-
-        this.page = page;
-
-        this.sortedBy = sort;
-        this.sortDir = dir;
+        window.onpopstate = function (event) {
+            _this2.bindParams(event.state);
+            _this2.updateData();
+        };
     }
 });
 

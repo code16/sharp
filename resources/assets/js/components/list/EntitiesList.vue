@@ -151,30 +151,32 @@
                 this.updateHistory();
             },
             updateData() {
-                axios.get(`/sharp/api/list/${this.entityKey}`, {
-                        params:this.apiParams
-                    })
-                    .then(({data:{ data }})=>{
-                        this.data = data;
-                        this.setupActionBar();
-                    });
+                this.get().then(({data:{ data }})=>{
+                    this.data = data;
+                    this.setupActionBar();
+                });
             },
             updateHistory() {
-                history.pushState(null, null, qs.serialize(this.apiParams));
+                history.pushState(this.apiParams, null, qs.serialize(this.apiParams));
+            },
+            bindParams(params = this.params) {
+                let { search, page, sort, dir } = params;
+                this.actionsBus.$emit('searchChanged', search, { isInput: false });
+
+                this.page = page;
+                this.sortedBy = sort;
+                this.sortDir = dir;
             }
         },
         actions: {
-            searchChanged(input, {updateData=true, updateHistory=true}={}) {
-                console.log('entities list search changed', input, updateData, updateHistory);
+            searchChanged(input, {isInput=true}={}) {
+                console.log('entities list search changed', input, isInput);
 
                 this.search = input;
-                if(this.page>1)  {
-                    updateHistory = updateData = true;
-                    this.page = 1;
+                if(isInput) {
+                    this.page>1 && (this.page=1);
+                    this.update();
                 }
-
-                updateData && this.updateData();
-                updateHistory && this.updateHistory();
             }
         },
         created() {
@@ -183,13 +185,12 @@
                 this.setupActionBar();
             });
 
-            let { search, page, sort, dir } = this.params;
-            this.actionsBus.$emit('searchChanged', search, {updateData: false, updateHistory: false});
+            this.bindParams();
 
-            this.page = page;
-
-            this.sortedBy = sort;
-            this.sortDir = dir;
+            window.onpopstate = event => {
+                this.bindParams(event.state);
+                this.updateData();
+            };
         }
     }
 </script>
