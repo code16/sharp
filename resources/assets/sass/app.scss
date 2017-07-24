@@ -74,6 +74,8 @@ $button-border-width: 1px;
   @import 'components/Search';
   @import 'components/list/Pagination';
 
+  @import 'components/LeftNav';
+
   input[type="number"].hide-controls {
     &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
       -webkit-appearance: none;

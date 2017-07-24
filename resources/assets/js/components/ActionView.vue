@@ -1,10 +1,12 @@
 <template>
-    <div class="SharpActionView container">
-        <component v-if="barComp" :is="barComp"></component>
-        <slot></slot>
-        <sharp-modal ref="mainModal" v-bind="mainModalProps">
-            {{mainModalText}}
-        </sharp-modal>
+    <div class="SharpActionView">
+        <div class="container">
+            <component v-if="barComp" :is="barComp"></component>
+            <slot></slot>
+            <sharp-modal ref="mainModal" v-bind="mainModalProps">
+                {{mainModalText}}
+            </sharp-modal>
+        </div>
     </div>
 </template>
 

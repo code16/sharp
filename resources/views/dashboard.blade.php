@@ -2,10 +2,12 @@
 
 @section("content")
 
-    @include("sharp::partials._menu", ["dashboard" => true])
-
     <div id="sharp-app">
-        Dashboard
+        @include("sharp::partials._menu", ["dashboard" => true])
+        <sharp-action-view context="dashboard">
+            Dashboard
+        </sharp-action-view>
+
     </div>
 
 @endsection

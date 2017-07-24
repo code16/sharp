@@ -5,6 +5,8 @@ import FieldDisplay from './components/form/FieldDisplay';
 import EntitiesList from './components/list/EntitiesList';
 //import Dashboard from './components/dashboard/Dashboard';
 
+import CollapsibleItem from './components/menu/CollapsibleItem';
+
 import SharpLoading from './components/Loading';
 
 import axios from 'axios';
@@ -30,6 +32,7 @@ new Vue({
         [ActionView.name]:ActionView,
         [Form.name]:Form,
         [EntitiesList.name]:EntitiesList,
+        [CollapsibleItem.name]:CollapsibleItem
         //[Dashboard.name]:Dashboard
     },
 
