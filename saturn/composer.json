@@ -14,12 +14,16 @@
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4",
+    "laravel/dusk": "^1.1",
     "mockery/mockery": "0.9.*",
     "phpunit/phpunit": "~5.7"
   },
   "autoload": {
     "classmap": [
       "database"
+    ],
+    "files": [
+      "../src/sharp_helper.php"
     ],
     "psr-4": {
       "App\\": "app/",

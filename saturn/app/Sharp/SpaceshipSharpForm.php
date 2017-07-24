@@ -6,7 +6,7 @@ use App\Pilot;
 use App\Spaceship;
 use App\SpaceshipType;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
-use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentTransformer;
+use Code16\Sharp\Form\Eloquent\WithFormEloquentTransformers;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
@@ -20,12 +20,13 @@ use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 class SpaceshipSharpForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
 
-    use WithSharpFormEloquentTransformer;
+    use WithCustomTransformers, WithFormEloquentTransformers;
 
     function buildFormFields()
     {

@@ -5,7 +5,7 @@ namespace Code16\Sharp\Http\Middleware\Api;
 use Closure;
 use Code16\Sharp\Exceptions\Auth\SharpAuthenticationException;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
-use Code16\Sharp\Exceptions\EntitiesList\InvalidEntityStateException;
+use Code16\Sharp\Exceptions\EntityList\InvalidEntityStateException;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Exceptions\SharpException;
 

@@ -3,9 +3,9 @@
 namespace App\Sharp\Filters;
 
 use App\Pilot;
-use Code16\Sharp\EntitiesList\EntitiesListFilter;
+use Code16\Sharp\EntityList\EntityListMultipleFilter;
 
-class SpaceshipPilotsFilter implements EntitiesListFilter
+class SpaceshipPilotsFilter implements EntityListMultipleFilter
 {
     /**
      * @return array
@@ -14,13 +14,5 @@ class SpaceshipPilotsFilter implements EntitiesListFilter
     {
         return Pilot::orderBy("name")
             ->pluck("name", "id");
-    }
-
-    /**
-     * @return bool
-     */
-    public function multiple()
-    {
-        return true;
     }
 }

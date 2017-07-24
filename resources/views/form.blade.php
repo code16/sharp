@@ -2,6 +2,8 @@
 
 @section("content")
 
+    @include("sharp::partials._menu")
+
     <div id="sharp-app" class="Sharp__form-page">
         <sharp-action-view context="form">
             <sharp-form entity-key="{{ $entityKey }}"

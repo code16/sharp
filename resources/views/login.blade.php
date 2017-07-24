@@ -35,7 +35,7 @@
                                     <div class="SharpFieldContainer SharpForm--form-item">
                                         <input type="password" name="password" id="password" class="SharpText" placeholder="@lang('sharp::login.password_field')">
                                     </div>
-                                    <button type="submit" class="SharpButton SharpButton--primary">
+                                    <button type="submit" id="submit" class="SharpButton SharpButton--primary">
                                         @lang('sharp::login.button')
                                     </button>
                                 </div>

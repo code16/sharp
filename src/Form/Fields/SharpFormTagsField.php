@@ -122,7 +122,7 @@ class SharpFormTagsField extends SharpFormField
     protected function validationRules()
     {
         return [
-            "options" => "required|array",
+            "options" => "array",
             "creatable" => "boolean",
             "maxTagCount" => "integer",
         ];

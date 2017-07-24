@@ -12,8 +12,8 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
     {
         parent::setUp();
 
-        unlink(resource_path("views/LIT.vue"));
-        unlink(resource_path("views/RIT.vue"));
+        @unlink(resource_path("views/LIT.vue"));
+        @unlink(resource_path("views/RIT.vue"));
         file_put_contents(resource_path("views/LIT.vue"), "LIT-content");
         file_put_contents(resource_path("views/RIT.vue"), "RIT-content");
     }

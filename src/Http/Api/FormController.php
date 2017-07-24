@@ -2,8 +2,6 @@
 
 namespace Code16\Sharp\Http\Api;
 
-use Code16\Sharp\Form\SharpForm;
-
 class FormController extends ApiController
 {
 
@@ -14,7 +12,7 @@ class FormController extends ApiController
      */
     public function edit($entityKey, $instanceId)
     {
-        $this->checkAuthorization("view", $entityKey, $instanceId);
+        sharp_check_ability("view", $entityKey, $instanceId);
 
         $form = $this->getFormInstance($entityKey);
 
@@ -31,7 +29,7 @@ class FormController extends ApiController
      */
     public function create($entityKey)
     {
-        $this->checkAuthorization("create", $entityKey);
+        sharp_check_ability("create", $entityKey);
 
         $form = $this->getFormInstance($entityKey);
 
@@ -49,7 +47,7 @@ class FormController extends ApiController
      */
     public function update($entityKey, $instanceId)
     {
-        $this->checkAuthorization("update", $entityKey, $instanceId);
+        sharp_check_ability("update", $entityKey, $instanceId);
 
         $this->validateRequest($entityKey);
 
@@ -66,13 +64,13 @@ class FormController extends ApiController
      */
     public function store($entityKey)
     {
-        $this->checkAuthorization("create", $entityKey);
+        sharp_check_ability("create", $entityKey);
 
         $this->validateRequest($entityKey);
 
         $form = $this->getFormInstance($entityKey);
 
-        $form->store(request()->only($form->getFieldKeys()));
+        $form->store(request()->only($form->getDataKeys()));
 
         return response()->json(["ok" => true]);
     }
@@ -84,22 +82,13 @@ class FormController extends ApiController
      */
     public function delete($entityKey, $instanceId)
     {
-        $this->checkAuthorization("delete", $entityKey, $instanceId);
+        sharp_check_ability("delete", $entityKey, $instanceId);
 
         $form = $this->getFormInstance($entityKey);
 
         $form->delete($instanceId);
 
         return response()->json(["ok" => true]);
-    }
-
-    /**
-     * @param string $entityKey
-     * @return SharpForm
-     */
-    protected function getFormInstance(string $entityKey): SharpForm
-    {
-        return app(config("sharp.entities.{$entityKey}.form"));
     }
 
     /**
@@ -122,7 +111,7 @@ class FormController extends ApiController
     protected function requestData($form): array
     {
         return collect(request()->all())->filter(function ($item, $key) use ($form) {
-            return in_array($key, $form->getFieldKeys());
+            return in_array($key, $form->getDataKeys());
         })->all();
     }
 }

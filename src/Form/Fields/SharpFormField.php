@@ -157,6 +157,14 @@ abstract class SharpFormField
     }
 
     /**
+     * @return string
+     */
+    public function key(): string
+    {
+        return $this->key;
+    }
+
+    /**
      * Return specific validation rules.
      *
      * @return array
@@ -168,6 +176,7 @@ abstract class SharpFormField
 
     /**
      * Throw an exception in case of invalid attribute value.
+     *
      * @param array $properties
      * @throws SharpFormFieldValidationException
      */

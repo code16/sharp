@@ -2,18 +2,17 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
-use Code16\Sharp\EntitiesList\EntitiesListState;
+use Code16\Sharp\EntityList\Commands\EntityState;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
-use Code16\Sharp\Tests\Fixtures\PersonSharpEntitiesList;
-use Code16\Sharp\Tests\Fixtures\User;
-use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
 
-class EntityStateControllerTest extends SharpTestCase
+class EntityStateControllerTest extends BaseApiTest
 {
     /** @test */
     public function we_can_update_the_state_of_an_entity()
     {
         $this->buildTheWorld();
+        $this->disableExceptionHandling();
 
         $this->json('post', '/sharp/api/list/person/state/1', [
                 "attribute" => "state",
@@ -54,7 +53,13 @@ class EntityStateControllerTest extends SharpTestCase
             ->assertStatus(200)
             ->assertJson([
                 "action" => "refresh",
-                "items" => [1],
+                "items" => [
+                    [
+                        "id" => 1,
+                        "name" => "John <b>Wayne</b>",
+                        "age" => 22
+                    ]
+                ],
                 "value" => "ok_refresh_items",
             ]);
     }
@@ -93,28 +98,39 @@ class EntityStateControllerTest extends SharpTestCase
             ->assertStatus(417);
     }
 
-    protected function buildTheWorld()
+    /** @test */
+    public function we_cant_update_the_state_if_unauthorized()
     {
-        $this->actingAs(new User);
+        $this->buildTheWorld();
 
         $this->app['config']->set(
             'sharp.entities.person.list',
             EntityStatePersonSharpEntitiesList::class
         );
 
+        $this->json('post', '/sharp/api/list/person/state/100', [
+            "attribute" => "state",
+            "value" => "anything"
+        ])->assertStatus(403);
+    }
+
+    protected function buildTheWorld()
+    {
+        parent::buildTheWorld();
+        $this->login();
+
         $this->app['config']->set(
-            'app.key', 'base64:'.base64_encode(random_bytes(
-                $this->app['config']['app.cipher'] == 'AES-128-CBC' ? 16 : 32
-            ))
+            'sharp.entities.person.list',
+            EntityStatePersonSharpEntitiesList::class
         );
     }
 }
 
-class EntityStatePersonSharpEntitiesList extends PersonSharpEntitiesList {
+class EntityStatePersonSharpEntitiesList extends PersonSharpEntityList {
 
     function buildListConfig()
     {
-        $this->setEntityStateHandler("state", new class() extends EntitiesListState {
+        $this->setEntityState("state", new class() extends EntityState {
 
             protected function buildStates()
             {
@@ -135,8 +151,13 @@ class EntityStatePersonSharpEntitiesList extends PersonSharpEntitiesList {
                 }
 
                 if($stateId == "ok_refresh_items") {
-                    return $this->refresh([$instanceId]);
+                    return $this->refresh($instanceId);
                 }
+            }
+
+            public function authorizeFor($instanceId): bool
+            {
+                return $instanceId != 100;
             }
         });
     }

@@ -41,6 +41,11 @@ return [
             'provider' => 'users',
         ],
 
+        'sharp' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+
         'api' => [
             'driver' => 'token',
             'provider' => 'users',

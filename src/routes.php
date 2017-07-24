@@ -7,14 +7,26 @@ Route::group([
     'namespace' => 'Code16\Sharp\Http\Api'
 ], function() {
 
+    Route::get("/dashboard")
+        ->name("code16.sharp.api.dashboard")
+        ->uses('DashboardController@index');
+
     Route::get("/list/{entityKey}")
         ->name("code16.sharp.api.list")
-        ->middleware('sharp_api_append_list_authorizations')
-        ->uses('EntitiesListController@show');
+        ->middleware(['sharp_api_append_list_authorizations', 'sharp_save_list_params'])
+        ->uses('EntityListController@show');
 
     Route::post("/list/{entityKey}/state/{instanceId}")
         ->name("code16.sharp.api.list.state")
-        ->uses('EntityStateController@update');
+        ->uses('Commands\EntityStateController@update');
+
+    Route::post("/list/{entityKey}/command/{commandKey}")
+        ->name("code16.sharp.api.list.command.entity")
+        ->uses('Commands\EntityCommandController@update');
+
+    Route::post("/list/{entityKey}/command/{commandKey}/{instanceId}")
+        ->name("code16.sharp.api.list.command.instance")
+        ->uses('Commands\InstanceCommandController@update');
 
     Route::get("/form/{entityKey}")
         ->name("code16.sharp.api.form.create")
@@ -65,8 +77,17 @@ Route::group([
         'middleware' => ['sharp_auth'],
     ], function() {
 
+        Route::get('/')
+            ->name("code16.sharp.dashboard")
+            ->uses('DashboardController@index');
+
+        Route::get('/logout')
+            ->name("code16.sharp.logout")
+            ->uses('LoginController@destroy');
+
         Route::get('/list/{entityKey}')
             ->name("code16.sharp.list")
+            ->middleware('sharp_restore_list_params')
             ->uses('ListController@show');
 
         Route::get('/form/{entityKey}/{instanceId}')

@@ -12,7 +12,18 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         factory(\App\User::class)->create([
-            "email" => "test@example.com"
+            "email" => "boss@example.com",
+            "group" => "sharp,boss"
+        ]);
+
+        factory(\App\User::class)->create([
+            "email" => "admin@example.com",
+            "group" => "sharp"
+        ]);
+
+        factory(\App\User::class)->create([
+            "email" => "user@example.com",
+            "group" => "user"
         ]);
 
         $types = factory(\App\SpaceshipType::class, 10)->create();

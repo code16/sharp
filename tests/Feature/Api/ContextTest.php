@@ -7,10 +7,19 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ContextTest extends BaseApiTest
 {
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->login();
+    }
+
+
     /** @test */
     public function context_is_set_on_a_update_case()
     {
-        $this->buildTheWorld(true);
+        $this->buildTheWorld();
+        $this->configurePersonValidator();
 
         $context = app(SharpContext::class);
 
@@ -25,7 +34,8 @@ class ContextTest extends BaseApiTest
     /** @test */
     public function context_is_set_on_a_creation_case()
     {
-        $this->buildTheWorld(true);
+        $this->buildTheWorld();
+        $this->configurePersonValidator();
 
         $context = app(SharpContext::class);
 

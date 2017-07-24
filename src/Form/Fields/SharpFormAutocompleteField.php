@@ -3,11 +3,12 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithTemplates;
 use Illuminate\Support\Collection;
 
 class SharpFormAutocompleteField extends SharpFormField
 {
-    use SharpFormFieldWithPlaceholder;
+    use SharpFormFieldWithPlaceholder, SharpFormFieldWithTemplates;
 
     /**
      * @var string
@@ -43,16 +44,6 @@ class SharpFormAutocompleteField extends SharpFormField
      * @var string
      */
     protected $itemIdAttribute = "id";
-
-    /**
-     * @var string
-     */
-    protected $listItemTemplate;
-
-    /**
-     * @var string
-     */
-    protected $resultItemTemplate;
 
     /**
      * @var int
@@ -157,9 +148,7 @@ class SharpFormAutocompleteField extends SharpFormField
      */
     public function setListItemTemplatePath(string $listItemTemplatePath)
     {
-         return $this->setListItemInlineTemplate(
-             file_get_contents(resource_path("views/" . $listItemTemplatePath))
-         );
+         return $this->setTemplatePath($listItemTemplatePath, "list");
     }
 
     /**
@@ -168,9 +157,7 @@ class SharpFormAutocompleteField extends SharpFormField
      */
     public function setResultItemTemplatePath(string $resultItemTemplate)
     {
-        return $this->setResultItemInlineTemplate(
-            file_get_contents(resource_path("views/" . $resultItemTemplate))
-        );
+        return $this->setTemplatePath($resultItemTemplate, "result");
     }
 
     /**
@@ -179,9 +166,7 @@ class SharpFormAutocompleteField extends SharpFormField
      */
     public function setListItemInlineTemplate(string $template)
     {
-        $this->listItemTemplate = $template;
-
-        return $this;
+        return $this->setInlineTemplate($template, "list");
     }
 
     /**
@@ -190,9 +175,7 @@ class SharpFormAutocompleteField extends SharpFormField
      */
     public function setResultItemInlineTemplate(string $template)
     {
-        $this->resultItemTemplate = $template;
-
-        return $this;
+        return $this->setInlineTemplate($template, "result");
     }
 
     /**
@@ -239,8 +222,8 @@ class SharpFormAutocompleteField extends SharpFormField
             "remoteMethod" => $this->remoteMethod,
             "remoteSearchAttribute" => $this->remoteSearchAttribute,
             "itemIdAttribute" => $this->itemIdAttribute,
-            "listItemTemplate" => $this->listItemTemplate,
-            "resultItemTemplate" => $this->resultItemTemplate,
+            "listItemTemplate" => $this->template("list"),
+            "resultItemTemplate" => $this->template("result"),
             "searchMinChars" => $this->searchMinChars,
         ]);
     }
