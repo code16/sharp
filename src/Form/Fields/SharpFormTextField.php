@@ -8,6 +8,8 @@ class SharpFormTextField extends SharpFormField
 {
     use SharpFormFieldWithPlaceholder;
 
+    const FIELD_TYPE = "text";
+
     /**
      * @var string
      */
@@ -19,7 +21,7 @@ class SharpFormTextField extends SharpFormField
      */
     public static function make(string $key)
     {
-        return new static($key, 'text');
+        return new static($key, static::FIELD_TYPE);
     }
 
     /**

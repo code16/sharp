@@ -24,6 +24,11 @@ class AppendListAuthorizations
         $this->gate = $gate;
     }
 
+    /**
+     * @param Request $request
+     * @param Closure $next
+     * @return JsonResponse
+     */
     public function handle(Request $request, Closure $next)
     {
         $response = $next($request);

@@ -114,6 +114,10 @@ trait WithSharpFormEloquentUpdater
                 // We have to build an UpdateRequestData object for each item
                 $listValue = [];
 
+                if(!$value) {
+                    $value = [];
+                }
+
                 foreach ($value as $item) {
                     $itemData = new UpdateRequestData;
 

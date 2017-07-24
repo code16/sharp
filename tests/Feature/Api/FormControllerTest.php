@@ -4,6 +4,13 @@ namespace Code16\Sharp\Tests\Feature\Api;
 
 class FormControllerTest extends BaseApiTest
 {
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->login();
+    }
+
+
     /** @test */
     public function we_can_get_form_data_for_an_entity()
     {
@@ -102,7 +109,8 @@ class FormControllerTest extends BaseApiTest
     /** @test */
     public function we_can_validate_an_entity_before_update()
     {
-        $this->buildTheWorld(true);
+        $this->buildTheWorld();
+        $this->configurePersonValidator();
 
         $this->json('post', '/sharp/api/form/person/1', [
             "age" => 22

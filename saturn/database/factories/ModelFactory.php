@@ -8,6 +8,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
         'password' => $password ?: $password = bcrypt('secret'),
+        'group' => 'user',
         'remember_token' => str_random(10),
     ];
 });
@@ -22,7 +23,8 @@ $factory->define(\App\Spaceship::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->lastName,
         'capacity' => $faker->numberBetween(5, 80) * 1000,
-        'construction_date' => $faker->date()
+        'construction_date' => $faker->date(),
+        'type_id' => factory(\App\SpaceshipType::class)->create()->id
     ];
 });
 
