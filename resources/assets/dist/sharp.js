@@ -27379,13 +27379,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_list_EntitiesList___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_list_EntitiesList__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_menu_CollapsibleItem__ = __webpack_require__(303);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_menu_CollapsibleItem___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_menu_CollapsibleItem__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_Loading__ = __webpack_require__(213);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_Loading___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_Loading__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_axios__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_axios_lib_helpers_cookies__ = __webpack_require__(41);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_axios_lib_helpers_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_axios_lib_helpers_cookies__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__helpers_querystring__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_menu_NavItem__ = __webpack_require__(306);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_menu_NavItem___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_menu_NavItem__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_Loading__ = __webpack_require__(213);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_Loading___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__components_Loading__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_axios__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_axios_lib_helpers_cookies__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_axios_lib_helpers_cookies___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_axios_lib_helpers_cookies__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__helpers_querystring__ = __webpack_require__(46);
 var _components;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -27406,6 +27408,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 // prevent recursive components import
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component(__WEBPACK_IMPORTED_MODULE_3__components_form_FieldDisplay__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_3__components_form_FieldDisplay__["a" /* default */]);
 
@@ -27413,12 +27416,12 @@ new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
     el: "#sharp-app",
 
     provide: {
-        glasspane: new __WEBPACK_IMPORTED_MODULE_6__components_Loading___default.a({ el: '#glasspane' }),
-        xsrfToken: __WEBPACK_IMPORTED_MODULE_8_axios_lib_helpers_cookies___default.a.read(__WEBPACK_IMPORTED_MODULE_7_axios___default.a.defaults.xsrfCookieName),
-        params: __WEBPACK_IMPORTED_MODULE_9__helpers_querystring__["a" /* parse */]()
+        glasspane: new __WEBPACK_IMPORTED_MODULE_7__components_Loading___default.a({ el: '#glasspane' }),
+        xsrfToken: __WEBPACK_IMPORTED_MODULE_9_axios_lib_helpers_cookies___default.a.read(__WEBPACK_IMPORTED_MODULE_8_axios___default.a.defaults.xsrfCookieName),
+        params: __WEBPACK_IMPORTED_MODULE_10__helpers_querystring__["a" /* parse */]()
     },
 
-    components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_1__components_ActionView___default.a.name, __WEBPACK_IMPORTED_MODULE_1__components_ActionView___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_2__components_form_Form___default.a.name, __WEBPACK_IMPORTED_MODULE_2__components_form_Form___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_4__components_list_EntitiesList___default.a.name, __WEBPACK_IMPORTED_MODULE_4__components_list_EntitiesList___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_5__components_menu_CollapsibleItem___default.a.name, __WEBPACK_IMPORTED_MODULE_5__components_menu_CollapsibleItem___default.a), _components),
+    components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_1__components_ActionView___default.a.name, __WEBPACK_IMPORTED_MODULE_1__components_ActionView___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_2__components_form_Form___default.a.name, __WEBPACK_IMPORTED_MODULE_2__components_form_Form___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_4__components_list_EntitiesList___default.a.name, __WEBPACK_IMPORTED_MODULE_4__components_list_EntitiesList___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_5__components_menu_CollapsibleItem___default.a.name, __WEBPACK_IMPORTED_MODULE_5__components_menu_CollapsibleItem___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_6__components_menu_NavItem___default.a.name, __WEBPACK_IMPORTED_MODULE_6__components_menu_NavItem___default.a), _components),
 
     mounted: function mounted() {
         console.log(this);
@@ -57947,6 +57950,8 @@ if (false) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__NavItem__ = __webpack_require__(306);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__NavItem___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__NavItem__);
 //
 //
 //
@@ -57967,10 +57972,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpCollapsibleItem',
     props: {
-        isExpanded: {
+        initiallyExpanded: {
             type: Boolean,
             default: false
         },
@@ -57978,11 +57984,43 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     data: function data() {
         return {
-            expanded: this.isExpanded
+            expanded: this.initiallyExpanded
         };
     },
+
+    watch: {
+        expanded: 'expandedChanged'
+    },
+    computed: {
+        navItems: function navItems() {
+            return this.$slots.default.map(function (slot) {
+                return slot.componentInstance;
+            }).filter(function (comp) {
+                return comp && comp.$options.name === __WEBPACK_IMPORTED_MODULE_0__NavItem___default.a.name;
+            });
+        }
+    },
+    methods: {
+        expandedChanged: function expandedChanged() {
+            var _this = this;
+
+            this.$nextTick(function (_) {
+                _this.navItems.forEach(function (i) {
+                    return i.itemLinkFocusable = _this.expanded;
+                });
+            });
+        },
+        toggle: function toggle() {
+            this.expanded = !this.expanded;
+        }
+    },
     mounted: function mounted() {
-        console.log(this.$slots.default);
+        var _this2 = this;
+
+        this.navItems.forEach(function (i) {
+            i.itemFocusable = false;
+            i.itemLinkFocusable = _this2.expanded;
+        });
     }
 });
 
@@ -58029,13 +58067,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
     staticClass: "SharpLeftNav__item SharpLeftNav__item--has-children",
     class: {
       'SharpLeftNav__item--expanded': _vm.expanded
+    },
+    attrs: {
+      "tabindex": "0"
+    },
+    on: {
+      "keydown": function($event) {
+        if (!('button' in $event) && _vm._k($event.keyCode, "enter", 13)) { return null; }
+        _vm.toggle($event)
+      }
     }
   }, [_vm._c('a', {
     staticClass: "SharpLeftNav__item-link",
     on: {
-      "click": function($event) {
-        _vm.expanded = !_vm.expanded
-      }
+      "click": _vm.toggle
     }
   }, [_vm._t("label", [_vm._v("\n            " + _vm._s(_vm.label) + "\n        ")]), _vm._v(" "), _vm._c('div', {
     staticClass: "SharpLeftNav__item-icon"
@@ -58064,6 +58109,116 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
      require("vue-hot-reload-api").rerender("data-v-be239242", module.exports)
+  }
+}
+
+/***/ }),
+/* 305 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: 'SharpNavItem',
+    props: {
+        current: {
+            type: Boolean,
+            default: false
+        },
+        disabled: {
+            type: Boolean,
+            default: false
+        },
+        link: String
+    },
+    data: function data() {
+        return {
+            itemFocusable: !this.disabled,
+            itemLinkFocusable: true
+        };
+    }
+});
+
+/***/ }),
+/* 306 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(305),
+  /* template */
+  __webpack_require__(307),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/antoine/code/sharp/resources/assets/js/components/menu/NavItem.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] NavItem.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-47d3f0f8", Component.options)
+  } else {
+    hotAPI.reload("data-v-47d3f0f8", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 307 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
+  return _vm._c('li', {
+    staticClass: "SharpLeftNav__item",
+    class: {
+      'SharpLeftNav__item--active': _vm.current, 'SharpLeftNav__item--disabled': _vm.disabled
+    },
+    attrs: {
+      "role": "menuitem"
+    }
+  }, [(_vm.disabled) ? [_vm._c('span', {
+    staticClass: "SharpLeftNav__item-link"
+  }, [_vm._t("default")], 2)] : [_vm._c('a', {
+    staticClass: "SharpLeftNav__item-link",
+    attrs: {
+      "href": _vm.link
+    }
+  }, [_vm._t("default")], 2)]], 2)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-47d3f0f8", module.exports)
   }
 }
 

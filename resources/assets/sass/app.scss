@@ -83,4 +83,8 @@ $button-border-width: 1px;
     }
     -moz-appearance: textfield;
   }
+
+  [v-cloak] {
+    display: none;
+  }
 }

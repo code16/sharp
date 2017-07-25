@@ -1,7 +1,7 @@
 <template>
     <li class="SharpLeftNav__item SharpLeftNav__item--has-children"
-        :class="{'SharpLeftNav__item--expanded': expanded}">
-        <a class="SharpLeftNav__item-link" @click="expanded=!expanded">
+        :class="{'SharpLeftNav__item--expanded': expanded}" tabindex="0" @keydown.enter="toggle">
+        <a class="SharpLeftNav__item-link" @click="toggle">
             <slot name="label">
                 {{ label }}
             </slot>
@@ -18,10 +18,11 @@
 </template>
 
 <script>
+    import NavItem from './NavItem';
     export default {
         name:'SharpCollapsibleItem',
         props: {
-            isExpanded: {
+            initiallyExpanded: {
                 type:Boolean,
                 default: false
             },
@@ -29,11 +30,34 @@
         },
         data() {
             return {
-                expanded: this.isExpanded
+                expanded: this.initiallyExpanded
+            }
+        },
+        watch: {
+            expanded:'expandedChanged'
+        },
+        computed: {
+            navItems() {
+                return this.$slots.default
+                    .map(slot => slot.componentInstance)
+                    .filter(comp => comp && comp.$options.name === NavItem.name);
+            }
+        },
+        methods: {
+            expandedChanged() {
+                this.$nextTick(_=> {
+                    this.navItems.forEach(i => i.itemLinkFocusable = this.expanded);
+                });
+            },
+            toggle() {
+                this.expanded = !this.expanded;
             }
         },
         mounted() {
-            console.log(this.$slots.default);
+            this.navItems.forEach(i => {
+                i.itemFocusable = false;
+                i.itemLinkFocusable = this.expanded;
+            });
         }
     }
 </script>

@@ -28,18 +28,21 @@
       &:focus {
         outline: 1px solid transparent;
 
-        &:not(.SharpLeftNav__item--has-children) {
-          background-color: $color__gray-2;
-        }
+        &:not(.SharpLeftNav__item--disabled) {
 
-        .SharpLeftNav__item-link {
-          color: $color__blue-51;
-          text-decoration: underline;
-        }
+          &:not(.SharpLeftNav__item--has-children) {
+            background-color: $color__gray-2;
+          }
 
-        .SharpLeftNav--nested .left-nav-list__item-link {
-          color: $color__blue-90;
-          text-decoration: none;
+          .SharpLeftNav__item-link {
+            color: $color__blue-51;
+            text-decoration: underline;
+          }
+
+          .SharpLeftNav__list--nested .SharpLeftNav__item-link {
+            color: $color__blue-90;
+            text-decoration: none;
+          }
         }
       }
 
@@ -62,6 +65,13 @@
         text-decoration: none;
         transition: background-color $transition--base;
         padding: .75rem 1.5rem .75rem rem(59px);
+
+        &:focus {
+          outline: 1px solid transparent;
+          background-color: $color__gray-2;
+          color: $color__blue-51;
+          text-decoration: underline;
+        }
       }
 
       &-icon {
@@ -96,22 +106,27 @@
         }
       }
 
-      &:not(.SharpLeftNav__item--has-children):hover {
+      &:not(.SharpLeftNav__item--has-children):not(.SharpLeftNav__item--disabled):hover {
         & > .SharpLeftNav__item-link {
           background-color: $color__gray-2;
           color: $color__blue-51;
         }
       }
 
+      &.SharpLeftNav__item--disabled {
+        cursor: default;
+      }
+
+
     }
 
     .SharpLeftNav__item--has-children {
-      .SharpLeftNav__item__item-link {
+      .SharpLeftNav__item-link {
         padding-right: 1.5rem;
       }
 
       &:hover {
-        & > .SharpLeftNav__item_item-link {
+        & > .SharpLeftNav__item-link {
           color: $color__blue-51;
         }
       }
@@ -140,13 +155,6 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-
-        &:focus {
-          outline: 1px solid transparent;
-          background-color: $color__gray-2;
-          color: $color__blue-51;
-          text-decoration: underline;
-        }
       }
 
       &:hover {

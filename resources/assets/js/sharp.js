@@ -6,6 +6,7 @@ import EntitiesList from './components/list/EntitiesList';
 //import Dashboard from './components/dashboard/Dashboard';
 
 import CollapsibleItem from './components/menu/CollapsibleItem';
+import NavItem from './components/menu/NavItem';
 
 import SharpLoading from './components/Loading';
 
@@ -32,7 +33,8 @@ new Vue({
         [ActionView.name]:ActionView,
         [Form.name]:Form,
         [EntitiesList.name]:EntitiesList,
-        [CollapsibleItem.name]:CollapsibleItem
+        [CollapsibleItem.name]:CollapsibleItem,
+        [NavItem.name]:NavItem
         //[Dashboard.name]:Dashboard
     },
 
