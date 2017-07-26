@@ -3,8 +3,8 @@
         <template v-if="ready">
             <div class="SharpEntitiesList__table SharpEntitiesList__table--border">
                 <div class="SharpEntitiesList__thead">
-                    <div class="SharpEntitiesList__row SharpEntitiesList__row--header">
-                        <div class="SharpEntitiesList__th" v-for="contLayout in layout">
+                    <div class="SharpEntitiesList__row SharpEntitiesList__row--header row">
+                        <div class="SharpEntitiesList__th" :class="colClasses(contLayout)" v-for="contLayout in layout">
                             {{ containers[contLayout.key].label }}
                             <template v-if="containers[contLayout.key].sortable">
                                 <svg class="SharpEntitiesList__carret"
@@ -18,9 +18,9 @@
                     </div>
                 </div>
                 <div class="SharpEntitiesList__tbody">
-                    <div class="SharpEntitiesList__row" v-for="item in data.items" @click="rowClicked(item.id)">
-                        <div class="SharpEntitiesList__td" v-for="contLayout in layout">
-                            <span v-if="containers[contLayout.key].html" v-html="item[contLayout.key]"></span>
+                    <div class="SharpEntitiesList__row row" v-for="item in data.items" @click="rowClicked(item.id)">
+                        <div class="SharpEntitiesList__td" :class="colClasses(contLayout)" v-for="contLayout in layout">
+                            <span v-if="containers[contLayout.key].html" v-html="item[contLayout.key]" class="SharpEntitiesList__td-html-container"></span>
                             <template v-else>
                                 {{ item[contLayout.key] }}
                             </template>
@@ -85,7 +85,9 @@
                 page: 0,
                 search: '',
                 sortedBy: null,
-                sortDir: 'asc',
+                sortDir: null,
+
+                filtersValue: {}
             }
         },
         computed: {
@@ -93,8 +95,12 @@
                 return `${API_PATH}/list/${this.entityKey}`;
             },
             apiParams() {
-                if(!this.ready)
-                    return this.params;
+                if(!this.ready) {
+                    return {
+                        ...this.params,
+                        page : parseInt(this.params.page)
+                    }
+                }
 
                 let params = {};
                 if(this.config.paginated) params.page = this.page;
@@ -103,7 +109,14 @@
                     params.sort = this.sortedBy;
                     params.dir = this.sortDir;
                 }
+                params = { ...params, ...this.filterParams };
                 return params;
+            },
+            filterParams() {
+                return Object.keys(this.filtersValue).reduce((res, filterKey)=>{
+                    res[`filter_${filterKey}`] = this.filtersValue[filterKey];
+                    return res;
+                },{});
             },
             instanceIdAttribute() {
                 return (this.config||{}).instanceIdAttribute;
@@ -117,6 +130,17 @@
                 this.config = config || {};
 
                 this.page = this.data.page;
+                !this.sortDir && (this.sortDir = this.config.defaultSortDir);
+                !this.sortedBy && (this.sortedBy = this.config.defaultSort);
+
+                this.filtersValue = this.config.filters.reduce((res, filter) => {
+
+                    res[filter.key] = filter.default || (filter.mulitple?[]:null);
+                    return res;
+                }, {});
+
+                this.ready = true;
+                history.replaceState(this.apiParams, null);
             },
             verify() {
                 for(let contLayout of this.layout) {
@@ -126,12 +150,19 @@
                     }
                 }
             },
+            colClasses(layout) {
+                return [
+                    `col-${layout.sizeXS}`,
+                    `col-sm-${layout.size}`,
+                ]
+            },
             rowClicked(instanceId) {
                 location.href = `/sharp/form/${this.entityKey}/${instanceId}`;
             },
             setupActionBar() {
                 this.actionsBus.$emit('setup', {
-                    itemsCount: this.data.totalCount
+                    itemsCount: this.data.totalCount,
+                    filters: this.config.filters
                 });
             },
             pageChanged(page) {
@@ -163,14 +194,14 @@
                 let { search, page, sort, dir } = params;
                 this.actionsBus.$emit('searchChanged', search, { isInput: false });
 
-                this.page = page;
-                this.sortedBy = sort;
-                this.sortDir = dir;
+                page && (this.page = page);
+                sort && (this.sortedBy = sort);
+                dir && (this.sortDir = dir);
             }
         },
         actions: {
             searchChanged(input, {isInput=true}={}) {
-                console.log('entities list search changed', input, isInput);
+                //console.log('entities list search changed', input, isInput);
 
                 this.search = input;
                 if(isInput) {

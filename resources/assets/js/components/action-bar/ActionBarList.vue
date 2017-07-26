@@ -2,6 +2,10 @@
     <sharp-action-bar>
         <template slot="left">
             <span>{{ itemsCount }} {{ l('action_bar.list.items_count') }}</span>
+            <sharp-filter-select v-for="filter in filters" :name="filter.key" :values="filter.values"
+                                 :key="filter.key" @input="emitAction('filterChanged',filter.key,$event)"
+                                 :value="filtersValue[filter.key]" :multiple="filter.multiple">
+            </sharp-filter-select>
         </template>
         <template slot="right">
             <div class="SharpActionBar__search SharpSearch SharpSearch--lg" role="search">
@@ -33,11 +37,14 @@
 
     import Text from '../form/fields/Text';
 
+    import FilterSelect from '../list/FilterSelect';
+
     export default {
         name: 'SharpActionBarList',
         components : {
             [ActionBar.name]: ActionBar,
-            [Text.name]: Text
+            [Text.name]: Text,
+            [FilterSelect.name]: FilterSelect
         },
 
         mixins: [ActionBarMixin, ActionEvents, Localization],
@@ -45,7 +52,9 @@
         data() {
             return {
                 itemsCount: 0,
-                search:''
+                search:'',
+                filters: [],
+                filtersValue: {}
             }
         },
         methods: {
@@ -59,12 +68,13 @@
         },
         actions: {
             setup(config) {
-                let { itemsCount } = config;
+                let { itemsCount, filters } = config;
                 this.itemsCount = itemsCount;
+                this.filters = filters;
             },
             searchChanged(input) {
                 this.search = input;
-            }
+            },
         }
     }
 </script>
