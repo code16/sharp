@@ -18,13 +18,23 @@
                     </div>
                 </div>
                 <div class="SharpEntitiesList__tbody">
-                    <div class="SharpEntitiesList__row row" v-for="item in data.items" @click="rowClicked(item.id)">
-                        <div class="SharpEntitiesList__td" :class="colClasses(contLayout)" v-for="contLayout in layout">
-                            <span v-if="containers[contLayout.key].html" v-html="item[contLayout.key]" class="SharpEntitiesList__td-html-container"></span>
-                            <template v-else>
-                                {{ item[contLayout.key] }}
-                            </template>
+
+                    <div class="SharpEntitiesList__row" v-for="item in data.items">
+                        <div class="row" @click="rowClicked(item.id)">
+                            <div class="SharpEntitiesList__td" :class="colClasses(contLayout)" v-for="contLayout in layout">
+                                <span v-if="containers[contLayout.key].html" v-html="item[contLayout.key]" class="SharpEntitiesList__td-html-container"></span>
+                                <template v-else>
+                                    {{ item[contLayout.key] }}
+                                </template>
+                            </div>
                         </div>
+                        <sharp-dropdown class="SharpEntitiesList__state-dropdown" :show-arrow="false">
+                            <i slot="text" class="fa fa-circle" :class="stateClasses(item.state)" :style="stateStyle(item.state)"></i>
+                            <sharp-dropdown-item v-for="state in config.state.values" @click="setState(item,state)" :key="state.value">
+                                <i class="fa fa-circle" :class="stateClasses(state.value)" :style="stateStyle(state.value)"></i>
+                                {{ state.label }}
+                            </sharp-dropdown-item>
+                        </sharp-dropdown>
                     </div>
                 </div>
             </div>
@@ -45,6 +55,9 @@
 <script>
     import DynamicView from '../DynamicViewMixin';
     import Pagination from './Pagination';
+    import Dropdown from '../dropdown/Dropdown';
+    import DropdownItem from '../dropdown/DropdownItem';
+
     import { API_PATH } from '../../consts';
     import * as util from '../../util';
 
@@ -67,7 +80,9 @@
         mixins: [ ActionEvents ],
 
         components: {
-            [Pagination.name]: Pagination
+            [Pagination.name]: Pagination,
+            [Dropdown.name]: Dropdown,
+            [DropdownItem.name]: DropdownItem
         },
 
         props: {
@@ -118,6 +133,18 @@
                     return res;
                 },{});
             },
+            stateByValue() {
+                return this.config.state.values.reduce((res, stateData) => {
+                    res[stateData.value] = stateData;
+                    return res;
+                }, {})
+            },
+            indexByInstanceId() {
+                return this.data.items.reduce((res, instance, index) => {
+                    res[instance.id] = index;
+                    return res;
+                }, {});
+            },
             instanceIdAttribute() {
                 return (this.config||{}).instanceIdAttribute;
             },
@@ -134,8 +161,7 @@
                 !this.sortedBy && (this.sortedBy = this.config.defaultSort);
 
                 this.filtersValue = this.config.filters.reduce((res, filter) => {
-
-                    res[filter.key] = filter.default || (filter.mulitple?[]:null);
+                    res[filter.key] = this.filtersValue[filter.key] || filter.default || (filter.multiple?[]:null);
                     return res;
                 }, {});
 
@@ -156,13 +182,22 @@
                     `col-sm-${layout.size}`,
                 ]
             },
+            stateClasses(state) {
+                let { color } = this.stateByValue[state];
+                return color.indexOf('sharp_') === 0 ? [color] : [];
+            },
+            stateStyle(state) {
+                let { color } = this.stateByValue[state];
+                return color.indexOf('sharp_') === -1 ? `color:${color}` : '';
+            },
             rowClicked(instanceId) {
                 location.href = `/sharp/form/${this.entityKey}/${instanceId}`;
             },
             setupActionBar() {
                 this.actionsBus.$emit('setup', {
                     itemsCount: this.data.totalCount,
-                    filters: this.config.filters
+                    filters: this.config.filters,
+                    filtersValue: this.filtersValue
                 });
             },
             pageChanged(page) {
@@ -176,6 +211,26 @@
 
                 this.page = 1;
                 this.update();
+            },
+            setState({ id }, { value }) {
+                axios.post(`${this.apiPath}/state/${id}`, {
+                        attribute: this.config.state.attribute,
+                        value
+                    })
+                    .then(({data:{ action, items }})=>{
+                    //debugger;
+                        if(action === 'refresh') {
+                            items.forEach(item => this.$set(this.data.items,this.indexByInstanceId[item.id],item));
+                        }
+                        else if(action === 'reload') {
+                            this.updateData();
+                        }
+                    })
+                    .catch(({error:{response:{data, status}}}) => {
+                        if(status === 417) {
+                            alert(data.message);
+                        }
+                    })
             },
             update() {
                 this.updateData();
@@ -191,13 +246,20 @@
                 history.pushState(this.apiParams, null, qs.serialize(this.apiParams));
             },
             bindParams(params = this.params) {
-                let { search, page, sort, dir } = params;
+                let { search, page, sort, dir, ...dynamicParams } = params;
                 this.actionsBus.$emit('searchChanged', search, { isInput: false });
 
-                page && (this.page = page);
+                page && (this.page = parseInt(page));
                 sort && (this.sortedBy = sort);
                 dir && (this.sortDir = dir);
-            }
+
+                for(let paramKey of Object.keys(dynamicParams)) {
+                    if(paramKey.indexOf('filter_') === 0) {
+                        let [ _, filterKey ] = paramKey.split('_');
+                        this.filtersValue[filterKey] = dynamicParams[paramKey];
+                    }
+                }
+            },
         },
         actions: {
             searchChanged(input, {isInput=true}={}) {
@@ -208,15 +270,18 @@
                     this.page>1 && (this.page=1);
                     this.update();
                 }
+            },
+            filterChanged(key, value) {
+                this.filtersValue[key] = value;
+                this.update();
             }
         },
         created() {
             this.get().then(_=>{
                 this.verify();
+                this.bindParams();
                 this.setupActionBar();
             });
-
-            this.bindParams();
 
             window.onpopstate = event => {
                 this.bindParams(event.state);

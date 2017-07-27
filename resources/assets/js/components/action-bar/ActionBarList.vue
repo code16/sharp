@@ -68,13 +68,17 @@
         },
         actions: {
             setup(config) {
-                let { itemsCount, filters } = config;
+                let { itemsCount, filters, filtersValue } = config;
                 this.itemsCount = itemsCount;
                 this.filters = filters;
+                this.filtersValue = filtersValue;
             },
             searchChanged(input) {
                 this.search = input;
             },
+            filterChanged(key, value) {
+                this.filtersValue[key] = value;
+            }
         }
     }
 </script>

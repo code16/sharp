@@ -21285,8 +21285,11 @@ module.exports = (
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins_Localization__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__helpers_querystring__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins_Localization__ = __webpack_require__(14);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
 
 
 
@@ -21308,7 +21311,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
             if (this.test) return;
 
-            return __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(this.apiPath, { params: this.apiParams }).then(function (response) {
+            return __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(this.apiPath, {
+                params: this.apiParams,
+                paramsSerializer: function paramsSerializer(p) {
+                    return __WEBPACK_IMPORTED_MODULE_1__helpers_querystring__["b" /* serialize */](p, { urlSeparator: false });
+                }
+            }).then(function (response) {
                 _this.mount(response.data);
                 _this.ready = true;
                 return Promise.resolve(response);
@@ -21341,7 +21349,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         }, function (error) {
             _this2.glasspane.$emit('hide');
             var modalOptions = {
-                title: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__mixins_Localization__["a" /* lang */])('modals.' + error.response.status),
+                title: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__mixins_Localization__["a" /* lang */])('modals.' + error.response.status),
                 text: error.response.data.message,
                 isError: true
             };
@@ -21661,10 +21669,14 @@ function serializeValue(val) {
 }
 
 function serialize(obj) {
+    var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+        _ref$urlSeparator = _ref.urlSeparator,
+        urlSeparator = _ref$urlSeparator === undefined ? true : _ref$urlSeparator;
+
     return Object.keys(obj).reduce(function (res, key, index) {
         var value = serializeValue(obj[key]);
         return '' + res + (index ? '&' : '') + encodeURIComponent(key) + '=' + encodeURIComponent(value);
-    }, '?');
+    }, urlSeparator ? '?' : '');
 }
 
 
@@ -29420,13 +29432,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     actions: {
         setup: function setup(config) {
             var itemsCount = config.itemsCount,
-                filters = config.filters;
+                filters = config.filters,
+                filtersValue = config.filtersValue;
 
             this.itemsCount = itemsCount;
             this.filters = filters;
+            this.filtersValue = filtersValue;
         },
         searchChanged: function searchChanged(input) {
             this.search = input;
+        },
+        filterChanged: function filterChanged(key, value) {
+            this.filtersValue[key] = value;
         }
     }
 });
@@ -29468,6 +29485,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -29483,7 +29502,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     props: {
-        text: String
+        text: String,
+        showArrow: {
+            type: Boolean,
+            default: true
+        }
     },
     data: function data() {
         return {
@@ -30354,7 +30377,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         },
         maxText: String,
         maxSelected: Number,
-        readOnly: Boolean
+        readOnly: Boolean,
+
+        inline: {
+            type: Boolean,
+            default: true
+        }
     },
 
     data: function data() {
@@ -32167,13 +32195,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DynamicViewMixin__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Pagination__ = __webpack_require__(246);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Pagination___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Pagination__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__consts__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__util__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mixins__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__helpers_querystring__ = __webpack_require__(47);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_axios__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dropdown_Dropdown__ = __webpack_require__(225);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dropdown_Dropdown___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__dropdown_Dropdown__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__dropdown_DropdownItem__ = __webpack_require__(226);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__dropdown_DropdownItem___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__dropdown_DropdownItem__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__consts__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__util__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__mixins__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__helpers_querystring__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_axios__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_axios__);
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _components;
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -32221,6 +32259,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
 
 
 
@@ -32240,9 +32291,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     inject: ['actionsBus', 'glasspane', 'params' // querystring params as an object
     ],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins__["a" /* ActionEvents */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_6__mixins__["a" /* ActionEvents */]],
 
-    components: _defineProperty({}, __WEBPACK_IMPORTED_MODULE_1__Pagination___default.a.name, __WEBPACK_IMPORTED_MODULE_1__Pagination___default.a),
+    components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_1__Pagination___default.a.name, __WEBPACK_IMPORTED_MODULE_1__Pagination___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_2__dropdown_Dropdown___default.a.name, __WEBPACK_IMPORTED_MODULE_2__dropdown_Dropdown___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_3__dropdown_DropdownItem___default.a.name, __WEBPACK_IMPORTED_MODULE_3__dropdown_DropdownItem___default.a), _components),
 
     props: {
         entityKey: {
@@ -32267,7 +32318,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     computed: {
         apiPath: function apiPath() {
-            return __WEBPACK_IMPORTED_MODULE_2__consts__["a" /* API_PATH */] + '/list/' + this.entityKey;
+            return __WEBPACK_IMPORTED_MODULE_4__consts__["a" /* API_PATH */] + '/list/' + this.entityKey;
         },
         apiParams: function apiParams() {
             if (!this.ready) {
@@ -32294,12 +32345,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 return res;
             }, {});
         },
+        stateByValue: function stateByValue() {
+            return this.config.state.values.reduce(function (res, stateData) {
+                res[stateData.value] = stateData;
+                return res;
+            }, {});
+        },
+        indexByInstanceId: function indexByInstanceId() {
+            return this.data.items.reduce(function (res, instance, index) {
+                res[instance.id] = index;
+                return res;
+            }, {});
+        },
         instanceIdAttribute: function instanceIdAttribute() {
             return (this.config || {}).instanceIdAttribute;
         }
     },
     methods: {
         mount: function mount(_ref) {
+            var _this2 = this;
+
             var containers = _ref.containers,
                 layout = _ref.layout,
                 data = _ref.data,
@@ -32315,8 +32380,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             !this.sortedBy && (this.sortedBy = this.config.defaultSort);
 
             this.filtersValue = this.config.filters.reduce(function (res, filter) {
-
-                res[filter.key] = filter.default || (filter.mulitple ? [] : null);
+                res[filter.key] = _this2.filtersValue[filter.key] || filter.default || (filter.multiple ? [] : null);
                 return res;
             }, {});
 
@@ -32333,7 +32397,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     var contLayout = _step.value;
 
                     if (!(contLayout.key in this.containers)) {
-                        __WEBPACK_IMPORTED_MODULE_3__util__["a" /* error */]('EntitiesList: unknown container "' + contLayout.key + '" (in layout)');
+                        __WEBPACK_IMPORTED_MODULE_5__util__["a" /* error */]('EntitiesList: unknown container "' + contLayout.key + '" (in layout)');
                         this.ready = false;
                     }
                 }
@@ -32355,13 +32419,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         colClasses: function colClasses(layout) {
             return ['col-' + layout.sizeXS, 'col-sm-' + layout.size];
         },
+        stateClasses: function stateClasses(state) {
+            var color = this.stateByValue[state].color;
+
+            return color.indexOf('sharp_') === 0 ? [color] : [];
+        },
+        stateStyle: function stateStyle(state) {
+            var color = this.stateByValue[state].color;
+
+            return color.indexOf('sharp_') === -1 ? 'color:' + color : '';
+        },
         rowClicked: function rowClicked(instanceId) {
             location.href = '/sharp/form/' + this.entityKey + '/' + instanceId;
         },
         setupActionBar: function setupActionBar() {
             this.actionsBus.$emit('setup', {
                 itemsCount: this.data.totalCount,
-                filters: this.config.filters
+                filters: this.config.filters,
+                filtersValue: this.filtersValue
             });
         },
         pageChanged: function pageChanged(page) {
@@ -32375,42 +32450,108 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             this.page = 1;
             this.update();
         },
+        setState: function setState(_ref2, _ref3) {
+            var _this3 = this;
+
+            var id = _ref2.id;
+            var value = _ref3.value;
+
+            __WEBPACK_IMPORTED_MODULE_8_axios___default.a.post(this.apiPath + '/state/' + id, {
+                attribute: this.config.state.attribute,
+                value: value
+            }).then(function (_ref4) {
+                var _ref4$data = _ref4.data,
+                    action = _ref4$data.action,
+                    items = _ref4$data.items;
+
+                //debugger;
+                if (action === 'refresh') {
+                    items.forEach(function (item) {
+                        return _this3.$set(_this3.data.items, _this3.indexByInstanceId[item.id], item);
+                    });
+                } else if (action === 'reload') {
+                    _this3.updateData();
+                }
+            }).catch(function (_ref5) {
+                var _ref5$error$response = _ref5.error.response,
+                    data = _ref5$error$response.data,
+                    status = _ref5$error$response.status;
+
+                if (status === 417) {
+                    alert(data.message);
+                }
+            });
+        },
         update: function update() {
             this.updateData();
             this.updateHistory();
         },
         updateData: function updateData() {
-            var _this2 = this;
+            var _this4 = this;
 
-            this.get().then(function (_ref2) {
-                var data = _ref2.data.data;
+            this.get().then(function (_ref6) {
+                var data = _ref6.data.data;
 
-                _this2.data = data;
-                _this2.setupActionBar();
+                _this4.data = data;
+                _this4.setupActionBar();
             });
         },
         updateHistory: function updateHistory() {
-            history.pushState(this.apiParams, null, __WEBPACK_IMPORTED_MODULE_5__helpers_querystring__["b" /* serialize */](this.apiParams));
+            history.pushState(this.apiParams, null, __WEBPACK_IMPORTED_MODULE_7__helpers_querystring__["b" /* serialize */](this.apiParams));
         },
         bindParams: function bindParams() {
             var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.params;
+
             var search = params.search,
                 page = params.page,
                 sort = params.sort,
-                dir = params.dir;
+                dir = params.dir,
+                dynamicParams = _objectWithoutProperties(params, ['search', 'page', 'sort', 'dir']);
 
             this.actionsBus.$emit('searchChanged', search, { isInput: false });
 
-            page && (this.page = page);
+            page && (this.page = parseInt(page));
             sort && (this.sortedBy = sort);
             dir && (this.sortDir = dir);
+
+            var _iteratorNormalCompletion2 = true;
+            var _didIteratorError2 = false;
+            var _iteratorError2 = undefined;
+
+            try {
+                for (var _iterator2 = Object.keys(dynamicParams)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                    var paramKey = _step2.value;
+
+                    if (paramKey.indexOf('filter_') === 0) {
+                        var _paramKey$split = paramKey.split('_'),
+                            _paramKey$split2 = _slicedToArray(_paramKey$split, 2),
+                            _ = _paramKey$split2[0],
+                            filterKey = _paramKey$split2[1];
+
+                        this.filtersValue[filterKey] = dynamicParams[paramKey];
+                    }
+                }
+            } catch (err) {
+                _didIteratorError2 = true;
+                _iteratorError2 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                        _iterator2.return();
+                    }
+                } finally {
+                    if (_didIteratorError2) {
+                        throw _iteratorError2;
+                    }
+                }
+            }
         }
     },
     actions: {
         searchChanged: function searchChanged(input) {
-            var _ref3 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-                _ref3$isInput = _ref3.isInput,
-                isInput = _ref3$isInput === undefined ? true : _ref3$isInput;
+            var _ref7 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+                _ref7$isInput = _ref7.isInput,
+                isInput = _ref7$isInput === undefined ? true : _ref7$isInput;
 
             //console.log('entities list search changed', input, isInput);
 
@@ -32419,21 +32560,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 this.page > 1 && (this.page = 1);
                 this.update();
             }
+        },
+        filterChanged: function filterChanged(key, value) {
+            this.filtersValue[key] = value;
+            this.update();
         }
     },
     created: function created() {
-        var _this3 = this;
+        var _this5 = this;
 
         this.get().then(function (_) {
-            _this3.verify();
-            _this3.setupActionBar();
+            _this5.verify();
+            _this5.bindParams();
+            _this5.setupActionBar();
         });
 
-        this.bindParams();
-
         window.onpopstate = function (event) {
-            _this3.bindParams(event.state);
-            _this3.updateData();
+            _this5.bindParams(event.state);
+            _this5.updateData();
         };
     }
 });
@@ -56413,9 +56557,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
     }
   }, [_vm._c('li', {
     staticClass: "SharpDropdown__text"
-  }, [_vm._v(_vm._s(_vm.text))]), _vm._v(" "), _vm._c('dropdown-arrow', {
+  }, [_vm._t("text", [_vm._v(_vm._s(_vm.text))])], 2), _vm._v(" "), (_vm.showArrow) ? _vm._c('dropdown-arrow', {
     staticClass: "SharpDropdown__arrow"
-  }), _vm._v(" "), _vm._c('li', [_vm._c('ul', {
+  }) : _vm._e(), _vm._v(" "), _vm._c('li', [_vm._c('ul', {
     staticClass: "SharpDropdown__list"
   }, [_vm._t("default")], 2)])], 1)
 },staticRenderFns: []}
@@ -57149,9 +57293,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
       }
     })
   }) : _vm._c('div', {
-    staticClass: "SharpSelect__radio-button-group"
-  }, [_vm._l((_vm.options), function(option) {
-    return [_vm._c('input', {
+    staticClass: "SharpSelect__radio-button-group",
+    class: {
+      'SharpSelect__radio-button-group--block': !_vm.inline
+    }
+  }, _vm._l((_vm.options), function(option) {
+    return _vm._c(_vm.inline ? 'span' : 'div', {
+      key: option.id,
+      tag: "component"
+    }, [_vm._c('input', {
       staticClass: "SharpRadio",
       attrs: {
         "type": "radio",
@@ -57159,7 +57309,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
         "disabled": _vm.readOnly
       },
       domProps: {
-        "checked": _vm.value === option.id
+        "checked": _vm.value == option.id
       }
     }), _vm._v(" "), _vm._c('label', {
       staticClass: "SharpRadio__label",
@@ -57170,8 +57320,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
       }
     }, [_vm._c('span', {
       staticClass: "SharpRadio__appearance"
-    }), _vm._v("\n                    " + _vm._s(option.label) + "\n                ")])]
-  })], 2)], 2)], 1)
+    }), _vm._v("\n                    " + _vm._s(option.label) + "\n                ")])])
+  }))], 2)], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -57979,7 +58129,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
     staticClass: "SharpEntitiesList__tbody"
   }, _vm._l((_vm.data.items), function(item) {
     return _vm._c('div', {
-      staticClass: "SharpEntitiesList__row row",
+      staticClass: "SharpEntitiesList__row"
+    }, [_vm._c('div', {
+      staticClass: "row",
       on: {
         "click": function($event) {
           _vm.rowClicked(item.id)
@@ -57994,8 +58146,31 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
         domProps: {
           "innerHTML": _vm._s(item[contLayout.key])
         }
-      }) : [_vm._v("\n                            " + _vm._s(item[contLayout.key]) + "\n                        ")]], 2)
-    }))
+      }) : [_vm._v("\n                                " + _vm._s(item[contLayout.key]) + "\n                            ")]], 2)
+    })), _vm._v(" "), _vm._c('sharp-dropdown', {
+      staticClass: "SharpEntitiesList__state-dropdown",
+      attrs: {
+        "show-arrow": false
+      }
+    }, [_vm._c('i', {
+      staticClass: "fa fa-circle",
+      class: _vm.stateClasses(item.state),
+      style: (_vm.stateStyle(item.state)),
+      slot: "text"
+    }), _vm._v(" "), _vm._l((_vm.config.state.values), function(state) {
+      return _vm._c('sharp-dropdown-item', {
+        key: state.value,
+        on: {
+          "click": function($event) {
+            _vm.setState(item, state)
+          }
+        }
+      }, [_vm._c('i', {
+        staticClass: "fa fa-circle",
+        class: _vm.stateClasses(state.value),
+        style: (_vm.stateStyle(state.value))
+      }), _vm._v("\n                            " + _vm._s(state.label) + "\n                        ")])
+    })], 2)], 1)
   }))]), _vm._v(" "), _vm._c('div', {
     staticClass: "SharpEntitiesList__pagination-container"
   }, [_vm._c('sharp-pagination', {
@@ -58743,7 +58918,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             required: true
         },
         value: {
-            type: [String, Array],
+            type: [String, Number, Array],
             required: true
         },
         multiple: Boolean
@@ -58807,7 +58982,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
       "value": _vm.value,
       "options": _vm.options,
       "multiple": _vm.multiple,
-      "display": "list"
+      "display": "list",
+      "inline": false
     },
     on: {
       "input": function($event) {

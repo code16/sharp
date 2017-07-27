@@ -29,6 +29,12 @@ $button-border-width: 1px;
 
   font-family: $font-family-base;
 
+  .sharp_primary { color:$brand-01 }
+  .sharp_secondary { color:$brand-02 }
+  .sharp_gray { color:$color__navy-gray-7 }
+  .sharp_lightgray { color:$color__navy-gray-9 }
+  .sharp_darkgray { color:$color__navy-gray-4 }
+
   @import 'node_modules/carbon-components/scss/globals/scss/css--typography';
 
   @import 'node_modules/bootstrap/scss/grid';

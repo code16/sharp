@@ -1,7 +1,9 @@
 <template>
     <div class="SharpDropdown" :class="{'SharpDropdown--open':opened}" tabindex="0" @focus="opened=true" @blur="opened=false">
-        <li class="SharpDropdown__text" >{{text}}</li>
-        <dropdown-arrow class="SharpDropdown__arrow"></dropdown-arrow>
+        <li class="SharpDropdown__text">
+            <slot name="text">{{text}}</slot>
+        </li>
+        <dropdown-arrow v-if="showArrow" class="SharpDropdown__arrow"></dropdown-arrow>
         <li>
             <ul class="SharpDropdown__list">
                 <slot></slot>
@@ -24,7 +26,11 @@
             }
         },
         props: {
-            text: String
+            text: String,
+            showArrow: {
+                type: Boolean,
+                default: true
+            }
         },
         data() {
             return {

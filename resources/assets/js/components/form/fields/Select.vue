@@ -24,14 +24,14 @@
                              :text="option.label" :disabled="readOnly" :key="option.id">
                 </sharp-check>
             </template>
-            <div v-else class="SharpSelect__radio-button-group">
-                <template v-for="option in options">
-                    <input class="SharpRadio" type="radio" :checked="value===option.id" tabindex="0" :disabled="readOnly">
+            <div v-else class="SharpSelect__radio-button-group" :class="{'SharpSelect__radio-button-group--block':!inline}">
+                <component :is="inline?'span':'div'" v-for="option in options" :key="option.id">
+                    <input class="SharpRadio" type="radio" :checked="value==option.id" tabindex="0" :disabled="readOnly">
                     <label class="SharpRadio__label" @click="handleRadioClicked(option.id)">
                         <span class="SharpRadio__appearance"></span>
                         {{option.label}}
                     </label>
-                </template>
+                </component>
             </div>
         </div>
     </div>
@@ -74,6 +74,11 @@
             maxText: String,
             maxSelected: Number,
             readOnly: Boolean,
+
+            inline: {
+                type: Boolean,
+                default: true
+            }
         },
 
         data() {

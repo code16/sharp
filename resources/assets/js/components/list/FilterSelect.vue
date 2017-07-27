@@ -1,7 +1,7 @@
 <template>
     <sharp-dropdown :text="name">
         <sharp-select :value="value" :options="options" :multiple="multiple"
-                      display="list" @input="$emit('input',$event)">
+                      display="list" @input="$emit('input',$event)" :inline="false">
         </sharp-select>
     </sharp-dropdown>
 </template>
@@ -26,7 +26,7 @@
                 required: true
             },
             value: {
-                type: [String, Array],
+                type: [String, Number, Array],
                 required: true
             },
             multiple: Boolean

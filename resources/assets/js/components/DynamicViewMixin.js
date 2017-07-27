@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import * as qs from '../helpers/querystring';
+
 import { lang } from '../mixins/Localization';
 
 export default {
@@ -15,7 +17,11 @@ export default {
         get() {
             if(this.test) return;
 
-            return axios.get(this.apiPath, { params: this.apiParams }).then(response=>{
+            return axios.get(this.apiPath, {
+                    params : this.apiParams,
+                    paramsSerializer : p => qs.serialize(p, {urlSeparator:false})
+                })
+                .then(response=>{
                     this.mount(response.data);
                     this.ready = true;
                     return Promise.resolve(response);

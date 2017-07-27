@@ -14,8 +14,8 @@
   &__table {
     @include reset;
     //display: table;
-    overflow-x: auto;
-    overflow-y: hidden;
+    //overflow-x: auto;
+    //overflow-y: hidden;
     width: 100%;
     min-width: 500px;
     border-collapse: collapse;
@@ -65,6 +65,7 @@
 
   &__row {
     //display: table-row;
+    display:flex;
     border-bottom: 1px solid $ui-04;
     transition: $transition--base $bx--standard-easing;
     padding: 1em 0;
@@ -87,6 +88,9 @@
       cursor: pointer;
     }
 
+    .row {
+      flex: 1;
+    }
   }
 
   &__thead {
@@ -144,5 +148,15 @@
 
   &__input:checked + .SharpEntities__row .SharpEntities__svg {
     fill: $brand-02;
+  }
+
+  &__state-dropdown {
+    background:transparent;
+    width:auto;
+    .SharpDropdown__list {
+      z-index:100;
+      width:rem(200px);
+    }
+
   }
 }

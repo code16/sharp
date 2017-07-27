@@ -21,11 +21,11 @@ function serializeValue(val) {
     return val;
 }
 
-function serialize(obj) {
+function serialize(obj, { urlSeparator=true }={}) {
     return Object.keys(obj).reduce((res, key, index)=>{
         let value = serializeValue(obj[key]);
         return `${res}${index?'&':''}${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
-    },'?');
+    },urlSeparator?'?':'');
 }
 
 export {
