@@ -124,12 +124,26 @@
                     params.sort = this.sortedBy;
                     params.dir = this.sortDir;
                 }
-                params = { ...params, ...this.filterParams };
+                params = {
+                    ...params,
+                    ...this.filterParams
+                };
                 return params;
             },
             filterParams() {
                 return Object.keys(this.filtersValue).reduce((res, filterKey)=>{
                     res[`filter_${filterKey}`] = this.filtersValue[filterKey];
+                    return res;
+                },{});
+            },
+            instanceIdAttribute() {
+                return (this.config||{}).instanceIdAttribute;
+            },
+
+            //// Getters
+            filterByKey() {
+                return this.config.filters.reduce((res, filter)=>{
+                    res[filter.key] = filter ;
                     return res;
                 },{});
             },
@@ -145,9 +159,6 @@
                     return res;
                 }, {});
             },
-            instanceIdAttribute() {
-                return (this.config||{}).instanceIdAttribute;
-            },
         },
         methods: {
             mount({ containers, layout, data, config }) {
@@ -161,7 +172,7 @@
                 !this.sortedBy && (this.sortedBy = this.config.defaultSort);
 
                 this.filtersValue = this.config.filters.reduce((res, filter) => {
-                    res[filter.key] = this.filtersValue[filter.key] || filter.default || (filter.multiple?[]:null);
+                    res[filter.key] = this.filterValueOrDefault(this.filtersValue[filter.key],filter);
                     return res;
                 }, {});
 
@@ -193,11 +204,15 @@
             rowClicked(instanceId) {
                 location.href = `/sharp/form/${this.entityKey}/${instanceId}`;
             },
+            filterValueOrDefault(val, filter) {
+                return val || filter.default || (filter.multiple?[]:null);
+            },
             setupActionBar() {
                 this.actionsBus.$emit('setup', {
                     itemsCount: this.data.totalCount,
                     filters: this.config.filters,
-                    filtersValue: this.filtersValue
+                    filtersValue: this.filtersValue,
+                    commands: this.config.commands
                 });
             },
             pageChanged(page) {
@@ -218,13 +233,8 @@
                         value
                     })
                     .then(({data:{ action, items }})=>{
-                    //debugger;
-                        if(action === 'refresh') {
-                            items.forEach(item => this.$set(this.data.items,this.indexByInstanceId[item.id],item));
-                        }
-                        else if(action === 'reload') {
-                            this.updateData();
-                        }
+                        if(action === 'refresh') this.actionRefresh(items);
+                        else if(action === 'reload') this.actionReload();
                     })
                     .catch(({error:{response:{data, status}}}) => {
                         if(status === 417) {
@@ -233,6 +243,7 @@
                     })
             },
             update() {
+                this.page>1 && (this.page=1);
                 this.updateData();
                 this.updateHistory();
             },
@@ -242,6 +253,14 @@
                     this.setupActionBar();
                 });
             },
+
+            actionReload() {
+                this.updateData();
+            },
+            actionRefresh(items) {
+                items.forEach(item => this.$set(this.data.items,this.indexByInstanceId[item.id],item))
+            },
+
             updateHistory() {
                 history.pushState(this.apiParams, null, qs.serialize(this.apiParams));
             },
@@ -254,9 +273,10 @@
                 dir && (this.sortDir = dir);
 
                 for(let paramKey of Object.keys(dynamicParams)) {
+                    let paramValue = dynamicParams[paramKey];
                     if(paramKey.indexOf('filter_') === 0) {
                         let [ _, filterKey ] = paramKey.split('_');
-                        this.filtersValue[filterKey] = dynamicParams[paramKey];
+                        this.filtersValue[filterKey] = this.filterValueOrDefault(paramValue,this.filterByKey[filterKey]);
                     }
                 }
             },
@@ -267,13 +287,28 @@
 
                 this.search = input;
                 if(isInput) {
-                    this.page>1 && (this.page=1);
                     this.update();
                 }
             },
             filterChanged(key, value) {
                 this.filtersValue[key] = value;
                 this.update();
+            },
+            command(key) {
+                axios.post(`${this.apiPath}/command/${key}`, {
+                        query: this.apiParams
+                    })
+                    .then(({data: {action, items, message, html}})=>{
+                        if(action === 'refresh') this.actionRefresh(items);
+                        else if(action === 'reload') this.actionReload();
+                        else if(action === 'info')
+                            this.actionsBus.$emit('showMainModal', {
+                                title: 'Résultat',
+                                text: message,
+                                okCloseOnly: true,
+                            });
+                        else if(action === 'view') alert('TODO action view command');
+                    });
             }
         },
         created() {

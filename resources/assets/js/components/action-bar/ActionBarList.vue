@@ -25,6 +25,11 @@
                 <button class="SharpSearch__button" type="button" aria-label="Search button" @click="emitSearch">
                     <svg width="16" height="14" viewBox="0 0 16 14" fill-rule="evenodd"><path d="M12.6 6H0v2h12.7l-5 4.7L9 14l7-7-7-7-1.3 1.3z"></path></svg>
                 </button>
+                <sharp-dropdown  class="SharpActionBar__actions-dropdown">
+                    <sharp-dropdown-item v-for="command in commands" @click="emitAction('command', command.key)" :key="command.key">
+                        {{ command.label }}
+                    </sharp-dropdown-item>
+                </sharp-dropdown>
             </div>
         </template>
     </sharp-action-bar>
@@ -39,12 +44,17 @@
 
     import FilterSelect from '../list/FilterSelect';
 
+    import Dropdown from '../dropdown/Dropdown';
+    import DropdownItem from '../dropdown/DropdownItem';
+
     export default {
         name: 'SharpActionBarList',
         components : {
             [ActionBar.name]: ActionBar,
             [Text.name]: Text,
-            [FilterSelect.name]: FilterSelect
+            [FilterSelect.name]: FilterSelect,
+            [Dropdown.name]: Dropdown,
+            [DropdownItem.name]: DropdownItem
         },
 
         mixins: [ActionBarMixin, ActionEvents, Localization],
@@ -54,7 +64,8 @@
                 itemsCount: 0,
                 search:'',
                 filters: [],
-                filtersValue: {}
+                filtersValue: {},
+                commands: []
             }
         },
         methods: {
@@ -68,10 +79,11 @@
         },
         actions: {
             setup(config) {
-                let { itemsCount, filters, filtersValue } = config;
+                let { itemsCount, filters, filtersValue, commands } = config;
                 this.itemsCount = itemsCount;
                 this.filters = filters;
                 this.filtersValue = filtersValue;
+                this.commands = commands;
             },
             searchChanged(input) {
                 this.search = input;

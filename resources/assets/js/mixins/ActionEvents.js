@@ -14,7 +14,7 @@ export default {
             let action = actions[actionName];
             if(typeof action === 'string') {
                 if(typeof this[action] !== 'function') {
-                    util.error(`${this.$options.name} (ActionEvents) : this.${action} is not a function`)
+                    util.error(`${this.$options.name} (ActionEvents) : this.${action} is not a function`);
                     continue;
                 }
 

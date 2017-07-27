@@ -43,6 +43,7 @@
 
     export default {
         name: 'SharpSelect',
+
         components: {
             [Multiselect.name]: Multiselect,
             SharpCheck
@@ -78,7 +79,8 @@
             inline: {
                 type: Boolean,
                 default: true
-            }
+            },
+            disableFocus: Boolean
         },
 
         data() {

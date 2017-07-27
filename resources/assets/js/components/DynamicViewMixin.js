@@ -43,7 +43,8 @@ export default {
 
         axios.interceptors.request.use(config => {
             //console.log('request interceptor', config);
-            this.glasspane.$emit('show');
+            if(config.method==='get')
+                this.glasspane.$emit('show');
             return config;
         }, error => Promise.reject(error));
 

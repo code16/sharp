@@ -21337,7 +21337,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
         __WEBPACK_IMPORTED_MODULE_0_axios___default.a.interceptors.request.use(function (config) {
             //console.log('request interceptor', config);
-            _this2.glasspane.$emit('show');
+            if (config.method === 'get') _this2.glasspane.$emit('show');
             return config;
         }, function (error) {
             return Promise.reject(error);
@@ -29360,6 +29360,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__form_fields_Text___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__form_fields_Text__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__list_FilterSelect__ = __webpack_require__(309);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__list_FilterSelect___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__list_FilterSelect__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__dropdown_Dropdown__ = __webpack_require__(225);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__dropdown_Dropdown___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__dropdown_Dropdown__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__dropdown_DropdownItem__ = __webpack_require__(226);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__dropdown_DropdownItem___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__dropdown_DropdownItem__);
 var _components;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -29396,6 +29400,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+
+
+
 
 
 
@@ -29407,7 +29419,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpActionBarList',
-    components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_0__ActionBar___default.a.name, __WEBPACK_IMPORTED_MODULE_0__ActionBar___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_3__form_fields_Text___default.a.name, __WEBPACK_IMPORTED_MODULE_3__form_fields_Text___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_4__list_FilterSelect___default.a.name, __WEBPACK_IMPORTED_MODULE_4__list_FilterSelect___default.a), _components),
+    components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_0__ActionBar___default.a.name, __WEBPACK_IMPORTED_MODULE_0__ActionBar___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_3__form_fields_Text___default.a.name, __WEBPACK_IMPORTED_MODULE_3__form_fields_Text___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_4__list_FilterSelect___default.a.name, __WEBPACK_IMPORTED_MODULE_4__list_FilterSelect___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_5__dropdown_Dropdown___default.a.name, __WEBPACK_IMPORTED_MODULE_5__dropdown_Dropdown___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_6__dropdown_DropdownItem___default.a.name, __WEBPACK_IMPORTED_MODULE_6__dropdown_DropdownItem___default.a), _components),
 
     mixins: [__WEBPACK_IMPORTED_MODULE_1__ActionBarMixin__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__mixins__["a" /* ActionEvents */], __WEBPACK_IMPORTED_MODULE_2__mixins__["d" /* Localization */]],
 
@@ -29416,7 +29428,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             itemsCount: 0,
             search: '',
             filters: [],
-            filtersValue: {}
+            filtersValue: {},
+            commands: []
         };
     },
 
@@ -29433,11 +29446,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         setup: function setup(config) {
             var itemsCount = config.itemsCount,
                 filters = config.filters,
-                filtersValue = config.filtersValue;
+                filtersValue = config.filtersValue,
+                commands = config.commands;
 
             this.itemsCount = itemsCount;
             this.filters = filters;
             this.filtersValue = filtersValue;
+            this.commands = commands;
         },
         searchChanged: function searchChanged(input) {
             this.search = input;
@@ -30350,6 +30365,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpSelect',
+
     components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_0__Multiselect___default.a.name, __WEBPACK_IMPORTED_MODULE_0__Multiselect___default.a), _defineProperty(_components, 'SharpCheck', __WEBPACK_IMPORTED_MODULE_1__Check_vue___default.a), _components),
 
     props: {
@@ -30382,7 +30398,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         inline: {
             type: Boolean,
             default: true
-        }
+        },
+        disableFocus: Boolean
     },
 
     data: function data() {
@@ -32345,6 +32362,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 return res;
             }, {});
         },
+        instanceIdAttribute: function instanceIdAttribute() {
+            return (this.config || {}).instanceIdAttribute;
+        },
+
+
+        //// Getters
+        filterByKey: function filterByKey() {
+            return this.config.filters.reduce(function (res, filter) {
+                res[filter.key] = filter;
+                return res;
+            }, {});
+        },
         stateByValue: function stateByValue() {
             return this.config.state.values.reduce(function (res, stateData) {
                 res[stateData.value] = stateData;
@@ -32356,9 +32385,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 res[instance.id] = index;
                 return res;
             }, {});
-        },
-        instanceIdAttribute: function instanceIdAttribute() {
-            return (this.config || {}).instanceIdAttribute;
         }
     },
     methods: {
@@ -32380,7 +32406,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             !this.sortedBy && (this.sortedBy = this.config.defaultSort);
 
             this.filtersValue = this.config.filters.reduce(function (res, filter) {
-                res[filter.key] = _this2.filtersValue[filter.key] || filter.default || (filter.multiple ? [] : null);
+                res[filter.key] = _this2.filterValueOrDefault(_this2.filtersValue[filter.key], filter);
                 return res;
             }, {});
 
@@ -32432,11 +32458,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         rowClicked: function rowClicked(instanceId) {
             location.href = '/sharp/form/' + this.entityKey + '/' + instanceId;
         },
+        filterValueOrDefault: function filterValueOrDefault(val, filter) {
+            return val || filter.default || (filter.multiple ? [] : null);
+        },
         setupActionBar: function setupActionBar() {
             this.actionsBus.$emit('setup', {
                 itemsCount: this.data.totalCount,
                 filters: this.config.filters,
-                filtersValue: this.filtersValue
+                filtersValue: this.filtersValue,
+                commands: this.config.commands
             });
         },
         pageChanged: function pageChanged(page) {
@@ -32464,14 +32494,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     action = _ref4$data.action,
                     items = _ref4$data.items;
 
-                //debugger;
-                if (action === 'refresh') {
-                    items.forEach(function (item) {
-                        return _this3.$set(_this3.data.items, _this3.indexByInstanceId[item.id], item);
-                    });
-                } else if (action === 'reload') {
-                    _this3.updateData();
-                }
+                if (action === 'refresh') _this3.actionRefresh(items);else if (action === 'reload') _this3.actionReload();
             }).catch(function (_ref5) {
                 var _ref5$error$response = _ref5.error.response,
                     data = _ref5$error$response.data,
@@ -32483,6 +32506,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             });
         },
         update: function update() {
+            this.page > 1 && (this.page = 1);
             this.updateData();
             this.updateHistory();
         },
@@ -32494,6 +32518,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
                 _this4.data = data;
                 _this4.setupActionBar();
+            });
+        },
+        actionReload: function actionReload() {
+            this.updateData();
+        },
+        actionRefresh: function actionRefresh(items) {
+            var _this5 = this;
+
+            items.forEach(function (item) {
+                return _this5.$set(_this5.data.items, _this5.indexByInstanceId[item.id], item);
             });
         },
         updateHistory: function updateHistory() {
@@ -32522,13 +32556,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 for (var _iterator2 = Object.keys(dynamicParams)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
                     var paramKey = _step2.value;
 
+                    var paramValue = dynamicParams[paramKey];
                     if (paramKey.indexOf('filter_') === 0) {
                         var _paramKey$split = paramKey.split('_'),
                             _paramKey$split2 = _slicedToArray(_paramKey$split, 2),
                             _ = _paramKey$split2[0],
                             filterKey = _paramKey$split2[1];
 
-                        this.filtersValue[filterKey] = dynamicParams[paramKey];
+                        this.filtersValue[filterKey] = this.filterValueOrDefault(paramValue, this.filterByKey[filterKey]);
                     }
                 }
             } catch (err) {
@@ -32557,27 +32592,45 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
             this.search = input;
             if (isInput) {
-                this.page > 1 && (this.page = 1);
                 this.update();
             }
         },
         filterChanged: function filterChanged(key, value) {
             this.filtersValue[key] = value;
             this.update();
+        },
+        command: function command(key) {
+            var _this6 = this;
+
+            __WEBPACK_IMPORTED_MODULE_8_axios___default.a.post(this.apiPath + '/command/' + key, {
+                query: this.apiParams
+            }).then(function (_ref8) {
+                var _ref8$data = _ref8.data,
+                    action = _ref8$data.action,
+                    items = _ref8$data.items,
+                    message = _ref8$data.message,
+                    html = _ref8$data.html;
+
+                if (action === 'refresh') _this6.actionRefresh(items);else if (action === 'reload') _this6.actionReload();else if (action === 'info') _this6.actionsBus.$emit('showMainModal', {
+                    title: 'Résultat',
+                    text: message,
+                    okCloseOnly: true
+                });else if (action === 'view') alert('TODO action view command');
+            });
         }
     },
     created: function created() {
-        var _this5 = this;
+        var _this7 = this;
 
         this.get().then(function (_) {
-            _this5.verify();
-            _this5.bindParams();
-            _this5.setupActionBar();
+            _this7.verify();
+            _this7.bindParams();
+            _this7.setupActionBar();
         });
 
         window.onpopstate = function (event) {
-            _this5.bindParams(event.state);
-            _this5.updateData();
+            _this7.bindParams(event.state);
+            _this7.updateData();
         };
     }
 });
@@ -56713,7 +56766,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
     attrs: {
       "d": "M12.6 6H0v2h12.7l-5 4.7L9 14l7-7-7-7-1.3 1.3z"
     }
-  })])])])])], 2)
+  })])]), _vm._v(" "), _vm._c('sharp-dropdown', {
+    staticClass: "SharpActionBar__actions-dropdown"
+  }, _vm._l((_vm.commands), function(command) {
+    return _vm._c('sharp-dropdown-item', {
+      key: command.key,
+      on: {
+        "click": function($event) {
+          _vm.emitAction('command', command.key)
+        }
+      }
+    }, [_vm._v("\n                    " + _vm._s(command.label) + "\n                ")])
+  }))], 1)])], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -56750,8 +56814,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
   }, [_vm._c('input', {
     staticClass: "SharpCheck__input",
     attrs: {
-      "type": "checkbox",
-      "disabled": _vm.readOnly
+      "type": "checkbox"
     },
     domProps: {
       "checked": _vm.value
@@ -58931,6 +58994,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 return { id: key, label: _this.values[key] };
             });
         }
+    },
+    methods: {
+        handleSelect: function handleSelect(value) {
+            this.$emit('input', value);
+            this.$refs.dropdown.$el.focus();
+        }
     }
 });
 
@@ -58974,6 +59043,7 @@ module.exports = Component.exports
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
   return _vm._c('sharp-dropdown', {
+    ref: "dropdown",
     attrs: {
       "text": _vm.name
     }
@@ -58983,12 +59053,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
       "options": _vm.options,
       "multiple": _vm.multiple,
       "display": "list",
-      "inline": false
+      "inline": false,
+      "disable-focus": ""
     },
     on: {
-      "input": function($event) {
-        _vm.$emit('input', $event)
-      }
+      "input": _vm.handleSelect
     }
   })], 1)
 },staticRenderFns: []}
