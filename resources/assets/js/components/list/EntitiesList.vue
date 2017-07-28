@@ -20,7 +20,7 @@
                 <div class="SharpEntitiesList__tbody">
 
                     <div class="SharpEntitiesList__row" v-for="item in data.items">
-                        <div class="row" @click="rowClicked(item.id)">
+                        <div class="row" @click="rowClicked(item)">
                             <div class="SharpEntitiesList__td" :class="colClasses(contLayout)" v-for="contLayout in layout">
                                 <span v-if="containers[contLayout.key].html" v-html="item[contLayout.key]" class="SharpEntitiesList__td-html-container"></span>
                                 <template v-else>
@@ -28,11 +28,16 @@
                                 </template>
                             </div>
                         </div>
-                        <sharp-dropdown class="SharpEntitiesList__state-dropdown" :show-arrow="false">
+                        <sharp-dropdown v-if="hasStateAuthorization(item)" class="SharpEntitiesList__state-dropdown" :show-arrow="false">
                             <i slot="text" class="fa fa-circle" :class="stateClasses(item.state)" :style="stateStyle(item.state)"></i>
                             <sharp-dropdown-item v-for="state in config.state.values" @click="setState(item,state)" :key="state.value">
                                 <i class="fa fa-circle" :class="stateClasses(state.value)" :style="stateStyle(state.value)"></i>
                                 {{ state.label }}
+                            </sharp-dropdown-item>
+                        </sharp-dropdown>
+                        <sharp-dropdown v-if="instanceCommands(item).length" class="SharpEntitiesList__commands-dropdown">
+                            <sharp-dropdown-item v-for="command in instanceCommands(item)" @click="sendCommand(command,item)" :key="command.key">
+                                {{ command.label }}
                             </sharp-dropdown-item>
                         </sharp-dropdown>
                     </div>
@@ -96,6 +101,7 @@
             return {
                 containers: null,
                 config: null,
+                authorizations: null,
 
                 page: 0,
                 search: '',
@@ -136,7 +142,7 @@
                     return res;
                 },{});
             },
-            instanceIdAttribute() {
+            idAttr() {
                 return (this.config||{}).instanceIdAttribute;
             },
 
@@ -154,22 +160,34 @@
                 }, {})
             },
             indexByInstanceId() {
-                return this.data.items.reduce((res, instance, index) => {
-                    res[instance.id] = index;
+                return this.data.items.reduce((res, {[this.idAttr]:id}, index) => {
+                    res[id] = index;
                     return res;
                 }, {});
             },
+            commandsByInstanceId() {
+                let instCmds = this.config.commands.filter(c=>c.type==='instance');
+                return this.data.items.reduce((res, {[this.idAttr]:id}) => {
+                    res[id] = instCmds.filter(c=>c.authorization.indexOf(id) !== -1);
+                    return res;
+                }, {});
+            }
         },
         methods: {
-            mount({ containers, layout, data, config }) {
+            /**
+             * Initialization
+             */
+            mount({ containers, layout, data, config, authorizations }) {
                 this.containers = containers;
                 this.layout = layout;
                 this.data = data || {};
                 this.config = config || {};
+                this.authorizations = authorizations;
 
                 this.page = this.data.page;
                 !this.sortDir && (this.sortDir = this.config.defaultSortDir);
                 !this.sortedBy && (this.sortedBy = this.config.defaultSort);
+
 
                 this.filtersValue = this.config.filters.reduce((res, filter) => {
                     res[filter.key] = this.filterValueOrDefault(this.filtersValue[filter.key],filter);
@@ -187,6 +205,19 @@
                     }
                 }
             },
+            setupActionBar() {
+                this.actionsBus.$emit('setup', {
+                    itemsCount: this.data.totalCount,
+                    filters: this.config.filters,
+                    filtersValue: this.filtersValue,
+                    commands: this.config.commands.filter(c=>c.authorization && c.type==='entity'),
+                    showCreateButton:this.authorizations.create
+                });
+            },
+
+            /**
+             * Getters
+             */
             colClasses(layout) {
                 return [
                     `col-${layout.sizeXS}`,
@@ -201,24 +232,30 @@
                 let { color } = this.stateByValue[state];
                 return color.indexOf('sharp_') === -1 ? `color:${color}` : '';
             },
-            rowClicked(instanceId) {
-                location.href = `/sharp/form/${this.entityKey}/${instanceId}`;
+            hasStateAuthorization({[this.idAttr]:instanceId}) {
+                return this.config.state.authorization.indexOf(instanceId) !== -1;
             },
             filterValueOrDefault(val, filter) {
                 return val || filter.default || (filter.multiple?[]:null);
             },
-            setupActionBar() {
-                this.actionsBus.$emit('setup', {
-                    itemsCount: this.data.totalCount,
-                    filters: this.config.filters,
-                    filtersValue: this.filtersValue,
-                    commands: this.config.commands
-                });
+            instanceCommands({[this.idAttr]:instanceId}) {
+                return this.commandsByInstanceId[instanceId];
+            },
+
+            /**
+             * Events
+             */
+            rowClicked({[this.idAttr]:instanceId}) {
+                location.href = `/sharp/form/${this.entityKey}/${instanceId}`;
             },
             pageChanged(page) {
                 this.page = page;
                 this.update();
             },
+
+            /**
+             * Data operations
+             */
             sortToggle(contKey) {
                 if(this.sortedBy === contKey)
                     this.sortDir = this.sortDir==='asc'? 'desc': 'asc';
@@ -227,7 +264,8 @@
                 this.page = 1;
                 this.update();
             },
-            setState({ id }, { value }) {
+            /* (Instance, State) */
+            setState({ [this.idAttr]:instanceId }, { value }) {
                 axios.post(`${this.apiPath}/state/${id}`, {
                         attribute: this.config.state.attribute,
                         value
@@ -242,6 +280,26 @@
                         }
                     })
             },
+            /* (Command, Instance) */
+            sendCommand({ key }, instance) {
+                let endpoint = `${this.apiPath}/command/${key}`;
+                instance && (endpoint+=`/${instance[this.idAttr]}`);
+
+                axios.post(endpoint, {
+                        query: this.apiParams
+                    })
+                    .then(({data: {action, items, message, html}})=>{
+                        if(action === 'refresh') this.actionRefresh(items);
+                        else if(action === 'reload') this.actionReload();
+                        else if(action === 'info')
+                            this.actionsBus.$emit('showMainModal', {
+                                title: 'Résultat',
+                                text: message,
+                                okCloseOnly: true,
+                            });
+                        else if(action === 'view') alert('TODO action view command');
+                    });
+            },
             update() {
                 this.page>1 && (this.page=1);
                 this.updateData();
@@ -254,13 +312,19 @@
                 });
             },
 
+            /**
+             * Actions
+             */
             actionReload() {
                 this.updateData();
             },
             actionRefresh(items) {
-                items.forEach(item => this.$set(this.data.items,this.indexByInstanceId[item.id],item))
+                items.forEach(item => this.$set(this.data.items,this.indexByInstanceId[item[this.idAttr]],item))
             },
 
+            /**
+             * History & URL
+             */
             updateHistory() {
                 history.pushState(this.apiParams, null, qs.serialize(this.apiParams));
             },
@@ -294,21 +358,9 @@
                 this.filtersValue[key] = value;
                 this.update();
             },
-            command(key) {
-                axios.post(`${this.apiPath}/command/${key}`, {
-                        query: this.apiParams
-                    })
-                    .then(({data: {action, items, message, html}})=>{
-                        if(action === 'refresh') this.actionRefresh(items);
-                        else if(action === 'reload') this.actionReload();
-                        else if(action === 'info')
-                            this.actionsBus.$emit('showMainModal', {
-                                title: 'Résultat',
-                                text: message,
-                                okCloseOnly: true,
-                            });
-                        else if(action === 'view') alert('TODO action view command');
-                    });
+            command: 'sendCommand',
+            create() {
+                location.href=`/sharp/form/${this.entityKey}`;
             }
         },
         created() {

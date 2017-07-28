@@ -1,5 +1,5 @@
 <template>
-    <sharp-action-bar>
+    <sharp-action-bar class="SharpActionBarList">
         <template slot="left">
             <span>{{ itemsCount }} {{ l('action_bar.list.items_count') }}</span>
             <sharp-filter-select v-for="filter in filters" :name="filter.key" :values="filter.values"
@@ -25,8 +25,11 @@
                 <button class="SharpSearch__button" type="button" aria-label="Search button" @click="emitSearch">
                     <svg width="16" height="14" viewBox="0 0 16 14" fill-rule="evenodd"><path d="M12.6 6H0v2h12.7l-5 4.7L9 14l7-7-7-7-1.3 1.3z"></path></svg>
                 </button>
-                <sharp-dropdown  class="SharpActionBar__actions-dropdown">
-                    <sharp-dropdown-item v-for="command in commands" @click="emitAction('command', command.key)" :key="command.key">
+                <button v-if="showCreateButton" class="SharpButton SharpButton--primary" @click="emitAction('create')">
+                    {{ l('action_bar.list.create_button') }}
+                </button>
+                <sharp-dropdown class="SharpActionBar__actions-dropdown">
+                    <sharp-dropdown-item v-for="command in commands" @click="emitAction('command', command)" :key="command.key">
                         {{ command.label }}
                     </sharp-dropdown-item>
                 </sharp-dropdown>
@@ -65,7 +68,9 @@
                 search:'',
                 filters: [],
                 filtersValue: {},
-                commands: []
+                commands: [],
+
+                showCreateButton: false
             }
         },
         methods: {
@@ -79,11 +84,13 @@
         },
         actions: {
             setup(config) {
-                let { itemsCount, filters, filtersValue, commands } = config;
+                let { itemsCount, filters, filtersValue, commands, showCreateButton } = config;
                 this.itemsCount = itemsCount;
                 this.filters = filters;
                 this.filtersValue = filtersValue;
                 this.commands = commands;
+
+                this.showCreateButton = showCreateButton;
             },
             searchChanged(input) {
                 this.search = input;

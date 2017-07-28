@@ -133,13 +133,14 @@
             },
 
             setupActionBar() {
-                const submitButtonVisible = this.isCreation ? this.authorizations.create : this.authorizations.update;
+                const showSubmitButton = this.isCreation ? this.authorizations.create : this.authorizations.update;
 
                 this.actionsBus.$emit('setup', {
                     locales: null, //this.config.locales,
-                    submitButtonVisible,
-                    deleteButtonVisible: this.authorizations.delete,
-                    backButton: this.isReadOnly
+                    showSubmitButton,
+                    showDeleteButton: this.authorizations.delete,
+                    showBackButton: this.isReadOnly,
+                    opType: this.isCreation ? 'create' : 'update'
                 });
 
                 if(this.config.locales) {
@@ -149,10 +150,14 @@
         },
         actions: {
             submit() {
-                this.post().catch(this.handleError)
+                this.post()
+                    .then(({ data })=>{
+                        location.href = `/sharp/list/${this.entityKey}?restore-context=1`
+                    })
+                    .catch(this.handleError)
             },
             cancel() {
-                location.href = `/sharp/list/${this.entityKey}`;
+                location.href = `/sharp/list/${this.entityKey}?restore-context=1`;
             },
             localeChanged(newLocale) {
                 this.locale = newLocale;

@@ -40,6 +40,12 @@
     }
   }
 
+  &.SharpActionBarList {
+    .SharpActionBar__actions-dropdown {
+      width: 4em;
+    }
+  }
+
   &__search.SharpSearch {
     .SharpSearch__close {
       right: 3.5rem;

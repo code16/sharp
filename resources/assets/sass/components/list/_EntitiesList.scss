@@ -66,6 +66,7 @@
   &__row {
     //display: table-row;
     display:flex;
+    align-items:center;
     border-bottom: 1px solid $ui-04;
     transition: $transition--base $bx--standard-easing;
     padding: 1em 0;
@@ -96,6 +97,7 @@
   &__thead {
     //display: table-header-group;
     vertical-align: middle;
+    padding-right: 5em;
   }
 
   &__th {
@@ -150,13 +152,29 @@
     fill: $brand-02;
   }
 
-  &__state-dropdown {
-    background:transparent;
-    width:auto;
+  &__state-dropdown, &__commands-dropdown {
+    width:2em;
+    margin: 0 .5em;
     .SharpDropdown__list {
       z-index:100;
       width:rem(200px);
+      right:0;
     }
-
+  }
+  &__state-dropdown {
+    background:transparent;
+    .SharpDropdown__text {
+      display:flex;
+      align-items:center;
+      justify-content: center;
+      padding-left:0;
+    }
+  }
+  &__commands-dropdown {
+    width:auto;
+    .SharpDropdown__arrow {
+      right:.25rem;
+      top: .8rem;
+    }
   }
 }
