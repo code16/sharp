@@ -32626,9 +32626,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         },
         apiParams: function apiParams() {
             if (!this.ready) {
-                return _extends({}, this.params, {
-                    page: parseInt(this.params.page)
-                });
+                return _extends({}, this.params);
             }
 
             var params = {};
@@ -32650,7 +32648,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             }, {});
         },
         idAttr: function idAttr() {
-            return (this.config || {}).instanceIdAttribute;
+            return this.config.instanceIdAttribute;
         },
 
 
@@ -32702,15 +32700,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
             var containers = _ref3.containers,
                 layout = _ref3.layout,
-                data = _ref3.data,
-                config = _ref3.config,
+                _ref3$data = _ref3.data,
+                data = _ref3$data === undefined ? {} : _ref3$data,
+                _ref3$config = _ref3.config,
+                config = _ref3$config === undefined ? {} : _ref3$config,
                 authorizations = _ref3.authorizations;
 
             this.containers = containers;
             this.layout = layout;
-            this.data = data || {};
-            this.config = config || {};
+            this.data = data;
+            this.config = config;
             this.authorizations = authorizations;
+
+            this.config.commands = config.commands || [];
+            this.config.filters = config.filters || [];
 
             this.page = this.data.page;
             !this.sortDir && (this.sortDir = this.config.defaultSortDir);
@@ -32785,7 +32788,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         hasStateAuthorization: function hasStateAuthorization(_ref4) {
             var instanceId = _ref4[this.idAttr];
 
-            return this.config.state.authorization.indexOf(instanceId) !== -1;
+            return this.config.state && this.config.state.authorization.indexOf(instanceId) !== -1;
         },
         filterValueOrDefault: function filterValueOrDefault(val, filter) {
             return val || filter.default || (filter.multiple ? [] : null);
@@ -32829,7 +32832,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             var instanceId = _ref7[this.idAttr];
             var value = _ref8.value;
 
-            __WEBPACK_IMPORTED_MODULE_8_axios___default.a.post(this.apiPath + '/state/' + id, {
+            __WEBPACK_IMPORTED_MODULE_8_axios___default.a.post(this.apiPath + '/state/' + instanceId, {
                 attribute: this.config.state.attribute,
                 value: value
             }).then(function (_ref9) {
@@ -57683,7 +57686,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         _vm.emitAction('create')
       }
     }
-  }, [_vm._v("\n                " + _vm._s(_vm.l('action_bar.list.create_button')) + "\n            ")]) : _vm._e(), _vm._v(" "), _c('sharp-dropdown', {
+  }, [_vm._v("\n                " + _vm._s(_vm.l('action_bar.list.create_button')) + "\n            ")]) : _vm._e(), _vm._v(" "), (_vm.commands.length) ? _c('sharp-dropdown', {
     staticClass: "SharpActionBar__actions-dropdown"
   }, _vm._l((_vm.commands), function(command) {
     return _c('sharp-dropdown-item', {
@@ -57694,7 +57697,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         }
       }
     }, [_vm._v("\n                    " + _vm._s(command.label) + "\n                ")])
-  }))], 1)])], 2)
+  })) : _vm._e()], 1)])], 2)
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -58462,6 +58465,7 @@ if (false) {
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('sharp-dropdown', {
     ref: "dropdown",
+    staticClass: "SharpFilterSelect",
     attrs: {
       "text": _vm.name
     }

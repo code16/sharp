@@ -118,8 +118,7 @@
             apiParams() {
                 if(!this.ready) {
                     return {
-                        ...this.params,
-                        page : parseInt(this.params.page)
+                        ...this.params
                     }
                 }
 
@@ -143,7 +142,7 @@
                 },{});
             },
             idAttr() {
-                return (this.config||{}).instanceIdAttribute;
+                return this.config.instanceIdAttribute;
             },
 
             //// Getters
@@ -177,12 +176,15 @@
             /**
              * Initialization
              */
-            mount({ containers, layout, data, config, authorizations }) {
+            mount({ containers, layout, data={}, config={}, authorizations }) {
                 this.containers = containers;
                 this.layout = layout;
-                this.data = data || {};
-                this.config = config || {};
+                this.data = data;
+                this.config = config;
                 this.authorizations = authorizations;
+
+                this.config.commands = config.commands || [];
+                this.config.filters = config.filters || [];
 
                 this.page = this.data.page;
                 !this.sortDir && (this.sortDir = this.config.defaultSortDir);
@@ -190,7 +192,7 @@
 
 
                 this.filtersValue = this.config.filters.reduce((res, filter) => {
-                    res[filter.key] = this.filterValueOrDefault(this.filtersValue[filter.key],filter);
+                    res[filter.key] = this.filterValueOrDefault(this.filtersValue[filter.key], filter);
                     return res;
                 }, {});
 
@@ -233,7 +235,7 @@
                 return color.indexOf('sharp_') === -1 ? `color:${color}` : '';
             },
             hasStateAuthorization({[this.idAttr]:instanceId}) {
-                return this.config.state.authorization.indexOf(instanceId) !== -1;
+                return this.config.state && this.config.state.authorization.indexOf(instanceId) !== -1;
             },
             filterValueOrDefault(val, filter) {
                 return val || filter.default || (filter.multiple?[]:null);
@@ -266,7 +268,7 @@
             },
             /* (Instance, State) */
             setState({ [this.idAttr]:instanceId }, { value }) {
-                axios.post(`${this.apiPath}/state/${id}`, {
+                axios.post(`${this.apiPath}/state/${instanceId}`, {
                         attribute: this.config.state.attribute,
                         value
                     })

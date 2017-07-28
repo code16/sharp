@@ -28,7 +28,7 @@
                 <button v-if="showCreateButton" class="SharpButton SharpButton--primary" @click="emitAction('create')">
                     {{ l('action_bar.list.create_button') }}
                 </button>
-                <sharp-dropdown class="SharpActionBar__actions-dropdown">
+                <sharp-dropdown v-if="commands.length" class="SharpActionBar__actions-dropdown">
                     <sharp-dropdown-item v-for="command in commands" @click="emitAction('command', command)" :key="command.key">
                         {{ command.label }}
                     </sharp-dropdown-item>

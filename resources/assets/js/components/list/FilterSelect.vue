@@ -1,5 +1,5 @@
 <template>
-    <sharp-dropdown :text="name" ref="dropdown">
+    <sharp-dropdown class="SharpFilterSelect" :text="name" ref="dropdown">
         <sharp-select :value="value" :options="options" :multiple="multiple"
                       display="list" @input="handleSelect" :inline="false" disable-focus>
         </sharp-select>

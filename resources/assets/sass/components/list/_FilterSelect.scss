@@ -1,0 +1,16 @@
+.SharpFilterSelect {
+  width: auto;
+
+  .SharpDropdown {
+    &__text {
+      padding: .5rem 1.5em .5em .5em;
+    }
+    &__arrow {
+      top: .9rem;
+      right: .5rem;
+    }
+    &__list {
+      width: 12rem;
+    }
+  }
+}
