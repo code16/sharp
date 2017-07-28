@@ -101,7 +101,7 @@ class SpaceshipSharpList extends SharpEntityList
                 ->leftJoin("pilots", "pilots.id", "=", "pilot_spaceship.pilot_id");
 
             if ($params->filterFor("pilots")) {
-                $spaceships->whereIn("pilots.id", $params->filterFor("pilots"));
+                $spaceships->whereIn("pilots.id", (array)$params->filterFor("pilots"));
             }
 
             if ($params->hasSearch()) {
