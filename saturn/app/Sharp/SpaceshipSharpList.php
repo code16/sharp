@@ -96,8 +96,7 @@ class SpaceshipSharpList extends SharpEntityList
         }
 
         if($params->hasSearch() || $params->filterFor("pilots")) {
-            $spaceships->select("spaceships.*")
-                ->leftJoin("pilot_spaceship", "spaceships.id", "=", "pilot_spaceship.spaceship_id")
+            $spaceships->leftJoin("pilot_spaceship", "spaceships.id", "=", "pilot_spaceship.spaceship_id")
                 ->leftJoin("pilots", "pilots.id", "=", "pilot_spaceship.pilot_id");
 
             if ($params->filterFor("pilots")) {
@@ -126,7 +125,7 @@ class SpaceshipSharpList extends SharpEntityList
             ->setUploadTransformer("picture", 100)
             ->transform(
                 $spaceships->with("picture", "type", "pilots")
-                    ->paginate(10)
+                    ->paginate(10, ["spaceships.*"])
             );
     }
 }
