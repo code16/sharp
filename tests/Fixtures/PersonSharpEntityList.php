@@ -39,7 +39,7 @@ class PersonSharpEntityList extends SharpEntityList
 
         if($params->filterFor("age_multiple")) {
             $items = collect($items)->filter(function($item) use($params) {
-                return in_array($item["age"], $params->filterFor("age_multiple"));
+                return in_array($item["age"], (array)$params->filterFor("age_multiple"));
             })->all();
         }
 
