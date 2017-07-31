@@ -5,6 +5,10 @@ export default {
         let actions = this.$options.actions;
 
         if(!actions) return;
+        if(typeof actions._disabled === 'function' && actions._disabled.call(this)) {
+            util.log(`${this.$options.name} : actions are disabled`);
+            return;
+        }
         if(!this.actionsBus) {
             util.error('Use of action options without actionsBus injected');
             return;

@@ -1,6 +1,6 @@
 <template>
     <div class="SharpTabbedLayout">
-        <template v-if="layout.tabbed && layout.tabs.length>1">
+        <template v-if="showTabs">
             <sharp-b-tabs>
                 <sharp-b-tab v-for="(tab,i) in layout.tabs" :title="tab.title" :key="i">
                     <slot v-bind="tab"></slot>
@@ -24,11 +24,19 @@
         props : {
             layout: Object,
         },
+        provide() {
+            if(!this.showTabs) {
+                return { $tab: false }
+            }
+        },
         components: {
             [Tabs.name]:Tabs,
             [Tab.name]:Tab,
         },
         computed: {
+            showTabs() {
+                return this.layout.tabbed && this.layout.tabs.length>1;
+            }
         }
     }
 </script>

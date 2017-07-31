@@ -30,8 +30,8 @@ export default {
                     return Promise.reject(error);
                 });
         },
-        post() {
-            return axios.post(this.apiPath, this.data).then(response=>{
+        post(endpoint = this.apiPath, data = this.data) {
+            return axios.post(endpoint, data).then(response=>{
                     return Promise.resolve(response);
                 })
                 .catch(error=>{
@@ -40,10 +40,9 @@ export default {
         }
     },
     created() {
-
         axios.interceptors.request.use(config => {
             //console.log('request interceptor', config);
-            if(config.method==='get')
+            //if(config.method==='get')
                 this.glasspane.$emit('show');
             return config;
         }, error => Promise.reject(error));
@@ -76,6 +75,7 @@ export default {
             return Promise.reject(error);
         });
 
-        this.glasspane.$emit('show');
+        if(!this.synchronous)
+            this.glasspane.$emit('show');
     }
 }

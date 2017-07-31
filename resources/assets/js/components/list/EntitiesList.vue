@@ -36,7 +36,7 @@
                             </sharp-dropdown-item>
                         </sharp-dropdown>
                         <sharp-dropdown v-if="instanceCommands(item).length" class="SharpEntitiesList__commands-dropdown">
-                            <sharp-dropdown-item v-for="command in instanceCommands(item)" @click="sendCommand(command,item)" :key="command.key">
+                            <sharp-dropdown-item v-for="command in instanceCommands(item)" @click="sendCommand(command, item)" :key="command.key">
                                 {{ command.label }}
                             </sharp-dropdown-item>
                         </sharp-dropdown>
@@ -53,6 +53,17 @@
                                   @change="pageChanged">
                 </sharp-pagination>
             </div>
+            <sharp-modal v-for="(form,index) in commandForms"
+                         :visible="showFormModal[form.key]"
+                         :key="form.key"
+                         @ok="postCommandForm(form.key, $event)">
+                <sharp-form independant
+                            ignore-authorizations
+                            :props="form"
+                            :entity-key="form.key"
+                            @submitted="commandFormSubmitted(form.key, $event)">
+                </sharp-form>
+            </sharp-modal>
         </template>
     </div>
 </template>
@@ -62,6 +73,8 @@
     import Pagination from './Pagination';
     import Dropdown from '../dropdown/Dropdown';
     import DropdownItem from '../dropdown/DropdownItem';
+    import Modal from '../Modal';
+    import Form from '../form/Form';
 
     import { API_PATH } from '../../consts';
     import * as util from '../../util';
@@ -87,7 +100,9 @@
         components: {
             [Pagination.name]: Pagination,
             [Dropdown.name]: Dropdown,
-            [DropdownItem.name]: DropdownItem
+            [DropdownItem.name]: DropdownItem,
+            [Modal.name]: Modal,
+            [Form.name]: Form
         },
 
         props: {
@@ -108,7 +123,9 @@
                 sortedBy: null,
                 sortDir: null,
 
-                filtersValue: {}
+                filtersValue: {},
+                showFormModal: {},
+                selectedInstance: null
             }
         },
         computed: {
@@ -170,6 +187,12 @@
                     res[id] = instCmds.filter(c=>c.authorization.indexOf(id) !== -1);
                     return res;
                 }, {});
+            },
+            commandForms() {
+                return this.config.commands.filter(({form})=>form).map(({form, key}) => ({
+                    ...form, key,
+                    layout: { tabs: [{ columns: [{fields:form.layout}]}] },
+                }));
             }
         },
         methods: {
@@ -255,6 +278,7 @@
                 this.update();
             },
 
+
             /**
              * Data operations
              */
@@ -282,26 +306,6 @@
                         }
                     })
             },
-            /* (Command, Instance) */
-            sendCommand({ key }, instance) {
-                let endpoint = `${this.apiPath}/command/${key}`;
-                instance && (endpoint+=`/${instance[this.idAttr]}`);
-
-                axios.post(endpoint, {
-                        query: this.apiParams
-                    })
-                    .then(({data: {action, items, message, html}})=>{
-                        if(action === 'refresh') this.actionRefresh(items);
-                        else if(action === 'reload') this.actionReload();
-                        else if(action === 'info')
-                            this.actionsBus.$emit('showMainModal', {
-                                title: 'Résultat',
-                                text: message,
-                                okCloseOnly: true,
-                            });
-                        else if(action === 'view') alert('TODO action view command');
-                    });
-            },
             update() {
                 this.page>1 && (this.page=1);
                 this.updateData();
@@ -312,6 +316,63 @@
                     this.data = data;
                     this.setupActionBar();
                 });
+            },
+
+            /**
+             * Commands
+             */
+            commandEnpoint(key, { [this.idAttr]:instanceId }={}) {
+                return `${this.apiPath}/command/${key}${instanceId?`/${instanceId}`:''}`;
+            },
+
+            /* (Command, Instance)
+             * Display a form in a modal if the command require a form, else send API request
+             */
+            sendCommand({ key, form }, instance) {
+                if(form) {
+                    this.selectedInstance = instance;
+                    this.$set(this.showFormModal,key,true);
+                    return;
+                }
+                axios.post(this.commandEnpoint(key, instance), {query: this.apiParams})
+                    .then(({data})=>this.handleCommandResponse(data));
+
+            },
+
+            /* (CommandAPIResponse)
+            * Execute the required command action
+            */
+            handleCommandResponse({action, items, message, html}) {
+                if(action === 'refresh') this.actionRefresh(items);
+                else if(action === 'reload') this.actionReload();
+                else if(action === 'info') {
+                    this.actionsBus.$emit('showMainModal', {
+                        title: 'Résultat',
+                        text: message,
+                        okCloseOnly: true,
+                    });
+                }
+                else if(action === 'view') alert('TODO action view command');
+            },
+
+            /* (CommandKey, BHideModalEvent)
+            * Execute form submission
+            */
+            postCommandForm(key, event) {
+                this.actionsBus.$emit('submit', {
+                    key, endpoint: this.commandEnpoint(key, this.selectedInstance),
+                    dataFormatter:form=>({ query:this.apiParams, data:form.data })
+                });
+                return event.cancel();
+            },
+
+            /* (CommandKey, FormData)
+            * Hide the current form modal after data correctly sent, handle actions
+            */
+            commandFormSubmitted(key, data) {
+                this.selectedInstance = null;
+                this.$set(this.showFormModal,key, false);
+                this.handleCommandResponse(data);
             },
 
             /**

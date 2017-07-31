@@ -7,11 +7,12 @@
 
         render(h, ctx) {
             //console.log(ctx);
-            ctx.data['class'] = {
-                ...ctx.data['class'],
-                SharpModal: true,
-                'SharpModal--error': ctx.props.isError
-            };
+            ctx.data['class'] =
+            [
+                'SharpModal',
+                { 'SharpModal--error': ctx.props.isError },
+                ...(Array.isArray(ctx.data['class']) ? ctx.data['class'] : [ctx.data['class']])
+            ];
 
             let { isError, ...exposedProps } = ctx.props;
             ctx.props = exposedProps;

@@ -43,6 +43,8 @@
 
     import axios from 'axios';
 
+    const noop = ()=>{}
+
     export default {
         name:'SharpForm',
         extends: DynamicView,
@@ -58,7 +60,15 @@
             entityKey: String,
             instanceId: String,
 
-            submitButton: String
+            submitButton: String,
+
+            independant: {
+                type:Boolean,
+                default: false
+            },
+            ignoreAuthorizations: Boolean,
+            props: Object,
+            endpoint: String,
         },
 
         inject:['actionsBus', 'glasspane'],
@@ -81,6 +91,8 @@
         },
         computed: {
             apiPath() {
+                if(this.endpoint) return this.endpoint;
+
                 let path = `${API_PATH}/form/${this.entityKey}`;
                 if(this.instanceId) path+=`/${this.instanceId}`;
                 return path;
@@ -91,9 +103,12 @@
             isCreation() {
                 return !this.instanceId;
             },
-
             isReadOnly() {
-                return !(this.isCreation ? this.authorizations.create : this.authorizations.update);
+                return !this.ignoreAuthorizations && !(this.isCreation ? this.authorizations.create : this.authorizations.update);
+            },
+            // don't show loading on creation
+            synchronous() {
+                return this.independant;
             }
         },
         methods: {
@@ -109,11 +124,11 @@
                 }
                 else this.$set(this.data,key,value);
             },
-            mount({fields, layout, data, config, authorizations}) {
+            mount({fields, layout, data={}, config={}, authorizations={}}) {
                 this.fields = fields;
                 this.layout = layout;
-                this.data = data || {};
-                this.config = config || {};
+                this.data = data;
+                this.config = config;
                 this.authorizations = authorizations;
             },
             handleError({response}) {
@@ -126,10 +141,16 @@
                 axios.delete(this.apiPath);
             },
             init() {
-                if(this.entityKey) {
-                    this.get().then(_=>this.setupActionBar());
+                if(this.independant) {
+                    this.mount(this.props);
+                    this.ready = true;
                 }
-                else util.error('no entity key provided');
+                else {
+                    if(this.entityKey) {
+                        this.get().then(_=>this.setupActionBar());
+                    }
+                    else util.error('no entity key provided');
+                }
             },
 
             setupActionBar() {
@@ -149,10 +170,15 @@
             },
         },
         actions: {
-            submit() {
-                this.post()
+            submit({entityKey, endpoint, dataFormatter=noop }={}) {
+                if(entityKey && entityKey !== this.entityKey) return;
+
+                this.post(endpoint, dataFormatter(this))
                     .then(({ data })=>{
-                        location.href = `/sharp/list/${this.entityKey}?restore-context=1`
+                        if(this.independant) {
+                            this.$emit('submitted', data);
+                        }
+                        else location.href = `/sharp/list/${this.entityKey}?restore-context=1`
                     })
                     .catch(this.handleError)
             },
@@ -166,6 +192,7 @@
         },
         mounted() {
             this.init();
+            console.log(this);
         }
     }
 </script>
