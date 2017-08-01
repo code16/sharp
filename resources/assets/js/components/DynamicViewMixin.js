@@ -11,13 +11,14 @@ export default {
             layout:null,
 
             ready:false,
+            axiosInstance: axios.create()
         }
     },
     methods: {
         get() {
             if(this.test) return;
 
-            return axios.get(this.apiPath, {
+            return this.axiosInstance.get(this.apiPath, {
                     params : this.apiParams,
                     paramsSerializer : p => qs.serialize(p, {urlSeparator:false})
                 })
@@ -31,7 +32,7 @@ export default {
                 });
         },
         post(endpoint = this.apiPath, data = this.data) {
-            return axios.post(endpoint, data).then(response=>{
+            return this.axiosInstance.post(endpoint, data).then(response=>{
                     return Promise.resolve(response);
                 })
                 .catch(error=>{
@@ -40,14 +41,12 @@ export default {
         }
     },
     created() {
-        axios.interceptors.request.use(config => {
-            //console.log('request interceptor', config);
-            //if(config.method==='get')
-                this.glasspane.$emit('show');
+        this.axiosInstance.interceptors.request.use(config => {
+            this.glasspane.$emit('show');
             return config;
         }, error => Promise.reject(error));
 
-        axios.interceptors.response.use(response => {
+        this.axiosInstance.interceptors.response.use(response => {
             this.glasspane.$emit('hide');
             return response;
         }, error => {

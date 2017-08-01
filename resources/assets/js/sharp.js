@@ -35,11 +35,9 @@ new Vue({
         [EntitiesList.name]:EntitiesList,
         [CollapsibleItem.name]:CollapsibleItem,
         [NavItem.name]:NavItem
-        //[Dashboard.name]:Dashboard
     },
 
     mounted() {
-        console.log(this);
     }
 });
 

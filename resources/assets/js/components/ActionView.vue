@@ -40,7 +40,8 @@
         data() {
             return {
                 mainModalText:"",
-                mainModalProps: {}
+                mainModalProps: {},
+
             }
         },
         computed: {

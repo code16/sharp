@@ -53,10 +53,11 @@
                                   @change="pageChanged">
                 </sharp-pagination>
             </div>
-            <sharp-modal v-for="(form,index) in commandForms"
+            <sharp-modal v-for="form in commandForms"
                          :visible="showFormModal[form.key]"
                          :key="form.key"
-                         @ok="postCommandForm(form.key, $event)">
+                         @ok="postCommandForm(form.key, $event)"
+                         @hidden="$set(showFormModal,form.key,false)">
                 <sharp-form independant
                             ignore-authorizations
                             :props="form"
@@ -64,6 +65,7 @@
                             @submitted="commandFormSubmitted(form.key, $event)">
                 </sharp-form>
             </sharp-modal>
+            <sharp-view-panel v-model="showViewPanel" :content="viewPanelContent"></sharp-view-panel>
         </template>
     </div>
 </template>
@@ -75,6 +77,7 @@
     import DropdownItem from '../dropdown/DropdownItem';
     import Modal from '../Modal';
     import Form from '../form/Form';
+    import ViewPanel from './ViewPanel';
 
     import { API_PATH } from '../../consts';
     import * as util from '../../util';
@@ -102,7 +105,8 @@
             [Dropdown.name]: Dropdown,
             [DropdownItem.name]: DropdownItem,
             [Modal.name]: Modal,
-            [Form.name]: Form
+            [Form.name]: Form,
+            [ViewPanel.name]: ViewPanel
         },
 
         props: {
@@ -125,7 +129,9 @@
 
                 filtersValue: {},
                 showFormModal: {},
-                selectedInstance: null
+                selectedInstance: null,
+                showViewPanel: false,
+                viewPanelContent: null
             }
         },
         computed: {
@@ -352,7 +358,10 @@
                         okCloseOnly: true,
                     });
                 }
-                else if(action === 'view') alert('TODO action view command');
+                else if(action === 'view') {
+                    this.showViewPanel = true;
+                    this.viewPanelContent = html;
+                }
             },
 
             /* (CommandKey, BHideModalEvent)

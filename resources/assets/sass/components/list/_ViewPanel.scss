@@ -4,6 +4,8 @@
   top:0;
   height: 100%;
   background: white;
+  width: 90%;
+  @include layer(pop-out);
 
   &--collapsed {
     width:0;
@@ -18,6 +20,6 @@
   }
 
   &--expanded {
-    width: 90%;
+
   }
 }
