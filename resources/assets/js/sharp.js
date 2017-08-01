@@ -7,6 +7,7 @@ import EntitiesList from './components/list/EntitiesList';
 
 import CollapsibleItem from './components/menu/CollapsibleItem';
 import NavItem from './components/menu/NavItem';
+import LeftNav from './components/menu/LeftNav';
 
 import SharpLoading from './components/Loading';
 
@@ -34,10 +35,14 @@ new Vue({
         [Form.name]:Form,
         [EntitiesList.name]:EntitiesList,
         [CollapsibleItem.name]:CollapsibleItem,
-        [NavItem.name]:NavItem
+        [NavItem.name]:NavItem,
+        [LeftNav.name]:LeftNav
     },
 
-    mounted() {
+    created() {
+        this.$on('setClass',(className,active)=>
+            this.$el.classList[active?'add':'remove'](className)
+        );
     }
 });
 

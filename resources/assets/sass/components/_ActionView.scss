@@ -1,3 +1,10 @@
+@include media-breakpoint-up(md) {
+  &.leftNav--opened {
+    .SharpActionView {
+      padding-left: rem(200px);
+    }
+  }
+}
 .SharpActionView {
-  padding-left: rem(250px);
+  padding-left: rem(48px);
 }

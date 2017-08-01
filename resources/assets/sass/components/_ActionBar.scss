@@ -2,7 +2,7 @@
   margin-top: 1em;
   margin-bottom: 1em;
 
-  height: 2.5rem;
+  //height: 2.5rem;
 
   .left, .right {
     display: flex;
@@ -14,6 +14,10 @@
   }
   .right {
     justify-content: flex-end;
+  }
+
+  &__extras {
+    display:flex;
   }
 
   &__actions-dropdown {
@@ -43,6 +47,13 @@
   &.SharpActionBarList {
     .SharpActionBar__actions-dropdown {
       width: 4em;
+    }
+  }
+
+  .SharpFilterSelect {
+    margin-left: .5em;
+    &:first-child {
+      padding: 0;
     }
   }
 

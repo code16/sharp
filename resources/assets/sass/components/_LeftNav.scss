@@ -6,6 +6,10 @@
   height: 100%;
   background-color: $color__white;
   border-right: 1px solid $color__gray-1;
+  overflow: scroll;
+  max-height: 100%;
+
+  z-index: 2;
 
   &__title {
     padding: .75rem 1.5rem .75rem rem(59px);
@@ -250,7 +254,7 @@
       justify-content: flex-end;
       align-items: center;
       margin-top: auto;
-      margin-bottom: rem(90px);
+      //margin-bottom: rem(90px);
       padding: rem(14px) rem(16px);
 
       &:hover, &:focus {
@@ -285,7 +289,8 @@
 
   &--collapsing, &--collapsed {
     width: rem(48px);
-    transition: background-color 300ms $bx--standard-easing, width 300ms $bx--standard-easing;
+    transition: background-color 300ms $bx--standard-easing,
+                width 300ms $bx--standard-easing;
     cursor: pointer;
     background-color: rgba($color__blue-51, .10);
 
@@ -293,14 +298,14 @@
       background-color: rgba($color__blue-51, .30);
     }
 
-    ul, li, hr, .bx--interior-left-nav-collapse__target {
+    ul, li, hr, .SharpLeftNav__collapse-target {
       opacity: 0;
       transition: opacity 300ms $bx--standard-easing;
       overflow: hidden;
       white-space: nowrap;
     }
 
-    .bx--interior-left-nav-collapse {
+    .SharpLeftNav__collapse {
       background-color: transparent;
 
       &:hover {
@@ -308,13 +313,14 @@
       }
     }
 
-    .bx--interior-left-nav-collapse__arrow {
+    .SharpLeftNav__collapse-arrow {
       transform: rotate(180deg);
       transition: transform 300ms $bx--standard-easing;
     }
   }
 
   &--collapsed {
+    height: 100%;
     ul, li, hr, .SharpLeftNav__collapse-target {
       display: none;
     }

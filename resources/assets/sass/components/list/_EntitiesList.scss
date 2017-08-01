@@ -17,7 +17,7 @@
     //overflow-x: auto;
     //overflow-y: hidden;
     width: 100%;
-    min-width: 500px;
+    //min-width: 500px;
     border-collapse: collapse;
     border-spacing: 0;
     margin-bottom: 5rem;
@@ -76,7 +76,7 @@
     }
 
     &--header {
-      border-bottom: 2px solid $brand-01;
+      border: none;
       cursor: inherit;
     }
 
@@ -96,8 +96,9 @@
 
   &__thead {
     //display: table-header-group;
+    border-bottom: 2px solid $brand-01;
     vertical-align: middle;
-    padding-right: 5em;
+    padding-right: 3em;
   }
 
   &__th {
@@ -113,6 +114,12 @@
     text-align: left;
     text-transform: uppercase;
     vertical-align: middle;
+
+    & > span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   &__tbody {
@@ -154,7 +161,7 @@
 
   &__state-dropdown, &__commands-dropdown {
     width:2em;
-    margin: 0 .5em;
+    //margin: 0 .5em;
     .SharpDropdown__list {
       z-index:100;
       width:rem(200px);

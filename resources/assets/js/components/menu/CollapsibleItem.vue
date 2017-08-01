@@ -22,19 +22,12 @@
     export default {
         name:'SharpCollapsibleItem',
         props: {
-            initiallyExpanded: {
-                type:Boolean,
-                default: false
-            },
             label: String
         },
         data() {
             return {
                 expanded: this.initiallyExpanded
             }
-        },
-        watch: {
-            expanded:'expandedChanged'
         },
         computed: {
             navItems() {
@@ -44,20 +37,12 @@
             }
         },
         methods: {
-            expandedChanged() {
-                this.$nextTick(_=> {
-                    this.navItems.forEach(i => i.itemLinkFocusable = this.expanded);
-                });
-            },
             toggle() {
                 this.expanded = !this.expanded;
             }
         },
         mounted() {
-            this.navItems.forEach(i => {
-                i.itemFocusable = false;
-                i.itemLinkFocusable = this.expanded;
-            });
+            this.expanded = this.navItems.some(i=>i.current);
         }
     }
 </script>

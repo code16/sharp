@@ -1,6 +1,6 @@
 <template>
     <div class="SharpDropdown" :class="{'SharpDropdown--open':opened}" tabindex="0" @focus="opened=true" @blur="opened=false">
-        <li class="SharpDropdown__text">
+        <li class="SharpDropdown__text" @mousedown="toggleIfFocused">
             <slot name="text">{{text}}</slot>
         </li>
         <dropdown-arrow v-if="showArrow" class="SharpDropdown__arrow"></dropdown-arrow>
@@ -40,6 +40,12 @@
         methods:{
             toggle() {
                 this.opened = !this.opened;
+            },
+            toggleIfFocused(e) {
+                if(this.opened) {
+                    this.$el.blur();
+                    e.preventDefault();
+                }
             }
         },
         mounted() {

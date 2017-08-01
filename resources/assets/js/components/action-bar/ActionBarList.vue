@@ -2,10 +2,6 @@
     <sharp-action-bar class="SharpActionBarList">
         <template slot="left">
             <span>{{ itemsCount }} {{ l('action_bar.list.items_count') }}</span>
-            <sharp-filter-select v-for="filter in filters" :name="filter.key" :values="filter.values"
-                                 :key="filter.key" @input="emitAction('filterChanged',filter.key,$event)"
-                                 :value="filtersValue[filter.key]" :multiple="filter.multiple">
-            </sharp-filter-select>
         </template>
         <template slot="right">
             <div class="SharpActionBar__search SharpSearch SharpSearch--lg" role="search">
@@ -34,6 +30,12 @@
                     </sharp-dropdown-item>
                 </sharp-dropdown>
             </div>
+        </template>
+        <template slot="extras">
+            <sharp-filter-select v-for="filter in filters" :name="filter.key" :values="filter.values"
+                                 :key="filter.key" @input="emitAction('filterChanged',filter.key,$event)"
+                                 :value="filtersValue[filter.key]" :multiple="filter.multiple">
+            </sharp-filter-select>
         </template>
     </sharp-action-bar>
 </template>

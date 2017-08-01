@@ -41,7 +41,6 @@
             return {
                 mainModalText:"",
                 mainModalProps: {},
-
             }
         },
         computed: {

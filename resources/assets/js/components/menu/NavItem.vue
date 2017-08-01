@@ -32,8 +32,7 @@
         },
         data() {
             return {
-                itemFocusable: !this.disabled,
-                itemLinkFocusable: true
+
             }
         },
     }

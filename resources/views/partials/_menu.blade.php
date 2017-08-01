@@ -1,4 +1,4 @@
-<nav role="navigation" aria-label="Menu Sharp" class="SharpLeftNav">
+<sharp-left-nav>
     <h2 class="SharpLeftNav__title">{{ $sharpMenu->name }}</h2>
 
     <ul role="menubar" class="SharpLeftNav__list" aria-hidden="false" v-cloak>
@@ -21,7 +21,7 @@
         @endif
 
         @foreach($sharpMenu->categories as $category)
-        <sharp-collapsible-item label="{{ $category->label }}" :initially-expanded="{{ json_encode((bool)($entityKey??false)) }}">
+        <sharp-collapsible-item label="{{ $category->label }}">
             @foreach($category->entities as $entity)
             <sharp-nav-item :current="{{ json_encode(($entityKey??false)==$entity->key) }}" v-cloak
                             link="{{ route('code16.sharp.list', $entity->key) }}">
@@ -36,4 +36,4 @@
         </sharp-collapsible-item>
         @endforeach
     </ul>
-</nav>
+</sharp-left-nav>

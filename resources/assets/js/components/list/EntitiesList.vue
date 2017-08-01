@@ -5,7 +5,7 @@
                 <div class="SharpEntitiesList__thead">
                     <div class="SharpEntitiesList__row SharpEntitiesList__row--header row">
                         <div class="SharpEntitiesList__th" :class="colClasses(contLayout)" v-for="contLayout in layout">
-                            {{ containers[contLayout.key].label }}
+                            <span>{{ containers[contLayout.key].label }}</span>
                             <template v-if="containers[contLayout.key].sortable">
                                 <svg class="SharpEntitiesList__carret"
                                      :class="{'SharpEntitiesList__carret--selected':sortedBy === contLayout.key,
@@ -249,10 +249,11 @@
             /**
              * Getters
              */
-            colClasses(layout) {
+            colClasses({ sizeXS, size, hideOnXS}) {
                 return [
-                    `col-${layout.sizeXS}`,
-                    `col-sm-${layout.size}`,
+                    `col-${sizeXS}`,
+                    `col-sm-${size}`,
+                    {'hidden-xs-down':hideOnXS}
                 ]
             },
             stateClasses(state) {
@@ -412,6 +413,9 @@
                     let paramValue = dynamicParams[paramKey];
                     if(paramKey.indexOf('filter_') === 0) {
                         let [ _, filterKey ] = paramKey.split('_');
+                        if((this.filterByKey[filterKey]||{}).multiple && paramValue && !Array.isArray(paramValue)) {
+                            paramValue = [paramValue];
+                        }
                         this.filtersValue[filterKey] = this.filterValueOrDefault(paramValue,this.filterByKey[filterKey]);
                     }
                 }

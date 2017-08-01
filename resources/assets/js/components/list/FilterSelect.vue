@@ -1,5 +1,8 @@
 <template>
-    <sharp-dropdown class="SharpFilterSelect" :text="name" ref="dropdown">
+    <sharp-dropdown class="SharpFilterSelect" ref="dropdown">
+        <template slot="text">
+            {{name}}<span style="font-weight:normal">{{ valueString ? ` | ${valueString}` : '' }}</span>
+        </template>
         <sharp-select :value="value" :options="options" :multiple="multiple"
                       display="list" @input="handleSelect" :inline="false" disable-focus>
         </sharp-select>
@@ -34,14 +37,23 @@
         computed: {
             options() {
                 return Object.keys(this.values).map(key => ({id:key, label:this.values[key]}));
+            },
+            valueString() {
+                if(Array.isArray(this.value)) {
+                    return this.value.map(key => this.values[key]).join(', ');
+                }
+                return this.value ? this.values[this.value] : '';
             }
         },
         methods: {
             handleSelect(value) {
                 this.$emit('input', value);
-                this.$refs.dropdown.$el.focus();
-
+                if(this.multiple)
+                    this.$refs.dropdown.$el.focus();
+                else {
+                    setTimeout(_=>this.$refs.dropdown.$el.blur(),100);
+                }
             }
-        }
+        },
     }
 </script>
