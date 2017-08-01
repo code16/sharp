@@ -70,6 +70,22 @@ class EntityListControllerTest extends BaseApiTest
     }
 
     /** @test */
+    public function default_filter_value_is_used_if_no_value_was_went()
+    {
+        $this->buildTheWorld();
+
+        // We use a special QS key "default_age" only for test purpose
+        // to know that we should use default value in this case
+        $this->json('get', '/sharp/api/list/person?default_age=true')
+            ->assertStatus(200)
+            ->assertJsonFragment(["data" => [
+                "items" => [
+                    ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22]
+                ]
+            ]]);
+    }
+
+    /** @test */
     public function we_can_filter_with_multiple_values_on_entities()
     {
         $this->buildTheWorld();
