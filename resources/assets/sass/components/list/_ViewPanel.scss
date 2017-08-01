@@ -1,0 +1,23 @@
+.SharpViewPanel {
+  position: fixed;
+  left:0;
+  top:0;
+  height: 100%;
+  background: white;
+
+  &--collapsed {
+    width:0;
+  }
+
+  &--collapsing {
+    transition: width 400ms $bx--standard-easing;
+  }
+
+  &--expanding {
+    transition: width 400ms $bx--standard-easing;
+  }
+
+  &--expanded {
+    width: 90%;
+  }
+}
