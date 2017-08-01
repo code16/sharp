@@ -121,8 +121,9 @@ class CommandControllerTest extends BaseApiTest
         $this->buildTheWorld();
         $this->disableExceptionHandling();
 
-        $this->json('post', '/sharp/api/list/person/command/entity_form', ["name" => "John"])
-            ->assertStatus(200);
+        $this->json('post', '/sharp/api/list/person/command/entity_form', [
+            "data" => ["name" => "John"]
+        ])->assertStatus(200);
     }
 
     /** @test */
