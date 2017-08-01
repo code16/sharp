@@ -6,6 +6,7 @@ use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\EntityListFilter;
 use Code16\Sharp\EntityList\EntityListMultipleFilter;
 use Code16\Sharp\EntityList\EntityListQueryParams;
+use Code16\Sharp\EntityList\EntityListRequiredFilter;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -34,6 +35,11 @@ class PersonSharpEntityList extends SharpEntityList
         if($params->filterFor("age")) {
             $items = collect($items)->filter(function($item) use($params) {
                 return $item["age"] == $params->filterFor("age");
+            })->all();
+
+        } elseif(request()->has("default_age")) {
+            $items = collect($items)->filter(function($item) use($params) {
+                return $item["age"] == $params->filterFor("age_required");
             })->all();
         }
 
@@ -96,7 +102,8 @@ class PersonSharpEntityList extends SharpEntityList
     {
         $this->setSearchable()
             ->addFilter("age", PersonSharpEntityListAgeFilter::class)
-            ->addFilter("age_multiple", PersonSharpEntityListAgeMultipleFilter::class);
+            ->addFilter("age_multiple", PersonSharpEntityListAgeMultipleFilter::class)
+            ->addFilter("age_required", PersonSharpEntityListAgeRequiredFilter::class);
     }
 }
 
@@ -115,4 +122,17 @@ class PersonSharpEntityListAgeMultipleFilter
     extends PersonSharpEntityListAgeFilter
     implements EntityListMultipleFilter
 {
+}
+
+class PersonSharpEntityListAgeRequiredFilter
+    extends PersonSharpEntityListAgeFilter
+    implements EntityListRequiredFilter
+{
+    /**
+     * @return string|int
+     */
+    public function defaultValue()
+    {
+        return 22;
+    }
 }

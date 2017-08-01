@@ -28,15 +28,6 @@ trait HandleFilters
     }
 
     /**
-     * @param string $filterName
-     * @return string|array
-     */
-    protected function filterValue(string $filterName)
-    {
-        return $this->filterHandlers[$filterName]->currentValue();
-    }
-
-    /**
      * @param array $config
      */
     protected function appendFiltersToConfig(array &$config)

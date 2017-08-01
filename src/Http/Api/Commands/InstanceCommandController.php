@@ -26,7 +26,6 @@ class InstanceCommandController extends ApiController
             throw new SharpAuthorizationException();
         }
 
-
         return $this->returnAsJson(
             $list, $list->instanceCommandHandler($commandKey)->execute($instanceId, (array)request("data"))
         );
