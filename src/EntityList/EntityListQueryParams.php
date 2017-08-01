@@ -34,28 +34,57 @@ class EntityListQueryParams
      */
     protected $specificIds;
 
-    /**
-     * @param string|null $defaultSortedBy
-     * @param string|null $defaultSortedDir
-     * @return static
-     */
-    public static function createFromRequest($defaultSortedBy = null, $defaultSortedDir = null)
+    public static function create()
     {
-        $instance = new static;
-        $instance->search = request("search");
-        $instance->page = request("page");
-        $instance->sortedBy = request("sort") ?: $defaultSortedBy;
-        $instance->sortedDir = request("dir") ?: $defaultSortedDir;
+        return new static;
+    }
+
+    /**
+     * @param string $defaultSortedBy
+     * @param string $defaultSortedDir
+     * @return $this
+     */
+    public function setDefaultSort($defaultSortedBy, $defaultSortedDir)
+    {
+        $this->sortedBy = $defaultSortedBy;
+        $this->sortedDir = $defaultSortedDir;
+
+        return $this;
+    }
+
+    /**
+     * @param array $filters
+     * @return $this
+     */
+    public function setDefaultFilters($filters)
+    {
+        $this->filters = (array)$filters;
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function fillWithRequest()
+    {
+        $this->search = request("search");
+        $this->page = request("page");
+
+        if(request("sort")) {
+            $this->sortedBy = request("sort");
+            $this->sortedDir = request("dir");
+        }
 
         collect(request()->except(["search", "page", "sort", "dir"]))
             ->filter(function($value, $name) {
                 return starts_with($name, "filter_");
 
-            })->each(function($value, $name) use($instance) {
-               $instance->filters[substr($name, strlen("filter_"))] = $value;
+            })->each(function($value, $name) {
+               $this->filters[substr($name, strlen("filter_"))] = $value;
             });
 
-        return $instance;
+        return $this;
     }
 
     public static function createFromArrayOfIds(array $ids)
