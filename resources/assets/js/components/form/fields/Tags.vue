@@ -111,7 +111,7 @@
         created() {
             this.lastIndex += this.options.length;
             this.tags = (this.value||[]).map(this.patchTag);
-            console.log(this);
+            //console.log(this);
         }
     }
 </script>

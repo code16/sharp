@@ -49,7 +49,7 @@
         computed: {
             barComp() {
                 return actionBarCompName[this.context];
-            }
+            },
         },
         methods: {
             showMainModal({text, okCallback=noop, okCloseOnly, isError, ...sharedProps}) {

@@ -31046,7 +31046,7 @@ var Tag = function (_LabelledItem2) {
     created: function created() {
         this.lastIndex += this.options.length;
         this.tags = (this.value || []).map(this.patchTag);
-        console.log(this);
+        //console.log(this);
     }
 });
 
@@ -32979,7 +32979,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         rowClicked: function rowClicked(_ref9) {
             var instanceId = _ref9[this.idAttr];
 
-            location.href = '/sharp/form/' + this.entityKey + '/' + instanceId;
+            if (this.authorizations.view.indexOf(instanceId) !== -1) {
+                location.href = '/sharp/form/' + this.entityKey + '/' + instanceId;
+            }
         },
         pageChanged: function pageChanged(page) {
             this.page = page;
@@ -33021,6 +33023,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
                 if (status === 417) {
                     alert(data.message);
+                } else if (status === 422) {
+                    _this5.actionsBus.$emit('showMainModal', {
+                        title: _this5.l('modals.state.422.title'),
+                        text: data.message,
+                        isError: true,
+                        okCloseOnly: true
+                    });
                 }
             });
         },
@@ -33077,15 +33086,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                             text: confirmation,
                             closeTitle: 'Cancel',
                             okCallback: function okCallback(e) {
-                                return resolve({ data: data, modalEvent: e });
+                                return resolve(data);
                             }
                         });
                     });
                 }
-                return Promise.resolve({ data: data });
-            }).then(function (args) {
-                return _this7.handleCommandResponse(args);
-            });
+                return Promise.resolve(data);
+            }).then(this.handleCommandResponse);
         },
 
 
@@ -33093,15 +33100,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         * Execute the required command action
         */
         handleCommandResponse: function handleCommandResponse(_ref18) {
-            var _ref18$data = _ref18.data,
-                action = _ref18$data.action,
-                items = _ref18$data.items,
-                message = _ref18$data.message,
-                html = _ref18$data.html,
-                modalEvent = _ref18.modalEvent;
+            var action = _ref18.action,
+                items = _ref18.items,
+                message = _ref18.message,
+                html = _ref18.html;
 
             if (action === 'refresh') this.actionRefresh(items);else if (action === 'reload') this.actionReload();else if (action === 'info') {
-                if (modalEvent) modalEvent.cancel();
                 this.actionsBus.$emit('showMainModal', {
                     title: this.l('modals.command.info.title'),
                     text: message,
@@ -58036,27 +58040,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     attrs: {
       "d": "M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm3.5 10.1l-1.4 1.4L8 9.4l-2.1 2.1-1.4-1.4L6.6 8 4.5 5.9l1.4-1.4L8 6.6l2.1-2.1 1.4 1.4L9.4 8l2.1 2.1z"
     }
-  })]), _vm._v(" "), _c('button', {
-    staticClass: "SharpSearch__button",
-    attrs: {
-      "type": "button",
-      "aria-label": "Search button"
-    },
-    on: {
-      "click": _vm.emitSearch
-    }
-  }, [_c('svg', {
-    attrs: {
-      "width": "16",
-      "height": "14",
-      "viewBox": "0 0 16 14",
-      "fill-rule": "evenodd"
-    }
-  }, [_c('path', {
-    attrs: {
-      "d": "M12.6 6H0v2h12.7l-5 4.7L9 14l7-7-7-7-1.3 1.3z"
-    }
-  })])]), _vm._v(" "), (_vm.showCreateButton) ? _c('button', {
+  })]), _vm._v(" "), (_vm.showCreateButton) ? _c('button', {
     staticClass: "SharpButton SharpButton--primary",
     on: {
       "click": function($event) {

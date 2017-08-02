@@ -16,22 +16,25 @@
     justify-content: flex-end;
   }
 
+
   &__extras {
     display:flex;
+    padding-top: .1rem;
   }
 
   &__actions-dropdown {
     align-self: stretch;
+    min-width: 2rem;
+    max-width: 2rem;
     .SharpDropdown__list {
       width: auto;
       right:0;
     }
-    width: 2rem;
+
     .SharpDropdown__text {
       border: none;
       height: 100%;
     }
-
     .SharpDropdown__arrow {
       right: .75rem;
     }
@@ -44,11 +47,6 @@
     }
   }
 
-  &.SharpActionBarList {
-    .SharpActionBar__actions-dropdown {
-      width: 4em;
-    }
-  }
 
   .SharpFilterSelect {
     margin-left: .5em;
@@ -57,9 +55,28 @@
     }
   }
 
+  &.SharpActionBarList {
+    @include media-breakpoint-down(sm) {
+      .col.left {
+        flex: 0 !important;
+      }
+      .col.right {
+        flex: 1 !important;
+      }
+    }
+  }
+
   &__search.SharpSearch {
     .SharpSearch__close {
       right: 3.5rem;
+    }
+    @include media-breakpoint-down(sm) {
+      .SharpSearch__close {
+        display:none;
+      }
+      .SharpSearch__input {
+        padding-right: 0;
+      }
     }
   }
 }

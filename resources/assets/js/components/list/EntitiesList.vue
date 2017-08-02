@@ -279,7 +279,9 @@
              * Events
              */
             rowClicked({[this.idAttr]:instanceId}) {
-                location.href = `/sharp/form/${this.entityKey}/${instanceId}`;
+                if(this.authorizations.view.indexOf(instanceId)!==-1) {
+                    location.href = `/sharp/form/${this.entityKey}/${instanceId}`;
+                }
             },
             pageChanged(page) {
                 this.page = page;
@@ -311,6 +313,14 @@
                     .catch(({error:{response:{data, status}}}) => {
                         if(status === 417) {
                             alert(data.message);
+                        }
+                        else if(status === 422) {
+                            this.actionsBus.$emit('showMainModal', {
+                                title: this.l('modals.state.422.title'),
+                                text: data.message,
+                                isError: true,
+                                okCloseOnly: true
+                            });
                         }
                     })
             },
@@ -350,24 +360,22 @@
                                     title: this.l('modals.command.confirm.title'),
                                     text: confirmation,
                                     closeTitle: 'Cancel',
-                                    okCallback: e => resolve({data, modalEvent:e}),
+                                    okCallback: e => resolve(data),
                                 });
                             })
                         }
-                        return Promise.resolve({data});
+                        return Promise.resolve(data);
                     })
-                    .then(args => this.handleCommandResponse(args));
+                    .then(this.handleCommandResponse);
             },
 
             /* (CommandAPIResponse)
             * Execute the required command action
             */
-            handleCommandResponse({data:{action, items, message, html}, modalEvent}) {
+            handleCommandResponse({action, items, message, html}) {
                 if(action === 'refresh') this.actionRefresh(items);
                 else if(action === 'reload') this.actionReload();
                 else if(action === 'info') {
-                    if(modalEvent)
-                        modalEvent.cancel();
                     this.actionsBus.$emit('showMainModal', {
                         title: this.l('modals.command.info.title'),
                         text: message,
