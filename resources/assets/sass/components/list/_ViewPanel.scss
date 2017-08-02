@@ -6,6 +6,7 @@
   background: white;
   width: 90%;
   @include layer(pop-out);
+  z-index: 99;
 
   &--collapsed {
     width:0;
