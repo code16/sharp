@@ -177,15 +177,15 @@ module.exports = function normalizeComponent (
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ActionEvents__ = __webpack_require__(161);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ReadOnlyFields__ = __webpack_require__(165);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__QueryTree__ = __webpack_require__(164);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_0__testable_form__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_0__testable_form__["a"]; });
 /* unused harmony reexport testableDashboard */
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_2__ErrorNode__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_3__Focusable__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return __WEBPACK_IMPORTED_MODULE_4__UploadXSRF__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_5__Localization__["b"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_5__Localization__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_6__ActionEvents__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_7__ReadOnlyFields__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_8__QueryTree__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_7__ReadOnlyFields__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_8__QueryTree__["a"]; });
 
 
 
@@ -20291,12 +20291,12 @@ var UPLOAD_URL = API_PATH + '/upload';
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return lang; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return lang; });
 var lang = function lang(key) {
     return window.i18n[key];
 };
 
-/* harmony default export */ __webpack_exports__["b"] = ({
+/* harmony default export */ __webpack_exports__["a"] = ({
     computed: {
         language: function language() {
             return document.documentElement.lang;
@@ -21645,7 +21645,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         }, function (error) {
             _this2.glasspane.$emit('hide');
             var modalOptions = {
-                title: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__mixins_Localization__["a" /* lang */])('modals.' + error.response.status),
+                title: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__mixins_Localization__["b" /* lang */])('modals.' + error.response.status),
                 text: error.response.data.message,
                 isError: true
             };
@@ -29115,12 +29115,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
 
 
 
+
+var noop = function noop() {};
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpActionView',
@@ -29142,8 +29145,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     data: function data() {
         return {
-            mainModalText: "",
-            mainModalProps: {}
+            mainModalsData: {},
+            mainModalId: 0
         };
     },
 
@@ -29153,27 +29156,33 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
     },
     methods: {
-        showMainModal: function showMainModal(props) {
-            var text = props.text,
-                okCallback = props.okCallback,
-                okCloseOnly = props.okCloseOnly,
-                isError = props.isError,
-                sharedProps = _objectWithoutProperties(props, ['text', 'okCallback', 'okCloseOnly', 'isError']);
+        showMainModal: function showMainModal(_ref) {
+            var _this = this;
 
-            this.mainModalText = text;
-            this.$refs.mainModal.show();
+            var text = _ref.text,
+                _ref$okCallback = _ref.okCallback,
+                okCallback = _ref$okCallback === undefined ? noop : _ref$okCallback,
+                okCloseOnly = _ref.okCloseOnly,
+                isError = _ref.isError,
+                sharedProps = _objectWithoutProperties(_ref, ['text', 'okCallback', 'okCloseOnly', 'isError']);
 
-            this.$refs.mainModal.$off('ok');
-            if (okCallback) {
-                this.$refs.mainModal.$on('ok', okCallback);
-            }
+            var curId = this.mainModalId;
+            var hiddenCallback = function hiddenCallback(_) {
+                return _this.$delete(_this.mainModalsData, curId);
+            };
 
-            this.mainModalProps = _extends({}, sharedProps, {
-                okOnly: okCloseOnly,
-                noCloseOnBackdrop: okCloseOnly,
-                noCloseOnEsc: okCloseOnly,
-                isError: isError
+            this.$set(this.mainModalsData, curId, {
+                props: _extends({}, sharedProps, {
+                    okOnly: okCloseOnly,
+                    noCloseOnBackdrop: okCloseOnly,
+                    noCloseOnEsc: okCloseOnly,
+                    visible: true,
+                    isError: isError
+                }),
+                okCallback: okCallback, hiddenCallback: hiddenCallback,
+                text: text
             });
+            this.mainModalId++;
         }
     },
     mounted: function mounted() {
@@ -29317,6 +29326,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vendor_bootstrap_vue_components_modal__ = __webpack_require__(255);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins__ = __webpack_require__(1);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -29336,13 +29347,16 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             exposedProps = _objectWithoutProperties(_ctx$props, ['isError']);
 
         ctx.props = exposedProps;
+        ctx.data.attrs = _extends({}, ctx.data.attrs, {
+            noAutoFocus: true
+        });
 
         __WEBPACK_IMPORTED_MODULE_0__vendor_bootstrap_vue_components_modal__["a" /* default */].name = 'SharpModal';
 
         return h(__WEBPACK_IMPORTED_MODULE_0__vendor_bootstrap_vue_components_modal__["a" /* default */], ctx.data, [h({
             name: 'SharpModalTitle',
             template: '\n                <div>\n                    <h5 class="SharpModal__heading">\n                        <slot name="title">{{title}}</slot>\n                    </h5>\n                    <button v-if="!okOnly" class="SharpModal__close" type="button" @click="hide">\n                        <svg class="SharpModal__close-icon" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd">\n                          <path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>\n                        </svg>\n                    </button>\n                </div>\n                ',
-            mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins__["b" /* QueryTree */]],
+            mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins__["c" /* QueryTree */]],
             props: { title: String, okOnly: Boolean },
             computed: {
                 $modal: function $modal() {
@@ -29387,10 +29401,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 
         if (!props.placeholder) {
-            data.attrs.placeholder = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__mixins_Localization__["a" /* lang */])('form.multiselect.placeholder');
+            data.attrs.placeholder = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__mixins_Localization__["b" /* lang */])('form.multiselect.placeholder');
         }
 
-        return h(__WEBPACK_IMPORTED_MODULE_0_vue_multiselect___default.a, data, [h(__WEBPACK_IMPORTED_MODULE_1__dropdown_Arrow__["a" /* default */], { 'class': 'multiselect__select', slot: 'carret' }), h('template', { slot: 'maxElements' }, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__mixins_Localization__["a" /* lang */])('form.multiselect.max_text'))].concat(_toConsumableArray(children || [])));
+        return h(__WEBPACK_IMPORTED_MODULE_0_vue_multiselect___default.a, data, [h(__WEBPACK_IMPORTED_MODULE_1__dropdown_Arrow__["a" /* default */], { 'class': 'multiselect__select', slot: 'carret' }), h('template', { slot: 'maxElements' }, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__mixins_Localization__["b" /* lang */])('form.multiselect.max_text'))].concat(_toConsumableArray(children || [])));
     }
 });
 
@@ -29697,7 +29711,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpActionBarForm',
-    mixins: [__WEBPACK_IMPORTED_MODULE_1__ActionBarMixin__["a" /* default */], __WEBPACK_IMPORTED_MODULE_4__mixins__["a" /* ActionEvents */], __WEBPACK_IMPORTED_MODULE_4__mixins__["e" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_1__ActionBarMixin__["a" /* default */], __WEBPACK_IMPORTED_MODULE_4__mixins__["a" /* ActionEvents */], __WEBPACK_IMPORTED_MODULE_4__mixins__["b" /* Localization */]],
     components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_0__ActionBar__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_0__ActionBar__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_2__LocaleSelector__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_2__LocaleSelector__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_3__dropdown__["a" /* Dropdown */].name, __WEBPACK_IMPORTED_MODULE_3__dropdown__["a" /* Dropdown */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_3__dropdown__["b" /* DropdownItem */].name, __WEBPACK_IMPORTED_MODULE_3__dropdown__["b" /* DropdownItem */]), _components),
     data: function data() {
         return {
@@ -29812,7 +29826,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     name: 'SharpActionBarList',
     components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_0__ActionBar__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_0__ActionBar__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_3__form_fields_Text__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_3__form_fields_Text__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_4__list_FilterSelect__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_4__list_FilterSelect__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_5__dropdown_Dropdown__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_5__dropdown_Dropdown__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_6__dropdown_DropdownItem__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_6__dropdown_DropdownItem__["a" /* default */]), _components),
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_1__ActionBarMixin__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__mixins__["a" /* ActionEvents */], __WEBPACK_IMPORTED_MODULE_2__mixins__["e" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_1__ActionBarMixin__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__mixins__["a" /* ActionEvents */], __WEBPACK_IMPORTED_MODULE_2__mixins__["b" /* Localization */]],
 
     data: function data() {
         return {
@@ -30275,7 +30289,7 @@ var noop = function noop() {};
     name: 'SharpForm',
     extends: __WEBPACK_IMPORTED_MODULE_3__DynamicViewMixin__["a" /* default */],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_2__mixins__["c" /* testableForm */], __WEBPACK_IMPORTED_MODULE_2__mixins__["a" /* ActionEvents */], __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__mixins__["d" /* ReadOnlyFields */])('fields')],
+    mixins: [__WEBPACK_IMPORTED_MODULE_2__mixins__["d" /* testableForm */], __WEBPACK_IMPORTED_MODULE_2__mixins__["a" /* ActionEvents */], __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__mixins__["e" /* ReadOnlyFields */])('fields')],
     components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_4__TabbedLayout__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_4__TabbedLayout__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_6__FieldsLayout_vue__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_6__FieldsLayout_vue__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_5__Grid__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_5__Grid__["a" /* default */]), _components),
 
     props: {
@@ -30284,13 +30298,15 @@ var noop = function noop() {};
 
         submitButton: String,
 
+        /// Extras props for customization
         independant: {
             type: Boolean,
             default: false
         },
         ignoreAuthorizations: Boolean,
         props: Object,
-        endpoint: String
+        endpoint: String,
+        resetDataAfterSubmitted: Boolean
     },
 
     inject: ['actionsBus', 'glasspane'],
@@ -30415,6 +30431,11 @@ var noop = function noop() {};
             this.post(endpoint, dataFormatter(this)).then(function (_ref4) {
                 var data = _ref4.data;
 
+                if (_this2.resetDataAfterSubmitted) {
+                    Object.keys(_this2.data).forEach(function (key) {
+                        return _this2.data[key] = null;
+                    });
+                }
                 if (_this2.independant) {
                     _this2.$emit('submitted', data);
                 } else location.href = '/sharp/list/' + _this2.entityKey + '?restore-context=1';
@@ -31173,7 +31194,7 @@ var Tag = function (_LabelledItem2) {
 
     inject: ['$field'],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_2__mixins__["f" /* Focusable */], __WEBPACK_IMPORTED_MODULE_2__mixins__["e" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_2__mixins__["f" /* Focusable */], __WEBPACK_IMPORTED_MODULE_2__mixins__["b" /* Localization */]],
 
     props: {
         value: {
@@ -31736,7 +31757,7 @@ var noop = function noop() {};
 
     inject: ['$form'],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_3__mixins__["e" /* Localization */], __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__mixins__["d" /* ReadOnlyFields */])('itemFields')],
+    mixins: [__WEBPACK_IMPORTED_MODULE_3__mixins__["b" /* Localization */], __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__mixins__["e" /* ReadOnlyFields */])('itemFields')],
 
     components: (_components = {
         Draggable: __WEBPACK_IMPORTED_MODULE_0_vuedraggable___default.a
@@ -32073,7 +32094,7 @@ var noop = function noop() {};
             this.simplemde.toolbar.forEach(function (icon) {
                 if ((typeof icon === 'undefined' ? 'undefined' : _typeof(icon)) === 'object') {
                     var lName = icon.name.replace(/-/g, '_');
-                    icon.title = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__mixins_Localization__["a" /* lang */])('form.markdown.icons.' + lName + '.title');
+                    icon.title = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__mixins_Localization__["b" /* lang */])('form.markdown.icons.' + lName + '.title');
                 }
             });
             this.$el.querySelector('.editor-toolbar').remove();
@@ -32397,7 +32418,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     inject: ['actionsBus'],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_5__mixins__["e" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_5__mixins__["b" /* Localization */]],
 
     props: {
         ratioX: Number,
@@ -32700,6 +32721,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -32725,7 +32747,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     inject: ['actionsBus', 'glasspane', 'params' // querystring params as an object
     ],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_9__mixins__["a" /* ActionEvents */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_9__mixins__["a" /* ActionEvents */], __WEBPACK_IMPORTED_MODULE_9__mixins__["b" /* Localization */]],
 
     components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_1__Pagination__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_1__Pagination__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_2__dropdown_Dropdown__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_2__dropdown_Dropdown__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_3__dropdown_DropdownItem__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_3__dropdown_DropdownItem__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_4__Modal__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_4__Modal__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_5__form_Form__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_5__form_Form__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_6__ViewPanel__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_6__ViewPanel__["a" /* default */]), _components),
 
@@ -33037,7 +33059,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             var _this7 = this;
 
             var key = _ref16.key,
-                form = _ref16.form;
+                form = _ref16.form,
+                confirmation = _ref16.confirmation;
 
             if (form) {
                 this.selectedInstance = instance;
@@ -33046,7 +33069,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             }
             __WEBPACK_IMPORTED_MODULE_11_axios___default.a.post(this.commandEnpoint(key, instance), { query: this.apiParams }).then(function (_ref17) {
                 var data = _ref17.data;
-                return _this7.handleCommandResponse(data);
+
+                if (confirmation) {
+                    return new Promise(function (resolve) {
+                        _this7.actionsBus.$emit('showMainModal', {
+                            title: _this7.l('modals.command.confirm.title'),
+                            text: confirmation,
+                            closeTitle: 'Cancel',
+                            okCallback: function okCallback(e) {
+                                return resolve({ data: data, modalEvent: e });
+                            }
+                        });
+                    });
+                }
+                return Promise.resolve({ data: data });
+            }).then(function (args) {
+                return _this7.handleCommandResponse(args);
             });
         },
 
@@ -33055,14 +33093,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         * Execute the required command action
         */
         handleCommandResponse: function handleCommandResponse(_ref18) {
-            var action = _ref18.action,
-                items = _ref18.items,
-                message = _ref18.message,
-                html = _ref18.html;
+            var _ref18$data = _ref18.data,
+                action = _ref18$data.action,
+                items = _ref18$data.items,
+                message = _ref18$data.message,
+                html = _ref18$data.html,
+                modalEvent = _ref18.modalEvent;
 
             if (action === 'refresh') this.actionRefresh(items);else if (action === 'reload') this.actionReload();else if (action === 'info') {
+                if (modalEvent) modalEvent.cancel();
                 this.actionsBus.$emit('showMainModal', {
-                    title: 'Résultat',
+                    title: this.l('modals.command.info.title'),
                     text: message,
                     okCloseOnly: true
                 });
@@ -57004,7 +57045,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       expression: "hide"
     }],
     staticClass: "SharpViewPanel"
-  }, [_c('iframe', {
+  }, [(_vm.content) ? _c('iframe', {
     staticStyle: {
       "height": "100%",
       "width": "100%"
@@ -57015,7 +57056,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "width": "100%",
       "frameborder": "0"
     }
-  })])])
+  }) : _vm._e()])])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -59193,9 +59234,15 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     staticClass: "container"
   }, [(_vm.barComp) ? _c(_vm.barComp, {
     tag: "component"
-  }) : _vm._e(), _vm._v(" "), _vm._t("default"), _vm._v(" "), _c('sharp-modal', _vm._b({
-    ref: "mainModal"
-  }, 'sharp-modal', _vm.mainModalProps, false), [_vm._v("\n            " + _vm._s(_vm.mainModalText) + "\n        ")])], 2)])
+  }) : _vm._e(), _vm._v(" "), _vm._t("default"), _vm._v(" "), _vm._l((_vm.mainModalsData), function(modal, id) {
+    return _c('sharp-modal', _vm._b({
+      key: id,
+      on: {
+        "ok": modal.okCallback,
+        "hidden": modal.hiddenCallback
+      }
+    }, 'sharp-modal', modal.props, false), [_vm._v("\n            " + _vm._s(modal.text) + "\n        ")])
+  })], 2)])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -59709,10 +59756,11 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       }
     }, [_c('sharp-form', {
       attrs: {
+        "props": form,
+        "entity-key": form.key,
         "independant": "",
         "ignore-authorizations": "",
-        "props": form,
-        "entity-key": form.key
+        "reset-data-after-submitted": ""
       },
       on: {
         "submitted": function($event) {

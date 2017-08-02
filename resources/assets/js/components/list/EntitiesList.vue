@@ -58,10 +58,11 @@
                          :key="form.key"
                          @ok="postCommandForm(form.key, $event)"
                          @hidden="$set(showFormModal,form.key,false)">
-                <sharp-form independant
-                            ignore-authorizations
-                            :props="form"
+                <sharp-form :props="form"
                             :entity-key="form.key"
+                            independant
+                            ignore-authorizations
+                            reset-data-after-submitted
                             @submitted="commandFormSubmitted(form.key, $event)">
                 </sharp-form>
             </sharp-modal>
@@ -82,7 +83,7 @@
     import { API_PATH } from '../../consts';
     import * as util from '../../util';
 
-    import { ActionEvents } from '../../mixins';
+    import { ActionEvents, Localization } from '../../mixins';
 
     import * as qs from '../../helpers/querystring';
 
@@ -98,7 +99,7 @@
             'params' // querystring params as an object
         ],
 
-        mixins: [ ActionEvents ],
+        mixins: [ ActionEvents, Localization ],
 
         components: {
             [Pagination.name]: Pagination,
@@ -335,28 +336,42 @@
             /* (Command, Instance)
              * Display a form in a modal if the command require a form, else send API request
              */
-            sendCommand({ key, form }, instance) {
+            sendCommand({ key, form, confirmation }, instance) {
                 if(form) {
                     this.selectedInstance = instance;
                     this.$set(this.showFormModal,key,true);
                     return;
                 }
                 axios.post(this.commandEnpoint(key, instance), {query: this.apiParams})
-                    .then(({data})=>this.handleCommandResponse(data));
-
+                    .then(({data})=> {
+                        if (confirmation) {
+                            return new Promise((resolve) => {
+                                this.actionsBus.$emit('showMainModal', {
+                                    title: this.l('modals.command.confirm.title'),
+                                    text: confirmation,
+                                    closeTitle: 'Cancel',
+                                    okCallback: e => resolve({data, modalEvent:e}),
+                                });
+                            })
+                        }
+                        return Promise.resolve({data});
+                    })
+                    .then(args => this.handleCommandResponse(args));
             },
 
             /* (CommandAPIResponse)
             * Execute the required command action
             */
-            handleCommandResponse({action, items, message, html}) {
+            handleCommandResponse({data:{action, items, message, html}, modalEvent}) {
                 if(action === 'refresh') this.actionRefresh(items);
                 else if(action === 'reload') this.actionReload();
                 else if(action === 'info') {
+                    if(modalEvent)
+                        modalEvent.cancel();
                     this.actionsBus.$emit('showMainModal', {
-                        title: 'Résultat',
+                        title: this.l('modals.command.info.title'),
                         text: message,
-                        okCloseOnly: true,
+                        okCloseOnly: true
                     });
                 }
                 else if(action === 'view') {

@@ -16,10 +16,12 @@
 
             let { isError, ...exposedProps } = ctx.props;
             ctx.props = exposedProps;
-
+            ctx.data.attrs = {
+                ...ctx.data.attrs,
+                noAutoFocus : true
+            };
 
             bModal.name = 'SharpModal';
-
 
             return h(bModal, ctx.data, [
                 h({

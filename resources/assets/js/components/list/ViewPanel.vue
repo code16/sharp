@@ -7,7 +7,7 @@
                 leave-to-class="SharpViewPanel--collapsed"
                 >
         <div class="SharpViewPanel" v-show="show" v-click-outside="hide">
-            <iframe :src="`data:text/html;charset=utf-8$,${encodeURIComponent(content)}`"
+            <iframe v-if="content" :src="`data:text/html;charset=utf-8$,${encodeURIComponent(content)}`"
                     style="height:100%;width:100%" height="100%" width="100%" frameborder="0">
             </iframe>
         </div>

@@ -62,6 +62,7 @@
 
             submitButton: String,
 
+            /// Extras props for customization
             independant: {
                 type:Boolean,
                 default: false
@@ -69,6 +70,7 @@
             ignoreAuthorizations: Boolean,
             props: Object,
             endpoint: String,
+            resetDataAfterSubmitted: Boolean
         },
 
         inject:['actionsBus', 'glasspane'],
@@ -175,6 +177,9 @@
 
                 this.post(endpoint, dataFormatter(this))
                     .then(({ data })=>{
+                        if(this.resetDataAfterSubmitted) {
+                            Object.keys(this.data).forEach(key => this.data[key] = null);
+                        }
                         if(this.independant) {
                             this.$emit('submitted', data);
                         }

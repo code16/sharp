@@ -3,8 +3,9 @@
         <div class="container">
             <component v-if="barComp" :is="barComp"></component>
             <slot></slot>
-            <sharp-modal ref="mainModal" v-bind="mainModalProps">
-                {{mainModalText}}
+            <sharp-modal v-for="(modal,id) in mainModalsData" :key="id"
+                         v-bind="modal.props" @ok="modal.okCallback" @hidden="modal.hiddenCallback">
+                {{modal.text}}
             </sharp-modal>
         </div>
     </div>
@@ -16,6 +17,8 @@
 
     import Modal from './Modal';
     import Vue from 'vue';
+
+    const noop=()=>{};
 
     export default {
         name:'SharpActionView',
@@ -39,8 +42,8 @@
 
         data() {
             return {
-                mainModalText:"",
-                mainModalProps: {},
+                mainModalsData: {},
+                mainModalId: 0
             }
         },
         computed: {
@@ -49,24 +52,23 @@
             }
         },
         methods: {
-            showMainModal(props) {
-                let {text, okCallback, okCloseOnly, isError, ...sharedProps} = props;
+            showMainModal({text, okCallback=noop, okCloseOnly, isError, ...sharedProps}) {
+                const curId = this.mainModalId;
+                const hiddenCallback = _=>this.$delete(this.mainModalsData, curId);
 
-                this.mainModalText = text;
-                this.$refs.mainModal.show();
-
-                this.$refs.mainModal.$off('ok');
-                if(okCallback) {
-                    this.$refs.mainModal.$on('ok', okCallback);
-                }
-
-                this.mainModalProps = {
-                    ...sharedProps,
-                    okOnly:okCloseOnly,
-                    noCloseOnBackdrop:okCloseOnly,
-                    noCloseOnEsc:okCloseOnly,
-                    isError
-                }
+                this.$set(this.mainModalsData,curId,{
+                    props: {
+                        ...sharedProps,
+                        okOnly:okCloseOnly,
+                        noCloseOnBackdrop:okCloseOnly,
+                        noCloseOnEsc:okCloseOnly,
+                        visible: true,
+                        isError
+                    },
+                    okCallback, hiddenCallback,
+                    text,
+                });
+                this.mainModalId++;
             }
         },
         mounted() {
