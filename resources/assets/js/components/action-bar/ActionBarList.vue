@@ -21,15 +21,16 @@
                 <!--<button class="SharpSearch__button" type="button" aria-label="Search button" @click="emitSearch">-->
                     <!--<svg width="16" height="14" viewBox="0 0 16 14" fill-rule="evenodd"><path d="M12.6 6H0v2h12.7l-5 4.7L9 14l7-7-7-7-1.3 1.3z"></path></svg>-->
                 <!--</button>-->
-                <button v-if="showCreateButton" class="SharpButton SharpButton--primary" @click="emitAction('create')">
-                    {{ l('action_bar.list.create_button') }}
-                </button>
-                <sharp-dropdown v-if="commands.length" class="SharpActionBar__actions-dropdown">
-                    <sharp-dropdown-item v-for="command in commands" @click="emitAction('command', command)" :key="command.key">
-                        {{ command.label }}
-                    </sharp-dropdown-item>
-                </sharp-dropdown>
+
             </div>
+            <button v-if="showCreateButton" class="SharpButton SharpButton--primary" @click="emitAction('create')">
+                {{ l('action_bar.list.create_button') }}
+            </button>
+            <sharp-dropdown v-if="commands.length" class="SharpActionBar__actions-dropdown">
+                <sharp-dropdown-item v-for="command in commands" @click="emitAction('command', command)" :key="command.key">
+                    {{ command.label }}
+                </sharp-dropdown-item>
+            </sharp-dropdown>
         </template>
         <template slot="extras">
             <sharp-filter-select v-for="filter in filters" :name="filter.key" :values="filter.values"

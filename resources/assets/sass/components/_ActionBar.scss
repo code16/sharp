@@ -68,7 +68,7 @@
 
   &__search.SharpSearch {
     .SharpSearch__close {
-      right: 3.5rem;
+      right: .5rem;
     }
     @include media-breakpoint-down(sm) {
       .SharpSearch__close {

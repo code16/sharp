@@ -29810,6 +29810,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -58147,14 +58148,14 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     attrs: {
       "d": "M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm3.5 10.1l-1.4 1.4L8 9.4l-2.1 2.1-1.4-1.4L6.6 8 4.5 5.9l1.4-1.4L8 6.6l2.1-2.1 1.4 1.4L9.4 8l2.1 2.1z"
     }
-  })]), _vm._v(" "), (_vm.showCreateButton) ? _c('button', {
+  })])]), _vm._v(" "), (_vm.showCreateButton) ? _c('button', {
     staticClass: "SharpButton SharpButton--primary",
     on: {
       "click": function($event) {
         _vm.emitAction('create')
       }
     }
-  }, [_vm._v("\n                " + _vm._s(_vm.l('action_bar.list.create_button')) + "\n            ")]) : _vm._e(), _vm._v(" "), (_vm.commands.length) ? _c('sharp-dropdown', {
+  }, [_vm._v("\n            " + _vm._s(_vm.l('action_bar.list.create_button')) + "\n        ")]) : _vm._e(), _vm._v(" "), (_vm.commands.length) ? _c('sharp-dropdown', {
     staticClass: "SharpActionBar__actions-dropdown"
   }, _vm._l((_vm.commands), function(command) {
     return _c('sharp-dropdown-item', {
@@ -58164,8 +58165,8 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
           _vm.emitAction('command', command)
         }
       }
-    }, [_vm._v("\n                    " + _vm._s(command.label) + "\n                ")])
-  })) : _vm._e()], 1)]), _vm._v(" "), _c('template', {
+    }, [_vm._v("\n                " + _vm._s(command.label) + "\n            ")])
+  })) : _vm._e()], 1), _vm._v(" "), _c('template', {
     slot: "extras"
   }, _vm._l((_vm.filters), function(filter) {
     return _c('sharp-filter-select', {
