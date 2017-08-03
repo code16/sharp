@@ -1,10 +1,15 @@
+.SharpActionView {
+  transition: padding 300ms $bx--standard-easing;
+  padding-left: rem(48px);
+}
+
 @include media-breakpoint-up(md) {
-  &.leftNav--opened {
+  .SharpActionView {
+    padding-left: rem(200px);
+  }
+  &.leftNav--collapsed {
     .SharpActionView {
-      padding-left: rem(200px);
+      padding-left: rem(48px);
     }
   }
-}
-.SharpActionView {
-  padding-left: rem(48px);
 }

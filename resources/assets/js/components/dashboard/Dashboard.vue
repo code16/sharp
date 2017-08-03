@@ -1,22 +1,18 @@
 <template>
     <div class="SharpDashboard container">
         <template v-if="ready">
-            <sharp-tabbed-layout :layout="layout">
-                <template scope="tab">
-                    <sharp-grid :rows="[tab.columns]">
-                        <template scope="column">
-                            <sharp-grid :rows="column.widgets">
-                                <template scope="widgetLayout">
-                                    <sharp-widget :widget-type="widgets[widgetLayout.key].type"
-                                                  :widget-props="widgets[widgetLayout.key]"
-                                                  :value="data[widgetLayout.key]">
-                                    </sharp-widget>
-                                </template>
-                            </sharp-grid>
+            <!--<sharp-tabbed-layout :layout="layout">-->
+                <!--<template scope="tab">-->
+                    <sharp-grid :rows="layout.rows">
+                        <template scope="widgetLayout">
+                            <sharp-widget :widget-type="widgets[widgetLayout.key].type"
+                                          :widget-props="widgets[widgetLayout.key]"
+                                          :value="data[widgetLayout.key]">
+                            </sharp-widget>
                         </template>
                     </sharp-grid>
-                </template>
-            </sharp-tabbed-layout>
+                <!--</template>-->
+            <!--</sharp-tabbed-layout>-->
         </template>
     </div>
 </template>
@@ -28,6 +24,7 @@
     import DynamicView from '../DynamicViewMixin';
 
     import { testableDashboard } from '../../mixins/index';
+    import { API_PATH } from '../../consts';
 
     export default {
         name:'SharpDashboard',
@@ -47,7 +44,7 @@
         },
         computed: {
             apiPath() {
-                //TODO
+                return `${API_PATH}/dashboard`
             }
         },
         methods: {

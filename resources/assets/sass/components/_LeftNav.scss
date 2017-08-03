@@ -50,7 +50,7 @@
         }
       }
 
-      &--active {
+      &.SharpLeftNav__item--active {
         & > .SharpLeftNav__item-link {
           background-color: $color__gray-2;
           color: $color__blue-51;

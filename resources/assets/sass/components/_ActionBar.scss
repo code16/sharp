@@ -41,9 +41,6 @@
 
     .SharpDropdown__link {
       padding-right: 1rem;
-      &:hover {
-        @extend .SharpDropdown__link:focus;
-      }
     }
   }
 

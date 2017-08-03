@@ -1,16 +1,18 @@
 <template>
-    <nav class="SharpLeftNav SharpLeftNav--collapseable" :class="`SharpLeftNav--${state}`"
-         role="navigation" aria-label="Menu Sharp" @click="collapsed && (collapsed=false)">
-        <slot></slot>
-        <div class="SharpLeftNav__collapse" @click.stop="collapsed = !collapsed">
-            <a class="SharpLeftNav__collapse-link" href="#" @click.prevent>
-                <svg class="SharpLeftNav__collapse-arrow" width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd">
-                    <path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path>
-                </svg>
-            </a>
-        </div>
+    <div>
+        <nav v-show="ready" class="SharpLeftNav SharpLeftNav--collapseable" :class="`SharpLeftNav--${state}`"
+             role="navigation" aria-label="Menu Sharp" @click="collapsed && (collapsed=false)">
+            <slot></slot>
+            <div class="SharpLeftNav__collapse" @click.stop="collapsed = !collapsed">
+                <a class="SharpLeftNav__collapse-link" href="#" @click.prevent>
+                    <svg class="SharpLeftNav__collapse-arrow" width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd">
+                        <path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path>
+                    </svg>
+                </a>
+            </div>
+        </nav>
         <div class="hidden-md-down" ref="testViewport"></div>
-    </nav>
+    </div>
 </template>
 
 <script>
@@ -18,19 +20,22 @@
         name: 'SharpLeftNav',
         data() {
             return {
-                collapsed: false,
-                state: 'expanded'
+                collapsed: null,
+                state: 'expanded',
+                ready: false
             }
         },
         watch: {
             collapsed: {
                 immediate: true,
-                handler(val) {
+                handler(val, oldVal) {
+                    this.$root.$emit('setClass', 'leftNav--collapsed', this.collapsed);
+                    if(oldVal === null) {
+                        return this.updateState();
+                    }
+                    // apply transition
                     this.state = val ? 'collapsing' : 'expanding';
-                    setTimeout(_=>{
-                        this.state= val ? 'collapsed' : 'expanded';
-                        this.$root.$emit('setClass', 'leftNav--opened', !this.collapsed);
-                    }, 250);
+                    setTimeout(this.updateState, 250);
                 }
             }
         },
@@ -40,8 +45,14 @@
                 return !offsetWidth && !offsetHeight;
             }
         },
+        methods: {
+            updateState() {
+                this.state = this.collapsed ? 'collapsed' : 'expanded';
+            }
+        },
         mounted() {
             this.collapsed = this.viewportSmall;
+            this.$nextTick(_=>this.ready=true);
         }
     }
 </script>

@@ -7,6 +7,7 @@ import Localization from './Localization';
 import ActionEvents from './ActionEvents';
 import ReadOnlyFields from './ReadOnlyFields';
 import QueryTree from './QueryTree';
+import AutoScroll from './AutoScroll';
 
 export {
     testableForm,
@@ -17,5 +18,6 @@ export {
     Localization,
     ActionEvents,
     ReadOnlyFields,
-    QueryTree
+    QueryTree,
+    AutoScroll
 }

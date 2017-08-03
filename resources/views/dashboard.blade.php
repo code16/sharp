@@ -2,12 +2,11 @@
 
 @section("content")
 
-    <div id="sharp-app">
+    <div id="sharp-app" v-cloak>
         @include("sharp::partials._menu", ["dashboard" => true])
         <sharp-action-view context="dashboard">
-            Dashboard
+            <sharp-dashboard></sharp-dashboard>
         </sharp-action-view>
-
     </div>
 
 @endsection

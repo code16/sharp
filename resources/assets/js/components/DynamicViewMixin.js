@@ -5,6 +5,7 @@ import * as qs from '../helpers/querystring';
 import { lang } from '../mixins/Localization';
 
 export default {
+    inject:['glasspane'],
     data() {
         return {
             data:null,

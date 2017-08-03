@@ -3,7 +3,7 @@ import ActionView from './components/ActionView';
 import Form from './components/form/Form';
 import FieldDisplay from './components/form/FieldDisplay';
 import EntitiesList from './components/list/EntitiesList';
-//import Dashboard from './components/dashboard/Dashboard';
+import Dashboard from './components/dashboard/Dashboard';
 
 import CollapsibleItem from './components/menu/CollapsibleItem';
 import NavItem from './components/menu/NavItem';
@@ -33,6 +33,7 @@ new Vue({
     components: {
         [ActionView.name]:ActionView,
         [Form.name]:Form,
+        [Dashboard.name]:Dashboard,
         [EntitiesList.name]:EntitiesList,
         [CollapsibleItem.name]:CollapsibleItem,
         [NavItem.name]:NavItem,
@@ -40,9 +41,10 @@ new Vue({
     },
 
     created() {
-        this.$on('setClass',(className,active)=>
-            this.$el.classList[active?'add':'remove'](className)
-        );
+        this.$on('setClass',(className,active)=> {
+            console.log('setClass', className, active);
+            this.$el.classList[active ? 'add' : 'remove'](className);
+        });
     }
 });
 

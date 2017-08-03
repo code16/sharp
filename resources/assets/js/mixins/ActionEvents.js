@@ -1,6 +1,7 @@
 import * as util from '../util';
 
 export default {
+    inject:['actionsBus'],
     created() {
         let actions = this.$options.actions;
 
