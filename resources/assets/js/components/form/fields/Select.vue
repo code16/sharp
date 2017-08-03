@@ -126,6 +126,7 @@
             handleRadioClicked(optId) {
                 this.$emit('input', optId);
             }
-        }
+        },
+        mounted(){console.log(this)}
     }
 </script>

@@ -30,6 +30,8 @@
 
     import moment from 'moment';
 
+    import { AutoScroll } from '../../../../mixins';
+
     const {
         methods: {
             renderFormat
@@ -38,7 +40,7 @@
 
     export default {
         name:'SharpTimePicker',
-        mixins:[TimePicker],
+        mixins:[TimePicker, AutoScroll],
         props: {
             active:Boolean,
             min:String,
@@ -56,9 +58,8 @@
         },
         watch: {
             minute() { this.$nextTick(_=>this.updateScroll('minutes')); },
-            second() { this.$nextTick(_=>this.updateScroll('seconds')); },
             hour() { this.$nextTick(_=>this.updateScroll('hours')); },
-            active(a) { a && ['minutes','seconds','hours'].forEach(ref=>this.updateScroll(ref)); },
+            active(a) { a && ['minutes','hours'].forEach(ref=>this.updateScroll(ref)); },
         },
         computed: {
             minMoment() {
@@ -96,6 +97,17 @@
                     });
                 }
                 return this.minutes;
+            },
+
+            autoScrollOptions() {
+                return listRef => {
+                    if(this.isSelection)
+                        return this.isSelection=false;
+                    return {
+                        list: this.$refs[listRef],
+                        item: _ => this.$refs[listRef].querySelector('.active')
+                    };
+                }
             }
         },
         methods: {
@@ -103,23 +115,9 @@
                this.select(type, value);
                this.isSelection = true;
             },
-            updateScroll(listRef) {
-                if(this.isSelection)
-                    return this.isSelection=false;
-
-                let list = this.$refs[listRef];
-                if(list) {
-                    let activeItem = list.querySelector('.active');
-                    if(activeItem)
-                        list.scrollTop = activeItem.offsetTop-list.offsetHeight/2.+activeItem.offsetHeight/2.;
-                }
-            },
             renderFormat() {
                 renderFormat.apply(this, arguments);
             },
-        },
-        mounted() {
-            //console.log(this);
         }
     }
 </script>

@@ -51,6 +51,10 @@
       transform: rotate(180deg);
       transition: transform 200ms $bx--standard-easing;
     }
+
+    &--selected {
+      fill: $brand-02;
+    }
   }
 
   &__input {
@@ -67,10 +71,9 @@
   &__row {
     //display: table-row;
     display:flex;
-    align-items:center;
     border-bottom: 1px solid $ui-04;
     transition: $transition--base $bx--standard-easing;
-    padding: 1em 0;
+
 
     &__input:checked + & {
       background-color: rgba($brand-02, .1);
@@ -81,18 +84,37 @@
       cursor: inherit;
     }
 
+    &--header, .SharpEntitiesList__cols, .SharpEntitiesList__row-actions {
+      padding: 1em 0;
+    }
+
     &:focus:not(.SharpEntitiesList__row--header) {
       @include focus-outline('border');
     }
 
-    &:hover:not(.SharpEntitiesList__row--header) {
+    &:hover:not(.SharpEntitiesList__row--header, .SharpEntitiesList__row--disabled) {
       background-color: $ui-02;
       cursor: pointer;
     }
 
-    .row {
+    .SharpEntitiesList__cols {
       flex: 1;
+      display: flex;
+      position: relative;
+      .row {
+        flex:1;
+        align-items: center;
+      }
+      .SharpEntitiesList__row-link {
+        position: absolute;
+        left:0; right: 0; top: 0; bottom:0;
+      }
     }
+    .SharpEntitiesList__row-actions {
+      display: flex;
+      align-items: center;
+    }
+
   }
 
   &__thead {
@@ -162,8 +184,8 @@
   }
 
   &__state-dropdown, &__commands-dropdown {
-    width:2em;
-    //margin: 0 .5em;
+    height: 1.8rem;
+    margin: 0 .1em;
     .SharpDropdown__list {
       z-index:100;
       width:rem(200px);
@@ -172,11 +194,14 @@
   }
   &__state-dropdown {
     background:transparent;
+    width:1.5rem;
+
     .SharpDropdown__text {
+      padding: 0;
       display:flex;
       align-items:center;
       justify-content: center;
-      padding-left:0;
+      height: 100%
     }
   }
   &__commands-dropdown {

@@ -19,32 +19,39 @@
                 </div>
                 <div class="SharpEntitiesList__tbody">
 
-                    <div class="SharpEntitiesList__row" v-for="item in data.items">
-                        <div class="row" @click="rowClicked(item)">
-                            <div class="SharpEntitiesList__td" :class="colClasses(contLayout)" v-for="contLayout in layout">
-                                <span v-if="containers[contLayout.key].html" v-html="item[contLayout.key]" class="SharpEntitiesList__td-html-container"></span>
-                                <template v-else>
-                                    {{ item[contLayout.key] }}
-                                </template>
+                    <div v-for="item in data.items" class="SharpEntitiesList__row" :class="{'SharpEntitiesList__row--disabled':!rowHasLink(item)}">
+                        <div class="SharpEntitiesList__cols">
+                            <div class="row">
+                                <div class="SharpEntitiesList__td" :class="colClasses(contLayout)" v-for="contLayout in layout">
+                                    <span v-if="containers[contLayout.key].html" v-html="item[contLayout.key]" class="SharpEntitiesList__td-html-container"></span>
+                                    <template v-else>
+                                        {{ item[contLayout.key] }}
+                                    </template>
+                                </div>
                             </div>
+                            <a class="SharpEntitiesList__row-link" v-if="rowHasLink(item)" :href="rowLink(item)"></a>
                         </div>
-                        <sharp-dropdown v-if="hasStateAuthorization(item)" class="SharpEntitiesList__state-dropdown" :show-arrow="false">
-                            <i slot="text" class="fa fa-circle" :class="stateClasses(item.state)" :style="stateStyle(item.state)"></i>
-                            <sharp-dropdown-item v-for="state in config.state.values" @click="setState(item,state)" :key="state.value">
-                                <i class="fa fa-circle" :class="stateClasses(state.value)" :style="stateStyle(state.value)"></i>
-                                {{ state.label }}
-                            </sharp-dropdown-item>
-                        </sharp-dropdown>
-                        <sharp-dropdown v-if="instanceCommands(item).length" class="SharpEntitiesList__commands-dropdown">
-                            <sharp-dropdown-item v-for="command in instanceCommands(item)" @click="sendCommand(command, item)" :key="command.key">
-                                {{ command.label }}
-                            </sharp-dropdown-item>
-                        </sharp-dropdown>
+                        <div class="SharpEntitiesList__row-actions">
+                            <sharp-dropdown v-if="hasStateAuthorization(item)" class="SharpEntitiesList__state-dropdown" :show-arrow="false">
+                                <i slot="text" class="fa fa-circle" :class="stateClasses(item.state)" :style="stateStyle(item.state)"></i>
+                                <sharp-dropdown-item v-for="state in config.state.values" @click="setState(item,state)" :key="state.value">
+                                    <i class="fa fa-circle" :class="stateClasses(state.value)" :style="stateStyle(state.value)"></i>
+                                    {{ state.label }}
+                                </sharp-dropdown-item>
+                            </sharp-dropdown>
+                            <sharp-dropdown v-if="instanceCommands(item).length" class="SharpEntitiesList__commands-dropdown">
+                                <sharp-dropdown-item v-for="command in instanceCommands(item)" @click="sendCommand(command, item)" :key="command.key">
+                                    {{ command.label }}
+                                </sharp-dropdown-item>
+                            </sharp-dropdown>
+                        </div>
+
                     </div>
                 </div>
             </div>
             <div class="SharpEntitiesList__pagination-container">
-                <sharp-pagination class="SharpPagination"
+                <sharp-pagination v-if="data.totalCount/data.pageSize > 1."
+                                  class="SharpPagination"
                                   :total-rows="data.totalCount"
                                   :per-page="data.pageSize"
                                   :min-page-end-buttons="3"
@@ -95,7 +102,6 @@
 
         inject: [
             'actionsBus',
-            'glasspane',
             'params' // querystring params as an object
         ],
 
@@ -188,6 +194,15 @@
                     return res;
                 }, {});
             },
+            authorizationsByInstanceId() {
+                return this.data.items.reduce((res, {[this.idAttr]:id}) => {
+                    res[id] = {
+                        view: this.authorizations.view.indexOf(id) !== -1,
+                        update: this.authorizations.update.indexOf(id) !== -1
+                    };
+                    return res;
+                }, {});
+            },
             commandsByInstanceId() {
                 let instCmds = this.config.commands.filter(c=>c.type==='instance');
                 return this.data.items.reduce((res, {[this.idAttr]:id}) => {
@@ -274,21 +289,20 @@
             instanceCommands({[this.idAttr]:instanceId}) {
                 return this.commandsByInstanceId[instanceId];
             },
+            rowHasLink({[this.idAttr]:instanceId}) {
+                return this.authorizationsByInstanceId[instanceId].view;
+            },
+            rowLink({[this.idAttr]:instanceId}) {
+                return `/sharp/form/${this.entityKey}/${instanceId}`;
+            },
 
             /**
              * Events
              */
-            rowClicked({[this.idAttr]:instanceId}) {
-                if(this.authorizations.view.indexOf(instanceId)!==-1) {
-                    location.href = `/sharp/form/${this.entityKey}/${instanceId}`;
-                }
-            },
             pageChanged(page) {
                 this.page = page;
                 this.update();
             },
-
-
             /**
              * Data operations
              */

@@ -2,7 +2,7 @@
     <sharp-grid :rows="layout">
         <template scope="fieldLayout">
             <slot v-if="!fieldLayout.legend" v-bind="fieldLayout"></slot>
-            <fieldset class="SharpForm--fieldset" v-else>
+            <fieldset class="SharpForm__fieldset" v-else>
                 <div class="SharpModule__inner">
                     <div class="SharpModule__header">
                         <legend class="SharpModule__title">{{fieldLayout.legend}}</legend>

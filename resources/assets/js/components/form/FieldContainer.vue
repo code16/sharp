@@ -1,6 +1,6 @@
 <template>
-    <div class="SharpFieldContainer SharpForm--form-item" :class="formGroupClasses" :style="extraStyle">
-        <label class="SharpForm--label" v-show="label" @click="triggerFocus">
+    <div class="SharpFieldContainer SharpForm__form-item" :class="formGroupClasses" :style="extraStyle">
+        <label class="SharpForm__label" v-show="label" @click="triggerFocus">
             {{label}} <span v-if="fieldProps.localized" class="SharpFieldContainer__label-locale">({{locale}})</span>
         </label>
         <template v-if="alerts.length">
@@ -14,10 +14,10 @@
                      @clear="clear"
                      @blur="handleBlur">
         </sharp-field>
-        <div class="SharpForm--form-requirement">{{stateMessage}}</div>
+        <div class="SharpForm__form-requirement">{{stateMessage}}</div>
 
         <!--TODO help message class-->
-        <small class="">{{helpMessage}}</small>
+        <small class="SharpForm__help-message">{{helpMessage}}</small>
     </div>
 </template>
 
@@ -67,8 +67,8 @@
         computed: {
             formGroupClasses() {
                 return {
-                    'SharpForm--form-item--danger': this.state==='error',
-                    'SharpForm--form-item--success': this.state==='ok'
+                    'SharpForm__form-item--danger': this.state==='error',
+                    'SharpForm__form-item--success': this.state==='ok'
                 }
             },
             extraStyle() {

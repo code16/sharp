@@ -37,6 +37,13 @@
                 opened: false
             }
         },
+        watch: {
+            opened(val) {
+                if(val) {
+                    this.$nextTick(_=> this.$emit('opened'));
+                }
+            }
+        },
         methods:{
             toggle() {
                 this.opened = !this.opened;

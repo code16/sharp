@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const fs = require('fs-extra');
 
 mix.autoload({}).options({
-       // extractVueStyles:'.bin/vendor-components.css'
+        extractVueStyles:'.bin/vendor-components.css'
     })
     .setPublicPath('resources/assets/dist')
 

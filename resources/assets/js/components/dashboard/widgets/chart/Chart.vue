@@ -4,7 +4,7 @@
 
 <script>
     // Removed because Vue duplication
-    //import { Bar, Line, Pie } from 'vue-chartjs';
+    import { Bar, Line, Pie } from 'vue-chartjs';
     import Chartjs from './Chartjs';
 
     const noop = ()=>{}

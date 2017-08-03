@@ -50,6 +50,7 @@
         extends: DynamicView,
 
         mixins: [testableForm, ActionEvents, ReadOnlyFields('fields')],
+
         components: {
             [TabbedLayout.name]: TabbedLayout,
             [FieldsLayout.name]: FieldsLayout,
@@ -73,7 +74,7 @@
             resetDataAfterSubmitted: Boolean
         },
 
-        inject:['actionsBus', 'glasspane'],
+        inject:['actionsBus'],
 
         provide() {
             return {

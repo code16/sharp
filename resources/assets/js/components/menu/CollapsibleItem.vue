@@ -1,5 +1,5 @@
 <template>
-    <li class="SharpLeftNav__item SharpLeftNav__item--has-children"
+    <li v-show="ready" class="SharpLeftNav__item SharpLeftNav__item--has-children"
         :class="{'SharpLeftNav__item--expanded': expanded}" tabindex="0" @keydown.enter="toggle">
         <a class="SharpLeftNav__item-link" @click="toggle">
             <slot name="label">
@@ -26,7 +26,8 @@
         },
         data() {
             return {
-                expanded: this.initiallyExpanded
+                expanded: false,
+                ready: false
             }
         },
         computed: {
@@ -43,6 +44,7 @@
         },
         mounted() {
             this.expanded = this.navItems.some(i=>i.current);
+            this.$nextTick(_=>this.ready=true);
         }
     }
 </script>

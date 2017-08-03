@@ -53,6 +53,8 @@
     list-style: none;
     position: absolute;
     z-index: z('dropdown');
+    max-height: 20rem;
+    overflow: auto;
   }
 
   &__item {
@@ -65,7 +67,7 @@
       padding-left: 1rem;
       padding-right: 1.5rem;
 
-      &:focus {
+      &:focus, &:hover {
         background-color: $brand-01;
         color: $inverse-01;
         outline: 1px solid transparent;
