@@ -2,6 +2,9 @@
     <div>
         <nav v-show="ready" class="SharpLeftNav SharpLeftNav--collapseable" :class="`SharpLeftNav--${state}`"
              role="navigation" aria-label="Menu Sharp" @click="collapsed && (collapsed=false)">
+            <div class="SharpLeftNav__top-icon">
+                <i class="fa" :class="currentIcon"></i>
+            </div>
             <slot></slot>
             <div class="SharpLeftNav__collapse" @click.stop="collapsed = !collapsed">
                 <a class="SharpLeftNav__collapse-link" href="#" @click.prevent>
@@ -18,6 +21,10 @@
 <script>
     export default {
         name: 'SharpLeftNav',
+        props: {
+            categories: Array,
+            current: String
+        },
         data() {
             return {
                 collapsed: null,
@@ -43,6 +50,14 @@
             viewportSmall() {
                 let { offsetWidth, offsetHeight } = this.$refs.testViewport;
                 return !offsetWidth && !offsetHeight;
+            },
+            allEntities() {
+                return this.categories.reduce((res,category)=>[...res,...category.entities],[]);
+            },
+            currentIcon() {
+                return this.current === 'dashboard'
+                    ? 'fa-dashboard'
+                    : (this.allEntities.find(e=>e.key===this.current)||{}).icon;
             }
         },
         methods: {

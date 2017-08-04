@@ -16,6 +16,18 @@
     @include font-size('20');
   }
 
+  &__top-icon {
+    opacity: 0;
+    color: $color__blue-51;
+    position: absolute;
+    right:0;
+    left:0;
+    .fa {
+      text-align: center;
+      width: 100%;
+    }
+  }
+
   &__list {
     list-style: none;
     display: flex;
@@ -317,6 +329,10 @@
       transform: rotate(180deg);
       transition: transform 300ms $bx--standard-easing;
     }
+
+    .SharpLeftNav__top-icon {
+      transition: opacity 300ms $bx--standard-easing;
+    }
   }
 
   &--collapsed {
@@ -329,6 +345,11 @@
       justify-content: center;
       padding-left: 0;
       padding-right: 0;
+    }
+
+    .SharpLeftNav__top-icon {
+      display: flex;
+      opacity: 1;
     }
   }
 
@@ -348,7 +369,15 @@
       transform: rotate(0deg);
       transition: transform 300ms $bx--standard-easing;
     }
+
+    .SharpLeftNav__top-icon {
+      opacity: 0;
+    }
   }
 
-
+  &--expanded {
+    .SharpLeftNav__top-icon {
+      display:none;
+    }
+  }
 }

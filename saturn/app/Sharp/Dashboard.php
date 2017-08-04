@@ -15,12 +15,12 @@ class Dashboard extends SharpDashboard
     function buildWidgets()
     {
         $this->addWidget(
-            SharpBarGraphWidget::make("capacities")
-                ->setTitle("Spaceships by capacity")
+//            SharpBarGraphWidget::make("capacities")
+//                ->setTitle("Spaceships by capacity")
 //            \Code16\Sharp\Dashboard\Widgets\SharpPieGraphWidget::make("capacities")
 //                ->setTitle("Spaceships by capacity")
-//            \Code16\Sharp\Dashboard\Widgets\SharpLineGraphWidget::make("capacities")
-//                ->setTitle("Spaceships by capacity")
+            \Code16\Sharp\Dashboard\Widgets\SharpLineGraphWidget::make("capacities")
+                ->setTitle("Spaceships by capacity")
         )->addWidget(
             SharpPanelWidget::make("activeSpaceships")
                 ->setInlineTemplate("<h1>{{count}}</h1> spaceships in activity")
@@ -69,14 +69,14 @@ class Dashboard extends SharpDashboard
             "inactiveSpaceships", ["count" => $spaceships->where("state", "inactive")->first()->count]
         );
 
-//        $this->addGraphDataSet(
-//            "capacities",
-//            SharpGraphWidgetDataSet::make($capacities->map(function($value) {
-//                return $value * rand(1, 3);
-//            }))
-//                ->setLabel("Capacities 2")
-//                ->setColor("blue")
-//        );
+        $this->addGraphDataSet(
+            "capacities",
+            SharpGraphWidgetDataSet::make($capacities->map(function($value) {
+                return $value * rand(1, 3);
+            }))
+                ->setLabel("Capacities 2")
+                ->setColor("blue")
+        );
     }
 
 }

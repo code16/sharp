@@ -1,9 +1,14 @@
 <template>
-    <div class="card">
-        <div class="card-block">
-            <component :is="widgetComp" v-bind="exposedProps"></component>
+    <article class="SharpWidget" :class="{'SharpCard':widgetType!=='graph'}" tabindex="0">
+        <div class="SharpCard__overview">
+            <div class="SharpCard__overview-about">
+                <component :is="widgetComp" v-bind="exposedProps"></component>
+            </div>
         </div>
-    </div>
+        <footer class="SharpCard__footer">
+
+        </footer>
+    </article>
 </template>
 <script>
     import Widgets, { NameAssociation as widgetCompName } from './widgets/index';

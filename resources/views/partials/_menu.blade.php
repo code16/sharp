@@ -1,4 +1,4 @@
-<sharp-left-nav v-cloak>
+<sharp-left-nav v-cloak current="{{ $entityKey ?? ($dashboard ? 'dashboard' : '') }}" :categories="{{ json_encode($sharpMenu->categories) }}">
     <h2 class="SharpLeftNav__title">{{ $sharpMenu->name }}</h2>
 
     <ul role="menubar" class="SharpLeftNav__list" aria-hidden="false" v-cloak>

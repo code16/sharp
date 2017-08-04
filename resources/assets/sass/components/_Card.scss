@@ -1,0 +1,174 @@
+.SharpCard {
+  @include reset;
+  @include layer('raised');
+  display: flex;
+  flex-direction: column;
+  //width: rem(200px);
+  height: rem(240px);
+  background-color: $ui-01;
+  border: 1px solid $ui-04;
+
+  &:focus {
+    @include focus-outline('border');
+  }
+
+  .SharpCard {
+    &__overview {
+      @include reset;
+      position: relative;
+      display: flex;
+      justify-content: $card-flex-align;
+      text-align: $card-text-align;
+      padding-left: 1rem;
+      padding-top: 1rem;
+      padding-right: 1rem;
+      height: 12rem;
+
+      .SharpCard__overflow-menu {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        z-index: z('overflowOptions');
+        margin: 0;
+      }
+
+      .SharpCard__overview-about {
+        @include reset;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        align-items: $card-flex-align;
+        padding-top: 1rem;
+
+        .SharpCard__about-title {
+          font-weight: 400;
+          padding-top: 1.5rem;
+
+          &--name {
+            @include font-size('18');
+            @include text-overflow(rem(180px));
+            font-weight: 400;
+            margin: 0;
+            line-height: 1.2;
+          }
+
+          &--link {
+            @include font-size('12');
+            @include text-overflow(rem(180px));
+            display: inline;
+            font-weight: 400;
+            text-align: center;
+          }
+
+          &--additional-info {
+            @include font-size('12');
+            @include text-overflow(rem(180px));
+            display: inline;
+            font-weight: 400;
+            padding: 0;
+            margin: 0;
+            color: $text-02;
+
+            &:first-child {
+              padding-top: .25rem;
+            }
+          }
+        }
+
+        .SharpCard__about-icon {
+          @include reset;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: rem(50px);
+          height: rem(50px);
+          background-color: $ui-01;
+          border: 1px solid $ui-04;
+          border-radius: 100%;
+
+          .SharpCard__about-icon-img {
+            width: rem(32px);
+            height: rem(32px);
+            overflow: hidden;
+          }
+        }
+
+      }
+    }
+
+    &__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: rem(48px);
+      background-color: $ui-03;
+      padding-left: 1rem;
+      padding-right: 1rem;
+
+      &-link {
+        @include font-size('14');
+
+        &:focus {
+          @include focus-outline('border');
+        }
+      }
+
+      .SharpCard__app-status {
+        @include reset;
+
+        .active {
+          display: flex;
+        }
+
+        &--running {
+          @include app-status('running');
+        }
+
+        &--not-running {
+          @include app-status('not-running');
+        }
+
+        &--stopped {
+          @include app-status('stopped');
+        }
+
+        &--limited {
+          @include app-status('limited');
+        }
+      }
+
+      .SharpCard__app-actions {
+        display: flex;
+
+        .SharpCard__app-actions-button {
+          @include font-size('16');
+          display: inline-block;
+          padding: .125rem 0 0;
+          margin: 0 .175rem;
+          cursor: pointer;
+          background: none;
+          border: none;
+
+          &:hover, &:focus {
+            .SharpCard__app-actions-icon {
+              fill: $brand-01;
+            }
+          }
+
+          &:focus {
+            @include focus-outline('border');
+          }
+        }
+
+        .SharpCard__app-actions-icon {
+          width: 1rem;
+          height: 1rem;
+          margin: 0 .125rem;
+          transition: 200ms;
+          fill: $ui-05;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

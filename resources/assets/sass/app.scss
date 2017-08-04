@@ -86,14 +86,21 @@ $grid-gutter-widths: (
   @import 'components/form/Textarea';
   @import 'components/form/Radio';
 
-
+  // List
   @import 'components/list/EntitiesList';
   @import 'components/Search';
   @import 'components/list/Pagination';
   @import 'components/list/FilterSelect';
   @import 'components/list/ViewPanel';
 
+  // Menu
   @import 'components/LeftNav';
+
+  // Dashboard
+  @import 'components/dashboard/Widget';
+  @import 'components/dashboard/Chart';
+  @import 'components/dashboard/Dashboard';
+  @import 'components/Card';
 
   input[type="number"].hide-controls {
     &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
