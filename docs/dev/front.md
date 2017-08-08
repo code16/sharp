@@ -41,6 +41,19 @@ Prop name | Required | Type | Default | Description
 `entity-key` | `false` | *String* | | The current form entity key (required to make a `CREATE` or `UPDATE` API call)
 `instance-id` | `false` | *String* | | The current form entity key (required to make `UPDATE` API call)
 `independant` | `false` | *Boolean* |`false` | If `true`, prevent the component setting up the *ActionBar*, also prevent making *API calls*
-`ignore-authorizations` | *Boolean* | `false` | `false` | If `true`, ignoring all authorizations tests
+`ignore-authorizations` |  `false` | *Boolean*  | `false` | If `true`, ignoring all authorizations tests
 `props` | `false` | *Object* | | If `independant`, mount the form with the given object
 `reset-data-after-submitted` | `false` | *Boolean* | `false` | Reset data object after sucessful submission
+
+### FieldDisplay
+#### Props
+Prop name | Required | Type | Description
+-|-|-|-
+`field-key` | `true` | `String` | String key describing the field (unique in the current context)
+`context-fields` | `true` | `Object` | Object listing all fields in the current context (Form fields, List item fields...) : follow the fields object declaration format
+`context-data` | `true` | `Object` | Object listing all fields data in the current context : follow the data object declaration format
+`field-layout` | `true` | `Object` | Object specifying the current field layout, essentially used for the `List` field
+`locale` | `false` | `String` | String representing the current selected locale
+`error-identifier` | `true` | `String` | String which will be concatenate to the first *ErrorNode*'s parent `id` if exist : ex `name` concatenated to `list.0` give `list.0.name`. Used for laravel validation. *Fields* and *List items* are *ErrorNode*.
+`update-data` | `true` | `Function` | Function called when a field changed to update the form data object
+
