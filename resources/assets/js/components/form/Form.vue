@@ -61,8 +61,6 @@
             entityKey: String,
             instanceId: String,
 
-            submitButton: String,
-
             /// Extras props for customization
             independant: {
                 type:Boolean,
@@ -70,7 +68,6 @@
             },
             ignoreAuthorizations: Boolean,
             props: Object,
-            endpoint: String,
             resetDataAfterSubmitted: Boolean
         },
 
@@ -94,8 +91,6 @@
         },
         computed: {
             apiPath() {
-                if(this.endpoint) return this.endpoint;
-
                 let path = `${API_PATH}/form/${this.entityKey}`;
                 if(this.instanceId) path+=`/${this.instanceId}`;
                 return path;
