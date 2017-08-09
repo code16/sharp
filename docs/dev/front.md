@@ -2,7 +2,7 @@
 
 The front-end of Sharp 4 is made with the JS framework [Vue.js](https://vuejs.org/).
 
-
+---
 ## How to read this document ?
 
 ### Diagrams
@@ -15,7 +15,7 @@ Diagrams in this document follows this convention :
 2. A slot component is explicitly written in a `.blade` file
 3. A DOM subsection is a separation only visible in the page DOM not as a Vue component
 
-
+---
 ## The root component
 
 ![Sharp root component](imgs/RootComponent.png)
@@ -25,7 +25,7 @@ Components above are defined in each `.blade` Sharp pages :
 * Form
 * EntitiesList
 
-
+---
 ## Action view
 
 ![Action view component](imgs/ActionView.png)
@@ -37,6 +37,8 @@ Used to show text/error message.
 Prop name | Required | Description
 -|-|-
 `context` | `true` | Define in which page the component is : `"dashboard"`, `"form"` or `"list"`
+
+---
 
 ## Form
 ![Form component](imgs/Form.png)
@@ -82,6 +84,8 @@ Prop name | Required | Type | Description
 `error-identifier` | `true` | `String` | String which will be concatenate to the first *ErrorNode*'s parent `id` if exist : ex `name` concatenated to `list.0` give `list.0.name`. Used for laravel validation. *Fields* and *List items* are *ErrorNode*.
 `update-data` | `true` | `Function` | Function called when a field changed to update the form data object
 
+---
+
 ## EntitiesList
 ![EntitiesList component](imgs/EntitiesList.png)
 
@@ -92,6 +96,7 @@ Prop name | Required | Type | Description
 -|-|-|-
 `entity-key` | `true` | `String` | Entity key of the current list page
 
+---
 
 ## Dashboard
 ![Dashboard component](imgs/Dashboard.png) 
