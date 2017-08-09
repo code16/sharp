@@ -8,16 +8,20 @@
     export default {
         name:'SharpMultiselect',
         functional:true,
-        render(h, { data, children, props }) {
+        render(h, { data, children=[], slots ,props }) {
 
             if(!props.placeholder) {
                 data.attrs.placeholder = lang('form.multiselect.placeholder');
             }
 
+            let carretSlot = slots().carret;
+
             return h(Multiselect, data, [
-                h(DropdownArrow, { 'class': 'multiselect__select' ,slot:'carret' }),
+                carretSlot
+                    ? h('template',{ slot:'carret' },carretSlot)
+                    : h(DropdownArrow, { 'class': 'multiselect__select', slot:'carret' }),
                 h('template', { slot:'maxElements'}, lang('form.multiselect.max_text')),
-                ...(children||[])
+                ...children,
             ])
         }
     }

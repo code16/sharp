@@ -133,8 +133,8 @@ const defaultData = {
     // },
     mylist: [],
     tags:[],
-    select: [1,3],
-    //select:1,
+    // select: [1,3],
+    select:1,
     show_html: true,
     html: {
         title: 'Salut',
@@ -291,7 +291,7 @@ let fields = {
     },
     select: {
         type:'select',
-        multiple:true,
+        multiple:false,
         display:'dropdown',
         options: [
             {id:0,label:'Jérôme'}, {id:1,label:'François'}, {id:2,label:'Raymond'}, {id:3,label:'Claude'}, {id:4,label:'Antoine'}, {id:5,label:'Félicité'}

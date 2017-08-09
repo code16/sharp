@@ -14,7 +14,7 @@
                 :max="maxSelected"
                 @input="handleInput" ref="multiselect">
             <template v-if="!multiple && value!=null">
-                <div slot="carret" @mousedown.stop.prevent="remove()" class="SharpSelect__remove-btn close"></div>
+                <div slot="carret" @mousedown.stop.prevent="remove()" class="SharpSelect__clear-btn close"></div>
             </template>
         </sharp-multiselect>
         <div v-else>
@@ -127,6 +127,8 @@
                 this.$emit('input', optId);
             }
         },
-        mounted(){console.log(this)}
+        mounted(){
+
+        }
     }
 </script>

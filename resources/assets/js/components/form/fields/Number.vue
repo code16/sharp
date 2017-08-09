@@ -5,7 +5,7 @@
         name: 'SharpNumber',
         functional: true,
         render(h, {props: {step, min, max, showControls}, data }) {
-            return h(Text.name, {
+            return h(Text, {
                 'class': {
                     'hide-controls':!showControls, ...data['class']
                 },

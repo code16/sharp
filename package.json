@@ -8,7 +8,12 @@
     "transform": {
       "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
       ".*\\.(vue)$": "<rootDir>/node_modules/jest-vue-preprocessor"
-    }
+    },
+    "verbose": true,
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/vendor/"
+    ]
   },
   "scripts": {
     "dev": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",

@@ -1,7 +1,6 @@
 import SharpAutocomplete from './Autocomplete';
 import SharpTextarea from './Textarea';
 import SharpText from './Text';
-import SharpPassword from './Password';
 import SharpMarkdown from './markdown/Markdown';
 import SharpNumber from './Number';
 import SharpUpload from './upload/Upload';
@@ -17,7 +16,6 @@ import SharpHtml from './Html';
 export const NameAssociation = {
     'autocomplete' : SharpAutocomplete.name,
     'text'         : SharpText.name,
-    'password'     : SharpPassword.name,
     'textarea'     : SharpTextarea.name,
     'markdown'     : SharpMarkdown.name,
     'number'       : SharpNumber.name,
@@ -33,7 +31,6 @@ export const NameAssociation = {
 export default {
     [SharpAutocomplete.name] : SharpAutocomplete,
     [SharpText.name] : SharpText,
-    [SharpPassword.name] : SharpPassword,
     [SharpTextarea.name] : SharpTextarea,
     [SharpMarkdown.name] : SharpMarkdown,
     [SharpNumber.name] : SharpNumber,
