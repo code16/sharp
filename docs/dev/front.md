@@ -87,5 +87,11 @@ Prop name | Required | Type | Description
 
 1. These modals instantiate each command forms. If the user click on a command with a form, the corresponding modal is displayed
 
+### Props
+Prop name | Required | Type | Description
+-|-|-|-
+`entity-key` | `true` | `String` | Entity key of the current list page
+
+
 ## Dashboard
 ![Dashboard component](imgs/Dashboard.png) 
