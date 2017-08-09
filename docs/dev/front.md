@@ -28,12 +28,19 @@ Components above are defined in each `.blade` Sharp pages :
 
 ## Action view
 
+![Action view](imgs/ActionView.png)
+
+1. The «main modal» can be called in every child components. To do so, emit the event showMainModal with the actionsBus. 
+Used to show text/error message.
+
 ### Props
 Prop name | Required | Description
 -|-|-
 `context` | `true` | Define in which page the component is : `"dashboard"`, `"form"` or `"list"`
 
 ## Form
+
+1. If the field's layout define a fieldset, it display another FieldsLayout component corresponding of the fieldset layout. Else the FieldDisplay component is used
 
 ### Props
 Prop name | Required | Type | Default | Description
@@ -46,6 +53,23 @@ Prop name | Required | Type | Default | Description
 `reset-data-after-submitted` | `false` | *Boolean* | `false` | Reset data object after sucessful submission
 
 ### FieldDisplay
+![Field Display component](imgs/FieldDisplay.png)
+
+The *FieldDiplay* component :
+* Decide if the Field is visible (it compute the given field's conditional display with the other context's fields)
+* Gives the localized value to the field if locales are defined
+* Gives the localized error identifier to the field if locales are defined
+
+The *FieldContainer* component, as well as displaying the Field :
+* Shows the field label
+* Shows an error if the field has one
+* Shows an help message if the field has one
+
+The *Field* component:
+* Chooses the correct component to display given the field type
+* Defines exposed props to the field component
+* Calls a function to update form data on input emitted
+
 #### Props
 Prop name | Required | Type | Description
 -|-|-|-
@@ -57,3 +81,10 @@ Prop name | Required | Type | Description
 `error-identifier` | `true` | `String` | String which will be concatenate to the first *ErrorNode*'s parent `id` if exist : ex `name` concatenated to `list.0` give `list.0.name`. Used for laravel validation. *Fields* and *List items* are *ErrorNode*.
 `update-data` | `true` | `Function` | Function called when a field changed to update the form data object
 
+## EntitiesList
+![EntitiesList component](imgs/EntitiesList.png)
+
+1. These modals instantiate each command forms. If the user click on a command with a form, the corresponding modal is displayed
+
+## Dashboard
+![Dashboard component](imgs/Dashboard.png) 
