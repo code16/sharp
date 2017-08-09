@@ -28,7 +28,7 @@ Components above are defined in each `.blade` Sharp pages :
 
 ## Action view
 
-![Action view](imgs/ActionView.png)
+![Action view component](imgs/ActionView.png)
 
 1. The «main modal» can be called in every child components. To do so, emit the event showMainModal with the actionsBus. 
 Used to show text/error message.
@@ -39,6 +39,7 @@ Prop name | Required | Description
 `context` | `true` | Define in which page the component is : `"dashboard"`, `"form"` or `"list"`
 
 ## Form
+![Form component](imgs/Form.png)
 
 1. If the field's layout define a fieldset, it display another FieldsLayout component corresponding of the fieldset layout. Else the FieldDisplay component is used
 
