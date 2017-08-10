@@ -27,7 +27,12 @@
   }
 
   &__multiselect {
-    &--hide-dropdown {
+    &--hide-dropdown.multiselect--active {
+      box-shadow: unset !important;
+      .multiselect__tags {
+        border: $input-border;
+        @include focus-outline('border');
+      }
       .multiselect__content {
         display: none;
       }
@@ -44,22 +49,11 @@
     }
   }
 
-
-  &__close-btn-container {
+  .SharpLoading {
     position: absolute;
-    top: 1px;
-    right: 1px;
-    width: 40px;
-    height: 100%;
-    text-align: center;
-
-    button.close {
-      height: 100%;
-      width: 100%;
-      outline: none;
-      span {
-        vertical-align: super;
-      }
+    right: 0;
+    &__svg {
+      stroke: $brand-01
     }
   }
 }

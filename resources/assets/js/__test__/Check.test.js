@@ -8,7 +8,7 @@ describe('check-field', () => {
     beforeEach(()=>{
         document.body.innerHTML = `
             <div id="app">
-                <sharp-check :value="true" read-only @input="inputEmitted($event)"></sharp-check>
+                <sharp-check :value="true" :read-only="readOnly" @input="inputEmitted($event)"></sharp-check>
             </div>
         `
     });
@@ -19,7 +19,17 @@ describe('check-field', () => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('emit event on checkbox changed', async () => {
+    it('can mount "read only" Check field', async () => {
+        await createVm({
+            propsData: {
+                readOnly: true
+            }
+        });
+
+        expect(document.body.innerHTML).toMatchSnapshot();
+    });
+
+    it('emit event on checkbox changed & correct value', async () => {
         let inputEmitted = jest.fn();
 
         await createVm({
@@ -30,20 +40,8 @@ describe('check-field', () => {
 
         let checkbox = document.querySelector('input');
         checkbox.dispatchEvent(new Event('change', { bubbles: true }));
-        expect(inputEmitted.mock.calls.length).toBe(1);
-    });
-
-    it('emit correct value', async () => {
-        let inputEmitted = jest.fn();
-
-        await createVm({
-            methods: {
-                inputEmitted
-            }
-        });
-        let input = document.querySelector('input');
-        input.dispatchEvent(new Event('change', { bubbles: true }));
-        expect(inputEmitted.mock.calls[0][0]).toBe(true);
+        expect(inputEmitted).toHaveBeenCalledTimes(1);
+        expect(inputEmitted).toHaveBeenCalledWith(true);
     });
 });
 
@@ -53,7 +51,7 @@ async function createVm(customOptions={}) {
         el: '#app',
         mixins: [customOptions],
 
-        props:['inputType']
+        props:['readOnly']
     });
 
     await Vue.nextTick();

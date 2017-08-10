@@ -47,7 +47,7 @@
     "uglifyjs-webpack-plugin": "^0.4.3",
     "vue-clip": "^1.0.0",
     "vue-cropperjs": "^2.1.1",
-    "vue-multiselect": "next",
+    "vue-multiselect": "^2.0.2",
     "vue2-timepicker": "^0.1.4",
     "vuedraggable": "^2.10.0",
     "vuejs-datepicker": "^0.7.11"

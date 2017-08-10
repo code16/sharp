@@ -12,14 +12,115 @@ describe('select-field',()=>{
     beforeEach(()=>{
         document.body.innerHTML = `
             <div id="app">
-                <sharp-select :value="3" :multiple="multiple" :options="[{id:3,label:'AAA'}]" @input="inputEmitted($event)"></sharp-select>
+                <sharp-select :value="value" 
+                              :multiple="multiple" 
+                              :display="display" 
+                              :options="[{id:3,label:'AAA'}, {id:4, label:'BBB'}]" 
+                              :read-only="readOnly"
+                              :max-selected="3"
+                              placeholder="placeholder"
+                              unique-identifier="select"
+                              clearable
+                              @input="inputEmitted($event)">
+                </sharp-select>
             </div>
         `
     });
 
     it('can mount Select field', async () => {
-        await createVm();
+        await createVm({
+            data:() => ({ value: null }) // possible String/Number value (no reactive)
+        });
         expect(document.body.innerHTML).toMatchSnapshot();
+    });
+
+    it('can mount Select field as checkboxes list', async () => {
+        await createVm({
+            propsData: {
+                multiple: true,
+                display: 'list'
+            },
+            data: () => ({ value: [] })
+        });
+        expect(document.body.innerHTML).toMatchSnapshot();
+    });
+
+    it('can mount "read only" Select field as checkboxes list', async () => {
+        await createVm({
+            propsData: {
+                multiple: true,
+                display: 'list',
+                readOnly: true,
+            },
+            data:() => ({ value: [] })
+        });
+        expect(document.body.innerHTML).toMatchSnapshot();
+    });
+
+    it('can mount Select field as radios list', async () => {
+        await createVm({
+            propsData: {
+                multiple: false,
+                display: 'list'
+            },
+            data: () => ({ value: null })
+        });
+        expect(document.body.innerHTML).toMatchSnapshot();
+    });
+
+    it('can mount "read only" Select field as radios list', async () => {
+        await createVm({
+            propsData: {
+                multiple: false,
+                display: 'list',
+                readOnly: true
+            },
+            data: () => ({ value: null })
+        });
+        expect(document.body.innerHTML).toMatchSnapshot();
+    });
+
+    it('expose appropriate props to multiselect component', async () => {
+
+        let $tags = await createVm({
+            propsData: {
+                multiple: true, readOnly: true
+            },
+            data: () => ({ value: [3] })
+        });
+
+        let { multiselect } = $tags.$refs;
+
+        expect(multiselect.$props).toMatchObject({
+            value: [3],
+            placeholder: 'placeholder',
+            max: 3,
+            disabled: true,
+            searchable: false,
+            // multiple dependant props
+            closeOnSelect: false,
+            multiple: true,
+            hideSelected: true,
+        });
+    });
+
+    it('expose appropriate props to multiselect component when multiple is false', async () => {
+
+        let $tags = await createVm({
+            propsData: {
+                multiple: false
+            },
+            data: () => ({ value: null })
+        });
+
+        let { multiselect } = $tags.$refs;
+
+        expect(multiselect.$props).toMatchObject({
+            // multiple dependant props
+            closeOnSelect: true,
+            multiple: false,
+            hideSelected: false,
+        });
     });
 
     it('clear on cross button clicked', async () => {
@@ -31,7 +132,8 @@ describe('select-field',()=>{
             },
             methods: {
                 inputEmitted
-            }
+            },
+            data: () => ({ value: 3 })
         });
 
         let clearBtn = document.querySelector('.SharpSelect__clear-btn');
@@ -40,6 +142,124 @@ describe('select-field',()=>{
         expect(inputEmitted.mock.calls[0][0]).toBe(null);
     });
 
+    it('check correct checkboxes depending on value', async () => {
+        let value = [];
+        await createVm({
+            propsData: {
+                multiple: true,
+                display: 'list'
+            },
+            data:() => ({ value })
+        });
+
+        let checkboxes = document.querySelectorAll('input');
+
+        expect(document.querySelectorAll('input:checked').length).toBe(0);
+
+        value.push(3);
+        await Vue.nextTick();
+
+        expect(checkboxes[0].checked).toBe(true);
+        expect(checkboxes[1].checked).toBe(false);
+    });
+
+    it('emit input on checkbox changed and correct value', async () => {
+        let inputEmitted = jest.fn();
+
+        await createVm({
+            propsData: {
+                multiple: true,
+                display: 'list'
+            },
+            methods: {
+                inputEmitted
+            },
+            data: () => ({ value: [] })
+        });
+
+        let checkbox = document.querySelector('input');
+
+        checkbox.click();
+
+        expect(inputEmitted).toHaveBeenCalledTimes(1);
+        expect(inputEmitted).toHaveBeenCalledWith([3]);
+    });
+
+    it('check correct radio depending on value', async () => {
+
+        let { $root:vm } = await createVm({
+            propsData: {
+                multiple: false,
+                display: 'list'
+            },
+            data: () => ({ value: null }),
+        });
+
+        let radios = document.querySelectorAll('input');
+
+        expect(document.querySelectorAll('input:checked').length).toBe(0);
+
+        vm.value = 3;
+        await Vue.nextTick();
+
+        expect(radios[0].checked).toBe(true);
+        expect(radios[1].checked).toBe(false);
+    });
+
+    it('emit input on radio clicked and correct value', async () => {
+        let inputEmitted = jest.fn();
+
+        await createVm({
+            propsData: {
+                multiple: false,
+                display: 'list'
+            },
+            methods: {
+                inputEmitted
+            },
+            data: () => ({ value: null })
+        });
+
+        let radio = document.querySelector('input');
+
+        radio.dispatchEvent(new Event('change', { bubbles: true }));
+
+        expect(inputEmitted).toHaveBeenCalledTimes(1);
+        expect(inputEmitted).toHaveBeenCalledWith(3);
+    });
+
+    it('correct options labels', async () => {
+        let $select = await createVm({
+            data: () => ({ value: null })
+        });
+
+        expect($select.multiselectLabel(3)).toBe('AAA');
+        expect($select.multiselectLabel(4)).toBe('BBB');
+    });
+
+    it('corresponding multiselect options ids', async () => {
+        let $select = await createVm({
+            data: () => ({ value: null })
+        });
+
+        expect($select.multiselectOptions).toEqual([3,4]);
+    });
+
+    it('corresponding input id and label for', async () => {
+        await createVm({
+            propsData: {
+                multiple:false,
+                display:'list'
+            },
+            data: () => ({ value: null })
+        });
+
+        let radio = document.querySelector('input'),
+            label = document.querySelector('label');
+
+        expect(radio.id).toBe('select0');
+        expect(label.htmlFor).toBe('select0');
+    });
 });
 
 async function createVm(customOptions={}) {
@@ -48,7 +268,7 @@ async function createVm(customOptions={}) {
         el: '#app',
         mixins: [customOptions],
 
-        props:['multiple']
+        props:['multiple', 'display', 'readOnly'],
     });
 
     await Vue.nextTick();

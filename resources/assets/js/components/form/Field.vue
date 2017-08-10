@@ -19,6 +19,7 @@
             fieldLayout: Object,
             value: [String, Number, Boolean, Object, Array],
             locale: String,
+            uniqueIdentifier: String,
             updateData: Function
         },
         mounted() {
@@ -32,6 +33,14 @@
 
             let { key, ...fieldProps } = this.fieldProps;
 
+//            console.log({
+//                fieldKey:this.fieldKey,
+//                fieldLayout:this.fieldLayout,
+//                value:this.value,
+//                locale:this.locale,
+//                uniqueIdentifier:this.uniqueIdentifier,
+//                ...fieldProps
+//            });
 
             return h(fieldCompName[this.fieldType],{
                 props : {
@@ -39,6 +48,7 @@
                     fieldLayout:this.fieldLayout,
                     value:this.value,
                     locale:this.locale,
+                    uniqueIdentifier:this.uniqueIdentifier,
                     ...fieldProps
                 },
                 on: {

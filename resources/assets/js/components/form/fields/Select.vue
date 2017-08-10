@@ -12,8 +12,9 @@
                 :placeholder="placeholder"
                 :disabled="readOnly"
                 :max="maxSelected"
+                :allow-empty="clearable"
                 @input="handleInput" ref="multiselect">
-            <template v-if="!multiple && value!=null">
+            <template v-if="clearable && !multiple && value!=null">
                 <div slot="carret" @mousedown.stop.prevent="remove()" class="SharpSelect__clear-btn close"></div>
             </template>
         </sharp-multiselect>
@@ -21,13 +22,16 @@
             <template v-if="multiple">
                 <sharp-check v-for="option in options" :value="checked(option.id)"
                              @input="c=>handleCheckboxChanged(c,option.id)"
-                             :text="option.label" :disabled="readOnly" :key="option.id">
+                             :text="option.label" :read-only="readOnly" :key="option.id">
                 </sharp-check>
             </template>
             <div v-else class="SharpSelect__radio-button-group" :class="{'SharpSelect__radio-button-group--block':!inline}">
-                <component :is="inline?'span':'div'" v-for="option in options" :key="option.id">
-                    <input class="SharpRadio" type="radio" :checked="value==option.id" tabindex="0" :disabled="readOnly">
-                    <label class="SharpRadio__label" @click="handleRadioClicked(option.id)">
+                <component :is="inline?'span':'div'" v-for="(option, index) in options" :key="option.id">
+                    <input type="radio" :id="`${uniqueIdentifier}${index}`" class="SharpRadio"
+                           :checked="value===option.id" tabindex="0" :disabled="readOnly"
+                           :name="uniqueIdentifier" :value="option.id"
+                           @change="handleRadioChanged(option.id)">
+                    <label class="SharpRadio__label" :for="`${uniqueIdentifier}${index}`">
                         <span class="SharpRadio__appearance"></span>
                         {{option.label}}
                     </label>
@@ -51,7 +55,7 @@
 
         props: {
             value: [Array, String, Number],
-
+            uniqueIdentifier: String,
             options: {
                 type: Array,
                 required: true
@@ -72,7 +76,6 @@
                 type: String,
                 default: '-'
             },
-            maxText: String,
             maxSelected: Number,
             readOnly: Boolean,
 
@@ -80,7 +83,6 @@
                 type: Boolean,
                 default: true
             },
-            disableFocus: Boolean
         },
 
         data() {
@@ -123,12 +125,9 @@
                     newValue = this.value.filter(val => val !== optId);
                 this.$emit('input', newValue);
             },
-            handleRadioClicked(optId) {
+            handleRadioChanged(optId) {
                 this.$emit('input', optId);
             }
         },
-        mounted(){
-
-        }
     }
 </script>

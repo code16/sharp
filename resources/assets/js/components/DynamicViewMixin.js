@@ -5,7 +5,7 @@ import * as qs from '../helpers/querystring';
 import { lang } from '../mixins/Localization';
 
 export default {
-    inject:['glasspane'],
+    inject:['mainLoading'],
     data() {
         return {
             data:null,
@@ -43,15 +43,15 @@ export default {
     },
     created() {
         this.axiosInstance.interceptors.request.use(config => {
-            this.glasspane.$emit('show');
+            this.mainLoading.$emit('show');
             return config;
         }, error => Promise.reject(error));
 
         this.axiosInstance.interceptors.response.use(response => {
-            this.glasspane.$emit('hide');
+            this.mainLoading.$emit('hide');
             return response;
         }, error => {
-            this.glasspane.$emit('hide');
+            this.mainLoading.$emit('hide');
             let modalOptions = {
                 title: lang(`modals.${error.response.status}`),
                 text: error.response.data.message,
@@ -76,6 +76,6 @@ export default {
         });
 
         if(!this.synchronous)
-            this.glasspane.$emit('show');
+            this.mainLoading.$emit('show');
     }
 }

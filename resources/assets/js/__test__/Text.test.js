@@ -24,7 +24,7 @@ describe('text-field', () => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('emit event on input', async () => {
+    it('emit event on input and correct value', async () => {
         let inputEmitted = jest.fn();
 
         await createVm({
@@ -33,21 +33,9 @@ describe('text-field', () => {
             }
         });
         let input = document.querySelector('input');
-        input.dispatchEvent(new InputEvent('input'));
-        expect(inputEmitted.mock.calls.length).toBe(1);
-    });
-
-    it('emit correct value', async () => {
-        let inputEmitted = jest.fn();
-
-        await createVm({
-            methods: {
-                inputEmitted
-            }
-        });
-        let input = document.querySelector('input');
-        input.dispatchEvent(new InputEvent('input'));
-        expect(inputEmitted.mock.calls[0][0]).toBe('AAA');
+        input.dispatchEvent(new Event('input', { bubbles:true }));
+        expect(inputEmitted).toHaveBeenCalledTimes(1);
+        expect(inputEmitted).toHaveBeenCalledWith('AAA');
     });
 
     it('take input type in account', async () => {
@@ -57,7 +45,7 @@ describe('text-field', () => {
             }
         });
         let input = document.querySelector('input');
-        expect(input.type === 'password');
+        expect(input.type).toBe('password');
     });
 
 });

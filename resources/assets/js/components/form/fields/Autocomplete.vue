@@ -20,16 +20,21 @@
                      :track-by="itemIdAttribute"
                      :internal-search="false"
                      :placeholder="placeholder"
-                     :loading="state=='loading'"
+                     :loading="isLoading"
                      :disabled="readOnly"
                      :max="hideDropdown ? -1 : 1"
+                     preserve-search
                      @search-change="updateSuggestions"
                      @select="handleSelect"
-                     @input="handleInput"
                      @close="handleDropdownClose"
+                     @search-changed="handleSearchChanged"
+                     @open="opened=true"
                      ref="multiselect">
             <template slot="option" scope="props">
                 <sharp-template name="ListItem" :template="listItemTemplate" :template-data="props.option"></sharp-template>
+            </template>
+            <template slot="loading">
+                <sharp-loading :visible="isLoading" inline small></sharp-loading>
             </template>
             <template slot="noResult">Aucun résultats</template>
         </multiselect>
@@ -37,7 +42,8 @@
 </template>
 
 <script>
-    import SharpTemplate from '../../Template.vue';
+    import Template from '../../Template.vue';
+    import Loading from '../../Loading.vue';
     import Multiselect from 'vue-multiselect';
 
     import SearchStrategy from '../../../app/models/SearchStrategy';
@@ -48,7 +54,8 @@
         name:'SharpAutocomplete',
         components: {
             Multiselect,
-            [SharpTemplate.name]:SharpTemplate
+            [Template.name]:Template,
+            [Loading.name]: Loading
         },
 
         props: {
@@ -88,12 +95,12 @@
             return {
                 query: '',
                 suggestions: this.localValues,
-                isLoading: false,
                 searchStrategy: new SearchStrategy({
                     list: this.localValues,
                     minQueryLength: this.searchMinChars,
                     searchKeys: this.searchKeys
                 }),
+                opened: false,
                 state: this.value?'valuated':'initial'
             }
         },
@@ -109,6 +116,9 @@
                     return this.value;
 
                 return this.localValues.find(v=>v[this.itemIdAttribute]===this.value);
+            },
+            isLoading() {
+                return this.state === 'loading' || this.opened && !!this.query.length && this.hideDropdown;
             },
             hideDropdown() {
                 return this.isRemote ? this.query.length < this.searchMinChars : false;
@@ -148,16 +158,18 @@
                 }
             },
 
+            handleSearchChanged(search) {
+                this.query = search;
+            },
+
             handleSelect(value) {
                 this.state = 'valuated';
                 this.$emit('input', value[this.itemIdAttribute]);
             },
-            handleInput(value) {
-
-            },
             handleDropdownClose() {
                 if(this.state === 'searching')
                     this.state = 'initial';
+                this.opened = false;
             },
             handleResetClick() {
                 this.state = 'searching';

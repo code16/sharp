@@ -1,7 +1,7 @@
 import Vue from 'vue/dist/vue';
 import NumberInput from '../components/form/fields/Number.vue';
 
-import { fakeInjections } from './utils';
+import { FakeInjections } from './utils';
 
 
 describe('number-field',()=>{

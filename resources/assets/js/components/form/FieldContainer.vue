@@ -75,8 +75,14 @@
                 return this.fieldProps.extraStyle;
             },
             exposedProps() {
-                const { errorIdentifier, isErrorRoot, ...exposedProps } = this.$props;
-                return exposedProps;
+                const {
+                    errorIdentifier,
+                    ...exposedProps,
+                } = this.$props;
+                return {
+                    ...exposedProps,
+                    uniqueIdentifier: this.mergedErrorIdentifier
+                };
             }
         },
         methods: {

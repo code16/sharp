@@ -9,7 +9,7 @@ import CollapsibleItem from './components/menu/CollapsibleItem';
 import NavItem from './components/menu/NavItem';
 import LeftNav from './components/menu/LeftNav';
 
-import SharpLoading from './components/Loading';
+import Loading from './components/Loading';
 
 import axios from 'axios';
 import cookies from 'axios/lib/helpers/cookies';
@@ -19,13 +19,13 @@ import * as qs from './helpers/querystring';
 
 // prevent recursive components import
 Vue.component(FieldDisplay.name, FieldDisplay);
-
+const SharpLoading = Vue.extend(Loading);
 
 new Vue({
     el:"#sharp-app",
 
     provide: {
-        glasspane: new SharpLoading({ el: '#glasspane' }),
+        mainLoading: new SharpLoading({ el: '#glasspane' }),
         xsrfToken: cookies.read(axios.defaults.xsrfCookieName),
         params: qs.parse()
     },

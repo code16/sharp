@@ -292,7 +292,7 @@ let fields = {
     select: {
         type:'select',
         multiple:false,
-        display:'dropdown',
+        display:'list',
         options: [
             {id:0,label:'Jérôme'}, {id:1,label:'François'}, {id:2,label:'Raymond'}, {id:3,label:'Claude'}, {id:4,label:'Antoine'}, {id:5,label:'Félicité'}
         ]

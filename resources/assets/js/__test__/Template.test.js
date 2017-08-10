@@ -14,7 +14,7 @@ describe('template-component',()=>{
         `
     });
 
-    it('can mount Password field', async () => {
+    it('can mount given template wrapped in div tag', async () => {
         await createVm();
 
         expect(document.body.innerHTML).toMatchSnapshot();

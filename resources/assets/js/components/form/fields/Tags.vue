@@ -49,11 +49,10 @@
             [Multiselect.name]: Multiselect
         },
         props: {
-            value: Array,
-            options: Array,
+            value: Array, // [{id:0, label: 'AAA'}, ...]
+            options: Array, // [{id:0, label:'AAA'}, ...]
             placeholder: String,
             maxTagCount: Number,
-            maxText: String,
             createText: String,
             creatable: {
                 type: Boolean,
@@ -111,7 +110,6 @@
         created() {
             this.lastIndex += this.options.length;
             this.tags = (this.value||[]).map(this.patchTag);
-            //console.log(this);
         }
     }
 </script>
