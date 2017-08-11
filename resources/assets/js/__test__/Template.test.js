@@ -9,7 +9,7 @@ describe('template-component',()=>{
     beforeEach(()=>{
         document.body.innerHTML = `
             <div id="app">
-                <sharp-template name="Test" :template-data="{ name:'Antoine' }" template="<em v-text='name'></em>"></sharp-template>
+                <sharp-template name="Test" :template-data="{ name:'Antoine' }" :template="'<em>{{name}}</em>'"></sharp-template>
             </div>
         `
     });

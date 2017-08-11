@@ -34316,6 +34316,8 @@ var noop = function noop() {};
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_models_SearchStrategy__ = __webpack_require__(252);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_axios__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__util__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__mixins__ = __webpack_require__(2);
 var _components;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -34361,8 +34363,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
+
+
+
 
 
 
@@ -34377,6 +34380,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     components: (_components = {
         Multiselect: __WEBPACK_IMPORTED_MODULE_2_vue_multiselect___default.a
     }, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_0__Template_vue__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_0__Template_vue__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_1__Loading_vue__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_1__Loading_vue__["a" /* default */]), _components),
+
+    mixins: [__WEBPACK_IMPORTED_MODULE_6__mixins__["b" /* Localization */]],
 
     props: {
         fieldKey: String,
@@ -34419,11 +34424,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return {
             query: '',
             suggestions: this.localValues,
-            searchStrategy: new __WEBPACK_IMPORTED_MODULE_3__app_models_SearchStrategy__["a" /* default */]({
-                list: this.localValues,
-                minQueryLength: this.searchMinChars,
-                searchKeys: this.searchKeys
-            }),
             opened: false,
             state: this.value ? 'valuated' : 'initial'
         };
@@ -34450,8 +34450,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         hideDropdown: function hideDropdown() {
             return this.isRemote ? this.query.length < this.searchMinChars : false;
         },
-        dynamicSuggestions: function dynamicSuggestions() {
-            return this.hideDropdown ? [null] : this.suggestions;
+        searchStrategy: function searchStrategy() {
+            return new __WEBPACK_IMPORTED_MODULE_3__app_models_SearchStrategy__["a" /* default */]({
+                list: this.localValues,
+                minQueryLength: this.searchMinChars,
+                searchKeys: this.searchKeys
+            });
         }
     },
     methods: {
@@ -34477,9 +34481,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 this.state = 'searching';
             }
         },
-        handleSearchChanged: function handleSearchChanged(search) {
-            this.query = search;
-        },
         handleSelect: function handleSelect(value) {
             this.state = 'valuated';
             this.$emit('input', value[this.itemIdAttribute]);
@@ -34491,12 +34492,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         handleResetClick: function handleResetClick() {
             var _this3 = this;
 
-            this.state = 'searching';
+            this.state = 'initial';
 
-            this.$emit('input', '');
-            this.$nextTick(function () {
-                _this3.$refs.multiselect.activate();
-            });
+            this.$emit('input', null);
+            if (this.mode === 'local') {
+                this.$nextTick(function () {
+                    _this3.$refs.multiselect.activate();
+                });
+            }
+        }
+    },
+    created: function created() {
+        if (this.$props.mode === 'local' && !this.$options.propsData.searchKeys) {
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__util__["d" /* warn */])('Autocomplete (key: ' + this.fieldKey + ') has local mode but no searchKeys, default set to [\'value\']');
         }
     }
 });
@@ -39355,7 +39363,8 @@ var fields = {
         label: 'Texte'
     },
     B: {
-        type: 'password',
+        type: 'text',
+        inputType: 'password',
         label: 'Mot de passe'
     },
     number: {
@@ -82810,20 +82819,18 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     },
     attrs: {
       "value": _vm.valueObject,
-      "options": _vm.dynamicSuggestions,
+      "options": _vm.suggestions,
       "track-by": _vm.itemIdAttribute,
       "internal-search": false,
       "placeholder": _vm.placeholder,
       "loading": _vm.isLoading,
       "disabled": _vm.readOnly,
-      "max": _vm.hideDropdown ? -1 : 1,
       "preserve-search": ""
     },
     on: {
       "search-change": _vm.updateSuggestions,
       "select": _vm.handleSelect,
       "close": _vm.handleDropdownClose,
-      "search-changed": _vm.handleSearchChanged,
       "open": function($event) {
         _vm.opened = true
       }
@@ -82850,7 +82857,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     }
   })], 1), _vm._v(" "), _c('template', {
     slot: "noResult"
-  }, [_vm._v("Aucun résultats")])], 2) : _vm._e()], 1)
+  }, [_vm._v(_vm._s(_vm.l('form.autocomplete.no_results_text')))])], 2) : _vm._e()], 1)
 }
 var staticRenderFns = []
 render._withStripped = true

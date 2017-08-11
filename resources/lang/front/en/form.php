@@ -13,6 +13,8 @@ return [
     'multiselect.placeholder' => 'Select option',
     'multiselect.max_text' => 'Maximum items selected',
 
+    'autocomplete.no_results_text' => 'Nothing found',
+
     'markdown.icons.bold.title' => 'Bold',
     'markdown.icons.italic.title' => 'Italic',
     'markdown.icons.strikethrough.title' => 'Strike through',

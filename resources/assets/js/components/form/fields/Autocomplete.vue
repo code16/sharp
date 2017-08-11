@@ -16,18 +16,16 @@
                      class="SharpAutocomplete__multiselect"
                      :class="{'SharpAutocomplete__multiselect--hide-dropdown':hideDropdown}"
                      :value="valueObject"
-                     :options="dynamicSuggestions"
+                     :options="suggestions"
                      :track-by="itemIdAttribute"
                      :internal-search="false"
                      :placeholder="placeholder"
                      :loading="isLoading"
                      :disabled="readOnly"
-                     :max="hideDropdown ? -1 : 1"
                      preserve-search
                      @search-change="updateSuggestions"
                      @select="handleSelect"
                      @close="handleDropdownClose"
-                     @search-changed="handleSearchChanged"
                      @open="opened=true"
                      ref="multiselect">
             <template slot="option" scope="props">
@@ -36,7 +34,7 @@
             <template slot="loading">
                 <sharp-loading :visible="isLoading" inline small></sharp-loading>
             </template>
-            <template slot="noResult">Aucun résultats</template>
+            <template slot="noResult">{{ l('form.autocomplete.no_results_text') }}</template>
         </multiselect>
     </div>
 </template>
@@ -50,6 +48,9 @@
 
     import axios from 'axios';
 
+    import { warn } from '../../../util';
+    import { Localization } from '../../../mixins';
+
     export default {
         name:'SharpAutocomplete',
         components: {
@@ -57,6 +58,8 @@
             [Template.name]:Template,
             [Loading.name]: Loading
         },
+
+        mixins: [Localization],
 
         props: {
             fieldKey: String,
@@ -95,13 +98,8 @@
             return {
                 query: '',
                 suggestions: this.localValues,
-                searchStrategy: new SearchStrategy({
-                    list: this.localValues,
-                    minQueryLength: this.searchMinChars,
-                    searchKeys: this.searchKeys
-                }),
                 opened: false,
-                state: this.value?'valuated':'initial'
+                state: this.value ? 'valuated' : 'initial'
             }
         },
         computed: {
@@ -123,8 +121,12 @@
             hideDropdown() {
                 return this.isRemote ? this.query.length < this.searchMinChars : false;
             },
-            dynamicSuggestions() {
-                return this.hideDropdown ? [null] : this.suggestions;
+            searchStrategy() {
+                return new SearchStrategy({
+                    list: this.localValues,
+                    minQueryLength: this.searchMinChars,
+                    searchKeys: this.searchKeys
+                });
             }
         },
         methods: {
@@ -158,10 +160,6 @@
                 }
             },
 
-            handleSearchChanged(search) {
-                this.query = search;
-            },
-
             handleSelect(value) {
                 this.state = 'valuated';
                 this.$emit('input', value[this.itemIdAttribute]);
@@ -172,13 +170,20 @@
                 this.opened = false;
             },
             handleResetClick() {
-                this.state = 'searching';
+                this.state = 'initial';
 
-                this.$emit('input', '');
-                this.$nextTick(()=>{
-                    this.$refs.multiselect.activate();
-                });
-            }
+                this.$emit('input', null);
+                if(this.mode === 'local') {
+                    this.$nextTick(()=>{
+                        this.$refs.multiselect.activate();
+                    });
+                }
+            },
         },
+        created() {
+            if(this.$props.mode === 'local' && !this.$options.propsData.searchKeys) {
+                warn(`Autocomplete (key: ${this.fieldKey}) has local mode but no searchKeys, default set to ['value']`);
+            }
+        }
     }
 </script>

@@ -155,7 +155,8 @@ let fields = {
         label: 'Texte'
     },
     B:{
-        type:'password',
+        type:'text',
+        inputType: 'password',
         label: 'Mot de passe'
     },
     number:{
