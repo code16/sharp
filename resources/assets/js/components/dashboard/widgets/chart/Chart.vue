@@ -1,7 +1,12 @@
 <template>
-    <sharp-chartjs :comp="chartComp" :data="data" :options="options"
-                   :styles="{}" :cssClasses="classes">
-    </sharp-chartjs>
+    <div>
+        <h2 v-if="title">{{title}}</h2>
+        <div :class="classes" :style="styles">
+            <sharp-chartjs :comp="chartComp" :data="data" :options="options"
+                           :styles="{}" cssClasses="SharpWidgetChart__inner">
+            </sharp-chartjs>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -21,11 +26,17 @@
         props: {
             display:String,
             title: String,
-            value: Object
+            value: Object,
+
+            ratioX:Number,
+            ratioY:Number,
         },
         computed: {
             classes() {
                 return `SharpWidgetChart SharpWidgetChart--${this.display}`;
+            },
+            styles() {
+                return { paddingTop:`${this.ratioY/this.ratioX*100}%` }
             },
             chartComp() {
                 const map = {
@@ -36,24 +47,30 @@
             options() {
                 return {
                     title: {
-                        display: !!this.title,
-                        text: this.title
+                        display: false
                     },
                     maintainAspectRatio:false,
                     legendCallback: noop
                 }
             },
             data() {
-                let { datasets } = this.value;
-                //debugger;
                 return {
                     ...this.value,
-                    datasets: [
-                        ...datasets.map(set=>({
-                            ...set, backgroundColor: set.color, data: set.values || set.data
-                        }))
-                    ]
+                    datasets: this.datasets
                 }
+            },
+            datasets() {
+                return this.value.datasets.map(dataset=>({
+                    ...dataset,
+                    ...this.datasetColor(dataset)
+                }))
+            }
+        },
+        methods: {
+            datasetColor({ color }) {
+                return this.display==='line'
+                    ? { borderColor: color }
+                    : { backgroundColor: color };
             }
         },
         mounted() {

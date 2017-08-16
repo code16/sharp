@@ -33658,10 +33658,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Chartjs__ = __webpack_require__(530);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
 //
 //
 //
@@ -33683,11 +33686,17 @@ var noop = function noop() {};
     props: {
         display: String,
         title: String,
-        value: Object
+        value: Object,
+
+        ratioX: Number,
+        ratioY: Number
     },
     computed: {
         classes: function classes() {
             return 'SharpWidgetChart SharpWidgetChart--' + this.display;
+        },
+        styles: function styles() {
+            return { paddingTop: this.ratioY / this.ratioX * 100 + '%' };
         },
         chartComp: function chartComp() {
             var map = {
@@ -33698,23 +33707,30 @@ var noop = function noop() {};
         options: function options() {
             return {
                 title: {
-                    display: !!this.title,
-                    text: this.title
+                    display: false
                 },
                 maintainAspectRatio: false,
                 legendCallback: noop
             };
         },
         data: function data() {
-            var datasets = this.value.datasets;
-            //debugger;
-
             return _extends({}, this.value, {
-                datasets: [].concat(_toConsumableArray(datasets.map(function (set) {
-                    return _extends({}, set, { backgroundColor: set.color, data: set.values || set.data
-                    });
-                })))
+                datasets: this.datasets
             });
+        },
+        datasets: function datasets() {
+            var _this = this;
+
+            return this.value.datasets.map(function (dataset) {
+                return _extends({}, dataset, _this.datasetColor(dataset));
+            });
+        }
+    },
+    methods: {
+        datasetColor: function datasetColor(_ref) {
+            var color = _ref.color;
+
+            return this.display === 'line' ? { borderColor: color } : { backgroundColor: color };
         }
     },
     mounted: function mounted() {}
@@ -81236,15 +81252,18 @@ if (false) {
 
 "use strict";
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('sharp-chartjs', {
+  return _c('div', [(_vm.title) ? _c('h2', [_vm._v(_vm._s(_vm.title))]) : _vm._e(), _vm._v(" "), _c('div', {
+    class: _vm.classes,
+    style: (_vm.styles)
+  }, [_c('sharp-chartjs', {
     attrs: {
       "comp": _vm.chartComp,
       "data": _vm.data,
       "options": _vm.options,
       "styles": {},
-      "cssClasses": _vm.classes
+      "cssClasses": "SharpWidgetChart__inner"
     }
-  })
+  })], 1)])
 }
 var staticRenderFns = []
 render._withStripped = true
