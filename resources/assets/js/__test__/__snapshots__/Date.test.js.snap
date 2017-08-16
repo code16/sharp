@@ -1,0 +1,120 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`date-field can mount Date field 1`] = `
+<div id="app">
+    <div class="SharpDate"><input class="SharpDate__input">
+        <div class="SharpDate__picker" style="display: none;">
+            <div class="SharpDate__datepicker SharpDate__date"><input type="hidden" readonly="readonly">
+                <!---->
+                <div class="SharpDate__calendar open" style="position: static;">
+                    <header><span class="prev"><svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd"><path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path></svg></span> <span class="up"><span class="SharpDate__cur-month">Fév</span> <span class="SharpDate__cur-year">2013</span></span>
+                        <span class="next"><svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd"><path d="M0 10.6L4.7 6 0 1.4 1.4 0l6.1 6-6.1 6z"></path></svg></span></header>
+                    <div class="SharpDate__innerContainer">
+                        <div class="SharpDate__rContainer">
+                            <div class="SharpDate__weekdays"><span class="cell day-header">Lun</span><span class="cell day-header">Mar</span><span class="cell day-header">Mer</span><span class="cell day-header">Jeu</span><span class="cell day-header">Ven</span><span class="cell day-header">Sam</span>
+                                <span
+                                    class="cell day-header">Dim</span>
+                            </div>
+                            <div class="SharpDate__days">
+                                <div class="SharpDate__dayContainer"><span class="cell day blank"></span><span class="cell day blank"></span><span class="cell day blank"></span><span class="cell day blank"></span> <span track-by="timestamp" class="cell day">1
+                        </span><span track-by="timestamp" class="cell day">2
+                        </span><span track-by="timestamp" class="cell day">3
+                        </span><span track-by="timestamp" class="cell day">4
+                        </span><span track-by="timestamp" class="cell day">5
+                        </span><span track-by="timestamp" class="cell day">6
+                        </span><span track-by="timestamp" class="cell day">7
+                        </span><span track-by="timestamp" class="cell day selected">8
+                        </span><span track-by="timestamp" class="cell day">9
+                        </span><span track-by="timestamp" class="cell day">10
+                        </span><span track-by="timestamp" class="cell day">11
+                        </span><span track-by="timestamp" class="cell day">12
+                        </span><span track-by="timestamp" class="cell day">13
+                        </span><span track-by="timestamp" class="cell day">14
+                        </span><span track-by="timestamp" class="cell day">15
+                        </span><span track-by="timestamp" class="cell day">16
+                        </span><span track-by="timestamp" class="cell day">17
+                        </span><span track-by="timestamp" class="cell day">18
+                        </span><span track-by="timestamp" class="cell day">19
+                        </span><span track-by="timestamp" class="cell day">20
+                        </span><span track-by="timestamp" class="cell day">21
+                        </span><span track-by="timestamp" class="cell day">22
+                        </span><span track-by="timestamp" class="cell day">23
+                        </span><span track-by="timestamp" class="cell day">24
+                        </span><span track-by="timestamp" class="cell day">25
+                        </span><span track-by="timestamp" class="cell day">26
+                        </span><span track-by="timestamp" class="cell day">27
+                        </span><span track-by="timestamp" class="cell day">28
+                        </span> <span class="cell day blank"></span><span class="cell day blank"></span><span class="cell day blank"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="SharpDate__calendar" style="position: static; display: none;">
+                    <header><span class="prev"><svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd"><path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path></svg></span> <span class="up"><span class="SharpDate__cur-year">2013</span></span>
+                        <span
+                            class="next"><svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd"><path d="M0 10.6L4.7 6 0 1.4 1.4 0l6.1 6-6.1 6z"></path></svg></span>
+                    </header>
+                    <div class="SharpDate__innerContainer">
+                        <div class="SharpDate__rContainer">
+                            <div class="SharpDate__monthContainer"><span track-by="timestamp" class="cell month">Janvier</span><span track-by="timestamp" class="cell month selected">Février</span><span track-by="timestamp" class="cell month">Mars</span><span track-by="timestamp" class="cell month">Avril</span>
+                                <span
+                                    track-by="timestamp" class="cell month">Mai</span><span track-by="timestamp" class="cell month">Juin</span><span track-by="timestamp" class="cell month">Juillet</span><span track-by="timestamp" class="cell month">Août</span><span track-by="timestamp" class="cell month">Septembre</span>
+                                    <span
+                                        track-by="timestamp" class="cell month">Octobre</span><span track-by="timestamp" class="cell month">Novembre</span><span track-by="timestamp" class="cell month">Décembre</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="SharpDate__calendar" style="position: static; display: none;">
+                    <header><span class="prev"><svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd"><path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path></svg></span> <span class="up"><span class="SharpDate__cur-decade">2010's</span></span>
+                        <span class="next"><svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd"><path d="M0 10.6L4.7 6 0 1.4 1.4 0l6.1 6-6.1 6z"></path></svg></span></header>
+                    <div class="SharpDate__innerContainer">
+                        <div class="SharpDate__rContainer">
+                            <div class="SharpDate__yearContainer"><span track-by="timestamp" class="cell year">2010</span><span track-by="timestamp" class="cell year">2011</span><span track-by="timestamp" class="cell year">2012</span><span track-by="timestamp" class="cell year selected">2013</span>
+                                <span
+                                    track-by="timestamp" class="cell year">2014</span><span track-by="timestamp" class="cell year">2015</span><span track-by="timestamp" class="cell year">2016</span><span track-by="timestamp" class="cell year">2017</span><span track-by="timestamp" class="cell year">2018</span>
+                                    <span
+                                        track-by="timestamp" class="cell year">2019</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <span class="time-picker SharpDate__time"><header><span class="hint">HH</span> <span class="hint">mm</span></header>
+            <div class="dropdown">
+                <div class="select-list">
+                    <ul class="hours">
+                        <li class="">00</li>
+                        <li class="">01</li>
+                        <li class="">02</li>
+                        <li class="">03</li>
+                        <li class="">04</li>
+                        <li class="">05</li>
+                        <li class="">06</li>
+                        <li class="">07</li>
+                        <li class="active">08</li>
+                        <li class="">09</li>
+                        <li class="">10</li>
+                        <li class="">11</li>
+                        <li class="">12</li>
+                        <li class="">13</li>
+                        <li class="">14</li>
+                        <li class="">15</li>
+                        <li class="">16</li>
+                        <li class="">17</li>
+                        <li class="">18</li>
+                        <li class="">19</li>
+                        <li class="">20</li>
+                        <li class="">21</li>
+                        <li class="">22</li>
+                        <li class="">23</li>
+                    </ul>
+                    <ul class="minutes">
+                        <li class="">00</li>
+                        <li class="active">30</li>
+                    </ul>
+                </div>
+            </div>
+            </span>
+        </div>
+    </div>
+</div>
+`;
