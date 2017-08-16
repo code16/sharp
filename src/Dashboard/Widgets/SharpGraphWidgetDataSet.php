@@ -71,7 +71,7 @@ class SharpGraphWidgetDataSet
     public function toArray()
     {
         return [
-            "values" => array_values($this->values),
+            "data" => array_values($this->values),
             "labels" => array_keys($this->values)
         ]
             + ($this->label ? ["label" => $this->label] : [])

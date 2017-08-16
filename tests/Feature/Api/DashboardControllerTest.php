@@ -57,7 +57,7 @@ class DashboardControllerTest extends BaseApiTest
                     "key" => "bars1",
                     "datasets" => [
                         [
-                            "values" => [10, 20, 30],
+                            "data" => [10, 20, 30],
                             "label" => "Bars 1"
                         ]
                     ],
@@ -67,7 +67,7 @@ class DashboardControllerTest extends BaseApiTest
                     "key" => "bars2",
                     "datasets" => [
                         [
-                            "values" => [10, 20, 30],
+                            "data" => [10, 20, 30],
                             "label" => "Bars 2"
                         ]
                     ],
