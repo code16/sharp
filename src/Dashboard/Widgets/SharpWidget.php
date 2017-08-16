@@ -57,8 +57,8 @@ abstract class SharpWidget
     public function setLink(string $entityKey, string $instanceId = null)
     {
         $this->link = $instanceId
-            ? route("code16.sharp.api.form.edit", compact('entityKey', 'instanceId'))
-            : route("code16.sharp.api.list", compact('entityKey'));
+            ? route("code16.sharp.edit", compact('entityKey', 'instanceId'))
+            : route("code16.sharp.list", compact('entityKey'));
 
         return $this;
     }

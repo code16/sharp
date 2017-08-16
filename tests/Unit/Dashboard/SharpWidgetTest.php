@@ -56,6 +56,30 @@ class SharpWidgetTest extends SharpTestCase
         );
     }
 
+    /** @test */
+    function we_can_define_an_entity_link()
+    {
+        $widget = SomeTestWidget::make("name")
+            ->setLink("entity");
+
+        $this->assertArraySubset(
+            ["link" => route("code16.sharp.list", "entity")],
+            $widget->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_an_instance_link()
+    {
+        $widget = SomeTestWidget::make("name")
+            ->setLink("entity", 1);
+
+        $this->assertArraySubset(
+            ["link" => route("code16.sharp.edit", ["entity", 1])],
+            $widget->toArray()
+        );
+    }
+
 }
 
 class SomeTestWidget extends SharpWidget

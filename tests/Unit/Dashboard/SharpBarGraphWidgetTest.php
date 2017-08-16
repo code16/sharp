@@ -18,4 +18,27 @@ class SharpBarGraphWidgetTest extends SharpTestCase
             $widget->toArray()
         );
     }
+
+    /** @test */
+    function returned_array_contains_default_ratio()
+    {
+        $widget = SharpBarGraphWidget::make("name");
+
+        $this->assertArraySubset(
+            ["ratioX" => 16, "ratioY" => 9],
+            $widget->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_a_specific_ratio()
+    {
+        $widget = SharpBarGraphWidget::make("name")
+            ->setRatio("2:3");
+
+        $this->assertArraySubset(
+            ["ratioX" => 2, "ratioY" => 3],
+            $widget->toArray()
+        );
+    }
 }

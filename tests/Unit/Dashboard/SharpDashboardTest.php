@@ -26,7 +26,9 @@ class SharpDashboardTest extends SharpTestCase
         $this->assertEquals(["widget" => [
             "key" => "widget",
             "type" => "graph",
-            "display" => "bar"
+            "display" => "bar",
+            "ratioX" => 16,
+            "ratioY" => 9,
         ]], $dashboard->widgets());
     }
 
