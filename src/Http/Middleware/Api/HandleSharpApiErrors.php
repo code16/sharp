@@ -5,9 +5,10 @@ namespace Code16\Sharp\Http\Middleware\Api;
 use Closure;
 use Code16\Sharp\Exceptions\Auth\SharpAuthenticationException;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
-use Code16\Sharp\Exceptions\EntityList\InvalidEntityStateException;
+use Code16\Sharp\Exceptions\EntityList\SharpInvalidEntityStateException;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Exceptions\SharpException;
+use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
 
 class HandleSharpApiErrors
 {
@@ -46,7 +47,11 @@ class HandleSharpApiErrors
             return 403;
         }
 
-        if ($exception instanceof InvalidEntityStateException) {
+        if ($exception instanceof SharpInvalidEntityKeyException) {
+            return 404;
+        }
+
+        if ($exception instanceof SharpInvalidEntityStateException) {
             return 422;
         }
 

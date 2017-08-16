@@ -24,7 +24,7 @@ class Dashboard extends SharpDashboard
         )->addWidget(
             SharpPanelWidget::make("activeSpaceships")
                 ->setInlineTemplate("<h1>{{count}}</h1> spaceships in activity")
-                ->setLink('spaceships')
+                ->setLink('spaceship')
         )->addWidget(
             SharpPanelWidget::make("inactiveSpaceships")
                 ->setInlineTemplate("<h1>{{count}}</h1> inactive spaceships")

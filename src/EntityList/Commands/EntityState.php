@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\EntityList\Commands;
 
-use Code16\Sharp\Exceptions\EntityList\InvalidEntityStateException;
+use Code16\Sharp\Exceptions\EntityList\SharpInvalidEntityStateException;
 use Exception;
 
 /**
@@ -72,7 +72,7 @@ abstract class EntityState extends InstanceCommand
      * @param string $instanceId
      * @param array $params
      * @return array
-     * @throws InvalidEntityStateException
+     * @throws SharpInvalidEntityStateException
      */
     public function execute($instanceId, array $params = [])
     {
@@ -80,7 +80,7 @@ abstract class EntityState extends InstanceCommand
         $this->buildStates();
 
         if(!in_array($stateId, array_keys($this->states))) {
-            throw new InvalidEntityStateException($stateId);
+            throw new SharpInvalidEntityStateException($stateId);
         }
 
         return $this->updateState($instanceId, $stateId) ?: $this->refresh($instanceId);

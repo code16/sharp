@@ -134,6 +134,15 @@ class FormControllerTest extends BaseApiTest
     }
 
     /** @test */
+    public function invalid_entity_key_is_returned_as_404()
+    {
+        $this->buildTheWorld();
+
+        $this->json('get', '/sharp/api/form/notanvalidentity')
+            ->assertStatus(404);
+    }
+
+    /** @test */
     public function applicative_exception_is_returned_as_417()
     {
         $this->buildTheWorld();

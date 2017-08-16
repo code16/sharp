@@ -179,4 +179,13 @@ class EntityListControllerTest extends BaseApiTest
                 "paginated" => false
             ]]);
     }
+
+    /** @test */
+    public function invalid_entity_key_is_returned_as_404()
+    {
+        $this->buildTheWorld();
+
+        $this->json('get', '/sharp/api/list/notanvalidentity')
+            ->assertStatus(404);
+    }
 }
