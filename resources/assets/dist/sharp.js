@@ -36250,6 +36250,7 @@ var noop = function noop() {};
 
             opt.url = __WEBPACK_IMPORTED_MODULE_3__consts__["b" /* UPLOAD_URL */];
             opt.uploadMultiple = false;
+
             if (this.fileFilter) {
                 opt.acceptedFiles = {
                     extensions: this.fileFilter,

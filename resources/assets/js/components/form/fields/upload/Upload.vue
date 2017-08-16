@@ -41,6 +41,7 @@
 
                 opt.url = UPLOAD_URL;
                 opt.uploadMultiple = false;
+
                 if (this.fileFilter) {
                     opt.acceptedFiles = {
                         extensions: this.fileFilter,

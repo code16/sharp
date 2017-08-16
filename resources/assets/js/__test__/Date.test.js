@@ -10,7 +10,7 @@ describe('date-field',()=>{
         document.documentElement.lang = 'fr';
         document.body.innerHTML = `
             <div id="app">
-                <sharp-date value="2013-02-08 09:30:26.123+02:00" has-time :read-only="readOnly"></sharp-date>
+                <sharp-date value="2013-02-08 09:30:26.123+02:00" :has-time="!disableTime" :read-only="readOnly"></sharp-date>
             </div>
         `
     });
@@ -20,6 +20,20 @@ describe('date-field',()=>{
 
         expect(document.body.innerHTML).toMatchSnapshot();
     });
+
+    it('can mount Date field without TimePicker', async () => {
+        await createVm({
+            propsData: {
+                disableTime: true
+            }
+        });
+
+        expect(document.body.innerHTML).toMatchSnapshot();
+    });
+
+    it('expose appropriate props to TimePicker', async () => {
+        let $date = await createVm();
+    });
 });
 
 async function createVm() {
@@ -27,8 +41,7 @@ async function createVm() {
         el: '#app',
 
         mixins: [FakeInjections],
-        props: ['readOnly']
-
+        props: ['readOnly', 'disableTime']
     });
 
     await Vue.nextTick();
