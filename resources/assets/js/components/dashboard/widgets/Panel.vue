@@ -1,8 +1,6 @@
 <template>
     <div class="SharpWidgetPanel">
-        <a :href="link">
-            <sharp-template name="WidgetPanel" :template="template" :template-data="value.data"></sharp-template>
-        </a>
+        <sharp-template name="WidgetPanel" :template="template" :template-data="value.data"></sharp-template>
     </div>
 </template>
 
@@ -16,7 +14,6 @@
         props: {
             value: Object,
             template:String,
-            link:String
         }
     }
 </script>

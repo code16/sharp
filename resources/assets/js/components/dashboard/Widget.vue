@@ -1,13 +1,12 @@
 <template>
-    <article class="SharpWidget" :class="{'SharpCard':widgetType!=='graph'}" tabindex="0">
-        <div class="SharpCard__overview">
-            <div class="SharpCard__overview-about">
-                <component :is="widgetComp" v-bind="exposedProps"></component>
+    <article class="SharpWidget SharpCard" :class="{'SharpWidget--chart':widgetType=='graph', 'SharpWidget--link':hasLink}">
+        <component :is="hasLink ? 'a' : 'div'" :href="widgetProps.link" :class="{SharpWidget__link:hasLink}">
+            <div class="SharpCard__overview">
+                <div class="SharpCard__overview-about">
+                    <component :is="widgetComp" v-bind="exposedProps"></component>
+                </div>
             </div>
-        </div>
-        <footer class="SharpCard__footer">
-
-        </footer>
+        </component>
     </article>
 </template>
 <script>
@@ -29,6 +28,9 @@
             },
             exposedProps() {
                 return { ...this.widgetProps, value:this.value }
+            },
+            hasLink() {
+                return !!this.widgetProps.link;
             }
         },
     }

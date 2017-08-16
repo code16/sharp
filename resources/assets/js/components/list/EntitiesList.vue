@@ -195,10 +195,11 @@
                 }, {});
             },
             authorizationsByInstanceId() {
+
                 return this.data.items.reduce((res, {[this.idAttr]:id}) => {
                     res[id] = {
-                        view: this.authorizations.view.indexOf(id) !== -1,
-                        update: this.authorizations.update.indexOf(id) !== -1
+                        view: this.getAuthorizations({ type:'view', id }),
+                        update: this.getAuthorizations({ type:'update', id })
                     };
                     return res;
                 }, {});
@@ -254,7 +255,7 @@
             },
             setupActionBar() {
                 this.actionsBus.$emit('setup', {
-                    itemsCount: this.data.totalCount,
+                    itemsCount: this.data.totalCount || this.data.items.length,
                     filters: this.config.filters,
                     filtersValue: this.filtersValue,
                     commands: this.config.commands.filter(c=>c.authorization && c.type==='entity'),
@@ -295,13 +296,18 @@
             rowLink({[this.idAttr]:instanceId}) {
                 return `/sharp/form/${this.entityKey}/${instanceId}`;
             },
+            getAuthorizations({ type, id }) {
+                return typeof this.authorizations[type] === 'boolean'
+                    ? this.authorizations[type]
+                    : this.authorizations[type].indexOf(id) !== -1;
+            },
 
             /**
              * Events
              */
             pageChanged(page) {
                 this.page = page;
-                this.update();
+                this.update({ resetPage: false });
             },
             /**
              * Data operations
@@ -338,8 +344,9 @@
                         }
                     })
             },
-            update() {
-                this.page>1 && (this.page=1);
+            update({ resetPage=true }={}) {
+                if(resetPage && this.page>1)
+                    this.page=1;
                 this.updateData();
                 this.updateHistory();
             },
