@@ -1,6 +1,7 @@
 <template>
     <div>
         <h2 v-if="title">{{title}}</h2>
+        <sharp-legend :datasets="value.datasets"></sharp-legend>
         <div :class="classes" :style="styles">
             <sharp-chartjs :comp="chartComp" :data="data" :options="options"
                            :styles="{}" cssClasses="SharpWidgetChart__inner">
@@ -13,6 +14,7 @@
     // Removed because Vue duplication
     import { Bar, Line, Pie } from 'vue-chartjs';
     import Chartjs from './Chartjs';
+    import Legend from './Legend';
 
     const noop = ()=>{};
 
@@ -20,7 +22,8 @@
         name:'SharpWidgetChart',
 
         components: {
-            [Chartjs.name]:Chartjs
+            [Chartjs.name]:Chartjs,
+            [Legend.name]:Legend
         },
 
         props: {
@@ -49,6 +52,9 @@
                     title: {
                         display: false
                     },
+                    legend: {
+                        display: false
+                    },
                     maintainAspectRatio:false,
                     legendCallback: noop
                 }
@@ -69,7 +75,7 @@
         methods: {
             datasetColor({ color }) {
                 return this.display==='line'
-                    ? { borderColor: color }
+                    ? { borderColor: color, fill: false }
                     : { backgroundColor: color };
             }
         },

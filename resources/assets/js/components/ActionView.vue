@@ -1,12 +1,18 @@
 <template>
     <div class="SharpActionView">
         <div class="container">
-            <component v-if="barComp" :is="barComp"></component>
-            <slot></slot>
-            <sharp-modal v-for="(modal,id) in mainModalsData" :key="id"
-                         v-bind="modal.props" @ok="modal.okCallback" @hidden="modal.hiddenCallback">
-                {{modal.text}}
-            </sharp-modal>
+            <template v-if="showErrorPage">
+                <h1>Erreur {{errorPageData.status}}</h1>
+                <p>{{errorPageData.message}}</p>
+            </template>
+            <template v-else>
+                <component v-if="barComp" :is="barComp"></component>
+                <slot></slot>
+                <sharp-modal v-for="(modal,id) in mainModalsData" :key="id"
+                             v-bind="modal.props" @ok="modal.okCallback" @hidden="modal.hiddenCallback">
+                    {{modal.text}}
+                </sharp-modal>
+            </template>
         </div>
     </div>
 </template>
@@ -17,6 +23,7 @@
 
     import Modal from './Modal';
     import Vue from 'vue';
+    import axios from 'axios';
 
     const noop=()=>{};
 
@@ -30,6 +37,7 @@
         provide() {
             return {
                 actionsBus: new EventBus({name:'SharpActionsEventBus'}),
+                axiosInstance: axios.create()
             }
         },
 
@@ -43,7 +51,9 @@
         data() {
             return {
                 mainModalsData: {},
-                mainModalId: 0
+                mainModalId: 0,
+                showErrorPage: false,
+                errorPageData: null
             }
         },
         computed: {
@@ -71,8 +81,20 @@
                 this.mainModalId++;
             }
         },
-        mounted() {
-            this._provided.actionsBus.$on('showMainModal', this.showMainModal);
+        created() {
+            let { actionsBus, axiosInstance } = this._provided;
+
+            actionsBus.$on('showMainModal', this.showMainModal);
+            axiosInstance.interceptors.response.use(c=>c, error=>{
+                let { response: {status, data} } = error;
+                if(status === 404) {
+                    this.showErrorPage = true;
+                    this.errorPageData = {
+                        status, message: data.message
+                    }
+                }
+                return Promise.reject(error);
+            });
         }
     }
 </script>

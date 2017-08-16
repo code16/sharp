@@ -101,7 +101,9 @@ $grid-gutter-widths: (
   @import 'components/dashboard/Chart';
   @import 'components/dashboard/Panel';
   @import 'components/dashboard/Dashboard';
+  @import 'components/dashboard/Legend';
   @import 'components/Card';
+
 
   input[type="number"].hide-controls {
     &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {

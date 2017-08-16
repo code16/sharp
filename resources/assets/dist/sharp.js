@@ -21547,27 +21547,23 @@ module.exports = defaults;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__helpers_querystring__ = __webpack_require__(56);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins_Localization__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__helpers_querystring__ = __webpack_require__(56);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins_Localization__ = __webpack_require__(32);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 
 
 
 
-
-
 /* harmony default export */ __webpack_exports__["a"] = ({
-    inject: ['mainLoading'],
+    inject: ['mainLoading', 'axiosInstance'],
+
     data: function data() {
         return {
             data: null,
             layout: null,
 
-            ready: false,
-            axiosInstance: __WEBPACK_IMPORTED_MODULE_0_axios___default.a.create()
+            ready: false
         };
     },
 
@@ -21580,7 +21576,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return this.axiosInstance.get(this.apiPath, {
                 params: this.apiParams,
                 paramsSerializer: function paramsSerializer(p) {
-                    return __WEBPACK_IMPORTED_MODULE_1__helpers_querystring__["b" /* serialize */](p, { urlSeparator: false });
+                    return __WEBPACK_IMPORTED_MODULE_0__helpers_querystring__["b" /* serialize */](p, { urlSeparator: false });
                 }
             }).then(function (response) {
                 _this.mount(response.data);
@@ -21617,7 +21613,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         }, function (error) {
             _this2.mainLoading.$emit('hide');
             var modalOptions = {
-                title: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__mixins_Localization__["b" /* lang */])('modals.' + error.response.status),
+                title: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__mixins_Localization__["b" /* lang */])('modals.' + error.response.status),
                 text: error.response.data.message,
                 isError: true
             };
@@ -21635,6 +21631,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                         okCloseOnly: true
                     }));
                     break;
+
             }
             return Promise.reject(error);
         });
@@ -32710,6 +32707,8 @@ module.exports = function spread(callback) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Modal__ = __webpack_require__(85);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_axios__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_axios__);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
@@ -32729,6 +32728,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -32744,7 +32750,8 @@ var noop = function noop() {};
 
     provide: function provide() {
         return {
-            actionsBus: new __WEBPACK_IMPORTED_MODULE_1__EventBus__["a" /* default */]({ name: 'SharpActionsEventBus' })
+            actionsBus: new __WEBPACK_IMPORTED_MODULE_1__EventBus__["a" /* default */]({ name: 'SharpActionsEventBus' }),
+            axiosInstance: __WEBPACK_IMPORTED_MODULE_4_axios___default.a.create()
         };
     },
 
@@ -32759,7 +32766,9 @@ var noop = function noop() {};
     data: function data() {
         return {
             mainModalsData: {},
-            mainModalId: 0
+            mainModalId: 0,
+            showErrorPage: false,
+            errorPageData: null
         };
     },
 
@@ -32798,8 +32807,30 @@ var noop = function noop() {};
             this.mainModalId++;
         }
     },
-    mounted: function mounted() {
-        this._provided.actionsBus.$on('showMainModal', this.showMainModal);
+    created: function created() {
+        var _this2 = this;
+
+        var _provided = this._provided,
+            actionsBus = _provided.actionsBus,
+            axiosInstance = _provided.axiosInstance;
+
+
+        actionsBus.$on('showMainModal', this.showMainModal);
+        axiosInstance.interceptors.response.use(function (c) {
+            return c;
+        }, function (error) {
+            var _error$response = error.response,
+                status = _error$response.status,
+                data = _error$response.data;
+
+            if (status === 404) {
+                _this2.showErrorPage = true;
+                _this2.errorPageData = {
+                    status: status, message: data.message
+                };
+            }
+            return Promise.reject(error);
+        });
     }
 });
 
@@ -33656,10 +33687,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_chartjs__ = __webpack_require__(513);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_chartjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_chartjs__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Chartjs__ = __webpack_require__(530);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Legend__ = __webpack_require__(622);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _components;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
 //
 //
 //
@@ -33676,12 +33711,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 var noop = function noop() {};
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpWidgetChart',
 
-    components: _defineProperty({}, __WEBPACK_IMPORTED_MODULE_1__Chartjs__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_1__Chartjs__["a" /* default */]),
+    components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_1__Chartjs__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_1__Chartjs__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_2__Legend__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_2__Legend__["a" /* default */]), _components),
 
     props: {
         display: String,
@@ -33709,6 +33745,9 @@ var noop = function noop() {};
                 title: {
                     display: false
                 },
+                legend: {
+                    display: false
+                },
                 maintainAspectRatio: false,
                 legendCallback: noop
             };
@@ -33730,7 +33769,7 @@ var noop = function noop() {};
         datasetColor: function datasetColor(_ref) {
             var color = _ref.color;
 
-            return this.display === 'line' ? { borderColor: color } : { backgroundColor: color };
+            return this.display === 'line' ? { borderColor: color, fill: false } : { backgroundColor: color };
         }
     },
     mounted: function mounted() {}
@@ -81252,7 +81291,11 @@ if (false) {
 
 "use strict";
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [(_vm.title) ? _c('h2', [_vm._v(_vm._s(_vm.title))]) : _vm._e(), _vm._v(" "), _c('div', {
+  return _c('div', [(_vm.title) ? _c('h2', [_vm._v(_vm._s(_vm.title))]) : _vm._e(), _vm._v(" "), _c('sharp-legend', {
+    attrs: {
+      "datasets": _vm.value.datasets
+    }
+  }), _vm._v(" "), _c('div', {
     class: _vm.classes,
     style: (_vm.styles)
   }, [_c('sharp-chartjs', {
@@ -81263,7 +81306,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "styles": {},
       "cssClasses": "SharpWidgetChart__inner"
     }
-  })], 1)])
+  })], 1)], 1)
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -82721,7 +82764,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     staticClass: "SharpActionView"
   }, [_c('div', {
     staticClass: "container"
-  }, [(_vm.barComp) ? _c(_vm.barComp, {
+  }, [(_vm.showErrorPage) ? [_c('h1', [_vm._v("Erreur " + _vm._s(_vm.errorPageData.status))]), _vm._v(" "), _c('p', [_vm._v(_vm._s(_vm.errorPageData.message))])] : [(_vm.barComp) ? _c(_vm.barComp, {
     tag: "component"
   }) : _vm._e(), _vm._v(" "), _vm._t("default"), _vm._v(" "), _vm._l((_vm.mainModalsData), function(modal, id) {
     return _c('sharp-modal', _vm._b({
@@ -82730,8 +82773,8 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         "ok": modal.okCallback,
         "hidden": modal.hiddenCallback
       }
-    }, 'sharp-modal', modal.props, false), [_vm._v("\n            " + _vm._s(modal.text) + "\n        ")])
-  })], 2)])
+    }, 'sharp-modal', modal.props, false), [_vm._v("\n                " + _vm._s(modal.text) + "\n            ")])
+  })]], 2)])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -83904,6 +83947,122 @@ __webpack_require__(176);
 __webpack_require__(177);
 module.exports = __webpack_require__(175);
 
+
+/***/ }),
+/* 612 */,
+/* 613 */,
+/* 614 */,
+/* 615 */,
+/* 616 */,
+/* 617 */,
+/* 618 */,
+/* 619 */,
+/* 620 */,
+/* 621 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    name: 'SharpLegend',
+    props: {
+        datasets: Array
+    }
+});
+
+/***/ }),
+/* 622 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_node_modules_vue_loader_lib_selector_type_script_index_0_Legend_vue__ = __webpack_require__(621);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_5bdc5a6b_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_Legend_vue__ = __webpack_require__(623);
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+
+/* template */
+
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_node_modules_vue_loader_lib_selector_type_script_index_0_Legend_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_5bdc5a6b_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_Legend_vue__["a" /* default */],
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/dashboard/widgets/chart/Legend.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Legend.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5bdc5a6b", Component.options)
+  } else {
+    hotAPI.reload("data-v-5bdc5a6b", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
+
+
+/***/ }),
+/* 623 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "SharpLegend"
+  }, [_c('div', {
+    staticClass: "SharpLegend__list row"
+  }, _vm._l((_vm.datasets), function(dataset) {
+    return _c('div', {
+      staticClass: "SharpLegend__item col-sm"
+    }, [_c('span', {
+      staticClass: "SharpLegend__color",
+      style: ({
+        background: dataset.color
+      })
+    }), _vm._v(" "), _c('span', {
+      staticClass: "SharpLegend__text"
+    }, [_vm._v(_vm._s(dataset.label))])])
+  }))])
+}
+var staticRenderFns = []
+render._withStripped = true
+var esExports = { render: render, staticRenderFns: staticRenderFns }
+/* harmony default export */ __webpack_exports__["a"] = (esExports);
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-5bdc5a6b", esExports)
+  }
+}
 
 /***/ })
 /******/ ]);

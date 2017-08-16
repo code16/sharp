@@ -1,18 +1,16 @@
-import axios from 'axios';
-
 import * as qs from '../helpers/querystring';
 
 import { lang } from '../mixins/Localization';
 
 export default {
-    inject:['mainLoading'],
+    inject:['mainLoading', 'axiosInstance'],
+    
     data() {
         return {
             data:null,
             layout:null,
 
             ready:false,
-            axiosInstance: axios.create()
         }
     },
     methods: {
@@ -71,6 +69,7 @@ export default {
                     okCloseOnly:true,
                 });
                     break;
+                
             }
             return Promise.reject(error);
         });

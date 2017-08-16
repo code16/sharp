@@ -1,0 +1,18 @@
+.SharpLegend {
+  justify-content: center;
+  display:flex;
+
+  &__item {
+    white-space: nowrap;
+  }
+
+  &__color {
+    display: inline-block;
+    width: 1rem;
+    height: .5rem;
+    vertical-align:center;
+  }
+  &__text {
+    white-space: nowrap;
+  }
+}
