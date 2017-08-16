@@ -85,7 +85,7 @@ class SharpDashboardTest extends SharpTestCase
                 "key" => "widget",
                 "datasets" => [
                     [
-                        "values" => [10,20,30],
+                        "data" => [10,20,30],
                         "label" => "test",
                         "color" => "blue"
                     ]
@@ -120,11 +120,11 @@ class SharpDashboardTest extends SharpTestCase
                 "key" => "widget",
                 "datasets" => [
                     [
-                        "values" => [10,20,30],
+                        "data" => [10,20,30],
                         "label" => "test",
                         "color" => "blue"
                     ], [
-                        "values" => [40,50,60],
+                        "data" => [40,50,60],
                         "label" => "test2",
                         "color" => "red"
                     ]
