@@ -1,7 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`tags-field can mout Tags field 1`] = `
-"
-            <div id=\\"app\\"><div tabindex=\\"0\\" class=\\"multiselect SharpTags\\"><svg width=\\"10\\" height=\\"5\\" viewBox=\\"0 0 10 5\\" fill-rule=\\"evenodd\\" class=\\"multiselect__select\\"><path d=\\"M10 0L5 5 0 0z\\"></path></svg>  <div class=\\"multiselect__tags\\"><div class=\\"multiselect__tags-wrap\\" style=\\"display: none;\\"></div> <!----> <div class=\\"multiselect__spinner\\" style=\\"display: none;\\"></div> <input name=\\"\\" type=\\"text\\" autocomplete=\\"off\\" placeholder=\\"placeholder\\" class=\\"multiselect__input\\"> <!----></div> <div class=\\"multiselect__content-wrapper\\" style=\\"max-height: 300px; display: none;\\"><ul class=\\"multiselect__content\\" style=\\"display: inline-block;\\"> <!----> <li class=\\"multiselect__element\\"><span data-select=\\"\\" data-selected=\\"\\" data-deselect=\\"\\" class=\\"multiselect__option multiselect__option--highlight\\"><span>AAA</span></span> <!----></li><li class=\\"multiselect__element\\"><span data-select=\\"\\" data-selected=\\"\\" data-deselect=\\"\\" class=\\"multiselect__option\\"><span>BBB</span></span> <!----></li> <li style=\\"display: none;\\"><span class=\\"multiselect__option\\">No elements found. Consider changing the search query.</span></li> </ul></div></div></div>
-        "
+<div id="app">
+    <div tabindex="0" class="multiselect SharpTags"><svg width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd" class="multiselect__select"><path d="M10 0L5 5 0 0z"></path></svg>
+        <div class="multiselect__tags">
+            <div class="multiselect__tags-wrap" style="display: none;"></div>
+            <!---->
+            <div class="multiselect__spinner" style="display: none;"></div> <input name="" type="text" autocomplete="off" placeholder="placeholder" class="multiselect__input">
+            <!---->
+        </div>
+        <div class="multiselect__content-wrapper" style="max-height: 300px; display: none;">
+            <ul class="multiselect__content" style="display: inline-block;">
+                <!---->
+                <li class="multiselect__element"><span data-select="" data-selected="" data-deselect="" class="multiselect__option multiselect__option--highlight"><span>AAA</span></span>
+                    <!---->
+                </li>
+                <li class="multiselect__element"><span data-select="" data-selected="" data-deselect="" class="multiselect__option"><span>BBB</span></span>
+                    <!---->
+                </li>
+                <li style="display: none;"><span class="multiselect__option">No elements found. Consider changing the search query.</span></li>
+            </ul>
+        </div>
+    </div>
+</div>
 `;

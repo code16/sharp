@@ -1,7 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`number-field can mount Number field 1`] = `
-"
-            <div id=\\"app\\"><input type=\\"number\\" placeholder=\\"Entrez un nombre\\" class=\\"SharpText hide-controls\\" step=\\"1\\" min=\\"0\\" max=\\"10\\"></div>
-        "
+<div id="app">
+    <input type="number" placeholder="Entrez un nombre" class="SharpText hide-controls" step="1" min="0" max="10"></div>
 `;

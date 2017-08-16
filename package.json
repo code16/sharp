@@ -9,6 +9,9 @@
       "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
       ".*\\.(vue)$": "<rootDir>/node_modules/jest-vue-preprocessor"
     },
+    "snapshotSerializers": [
+      "<rootDir>/resources/assets/js/__test__/utils/htmlSnapshotBeautifier.js"
+    ],
     "verbose": true,
     "testPathIgnorePatterns": [
       "/node_modules/",
@@ -38,6 +41,7 @@
     "jest": "^20.0.4",
     "jest-vue-preprocessor": "^1.0.1",
     "jquery": "^3.1.0",
+    "js-beautify": "^1.6.14",
     "laravel-mix": "^0.12.1",
     "mime-types": "^2.1.15",
     "moment": "^2.18.1",

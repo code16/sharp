@@ -1,7 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`textarea-field can mount Textarea field 1`] = `
-"
-            <div id=\\"app\\"><textarea rows=\\"30\\" placeholder=\\"Entrez du texte\\" disabled=\\"disabled\\" class=\\"SharpTextarea\\"></textarea></div>
-        "
+<div id="app">
+    <textarea rows="30" placeholder="Entrez du texte" disabled="disabled" class="SharpTextarea"></textarea></div>
 `;
