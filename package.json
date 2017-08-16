@@ -61,11 +61,13 @@
     "carbon-icons": "^6.0.6",
     "chart.js": "^2.6.0",
     "font-awesome": "^4.7.0",
+    "global": "^4.3.2",
     "moxios": "^0.4.0",
     "vue": "^2.3.4",
     "vue-chartjs": "^2.8.0",
     "vue-loader": "^13.0.2",
     "vue-router": "^2.7.0",
-    "vue-template-compiler": "^2.4.2"
+    "vue-template-compiler": "^2.4.2",
+    "yarn": "^0.27.5"
   }
 }
