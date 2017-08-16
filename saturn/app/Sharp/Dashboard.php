@@ -4,8 +4,8 @@ namespace App\Sharp;
 
 use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
 use Code16\Sharp\Dashboard\SharpDashboard;
+use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
-use Code16\Sharp\Dashboard\Widgets\SharpLineGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Illuminate\Support\Facades\DB;
 
@@ -15,12 +15,12 @@ class Dashboard extends SharpDashboard
     function buildWidgets()
     {
         $this->addWidget(
-//            SharpBarGraphWidget::make("capacities")
-//                ->setTitle("Spaceships by capacity")
+            SharpBarGraphWidget::make("capacities")
+                ->setTitle("Spaceships by capacity")
 //            SharpPieGraphWidget::make("capacities")
 //                ->setTitle("Spaceships by capacity")
-            SharpLineGraphWidget::make("capacities")
-                ->setTitle("Spaceships by capacity")
+//            SharpLineGraphWidget::make("capacities")
+//                ->setTitle("Spaceships by capacity")
         )->addWidget(
             SharpPanelWidget::make("activeSpaceships")
                 ->setInlineTemplate("<h1>{{count}}</h1> spaceships in activity")
