@@ -8,6 +8,7 @@ exports[`date-field can mount "picker displayed" Date field 1`] = `
             <!---->
         </div>
     </div>
+    <div></div>
 </div>
 `;
 
@@ -19,6 +20,7 @@ exports[`date-field can mount "read only" Date field 1`] = `
             <!---->
         </div>
     </div>
+    <div></div>
 </div>
 `;
 
@@ -140,6 +142,7 @@ exports[`date-field can mount Date field 1`] = `
             </span>
         </div>
     </div>
+    <div></div>
 </div>
 `;
 
@@ -227,5 +230,6 @@ exports[`date-field can mount Date field without TimePicker 1`] = `
             <!---->
         </div>
     </div>
+    <div></div>
 </div>
 `;

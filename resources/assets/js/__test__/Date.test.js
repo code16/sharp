@@ -23,6 +23,7 @@ describe('date-field',()=>{
                             @input="inputEmitted"
                             >
                 </sharp-date>
+                <div ref="outsideElement"></div>
             </div>
         `
     });
@@ -211,7 +212,8 @@ describe('date-field',()=>{
     it('increase/decrease date on keydown up/down', async () => {
         let $date = await createVm({
             propsData: {
-                displayFormat:'DD/MM/YYYY HH:mm'
+                displayFormat:'DD/MM/YYYY HH:mm',
+                stepTime: 10
             }
         });
 
@@ -221,12 +223,137 @@ describe('date-field',()=>{
 
         $date.$on('input', inputEmitted);
 
-        input.setSelectionRange(1,1);
-        input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 38 })); //UP
 
+        // Day change
+        input.setSelectionRange(1,1);
+
+        input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 38 })); //UP
         expect(inputEmitted).toHaveBeenCalledTimes(1);
         expect(inputEmitted.mock.calls[0][0]).toBeInstanceOf(moment);
-        expect(inputEmitted.mock.calls[0][0].toDate()).toEqual(new Date(1997, 7, 20, 12, 10));
+        expect(inputEmitted.mock.calls[0][0].toDate()).toEqual(new Date(1996, 7, 21, 12, 11));
+
+        input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 40 })); //DOWN
+        expect(inputEmitted).toHaveBeenCalledTimes(2);
+        expect(inputEmitted.mock.calls[1][0]).toBeInstanceOf(moment);
+        expect(inputEmitted.mock.calls[1][0].toDate()).toEqual(new Date(1996, 7, 20, 12, 11));
+
+
+        // Month change
+        input.setSelectionRange(3,3);
+
+        input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 38 })); //UP
+        expect(inputEmitted).toHaveBeenCalledTimes(3);
+        expect(inputEmitted.mock.calls[2][0].toDate()).toEqual(new Date(1996, 8, 20, 12, 11));
+
+        input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 40 })); //DOWN
+        expect(inputEmitted).toHaveBeenCalledTimes(4);
+        expect(inputEmitted.mock.calls[3][0].toDate()).toEqual(new Date(1996, 7, 20, 12, 11));
+
+
+        // Year change
+        input.setSelectionRange(6,6);
+
+        input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 38 })); //UP
+        expect(inputEmitted).toHaveBeenCalledTimes(5);
+        expect(inputEmitted.mock.calls[4][0].toDate()).toEqual(new Date(1997, 7, 20, 12, 11));
+
+        input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 40 })); //DOWN
+        expect(inputEmitted).toHaveBeenCalledTimes(6);
+        expect(inputEmitted.mock.calls[5][0].toDate()).toEqual(new Date(1996, 7, 20, 12, 11));
+
+
+        // Hours change
+        input.setSelectionRange(11,11);
+
+        input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 38 })); //UP
+        expect(inputEmitted).toHaveBeenCalledTimes(7);
+        expect(inputEmitted.mock.calls[6][0].toDate()).toEqual(new Date(1996, 7, 20, 13, 11));
+
+        input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 40 })); //DOWN
+        expect(inputEmitted).toHaveBeenCalledTimes(8);
+        expect(inputEmitted.mock.calls[7][0].toDate()).toEqual(new Date(1996, 7, 20, 12, 11));
+
+
+        // Minutes change
+        input.setSelectionRange(14,14);
+
+        input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 38 })); //UP
+        expect(inputEmitted).toHaveBeenCalledTimes(9);
+        expect(inputEmitted.mock.calls[8][0].toDate()).toEqual(new Date(1996, 7, 20, 12, 20));
+
+        input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 40 })); //DOWN
+        expect(inputEmitted).toHaveBeenCalledTimes(10);
+        expect(inputEmitted.mock.calls[9][0].toDate()).toEqual(new Date(1996, 7, 20, 12, 10));
+    });
+
+    it('increase/decrease minute properly', async () => {
+        let $date = await createVm({
+            propsData: {
+                displayFormat:'DD/MM/YYYY HH:mm',
+                stepTime: 10
+            }
+        });
+
+        let { input } = $date.$refs;
+
+        let inputEmitted = jest.fn();
+
+        $date.$on('input', inputEmitted);
+
+        input.setSelectionRange(14,14);
+        input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 38 })); //UP
+        expect(inputEmitted).toHaveBeenCalledTimes(1);
+        expect(inputEmitted.mock.calls[0][0].toDate()).toEqual(new Date(1996, 7, 20, 12, 20));
+
+        input.value = '20/08/1996 12:11';
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+
+        input.setSelectionRange(14,14);
+        input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 40 })); //DOWN
+        expect(inputEmitted).toHaveBeenCalledTimes(3);
+        expect(inputEmitted.mock.calls[2][0].toDate()).toEqual(new Date(1996, 7, 20, 12, 10));
+    })
+
+    it('select text properly after increase/descrease', async () => {
+        let $date = await createVm({
+            propsData: {
+                displayFormat:'DD/MM/YYYY HH:mm',
+            }
+        });
+
+        let { input } = $date.$refs;
+
+        input.setSelectionRange(1,1);
+        input.setSelectionRange = jest.fn();
+        input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 38 })); //UP
+
+        await Vue.nextTick();
+
+        expect(input.setSelectionRange).toHaveBeenCalledTimes(1);
+        expect(input.setSelectionRange).toHaveBeenCalledWith(0,2);
+    });
+
+    it('show on focus', async () => {
+        let $date = await createVm();
+
+        let { input } = $date.$refs;
+
+        input.focus();
+
+        expect($date.showPicker).toBe(true);
+    });
+
+    it('hide on click outside', async () => {
+        let $date = await createVm();
+
+        let { $root:vm } = $date;
+        let { outsideElement } = vm.$refs;
+
+        $date.showPicker = true;
+
+        outsideElement.click();
+
+        expect($date.showPicker).toBe(false);
     });
 });
 

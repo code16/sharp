@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-const injectedComponents = ['$field'];
+const injectedComponents = ['$field', '$form'];
 
 export default {
     provide() {

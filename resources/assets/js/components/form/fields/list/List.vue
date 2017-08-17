@@ -39,7 +39,7 @@
             </transition-group>
             <template slot="footer">
                 <button v-if="!disabled && showAddButton" type="button" :key="-1"
-                        class="SharpButton SharpButton--secondary SharpList__add-button" style=""
+                        class="SharpButton SharpButton--secondary SharpList__add-button"
                         @click="add">{{addText}}</button>
             </template>
         </draggable>
