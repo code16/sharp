@@ -1,13 +1,13 @@
 import Vue from 'vue/dist/vue.common';
 import Select from '../components/form/fields/Select.vue';
 
-import { FakeI18n } from './utils';
+import { MockI18n } from './utils';
 
 
 
 describe('select-field',()=>{
     Vue.component('sharp-select', Select);
-    Vue.use(FakeI18n);
+    Vue.use(MockI18n);
 
     beforeEach(()=>{
         document.body.innerHTML = `

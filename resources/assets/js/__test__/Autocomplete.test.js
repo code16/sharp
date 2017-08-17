@@ -5,12 +5,12 @@ import SearchStrategy from '../app/models/SearchStrategy';
 import { nextRequestFulfilled } from './utils/moxios-utils';
 import moxios from 'moxios';
 
-import { FakeI18n } from './utils';
+import { MockI18n } from './utils';
 
 
 describe('autocomplete-field', ()=>{
     Vue.component('sharp-autocomplete', Autocomplete);
-    Vue.use(FakeI18n);
+    Vue.use(MockI18n);
 
     describe('common & local', ()=> {
         beforeEach(()=>{

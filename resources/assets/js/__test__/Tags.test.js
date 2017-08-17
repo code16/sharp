@@ -1,11 +1,11 @@
 import Vue from 'vue/dist/vue.common.js';
 import Tags from '../components/form/fields/Tags.vue';
 
-import { FakeI18n } from './utils';
+import { MockI18n } from './utils';
 
 describe('tags-field', () => {
     Vue.component('sharp-tags', Tags);
-    Vue.use(FakeI18n);
+    Vue.use(MockI18n);
 
     beforeEach(()=>{
         document.body.innerHTML = `

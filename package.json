@@ -12,6 +12,9 @@
     "snapshotSerializers": [
       "<rootDir>/resources/assets/js/__test__/utils/htmlSnapshotBeautifier.js"
     ],
+    "moduleNameMapper": {
+      "\\.(css|less)$": "<rootDir>/resources/assets/js/__test__/__mocks__/styleMock.js"
+    },
     "verbose": true,
     "testPathIgnorePatterns": [
       "/node_modules/",

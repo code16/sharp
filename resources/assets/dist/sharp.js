@@ -35864,9 +35864,6 @@ var noop = function noop() {};
             this.lastIndex = this.list.length;
             // make value === list, to update changes
             this.$emit('input', this.list);
-        },
-        beforeTransition: function beforeTransition(el, done) {
-            console.log(el);
         }
     },
     created: function created() {
@@ -37419,6 +37416,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 
@@ -37436,9 +37436,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         ClickOutside: __WEBPACK_IMPORTED_MODULE_0__directives_ClickOutside__["a" /* default */]
     },
     methods: {
-        hide: function hide() {
-            this.$emit('change', false);
-        }
+        hide: function hide() {}
     }
 });
 
@@ -80423,7 +80421,20 @@ if (false) {
 
 "use strict";
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('transition', {
+  return _c('div', [_c('div', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.show),
+      expression: "show"
+    }],
+    staticClass: "SharpViewPanel__glasspane",
+    on: {
+      "click": function($event) {
+        _vm.$emit('change', false)
+      }
+    }
+  }), _vm._v(" "), _c('transition', {
     attrs: {
       "enter-class": "SharpViewPanel--collapsed",
       "enter-active-class": "SharpViewPanel--expanding",
@@ -80438,11 +80449,6 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       rawName: "v-show",
       value: (_vm.show),
       expression: "show"
-    }, {
-      name: "click-outside",
-      rawName: "v-click-outside",
-      value: (_vm.hide),
-      expression: "hide"
     }],
     staticClass: "SharpViewPanel"
   }, [(_vm.content) ? _c('iframe', {
@@ -80456,7 +80462,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "width": "100%",
       "frameborder": "0"
     }
-  }) : _vm._e()])])
+  }) : _vm._e()])])], 1)
 }
 var staticRenderFns = []
 render._withStripped = true

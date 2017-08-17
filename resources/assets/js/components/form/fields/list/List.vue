@@ -190,11 +190,6 @@
                 // make value === list, to update changes
                 this.$emit('input', this.list);
             },
-
-            beforeTransition(el,done) {
-                console.log(el);
-            }
-
         },
         created() {
             this.initList();

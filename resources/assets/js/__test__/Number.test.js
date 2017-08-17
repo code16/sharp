@@ -1,7 +1,7 @@
 import Vue from 'vue/dist/vue';
 import NumberInput from '../components/form/fields/Number.vue';
 
-import { FakeInjections } from './utils';
+import { MockInjections } from './utils';
 
 
 describe('number-field',()=>{
@@ -26,7 +26,7 @@ describe('number-field',()=>{
 async function createVm(customOptions={}) {
     const vm = new Vue({
         el: '#app',
-        mixins: [FakeInjections, customOptions],
+        mixins: [MockInjections, customOptions],
     });
 
     await Vue.nextTick();

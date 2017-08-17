@@ -2,7 +2,7 @@ import Vue from 'vue/dist/vue.common';
 import DateField from '../components/form/fields/date/Date.vue';
 import moment from 'moment';
 
-import { FakeInjections, QueryComponent } from './utils';
+import { MockInjections, QueryComponent } from './utils';
 
 describe('date-field',()=>{
     Vue.component('sharp-date', DateField);
@@ -361,7 +361,7 @@ async function createVm(customOptions={}) {
     let vm = new Vue({
         el: '#app',
 
-        mixins: [customOptions, FakeInjections],
+        mixins: [customOptions, MockInjections],
         props: ['readOnly', 'disableTime','disableDate' ,'displayFormat', 'stepTime', 'minTime', 'maxTime'],
 
         'extends': {

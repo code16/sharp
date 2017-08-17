@@ -1,7 +1,7 @@
 import Vue from 'vue/dist/vue';
 import Text from '../components/form/fields/Text.vue';
 
-import FakeInjections from './utils/FakeInjections';
+import { MockInjections } from './utils';
 
 describe('text-field', () => {
     Vue.component('sharp-text', Text);
@@ -54,7 +54,7 @@ async function createVm(customOptions={}) {
 
     const vm = new Vue({
         el: '#app',
-        mixins: [FakeInjections, customOptions],
+        mixins: [MockInjections, customOptions],
 
         props:['inputType']
     });
