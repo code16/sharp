@@ -35177,8 +35177,7 @@ var Tag = function (_LabelledItem2) {
     },
     data: function data() {
         return {
-            showPicker: false,
-            force: false
+            showPicker: false
         };
     },
 
@@ -35293,7 +35292,6 @@ var Tag = function (_LabelledItem2) {
         },
         forceShowPicker: function forceShowPicker() {
             this.showPicker = true;
-            //this.force = true;
         }
     },
     mounted: function mounted() {

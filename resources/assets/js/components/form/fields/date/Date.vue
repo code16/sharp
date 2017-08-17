@@ -76,8 +76,7 @@
         },
         data() {
             return {
-                showPicker:false,
-                force:false
+                showPicker:false
             }
         },
         computed: {
@@ -182,7 +181,6 @@
             },
             forceShowPicker() {
                 this.showPicker = true;
-                //this.force = true;
             }
         },
         mounted() {
