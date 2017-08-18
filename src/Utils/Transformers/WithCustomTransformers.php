@@ -27,9 +27,11 @@ trait WithCustomTransformers
      */
     function setCustomTransformer(string $attribute, $transformer)
     {
-        $transformer = $transformer instanceof Closure
-            ? $this->normalizeToSharpAttributeTransformer($transformer)
-            : app($transformer);
+        if(!$transformer instanceof SharpAttributeTransformer) {
+            $transformer = $transformer instanceof Closure
+                ? $this->normalizeToSharpAttributeTransformer($transformer)
+                : app($transformer);
+        }
 
         $this->transformers[$attribute] = $transformer;
 

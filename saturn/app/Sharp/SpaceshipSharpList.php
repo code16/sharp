@@ -11,14 +11,14 @@ use App\Sharp\Filters\SpaceshipTypeFilter;
 use App\Sharp\States\SpaceshipEntityState;
 use App\Spaceship;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
-use Code16\Sharp\EntityList\Eloquent\WithEntityListEloquentTransformers;
+use Code16\Sharp\EntityList\Eloquent\Transformers\SharpUploadModelAttributeTransformer;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 class SpaceshipSharpList extends SharpEntityList
 {
-    use WithCustomTransformers, WithEntityListEloquentTransformers;
+    use WithCustomTransformers;
 
     function buildListDataContainers()
     {
@@ -122,7 +122,7 @@ class SpaceshipSharpList extends SharpEntityList
             ->setCustomTransformer("pilots.name", function($spaceship) {
                 return $spaceship->pilots->pluck("name")->implode("<br>");
             })
-            ->setUploadTransformer("picture", 100)
+            ->setCustomTransformer("picture", new SharpUploadModelAttributeTransformer(100))
             ->transform(
                 $spaceships->with("picture", "type", "pilots")
                     ->paginate(10, ["spaceships.*"])

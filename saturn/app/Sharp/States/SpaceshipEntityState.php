@@ -24,4 +24,8 @@ class SpaceshipEntityState extends EntityState
 
         return $this->refresh($instanceId);
     }
+
+    public function authorizeFor($instanceId): bool {
+        return $instanceId % 2 == 0;
+    }
 }

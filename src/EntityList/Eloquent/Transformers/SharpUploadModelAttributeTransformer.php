@@ -2,15 +2,16 @@
 
 namespace Code16\Sharp\EntityList\Eloquent\Transformers;
 
+use Code16\Sharp\Exceptions\SharpException;
+use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 
-class EloquentEntityListUploadTransformer implements SharpAttributeTransformer
+/**
+ * Special SharpAttributeTransformer to handle SharpUploadModel
+ * transformation in an EntityList
+ */
+class SharpUploadModelAttributeTransformer implements SharpAttributeTransformer
 {
-    /**
-     * @var string
-     */
-    protected $labelAttribute;
-
     /**
      * @var int
      */
@@ -27,14 +28,12 @@ class EloquentEntityListUploadTransformer implements SharpAttributeTransformer
     protected $filters;
 
     /**
-     * @param string $labelAttribute
      * @param int|null $width
      * @param int|null $height
      * @param array $filters
      */
-    public function __construct(string $labelAttribute, int $width = null, int $height = null, array $filters = [])
+    public function __construct(int $width = null, int $height = null, array $filters = [])
     {
-        $this->labelAttribute = $labelAttribute;
         $this->width = $width;
         $this->height = $height;
         $this->filters = $filters;
@@ -46,11 +45,16 @@ class EloquentEntityListUploadTransformer implements SharpAttributeTransformer
      * @param $instance
      * @param string $attribute
      * @return mixed
+     * @throws SharpException
      */
     function apply($instance, string $attribute)
     {
         if(!$instance->$attribute) {
             return null;
+        }
+
+        if(!$instance->$attribute instanceof SharpUploadModel) {
+            throw new SharpException("[$attribute] mist be an instance of SharpUploadModel");
         }
 
         return '<img src="'
