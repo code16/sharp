@@ -2,13 +2,14 @@ import Vue from 'vue/dist/vue.common';
 import List from '../components/form/fields/list/List.vue';
 import FieldDisplay from '../components/form/FieldDisplay';
 
-import { MockInjections, MockTransitions } from './utils';
+import { MockInjections, MockTransitions, MockI18n } from './utils';
 
 describe('list-field', () => {
     Vue.component('sharp-list', List);
     Vue.component('sharp-field-display', FieldDisplay);
 
     Vue.use(MockTransitions);
+    Vue.use(MockI18n);
 
     beforeEach(()=>{
         document.body.innerHTML = `    
@@ -27,6 +28,7 @@ describe('list-field', () => {
                             :max-item-count="5"
                             item-id-attribute="id"
                             :read-only="readOnly"
+                            locale="fr"
                             @input="inputEmitted">
                 </sharp-list>
             </div>
@@ -49,6 +51,19 @@ describe('list-field', () => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
+    it('can mount "read only" filled list field', async () => {
+        await createVm({
+            propsData: {
+                readOnly:true
+            },
+            data:()=>({
+                value: [{id:0, name:'Antoine'}]
+            })
+        });
+
+        expect(document.body.innerHTML).toMatchSnapshot();
+    });
+
     it('can mount collapsed list field', async () => {
         let $list = await createVm({
             data:()=>({
@@ -63,6 +78,29 @@ describe('list-field', () => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
+    it('can mount non addable, non removable, non sortable list field', async () => {
+        await createVm({
+            propsData: {
+                addable: false, removable: false, sortable: false
+            },
+            data:()=>({
+                value: [{id:0, name:'Antoine'}]
+            }),
+        });
+
+        expect(document.body.innerHTML).toMatchSnapshot();
+    });
+
+    it('can mount with full list', async () => {
+        await createVm({
+            data:()=>({
+                value: [{id:0, name:'Antoine'},{id:1, name:'Samuel'},{id:2, name:'Solène'},{id:3, name:'Georges'},{id:4, name:'Gérard'}]
+            }),
+        });
+
+        expect(document.body.innerHTML).toMatchSnapshot();
+    });
+
     it('emit input on init to have list and value equals by reference (sync changes)', async () => {
         let inputEmitted = jest.fn();
 
@@ -72,9 +110,111 @@ describe('list-field', () => {
             }
         });
 
-
         expect(inputEmitted).toHaveBeenCalledTimes(1);
         expect(inputEmitted).toHaveBeenCalledWith($list.list);
+    });
+
+    it('create appropriate item', async () => {
+        let $list = await createVm();
+
+        let item = $list.createItem();
+
+        expect(item).toMatchObject({ id: null, name: null });
+    });
+
+    it('items have correct indexes', async () => {
+        let $list = await createVm({
+            data:()=>({
+                value:[{id:0, name:'Antoine'},{id:1, name:'Samuel'},{id:2, name:'Solène'}]
+            })
+        });
+
+        let { list, indexSymbol } = $list;
+
+        expect(list).toMatchObject([
+            { [indexSymbol]:0 },{ [indexSymbol]:1 },{ [indexSymbol]:2 }
+        ]);
+
+        $list.add();
+
+        expect(list).toMatchObject([
+            { [indexSymbol]:0 },{ [indexSymbol]:1 },{ [indexSymbol]:2 },{ [indexSymbol]:3 }
+        ]);
+    });
+
+    it('items have correct drag indexes', async () => {
+        let $list = await createVm({
+            data:()=>({
+                value:[{id:0, name:'Antoine'},{id:1, name:'Samuel'},{id:2, name:'Solène'}]
+            })
+        });
+
+        $list.toggleDrag();
+
+        let { list, dragIndexSymbol } = $list;
+
+        expect(list).toMatchObject([
+            { [dragIndexSymbol]:0 }, { [dragIndexSymbol]:1 }, { [dragIndexSymbol]:2 }
+        ]);
+    });
+
+    it('remove item correctly', async () => {
+        let $list = await createVm({
+            data:()=>({
+                value:[{id:0, name:'Antoine'},{id:1, name:'Samuel'},{id:2, name:'Solène'}]
+            })
+        });
+
+        $list.remove(1);
+
+        let { list, indexSymbol } = $list;
+
+        expect(list).toMatchObject([
+            {id:0, name:'Antoine', [indexSymbol]:0 },{id:2, name:'Solène', [indexSymbol]:2}
+        ])
+    });
+
+    it('expose appropriate collapsed item template props data', async () => {
+        let $list = await createVm();
+
+        let { dragIndexSymbol } = $list;
+        let data = $list.collapsedItemData({ id:1, name:'Samuel', [dragIndexSymbol]: 2 });
+
+        expect(data).toMatchObject({
+            $index: 2,
+            id: 1,
+            name: 'Samuel'
+        });
+    });
+
+    it('update data properly', async () => {
+        let $list = await createVm({
+            data:()=>({
+                value:[{id:0, name:'Antoine'},{id:1, name:'Samuel'},{id:2, name:'Solène'}]
+            })
+        });
+
+        let updateFn = $list.update(1);
+
+        updateFn('name','George');
+
+        expect($list.list[1]).toMatchObject({
+            id:1, name:'George'
+        })
+    });
+
+    it('insert item properly', async () => {
+        let $list = await createVm({
+            data:()=>({
+                value:[{id:0, name:'Antoine'},{id:2, name:'Solène'}]
+            })
+        });
+
+        $list.insertNewItem(0);
+
+        expect($list.list).toMatchObject([
+            {id:0, name:'Antoine'},{id: null, name: null},{id:2, name:'Solène'}
+        ])
     });
 });
 

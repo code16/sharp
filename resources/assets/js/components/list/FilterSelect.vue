@@ -1,12 +1,22 @@
 <template>
-    <sharp-dropdown class="SharpFilterSelect" ref="dropdown" @opened="updateScroll">
-        <template slot="text">
-            {{name}}<span style="font-weight:normal">{{ valueString ? ` | ${valueString}` : '' }}</span>
-        </template>
-        <sharp-select :value="value" :options="options" :multiple="multiple" ref="select"
-                      display="list" @input="handleSelect" :inline="false" disable-focus>
-        </sharp-select>
-    </sharp-dropdown>
+    <span class="SharpFilterSelect">
+        <sharp-dropdown ref="dropdown" @opened="updateScroll">
+            <template slot="text">
+                {{name}}<span style="font-weight:normal">{{ valueString ? ` | ${valueString}` : '' }}</span>
+            </template>
+            <sharp-select :value="value"
+                          :options="options"
+                          :multiple="multiple"
+                          :clearable="!required"
+                          :inline="false"
+                          :unique-identifier="filterKey"
+                          display="list"
+                          disable-focus
+                          ref="select"
+                          @input="handleSelect">
+            </sharp-select>
+        </sharp-dropdown>
+    </span>
 </template>
 
 <script>
@@ -24,6 +34,10 @@
             [Select.name]: Select
         },
         props: {
+            filterKey: {
+                type: String,
+                required: true
+            },
             name : {
                 type: String,
                 required: true
@@ -34,9 +48,9 @@
             },
             value: {
                 type: [String, Number, Array],
-                required: true
             },
-            multiple: Boolean
+            multiple: Boolean,
+            required: Boolean
         },
         computed: {
             options() {

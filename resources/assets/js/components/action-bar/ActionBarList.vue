@@ -18,10 +18,6 @@
                      width="16" height="16" viewBox="0 0 16 16" fill-rule="evenodd">
                     <path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm3.5 10.1l-1.4 1.4L8 9.4l-2.1 2.1-1.4-1.4L6.6 8 4.5 5.9l1.4-1.4L8 6.6l2.1-2.1 1.4 1.4L9.4 8l2.1 2.1z"></path>
                 </svg>
-                <!--<button class="SharpSearch__button" type="button" aria-label="Search button" @click="emitSearch">-->
-                    <!--<svg width="16" height="14" viewBox="0 0 16 14" fill-rule="evenodd"><path d="M12.6 6H0v2h12.7l-5 4.7L9 14l7-7-7-7-1.3 1.3z"></path></svg>-->
-                <!--</button>-->
-
             </div>
             <button v-if="showCreateButton" class="SharpButton SharpButton--primary" @click="emitAction('create')">
                 {{ l('action_bar.list.create_button') }}
@@ -33,9 +29,14 @@
             </sharp-dropdown>
         </template>
         <template slot="extras">
-            <sharp-filter-select v-for="filter in filters" :name="filter.key" :values="filter.values"
-                                 :key="filter.key" @input="emitAction('filterChanged',filter.key,$event)"
-                                 :value="filtersValue[filter.key]" :multiple="filter.multiple">
+            <sharp-filter-select v-for="filter in filters"
+                                 :name="filter.key"
+                                 :filter-key="`actionbarlist_${filter.key}`"
+                                 :values="filter.values"
+                                 :value="filtersValue[filter.key]"
+                                 :multiple="filter.multiple"
+                                 :key="filter.key"
+                                 @input="emitAction('filterChanged',filter.key,$event)">
             </sharp-filter-select>
         </template>
     </sharp-action-bar>
@@ -99,8 +100,11 @@
                 this.search = input;
             },
             filterChanged(key, value) {
-                this.filtersValue[key] = value;
+                this.$set(this.filtersValue,key,value);
             }
+        },
+        mounted() {
+            console.log(this);
         }
     }
 </script>

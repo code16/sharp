@@ -1,10 +1,13 @@
 <template>
-    <div class="SharpDropdown" :class="{'SharpDropdown--open':opened}" tabindex="0" @focus="opened=true" @blur="opened=false">
+    <div class="SharpDropdown"
+         :class="{'SharpDropdown--open':opened, 'SharpDropdown--disabled':disabled}"
+         :tabindex="disabled?-1:0"
+         @focus="handleFocus" @blur="opened=false">
         <li class="SharpDropdown__text" @mousedown="toggleIfFocused">
             <slot name="text">{{text}}</slot>
         </li>
         <dropdown-arrow v-if="showArrow" class="SharpDropdown__arrow"></dropdown-arrow>
-        <li>
+        <li v-if="!disabled">
             <ul class="SharpDropdown__list">
                 <slot></slot>
             </ul>
@@ -30,7 +33,8 @@
             showArrow: {
                 type: Boolean,
                 default: true
-            }
+            },
+            disabled: Boolean
         },
         data() {
             return {
@@ -45,8 +49,9 @@
             }
         },
         methods:{
-            toggle() {
-                this.opened = !this.opened;
+            handleFocus() {
+                if(this.disabled) return;
+                this.opened = true;
             },
             toggleIfFocused(e) {
                 if(this.opened) {

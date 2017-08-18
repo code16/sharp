@@ -71,7 +71,7 @@
             resetDataAfterSubmitted: Boolean
         },
 
-        inject:['actionsBus'],
+        inject:['actionsBus', ...DynamicView.inject],
 
         provide() {
             return {

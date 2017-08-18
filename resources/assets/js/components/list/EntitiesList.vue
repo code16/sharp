@@ -32,7 +32,7 @@
                             <a class="SharpEntitiesList__row-link" v-if="rowHasLink(item)" :href="rowLink(item)"></a>
                         </div>
                         <div class="SharpEntitiesList__row-actions">
-                            <sharp-dropdown v-if="hasStateAuthorization(item)" class="SharpEntitiesList__state-dropdown" :show-arrow="false">
+                            <sharp-dropdown class="SharpEntitiesList__state-dropdown" :show-arrow="false" :disabled="!hasStateAuthorization(item)">
                                 <i slot="text" class="fa fa-circle" :class="stateClasses(item.state)" :style="stateStyle(item.state)"></i>
                                 <sharp-dropdown-item v-for="state in config.state.values" @click="setState(item,state)" :key="state.value">
                                     <i class="fa fa-circle" :class="stateClasses(state.value)" :style="stateStyle(state.value)"></i>
@@ -167,7 +167,8 @@
             },
             filterParams() {
                 return Object.keys(this.filtersValue).reduce((res, filterKey)=>{
-                    res[`filter_${filterKey}`] = this.filtersValue[filterKey];
+                    if(this.filtersValue[filterKey] != null)
+                        res[`filter_${filterKey}`] = this.filtersValue[filterKey];
                     return res;
                 },{});
             },
@@ -282,7 +283,10 @@
                 return color.indexOf('sharp_') === -1 ? `color:${color}` : '';
             },
             hasStateAuthorization({[this.idAttr]:instanceId}) {
-                return this.config.state && this.config.state.authorization.indexOf(instanceId) !== -1;
+                if(!this.config.state) return false;
+
+                let { authorization:auth } = this.config.state;
+                return Array.isArray(auth) ? auth.indexOf(instanceId) !== -1 : auth;
             },
             filterValueOrDefault(val, filter) {
                 return val || filter.default || (filter.multiple?[]:null);

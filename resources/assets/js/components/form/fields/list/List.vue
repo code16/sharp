@@ -5,8 +5,8 @@
                 {{dragActive ? 'Ok' : 'Trier'}}
             </button>
         </template>
-        <draggable :options="dragOptions" :list="list">
-            <transition-group name="expand">
+        <draggable :options="dragOptions" :list="list" ref="draggable">
+            <transition-group name="expand" tag="div">
                 <div v-for="(listItemData, i) in list" :key="listItemData[indexSymbol]"
                     class="SharpList__item"
                     :class="{'SharpList__item--collapsed':dragActive}"
@@ -36,8 +36,8 @@
                         <button class="SharpButton SharpButton--secondary SharpButton--sm" @click="insertNewItem(i)">{{ l('form.list.insert_button') }}</button>
                     </div>
                 </div>
-            </transition-group>
-            <template slot="footer">
+            </transition-group><!-- Important comment, do not remove
+         --><template slot="footer">
                 <button v-if="!disabled && showAddButton" type="button" :key="-1"
                         class="SharpButton SharpButton--secondary SharpList__add-button"
                         @click="add">{{addText}}</button>
@@ -104,9 +104,7 @@
             return {
                 list:[],
                 dragActive: false,
-                lastIndex: 0,
-
-                transitionActive: false,
+                lastIndex: 0
             }
         },
         watch: {
@@ -145,14 +143,14 @@
                 return (this.value||[]).map((v,i)=>({[this.indexSymbol]:i,...v}));
             },
             createItem() {
-                return Object.keys(this.itemFields).reduce((res, itemKey) => {
-                    if(this.$form.localized && this.itemFields[itemKey].localized) {
-                        res[itemKey] = this.$form.config.locales.reduce((res, l)=>{
+                return Object.keys(this.itemFields).reduce((res, fieldKey) => {
+                    if(this.$form.localized && this.itemFields[fieldKey].localized) {
+                        res[fieldKey] = this.$form.config.locales.reduce((res, l)=>{
                             res[l] = null;
                             return res;
                         },{});
                     }
-                    else res[itemKey] = null;
+                    else res[fieldKey] = null;
                     return res;
                 },{
                     [this.itemIdAttribute]:null,
@@ -193,6 +191,6 @@
         },
         created() {
             this.initList();
-        }
+        },
     }
 </script>

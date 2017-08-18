@@ -26,11 +26,10 @@
                 </sharp-check>
             </template>
             <div v-else class="SharpSelect__radio-button-group" :class="{'SharpSelect__radio-button-group--block':!inline}">
-                <component :is="inline?'span':'div'" v-for="(option, index) in options" :key="option.id">
+                <component :is="inline?'span':'div'" v-for="(option, index) in options" :key="option.id" @click="handleRadioClicked(option.id)">
                     <input type="radio" :id="`${uniqueIdentifier}${index}`" class="SharpRadio"
                            :checked="value===option.id" tabindex="0" :disabled="readOnly"
-                           :name="uniqueIdentifier" :value="option.id"
-                           @change="handleRadioChanged(option.id)">
+                           :name="uniqueIdentifier" :value="option.id">
                     <label class="SharpRadio__label" :for="`${uniqueIdentifier}${index}`">
                         <span class="SharpRadio__appearance"></span>
                         {{option.label}}
@@ -55,7 +54,10 @@
 
         props: {
             value: [Array, String, Number],
-            uniqueIdentifier: String,
+            uniqueIdentifier: {
+                type: String,
+                required: true
+            },
             options: {
                 type: Array,
                 required: true
@@ -125,8 +127,11 @@
                     newValue = this.value.filter(val => val !== optId);
                 this.$emit('input', newValue);
             },
-            handleRadioChanged(optId) {
-                this.$emit('input', optId);
+            handleRadioClicked(optId) {
+                if(this.value === optId && this.clearable) {
+                    this.$emit('input', null);
+                }
+                else this.$emit('input', optId);
             }
         },
     }

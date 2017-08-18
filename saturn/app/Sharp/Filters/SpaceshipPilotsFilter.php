@@ -3,9 +3,9 @@
 namespace App\Sharp\Filters;
 
 use App\Pilot;
-use Code16\Sharp\EntityList\EntityListMultipleFilter;
+use Code16\Sharp\EntityList\EntityListFilter;
 
-class SpaceshipPilotsFilter implements EntityListMultipleFilter
+class SpaceshipPilotsFilter implements EntityListFilter
 {
     /**
      * @return array

@@ -11,7 +11,9 @@
   cursor: pointer;
   color: $text-01;
 
-  &:focus {
+  outline: 1px solid transparent;
+
+  &:focus:not(.SharpDropdown--disabled) {
     @include focus-outline('border');
   }
 

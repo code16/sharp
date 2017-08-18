@@ -33469,6 +33469,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -33527,8 +33528,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             this.search = input;
         },
         filterChanged: function filterChanged(key, value) {
-            this.filtersValue[key] = value;
+            this.$set(this.filtersValue, key, value);
         }
+    },
+    mounted: function mounted() {
+        console.log(this);
     }
 });
 
@@ -33865,6 +33869,9 @@ var noop = function noop() {};
 //
 //
 //
+//
+//
+//
 
 
 
@@ -33884,7 +33891,8 @@ var noop = function noop() {};
         showArrow: {
             type: Boolean,
             default: true
-        }
+        },
+        disabled: Boolean
     },
     data: function data() {
         return {
@@ -33904,8 +33912,9 @@ var noop = function noop() {};
         }
     },
     methods: {
-        toggle: function toggle() {
-            this.opened = !this.opened;
+        handleFocus: function handleFocus() {
+            if (this.disabled) return;
+            this.opened = true;
         },
         toggleIfFocused: function toggleIfFocused(e) {
             if (this.opened) {
@@ -34216,6 +34225,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_axios__);
 var _components;
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //
@@ -34286,7 +34297,7 @@ var noop = function noop() {};
         resetDataAfterSubmitted: Boolean
     },
 
-    inject: ['actionsBus'],
+    inject: ['actionsBus'].concat(_toConsumableArray(__WEBPACK_IMPORTED_MODULE_3__DynamicViewMixin__["a" /* default */].inject)),
 
     provide: function provide() {
         return {
@@ -34781,7 +34792,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
 
 
 
@@ -34793,7 +34803,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     props: {
         value: [Array, String, Number],
-        uniqueIdentifier: String,
+        uniqueIdentifier: {
+            type: String,
+            required: true
+        },
         options: {
             type: Array,
             required: true
@@ -34864,8 +34877,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             });
             this.$emit('input', newValue);
         },
-        handleRadioChanged: function handleRadioChanged(optId) {
-            this.$emit('input', optId);
+        handleRadioClicked: function handleRadioClicked(optId) {
+            if (this.value === optId && this.clearable) {
+                this.$emit('input', null);
+            } else this.$emit('input', optId);
         }
     }
 });
@@ -35772,9 +35787,7 @@ var noop = function noop() {};
         return {
             list: [],
             dragActive: false,
-            lastIndex: 0,
-
-            transitionActive: false
+            lastIndex: 0
         };
     },
 
@@ -35820,13 +35833,13 @@ var noop = function noop() {};
             var _this2 = this,
                 _Object$keys$reduce;
 
-            return Object.keys(this.itemFields).reduce(function (res, itemKey) {
-                if (_this2.$form.localized && _this2.itemFields[itemKey].localized) {
-                    res[itemKey] = _this2.$form.config.locales.reduce(function (res, l) {
+            return Object.keys(this.itemFields).reduce(function (res, fieldKey) {
+                if (_this2.$form.localized && _this2.itemFields[fieldKey].localized) {
+                    res[fieldKey] = _this2.$form.config.locales.reduce(function (res, l) {
                         res[l] = null;
                         return res;
                     }, {});
-                } else res[itemKey] = null;
+                } else res[fieldKey] = null;
                 return res;
             }, (_Object$keys$reduce = {}, _defineProperty(_Object$keys$reduce, this.itemIdAttribute, null), _defineProperty(_Object$keys$reduce, this.indexSymbol, this.lastIndex++), _Object$keys$reduce));
         },
@@ -36778,7 +36791,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             var _this = this;
 
             return Object.keys(this.filtersValue).reduce(function (res, filterKey) {
-                res['filter_' + filterKey] = _this.filtersValue[filterKey];
+                if (_this.filtersValue[filterKey] != null) res['filter_' + filterKey] = _this.filtersValue[filterKey];
                 return res;
             }, {});
         },
@@ -36952,7 +36965,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         hasStateAuthorization: function hasStateAuthorization(_ref8) {
             var instanceId = _ref8[this.idAttr];
 
-            return this.config.state && this.config.state.authorization.indexOf(instanceId) !== -1;
+            if (!this.config.state) return false;
+
+            var auth = this.config.state.authorization;
+
+            return Array.isArray(auth) ? auth.indexOf(instanceId) !== -1 : auth;
         },
         filterValueOrDefault: function filterValueOrDefault(val, filter) {
             return val || filter.default || (filter.multiple ? [] : null);
@@ -37282,6 +37299,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -37293,6 +37320,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     mixins: [__WEBPACK_IMPORTED_MODULE_2__mixins__["g" /* AutoScroll */]],
     components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_0__dropdown_Dropdown__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_0__dropdown_Dropdown__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_1__form_fields_Select__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_1__form_fields_Select__["a" /* default */]), _components),
     props: {
+        filterKey: {
+            type: String,
+            required: true
+        },
         name: {
             type: String,
             required: true
@@ -37302,10 +37333,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             required: true
         },
         value: {
-            type: [String, Number, Array],
-            required: true
+            type: [String, Number, Array]
         },
-        multiple: Boolean
+        multiple: Boolean,
+        required: Boolean
     },
     computed: {
         options: function options() {
@@ -81293,15 +81324,13 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   return _c('div', {
     staticClass: "SharpDropdown",
     class: {
-      'SharpDropdown--open': _vm.opened
+      'SharpDropdown--open': _vm.opened, 'SharpDropdown--disabled': _vm.disabled
     },
     attrs: {
-      "tabindex": "0"
+      "tabindex": _vm.disabled ? -1 : 0
     },
     on: {
-      "focus": function($event) {
-        _vm.opened = true
-      },
+      "focus": _vm.handleFocus,
       "blur": function($event) {
         _vm.opened = false
       }
@@ -81313,9 +81342,9 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     }
   }, [_vm._t("text", [_vm._v(_vm._s(_vm.text))])], 2), _vm._v(" "), (_vm.showArrow) ? _c('dropdown-arrow', {
     staticClass: "SharpDropdown__arrow"
-  }) : _vm._e(), _vm._v(" "), _c('li', [_c('ul', {
+  }) : _vm._e(), _vm._v(" "), (!_vm.disabled) ? _c('li', [_c('ul', {
     staticClass: "SharpDropdown__list"
-  }, [_vm._t("default")], 2)])], 1)
+  }, [_vm._t("default")], 2)]) : _vm._e()], 1)
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -81501,6 +81530,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       key: filter.key,
       attrs: {
         "name": filter.key,
+        "filter-key": ("actionbarlist_" + (filter.key)),
         "values": filter.values,
         "value": _vm.filtersValue[filter.key],
         "multiple": filter.multiple
@@ -81936,13 +81966,15 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "click": _vm.toggleDrag
     }
   }, [_vm._v("\n            " + _vm._s(_vm.dragActive ? 'Ok' : 'Trier') + "\n        ")])] : _vm._e(), _vm._v(" "), _c('draggable', {
+    ref: "draggable",
     attrs: {
       "options": _vm.dragOptions,
       "list": _vm.list
     }
   }, [_c('transition-group', {
     attrs: {
-      "name": "expand"
+      "name": "expand",
+      "tag": "div"
     }
   }, _vm._l((_vm.list), function(listItemData, i) {
     return _c('div', {
@@ -81998,7 +82030,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         }
       }
     }, [_vm._v(_vm._s(_vm.l('form.list.insert_button')))])]) : _vm._e()])
-  })), _vm._v(" "), _c('template', {
+  })), _c('template', {
     slot: "footer"
   }, [(!_vm.disabled && _vm.showAddButton) ? _c('button', {
     key: -1,
@@ -82358,7 +82390,12 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   }, _vm._l((_vm.options), function(option, index) {
     return _c(_vm.inline ? 'span' : 'div', {
       key: option.id,
-      tag: "component"
+      tag: "component",
+      on: {
+        "click": function($event) {
+          _vm.handleRadioClicked(option.id)
+        }
+      }
     }, [_c('input', {
       staticClass: "SharpRadio",
       attrs: {
@@ -82371,11 +82408,6 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       domProps: {
         "checked": _vm.value === option.id,
         "value": option.id
-      },
-      on: {
-        "change": function($event) {
-          _vm.handleRadioChanged(option.id)
-        }
       }
     }), _vm._v(" "), _c('label', {
       staticClass: "SharpRadio__label",
@@ -82496,15 +82528,16 @@ if (false) {
 
 "use strict";
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('sharp-dropdown', {
+  return _c('span', {
+    staticClass: "SharpFilterSelect"
+  }, [_c('sharp-dropdown', {
     ref: "dropdown",
-    staticClass: "SharpFilterSelect",
     on: {
       "opened": _vm.updateScroll
     }
   }, [_c('template', {
     slot: "text"
-  }, [_vm._v("\n        " + _vm._s(_vm.name)), _c('span', {
+  }, [_vm._v("\n            " + _vm._s(_vm.name)), _c('span', {
     staticStyle: {
       "font-weight": "normal"
     }
@@ -82514,14 +82547,16 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "value": _vm.value,
       "options": _vm.options,
       "multiple": _vm.multiple,
-      "display": "list",
+      "clearable": !_vm.required,
       "inline": false,
+      "unique-identifier": _vm.filterKey,
+      "display": "list",
       "disable-focus": ""
     },
     on: {
       "input": _vm.handleSelect
     }
-  })], 2)
+  })], 2)], 1)
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -83377,10 +83412,11 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       }
     }) : _vm._e()]), _vm._v(" "), _c('div', {
       staticClass: "SharpEntitiesList__row-actions"
-    }, [(_vm.hasStateAuthorization(item)) ? _c('sharp-dropdown', {
+    }, [_c('sharp-dropdown', {
       staticClass: "SharpEntitiesList__state-dropdown",
       attrs: {
-        "show-arrow": false
+        "show-arrow": false,
+        "disabled": !_vm.hasStateAuthorization(item)
       }
     }, [_c('i', {
       staticClass: "fa fa-circle",
@@ -83400,7 +83436,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         class: _vm.stateClasses(state.value),
         style: (_vm.stateStyle(state.value))
       }), _vm._v("\n                                " + _vm._s(state.label) + "\n                            ")])
-    })], 2) : _vm._e(), _vm._v(" "), (_vm.instanceCommands(item).length) ? _c('sharp-dropdown', {
+    })], 2), _vm._v(" "), (_vm.instanceCommands(item).length) ? _c('sharp-dropdown', {
       staticClass: "SharpEntitiesList__commands-dropdown"
     }, _vm._l((_vm.instanceCommands(item)), function(command) {
       return _c('sharp-dropdown-item', {
