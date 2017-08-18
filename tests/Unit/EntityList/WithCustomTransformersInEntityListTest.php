@@ -7,6 +7,7 @@ use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
+use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
@@ -73,6 +74,67 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
             $list->getListData(new EntityListQueryParams())[2]
         );
     }
+
+    /** @test */
+    function we_can_define_a_custom_transformer_as_a_closure()
+    {
+        Person::create(["name" => "John Wayne"]);
+
+        $list = new class extends WithCustomTransformersTestList
+        {
+            function getListData(EntityListQueryParams $params)
+            {
+                return $this->setCustomTransformer("name", function($person) {
+                    return strtoupper($person->name);
+                })->transform(Person::all());
+            }
+        };
+
+        $this->assertArraySubset(
+            ["name" => "JOHN WAYNE"],
+            $list->getListData(new EntityListQueryParams())[0]
+        );
+    }
+
+    /** @test */
+    function we_can_define_a_custom_transformer_as_a_class_name()
+    {
+        Person::create(["name" => "John Wayne"]);
+
+        $list = new class extends WithCustomTransformersTestList
+        {
+            function getListData(EntityListQueryParams $params)
+            {
+                return $this->setCustomTransformer("name", UppercaseTransformer::class)
+                    ->transform(Person::all());
+            }
+        };
+
+        $this->assertArraySubset(
+            ["name" => "JOHN WAYNE"],
+            $list->getListData(new EntityListQueryParams())[0]
+        );
+    }
+
+    /** @test */
+    function we_can_define_a_custom_transformer_as_a_class_instance()
+    {
+        Person::create(["name" => "John Wayne"]);
+
+        $list = new class extends WithCustomTransformersTestList
+        {
+            function getListData(EntityListQueryParams $params)
+            {
+                return $this->setCustomTransformer("name", new UppercaseTransformer())
+                    ->transform(Person::all());
+            }
+        };
+
+        $this->assertArraySubset(
+            ["name" => "JOHN WAYNE"],
+            $list->getListData(new EntityListQueryParams())[0]
+        );
+    }
 }
 
 class WithCustomTransformersTestList extends SharpEntityList
@@ -87,4 +149,13 @@ class WithCustomTransformersTestList extends SharpEntityList
     function buildListDataContainers() {}
     function buildListLayout() {}
     function buildListConfig() {}
+}
+
+class UppercaseTransformer implements SharpAttributeTransformer
+{
+
+    function apply($instance, string $attribute)
+    {
+        return strtoupper($instance->$attribute);
+    }
 }
