@@ -53,17 +53,14 @@ In this example, `picture` and `name` will be displayed respectively on 1/12 and
 
 ## `getListData(EntityListQueryParams $params)`
 
-Now the real work: grab and return the actual list data. This method must return an array of `instances` of our `entity`. You can do this however you want, so let's see a generic example, and then how Sharp can simplify the work if you use Eloquent.
+Now the real work: grab and return the actual list data. This method must return an array of `instances` of our `entity`. You can do this however you want, so let's see a generic example:
 
-
-### The generic way
-
-Simply return an array, with 2 rules:
+The returned array is meant to be build with 2 rules:
 
 - each item must define the keys declared in the `buildDatacontainer()` function,
 - plus one attribute for the identifier, which is `id` by default (more on that later).
 
-So for instance, if we defined 3 columns:
+So for instance, if we defined 2 columns `name` and `capacity`:
 
     function getListData(EntityListQueryParams $params)
     {
@@ -80,7 +77,7 @@ So for instance, if we defined 3 columns:
         ];
     }
 
-Of course, real code will imply some data request, in a DB, a file, ... The important thing is that Sharp won't care.
+Of course, real code would imply some data request in a DB, or a file for instance; the important thing is that Sharp don't care.
 
 
 ### Transformers
@@ -100,7 +97,7 @@ In a more realistic project, you'll want to transform your data before sending i
         )->transform($spaceships);
     }
 
-The `setCustomTransformer()` function takes the key of the attribute to transform, and either a `Closure` or the full name of a class which must implement `Code16\Sharp\Utils\Transformers\SharpAttributeTransformer`.
+The `setCustomTransformer()` function takes the key of the attribute to transform, and either a `Closure` or an instance of a class which must implement `Code16\Sharp\Utils\Transformers\SharpAttributeTransformer`, or even just the full name of the lastest.
 
 The `transform` function must be called after, and will apply all transformers on your list.
 
@@ -145,7 +142,7 @@ Note that the ability of sorting a column is defined in `buildListDataContainers
 
 #### Search
 
-`$params->hasSearch()` returns true if the user entered a search, and `$params->searchWords()` return an array of search terms. This last method can take parameters, here's its full signature:
+`$params->hasSearch()` returns true if the user entered a search, and `$params->searchWords()` returns an array of search terms. This last method can take parameters, here's its full signature:
 
     public function searchWords(
         $isLike = true,
@@ -172,22 +169,36 @@ Here's a code sample with an Eloquent Model:
 
 #### Filters
 
-We haven't see yet how we can build a `Filter`, but at this stage, a filter has simply a `key` and a `value`. So we can grab this calling `$filterValue = $params->filterFor($filterKey)`, and use the value in our query code.
-
-
-### The Eloquent way
-
-TODO `setUploadTransformer` ?
+We haven't see yet how we can build a `Filter`, but at this stage, a filter is simply a `key` and a `value`. So we can grab this calling `$filterValue = $params->filterFor($filterKey)`, and use the value in our query code.
 
 
 ### Pagination
 
 It's very common to return in `getListData()` paginated results:  simply return a `Illuminate\Contracts\Pagination\LengthAwarePaginator` in this case.
 
-With `Eloquent` or the `QueryBuilder`, this means simply call `->paginate($count)` on the query.
+With `Eloquent` or the `QueryBuilder`, this means calling `->paginate($count)` on the query.
 
 
 
 ## `buildListConfig()`
 
+Finally, this last function must describe... the list config. Let's see an example:
 
+    function buildListConfig()
+    {
+        $this->setInstanceIdAttribute("id")
+            ->setSearchable()
+            ->setDefaultSort("name", "asc")
+            ->setPaginated();
+    }
+
+Here we declare that:
+
+- each item of our list is identified by an attribute `id` (this is the default value);
+- the list is meant to allow search to the user, meaning Sharp will display a search text input and process its content to fill the `EntityListQueryParams` instance (see above);
+- the list must be sorted by "name", meaning that the `EntityListQueryParams` instance will be filled with this default value;
+- and finally, the list is paginated, meaning that `getListData(EntityListQueryParams $params)` must return an instance of `LengthAwarePaginator` (see above) and that Sharp will display pagination links if needed.
+
+This config can also contain things related to Filters, Commands or State, and all of this is discussed on following chapters.
+
+> next chapter : [Filters](filters.md).

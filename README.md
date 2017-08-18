@@ -62,7 +62,7 @@ We'll get into all those classes in this document. The important thing to notice
 ## Full documentation
 
 1. [Building an Entity List](docs/building-entity-list.md)
-2. Filters
+2. [Filters](docs/filters.md)
 3. Commands and Entity State
 4. Building an Entity Form
 5. All form inputs
