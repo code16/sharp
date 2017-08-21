@@ -49,6 +49,6 @@ class SpaceshipSendMessage extends InstanceCommand
 
     public function authorizeFor($instanceId): bool
     {
-        return $instanceId%2 == 0 && $instanceId <= 10;
+        return $instanceId%2 == 0 && $instanceId > 10;
     }
 }

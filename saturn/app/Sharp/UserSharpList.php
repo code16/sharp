@@ -4,14 +4,13 @@ namespace App\Sharp;
 
 use App\User;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
-use Code16\Sharp\EntityList\Eloquent\WithEntityListEloquentTransformers;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 class UserSharpList extends SharpEntityList
 {
-    use WithCustomTransformers, WithEntityListEloquentTransformers;
+    use WithCustomTransformers;
 
     function buildListDataContainers()
     {

@@ -31,6 +31,6 @@ class SpaceshipSynchronize extends EntityCommand
 
     public function authorize():bool
     {
-        return auth("sharp")->user()->hasGroup("boss");
+        return sharp_user()->hasGroup("boss");
     }
 }

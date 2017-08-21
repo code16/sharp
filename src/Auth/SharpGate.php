@@ -6,7 +6,7 @@ use Illuminate\Auth\Access\Gate;
 use Illuminate\Contracts\Container\Container;
 
 /**
- * We have to define out own Gate to ensure that the correct
+ * We have to define our own Gate to ensure that the correct
  * user (which could be from a custom Guard) is returned.
  *
  * Class SharpGate
