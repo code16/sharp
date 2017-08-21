@@ -21602,6 +21602,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
         this.axiosInstance.interceptors.request.use(function (config) {
             _this2.mainLoading.$emit('show');
+            //debugger
             return config;
         }, function (error) {
             return Promise.reject(error);
@@ -33470,6 +33471,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -34792,6 +34794,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -34803,10 +34815,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     props: {
         value: [Array, String, Number],
-        uniqueIdentifier: {
-            type: String,
-            required: true
-        },
+        uniqueIdentifier: String,
         options: {
             type: Array,
             required: true
@@ -34877,10 +34886,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             });
             this.$emit('input', newValue);
         },
-        handleRadioClicked: function handleRadioClicked(optId) {
-            if (this.value === optId && this.clearable) {
-                this.$emit('input', null);
-            } else this.$emit('input', optId);
+        handleRadioChanged: function handleRadioChanged(optId) {
+            this.$emit('input', optId);
         }
     }
 });
@@ -37309,6 +37316,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -37338,6 +37349,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         multiple: Boolean,
         required: Boolean
     },
+    data: function data() {
+        return {
+            opened: false
+        };
+    },
+
     computed: {
         options: function options() {
             var _this = this;
@@ -37365,18 +37382,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     return _this3.$refs.select.$el.querySelector('input:checked');
                 }
             };
+        },
+        empty: function empty() {
+            return !this.value || this.multiple && !this.value.length;
         }
     },
     methods: {
         handleSelect: function handleSelect(value) {
-            var _this4 = this;
-
             this.$emit('input', value);
-            if (this.multiple) this.$refs.dropdown.$el.focus();else {
-                setTimeout(function (_) {
-                    return _this4.$refs.dropdown.$el.blur();
-                }, 100);
-            }
+        },
+        open: function open() {
+            var multiselect = this.$refs.select.$refs.multiselect;
+
+            multiselect.activate();
         }
     }
 });
@@ -81533,7 +81551,8 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         "filter-key": ("actionbarlist_" + (filter.key)),
         "values": filter.values,
         "value": _vm.filtersValue[filter.key],
-        "multiple": filter.multiple
+        "multiple": filter.multiple,
+        "required": filter.required
       },
       on: {
         "input": function($event) {
@@ -82358,10 +82377,19 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "allow-empty": _vm.clearable
     },
     on: {
-      "input": _vm.handleInput
+      "input": _vm.handleInput,
+      "open": function($event) {
+        _vm.$emit('open')
+      },
+      "close": function($event) {
+        _vm.$emit('close')
+      }
     }
-  }, [(_vm.clearable && !_vm.multiple && _vm.value != null) ? [_c('div', {
-    staticClass: "SharpSelect__clear-btn close",
+  }, [(_vm.clearable && !_vm.multiple && _vm.value != null) ? [_c('button', {
+    staticClass: "SharpSelect__clear-button",
+    attrs: {
+      "type": "button"
+    },
     on: {
       "mousedown": function($event) {
         $event.stopPropagation();
@@ -82370,7 +82398,22 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       }
     },
     slot: "carret"
-  })] : _vm._e()], 2) : _c('div', [(_vm.multiple) ? _vm._l((_vm.options), function(option) {
+  }, [_c('svg', {
+    staticClass: "SharpSelect__clear-button-icon",
+    attrs: {
+      "aria-label": "close",
+      "width": "10",
+      "height": "10",
+      "viewBox": "0 0 10 10",
+      "fill-rule": "evenodd"
+    }
+  }, [_c('path', {
+    attrs: {
+      "d": "M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"
+    }
+  })])])] : _vm._e(), _vm._v(" "), _vm._t("option", null, {
+    slot: "option"
+  })], 2) : _c('div', [(_vm.multiple) ? _vm._l((_vm.options), function(option) {
     return _c('sharp-check', {
       key: option.id,
       attrs: {
@@ -82390,12 +82433,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   }, _vm._l((_vm.options), function(option, index) {
     return _c(_vm.inline ? 'span' : 'div', {
       key: option.id,
-      tag: "component",
-      on: {
-        "click": function($event) {
-          _vm.handleRadioClicked(option.id)
-        }
-      }
+      tag: "component"
     }, [_c('input', {
       staticClass: "SharpRadio",
       attrs: {
@@ -82408,6 +82446,11 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       domProps: {
         "checked": _vm.value === option.id,
         "value": option.id
+      },
+      on: {
+        "change": function($event) {
+          _vm.handleRadioChanged(option.id)
+        }
       }
     }), _vm._v(" "), _c('label', {
       staticClass: "SharpRadio__label",
@@ -82529,34 +82572,42 @@ if (false) {
 "use strict";
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('span', {
-    staticClass: "SharpFilterSelect"
-  }, [_c('sharp-dropdown', {
-    ref: "dropdown",
+    staticClass: "SharpFilterSelect",
+    class: {
+      'SharpFilterSelect--open': _vm.opened,
+      'SharpFilterSelect--empty': _vm.empty,
+      'SharpFilterSelect--multiple': _vm.multiple
+    },
     on: {
-      "opened": _vm.updateScroll
+      "click": _vm.open
     }
-  }, [_c('template', {
-    slot: "text"
-  }, [_vm._v("\n            " + _vm._s(_vm.name)), _c('span', {
+  }, [_c('span', {
+    staticClass: "SharpFilterSelect__text"
+  }, [_vm._v("\n        " + _vm._s(_vm.name)), (!_vm.empty) ? _c('span', {
     staticStyle: {
       "font-weight": "normal"
     }
-  }, [_vm._v(_vm._s(_vm.valueString ? (" | " + _vm.valueString) : ''))])]), _vm._v(" "), _c('sharp-select', {
+  }, [_vm._v(" | ")]) : _vm._e()]), _vm._v(" "), _c('sharp-select', {
     ref: "select",
+    staticClass: "SharpFilterSelect__select",
     attrs: {
       "value": _vm.value,
       "options": _vm.options,
       "multiple": _vm.multiple,
       "clearable": !_vm.required,
       "inline": false,
-      "unique-identifier": _vm.filterKey,
-      "display": "list",
-      "disable-focus": ""
+      "unique-identifier": _vm.filterKey
     },
     on: {
-      "input": _vm.handleSelect
+      "input": _vm.handleSelect,
+      "open": function($event) {
+        _vm.opened = true
+      },
+      "close": function($event) {
+        _vm.opened = false
+      }
     }
-  })], 2)], 1)
+  })], 1)
 }
 var staticRenderFns = []
 render._withStripped = true

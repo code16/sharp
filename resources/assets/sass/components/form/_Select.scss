@@ -1,15 +1,16 @@
 .SharpSelect {
-  &__clear-btn {
+  &__clear-button {
     position: absolute;
-    width: 40px;
-    height: 38px;
-    right: 1px;
-    top: 1px;
-    padding: 4px 8px;
-    text-align: center;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    right:0;
+    height: 100%;
+    @extend .SharpNotification__inline__close-button;
 
-    &:after {
-      content:"×";
+    &-icon {
+      position: initial;
+      @extend .SharpNotification__inline__close-icon;
     }
   }
 

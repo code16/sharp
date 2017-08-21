@@ -42,6 +42,7 @@ export default {
     created() {
         this.axiosInstance.interceptors.request.use(config => {
             this.mainLoading.$emit('show');
+            //debugger
             return config;
         }, error => Promise.reject(error));
 

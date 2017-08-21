@@ -1,20 +1,54 @@
 .SharpFilterSelect {
   width: auto;
+  background-color: $field-01;
+  padding-left: 1rem;
+  position:relative;
+  cursor: default;
+  @include font-size('14');
 
-  .SharpDropdown {
-    &__text {
-      padding: .5rem 1.5em .5em .5em;
-    }
-    &__arrow {
-      top: .9rem;
-      right: .5rem;
-    }
-    &__list {
-      width: 12rem;
+  display:flex;
+  align-items:center;
+
+  &--open {
+    @extend .SharpDropdown--open:focus;
+  }
+
+  &--empty, &--multiple {
+    .multiselect__single {
+      display:none;
     }
   }
 
-  .SharpCheck, .SharpSelect__radio-button-group > * {
-    margin: .2rem;
+  &__text {
+    //padding-right: .5rem;
+  }
+
+  &__select {
+    display: inline-block;
+
+    .multiselect {
+      position: initial;
+      background: none;
+
+      &__content {
+        left:0;
+      }
+
+      &__tags {
+        padding-right: 2rem;
+        padding-left:0;
+      }
+
+      &:focus {
+        outline: 1px solid transparent;
+      }
+
+      &.multiselect--active {
+        box-shadow: unset;
+      }
+    }
+    .SharpSelect__clear-button {
+      width: 2rem;
+    }
   }
 }

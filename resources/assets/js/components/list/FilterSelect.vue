@@ -1,21 +1,25 @@
 <template>
-    <span class="SharpFilterSelect">
-        <sharp-dropdown ref="dropdown" @opened="updateScroll">
-            <template slot="text">
-                {{name}}<span style="font-weight:normal">{{ valueString ? ` | ${valueString}` : '' }}</span>
-            </template>
-            <sharp-select :value="value"
-                          :options="options"
-                          :multiple="multiple"
-                          :clearable="!required"
-                          :inline="false"
-                          :unique-identifier="filterKey"
-                          display="list"
-                          disable-focus
-                          ref="select"
-                          @input="handleSelect">
-            </sharp-select>
-        </sharp-dropdown>
+    <span class="SharpFilterSelect"
+          :class="{
+          'SharpFilterSelect--open':opened,
+          'SharpFilterSelect--empty':empty,
+          'SharpFilterSelect--multiple':multiple}"
+          @click="open">
+        <span class="SharpFilterSelect__text">
+            {{name}}<span v-if="!empty" style="font-weight:normal"> |&nbsp;</span>
+        </span>
+        <sharp-select class="SharpFilterSelect__select"
+                      :value="value"
+                      :options="options"
+                      :multiple="multiple"
+                      :clearable="!required"
+                      :inline="false"
+                      :unique-identifier="filterKey"
+                      ref="select"
+                      @input="handleSelect"
+                      @open="opened=true"
+                      @close="opened=false">
+        </sharp-select>
     </span>
 </template>
 
@@ -52,6 +56,11 @@
             multiple: Boolean,
             required: Boolean
         },
+        data() {
+            return {
+                opened: false
+            }
+        },
         computed: {
             options() {
                 return Object.keys(this.values).map(key => ({id:key, label:this.values[key]}));
@@ -69,17 +78,20 @@
                     list: this.$el.querySelector('.SharpDropdown__list'),
                     item: _ => this.$refs.select.$el.querySelector('input:checked')
                 }
+            },
+
+            empty() {
+                return !this.value || this.multiple && !this.value.length;
             }
         },
         methods: {
             handleSelect(value) {
                 this.$emit('input', value);
-                if(this.multiple)
-                    this.$refs.dropdown.$el.focus();
-                else {
-                    setTimeout(_=>this.$refs.dropdown.$el.blur(),100);
-                }
             },
-        },
+            open() {
+                let { select:{ $refs: { multiselect } } } = this.$refs;
+                multiselect.activate();
+            }
+        }
     }
 </script>

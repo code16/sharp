@@ -35,6 +35,7 @@
                                  :values="filter.values"
                                  :value="filtersValue[filter.key]"
                                  :multiple="filter.multiple"
+                                 :required="filter.required"
                                  :key="filter.key"
                                  @input="emitAction('filterChanged',filter.key,$event)">
             </sharp-filter-select>

@@ -13,10 +13,19 @@
                 :disabled="readOnly"
                 :max="maxSelected"
                 :allow-empty="clearable"
-                @input="handleInput" ref="multiselect">
+                @input="handleInput"
+                @open="$emit('open')"
+                @close="$emit('close')"
+                ref="multiselect">
             <template v-if="clearable && !multiple && value!=null">
-                <div slot="carret" @mousedown.stop.prevent="remove()" class="SharpSelect__clear-btn close"></div>
+                <button slot="carret" class="SharpSelect__clear-button" type="button" @mousedown.stop.prevent="remove()">
+                    <svg class="SharpSelect__clear-button-icon"
+                         aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd">
+                        <path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
+                    </svg>
+                </button>
             </template>
+            <slot name="option" slot="option"></slot>
         </sharp-multiselect>
         <div v-else>
             <template v-if="multiple">
@@ -26,10 +35,11 @@
                 </sharp-check>
             </template>
             <div v-else class="SharpSelect__radio-button-group" :class="{'SharpSelect__radio-button-group--block':!inline}">
-                <component :is="inline?'span':'div'" v-for="(option, index) in options" :key="option.id" @click="handleRadioClicked(option.id)">
+                <component :is="inline?'span':'div'" v-for="(option, index) in options" :key="option.id">
                     <input type="radio" :id="`${uniqueIdentifier}${index}`" class="SharpRadio"
                            :checked="value===option.id" tabindex="0" :disabled="readOnly"
-                           :name="uniqueIdentifier" :value="option.id">
+                           :name="uniqueIdentifier" :value="option.id"
+                           @change="handleRadioChanged(option.id)">
                     <label class="SharpRadio__label" :for="`${uniqueIdentifier}${index}`">
                         <span class="SharpRadio__appearance"></span>
                         {{option.label}}
@@ -54,10 +64,7 @@
 
         props: {
             value: [Array, String, Number],
-            uniqueIdentifier: {
-                type: String,
-                required: true
-            },
+            uniqueIdentifier: String,
             options: {
                 type: Array,
                 required: true
@@ -127,11 +134,8 @@
                     newValue = this.value.filter(val => val !== optId);
                 this.$emit('input', newValue);
             },
-            handleRadioClicked(optId) {
-                if(this.value === optId && this.clearable) {
-                    this.$emit('input', null);
-                }
-                else this.$emit('input', optId);
+            handleRadioChanged(optId) {
+                this.$emit('input', optId);
             }
         },
     }
