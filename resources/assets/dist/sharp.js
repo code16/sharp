@@ -35952,7 +35952,7 @@ var noop = function noop() {};
 
         locale: String
     },
-    inject: ['xsrfToken'],
+    inject: ['xsrfToken', 'actionsBus'],
 
     data: function data() {
         return {
@@ -35972,6 +35972,9 @@ var noop = function noop() {};
     methods: {
         createUploader: function createUploader(cm) {
             return new __WEBPACK_IMPORTED_MODULE_1__MarkdownUpload__["a" /* default */]({
+                provide: {
+                    actionsBus: this.actionsBus
+                },
                 propsData: {
                     onSuccess: function onSuccess(file) {
                         var find = this.marker.find();
@@ -36815,6 +36818,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             }, {});
         },
         stateByValue: function stateByValue() {
+            if (!this.config.state) return null;
             return this.config.state.values.reduce(function (res, stateData) {
                 res[stateData.value] = stateData;
                 return res;
@@ -83463,7 +83467,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       }
     }) : _vm._e()]), _vm._v(" "), _c('div', {
       staticClass: "SharpEntitiesList__row-actions"
-    }, [_c('sharp-dropdown', {
+    }, [(_vm.config.state) ? _c('sharp-dropdown', {
       staticClass: "SharpEntitiesList__state-dropdown",
       attrs: {
         "show-arrow": false,
@@ -83487,7 +83491,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         class: _vm.stateClasses(state.value),
         style: (_vm.stateStyle(state.value))
       }), _vm._v("\n                                " + _vm._s(state.label) + "\n                            ")])
-    })], 2), _vm._v(" "), (_vm.instanceCommands(item).length) ? _c('sharp-dropdown', {
+    })], 2) : _vm._e(), _vm._v(" "), (_vm.instanceCommands(item).length) ? _c('sharp-dropdown', {
       staticClass: "SharpEntitiesList__commands-dropdown"
     }, _vm._l((_vm.instanceCommands(item)), function(command) {
       return _c('sharp-dropdown-item', {

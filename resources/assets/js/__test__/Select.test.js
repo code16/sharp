@@ -34,6 +34,16 @@ describe('select-field',()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
+    it('can mount Select field with clear button', async () => {
+        await createVm({
+            propsData: {
+                multiple: false
+            },
+            data:() => ({ value: 3 }) // possible String/Number value (no reactive)
+        });
+        expect(document.body.innerHTML).toMatchSnapshot();
+    });
+
     it('can mount Select field as checkboxes list', async () => {
         await createVm({
             propsData: {
@@ -136,7 +146,7 @@ describe('select-field',()=>{
             data: () => ({ value: 3 })
         });
 
-        let clearBtn = document.querySelector('.SharpSelect__clear-btn');
+        let clearBtn = document.querySelector('.SharpSelect__clear-button');
         clearBtn.dispatchEvent(new MouseEvent('mousedown'));
 
         expect(inputEmitted.mock.calls[0][0]).toBe(null);

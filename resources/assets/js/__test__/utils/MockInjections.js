@@ -1,5 +1,11 @@
 import Vue from 'vue';
 
+
+const injectedStrings = {
+    xsrfToken: 'xsrfTest'
+};
+
+
 const injectedComponents = {
     $field:{},
     $form:{
@@ -7,15 +13,24 @@ const injectedComponents = {
             errors: {}
         })
     },
-    $tab:{}
+    $tab:{},
+
+    actionsBus:{}
 };
+
+function resolveComponents(comps) {
+    return Object.keys(comps).reduce((injections, compName) => {
+        let Comp = Vue.extend(comps[compName]);
+        injections[compName] = new Comp();
+        return injections;
+    }, {});
+}
 
 export default {
     provide() {
-        return Object.keys(injectedComponents).reduce((injections, compName) => {
-            let Comp = Vue.extend(injectedComponents[compName]);
-            injections[compName] = new Comp();
-            return injections;
-        }, {});
+        return {
+            ...resolveComponents(injectedComponents),
+            ...injectedStrings
+        };
     }
 }

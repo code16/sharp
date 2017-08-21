@@ -72,7 +72,7 @@
 
     .multiselect__tag {
       position: relative;
-      padding: 4px 26px 4px 10px;
+      padding: 4px 20px 4px 8px;
       margin-top: 0;
       margin-left: 0;
     }
@@ -80,7 +80,7 @@
 
   .multiselect__input {
     @extend .SharpText;
-    box-shadow: none;
+    box-shadow: none !important;
   }
 
   .multiselect__input, .multiselect__single {

@@ -1,4 +1,4 @@
-export const lang = key => {
+export let lang = (key) => {
     return window.i18n[key];
 };
 

@@ -1,5 +1,37 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`list-field can mount "read only" filled list field 1`] = `
+<div id="app">
+    <div class="SharpList">
+        <!---->
+        <div>
+            <div>
+                <div class="SharpList__item">
+                    <div class="SharpModule__inner">
+                        <div class="SharpModule__content">
+                            <div class="SharpGrid">
+                                <div class="row">
+                                    <div class="col-md">
+                                        <div class="SharpFieldContainer SharpForm__form-item"><label class="SharpForm__label" style="display: none;">
+         <!----></label>
+                                            <!----><input type="text" disabled="disabled" class="SharpText">
+                                            <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!---->
+                        </div>
+                    </div>
+                    <!---->
+                </div>
+            </div>
+            <!---->
+        </div>
+        <!---->
+    </div>
+</div>
+`;
+
 exports[`list-field can mount collapsed list field 1`] = `
 <div id="app">
     <div class="SharpList">
@@ -22,6 +54,17 @@ exports[`list-field can mount collapsed list field 1`] = `
 </div>
 `;
 
+exports[`list-field can mount empty "read only" list field 1`] = `
+<div id="app">
+    <div class="SharpList">
+        <!---->
+        <div>
+            <div></div>
+            <!---->
+        </div> <em class="SharpList__empty-alert"></em></div>
+</div>
+`;
+
 exports[`list-field can mount empty list field 1`] = `
 <div id="app">
     <div class="SharpList">
@@ -35,8 +78,9 @@ exports[`list-field can mount empty list field 1`] = `
 
 exports[`list-field can mount filled list field 1`] = `
 <div id="app">
-    <div class="SharpList">
-        <!---->
+    <div class="SharpList"><button type="button" class="SharpButton SharpButton--secondary SharpList__sort-button">
+            Trier
+        </button>
         <div>
             <div>
                 <div class="SharpList__item">
@@ -51,9 +95,23 @@ exports[`list-field can mount filled list field 1`] = `
                                             <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
                                     </div>
                                 </div>
-                            </div>
-                            <!---->
-                        </div>
+                            </div> <button class="SharpButton SharpButton--danger SharpButton--sm"></button></div>
+                    </div>
+                    <div class="SharpList__new-item-zone"><button class="SharpButton SharpButton--secondary SharpButton--sm"></button></div>
+                </div>
+                <div class="SharpList__item">
+                    <div class="SharpModule__inner">
+                        <div class="SharpModule__content">
+                            <div class="SharpGrid">
+                                <div class="row">
+                                    <div class="col-md">
+                                        <div class="SharpFieldContainer SharpForm__form-item"><label class="SharpForm__label" style="display: none;">
+         <!----></label>
+                                            <!----><input type="text" class="SharpText">
+                                            <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
+                                    </div>
+                                </div>
+                            </div> <button class="SharpButton SharpButton--danger SharpButton--sm"></button></div>
                     </div>
                     <!---->
                 </div>
@@ -87,6 +145,24 @@ exports[`list-field can mount non addable, non removable, non sortable list fiel
                     </div>
                     <!---->
                 </div>
+                <div class="SharpList__item">
+                    <div class="SharpModule__inner">
+                        <div class="SharpModule__content">
+                            <div class="SharpGrid">
+                                <div class="row">
+                                    <div class="col-md">
+                                        <div class="SharpFieldContainer SharpForm__form-item"><label class="SharpForm__label" style="display: none;">
+         <!----></label>
+                                            <!----><input type="text" class="SharpText">
+                                            <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!---->
+                        </div>
+                    </div>
+                    <!---->
+                </div>
             </div>
             <!---->
         </div>
@@ -97,8 +173,9 @@ exports[`list-field can mount non addable, non removable, non sortable list fiel
 
 exports[`list-field can mount with full list 1`] = `
 <div id="app">
-    <div class="SharpList">
-        <!---->
+    <div class="SharpList"><button type="button" class="SharpButton SharpButton--secondary SharpList__sort-button">
+            Trier
+        </button>
         <div>
             <div>
                 <div class="SharpList__item">
@@ -113,9 +190,7 @@ exports[`list-field can mount with full list 1`] = `
                                             <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
                                     </div>
                                 </div>
-                            </div>
-                            <!---->
-                        </div>
+                            </div> <button class="SharpButton SharpButton--danger SharpButton--sm"></button></div>
                     </div>
                     <!---->
                 </div>
@@ -131,9 +206,7 @@ exports[`list-field can mount with full list 1`] = `
                                             <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
                                     </div>
                                 </div>
-                            </div>
-                            <!---->
-                        </div>
+                            </div> <button class="SharpButton SharpButton--danger SharpButton--sm"></button></div>
                     </div>
                     <!---->
                 </div>
@@ -149,9 +222,7 @@ exports[`list-field can mount with full list 1`] = `
                                             <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
                                     </div>
                                 </div>
-                            </div>
-                            <!---->
-                        </div>
+                            </div> <button class="SharpButton SharpButton--danger SharpButton--sm"></button></div>
                     </div>
                     <!---->
                 </div>
@@ -167,9 +238,7 @@ exports[`list-field can mount with full list 1`] = `
                                             <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
                                     </div>
                                 </div>
-                            </div>
-                            <!---->
-                        </div>
+                            </div> <button class="SharpButton SharpButton--danger SharpButton--sm"></button></div>
                     </div>
                     <!---->
                 </div>
@@ -185,9 +254,7 @@ exports[`list-field can mount with full list 1`] = `
                                             <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
                                     </div>
                                 </div>
-                            </div>
-                            <!---->
-                        </div>
+                            </div> <button class="SharpButton SharpButton--danger SharpButton--sm"></button></div>
                     </div>
                     <!---->
                 </div>

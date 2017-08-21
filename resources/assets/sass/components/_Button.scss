@@ -19,8 +19,8 @@
     width: rem(16px);
     height: rem(16px);
     margin-left: .5rem;
-    transition-duration: $transition--base;
-    transition-timing-function: ease-in;
+    //transition-duration: $transition--base;
+    //transition-timing-function: ease-in;
   }
 
   @include reset;
@@ -38,8 +38,8 @@
   border-radius: $button-border-radius;
   text-align: center;
   text-decoration: none;
-  transition-duration: $transition--base;
-  transition-timing-function: ease-in;
+  //transition-duration: $transition--base;
+  //transition-timing-function: ease-in;
   white-space: nowrap;
   line-height: 16px;
 
@@ -89,7 +89,7 @@
 
   &--danger {
     @include button-theme(
-      transparent,  // bg-color
+      $ui-01,  // bg-color
       $support-01, // border-color
       $support-01,  // font-color
       $support-01,  // hover-bg-color

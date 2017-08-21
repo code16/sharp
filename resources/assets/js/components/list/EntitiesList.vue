@@ -32,7 +32,7 @@
                             <a class="SharpEntitiesList__row-link" v-if="rowHasLink(item)" :href="rowLink(item)"></a>
                         </div>
                         <div class="SharpEntitiesList__row-actions">
-                            <sharp-dropdown class="SharpEntitiesList__state-dropdown" :show-arrow="false" :disabled="!hasStateAuthorization(item)">
+                            <sharp-dropdown v-if="config.state" class="SharpEntitiesList__state-dropdown" :show-arrow="false" :disabled="!hasStateAuthorization(item)">
                                 <i slot="text" class="fa fa-circle" :class="stateClasses(item.state)" :style="stateStyle(item.state)"></i>
                                 <sharp-dropdown-item v-for="state in config.state.values" @click="setState(item,state)" :key="state.value">
                                     <i class="fa fa-circle" :class="stateClasses(state.value)" :style="stateStyle(state.value)"></i>
@@ -184,6 +184,8 @@
                 },{});
             },
             stateByValue() {
+                if(!this.config.state)
+                    return null;
                 return this.config.state.values.reduce((res, stateData) => {
                     res[stateData.value] = stateData;
                     return res;

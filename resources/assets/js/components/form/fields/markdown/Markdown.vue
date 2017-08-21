@@ -29,7 +29,7 @@
 
             locale:String
         },
-        inject: [ 'xsrfToken' ],
+        inject: [ 'xsrfToken', 'actionsBus' ],
 
         data() {
             return {
@@ -48,6 +48,9 @@
         methods : {
             createUploader(cm) {
                 return new MarkdownUpload({
+                    provide:{
+                        actionsBus: this.actionsBus
+                    },
                     propsData: {
                         onSuccess(file) {
                             let find = this.marker.find();

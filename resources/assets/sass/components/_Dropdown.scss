@@ -45,6 +45,8 @@
     padding-left: 1rem;
     font-weight: 700;
     border: $input-border;
+
+    @include layer('raised');
   }
 
   &__list {

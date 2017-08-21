@@ -1,3 +1,5 @@
+@import '../mixins/card';
+
 .SharpCard {
   @include reset;
   @include layer('raised');

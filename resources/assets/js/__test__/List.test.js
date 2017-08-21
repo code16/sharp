@@ -2,7 +2,7 @@ import Vue from 'vue/dist/vue.common';
 import List from '../components/form/fields/list/List.vue';
 import FieldDisplay from '../components/form/FieldDisplay';
 
-import { MockInjections, MockTransitions, MockI18n } from './utils';
+import { MockInjections, MockTransitions, MockI18n, QueryComponent } from './utils';
 
 describe('list-field', () => {
     Vue.component('sharp-list', List);
@@ -10,6 +10,7 @@ describe('list-field', () => {
 
     Vue.use(MockTransitions);
     Vue.use(MockI18n);
+    Vue.use(QueryComponent);
 
     beforeEach(()=>{
         document.body.innerHTML = `    
@@ -36,15 +37,33 @@ describe('list-field', () => {
     });
 
     it('can mount empty list field', async () => {
-        await createVm();
+        await createVm({
+            propsData: {
+                addable:true, removable:true, sortable:true
+            }
+        });
+
+        expect(document.body.innerHTML).toMatchSnapshot();
+    });
+
+    it('can mount empty "read only" list field', async () => {
+        await createVm({
+            propsData: {
+                readOnly: true,
+                addable:true, removable:true, sortable:true
+            }
+        });
 
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
     it('can mount filled list field', async () => {
         await createVm({
+            propsData: {
+                addable:true, removable:true, sortable:true
+            },
             data:()=>({
-                value: [{id:0, name:'Antoine'}]
+                value: [{id:0, name:'Antoine'}, {id:1, name:'Samuel'}]
             })
         });
 
@@ -54,7 +73,8 @@ describe('list-field', () => {
     it('can mount "read only" filled list field', async () => {
         await createVm({
             propsData: {
-                readOnly:true
+                readOnly:true,
+                addable: true, removable: true, sortable: true
             },
             data:()=>({
                 value: [{id:0, name:'Antoine'}]
@@ -66,6 +86,9 @@ describe('list-field', () => {
 
     it('can mount collapsed list field', async () => {
         let $list = await createVm({
+            propsData: {
+                addable: true, removable: true, sortable: true
+            },
             data:()=>({
                 value: [{id:0, name:'Antoine'}]
             }),
@@ -84,7 +107,7 @@ describe('list-field', () => {
                 addable: false, removable: false, sortable: false
             },
             data:()=>({
-                value: [{id:0, name:'Antoine'}]
+                value: [{id:0, name:'Antoine'},{ id:1, name:'Samuel' }]
             }),
         });
 
@@ -93,6 +116,9 @@ describe('list-field', () => {
 
     it('can mount with full list', async () => {
         await createVm({
+            propsData: {
+                addable:true, removable:true, sortable: true
+            },
             data:()=>({
                 value: [{id:0, name:'Antoine'},{id:1, name:'Samuel'},{id:2, name:'Solène'},{id:3, name:'Georges'},{id:4, name:'Gérard'}]
             }),
@@ -215,6 +241,18 @@ describe('list-field', () => {
         expect($list.list).toMatchObject([
             {id:0, name:'Antoine'},{id: null, name: null},{id:2, name:'Solène'}
         ])
+    });
+
+    it('have proper field identifier', async () => {
+        let $list = await createVm({
+            data:()=>({
+                value:[{id:0, name:'Antoine'}, {id:1, name:'Samuel'}]
+            })
+        });
+
+        let identifiers = $list.$findDeepChildren('SharpFieldContainer').map(fc => fc.mergedErrorIdentifier);
+
+        expect(identifiers).toEqual(expect.arrayContaining([ '0.name', '1.name' ]));
     });
 });
 

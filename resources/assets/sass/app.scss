@@ -1,11 +1,8 @@
-$css--reset: true;
-$css--typography: true;
+$css--reset:false;
 
 @import 'node_modules/carbon-components/scss/globals/scss/colors';
 @import 'node_modules/carbon-components/scss/globals/scss/vars';
-@import 'node_modules/carbon-components/scss/globals/scss/layer';
 @import 'node_modules/carbon-components/scss/globals/scss/typography';
-@import 'node_modules/carbon-components/scss/globals/scss/helper-mixins';
 @import 'node_modules/carbon-components/scss/globals/scss/layout';
 @import 'node_modules/carbon-components/scss/globals/scss/css--reset';
 
@@ -21,19 +18,12 @@ $css--typography: true;
 
 @import 'components/loading/Loading';
 
-$input-label-weight: 400;
-$button-border-width: 1px;
-
-$grid-gutter-widths: (
-        xs: 10px,
-        sm: $grid-gutter-width-base,
-        md: $grid-gutter-width-base,
-        lg: $grid-gutter-width-base,
-        xl: $grid-gutter-width-base
-);
+@import 'vars';
+@import 'mixins/layer';
+@import 'mixins/helper-mixins';
 
 #sharp-app {
-  @include reset;
+
   color: $text-01;
   line-height: 1;
 
@@ -44,8 +34,6 @@ $grid-gutter-widths: (
   .sharp_gray { color:$color__navy-gray-7 }
   .sharp_lightgray { color:$color__navy-gray-9 }
   .sharp_darkgray { color:$color__navy-gray-4 }
-
-  @import 'node_modules/carbon-components/scss/globals/scss/css--typography';
 
   @import 'node_modules/bootstrap/scss/grid';
 
