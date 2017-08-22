@@ -29,7 +29,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function label(): string {
                         return "My Instance Command";
                     }
-                    public function execute($instanceId, array $params = []): array {}
+                    public function execute($instanceId, array $data = []): array {}
                 });
             }
         };

@@ -20,10 +20,10 @@ abstract class InstanceCommand extends Command
 
     /**
      * @param string $instanceId
-     * @param array $params
+     * @param array $data
      * @return array
      */
-    public abstract function execute($instanceId, array $params = []): array;
+    public abstract function execute($instanceId, array $data = []): array;
 
     /**
      * Check if the current user is allowed to use this Command for this instance

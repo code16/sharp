@@ -18,10 +18,10 @@ class SpaceshipPreview extends InstanceCommand
 
     /**
      * @param string $instanceId
-     * @param array $params
+     * @param array $data
      * @return array
      */
-    public function execute($instanceId, array $params = []): array
+    public function execute($instanceId, array $data = []): array
     {
         $spaceship = Spaceship::findOrFail($instanceId);
 
