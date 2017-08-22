@@ -22,7 +22,7 @@ class EloquentFormTagsTransformer implements SharpAttributeTransformer
      * @param string|Closure $labelAttribute
      * @param string $idAttribute
      */
-    public function __construct($labelAttribute, $idAttribute)
+    public function __construct($labelAttribute, string $idAttribute = "id")
     {
         $this->idAttribute = $idAttribute;
 

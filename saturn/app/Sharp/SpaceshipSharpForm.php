@@ -6,7 +6,7 @@ use App\Pilot;
 use App\Spaceship;
 use App\SpaceshipType;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
-use Code16\Sharp\Form\Eloquent\WithFormEloquentTransformers;
+use Code16\Sharp\Form\Eloquent\Transformers\EloquentFormTagsTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
@@ -26,7 +26,7 @@ class SpaceshipSharpForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
 
-    use WithCustomTransformers, WithFormEloquentTransformers;
+    use WithCustomTransformers;
 
     function buildFormFields()
     {
@@ -146,17 +146,17 @@ class SpaceshipSharpForm extends SharpForm
 
     }
 
-//    function create()
-//    {
-//        return $this->transform(new Spaceship);
-//    }
+    function create(): array
+    {
+        return $this->transform(new Spaceship(["name" => "new"]));
+    }
 
     function find($id): array
     {
         return $this->setCustomTransformer("capacity", function($spaceship) {
                 return $spaceship->capacity / 1000;
             })
-            ->setTagsTransformer("pilots", "name")
+            ->setCustomTransformer("pilots", new EloquentFormTagsTransformer("name"))
             ->transform(
                 Spaceship::with("reviews", "pilots", "picture", "pictures")->findOrFail($id)
             );
