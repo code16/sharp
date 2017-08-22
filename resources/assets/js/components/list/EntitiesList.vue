@@ -64,12 +64,11 @@
                          :visible="showFormModal[form.key]"
                          :key="form.key"
                          @ok="postCommandForm(form.key, $event)"
-                         @hidden="$set(showFormModal,form.key,false)">
+                         @hidden="hideCommandModal(form.key)">
                 <sharp-form :props="form"
                             :entity-key="form.key"
                             independant
                             ignore-authorizations
-                            reset-data-after-submitted
                             @submitted="commandFormSubmitted(form.key, $event)">
                 </sharp-form>
             </sharp-modal>
@@ -420,7 +419,8 @@
             */
             postCommandForm(key, event) {
                 this.actionsBus.$emit('submit', {
-                    key, endpoint: this.commandEnpoint(key, this.selectedInstance),
+                    entityKey: key,
+                    endpoint: this.commandEnpoint(key, this.selectedInstance),
                     dataFormatter:form=>({ query:this.apiParams, data:form.data })
                 });
                 return event.cancel();
@@ -431,8 +431,13 @@
             */
             commandFormSubmitted(key, data) {
                 this.selectedInstance = null;
-                this.$set(this.showFormModal,key, false);
+                this.hideCommandModal(key);
                 this.handleCommandResponse(data);
+            },
+
+            hideCommandModal(key) {
+                this.actionsBus.$emit('reset', { entityKey: key });
+                this.$set(this.showFormModal,key, false);
             },
 
             /**

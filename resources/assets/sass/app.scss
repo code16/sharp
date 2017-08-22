@@ -3,7 +3,6 @@ $css--reset:false;
 @import 'node_modules/carbon-components/scss/globals/scss/colors';
 @import 'node_modules/carbon-components/scss/globals/scss/vars';
 @import 'node_modules/carbon-components/scss/globals/scss/typography';
-@import 'node_modules/carbon-components/scss/globals/scss/layout';
 @import 'node_modules/carbon-components/scss/globals/scss/css--reset';
 
 @import 'node_modules/bootstrap/scss/mixins/hover';
@@ -21,6 +20,7 @@ $css--reset:false;
 @import 'vars';
 @import 'mixins/layer';
 @import 'mixins/helper-mixins';
+@import 'mixins/layout';
 
 #sharp-app {
 

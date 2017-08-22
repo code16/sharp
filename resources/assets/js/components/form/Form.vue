@@ -67,8 +67,7 @@
                 default: false
             },
             ignoreAuthorizations: Boolean,
-            props: Object,
-            resetDataAfterSubmitted: Boolean
+            props: Object
         },
 
         inject:['actionsBus', ...DynamicView.inject],
@@ -190,6 +189,11 @@
                 this.locale = newLocale;
             },
             delete: 'delete',
+            reset({ entityKey }) {
+                if(entityKey && entityKey !== this.entityKey) return;
+
+                this.data = {}
+            }
         },
         mounted() {
             this.init();

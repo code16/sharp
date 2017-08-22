@@ -2,7 +2,7 @@
   &--link {
     &.SharpCard {
       &:hover {
-        @include focus-outline('border');
+        @include focus-outline('layer');
       }
     }
   }

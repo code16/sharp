@@ -39,9 +39,9 @@
 
   &__form-item--danger {
     input, textarea, select, .SharpDropdown__text {
-      box-shadow: 0 2px 0px 0px $support-01;
+      border-bottom: 2px solid $support-01;
     }
-    .SharpForm--form-requirement {
+    .SharpForm__form-requirement {
       max-height: rem(200px);
     }
   }

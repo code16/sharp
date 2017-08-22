@@ -1,16 +1,13 @@
 .SharpFilterSelect {
   width: auto;
-  background-color: $field-01;
-  padding-left: 1rem;
-  position:relative;
-  cursor: default;
-  @include font-size('14');
 
   display:flex;
-  align-items:center;
+
+  @extend .SharpDropdown;
+  cursor: default;
 
   &--open {
-    @extend .SharpDropdown--open:focus;
+    @extend .SharpDropdown--open;
   }
 
   &--empty, &--multiple {
@@ -21,6 +18,13 @@
 
   &__text {
     //padding-right: .5rem;
+    height: 100%;
+    display:flex;
+    align-items:center;
+    padding-left: 1rem;
+    position: relative;
+    background: $ui-01;
+    z-index: z('dropdownText')
   }
 
   &__select {

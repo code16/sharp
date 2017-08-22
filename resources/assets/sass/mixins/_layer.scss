@@ -15,11 +15,11 @@
 //
 
 // Box shadow variables
-$box-shadow--raised: 0 1px 2px 0 $box-shadow;
-$box-shadow--overlay: 0 4px 8px 0 $box-shadow;
-$box-shadow--sticky-nav: 0 6px 12px 0 $box-shadow;
-$box-shadow--temporary-nav: 0 8px 16px 0 $box-shadow;
-$box-shadow--pop-out: 0 12px 24px 0 $box-shadow;
+$box-shadow--raised: 0 0 2px 0 $box-shadow;
+$box-shadow--overlay: 0 0 8px 0 $box-shadow;
+$box-shadow--sticky-nav: 0 0 12px 0 $box-shadow;
+$box-shadow--temporary-nav: 0 0 16px 0 $box-shadow;
+$box-shadow--pop-out: 0 0 24px 0 $box-shadow;
 
 // Layer box-shadow map
 $layer-shadows: (

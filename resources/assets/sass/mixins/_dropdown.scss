@@ -10,9 +10,11 @@
 }
 
 @mixin SharpDropdownShadowBottom {
-  box-shadow: 0 1px 0 0 $brand-01, 1px 0 0 0 $brand-01, -1px 0 0 0 $brand-01;
+  //box-shadow: 0 1px 0 0 $brand-01, 1px 0 0 0 $brand-01, -1px 0 0 0 $brand-01;
+  @include focus-outline('layer')
 }
 
 @mixin SharpDropdownShadowTop {
-  box-shadow: 0 -1px 0 0 $brand-01, 1px 0 0 0 $brand-01, -1px 0 0 0 $brand-01;
+  //box-shadow: 0 -1px 0 0 $brand-01, 1px 0 0 0 $brand-01, -1px 0 0 0 $brand-01;
+  @include focus-outline('layer')
 }

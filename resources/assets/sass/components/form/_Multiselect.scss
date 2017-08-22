@@ -1,12 +1,9 @@
 .multiselect {
   @extend .SharpDropdown;
 
-  &:focus {
-    @extend .SharpDropdown:focus;
-  }
 
   &.multiselect--active {
-    @extend .SharpDropdown--open:focus;
+    @extend .SharpDropdown--open;
 
     .multiselect__content {
       @include SharpDropdownShadowBottom;

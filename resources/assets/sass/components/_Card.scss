@@ -11,7 +11,7 @@
   border: 1px solid $ui-04;
 
   &:focus {
-    @include focus-outline('border');
+    @include focus-outline('layer');
   }
 
   .SharpCard {

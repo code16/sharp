@@ -36,13 +36,19 @@
   }
 }
 
-@mixin focus-outline($type: 'border') {
+@mixin focus-outline($type: 'border', $color: $brand-01) {
   @if ($type == 'border') {
-    outline: 1px solid orange;
+    outline: 1px solid $color;
   }
 
   @if ($type == 'blurred') {
     box-shadow: 0 0 0 3px $color__blue-20;
+    outline: 1px solid transparent;
+  }
+
+
+  @if ($type == 'layer') {
+    box-shadow: 0 0 3px 0 $color;
     outline: 1px solid transparent;
   }
 }

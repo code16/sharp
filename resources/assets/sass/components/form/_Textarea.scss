@@ -8,8 +8,11 @@
   background-color: $field-01;
   border: $input-border;
 
+  //sharp specific
+  @include layer('raised');
+
   &:focus {
-    @include focus-outline('border');
+    @include focus-outline('layer');
   }
 
   &::-webkit-input-placeholder {

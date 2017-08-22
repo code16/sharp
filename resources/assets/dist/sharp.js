@@ -34295,8 +34295,7 @@ var noop = function noop() {};
             default: false
         },
         ignoreAuthorizations: Boolean,
-        props: Object,
-        resetDataAfterSubmitted: Boolean
+        props: Object
     },
 
     inject: ['actionsBus'].concat(_toConsumableArray(__WEBPACK_IMPORTED_MODULE_3__DynamicViewMixin__["a" /* default */].inject)),
@@ -34436,7 +34435,14 @@ var noop = function noop() {};
             this.locale = newLocale;
         },
 
-        delete: 'delete'
+        delete: 'delete',
+        reset: function reset(_ref5) {
+            var entityKey = _ref5.entityKey;
+
+            if (entityKey && entityKey !== this.entityKey) return;
+
+            this.data = {};
+        }
     },
     mounted: function mounted() {
         this.init();
@@ -36722,7 +36728,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
 
 
 
@@ -37156,7 +37161,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             var _this9 = this;
 
             this.actionsBus.$emit('submit', {
-                key: key, endpoint: this.commandEnpoint(key, this.selectedInstance),
+                entityKey: key,
+                endpoint: this.commandEnpoint(key, this.selectedInstance),
                 dataFormatter: function dataFormatter(form) {
                     return { query: _this9.apiParams, data: form.data };
                 }
@@ -37170,8 +37176,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         */
         commandFormSubmitted: function commandFormSubmitted(key, data) {
             this.selectedInstance = null;
-            this.$set(this.showFormModal, key, false);
+            this.hideCommandModal(key);
             this.handleCommandResponse(data);
+        },
+        hideCommandModal: function hideCommandModal(key) {
+            this.actionsBus.$emit('reset', { entityKey: key });
+            this.$set(this.showFormModal, key, false);
         },
 
 
@@ -82591,7 +82601,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     staticStyle: {
       "font-weight": "normal"
     }
-  }, [_vm._v(" | ")]) : _vm._e()]), _vm._v(" "), _c('sharp-select', {
+  }, [_vm._v(" | ")]) : _vm._e()]), _vm._v(" "), _c('sharp-select', {
     ref: "select",
     staticClass: "SharpFilterSelect__select",
     attrs: {
@@ -83528,7 +83538,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
           _vm.postCommandForm(form.key, $event)
         },
         "hidden": function($event) {
-          _vm.$set(_vm.showFormModal, form.key, false)
+          _vm.hideCommandModal(form.key)
         }
       }
     }, [_c('sharp-form', {
@@ -83536,8 +83546,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         "props": form,
         "entity-key": form.key,
         "independant": "",
-        "ignore-authorizations": "",
-        "reset-data-after-submitted": ""
+        "ignore-authorizations": ""
       },
       on: {
         "submitted": function($event) {
