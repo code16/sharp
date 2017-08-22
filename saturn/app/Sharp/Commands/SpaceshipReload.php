@@ -19,7 +19,7 @@ class SpaceshipReload extends EntityCommand
      * @param array $params
      * @return array
      */
-    public function execute(array $params = [])
+    public function execute(array $params = []): array
     {
         return $this->reload();
     }

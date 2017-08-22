@@ -22,13 +22,13 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function label(): string {
                         return "My Entity Command";
                     }
-                    public function execute(array $params = []) {}
+                    public function execute(array $params = []): array {}
                 });
                 $this->addEntityCommand("instanceCommand", new class extends InstanceCommand {
                     public function label(): string {
                         return "My Instance Command";
                     }
-                    public function execute($instanceId, array $params = []) {}
+                    public function execute($instanceId, array $params = []): array {}
                 });
             }
         };
@@ -88,7 +88,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function confirmationText() {
                         return "Sure?";
                     }
-                    public function execute(array $params = []) {}
+                    public function execute(array $params = []): array {}
 
                 });
             }
@@ -124,7 +124,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function buildFormLayout(FormLayoutColumn &$column) {
                         $column->withSingleField("message");
                     }
-                    public function execute(array $params = []) {}
+                    public function execute(array $params = []): array {}
                 });
             }
         };
@@ -168,7 +168,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                         $this->addField(SharpFormTextField::make("message"));
                         $this->addField(SharpFormTextField::make("message2"));
                     }
-                    public function execute(array $params = []) {}
+                    public function execute(array $params = []): array {}
                 });
             }
         };
@@ -202,7 +202,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function authorize(): bool {
                         return false;
                     }
-                    public function execute(array $params = []) {}
+                    public function execute(array $params = []): array {}
                 });
             }
         };
@@ -234,7 +234,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function authorizeFor($instanceId): bool {
                         return $instanceId < 3;
                     }
-                    public function execute($instanceId, array $params = []) {}
+                    public function execute($instanceId, array $params = []): array {}
                 });
             }
         };
@@ -266,5 +266,5 @@ class SharpEntityListCommandTestCommand extends EntityCommand
         return "My Entity Command";
     }
 
-    public function execute(array $params = []) {}
+    public function execute(array $params = []): array {}
 }

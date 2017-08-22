@@ -74,7 +74,7 @@ abstract class EntityState extends InstanceCommand
      * @return array
      * @throws SharpInvalidEntityStateException
      */
-    public function execute($instanceId, array $params = [])
+    public function execute($instanceId, array $params = []): array
     {
         $stateId = $params["value"];
         $this->buildStates();
@@ -84,6 +84,14 @@ abstract class EntityState extends InstanceCommand
         }
 
         return $this->updateState($instanceId, $stateId) ?: $this->refresh($instanceId);
+    }
+
+    /**
+     * @return string
+     */
+    public function label(): string
+    {
+        return null;
     }
 
     /**
