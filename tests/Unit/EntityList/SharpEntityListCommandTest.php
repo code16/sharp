@@ -4,6 +4,7 @@ namespace Code16\Sharp\Tests\Unit\EntityList;
 
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Tests\SharpTestCase;
@@ -22,7 +23,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function label(): string {
                         return "My Entity Command";
                     }
-                    public function execute(array $params = []): array {}
+                    public function execute(EntityListQueryParams $params, array $data = []): array {}
                 });
                 $this->addEntityCommand("instanceCommand", new class extends InstanceCommand {
                     public function label(): string {
@@ -88,7 +89,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function confirmationText() {
                         return "Sure?";
                     }
-                    public function execute(array $params = []): array {}
+                    public function execute(EntityListQueryParams $params, array $data = []): array {}
 
                 });
             }
@@ -124,7 +125,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function buildFormLayout(FormLayoutColumn &$column) {
                         $column->withSingleField("message");
                     }
-                    public function execute(array $params = []): array {}
+                    public function execute(EntityListQueryParams $params, array $data = []): array {}
                 });
             }
         };
@@ -168,7 +169,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                         $this->addField(SharpFormTextField::make("message"));
                         $this->addField(SharpFormTextField::make("message2"));
                     }
-                    public function execute(array $params = []): array {}
+                    public function execute(EntityListQueryParams $params, array $data = []): array {}
                 });
             }
         };
@@ -202,7 +203,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function authorize(): bool {
                         return false;
                     }
-                    public function execute(array $params = []): array {}
+                    public function execute(EntityListQueryParams $params, array $data = []): array {}
                 });
             }
         };
@@ -266,5 +267,5 @@ class SharpEntityListCommandTestCommand extends EntityCommand
         return "My Entity Command";
     }
 
-    public function execute(array $params = []): array {}
+    public function execute(EntityListQueryParams $params, array $data = []): array {}
 }

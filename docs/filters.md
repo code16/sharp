@@ -85,4 +85,4 @@ In this case, with Eloquent for instance, your might have to modify your code to
 
 Note that a filter can't be required AND multiple.
 
-> Next : [Commands and Entity State](commands-and-entity-state.md)
+> Next chapter : [Commands](commands.md)

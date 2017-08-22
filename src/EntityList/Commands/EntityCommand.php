@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\EntityList\Commands;
 
+use Code16\Sharp\EntityList\EntityListQueryParams;
+
 abstract class EntityCommand extends Command
 {
 
@@ -14,8 +16,9 @@ abstract class EntityCommand extends Command
     }
 
     /**
-     * @param array $params
+     * @param EntityListQueryParams $params
+     * @param array $data
      * @return array
      */
-    public abstract function execute(array $params = []): array;
+    public abstract function execute(EntityListQueryParams $params, array $data = []): array;
 }

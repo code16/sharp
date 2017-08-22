@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Api\Commands;
 
+use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Code16\Sharp\Http\Api\ApiController;
 
@@ -25,7 +26,10 @@ class EntityCommandController extends ApiController
         }
 
         return $this->returnAsJson(
-            $list, $list->entityCommandHandler($commandKey)->execute((array)request("data"))
+            $list, $list->entityCommandHandler($commandKey)->execute(
+                EntityListQueryParams::create()->fillWithRequest("query"),
+                (array)request("data")
+            )
         );
     }
 }
