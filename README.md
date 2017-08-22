@@ -3,11 +3,11 @@
 > Sharp is under heavy development. It should be out and fully documented in a few weeks. This documentation is very WIP.
 
 Sharp is not a CMS: it's a content management framework, a toolset which provides help building a CMS section in a website, with some rules in mind:
-- the public website should not have any knowledge of the CMS;
-- the CMS should not have any expectations from the persistence layer (meaning: the DB structure has nothing to do with the CMS);
-- in fact, removing the CMS should not have any effect on the project (well, ok, except for the administrator);
-- administrators should work with their data and terminology, not CMS terms;
-- website developers should not have to work on the front-end development for the CMS. 
+- the public website **should not have any knowledge of the CMS**;
+- the CMS **should not have any expectations from the persistence layer** (meaning: the DB structure has nothing to do with the CMS);
+- in fact, **removing the CMS should not have any effect on the project** (well, ok, except for the administrator);
+- administrators **should work with their data and terminology**, not CMS terms;
+- website developers **should not have to work on the front-end development** for the CMS. 
  
 Sharp intends to provide a clean solution to the following needs:
 - create, update or delete any structured data of the project, handling validation and errors;
@@ -31,7 +31,7 @@ Each `entity` in Sharp can be displayed:
 ## Installation
 
 - Add the package with composer: `composer require code16/sharp`,
-- Register the service provider `Code16\Sharp\SharpServiceProvider` in the provider array of `config/app.php`,
+- [Laravel 5.4 only] Register the service provider `Code16\Sharp\SharpServiceProvider` in the provider array of `config/app.php`,
 - Publish assets: `php artisan vendor:publish --provider=Code16\Sharp\SharpServiceProvider`.
 
 ## Configuration
