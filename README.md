@@ -61,13 +61,14 @@ We'll get into all those classes in this document. The important thing to notice
 
 ## Full documentation
 
-1. [Building an Entity List](docs/building-entity-list.md)
-2. [Filters](docs/filters.md)
-3. [Commands](docs/commands.md)
-4. Entity State
-4. Building an Entity Form
-5. All form inputs
-6. The Dashboard
-7. Authentication and authorizations
-8. Handling data localization
-9. Extending Sharp
+1. [Authentication](docs/authentication.md)
+2. [Building an Entity List](docs/building-entity-list.md)
+3. [Filters](docs/filters.md)
+4. [Commands](docs/commands.md)
+5. [Entity States](docs/entity-states.md)
+6. Building an Entity Form
+7. All form inputs
+8. The Dashboard
+9. Authorizations
+10. Handling data localization
+11. Extending Sharp
