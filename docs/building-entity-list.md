@@ -93,9 +93,12 @@ In a more realistic project, you'll want to transform your data before sending i
         )->transform($spaceships);
     }
 
-The `setCustomTransformer()` function takes the key of the attribute to transform, and either a `Closure` or an instance of a class which must implement `Code16\Sharp\Utils\Transformers\SharpAttributeTransformer`, or even just the full name of the lastest.
+The `setCustomTransformer()` function takes the key of the attribute to transform, and either a `Closure` or an instance of a class which must implement `Code16\Sharp\Utils\Transformers\SharpAttributeTransformer`, or even just the full class name of the lastest.
 
-The `transform` function must be called after, and will apply all transformers on your list.
+The `transform` function must be called after, and will 
+
+- apply all custom transformers on your list 
+- and transform the given object (a model likely) into an array (see note below).
 
 > Note that transformers need your models (spaceships, here) to allow a direct access to their attributes, like for instance `spaceship->capacity`, and to implement `Illuminate\Contracts\Support\Arrayable` interface. Eloquent Model fulfill those needs.
 

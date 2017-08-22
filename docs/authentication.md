@@ -57,4 +57,6 @@ Finally, can hook into the the [Laravel custom guards](https://laravel.com/docs/
 
 Of course, this implies that you defined a "sharp" guard in `config/auth.php`, as detailed in the Laravel documentation.
 
+---
+
 > next chapter : [Building an Entity List](building-entity-list.md).

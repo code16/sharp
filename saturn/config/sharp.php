@@ -11,8 +11,8 @@ return [
             "validator" => \App\Sharp\SpaceshipSharpValidator::class,
             "policy" => \App\Sharp\Policies\SpaceshipPolicy::class,
 //            "authorizations" => [
+//                "update" => false,
 //                "delete" => false,
-//                "create" => false,
 //            ]
         ],
         "user" => [

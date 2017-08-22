@@ -85,4 +85,6 @@ In this case, with Eloquent for instance, your might have to modify your code to
 
 Note that a filter can't be required AND multiple.
 
+---
+
 > Next chapter : [Commands](commands.md)

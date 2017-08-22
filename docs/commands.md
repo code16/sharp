@@ -145,5 +145,6 @@ For instance Commands we have to know the instance involved, which means the sig
         return Spaceship::findOrFail($instanceId)->owner_id == sharp_user()->id;
     }
 
+---
 
 > Next chapter : [Entity states](entity-states.md)

@@ -73,4 +73,6 @@ Entity states can declare an authorization check very much like Instance Command
     }
 
 
+---
+
 > Next chapter : [Building an Entity Form](building-entity-form.md)
