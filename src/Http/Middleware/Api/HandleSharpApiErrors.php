@@ -23,7 +23,8 @@ class HandleSharpApiErrors
     {
         $response = $next($request);
 
-        if($response->exception instanceof SharpException) {
+        if($response->exception instanceof SharpException
+            || method_exists($response->exception, 'getStatusCode')) {
             return response()->json([
                 "message" => $response->exception->getMessage()
             ], $this->getHttpCodeFor($response->exception));
@@ -55,6 +56,6 @@ class HandleSharpApiErrors
             return 422;
         }
 
-        return 500;
+        return $exception->getStatusCode();
     }
 }
