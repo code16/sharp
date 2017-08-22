@@ -35151,6 +35151,9 @@ var Tag = function (_LabelledItem2) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_moment__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_moment__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
 //
 //
 //
@@ -35251,7 +35254,7 @@ var Tag = function (_LabelledItem2) {
             return this.moment.format(this.displayFormat);
         }
     },
-    methods: {
+    methods: _defineProperty({
         handleDateSelect: function handleDateSelect(date) {
             this.moment.set({
                 year: date.getFullYear(),
@@ -35342,19 +35345,13 @@ var Tag = function (_LabelledItem2) {
                 end: this.displayFormat.lastIndexOf(ch) + 1
             };
         },
-        forceShowPicker: function forceShowPicker() {
+        handleFocus: function handleFocus() {
             this.showPicker = true;
         }
-    },
+    }, 'handleBlur', function handleBlur() {
+        this.showPicker = false;
+    }),
     mounted: function mounted() {
-        var _this = this;
-
-        document.addEventListener('click', function (e) {
-            if (!_this.$el.contains(e.target) && _this.showPicker) {
-                _this.showPicker = false;
-            }
-        }, false);
-
         this.setFocusable(this.$refs.input);
     }
 });
@@ -83688,7 +83685,12 @@ if (false) {
 "use strict";
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "SharpDate"
+    staticClass: "SharpDate",
+    class: {
+      'SharpDate--open': _vm.showPicker
+    }
+  }, [_c('div', {
+    staticClass: "SharpDate__input-wrapper"
   }, [_c('input', {
     ref: "input",
     staticClass: "SharpDate__input",
@@ -83699,9 +83701,8 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "value": _vm.inputValue
     },
     on: {
-      "input": _vm.handleInput,
-      "focus": _vm.forceShowPicker,
       "blur": _vm.handleBlur,
+      "focus": _vm.handleFocus,
       "keydown": [function($event) {
         if (!('button' in $event) && _vm._k($event.keyCode, "up", 38)) { return null; }
         $event.preventDefault();
@@ -83712,14 +83713,19 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         _vm.decrease($event)
       }]
     }
-  }), _vm._v(" "), _c('div', {
+  })]), _vm._v(" "), _c('div', {
     directives: [{
       name: "show",
       rawName: "v-show",
       value: (_vm.showPicker),
       expression: "showPicker"
     }],
-    staticClass: "SharpDate__picker"
+    staticClass: "SharpDate__picker",
+    on: {
+      "mousedown": function($event) {
+        $event.preventDefault();
+      }
+    }
   }, [(_vm.hasDate) ? _c('sharp-date-picker', {
     staticClass: "SharpDate__date",
     attrs: {

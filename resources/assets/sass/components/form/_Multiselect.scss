@@ -55,6 +55,8 @@
     cursor: default;
     min-height: rem(40px);
 
+    @include layer('raised');
+
     .multiselect__input {
       border: none;
       display:inline-block;

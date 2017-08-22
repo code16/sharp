@@ -1,15 +1,16 @@
-    <template>
-    <div class="SharpDate">
-        <input class="SharpDate__input"
-               :value="inputValue"
-               :disabled="readOnly"
-               @input="handleInput"
-               @focus="forceShowPicker"
-               @blur="handleBlur"
-               @keydown.up.prevent="increase"
-               @keydown.down.prevent="decrease"
-               ref="input">
-        <div class="SharpDate__picker" v-show="showPicker">
+<template>
+    <div class="SharpDate" :class="{'SharpDate--open':showPicker}">
+        <div class="SharpDate__input-wrapper">
+            <input class="SharpDate__input"
+                   :value="inputValue"
+                   :disabled="readOnly"
+                   @blur="handleBlur"
+                   @focus="handleFocus"
+                   @keydown.up.prevent="increase"
+                   @keydown.down.prevent="decrease"
+                   ref="input">
+        </div>
+        <div class="SharpDate__picker" v-show="showPicker" @mousedown.prevent>
             <sharp-date-picker v-if="hasDate"
                                class="SharpDate__date"
                                :language="language"
@@ -179,18 +180,14 @@
                     end:this.displayFormat.lastIndexOf(ch)+1
                 };
             },
-            forceShowPicker() {
+            handleFocus() {
                 this.showPicker = true;
+            },
+            handleBlur() {
+                this.showPicker = false;
             }
         },
         mounted() {
-            document.addEventListener('click', (e) => {
-                if (!this.$el.contains(e.target) && this.showPicker) {
-                    this.showPicker = false;
-                }
-            }, false);
-
-
             this.setFocusable(this.$refs.input);
         }
     }
