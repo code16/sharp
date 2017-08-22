@@ -13,16 +13,8 @@
 
   outline: 1px solid transparent;
 
-  &:focus:not(.SharpDropdown--disabled) {
-    @include focus-outline('border');
-  }
-
-  &--open:focus {
-    outline: 1px solid transparent;
-    @include SharpDropdownShadowTop;
-  }
-
   &__arrow {
+    z-index: z('dropdownIcon');
     fill: $brand-01;
     position: absolute;
     right: 1rem;
@@ -40,19 +32,20 @@
   }
 
   &__text {
+    z-index: z('dropdownText');
     padding-top: rem(13px);
     padding-bottom: rem(13px);
     padding-left: 1rem;
     font-weight: 700;
     border: $input-border;
-
-    @include layer('raised');
+    background: $ui-01;
+    position:relative;
   }
 
   &__list {
     @include reset;
     @include layer('overlay');
-    width: 100%;
+    //width: 100%;
     display: none;
     list-style: none;
     position: absolute;
@@ -80,6 +73,8 @@
   }
 
   &--open {
+    @include focus-outline('layer');
+    z-index: z('dropdownActive');
     .SharpDropdown__arrow {
       @include SharpDropdownOpenArrow;
     }
@@ -90,7 +85,7 @@
 
     &:focus {
       .SharpDropdown__list {
-        @include SharpDropdownShadowBottom;
+        @include focus-outline('layer');
       }
     }
   }

@@ -17,9 +17,12 @@
 
     width: 100%;
 
+    // Sharp specific
+    @include layer('raised');
+
     &:focus,
     &.bx--focused {
-      @include focus-outline('border');
+      @include focus-outline('layer');
     }
 
     &:disabled {

@@ -18,8 +18,11 @@
     text-overflow: ellipsis;
     width: 100%;
 
+    //Sharp specific
+    @include layer('raised');
+
     &:focus {
-      @include focus-outline('border');
+      @include focus-outline('layer');
     }
 
     &::placeholder {
