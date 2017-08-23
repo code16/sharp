@@ -18,6 +18,14 @@
                 return Object.keys(this.errors).length > 0;
             }
         },
+        watch: {
+            async localActive(val) {
+                if(val) {
+                    await this.$nextTick();
+                    this.$emit('active');
+                }
+            }
+        },
         methods: {
             setError(fieldKey) {
                 this.$set(this.errors,fieldKey,true);

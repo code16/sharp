@@ -29,7 +29,7 @@
 
             locale:String
         },
-        inject: [ 'xsrfToken', 'actionsBus' ],
+        inject: [ 'xsrfToken', 'actionsBus', '$tab' ],
 
         data() {
             return {
@@ -183,10 +183,15 @@
                 placeholder: this.placeholder,
                 spellChecker: false,
                 toolbar: this.toolbar,
-                autoDownloadFontAwesome: false
+                autoDownloadFontAwesome: false,
+                status: false
             });
 
             this.simplemde.codemirror.setSize('auto',this.height);
+
+            this.$tab.$on('active', () => {
+                this.simplemde.codemirror.refresh();
+            });
 
             if(this.readOnly) {
                 this.setReadOnly();

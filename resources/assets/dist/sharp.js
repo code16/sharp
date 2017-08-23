@@ -33122,6 +33122,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             return Object.keys(this.errors).length > 0;
         }
     },
+    watch: {
+        localActive: async function localActive(val) {
+            if (val) {
+                await this.$nextTick();
+                this.$emit('active');
+            }
+        }
+    },
     methods: {
         setError: function setError(fieldKey) {
             this.$set(this.errors, fieldKey, true);
@@ -35971,7 +35979,7 @@ var noop = function noop() {};
 
         locale: String
     },
-    inject: ['xsrfToken', 'actionsBus'],
+    inject: ['xsrfToken', 'actionsBus', '$tab'],
 
     data: function data() {
         return {
@@ -36126,16 +36134,23 @@ var noop = function noop() {};
         }
     },
     mounted: function mounted() {
+        var _this2 = this;
+
         this.simplemde = new __WEBPACK_IMPORTED_MODULE_0_simplemde___default.a({
             element: this.$refs.textarea,
             initialValue: this.value,
             placeholder: this.placeholder,
             spellChecker: false,
             toolbar: this.toolbar,
-            autoDownloadFontAwesome: false
+            autoDownloadFontAwesome: false,
+            status: false
         });
 
         this.simplemde.codemirror.setSize('auto', this.height);
+
+        this.$tab.$on('active', function () {
+            _this2.simplemde.codemirror.refresh();
+        });
 
         if (this.readOnly) {
             this.setReadOnly();
