@@ -10,6 +10,24 @@
     margin-bottom: 2rem;
 
     @extend .SharpModule;
+
+    .SharpModule__inner {
+      background: transparent;
+      border: 0;
+      @include layer('base');
+    }
+
+    .SharpModule__header {
+      padding: 0;
+      .SharpModule__title {
+        @extend .SharpForm__label;
+      }
+    }
+
+    .SharpModule__content {
+      background: $ui-03;
+      @include layer('raised');
+    }
   }
 
   &__form-item {
@@ -27,7 +45,7 @@
     @include reset;
     @include font-size('14');
     font-weight: $input-label-weight;
-    display: inline-block;
+    display: block;
     vertical-align: baseline;
     margin-bottom: rem(10px);
     text-transform: uppercase;

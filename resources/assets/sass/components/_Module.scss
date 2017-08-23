@@ -24,7 +24,7 @@
 
     .SharpModule__title {
       @include font-size('14');
-      @include font-smoothing;
+      //@include font-smoothing;
       letter-spacing: 0;
       font-weight: 700;
       color: $text-01;
