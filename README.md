@@ -1,7 +1,5 @@
 # Sharp 4
 
-> Sharp is under heavy development. It should be out and fully documented in a few weeks. This documentation is very WIP.
-
 Sharp is not a CMS: it's a content management framework, a toolset which provides help building a CMS section in a website, with some rules in mind:
 - the public website **should not have any knowledge of the CMS**;
 - the CMS **should not have any expectations from the persistence layer** (meaning: the DB structure has nothing to do with the CMS);
