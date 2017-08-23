@@ -176,7 +176,8 @@
                         if(this.independant) {
                             this.$emit('submitted', data);
                         }
-                        else location.href = `/sharp/list/${this.entityKey}?restore-context=1`
+                        else if(data.ok)
+                            location.href = `/sharp/list/${this.entityKey}?restore-context=1`
                     })
                     .catch(this.handleError)
             },

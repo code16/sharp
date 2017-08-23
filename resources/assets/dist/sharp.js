@@ -34449,7 +34449,7 @@ var noop = function noop() {};
                 }
                 if (_this2.independant) {
                     _this2.$emit('submitted', data);
-                } else location.href = '/sharp/list/' + _this2.entityKey + '?restore-context=1';
+                } else if (data.ok) location.href = '/sharp/list/' + _this2.entityKey + '?restore-context=1';
             }).catch(this.handleError);
         },
         cancel: function cancel() {

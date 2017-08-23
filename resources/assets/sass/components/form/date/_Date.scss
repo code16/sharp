@@ -3,8 +3,6 @@
 .SharpDate {
   position: relative;
 
-
-
   &__input {
     @include reset;
     @include font-size('14');
@@ -16,7 +14,8 @@
     background-color: $field-01;
     color: $text-01;
     border: 1px solid transparent;
-    z-index: 100;
+
+    z-index: z('dropdownText');
 
     width: 100%;
 

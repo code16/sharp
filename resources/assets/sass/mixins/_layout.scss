@@ -65,15 +65,18 @@ $padding: (
 $z-indexes: (
   modal     : 9000,
   overlay   : 8000,
-  dropdown  : 100,
-  dropdownText : 101,
-  dropdownIcon : 102,
-  dropdownActive : 200,
   header    : 6000,
   footer    : 5000,
   hidden    : - 1,
   overflowHidden: - 1,
-  overflowOptions: 1
+  overflowOptions: 1,
+  // sharp
+  leftNav : 2,
+  dropdown  : 100,
+  dropdownText : 11,
+  dropdownIcon : 12,
+  dropdownActive : 20,
+  markdown : 30,
 );
 
 //-------------------------------------

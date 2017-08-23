@@ -1,13 +1,14 @@
 .SharpViewPanel {
 
   &__glasspane {
-    z-index: 9999;
     position: fixed;
     left:0;
     top:0;
     height: 100%;
     width: 100%;
     background: rgba(0,0,0,.1);
+
+    z-index: z('overlay');
   }
 
   position: fixed;
@@ -17,7 +18,8 @@
   background: white;
   width: 90%;
   @include layer(pop-out);
-  z-index: 99;
+
+  z-index: z('modal');
 
   &--collapsed {
     width:0;

@@ -1,7 +1,7 @@
-
-
 .SharpMarkdown {
   @extend .SharpModule;
+  position: relative;
+  z-index : z('markdown');
 
   .editor-toolbar {
     @extend .SharpModule__header;
@@ -25,5 +25,4 @@
     padding: 1rem !important;
     line-height: 1.4;
   }
-
 }
