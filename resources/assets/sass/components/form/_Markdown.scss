@@ -9,6 +9,10 @@
     border-radius: 0;
   }
 
+  &__upload-line {
+    z-index: 3;
+  }
+
   &--read-only {
     .CodeMirror {
       opacity: 0.8;

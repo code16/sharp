@@ -36063,6 +36063,8 @@ var noop = function noop() {};
             var from = this.cursorPos,
                 to = { line: this.cursorPos.line, ch: this.cursorPos.ch + md.length };
 
+            cm.addLineClass(this.cursorPos.line, 'wrap', 'SharpMarkdown__upload-line');
+
             var uploader = this.createUploader(cm);
             uploader.marker = cm.markText(from, to, {
                 replacedWith: uploader.$mount().$el,
@@ -36097,11 +36099,11 @@ var noop = function noop() {};
             // console.log('beforeChange',arguments, this.cursorEntered);
         },
         onKeydown: function onKeydown(cm, e) {
-            console.log('key down');
+            //console.log('key down');
             this.lastKeydown = e;
         },
         onKeyHandled: function onKeyHandled(cm, name, e) {
-            console.log('key handled', arguments);
+            //console.log('key handled',arguments);
             if (__WEBPACK_IMPORTED_MODULE_2_codemirror___default.a.keyMap.default[name] === 'undo') {} else if (name === 'Backspace') {
                 this.onNextBackspace();
                 this.onNextBackspace = noop;
@@ -36363,6 +36365,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
 //
 //
 //
@@ -36769,6 +36772,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 
@@ -36830,7 +36836,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     watch: {
         ready: async function ready(_ready) {
-            if (_ready) {
+            if (_ready && this.data.items.length) {
                 await this.$nextTick();
                 this.headerAutoPadding = {
                     width: this.$refs.actionsCol[0].offsetWidth + 'px'
@@ -82813,7 +82819,8 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     }
   }, [_c('div')])], 2)]), _vm._v(" "), (!!_vm.originalImageSrc) ? [_c('sharp-modal', {
     attrs: {
-      "close-on-backdrop": false
+      "close-on-backdrop": false,
+      "title": _vm.l('modals.cropper.title')
     },
     on: {
       "ok": _vm.onEditModalOk,
@@ -83435,7 +83442,7 @@ if (false) {
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "SharpEntitiesList"
-  }, [(_vm.ready) ? [_c('div', {
+  }, [(_vm.ready) ? [(!_vm.data.items.length) ? [_vm._v("\n            " + _vm._s(_vm.l('entity_list.empty_text')) + "\n        ")] : _c('div', {
     staticClass: "SharpEntitiesList__table SharpEntitiesList__table--border"
   }, [_c('div', {
     staticClass: "SharpEntitiesList__thead"

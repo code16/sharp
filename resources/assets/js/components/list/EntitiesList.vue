@@ -1,7 +1,10 @@
 <template>
     <div class="SharpEntitiesList">
         <template v-if="ready">
-            <div class="SharpEntitiesList__table SharpEntitiesList__table--border">
+            <template v-if="!data.items.length">
+                {{ l('entity_list.empty_text') }}
+            </template>
+            <div v-else="" class="SharpEntitiesList__table SharpEntitiesList__table--border">
                 <div class="SharpEntitiesList__thead">
                     <div class="SharpEntitiesList__row SharpEntitiesList__row--header container">
                         <div class="SharpEntitiesList__cols">
@@ -158,7 +161,7 @@
         },
         watch: {
             async ready(ready) {
-                if(ready) {
+                if(ready && this.data.items.length) {
                     await this.$nextTick();
                     this.headerAutoPadding = {
                         width: `${this.$refs.actionsCol[0].offsetWidth}px`

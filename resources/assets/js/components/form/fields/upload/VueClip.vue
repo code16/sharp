@@ -47,7 +47,8 @@
             </div>
         </div>
         <template v-if="!!originalImageSrc">
-            <sharp-modal v-model="showEditModal" @ok="onEditModalOk" @shown="onEditModalShown" :close-on-backdrop="false">
+            <sharp-modal v-model="showEditModal" @ok="onEditModalOk" @shown="onEditModalShown" :close-on-backdrop="false"
+                         :title="l('modals.cropper.title')">
                 <vue-cropper ref="cropper" class="SharpUpload__modal-vue-cropper"
                              :view-mode="2" drag-mode="crop"  :aspect-ratio="ratioX/ratioY"
                              :auto-crop-area="1" :zoomable="false" :guides="false"

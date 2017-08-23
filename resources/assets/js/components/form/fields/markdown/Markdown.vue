@@ -107,6 +107,8 @@
                 cm.setCursor(this.cursorPos.line-1,0);
                 let from = this.cursorPos, to = { line:this.cursorPos.line, ch:this.cursorPos.ch+md.length };
 
+                cm.addLineClass(this.cursorPos.line, 'wrap', 'SharpMarkdown__upload-line');
+
                 let uploader = this.createUploader(cm);
                 uploader.marker = cm.markText(from, to, {
                     replacedWith: uploader.$mount().$el ,
@@ -139,11 +141,11 @@
                // console.log('beforeChange',arguments, this.cursorEntered);
             },
             onKeydown(cm, e) {
-                console.log('key down');
+                //console.log('key down');
                 this.lastKeydown = e;
             },
             onKeyHandled(cm, name, e) {
-                console.log('key handled',arguments);
+                //console.log('key handled',arguments);
                 if(CodeMirror.keyMap.default[name] === 'undo') {
 
                 }
