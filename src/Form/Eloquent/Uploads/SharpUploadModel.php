@@ -24,55 +24,42 @@ class SharpUploadModel extends Model
     /**
      * @param array $value
      */
-    function setFileAttribute(array $value = null)
+//    function setFileAttribute(array $value = null)
+//    {
+//        if(is_null($value) && $this->exists) {
+//            $value = [
+//                'path' => null, 'size' => null,
+//                'mime' => null, 'disk' => null
+//            ];
+//        }
+//
+//        if(empty($value)) {
+//            return;
+//        }
+//
+//        if(array_key_exists("path", $value)) {
+//            $this->setAttribute('file_name', $value["path"])
+//                ->setAttribute('size', $value["size"])
+//                ->setAttribute('mime_type', $value["mime"])
+//                ->setAttribute('disk', $value["disk"]);
+//        }
+//
+//        if($value["transformed"] ?? false && $this->exists) {
+//            (new Thumbnail($this))->destroyAllThumbnails();
+//        }
+//    }
+
+    /**
+     * @param $value
+     */
+    public function setTransformedAttribute($value)
     {
-        if(is_null($value) && $this->exists) {
-            $value = [
-                'path' => null, 'size' => null,
-                'mime' => null, 'disk' => null
-            ];
-        }
-
-        if(empty($value)) {
-            return;
-        }
-
-        if(array_key_exists("path", $value)) {
-            $this->setAttribute('file_name', $value["path"]);
-            $this->setAttribute('size', $value["size"]);
-            $this->setAttribute('mime_type', $value["mime"]);
-            $this->setAttribute('disk', $value["disk"]);
-        }
-
-        if($value["transformed"] ?? false && $this->exists) {
+        // The transformed attribute to true means there
+        // was a transformation, we have to delete old thumbnails
+        if($value && $this->exists) {
             (new Thumbnail($this))->destroyAllThumbnails();
         }
     }
-
-    /**
-     * @return array|null
-     */
-    function getFileAttribute()
-    {
-        $filename = $this->getAttribute("file_name");
-        return $filename ? [
-            "name" => $this->getAttribute("file_name"),
-            "thumbnail" => $this->thumbnail(null, 150),
-            "size" => $this->getAttribute("size"),
-        ] : null;
-    }
-
-    /**
-     * @return array
-     */
-    function toArray()
-    {
-        return [
-            "id" => $this->getAttribute("id"),
-            "file" => $this->getFileAttribute()
-        ] + $this->getAttribute("custom_properties") ?? [];
-    }
-
 
     /**
      * @param string $key
@@ -124,7 +111,7 @@ class SharpUploadModel extends Model
         return in_array($name, [
             "id", "model_id", "model_type", "model_key", "file_name",
             "mime_type", "disk", "size", "custom_properties",
-            "order", "created_at", "updated_at", "file"
+            "order", "created_at", "updated_at", "file", "transformed"
         ]);
     }
 

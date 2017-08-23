@@ -65,9 +65,9 @@ class UploadFormatter
             );
 
             return [
-                "path" => $storedFileName,
+                "file_name" => $storedFileName,
                 "size" => $this->filesystem->disk($field->storageDisk())->size($storedFileName),
-                "mime" => $this->filesystem->disk($field->storageDisk())->mimeType($storedFileName),
+                "mime_type" => $this->filesystem->disk($field->storageDisk())->mimeType($storedFileName),
                 "disk" => $field->storageDisk(),
                 "transformed" => $transformed
             ];

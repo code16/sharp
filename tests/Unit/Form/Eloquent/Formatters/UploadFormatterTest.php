@@ -42,9 +42,9 @@ class UploadFormatterTest extends SharpFormEloquentBaseTest
             ->setStorageBasePath("data/Test");
 
         $this->assertEquals([
-                "path" => "data/Test/{$file[0]}",
+                "file_name" => "data/Test/{$file[0]}",
                 "size" => $file[1],
-                "mime" => "image/png",
+                "mime_type" => "image/png",
                 "disk" => "local",
                 "transformed" => false
             ],
@@ -106,7 +106,7 @@ class UploadFormatterTest extends SharpFormEloquentBaseTest
         ]);
 
         $this->assertArraySubset(
-            ["path" => "data/Test/{$person->id}/{$person->name}/$fileName"],
+            ["file_name" => "data/Test/{$person->id}/{$person->name}/$fileName"],
             $formatter->format([
                 "name" => $fileName,
                 "uploaded" => true
@@ -126,7 +126,7 @@ class UploadFormatterTest extends SharpFormEloquentBaseTest
             ->setCropRatio("16:9");
 
         $this->assertArraySubset([
-            "path" => "data/Test/{$file[0]}",
+            "file_name" => "data/Test/{$file[0]}",
             "transformed" => true
         ],
             $formatter->format([

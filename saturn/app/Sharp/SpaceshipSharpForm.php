@@ -7,6 +7,7 @@ use App\Spaceship;
 use App\SpaceshipType;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Eloquent\Transformers\EloquentFormTagsTransformer;
+use Code16\Sharp\Form\Eloquent\Transformers\EloquentFormUploadTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
@@ -67,7 +68,7 @@ class SpaceshipSharpForm extends SharpForm
                 )
 
         )->addField(
-            SharpFormUploadField::make("picture:file")
+            SharpFormUploadField::make("picture")
                 ->setLabel("Picture")
                 ->setFileFilterImages()
                 ->setCropRatio("1:1")
@@ -140,7 +141,7 @@ class SpaceshipSharpForm extends SharpForm
                             ->withFields("status|5", "comment|7");
                     });
             })->addColumn(6, function(FormLayoutColumn $column) {
-                $column->withSingleField("picture:file")
+                $column->withSingleField("picture")
                     ->withSingleField("picture:legend")
                     ->withSingleField("pictures", function(FormLayoutColumn $listItem) {
                         $listItem->withSingleField("file")
@@ -170,6 +171,8 @@ class SpaceshipSharpForm extends SharpForm
                 return $spaceship->capacity / 1000;
             })
             ->setCustomTransformer("pilots", new EloquentFormTagsTransformer("name"))
+            ->setCustomTransformer("picture", new EloquentFormUploadTransformer())
+//            ->setCustomTransformer("pictures", new EloquentFormTagsTransformer("name"))
             ->transform(
                 Spaceship::with("reviews", "pilots", "picture", "pictures")->findOrFail($id)
             );

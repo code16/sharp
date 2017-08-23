@@ -41,53 +41,7 @@ class SharpUploadModelTest extends SharpFormEloquentBaseTest
     }
 
     /** @test */
-    function we_can_set_file_attribute()
-    {
-        $upload = new SharpUploadModel();
-        $upload->file = [
-            "path" => "my/file",
-            "size" => 120,
-            "mime" => "image/jpg",
-            "disk" => "local"
-        ];
-
-        $this->assertEquals("my/file", $upload->file_name);
-        $this->assertEquals(120, $upload->size);
-        $this->assertEquals("image/jpg", $upload->mime_type);
-        $this->assertEquals("local", $upload->disk);
-    }
-
-    /** @test */
-    function setting_null_as_file_attribute_nullifies_all_file_attributes()
-    {
-        $upload = new SharpUploadModel();
-        $upload->file = null;
-
-        $this->assertNull($upload->file_name);
-        $this->assertNull($upload->size);
-        $this->assertNull($upload->mime_type);
-        $this->assertNull($upload->disk);
-    }
-
-    /** @test */
-    function setting_empty_array_wont_touch_file_attributes()
-    {
-        $upload = new SharpUploadModel([
-            "file_name" => "my/file",
-            "size" => 120,
-            "mime_type" => "image/jpg",
-            "disk" => "local"
-        ]);
-        $upload->file = [];
-
-        $this->assertEquals("my/file", $upload->file_name);
-        $this->assertEquals(120, $upload->size);
-        $this->assertEquals("image/jpg", $upload->mime_type);
-        $this->assertEquals("local", $upload->disk);
-    }
-
-    /** @test */
-    function the_transformed_property_presence_means_all_thumbnails_are_destroyed()
+    function all_thumbnails_are_destroyed_if_we_set_transformed_to_true()
     {
         $person = Person::create(["name" => "A"]);
 
@@ -107,33 +61,13 @@ class SharpUploadModelTest extends SharpFormEloquentBaseTest
 
         $this->assertTrue(file_exists(public_path("thumbnails/data/100-100/" . basename($file))));
 
-        $upload->file = [
-            "transformed" => ["something"]
-        ];
+        $upload->transformed = true;
 
         $this->assertFalse(file_exists(public_path("thumbnails/data/100-100/" . basename($file))));
     }
 
     /** @test */
-    function we_can_get_file_attribute()
-    {
-        $upload = new SharpUploadModel();
-        $upload->file = [
-            "path" => "my/file",
-            "size" => 120,
-            "mime" => "image/jpg",
-            "disk" => "local"
-        ];
-
-        $this->assertEquals([
-            "name" => "my/file",
-            "size" => 120,
-            "thumbnail" => null,
-        ], $upload->file);
-    }
-
-    /** @test */
-    function a_thumbnail_is_created_when_getting_file_attribute()
+    function a_thumbnail_is_created_when_asked()
     {
         $person = Person::create(["name" => "A"]);
 
@@ -149,11 +83,10 @@ class SharpUploadModelTest extends SharpFormEloquentBaseTest
             "model_key" => "test"
         ]);
 
-        $this->assertEquals([
-            "name" => $file,
-            "size" => 120,
-            "thumbnail" => url("thumbnails/data/-150/" . basename($file)),
-        ], $upload->file);
+        $this->assertEquals(
+            url("thumbnails/data/-150/" . basename($file)),
+            $upload->thumbnail(null, 150)
+        );
 
         $this->assertTrue(file_exists(public_path("thumbnails/data/-150/" . basename($file))));
     }
