@@ -18,4 +18,16 @@ class SharpFormCheckFieldTest extends SharpTestCase
             ], $formField->toArray()
         );
     }
+
+    /** @test */
+    function we_can_define_text()
+    {
+        $formField = SharpFormCheckField::make("check", "text")
+            ->setText("text 2");
+
+        $this->assertArraySubset(
+            ["text" => "text 2"],
+            $formField->toArray()
+        );
+    }
 }

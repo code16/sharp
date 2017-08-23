@@ -6,11 +6,12 @@ use App\Pilot;
 use App\Spaceship;
 use App\SpaceshipType;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
-use Code16\Sharp\Form\Eloquent\WithFormEloquentTransformers;
+use Code16\Sharp\Form\Eloquent\Transformers\EloquentFormTagsTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
+use Code16\Sharp\Form\Fields\SharpFormMarkdownField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTagsField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
@@ -26,7 +27,7 @@ class SpaceshipSharpForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
 
-    use WithCustomTransformers, WithFormEloquentTransformers;
+    use WithCustomTransformers;
 
     function buildFormFields()
     {
@@ -37,6 +38,10 @@ class SpaceshipSharpForm extends SharpForm
         )->addField(
             SharpFormTextField::make("capacity")
                 ->setLabel("Capacity (x1000)")
+
+        )->addField(
+            SharpFormMarkdownField::make("description")
+                ->setLabel("Description")
 
         )->addField(
             SharpFormDateField::make("construction_date")
@@ -137,26 +142,27 @@ class SpaceshipSharpForm extends SharpForm
             });
 
         })->addTab("tab 2", function(FormLayoutTab $tab) {
-            $tab->addColumn(6, function(FormLayoutColumn $column) {
+            $tab->addColumn(5, function(FormLayoutColumn $column) {
                 $column->withFieldset("Technical details", function(FormLayoutFieldset $fieldset) {
                     return $fieldset->withFields("capacity|4,6", "construction_date|8,6");
                 });
+            })->addColumn(7, function(FormLayoutColumn $column) {
+                $column->withSingleField("description");
             });
         });
-
     }
 
-//    function create()
-//    {
-//        return $this->transform(new Spaceship);
-//    }
+    function create(): array
+    {
+        return $this->transform(new Spaceship(["name" => "new"]));
+    }
 
     function find($id): array
     {
         return $this->setCustomTransformer("capacity", function($spaceship) {
                 return $spaceship->capacity / 1000;
             })
-            ->setTagsTransformer("pilots", "name")
+            ->setCustomTransformer("pilots", new EloquentFormTagsTransformer("name"))
             ->transform(
                 Spaceship::with("reviews", "pilots", "picture", "pictures")->findOrFail($id)
             );

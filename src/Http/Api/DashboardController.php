@@ -13,7 +13,7 @@ class DashboardController extends ApiController
         $dashboard = $this->getDashboardInstance();
 
         if(!$dashboard) {
-            return response()->json("", 404);
+            abort(404, "Dashboard not found");
         }
 
         return response()->json([

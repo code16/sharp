@@ -4,6 +4,7 @@ namespace Code16\Sharp\Tests\Feature\Api;
 
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
 
@@ -153,6 +154,22 @@ class CommandControllerTest extends BaseApiTest
     }
 
     /** @test */
+    public function we_get_the_full_query_in_an_entity_command()
+    {
+        $this->buildTheWorld();
+        $this->disableExceptionHandling();
+
+        $this->json('post', '/sharp/api/list/person/command/entity_params', [
+            "query" => ["sort" => "name", "dir" => "desc"]
+        ])
+            ->assertStatus(200)
+            ->assertJson([
+                "action" => "info",
+                "message" => "namedesc"
+            ]);
+    }
+
+    /** @test */
     public function we_cant_call_an_unauthorized_entity_command()
     {
         $this->buildTheWorld();
@@ -190,65 +207,73 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
     {
         $this->addEntityCommand("entity_info", new class() extends EntityCommand {
             public function label(): string { return "label"; }
-            public function execute(array $params = []) {
+            public function execute(EntityListQueryParams $params, array $data = []): array {
                 return $this->info("ok");
             }
 
         })->addInstanceCommand("instance_info", new class() extends InstanceCommand {
             public function label(): string { return "label"; }
-            public function execute($instanceId, array $params = []) {
+            public function execute($instanceId, array $params = []): array {
                 return $this->info("ok");
             }
 
         })->addEntityCommand("entity_reload", new class() extends EntityCommand {
             public function label(): string { return "label"; }
-            public function execute(array $params = []) {
+            public function execute(EntityListQueryParams $params, array $data = []): array {
                 return $this->reload();
             }
 
         })->addEntityCommand("entity_view", new class() extends EntityCommand {
             public function label(): string { return "label"; }
-            public function execute(array $params = []) {
+            public function execute(EntityListQueryParams $params, array $data = []): array {
                 return $this->view("welcome");
             }
 
         })->addEntityCommand("entity_refresh", new class() extends EntityCommand {
             public function label(): string { return "label"; }
-            public function execute(array $params = []) {
+            public function execute(EntityListQueryParams $params, array $data = []): array {
                 return $this->refresh([1, 2]);
             }
 
         })->addInstanceCommand("instance_refresh", new class() extends InstanceCommand {
             public function label(): string { return "label"; }
-            public function execute($instanceId, array $params = []) {
+            public function execute($instanceId, array $params = []): array {
                 return $this->refresh(1);
             }
 
         })->addInstanceCommand("entity_exception", new class() extends EntityCommand {
             public function label(): string { return "label"; }
-            public function execute(array $params = []) {
+            public function execute(EntityListQueryParams $params, array $data = []): array {
                 throw new SharpApplicativeException("error");
             }
 
         })->addEntityCommand("entity_form", new class() extends EntityCommand {
             public function label(): string { return "label"; }
-            public function execute(array $params = []) {
-                $this->validate($params, ["name"=>"required"]);
+            public function execute(EntityListQueryParams $params, array $data = []): array {
+                $this->validate($data, ["name"=>"required"]);
                 return $this->reload();
             }
 
         })->addInstanceCommand("entity_unauthorized", new class() extends EntityCommand {
             public function label(): string { return "label"; }
             public function authorize(): bool { return false; }
-            public function execute(array $params = []) {
+            public function execute(EntityListQueryParams $params, array $data = []): array {
                 return $this->reload();
             }
 
         })->addInstanceCommand("instance_unauthorized_odd_id", new class() extends InstanceCommand {
             public function label(): string { return "label"; }
             public function authorizeFor($instanceId): bool { return $instanceId%2==0; }
-            public function execute($instanceId, array $params = []) {
+            public function execute($instanceId, array $params = []): array {
                 return $this->reload();
+            }
+
+        })->addEntityCommand("entity_params", new class() extends EntityCommand
+        {
+            public function label(): string { return "label"; }
+            public function execute(EntityListQueryParams $params, array $data = []): array
+            {
+                return $this->info($params->sortedBy() . $params->sortedDir());
             }
         });
 

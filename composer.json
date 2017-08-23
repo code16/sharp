@@ -30,5 +30,12 @@
     "psr-4": {
       "Code16\\Sharp\\Tests\\": "tests/"
     }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Code16\\Sharp\\SharpServiceProvider"
+      ]
+    }
   }
 }

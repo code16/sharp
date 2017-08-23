@@ -175,4 +175,9 @@ abstract class Command
             );
         }
     }
+
+    /**
+     * @return string
+     */
+    abstract public function label(): string;
 }

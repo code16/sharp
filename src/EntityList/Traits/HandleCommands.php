@@ -77,13 +77,13 @@ trait HandleCommands
                 return $commandHandler->type() == "instance" && $commandHandler->authorize();
             });
 
-        // ... and Entity State is present...
+        // ... and Entity State if present...
         if($this->entityStateHandler) {
             $instanceHandlers->push($this->entityStateHandler);
         }
 
         // ... and for each of them, set authorization for every $item
-        $instanceHandlers->each(function($commandHandler) use($items) {
+        $instanceHandlers->each(function(InstanceCommand $commandHandler) use($items) {
             foreach ($items as $item) {
                 $commandHandler->checkAndStoreAuthorizationFor(
                     $item[$this->instanceIdAttribute]

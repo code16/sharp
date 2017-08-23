@@ -64,19 +64,24 @@ class EntityListQueryParams
     }
 
     /**
+     * @param string|null $queryPrefix
      * @return $this
      */
-    public function fillWithRequest()
+    public function fillWithRequest(string $queryPrefix = null)
     {
-        $this->search = request("search");
-        $this->page = request("page");
+        $query = $queryPrefix
+            ? request("query")
+            : request()->all();
 
-        if(request("sort")) {
-            $this->sortedBy = request("sort");
-            $this->sortedDir = request("dir");
+        $this->search = $query["search"] ?? null;
+        $this->page = $query["page"] ?? null;
+
+        if(isset($query["sort"])) {
+            $this->sortedBy = $query["sort"];
+            $this->sortedDir = $query["dir"];
         }
 
-        collect(request()->except(["search", "page", "sort", "dir"]))
+        collect($query)->except(["search", "page", "sort", "dir"])
             ->filter(function($value, $name) {
                 return starts_with($name, "filter_");
 

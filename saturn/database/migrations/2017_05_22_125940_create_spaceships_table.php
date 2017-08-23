@@ -22,6 +22,7 @@ class CreateSpaceshipsTable extends Migration
         Schema::create('spaceships', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->text('description')->nullable();
             $table->unsignedInteger('capacity');
             $table->date('construction_date')->nullable();
             $table->unsignedInteger('type_id');
