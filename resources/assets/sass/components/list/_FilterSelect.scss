@@ -1,10 +1,11 @@
 .SharpFilterSelect {
   width: auto;
   display:flex;
-  outline: 1px solid $brand-03;
+  border: 1px solid $brand-03;
+  cursor: default;
 
   @extend .SharpDropdown;
-  cursor: default;
+  @include nav-dropdown;
 
   &--open {
     @extend .SharpDropdown--open;
@@ -36,12 +37,6 @@
 
       &__content {
         left:0;
-        outline: 1px solid $brand-03 !important;
-        border: 1px solid transparent !important;
-      }
-
-      &__option--highlight {
-        background-color: $brand-03 !important;
       }
 
       &__tags {

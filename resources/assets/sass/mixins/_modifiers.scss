@@ -1,0 +1,19 @@
+@mixin nav-dropdown() {
+  .SharpDropdown__list, .multiselect__content {
+    outline: 1px solid $brand-03 !important;
+    border: 1px solid transparent !important;
+    box-shadow: 0 0 7px 0 $brand-01 !important;
+  }
+  .SharpDropdown__link:focus,
+  .SharpDropdown__link:hover,
+  .multiselect__option--highlight
+  {
+    background-color: $brand-03;
+  }
+}
+
+@mixin dropdown-nowrap() {
+  .multiselct__option {
+    white-space: nowrap;
+  }
+}

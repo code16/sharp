@@ -21,6 +21,7 @@ $css--reset:false;
 @import 'mixins/layer';
 @import 'mixins/helper-mixins';
 @import 'mixins/layout';
+@import 'mixins/modifiers';
 
 @mixin sharp-color($color) {
   fill: $color;

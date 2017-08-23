@@ -28,6 +28,7 @@
 
   &--disabled {
     cursor: default;
+    opacity: 0.7;
   }
 
   &[data-value=''] &__text {
@@ -66,6 +67,8 @@
       padding-bottom: 1rem;
       padding-left: 1rem;
       padding-right: 1.5rem;
+
+      white-space: nowrap;
 
       &:focus, &:hover {
         background-color: $brand-01;

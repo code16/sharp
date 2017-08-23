@@ -1,12 +1,17 @@
 .SharpActionBar {
-  margin-top: 1em;
-  margin-bottom: 1em;
+  color: $inverse-01;
 
-  //height: 2.5rem;
+  margin-bottom: 1rem;
 
   .left, .right {
     display: flex;
     align-items: center;
+    & > *{
+      margin-left:.5rem;
+    }
+    & > *:first-child {
+      margin-left:0;
+    }
   }
 
   .left {
@@ -16,10 +21,15 @@
     justify-content: flex-end;
   }
 
+  &__bar {
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+    background: $brand-01;
+  }
 
   &__extras {
     display:flex;
-    padding-top: .5rem;
+    padding-top: 1rem;
   }
 
   &__actions-dropdown {
@@ -41,6 +51,25 @@
 
     .SharpDropdown__link {
       padding-right: 1rem;
+    }
+
+    &--commands {
+      width: 2.5rem;
+      min-width: 2.5rem;
+      max-width: 2.5rem;
+
+      .SharpDropdown__text {
+        color: $brand-03;
+      }
+
+      @include nav-dropdown;
+    }
+  }
+
+  .SharpButton--secondary {
+    &:hover, &:focus {
+      background: darken($ui-01, 10%);
+      color: $brand-01;
     }
   }
 

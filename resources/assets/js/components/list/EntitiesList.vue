@@ -3,23 +3,30 @@
         <template v-if="ready">
             <div class="SharpEntitiesList__table SharpEntitiesList__table--border">
                 <div class="SharpEntitiesList__thead">
-                    <div class="SharpEntitiesList__row SharpEntitiesList__row--header row">
-                        <div class="SharpEntitiesList__th" :class="colClasses(contLayout)" v-for="contLayout in layout">
-                            <span>{{ containers[contLayout.key].label }}</span>
-                            <template v-if="containers[contLayout.key].sortable">
-                                <svg class="SharpEntitiesList__carret"
-                                     :class="{'SharpEntitiesList__carret--selected':sortedBy === contLayout.key,
-                                              'SharpEntitiesList__carret--ascending':sortedBy === contLayout.key && sortDir==='asc'}"
-                                     width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd" @click="sortToggle(contLayout.key)">
-                                    <path d="M10 0L5 5 0 0z"></path>
-                                </svg>
-                            </template>
+                    <div class="SharpEntitiesList__row SharpEntitiesList__row--header container">
+                        <div class="SharpEntitiesList__cols">
+                            <div class="row">
+                                <div class="SharpEntitiesList__th"
+                                     :class="colClasses(contLayout)"
+                                     v-for="contLayout in layout">
+                                    <span>{{ containers[contLayout.key].label }}</span>
+                                    <template v-if="containers[contLayout.key].sortable">
+                                        <svg class="SharpEntitiesList__carret"
+                                             :class="{'SharpEntitiesList__carret--selected':sortedBy === contLayout.key,
+                                              'SharpEntitiesList__carret--ascending': sortedBy === contLayout.key && sortDir==='asc'}"
+                                             width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd">
+                                            <path d="M10 0L5 5 0 0z"></path>
+                                        </svg>
+                                    </template>
+                                    <a class="SharpEntitiesList__sort-link" v-if="containers[contLayout.key].sortable" @click.prevent="sortToggle(contLayout.key)" href=""></a>
+                                </div>
+                            </div>
                         </div>
+                        <div :style="headerAutoPadding">&nbsp</div>
                     </div>
                 </div>
                 <div class="SharpEntitiesList__tbody">
-
-                    <div v-for="item in data.items" class="SharpEntitiesList__row" :class="{'SharpEntitiesList__row--disabled':!rowHasLink(item)}">
+                    <div v-for="item in data.items" class="SharpEntitiesList__row container" :class="{'SharpEntitiesList__row--disabled':!rowHasLink(item)}">
                         <div class="SharpEntitiesList__cols">
                             <div class="row">
                                 <div class="SharpEntitiesList__td" :class="colClasses(contLayout)" v-for="contLayout in layout">
@@ -31,7 +38,7 @@
                             </div>
                             <a class="SharpEntitiesList__row-link" v-if="rowHasLink(item)" :href="rowLink(item)"></a>
                         </div>
-                        <div class="SharpEntitiesList__row-actions">
+                        <div class="SharpEntitiesList__row-actions" ref="actionsCol">
                             <sharp-dropdown v-if="config.state" class="SharpEntitiesList__state-dropdown" :show-arrow="false" :disabled="!hasStateAuthorization(item)">
                                 <sharp-state-icon slot="text" :class="stateClasses(item.state)" :style="stateStyle(item.state)"></sharp-state-icon>
                                 <sharp-dropdown-item v-for="state in config.state.values" @click="setState(item,state)" :key="state.value">
@@ -39,7 +46,9 @@
                                     {{ state.label }}
                                 </sharp-dropdown-item>
                             </sharp-dropdown>
-                            <sharp-dropdown v-if="instanceCommands(item).length" class="SharpEntitiesList__commands-dropdown" :show-arrow="false">
+                            <sharp-dropdown v-if="!noInstanceCommands"
+                                            class="SharpEntitiesList__commands-dropdown"
+                                            :class="{'SharpEntitiesList__commands-dropdown--placeholder':!instanceCommands(item)}" :show-arrow="false">
                                 <div slot="text" class="SharpEntitiesList__command-icon">
                                     <i class="fa fa-plus"></i>
                                 </div>
@@ -48,7 +57,6 @@
                                 </sharp-dropdown-item>
                             </sharp-dropdown>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -137,12 +145,25 @@
                 search: '',
                 sortedBy: null,
                 sortDir: null,
+                sortDirs: {},
 
                 filtersValue: {},
                 showFormModal: {},
                 selectedInstance: null,
                 showViewPanel: false,
-                viewPanelContent: null
+                viewPanelContent: null,
+
+                headerAutoPadding: {}
+            }
+        },
+        watch: {
+            async ready(ready) {
+                if(ready) {
+                    await this.$nextTick();
+                    this.headerAutoPadding = {
+                        width: `${this.$refs.actionsCol[0].offsetWidth}px`
+                    }
+                }
             }
         },
         computed: {
@@ -213,10 +234,16 @@
             },
             commandsByInstanceId() {
                 let instCmds = this.config.commands.filter(c=>c.type==='instance');
-                return this.data.items.reduce((res, {[this.idAttr]:id}) => {
-                    res[id] = instCmds.filter(c=>c.authorization.indexOf(id) !== -1);
+
+                return instCmds.length ? this.data.items.reduce((res, {[this.idAttr]:id}) => {
+                    let authorizedCmds = instCmds.filter(c=>c.authorization.indexOf(id) !== -1);
+                    if(authorizedCmds.length)
+                        res[id] = authorizedCmds;
                     return res;
-                }, {});
+                }, {}) : {};
+            },
+            noInstanceCommands() {
+                return !Object.keys(this.commandsByInstanceId).length;
             },
             commandForms() {
                 return this.config.commands.filter(({form})=>form).map(({form, key}) => ({
@@ -243,6 +270,7 @@
                 !this.sortDir && (this.sortDir = this.config.defaultSortDir);
                 !this.sortedBy && (this.sortedBy = this.config.defaultSort);
 
+                this.sortDirs[this.sortedBy] = this.sortDir;
 
                 this.filtersValue = this.config.filters.reduce((res, filter) => {
                     res[filter.key] = this.filterValueOrDefault(this.filtersValue[filter.key], filter);
@@ -273,11 +301,12 @@
             /**
              * Getters
              */
-            colClasses({ sizeXS, size, hideOnXS}) {
+            colClasses({ sizeXS, size, hideOnXS }, extraClasses) {
                 return [
+                    extraClasses,
                     `col-${sizeXS}`,
                     `col-sm-${size}`,
-                    {'hidden-xs-down':hideOnXS}
+                    {'hidden-xs-down':hideOnXS},
                 ]
             },
             isStateClass(color) {
@@ -304,7 +333,7 @@
                 return val || filter.default || (filter.multiple?[]:null);
             },
             instanceCommands({[this.idAttr]:instanceId}) {
-                return this.commandsByInstanceId[instanceId];
+                return this.commandsByInstanceId[instanceId]// || [];
             },
             rowHasLink({[this.idAttr]:instanceId}) {
                 return this.authorizationsByInstanceId[instanceId].view;
@@ -329,8 +358,10 @@
              * Data operations
              */
             sortToggle(contKey) {
-                if(this.sortedBy === contKey)
-                    this.sortDir = this.sortDir==='asc'? 'desc': 'asc';
+                if(contKey === this.sortedBy)
+                    this.sortDir = this.sortDir === 'asc' ? 'desc': 'asc';
+                else
+                    this.sortDir = 'asc';
                 this.sortedBy = contKey;
 
                 this.page = 1;
@@ -347,10 +378,7 @@
                         else if(action === 'reload') this.actionReload();
                     })
                     .catch(({error:{response:{data, status}}}) => {
-                        if(status === 417) {
-                            alert(data.message);
-                        }
-                        else if(status === 422) {
+                        if(status === 422) {
                             this.actionsBus.$emit('showMainModal', {
                                 title: this.l('modals.state.422.title'),
                                 text: data.message,
@@ -516,6 +544,6 @@
                 this.bindParams(event.state);
                 this.updateData();
             };
-        }
+        },
     }
 </script>

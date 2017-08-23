@@ -1,12 +1,14 @@
 <template>
     <div class="SharpActionView">
+        <template v-if="!showErrorPage">
+            <component v-if="barComp" :is="barComp"></component>
+        </template>
         <div class="container">
             <template v-if="showErrorPage">
                 <h1>Error {{errorPageData.status}}</h1>
                 <p>{{errorPageData.message}}</p>
             </template>
             <template v-else>
-                <component v-if="barComp" :is="barComp"></component>
                 <slot></slot>
                 <sharp-modal v-for="(modal,id) in mainModalsData" :key="id"
                              v-bind="modal.props" @ok="modal.okCallback" @hidden="modal.hiddenCallback">

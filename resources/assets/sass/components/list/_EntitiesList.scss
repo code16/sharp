@@ -23,7 +23,7 @@
     margin-bottom: 5rem;
     background-color: transparent;
 
-    padding: 0 1em;
+    //padding: 0 1em;
 
     &--border {
       border: 1px solid $ui-04;
@@ -53,7 +53,7 @@
     }
 
     &--selected {
-      fill: $brand-02;
+      fill: $brand-01;
     }
   }
 
@@ -64,7 +64,7 @@
   &--selection {
     .SharpEntities__row:hover:not(.SharpEntitiesList__row--header) {
       background-color: rgba($brand-02, .1);
-      cursor: pointer;
+      //cursor: pointer;
     }
   }
 
@@ -73,7 +73,6 @@
     display:flex;
     border-bottom: 1px solid $ui-04;
     transition: $transition--base $bx--standard-easing;
-
 
     &__input:checked + & {
       background-color: rgba($brand-02, .1);
@@ -84,7 +83,7 @@
       cursor: inherit;
     }
 
-    &--header, .SharpEntitiesList__cols, .SharpEntitiesList__row-actions {
+    .SharpEntitiesList__cols, .SharpEntitiesList__row-actions {
       padding: 1em 0;
     }
 
@@ -94,7 +93,7 @@
 
     &:hover:not(.SharpEntitiesList__row--header, .SharpEntitiesList__row--disabled) {
       background-color: $ui-02;
-      cursor: pointer;
+      //cursor: pointer;
     }
 
     .SharpEntitiesList__cols {
@@ -119,10 +118,12 @@
 
   &__thead {
     //display: table-header-group;
-    border-bottom: 2px solid $brand-01;
+    border-bottom: 1px solid $brand-01;
     vertical-align: middle;
-    padding-right: 3em;
+    //padding-right: 4em;
   }
+
+
 
   &__th {
     @include reset;
@@ -137,12 +138,17 @@
     text-align: left;
     text-transform: uppercase;
     vertical-align: middle;
+    position: relative;
+
+    .SharpEntitiesList__sort-link {
+      position: absolute;
+      left:0; right: 0; top: 0; bottom:0;
+    }
 
     & > span {
       //white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      text-align: center;
     }
   }
 
@@ -167,6 +173,9 @@
     }
   }
 
+  &__td, &__th {
+    padding: .5rem;
+  }
 
   &__svg {
     display: inline-block;
@@ -183,12 +192,48 @@
     fill: $brand-02;
   }
 
-  &__state-dropdown, &__commands-dropdown {
-    //height: 1.8rem;
-    margin: 0 .1em;
-    //width:1.5rem;
 
+  &__commands-dropdown {
+    border: 1px solid $brand-03 !important;
+    .SharpDropdown__text {
+      //border: 1px solid $brand-03;
+    }
+    .SharpEntitiesList__command-icon {
+      width: rem(12px);
+      height: rem(12px);
+      color: $brand-03;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .fa {
+        font-size : rem(8px);
+      }
+    }
+    &--placeholder {
+      visibility: hidden;
+    }
+  }
+
+  &__state-dropdown {
+    .SharpDropdown__text {
+      border: 0;
+    }
+    .SharpDropdown__link {
+      display: flex;
+      align-items: center;
+
+      svg {
+        margin-right: .5rem;
+      }
+    }
+  }
+
+  &__state-dropdown, &__commands-dropdown {
+    margin: 0 .2rem;
     background:transparent;
+
+    @include nav-dropdown;
 
     &.SharpDropdown--open {
       .SharpDropdown__text {
@@ -197,40 +242,17 @@
     }
 
     .SharpDropdown__text {
-      background-color: transparent;
       padding: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       height: 100%
     }
+
     .SharpDropdown__list {
-      outline: 1px solid $brand-03 !important;
-      border: 1px solid transparent !important;
       z-index:100;
-      width:rem(200px);
+      //width:rem(200px);
       right:0;
     }
-
-    .SharpDropdown__link {
-      &:focus, &:hover {
-        background-color: $brand-03;
-      }
-    }
   }
-
-  .SharpEntitiesList__command-icon {
-    border: 1px solid $brand-03;
-    width: rem(14px);
-    height: rem(14px);
-    color: $brand-03;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    .fa {
-      font-size : rem(8px);
-    }
-  }
-
 }

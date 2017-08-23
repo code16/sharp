@@ -62,6 +62,16 @@
     );
   }
 
+  &--accent {
+    @include button-theme(
+      $brand-03,   // bg-color
+      transparent, // border-color
+      $inverse-01, // font-color
+      lighten($brand-03, 10%),   // hover-bg-color
+      $ui-01       // icon-color
+    );
+  }
+
   &--secondary {
     @include button-theme(
       $ui-01, // bg-color

@@ -21620,6 +21620,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             };
 
             switch (error.response.status) {
+                /// Unauthorized
                 case 401:
                     _this2.actionsBus.$emit('showMainModal', _extends({}, modalOptions, {
                         okCallback: function okCallback() {
@@ -21627,12 +21628,13 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                         }
                     }));
                     break;
+                /// Forbidden
                 case 403:
+                case 417:
                     _this2.actionsBus.$emit('showMainModal', _extends({}, modalOptions, {
                         okCloseOnly: true
                     }));
                     break;
-
             }
             return Promise.reject(error);
         });
@@ -21649,12 +21651,27 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /* harmony default export */ __webpack_exports__["a"] = ({
     inject: ['actionsBus'],
 
+    data: function data() {
+        return {
+            ready: false
+        };
+    },
+
+
     methods: {
         emitAction: function emitAction() {
             var _actionsBus;
 
             (_actionsBus = this.actionsBus).$emit.apply(_actionsBus, arguments);
         }
+    },
+
+    mounted: function mounted() {
+        var _this = this;
+
+        this.actionsBus.$on('setup', function () {
+            _this.ready = true;
+        });
     }
 });
 
@@ -32735,6 +32752,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 
 
@@ -33302,35 +33321,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-    name: 'SharpActionBar'
+    name: 'SharpActionBar',
+    props: {
+        ready: Boolean
+    }
 });
 
 /***/ }),
-/* 205 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ActionBar__ = __webpack_require__(87);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ActionBarMixin__ = __webpack_require__(55);
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-//
-//
-//
-//
-
-
-
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-    name: 'SharpActionBarDashboard',
-    mixins: [__WEBPACK_IMPORTED_MODULE_1__ActionBarMixin__["a" /* default */]],
-    components: _defineProperty({}, __WEBPACK_IMPORTED_MODULE_0__ActionBar__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_0__ActionBar__["a" /* default */])
-});
-
-/***/ }),
+/* 205 */,
 /* 206 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -33436,6 +33442,11 @@ var _components;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
 //
 //
 //
@@ -34373,7 +34384,7 @@ var noop = function noop() {};
         handleError: function handleError(_ref2) {
             var response = _ref2.response;
 
-            if (response.status === 422) this.errors = response.data || {};else if (response.status === 417) alert(response.data.message);
+            if (response.status === 422) this.errors = response.data || {};
         },
         delete: function _delete() {
             __WEBPACK_IMPORTED_MODULE_7_axios___default.a.delete(this.apiPath);
@@ -36734,6 +36745,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -36781,15 +36800,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             search: '',
             sortedBy: null,
             sortDir: null,
+            sortDirs: {},
 
             filtersValue: {},
             showFormModal: {},
             selectedInstance: null,
             showViewPanel: false,
-            viewPanelContent: null
+            viewPanelContent: null,
+
+            headerAutoPadding: {}
         };
     },
 
+    watch: {
+        ready: async function ready(_ready) {
+            if (_ready) {
+                await this.$nextTick();
+                this.headerAutoPadding = {
+                    width: this.$refs.actionsCol[0].offsetWidth + 'px'
+                };
+            }
+        }
+    },
     computed: {
         apiPath: function apiPath() {
             return __WEBPACK_IMPORTED_MODULE_8__consts__["a" /* API_PATH */] + '/list/' + this.entityKey;
@@ -36865,14 +36897,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             var instCmds = this.config.commands.filter(function (c) {
                 return c.type === 'instance';
             });
-            return this.data.items.reduce(function (res, _ref3) {
+
+            return instCmds.length ? this.data.items.reduce(function (res, _ref3) {
                 var id = _ref3[_this4.idAttr];
 
-                res[id] = instCmds.filter(function (c) {
+                var authorizedCmds = instCmds.filter(function (c) {
                     return c.authorization.indexOf(id) !== -1;
                 });
+                if (authorizedCmds.length) res[id] = authorizedCmds;
                 return res;
-            }, {});
+            }, {}) : {};
+        },
+        noInstanceCommands: function noInstanceCommands() {
+            return !Object.keys(this.commandsByInstanceId).length;
         },
         commandForms: function commandForms() {
             return this.config.commands.filter(function (_ref4) {
@@ -36914,6 +36951,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             this.page = this.data.page;
             !this.sortDir && (this.sortDir = this.config.defaultSortDir);
             !this.sortedBy && (this.sortedBy = this.config.defaultSort);
+
+            this.sortDirs[this.sortedBy] = this.sortDir;
 
             this.filtersValue = this.config.filters.reduce(function (res, filter) {
                 res[filter.key] = _this5.filterValueOrDefault(_this5.filtersValue[filter.key], filter);
@@ -36968,12 +37007,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         /**
          * Getters
          */
-        colClasses: function colClasses(_ref7) {
+        colClasses: function colClasses(_ref7, extraClasses) {
             var sizeXS = _ref7.sizeXS,
                 size = _ref7.size,
                 hideOnXS = _ref7.hideOnXS;
 
-            return ['col-' + sizeXS, 'col-sm-' + size, { 'hidden-xs-down': hideOnXS }];
+            return [extraClasses, 'col-' + sizeXS, 'col-sm-' + size, { 'hidden-xs-down': hideOnXS }];
         },
         isStateClass: function isStateClass(color) {
             return color.indexOf('sharp_') === 0;
@@ -37006,7 +37045,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         instanceCommands: function instanceCommands(_ref9) {
             var instanceId = _ref9[this.idAttr];
 
-            return this.commandsByInstanceId[instanceId];
+            return this.commandsByInstanceId[instanceId]; // || [];
         },
         rowHasLink: function rowHasLink(_ref10) {
             var instanceId = _ref10[this.idAttr];
@@ -37038,7 +37077,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
          * Data operations
          */
         sortToggle: function sortToggle(contKey) {
-            if (this.sortedBy === contKey) this.sortDir = this.sortDir === 'asc' ? 'desc' : 'asc';
+            if (contKey === this.sortedBy) this.sortDir = this.sortDir === 'asc' ? 'desc' : 'asc';else this.sortDir = 'asc';
             this.sortedBy = contKey;
 
             this.page = 1;
@@ -37066,9 +37105,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     data = _ref16$error$response.data,
                     status = _ref16$error$response.status;
 
-                if (status === 417) {
-                    alert(data.message);
-                } else if (status === 422) {
+                if (status === 422) {
                     _this6.actionsBus.$emit('showMainModal', {
                         title: _this6.l('modals.state.422.title'),
                         text: data.message,
@@ -39819,7 +39856,6 @@ var SearchStrategy = function () {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ActionBarForm__ = __webpack_require__(525);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ActionBarList__ = __webpack_require__(526);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ActionBarDashboard__ = __webpack_require__(524);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return NameAssociation; });
 var _ActionBarForm$name$A;
 
@@ -39827,15 +39863,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-
+//import ActionBarDashboard from './ActionBarDashboard';
 
 var NameAssociation = {
     'form': __WEBPACK_IMPORTED_MODULE_0__ActionBarForm__["a" /* default */].name,
-    'list': __WEBPACK_IMPORTED_MODULE_1__ActionBarList__["a" /* default */].name,
-    'dashboard': __WEBPACK_IMPORTED_MODULE_2__ActionBarDashboard__["a" /* default */].name
+    'list': __WEBPACK_IMPORTED_MODULE_1__ActionBarList__["a" /* default */].name
+    //'dashboard': ActionBarDashboard.name
 };
 
-/* harmony default export */ __webpack_exports__["a"] = (_ActionBarForm$name$A = {}, _defineProperty(_ActionBarForm$name$A, __WEBPACK_IMPORTED_MODULE_0__ActionBarForm__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_0__ActionBarForm__["a" /* default */]), _defineProperty(_ActionBarForm$name$A, __WEBPACK_IMPORTED_MODULE_1__ActionBarList__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_1__ActionBarList__["a" /* default */]), _defineProperty(_ActionBarForm$name$A, __WEBPACK_IMPORTED_MODULE_2__ActionBarDashboard__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_2__ActionBarDashboard__["a" /* default */]), _ActionBarForm$name$A);
+/* harmony default export */ __webpack_exports__["a"] = (_ActionBarForm$name$A = {}, _defineProperty(_ActionBarForm$name$A, __WEBPACK_IMPORTED_MODULE_0__ActionBarForm__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_0__ActionBarForm__["a" /* default */]), _defineProperty(_ActionBarForm$name$A, __WEBPACK_IMPORTED_MODULE_1__ActionBarList__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_1__ActionBarList__["a" /* default */]), _ActionBarForm$name$A);
 
 /***/ }),
 /* 257 */
@@ -78421,55 +78457,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 524 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_node_modules_vue_loader_lib_selector_type_script_index_0_ActionBarDashboard_vue__ = __webpack_require__(205);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_41f4bba8_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_ActionBarDashboard_vue__ = __webpack_require__(574);
-var disposed = false
-var normalizeComponent = __webpack_require__(0)
-/* script */
-
-/* template */
-
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_node_modules_vue_loader_lib_selector_type_script_index_0_ActionBarDashboard_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_41f4bba8_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_ActionBarDashboard_vue__["a" /* default */],
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources/assets/js/components/action-bar/ActionBarDashboard.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] ActionBarDashboard.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-41f4bba8", Component.options)
-  } else {
-    hotAPI.reload("data-v-41f4bba8", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
-
-
-/***/ }),
+/* 524 */,
 /* 525 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -80408,7 +80396,11 @@ if (false) {
 
 "use strict";
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('sharp-action-bar', [_c('template', {
+  return _c('sharp-action-bar', {
+    attrs: {
+      "ready": _vm.ready
+    }
+  }, [_c('template', {
     slot: "left"
   }, [(_vm.showBackButton) ? _c('button', {
     staticClass: "SharpButton SharpButton--secondary",
@@ -80435,7 +80427,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       }
     }
   }, [_vm._v("\n            " + _vm._s(_vm.l('action_bar.form.cancel_button')) + "\n        ")]) : _vm._e(), _vm._v(" "), (_vm.showSubmitButton) ? _c('button', {
-    staticClass: "SharpButton SharpButton--primary",
+    staticClass: "SharpButton SharpButton--accent",
     on: {
       "click": function($event) {
         _vm.emitAction('submit')
@@ -81478,7 +81470,10 @@ if (false) {
 "use strict";
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('sharp-action-bar', {
-    staticClass: "SharpActionBarList"
+    staticClass: "SharpActionBarList",
+    attrs: {
+      "ready": _vm.ready
+    }
   }, [_c('template', {
     slot: "left"
   }, [_c('span', [_vm._v(_vm._s(_vm.itemsCount) + " " + _vm._s(_vm.l('action_bar.list.items_count')))])]), _vm._v(" "), _c('template', {
@@ -81551,15 +81546,22 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "d": "M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm3.5 10.1l-1.4 1.4L8 9.4l-2.1 2.1-1.4-1.4L6.6 8 4.5 5.9l1.4-1.4L8 6.6l2.1-2.1 1.4 1.4L9.4 8l2.1 2.1z"
     }
   })])]), _vm._v(" "), (_vm.showCreateButton) ? _c('button', {
-    staticClass: "SharpButton SharpButton--primary",
+    staticClass: "SharpButton SharpButton--accent",
     on: {
       "click": function($event) {
         _vm.emitAction('create')
       }
     }
   }, [_vm._v("\n            " + _vm._s(_vm.l('action_bar.list.create_button')) + "\n        ")]) : _vm._e(), _vm._v(" "), (_vm.commands.length) ? _c('sharp-dropdown', {
-    staticClass: "SharpActionBar__actions-dropdown"
-  }, _vm._l((_vm.commands), function(command) {
+    staticClass: "SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands",
+    attrs: {
+      "show-arrow": false
+    }
+  }, [_c('div', {
+    slot: "text"
+  }, [_c('i', {
+    staticClass: "fa fa-plus"
+  })]), _vm._v(" "), _vm._l((_vm.commands), function(command) {
     return _c('sharp-dropdown-item', {
       key: command.key,
       on: {
@@ -81568,7 +81570,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         }
       }
     }, [_vm._v("\n                " + _vm._s(command.label) + "\n            ")])
-  })) : _vm._e()], 1), _vm._v(" "), _c('template', {
+  })], 2) : _vm._e()], 1), _vm._v(" "), _c('template', {
     slot: "extras"
   }, _vm._l((_vm.filters), function(filter) {
     return _c('sharp-filter-select', {
@@ -81676,25 +81678,7 @@ if (false) {
 }
 
 /***/ }),
-/* 574 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('sharp-action-bar')
-}
-var staticRenderFns = []
-render._withStripped = true
-var esExports = { render: render, staticRenderFns: staticRenderFns }
-/* harmony default export */ __webpack_exports__["a"] = (esExports);
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-41f4bba8", esExports)
-  }
-}
-
-/***/ }),
+/* 574 */,
 /* 575 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -82987,11 +82971,11 @@ if (false) {
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "SharpActionView"
-  }, [_c('div', {
-    staticClass: "container"
-  }, [(_vm.showErrorPage) ? [_c('h1', [_vm._v("Error " + _vm._s(_vm.errorPageData.status))]), _vm._v(" "), _c('p', [_vm._v(_vm._s(_vm.errorPageData.message))])] : [(_vm.barComp) ? _c(_vm.barComp, {
+  }, [(!_vm.showErrorPage) ? [(_vm.barComp) ? _c(_vm.barComp, {
     tag: "component"
-  }) : _vm._e(), _vm._v(" "), _vm._t("default"), _vm._v(" "), _vm._l((_vm.mainModalsData), function(modal, id) {
+  }) : _vm._e()] : _vm._e(), _vm._v(" "), _c('div', {
+    staticClass: "container"
+  }, [(_vm.showErrorPage) ? [_c('h1', [_vm._v("Error " + _vm._s(_vm.errorPageData.status))]), _vm._v(" "), _c('p', [_vm._v(_vm._s(_vm.errorPageData.message))])] : [_vm._t("default"), _vm._v(" "), _vm._l((_vm.mainModalsData), function(modal, id) {
     return _c('sharp-modal', _vm._b({
       key: id,
       on: {
@@ -82999,7 +82983,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         "hidden": modal.hiddenCallback
       }
     }, 'sharp-modal', modal.props, false), [_vm._v("\n                " + _vm._s(modal.text) + "\n            ")])
-  })]], 2)])
+  })]], 2)], 2)
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -83171,17 +83155,23 @@ if (false) {
 
 "use strict";
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
+  return (_vm.ready) ? _c('div', {
     staticClass: "SharpActionBar"
+  }, [_c('div', {
+    staticClass: "SharpActionBar__bar"
+  }, [_c('div', {
+    staticClass: "container"
   }, [_c('div', {
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col left"
   }, [_vm._t("left")], 2), _vm._v(" "), _c('div', {
     staticClass: "col right"
-  }, [_vm._t("right")], 2)]), _vm._v(" "), _c('div', {
+  }, [_vm._t("right")], 2)])])]), _vm._v(" "), _c('div', {
+    staticClass: "container"
+  }, [_c('div', {
     staticClass: "SharpActionBar__extras"
-  }, [_vm._t("extras")], 2)])
+  }, [_vm._t("extras")], 2)])]) : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -83434,7 +83424,11 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   }, [_c('div', {
     staticClass: "SharpEntitiesList__thead"
   }, [_c('div', {
-    staticClass: "SharpEntitiesList__row SharpEntitiesList__row--header row"
+    staticClass: "SharpEntitiesList__row SharpEntitiesList__row--header container"
+  }, [_c('div', {
+    staticClass: "SharpEntitiesList__cols"
+  }, [_c('div', {
+    staticClass: "row"
   }, _vm._l((_vm.layout), function(contLayout) {
     return _c('div', {
       staticClass: "SharpEntitiesList__th",
@@ -83450,22 +83444,30 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         "height": "5",
         "viewBox": "0 0 10 5",
         "fill-rule": "evenodd"
-      },
-      on: {
-        "click": function($event) {
-          _vm.sortToggle(contLayout.key)
-        }
       }
     }, [_c('path', {
       attrs: {
         "d": "M10 0L5 5 0 0z"
       }
-    })])] : _vm._e()], 2)
+    })])] : _vm._e(), _vm._v(" "), (_vm.containers[contLayout.key].sortable) ? _c('a', {
+      staticClass: "SharpEntitiesList__sort-link",
+      attrs: {
+        "href": ""
+      },
+      on: {
+        "click": function($event) {
+          $event.preventDefault();
+          _vm.sortToggle(contLayout.key)
+        }
+      }
+    }) : _vm._e()], 2)
   }))]), _vm._v(" "), _c('div', {
+    style: (_vm.headerAutoPadding)
+  }, [_vm._v(" ")])])]), _vm._v(" "), _c('div', {
     staticClass: "SharpEntitiesList__tbody"
   }, _vm._l((_vm.data.items), function(item) {
     return _c('div', {
-      staticClass: "SharpEntitiesList__row",
+      staticClass: "SharpEntitiesList__row container",
       class: {
         'SharpEntitiesList__row--disabled': !_vm.rowHasLink(item)
       }
@@ -83489,6 +83491,8 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         "href": _vm.rowLink(item)
       }
     }) : _vm._e()]), _vm._v(" "), _c('div', {
+      ref: "actionsCol",
+      refInFor: true,
       staticClass: "SharpEntitiesList__row-actions"
     }, [(_vm.config.state) ? _c('sharp-dropdown', {
       staticClass: "SharpEntitiesList__state-dropdown",
@@ -83512,8 +83516,11 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         class: _vm.stateClasses(state.value),
         style: (_vm.stateStyle(state.value))
       }), _vm._v("\n                                " + _vm._s(state.label) + "\n                            ")], 1)
-    })], 2) : _vm._e(), _vm._v(" "), (_vm.instanceCommands(item).length) ? _c('sharp-dropdown', {
+    })], 2) : _vm._e(), _vm._v(" "), (!_vm.noInstanceCommands) ? _c('sharp-dropdown', {
       staticClass: "SharpEntitiesList__commands-dropdown",
+      class: {
+        'SharpEntitiesList__commands-dropdown--placeholder': !_vm.instanceCommands(item)
+      },
       attrs: {
         "show-arrow": false
       }

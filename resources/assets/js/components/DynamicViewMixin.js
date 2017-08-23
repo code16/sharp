@@ -58,6 +58,7 @@ export default {
             };
 
             switch(error.response.status) {
+                /// Unauthorized
                 case 401: this.actionsBus.$emit('showMainModal', {
                     ...modalOptions,
                     okCallback() {
@@ -65,12 +66,14 @@ export default {
                     },
                 });
                     break;
-                case 403: this.actionsBus.$emit('showMainModal', {
+                /// Forbidden
+                case 403:
+                case 417:
+                    this.actionsBus.$emit('showMainModal', {
                     ...modalOptions,
                     okCloseOnly:true,
                 });
                     break;
-                
             }
             return Promise.reject(error);
         });

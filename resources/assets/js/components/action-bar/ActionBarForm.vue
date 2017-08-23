@@ -1,5 +1,5 @@
 <template>
-    <sharp-action-bar>
+    <sharp-action-bar :ready="ready">
         <template slot="left">
             <button v-if="showBackButton" class="SharpButton SharpButton--secondary" @click="emitAction('cancel')">
                 {{ l('action_bar.form.back_button') }}
@@ -10,7 +10,7 @@
             <button v-if="!showBackButton" class="SharpButton SharpButton--secondary" @click="emitAction('cancel')">
                 {{ l('action_bar.form.cancel_button') }}
             </button>
-            <button v-if="showSubmitButton" class="SharpButton SharpButton--primary" @click="emitAction('submit')">
+            <button v-if="showSubmitButton" class="SharpButton SharpButton--accent" @click="emitAction('submit')">
                 {{ l(`action_bar.form.submit_button.${opType}`) }}
             </button>
             <template v-if="showActionsDropdown">

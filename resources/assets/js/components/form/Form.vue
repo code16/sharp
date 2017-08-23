@@ -131,8 +131,6 @@
             handleError({response}) {
                 if(response.status===422)
                     this.errors = response.data || {};
-                else if(response.status===417)
-                    alert(response.data.message)
             },
             delete() {
                 axios.delete(this.apiPath);
