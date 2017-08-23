@@ -29,7 +29,36 @@ In short, this method is meant to host the code responsible for the declaration 
         );
     }
 
-As we can see in this simple example, we defined two text fields giving them a mandatory `key` and an optional label. It's all there is to it, and as you've probably guessed Sharp offers several other field types, each of them having specific config. Here's the full list and documentation:
+As we can see in this simple example, we defined two text fields giving them a mandatory `key` and an optional label. 
+
+#### Form fields shared attributes
+
+Every field has the optional following setters:
+
+- `setLabel(string $label)` for the field label displayed above it
+- `setHelpMessage(string $helpMessage)` to add a help text below the field
+- `setReadOnly(bool $readOnly = true)`
+- `setExtraStyle(string $style)`: the CSS style will be added in a `style` attribute
+
+In addition, all text fields have one more generic setter:
+
+- `setPlaceholder(string $placeholder)`
+
+#### Conditional display
+
+The idea is to hide or show a field depending of some other field value, called "master" in this relation. To do that, use the `addConditionalDisplay(string $fieldKey, $values = true)` setter giving:
+- the master `$fieldKey`, which should refer to either a Check, Select, Tags or Autocomplete field,
+- the `$values` of the master field for which the "slave" field must be visible. You can put there a boolean for a Check master field, and for other fields (Select, Tags, Autocomplete), either:
+	- a string value, like for instance `"red"`: the slave field is visible only when the master field value is "red"
+	- a string value with a negation mark as the first char, like `"!red`": the slave field is visible only when the master field value is NOT "red"
+	- an array of values: `["red", "blue"]`. The slave field is visible only when the master field value is either "red" or "blue".
+
+You can add multiple conditional display rules, chaining calls to `addConditionalDisplay(string $fieldKey, $values = true)`. In this case, all conditions will be linked with a `AND` operator by default (meaning all conditions must be verified to display the slave field), but this can be switch to an `OR` easily with `setConditionalDisplayOrOperator()` (and back with `setConditionalDisplayAndOperator()`).
+
+
+#### Form fields specific attributes
+
+For the specifics of each field, here's the full list and documentation:
 
 - [Text](form-fields/text.md)
 - [Textarea](form-fields/textarea.md)
