@@ -160,8 +160,8 @@
             }
         },
         watch: {
-            async ready(ready) {
-                if(ready && this.data.items.length) {
+            async 'data.items'(items) {
+                if(items.length) {
                     await this.$nextTick();
                     this.headerAutoPadding = {
                         width: `${this.$refs.actionsCol[0].offsetWidth}px`

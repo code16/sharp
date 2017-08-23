@@ -36835,8 +36835,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
 
     watch: {
-        ready: async function ready(_ready) {
-            if (_ready && this.data.items.length) {
+        'data.items': async function dataItems(items) {
+            if (items.length) {
                 await this.$nextTick();
                 this.headerAutoPadding = {
                     width: this.$refs.actionsCol[0].offsetWidth + 'px'
