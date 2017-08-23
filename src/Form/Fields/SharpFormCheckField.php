@@ -25,6 +25,17 @@ class SharpFormCheckField extends SharpFormField
     }
 
     /**
+     * @param string $text
+     * @return $this
+     */
+    public function setText(string $text)
+    {
+        $this->text = $text;
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     protected function validationRules()
