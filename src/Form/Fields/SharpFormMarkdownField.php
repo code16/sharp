@@ -8,6 +8,20 @@ class SharpFormMarkdownField extends SharpFormField
 {
     use SharpFormFieldWithPlaceholder;
 
+    const B = "bold";
+    const I = "italic";
+    const UL = "unordered-list";
+    const OL = "ordered-list";
+    const SEPARATOR = "|";
+    const A = "link";
+    const H1 = "heading-1";
+    const H2 = "heading-2";
+    const H3 = "heading-3";
+    const CODE = "code";
+    const QUOTE = "quote";
+    const IMG = "image";
+    const HR = "horizontal-rule";
+
     /**
      * @var int
      */
@@ -17,7 +31,11 @@ class SharpFormMarkdownField extends SharpFormField
      * @var array
      */
     protected $toolbar = [
-        "bold", "italic", "|", "unordered-list", "ordered-list", "|", "link"
+        self::B, self::I,
+        self::SEPARATOR,
+        self::UL,
+        self::SEPARATOR,
+        self::A,
     ];
 
     /**
@@ -46,6 +64,17 @@ class SharpFormMarkdownField extends SharpFormField
     public function setHeight(int $height)
     {
         $this->height = $height;
+
+        return $this;
+    }
+
+    /**
+     * @param array $toolbar
+     * @return static
+     */
+    public function setToolbar(array $toolbar)
+    {
+        $this->toolbar = $toolbar;
 
         return $this;
     }

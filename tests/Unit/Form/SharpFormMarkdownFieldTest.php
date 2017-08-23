@@ -14,7 +14,8 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
 
         $this->assertEquals([
                 "key" => "text", "type" => "markdown", "toolbar" => [
-                    "bold", "italic", "|", "unordered-list", "ordered-list", "|", "link"
+                    SharpFormMarkdownField::B, SharpFormMarkdownField::I, SharpFormMarkdownField::SEPARATOR,
+                    SharpFormMarkdownField::UL, SharpFormMarkdownField::SEPARATOR, SharpFormMarkdownField::A,
                 ], "maxImageSize" => 2
             ], $formField->toArray()
         );
@@ -40,6 +41,26 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ["maxImageSize" => 50],
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_toolbar()
+    {
+        $formField = SharpFormMarkdownField::make("text")
+            ->setToolbar([
+                SharpFormMarkdownField::IMG,
+                SharpFormMarkdownField::SEPARATOR,
+                SharpFormMarkdownField::UL,
+            ]);
+
+        $this->assertArraySubset(
+            ["toolbar" => [
+                SharpFormMarkdownField::IMG,
+                SharpFormMarkdownField::SEPARATOR,
+                SharpFormMarkdownField::UL,
+            ]],
             $formField->toArray()
         );
     }
