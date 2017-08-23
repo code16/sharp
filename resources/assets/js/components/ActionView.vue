@@ -2,7 +2,7 @@
     <div class="SharpActionView">
         <div class="container">
             <template v-if="showErrorPage">
-                <h1>Erreur {{errorPageData.status}}</h1>
+                <h1>Error {{errorPageData.status}}</h1>
                 <p>{{errorPageData.message}}</p>
             </template>
             <template v-else>

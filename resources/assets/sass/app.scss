@@ -22,18 +22,22 @@ $css--reset:false;
 @import 'mixins/helper-mixins';
 @import 'mixins/layout';
 
-#sharp-app {
+@mixin sharp-color($color) {
+  fill: $color;
+  stroke: $color;
+}
 
+#sharp-app {
   color: $text-01;
   line-height: 1;
 
   font-family: $font-family-base;
 
-  .sharp_primary { color:$brand-01 }
-  .sharp_secondary { color:$brand-02 }
-  .sharp_gray { color:$color__navy-gray-7 }
-  .sharp_lightgray { color:$color__navy-gray-9 }
-  .sharp_darkgray { color:$color__navy-gray-4 }
+  .sharp_primary { @include sharp-color($brand-01) }
+  .sharp_secondary { @include sharp-color($brand-02) }
+  .sharp_gray { @include sharp-color($color__navy-gray-7) }
+  .sharp_lightgray { @include sharp-color($color__navy-gray-9) }
+  .sharp_darkgray { @include sharp-color($color__navy-gray-4) }
 
   @import 'node_modules/bootstrap/scss/grid';
 

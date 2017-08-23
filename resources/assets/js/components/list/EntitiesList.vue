@@ -33,13 +33,16 @@
                         </div>
                         <div class="SharpEntitiesList__row-actions">
                             <sharp-dropdown v-if="config.state" class="SharpEntitiesList__state-dropdown" :show-arrow="false" :disabled="!hasStateAuthorization(item)">
-                                <i slot="text" class="fa fa-circle" :class="stateClasses(item.state)" :style="stateStyle(item.state)"></i>
+                                <sharp-state-icon slot="text" :class="stateClasses(item.state)" :style="stateStyle(item.state)"></sharp-state-icon>
                                 <sharp-dropdown-item v-for="state in config.state.values" @click="setState(item,state)" :key="state.value">
-                                    <i class="fa fa-circle" :class="stateClasses(state.value)" :style="stateStyle(state.value)"></i>
+                                    <sharp-state-icon :class="stateClasses(state.value)" :style="stateStyle(state.value)"></sharp-state-icon>
                                     {{ state.label }}
                                 </sharp-dropdown-item>
                             </sharp-dropdown>
-                            <sharp-dropdown v-if="instanceCommands(item).length" class="SharpEntitiesList__commands-dropdown">
+                            <sharp-dropdown v-if="instanceCommands(item).length" class="SharpEntitiesList__commands-dropdown" :show-arrow="false">
+                                <div slot="text" class="SharpEntitiesList__command-icon">
+                                    <i class="fa fa-plus"></i>
+                                </div>
                                 <sharp-dropdown-item v-for="command in instanceCommands(item)" @click="sendCommand(command, item)" :key="command.key">
                                     {{ command.label }}
                                 </sharp-dropdown-item>
@@ -85,6 +88,7 @@
     import Modal from '../Modal';
     import Form from '../form/Form';
     import ViewPanel from './ViewPanel';
+    import StateIcon from './StateIcon';
 
     import { API_PATH } from '../../consts';
     import * as util from '../../util';
@@ -112,7 +116,8 @@
             [DropdownItem.name]: DropdownItem,
             [Modal.name]: Modal,
             [Form.name]: Form,
-            [ViewPanel.name]: ViewPanel
+            [ViewPanel.name]: ViewPanel,
+            [StateIcon.name]: StateIcon,
         },
 
         props: {
@@ -275,13 +280,19 @@
                     {'hidden-xs-down':hideOnXS}
                 ]
             },
+            isStateClass(color) {
+                return color.indexOf('sharp_') === 0;
+            },
             stateClasses(state) {
                 let { color } = this.stateByValue[state];
-                return color.indexOf('sharp_') === 0 ? [color] : [];
+                return this.isStateClass(color) ? [color] : [];
             },
             stateStyle(state) {
                 let { color } = this.stateByValue[state];
-                return color.indexOf('sharp_') === -1 ? `color:${color}` : '';
+                return !this.isStateClass(color) ? {
+                    fill: color,
+                    stroke: color,
+                } : '';
             },
             hasStateAuthorization({[this.idAttr]:instanceId}) {
                 if(!this.config.state) return false;

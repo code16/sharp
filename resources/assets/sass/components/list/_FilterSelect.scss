@@ -1,7 +1,7 @@
 .SharpFilterSelect {
   width: auto;
-
   display:flex;
+  outline: 1px solid $brand-03;
 
   @extend .SharpDropdown;
   cursor: default;
@@ -24,7 +24,7 @@
     padding-left: 1rem;
     position: relative;
     background: $ui-01;
-    z-index: z('dropdownText')
+    z-index: z('dropdownText');
   }
 
   &__select {
@@ -36,6 +36,12 @@
 
       &__content {
         left:0;
+        outline: 1px solid $brand-03 !important;
+        border: 1px solid transparent !important;
+      }
+
+      &__option--highlight {
+        background-color: $brand-03 !important;
       }
 
       &__tags {

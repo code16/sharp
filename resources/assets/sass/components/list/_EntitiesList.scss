@@ -184,31 +184,53 @@
   }
 
   &__state-dropdown, &__commands-dropdown {
-    height: 1.8rem;
+    //height: 1.8rem;
     margin: 0 .1em;
+    //width:1.5rem;
+
+    background:transparent;
+
+    &.SharpDropdown--open {
+      .SharpDropdown__text {
+        background: $ui-01;
+      }
+    }
+
+    .SharpDropdown__text {
+      background-color: transparent;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%
+    }
     .SharpDropdown__list {
+      outline: 1px solid $brand-03 !important;
+      border: 1px solid transparent !important;
       z-index:100;
       width:rem(200px);
       right:0;
     }
-  }
-  &__state-dropdown {
-    background:transparent;
-    width:1.5rem;
 
-    .SharpDropdown__text {
-      padding: 0;
-      display:flex;
-      align-items:center;
-      justify-content: center;
-      height: 100%
+    .SharpDropdown__link {
+      &:focus, &:hover {
+        background-color: $brand-03;
+      }
     }
   }
-  &__commands-dropdown {
-    width:auto;
-    .SharpDropdown__arrow {
-      right:.25rem;
-      top: .8rem;
+
+  .SharpEntitiesList__command-icon {
+    border: 1px solid $brand-03;
+    width: rem(14px);
+    height: rem(14px);
+    color: $brand-03;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .fa {
+      font-size : rem(8px);
     }
   }
+
 }

@@ -1,18 +1,14 @@
 <template>
     <div class="SharpDashboard container">
         <template v-if="ready">
-            <!--<sharp-tabbed-layout :layout="layout">-->
-                <!--<template scope="tab">-->
-                    <sharp-grid :rows="layout.rows">
-                        <template scope="widgetLayout">
-                            <sharp-widget :widget-type="widgets[widgetLayout.key].type"
-                                          :widget-props="widgets[widgetLayout.key]"
-                                          :value="data[widgetLayout.key]">
-                            </sharp-widget>
-                        </template>
-                    </sharp-grid>
-                <!--</template>-->
-            <!--</sharp-tabbed-layout>-->
+            <sharp-grid :rows="layout.rows">
+                <template scope="widgetLayout">
+                    <sharp-widget :widget-type="widgets[widgetLayout.key].type"
+                                  :widget-props="widgets[widgetLayout.key]"
+                                  :value="data[widgetLayout.key]">
+                    </sharp-widget>
+                </template>
+            </sharp-grid>
         </template>
     </div>
 </template>

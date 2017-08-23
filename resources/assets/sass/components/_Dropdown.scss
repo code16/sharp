@@ -26,6 +26,9 @@
     transform-origin: 50% 45%;
   }
 
+  &--disabled {
+    cursor: default;
+  }
 
   &[data-value=''] &__text {
     color: $text-03;

@@ -16,7 +16,12 @@
 
             let carretSlot = slots().carret;
 
-            return h(Multiselect, data, [
+            return h({
+                'extends':Multiselect,
+                mounted() {
+                    this.$el.addEventListener('blur', () => this.deactivate());
+                }
+            }, data, [
                 carretSlot
                     ? h('template',{ slot:'carret' },carretSlot)
                     : h(DropdownArrow, { 'class': 'multiselect__select', slot:'carret' }),
