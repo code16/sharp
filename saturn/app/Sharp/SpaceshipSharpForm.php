@@ -42,6 +42,13 @@ class SpaceshipSharpForm extends SharpForm
         )->addField(
             SharpFormMarkdownField::make("description")
                 ->setLabel("Description")
+                ->setToolbar([
+                    SharpFormMarkdownField::B, SharpFormMarkdownField::I,
+                    SharpFormMarkdownField::SEPARATOR,
+                    SharpFormMarkdownField::IMG,
+                    SharpFormMarkdownField::SEPARATOR,
+                    SharpFormMarkdownField::A,
+                ])
 
         )->addField(
             SharpFormDateField::make("construction_date")
