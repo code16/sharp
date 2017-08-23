@@ -39,7 +39,6 @@ class SpaceshipSharpList extends SharpEntityList
         )->addDataContainer(
             EntityListDataContainer::make("type")
                 ->setLabel("Type")
-                ->setSortable()
 
         )->addDataContainer(
             EntityListDataContainer::make("pilots.name")
