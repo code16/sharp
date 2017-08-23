@@ -116,6 +116,7 @@ class SpaceshipSharpForm extends SharpForm
                 ->setRemovable()
                 ->setSortable()
                 ->setItemIdAttribute("id")
+                ->setOrderAttribute("order")
                 ->addItemField(
                     SharpFormUploadField::make("file")
                         ->setFileFilterImages()
@@ -172,7 +173,7 @@ class SpaceshipSharpForm extends SharpForm
             })
             ->setCustomTransformer("pilots", new EloquentFormTagsTransformer("name"))
             ->setCustomTransformer("picture", new EloquentFormUploadTransformer())
-//            ->setCustomTransformer("pictures", new EloquentFormTagsTransformer("name"))
+            ->setCustomTransformer("pictures", new EloquentFormUploadTransformer())
             ->transform(
                 Spaceship::with("reviews", "pilots", "picture", "pictures")->findOrFail($id)
             );

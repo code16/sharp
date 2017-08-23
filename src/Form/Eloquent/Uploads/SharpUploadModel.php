@@ -22,34 +22,6 @@ class SharpUploadModel extends Model
     }
 
     /**
-     * @param array $value
-     */
-//    function setFileAttribute(array $value = null)
-//    {
-//        if(is_null($value) && $this->exists) {
-//            $value = [
-//                'path' => null, 'size' => null,
-//                'mime' => null, 'disk' => null
-//            ];
-//        }
-//
-//        if(empty($value)) {
-//            return;
-//        }
-//
-//        if(array_key_exists("path", $value)) {
-//            $this->setAttribute('file_name', $value["path"])
-//                ->setAttribute('size', $value["size"])
-//                ->setAttribute('mime_type', $value["mime"])
-//                ->setAttribute('disk', $value["disk"]);
-//        }
-//
-//        if($value["transformed"] ?? false && $this->exists) {
-//            (new Thumbnail($this))->destroyAllThumbnails();
-//        }
-//    }
-
-    /**
      * @param $value
      */
     public function setTransformedAttribute($value)
@@ -58,6 +30,18 @@ class SharpUploadModel extends Model
         // was a transformation, we have to delete old thumbnails
         if($value && $this->exists) {
             (new Thumbnail($this))->destroyAllThumbnails();
+        }
+    }
+
+    /**
+     * @param $value
+     */
+    public function setFileAttribute($value)
+    {
+        // We use this magical "file" attribute to fill at the same time
+        // file_name, mime_type, disk and size in a MorphMany case
+        if($value) {
+            $this->fill($value);
         }
     }
 
