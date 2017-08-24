@@ -3,9 +3,9 @@
             v-show="show"
             :options="options"
             :value="value"
-            :on-added-file="_=>onAddedFile()"
-            @success="data=>onSuccess(data)"
-            @removed="_=>onRemoved()"
+            :on-added-file="handleAdded"
+            @success="$emit('success',$self,$event)"
+            @removed="$emit('remove',$self)"
             class="SharpMarkdownUpload"
             ref="vueclip">
     </sharp-vue-clip>
@@ -25,10 +25,6 @@
             value: Object,
             maxFileSize: Number,
 
-            onSuccess: Function,
-            onRemoved: Function,
-            onAdded: Function,
-
             marker: Object,
 
             xsrfToken: String
@@ -38,8 +34,7 @@
         },
         data() {
             return {
-                show: false,
-                removed: false
+                show: false
             }
         },
         computed: {
@@ -65,20 +60,18 @@
             }
         },
         methods: {
-            onAddedFile() {
+            handleAdded() {
                 this.show = true;
-                this.$nextTick(_ => {
-                    this.onAdded();
-                })
+                this.$nextTick(() => this.$emit('added', this));
             },
             checkCancelled() {
                 if (!this.show)
-                    this.onRemoved();
+                    this.$emit('remove', this);
                 document.body.onfocus = null;
             },
             inputClick() {
                 this.fileInput.click();
-                document.body.onfocus = _ => {
+                document.body.onfocus = () => {
                     setTimeout(this.checkCancelled, 100);
                 };
             },

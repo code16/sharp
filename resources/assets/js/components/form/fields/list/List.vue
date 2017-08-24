@@ -15,9 +15,11 @@
                 >
                     <div class="SharpModule__inner">
                         <div class="SharpModule__content">
+
                             <template v-if="dragActive && collapsedItemTemplate">
                                 <sharp-template name="CollapsedItem" :template="collapsedItemTemplate" :template-data="collapsedItemData(listItemData)"></sharp-template>
                             </template>
+
                             <template v-else>
                                 <sharp-list-item :layout="fieldLayout.item" :error-identifier="i">
                                     <template scope="itemFieldLayout">
@@ -32,6 +34,9 @@
                                 </sharp-list-item>
                                 <button v-if="!disabled && removable" class="SharpButton SharpButton--danger SharpButton--sm" @click="remove(i)">{{ l('form.list.remove_button') }}</button>
                             </template>
+
+                            <!-- Full size div use to handle the item when drag n drop (c.f draggable options) -->
+                            <div v-if="dragActive" class="SharpList__overlay-handle"></div>
                         </div>
                     </div>
                     <div v-if="!disabled && showAddButton && i<list.length-1" class="SharpList__new-item-zone">
@@ -128,7 +133,7 @@
                 return this.itemFields;
             },
             dragOptions() {
-                return { disabled:!this.dragActive };
+                return { disabled:!this.dragActive, handle: '.SharpList__overlay-handle' };
             },
             showAddButton() {
                 return this.addable && (this.list.length<this.maxItemCount || !this.maxItemCount);

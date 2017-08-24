@@ -164,9 +164,10 @@
                     data = JSON.parse(this.file.xhrResponse.responseText);
                 }
                 catch(e) { console.log(e); }
-                this.$emit('success', data);
 
                 data.uploaded = true;
+                this.$emit('success', data);
+
                 this.$parent.$emit('input',data);
                 this.actionsBus.$emit('enable-submit');
 
