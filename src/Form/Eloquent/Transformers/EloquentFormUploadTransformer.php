@@ -29,8 +29,7 @@ class EloquentFormUploadTransformer implements SharpAttributeTransformer
                 return [
                     "file" => array_only($array, ["name", "thumbnail", "size"]),
                 ] + array_except($array, ["name", "thumbnail", "size"]);
-
-            });
+            })->all();
         };
 
         return $this->transformUpload($instance->$attribute);
@@ -43,7 +42,7 @@ class EloquentFormUploadTransformer implements SharpAttributeTransformer
                 "thumbnail" => $upload->thumbnail(null, 150),
                 "size" => $upload->size,
             ] : [])
-            + $upload->custom_properties
+            + ($upload->custom_properties ?? [])
             + ["id" => $upload->id];
     }
 }

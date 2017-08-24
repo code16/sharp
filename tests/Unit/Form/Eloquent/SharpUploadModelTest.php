@@ -2,43 +2,11 @@
 
 namespace Code16\Sharp\Tests\Unit\Form\Eloquent;
 
-use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
-use Code16\Sharp\Tests\Fixtures\Person;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Http\Testing\FileFactory;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Schema;
+use Code16\Sharp\Tests\Unit\Form\Eloquent\Utils\TestWithSharpUploadModel;
 
 class SharpUploadModelTest extends SharpFormEloquentBaseTest
 {
-
-    protected function getEnvironmentSetUp($app)
-    {
-        parent::getEnvironmentSetUp($app);
-
-        Schema::create('sharp_upload_models', function (Blueprint $table) {
-            $table->increments('id');
-            $table->morphs('model');
-            $table->string('model_key')->nullable();
-            $table->string('file_name')->nullable();
-            $table->string('mime_type')->nullable();
-            $table->string('disk')->default('local');
-            $table->unsignedInteger('size')->nullable();
-            $table->text('custom_properties')->nullable();
-            $table->unsignedInteger('order')->nullable();
-            $table->timestamps();
-        });
-
-        config(['filesystems.disks.local' => [
-            'driver' => 'local',
-            'root' => storage_path('app'),
-        ]]);
-
-        config(['sharp.uploads.thumbnails_dir' => 'thumbnails']);
-
-        File::deleteDirectory(storage_path("app/data"));
-        File::deleteDirectory(public_path("thumbnails"));
-    }
+    use TestWithSharpUploadModel;
 
     /** @test */
     function all_thumbnails_are_destroyed_if_we_set_transformed_to_true()
@@ -87,28 +55,5 @@ class SharpUploadModelTest extends SharpFormEloquentBaseTest
         );
 
         $this->assertTrue(file_exists(public_path("thumbnails/data/-150/" . basename($file))));
-    }
-
-    private function createImage()
-    {
-        $file = (new FileFactory)->image("test.png", 600, 600);
-        return $file->store("data");
-    }
-
-    /**
-     * @param $file
-     * @return $this|\Illuminate\Database\Eloquent\Model
-     */
-    protected function createSharpUploadModel($file)
-    {
-        return SharpUploadModel::create([
-            "file_name" => $file,
-            "size" => 120,
-            "mime_type" => "image/png",
-            "disk" => "local",
-            "model_type" => Person::class,
-            "model_id" => Person::create(["name" => "A"])->id,
-            "model_key" => "test"
-        ]);
     }
 }
