@@ -4,6 +4,10 @@ namespace Code16\Sharp\Form\Transformers;
 
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 
+/**
+ * Handles the transformation of a string value to a valid form
+ * expected by the Markdown front field.
+ */
 class FormMarkdownTransformer implements SharpAttributeTransformer
 {
 

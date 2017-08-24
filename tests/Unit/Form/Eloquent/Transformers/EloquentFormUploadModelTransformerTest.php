@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Tests\Unit\Form\Eloquent\Transformers;
 
-use Code16\Sharp\Form\Eloquent\Transformers\EloquentFormUploadTransformer;
+use Code16\Sharp\Form\Eloquent\Transformers\EloquentFormUploadModelTransformer;
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\Utils\TestWithSharpUploadModel;
@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class EloquentFormUploadTransformerTest extends SharpFormEloquentBaseTest
+class EloquentFormUploadModelTransformerTest extends SharpFormEloquentBaseTest
 {
     use TestWithSharpUploadModel {
         getEnvironmentSetUp as protected traitGetEnvironmentSetUp;
@@ -32,7 +32,7 @@ class EloquentFormUploadTransformerTest extends SharpFormEloquentBaseTest
         $picturable = Picturable::create();
         $upload = $this->createSharpUploadModel($this->createImage(), $picturable);
 
-        $transformer = new EloquentFormUploadTransformer();
+        $transformer = new EloquentFormUploadModelTransformer();
 
         $this->assertEquals([
             "id" => $upload->id,
@@ -49,7 +49,7 @@ class EloquentFormUploadTransformerTest extends SharpFormEloquentBaseTest
         $upload = $this->createSharpUploadModel($this->createImage(), $picturable);
         $upload2 = $this->createSharpUploadModel($this->createImage(), $picturable);
 
-        $transformer = new EloquentFormUploadTransformer();
+        $transformer = new EloquentFormUploadModelTransformer();
 
         $this->assertEquals([[
             "file" => [

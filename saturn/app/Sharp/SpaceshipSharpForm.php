@@ -6,8 +6,7 @@ use App\Pilot;
 use App\Spaceship;
 use App\SpaceshipType;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
-use Code16\Sharp\Form\Eloquent\Transformers\EloquentFormTagsTransformer;
-use Code16\Sharp\Form\Eloquent\Transformers\EloquentFormUploadTransformer;
+use Code16\Sharp\Form\Eloquent\Transformers\EloquentFormUploadModelTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
@@ -23,6 +22,7 @@ use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\Transformers\FormMarkdownTransformer;
+use Code16\Sharp\Form\Transformers\FormTagsTransformer;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 class SpaceshipSharpForm extends SharpForm
@@ -172,10 +172,10 @@ class SpaceshipSharpForm extends SharpForm
         return $this->setCustomTransformer("capacity", function($spaceship) {
                 return $spaceship->capacity / 1000;
             })
-            ->setCustomTransformer("pilots", new EloquentFormTagsTransformer("name"))
+            ->setCustomTransformer("pilots", new FormTagsTransformer("name"))
             ->setCustomTransformer("description", new FormMarkdownTransformer())
-            ->setCustomTransformer("picture", new EloquentFormUploadTransformer())
-            ->setCustomTransformer("pictures", new EloquentFormUploadTransformer())
+            ->setCustomTransformer("picture", new EloquentFormUploadModelTransformer())
+            ->setCustomTransformer("pictures", new EloquentFormUploadModelTransformer())
             ->transform(
                 Spaceship::with("reviews", "pilots", "picture", "pictures")->findOrFail($id)
             );
