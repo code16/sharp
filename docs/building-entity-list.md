@@ -93,7 +93,7 @@ In a more realistic project, you'll want to transform your data before sending i
         )->transform($spaceships);
     }
 
-The `setCustomTransformer()` function takes the key of the attribute to transform, and either a `Closure` or an instance of a class which must implement `Code16\Sharp\Utils\Transformers\SharpAttributeTransformer`, or even just the full class name of the lastest.
+The `setCustomTransformer()` function takes the key of the attribute to transform, and either a `Closure` or an instance of a class which must implement `Code16\Sharp\Utils\Transformers\SharpAttributeTransformer`, or even just the full class name of the latest.
 
 The `transform` function must be called after, and will 
 
@@ -102,7 +102,22 @@ The `transform` function must be called after, and will
 
 > Note that transformers need your models (spaceships, here) to allow a direct access to their attributes, like for instance `spaceship->capacity`, and to implement `Illuminate\Contracts\Support\Arrayable` interface. Eloquent Model fulfill those needs.
 
-##### The ":" operator in transformers
+
+##### Transform attribute of an item (hasMany relationship)
+
+Sometimes (maybe more ofter in the Entity Form, as we'll see), you would like to transform an attribute of a related model in a "has many" relationship. For instance let's say you want to display the names of the sons of a father in caps:
+
+    return $this->setCustomTransformer(
+            "sons[name]", 
+            function($son) {
+                return strtoupper($son->name)
+            })
+        )->transform($father);
+
+The convention in this case is to use an array notation, given that `$father->sons` is a collection of objects with a `name` attribute
+
+
+##### The ":" operator and transformers
 
 If you need to reference a related attribute, like for instance the name of the author of a Post, you can define a custom transformer, or simply use the `:` operator, like this in `buildListDataContainers()` and `buildListLayout()`:
 

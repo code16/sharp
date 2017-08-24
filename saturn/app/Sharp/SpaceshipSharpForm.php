@@ -22,6 +22,7 @@ use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Form\Transformers\FormMarkdownTransformer;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 class SpaceshipSharpForm extends SharpForm
@@ -172,6 +173,7 @@ class SpaceshipSharpForm extends SharpForm
                 return $spaceship->capacity / 1000;
             })
             ->setCustomTransformer("pilots", new EloquentFormTagsTransformer("name"))
+            ->setCustomTransformer("description", new FormMarkdownTransformer())
             ->setCustomTransformer("picture", new EloquentFormUploadTransformer())
             ->setCustomTransformer("pictures", new EloquentFormUploadTransformer())
             ->transform(
