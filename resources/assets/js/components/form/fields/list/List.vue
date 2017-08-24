@@ -1,8 +1,10 @@
 <template>
-    <div class="SharpList">
+    <div class="SharpList" :class="{ 'SharpList--sort': dragActive }">
         <template v-if="sortable && list.length > 1">
-            <button type="button" class="SharpButton SharpButton--secondary SharpList__sort-button" :class="{active:dragActive}" @click="toggleDrag">
-                {{dragActive ? 'Ok' : 'Trier'}}
+            <button type="button" class="SharpButton SharpButton--ghost SharpList__sort-button" :class="{'SharpButton--active':dragActive}" @click="toggleDrag">
+                <svg class="SharpButton__icon" width='24' height='22' viewBox='0 0 24 22' fill-rule='evenodd'>
+                    <path d='M20 14V0h-4v14h-4l6 8 6-8zM4 8v14h4V8h4L6 0 0 8z'></path>
+                </svg>
             </button>
         </template>
         <draggable :options="dragOptions" :list="list" ref="draggable">

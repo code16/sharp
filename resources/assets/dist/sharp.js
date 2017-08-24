@@ -35766,6 +35766,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 
 
@@ -82005,11 +82007,14 @@ if (false) {
 "use strict";
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "SharpList"
-  }, [(_vm.sortable && _vm.list.length > 1) ? [_c('button', {
-    staticClass: "SharpButton SharpButton--secondary SharpList__sort-button",
+    staticClass: "SharpList",
     class: {
-      active: _vm.dragActive
+      'SharpList--sort': _vm.dragActive
+    }
+  }, [(_vm.sortable && _vm.list.length > 1) ? [_c('button', {
+    staticClass: "SharpButton SharpButton--ghost SharpList__sort-button",
+    class: {
+      'SharpButton--active': _vm.dragActive
     },
     attrs: {
       "type": "button"
@@ -82017,7 +82022,19 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     on: {
       "click": _vm.toggleDrag
     }
-  }, [_vm._v("\n            " + _vm._s(_vm.dragActive ? 'Ok' : 'Trier') + "\n        ")])] : _vm._e(), _vm._v(" "), _c('draggable', {
+  }, [_c('svg', {
+    staticClass: "SharpButton__icon",
+    attrs: {
+      "width": "24",
+      "height": "22",
+      "viewBox": "0 0 24 22",
+      "fill-rule": "evenodd"
+    }
+  }, [_c('path', {
+    attrs: {
+      "d": "M20 14V0h-4v14h-4l6 8 6-8zM4 8v14h4V8h4L6 0 0 8z"
+    }
+  })])])] : _vm._e(), _vm._v(" "), _c('draggable', {
     ref: "draggable",
     attrs: {
       "options": _vm.dragOptions,
@@ -82717,7 +82734,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   return _c('div', {
     staticClass: "SharpUpload",
     class: {
-      'SharpUpload--empty': !_vm.file
+      'SharpUpload--empty': !_vm.file, 'SharpUpload--disabled': _vm.readOnly
     }
   }, [_c('div', {
     staticClass: "SharpUpload__inner"
@@ -82773,7 +82790,8 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   })])]), _vm._v(" "), _c('div', [(!!_vm.originalImageSrc) ? [_c('button', {
     staticClass: "SharpButton SharpButton--sm SharpButton--secondary",
     attrs: {
-      "type": "button"
+      "type": "button",
+      "disabled": _vm.readOnly
     },
     on: {
       "click": _vm.onEditButtonClick
@@ -82781,7 +82799,8 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   }, [_vm._v("\n                                    " + _vm._s(_vm.l('form.upload.edit_button')) + "\n                                ")])] : _vm._e(), _vm._v(" "), _c('button', {
     staticClass: "SharpButton SharpButton--sm SharpButton--secondary SharpButton--danger SharpUpload__remove-button",
     attrs: {
-      "type": "button"
+      "type": "button",
+      "disabled": _vm.readOnly
     },
     on: {
       "click": function($event) {
@@ -82789,6 +82808,12 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       }
     }
   }, [_vm._v("\n                                " + _vm._s(_vm.l('form.upload.remove_button')) + "\n                            ")])], 2)]), _vm._v(" "), _c('button', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (!_vm.readOnly),
+      expression: "!readOnly"
+    }],
     staticClass: "SharpUpload__close-button",
     attrs: {
       "type": "button"
