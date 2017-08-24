@@ -13,7 +13,6 @@ use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
-use Code16\Sharp\Form\Fields\SharpFormMarkdownField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTagsField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
@@ -42,16 +41,19 @@ class SpaceshipSharpForm extends SharpForm
             SharpFormTextField::make("capacity")
                 ->setLabel("Capacity (x1000)")
 
-        )->addField(
-            SharpFormMarkdownField::make("description")
-                ->setLabel("Description")
-                ->setToolbar([
-                    SharpFormMarkdownField::B, SharpFormMarkdownField::I,
-                    SharpFormMarkdownField::SEPARATOR,
-                    SharpFormMarkdownField::IMG,
-                    SharpFormMarkdownField::SEPARATOR,
-                    SharpFormMarkdownField::A,
-                ])
+//        )->addField(
+//            SharpFormMarkdownField::make("description")
+//                ->setLabel("Description")
+//                ->setToolbar([
+//                    SharpFormMarkdownField::B, SharpFormMarkdownField::I,
+//                    SharpFormMarkdownField::SEPARATOR,
+//                    SharpFormMarkdownField::IMG,
+//                    SharpFormMarkdownField::SEPARATOR,
+//                    SharpFormMarkdownField::A,
+//                ])
+//                ->setCropRatio("1:1")
+//                ->setStorageDisk("local")
+//                ->setStorageBasePath("data/Spaceship/{id}")
 
         )->addField(
             SharpFormDateField::make("construction_date")
@@ -157,8 +159,8 @@ class SpaceshipSharpForm extends SharpForm
                 $column->withFieldset("Technical details", function(FormLayoutFieldset $fieldset) {
                     return $fieldset->withFields("capacity|4,6", "construction_date|8,6");
                 });
-            })->addColumn(7, function(FormLayoutColumn $column) {
-                $column->withSingleField("description");
+//            })->addColumn(7, function(FormLayoutColumn $column) {
+//                $column->withSingleField("description");
             });
         });
     }

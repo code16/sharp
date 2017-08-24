@@ -34,10 +34,10 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_define_maxImageSize()
+    function we_can_define_maxFileSize()
     {
         $formField = SharpFormMarkdownField::make("text")
-            ->setMaxImageSize(50);
+            ->setMaxFileSize(50);
 
         $this->assertArraySubset(
             ["maxImageSize" => 50],
