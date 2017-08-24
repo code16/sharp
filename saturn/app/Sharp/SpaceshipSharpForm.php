@@ -2,16 +2,17 @@
 
 namespace App\Sharp;
 
+use App\Media;
 use App\Pilot;
 use App\Spaceship;
 use App\SpaceshipType;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
-use Code16\Sharp\Form\Eloquent\Transformers\EloquentFormTagsTransformer;
+use Code16\Sharp\Form\Eloquent\Transformers\FormMarkdownWithSharpUploadModelsTransformer;
+use Code16\Sharp\Form\Eloquent\Transformers\FormUploadModelTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
-use Code16\Sharp\Form\Fields\SharpFormMarkdownField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTagsField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
@@ -21,6 +22,7 @@ use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Form\Transformers\FormTagsTransformer;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 class SpaceshipSharpForm extends SharpForm
@@ -39,16 +41,19 @@ class SpaceshipSharpForm extends SharpForm
             SharpFormTextField::make("capacity")
                 ->setLabel("Capacity (x1000)")
 
-        )->addField(
-            SharpFormMarkdownField::make("description")
-                ->setLabel("Description")
-                ->setToolbar([
-                    SharpFormMarkdownField::B, SharpFormMarkdownField::I,
-                    SharpFormMarkdownField::SEPARATOR,
-                    SharpFormMarkdownField::IMG,
-                    SharpFormMarkdownField::SEPARATOR,
-                    SharpFormMarkdownField::A,
-                ])
+//        )->addField(
+//            SharpFormMarkdownField::make("description")
+//                ->setLabel("Description")
+//                ->setToolbar([
+//                    SharpFormMarkdownField::B, SharpFormMarkdownField::I,
+//                    SharpFormMarkdownField::SEPARATOR,
+//                    SharpFormMarkdownField::IMG,
+//                    SharpFormMarkdownField::SEPARATOR,
+//                    SharpFormMarkdownField::A,
+//                ])
+//                ->setCropRatio("1:1")
+//                ->setStorageDisk("local")
+//                ->setStorageBasePath("data/Spaceship/{id}")
 
         )->addField(
             SharpFormDateField::make("construction_date")
@@ -67,7 +72,7 @@ class SpaceshipSharpForm extends SharpForm
                 )
 
         )->addField(
-            SharpFormUploadField::make("picture:file")
+            SharpFormUploadField::make("picture")
                 ->setLabel("Picture")
                 ->setFileFilterImages()
                 ->setCropRatio("1:1")
@@ -115,6 +120,7 @@ class SpaceshipSharpForm extends SharpForm
                 ->setRemovable()
                 ->setSortable()
                 ->setItemIdAttribute("id")
+                ->setOrderAttribute("order")
                 ->addItemField(
                     SharpFormUploadField::make("file")
                         ->setFileFilterImages()
@@ -140,7 +146,7 @@ class SpaceshipSharpForm extends SharpForm
                             ->withFields("status|5", "comment|7");
                     });
             })->addColumn(6, function(FormLayoutColumn $column) {
-                $column->withSingleField("picture:file")
+                $column->withSingleField("picture")
                     ->withSingleField("picture:legend")
                     ->withSingleField("pictures", function(FormLayoutColumn $listItem) {
                         $listItem->withSingleField("file")
@@ -153,8 +159,8 @@ class SpaceshipSharpForm extends SharpForm
                 $column->withFieldset("Technical details", function(FormLayoutFieldset $fieldset) {
                     return $fieldset->withFields("capacity|4,6", "construction_date|8,6");
                 });
-            })->addColumn(7, function(FormLayoutColumn $column) {
-                $column->withSingleField("description");
+//            })->addColumn(7, function(FormLayoutColumn $column) {
+//                $column->withSingleField("description");
             });
         });
     }
@@ -169,7 +175,10 @@ class SpaceshipSharpForm extends SharpForm
         return $this->setCustomTransformer("capacity", function($spaceship) {
                 return $spaceship->capacity / 1000;
             })
-            ->setCustomTransformer("pilots", new EloquentFormTagsTransformer("name"))
+            ->setCustomTransformer("pilots", new FormTagsTransformer("name"))
+            ->setCustomTransformer("description", new FormMarkdownWithSharpUploadModelsTransformer(Media::class))
+            ->setCustomTransformer("picture", new FormUploadModelTransformer())
+            ->setCustomTransformer("pictures", new FormUploadModelTransformer())
             ->transform(
                 Spaceship::with("reviews", "pilots", "picture", "pictures")->findOrFail($id)
             );

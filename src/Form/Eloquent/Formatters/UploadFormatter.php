@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Form\Eloquent\Formatters;
 
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 use Code16\Sharp\Utils\FileUtil;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -43,7 +44,7 @@ class UploadFormatter
      * @param Model $instance
      * @return array
      */
-    public function format($value, SharpFormUploadField $field, Model $instance)
+    public function format($value, $field, Model $instance)
     {
         if($this->isUploaded($value)) {
 
@@ -65,9 +66,9 @@ class UploadFormatter
             );
 
             return [
-                "path" => $storedFileName,
+                "file_name" => $storedFileName,
                 "size" => $this->filesystem->disk($field->storageDisk())->size($storedFileName),
-                "mime" => $this->filesystem->disk($field->storageDisk())->mimeType($storedFileName),
+                "mime_type" => $this->filesystem->disk($field->storageDisk())->mimeType($storedFileName),
                 "disk" => $field->storageDisk(),
                 "transformed" => $transformed
             ];
@@ -104,21 +105,21 @@ class UploadFormatter
 
     /**
      * @param array $value
-     * @param SharpFormUploadField $field
+     * @param SharpFormFieldWithUpload $field
      * @return bool
      */
-    protected function isTransformed($value, SharpFormUploadField $field): bool
+    protected function isTransformed($value, $field): bool
     {
         return isset($value["cropData"]) && $field->cropRatio();
     }
 
     /**
      * @param string $fileName
-     * @param SharpFormUploadField $field
+     * @param SharpFormFieldWithUpload $field
      * @param Model $instance
      * @return string
      */
-    protected function getStoragePath(string $fileName, SharpFormUploadField $field, Model $instance): string
+    protected function getStoragePath(string $fileName, $field, Model $instance): string
     {
         $basePath = $this->substituteParameters($field->storageBasePath(), $instance);
 
@@ -133,10 +134,10 @@ class UploadFormatter
      * Check if we need the Model to be persisted, and if so and if he's transient,
      * throw a ModelNotFoundException.
      *
-     * @param SharpFormUploadField $field
+     * @param SharpFormFieldWithUpload $field
      * @param Model $instance
      */
-    protected function checkIfModelNeedsToExist(SharpFormUploadField $field, Model $instance)
+    protected function checkIfModelNeedsToExist($field, Model $instance)
     {
         if (strpos($field->storageBasePath(), '{id}') !== false && !$instance->exists) {
             throw new ModelNotFoundException();

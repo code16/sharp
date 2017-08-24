@@ -1,11 +1,11 @@
 <?php
 
-namespace Code16\Sharp\Form\Eloquent\Transformers;
+namespace Code16\Sharp\Form\Transformers;
 
 use Closure;
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 
-class EloquentFormTagsTransformer implements SharpAttributeTransformer
+class FormTagsTransformer implements SharpAttributeTransformer
 {
     /**
      * @var string
@@ -25,18 +25,7 @@ class EloquentFormTagsTransformer implements SharpAttributeTransformer
     public function __construct($labelAttribute, string $idAttribute = "id")
     {
         $this->idAttribute = $idAttribute;
-
-        $this->labelAttribute = $labelAttribute instanceof Closure
-            ? new class($labelAttribute) {
-                private $closure;
-                function __construct($closure) {
-                    $this->closure = $closure;
-                }
-                function apply($instance) {
-                    return call_user_func($this->closure, $instance);
-                }
-            }
-            : $labelAttribute;
+        $this->labelAttribute = $labelAttribute;
     }
 
     /**
@@ -48,12 +37,12 @@ class EloquentFormTagsTransformer implements SharpAttributeTransformer
      */
     function apply($instance, string $attribute)
     {
-        return $instance->$attribute
+        return collect($instance->$attribute)
             ->map(function($item) {
                 return [
                     "id" => $item->{$this->idAttribute},
-                    "label" => is_object($this->labelAttribute)
-                        ? $this->labelAttribute->apply($item)
+                    "label" => is_callable($this->labelAttribute)
+                        ? call_user_func($this->labelAttribute, $item)
                         : $item->{$this->labelAttribute}
                 ];
             })->all();

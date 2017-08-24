@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Tests\Unit\Form;
 
+use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Tests\Fixtures\Person;
@@ -209,6 +210,36 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
         $this->assertArraySubset(
             ["name" => "JOHN WAYNE"],
             $form->find($person->id)
+        );
+    }
+
+    /** @test */
+    function we_can_use_add_a_custom_transformer_to_a_field_in_a_list()
+    {
+        $mother = Person::create(["name" => "Jane Wayne"]);
+        Person::create(["name" => "aaa", "mother_id" => $mother->id]);
+        Person::create(["name" => "bbb", "mother_id" => $mother->id]);
+
+        $form = new class extends WithCustomTransformersTestForm {
+            function buildFormFields() {
+                $this->addField(SharpFormListField::make("sons")
+                    ->addItemField(SharpFormTextField::make("name"))
+                );
+            }
+        };
+
+        $form->setCustomTransformer("sons[name]", function($son) {
+            return strtoupper($son->name);
+        });
+
+        $this->assertArraySubset(
+            ["name" => "AAA"],
+            $form->find($mother->id)["sons"][0]
+        );
+
+        $this->assertArraySubset(
+            ["name" => "BBB"],
+            $form->find($mother->id)["sons"][1]
         );
     }
 }

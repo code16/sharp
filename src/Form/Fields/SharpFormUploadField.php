@@ -2,32 +2,16 @@
 
 namespace Code16\Sharp\Form\Fields;
 
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
+
 class SharpFormUploadField extends SharpFormField
 {
-    /**
-     * @var float
-     */
-    protected $maxFileSize;
+    use SharpFormFieldWithUpload;
 
     /**
      * @var string
      */
     protected $fileFilter = null;
-
-    /**
-     * @var string
-     */
-    protected $cropRatio;
-
-    /**
-     * @var string
-     */
-    protected $storageDisk = "local";
-
-    /**
-     * @var string
-     */
-    protected $storageBasePath = "data";
 
     /**
      * @param string $key
@@ -36,17 +20,6 @@ class SharpFormUploadField extends SharpFormField
     public static function make(string $key)
     {
         return new static($key, 'upload');
-    }
-
-    /**
-     * @param float $maxFileSizeInMB
-     * @return static
-     */
-    public function setMaxFileSize(float $maxFileSizeInMB)
-    {
-        $this->maxFileSize = $maxFileSizeInMB;
-
-        return $this;
     }
 
     /**
@@ -69,64 +42,6 @@ class SharpFormUploadField extends SharpFormField
 
         return $this;
     }
-
-    /**
-     * @param string $ratio 16:9, 1:1, ...
-     * @return static
-     */
-    public function setCropRatio(string $ratio)
-    {
-        $this->cropRatio = explode(":", $ratio);
-
-        return $this;
-    }
-
-    /**
-     * @param string $storageDisk
-     * @return static
-     */
-    public function setStorageDisk(string $storageDisk)
-    {
-        $this->storageDisk = $storageDisk;
-
-        return $this;
-    }
-
-    /**
-     * @param string $storageBasePath
-     * @return static
-     */
-    public function setStorageBasePath(string $storageBasePath)
-    {
-        $this->storageBasePath = $storageBasePath;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function storageDisk()
-    {
-        return $this->storageDisk;
-    }
-
-    /**
-     * @return string
-     */
-    public function storageBasePath()
-    {
-        return $this->storageBasePath;
-    }
-
-    /**
-     * @return string
-     */
-    public function cropRatio()
-    {
-        return $this->cropRatio;
-    }
-
 
     /**
      * @return array

@@ -103,7 +103,7 @@ trait WithCustomTransformers
     {
         $array = $model->toArray();
 
-        // Handle relation separator `:`
+        // Handle relation "hasOne" or "belongsTo" separator `:`
         $keys->filter(function ($key) {
             return strpos($key, ':') !== false;
 
@@ -118,7 +118,18 @@ trait WithCustomTransformers
 
         // Apply transformers
         foreach($this->transformers as $attribute => $transformer) {
-            $array[$attribute] = $transformer->apply($model, $attribute);
+            if(strpos($attribute, '[') !== false) {
+                // List case: apply transformer to each item
+                $listAttribute = substr($attribute, 0, strpos($attribute, '['));
+                $itemAttribute = substr($attribute, strpos($attribute, '[')+1, -1);
+
+                foreach($model->$listAttribute as $k => $itemModel) {
+                    $array[$listAttribute][$k][$itemAttribute] = $transformer->apply($itemModel, $itemAttribute);
+                }
+
+            } else {
+                $array[$attribute] = $transformer->apply($model, $attribute);
+            }
         }
 
         return $array;

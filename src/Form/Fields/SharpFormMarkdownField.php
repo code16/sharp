@@ -3,10 +3,11 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 
 class SharpFormMarkdownField extends SharpFormField
 {
-    use SharpFormFieldWithPlaceholder;
+    use SharpFormFieldWithPlaceholder, SharpFormFieldWithUpload;
 
     const B = "bold";
     const I = "italic";
@@ -42,11 +43,6 @@ class SharpFormMarkdownField extends SharpFormField
      * @var bool
      */
     protected $showToolbar = true;
-
-    /**
-     * @var float
-     */
-    protected $maxImageSize = 2;
 
     /**
      * @param string $key
@@ -100,17 +96,6 @@ class SharpFormMarkdownField extends SharpFormField
     }
 
     /**
-     * @param float $sizeInMB
-     * @return static
-     */
-    public function setMaxImageSize(float $sizeInMB)
-    {
-        $this->maxImageSize = $sizeInMB;
-
-        return $this;
-    }
-
-    /**
      * @return array
      */
     protected function validationRules()
@@ -119,6 +104,8 @@ class SharpFormMarkdownField extends SharpFormField
             "height" => "integer",
             "toolbar" => "array|nullable",
             "maxImageSize" => "numeric",
+            "ratioX" => "integer|nullable",
+            "ratioY" => "integer|nullable",
         ];
     }
 
@@ -131,7 +118,9 @@ class SharpFormMarkdownField extends SharpFormField
             "height" => $this->height,
             "toolbar" => $this->showToolbar ? $this->toolbar : null,
             "placeholder" => $this->placeholder,
-            "maxImageSize" => $this->maxImageSize,
+            "maxImageSize" => $this->maxFileSize ?: 2,
+            "ratioX" => $this->cropRatio ? (int)$this->cropRatio[0] : null,
+            "ratioY" => $this->cropRatio ? (int)$this->cropRatio[1] : null,
         ]);
     }
 }
