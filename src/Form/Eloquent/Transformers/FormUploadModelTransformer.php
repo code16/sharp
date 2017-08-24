@@ -5,7 +5,7 @@ namespace Code16\Sharp\Form\Eloquent\Transformers;
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-class EloquentFormUploadModelTransformer implements SharpAttributeTransformer
+class FormUploadModelTransformer implements SharpAttributeTransformer
 {
 
     /**

@@ -8,6 +8,11 @@ namespace Code16\Sharp\Form\Transformers;
  */
 abstract class FormMarkdownWithUploadsTransformer extends FormMarkdownTransformer
 {
+    /** @obj */
+    protected $instance;
+
+    /** @string */
+    protected $attribute;
 
     /**
      * Transform a model attribute to array (json-able).
@@ -18,12 +23,18 @@ abstract class FormMarkdownWithUploadsTransformer extends FormMarkdownTransforme
      */
     function apply($instance, string $attribute)
     {
+        $this->instance = $instance;
+        $this->attribute = $attribute;
+
         $array = parent::apply($instance, $attribute);
 
         $md = $instance->$attribute;
 
         foreach($this->extractEmbeddedUploads($md) as $filename) {
-            $array["files"][] = $this->getUpload($filename);
+            $upload = $this->getUpload($filename);
+            if($upload) {
+                $array["files"][] = $upload;
+            }
         }
 
         return $array;
@@ -34,10 +45,14 @@ abstract class FormMarkdownWithUploadsTransformer extends FormMarkdownTransforme
      * ["name", "thumbnail", "size"]
      *
      * @param string $filename
+     * @return array|null
+     */
+    abstract function getUpload(string $filename);
+
+    /**
+     * @param string $md
      * @return array
      */
-    abstract function getUpload(string $filename): array;
-
     protected function extractEmbeddedUploads(string $md)
     {
         preg_match_all(

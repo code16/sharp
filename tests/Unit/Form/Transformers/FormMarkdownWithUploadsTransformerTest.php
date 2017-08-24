@@ -34,7 +34,7 @@ class FormMarkdownWithUploadsTransformerTest extends SharpTestCase
         $transformer = new FormMarkdownWithUploadsTransformerImpl();
 
         $this->assertEquals([
-            ["file_name" => "test.png"]
+            ["name" => "test.png"]
         ], $transformer->apply($book, "content")["files"]);
     }
 
@@ -49,7 +49,7 @@ class FormMarkdownWithUploadsTransformerTest extends SharpTestCase
         $transformer = new FormMarkdownWithUploadsTransformerImpl();
 
         $this->assertEquals([
-            ["file_name" => "test.png"]
+            ["name" => "test.png"]
         ], $transformer->apply($book, "content")["files"]);
     }
 
@@ -68,17 +68,17 @@ class FormMarkdownWithUploadsTransformerTest extends SharpTestCase
         $transformer = new FormMarkdownWithUploadsTransformerImpl();
 
         $this->assertEquals([
-            ["file_name" => "test.png"],
-            ["file_name" => "test2.png"],
-            ["file_name" => "test3.png"],
+            ["name" => "test.png"],
+            ["name" => "test2.png"],
+            ["name" => "test3.png"],
         ], $transformer->apply($book, "content")["files"]);
     }
 }
 
 class FormMarkdownWithUploadsTransformerImpl extends FormMarkdownWithUploadsTransformer
 {
-    function getUpload(string $filename): array
+    function getUpload(string $filename)
     {
-        return ["file_name" => $filename];
+        return ["name" => $filename];
     }
 }
