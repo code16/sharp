@@ -43,19 +43,9 @@ class SharpUploadModelTest extends SharpFormEloquentBaseTest
     /** @test */
     function all_thumbnails_are_destroyed_if_we_set_transformed_to_true()
     {
-        $person = Person::create(["name" => "A"]);
-
         $file = $this->createImage();
 
-        $upload = SharpUploadModel::create([
-            "file_name" => $file,
-            "size" => 120,
-            "mime_type" => "image/png",
-            "disk" => "local",
-            "model_type" => Person::class,
-            "model_id" => $person->id,
-            "model_key" => "test"
-        ]);
+        $upload = $this->createSharpUploadModel($file);
 
         $upload->thumbnail(100, 100);
 
@@ -67,21 +57,29 @@ class SharpUploadModelTest extends SharpFormEloquentBaseTest
     }
 
     /** @test */
-    function a_thumbnail_is_created_when_asked()
+    function when_setting_the_magic_file_attribute_we_can_fill_several_attributes()
     {
-        $person = Person::create(["name" => "A"]);
-
         $file = $this->createImage();
 
-        $upload = SharpUploadModel::create([
-            "file_name" => $file,
-            "size" => 120,
-            "mime_type" => "image/png",
-            "disk" => "local",
-            "model_type" => Person::class,
-            "model_id" => $person->id,
-            "model_key" => "test"
-        ]);
+        $upload = $this->createSharpUploadModel($file);
+
+        $upload->file = [
+            "file_name" => "test/test.png",
+            "mime_type" => "test_mime",
+            "size" => 1,
+        ];
+
+        $this->assertEquals("test/test.png", $upload->file_name);
+        $this->assertEquals("test_mime", $upload->mime_type);
+        $this->assertEquals(1, $upload->size);
+    }
+
+    /** @test */
+    function a_thumbnail_is_created_when_asked()
+    {
+        $file = $this->createImage();
+
+        $upload = $this->createSharpUploadModel($file);
 
         $this->assertEquals(
             url("thumbnails/data/-150/" . basename($file)),
@@ -95,5 +93,22 @@ class SharpUploadModelTest extends SharpFormEloquentBaseTest
     {
         $file = (new FileFactory)->image("test.png", 600, 600);
         return $file->store("data");
+    }
+
+    /**
+     * @param $file
+     * @return $this|\Illuminate\Database\Eloquent\Model
+     */
+    protected function createSharpUploadModel($file)
+    {
+        return SharpUploadModel::create([
+            "file_name" => $file,
+            "size" => 120,
+            "mime_type" => "image/png",
+            "disk" => "local",
+            "model_type" => Person::class,
+            "model_id" => Person::create(["name" => "A"])->id,
+            "model_key" => "test"
+        ]);
     }
 }
