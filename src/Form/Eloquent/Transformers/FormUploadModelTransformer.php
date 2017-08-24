@@ -26,8 +26,10 @@ class FormUploadModelTransformer implements SharpAttributeTransformer
             return $instance->$attribute->map(function($upload) {
                 $array = $this->transformUpload($upload);
 
+                $file = array_only($array, ["name", "thumbnail", "size"]);
+
                 return [
-                    "file" => array_only($array, ["name", "thumbnail", "size"]),
+                    "file" => sizeof($file) ? $file : null,
                 ] + array_except($array, ["name", "thumbnail", "size"]);
             })->all();
         };
