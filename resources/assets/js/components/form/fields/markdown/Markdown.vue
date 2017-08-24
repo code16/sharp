@@ -62,20 +62,21 @@
             }
         },
         methods : {
-            createUploader() {
+            createUploader(value) {
                 let $uploader = new MarkdownUpload({
                     provide: {
                         actionsBus: this.actionsBus
                     },
                     propsData: {
                         id: this.uploaderId++,
-                        xsrfToken: this.xsrfToken
+                        xsrfToken: this.xsrfToken,
+                        value
                     },
                 });
 
-                $uploader.$on('success', this.updateUploader.bind(this));
-                $uploader.$on('added', this.refreshCodemirror.bind(this));
-                $uploader.$on('remove', this.removeMarker.bind(this));
+                $uploader.$on('success', this.updateUploader.bind(this, $uploader));
+                $uploader.$on('added', this.refreshCodemirror.bind(this, $uploader));
+                $uploader.$on('remove', this.removeMarker.bind(this, $uploader));
 
                 return $uploader;
             },
@@ -85,16 +86,19 @@
                 this.codemirror.focus();
             },
 
-            removeMarker({ id, marker }) {
+            removeMarker($uploader) {
+                let { id, marker } = $uploader;
+
                 if(marker.explicitlyCleared)
                     return;
                 marker.inclusiveLeft = marker.inclusiveRight = false;
                 let find = marker.find(), line = find.from.line;
-                this.codemirror.replaceRange('',find.from,{line:line+1, ch:0});
+                //this.codemirror.replaceRange('',find.from,{line:line+1, ch:0});
                 marker.inclusiveLeft = marker.inclusiveRight = true;
                 this.codemirror.focus();
 
-                this.value = this.value.files.filter()
+                $uploader.$destroy();
+                this.value.files = this.value.files.filter(f => f[this.idSymbol] !== id);
             },
 
             updateUploader({ id, marker }, data) {
@@ -106,7 +110,7 @@
                 this.value.files.push({ [this.idSymbol]:id, ...data });
             },
 
-            insertUploadImage() {
+            insertUploadImage({ replaceBySelection, data } = {}) {
                 let selection = this.codemirror.getSelection(' ');
                 let curLineContent = this.codemirror.getLine(this.cursorPos.line);
 
@@ -126,7 +130,7 @@
 
                 this.codemirror.getInputField().blur();
 
-                let md = `![${selection||''}]()`;
+                let md = replaceBySelection ? selection : `![${selection||''}]()`;
 
                 this.codemirror.replaceRange(`${md}\n`,this.cursorPos);
                 this.codemirror.setCursor(this.cursorPos.line-1,0);
@@ -134,7 +138,8 @@
 
                 this.codemirror.addLineClass(this.cursorPos.line, 'wrap', 'SharpMarkdown__upload-line');
 
-                let $uploader = this.createUploader();
+                let $uploader = this.createUploader(data);
+                console.log($uploader);
                 $uploader.marker = this.codemirror.markText(from, to, {
                     replacedWith: $uploader.$mount().$el,
                     clearWhenEmpty: false,
@@ -142,16 +147,19 @@
                     inclusiveLeft: true,
                 });
 
-                $uploader.marker.on('beforeCursorEnter',() => this.uploadBeforeCursorEnter($uploader.marker));
-                $uploader.inputClick();
+                $uploader.marker.on('beforeCursorEnter',() => this.uploadBeforeCursorEnter($uploader));
+
+                if(!data)
+                    $uploader.inputClick();
 
                 this.codemirror.setCursor(this.cursorPos.line+1, 0);
             },
 
-            uploadBeforeCursorEnter(marker) {
-                //console.log(this.lastKeydown.keyCode, this.cursorPos.line);
-                if(this.lastKeydown.keyCode === 8 && this.cursorPos.line === 1) {
-                    this.onNextBackspace = this.removeMarker(marker);
+            uploadBeforeCursorEnter($uploader) {
+                //debugger
+                console.log(this.lastKeydown.keyCode, this.cursorPos.line);
+                if(this.lastKeydown.keyCode === 8) {
+                    this.removeMarker($uploader);
                 }
             },
             onCursorActivity() {
@@ -165,7 +173,7 @@
             },
 
             onBeforeChange(cm, change) {
-               // console.log('beforeChange',arguments, this.cursorEntered);
+              // debugger
             },
 
             onKeydown(cm, e) {
@@ -178,7 +186,8 @@
                     return;
 
                 if(name === 'Backspace') {
-                    this.onNextBackspace();
+                    //debugger;
+                    //this.onNextBackspace();
                     this.onNextBackspace = noop;
                 }
             },
@@ -204,6 +213,33 @@
             bindImageAction() {
                 let imageBtn = this.simplemde.toolbar.find(btn => btn.name === 'image');
                 (imageBtn||{}).action = this.insertUploadImage;
+            },
+
+            parse() {
+                let images = [];
+                this.codemirror.eachLine(lineHandler => {
+                    let { text } = lineHandler;
+                    let line = this.codemirror.getLineNumber(lineHandler);
+                    let regex = /!\[(.*?)\]\((.*?)\)/g;
+                    let match = regex.exec(text);
+
+                    if(match) {
+                        let { index, 0: { length }, 1:title, 2:name  } = match;
+                        console.log(match);
+                        images.push({
+                            range: { start:{ ch:index ,line }, end:{ch:index+length, line} },
+                            data: {
+                                name,
+                                title
+                            }
+                        })
+                    }
+                });
+
+                images.reverse().forEach(({ range, data }) => {
+                    this.codemirror.setSelection(range.start, range.end);
+                    this.insertUploadImage({ replaceBySelection:true, data });
+                });
             }
         },
         mounted() {
@@ -217,14 +253,17 @@
                 status: false
             });
 
+
+
             this.value.files = this.value.files || [];
             this.$emit('input', {
                 ...this.value, file: this.indexedFiles
             });
             this.uploaderId = this.value.files.length;
 
-            this.$tab.$on('active', () => {
+            this.$tab.$once('active', () => {
                 this.codemirror.refresh();
+                this.parse();
             });
 
             this.codemirror.setSize('auto',this.height);

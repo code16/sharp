@@ -36029,20 +36029,21 @@ var noop = function noop() {};
         }
     },
     methods: {
-        createUploader: function createUploader() {
+        createUploader: function createUploader(value) {
             var $uploader = new __WEBPACK_IMPORTED_MODULE_1__MarkdownUpload__["a" /* default */]({
                 provide: {
                     actionsBus: this.actionsBus
                 },
                 propsData: {
                     id: this.uploaderId++,
-                    xsrfToken: this.xsrfToken
+                    xsrfToken: this.xsrfToken,
+                    value: value
                 }
             });
 
-            $uploader.$on('success', this.updateUploader.bind(this));
-            $uploader.$on('added', this.refreshCodemirror.bind(this));
-            $uploader.$on('remove', this.removeMarker.bind(this));
+            $uploader.$on('success', this.updateUploader.bind(this, $uploader));
+            $uploader.$on('added', this.refreshCodemirror.bind(this, $uploader));
+            $uploader.$on('remove', this.removeMarker.bind(this, $uploader));
 
             return $uploader;
         },
@@ -36050,23 +36051,29 @@ var noop = function noop() {};
             this.codemirror.refresh();
             this.codemirror.focus();
         },
-        removeMarker: function removeMarker(_ref) {
-            var id = _ref.id,
-                marker = _ref.marker;
+        removeMarker: function removeMarker($uploader) {
+            var _this2 = this;
+
+            var id = $uploader.id,
+                marker = $uploader.marker;
+
 
             if (marker.explicitlyCleared) return;
             marker.inclusiveLeft = marker.inclusiveRight = false;
             var find = marker.find(),
                 line = find.from.line;
-            this.codemirror.replaceRange('', find.from, { line: line + 1, ch: 0 });
+            //this.codemirror.replaceRange('',find.from,{line:line+1, ch:0});
             marker.inclusiveLeft = marker.inclusiveRight = true;
             this.codemirror.focus();
 
-            this.value = this.value.files.filter();
+            $uploader.$destroy();
+            this.value.files = this.value.files.filter(function (f) {
+                return f[_this2.idSymbol] !== id;
+            });
         },
-        updateUploader: function updateUploader(_ref2, data) {
-            var id = _ref2.id,
-                marker = _ref2.marker;
+        updateUploader: function updateUploader(_ref, data) {
+            var id = _ref.id,
+                marker = _ref.marker;
 
             var find = marker.find();
 
@@ -36076,7 +36083,11 @@ var noop = function noop() {};
             this.value.files.push(_extends(_defineProperty({}, this.idSymbol, id), data));
         },
         insertUploadImage: function insertUploadImage() {
-            var _this2 = this;
+            var _this3 = this;
+
+            var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+                replaceBySelection = _ref2.replaceBySelection,
+                data = _ref2.data;
 
             var selection = this.codemirror.getSelection(' ');
             var curLineContent = this.codemirror.getLine(this.cursorPos.line);
@@ -36097,7 +36108,7 @@ var noop = function noop() {};
 
             this.codemirror.getInputField().blur();
 
-            var md = '![' + (selection || '') + ']()';
+            var md = replaceBySelection ? selection : '![' + (selection || '') + ']()';
 
             this.codemirror.replaceRange(md + '\n', this.cursorPos);
             this.codemirror.setCursor(this.cursorPos.line - 1, 0);
@@ -36106,7 +36117,8 @@ var noop = function noop() {};
 
             this.codemirror.addLineClass(this.cursorPos.line, 'wrap', 'SharpMarkdown__upload-line');
 
-            var $uploader = this.createUploader();
+            var $uploader = this.createUploader(data);
+            console.log($uploader);
             $uploader.marker = this.codemirror.markText(from, to, {
                 replacedWith: $uploader.$mount().$el,
                 clearWhenEmpty: false,
@@ -36115,16 +36127,18 @@ var noop = function noop() {};
             });
 
             $uploader.marker.on('beforeCursorEnter', function () {
-                return _this2.uploadBeforeCursorEnter($uploader.marker);
+                return _this3.uploadBeforeCursorEnter($uploader);
             });
-            $uploader.inputClick();
+
+            if (!data) $uploader.inputClick();
 
             this.codemirror.setCursor(this.cursorPos.line + 1, 0);
         },
-        uploadBeforeCursorEnter: function uploadBeforeCursorEnter(marker) {
-            //console.log(this.lastKeydown.keyCode, this.cursorPos.line);
-            if (this.lastKeydown.keyCode === 8 && this.cursorPos.line === 1) {
-                this.onNextBackspace = this.removeMarker(marker);
+        uploadBeforeCursorEnter: function uploadBeforeCursorEnter($uploader) {
+            //debugger
+            console.log(this.lastKeydown.keyCode, this.cursorPos.line);
+            if (this.lastKeydown.keyCode === 8) {
+                this.removeMarker($uploader);
             }
         },
         onCursorActivity: function onCursorActivity() {
@@ -36135,7 +36149,7 @@ var noop = function noop() {};
             }));
         },
         onBeforeChange: function onBeforeChange(cm, change) {
-            // console.log('beforeChange',arguments, this.cursorEntered);
+            // debugger
         },
         onKeydown: function onKeydown(cm, e) {
             //console.log('key down');
@@ -36145,7 +36159,8 @@ var noop = function noop() {};
             if (__WEBPACK_IMPORTED_MODULE_2_codemirror___default.a.keyMap.default[name] === 'undo') return;
 
             if (name === 'Backspace') {
-                this.onNextBackspace();
+                //debugger;
+                //this.onNextBackspace();
                 this.onNextBackspace = noop;
             }
         },
@@ -36174,10 +36189,46 @@ var noop = function noop() {};
                 return btn.name === 'image';
             });
             (imageBtn || {}).action = this.insertUploadImage;
+        },
+        parse: function parse() {
+            var _this4 = this;
+
+            var images = [];
+            this.codemirror.eachLine(function (lineHandler) {
+                var text = lineHandler.text;
+
+                var line = _this4.codemirror.getLineNumber(lineHandler);
+                var regex = /!\[(.*?)\]\((.*?)\)/g;
+                var match = regex.exec(text);
+
+                if (match) {
+                    var index = match.index,
+                        length = match[0].length,
+                        title = match[1],
+                        name = match[2];
+
+                    console.log(match);
+                    images.push({
+                        range: { start: { ch: index, line: line }, end: { ch: index + length, line: line } },
+                        data: {
+                            name: name,
+                            title: title
+                        }
+                    });
+                }
+            });
+
+            images.reverse().forEach(function (_ref3) {
+                var range = _ref3.range,
+                    data = _ref3.data;
+
+                _this4.codemirror.setSelection(range.start, range.end);
+                _this4.insertUploadImage({ replaceBySelection: true, data: data });
+            });
         }
     },
     mounted: function mounted() {
-        var _this3 = this;
+        var _this5 = this;
 
         this.simplemde = new __WEBPACK_IMPORTED_MODULE_0_simplemde___default.a({
             element: this.$refs.textarea,
@@ -36194,8 +36245,9 @@ var noop = function noop() {};
         }));
         this.uploaderId = this.value.files.length;
 
-        this.$tab.$on('active', function () {
-            _this3.codemirror.refresh();
+        this.$tab.$once('active', function () {
+            _this5.codemirror.refresh();
+            _this5.parse();
         });
 
         this.codemirror.setSize('auto', this.height);
@@ -36253,6 +36305,7 @@ var noop = function noop() {};
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0_vue___default.a.extend({
     mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins__["j" /* UploadXSRF */]],
     props: {
+        id: Number,
         value: Object,
         maxFileSize: Number,
 
@@ -36265,7 +36318,7 @@ var noop = function noop() {};
     },
     data: function data() {
         return {
-            show: false
+            show: this.value
         };
     },
 
@@ -36297,11 +36350,11 @@ var noop = function noop() {};
 
             this.show = true;
             this.$nextTick(function () {
-                return _this.$emit('added', _this);
+                return _this.$emit('added');
             });
         },
         checkCancelled: function checkCancelled() {
-            if (!this.show) this.$emit('remove', this);
+            if (!this.show) this.$emit('remove');
             document.body.onfocus = null;
         },
         inputClick: function inputClick() {
@@ -83460,10 +83513,10 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     },
     on: {
       "success": function($event) {
-        _vm.$emit('success', _vm.$self, $event)
+        _vm.$emit('success', $event)
       },
       "removed": function($event) {
-        _vm.$emit('remove', _vm.$self)
+        _vm.$emit('remove')
       }
     }
   })

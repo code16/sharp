@@ -4,8 +4,8 @@
             :options="options"
             :value="value"
             :on-added-file="handleAdded"
-            @success="$emit('success',$self,$event)"
-            @removed="$emit('remove',$self)"
+            @success="$emit('success',$event)"
+            @removed="$emit('remove')"
             class="SharpMarkdownUpload"
             ref="vueclip">
     </sharp-vue-clip>
@@ -22,6 +22,7 @@
     export default Vue.extend({
         mixins: [ UploadXSRF ],
         props: {
+            id: Number,
             value: Object,
             maxFileSize: Number,
 
@@ -34,7 +35,7 @@
         },
         data() {
             return {
-                show: false
+                show: this.value
             }
         },
         computed: {
@@ -62,11 +63,11 @@
         methods: {
             handleAdded() {
                 this.show = true;
-                this.$nextTick(() => this.$emit('added', this));
+                this.$nextTick(() => this.$emit('added'));
             },
             checkCancelled() {
                 if (!this.show)
-                    this.$emit('remove', this);
+                    this.$emit('remove');
                 document.body.onfocus = null;
             },
             inputClick() {
