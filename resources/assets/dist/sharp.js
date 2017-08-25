@@ -36001,7 +36001,6 @@ var noop = function noop() {};
             simplemde: null,
             cursorPos: 0,
             lastKeydown: 0,
-            onNextBackspace: noop,
 
             uploaderId: 0
         };
@@ -36014,13 +36013,6 @@ var noop = function noop() {};
         }
     },
     computed: {
-        indexedFiles: function indexedFiles() {
-            var _this = this;
-
-            return this.value.files.map(function (file, i) {
-                return _extends(_defineProperty({}, _this.idSymbol, i), file);
-            });
-        },
         codemirror: function codemirror() {
             return this.simplemde.codemirror;
         },
@@ -36029,6 +36021,13 @@ var noop = function noop() {};
         }
     },
     methods: {
+        indexedFiles: function indexedFiles() {
+            var _this = this;
+
+            return (this.value.files || []).map(function (file, i) {
+                return _extends(_defineProperty({}, _this.idSymbol, i), file);
+            });
+        },
         createUploader: function createUploader(value) {
             var $uploader = new __WEBPACK_IMPORTED_MODULE_1__MarkdownUpload__["a" /* default */]({
                 provide: {
@@ -36054,26 +36053,33 @@ var noop = function noop() {};
         removeMarker: function removeMarker($uploader) {
             var _this2 = this;
 
+            var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+                fromBackspace = _ref.fromBackspace;
+
             var id = $uploader.id,
                 marker = $uploader.marker;
 
 
             if (marker.explicitlyCleared) return;
-            marker.inclusiveLeft = marker.inclusiveRight = false;
-            var find = marker.find(),
-                line = find.from.line;
-            //this.codemirror.replaceRange('',find.from,{line:line+1, ch:0});
-            marker.inclusiveLeft = marker.inclusiveRight = true;
-            this.codemirror.focus();
+
+            if (!fromBackspace) {
+                marker.inclusiveLeft = marker.inclusiveRight = false;
+                var find = marker.find(),
+                    line = find.from.line;
+                this.codemirror.replaceRange('', find.from, { line: line + 1, ch: 0 });
+                marker.inclusiveLeft = marker.inclusiveRight = true;
+                marker.clear();
+                this.codemirror.focus();
+            }
 
             $uploader.$destroy();
             this.value.files = this.value.files.filter(function (f) {
                 return f[_this2.idSymbol] !== id;
             });
         },
-        updateUploader: function updateUploader(_ref, data) {
-            var id = _ref.id,
-                marker = _ref.marker;
+        updateUploader: function updateUploader(_ref2, data) {
+            var id = _ref2.id,
+                marker = _ref2.marker;
 
             var find = marker.find();
 
@@ -36085,9 +36091,10 @@ var noop = function noop() {};
         insertUploadImage: function insertUploadImage() {
             var _this3 = this;
 
-            var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-                replaceBySelection = _ref2.replaceBySelection,
-                data = _ref2.data;
+            var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+                replaceBySelection = _ref3.replaceBySelection,
+                data = _ref3.data,
+                isInsertion = _ref3.isInsertion;
 
             var selection = this.codemirror.getSelection(' ');
             var curLineContent = this.codemirror.getLine(this.cursorPos.line);
@@ -36095,30 +36102,37 @@ var noop = function noop() {};
             if (selection) {
                 this.codemirror.replaceSelection('');
                 curLineContent = this.codemirror.getLine(this.cursorPos.line);
-                //console.log(selection);
             }
 
             if (curLineContent.length) {
                 this.codemirror.replaceRange('\n', {
                     line: this.cursorPos.line,
-                    ch: curLineContent.length
+                    ch: this.cursorPos.ch
                 });
-                this.codemirror.setCursor(this.cursorPos.line + 1, 0);
+                //this.codemirror.setCursor(this.cursorPos.line+1, 0);
             }
 
             this.codemirror.getInputField().blur();
 
             var md = replaceBySelection ? selection : '![' + (selection || '') + ']()';
 
-            this.codemirror.replaceRange(md + '\n', this.cursorPos);
-            this.codemirror.setCursor(this.cursorPos.line - 1, 0);
+            if (isInsertion) {
+                md += '\n';
+            }
+
+            this.codemirror.replaceRange(md, this.cursorPos);
+            this.codemirror.setCursor(this.cursorPos.line + (isInsertion ? -1 : 0), 0);
             var from = this.cursorPos,
                 to = { line: this.cursorPos.line, ch: this.cursorPos.ch + md.length };
 
             this.codemirror.addLineClass(this.cursorPos.line, 'wrap', 'SharpMarkdown__upload-line');
 
+            //                this.codemirror.addLineClass(this.cursorPos.line, 'text', '__test-class__text');
+            //                this.codemirror.addLineClass(this.cursorPos.line, 'background', '__test-class__background');
+            //                this.codemirror.addLineClass(this.cursorPos.line, 'gutter', '__test-class__gutter');
+
             var $uploader = this.createUploader(data);
-            console.log($uploader);
+            //console.log($uploader);
             $uploader.marker = this.codemirror.markText(from, to, {
                 replacedWith: $uploader.$mount().$el,
                 clearWhenEmpty: false,
@@ -36138,7 +36152,7 @@ var noop = function noop() {};
             //debugger
             console.log(this.lastKeydown.keyCode, this.cursorPos.line);
             if (this.lastKeydown.keyCode === 8) {
-                this.removeMarker($uploader);
+                this.removeMarker($uploader, { fromBackspace: true });
             }
         },
         onCursorActivity: function onCursorActivity() {
@@ -36155,15 +36169,7 @@ var noop = function noop() {};
             //console.log('key down');
             this.lastKeydown = e;
         },
-        onKeyHandled: function onKeyHandled(cm, name, e) {
-            if (__WEBPACK_IMPORTED_MODULE_2_codemirror___default.a.keyMap.default[name] === 'undo') return;
-
-            if (name === 'Backspace') {
-                //debugger;
-                //this.onNextBackspace();
-                this.onNextBackspace = noop;
-            }
-        },
+        onKeyHandled: function onKeyHandled(cm, name, e) {},
         codemirrorOn: function codemirrorOn(eventName, callback, immediate) {
             immediate && callback(this.codemirror);
             this.codemirror.on(eventName, callback);
@@ -36185,19 +36191,23 @@ var noop = function noop() {};
             });
         },
         bindImageAction: function bindImageAction() {
+            var _this4 = this;
+
             var imageBtn = this.simplemde.toolbar.find(function (btn) {
                 return btn.name === 'image';
             });
-            (imageBtn || {}).action = this.insertUploadImage;
+            (imageBtn || {}).action = function () {
+                return _this4.insertUploadImage({ isInsertion: true });
+            };
         },
         parse: function parse() {
-            var _this4 = this;
+            var _this5 = this;
 
             var images = [];
             this.codemirror.eachLine(function (lineHandler) {
                 var text = lineHandler.text;
 
-                var line = _this4.codemirror.getLineNumber(lineHandler);
+                var line = _this5.codemirror.getLineNumber(lineHandler);
                 var regex = /!\[(.*?)\]\((.*?)\)/g;
                 var match = regex.exec(text);
 
@@ -36206,8 +36216,8 @@ var noop = function noop() {};
                         length = match[0].length,
                         title = match[1],
                         name = match[2];
+                    //console.log(match);
 
-                    console.log(match);
                     images.push({
                         range: { start: { ch: index, line: line }, end: { ch: index + length, line: line } },
                         data: {
@@ -36218,17 +36228,21 @@ var noop = function noop() {};
                 }
             });
 
-            images.reverse().forEach(function (_ref3) {
-                var range = _ref3.range,
-                    data = _ref3.data;
+            images.reverse().forEach(function (_ref4) {
+                var range = _ref4.range,
+                    data = _ref4.data;
 
-                _this4.codemirror.setSelection(range.start, range.end);
-                _this4.insertUploadImage({ replaceBySelection: true, data: data });
+                _this5.codemirror.setSelection(range.start, range.end);
+                _this5.insertUploadImage({ replaceBySelection: true, data: data });
             });
+        },
+        refreshOnExternalChange: function refreshOnExternalChange() {
+            this.codemirror.refresh();
+            this.parse();
         }
     },
     mounted: function mounted() {
-        var _this5 = this;
+        var _this6 = this;
 
         this.simplemde = new __WEBPACK_IMPORTED_MODULE_0_simplemde___default.a({
             element: this.$refs.textarea,
@@ -36240,14 +36254,11 @@ var noop = function noop() {};
             status: false
         });
 
-        this.value.files = this.value.files || [];
-        this.$emit('input', _extends({}, this.value, { file: this.indexedFiles
-        }));
+        this.value.files = this.indexedFiles();
         this.uploaderId = this.value.files.length;
 
         this.$tab.$once('active', function () {
-            _this5.codemirror.refresh();
-            _this5.parse();
+            return _this6.refreshOnExternalChange();
         });
 
         this.codemirror.setSize('auto', this.height);
@@ -36266,7 +36277,7 @@ var noop = function noop() {};
 
         this.codemirrorOn('keydown', this.onKeydown);
         this.codemirrorOn('keyHandled', this.onKeyHandled);
-        //console.log(this);
+        console.log(this);
     }
 });
 

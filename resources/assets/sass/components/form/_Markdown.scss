@@ -11,6 +11,11 @@
 
   &__upload-line {
     z-index: 3;
+    .CodeMirror-line {
+      & > span {
+        padding-right: 0 !important;
+      }
+    }
   }
 
   &--read-only {
