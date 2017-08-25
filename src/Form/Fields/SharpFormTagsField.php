@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Form\Fields;
 
+use Code16\Sharp\Form\Fields\Formatters\TagsFormatter;
+
 class SharpFormTagsField extends SharpFormField
 {
     /**
@@ -17,7 +19,17 @@ class SharpFormTagsField extends SharpFormField
     /**
      * @var string
      */
+    protected $labelAttribute = "label";
+
+    /**
+     * @var string
+     */
     protected $createAttribute = null;
+
+    /**
+     * @var string
+     */
+    protected $idAttribute = "id";
 
     /**
      * @var int
@@ -36,7 +48,8 @@ class SharpFormTagsField extends SharpFormField
      */
     public static function make(string $key, array $options)
     {
-        $instance = new static($key, 'tags');
+        $instance = new static($key, 'tags', new TagsFormatter);
+
         $instance->options = collect($options)->map(function($label, $id) {
             return [
                 "id" => $id, "label" => $label
@@ -69,12 +82,23 @@ class SharpFormTagsField extends SharpFormField
     }
 
     /**
-     * @param string $createAttribute
+     * @param string $attribute
      * @return static
      */
-    public function setCreateAttribute(string $createAttribute)
+    public function setCreateAttribute(string $attribute)
     {
-        $this->createAttribute = $createAttribute;
+        $this->createAttribute = $attribute;
+
+        return $this;
+    }
+
+    /**
+     * @param string|Closure $labelAttribute
+     * @return static
+     */
+    public function setLabelAttribute($labelAttribute)
+    {
+        $this->labelAttribute = $labelAttribute;
 
         return $this;
     }
@@ -111,9 +135,25 @@ class SharpFormTagsField extends SharpFormField
     /**
      * @return string
      */
+    public function labelAttribute()
+    {
+        return $this->labelAttribute;
+    }
+
+    /**
+     * @return string
+     */
     public function createAttribute()
     {
         return $this->createAttribute;
+    }
+
+    /**
+     * @return string
+     */
+    public function idAttribute()
+    {
+        return $this->idAttribute;
     }
 
     /**

@@ -3,8 +3,6 @@
 namespace Code16\Sharp\Form\Eloquent\Relationships;
 
 use Code16\Sharp\Form\Eloquent\EloquentModelUpdater;
-use Code16\Sharp\Form\Eloquent\Request\UpdateRequestData;
-use Code16\Sharp\Form\Fields\SharpFormListField;
 
 class HasManyRelationUpdater
 {
@@ -17,9 +15,9 @@ class HasManyRelationUpdater
      * @param $instance
      * @param string $attribute
      * @param array $value
-     * @param SharpFormListField $listFormField
+     * @param array|null $sortConfiguration
      */
-    public function update($instance, $attribute, $value, $listFormField = null)
+    public function update($instance, $attribute, $value, $sortConfiguration = null)
     {
         $relatedModel = $instance->$attribute()->getRelated();
         $relatedModelKeyName = $relatedModel->getKeyName();
@@ -41,10 +39,9 @@ class HasManyRelationUpdater
 
             $model = app(EloquentModelUpdater::class)->update($relatedInstance, $item);
 
-            // Handle automatic order attribute update
-            if($listFormField && $listFormField->isSortable() && $listFormField->orderAttribute()) {
+            if($sortConfiguration) {
                 $model->update([
-                    $listFormField->orderAttribute() => ($k+1)
+                    $sortConfiguration["orderAttribute"] => ($k+1)
                 ]);
             }
 
@@ -57,13 +54,13 @@ class HasManyRelationUpdater
     }
 
     /**
-     * @param UpdateRequestData $item
+     * @param array $item
      * @param $relatedModelKeyName
      * @return mixed
      */
     private function findItemId($item, $relatedModelKeyName)
     {
-        $id = $item->findItem($relatedModelKeyName)->value();
+        $id = $item[$relatedModelKeyName];
 
         if($id) {
             $this->handledIds[] = $id;

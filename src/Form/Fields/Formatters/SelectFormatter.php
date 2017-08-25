@@ -1,10 +1,11 @@
 <?php
 
-namespace Code16\Sharp\Form\Eloquent\Formatters;
+namespace Code16\Sharp\Form\Fields\Formatters;
 
+use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 
-class SelectFormatter
+class SelectFormatter implements SharpFieldFormatter
 {
     /**
      * @param array|int $value
@@ -12,6 +13,16 @@ class SelectFormatter
      * @return mixed
      */
     public function format($value, $field)
+    {
+
+    }
+
+    /**
+     * @param SharpFormField $field
+     * @param $value
+     * @return mixed
+     */
+    function toFront(SharpFormField $field, $value)
     {
         if($field->multiple()) {
             return collect((array)$value)->map(function($item) {
@@ -23,6 +34,12 @@ class SelectFormatter
             return $value[0];
         }
 
+        return $value;
+    }
+
+    function fromFront(SharpFormField $field, string $attribute, $value)
+    {
+        // TODO check this (maybe create array if multiple, ...)
         return $value;
     }
 }

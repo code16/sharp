@@ -2,39 +2,16 @@
 
 namespace Code16\Sharp\Form\Eloquent;
 
-use Closure;
-use Code16\Sharp\Form\Eloquent\Request\UpdateRequestData;
 use Code16\Sharp\Form\Fields\SharpFormListField;
-use Code16\Sharp\Form\Transformers\SharpAttributeValuator;
 use Illuminate\Database\Eloquent\Model;
 
 trait WithSharpFormEloquentUpdater
 {
-    /**
-     * @var array
-     */
-    protected $valuators = [];
 
     /**
      * @var array
      */
     protected $ignoredAttributes = [];
-
-    /**
-     * @param string $attribute
-     * @param string|Closure $valuator
-     * @return $this
-     */
-    function setCustomValuator(string $attribute, $valuator)
-    {
-        $valuator = $valuator instanceof Closure
-            ? $this->normalizeToSharpAttributeValuator($valuator)
-            : app($valuator);
-
-        $this->valuators[$attribute] = $valuator;
-
-        return $this;
-    }
 
     /**
      * @param string|array $attribute
@@ -48,101 +25,31 @@ trait WithSharpFormEloquentUpdater
     }
 
     /**
-     * Update an Eloquent Model with $data.
+     * Update an Eloquent Model with $data (which is already Form Field formatted)
      *
      * @param Model $instance
-     * @param array $plainData
+     * @param array $data
      * @return Model
      */
-    function save(Model $instance, array $plainData)
+    function save(Model $instance, array $data)
     {
         return app(EloquentModelUpdater::class)
-            ->update($instance, $this->buildData($plainData));
+            ->initRelationshipsConfiguration($this->getFormListFieldsConfiguration())
+            ->update($instance, $this->applyTransformers($data, false));
     }
 
-    /**
-     * @param Closure $closure
-     * @return SharpAttributeValuator
-     */
-    protected function normalizeToSharpAttributeValuator(Closure $closure): SharpAttributeValuator
+    protected function getFormListFieldsConfiguration()
     {
-        return new class($closure) implements SharpAttributeValuator
-        {
-            private $closure;
+        return collect($this->fields)
+            ->filter(function($field) {
+                return $field instanceof SharpFormListField
+                    && $field->isSortable();
 
-            function __construct($closure)
-            {
-                $this->closure = $closure;
-            }
-
-            function getValue($instance, string $attribute, $value)
-            {
-                return call_user_func($this->closure, $instance, $value);
-            }
-        };
-    }
-
-    /**
-     * @param string $attribute
-     * @return SharpAttributeValuator|null
-     */
-    protected function customValuator($attribute)
-    {
-         return isset($this->valuators[$attribute])
-            ? $this->valuators[$attribute]
-            : null;
-    }
-
-    /**
-     * @param array $plainData
-     * @return UpdateRequestData
-     */
-    protected function buildData(array $plainData)
-    {
-        $data = new UpdateRequestData;
-
-        foreach ($plainData as $attribute => $value) {
-
-            if(in_array($attribute, $this->ignoredAttributes)) {
-                // Ignore this attribute
-                continue;
-            }
-
-            $field = $this->findFieldByKey($attribute);
-
-            if($field instanceof SharpFormListField) {
-                // We have to build an UpdateRequestData object for each item
-                $listValue = [];
-
-                if(!$value) {
-                    $value = [];
-                }
-
-                foreach ($value as $item) {
-                    $itemData = new UpdateRequestData;
-
-                    foreach ($item as $itemAttribute => $itemValue) {
-                        $itemField = $this->findFieldByKey("{$attribute}.{$itemAttribute}");
-
-                        $itemData->add($itemAttribute)
-                            ->setValue($itemValue)
-                            ->setValuator($this->customValuator("{$attribute}.{$itemAttribute}"))
-                            ->setFormField($itemField);
-                    }
-
-                    $listValue[] = $itemData;
-                }
-
-                // The value is an array of UpdateRequestData
-                $value = $listValue;
-            }
-
-            $data->add($attribute)
-                ->setValue($value)
-                ->setValuator($this->customValuator($attribute))
-                ->setFormField($field);
-        }
-
-        return $data;
+            })->map(function($listField) {
+                return [
+                    "key" => $listField->key(),
+                    "orderAttribute" => $listField->orderAttribute()
+                ];
+            })->keyBy("key");
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Form\Fields;
 
+use Code16\Sharp\Form\Fields\Formatters\MarkdownFormatter;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 
@@ -50,7 +51,7 @@ class SharpFormMarkdownField extends SharpFormField
      */
     public static function make(string $key)
     {
-        return new static($key, 'markdown');
+        return new static($key, 'markdown', new MarkdownFormatter());
     }
 
     /**

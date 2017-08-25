@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Form\Fields;
 
+use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 
 class SharpFormUploadField extends SharpFormField
@@ -19,7 +20,7 @@ class SharpFormUploadField extends SharpFormField
      */
     public static function make(string $key)
     {
-        return new static($key, 'upload');
+        return new static($key, 'upload', new UploadFormatter);
     }
 
     /**

@@ -33,7 +33,7 @@ class TagsFormatterTest extends SharpTestCase
 
         $field = SharpFormTagsField::make("tags", [
             1=>"A"
-        ])->setCreatable()->setCreateAttribute("name");
+        ])->setCreatable()->setLabelAttribute("name");
 
         $value = [
             ["id" => 1],

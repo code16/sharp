@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException;
+use Code16\Sharp\Form\Fields\Formatters\SharpFieldFormatter;
 use Illuminate\Support\Facades\Validator;
 
 abstract class SharpFormField
@@ -48,13 +49,20 @@ abstract class SharpFormField
     protected $extraStyle;
 
     /**
+     * @var SharpFieldFormatter
+     */
+    protected $formatter;
+
+    /**
      * @param string $key
      * @param string $type
+     * @param SharpFieldFormatter|null $formatter
      */
-    protected function __construct(string $key, string $type)
+    protected function __construct(string $key, string $type, SharpFieldFormatter $formatter = null)
     {
         $this->key = $key;
         $this->type = $type;
+        $this->formatter = $formatter;
     }
 
     /**
@@ -142,6 +150,17 @@ abstract class SharpFormField
     }
 
     /**
+     * @param SharpFieldFormatter $formatter
+     * @return static
+     */
+    public function setFormatter(SharpFieldFormatter $formatter)
+    {
+        $this->formatter = $$formatter;
+
+        return $this;
+    }
+
+    /**
      * Create the properties array for the field, using parent::buildArray()
      *
      * @return array
@@ -162,6 +181,14 @@ abstract class SharpFormField
     public function key(): string
     {
         return $this->key;
+    }
+
+    /**
+     * @return SharpFieldFormatter
+     */
+    public function formatter()
+    {
+        return $this->formatter;
     }
 
     /**

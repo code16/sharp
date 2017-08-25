@@ -1,54 +1,61 @@
 <?php
 
-namespace Code16\Sharp\Form\Eloquent\Formatters;
+namespace Code16\Sharp\Form\Fields\Formatters;
 
-use Code16\Sharp\Form\Fields\SharpFormUploadField;
+use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 use Code16\Sharp\Utils\FileUtil;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Filesystem\FilesystemManager;
 use Intervention\Image\ImageManager;
 
-class UploadFormatter
+class UploadFormatter implements SharpFieldFormatter
 {
     /**
      * @var FilesystemManager
      */
-    private $filesystem;
+    protected $filesystem;
 
     /**
      * @var FileUtil
      */
-    private $fileUtil;
+    protected $fileUtil;
 
     /**
      * @var ImageManager
      */
-    private $imageManager;
+    protected $imageManager;
 
-    /**
-     * @param FilesystemManager $filesystem
-     * @param FileUtil $uploadUtil
-     */
-    public function __construct(FilesystemManager $filesystem, FileUtil $uploadUtil, ImageManager $imageManager)
+
+    public function __construct()
     {
-        $this->filesystem = $filesystem;
-        $this->fileUtil = $uploadUtil;
-        $this->imageManager = $imageManager;
+        $this->filesystem = app(FilesystemManager::class);
+        $this->fileUtil = app(FileUtil::class);
+        $this->imageManager = app(ImageManager::class);
     }
 
     /**
+     * @param SharpFormField $field
      * @param $value
-     * @param SharpFormUploadField $field
-     * @param Model $instance
-     * @return array
+     * @return mixed
      */
-    public function format($value, $field, Model $instance)
+    function toFront(SharpFormField $field, $value)
+    {
+        return $value;
+    }
+
+    /**
+     * Handle file operations on newly uploaded files
+     * + image transformations (crop, rotations) on transformed ones.
+     *
+     * @param SharpFormField $field
+     * @param string $attribute
+     * @param $value
+     * @return array|null
+     */
+    function fromFront(SharpFormField $field, string $attribute, $value)
     {
         if($this->isUploaded($value)) {
-
-            $this->checkIfModelNeedsToExist($field, $instance);
 
             $fileContent = $this->filesystem->disk("sharp_uploads")->get(
                 $value["name"]
@@ -59,7 +66,7 @@ class UploadFormatter
                 $fileContent = $this->handleImageTransformations($fileContent, $value["cropData"]);
             }
 
-            $storedFileName = $this->getStoragePath($value["name"], $field, $instance);
+            $storedFileName = $this->getStoragePath($value["name"], $field);
 
             $this->filesystem->disk($field->storageDisk())->put(
                 $storedFileName, $fileContent
@@ -116,32 +123,17 @@ class UploadFormatter
     /**
      * @param string $fileName
      * @param SharpFormFieldWithUpload $field
-     * @param Model $instance
      * @return string
      */
-    protected function getStoragePath(string $fileName, $field, Model $instance): string
+    protected function getStoragePath(string $fileName, $field): string
     {
-        $basePath = $this->substituteParameters($field->storageBasePath(), $instance);
+        $basePath = $field->storageBasePath();
 
         $fileName = $this->fileUtil->findAvailableName(
             $fileName, $basePath, $field->storageDisk()
         );
 
         return "{$basePath}/{$fileName}";
-    }
-
-    /**
-     * Check if we need the Model to be persisted, and if so and if he's transient,
-     * throw a ModelNotFoundException.
-     *
-     * @param SharpFormFieldWithUpload $field
-     * @param Model $instance
-     */
-    protected function checkIfModelNeedsToExist($field, Model $instance)
-    {
-        if (strpos($field->storageBasePath(), '{id}') !== false && !$instance->exists) {
-            throw new ModelNotFoundException();
-        }
     }
 
     /**
@@ -152,16 +144,16 @@ class UploadFormatter
      * @param Model $instance
      * @return string
      */
-    protected function substituteParameters(string $basePath, Model $instance)
-    {
-        preg_match_all('/{([^}]+)}/', $basePath, $matches, PREG_SET_ORDER);
-
-        foreach ($matches as $match) {
-            $basePath = str_replace($match[0], $instance->{$match[1]}, $basePath);
-        }
-
-        return $basePath;
-    }
+//    protected function substituteParameters(string $basePath, Model $instance)
+//    {
+//        preg_match_all('/{([^}]+)}/', $basePath, $matches, PREG_SET_ORDER);
+//
+//        foreach ($matches as $match) {
+//            $basePath = str_replace($match[0], $instance->{$match[1]}, $basePath);
+//        }
+//
+//        return $basePath;
+//    }
 
     /**
      * @param $fileContent

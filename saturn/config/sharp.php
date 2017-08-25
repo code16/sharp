@@ -8,7 +8,7 @@ return [
         "spaceship" => [
             "list" => \App\Sharp\SpaceshipSharpList::class,
             "form" => \App\Sharp\SpaceshipSharpForm::class,
-            "validator" => \App\Sharp\SpaceshipSharpValidator::class,
+//            "validator" => \App\Sharp\SpaceshipSharpValidator::class,
             "policy" => \App\Sharp\Policies\SpaceshipPolicy::class,
 //            "authorizations" => [
 //                "update" => false,

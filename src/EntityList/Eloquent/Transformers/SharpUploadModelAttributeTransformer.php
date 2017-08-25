@@ -47,7 +47,7 @@ class SharpUploadModelAttributeTransformer implements SharpAttributeTransformer
      * @return mixed
      * @throws SharpException
      */
-    function apply($instance, string $attribute)
+    function apply($value, $instance = null, $attribute = null)
     {
         if(!$instance->$attribute) {
             return null;

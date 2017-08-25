@@ -11,11 +11,12 @@ class FormUploadModelTransformer implements SharpAttributeTransformer
     /**
      * Transform a model attribute to array (json-able).
      *
+     * @param $value
      * @param $instance
      * @param string $attribute
      * @return mixed
      */
-    function apply($instance, string $attribute)
+    function apply($value, $instance = null, $attribute = null)
     {
         if(!$instance->$attribute) {
             return null;
