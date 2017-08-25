@@ -133,12 +133,13 @@
                         line: this.cursorPos.line,
                         ch: this.cursorPos.ch
                     });
-                    //this.codemirror.setCursor(this.cursorPos.line+1, 0);
                 }
 
                 this.codemirror.getInputField().blur();
 
-                let md = replaceBySelection ? selection : `![${selection||''}]()`;
+                let md = replaceBySelection
+                    ? selection
+                    : '![]()';// `![${selection||''}]()`;   take selection as title
 
                 if(isInsertion) {
                     md += '\n\n';

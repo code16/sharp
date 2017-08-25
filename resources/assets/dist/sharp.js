@@ -36114,12 +36114,11 @@ var noop = function noop() {};
                     line: this.cursorPos.line,
                     ch: this.cursorPos.ch
                 });
-                //this.codemirror.setCursor(this.cursorPos.line+1, 0);
             }
 
             this.codemirror.getInputField().blur();
 
-            var md = replaceBySelection ? selection : '![' + (selection || '') + ']()';
+            var md = replaceBySelection ? selection : '![]()'; // `![${selection||''}]()`;   take selection as title
 
             if (isInsertion) {
                 md += '\n\n';
