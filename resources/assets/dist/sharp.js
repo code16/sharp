@@ -36008,7 +36008,7 @@ var noop = function noop() {};
     watch: {
         /// On form locale change
         locale: function locale() {
-            this.simplemde.value(this.value);
+            this.simplemde.value(this.value.text);
         }
     },
     computed: {
@@ -36126,7 +36126,7 @@ var noop = function noop() {};
             }
 
             this.codemirror.replaceRange(md, this.cursorPos);
-            this.codemirror.setCursor(this.cursorPos.line + (isInsertion ? -2 : -1), 0);
+            this.codemirror.setCursor(this.cursorPos.line + (isInsertion ? -2 : 0), 0);
             var from = this.cursorPos,
                 to = { line: this.cursorPos.line, ch: this.cursorPos.ch + md.length };
 
@@ -36276,7 +36276,7 @@ var noop = function noop() {};
 
         this.codemirrorOn('keydown', this.onKeydown);
         this.codemirrorOn('keyHandled', this.onKeyHandled);
-        console.log(this);
+        //console.log(this);
     }
 });
 

@@ -145,7 +145,7 @@
                 }
 
                 this.codemirror.replaceRange(md,this.cursorPos);
-                this.codemirror.setCursor(this.cursorPos.line+(isInsertion?-2:-1),0);
+                this.codemirror.setCursor(this.cursorPos.line+(isInsertion?-2:0),0);
                 let from = this.cursorPos, to = { line:this.cursorPos.line, ch:this.cursorPos.ch+md.length };
 
                 this.codemirror.addLineClass(this.cursorPos.line, 'wrap', 'SharpMarkdown__upload-line');
