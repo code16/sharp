@@ -255,11 +255,21 @@ abstract class SharpForm
     }
 
     /**
+     * @param $data
+     * @return mixed
+     */
+    public function storeInstance($data)
+    {
+        return $this->store($this->formatRequestData($data));
+    }
+
+    /**
      * @param array $data
+     * @return mixed
      */
     public function store(array $data)
     {
-        $this->update(null, $data);
+        return $this->update(null, $data);
     }
 
     /**

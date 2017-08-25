@@ -96,7 +96,12 @@ trait WithCustomTransformers
      */
     protected function applyTransformers($model, bool $formatToFrontForm)
     {
-        $attributes = is_array($model) ? $model : $model->toArray();
+        // Merge model attribute with form fields to be sure we have
+        // all attributes which the front code needed.
+        $attributes = array_merge(
+            collect($this->getDataKeys())->flip()->map(function() {
+                return null;
+            })->all(), is_array($model) ? $model : $model->toArray());
 
         if(is_object($model)) {
             $attributes = $this->handleAutoRelatedAttributes($attributes, $model);

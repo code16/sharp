@@ -66,7 +66,7 @@ class MarkdownFormatter implements SharpFieldFormatter
      * @param string $md
      * @return array
      */
-    protected function extractEmbeddedUploads(string $md)
+    protected function extractEmbeddedUploads($md)
     {
         preg_match_all(
             '/!\[[^\]]*\]\((?<filename>.*?)(?=\"|\))(?<optionalpart>\".*\")?\)/',
