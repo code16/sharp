@@ -323,6 +323,9 @@
   }
 
   &--collapsing, &--collapsed {
+    .SharpLeftNav__shadow {
+      display: none;
+    }
     width: rem(48px);
     transition: background-color 300ms $bx--standard-easing,
                 width 300ms $bx--standard-easing;
@@ -381,6 +384,10 @@
     width: rem(200px);
     transition: width 300ms $bx--standard-easing;
     background-color: #fff;
+
+    .SharpLeftNav__shadow {
+      display: none;
+    }
 
     @include transition-elements {
       opacity: 1;
