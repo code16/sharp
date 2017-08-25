@@ -1,8 +1,10 @@
 <template>
-    <div class="SharpList">
+    <div class="SharpList" :class="{ 'SharpList--sort': dragActive }">
         <template v-if="sortable && list.length > 1">
-            <button type="button" class="SharpButton SharpButton--secondary SharpList__sort-button" :class="{active:dragActive}" @click="toggleDrag">
-                {{dragActive ? 'Ok' : 'Trier'}}
+            <button type="button" class="SharpButton SharpButton--ghost SharpList__sort-button" :class="{'SharpButton--active':dragActive}" @click="toggleDrag">
+                <svg class="SharpButton__icon" width='24' height='22' viewBox='0 0 24 22' fill-rule='evenodd'>
+                    <path d='M20 14V0h-4v14h-4l6 8 6-8zM4 8v14h4V8h4L6 0 0 8z'></path>
+                </svg>
             </button>
         </template>
         <draggable :options="dragOptions" :list="list" ref="draggable">
@@ -13,9 +15,11 @@
                 >
                     <div class="SharpModule__inner">
                         <div class="SharpModule__content">
+
                             <template v-if="dragActive && collapsedItemTemplate">
                                 <sharp-template name="CollapsedItem" :template="collapsedItemTemplate" :template-data="collapsedItemData(listItemData)"></sharp-template>
                             </template>
+
                             <template v-else>
                                 <sharp-list-item :layout="fieldLayout.item" :error-identifier="i">
                                     <template scope="itemFieldLayout">
@@ -30,6 +34,9 @@
                                 </sharp-list-item>
                                 <button v-if="!disabled && removable" class="SharpButton SharpButton--danger SharpButton--sm" @click="remove(i)">{{ l('form.list.remove_button') }}</button>
                             </template>
+
+                            <!-- Full size div use to handle the item when drag n drop (c.f draggable options) -->
+                            <div v-if="dragActive" class="SharpList__overlay-handle"></div>
                         </div>
                     </div>
                     <div v-if="!disabled && showAddButton && i<list.length-1" class="SharpList__new-item-zone">
@@ -126,7 +133,7 @@
                 return this.itemFields;
             },
             dragOptions() {
-                return { disabled:!this.dragActive };
+                return { disabled:!this.dragActive, handle: '.SharpList__overlay-handle' };
             },
             showAddButton() {
                 return this.addable && (this.list.length<this.maxItemCount || !this.maxItemCount);

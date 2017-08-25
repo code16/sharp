@@ -34219,6 +34219,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -35765,6 +35766,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -35843,7 +35851,7 @@ var noop = function noop() {};
             return this.itemFields;
         },
         dragOptions: function dragOptions() {
-            return { disabled: !this.dragActive };
+            return { disabled: !this.dragActive, handle: '.SharpList__overlay-handle' };
         },
         showAddButton: function showAddButton() {
             return this.addable && (this.list.length < this.maxItemCount || !this.maxItemCount);
@@ -35948,6 +35956,10 @@ var noop = function noop() {};
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mixins_Localization__ = __webpack_require__(32);
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -35968,7 +35980,10 @@ var noop = function noop() {};
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpMarkdown',
     props: {
-        value: String,
+        value: {
+            type: Object,
+            default: function _default() {}
+        },
 
         placeholder: String,
         toolbar: Array,
@@ -35986,7 +36001,8 @@ var noop = function noop() {};
             simplemde: null,
             cursorPos: 0,
             lastKeydown: 0,
-            onNextBackspace: noop
+
+            uploaderId: 0
         };
     },
 
@@ -35996,119 +36012,167 @@ var noop = function noop() {};
             this.simplemde.value(this.value);
         }
     },
+    computed: {
+        codemirror: function codemirror() {
+            return this.simplemde.codemirror;
+        },
+        idSymbol: function idSymbol() {
+            return Symbol('fileIdSymbol');
+        }
+    },
     methods: {
-        createUploader: function createUploader(cm) {
-            return new __WEBPACK_IMPORTED_MODULE_1__MarkdownUpload__["a" /* default */]({
+        indexedFiles: function indexedFiles() {
+            var _this = this;
+
+            return (this.value.files || []).map(function (file, i) {
+                return _extends(_defineProperty({}, _this.idSymbol, i), file);
+            });
+        },
+        createUploader: function createUploader(value) {
+            var $uploader = new __WEBPACK_IMPORTED_MODULE_1__MarkdownUpload__["a" /* default */]({
                 provide: {
                     actionsBus: this.actionsBus
                 },
                 propsData: {
-                    onSuccess: function onSuccess(file) {
-                        var find = this.marker.find();
-                        //console.log(this.marker);
-                        var content = cm.getLine(find.from.line);
-                        cm.replaceRange(content.replace(/\(.*?\)/, '(' + file.name + ')'), find.from, find.to);
-                    },
-                    onAdded: function onAdded() {
-                        cm.refresh();
-                        cm.focus();
-                    },
-                    onRemoved: function onRemoved() {
-                        if (this.marker.explicitlyCleared) return;
-                        this.remove();
-                    },
-
-                    xsrfToken: this.xsrfToken
-                },
-                methods: {
-                    remove: function remove() {
-                        this.marker.inclusiveLeft = this.marker.inclusiveRight = false;
-                        var find = this.marker.find(),
-                            line = find.from.line;
-                        cm.replaceRange('', find.from, { line: line + 1, ch: 0 });
-                        this.marker.inclusiveLeft = this.marker.inclusiveRight = true;
-                        cm.focus();
-                    }
+                    id: this.uploaderId++,
+                    xsrfToken: this.xsrfToken,
+                    value: value
                 }
             });
-        },
-        insertUploadImage: function insertUploadImage(_ref) {
-            var codemirror = _ref.codemirror;
 
-            var cm = codemirror;
-            var selection = cm.getSelection(' ');
-            var curLineContent = cm.getLine(this.cursorPos.line);
+            $uploader.$on('success', this.updateUploader.bind(this, $uploader));
+            $uploader.$on('added', this.refreshCodemirror.bind(this, $uploader));
+            $uploader.$on('remove', this.removeMarker.bind(this, $uploader));
+
+            return $uploader;
+        },
+        refreshCodemirror: function refreshCodemirror() {
+            this.codemirror.refresh();
+            this.codemirror.focus();
+        },
+        removeMarker: function removeMarker($uploader) {
+            var _this2 = this;
+
+            var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+                fromBackspace = _ref.fromBackspace;
+
+            var id = $uploader.id,
+                marker = $uploader.marker;
+
+
+            if (marker.explicitlyCleared) return;
+
+            if (!fromBackspace) {
+                marker.inclusiveLeft = marker.inclusiveRight = false;
+                var find = marker.find(),
+                    line = find.from.line;
+                this.codemirror.replaceRange('', find.from, { line: line + 1, ch: 0 });
+                marker.inclusiveLeft = marker.inclusiveRight = true;
+                marker.clear();
+                this.codemirror.focus();
+            }
+
+            $uploader.$destroy();
+            this.value.files = this.value.files.filter(function (f) {
+                return f[_this2.idSymbol] !== id;
+            });
+        },
+        updateUploader: function updateUploader(_ref2, data) {
+            var id = _ref2.id,
+                marker = _ref2.marker;
+
+            var find = marker.find();
+
+            var content = this.codemirror.getLine(find.from.line);
+            this.codemirror.replaceRange(content.replace(/\(.*?\)/, '(' + data.name + ')'), find.from, find.to);
+
+            this.value.files.push(_extends(_defineProperty({}, this.idSymbol, id), data));
+        },
+        insertUploadImage: function insertUploadImage() {
+            var _this3 = this;
+
+            var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+                replaceBySelection = _ref3.replaceBySelection,
+                data = _ref3.data,
+                isInsertion = _ref3.isInsertion;
+
+            var selection = this.codemirror.getSelection(' ');
+            var curLineContent = this.codemirror.getLine(this.cursorPos.line);
 
             if (selection) {
-                cm.replaceSelection('');
-                curLineContent = cm.getLine(this.cursorPos.line);
-                //console.log(selection);
+                this.codemirror.replaceSelection('');
+                curLineContent = this.codemirror.getLine(this.cursorPos.line);
             }
 
             if (curLineContent.length) {
-                cm.replaceRange('\n', {
+                this.codemirror.replaceRange('\n', {
                     line: this.cursorPos.line,
-                    ch: curLineContent.length
+                    ch: this.cursorPos.ch
                 });
-                cm.setCursor(this.cursorPos.line + 1, 0);
+                //this.codemirror.setCursor(this.cursorPos.line+1, 0);
             }
 
-            cm.getInputField().blur();
+            this.codemirror.getInputField().blur();
 
-            var md = '![' + (selection || '') + ']()';
+            var md = replaceBySelection ? selection : '![' + (selection || '') + ']()';
 
-            cm.replaceRange(md + '\n', this.cursorPos);
-            cm.setCursor(this.cursorPos.line - 1, 0);
+            if (isInsertion) {
+                md += '\n';
+            }
+
+            this.codemirror.replaceRange(md, this.cursorPos);
+            this.codemirror.setCursor(this.cursorPos.line + (isInsertion ? -1 : 0), 0);
             var from = this.cursorPos,
                 to = { line: this.cursorPos.line, ch: this.cursorPos.ch + md.length };
 
-            var uploader = this.createUploader(cm);
-            uploader.marker = cm.markText(from, to, {
-                replacedWith: uploader.$mount().$el,
+            this.codemirror.addLineClass(this.cursorPos.line, 'wrap', 'SharpMarkdown__upload-line');
+
+            //                this.codemirror.addLineClass(this.cursorPos.line, 'text', '__test-class__text');
+            //                this.codemirror.addLineClass(this.cursorPos.line, 'background', '__test-class__background');
+            //                this.codemirror.addLineClass(this.cursorPos.line, 'gutter', '__test-class__gutter');
+
+            var $uploader = this.createUploader(data);
+            //console.log($uploader);
+            $uploader.marker = this.codemirror.markText(from, to, {
+                replacedWith: $uploader.$mount().$el,
                 clearWhenEmpty: false,
                 inclusiveRight: true,
                 inclusiveLeft: true
             });
 
-            uploader.marker.on('beforeCursorEnter', this.uploadBeforeCursorEnter(uploader));
-            uploader.inputClick();
+            $uploader.marker.on('beforeCursorEnter', function () {
+                return _this3.uploadBeforeCursorEnter($uploader);
+            });
 
-            cm.setCursor(this.cursorPos.line + 1, 0);
-        },
-        uploadBeforeCursorEnter: function uploadBeforeCursorEnter(uploader) {
-            var _this = this;
+            if (!data) $uploader.inputClick();
 
-            return function (_) {
-                console.log(_this.lastKeydown.keyCode, _this.cursorPos.line);
-                if (_this.lastKeydown.keyCode === 8 && _this.cursorPos.line === 1) {
-                    _this.onNextBackspace = uploader.remove.bind(uploader);
-                }
-                _this.cursorEntered = true;
-            };
+            this.codemirror.setCursor(this.cursorPos.line + 1, 0);
         },
-        onCursorActivity: function onCursorActivity(cm) {
-            this.cursorPos = cm.getCursor();
-        },
-        onChange: function onChange(cm) {
-            this.$emit('input', this.simplemde.value());
-        },
-        onBeforeChange: function onBeforeChange(cm, change) {
-            // console.log('beforeChange',arguments, this.cursorEntered);
-        },
-        onKeydown: function onKeydown(cm, e) {
-            console.log('key down');
-            this.lastKeydown = e;
-        },
-        onKeyHandled: function onKeyHandled(cm, name, e) {
-            console.log('key handled', arguments);
-            if (__WEBPACK_IMPORTED_MODULE_2_codemirror___default.a.keyMap.default[name] === 'undo') {} else if (name === 'Backspace') {
-                this.onNextBackspace();
-                this.onNextBackspace = noop;
+        uploadBeforeCursorEnter: function uploadBeforeCursorEnter($uploader) {
+            //debugger
+            console.log(this.lastKeydown.keyCode, this.cursorPos.line);
+            if (this.lastKeydown.keyCode === 8) {
+                this.removeMarker($uploader, { fromBackspace: true });
             }
         },
+        onCursorActivity: function onCursorActivity() {
+            this.cursorPos = this.codemirror.getCursor();
+        },
+        onChange: function onChange() {
+            this.$emit('input', _extends({}, this.value, { text: this.simplemde.value()
+            }));
+        },
+        onBeforeChange: function onBeforeChange(cm, change) {
+            // debugger
+        },
+        onKeydown: function onKeydown(cm, e) {
+            //console.log('key down');
+            this.lastKeydown = e;
+        },
+        onKeyHandled: function onKeyHandled(cm, name, e) {},
         codemirrorOn: function codemirrorOn(eventName, callback, immediate) {
-            immediate && callback(this.simplemde.codemirror);
-            this.simplemde.codemirror.on(eventName, callback);
+            immediate && callback(this.codemirror);
+            this.codemirror.on(eventName, callback);
         },
         localizeToolbar: function localizeToolbar() {
             this.simplemde.toolbar.forEach(function (icon) {
@@ -36121,24 +36185,68 @@ var noop = function noop() {};
             this.simplemde.createToolbar();
         },
         setReadOnly: function setReadOnly() {
-            this.simplemde.codemirror.setOption('readOnly', true);
+            this.codemirror.setOption('readOnly', true);
             this.simplemde.toolbar.forEach(function (icon) {
                 return (typeof icon === 'undefined' ? 'undefined' : _typeof(icon)) === 'object' && (icon.action = noop);
             });
         },
         bindImageAction: function bindImageAction() {
+            var _this4 = this;
+
             var imageBtn = this.simplemde.toolbar.find(function (btn) {
                 return btn.name === 'image';
             });
-            (imageBtn || {}).action = this.insertUploadImage;
+            (imageBtn || {}).action = function () {
+                return _this4.insertUploadImage({ isInsertion: true });
+            };
+        },
+        parse: function parse() {
+            var _this5 = this;
+
+            var images = [];
+            this.codemirror.eachLine(function (lineHandler) {
+                var text = lineHandler.text;
+
+                var line = _this5.codemirror.getLineNumber(lineHandler);
+                var regex = /!\[(.*?)\]\((.*?)\)/g;
+                var match = regex.exec(text);
+
+                if (match) {
+                    var index = match.index,
+                        length = match[0].length,
+                        title = match[1],
+                        name = match[2];
+                    //console.log(match);
+
+                    images.push({
+                        range: { start: { ch: index, line: line }, end: { ch: index + length, line: line } },
+                        data: {
+                            name: name,
+                            title: title
+                        }
+                    });
+                }
+            });
+
+            images.reverse().forEach(function (_ref4) {
+                var range = _ref4.range,
+                    data = _ref4.data;
+
+                _this5.codemirror.setSelection(range.start, range.end);
+                _this5.insertUploadImage({ replaceBySelection: true, data: data });
+            });
+        },
+        refreshOnExternalChange: function refreshOnExternalChange() {
+            this.codemirror.refresh();
+            this.parse();
         }
     },
     mounted: function mounted() {
-        var _this2 = this;
+        var _this6 = this;
 
         this.simplemde = new __WEBPACK_IMPORTED_MODULE_0_simplemde___default.a({
             element: this.$refs.textarea,
-            initialValue: this.value,
+            initialValue: this.value.text,
             placeholder: this.placeholder,
             spellChecker: false,
             toolbar: this.toolbar,
@@ -36146,11 +36254,14 @@ var noop = function noop() {};
             status: false
         });
 
-        this.simplemde.codemirror.setSize('auto', this.height);
+        this.value.files = this.indexedFiles();
+        this.uploaderId = this.value.files.length;
 
-        this.$tab.$on('active', function () {
-            _this2.simplemde.codemirror.refresh();
+        this.$tab.$once('active', function () {
+            return _this6.refreshOnExternalChange();
         });
+
+        this.codemirror.setSize('auto', this.height);
 
         if (this.readOnly) {
             this.setReadOnly();
@@ -36166,7 +36277,7 @@ var noop = function noop() {};
 
         this.codemirrorOn('keydown', this.onKeydown);
         this.codemirrorOn('keyHandled', this.onKeyHandled);
-        //console.log(this);
+        console.log(this);
     }
 });
 
@@ -36205,12 +36316,9 @@ var noop = function noop() {};
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0_vue___default.a.extend({
     mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins__["j" /* UploadXSRF */]],
     props: {
+        id: Number,
         value: Object,
         maxFileSize: Number,
-
-        onSuccess: Function,
-        onRemoved: Function,
-        onAdded: Function,
 
         marker: Object,
 
@@ -36221,8 +36329,7 @@ var noop = function noop() {};
     },
     data: function data() {
         return {
-            show: false,
-            removed: false
+            show: this.value
         };
     },
 
@@ -36249,23 +36356,23 @@ var noop = function noop() {};
         }
     },
     methods: {
-        onAddedFile: function onAddedFile() {
+        handleAdded: function handleAdded() {
             var _this = this;
 
             this.show = true;
-            this.$nextTick(function (_) {
-                _this.onAdded();
+            this.$nextTick(function () {
+                return _this.$emit('added');
             });
         },
         checkCancelled: function checkCancelled() {
-            if (!this.show) this.onRemoved();
+            if (!this.show) this.$emit('remove');
             document.body.onfocus = null;
         },
         inputClick: function inputClick() {
             var _this2 = this;
 
             this.fileInput.click();
-            document.body.onfocus = function (_) {
+            document.body.onfocus = function () {
                 setTimeout(_this2.checkCancelled, 100);
             };
         }
@@ -36362,6 +36469,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
 //
 //
 //
@@ -36532,9 +36640,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             } catch (e) {
                 console.log(e);
             }
-            this.$emit('success', data);
 
             data.uploaded = true;
+            this.$emit('success', data);
+
             this.$parent.$emit('input', data);
             this.actionsBus.$emit('enable-submit');
 
@@ -36768,6 +36877,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 
@@ -36828,8 +36940,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
 
     watch: {
-        ready: async function ready(_ready) {
-            if (_ready) {
+        'data.items': async function dataItems(items) {
+            if (items.length) {
                 await this.$nextTick();
                 this.headerAutoPadding = {
                     width: this.$refs.actionsCol[0].offsetWidth + 'px'
@@ -81998,11 +82110,14 @@ if (false) {
 "use strict";
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "SharpList"
-  }, [(_vm.sortable && _vm.list.length > 1) ? [_c('button', {
-    staticClass: "SharpButton SharpButton--secondary SharpList__sort-button",
+    staticClass: "SharpList",
     class: {
-      active: _vm.dragActive
+      'SharpList--sort': _vm.dragActive
+    }
+  }, [(_vm.sortable && _vm.list.length > 1) ? [_c('button', {
+    staticClass: "SharpButton SharpButton--ghost SharpList__sort-button",
+    class: {
+      'SharpButton--active': _vm.dragActive
     },
     attrs: {
       "type": "button"
@@ -82010,7 +82125,19 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     on: {
       "click": _vm.toggleDrag
     }
-  }, [_vm._v("\n            " + _vm._s(_vm.dragActive ? 'Ok' : 'Trier') + "\n        ")])] : _vm._e(), _vm._v(" "), _c('draggable', {
+  }, [_c('svg', {
+    staticClass: "SharpButton__icon",
+    attrs: {
+      "width": "24",
+      "height": "22",
+      "viewBox": "0 0 24 22",
+      "fill-rule": "evenodd"
+    }
+  }, [_c('path', {
+    attrs: {
+      "d": "M20 14V0h-4v14h-4l6 8 6-8zM4 8v14h4V8h4L6 0 0 8z"
+    }
+  })])])] : _vm._e(), _vm._v(" "), _c('draggable', {
     ref: "draggable",
     attrs: {
       "options": _vm.dragOptions,
@@ -82065,7 +82192,9 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
           _vm.remove(i)
         }
       }
-    }, [_vm._v(_vm._s(_vm.l('form.list.remove_button')))]) : _vm._e()]], 2)]), _vm._v(" "), (!_vm.disabled && _vm.showAddButton && i < _vm.list.length - 1) ? _c('div', {
+    }, [_vm._v(_vm._s(_vm.l('form.list.remove_button')))]) : _vm._e()], _vm._v(" "), (_vm.dragActive) ? _c('div', {
+      staticClass: "SharpList__overlay-handle"
+    }) : _vm._e()], 2)]), _vm._v(" "), (!_vm.disabled && _vm.showAddButton && i < _vm.list.length - 1) ? _c('div', {
       staticClass: "SharpList__new-item-zone"
     }, [_c('button', {
       staticClass: "SharpButton SharpButton--secondary SharpButton--sm",
@@ -82710,7 +82839,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   return _c('div', {
     staticClass: "SharpUpload",
     class: {
-      'SharpUpload--empty': !_vm.file
+      'SharpUpload--empty': !_vm.file, 'SharpUpload--disabled': _vm.readOnly
     }
   }, [_c('div', {
     staticClass: "SharpUpload__inner"
@@ -82766,7 +82895,8 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   })])]), _vm._v(" "), _c('div', [(!!_vm.originalImageSrc) ? [_c('button', {
     staticClass: "SharpButton SharpButton--sm SharpButton--secondary",
     attrs: {
-      "type": "button"
+      "type": "button",
+      "disabled": _vm.readOnly
     },
     on: {
       "click": _vm.onEditButtonClick
@@ -82774,7 +82904,8 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   }, [_vm._v("\n                                    " + _vm._s(_vm.l('form.upload.edit_button')) + "\n                                ")])] : _vm._e(), _vm._v(" "), _c('button', {
     staticClass: "SharpButton SharpButton--sm SharpButton--secondary SharpButton--danger SharpUpload__remove-button",
     attrs: {
-      "type": "button"
+      "type": "button",
+      "disabled": _vm.readOnly
     },
     on: {
       "click": function($event) {
@@ -82782,6 +82913,12 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       }
     }
   }, [_vm._v("\n                                " + _vm._s(_vm.l('form.upload.remove_button')) + "\n                            ")])], 2)]), _vm._v(" "), _c('button', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (!_vm.readOnly),
+      expression: "!readOnly"
+    }],
     staticClass: "SharpUpload__close-button",
     attrs: {
       "type": "button"
@@ -82812,7 +82949,8 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     }
   }, [_c('div')])], 2)]), _vm._v(" "), (!!_vm.originalImageSrc) ? [_c('sharp-modal', {
     attrs: {
-      "close-on-backdrop": false
+      "close-on-backdrop": false,
+      "title": _vm.l('modals.cropper.title')
     },
     on: {
       "ok": _vm.onEditModalOk,
@@ -83382,11 +83520,15 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     attrs: {
       "options": _vm.options,
       "value": _vm.value,
-      "on-added-file": function (_) { return _vm.onAddedFile(); }
+      "on-added-file": _vm.handleAdded
     },
     on: {
-      "success": function (data) { return _vm.onSuccess(data); },
-      "removed": function (_) { return _vm.onRemoved(); }
+      "success": function($event) {
+        _vm.$emit('success', $event)
+      },
+      "removed": function($event) {
+        _vm.$emit('remove')
+      }
     }
   })
 }
@@ -83434,7 +83576,7 @@ if (false) {
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "SharpEntitiesList"
-  }, [(_vm.ready) ? [_c('div', {
+  }, [(_vm.ready) ? [(!_vm.data.items.length) ? [_vm._v("\n            " + _vm._s(_vm.l('entity_list.empty_text')) + "\n        ")] : _c('div', {
     staticClass: "SharpEntitiesList__table SharpEntitiesList__table--border"
   }, [_c('div', {
     staticClass: "SharpEntitiesList__thead"

@@ -9,6 +9,15 @@
     border-radius: 0;
   }
 
+  &__upload-line {
+    z-index: 3;
+    .CodeMirror-line {
+      & > span {
+        padding-right: 0 !important;
+      }
+    }
+  }
+
   &--read-only {
     .CodeMirror {
       opacity: 0.8;
@@ -23,6 +32,7 @@
     border: none;
     border-radius: 0;
     padding: 1rem !important;
-    line-height: 1.4;
+    line-height: 1.5;
+    @include font-size('14');
   }
 }
