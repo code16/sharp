@@ -5,15 +5,34 @@
   top: 0;
   height: 100%;
   background-color: $color__white;
-  border-right: 1px solid $color__gray-1;
+  //border-right: 1px solid $color__gray-1;
+
   overflow: scroll;
   max-height: 100%;
 
   z-index: z('leftNav');
 
+  &__shadow {
+    position: fixed;
+    top: 5rem;
+    left:0;
+    height:calc(100% - 5rem);
+    width:rem(200px);
+    box-shadow: 2px 0 4px 0 $ui-03;
+  }
+
+  &__title-container {
+    padding: .75rem;
+    background: $brand-01-light;
+    display: flex;
+    align-items: center;
+    height: 5rem;
+    z-index: 1;
+  }
   &__title {
-    padding: .75rem 1.5rem .75rem rem(59px);
-    @include font-size('20');
+    @include font-size('16');
+    text-transform: uppercase;
+    color: $inverse-01;
   }
 
   &__top-icon {
@@ -33,7 +52,6 @@
     display: flex;
     flex-direction: column;
     background-color: $color__white;
-    padding-top: 1.5rem;
     overflow: auto;
 
     .SharpLeftNav__item {
@@ -193,15 +211,20 @@
   // collapsed states
   ///////////////////////////////////////////////////
 
+  @mixin transition-elements() {
+    ul, li, hr, .SharpLeftNav__title-container ,.SharpLeftNav__collapse-target {
+      @content;
+    }
+  }
+
   &--collapseable {
     overflow: hidden;
     display: flex;
     flex-direction: column;
     width: rem(200px);
-    padding-top: rem(20px);
     transition: background-color 300ms $bx--standard-easing, width 300ms $bx--standard-easing;
 
-    ul, li, hr, .SharpLeftNav__collapse-target {
+    @include transition-elements {
       opacity: 1;
     }
 
@@ -310,7 +333,7 @@
       background-color: rgba($color__blue-51, .30);
     }
 
-    ul, li, hr, .SharpLeftNav__collapse-target {
+    @include transition-elements {
       opacity: 0;
       transition: opacity 300ms $bx--standard-easing;
       overflow: hidden;
@@ -337,7 +360,8 @@
 
   &--collapsed {
     height: 100%;
-    ul, li, hr, .SharpLeftNav__collapse-target {
+    padding-top: rem(20px);
+    @include transition-elements {
       display: none;
     }
 
@@ -358,7 +382,7 @@
     transition: width 300ms $bx--standard-easing;
     background-color: #fff;
 
-    ul, li, hr, .SharpLeftNav__collapse-target {
+    @include transition-elements {
       opacity: 1;
       transition: opacity 300ms $bx--standard-easing;
       overflow: hidden;
