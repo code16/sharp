@@ -82700,7 +82700,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     staticStyle: {
       "font-weight": "normal"
     }
-  }, [_vm._v(" | ")]) : _vm._e()]), _vm._v(" "), _c('sharp-select', {
+  }, [_vm._v(" : ")]) : _vm._e()]), _vm._v(" "), _c('sharp-select', {
     ref: "select",
     staticClass: "SharpFilterSelect__select",
     attrs: {

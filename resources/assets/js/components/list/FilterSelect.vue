@@ -6,7 +6,7 @@
           'SharpFilterSelect--multiple':multiple}"
           @click="open">
         <span class="SharpFilterSelect__text">
-            {{name}}<span v-if="!empty" style="font-weight:normal">&nbsp;|&nbsp;</span>
+            {{name}}<span v-if="!empty" style="font-weight:normal">&nbsp;:&nbsp;</span>
         </span>
         <sharp-select class="SharpFilterSelect__select"
                       :value="value"

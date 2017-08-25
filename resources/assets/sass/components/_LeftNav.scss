@@ -29,9 +29,11 @@
     height: 5rem;
     z-index: 1;
   }
+
   &__title {
     @include font-size('16');
     text-transform: uppercase;
+    letter-spacing: 0;
     color: $inverse-01;
   }
 
@@ -53,6 +55,7 @@
     flex-direction: column;
     background-color: $color__white;
     overflow: auto;
+    padding-top: 1rem;
 
     .SharpLeftNav__item {
       cursor: pointer;
@@ -247,7 +250,6 @@
     }
 
     .SharpLeftNav__list {
-      padding-top: 0;
 
       @include light-ui {
         background-color: inherit;
@@ -258,15 +260,15 @@
       position: relative;
       background-color: #fff;
 
-      &:before {
-        top: 0;
-        position: absolute;
-        background-color: $color__blue-51;
-        height: 100%;
-        left: 0;
-        width: 4px;
-        content: '';
-      }
+      //&:before {
+      //  top: 0;
+      //  position: absolute;
+      //  background-color: $color__blue-51;
+      //  height: 100%;
+      //  left: 0;
+      //  width: 4px;
+      //  content: '';
+      //}
     }
 
     .SharpLeftNav__item {
@@ -279,7 +281,7 @@
 
     .SharpLeftNav__list--nested .SharpLeftNav__item-link {
       font-size: rem(12px);
-      padding-left: rem(40px);
+      //padding-left: rem(40px);
     }
 
     .SharpLeftNav__collapse {
@@ -291,6 +293,8 @@
       margin-top: auto;
       //margin-bottom: rem(90px);
       padding: rem(14px) rem(16px);
+
+      z-index:1;
 
       &:hover, &:focus {
         background-color: rgba($color__blue-51, .30);

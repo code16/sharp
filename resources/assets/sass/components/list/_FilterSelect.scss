@@ -26,6 +26,8 @@
     position: relative;
     background: $ui-01;
     z-index: z('dropdownText');
+    text-transform: uppercase;
+    //color: $text-02;
   }
 
   &__select {
@@ -37,6 +39,24 @@
 
       &__content {
         left:0;
+      }
+
+      &__tag {
+        background: $ui-01;
+        &:not(:first-child):before {
+          content: "|";
+          position: absolute;
+          left:0;
+          top:0;
+          font-weight: normal;
+          @include font-size('16');
+          margin-left: -.1875rem;
+        }
+
+        &-icon:after {
+          content: "x";
+          color: $brand-03;
+        }
       }
 
       &__tags {
