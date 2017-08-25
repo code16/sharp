@@ -1,13 +1,13 @@
 <template>
     <sharp-action-bar :ready="ready">
         <template slot="left">
-            <button v-if="showBackButton" class="SharpButton SharpButton--secondary" @click="emitAction('cancel')">
+            <button v-if="showBackButton" class="SharpButton SharpButton--secondary-accent" @click="emitAction('cancel')">
                 {{ l('action_bar.form.back_button') }}
             </button>
             <sharp-locale-selector v-if="locales" @input="l=>emitAction('localeChanged',l)" :value="locale" :locales="locales"></sharp-locale-selector>
         </template>
         <template slot="right">
-            <button v-if="!showBackButton" class="SharpButton SharpButton--secondary" @click="emitAction('cancel')">
+            <button v-if="!showBackButton" class="SharpButton SharpButton--secondary-accent" @click="emitAction('cancel')">
                 {{ l('action_bar.form.cancel_button') }}
             </button>
             <button v-if="showSubmitButton" class="SharpButton SharpButton--accent" @click="emitAction('submit')">

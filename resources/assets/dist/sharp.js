@@ -35175,8 +35175,7 @@ var Tag = function (_LabelledItem2) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_moment__ = __webpack_require__(82);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_moment__);
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
+//
 //
 //
 //
@@ -35278,7 +35277,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             return this.moment.format(this.displayFormat);
         }
     },
-    methods: _defineProperty({
+    methods: {
         handleDateSelect: function handleDateSelect(date) {
             this.moment.set({
                 year: date.getFullYear(),
@@ -35305,9 +35304,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 this.$field.$emit('ok');
                 this.$emit('input', m);
             }
-        },
-        handleBlur: function handleBlur() {
-            this.$field.$emit('clear');
         },
         increase: function increase(e) {
             this.translate(e.target, 1);
@@ -35371,10 +35367,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         },
         handleFocus: function handleFocus() {
             this.showPicker = true;
+        },
+        handleBlur: function handleBlur() {
+            this.$field.$emit('clear');
+            this.showPicker = false;
         }
-    }, 'handleBlur', function handleBlur() {
-        this.showPicker = false;
-    }),
+    },
     mounted: function mounted() {
         this.setFocusable(this.$refs.input);
     }
@@ -80491,7 +80489,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   }, [_c('template', {
     slot: "left"
   }, [(_vm.showBackButton) ? _c('button', {
-    staticClass: "SharpButton SharpButton--secondary",
+    staticClass: "SharpButton SharpButton--secondary-accent",
     on: {
       "click": function($event) {
         _vm.emitAction('cancel')
@@ -80508,7 +80506,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   }) : _vm._e()], 1), _vm._v(" "), _c('template', {
     slot: "right"
   }, [(!_vm.showBackButton) ? _c('button', {
-    staticClass: "SharpButton SharpButton--secondary",
+    staticClass: "SharpButton SharpButton--secondary-accent",
     on: {
       "click": function($event) {
         _vm.emitAction('cancel')
@@ -83883,6 +83881,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "value": _vm.inputValue
     },
     on: {
+      "input": _vm.handleInput,
       "blur": _vm.handleBlur,
       "focus": _vm.handleFocus,
       "keydown": [function($event) {

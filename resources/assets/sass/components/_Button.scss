@@ -98,6 +98,16 @@
     }
   }
 
+  &--secondary-accent {
+    @include button-theme(
+      $ui-01,   // bg-color
+      $brand-01, // border-color
+      $brand-03, // font-color
+      darken($ui-01, 10%),   // hover-bg-color
+      $brand-03       // icon-color
+    );
+  }
+
   &--ghost {
     @include button-theme(
                     transparent, // bg-color
