@@ -155,7 +155,7 @@ abstract class SharpFormField
      */
     public function setFormatter(SharpFieldFormatter $formatter)
     {
-        $this->formatter = $$formatter;
+        $this->formatter = $formatter;
 
         return $this;
     }

@@ -4,6 +4,7 @@ namespace Code16\Sharp\Form\Eloquent;
 
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 trait WithSharpFormEloquentUpdater
 {
@@ -38,6 +39,13 @@ trait WithSharpFormEloquentUpdater
             ->update($instance, $this->applyTransformers($data, false));
     }
 
+    /**
+     * Get all List fields which are sortable and their "orderAttribute"
+     * configuration to be used by EloquentModelUpdater
+     * for automatic ordering.
+     *
+     * @return Collection
+     */
     protected function getFormListFieldsConfiguration()
     {
         return collect($this->fields)
@@ -50,6 +58,7 @@ trait WithSharpFormEloquentUpdater
                     "key" => $listField->key(),
                     "orderAttribute" => $listField->orderAttribute()
                 ];
+
             })->keyBy("key");
     }
 }

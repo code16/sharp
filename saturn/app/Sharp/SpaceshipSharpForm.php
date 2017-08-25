@@ -191,7 +191,7 @@ class SpaceshipSharpForm extends SharpForm
         $this->setCustomTransformer("capacity", function($capacity) {
                 return $capacity * 1000;
             })
-//            ->ignore("pilots")
+            ->ignore("pilots")
             ->save($instance, $data);
     }
 

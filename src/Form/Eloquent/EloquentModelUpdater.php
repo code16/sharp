@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Form\Eloquent;
 
-use Code16\Sharp\Form\Eloquent\Request\UpdateRequestData;
 use Illuminate\Database\Eloquent\Model;
 
 class EloquentModelUpdater
