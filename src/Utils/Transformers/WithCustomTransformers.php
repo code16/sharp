@@ -115,7 +115,9 @@ trait WithCustomTransformers
                 $itemAttribute = substr($attribute, strpos($attribute, '[') + 1, -1);
 
                 foreach ($model->$listAttribute as $k => $itemModel) {
-                    $attributes[$listAttribute][$k][$itemAttribute] = $transformer->apply($itemModel, $itemAttribute);
+                    $attributes[$listAttribute][$k][$itemAttribute] = $transformer->apply(
+                        $attributes[$listAttribute][$k][$itemAttribute], $itemModel, $itemAttribute
+                    );
                 }
 
             } else {

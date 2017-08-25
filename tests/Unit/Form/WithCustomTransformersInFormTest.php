@@ -187,8 +187,8 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
         ]);
 
         $form = new WithCustomTransformersTestForm();
-        $form->setCustomTransformer("name", function($person) {
-            return strtoupper($person->name);
+        $form->setCustomTransformer("name", function($name) {
+            return strtoupper($name);
         });
 
         $this->assertArraySubset(
@@ -228,8 +228,8 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
             }
         };
 
-        $form->setCustomTransformer("sons[name]", function($son) {
-            return strtoupper($son->name);
+        $form->setCustomTransformer("sons[name]", function($name) {
+            return strtoupper($name);
         });
 
         $this->assertArraySubset(
@@ -265,8 +265,8 @@ class WithCustomTransformersTestForm extends SharpForm
 
 class SharpAttributeUppercaseTransformer implements SharpAttributeTransformer
 {
-    function apply($instance, string $attribute)
+    function apply($value, $instance=null, $attribute=null)
     {
-        return strtoupper($instance->$attribute);
+        return strtoupper($value);
     }
 }
