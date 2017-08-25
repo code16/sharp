@@ -2,7 +2,8 @@
 
 exports[`date-field can mount "picker displayed" Date field 1`] = `
 <div id="app">
-    <div class="SharpDate"><input class="SharpDate__input">
+    <div class="SharpDate SharpDate--open">
+        <div class="SharpDate__input-wrapper"><input class="SharpDate__input"></div>
         <div class="SharpDate__picker" style="">
             <!---->
             <!---->
@@ -14,7 +15,8 @@ exports[`date-field can mount "picker displayed" Date field 1`] = `
 
 exports[`date-field can mount "read only" Date field 1`] = `
 <div id="app">
-    <div class="SharpDate"><input disabled="disabled" class="SharpDate__input">
+    <div class="SharpDate">
+        <div class="SharpDate__input-wrapper"><input disabled="disabled" class="SharpDate__input"></div>
         <div class="SharpDate__picker" style="display: none;">
             <!---->
             <!---->
@@ -26,7 +28,8 @@ exports[`date-field can mount "read only" Date field 1`] = `
 
 exports[`date-field can mount Date field 1`] = `
 <div id="app">
-    <div class="SharpDate"><input class="SharpDate__input">
+    <div class="SharpDate">
+        <div class="SharpDate__input-wrapper"><input class="SharpDate__input"></div>
         <div class="SharpDate__picker" style="display: none;">
             <div class="SharpDate__datepicker SharpDate__date"><input type="hidden" readonly="readonly">
                 <!---->
@@ -148,7 +151,8 @@ exports[`date-field can mount Date field 1`] = `
 
 exports[`date-field can mount Date field without TimePicker 1`] = `
 <div id="app">
-    <div class="SharpDate"><input class="SharpDate__input">
+    <div class="SharpDate">
+        <div class="SharpDate__input-wrapper"><input class="SharpDate__input"></div>
         <div class="SharpDate__picker" style="display: none;">
             <div class="SharpDate__datepicker SharpDate__date"><input type="hidden" readonly="readonly">
                 <!---->

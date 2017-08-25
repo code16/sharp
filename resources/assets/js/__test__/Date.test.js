@@ -343,15 +343,13 @@ describe('date-field',()=>{
         expect($date.showPicker).toBe(true);
     });
 
-    it('hide on click outside', async () => {
+    it('hide on blur', async () => {
         let $date = await createVm();
 
-        let { $root:vm } = $date;
-        let { outsideElement } = vm.$refs;
+        let { input } = $date.$refs;
 
-        $date.showPicker = true;
-
-        outsideElement.click();
+        input.focus();
+        input.blur();
 
         expect($date.showPicker).toBe(false);
     });

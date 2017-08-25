@@ -41,7 +41,6 @@ exports[`markdown-field can mount "localized" Markdown field 1`] = `
                 </div>
             </div>
             <div class="editor-preview-side"></div>
-            <div class="editor-statusbar"><span class="autosave"></span><span class="lines">1</span><span class="words">0</span><span class="cursor">0:0</span></div>
         </div>
     </div>
 </div>
@@ -88,7 +87,6 @@ exports[`markdown-field can mount "read only" Markdown field 1`] = `
                 </div>
             </div>
             <div class="editor-preview-side"></div>
-            <div class="editor-statusbar"><span class="autosave"></span><span class="lines">1</span><span class="words">0</span><span class="cursor">0:0</span></div>
         </div>
     </div>
 </div>
@@ -135,7 +133,6 @@ exports[`markdown-field can mount Markdown field 1`] = `
                 </div>
             </div>
             <div class="editor-preview-side"></div>
-            <div class="editor-statusbar"><span class="autosave"></span><span class="lines">1</span><span class="words">0</span><span class="cursor">0:0</span></div>
         </div>
     </div>
 </div>

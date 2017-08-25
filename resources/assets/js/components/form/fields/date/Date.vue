@@ -4,6 +4,7 @@
             <input class="SharpDate__input"
                    :value="inputValue"
                    :disabled="readOnly"
+                   @input="handleInput"
                    @blur="handleBlur"
                    @focus="handleFocus"
                    @keydown.up.prevent="increase"
@@ -125,9 +126,6 @@
                     this.$emit('input', m);
                 }
             },
-            handleBlur() {
-                this.$field.$emit('clear');
-            },
 
             increase(e) {
                 this.translate(e.target, 1)
@@ -184,6 +182,7 @@
                 this.showPicker = true;
             },
             handleBlur() {
+                this.$field.$emit('clear');
                 this.showPicker = false;
             }
         },
