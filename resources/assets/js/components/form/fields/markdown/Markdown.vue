@@ -55,6 +55,12 @@
             },
             idSymbol() {
                 return Symbol('fileIdSymbol');
+            },
+            filesByName() {
+                return this.value.files.reduce((res, file) => {
+                    res[file.name] = file;
+                    return res;
+                }, {});
             }
         },
         methods : {
@@ -73,7 +79,7 @@
                     },
                 });
 
-                $uploader.$on('success', this.updateUploader.bind(this, $uploader));
+                $uploader.$on('success', this.updateUploaderData.bind(this, $uploader));
                 $uploader.$on('added', this.refreshCodemirror.bind(this, $uploader));
                 $uploader.$on('remove', this.removeMarker.bind(this, $uploader));
 
@@ -104,7 +110,7 @@
                 this.value.files = this.value.files.filter(f => f[this.idSymbol] !== id);
             },
 
-            updateUploader({ id, marker }, data) {
+            updateUploaderData({ id, marker }, data) {
                 let find = marker.find();
 
                 let content = this.codemirror.getLine(find.from.line);
@@ -135,17 +141,17 @@
                 let md = replaceBySelection ? selection : `![${selection||''}]()`;
 
                 if(isInsertion) {
-                    md += '\n';
+                    md += '\n\n';
                 }
 
                 this.codemirror.replaceRange(md,this.cursorPos);
-                this.codemirror.setCursor(this.cursorPos.line+(isInsertion?-1:0),0);
+                this.codemirror.setCursor(this.cursorPos.line+(isInsertion?-2:-1),0);
                 let from = this.cursorPos, to = { line:this.cursorPos.line, ch:this.cursorPos.ch+md.length };
 
                 this.codemirror.addLineClass(this.cursorPos.line, 'wrap', 'SharpMarkdown__upload-line');
 
 
-                let $uploader = this.createUploader(data);
+                let $uploader = this.createUploader(data && this.filesByName[data.name]);
                 //console.log($uploader);
                 $uploader.marker = this.codemirror.markText(from, to, {
                     replacedWith: $uploader.$mount().$el,
@@ -158,8 +164,6 @@
 
                 if(!data)
                     $uploader.inputClick();
-
-                this.codemirror.setCursor(this.cursorPos.line+1, 0);
             },
 
             uploadBeforeCursorEnter($uploader) {
