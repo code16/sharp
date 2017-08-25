@@ -46,7 +46,7 @@
         watch: {
             /// On form locale change
             locale() {
-                this.simplemde.value(this.value);
+                this.simplemde.value(this.value.text);
             }
         },
         computed: {
@@ -284,7 +284,7 @@
 
             this.codemirrorOn('keydown', this.onKeydown);
             this.codemirrorOn('keyHandled', this.onKeyHandled);
-            console.log(this);
+            //console.log(this);
         }
     }
 </script>
