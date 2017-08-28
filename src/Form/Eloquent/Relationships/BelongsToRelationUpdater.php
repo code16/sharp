@@ -16,9 +16,16 @@ class BelongsToRelationUpdater
             // This is a relation attribute update case (eg: mother:name)
             list($attribute, $subAttribute) = explode(":", $attribute);
 
-            $instance->$attribute()->update([
-                $subAttribute => $value
-            ]);
+            if($instance->$attribute) {
+                $instance->$attribute()->update([
+                    $subAttribute => $value
+                ]);
+
+            } elseif($value) {
+                $instance->$attribute()->create([
+                    $subAttribute => $value
+                ]);
+            }
 
             return;
         }

@@ -1,7 +1,8 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Eloquent;
+namespace Code16\Sharp\Tests\Unit\Form\Eloquent\Uploads;
 
+use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\Utils\TestWithSharpUploadModel;
 
 class SharpUploadModelTest extends SharpFormEloquentBaseTest

@@ -34,9 +34,20 @@ trait WithSharpFormEloquentUpdater
      */
     function save(Model $instance, array $data)
     {
+        // First transform data...
+        $data = $this->applyTransformers($data, false);
+
+        // Then handle manually ignored attributes...
+        if(count($this->ignoredAttributes)) {
+            $data = collect($data)->filter(function ($value, $attribute) {
+                return array_search($attribute, $this->ignoredAttributes) === false;
+            })->all();
+        }
+
+        // Finally call updater
         return app(EloquentModelUpdater::class)
             ->initRelationshipsConfiguration($this->getFormListFieldsConfiguration())
-            ->update($instance, $this->applyTransformers($data, false));
+            ->update($instance, $data);
     }
 
     /**
