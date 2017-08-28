@@ -15,9 +15,9 @@ class SelectFormatter implements SharpFieldFormatter
     {
         if($field->multiple()) {
             return collect((array)$value)->map(function($item) use($field) {
-                return [
-                    "id" => is_array($item) || is_object($item) ? ((array)$item)[$field->idAttribute()] : $item
-                ];
+                return is_array($item) || is_object($item)
+                    ? ((array)$item)[$field->idAttribute()]
+                    : $item;
             })->all();
 
         } elseif(is_array($value)) {
@@ -37,10 +37,10 @@ class SelectFormatter implements SharpFieldFormatter
     function fromFront(SharpFormField $field, string $attribute, $value)
     {
         if($field->multiple()) {
-            return array_pluck($value, "id");
+            return (array)$value;
 
         } elseif(is_array($value)) {
-            return $value[0]["id"];
+            return $value[0];
         }
 
         return $value;

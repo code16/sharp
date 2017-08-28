@@ -26,7 +26,7 @@ class SelectFormatterTest extends SharpTestCase
         $field = SharpFormSelectField::make("select", $this->getSelectData())
             ->setMultiple();
 
-        $this->assertEquals([["id"=>1],["id"=>2]], $formatter->toFront($field, [1,2]));
+        $this->assertEquals([1,2], $formatter->toFront($field, [1,2]));
     }
 
     /** @test */
@@ -36,7 +36,7 @@ class SelectFormatterTest extends SharpTestCase
         $field = SharpFormSelectField::make("select", $this->getSelectData())
             ->setMultiple();
 
-        $this->assertEquals([["id"=>1],["id"=>2]], $formatter->toFront($field, [
+        $this->assertEquals([1,2], $formatter->toFront($field, [
             ["id"=>1, "label"=>"A"], ["id"=>2, "label"=>"B"]
         ]));
     }
@@ -49,7 +49,7 @@ class SelectFormatterTest extends SharpTestCase
             ->setMultiple()
             ->setIdAttribute("number");
 
-        $this->assertEquals([["id"=>1],["id"=>2]], $formatter->toFront($field, [
+        $this->assertEquals([1,2], $formatter->toFront($field, [
             ["number"=>1, "label"=>"A"], ["number"=>2, "label"=>"B"]
         ]));
     }
@@ -62,7 +62,7 @@ class SelectFormatterTest extends SharpTestCase
         $field = SharpFormSelectField::make("select", $this->getSelectData());
 
         $this->assertEquals(1, $formatter->fromFront($field, $attribute, 1));
-        $this->assertEquals(1, $formatter->fromFront($field, $attribute, [["id"=>1],["id"=>2]]));
+        $this->assertEquals(1, $formatter->fromFront($field, $attribute, [1,2]));
     }
 
     /** @test */
@@ -73,7 +73,7 @@ class SelectFormatterTest extends SharpTestCase
         $field = SharpFormSelectField::make("select", $this->getSelectData())
             ->setMultiple();
 
-        $this->assertEquals([1,2], $formatter->fromFront($field, $attribute, [["id"=>1],["id"=>2]]));
+        $this->assertEquals([1,2], $formatter->fromFront($field, $attribute, [1,2]));
     }
 
     /**
