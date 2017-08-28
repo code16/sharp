@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Form\Fields;
 
+use Code16\Sharp\Form\Fields\Formatters\TextFormatter;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 
 class SharpFormTextField extends SharpFormField
@@ -19,7 +20,7 @@ class SharpFormTextField extends SharpFormField
      */
     public static function make(string $key)
     {
-        return new static($key, "text");
+        return new static($key, "text", new TextFormatter);
     }
 
     /**

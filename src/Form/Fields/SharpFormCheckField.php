@@ -3,6 +3,8 @@
 namespace Code16\Sharp\Form\Fields;
 
 
+use Code16\Sharp\Form\Fields\Formatters\CheckFormatter;
+
 class SharpFormCheckField extends SharpFormField
 {
 
@@ -18,7 +20,7 @@ class SharpFormCheckField extends SharpFormField
      */
     public static function make(string $key, string $text)
     {
-        $instance = new static($key, 'check');
+        $instance = new static($key, 'check', new CheckFormatter);
         $instance->text = $text;
 
         return $instance;

@@ -12,7 +12,7 @@
   }
 
   &__inner {
-    @include layer('raised');
+    //@include layer('raised');
     background-color: $ui-03;
     border: 1px solid transparent;
   }

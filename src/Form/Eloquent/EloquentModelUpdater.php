@@ -2,66 +2,51 @@
 
 namespace Code16\Sharp\Form\Eloquent;
 
-use Code16\Sharp\Form\Eloquent\Request\UpdateRequestData;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class EloquentModelUpdater
 {
+    /** @var array */
+    protected $relationshipsConfiguration;
 
     /**
      * @param Model $instance
-     * @param UpdateRequestData $data
+     * @param array $data
      * @return Model
      */
-    function update($instance, UpdateRequestData $data)
+    function update($instance, array $data)
     {
-        $delayedAttributes = [];
         $relationships = [];
 
-        foreach($data->items() as $item) {
+        foreach($data as $attribute => $value) {
 
-            // Only update referenced fields
-            if(! $item->formField()) continue;
-
-            if($this->isRelationship($instance, $item->attribute())) {
-                $relationships[] = $item;
+            if($this->isRelationship($instance, $attribute)) {
+                $relationships[$attribute] = $value;
 
                 continue;
             }
 
-            try {
-                $value = $item->formattedValue($instance);
-
-            } catch(ModelNotFoundException $ex) {
-                // We try to format a field which needs the instance to be persisted.
-                // For example: the UploadFormatter needs a persisted instance if
-                // its storagePath contains a parameter, like {id}. We delay the valuate.
-                $delayedAttributes[] = $item;
-
-                continue;
-            }
-
-            $this->valuateAttribute($instance, $item->attribute(), $value, $item->valuator());
+            $this->valuateAttribute($instance, $attribute, $value);
         }
 
         // End of "normal" attributes.
         $instance->save();
 
-        // Next, handle delayed attributes
-        foreach($delayedAttributes as $dataItem) {
-            $this->valuateAttribute(
-                $instance, $dataItem->attribute(),
-                $dataItem->formattedValue($instance),
-                $dataItem->valuator()
-            );
-        }
-        $instance->save();
-
-        // Finally, handle relationships.
+        // Next, handle relationships.
         $this->saveRelationships($instance, $relationships);
 
         return $instance;
+    }
+
+    /**
+     * @param array $configuration
+     * @return $this
+     */
+    function initRelationshipsConfiguration($configuration)
+    {
+        $this->relationshipsConfiguration = $configuration;
+
+        return $this;
     }
 
     /**
@@ -70,16 +55,9 @@ class EloquentModelUpdater
      * @param Model $instance
      * @param string $attribute
      * @param $value
-     * @param null $valuator
      */
-    protected function valuateAttribute($instance, string $attribute, $value, $valuator = null)
+    protected function valuateAttribute($instance, string $attribute, $value)
     {
-        if ($valuator) {
-            $value = $valuator->getValue(
-                $instance, $attribute, $value
-            );
-        }
-
         $instance->setAttribute($attribute, $value);
     }
 
@@ -99,19 +77,16 @@ class EloquentModelUpdater
      */
     protected function saveRelationships($instance, array $relationships)
     {
-        foreach ($relationships as $dataItem) {
-            $attribute = explode(":", $dataItem->attribute())[0];
-            $type = get_class($instance->{$attribute}());
+        foreach ($relationships as $attribute => $value) {
+            $relAttribute = explode(":", $attribute)[0];
+            $type = get_class($instance->{$relAttribute}());
 
             $relationshipUpdater = app('Code16\Sharp\Form\Eloquent\Relationships\\'
                 . (new \ReflectionClass($type))->getShortName()
                 . 'RelationUpdater');
 
             $relationshipUpdater->update(
-                $instance,
-                $dataItem->attribute(),
-                $dataItem->formattedValue($instance),
-                $dataItem->formField()
+                $instance, $attribute, $value, $this->relationshipsConfiguration[$attribute] ?? null
             );
         }
     }

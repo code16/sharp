@@ -37,6 +37,12 @@ class Spaceship extends Model
             ->orderBy("order");
     }
 
+//    public function descriptionPictures()
+//    {
+//        return $this->morphMany(Media::class, "model")
+//            ->where("model_key", "markdown_description");
+//    }
+
     public function getDefaultAttributesFor($attribute)
     {
         return in_array($attribute, ["picture", "pictures"])

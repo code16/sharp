@@ -84,8 +84,8 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
         {
             function getListData(EntityListQueryParams $params)
             {
-                return $this->setCustomTransformer("name", function($person) {
-                    return strtoupper($person->name);
+                return $this->setCustomTransformer("name", function($name) {
+                    return strtoupper($name);
                 })->transform(Person::all());
             }
         };
@@ -154,8 +154,16 @@ class WithCustomTransformersTestList extends SharpEntityList
 class UppercaseTransformer implements SharpAttributeTransformer
 {
 
-    function apply($instance, string $attribute)
+    /**
+     * Transform a model attribute to array (json-able).
+     *
+     * @param $value
+     * @param $instance
+     * @param string $attribute
+     * @return mixed
+     */
+    function apply($value, $instance = null, $attribute = null)
     {
-        return strtoupper($instance->$attribute);
+        return strtoupper($value);
     }
 }

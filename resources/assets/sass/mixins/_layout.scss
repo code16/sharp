@@ -71,12 +71,13 @@ $z-indexes: (
   overflowHidden: - 1,
   overflowOptions: 1,
   // sharp
-  leftNav : 2,
   dropdown  : 10,
   dropdownText : 11,
   dropdownIcon : 12,
   dropdownActive : 20,
   markdown : 30,
+  listItemOverlay: 50,
+  leftNav : 100,
 );
 
 //-------------------------------------

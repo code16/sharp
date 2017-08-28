@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Form\Fields;
 
+use Code16\Sharp\Form\Fields\Formatters\TextareaFormatter;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 
 class SharpFormTextareaField extends SharpFormField
@@ -19,7 +20,7 @@ class SharpFormTextareaField extends SharpFormField
      */
     public static function make(string $key)
     {
-        return new static($key, 'textarea');
+        return new static($key, 'textarea', new TextareaFormatter);
     }
 
     /**

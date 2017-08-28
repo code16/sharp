@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Form\Fields;
 
+use Code16\Sharp\Form\Fields\Formatters\HtmlFormatter;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithTemplates;
 
 class SharpFormHtmlField extends SharpFormField
@@ -18,7 +19,7 @@ class SharpFormHtmlField extends SharpFormField
      */
     public static function make(string $key)
     {
-        return new static($key, 'html');
+        return new static($key, 'html', new HtmlFormatter);
     }
 
     /**

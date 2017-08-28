@@ -9,9 +9,6 @@ use Illuminate\Support\Collection;
 
 /**
  * This trait allows a class to handle a custom transformers array.
- *
- * Trait WithCustomTransformers
- * @package Code16\Sharp\Utils\Transformers
  */
 trait WithCustomTransformers
 {
@@ -61,15 +58,13 @@ trait WithCustomTransformers
 
         if($models instanceof Collection) {
             return $models->map(function($model) {
-                return $this->applyTransformers(
-                    collect($this->getDataKeys()), $model
-                );
+                return $this->applyTransformers($model, false);
             })->all();
         }
 
-        return $this->applyTransformers(
-            collect($this->getDataKeys()), $models
-        );
+        // Only one model, it's a Form: we must add
+        // Form Field Formatters in the process
+        return $this->applyTransformers($models, true);
     }
 
     /**
@@ -87,40 +82,92 @@ trait WithCustomTransformers
                 $this->closure = $closure;
             }
 
-            function apply($instance, string $attribute)
+            function apply($value, $instance = null, $attribute = null)
             {
-                return call_user_func($this->closure, $instance);
+                return call_user_func($this->closure, $value, $instance, $attribute);
             }
         };
     }
 
     /**
-     * @param Collection $keys keys which are meant to be in the final array
-     * @param object $model the base model (Eloquent for instance)
+     * @param array|object $model the base model (Eloquent for instance), or an array of attributes
+     * @param bool $formatToFrontForm is true, data is `toFront()` formatted according to Form Field type
      * @return array
      */
-    protected function applyTransformers(Collection $keys, $model)
+    protected function applyTransformers($model, bool $formatToFrontForm)
     {
-        $array = $model->toArray();
+        // Merge model attribute with form fields to be sure we have
+        // all attributes which the front code needed.
+        $attributes = array_merge(
+            collect($this->getDataKeys())->flip()->map(function() {
+                return null;
+            })->all(), is_array($model) ? $model : $model->toArray());
 
-        // Handle relation separator `:`
-        $keys->filter(function ($key) {
-            return strpos($key, ':') !== false;
-
-        })->map(function ($key) {
-            return array_merge([$key], explode(':', $key));
-
-        })->each(function ($key) use (&$array, $model) {
-            // For each one, we create a "relation:attribute" key
-            // in the returned array
-            $array[$key[0]] = $model->{$key[1]} ? $model->{$key[1]}->{$key[2]} : null;
-        });
+        if(is_object($model)) {
+            $attributes = $this->handleAutoRelatedAttributes($attributes, $model);
+        }
 
         // Apply transformers
         foreach($this->transformers as $attribute => $transformer) {
-            $array[$attribute] = $transformer->apply($model, $attribute);
+            if(strpos($attribute, '[') !== false) {
+                // List item case: apply transformer to each item
+                $listAttribute = substr($attribute, 0, strpos($attribute, '['));
+                $itemAttribute = substr($attribute, strpos($attribute, '[') + 1, -1);
+
+                foreach ($model->$listAttribute as $k => $itemModel) {
+                    $attributes[$listAttribute][$k][$itemAttribute] = $transformer->apply(
+                        $attributes[$listAttribute][$k][$itemAttribute], $itemModel, $itemAttribute
+                    );
+                }
+
+            } else {
+                $attributes[$attribute] = $transformer->apply($attributes[$attribute], $model, $attribute);
+            }
         }
 
-        return $array;
+        return $formatToFrontForm
+            ? $this->applyFormatters($attributes)
+            : $attributes;
+    }
+
+    /**
+     * @param $attributes
+     * @return array
+     */
+    protected function applyFormatters($attributes): array
+    {
+        return collect($attributes)->map(function ($value, $key) {
+            $field = $this->findFieldByKey($key);
+
+            return $field
+                ? $field->formatter()->toFront($field, $value)
+                : $value;
+        })->all();
+    }
+
+    /**
+     * Handle `:` separator: we want to transform a related attribute in
+     * a hasOne or belongsTo relationship. Ex: with "mother:name",
+     * we add a transformed mother:name attribute in the array
+     *
+     * @param $model
+     * @return mixed
+     */
+    protected function handleAutoRelatedAttributes($attributes, $model)
+    {
+        collect($this->getDataKeys())
+            ->filter(function ($key) {
+                return strpos($key, ':') !== false;
+
+            })->map(function ($key) {
+                return array_merge([$key], explode(':', $key));
+
+            })->each(function ($key) use (&$attributes, $model) {
+                // For each one, we create a "relation:attribute" key
+                // in the returned array
+                $attributes[$key[0]] = $model->{$key[1]} ? $model->{$key[1]}->{$key[2]} : null;
+            });
+
+        return $attributes;
     }
 }

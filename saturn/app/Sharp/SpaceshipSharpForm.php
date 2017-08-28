@@ -6,7 +6,7 @@ use App\Pilot;
 use App\Spaceship;
 use App\SpaceshipType;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
-use Code16\Sharp\Form\Eloquent\Transformers\EloquentFormTagsTransformer;
+use Code16\Sharp\Form\Eloquent\Transformers\FormUploadModelTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
@@ -21,13 +21,10 @@ use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
-use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 class SpaceshipSharpForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
-
-    use WithCustomTransformers;
 
     function buildFormFields()
     {
@@ -49,6 +46,9 @@ class SpaceshipSharpForm extends SharpForm
                     SharpFormMarkdownField::SEPARATOR,
                     SharpFormMarkdownField::A,
                 ])
+                ->setCropRatio("1:1")
+                ->setStorageDisk("local")
+                ->setStorageBasePath("data/Spaceship/markdown")
 
         )->addField(
             SharpFormDateField::make("construction_date")
@@ -67,12 +67,12 @@ class SpaceshipSharpForm extends SharpForm
                 )
 
         )->addField(
-            SharpFormUploadField::make("picture:file")
+            SharpFormUploadField::make("picture")
                 ->setLabel("Picture")
                 ->setFileFilterImages()
                 ->setCropRatio("1:1")
                 ->setStorageDisk("local")
-                ->setStorageBasePath("data/Spaceship/{id}")
+                ->setStorageBasePath("data/Spaceship")
 
         )->addField(
             SharpFormTextField::make("picture:legend")
@@ -115,6 +115,7 @@ class SpaceshipSharpForm extends SharpForm
                 ->setRemovable()
                 ->setSortable()
                 ->setItemIdAttribute("id")
+                ->setOrderAttribute("order")
                 ->addItemField(
                     SharpFormUploadField::make("file")
                         ->setFileFilterImages()
@@ -140,7 +141,7 @@ class SpaceshipSharpForm extends SharpForm
                             ->withFields("status|5", "comment|7");
                     });
             })->addColumn(6, function(FormLayoutColumn $column) {
-                $column->withSingleField("picture:file")
+                $column->withSingleField("picture")
                     ->withSingleField("picture:legend")
                     ->withSingleField("pictures", function(FormLayoutColumn $listItem) {
                         $listItem->withSingleField("file")
@@ -166,10 +167,13 @@ class SpaceshipSharpForm extends SharpForm
 
     function find($id): array
     {
-        return $this->setCustomTransformer("capacity", function($spaceship) {
-                return $spaceship->capacity / 1000;
+        return $this->setCustomTransformer("capacity", function($capacity) {
+                return $capacity / 1000;
             })
-            ->setCustomTransformer("pilots", new EloquentFormTagsTransformer("name"))
+//            ->setCustomTransformer("pilots", new FormTagsTransformer("name"))
+//            ->setCustomTransformer("description", new FormMarkdownWithSharpUploadModelsTransformer(Media::class))
+            ->setCustomTransformer("picture", new FormUploadModelTransformer())
+            ->setCustomTransformer("pictures", new FormUploadModelTransformer())
             ->transform(
                 Spaceship::with("reviews", "pilots", "picture", "pictures")->findOrFail($id)
             );
@@ -183,10 +187,10 @@ class SpaceshipSharpForm extends SharpForm
             throw new SharpApplicativeException("Name can't be «error»");
         }
 
-        $this->setCustomValuator("capacity", function ($spaceship, $value) {
-                return $value * 1000;
+        $this->setCustomTransformer("capacity", function($capacity) {
+                return $capacity * 1000;
             })
-//            ->ignore("pilots")
+            ->ignore("pilots")
             ->save($instance, $data);
     }
 

@@ -35175,7 +35175,8 @@ var Tag = function (_LabelledItem2) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_moment__ = __webpack_require__(82);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_moment__);
-//
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -35277,7 +35278,7 @@ var Tag = function (_LabelledItem2) {
             return this.moment.format(this.displayFormat);
         }
     },
-    methods: {
+    methods: _defineProperty({
         handleDateSelect: function handleDateSelect(date) {
             this.moment.set({
                 year: date.getFullYear(),
@@ -35304,6 +35305,9 @@ var Tag = function (_LabelledItem2) {
                 this.$field.$emit('ok');
                 this.$emit('input', m);
             }
+        },
+        handleBlur: function handleBlur() {
+            this.$field.$emit('clear');
         },
         increase: function increase(e) {
             this.translate(e.target, 1);
@@ -35367,12 +35371,10 @@ var Tag = function (_LabelledItem2) {
         },
         handleFocus: function handleFocus() {
             this.showPicker = true;
-        },
-        handleBlur: function handleBlur() {
-            this.$field.$emit('clear');
-            this.showPicker = false;
         }
-    },
+    }, 'handleBlur', function handleBlur() {
+        this.showPicker = false;
+    }),
     mounted: function mounted() {
         this.setFocusable(this.$refs.input);
     }
@@ -35765,6 +35767,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -35843,7 +35850,7 @@ var noop = function noop() {};
             return this.itemFields;
         },
         dragOptions: function dragOptions() {
-            return { disabled: !this.dragActive };
+            return { disabled: !this.dragActive, handle: '.SharpList__overlay-handle' };
         },
         showAddButton: function showAddButton() {
             return this.addable && (this.list.length < this.maxItemCount || !this.maxItemCount);
@@ -35948,6 +35955,10 @@ var noop = function noop() {};
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mixins_Localization__ = __webpack_require__(32);
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -35968,7 +35979,10 @@ var noop = function noop() {};
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpMarkdown',
     props: {
-        value: String,
+        value: {
+            type: Object,
+            default: function _default() {}
+        },
 
         placeholder: String,
         toolbar: Array,
@@ -35985,132 +35999,229 @@ var noop = function noop() {};
         return {
             simplemde: null,
             cursorPos: 0,
-            lastKeydown: 0,
-            onNextBackspace: noop
+
+            uploaderId: 0
         };
     },
 
     watch: {
         /// On form locale change
         locale: function locale() {
-            this.simplemde.value(this.value);
+            this.simplemde.value(this.value.text);
+        }
+    },
+    computed: {
+        codemirror: function codemirror() {
+            return this.simplemde.codemirror;
+        },
+        idSymbol: function idSymbol() {
+            return Symbol('fileIdSymbol');
+        },
+        filesByName: function filesByName() {
+            return this.value.files.reduce(function (res, file) {
+                res[file.name] = file;
+                return res;
+            }, {});
+        },
+        indexByFileId: function indexByFileId() {
+            var _this = this;
+
+            return this.value.files.reduce(function (res, file, index) {
+                res[file[_this.idSymbol]] = index;
+                return res;
+            }, {});
         }
     },
     methods: {
-        createUploader: function createUploader(cm) {
-            return new __WEBPACK_IMPORTED_MODULE_1__MarkdownUpload__["a" /* default */]({
+        indexedFiles: function indexedFiles() {
+            var _this2 = this;
+
+            return (this.value.files || []).map(function (file, i) {
+                return _extends(_defineProperty({}, _this2.idSymbol, i), file);
+            });
+        },
+        createUploader: function createUploader(_ref) {
+            var _this3 = this;
+
+            var value = _ref.value,
+                removeOptions = _ref.removeOptions;
+
+            var $uploader = new __WEBPACK_IMPORTED_MODULE_1__MarkdownUpload__["a" /* default */]({
                 provide: {
                     actionsBus: this.actionsBus
                 },
                 propsData: {
-                    onSuccess: function onSuccess(file) {
-                        var find = this.marker.find();
-                        //console.log(this.marker);
-                        var content = cm.getLine(find.from.line);
-                        cm.replaceRange(content.replace(/\(.*?\)/, '(' + file.name + ')'), find.from, find.to);
-                    },
-                    onAdded: function onAdded() {
-                        cm.refresh();
-                        cm.focus();
-                    },
-                    onRemoved: function onRemoved() {
-                        if (this.marker.explicitlyCleared) return;
-                        this.remove();
-                    },
-
-                    xsrfToken: this.xsrfToken
-                },
-                methods: {
-                    remove: function remove() {
-                        this.marker.inclusiveLeft = this.marker.inclusiveRight = false;
-                        var find = this.marker.find(),
-                            line = find.from.line;
-                        cm.replaceRange('', find.from, { line: line + 1, ch: 0 });
-                        this.marker.inclusiveLeft = this.marker.inclusiveRight = true;
-                        cm.focus();
-                    }
+                    id: this.uploaderId++,
+                    xsrfToken: this.xsrfToken,
+                    value: value
                 }
             });
-        },
-        insertUploadImage: function insertUploadImage(_ref) {
-            var codemirror = _ref.codemirror;
 
-            var cm = codemirror;
-            var selection = cm.getSelection(' ');
-            var curLineContent = cm.getLine(this.cursorPos.line);
+            $uploader.$on('success', function (file) {
+                return _this3.updateUploaderData($uploader, file);
+            });
+            $uploader.$on('refresh', function () {
+                return _this3.refreshCodemirror();
+            });
+            $uploader.$on('remove', function () {
+                return _this3.removeMarker($uploader, removeOptions);
+            });
+            $uploader.$on('update', function (data) {
+                return _this3.updateFileData($uploader, data);
+            });
+            $uploader.$on('active', function () {
+                return _this3.setMarkerActive($uploader);
+            });
+            $uploader.$on('inactive', function () {
+                return _this3.setMarkerInactive($uploader);
+            });
+
+            return $uploader;
+        },
+        refreshCodemirror: function refreshCodemirror() {
+            console.log('refresh codemirror');
+            this.codemirror.refresh();
+            this.codemirror.focus();
+        },
+        removeMarker: function removeMarker($uploader) {
+            var _this4 = this;
+
+            var _ref2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+                isCMEvent = _ref2.isCMEvent,
+                relativeFallbackLine = _ref2.relativeFallbackLine;
+
+            var id = $uploader.id,
+                marker = $uploader.marker;
+
+
+            if (marker.explicitlyCleared) return;
+
+            if (!isCMEvent) {
+                marker.inclusiveLeft = marker.inclusiveRight = false;
+                var find = marker.find(),
+                    line = find.from.line;
+                var fallbackLine = line - relativeFallbackLine;
+                var fallbacklineContent = +(this.codemirror.getLine(this.cursorPos.line) || {}).length;
+
+                this.codemirror.replaceRange('', { line: fallbackLine, ch: fallbacklineContent.length }, { line: line + 1, ch: 0 });
+                marker.inclusiveLeft = marker.inclusiveRight = true;
+                marker.clear();
+                this.codemirror.focus();
+            }
+
+            $uploader.$destroy();
+            this.value.files = this.value.files.filter(function (f) {
+                return f[_this4.idSymbol] !== id;
+            });
+        },
+        updateUploaderData: function updateUploaderData(_ref3, data) {
+            var id = _ref3.id,
+                marker = _ref3.marker;
+
+            var find = marker.find();
+
+            var content = this.codemirror.getLine(find.from.line);
+            this.codemirror.replaceRange(content.replace(/\(.*?\)/, '(' + data.name + ')'), find.from, find.to);
+
+            this.value.files.push(_extends(_defineProperty({}, this.idSymbol, id), data));
+        },
+        setMarkerActive: function setMarkerActive(_ref4) {
+            var marker = _ref4.marker;
+
+            this.codemirror.addLineClass(marker.lines[0], 'wrap', 'SharpMarkdown__line--active');
+        },
+        setMarkerInactive: function setMarkerInactive(_ref5) {
+            var marker = _ref5.marker;
+
+            this.codemirror.removeLineClass(marker.lines[0], 'wrap', 'SharpMarkdown__line--active');
+        },
+        updateFileData: function updateFileData(_ref6, data) {
+            var id = _ref6.id;
+
+            var fileIndex = this.indexByFileId[id];
+            var file = this.value.files[fileIndex];
+            this.$set(this.value.files, fileIndex, _extends({}, file, data));
+
+            //setTimeout(() => this.refreshCodemirror(), 100);
+        },
+        insertUploadImage: function insertUploadImage() {
+            var _this5 = this;
+
+            var _ref7 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+                replaceBySelection = _ref7.replaceBySelection,
+                data = _ref7.data,
+                isInsertion = _ref7.isInsertion;
+
+            var selection = this.codemirror.getSelection(' ');
+            var curLineContent = this.codemirror.getLine(this.cursorPos.line);
+            var initialCursorPos = this.cursorPos;
 
             if (selection) {
-                cm.replaceSelection('');
-                curLineContent = cm.getLine(this.cursorPos.line);
-                //console.log(selection);
+                this.codemirror.replaceSelection('');
+                curLineContent = this.codemirror.getLine(this.cursorPos.line);
             }
 
             if (curLineContent.length) {
-                cm.replaceRange('\n', {
-                    line: this.cursorPos.line,
-                    ch: curLineContent.length
-                });
-                cm.setCursor(this.cursorPos.line + 1, 0);
+                this.codemirror.replaceRange('\n', this.cursorPos);
+            }
+            if (isInsertion) {
+                this.codemirror.replaceRange('\n', this.cursorPos);
             }
 
-            cm.getInputField().blur();
+            this.codemirror.getInputField().blur();
 
-            var md = '![' + (selection || '') + ']()';
+            var md = replaceBySelection ? selection : '![]()'; // `![${selection||''}]()`;   take selection as title
 
-            cm.replaceRange(md + '\n', this.cursorPos);
-            cm.setCursor(this.cursorPos.line - 1, 0);
+
+            var afterNewLinesCount = isInsertion ? 2 : 0;
+
+            md += '\n'.repeat(afterNewLinesCount);
+
+            this.codemirror.replaceRange(md, this.cursorPos);
+            this.codemirror.setCursor(this.cursorPos.line - afterNewLinesCount, 0);
             var from = this.cursorPos,
                 to = { line: this.cursorPos.line, ch: this.cursorPos.ch + md.length };
 
-            cm.addLineClass(this.cursorPos.line, 'wrap', 'SharpMarkdown__upload-line');
+            var relativeFallbackLine = isInsertion ? this.cursorPos.line - initialCursorPos.line : 1;
 
-            var uploader = this.createUploader(cm);
-            uploader.marker = cm.markText(from, to, {
-                replacedWith: uploader.$mount().$el,
+            var $uploader = this.createUploader({
+                value: data && this.filesByName[data.name],
+                removeOptions: {
+                    relativeFallbackLine: relativeFallbackLine
+                }
+            });
+            //console.log($uploader);
+            $uploader.marker = this.codemirror.markText(from, to, {
+                replacedWith: $uploader.$mount().$el,
                 clearWhenEmpty: false,
                 inclusiveRight: true,
                 inclusiveLeft: true
             });
 
-            uploader.marker.on('beforeCursorEnter', this.uploadBeforeCursorEnter(uploader));
-            uploader.inputClick();
+            this.codemirror.addLineClass($uploader.marker.lines[0], 'wrap', 'SharpMarkdown__upload-line');
+            $uploader.marker.lines[0].on('delete', function () {
+                return _this5.removeMarker($uploader, { isCMEvent: true, relativeFallbackLine: relativeFallbackLine });
+            });
 
-            cm.setCursor(this.cursorPos.line + 1, 0);
+            if (!data) $uploader.inputClick();
         },
-        uploadBeforeCursorEnter: function uploadBeforeCursorEnter(uploader) {
-            var _this = this;
-
-            return function (_) {
-                console.log(_this.lastKeydown.keyCode, _this.cursorPos.line);
-                if (_this.lastKeydown.keyCode === 8 && _this.cursorPos.line === 1) {
-                    _this.onNextBackspace = uploader.remove.bind(uploader);
-                }
-                _this.cursorEntered = true;
-            };
+        onCursorActivity: function onCursorActivity() {
+            this.cursorPos = this.codemirror.getCursor();
         },
-        onCursorActivity: function onCursorActivity(cm) {
-            this.cursorPos = cm.getCursor();
-        },
-        onChange: function onChange(cm) {
-            this.$emit('input', this.simplemde.value());
+        onChange: function onChange() {
+            this.$emit('input', _extends({}, this.value, { text: this.simplemde.value()
+            }));
         },
         onBeforeChange: function onBeforeChange(cm, change) {
-            // console.log('beforeChange',arguments, this.cursorEntered);
+            // debugger
         },
         onKeydown: function onKeydown(cm, e) {
             //console.log('key down');
-            this.lastKeydown = e;
         },
-        onKeyHandled: function onKeyHandled(cm, name, e) {
-            //console.log('key handled',arguments);
-            if (__WEBPACK_IMPORTED_MODULE_2_codemirror___default.a.keyMap.default[name] === 'undo') {} else if (name === 'Backspace') {
-                this.onNextBackspace();
-                this.onNextBackspace = noop;
-            }
-        },
+        onKeyHandled: function onKeyHandled(cm, name, e) {},
         codemirrorOn: function codemirrorOn(eventName, callback, immediate) {
-            immediate && callback(this.simplemde.codemirror);
-            this.simplemde.codemirror.on(eventName, callback);
+            immediate && callback(this.codemirror);
+            this.codemirror.on(eventName, callback);
         },
         localizeToolbar: function localizeToolbar() {
             this.simplemde.toolbar.forEach(function (icon) {
@@ -36123,24 +36234,68 @@ var noop = function noop() {};
             this.simplemde.createToolbar();
         },
         setReadOnly: function setReadOnly() {
-            this.simplemde.codemirror.setOption('readOnly', true);
+            this.codemirror.setOption('readOnly', true);
             this.simplemde.toolbar.forEach(function (icon) {
                 return (typeof icon === 'undefined' ? 'undefined' : _typeof(icon)) === 'object' && (icon.action = noop);
             });
         },
         bindImageAction: function bindImageAction() {
+            var _this6 = this;
+
             var imageBtn = this.simplemde.toolbar.find(function (btn) {
                 return btn.name === 'image';
             });
-            (imageBtn || {}).action = this.insertUploadImage;
+            (imageBtn || {}).action = function () {
+                return _this6.insertUploadImage({ isInsertion: true });
+            };
+        },
+        parse: function parse() {
+            var _this7 = this;
+
+            var images = [];
+            this.codemirror.eachLine(function (lineHandler) {
+                var text = lineHandler.text;
+
+                var line = _this7.codemirror.getLineNumber(lineHandler);
+                var regex = /!\[(.*?)\]\((.*?)\)/g;
+                var match = regex.exec(text);
+
+                if (match) {
+                    var index = match.index,
+                        length = match[0].length,
+                        title = match[1],
+                        name = match[2];
+                    //console.log(match);
+
+                    images.push({
+                        range: { start: { ch: index, line: line }, end: { ch: index + length, line: line } },
+                        data: {
+                            name: name,
+                            title: title
+                        }
+                    });
+                }
+            });
+
+            images.reverse().forEach(function (_ref8) {
+                var range = _ref8.range,
+                    data = _ref8.data;
+
+                _this7.codemirror.setSelection(range.start, range.end);
+                _this7.insertUploadImage({ replaceBySelection: true, data: data });
+            });
+        },
+        refreshOnExternalChange: function refreshOnExternalChange() {
+            this.codemirror.refresh();
+            this.parse();
         }
     },
     mounted: function mounted() {
-        var _this2 = this;
+        var _this8 = this;
 
         this.simplemde = new __WEBPACK_IMPORTED_MODULE_0_simplemde___default.a({
             element: this.$refs.textarea,
-            initialValue: this.value,
+            initialValue: this.value.text,
             placeholder: this.placeholder,
             spellChecker: false,
             toolbar: this.toolbar,
@@ -36148,11 +36303,14 @@ var noop = function noop() {};
             status: false
         });
 
-        this.simplemde.codemirror.setSize('auto', this.height);
+        this.value.files = this.indexedFiles();
+        this.uploaderId = this.value.files.length;
 
-        this.$tab.$on('active', function () {
-            _this2.simplemde.codemirror.refresh();
+        this.$tab.$once('active', function () {
+            return _this8.refreshOnExternalChange();
         });
+
+        this.codemirror.setSize('auto', this.height);
 
         if (this.readOnly) {
             this.setReadOnly();
@@ -36196,6 +36354,10 @@ var noop = function noop() {};
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -36207,12 +36369,9 @@ var noop = function noop() {};
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0_vue___default.a.extend({
     mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins__["j" /* UploadXSRF */]],
     props: {
+        id: Number,
         value: Object,
         maxFileSize: Number,
-
-        onSuccess: Function,
-        onRemoved: Function,
-        onAdded: Function,
 
         marker: Object,
 
@@ -36223,8 +36382,7 @@ var noop = function noop() {};
     },
     data: function data() {
         return {
-            show: false,
-            removed: false
+            show: this.value
         };
     },
 
@@ -36251,23 +36409,23 @@ var noop = function noop() {};
         }
     },
     methods: {
-        onAddedFile: function onAddedFile() {
+        handleAdded: function handleAdded() {
             var _this = this;
 
             this.show = true;
-            this.$nextTick(function (_) {
-                _this.onAdded();
+            this.$nextTick(function () {
+                return _this.$emit('added');
             });
         },
         checkCancelled: function checkCancelled() {
-            if (!this.show) this.onRemoved();
+            if (!this.show) this.$emit('remove');
             document.body.onfocus = null;
         },
         inputClick: function inputClick() {
             var _this2 = this;
 
             this.fileInput.click();
-            document.body.onfocus = function (_) {
+            document.body.onfocus = function () {
                 setTimeout(_this2.checkCancelled, 100);
             };
         }
@@ -36364,7 +36522,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-//
 //
 //
 //
@@ -36535,9 +36692,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             } catch (e) {
                 console.log(e);
             }
-            this.$emit('success', data);
 
             data.uploaded = true;
+            this.$emit('success', data);
+
             this.$parent.$emit('input', data);
             this.actionsBus.$emit('enable-submit');
 
@@ -36564,6 +36722,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             this.resized = false;
         },
         onEditButtonClick: function onEditButtonClick() {
+            this.$emit('active');
             this.showEditModal = true;
             this.croppable = true;
         },
@@ -36616,14 +36775,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             };
 
             if (this.croppable) {
-                this.$parent.$emit('input', _extends({}, this.value, {
+                var data = _extends({}, this.value, {
                     cropData: relativeData
-                }));
+                });
+                this.$parent.$emit('input', data);
+                this.$emit('updated', data);
             }
         },
         updateCroppedImage: function updateCroppedImage() {
             if (this.croppable) {
                 this.croppedImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
+                //this.$nextTick(() => this.$emit('cropped'));
             }
         },
         getCropData: function getCropData() {
@@ -80489,7 +80651,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   }, [_c('template', {
     slot: "left"
   }, [(_vm.showBackButton) ? _c('button', {
-    staticClass: "SharpButton SharpButton--secondary-accent",
+    staticClass: "SharpButton SharpButton--secondary",
     on: {
       "click": function($event) {
         _vm.emitAction('cancel')
@@ -80506,7 +80668,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   }) : _vm._e()], 1), _vm._v(" "), _c('template', {
     slot: "right"
   }, [(!_vm.showBackButton) ? _c('button', {
-    staticClass: "SharpButton SharpButton--secondary-accent",
+    staticClass: "SharpButton SharpButton--secondary",
     on: {
       "click": function($event) {
         _vm.emitAction('cancel')
@@ -82150,7 +82312,9 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
           _vm.remove(i)
         }
       }
-    }, [_vm._v(_vm._s(_vm.l('form.list.remove_button')))]) : _vm._e()]], 2)]), _vm._v(" "), (!_vm.disabled && _vm.showAddButton && i < _vm.list.length - 1) ? _c('div', {
+    }, [_vm._v(_vm._s(_vm.l('form.list.remove_button')))]) : _vm._e()], _vm._v(" "), (_vm.dragActive) ? _c('div', {
+      staticClass: "SharpList__overlay-handle"
+    }) : _vm._e()], 2)]), _vm._v(" "), (!_vm.disabled && _vm.showAddButton && i < _vm.list.length - 1) ? _c('div', {
       staticClass: "SharpList__new-item-zone"
     }, [_c('button', {
       staticClass: "SharpButton SharpButton--secondary SharpButton--sm",
@@ -82698,7 +82862,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     staticStyle: {
       "font-weight": "normal"
     }
-  }, [_vm._v(" : ")]) : _vm._e()]), _vm._v(" "), _c('sharp-select', {
+  }, [_vm._v(" | ")]) : _vm._e()]), _vm._v(" "), _c('sharp-select', {
     ref: "select",
     staticClass: "SharpFilterSelect__select",
     attrs: {
@@ -82822,6 +82986,11 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   }, [_c('img', {
     attrs: {
       "src": _vm.imageSrc
+    },
+    on: {
+      "load": function($event) {
+        _vm.$emit('image-updated')
+      }
     }
   })]) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "SharpUpload__infos"
@@ -82910,7 +83079,10 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     },
     on: {
       "ok": _vm.onEditModalOk,
-      "shown": _vm.onEditModalShown
+      "shown": _vm.onEditModalShown,
+      "hidden": function($event) {
+        _vm.$emit('inactive')
+      }
     },
     model: {
       value: (_vm.showEditModal),
@@ -83476,11 +83648,27 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     attrs: {
       "options": _vm.options,
       "value": _vm.value,
-      "on-added-file": function (_) { return _vm.onAddedFile(); }
+      "on-added-file": _vm.handleAdded
     },
     on: {
-      "success": function (data) { return _vm.onSuccess(data); },
-      "removed": function (_) { return _vm.onRemoved(); }
+      "success": function($event) {
+        _vm.$emit('success', $event)
+      },
+      "removed": function($event) {
+        _vm.$emit('remove')
+      },
+      "updated": function($event) {
+        _vm.$emit('update', $event)
+      },
+      "active": function($event) {
+        _vm.$emit('active')
+      },
+      "inactive": function($event) {
+        _vm.$emit('inactive')
+      },
+      "image-updated": function($event) {
+        _vm.$emit('refresh')
+      }
     }
   })
 }
@@ -83881,7 +84069,6 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "value": _vm.inputValue
     },
     on: {
-      "input": _vm.handleInput,
       "blur": _vm.handleBlur,
       "focus": _vm.handleFocus,
       "keydown": [function($event) {

@@ -421,7 +421,7 @@ class WithSharpFormEloquentUpdaterTestForm extends SharpForm
         $this->addField(
             SharpFormTagsField::make("friends", $peopleList)
                 ->setCreatable()
-                ->setCreateAttribute("name")
+                ->setLabelAttribute("name")
         );
         $this->addField(SharpFormTextField::make("mother:name"));
         $this->addField(SharpFormTextField::make("mother:age"));
