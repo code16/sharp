@@ -9,8 +9,6 @@ use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
 
 class MorphManyRelationUpdaterTest extends SharpFormEloquentBaseTest
 {
-    use TestWithSharpList;
-
     /** @test */
     function we_can_create_a_morphMany_related()
     {
@@ -18,13 +16,10 @@ class MorphManyRelationUpdaterTest extends SharpFormEloquentBaseTest
 
         $updater = new MorphManyRelationUpdater();
 
-        $updater->update($person, "pictures", $this->formatData([[
-            "id" => [
-                "value" => null, "valuator" => null, "field" => null
-            ], "file" => [
-                "value" => "test.jpg", "valuator" => null, "field" => SharpFormTextField::make("file_name")
-            ]
-        ]]));
+        $updater->update($person, "pictures", [[
+            "id" => null,
+            "file" => "test.jpg"
+        ]]);
 
         $this->assertDatabaseHas("pictures", [
             "picturable_type" => Person::class,
@@ -43,13 +38,10 @@ class MorphManyRelationUpdaterTest extends SharpFormEloquentBaseTest
 
         $updater = new MorphManyRelationUpdater();
 
-        $updater->update($person, "pictures", $this->formatData([[
-            "id" => [
-                "value" => $person->pictures->first()->id, "valuator" => null, "field" => null
-            ], "file" => [
-                "value" => "test.jpg", "valuator" => null, "field" => SharpFormTextField::make("file_name")
-            ]
-        ]]));
+        $updater->update($person, "pictures", [[
+            "id" => $person->pictures->first()->id,
+            "file" => "test.jpg"
+        ]]);
 
         $this->assertDatabaseHas("pictures", [
             "picturable_type" => Person::class,
