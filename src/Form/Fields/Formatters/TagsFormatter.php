@@ -16,9 +16,10 @@ class TagsFormatter implements SharpFieldFormatter
     {
         return collect((array)$value)
             ->map(function($item) use($field) {
-                if(is_object($item)) {
+
+                if(is_object($item) || is_array($item)) {
                     return [
-                        "id" => $item->{$field->idAttribute()},
+                        "id" => ((array)$item)[$field->idAttribute()],
                     ];
                 }
 

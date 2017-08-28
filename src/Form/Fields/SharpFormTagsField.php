@@ -19,11 +19,6 @@ class SharpFormTagsField extends SharpFormField
     /**
      * @var string
      */
-    protected $labelAttribute = "label";
-
-    /**
-     * @var string
-     */
     protected $createAttribute = null;
 
     /**
@@ -104,17 +99,6 @@ class SharpFormTagsField extends SharpFormField
     }
 
     /**
-     * @param string $labelAttribute
-     * @return static
-     */
-    public function setLabelAttribute($labelAttribute)
-    {
-        $this->labelAttribute = $labelAttribute;
-
-        return $this;
-    }
-
-    /**
      * @param int $maxTagCount
      * @return static
      */
@@ -141,14 +125,6 @@ class SharpFormTagsField extends SharpFormField
     public function creatable()
     {
         return $this->creatable;
-    }
-
-    /**
-     * @return string
-     */
-    public function labelAttribute()
-    {
-        return $this->labelAttribute;
     }
 
     /**

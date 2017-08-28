@@ -36,6 +36,22 @@ class TagsFormatterTest extends SharpTestCase
     }
 
     /** @test */
+    function we_can_format_arrays_to_front()
+    {
+        $formatter = new TagsFormatter;
+        $field = SharpFormTagsField::make("tags", $this->getTagsData());
+
+        $this->assertEquals(
+            [["id"=>1]],
+            $formatter->toFront($field, [["id"=>1,"name"=>"A"]])
+        );
+        $this->assertEquals(
+            [["id"=>1],["id"=>2]],
+            $formatter->toFront($field, [["id"=>1,"name"=>"A"], ["id"=>2,"name"=>"B"]])
+        );
+    }
+
+    /** @test */
     function we_can_format_objects_to_front_with_a_defined_id_attribute()
     {
         $formatter = new TagsFormatter;
