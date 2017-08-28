@@ -85,7 +85,7 @@
                 });
 
                 $uploader.$on('success', file => this.updateUploaderData($uploader, file));
-                $uploader.$on('added', () => this.refreshCodemirror());
+                $uploader.$on('refresh', () => this.refreshCodemirror());
                 $uploader.$on('remove', () => this.removeMarker($uploader, removeOptions));
                 $uploader.$on('update', data => this.updateFileData($uploader, data));
                 $uploader.$on('active', () => this.setMarkerActive($uploader));
@@ -95,6 +95,7 @@
             },
 
             refreshCodemirror() {
+                console.log('refresh codemirror');
                 this.codemirror.refresh();
                 this.codemirror.focus();
             },
@@ -142,6 +143,8 @@
                 let fileIndex = this.indexByFileId[id];
                 let file = this.value.files[fileIndex];
                 this.$set(this.value.files, fileIndex, { ...file, ...data });
+
+                //setTimeout(() => this.refreshCodemirror(), 100);
             },
 
             insertUploadImage({ replaceBySelection, data, isInsertion } = {}) {

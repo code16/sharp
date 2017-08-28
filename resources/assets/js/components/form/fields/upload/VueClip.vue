@@ -10,7 +10,7 @@
                 <template v-if="file">
                     <div class="SharpUpload__container">
                         <div class="SharpUpload__thumbnail" v-if="!!imageSrc">
-                            <img :src="imageSrc">
+                            <img :src="imageSrc" @load="$emit('image-updated')">
                         </div>
                         <div class="SharpUpload__infos">
                             <div>
@@ -53,8 +53,7 @@
                              :view-mode="2" drag-mode="crop"  :aspect-ratio="ratioX/ratioY"
                              :auto-crop-area="1" :zoomable="false" :guides="false"
                              :background="true" :rotatable="true" :src="originalImageSrc"
-                             :ready="onCropperReady"
-                             alt="Source image">
+                             :ready="onCropperReady" alt="Source image">
                 </vue-cropper>
                 <div>
                     <button class="SharpButton SharpButton--primary" @click="rotate(-90)"><i class="fa fa-rotate-left"></i></button>
@@ -262,6 +261,7 @@
             updateCroppedImage() {
                 if(this.croppable) {
                     this.croppedImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
+                    //this.$nextTick(() => this.$emit('cropped'));
                 }
             },
 

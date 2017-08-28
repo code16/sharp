@@ -9,6 +9,7 @@
             @updated="$emit('update', $event)"
             @active="$emit('active')"
             @inactive="$emit('inactive')"
+            @image-updated="$emit('refresh')"
             class="SharpMarkdownUpload"
             ref="vueclip">
     </sharp-vue-clip>

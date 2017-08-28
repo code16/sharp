@@ -36060,7 +36060,7 @@ var noop = function noop() {};
             $uploader.$on('success', function (file) {
                 return _this3.updateUploaderData($uploader, file);
             });
-            $uploader.$on('added', function () {
+            $uploader.$on('refresh', function () {
                 return _this3.refreshCodemirror();
             });
             $uploader.$on('remove', function () {
@@ -36079,6 +36079,7 @@ var noop = function noop() {};
             return $uploader;
         },
         refreshCodemirror: function refreshCodemirror() {
+            console.log('refresh codemirror');
             this.codemirror.refresh();
             this.codemirror.focus();
         },
@@ -36140,6 +36141,8 @@ var noop = function noop() {};
             var fileIndex = this.indexByFileId[id];
             var file = this.value.files[fileIndex];
             this.$set(this.value.files, fileIndex, _extends({}, file, data));
+
+            //setTimeout(() => this.refreshCodemirror(), 100);
         },
         insertUploadImage: function insertUploadImage() {
             var _this5 = this;
@@ -36353,6 +36356,7 @@ var noop = function noop() {};
 //
 //
 //
+//
 
 
 
@@ -36517,7 +36521,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-//
 //
 //
 //
@@ -36781,6 +36784,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         updateCroppedImage: function updateCroppedImage() {
             if (this.croppable) {
                 this.croppedImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
+                //this.$nextTick(() => this.$emit('cropped'));
             }
         },
         getCropData: function getCropData() {
@@ -82981,6 +82985,11 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   }, [_c('img', {
     attrs: {
       "src": _vm.imageSrc
+    },
+    on: {
+      "load": function($event) {
+        _vm.$emit('image-updated')
+      }
     }
   })]) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "SharpUpload__infos"
@@ -83655,6 +83664,9 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       },
       "inactive": function($event) {
         _vm.$emit('inactive')
+      },
+      "image-updated": function($event) {
+        _vm.$emit('refresh')
       }
     }
   })
