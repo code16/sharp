@@ -42,7 +42,7 @@ class MarkdownFormatter implements SharpFieldFormatter
         $text = $value['text'];
 
         if(isset($value["files"])) {
-            $uploadFormatter = new UploadFormatter();
+            $uploadFormatter = app(UploadFormatter::class);
 
             foreach($value["files"] as $file) {
                 $upload = $uploadFormatter->fromFront($field, $attribute, $file);
@@ -88,7 +88,7 @@ class MarkdownFormatter implements SharpFieldFormatter
         $model = new SharpUploadModel([
             "file_name" => $filename,
             "disk" => $field->storageDisk(),
-            "size" => Storage::disk($field->storageDisk())->size($filename)
+            "size" => $this->getFileSize($field, $filename)
         ]);
 
         return [
@@ -96,6 +96,20 @@ class MarkdownFormatter implements SharpFieldFormatter
             "size" => $model->size,
             "thumbnail" => $model->thumbnail(null, 150)
         ];
+    }
+
+    /**
+     * @param $field
+     * @param $filename
+     * @return mixed
+     */
+    protected function getFileSize($field, $filename)
+    {
+        try {
+            return Storage::disk($field->storageDisk())->size($filename);
+        } catch(\RuntimeException $ex) {
+            return null;
+        }
     }
 
 }

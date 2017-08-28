@@ -5,9 +5,9 @@ namespace Code16\Sharp\Tests\Unit\Form\Fields\Formatters;
 use Code16\Sharp\Form\Fields\Formatters\ListFormatter;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
-use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
+use Code16\Sharp\Tests\SharpTestCase;
 
-class ListFormatterTest extends SharpFormEloquentBaseTest
+class ListFormatterTest extends SharpTestCase
 {
 
     /** @test */

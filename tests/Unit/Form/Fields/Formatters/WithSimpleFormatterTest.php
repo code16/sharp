@@ -4,9 +4,8 @@ namespace Code16\Sharp\Tests\Unit\Form\Fields\Formatters;
 
 use Code16\Sharp\Form\Fields\Formatters\AbstractSimpleFormatter;
 use Code16\Sharp\Form\Fields\SharpFormField;
-use Code16\Sharp\Tests\SharpTestCase;
 
-abstract class AbstractSimpleFormatterTest extends SharpTestCase
+trait WithSimpleFormatterTest
 {
 
     function checkSimpleFormatterToFront(SharpFormField $field, AbstractSimpleFormatter $formatter)
