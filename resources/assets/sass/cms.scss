@@ -2,6 +2,10 @@ html, body {
   height: 100%;
 }
 
+#sharp-app {
+  min-height:  100%;
+}
+
 $css--reset: true;
 $css--typography: true;
 
@@ -13,6 +17,7 @@ $css--typography: true;
 
 @import 'node_modules/bootstrap/scss/variables';
 @import 'node_modules/bootstrap/scss/mixins';
+@import 'node_modules/bootstrap/scss/utilities';
 
 @import 'vars';
 
@@ -24,3 +29,4 @@ body {
 
 @import 'pages/LoginPage';
 @import 'pages/FormPage';
+@import 'pages/DashboardPage';

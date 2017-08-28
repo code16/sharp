@@ -1,5 +1,5 @@
 <template>
-    <div class="SharpUpload" :class="{'SharpUpload--empty':!file}">
+    <div class="SharpUpload" :class="{'SharpUpload--empty':!file, 'SharpUpload--disabled':readOnly}">
         <div class="SharpUpload__inner">
             <div class="SharpUpload__content">
                 <form v-show="!file" class="dropzone">
@@ -23,17 +23,17 @@
                             </div>
                             <div>
                                 <template v-if="!!originalImageSrc">
-                                    <button type="button" class="SharpButton SharpButton--sm SharpButton--secondary" @click="onEditButtonClick">
+                                    <button type="button" class="SharpButton SharpButton--sm SharpButton--secondary" @click="onEditButtonClick" :disabled="readOnly">
                                         {{ l('form.upload.edit_button') }}
                                     </button>
                                 </template>
                                 <button type="button" class="SharpButton SharpButton--sm SharpButton--secondary SharpButton--danger SharpUpload__remove-button"
-                                        @click="remove()">
+                                        @click="remove()" :disabled="readOnly">
                                     {{ l('form.upload.remove_button') }}
                                 </button>
                             </div>
                         </div>
-                        <button class="SharpUpload__close-button" type="button" @click="remove()">
+                        <button class="SharpUpload__close-button" type="button" @click="remove()" v-show="!readOnly">
                             <svg class="SharpUpload__close-icon"
                                  aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd">
                                 <path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
@@ -47,7 +47,8 @@
             </div>
         </div>
         <template v-if="!!originalImageSrc">
-            <sharp-modal v-model="showEditModal" @ok="onEditModalOk" @shown="onEditModalShown" :close-on-backdrop="false">
+            <sharp-modal v-model="showEditModal" @ok="onEditModalOk" @shown="onEditModalShown" :close-on-backdrop="false"
+                         :title="l('modals.cropper.title')">
                 <vue-cropper ref="cropper" class="SharpUpload__modal-vue-cropper"
                              :view-mode="2" drag-mode="crop"  :aspect-ratio="ratioX/ratioY"
                              :auto-crop-area="1" :zoomable="false" :guides="false"

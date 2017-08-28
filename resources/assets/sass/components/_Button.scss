@@ -52,6 +52,7 @@
   }
 
 
+
   &--primary {
     @include button-theme(
       $brand-01,   // bg-color
@@ -97,6 +98,48 @@
     }
   }
 
+  &--secondary-accent {
+    @include button-theme(
+      $ui-01,   // bg-color
+      $brand-01, // border-color
+      $brand-03, // font-color
+      darken($ui-01, 10%),   // hover-bg-color
+      $brand-03       // icon-color
+    );
+  }
+
+  &--ghost {
+    @include button-theme(
+                    transparent, // bg-color
+                    transparent,   // border-color
+                    $brand-01,   // font-color
+                    $brand-01,   // hover-bg-color
+                    $brand-01 // icon-color
+    );
+
+    &:hover,
+    &:focus {
+      color: $inverse-01;
+
+      .SharpButton__icon {
+        fill: $inverse-01;
+      }
+    }
+
+    .SharpButton__icon {
+      margin-left: .275rem;
+    }
+
+    &:hover:disabled,
+    &:focus:disabled {
+      color: $brand-01;
+
+      .SharpButton__icon {
+        fill: $brand-01;
+      }
+    }
+  }
+
   &--danger {
     @include button-theme(
       $ui-01,  // bg-color
@@ -128,7 +171,7 @@
   }
 
   &--sm {
-    height: 2rem;
+    height: 1.6rem;
     font-size: .75rem;
     padding: $button-padding-sm;
     letter-spacing: 0;

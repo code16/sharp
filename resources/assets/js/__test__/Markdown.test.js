@@ -66,13 +66,13 @@ describe('markdown-field', () => {
                 locale: 'fr'
             },
             data: ()=>({
-                value: 'Valeur 1'
+                value: { text:'Valeur 1' }
             })
         });
 
         let { $root:vm, simplemde } = $markdown;
 
-        vm.value = 'Valeur 2';
+        vm.value.text = 'Valeur 2';
         vm.locale = 'en';
 
         await Vue.nextTick();
@@ -86,7 +86,7 @@ describe('markdown-field', () => {
                 toolbar: [{ name:'my action' }]
             },
             data: ()=>({
-                value: 'Valeur 1'
+                value: { text:'Valeur 1' }
             })
         });
 
@@ -113,8 +113,12 @@ describe('markdown-field', () => {
         });
 
         let { simplemde } = $markdown;
+        $markdown.insertUploadImage = jest.fn();
 
-        expect(simplemde.toolbar[0].action).toBe($markdown.insertUploadImage);
+        expect(simplemde.toolbar[0].action).toBeInstanceOf(Function);
+        simplemde.toolbar[0].action();
+
+        expect($markdown.insertUploadImage).toHaveBeenCalled();
     });
 
     it('set read only properly', async () => {
@@ -160,7 +164,7 @@ describe('markdown-field', () => {
 
         simplemde.value('AAA');
 
-        expect(inputEmitted).toHaveBeenLastCalledWith('AAA');
+        expect(inputEmitted).toHaveBeenLastCalledWith(expect.objectContaining({ text:'AAA' }));
     });
 
     it('insert image properly', async () => {
@@ -191,7 +195,7 @@ async function createVm(customOptions={}) {
 
         'extends': {
             data:() => ({
-                value: null
+                value: {}
             }),
             methods: {
                 inputEmitted: ()=>{}

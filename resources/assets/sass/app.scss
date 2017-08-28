@@ -41,6 +41,7 @@ $css--reset:false;
   .sharp_darkgray { @include sharp-color($color__navy-gray-4) }
 
   @import 'node_modules/bootstrap/scss/grid';
+  @import 'node_modules/bootstrap/scss/transitions';
 
   // from carbon design
   @import 'components/Button';

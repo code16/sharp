@@ -5,15 +5,36 @@
   top: 0;
   height: 100%;
   background-color: $color__white;
-  border-right: 1px solid $color__gray-1;
+  //border-right: 1px solid $color__gray-1;
+
   overflow: scroll;
   max-height: 100%;
 
   z-index: z('leftNav');
 
+  &__shadow {
+    position: fixed;
+    top: 5rem;
+    left:0;
+    height:calc(100% - 5rem);
+    width:rem(200px);
+    box-shadow: 2px 0 3px 0 $ui-03;
+  }
+
+  &__title-container {
+    padding: .75rem;
+    background: $brand-01-light;
+    display: flex;
+    align-items: center;
+    height: 5rem;
+    z-index: 1;
+  }
+
   &__title {
-    padding: .75rem 1.5rem .75rem rem(59px);
-    @include font-size('20');
+    @include font-size('16');
+    text-transform: uppercase;
+    letter-spacing: 0;
+    color: $inverse-01;
   }
 
   &__top-icon {
@@ -33,8 +54,8 @@
     display: flex;
     flex-direction: column;
     background-color: $color__white;
-    padding-top: 1.5rem;
     overflow: auto;
+    padding-top: 1rem;
 
     .SharpLeftNav__item {
       cursor: pointer;
@@ -193,15 +214,20 @@
   // collapsed states
   ///////////////////////////////////////////////////
 
+  @mixin transition-elements() {
+    ul, li, hr, .SharpLeftNav__title-container ,.SharpLeftNav__collapse-target {
+      @content;
+    }
+  }
+
   &--collapseable {
     overflow: hidden;
     display: flex;
     flex-direction: column;
     width: rem(200px);
-    padding-top: rem(20px);
     transition: background-color 300ms $bx--standard-easing, width 300ms $bx--standard-easing;
 
-    ul, li, hr, .SharpLeftNav__collapse-target {
+    @include transition-elements {
       opacity: 1;
     }
 
@@ -224,7 +250,6 @@
     }
 
     .SharpLeftNav__list {
-      padding-top: 0;
 
       @include light-ui {
         background-color: inherit;
@@ -235,15 +260,15 @@
       position: relative;
       background-color: #fff;
 
-      &:before {
-        top: 0;
-        position: absolute;
-        background-color: $color__blue-51;
-        height: 100%;
-        left: 0;
-        width: 4px;
-        content: '';
-      }
+      //&:before {
+      //  top: 0;
+      //  position: absolute;
+      //  background-color: $color__blue-51;
+      //  height: 100%;
+      //  left: 0;
+      //  width: 4px;
+      //  content: '';
+      //}
     }
 
     .SharpLeftNav__item {
@@ -256,7 +281,7 @@
 
     .SharpLeftNav__list--nested .SharpLeftNav__item-link {
       font-size: rem(12px);
-      padding-left: rem(40px);
+      //padding-left: rem(40px);
     }
 
     .SharpLeftNav__collapse {
@@ -268,6 +293,8 @@
       margin-top: auto;
       //margin-bottom: rem(90px);
       padding: rem(14px) rem(16px);
+
+      z-index:1;
 
       &:hover, &:focus {
         background-color: rgba($color__blue-51, .30);
@@ -300,6 +327,9 @@
   }
 
   &--collapsing, &--collapsed {
+    .SharpLeftNav__shadow {
+      display: none;
+    }
     width: rem(48px);
     transition: background-color 300ms $bx--standard-easing,
                 width 300ms $bx--standard-easing;
@@ -310,7 +340,7 @@
       background-color: rgba($color__blue-51, .30);
     }
 
-    ul, li, hr, .SharpLeftNav__collapse-target {
+    @include transition-elements {
       opacity: 0;
       transition: opacity 300ms $bx--standard-easing;
       overflow: hidden;
@@ -337,7 +367,8 @@
 
   &--collapsed {
     height: 100%;
-    ul, li, hr, .SharpLeftNav__collapse-target {
+    padding-top: rem(20px);
+    @include transition-elements {
       display: none;
     }
 
@@ -358,7 +389,11 @@
     transition: width 300ms $bx--standard-easing;
     background-color: #fff;
 
-    ul, li, hr, .SharpLeftNav__collapse-target {
+    .SharpLeftNav__shadow {
+      display: none;
+    }
+
+    @include transition-elements {
       opacity: 1;
       transition: opacity 300ms $bx--standard-easing;
       overflow: hidden;

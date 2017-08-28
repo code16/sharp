@@ -1,5 +1,4 @@
 .SharpList {
-
   &__empty-alert {
     opacity: .5;
   }
@@ -12,6 +11,30 @@
     right:0;
     top:0;
     z-index:1;
+    padding: 0;
+    height:auto;
+
+    &:hover, &:focus {
+      background: transparent;
+    }
+
+    &:focus {
+      .SharpButton__icon {
+        fill: $brand-01;
+      }
+      outline: 1px solid transparent;
+    }
+
+    &:hover {
+      .SharpButton__icon {
+        fill: $brand-02;
+      }
+    }
+
+
+    &.SharpButton--active .SharpButton__icon {
+      fill: $brand-03;
+    }
   }
 
   //remove item button
@@ -34,7 +57,7 @@
         box-shadow: none !important;
       }
       &__content {
-        padding: 0 !important;
+        //padding: 0 !important;
       }
 
       &__remove-button {
@@ -97,4 +120,5 @@
       }
     }
   }
+
 }
