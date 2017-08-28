@@ -24,9 +24,14 @@
     import Multiselect from '../../Multiselect';
 
     class LabelledItem {
-        constructor(item) {
+        constructor(item, keep={}) {
             this.id = item.id;
-            this.label = item.label;
+            if(keep.label) {
+                this.label = item.label
+            }
+            if(keep.internalId) {
+                this.internalId = item.internalId;
+            }
         }
 
         set internalId(id) {
@@ -41,6 +46,10 @@
     class Option extends LabelledItem {
     }
     class Tag extends LabelledItem {
+
+        constructor(item, { toExport } = {}) {
+            super(item, { label: !toExport || !item.id, internalId: !toExport });
+        }
     }
 
     export default {
@@ -72,6 +81,14 @@
             },
             dynamicPlaceholder() {
                 return this.tags.length < (this.maxTagCount || Infinity) ? this.placeholder : "";
+            },
+            croppedTags() {
+                return this.tags.maps(({ id, label }) => {
+                    let cropped = {};
+                    cropped.id = id;
+                    if(!id) cropped.label = label;
+                    return cropped;
+                });
             }
         },
         watch: {
@@ -85,9 +102,7 @@
             },
             patchTag(tag) {
                 let matchedOption = this.indexedOptions.find(o => o.id === tag.id);
-                let patchedTag = new Tag(tag);
-                patchedTag.internalId = matchedOption ? matchedOption.internalId : this.lastIndex++;
-                return patchedTag;
+                return new Tag(matchedOption);
             },
             handleNewTag(val) {
                 let newTag = new Tag({id: null, label: val});
@@ -104,7 +119,7 @@
                 else this.$refs.multiselect.pointer = 0
             },
             onTagsChanged() {
-                this.$emit('input', this.tags.map(t => new Tag(t)));
+                this.$emit('input', this.tags.map(t => new Tag(t, { toExport: true })));
             }
         },
         created() {

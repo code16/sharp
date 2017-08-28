@@ -34965,10 +34965,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var LabelledItem = function () {
     function LabelledItem(item) {
+        var keep = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
         _classCallCheck(this, LabelledItem);
 
         this.id = item.id;
-        this.label = item.label;
+        if (keep.label) {
+            this.label = item.label;
+        }
+        if (keep.internalId) {
+            this.internalId = item.internalId;
+        }
     }
 
     _createClass(LabelledItem, [{
@@ -34999,10 +35006,13 @@ var Option = function (_LabelledItem) {
 var Tag = function (_LabelledItem2) {
     _inherits(Tag, _LabelledItem2);
 
-    function Tag() {
+    function Tag(item) {
+        var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+            toExport = _ref.toExport;
+
         _classCallCheck(this, Tag);
 
-        return _possibleConstructorReturn(this, (Tag.__proto__ || Object.getPrototypeOf(Tag)).apply(this, arguments));
+        return _possibleConstructorReturn(this, (Tag.__proto__ || Object.getPrototypeOf(Tag)).call(this, item, { label: !toExport || !item.id, internalId: !toExport }));
     }
 
     return Tag;
@@ -35036,6 +35046,17 @@ var Tag = function (_LabelledItem2) {
         },
         dynamicPlaceholder: function dynamicPlaceholder() {
             return this.tags.length < (this.maxTagCount || Infinity) ? this.placeholder : "";
+        },
+        croppedTags: function croppedTags() {
+            return this.tags.maps(function (_ref2) {
+                var id = _ref2.id,
+                    label = _ref2.label;
+
+                var cropped = {};
+                cropped.id = id;
+                if (!id) cropped.label = label;
+                return cropped;
+            });
         }
     },
     watch: {
@@ -35051,9 +35072,7 @@ var Tag = function (_LabelledItem2) {
             var matchedOption = this.indexedOptions.find(function (o) {
                 return o.id === tag.id;
             });
-            var patchedTag = new Tag(tag);
-            patchedTag.internalId = matchedOption ? matchedOption.internalId : this.lastIndex++;
-            return patchedTag;
+            return new Tag(matchedOption);
         },
         handleNewTag: function handleNewTag(val) {
             var newTag = new Tag({ id: null, label: val });
@@ -35070,7 +35089,7 @@ var Tag = function (_LabelledItem2) {
         },
         onTagsChanged: function onTagsChanged() {
             this.$emit('input', this.tags.map(function (t) {
-                return new Tag(t);
+                return new Tag(t, { toExport: true });
             }));
         }
     },
@@ -35175,8 +35194,7 @@ var Tag = function (_LabelledItem2) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_moment__ = __webpack_require__(82);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_moment__);
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
+//
 //
 //
 //
@@ -35278,7 +35296,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             return this.moment.format(this.displayFormat);
         }
     },
-    methods: _defineProperty({
+    methods: {
         handleDateSelect: function handleDateSelect(date) {
             this.moment.set({
                 year: date.getFullYear(),
@@ -35305,9 +35323,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 this.$field.$emit('ok');
                 this.$emit('input', m);
             }
-        },
-        handleBlur: function handleBlur() {
-            this.$field.$emit('clear');
         },
         increase: function increase(e) {
             this.translate(e.target, 1);
@@ -35371,10 +35386,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         },
         handleFocus: function handleFocus() {
             this.showPicker = true;
+        },
+        handleBlur: function handleBlur() {
+            this.$field.$emit('clear');
+            this.showPicker = false;
         }
-    }, 'handleBlur', function handleBlur() {
-        this.showPicker = false;
-    }),
+    },
     mounted: function mounted() {
         this.setFocusable(this.$refs.input);
     }
@@ -80651,7 +80668,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   }, [_c('template', {
     slot: "left"
   }, [(_vm.showBackButton) ? _c('button', {
-    staticClass: "SharpButton SharpButton--secondary",
+    staticClass: "SharpButton SharpButton--secondary-accent",
     on: {
       "click": function($event) {
         _vm.emitAction('cancel')
@@ -80668,7 +80685,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   }) : _vm._e()], 1), _vm._v(" "), _c('template', {
     slot: "right"
   }, [(!_vm.showBackButton) ? _c('button', {
-    staticClass: "SharpButton SharpButton--secondary",
+    staticClass: "SharpButton SharpButton--secondary-accent",
     on: {
       "click": function($event) {
         _vm.emitAction('cancel')
@@ -82862,7 +82879,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     staticStyle: {
       "font-weight": "normal"
     }
-  }, [_vm._v(" | ")]) : _vm._e()]), _vm._v(" "), _c('sharp-select', {
+  }, [_vm._v(" : ")]) : _vm._e()]), _vm._v(" "), _c('sharp-select', {
     ref: "select",
     staticClass: "SharpFilterSelect__select",
     attrs: {
@@ -84069,6 +84086,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "value": _vm.inputValue
     },
     on: {
+      "input": _vm.handleInput,
       "blur": _vm.handleBlur,
       "focus": _vm.handleFocus,
       "keydown": [function($event) {
