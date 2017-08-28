@@ -23,7 +23,7 @@ class HasManyRelationUpdater
         $relatedModelKeyName = $relatedModel->getKeyName();
 
         // Add / update sent items
-        foreach($value as $k => $item) {
+        foreach((array)$value as $k => $item) {
             $id = $this->findItemId($item, $relatedModelKeyName);
             $relatedInstance = $instance->$attribute()->findOrNew($id);
 
