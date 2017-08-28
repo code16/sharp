@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Transformers;
+namespace Code16\Sharp\Tests\Unit\Form\Formatters;
 
 use Code16\Sharp\Tests\SharpTestCase;
 

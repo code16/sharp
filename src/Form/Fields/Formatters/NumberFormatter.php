@@ -19,6 +19,6 @@ class NumberFormatter implements SharpFieldFormatter
 
     function fromFront(SharpFormField $field, string $attribute, $value)
     {
-        return (int)$value;
+        return $this->toFront($field, $value);
     }
 }

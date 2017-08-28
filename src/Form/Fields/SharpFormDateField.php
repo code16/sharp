@@ -147,6 +147,22 @@ class SharpFormDateField extends SharpFormField
     }
 
     /**
+     * @return bool
+     */
+    public function hasDate()
+    {
+        return $this->hasDate;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasTime()
+    {
+        return $this->hasTime;
+    }
+
+    /**
      * @return array
      */
     protected function validationRules()

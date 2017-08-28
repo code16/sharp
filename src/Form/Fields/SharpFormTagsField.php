@@ -93,7 +93,18 @@ class SharpFormTagsField extends SharpFormField
     }
 
     /**
-     * @param string|Closure $labelAttribute
+     * @param string $idAttribute
+     * @return static
+     */
+    public function setIdAttribute($idAttribute)
+    {
+        $this->idAttribute = $idAttribute;
+
+        return $this;
+    }
+
+    /**
+     * @param string $labelAttribute
      * @return static
      */
     public function setLabelAttribute($labelAttribute)
@@ -154,6 +165,14 @@ class SharpFormTagsField extends SharpFormField
     public function idAttribute()
     {
         return $this->idAttribute;
+    }
+
+    /**
+     * @return array
+     */
+    public function options()
+    {
+        return $this->options;
     }
 
     /**

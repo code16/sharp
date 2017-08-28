@@ -1,8 +1,8 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Eloquent\Formatters;
+namespace Code16\Sharp\Tests\Unit\Form\Fields\Formatters;
 
-use Code16\Sharp\Form\Eloquent\Formatters\MarkdownFormatter;
+use Code16\Sharp\Form\Fields\Formatters\MarkdownFormatter;
 
 class MarkdownFormatterTest extends AbstractSimpleFormatterTest
 {

@@ -10,34 +10,53 @@ class TagsFormatter implements SharpFieldFormatter
     /**
      * @param SharpFormField $field
      * @param $value
-     * @return mixed
+     * @return array
      */
     function toFront(SharpFormField $field, $value)
     {
-        return collect($value)
+        return collect((array)$value)
             ->map(function($item) use($field) {
-                return [
-                    "id" => $item[$field->idAttribute()],
-                    "label" => is_callable($field->labelAttribute())
-                        ? call_user_func($field->labelAttribute(), $item)
-                        : $item[$field->labelAttribute()]
-                ];
-            })->all();
+                if(is_object($item)) {
+                    return [
+                        "id" => $item->{$field->idAttribute()},
+                    ];
+                }
+
+                return ["id" => $item];
+
+            })
+            ->all();
     }
 
+    /**
+     * @param SharpFormField $field
+     * @param string $attribute
+     * @param $value
+     * @return array
+     */
     function fromFront(SharpFormField $field, string $attribute, $value)
     {
+        $options = collect($field->options())->keyBy("id")->all();
+        $collection = collect($value)->filter(function($item) use($field, $options) {
+            // Strip values that aren't in configured options
+            return is_null($item["id"]) || isset($options[$item["id"]]);
+        });
+
         if(! $field->creatable()) {
             // Field isn't creatable, let's just strip all null ids
-            return collect($value)->filter(function($item) {
+            return $collection->filter(function($item) {
                 return !is_null($item["id"]);
+            })->map(function($item) use($field) {
+                return [
+                    $field->idAttribute() => $item["id"]
+                ];
             })->all();
         }
 
-        return collect($value)->map(function($item) use($field) {
+        return $collection->map(function($item) use($field) {
             if(is_null($item["id"])) {
                 return [
-                    $field->idAttribute() => $item["id"],
+                    $field->idAttribute() => null,
                     $field->createAttribute() => $item["label"]
                 ];
             }

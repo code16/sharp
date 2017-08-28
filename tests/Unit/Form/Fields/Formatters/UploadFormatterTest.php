@@ -1,8 +1,8 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Eloquent\Formatters;
+namespace Code16\Sharp\Tests\Unit\Form\Fields\Formatters;
 
-use Code16\Sharp\Form\Eloquent\Formatters\UploadFormatter;
+use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;

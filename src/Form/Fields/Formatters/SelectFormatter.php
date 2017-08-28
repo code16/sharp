@@ -3,20 +3,9 @@
 namespace Code16\Sharp\Form\Fields\Formatters;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
-use Code16\Sharp\Form\Fields\SharpFormSelectField;
 
 class SelectFormatter implements SharpFieldFormatter
 {
-    /**
-     * @param array|int $value
-     * @param SharpFormSelectField $field
-     * @return mixed
-     */
-    public function format($value, $field)
-    {
-
-    }
-
     /**
      * @param SharpFormField $field
      * @param $value
@@ -37,9 +26,21 @@ class SelectFormatter implements SharpFieldFormatter
         return $value;
     }
 
+    /**
+     * @param SharpFormField $field
+     * @param string $attribute
+     * @param $value
+     * @return mixed
+     */
     function fromFront(SharpFormField $field, string $attribute, $value)
     {
-        // TODO check this (maybe create array if multiple, ...)
+        if($field->multiple()) {
+            return array_pluck($value, "id");
+
+        } elseif(is_array($value)) {
+            return $value[0]["id"];
+        }
+
         return $value;
     }
 }

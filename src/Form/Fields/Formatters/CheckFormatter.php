@@ -10,13 +10,19 @@ class CheckFormatter implements SharpFieldFormatter
     /**
      * @param SharpFormField $field
      * @param $value
-     * @return mixed
+     * @return bool
      */
     function toFront(SharpFormField $field, $value)
     {
-        return $value;
+        return (bool) $value;
     }
 
+    /**
+     * @param SharpFormField $field
+     * @param string $attribute
+     * @param $value
+     * @return bool
+     */
     function fromFront(SharpFormField $field, string $attribute, $value)
     {
         if(is_string($value) && strlen($value)) {
