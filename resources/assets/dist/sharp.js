@@ -33499,6 +33499,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -33525,7 +33537,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             filtersValue: {},
             commands: [],
 
-            showCreateButton: false
+            showCreateButton: false,
+            searchActive: false
         };
     },
 
@@ -33536,6 +33549,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         },
         emitSearch: function emitSearch() {
             this.actionsBus.$emit('searchChanged', this.search);
+        },
+        handleSearchFocus: function handleSearchFocus() {
+            this.searchActive = true;
         }
     },
     actions: {
@@ -81722,6 +81738,9 @@ if (false) {
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('sharp-action-bar', {
     staticClass: "SharpActionBarList",
+    class: {
+      'SharpActionBarList--search-active': _vm.searchActive
+    },
     attrs: {
       "ready": _vm.ready
     }
@@ -81731,10 +81750,49 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     slot: "right"
   }, [_c('div', {
     staticClass: "SharpActionBar__search SharpSearch SharpSearch--lg",
+    class: {
+      'SharpSearch--active': _vm.searchActive
+    },
     attrs: {
       "role": "search"
     }
-  }, [_c('svg', {
+  }, [_c('div', {
+    staticClass: "SharpSearch__overlay"
+  }), _vm._v(" "), _c('label', {
+    staticClass: "SharpSearch__label",
+    attrs: {
+      "id": "ab-search-label",
+      "for": "ab-search-input"
+    }
+  }, [_vm._v(_vm._s(_vm.l('action_bar.list.search.placeholder')))]), _vm._v(" "), _c('input', {
+    ref: "search",
+    staticClass: "SharpSearch__input",
+    attrs: {
+      "placeholder": _vm.l('action_bar.list.search.placeholder'),
+      "type": "text",
+      "id": "ab-search-input",
+      "role": "search",
+      "aria-labelledby": "ab-search-label"
+    },
+    domProps: {
+      "value": _vm.search
+    },
+    on: {
+      "keyup": function($event) {
+        if (!('button' in $event) && _vm._k($event.keyCode, "enter", 13)) { return null; }
+        _vm.emitSearch($event)
+      },
+      "focus": function($event) {
+        _vm.searchActive = true
+      },
+      "blur": function($event) {
+        _vm.searchActive = false
+      },
+      "input": function($event) {
+        _vm.search = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _c('svg', {
     staticClass: "SharpSearch__magnifier",
     attrs: {
       "width": "16",
@@ -81750,35 +81808,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     attrs: {
       "d": "M16 13.8L13.8 16l-3.6-3.6 2.2-2.2z"
     }
-  })]), _vm._v(" "), _c('label', {
-    staticClass: "SharpSearch__label",
-    attrs: {
-      "id": "ab-search-label",
-      "for": "ab-search-input"
-    }
-  }, [_vm._v(_vm._s(_vm.l('action_bar.list.search.placeholder')))]), _vm._v(" "), _c('input', {
-    ref: "search",
-    staticClass: "SharpSearch__input",
-    attrs: {
-      "type": "text",
-      "id": "ab-search-input",
-      "role": "search",
-      "placeholder": _vm.l('action_bar.list.search.placeholder'),
-      "aria-labelledby": "ab-search-label"
-    },
-    domProps: {
-      "value": _vm.search
-    },
-    on: {
-      "keyup": function($event) {
-        if (!('button' in $event) && _vm._k($event.keyCode, "enter", 13)) { return null; }
-        _vm.emitSearch($event)
-      },
-      "input": function($event) {
-        _vm.search = $event.target.value
-      }
-    }
-  }), _vm._v(" "), _c('svg', {
+  })]), _vm._v(" "), _c('svg', {
     staticClass: "SharpSearch__close",
     class: {
       'SharpSearch__close--hidden': !(_vm.search || '').length

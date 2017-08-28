@@ -30,7 +30,19 @@
 
   &__extras {
     display:flex;
+    flex-flow: row wrap;
     padding-top: 1rem;
+
+    .SharpFilterSelect {
+      margin: 0 0 0 .5rem;
+      @include media-breakpoint-down(sm) {
+        margin: .5rem 0 0 0;
+        width: 100%;
+      }
+      &:first-child {
+        margin: 0;
+      }
+    }
   }
 
   &__actions-dropdown {
@@ -75,13 +87,6 @@
   }
 
 
-  .SharpFilterSelect {
-    margin-left: .5em;
-    &:first-child {
-      margin: 0;
-    }
-  }
-
   &.SharpActionBarList {
     @include media-breakpoint-down(sm) {
       .col.left {
@@ -89,6 +94,11 @@
       }
       .col.right {
         flex: 1 !important;
+      }
+      &--search-active .SharpActionBar__bar{
+        .SharpButton, .SharpDropdown {
+          display: none;
+        }
       }
     }
   }
@@ -98,6 +108,27 @@
       right: .5rem;
     }
     @include media-breakpoint-down(sm) {
+      &.SharpSearch--active {
+        width: 100%;
+        .SharpSearch__input, .SharpSearch__magnifier {
+          z-index: 101;
+        }
+
+        .SharpSearch__overlay {
+          display:block;
+        }
+      }
+      .SharpSearch__overlay {
+        z-index: 100;
+        position: fixed;
+        left:0;
+        top:0;
+        height: 100%;
+        width: 100%;
+        background: rgba(0,0,0,.1);
+
+        display: none;
+      }
       .SharpSearch__close {
         display:none;
       }
