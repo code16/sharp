@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form;
+namespace Code16\Sharp\Tests\Unit\Form\Fields;
 
 use Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
