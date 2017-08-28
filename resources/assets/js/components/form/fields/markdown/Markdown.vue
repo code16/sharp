@@ -38,7 +38,6 @@
             return {
                 simplemde:null,
                 cursorPos:0,
-                lastKeydown:0,
 
                 uploaderId: 0
             }
@@ -67,7 +66,7 @@
             indexedFiles() {
                 return (this.value.files||[]).map( (file,i) => ({ [this.idSymbol]:i, ...file }) );
             },
-            createUploader(value) {
+            createUploader({ value, removeOptions }) {
                 let $uploader = new MarkdownUpload({
                     provide: {
                         actionsBus: this.actionsBus
@@ -79,9 +78,12 @@
                     },
                 });
 
-                $uploader.$on('success', this.updateUploaderData.bind(this, $uploader));
-                $uploader.$on('added', this.refreshCodemirror.bind(this, $uploader));
-                $uploader.$on('remove', this.removeMarker.bind(this, $uploader));
+                $uploader.$on('success', file => this.updateUploaderData($uploader, file));
+                $uploader.$on('added', () => this.refreshCodemirror());
+                $uploader.$on('remove', () => this.removeMarker($uploader, removeOptions));
+                $uploader.$on('update', data => this.updateFileData($uploader, data));
+                $uploader.$on('active', () => this.setMarkerActive($uploader));
+                $uploader.$on('inactive', () => this.setMarkerInactive($uploader));
 
                 return $uploader;
             },
@@ -91,16 +93,19 @@
                 this.codemirror.focus();
             },
 
-            removeMarker($uploader, { fromBackspace } = {}) {
+            removeMarker($uploader, { isCMEvent, relativeFallbackLine } = {}) {
                 let { id, marker } = $uploader;
 
                 if(marker.explicitlyCleared)
                     return;
 
-                if(!fromBackspace) {
+                if(!isCMEvent) {
                     marker.inclusiveLeft = marker.inclusiveRight = false;
                     let find = marker.find(), line = find.from.line;
-                    this.codemirror.replaceRange('',find.from,{line:line+1, ch:0});
+                    let fallbackLine = line-relativeFallbackLine;
+                    let fallbacklineContent = +((this.codemirror.getLine(this.cursorPos.line)||{}).length);
+
+                    this.codemirror.replaceRange('',{ line: fallbackLine, ch:fallbacklineContent.length},{line:line+1, ch:0});
                     marker.inclusiveLeft = marker.inclusiveRight = true;
                     marker.clear();
                     this.codemirror.focus();
@@ -119,9 +124,24 @@
                 this.value.files.push({ [this.idSymbol]:id, ...data });
             },
 
+            setMarkerActive({ marker }) {
+                this.codemirror.addLineClass(marker.lines[0], 'wrap', 'SharpMarkdown__line--active');
+            },
+
+            setMarkerInactive({ marker }) {
+                this.codemirror.removeLineClass(marker.lines[0], 'wrap', 'SharpMarkdown__line--active');
+            },
+
+            updateFileData({ id }, data) {
+                let file = this.value.files.find(f => f[this.idSymbol] === id);
+                file = data;
+            },
+
             insertUploadImage({ replaceBySelection, data, isInsertion } = {}) {
                 let selection = this.codemirror.getSelection(' ');
                 let curLineContent = this.codemirror.getLine(this.cursorPos.line);
+                let initialCursorPos = this.cursorPos;
+
 
                 if(selection) {
                     this.codemirror.replaceSelection('');
@@ -129,10 +149,10 @@
                 }
 
                 if(curLineContent.length) {
-                    this.codemirror.replaceRange('\n', {
-                        line: this.cursorPos.line,
-                        ch: this.cursorPos.ch
-                    });
+                    this.codemirror.replaceRange('\n', this.cursorPos);
+                }
+                if(isInsertion) {
+                    this.codemirror.replaceRange('\n', this.cursorPos);
                 }
 
                 this.codemirror.getInputField().blur();
@@ -142,17 +162,21 @@
                     : '![]()';// `![${selection||''}]()`;   take selection as title
 
                 if(isInsertion) {
-                    md += '\n\n';
+                    md += '\n';
                 }
 
                 this.codemirror.replaceRange(md,this.cursorPos);
-                this.codemirror.setCursor(this.cursorPos.line+(isInsertion?-2:0),0);
+                this.codemirror.setCursor(this.cursorPos.line+(isInsertion?-1:0),0);
                 let from = this.cursorPos, to = { line:this.cursorPos.line, ch:this.cursorPos.ch+md.length };
 
-                this.codemirror.addLineClass(this.cursorPos.line, 'wrap', 'SharpMarkdown__upload-line');
+                let relativeFallbackLine = this.cursorPos.line - initialCursorPos.line;
 
-
-                let $uploader = this.createUploader(data && this.filesByName[data.name]);
+                let $uploader = this.createUploader({
+                    value:data && this.filesByName[data.name],
+                    removeOptions: {
+                        relativeFallbackLine
+                    }
+                });
                 //console.log($uploader);
                 $uploader.marker = this.codemirror.markText(from, to, {
                     replacedWith: $uploader.$mount().$el,
@@ -161,19 +185,13 @@
                     inclusiveLeft: true,
                 });
 
-                $uploader.marker.on('beforeCursorEnter',() => this.uploadBeforeCursorEnter($uploader));
+                this.codemirror.addLineClass($uploader.marker.lines[0], 'wrap', 'SharpMarkdown__upload-line');
+                $uploader.marker.lines[0].on('delete', () => this.removeMarker($uploader, { isCMEvent: true, relativeFallbackLine }));
 
                 if(!data)
                     $uploader.inputClick();
             },
 
-            uploadBeforeCursorEnter($uploader) {
-                //debugger
-                console.log(this.lastKeydown.keyCode, this.cursorPos.line);
-                if(this.lastKeydown.keyCode === 8) {
-                    this.removeMarker($uploader, { fromBackspace:true });
-                }
-            },
             onCursorActivity() {
                 this.cursorPos = this.codemirror.getCursor();
             },
@@ -190,7 +208,6 @@
 
             onKeydown(cm, e) {
                 //console.log('key down');
-                this.lastKeydown = e;
             },
 
             onKeyHandled(cm, name, e) {

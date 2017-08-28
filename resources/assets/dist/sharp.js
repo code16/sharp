@@ -35999,7 +35999,6 @@ var noop = function noop() {};
         return {
             simplemde: null,
             cursorPos: 0,
-            lastKeydown: 0,
 
             uploaderId: 0
         };
@@ -36033,7 +36032,12 @@ var noop = function noop() {};
                 return _extends(_defineProperty({}, _this.idSymbol, i), file);
             });
         },
-        createUploader: function createUploader(value) {
+        createUploader: function createUploader(_ref) {
+            var _this2 = this;
+
+            var value = _ref.value,
+                removeOptions = _ref.removeOptions;
+
             var $uploader = new __WEBPACK_IMPORTED_MODULE_1__MarkdownUpload__["a" /* default */]({
                 provide: {
                     actionsBus: this.actionsBus
@@ -36045,9 +36049,24 @@ var noop = function noop() {};
                 }
             });
 
-            $uploader.$on('success', this.updateUploaderData.bind(this, $uploader));
-            $uploader.$on('added', this.refreshCodemirror.bind(this, $uploader));
-            $uploader.$on('remove', this.removeMarker.bind(this, $uploader));
+            $uploader.$on('success', function (file) {
+                return _this2.updateUploaderData($uploader, file);
+            });
+            $uploader.$on('added', function () {
+                return _this2.refreshCodemirror();
+            });
+            $uploader.$on('remove', function () {
+                return _this2.removeMarker($uploader, removeOptions);
+            });
+            $uploader.$on('update', function (data) {
+                return _this2.updateFileData($uploader, data);
+            });
+            $uploader.$on('active', function () {
+                return _this2.setMarkerActive($uploader);
+            });
+            $uploader.$on('inactive', function () {
+                return _this2.setMarkerInactive($uploader);
+            });
 
             return $uploader;
         },
@@ -36056,10 +36075,11 @@ var noop = function noop() {};
             this.codemirror.focus();
         },
         removeMarker: function removeMarker($uploader) {
-            var _this2 = this;
+            var _this3 = this;
 
-            var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-                fromBackspace = _ref.fromBackspace;
+            var _ref2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+                isCMEvent = _ref2.isCMEvent,
+                relativeFallbackLine = _ref2.relativeFallbackLine;
 
             var id = $uploader.id,
                 marker = $uploader.marker;
@@ -36067,11 +36087,14 @@ var noop = function noop() {};
 
             if (marker.explicitlyCleared) return;
 
-            if (!fromBackspace) {
+            if (!isCMEvent) {
                 marker.inclusiveLeft = marker.inclusiveRight = false;
                 var find = marker.find(),
                     line = find.from.line;
-                this.codemirror.replaceRange('', find.from, { line: line + 1, ch: 0 });
+                var fallbackLine = line - relativeFallbackLine;
+                var fallbacklineContent = +(this.codemirror.getLine(this.cursorPos.line) || {}).length;
+
+                this.codemirror.replaceRange('', { line: fallbackLine, ch: fallbacklineContent.length }, { line: line + 1, ch: 0 });
                 marker.inclusiveLeft = marker.inclusiveRight = true;
                 marker.clear();
                 this.codemirror.focus();
@@ -36079,12 +36102,12 @@ var noop = function noop() {};
 
             $uploader.$destroy();
             this.value.files = this.value.files.filter(function (f) {
-                return f[_this2.idSymbol] !== id;
+                return f[_this3.idSymbol] !== id;
             });
         },
-        updateUploaderData: function updateUploaderData(_ref2, data) {
-            var id = _ref2.id,
-                marker = _ref2.marker;
+        updateUploaderData: function updateUploaderData(_ref3, data) {
+            var id = _ref3.id,
+                marker = _ref3.marker;
 
             var find = marker.find();
 
@@ -36093,16 +36116,37 @@ var noop = function noop() {};
 
             this.value.files.push(_extends(_defineProperty({}, this.idSymbol, id), data));
         },
-        insertUploadImage: function insertUploadImage() {
-            var _this3 = this;
+        setMarkerActive: function setMarkerActive(_ref4) {
+            var marker = _ref4.marker;
 
-            var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-                replaceBySelection = _ref3.replaceBySelection,
-                data = _ref3.data,
-                isInsertion = _ref3.isInsertion;
+            this.codemirror.addLineClass(marker.lines[0], 'wrap', 'SharpMarkdown__line--active');
+        },
+        setMarkerInactive: function setMarkerInactive(_ref5) {
+            var marker = _ref5.marker;
+
+            this.codemirror.removeLineClass(marker.lines[0], 'wrap', 'SharpMarkdown__line--active');
+        },
+        updateFileData: function updateFileData(_ref6, data) {
+            var _this4 = this;
+
+            var id = _ref6.id;
+
+            var file = this.value.files.find(function (f) {
+                return f[_this4.idSymbol] === id;
+            });
+            file = data;
+        },
+        insertUploadImage: function insertUploadImage() {
+            var _this5 = this;
+
+            var _ref7 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+                replaceBySelection = _ref7.replaceBySelection,
+                data = _ref7.data,
+                isInsertion = _ref7.isInsertion;
 
             var selection = this.codemirror.getSelection(' ');
             var curLineContent = this.codemirror.getLine(this.cursorPos.line);
+            var initialCursorPos = this.cursorPos;
 
             if (selection) {
                 this.codemirror.replaceSelection('');
@@ -36110,10 +36154,10 @@ var noop = function noop() {};
             }
 
             if (curLineContent.length) {
-                this.codemirror.replaceRange('\n', {
-                    line: this.cursorPos.line,
-                    ch: this.cursorPos.ch
-                });
+                this.codemirror.replaceRange('\n', this.cursorPos);
+            }
+            if (isInsertion) {
+                this.codemirror.replaceRange('\n', this.cursorPos);
             }
 
             this.codemirror.getInputField().blur();
@@ -36121,17 +36165,22 @@ var noop = function noop() {};
             var md = replaceBySelection ? selection : '![]()'; // `![${selection||''}]()`;   take selection as title
 
             if (isInsertion) {
-                md += '\n\n';
+                md += '\n';
             }
 
             this.codemirror.replaceRange(md, this.cursorPos);
-            this.codemirror.setCursor(this.cursorPos.line + (isInsertion ? -2 : 0), 0);
+            this.codemirror.setCursor(this.cursorPos.line + (isInsertion ? -1 : 0), 0);
             var from = this.cursorPos,
                 to = { line: this.cursorPos.line, ch: this.cursorPos.ch + md.length };
 
-            this.codemirror.addLineClass(this.cursorPos.line, 'wrap', 'SharpMarkdown__upload-line');
+            var relativeFallbackLine = this.cursorPos.line - initialCursorPos.line;
 
-            var $uploader = this.createUploader(data && this.filesByName[data.name]);
+            var $uploader = this.createUploader({
+                value: data && this.filesByName[data.name],
+                removeOptions: {
+                    relativeFallbackLine: relativeFallbackLine
+                }
+            });
             //console.log($uploader);
             $uploader.marker = this.codemirror.markText(from, to, {
                 replacedWith: $uploader.$mount().$el,
@@ -36140,18 +36189,12 @@ var noop = function noop() {};
                 inclusiveLeft: true
             });
 
-            $uploader.marker.on('beforeCursorEnter', function () {
-                return _this3.uploadBeforeCursorEnter($uploader);
+            this.codemirror.addLineClass($uploader.marker.lines[0], 'wrap', 'SharpMarkdown__upload-line');
+            $uploader.marker.lines[0].on('delete', function () {
+                return _this5.removeMarker($uploader, { isCMEvent: true, relativeFallbackLine: relativeFallbackLine });
             });
 
             if (!data) $uploader.inputClick();
-        },
-        uploadBeforeCursorEnter: function uploadBeforeCursorEnter($uploader) {
-            //debugger
-            console.log(this.lastKeydown.keyCode, this.cursorPos.line);
-            if (this.lastKeydown.keyCode === 8) {
-                this.removeMarker($uploader, { fromBackspace: true });
-            }
         },
         onCursorActivity: function onCursorActivity() {
             this.cursorPos = this.codemirror.getCursor();
@@ -36165,7 +36208,6 @@ var noop = function noop() {};
         },
         onKeydown: function onKeydown(cm, e) {
             //console.log('key down');
-            this.lastKeydown = e;
         },
         onKeyHandled: function onKeyHandled(cm, name, e) {},
         codemirrorOn: function codemirrorOn(eventName, callback, immediate) {
@@ -36189,23 +36231,23 @@ var noop = function noop() {};
             });
         },
         bindImageAction: function bindImageAction() {
-            var _this4 = this;
+            var _this6 = this;
 
             var imageBtn = this.simplemde.toolbar.find(function (btn) {
                 return btn.name === 'image';
             });
             (imageBtn || {}).action = function () {
-                return _this4.insertUploadImage({ isInsertion: true });
+                return _this6.insertUploadImage({ isInsertion: true });
             };
         },
         parse: function parse() {
-            var _this5 = this;
+            var _this7 = this;
 
             var images = [];
             this.codemirror.eachLine(function (lineHandler) {
                 var text = lineHandler.text;
 
-                var line = _this5.codemirror.getLineNumber(lineHandler);
+                var line = _this7.codemirror.getLineNumber(lineHandler);
                 var regex = /!\[(.*?)\]\((.*?)\)/g;
                 var match = regex.exec(text);
 
@@ -36226,12 +36268,12 @@ var noop = function noop() {};
                 }
             });
 
-            images.reverse().forEach(function (_ref4) {
-                var range = _ref4.range,
-                    data = _ref4.data;
+            images.reverse().forEach(function (_ref8) {
+                var range = _ref8.range,
+                    data = _ref8.data;
 
-                _this5.codemirror.setSelection(range.start, range.end);
-                _this5.insertUploadImage({ replaceBySelection: true, data: data });
+                _this7.codemirror.setSelection(range.start, range.end);
+                _this7.insertUploadImage({ replaceBySelection: true, data: data });
             });
         },
         refreshOnExternalChange: function refreshOnExternalChange() {
@@ -36240,7 +36282,7 @@ var noop = function noop() {};
         }
     },
     mounted: function mounted() {
-        var _this6 = this;
+        var _this8 = this;
 
         this.simplemde = new __WEBPACK_IMPORTED_MODULE_0_simplemde___default.a({
             element: this.$refs.textarea,
@@ -36256,7 +36298,7 @@ var noop = function noop() {};
         this.uploaderId = this.value.files.length;
 
         this.$tab.$once('active', function () {
-            return _this6.refreshOnExternalChange();
+            return _this8.refreshOnExternalChange();
         });
 
         this.codemirror.setSize('auto', this.height);
@@ -36290,6 +36332,9 @@ var noop = function noop() {};
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__messages__ = __webpack_require__(97);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__consts__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mixins__ = __webpack_require__(2);
+//
+//
+//
 //
 //
 //
@@ -36668,6 +36713,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             this.resized = false;
         },
         onEditButtonClick: function onEditButtonClick() {
+            this.$emit('active');
             this.showEditModal = true;
             this.croppable = true;
         },
@@ -36720,9 +36766,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             };
 
             if (this.croppable) {
-                this.$parent.$emit('input', _extends({}, this.value, {
+                var data = _extends({}, this.value, {
                     cropData: relativeData
-                }));
+                });
+                this.$parent.$emit('input', data);
+                this.$emit('updated', data);
             }
         },
         updateCroppedImage: function updateCroppedImage() {
@@ -83016,7 +83064,10 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     },
     on: {
       "ok": _vm.onEditModalOk,
-      "shown": _vm.onEditModalShown
+      "shown": _vm.onEditModalShown,
+      "hidden": function($event) {
+        _vm.$emit('inactive')
+      }
     },
     model: {
       value: (_vm.showEditModal),
@@ -83590,6 +83641,15 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       },
       "removed": function($event) {
         _vm.$emit('remove')
+      },
+      "updated": function($event) {
+        _vm.$emit('update', $event)
+      },
+      "active": function($event) {
+        _vm.$emit('active')
+      },
+      "inactive": function($event) {
+        _vm.$emit('inactive')
       }
     }
   })

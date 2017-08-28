@@ -10,12 +10,15 @@
   }
 
   &__upload-line {
-    z-index: 3;
     .CodeMirror-line {
       & > span {
         padding-right: 0 !important;
       }
     }
+  }
+
+  &__line--active {
+    z-index: 3;
   }
 
   &--read-only {
