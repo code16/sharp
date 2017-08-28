@@ -7,6 +7,7 @@ use Code16\Sharp\Exceptions\Auth\SharpAuthenticationException;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Code16\Sharp\Exceptions\EntityList\SharpInvalidEntityStateException;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
+use Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException;
 use Code16\Sharp\Exceptions\SharpException;
 use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
 
@@ -23,12 +24,12 @@ class HandleSharpApiErrors
     {
         $response = $next($request);
 
-        if($response->exception instanceof SharpException
-            || method_exists($response->exception, 'getStatusCode')) {
-            return response()->json([
-                "message" => $response->exception->getMessage()
-            ], $this->getHttpCodeFor($response->exception));
-        }
+//        if($response->exception instanceof SharpException
+//            || method_exists($response->exception, 'getStatusCode')) {
+//            return response()->json([
+//                "message" => $response->exception->getMessage()
+//            ], $this->getHttpCodeFor($response->exception));
+//        }
 
         return $response;
     }
@@ -54,6 +55,10 @@ class HandleSharpApiErrors
 
         if ($exception instanceof SharpInvalidEntityStateException) {
             return 422;
+        }
+
+        if ($exception instanceof SharpFormFieldValidationException) {
+            return 500;
         }
 
         return $exception->getStatusCode();

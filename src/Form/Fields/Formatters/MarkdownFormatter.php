@@ -39,7 +39,7 @@ class MarkdownFormatter implements SharpFieldFormatter
      */
     function fromFront(SharpFormField $field, string $attribute, $value)
     {
-        $text = $value['text'];
+        $text = $value['text'] ?? '';
 
         if(isset($value["files"])) {
             $uploadFormatter = app(UploadFormatter::class);
@@ -107,6 +107,7 @@ class MarkdownFormatter implements SharpFieldFormatter
     {
         try {
             return Storage::disk($field->storageDisk())->size($filename);
+
         } catch(\RuntimeException $ex) {
             return null;
         }

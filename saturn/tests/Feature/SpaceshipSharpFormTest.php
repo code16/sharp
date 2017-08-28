@@ -31,7 +31,8 @@ class SpaceshipSharpFormTest extends TestCase
         $this->getSharpForm("spaceship", $spaceship->id)
             ->assertSharpFormHasFieldOfType("name", SharpFormTextField::class)
             ->assertSharpFormHasFields([
-                "name", "picture:file", "picture:legend", "capacity", "type_id", "construction_date", "pilots", "reviews"
+                "name", "picture", "picture:legend", "capacity", "type_id",
+                "construction_date", "pilots", "reviews", "features"
             ])
             ->assertSharpFormDataEquals("name", $spaceship->name);
     }
@@ -45,7 +46,8 @@ class SpaceshipSharpFormTest extends TestCase
 
         $this->getSharpForm("spaceship")
             ->assertSharpFormHasFields([
-                "name", "picture:file", "picture:legend", "capacity", "type_id", "construction_date", "pilots", "reviews"
+                "name", "picture", "picture:legend", "capacity", "type_id",
+                "construction_date", "pilots", "reviews", "features"
             ]);
     }
 

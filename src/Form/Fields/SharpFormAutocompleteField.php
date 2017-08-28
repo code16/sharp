@@ -11,6 +11,8 @@ class SharpFormAutocompleteField extends SharpFormField
 {
     use SharpFormFieldWithPlaceholder, SharpFormFieldWithTemplates;
 
+    const FIELD_TYPE = "autocomplete";
+
     /**
      * @var string
      */
@@ -58,7 +60,7 @@ class SharpFormAutocompleteField extends SharpFormField
      */
     public static function make(string $key, string $mode)
     {
-        $instance = new static($key, 'autocomplete', new AutocompleteFormatter());
+        $instance = new static($key, static::FIELD_TYPE, new AutocompleteFormatter());
         $instance->mode = $mode;
 
         return $instance;

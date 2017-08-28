@@ -6,6 +6,8 @@ use Code16\Sharp\Form\Fields\Formatters\TagsFormatter;
 
 class SharpFormTagsField extends SharpFormField
 {
+    const FIELD_TYPE = "tags";
+
     /**
      * @var bool
      */
@@ -43,7 +45,7 @@ class SharpFormTagsField extends SharpFormField
      */
     public static function make(string $key, array $options)
     {
-        $instance = new static($key, 'tags', new TagsFormatter);
+        $instance = new static($key, static::FIELD_TYPE, new TagsFormatter);
 
         $instance->options = collect($options)->map(function($label, $id) {
             return [

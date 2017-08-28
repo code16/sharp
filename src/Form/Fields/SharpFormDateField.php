@@ -6,6 +6,8 @@ use Code16\Sharp\Form\Fields\Formatters\DateFormatter;
 
 class SharpFormDateField extends SharpFormField
 {
+    const FIELD_TYPE = "date";
+
     /**
      * @var bool
      */
@@ -52,7 +54,7 @@ class SharpFormDateField extends SharpFormField
      */
     public static function make(string $key)
     {
-        $field = new static($key, 'date', new DateFormatter());
+        $field = new static($key, static::FIELD_TYPE, new DateFormatter());
         $field->language = app()->getLocale();
 
         return $field;

@@ -6,6 +6,8 @@ use Code16\Sharp\Form\Fields\Formatters\ListFormatter;
 
 class SharpFormListField extends SharpFormField
 {
+    const FIELD_TYPE = "list";
+
     /**
      * @var bool
      */
@@ -57,7 +59,7 @@ class SharpFormListField extends SharpFormField
      */
     public static function make(string $key)
     {
-        return new static($key, 'list', new ListFormatter);
+        return new static($key, static::FIELD_TYPE, new ListFormatter);
     }
 
     /**
