@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Tests\Unit\Form\Eloquent\Relationships;
 
 use Code16\Sharp\Form\Eloquent\Relationships\HasManyRelationUpdater;
-use Code16\Sharp\Form\Eloquent\Request\UpdateRequestData;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;

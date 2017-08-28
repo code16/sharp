@@ -2,8 +2,6 @@
 
 namespace Code16\Sharp\Tests\Unit\Form\Eloquent\Relationships;
 
-use Code16\Sharp\Form\Eloquent\Request\UpdateRequestData;
-
 trait TestWithSharpList
 {
     protected function formatData(array $data)
