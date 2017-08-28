@@ -36172,16 +36172,17 @@ var noop = function noop() {};
 
             var md = replaceBySelection ? selection : '![]()'; // `![${selection||''}]()`;   take selection as title
 
-            if (isInsertion) {
-                md += '\n';
-            }
+
+            var afterNewLinesCount = isInsertion ? 2 : 0;
+
+            md += '\n'.repeat(afterNewLinesCount);
 
             this.codemirror.replaceRange(md, this.cursorPos);
-            this.codemirror.setCursor(this.cursorPos.line + (isInsertion ? -1 : 0), 0);
+            this.codemirror.setCursor(this.cursorPos.line - afterNewLinesCount, 0);
             var from = this.cursorPos,
                 to = { line: this.cursorPos.line, ch: this.cursorPos.ch + md.length };
 
-            var relativeFallbackLine = this.cursorPos.line - initialCursorPos.line;
+            var relativeFallbackLine = isInsertion ? this.cursorPos.line - initialCursorPos.line : 1;
 
             var $uploader = this.createUploader({
                 value: data && this.filesByName[data.name],

@@ -152,7 +152,6 @@
                 let curLineContent = this.codemirror.getLine(this.cursorPos.line);
                 let initialCursorPos = this.cursorPos;
 
-
                 if(selection) {
                     this.codemirror.replaceSelection('');
                     curLineContent = this.codemirror.getLine(this.cursorPos.line);
@@ -171,15 +170,16 @@
                     ? selection
                     : '![]()';// `![${selection||''}]()`;   take selection as title
 
-                if(isInsertion) {
-                    md += '\n';
-                }
+
+                let afterNewLinesCount = isInsertion ? 2 : 0;
+
+                md += '\n'.repeat(afterNewLinesCount);
 
                 this.codemirror.replaceRange(md,this.cursorPos);
-                this.codemirror.setCursor(this.cursorPos.line+(isInsertion?-1:0),0);
+                this.codemirror.setCursor(this.cursorPos.line-afterNewLinesCount,0);
                 let from = this.cursorPos, to = { line:this.cursorPos.line, ch:this.cursorPos.ch+md.length };
 
-                let relativeFallbackLine = this.cursorPos.line - initialCursorPos.line;
+                let relativeFallbackLine = isInsertion ? this.cursorPos.line - initialCursorPos.line : 1;
 
                 let $uploader = this.createUploader({
                     value:data && this.filesByName[data.name],
