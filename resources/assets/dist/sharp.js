@@ -36017,7 +36017,8 @@ var noop = function noop() {};
             simplemde: null,
             cursorPos: 0,
 
-            uploaderId: 0
+            uploaderId: 0,
+            uploaders: []
         };
     },
 
@@ -36060,17 +36061,18 @@ var noop = function noop() {};
         createUploader: function createUploader(_ref) {
             var _this3 = this;
 
-            var value = _ref.value,
+            var id = _ref.id,
+                value = _ref.value,
                 removeOptions = _ref.removeOptions;
 
+            console.log('create uploader', this.uploaderId);
             var $uploader = new __WEBPACK_IMPORTED_MODULE_1__MarkdownUpload__["a" /* default */]({
                 provide: {
                     actionsBus: this.actionsBus
                 },
                 propsData: {
-                    id: this.uploaderId++,
-                    xsrfToken: this.xsrfToken,
-                    value: value
+                    id: id, value: value,
+                    xsrfToken: this.xsrfToken
                 }
             });
 
@@ -36155,11 +36157,10 @@ var noop = function noop() {};
         updateFileData: function updateFileData(_ref6, data) {
             var id = _ref6.id;
 
+            //debugger;
             var fileIndex = this.indexByFileId[id];
             var file = this.value.files[fileIndex];
             this.$set(this.value.files, fileIndex, _extends({}, file, data));
-
-            //setTimeout(() => this.refreshCodemirror(), 100);
         },
         insertUploadImage: function insertUploadImage() {
             var _this5 = this;
@@ -36202,6 +36203,7 @@ var noop = function noop() {};
             var relativeFallbackLine = isInsertion ? this.cursorPos.line - initialCursorPos.line : 1;
 
             var $uploader = this.createUploader({
+                id: data ? this.filesByName[data.name][this.idSymbol] : this.uploaderId++,
                 value: data && this.filesByName[data.name],
                 removeOptions: {
                     relativeFallbackLine: relativeFallbackLine
@@ -36220,7 +36222,9 @@ var noop = function noop() {};
                 return _this5.removeMarker($uploader, { isCMEvent: true, relativeFallbackLine: relativeFallbackLine });
             });
 
-            if (!data) $uploader.inputClick();
+            if (isInsertion) $uploader.inputClick();
+
+            this.uploaders.push($uploader);
         },
         onCursorActivity: function onCursorActivity() {
             this.cursorPos = this.codemirror.getCursor();
@@ -36321,7 +36325,6 @@ var noop = function noop() {};
         });
 
         this.value.files = this.indexedFiles();
-        this.uploaderId = this.value.files.length;
 
         this.$tab.$once('active', function () {
             return _this8.refreshOnExternalChange();
@@ -36343,7 +36346,6 @@ var noop = function noop() {};
 
         this.codemirrorOn('keydown', this.onKeydown);
         this.codemirrorOn('keyHandled', this.onKeyHandled);
-        //console.log(this);
     }
 });
 
