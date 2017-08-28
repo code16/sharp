@@ -85,4 +85,19 @@ class DateFormatterTest extends SharpTestCase
         $this->assertEquals("10:30:00", $formatter->fromFront($field, $attribute, "2017-05-31 10:30:00"));
         $this->assertEquals("10:30:00", $formatter->fromFront($field, $attribute, "10:30:00"));
     }
+
+    /** @test */
+    function we_handle_timezone_from_front()
+    {
+        $formatter = new DateFormatter;
+        $field = SharpFormDateField::make("date");
+        $field->setHasTime(true);
+        $attribute = "attribute";
+
+        config(["app.timezone" => "Europe/Paris"]); //GMT+2
+        $this->assertEquals("2017-05-31 15:00:00", $formatter->fromFront($field, $attribute, "2017-05-31T13:00:00.000Z"));
+
+        config(["app.timezone" => "America/Montreal"]); //GMT-4
+        $this->assertEquals("2017-05-31 09:00:00", $formatter->fromFront($field, $attribute, "2017-05-31T13:00:00.000Z"));
+    }
 }

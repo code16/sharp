@@ -31,8 +31,8 @@ class DateFormatter implements SharpFieldFormatter
      */
     function fromFront(SharpFormField $field, string $attribute, $value)
     {
-        // TODO FIX Timezone
-        return Carbon::parse($value, config("app.timezone"))
+        return Carbon::parse($value)
+            ->setTimezone(config("app.timezone"))
             ->format($this->getFormat($field));
     }
 
