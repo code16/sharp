@@ -60,7 +60,7 @@ return [
 //        ]
     ],
 
-    "dashboard" => \App\Sharp\Dashboard::class,
+//    "dashboard" => \App\Sharp\Dashboard::class,
 
     "uploads" => [
         "tmp_dir" => env("SHARP_UPLOADS_TMP_DIR", "tmp"),

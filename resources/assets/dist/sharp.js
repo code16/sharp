@@ -35036,6 +35036,11 @@ var Tag = function (_LabelledItem2) {
         },
         dynamicPlaceholder: function dynamicPlaceholder() {
             return this.tags.length < (this.maxTagCount || Infinity) ? this.placeholder : "";
+        },
+        ids: function ids() {
+            return this.tags.map(function (t) {
+                return t.internalId;
+            });
         }
     },
     watch: {
@@ -35051,9 +35056,7 @@ var Tag = function (_LabelledItem2) {
             var matchedOption = this.indexedOptions.find(function (o) {
                 return o.id === tag.id;
             });
-            var patchedTag = new Tag(tag);
-            patchedTag.internalId = matchedOption ? matchedOption.internalId : this.lastIndex++;
-            return patchedTag;
+            return new Tag(matchedOption);
         },
         handleNewTag: function handleNewTag(val) {
             var newTag = new Tag({ id: null, label: val });
@@ -35175,8 +35178,7 @@ var Tag = function (_LabelledItem2) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_moment__ = __webpack_require__(82);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_moment__);
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
+//
 //
 //
 //
@@ -35278,7 +35280,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             return this.moment.format(this.displayFormat);
         }
     },
-    methods: _defineProperty({
+    methods: {
         handleDateSelect: function handleDateSelect(date) {
             this.moment.set({
                 year: date.getFullYear(),
@@ -35305,9 +35307,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 this.$field.$emit('ok');
                 this.$emit('input', m);
             }
-        },
-        handleBlur: function handleBlur() {
-            this.$field.$emit('clear');
         },
         increase: function increase(e) {
             this.translate(e.target, 1);
@@ -35371,10 +35370,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         },
         handleFocus: function handleFocus() {
             this.showPicker = true;
+        },
+        handleBlur: function handleBlur() {
+            this.$field.$emit('clear');
+            this.showPicker = false;
         }
-    }, 'handleBlur', function handleBlur() {
-        this.showPicker = false;
-    }),
+    },
     mounted: function mounted() {
         this.setFocusable(this.$refs.input);
     }
@@ -36000,7 +36001,8 @@ var noop = function noop() {};
             simplemde: null,
             cursorPos: 0,
 
-            uploaderId: 0
+            uploaderId: 0,
+            uploaders: []
         };
     },
 
@@ -36043,17 +36045,18 @@ var noop = function noop() {};
         createUploader: function createUploader(_ref) {
             var _this3 = this;
 
-            var value = _ref.value,
+            var id = _ref.id,
+                value = _ref.value,
                 removeOptions = _ref.removeOptions;
 
+            console.log('create uploader', this.uploaderId);
             var $uploader = new __WEBPACK_IMPORTED_MODULE_1__MarkdownUpload__["a" /* default */]({
                 provide: {
                     actionsBus: this.actionsBus
                 },
                 propsData: {
-                    id: this.uploaderId++,
-                    xsrfToken: this.xsrfToken,
-                    value: value
+                    id: id, value: value,
+                    xsrfToken: this.xsrfToken
                 }
             });
 
@@ -36138,11 +36141,10 @@ var noop = function noop() {};
         updateFileData: function updateFileData(_ref6, data) {
             var id = _ref6.id;
 
+            //debugger;
             var fileIndex = this.indexByFileId[id];
             var file = this.value.files[fileIndex];
             this.$set(this.value.files, fileIndex, _extends({}, file, data));
-
-            //setTimeout(() => this.refreshCodemirror(), 100);
         },
         insertUploadImage: function insertUploadImage() {
             var _this5 = this;
@@ -36185,6 +36187,7 @@ var noop = function noop() {};
             var relativeFallbackLine = isInsertion ? this.cursorPos.line - initialCursorPos.line : 1;
 
             var $uploader = this.createUploader({
+                id: data ? this.filesByName[data.name][this.idSymbol] : this.uploaderId++,
                 value: data && this.filesByName[data.name],
                 removeOptions: {
                     relativeFallbackLine: relativeFallbackLine
@@ -36203,7 +36206,9 @@ var noop = function noop() {};
                 return _this5.removeMarker($uploader, { isCMEvent: true, relativeFallbackLine: relativeFallbackLine });
             });
 
-            if (!data) $uploader.inputClick();
+            if (isInsertion) $uploader.inputClick();
+
+            this.uploaders.push($uploader);
         },
         onCursorActivity: function onCursorActivity() {
             this.cursorPos = this.codemirror.getCursor();
@@ -36304,7 +36309,6 @@ var noop = function noop() {};
         });
 
         this.value.files = this.indexedFiles();
-        this.uploaderId = this.value.files.length;
 
         this.$tab.$once('active', function () {
             return _this8.refreshOnExternalChange();
@@ -36326,7 +36330,6 @@ var noop = function noop() {};
 
         this.codemirrorOn('keydown', this.onKeydown);
         this.codemirrorOn('keyHandled', this.onKeyHandled);
-        //console.log(this);
     }
 });
 
@@ -80651,7 +80654,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   }, [_c('template', {
     slot: "left"
   }, [(_vm.showBackButton) ? _c('button', {
-    staticClass: "SharpButton SharpButton--secondary",
+    staticClass: "SharpButton SharpButton--secondary-accent",
     on: {
       "click": function($event) {
         _vm.emitAction('cancel')
@@ -80668,7 +80671,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   }) : _vm._e()], 1), _vm._v(" "), _c('template', {
     slot: "right"
   }, [(!_vm.showBackButton) ? _c('button', {
-    staticClass: "SharpButton SharpButton--secondary",
+    staticClass: "SharpButton SharpButton--secondary-accent",
     on: {
       "click": function($event) {
         _vm.emitAction('cancel')
@@ -82862,7 +82865,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     staticStyle: {
       "font-weight": "normal"
     }
-  }, [_vm._v(" | ")]) : _vm._e()]), _vm._v(" "), _c('sharp-select', {
+  }, [_vm._v(" : ")]) : _vm._e()]), _vm._v(" "), _c('sharp-select', {
     ref: "select",
     staticClass: "SharpFilterSelect__select",
     attrs: {
@@ -83161,9 +83164,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "multiple": "",
       "searchable": "",
       "hide-selected": "",
-      "selectLabel": "",
-      "selectedLabel": "",
-      "deselectLabel": ""
+      "show-labels": false
     },
     on: {
       "search-change": _vm.handleTextInput,
@@ -84069,6 +84070,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "value": _vm.inputValue
     },
     on: {
+      "input": _vm.handleInput,
       "blur": _vm.handleBlur,
       "focus": _vm.handleFocus,
       "keydown": [function($event) {

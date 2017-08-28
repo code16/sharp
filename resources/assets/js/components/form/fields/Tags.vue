@@ -12,7 +12,7 @@
             track-by="_internalId"
             label="label"
             multiple searchable hide-selected
-            selectLabel="" selectedLabel="" deselectLabel=""
+            :show-labels="false"
             @search-change="handleTextInput"
             @input="handleInput"
             @tag="handleNewTag"
@@ -72,6 +72,9 @@
             },
             dynamicPlaceholder() {
                 return this.tags.length < (this.maxTagCount || Infinity) ? this.placeholder : "";
+            },
+            ids() {
+                return this.tags.map(t=>t.internalId);
             }
         },
         watch: {
@@ -85,9 +88,7 @@
             },
             patchTag(tag) {
                 let matchedOption = this.indexedOptions.find(o => o.id === tag.id);
-                let patchedTag = new Tag(tag);
-                patchedTag.internalId = matchedOption ? matchedOption.internalId : this.lastIndex++;
-                return patchedTag;
+                return new Tag(matchedOption);
             },
             handleNewTag(val) {
                 let newTag = new Tag({id: null, label: val});

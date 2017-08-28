@@ -39,7 +39,8 @@
                 simplemde:null,
                 cursorPos:0,
 
-                uploaderId: 0
+                uploaderId: 0,
+                uploaders:[]
             }
         },
         watch: {
@@ -72,15 +73,15 @@
             indexedFiles() {
                 return (this.value.files||[]).map( (file,i) => ({ [this.idSymbol]:i, ...file }) );
             },
-            createUploader({ value, removeOptions }) {
+            createUploader({ id, value, removeOptions,  }) {
+                console.log('create uploader', this.uploaderId);
                 let $uploader = new MarkdownUpload({
                     provide: {
                         actionsBus: this.actionsBus
                     },
                     propsData: {
-                        id: this.uploaderId++,
+                        id, value,
                         xsrfToken: this.xsrfToken,
-                        value
                     },
                 });
 
@@ -140,11 +141,10 @@
             },
 
             updateFileData({ id }, data) {
+                //debugger;
                 let fileIndex = this.indexByFileId[id];
                 let file = this.value.files[fileIndex];
                 this.$set(this.value.files, fileIndex, { ...file, ...data });
-
-                //setTimeout(() => this.refreshCodemirror(), 100);
             },
 
             insertUploadImage({ replaceBySelection, data, isInsertion } = {}) {
@@ -182,7 +182,8 @@
                 let relativeFallbackLine = isInsertion ? this.cursorPos.line - initialCursorPos.line : 1;
 
                 let $uploader = this.createUploader({
-                    value:data && this.filesByName[data.name],
+                    id: data ? this.filesByName[data.name][this.idSymbol] : this.uploaderId++,
+                    value: data && this.filesByName[data.name],
                     removeOptions: {
                         relativeFallbackLine
                     }
@@ -198,8 +199,10 @@
                 this.codemirror.addLineClass($uploader.marker.lines[0], 'wrap', 'SharpMarkdown__upload-line');
                 $uploader.marker.lines[0].on('delete', () => this.removeMarker($uploader, { isCMEvent: true, relativeFallbackLine }));
 
-                if(!data)
+                if(isInsertion)
                     $uploader.inputClick();
+
+                this.uploaders.push($uploader);
             },
 
             onCursorActivity() {
@@ -291,8 +294,6 @@
             });
 
             this.value.files = this.indexedFiles();
-            this.uploaderId = this.value.files.length;
-
 
             this.$tab.$once('active', () => this.refreshOnExternalChange());
 
@@ -312,7 +313,6 @@
 
             this.codemirrorOn('keydown', this.onKeydown);
             this.codemirrorOn('keyHandled', this.onKeyHandled);
-            //console.log(this);
         }
     }
 </script>
