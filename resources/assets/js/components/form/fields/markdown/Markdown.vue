@@ -60,6 +60,12 @@
                     res[file.name] = file;
                     return res;
                 }, {});
+            },
+            indexByFileId() {
+                return this.value.files.reduce((res, file, index) => {
+                    res[file[this.idSymbol]] = index;
+                    return res;
+                }, {});
             }
         },
         methods : {
@@ -133,7 +139,7 @@
             },
 
             updateFileData({ id }, data) {
-                let fileIndex = this.value.files.findIndex(f => f[this.idSymbol] === id);
+                let fileIndex = this.indexByFileId[id];
                 let file = this.value.files[fileIndex];
                 this.$set(this.value.files, fileIndex, { ...file, ...data });
             },
