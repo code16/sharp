@@ -19,12 +19,12 @@ class MarkdownFormatterTest extends SharpTestCase
 
         config(['filesystems.disks.local' => [
             'driver' => 'local',
-            'root' => storage_path('app/tmp'),
+            'root' => storage_path('app'),
         ]]);
 
         config(['filesystems.disks.sharp_uploads' => [
             'driver' => 'local',
-            'root' => storage_path('app'),
+            'root' => storage_path('app/tmp'),
         ]]);
 
         config(['sharp.uploads.thumbnails_dir' => 'thumbnails']);
