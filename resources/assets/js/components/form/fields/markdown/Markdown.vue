@@ -133,8 +133,9 @@
             },
 
             updateFileData({ id }, data) {
-                let file = this.value.files.find(f => f[this.idSymbol] === id);
-                file = data;
+                let fileIndex = this.value.files.findIndex(f => f[this.idSymbol] === id);
+                let file = this.value.files[fileIndex];
+                this.$set(this.value.files, fileIndex, { ...file, ...data });
             },
 
             insertUploadImage({ replaceBySelection, data, isInsertion } = {}) {

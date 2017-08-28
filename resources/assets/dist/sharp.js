@@ -36131,10 +36131,11 @@ var noop = function noop() {};
 
             var id = _ref6.id;
 
-            var file = this.value.files.find(function (f) {
+            var fileIndex = this.value.files.findIndex(function (f) {
                 return f[_this4.idSymbol] === id;
             });
-            file = data;
+            var file = this.value.files[fileIndex];
+            this.$set(this.value.files, fileIndex, _extends({}, file, data));
         },
         insertUploadImage: function insertUploadImage() {
             var _this5 = this;
