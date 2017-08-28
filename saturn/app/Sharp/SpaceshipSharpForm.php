@@ -84,7 +84,6 @@ class SpaceshipSharpForm extends SharpForm
                 )
                 ->setLabel("Pilots")
                 ->setCreatable(true)
-                ->setLabelAttribute("name")
                 ->setCreateAttribute("name")
                 ->setMaxTagCount(4)
 
