@@ -14,8 +14,10 @@ class SelectFormatter implements SharpFieldFormatter
     function toFront(SharpFormField $field, $value)
     {
         if($field->multiple()) {
-            return collect((array)$value)->map(function($item) {
-                return ["id" => $item];
+            return collect((array)$value)->map(function($item) use($field) {
+                return [
+                    "id" => is_array($item) || is_object($item) ? ((array)$item)[$field->idAttribute()] : $item
+                ];
             })->all();
 
         } elseif(is_array($value)) {

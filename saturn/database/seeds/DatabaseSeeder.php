@@ -28,6 +28,8 @@ class DatabaseSeeder extends Seeder
 
         $types = factory(\App\SpaceshipType::class, 10)->create();
 
+        $features = factory(\App\Feature::class, 15)->create();
+
         $pilots = factory(\App\Pilot::class, 10)->create();
 
         foreach($types as $type) {
@@ -42,6 +44,10 @@ class DatabaseSeeder extends Seeder
 
                 $spaceship->pilots()->sync(
                     $pilots->random(rand(1, 3))->pluck("id")->all()
+                );
+
+                $spaceship->features()->sync(
+                    $features->random(rand(1, 3))->pluck("id")->all()
                 );
             }
         }

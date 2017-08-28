@@ -30,6 +30,31 @@ class SelectFormatterTest extends SharpTestCase
     }
 
     /** @test */
+    function we_can_format_a_multiple_array_value_to_front()
+    {
+        $formatter = new SelectFormatter;
+        $field = SharpFormSelectField::make("select", $this->getSelectData())
+            ->setMultiple();
+
+        $this->assertEquals([["id"=>1],["id"=>2]], $formatter->toFront($field, [
+            ["id"=>1, "label"=>"A"], ["id"=>2, "label"=>"B"]
+        ]));
+    }
+
+    /** @test */
+    function we_can_define_idAttribute_for_a_multiple_array_value_to_front()
+    {
+        $formatter = new SelectFormatter;
+        $field = SharpFormSelectField::make("select", $this->getSelectData())
+            ->setMultiple()
+            ->setIdAttribute("number");
+
+        $this->assertEquals([["id"=>1],["id"=>2]], $formatter->toFront($field, [
+            ["number"=>1, "label"=>"A"], ["number"=>2, "label"=>"B"]
+        ]));
+    }
+
+    /** @test */
     function we_can_format_value_from_front()
     {
         $formatter = new SelectFormatter;

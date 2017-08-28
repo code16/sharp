@@ -32,6 +32,11 @@ class SharpFormSelectField extends SharpFormField
     protected $display = "list";
 
     /**
+     * @var string
+     */
+    protected $idAttribute = "id";
+
+    /**
      * @param string $key
      * @param array $options
      * @return static
@@ -117,6 +122,25 @@ class SharpFormSelectField extends SharpFormField
     public function multiple()
     {
         return $this->multiple;
+    }
+
+    /**
+     * @return bool
+     */
+    public function idAttribute()
+    {
+        return $this->idAttribute;
+    }
+
+    /**
+     * @param string $idAttribute
+     * @return $this
+     */
+    public function setIdAttribute(string $idAttribute)
+    {
+        $this->idAttribute = $idAttribute;
+
+        return $this;
     }
 
     /**

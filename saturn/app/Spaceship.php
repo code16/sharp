@@ -24,6 +24,11 @@ class Spaceship extends Model
         return $this->belongsToMany(Pilot::class);
     }
 
+    public function features()
+    {
+        return $this->belongsToMany(Feature::class);
+    }
+
     public function picture()
     {
         return $this->morphOne(Media::class, "model")

@@ -2,6 +2,7 @@
 
 namespace App\Sharp;
 
+use App\Feature;
 use App\Pilot;
 use App\Spaceship;
 use App\SpaceshipType;
@@ -88,6 +89,14 @@ class SpaceshipSharpForm extends SharpForm
                 ->setMaxTagCount(4)
 
         )->addField(
+            SharpFormSelectField::make("features",
+                    Feature::orderBy("name")->get()->pluck("name", "id")->all()
+                )
+                ->setLabel("Features")
+                ->setMultiple()
+                ->setDisplayAsList()
+
+        )->addField(
             SharpFormListField::make("reviews")
                 ->setLabel("Technical reviews")
                 ->setAddable()
@@ -153,7 +162,8 @@ class SpaceshipSharpForm extends SharpForm
             $tab->addColumn(5, function(FormLayoutColumn $column) {
                 $column->withFieldset("Technical details", function(FormLayoutFieldset $fieldset) {
                     return $fieldset->withFields("capacity|4,6", "construction_date|8,6");
-                });
+                })->withSingleField("features");
+
             })->addColumn(7, function(FormLayoutColumn $column) {
                 $column->withSingleField("description");
             });
@@ -175,7 +185,7 @@ class SpaceshipSharpForm extends SharpForm
             ->setCustomTransformer("picture", new FormUploadModelTransformer())
             ->setCustomTransformer("pictures", new FormUploadModelTransformer())
             ->transform(
-                Spaceship::with("reviews", "pilots", "picture", "pictures")->findOrFail($id)
+                Spaceship::with("reviews", "pilots", "picture", "pictures", "features")->findOrFail($id)
             );
     }
 

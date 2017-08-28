@@ -19,6 +19,13 @@ $factory->define(\App\SpaceshipType::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->define(\App\Feature::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+    ];
+});
+
+
 $factory->define(\App\Spaceship::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->lastName,
