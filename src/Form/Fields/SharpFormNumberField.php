@@ -9,6 +9,8 @@ class SharpFormNumberField extends SharpFormField
 {
     use SharpFormFieldWithPlaceholder;
 
+    const FIELD_TYPE = "number";
+
     /**
      * @var int
      */
@@ -35,7 +37,7 @@ class SharpFormNumberField extends SharpFormField
      */
     public static function make(string $key)
     {
-        return new static($key, 'number', new NumberFormatter);
+        return new static($key, static::FIELD_TYPE, new NumberFormatter);
     }
 
     /**

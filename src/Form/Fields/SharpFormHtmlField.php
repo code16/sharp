@@ -13,13 +13,15 @@ class SharpFormHtmlField extends SharpFormField
         template as protected parentTemplate;
     }
 
+    const FIELD_TYPE = "html";
+
     /**
      * @param string $key
      * @return static
      */
     public static function make(string $key)
     {
-        return new static($key, 'html', new HtmlFormatter);
+        return new static($key, static::FIELD_TYPE, new HtmlFormatter);
     }
 
     /**

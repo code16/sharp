@@ -9,6 +9,8 @@ class SharpFormTextareaField extends SharpFormField
 {
     use SharpFormFieldWithPlaceholder;
 
+    const FIELD_TYPE = "textarea";
+
     /**
      * @var int
      */
@@ -20,7 +22,7 @@ class SharpFormTextareaField extends SharpFormField
      */
     public static function make(string $key)
     {
-        return new static($key, 'textarea', new TextareaFormatter);
+        return new static($key, static::FIELD_TYPE, new TextareaFormatter);
     }
 
     /**

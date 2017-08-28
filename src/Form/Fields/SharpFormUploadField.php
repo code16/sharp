@@ -9,6 +9,8 @@ class SharpFormUploadField extends SharpFormField
 {
     use SharpFormFieldWithUpload;
 
+    const FIELD_TYPE = "upload";
+
     /**
      * @var string
      */
@@ -20,7 +22,7 @@ class SharpFormUploadField extends SharpFormField
      */
     public static function make(string $key)
     {
-        return new static($key, 'upload', new UploadFormatter);
+        return new static($key, static::FIELD_TYPE, new UploadFormatter);
     }
 
     /**

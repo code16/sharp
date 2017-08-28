@@ -6,6 +6,8 @@ use Code16\Sharp\Form\Fields\Formatters\SelectFormatter;
 
 class SharpFormSelectField extends SharpFormField
 {
+    const FIELD_TYPE = "select";
+
     /**
      * @var array
      */
@@ -43,7 +45,7 @@ class SharpFormSelectField extends SharpFormField
      */
     public static function make(string $key, array $options)
     {
-        $instance = new static($key, 'select', new SelectFormatter);
+        $instance = new static($key, static::FIELD_TYPE, new SelectFormatter);
         $instance->options = collect($options)->map(function($label, $id) {
             return [
                 "id" => $id, "label" => $label
@@ -149,7 +151,7 @@ class SharpFormSelectField extends SharpFormField
     protected function validationRules()
     {
         return [
-            "options" => "required|array",
+            "options" => "array",
             "multiple" => "boolean",
             "clearable" => "boolean",
             "display" => "required|in:list,dropdown",

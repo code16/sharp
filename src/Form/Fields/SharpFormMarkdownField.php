@@ -10,6 +10,8 @@ class SharpFormMarkdownField extends SharpFormField
 {
     use SharpFormFieldWithPlaceholder, SharpFormFieldWithUpload;
 
+    const FIELD_TYPE = "markdown";
+
     const B = "bold";
     const I = "italic";
     const UL = "unordered-list";
@@ -51,7 +53,7 @@ class SharpFormMarkdownField extends SharpFormField
      */
     public static function make(string $key)
     {
-        return new static($key, 'markdown', new MarkdownFormatter());
+        return new static($key, static::FIELD_TYPE, new MarkdownFormatter());
     }
 
     /**
