@@ -45,8 +45,8 @@ class UserSharpList extends SharpEntityList
 
     function getListData(EntityListQueryParams $params)
     {
-        return $this->setCustomTransformer("group", function($user) {
-            return implode("<br>", explode(",", $user->group));
+        return $this->setCustomTransformer("group", function($group) {
+            return implode("<br>", explode(",", $group));
         })
         ->transform(
             User::orderBy($params->sortedBy(), $params->sortedDir())->get()

@@ -53,7 +53,7 @@ class FormController extends ApiController
 
         $form = $this->getFormInstance($entityKey);
 
-        $form->update($instanceId, $this->requestData($form));
+        $form->updateInstance($instanceId, request()->all());
 
         return response()->json(["ok" => true]);
     }
@@ -70,7 +70,7 @@ class FormController extends ApiController
 
         $form = $this->getFormInstance($entityKey);
 
-        $form->store(request()->only($form->getDataKeys()));
+        $form->storeInstance(request()->all());
 
         return response()->json(["ok" => true]);
     }
@@ -102,16 +102,5 @@ class FormController extends ApiController
             // Validation is automatically called (FormRequest)
             app($validatorClass);
         }
-    }
-
-    /**
-     * @param $form
-     * @return array
-     */
-    protected function requestData($form): array
-    {
-        return collect(request()->all())->filter(function ($item, $key) use ($form) {
-            return in_array($key, $form->getDataKeys());
-        })->all();
     }
 }

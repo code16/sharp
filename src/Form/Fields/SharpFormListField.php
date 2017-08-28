@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Form\Fields;
 
+use Code16\Sharp\Form\Fields\Formatters\ListFormatter;
+
 class SharpFormListField extends SharpFormField
 {
     /**
@@ -55,7 +57,7 @@ class SharpFormListField extends SharpFormField
      */
     public static function make(string $key)
     {
-        return new static($key, 'list');
+        return new static($key, 'list', new ListFormatter);
     }
 
     /**
@@ -172,6 +174,14 @@ class SharpFormListField extends SharpFormField
     public function orderAttribute()
     {
         return $this->orderAttribute;
+    }
+
+    /**
+     * @return string
+     */
+    public function itemIdAttribute()
+    {
+        return $this->itemIdAttribute;
     }
 
     /**

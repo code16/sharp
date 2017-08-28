@@ -5,9 +5,12 @@ namespace Code16\Sharp\Form;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
+use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpForm
 {
+    use WithCustomTransformers;
+
     /**
      * @var array
      */
@@ -224,10 +227,49 @@ abstract class SharpForm
 
     /**
      * @param array $data
+     * @return array
+     */
+    protected function formatRequestData(array $data): array
+    {
+        return collect($data)->filter(function ($value, $key) {
+            return in_array($key, $this->getDataKeys());
+
+        })->map(function($value, $key) {
+            // Apply formatters
+            $field = $this->findFieldByKey($key);
+            return $field
+                ? $field->formatter()->fromFront($field, $key, $value)
+                : $value;
+
+        })->all();
+    }
+
+    /**
+     * @param $id
+     * @param $data
+     * @return mixed
+     */
+    public function updateInstance($id, $data)
+    {
+        return $this->update($id, $this->formatRequestData($data));
+    }
+
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public function storeInstance($data)
+    {
+        return $this->store($this->formatRequestData($data));
+    }
+
+    /**
+     * @param array $data
+     * @return mixed
      */
     public function store(array $data)
     {
-        $this->update(null, $data);
+        return $this->update(null, $data);
     }
 
     /**

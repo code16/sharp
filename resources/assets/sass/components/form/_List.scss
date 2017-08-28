@@ -6,6 +6,7 @@
   &__add-button {
     width:100%;
   }
+
   &__sort-button {
     position:absolute;
     right:0;
@@ -13,27 +14,34 @@
     z-index:1;
     padding: 0;
     height:auto;
+    background: $ui-02 !important;
 
-    &:hover, &:focus {
-      background: transparent;
+    &:before {
+      content: "Trier";
+    }
+
+    @mixin colorize($color) {
+      color: $color;
+      .SharpButton__icon {
+        fill: $color;
+      }
     }
 
     &:focus {
-      .SharpButton__icon {
-        fill: $brand-01;
-      }
+      @include colorize($brand-01);
       outline: 1px solid transparent;
     }
 
     &:hover {
-      .SharpButton__icon {
-        fill: $brand-02;
-      }
+      @include colorize($brand-02);
     }
 
 
-    &.SharpButton--active .SharpButton__icon {
-      fill: $brand-03;
+    &.SharpButton--active {
+      @include colorize($brand-03);
+      &:before {
+        content: "Terminer";
+      }
     }
   }
 
@@ -45,9 +53,11 @@
   &__item {
     @extend .SharpModule;
     padding: 0;
-    border-bottom: 1px solid $ui-02;
+    margin-bottom: 4px;
     position: relative;
 
+
+    /// Contextual children modifiers
     .SharpForm--label {
       @include font-size('12');
     }
@@ -70,8 +80,24 @@
 
     }
 
+    ///
+
+    .SharpList__overlay-handle {
+      position: absolute;
+      top:0;
+      left:0;
+      width: 100%;
+      height: 100%;
+      z-index: z('listItemOverlay');
+      cursor: move;
+    }
+
+    &.sortable-chosen {
+      @include focus-outline('border');
+    }
+
     &:last-of-type {
-      padding-bottom: rem(10px);
+      margin-bottom: rem(10px);
     }
 
     &.expand-enter-active {
@@ -85,10 +111,6 @@
     &.expand-enter, &.expand-leave-to  {
       opacity: 0;
       transform: translateY(30px);
-    }
-
-    &--collapsed {
-      background: #f5f5f5;
     }
 
     &--no-transition {

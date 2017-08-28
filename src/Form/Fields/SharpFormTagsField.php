@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Form\Fields;
 
+use Code16\Sharp\Form\Fields\Formatters\TagsFormatter;
+
 class SharpFormTagsField extends SharpFormField
 {
     /**
@@ -20,6 +22,11 @@ class SharpFormTagsField extends SharpFormField
     protected $createAttribute = null;
 
     /**
+     * @var string
+     */
+    protected $idAttribute = "id";
+
+    /**
      * @var int
      */
     protected $maxTagCount = null;
@@ -36,7 +43,8 @@ class SharpFormTagsField extends SharpFormField
      */
     public static function make(string $key, array $options)
     {
-        $instance = new static($key, 'tags');
+        $instance = new static($key, 'tags', new TagsFormatter);
+
         $instance->options = collect($options)->map(function($label, $id) {
             return [
                 "id" => $id, "label" => $label
@@ -69,12 +77,23 @@ class SharpFormTagsField extends SharpFormField
     }
 
     /**
-     * @param string $createAttribute
+     * @param string $attribute
      * @return static
      */
-    public function setCreateAttribute(string $createAttribute)
+    public function setCreateAttribute(string $attribute)
     {
-        $this->createAttribute = $createAttribute;
+        $this->createAttribute = $attribute;
+
+        return $this;
+    }
+
+    /**
+     * @param string $idAttribute
+     * @return static
+     */
+    public function setIdAttribute($idAttribute)
+    {
+        $this->idAttribute = $idAttribute;
 
         return $this;
     }
@@ -114,6 +133,22 @@ class SharpFormTagsField extends SharpFormField
     public function createAttribute()
     {
         return $this->createAttribute;
+    }
+
+    /**
+     * @return string
+     */
+    public function idAttribute()
+    {
+        return $this->idAttribute;
+    }
+
+    /**
+     * @return array
+     */
+    public function options()
+    {
+        return $this->options;
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Form\Fields;
 
+use Code16\Sharp\Form\Fields\Formatters\AutocompleteFormatter;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithTemplates;
 use Illuminate\Support\Collection;
@@ -57,7 +58,7 @@ class SharpFormAutocompleteField extends SharpFormField
      */
     public static function make(string $key, string $mode)
     {
-        $instance = new static($key, 'autocomplete');
+        $instance = new static($key, 'autocomplete', new AutocompleteFormatter());
         $instance->mode = $mode;
 
         return $instance;

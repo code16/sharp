@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Form\Fields;
 
+use Code16\Sharp\Form\Fields\Formatters\DateFormatter;
+
 class SharpFormDateField extends SharpFormField
 {
     /**
@@ -50,7 +52,7 @@ class SharpFormDateField extends SharpFormField
      */
     public static function make(string $key)
     {
-        $field = new static($key, 'date');
+        $field = new static($key, 'date', new DateFormatter());
         $field->language = app()->getLocale();
 
         return $field;
@@ -142,6 +144,22 @@ class SharpFormDateField extends SharpFormField
         $this->displayFormat = $displayFormat;
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasDate()
+    {
+        return $this->hasDate;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasTime()
+    {
+        return $this->hasTime;
     }
 
     /**

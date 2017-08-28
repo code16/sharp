@@ -10,7 +10,7 @@
                 <template v-if="file">
                     <div class="SharpUpload__container">
                         <div class="SharpUpload__thumbnail" v-if="!!imageSrc">
-                            <img :src="imageSrc">
+                            <img :src="imageSrc" @load="$emit('image-updated')">
                         </div>
                         <div class="SharpUpload__infos">
                             <div>
@@ -47,14 +47,13 @@
             </div>
         </div>
         <template v-if="!!originalImageSrc">
-            <sharp-modal v-model="showEditModal" @ok="onEditModalOk" @shown="onEditModalShown" :close-on-backdrop="false"
+            <sharp-modal v-model="showEditModal" @ok="onEditModalOk" @shown="onEditModalShown" @hidden="$emit('inactive')" :close-on-backdrop="false"
                          :title="l('modals.cropper.title')">
                 <vue-cropper ref="cropper" class="SharpUpload__modal-vue-cropper"
                              :view-mode="2" drag-mode="crop"  :aspect-ratio="ratioX/ratioY"
                              :auto-crop-area="1" :zoomable="false" :guides="false"
                              :background="true" :rotatable="true" :src="originalImageSrc"
-                             :ready="onCropperReady"
-                             alt="Source image">
+                             :ready="onCropperReady" alt="Source image">
                 </vue-cropper>
                 <div>
                     <button class="SharpButton SharpButton--primary" @click="rotate(-90)"><i class="fa fa-rotate-left"></i></button>
@@ -164,9 +163,10 @@
                     data = JSON.parse(this.file.xhrResponse.responseText);
                 }
                 catch(e) { console.log(e); }
-                this.$emit('success', data);
 
                 data.uploaded = true;
+                this.$emit('success', data);
+
                 this.$parent.$emit('input',data);
                 this.actionsBus.$emit('enable-submit');
 
@@ -194,6 +194,7 @@
             },
 
             onEditButtonClick() {
+                this.$emit('active');
                 this.showEditModal = true;
                 this.croppable = true;
             },
@@ -248,16 +249,19 @@
                 };
 
                 if(this.croppable) {
-                    this.$parent.$emit('input', {
+                    let data = {
                         ...this.value,
                         cropData: relativeData,
-                    });
+                    };
+                    this.$parent.$emit('input', data);
+                    this.$emit('updated', data);
                 }
             },
 
             updateCroppedImage() {
                 if(this.croppable) {
                     this.croppedImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
+                    //this.$nextTick(() => this.$emit('cropped'));
                 }
             },
 

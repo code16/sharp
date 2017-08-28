@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Form\Fields;
 
+use Code16\Sharp\Form\Fields\Formatters\SelectFormatter;
+
 class SharpFormSelectField extends SharpFormField
 {
     /**
@@ -36,7 +38,7 @@ class SharpFormSelectField extends SharpFormField
      */
     public static function make(string $key, array $options)
     {
-        $instance = new static($key, 'select');
+        $instance = new static($key, 'select', new SelectFormatter);
         $instance->options = collect($options)->map(function($label, $id) {
             return [
                 "id" => $id, "label" => $label

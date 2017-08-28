@@ -41,7 +41,7 @@ class SpaceshipSharpList extends SharpEntityList
                 ->setLabel("Type")
 
         )->addDataContainer(
-            EntityListDataContainer::make("pilots.name")
+            EntityListDataContainer::make("pilots")
                 ->setLabel("Pilots")
                 ->setHtml()
 
@@ -74,7 +74,7 @@ class SpaceshipSharpList extends SharpEntityList
             ->addColumn("name", 3, 5)
             ->addColumnLarge("capacity", 1)
             ->addColumn("type", 2, 4)
-            ->addColumnLarge("pilots.name", 4)
+            ->addColumnLarge("pilots", 4)
             ->addColumn("messages_sent_count", 1);
     }
 
@@ -112,13 +112,13 @@ class SpaceshipSharpList extends SharpEntityList
             }
         }
 
-        return $this->setCustomTransformer("capacity", function($spaceship) {
-                return number_format($spaceship->capacity / 1000, 0) . "k";
+        return $this->setCustomTransformer("capacity", function($capacity) {
+                return number_format($capacity / 1000, 0) . "k";
             })
-            ->setCustomTransformer("type", function($spaceship) {
+            ->setCustomTransformer("type", function($type, $spaceship) {
                 return $spaceship->type->label;
             })
-            ->setCustomTransformer("pilots.name", function($spaceship) {
+            ->setCustomTransformer("pilots", function($pilots, $spaceship) {
                 return $spaceship->pilots->pluck("name")->implode("<br>");
             })
             ->setCustomTransformer("picture", new SharpUploadModelAttributeTransformer(100))

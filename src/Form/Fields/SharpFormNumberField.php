@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Form\Fields;
 
+use Code16\Sharp\Form\Fields\Formatters\NumberFormatter;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 
 class SharpFormNumberField extends SharpFormField
@@ -34,7 +35,7 @@ class SharpFormNumberField extends SharpFormField
      */
     public static function make(string $key)
     {
-        return new static($key, 'number');
+        return new static($key, 'number', new NumberFormatter);
     }
 
     /**
