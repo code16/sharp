@@ -34965,17 +34965,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var LabelledItem = function () {
     function LabelledItem(item) {
-        var keep = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
         _classCallCheck(this, LabelledItem);
 
         this.id = item.id;
-        if (keep.label) {
-            this.label = item.label;
-        }
-        if (keep.internalId) {
-            this.internalId = item.internalId;
-        }
+        this.label = item.label;
     }
 
     _createClass(LabelledItem, [{
@@ -35006,13 +34999,10 @@ var Option = function (_LabelledItem) {
 var Tag = function (_LabelledItem2) {
     _inherits(Tag, _LabelledItem2);
 
-    function Tag(item) {
-        var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-            toExport = _ref.toExport;
-
+    function Tag() {
         _classCallCheck(this, Tag);
 
-        return _possibleConstructorReturn(this, (Tag.__proto__ || Object.getPrototypeOf(Tag)).call(this, item, { label: !toExport || !item.id, internalId: !toExport }));
+        return _possibleConstructorReturn(this, (Tag.__proto__ || Object.getPrototypeOf(Tag)).apply(this, arguments));
     }
 
     return Tag;
@@ -35047,15 +35037,9 @@ var Tag = function (_LabelledItem2) {
         dynamicPlaceholder: function dynamicPlaceholder() {
             return this.tags.length < (this.maxTagCount || Infinity) ? this.placeholder : "";
         },
-        croppedTags: function croppedTags() {
-            return this.tags.maps(function (_ref2) {
-                var id = _ref2.id,
-                    label = _ref2.label;
-
-                var cropped = {};
-                cropped.id = id;
-                if (!id) cropped.label = label;
-                return cropped;
+        ids: function ids() {
+            return this.tags.map(function (t) {
+                return t.internalId;
             });
         }
     },
@@ -35089,7 +35073,7 @@ var Tag = function (_LabelledItem2) {
         },
         onTagsChanged: function onTagsChanged() {
             this.$emit('input', this.tags.map(function (t) {
-                return new Tag(t, { toExport: true });
+                return new Tag(t);
             }));
         }
     },
@@ -83180,9 +83164,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "multiple": "",
       "searchable": "",
       "hide-selected": "",
-      "selectLabel": "",
-      "selectedLabel": "",
-      "deselectLabel": ""
+      "show-labels": false
     },
     on: {
       "search-change": _vm.handleTextInput,

@@ -12,7 +12,7 @@
             track-by="_internalId"
             label="label"
             multiple searchable hide-selected
-            selectLabel="" selectedLabel="" deselectLabel=""
+            :show-labels="false"
             @search-change="handleTextInput"
             @input="handleInput"
             @tag="handleNewTag"
@@ -24,14 +24,9 @@
     import Multiselect from '../../Multiselect';
 
     class LabelledItem {
-        constructor(item, keep={}) {
+        constructor(item) {
             this.id = item.id;
-            if(keep.label) {
-                this.label = item.label
-            }
-            if(keep.internalId) {
-                this.internalId = item.internalId;
-            }
+            this.label = item.label;
         }
 
         set internalId(id) {
@@ -46,10 +41,6 @@
     class Option extends LabelledItem {
     }
     class Tag extends LabelledItem {
-
-        constructor(item, { toExport } = {}) {
-            super(item, { label: !toExport || !item.id, internalId: !toExport });
-        }
     }
 
     export default {
@@ -82,13 +73,8 @@
             dynamicPlaceholder() {
                 return this.tags.length < (this.maxTagCount || Infinity) ? this.placeholder : "";
             },
-            croppedTags() {
-                return this.tags.maps(({ id, label }) => {
-                    let cropped = {};
-                    cropped.id = id;
-                    if(!id) cropped.label = label;
-                    return cropped;
-                });
+            ids() {
+                return this.tags.map(t=>t.internalId);
             }
         },
         watch: {
@@ -119,7 +105,7 @@
                 else this.$refs.multiselect.pointer = 0
             },
             onTagsChanged() {
-                this.$emit('input', this.tags.map(t => new Tag(t, { toExport: true })));
+                this.$emit('input', this.tags.map(t => new Tag(t)));
             }
         },
         created() {
