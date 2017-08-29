@@ -23,7 +23,7 @@ class SharpFormSelectFieldTest extends SharpTestCase
                     ["id" => "1", "label" => "Elem 1"],
                     ["id" => "2", "label" => "Elem 2"],
                 ], "multiple" => false,
-                "clearable" => false, "display" => "list",
+                "clearable" => false, "inline" => false, "display" => "list",
             ], $formField->toArray()
         );
     }
@@ -36,6 +36,18 @@ class SharpFormSelectFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ["multiple" => true],
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_inline()
+    {
+        $formField = $this->getDefaultSelect()
+            ->setInline();
+
+        $this->assertArraySubset(
+            ["inline" => true],
             $formField->toArray()
         );
     }
