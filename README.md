@@ -68,5 +68,6 @@ We'll get into all those classes in this document. The important thing to notice
 7. [Entity Authorizations](docs/entity-authorizations.md)
 8. [The Dashboard](docs/dashboard.md)
 9. [How to transform data](docs/how-to-transform-data.md)
-10. Handling data localization
-11. Extending Sharp
+10. [Sharp built-in solution for uploads](docs/sharp-built-in-solution-for-uploads.md)
+11. Handling data localization
+12. Extending Sharp

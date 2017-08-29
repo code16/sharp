@@ -106,6 +106,7 @@ class SpaceshipSharpForm extends SharpForm
                     SharpFormDateField::make("starts_at")
                         ->setLabel("Date")
                         ->setDisplayFormat("YYYY/MM/DD HH:mm")
+                        ->setMinTime(8)
                         ->setHasTime(true)
                 )->addItemField(
                     SharpFormSelectField::make("status", [

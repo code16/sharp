@@ -71,6 +71,10 @@ class SharpFormUploadField extends SharpFormField
         ]);
     }
 
+    /**
+     * @param $fileFilter
+     * @return array
+     */
     private function formatFileFilter($fileFilter)
     {
         if(!is_array($fileFilter)) {
@@ -82,6 +86,7 @@ class SharpFormUploadField extends SharpFormField
             if(substr($filter, 0, 1) != ".") {
                 $filter = ".$filter";
             }
+
             return $filter;
 
         })->all();
