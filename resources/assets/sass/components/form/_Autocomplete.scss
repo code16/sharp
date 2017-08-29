@@ -18,11 +18,11 @@
     justify-content: space-between;
     align-items: center;
     &__close-button {
-      @extend .SharpNotification__inline__close-button;
+      @include close-button;
     }
 
     &__close-icon {
-      @extend .SharpNotification__inline__close-icon;
+      @include close-icon;
     }
   }
 

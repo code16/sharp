@@ -69,11 +69,8 @@
 
           &:not(.SharpLeftNav__item--has-children) {
             background-color: $color__gray-2;
-          }
-
-          .SharpLeftNav__item-link {
-            color: $color__blue-51;
             text-decoration: underline;
+            color: $color__blue-51;
           }
 
           .SharpLeftNav__list--nested .SharpLeftNav__item-link {
@@ -169,7 +166,7 @@
 
       &:hover {
         & > .SharpLeftNav__item-link {
-          color: $color__blue-51;
+          //color: $color__blue-51;
         }
       }
     }

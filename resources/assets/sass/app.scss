@@ -22,6 +22,7 @@ $css--reset:false;
 @import 'mixins/helper-mixins';
 @import 'mixins/layout';
 @import 'mixins/modifiers';
+@import 'mixins/close-button';
 
 @mixin sharp-color($color) {
   fill: $color;
