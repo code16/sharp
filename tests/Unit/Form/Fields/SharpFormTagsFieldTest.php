@@ -23,7 +23,7 @@ class SharpFormTagsFieldTest extends SharpTestCase
                     ["id" => "1", "label" => "Elem 1"],
                     ["id" => "2", "label" => "Elem 2"],
                 ], "creatable" => false,
-                "createText" => "New..."
+                "createText" => "Create"
             ], $formField->toArray()
         );
     }
