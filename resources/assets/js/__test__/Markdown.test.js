@@ -167,22 +167,35 @@ describe('markdown-field', () => {
         expect(inputEmitted).toHaveBeenLastCalledWith(expect.objectContaining({ text:'AAA' }));
     });
 
-    // it('insert image properly', async () => {
-    //     let $markdown = await createVm();
-    //
-    //     let { simplemde } = $markdown;
-    //     let { codemirror } = simplemde;
-    //
-    //     codemirror.getSelection = jest.fn(() => 'Image title');
-    //     codemirror.markText = jest.fn(() => ({
-    //         on: jest.fn()
-    //     }));
-    //
-    //     $markdown.insertUploadImage(simplemde);
-    //
-    //     console.log(simplemde.value());
-    //     //console.log($markdown.$root._provided);
-    // });
+
+    describe('uploader insertion', () => {
+
+        let mockCodemirror = codemirror => {
+            codemirror.getSelection = jest.fn(() => 'Image title');
+            codemirror.markText = jest.fn(() => ({
+                on: jest.fn(),
+                lines: [{ on: jest.fn() }]
+            }));
+            codemirror.addLineClass = jest.fn();
+        };
+
+        let mockXHR = () => {
+
+        };
+
+        it('insert image properly', async () => {
+            let $markdown = await createVm();
+
+            let { simplemde } = $markdown;
+            let { codemirror } = simplemde;
+
+            mockCodemirror(codemirror);
+
+            $markdown.insertUploadImage(simplemde);
+
+            console.log(simplemde.value());
+        });
+    });
 });
 
 async function createVm(customOptions={}) {
