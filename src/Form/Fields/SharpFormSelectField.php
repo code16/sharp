@@ -39,6 +39,11 @@ class SharpFormSelectField extends SharpFormField
     protected $idAttribute = "id";
 
     /**
+     * @var bool
+     */
+    protected $inline = false;
+
+    /**
      * @param string $key
      * @param array $options
      * @return static
@@ -73,6 +78,17 @@ class SharpFormSelectField extends SharpFormField
     public function setClearable(bool $clearable = true)
     {
         $this->clearable = $clearable;
+
+        return $this;
+    }
+
+    /**
+     * @param bool $inline
+     * @return $this
+     */
+    public function setInline(bool $inline = true)
+    {
+        $this->inline = $inline;
 
         return $this;
     }
@@ -153,6 +169,7 @@ class SharpFormSelectField extends SharpFormField
         return [
             "options" => "array",
             "multiple" => "boolean",
+            "inline" => "boolean",
             "clearable" => "boolean",
             "display" => "required|in:list,dropdown",
             "maxSelected" => "int"
@@ -169,6 +186,7 @@ class SharpFormSelectField extends SharpFormField
             "multiple" => $this->multiple,
             "clearable" => $this->clearable,
             "display" => $this->display,
+            "inline" => $this->inline,
             "maxSelected" => $this->maxSelected,
         ]);
     }

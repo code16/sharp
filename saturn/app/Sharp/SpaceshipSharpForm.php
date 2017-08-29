@@ -111,7 +111,7 @@ class SpaceshipSharpForm extends SharpForm
                     SharpFormSelectField::make("status", [
                         "ok" => "Passed", "ko" => "Failed"
                     ])->setLabel("Status")
-                    ->setDisplayAsList()
+                    ->setDisplayAsList()->setInline()
                 )->addItemField(
                     SharpFormTextareaField::make("comment")
                         ->setLabel("Comment")
