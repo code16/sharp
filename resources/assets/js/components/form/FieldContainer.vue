@@ -90,7 +90,7 @@
                 this.state = 'error';
                 this.stateMessage = error;
                 if(this.$tab) {
-                    this.$tab.$emit('error', this.fieldKey);
+                    this.$tab.$emit('error', this.mergedErrorIdentifier);
                 }
             },
             setOk() {
@@ -101,8 +101,9 @@
                 this.state = 'classic';
                 this.stateMessage = '';
                 if(this.$tab) {
-                    this.$tab.$emit('clear', this.fieldKey);
+                    this.$tab.$emit('clear', this.mergedErrorIdentifier);
                 }
+                this.$form.$emit('error-cleared', this.mergedErrorIdentifier);
             },
             triggerFocus() {
                 this.$set(this.fieldProps,'focused',true);

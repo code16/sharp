@@ -1,9 +1,11 @@
 .SharpActionView {
   transition: padding 300ms $bx--standard-easing;
   padding-left: rem(48px);
+  margin-bottom: 3rem;
 }
 
 @include media-breakpoint-up(md) {
+  padding-top: 5rem;
   .SharpActionView {
     padding-left: rem(200px);
   }

@@ -34,13 +34,13 @@
   }
 
   &__close-button {
-    @extend .SharpNotification__inline__close-button;
+    @include close-button;
     display: none;
     background: transparent;
   }
 
   &__close-icon {
-    @extend .SharpNotification__inline__close-icon;
+    @include close-icon;
   }
 
   &__upload-button {

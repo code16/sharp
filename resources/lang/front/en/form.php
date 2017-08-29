@@ -2,9 +2,15 @@
 
 return [
 
+    'validation_error.title' => 'Form error',
+    'validation_error.description' => 'Some fields are not correct',
+
     'list.remove_button' => 'Remove',
     'list.insert_button' => 'Insert',
+    'list.sort_button.inactive' => 'Sort',
+    'list.sort_button.active' => 'Finish',
     'list.empty' => 'Empty list',
+
 
     'upload.browse_button' => 'Browse...',
     'upload.remove_button' => 'Remove',

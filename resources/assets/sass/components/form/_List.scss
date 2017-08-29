@@ -17,7 +17,7 @@
     background: $ui-02 !important;
 
     &:before {
-      content: "Trier";
+      content: attr(data-inactive-text);
     }
 
     @mixin colorize($color) {
@@ -40,7 +40,7 @@
     &.SharpButton--active {
       @include colorize($brand-03);
       &:before {
-        content: "Terminer";
+        content: attr(data-active-text);
       }
     }
   }

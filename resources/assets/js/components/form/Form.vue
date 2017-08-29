@@ -1,6 +1,17 @@
 <template>
     <div class="SharpForm">
         <template v-if="ready">
+            <div v-show="hasErrors" class="SharpNotification SharpNotification__inline SharpNotification__inline--error" role="alert">
+                <div class="SharpNotification__details">
+                    <svg class="SharpNotification__icon" width="16" height="16" viewBox="0 0 16 16" fill-rule="evenodd">
+                        <path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zM5.1 13.3L3.5 12 11 2.6l1.5 1.2-7.4 9.5z"></path>
+                    </svg>
+                    <div class="SharpNotification__text-wrapper">
+                        <p class="SharpNotification__title">{{ l('form.validation_error.title') }}</p>
+                        <p class="SharpNotification__subtitle">{{ l('form.validation_error.description') }}</p>
+                    </div>
+                </div>
+            </div>
             <sharp-tabbed-layout :layout="layout">
                 <!-- Tab -->
                 <template scope="tab">
@@ -32,7 +43,7 @@
     import * as util from '../../util';
     import { API_PATH } from '../../consts';
 
-    import { testableForm, ActionEvents, ReadOnlyFields } from '../../mixins';
+    import { testableForm, ActionEvents, ReadOnlyFields, Localization } from '../../mixins';
 
     import DynamicView from '../DynamicViewMixin';
 
@@ -49,7 +60,7 @@
         name:'SharpForm',
         extends: DynamicView,
 
-        mixins: [testableForm, ActionEvents, ReadOnlyFields('fields')],
+        mixins: [testableForm, ActionEvents, ReadOnlyFields('fields'), Localization],
 
         components: {
             [TabbedLayout.name]: TabbedLayout,
@@ -106,6 +117,9 @@
             // don't show loading on creation
             synchronous() {
                 return this.independant;
+            },
+            hasErrors() {
+                return Object.keys(this.errors).some(errorKey => !this.errors[errorKey].cleared);
             }
         },
         methods: {
@@ -170,14 +184,13 @@
 
                 this.post(endpoint, dataFormatter(this))
                     .then(({ data })=>{
-                        if(this.resetDataAfterSubmitted) {
-                            Object.keys(this.data).forEach(key => this.data[key] = null);
-                        }
                         if(this.independant) {
                             this.$emit('submitted', data);
                         }
-                        else if(data.ok)
+                        else if(data.ok) {
+                            this.mainLoading.$emit('show');
                             location.href = `/sharp/list/${this.entityKey}?restore-context=1`
+                        }
                     })
                     .catch(this.handleError)
             },
@@ -193,6 +206,11 @@
 
                 this.data = {}
             }
+        },
+        created() {
+            this.$on('error-cleared', errorId => {
+                this.$set(this.errors[errorId],'cleared',true);
+            })
         },
         mounted() {
             this.init();

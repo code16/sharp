@@ -12,11 +12,11 @@
     justify-content: center;
     right:0;
     height: 100%;
-    @extend .SharpNotification__inline__close-button;
+    @include close-button;
 
     &-icon {
       position: initial;
-      @extend .SharpNotification__inline__close-icon;
+      @include close-icon;
     }
   }
 

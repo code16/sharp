@@ -34181,7 +34181,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             this.state = 'error';
             this.stateMessage = error;
             if (this.$tab) {
-                this.$tab.$emit('error', this.fieldKey);
+                this.$tab.$emit('error', this.mergedErrorIdentifier);
             }
         },
         setOk: function setOk() {
@@ -34192,8 +34192,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             this.state = 'classic';
             this.stateMessage = '';
             if (this.$tab) {
-                this.$tab.$emit('clear', this.fieldKey);
+                this.$tab.$emit('clear', this.mergedErrorIdentifier);
             }
+            this.$form.$emit('error-cleared', this.mergedErrorIdentifier);
         },
         triggerFocus: function triggerFocus() {
             this.$set(this.fieldProps, 'focused', true);
@@ -34304,6 +34305,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -34324,7 +34336,7 @@ var noop = function noop() {};
     name: 'SharpForm',
     extends: __WEBPACK_IMPORTED_MODULE_3__DynamicViewMixin__["a" /* default */],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_2__mixins__["f" /* testableForm */], __WEBPACK_IMPORTED_MODULE_2__mixins__["b" /* ActionEvents */], __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__mixins__["g" /* ReadOnlyFields */])('fields')],
+    mixins: [__WEBPACK_IMPORTED_MODULE_2__mixins__["f" /* testableForm */], __WEBPACK_IMPORTED_MODULE_2__mixins__["b" /* ActionEvents */], __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__mixins__["g" /* ReadOnlyFields */])('fields'), __WEBPACK_IMPORTED_MODULE_2__mixins__["c" /* Localization */]],
 
     components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_4__TabbedLayout__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_4__TabbedLayout__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_6__FieldsLayout_vue__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_6__FieldsLayout_vue__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_5__Grid__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_5__Grid__["a" /* default */]), _components),
 
@@ -34378,6 +34390,13 @@ var noop = function noop() {};
         // don't show loading on creation
         synchronous: function synchronous() {
             return this.independant;
+        },
+        hasErrors: function hasErrors() {
+            var _this = this;
+
+            return Object.keys(this.errors).some(function (errorKey) {
+                return !_this.errors[errorKey].cleared;
+            });
         }
     },
     methods: {
@@ -34417,7 +34436,7 @@ var noop = function noop() {};
             __WEBPACK_IMPORTED_MODULE_7_axios___default.a.delete(this.apiPath);
         },
         init: function init() {
-            var _this = this;
+            var _this2 = this;
 
             if (this.independant) {
                 this.mount(this.props);
@@ -34425,7 +34444,7 @@ var noop = function noop() {};
             } else {
                 if (this.entityKey) {
                     this.get().then(function (_) {
-                        return _this.setupActionBar();
+                        return _this2.setupActionBar();
                     });
                 } else __WEBPACK_IMPORTED_MODULE_0__util__["b" /* error */]('no entity key provided');
             }
@@ -34448,7 +34467,7 @@ var noop = function noop() {};
     },
     actions: {
         submit: function submit() {
-            var _this2 = this;
+            var _this3 = this;
 
             var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
                 entityKey = _ref3.entityKey,
@@ -34461,14 +34480,12 @@ var noop = function noop() {};
             this.post(endpoint, dataFormatter(this)).then(function (_ref4) {
                 var data = _ref4.data;
 
-                if (_this2.resetDataAfterSubmitted) {
-                    Object.keys(_this2.data).forEach(function (key) {
-                        return _this2.data[key] = null;
-                    });
+                if (_this3.independant) {
+                    _this3.$emit('submitted', data);
+                } else if (data.ok) {
+                    _this3.mainLoading.$emit('show');
+                    location.href = '/sharp/list/' + _this3.entityKey + '?restore-context=1';
                 }
-                if (_this2.independant) {
-                    _this2.$emit('submitted', data);
-                } else if (data.ok) location.href = '/sharp/list/' + _this2.entityKey + '?restore-context=1';
             }).catch(this.handleError);
         },
         cancel: function cancel() {
@@ -34486,6 +34503,13 @@ var noop = function noop() {};
 
             this.data = {};
         }
+    },
+    created: function created() {
+        var _this4 = this;
+
+        this.$on('error-cleared', function (errorId) {
+            _this4.$set(_this4.errors[errorId], 'cleared', true);
+        });
     },
     mounted: function mounted() {
         this.init();
@@ -35095,7 +35119,9 @@ var Tag = function (_LabelledItem2) {
             var matchedOption = this.indexedOptions.find(function (o) {
                 return o.id === tag.id;
             });
-            return new Tag(matchedOption);
+            var patchedTag = new Tag(matchedOption);
+            patchedTag.internalId = matchedOption.internalId;
+            return patchedTag;
         },
         handleNewTag: function handleNewTag(val) {
             var newTag = new Tag({ id: null, label: val });
@@ -35812,6 +35838,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -36369,7 +36400,7 @@ var noop = function noop() {};
 
         this.codemirrorOn('keydown', this.onKeydown);
         this.codemirrorOn('keyHandled', this.onKeyHandled);
-        console.log(this);
+        //console.log(this);
     }
 });
 
@@ -82303,7 +82334,9 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       'SharpButton--active': _vm.dragActive
     },
     attrs: {
-      "type": "button"
+      "type": "button",
+      "data-inactive-text": _vm.l('form.list.sort_button.inactive'),
+      "data-active-text": _vm.l('form.list.sort_button.active')
     },
     on: {
       "click": _vm.toggleDrag
@@ -83264,7 +83297,38 @@ if (false) {
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "SharpForm"
-  }, [(_vm.ready) ? [_c('sharp-tabbed-layout', {
+  }, [(_vm.ready) ? [_c('div', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.hasErrors),
+      expression: "hasErrors"
+    }],
+    staticClass: "SharpNotification SharpNotification__inline SharpNotification__inline--error",
+    attrs: {
+      "role": "alert"
+    }
+  }, [_c('div', {
+    staticClass: "SharpNotification__details"
+  }, [_c('svg', {
+    staticClass: "SharpNotification__icon",
+    attrs: {
+      "width": "16",
+      "height": "16",
+      "viewBox": "0 0 16 16",
+      "fill-rule": "evenodd"
+    }
+  }, [_c('path', {
+    attrs: {
+      "d": "M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zM5.1 13.3L3.5 12 11 2.6l1.5 1.2-7.4 9.5z"
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "SharpNotification__text-wrapper"
+  }, [_c('p', {
+    staticClass: "SharpNotification__title"
+  }, [_vm._v(_vm._s(_vm.l('form.validation_error.title')))]), _vm._v(" "), _c('p', {
+    staticClass: "SharpNotification__subtitle"
+  }, [_vm._v(_vm._s(_vm.l('form.validation_error.description')))])])])]), _vm._v(" "), _c('sharp-tabbed-layout', {
     attrs: {
       "layout": _vm.layout
     },

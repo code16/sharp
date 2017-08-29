@@ -2,23 +2,24 @@
 
 exports[`select-field can mount "read only" Select field as checkboxes list 1`] = `
 <div id="app">
-    <div class="SharpSelect SharpSelect--multiple">
-        <div>
-            <div class="SharpCheck"><label class="SharpCheck__label"><input type="checkbox" disabled="disabled" class="SharpCheck__input"> <span class="SharpCheck__appearance"><svg width="12" height="9" viewBox="0 0 12 9" fill-rule="evenodd" class="SharpCheck__checkmark"><path d="M4.1 6.1L1.4 3.4 0 4.9 4.1 9l7.6-7.6L10.3 0z"></path></svg></span> <span class="SharpChek__label-text">AAA</span></label></div>
-            <div
-                class="SharpCheck"><label class="SharpCheck__label"><input type="checkbox" disabled="disabled" class="SharpCheck__input"> <span class="SharpCheck__appearance"><svg width="12" height="9" viewBox="0 0 12 9" fill-rule="evenodd" class="SharpCheck__checkmark"><path d="M4.1 6.1L1.4 3.4 0 4.9 4.1 9l7.6-7.6L10.3 0z"></path></svg></span> <span class="SharpChek__label-text">BBB</span></label></div>
+    <div class="SharpSelect SharpSelect--multiple SharpSelect--list">
+        <div><span class="SharpSelect__item SharpSelect__item--inline"><div class="SharpCheck"><label class="SharpCheck__label"><input type="checkbox" disabled="disabled" class="SharpCheck__input"> <span class="SharpCheck__appearance"><svg width="12" height="9" viewBox="0 0 12 9" fill-rule="evenodd" class="SharpCheck__checkmark"><path d="M4.1 6.1L1.4 3.4 0 4.9 4.1 9l7.6-7.6L10.3 0z"></path></svg></span>            <span class="SharpChek__label-text">AAA</span></label>
+        </div>
+        </span><span class="SharpSelect__item SharpSelect__item--inline"><div class="SharpCheck"><label class="SharpCheck__label"><input type="checkbox" disabled="disabled" class="SharpCheck__input"> <span class="SharpCheck__appearance"><svg width="12" height="9" viewBox="0 0 12 9" fill-rule="evenodd" class="SharpCheck__checkmark"><path d="M4.1 6.1L1.4 3.4 0 4.9 4.1 9l7.6-7.6L10.3 0z"></path></svg></span>        <span class="SharpChek__label-text">BBB</span></label>
     </div>
+    </span>
+</div>
 </div>
 </div>
 `;
 
 exports[`select-field can mount "read only" Select field as radios list 1`] = `
 <div id="app">
-    <div class="SharpSelect">
+    <div class="SharpSelect SharpSelect--list">
         <div>
-            <div class="SharpSelect__radio-button-group"><span><input type="radio" id="select0" tabindex="0" disabled="disabled" name="select" class="SharpRadio"> <label for="select0" class="SharpRadio__label"><span class="SharpRadio__appearance"></span> AAA
+            <div class="SharpSelect__radio-button-group"><span class="SharpSelect__item SharpSelect__item--inline"><input type="radio" tabindex="0" id="select0" disabled="disabled" name="select" class="SharpRadio"> <label for="select0" class="SharpRadio__label"><span class="SharpRadio__appearance"></span>                AAA
                 </label>
-                </span><span><input type="radio" id="select1" tabindex="0" disabled="disabled" name="select" class="SharpRadio"> <label for="select1" class="SharpRadio__label"><span class="SharpRadio__appearance"></span> BBB
+                </span><span class="SharpSelect__item SharpSelect__item--inline"><input type="radio" tabindex="0" id="select1" disabled="disabled" name="select" class="SharpRadio"> <label for="select1" class="SharpRadio__label"><span class="SharpRadio__appearance"></span>                BBB
                 </label>
                 </span>
             </div>
@@ -29,7 +30,7 @@ exports[`select-field can mount "read only" Select field as radios list 1`] = `
 
 exports[`select-field can mount Select field 1`] = `
 <div id="app">
-    <div class="SharpSelect">
+    <div class="SharpSelect SharpSelect--dropdown">
         <div tabindex="0" class="multiselect"><svg width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd" class="multiselect__select"><path d="M10 0L5 5 0 0z"></path></svg>
             <div class="multiselect__tags">
                 <div class="multiselect__tags-wrap" style="display: none;"></div>
@@ -55,23 +56,24 @@ exports[`select-field can mount Select field 1`] = `
 
 exports[`select-field can mount Select field as checkboxes list 1`] = `
 <div id="app">
-    <div class="SharpSelect SharpSelect--multiple">
-        <div>
-            <div class="SharpCheck"><label class="SharpCheck__label"><input type="checkbox" class="SharpCheck__input"> <span class="SharpCheck__appearance"><svg width="12" height="9" viewBox="0 0 12 9" fill-rule="evenodd" class="SharpCheck__checkmark"><path d="M4.1 6.1L1.4 3.4 0 4.9 4.1 9l7.6-7.6L10.3 0z"></path></svg></span> <span class="SharpChek__label-text">AAA</span></label></div>
-            <div
-                class="SharpCheck"><label class="SharpCheck__label"><input type="checkbox" class="SharpCheck__input"> <span class="SharpCheck__appearance"><svg width="12" height="9" viewBox="0 0 12 9" fill-rule="evenodd" class="SharpCheck__checkmark"><path d="M4.1 6.1L1.4 3.4 0 4.9 4.1 9l7.6-7.6L10.3 0z"></path></svg></span> <span class="SharpChek__label-text">BBB</span></label></div>
+    <div class="SharpSelect SharpSelect--multiple SharpSelect--list">
+        <div><span class="SharpSelect__item SharpSelect__item--inline"><div class="SharpCheck"><label class="SharpCheck__label"><input type="checkbox" class="SharpCheck__input"> <span class="SharpCheck__appearance"><svg width="12" height="9" viewBox="0 0 12 9" fill-rule="evenodd" class="SharpCheck__checkmark"><path d="M4.1 6.1L1.4 3.4 0 4.9 4.1 9l7.6-7.6L10.3 0z"></path></svg></span>            <span class="SharpChek__label-text">AAA</span></label>
+        </div>
+        </span><span class="SharpSelect__item SharpSelect__item--inline"><div class="SharpCheck"><label class="SharpCheck__label"><input type="checkbox" class="SharpCheck__input"> <span class="SharpCheck__appearance"><svg width="12" height="9" viewBox="0 0 12 9" fill-rule="evenodd" class="SharpCheck__checkmark"><path d="M4.1 6.1L1.4 3.4 0 4.9 4.1 9l7.6-7.6L10.3 0z"></path></svg></span>        <span class="SharpChek__label-text">BBB</span></label>
     </div>
+    </span>
+</div>
 </div>
 </div>
 `;
 
 exports[`select-field can mount Select field as radios list 1`] = `
 <div id="app">
-    <div class="SharpSelect">
+    <div class="SharpSelect SharpSelect--list">
         <div>
-            <div class="SharpSelect__radio-button-group"><span><input type="radio" id="select0" tabindex="0" name="select" class="SharpRadio"> <label for="select0" class="SharpRadio__label"><span class="SharpRadio__appearance"></span> AAA
+            <div class="SharpSelect__radio-button-group"><span class="SharpSelect__item SharpSelect__item--inline"><input type="radio" tabindex="0" id="select0" name="select" class="SharpRadio"> <label for="select0" class="SharpRadio__label"><span class="SharpRadio__appearance"></span> AAA
                 </label>
-                </span><span><input type="radio" id="select1" tabindex="0" name="select" class="SharpRadio"> <label for="select1" class="SharpRadio__label"><span class="SharpRadio__appearance"></span> BBB
+                </span><span class="SharpSelect__item SharpSelect__item--inline"><input type="radio" tabindex="0" id="select1" name="select" class="SharpRadio"> <label for="select1" class="SharpRadio__label"><span class="SharpRadio__appearance"></span> BBB
                 </label>
                 </span>
             </div>
@@ -82,7 +84,7 @@ exports[`select-field can mount Select field as radios list 1`] = `
 
 exports[`select-field can mount Select field with clear button 1`] = `
 <div id="app">
-    <div class="SharpSelect">
+    <div class="SharpSelect SharpSelect--dropdown">
         <div tabindex="0" class="multiselect"><button type="button" class="SharpSelect__clear-button"><svg aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd" class="SharpSelect__clear-button-icon"><path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path></svg></button>
             <div class="multiselect__tags">
                 <div class="multiselect__tags-wrap" style="display: none;"></div>
