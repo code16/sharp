@@ -20,7 +20,7 @@ describe('markdown-field', () => {
                     placeholder="Champ md" 
                     :toolbar="toolbar" 
                     :height="310"
-                    :max-image-size="3"
+                    :inner-components="{upload:{maximageSize:3}}"
                     :locale="locale"
                     @input="inputEmitted">
                 </sharp-markdown>
@@ -167,22 +167,22 @@ describe('markdown-field', () => {
         expect(inputEmitted).toHaveBeenLastCalledWith(expect.objectContaining({ text:'AAA' }));
     });
 
-    it('insert image properly', async () => {
-        let $markdown = await createVm();
-
-        let { simplemde } = $markdown;
-        let { codemirror } = simplemde;
-
-        codemirror.getSelection = jest.fn(() => 'Image title');
-        codemirror.markText = jest.fn(() => ({
-            on: jest.fn()
-        }));
-
-        $markdown.insertUploadImage(simplemde);
-
-        console.log(simplemde.value());
-        //console.log($markdown.$root._provided);
-    });
+    // it('insert image properly', async () => {
+    //     let $markdown = await createVm();
+    //
+    //     let { simplemde } = $markdown;
+    //     let { codemirror } = simplemde;
+    //
+    //     codemirror.getSelection = jest.fn(() => 'Image title');
+    //     codemirror.markText = jest.fn(() => ({
+    //         on: jest.fn()
+    //     }));
+    //
+    //     $markdown.insertUploadImage(simplemde);
+    //
+    //     console.log(simplemde.value());
+    //     //console.log($markdown.$root._provided);
+    // });
 });
 
 async function createVm(customOptions={}) {

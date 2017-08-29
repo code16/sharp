@@ -35095,7 +35095,9 @@ var Tag = function (_LabelledItem2) {
             var matchedOption = this.indexedOptions.find(function (o) {
                 return o.id === tag.id;
             });
-            return new Tag(matchedOption);
+            var patchedTag = new Tag(matchedOption);
+            patchedTag.internalId = matchedOption.internalId;
+            return patchedTag;
         },
         handleNewTag: function handleNewTag(val) {
             var newTag = new Tag({ id: null, label: val });
@@ -36369,7 +36371,7 @@ var noop = function noop() {};
 
         this.codemirrorOn('keydown', this.onKeydown);
         this.codemirrorOn('keyHandled', this.onKeyHandled);
-        console.log(this);
+        //console.log(this);
     }
 });
 

@@ -88,7 +88,9 @@
             },
             patchTag(tag) {
                 let matchedOption = this.indexedOptions.find(o => o.id === tag.id);
-                return new Tag(matchedOption);
+                let patchedTag = new Tag(matchedOption);
+                patchedTag.internalId = matchedOption.internalId;
+                return patchedTag;
             },
             handleNewTag(val) {
                 let newTag = new Tag({id: null, label: val});
