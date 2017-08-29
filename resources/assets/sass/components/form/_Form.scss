@@ -57,10 +57,14 @@
 
   &__form-item--danger {
     input, textarea, select, .SharpDropdown__text {
-      border-bottom: 2px solid $support-01;
+      //border-bottom: 2px solid $support-01;
     }
     .SharpForm__form-requirement {
       max-height: rem(200px);
+      background: rgba($support-01, .1);
+      margin: 0;
+      padding: .5rem 1rem;
+      border-top: 1px solid $support-01;
     }
   }
 
