@@ -34,7 +34,7 @@ class MarkdownFormatterTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_format_value_to_front()
+    function we_can_format_a_text_value_to_front()
     {
         $formatter = new MarkdownFormatter;
         $field = SharpFormMarkdownField::make("md");
@@ -44,7 +44,7 @@ class MarkdownFormatterTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_format_a_text_with_an_embedded_upload_to_front()
+    function when_text_has_an_embedded_upload_the_files_array_is_handled_to_front()
     {
         $formatter = new MarkdownFormatter;
         $field = SharpFormMarkdownField::make("md");
@@ -56,7 +56,7 @@ class MarkdownFormatterTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_transform_a_text_with_many_embedded_upload()
+    function when_text_has_multiple_embedded_uploads_the_files_array_is_handled_to_front()
     {
         $formatter = new MarkdownFormatter;
         $field = SharpFormMarkdownField::make("md");
@@ -83,7 +83,7 @@ class MarkdownFormatterTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_format_value_from_front()
+    function we_can_format_a_text_value_from_front()
     {
         $formatter = new MarkdownFormatter;
         $field = SharpFormMarkdownField::make("md");
@@ -111,7 +111,6 @@ class MarkdownFormatterTest extends SharpTestCase
             return $service;
         });
 
-
         $this->assertEquals(
             "![](uploaded_test.png)",
             $formatter->fromFront($field, $attribute, [
@@ -123,5 +122,4 @@ class MarkdownFormatterTest extends SharpTestCase
             ])
         );
     }
-
 }

@@ -29,8 +29,13 @@ class SharpUploadModel extends Model
         // The transformed attribute to true means there
         // was a transformation, we have to delete old thumbnails
         if($value && $this->exists) {
-            (new Thumbnail($this))->destroyAllThumbnails();
+            $this->deleteAllThumbnails();
         }
+    }
+
+    public function deleteAllThumbnails()
+    {
+        (new Thumbnail($this))->destroyAllThumbnails();
     }
 
     /**

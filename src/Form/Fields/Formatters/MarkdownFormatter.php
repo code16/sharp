@@ -55,6 +55,11 @@ class MarkdownFormatter implements SharpFieldFormatter
                         "![]({$upload["file_name"]})",
                         $text
                     );
+
+                } elseif($upload["transformed"] ?? false) {
+                    // File was pre-existing and was transformed: we must
+                    // refresh all its thumbnails (meaning delete them)
+                     $this->deleteThumbnails($field, $file["name"]);
                 }
             }
         }
@@ -96,6 +101,18 @@ class MarkdownFormatter implements SharpFieldFormatter
             "size" => $model->size,
             "thumbnail" => $model->thumbnail(null, 150)
         ];
+    }
+
+    /**
+     * @param $field
+     * @param $filename
+     */
+    protected function deleteThumbnails($field, $filename)
+    {
+        (new SharpUploadModel([
+            "file_name" => $filename,
+            "disk" => $field->storageDisk()
+        ]))->deleteAllThumbnails();
     }
 
     /**

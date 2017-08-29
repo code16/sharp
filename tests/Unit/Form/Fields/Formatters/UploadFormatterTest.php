@@ -75,7 +75,7 @@ class UploadFormatterTest extends SharpTestCase
     }
 
     /** @test */
-    function we_handle_crop_transformation_on_upload()
+    function we_handle_crop_transformation_on_upload_from_front()
     {
         $file = $this->uploadedFile();
         $formatter = new UploadFormatter;
@@ -87,7 +87,8 @@ class UploadFormatterTest extends SharpTestCase
 
         $this->assertArraySubset([
             "file_name" => "data/Test/{$file[0]}",
-            "transformed" => true,
+            "transformed" => true
+
         ], $formatter->fromFront(
             $field, $attribute, [
                 "name" => $file[0], "cropData" => [
