@@ -55,6 +55,11 @@ The idea is to hide or show a field depending of some other field value, called 
 
 You can add multiple conditional display rules, chaining calls to `addConditionalDisplay(string $fieldKey, $values = true)`. In this case, all conditions will be linked with a `AND` operator by default (meaning all conditions must be verified to display the slave field), but this can be switch to an `OR` easily with `setConditionalDisplayOrOperator()` (and back with `setConditionalDisplayAndOperator()`).
 
+#### Formatters
+
+Every field is linked to a Formatter, which defines the way data is formatted right before sending it to the front (last step, after transformers) and right after reception from the front (first step, before transformers).
+
+Sharp provides a Formatter implementation per field type, but you can override this using the `setFormatter($formatter)` setter, providing a `Code16\Sharp\Form\Fields\Formatters\SharpFieldFormatter` implementation.
 
 #### Form fields specific attributes
 
@@ -183,30 +188,30 @@ Next, we have to write the code responsible for the instance data (in an update 
         ];
     }
 
-As explained in [the Entity List documentation page](building-entity-list.md), Sharp provides a useful transformer trait: `Code16\Sharp\Utils\Transformers\WithCustomTransformers`, which allows this code under some circumstances detailed in the Entity List doc (in short: that your Model is implementing `Arrayable`, and even shorter: no problem with Eloquent):
-
-    function find($id): array
-    {
-        return $this->setCustomTransformer("capacity", function($spaceship) {
-            return $spaceship->capacity / 1000;
-             
-        })->transform(
-            Spaceship::with("pictures")->findOrFail($id)
-        );
-    }
-
-Here we applied a "custom transformer" as a Closure (we could have written a dedicated class for that, implemeting `Code16\Sharp\Utils\Transformers\SharpAttributeTransformer`) to transform `capacity`, maybe because we want the user to enter the value in thousands but our database to store it as a full number.
+As for the Entity List, you'll want to transform your data before sending it. Transformers are explained in the detailled [How to transform data](how-to-transform-data.md) documentation.
 
 
 ### `update($id, array $data)`
 
-Well, this is the core: how to write the actual update code. Let's review two cases:
+Well, this is the core: how to write the actual update code. 
 
-#### General case
+#### Form field format
 
-If you are not using Eloquent (and maybe no database at all), you'll have to do it manually. Remember: Sharp aims to be as permissive as possible. So just write the code to update the instance designated by `$id` with the values in the `$data` array.
+Before going into the details, please note that the `$data` array contains the per-field formatted data: depending on the type of SharpFormField you used, the structure may change. 
 
-#### Eloquent case (where the magic happens)
+For instance, a `SharpFormMarkdownField` content will be formated as an array with a `text` attribute for the full text and an optional `fields` attribute with embedded fields (see the Markdown field documentation for more details).
+
+Sharp will use this format step to perform some tasks: move or copy uploaded files, handle image transformation, ... Note that you can override the formatter of a specific field as explained above in the `buildFormFields()` section.
+
+Now let's review two cases:
+
+#### General case: you are on your own
+
+If you are not using Eloquent (and maybe no database at all), you'll have to do it manually. 
+
+Remember: Sharp aims to be as permissive as possible. So just write the code to update the instance designated by `$id` with the values in the formatted `$data` array.
+
+#### Eloquent case (where the magic happens) — beta
 
 Sharp also aims to help the applicative code to be as small as possible, and if you're using Eloquent, you can import a dedicated trait: `Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater`. And then, write this kind of code:
 
@@ -215,17 +220,18 @@ Sharp also aims to help the applicative code to be as small as possible, and if 
         $instance = $id ? Spaceship::findOrFail($id) : new Spaceship;
 
 
-        $this->setCustomValuator("capacity", function ($spaceship, $value) {
-            return $value * 1000;
-            
-        })->save($instance, $data);
+        $this->setCustomTransformer("capacity", function($capacity) {
+                return $capacity * 1000;
+            })
+            ->ignore("pilots")
+            ->save($instance, $data);
     }
 
-We first define a custom valuator. As for custom transformers, we can do it passing a Closure, or the full name of a class which implements `Code16\Sharp\Form\Transformers\SharpAttributeValuator`. Here we simply format back the `capacity` expressed in thousand by the user.
+We first define a custom transformer (see [detailled documentation](how-to-transform-data.md)).
 
-Then we call `$this->save()` with the instance and the sent data. This kind of magical and heavily tested method will handle all the persisting code for you, handling if needed related models (for lists, tags, selects, ...), with any relation allowed by Eloquent (hasMany, belongsToMany, morphMany, ...).
+Then we decide for some reason to bypass the automatic save process for the `pilots` attribute — because why not? This `ignore()` function can be called with an array as well. You'll probably do whatever is necessary for this field after the `save()` call.
 
-What if you want to forbid Sharp to handle automatically a specific field, for whatever reason? Well, simply call `$this->ignore("myField")` before calling `$this->save()`, and do whatever is necessary for this field after.
+Finally we call `$this->save()` with the instance and the sent data. This kind of magical, heavily tested and almost-out-of-beta method will do all the persisting crap for you, handling if needed related models (for lists, tags, selects, ...), with any relation allowed by Eloquent (hasMany, belongsToMany, morphMany, ...).
 
 
 #### Handle applicative exceptions
@@ -257,7 +263,7 @@ This method **is not mandatory**, a default implementation is proposed by Sharp,
 
 ### `delete($id)`
 
-Finally (!), here you must write the code performed on a deletion of the instance. It can be anything, here an Eloquent example:
+Finally (!), here you must write the code performed on a deletion of the instance. It can be anything, here's an Eloquent example:
 
     function delete($id)
     {
@@ -283,7 +289,7 @@ Once this class written, we have to declare the form in the sharp config file:
 
 ## Input validation
 
-Of course you will like to have an input validation on your form. Simply create a [Laravel Form Request class](https://laravel.com/docs/5.4/validation#form-request-validation), and link it in the config:
+Of course you'll want to have an input validation on your form. Simply create a [Laravel Form Request class](https://laravel.com/docs/5.4/validation#form-request-validation), and link it in the config:
 
     // config/sharp.php
     
@@ -297,6 +303,8 @@ Of course you will like to have an input validation on your form. Simply create 
         ]
     ];
 
+Sharp will handle the error display in the form.
+
 ---
 
-> next chapter : [Entity authorizations](entity-authorizations.md).
+> next chapter: [Entity authorizations](entity-authorizations.md).

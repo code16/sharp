@@ -67,5 +67,6 @@ We'll get into all those classes in this document. The important thing to notice
 6. [Building an Entity Form](docs/building-entity-form.md)
 7. [Entity Authorizations](docs/entity-authorizations.md)
 8. [The Dashboard](docs/dashboard.md)
-9. Handling data localization
-10. Extending Sharp
+9. [How to transform data](docs/how-to-transform-data.md)
+10. Handling data localization
+11. Extending Sharp
