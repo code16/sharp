@@ -49,11 +49,19 @@
         <template v-if="!!originalImageSrc">
             <sharp-modal v-model="showEditModal" @ok="onEditModalOk" @shown="onEditModalShown" @hidden="$emit('inactive')" :close-on-backdrop="false"
                          :title="l('modals.cropper.title')">
-                <vue-cropper ref="cropper" class="SharpUpload__modal-vue-cropper"
-                             :view-mode="2" drag-mode="crop"  :aspect-ratio="ratioX/ratioY"
-                             :auto-crop-area="1" :zoomable="false" :guides="false"
-                             :background="true" :rotatable="true" :src="originalImageSrc"
-                             :ready="onCropperReady" alt="Source image">
+                <vue-cropper ref="cropper"
+                             class="SharpUpload__modal-vue-cropper"
+                             :view-mode="2"
+                             drag-mode="crop"
+                             :aspect-ratio="ratioX/ratioY"
+                             :auto-crop-area="1"
+                             :zoomable="false"
+                             :guides="false"
+                             :background="true"
+                             :rotatable="true"
+                             :src="originalImageSrc"
+                             :ready="onCropperReady"
+                             alt="Source image">
                 </vue-cropper>
                 <div>
                     <button class="SharpButton SharpButton--primary" @click="rotate(-90)"><i class="fa fa-rotate-left"></i></button>

@@ -1,5 +1,5 @@
 <template>
-    <div class="SharpSelect" :class="{'SharpSelect--multiple':multiple}">
+    <div class="SharpSelect" :class="[{'SharpSelect--multiple':multiple}, `SharpSelect--${display}`]">
         <sharp-multiselect
                 v-if="display==='dropdown'"
                 :value="value"

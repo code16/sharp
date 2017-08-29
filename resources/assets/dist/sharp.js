@@ -36004,10 +36004,10 @@ var noop = function noop() {};
         placeholder: String,
         toolbar: Array,
         height: Number,
-        maxImageSize: Number,
+
+        innerComponents: Object,
 
         readOnly: Boolean,
-
         locale: String
     },
     inject: ['xsrfToken', 'actionsBus', '$tab'],
@@ -36017,8 +36017,7 @@ var noop = function noop() {};
             simplemde: null,
             cursorPos: 0,
 
-            uploaderId: 0,
-            uploaders: []
+            uploaderId: 0
         };
     },
 
@@ -36065,15 +36064,16 @@ var noop = function noop() {};
                 value = _ref.value,
                 removeOptions = _ref.removeOptions;
 
-            console.log('create uploader', this.uploaderId);
+
             var $uploader = new __WEBPACK_IMPORTED_MODULE_1__MarkdownUpload__["a" /* default */]({
                 provide: {
                     actionsBus: this.actionsBus
                 },
-                propsData: {
-                    id: id, value: value,
+                propsData: _extends({
+                    id: id, value: value
+                }, this.innerComponents.upload, {
                     xsrfToken: this.xsrfToken
-                }
+                })
             });
 
             $uploader.$on('success', function (file) {
@@ -36094,6 +36094,8 @@ var noop = function noop() {};
             $uploader.$on('inactive', function () {
                 return _this3.setMarkerInactive($uploader);
             });
+
+            //console.log('create uploader', id, $uploader);
 
             return $uploader;
         },
@@ -36203,7 +36205,7 @@ var noop = function noop() {};
             var relativeFallbackLine = isInsertion ? this.cursorPos.line - initialCursorPos.line : 1;
 
             var $uploader = this.createUploader({
-                id: data ? this.filesByName[data.name][this.idSymbol] : this.uploaderId++,
+                id: data ? this.filesByName[data.name][this.idSuy] : this.uploaderId++,
                 value: data && this.filesByName[data.name],
                 removeOptions: {
                     relativeFallbackLine: relativeFallbackLine
@@ -36223,8 +36225,6 @@ var noop = function noop() {};
             });
 
             if (isInsertion) $uploader.inputClick();
-
-            this.uploaders.push($uploader);
         },
         onCursorActivity: function onCursorActivity() {
             this.cursorPos = this.codemirror.getCursor();
@@ -36346,6 +36346,7 @@ var noop = function noop() {};
 
         this.codemirrorOn('keydown', this.onKeydown);
         this.codemirrorOn('keyHandled', this.onKeyHandled);
+        console.log(this);
     }
 });
 
@@ -36377,6 +36378,8 @@ var noop = function noop() {};
 //
 //
 //
+//
+//
 
 
 
@@ -36390,7 +36393,10 @@ var noop = function noop() {};
     props: {
         id: Number,
         value: Object,
-        maxFileSize: Number,
+
+        maxImageSize: Number,
+        ratioX: Number,
+        ratioY: Number,
 
         marker: Object,
 
@@ -36415,7 +36421,7 @@ var noop = function noop() {};
                     message: __WEBPACK_IMPORTED_MODULE_2__messages__["a" /* default */].uploadFileBadExtension
                 },
                 maxFilesize: {
-                    limit: this.maxFileSize,
+                    limit: this.maxImageSize,
                     message: __WEBPACK_IMPORTED_MODULE_2__messages__["a" /* default */].uploadFileTooBig
                 }
             });
@@ -36429,23 +36435,18 @@ var noop = function noop() {};
     },
     methods: {
         handleAdded: function handleAdded() {
-            var _this = this;
-
             this.show = true;
-            this.$nextTick(function () {
-                return _this.$emit('added');
-            });
         },
         checkCancelled: function checkCancelled() {
             if (!this.show) this.$emit('remove');
             document.body.onfocus = null;
         },
         inputClick: function inputClick() {
-            var _this2 = this;
+            var _this = this;
 
             this.fileInput.click();
             document.body.onfocus = function () {
-                setTimeout(_this2.checkCancelled, 100);
+                setTimeout(_this.checkCancelled, 100);
             };
         }
     }
@@ -36541,6 +36542,14 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -82666,9 +82675,9 @@ if (false) {
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "SharpSelect",
-    class: {
+    class: [{
       'SharpSelect--multiple': _vm.multiple
-    }
+    }, ("SharpSelect--" + _vm.display)]
   }, [(_vm.display === 'dropdown') ? _c('sharp-multiselect', {
     ref: "multiselect",
     attrs: {
@@ -83679,6 +83688,8 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     attrs: {
       "options": _vm.options,
       "value": _vm.value,
+      "ratioX": _vm.ratioX,
+      "ratioY": _vm.ratioY,
       "on-added-file": _vm.handleAdded
     },
     on: {

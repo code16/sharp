@@ -1,4 +1,10 @@
 .SharpSelect {
+
+  &--list {
+    background: $ui-03;
+    padding: 1rem;
+  }
+
   &__clear-button {
     position: absolute;
     display:flex;
@@ -24,7 +30,12 @@
     }
   }
 
-
+  .SharpCheck {
+    margin-top: .3rem;
+    &:first-child {
+      margin-top: 0;
+    }
+  }
 
   &--multiple {
     .multiselect__tags {
