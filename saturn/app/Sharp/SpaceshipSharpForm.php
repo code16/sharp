@@ -180,8 +180,6 @@ class SpaceshipSharpForm extends SharpForm
         return $this->setCustomTransformer("capacity", function($capacity) {
                 return $capacity / 1000;
             })
-//            ->setCustomTransformer("pilots", new FormTagsTransformer("name"))
-//            ->setCustomTransformer("description", new FormMarkdownWithSharpUploadModelsTransformer(Media::class))
             ->setCustomTransformer("picture", new FormUploadModelTransformer())
             ->setCustomTransformer("pictures", new FormUploadModelTransformer())
             ->transform(

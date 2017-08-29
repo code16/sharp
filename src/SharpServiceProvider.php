@@ -50,30 +50,7 @@ class SharpServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app['router']->aliasMiddleware(
-            'sharp_api_append_form_authorizations', AppendFormAuthorizations::class
-
-        )->aliasMiddleware(
-            'sharp_api_append_list_authorizations', AppendListAuthorizations::class
-
-        )->aliasMiddleware(
-            'sharp_api_errors', HandleSharpApiErrors::class
-
-        )->aliasMiddleware(
-            'sharp_api_context', AddSharpContext::class
-
-        )->aliasMiddleware(
-            'sharp_save_list_params', SaveEntityListParams::class
-
-        )->aliasMiddleware(
-            'sharp_restore_list_params', RestoreEntityListParams::class
-
-        )->aliasMiddleware(
-            'sharp_auth', CheckIsSharpAuthenticated::class
-
-        )->aliasMiddleware(
-            'sharp_guest', CheckIsSharpGuest::class
-        );
+        $this->registerMiddleware();
 
         $this->app->singleton(
             SharpContext::class, SharpContext::class
@@ -122,5 +99,47 @@ class SharpServiceProvider extends ServiceProvider
                 return true;
             });
         }
+    }
+
+    protected function registerMiddleware()
+    {
+        $this->app['router']->middlewareGroup("sharp_web", [
+            \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+            \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
+            \Illuminate\Foundation\Http\Middleware\TrimStrings::class,
+            \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+            \Illuminate\Cookie\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        ]);
+
+        $this->app['router']->aliasMiddleware(
+            'sharp_api_append_form_authorizations', AppendFormAuthorizations::class
+
+        )->aliasMiddleware(
+            'sharp_api_append_list_authorizations', AppendListAuthorizations::class
+
+        )->aliasMiddleware(
+            'sharp_api_errors', HandleSharpApiErrors::class
+
+        )->aliasMiddleware(
+            'sharp_api_context', AddSharpContext::class
+
+        )->aliasMiddleware(
+            'sharp_save_list_params', SaveEntityListParams::class
+
+        )->aliasMiddleware(
+            'sharp_restore_list_params', RestoreEntityListParams::class
+
+        )->aliasMiddleware(
+            'sharp_auth', CheckIsSharpAuthenticated::class
+
+        )->aliasMiddleware(
+            'sharp_guest', CheckIsSharpGuest::class
+        );
+
     }
 }
