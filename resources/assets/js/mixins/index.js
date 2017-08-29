@@ -8,6 +8,7 @@ import ActionEvents from './ActionEvents';
 import ReadOnlyFields from './ReadOnlyFields';
 import QueryTree from './QueryTree';
 import AutoScroll from './AutoScroll';
+import Responsive from './Responsive';
 
 export {
     testableForm,
@@ -19,5 +20,6 @@ export {
     ActionEvents,
     ReadOnlyFields,
     QueryTree,
-    AutoScroll
+    AutoScroll,
+    Responsive
 }

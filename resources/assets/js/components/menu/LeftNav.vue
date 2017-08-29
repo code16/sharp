@@ -14,13 +14,17 @@
                 </a>
             </div>
         </nav>
-        <div class="hidden-md-down" ref="testViewport"></div>
     </div>
 </template>
 
 <script>
+    import { Responsive } from '../../mixins';
+
     export default {
         name: 'SharpLeftNav',
+
+        mixins: [Responsive('md')],
+
         props: {
             categories: Array,
             current: String
@@ -47,10 +51,6 @@
             }
         },
         computed: {
-            viewportSmall() {
-                let { offsetWidth, offsetHeight } = this.$refs.testViewport;
-                return !offsetWidth && !offsetHeight;
-            },
             allEntities() {
                 return this.categories.reduce((res,category)=>[...res,...category.entities],[]);
             },
@@ -66,7 +66,7 @@
             }
         },
         mounted() {
-            this.collapsed = this.viewportSmall;
+            this.collapsed = this.isViewportSmall;
             this.$nextTick(_=>this.ready=true);
         }
     }

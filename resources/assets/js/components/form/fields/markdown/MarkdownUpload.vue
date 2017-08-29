@@ -3,6 +3,8 @@
             v-show="show"
             :options="options"
             :value="value"
+            :ratioX="ratioX"
+            :ratioY="ratioY"
             :on-added-file="handleAdded"
             @success="$emit('success',$event)"
             @removed="$emit('remove')"
@@ -28,7 +30,10 @@
         props: {
             id: Number,
             value: Object,
-            maxFileSize: Number,
+
+            maxImageSize: Number,
+            ratioX: Number,
+            ratioY: Number,
 
             marker: Object,
 
@@ -52,7 +57,7 @@
                         message: Messages.uploadFileBadExtension
                     },
                     maxFilesize: {
-                        limit: this.maxFileSize,
+                        limit: this.maxImageSize,
                         message: Messages.uploadFileTooBig
                     }
                 });
@@ -67,7 +72,6 @@
         methods: {
             handleAdded() {
                 this.show = true;
-                this.$nextTick(() => this.$emit('added'));
             },
             checkCancelled() {
                 if (!this.show)

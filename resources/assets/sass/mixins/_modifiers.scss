@@ -3,7 +3,11 @@
     outline: 1px solid $brand-03 !important;
     border: 1px solid transparent !important;
     box-shadow: 0 0 7px 0 $brand-01 !important;
-    width: auto !important;
+    width: auto;
+
+    @include media-breakpoint-down($small-breakpoint) {
+      width: 100%;
+    }
   }
   .SharpDropdown__link:focus,
   .SharpDropdown__link:hover,

@@ -25,7 +25,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div :style="headerAutoPadding">&nbsp</div>
+                        <div class="hidden-sm-down" :style="headerAutoPadding">&nbsp</div>
                     </div>
                 </div>
                 <div class="SharpEntitiesList__tbody">
@@ -163,9 +163,7 @@
             async 'data.items'(items) {
                 if(items.length) {
                     await this.$nextTick();
-                    this.headerAutoPadding = {
-                        width: `${this.$refs.actionsCol[0].offsetWidth}px`
-                    }
+                    this.updateHeaderAutoPadding();
                 }
             }
         },
@@ -308,8 +306,8 @@
                 return [
                     extraClasses,
                     `col-${sizeXS}`,
-                    `col-sm-${size}`,
-                    {'hidden-xs-down':hideOnXS},
+                    `col-md-${size}`,
+                    {'hidden-sm-down':hideOnXS},
                 ]
             },
             isStateClass(color) {
@@ -517,6 +515,12 @@
                     }
                 }
             },
+
+            updateHeaderAutoPadding() {
+                this.headerAutoPadding = {
+                    width: `${this.$refs.actionsCol[0].offsetWidth}px`
+                }
+            }
         },
         actions: {
             searchChanged(input, {isInput=true}={}) {
@@ -547,6 +551,8 @@
                 this.bindParams(event.state);
                 this.updateData();
             };
+
+            window.addEventListener('resize', this.updateHeaderAutoPadding);
         },
     }
 </script>

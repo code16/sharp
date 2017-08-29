@@ -26,10 +26,10 @@
             placeholder:String,
             toolbar:Array,
             height:Number,
-            maxImageSize:Number,
+
+            innerComponents:Object,
 
             readOnly: Boolean,
-
             locale:String
         },
         inject: [ 'xsrfToken', 'actionsBus', '$tab' ],
@@ -40,7 +40,6 @@
                 cursorPos:0,
 
                 uploaderId: 0,
-                uploaders:[]
             }
         },
         watch: {
@@ -74,13 +73,14 @@
                 return (this.value.files||[]).map( (file,i) => ({ [this.idSymbol]:i, ...file }) );
             },
             createUploader({ id, value, removeOptions,  }) {
-                console.log('create uploader', this.uploaderId);
+
                 let $uploader = new MarkdownUpload({
                     provide: {
                         actionsBus: this.actionsBus
                     },
                     propsData: {
                         id, value,
+                        ...this.innerComponents.upload,
                         xsrfToken: this.xsrfToken,
                     },
                 });
@@ -91,6 +91,8 @@
                 $uploader.$on('update', data => this.updateFileData($uploader, data));
                 $uploader.$on('active', () => this.setMarkerActive($uploader));
                 $uploader.$on('inactive', () => this.setMarkerInactive($uploader));
+
+                //console.log('create uploader', id, $uploader);
 
                 return $uploader;
             },
@@ -182,7 +184,7 @@
                 let relativeFallbackLine = isInsertion ? this.cursorPos.line - initialCursorPos.line : 1;
 
                 let $uploader = this.createUploader({
-                    id: data ? this.filesByName[data.name][this.idSymbol] : this.uploaderId++,
+                    id: data ? this.filesByName[data.name][this.idSuy] : this.uploaderId++,
                     value: data && this.filesByName[data.name],
                     removeOptions: {
                         relativeFallbackLine
@@ -201,8 +203,6 @@
 
                 if(isInsertion)
                     $uploader.inputClick();
-
-                this.uploaders.push($uploader);
             },
 
             onCursorActivity() {
@@ -313,6 +313,7 @@
 
             this.codemirrorOn('keydown', this.onKeydown);
             this.codemirrorOn('keyHandled', this.onKeyHandled);
+            console.log(this);
         }
     }
 </script>
