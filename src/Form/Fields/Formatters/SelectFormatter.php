@@ -37,7 +37,10 @@ class SelectFormatter implements SharpFieldFormatter
     function fromFront(SharpFormField $field, string $attribute, $value)
     {
         if($field->multiple()) {
-            return (array)$value;
+            // We must transform items into associative arrays with the "id" key
+            return collect((array)$value)->map(function ($item) {
+                return ["id" => $item];
+            })->all();
 
         } elseif(is_array($value)) {
             return $value[0];

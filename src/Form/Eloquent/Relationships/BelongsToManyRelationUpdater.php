@@ -19,15 +19,19 @@ class BelongsToManyRelationUpdater
         $collection = collect($value);
 
         // First sync all existing related items (ie: those with an id)
+        // Can be from SharpFormTagsField or SharpFormSelectField "multiple"
         $instance->$attribute()->sync(
             $collection->filter(function($item) {
                 return !is_null($item["id"]);
+
             })->pluck("id")->all()
         );
 
         // Then create all non-existing related items
+        // (only for SharpFormTagsField "creatable" mode)
         $collection->filter(function($item) {
             return is_null($item["id"]);
+
         })->each(function($item) use($instance, $attribute) {
             unset($item["id"]);
             $instance->$attribute()->create($item);

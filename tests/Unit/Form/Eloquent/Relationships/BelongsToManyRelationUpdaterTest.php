@@ -25,6 +25,8 @@ class BelongsToManyRelationUpdaterTest extends SharpFormEloquentBaseTest
             "person1_id" => $person1->id,
             "person2_id" => $person2->id,
         ]);
+
+        $this->assertCount(2, Person::all());
     }
 
     /** @test */

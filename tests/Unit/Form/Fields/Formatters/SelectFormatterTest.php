@@ -73,7 +73,7 @@ class SelectFormatterTest extends SharpTestCase
         $field = SharpFormSelectField::make("select", $this->getSelectData())
             ->setMultiple();
 
-        $this->assertEquals([1,2], $formatter->fromFront($field, $attribute, [1,2]));
+        $this->assertEquals([["id"=>1], ["id"=>2]], $formatter->fromFront($field, $attribute, [1,2]));
     }
 
     /**
