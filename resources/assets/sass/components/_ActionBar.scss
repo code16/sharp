@@ -1,3 +1,22 @@
+@include media-breakpoint-up(md) {
+  .SharpActionBar {
+    &__bar {
+      transition: left 300ms $bx--standard-easing;
+      position: fixed;
+      top:0;
+      right:0;
+      left: rem(200px);
+      z-index: z('actionBar');
+    }
+  }
+  &.leftNav--collapsed {
+    .SharpActionBar__bar {
+      left: rem(48px);
+      padding-left: 0;
+    }
+  }
+}
+
 .SharpActionBar {
   color: $inverse-01;
   margin-bottom: 1rem;

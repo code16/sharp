@@ -340,6 +340,7 @@
                 width 300ms $bx--standard-easing;
     cursor: pointer;
     background-color: rgba($color__blue-51, .10);
+    //background: $brand-01-light;
 
     &:hover, &:focus {
       background-color: rgba($color__blue-51, .30);
