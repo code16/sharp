@@ -24,12 +24,12 @@ class HandleSharpApiErrors
     {
         $response = $next($request);
 
-//        if($response->exception instanceof SharpException
-//            || method_exists($response->exception, 'getStatusCode')) {
-//            return response()->json([
-//                "message" => $response->exception->getMessage()
-//            ], $this->getHttpCodeFor($response->exception));
-//        }
+        if($response->exception instanceof SharpException
+            || method_exists($response->exception, 'getStatusCode')) {
+            return response()->json([
+                "message" => $response->exception->getMessage()
+            ], $this->getHttpCodeFor($response->exception));
+        }
 
         return $response;
     }
