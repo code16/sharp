@@ -1,5 +1,5 @@
 <template>
-    <div class="SharpDashboard container">
+    <div class="SharpDashboard">
         <template v-if="ready">
             <sharp-grid :rows="layout.rows">
                 <template scope="widgetLayout">
