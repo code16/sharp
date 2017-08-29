@@ -20,7 +20,7 @@
     //min-width: 500px;
     border-collapse: collapse;
     border-spacing: 0;
-    margin-bottom: 5rem;
+    margin-bottom: 3rem;
     background-color: transparent;
 
     //padding: 0 1em;
@@ -74,6 +74,10 @@
     border-bottom: 1px solid $ui-04;
     transition: $transition--base $bx--standard-easing;
 
+    @include media-breakpoint-down(sm) {
+      flex-flow: column;
+    }
+
     &__input:checked + & {
       background-color: rgba($brand-02, .1);
     }
@@ -112,8 +116,16 @@
     .SharpEntitiesList__row-actions {
       display: flex;
       align-items: center;
-    }
+      justify-content: flex-end;
 
+      @include media-breakpoint-down(sm) {
+        padding-top: 0;
+      }
+
+      & > * {
+        flex: 0;
+      }
+    }
   }
 
   &__thead {

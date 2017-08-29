@@ -29,21 +29,41 @@
         </sharp-multiselect>
         <div v-else>
             <template v-if="multiple">
-                <sharp-check v-for="option in options" :value="checked(option.id)"
-                             @input="c=>handleCheckboxChanged(c,option.id)"
-                             :text="option.label" :read-only="readOnly" :key="option.id">
-                </sharp-check>
+                <component :is="inline?'span':'div'"
+                           v-for="option in options"
+                           :key="option.id"
+                           class="SharpSelect__item"
+                           :class="{'SharpSelect__item--inline':inline}"
+                >
+                    <sharp-check :value="checked(option.id)"
+                                 :text="option.label"
+                                 :read-only="readOnly"
+                                 @input="handleCheckboxChanged($event,option.id)">
+                    </sharp-check>
+                </component>
             </template>
             <div v-else class="SharpSelect__radio-button-group" :class="{'SharpSelect__radio-button-group--block':!inline}">
-                <component :is="inline?'span':'div'" v-for="(option, index) in options" :key="option.id">
-                    <input type="radio" :id="`${uniqueIdentifier}${index}`" class="SharpRadio"
-                           :checked="value===option.id" tabindex="0" :disabled="readOnly"
-                           :name="uniqueIdentifier" :value="option.id"
-                           @change="handleRadioChanged(option.id)">
+                <component :is="inline?'span':'div'"
+                           v-for="(option, index) in options"
+                           :key="option.id"
+                           class="SharpSelect__item"
+                           :class="{'SharpSelect__item--inline':inline}"
+                >
+                    <input type="radio"
+                           class="SharpRadio"
+                           tabindex="0"
+                           :id="`${uniqueIdentifier}${index}`"
+                           :checked="value===option.id"
+                           :value="option.id"
+                           :disabled="readOnly"
+                           :name="uniqueIdentifier"
+                           @change="handleRadioChanged(option.id)"
+                    >
                     <label class="SharpRadio__label" :for="`${uniqueIdentifier}${index}`">
                         <span class="SharpRadio__appearance"></span>
                         {{option.label}}
                     </label>
+
                 </component>
             </div>
         </div>

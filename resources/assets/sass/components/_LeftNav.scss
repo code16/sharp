@@ -136,6 +136,7 @@
 
         & > .SharpLeftNav__item-link {
           color: $color__blue-51;
+          font-weight: bold;
         }
 
         .SharpLeftNav__item-icon .SharpLeftNav__icon {
@@ -158,6 +159,10 @@
     }
 
     .SharpLeftNav__item--has-children {
+      & > .SharpLeftNav__item-link {
+        text-transform: uppercase;
+      }
+
       .SharpLeftNav__item-link {
         padding-right: 1.5rem;
       }

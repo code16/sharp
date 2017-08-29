@@ -21,7 +21,7 @@
 
   &__text {
     //padding-right: .5rem;
-    height: 100%;
+    min-height: 100%;
     display:flex;
     align-items:center;
     padding-left: 1rem;
@@ -34,6 +34,7 @@
 
   &__select {
     display: inline-block;
+    width: 100%;
 
     .multiselect {
       position: initial;
@@ -53,6 +54,10 @@
           font-weight: normal;
           @include font-size('16');
           margin-left: -.1875rem;
+
+          @include media-breakpoint-down($small-breakpoint) {
+            display: none;
+          }
         }
 
         &-icon:after {
@@ -65,6 +70,14 @@
         padding-right: 2rem;
         padding-left:0;
         box-shadow: none;
+      }
+
+      &__tags-wrap {
+        @include media-breakpoint-down($small-breakpoint) {
+          display: flex;
+          flex-flow:column;
+          align-items: flex-start;
+        }
       }
 
       &:focus {

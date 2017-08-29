@@ -6,7 +6,7 @@
         </template>
         <template slot="right">
             <div class="SharpActionBar__search SharpSearch SharpSearch--lg" :class="{'SharpSearch--active':searchActive}" role="search">
-                <div class="SharpSearch__overlay"></div>
+                <!--<div class="SharpSearch__overlay"></div>-->
 
                 <label id="ab-search-label" class="SharpSearch__label" for="ab-search-input">{{ l('action_bar.list.search.placeholder') }}</label>
                 <input class="SharpSearch__input"

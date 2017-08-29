@@ -10273,16 +10273,19 @@ module.exports = Vue$3;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ReadOnlyFields__ = __webpack_require__(272);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__QueryTree__ = __webpack_require__(271);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__AutoScroll__ = __webpack_require__(268);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_0__testable_form__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_1__testable_dashboard__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return __WEBPACK_IMPORTED_MODULE_2__ErrorNode__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return __WEBPACK_IMPORTED_MODULE_3__Focusable__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return __WEBPACK_IMPORTED_MODULE_4__UploadXSRF__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_5__Localization__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_6__ActionEvents__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_7__ReadOnlyFields__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_8__QueryTree__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_9__AutoScroll__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Responsive__ = __webpack_require__(624);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_0__testable_form__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_1__testable_dashboard__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return __WEBPACK_IMPORTED_MODULE_2__ErrorNode__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return __WEBPACK_IMPORTED_MODULE_3__Focusable__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return __WEBPACK_IMPORTED_MODULE_4__UploadXSRF__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_5__Localization__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_6__ActionEvents__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_7__ReadOnlyFields__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_8__QueryTree__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return __WEBPACK_IMPORTED_MODULE_9__AutoScroll__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_10__Responsive__["a"]; });
+
 
 
 
@@ -20193,9 +20196,9 @@ module.exports = isObject;
 /* unused harmony export hyphenate */
 /* unused harmony export capitalize */
 /* unused harmony export callConsole */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return log; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return log; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return warn; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return error; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return error; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return ignoreWarns; });
 
 
@@ -33030,7 +33033,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         return h(__WEBPACK_IMPORTED_MODULE_0__vendor_bootstrap_vue_components_modal__["a" /* default */], ctx.data, [h({
             name: 'SharpModalTitle',
             template: '\n                <div>\n                    <h5 class="SharpModal__heading">\n                        <slot name="title">{{title}}</slot>\n                    </h5>\n                    <button v-if="!okOnly" class="SharpModal__close" type="button" @click="hide">\n                        <svg class="SharpModal__close-icon" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd">\n                          <path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>\n                        </svg>\n                    </button>\n                </div>\n                ',
-            mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins__["c" /* QueryTree */]],
+            mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins__["d" /* QueryTree */]],
             props: { title: String, okOnly: Boolean },
             computed: {
                 $modal: function $modal() {
@@ -33392,7 +33395,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpActionBarForm',
-    mixins: [__WEBPACK_IMPORTED_MODULE_1__ActionBarMixin__["a" /* default */], __WEBPACK_IMPORTED_MODULE_4__mixins__["a" /* ActionEvents */], __WEBPACK_IMPORTED_MODULE_4__mixins__["b" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_1__ActionBarMixin__["a" /* default */], __WEBPACK_IMPORTED_MODULE_4__mixins__["b" /* ActionEvents */], __WEBPACK_IMPORTED_MODULE_4__mixins__["c" /* Localization */]],
     components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_0__ActionBar__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_0__ActionBar__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_2__LocaleSelector__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_2__LocaleSelector__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_3__dropdown__["a" /* Dropdown */].name, __WEBPACK_IMPORTED_MODULE_3__dropdown__["a" /* Dropdown */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_3__dropdown__["b" /* DropdownItem */].name, __WEBPACK_IMPORTED_MODULE_3__dropdown__["b" /* DropdownItem */]), _components),
     data: function data() {
         return {
@@ -33527,7 +33530,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     name: 'SharpActionBarList',
     components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_0__ActionBar__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_0__ActionBar__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_3__form_fields_Text__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_3__form_fields_Text__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_4__list_FilterSelect__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_4__list_FilterSelect__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_5__dropdown_Dropdown__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_5__dropdown_Dropdown__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_6__dropdown_DropdownItem__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_6__dropdown_DropdownItem__["a" /* default */]), _components),
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_1__ActionBarMixin__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__mixins__["a" /* ActionEvents */], __WEBPACK_IMPORTED_MODULE_2__mixins__["b" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_1__ActionBarMixin__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__mixins__["b" /* ActionEvents */], __WEBPACK_IMPORTED_MODULE_2__mixins__["c" /* Localization */]],
 
     data: function data() {
         return {
@@ -33624,7 +33627,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     name: 'SharpDashboard',
     extends: __WEBPACK_IMPORTED_MODULE_3__DynamicViewMixin__["a" /* default */],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins_index__["d" /* testableDashboard */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins_index__["e" /* testableDashboard */]],
 
     components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_0__TabbedLayout__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_0__TabbedLayout__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_1__Grid__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_1__Grid__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_2__Widget__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_2__Widget__["a" /* default */]), _components),
     data: function data() {
@@ -34039,7 +34042,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
         var _this = this;
 
         if (!(this.fieldType in __WEBPACK_IMPORTED_MODULE_0__fields_index__["b" /* NameAssociation */])) {
-            __WEBPACK_IMPORTED_MODULE_1__util__["a" /* error */]('SharpField \'' + this.fieldKey + '\', unknown type \'' + this.fieldType + '\'', this.fieldProps);
+            __WEBPACK_IMPORTED_MODULE_1__util__["b" /* error */]('SharpField \'' + this.fieldKey + '\', unknown type \'' + this.fieldType + '\'', this.fieldProps);
             return null;
         }
 
@@ -34119,7 +34122,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpFieldContainer',
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins_index__["i" /* ErrorNode */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins_index__["j" /* ErrorNode */]],
 
     components: _defineProperty({}, __WEBPACK_IMPORTED_MODULE_0__Field__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_0__Field__["a" /* default */]),
 
@@ -34321,7 +34324,7 @@ var noop = function noop() {};
     name: 'SharpForm',
     extends: __WEBPACK_IMPORTED_MODULE_3__DynamicViewMixin__["a" /* default */],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_2__mixins__["e" /* testableForm */], __WEBPACK_IMPORTED_MODULE_2__mixins__["a" /* ActionEvents */], __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__mixins__["f" /* ReadOnlyFields */])('fields')],
+    mixins: [__WEBPACK_IMPORTED_MODULE_2__mixins__["f" /* testableForm */], __WEBPACK_IMPORTED_MODULE_2__mixins__["b" /* ActionEvents */], __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__mixins__["g" /* ReadOnlyFields */])('fields')],
 
     components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_4__TabbedLayout__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_4__TabbedLayout__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_6__FieldsLayout_vue__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_6__FieldsLayout_vue__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_5__Grid__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_5__Grid__["a" /* default */]), _components),
 
@@ -34424,7 +34427,7 @@ var noop = function noop() {};
                     this.get().then(function (_) {
                         return _this.setupActionBar();
                     });
-                } else __WEBPACK_IMPORTED_MODULE_0__util__["a" /* error */]('no entity key provided');
+                } else __WEBPACK_IMPORTED_MODULE_0__util__["b" /* error */]('no entity key provided');
             }
         },
         setupActionBar: function setupActionBar() {
@@ -34567,7 +34570,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         Multiselect: __WEBPACK_IMPORTED_MODULE_2_vue_multiselect___default.a
     }, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_0__Template_vue__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_0__Template_vue__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_1__Loading_vue__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_1__Loading_vue__["a" /* default */]), _components),
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_6__mixins__["b" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_6__mixins__["c" /* Localization */]],
 
     props: {
         fieldKey: String,
@@ -34798,6 +34801,26 @@ var _components;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -35121,7 +35144,7 @@ var Tag = function (_LabelledItem2) {
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpText',
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins__["h" /* Focusable */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins__["i" /* Focusable */]],
 
     props: {
         value: [String, Number],
@@ -35245,7 +35268,7 @@ var Tag = function (_LabelledItem2) {
 
     inject: ['$field'],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_2__mixins__["h" /* Focusable */], __WEBPACK_IMPORTED_MODULE_2__mixins__["b" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_2__mixins__["i" /* Focusable */], __WEBPACK_IMPORTED_MODULE_2__mixins__["c" /* Localization */]],
 
     props: {
         value: {
@@ -35613,7 +35636,7 @@ var _renderFormat = __WEBPACK_IMPORTED_MODULE_0__vendor_vue2_timepicker_vue_time
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpTimePicker',
-    mixins: [__WEBPACK_IMPORTED_MODULE_0__vendor_vue2_timepicker_vue_timepicker__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__mixins__["g" /* AutoScroll */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_0__vendor_vue2_timepicker_vue_timepicker__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__mixins__["h" /* AutoScroll */]],
     props: {
         active: Boolean,
         min: String,
@@ -35803,7 +35826,7 @@ var noop = function noop() {};
 
     inject: ['$form'],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_3__mixins__["b" /* Localization */], __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__mixins__["f" /* ReadOnlyFields */])('itemFields')],
+    mixins: [__WEBPACK_IMPORTED_MODULE_3__mixins__["c" /* Localization */], __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__mixins__["g" /* ReadOnlyFields */])('itemFields')],
 
     components: (_components = {
         Draggable: __WEBPACK_IMPORTED_MODULE_0_vuedraggable___default.a
@@ -35956,7 +35979,7 @@ var noop = function noop() {};
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpListItem',
     extends: __WEBPACK_IMPORTED_MODULE_0__FieldsLayout__["a" /* default */],
-    mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins_index__["i" /* ErrorNode */]]
+    mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins_index__["j" /* ErrorNode */]]
 });
 
 /***/ }),
@@ -36389,7 +36412,7 @@ var noop = function noop() {};
 
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0_vue___default.a.extend({
-    mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins__["j" /* UploadXSRF */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins__["k" /* UploadXSRF */]],
     props: {
         id: Number,
         value: Object,
@@ -36485,7 +36508,7 @@ var noop = function noop() {};
         SharpVueClip: __WEBPACK_IMPORTED_MODULE_1__VueClip__["a" /* default */]
     },
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins__["j" /* UploadXSRF */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins__["k" /* UploadXSRF */]],
     inject: ['$field', 'xsrfToken'],
 
     props: {
@@ -36634,7 +36657,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     inject: ['actionsBus'],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_5__mixins__["b" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_5__mixins__["c" /* Localization */]],
 
     props: {
         ratioX: Number,
@@ -36990,7 +37013,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     inject: ['actionsBus', 'params' // querystring params as an object
     ],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_10__mixins__["a" /* ActionEvents */], __WEBPACK_IMPORTED_MODULE_10__mixins__["b" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_10__mixins__["b" /* ActionEvents */], __WEBPACK_IMPORTED_MODULE_10__mixins__["c" /* Localization */]],
 
     components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_1__Pagination__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_1__Pagination__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_2__dropdown_Dropdown__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_2__dropdown_Dropdown__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_3__dropdown_DropdownItem__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_3__dropdown_DropdownItem__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_4__Modal__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_4__Modal__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_5__form_Form__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_5__form_Form__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_6__ViewPanel__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_6__ViewPanel__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_7__StateIcon__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_7__StateIcon__["a" /* default */]), _components),
 
@@ -37027,9 +37050,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         'data.items': async function dataItems(items) {
             if (items.length) {
                 await this.$nextTick();
-                this.headerAutoPadding = {
-                    width: this.$refs.actionsCol[0].offsetWidth + 'px'
-                };
+                this.updateHeaderAutoPadding();
             }
         }
     },
@@ -37183,7 +37204,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     var contLayout = _step.value;
 
                     if (!(contLayout.key in this.containers)) {
-                        __WEBPACK_IMPORTED_MODULE_9__util__["a" /* error */]('EntitiesList: unknown container "' + contLayout.key + '" (in layout)');
+                        __WEBPACK_IMPORTED_MODULE_9__util__["b" /* error */]('EntitiesList: unknown container "' + contLayout.key + '" (in layout)');
                         this.ready = false;
                     }
                 }
@@ -37223,7 +37244,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 size = _ref7.size,
                 hideOnXS = _ref7.hideOnXS;
 
-            return [extraClasses, 'col-' + sizeXS, 'col-sm-' + size, { 'hidden-xs-down': hideOnXS }];
+            return [extraClasses, 'col-' + sizeXS, 'col-md-' + size, { 'hidden-sm-down': hideOnXS }];
         },
         isStateClass: function isStateClass(color) {
             return color.indexOf('sharp_') === 0;
@@ -37517,6 +37538,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     }
                 }
             }
+        },
+        updateHeaderAutoPadding: function updateHeaderAutoPadding() {
+            this.headerAutoPadding = {
+                width: this.$refs.actionsCol[0].offsetWidth + 'px'
+            };
         }
     },
     actions: {
@@ -37555,6 +37581,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             _this11.bindParams(event.state);
             _this11.updateData();
         };
+
+        window.addEventListener('resize', this.updateHeaderAutoPadding);
     }
 });
 
@@ -37603,7 +37631,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpFilterSelect',
-    mixins: [__WEBPACK_IMPORTED_MODULE_2__mixins__["g" /* AutoScroll */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_2__mixins__["h" /* AutoScroll */]],
     components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_0__dropdown_Dropdown__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_0__dropdown_Dropdown__["a" /* default */]), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_1__form_fields_Select__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_1__form_fields_Select__["a" /* default */]), _components),
     props: {
         filterKey: {
@@ -37851,6 +37879,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins__ = __webpack_require__(2);
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 //
@@ -37872,10 +37901,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
-//
+
+
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpLeftNav',
+
+    mixins: [__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__mixins__["a" /* Responsive */])('md')],
+
     props: {
         categories: Array,
         current: String
@@ -37903,13 +37936,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
     },
     computed: {
-        viewportSmall: function viewportSmall() {
-            var _$refs$testViewport = this.$refs.testViewport,
-                offsetWidth = _$refs$testViewport.offsetWidth,
-                offsetHeight = _$refs$testViewport.offsetHeight;
-
-            return !offsetWidth && !offsetHeight;
-        },
         allEntities: function allEntities() {
             return this.categories.reduce(function (res, category) {
                 return [].concat(_toConsumableArray(res), _toConsumableArray(category.entities));
@@ -37931,7 +37957,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     mounted: function mounted() {
         var _this2 = this;
 
-        this.collapsed = this.viewportSmall;
+        this.collapsed = this.isViewportSmall;
         this.$nextTick(function (_) {
             return _this2.ready = true;
         });
@@ -40181,7 +40207,7 @@ var computeCondition = function computeCondition(fields, data, condition) {
 
 
     if (!(operator === 'or' || operator === 'and')) {
-        __WEBPACK_IMPORTED_MODULE_0__util__["a" /* error */]('Conditional display : unknown operator \'' + operator + '\'', condition);
+        __WEBPACK_IMPORTED_MODULE_0__util__["b" /* error */]('Conditional display : unknown operator \'' + operator + '\'', condition);
         return true;
     }
 
@@ -40194,7 +40220,7 @@ var computeCondition = function computeCondition(fields, data, condition) {
             var condField = _step.value;
 
             if (!(condField.key in fields)) {
-                __WEBPACK_IMPORTED_MODULE_0__util__["a" /* error */]('Conditional display : can\'t find a field with key \'' + condition.key + '\' in \'fields\'', condition);
+                __WEBPACK_IMPORTED_MODULE_0__util__["b" /* error */]('Conditional display : can\'t find a field with key \'' + condition.key + '\' in \'fields\'', condition);
                 res = true;
             }
 
@@ -40206,11 +40232,11 @@ var computeCondition = function computeCondition(fields, data, condition) {
                 res = computeSelectCondition(condField.values, value, isSingleSelect);
             } else if (field.type === 'check') {
                 if (typeof condField.values !== "boolean") {
-                    __WEBPACK_IMPORTED_MODULE_0__util__["a" /* error */]('Conditional display : \'values\' must be a boolean for a \'check\' field (\'' + condField.key + '\')', condition, field);
+                    __WEBPACK_IMPORTED_MODULE_0__util__["b" /* error */]('Conditional display : \'values\' must be a boolean for a \'check\' field (\'' + condField.key + '\')', condition, field);
                     res = true;
                 } else res = value == condField.values;
             } else {
-                __WEBPACK_IMPORTED_MODULE_0__util__["a" /* error */]('Conditional display : unprocessable field type \'' + field.type + '\'', field);
+                __WEBPACK_IMPORTED_MODULE_0__util__["b" /* error */]('Conditional display : unprocessable field type \'' + field.type + '\'', field);
                 res = true;
             }
 
@@ -40286,7 +40312,7 @@ var getIdentifier = function getIdentifier(identifier, field, locale) {
         var value = contextData[fieldKey];
 
         if (!(fieldKey in contextFields)) {
-            __WEBPACK_IMPORTED_MODULE_0__util__["a" /* error */]('Field displayer (\'layout\') : Can\'t find a field with key \'' + fieldKey + '\' in \'fields\'', contextFields);
+            __WEBPACK_IMPORTED_MODULE_0__util__["b" /* error */]('Field displayer (\'layout\') : Can\'t find a field with key \'' + fieldKey + '\' in \'fields\'', contextFields);
             return null;
         }
 
@@ -41083,11 +41109,11 @@ function validate(binding) {
 
         if (!actions) return;
         if (typeof actions._disabled === 'function' && actions._disabled.call(this)) {
-            __WEBPACK_IMPORTED_MODULE_0__util__["b" /* log */](this.$options.name + ' : actions are disabled');
+            __WEBPACK_IMPORTED_MODULE_0__util__["a" /* log */](this.$options.name + ' : actions are disabled');
             return;
         }
         if (!this.actionsBus) {
-            __WEBPACK_IMPORTED_MODULE_0__util__["a" /* error */]('Use of action options without actionsBus injected');
+            __WEBPACK_IMPORTED_MODULE_0__util__["b" /* error */]('Use of action options without actionsBus injected');
             return;
         }
 
@@ -41102,7 +41128,7 @@ function validate(binding) {
                 var action = actions[actionName];
                 if (typeof action === 'string') {
                     if (typeof _this[action] !== 'function') {
-                        __WEBPACK_IMPORTED_MODULE_0__util__["a" /* error */](_this.$options.name + ' (ActionEvents) : this.' + action + ' is not a function');
+                        __WEBPACK_IMPORTED_MODULE_0__util__["b" /* error */](_this.$options.name + ' (ActionEvents) : this.' + action + ' is not a function');
                         return 'continue';
                     }
 
@@ -41121,7 +41147,7 @@ function validate(binding) {
 
                         return action.apply(_this, args);
                     });
-                } else __WEBPACK_IMPORTED_MODULE_0__util__["a" /* error */](_this.$options.name + ' (ActionEvents) : unprocessable action type (only function on string)');
+                } else __WEBPACK_IMPORTED_MODULE_0__util__["b" /* error */](_this.$options.name + ' (ActionEvents) : unprocessable action type (only function on string)');
             };
 
             for (var _iterator = Object.keys(this.$options.actions)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
@@ -81765,9 +81791,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     attrs: {
       "role": "search"
     }
-  }, [_c('div', {
-    staticClass: "SharpSearch__overlay"
-  }), _vm._v(" "), _c('label', {
+  }, [_c('label', {
     staticClass: "SharpSearch__label",
     attrs: {
       "id": "ab-search-label",
@@ -81951,10 +81975,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     attrs: {
       "d": "M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"
     }
-  })])])])], 2), _vm._v(" "), _c('div', {
-    ref: "testViewport",
-    staticClass: "hidden-md-down"
-  })])
+  })])])])], 2)])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -82731,17 +82752,25 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   })])])] : _vm._e(), _vm._v(" "), _vm._t("option", null, {
     slot: "option"
   })], 2) : _c('div', [(_vm.multiple) ? _vm._l((_vm.options), function(option) {
-    return _c('sharp-check', {
+    return _c(_vm.inline ? 'span' : 'div', {
       key: option.id,
+      tag: "component",
+      staticClass: "SharpSelect__item",
+      class: {
+        'SharpSelect__item--inline': _vm.inline
+      }
+    }, [_c('sharp-check', {
       attrs: {
         "value": _vm.checked(option.id),
         "text": option.label,
         "read-only": _vm.readOnly
       },
       on: {
-        "input": function (c) { return _vm.handleCheckboxChanged(c, option.id); }
+        "input": function($event) {
+          _vm.handleCheckboxChanged($event, option.id)
+        }
       }
-    })
+    })], 1)
   }) : _c('div', {
     staticClass: "SharpSelect__radio-button-group",
     class: {
@@ -82750,13 +82779,17 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   }, _vm._l((_vm.options), function(option, index) {
     return _c(_vm.inline ? 'span' : 'div', {
       key: option.id,
-      tag: "component"
+      tag: "component",
+      staticClass: "SharpSelect__item",
+      class: {
+        'SharpSelect__item--inline': _vm.inline
+      }
     }, [_c('input', {
       staticClass: "SharpRadio",
       attrs: {
         "type": "radio",
-        "id": ("" + _vm.uniqueIdentifier + index),
         "tabindex": "0",
+        "id": ("" + _vm.uniqueIdentifier + index),
         "disabled": _vm.readOnly,
         "name": _vm.uniqueIdentifier
       },
@@ -83801,6 +83834,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       }
     }) : _vm._e()], 2)
   }))]), _vm._v(" "), _c('div', {
+    staticClass: "hidden-sm-down",
     style: (_vm.headerAutoPadding)
   }, [_vm._v(" ")])])]), _vm._v(" "), _c('div', {
     staticClass: "SharpEntitiesList__tbody"
@@ -84576,6 +84610,56 @@ __webpack_require__(176);
 __webpack_require__(177);
 module.exports = __webpack_require__(175);
 
+
+/***/ }),
+/* 615 */,
+/* 616 */,
+/* 617 */,
+/* 618 */,
+/* 619 */,
+/* 620 */,
+/* 621 */,
+/* 622 */,
+/* 623 */,
+/* 624 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function () {
+    var breakpoint = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'sm';
+
+    return {
+        data: function data() {
+            return {
+                isViewportSmall: false
+            };
+        },
+        mounted: function mounted() {
+            var _this = this;
+
+            var id = 'viewport-down-' + breakpoint;
+            var testElm = document.getElementById(id);
+
+            if (!testElm) {
+                testElm = document.createElement('div');
+                testElm.id = id;
+                testElm.classList.add('hidden-' + breakpoint + '-down');
+                document.body.appendChild(testElm);
+            }
+
+            var update = function update() {
+                var _testElm = testElm,
+                    offsetWidth = _testElm.offsetWidth,
+                    offsetHeight = _testElm.offsetHeight;
+
+                _this.isViewportSmall = !offsetWidth && !offsetHeight;
+            };
+
+            update();
+            window.addEventListener('resize', update);
+        }
+    };
+});
 
 /***/ })
 /******/ ]);
