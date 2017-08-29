@@ -16,7 +16,11 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
                 "key" => "text", "type" => "markdown", "toolbar" => [
                     SharpFormMarkdownField::B, SharpFormMarkdownField::I, SharpFormMarkdownField::SEPARATOR,
                     SharpFormMarkdownField::UL, SharpFormMarkdownField::SEPARATOR, SharpFormMarkdownField::A,
-                ], "maxImageSize" => 2
+                ], "innerComponents" => [
+                    "upload" => [
+                        "maxImageSize" => 2
+                    ]
+                ]
             ], $formField->toArray()
         );
     }
@@ -34,15 +38,30 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_define_maxFileSize()
+    function we_can_define_upload_configuration()
     {
         $formField = SharpFormMarkdownField::make("text")
             ->setMaxFileSize(50);
 
-        $this->assertArraySubset(
-            ["maxImageSize" => 50],
-            $formField->toArray()
-        );
+        $this->assertArraySubset([
+            "innerComponents" => [
+                "upload" => [
+                    "maxImageSize" => 50
+                ]
+            ]
+        ], $formField->toArray());
+
+        $formField->setCropRatio("16:9");
+
+        $this->assertArraySubset([
+            "innerComponents" => [
+                "upload" => [
+                    "maxImageSize" => 50,
+                    "ratioX" => 16,
+                    "ratioY" => 9
+                ]
+            ]
+        ], $formField->toArray());
     }
 
     /** @test */

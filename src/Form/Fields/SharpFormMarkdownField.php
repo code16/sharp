@@ -121,9 +121,21 @@ class SharpFormMarkdownField extends SharpFormField
             "height" => $this->height,
             "toolbar" => $this->showToolbar ? $this->toolbar : null,
             "placeholder" => $this->placeholder,
-            "maxImageSize" => $this->maxFileSize ?: 2,
-            "ratioX" => $this->cropRatio ? (int)$this->cropRatio[0] : null,
-            "ratioY" => $this->cropRatio ? (int)$this->cropRatio[1] : null,
+            "innerComponents" => [
+                "upload" => $this->innerComponentUploadConfiguration()
+            ]
         ]);
+    }
+
+    protected function innerComponentUploadConfiguration()
+    {
+        $array = ["maxImageSize" => $this->maxFileSize ?: 2];
+
+        if($this->cropRatio) {
+            $array["ratioX"] = (int)$this->cropRatio[0];
+            $array["ratioY"] = (int)$this->cropRatio[1];
+        }
+
+        return $array;
     }
 }
