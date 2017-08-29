@@ -38,23 +38,20 @@ class TagsFormatter implements SharpFieldFormatter
     function fromFront(SharpFormField $field, string $attribute, $value)
     {
         $options = collect($field->options())->keyBy("id")->all();
-        $collection = collect($value)->filter(function($item) use($field, $options) {
+
+        return collect($value)->filter(function($item) use($field, $options) {
             // Strip values that aren't in configured options
             return is_null($item["id"]) || isset($options[$item["id"]]);
-        });
+        })
 
-        if(! $field->creatable()) {
+        ->when(! $field->creatable(), function($collection) {
             // Field isn't creatable, let's just strip all null ids
             return $collection->filter(function($item) {
                 return !is_null($item["id"]);
-            })->map(function($item) use($field) {
-                return [
-                    $field->idAttribute() => $item["id"]
-                ];
-            })->all();
-        }
+            });
+        })
 
-        return $collection->map(function($item) use($field) {
+        ->map(function($item) use($field) {
             if(is_null($item["id"])) {
                 return [
                     $field->idAttribute() => null,
@@ -62,8 +59,12 @@ class TagsFormatter implements SharpFieldFormatter
                 ];
             }
 
-            return $item;
+            return [
+                $field->idAttribute() => $item["id"]
+            ];
 
-        })->values()->all();
+        })
+        ->values()
+        ->all();
     }
 }
