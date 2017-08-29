@@ -3,9 +3,6 @@
         <template v-if="ready">
             <div v-show="hasErrors" class="SharpNotification SharpNotification__inline SharpNotification__inline--error" role="alert">
                 <div class="SharpNotification__details">
-                    <svg class="SharpNotification__icon" width="16" height="16" viewBox="0 0 16 16" fill-rule="evenodd">
-                        <path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zM5.1 13.3L3.5 12 11 2.6l1.5 1.2-7.4 9.5z"></path>
-                    </svg>
                     <div class="SharpNotification__text-wrapper">
                         <p class="SharpNotification__title">{{ l('form.validation_error.title') }}</p>
                         <p class="SharpNotification__subtitle">{{ l('form.validation_error.description') }}</p>

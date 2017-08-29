@@ -3,9 +3,9 @@
 // ---------------------------------------------
 
 @mixin inline-notification--color($color) {
-  border: 1px solid $color;
-  border-left: 6px solid $color;
-
+  //border: 1px solid $color;
+  //border-left: 6px solid $color;
+  background: rgba($color, .1);
   .SharpNotification__icon {
     fill: $color;
   }
