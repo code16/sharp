@@ -3,7 +3,7 @@
 // API routes
 Route::group([
     'prefix' => '/sharp/api',
-    'middleware' => ['web', 'sharp_api_errors', 'sharp_auth', 'sharp_api_context'],
+    'middleware' => ['sharp_web', 'sharp_api_errors', 'sharp_auth', 'sharp_api_context'],
     'namespace' => 'Code16\Sharp\Http\Api'
 ], function() {
 
@@ -55,7 +55,7 @@ Route::group([
 // Web routes
 Route::group([
     'prefix' => '/sharp',
-    'middleware' => ['web'],
+    'middleware' => ['sharp_web'],
     'namespace' => 'Code16\Sharp\Http'
 ], function() {
 
