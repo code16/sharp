@@ -140,7 +140,7 @@ class SpaceshipSharpForm extends SharpForm
 
     function buildFormLayout()
     {
-        $this->addTab("tab 1", function(FormLayoutTab $tab) {
+        $this->addTab("General info", function(FormLayoutTab $tab) {
             $tab->addColumn(6, function(FormLayoutColumn $column) {
                 $column->withSingleField("name")
                     ->withSingleField("type_id")
@@ -158,7 +158,7 @@ class SpaceshipSharpForm extends SharpForm
                     });
             });
 
-        })->addTab("tab 2", function(FormLayoutTab $tab) {
+        })->addTab("Details", function(FormLayoutTab $tab) {
             $tab->addColumn(5, function(FormLayoutColumn $column) {
                 $column->withFieldset("Technical details", function(FormLayoutFieldset $fieldset) {
                     return $fieldset->withFields("capacity|4,6", "construction_date|8,6");
