@@ -25,7 +25,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="hidden-sm-down" :style="headerAutoPadding">&nbsp</div>
+                        <div class="d-none d-md-block" :style="headerAutoPadding">&nbsp</div>
                     </div>
                 </div>
                 <div class="SharpEntitiesList__tbody">
@@ -307,7 +307,7 @@
                     extraClasses,
                     `col-${sizeXS}`,
                     `col-md-${size}`,
-                    {'hidden-sm-down':hideOnXS},
+                    hideOnXS?`d-none d-md-flex`:''
                 ]
             },
             isStateClass(color) {
@@ -517,6 +517,7 @@
             },
 
             updateHeaderAutoPadding() {
+                if(!this.$refs.actionsCol) return;
                 this.headerAutoPadding = {
                     width: `${this.$refs.actionsCol[0].offsetWidth}px`
                 }

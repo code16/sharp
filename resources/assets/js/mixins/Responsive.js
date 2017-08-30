@@ -12,13 +12,13 @@ export default function (breakpoint='sm') {
             if(!testElm) {
                 testElm = document.createElement('div');
                 testElm.id = id;
-                testElm.classList.add(`hidden-${breakpoint}-down`);
+                testElm.classList.add(`d-${breakpoint}-none`);
                 document.body.appendChild(testElm);
             }
 
             const update = () => {
-                let { offsetWidth, offsetHeight } = testElm;
-                this.isViewportSmall = !offsetWidth && !offsetHeight;
+                let { offsetWidth } = testElm;
+                this.isViewportSmall = offsetWidth;
             };
 
             update();

@@ -1,18 +1,20 @@
 $css--reset:false;
 
-@import 'node_modules/carbon-components/scss/globals/scss/colors';
-@import 'node_modules/carbon-components/scss/globals/scss/vars';
-@import 'node_modules/carbon-components/scss/globals/scss/typography';
-@import 'node_modules/carbon-components/scss/globals/scss/css--reset';
+@import '~carbon-components/scss/globals/scss/colors';
+@import '~carbon-components/scss/globals/scss/vars';
+@import '~carbon-components/scss/globals/scss/typography';
+@import '~carbon-components/scss/globals/scss/css--reset';
 
-@import 'node_modules/bootstrap/scss/mixins/hover';
-@import 'node_modules/bootstrap/scss/mixins/grid';
-@import 'node_modules/bootstrap/scss/mixins/grid-framework';
-@import 'node_modules/bootstrap/scss/mixins/breakpoints';
-@import 'node_modules/bootstrap/scss/mixins/visibility';
-@import 'node_modules/bootstrap/scss/variables';
-@import 'node_modules/bootstrap/scss/utilities/flex';
-@import 'node_modules/bootstrap/scss/utilities/visibility';
+
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins/hover';
+@import '~bootstrap/scss/mixins/grid';
+@import '~bootstrap/scss/mixins/grid-framework';
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '~bootstrap/scss/mixins/visibility';
+@import '~bootstrap/scss/utilities/flex';
+@import '~bootstrap/scss/utilities/visibility';
 
 
 @import 'components/loading/Loading';

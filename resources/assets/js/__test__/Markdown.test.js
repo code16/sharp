@@ -180,7 +180,11 @@ describe('markdown-field', () => {
         };
 
         let mockXHR = () => {
+            XMLHttpRequest = jest.fn(() => ({
+                send : jest.fn({
 
+                })
+            }));
         };
 
         it('insert image properly', async () => {
