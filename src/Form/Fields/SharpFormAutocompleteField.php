@@ -55,7 +55,7 @@ class SharpFormAutocompleteField extends SharpFormField
 
     /**
      * @param string $key
-     * @param string $mode
+     * @param string $mode "local" or "remote"
      * @return static
      */
     public static function make(string $key, string $mode)
