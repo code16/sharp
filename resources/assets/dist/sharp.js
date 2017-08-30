@@ -34313,9 +34313,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
 
 
 
@@ -83310,19 +83307,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     }
   }, [_c('div', {
     staticClass: "SharpNotification__details"
-  }, [_c('svg', {
-    staticClass: "SharpNotification__icon",
-    attrs: {
-      "width": "16",
-      "height": "16",
-      "viewBox": "0 0 16 16",
-      "fill-rule": "evenodd"
-    }
-  }, [_c('path', {
-    attrs: {
-      "d": "M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zM5.1 13.3L3.5 12 11 2.6l1.5 1.2-7.4 9.5z"
-    }
-  })]), _vm._v(" "), _c('div', {
+  }, [_c('div', {
     staticClass: "SharpNotification__text-wrapper"
   }, [_c('p', {
     staticClass: "SharpNotification__title"

@@ -2,6 +2,7 @@
   @include reset;
   @include font-size('14');
   width: 100%;
+  max-width: 100% !important;
   min-width: 10rem;
   padding: 1rem;
   color: $text-01;

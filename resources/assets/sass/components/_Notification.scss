@@ -9,7 +9,6 @@
     @include font-size('14');
     display: flex;
     justify-content: space-between;
-    background-color: $ui-01;
     padding: .75rem 1rem;
     min-height: rem(40px);
     color: $text-01;
@@ -45,7 +44,7 @@
     .SharpNotification__text-wrapper {
       display: flex;
       flex-wrap: wrap;
-      margin: 0 1rem;
+      //margin: 0 1rem;
 
       @media (max-width: 640px) {
         flex-direction: column;
