@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Formatters\SelectFormatter;
+use Illuminate\Support\Collection;
 
 class SharpFormSelectField extends SharpFormField
 {
@@ -51,13 +52,34 @@ class SharpFormSelectField extends SharpFormField
     public static function make(string $key, array $options)
     {
         $instance = new static($key, static::FIELD_TYPE, new SelectFormatter);
-        $instance->options = collect($options)->map(function($label, $id) {
+        $instance->options = static::formatOptions($options);
+
+        return $instance;
+    }
+
+    /**
+     * @param array|Collection $options
+     * @return array
+     */
+    private static function formatOptions($options)
+    {
+        if(! sizeof($options)) {
+            return [];
+        }
+
+        $options = collect($options);
+
+        if(is_array($options->first())) {
+            // We assume that we already have ["id", "label"] in this case
+            return $options->all();
+        }
+
+        // Simple [key => value] array case
+        return $options->map(function($label, $id) {
             return [
                 "id" => $id, "label" => $label
             ];
         })->values()->all();
-
-        return $instance;
     }
 
     /**
