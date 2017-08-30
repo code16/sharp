@@ -14,6 +14,7 @@ class PilotSharpList extends SharpEntityList
     {
         $this->addDataContainer(
             EntityListDataContainer::make("name")
+                ->setSortable()
                 ->setLabel("Name")
         );
     }

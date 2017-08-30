@@ -32,7 +32,31 @@ $factory->define(\App\Spaceship::class, function (Faker\Generator $faker) {
         'description' => $faker->realText(400),
         'capacity' => $faker->numberBetween(5, 80) * 1000,
         'construction_date' => $faker->date(),
-        'type_id' => factory(\App\SpaceshipType::class)->create()->id
+        'type_id' => function() {
+            return (\App\SpaceshipType::class)->create()->id;
+        }
+    ];
+});
+
+$factory->define(\App\Travel::class, function (Faker\Generator $faker) {
+    return [
+        'departure_date' => $faker->dateTime(),
+        'spaceship_id' => function() {
+            return (\App\Spaceship::class)->create()->id;
+        },
+        'destination' => $faker->country,
+    ];
+});
+
+$factory->define(\App\Passenger::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->name,
+        'gender' => $faker->boolean ? 'M' : 'F',
+        'birth_date' => $faker->date(),
+        'travel_id' => function() {
+            return (\App\Travel::class)->create()->id;
+        },
+        'travel_category' => $faker->randomElement(['Third class', 'Classic', 'First class', 'Business']),
     ];
 });
 

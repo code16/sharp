@@ -26,14 +26,14 @@ class DatabaseSeeder extends Seeder
             "group" => "user"
         ]);
 
-        $types = factory(\App\SpaceshipType::class, 10)->create();
+        $types = factory(\App\SpaceshipType::class, 5)->create();
 
         $features = factory(\App\Feature::class, 15)->create();
 
-        $pilots = factory(\App\Pilot::class, 10)->create();
+        $pilots = factory(\App\Pilot::class, 50)->create();
 
         foreach($types as $type) {
-            $spaceships = factory(\App\Spaceship::class, 20)->create([
+            $spaceships = factory(\App\Spaceship::class, 10)->create([
                 "type_id" => $type->id
             ]);
 
@@ -41,6 +41,20 @@ class DatabaseSeeder extends Seeder
                 factory(\App\TechnicalReview::class, rand(1, 2))->create([
                     "spaceship_id" => $spaceship->id
                 ]);
+
+                if($spaceship->id%2 == 0) {
+                    $travel = factory(\App\Travel::class)->create([
+                        "spaceship_id" => $spaceship->id
+                    ]);
+
+                    $passengers = factory(\App\Passenger::class, rand(10, 200))->create([
+                        "travel_id" => $travel->id
+                    ]);
+
+                    $travel->delegates()->sync(
+                        $passengers->random(rand(1, 3))->pluck("id")->all()
+                    );
+                }
 
                 $spaceship->pilots()->sync(
                     $pilots->random(rand(1, 3))->pluck("id")->all()
