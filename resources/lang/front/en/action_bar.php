@@ -2,7 +2,7 @@
 
 return [
 
-    'list.items_count' => 'items',
+    'list.items_count' => 'item(s)',
     'list.search.placeholder' => 'Search',
     'list.create_button' => 'New...',
     'locale_selector.label' => 'Choose a language',

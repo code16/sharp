@@ -2,8 +2,8 @@
 
 return [
 
-    'validation_error.title' => 'Form error',
-    'validation_error.description' => 'Some fields are not correct',
+    'validation_error.title' => 'Your input is invalid',
+    'validation_error.description' => 'Please review your input, errors are detailed below each field',
 
     'list.remove_button' => 'Remove',
     'list.insert_button' => 'Insert',
@@ -17,9 +17,9 @@ return [
     'upload.edit_button' => 'Edit',
 
     'multiselect.placeholder' => 'Select option',
-    'multiselect.max_text' => 'Maximum items selected',
+    'multiselect.max_text' => 'Maximum items reached',
 
-    'autocomplete.no_results_text' => 'Nothing found',
+    'autocomplete.no_results_text' => 'No result found',
 
     'markdown.icons.bold.title' => 'Bold',
     'markdown.icons.italic.title' => 'Italic',
