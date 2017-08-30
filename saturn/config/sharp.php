@@ -16,6 +16,11 @@ return [
             "form" => \App\Sharp\PilotSharpForm::class,
             "validator" => \App\Sharp\PilotSharpValidator::class,
         ],
+        "passenger" => [
+            "list" => \App\Sharp\PassengerSharpList::class,
+            "form" => \App\Sharp\PassengerSharpForm::class,
+            "validator" => \App\Sharp\PassengerSharpValidator::class,
+        ],
         "user" => [
             "list" => \App\Sharp\UserSharpList::class,
             "policy" => \App\Sharp\Policies\UserPolicy::class,

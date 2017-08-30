@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Travel extends Model
 {
+    protected $dates = ["created_at", "updated_at", "departure_date"];
+
     public function spaceship()
     {
         return $this->belongsTo(Spaceship::class);
