@@ -4,6 +4,31 @@ Class: `Code16\Sharp\Form\Fields\SharpFormSelectField`
 
 ## Configuration
 
+### Constructor `function make(string $key, array $options)`
+
+The `$options` array can be either:
+
+- a simple key-value array
+- an array of arrays with `id` and `label` keys. Fore instance:
+
+    [
+        ["id"=>1, "label"=>"Label 1"],
+        ["id"=>2, "label"=>"Label 2"],
+    ]
+
+This allows to write code like this:
+
+    SharpFormSelectField::make("travel_id",
+        Travel::orderBy("departure_date")->get()->map(function($travel) {
+            return [
+                "id" => $travel->id,
+                "label" => $travel->departure_date->format("Y-m-d")
+                    . " — " . $travel->destination
+            ];
+        })->all()
+    )
+
+
 ### `setMultiple(bool $multiple = true)`
 
 Allow multi-selection (default: false)

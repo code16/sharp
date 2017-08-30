@@ -21,6 +21,11 @@ return [
             "form" => \App\Sharp\PassengerSharpForm::class,
             "validator" => \App\Sharp\PassengerSharpValidator::class,
         ],
+        "travel" => [
+            "list" => \App\Sharp\TravelSharpList::class,
+            "form" => \App\Sharp\TravelSharpForm::class,
+            "validator" => \App\Sharp\TravelSharpValidator::class,
+        ],
         "user" => [
             "list" => \App\Sharp\UserSharpList::class,
             "policy" => \App\Sharp\Policies\UserPolicy::class,
@@ -67,19 +72,6 @@ return [
                 ]
             ]
         ],
-//        [
-//            "label" => "Test",
-//            "entities" => [
-//                "spaceship" => [
-//                    "label" => "Spaceships",
-//                    "icon" => "fa-plane"
-//                ],
-//                "user" => [
-//                    "label" => "Users",
-//                    "icon" => "fa-envelope"
-//                ]
-//            ]
-//        ]
     ],
 
     "dashboard" => \App\Sharp\Dashboard::class,
