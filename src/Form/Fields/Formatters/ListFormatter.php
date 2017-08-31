@@ -22,13 +22,9 @@ class ListFormatter implements SharpFieldFormatter
             $field->itemFields()->each(function($itemField) use($item, &$itemArray) {
                 $key = $itemField->key();
 
-                $value = ($key == '<item>')
-                    ? $item // Special <item> case: the whole item should be passed to this field's formatter
-                    : $item[$key] ?? null;
-
-                if($value) {
+                if(isset($item[$key])) {
                     $itemArray[$key] = $itemField->formatter()->toFront(
-                        $itemField, $value
+                        $itemField, $item[$key]
                     );
                 }
             });
@@ -55,17 +51,7 @@ class ListFormatter implements SharpFieldFormatter
                 $itemField = $field->findItemFormFieldByKey($key);
 
                 if($itemField) {
-                    $formattedValue = $itemField->formatter()->fromFront($itemField, $key, $value);
-
-                    if($key == '<item>') {
-                        // Special case: the item represents the list item
-                        $itemArray[$field->itemIdAttribute()] = $formattedValue;
-
-                        // We can only have ONE field in the <item> case
-                        break;
-                    }
-
-                    $itemArray[$key] = $formattedValue;
+                    $itemArray[$key] = $itemField->formatter()->fromFront($itemField, $key, $value);
                 }
             }
 

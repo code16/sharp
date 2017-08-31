@@ -38,23 +38,6 @@ class ListFormatterTest extends SharpTestCase
     }
 
     /** @test */
-    function special_whole_item_is_handled_when_formatting_to_front()
-    {
-        $formatter = new ListFormatter;
-        $field = SharpFormListField::make("list")
-            ->addItemField(SharpFormTextField::make("<item>"));
-
-        $expectedData = collect($this->getData())->map(function($item) {
-            return [
-                "id" => $item["id"],
-                "<item>" => $item
-            ];
-        })->all();
-
-        $this->assertEquals($expectedData, $formatter->toFront($field, $this->getData()));
-    }
-
-    /** @test */
     function we_can_format_value_from_front()
     {
         $formatter = new ListFormatter;
@@ -99,35 +82,6 @@ class ListFormatterTest extends SharpTestCase
         })->all();
 
         $this->assertEquals($data, $formatter->toFront($field, $data));
-    }
-
-    /** @test */
-    function special_whole_item_is_handled_when_formatting_from_front()
-    {
-        $formatter = new ListFormatter;
-        $field = SharpFormListField::make("list")
-            ->addItemField(SharpFormTextField::make("<item>"))
-            ->addItemField(SharpFormTextField::make("name")); // This field should be ignored
-
-        $data = [
-            [
-                "id" => 1,
-                "<item>" => str_random(),
-                "name" => "bob"
-            ], [
-                "id" => 2,
-                "<item>" => str_random(),
-                "name" => "bob"
-            ]
-        ];
-
-        $expectedData = collect($data)->map(function($item) {
-            return [
-                "id" => $item["<item>"]
-            ];
-        })->all();
-
-        $this->assertEquals($expectedData, $formatter->fromFront($field, 'attribute', $data));
     }
 
     /**

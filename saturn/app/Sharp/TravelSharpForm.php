@@ -6,6 +6,7 @@ use App\Spaceship;
 use App\Travel;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteListField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
@@ -36,18 +37,30 @@ class TravelSharpForm extends SharpForm
                 ->setLabel("Destination")
 
         )->addField(
-            SharpFormListField::make("delegates")
+            SharpFormAutocompleteListField::make("delegates")
                 ->setLabel("Travel delegates")
                 ->setAddable()
                 ->setRemovable()
-                ->addItemField(
-                    SharpFormAutocompleteField::make("<item>", "remote")
+                ->setItemField(
+                    SharpFormAutocompleteField::make("item", "remote")
                         ->setLabel("Passenger")
                         ->setPlaceholder("test")
                         ->setListItemInlineTemplate("{{ name }}")
                         ->setResultItemTemplatePath("sharp/templates/delegate_result.vue")
                         ->setRemoteEndpoint(url('/passengers'))
                 )
+//            SharpFormListField::make("delegates")
+//                ->setLabel("Travel delegates")
+//                ->setAddable()
+//                ->setRemovable()
+//                ->addItemField(
+//                    SharpFormAutocompleteField::make("<item>", "remote")
+//                        ->setLabel("Passenger")
+//                        ->setPlaceholder("test")
+//                        ->setListItemInlineTemplate("{{ name }}")
+//                        ->setResultItemTemplatePath("sharp/templates/delegate_result.vue")
+//                        ->setRemoteEndpoint(url('/passengers'))
+//                )
         );
     }
 
@@ -59,7 +72,7 @@ class TravelSharpForm extends SharpForm
         })->addColumn(7, function(FormLayoutColumn $column) {
             $column->withSingleField("spaceship_id")
                 ->withSingleField("delegates", function(FormLayoutColumn $listItem) {
-                    $listItem->withSingleField("<item>");
+                    $listItem->withSingleField("item");
                 });
         });
     }
