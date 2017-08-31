@@ -106,6 +106,20 @@ class TagsFormatterTest extends SharpTestCase
     }
 
     /** @test */
+    function we_strip_null_ids_if_creatable_attribute_is_false_from_front()
+    {
+        $formatter = new TagsFormatter;
+        $attribute = "attribute";
+        $field = SharpFormTagsField::make("tags", $this->getTagsData())
+            ->setCreatable(false)
+            ->setCreateAttribute("name");
+
+        $this->assertEquals([["id"=>1],["id"=>2]], $formatter->fromFront(
+            $field, $attribute, [["id"=>1],["id"=>2],["id"=>null,"label"=>"green"]])
+        );
+    }
+
+    /** @test */
     function we_handle_id_attribute_from_front()
     {
         $formatter = new TagsFormatter;

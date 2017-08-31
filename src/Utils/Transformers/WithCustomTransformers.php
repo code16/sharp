@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Utils\Transformers;
 
 use Closure;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -58,13 +59,15 @@ trait WithCustomTransformers
 
         if($models instanceof Collection) {
             return $models->map(function($model) {
-                return $this->applyTransformers($model, false);
+                return $this->applyTransformers($model);
             })->all();
         }
 
         // Only one model, it's a Form: we must add
         // Form Field Formatters in the process
-        return $this->applyTransformers($models, true);
+        return $this->applyFormatters(
+            $this->applyTransformers($models)
+        );
     }
 
     /**
@@ -91,10 +94,9 @@ trait WithCustomTransformers
 
     /**
      * @param array|object $model the base model (Eloquent for instance), or an array of attributes
-     * @param bool $formatToFrontForm is true, data is `toFront()` formatted according to Form Field type
      * @return array
      */
-    protected function applyTransformers($model, bool $formatToFrontForm)
+    protected function applyTransformers($model)
     {
         // Merge model attribute with form fields to be sure we have
         // all attributes which the front code needed.
@@ -125,9 +127,7 @@ trait WithCustomTransformers
             }
         }
 
-        return $formatToFrontForm
-            ? $this->applyFormatters($attributes)
-            : $attributes;
+        return $attributes;
     }
 
     /**

@@ -79,3 +79,5 @@ Once this class written, we have to declare the form in the sharp config file:
 This will display the Dashboard on the `/sharp` home URL, and add a link in the side menu.
 
 ---
+
+> next chapter: [How to transform data](how-to-transform-data.md).

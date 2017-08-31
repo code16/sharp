@@ -151,12 +151,20 @@ class SharpFormListField extends SharpFormField
     }
 
     /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function itemFields()
+    {
+        return collect($this->itemFields);
+    }
+
+    /**
      * @param string $key
      * @return SharpFormField
      */
     public function findItemFormFieldByKey(string $key)
     {
-        return collect($this->itemFields)->where("key", $key)->first();
+        return $this->itemFields()->where("key", $key)->first();
     }
 
     /**

@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'empty_text' => 'No results found'
+    'empty_text' => 'No result found'
 ];

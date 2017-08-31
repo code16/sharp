@@ -19,12 +19,19 @@ class ListFormatter implements SharpFieldFormatter
                 $field->itemIdAttribute() => $item[$field->itemIdAttribute()]
             ];
 
-            foreach($item as $key => $value) {
-                $itemField = $field->findItemFormFieldByKey($key);
-                if($itemField) {
-                    $itemArray[$key] = $itemField->formatter()->toFront($itemField, $value);
+            $field->itemFields()->each(function($itemField) use($item, &$itemArray) {
+                $key = $itemField->key();
+
+                $value = $key == '<item>'
+                    ? $item // Special <item> case: the whole item should be passed to this field's formatter
+                    : $item[$key] ?? null;
+
+                if($value) {
+                    $itemArray[$key] = $itemField->formatter()->toFront(
+                        $itemField, $value
+                    );
                 }
-            }
+            });
 
             return $itemArray;
 

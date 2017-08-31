@@ -60,7 +60,7 @@ class SpaceshipSharpForm extends SharpForm
         )->addField(
             SharpFormAutocompleteField::make("type_id", "local")
                 ->setLabel("Ship type")
-                ->setSearchKeys(["label"])
+                ->setLocalSearchKeys(["label"])
                 ->setListItemTemplatePath("/sharp/templates/spaceshipType_list.vue")
                 ->setResultItemTemplatePath("/sharp/templates/spaceshipType_result.vue")
                 ->setLocalValues(
@@ -106,6 +106,7 @@ class SpaceshipSharpForm extends SharpForm
                     SharpFormDateField::make("starts_at")
                         ->setLabel("Date")
                         ->setDisplayFormat("YYYY/MM/DD HH:mm")
+                        ->setMinTime(8)
                         ->setHasTime(true)
                 )->addItemField(
                     SharpFormSelectField::make("status", [
@@ -140,7 +141,7 @@ class SpaceshipSharpForm extends SharpForm
 
     function buildFormLayout()
     {
-        $this->addTab("tab 1", function(FormLayoutTab $tab) {
+        $this->addTab("General info", function(FormLayoutTab $tab) {
             $tab->addColumn(6, function(FormLayoutColumn $column) {
                 $column->withSingleField("name")
                     ->withSingleField("type_id")
@@ -158,7 +159,7 @@ class SpaceshipSharpForm extends SharpForm
                     });
             });
 
-        })->addTab("tab 2", function(FormLayoutTab $tab) {
+        })->addTab("Details", function(FormLayoutTab $tab) {
             $tab->addColumn(5, function(FormLayoutColumn $column) {
                 $column->withFieldset("Technical details", function(FormLayoutFieldset $fieldset) {
                     return $fieldset->withFields("capacity|4,6", "construction_date|8,6");
@@ -198,7 +199,6 @@ class SpaceshipSharpForm extends SharpForm
         $this->setCustomTransformer("capacity", function($capacity) {
                 return $capacity * 1000;
             })
-            ->ignore("pilots")
             ->save($instance, $data);
     }
 

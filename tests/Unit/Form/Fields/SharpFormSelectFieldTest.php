@@ -100,6 +100,23 @@ class SharpFormSelectFieldTest extends SharpTestCase
         );
     }
 
+    /** @test */
+    function we_can_define_options_as_a_id_label_array()
+    {
+        $formField = $this->getDefaultSelect([
+            ["id" => 1, "label" => "Elem 1"],
+            ["id" => 2, "label" => "Elem 2"],
+        ]);
+
+        $this->assertArraySubset(
+            ["options" => [
+                ["id" => 1, "label" => "Elem 1"],
+                ["id" => 2, "label" => "Elem 2"],
+            ]],
+            $formField->toArray()
+        );
+    }
+
     /**
      * @param array|null $options
      * @return SharpFormSelectField

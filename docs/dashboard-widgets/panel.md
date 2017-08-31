@@ -15,6 +15,8 @@ The Panel needs a view template, that you can provide in two ways:
 
 Just write the template as a string, using placeholders for data like this: `{{var}}`.
 
+Example:
+
     $panel->setInlineTemplate(
         "<h1>{{count}}</h1> spaceships in activity"
     )
@@ -26,8 +28,8 @@ Use this if you need more control: give the path of a full template, in its own 
 
 The template will be [interpreted by Vue.js](https://vuejs.org/v2/guide/syntax.html), meaning you can add data placeholders, DOM structure but also directives, and anything that Vue will parse. For instance:
 
-<div v-if="show">result is {{value}}</div>
-<div v-else>result is unknown</div>
+`<div v-if="show">result is {{value}}</div>`
+`<div v-else>result is unknown</div>`
 
 
 

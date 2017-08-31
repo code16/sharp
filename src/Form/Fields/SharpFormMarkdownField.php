@@ -127,6 +127,9 @@ class SharpFormMarkdownField extends SharpFormField
         ]);
     }
 
+    /**
+     * @return array
+     */
     protected function innerComponentUploadConfiguration()
     {
         $array = ["maxImageSize" => $this->maxFileSize ?: 2];

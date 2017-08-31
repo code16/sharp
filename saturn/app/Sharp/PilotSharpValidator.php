@@ -5,7 +5,7 @@ namespace App\Sharp;
 use Code16\Sharp\Http\WithSharpFormContext;
 use Illuminate\Foundation\Http\FormRequest;
 
-class SpaceshipSharpValidator extends FormRequest
+class PilotSharpValidator extends FormRequest
 {
     use WithSharpFormContext;
 
@@ -28,11 +28,6 @@ class SpaceshipSharpValidator extends FormRequest
     {
         return [
             'name' => 'required',
-            'type_id' => 'required',
-            'picture' => 'required',
-            'pictures.*.file' => 'required',
-//            'pictures.*.legend' => 'required',
-            "capacity" => "integer|min:10|nullable"
         ];
     }
 }

@@ -96,4 +96,4 @@ The `:` separator used here will be interpreted in `transform()`, and the `$post
 
 ---
 
-> next chapter: Handling data localization
+> next chapter: [Sharp built-in solution for uploads](sharp-built-in-solution-for-uploads.md).

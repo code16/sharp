@@ -23,7 +23,6 @@ class BelongsToManyRelationUpdater
         $instance->$attribute()->sync(
             $collection->filter(function($item) {
                 return !is_null($item["id"]);
-
             })->pluck("id")->all()
         );
 

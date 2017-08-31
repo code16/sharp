@@ -16,7 +16,7 @@ class SharpFormTagsField extends SharpFormField
     /**
      * @var string
      */
-    protected $createText = "New...";
+    protected $createText = "Create";
 
     /**
      * @var string
