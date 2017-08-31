@@ -34629,7 +34629,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     props: {
         fieldKey: String,
 
-        value: [String, Number],
+        value: [String, Number, Object],
 
         mode: String,
         localValues: {
@@ -34726,7 +34726,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         },
         handleSelect: function handleSelect(value) {
             this.state = 'valuated';
-            this.$emit('input', value[this.itemIdAttribute]);
+            this.$emit('input', value);
         },
         handleDropdownClose: function handleDropdownClose() {
             if (this.state === 'searching') this.state = 'initial';

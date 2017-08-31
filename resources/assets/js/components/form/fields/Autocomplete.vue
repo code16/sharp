@@ -64,7 +64,7 @@
         props: {
             fieldKey: String,
 
-            value: [String, Number],
+            value: [String, Number, Object],
 
             mode: String,
             localValues: {
@@ -162,7 +162,7 @@
 
             handleSelect(value) {
                 this.state = 'valuated';
-                this.$emit('input', value[this.itemIdAttribute]);
+                this.$emit('input', value);
             },
             handleDropdownClose() {
                 if(this.state === 'searching')

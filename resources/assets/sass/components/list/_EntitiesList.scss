@@ -138,7 +138,7 @@
 
 
   &__th {
-    @include reset;
+    //@include reset;
     //@include padding-th;
     //display: table-cell;
     display: flex;
@@ -170,7 +170,7 @@
   }
 
   &__td {
-    @include reset;
+    //@include reset;
     @include font-size('14');
     @include line-height('body');
     //@include padding-td;
@@ -186,7 +186,7 @@
   }
 
   &__td, &__th {
-    padding: .5rem;
+    //padding: .5rem;
   }
 
   &__svg {

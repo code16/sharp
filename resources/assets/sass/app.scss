@@ -6,8 +6,11 @@ $css--reset:false;
 @import '~carbon-components/scss/globals/scss/css--reset';
 
 
+
+
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
+
 @import '~bootstrap/scss/mixins/hover';
 @import '~bootstrap/scss/mixins/grid';
 @import '~bootstrap/scss/mixins/grid-framework';
@@ -47,6 +50,19 @@ $small-breakpoint: sm;
 
   @import 'node_modules/bootstrap/scss/grid';
   @import 'node_modules/bootstrap/scss/transitions';
+
+  //@include media-breakpoint-down(sm) {
+  //
+  //  .row {
+  //    margin-left: -7px;
+  //    margin-right: -7px
+  //  }
+  //
+  //  [class*="col-"]{
+  //    padding-left: 7px !important;
+  //    padding-right: 7px !important;
+  //  }
+  //}
 
   // from carbon design
   @import 'components/Button';
