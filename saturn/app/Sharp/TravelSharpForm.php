@@ -44,6 +44,8 @@ class TravelSharpForm extends SharpForm
                 ->addItemField(
                     SharpFormAutocompleteField::make("<item>", "remote")
                         ->setLabel("Passenger")
+                        ->setItemIdAttribute("num")
+                        ->setPlaceholder("test")
                         ->setListItemInlineTemplate("{{ name }}")
                         ->setResultItemTemplatePath("sharp/templates/delegate_result.vue")
                         ->setRemoteEndpoint(url('/passengers'))
@@ -69,6 +71,7 @@ class TravelSharpForm extends SharpForm
         return $this->setCustomTransformer("delegates", function($value, $travel) {
             return $travel->delegates->map(function($passenger) {
                 $passenger["num"] = $passenger["id"];
+                unset($passenger["id"]);
                 return $passenger;
             });
 
