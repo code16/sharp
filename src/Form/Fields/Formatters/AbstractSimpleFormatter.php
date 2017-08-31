@@ -17,6 +17,12 @@ abstract class AbstractSimpleFormatter implements SharpFieldFormatter
         return $value;
     }
 
+    /**
+     * @param SharpFormField $field
+     * @param string $attribute
+     * @param $value
+     * @return mixed
+     */
     function fromFront(SharpFormField $field, string $attribute, $value)
     {
         return $value;
