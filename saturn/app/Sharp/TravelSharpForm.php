@@ -42,9 +42,9 @@ class TravelSharpForm extends SharpForm
                 ->setRemovable()
                 ->setItemIdAttribute("id")
                 ->addItemField(
-                    SharpFormAutocompleteField::make("passenger_id", "remote")
+                    SharpFormAutocompleteField::make("<item>", "remote")
                         ->setLabel("Passenger")
-                        ->setSearchKeys(["label"])
+                        ->setItemLabelAttribute("name")
                         ->setListItemTemplatePath("/sharp/templates/spaceshipType_list.vue")
                         ->setResultItemTemplatePath("/sharp/templates/spaceshipType_result.vue")
                         ->setRemoteEndpoint("bla")
@@ -60,14 +60,16 @@ class TravelSharpForm extends SharpForm
         })->addColumn(7, function(FormLayoutColumn $column) {
             $column->withSingleField("spaceship_id")
                 ->withSingleField("delegates", function(FormLayoutColumn $listItem) {
-                    $listItem->withSingleField("passenger_id");
+                    $listItem->withSingleField("<item>");
                 });
         });
     }
 
     function find($id): array
     {
-        return $this->transform(Travel::with(["spaceship", "delegates"])->findOrFail($id));
+        return $this->transform(
+            Travel::with(["spaceship", "delegates"])->findOrFail($id)
+        );
     }
 
     function update($id, array $data)

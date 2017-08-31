@@ -13,7 +13,7 @@ Class: `Code16\Sharp\Form\Fields\SharpFormAutocompleteField`
 
 Set the values of the dictionnary on mode=local, as an key=>value array.
 
-### `setSearchKeys(array $searchKeys)`
+### `setLocalSearchKeys(array $searchKeys)`
 
 Set the names of the attributes used in the search (mode=local).
 Default: `["value"]`
@@ -38,8 +38,13 @@ Set the remote method to GET (default) or POST.
 
 ### `setItemIdAttribute(string $itemIdAttribute)`
 
-Set the name of the id attribute for items.
+Set the name of the id attribute for items. Only useful if you pass an object as the data for the autocomplete (meaning: in the formatter's `toFront`). Main use case is for mode=remote.
 Default: `"id"`
+
+### `setItemLabelAttribute(string $itemLabelAttribute)`
+
+Set the name of the label attribute for items. Only useful when mode=remote, for which you have to pass an object as the data for the autocomplete (meaning: in the formatter's `toFront`), for initial valuation.
+Default: `"label"`
 
 ### `setListItemInlineTemplate(string $template)` and `setResultItemInlineTemplate(string $template)`
 
@@ -68,5 +73,15 @@ The template will be use, depending on the function, to display either the list 
 
 ## Formatter
 
-- `toFront`: expects the related item id.
-- `fromFront`: returns the select item id.
+### `toFront`
+
+If **mode=local**, you must pass there either: 
+- an id 
+- or an object with an `id` (or whatever was configure through `setItemIdAttribute()`) property.
+
+If **mode=remote**, you must pass an object with at least 2 attributes: `id` (or whatever was configure through `setItemIdAttribute()`) and `label` (or whatever was configure through `setItemLabelAttribute()`).
+
+
+### `fromFront`
+
+Returns the selected item id.

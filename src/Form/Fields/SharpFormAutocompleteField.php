@@ -3,13 +3,14 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Formatters\AutocompleteFormatter;
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithOptions;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithTemplates;
 use Illuminate\Support\Collection;
 
 class SharpFormAutocompleteField extends SharpFormField
 {
-    use SharpFormFieldWithPlaceholder, SharpFormFieldWithTemplates;
+    use SharpFormFieldWithPlaceholder, SharpFormFieldWithTemplates, SharpFormFieldWithOptions;
 
     const FIELD_TYPE = "autocomplete";
 
@@ -26,7 +27,7 @@ class SharpFormAutocompleteField extends SharpFormField
     /**
      * @var array
      */
-    protected $searchKeys = ["value"];
+    protected $localSearchKeys = ["value"];
 
     /**
      * @var string
@@ -47,6 +48,11 @@ class SharpFormAutocompleteField extends SharpFormField
      * @var string
      */
     protected $itemIdAttribute = "id";
+
+    /**
+     * @var string
+     */
+    protected $itemLabelAttribute = "label";
 
     /**
      * @var int
@@ -72,22 +78,18 @@ class SharpFormAutocompleteField extends SharpFormField
      */
     public function setLocalValues($localValues)
     {
-        $this->localValues = collect($localValues)->map(function($label, $id) {
-            return [
-                "id" => $id, "label" => $label
-            ];
-        })->values()->all();
+        $this->localValues = static::formatOptions($localValues);
 
         return $this;
     }
 
     /**
-     * @param array $searchKeys
+     * @param array $localSearchKeys
      * @return $this
      */
-    public function setSearchKeys(array $searchKeys)
+    public function setLocalSearchKeys(array $localSearchKeys)
     {
-        $this->searchKeys = $searchKeys;
+        $this->localSearchKeys = $localSearchKeys;
 
         return $this;
     }
@@ -146,6 +148,17 @@ class SharpFormAutocompleteField extends SharpFormField
     }
 
     /**
+     * @param string $itemLabelAttribute
+     * @return $this
+     */
+    public function setItemLabelAttribute(string $itemLabelAttribute)
+    {
+        $this->itemLabelAttribute = $itemLabelAttribute;
+
+        return $this;
+    }
+
+    /**
      * @param string $listItemTemplatePath
      * @return $this
      */
@@ -193,13 +206,44 @@ class SharpFormAutocompleteField extends SharpFormField
     }
 
     /**
+     * @return bool
+     */
+    public function isRemote()
+    {
+        return $this->mode == "remote";
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLocal()
+    {
+        return $this->mode == "local";
+    }
+
+    /**
+     * @return string
+     */
+    public function itemIdAttribute()
+    {
+        return $this->itemIdAttribute;
+    }
+
+    /**
+     * @return string
+     */
+    public function itemLabelAttribute()
+    {
+        return $this->itemLabelAttribute;
+    }
+
+    /**
      * @return array
      */
     protected function validationRules()
     {
         return [
             "mode" => "required|in:local,remote",
-            "itemIdAttribute" => "required",
             "listItemTemplate" => "required",
             "resultItemTemplate" => "required",
             "searchMinChars" => "required|integer",
@@ -220,11 +264,10 @@ class SharpFormAutocompleteField extends SharpFormField
             "mode" => $this->mode,
             "placeholder" => $this->placeholder,
             "localValues" => $this->localValues,
-            "searchKeys" => $this->searchKeys,
+            "searchKeys" => $this->localSearchKeys,
             "remoteEndpoint" => $this->remoteEndpoint,
             "remoteMethod" => $this->remoteMethod,
             "remoteSearchAttribute" => $this->remoteSearchAttribute,
-            "itemIdAttribute" => $this->itemIdAttribute,
             "listItemTemplate" => $this->template("list"),
             "resultItemTemplate" => $this->template("result"),
             "searchMinChars" => $this->searchMinChars,

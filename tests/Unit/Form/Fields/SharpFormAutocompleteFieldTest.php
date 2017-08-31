@@ -30,7 +30,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
         $this->assertEquals([
                 "key" => "field", "type" => "autocomplete",
                 "mode" => "local", "searchKeys" => ["value"],
-                "remoteMethod" => "GET", "itemIdAttribute" => "id",
+                "remoteMethod" => "GET",
                 "listItemTemplate" => "LIT-content",
                 "resultItemTemplate" => "RIT-content",
                 "searchMinChars" => 1, "localValues" => [
@@ -59,14 +59,19 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_define_itemIdAttribute()
+    function we_can_define_localValues_as_a_id_label_array()
     {
-        $formField = $this->getDefaultLocalAutocomplete()
-            ->setItemIdAttribute("attribute");
+        $formField = $this->getDefaultLocalAutocomplete([
+            ["id" => 1, "label" => "Elem 1"],
+            ["id" => 2, "label" => "Elem 2"],
+        ]);
 
-        $this->assertArraySubset([
-                "itemIdAttribute" => "attribute"
-            ], $formField->toArray()
+        $this->assertArraySubset(
+            ["localValues" => [
+                ["id" => 1, "label" => "Elem 1"],
+                ["id" => 2, "label" => "Elem 2"],
+            ]],
+            $formField->toArray()
         );
     }
 
