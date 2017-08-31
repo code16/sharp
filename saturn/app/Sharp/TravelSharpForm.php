@@ -49,18 +49,6 @@ class TravelSharpForm extends SharpForm
                         ->setResultItemTemplatePath("sharp/templates/delegate_result.vue")
                         ->setRemoteEndpoint(url('/passengers'))
                 )
-//            SharpFormListField::make("delegates")
-//                ->setLabel("Travel delegates")
-//                ->setAddable()
-//                ->setRemovable()
-//                ->addItemField(
-//                    SharpFormAutocompleteField::make("<item>", "remote")
-//                        ->setLabel("Passenger")
-//                        ->setPlaceholder("test")
-//                        ->setListItemInlineTemplate("{{ name }}")
-//                        ->setResultItemTemplatePath("sharp/templates/delegate_result.vue")
-//                        ->setRemoteEndpoint(url('/passengers'))
-//                )
         );
     }
 

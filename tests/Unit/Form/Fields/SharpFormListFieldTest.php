@@ -129,7 +129,7 @@ class SharpFormListFieldTest extends SharpTestCase
     /**
      * @return SharpFormListField
      */
-    private function getDefaultList()
+    protected function getDefaultList()
     {
         return SharpFormListField::make("field")
             ->addItemField(
