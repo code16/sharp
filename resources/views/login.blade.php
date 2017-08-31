@@ -9,25 +9,33 @@
                 <div class="row justify-content-center">
                     <div class="col-sm-9 col-md-6 col-lg-5 col-xl-4">
 
+                        <h1 class="text-center mb-3">Sharp</h1>
+
+                        @if ($errors->any())
+
+                            <div role="alert" class="SharpNotification SharpNotification__inline SharpNotification__inline--error">
+                                <div class="SharpNotification__details">
+                                    <div class="SharpNotification__text-wrapper">
+                                        <p class="SharpNotification__subtitle">@lang('sharp::auth.validation_error')</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        @elseif (session()->has('invalid'))
+
+                            <div role="alert" class="SharpNotification SharpNotification__inline SharpNotification__inline--error">
+                                <div class="SharpNotification__details">
+                                    <div class="SharpNotification__text-wrapper">
+                                        <p class="SharpNotification__subtitle">@lang('sharp::auth.invalid_credentials')</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        @endif
+
                         <div class="SharpModule">
                             <div class="SharpModule__inner">
-                                <div class="SharpModule__header">
-                                    <h1 class="SharpModule__title">
-                                        @lang('sharp::login.title')
-                                    </h1>
-                                </div>
                                 <div class="SharpModule__content">
-                                    @if ($errors->any())
-                                        <div class="alert alert-danger">
-                                            @lang('sharp::auth.validation_error')
-                                        </div>
-
-                                    @elseif (session()->has('invalid'))
-                                        <div class="alert alert-danger">
-                                            @lang('sharp::auth.invalid_credentials')
-                                        </div>
-                                    @endif
-
                                     <div class="SharpFieldContainer SharpForm__form-item">
                                         <input type="text" name="login" id="login" class="SharpText" value="{{ old('login') }}" placeholder="@lang('sharp::login.login_field')">
                                     </div>
