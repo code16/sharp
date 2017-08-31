@@ -50,11 +50,6 @@ class SharpFormAutocompleteField extends SharpFormField
     protected $itemIdAttribute = "id";
 
     /**
-     * @var string
-     */
-    protected $itemLabelAttribute = "label";
-
-    /**
      * @var int
      */
     protected $searchMinChars = 1;
@@ -148,17 +143,6 @@ class SharpFormAutocompleteField extends SharpFormField
     }
 
     /**
-     * @param string $itemLabelAttribute
-     * @return $this
-     */
-    public function setItemLabelAttribute(string $itemLabelAttribute)
-    {
-        $this->itemLabelAttribute = $itemLabelAttribute;
-
-        return $this;
-    }
-
-    /**
      * @param string $listItemTemplatePath
      * @return $this
      */
@@ -244,6 +228,7 @@ class SharpFormAutocompleteField extends SharpFormField
     {
         return [
             "mode" => "required|in:local,remote",
+            "itemIdAttribute" => "required",
             "listItemTemplate" => "required",
             "resultItemTemplate" => "required",
             "searchMinChars" => "required|integer",
@@ -264,6 +249,7 @@ class SharpFormAutocompleteField extends SharpFormField
             "mode" => $this->mode,
             "placeholder" => $this->placeholder,
             "localValues" => $this->localValues,
+            "itemIdAttribute" => $this->itemIdAttribute,
             "searchKeys" => $this->localSearchKeys,
             "remoteEndpoint" => $this->remoteEndpoint,
             "remoteMethod" => $this->remoteMethod,

@@ -38,7 +38,9 @@ Set the remote method to GET (default) or POST.
 
 ### `setItemIdAttribute(string $itemIdAttribute)`
 
-Set the name of the id attribute for items. Only useful if you pass an object as the data for the autocomplete (meaning: in the formatter's `toFront`). Main use case is for mode=remote.
+Set the name of the id attribute for items. This is useful :
+- if you pass an object as the data for the autocomplete (meaning: in the formatter's `toFront`).
+- to designate the id attribute in the remote API call return.
 Default: `"id"`
 
 ### `setItemLabelAttribute(string $itemLabelAttribute)`
@@ -53,10 +55,12 @@ Just write the template as a string, using placeholders for data like this: `{{v
 Example:
 
     $panel->setInlineTemplate(
-        "<h1>{{count}}</h1> spaceships in activity"
+        "Foreground: <strong>{{color}}</strong>"
     )
 
 The template will be use, depending on the function, to display either the list item (in the result dropdown) or the result item (meaning the valuated form input).
+
+Be aware that you'll need for this to work to pass a valuated object to the Autocomplete, as data.
 
 
 ### `setListItemTemplatePath(string $listItemTemplatePath)` and `setResultItemTemplatePath(string $resultItemTemplate)`
@@ -70,16 +74,18 @@ The template will be [interpreted by Vue.js](https://vuejs.org/v2/guide/syntax.h
 
 The template will be use, depending on the function, to display either the list item (in the result dropdown) or the result item (meaning the valuated form input).
 
+Be aware that you'll need for this to work to pass a valuated object to the Autocomplete, as data.
+
 
 ## Formatter
 
 ### `toFront`
 
 If **mode=local**, you must pass there either: 
-- an id 
+- an single id, since the label will be grabbed from the `localValues` array,
 - or an object with an `id` (or whatever was configure through `setItemIdAttribute()`) property.
 
-If **mode=remote**, you must pass an object with at least 2 attributes: `id` (or whatever was configure through `setItemIdAttribute()`) and `label` (or whatever was configure through `setItemLabelAttribute()`).
+If **mode=remote**, you must pass an object with at least an `id` (or whatever was configure through `setItemIdAttribute()`) attribute and all attributes needed by the item templates.
 
 
 ### `fromFront`

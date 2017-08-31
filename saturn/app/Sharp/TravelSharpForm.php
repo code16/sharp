@@ -40,14 +40,13 @@ class TravelSharpForm extends SharpForm
                 ->setLabel("Travel delegates")
                 ->setAddable()
                 ->setRemovable()
-                ->setItemIdAttribute("id")
+                ->setItemIdAttribute("num")
                 ->addItemField(
                     SharpFormAutocompleteField::make("<item>", "remote")
                         ->setLabel("Passenger")
-                        ->setItemLabelAttribute("name")
-                        ->setListItemTemplatePath("/sharp/templates/spaceshipType_list.vue")
-                        ->setResultItemTemplatePath("/sharp/templates/spaceshipType_result.vue")
-                        ->setRemoteEndpoint("bla")
+                        ->setListItemInlineTemplate("{{ name }}")
+                        ->setResultItemTemplatePath("sharp/templates/delegate_result.vue")
+                        ->setRemoteEndpoint(url('/passengers'))
                 )
         );
     }
@@ -67,7 +66,13 @@ class TravelSharpForm extends SharpForm
 
     function find($id): array
     {
-        return $this->transform(
+        return $this->setCustomTransformer("delegates", function($value, $travel) {
+            return $travel->delegates->map(function($passenger) {
+                $passenger["num"] = $passenger["id"];
+                return $passenger;
+            });
+
+        })->transform(
             Travel::with(["spaceship", "delegates"])->findOrFail($id)
         );
     }

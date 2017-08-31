@@ -30,7 +30,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
         $this->assertEquals([
                 "key" => "field", "type" => "autocomplete",
                 "mode" => "local", "searchKeys" => ["value"],
-                "remoteMethod" => "GET",
+                "remoteMethod" => "GET", "itemIdAttribute" => "id",
                 "listItemTemplate" => "LIT-content",
                 "resultItemTemplate" => "RIT-content",
                 "searchMinChars" => 1, "localValues" => [
