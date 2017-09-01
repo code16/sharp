@@ -85,13 +85,20 @@ class SharpFormListFieldTest extends SharpTestCase
             ["maxItemCount" => 10],
             $formField->toArray()
         );
+
+        $formField->setMaxItemCountUnlimited();
+
+        $this->assertArrayNotHasKey(
+            "maxItemCount",
+            $formField->toArray()
+        );
     }
 
     /** @test */
-    function we_can_define_collapsedItemTemplate()
+    function we_can_define_collapsedItemInlineTemplate()
     {
         $formField = $this->getDefaultList()
-            ->setCollapsedItemTemplate("template");
+            ->setCollapsedItemInlineTemplate("template");
 
         $this->assertArraySubset(
             ["collapsedItemTemplate" => "template"],

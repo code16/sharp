@@ -2,35 +2,117 @@
 
 Class: `Code16\Sharp\Form\Fields\SharpFormListField`
 
+A List is made of items, and each item is made of Form Fields.
+
+Let's review a simple use case: a museum with all kind of art pieces. In the DB it's a 1-N relationship. If we choose to define a ArtPiece Entity in Sharp, we'll end up with maybe a Select, or an Autocomplete, to designate the Museum. But here, we want to do the opposite: define a Museum Entity, with an ArtPiece list.
+
+Here how we can build this:
+
+    function buildFormFields()
+    {
+        $this->addField(
+            SharpFormListField::make("pieces")
+                ->setLabel("Art pieces")
+                ->setAddable()
+                ->setRemovable()
+                ->addItemField(
+                    SharpFormDateField::make("acquisition_date")
+                        ->setLabel("Acquisition")
+                )->addItemField(
+                    SharpFormTextField::make("title")
+                        ->setLabel("Title")
+                )->addItemField(
+                    SharpFormSelectField::make("artist_id", [
+					    ...
+    				])
+                        ->setLabel("Artist")
+                )
+        );
+    }
+
+
 ## Configuration
 
+### `addItemField(SharpFormField $field)`
 
-`<item>` special case
+Add a SharpFormField in the item, building it like for the regular Form, with `SharpFormField::make()`.
 
-Sometimes you'll want to refer the whole related object for a list item. The solution is to use `<item>` as field key, and Sharp will then pass the object to the Field Formatter.
+### `setAddable(bool $addable = true)`
 
-Let's review a use case: imagine you want to handle a list of `winners` by selecting them in a big list of Players, for which an remote Autocomplete is the best choice (otherwise you could have opted for a Tags Field).
+Defines if new items can be added to the List.
+Default: false.
 
-The `model->winners` relation is N-N, here (`belongsToMany`), but Lists are meant to handle 1-N relationships (`hasMany`).
+### `setAddText(string $addText)`
 
-You can in fact define the list as this:
+Define the text of the Add item button.
+Default: "Add an item".
 
-    SharpFormListField::make("winners")
-            ->setLabel("Winners")
-            ->addItemField(
-                SharpFormAutocompleteField::make("<item>", "remote")
-                    ->setRemoteEndpoint("/players")
-                    [...]
-            )
-    );
+### `setMaxItemCount(int $maxItemCount)` and `setMaxItemCountUnlimited()`
 
-Because of this special `<item>` key, Sharp will replace each item .
+If the List is `addable`, you can specify a maximum item count with these.
+Default: unlimited.
 
-Please note this special case implies that 
+### `setSortable(bool $sortable = true)`
 
-- you only have ONE field in the list item, since it represents the whole item.
-- The List's `setItemIdAttribute` must match the Autocomplete's `setItemIdAttribute`.
+Defines if items can be sorted by the user.
+Default: false.
+
+### `setOrderAttribute(string $orderAttribute)`
+
+This is only useful when using the `WithSharpFormEloquentUpdater` trait. You can define here the name of an numerical order attribute (typically: `order`), and it will be automatically updated in the `save()` process.
+
+### `setCollapsedItemInlineTemplate(string $template)` and `setCollapsedItemTemplatePath(string $template)`
+
+The UI for a `sortable` List is to add a "reorder" button, which swaps the list in a readonly state. But for big List items it can be useful to define a special template for this reordering state. 
+For inline template, just write the template as a string, using placeholders for data like this: `{{var}}`.
+
+Example:
+
+    $list->setCollapsedItemInlineTemplate(
+        "Foreground: <strong>{{color}}</strong>"
+    )
+
+For template path, give the relative path of a template file (stating in the views Laravel folder).
+The template will be [interpreted by Vue.js](https://vuejs.org/v2/guide/syntax.html), meaning you can add data placeholders, DOM structure but also directives, and anything that Vue will parse. For instance:
+
+`<div v-if="show">result is {{value}}</div>`
+`<div v-else>result is unknown</div>`
+
+
+
+### `setRemovable(bool $removable = true)`
+
+Defines if items can be removed by the user.
+Default: false.
+
+### `setItemIdAttribute(string $itemIdAttribute)`
+
+
+
+## Layout
+
+The List item layout must be defined like the form itself, in the `buildFormLayout()` function. The item layout is managed as a Form column, with a `FormLayoutColumn` object. To link the column and the item, use the classic `withSingleField()` function with a second argument, a Closure accepting a `FormLayoutColumn`.
+
+Here's an example for the Museum List defined above:
+
+    $this->addColumn(6, function(FormLayoutColumn $column) {
+         $column->withSingleField("pieces", function(FormLayoutColumn $listItem) {
+            $listItem->withSingleField("acquisition_date")
+                     ->withSingleField("title")
+                     ->withSingleField("artist_id")
+         });
+     });
 
 
 ## Formatter
 
+### `toFront`
+
+The Formatter expects an array or a `Collection` of models, each one defining attributes for each list item keys at the format expected by the corresponding Field Formatter.
+
+So in our Museum example, we must provide an array of ArtPiece models with at least those attributes: `id`, `title`, `acquisition_date`, `artist_id`.
+
+### `fromFront`
+
+Returns an array with the same shape.
+Newly added items will have a `null` id.

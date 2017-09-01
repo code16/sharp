@@ -3,9 +3,12 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Formatters\ListFormatter;
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithTemplates;
 
 class SharpFormListField extends SharpFormField
 {
+    use SharpFormFieldWithTemplates;
+
     const FIELD_TYPE = "list";
 
     /**
@@ -42,11 +45,6 @@ class SharpFormListField extends SharpFormField
      * @var int
      */
     protected $maxItemCount = null;
-
-    /**
-     * @var string
-     */
-    protected $collapsedItemTemplate = null;
 
     /**
      * @var array
@@ -129,12 +127,33 @@ class SharpFormListField extends SharpFormField
     }
 
     /**
-     * @param string $collapsedItemTemplate
      * @return static
      */
-    public function setCollapsedItemTemplate(string $collapsedItemTemplate)
+    public function setMaxItemCountUnlimited()
     {
-        $this->collapsedItemTemplate = $collapsedItemTemplate;
+        $this->maxItemCount = null;
+
+        return $this;
+    }
+
+    /**
+     * @param string $collapsedItemInlineTemplate
+     * @return static
+     */
+    public function setCollapsedItemInlineTemplate(string $collapsedItemInlineTemplate)
+    {
+        $this->setInlineTemplate($collapsedItemInlineTemplate, "item");
+
+        return $this;
+    }
+
+    /**
+     * @param string $collapsedItemTemplatePath
+     * @return static
+     */
+    public function setCollapsedItemTemplatePath(string $collapsedItemTemplatePath)
+    {
+        $this->setTemplatePath($collapsedItemTemplatePath, "item");
 
         return $this;
     }
@@ -146,6 +165,17 @@ class SharpFormListField extends SharpFormField
     public function addItemField(SharpFormField $field)
     {
         $this->itemFields[] = $field;
+
+        return $this;
+    }
+
+    /**
+     * @param string $itemIdAttribute
+     * @return static
+     */
+    public function setItemIdAttribute(string $itemIdAttribute)
+    {
+        $this->itemIdAttribute = $itemIdAttribute;
 
         return $this;
     }
@@ -165,17 +195,6 @@ class SharpFormListField extends SharpFormField
     public function findItemFormFieldByKey(string $key)
     {
         return $this->itemFields()->where("key", $key)->first();
-    }
-
-    /**
-     * @param string $itemIdAttribute
-     * @return static
-     */
-    public function setItemIdAttribute(string $itemIdAttribute)
-    {
-        $this->itemIdAttribute = $itemIdAttribute;
-
-        return $this;
     }
 
     /**
@@ -214,7 +233,7 @@ class SharpFormListField extends SharpFormField
             "addable" => "boolean",
             "removable" => "boolean",
             "sortable" => "boolean",
-            "maxItemCount" => "integer",
+            "maxItemCount" => "nullable|integer",
         ];
     }
 
@@ -228,7 +247,7 @@ class SharpFormListField extends SharpFormField
             "removable" => $this->removable,
             "sortable" => $this->sortable,
             "addText" => $this->addText,
-            "collapsedItemTemplate" => $this->collapsedItemTemplate,
+            "collapsedItemTemplate" => $this->template("item"),
             "maxItemCount" => $this->maxItemCount,
             "itemIdAttribute" => $this->itemIdAttribute,
             "itemFields" => collect($this->itemFields)->map(function($field) {

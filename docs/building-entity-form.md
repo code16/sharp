@@ -77,6 +77,7 @@ For the specifics of each field, here's the full list and documentation:
 - [Autocomplete](form-fields/autocomplete.md)
 - [Tags](form-fields/tags.md)
 - [List](form-fields/list.md)
+- [AutocompleteList](form-fields/autocomplete-list.md)
 
 ### `buildFormLayout()`
 

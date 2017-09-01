@@ -67,15 +67,7 @@ class TravelSharpForm extends SharpForm
 
     function find($id): array
     {
-        return $this
-//            ->setCustomTransformer("delegates", function($value, $travel) {
-//                return $travel->delegates->map(function($passenger) {
-//                    $passenger["num"] = $passenger["id"];
-//                    unset($passenger["id"]);
-//                    return $passenger;
-//                });
-//            })
-            ->transform(
+        return $this->transform(
             Travel::with(["spaceship", "delegates"])->findOrFail($id)
         );
     }
