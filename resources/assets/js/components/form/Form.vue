@@ -162,7 +162,7 @@
                 this.actionsBus.$emit('setup', {
                     locales: null, //this.config.locales,
                     showSubmitButton,
-                    showDeleteButton: this.authorizations.delete,
+                    showDeleteButton: !this.isCreation && this.authorizations.delete,
                     showBackButton: this.isReadOnly,
                     opType: this.isCreation ? 'create' : 'update'
                 });
