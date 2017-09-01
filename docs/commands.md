@@ -101,9 +101,21 @@ Finally, let's review the return possibilities. After a Command has been execute
 
 - `return $this->info("some text")`: displays the entered text in a modal.
 - `return $this->reload()`: reload the current entity list (with context).
-- `return $this->refresh(1)`: refresh only the instance with an id on `1`. We can pass an id array also to refresh more than one instance.
+- `return $this->refresh(1)`*: refresh only the instance with an id on `1`. We can pass an id array also to refresh more than one instance.
 - `return $this->view("view.name", ["some"=>"params"])`: display a  view right in Sharp. Useful for page previews.
 
+\* In order for `refresh()` to work properly, your Entity List's  `getListData(EntityListQueryParams $params)` will be called, and `$params` will return all the wanted `id`s with `specificIds()`. Here's a code example:
+
+    function getListData(EntityListQueryParams $params)
+    {
+        $spaceships = Spaceship::distinct();
+
+        if($params->specificIds()) {
+            $spaceships->whereIn("id", $params->specificIds());
+        }
+        
+        [...]
+    }
 
 
 ## Configure the Command
