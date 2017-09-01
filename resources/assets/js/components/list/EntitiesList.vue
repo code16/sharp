@@ -75,10 +75,10 @@
                 </sharp-pagination>
             </div>
             <sharp-modal v-for="form in commandForms"
-                         :visible="showFormModal[form.key]"
+                         v-model="showFormModal[form.key]"
                          :key="form.key"
                          @ok="postCommandForm(form.key, $event)"
-                         @hidden="hideCommandModal(form.key)">
+                         @hidden="onCommandFormModalHidden(form.key)">
                 <sharp-form :props="form"
                             :entity-key="form.key"
                             independant
@@ -408,6 +408,10 @@
                 return `${this.apiPath}/command/${key}${instanceId?`/${instanceId}`:''}`;
             },
 
+            getFormModal(key) {
+                return this.$refs[`formModal-${key}`][0];
+            },
+
             /* (Command, Instance)
              * Display a form in a modal if the command require a form, else send API request
              */
@@ -415,6 +419,7 @@
                 if(form) {
                     this.selectedInstance = instance;
                     this.$set(this.showFormModal,key,true);
+                    //this.getFormModal(key).show();
                     return;
                 }
                 axios.post(this.commandEnpoint(key, instance), {query: this.apiParams})
@@ -462,21 +467,22 @@
                     endpoint: this.commandEnpoint(key, this.selectedInstance),
                     dataFormatter:form=>({ query:this.apiParams, data:form.data })
                 });
-                return event.cancel();
+                event.cancel();
+                this.$set(this.showFormModal,key,true);
             },
 
             /* (CommandKey, FormData)
             * Hide the current form modal after data correctly sent, handle actions
             */
-            commandFormSubmitted(key, data) {
+            async commandFormSubmitted(key, data) {
                 this.selectedInstance = null;
-                this.hideCommandModal(key);
                 this.handleCommandResponse(data);
+                await this.$nextTick();
+                this.$set(this.showFormModal,key, false);
             },
 
-            hideCommandModal(key) {
+            onCommandFormModalHidden(key) {
                 this.actionsBus.$emit('reset', { entityKey: key });
-                this.$set(this.showFormModal,key, false);
             },
 
             /**
@@ -541,6 +547,7 @@
             }
         },
         created() {
+            console.log(this);
             this.get().then(_=>{
                 this.verify();
                 this.bindParams();

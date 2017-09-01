@@ -143,9 +143,6 @@
                 if(response.status===422)
                     this.errors = response.data || {};
             },
-            delete() {
-                axios.delete(this.apiPath);
-            },
             init() {
                 if(this.independant) {
                     this.mount(this.props);
@@ -174,34 +171,48 @@
                     this.actionsBus.$emit('localeChanged', this.config.locales[0]);
                 }
             },
+            redirectToList({ restoreContext=true }={}) {
+                location.href = `/sharp/list/${this.entityKey}${restoreContext?'?restore-context=1':''}`
+            }
         },
         actions: {
-            submit({entityKey, endpoint, dataFormatter=noop }={}) {
+            async submit({entityKey, endpoint, dataFormatter=noop }={}) {
                 if(entityKey && entityKey !== this.entityKey) return;
 
-                this.post(endpoint, dataFormatter(this))
-                    .then(({ data })=>{
-                        if(this.independant) {
-                            this.$emit('submitted', data);
-                        }
-                        else if(data.ok) {
-                            this.mainLoading.$emit('show');
-                            location.href = `/sharp/list/${this.entityKey}?restore-context=1`
-                        }
-                    })
-                    .catch(this.handleError)
+                try {
+                    const { data } = await this.post(endpoint, dataFormatter(this));
+                    if(this.independant) {
+                        this.$emit('submitted', data);
+                    }
+                    else if(data.ok) {
+                        this.mainLoading.$emit('show');
+                        this.redirectToList();
+                    }
+                }
+                catch(error) {
+                    this.handleError(error);
+                }
+            },
+            async 'delete'() {
+                try {
+                    await axios.delete(this.apiPath);
+                    this.redirectToList();
+                }
+                catch(error) {
+
+                }
             },
             cancel() {
-                location.href = `/sharp/list/${this.entityKey}?restore-context=1`;
+                this.redirectToList();
             },
             localeChanged(newLocale) {
                 this.locale = newLocale;
             },
-            delete: 'delete',
             reset({ entityKey }) {
                 if(entityKey && entityKey !== this.entityKey) return;
 
-                this.data = {}
+                this.data = {};
+                this.errors = {};
             }
         },
         created() {

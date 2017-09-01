@@ -25,6 +25,8 @@
     import Field from './Field';
     import {ErrorNode} from '../../mixins/index';
 
+    import * as util from '../../util';
+
     export default {
         name: 'SharpFieldContainer',
 
@@ -55,11 +57,16 @@
                     this.clear();
             },
             '$form.errors': {
-                immediate:true,
                 handler(errors) {
                     let error = errors[this.mergedErrorIdentifier];
-                    if(Array.isArray(error)) {
+                    if(error == null) {
+                        this.clear();
+                    }
+                    else if(Array.isArray(error)) {
                         this.setError(error[0]);
+                    }
+                    else {
+                        util.error(`FieldContainer : Not processable error "${this.mergedErrorIdentifier}" : `, error);
                     }
                 }
             },

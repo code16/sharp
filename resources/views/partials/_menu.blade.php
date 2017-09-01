@@ -8,7 +8,7 @@
     <ul role="menubar" class="SharpLeftNav__list" aria-hidden="false" v-cloak>
         <sharp-nav-item disabled>
             <span>
-                <i class="fa fa-user"></i>
+                <i class="fa fa-fw fa-user"></i>
                 {{ $sharpMenu->user }}
             </span>
             <a href="{{ route('code16.sharp.logout') }}"><i class="fa fa-sign-out"></i></a>
@@ -17,7 +17,7 @@
         @if($sharpMenu->dashboard)
             <sharp-nav-item :current="{{ json_encode($dashboard ?? false) }}" link="{{ route('code16.sharp.dashboard') }}">
                 <span>
-                    <i class="fa fa-dashboard"></i>
+                    <i class="fa fa-fw fa-dashboard"></i>
                     @lang('sharp::menu.dashboard')
                 </span>
             </sharp-nav-item>
@@ -31,7 +31,7 @@
                                     link="{{ route('code16.sharp.list', $entity->key) }}">
                         <span>
                             @if($entity->icon)
-                                <i class="fa {{ $entity->icon }}"></i>
+                                <i class="fa fa-fw {{ $entity->icon }}"></i>
                             @endif
                             {{ $entity->label }}
                         </span>

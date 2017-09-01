@@ -301,8 +301,5 @@
         beforeDestroy() {
             this.uploader._uploader.destroy();
         },
-        mounted() {
-            console.log(this.uploader._uploader);
-        }
     }
 </script>
