@@ -1,5 +1,5 @@
 <script>
-    import bPagination from '../vendor/bootstrap-vue/components/pagination';
+    import bPagination from 'bootstrap-vue/lib/components/pagination';
     import { ignoreWarns } from '../../util';
 
     export default {

@@ -206,7 +206,8 @@
         },
         created() {
             this.$on('error-cleared', errorId => {
-                this.$set(this.errors[errorId],'cleared',true);
+                if(this.errors[errorId])
+                    this.$set(this.errors[errorId],'cleared',true);
             })
         },
         mounted() {

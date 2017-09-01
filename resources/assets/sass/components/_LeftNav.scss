@@ -1,3 +1,5 @@
+@import "../mixins/left-nav";
+
 .SharpLeftNav {
   @include reset;
   width: rem(250px);
@@ -56,6 +58,9 @@
     background-color: $color__white;
     overflow: auto;
     padding-top: 1rem;
+
+    @include enhanced-item-border-and-spacing;
+    @include enhanced-item-font-size;
 
     .SharpLeftNav__item {
       cursor: pointer;
@@ -151,8 +156,6 @@
       &.SharpLeftNav__item--disabled {
         cursor: default;
       }
-
-
     }
 
     .SharpLeftNav__item--has-children {
@@ -282,7 +285,7 @@
     }
 
     .SharpLeftNav__list--nested .SharpLeftNav__item-link {
-      font-size: rem(12px);
+      //font-size: rem(12px);
       //padding-left: rem(40px);
     }
 

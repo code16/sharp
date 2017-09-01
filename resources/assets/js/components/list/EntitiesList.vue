@@ -160,10 +160,9 @@
             }
         },
         watch: {
-            async 'data.items'(items) {
+            'data.items'(items) {
                 if(items.length) {
-                    await this.$nextTick();
-                    this.updateHeaderAutoPadding();
+                    this.$nextTick(() => this.updateHeaderAutoPadding());
                 }
             }
         },
