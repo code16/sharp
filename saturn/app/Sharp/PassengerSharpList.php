@@ -61,6 +61,11 @@ class PassengerSharpList extends SharpEntityList
             })
             ->setCustomTransformer("travel", function($value, $passenger) {
                 $travel = $passenger->travel;
+
+                if(!$travel) {
+                    return "";
+                }
+
                 $date = $travel->departure_date->format('Y-m-d (H:i)');
 
                 return '<i class="fa fa-space-shuttle"></i> ' . $travel->spaceship->name

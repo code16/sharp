@@ -8,8 +8,9 @@ use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Code16\Sharp\Exceptions\EntityList\SharpInvalidEntityStateException;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException;
-use Code16\Sharp\Exceptions\SharpException;
 use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
 
 class HandleSharpApiErrors
 {
@@ -24,8 +25,8 @@ class HandleSharpApiErrors
     {
         $response = $next($request);
 
-        if($response->exception instanceof SharpException
-            || method_exists($response->exception, 'getStatusCode')) {
+        if($response->exception
+            && !$response->exception instanceof ValidationException) {
             return response()->json([
                 "message" => $response->exception->getMessage()
             ], $this->getHttpCodeFor($response->exception));
@@ -49,7 +50,8 @@ class HandleSharpApiErrors
             return 403;
         }
 
-        if ($exception instanceof SharpInvalidEntityKeyException) {
+        if ($exception instanceof SharpInvalidEntityKeyException
+            ||$exception instanceof ModelNotFoundException) {
             return 404;
         }
 
@@ -61,6 +63,10 @@ class HandleSharpApiErrors
             return 500;
         }
 
-        return $exception->getStatusCode();
+        if(method_exists($exception, 'getStatusCode')) {
+            return $exception->getStatusCode();
+        }
+
+        return 500;
     }
 }
