@@ -429,7 +429,6 @@
                                 this.actionsBus.$emit('showMainModal', {
                                     title: this.l('modals.command.confirm.title'),
                                     text: confirmation,
-                                    closeTitle: 'Cancel',
                                     okCallback: e => resolve(data),
                                 });
                             })

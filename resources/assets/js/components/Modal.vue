@@ -1,6 +1,8 @@
 <script>
     import bModal from './vendor/bootstrap-vue/components/modal';
     import { QueryTree } from '../mixins';
+    import { lang } from '../mixins/Localization';
+
     export default {
         name:'SharpModal',
         functional: true,
@@ -20,6 +22,11 @@
                 ...ctx.data.attrs,
                 noAutoFocus : true
             };
+
+            ctx.data.props.closeTitle = ctx.data.props.closeTitle || lang('modals.cancel_button');
+            ctx.data.props.okTitle = ctx.data.props.okTitle || lang('modals.ok_button');
+
+            console.log(ctx);
 
             bModal.name = 'SharpModal';
 
