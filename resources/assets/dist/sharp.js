@@ -34027,7 +34027,6 @@ if (false) {(function () {
                 this.$el.addEventListener('blur', function () {
                     return _this.deactivate();
                 });
-                console.log(data, this.$refs);
             }
         }, data, [carretSlot ? h('template', { slot: 'carret' }, carretSlot) : h(__WEBPACK_IMPORTED_MODULE_2__dropdown_Arrow__["a" /* default */], { 'class': 'multiselect__select', slot: 'carret' }), h('template', { slot: 'maxElements' }, Object(__WEBPACK_IMPORTED_MODULE_3__mixins_Localization__["b" /* lang */])('form.multiselect.max_text'))].concat(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_toConsumableArray___default()(children)));
     }
@@ -34284,7 +34283,15 @@ if (false) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Arrow__ = __webpack_require__(137);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__(99);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator__ = __webpack_require__(100);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Arrow__ = __webpack_require__(137);
+
+
+//
+//
 //
 //
 //
@@ -34308,7 +34315,7 @@ if (false) {
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpDropdown',
     components: {
-        DropdownArrow: __WEBPACK_IMPORTED_MODULE_0__Arrow__["a" /* default */]
+        DropdownArrow: __WEBPACK_IMPORTED_MODULE_2__Arrow__["a" /* default */]
     },
     provide: function provide() {
         return {
@@ -34326,7 +34333,8 @@ if (false) {
     },
     data: function data() {
         return {
-            opened: false
+            opened: false,
+            isAbove: false
         };
     },
 
@@ -34342,15 +34350,56 @@ if (false) {
         }
     },
     methods: {
-        handleFocus: function handleFocus() {
-            if (this.disabled) return;
-            this.opened = true;
+        handleFocus: function () {
+            var _ref = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
+                return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
+                    while (1) {
+                        switch (_context.prev = _context.next) {
+                            case 0:
+                                if (!this.disabled) {
+                                    _context.next = 2;
+                                    break;
+                                }
+
+                                return _context.abrupt('return');
+
+                            case 2:
+                                this.opened = true;
+                                _context.next = 5;
+                                return this.$nextTick();
+
+                            case 5:
+                                this.adjustPosition();
+
+                            case 6:
+                            case 'end':
+                                return _context.stop();
+                        }
+                    }
+                }, _callee, this);
+            }));
+
+            function handleFocus() {
+                return _ref.apply(this, arguments);
+            }
+
+            return handleFocus;
+        }(),
+        handleBlur: function handleBlur() {
+            this.opened = false;
+            this.isAbove = false;
         },
         toggleIfFocused: function toggleIfFocused(e) {
             if (this.opened) {
                 this.$el.blur();
                 e.preventDefault();
             }
+        },
+        adjustPosition: function adjustPosition() {
+            var _$refs$list$getBoundi = this.$refs.list.getBoundingClientRect(),
+                bottom = _$refs$list$getBoundi.bottom;
+
+            this.isAbove = bottom > window.innerHeight;
         }
     },
     mounted: function mounted() {}
@@ -34365,16 +34414,16 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   return _c('div', {
     staticClass: "SharpDropdown",
     class: {
-      'SharpDropdown--open': _vm.opened, 'SharpDropdown--disabled': _vm.disabled
+      'SharpDropdown--open': _vm.opened,
+      'SharpDropdown--disabled': _vm.disabled,
+      'SharpDropdown--above': _vm.isAbove
     },
     attrs: {
       "tabindex": _vm.disabled ? -1 : 0
     },
     on: {
       "focus": _vm.handleFocus,
-      "blur": function($event) {
-        _vm.opened = false
-      }
+      "blur": _vm.handleBlur
     }
   }, [_c('li', {
     staticClass: "SharpDropdown__text",
@@ -34384,6 +34433,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   }, [_vm._t("text", [_vm._v(_vm._s(_vm.text))])], 2), _vm._v(" "), (_vm.showArrow) ? _c('dropdown-arrow', {
     staticClass: "SharpDropdown__arrow"
   }) : _vm._e(), _vm._v(" "), (!_vm.disabled) ? _c('li', [_c('ul', {
+    ref: "list",
     staticClass: "SharpDropdown__list"
   }, [_vm._t("default")], 2)]) : _vm._e()], 1)
 }

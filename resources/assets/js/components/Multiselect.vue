@@ -20,7 +20,6 @@
                 'extends':Multiselect,
                 mounted() {
                     this.$el.addEventListener('blur', () => this.deactivate());
-                    console.log(data, this.$refs);
                 }
             }, data, [
                 carretSlot

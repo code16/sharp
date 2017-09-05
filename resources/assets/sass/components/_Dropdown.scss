@@ -13,6 +13,12 @@
 
   outline: 1px solid transparent;
 
+  &--above {
+    .SharpDropdown__list {
+      bottom: 100%;
+    }
+  }
+
   &__arrow {
     z-index: z('dropdownIcon');
     fill: $brand-01;
