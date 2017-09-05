@@ -50,14 +50,15 @@ export default {
             this.mainLoading.$emit('hide');
             return response;
         }, error => {
+            let { response: {status, data}, config: { method } } = error;
             this.mainLoading.$emit('hide');
             let modalOptions = {
-                title: lang(`modals.${error.response.status}`),
-                text: error.response.data.message,
+                title: lang(`modals.${status}`),
+                text: data.message,
                 isError: true
             };
 
-            switch(error.response.status) {
+            switch(status) {
                 /// Unauthorized
                 case 401: this.actionsBus.$emit('showMainModal', {
                     ...modalOptions,
@@ -66,13 +67,15 @@ export default {
                     },
                 });
                     break;
-                /// Forbidden
+
+                case 404:
                 case 403:
                 case 417:
-                    this.actionsBus.$emit('showMainModal', {
-                    ...modalOptions,
-                    okCloseOnly:true,
-                });
+                    if(status !== 404 || method !== 'get')
+                        this.actionsBus.$emit('showMainModal', {
+                            ...modalOptions,
+                            okCloseOnly:true,
+                        });
                     break;
             }
             return Promise.reject(error);

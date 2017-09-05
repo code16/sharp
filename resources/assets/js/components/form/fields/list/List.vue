@@ -44,7 +44,7 @@
                             <div v-if="dragActive" class="SharpList__overlay-handle"></div>
                         </div>
                     </div>
-                    <div v-if="!disabled && showAddButton && i<list.length-1" class="SharpList__new-item-zone">
+                    <div v-if="!disabled && showInsertButton && i<list.length-1" class="SharpList__new-item-zone">
                         <button class="SharpButton SharpButton--secondary SharpButton--sm" @click="insertNewItem(i)">{{ l('form.list.insert_button') }}</button>
                     </div>
                 </div>
@@ -142,6 +142,9 @@
             },
             showAddButton() {
                 return this.addable && (this.list.length<this.maxItemCount || !this.maxItemCount);
+            },
+            showInsertButton() {
+                return this.showAddButton && this.sortable;
             },
             dragIndexSymbol() {
                 return Symbol('dragIndex');

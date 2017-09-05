@@ -1,7 +1,14 @@
 @import '../mixins/button';
 
+
 .SharpButton {
   font-family: inherit;
+
+  overflow: hidden;
+
+  &__collapse-transition {
+    transition: width 100ms $bx--standard-easing;
+  }
 
   &::-moz-focus-inner {
     padding: 0;
@@ -87,8 +94,8 @@
       color: $inverse-01;
     }
 
-    &:hover > .bx--btn__icon,
-    &:focus > .bx--btn__icon {
+    &:hover > svg,
+    &:focus > svg {
       fill: $inverse-01;
     }
 
@@ -121,12 +128,12 @@
     &:focus {
       color: $inverse-01;
 
-      .SharpButton__icon {
+      svg {
         fill: $inverse-01;
       }
     }
 
-    .SharpButton__icon {
+    svg {
       margin-left: .275rem;
     }
 
@@ -134,7 +141,7 @@
     &:focus:disabled {
       color: $brand-01;
 
-      .SharpButton__icon {
+      svg {
         fill: $brand-01;
       }
     }
@@ -143,10 +150,10 @@
   &--danger {
     @include button-theme(
       $ui-01,  // bg-color
-      $support-01, // border-color
-      $support-01,  // font-color
+      $brand-01, // border-color
+      $brand-01,  // font-color
       $support-01,  // hover-bg-color
-      $ui-05        // icon-color
+      $brand-01       // icon-color
     );
 
     &:hover {
@@ -164,8 +171,8 @@
       border: $button-border-width solid currentColor;
     }
 
-    &:hover > .bx--btn__icon,
-    &:focus > .bx--btn__icon {
+    &:hover > svg,
+    &:focus > svg {
       fill: $inverse-01;
     }
   }

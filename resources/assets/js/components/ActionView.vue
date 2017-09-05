@@ -87,9 +87,11 @@
             let { actionsBus, axiosInstance } = this._provided;
 
             actionsBus.$on('showMainModal', this.showMainModal);
+
             axiosInstance.interceptors.response.use(c=>c, error=>{
-                let { response: {status, data} } = error;
-                if(status === 404) {
+                let { response: {status, data}, config: { method } } = error;
+                console.dir(error);
+                if(method==='get' && status === 404) {
                     this.showErrorPage = true;
                     this.errorPageData = {
                         status, message: data.message
