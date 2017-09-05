@@ -15,8 +15,9 @@ class LangController extends Controller
     public function index()
     {
         $lang = app()->getLocale();
+        $version = sharp_version();
 
-        $strings = Cache::rememberForever("sharp.lang.$lang.js", function() {
+        $strings = Cache::rememberForever("sharp.lang.$lang.$version.js", function() {
             $strings = [];
 
             foreach(["action_bar", "form", "modals", "entity_list"] as $filename) {
