@@ -34027,6 +34027,7 @@ if (false) {(function () {
                 this.$el.addEventListener('blur', function () {
                     return _this.deactivate();
                 });
+                console.log(data, this.$refs);
             }
         }, data, [carretSlot ? h('template', { slot: 'carret' }, carretSlot) : h(__WEBPACK_IMPORTED_MODULE_2__dropdown_Arrow__["a" /* default */], { 'class': 'multiselect__select', slot: 'carret' }), h('template', { slot: 'maxElements' }, Object(__WEBPACK_IMPORTED_MODULE_3__mixins_Localization__["b" /* lang */])('form.multiselect.max_text'))].concat(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_toConsumableArray___default()(children)));
     }
@@ -36788,7 +36789,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         _vm.emitAction('cancel')
       }
     }
-  }, [_vm._v("\n            " + _vm._s(_vm.showBackButton ? _vm.l('action_bar.form.back_button') : _vm.l('action_bar.form.cancel_button')) + "\n        ")]), _vm._v(" "), _c('div', {
+  }, [_vm._v("\n            " + _vm._s(_vm.showBackButton ? _vm.l('action_bar.form.back_button') : _vm.l('action_bar.form.cancel_button')) + "\n        ")]), _vm._v(" "), (_vm.showDeleteButton) ? _c('div', {
     staticClass: "w-100 h-100"
   }, [_c('collapse', {
     attrs: {
@@ -36838,7 +36839,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         }, [_vm._v("\n                        " + _vm._s(_vm.l('action_bar.form.delete_button')) + "\n                    ")])]
       }
     }])
-  })], 1)]), _vm._v(" "), _c('template', {
+  })], 1) : _vm._e()]), _vm._v(" "), _c('template', {
     slot: "right"
   }, [(_vm.showSubmitButton) ? _c('button', {
     staticClass: "SharpButton SharpButton--accent",
@@ -45869,6 +45870,7 @@ if (false) {(function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__util__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__mixins__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__mixins_Localization__ = __webpack_require__(55);
 
 
 
@@ -45927,6 +45929,7 @@ var _components;
 
 
 
+
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpAutocomplete',
     components: (_components = {
@@ -45947,7 +45950,10 @@ var _components;
                 return [];
             }
         },
-        placeholder: String,
+        placeholder: {
+            type: String,
+            default: Object(__WEBPACK_IMPORTED_MODULE_9__mixins_Localization__["b" /* lang */])('form.multiselect.placeholder')
+        },
         remoteEndpoint: String,
         remoteMethod: String,
         remoteSearchAttribute: {
@@ -45998,7 +46004,7 @@ var _components;
                 searchKeys: this.searchKeys
             });
         },
-        canShowValue: function canShowValue() {
+        showValue: function showValue() {
             return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_typeof___default()(this.value) === 'object';
         }
     },
@@ -47158,7 +47164,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         'SharpAutocomplete--disabled': _vm.readOnly
       }
     ]
-  }, [(_vm.state == 'valuated' && _vm.canShowValue) ? _c('div', {
+  }, [(_vm.state == 'valuated' && _vm.showValue) ? _c('div', {
     staticClass: "SharpAutocomplete__result-item"
   }, [_c('sharp-template', {
     attrs: {
