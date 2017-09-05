@@ -2,13 +2,15 @@
   "name": "code16/sharp",
   "description": "Let's call it a Laravel Content Management Framework",
   "authors": [{
-    "name": "Philippe Lonchampt"
+    "name": "Philippe Lonchampt",
+    "email": "philippe@code16.fr"
   }, {
-    "name": "Antoine Guingand"
+    "name": "Antoine Guingand",
+    "email": "antoine@code16.fr"
   }],
   "require": {
     "php": ">=7.0.0",
-    "laravel/framework": "5.4.*",
+    "laravel/framework": "5.4.*|5.5.*",
     "intervention/image": "^2.3"
   },
   "require-dev": {
