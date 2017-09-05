@@ -82,6 +82,6 @@ class PassengerSharpForm extends SharpForm
 
     function delete($id)
     {
-        Passenger::findOrFail("A")->delete();
+        Passenger::findOrFail($id)->delete();
     }
 }
