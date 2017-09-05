@@ -30,7 +30,7 @@ Each `entity` in Sharp can be displayed:
 
 - Add the package with composer: `composer require code16/sharp`,
 - [Laravel 5.4 only] Register the service provider `Code16\Sharp\SharpServiceProvider` in the provider array of `config/app.php`,
-- Publish assets: `php artisan vendor:publish --provider=Code16\Sharp\SharpServiceProvider`.
+- Publish assets: `php artisan vendor:publish --tag=assets`.
 
 ## Configuration
 
