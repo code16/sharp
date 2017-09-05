@@ -26,11 +26,17 @@ Each `entity` in Sharp can be displayed:
 - in an `Entity List`, which is the list of all the `instances` for this `entity`: with some configuration and code, the user can sort the data, add filters, and perform a search. From there we also gain access to applicative `commands` applied to an `instance` or the whole list, and to a simple `state` changer (the publish state of an Article, for instance). All of that is described below.
 - And in a `Form`, either to update or create a new `instance`.
 
+![](docs/img/dashboard.png)
+
+![](docs/img/list.png)
+
+![](docs/img/form.png)
+
 ## Installation
 
 - Add the package with composer: `composer require code16/sharp`,
 - [Laravel 5.4 only] Register the service provider `Code16\Sharp\SharpServiceProvider` in the provider array of `config/app.php`,
-- Publish assets: `php artisan vendor:publish --provider=Code16\Sharp\SharpServiceProvider`.
+- Publish assets: `php artisan vendor:publish --tag=assets`.
 
 ## Configuration
 

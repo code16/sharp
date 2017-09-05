@@ -9,7 +9,7 @@
                 <collapse transition-class="SharpButton__collapse-transition">
                     <template slot="frame-0" scope="frame">
                         <button class="SharpButton SharpButton--danger" @click="frame.next(focusDelete)">
-                            <svg  width='16' height='24' viewBox='0 0 16 24' fill-rule='evenodd'>
+                            <svg  width='16' height='16' viewBox='0 0 16 24' fill-rule='evenodd'>
                                 <path d='M4 0h8v2H4zM0 3v4h1v17h14V7h1V3H0zm13 18H3V8h10v13z'></path>
                                 <path d='M5 10h2v9H5zm4 0h2v9H9z'></path>
                             </svg>
