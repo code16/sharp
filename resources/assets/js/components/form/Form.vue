@@ -195,7 +195,7 @@
             },
             async 'delete'() {
                 try {
-                    await axios.delete(this.apiPath);
+                    await this.axiosInstance.delete(this.apiPath);
                     this.redirectToList();
                 }
                 catch(error) {

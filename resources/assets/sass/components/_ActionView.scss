@@ -5,9 +5,9 @@
 }
 
 @include media-breakpoint-up(md) {
-  padding-top: 5rem;
   .SharpActionView {
     padding-left: rem(200px);
+    margin-top: 5rem;
   }
   &.leftNav--collapsed {
     .SharpActionView {

@@ -6,8 +6,6 @@ $css--reset:false;
 @import '~carbon-components/scss/globals/scss/css--reset';
 
 
-
-
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
 
@@ -16,8 +14,6 @@ $css--reset:false;
 @import '~bootstrap/scss/mixins/grid-framework';
 @import '~bootstrap/scss/mixins/breakpoints';
 @import '~bootstrap/scss/mixins/visibility';
-@import '~bootstrap/scss/utilities/flex';
-@import '~bootstrap/scss/utilities/visibility';
 
 
 @import 'components/loading/Loading';
@@ -50,19 +46,8 @@ $small-breakpoint: sm;
 
   @import 'node_modules/bootstrap/scss/grid';
   @import 'node_modules/bootstrap/scss/transitions';
-
-  //@include media-breakpoint-down(sm) {
-  //
-  //  .row {
-  //    margin-left: -7px;
-  //    margin-right: -7px
-  //  }
-  //
-  //  [class*="col-"]{
-  //    padding-left: 7px !important;
-  //    padding-right: 7px !important;
-  //  }
-  //}
+  @import '~bootstrap/scss/utilities/flex';
+  @import '~bootstrap/scss/utilities/visibility';
 
   // from carbon design
   @import 'components/Button';
@@ -118,7 +103,6 @@ $small-breakpoint: sm;
   @import 'components/dashboard/Dashboard';
   @import 'components/dashboard/Legend';
   @import 'components/Card';
-
 
   input[type="number"].hide-controls {
     &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {

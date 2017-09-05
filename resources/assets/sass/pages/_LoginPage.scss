@@ -1,7 +1,7 @@
 .Sharp__login-page {
   display: flex;
-  align-items: center;
   height:100%;
+  padding: 20vh 0;
   @include media-breakpoint-down(xs) {
     .container {
       width:100%
