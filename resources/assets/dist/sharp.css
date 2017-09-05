@@ -5284,6 +5284,10 @@
           box-sizing: inherit;
 }
 
+#sharp-app .SharpDropdown--above .SharpDropdown__list, #sharp-app .SharpDropdown--above .multiselect .multiselect__content, #sharp-app .multiselect .SharpDropdown--above .multiselect__content {
+  bottom: 100%;
+}
+
 #sharp-app .SharpDropdown__arrow, #sharp-app .multiselect .multiselect__select {
   z-index: 12;
   fill: #314255;
