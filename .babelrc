@@ -12,7 +12,11 @@
   "env": {
     "test": {
       "plugins": [
-        "transform-object-rest-spread"
+        "transform-object-rest-spread",
+        ["transform-runtime", {
+          "polyfill": false,
+          "regenerator": true
+        }]
       ],
       "presets": [
         "es2015"
