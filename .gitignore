@@ -3,6 +3,5 @@ vendor
 .idea
 .DS_Store
 composer.lock
-yarn.lock
 stats.json
 /public
