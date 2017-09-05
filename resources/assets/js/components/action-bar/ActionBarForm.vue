@@ -5,7 +5,7 @@
                 {{ showBackButton ? l('action_bar.form.back_button') : l('action_bar.form.cancel_button') }}
             </button>
 
-            <div class="w-100 h-100">
+            <div v-if="showDeleteButton" class="w-100 h-100">
                 <collapse transition-class="SharpButton__collapse-transition">
                     <template slot="frame-0" scope="frame">
                         <button class="SharpButton SharpButton--danger" @click="frame.next(focusDelete)">

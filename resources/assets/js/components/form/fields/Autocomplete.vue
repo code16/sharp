@@ -3,7 +3,7 @@
          :class="[`SharpAutocomplete--${state}`,
                  {'SharpAutocomplete--remote':isRemote},
                  {'SharpAutocomplete--disabled':readOnly}]">
-        <div v-if="state=='valuated' && canShowValue" class="SharpAutocomplete__result-item">
+        <div v-if="state=='valuated' && showValue" class="SharpAutocomplete__result-item">
             <sharp-template name="ResultItem" :template="resultItemTemplate" :template-data="value"></sharp-template>
             <button class="SharpAutocomplete__result-item__close-button" type="button" @click="handleResetClick">
                 <svg class="SharpAutocomplete__result-item__close-icon"
@@ -50,6 +50,7 @@
 
     import { warn } from '../../../util';
     import { Localization } from '../../../mixins';
+    import { lang } from '../../../mixins/Localization'
 
     export default {
         name:'SharpAutocomplete',
@@ -71,7 +72,10 @@
                 type: Array,
                 default:()=>[]
             },
-            placeholder: String,
+            placeholder: {
+                type: String,
+                default: lang('form.multiselect.placeholder')
+            },
             remoteEndpoint: String,
             remoteMethod:String,
             remoteSearchAttribute: {
@@ -119,7 +123,7 @@
                     searchKeys: this.searchKeys
                 });
             },
-            canShowValue() {
+            showValue() {
                 return typeof this.value === 'object';
             }
         },
