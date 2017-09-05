@@ -108,6 +108,10 @@
     }
   }
 
+  .SharpButton {
+    border: 1px solid $brand-01;
+  }
+
 
   &.SharpActionBarList {
     @include media-breakpoint-down(sm) {

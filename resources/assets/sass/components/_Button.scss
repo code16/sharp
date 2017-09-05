@@ -150,8 +150,8 @@
   &--danger {
     @include button-theme(
       $ui-01,  // bg-color
-      $brand-01, // border-color
-      $brand-01,  // font-color
+      $support-01, // border-color
+      $support-01,  // font-color
       $support-01,  // hover-bg-color
       $brand-01       // icon-color
     );

@@ -3,8 +3,8 @@
          :class="[`SharpAutocomplete--${state}`,
                  {'SharpAutocomplete--remote':isRemote},
                  {'SharpAutocomplete--disabled':readOnly}]">
-        <div v-if="state=='valuated'" class="SharpAutocomplete__result-item">
-            <sharp-template name="ResultItem" :template="resultItemTemplate" :template-data="valueObject"></sharp-template>
+        <div v-if="state=='valuated' && canShowValue" class="SharpAutocomplete__result-item">
+            <sharp-template name="ResultItem" :template="resultItemTemplate" :template-data="value"></sharp-template>
             <button class="SharpAutocomplete__result-item__close-button" type="button" @click="handleResetClick">
                 <svg class="SharpAutocomplete__result-item__close-icon"
                      aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd">
@@ -15,7 +15,7 @@
         <multiselect v-if="state!='valuated'"
                      class="SharpAutocomplete__multiselect"
                      :class="{'SharpAutocomplete__multiselect--hide-dropdown':hideDropdown}"
-                     :value="valueObject"
+                     :value="value"
                      :options="suggestions"
                      :track-by="itemIdAttribute"
                      :internal-search="false"
@@ -106,15 +106,6 @@
             isRemote() {
                 return this.mode === 'remote';
             },
-            valueObject() {
-                if(!this.value)
-                    return null;
-
-                if(this.isRemote)
-                    return this.value;
-
-                return this.localValues.find(v=>v[this.itemIdAttribute]===this.value);
-            },
             isLoading() {
                 return this.state === 'loading' || this.opened && !!this.query.length && this.hideDropdown;
             },
@@ -127,6 +118,9 @@
                     minQueryLength: this.searchMinChars,
                     searchKeys: this.searchKeys
                 });
+            },
+            canShowValue() {
+                return typeof this.value === 'object';
             }
         },
         methods: {
@@ -184,6 +178,9 @@
             if(this.$props.mode === 'local' && !this.$options.propsData.searchKeys) {
                 warn(`Autocomplete (key: ${this.fieldKey}) has local mode but no searchKeys, default set to ['value']`);
             }
+
+            if(!this.isRemote)
+                this.$emit('input', this.localValues.find(v => v[this.itemIdAttribute] === this.value));
         }
     }
 </script>
