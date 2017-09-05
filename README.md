@@ -70,4 +70,6 @@ We'll get into all those classes in this document. The important thing to notice
 9. [How to transform data](docs/how-to-transform-data.md)
 10. [Sharp built-in solution for uploads](docs/sharp-built-in-solution-for-uploads.md)
 11. Handling data localization
-12. Extending Sharp
+12. [Testing with Sharp](docs/testing-with-sharp.md)
+13. Extending Sharp
+14. Style and visual theme
