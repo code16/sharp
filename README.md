@@ -71,3 +71,4 @@ We'll get into all those classes in this document. The important thing to notice
 10. [Sharp built-in solution for uploads](docs/sharp-built-in-solution-for-uploads.md)
 11. Handling data localization
 12. Extending Sharp
+13. Style and visual theme
