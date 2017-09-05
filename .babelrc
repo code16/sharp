@@ -11,11 +11,8 @@
   ],
   "env": {
     "test": {
-      "plugins": [
-        "transform-object-rest-spread"
-      ],
       "presets": [
-        "es2015"
+        "es2015", "es2017"
       ]
     }
   }
