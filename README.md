@@ -16,6 +16,12 @@ Sharp intends to provide a clean solution to the following needs:
 
 Sharp 4 needs Laravel 5.4+ and PHP 7.0+.
 
+![](docs/img/dashboard.png)
+
+![](docs/img/list.png)
+
+![](docs/img/form.png)
+
 ## Terminology, general concept
 
 In Sharp, we handle `entities`; and `entity` is simply a data structure which has a meaning in the applicative context. For instance, a `Person`, a `Post` or an `Order`. In the Eloquent world, for which Sharp is optimized, it's typically a Model — but it's not necessarily a 1-1 relationship, a Sharp `entity` can represent a portion of a Model, or several Models.
@@ -25,12 +31,6 @@ Each instance of an `entity` is called... an `instance`.
 Each `entity` in Sharp can be displayed:
 - in an `Entity List`, which is the list of all the `instances` for this `entity`: with some configuration and code, the user can sort the data, add filters, and perform a search. From there we also gain access to applicative `commands` applied to an `instance` or the whole list, and to a simple `state` changer (the publish state of an Article, for instance). All of that is described below.
 - And in a `Form`, either to update or create a new `instance`.
-
-![](docs/img/dashboard.png)
-
-![](docs/img/list.png)
-
-![](docs/img/form.png)
 
 ## Installation
 
