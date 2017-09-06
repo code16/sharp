@@ -26,6 +26,7 @@
     "watch": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "hot": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
     "production": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "test": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=test node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js; node_modules/.bin/jest",
     "stats": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js --profile --json | tail -n +3 > stats.json",
     "show-stats": "npm run stats && webpack-bundle-size-analyzer stats.json"
   },
