@@ -1,5 +1,5 @@
 language: php
-
+sudo: trues
 php:
   - 7.0
   - 7.1
@@ -10,6 +10,10 @@ matrix:
 before_script:
   - travis_retry composer self-update
   - travis_retry composer install --prefer-source --no-interaction
+  - npm -g install jest
+  - npm install
 
 script:
   - vendor/bin/phpunit
+  - jest
+
