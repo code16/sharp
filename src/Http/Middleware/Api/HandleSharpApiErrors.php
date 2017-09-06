@@ -10,6 +10,7 @@ use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException;
 use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 
 class HandleSharpApiErrors
@@ -25,8 +26,11 @@ class HandleSharpApiErrors
     {
         $response = $next($request);
 
-        if($response->exception
-            && !$response->exception instanceof ValidationException) {
+        if($response->exception) {
+            if ($response->exception instanceof ValidationException) {
+                return $this->handleValidationException($response);
+            }
+
             return response()->json([
                 "message" => $response->exception->getMessage()
             ], $this->getHttpCodeFor($response->exception));
@@ -68,5 +72,21 @@ class HandleSharpApiErrors
         }
 
         return 500;
+    }
+
+    /**
+     * @param $response
+     * @return JsonResponse
+     */
+    protected function handleValidationException($response)
+    {
+        $errorsBag = starts_with(app()::VERSION, '5.4')
+            ? $response->exception->validator->errors()
+            : $response->exception->errors();
+
+        return response()->json([
+            "message" => $response->exception->getMessage(),
+            "errors" => $errorsBag
+        ], 422);
     }
 }

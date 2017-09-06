@@ -116,8 +116,10 @@ class FormControllerTest extends BaseApiTest
             "age" => 22
         ])->assertStatus(422)
             ->assertJson([
-                "name" => [
-                    "The name field is required."
+                "errors" => [
+                    "name" => [
+                        "The name field is required."
+                    ]
                 ]
             ]);
     }

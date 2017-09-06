@@ -147,8 +147,10 @@ class CommandControllerTest extends BaseApiTest
         $this->json('post', '/sharp/api/list/person/command/entity_form')
             ->assertStatus(422)
             ->assertJson([
-                "name" => [
-                    "The name field is required."
+                "errors" => [
+                    "name" => [
+                        "The name field is required."
+                    ]
                 ]
             ]);
     }
