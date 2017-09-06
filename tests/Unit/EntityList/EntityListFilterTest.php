@@ -32,7 +32,10 @@ class EntityListFilterTest extends SharpTestCase
                     "label" => "test",
                     "multiple" => false,
                     "required" => false,
-                    "values" => [1 => "A", 2 => "B"]
+                    "values" => [
+                        ["id" => 1, "label" => "A"],
+                        ["id" => 2, "label" => "B"]
+                    ]
                 ]
             ]
         ], $list->listConfig());
@@ -56,7 +59,10 @@ class EntityListFilterTest extends SharpTestCase
                     "key" => "test",
                     "multiple" => false,
                     "required" => false,
-                    "values" => [1 => "A", 2 => "B"]
+                    "values" => [
+                        ["id" => 1, "label" => "A"],
+                        ["id" => 2, "label" => "B"]
+                    ]
                 ]
             ]
         ], $list->listConfig());
@@ -80,7 +86,6 @@ class EntityListFilterTest extends SharpTestCase
                     "key" => "test",
                     "multiple" => true,
                     "required" => false,
-                    "values" => [1 => "A", 2 => "B"]
                 ]
             ]
         ], $list->listConfig());
@@ -104,7 +109,10 @@ class EntityListFilterTest extends SharpTestCase
                     "key" => "test",
                     "multiple" => false,
                     "required" => true,
-                    "values" => [1 => "A", 2 => "B"],
+                    "values" => [
+                        ["id" => 1, "label" => "A"],
+                        ["id" => 2, "label" => "B"]
+                    ],
                     "default" => 2
                 ]
             ]

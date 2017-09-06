@@ -41,9 +41,20 @@ trait HandleFilters
                 "multiple" => $multiple,
                 "required" => $required,
                 "default" => $required ? $handler->defaultValue() : null,
-                "values" => $handler->values(),
+                "values" => $this->formatFilterValues($handler->values()),
                 "label" => method_exists($handler, "label") ? $handler->label() : $filterName
             ];
         }
+    }
+
+    /**
+     * @param array $values
+     * @return array
+     */
+    protected function formatFilterValues(array $values)
+    {
+        return collect($values)->map(function($label, $id) {
+            return compact('id', 'label');
+        })->values()->all();
     }
 }
