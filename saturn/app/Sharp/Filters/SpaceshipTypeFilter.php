@@ -18,4 +18,9 @@ class SpaceshipTypeFilter implements EntityListRequiredFilter
     {
         return SpaceshipType::orderBy("label")->first()->id;
     }
+
+    public function label()
+    {
+        return "Ship type";
+    }
 }

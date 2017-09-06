@@ -8,7 +8,7 @@ use Code16\Sharp\EntityList\EntityListRequiredFilter;
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Tests\Unit\EntityList\Utils\SharpEntityDefaultTestList;
 
-class SharpEntityListFilterTest extends SharpTestCase
+class EntityListFilterTest extends SharpTestCase
 {
 
     /** @test */
@@ -29,6 +29,7 @@ class SharpEntityListFilterTest extends SharpTestCase
             "filters" => [
                 [
                     "key" => "test",
+                    "label" => "test",
                     "multiple" => false,
                     "required" => false,
                     "values" => [1 => "A", 2 => "B"]
@@ -105,6 +106,33 @@ class SharpEntityListFilterTest extends SharpTestCase
                     "required" => true,
                     "values" => [1 => "A", 2 => "B"],
                     "default" => 2
+                ]
+            ]
+        ], $list->listConfig());
+    }
+
+    /** @test */
+    function we_can_define_a_label_for_the_filter()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig()
+            {
+                $this->addFilter("test", new class extends SharpEntityListTestFilter {
+                    function label()
+                    {
+                        return "test label";
+                    }
+                });
+            }
+        };
+
+        $list->buildListConfig();
+
+        $this->assertArraySubset([
+            "filters" => [
+                [
+                    "key" => "test",
+                    "label" => "test label",
                 ]
             ]
         ], $list->listConfig());
