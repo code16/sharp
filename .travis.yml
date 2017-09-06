@@ -10,10 +10,8 @@ matrix:
 before_script:
   - travis_retry composer self-update
   - travis_retry composer install --prefer-source --no-interaction
-  - npm -g install jest
   - npm install
 
 script:
   - vendor/bin/phpunit
-  - jest
-
+  - npm run test
