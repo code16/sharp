@@ -1,6 +1,5 @@
 import Vue from 'vue/dist/vue.common';
 import Autocomplete from '../components/form/fields/Autocomplete.vue';
-import SearchStrategy from '../app/models/SearchStrategy';
 
 import { nextRequestFulfilled } from './utils/moxios-utils';
 import moxios from 'moxios';
@@ -40,7 +39,7 @@ describe('autocomplete-field', ()=>{
 
         it('can Autocomplete field as result item', async () => {
             await createVm({
-                data: () => ({ value:1 })
+                data: () => ({ value: {id:1, name:'Theodore Bagwell', alias:'T-Bag'} })
             });
 
             expect(document.body.innerHTML).toMatchSnapshot();
@@ -91,14 +90,6 @@ describe('autocomplete-field', ()=>{
             });
         });
 
-        it("have corresponding value object", async ()=>{
-            let $autocomplete = await createVm({
-                data: () => ({ value:2 })
-            });
-
-            expect($autocomplete.valueObject).toEqual({id:2, name:'Lincoln Burrows', alias: 'Linc'});
-        });
-
         it('update autocomplete state properly', async () => {
             let $autocomplete = await createVm({
                 data: () => ({ value: null })
@@ -113,7 +104,7 @@ describe('autocomplete-field', ()=>{
             expect($autocomplete.state).toBe('searching');
 
             multiselect.$emit('select', {id:1, name:'Theodore Bagwell', alias:'T-Bag'});
-            vm.value = 1;
+            vm.value = {id:1, name:'Theodore Bagwell', alias:'T-Bag'};
             expect($autocomplete.state).toBe('valuated');
 
             await Vue.nextTick();
@@ -125,7 +116,7 @@ describe('autocomplete-field', ()=>{
 
         it('is valuated on start if have value', async () => {
             let $autocomplete = await createVm({
-                data: () => ({ value:1 })
+                data: () => ({ value:{id:1, name:'Theodore Bagwell', alias:'T-Bag'} })
             });
 
             expect($autocomplete.state).toBe('valuated');
@@ -162,9 +153,7 @@ describe('autocomplete-field', ()=>{
 
             multiselect.$emit('select', {id:2, name:'Lincoln Burrows', alias: 'Linc'});
 
-            expect(inputEmitted).toHaveBeenCalledTimes(1);
-            expect(inputEmitted).toHaveBeenCalledWith(2);
-            vm.value = 2;
+            expect(inputEmitted).toHaveBeenLastCalledWith({id:2, name:'Lincoln Burrows', alias: 'Linc'});
         });
 
         it('define loading slot', async () => {

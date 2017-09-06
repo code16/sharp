@@ -74,7 +74,7 @@
             },
             placeholder: {
                 type: String,
-                default: lang('form.multiselect.placeholder')
+                default: () => lang('form.multiselect.placeholder')
             },
             remoteEndpoint: String,
             remoteMethod:String,
