@@ -16,7 +16,7 @@ return [
     'upload.remove_button' => 'Remove',
     'upload.edit_button' => 'Edit',
 
-    'multiselect.placeholder' => 'Select option Localized',
+    'multiselect.placeholder' => 'Select option',
     'multiselect.max_text' => 'Maximum items reached',
 
     'autocomplete.no_results_text' => 'No result found',
