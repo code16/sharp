@@ -1,12 +1,14 @@
 import Vue from 'vue/dist/vue.common';
 import DateField from '../components/form/fields/date/Date.vue';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import { MockInjections, QueryComponent } from './utils';
 
 describe('date-field',()=>{
     Vue.component('sharp-date', DateField);
     Vue.use(QueryComponent);
+
+    moment.tz.setDefault('Europe/Paris');
 
     beforeEach(() => {
         document.documentElement.lang = 'fr';

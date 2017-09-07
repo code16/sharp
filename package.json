@@ -51,6 +51,7 @@
     "laravel-mix": "^1.4.2",
     "mime-types": "^2.1.15",
     "moment": "^2.18.1",
+    "moment-timezone": "^0.5.13",
     "regenerator-runtime": "^0.10.5",
     "simplemde": "^1.11.2",
     "uglifyjs-webpack-plugin": "^0.4.3",
