@@ -13,6 +13,7 @@ class SpaceshipPilotsFilter implements EntityListMultipleFilter
     public function values()
     {
         return Pilot::orderBy("name")
-            ->pluck("name", "id");
+            ->pluck("name", "id")
+            ->all();
     }
 }

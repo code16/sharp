@@ -11,7 +11,8 @@ class SpaceshipTypeFilter implements EntityListRequiredFilter
     public function values()
     {
         return SpaceshipType::orderBy("label")
-            ->pluck("label", "id");
+            ->pluck("label", "id")
+            ->all();
     }
 
     public function defaultValue()
