@@ -5660,13 +5660,13 @@
   -webkit-transition: padding 300ms cubic-bezier(0.5, 0, 0.1, 1);
   transition: padding 300ms cubic-bezier(0.5, 0, 0.1, 1);
   padding-left: 3rem;
-  margin-bottom: 3rem;
+  padding-bottom: 3rem;
 }
 
 @media (min-width: 768px) {
   #sharp-app .SharpActionView {
     padding-left: 12.5rem;
-    margin-top: 5rem;
+    padding-top: 5rem;
   }
   #sharp-app.leftNav--collapsed .SharpActionView {
     padding-left: 3rem;
@@ -5848,6 +5848,16 @@
 
 #sharp-app .SharpActionBar__search.SharpSearch .SharpSearch__close {
   right: .5rem;
+}
+
+#sharp-app .SharpActionBar__search.SharpSearch .SharpSearch__input {
+  -webkit-box-shadow: unset;
+          box-shadow: unset;
+}
+
+#sharp-app .SharpActionBar__search.SharpSearch .SharpSearch__input:focus {
+  -webkit-box-shadow: 0 0 0 1px #FD7400;
+          box-shadow: 0 0 0 1px #FD7400;
 }
 
 @media (max-width: 767px) {
@@ -9073,6 +9083,7 @@
   background: #FFFFFF;
   z-index: 11;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 #sharp-app .SharpFilterSelect__select {

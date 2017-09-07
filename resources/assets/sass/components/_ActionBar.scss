@@ -135,6 +135,7 @@
       right: .5rem;
     }
     .SharpSearch__input {
+      box-shadow: unset;
       &:focus {
         box-shadow: 0 0 0 1px $brand-03;
       }

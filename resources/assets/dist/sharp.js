@@ -37920,7 +37920,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     return _c('sharp-filter-select', {
       key: filter.key,
       attrs: {
-        "name": filter.key,
+        "name": filter.label,
         "filter-key": ("actionbarlist_" + (filter.key)),
         "values": filter.values,
         "value": _vm.filtersValue[filter.key],
