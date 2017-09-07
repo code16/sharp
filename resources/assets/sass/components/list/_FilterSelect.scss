@@ -30,6 +30,7 @@
     z-index: z('dropdownText');
     text-transform: uppercase;
     //color: $text-02;
+    white-space: nowrap;
   }
 
   &__select {

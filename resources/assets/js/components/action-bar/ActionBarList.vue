@@ -45,7 +45,7 @@
         </template>
         <template slot="extras">
             <sharp-filter-select v-for="filter in filters"
-                                 :name="filter.key"
+                                 :name="filter.label"
                                  :filter-key="`actionbarlist_${filter.key}`"
                                  :values="filter.values"
                                  :value="filtersValue[filter.key]"
