@@ -4,17 +4,22 @@ import moment from 'moment-timezone';
 
 import { MockInjections, QueryComponent } from './utils';
 
+
+function date(...args) {
+    return new Date(Date.UTC(...args));
+}
+
 describe('date-field',()=>{
     Vue.component('sharp-date', DateField);
     Vue.use(QueryComponent);
 
-    moment.tz.setDefault('Europe/Paris');
+    moment.tz.setDefault('UTC');
 
     beforeEach(() => {
         document.documentElement.lang = 'fr';
         document.body.innerHTML = `
             <div id="app">
-                <sharp-date value="1996-08-20 12:11+02:00"
+                <sharp-date value="1996-08-20 12:11+00:00"
                             :has-date="!disableDate"
                             :has-time="!disableTime" 
                             :read-only="readOnly" 
@@ -109,7 +114,7 @@ describe('date-field',()=>{
         let datepicker = $date.$findChild('SharpDatepicker');
 
         expect(datepicker.$props).toMatchObject({
-            value: new Date(1996, 7, 20, 12, 11),
+            value: date(1996, 7, 20, 12, 11),
             language: 'fr',
             inline: true,
             mondayFirst: true
@@ -133,11 +138,11 @@ describe('date-field',()=>{
 
         let inputEmitted = jest.fn();
         $date.$on('input', inputEmitted);
-        datepicker.$emit('selected', new Date(1996, 7, 22));
+        datepicker.$emit('selected', date(1996, 7, 22));
 
         expect(inputEmitted).toHaveBeenCalledTimes(1);
         expect(inputEmitted.mock.calls[0][0]).toBeInstanceOf(moment);
-        expect(inputEmitted.mock.calls[0][0].toDate()).toEqual(new Date(1996, 7, 22, 12, 11));
+        expect(inputEmitted.mock.calls[0][0].toDate()).toEqual(date(1996, 7, 22, 12, 11));
     });
 
     it('emit input on time changed & correct value', async () => {
@@ -151,7 +156,7 @@ describe('date-field',()=>{
 
         expect(inputEmitted).toHaveBeenCalledTimes(1);
         expect(inputEmitted.mock.calls[0][0]).toBeInstanceOf(moment);
-        expect(inputEmitted.mock.calls[0][0].toDate()).toEqual(new Date(1996, 7, 20, 13, 20));
+        expect(inputEmitted.mock.calls[0][0].toDate()).toEqual(date(1996, 7, 20, 13, 20));
     });
 
     it('emit input on input changed', async () => {
@@ -173,7 +178,7 @@ describe('date-field',()=>{
         expect(okEmitted).toHaveBeenCalledTimes(1);
         expect(inputEmitted).toHaveBeenCalledTimes(1);
         expect(inputEmitted.mock.calls[0][0]).toBeInstanceOf(moment);
-        expect(inputEmitted.mock.calls[0][0].toDate()).toEqual(new Date(1996, 7, 22, 13, 20));
+        expect(inputEmitted.mock.calls[0][0].toDate()).toEqual(date(1996, 7, 22, 13, 20));
     });
 
     it('emit error on input changed if invalid', async () => {
@@ -232,12 +237,12 @@ describe('date-field',()=>{
         input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 38 })); //UP
         expect(inputEmitted).toHaveBeenCalledTimes(1);
         expect(inputEmitted.mock.calls[0][0]).toBeInstanceOf(moment);
-        expect(inputEmitted.mock.calls[0][0].toDate()).toEqual(new Date(1996, 7, 21, 12, 11));
+        expect(inputEmitted.mock.calls[0][0].toDate()).toEqual(date(1996, 7, 21, 12, 11));
 
         input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 40 })); //DOWN
         expect(inputEmitted).toHaveBeenCalledTimes(2);
         expect(inputEmitted.mock.calls[1][0]).toBeInstanceOf(moment);
-        expect(inputEmitted.mock.calls[1][0].toDate()).toEqual(new Date(1996, 7, 20, 12, 11));
+        expect(inputEmitted.mock.calls[1][0].toDate()).toEqual(date(1996, 7, 20, 12, 11));
 
 
         // Month change
@@ -245,11 +250,11 @@ describe('date-field',()=>{
 
         input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 38 })); //UP
         expect(inputEmitted).toHaveBeenCalledTimes(3);
-        expect(inputEmitted.mock.calls[2][0].toDate()).toEqual(new Date(1996, 8, 20, 12, 11));
+        expect(inputEmitted.mock.calls[2][0].toDate()).toEqual(date(1996, 8, 20, 12, 11));
 
         input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 40 })); //DOWN
         expect(inputEmitted).toHaveBeenCalledTimes(4);
-        expect(inputEmitted.mock.calls[3][0].toDate()).toEqual(new Date(1996, 7, 20, 12, 11));
+        expect(inputEmitted.mock.calls[3][0].toDate()).toEqual(date(1996, 7, 20, 12, 11));
 
 
         // Year change
@@ -257,11 +262,11 @@ describe('date-field',()=>{
 
         input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 38 })); //UP
         expect(inputEmitted).toHaveBeenCalledTimes(5);
-        expect(inputEmitted.mock.calls[4][0].toDate()).toEqual(new Date(1997, 7, 20, 12, 11));
+        expect(inputEmitted.mock.calls[4][0].toDate()).toEqual(date(1997, 7, 20, 12, 11));
 
         input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 40 })); //DOWN
         expect(inputEmitted).toHaveBeenCalledTimes(6);
-        expect(inputEmitted.mock.calls[5][0].toDate()).toEqual(new Date(1996, 7, 20, 12, 11));
+        expect(inputEmitted.mock.calls[5][0].toDate()).toEqual(date(1996, 7, 20, 12, 11));
 
 
         // Hours change
@@ -269,11 +274,11 @@ describe('date-field',()=>{
 
         input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 38 })); //UP
         expect(inputEmitted).toHaveBeenCalledTimes(7);
-        expect(inputEmitted.mock.calls[6][0].toDate()).toEqual(new Date(1996, 7, 20, 13, 11));
+        expect(inputEmitted.mock.calls[6][0].toDate()).toEqual(date(1996, 7, 20, 13, 11));
 
         input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 40 })); //DOWN
         expect(inputEmitted).toHaveBeenCalledTimes(8);
-        expect(inputEmitted.mock.calls[7][0].toDate()).toEqual(new Date(1996, 7, 20, 12, 11));
+        expect(inputEmitted.mock.calls[7][0].toDate()).toEqual(date(1996, 7, 20, 12, 11));
 
 
         // Minutes change
@@ -281,11 +286,11 @@ describe('date-field',()=>{
 
         input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 38 })); //UP
         expect(inputEmitted).toHaveBeenCalledTimes(9);
-        expect(inputEmitted.mock.calls[8][0].toDate()).toEqual(new Date(1996, 7, 20, 12, 20));
+        expect(inputEmitted.mock.calls[8][0].toDate()).toEqual(date(1996, 7, 20, 12, 20));
 
         input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 40 })); //DOWN
         expect(inputEmitted).toHaveBeenCalledTimes(10);
-        expect(inputEmitted.mock.calls[9][0].toDate()).toEqual(new Date(1996, 7, 20, 12, 10));
+        expect(inputEmitted.mock.calls[9][0].toDate()).toEqual(date(1996, 7, 20, 12, 10));
     });
 
     it('increase/decrease minute properly', async () => {
@@ -305,7 +310,7 @@ describe('date-field',()=>{
         input.setSelectionRange(14,14);
         input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 38 })); //UP
         expect(inputEmitted).toHaveBeenCalledTimes(1);
-        expect(inputEmitted.mock.calls[0][0].toDate()).toEqual(new Date(1996, 7, 20, 12, 20));
+        expect(inputEmitted.mock.calls[0][0].toDate()).toEqual(date(1996, 7, 20, 12, 20));
 
         input.value = '20/08/1996 12:11';
         input.dispatchEvent(new Event('input', { bubbles: true }));
@@ -313,7 +318,7 @@ describe('date-field',()=>{
         input.setSelectionRange(14,14);
         input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 40 })); //DOWN
         expect(inputEmitted).toHaveBeenCalledTimes(3);
-        expect(inputEmitted.mock.calls[2][0].toDate()).toEqual(new Date(1996, 7, 20, 12, 10));
+        expect(inputEmitted.mock.calls[2][0].toDate()).toEqual(date(1996, 7, 20, 12, 10));
     })
 
     it('select text properly after increase/descrease', async () => {
