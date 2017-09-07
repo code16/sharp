@@ -130,9 +130,16 @@
   }
 
   &__search.SharpSearch {
+
     .SharpSearch__close {
       right: .5rem;
     }
+    .SharpSearch__input {
+      &:focus {
+        box-shadow: 0 0 0 1px $brand-03;
+      }
+    }
+
     @include media-breakpoint-down(sm) {
       &.SharpSearch--active {
         width: 100%;
