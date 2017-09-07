@@ -20,13 +20,10 @@
             ctx.props = exposedProps;
             ctx.data.attrs = {
                 ...ctx.data.attrs,
-                noAutoFocus : true
+                noAutoFocus : true,
+                closeTitle: ctx.props.closeTitle || lang('modals.cancel_button'),
+                okTitle: ctx.props.okTitle ||lang('modals.ok_button')
             };
-
-            ctx.data.props.closeTitle = ctx.data.props.closeTitle || lang('modals.cancel_button');
-            ctx.data.props.okTitle = ctx.data.props.okTitle || lang('modals.ok_button');
-
-            console.log(ctx);
 
             bModal.name = 'SharpModal';
 

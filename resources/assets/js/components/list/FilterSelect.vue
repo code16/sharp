@@ -65,13 +65,6 @@
             options() {
                 return Object.keys(this.values).map(key => ({id:key, label:this.values[key]}));
             },
-            valueString() {
-                if(Array.isArray(this.value)) {
-                    return this.value.map(key => this.values[key]).join(', ');
-                }
-                return this.value ? this.values[this.value] : '';
-            },
-
 
             autoScrollOptions() {
                 return {
