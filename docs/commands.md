@@ -54,9 +54,9 @@ Instead of an `EntityListQueryParams` object, we get an `$instanceId` parameter 
 
 ### Add a Command form
 
-The second parameter in the `execute()` function is an array named `$data`, which contains values entered by the user in a Command specific form. A use case might be to allow the user to enter a text to be sent to the customer with his invoice. In order to do that, we have first to write a `buildForm()` function in the Command class:
+The second parameter in the `execute()` function is an array named `$data`, which contains values entered by the user in a Command specific form. A use case might be to allow the user to enter a text to be sent to the customer with his invoice. In order to do that, we have first to write a `buildFormFields()` function in the Command class:
 
-    function buildForm()
+    function buildFormFields()
     {
         $this->addField(
             SharpFormTextareaField::make("message")
