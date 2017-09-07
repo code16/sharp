@@ -10,7 +10,7 @@
         </span>
         <sharp-select class="SharpFilterSelect__select"
                       :value="value"
-                      :options="options"
+                      :options="values"
                       :multiple="multiple"
                       :clearable="!required"
                       :inline="false"
@@ -47,7 +47,7 @@
                 required: true
             },
             values: {
-                type: Object,
+                type: Array,
                 required: true
             },
             value: {
