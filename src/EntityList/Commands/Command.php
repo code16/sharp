@@ -3,6 +3,7 @@
 namespace Code16\Sharp\EntityList\Commands;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
+use Code16\Sharp\Form\HandleFormFields;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Http\JsonResponse;
@@ -17,10 +18,7 @@ use Illuminate\Validation\ValidationException;
  */
 abstract class Command
 {
-    /**
-     * @var array
-     */
-    protected $fields;
+    use HandleFormFields;
 
     /**
      * @param string $message
@@ -70,19 +68,6 @@ abstract class Command
     }
 
     /**
-     * Add a form field.
-     *
-     * @param SharpFormField $field
-     * @return $this
-     */
-    protected function addField(SharpFormField $field)
-    {
-        $this->fields[] = $field;
-
-        return $this;
-    }
-
-    /**
      * Check if the current user is allowed to use this Command.
      *
      * @return bool
@@ -111,7 +96,7 @@ abstract class Command
     /**
      * Build the optional Command form, calling ->addField()
      */
-    public function buildForm()
+    public function buildFormFields()
     {
     }
 
@@ -129,11 +114,7 @@ abstract class Command
      */
     public function form()
     {
-        $this->buildForm();
-
-        return collect($this->fields)->map(function($field) {
-            return $field->toArray();
-        })->keyBy("key")->all();
+        return $this->fields();
     }
 
     /**

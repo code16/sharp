@@ -6,6 +6,7 @@ use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
+use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
 
 class CommandControllerTest extends BaseApiTest
@@ -251,6 +252,9 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
 
         })->addEntityCommand("entity_form", new class() extends EntityCommand {
             public function label(): string { return "label"; }
+            public function buildFormFields() {
+                $this->addField(SharpFormTextField::make("name"));
+            }
             public function execute(EntityListQueryParams $params, array $data = []): array {
                 $this->validate($data, ["name"=>"required"]);
                 return $this->reload();
