@@ -2,7 +2,20 @@
 
 Class: `Code16\Sharp\Form\Fields\SharpFormUploadField`
 
-## Configuration
+## General configuration
+
+First, in order to get the upload part working, you have to define a "tmp" path where files will be stored until they are moved to the final folder. Here's the default:
+
+    // in config/sharp.php
+    
+    "uploads" => [
+        "tmp_dir" => env("SHARP_UPLOADS_TMP_DIR", "tmp"),
+    ]
+
+This `tmp_dir` path is relative to the `local` filesystem defined in the Laravel configuration.
+
+
+## Field Configuration
 
 ### `setMaxFileSize(float $sizeInMB)`
 

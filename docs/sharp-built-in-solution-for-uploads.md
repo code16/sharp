@@ -106,7 +106,6 @@ You must first define the thumbnail directory, in Sharp's config:
     // config/sharp.php
     
     "uploads" => [
-        "tmp_dir" => "tmp",
         "thumbnails_dir" => "thumbnails",
     ],
 
