@@ -35,7 +35,7 @@ class SpaceshipSendMessage extends InstanceCommand
         return $this->refresh($instanceId);
     }
 
-    function buildForm()
+    function buildFormFields()
     {
         $this->addField(
             SharpFormTextareaField::make("message")
