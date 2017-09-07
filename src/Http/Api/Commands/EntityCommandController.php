@@ -20,15 +20,17 @@ class EntityCommandController extends ApiController
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
+        $commandHandler = $list->entityCommandHandler($commandKey);
 
-        if(!$list->entityCommandHandler($commandKey)->authorize()) {
+        if(! $commandHandler->authorize()) {
             throw new SharpAuthorizationException();
         }
 
         return $this->returnAsJson(
-            $list, $list->entityCommandHandler($commandKey)->execute(
+            $list,
+            $commandHandler->execute(
                 EntityListQueryParams::create()->fillWithRequest("query"),
-                (array)request("data")
+                $commandHandler->formatRequestData((array)request("data"))
             )
         );
     }

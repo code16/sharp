@@ -20,14 +20,19 @@ class InstanceCommandController extends ApiController
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
+        $commandHandler = $list->instanceCommandHandler($commandKey);
 
-        if(!$list->instanceCommandHandler($commandKey)->authorize()
-            || !$list->instanceCommandHandler($commandKey)->authorizeFor($instanceId)) {
+        if(!$commandHandler->authorize()
+            || !$commandHandler->authorizeFor($instanceId)) {
             throw new SharpAuthorizationException();
         }
 
         return $this->returnAsJson(
-            $list, $list->instanceCommandHandler($commandKey)->execute($instanceId, (array)request("data"))
+            $list,
+            $commandHandler->execute(
+                $instanceId,
+                $commandHandler->formatRequestData((array)request("data"))
+            )
         );
     }
 }

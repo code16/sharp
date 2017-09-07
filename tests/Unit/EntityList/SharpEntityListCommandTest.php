@@ -119,7 +119,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function label(): string {
                         return "My Entity Command";
                     }
-                    public function buildForm() {
+                    public function buildFormFields() {
                         $this->addField(SharpFormTextField::make("message"));
                     }
                     public function buildFormLayout(FormLayoutColumn &$column) {
@@ -165,7 +165,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function label(): string {
                         return "My Entity Command";
                     }
-                    public function buildForm() {
+                    public function buildFormFields() {
                         $this->addField(SharpFormTextField::make("message"));
                         $this->addField(SharpFormTextField::make("message2"));
                     }
