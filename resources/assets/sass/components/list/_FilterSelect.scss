@@ -66,6 +66,26 @@
         }
       }
 
+      .SharpSelect__clear-button {
+        position: absolute;
+        font-size: 100%;
+        font-weight: bold;
+        line-height: 0;
+        width: 22px;
+        padding-right: 1rem;
+        &-icon {
+          display: none;
+        }
+        &:after {
+          content: "x";
+          color: $brand-03;
+        }
+      }
+
+      .SharpSelect__clear-button ~ .multiselect__tags {
+        padding-right: 2rem;
+      }
+
       &__tags {
         padding-right: 2rem;
         padding-left:0;

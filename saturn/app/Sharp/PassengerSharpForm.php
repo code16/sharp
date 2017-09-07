@@ -30,6 +30,7 @@ class PassengerSharpForm extends SharpForm
             SharpFormSelectField::make("gender", ["M"=>"Mr", "F"=>"Mrs"])
                 ->setDisplayAsDropdown()
                 ->setLabel("Gender")
+                ->setClearable()
 
         )->addField(
             SharpFormSelectField::make("travel_category", [
