@@ -20,6 +20,7 @@ class FileUtil
         list($baseFileName, $ext) = $this->explodeExtension($fileName);
 
         $baseFileName = $this->normalizeName($baseFileName);
+        $fileName = $baseFileName . $ext;
 
         while (Storage::disk($disk)->exists("$path/$fileName")) {
             $fileName = $baseFileName . "-" . ($k++) . $ext;
@@ -50,6 +51,6 @@ class FileUtil
      */
     private function normalizeName(string $fileName)
     {
-        return preg_replace("#[^A-Za-z1-9-_\\.]#", "", $fileName);
+        return preg_replace("#[^A-Za-z0-9-_\\.]#", "", $fileName);
     }
 }
