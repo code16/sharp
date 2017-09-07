@@ -57,8 +57,8 @@ class UploadFormatter implements SharpFieldFormatter
     {
         if($this->isUploaded($value)) {
 
-            $fileContent = $this->filesystem->disk("sharp_uploads")->get(
-                $value["name"]
+            $fileContent = $this->filesystem->disk("local")->get(
+                config("sharp.uploads.tmp_dir", 'tmp') . '/' . $value["name"]
             );
 
             if($transformed = $this->isTransformed($value, $field)) {

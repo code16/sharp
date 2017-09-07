@@ -11,11 +11,7 @@ class FormUploadControllerTest extends BaseApiTest
     {
         parent::setUp();
 
-        config(['filesystems.disks.sharp_uploads' => [
-            'driver' => 'local',
-            'root' => storage_path('app/tmp'),
-        ]]);
-
+        config(['sharp.uploads.tmp_dir' => 'tmp']);
         File::deleteDirectory(storage_path("app/tmp"));
 
         // Must use this to login & set APP_KEY
