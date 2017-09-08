@@ -85,6 +85,16 @@ In this case, with Eloquent for instance, your might have to modify your code to
 
 Note that a filter can't be required AND multiple.
 
+## Filter label
+
+To use a custom label for the filter, simply add a `label()` function that returns a string in the Filter class.
+
+    public function label() 
+    {
+        return "My label";
+    }
+
+
 ---
 
 > Next chapter : [Commands](commands.md)
