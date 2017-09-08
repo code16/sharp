@@ -7989,6 +7989,10 @@
   padding-bottom: 0.375rem;
 }
 
+#sharp-app .SharpModal {
+  line-height: 1.5;
+}
+
 #sharp-app .SharpModal.SharpModal--error .modal .modal-dialog {
   border-top: #e71d32 4px solid;
 }
@@ -8019,7 +8023,7 @@
           justify-content: center;
   content: '';
   opacity: 0;
-  background-color: rgba(218, 227, 238, 0.5);
+  background-color: rgba(255, 255, 255, 0.5);
   -webkit-transition: opacity 200ms, z-index 0s 200ms, visibility 0s 200ms;
   transition: opacity 200ms, z-index 0s 200ms, visibility 0s 200ms;
   visibility: hidden;

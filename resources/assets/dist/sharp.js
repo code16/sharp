@@ -37065,7 +37065,8 @@ var _components;
             commands: [],
 
             showCreateButton: false,
-            searchActive: false
+            searchActive: false,
+            searchable: false
         };
     },
 
@@ -37087,7 +37088,8 @@ var _components;
                 filters = config.filters,
                 filtersValue = config.filtersValue,
                 commands = config.commands,
-                showCreateButton = config.showCreateButton;
+                showCreateButton = config.showCreateButton,
+                searchable = config.searchable;
 
             this.itemsCount = itemsCount;
             this.filters = filters;
@@ -37095,6 +37097,7 @@ var _components;
             this.commands = commands;
 
             this.showCreateButton = showCreateButton;
+            this.searchable = searchable;
         },
         searchChanged: function searchChanged(input) {
             this.search = input;
@@ -37813,7 +37816,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     slot: "left"
   }, [_c('span', [_vm._v(_vm._s(_vm.itemsCount) + " " + _vm._s(_vm.l('action_bar.list.items_count')))])]), _vm._v(" "), _c('template', {
     slot: "right"
-  }, [_c('div', {
+  }, [(_vm.searchable) ? _c('div', {
     staticClass: "SharpActionBar__search SharpSearch SharpSearch--lg",
     class: {
       'SharpSearch--active': _vm.searchActive
@@ -37889,7 +37892,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     attrs: {
       "d": "M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm3.5 10.1l-1.4 1.4L8 9.4l-2.1 2.1-1.4-1.4L6.6 8 4.5 5.9l1.4-1.4L8 6.6l2.1-2.1 1.4 1.4L9.4 8l2.1 2.1z"
     }
-  })])]), _vm._v(" "), (_vm.showCreateButton) ? _c('button', {
+  })])]) : _vm._e(), _vm._v(" "), (_vm.showCreateButton) ? _c('button', {
     staticClass: "SharpButton SharpButton--accent",
     on: {
       "click": function($event) {
@@ -69621,7 +69624,8 @@ var _components;
                 commands: this.config.commands.filter(function (c) {
                     return c.authorization && c.type === 'entity';
                 }),
-                showCreateButton: this.authorizations.create
+                showCreateButton: this.authorizations.create,
+                searchable: this.config.searchable
             });
         },
 

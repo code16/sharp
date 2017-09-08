@@ -29,7 +29,7 @@ class TravelSharpList extends SharpEntityList
 
     function buildListConfig()
     {
-        $this->setSearchable()
+        $this//->setSearchable()
             ->setDefaultSort("departure_date", "desc")
             ->setPaginated();
     }

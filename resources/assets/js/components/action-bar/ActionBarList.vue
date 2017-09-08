@@ -5,7 +5,7 @@
             <span>{{ itemsCount }} {{ l('action_bar.list.items_count') }}</span>
         </template>
         <template slot="right">
-            <div class="SharpActionBar__search SharpSearch SharpSearch--lg" :class="{'SharpSearch--active':searchActive}" role="search">
+            <div v-if="searchable" class="SharpActionBar__search SharpSearch SharpSearch--lg" :class="{'SharpSearch--active':searchActive}" role="search">
                 <label id="ab-search-label" class="SharpSearch__label" for="ab-search-input">{{ l('action_bar.list.search.placeholder') }}</label>
                 <input class="SharpSearch__input"
                        :value="search"
@@ -91,7 +91,8 @@
                 commands: [],
 
                 showCreateButton: false,
-                searchActive: false
+                searchActive: false,
+                searchable: false
             }
         },
         methods: {
@@ -108,13 +109,14 @@
         },
         actions: {
             setup(config) {
-                let { itemsCount, filters, filtersValue, commands, showCreateButton } = config;
+                let { itemsCount, filters, filtersValue, commands, showCreateButton, searchable } = config;
                 this.itemsCount = itemsCount;
                 this.filters = filters;
                 this.filtersValue = filtersValue;
                 this.commands = commands;
 
                 this.showCreateButton = showCreateButton;
+                this.searchable = searchable;
             },
             searchChanged(input) {
                 this.search = input;

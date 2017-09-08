@@ -294,7 +294,8 @@
                     filters: this.config.filters,
                     filtersValue: this.filtersValue,
                     commands: this.config.commands.filter(c=>c.authorization && c.type==='entity'),
-                    showCreateButton:this.authorizations.create
+                    showCreateButton:this.authorizations.create,
+                    searchable: this.config.searchable
                 });
             },
 
