@@ -112,6 +112,11 @@
             }
         },
         watch: {
+            value(value) {
+                if(!value) {
+                    this.files = [];
+                }
+            },
             'file.status'(status) {
                 (status in this.statusFunction) && this.statusFunction[status]();
             },
