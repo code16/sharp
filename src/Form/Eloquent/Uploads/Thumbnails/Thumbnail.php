@@ -14,17 +14,27 @@ class Thumbnail
     /**
      * @var ImageManager
      */
-    private $imageManager;
+    protected $imageManager;
 
     /**
      * @var FilesystemManager
      */
-    private $storage;
+    protected $storage;
 
     /**
      * @var SharpUploadModel
      */
-    private $uploadModel;
+    protected $uploadModel;
+
+    /**
+     * @var int
+     */
+    protected $quality = 90;
+
+    /**
+     * @var bool
+     */
+    protected $appendTimestamp = false;
 
     /**
      * @param SharpUploadModel $model
@@ -39,20 +49,41 @@ class Thumbnail
     }
 
     /**
+     * @param int $quality
+     * @return $this
+     */
+    public function setQuality(int $quality)
+    {
+        $this->quality = $quality;
+
+        return $this;
+    }
+
+    /**
+     * @param bool $appendTimestamp
+     * @return $this
+     */
+    public function setAppendTimestamp(bool $appendTimestamp = true)
+    {
+        $this->appendTimestamp = $appendTimestamp;
+
+        return $this;
+    }
+
+    /**
      * @param int $width
      * @param int|null $height
      * @param array $filters: fit, grayscale, ...
-     * @param int $quality
      * @return null|string
      */
-    public function make($width, $height=null, $filters=[], $quality=90)
+    public function make($width, $height=null, $filters=[])
     {
         return $this->generateThumbnail(
             $this->uploadModel->disk,
             $this->uploadModel->file_name,
             dirname($this->uploadModel->file_name),
             basename($this->uploadModel->file_name),
-            $width, $height, $filters, $quality
+            $width, $height, $filters
         );
     }
 
@@ -72,13 +103,12 @@ class Thumbnail
      * @param $width
      * @param $height
      * @param $filters
-     * @param $quality
      * @return null|string
      */
     private function generateThumbnail(
         $sourceDisk, $sourceRelativeFilePath,
         $destinationRelativeBasePath, $destinationFileName,
-        $width, $height, $filters, $quality)
+        $width, $height, $filters)
     {
         if($width==0) $width=null;
         if($height==0) $height=null;
@@ -122,7 +152,7 @@ class Thumbnail
                     });
                 }
 
-                $sourceImg->save($thumbFile, $quality);
+                $sourceImg->save($thumbFile, $this->quality);
 
             } catch(FileNotFoundException $ex) {
                 return null;
@@ -132,7 +162,7 @@ class Thumbnail
             }
         }
 
-        return url($thumbName);
+        return url($thumbName) . ($this->appendTimestamp ? "?" . filectime($thumbFile) : "");
     }
 
     /**

@@ -112,6 +112,8 @@ class SharpUploadModel extends Model
      */
     public function thumbnail($width=null, $height=null, $filters=[])
     {
-        return (new Thumbnail($this))->make($width, $height, $filters);
+        return (new Thumbnail($this))
+            ->setAppendTimestamp()
+            ->make($width, $height, $filters);
     }
 }

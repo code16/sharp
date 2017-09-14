@@ -117,7 +117,7 @@ class UploadFormatter implements SharpFieldFormatter
      */
     protected function isTransformed($value, $field): bool
     {
-        return isset($value["cropData"]) && $field->cropRatio();
+        return isset($value["cropData"]);
     }
 
     /**
