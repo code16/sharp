@@ -9,6 +9,31 @@ function sharp_version()
 }
 
 /**
+ * @param array $sharpMenu
+ * @param string|null $entityKey
+ * @return string
+ */
+function sharp_page_title($sharpMenu, $entityKey)
+{
+    $entityLabel = $sharpMenu->dashboard
+        ? trans('sharp::menu.dashboard')
+        : "";
+
+    if($entityKey) {
+        foreach($sharpMenu->categories as $category) {
+            foreach($category->entities as $entity) {
+                if($entity->key == $entityKey) {
+                    $entityLabel = $entity->label;
+                    break 2;
+                }
+            }
+        }
+    }
+
+    return $sharpMenu->name . ', ' .$entityLabel . ' | Sharp ' . sharp_version();
+}
+
+/**
  * @return mixed
  */
 function sharp_user()
