@@ -342,13 +342,13 @@
             isStateClass(color) {
                 return color.indexOf('sharp_') === 0;
             },
-            stateClasses({ item={}, value }) {
-                let state = item[this.stateAttr] || value;
+            stateClasses({ item, value }) {
+                let state = item ? item[this.stateAttr] : value;
                 let { color } = this.stateByValue[state];
                 return this.isStateClass(color) ? [color] : [];
             },
-            stateStyle({ item={}, value }) {
-                let state = item[this.stateAttr] || value;
+            stateStyle({ item, value }) {
+                let state = item ? item[this.stateAttr] : value;
                 let { color } = this.stateByValue[state];
                 return !this.isStateClass(color) ? {
                     fill: color,
