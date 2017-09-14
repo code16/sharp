@@ -20,8 +20,7 @@ class FeatureSharpList extends SharpEntityList
 
     function buildListConfig()
     {
-//        $this->setReord
-//            ->setPaginated();
+        $this->setReorderable();
     }
 
     function buildListLayout()

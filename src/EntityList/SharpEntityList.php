@@ -15,54 +15,37 @@ abstract class SharpEntityList
 {
     use HandleFilters, HandleEntityState, HandleCommands, WithCustomTransformers;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $containers = [];
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $columns = [];
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $listBuilt = false;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $layoutBuilt = false;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $instanceIdAttribute = "id";
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $displayMode = "list";
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $searchable = false;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $paginated = false;
 
-    /**
-     * @var string
-     */
+    /** @var bool */
+    protected $reorderable = false;
+
+    /** @var string */
     protected $defaultSort;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $defaultSortDir;
 
     /**
@@ -156,6 +139,7 @@ abstract class SharpEntityList
             "displayMode" => $this->displayMode,
             "searchable" => $this->searchable,
             "paginated" => $this->paginated,
+            "reorderable" => $this->reorderable,
             "defaultSort" => $this->defaultSort,
             "defaultSortDir" => $this->defaultSortDir,
         ];
@@ -187,6 +171,17 @@ abstract class SharpEntityList
     public function setDisplayMode(string $displayMode)
     {
         $this->displayMode = $displayMode;
+
+        return $this;
+    }
+
+    /**
+     * @param bool $reorderable
+     * @return $this
+     */
+    public function setReorderable(bool $reorderable = true)
+    {
+        $this->reorderable = $reorderable;
 
         return $this;
     }

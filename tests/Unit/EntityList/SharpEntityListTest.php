@@ -135,6 +135,7 @@ class SharpEntityListTest extends SharpTestCase
         $this->assertEquals([
             "searchable" => true,
             "paginated" => true,
+            "reorderable" => false,
             "instanceIdAttribute" => "id",
             "displayMode" => "list",
             "defaultSort" => null,
