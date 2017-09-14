@@ -35,6 +35,8 @@ class EntityListController extends ApiController
         sharp_check_ability("update", $entityKey);
 
         $list = $this->getListInstance($entityKey);
+        $list->buildListConfig();
+
         $list->reorderHandler()->reorder(
             request("instances")
         );
