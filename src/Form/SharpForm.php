@@ -6,6 +6,7 @@ use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
+use Illuminate\Database\Eloquent\Model;
 
 abstract class SharpForm
 {
@@ -182,11 +183,28 @@ abstract class SharpForm
      */
     public function create(): array
     {
-        return collect($this->getDataKeys())
+        $attributes = collect($this->getDataKeys())
             ->flip()
             ->map(function() {
                 return null;
             })->all();
+
+        // Build a fake Model class based on attributes
+        return $this->transform(new class($attributes) extends \stdClass
+        {
+            public function __construct($attributes)
+            {
+                $this->attributes = $attributes;
+
+                foreach($attributes as $name => $value) {
+                    $this->$name = $value;
+                }
+            }
+            public function toArray()
+            {
+                return $this->attributes;
+            }
+        });
     }
 
     /**

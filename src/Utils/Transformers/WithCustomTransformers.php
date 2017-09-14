@@ -39,7 +39,7 @@ trait WithCustomTransformers
     /**
      * Transforms a model or a models collection into an array.
      *
-     * @param Collection|array|LengthAwarePaginatorContract|stdClass $models
+     * @param $models
      * @return array|LengthAwarePaginator
      */
     function transform($models)
