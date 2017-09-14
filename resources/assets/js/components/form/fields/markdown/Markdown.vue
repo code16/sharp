@@ -295,7 +295,7 @@
 
             this.value.files = this.indexedFiles();
 
-            this.$tab.$once('active', () => this.refreshOnExternalChange());
+            this.$tab && this.$tab.$once('active', () => this.refreshOnExternalChange());
 
             this.codemirror.setSize('auto',this.height);
 
