@@ -11,6 +11,10 @@
     }
   }
 
+  &__reorder-icon {
+    color: $brand-01-light;
+  }
+
   &__table {
     @include reset;
     //display: table;
@@ -97,7 +101,6 @@
 
     &:hover:not(.SharpEntitiesList__row--header, .SharpEntitiesList__row--disabled) {
       background-color: $ui-02;
-      //cursor: pointer;
     }
 
     .SharpEntitiesList__cols {
@@ -125,6 +128,17 @@
       & > * {
         flex: 0;
       }
+    }
+  }
+
+  .SharpEntitiesList__row--reorder {
+    cursor: move;
+    background: darken($ui-01, 5%) !important;
+    border-bottom: 0;
+    border-color: transparent;
+    margin-bottom: .25rem;
+    .SharpEntitiesList__row-link {
+      display: none;
     }
   }
 

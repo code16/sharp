@@ -3244,13 +3244,13 @@
 }
 
 #sharp-app .sharp_primary {
-  fill: #314255;
-  stroke: #314255;
+  fill: #5596e6;
+  stroke: #5596e6;
 }
 
 #sharp-app .sharp_secondary {
-  fill: #5596e6;
-  stroke: #5596e6;
+  fill: #FD7400;
+  stroke: #FD7400;
 }
 
 #sharp-app .sharp_gray {
@@ -8458,6 +8458,10 @@
   width: auto;
 }
 
+#sharp-app .SharpEntitiesList__reorder-icon {
+  color: #68829E;
+}
+
 #sharp-app .SharpEntitiesList__table {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
@@ -8623,6 +8627,18 @@
   -webkit-box-flex: 0;
       -ms-flex: 0;
           flex: 0;
+}
+
+#sharp-app .SharpEntitiesList .SharpEntitiesList__row--reorder {
+  cursor: move;
+  background: #f2f2f2 !important;
+  border-bottom: 0;
+  border-color: transparent;
+  margin-bottom: .25rem;
+}
+
+#sharp-app .SharpEntitiesList .SharpEntitiesList__row--reorder .SharpEntitiesList__row-link {
+  display: none;
 }
 
 #sharp-app .SharpEntitiesList__thead {
@@ -10191,6 +10207,10 @@
 
 #sharp-app [v-cloak] {
   display: none;
+}
+
+#sharp-app .sortable-chosen {
+  outline: 1px solid #314255;
 }
 
 .hidden[data-v-15755a81] {

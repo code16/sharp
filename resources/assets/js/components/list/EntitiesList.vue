@@ -1,5 +1,5 @@
 <template>
-    <div class="SharpEntitiesList">
+    <div class="SharpEntitiesList" :class="{ 'SharpEntitiesList--reorder': reorderActive }">
         <template v-if="ready">
             <template v-if="!data.items.length">
                 {{ l('entity_list.empty_text') }}
@@ -29,38 +29,45 @@
                     </div>
                 </div>
                 <div class="SharpEntitiesList__tbody">
-                    <div v-for="item in data.items" class="SharpEntitiesList__row container" :class="{'SharpEntitiesList__row--disabled':!rowHasLink(item)}">
-                        <div class="SharpEntitiesList__cols">
-                            <div class="row">
-                                <div class="SharpEntitiesList__td" :class="colClasses(contLayout)" v-for="contLayout in layout">
-                                    <span v-if="containers[contLayout.key].html" v-html="item[contLayout.key]" class="SharpEntitiesList__td-html-container"></span>
-                                    <template v-else>
-                                        {{ item[contLayout.key] }}
-                                    </template>
+                    <draggable :options="dragOptions" :list="reorderedItems">
+                        <div v-for="item in (reorderActive ? reorderedItems : data.items)"
+                             class="SharpEntitiesList__row container"
+                             :class="{'SharpEntitiesList__row--disabled':!rowHasLink(item), 'SharpEntitiesList__row--reorder':reorderActive}">
+                            <div class="SharpEntitiesList__cols">
+                                <div class="row">
+                                    <div class="SharpEntitiesList__td" :class="colClasses(contLayout)" v-for="contLayout in layout">
+                                        <span v-if="containers[contLayout.key].html" v-html="item[contLayout.key]" class="SharpEntitiesList__td-html-container"></span>
+                                        <template v-else>
+                                            {{ item[contLayout.key] }}
+                                        </template>
+                                    </div>
                                 </div>
+                                <a class="SharpEntitiesList__row-link" v-if="rowHasLink(item)" :href="rowLink(item)"></a>
                             </div>
-                            <a class="SharpEntitiesList__row-link" v-if="rowHasLink(item)" :href="rowLink(item)"></a>
+                            <div v-show="!reorderActive" class="SharpEntitiesList__row-actions" ref="actionsCol">
+                                <sharp-dropdown v-if="config.state" class="SharpEntitiesList__state-dropdown" :show-arrow="false" :disabled="!hasStateAuthorization(item)">
+                                    <sharp-state-icon slot="text" :class="stateClasses({item})" :style="stateStyle({item})"></sharp-state-icon>
+                                    <sharp-dropdown-item v-for="state in config.state.values" @click="setState(item,state)" :key="state.value">
+                                        <sharp-state-icon :class="stateClasses({ value:state.value })" :style="stateStyle({ value:state.value })"></sharp-state-icon>
+                                        {{ state.label }}
+                                    </sharp-dropdown-item>
+                                </sharp-dropdown>
+                                <sharp-dropdown v-if="!noInstanceCommands"
+                                                class="SharpEntitiesList__commands-dropdown"
+                                                :class="{'SharpEntitiesList__commands-dropdown--placeholder':!instanceCommands(item)}" :show-arrow="false">
+                                    <div slot="text" class="SharpEntitiesList__command-icon">
+                                        <i class="fa fa-plus"></i>
+                                    </div>
+                                    <sharp-dropdown-item v-for="command in instanceCommands(item)" @click="sendCommand(command, item)" :key="command.key">
+                                        {{ command.label }}
+                                    </sharp-dropdown-item>
+                                </sharp-dropdown>
+                            </div>
+                            <div v-show="reorderActive" class="SharpEntitiesList__row-actions" ref="actionsCol">
+                                <i class="fa fa-ellipsis-v SharpEntitiesList__reorder-icon"></i>
+                            </div>
                         </div>
-                        <div class="SharpEntitiesList__row-actions" ref="actionsCol">
-                            <sharp-dropdown v-if="config.state" class="SharpEntitiesList__state-dropdown" :show-arrow="false" :disabled="!hasStateAuthorization(item)">
-                                <sharp-state-icon slot="text" :class="stateClasses(item.state)" :style="stateStyle(item.state)"></sharp-state-icon>
-                                <sharp-dropdown-item v-for="state in config.state.values" @click="setState(item,state)" :key="state.value">
-                                    <sharp-state-icon :class="stateClasses(state.value)" :style="stateStyle(state.value)"></sharp-state-icon>
-                                    {{ state.label }}
-                                </sharp-dropdown-item>
-                            </sharp-dropdown>
-                            <sharp-dropdown v-if="!noInstanceCommands"
-                                            class="SharpEntitiesList__commands-dropdown"
-                                            :class="{'SharpEntitiesList__commands-dropdown--placeholder':!instanceCommands(item)}" :show-arrow="false">
-                                <div slot="text" class="SharpEntitiesList__command-icon">
-                                    <i class="fa fa-plus"></i>
-                                </div>
-                                <sharp-dropdown-item v-for="command in instanceCommands(item)" @click="sendCommand(command, item)" :key="command.key">
-                                    {{ command.label }}
-                                </sharp-dropdown-item>
-                            </sharp-dropdown>
-                        </div>
-                    </div>
+                    </draggable>
                 </div>
             </div>
             <div class="SharpEntitiesList__pagination-container">
@@ -101,6 +108,8 @@
     import ViewPanel from './ViewPanel';
     import StateIcon from './StateIcon';
 
+    import Draggable from 'vuedraggable';
+
     import { API_PATH } from '../../consts';
     import * as util from '../../util';
 
@@ -129,6 +138,7 @@
             [Form.name]: Form,
             [ViewPanel.name]: ViewPanel,
             [StateIcon.name]: StateIcon,
+            Draggable
         },
 
         props: {
@@ -150,6 +160,8 @@
                 sortDir: null,
                 sortDirs: {},
 
+                reorderActive: false,
+                reorderedItems: [],
                 filtersValue: {},
                 showFormModal: {},
                 selectedInstance: null,
@@ -164,9 +176,18 @@
                 if(items.length) {
                     this.$nextTick(() => this.updateHeaderAutoPadding());
                 }
+            },
+            reorderActive() {
+                this.$nextTick(() => this.updateHeaderAutoPadding());
             }
         },
         computed: {
+            dragOptions() {
+                return {
+                    disabled: !this.reorderActive
+                }
+            },
+
             apiPath() {
                 return `${API_PATH}/list/${this.entityKey}`;
             },
@@ -199,6 +220,11 @@
             },
             idAttr() {
                 return this.config.instanceIdAttribute;
+            },
+            stateAttr() {
+                if(!this.config.state)
+                    return null;
+                return this.config.state.attribute;
             },
 
             //// Getters
@@ -272,6 +298,8 @@
 
                 this.sortDirs[this.sortedBy] = this.sortDir;
 
+                this.reorderedItems = [...this.data.items];
+
                 this.filtersValue = this.config.filters.reduce((res, filter) => {
                     res[filter.key] = this.filterValueOrDefault(this.filtersValue[filter.key], filter);
                     return res;
@@ -295,7 +323,8 @@
                     filtersValue: this.filtersValue,
                     commands: this.config.commands.filter(c=>c.authorization && c.type==='entity'),
                     showCreateButton:this.authorizations.create,
-                    searchable: this.config.searchable
+                    searchable: this.config.searchable,
+                    showReorderButton: this.config.reorderable && this.authorizations.update
                 });
             },
 
@@ -313,11 +342,13 @@
             isStateClass(color) {
                 return color.indexOf('sharp_') === 0;
             },
-            stateClasses(state) {
+            stateClasses({ item={}, value }) {
+                let state = item[this.stateAttr] || value;
                 let { color } = this.stateByValue[state];
                 return this.isStateClass(color) ? [color] : [];
             },
-            stateStyle(state) {
+            stateStyle({ item={}, value }) {
+                let state = item[this.stateAttr] || value;
                 let { color } = this.stateByValue[state];
                 return !this.isStateClass(color) ? {
                     fill: color,
@@ -544,6 +575,22 @@
             command: 'sendCommand',
             create() {
                 location.href=`/sharp/form/${this.entityKey}`;
+            },
+            toggleReorder({ apply }={}) {
+                if(apply) {
+                    this.axiosInstance.post(`${this.apiPath}/reorder`, {
+                        instances : this.reorderedItems.map(i => i[this.idAttr])
+                    }).then(()=>{
+                        this.$set(this.data,'items',[...this.reorderedItems]);
+                        this.reorderActive = !this.reorderActive;
+                    });
+                }
+                else {
+                    this.reorderActive = !this.reorderActive;
+                    if(!this.reorderActive) {
+                        this.reorderedItems = [...this.data.items];
+                    }
+                }
             }
         },
         created() {
