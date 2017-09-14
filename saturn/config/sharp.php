@@ -24,7 +24,6 @@ return [
         "travel" => [
             "list" => \App\Sharp\TravelSharpList::class,
             "form" => \App\Sharp\TravelSharpForm::class,
-            "validator" => \App\Sharp\TravelSharpValidator::class,
         ],
         "user" => [
             "list" => \App\Sharp\UserSharpList::class,
@@ -35,7 +34,12 @@ return [
                 "update" => false,
                 "view" => false
             ]
-        ]
+        ],
+        "feature" => [
+            "list" => \App\Sharp\FeatureSharpList::class,
+            "form" => \App\Sharp\FeatureSharpForm::class,
+            "validator" => \App\Sharp\FeatureSharpValidator::class,
+        ],
     ],
 
     "menu" => [
@@ -69,6 +73,10 @@ return [
                 "user" => [
                     "label" => "Sharp users",
                     "icon" => "fa-user-secret"
+                ],
+                "feature" => [
+                    "label" => "Features",
+                    "icon" => "fa-superpowers"
                 ]
             ]
         ],
