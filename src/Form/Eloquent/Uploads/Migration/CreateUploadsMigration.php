@@ -46,7 +46,7 @@ class CreateUploadsMigration extends Command
      *
      * @return void
      */
-    public function fire()
+    public function handle()
     {
         $table = trim($this->input->getArgument('table_name'));
         $name = "create_{$table}_table";
