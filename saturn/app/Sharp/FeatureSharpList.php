@@ -20,7 +20,7 @@ class FeatureSharpList extends SharpEntityList
 
     function buildListConfig()
     {
-        $this->setReorderable();
+        $this->setReorderable(new FeatureReorderHandler());
     }
 
     function buildListLayout()

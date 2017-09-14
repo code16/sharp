@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Tests\Fixtures;
 
+use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\EntityListFilter;
 use Code16\Sharp\EntityList\EntityListMultipleFilter;
@@ -101,6 +102,7 @@ class PersonSharpEntityList extends SharpEntityList
     function buildListConfig()
     {
         $this->setSearchable()
+            ->setReorderable(PersonSharpEntityListReorderHandler::class)
             ->addFilter("age", PersonSharpEntityListAgeFilter::class)
             ->addFilter("age_multiple", PersonSharpEntityListAgeMultipleFilter::class)
             ->addFilter("age_required", PersonSharpEntityListAgeRequiredFilter::class);
@@ -134,5 +136,13 @@ class PersonSharpEntityListAgeRequiredFilter
     public function defaultValue()
     {
         return 22;
+    }
+}
+
+class PersonSharpEntityListReorderHandler
+    implements ReorderHandler
+{
+    function reorder(array $ids)
+    {
     }
 }

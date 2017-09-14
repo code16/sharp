@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\EntityList;
 
+use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\Layout\EntityListLayoutColumn;
 use Code16\Sharp\EntityList\Traits\HandleCommands;
@@ -39,8 +40,8 @@ abstract class SharpEntityList
     /** @var bool */
     protected $paginated = false;
 
-    /** @var bool */
-    protected $reorderable = false;
+    /** @var ReorderHandler */
+    protected $reorderHandler = null;
 
     /** @var string */
     protected $defaultSort;
@@ -139,7 +140,7 @@ abstract class SharpEntityList
             "displayMode" => $this->displayMode,
             "searchable" => $this->searchable,
             "paginated" => $this->paginated,
-            "reorderable" => $this->reorderable,
+            "reorderable" => !is_null($this->reorderHandler),
             "defaultSort" => $this->defaultSort,
             "defaultSortDir" => $this->defaultSortDir,
         ];
@@ -176,14 +177,21 @@ abstract class SharpEntityList
     }
 
     /**
-     * @param bool $reorderable
+     * @param string|ReorderHandler $reorderHandler
      * @return $this
      */
-    public function setReorderable(bool $reorderable = true)
+    public function setReorderable($reorderHandler)
     {
-        $this->reorderable = $reorderable;
+        $this->reorderHandler = $reorderHandler instanceof ReorderHandler
+            ? $reorderHandler
+            : app($reorderHandler);
 
         return $this;
+    }
+
+    public function setNotReorderable()
+    {
+        $this->reorderHandler = null;
     }
 
     /**
@@ -219,6 +227,14 @@ abstract class SharpEntityList
         $this->paginated = $paginated;
 
         return $this;
+    }
+
+    /**
+     * @return ReorderHandler
+     */
+    public function reorderHandler()
+    {
+        return $this->reorderHandler;
     }
 
     /**

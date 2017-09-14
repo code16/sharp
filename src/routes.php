@@ -16,6 +16,10 @@ Route::group([
         ->middleware(['sharp_api_append_list_authorizations', 'sharp_save_list_params'])
         ->uses('EntityListController@show');
 
+    Route::post("/list/{entityKey}/reorder")
+        ->name("code16.sharp.api.list.reorder")
+        ->uses('EntityListController@update');
+
     Route::post("/list/{entityKey}/state/{instanceId}")
         ->name("code16.sharp.api.list.state")
         ->uses('Commands\EntityStateController@update');

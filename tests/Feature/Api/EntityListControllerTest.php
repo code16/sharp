@@ -10,7 +10,6 @@ class EntityListControllerTest extends BaseApiTest
         $this->login();
     }
 
-
     /** @test */
     public function we_can_get_list_data_for_an_entity()
     {
@@ -187,5 +186,14 @@ class EntityListControllerTest extends BaseApiTest
 
         $this->json('get', '/sharp/api/list/notanvalidentity')
             ->assertStatus(404);
+    }
+
+    public function we_can_reorder_instances()
+    {
+        $this->buildTheWorld();
+
+        $this->json('post', '/sharp/api/list/person/reorder', [
+            3,2,1
+        ])->assertStatus(200);
     }
 }

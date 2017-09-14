@@ -23,4 +23,24 @@ class EntityListController extends ApiController
             "config" => $list->listConfig()
         ]);
     }
+
+    /**
+     * Call for reorder instances.
+     *
+     * @param string $entityKey
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update($entityKey)
+    {
+        sharp_check_ability("update", $entityKey);
+
+        $list = $this->getListInstance($entityKey);
+        $list->reorderHandler()->reorder(
+            request("instances")
+        );
+
+        return response()->json([
+            "ok" => true
+        ]);
+    }
 }
