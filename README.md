@@ -65,17 +65,18 @@ We'll get into all those classes in this document. The important thing to notice
 
 ## Full documentation
 
-1. [Authentication](docs/authentication.md)
-2. [Building an Entity List](docs/building-entity-list.md)
-3. [Filters](docs/filters.md)
-4. [Commands](docs/commands.md)
-5. [Entity States](docs/entity-states.md)
-6. [Building an Entity Form](docs/building-entity-form.md)
-7. [Entity Authorizations](docs/entity-authorizations.md)
-8. [The Dashboard](docs/dashboard.md)
-9. [How to transform data](docs/how-to-transform-data.md)
-10. [Sharp built-in solution for uploads](docs/sharp-built-in-solution-for-uploads.md)
-11. Handling data localization
-12. [Testing with Sharp](docs/testing-with-sharp.md)
-13. Extending Sharp
-14. Style and visual theme
+- [Authentication](docs/authentication.md)
+- [Building an Entity List](docs/building-entity-list.md)
+- [Filters](docs/filters.md)
+- [Commands](docs/commands.md)
+- [Entity States](docs/entity-states.md)
+- [Reordering instances](docs/reordering-instances.md)
+- [Building an Entity Form](docs/building-entity-form.md)
+- [Entity Authorizations](docs/entity-authorizations.md)
+- [The Dashboard](docs/dashboard.md)
+- [How to transform data](docs/how-to-transform-data.md)
+- [Sharp built-in solution for uploads](docs/sharp-built-in-solution-for-uploads.md)
+- Handling data localization
+- [Testing with Sharp](docs/testing-with-sharp.md)
+- Extending Sharp
+- Style and visual theme
