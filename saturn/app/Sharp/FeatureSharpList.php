@@ -3,6 +3,7 @@
 namespace App\Sharp;
 
 use App\Feature;
+use App\Sharp\Commands\FeatureReorderHandler;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
