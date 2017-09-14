@@ -5,7 +5,7 @@
             <span>{{ itemsCount }} {{ l('action_bar.list.items_count') }}</span>
         </template>
         <template slot="right">
-            <div v-if="searchable" class="SharpActionBar__search SharpSearch SharpSearch--lg" :class="{'SharpSearch--active':searchActive}" role="search">
+            <div v-if="searchable && !reorderActive" class="SharpActionBar__search SharpSearch SharpSearch--lg" :class="{'SharpSearch--active':searchActive}" role="search">
                 <label id="ab-search-label" class="SharpSearch__label" for="ab-search-input">{{ l('action_bar.list.search.placeholder') }}</label>
                 <input class="SharpSearch__input"
                        :value="search"
@@ -29,10 +29,27 @@
                     <path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm3.5 10.1l-1.4 1.4L8 9.4l-2.1 2.1-1.4-1.4L6.6 8 4.5 5.9l1.4-1.4L8 6.6l2.1-2.1 1.4 1.4L9.4 8l2.1 2.1z"></path>
                 </svg>
             </div>
-            <button v-if="showCreateButton" class="SharpButton SharpButton--accent" @click="emitAction('create')">
+            <template v-if="showReorderButton">
+                <template v-if="reorderActive">
+                    <button class="SharpButton SharpButton--secondary-accent" @click="emitAction('toggleReorder')">
+                        {{ l('action_bar.list.reorder_button.cancel') }}
+                    </button>
+                    <button class="SharpButton SharpButton--accent" @click="emitAction('toggleReorder', { apply: true })">
+                        {{ l('action_bar.list.reorder_button.finish') }}
+                    </button>
+                </template>
+                <template v-else>
+                    <button class="SharpButton SharpButton--secondary-accent" @click="emitAction('toggleReorder')">
+                        {{ l('action_bar.list.reorder_button') }}
+                    </button>
+                </template>
+            </template>
+
+
+            <button v-if="showCreateButton && !reorderActive" class="SharpButton SharpButton--accent" @click="emitAction('create')">
                 {{ l('action_bar.list.create_button') }}
             </button>
-            <sharp-dropdown v-if="commands.length"
+            <sharp-dropdown v-if="commands.length && !reorderActive"
                             class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
                             :show-arrow="false">
                 <div slot="text">
@@ -45,6 +62,7 @@
         </template>
         <template slot="extras">
             <sharp-filter-select v-for="filter in filters"
+                                 v-show="!reorderActive"
                                  :name="filter.label"
                                  :filter-key="`actionbarlist_${filter.key}`"
                                  :values="filter.values"
@@ -91,8 +109,11 @@
                 commands: [],
 
                 showCreateButton: false,
+                showReorderButton: false,
                 searchActive: false,
-                searchable: false
+                searchable: false,
+
+                reorderActive: false
             }
         },
         methods: {
@@ -109,13 +130,14 @@
         },
         actions: {
             setup(config) {
-                let { itemsCount, filters, filtersValue, commands, showCreateButton, searchable } = config;
+                let { itemsCount, filters, filtersValue, commands, showCreateButton, showReorderButton, searchable } = config;
                 this.itemsCount = itemsCount;
                 this.filters = filters;
                 this.filtersValue = filtersValue;
                 this.commands = commands;
 
                 this.showCreateButton = showCreateButton;
+                this.showReorderButton = showReorderButton;
                 this.searchable = searchable;
             },
             searchChanged(input) {
@@ -123,6 +145,11 @@
             },
             filterChanged(key, value) {
                 this.$set(this.filtersValue,key,value);
+            },
+
+            toggleReorder() {
+                this.reorderActive = !this.reorderActive;
+                document.activeElement.blur();
             }
         },
         mounted() {

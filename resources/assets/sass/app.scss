@@ -38,8 +38,8 @@ $small-breakpoint: sm;
 
   font-family: $font-family-base;
 
-  .sharp_primary { @include sharp-color($brand-01) }
-  .sharp_secondary { @include sharp-color($brand-02) }
+  .sharp_primary { @include sharp-color($brand-02) }
+  .sharp_secondary { @include sharp-color($brand-03) }
   .sharp_gray { @include sharp-color($color__navy-gray-7) }
   .sharp_lightgray { @include sharp-color($color__navy-gray-9) }
   .sharp_darkgray { @include sharp-color($color__navy-gray-4) }
@@ -114,5 +114,9 @@ $small-breakpoint: sm;
 
   [v-cloak] {
     display: none;
+  }
+
+  .sortable-chosen {
+    @include focus-outline('border');
   }
 }

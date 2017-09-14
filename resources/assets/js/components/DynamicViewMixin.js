@@ -53,8 +53,8 @@ export default {
             let { response: {status, data}, config: { method } } = error;
             this.mainLoading.$emit('hide');
             let modalOptions = {
-                title: lang(`modals.${status}`),
-                text: data.message,
+                title: lang(`modals.${status}.title`) || lang(`modals.error.title`),
+                text: data.message || lang(`modals.error.message`),
                 isError: true
             };
 
