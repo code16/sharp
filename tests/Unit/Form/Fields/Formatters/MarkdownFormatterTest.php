@@ -75,11 +75,11 @@ class MarkdownFormatterTest extends SharpTestCase
         $field = SharpFormMarkdownField::make("md");
         $value = "![]($image)";
 
-        $this->assertEquals([
-            "name" => $image,
-            "size" => 1127,
-            "thumbnail" => url("thumbnails/data/-150/" . basename($image))
-        ], $formatter->toFront($field, $value)["files"][0]);
+        $toFrontArray = $formatter->toFront($field, $value)["files"][0];
+
+        $this->assertEquals($image, $toFrontArray["name"]);
+        $this->assertEquals(1127, $toFrontArray["size"]);
+        $this->assertStringStartsWith(url("thumbnails/data/-150/" . basename($image)), $toFrontArray["thumbnail"]);
     }
 
     /** @test */
