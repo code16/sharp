@@ -7,7 +7,7 @@ Data transformation is useful when sending data to the front, which happens in t
 
 ## The `transform()` function
 
-In an Entity List or an Entoty Form, you can use the `transform()` function which will:
+In an Entity List or an Entity Form, you can use the `transform()` function which will:
 
 - apply all custom transformers on your list (see below),
 - transform the given model(s) into an array, handling pagination if a `LengthAwarePaginator` is provided.
