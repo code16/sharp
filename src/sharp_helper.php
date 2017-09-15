@@ -15,22 +15,29 @@ function sharp_version()
  */
 function sharp_page_title($sharpMenu, $entityKey)
 {
-    $entityLabel = $sharpMenu->dashboard
-        ? trans('sharp::menu.dashboard')
-        : "";
+    if(!$sharpMenu) {
+        $title = "Login";
 
-    if($entityKey) {
-        foreach($sharpMenu->categories as $category) {
-            foreach($category->entities as $entity) {
-                if($entity->key == $entityKey) {
-                    $entityLabel = $entity->label;
-                    break 2;
+    } else {
+        $entityLabel = $sharpMenu->dashboard
+            ? trans('sharp::menu.dashboard')
+            : "";
+
+        if ($entityKey) {
+            foreach ($sharpMenu->categories as $category) {
+                foreach ($category->entities as $entity) {
+                    if ($entity->key == $entityKey) {
+                        $entityLabel = $entity->label;
+                        break 2;
+                    }
                 }
             }
         }
+
+        $title = $sharpMenu->name . ', ' .$entityLabel;
     }
 
-    return $sharpMenu->name . ', ' .$entityLabel . ' | Sharp ' . sharp_version();
+    return  "$title | Sharp " . sharp_version();
 }
 
 /**
