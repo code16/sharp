@@ -185,7 +185,7 @@
 
   &__td {
     //@include reset;
-    @include font-size('14');
+    font-size: rem(14px) !important;
     @include line-height('body');
     //@include padding-td;
     position: relative;
