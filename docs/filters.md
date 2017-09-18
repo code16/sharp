@@ -1,6 +1,6 @@
 # Entity List Filters
 
-Entity List Filters are simply a way for the user to filter list items on some attribute. Like filter cats on color is black, for instance.
+Entity List Filters are a simple way for the user to filter list items on some attribute, like for instance display only books that cost more than 15 euros.
 
 
 ## Write the filter class

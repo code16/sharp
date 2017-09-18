@@ -9,6 +9,38 @@ function sharp_version()
 }
 
 /**
+ * @param array $sharpMenu
+ * @param string|null $entityKey
+ * @return string
+ */
+function sharp_page_title($sharpMenu, $entityKey)
+{
+    if(!$sharpMenu) {
+        $title = "Login";
+
+    } else {
+        $entityLabel = $sharpMenu->dashboard
+            ? trans('sharp::menu.dashboard')
+            : "";
+
+        if ($entityKey) {
+            foreach ($sharpMenu->categories as $category) {
+                foreach ($category->entities as $entity) {
+                    if ($entity->key == $entityKey) {
+                        $entityLabel = $entity->label;
+                        break 2;
+                    }
+                }
+            }
+        }
+
+        $title = $sharpMenu->name . ', ' .$entityLabel;
+    }
+
+    return  "$title | Sharp " . sharp_version();
+}
+
+/**
  * @return mixed
  */
 function sharp_user()

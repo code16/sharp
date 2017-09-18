@@ -32,6 +32,7 @@ $factory->define(\App\Spaceship::class, function (Faker\Generator $faker) {
         'description' => $faker->realText(400),
         'capacity' => $faker->numberBetween(5, 80) * 1000,
         'construction_date' => $faker->date(),
+        'state' => $faker->randomElement(["inactive", "active", "building", "conception"]),
         'type_id' => function() {
             return factory(\App\SpaceshipType::class)->create()->id;
         }
