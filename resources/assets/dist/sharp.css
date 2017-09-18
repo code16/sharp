@@ -3043,147 +3043,6 @@
   clip: auto;
 }
 
-
-.hidden[data-v-15755a81] {
-    opacity: 0 !important;
-}
-
-/* Make modal display as block instead of inline style, and because Vue's v-show deletes inline "display" style */
-.modal[data-v-15755a81] {
-    display: block;
-}
-
-.page-item[data-v-137ab6f6] {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-.page-item.disabled[data-v-137ab6f6] {
-    cursor: not-allowed;
-    opacity: .65;
-}
-.time-picker {
-  display: inline-block;
-  position: relative;
-  font-size: 1em;
-  width: 10em;
-  font-family: sans-serif;
-  vertical-align: middle;
-}
-
-.time-picker * {
-  box-sizing: border-box;
-}
-
-.time-picker input.display-time {
-  border: 1px solid #d2d2d2;
-  width: 10em;
-  height: 2.2em;
-  padding: 0.3em 0.5em;
-  font-size: 1em;
-}
-
-.time-picker .clear-btn {
-  position: absolute;
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-  align-items: center;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  margin-top: -0.15em;
-  z-index: 3;
-  font-size: 1.1em;
-  line-height: 1em;
-  vertical-align: middle;
-  width: 1.3em;
-  color: #d2d2d2;
-  background: rgba(255,255,255,0);
-  text-align: center;
-  font-style: normal;
-
-  -webkit-transition: color .2s;
-  transition: color .2s;
-}
-
-.time-picker .clear-btn:hover {
-  color: #797979;
-  cursor: pointer;
-}
-
-.time-picker .time-picker-overlay {
-  z-index: 2;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.time-picker .dropdown {
-  position: absolute;
-  z-index: 5;
-  top: calc(2.2em + 2px);
-  left: 0;
-  background: #fff;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.15);
-  width: 10em;
-  height: 10em;
-  font-weight: normal;
-}
-
-.time-picker .dropdown .select-list {
-  width: 10em;
-  height: 10em;
-  overflow: hidden;
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: stretch;
-  justify-content: space-between;
-}
-
-.time-picker .dropdown ul {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-
-  flex: 1;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-.time-picker .dropdown ul.minutes,
-.time-picker .dropdown ul.seconds,
-.time-picker .dropdown ul.apms{
-  border-left: 1px solid #fff;
-}
-
-.time-picker .dropdown ul li {
-  text-align: center;
-  padding: 0.3em 0;
-  color: #161616;
-}
-
-.time-picker .dropdown ul li:not(.hint):hover {
-  background: rgba(0,0,0,.08);
-  color: #161616;
-  cursor: pointer;
-}
-
-.time-picker .dropdown ul li.active,
-.time-picker .dropdown ul li.active:hover {
-  background: #41B883;
-  color: #fff;
-}
-
-.time-picker .dropdown .hint {
-  color: #a5a5a5;
-  cursor: default;
-  font-size: 0.8em;
-}
-
 @charset "UTF-8";
 @-webkit-keyframes rotate {
   0% {
@@ -5958,7 +5817,7 @@
 
 @media (max-width: 767px) {
   #sharp-app .SharpActionBar__actions-dropdown--commands .SharpDropdown__list, #sharp-app .SharpActionBar__actions-dropdown--commands .multiselect .multiselect__content, #sharp-app .multiselect .SharpActionBar__actions-dropdown--commands .multiselect__content, #sharp-app .SharpActionBar__actions-dropdown--commands .multiselect__content {
-    width: 100%;
+    min-width: 100%;
   }
 }
 
@@ -8170,7 +8029,7 @@
           justify-content: center;
   content: '';
   opacity: 0;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
   -webkit-transition: opacity 200ms, z-index 0s 200ms, visibility 0s 200ms;
   transition: opacity 200ms, z-index 0s 200ms, visibility 0s 200ms;
   visibility: hidden;
@@ -8189,6 +8048,7 @@
   -webkit-transition: opacity 200ms;
   transition: opacity 200ms;
   visibility: visible;
+  overflow-y: auto;
 }
 
 #sharp-app .SharpModal .modal .modal-dialog {
@@ -8200,8 +8060,6 @@
   font-size: 100%;
   font-family: inherit;
   vertical-align: baseline;
-  -webkit-box-shadow: 0 0 24px 0 #DAE3EE;
-          box-shadow: 0 0 24px 0 #DAE3EE;
   position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -8212,11 +8070,11 @@
           flex-direction: column;
   background-color: #EBF0F7;
   border-top: #314255 4px solid;
-  min-width: 100%;
-  max-height: 100%;
-  height: 100%;
   padding: 2rem 3% 0rem 3%;
   outline: 2px solid white;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 1rem;
 }
 
 #sharp-app .SharpModal .modal .modal-dialog > *,
@@ -8226,18 +8084,20 @@
           box-sizing: inherit;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 576px) {
   #sharp-app .SharpModal .modal .modal-dialog {
-    height: auto;
-    min-width: 500px;
-    max-width: 75%;
-    padding: 2.75rem 3rem 0 3rem;
+    width: 400px;
+    max-width: 400px;
+    margin: 0;
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   #sharp-app .SharpModal .modal .modal-dialog {
-    max-width: 50%;
+    width: 600px;
+    max-width: 600px;
+    padding: 2.75rem 3rem 0 3rem;
+    margin: 0;
   }
 }
 
@@ -8275,12 +8135,12 @@
   margin-top: auto;
   text-align: right;
   background-color: #FFFFFF;
-  margin-left: -1.5rem;
-  margin-right: -1.5rem;
+  margin-left: -3vw;
+  margin-right: -3vw;
   padding: 1.5rem 1.5rem;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   #sharp-app .SharpModal .modal .modal-footer {
     margin-left: -3rem;
     margin-right: -3rem;
@@ -8920,7 +8780,7 @@
 
 @media (max-width: 767px) {
   #sharp-app .SharpEntitiesList__state-dropdown .SharpDropdown__list, #sharp-app .SharpEntitiesList__state-dropdown .multiselect .multiselect__content, #sharp-app .multiselect .SharpEntitiesList__state-dropdown .multiselect__content, #sharp-app .SharpEntitiesList__state-dropdown .multiselect__content, #sharp-app .SharpEntitiesList__commands-dropdown .SharpDropdown__list, #sharp-app .SharpEntitiesList__commands-dropdown .multiselect .multiselect__content, #sharp-app .multiselect .SharpEntitiesList__commands-dropdown .multiselect__content, #sharp-app .SharpEntitiesList__commands-dropdown .multiselect__content {
-    width: 100%;
+    min-width: 100%;
   }
 }
 
@@ -9227,7 +9087,7 @@
 
 @media (max-width: 767px) {
   #sharp-app .SharpFilterSelect .SharpDropdown__list, #sharp-app .SharpFilterSelect .multiselect .multiselect__content, #sharp-app .multiselect .SharpFilterSelect .multiselect__content, #sharp-app .SharpFilterSelect .multiselect__content {
-    width: 100%;
+    min-width: 100%;
   }
 }
 
@@ -10363,6 +10223,151 @@
 #sharp-app .sortable-chosen {
   outline: 1px solid #314255;
 }
+
+.modal-open {
+  overflow-y: hidden;
+}
+
+.hidden[data-v-15755a81] {
+    opacity: 0 !important;
+}
+
+/* Make modal display as block instead of inline style, and because Vue's v-show deletes inline "display" style */
+.modal[data-v-15755a81] {
+    display: block;
+}
+
+.page-item[data-v-137ab6f6] {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.page-item.disabled[data-v-137ab6f6] {
+    cursor: not-allowed;
+    opacity: .65;
+}
+.time-picker {
+  display: inline-block;
+  position: relative;
+  font-size: 1em;
+  width: 10em;
+  font-family: sans-serif;
+  vertical-align: middle;
+}
+
+.time-picker * {
+  box-sizing: border-box;
+}
+
+.time-picker input.display-time {
+  border: 1px solid #d2d2d2;
+  width: 10em;
+  height: 2.2em;
+  padding: 0.3em 0.5em;
+  font-size: 1em;
+}
+
+.time-picker .clear-btn {
+  position: absolute;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin-top: -0.15em;
+  z-index: 3;
+  font-size: 1.1em;
+  line-height: 1em;
+  vertical-align: middle;
+  width: 1.3em;
+  color: #d2d2d2;
+  background: rgba(255,255,255,0);
+  text-align: center;
+  font-style: normal;
+
+  -webkit-transition: color .2s;
+  transition: color .2s;
+}
+
+.time-picker .clear-btn:hover {
+  color: #797979;
+  cursor: pointer;
+}
+
+.time-picker .time-picker-overlay {
+  z-index: 2;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.time-picker .dropdown {
+  position: absolute;
+  z-index: 5;
+  top: calc(2.2em + 2px);
+  left: 0;
+  background: #fff;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.15);
+  width: 10em;
+  height: 10em;
+  font-weight: normal;
+}
+
+.time-picker .dropdown .select-list {
+  width: 10em;
+  height: 10em;
+  overflow: hidden;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+.time-picker .dropdown ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.time-picker .dropdown ul.minutes,
+.time-picker .dropdown ul.seconds,
+.time-picker .dropdown ul.apms{
+  border-left: 1px solid #fff;
+}
+
+.time-picker .dropdown ul li {
+  text-align: center;
+  padding: 0.3em 0;
+  color: #161616;
+}
+
+.time-picker .dropdown ul li:not(.hint):hover {
+  background: rgba(0,0,0,.08);
+  color: #161616;
+  cursor: pointer;
+}
+
+.time-picker .dropdown ul li.active,
+.time-picker .dropdown ul li.active:hover {
+  background: #41B883;
+  color: #fff;
+}
+
+.time-picker .dropdown .hint {
+  color: #a5a5a5;
+  cursor: default;
+  font-size: 0.8em;
+}
+
 
 /**
  * simplemde v1.11.2

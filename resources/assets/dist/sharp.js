@@ -39042,10 +39042,10 @@ var _components;
         handleSelect: function handleSelect(value) {
             this.$emit('input', value);
         },
-        open: function open() {
+        toggle: function toggle() {
             var multiselect = this.$refs.select.$refs.multiselect;
 
-            multiselect.activate();
+            multiselect.toggle();
         }
     }
 });
@@ -39457,7 +39457,11 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       'SharpFilterSelect--multiple': _vm.multiple
     },
     on: {
-      "click": _vm.open
+      "mousedown": function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        _vm.toggle($event)
+      }
     }
   }, [_c('span', {
     staticClass: "SharpFilterSelect__text"
@@ -69898,33 +69902,30 @@ var _components;
                 //this.getFormModal(key).show();
                 return;
             }
-            __WEBPACK_IMPORTED_MODULE_20_axios___default.a.post(this.commandEnpoint(key, instance), { query: this.apiParams }).then(function (_ref23) {
-                var data = _ref23.data;
-
+            new Promise(function (resolve) {
                 if (confirmation) {
-                    return new Promise(function (resolve) {
-                        _this10.actionsBus.$emit('showMainModal', {
-                            title: _this10.l('modals.command.confirm.title'),
-                            text: confirmation,
-                            okCallback: function okCallback(e) {
-                                return resolve(data);
-                            }
-                        });
+                    _this10.actionsBus.$emit('showMainModal', {
+                        title: _this10.l('modals.command.confirm.title'),
+                        text: confirmation,
+                        okCallback: function okCallback(e) {
+                            return resolve();
+                        }
                     });
-                }
-                return Promise.resolve(data);
-            }).then(this.handleCommandResponse);
+                } else resolve();
+            }).then(function () {
+                __WEBPACK_IMPORTED_MODULE_20_axios___default.a.post(_this10.commandEnpoint(key, instance), { query: _this10.apiParams }).then(_this10.handleCommandResponse);
+            });
         },
 
 
         /* (CommandAPIResponse)
         * Execute the required command action
         */
-        handleCommandResponse: function handleCommandResponse(_ref24) {
-            var action = _ref24.action,
-                items = _ref24.items,
-                message = _ref24.message,
-                html = _ref24.html;
+        handleCommandResponse: function handleCommandResponse(_ref23) {
+            var action = _ref23.action,
+                items = _ref23.items,
+                message = _ref23.message,
+                html = _ref23.html;
 
             if (action === 'refresh') this.actionRefresh(items);else if (action === 'reload') this.actionReload();else if (action === 'info') {
                 this.actionsBus.$emit('showMainModal', {
@@ -69961,7 +69962,7 @@ var _components;
         * Hide the current form modal after data correctly sent, handle actions
         */
         commandFormSubmitted: function () {
-            var _ref25 = __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_2_babel_runtime_regenerator___default.a.mark(function _callee(key, data) {
+            var _ref24 = __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_2_babel_runtime_regenerator___default.a.mark(function _callee(key, data) {
                 return __WEBPACK_IMPORTED_MODULE_2_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
@@ -69983,7 +69984,7 @@ var _components;
             }));
 
             function commandFormSubmitted(_x3, _x4) {
-                return _ref25.apply(this, arguments);
+                return _ref24.apply(this, arguments);
             }
 
             return commandFormSubmitted;
@@ -70074,9 +70075,9 @@ var _components;
     },
     actions: {
         searchChanged: function searchChanged(input) {
-            var _ref26 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-                _ref26$isInput = _ref26.isInput,
-                isInput = _ref26$isInput === undefined ? true : _ref26$isInput;
+            var _ref25 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+                _ref25$isInput = _ref25.isInput,
+                isInput = _ref25$isInput === undefined ? true : _ref25$isInput;
 
             //console.log('entities list search changed', input, isInput);
 
@@ -70097,8 +70098,8 @@ var _components;
         toggleReorder: function toggleReorder() {
             var _this13 = this;
 
-            var _ref27 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-                apply = _ref27.apply;
+            var _ref26 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+                apply = _ref26.apply;
 
             if (apply) {
                 this.axiosInstance.post(this.apiPath + '/reorder', {
