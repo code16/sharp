@@ -62,7 +62,11 @@ class SharpServiceProvider extends ServiceProvider
 
         // Override Laravel's Gate to handle Sharp's ability to define a custom Guard
         $this->app->singleton(GateContract::class, function ($app) {
-            return new SharpGate($app);
+            return new \Illuminate\Auth\Access\Gate($app, function () use ($app) {
+                return request()->is("sharp/*")
+                    ? sharp_user()
+                    : auth()->guard(config("auth.defaults.guard"))->user();
+            });
         });
 
         $this->commands([
