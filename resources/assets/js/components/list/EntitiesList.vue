@@ -36,7 +36,9 @@
                             <div class="SharpEntitiesList__cols">
                                 <div class="row">
                                     <div class="SharpEntitiesList__td" :class="colClasses(contLayout)" v-for="contLayout in layout">
-                                        <span v-if="containers[contLayout.key].html" v-html="item[contLayout.key]" class="SharpEntitiesList__td-html-container"></span>
+                                        <div v-if="containers[contLayout.key].html" v-html="item[contLayout.key]"
+                                             class="SharpEntitiesList__td-html-container">
+                                        </div>
                                         <template v-else>
                                             {{ item[contLayout.key] }}
                                         </template>

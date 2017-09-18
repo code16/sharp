@@ -5724,8 +5724,14 @@
 }
 
 #sharp-app .SharpActionBar__bar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   padding-top: 1rem;
-  padding-bottom: 2rem;
+  padding-bottom: 1rem;
   background: #314255;
   height: 5rem;
 }
