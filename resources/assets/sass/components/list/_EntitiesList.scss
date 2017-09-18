@@ -185,7 +185,7 @@
 
   &__td {
     //@include reset;
-    font-size: rem(14px) !important;
+    @include font-size('14');
     @include line-height('body');
     //@include padding-td;
     position: relative;
@@ -193,6 +193,9 @@
 
     &-html-container {
       max-width: 100%;
+      * {
+        font-size: rem(14px) !important;
+      }
       img {
         max-width: 100%;
       }
