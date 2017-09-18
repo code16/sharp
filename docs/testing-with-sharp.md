@@ -40,6 +40,16 @@ Call the Sharp API to update the Entity `$entityKey` of id `$instanceId`, with `
 Call the Sharp API to store a new Entity `$entityKey` with `$data`.
 
 
+#### `callEntityCommand(string $entityKey, string $commandKey, array $data)`
+
+Call the `$commandKey` Entity Command with the optional `$data`.
+
+
+#### `callInstanceCommand(string $entityKey, $instanceId, string $commandKey, array $data)`
+
+Call the `$commandKey` Instance Command with the optional `$data`.
+
+
 ### Assertions
 
 First, and of course, you can use regular assertions, like for instance:
