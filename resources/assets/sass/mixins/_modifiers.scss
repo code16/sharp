@@ -5,8 +5,8 @@
     box-shadow: 0 0 7px 0 $brand-01 !important;
     width: auto;
 
-    @include media-breakpoint-down($small-breakpoint) {
-      width: 100%;
+    @include media-breakpoint-down(sm) {
+      min-width: 100%;
     }
   }
   .SharpDropdown__link:focus,

@@ -456,20 +456,18 @@
                     //this.getFormModal(key).show();
                     return;
                 }
-                axios.post(this.commandEnpoint(key, instance), {query: this.apiParams})
-                    .then(({data})=> {
-                        if (confirmation) {
-                            return new Promise((resolve) => {
-                                this.actionsBus.$emit('showMainModal', {
-                                    title: this.l('modals.command.confirm.title'),
-                                    text: confirmation,
-                                    okCallback: e => resolve(data),
-                                });
-                            })
-                        }
-                        return Promise.resolve(data);
-                    })
-                    .then(this.handleCommandResponse);
+                new Promise((resolve) => {
+                    if (confirmation) {
+                        this.actionsBus.$emit('showMainModal', {
+                            title: this.l('modals.command.confirm.title'),
+                            text: confirmation,
+                            okCallback: e => resolve(),
+                        });
+                    }
+                    else resolve();
+                }).then(() => {
+                    axios.post(this.commandEnpoint(key, instance), {query: this.apiParams}).then(this.handleCommandResponse);
+                });
             },
 
             /* (CommandAPIResponse)

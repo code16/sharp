@@ -4,7 +4,7 @@
           'SharpFilterSelect--open':opened,
           'SharpFilterSelect--empty':empty,
           'SharpFilterSelect--multiple':multiple}"
-          @click="open">
+          @mousedown.prevent.stop="toggle">
         <span class="SharpFilterSelect__text">
             {{name}}<span v-if="!empty" style="font-weight:normal">&nbsp;&nbsp;</span>
         </span>
@@ -81,9 +81,9 @@
             handleSelect(value) {
                 this.$emit('input', value);
             },
-            open() {
+            toggle() {
                 let { select:{ $refs: { multiselect } } } = this.$refs;
-                multiselect.activate();
+                multiselect.toggle();
             }
         }
     }

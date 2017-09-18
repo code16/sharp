@@ -53,14 +53,14 @@
     padding-top: 1rem;
     //flex-flow: row wrap;
     align-items: center;
-    @include media-breakpoint-down($small-breakpoint) {
+    @include media-breakpoint-down(sm) {
       flex-flow: column;
       align-items: stretch;
     }
 
     .SharpFilterSelect {
       margin: 0 0 0 .5rem;
-      @include media-breakpoint-down($small-breakpoint) {
+      @include media-breakpoint-down(sm) {
         margin: .5rem 0 0 0;
       }
       &:first-child {
