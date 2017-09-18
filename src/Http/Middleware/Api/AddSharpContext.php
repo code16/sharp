@@ -22,8 +22,6 @@ class AddSharpContext
     }
 
     /**
-     * Return http 417 on SharpFormException.
-     *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
      * @param  string|null  $guard

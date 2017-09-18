@@ -11,6 +11,7 @@ use Code16\Sharp\Http\Middleware\Api\AppendFormAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendListAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors;
 use Code16\Sharp\Http\Middleware\Api\SaveEntityListParams;
+use Code16\Sharp\Http\Middleware\Api\SetSharpLocale;
 use Code16\Sharp\Http\Middleware\CheckIsSharpAuthenticated;
 use Code16\Sharp\Http\Middleware\CheckIsSharpGuest;
 use Code16\Sharp\Http\Middleware\RestoreEntityListParams;
@@ -131,6 +132,9 @@ class SharpServiceProvider extends ServiceProvider
 
         )->aliasMiddleware(
             'sharp_api_context', AddSharpContext::class
+
+        )->aliasMiddleware(
+            'sharp_locale', SetSharpLocale::class
 
         )->aliasMiddleware(
             'sharp_save_list_params', SaveEntityListParams::class
