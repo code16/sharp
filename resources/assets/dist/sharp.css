@@ -8828,13 +8828,17 @@
 }
 
 #sharp-app .SharpEntitiesList__td {
-  font-size: 0.875rem !important;
+  font-size: 0.875rem;
   line-height: 1.5;
   position: relative;
 }
 
 #sharp-app .SharpEntitiesList__td-html-container {
   max-width: 100%;
+}
+
+#sharp-app .SharpEntitiesList__td-html-container * {
+  font-size: 0.875rem !important;
 }
 
 #sharp-app .SharpEntitiesList__td-html-container img {
