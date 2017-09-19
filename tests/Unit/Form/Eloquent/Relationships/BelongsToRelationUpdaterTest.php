@@ -24,4 +24,23 @@ class BelongsToRelationUpdaterTest extends SharpFormEloquentBaseTest
             "mother_id" => $mother->id
         ]);
     }
+
+    /** @test */
+    function we_can_create_a_belongsTo_relation()
+    {
+        $person = Person::create(["name" => "John Wayne"]);
+
+        $updater = new BelongsToRelationUpdater();
+
+        $updater->update($person, "mother:name", "Jane Wayne");
+
+        $this->assertCount(2, Person::all());
+
+        $mother = Person::where("name", "Jane Wayne")->first();
+
+        $this->assertDatabaseHas("people", [
+            "id" => $person->id,
+            "mother_id" => $mother->id
+        ]);
+    }
 }
