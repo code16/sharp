@@ -18,11 +18,11 @@ class SetLocaleTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->assertEquals("Monday", Carbon::now()->startOfWeek()->formatLocalized("%A"));
+        $this->assertEquals("monday", strtolower(Carbon::now()->startOfWeek()->formatLocalized("%A")));
 
         $this->json('get', '/sharp/api/form/person/1');
 
-        $this->assertEquals("Monday", Carbon::now()->startOfWeek()->formatLocalized("%A"));
+        $this->assertEquals("monday", strtolower(Carbon::now()->startOfWeek()->formatLocalized("%A")));
     }
 
     /** @test */
@@ -32,12 +32,12 @@ class SetLocaleTest extends BaseApiTest
 
         config(["sharp.locale" => "fr_FR.UTF-8"]);
 
-        $this->assertEquals("Monday", Carbon::now()->startOfWeek()->formatLocalized("%A"));
+        $this->assertEquals("monday", strtolower(Carbon::now()->startOfWeek()->formatLocalized("%A")));
 
         // Locale is set through the SetSharpLocale middleware for the request
         $this->json('get', '/sharp/api/form/person/1');
 
-        $this->assertEquals("Lundi", Carbon::now()->startOfWeek()->formatLocalized("%A"));
+        $this->assertEquals("lundi", strtolower(Carbon::now()->startOfWeek()->formatLocalized("%A")));
     }
 
 
