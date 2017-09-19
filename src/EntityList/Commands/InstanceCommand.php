@@ -28,6 +28,7 @@ abstract class InstanceCommand extends Command
     /**
      * Check if the current user is allowed to use this Command for this instance
      *
+     * @param $instanceId
      * @return bool
      */
     public function authorizeFor($instanceId): bool
