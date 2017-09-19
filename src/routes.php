@@ -54,6 +54,10 @@ Route::group([
         ->name("code16.sharp.api.form.store")
         ->uses('FormController@store');
 
+    Route::post("/download/{entityKey}/{instanceId}/{formUploadFieldKey}")
+        ->name("code16.sharp.api.form.download")
+        ->uses('FormDownloadController@show');
+
 });
 
 // Web routes
