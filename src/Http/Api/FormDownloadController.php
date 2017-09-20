@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Http\Api;
 
-use Code16\Sharp\Form\Fields\SharpFormUploadField;
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 use Illuminate\Filesystem\FilesystemManager;
 
 class FormDownloadController extends ApiController
@@ -48,10 +48,10 @@ class FormDownloadController extends ApiController
 
     /**
      * @param string $fileName
-     * @param SharpFormUploadField $field
+     * @param SharpFormFieldWithUpload $field
      * @return array
      */
-    protected function determineDiskAndFilePath(string $fileName, SharpFormUploadField $field)
+    protected function determineDiskAndFilePath(string $fileName, $field)
     {
         $basePath = $field->storageBasePath();
         $disk = $this->filesystem->disk($field->storageDisk());
