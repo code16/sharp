@@ -91,21 +91,16 @@ const getIdentifier = (identifier, field, locale) => {
     return identifier;
 };
 
+const noop = ()=>{};
+
 export default {
     name: 'SharpFieldDisplay',
     functional: true,
 
-//        props: {
-//            fieldKey: String,
-//            contextFields:Object,
-//            contextData:Object,
-//             ... callbacks, error
-//        },
-
     inject:['$form'],
 
     render(h, { props, injections }) {
-        let { fieldKey, contextFields, contextData, errorIdentifier, ...sharedProps } = props;
+        let { fieldKey, contextFields, contextData, errorIdentifier, updateVisibility, ...sharedProps } = props;
         let { $form } = injections;
 
         let field = contextFields[fieldKey];
@@ -116,18 +111,22 @@ export default {
             return null;
         }
 
-        return acceptCondition(contextFields, contextData, field.conditionalDisplay) ?
-            h(FieldContainer,{
-                props: {
-                    fieldKey,
-                    fieldProps: field,
-                    fieldType: field.type,
-                    value: getValue($form, field, value, props.locale),
-                    label: field.label,
-                    helpMessage: field.helpMessage,
-                    errorIdentifier: getIdentifier(errorIdentifier, field, props.locale),
-                    ...sharedProps
-                }
-            }) : null;
+        let isVisible = acceptCondition(contextFields, contextData, field.conditionalDisplay);
+
+        updateVisibility && updateVisibility(fieldKey, isVisible);
+
+        return isVisible ? h(FieldContainer, {
+            props: {
+                fieldKey,
+                fieldProps: field,
+                fieldType: field.type,
+                value: getValue($form, field, value, props.locale),
+                label: field.label,
+                helpMessage: field.helpMessage,
+                errorIdentifier: getIdentifier(errorIdentifier, field, props.locale),
+                ...sharedProps
+            }
+        }) : null
+
     }
 }

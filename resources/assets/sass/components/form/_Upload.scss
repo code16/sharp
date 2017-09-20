@@ -82,6 +82,16 @@
     }
   }
 
+  &__progress {
+    height: 3px;
+    background: $ui-02;
+    &-bar {
+      transition: width 200ms $bx--standard-easing;
+      height:100%;
+      background: $brand-02;
+    }
+  }
+
   &__modal-vue-cropper {
     @include media-breakpoint-up(xs) { max-height: 250px; }
     @include media-breakpoint-up(sm) { max-height: 300px; }

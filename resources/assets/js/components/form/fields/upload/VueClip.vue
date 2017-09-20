@@ -16,13 +16,13 @@
                             <div>
                                 <label class="SharpUpload__info">{{ fileName }}</label>
                                 <div class="SharpUpload__info">{{ size }}</div>
-                                <div class="progress" v-show="showProgressBar">
-                                    <div class="progress-bar" role="progressbar" :style="{width:`${progress}%`}"
+                                <div class="SharpUpload__progress mt-2" v-show="inProgress || extraProgressTime">
+                                    <div class="SharpUpload__progress-bar" role="progressbar" :style="{width:`${progress}%`}"
                                          :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             </div>
                             <div>
-                                <template v-if="!!originalImageSrc">
+                                <template v-if="!!originalImageSrc && !inProgress">
                                     <button type="button" class="SharpButton SharpButton--sm SharpButton--secondary" @click="onEditButtonClick" :disabled="readOnly">
                                         {{ l('form.upload.edit_button') }}
                                     </button>
@@ -104,11 +104,12 @@
 
         data() {
             return {
-                showProgressBar: false,
                 showEditModal: false,
                 croppedImg: null,
                 resized: false,
-                croppable: false
+                croppable: false,
+
+                extraProgressTime: false
             }
         },
         watch: {
@@ -120,6 +121,13 @@
             'file.status'(status) {
                 (status in this.statusFunction) && this.statusFunction[status]();
             },
+            inProgress(val) {
+                this.actionsBus.$emit('setActionsVisibility', val);
+                if(!val) {
+                    this.extraProgressTime = true;
+                    setTimeout(()=>this.extraProgressTime=false, 500);
+                }
+            }
         },
         computed: {
             file() {
@@ -141,8 +149,34 @@
                 res += size.toLocaleString();
                 return `${res} MB`;
             },
+            hasCrop() {
+                return !!(this.ratioX && this.ratioY);
+            },
+            operationFinished() {
+                return {
+                    crop: this.hasCrop ? !!this.croppedImg : null
+                }
+            },
+            operations() {
+                return Object.keys(this.operationFinished);
+            },
+            activeOperationsCount() {
+                return this.operations.filter(op => this.operationFinished[op] !== null).length;
+            },
+            operationFinishedCount() {
+                return this.operations.filter(op => this.operationFinished[op]).length;
+            },
             progress() {
-                return Math.floor(this.file.progress);
+                let delta = this.activeOperationsCount - this.operationFinishedCount;
+                let factor = (1-delta*.05);
+
+                return Math.floor(this.file.progress) * factor;
+            },
+            inProgress() {
+                return this.file &&
+                       this.file.status !== 'success' &&
+                       this.operationFinishedCount !== this.activeOperationsCount &&
+                       this.progress < 100;
             },
             statusFunction() {
                 return { error:this.onStatusError, success:this.onStatusSuccess, added:this.onStatusAdded }
@@ -154,15 +188,14 @@
             }
         },
         methods: {
+
             // status callbacks
             onStatusAdded() {
-                this.showProgressBar = true;
                 this.$emit('reset');
 
                 this.actionsBus.$emit('disable-submit');
             },
             onStatusError() {
-                this.showProgressBar = false;
                 let msg = this.file.errorMessage;
                 this.remove();
                 this.$emit('error', msg);
@@ -170,7 +203,6 @@
                 this.actionsBus.$emit('enable-submit');
             },
             onStatusSuccess() {
-                setTimeout(() => this.showProgressBar = false, 1000);
                 let data = {};
                 try {
                     data = JSON.parse(this.file.xhrResponse.responseText);

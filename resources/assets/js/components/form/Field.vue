@@ -33,14 +33,6 @@
 
             let { key, ...fieldProps } = this.fieldProps;
 
-//            console.log({
-//                fieldKey:this.fieldKey,
-//                fieldLayout:this.fieldLayout,
-//                value:this.value,
-//                locale:this.locale,
-//                uniqueIdentifier:this.uniqueIdentifier,
-//                ...fieldProps
-//            });
 
             return h(fieldCompName[this.fieldType],{
                 props : {
@@ -54,7 +46,7 @@
                 on: {
                     input: val => {
                         if(this.fieldProps.readOnly)
-                            util.warn(`SharpField '${this.fieldKey}', can't update because is readOnly`);
+                            util.log(`SharpField '${this.fieldKey}', can't update because is readOnly`);
                         else
                             this.updateData(this.fieldKey,val);
                     },

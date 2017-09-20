@@ -15,7 +15,7 @@
                     <sharp-grid :rows="[tab.columns]">
                         <!-- column -->
                         <template scope="column">
-                            <sharp-fields-layout v-if="fields" :layout="column.fields">
+                            <sharp-fields-layout v-if="fields" :layout="column.fields" :visible="fieldVisible">
                                 <!-- field -->
                                 <template scope="fieldLayout">
                                     <sharp-field-display :field-key="fieldLayout.key"
@@ -24,7 +24,8 @@
                                                          :field-layout="fieldLayout"
                                                          :locale="locale"
                                                          :error-identifier="fieldLayout.key"
-                                                         :update-data="updateData">
+                                                         :update-data="updateData"
+                                                         :update-visibility="updateVisibility">
                                     </sharp-field-display>
                                 </template>
                             </sharp-fields-layout>
@@ -93,7 +94,10 @@
                 authorizations: null,
 
                 errors:{},
-                locale: ''
+                locale: '',
+
+                fieldVisible: {},
+                curFieldsetId:0
             }
         },
         computed: {
@@ -132,17 +136,40 @@
                 }
                 else this.$set(this.data,key,value);
             },
+            updateVisibility(key, visibility) {
+                this.$set(this.fieldVisible, key, visibility);
+            },
             mount({fields, layout, data={}, config={}, authorizations={}}) {
                 this.fields = fields;
-                this.layout = layout;
+                this.layout = this.patchLayout(layout);
                 this.data = data;
                 this.config = config;
                 this.authorizations = authorizations;
+
+                this.fieldVisible = Object.keys(this.fields).reduce((res, fKey) => {
+                    res[fKey] = true;
+                    return res;
+                },{})
             },
             handleError({response}) {
                 if(response.status===422)
                     this.errors = response.data.errors || {};
             },
+
+            patchLayout(layout) {
+                let curFieldsetId = 0;
+                let mapFields = layout => {
+                    if(layout.legend)
+                        layout.id = `${curFieldsetId++}#${layout.legend}`;
+                    else if(layout.fields)
+                        layout.fields.forEach(row => {
+                            row.forEach(mapFields);
+                        });
+                };
+                layout.tabs.forEach(t => t.columns.forEach(mapFields));
+                return layout;
+            },
+
             init() {
                 if(this.independant) {
                     this.mount(this.props);
@@ -156,24 +183,24 @@
                 }
             },
 
-            setupActionBar() {
+            setupActionBar({ disable=false ,setLocale=true }={}) {
                 const showSubmitButton = this.isCreation ? this.authorizations.create : this.authorizations.update;
 
                 this.actionsBus.$emit('setup', {
                     locales: null, //this.config.locales,
-                    showSubmitButton,
-                    showDeleteButton: !this.isCreation && this.authorizations.delete,
+                    showSubmitButton: showSubmitButton && !disable,
+                    showDeleteButton: !this.isCreation && this.authorizations.delete && !disable,
                     showBackButton: this.isReadOnly,
                     opType: this.isCreation ? 'create' : 'update'
                 });
 
-                if(this.config.locales) {
+                if(setLocale && this.config.locales) {
                     this.actionsBus.$emit('localeChanged', this.config.locales[0]);
                 }
             },
             redirectToList({ restoreContext=true }={}) {
                 location.href = `/sharp/list/${this.entityKey}${restoreContext?'?restore-context=1':''}`
-            }
+            },
         },
         actions: {
             async submit({entityKey, endpoint, dataFormatter=noop }={}) {
@@ -213,6 +240,10 @@
 
                 this.data = {};
                 this.errors = {};
+            },
+
+            setActionsVisibility(v) {
+                this.setupActionBar({ disable:v, setLocale:false });
             }
         },
         created() {

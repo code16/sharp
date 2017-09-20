@@ -23,7 +23,7 @@
     export default {
         name: 'SharpLeftNav',
 
-        mixins: [Responsive('md')],
+        mixins: [Responsive('lg')],
 
         props: {
             categories: Array,

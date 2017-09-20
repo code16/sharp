@@ -4,7 +4,7 @@
   padding-bottom: 3rem;
 }
 
-@include media-breakpoint-up(md) {
+@include media-breakpoint-up($breakpoint-fixed-menu) {
   .SharpActionView {
     padding-left: rem(200px);
     padding-top: 5rem;

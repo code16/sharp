@@ -1,4 +1,4 @@
-@include media-breakpoint-up(md) {
+@include media-breakpoint-up($breakpoint-fixed-menu) {
   .SharpActionBar {
     &__bar {
       transition: left 300ms $bx--standard-easing;
