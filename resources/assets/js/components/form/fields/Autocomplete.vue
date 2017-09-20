@@ -3,7 +3,7 @@
          :class="[`SharpAutocomplete--${state}`,
                  {'SharpAutocomplete--remote':isRemote},
                  {'SharpAutocomplete--disabled':readOnly}]">
-        <div v-if="state=='valuated' && showValue" class="SharpAutocomplete__result-item">
+        <div v-if="state=='valuated' && value" class="SharpAutocomplete__result-item">
             <sharp-template name="ResultItem" :template="resultItemTemplate" :template-data="value"></sharp-template>
             <button class="SharpAutocomplete__result-item__close-button" type="button" @click="handleResetClick">
                 <svg class="SharpAutocomplete__result-item__close-icon"
@@ -103,7 +103,7 @@
                 query: '',
                 suggestions: this.localValues,
                 opened: false,
-                state: this.value ? 'valuated' : 'initial'
+                state: 'initial'
             }
         },
         computed: {
@@ -122,9 +122,6 @@
                     minQueryLength: this.searchMinChars,
                     searchKeys: this.searchKeys
                 });
-            },
-            showValue() {
-                return typeof this.value === 'object';
             }
         },
         methods: {
@@ -183,8 +180,11 @@
                 warn(`Autocomplete (key: ${this.fieldKey}) has local mode but no searchKeys, default set to ['value']`);
             }
 
-            if(!this.isRemote)
+            if(!this.isRemote) {
                 this.$emit('input', this.localValues.find(v => v[this.itemIdAttribute] === this.value));
+                this.$nextTick(()=>this.state = 'valuated');
+            }
+
         }
     }
 </script>

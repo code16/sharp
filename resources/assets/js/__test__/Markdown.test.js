@@ -197,7 +197,7 @@ describe('markdown-field', () => {
 
             $markdown.insertUploadImage(simplemde);
 
-            console.log(simplemde.value());
+            //console.log(simplemde.value());
         });
     });
 });

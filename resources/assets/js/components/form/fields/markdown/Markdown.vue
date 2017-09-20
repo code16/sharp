@@ -18,6 +18,7 @@
     export default {
         name: 'SharpMarkdown',
         props: {
+            fieldKey: String,
             value:{
                 type: Object,
                 default: ()=>{}
@@ -32,7 +33,7 @@
             readOnly: Boolean,
             locale:String
         },
-        inject: [ 'xsrfToken', 'actionsBus', '$tab' ],
+        inject: [ 'xsrfToken', 'actionsBus', '$tab', '$form' ],
 
         data() {
             return {
@@ -76,11 +77,13 @@
 
                 let $uploader = new MarkdownUpload({
                     provide: {
-                        actionsBus: this.actionsBus
+                        actionsBus: this.actionsBus,
+                        $form: this.$form
                     },
                     propsData: {
                         id, value,
                         ...this.innerComponents.upload,
+                        fieldKey: this.fieldKey,
                         xsrfToken: this.xsrfToken,
                     },
                 });

@@ -104,6 +104,7 @@ describe('autocomplete-field', ()=>{
             expect($autocomplete.state).toBe('searching');
 
             multiselect.$emit('select', {id:1, name:'Theodore Bagwell', alias:'T-Bag'});
+            console.log(multiselect.value);
             vm.value = {id:1, name:'Theodore Bagwell', alias:'T-Bag'};
             expect($autocomplete.state).toBe('valuated');
 
