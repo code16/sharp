@@ -25,7 +25,7 @@ Max file size allowed.
 
 Set a ratio constraint to uploaded images, formatted like this: `width:height`. For instance: `16:9`, or `1:1`.
 
-When a crop ratio is set, any uploaded picture will be auto-cropped (centered), and the "edit" tool will be accessible.
+When a crop ratio is set, any uploaded picture will be auto-cropped (centered).
 
 ### `setStorageDisk(string $storageDisk)`
 
@@ -55,7 +55,7 @@ Here's the documentation for the non built-in solution:
 
 ### `toFront`
 
-The front expects an array with 3 keys:
+The front expects an array with three keys:
 
     [
         "name" => "", // Relative file path
@@ -70,9 +70,9 @@ The formatter can't handle it automatically, it too project-sepecific. You'll ha
         return $this->setCustomTransformer("picture", 
             function($value, $spaceship, $attribute) {
                 return [
-				    "name" => $spaceship->picture->name,
-				    "thumbnail" => [...],
-				    "size" => $spaceship->picture->size,
+                    "name" => $spaceship->picture->name,
+                    "thumbnail" => [...],
+                    "size" => $spaceship->picture->size,
                 ];
             })
             ->transform(
@@ -84,7 +84,7 @@ The formatter can't handle it automatically, it too project-sepecific. You'll ha
 
 There are four cases:
 
-- newly uploaded file
+#### newly uploaded file
 
 The formatter will perform any transformation, store the file on the configured location, and return an array like this:
 
@@ -110,7 +110,7 @@ Using the `Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater`, you will pr
     }
 
 
-- existing transformed file 
+#### existing transformed file 
 
 In this case, the file was already stored, but was transformed (cropped, or rotated). The formatter will transform the file, store the result and simply return and array with one key:
 
@@ -121,11 +121,11 @@ In this case, the file was already stored, but was transformed (cropped, or rota
 Then you'll have to catch that if needed (to destroy all previous generated thumbnails for instance).
 
 
-- deleted file
+#### deleted file
 
-The formatter will return null (without deleting the file from the storage).
+The formatter will return null (note that the file **will not** be deleted from the storage).
 
 
-- existing and unchanged file
+#### existing and unchanged file
 
 The formatter will return an empty array.

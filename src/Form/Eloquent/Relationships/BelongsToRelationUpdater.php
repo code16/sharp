@@ -21,13 +21,17 @@ class BelongsToRelationUpdater
                     $subAttribute => $value
                 ]);
 
-            } elseif($value) {
-                $instance->$attribute()->create([
-                    $subAttribute => $value
-                ]);
+                return;
             }
 
-            return;
+            // Creation case
+            if(!$value) {
+                return;
+            }
+
+            $value = $instance->$attribute()->create([
+                $subAttribute => $value
+            ]);
         }
 
         $instance->$attribute()->associate($value);

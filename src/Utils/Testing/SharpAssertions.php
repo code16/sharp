@@ -92,8 +92,7 @@ trait SharpAssertions
      */
     protected function getSharpForm(string $entityKey, $instanceId = null)
     {
-        return $this->json(
-            'GET',
+        return $this->getJson(
             $instanceId
                 ? route("code16.sharp.api.form.edit", [$entityKey, $instanceId])
                 : route("code16.sharp.api.form.create", $entityKey)
@@ -108,8 +107,8 @@ trait SharpAssertions
      */
     protected function updateSharpForm(string $entityKey, $instanceId, array $data)
     {
-        return $this->json(
-            'POST', route("code16.sharp.api.form.update", [$entityKey, $instanceId]),
+        return $this->postJson(
+            route("code16.sharp.api.form.update", [$entityKey, $instanceId]),
             $data
         );
     }
@@ -121,9 +120,41 @@ trait SharpAssertions
      */
     protected function storeSharpForm(string $entityKey, array $data)
     {
-        return $this->json(
-            'POST', route("code16.sharp.api.form.store", $entityKey),
+        return $this->postJson(
+            route("code16.sharp.api.form.store", $entityKey),
             $data
+        );
+    }
+
+    /**
+     * @param string $entityKey
+     * @param $instanceId
+     * @param string $commandKey
+     * @param array $data
+     * @return mixed
+     */
+    protected function callInstanceCommand(string $entityKey, $instanceId, string $commandKey, array $data = [])
+    {
+        return $this->postJson(
+            route(
+                "code16.sharp.api.list.command.instance",
+                compact('entityKey', 'instanceId', 'commandKey')
+            ),
+            ["data" => $data]
+        );
+    }
+
+    /**
+     * @param string $entityKey
+     * @param string $commandKey
+     * @param array $data
+     * @return mixed
+     */
+    protected function callEntityCommand(string $entityKey, string $commandKey, array $data = [])
+    {
+        return $this->postJson(
+            route("code16.sharp.api.list.command.entity", compact('entityKey', 'commandKey')),
+            ["data" => $data]
         );
     }
 

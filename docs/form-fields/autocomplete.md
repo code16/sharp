@@ -27,6 +27,13 @@ Default: `1`
 
 The endpoint to hit with mode=remote.
 
+If this endpoint is yours (`remote` mode here is useful to avoid loading a lot of data in the view), you can add the `sharp_auth` middleware to the API route to handle authentication and prevent this API endpoint to be called by non-sharp users:
+
+    Route::get('/api/sharp/clients')
+        ->middleware('sharp_auth')
+        ->uses("MySharpApiClientController@index")
+
+
 ### `setRemoteSearchAttribute(string $remoteSearchAttribute)`
 
 The attribute name sent to the remote endpoint as search key.
