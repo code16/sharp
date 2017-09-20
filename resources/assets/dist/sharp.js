@@ -46394,21 +46394,18 @@ if (false) {(function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_typeof__ = __webpack_require__(26);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_typeof___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_typeof__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Template_vue__ = __webpack_require__(61);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Loading_vue__ = __webpack_require__(162);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vue_multiselect__ = __webpack_require__(136);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vue_multiselect___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_vue_multiselect__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_models_SearchStrategy__ = __webpack_require__(395);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_axios__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__util__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__mixins__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__mixins_Localization__ = __webpack_require__(34);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Template_vue__ = __webpack_require__(61);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Loading_vue__ = __webpack_require__(162);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_multiselect__ = __webpack_require__(136);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_multiselect___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_vue_multiselect__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_models_SearchStrategy__ = __webpack_require__(395);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_axios__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__util__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__mixins__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__mixins_Localization__ = __webpack_require__(34);
 
 
 var _components;
@@ -46470,10 +46467,10 @@ var _components;
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpAutocomplete',
     components: (_components = {
-        Multiselect: __WEBPACK_IMPORTED_MODULE_4_vue_multiselect___default.a
-    }, __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_2__Template_vue__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_2__Template_vue__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_3__Loading_vue__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_3__Loading_vue__["a" /* default */]), _components),
+        Multiselect: __WEBPACK_IMPORTED_MODULE_3_vue_multiselect___default.a
+    }, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_1__Template_vue__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_1__Template_vue__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_2__Loading_vue__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_2__Loading_vue__["a" /* default */]), _components),
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_8__mixins__["e" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_7__mixins__["e" /* Localization */]],
 
     props: {
         fieldKey: String,
@@ -46490,7 +46487,7 @@ var _components;
         placeholder: {
             type: String,
             default: function _default() {
-                return Object(__WEBPACK_IMPORTED_MODULE_9__mixins_Localization__["b" /* lang */])('form.multiselect.placeholder');
+                return Object(__WEBPACK_IMPORTED_MODULE_8__mixins_Localization__["b" /* lang */])('form.multiselect.placeholder');
             }
         },
         remoteEndpoint: String,
@@ -46522,7 +46519,7 @@ var _components;
             query: '',
             suggestions: this.localValues,
             opened: false,
-            state: this.value ? 'valuated' : 'initial'
+            state: 'initial'
         };
     },
 
@@ -46537,14 +46534,11 @@ var _components;
             return this.isRemote ? this.query.length < this.searchMinChars : false;
         },
         searchStrategy: function searchStrategy() {
-            return new __WEBPACK_IMPORTED_MODULE_5__app_models_SearchStrategy__["a" /* default */]({
+            return new __WEBPACK_IMPORTED_MODULE_4__app_models_SearchStrategy__["a" /* default */]({
                 list: this.localValues,
                 minQueryLength: this.searchMinChars,
                 searchKeys: this.searchKeys
             });
-        },
-        showValue: function showValue() {
-            return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_typeof___default()(this.value) === 'object';
         }
     },
     methods: {
@@ -46557,9 +46551,9 @@ var _components;
             if (this.isRemote) {
                 this.state = 'loading';
                 var call = function call(method, endpoint, attribute) {
-                    return method === 'GET' ? __WEBPACK_IMPORTED_MODULE_6_axios___default.a.get(endpoint, {
-                        params: __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()({}, attribute, query)
-                    }) : __WEBPACK_IMPORTED_MODULE_6_axios___default.a.post(endpoint, __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()({}, attribute, query));
+                    return method === 'GET' ? __WEBPACK_IMPORTED_MODULE_5_axios___default.a.get(endpoint, {
+                        params: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()({}, attribute, query)
+                    }) : __WEBPACK_IMPORTED_MODULE_5_axios___default.a.post(endpoint, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()({}, attribute, query));
                 };
                 call(this.remoteMethod, this.remoteEndpoint, this.remoteSearchAttribute).then(function (response) {
                     _this.state = 'searching';
@@ -46595,12 +46589,17 @@ var _components;
         var _this3 = this;
 
         if (this.$props.mode === 'local' && !this.$options.propsData.searchKeys) {
-            Object(__WEBPACK_IMPORTED_MODULE_7__util__["d" /* warn */])('Autocomplete (key: ' + this.fieldKey + ') has local mode but no searchKeys, default set to [\'value\']');
+            Object(__WEBPACK_IMPORTED_MODULE_6__util__["d" /* warn */])('Autocomplete (key: ' + this.fieldKey + ') has local mode but no searchKeys, default set to [\'value\']');
         }
 
-        if (!this.isRemote) this.$emit('input', this.localValues.find(function (v) {
-            return v[_this3.itemIdAttribute] === _this3.value;
-        }));
+        if (!this.isRemote) {
+            this.$emit('input', this.localValues.find(function (v) {
+                return v[_this3.itemIdAttribute] === _this3.value;
+            }));
+            this.$nextTick(function () {
+                return _this3.state = 'valuated';
+            });
+        }
     }
 });
 
@@ -47703,7 +47702,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         'SharpAutocomplete--disabled': _vm.readOnly
       }
     ]
-  }, [(_vm.state == 'valuated' && _vm.showValue) ? _c('div', {
+  }, [(_vm.state == 'valuated' && _vm.value) ? _c('div', {
     staticClass: "SharpAutocomplete__result-item"
   }, [_c('sharp-template', {
     attrs: {
@@ -47997,6 +47996,7 @@ var noop = function noop() {};
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpMarkdown',
     props: {
+        fieldKey: String,
         value: {
             type: Object,
             default: function _default() {}
@@ -48011,7 +48011,7 @@ var noop = function noop() {};
         readOnly: Boolean,
         locale: String
     },
-    inject: ['xsrfToken', 'actionsBus', '$tab'],
+    inject: ['xsrfToken', 'actionsBus', '$tab', '$form'],
 
     data: function data() {
         return {
@@ -48068,11 +48068,13 @@ var noop = function noop() {};
 
             var $uploader = new __WEBPACK_IMPORTED_MODULE_4__MarkdownUpload__["a" /* default */]({
                 provide: {
-                    actionsBus: this.actionsBus
+                    actionsBus: this.actionsBus,
+                    $form: this.$form
                 },
                 propsData: __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends___default()({
                     id: id, value: value
                 }, this.innerComponents.upload, {
+                    fieldKey: this.fieldKey,
                     xsrfToken: this.xsrfToken
                 })
             });
@@ -55547,6 +55549,7 @@ if (false) {(function () {
 //
 //
 //
+//
 
 
 
@@ -55558,6 +55561,7 @@ if (false) {(function () {
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0_vue___default.a.extend({
     mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins__["i" /* UploadXSRF */]],
     props: {
+        fieldKey: String,
         id: Number,
         value: Object,
 
@@ -55645,6 +55649,12 @@ if (false) {(function () {
 
 
 
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -55892,14 +55902,14 @@ if (false) {(function () {
         },
         download: function () {
             var _ref = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_babel_runtime_regenerator___default.a.mark(function _callee() {
-                var _ref2, data, $link;
+                var _ref2, data, headers, $link, blob;
 
                 return __WEBPACK_IMPORTED_MODULE_1_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
                             case 0:
                                 if (this.value.uploaded) {
-                                    _context.next = 9;
+                                    _context.next = 12;
                                     break;
                                 }
 
@@ -55909,13 +55919,16 @@ if (false) {(function () {
                             case 3:
                                 _ref2 = _context.sent;
                                 data = _ref2.data;
+                                headers = _ref2.headers;
                                 $link = this.$refs.dlLink;
+                                blob = new Blob([data], { type: headers['content-type'] });
 
-                                $link.href = URL.createObjectURL(new Blob([data]));
+                                console.log(blob);
+                                $link.href = URL.createObjectURL(blob);
                                 $link.download = this.fileName;
                                 $link.click();
 
-                            case 9:
+                            case 12:
                             case 'end':
                                 return _context.stop();
                         }
@@ -64667,21 +64680,19 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   })]) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "SharpUpload__infos"
   }, [_c('div', [_c('label', {
-    staticClass: "SharpUpload__info"
+    staticClass: "SharpUpload__filename"
   }, [_vm._v(_vm._s(_vm.fileName))]), _vm._v(" "), _c('div', {
-    staticClass: "SharpUpload__info"
-  }, [_vm._v(_vm._s(_vm.size))]), _vm._v(" "), _c('div', {
+    staticClass: "SharpUpload__info mt-2"
+  }, [_vm._v("\n                                " + _vm._s(_vm.size) + "\n                            ")]), _vm._v(" "), _c('div', {
     directives: [{
       name: "show",
       rawName: "v-show",
       value: (_vm.canDownload),
       expression: "canDownload"
     }],
-    staticClass: "mt-2"
+    staticClass: "SharpUpload__info mt-3"
   }, [_c('a', {
-    staticStyle: {
-      "font-size": "smaller"
-    },
+    staticClass: "SharpUpload__download-link",
     attrs: {
       "href": ""
     },
@@ -64691,7 +64702,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         _vm.download($event)
       }
     }
-  }, [_vm._v(_vm._s(_vm.l('form.upload.download_link')))])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("\n                                    " + _vm._s(_vm.l('form.upload.download_link')) + "\n                                ")])]), _vm._v(" "), _c('div', {
     directives: [{
       name: "show",
       rawName: "v-show",
@@ -64852,6 +64863,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     ref: "vueclip",
     staticClass: "SharpMarkdownUpload",
     attrs: {
+      "field-key": _vm.fieldKey,
       "options": _vm.options,
       "value": _vm.value,
       "ratioX": _vm.ratioX,
