@@ -14,9 +14,15 @@
                         </div>
                         <div class="SharpUpload__infos">
                             <div>
-                                <label class="SharpUpload__info">{{ fileName }}</label>
-                                <div class="SharpUpload__info">{{ size }}</div>
-                                <div class="mt-2" v-show="canDownload"><a @click.prevent="download" style="font-size:smaller" href="">{{ l('form.upload.download_link') }}</a></div>
+                                <label class="SharpUpload__filename">{{ fileName }}</label>
+                                <div class="SharpUpload__info mt-2">
+                                    {{ size }}
+                                </div>
+                                <div class="SharpUpload__info mt-3" v-show="canDownload">
+                                    <a class="SharpUpload__download-link" @click.prevent="download" href="">
+                                        {{ l('form.upload.download_link') }}
+                                    </a>
+                                </div>
                                 <div class="SharpUpload__progress mt-2" v-show="inProgress || extraProgressTime">
                                     <div class="SharpUpload__progress-bar" role="progressbar" :style="{width:`${progress}%`}"
                                          :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"></div>

@@ -77,7 +77,17 @@
       }
 
       .SharpUpload__info {
+        @include font-size('12');
+      }
+
+      .SharpUpload__download-link {
+        @include font-size('12');
+        text-decoration: none;
+      }
+
+      .SharpUpload__filename {
         @include font-size('14');
+        font-weight: 500;
       }
     }
   }
