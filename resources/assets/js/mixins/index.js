@@ -9,6 +9,7 @@ import ReadOnlyFields from './ReadOnlyFields';
 import QueryTree from './QueryTree';
 import AutoScroll from './AutoScroll';
 import Responsive from './Responsive';
+import ConfigNode from './ConfigNode';
 
 export {
     testableForm,
@@ -21,5 +22,6 @@ export {
     ReadOnlyFields,
     QueryTree,
     AutoScroll,
-    Responsive
+    Responsive,
+    ConfigNode
 }

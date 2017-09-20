@@ -18,7 +18,7 @@
     export default {
         name: 'SharpMarkdown',
         props: {
-            fieldKey: String,
+            fieldConfigIdentifier: String,
             value:{
                 type: Object,
                 default: ()=>{}
@@ -83,7 +83,7 @@
                     propsData: {
                         id, value,
                         ...this.innerComponents.upload,
-                        fieldKey: this.fieldKey,
+                        downloadId: this.fieldConfigIdentifier,
                         xsrfToken: this.xsrfToken,
                     },
                 });

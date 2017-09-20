@@ -1,5 +1,5 @@
 <template>
-    <sharp-vue-clip :field-key="fieldKey"
+    <sharp-vue-clip :download-id="fieldConfigIdentifier"
                     :options="options"
                     :value="value"
                     :ratioX="ratioX"
@@ -28,7 +28,7 @@
         inject: [ '$field', 'xsrfToken' ],
 
         props: {
-            fieldKey: String,
+            fieldConfigIdentifier: String,
             value: Object,
 
             fileFilter: Array,

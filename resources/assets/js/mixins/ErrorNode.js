@@ -1,4 +1,7 @@
+import Identifier from './utils/Identifier';
+
 export default {
+    mixins: [Identifier],
     props:{
         errorIdentifier:{
             type:[String, Number],
@@ -7,16 +10,7 @@ export default {
     },
     computed: {
         mergedErrorIdentifier() {
-            let errorComp = this.$parent;
-            while(errorComp && errorComp.mergedErrorIdentifier == null) {
-                errorComp = errorComp.$parent;
-            }
-            let ascendantIdentifier = '';
-            if(errorComp) {
-                ascendantIdentifier = errorComp.mergedErrorIdentifier+'.';
-            }
-
-            return `${ascendantIdentifier}${this.errorIdentifier}`;
+            return this.getMergedIdentifier('mergedErrorIdentifier', this.errorIdentifier);
         }
     }
 }
