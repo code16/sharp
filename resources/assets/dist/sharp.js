@@ -55902,33 +55902,32 @@ if (false) {(function () {
         },
         download: function () {
             var _ref = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_babel_runtime_regenerator___default.a.mark(function _callee() {
-                var _ref2, data, headers, $link, blob;
+                var _ref2, data, $link;
 
                 return __WEBPACK_IMPORTED_MODULE_1_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
                             case 0:
                                 if (this.value.uploaded) {
-                                    _context.next = 12;
+                                    _context.next = 10;
                                     break;
                                 }
 
                                 _context.next = 3;
-                                return __WEBPACK_IMPORTED_MODULE_10_axios___default.a.post(this.downloadLink, { fileName: this.value.name });
+                                return __WEBPACK_IMPORTED_MODULE_10_axios___default.a.post(this.downloadLink, { fileName: this.value.name }, { responseType: 'blob' });
 
                             case 3:
                                 _ref2 = _context.sent;
                                 data = _ref2.data;
-                                headers = _ref2.headers;
-                                $link = this.$refs.dlLink;
-                                blob = new Blob([data], { type: headers['content-type'] });
 
-                                console.log(blob);
-                                $link.href = URL.createObjectURL(blob);
+                                console.log(data);
+                                $link = this.$refs.dlLink;
+
+                                $link.href = URL.createObjectURL(data);
                                 $link.download = this.fileName;
                                 $link.click();
 
-                            case 12:
+                            case 10:
                             case 'end':
                                 return _context.stop();
                         }
