@@ -24,6 +24,7 @@
                                                          :field-layout="fieldLayout"
                                                          :locale="locale"
                                                          :error-identifier="fieldLayout.key"
+                                                         :config-identifier="fieldLayout.key"
                                                          :update-data="updateData"
                                                          :update-visibility="updateVisibility">
                                     </sharp-field-display>
@@ -65,6 +66,7 @@
             [FieldsLayout.name]: FieldsLayout,
             [Grid.name]: Grid,
         },
+
 
         props:{
             entityKey: String,

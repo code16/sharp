@@ -17,9 +17,7 @@
                                 <label class="SharpUpload__filename">{{ fileName }}</label>
                                 <div class="SharpUpload__info mt-2">
                                     {{ size }}
-                                </div>
-                                <div class="SharpUpload__info mt-3" v-show="canDownload">
-                                    <a class="SharpUpload__download-link" @click.prevent="download" href="">
+                                    <a v-show="canDownload" class="SharpUpload__download-link ml-2" @click.prevent="download" href="">
                                         {{ l('form.upload.download_link') }}
                                     </a>
                                 </div>
@@ -105,7 +103,7 @@
         mixins: [ Localization ],
 
         props: {
-            fieldKey: String,
+            downloadId: String,
             ratioX: Number,
             ratioY: Number,
             value: Object,
@@ -202,7 +200,7 @@
                 return this.value && !this.value.uploaded;
             },
             downloadLink() {
-                return `${this.$form.downloadLinkBase}/${this.fieldKey}`;
+                return `${this.$form.downloadLinkBase}/${this.downloadId}`;
             }
         },
         methods: {

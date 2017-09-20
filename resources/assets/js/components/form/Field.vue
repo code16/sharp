@@ -5,6 +5,7 @@
     export default {
         name:'SharpField',
         components: Fields,
+        inheritAttrs: false,
 
         provide() {
             return {
@@ -20,6 +21,7 @@
             value: [String, Number, Boolean, Object, Array],
             locale: String,
             uniqueIdentifier: String,
+            fieldConfigIdentifier: String,
             updateData: Function
         },
         mounted() {
@@ -40,7 +42,8 @@
                     fieldLayout:this.fieldLayout,
                     value:this.value,
                     locale:this.locale,
-                    uniqueIdentifier:this.uniqueIdentifier,
+                    uniqueIdentifier: this.uniqueIdentifier,
+                    fieldConfigIdentifier: this.fieldConfigIdentifier,
                     ...fieldProps
                 },
                 on: {

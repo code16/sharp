@@ -10309,17 +10309,20 @@ module.exports = Vue$3;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__QueryTree__ = __webpack_require__(302);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__AutoScroll__ = __webpack_require__(303);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Responsive__ = __webpack_require__(314);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return __WEBPACK_IMPORTED_MODULE_0__testable_form__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return __WEBPACK_IMPORTED_MODULE_1__testable_dashboard__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_2__ErrorNode__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_3__Focusable__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return __WEBPACK_IMPORTED_MODULE_4__UploadXSRF__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_5__Localization__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__ConfigNode__ = __webpack_require__(724);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return __WEBPACK_IMPORTED_MODULE_0__testable_form__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return __WEBPACK_IMPORTED_MODULE_1__testable_dashboard__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_2__ErrorNode__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_3__Focusable__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return __WEBPACK_IMPORTED_MODULE_4__UploadXSRF__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_5__Localization__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_6__ActionEvents__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_7__ReadOnlyFields__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_8__QueryTree__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return __WEBPACK_IMPORTED_MODULE_7__ReadOnlyFields__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_8__QueryTree__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_9__AutoScroll__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return __WEBPACK_IMPORTED_MODULE_10__Responsive__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return __WEBPACK_IMPORTED_MODULE_10__Responsive__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_11__ConfigNode__["a"]; });
+
 
 
 
@@ -34168,7 +34171,7 @@ var _components;
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpActionBarForm',
-    mixins: [__WEBPACK_IMPORTED_MODULE_2__ActionBarMixin__["a" /* default */], __WEBPACK_IMPORTED_MODULE_6__mixins__["a" /* ActionEvents */], __WEBPACK_IMPORTED_MODULE_6__mixins__["e" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_2__ActionBarMixin__["a" /* default */], __WEBPACK_IMPORTED_MODULE_6__mixins__["a" /* ActionEvents */], __WEBPACK_IMPORTED_MODULE_6__mixins__["f" /* Localization */]],
     components: (_components = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_1__ActionBar__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_1__ActionBar__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_3__LocaleSelector__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_3__LocaleSelector__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_4__dropdown__["a" /* Dropdown */].name, __WEBPACK_IMPORTED_MODULE_4__dropdown__["a" /* Dropdown */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_4__dropdown__["b" /* DropdownItem */].name, __WEBPACK_IMPORTED_MODULE_4__dropdown__["b" /* DropdownItem */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, 'Collapse', __WEBPACK_IMPORTED_MODULE_5__Collapse__["a" /* default */]), _components),
     data: function data() {
         return {
@@ -36842,7 +36845,11 @@ var widgets = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_Identifier__ = __webpack_require__(723);
+
+
 /* harmony default export */ __webpack_exports__["a"] = ({
+    mixins: [__WEBPACK_IMPORTED_MODULE_0__utils_Identifier__["a" /* default */]],
     props: {
         errorIdentifier: {
             type: [String, Number],
@@ -36851,16 +36858,7 @@ var widgets = {
     },
     computed: {
         mergedErrorIdentifier: function mergedErrorIdentifier() {
-            var errorComp = this.$parent;
-            while (errorComp && errorComp.mergedErrorIdentifier == null) {
-                errorComp = errorComp.$parent;
-            }
-            var ascendantIdentifier = '';
-            if (errorComp) {
-                ascendantIdentifier = errorComp.mergedErrorIdentifier + '.';
-            }
-
-            return '' + ascendantIdentifier + this.errorIdentifier;
+            return this.getMergedIdentifier('mergedErrorIdentifier', this.errorIdentifier);
         }
     }
 });
@@ -38745,7 +38743,7 @@ var _components;
     name: 'SharpActionBarList',
     components: (_components = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_1__ActionBar__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_1__ActionBar__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_4__form_fields_Text__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_4__form_fields_Text__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_5__list_FilterSelect__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_5__list_FilterSelect__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_6__dropdown_Dropdown__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_6__dropdown_Dropdown__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_7__dropdown_DropdownItem__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_7__dropdown_DropdownItem__["a" /* default */]), _components),
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_2__ActionBarMixin__["a" /* default */], __WEBPACK_IMPORTED_MODULE_3__mixins__["a" /* ActionEvents */], __WEBPACK_IMPORTED_MODULE_3__mixins__["e" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_2__ActionBarMixin__["a" /* default */], __WEBPACK_IMPORTED_MODULE_3__mixins__["a" /* ActionEvents */], __WEBPACK_IMPORTED_MODULE_3__mixins__["f" /* Localization */]],
 
     data: function data() {
         return {
@@ -38833,7 +38831,7 @@ var _components;
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpText',
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins__["d" /* Focusable */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins__["e" /* Focusable */]],
 
     props: {
         value: [String, Number],
@@ -39739,7 +39737,7 @@ if (false) {
         return h(__WEBPACK_IMPORTED_MODULE_3__vendor_bootstrap_vue_components_modal__["a" /* default */], ctx.data, [h({
             name: 'SharpModalTitle',
             template: '\n                <div>\n                    <h5 class="SharpModal__heading">\n                        <slot name="title">{{title}}</slot>\n                    </h5>\n                    <button v-if="!okOnly" class="SharpModal__close" type="button" @click="hide">\n                        <svg class="SharpModal__close-icon" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd">\n                          <path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>\n                        </svg>\n                    </button>\n                </div>\n                ',
-            mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins__["f" /* QueryTree */]],
+            mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins__["g" /* QueryTree */]],
             props: { title: String, okOnly: Boolean },
             computed: {
                 $modal: function $modal() {
@@ -44062,6 +44060,7 @@ var _components;
 //
 //
 //
+//
 
 
 
@@ -44082,7 +44081,7 @@ var noop = function noop() {};
     name: 'SharpForm',
     extends: __WEBPACK_IMPORTED_MODULE_6__DynamicViewMixin__["a" /* default */],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_5__mixins__["k" /* testableForm */], __WEBPACK_IMPORTED_MODULE_5__mixins__["a" /* ActionEvents */], Object(__WEBPACK_IMPORTED_MODULE_5__mixins__["g" /* ReadOnlyFields */])('fields'), __WEBPACK_IMPORTED_MODULE_5__mixins__["e" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_5__mixins__["l" /* testableForm */], __WEBPACK_IMPORTED_MODULE_5__mixins__["a" /* ActionEvents */], Object(__WEBPACK_IMPORTED_MODULE_5__mixins__["h" /* ReadOnlyFields */])('fields'), __WEBPACK_IMPORTED_MODULE_5__mixins__["f" /* Localization */]],
 
     components: (_components = {}, __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_7__TabbedLayout__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_7__TabbedLayout__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_9__FieldsLayout_vue__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_9__FieldsLayout_vue__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_8__Grid__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_8__Grid__["a" /* default */]), _components),
 
@@ -45783,6 +45782,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
                         "field-layout": fieldLayout,
                         "locale": _vm.locale,
                         "error-identifier": fieldLayout.key,
+                        "config-identifier": fieldLayout.key,
                         "update-data": _vm.updateData,
                         "update-visibility": _vm.updateVisibility
                       }
@@ -46031,16 +46031,13 @@ if (false) {(function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_objectWithoutProperties__ = __webpack_require__(31);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_objectWithoutProperties___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_objectWithoutProperties__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Field__ = __webpack_require__(386);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mixins_index__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__util__ = __webpack_require__(15);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Field__ = __webpack_require__(386);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mixins_index__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__util__ = __webpack_require__(15);
 
 
 //
@@ -46075,13 +46072,13 @@ if (false) {(function () {
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpFieldContainer',
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins_index__["c" /* ErrorNode */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_3__mixins_index__["d" /* ErrorNode */], __WEBPACK_IMPORTED_MODULE_3__mixins_index__["c" /* ConfigNode */]],
 
-    components: __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()({}, __WEBPACK_IMPORTED_MODULE_3__Field__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_3__Field__["a" /* default */]),
+    components: __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()({}, __WEBPACK_IMPORTED_MODULE_2__Field__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_2__Field__["a" /* default */]),
 
     inject: ['$tab', '$form'],
 
-    props: __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, __WEBPACK_IMPORTED_MODULE_3__Field__["a" /* default */].props, {
+    props: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, __WEBPACK_IMPORTED_MODULE_2__Field__["a" /* default */].props, {
 
         label: String,
         helpMessage: String
@@ -46107,7 +46104,7 @@ if (false) {(function () {
                 } else if (Array.isArray(error)) {
                     this.setError(error[0]);
                 } else {
-                    __WEBPACK_IMPORTED_MODULE_5__util__["a" /* error */]('FieldContainer : Not processable error "' + this.mergedErrorIdentifier + '" : ', error);
+                    __WEBPACK_IMPORTED_MODULE_4__util__["a" /* error */]('FieldContainer : Not processable error "' + this.mergedErrorIdentifier + '" : ', error);
                 }
             }
         }
@@ -46123,12 +46120,9 @@ if (false) {(function () {
             return this.fieldProps.extraStyle;
         },
         exposedProps: function exposedProps() {
-            var _$props = this.$props,
-                errorIdentifier = _$props.errorIdentifier,
-                exposedProps = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_objectWithoutProperties___default()(_$props, ['errorIdentifier']);
-
-            return __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, exposedProps, {
-                uniqueIdentifier: this.mergedErrorIdentifier
+            return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, this.$props, {
+                uniqueIdentifier: this.mergedErrorIdentifier,
+                fieldConfigIdentifier: this.mergedConfigIdentifier
             });
         }
     },
@@ -46231,6 +46225,7 @@ if (false) {(function () {
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpField',
     components: __WEBPACK_IMPORTED_MODULE_2__fields_index__["b" /* default */],
+    inheritAttrs: false,
 
     provide: function provide() {
         return {
@@ -46247,6 +46242,7 @@ if (false) {(function () {
         value: [String, Number, Boolean, Object, Array],
         locale: String,
         uniqueIdentifier: String,
+        fieldConfigIdentifier: String,
         updateData: Function
     },
     mounted: function mounted() {
@@ -46270,7 +46266,8 @@ if (false) {(function () {
                 fieldLayout: this.fieldLayout,
                 value: this.value,
                 locale: this.locale,
-                uniqueIdentifier: this.uniqueIdentifier
+                uniqueIdentifier: this.uniqueIdentifier,
+                fieldConfigIdentifier: this.fieldConfigIdentifier
             }, fieldProps),
             on: {
                 input: function input(val) {
@@ -46470,7 +46467,7 @@ var _components;
         Multiselect: __WEBPACK_IMPORTED_MODULE_3_vue_multiselect___default.a
     }, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_1__Template_vue__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_1__Template_vue__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_2__Loading_vue__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_2__Loading_vue__["a" /* default */]), _components),
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_7__mixins__["e" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_7__mixins__["f" /* Localization */]],
 
     props: {
         fieldKey: String,
@@ -47996,7 +47993,7 @@ var noop = function noop() {};
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpMarkdown',
     props: {
-        fieldKey: String,
+        fieldConfigIdentifier: String,
         value: {
             type: Object,
             default: function _default() {}
@@ -48074,7 +48071,7 @@ var noop = function noop() {};
                 propsData: __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends___default()({
                     id: id, value: value
                 }, this.innerComponents.upload, {
-                    fieldKey: this.fieldKey,
+                    downloadId: this.fieldConfigIdentifier,
                     xsrfToken: this.xsrfToken
                 })
             });
@@ -55559,9 +55556,9 @@ if (false) {(function () {
 
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0_vue___default.a.extend({
-    mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins__["i" /* UploadXSRF */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins__["j" /* UploadXSRF */]],
     props: {
-        fieldKey: String,
+        downloadId: String,
         id: Number,
         value: Object,
 
@@ -55729,8 +55726,6 @@ if (false) {(function () {
 //
 //
 //
-//
-//
 
 
 
@@ -55751,10 +55746,10 @@ if (false) {(function () {
 
     inject: ['actionsBus', '$form'],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_9__mixins__["e" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_9__mixins__["f" /* Localization */]],
 
     props: {
-        fieldKey: String,
+        downloadId: String,
         ratioX: Number,
         ratioY: Number,
         value: Object,
@@ -55861,7 +55856,7 @@ if (false) {(function () {
             return this.value && !this.value.uploaded;
         },
         downloadLink: function downloadLink() {
-            return this.$form.downloadLinkBase + '/' + this.fieldKey;
+            return this.$form.downloadLinkBase + '/' + this.downloadId;
         }
     },
     methods: {
@@ -64682,16 +64677,14 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     staticClass: "SharpUpload__filename"
   }, [_vm._v(_vm._s(_vm.fileName))]), _vm._v(" "), _c('div', {
     staticClass: "SharpUpload__info mt-2"
-  }, [_vm._v("\n                                " + _vm._s(_vm.size) + "\n                            ")]), _vm._v(" "), _c('div', {
+  }, [_vm._v("\n                                " + _vm._s(_vm.size) + "\n                                "), _c('a', {
     directives: [{
       name: "show",
       rawName: "v-show",
       value: (_vm.canDownload),
       expression: "canDownload"
     }],
-    staticClass: "SharpUpload__info mt-3"
-  }, [_c('a', {
-    staticClass: "SharpUpload__download-link",
+    staticClass: "SharpUpload__download-link ml-2",
     attrs: {
       "href": ""
     },
@@ -64862,7 +64855,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     ref: "vueclip",
     staticClass: "SharpMarkdownUpload",
     attrs: {
-      "field-key": _vm.fieldKey,
+      "download-id": _vm.downloadId,
       "options": _vm.options,
       "value": _vm.value,
       "ratioX": _vm.ratioX,
@@ -65097,11 +65090,11 @@ if (false) {(function () {
         SharpVueClip: __WEBPACK_IMPORTED_MODULE_1__VueClip__["a" /* default */]
     },
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins__["i" /* UploadXSRF */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins__["j" /* UploadXSRF */]],
     inject: ['$field', 'xsrfToken'],
 
     props: {
-        fieldKey: String,
+        fieldConfigIdentifier: String,
         value: Object,
 
         fileFilter: Array,
@@ -65147,7 +65140,7 @@ if (false) {(function () {
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('sharp-vue-clip', {
     attrs: {
-      "field-key": _vm.fieldKey,
+      "download-id": _vm.fieldConfigIdentifier,
       "options": _vm.options,
       "value": _vm.value,
       "ratioX": _vm.ratioX,
@@ -65687,7 +65680,7 @@ if (false) {(function () {
 
     inject: ['$field'],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_2__mixins__["d" /* Focusable */], __WEBPACK_IMPORTED_MODULE_2__mixins__["e" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_2__mixins__["e" /* Focusable */], __WEBPACK_IMPORTED_MODULE_2__mixins__["f" /* Localization */]],
 
     props: {
         value: {
@@ -67452,6 +67445,7 @@ var _components;
 //
 //
 //
+//
 
 
 
@@ -67466,11 +67460,22 @@ var noop = function noop() {};
 
     inject: ['$form'],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_5__mixins__["e" /* Localization */], Object(__WEBPACK_IMPORTED_MODULE_5__mixins__["g" /* ReadOnlyFields */])('itemFields')],
+    mixins: [__WEBPACK_IMPORTED_MODULE_5__mixins__["f" /* Localization */], Object(__WEBPACK_IMPORTED_MODULE_5__mixins__["h" /* ReadOnlyFields */])('itemFields')],
 
     components: (_components = {
         Draggable: __WEBPACK_IMPORTED_MODULE_2_vuedraggable___default.a
     }, __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_3__ListItem__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_3__ListItem__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_4__Template__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_4__Template__["a" /* default */]), _components),
+
+    provide: function provide() {
+        return {
+            uploadUtils: {
+                getDownloadLink: function getDownloadLink(fieldKey) {
+                    return this.$form.downloadLinkBase + '/' + this.fieldKey + '.' + fieldKey;
+                }
+            }
+        };
+    },
+
 
     props: {
         fieldKey: String,
@@ -69170,7 +69175,7 @@ if (false) {(function () {
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpListItem',
     extends: __WEBPACK_IMPORTED_MODULE_0__FieldsLayout__["a" /* default */],
-    mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins_index__["c" /* ErrorNode */]]
+    mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins_index__["d" /* ErrorNode */]]
 });
 
 /***/ }),
@@ -69251,6 +69256,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
               "context-fields": _vm.updatedItemFields,
               "context-data": listItemData,
               "error-identifier": itemFieldLayout.key,
+              "config-identifier": itemFieldLayout.key,
               "update-data": _vm.update(i),
               "locale": _vm.locale
             }
@@ -69682,7 +69688,7 @@ var _components;
     inject: ['actionsBus', 'params' // querystring params as an object
     ],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_18__mixins__["a" /* ActionEvents */], __WEBPACK_IMPORTED_MODULE_18__mixins__["e" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_18__mixins__["a" /* ActionEvents */], __WEBPACK_IMPORTED_MODULE_18__mixins__["f" /* Localization */]],
 
     components: (_components = {}, __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_8__Pagination__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_8__Pagination__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_9__dropdown_Dropdown__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_9__dropdown_Dropdown__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_10__dropdown_DropdownItem__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_10__dropdown_DropdownItem__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_11__Modal__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_11__Modal__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_12__form_Form__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_12__form_Form__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_13__ViewPanel__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_13__ViewPanel__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_14__StateIcon__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_14__StateIcon__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_defineProperty___default()(_components, 'Draggable', __WEBPACK_IMPORTED_MODULE_15_vuedraggable___default.a), _components),
 
@@ -71873,7 +71879,7 @@ var _components;
     name: 'SharpDashboard',
     extends: __WEBPACK_IMPORTED_MODULE_4__DynamicViewMixin__["a" /* default */],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_5__mixins_index__["j" /* testableDashboard */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_5__mixins_index__["k" /* testableDashboard */]],
 
     components: (_components = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_1__TabbedLayout__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_1__TabbedLayout__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_2__Grid__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_2__Grid__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_3__Widget__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_3__Widget__["a" /* default */]), _components),
     data: function data() {
@@ -91973,7 +91979,7 @@ if (false) {(function () {
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpLeftNav',
 
-    mixins: [Object(__WEBPACK_IMPORTED_MODULE_1__mixins__["h" /* Responsive */])('lg')],
+    mixins: [Object(__WEBPACK_IMPORTED_MODULE_1__mixins__["i" /* Responsive */])('lg')],
 
     props: {
         categories: Array,
@@ -92119,6 +92125,60 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 714 */,
+/* 715 */,
+/* 716 */,
+/* 717 */,
+/* 718 */,
+/* 719 */,
+/* 720 */,
+/* 721 */,
+/* 722 */,
+/* 723 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ({
+    methods: {
+        getMergedIdentifier: function getMergedIdentifier(prop, curId) {
+            var ascendant = this.$parent;
+            while (ascendant && ascendant[prop] == null) {
+                ascendant = ascendant.$parent;
+            }
+            var ascendantIdentifier = '';
+            if (ascendant) {
+                ascendantIdentifier = ascendant[prop] + '.';
+            }
+
+            return '' + ascendantIdentifier + curId;
+        }
+    }
+});
+
+/***/ }),
+/* 724 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_Identifier__ = __webpack_require__(723);
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    mixins: [__WEBPACK_IMPORTED_MODULE_0__utils_Identifier__["a" /* default */]],
+    props: {
+        configIdentifier: {
+            type: String,
+            required: true
+        }
+    },
+    computed: {
+        mergedConfigIdentifier: function mergedConfigIdentifier() {
+            return this.getMergedIdentifier('mergedConfigIdentifier', this.configIdentifier);
+        }
+    }
+});
 
 /***/ })
 /******/ ]);

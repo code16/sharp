@@ -32,6 +32,7 @@
                                                              :context-fields="updatedItemFields"
                                                              :context-data="listItemData"
                                                              :error-identifier="itemFieldLayout.key"
+                                                             :config-identifier="itemFieldLayout.key"
                                                              :update-data="update(i)"
                                                              :locale="locale">
                                         </sharp-field-display>
@@ -78,6 +79,16 @@
             Draggable,
             [ListItem.name]:ListItem,
             [Template.name]:Template
+        },
+
+        provide() {
+            return {
+                uploadUtils: {
+                    getDownloadLink(fieldKey) {
+                        return `${this.$form.downloadLinkBase}/${this.fieldKey}.${fieldKey}`
+                    }
+                }
+            }
         },
 
         props: {

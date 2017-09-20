@@ -1,7 +1,7 @@
 <template>
     <sharp-vue-clip
             v-show="show"
-            :field-key="fieldKey"
+            :download-id="downloadId"
             :options="options"
             :value="value"
             :ratioX="ratioX"
@@ -29,7 +29,7 @@
     export default Vue.extend({
         mixins: [ UploadXSRF ],
         props: {
-            fieldKey: String,
+            downloadId: String,
             id: Number,
             value: Object,
 

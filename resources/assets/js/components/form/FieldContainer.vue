@@ -23,14 +23,14 @@
 
 <script>
     import Field from './Field';
-    import {ErrorNode} from '../../mixins/index';
+    import {ErrorNode, ConfigNode} from '../../mixins/index';
 
     import * as util from '../../util';
 
     export default {
         name: 'SharpFieldContainer',
 
-        mixins: [ ErrorNode ],
+        mixins: [ ErrorNode, ConfigNode ],
 
         components: {
             [Field.name]:Field
@@ -82,13 +82,10 @@
                 return this.fieldProps.extraStyle;
             },
             exposedProps() {
-                const {
-                    errorIdentifier,
-                    ...exposedProps,
-                } = this.$props;
                 return {
-                    ...exposedProps,
-                    uniqueIdentifier: this.mergedErrorIdentifier
+                    ...this.$props,
+                    uniqueIdentifier: this.mergedErrorIdentifier,
+                    fieldConfigIdentifier: this.mergedConfigIdentifier
                 };
             }
         },

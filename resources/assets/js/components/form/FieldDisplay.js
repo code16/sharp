@@ -100,7 +100,13 @@ export default {
     inject:['$form'],
 
     render(h, { props, injections }) {
-        let { fieldKey, contextFields, contextData, errorIdentifier, updateVisibility, ...sharedProps } = props;
+        let { fieldKey,
+            contextFields,
+            contextData,
+            errorIdentifier,
+            updateVisibility,
+            ...sharedProps } = props;
+
         let { $form } = injections;
 
         let field = contextFields[fieldKey];
