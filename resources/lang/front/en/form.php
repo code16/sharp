@@ -15,6 +15,7 @@ return [
     'upload.browse_button' => 'Browse...',
     'upload.remove_button' => 'Remove',
     'upload.edit_button' => 'Edit',
+    'upload.download_link' => 'Download file',
 
     'multiselect.placeholder' => 'Select option',
     'multiselect.max_text' => 'Maximum items reached',

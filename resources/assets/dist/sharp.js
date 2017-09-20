@@ -44006,26 +44006,24 @@ if (false) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator__ = __webpack_require__(58);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_toConsumableArray__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_toConsumableArray___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_toConsumableArray__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_defineProperty__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_defineProperty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_defineProperty__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__util__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__consts__ = __webpack_require__(44);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__mixins__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__DynamicViewMixin__ = __webpack_require__(102);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__TabbedLayout__ = __webpack_require__(160);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__Grid__ = __webpack_require__(104);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__FieldsLayout_vue__ = __webpack_require__(161);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_axios__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11_axios__);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__util__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__consts__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__mixins__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__DynamicViewMixin__ = __webpack_require__(102);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__TabbedLayout__ = __webpack_require__(160);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Grid__ = __webpack_require__(104);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__FieldsLayout_vue__ = __webpack_require__(161);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_axios__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_axios__);
 
 
 
 
 var _components;
 
+//
 //
 //
 //
@@ -44082,11 +44080,11 @@ var noop = function noop() {};
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpForm',
-    extends: __WEBPACK_IMPORTED_MODULE_7__DynamicViewMixin__["a" /* default */],
+    extends: __WEBPACK_IMPORTED_MODULE_6__DynamicViewMixin__["a" /* default */],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_6__mixins__["k" /* testableForm */], __WEBPACK_IMPORTED_MODULE_6__mixins__["a" /* ActionEvents */], Object(__WEBPACK_IMPORTED_MODULE_6__mixins__["g" /* ReadOnlyFields */])('fields'), __WEBPACK_IMPORTED_MODULE_6__mixins__["e" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_5__mixins__["k" /* testableForm */], __WEBPACK_IMPORTED_MODULE_5__mixins__["a" /* ActionEvents */], Object(__WEBPACK_IMPORTED_MODULE_5__mixins__["g" /* ReadOnlyFields */])('fields'), __WEBPACK_IMPORTED_MODULE_5__mixins__["e" /* Localization */]],
 
-    components: (_components = {}, __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_8__TabbedLayout__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_8__TabbedLayout__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_10__FieldsLayout_vue__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_10__FieldsLayout_vue__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_9__Grid__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_9__Grid__["a" /* default */]), _components),
+    components: (_components = {}, __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_7__TabbedLayout__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_7__TabbedLayout__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_9__FieldsLayout_vue__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_9__FieldsLayout_vue__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_8__Grid__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_8__Grid__["a" /* default */]), _components),
 
     props: {
         entityKey: String,
@@ -44101,7 +44099,7 @@ var noop = function noop() {};
         props: Object
     },
 
-    inject: ['actionsBus'].concat(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_toConsumableArray___default()(__WEBPACK_IMPORTED_MODULE_7__DynamicViewMixin__["a" /* default */].inject)),
+    inject: ['actionsBus'],
 
     provide: function provide() {
         return {
@@ -44115,13 +44113,16 @@ var noop = function noop() {};
             authorizations: null,
 
             errors: {},
-            locale: ''
+            locale: '',
+
+            fieldVisible: {},
+            curFieldsetId: 0
         };
     },
 
     computed: {
         apiPath: function apiPath() {
-            var path = __WEBPACK_IMPORTED_MODULE_5__consts__["a" /* API_PATH */] + '/form/' + this.entityKey;
+            var path = __WEBPACK_IMPORTED_MODULE_4__consts__["a" /* API_PATH */] + '/form/' + this.entityKey;
             if (this.instanceId) path += '/' + this.instanceId;
             return path;
         },
@@ -44145,6 +44146,9 @@ var noop = function noop() {};
             return Object.keys(this.errors).some(function (errorKey) {
                 return !_this.errors[errorKey].cleared;
             });
+        },
+        downloadLinkBase: function downloadLinkBase() {
+            return __WEBPACK_IMPORTED_MODULE_4__consts__["a" /* API_PATH */] + '/download/' + this.entityKey + '/' + this.instanceId;
         }
     },
     methods: {
@@ -44159,6 +44163,9 @@ var noop = function noop() {};
                 this.$set(this.data[key], this.locale, value);
             } else this.$set(this.data, key, value);
         },
+        updateVisibility: function updateVisibility(key, visibility) {
+            this.$set(this.fieldVisible, key, visibility);
+        },
         mount: function mount(_ref) {
             var fields = _ref.fields,
                 layout = _ref.layout,
@@ -44170,15 +44177,32 @@ var noop = function noop() {};
                 authorizations = _ref$authorizations === undefined ? {} : _ref$authorizations;
 
             this.fields = fields;
-            this.layout = layout;
+            this.layout = this.patchLayout(layout);
             this.data = data;
             this.config = config;
             this.authorizations = authorizations;
+
+            this.fieldVisible = Object.keys(this.fields).reduce(function (res, fKey) {
+                res[fKey] = true;
+                return res;
+            }, {});
         },
         handleError: function handleError(_ref2) {
             var response = _ref2.response;
 
             if (response.status === 422) this.errors = response.data.errors || {};
+        },
+        patchLayout: function patchLayout(layout) {
+            var curFieldsetId = 0;
+            var mapFields = function mapFields(layout) {
+                if (layout.legend) layout.id = curFieldsetId++ + '#' + layout.legend;else if (layout.fields) layout.fields.forEach(function (row) {
+                    row.forEach(mapFields);
+                });
+            };
+            layout.tabs.forEach(function (t) {
+                return t.columns.forEach(mapFields);
+            });
+            return layout;
         },
         init: function init() {
             var _this2 = this;
@@ -44191,42 +44215,48 @@ var noop = function noop() {};
                     this.get().then(function (_) {
                         return _this2.setupActionBar();
                     });
-                } else __WEBPACK_IMPORTED_MODULE_4__util__["a" /* error */]('no entity key provided');
+                } else __WEBPACK_IMPORTED_MODULE_3__util__["a" /* error */]('no entity key provided');
             }
         },
         setupActionBar: function setupActionBar() {
+            var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+                _ref3$disable = _ref3.disable,
+                disable = _ref3$disable === undefined ? false : _ref3$disable,
+                _ref3$setLocale = _ref3.setLocale,
+                setLocale = _ref3$setLocale === undefined ? true : _ref3$setLocale;
+
             var showSubmitButton = this.isCreation ? this.authorizations.create : this.authorizations.update;
 
             this.actionsBus.$emit('setup', {
                 locales: null, //this.config.locales,
-                showSubmitButton: showSubmitButton,
-                showDeleteButton: !this.isCreation && this.authorizations.delete,
+                showSubmitButton: showSubmitButton && !disable,
+                showDeleteButton: !this.isCreation && this.authorizations.delete && !disable,
                 showBackButton: this.isReadOnly,
                 opType: this.isCreation ? 'create' : 'update'
             });
 
-            if (this.config.locales) {
+            if (setLocale && this.config.locales) {
                 this.actionsBus.$emit('localeChanged', this.config.locales[0]);
             }
         },
         redirectToList: function redirectToList() {
-            var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-                _ref3$restoreContext = _ref3.restoreContext,
-                restoreContext = _ref3$restoreContext === undefined ? true : _ref3$restoreContext;
+            var _ref4 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+                _ref4$restoreContext = _ref4.restoreContext,
+                restoreContext = _ref4$restoreContext === undefined ? true : _ref4$restoreContext;
 
             location.href = '/sharp/list/' + this.entityKey + (restoreContext ? '?restore-context=1' : '');
         }
     },
     actions: {
         submit: function () {
-            var _ref4 = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
-                var _ref5 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-                    entityKey = _ref5.entityKey,
-                    endpoint = _ref5.endpoint,
-                    _ref5$dataFormatter = _ref5.dataFormatter,
-                    dataFormatter = _ref5$dataFormatter === undefined ? noop : _ref5$dataFormatter;
+            var _ref5 = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
+                var _ref6 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+                    entityKey = _ref6.entityKey,
+                    endpoint = _ref6.endpoint,
+                    _ref6$dataFormatter = _ref6.dataFormatter,
+                    dataFormatter = _ref6$dataFormatter === undefined ? noop : _ref6$dataFormatter;
 
-                var _ref6, data;
+                var _ref7, data;
 
                 return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
                     while (1) {
@@ -44245,8 +44275,8 @@ var noop = function noop() {};
                                 return this.post(endpoint, dataFormatter(this));
 
                             case 5:
-                                _ref6 = _context.sent;
-                                data = _ref6.data;
+                                _ref7 = _context.sent;
+                                data = _ref7.data;
 
                                 if (this.independant) {
                                     this.$emit('submitted', data);
@@ -44272,13 +44302,13 @@ var noop = function noop() {};
             }));
 
             function submit() {
-                return _ref4.apply(this, arguments);
+                return _ref5.apply(this, arguments);
             }
 
             return submit;
         }(),
         'delete': function () {
-            var _ref7 = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2() {
+            var _ref8 = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2() {
                 return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
                     while (1) {
                         switch (_context2.prev = _context2.next) {
@@ -44305,7 +44335,7 @@ var noop = function noop() {};
             }));
 
             function _delete() {
-                return _ref7.apply(this, arguments);
+                return _ref8.apply(this, arguments);
             }
 
             return _delete;
@@ -44316,13 +44346,16 @@ var noop = function noop() {};
         localeChanged: function localeChanged(newLocale) {
             this.locale = newLocale;
         },
-        reset: function reset(_ref8) {
-            var entityKey = _ref8.entityKey;
+        reset: function reset(_ref9) {
+            var entityKey = _ref9.entityKey;
 
             if (entityKey && entityKey !== this.entityKey) return;
 
             this.data = {};
             this.errors = {};
+        },
+        setActionsVisibility: function setActionsVisibility(v) {
+            this.setupActionBar({ disable: v, setLocale: false });
         }
     },
     created: function created() {
@@ -45608,6 +45641,32 @@ if (false) {
         layout: { // 2D array fields [ligne][col]
             type: Array,
             required: true
+        },
+        visible: {
+            type: Object,
+            default: function _default() {}
+        }
+    },
+
+    data: function data() {
+        return {
+            fieldsetMap: {}
+        };
+    },
+
+
+    methods: {
+        isFieldsetVisible: function isFieldsetVisible(fieldLayout) {
+            var _this = this;
+
+            var id = fieldLayout.id,
+                fields = fieldLayout.fields;
+
+
+            var map = this.fieldsetMap[id] || (this.fieldsetMap[id] = [].concat.apply([], fields));
+            return map.some(function (f) {
+                return _this.visible[f.key];
+            });
         }
     }
 });
@@ -45626,6 +45685,12 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       key: "default",
       fn: function(fieldLayout) {
         return [(!fieldLayout.legend) ? _vm._t("default", null, null, fieldLayout) : _c('fieldset', {
+          directives: [{
+            name: "show",
+            rawName: "v-show",
+            value: (_vm.isFieldsetVisible(fieldLayout)),
+            expression: "isFieldsetVisible(fieldLayout)"
+          }],
           staticClass: "SharpForm__fieldset"
         }, [_c('div', {
           staticClass: "SharpModule__inner"
@@ -45704,7 +45769,8 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
             fn: function(column) {
               return [(_vm.fields) ? _c('sharp-fields-layout', {
                 attrs: {
-                  "layout": column.fields
+                  "layout": column.fields,
+                  "visible": _vm.fieldVisible
                 },
                 scopedSlots: _vm._u([{
                   key: "default",
@@ -45717,7 +45783,8 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
                         "field-layout": fieldLayout,
                         "locale": _vm.locale,
                         "error-identifier": fieldLayout.key,
-                        "update-data": _vm.updateData
+                        "update-data": _vm.updateData,
+                        "update-visibility": _vm.updateVisibility
                       }
                     })]
                   }
@@ -45862,16 +45929,11 @@ var getIdentifier = function getIdentifier(identifier, field, locale) {
     return identifier;
 };
 
+var noop = function noop() {};
+
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpFieldDisplay',
     functional: true,
-
-    //        props: {
-    //            fieldKey: String,
-    //            contextFields:Object,
-    //            contextData:Object,
-    //             ... callbacks, error
-    //        },
 
     inject: ['$form'],
 
@@ -45883,7 +45945,8 @@ var getIdentifier = function getIdentifier(identifier, field, locale) {
             contextFields = props.contextFields,
             contextData = props.contextData,
             errorIdentifier = props.errorIdentifier,
-            sharedProps = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_objectWithoutProperties___default()(props, ['fieldKey', 'contextFields', 'contextData', 'errorIdentifier']);
+            updateVisibility = props.updateVisibility,
+            sharedProps = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_objectWithoutProperties___default()(props, ['fieldKey', 'contextFields', 'contextData', 'errorIdentifier', 'updateVisibility']);
 
         var $form = injections.$form;
 
@@ -45896,7 +45959,11 @@ var getIdentifier = function getIdentifier(identifier, field, locale) {
             return null;
         }
 
-        return acceptCondition(contextFields, contextData, field.conditionalDisplay) ? h(__WEBPACK_IMPORTED_MODULE_3__FieldContainer__["a" /* default */], {
+        var isVisible = acceptCondition(contextFields, contextData, field.conditionalDisplay);
+
+        updateVisibility && updateVisibility(fieldKey, isVisible);
+
+        return isVisible ? h(__WEBPACK_IMPORTED_MODULE_3__FieldContainer__["a" /* default */], {
             props: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({
                 fieldKey: fieldKey,
                 fieldProps: field,
@@ -46197,15 +46264,6 @@ if (false) {(function () {
             key = _fieldProps.key,
             fieldProps = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_objectWithoutProperties___default()(_fieldProps, ['key']);
 
-        //            console.log({
-        //                fieldKey:this.fieldKey,
-        //                fieldLayout:this.fieldLayout,
-        //                value:this.value,
-        //                locale:this.locale,
-        //                uniqueIdentifier:this.uniqueIdentifier,
-        //                ...fieldProps
-        //            });
-
         return h(__WEBPACK_IMPORTED_MODULE_2__fields_index__["a" /* NameAssociation */][this.fieldType], {
             props: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({
                 fieldKey: this.fieldKey,
@@ -46216,7 +46274,7 @@ if (false) {(function () {
             }, fieldProps),
             on: {
                 input: function input(val) {
-                    if (_this.fieldProps.readOnly) __WEBPACK_IMPORTED_MODULE_3__util__["d" /* warn */]('SharpField \'' + _this.fieldKey + '\', can\'t update because is readOnly');else _this.updateData(_this.fieldKey, val);
+                    if (_this.fieldProps.readOnly) __WEBPACK_IMPORTED_MODULE_3__util__["c" /* log */]('SharpField \'' + _this.fieldKey + '\', can\'t update because is readOnly');else _this.updateData(_this.fieldKey, val);
                 },
                 blur: function blur(_) {
                     _this.fieldProps.focused = false;
@@ -55568,15 +55626,23 @@ if (false) {(function () {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__vendor_vue_clip_components_Clip_index__ = __webpack_require__(422);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__vendor_vue_clip_File__ = __webpack_require__(167);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Modal__ = __webpack_require__(98);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_vue_cropperjs__ = __webpack_require__(426);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_vue_cropperjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_vue_cropperjs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__rotate__ = __webpack_require__(432);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__mixins__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_regenerator__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_regenerator__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_defineProperty__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_defineProperty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_defineProperty__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__vendor_vue_clip_components_Clip_index__ = __webpack_require__(422);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__vendor_vue_clip_File__ = __webpack_require__(167);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Modal__ = __webpack_require__(98);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_vue_cropperjs__ = __webpack_require__(426);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_vue_cropperjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_vue_cropperjs__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__rotate__ = __webpack_require__(432);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__mixins__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_axios__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_axios__);
+
+
 
 
 //
@@ -55653,6 +55719,10 @@ if (false) {(function () {
 //
 //
 //
+//
+//
+
+
 
 
 
@@ -55665,15 +55735,16 @@ if (false) {(function () {
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpVueClip',
 
-    extends: __WEBPACK_IMPORTED_MODULE_2__vendor_vue_clip_components_Clip_index__["a" /* default */],
+    extends: __WEBPACK_IMPORTED_MODULE_4__vendor_vue_clip_components_Clip_index__["a" /* default */],
 
-    components: __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()({}, __WEBPACK_IMPORTED_MODULE_4__Modal__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_4__Modal__["a" /* default */]),
+    components: __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_defineProperty___default()({}, __WEBPACK_IMPORTED_MODULE_6__Modal__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_6__Modal__["a" /* default */]),
 
-    inject: ['actionsBus'],
+    inject: ['actionsBus', '$form'],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_7__mixins__["e" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_9__mixins__["e" /* Localization */]],
 
     props: {
+        fieldKey: String,
         ratioX: Number,
         ratioY: Number,
         value: Object,
@@ -55683,11 +55754,12 @@ if (false) {(function () {
 
     data: function data() {
         return {
-            showProgressBar: false,
             showEditModal: false,
             croppedImg: null,
             resized: false,
-            croppable: false
+            croppable: false,
+
+            extraProgressTime: false
         };
     },
 
@@ -55699,6 +55771,17 @@ if (false) {(function () {
         },
         'file.status': function fileStatus(status) {
             status in this.statusFunction && this.statusFunction[status]();
+        },
+        inProgress: function inProgress(val) {
+            var _this = this;
+
+            this.actionsBus.$emit('setActionsVisibility', val);
+            if (!val && this.file.status === 'success') {
+                this.extraProgressTime = true;
+                setTimeout(function () {
+                    return _this.extraProgressTime = false;
+                }, 500);
+            }
         }
     },
     computed: {
@@ -55723,8 +55806,39 @@ if (false) {(function () {
             res += size.toLocaleString();
             return res + ' MB';
         },
+        hasCrop: function hasCrop() {
+            return !!(this.ratioX && this.ratioY);
+        },
+        operationFinished: function operationFinished() {
+            return {
+                crop: this.hasCrop ? !!this.croppedImg : null
+            };
+        },
+        operations: function operations() {
+            return Object.keys(this.operationFinished);
+        },
+        activeOperationsCount: function activeOperationsCount() {
+            var _this2 = this;
+
+            return this.operations.filter(function (op) {
+                return _this2.operationFinished[op] !== null;
+            }).length;
+        },
+        operationFinishedCount: function operationFinishedCount() {
+            var _this3 = this;
+
+            return this.operations.filter(function (op) {
+                return _this3.operationFinished[op];
+            }).length;
+        },
         progress: function progress() {
-            return Math.floor(this.file.progress);
+            var delta = this.activeOperationsCount - this.operationFinishedCount;
+            var factor = 1 - delta * .05;
+
+            return Math.floor(this.file.progress) * factor;
+        },
+        inProgress: function inProgress() {
+            return this.file && ['success', 'exist'].indexOf(this.file.status) === -1 && this.operationFinishedCount !== this.activeOperationsCount && this.progress < 100;
         },
         statusFunction: function statusFunction() {
             return { error: this.onStatusError, success: this.onStatusSuccess, added: this.onStatusAdded };
@@ -55732,18 +55846,23 @@ if (false) {(function () {
         fileName: function fileName() {
             var splitted = this.file.name.split('/');
             return splitted.length ? splitted[splitted.length - 1] : '';
+        },
+        canDownload: function canDownload() {
+            return this.value && !this.value.uploaded;
+        },
+        downloadLink: function downloadLink() {
+            return this.$form.downloadLinkBase + '/' + this.fieldKey;
         }
     },
     methods: {
+
         // status callbacks
         onStatusAdded: function onStatusAdded() {
-            this.showProgressBar = true;
             this.$emit('reset');
 
             this.actionsBus.$emit('disable-submit');
         },
         onStatusError: function onStatusError() {
-            this.showProgressBar = false;
             var msg = this.file.errorMessage;
             this.remove();
             this.$emit('error', msg);
@@ -55751,11 +55870,8 @@ if (false) {(function () {
             this.actionsBus.$emit('enable-submit');
         },
         onStatusSuccess: function onStatusSuccess() {
-            var _this = this;
+            var _this4 = this;
 
-            setTimeout(function () {
-                return _this.showProgressBar = false;
-            }, 1000);
             var data = {};
             try {
                 data = JSON.parse(this.file.xhrResponse.responseText);
@@ -55771,9 +55887,48 @@ if (false) {(function () {
 
             this.croppable = true;
             this.$nextTick(function (_) {
-                _this.isCropperReady() && _this.onCropperReady();
+                _this4.isCropperReady() && _this4.onCropperReady();
             });
         },
+        download: function () {
+            var _ref = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_babel_runtime_regenerator___default.a.mark(function _callee() {
+                var _ref2, data, $link;
+
+                return __WEBPACK_IMPORTED_MODULE_1_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
+                    while (1) {
+                        switch (_context.prev = _context.next) {
+                            case 0:
+                                if (this.value.uploaded) {
+                                    _context.next = 9;
+                                    break;
+                                }
+
+                                _context.next = 3;
+                                return __WEBPACK_IMPORTED_MODULE_10_axios___default.a.post(this.downloadLink, { fileName: this.value.name });
+
+                            case 3:
+                                _ref2 = _context.sent;
+                                data = _ref2.data;
+                                $link = this.$refs.dlLink;
+
+                                $link.href = URL.createObjectURL(new Blob([data]));
+                                $link.download = this.fileName;
+                                $link.click();
+
+                            case 9:
+                            case 'end':
+                                return _context.stop();
+                        }
+                    }
+                }, _callee, this);
+            }));
+
+            function download() {
+                return _ref.apply(this, arguments);
+            }
+
+            return download;
+        }(),
 
 
         // actions
@@ -55797,15 +55952,15 @@ if (false) {(function () {
             this.croppable = true;
         },
         onEditModalShown: function onEditModalShown() {
-            var _this2 = this;
+            var _this5 = this;
 
             if (!this.resized) {
                 this.$nextTick(function () {
-                    var cropper = _this2.$refs.cropper.cropper;
+                    var cropper = _this5.$refs.cropper.cropper;
 
                     cropper.resize();
                     cropper.reset();
-                    _this2.resized = true;
+                    _this5.resized = true;
                 });
             }
         },
@@ -55823,7 +55978,6 @@ if (false) {(function () {
             }
         },
         updateCropData: function updateCropData() {
-
             var cropData = this.getCropData();
             var imgData = this.getImageData();
 
@@ -55865,7 +56019,7 @@ if (false) {(function () {
             return this.$refs.cropper.getImageData();
         },
         rotate: function rotate(degree) {
-            Object(__WEBPACK_IMPORTED_MODULE_6__rotate__["a" /* default */])(this.$refs.cropper.cropper, degree);
+            Object(__WEBPACK_IMPORTED_MODULE_8__rotate__["a" /* default */])(this.$refs.cropper.cropper, degree);
         }
     },
     created: function created() {
@@ -55874,10 +56028,11 @@ if (false) {(function () {
 
         if (!this.value) return;
 
-        this.files.push(new __WEBPACK_IMPORTED_MODULE_3__vendor_vue_clip_File__["a" /* default */](__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, this.value, {
+        this.files.push(new __WEBPACK_IMPORTED_MODULE_5__vendor_vue_clip_File__["a" /* default */](__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, this.value, {
             upload: {}
         })));
         this.file.thumbnail = this.value.thumbnail;
+        this.file.status = 'exist';
     },
     beforeDestroy: function beforeDestroy() {
         this.uploader._uploader.destroy();
@@ -64519,12 +64674,33 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     directives: [{
       name: "show",
       rawName: "v-show",
-      value: (_vm.showProgressBar),
-      expression: "showProgressBar"
+      value: (_vm.canDownload),
+      expression: "canDownload"
     }],
-    staticClass: "progress"
+    staticClass: "mt-2"
+  }, [_c('a', {
+    staticStyle: {
+      "font-size": "smaller"
+    },
+    attrs: {
+      "href": ""
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.download($event)
+      }
+    }
+  }, [_vm._v(_vm._s(_vm.l('form.upload.download_link')))])]), _vm._v(" "), _c('div', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.inProgress || _vm.extraProgressTime),
+      expression: "inProgress || extraProgressTime"
+    }],
+    staticClass: "SharpUpload__progress mt-2"
   }, [_c('div', {
-    staticClass: "progress-bar",
+    staticClass: "SharpUpload__progress-bar",
     style: ({
       width: (_vm.progress + "%")
     }),
@@ -64534,7 +64710,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "aria-valuemin": "0",
       "aria-valuemax": "100"
     }
-  })])]), _vm._v(" "), _c('div', [(!!_vm.originalImageSrc) ? [_c('button', {
+  })])]), _vm._v(" "), _c('div', [(!!_vm.originalImageSrc && !_vm.inProgress) ? [_c('button', {
     staticClass: "SharpButton SharpButton--sm SharpButton--secondary",
     attrs: {
       "type": "button",
@@ -64642,7 +64818,12 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     }
   }, [_c('i', {
     staticClass: "fa fa-rotate-right"
-  })])])], 1)] : _vm._e()], 2)
+  })])])], 1)] : _vm._e(), _vm._v(" "), _c('a', {
+    ref: "dlLink",
+    staticStyle: {
+      "display": "none"
+    }
+  })], 2)
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -64887,6 +65068,10 @@ if (false) {(function () {
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -64905,6 +65090,7 @@ if (false) {(function () {
     inject: ['$field', 'xsrfToken'],
 
     props: {
+        fieldKey: String,
         value: Object,
 
         fileFilter: Array,
@@ -64950,6 +65136,7 @@ if (false) {(function () {
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('sharp-vue-clip', {
     attrs: {
+      "field-key": _vm.fieldKey,
       "options": _vm.options,
       "value": _vm.value,
       "ratioX": _vm.ratioX,
@@ -91775,7 +91962,7 @@ if (false) {(function () {
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpLeftNav',
 
-    mixins: [Object(__WEBPACK_IMPORTED_MODULE_1__mixins__["h" /* Responsive */])('md')],
+    mixins: [Object(__WEBPACK_IMPORTED_MODULE_1__mixins__["h" /* Responsive */])('lg')],
 
     props: {
         categories: Array,

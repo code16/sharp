@@ -16,13 +16,14 @@
                             <div>
                                 <label class="SharpUpload__info">{{ fileName }}</label>
                                 <div class="SharpUpload__info">{{ size }}</div>
-                                <div class="progress" v-show="showProgressBar">
-                                    <div class="progress-bar" role="progressbar" :style="{width:`${progress}%`}"
+                                <div class="mt-2" v-show="canDownload"><a @click.prevent="download" style="font-size:smaller" href="">{{ l('form.upload.download_link') }}</a></div>
+                                <div class="SharpUpload__progress mt-2" v-show="inProgress || extraProgressTime">
+                                    <div class="SharpUpload__progress-bar" role="progressbar" :style="{width:`${progress}%`}"
                                          :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             </div>
                             <div>
-                                <template v-if="!!originalImageSrc">
+                                <template v-if="!!originalImageSrc && !inProgress">
                                     <button type="button" class="SharpButton SharpButton--sm SharpButton--secondary" @click="onEditButtonClick" :disabled="readOnly">
                                         {{ l('form.upload.edit_button') }}
                                     </button>
@@ -69,6 +70,7 @@
                 </div>
             </sharp-modal>
         </template>
+        <a style="display: none" ref="dlLink"></a>
     </div>
 </template>
 
@@ -81,6 +83,8 @@
 
     import { Localization } from '../../../../mixins';
 
+    import axios from 'axios';
+
     export default {
         name: 'SharpVueClip',
 
@@ -90,11 +94,12 @@
             [Modal.name]: Modal
         },
 
-        inject : [ 'actionsBus' ],
+        inject : [ 'actionsBus', '$form' ],
 
         mixins: [ Localization ],
 
         props: {
+            fieldKey: String,
             ratioX: Number,
             ratioY: Number,
             value: Object,
@@ -104,11 +109,12 @@
 
         data() {
             return {
-                showProgressBar: false,
                 showEditModal: false,
                 croppedImg: null,
                 resized: false,
-                croppable: false
+                croppable: false,
+
+                extraProgressTime: false
             }
         },
         watch: {
@@ -120,6 +126,13 @@
             'file.status'(status) {
                 (status in this.statusFunction) && this.statusFunction[status]();
             },
+            inProgress(val) {
+                this.actionsBus.$emit('setActionsVisibility', val);
+                if(!val && this.file.status === 'success') {
+                    this.extraProgressTime = true;
+                    setTimeout(()=>this.extraProgressTime=false, 500);
+                }
+            }
         },
         computed: {
             file() {
@@ -141,8 +154,34 @@
                 res += size.toLocaleString();
                 return `${res} MB`;
             },
+            hasCrop() {
+                return !!(this.ratioX && this.ratioY);
+            },
+            operationFinished() {
+                return {
+                    crop: this.hasCrop ? !!this.croppedImg : null
+                }
+            },
+            operations() {
+                return Object.keys(this.operationFinished);
+            },
+            activeOperationsCount() {
+                return this.operations.filter(op => this.operationFinished[op] !== null).length;
+            },
+            operationFinishedCount() {
+                return this.operations.filter(op => this.operationFinished[op]).length;
+            },
             progress() {
-                return Math.floor(this.file.progress);
+                let delta = this.activeOperationsCount - this.operationFinishedCount;
+                let factor = (1-delta*.05);
+
+                return Math.floor(this.file.progress) * factor;
+            },
+            inProgress() {
+                return this.file &&
+                       ['success','exist'].indexOf(this.file.status) === -1 &&
+                       this.operationFinishedCount !== this.activeOperationsCount &&
+                       this.progress < 100;
             },
             statusFunction() {
                 return { error:this.onStatusError, success:this.onStatusSuccess, added:this.onStatusAdded }
@@ -151,18 +190,24 @@
             fileName() {
                 let splitted = this.file.name.split('/');
                 return splitted.length ? splitted[splitted.length-1] : '';
+            },
+
+            canDownload() {
+                return this.value && !this.value.uploaded;
+            },
+            downloadLink() {
+                return `${this.$form.downloadLinkBase}/${this.fieldKey}`;
             }
         },
         methods: {
+
             // status callbacks
             onStatusAdded() {
-                this.showProgressBar = true;
                 this.$emit('reset');
 
                 this.actionsBus.$emit('disable-submit');
             },
             onStatusError() {
-                this.showProgressBar = false;
                 let msg = this.file.errorMessage;
                 this.remove();
                 this.$emit('error', msg);
@@ -170,7 +215,6 @@
                 this.actionsBus.$emit('enable-submit');
             },
             onStatusSuccess() {
-                setTimeout(() => this.showProgressBar = false, 1000);
                 let data = {};
                 try {
                     data = JSON.parse(this.file.xhrResponse.responseText);
@@ -187,6 +231,16 @@
                 this.$nextTick(_=>{
                     this.isCropperReady() && this.onCropperReady();
                 });
+            },
+
+            async download() {
+                if(!this.value.uploaded) {
+                    let { data } = await axios.post(this.downloadLink, { fileName: this.value.name });
+                    let $link = this.$refs.dlLink;
+                    $link.href = URL.createObjectURL(new Blob([data]));
+                    $link.download = this.fileName;
+                    $link.click();
+                }
             },
 
             // actions
@@ -241,7 +295,6 @@
             },
 
             updateCropData() {
-
                 let cropData = this.getCropData();
                 let imgData = this.getImageData();
 
@@ -302,6 +355,7 @@
                 upload: {}
             }));
             this.file.thumbnail = this.value.thumbnail;
+            this.file.status = 'exist';
         },
         beforeDestroy() {
             this.uploader._uploader.destroy();

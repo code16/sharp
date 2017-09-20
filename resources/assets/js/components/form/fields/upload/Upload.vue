@@ -1,5 +1,9 @@
 <template>
-    <sharp-vue-clip :options="options" :value="value" :ratioX="ratioX" :ratioY="ratioY"
+    <sharp-vue-clip :field-key="fieldKey"
+                    :options="options"
+                    :value="value"
+                    :ratioX="ratioX"
+                    :ratioY="ratioY"
                     :read-only="readOnly"
                     @error="$field.$emit('error',$event)"
                     @reset="$field.$emit('clear')">
@@ -24,6 +28,7 @@
         inject: [ '$field', 'xsrfToken' ],
 
         props: {
+            fieldKey: String,
             value: Object,
 
             fileFilter: Array,
