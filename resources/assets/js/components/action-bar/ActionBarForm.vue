@@ -2,7 +2,7 @@
     <sharp-action-bar :ready="ready">
         <template slot="left">
             <button class="SharpButton SharpButton--secondary-accent" @click="emitAction('cancel')">
-                {{ showBackButton ? l('action_bar.form.back_button') : l('action_bar.form.cancel_button') }}
+                {{ showBackButton ? label('back_button') : label('cancel_button') }}
             </button>
 
             <div v-if="showDeleteButton" class="w-100 h-100">
@@ -17,7 +17,7 @@
                     </template>
                     <template slot="frame-1" scope="frame">
                         <button @click="emitAction('delete')" @blur="frame.next()" ref="openDelete" class="SharpButton SharpButton--danger">
-                            {{ l('action_bar.form.delete_button') }}
+                            {{ label('delete_button') }}
                         </button>
                     </template>
                 </collapse>
@@ -27,7 +27,7 @@
         </template>
         <template slot="right">
             <button v-if="showSubmitButton" class="SharpButton SharpButton--accent" @click="emitAction('submit')">
-                {{ l(`action_bar.form.submit_button.${opType}`) }}
+                {{ label('submit_button',opType) }}
             </button>
         </template>
     </sharp-action-bar>
@@ -42,11 +42,13 @@
 
     import Collapse from '../Collapse';
 
-    import { Localization, ActionEvents } from '../../mixins';
+    import { ActionEvents } from '../../mixins';
+
+    import { lang } from '../../mixins/Localization';
 
     export default {
         name: 'SharpActionBarForm',
-        mixins: [ActionBarMixin, ActionEvents, Localization],
+        mixins: [ActionBarMixin, ActionEvents],
         components: {
             [ActionBar.name]:ActionBar,
             [LocaleSelector.name]:LocaleSelector,
@@ -66,6 +68,7 @@
                 deleteButtonOpened: false,
 
                 opType: 'create', // or 'update'
+                actionsState: null
             }
         },
         methods: {
@@ -73,6 +76,15 @@
                 if(this.$refs.openDelete) {
                     this.$refs.openDelete.focus();
                 }
+            },
+            label(element, extra) {
+                let localeKey = `action_bar.form.${element}`, stateLabel;
+                if(this.actionsState) {
+                    let { state, modifier } = this.actionsState;
+                    stateLabel = lang(`${localeKey}.${state}.${modifier}`);
+                }
+                if(!stateLabel && extra) localeKey+=`.${extra}`;
+                return stateLabel || lang(localeKey);
             }
         },
         actions: {
@@ -87,6 +99,9 @@
                 this.showDeleteButton = showDeleteButton;
                 this.showBackButton = showBackButton;
                 this.opType = opType;
+            },
+            updateActionsState(actionsState) {
+                this.actionsState = actionsState;
             }
         }
     }

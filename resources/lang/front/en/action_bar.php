@@ -13,5 +13,8 @@ return [
     'form.submit_button.update' => 'Update',
     'form.cancel_button' => 'Cancel',
     'form.delete_button' => 'Delete',
-    'form.back_button' => 'Back'
+    'form.back_button' => 'Back',
+
+    /// element.state.modifier
+    'form.submit_button.pending.upload' => 'Uploading...',
 ];
