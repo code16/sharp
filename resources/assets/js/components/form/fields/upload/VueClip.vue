@@ -16,6 +16,7 @@
                             <div>
                                 <label class="SharpUpload__info">{{ fileName }}</label>
                                 <div class="SharpUpload__info">{{ size }}</div>
+                                <div class="mt-2" v-show="canDownload"><a @click.prevent="download" style="font-size:smaller" href="">{{ l('form.upload.download_link') }}</a></div>
                                 <div class="SharpUpload__progress mt-2" v-show="inProgress || extraProgressTime">
                                     <div class="SharpUpload__progress-bar" role="progressbar" :style="{width:`${progress}%`}"
                                          :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"></div>
@@ -69,6 +70,7 @@
                 </div>
             </sharp-modal>
         </template>
+        <a style="display: none" ref="dlLink"></a>
     </div>
 </template>
 
@@ -81,6 +83,8 @@
 
     import { Localization } from '../../../../mixins';
 
+    import axios from 'axios';
+
     export default {
         name: 'SharpVueClip',
 
@@ -90,11 +94,12 @@
             [Modal.name]: Modal
         },
 
-        inject : [ 'actionsBus' ],
+        inject : [ 'actionsBus', '$form' ],
 
         mixins: [ Localization ],
 
         props: {
+            fieldKey: String,
             ratioX: Number,
             ratioY: Number,
             value: Object,
@@ -123,7 +128,7 @@
             },
             inProgress(val) {
                 this.actionsBus.$emit('setActionsVisibility', val);
-                if(!val) {
+                if(!val && this.file.status === 'success') {
                     this.extraProgressTime = true;
                     setTimeout(()=>this.extraProgressTime=false, 500);
                 }
@@ -174,7 +179,7 @@
             },
             inProgress() {
                 return this.file &&
-                       this.file.status !== 'success' &&
+                       ['success','exist'].indexOf(this.file.status) === -1 &&
                        this.operationFinishedCount !== this.activeOperationsCount &&
                        this.progress < 100;
             },
@@ -185,6 +190,13 @@
             fileName() {
                 let splitted = this.file.name.split('/');
                 return splitted.length ? splitted[splitted.length-1] : '';
+            },
+
+            canDownload() {
+                return this.value && !this.value.uploaded;
+            },
+            downloadLink() {
+                return `${this.$form.downloadLinkBase}/${this.fieldKey}`;
             }
         },
         methods: {
@@ -219,6 +231,16 @@
                 this.$nextTick(_=>{
                     this.isCropperReady() && this.onCropperReady();
                 });
+            },
+
+            async download() {
+                if(!this.value.uploaded) {
+                    let { data } = await axios.post(this.downloadLink, { fileName: this.value.name });
+                    let $link = this.$refs.dlLink;
+                    $link.href = URL.createObjectURL(new Blob([data]));
+                    $link.download = this.fileName;
+                    $link.click();
+                }
             },
 
             // actions
@@ -273,7 +295,6 @@
             },
 
             updateCropData() {
-
                 let cropData = this.getCropData();
                 let imgData = this.getImageData();
 
@@ -334,6 +355,7 @@
                 upload: {}
             }));
             this.file.thumbnail = this.value.thumbnail;
+            this.file.status = 'exist';
         },
         beforeDestroy() {
             this.uploader._uploader.destroy();

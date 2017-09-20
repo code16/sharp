@@ -3,7 +3,7 @@
         <template scope="fieldLayout">
             <slot v-if="!fieldLayout.legend" v-bind="fieldLayout"></slot>
 
-            <fieldset class="SharpForm__fieldset" v-else-if="isFieldsetVisible(fieldLayout)">
+            <fieldset class="SharpForm__fieldset" v-else v-show="isFieldsetVisible(fieldLayout)">
                 <div class="SharpModule__inner">
                     <div class="SharpModule__header">
                         <legend class="SharpModule__title">{{fieldLayout.legend}}</legend>

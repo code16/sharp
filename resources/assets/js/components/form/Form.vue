@@ -79,7 +79,7 @@
             props: Object
         },
 
-        inject:['actionsBus', ...DynamicView.inject],
+        inject:['actionsBus'],
 
         provide() {
             return {
@@ -121,6 +121,10 @@
             },
             hasErrors() {
                 return Object.keys(this.errors).some(errorKey => !this.errors[errorKey].cleared);
+            },
+
+            downloadLinkBase() {
+                return `${API_PATH}/download/${this.entityKey}/${this.instanceId}`;
             }
         },
         methods: {
