@@ -59,7 +59,7 @@ The front expects an array with three keys:
 
     [
         "name" => "", // Relative file path
-        "thumbnail" => "", // 150px height thumbnail full url
+        "thumbnail" => "", // 1000px w * 400px h thumbnail full url
         "size" => x, // Size in bytes
     ]
 
