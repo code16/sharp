@@ -38,7 +38,7 @@ class FormUploadModelTransformerTest extends SharpFormEloquentBaseTest
             "id" => $upload->id,
             "name" => $upload->file_name,
             "size" => (string)$upload->size,
-            "thumbnail" => $upload->thumbnail(null, 150)
+            "thumbnail" => $upload->thumbnail(1000, 400)
         ], $transformer->apply("", $picturable, "picture"));
     }
 
@@ -55,14 +55,14 @@ class FormUploadModelTransformerTest extends SharpFormEloquentBaseTest
             "file" => [
                 "name" => $upload->file_name,
                 "size" => (string)$upload->size,
-                "thumbnail" => $upload->thumbnail(null, 150)
+                "thumbnail" => $upload->thumbnail(1000, 400)
             ],
             "id" => $upload->id,
         ], [
             "file" => [
                 "name" => $upload2->file_name,
                 "size" => (string)$upload2->size,
-                "thumbnail" => $upload2->thumbnail(null, 150)
+                "thumbnail" => $upload2->thumbnail(1000, 400)
             ],
             "id" => $upload2->id,
         ]], $transformer->apply("", $picturable, "pictures"));

@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
+use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\SharpForm;
 use Illuminate\Http\UploadedFile;
@@ -76,6 +77,24 @@ class FormDownloadControllerTest extends BaseApiTest
             ['fileName' => 'files/test.jpg']
         )->assertStatus(404);
     }
+
+    /** @test */
+    function we_can_download_a_file_in_a_list()
+    {
+        $file = UploadedFile::fake()->image('test.jpg', 600, 600);
+        $file->storeAs('/list-files', 'test.jpg', ['disk' => 'local']);
+
+        $response = $this->postJson(
+            route('code16.sharp.api.form.download', [
+                'entityKey' => 'download',
+                'instanceId' => 1,
+                'formUploadFieldKey' => 'list.file'
+            ]),
+            ['fileName' => 'test.jpg']
+        )->assertStatus(200);
+
+        $this->assertStringEqualsFile(storage_path('app/list-files/test.jpg'), $response->content());
+    }
 }
 
 class FormDownloadControllerTestForm extends SharpForm
@@ -86,6 +105,13 @@ class FormDownloadControllerTestForm extends SharpForm
             SharpFormUploadField::make("file")
                 ->setStorageDisk("local")
                 ->setStorageBasePath("files")
+        )->addField(
+            SharpFormListField::make("list")
+                ->addItemField(
+                    SharpFormUploadField::make("file")
+                        ->setStorageDisk("local")
+                        ->setStorageBasePath("list-files")
+                )
         );
     }
     function buildFormLayout()

@@ -99,7 +99,7 @@ class MarkdownFormatter implements SharpFieldFormatter
         return [
             "name" => $model->file_name,
             "size" => $model->size,
-            "thumbnail" => $model->thumbnail(null, 150)
+            "thumbnail" => $model->thumbnail(1000, 400)
         ];
     }
 
