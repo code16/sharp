@@ -10310,18 +10310,21 @@ module.exports = Vue$3;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__AutoScroll__ = __webpack_require__(303);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Responsive__ = __webpack_require__(314);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__ConfigNode__ = __webpack_require__(724);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return __WEBPACK_IMPORTED_MODULE_0__testable_form__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return __WEBPACK_IMPORTED_MODULE_1__testable_dashboard__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_2__ErrorNode__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_3__Focusable__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return __WEBPACK_IMPORTED_MODULE_4__UploadXSRF__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_5__Localization__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__Debounce__ = __webpack_require__(726);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return __WEBPACK_IMPORTED_MODULE_0__testable_form__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return __WEBPACK_IMPORTED_MODULE_1__testable_dashboard__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_2__ErrorNode__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_3__Focusable__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return __WEBPACK_IMPORTED_MODULE_4__UploadXSRF__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_5__Localization__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_6__ActionEvents__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return __WEBPACK_IMPORTED_MODULE_7__ReadOnlyFields__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_8__QueryTree__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return __WEBPACK_IMPORTED_MODULE_7__ReadOnlyFields__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return __WEBPACK_IMPORTED_MODULE_8__QueryTree__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_9__AutoScroll__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return __WEBPACK_IMPORTED_MODULE_10__Responsive__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return __WEBPACK_IMPORTED_MODULE_10__Responsive__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_11__ConfigNode__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_12__Debounce__["a"]; });
+
 
 
 
@@ -38763,7 +38766,7 @@ var _components;
     name: 'SharpActionBarList',
     components: (_components = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_1__ActionBar__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_1__ActionBar__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_4__form_fields_Text__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_4__form_fields_Text__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_5__list_FilterSelect__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_5__list_FilterSelect__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_6__dropdown_Dropdown__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_6__dropdown_Dropdown__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_7__dropdown_DropdownItem__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_7__dropdown_DropdownItem__["a" /* default */]), _components),
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_2__ActionBarMixin__["a" /* default */], __WEBPACK_IMPORTED_MODULE_3__mixins__["a" /* ActionEvents */], __WEBPACK_IMPORTED_MODULE_3__mixins__["f" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_2__ActionBarMixin__["a" /* default */], __WEBPACK_IMPORTED_MODULE_3__mixins__["a" /* ActionEvents */], __WEBPACK_IMPORTED_MODULE_3__mixins__["g" /* Localization */]],
 
     data: function data() {
         return {
@@ -38851,7 +38854,7 @@ var _components;
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpText',
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins__["e" /* Focusable */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins__["f" /* Focusable */]],
 
     props: {
         value: [String, Number],
@@ -39757,7 +39760,7 @@ if (false) {
         return h(__WEBPACK_IMPORTED_MODULE_3__vendor_bootstrap_vue_components_modal__["a" /* default */], ctx.data, [h({
             name: 'SharpModalTitle',
             template: '\n                <div>\n                    <h5 class="SharpModal__heading">\n                        <slot name="title">{{title}}</slot>\n                    </h5>\n                    <button v-if="!okOnly" class="SharpModal__close" type="button" @click="hide">\n                        <svg class="SharpModal__close-icon" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd">\n                          <path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>\n                        </svg>\n                    </button>\n                </div>\n                ',
-            mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins__["g" /* QueryTree */]],
+            mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins__["h" /* QueryTree */]],
             props: { title: String, okOnly: Boolean },
             computed: {
                 $modal: function $modal() {
@@ -44101,7 +44104,7 @@ var noop = function noop() {};
     name: 'SharpForm',
     extends: __WEBPACK_IMPORTED_MODULE_6__DynamicViewMixin__["a" /* default */],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_5__mixins__["l" /* testableForm */], __WEBPACK_IMPORTED_MODULE_5__mixins__["a" /* ActionEvents */], Object(__WEBPACK_IMPORTED_MODULE_5__mixins__["h" /* ReadOnlyFields */])('fields'), __WEBPACK_IMPORTED_MODULE_5__mixins__["f" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_5__mixins__["m" /* testableForm */], __WEBPACK_IMPORTED_MODULE_5__mixins__["a" /* ActionEvents */], Object(__WEBPACK_IMPORTED_MODULE_5__mixins__["i" /* ReadOnlyFields */])('fields'), __WEBPACK_IMPORTED_MODULE_5__mixins__["g" /* Localization */]],
 
     components: (_components = {}, __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_7__TabbedLayout__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_7__TabbedLayout__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_9__FieldsLayout_vue__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_9__FieldsLayout_vue__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_8__Grid__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_8__Grid__["a" /* default */]), _components),
 
@@ -46108,7 +46111,7 @@ if (false) {(function () {
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpFieldContainer',
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_3__mixins_index__["d" /* ErrorNode */], __WEBPACK_IMPORTED_MODULE_3__mixins_index__["c" /* ConfigNode */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_3__mixins_index__["e" /* ErrorNode */], __WEBPACK_IMPORTED_MODULE_3__mixins_index__["c" /* ConfigNode */]],
 
     components: __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()({}, __WEBPACK_IMPORTED_MODULE_2__Field__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_2__Field__["a" /* default */]),
 
@@ -46443,7 +46446,6 @@ if (false) {(function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__util__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__mixins__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__mixins_Localization__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__helpers_debounce__ = __webpack_require__(725);
 
 
 
@@ -46504,14 +46506,13 @@ var _components;
 
 
 
-
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpAutocomplete',
     components: (_components = {
         Multiselect: __WEBPACK_IMPORTED_MODULE_5_vue_multiselect___default.a
     }, __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_3__Template_vue__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_3__Template_vue__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_4__Loading_vue__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_4__Loading_vue__["a" /* default */]), _components),
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_9__mixins__["f" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_9__mixins__["g" /* Localization */], __WEBPACK_IMPORTED_MODULE_9__mixins__["d" /* Debounce */]],
 
     props: {
         fieldKey: String,
@@ -46583,84 +46584,20 @@ var _components;
         }
     },
     methods: {
-        callApi: Object(__WEBPACK_IMPORTED_MODULE_11__helpers_debounce__["a" /* default */])(function (_ref) {
-            var query = _ref.query,
-                method = _ref.method,
-                endpoint = _ref.endpoint,
-                attribute = _ref.attribute;
-
-            method === 'GET' ? __WEBPACK_IMPORTED_MODULE_7_axios___default.a.get(endpoint, {
-                params: __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()({}, attribute, query)
-            }) : __WEBPACK_IMPORTED_MODULE_7_axios___default.a.post(endpoint, __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()({}, attribute, query));
-        }, 200),
-        updateSuggestions: function () {
-            var _ref2 = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee(query) {
-                var _ref3, data;
-
-                return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
-                    while (1) {
-                        switch (_context.prev = _context.next) {
-                            case 0:
-                                this.query = query;
-
-                                if (!this.hideDropdown) {
-                                    _context.next = 3;
-                                    break;
-                                }
-
-                                return _context.abrupt('return');
-
-                            case 3:
-                                if (!this.isRemote) {
-                                    _context.next = 18;
-                                    break;
-                                }
-
-                                this.state = 'loading';
-                                _context.prev = 5;
-                                _context.next = 8;
-                                return this.callApi({
-                                    query: query,
-                                    method: this.remoteMethod,
-                                    endpoint: this.remoteEndpoint,
-                                    attribute: this.remoteSearchAttribute
-                                });
-
-                            case 8:
-                                _ref3 = _context.sent;
-                                data = _ref3.data;
-
-                                this.state = 'searching';
-                                this.suggestions = data;
-                                _context.next = 16;
-                                break;
-
-                            case 14:
-                                _context.prev = 14;
-                                _context.t0 = _context['catch'](5);
-
-                            case 16:
-                                _context.next = 20;
-                                break;
-
-                            case 18:
-                                this.suggestions = this.searchStrategy.search(query);
-                                this.state = 'searching';
-
-                            case 20:
-                            case 'end':
-                                return _context.stop();
-                        }
-                    }
-                }, _callee, this, [[5, 14]]);
-            }));
-
-            function updateSuggestions(_x) {
-                return _ref2.apply(this, arguments);
-            }
-
-            return updateSuggestions;
-        }(),
+        callApi: function callApi(query) {
+            return this.remoteMethod === 'GET' ? __WEBPACK_IMPORTED_MODULE_7_axios___default.a.get(this.remoteEndpoint, {
+                params: __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()({}, this.remoteSearchAttribute, query)
+            }) : __WEBPACK_IMPORTED_MODULE_7_axios___default.a.post(this.remoteEndpoint, __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()({}, this.remoteSearchAttribute, query));
+        },
+        updateSuggestions: function updateSuggestions(query) {
+            this.query = query;
+            if (this.hideDropdown) return;
+            this.isRemote ? this.updateRemoteSuggestions() : this.updateLocalSuggestions();
+        },
+        updateLocalSuggestions: function updateLocalSuggestions() {
+            this.suggestions = this.searchStrategy.search(this.query);
+            this.state = 'searching';
+        },
         handleSelect: function handleSelect(value) {
             this.state = 'valuated';
             this.$emit('input', value);
@@ -46679,6 +46616,53 @@ var _components;
                 _this.$refs.multiselect.activate();
             });
         }
+    },
+    debounced: {
+        wait: 200,
+
+        updateRemoteSuggestions: function () {
+            var _ref = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
+                var _ref2, data;
+
+                return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
+                    while (1) {
+                        switch (_context.prev = _context.next) {
+                            case 0:
+                                console.log('remote');
+                                this.state = 'loading';
+                                _context.prev = 2;
+                                _context.next = 5;
+                                return this.callApi(this.query);
+
+                            case 5:
+                                _ref2 = _context.sent;
+                                data = _ref2.data;
+
+                                this.state = 'searching';
+                                this.suggestions = data;
+                                _context.next = 14;
+                                break;
+
+                            case 11:
+                                _context.prev = 11;
+                                _context.t0 = _context['catch'](2);
+
+                                console.log('error', _context.t0);
+
+                            case 14:
+                            case 'end':
+                                return _context.stop();
+                        }
+                    }
+                }, _callee, this, [[2, 11]]);
+            }));
+
+            function updateRemoteSuggestions() {
+                return _ref.apply(this, arguments);
+            }
+
+            return updateRemoteSuggestions;
+        }()
     },
     created: function created() {
         var _this2 = this;
@@ -47845,7 +47829,9 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "preserve-search": ""
     },
     on: {
-      "search-change": _vm.updateSuggestions,
+      "search-change": function($event) {
+        _vm.updateSuggestions($event)
+      },
       "select": _vm.handleSelect,
       "close": _vm.handleDropdownClose,
       "open": function($event) {
@@ -55656,7 +55642,7 @@ if (false) {(function () {
 
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0_vue___default.a.extend({
-    mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins__["j" /* UploadXSRF */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins__["k" /* UploadXSRF */]],
     props: {
         downloadId: String,
         id: Number,
@@ -55846,7 +55832,7 @@ if (false) {(function () {
 
     inject: ['actionsBus', '$form', '$field'],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_9__mixins__["f" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_9__mixins__["g" /* Localization */]],
 
     props: {
         downloadId: String,
@@ -65198,7 +65184,7 @@ if (false) {(function () {
         SharpVueClip: __WEBPACK_IMPORTED_MODULE_1__VueClip__["a" /* default */]
     },
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins__["j" /* UploadXSRF */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins__["k" /* UploadXSRF */]],
     inject: ['$field', 'xsrfToken'],
 
     props: {
@@ -65788,7 +65774,7 @@ if (false) {(function () {
 
     inject: ['$field'],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_2__mixins__["e" /* Focusable */], __WEBPACK_IMPORTED_MODULE_2__mixins__["f" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_2__mixins__["f" /* Focusable */], __WEBPACK_IMPORTED_MODULE_2__mixins__["g" /* Localization */]],
 
     props: {
         value: {
@@ -67568,7 +67554,7 @@ var noop = function noop() {};
 
     inject: ['$form'],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_5__mixins__["f" /* Localization */], Object(__WEBPACK_IMPORTED_MODULE_5__mixins__["h" /* ReadOnlyFields */])('itemFields')],
+    mixins: [__WEBPACK_IMPORTED_MODULE_5__mixins__["g" /* Localization */], Object(__WEBPACK_IMPORTED_MODULE_5__mixins__["i" /* ReadOnlyFields */])('itemFields')],
 
     components: (_components = {
         Draggable: __WEBPACK_IMPORTED_MODULE_2_vuedraggable___default.a
@@ -69283,7 +69269,7 @@ if (false) {(function () {
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpListItem',
     extends: __WEBPACK_IMPORTED_MODULE_0__FieldsLayout__["a" /* default */],
-    mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins_index__["d" /* ErrorNode */]]
+    mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins_index__["e" /* ErrorNode */]]
 });
 
 /***/ }),
@@ -69796,7 +69782,7 @@ var _components;
     inject: ['actionsBus', 'params' // querystring params as an object
     ],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_18__mixins__["a" /* ActionEvents */], __WEBPACK_IMPORTED_MODULE_18__mixins__["f" /* Localization */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_18__mixins__["a" /* ActionEvents */], __WEBPACK_IMPORTED_MODULE_18__mixins__["g" /* Localization */]],
 
     components: (_components = {}, __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_8__Pagination__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_8__Pagination__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_9__dropdown_Dropdown__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_9__dropdown_Dropdown__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_10__dropdown_DropdownItem__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_10__dropdown_DropdownItem__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_11__Modal__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_11__Modal__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_12__form_Form__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_12__form_Form__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_13__ViewPanel__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_13__ViewPanel__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_14__StateIcon__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_14__StateIcon__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_defineProperty___default()(_components, 'Draggable', __WEBPACK_IMPORTED_MODULE_15_vuedraggable___default.a), _components),
 
@@ -71987,7 +71973,7 @@ var _components;
     name: 'SharpDashboard',
     extends: __WEBPACK_IMPORTED_MODULE_4__DynamicViewMixin__["a" /* default */],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_5__mixins_index__["k" /* testableDashboard */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_5__mixins_index__["l" /* testableDashboard */]],
 
     components: (_components = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_1__TabbedLayout__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_1__TabbedLayout__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_2__Grid__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_2__Grid__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_3__Widget__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_3__Widget__["a" /* default */]), _components),
     data: function data() {
@@ -92087,7 +92073,7 @@ if (false) {(function () {
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpLeftNav',
 
-    mixins: [Object(__WEBPACK_IMPORTED_MODULE_1__mixins__["i" /* Responsive */])('lg')],
+    mixins: [Object(__WEBPACK_IMPORTED_MODULE_1__mixins__["j" /* Responsive */])('lg')],
 
     props: {
         categories: Array,
@@ -92289,11 +92275,11 @@ if (false) {
 });
 
 /***/ }),
-/* 725 */
+/* 725 */,
+/* 726 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = debounce;
 function debounce(func, wait, immediate) {
     var timeout;
     return function () {
@@ -92308,7 +92294,71 @@ function debounce(func, wait, immediate) {
         timeout = setTimeout(later, wait);
         if (callNow) func.apply(context, args);
     };
-};
+}
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    beforeCreate: function beforeCreate() {
+        var _this = this;
+
+        this.$options.computed = this.$options.computed || {};
+
+        var _$options = this.$options,
+            computed = _$options.computed,
+            debounced = _$options.debounced;
+
+
+        if (debounced) {
+            (function () {
+                if (typeof debounced === 'function') {
+                    debounced = debounced(_this.$options);
+                }
+
+                var wait = debounced.wait;
+                if (wait == null) {
+                    console.warn('[Debounce mixin] Debounced option wait time not defined default : 200');
+                    wait = 200;
+                }
+                var _iteratorNormalCompletion = true;
+                var _didIteratorError = false;
+                var _iteratorError = undefined;
+
+                try {
+                    var _loop = function _loop() {
+                        var key = _step.value;
+
+                        if (typeof debounced[key] === 'function') {
+                            if (key in computed) {
+                                return 'continue';
+                            }
+                            computed[key] = function () {
+                                return debounce(debounced[key].bind(this), wait);
+                            };
+                        }
+                    };
+
+                    for (var _iterator = Object.keys(debounced)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                        var _ret2 = _loop();
+
+                        if (_ret2 === 'continue') continue;
+                    }
+                } catch (err) {
+                    _didIteratorError = true;
+                    _iteratorError = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion && _iterator.return) {
+                            _iterator.return();
+                        }
+                    } finally {
+                        if (_didIteratorError) {
+                            throw _iteratorError;
+                        }
+                    }
+                }
+            })();
+        }
+    }
+});
 
 /***/ })
 /******/ ]);

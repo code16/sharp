@@ -10,6 +10,7 @@ import QueryTree from './QueryTree';
 import AutoScroll from './AutoScroll';
 import Responsive from './Responsive';
 import ConfigNode from './ConfigNode';
+import Debounce from './Debounce';
 
 export {
     testableForm,
@@ -23,5 +24,6 @@ export {
     QueryTree,
     AutoScroll,
     Responsive,
-    ConfigNode
+    ConfigNode,
+    Debounce
 }

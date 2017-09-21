@@ -4,7 +4,7 @@ import Autocomplete from '../components/form/fields/Autocomplete.vue';
 import { nextRequestFulfilled } from './utils/moxios-utils';
 import moxios from 'moxios';
 
-import { MockI18n } from './utils';
+import { MockI18n, wait } from './utils';
 
 
 describe('autocomplete-field', ()=>{
@@ -104,7 +104,6 @@ describe('autocomplete-field', ()=>{
             expect($autocomplete.state).toBe('searching');
 
             multiselect.$emit('select', {id:1, name:'Theodore Bagwell', alias:'T-Bag'});
-            console.log(multiselect.value);
             vm.value = {id:1, name:'Theodore Bagwell', alias:'T-Bag'};
             expect($autocomplete.state).toBe('valuated');
 
@@ -221,7 +220,7 @@ describe('autocomplete-field', ()=>{
             multiselect.$emit('search-change','Linc');
             expect($autocomplete.isLoading).toBe(true);
 
-            await nextRequestFulfilled({ status: 200, response:[] });
+            await nextRequestFulfilled({ status: 200, response:[] }, 400);
 
             expect($autocomplete.isLoading).toBe(false);
         });
@@ -234,11 +233,9 @@ describe('autocomplete-field', ()=>{
             expect($autocomplete.hideDropdown).toBe(true);
 
             multiselect.$emit('search-change', 'Th');
-
             expect($autocomplete.hideDropdown).toBe(true);
 
             multiselect.$emit('search-change', 'The');
-
             expect($autocomplete.hideDropdown).toBe(false);
 
         });
@@ -251,7 +248,7 @@ describe('autocomplete-field', ()=>{
             expect($autocomplete.state).toBe('initial');
 
             multiselect.$emit('search-change', 'Theo');
-            await nextRequestFulfilled({ status:200, response:[] });
+            await nextRequestFulfilled({ status:200, response:[] }, 400);
 
             expect($autocomplete.state).toBe('searching');
         });
@@ -262,7 +259,7 @@ describe('autocomplete-field', ()=>{
             let { multiselect } = $autocomplete.$refs;
 
             multiselect.$emit('search-change', 'Theo');
-            await nextRequestFulfilled({ status:200, response:[{id:1, name:'Theodore Bagwell', alias:'T-Bag'}] });
+            await nextRequestFulfilled({ status:200, response:[{id:1, name:'Theodore Bagwell', alias:'T-Bag'}] }, 400);
 
             expect($autocomplete.suggestions).toEqual([{id:1, name:'Theodore Bagwell', alias:'T-Bag'}]);
         });
@@ -278,7 +275,7 @@ describe('autocomplete-field', ()=>{
 
             multiselect.$emit('search-change', 'Linc');
 
-            let { request } = await nextRequestFulfilled({ status:200, response:[] });
+            let { request } = await nextRequestFulfilled({ status:200, response:[] }, 400);
             let { config:{ method, params, url }} = request;
 
             expect(method).toBe('get');
@@ -297,7 +294,7 @@ describe('autocomplete-field', ()=>{
 
             multiselect.$emit('search-change', 'Linc');
 
-            let { request } = await nextRequestFulfilled({ status:200, response:[] });
+            let { request } = await nextRequestFulfilled({ status:200, response:[] }, 400);
             let { config:{ method, data, url }} = request;
 
             expect(method).toBe('post');

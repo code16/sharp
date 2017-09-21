@@ -23,7 +23,7 @@
                      :loading="isLoading"
                      :disabled="readOnly"
                      preserve-search
-                     @search-change="updateSuggestions"
+                     @search-change="updateSuggestions($event)"
                      @select="handleSelect"
                      @close="handleDropdownClose"
                      @open="opened=true"
@@ -49,9 +49,8 @@
     import axios from 'axios';
 
     import { warn } from '../../../util';
-    import { Localization } from '../../../mixins';
-    import { lang } from '../../../mixins/Localization'
-    import debounce from '../../../helpers/debounce';
+    import { Localization, Debounce } from '../../../mixins';
+    import { lang } from '../../../mixins/Localization';
 
     export default {
         name:'SharpAutocomplete',
@@ -61,7 +60,7 @@
             [Loading.name]: Loading
         },
 
-        mixins: [Localization],
+        mixins: [Localization, Debounce],
 
         props: {
             fieldKey: String,
@@ -123,43 +122,32 @@
                     minQueryLength: this.searchMinChars,
                     searchKeys: this.searchKeys
                 });
-            }
+            },
         },
         methods: {
-            callApi: debounce(({query,method,endpoint,attribute})=>{
-                method === 'GET' ?
-                    axios.get(endpoint,{
+            callApi(query) {
+                return this.remoteMethod === 'GET' ?
+                    axios.get(this.remoteEndpoint,{
                         params: {
-                            [attribute]:query
+                            [this.remoteSearchAttribute]:query
                         }
-                    }): axios.post(endpoint,{
-                        [attribute]:query
-                    });
-            }, 200),
-            async updateSuggestions(query) {
+                    }): axios.post(this.remoteEndpoint,{
+                        [this.remoteSearchAttribute]:query
+                    })
+            },
+
+            updateSuggestions(query) {
                 this.query = query;
                 if(this.hideDropdown)
                     return;
+                this.isRemote
+                    ? this.updateRemoteSuggestions()
+                    : this.updateLocalSuggestions();
+            },
 
-                if(this.isRemote) {
-                    this.state = 'loading';
-                    try {
-                        let { data } = await this.callApi({
-                            query,
-                            method: this.remoteMethod,
-                            endpoint: this.remoteEndpoint,
-                            attribute: this.remoteSearchAttribute
-                        });
-                        this.state = 'searching';
-                        this.suggestions = data;
-                    }
-                    catch(e) {
-                    }
-                }
-                else {
-                    this.suggestions = this.searchStrategy.search(query);
-                    this.state = 'searching';
-                }
+            updateLocalSuggestions() {
+                this.suggestions = this.searchStrategy.search(this.query);
+                this.state = 'searching';
             },
 
             handleSelect(value) {
@@ -178,6 +166,22 @@
                 this.$nextTick(()=>{
                     this.$refs.multiselect.activate();
                 });
+            },
+        },
+        debounced: {
+            wait: 200,
+
+            async updateRemoteSuggestions() {
+                console.log('remote');
+                this.state = 'loading';
+                try {
+                    let { data } = await this.callApi(this.query);
+                    this.state = 'searching';
+                    this.suggestions = data;
+                }
+                catch(e) {
+                    console.log('error', e)
+                }
             },
         },
         created() {
