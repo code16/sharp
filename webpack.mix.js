@@ -1,6 +1,7 @@
 const { mix } = require('laravel-mix');
 const webpack = require('webpack');
 const fs = require('fs-extra');
+const path = require('path');
 
 (function() {
     mix.copy('node_modules/vue-clip/src', 'resources/assets/js/components/vendor/vue-clip')

@@ -181,6 +181,9 @@
             },
             reorderActive() {
                 this.$nextTick(() => this.updateHeaderAutoPadding());
+            },
+            page() {
+                document.body.scrollTop = document.documentElement.scrollTop = 0;
             }
         },
         computed: {
@@ -594,7 +597,6 @@
             }
         },
         created() {
-            console.log(this);
             this.get().then(_=>{
                 this.verify();
                 this.bindParams();

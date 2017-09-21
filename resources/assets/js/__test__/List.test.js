@@ -4,6 +4,7 @@ import FieldDisplay from '../components/form/FieldDisplay';
 
 import { MockInjections, MockTransitions, MockI18n, QueryComponent, wait } from './utils';
 
+
 describe('list-field', () => {
     Vue.component('sharp-list', List);
     Vue.component('sharp-field-display', FieldDisplay);
