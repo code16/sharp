@@ -99,7 +99,9 @@
                 locale: '',
 
                 fieldVisible: {},
-                curFieldsetId:0
+                curFieldsetId:0,
+
+                pendingJobs: []
             }
         },
         computed: {
@@ -210,7 +212,7 @@
         },
         actions: {
             async submit({entityKey, endpoint, dataFormatter=noop }={}) {
-                if(entityKey && entityKey !== this.entityKey) return;
+                if(entityKey && entityKey !== this.entityKey || this.pendingJobs.length) return;
 
                 try {
                     const { data } = await this.post(endpoint, dataFormatter(this));
@@ -248,8 +250,21 @@
                 this.errors = {};
             },
 
-            setActionsVisibility(v) {
-                this.setupActionBar({ disable:v, setLocale:false });
+            setPendingJob({ origin:$field, value:isPending }) {
+                if(isPending)
+                    this.pendingJobs.push($field);
+                else
+                    this.pendingJobs = this.pendingJobs.filter(field => field.uniqueIdentifier !== $field.uniqueIdentifier);
+
+                if(this.pendingJobs.length) {
+                    this.actionsBus.$emit('updateActionsState', {
+                        state: 'pending',
+                        modifier: this.pendingJobs[0].fieldType
+                    })
+                }
+                else {
+                    this.actionsBus.$emit('updateActionsState', null);
+                }
             }
         },
         created() {

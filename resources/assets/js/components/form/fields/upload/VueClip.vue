@@ -98,7 +98,7 @@
             [Modal.name]: Modal
         },
 
-        inject : [ 'actionsBus', '$form' ],
+        inject : [ 'actionsBus', '$form', '$field' ],
 
         mixins: [ Localization ],
 
@@ -131,8 +131,7 @@
                 (status in this.statusFunction) && this.statusFunction[status]();
             },
             inProgress(val) {
-                this.actionsBus.$emit('setActionsVisibility', val);
-                if(!val && this.file.status === 'success') {
+                if(!val && !this.file) {
                     this.extraProgressTime = true;
                     setTimeout(()=>this.extraProgressTime=false, 500);
                 }
@@ -204,19 +203,24 @@
             }
         },
         methods: {
-
             // status callbacks
             onStatusAdded() {
                 this.$emit('reset');
 
-                this.actionsBus.$emit('disable-submit');
+                this.actionsBus.$emit('setPendingJob', {
+                    origin: this.$field,
+                    value: true
+                });
             },
             onStatusError() {
                 let msg = this.file.errorMessage;
                 this.remove();
                 this.$emit('error', msg);
 
-                this.actionsBus.$emit('enable-submit');
+                this.actionsBus.$emit('setPendingJob', {
+                    origin: this.$field,
+                    value: false
+                });
             },
             onStatusSuccess() {
                 let data = {};
@@ -229,7 +233,11 @@
                 this.$emit('success', data);
 
                 this.$parent.$emit('input',data);
-                this.actionsBus.$emit('enable-submit');
+
+                this.actionsBus.$emit('setPendingJob', {
+                    origin: this.$field,
+                    value: false
+                });
 
                 this.croppable = true;
                 this.$nextTick(_=>{
