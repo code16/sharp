@@ -140,9 +140,11 @@
                 this.query = query;
                 if(this.hideDropdown)
                     return;
-                this.isRemote
-                    ? this.updateRemoteSuggestions()
-                    : this.updateLocalSuggestions();
+                if(this.isRemote) {
+                    this.state = 'loading';
+                    this.updateRemoteSuggestions();
+                }
+                else this.updateLocalSuggestions();
             },
 
             updateLocalSuggestions() {
@@ -170,10 +172,8 @@
         },
         debounced: {
             wait: 200,
-
             async updateRemoteSuggestions() {
-                console.log('remote');
-                this.state = 'loading';
+                //console.log('remote');
                 try {
                     let { data } = await this.callApi(this.query);
                     this.state = 'searching';

@@ -2,7 +2,7 @@ import Vue from 'vue/dist/vue.common';
 import List from '../components/form/fields/list/List.vue';
 import FieldDisplay from '../components/form/FieldDisplay';
 
-import { MockInjections, MockTransitions, MockI18n, QueryComponent } from './utils';
+import { MockInjections, MockTransitions, MockI18n, QueryComponent, wait } from './utils';
 
 describe('list-field', () => {
     Vue.component('sharp-list', List);
@@ -94,10 +94,12 @@ describe('list-field', () => {
             }),
         });
 
+        expect.assertions(1);
+
         $list.dragActive = true;
 
         await Vue.nextTick();
-
+        await wait(100);
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
