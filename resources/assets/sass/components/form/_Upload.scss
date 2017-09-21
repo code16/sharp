@@ -99,10 +99,16 @@
   &__progress {
     height: 3px;
     background: $ui-02;
+    transition-delay: 500ms;
     &-bar {
-      transition: width 200ms $bx--standard-easing;
+      transition: width 500ms $bx--standard-easing;
       height:100%;
       background: $brand-02;
+    }
+  }
+  &__progress-leave-to {
+    .SharpUpload__progress-bar {
+      width: 100%;
     }
   }
 

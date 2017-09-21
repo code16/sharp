@@ -6258,6 +6258,14 @@
   display: none;
 }
 
+#sharp-app .SharpAutocomplete__multiselect .multiselect__tags {
+  padding-right: 2rem !important;
+}
+
+#sharp-app .SharpAutocomplete__multiselect .multiselect__input {
+  width: 100% !important;
+}
+
 #sharp-app .SharpAutocomplete--remote .multiselect__select {
   display: none;
 }
@@ -6402,13 +6410,19 @@
 #sharp-app .SharpUpload__progress {
   height: 3px;
   background: #EBF0F7;
+  -webkit-transition-delay: 500ms;
+          transition-delay: 500ms;
 }
 
 #sharp-app .SharpUpload__progress-bar {
-  -webkit-transition: width 200ms cubic-bezier(0.5, 0, 0.1, 1);
-  transition: width 200ms cubic-bezier(0.5, 0, 0.1, 1);
+  -webkit-transition: width 500ms cubic-bezier(0.5, 0, 0.1, 1);
+  transition: width 500ms cubic-bezier(0.5, 0, 0.1, 1);
   height: 100%;
   background: #5596e6;
+}
+
+#sharp-app .SharpUpload__progress-leave-to .SharpUpload__progress-bar {
+  width: 100%;
 }
 
 #sharp-app .SharpUpload__modal-vue-cropper {

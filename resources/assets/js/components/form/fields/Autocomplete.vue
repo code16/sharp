@@ -51,6 +51,7 @@
     import { warn } from '../../../util';
     import { Localization } from '../../../mixins';
     import { lang } from '../../../mixins/Localization'
+    import debounce from '../../../helpers/debounce';
 
     export default {
         name:'SharpAutocomplete',
@@ -125,29 +126,35 @@
             }
         },
         methods: {
-            updateSuggestions(query) {
+            callApi: debounce(({query,method,endpoint,attribute})=>{
+                method === 'GET' ?
+                    axios.get(endpoint,{
+                        params: {
+                            [attribute]:query
+                        }
+                    }): axios.post(endpoint,{
+                        [attribute]:query
+                    });
+            }, 200),
+            async updateSuggestions(query) {
                 this.query = query;
                 if(this.hideDropdown)
                     return;
 
                 if(this.isRemote) {
                     this.state = 'loading';
-                    const call = (method,endpoint,attribute) =>
-                        method === 'GET' ?
-                            axios.get(endpoint,{
-                            params: {
-                                [attribute]:query
-                            }
-                        }): axios.post(endpoint,{
-                            [attribute]:query
+                    try {
+                        let { data } = await this.callApi({
+                            query,
+                            method: this.remoteMethod,
+                            endpoint: this.remoteEndpoint,
+                            attribute: this.remoteSearchAttribute
                         });
-                    call(this.remoteMethod, this.remoteEndpoint, this.remoteSearchAttribute)
-                        .then(response => {
-                            this.state = 'searching';
-                            this.suggestions = response.data;
-                        }).catch(
-                            // some error callback
-                        );
+                        this.state = 'searching';
+                        this.suggestions = data;
+                    }
+                    catch(e) {
+                    }
                 }
                 else {
                     this.suggestions = this.searchStrategy.search(query);
@@ -168,11 +175,9 @@
                 this.state = 'initial';
 
                 this.$emit('input', null);
-                if(this.mode === 'local') {
-                    this.$nextTick(()=>{
-                        this.$refs.multiselect.activate();
-                    });
-                }
+                this.$nextTick(()=>{
+                    this.$refs.multiselect.activate();
+                });
             },
         },
         created() {
@@ -182,6 +187,8 @@
 
             if(!this.isRemote) {
                 this.$emit('input', this.localValues.find(v => v[this.itemIdAttribute] === this.value));
+            }
+            if(this.value) {
                 this.$nextTick(()=>this.state = 'valuated');
             }
 

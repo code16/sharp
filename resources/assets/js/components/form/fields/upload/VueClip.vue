@@ -21,17 +21,17 @@
                                         {{ l('form.upload.download_link') }}
                                     </a>
                                 </div>
-                                <div class="SharpUpload__progress mt-2" v-show="inProgress || extraProgressTime">
-                                    <div class="SharpUpload__progress-bar" role="progressbar" :style="{width:`${progress}%`}"
-                                         :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
+                                <transition name="SharpUpload__progress">
+                                    <div class="SharpUpload__progress mt-2" v-show="inProgress">
+                                        <div class="SharpUpload__progress-bar" role="progressbar" :style="{width:`${progress}%`}"
+                                             :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </transition>
                             </div>
                             <div>
-                                <template v-if="!!originalImageSrc && !inProgress">
-                                    <button type="button" class="SharpButton SharpButton--sm SharpButton--secondary" @click="onEditButtonClick" :disabled="readOnly">
+                                    <button type="button" class="SharpButton SharpButton--sm SharpButton--secondary" @click="onEditButtonClick" :disabled="readOnly || !originalImageSrc || inProgress">
                                         {{ l('form.upload.edit_button') }}
                                     </button>
-                                </template>
                                 <button type="button" class="SharpButton SharpButton--sm SharpButton--secondary SharpButton--danger SharpUpload__remove-button"
                                         @click="remove()" :disabled="readOnly">
                                     {{ l('form.upload.remove_button') }}
@@ -52,7 +52,7 @@
             </div>
         </div>
         <template v-if="!!originalImageSrc">
-            <sharp-modal v-model="showEditModal" @ok="onEditModalOk" @shown="onEditModalShown" @hidden="$emit('inactive')" :close-on-backdrop="false"
+            <sharp-modal v-model="showEditModal" @ok="onEditModalOk" @shown="onEditModalShown" @hidden="onEditModalHidden" no-close-on-backdrop
                          :title="l('modals.cropper.title')">
                 <vue-cropper ref="cropper"
                              class="SharpUpload__modal-vue-cropper"
@@ -118,7 +118,7 @@
                 resized: false,
                 croppable: false,
 
-                extraProgressTime: false
+                canDownload: this.value
             }
         },
         watch: {
@@ -130,12 +130,6 @@
             'file.status'(status) {
                 (status in this.statusFunction) && this.statusFunction[status]();
             },
-            inProgress(val) {
-                if(!val && !this.file) {
-                    this.extraProgressTime = true;
-                    setTimeout(()=>this.extraProgressTime=false, 500);
-                }
-            }
         },
         computed: {
             file() {
@@ -175,16 +169,15 @@
                 return this.operations.filter(op => this.operationFinished[op]).length;
             },
             progress() {
+                let curProgress = this.file ? this.file.progress : 100;
+
                 let delta = this.activeOperationsCount - this.operationFinishedCount;
                 let factor = (1-delta*.05);
 
-                return Math.floor(this.file.progress) * factor;
+                return Math.floor(curProgress) * factor;
             },
             inProgress() {
-                return this.file &&
-                       ['success','exist'].indexOf(this.file.status) === -1 &&
-                       this.operationFinishedCount !== this.activeOperationsCount &&
-                       this.progress < 100;
+                return (this.file && this.file.status !== 'exist') && this.progress < 100;
             },
             statusFunction() {
                 return { error:this.onStatusError, success:this.onStatusSuccess, added:this.onStatusAdded }
@@ -193,10 +186,6 @@
             fileName() {
                 let splitted = this.file.name.split('/');
                 return splitted.length ? splitted[splitted.length-1] : '';
-            },
-
-            canDownload() {
-                return this.value && !this.value.uploaded;
             },
             downloadLink() {
                 return `${this.$form.downloadLinkBase}/${this.downloadId}`;
@@ -258,6 +247,7 @@
 
             // actions
             remove() {
+                this.canDownload = false;
                 this.removeFile(this.file);
                 this.files.splice(0, 1);
 
@@ -289,6 +279,11 @@
                         this.resized=true;
                     });
                 }
+            },
+
+            onEditModalHidden() {
+                this.$emit('inactive');
+                setTimeout(()=>this.$refs.cropper.cropper.reset(), 300);
             },
 
             onEditModalOk() {
