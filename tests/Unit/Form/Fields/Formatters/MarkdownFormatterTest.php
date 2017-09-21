@@ -79,7 +79,7 @@ class MarkdownFormatterTest extends SharpTestCase
 
         $this->assertEquals($image, $toFrontArray["name"]);
         $this->assertEquals(1127, $toFrontArray["size"]);
-        $this->assertStringStartsWith(url("thumbnails/data/-150/" . basename($image)), $toFrontArray["thumbnail"]);
+        $this->assertStringStartsWith(url("thumbnails/data/1000-400/" . basename($image)), $toFrontArray["thumbnail"]);
     }
 
     /** @test */
