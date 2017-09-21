@@ -67666,7 +67666,8 @@ var noop = function noop() {};
                 return res;
             }, (_Object$keys$reduce = {}, __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_Object$keys$reduce, this.itemIdAttribute, null), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_Object$keys$reduce, this.indexSymbol, this.lastIndex++), _Object$keys$reduce));
         },
-        insertNewItem: function insertNewItem(i) {
+        insertNewItem: function insertNewItem($event, i) {
+            $event.target.blur();
             this.list.splice(i + 1, 0, this.createItem());
         },
         add: function add() {
@@ -69372,7 +69373,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       staticClass: "SharpButton SharpButton--secondary SharpButton--sm",
       on: {
         "click": function($event) {
-          _vm.insertNewItem(i)
+          _vm.insertNewItem($event, i)
         }
       }
     }, [_vm._v(_vm._s(_vm.l('form.list.insert_button')))])]) : _vm._e()])

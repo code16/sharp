@@ -46,7 +46,7 @@
                         </div>
                     </div>
                     <div v-if="!disabled && showInsertButton && i<list.length-1" class="SharpList__new-item-zone">
-                        <button class="SharpButton SharpButton--secondary SharpButton--sm" @click="insertNewItem(i)">{{ l('form.list.insert_button') }}</button>
+                        <button class="SharpButton SharpButton--secondary SharpButton--sm" @click="insertNewItem($event,i)">{{ l('form.list.insert_button') }}</button>
                     </div>
                 </div>
             </transition-group><!-- Important comment, do not remove
@@ -183,7 +183,8 @@
                     [this.indexSymbol]:this.lastIndex++
                 });
             },
-            insertNewItem(i) {
+            insertNewItem($event, i) {
+                $event.target.blur();
                 this.list.splice(i+1, 0, this.createItem());
             },
             add() {
