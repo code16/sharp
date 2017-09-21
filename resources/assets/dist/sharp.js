@@ -46592,7 +46592,10 @@ var _components;
         updateSuggestions: function updateSuggestions(query) {
             this.query = query;
             if (this.hideDropdown) return;
-            this.isRemote ? this.updateRemoteSuggestions() : this.updateLocalSuggestions();
+            if (this.isRemote) {
+                this.state = 'loading';
+                this.updateRemoteSuggestions();
+            } else this.updateLocalSuggestions();
         },
         updateLocalSuggestions: function updateLocalSuggestions() {
             this.suggestions = this.searchStrategy.search(this.query);
@@ -46619,7 +46622,6 @@ var _components;
     },
     debounced: {
         wait: 200,
-
         updateRemoteSuggestions: function () {
             var _ref = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
                 var _ref2, data;
@@ -46628,33 +46630,31 @@ var _components;
                     while (1) {
                         switch (_context.prev = _context.next) {
                             case 0:
-                                console.log('remote');
-                                this.state = 'loading';
-                                _context.prev = 2;
-                                _context.next = 5;
+                                _context.prev = 0;
+                                _context.next = 3;
                                 return this.callApi(this.query);
 
-                            case 5:
+                            case 3:
                                 _ref2 = _context.sent;
                                 data = _ref2.data;
 
                                 this.state = 'searching';
                                 this.suggestions = data;
-                                _context.next = 14;
+                                _context.next = 12;
                                 break;
 
-                            case 11:
-                                _context.prev = 11;
-                                _context.t0 = _context['catch'](2);
+                            case 9:
+                                _context.prev = 9;
+                                _context.t0 = _context['catch'](0);
 
                                 console.log('error', _context.t0);
 
-                            case 14:
+                            case 12:
                             case 'end':
                                 return _context.stop();
                         }
                     }
-                }, _callee, this, [[2, 11]]);
+                }, _callee, this, [[0, 9]]);
             }));
 
             function updateRemoteSuggestions() {
