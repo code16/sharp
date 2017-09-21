@@ -33,7 +33,7 @@
             readOnly: Boolean,
             locale:String
         },
-        inject: [ 'xsrfToken', 'actionsBus', '$tab', '$form' ],
+        inject: [ 'xsrfToken', 'actionsBus', '$tab', '$form', '$field' ],
 
         data() {
             return {
@@ -78,7 +78,8 @@
                 let $uploader = new MarkdownUpload({
                     provide: {
                         actionsBus: this.actionsBus,
-                        $form: this.$form
+                        $form: this.$form,
+                        $field: this.$field
                     },
                     propsData: {
                         id, value,
@@ -146,7 +147,6 @@
             },
 
             updateFileData({ id }, data) {
-                //debugger;
                 let fileIndex = this.indexByFileId[id];
                 let file = this.value.files[fileIndex];
                 this.$set(this.value.files, fileIndex, { ...file, ...data });
@@ -187,7 +187,7 @@
                 let relativeFallbackLine = isInsertion ? this.cursorPos.line - initialCursorPos.line : 1;
 
                 let $uploader = this.createUploader({
-                    id: data ? this.filesByName[data.name][this.idSuy] : this.uploaderId++,
+                    id: data ? this.filesByName[data.name][this.idSymbol] : this.uploaderId++,
                     value: data && this.filesByName[data.name],
                     removeOptions: {
                         relativeFallbackLine

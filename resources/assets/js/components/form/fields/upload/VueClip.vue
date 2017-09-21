@@ -248,7 +248,7 @@
             async download() {
                 if(!this.value.uploaded) {
                     let { data } = await axios.post(this.downloadLink, { fileName: this.value.name }, { responseType: 'blob' });
-                    console.log(data);
+                    //console.log(data);
                     let $link = this.$refs.dlLink;
                     $link.href = URL.createObjectURL(data);
                     $link.download = this.fileName;
