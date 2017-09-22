@@ -9,9 +9,9 @@ matrix:
 
 before_script:
   - travis_retry composer self-update
-  - travis_retry composer install --prefer-source --no-interaction
-  - npm install
+  #- travis_retry composer install --prefer-source --no-interaction
+  #- npm install
 
 script:
   - vendor/bin/phpunit
-  - npm run test
+  #- npm run test
