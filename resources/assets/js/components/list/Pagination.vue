@@ -1,6 +1,6 @@
 <script>
-    import bPagination from '../vendor/bootstrap-vue/components/pagination';
     import { ignoreWarns } from '../../util';
+    import BVComp from '../../mixins/BVComp';
 
     export default {
         name: 'SharpPagination',
@@ -14,10 +14,9 @@
             ctx.data.attrs.lastText = `<i class="fa fa-angle-double-right" aria-hidden="true"></i>`;
 
 
-
             return h({
                 name:'SharpPagination',
-                extends:bPagination,
+                extends:BVComp('bPagination'),
 
                 watch: {
                     numberOfPages: {
@@ -25,7 +24,7 @@
                         handler(n) {
                             if(!ctx.props.minPageEndButtons)return;
                             // Hide first/last buttons if number of pages inf than 3
-                            ignoreWarns(_ => this.hideGotoEndButtons = n<ctx.props.minPageEndButtons);
+                            ignoreWarns(() => this.hideGotoEndButtons = n<ctx.props.minPageEndButtons);
                         }
                     }
                 }

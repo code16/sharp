@@ -38,11 +38,12 @@
 </template>
 
 <script>
-    import bTabs from './vendor/bootstrap-vue/components/tabs';
+    import Vue from 'vue';
+    import BVComp from '../mixins/BVComp';
 
     export default {
         name:'SharpBTabs',
-        extends:bTabs,
+        extends: BVComp('bTabs'),
         mounted() {
             //console.log(this);
         }
