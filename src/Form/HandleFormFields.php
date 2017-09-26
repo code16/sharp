@@ -101,6 +101,9 @@ trait HandleFormFields
         })->all();
     }
 
+    /**
+     * Check if the form was previously built, and build it if not.
+     */
     private function checkFormIsBuilt()
     {
         if (!$this->formBuilt) {
