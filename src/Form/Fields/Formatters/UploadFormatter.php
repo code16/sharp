@@ -55,6 +55,8 @@ class UploadFormatter implements SharpFieldFormatter
      */
     function fromFront(SharpFormField $field, string $attribute, $value)
     {
+        $storage = $this->filesystem->disk($field->storageDisk());
+
         if($this->isUploaded($value)) {
 
             $fileContent = $this->filesystem->disk("local")->get(
@@ -68,14 +70,12 @@ class UploadFormatter implements SharpFieldFormatter
 
             $storedFileName = $this->getStoragePath($value["name"], $field);
 
-            $this->filesystem->disk($field->storageDisk())->put(
-                $storedFileName, $fileContent
-            );
+            $storage->put($storedFileName, $fileContent);
 
             return [
                 "file_name" => $storedFileName,
-                "size" => $this->filesystem->disk($field->storageDisk())->size($storedFileName),
-                "mime_type" => $this->filesystem->disk($field->storageDisk())->mimeType($storedFileName),
+                "size" => $storage->size($storedFileName),
+                "mime_type" => $storage->mimeType($storedFileName),
                 "disk" => $field->storageDisk(),
                 "transformed" => $transformed
             ];
@@ -83,11 +83,11 @@ class UploadFormatter implements SharpFieldFormatter
 
         if($this->isTransformed($value, $field)) {
             // Just transform image, without updating value in DB
-            $fileContent = $this->filesystem->disk($field->storageDisk())->get(
+            $fileContent = $storage->get(
                 $value["name"]
             );
 
-            $this->filesystem->disk($field->storageDisk())->put(
+            $storage->put(
                 $value["name"],
                 $this->handleImageTransformations($fileContent, $value["cropData"])
             );

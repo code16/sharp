@@ -95,6 +95,29 @@ class UploadFormatterTest extends SharpTestCase
         ));
     }
 
+    /** @test */
+    function we_handle_crop_transformation_on_a_previously_upload_from_front()
+    {
+        $file = (new FileFactory)->image("image.png", 600, 600);
+        $filePath = $file->store("data/Test");
+
+        $formatter = new UploadFormatter;
+        $field = SharpFormUploadField::make("upload")
+            ->setStorageDisk("local")
+            ->setStorageBasePath("data/Test");
+
+        $this->assertArraySubset([
+            "transformed" => true
+
+        ], $formatter->fromFront(
+            $field, "attribute", [
+                "name" => $filePath, "cropData" => [
+                    "height" => .8, "width" => .6, "x" => 0, "y" => .1, "rotate" => 0
+                ], "uploaded" => false
+            ]
+        ));
+    }
+
     /**
      * @return array
      */
