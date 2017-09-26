@@ -90,7 +90,7 @@
 
             axiosInstance.interceptors.response.use(c=>c, error=>{
                 let { response: {status, data}, config: { method } } = error;
-                console.dir(error);
+
                 if(method==='get' && status === 404) {
                     this.showErrorPage = true;
                     this.errorPageData = {

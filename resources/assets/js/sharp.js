@@ -43,7 +43,7 @@ new Vue({
 
     created() {
         this.$on('setClass',(className,active)=> {
-            console.log('setClass', className, active);
+            //console.log('setClass', className, active);
             this.$el.classList[active ? 'add' : 'remove'](className);
         });
     }

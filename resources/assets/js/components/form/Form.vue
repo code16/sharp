@@ -275,7 +275,7 @@
         },
         mounted() {
             this.init();
-            console.log(this);
+            //console.log(this);
         }
     }
 </script>

@@ -14,7 +14,7 @@
     import { lang } from '../../../../mixins/Localization';
 
     const noop = ()=>{};
-
+        import Vue from 'vue';
     export default {
         name: 'SharpMarkdown',
         props: {
@@ -33,7 +33,8 @@
             readOnly: Boolean,
             locale:String
         },
-        inject: [ 'xsrfToken', 'actionsBus', '$tab', '$form', '$field' ],
+
+        inject: [ '$tab',],
 
         data() {
             return {
@@ -73,20 +74,17 @@
             indexedFiles() {
                 return (this.value.files||[]).map( (file,i) => ({ [this.idSymbol]:i, ...file }) );
             },
-            createUploader({ id, value, removeOptions,  }) {
-
+            createUploader({ id, value, removeOptions }) {
+                let $markdown = this;
                 let $uploader = new MarkdownUpload({
-                    provide: {
-                        actionsBus: this.actionsBus,
-                        $form: this.$form,
-                        $field: this.$field
-                    },
                     propsData: {
                         id, value,
                         ...this.innerComponents.upload,
                         downloadId: this.fieldConfigIdentifier,
-                        xsrfToken: this.xsrfToken,
                     },
+                    beforeCreate() {
+                        this.$parent = $markdown;
+                    }
                 });
 
                 $uploader.$on('success', file => this.updateUploaderData($uploader, file));
