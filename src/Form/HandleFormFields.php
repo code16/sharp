@@ -91,12 +91,12 @@ trait HandleFormFields
             return in_array($key, $this->getDataKeys());
 
         })->map(function($value, $key) {
-            $field = $this->findFieldByKey($key);
+            if(!$field = $this->findFieldByKey($key)) {
+                return $value;
+            }
 
             // Apply formatter based on field configuration
-            return $field
-                ? $field->formatter()->fromFront($field, $key, $value)
-                : $value;
+            return $field->formatter()->fromFront($field, $key, $value);
 
         })->all();
     }

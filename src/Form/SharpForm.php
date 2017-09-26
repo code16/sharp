@@ -155,7 +155,9 @@ abstract class SharpForm
      */
     public function updateInstance($id, $data)
     {
-        return $this->update($id, $this->formatRequestData($data));
+        $instance = $this->update($id, $this->formatRequestData($data));
+
+        return $instance;
     }
 
     /**
@@ -164,16 +166,7 @@ abstract class SharpForm
      */
     public function storeInstance($data)
     {
-        return $this->store($this->formatRequestData($data));
-    }
-
-    /**
-     * @param array $data
-     * @return mixed
-     */
-    public function store(array $data)
-    {
-        return $this->update(null, $data);
+        return $this->updateInstance(null, $data);
     }
 
     /**
@@ -218,6 +211,7 @@ abstract class SharpForm
     /**
      * @param $id
      * @param array $data
+     * @return mixed the updated or created instance
      */
     abstract function update($id, array $data);
 

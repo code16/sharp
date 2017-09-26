@@ -17,6 +17,12 @@ class HtmlFormatter implements SharpFieldFormatter
         return $value;
     }
 
+    /**
+     * @param SharpFormField $field
+     * @param string $attribute
+     * @param $value
+     * @return null
+     */
     function fromFront(SharpFormField $field, string $attribute, $value)
     {
         return null;

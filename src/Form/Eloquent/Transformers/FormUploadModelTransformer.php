@@ -38,6 +38,10 @@ class FormUploadModelTransformer implements SharpAttributeTransformer
         return $this->transformUpload($instance->$attribute);
     }
 
+    /**
+     * @param $upload
+     * @return array
+     */
     protected function transformUpload($upload)
     {
         return ($upload->file_name ? [

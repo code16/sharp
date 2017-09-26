@@ -68,14 +68,14 @@ class UploadFormatter implements SharpFieldFormatter
                 $fileContent = $this->handleImageTransformations($fileContent, $value["cropData"]);
             }
 
-            $storedFileName = $this->getStoragePath($value["name"], $field);
+            $storedFilePath = $this->getStoragePath($value["name"], $field);
 
-            $storage->put($storedFileName, $fileContent);
+            $storage->put($storedFilePath, $fileContent);
 
             return [
-                "file_name" => $storedFileName,
-                "size" => $storage->size($storedFileName),
-                "mime_type" => $storage->mimeType($storedFileName),
+                "file_name" => $storedFilePath,
+                "size" => $storage->size($storedFilePath),
+                "mime_type" => $storage->mimeType($storedFilePath),
                 "disk" => $field->storageDisk(),
                 "transformed" => $transformed
             ];
