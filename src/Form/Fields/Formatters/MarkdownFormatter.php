@@ -6,7 +6,7 @@ use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Illuminate\Support\Facades\Storage;
 
-class MarkdownFormatter implements SharpFieldFormatter
+class MarkdownFormatter extends SharpFieldFormatter
 {
 
     /**

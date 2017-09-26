@@ -149,24 +149,26 @@ abstract class SharpForm
     }
 
     /**
-     * @param $id
-     * @param $data
-     * @return mixed
+     * @param string|null $id
+     * @param array $data
      */
     public function updateInstance($id, $data)
     {
-        $instance = $this->update($id, $this->formatRequestData($data));
+        list($formattedData, $delayedData) = $this->formatRequestData($data, $id, true);
 
-        return $instance;
+        $id = $this->update($id, $formattedData);
+
+        if($delayedData) {
+            $this->update($id, $this->formatRequestData($delayedData, $id, false));
+        }
     }
 
     /**
      * @param $data
-     * @return mixed
      */
     public function storeInstance($data)
     {
-        return $this->updateInstance(null, $data);
+        $this->updateInstance(null, $data);
     }
 
     /**

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\FilesystemManager;
 use Intervention\Image\ImageManager;
 
-class UploadFormatter implements SharpFieldFormatter
+class UploadFormatter extends SharpFieldFormatter
 {
     /**
      * @var FilesystemManager

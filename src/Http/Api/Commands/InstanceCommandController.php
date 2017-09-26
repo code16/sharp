@@ -31,7 +31,7 @@ class InstanceCommandController extends ApiController
             $list,
             $commandHandler->execute(
                 $instanceId,
-                $commandHandler->formatRequestData((array)request("data"))
+                $commandHandler->formatRequestData((array)request("data"), $instanceId)
             )
         );
     }

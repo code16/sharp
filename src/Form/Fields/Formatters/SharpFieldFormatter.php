@@ -4,15 +4,31 @@ namespace Code16\Sharp\Form\Fields\Formatters;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
 
-interface SharpFieldFormatter
+abstract class SharpFieldFormatter
 {
+
+    /**
+     * @var string|null
+     */
+    protected $instanceId;
+
+    /**
+     * @param string|null $instanceId
+     * @return $this
+     */
+    function setInstanceId($instanceId)
+    {
+        $this->instanceId = $instanceId;
+
+        return $this;
+    }
 
     /**
      * @param SharpFormField $field
      * @param $value
      * @return mixed
      */
-    function toFront(SharpFormField $field, $value);
+    abstract function toFront(SharpFormField $field, $value);
 
     /**
      * @param SharpFormField $field
@@ -20,5 +36,5 @@ interface SharpFieldFormatter
      * @param $value
      * @return mixed
      */
-    function fromFront(SharpFormField $field, string $attribute, $value);
+    abstract function fromFront(SharpFormField $field, string $attribute, $value);
 }
