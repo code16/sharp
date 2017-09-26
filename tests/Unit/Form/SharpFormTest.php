@@ -2,8 +2,12 @@
 
 namespace Code16\Sharp\Tests\Unit\Form;
 
+use Code16\Sharp\Exceptions\Form\SharpFormFieldFormattingMustBeDelayedException;
+use Code16\Sharp\Form\Fields\Formatters\SharpFieldFormatter;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
+use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormMarkdownField;
+use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Tests\SharpTestCase;
 
@@ -28,6 +32,62 @@ class SharpFormTest extends SharpTestCase
                 "md" => ["text" => null],
                 "check" => false
             ], $sharpForm->newInstance());
+    }
+
+    /** @test */
+    function if_the_field_formatter_needs_it_we_can_delay_its_execution_after_first_save()
+    {
+        $sharpForm = new class extends BaseSharpForm
+        {
+            public $instance;
+
+            function buildFormFields()
+            {
+                $this->addField(
+                    SharpFormTextField::make("normal")
+                )->addField(
+                    SharpFormTextField::make("delayed")
+                        ->setFormatter(new class extends SharpFieldFormatter
+                        {
+                            function toFront(SharpFormField $field, $value)
+                            {
+                            }
+
+                            function fromFront(SharpFormField $field, string $attribute, $value)
+                            {
+                                if (!$this->instanceId) {
+                                    throw new SharpFormFieldFormattingMustBeDelayedException();
+                                }
+
+                                return $value . "-" . $this->instanceId;
+                            }
+                        })
+                );
+            }
+
+            function update($id, array $data)
+            {
+                if (!$id) {
+                    $this->instance = ["id" => 1] + $data;
+
+                } else {
+                    $this->instance += $data;
+                }
+
+                return 1;
+            }
+        };
+
+        $sharpForm->storeInstance([
+            "normal" => "abc",
+            "delayed" => "abc",
+        ]);
+
+        $this->assertEquals([
+            "id" => 1,
+            "normal" => "abc",
+            "delayed" => "abc-1",
+        ], $sharpForm->instance);
     }
 }
 

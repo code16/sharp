@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Form;
 
+use Code16\Sharp\Exceptions\Form\SharpFormFieldFormattingMustBeDelayedException;
 use Code16\Sharp\Form\Fields\SharpFormField;
 
 trait HandleFormFields
@@ -105,7 +106,8 @@ trait HandleFormFields
                     ->setInstanceId($instanceId)
                     ->fromFront($field, $key, $value);
 
-            } catch(FieldFormattingMustBeDelayedException $exception) {
+            } catch(SharpFormFieldFormattingMustBeDelayedException $exception) {
+                // The formatter needs to be executed in a second pass. We delay it.
                 if($handleDelayedData) {
                     $delayedData[$key] = $value;
                     return null;

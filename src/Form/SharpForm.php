@@ -159,6 +159,9 @@ abstract class SharpForm
         $id = $this->update($id, $formattedData);
 
         if($delayedData) {
+            // Some formatters asked to delay their handling after a first pass.
+            // Typically, this is used if the formatter needs the id of the
+            // instance: in a creation case, we must store it first.
             $this->update($id, $this->formatRequestData($delayedData, $id, false));
         }
     }
@@ -213,7 +216,7 @@ abstract class SharpForm
     /**
      * @param $id
      * @param array $data
-     * @return mixed the updated or created instance
+     * @return mixed the instance id
      */
     abstract function update($id, array $data);
 
