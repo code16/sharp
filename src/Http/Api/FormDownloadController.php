@@ -36,7 +36,7 @@ class FormDownloadController extends ApiController
             request('fileName'), $form->findFieldByKey($formUploadFieldKey)
         );
 
-        abort_if(!$disk->exists($path), 404);
+        abort_if(!$disk->exists($path), 404, trans("sharp::errors.file_not_found"));
 
         return response(
             $disk->get($path), 200, [
