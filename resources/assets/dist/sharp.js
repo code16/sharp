@@ -33123,7 +33123,7 @@ new __WEBPACK_IMPORTED_MODULE_1_vue_dist_vue_common___default.a({
         var _this = this;
 
         this.$on('setClass', function (className, active) {
-            console.log('setClass', className, active);
+            //console.log('setClass', className, active);
             _this.$el.classList[active ? 'add' : 'remove'](className);
         });
     }
@@ -33331,7 +33331,7 @@ var noop = function noop() {};
                 data = _error$response.data,
                 method = error.config.method;
 
-            console.dir(error);
+
             if (method === 'get' && status === 404) {
                 _this2.showErrorPage = true;
                 _this2.errorPageData = {
@@ -52803,7 +52803,7 @@ var noop = function noop() {};
     },
     mounted: function mounted() {
         this.init();
-        console.log(this);
+        //console.log(this);
     }
 });
 
@@ -55800,6 +55800,8 @@ if (false) {(function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_codemirror__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_codemirror___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_codemirror__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__mixins_Localization__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_vue__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_vue__);
 
 
 
@@ -55838,7 +55840,8 @@ var noop = function noop() {};
         readOnly: Boolean,
         locale: String
     },
-    inject: ['xsrfToken', 'actionsBus', '$tab', '$form', '$field'],
+
+    inject: ['$tab'],
 
     data: function data() {
         return {
@@ -55892,19 +55895,16 @@ var noop = function noop() {};
                 value = _ref.value,
                 removeOptions = _ref.removeOptions;
 
-
+            var $markdown = this;
             var $uploader = new __WEBPACK_IMPORTED_MODULE_4__MarkdownUpload__["a" /* default */]({
-                provide: {
-                    actionsBus: this.actionsBus,
-                    $form: this.$form,
-                    $field: this.$field
-                },
                 propsData: __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends___default()({
                     id: id, value: value
                 }, this.innerComponents.upload, {
-                    downloadId: this.fieldConfigIdentifier,
-                    xsrfToken: this.xsrfToken
-                })
+                    downloadId: this.fieldConfigIdentifier
+                }),
+                beforeCreate: function beforeCreate() {
+                    this.$parent = $markdown;
+                }
             });
 
             $uploader.$on('success', function (file) {
@@ -63387,6 +63387,9 @@ if (false) {(function () {
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0_vue___default.a.extend({
     mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins__["k" /* UploadXSRF */]],
+
+    inject: ['xsrfToken'],
+
     props: {
         downloadId: String,
         id: Number,
@@ -63394,18 +63397,15 @@ if (false) {(function () {
 
         maxImageSize: Number,
         ratioX: Number,
-        ratioY: Number,
-
-        marker: Object,
-
-        xsrfToken: String
+        ratioY: Number
     },
     components: {
         SharpVueClip: __WEBPACK_IMPORTED_MODULE_1__upload_VueClip__["a" /* default */]
     },
     data: function data() {
         return {
-            show: this.value
+            show: this.value,
+            marker: null
         };
     },
 
@@ -63574,7 +63574,7 @@ if (false) {(function () {
 
     components: __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_defineProperty___default()({}, __WEBPACK_IMPORTED_MODULE_6__Modal__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_6__Modal__["a" /* default */]),
 
-    inject: ['actionsBus', '$form', '$field'],
+    inject: ['actionsBus', 'axiosInstance', '$form', '$field'],
 
     mixins: [__WEBPACK_IMPORTED_MODULE_9__mixins__["g" /* Localization */]],
 
@@ -63620,7 +63620,7 @@ if (false) {(function () {
         },
         size: function size() {
             if (this.file.size == null) {
-                return '--';
+                return '';
             }
             var size = parseFloat(this.file.size.toFixed(2)) / 1024 / 1024;
             var res = '';
@@ -63736,7 +63736,7 @@ if (false) {(function () {
                                 }
 
                                 _context.next = 3;
-                                return __WEBPACK_IMPORTED_MODULE_10_axios___default.a.post(this.downloadLink, { fileName: this.value.name }, { responseType: 'blob' });
+                                return this.axiosInstance.post(this.downloadLink, { fileName: this.value.name }, { responseType: 'blob' });
 
                             case 3:
                                 _ref2 = _context.sent;
@@ -72591,18 +72591,28 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     }
   })]) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "SharpUpload__infos"
-  }, [_c('div', [_c('label', {
+  }, [_c('div', {
+    staticClass: "mb-3"
+  }, [_c('label', {
     staticClass: "SharpUpload__filename"
   }, [_vm._v(_vm._s(_vm.fileName))]), _vm._v(" "), _c('div', {
     staticClass: "SharpUpload__info mt-2"
-  }, [_vm._v("\n                                " + _vm._s(_vm.size) + "\n                                "), _c('a', {
+  }, [_c('span', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.size),
+      expression: "size"
+    }],
+    staticClass: "mr-2"
+  }, [_vm._v(_vm._s(_vm.size))]), _vm._v(" "), _c('a', {
     directives: [{
       name: "show",
       rawName: "v-show",
       value: (_vm.canDownload),
       expression: "canDownload"
     }],
-    staticClass: "SharpUpload__download-link ml-2",
+    staticClass: "SharpUpload__download-link",
     attrs: {
       "href": ""
     },
@@ -72636,10 +72646,16 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "aria-valuemax": "100"
     }
   })])])], 1), _vm._v(" "), _c('div', [_c('button', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (!!_vm.originalImageSrc && !_vm.inProgress),
+      expression: "!!originalImageSrc && !inProgress"
+    }],
     staticClass: "SharpButton SharpButton--sm SharpButton--secondary",
     attrs: {
       "type": "button",
-      "disabled": _vm.readOnly || !_vm.originalImageSrc || _vm.inProgress
+      "disabled": _vm.readOnly
     },
     on: {
       "click": _vm.onEditButtonClick
@@ -75492,8 +75508,8 @@ var noop = function noop() {};
                 return res;
             }, (_Object$keys$reduce = {}, __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_Object$keys$reduce, this.itemIdAttribute, null), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_Object$keys$reduce, this.indexSymbol, this.lastIndex++), _Object$keys$reduce));
         },
-        insertNewItem: function insertNewItem($event, i) {
-            $event.target.blur();
+        insertNewItem: function insertNewItem(i, $event) {
+            $event.target && $event.target.blur();
             this.list.splice(i + 1, 0, this.createItem());
         },
         add: function add() {
@@ -77199,7 +77215,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       staticClass: "SharpButton SharpButton--secondary SharpButton--sm",
       on: {
         "click": function($event) {
-          _vm.insertNewItem($event, i)
+          _vm.insertNewItem(i, $event)
         }
       }
     }, [_vm._v(_vm._s(_vm.l('form.list.insert_button')))])]) : _vm._e()])

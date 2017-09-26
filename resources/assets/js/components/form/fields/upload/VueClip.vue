@@ -13,11 +13,11 @@
                             <img :src="imageSrc" @load="$emit('image-updated')">
                         </div>
                         <div class="SharpUpload__infos">
-                            <div>
+                            <div class="mb-3">
                                 <label class="SharpUpload__filename">{{ fileName }}</label>
                                 <div class="SharpUpload__info mt-2">
-                                    {{ size }}
-                                    <a v-show="canDownload" class="SharpUpload__download-link ml-2" @click.prevent="download" href="">
+                                    <span v-show="size" class="mr-2">{{ size }}</span>
+                                    <a v-show="canDownload" class="SharpUpload__download-link" @click.prevent="download" href="">
                                         {{ l('form.upload.download_link') }}
                                     </a>
                                 </div>
@@ -29,7 +29,7 @@
                                 </transition>
                             </div>
                             <div>
-                                    <button type="button" class="SharpButton SharpButton--sm SharpButton--secondary" @click="onEditButtonClick" :disabled="readOnly || !originalImageSrc || inProgress">
+                                    <button v-show="!!originalImageSrc && !inProgress" type="button" class="SharpButton SharpButton--sm SharpButton--secondary" @click="onEditButtonClick" :disabled="readOnly">
                                         {{ l('form.upload.edit_button') }}
                                     </button>
                                 <button type="button" class="SharpButton SharpButton--sm SharpButton--secondary SharpButton--danger SharpUpload__remove-button"
@@ -98,7 +98,7 @@
             [Modal.name]: Modal
         },
 
-        inject : [ 'actionsBus', '$form', '$field' ],
+        inject : [ 'actionsBus', 'axiosInstance' ,'$form', '$field' ],
 
         mixins: [ Localization ],
 
@@ -143,7 +143,7 @@
             },
             size() {
                 if(this.file.size == null) {
-                    return '--';
+                    return '';
                 }
                 let size = (parseFloat((this.file.size).toFixed(2))/1024)/1024;
                 let res = '';
@@ -236,7 +236,7 @@
 
             async download() {
                 if(!this.value.uploaded) {
-                    let { data } = await axios.post(this.downloadLink, { fileName: this.value.name }, { responseType: 'blob' });
+                    let { data } = await this.axiosInstance.post(this.downloadLink, { fileName: this.value.name }, { responseType: 'blob' });
                     //console.log(data);
                     let $link = this.$refs.dlLink;
                     $link.href = URL.createObjectURL(data);

@@ -3043,127 +3043,6 @@
   clip: auto;
 }
 
-.time-picker {
-  display: inline-block;
-  position: relative;
-  font-size: 1em;
-  width: 10em;
-  font-family: sans-serif;
-  vertical-align: middle;
-}
-
-.time-picker * {
-  box-sizing: border-box;
-}
-
-.time-picker input.display-time {
-  border: 1px solid #d2d2d2;
-  width: 10em;
-  height: 2.2em;
-  padding: 0.3em 0.5em;
-  font-size: 1em;
-}
-
-.time-picker .clear-btn {
-  position: absolute;
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-  align-items: center;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  margin-top: -0.15em;
-  z-index: 3;
-  font-size: 1.1em;
-  line-height: 1em;
-  vertical-align: middle;
-  width: 1.3em;
-  color: #d2d2d2;
-  background: rgba(255,255,255,0);
-  text-align: center;
-  font-style: normal;
-
-  -webkit-transition: color .2s;
-  transition: color .2s;
-}
-
-.time-picker .clear-btn:hover {
-  color: #797979;
-  cursor: pointer;
-}
-
-.time-picker .time-picker-overlay {
-  z-index: 2;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.time-picker .dropdown {
-  position: absolute;
-  z-index: 5;
-  top: calc(2.2em + 2px);
-  left: 0;
-  background: #fff;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.15);
-  width: 10em;
-  height: 10em;
-  font-weight: normal;
-}
-
-.time-picker .dropdown .select-list {
-  width: 10em;
-  height: 10em;
-  overflow: hidden;
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: stretch;
-  justify-content: space-between;
-}
-
-.time-picker .dropdown ul {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-
-  flex: 1;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-.time-picker .dropdown ul.minutes,
-.time-picker .dropdown ul.seconds,
-.time-picker .dropdown ul.apms{
-  border-left: 1px solid #fff;
-}
-
-.time-picker .dropdown ul li {
-  text-align: center;
-  padding: 0.3em 0;
-  color: #161616;
-}
-
-.time-picker .dropdown ul li:not(.hint):hover {
-  background: rgba(0,0,0,.08);
-  color: #161616;
-  cursor: pointer;
-}
-
-.time-picker .dropdown ul li.active,
-.time-picker .dropdown ul li.active:hover {
-  background: #41B883;
-  color: #fff;
-}
-
-.time-picker .dropdown .hint {
-  color: #a5a5a5;
-  cursor: default;
-  font-size: 0.8em;
-}
-
 @charset "UTF-8";
 @-webkit-keyframes rotate {
   0% {
@@ -6505,10 +6384,6 @@
   transition: width .5s;
 }
 
-#sharp-app .SharpUpload__container .SharpUpload__infos > * {
-  margin: .2em 0;
-}
-
 #sharp-app .SharpUpload__container .SharpUpload__infos .SharpUpload__info {
   font-size: 0.75rem;
 }
@@ -6591,18 +6466,18 @@
           box-sizing: inherit;
 }
 
-#sharp-app .SharpForm__fieldset .SharpModule__inner, #sharp-app .SharpForm__fieldset .SharpUpload:not(.SharpUpload--empty) .SharpUpload__inner, #sharp-app .SharpUpload:not(.SharpUpload--empty) .SharpForm__fieldset .SharpUpload__inner {
+#sharp-app .SharpForm__fieldset > .SharpModule__inner, #sharp-app .SharpUpload:not(.SharpUpload--empty) .SharpForm__fieldset > .SharpUpload__inner {
   background: transparent;
   border: 0;
   -webkit-box-shadow: none;
           box-shadow: none;
 }
 
-#sharp-app .SharpForm__fieldset .SharpModule__header, #sharp-app .SharpForm__fieldset .SharpMarkdown .editor-toolbar, #sharp-app .SharpMarkdown .SharpForm__fieldset .editor-toolbar {
+#sharp-app .SharpForm__fieldset > .SharpModule__inner > .SharpModule__header, #sharp-app .SharpUpload:not(.SharpUpload--empty) .SharpForm__fieldset > .SharpUpload__inner > .SharpModule__header, #sharp-app .SharpMarkdown .SharpForm__fieldset > .SharpModule__inner > .editor-toolbar, #sharp-app .SharpUpload:not(.SharpUpload--empty) .SharpMarkdown .SharpForm__fieldset > .SharpUpload__inner > .editor-toolbar, #sharp-app .SharpMarkdown .SharpUpload:not(.SharpUpload--empty) .SharpForm__fieldset > .SharpUpload__inner > .editor-toolbar {
   padding: 0;
 }
 
-#sharp-app .SharpForm__fieldset .SharpModule__content, #sharp-app .SharpForm__fieldset .SharpUpload:not(.SharpUpload--empty) .SharpUpload__content, #sharp-app .SharpUpload:not(.SharpUpload--empty) .SharpForm__fieldset .SharpUpload__content, #sharp-app .SharpForm__fieldset .SharpMarkdown .CodeMirror, #sharp-app .SharpMarkdown .SharpForm__fieldset .CodeMirror {
+#sharp-app .SharpForm__fieldset > .SharpModule__inner > .SharpModule__content, #sharp-app .SharpUpload:not(.SharpUpload--empty) .SharpForm__fieldset > .SharpUpload__inner > .SharpModule__content, #sharp-app .SharpUpload:not(.SharpUpload--empty) .SharpForm__fieldset > .SharpModule__inner > .SharpUpload__content, #sharp-app .SharpUpload:not(.SharpUpload--empty) .SharpForm__fieldset > .SharpUpload__inner > .SharpUpload__content, #sharp-app .SharpMarkdown .SharpForm__fieldset > .SharpModule__inner > .CodeMirror, #sharp-app .SharpUpload:not(.SharpUpload--empty) .SharpMarkdown .SharpForm__fieldset > .SharpUpload__inner > .CodeMirror, #sharp-app .SharpMarkdown .SharpUpload:not(.SharpUpload--empty) .SharpForm__fieldset > .SharpUpload__inner > .CodeMirror {
   background: #DAE3EE;
   -webkit-box-shadow: 0 0 2px 0 #DAE3EE;
           box-shadow: 0 0 2px 0 #DAE3EE;
@@ -6619,7 +6494,7 @@
     }*/
 }
 
-#sharp-app .SharpForm__label, #sharp-app .SharpForm__fieldset .SharpModule__header .SharpModule__title, #sharp-app .SharpForm__fieldset .SharpMarkdown .editor-toolbar .SharpModule__title, #sharp-app .SharpMarkdown .SharpForm__fieldset .editor-toolbar .SharpModule__title {
+#sharp-app .SharpForm__label, #sharp-app .SharpForm__fieldset > .SharpModule__inner > .SharpModule__header .SharpModule__title, #sharp-app .SharpUpload:not(.SharpUpload--empty) .SharpForm__fieldset > .SharpUpload__inner > .SharpModule__header .SharpModule__title, #sharp-app .SharpMarkdown .SharpForm__fieldset > .SharpModule__inner > .editor-toolbar .SharpModule__title, #sharp-app .SharpUpload:not(.SharpUpload--empty) .SharpMarkdown .SharpForm__fieldset > .SharpUpload__inner > .editor-toolbar .SharpModule__title, #sharp-app .SharpMarkdown .SharpUpload:not(.SharpUpload--empty) .SharpForm__fieldset > .SharpUpload__inner > .editor-toolbar .SharpModule__title {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   margin: 0;
@@ -6636,9 +6511,9 @@
   text-transform: uppercase;
 }
 
-#sharp-app .SharpForm__label > *, #sharp-app .SharpForm__fieldset .SharpModule__header .SharpModule__title > *, #sharp-app .SharpForm__fieldset .SharpMarkdown .editor-toolbar .SharpModule__title > *, #sharp-app .SharpMarkdown .SharpForm__fieldset .editor-toolbar .SharpModule__title > *,
-#sharp-app .SharpForm__label > *:before, #sharp-app .SharpForm__fieldset .SharpModule__header .SharpModule__title > *:before, #sharp-app .SharpForm__fieldset .SharpMarkdown .editor-toolbar .SharpModule__title > *:before, #sharp-app .SharpMarkdown .SharpForm__fieldset .editor-toolbar .SharpModule__title > *:before,
-#sharp-app .SharpForm__label > *:after, #sharp-app .SharpForm__fieldset .SharpModule__header .SharpModule__title > *:after, #sharp-app .SharpForm__fieldset .SharpMarkdown .editor-toolbar .SharpModule__title > *:after, #sharp-app .SharpMarkdown .SharpForm__fieldset .editor-toolbar .SharpModule__title > *:after {
+#sharp-app .SharpForm__label > *, #sharp-app .SharpForm__fieldset > .SharpModule__inner > .SharpModule__header .SharpModule__title > *, #sharp-app .SharpUpload:not(.SharpUpload--empty) .SharpForm__fieldset > .SharpUpload__inner > .SharpModule__header .SharpModule__title > *, #sharp-app .SharpMarkdown .SharpForm__fieldset > .SharpModule__inner > .editor-toolbar .SharpModule__title > *, #sharp-app .SharpUpload:not(.SharpUpload--empty) .SharpMarkdown .SharpForm__fieldset > .SharpUpload__inner > .editor-toolbar .SharpModule__title > *, #sharp-app .SharpMarkdown .SharpUpload:not(.SharpUpload--empty) .SharpForm__fieldset > .SharpUpload__inner > .editor-toolbar .SharpModule__title > *,
+#sharp-app .SharpForm__label > *:before, #sharp-app .SharpForm__fieldset > .SharpModule__inner > .SharpModule__header .SharpModule__title > *:before, #sharp-app .SharpUpload:not(.SharpUpload--empty) .SharpForm__fieldset > .SharpUpload__inner > .SharpModule__header .SharpModule__title > *:before, #sharp-app .SharpMarkdown .SharpForm__fieldset > .SharpModule__inner > .editor-toolbar .SharpModule__title > *:before, #sharp-app .SharpUpload:not(.SharpUpload--empty) .SharpMarkdown .SharpForm__fieldset > .SharpUpload__inner > .editor-toolbar .SharpModule__title > *:before, #sharp-app .SharpMarkdown .SharpUpload:not(.SharpUpload--empty) .SharpForm__fieldset > .SharpUpload__inner > .editor-toolbar .SharpModule__title > *:before,
+#sharp-app .SharpForm__label > *:after, #sharp-app .SharpForm__fieldset > .SharpModule__inner > .SharpModule__header .SharpModule__title > *:after, #sharp-app .SharpUpload:not(.SharpUpload--empty) .SharpForm__fieldset > .SharpUpload__inner > .SharpModule__header .SharpModule__title > *:after, #sharp-app .SharpMarkdown .SharpForm__fieldset > .SharpModule__inner > .editor-toolbar .SharpModule__title > *:after, #sharp-app .SharpUpload:not(.SharpUpload--empty) .SharpMarkdown .SharpForm__fieldset > .SharpUpload__inner > .editor-toolbar .SharpModule__title > *:after, #sharp-app .SharpMarkdown .SharpUpload:not(.SharpUpload--empty) .SharpForm__fieldset > .SharpUpload__inner > .editor-toolbar .SharpModule__title > *:after {
   -webkit-box-sizing: inherit;
           box-sizing: inherit;
 }
@@ -10390,6 +10265,127 @@
 .modal-open {
   overflow-y: hidden;
 }
+.time-picker {
+  display: inline-block;
+  position: relative;
+  font-size: 1em;
+  width: 10em;
+  font-family: sans-serif;
+  vertical-align: middle;
+}
+
+.time-picker * {
+  box-sizing: border-box;
+}
+
+.time-picker input.display-time {
+  border: 1px solid #d2d2d2;
+  width: 10em;
+  height: 2.2em;
+  padding: 0.3em 0.5em;
+  font-size: 1em;
+}
+
+.time-picker .clear-btn {
+  position: absolute;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin-top: -0.15em;
+  z-index: 3;
+  font-size: 1.1em;
+  line-height: 1em;
+  vertical-align: middle;
+  width: 1.3em;
+  color: #d2d2d2;
+  background: rgba(255,255,255,0);
+  text-align: center;
+  font-style: normal;
+
+  -webkit-transition: color .2s;
+  transition: color .2s;
+}
+
+.time-picker .clear-btn:hover {
+  color: #797979;
+  cursor: pointer;
+}
+
+.time-picker .time-picker-overlay {
+  z-index: 2;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.time-picker .dropdown {
+  position: absolute;
+  z-index: 5;
+  top: calc(2.2em + 2px);
+  left: 0;
+  background: #fff;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.15);
+  width: 10em;
+  height: 10em;
+  font-weight: normal;
+}
+
+.time-picker .dropdown .select-list {
+  width: 10em;
+  height: 10em;
+  overflow: hidden;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+.time-picker .dropdown ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.time-picker .dropdown ul.minutes,
+.time-picker .dropdown ul.seconds,
+.time-picker .dropdown ul.apms{
+  border-left: 1px solid #fff;
+}
+
+.time-picker .dropdown ul li {
+  text-align: center;
+  padding: 0.3em 0;
+  color: #161616;
+}
+
+.time-picker .dropdown ul li:not(.hint):hover {
+  background: rgba(0,0,0,.08);
+  color: #161616;
+  cursor: pointer;
+}
+
+.time-picker .dropdown ul li.active,
+.time-picker .dropdown ul li.active:hover {
+  background: #41B883;
+  color: #fff;
+}
+
+.time-picker .dropdown .hint {
+  color: #a5a5a5;
+  cursor: default;
+  font-size: 0.8em;
+}
+
 
 /**
  * simplemde v1.11.2
