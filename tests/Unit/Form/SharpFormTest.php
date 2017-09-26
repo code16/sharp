@@ -52,7 +52,6 @@ class SharpFormTest extends SharpTestCase
                             function toFront(SharpFormField $field, $value)
                             {
                             }
-
                             function fromFront(SharpFormField $field, string $attribute, $value)
                             {
                                 if (!$this->instanceId) {

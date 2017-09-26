@@ -35,7 +35,7 @@ trait WithSharpFormEloquentUpdater
     function save(Model $instance, array $data)
     {
         // First transform data...
-        $data = $this->applyTransformers($data);
+        $data = $this->applyTransformers($data, false);
 
         // Then handle manually ignored attributes...
         if(count($this->ignoredAttributes)) {

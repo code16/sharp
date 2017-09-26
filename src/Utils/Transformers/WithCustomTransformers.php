@@ -94,19 +94,24 @@ trait WithCustomTransformers
 
     /**
      * @param array|object $model the base model (Eloquent for instance), or an array of attributes
+     * @param bool $forceAttributesPresence
      * @return array
      */
-    protected function applyTransformers($model)
+    protected function applyTransformers($model, bool $forceAttributesPresence = true)
     {
-        // Merge model attribute with form fields to be sure we have
-        // all attributes which the front code needed.
-        $attributes = array_merge(
-            collect($this->getDataKeys())->flip()->map(function() {
-                return null;
-            })->all(), is_array($model) ? $model : $model->toArray());
+        $attributes = is_array($model) ? $model : $model->toArray();
 
-        if(is_object($model)) {
-            $attributes = $this->handleAutoRelatedAttributes($attributes, $model);
+        if($forceAttributesPresence) {
+            // Merge model attribute with form fields to be sure we have
+            // all attributes which the front code needed.
+            $attributes = array_merge(
+                collect($this->getDataKeys())->flip()->map(function () {
+                    return null;
+                })->all(), $attributes);
+
+            if (is_object($model)) {
+                $attributes = $this->handleAutoRelatedAttributes($attributes, $model);
+            }
         }
 
         // Apply transformers
@@ -116,6 +121,10 @@ trait WithCustomTransformers
                 $listAttribute = substr($attribute, 0, strpos($attribute, '['));
                 $itemAttribute = substr($attribute, strpos($attribute, '[') + 1, -1);
 
+                if(!isset($attributes[$listAttribute])) {
+                    continue;
+                }
+
                 foreach ($model->$listAttribute as $k => $itemModel) {
                     $attributes[$listAttribute][$k][$itemAttribute] = $transformer->apply(
                         $attributes[$listAttribute][$k][$itemAttribute], $itemModel, $itemAttribute
@@ -123,6 +132,11 @@ trait WithCustomTransformers
                 }
 
             } else {
+
+                if(!isset($attributes[$attribute])) {
+                    continue;
+                }
+
                 $attributes[$attribute] = $transformer->apply($attributes[$attribute], $model, $attribute);
             }
         }

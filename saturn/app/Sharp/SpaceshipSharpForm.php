@@ -73,7 +73,7 @@ class SpaceshipSharpForm extends SharpForm
                 ->setFileFilterImages()
                 ->setCropRatio("1:1")
                 ->setStorageDisk("local")
-                ->setStorageBasePath("data/Spaceship")
+                ->setStorageBasePath("data/Spaceship/{id}")
 
         )->addField(
             SharpFormTextField::make("picture:legend")
@@ -192,7 +192,7 @@ class SpaceshipSharpForm extends SharpForm
     {
         $instance = $id ? Spaceship::findOrFail($id) : new Spaceship;
 
-        if($data["name"] == "error") {
+        if(isset($data["name"]) && $data["name"] == "error") {
             throw new SharpApplicativeException("Name can't be «error»");
         }
 
@@ -200,6 +200,8 @@ class SpaceshipSharpForm extends SharpForm
                 return $capacity * 1000;
             })
             ->save($instance, $data);
+
+        return $instance->id;
     }
 
     function delete($id)
