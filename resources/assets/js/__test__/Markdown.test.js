@@ -171,9 +171,10 @@ describe('markdown-field', () => {
     describe('uploader insertion', () => {
 
         let mockCodemirror = codemirror => {
-            codemirror.getSelection = jest.fn(() => 'Image title');
+            //codemirror.getSelection = jest.fn(() => 'Image title');
             codemirror.markText = jest.fn(() => ({
                 on: jest.fn(),
+                clear: jest.fn(),
                 lines: [{ on: jest.fn() }]
             }));
             codemirror.addLineClass = jest.fn();
@@ -187,7 +188,7 @@ describe('markdown-field', () => {
             }));
         };
 
-        it('insert image properly', async () => {
+        it('insert image uploader and text properly', async () => {
             let $markdown = await createVm();
 
             let { simplemde } = $markdown;
@@ -195,9 +196,84 @@ describe('markdown-field', () => {
 
             mockCodemirror(codemirror);
 
-            $markdown.insertUploadImage(simplemde);
+            simplemde.value("Lorem Elsass ipsum");
+            codemirror.setSelection({ line: 0, ch:5 }, { line: 0, ch:13 });
 
-            //console.log(simplemde.value());
+            $markdown.insertUploadImage({ isInsertion:true });
+
+            expect(simplemde.value()).toBe('Lorem\n\n![]()\n\nipsum');
+        });
+
+        it('update image uploader and text properly', async () => {
+            let $markdown = await createVm();
+
+            let { simplemde } = $markdown;
+            let { codemirror } = simplemde;
+
+            mockCodemirror(codemirror);
+
+            let $uploader = $markdown.insertUploadImage({ isInsertion:true });
+
+            expect(simplemde.value()).toBe('\n![]()\n\n');
+
+            $uploader.marker.find = jest.fn(() => ({ from:{ line: 1, ch: 0 }, to:{ line: 1, ch:5 }}) );
+            $uploader.$emit('success', { name: 'cat.jpg' });
+
+            expect(simplemde.value()).toBe('\n![](cat.jpg)\n\n');
+
+            expect($markdown.value.files).toEqual([{
+                [$markdown.idSymbol]: 0,
+                name: 'cat.jpg'
+            }]);
+        });
+
+        it('parse and insert image uploader and text properly', async () => {
+            let $uploader = null;
+            let $markdown = await createVm({
+                data: ()=>({
+                    value: {
+                        text:'aaa\n![Cat](cat.jpg)\nbbb',
+                        files:[{
+                            name:'cat.jpg',
+                            size: 123
+                        }]
+                    },
+                }),
+                components: {
+                    'sharp-markdown': {
+                        'extends': Markdown,
+                        created() {
+                            let insert = this.insertUploadImage;
+                            this.insertUploadImage = jest.fn((...args)=>
+                                $uploader = insert.apply(this, args)
+                            );
+                        }
+                    }
+                }
+            });
+
+            let { simplemde } = $markdown;
+            let { codemirror } = simplemde;
+
+            mockCodemirror(codemirror);
+
+            codemirror.setSelection = jest.fn(codemirror.setSelection);
+
+            $markdown.$tab.$emit('active');
+
+            expect(simplemde.value()).toBe('aaa\n![Cat](cat.jpg)\nbbb');
+
+
+            expect(codemirror.setSelection).toHaveBeenCalledTimes(1);
+            expect(codemirror.setSelection).toHaveBeenCalledWith({ line:1, ch:0 }, { line:1, ch:15 });
+
+            expect($markdown.insertUploadImage).toHaveBeenCalledTimes(1);
+            expect($markdown.insertUploadImage).toHaveBeenCalledWith({ replaceBySelection:true, data:{ name:'cat.jpg', title:'Cat' } });
+
+            expect($uploader.value).toMatchObject({
+                name: 'cat.jpg',
+                size: 123
+            });
         });
     });
 });

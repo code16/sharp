@@ -16,9 +16,10 @@
       "\\.(css|less)$": "<rootDir>/resources/assets/js/__test__/__mocks__/styleMock.js"
     },
     "verbose": true,
-    "testPathIgnorePatterns": [
-      "/node_modules/"
+    "setupFiles": [
+      "<rootDir>/resources/assets/js/__test__/setup/mockument.js"
     ]
+
   },
   "scripts": {
     "dev": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",

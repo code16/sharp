@@ -150,6 +150,9 @@
                 this.$set(this.value.files, fileIndex, { ...file, ...data });
             },
 
+            // replaceBySelection : put the selected text inside the marker (existing tag from parsing)
+            // data : contains de title and name from the image tag
+            // isInsertion : if the user click on 'insert image' button
             insertUploadImage({ replaceBySelection, data, isInsertion } = {}) {
                 let selection = this.codemirror.getSelection(' ');
                 let curLineContent = this.codemirror.getLine(this.cursorPos.line);
@@ -204,6 +207,8 @@
 
                 if(isInsertion)
                     $uploader.inputClick();
+
+                return $uploader;
             },
 
             onCursorActivity() {
