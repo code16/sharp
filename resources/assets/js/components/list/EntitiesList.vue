@@ -478,7 +478,8 @@
             /* (CommandAPIResponse)
             * Execute the required command action
             */
-            handleCommandResponse({action, items, message, html}) {
+            handleCommandResponse({ data:{action, items, message, html} }) {
+                //debugger;
                 if(action === 'refresh') this.actionRefresh(items);
                 else if(action === 'reload') this.actionReload();
                 else if(action === 'info') {

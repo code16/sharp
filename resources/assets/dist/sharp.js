@@ -78152,11 +78152,13 @@ var _components;
         * Execute the required command action
         */
         handleCommandResponse: function handleCommandResponse(_ref23) {
-            var action = _ref23.action,
-                items = _ref23.items,
-                message = _ref23.message,
-                html = _ref23.html;
+            var _ref23$data = _ref23.data,
+                action = _ref23$data.action,
+                items = _ref23$data.items,
+                message = _ref23$data.message,
+                html = _ref23$data.html;
 
+            //debugger;
             if (action === 'refresh') this.actionRefresh(items);else if (action === 'reload') this.actionReload();else if (action === 'info') {
                 this.actionsBus.$emit('showMainModal', {
                     title: this.l('modals.command.info.title'),
