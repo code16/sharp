@@ -51,6 +51,7 @@ class UploadFormatter extends SharpFieldFormatter
      * @param SharpFormField $field
      * @param string $attribute
      * @param $value
+     * @throws SharpFormFieldFormattingMustBeDelayedException
      * @return array|null
      */
     function fromFront(SharpFormField $field, string $attribute, $value)
@@ -63,12 +64,12 @@ class UploadFormatter extends SharpFieldFormatter
                 config("sharp.uploads.tmp_dir", 'tmp') . '/' . $value["name"]
             );
 
+            $storedFilePath = $this->getStoragePath($value["name"], $field);
+
             if($transformed = $this->isTransformed($value, $field)) {
                 // Handle transformations on the uploads disk for performance
                 $fileContent = $this->handleImageTransformations($fileContent, $value["cropData"]);
             }
-
-            $storedFilePath = $this->getStoragePath($value["name"], $field);
 
             $storage->put($storedFilePath, $fileContent);
 
