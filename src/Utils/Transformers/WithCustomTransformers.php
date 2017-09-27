@@ -120,7 +120,7 @@ trait WithCustomTransformers
                 $listAttribute = substr($attribute, 0, strpos($attribute, '['));
                 $itemAttribute = substr($attribute, strpos($attribute, '[') + 1, -1);
 
-                if(!isset($attributes[$listAttribute])) {
+                if(!array_key_exists($listAttribute, $attributes)) {
                     continue;
                 }
 
@@ -132,11 +132,13 @@ trait WithCustomTransformers
 
             } else {
 
-                if(!isset($attributes[$attribute])) {
+                if(!array_key_exists($attribute, $attributes)) {
                     continue;
                 }
 
-                $attributes[$attribute] = $transformer->apply($attributes[$attribute], $model, $attribute);
+                $attributes[$attribute] = $transformer->apply(
+                    $attributes[$attribute], $model, $attribute
+                );
             }
         }
 
