@@ -2,6 +2,16 @@ import * as qs from '../helpers/querystring';
 
 import { lang } from '../mixins/Localization';
 
+function parseBlobJSONContent(blob) {
+    return new Promise(resolve => {
+        let reader = new FileReader();
+        reader.addEventListener("loadend", function() {
+            resolve(JSON.parse(reader.result));
+        });
+        reader.readAsText(blob);
+    });
+}
+
 export default {
     inject:['mainLoading', 'axiosInstance'],
     
@@ -49,9 +59,14 @@ export default {
         this.axiosInstance.interceptors.response.use(response => {
             this.mainLoading.$emit('hide');
             return response;
-        }, error => {
-            let { response: {status, data}, config: { method } } = error;
+        }, async error => {
+            let { response: {status, data}, config: {method} } = error;
             this.mainLoading.$emit('hide');
+
+            if(data instanceof Blob) {
+                data = await parseBlobJSONContent(data);
+            }
+
             let modalOptions = {
                 title: lang(`modals.${status}.title`) || lang(`modals.error.title`),
                 text: data.message || lang(`modals.error.message`),

@@ -22499,14 +22499,30 @@ if (false) {(function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__helpers_querystring__ = __webpack_require__(98);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins_Localization__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__helpers_querystring__ = __webpack_require__(98);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mixins_Localization__ = __webpack_require__(24);
 
 
 
 
+
+
+
+function parseBlobJSONContent(blob) {
+    return new Promise(function (resolve) {
+        var reader = new FileReader();
+        reader.addEventListener("loadend", function () {
+            resolve(JSON.parse(reader.result));
+        });
+        reader.readAsText(blob);
+    });
+}
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     inject: ['mainLoading', 'axiosInstance'],
@@ -22529,7 +22545,7 @@ if (false) {(function () {
             return this.axiosInstance.get(this.apiPath, {
                 params: this.apiParams,
                 paramsSerializer: function paramsSerializer(p) {
-                    return __WEBPACK_IMPORTED_MODULE_1__helpers_querystring__["b" /* serialize */](p, { urlSeparator: false });
+                    return __WEBPACK_IMPORTED_MODULE_3__helpers_querystring__["b" /* serialize */](p, { urlSeparator: false });
                 }
             }).then(function (response) {
                 _this.mount(response.data);
@@ -22564,39 +22580,68 @@ if (false) {(function () {
         this.axiosInstance.interceptors.response.use(function (response) {
             _this2.mainLoading.$emit('hide');
             return response;
-        }, function (error) {
-            var _error$response = error.response,
-                status = _error$response.status,
-                data = _error$response.data,
-                method = error.config.method;
+        }, function () {
+            var _ref = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee(error) {
+                var _error$response, status, data, method, modalOptions;
 
-            _this2.mainLoading.$emit('hide');
-            var modalOptions = {
-                title: Object(__WEBPACK_IMPORTED_MODULE_2__mixins_Localization__["b" /* lang */])('modals.' + status + '.title') || Object(__WEBPACK_IMPORTED_MODULE_2__mixins_Localization__["b" /* lang */])('modals.error.title'),
-                text: data.message || Object(__WEBPACK_IMPORTED_MODULE_2__mixins_Localization__["b" /* lang */])('modals.error.message'),
-                isError: true
-            };
+                return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
+                    while (1) {
+                        switch (_context.prev = _context.next) {
+                            case 0:
+                                _error$response = error.response, status = _error$response.status, data = _error$response.data, method = error.config.method;
 
-            switch (status) {
-                /// Unauthorized
-                case 401:
-                    _this2.actionsBus.$emit('showMainModal', __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, modalOptions, {
-                        okCallback: function okCallback() {
-                            location.href = '/sharp/login';
+                                _this2.mainLoading.$emit('hide');
+
+                                if (!(data instanceof Blob)) {
+                                    _context.next = 6;
+                                    break;
+                                }
+
+                                _context.next = 5;
+                                return parseBlobJSONContent(data);
+
+                            case 5:
+                                data = _context.sent;
+
+                            case 6:
+                                modalOptions = {
+                                    title: Object(__WEBPACK_IMPORTED_MODULE_4__mixins_Localization__["b" /* lang */])('modals.' + status + '.title') || Object(__WEBPACK_IMPORTED_MODULE_4__mixins_Localization__["b" /* lang */])('modals.error.title'),
+                                    text: data.message || Object(__WEBPACK_IMPORTED_MODULE_4__mixins_Localization__["b" /* lang */])('modals.error.message'),
+                                    isError: true
+                                };
+                                _context.t0 = status;
+                                _context.next = _context.t0 === 401 ? 10 : _context.t0 === 404 ? 12 : _context.t0 === 403 ? 12 : _context.t0 === 417 ? 12 : 14;
+                                break;
+
+                            case 10:
+                                _this2.actionsBus.$emit('showMainModal', __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, modalOptions, {
+                                    okCallback: function okCallback() {
+                                        location.href = '/sharp/login';
+                                    }
+                                }));
+                                return _context.abrupt('break', 14);
+
+                            case 12:
+                                if (status !== 404 || method !== 'get') _this2.actionsBus.$emit('showMainModal', __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, modalOptions, {
+                                    okCloseOnly: true
+                                }));
+                                return _context.abrupt('break', 14);
+
+                            case 14:
+                                return _context.abrupt('return', Promise.reject(error));
+
+                            case 15:
+                            case 'end':
+                                return _context.stop();
                         }
-                    }));
-                    break;
+                    }
+                }, _callee, _this2);
+            }));
 
-                case 404:
-                case 403:
-                case 417:
-                    if (status !== 404 || method !== 'get') _this2.actionsBus.$emit('showMainModal', __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, modalOptions, {
-                        okCloseOnly: true
-                    }));
-                    break;
-            }
-            return Promise.reject(error);
-        });
+            return function (_x3) {
+                return _ref.apply(this, arguments);
+            };
+        }());
 
         if (!this.synchronous) this.mainLoading.$emit('show');
     }
