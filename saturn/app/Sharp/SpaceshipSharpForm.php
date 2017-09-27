@@ -49,7 +49,7 @@ class SpaceshipSharpForm extends SharpForm
                 ])
                 ->setCropRatio("1:1")
                 ->setStorageDisk("local")
-                ->setStorageBasePath("data/Spaceship/markdown")
+                ->setStorageBasePath("data/Spaceship/{id}/markdown")
 
         )->addField(
             SharpFormDateField::make("construction_date")

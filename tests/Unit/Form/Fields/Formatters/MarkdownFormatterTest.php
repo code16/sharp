@@ -102,6 +102,8 @@ class MarkdownFormatterTest extends SharpTestCase
         $attribute = "attribute";
 
         $service = Mockery::mock();
+        $service->shouldReceive('setInstanceId')
+            ->andReturnSelf();
         $service->shouldReceive('fromFront')
             ->andReturn([
                 "file_name" => "uploaded_test.png",

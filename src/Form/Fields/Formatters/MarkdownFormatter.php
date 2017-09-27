@@ -45,7 +45,9 @@ class MarkdownFormatter extends SharpFieldFormatter
             $uploadFormatter = app(UploadFormatter::class);
 
             foreach($value["files"] as $file) {
-                $upload = $uploadFormatter->fromFront($field, $attribute, $file);
+                $upload = $uploadFormatter
+                    ->setInstanceId($this->instanceId)
+                    ->fromFront($field, $attribute, $file);
 
                 if(isset($upload["file_name"])) {
                     // New file was uploaded. We have to update
