@@ -38,14 +38,14 @@
             locale:String
         },
 
-        inject: [ '$tab',],
+        inject: ['$tab'],
 
         data() {
             return {
                 simplemde:null,
                 cursorPos:0,
 
-                uploaderId: 0,
+                uploaderId: (this.value.files||[]).length,
             }
         },
         watch: {
@@ -96,7 +96,7 @@
                 $uploader.$on('active', () => this.setMarkerActive($uploader));
                 $uploader.$on('inactive', () => this.setMarkerInactive($uploader));
 
-                console.log('create uploader', id, $uploader);
+                //console.log('create uploader', id, $uploader);
 
                 return $uploader;
             },
@@ -117,9 +117,8 @@
                     marker.inclusiveLeft = marker.inclusiveRight = false;
                     let find = marker.find(), line = find.from.line;
                     let fallbackLine = line-relativeFallbackLine;
-                    let fallbacklineContent = +((this.codemirror.getLine(this.cursorPos.line)||{}).length);
 
-                    this.codemirror.replaceRange('',{ line: fallbackLine, ch:fallbacklineContent.length},{line:line+1, ch:0});
+                    this.codemirror.replaceRange('',{ line: fallbackLine },{line:line+1, ch:0});
                     marker.inclusiveLeft = marker.inclusiveRight = true;
                     marker.clear();
                     this.codemirror.focus();

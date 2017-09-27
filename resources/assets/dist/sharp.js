@@ -55895,7 +55895,7 @@ var noop = function noop() {};
             simplemde: null,
             cursorPos: 0,
 
-            uploaderId: 0
+            uploaderId: (this.value.files || []).length
         };
     },
 
@@ -55998,9 +55998,8 @@ var noop = function noop() {};
                 var find = marker.find(),
                     line = find.from.line;
                 var fallbackLine = line - relativeFallbackLine;
-                var fallbacklineContent = +(this.codemirror.getLine(this.cursorPos.line) || {}).length;
 
-                this.codemirror.replaceRange('', { line: fallbackLine, ch: fallbacklineContent.length }, { line: line + 1, ch: 0 });
+                this.codemirror.replaceRange('', { line: fallbackLine }, { line: line + 1, ch: 0 });
                 marker.inclusiveLeft = marker.inclusiveRight = true;
                 marker.clear();
                 this.codemirror.focus();
@@ -63532,6 +63531,9 @@ if (false) {(function () {
 
 
 
+
+var _components;
+
 //
 //
 //
@@ -63628,7 +63630,7 @@ if (false) {(function () {
 
     extends: __WEBPACK_IMPORTED_MODULE_4__vendor_vue_clip_components_Clip_index__["a" /* default */],
 
-    components: __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_defineProperty___default()({}, __WEBPACK_IMPORTED_MODULE_6__Modal__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_6__Modal__["a" /* default */]),
+    components: (_components = {}, __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_6__Modal__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_6__Modal__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_defineProperty___default()(_components, 'VueCropper', __WEBPACK_IMPORTED_MODULE_7_vue_cropperjs___default.a), _components),
 
     inject: ['actionsBus', 'axiosInstance', '$form', '$field'],
 
