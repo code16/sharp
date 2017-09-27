@@ -32,7 +32,7 @@ class SpaceshipSharpValidator extends FormRequest
 //            'picture' => 'required',
             'pictures.*.file' => 'required',
 //            'pictures.*.legend' => 'required',
-            "capacity" => "integer|min:10|nullable"
+            "capacity" => "integer|min:10|required"
         ];
     }
 }
