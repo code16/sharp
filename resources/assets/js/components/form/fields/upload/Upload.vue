@@ -1,10 +1,12 @@
 <template>
-    <sharp-vue-clip :download-id="fieldConfigIdentifier"
+    <sharp-vue-clip :pending-key="uniqueIdentifier"
+                    :download-id="fieldConfigIdentifier"
                     :options="options"
                     :value="value"
                     :ratioX="ratioX"
                     :ratioY="ratioY"
                     :read-only="readOnly"
+                    @input="$emit('input',$event)"
                     @error="$field.$emit('error',$event)"
                     @reset="$field.$emit('clear')">
     </sharp-vue-clip>
@@ -28,6 +30,7 @@
         inject: [ '$field', 'xsrfToken' ],
 
         props: {
+            uniqueIdentifier: String,
             fieldConfigIdentifier: String,
             value: Object,
 

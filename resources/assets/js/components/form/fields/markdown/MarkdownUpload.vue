@@ -1,6 +1,7 @@
 <template>
     <sharp-vue-clip
             v-show="show"
+            :pending-key="pendingKey"
             :download-id="downloadId"
             :options="options"
             :value="value"
@@ -26,13 +27,17 @@
     import { UPLOAD_URL } from '../../../../consts';
     import { UploadXSRF } from '../../../../mixins';
 
+
     export default Vue.extend({
+
         mixins: [ UploadXSRF ],
 
         inject: [ 'xsrfToken'],
 
         props: {
             downloadId: String,
+            pendingKey: String,
+
             id: Number,
             value: Object,
 

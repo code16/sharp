@@ -52777,17 +52777,18 @@ var noop = function noop() {};
             this.errors = {};
         },
         setPendingJob: function setPendingJob(_ref10) {
-            var $field = _ref10.origin,
+            var key = _ref10.key,
+                origin = _ref10.origin,
                 isPending = _ref10.value;
 
-            if (isPending) this.pendingJobs.push($field);else this.pendingJobs = this.pendingJobs.filter(function (field) {
-                return field.uniqueIdentifier !== $field.uniqueIdentifier;
+            if (isPending) this.pendingJobs.push(key);else this.pendingJobs = this.pendingJobs.filter(function (jobKey) {
+                return jobKey !== key;
             });
 
             if (this.pendingJobs.length) {
                 this.actionsBus.$emit('updateActionsState', {
                     state: 'pending',
-                    modifier: this.pendingJobs[0].fieldType
+                    modifier: origin
                 });
             } else {
                 this.actionsBus.$emit('updateActionsState', null);
@@ -54054,7 +54055,10 @@ if (false) {(function () {
             }, fieldProps),
             on: {
                 input: function input(val) {
-                    if (_this.fieldProps.readOnly) __WEBPACK_IMPORTED_MODULE_3__util__["c" /* log */]('SharpField \'' + _this.fieldKey + '\', can\'t update because is readOnly');else _this.updateData(_this.fieldKey, val);
+                    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+                    var force = options.force;
+
+                    if (_this.fieldProps.readOnly && !force) __WEBPACK_IMPORTED_MODULE_3__util__["c" /* log */]('SharpField \'' + _this.fieldKey + '\', can\'t update because is readOnly');else _this.updateData(_this.fieldKey, val);
                 },
                 blur: function blur(_) {
                     _this.fieldProps.focused = false;
@@ -54418,7 +54422,7 @@ var _components;
         if (!this.isRemote) {
             this.$emit('input', this.localValues.find(function (v) {
                 return v[_this2.itemIdAttribute] === _this2.value;
-            }));
+            }), { force: true });
         }
         if (this.value) {
             this.$nextTick(function () {
@@ -55797,11 +55801,8 @@ if (false) {(function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_simplemde__ = __webpack_require__(361);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_simplemde___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_simplemde__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__MarkdownUpload__ = __webpack_require__(377);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_codemirror__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_codemirror___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_codemirror__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__MarkdownWidget__ = __webpack_require__(677);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__mixins_Localization__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_vue__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_vue__);
 
 
 
@@ -55813,6 +55814,7 @@ if (false) {(function () {
 //
 //
 //
+
 
 
 
@@ -55825,6 +55827,7 @@ var noop = function noop() {};
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpMarkdown',
     props: {
+        uniqueIdentifier: String,
         fieldConfigIdentifier: String,
         value: {
             type: Object,
@@ -55895,16 +55898,14 @@ var noop = function noop() {};
                 value = _ref.value,
                 removeOptions = _ref.removeOptions;
 
-            var $markdown = this;
             var $uploader = new __WEBPACK_IMPORTED_MODULE_4__MarkdownUpload__["a" /* default */]({
+                mixins: [Object(__WEBPACK_IMPORTED_MODULE_5__MarkdownWidget__["a" /* default */])(this)],
                 propsData: __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends___default()({
                     id: id, value: value
                 }, this.innerComponents.upload, {
-                    downloadId: this.fieldConfigIdentifier
-                }),
-                beforeCreate: function beforeCreate() {
-                    this.$parent = $markdown;
-                }
+                    downloadId: this.fieldConfigIdentifier,
+                    pendingKey: this.uniqueIdentifier + '.upload.' + id
+                })
             });
 
             $uploader.$on('success', function (file) {
@@ -55926,7 +55927,7 @@ var noop = function noop() {};
                 return _this3.setMarkerInactive($uploader);
             });
 
-            //console.log('create uploader', id, $uploader);
+            console.log('create uploader', id, $uploader);
 
             return $uploader;
         },
@@ -55994,6 +55995,11 @@ var noop = function noop() {};
             var file = this.value.files[fileIndex];
             this.$set(this.value.files, fileIndex, __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends___default()({}, file, data));
         },
+
+
+        // replaceBySelection : put the selected text inside the marker (existing tag from parsing)
+        // data : contains de title and name from the image tag
+        // isInsertion : if the user click on 'insert image' button
         insertUploadImage: function insertUploadImage() {
             var _this5 = this;
 
@@ -56055,6 +56061,8 @@ var noop = function noop() {};
             });
 
             if (isInsertion) $uploader.inputClick();
+
+            return $uploader;
         },
         onCursorActivity: function onCursorActivity() {
             this.cursorPos = this.codemirror.getCursor();
@@ -63377,6 +63385,7 @@ if (false) {(function () {
 //
 //
 //
+//
 
 
 
@@ -63386,12 +63395,15 @@ if (false) {(function () {
 
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0_vue___default.a.extend({
+
     mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins__["k" /* UploadXSRF */]],
 
     inject: ['xsrfToken'],
 
     props: {
         downloadId: String,
+        pendingKey: String,
+
         id: Number,
         value: Object,
 
@@ -63580,6 +63592,7 @@ if (false) {(function () {
 
     props: {
         downloadId: String,
+        pendingKey: String,
         ratioX: Number,
         ratioY: Number,
         value: Object,
@@ -63678,24 +63691,26 @@ if (false) {(function () {
         }
     },
     methods: {
+        setPending: function setPending(value) {
+            this.actionsBus.$emit('setPendingJob', {
+                key: this.pendingKey,
+                origin: 'upload',
+                value: value
+            });
+        },
+
         // status callbacks
         onStatusAdded: function onStatusAdded() {
             this.$emit('reset');
 
-            this.actionsBus.$emit('setPendingJob', {
-                origin: this.$field,
-                value: true
-            });
+            this.setPending(true);
         },
         onStatusError: function onStatusError() {
             var msg = this.file.errorMessage;
             this.remove();
             this.$emit('error', msg);
 
-            this.actionsBus.$emit('setPendingJob', {
-                origin: this.$field,
-                value: false
-            });
+            this.setPending(false);
         },
         onStatusSuccess: function onStatusSuccess() {
             var _this3 = this;
@@ -63709,13 +63724,9 @@ if (false) {(function () {
 
             data.uploaded = true;
             this.$emit('success', data);
+            this.$emit('input', data);
 
-            this.$parent.$emit('input', data);
-
-            this.actionsBus.$emit('setPendingJob', {
-                origin: this.$field,
-                value: false
-            });
+            this.setPending(false);
 
             this.croppable = true;
             this.$nextTick(function (_) {
@@ -63773,7 +63784,7 @@ if (false) {(function () {
 
             this.resetEdit();
 
-            this.$parent.$emit('input', null);
+            this.$emit('input', null);
             this.$emit('reset');
             this.$emit('removed');
         },
@@ -63845,7 +63856,7 @@ if (false) {(function () {
                 var data = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, this.value, {
                     cropData: relativeData
                 });
-                this.$parent.$emit('input', data);
+                this.$emit('input', data);
                 this.$emit('updated', data);
             }
         },
@@ -72645,7 +72656,14 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "aria-valuemin": "0",
       "aria-valuemax": "100"
     }
-  })])])], 1), _vm._v(" "), _c('div', [_c('button', {
+  })])])], 1), _vm._v(" "), _c('div', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (!_vm.readOnly),
+      expression: "!readOnly"
+    }]
+  }, [_c('button', {
     directives: [{
       name: "show",
       rawName: "v-show",
@@ -72654,8 +72672,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     }],
     staticClass: "SharpButton SharpButton--sm SharpButton--secondary",
     attrs: {
-      "type": "button",
-      "disabled": _vm.readOnly
+      "type": "button"
     },
     on: {
       "click": _vm.onEditButtonClick
@@ -72791,6 +72808,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     ref: "vueclip",
     staticClass: "SharpMarkdownUpload",
     attrs: {
+      "pending-key": _vm.pendingKey,
       "download-id": _vm.downloadId,
       "options": _vm.options,
       "value": _vm.value,
@@ -73012,6 +73030,8 @@ if (false) {(function () {
 //
 //
 //
+//
+//
 
 
 
@@ -73030,6 +73050,7 @@ if (false) {(function () {
     inject: ['$field', 'xsrfToken'],
 
     props: {
+        uniqueIdentifier: String,
         fieldConfigIdentifier: String,
         value: Object,
 
@@ -73076,6 +73097,7 @@ if (false) {(function () {
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('sharp-vue-clip', {
     attrs: {
+      "pending-key": _vm.uniqueIdentifier,
       "download-id": _vm.fieldConfigIdentifier,
       "options": _vm.options,
       "value": _vm.value,
@@ -73084,6 +73106,9 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "read-only": _vm.readOnly
     },
     on: {
+      "input": function($event) {
+        _vm.$emit('input', $event)
+      },
       "error": function($event) {
         _vm.$field.$emit('error', $event)
       },
@@ -73981,7 +74006,8 @@ if (false) {(function () {
                 this.setValue(this.value);
             }
             this.showDayCalendar();
-        }
+        },
+        clickOutside: function clickOutside() {}
     }
 });
 
@@ -99247,6 +99273,28 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 668 */,
+/* 669 */,
+/* 670 */,
+/* 671 */,
+/* 672 */,
+/* 673 */,
+/* 674 */,
+/* 675 */,
+/* 676 */,
+/* 677 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function ($parent) {
+    return {
+        beforeCreate: function beforeCreate() {
+            this.$parent = $parent;
+        }
+    };
+});
 
 /***/ })
 /******/ ]);

@@ -28,8 +28,8 @@
                                     </div>
                                 </transition>
                             </div>
-                            <div>
-                                    <button v-show="!!originalImageSrc && !inProgress" type="button" class="SharpButton SharpButton--sm SharpButton--secondary" @click="onEditButtonClick" :disabled="readOnly">
+                            <div v-show="!readOnly">
+                                    <button v-show="!!originalImageSrc && !inProgress" type="button" class="SharpButton SharpButton--sm SharpButton--secondary" @click="onEditButtonClick">
                                         {{ l('form.upload.edit_button') }}
                                     </button>
                                 <button type="button" class="SharpButton SharpButton--sm SharpButton--secondary SharpButton--danger SharpUpload__remove-button"
@@ -104,6 +104,7 @@
 
         props: {
             downloadId: String,
+            pendingKey: String,
             ratioX: Number,
             ratioY: Number,
             value: Object,
@@ -118,7 +119,7 @@
                 resized: false,
                 croppable: false,
 
-                canDownload: this.value
+                canDownload: this.value,
             }
         },
         watch: {
@@ -192,24 +193,25 @@
             }
         },
         methods: {
+            setPending(value) {
+                this.actionsBus.$emit('setPendingJob', {
+                    key: this.pendingKey,
+                    origin: 'upload',
+                    value
+                });
+            },
             // status callbacks
             onStatusAdded() {
                 this.$emit('reset');
 
-                this.actionsBus.$emit('setPendingJob', {
-                    origin: this.$field,
-                    value: true
-                });
+                this.setPending(true);
             },
             onStatusError() {
                 let msg = this.file.errorMessage;
                 this.remove();
                 this.$emit('error', msg);
 
-                this.actionsBus.$emit('setPendingJob', {
-                    origin: this.$field,
-                    value: false
-                });
+                this.setPending(false)
             },
             onStatusSuccess() {
                 let data = {};
@@ -220,13 +222,9 @@
 
                 data.uploaded = true;
                 this.$emit('success', data);
+                this.$emit('input',data);
 
-                this.$parent.$emit('input',data);
-
-                this.actionsBus.$emit('setPendingJob', {
-                    origin: this.$field,
-                    value: false
-                });
+                this.setPending(false);
 
                 this.croppable = true;
                 this.$nextTick(_=>{
@@ -253,7 +251,7 @@
 
                 this.resetEdit();
 
-                this.$parent.$emit('input', null);
+                this.$emit('input', null);
                 this.$emit('reset');
                 this.$emit('removed');
             },
@@ -327,7 +325,7 @@
                         ...this.value,
                         cropData: relativeData,
                     };
-                    this.$parent.$emit('input', data);
+                    this.$emit('input', data);
                     this.$emit('updated', data);
                 }
             },

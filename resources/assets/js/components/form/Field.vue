@@ -47,8 +47,9 @@
                     ...fieldProps
                 },
                 on: {
-                    input: val => {
-                        if(this.fieldProps.readOnly)
+                    input: (val, options={}) => {
+                        let { force } = options;
+                        if(this.fieldProps.readOnly && !force)
                             util.log(`SharpField '${this.fieldKey}', can't update because is readOnly`);
                         else
                             this.updateData(this.fieldKey,val);

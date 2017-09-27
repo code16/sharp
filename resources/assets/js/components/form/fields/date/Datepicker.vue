@@ -155,6 +155,9 @@
                     this.setValue(this.value)
                 }
                 this.showDayCalendar();
+            },
+            clickOutside() {
+
             }
         },
     }

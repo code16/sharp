@@ -190,7 +190,7 @@
             }
 
             if(!this.isRemote) {
-                this.$emit('input', this.localValues.find(v => v[this.itemIdAttribute] === this.value));
+                this.$emit('input', this.localValues.find(v => v[this.itemIdAttribute] === this.value), { force: true });
             }
             if(this.value) {
                 this.$nextTick(()=>this.state = 'valuated');

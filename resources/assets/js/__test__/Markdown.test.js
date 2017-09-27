@@ -177,16 +177,8 @@ describe('markdown-field', () => {
                 clear: jest.fn(),
                 lines: [{ on: jest.fn() }]
             }));
-            codemirror.addLineClass = jest.fn();
         };
 
-        let mockXHR = () => {
-            XMLHttpRequest = jest.fn(() => ({
-                send : jest.fn({
-
-                })
-            }));
-        };
 
         it('insert image uploader and text properly', async () => {
             let $markdown = await createVm();
@@ -274,6 +266,19 @@ describe('markdown-field', () => {
                 name: 'cat.jpg',
                 size: 123
             });
+        });
+
+        it('register delete event and delete properly', async () => {
+            let $markdown = await createVm();
+
+            let { simplemde } = $markdown;
+            let { codemirror } = simplemde;
+
+            mockCodemirror(codemirror);
+
+            let $uploader = $markdown.insertUploadImage({ isInsertion:true });
+
+
         });
     });
 });

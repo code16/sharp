@@ -9,15 +9,19 @@
 <script>
     import SimpleMDE from 'simplemde';
     import MarkdownUpload from './MarkdownUpload';
-    import CodeMirror from 'codemirror';
+
+    import Widget from './MarkdownWidget';
 
     import { lang } from '../../../../mixins/Localization';
 
     const noop = ()=>{};
-        import Vue from 'vue';
+
+
+
     export default {
         name: 'SharpMarkdown',
         props: {
+            uniqueIdentifier: String,
             fieldConfigIdentifier: String,
             value:{
                 type: Object,
@@ -75,15 +79,13 @@
                 return (this.value.files||[]).map( (file,i) => ({ [this.idSymbol]:i, ...file }) );
             },
             createUploader({ id, value, removeOptions }) {
-                let $markdown = this;
                 let $uploader = new MarkdownUpload({
+                    mixins: [ Widget(this) ],
                     propsData: {
                         id, value,
                         ...this.innerComponents.upload,
                         downloadId: this.fieldConfigIdentifier,
-                    },
-                    beforeCreate() {
-                        this.$parent = $markdown;
+                        pendingKey: `${this.uniqueIdentifier}.upload.${id}`
                     }
                 });
 
@@ -94,7 +96,7 @@
                 $uploader.$on('active', () => this.setMarkerActive($uploader));
                 $uploader.$on('inactive', () => this.setMarkerInactive($uploader));
 
-                //console.log('create uploader', id, $uploader);
+                console.log('create uploader', id, $uploader);
 
                 return $uploader;
             },

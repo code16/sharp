@@ -250,16 +250,16 @@
                 this.errors = {};
             },
 
-            setPendingJob({ origin:$field, value:isPending }) {
+            setPendingJob({ key, origin, value:isPending }) {
                 if(isPending)
-                    this.pendingJobs.push($field);
+                    this.pendingJobs.push(key);
                 else
-                    this.pendingJobs = this.pendingJobs.filter(field => field.uniqueIdentifier !== $field.uniqueIdentifier);
+                    this.pendingJobs = this.pendingJobs.filter(jobKey => jobKey !== key);
 
                 if(this.pendingJobs.length) {
                     this.actionsBus.$emit('updateActionsState', {
                         state: 'pending',
-                        modifier: this.pendingJobs[0].fieldType
+                        modifier: origin
                     })
                 }
                 else {
