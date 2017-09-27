@@ -33,7 +33,7 @@ class FormDownloadController extends ApiController
         $form = $this->getFormInstance($entityKey);
 
         list($disk, $path) = $this->determineDiskAndFilePath(
-            request('fileName'), $form->findFieldByKey($formUploadFieldKey)
+            request('fileName'), $instanceId, $form->findFieldByKey($formUploadFieldKey)
         );
 
         abort_if(!$disk->exists($path), 404, trans("sharp::errors.file_not_found"));
@@ -48,12 +48,13 @@ class FormDownloadController extends ApiController
 
     /**
      * @param string $fileName
+     * @param string $instanceId
      * @param SharpFormFieldWithUpload $field
      * @return array
      */
-    protected function determineDiskAndFilePath(string $fileName, $field)
+    protected function determineDiskAndFilePath(string $fileName, $instanceId, $field)
     {
-        $basePath = $field->storageBasePath();
+        $basePath = str_replace('{id}', $instanceId, $field->storageBasePath());
         $disk = $this->filesystem->disk($field->storageDisk());
 
         if(starts_with($fileName, $basePath)) {
