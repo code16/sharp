@@ -16,9 +16,10 @@
       "\\.(css|less)$": "<rootDir>/resources/assets/js/__test__/__mocks__/styleMock.js"
     },
     "verbose": true,
-    "testPathIgnorePatterns": [
-      "/node_modules/"
+    "setupFiles": [
+      "<rootDir>/resources/assets/js/__test__/setup/mockument.js"
     ]
+
   },
   "scripts": {
     "dev": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
@@ -33,7 +34,6 @@
     "axios": "^0.15.2",
     "babel-jest": "^20.0.3",
     "babel-plugin-external-helpers": "^6.22.0",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.26.0",

@@ -101,6 +101,7 @@
 </template>
 
 <script>
+    import Vue from 'vue';
     import DynamicView from '../DynamicViewMixin';
     import Pagination from './Pagination';
     import Dropdown from '../dropdown/Dropdown';
@@ -120,6 +121,7 @@
     import * as qs from '../../helpers/querystring';
 
     import axios from 'axios';
+
 
     export default {
         name:'SharpEntitiesList',

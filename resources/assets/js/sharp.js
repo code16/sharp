@@ -1,4 +1,5 @@
 import Vue from 'vue/dist/vue.common';
+
 import ActionView from './components/ActionView';
 import Form from './components/form/Form';
 import FieldDisplay from './components/form/FieldDisplay';
@@ -16,8 +17,6 @@ import cookies from 'axios/lib/helpers/cookies';
 
 import * as qs from './helpers/querystring';
 
-
-window.Vue = Vue;
 
 // prevent recursive components import
 Vue.component(FieldDisplay.name, FieldDisplay);
@@ -44,7 +43,7 @@ new Vue({
 
     created() {
         this.$on('setClass',(className,active)=> {
-            console.log('setClass', className, active);
+            //console.log('setClass', className, active);
             this.$el.classList[active ? 'add' : 'remove'](className);
         });
     }

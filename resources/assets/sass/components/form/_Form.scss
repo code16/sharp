@@ -11,22 +11,20 @@
 
     @extend .SharpModule;
 
-    .SharpModule__inner {
+    &>.SharpModule__inner {
       background: transparent;
       border: 0;
       @include layer('base');
-    }
-
-    .SharpModule__header {
-      padding: 0;
-      .SharpModule__title {
-        @extend .SharpForm__label;
+      &>.SharpModule__header {
+        padding: 0;
+        .SharpModule__title {
+          @extend .SharpForm__label;
+        }
       }
-    }
-
-    .SharpModule__content {
-      background: $ui-03;
-      @include layer('raised');
+      &>.SharpModule__content {
+        background: $ui-03;
+        @include layer('raised');
+      }
     }
   }
 

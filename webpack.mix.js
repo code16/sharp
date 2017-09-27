@@ -5,7 +5,6 @@ const path = require('path');
 
 (function() {
     mix.copy('node_modules/vue-clip/src', 'resources/assets/js/components/vendor/vue-clip')
-        .copy('node_modules/bootstrap-vue/lib', 'resources/assets/js/components/vendor/bootstrap-vue')
         .copy('node_modules/vue2-timepicker/src', 'resources/assets/js/components/vendor/vue2-timepicker');
 
     if(process.env.NODE_ENV === 'test') {

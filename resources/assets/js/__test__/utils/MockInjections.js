@@ -1,8 +1,10 @@
 import Vue from 'vue';
+import axios from 'axios';
 
 
-const injectedStrings = {
-    xsrfToken: 'xsrfTest'
+const injectedCustoms = {
+    xsrfToken: 'xsrfTest',
+    axiosInstance: axios.create()
 };
 
 
@@ -30,7 +32,7 @@ export default {
     provide() {
         return {
             ...resolveComponents(injectedComponents),
-            ...injectedStrings
+            ...injectedCustoms
         };
     }
 }

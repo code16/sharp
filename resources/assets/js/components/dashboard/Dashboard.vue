@@ -19,14 +19,12 @@
     import Widget from './Widget';
     import DynamicView from '../DynamicViewMixin';
 
-    import { testableDashboard } from '../../mixins/index';
     import { API_PATH } from '../../consts';
 
     export default {
         name:'SharpDashboard',
         extends: DynamicView,
 
-        mixins: [testableDashboard],
 
         components: {
             [TabbedLayout.name]:TabbedLayout,

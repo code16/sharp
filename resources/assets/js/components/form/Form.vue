@@ -42,7 +42,7 @@
     import * as util from '../../util';
     import { API_PATH } from '../../consts';
 
-    import { testableForm, ActionEvents, ReadOnlyFields, Localization } from '../../mixins';
+    import { ActionEvents, ReadOnlyFields, Localization } from '../../mixins';
 
     import DynamicView from '../DynamicViewMixin';
 
@@ -59,7 +59,7 @@
         name:'SharpForm',
         extends: DynamicView,
 
-        mixins: [testableForm, ActionEvents, ReadOnlyFields('fields'), Localization],
+        mixins: [ActionEvents, ReadOnlyFields('fields'), Localization],
 
         components: {
             [TabbedLayout.name]: TabbedLayout,
@@ -275,7 +275,7 @@
         },
         mounted() {
             this.init();
-            console.log(this);
+            //console.log(this);
         }
     }
 </script>

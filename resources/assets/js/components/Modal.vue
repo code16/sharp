@@ -1,14 +1,16 @@
 <script>
-    import bModal from './vendor/bootstrap-vue/components/modal';
     import { QueryTree } from '../mixins';
     import { lang } from '../mixins/Localization';
+
+    import BVComp from '../mixins/BVComp';
 
     export default {
         name:'SharpModal',
         functional: true,
 
         render(h, ctx) {
-            //console.log(ctx);
+            const bModal = BVComp('bModal');
+
             ctx.data['class'] =
             [
                 'SharpModal',
@@ -22,10 +24,8 @@
                 ...ctx.data.attrs,
                 noAutoFocus : true,
                 closeTitle: ctx.props.closeTitle || lang('modals.cancel_button'),
-                okTitle: ctx.props.okTitle ||lang('modals.ok_button')
+                okTitle: ctx.props.okTitle || lang('modals.ok_button')
             };
-
-            bModal.name = 'SharpModal';
 
             return h(bModal, ctx.data, [
                 h({
@@ -46,7 +46,7 @@
                     props: { title: String, okOnly: Boolean },
                     computed: {
                         $modal() {
-                            return this.findAscendant('SharpModal');
+                            return this.findAscendant('bModal');
                         }
                     },
                     methods: {

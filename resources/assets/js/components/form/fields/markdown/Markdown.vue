@@ -14,7 +14,7 @@
     import { lang } from '../../../../mixins/Localization';
 
     const noop = ()=>{};
-
+        import Vue from 'vue';
     export default {
         name: 'SharpMarkdown',
         props: {
@@ -33,7 +33,8 @@
             readOnly: Boolean,
             locale:String
         },
-        inject: [ 'xsrfToken', 'actionsBus', '$tab', '$form', '$field' ],
+
+        inject: [ '$tab',],
 
         data() {
             return {
@@ -73,20 +74,17 @@
             indexedFiles() {
                 return (this.value.files||[]).map( (file,i) => ({ [this.idSymbol]:i, ...file }) );
             },
-            createUploader({ id, value, removeOptions,  }) {
-
+            createUploader({ id, value, removeOptions }) {
+                let $markdown = this;
                 let $uploader = new MarkdownUpload({
-                    provide: {
-                        actionsBus: this.actionsBus,
-                        $form: this.$form,
-                        $field: this.$field
-                    },
                     propsData: {
                         id, value,
                         ...this.innerComponents.upload,
                         downloadId: this.fieldConfigIdentifier,
-                        xsrfToken: this.xsrfToken,
                     },
+                    beforeCreate() {
+                        this.$parent = $markdown;
+                    }
                 });
 
                 $uploader.$on('success', file => this.updateUploaderData($uploader, file));
@@ -152,6 +150,9 @@
                 this.$set(this.value.files, fileIndex, { ...file, ...data });
             },
 
+            // replaceBySelection : put the selected text inside the marker (existing tag from parsing)
+            // data : contains de title and name from the image tag
+            // isInsertion : if the user click on 'insert image' button
             insertUploadImage({ replaceBySelection, data, isInsertion } = {}) {
                 let selection = this.codemirror.getSelection(' ');
                 let curLineContent = this.codemirror.getLine(this.cursorPos.line);
@@ -206,6 +207,8 @@
 
                 if(isInsertion)
                     $uploader.inputClick();
+
+                return $uploader;
             },
 
             onCursorActivity() {

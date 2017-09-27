@@ -28,6 +28,9 @@
 
     export default Vue.extend({
         mixins: [ UploadXSRF ],
+
+        inject: [ 'xsrfToken'],
+
         props: {
             downloadId: String,
             id: Number,
@@ -36,17 +39,14 @@
             maxImageSize: Number,
             ratioX: Number,
             ratioY: Number,
-
-            marker: Object,
-
-            xsrfToken: String,
         },
         components: {
             SharpVueClip
         },
         data() {
             return {
-                show: this.value
+                show: this.value,
+                marker: null
             }
         },
         computed: {
