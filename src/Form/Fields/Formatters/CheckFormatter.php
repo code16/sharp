@@ -4,7 +4,7 @@ namespace Code16\Sharp\Form\Fields\Formatters;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
 
-class CheckFormatter implements SharpFieldFormatter
+class CheckFormatter extends SharpFieldFormatter
 {
 
     /**

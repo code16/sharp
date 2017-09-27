@@ -4,7 +4,7 @@ namespace Code16\Sharp\Form\Fields\Formatters;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
 
-class NumberFormatter implements SharpFieldFormatter
+class NumberFormatter extends SharpFieldFormatter
 {
 
     /**
@@ -17,6 +17,12 @@ class NumberFormatter implements SharpFieldFormatter
         return (int)$value;
     }
 
+    /**
+     * @param SharpFormField $field
+     * @param string $attribute
+     * @param $value
+     * @return mixed
+     */
     function fromFront(SharpFormField $field, string $attribute, $value)
     {
         return $this->toFront($field, $value);

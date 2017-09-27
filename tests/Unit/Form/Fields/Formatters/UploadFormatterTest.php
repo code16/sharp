@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Tests\Unit\Form\Fields\Formatters;
 
+use Code16\Sharp\Exceptions\Form\SharpFormFieldFormattingMustBeDelayedException;
 use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Tests\SharpTestCase;
@@ -72,6 +73,39 @@ class UploadFormatterTest extends SharpTestCase
     }
 
     /** @test */
+    function we_delay_execution_if_the_storage_path_contains_instance_id_in_a_store_case()
+    {
+        $formatter = new UploadFormatter;
+        $field = SharpFormUploadField::make("upload")
+            ->setStorageDisk("local")
+            ->setStorageBasePath("data/Test/{id}");
+
+        $file = $this->uploadedFile();
+
+        $this->expectException(SharpFormFieldFormattingMustBeDelayedException::class);
+        $formatter->fromFront(
+            $field, "attribute", ["name" => $file[0], "uploaded" => true]
+        );
+    }
+
+    /** @test */
+    function if_the_storage_path_contains_instance_id_in_an_update_case_we_replace_the_id_placeholder()
+    {
+        $formatter = new UploadFormatter;
+        $field = SharpFormUploadField::make("upload")
+            ->setStorageDisk("local")
+            ->setStorageBasePath("data/Test/{id}");
+
+        $file = $this->uploadedFile();
+
+        $this->assertArraySubset([
+            "file_name" => "data/Test/50/{$file[0]}"
+        ], $formatter->setInstanceId(50)->fromFront(
+            $field, "attribute", ["name" => $file[0], "uploaded" => true]
+        ));
+    }
+
+    /** @test */
     function we_handle_crop_transformation_on_upload_from_front()
     {
         $file = $this->uploadedFile();
@@ -91,6 +125,29 @@ class UploadFormatterTest extends SharpTestCase
                 "name" => $file[0], "cropData" => [
                     "height" => .8, "width" => .6, "x" => 0, "y" => .1, "rotate" => 0
                 ], "uploaded" => true
+            ]
+        ));
+    }
+
+    /** @test */
+    function we_handle_crop_transformation_on_a_previously_upload_from_front()
+    {
+        $file = (new FileFactory)->image("image.png", 600, 600);
+        $filePath = $file->store("data/Test");
+
+        $formatter = new UploadFormatter;
+        $field = SharpFormUploadField::make("upload")
+            ->setStorageDisk("local")
+            ->setStorageBasePath("data/Test");
+
+        $this->assertArraySubset([
+            "transformed" => true
+
+        ], $formatter->fromFront(
+            $field, "attribute", [
+                "name" => $filePath, "cropData" => [
+                    "height" => .8, "width" => .6, "x" => 0, "y" => .1, "rotate" => 0
+                ], "uploaded" => false
             ]
         ));
     }

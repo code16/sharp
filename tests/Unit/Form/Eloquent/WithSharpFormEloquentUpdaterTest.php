@@ -24,13 +24,28 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
             }
         };
 
-        $this->assertNotNull(
-            $form->updateInstance($person->id, ["name" => "Claire Trevor"])
-        );
+        $form->updateInstance($person->id, ["name" => "Claire Trevor"]);
 
         $this->assertDatabaseHas("people", [
             "id" => $person->id,
             "name" => "Claire Trevor"
+        ]);
+    }
+
+    /** @test */
+    function we_can_store_a_new_instance()
+    {
+        $form = new class extends WithSharpFormEloquentUpdaterTestForm {
+            function buildFormFields()
+            {
+                $this->addField(SharpFormTextField::make("name"));
+            }
+        };
+
+        $form->storeInstance(["name" => "John Wayne"]);
+
+        $this->assertDatabaseHas("people", [
+            "name" => "John Wayne"
         ]);
     }
 
@@ -139,9 +154,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
             }
         };
 
-        $this->assertNotNull(
-            $form->updateInstance($mother->id, ["elderSon" => $son->id])
-        );
+        $form->updateInstance($mother->id, ["elderSon" => $son->id]);
 
         $this->assertDatabaseHas("people", [
             "id" => $son->id,
@@ -431,29 +444,5 @@ class WithSharpFormEloquentUpdaterTestForm extends SharpForm
     }
     function delete($id) { return false; }
     function buildFormLayout() {}
-    function buildFormFields()
-    {
-//        $peopleList = Person::all()->pluck("name", "id")->all();
-//
-//        $this->addField(SharpFormTextField::make("name"));
-//        $this->addField(SharpFormTextField::make("age"));
-//        $this->addField(SharpFormSelectField::make("mother_id", $peopleList));
-//        $this->addField(SharpFormSelectField::make("mother", $peopleList));
-//        $this->addField(SharpFormSelectField::make("elderSon", $peopleList));
-//        $this->addField(
-//            SharpFormListField::make("sons")
-//                ->setOrderAttribute("order")
-//                ->setSortable()
-//                ->addItemField(SharpFormTextField::make("name"))
-//        );
-//        $this->addField(
-//            SharpFormTagsField::make("friends", $peopleList)
-//                ->setCreatable()
-//        );
-//        $this->addField(SharpFormTextField::make("mother:name"));
-//        $this->addField(SharpFormTextField::make("mother:age"));
-//        $this->addField(SharpFormTextField::make("elderSon:name"));
-//        $this->addField(SharpFormTextField::make("elderSon:age"));
-//        $this->addField(SharpFormTextField::make("picture:file"));
-    }
+    function buildFormFields() {}
 }

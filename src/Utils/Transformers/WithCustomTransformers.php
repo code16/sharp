@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Utils\Transformers;
 
 use Closure;
-use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -94,19 +93,24 @@ trait WithCustomTransformers
 
     /**
      * @param array|object $model the base model (Eloquent for instance), or an array of attributes
+     * @param bool $forceFullObject if true all data keys of the model will be force set
      * @return array
      */
-    protected function applyTransformers($model)
+    protected function applyTransformers($model, bool $forceFullObject = true)
     {
-        // Merge model attribute with form fields to be sure we have
-        // all attributes which the front code needed.
-        $attributes = array_merge(
-            collect($this->getDataKeys())->flip()->map(function() {
-                return null;
-            })->all(), is_array($model) ? $model : $model->toArray());
+        $attributes = is_array($model) ? $model : $model->toArray();
 
-        if(is_object($model)) {
-            $attributes = $this->handleAutoRelatedAttributes($attributes, $model);
+        if($forceFullObject) {
+            // Merge model attribute with form fields to be sure we have
+            // all attributes which the front code needed.
+            $attributes = array_merge(
+                collect($this->getDataKeys())->flip()->map(function () {
+                    return null;
+                })->all(), $attributes);
+
+            if (is_object($model)) {
+                $attributes = $this->handleAutoRelatedAttributes($attributes, $model);
+            }
         }
 
         // Apply transformers
@@ -116,6 +120,10 @@ trait WithCustomTransformers
                 $listAttribute = substr($attribute, 0, strpos($attribute, '['));
                 $itemAttribute = substr($attribute, strpos($attribute, '[') + 1, -1);
 
+                if(!array_key_exists($listAttribute, $attributes)) {
+                    continue;
+                }
+
                 foreach ($model->$listAttribute as $k => $itemModel) {
                     $attributes[$listAttribute][$k][$itemAttribute] = $transformer->apply(
                         $attributes[$listAttribute][$k][$itemAttribute], $itemModel, $itemAttribute
@@ -123,7 +131,14 @@ trait WithCustomTransformers
                 }
 
             } else {
-                $attributes[$attribute] = $transformer->apply($attributes[$attribute], $model, $attribute);
+
+                if(!array_key_exists($attribute, $attributes)) {
+                    continue;
+                }
+
+                $attributes[$attribute] = $transformer->apply(
+                    $attributes[$attribute], $model, $attribute
+                );
             }
         }
 

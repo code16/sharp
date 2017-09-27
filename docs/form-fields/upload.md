@@ -33,7 +33,10 @@ Set the destination storage disk (as configured in Laravel's  `config/filesystem
 
 ### `setStorageBasePath(string $storageBasePath)`
 
-Set the destination base storage path.
+Set the destination base storage path. You can use the `{id}` special placeholder to add the instance id in the path. 
+
+For instance:
+`$field->setStorageBasePath('/users/{id}/avatar')`
 
 ### `setFileFilter($fileFilter)`
 

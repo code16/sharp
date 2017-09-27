@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Form;
 
+use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
@@ -149,31 +150,36 @@ abstract class SharpForm
     }
 
     /**
-     * @param $id
-     * @param $data
-     * @return mixed
+     * @param string|null $id
+     * @param array $data
+     * @throws SharpFormUpdateException
      */
     public function updateInstance($id, $data)
     {
-        return $this->update($id, $this->formatRequestData($data));
+        list($formattedData, $delayedData) = $this->formatRequestData($data, $id, true);
+
+        $id = $this->update($id, $formattedData);
+
+        if($delayedData) {
+            // Some formatters asked to delay their handling after a first pass.
+            // Typically, this is used if the formatter needs the id of the
+            // instance: in a creation case, we must store it first.
+            if(!$id) {
+                throw new SharpFormUpdateException(
+                    sprintf("The update method of [%s] must return the instance id", basename(get_class($this)))
+                );
+            }
+
+            $this->update($id, $this->formatRequestData($delayedData, $id, false));
+        }
     }
 
     /**
      * @param $data
-     * @return mixed
      */
     public function storeInstance($data)
     {
-        return $this->store($this->formatRequestData($data));
-    }
-
-    /**
-     * @param array $data
-     * @return mixed
-     */
-    public function store(array $data)
-    {
-        return $this->update(null, $data);
+        $this->updateInstance(null, $data);
     }
 
     /**
@@ -218,6 +224,7 @@ abstract class SharpForm
     /**
      * @param $id
      * @param array $data
+     * @return mixed the instance id
      */
     abstract function update($id, array $data);
 
