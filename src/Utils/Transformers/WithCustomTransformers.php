@@ -94,14 +94,14 @@ trait WithCustomTransformers
 
     /**
      * @param array|object $model the base model (Eloquent for instance), or an array of attributes
-     * @param bool $forceAttributesPresence
+     * @param bool $forceFullObject if true all data keys of the model will be force set
      * @return array
      */
-    protected function applyTransformers($model, bool $forceAttributesPresence = true)
+    protected function applyTransformers($model, bool $forceFullObject = true)
     {
         $attributes = is_array($model) ? $model : $model->toArray();
 
-        if($forceAttributesPresence) {
+        if($forceFullObject) {
             // Merge model attribute with form fields to be sure we have
             // all attributes which the front code needed.
             $attributes = array_merge(
