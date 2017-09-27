@@ -132,6 +132,9 @@ class UploadFormatter extends SharpFieldFormatter
 
         if(strpos($basePath, '{id}') !== false) {
             if(!$this->instanceId) {
+                // Well, we need the instance id for the storage path, and we are
+                // in a store() case. Let's delay this formatter, it will be
+                // called again after a first save() on the model.
                 throw new SharpFormFieldFormattingMustBeDelayedException();
             }
 

@@ -34,7 +34,9 @@ trait WithSharpFormEloquentUpdater
      */
     function save(Model $instance, array $data)
     {
-        // First transform data...
+        // First transform data, passing false as a second parameter to allow partial objects.
+        // This is important: this save() can be the second one called in the same request
+        // for any field which formatter required a delay in his execution.
         $data = $this->applyTransformers($data, false);
 
         // Then handle manually ignored attributes...
