@@ -251,6 +251,10 @@ In the `update($id, array $data)` method you may want to throw an exception on a
 
 The message will be displayed to the user.
 
+#### Return the instance id
+
+This is important for some cases (when a field formatter needs to de delayed): this method should return the id of the updated or stored instance.
+
 
 ### `create(): array`
 

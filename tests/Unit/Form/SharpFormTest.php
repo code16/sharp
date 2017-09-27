@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Tests\Unit\Form;
 
 use Code16\Sharp\Exceptions\Form\SharpFormFieldFormattingMustBeDelayedException;
+use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Code16\Sharp\Form\Fields\Formatters\SharpFieldFormatter;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormField;
@@ -87,6 +88,36 @@ class SharpFormTest extends SharpTestCase
             "normal" => "abc",
             "delayed" => "abc-1",
         ], $sharpForm->instance);
+    }
+
+    /** @test */
+    function an_exception_is_raised_if_we_try_to_delay_but_the_update_does_not_return_the_instance_id()
+    {
+        $sharpForm = new class extends BaseSharpForm
+        {
+            function buildFormFields()
+            {
+                $this->addField(
+                    SharpFormTextField::make("delayed")
+                        ->setFormatter(new class extends SharpFieldFormatter
+                        {
+                            function toFront(SharpFormField $field, $value)
+                            {
+                            }
+
+                            function fromFront(SharpFormField $field, string $attribute, $value)
+                            {
+                                throw new SharpFormFieldFormattingMustBeDelayedException();
+                            }
+                        })
+                );
+            }
+        };
+
+        $this->expectException(SharpFormUpdateException::class);
+        $sharpForm->storeInstance([
+            "delayed" => "abc",
+        ]);
     }
 }
 

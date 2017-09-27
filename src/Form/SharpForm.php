@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Form;
 
+use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
@@ -151,6 +152,7 @@ abstract class SharpForm
     /**
      * @param string|null $id
      * @param array $data
+     * @throws SharpFormUpdateException
      */
     public function updateInstance($id, $data)
     {
@@ -162,6 +164,12 @@ abstract class SharpForm
             // Some formatters asked to delay their handling after a first pass.
             // Typically, this is used if the formatter needs the id of the
             // instance: in a creation case, we must store it first.
+            if(!$id) {
+                throw new SharpFormUpdateException(
+                    sprintf("The update method of [%s] must return the instance id", basename(get_class($this)))
+                );
+            }
+
             $this->update($id, $this->formatRequestData($delayedData, $id, false));
         }
     }
