@@ -131,7 +131,7 @@ class SpaceshipSharpForm extends SharpForm
                         ->setFileFilterImages()
                         ->setCropRatio("16:9")
                         ->setStorageDisk("local")
-                        ->setStorageBasePath("data/Pictures")
+                        ->setStorageBasePath("data/Spaceship/{id}/Pictures")
                 )->addItemField(
                     SharpFormTextField::make("legend")
                         ->setPlaceholder("Legend")

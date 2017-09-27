@@ -23,9 +23,8 @@ class ListFormatter extends SharpFieldFormatter
                 $key = $itemField->key();
 
                 if(isset($item[$key])) {
-                    $itemArray[$key] = $itemField->formatter()->toFront(
-                        $itemField, $item[$key]
-                    );
+                    $itemArray[$key] = $itemField->formatter()
+                        ->toFront($itemField, $item[$key]);
                 }
             });
 
@@ -51,7 +50,9 @@ class ListFormatter extends SharpFieldFormatter
                 $itemField = $field->findItemFormFieldByKey($key);
 
                 if($itemField) {
-                    $itemArray[$key] = $itemField->formatter()->fromFront($itemField, $key, $value);
+                    $itemArray[$key] = $itemField->formatter()
+                        ->setInstanceId($this->instanceId)
+                        ->fromFront($itemField, $key, $value);
                 }
             }
 
