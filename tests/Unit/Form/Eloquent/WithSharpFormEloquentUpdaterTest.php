@@ -24,9 +24,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
             }
         };
 
-        $this->assertNotNull(
-            $form->updateInstance($person->id, ["name" => "Claire Trevor"])
-        );
+        $form->updateInstance($person->id, ["name" => "Claire Trevor"]);
 
         $this->assertDatabaseHas("people", [
             "id" => $person->id,
@@ -44,9 +42,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
             }
         };
 
-        $this->assertNotNull(
-            $form->storeInstance(["name" => "John Wayne"])
-        );
+        $form->storeInstance(["name" => "John Wayne"]);
 
         $this->assertDatabaseHas("people", [
             "name" => "John Wayne"
@@ -158,9 +154,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
             }
         };
 
-        $this->assertNotNull(
-            $form->updateInstance($mother->id, ["elderSon" => $son->id])
-        );
+        $form->updateInstance($mother->id, ["elderSon" => $son->id]);
 
         $this->assertDatabaseHas("people", [
             "id" => $son->id,

@@ -6,7 +6,7 @@ use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Illuminate\Support\Facades\Storage;
 
-class MarkdownFormatter implements SharpFieldFormatter
+class MarkdownFormatter extends SharpFieldFormatter
 {
 
     /**
@@ -45,7 +45,9 @@ class MarkdownFormatter implements SharpFieldFormatter
             $uploadFormatter = app(UploadFormatter::class);
 
             foreach($value["files"] as $file) {
-                $upload = $uploadFormatter->fromFront($field, $attribute, $file);
+                $upload = $uploadFormatter
+                    ->setInstanceId($this->instanceId)
+                    ->fromFront($field, $attribute, $file);
 
                 if(isset($upload["file_name"])) {
                     // New file was uploaded. We have to update

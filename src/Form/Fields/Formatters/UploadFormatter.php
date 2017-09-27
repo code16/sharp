@@ -2,14 +2,14 @@
 
 namespace Code16\Sharp\Form\Fields\Formatters;
 
+use Code16\Sharp\Exceptions\Form\SharpFormFieldFormattingMustBeDelayedException;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 use Code16\Sharp\Utils\FileUtil;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\FilesystemManager;
 use Intervention\Image\ImageManager;
 
-class UploadFormatter implements SharpFieldFormatter
+class UploadFormatter extends SharpFieldFormatter
 {
     /**
      * @var FilesystemManager
@@ -51,6 +51,7 @@ class UploadFormatter implements SharpFieldFormatter
      * @param SharpFormField $field
      * @param string $attribute
      * @param $value
+     * @throws SharpFormFieldFormattingMustBeDelayedException
      * @return array|null
      */
     function fromFront(SharpFormField $field, string $attribute, $value)
@@ -63,12 +64,12 @@ class UploadFormatter implements SharpFieldFormatter
                 config("sharp.uploads.tmp_dir", 'tmp') . '/' . $value["name"]
             );
 
+            $storedFilePath = $this->getStoragePath($value["name"], $field);
+
             if($transformed = $this->isTransformed($value, $field)) {
                 // Handle transformations on the uploads disk for performance
                 $fileContent = $this->handleImageTransformations($fileContent, $value["cropData"]);
             }
-
-            $storedFilePath = $this->getStoragePath($value["name"], $field);
 
             $storage->put($storedFilePath, $fileContent);
 
@@ -124,10 +125,22 @@ class UploadFormatter implements SharpFieldFormatter
      * @param string $fileName
      * @param SharpFormFieldWithUpload $field
      * @return string
+     * @throws SharpFormFieldFormattingMustBeDelayedException
      */
     protected function getStoragePath(string $fileName, $field): string
     {
         $basePath = $field->storageBasePath();
+
+        if(strpos($basePath, '{id}') !== false) {
+            if(!$this->instanceId) {
+                // Well, we need the instance id for the storage path, and we are
+                // in a store() case. Let's delay this formatter, it will be
+                // called again after a first save() on the model.
+                throw new SharpFormFieldFormattingMustBeDelayedException();
+            }
+
+            $basePath = str_replace('{id}', $this->instanceId, $basePath);
+        }
 
         $fileName = $this->fileUtil->findAvailableName(
             $fileName, $basePath, $field->storageDisk()
@@ -135,25 +148,6 @@ class UploadFormatter implements SharpFieldFormatter
 
         return "{$basePath}/{$fileName}";
     }
-
-    /**
-     * Replace {id} or other params in the storageBasePath string with
-     * the corresponding instance values.
-     *
-     * @param string $basePath
-     * @param Model $instance
-     * @return string
-     */
-//    protected function substituteParameters(string $basePath, Model $instance)
-//    {
-//        preg_match_all('/{([^}]+)}/', $basePath, $matches, PREG_SET_ORDER);
-//
-//        foreach ($matches as $match) {
-//            $basePath = str_replace($match[0], $instance->{$match[1]}, $basePath);
-//        }
-//
-//        return $basePath;
-//    }
 
     /**
      * @param $fileContent

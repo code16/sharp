@@ -4,7 +4,7 @@ namespace Code16\Sharp\Form\Fields\Formatters;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
 
-class ListFormatter implements SharpFieldFormatter
+class ListFormatter extends SharpFieldFormatter
 {
 
     /**
@@ -23,9 +23,8 @@ class ListFormatter implements SharpFieldFormatter
                 $key = $itemField->key();
 
                 if(isset($item[$key])) {
-                    $itemArray[$key] = $itemField->formatter()->toFront(
-                        $itemField, $item[$key]
-                    );
+                    $itemArray[$key] = $itemField->formatter()
+                        ->toFront($itemField, $item[$key]);
                 }
             });
 
@@ -51,7 +50,9 @@ class ListFormatter implements SharpFieldFormatter
                 $itemField = $field->findItemFormFieldByKey($key);
 
                 if($itemField) {
-                    $itemArray[$key] = $itemField->formatter()->fromFront($itemField, $key, $value);
+                    $itemArray[$key] = $itemField->formatter()
+                        ->setInstanceId($this->instanceId)
+                        ->fromFront($itemField, $key, $value);
                 }
             }
 

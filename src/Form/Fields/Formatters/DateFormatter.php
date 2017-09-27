@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormField;
 
-class DateFormatter implements SharpFieldFormatter
+class DateFormatter extends SharpFieldFormatter
 {
 
     /**

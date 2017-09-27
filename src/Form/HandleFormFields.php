@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Form;
 
+use Code16\Sharp\Exceptions\Form\SharpFormFieldFormattingMustBeDelayedException;
 use Code16\Sharp\Form\Fields\SharpFormField;
 
 trait HandleFormFields
@@ -82,23 +83,51 @@ trait HandleFormFields
      * Applies Field Formatters on $data.
      *
      * @param array $data
+     * @param string|null $instanceId
+     * @param bool $handleDelayedData
      * @return array
      */
-    public function formatRequestData(array $data): array
+    public function formatRequestData(array $data, $instanceId = null, bool $handleDelayedData = false): array
     {
-        return collect($data)->filter(function ($value, $key) {
+        $delayedData = collect([]);
+
+        $formattedData = collect($data)->filter(function ($value, $key) {
             // Filter only configured fields
             return in_array($key, $this->getDataKeys());
 
-        })->map(function($value, $key) {
+        })->map(function($value, $key) use($handleDelayedData, $delayedData, $instanceId) {
             if(!$field = $this->findFieldByKey($key)) {
                 return $value;
             }
 
-            // Apply formatter based on field configuration
-            return $field->formatter()->fromFront($field, $key, $value);
+            try {
+                // Apply formatter based on field configuration
+                return $field->formatter()
+                    ->setInstanceId($instanceId)
+                    ->fromFront($field, $key, $value);
 
-        })->all();
+            } catch(SharpFormFieldFormattingMustBeDelayedException $exception) {
+                // The formatter needs to be executed in a second pass. We delay it.
+                if($handleDelayedData) {
+                    $delayedData[$key] = $value;
+                    return null;
+                }
+
+                throw $exception;
+            }
+
+        });
+
+        if($handleDelayedData) {
+            return [
+                $formattedData->filter(function ($value, $key) use ($delayedData) {
+                    return !$delayedData->has($key);
+                })->all(),
+                $delayedData->all()
+            ];
+        }
+
+        return $formattedData->all();
     }
 
     /**
