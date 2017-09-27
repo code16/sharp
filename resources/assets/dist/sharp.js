@@ -78119,44 +78119,79 @@ var _components;
         /* (Command, Instance)
          * Display a form in a modal if the command require a form, else send API request
          */
-        sendCommand: function sendCommand(_ref22, instance) {
-            var _this10 = this;
+        sendCommand: function () {
+            var _ref23 = __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_2_babel_runtime_regenerator___default.a.mark(function _callee(_ref22, instance) {
+                var _this10 = this;
 
-            var key = _ref22.key,
-                form = _ref22.form,
-                confirmation = _ref22.confirmation;
+                var key = _ref22.key,
+                    form = _ref22.form,
+                    confirmation = _ref22.confirmation;
 
-            if (form) {
-                this.selectedInstance = instance;
-                this.$set(this.showFormModal, key, true);
-                //this.getFormModal(key).show();
-                return;
-            }
-            new Promise(function (resolve) {
-                if (confirmation) {
-                    _this10.actionsBus.$emit('showMainModal', {
-                        title: _this10.l('modals.command.confirm.title'),
-                        text: confirmation,
-                        okCallback: function okCallback(e) {
-                            return resolve();
+                var _ref24, data;
+
+                return __WEBPACK_IMPORTED_MODULE_2_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
+                    while (1) {
+                        switch (_context.prev = _context.next) {
+                            case 0:
+                                if (!form) {
+                                    _context.next = 4;
+                                    break;
+                                }
+
+                                this.selectedInstance = instance;
+                                this.$set(this.showFormModal, key, true);
+                                //this.getFormModal(key).show();
+                                return _context.abrupt('return');
+
+                            case 4:
+                                if (!confirmation) {
+                                    _context.next = 7;
+                                    break;
+                                }
+
+                                _context.next = 7;
+                                return new Promise(function (resolve) {
+                                    _this10.actionsBus.$emit('showMainModal', {
+                                        title: _this10.l('modals.command.confirm.title'),
+                                        text: confirmation,
+                                        okCallback: resolve
+                                    });
+                                });
+
+                            case 7:
+                                _context.next = 9;
+                                return __WEBPACK_IMPORTED_MODULE_21_axios___default.a.post(this.commandEnpoint(key, instance), { query: this.apiParams });
+
+                            case 9:
+                                _ref24 = _context.sent;
+                                data = _ref24.data;
+
+                                this.handleCommandResponse(data);
+
+                            case 12:
+                            case 'end':
+                                return _context.stop();
                         }
-                    });
-                } else resolve();
-            }).then(function () {
-                __WEBPACK_IMPORTED_MODULE_21_axios___default.a.post(_this10.commandEnpoint(key, instance), { query: _this10.apiParams }).then(_this10.handleCommandResponse);
-            });
-        },
+                    }
+                }, _callee, this);
+            }));
+
+            function sendCommand(_x3, _x4) {
+                return _ref23.apply(this, arguments);
+            }
+
+            return sendCommand;
+        }(),
 
 
         /* (CommandAPIResponse)
         * Execute the required command action
         */
-        handleCommandResponse: function handleCommandResponse(_ref23) {
-            var _ref23$data = _ref23.data,
-                action = _ref23$data.action,
-                items = _ref23$data.items,
-                message = _ref23$data.message,
-                html = _ref23$data.html;
+        handleCommandResponse: function handleCommandResponse(_ref25) {
+            var action = _ref25.action,
+                items = _ref25.items,
+                message = _ref25.message,
+                html = _ref25.html;
 
             //debugger;
             if (action === 'refresh') this.actionRefresh(items);else if (action === 'reload') this.actionReload();else if (action === 'info') {
@@ -78194,14 +78229,14 @@ var _components;
         * Hide the current form modal after data correctly sent, handle actions
         */
         commandFormSubmitted: function () {
-            var _ref24 = __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_2_babel_runtime_regenerator___default.a.mark(function _callee(key, data) {
-                return __WEBPACK_IMPORTED_MODULE_2_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
+            var _ref26 = __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_2_babel_runtime_regenerator___default.a.mark(function _callee2(key, data) {
+                return __WEBPACK_IMPORTED_MODULE_2_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
                     while (1) {
-                        switch (_context.prev = _context.next) {
+                        switch (_context2.prev = _context2.next) {
                             case 0:
                                 this.selectedInstance = null;
                                 this.handleCommandResponse(data);
-                                _context.next = 4;
+                                _context2.next = 4;
                                 return this.$nextTick();
 
                             case 4:
@@ -78209,14 +78244,14 @@ var _components;
 
                             case 5:
                             case 'end':
-                                return _context.stop();
+                                return _context2.stop();
                         }
                     }
-                }, _callee, this);
+                }, _callee2, this);
             }));
 
-            function commandFormSubmitted(_x3, _x4) {
-                return _ref24.apply(this, arguments);
+            function commandFormSubmitted(_x5, _x6) {
+                return _ref26.apply(this, arguments);
             }
 
             return commandFormSubmitted;
@@ -78307,9 +78342,9 @@ var _components;
     },
     actions: {
         searchChanged: function searchChanged(input) {
-            var _ref25 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-                _ref25$isInput = _ref25.isInput,
-                isInput = _ref25$isInput === undefined ? true : _ref25$isInput;
+            var _ref27 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+                _ref27$isInput = _ref27.isInput,
+                isInput = _ref27$isInput === undefined ? true : _ref27$isInput;
 
             //console.log('entities list search changed', input, isInput);
 
@@ -78330,8 +78365,8 @@ var _components;
         toggleReorder: function toggleReorder() {
             var _this13 = this;
 
-            var _ref26 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-                apply = _ref26.apply;
+            var _ref28 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+                apply = _ref28.apply;
 
             if (apply) {
                 this.axiosInstance.post(this.apiPath + '/reorder', {
