@@ -291,9 +291,9 @@ describe('vue-clip',() => {
 
     it('has crop', async () => {
         let $vueClip = await createVm({
-            data: ()=>({
+            propsData: {
                 ratioX:1, ratioY:1
-            })
+            }
         });
 
         let { $root:vm } = $vueClip;
