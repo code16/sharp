@@ -21,6 +21,8 @@ const path = require('path');
         .setPublicPath('resources/assets/dist')
 
         .js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
+        .js('resources/assets/js/api.js', 'resources/assets/dist/api.js')
+        .extract(['vue'])
         //.js('resources/assets/js/sharp-embedded.js', 'resources/assets/dist/sharp-embedded.js')
 
         .copy('node_modules/font-awesome/fonts','resources/assets/dist/fonts')

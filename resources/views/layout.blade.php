@@ -12,7 +12,14 @@
 
     @yield('content')
 
+    <script src="/vendor/sharp/manifest.js?version={{ sharp_version() }}"></script>
+    <script src="/vendor/sharp/vendor.js?version={{ sharp_version() }}"></script>
+    <script src="/vendor/sharp/api.js?version={{ sharp_version() }}"></script>
+
+    {{--Insert here custom field scripts--}}
+
     <script src="/vendor/sharp/lang.js?version={{ sharp_version() }}&locale={{ app()->getLocale() }}"></script>
     <script src="/vendor/sharp/sharp.js?version={{ sharp_version() }}"></script>
+
 </body>
 </html>

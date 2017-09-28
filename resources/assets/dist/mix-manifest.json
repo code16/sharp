@@ -3,5 +3,9 @@
     "/.bin/sharp-app.css": "/.bin/sharp-app.css",
     "/.bin/vendors.css": "/.bin/vendors.css",
     "/sharp-cms.css": "/sharp-cms.css",
+    "/vendor.js": "/vendor.js",
+    "/api.js": "/api.js",
+    "/manifest.js": "/manifest.js",
+    "/sharp-bootstrap.js": "/sharp-bootstrap.js",
     "/sharp.css": "/sharp.css"
 }
