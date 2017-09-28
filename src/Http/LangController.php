@@ -30,7 +30,7 @@ class LangController extends Controller
             return $strings;
         });
 
-        header('Content-Type: application/javascript');
-        return 'window.i18n = ' . json_encode($strings) . ';';
+        return response('window.i18n = ' . json_encode($strings) . ';')
+            ->header('Content-Type', 'application/javascript');
     }
 }
