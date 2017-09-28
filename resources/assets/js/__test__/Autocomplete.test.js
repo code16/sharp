@@ -4,11 +4,10 @@ import Autocomplete from '../components/form/fields/Autocomplete.vue';
 import { nextRequestFulfilled } from './utils/moxios-utils';
 import moxios from 'moxios';
 
-import { MockI18n, wait } from './utils';
+import { MockI18n } from './utils';
 
 
 describe('autocomplete-field', ()=>{
-    Vue.component('sharp-autocomplete', Autocomplete);
     Vue.use(MockI18n);
 
     describe('common & local', ()=> {
@@ -28,7 +27,8 @@ describe('autocomplete-field', ()=>{
                                     @input="inputEmitted($event)"
                                     >
                 </sharp-autocomplete>
-            </div>`
+            </div>`;
+            MockI18n.mockLangFunction();
         });
 
         it('can mount Autocomplete field as multiselect', async () => {
@@ -37,7 +37,7 @@ describe('autocomplete-field', ()=>{
             expect(document.body.innerHTML).toMatchSnapshot();
         });
 
-        it('can Autocomplete field as result item', async () => {
+        it('can mount Autocomplete field as result item', async () => {
             await createVm({
                 data: () => ({ value: {id:1, name:'Theodore Bagwell', alias:'T-Bag'} })
             });
@@ -46,14 +46,14 @@ describe('autocomplete-field', ()=>{
         });
 
         it('expose appropriate props to multiselect component', async ()=>{
-            let $tags = await createVm({
+            let $autocomplete = await createVm({
                 propsData: {
                     readOnly: true
                 },
                 data: () => ({ value: null })
             });
 
-            let { multiselect } = $tags.$refs;
+            let { multiselect } = $autocomplete.$refs;
 
             expect(multiselect.$props).toMatchObject({
                 options: [{id: 1, name:'Theodore Bagwell', alias: 'T-Bag'},
@@ -309,6 +309,10 @@ async function createVm(customOptions={}) {
     const vm = new Vue({
         el: '#app',
         mixins: [customOptions],
+
+        components: {
+            'sharp-autocomplete': Autocomplete
+        },
 
         props:['readOnly', 'remoteMethod'],
 

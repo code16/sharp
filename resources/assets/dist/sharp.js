@@ -20625,7 +20625,9 @@ var lang = function lang(key) {
         }
     },
     methods: {
-        l: lang
+        l: function l(key) {
+            return lang(key);
+        }
     }
 });
 
@@ -54237,7 +54239,6 @@ if (false) {(function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__util__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__mixins__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__mixins_Localization__ = __webpack_require__(24);
 
 
 
@@ -54285,6 +54286,7 @@ var _components;
 //
 //
 //
+//
 
 
 
@@ -54296,7 +54298,7 @@ var _components;
 
 
 
-
+// import { lang } from '../../../mixins/Localization';
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'SharpAutocomplete',
@@ -54321,8 +54323,8 @@ var _components;
         placeholder: {
             type: String,
             default: function _default() {
-                return Object(__WEBPACK_IMPORTED_MODULE_10__mixins_Localization__["b" /* lang */])('form.multiselect.placeholder');
-            }
+                return '';
+            } //lang('form.multiselect.placeholder')
         },
         remoteEndpoint: String,
         remoteMethod: String,
@@ -55652,7 +55654,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     }
   })], 1), _vm._v(" "), _c('template', {
     slot: "noResult"
-  }, [_vm._v(_vm._s(_vm.l('form.autocomplete.no_results_text')))])], 2) : _vm._e()], 1)
+  }, [_vm._v(_vm._s(_vm.l('form.autocomplete.no_results_text')))])], 2) : _vm._e(), _vm._v("\n    " + _vm._s(_vm.l('form.autocomplete.no_results_text')) + "\n")], 1)
 }
 var staticRenderFns = []
 render._withStripped = true

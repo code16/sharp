@@ -6,7 +6,6 @@ import { MockInjections, MockTransitions, MockI18n, QueryComponent, wait } from 
 
 
 describe('list-field', () => {
-    Vue.component('sharp-list', List);
     Vue.component('sharp-field-display', FieldDisplay);
 
     Vue.use(MockTransitions);
@@ -34,7 +33,8 @@ describe('list-field', () => {
                             @input="inputEmitted">
                 </sharp-list>
             </div>
-        `
+        `;
+        MockI18n.mockLangFunction();
     });
 
     it('can mount empty list field', async () => {
@@ -265,6 +265,10 @@ async function createVm(customOptions={}) {
         el: '#app',
         mixins: [MockInjections, customOptions],
 
+        components: {
+            'sharp-list':List
+        },
+
         props:['readOnly', 'addable', 'sortable', 'removable'],
 
         'extends': {
@@ -275,6 +279,7 @@ async function createVm(customOptions={}) {
                 inputEmitted: ()=>{}
             }
         }
+
     });
 
     await Vue.nextTick();

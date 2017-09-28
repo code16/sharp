@@ -2,17 +2,8 @@ import Vue from 'vue/dist/vue.common';
 import VueClip from '../components/form/fields/upload/VueClip';
 import { MockInjections, MockI18n } from "./utils/index";
 
-function mockComponent(VueClip) {
-    return {
-        'extends': VueClip,
-        components: {
-            'vue-cropper': { render:() => {} }
-        }
-    }
-}
 
 describe('vue-clip',() => {
-    Vue.component('sharp-vue-clip', mockComponent(VueClip));
     Vue.use(MockI18n);
 
     beforeEach(()=>{
@@ -27,7 +18,8 @@ describe('vue-clip',() => {
                     :read-only="readOnly">
                 </sharp-vue-clip>
             </div>
-        `
+        `;
+        MockI18n.mockLangFunction();
     });
 
     it('can mount VueClip component', async () => {
@@ -60,7 +52,7 @@ describe('vue-clip',() => {
     });
 
     it('can mount initially image VueClip component', async () => {
-        let $vueClip = await createVm({
+        await createVm({
             data: () => ({
                 value: {
                     name: 'Image.jpg',
@@ -79,6 +71,15 @@ async function createVm(customOptions={}) {
     const vm = new Vue({
         el: '#app',
         mixins: [customOptions, MockInjections],
+
+        components: {
+            'sharp-vue-clip': {
+                'extends': VueClip,
+                components: {
+                    'vue-cropper': { render:() => {} }
+                }
+            }
+        },
 
         props:['readOnly'],
 

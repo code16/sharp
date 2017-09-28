@@ -6,7 +6,6 @@ import { MockI18n } from './utils';
 
 
 describe('select-field',()=>{
-    Vue.component('sharp-select', Select);
     Vue.use(MockI18n);
 
     beforeEach(()=>{
@@ -24,7 +23,8 @@ describe('select-field',()=>{
                               @input="inputEmitted($event)">
                 </sharp-select>
             </div>
-        `
+        `;
+        MockI18n.mockLangFunction();
     });
 
     it('can mount Select field', async () => {
@@ -277,6 +277,10 @@ async function createVm(customOptions={}) {
     const vm = new Vue({
         el: '#app',
         mixins: [customOptions],
+
+        components: {
+            'sharp-select': Select
+        },
 
         props:['multiple', 'display', 'readOnly'],
     });

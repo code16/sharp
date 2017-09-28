@@ -3,14 +3,7 @@ import Markdown from '../components/form/fields/markdown/Markdown.vue';
 
 import { MockI18n, MockInjections } from './utils';
 
-import * as Localization from '../mixins/Localization';
-
-import * as MarkdownUpload from '../components/form/fields/markdown/MarkdownUpload.vue';
-
-
 describe('markdown-field', () => {
-
-    Vue.component('sharp-markdown', Markdown);
     Vue.use(MockI18n);
 
     beforeEach(()=>{
@@ -34,6 +27,8 @@ describe('markdown-field', () => {
             getBoundingClientRect: () => ({ }),
             getClientRects: () => ({ })
         });
+
+        MockI18n.mockLangFunction();
     });
 
     afterEach(() => {
@@ -48,7 +43,6 @@ describe('markdown-field', () => {
         });
 
         it('can mount "localized" Markdown field', async () => {
-            Localization.lang = jest.fn(() => 'LOCALIZED');
             await createVm();
 
             expect(document.body.innerHTML).toMatchSnapshot();
@@ -495,7 +489,10 @@ async function createVm(customOptions={}) {
             }),
             methods: {
                 inputEmitted: ()=>{}
-            }
+            },
+            components: {
+                'sharp-markdown': Markdown
+            },
         }
     });
 

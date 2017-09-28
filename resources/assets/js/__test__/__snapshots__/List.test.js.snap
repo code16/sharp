@@ -63,7 +63,7 @@ exports[`list-field can mount empty "read only" list field 1`] = `
         <div>
             <div></div>
             <!---->
-        </div> <em class="SharpList__empty-alert"></em></div>
+        </div> <em class="SharpList__empty-alert">{{ form.list.empty }}</em></div>
 </div>
 `;
 
@@ -80,7 +80,7 @@ exports[`list-field can mount empty list field 1`] = `
 
 exports[`list-field can mount filled list field 1`] = `
 <div id="app">
-    <div class="SharpList"><button type="button" class="SharpButton SharpButton--ghost SharpList__sort-button"><svg width="24" height="22" viewBox="0 0 24 22" fill-rule="evenodd" class="SharpButton__icon"><path d="M20 14V0h-4v14h-4l6 8 6-8zM4 8v14h4V8h4L6 0 0 8z"></path></svg></button>
+    <div class="SharpList"><button type="button" data-inactive-text="{{ form.list.sort_button.inactive }}" data-active-text="{{ form.list.sort_button.active }}" class="SharpButton SharpButton--ghost SharpList__sort-button"><svg width="24" height="22" viewBox="0 0 24 22" fill-rule="evenodd" class="SharpButton__icon"><path d="M20 14V0h-4v14h-4l6 8 6-8zM4 8v14h4V8h4L6 0 0 8z"></path></svg></button>
         <div>
             <div>
                 <div class="SharpList__item">
@@ -95,11 +95,11 @@ exports[`list-field can mount filled list field 1`] = `
                                             <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
                                     </div>
                                 </div>
-                            </div> <button class="SharpButton SharpButton--danger SharpButton--sm"></button>
+                            </div> <button class="SharpButton SharpButton--danger SharpButton--sm">{{ form.list.remove_button }}</button>
                             <!---->
                         </div>
                     </div>
-                    <div class="SharpList__new-item-zone"><button class="SharpButton SharpButton--secondary SharpButton--sm"></button></div>
+                    <div class="SharpList__new-item-zone"><button class="SharpButton SharpButton--secondary SharpButton--sm">{{ form.list.insert_button }}</button></div>
                 </div>
                 <div class="SharpList__item">
                     <div class="SharpModule__inner">
@@ -113,7 +113,7 @@ exports[`list-field can mount filled list field 1`] = `
                                             <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
                                     </div>
                                 </div>
-                            </div> <button class="SharpButton SharpButton--danger SharpButton--sm"></button>
+                            </div> <button class="SharpButton SharpButton--danger SharpButton--sm">{{ form.list.remove_button }}</button>
                             <!---->
                         </div>
                     </div>
@@ -179,7 +179,7 @@ exports[`list-field can mount non addable, non removable, non sortable list fiel
 
 exports[`list-field can mount with full list 1`] = `
 <div id="app">
-    <div class="SharpList"><button type="button" class="SharpButton SharpButton--ghost SharpList__sort-button"><svg width="24" height="22" viewBox="0 0 24 22" fill-rule="evenodd" class="SharpButton__icon"><path d="M20 14V0h-4v14h-4l6 8 6-8zM4 8v14h4V8h4L6 0 0 8z"></path></svg></button>
+    <div class="SharpList"><button type="button" data-inactive-text="{{ form.list.sort_button.inactive }}" data-active-text="{{ form.list.sort_button.active }}" class="SharpButton SharpButton--ghost SharpList__sort-button"><svg width="24" height="22" viewBox="0 0 24 22" fill-rule="evenodd" class="SharpButton__icon"><path d="M20 14V0h-4v14h-4l6 8 6-8zM4 8v14h4V8h4L6 0 0 8z"></path></svg></button>
         <div>
             <div>
                 <div class="SharpList__item">
@@ -194,7 +194,7 @@ exports[`list-field can mount with full list 1`] = `
                                             <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
                                     </div>
                                 </div>
-                            </div> <button class="SharpButton SharpButton--danger SharpButton--sm"></button>
+                            </div> <button class="SharpButton SharpButton--danger SharpButton--sm">{{ form.list.remove_button }}</button>
                             <!---->
                         </div>
                     </div>
@@ -212,7 +212,7 @@ exports[`list-field can mount with full list 1`] = `
                                             <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
                                     </div>
                                 </div>
-                            </div> <button class="SharpButton SharpButton--danger SharpButton--sm"></button>
+                            </div> <button class="SharpButton SharpButton--danger SharpButton--sm">{{ form.list.remove_button }}</button>
                             <!---->
                         </div>
                     </div>
@@ -230,7 +230,7 @@ exports[`list-field can mount with full list 1`] = `
                                             <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
                                     </div>
                                 </div>
-                            </div> <button class="SharpButton SharpButton--danger SharpButton--sm"></button>
+                            </div> <button class="SharpButton SharpButton--danger SharpButton--sm">{{ form.list.remove_button }}</button>
                             <!---->
                         </div>
                     </div>
@@ -248,7 +248,7 @@ exports[`list-field can mount with full list 1`] = `
                                             <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
                                     </div>
                                 </div>
-                            </div> <button class="SharpButton SharpButton--danger SharpButton--sm"></button>
+                            </div> <button class="SharpButton SharpButton--danger SharpButton--sm">{{ form.list.remove_button }}</button>
                             <!---->
                         </div>
                     </div>
@@ -266,7 +266,7 @@ exports[`list-field can mount with full list 1`] = `
                                             <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
                                     </div>
                                 </div>
-                            </div> <button class="SharpButton SharpButton--danger SharpButton--sm"></button>
+                            </div> <button class="SharpButton SharpButton--danger SharpButton--sm">{{ form.list.remove_button }}</button>
                             <!---->
                         </div>
                     </div>

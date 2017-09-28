@@ -1,8 +1,14 @@
-import * as Localization from '../../mixins/Localization';
+import Localization ,* as localizationFn from '../../mixins/Localization';
+
+const mockLangImplementation = localeKey => `{{ ${localeKey} }}`;
 
 export default {
     install() {
-        Localization.lang = jest.fn(localeKey => `{{ ${localeKey} }}`);
-        //window.i18n = {};
+        window.i18n = {};
+    },
+
+    mockLangFunction() {
+        localizationFn.lang = jest.fn(mockLangImplementation);
+        Localization.methods.l = jest.fn(mockLangImplementation);
     }
 }

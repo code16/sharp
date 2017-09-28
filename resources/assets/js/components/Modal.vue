@@ -22,8 +22,8 @@
             ctx.props = exposedProps;
             ctx.data.attrs = {
                 ...ctx.data.attrs,
-                noAutoFocus : true,
-                closeTitle: ctx.props.closeTitle || lang('modals.cancel_button'),
+                noEnforceFocus : true,
+                cancelTitle: ctx.props.cancelTitle || lang('modals.cancel_button'),
                 okTitle: ctx.props.okTitle || lang('modals.ok_button')
             };
 

@@ -4,7 +4,6 @@ import Tags from '../components/form/fields/Tags.vue';
 import { MockI18n } from './utils';
 
 describe('tags-field', () => {
-    Vue.component('sharp-tags', Tags);
     Vue.use(MockI18n);
 
     beforeEach(()=>{
@@ -20,7 +19,8 @@ describe('tags-field', () => {
                             @input="inputEmitted($event)">
                 </sharp-tags>
             </div>
-        `
+        `;
+        MockI18n.mockLangFunction();
     });
 
     it('can mout Tags field', async () => {
@@ -109,8 +109,13 @@ async function createVm(customOptions={}) {
 
     const vm = new Vue({
         el: '#app',
-        props:['value','readOnly'],
         mixins: [customOptions],
+
+        components: {
+            'sharp-tags': Tags
+        },
+
+        props:['value','readOnly'],
 
         'extends':{
            methods: {
