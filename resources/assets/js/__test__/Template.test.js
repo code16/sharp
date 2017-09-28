@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue.common.js';
+import Vue from 'vue';
 import Template from '../components/Template.vue';
 
 

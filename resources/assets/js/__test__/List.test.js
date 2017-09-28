@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue.common';
+import Vue from 'vue';
 import List from '../components/form/fields/list/List.vue';
 import FieldDisplay from '../components/form/FieldDisplay';
 

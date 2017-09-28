@@ -13,11 +13,13 @@
       "<rootDir>/resources/assets/js/__test__/utils/htmlSnapshotBeautifier.js"
     ],
     "moduleNameMapper": {
+      "^vue$": "vue/dist/vue.common.js",
       "\\.(css|less)$": "<rootDir>/resources/assets/js/__test__/__mocks__/styleMock.js"
     },
     "verbose": true,
     "setupFiles": [
-      "<rootDir>/resources/assets/js/__test__/setup/mockument.js"
+      "<rootDir>/resources/assets/js/__test__/setup/mockument.js",
+      "<rootDir>/resources/assets/js/__test__/setup/mockBootstrapVue.js"
     ]
   },
   "scripts": {

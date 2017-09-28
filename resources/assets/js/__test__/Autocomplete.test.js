@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue.common';
+import Vue from 'vue';
 import Autocomplete from '../components/form/fields/Autocomplete.vue';
 
 import { nextRequestFulfilled } from './utils/moxios-utils';

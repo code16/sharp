@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue.common';
+import Vue from 'vue';
 import DateField from '../components/form/fields/date/Date.vue';
 import moment from 'moment-timezone';
 

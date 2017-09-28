@@ -12,7 +12,8 @@ const injectedComponents = {
     $field:{},
     $form:{
         data: () => ({
-            errors: {}
+            errors: {},
+            downloadLinkBase:''
         })
     },
     $tab:{},

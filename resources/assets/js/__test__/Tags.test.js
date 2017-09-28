@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue.common.js';
+import Vue from 'vue';
 import Tags from '../components/form/fields/Tags.vue';
 
 import { MockI18n } from './utils';

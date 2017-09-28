@@ -130,7 +130,7 @@
                 }
             },
             'file.status'(status) {
-                (status in this.statusFunction) && this.statusFunction[status]();
+                (status in this.statusFunction) && this[this.statusFunction[status]]();
             },
         },
         computed: {
@@ -182,9 +182,10 @@
                 return (this.file && this.file.status !== 'exist') && this.progress < 100;
             },
             statusFunction() {
-                return { error:this.onStatusError, success:this.onStatusSuccess, added:this.onStatusAdded }
+                return {
+                    error:'onStatusError', success:'onStatusSuccess', added:'onStatusAdded'
+                }
             },
-
             fileName() {
                 let splitted = this.file.name.split('/');
                 return splitted.length ? splitted[splitted.length-1] : '';
