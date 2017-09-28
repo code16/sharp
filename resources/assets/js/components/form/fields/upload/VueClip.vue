@@ -95,7 +95,8 @@
         extends: VueClip,
 
         components: {
-            [Modal.name]: Modal
+            [Modal.name]: Modal,
+            VueCropper
         },
 
         inject : [ 'actionsBus', 'axiosInstance' ,'$form', '$field' ],

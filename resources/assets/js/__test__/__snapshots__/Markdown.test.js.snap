@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`markdown-field can mount "localized" Markdown field 1`] = `
+exports[`markdown-field basic tests can mount "localized" Markdown field 1`] = `
 <div id="app">
     <div class="SharpMarkdown">
         <div class="SharpModule__inner"><textarea style="display: none;"></textarea>
@@ -46,7 +46,7 @@ exports[`markdown-field can mount "localized" Markdown field 1`] = `
 </div>
 `;
 
-exports[`markdown-field can mount "read only" Markdown field 1`] = `
+exports[`markdown-field basic tests can mount "read only" Markdown field 1`] = `
 <div id="app">
     <div class="SharpMarkdown SharpMarkdown--read-only">
         <div class="SharpModule__inner"><textarea style="display: none;"></textarea>
@@ -92,7 +92,7 @@ exports[`markdown-field can mount "read only" Markdown field 1`] = `
 </div>
 `;
 
-exports[`markdown-field can mount Markdown field 1`] = `
+exports[`markdown-field basic tests can mount Markdown field 1`] = `
 <div id="app">
     <div class="SharpMarkdown">
         <div class="SharpModule__inner"><textarea style="display: none;"></textarea>

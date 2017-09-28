@@ -454,31 +454,31 @@
             /* (Command, Instance)
              * Display a form in a modal if the command require a form, else send API request
              */
-            sendCommand({ key, form, confirmation }, instance) {
+            async sendCommand({ key, form, confirmation }, instance) {
                 if(form) {
                     this.selectedInstance = instance;
                     this.$set(this.showFormModal,key,true);
                     //this.getFormModal(key).show();
                     return;
                 }
-                new Promise((resolve) => {
-                    if (confirmation) {
+                if(confirmation) {
+                    await new Promise(resolve => {
                         this.actionsBus.$emit('showMainModal', {
                             title: this.l('modals.command.confirm.title'),
                             text: confirmation,
-                            okCallback: e => resolve(),
+                            okCallback: resolve,
                         });
-                    }
-                    else resolve();
-                }).then(() => {
-                    axios.post(this.commandEnpoint(key, instance), {query: this.apiParams}).then(this.handleCommandResponse);
-                });
+                    });
+                }
+                let { data } = await axios.post(this.commandEnpoint(key, instance), { query: this.apiParams });
+                this.handleCommandResponse(data);
             },
 
             /* (CommandAPIResponse)
             * Execute the required command action
             */
             handleCommandResponse({action, items, message, html}) {
+                //debugger;
                 if(action === 'refresh') this.actionRefresh(items);
                 else if(action === 'reload') this.actionReload();
                 else if(action === 'info') {
