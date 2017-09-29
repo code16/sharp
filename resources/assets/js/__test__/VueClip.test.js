@@ -306,6 +306,18 @@ describe('vue-clip',() => {
 
         expect($vueClip.hasCrop).toBe(false);
     });
+
+    it('filename', async () => {
+        let $vueClip = await createVm({
+            data:()=> ({
+                value: {
+                    name: '/sharp/entities/Image.png'
+                }
+            })
+        });
+
+        expect($vueClip.fileName).toBe('Image.png');
+    });
 });
 
 async function createVm(customOptions={}) {

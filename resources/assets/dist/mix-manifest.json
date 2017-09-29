@@ -6,6 +6,5 @@
     "/vendor.js": "/vendor.js",
     "/api.js": "/api.js",
     "/manifest.js": "/manifest.js",
-    "/sharp-bootstrap.js": "/sharp-bootstrap.js",
     "/sharp.css": "/sharp.css"
 }

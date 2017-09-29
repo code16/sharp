@@ -16,7 +16,7 @@ describe('select-field',()=>{
                               :display="display" 
                               :options="[{id:3,label:'AAA'}, {id:4, label:'BBB'}]" 
                               :read-only="readOnly"
-                              :max-selected="3"
+                              :max-selected="multiple ? 3 : undefined"
                               placeholder="placeholder"
                               unique-identifier="select"
                               clearable

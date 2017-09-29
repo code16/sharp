@@ -14,7 +14,7 @@
                 data.attrs.placeholder = lang('form.multiselect.placeholder');
             }
 
-            let carretSlot = slots().carret;
+            let carretSlot = slots().caret;
 
             return h({
                 'extends':Multiselect,
@@ -23,8 +23,8 @@
                 }
             }, data, [
                 carretSlot
-                    ? h('template',{ slot:'carret' },carretSlot)
-                    : h(DropdownArrow, { 'class': 'multiselect__select', slot:'carret' }),
+                    ? h('template',{ slot:'caret' },carretSlot)
+                    : h(DropdownArrow, { 'class': 'multiselect__select', slot:'caret' }),
                 h('template', { slot:'maxElements'}, lang('form.multiselect.max_text')),
                 ...children,
             ])
