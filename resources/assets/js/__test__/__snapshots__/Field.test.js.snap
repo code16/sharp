@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`sharp-field can mount field 1`] = `
+<div id="app">
+    <div>Template field</div>
+</div>
+`;
+
+exports[`sharp-field can't mount and display error if unknown field 1`] = `
+<div id="app">
+    <!---->
+</div>
+`;

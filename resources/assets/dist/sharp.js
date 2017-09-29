@@ -53726,7 +53726,6 @@ var _components;
         updateCroppedImage: function updateCroppedImage() {
             if (this.croppable) {
                 this.croppedImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
-                //this.$nextTick(() => this.$emit('cropped'));
             }
         },
         getCropData: function getCropData() {
@@ -62587,6 +62586,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "display": "none"
     }
   }, [_c('div')])], 2)]), _vm._v(" "), (!!_vm.originalImageSrc) ? [_c('sharp-modal', {
+    ref: "modal",
     attrs: {
       "no-close-on-backdrop": "",
       "title": _vm.l('modals.cropper.title')

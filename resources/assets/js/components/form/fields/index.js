@@ -13,7 +13,7 @@ import SharpHtml from './Html';
 
 //debugger
 
-export const NameAssociation = {
+export let NameAssociation = {
     'autocomplete' : SharpAutocomplete.name,
     'text'         : SharpText.name,
     'textarea'     : SharpTextarea.name,

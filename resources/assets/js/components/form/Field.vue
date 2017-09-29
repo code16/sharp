@@ -54,7 +54,7 @@
                         else
                             this.updateData(this.fieldKey,val);
                     },
-                    blur: _ => {
+                    blur: () => {
                         this.fieldProps.focused = false;
                     }
                 }
