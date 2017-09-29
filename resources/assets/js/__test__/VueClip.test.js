@@ -33,6 +33,12 @@ function mockFile(props) {
     }
 }
 
+function mockXhrResponse(data) {
+    return {
+        responseText: JSON.stringify(data)
+    }
+}
+
 describe('vue-clip',() => {
     Vue.use(MockI18n);
 
@@ -111,6 +117,16 @@ describe('vue-clip',() => {
         let { file } = $vueClip;
 
         file.progress = 50;
+
+        await Vue.nextTick();
+
+        expect(document.body.innerHTML).toMatchSnapshot();
+    });
+
+    it('can mount "destroyed" VueClip component', async () => {
+        let $vueClip = await createVm();
+
+        $vueClip.$destroy();
 
         await Vue.nextTick();
 
@@ -271,6 +287,83 @@ describe('vue-clip',() => {
         expect($vueClip.imageSrc).toBe($vueClip.croppedImg);
     });
 
+    it('operations finished without any active', async () =>{
+        let $vueClip = await createVm({
+            data: ()=>({
+                value: {
+                    name: 'Image.jpg',
+                    thumbnail: '/image.jpg'
+                }
+            })
+        });
+
+        expect($vueClip.operations).toEqual(['crop']);
+
+        expect($vueClip.operationFinished).toEqual({
+            crop: null
+        });
+
+        expect($vueClip.activeOperationsCount).toBe(0);
+    });
+
+
+    it('operations finished with one active', async () => {
+        let $vueClip = await createVm({
+            propsData: {
+                ratioX: 1,
+                ratioY: 1
+            },
+            data: ()=>({
+                value: {
+                    name: 'Image.jpg',
+                    thumbnail: '/image.jpg'
+                }
+            })
+        });
+
+        expect($vueClip.operationFinished).toEqual({
+            crop: false
+        });
+
+        expect($vueClip.activeOperationsCount).toBe(1);
+        expect($vueClip.operationFinishedCount).toBe(0);
+
+
+        $vueClip.croppedImg = 'data:image/jpeg';
+
+        expect($vueClip.operationFinishedCount).toBe(1);
+        expect($vueClip.operationFinished).toEqual({
+            crop: true
+        });
+    });
+
+    it('progress with operations', async () => {
+        let $vueClip = await createVm({
+            propsData: {
+                ratioX: 1,
+                ratioY: 1
+            },
+            data: ()=>({
+                value: {
+                    name: 'Image.jpg',
+                    thumbnail: '/image.jpg'
+                }
+            })
+        });
+
+        $vueClip.file.progress = 50;
+
+        expect($vueClip.progress).toBe(47.5);
+
+        $vueClip.file.progress = 100;
+
+        expect($vueClip.progress).toBe(95);
+
+        $vueClip.croppedImg = 'data:image/jpeg';
+
+        expect($vueClip.progress).toBe(100);
+    });
+
     it('file size', async () => {
         let $vueClip = await createVm({
             data: ()=>({
@@ -287,6 +380,9 @@ describe('vue-clip',() => {
 
         expect($vueClip.size).toBe('0.5 MB');
         expect(Number.prototype.toLocaleString).toHaveBeenCalled();
+
+        $vueClip.file.size = 1024;
+        expect($vueClip.size).toBe('<0.1 MB');
     });
 
     it('has crop', async () => {
@@ -317,6 +413,282 @@ describe('vue-clip',() => {
         });
 
         expect($vueClip.fileName).toBe('Image.png');
+
+        $vueClip.file.name = 'Photo2.jpg';
+
+        await Vue.nextTick();
+
+        expect($vueClip.fileName).toBe('Photo2.jpg');
+    });
+
+    it('set pending', async () => {
+        let $vueClip = await createVm({
+            data:()=> ({
+                value: {
+                    name: 'Fichier.pdf'
+                }
+            })
+        });
+
+        let setPendingListener = jest.fn();
+
+        $vueClip.actionsBus.$on('setPendingJob', setPendingListener);
+
+        $vueClip.onStatusAdded();
+        expect(setPendingListener).toHaveBeenCalledTimes(1);
+        expect(setPendingListener).toHaveBeenCalledWith({
+            key: 'my_upload.0',
+            origin: 'upload',
+            value: true
+        });
+
+        $vueClip.file.xhrResponse = mockXhrResponse({});
+
+        $vueClip.onStatusSuccess();
+        expect(setPendingListener).toHaveBeenCalledTimes(2);
+        expect(setPendingListener).toHaveBeenLastCalledWith({
+            key: 'my_upload.0',
+            origin: 'upload',
+            value: false
+        });
+
+        $vueClip.onStatusError();
+        expect(setPendingListener).toHaveBeenCalledTimes(3);
+        expect(setPendingListener).toHaveBeenLastCalledWith({
+            key: 'my_upload.0',
+            origin: 'upload',
+            value: false
+        });
+    });
+
+    it('on status added', async () => {
+        let $vueClip = await createVm();
+
+        let handleReset = jest.fn();
+
+        $vueClip.$on('reset', handleReset);
+        $vueClip.onStatusAdded();
+
+        expect(handleReset).toHaveBeenCalled();
+    });
+
+    it('on status error', async () => {
+        let $vueClip = await createVm({
+            data:()=> ({
+                value: {
+                    name: 'Fichier.pdf'
+                }
+            })
+        });
+
+        let handleError = jest.fn();
+        $vueClip.remove = jest.fn();
+
+        $vueClip.file.errorMessage = "Can't upload";
+
+        $vueClip.$on('error', handleError);
+        $vueClip.onStatusError();
+
+        expect(handleError).toHaveBeenCalledTimes(1);
+        expect(handleError).toHaveBeenCalledWith("Can't upload");
+        expect($vueClip.remove).toHaveBeenCalled();
+    });
+
+    it('on status success', async () => {
+        let $vueClip = await createVm({
+            data:()=> ({
+                value: {
+                    name: 'Fichier.pdf'
+                }
+            })
+        });
+
+        $vueClip.file.xhrResponse = mockXhrResponse({
+            fileName: 'storage/Fichier.pdf'
+        });
+
+        let handleSuccess = jest.fn(), handleInput = jest.fn();
+
+        $vueClip.$on('success', handleSuccess);
+        $vueClip.$on('input', handleInput);
+
+        $vueClip.onStatusSuccess();
+
+        expect(handleSuccess).toHaveBeenCalledTimes(1);
+        expect(handleSuccess).toHaveBeenCalledWith({
+            fileName: 'storage/Fichier.pdf',
+            uploaded: true
+        });
+
+        expect(handleInput).toHaveBeenCalledTimes(1);
+        expect(handleInput).toHaveBeenCalledWith({
+            fileName: 'storage/Fichier.pdf',
+            uploaded: true
+        });
+    });
+
+    it('remove', async () => {
+        let $vueClip = await createVm({
+            data:()=> ({
+                value: {
+                    name: 'Fichier.pdf'
+                }
+            })
+        });
+
+        let handleInput=jest.fn(), handleReset=jest.fn(), handleRemoved=jest.fn();
+        $vueClip.$on('input', handleInput);
+        $vueClip.$on('reset', handleReset);
+        $vueClip.$on('removed', handleRemoved);
+
+        $vueClip.remove();
+
+        expect(handleInput).toHaveBeenCalledTimes(1);
+        expect(handleInput).toHaveBeenCalledWith(null);
+
+        expect(handleReset).toHaveBeenCalledTimes(1);
+        expect(handleRemoved).toHaveBeenCalledTimes(1);
+
+        expect($vueClip.files).toEqual([]);
+        expect($vueClip.canDownload).toBe(false);
+    });
+
+    function mockCropper() {
+        return {
+            cropper: {
+                ready: false,
+            },
+            getCroppedCanvas:jest.fn(()=>({
+                toDataURL:jest.fn(()=>'data:image/jpeg')
+            })),
+            getData:jest.fn(()=>({
+                width:100, height:200, x:20, y:40, rotate: 0
+            })),
+            getImageData:jest.fn(()=>({
+                naturalWidth: 200, naturalHeight: 800
+            }))
+        }
+    }
+
+    it('crop', async () => {
+        let $vueClip = await createVm({
+            propsData: {
+                ratioX: 1,
+                ratioY: 1
+            },
+            data:()=> ({
+                value: {
+                    name: 'Image.jpg',
+                    thumbnail: '/image.jpg'
+                }
+            })
+        });
+
+        expect($vueClip.$refs.cropper).toBeTruthy();
+
+        $vueClip.$refs.cropper = mockCropper();
+        let { cropper } = $vueClip.$refs.cropper;
+
+        expect($vueClip.isCropperReady()).toBe(false);
+        cropper.ready = true;
+        expect($vueClip.isCropperReady()).toBe(true);
+
+
+        $vueClip.file.xhrResponse = mockXhrResponse({});
+        $vueClip.onCropperReady = jest.fn($vueClip.onCropperReady);
+
+        $vueClip.onStatusSuccess();
+
+        let handleInput = jest.fn(), handleUpdated = jest.fn();
+        $vueClip.$on('input', handleInput);
+        $vueClip.$on('updated', handleUpdated);
+
+        await Vue.nextTick();
+
+        expect($vueClip.croppable).toBe(true);
+        expect($vueClip.onCropperReady).toHaveBeenCalled();
+
+        expect($vueClip.croppedImg).toBe('data:image/jpeg');
+
+        let testEmit = handler => {
+            expect(handler).toHaveBeenCalledTimes(1);
+            expect(handler.mock.calls[0][0]).toEqual({
+                name: 'Image.jpg',
+                thumbnail: '/image.jpg',
+                cropData: {
+                    width: .5,
+                    height: .25,
+                    x: .1,
+                    y: .05,
+                    rotate: -0
+                }
+            })
+        };
+
+        testEmit(handleInput);
+        testEmit(handleUpdated);
+
+        $vueClip.$refs.cropper.getData = jest.fn(()=>({
+            width: 100, height: 200, x:20, y:40, rotate: -90
+        }));
+
+        $vueClip.updateCropData();
+
+        testEmit = handler => {
+            expect(handler).toHaveBeenCalledTimes(2);
+            expect(handler.mock.calls[1][0]).toMatchObject({
+                cropData: {
+                    width: 0.125,
+                    height: 1,
+                    x: 0.025,
+                    y: 0.2,
+                    rotate: 90
+                }
+            });
+        };
+
+        testEmit(handleInput);
+        testEmit(handleUpdated);
+
+        $vueClip.remove();
+
+        expect($vueClip.croppedImg).toBe(null);
+    });
+
+    it('cropper modal', async () => {
+        let $vueClip = await createVm({
+            data:()=> ({
+                value: {
+                    name: 'Image.jpg',
+                    thumbnail: '/image.jpg'
+                }
+            })
+        });
+
+        let { modal } = $vueClip.$refs;
+
+        $vueClip.updateCroppedImage = jest.fn();
+        $vueClip.updateCropData = jest.fn();
+
+        modal.$emit('ok');
+
+        expect($vueClip.updateCroppedImage).toHaveBeenCalledTimes(1);
+        expect($vueClip.updateCropData).toHaveBeenCalledTimes(1);
+
+        let handleInactive = jest.fn(), handleActive = jest.fn();
+
+        $vueClip.$on('inactive', handleInactive);
+        $vueClip.$on('active', handleActive);
+
+        $vueClip.onEditButtonClick();
+
+        expect(handleActive).toHaveBeenCalledTimes(1);
+        expect($vueClip.showEditModal).toBe(true);
+
+
+        modal.$emit('hidden');
+
+        expect(handleInactive).toHaveBeenCalledTimes(1);
     });
 });
 
@@ -339,10 +711,7 @@ async function createVm(customOptions={}) {
         'extends': {
             data:() => ({
                 value: null
-            }),
-            methods: {
-                inputEmitted: ()=>{}
-            }
+            })
         }
     });
 

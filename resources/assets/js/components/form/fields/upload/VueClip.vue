@@ -53,7 +53,7 @@
         </div>
         <template v-if="!!originalImageSrc">
             <sharp-modal v-model="showEditModal" @ok="onEditModalOk" @shown="onEditModalShown" @hidden="onEditModalHidden" no-close-on-backdrop
-                         :title="l('modals.cropper.title')">
+                         :title="l('modals.cropper.title')" ref="modal">
                 <vue-cropper ref="cropper"
                              class="SharpUpload__modal-vue-cropper"
                              :view-mode="2"
@@ -335,7 +335,6 @@
             updateCroppedImage() {
                 if(this.croppable) {
                     this.croppedImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
-                    //this.$nextTick(() => this.$emit('cropped'));
                 }
             },
 

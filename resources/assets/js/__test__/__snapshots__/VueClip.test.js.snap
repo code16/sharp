@@ -1,5 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`vue-clip can mount "destroyed" VueClip component 1`] = `
+<div id="app">
+    <div class="SharpUpload SharpUpload--empty">
+        <div class="SharpUpload__inner">
+            <div class="SharpUpload__content">
+                <form class="dropzone"><button type="button" class="dz-message SharpButton SharpButton--secondary SharpUpload__upload-button">
+                    {{ form.upload.browse_button }}
+                </button></form>
+                <!---->
+                <div class="clip-preview-template" style="display: none;">
+                    <div></div>
+                </div>
+            </div>
+        </div>
+        <!----><a style="display: none;"></a></div>
+</div>
+`;
+
 exports[`vue-clip can mount "in progress" VueClip component 1`] = `
 <div id="app">
     <div class="SharpUpload">
