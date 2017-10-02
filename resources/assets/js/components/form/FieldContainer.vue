@@ -3,16 +3,12 @@
         <label class="SharpForm__label" v-show="label" @click="triggerFocus">
             {{label}} <span v-if="fieldProps.localized" class="SharpFieldContainer__label-locale">({{locale}})</span>
         </label>
-        <template v-if="alerts.length">
-            <div v-for="alert in alerts" class="alert" :class="alertClass(alert.type)" role="alert">
-                {{alert.msg}}
-            </div>
-        </template>
         <sharp-field v-bind="exposedProps"
                      @error="setError" 
                      @ok="setOk" 
                      @clear="clear"
-                     @blur="handleBlur">
+                     @blur="handleBlur"
+                     ref="field">
         </sharp-field>
         <div class="SharpForm__form-requirement">{{stateMessage}}</div>
 
@@ -47,8 +43,7 @@
         data() {
             return {
                 state:'classic',
-                stateMessage:'',
-                alerts:[],
+                stateMessage:''
             }
         },
         watch: {

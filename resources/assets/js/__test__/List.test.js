@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import List from '../components/form/fields/list/List.vue';
-import FieldDisplay from '../components/form/FieldDisplay';
+import FieldDisplay from '../components/form/field-display/FieldDisplay';
 
 import { MockInjections, MockTransitions, MockI18n, QueryComponent, wait } from './utils';
 

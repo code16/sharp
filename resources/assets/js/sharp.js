@@ -2,7 +2,7 @@ import Vue from 'vue/dist/vue.common';
 
 import ActionView from './components/ActionView';
 import Form from './components/form/Form';
-import FieldDisplay from './components/form/FieldDisplay';
+import FieldDisplay from './components/form/field-display/FieldDisplay';
 import EntitiesList from './components/list/EntitiesList';
 import Dashboard from './components/dashboard/Dashboard';
 
