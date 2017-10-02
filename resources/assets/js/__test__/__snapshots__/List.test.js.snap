@@ -13,8 +13,7 @@ exports[`list-field can mount "read only" filled list field 1`] = `
                                 <div class="row">
                                     <div class="col-md">
                                         <div class="SharpFieldContainer SharpForm__form-item"><label class="SharpForm__label" style="display: none;">
-         <!----></label>
-                                            <!----><input type="text" disabled="disabled" class="SharpText">
+         <!----></label> <input type="text" disabled="disabled" class="SharpText">
                                             <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
                                     </div>
                                 </div>
@@ -90,8 +89,7 @@ exports[`list-field can mount filled list field 1`] = `
                                 <div class="row">
                                     <div class="col-md">
                                         <div class="SharpFieldContainer SharpForm__form-item"><label class="SharpForm__label" style="display: none;">
-         <!----></label>
-                                            <!----><input type="text" class="SharpText">
+         <!----></label> <input type="text" class="SharpText">
                                             <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
                                     </div>
                                 </div>
@@ -108,8 +106,7 @@ exports[`list-field can mount filled list field 1`] = `
                                 <div class="row">
                                     <div class="col-md">
                                         <div class="SharpFieldContainer SharpForm__form-item"><label class="SharpForm__label" style="display: none;">
-         <!----></label>
-                                            <!----><input type="text" class="SharpText">
+         <!----></label> <input type="text" class="SharpText">
                                             <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
                                     </div>
                                 </div>
@@ -138,8 +135,7 @@ exports[`list-field can mount non addable, non removable, non sortable list fiel
                                 <div class="row">
                                     <div class="col-md">
                                         <div class="SharpFieldContainer SharpForm__form-item"><label class="SharpForm__label" style="display: none;">
-         <!----></label>
-                                            <!----><input type="text" class="SharpText">
+         <!----></label> <input type="text" class="SharpText">
                                             <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
                                     </div>
                                 </div>
@@ -157,8 +153,7 @@ exports[`list-field can mount non addable, non removable, non sortable list fiel
                                 <div class="row">
                                     <div class="col-md">
                                         <div class="SharpFieldContainer SharpForm__form-item"><label class="SharpForm__label" style="display: none;">
-         <!----></label>
-                                            <!----><input type="text" class="SharpText">
+         <!----></label> <input type="text" class="SharpText">
                                             <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
                                     </div>
                                 </div>
@@ -189,8 +184,7 @@ exports[`list-field can mount with full list 1`] = `
                                 <div class="row">
                                     <div class="col-md">
                                         <div class="SharpFieldContainer SharpForm__form-item"><label class="SharpForm__label" style="display: none;">
-         <!----></label>
-                                            <!----><input type="text" class="SharpText">
+         <!----></label> <input type="text" class="SharpText">
                                             <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
                                     </div>
                                 </div>
@@ -207,8 +201,7 @@ exports[`list-field can mount with full list 1`] = `
                                 <div class="row">
                                     <div class="col-md">
                                         <div class="SharpFieldContainer SharpForm__form-item"><label class="SharpForm__label" style="display: none;">
-         <!----></label>
-                                            <!----><input type="text" class="SharpText">
+         <!----></label> <input type="text" class="SharpText">
                                             <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
                                     </div>
                                 </div>
@@ -225,8 +218,7 @@ exports[`list-field can mount with full list 1`] = `
                                 <div class="row">
                                     <div class="col-md">
                                         <div class="SharpFieldContainer SharpForm__form-item"><label class="SharpForm__label" style="display: none;">
-         <!----></label>
-                                            <!----><input type="text" class="SharpText">
+         <!----></label> <input type="text" class="SharpText">
                                             <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
                                     </div>
                                 </div>
@@ -243,8 +235,7 @@ exports[`list-field can mount with full list 1`] = `
                                 <div class="row">
                                     <div class="col-md">
                                         <div class="SharpFieldContainer SharpForm__form-item"><label class="SharpForm__label" style="display: none;">
-         <!----></label>
-                                            <!----><input type="text" class="SharpText">
+         <!----></label> <input type="text" class="SharpText">
                                             <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
                                     </div>
                                 </div>
@@ -261,8 +252,7 @@ exports[`list-field can mount with full list 1`] = `
                                 <div class="row">
                                     <div class="col-md">
                                         <div class="SharpFieldContainer SharpForm__form-item"><label class="SharpForm__label" style="display: none;">
-         <!----></label>
-                                            <!----><input type="text" class="SharpText">
+         <!----></label> <input type="text" class="SharpText">
                                             <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
                                     </div>
                                 </div>

@@ -69,14 +69,15 @@ describe('field-display', () => {
                 }
             });
 
-            expect(document.body.innerHTML).toMatchSnapshot('[check] display');
+
+            expect(vm.$children).toHaveLength(1);
             expect(computeCondition)
                 .toHaveBeenCalledWith(vm.contextFields, vm.contextData, vm.contextFields.title.conditionalDisplay);
 
             Vue.set(vm.contextData,'check',false);
             await Vue.nextTick();
 
-            expect(document.body.innerHTML).toMatchSnapshot("[check] don't display");
+            expect(vm.$children).toHaveLength(0);
         });
 
         it('multiple select (unique values)', async () => {
@@ -105,13 +106,13 @@ describe('field-display', () => {
             });
 
             expect(computeSelectCondition).toHaveBeenCalledWith({ condValues: 2, fieldValue: [2,3], isSingleSelect: false });
-            expect(document.body.innerHTML).toMatchSnapshot('[multiple select#unique values] display');
+            expect(vm.$children).toHaveLength(1);
 
             Vue.set(vm.contextData, 'select', [ 3 ]);
             await Vue.nextTick();
 
             expect(computeSelectCondition).toHaveBeenCalledWith({ condValues: 2, fieldValue: [3], isSingleSelect: false });
-            expect(document.body.innerHTML).toMatchSnapshot("[multiple select#unique values] don't display");
+            expect(vm.$children).toHaveLength(0);
         });
 
         it('multiple select (multiple values)', async () => {
@@ -140,14 +141,14 @@ describe('field-display', () => {
             });
 
             expect(computeSelectCondition).toHaveBeenLastCalledWith({ condValues: [2,6], fieldValue: [2,3], isSingleSelect: false });
-            expect(document.body.innerHTML).toMatchSnapshot('[multiple select#multiple values] display');
+            expect(vm.$children).toHaveLength(1);
 
             Vue.set(vm.contextData, 'select', [ 4, 5 ]);
             await Vue.nextTick();
 
 
             expect(computeSelectCondition).toHaveBeenLastCalledWith({ condValues: [2,6], fieldValue: [4,5], isSingleSelect: false });
-            expect(document.body.innerHTML).toMatchSnapshot("[multiple select#multiple values] don't display");
+            expect(vm.$children).toHaveLength(0);
         });
 
         it('single select (unique values)', async () => {
@@ -175,13 +176,13 @@ describe('field-display', () => {
             });
 
             expect(computeSelectCondition).toHaveBeenLastCalledWith({ condValues: 4, fieldValue: 4, isSingleSelect: true });
-            expect(document.body.innerHTML).toMatchSnapshot('[single select#unique values] display');
+            expect(vm.$children).toHaveLength(1);
 
             Vue.set(vm.contextData, 'select', 5);
             await Vue.nextTick();
 
             expect(computeSelectCondition).toHaveBeenLastCalledWith({ condValues: 4, fieldValue: 5, isSingleSelect: true });
-            expect(document.body.innerHTML).toMatchSnapshot("[single select#unique values] don't display");
+            expect(vm.$children).toHaveLength(0);
         });
 
         it('single select (multiple values)', async () => {
@@ -209,13 +210,13 @@ describe('field-display', () => {
             });
 
             expect(computeSelectCondition).toHaveBeenLastCalledWith({ condValues: [4,8], fieldValue: 4, isSingleSelect: true });
-            expect(document.body.innerHTML).toMatchSnapshot('[single select#multiple values] display');
+            expect(vm.$children).toHaveLength(1);
 
             Vue.set(vm.contextData, 'select', 3);
             await Vue.nextTick();
 
             expect(computeSelectCondition).toHaveBeenLastCalledWith({ condValues: [4,8], fieldValue: 3, isSingleSelect: true });
-            expect(document.body.innerHTML).toMatchSnapshot("[single select#multiple values] don't display");
+            expect(vm.$children).toHaveLength(0);
         });
 
         it('multiple select (negative)', async () => {
@@ -244,13 +245,13 @@ describe('field-display', () => {
             });
 
             expect(computeSelectCondition).toHaveBeenLastCalledWith({ condValues: '!5', fieldValue: [4,6], isSingleSelect: false });
-            expect(document.body.innerHTML).toMatchSnapshot('[multiple select#negative] display');
+            expect(vm.$children).toHaveLength(1);
 
             Vue.set(vm.contextData, 'select', [ 5, 7 ]);
             await Vue.nextTick();
 
             expect(computeSelectCondition).toHaveBeenLastCalledWith({ condValues: '!5', fieldValue: [5,7], isSingleSelect: false });
-            expect(document.body.innerHTML).toMatchSnapshot("[multiple select#negative] don't display");
+            expect(vm.$children).toHaveLength(0);
         });
 
         it('single select (negative)', async () => {
@@ -278,13 +279,13 @@ describe('field-display', () => {
             });
 
             expect(computeSelectCondition).toHaveBeenLastCalledWith({ condValues: '!6', fieldValue: 3, isSingleSelect: true });
-            expect(document.body.innerHTML).toMatchSnapshot('[single select#negative] display');
+            expect(vm.$children).toHaveLength(1);
 
             Vue.set(vm.contextData, 'select', 6);
             await Vue.nextTick();
 
             expect(computeSelectCondition).toHaveBeenLastCalledWith({ condValues: '!6', fieldValue: 6, isSingleSelect: true });
-            expect(document.body.innerHTML).toMatchSnapshot("[single select#negative] don't display");
+            expect(vm.$children).toHaveLength(0);
         });
 
         it('or operator', async () => {
@@ -312,17 +313,17 @@ describe('field-display', () => {
                 }
             });
 
-            expect(document.body.innerHTML).toMatchSnapshot('[operator OR] display');
+            expect(vm.$children).toHaveLength(1);
 
             Vue.set(vm.contextData,'check1',false);
             await Vue.nextTick();
 
-            expect(document.body.innerHTML).toMatchSnapshot('[operator OR] display');
+            expect(vm.$children).toHaveLength(1);
 
             Vue.set(vm.contextData,'check2',false);
             await Vue.nextTick();
 
-            expect(document.body.innerHTML).toMatchSnapshot("[operator OR] don't display");
+            expect(vm.$children).toHaveLength(0);
         });
 
         it('and operator', async () => {
@@ -337,7 +338,7 @@ describe('field-display', () => {
                         title: {
                             type: 'text',
                             conditionalDisplay: {
-                                operator: 'or',
+                                operator: 'and',
                                 fields: [
                                     { key:'check1', values: true },
                                     { key:'check2', values: true }
@@ -350,12 +351,12 @@ describe('field-display', () => {
                 }
             });
 
-            expect(document.body.innerHTML).toMatchSnapshot('[operator AND] display');
+            expect(vm.$children).toHaveLength(1);
 
             Vue.set(vm.contextData,'check1',false);
             await Vue.nextTick();
-
-            expect(document.body.innerHTML).toMatchSnapshot("[operator AND] don't display");
+            
+            expect(vm.$children).toHaveLength(0);
         });
     });
 });
