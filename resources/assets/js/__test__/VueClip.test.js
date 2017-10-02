@@ -376,7 +376,7 @@ describe('vue-clip',() => {
 
         Number.prototype.toLocaleString = jest.fn(Number.prototype.toLocaleString);
 
-        $vueClip.file.size = 1024**2/2;
+        $vueClip.file.size = 1024*1024/2;
 
         expect($vueClip.size).toBe('0.5 MB');
         expect(Number.prototype.toLocaleString).toHaveBeenCalled();
