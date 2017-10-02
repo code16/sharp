@@ -12,9 +12,7 @@ exports[`list-field can mount "read only" filled list field 1`] = `
                             <div class="SharpGrid">
                                 <div class="row">
                                     <div class="col-md">
-                                        <div class="SharpFieldContainer SharpForm__form-item"><label class="SharpForm__label" style="display: none;">
-         <!----></label> <input type="text" disabled="disabled" class="SharpText">
-                                            <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
+                                        <div> FIELD DISPLAY MOCK </div>
                                     </div>
                                 </div>
                             </div>
@@ -88,9 +86,7 @@ exports[`list-field can mount filled list field 1`] = `
                             <div class="SharpGrid">
                                 <div class="row">
                                     <div class="col-md">
-                                        <div class="SharpFieldContainer SharpForm__form-item"><label class="SharpForm__label" style="display: none;">
-         <!----></label> <input type="text" class="SharpText">
-                                            <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
+                                        <div> FIELD DISPLAY MOCK </div>
                                     </div>
                                 </div>
                             </div> <button class="SharpButton SharpButton--danger SharpButton--sm">{{ form.list.remove_button }}</button>
@@ -105,9 +101,7 @@ exports[`list-field can mount filled list field 1`] = `
                             <div class="SharpGrid">
                                 <div class="row">
                                     <div class="col-md">
-                                        <div class="SharpFieldContainer SharpForm__form-item"><label class="SharpForm__label" style="display: none;">
-         <!----></label> <input type="text" class="SharpText">
-                                            <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
+                                        <div> FIELD DISPLAY MOCK </div>
                                     </div>
                                 </div>
                             </div> <button class="SharpButton SharpButton--danger SharpButton--sm">{{ form.list.remove_button }}</button>
@@ -134,9 +128,7 @@ exports[`list-field can mount non addable, non removable, non sortable list fiel
                             <div class="SharpGrid">
                                 <div class="row">
                                     <div class="col-md">
-                                        <div class="SharpFieldContainer SharpForm__form-item"><label class="SharpForm__label" style="display: none;">
-         <!----></label> <input type="text" class="SharpText">
-                                            <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
+                                        <div> FIELD DISPLAY MOCK </div>
                                     </div>
                                 </div>
                             </div>
@@ -152,9 +144,7 @@ exports[`list-field can mount non addable, non removable, non sortable list fiel
                             <div class="SharpGrid">
                                 <div class="row">
                                     <div class="col-md">
-                                        <div class="SharpFieldContainer SharpForm__form-item"><label class="SharpForm__label" style="display: none;">
-         <!----></label> <input type="text" class="SharpText">
-                                            <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
+                                        <div> FIELD DISPLAY MOCK </div>
                                     </div>
                                 </div>
                             </div>
@@ -183,9 +173,7 @@ exports[`list-field can mount with full list 1`] = `
                             <div class="SharpGrid">
                                 <div class="row">
                                     <div class="col-md">
-                                        <div class="SharpFieldContainer SharpForm__form-item"><label class="SharpForm__label" style="display: none;">
-         <!----></label> <input type="text" class="SharpText">
-                                            <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
+                                        <div> FIELD DISPLAY MOCK </div>
                                     </div>
                                 </div>
                             </div> <button class="SharpButton SharpButton--danger SharpButton--sm">{{ form.list.remove_button }}</button>
@@ -200,9 +188,7 @@ exports[`list-field can mount with full list 1`] = `
                             <div class="SharpGrid">
                                 <div class="row">
                                     <div class="col-md">
-                                        <div class="SharpFieldContainer SharpForm__form-item"><label class="SharpForm__label" style="display: none;">
-         <!----></label> <input type="text" class="SharpText">
-                                            <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
+                                        <div> FIELD DISPLAY MOCK </div>
                                     </div>
                                 </div>
                             </div> <button class="SharpButton SharpButton--danger SharpButton--sm">{{ form.list.remove_button }}</button>
@@ -217,9 +203,7 @@ exports[`list-field can mount with full list 1`] = `
                             <div class="SharpGrid">
                                 <div class="row">
                                     <div class="col-md">
-                                        <div class="SharpFieldContainer SharpForm__form-item"><label class="SharpForm__label" style="display: none;">
-         <!----></label> <input type="text" class="SharpText">
-                                            <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
+                                        <div> FIELD DISPLAY MOCK </div>
                                     </div>
                                 </div>
                             </div> <button class="SharpButton SharpButton--danger SharpButton--sm">{{ form.list.remove_button }}</button>
@@ -234,9 +218,7 @@ exports[`list-field can mount with full list 1`] = `
                             <div class="SharpGrid">
                                 <div class="row">
                                     <div class="col-md">
-                                        <div class="SharpFieldContainer SharpForm__form-item"><label class="SharpForm__label" style="display: none;">
-         <!----></label> <input type="text" class="SharpText">
-                                            <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
+                                        <div> FIELD DISPLAY MOCK </div>
                                     </div>
                                 </div>
                             </div> <button class="SharpButton SharpButton--danger SharpButton--sm">{{ form.list.remove_button }}</button>
@@ -251,9 +233,7 @@ exports[`list-field can mount with full list 1`] = `
                             <div class="SharpGrid">
                                 <div class="row">
                                     <div class="col-md">
-                                        <div class="SharpFieldContainer SharpForm__form-item"><label class="SharpForm__label" style="display: none;">
-         <!----></label> <input type="text" class="SharpText">
-                                            <div class="SharpForm__form-requirement"></div> <small class="SharpForm__help-message"></small></div>
+                                        <div> FIELD DISPLAY MOCK </div>
                                     </div>
                                 </div>
                             </div> <button class="SharpButton SharpButton--danger SharpButton--sm">{{ form.list.remove_button }}</button>

@@ -1,16 +1,20 @@
 import Vue from 'vue';
 import List from '../components/form/fields/list/List.vue';
-import FieldDisplay from '../components/form/field-display/FieldDisplay';
 
-import { MockInjections, MockTransitions, MockI18n, QueryComponent, wait } from './utils';
-
+import { MockInjections, MockTransitions, MockI18n, QueryComponent, mockSFC } from './utils';
+import { ErrorNode } from '../mixins';
 
 describe('list-field', () => {
-    Vue.component('sharp-field-display', FieldDisplay);
-
     Vue.use(MockTransitions);
     Vue.use(MockI18n);
     Vue.use(QueryComponent);
+
+    Vue.component('sharp-field-display', {
+        name: 'SharpFieldContainer',
+        inheritAttrs: false,
+        mixins: [ ErrorNode ],
+        template: '<div> FIELD DISPLAY MOCK </div>'
+    });
 
     beforeEach(()=>{
         document.body.innerHTML = `    
@@ -100,7 +104,6 @@ describe('list-field', () => {
         $list.dragActive = true;
 
         await Vue.nextTick();
-        await wait(100);
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
