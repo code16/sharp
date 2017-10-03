@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import List from '../components/form/fields/list/List.vue';
 
-import { MockInjections, MockTransitions, MockI18n, QueryComponent, mockSFC } from './utils';
+import { MockInjections, MockTransitions, MockI18n, QueryComponent } from './utils';
 import { ErrorNode } from '../mixins';
 
 describe('list-field', () => {
