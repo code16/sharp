@@ -302,7 +302,12 @@
 
             this.value.files = this.indexedFiles();
 
-            this.$tab && this.$tab.$once('active', () => this.refreshOnExternalChange());
+            if(this.$tab) {
+                this.$tab.$once('active', () => this.refreshOnExternalChange())
+            }
+            else {
+                this.$nextTick(() => this.refreshOnExternalChange());
+            }
 
             this.codemirror.setSize('auto',this.height);
 
@@ -320,7 +325,7 @@
 
             this.codemirrorOn('keydown', this.onKeydown);
             this.codemirrorOn('keyHandled', this.onKeyHandled);
-            //console.log(this);
+            console.log(this);
         }
     }
 </script>
