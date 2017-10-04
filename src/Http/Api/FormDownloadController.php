@@ -55,7 +55,15 @@ class FormDownloadController extends ApiController
     protected function determineDiskAndFilePath(string $fileName, $instanceId, $field)
     {
         $basePath = str_replace('{id}', $instanceId, $field->storageBasePath());
-        $disk = $this->filesystem->disk($field->storageDisk());
+        $storageDisk = $field->storageDisk();
+
+        if(strpos($fileName, ":") !== false) {
+            // Disk name is part of the file name, as in "local:/my/file.jpg".
+            // This is the case in markdown embedded images.
+            list($storageDisk, $fileName) = explode(":", $fileName);
+        }
+
+        $disk = $this->filesystem->disk($storageDisk);
 
         if(starts_with($fileName, $basePath)) {
             return [$disk, $fileName];

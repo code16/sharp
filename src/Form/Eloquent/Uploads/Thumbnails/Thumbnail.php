@@ -173,7 +173,7 @@ class Thumbnail
     private function resolveFilterClass($class, array $params)
     {
         if(! str_contains($class, "\\")) {
-            $class = 'Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\\' . ucfirst($filter) . 'Filter';
+            $class = 'Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\\' . ucfirst($class) . 'Filter';
         }
 
         if(class_exists($class)) {
