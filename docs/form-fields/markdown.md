@@ -74,6 +74,18 @@ Set the destination base storage path. You can use the `{id}` special placeholde
 For instance:
 `$field->setStorageBasePath('/users/{id}/markdown')`
 
+#### Display those images as thumbnail in the public site
+
+Of course you'll want to display those emebedded images in the public website, as thumbnails. Sharp provides a helper for that:
+
+`sharp_markdown_thumbnails(string $html, string $classNames, int $width = null, int $height = null, array $filters = [])`
+
+Where:
+
+- `$html` is the html-parsed markdown. Note that Sharp does not provide a markdown parser, mainly because you'll want to have the ability to choose yours. We think [this one](https://github.com/cebe/markdown) is pretty good, if you want some guidance.
+- `$classNames` will be set a `class` on the `<img>` tags.
+- `$width` and `$height` are constraints for the thumbnail.
+- and finally `$filters`, as [described in this documentation](../sharp-built-in-solution-for-uploads.md).
 
 ## Formatter
 

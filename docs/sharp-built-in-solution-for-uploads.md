@@ -118,11 +118,22 @@ Then you can call `$thumb = $book->cover->thumbnail(150)` to have a full URL to 
 The third argument is for Filters. For now, only two are available:
 
 - **greyscale**
-`->thumbnail(150, null, ["greyscale"])`
+`->thumbnail(150, null, ["greyscale" => []])`
 
 
 - **fit**: this one has 2 params, `w` for width and `h` for height, and will center-fit the image in those constraints.
 `->thumbnail(150, null, ["fit" => ["w"=>150, "h"=>100]])`
+
+But of course you can provide here a custom one. You'll need for that to first create a Filter class that extends `Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\ThumbnailFilter`, implementing:
+
+- `function applyFilter(Intervention\Image\Image $image)`: apply you filter, using the great [Intervention API](http://image.intervention.io).
+- `function resized()`: (optional, default to false) Return true if the resize is part of the `applyFilter()` code.
+
+Once the class is created, simply pass the full class path as filter name:
+
+    return $this->thumbnail($size, $size, [
+        CustomThumbnailFilter::class => ["w"=>$w, 'fill'=>'#ffffff']
+    ]);
 
 
 ## Update with Sharp
