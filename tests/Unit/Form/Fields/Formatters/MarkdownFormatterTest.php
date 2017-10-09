@@ -48,10 +48,10 @@ class MarkdownFormatterTest extends SharpTestCase
     {
         $formatter = new MarkdownFormatter;
         $field = SharpFormMarkdownField::make("md");
-        $value = "![](test.png)";
+        $value = "![](local:test.png)";
 
         $this->assertEquals(
-            "test.png",
+            "local:test.png",
             $formatter->toFront($field, $value)["files"][0]["name"]);
     }
 
@@ -60,7 +60,7 @@ class MarkdownFormatterTest extends SharpTestCase
     {
         $formatter = new MarkdownFormatter;
         $field = SharpFormMarkdownField::make("md");
-        $value = "![](test.png)\n![](test2.png)\n![](test3.png)";
+        $value = "![](local:test.png)\n![](local:test2.png)\n![](local:test3.png)";
 
         $this->assertCount(3, $formatter->toFront($field, $value)["files"]);
     }
@@ -73,11 +73,11 @@ class MarkdownFormatterTest extends SharpTestCase
 
         $formatter = new MarkdownFormatter;
         $field = SharpFormMarkdownField::make("md");
-        $value = "![]($image)";
+        $value = "![](local:$image)";
 
         $toFrontArray = $formatter->toFront($field, $value)["files"][0];
 
-        $this->assertEquals($image, $toFrontArray["name"]);
+        $this->assertEquals("local:$image", $toFrontArray["name"]);
         $this->assertEquals(1127, $toFrontArray["size"]);
         $this->assertStringStartsWith(url("thumbnails/data/1000-400/" . basename($image)), $toFrontArray["thumbnail"]);
     }
@@ -98,7 +98,7 @@ class MarkdownFormatterTest extends SharpTestCase
     {
         $formatter = new MarkdownFormatter;
         $field = SharpFormMarkdownField::make("md");
-        $value = "![](new_test.png)";
+        $value = "![](local:new_test.png)";
         $attribute = "attribute";
 
         $service = Mockery::mock();
@@ -114,11 +114,11 @@ class MarkdownFormatterTest extends SharpTestCase
         });
 
         $this->assertEquals(
-            "![](uploaded_test.png)",
+            "![](local:uploaded_test.png)",
             $formatter->fromFront($field, $attribute, [
                 "text" => $value,
                 "files" => [[
-                    "name" => "new_test.png",
+                    "name" => "local:new_test.png",
                     "uploaded" => true
                 ]]
             ])

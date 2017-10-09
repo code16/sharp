@@ -166,13 +166,15 @@ class Thumbnail
     }
 
     /**
-     * @param string $filter
+     * @param string $class
      * @param array $params
      * @return ThumbnailFilter|null
      */
-    private function resolveFilterClass($filter, array $params)
+    private function resolveFilterClass($class, array $params)
     {
-        $class = 'Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\\' . ucfirst($filter) . 'Filter';
+        if(! str_contains($class, "\\")) {
+            $class = 'Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\\' . ucfirst($class) . 'Filter';
+        }
 
         if(class_exists($class)) {
             return new $class($params);

@@ -78,3 +78,32 @@ function sharp_check_ability(string $ability, string $entityKey, string $instanc
     app(Code16\Sharp\Auth\SharpAuthorizationManager::class)
         ->check($ability, $entityKey, $instanceId);
 }
+
+/**
+ * Replace embedded images with thumbnails in a SharpMarkdownField's markdown text.
+ *
+ * @param string $html
+ * @param string $classNames
+ * @param int|null $width
+ * @param int|null $height
+ * @param array $filters
+ * @return string
+ */
+function sharp_markdown_thumbnails(string $html, string $classNames, int $width = null, int $height = null, array $filters = [])
+{
+    preg_match_all('/<img src="(.*)".*>/U', $html, $matches, PREG_SET_ORDER);
+
+    foreach($matches as $match) {
+        list($disk, $file_name) = explode(":", $match[1]);
+
+        $model = new Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel(compact('disk', 'file_name'));
+
+        $html = str_replace(
+            $match[0],
+            sprintf('<img src="%s" class="%s" alt="">', $model->thumbnail($width, $height, $filters), $classNames),
+            $html
+        );
+    }
+
+    return $html;
+}
