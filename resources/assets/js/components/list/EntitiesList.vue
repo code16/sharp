@@ -120,8 +120,6 @@
 
     import * as qs from '../../helpers/querystring';
 
-    import axios from 'axios';
-
 
     export default {
         name:'SharpEntitiesList',
@@ -408,7 +406,7 @@
             },
             /* (Instance, State) */
             setState({ [this.idAttr]:instanceId }, { value }) {
-                axios.post(`${this.apiPath}/state/${instanceId}`, {
+                this.axiosInstance.post(`${this.apiPath}/state/${instanceId}`, {
                         attribute: this.config.state.attribute,
                         value
                     })
@@ -470,7 +468,7 @@
                         });
                     });
                 }
-                let { data } = await axios.post(this.commandEnpoint(key, instance), { query: this.apiParams });
+                let { data } = await this.axiosInstance.post(this.commandEnpoint(key, instance), { query: this.apiParams });
                 this.handleCommandResponse(data);
             },
 

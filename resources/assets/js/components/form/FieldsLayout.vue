@@ -38,7 +38,7 @@
             },
             visible : {
                 type: Object,
-                default: () => {}
+                default: () => ({})
             }
         },
 

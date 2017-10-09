@@ -25,7 +25,7 @@
             fieldConfigIdentifier: String,
             value:{
                 type: Object,
-                default: ()=>{}
+                default: ()=>({})
             },
 
             placeholder:String,
@@ -325,7 +325,6 @@
 
             this.codemirrorOn('keydown', this.onKeydown);
             this.codemirrorOn('keyHandled', this.onKeyHandled);
-            console.log(this);
         }
     }
 </script>
