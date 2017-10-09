@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import * as fieldContainerModule from '../components/form/FieldContainer.vue';
 
-import { MockInjections, mockSFC } from "./utils/index";
+import { MockInjections, mockSFC } from "./utils";
 
 import FieldDisplay from '../components/form/field-display/FieldDisplay';
 import * as conditions from '../components/form/field-display/conditions';
@@ -359,6 +359,73 @@ describe('field-display', () => {
             expect(vm.$children).toHaveLength(0);
         });
     });
+
+    it('expose appropriate props', async () => {
+        let vm = await createVm({
+            propsData: {
+                contextData: {
+                    title: 'myTitle',
+                },
+                contextFields: {
+                    title: {
+                        type: 'text',
+                        placeholder: 'Title',
+                        label: 'Super title label',
+                        helpMessage: 'Super help message'
+                    }
+                }
+            }
+        });
+
+        let { $children:[$fieldContainer] } = vm;
+
+        expect($fieldContainer.$options.propsData).toMatchObject({
+            fieldKey: 'title',
+            fieldType: 'text',
+            fieldProps: {
+                type: 'text',
+                placeholder: 'Title'
+            },
+            value: 'myTitle',
+            label: 'Super title label',
+            helpMessage: 'Super help message'
+        });
+    });
+
+    it('call update visibility', async () => {
+        let updateVisibility = jest.fn();
+        let vm = await createVm({
+            propsData: {
+                contextData: {
+                    title: 'myTitle',
+                    check: true,
+                },
+                contextFields: {
+                    title: {
+                        type: 'text',
+                        conditionalDisplay: {
+                            operator: 'or',
+                            fields: [{ key:'check', values: true }]
+                        }
+                    },
+                    check: { type: 'check' }
+                }
+            },
+            methods: {
+                updateVisibility
+            }
+        });
+
+        expect(updateVisibility).toHaveBeenCalledTimes(1);
+        expect(updateVisibility).toHaveBeenLastCalledWith('title',true);
+
+        Vue.set(vm.contextData, 'check', false);
+
+        await Vue.nextTick();
+
+        expect(updateVisibility).toHaveBeenCalledTimes(2);
+        expect(updateVisibility).toHaveBeenLastCalledWith('title',false);
+    })
 });
 
 async function createVm(customOptions={}) {

@@ -1,9 +1,9 @@
-export function mockSFC (sfc, extend) {
+export function mockSFC (sfc, { render, template, ...extend } = {}) {
     Object.assign(sfc, {
         mixins: [],
         'extends': extend,
-        template: null,
-        render() { return this._v(`__MOCKED_SFC_${sfc.name}__\n`) },
+        template: template,
+        render: !template ? render || function() { return this._v(`__MOCKED_SFC_${sfc.name}__\n`) } : null,
         watch: {},
         beforeCreate: ()=>{},
         created: ()=>{},
