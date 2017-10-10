@@ -3,7 +3,7 @@ import Vue from 'vue/dist/vue.common';
 import ActionView from './components/ActionView';
 import Form from './components/form/Form';
 import FieldDisplay from './components/form/field-display/FieldDisplay';
-import EntitiesList from './components/list/EntitiesList';
+import EntityList from './components/list/EntityList';
 import Dashboard from './components/dashboard/Dashboard';
 
 import CollapsibleItem from './components/menu/CollapsibleItem';
@@ -36,7 +36,7 @@ new Vue({
         [ActionView.name]:ActionView,
         [Form.name]:Form,
         [Dashboard.name]:Dashboard,
-        [EntitiesList.name]:EntitiesList,
+        [EntityList.name]:EntityList,
         [CollapsibleItem.name]:CollapsibleItem,
         [NavItem.name]:NavItem,
         [LeftNav.name]:LeftNav

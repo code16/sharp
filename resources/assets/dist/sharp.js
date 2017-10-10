@@ -22930,7 +22930,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_ActionView__ = __webpack_require__(217);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_form_Form__ = __webpack_require__(150);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_form_field_display_FieldDisplay__ = __webpack_require__(341);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_list_EntitiesList__ = __webpack_require__(438);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_list_EntityList__ = __webpack_require__(438);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_dashboard_Dashboard__ = __webpack_require__(450);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_menu_CollapsibleItem__ = __webpack_require__(659);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_menu_NavItem__ = __webpack_require__(212);
@@ -22977,7 +22977,7 @@ new __WEBPACK_IMPORTED_MODULE_1_vue_dist_vue_common___default.a({
         params: __WEBPACK_IMPORTED_MODULE_13__helpers_querystring__["a" /* parse */]()
     },
 
-    components: (_components = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_2__components_ActionView__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_2__components_ActionView__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_3__components_form_Form__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_3__components_form_Form__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_6__components_dashboard_Dashboard__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_6__components_dashboard_Dashboard__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_5__components_list_EntitiesList__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_5__components_list_EntitiesList__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_7__components_menu_CollapsibleItem__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_7__components_menu_CollapsibleItem__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_8__components_menu_NavItem__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_8__components_menu_NavItem__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_9__components_menu_LeftNav__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_9__components_menu_LeftNav__["a" /* default */]), _components),
+    components: (_components = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_2__components_ActionView__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_2__components_ActionView__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_3__components_form_Form__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_3__components_form_Form__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_6__components_dashboard_Dashboard__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_6__components_dashboard_Dashboard__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_5__components_list_EntityList__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_5__components_list_EntityList__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_7__components_menu_CollapsibleItem__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_7__components_menu_CollapsibleItem__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_8__components_menu_NavItem__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_8__components_menu_NavItem__["a" /* default */]), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_9__components_menu_LeftNav__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_9__components_menu_LeftNav__["a" /* default */]), _components),
 
     created: function created() {
         var _this = this;
@@ -67323,8 +67323,8 @@ function computeCondition(fields, data, condition) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_es2015_modules_false_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_regenerator_true_env_test_presets_es2015_es2017_node_modules_vue_loader_lib_selector_type_script_index_0_EntitiesList_vue__ = __webpack_require__(439);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_d1f13524_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_EntitiesList_vue__ = __webpack_require__(449);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_es2015_modules_false_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_regenerator_true_env_test_presets_es2015_es2017_node_modules_vue_loader_lib_selector_type_script_index_0_EntityList_vue__ = __webpack_require__(439);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_85412d60_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_EntityList_vue__ = __webpack_require__(449);
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -67338,15 +67338,15 @@ var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
-  __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_es2015_modules_false_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_regenerator_true_env_test_presets_es2015_es2017_node_modules_vue_loader_lib_selector_type_script_index_0_EntitiesList_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_d1f13524_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_EntitiesList_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_es2015_modules_false_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_regenerator_true_env_test_presets_es2015_es2017_node_modules_vue_loader_lib_selector_type_script_index_0_EntityList_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_85412d60_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_EntityList_vue__["a" /* default */],
   __vue_styles__,
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/list/EntitiesList.vue"
+Component.options.__file = "resources/assets/js/components/list/EntityList.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] EntitiesList.vue: functional components are not supported with templates, they should use render functions.")}
+if (Component.options.functional) {console.error("[vue-loader] EntityList.vue: functional components are not supported with templates, they should use render functions.")}
 
 /* hot reload */
 if (false) {(function () {
@@ -67355,9 +67355,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-d1f13524", Component.options)
+    hotAPI.createRecord("data-v-85412d60", Component.options)
   } else {
-    hotAPI.reload("data-v-d1f13524", Component.options)
+    hotAPI.reload("data-v-85412d60", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -67535,7 +67535,7 @@ var _components;
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-    name: 'SharpEntitiesList',
+    name: 'SharpEntityList',
     extends: __WEBPACK_IMPORTED_MODULE_8__DynamicViewMixin__["a" /* default */],
 
     inject: ['actionsBus', 'params' // querystring params as an object
@@ -67758,7 +67758,7 @@ var _components;
                     var contLayout = _step.value;
 
                     if (!(contLayout.key in this.containers)) {
-                        __WEBPACK_IMPORTED_MODULE_18__util__["a" /* error */]('EntitiesList: unknown container "' + contLayout.key + '" (in layout)');
+                        __WEBPACK_IMPORTED_MODULE_18__util__["a" /* error */]('EntityList: unknown container "' + contLayout.key + '" (in layout)');
                         this.ready = false;
                     }
                 }
@@ -68636,29 +68636,29 @@ if (false) {
 "use strict";
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "SharpEntitiesList",
+    staticClass: "SharpEntityList",
     class: {
-      'SharpEntitiesList--reorder': _vm.reorderActive
+      'SharpEntityList--reorder': _vm.reorderActive
     }
   }, [(_vm.ready) ? [(!_vm.data.items.length) ? [_vm._v("\n            " + _vm._s(_vm.l('entity_list.empty_text')) + "\n        ")] : _c('div', {
-    staticClass: "SharpEntitiesList__table SharpEntitiesList__table--border"
+    staticClass: "SharpEntityList__table SharpEntityList__table--border"
   }, [_c('div', {
-    staticClass: "SharpEntitiesList__thead"
+    staticClass: "SharpEntityList__thead"
   }, [_c('div', {
-    staticClass: "SharpEntitiesList__row SharpEntitiesList__row--header container"
+    staticClass: "SharpEntityList__row SharpEntityList__row--header container"
   }, [_c('div', {
-    staticClass: "SharpEntitiesList__cols"
+    staticClass: "SharpEntityList__cols"
   }, [_c('div', {
     staticClass: "row"
   }, _vm._l((_vm.layout), function(contLayout) {
     return _c('div', {
-      staticClass: "SharpEntitiesList__th",
+      staticClass: "SharpEntityList__th",
       class: _vm.colClasses(contLayout)
     }, [_c('span', [_vm._v(_vm._s(_vm.containers[contLayout.key].label))]), _vm._v(" "), (_vm.containers[contLayout.key].sortable) ? [_c('svg', {
-      staticClass: "SharpEntitiesList__carret",
+      staticClass: "SharpEntityList__carret",
       class: {
-        'SharpEntitiesList__carret--selected': _vm.sortedBy === contLayout.key,
-          'SharpEntitiesList__carret--ascending': _vm.sortedBy === contLayout.key && _vm.sortDir === 'asc'
+        'SharpEntityList__carret--selected': _vm.sortedBy === contLayout.key,
+          'SharpEntityList__carret--ascending': _vm.sortedBy === contLayout.key && _vm.sortDir === 'asc'
       },
       attrs: {
         "width": "10",
@@ -68671,7 +68671,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         "d": "M10 0L5 5 0 0z"
       }
     })])] : _vm._e(), _vm._v(" "), (_vm.containers[contLayout.key].sortable) ? _c('a', {
-      staticClass: "SharpEntitiesList__sort-link",
+      staticClass: "SharpEntityList__sort-link",
       attrs: {
         "href": ""
       },
@@ -68686,7 +68686,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     staticClass: "d-none d-md-block",
     style: (_vm.headerAutoPadding)
   }, [_vm._v(" ")])])]), _vm._v(" "), _c('div', {
-    staticClass: "SharpEntitiesList__tbody"
+    staticClass: "SharpEntityList__tbody"
   }, [_c('draggable', {
     attrs: {
       "options": _vm.dragOptions,
@@ -68694,26 +68694,26 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     }
   }, _vm._l(((_vm.reorderActive ? _vm.reorderedItems : _vm.data.items)), function(item) {
     return _c('div', {
-      staticClass: "SharpEntitiesList__row container",
+      staticClass: "SharpEntityList__row container",
       class: {
-        'SharpEntitiesList__row--disabled': !_vm.rowHasLink(item), 'SharpEntitiesList__row--reorder': _vm.reorderActive
+        'SharpEntityList__row--disabled': !_vm.rowHasLink(item), 'SharpEntityList__row--reorder': _vm.reorderActive
       }
     }, [_c('div', {
-      staticClass: "SharpEntitiesList__cols"
+      staticClass: "SharpEntityList__cols"
     }, [_c('div', {
       staticClass: "row"
     }, _vm._l((_vm.layout), function(contLayout) {
       return _c('div', {
-        staticClass: "SharpEntitiesList__td",
+        staticClass: "SharpEntityList__td",
         class: _vm.colClasses(contLayout)
       }, [(_vm.containers[contLayout.key].html) ? _c('div', {
-        staticClass: "SharpEntitiesList__td-html-container",
+        staticClass: "SharpEntityList__td-html-container",
         domProps: {
           "innerHTML": _vm._s(item[contLayout.key])
         }
       }) : [_vm._v("\n                                        " + _vm._s(item[contLayout.key]) + "\n                                    ")]], 2)
     })), _vm._v(" "), (_vm.rowHasLink(item)) ? _c('a', {
-      staticClass: "SharpEntitiesList__row-link",
+      staticClass: "SharpEntityList__row-link",
       attrs: {
         "href": _vm.rowLink(item)
       }
@@ -68726,9 +68726,9 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       }],
       ref: "actionsCol",
       refInFor: true,
-      staticClass: "SharpEntitiesList__row-actions"
+      staticClass: "SharpEntityList__row-actions"
     }, [(_vm.config.state) ? _c('sharp-dropdown', {
-      staticClass: "SharpEntitiesList__state-dropdown",
+      staticClass: "SharpEntityList__state-dropdown",
       attrs: {
         "show-arrow": false,
         "disabled": !_vm.hasStateAuthorization(item)
@@ -68758,15 +68758,15 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         }))
       }), _vm._v("\n                                    " + _vm._s(state.label) + "\n                                ")], 1)
     })], 2) : _vm._e(), _vm._v(" "), (!_vm.noInstanceCommands) ? _c('sharp-dropdown', {
-      staticClass: "SharpEntitiesList__commands-dropdown",
+      staticClass: "SharpEntityList__commands-dropdown",
       class: {
-        'SharpEntitiesList__commands-dropdown--placeholder': !_vm.instanceCommands(item)
+        'SharpEntityList__commands-dropdown--placeholder': !_vm.instanceCommands(item)
       },
       attrs: {
         "show-arrow": false
       }
     }, [_c('div', {
-      staticClass: "SharpEntitiesList__command-icon",
+      staticClass: "SharpEntityList__command-icon",
       slot: "text"
     }, [_c('i', {
       staticClass: "fa fa-plus"
@@ -68788,12 +68788,12 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       }],
       ref: "actionsCol",
       refInFor: true,
-      staticClass: "SharpEntitiesList__row-actions"
+      staticClass: "SharpEntityList__row-actions"
     }, [_c('i', {
-      staticClass: "fa fa-ellipsis-v SharpEntitiesList__reorder-icon"
+      staticClass: "fa fa-ellipsis-v SharpEntityList__reorder-icon"
     })])])
   }))], 1)]), _vm._v(" "), _c('div', {
-    staticClass: "SharpEntitiesList__pagination-container"
+    staticClass: "SharpEntityList__pagination-container"
   }, [(_vm.data.totalCount / _vm.data.pageSize > 1.) ? _c('sharp-pagination', {
     staticClass: "SharpPagination",
     attrs: {
@@ -68857,7 +68857,7 @@ var esExports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-d1f13524", esExports)
+     require("vue-hot-reload-api").rerender("data-v-85412d60", esExports)
   }
 }
 

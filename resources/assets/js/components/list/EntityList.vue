@@ -1,53 +1,53 @@
 <template>
-    <div class="SharpEntitiesList" :class="{ 'SharpEntitiesList--reorder': reorderActive }">
+    <div class="SharpEntityList" :class="{ 'SharpEntityList--reorder': reorderActive }">
         <template v-if="ready">
             <template v-if="!data.items.length">
                 {{ l('entity_list.empty_text') }}
             </template>
-            <div v-else="" class="SharpEntitiesList__table SharpEntitiesList__table--border">
-                <div class="SharpEntitiesList__thead">
-                    <div class="SharpEntitiesList__row SharpEntitiesList__row--header container">
-                        <div class="SharpEntitiesList__cols">
+            <div v-else="" class="SharpEntityList__table SharpEntityList__table--border">
+                <div class="SharpEntityList__thead">
+                    <div class="SharpEntityList__row SharpEntityList__row--header container">
+                        <div class="SharpEntityList__cols">
                             <div class="row">
-                                <div class="SharpEntitiesList__th"
+                                <div class="SharpEntityList__th"
                                      :class="colClasses(contLayout)"
                                      v-for="contLayout in layout">
                                     <span>{{ containers[contLayout.key].label }}</span>
                                     <template v-if="containers[contLayout.key].sortable">
-                                        <svg class="SharpEntitiesList__carret"
-                                             :class="{'SharpEntitiesList__carret--selected':sortedBy === contLayout.key,
-                                              'SharpEntitiesList__carret--ascending': sortedBy === contLayout.key && sortDir==='asc'}"
+                                        <svg class="SharpEntityList__carret"
+                                             :class="{'SharpEntityList__carret--selected':sortedBy === contLayout.key,
+                                              'SharpEntityList__carret--ascending': sortedBy === contLayout.key && sortDir==='asc'}"
                                              width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd">
                                             <path d="M10 0L5 5 0 0z"></path>
                                         </svg>
                                     </template>
-                                    <a class="SharpEntitiesList__sort-link" v-if="containers[contLayout.key].sortable" @click.prevent="sortToggle(contLayout.key)" href=""></a>
+                                    <a class="SharpEntityList__sort-link" v-if="containers[contLayout.key].sortable" @click.prevent="sortToggle(contLayout.key)" href=""></a>
                                 </div>
                             </div>
                         </div>
                         <div class="d-none d-md-block" :style="headerAutoPadding">&nbsp</div>
                     </div>
                 </div>
-                <div class="SharpEntitiesList__tbody">
+                <div class="SharpEntityList__tbody">
                     <draggable :options="dragOptions" :list="reorderedItems">
                         <div v-for="item in (reorderActive ? reorderedItems : data.items)"
-                             class="SharpEntitiesList__row container"
-                             :class="{'SharpEntitiesList__row--disabled':!rowHasLink(item), 'SharpEntitiesList__row--reorder':reorderActive}">
-                            <div class="SharpEntitiesList__cols">
+                             class="SharpEntityList__row container"
+                             :class="{'SharpEntityList__row--disabled':!rowHasLink(item), 'SharpEntityList__row--reorder':reorderActive}">
+                            <div class="SharpEntityList__cols">
                                 <div class="row">
-                                    <div class="SharpEntitiesList__td" :class="colClasses(contLayout)" v-for="contLayout in layout">
+                                    <div class="SharpEntityList__td" :class="colClasses(contLayout)" v-for="contLayout in layout">
                                         <div v-if="containers[contLayout.key].html" v-html="item[contLayout.key]"
-                                             class="SharpEntitiesList__td-html-container">
+                                             class="SharpEntityList__td-html-container">
                                         </div>
                                         <template v-else>
                                             {{ item[contLayout.key] }}
                                         </template>
                                     </div>
                                 </div>
-                                <a class="SharpEntitiesList__row-link" v-if="rowHasLink(item)" :href="rowLink(item)"></a>
+                                <a class="SharpEntityList__row-link" v-if="rowHasLink(item)" :href="rowLink(item)"></a>
                             </div>
-                            <div v-show="!reorderActive" class="SharpEntitiesList__row-actions" ref="actionsCol">
-                                <sharp-dropdown v-if="config.state" class="SharpEntitiesList__state-dropdown" :show-arrow="false" :disabled="!hasStateAuthorization(item)">
+                            <div v-show="!reorderActive" class="SharpEntityList__row-actions" ref="actionsCol">
+                                <sharp-dropdown v-if="config.state" class="SharpEntityList__state-dropdown" :show-arrow="false" :disabled="!hasStateAuthorization(item)">
                                     <sharp-state-icon slot="text" :class="stateClasses({item})" :style="stateStyle({item})"></sharp-state-icon>
                                     <sharp-dropdown-item v-for="state in config.state.values" @click="setState(item,state)" :key="state.value">
                                         <sharp-state-icon :class="stateClasses({ value:state.value })" :style="stateStyle({ value:state.value })"></sharp-state-icon>
@@ -55,9 +55,9 @@
                                     </sharp-dropdown-item>
                                 </sharp-dropdown>
                                 <sharp-dropdown v-if="!noInstanceCommands"
-                                                class="SharpEntitiesList__commands-dropdown"
-                                                :class="{'SharpEntitiesList__commands-dropdown--placeholder':!instanceCommands(item)}" :show-arrow="false">
-                                    <div slot="text" class="SharpEntitiesList__command-icon">
+                                                class="SharpEntityList__commands-dropdown"
+                                                :class="{'SharpEntityList__commands-dropdown--placeholder':!instanceCommands(item)}" :show-arrow="false">
+                                    <div slot="text" class="SharpEntityList__command-icon">
                                         <i class="fa fa-plus"></i>
                                     </div>
                                     <sharp-dropdown-item v-for="command in instanceCommands(item)" @click="sendCommand(command, item)" :key="command.key">
@@ -65,14 +65,14 @@
                                     </sharp-dropdown-item>
                                 </sharp-dropdown>
                             </div>
-                            <div v-show="reorderActive" class="SharpEntitiesList__row-actions" ref="actionsCol">
-                                <i class="fa fa-ellipsis-v SharpEntitiesList__reorder-icon"></i>
+                            <div v-show="reorderActive" class="SharpEntityList__row-actions" ref="actionsCol">
+                                <i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i>
                             </div>
                         </div>
                     </draggable>
                 </div>
             </div>
-            <div class="SharpEntitiesList__pagination-container">
+            <div class="SharpEntityList__pagination-container">
                 <sharp-pagination v-if="data.totalCount/data.pageSize > 1."
                                   class="SharpPagination"
                                   :total-rows="data.totalCount"
@@ -122,7 +122,7 @@
 
 
     export default {
-        name:'SharpEntitiesList',
+        name:'SharpEntityList',
         extends: DynamicView,
 
         inject: [
@@ -316,7 +316,7 @@
             verify() {
                 for(let contLayout of this.layout) {
                     if(!(contLayout.key in this.containers)) {
-                        util.error(`EntitiesList: unknown container "${contLayout.key}" (in layout)`);
+                        util.error(`EntityList: unknown container "${contLayout.key}" (in layout)`);
                         this.ready = false;
                     }
                 }

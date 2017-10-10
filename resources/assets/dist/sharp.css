@@ -8611,7 +8611,7 @@
   outline: 1px solid transparent;
 }
 
-#sharp-app .SharpEntitiesList__pagination-container {
+#sharp-app .SharpEntityList__pagination-container {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -8620,15 +8620,15 @@
           justify-content: center;
 }
 
-#sharp-app .SharpEntitiesList__pagination-container .SharpPagination {
+#sharp-app .SharpEntityList__pagination-container .SharpPagination {
   width: auto;
 }
 
-#sharp-app .SharpEntitiesList__reorder-icon {
+#sharp-app .SharpEntityList__reorder-icon {
   color: #68829E;
 }
 
-#sharp-app .SharpEntitiesList__table {
+#sharp-app .SharpEntityList__table {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   margin: 0;
@@ -8644,23 +8644,23 @@
   background-color: transparent;
 }
 
-#sharp-app .SharpEntitiesList__table > *,
-#sharp-app .SharpEntitiesList__table > *:before,
-#sharp-app .SharpEntitiesList__table > *:after {
+#sharp-app .SharpEntityList__table > *,
+#sharp-app .SharpEntityList__table > *:before,
+#sharp-app .SharpEntityList__table > *:after {
   -webkit-box-sizing: inherit;
           box-sizing: inherit;
 }
 
-#sharp-app .SharpEntitiesList__table--border {
+#sharp-app .SharpEntityList__table--border {
   border: 1px solid #dfe3e6;
   background-color: #FFFFFF;
 }
 
-#sharp-app .SharpEntitiesList__table--condensed .SharpEntitiesList__td {
+#sharp-app .SharpEntityList__table--condensed .SharpEntityList__td {
   padding: 0.5rem;
 }
 
-#sharp-app .SharpEntitiesList__carret {
+#sharp-app .SharpEntityList__carret {
   fill: #8c9ba5;
   width: 8px;
   min-width: 8px;
@@ -8675,7 +8675,7 @@
   cursor: pointer;
 }
 
-#sharp-app .SharpEntitiesList__carret--ascending {
+#sharp-app .SharpEntityList__carret--ascending {
   -webkit-transform: rotate(180deg);
           transform: rotate(180deg);
   -webkit-transition: -webkit-transform 200ms cubic-bezier(0.5, 0, 0.1, 1);
@@ -8684,11 +8684,11 @@
   transition: transform 200ms cubic-bezier(0.5, 0, 0.1, 1), -webkit-transform 200ms cubic-bezier(0.5, 0, 0.1, 1);
 }
 
-#sharp-app .SharpEntitiesList__carret--selected {
+#sharp-app .SharpEntityList__carret--selected {
   fill: #314255;
 }
 
-#sharp-app .SharpEntitiesList__input {
+#sharp-app .SharpEntityList__input {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -8701,11 +8701,11 @@
   white-space: nowrap;
 }
 
-#sharp-app .SharpEntitiesList--selection .SharpEntities__row:hover:not(.SharpEntitiesList__row--header) {
+#sharp-app .SharpEntityList--selection .SharpEntityList__row:hover:not(.SharpEntityList__row--header) {
   background-color: rgba(85, 150, 230, 0.1);
 }
 
-#sharp-app .SharpEntitiesList__row {
+#sharp-app .SharpEntityList__row {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -8715,7 +8715,7 @@
 }
 
 @media (max-width: 767px) {
-  #sharp-app .SharpEntitiesList__row {
+  #sharp-app .SharpEntityList__row {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
         -ms-flex-flow: column;
@@ -8723,28 +8723,28 @@
   }
 }
 
-#sharp-app .SharpEntitiesList__row__input:checked + #sharp-app .SharpEntitiesList__row {
+#sharp-app .SharpEntityList__row__input:checked + #sharp-app .SharpEntityList__row {
   background-color: rgba(85, 150, 230, 0.1);
 }
 
-#sharp-app .SharpEntitiesList__row--header {
+#sharp-app .SharpEntityList__row--header {
   border: none;
   cursor: inherit;
 }
 
-#sharp-app .SharpEntitiesList__row .SharpEntitiesList__cols, #sharp-app .SharpEntitiesList__row .SharpEntitiesList__row-actions {
+#sharp-app .SharpEntityList__row .SharpEntityList__cols, #sharp-app .SharpEntityList__row .SharpEntityList__row-actions {
   padding: 1em 0;
 }
 
-#sharp-app .SharpEntitiesList__row:focus:not(.SharpEntitiesList__row--header) {
+#sharp-app .SharpEntityList__row:focus:not(.SharpEntityList__row--header) {
   outline: 1px solid #314255;
 }
 
-#sharp-app .SharpEntitiesList__row:hover:not(.SharpEntitiesList__row--header):not(.SharpEntitiesList__row--disabled) {
+#sharp-app .SharpEntityList__row:hover:not(.SharpEntityList__row--header):not(.SharpEntityList__row--disabled) {
   background-color: #EBF0F7;
 }
 
-#sharp-app .SharpEntitiesList__row .SharpEntitiesList__cols {
+#sharp-app .SharpEntityList__row .SharpEntityList__cols {
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
@@ -8754,7 +8754,7 @@
   position: relative;
 }
 
-#sharp-app .SharpEntitiesList__row .SharpEntitiesList__cols .row {
+#sharp-app .SharpEntityList__row .SharpEntityList__cols .row {
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
@@ -8763,7 +8763,7 @@
           align-items: center;
 }
 
-#sharp-app .SharpEntitiesList__row .SharpEntitiesList__cols .SharpEntitiesList__row-link {
+#sharp-app .SharpEntityList__row .SharpEntityList__cols .SharpEntityList__row-link {
   position: absolute;
   left: 0;
   right: 0;
@@ -8771,7 +8771,7 @@
   bottom: 0;
 }
 
-#sharp-app .SharpEntitiesList__row .SharpEntitiesList__row-actions {
+#sharp-app .SharpEntityList__row .SharpEntityList__row-actions {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -8784,18 +8784,18 @@
 }
 
 @media (max-width: 767px) {
-  #sharp-app .SharpEntitiesList__row .SharpEntitiesList__row-actions {
+  #sharp-app .SharpEntityList__row .SharpEntityList__row-actions {
     padding-top: 0;
   }
 }
 
-#sharp-app .SharpEntitiesList__row .SharpEntitiesList__row-actions > * {
+#sharp-app .SharpEntityList__row .SharpEntityList__row-actions > * {
   -webkit-box-flex: 0;
       -ms-flex: 0;
           flex: 0;
 }
 
-#sharp-app .SharpEntitiesList .SharpEntitiesList__row--reorder {
+#sharp-app .SharpEntityList .SharpEntityList__row--reorder {
   cursor: move;
   background: #f2f2f2 !important;
   border-bottom: 0;
@@ -8803,16 +8803,16 @@
   margin-bottom: .25rem;
 }
 
-#sharp-app .SharpEntitiesList .SharpEntitiesList__row--reorder .SharpEntitiesList__row-link {
+#sharp-app .SharpEntityList .SharpEntityList__row--reorder .SharpEntityList__row-link {
   display: none;
 }
 
-#sharp-app .SharpEntitiesList__thead {
+#sharp-app .SharpEntityList__thead {
   border-bottom: 1px solid #314255;
   vertical-align: middle;
 }
 
-#sharp-app .SharpEntitiesList__th {
+#sharp-app .SharpEntityList__th {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -8829,7 +8829,7 @@
   position: relative;
 }
 
-#sharp-app .SharpEntitiesList__th .SharpEntitiesList__sort-link {
+#sharp-app .SharpEntityList__th .SharpEntityList__sort-link {
   position: absolute;
   left: 0;
   right: 0;
@@ -8837,35 +8837,47 @@
   bottom: 0;
 }
 
-#sharp-app .SharpEntitiesList__th > span {
+#sharp-app .SharpEntityList__th > span {
   line-height: 2;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-#sharp-app .SharpEntitiesList__tbody {
+#sharp-app .SharpEntityList__tbody {
   vertical-align: middle;
 }
 
-#sharp-app .SharpEntitiesList__td {
+#sharp-app .SharpEntityList__td {
   font-size: 0.875rem;
   line-height: 1.5;
   position: relative;
 }
 
-#sharp-app .SharpEntitiesList__td-html-container {
+#sharp-app .SharpEntityList__td-html-container {
   max-width: 100%;
 }
 
-#sharp-app .SharpEntitiesList__td-html-container * {
+#sharp-app .SharpEntityList__td-html-container * {
   font-size: 0.875rem !important;
 }
 
-#sharp-app .SharpEntitiesList__td-html-container img {
+#sharp-app .SharpEntityList__td-html-container img {
   max-width: 100%;
 }
 
-#sharp-app .SharpEntitiesList__svg {
+#sharp-app .SharpEntityList__td-html-container small {
+  font-size: smaller !important;
+}
+
+#sharp-app .SharpEntityList__td-html-container b {
+  font-weight: bold !important;
+}
+
+#sharp-app .SharpEntityList__td-html-container i {
+  font-style: italic !important;
+}
+
+#sharp-app .SharpEntityList__svg {
   display: inline-block;
   fill: transparent;
   vertical-align: middle;
@@ -8873,19 +8885,19 @@
   transition: 250ms cubic-bezier(0.5, 0, 0.1, 1);
 }
 
-#sharp-app .SharpEntitiesList__row:hover .SharpEntities__svg {
+#sharp-app .SharpEntityList__row:hover .SharpEntityList__svg {
   fill: rgba(85, 150, 230, 0.1);
 }
 
-#sharp-app .SharpEntitiesList__input:checked + .SharpEntities__row .SharpEntities__svg {
+#sharp-app .SharpEntityList__input:checked + .SharpEntityList__row .SharpEntityList__svg {
   fill: #5596e6;
 }
 
-#sharp-app .SharpEntitiesList__commands-dropdown {
+#sharp-app .SharpEntityList__commands-dropdown {
   border: 1px solid #FD7400 !important;
 }
 
-#sharp-app .SharpEntitiesList__commands-dropdown .SharpEntitiesList__command-icon {
+#sharp-app .SharpEntityList__commands-dropdown .SharpEntityList__command-icon {
   width: 0.75rem;
   height: 0.75rem;
   color: #FD7400;
@@ -8900,19 +8912,19 @@
           justify-content: center;
 }
 
-#sharp-app .SharpEntitiesList__commands-dropdown .SharpEntitiesList__command-icon .fa {
+#sharp-app .SharpEntityList__commands-dropdown .SharpEntityList__command-icon .fa {
   font-size: 0.5rem;
 }
 
-#sharp-app .SharpEntitiesList__commands-dropdown--placeholder {
+#sharp-app .SharpEntityList__commands-dropdown--placeholder {
   visibility: hidden;
 }
 
-#sharp-app .SharpEntitiesList__state-dropdown .SharpDropdown__text, #sharp-app .SharpEntitiesList__state-dropdown .multiselect .multiselect__tags, #sharp-app .multiselect .SharpEntitiesList__state-dropdown .multiselect__tags {
+#sharp-app .SharpEntityList__state-dropdown .SharpDropdown__text, #sharp-app .SharpEntityList__state-dropdown .multiselect .multiselect__tags, #sharp-app .multiselect .SharpEntityList__state-dropdown .multiselect__tags {
   border: 0;
 }
 
-#sharp-app .SharpEntitiesList__state-dropdown .SharpDropdown__link, #sharp-app .SharpEntitiesList__state-dropdown .multiselect .multiselect__content li .multiselect__option, #sharp-app .multiselect .multiselect__content li .SharpEntitiesList__state-dropdown .multiselect__option {
+#sharp-app .SharpEntityList__state-dropdown .SharpDropdown__link, #sharp-app .SharpEntityList__state-dropdown .multiselect .multiselect__content li .multiselect__option, #sharp-app .multiselect .multiselect__content li .SharpEntityList__state-dropdown .multiselect__option {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -8921,16 +8933,16 @@
           align-items: center;
 }
 
-#sharp-app .SharpEntitiesList__state-dropdown .SharpDropdown__link svg, #sharp-app .SharpEntitiesList__state-dropdown .multiselect .multiselect__content li .multiselect__option svg, #sharp-app .multiselect .multiselect__content li .SharpEntitiesList__state-dropdown .multiselect__option svg {
+#sharp-app .SharpEntityList__state-dropdown .SharpDropdown__link svg, #sharp-app .SharpEntityList__state-dropdown .multiselect .multiselect__content li .multiselect__option svg, #sharp-app .multiselect .multiselect__content li .SharpEntityList__state-dropdown .multiselect__option svg {
   margin-right: .5rem;
 }
 
-#sharp-app .SharpEntitiesList__state-dropdown, #sharp-app .SharpEntitiesList__commands-dropdown {
+#sharp-app .SharpEntityList__state-dropdown, #sharp-app .SharpEntityList__commands-dropdown {
   margin: 0 .2rem;
   background: transparent;
 }
 
-#sharp-app .SharpEntitiesList__state-dropdown .SharpDropdown__list, #sharp-app .SharpEntitiesList__state-dropdown .multiselect .multiselect__content, #sharp-app .multiselect .SharpEntitiesList__state-dropdown .multiselect__content, #sharp-app .SharpEntitiesList__state-dropdown .multiselect__content, #sharp-app .SharpEntitiesList__commands-dropdown .SharpDropdown__list, #sharp-app .SharpEntitiesList__commands-dropdown .multiselect .multiselect__content, #sharp-app .multiselect .SharpEntitiesList__commands-dropdown .multiselect__content, #sharp-app .SharpEntitiesList__commands-dropdown .multiselect__content {
+#sharp-app .SharpEntityList__state-dropdown .SharpDropdown__list, #sharp-app .SharpEntityList__state-dropdown .multiselect .multiselect__content, #sharp-app .multiselect .SharpEntityList__state-dropdown .multiselect__content, #sharp-app .SharpEntityList__state-dropdown .multiselect__content, #sharp-app .SharpEntityList__commands-dropdown .SharpDropdown__list, #sharp-app .SharpEntityList__commands-dropdown .multiselect .multiselect__content, #sharp-app .multiselect .SharpEntityList__commands-dropdown .multiselect__content, #sharp-app .SharpEntityList__commands-dropdown .multiselect__content {
   outline: 1px solid #FD7400 !important;
   border: 1px solid transparent !important;
   -webkit-box-shadow: 0 0 7px 0 #314255 !important;
@@ -8939,24 +8951,24 @@
 }
 
 @media (max-width: 767px) {
-  #sharp-app .SharpEntitiesList__state-dropdown .SharpDropdown__list, #sharp-app .SharpEntitiesList__state-dropdown .multiselect .multiselect__content, #sharp-app .multiselect .SharpEntitiesList__state-dropdown .multiselect__content, #sharp-app .SharpEntitiesList__state-dropdown .multiselect__content, #sharp-app .SharpEntitiesList__commands-dropdown .SharpDropdown__list, #sharp-app .SharpEntitiesList__commands-dropdown .multiselect .multiselect__content, #sharp-app .multiselect .SharpEntitiesList__commands-dropdown .multiselect__content, #sharp-app .SharpEntitiesList__commands-dropdown .multiselect__content {
+  #sharp-app .SharpEntityList__state-dropdown .SharpDropdown__list, #sharp-app .SharpEntityList__state-dropdown .multiselect .multiselect__content, #sharp-app .multiselect .SharpEntityList__state-dropdown .multiselect__content, #sharp-app .SharpEntityList__state-dropdown .multiselect__content, #sharp-app .SharpEntityList__commands-dropdown .SharpDropdown__list, #sharp-app .SharpEntityList__commands-dropdown .multiselect .multiselect__content, #sharp-app .multiselect .SharpEntityList__commands-dropdown .multiselect__content, #sharp-app .SharpEntityList__commands-dropdown .multiselect__content {
     min-width: 100%;
   }
 }
 
-#sharp-app .SharpEntitiesList__state-dropdown .SharpDropdown__link:focus, #sharp-app .SharpEntitiesList__state-dropdown .multiselect .multiselect__content li .multiselect__option:focus, #sharp-app .multiselect .multiselect__content li .SharpEntitiesList__state-dropdown .multiselect__option:focus, #sharp-app .SharpEntitiesList__state-dropdown .multiselect .multiselect__content li .multiselect__option--highlight, #sharp-app .multiselect .multiselect__content li .SharpEntitiesList__state-dropdown .multiselect__option--highlight,
-#sharp-app .SharpEntitiesList__state-dropdown .SharpDropdown__link:hover, #sharp-app .SharpEntitiesList__state-dropdown .multiselect .multiselect__content li .multiselect__option:hover, #sharp-app .multiselect .multiselect__content li .SharpEntitiesList__state-dropdown .multiselect__option:hover,
-#sharp-app .SharpEntitiesList__state-dropdown .multiselect__option--highlight, #sharp-app .SharpEntitiesList__commands-dropdown .SharpDropdown__link:focus, #sharp-app .SharpEntitiesList__commands-dropdown .multiselect .multiselect__content li .multiselect__option:focus, #sharp-app .multiselect .multiselect__content li .SharpEntitiesList__commands-dropdown .multiselect__option:focus, #sharp-app .SharpEntitiesList__commands-dropdown .multiselect .multiselect__content li .multiselect__option--highlight, #sharp-app .multiselect .multiselect__content li .SharpEntitiesList__commands-dropdown .multiselect__option--highlight,
-#sharp-app .SharpEntitiesList__commands-dropdown .SharpDropdown__link:hover, #sharp-app .SharpEntitiesList__commands-dropdown .multiselect .multiselect__content li .multiselect__option:hover, #sharp-app .multiselect .multiselect__content li .SharpEntitiesList__commands-dropdown .multiselect__option:hover,
-#sharp-app .SharpEntitiesList__commands-dropdown .multiselect__option--highlight {
+#sharp-app .SharpEntityList__state-dropdown .SharpDropdown__link:focus, #sharp-app .SharpEntityList__state-dropdown .multiselect .multiselect__content li .multiselect__option:focus, #sharp-app .multiselect .multiselect__content li .SharpEntityList__state-dropdown .multiselect__option:focus, #sharp-app .SharpEntityList__state-dropdown .multiselect .multiselect__content li .multiselect__option--highlight, #sharp-app .multiselect .multiselect__content li .SharpEntityList__state-dropdown .multiselect__option--highlight,
+#sharp-app .SharpEntityList__state-dropdown .SharpDropdown__link:hover, #sharp-app .SharpEntityList__state-dropdown .multiselect .multiselect__content li .multiselect__option:hover, #sharp-app .multiselect .multiselect__content li .SharpEntityList__state-dropdown .multiselect__option:hover,
+#sharp-app .SharpEntityList__state-dropdown .multiselect__option--highlight, #sharp-app .SharpEntityList__commands-dropdown .SharpDropdown__link:focus, #sharp-app .SharpEntityList__commands-dropdown .multiselect .multiselect__content li .multiselect__option:focus, #sharp-app .multiselect .multiselect__content li .SharpEntityList__commands-dropdown .multiselect__option:focus, #sharp-app .SharpEntityList__commands-dropdown .multiselect .multiselect__content li .multiselect__option--highlight, #sharp-app .multiselect .multiselect__content li .SharpEntityList__commands-dropdown .multiselect__option--highlight,
+#sharp-app .SharpEntityList__commands-dropdown .SharpDropdown__link:hover, #sharp-app .SharpEntityList__commands-dropdown .multiselect .multiselect__content li .multiselect__option:hover, #sharp-app .multiselect .multiselect__content li .SharpEntityList__commands-dropdown .multiselect__option:hover,
+#sharp-app .SharpEntityList__commands-dropdown .multiselect__option--highlight {
   background-color: #FD7400;
 }
 
-#sharp-app .SharpEntitiesList__state-dropdown.SharpDropdown--open .SharpDropdown__text, #sharp-app .SharpEntitiesList__state-dropdown.multiselect.multiselect--active .SharpDropdown__text, #sharp-app .SharpEntitiesList__state-dropdown.SharpFilterSelect--open .SharpDropdown__text, #sharp-app .SharpEntitiesList__state-dropdown.SharpDropdown--open .multiselect .multiselect__tags, #sharp-app .multiselect .SharpEntitiesList__state-dropdown.SharpDropdown--open .multiselect__tags, #sharp-app .SharpEntitiesList__state-dropdown.multiselect.multiselect--active .multiselect__tags, #sharp-app .SharpEntitiesList__state-dropdown.SharpFilterSelect--open .multiselect .multiselect__tags, #sharp-app .multiselect .SharpEntitiesList__state-dropdown.SharpFilterSelect--open .multiselect__tags, #sharp-app .SharpEntitiesList__commands-dropdown.SharpDropdown--open .SharpDropdown__text, #sharp-app .SharpEntitiesList__commands-dropdown.multiselect.multiselect--active .SharpDropdown__text, #sharp-app .SharpEntitiesList__commands-dropdown.SharpFilterSelect--open .SharpDropdown__text, #sharp-app .SharpEntitiesList__commands-dropdown.SharpDropdown--open .multiselect .multiselect__tags, #sharp-app .multiselect .SharpEntitiesList__commands-dropdown.SharpDropdown--open .multiselect__tags, #sharp-app .SharpEntitiesList__commands-dropdown.multiselect.multiselect--active .multiselect__tags, #sharp-app .SharpEntitiesList__commands-dropdown.SharpFilterSelect--open .multiselect .multiselect__tags, #sharp-app .multiselect .SharpEntitiesList__commands-dropdown.SharpFilterSelect--open .multiselect__tags {
+#sharp-app .SharpEntityList__state-dropdown.SharpDropdown--open .SharpDropdown__text, #sharp-app .SharpEntityList__state-dropdown.multiselect.multiselect--active .SharpDropdown__text, #sharp-app .SharpEntityList__state-dropdown.SharpFilterSelect--open .SharpDropdown__text, #sharp-app .SharpEntityList__state-dropdown.SharpDropdown--open .multiselect .multiselect__tags, #sharp-app .multiselect .SharpEntityList__state-dropdown.SharpDropdown--open .multiselect__tags, #sharp-app .SharpEntityList__state-dropdown.multiselect.multiselect--active .multiselect__tags, #sharp-app .SharpEntityList__state-dropdown.SharpFilterSelect--open .multiselect .multiselect__tags, #sharp-app .multiselect .SharpEntityList__state-dropdown.SharpFilterSelect--open .multiselect__tags, #sharp-app .SharpEntityList__commands-dropdown.SharpDropdown--open .SharpDropdown__text, #sharp-app .SharpEntityList__commands-dropdown.multiselect.multiselect--active .SharpDropdown__text, #sharp-app .SharpEntityList__commands-dropdown.SharpFilterSelect--open .SharpDropdown__text, #sharp-app .SharpEntityList__commands-dropdown.SharpDropdown--open .multiselect .multiselect__tags, #sharp-app .multiselect .SharpEntityList__commands-dropdown.SharpDropdown--open .multiselect__tags, #sharp-app .SharpEntityList__commands-dropdown.multiselect.multiselect--active .multiselect__tags, #sharp-app .SharpEntityList__commands-dropdown.SharpFilterSelect--open .multiselect .multiselect__tags, #sharp-app .multiselect .SharpEntityList__commands-dropdown.SharpFilterSelect--open .multiselect__tags {
   background: #FFFFFF;
 }
 
-#sharp-app .SharpEntitiesList__state-dropdown .SharpDropdown__text, #sharp-app .SharpEntitiesList__state-dropdown .multiselect .multiselect__tags, #sharp-app .multiselect .SharpEntitiesList__state-dropdown .multiselect__tags, #sharp-app .SharpEntitiesList__commands-dropdown .SharpDropdown__text, #sharp-app .SharpEntitiesList__commands-dropdown .multiselect .multiselect__tags, #sharp-app .multiselect .SharpEntitiesList__commands-dropdown .multiselect__tags {
+#sharp-app .SharpEntityList__state-dropdown .SharpDropdown__text, #sharp-app .SharpEntityList__state-dropdown .multiselect .multiselect__tags, #sharp-app .multiselect .SharpEntityList__state-dropdown .multiselect__tags, #sharp-app .SharpEntityList__commands-dropdown .SharpDropdown__text, #sharp-app .SharpEntityList__commands-dropdown .multiselect .multiselect__tags, #sharp-app .multiselect .SharpEntityList__commands-dropdown .multiselect__tags {
   padding: 0;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -8970,7 +8982,7 @@
   height: 100%;
 }
 
-#sharp-app .SharpEntitiesList__state-dropdown .SharpDropdown__list, #sharp-app .SharpEntitiesList__state-dropdown .multiselect .multiselect__content, #sharp-app .multiselect .SharpEntitiesList__state-dropdown .multiselect__content, #sharp-app .SharpEntitiesList__commands-dropdown .SharpDropdown__list, #sharp-app .SharpEntitiesList__commands-dropdown .multiselect .multiselect__content, #sharp-app .multiselect .SharpEntitiesList__commands-dropdown .multiselect__content {
+#sharp-app .SharpEntityList__state-dropdown .SharpDropdown__list, #sharp-app .SharpEntityList__state-dropdown .multiselect .multiselect__content, #sharp-app .multiselect .SharpEntityList__state-dropdown .multiselect__content, #sharp-app .SharpEntityList__commands-dropdown .SharpDropdown__list, #sharp-app .SharpEntityList__commands-dropdown .multiselect .multiselect__content, #sharp-app .multiselect .SharpEntityList__commands-dropdown .multiselect__content {
   right: 0;
 }
 
