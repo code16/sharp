@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import * as fieldContainerModule from '../components/form/FieldContainer.vue';
 
-import { MockInjections, mockSFC } from "./utils";
+import { MockInjections, mockSFC, unmockSFC } from "./utils";
 
 import FieldDisplay from '../components/form/field-display/FieldDisplay';
 import * as conditions from '../components/form/field-display/conditions';
@@ -11,9 +11,16 @@ describe('field-display', () => {
 
     let computeSelectCondition = ()=>{}, computeCondition = ()=>{};
 
-    beforeEach(() => {
-        mockSFC(fieldContainerModule.default);
 
+    beforeAll(() => {
+        mockSFC(fieldContainerModule);
+    });
+
+    afterAll(()=> {
+        unmockSFC(fieldContainerModule);
+    });
+
+    beforeEach(() => {
         document.body.innerHTML = `
             <div id="app">
                 <sharp-field-display

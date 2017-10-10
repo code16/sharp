@@ -18,7 +18,8 @@ const injectedComponents = {
     },
     $tab:{},
 
-    actionsBus:{}
+    actionsBus:{},
+    mainLoading:{}
 };
 
 function resolveComponents(comps) {
