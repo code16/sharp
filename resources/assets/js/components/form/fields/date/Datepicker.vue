@@ -47,7 +47,6 @@
                             <span class="cell day blank" v-for="d in blankDays"></span>
                             <span class="cell day"
                                      v-for="day in days"
-                                     track-by="timestamp"
                                      v-bind:class="{ 'selected':day.isSelected, 'disabled':day.isDisabled, 'highlighted': day.isHighlighted, 'today': isToday(day)}"
                                      @click="selectDate(day)">{{ day.date }}
                             </span>
@@ -87,7 +86,6 @@
                     <div class="SharpDate__monthContainer">
                         <span class="cell month"
                               v-for="month in months"
-                              track-by="timestamp"
                               v-bind:class="{ 'selected': month.isSelected, 'disabled': month.isDisabled }"
                               @click.stop="selectMonth(month)">{{ month.month }}</span>
                     </div>
@@ -120,7 +118,6 @@
                     <span
                             class="cell year"
                             v-for="year in years"
-                            track-by="timestamp"
                             v-bind:class="{ 'selected': year.isSelected, 'disabled': year.isDisabled }"
                             @click.stop="selectYear(year)">{{ year.year }}</span>
                     </div>

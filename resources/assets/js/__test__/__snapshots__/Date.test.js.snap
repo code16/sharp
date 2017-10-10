@@ -43,37 +43,37 @@ exports[`date-field can mount Date field 1`] = `
                                     class="cell day-header">Dim</span>
                             </div>
                             <div class="SharpDate__days">
-                                <div class="SharpDate__dayContainer"><span class="cell day blank"></span><span class="cell day blank"></span><span class="cell day blank"></span> <span track-by="timestamp" class="cell day">1
-                        </span><span track-by="timestamp" class="cell day">2
-                        </span><span track-by="timestamp" class="cell day">3
-                        </span><span track-by="timestamp" class="cell day">4
-                        </span><span track-by="timestamp" class="cell day">5
-                        </span><span track-by="timestamp" class="cell day">6
-                        </span><span track-by="timestamp" class="cell day">7
-                        </span><span track-by="timestamp" class="cell day">8
-                        </span><span track-by="timestamp" class="cell day">9
-                        </span><span track-by="timestamp" class="cell day">10
-                        </span><span track-by="timestamp" class="cell day">11
-                        </span><span track-by="timestamp" class="cell day">12
-                        </span><span track-by="timestamp" class="cell day">13
-                        </span><span track-by="timestamp" class="cell day">14
-                        </span><span track-by="timestamp" class="cell day">15
-                        </span><span track-by="timestamp" class="cell day">16
-                        </span><span track-by="timestamp" class="cell day">17
-                        </span><span track-by="timestamp" class="cell day">18
-                        </span><span track-by="timestamp" class="cell day">19
-                        </span><span track-by="timestamp" class="cell day selected">20
-                        </span><span track-by="timestamp" class="cell day">21
-                        </span><span track-by="timestamp" class="cell day">22
-                        </span><span track-by="timestamp" class="cell day">23
-                        </span><span track-by="timestamp" class="cell day">24
-                        </span><span track-by="timestamp" class="cell day">25
-                        </span><span track-by="timestamp" class="cell day">26
-                        </span><span track-by="timestamp" class="cell day">27
-                        </span><span track-by="timestamp" class="cell day">28
-                        </span><span track-by="timestamp" class="cell day">29
-                        </span><span track-by="timestamp" class="cell day">30
-                        </span><span track-by="timestamp" class="cell day">31
+                                <div class="SharpDate__dayContainer"><span class="cell day blank"></span><span class="cell day blank"></span><span class="cell day blank"></span> <span class="cell day">1
+                        </span><span class="cell day">2
+                        </span><span class="cell day">3
+                        </span><span class="cell day">4
+                        </span><span class="cell day">5
+                        </span><span class="cell day">6
+                        </span><span class="cell day">7
+                        </span><span class="cell day">8
+                        </span><span class="cell day">9
+                        </span><span class="cell day">10
+                        </span><span class="cell day">11
+                        </span><span class="cell day">12
+                        </span><span class="cell day">13
+                        </span><span class="cell day">14
+                        </span><span class="cell day">15
+                        </span><span class="cell day">16
+                        </span><span class="cell day">17
+                        </span><span class="cell day">18
+                        </span><span class="cell day">19
+                        </span><span class="cell day selected">20
+                        </span><span class="cell day">21
+                        </span><span class="cell day">22
+                        </span><span class="cell day">23
+                        </span><span class="cell day">24
+                        </span><span class="cell day">25
+                        </span><span class="cell day">26
+                        </span><span class="cell day">27
+                        </span><span class="cell day">28
+                        </span><span class="cell day">29
+                        </span><span class="cell day">30
+                        </span><span class="cell day">31
                         </span> <span class="cell day blank"></span></div>
                             </div>
                         </div>
@@ -86,10 +86,9 @@ exports[`date-field can mount Date field 1`] = `
                     </header>
                     <div class="SharpDate__innerContainer">
                         <div class="SharpDate__rContainer">
-                            <div class="SharpDate__monthContainer"><span track-by="timestamp" class="cell month">Janvier</span><span track-by="timestamp" class="cell month">Février</span><span track-by="timestamp" class="cell month">Mars</span><span track-by="timestamp" class="cell month">Avril</span>
+                            <div class="SharpDate__monthContainer"><span class="cell month">Janvier</span><span class="cell month">Février</span><span class="cell month">Mars</span><span class="cell month">Avril</span><span class="cell month">Mai</span><span class="cell month">Juin</span>
                                 <span
-                                    track-by="timestamp" class="cell month">Mai</span><span track-by="timestamp" class="cell month">Juin</span><span track-by="timestamp" class="cell month">Juillet</span><span track-by="timestamp" class="cell month selected">Août</span><span track-by="timestamp"
-                                        class="cell month">Septembre</span><span track-by="timestamp" class="cell month">Octobre</span><span track-by="timestamp" class="cell month">Novembre</span><span track-by="timestamp" class="cell month">Décembre</span></div>
+                                    class="cell month">Juillet</span><span class="cell month selected">Août</span><span class="cell month">Septembre</span><span class="cell month">Octobre</span><span class="cell month">Novembre</span><span class="cell month">Décembre</span></div>
                         </div>
                     </div>
                 </div>
@@ -98,12 +97,9 @@ exports[`date-field can mount Date field 1`] = `
                         <span class="next"><svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd"><path d="M0 10.6L4.7 6 0 1.4 1.4 0l6.1 6-6.1 6z"></path></svg></span></header>
                     <div class="SharpDate__innerContainer">
                         <div class="SharpDate__rContainer">
-                            <div class="SharpDate__yearContainer"><span track-by="timestamp" class="cell year">1990</span><span track-by="timestamp" class="cell year">1991</span><span track-by="timestamp" class="cell year">1992</span><span track-by="timestamp" class="cell year">1993</span>
+                            <div class="SharpDate__yearContainer"><span class="cell year">1990</span><span class="cell year">1991</span><span class="cell year">1992</span><span class="cell year">1993</span><span class="cell year">1994</span><span class="cell year">1995</span><span class="cell year selected">1996</span>
                                 <span
-                                    track-by="timestamp" class="cell year">1994</span><span track-by="timestamp" class="cell year">1995</span><span track-by="timestamp" class="cell year selected">1996</span><span track-by="timestamp" class="cell year">1997</span><span track-by="timestamp" class="cell year">1998</span>
-                                    <span
-                                        track-by="timestamp" class="cell year">1999</span>
-                            </div>
+                                    class="cell year">1997</span><span class="cell year">1998</span><span class="cell year">1999</span></div>
                         </div>
                     </div>
                 </div>
@@ -166,37 +162,37 @@ exports[`date-field can mount Date field without TimePicker 1`] = `
                                     class="cell day-header">Dim</span>
                             </div>
                             <div class="SharpDate__days">
-                                <div class="SharpDate__dayContainer"><span class="cell day blank"></span><span class="cell day blank"></span><span class="cell day blank"></span> <span track-by="timestamp" class="cell day">1
-                        </span><span track-by="timestamp" class="cell day">2
-                        </span><span track-by="timestamp" class="cell day">3
-                        </span><span track-by="timestamp" class="cell day">4
-                        </span><span track-by="timestamp" class="cell day">5
-                        </span><span track-by="timestamp" class="cell day">6
-                        </span><span track-by="timestamp" class="cell day">7
-                        </span><span track-by="timestamp" class="cell day">8
-                        </span><span track-by="timestamp" class="cell day">9
-                        </span><span track-by="timestamp" class="cell day">10
-                        </span><span track-by="timestamp" class="cell day">11
-                        </span><span track-by="timestamp" class="cell day">12
-                        </span><span track-by="timestamp" class="cell day">13
-                        </span><span track-by="timestamp" class="cell day">14
-                        </span><span track-by="timestamp" class="cell day">15
-                        </span><span track-by="timestamp" class="cell day">16
-                        </span><span track-by="timestamp" class="cell day">17
-                        </span><span track-by="timestamp" class="cell day">18
-                        </span><span track-by="timestamp" class="cell day">19
-                        </span><span track-by="timestamp" class="cell day selected">20
-                        </span><span track-by="timestamp" class="cell day">21
-                        </span><span track-by="timestamp" class="cell day">22
-                        </span><span track-by="timestamp" class="cell day">23
-                        </span><span track-by="timestamp" class="cell day">24
-                        </span><span track-by="timestamp" class="cell day">25
-                        </span><span track-by="timestamp" class="cell day">26
-                        </span><span track-by="timestamp" class="cell day">27
-                        </span><span track-by="timestamp" class="cell day">28
-                        </span><span track-by="timestamp" class="cell day">29
-                        </span><span track-by="timestamp" class="cell day">30
-                        </span><span track-by="timestamp" class="cell day">31
+                                <div class="SharpDate__dayContainer"><span class="cell day blank"></span><span class="cell day blank"></span><span class="cell day blank"></span> <span class="cell day">1
+                        </span><span class="cell day">2
+                        </span><span class="cell day">3
+                        </span><span class="cell day">4
+                        </span><span class="cell day">5
+                        </span><span class="cell day">6
+                        </span><span class="cell day">7
+                        </span><span class="cell day">8
+                        </span><span class="cell day">9
+                        </span><span class="cell day">10
+                        </span><span class="cell day">11
+                        </span><span class="cell day">12
+                        </span><span class="cell day">13
+                        </span><span class="cell day">14
+                        </span><span class="cell day">15
+                        </span><span class="cell day">16
+                        </span><span class="cell day">17
+                        </span><span class="cell day">18
+                        </span><span class="cell day">19
+                        </span><span class="cell day selected">20
+                        </span><span class="cell day">21
+                        </span><span class="cell day">22
+                        </span><span class="cell day">23
+                        </span><span class="cell day">24
+                        </span><span class="cell day">25
+                        </span><span class="cell day">26
+                        </span><span class="cell day">27
+                        </span><span class="cell day">28
+                        </span><span class="cell day">29
+                        </span><span class="cell day">30
+                        </span><span class="cell day">31
                         </span> <span class="cell day blank"></span></div>
                             </div>
                         </div>
@@ -209,10 +205,9 @@ exports[`date-field can mount Date field without TimePicker 1`] = `
                     </header>
                     <div class="SharpDate__innerContainer">
                         <div class="SharpDate__rContainer">
-                            <div class="SharpDate__monthContainer"><span track-by="timestamp" class="cell month">Janvier</span><span track-by="timestamp" class="cell month">Février</span><span track-by="timestamp" class="cell month">Mars</span><span track-by="timestamp" class="cell month">Avril</span>
+                            <div class="SharpDate__monthContainer"><span class="cell month">Janvier</span><span class="cell month">Février</span><span class="cell month">Mars</span><span class="cell month">Avril</span><span class="cell month">Mai</span><span class="cell month">Juin</span>
                                 <span
-                                    track-by="timestamp" class="cell month">Mai</span><span track-by="timestamp" class="cell month">Juin</span><span track-by="timestamp" class="cell month">Juillet</span><span track-by="timestamp" class="cell month selected">Août</span><span track-by="timestamp"
-                                        class="cell month">Septembre</span><span track-by="timestamp" class="cell month">Octobre</span><span track-by="timestamp" class="cell month">Novembre</span><span track-by="timestamp" class="cell month">Décembre</span></div>
+                                    class="cell month">Juillet</span><span class="cell month selected">Août</span><span class="cell month">Septembre</span><span class="cell month">Octobre</span><span class="cell month">Novembre</span><span class="cell month">Décembre</span></div>
                         </div>
                     </div>
                 </div>
@@ -221,12 +216,9 @@ exports[`date-field can mount Date field without TimePicker 1`] = `
                         <span class="next"><svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd"><path d="M0 10.6L4.7 6 0 1.4 1.4 0l6.1 6-6.1 6z"></path></svg></span></header>
                     <div class="SharpDate__innerContainer">
                         <div class="SharpDate__rContainer">
-                            <div class="SharpDate__yearContainer"><span track-by="timestamp" class="cell year">1990</span><span track-by="timestamp" class="cell year">1991</span><span track-by="timestamp" class="cell year">1992</span><span track-by="timestamp" class="cell year">1993</span>
+                            <div class="SharpDate__yearContainer"><span class="cell year">1990</span><span class="cell year">1991</span><span class="cell year">1992</span><span class="cell year">1993</span><span class="cell year">1994</span><span class="cell year">1995</span><span class="cell year selected">1996</span>
                                 <span
-                                    track-by="timestamp" class="cell year">1994</span><span track-by="timestamp" class="cell year">1995</span><span track-by="timestamp" class="cell year selected">1996</span><span track-by="timestamp" class="cell year">1997</span><span track-by="timestamp" class="cell year">1998</span>
-                                    <span
-                                        track-by="timestamp" class="cell year">1999</span>
-                            </div>
+                                    class="cell year">1997</span><span class="cell year">1998</span><span class="cell year">1999</span></div>
                         </div>
                     </div>
                 </div>

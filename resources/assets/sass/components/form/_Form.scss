@@ -1,6 +1,8 @@
 
 
 .SharpForm {
+  $form-item-margin-bottom : 1.5rem;
+
   .close {
     font-weight: normal;
   }
@@ -26,12 +28,18 @@
         @include layer('raised');
       }
     }
+    .SharpForm__form-item {
+      margin-bottom: 0 !important;
+    }
+    .row:not(:last-child) {
+      margin-bottom: $form-item-margin-bottom;
+    }
   }
 
   &__form-item {
     flex: 1;
     //margin-right: 1rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: $form-item-margin-bottom;
 
     /*&:last-of-type {
       margin-right: 0;

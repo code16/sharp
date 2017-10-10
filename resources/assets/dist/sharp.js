@@ -63771,9 +63771,6 @@ if (false) {(function () {
 //
 //
 //
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
@@ -63931,9 +63928,6 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       class: {
         'selected': day.isSelected, 'disabled': day.isDisabled, 'highlighted': day.isHighlighted, 'today': _vm.isToday(day)
       },
-      attrs: {
-        "track-by": "timestamp"
-      },
       on: {
         "click": function($event) {
           _vm.selectDate(day)
@@ -64013,9 +64007,6 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       class: {
         'selected': month.isSelected, 'disabled': month.isDisabled
       },
-      attrs: {
-        "track-by": "timestamp"
-      },
       on: {
         "click": function($event) {
           $event.stopPropagation();
@@ -64088,9 +64079,6 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       staticClass: "cell year",
       class: {
         'selected': year.isSelected, 'disabled': year.isDisabled
-      },
-      attrs: {
-        "track-by": "timestamp"
       },
       on: {
         "click": function($event) {
