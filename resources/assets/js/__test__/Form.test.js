@@ -6,6 +6,8 @@ import * as gridModule from '../components/Grid.vue';
 import * as fieldsLayoutModule from '../components/form/FieldsLayout.vue';
 import * as tabbedLayoutModule from '../components/TabbedLayout.vue';
 
+import * as consts from '../consts';
+
 import { ErrorNode } from '../mixins';
 
 import { mockSFC, unmockSFC } from "./utils";
@@ -63,7 +65,7 @@ describe('sharp-form', ()=>{
             <div id="app">
                 <sharp-form 
                     entity-key="spaceship" 
-                    instance-id="10"
+                    :instance-id="instanceId"
                     :independant="independant" 
                     :props="props"
                     :ignore-authorizations="ignoreAuthorizations">
@@ -75,6 +77,29 @@ describe('sharp-form', ()=>{
     afterEach(()=>{
         moxios.uninstall();
     });
+
+    function mockComponent(mockedMethods) {
+        return {
+            'extends':Form,
+            created() {
+                mockedMethods.forEach(method=>this[method]=jest.fn());
+            }
+        }
+    }
+
+    const baseLayout = {
+        tabs : [
+            {
+                columns: [
+                    {
+                        fields: [
+                            [{ key:'title' }]
+                        ]
+                    }
+                ]
+            }
+        ]
+    };
 
     it('can mount sharp-form', async ()=>{
         await createVm();
@@ -184,6 +209,82 @@ describe('sharp-form', ()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
+    it('api path', async ()=> {
+        consts.API_PATH = '/test-api';
+        let $form = await createVm();
+
+        let { $root:vm } = $form;
+
+        expect($form.apiPath).toBe('/test-api/form/spaceship');
+
+        vm.instanceId = '10';
+
+        await Vue.nextTick();
+
+        expect($form.apiPath).toBe('/test-api/form/spaceship/10');
+    });
+
+    it('detect when is creation', async ()=>{
+        let $form = await createVm();
+
+        let { $root:vm } = $form;
+
+        expect($form.isCreation).toBe(true);
+
+        vm.instanceId = '10';
+
+        await Vue.nextTick();
+
+        expect($form.isCreation).toBe(false);
+
+    });
+
+    it('is read only', async () => {
+        let $form = await createVm({
+            propsData:{
+                independant: true,
+                props: {
+                    layout:baseLayout,
+                    fields:{},
+                    data:{},
+                    authorizations: {
+                        create: false,
+                        update: false
+                    }
+                }
+            },
+            // components: {
+            //     'sharp-form': mockComponent(['patchLayout'])
+            // }
+        });
+
+        let { $root:vm } = $form;
+
+        expect($form.isReadOnly).toBe(true);
+
+        Vue.set($form.authorizations, 'create', true);
+
+        expect($form.isReadOnly).toBe(false);
+
+        vm.instanceId = '10';
+
+        await Vue.nextTick();
+
+        expect($form.isReadOnly).toBe(true);
+
+        Vue.set($form.authorizations, 'update', true);
+
+        expect($form.isReadOnly).toBe(false);
+
+        vm.ignoreAuthorizations = true;
+        $form.authorizations = { create:false, update:false };
+
+        await Vue.nextTick();
+
+        expect($form.isReadOnly).toBe(false);
+
+    })
+
 });
 
 async function createVm(customOptions={}) {
@@ -192,7 +293,14 @@ async function createVm(customOptions={}) {
         el: '#app',
         mixins: [MockInjections, customOptions],
 
-        props: ['independant', 'props', 'ignoreAuthorizations'],
+        props: ['independant', 'props'],
+
+        'extends': {
+            data:()=>({
+                instanceId: null,
+                ignoreAuthorizations: null
+            })
+        },
 
         created() {
             let { axiosInstance } = this._provided;

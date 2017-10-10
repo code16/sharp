@@ -1,2 +1,2 @@
-export const API_PATH = '/sharp/api';
-export const UPLOAD_URL = `${API_PATH}/upload`;
+export let API_PATH = '/sharp/api';
+export let UPLOAD_URL = `${API_PATH}/upload`;
