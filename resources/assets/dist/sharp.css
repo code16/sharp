@@ -5311,7 +5311,7 @@
 }
 
 #sharp-app .SharpDropdown[data-value=''] #sharp-app .SharpDropdown__text, #sharp-app [data-value=''].multiselect #sharp-app .SharpDropdown__text, #sharp-app [data-value=''].SharpFilterSelect #sharp-app .SharpDropdown__text, #sharp-app .SharpDropdown[data-value=''] #sharp-app .multiselect .multiselect__tags, #sharp-app .multiselect .SharpDropdown[data-value=''] #sharp-app .multiselect__tags, #sharp-app [data-value=''].multiselect #sharp-app .multiselect__tags, #sharp-app [data-value=''].SharpFilterSelect #sharp-app .multiselect .multiselect__tags, #sharp-app .multiselect [data-value=''].SharpFilterSelect #sharp-app .multiselect__tags {
-  color: #5a6872;
+  color: #8c9ba5;
 }
 
 #sharp-app .SharpDropdown__text, #sharp-app .multiselect .multiselect__tags {
@@ -5547,7 +5547,7 @@
 #sharp-app .SharpNotification__inline .SharpNotification__close-icon {
   height: 10px;
   width: 10px;
-  fill: #5a6872;
+  fill: #8c9ba5;
   position: absolute;
   top: 3px;
   right: 1px;
@@ -5628,7 +5628,7 @@
 #sharp-app .SharpNotification__toast .SharpNotification__icon {
   height: 10px;
   width: 10px;
-  fill: #5a6872;
+  fill: #8c9ba5;
   position: absolute;
   top: 1px;
   right: 1px;
@@ -5644,7 +5644,7 @@
 
 #sharp-app .SharpNotification__toast .SharpNotification__subtitle {
   font-size: 0.75rem;
-  color: #5a6872;
+  color: #8c9ba5;
   margin-top: 0;
   margin-bottom: 1rem;
   line-height: 1.2;
@@ -5652,7 +5652,7 @@
 
 #sharp-app .SharpNotification__toast .SharpNotification__caption {
   font-size: 0.75rem;
-  color: #5a6872;
+  color: #8c9ba5;
   line-height: 1;
 }
 
@@ -6174,7 +6174,7 @@
 }
 
 #sharp-app .SharpText::-webkit-input-placeholder, #sharp-app .multiselect .multiselect__input::-webkit-input-placeholder, #sharp-app .SharpAutocomplete__result-item::-webkit-input-placeholder {
-  color: #5a6872;
+  color: #8c9ba5;
 }
 
 #sharp-app .SharpText:focus, #sharp-app .multiselect .multiselect__input:focus, #sharp-app .SharpAutocomplete__result-item:focus {
@@ -6238,7 +6238,7 @@
 #sharp-app .SharpAutocomplete__result-item__close-icon {
   height: 10px;
   width: 10px;
-  fill: #5a6872;
+  fill: #8c9ba5;
   position: absolute;
   top: 3px;
   right: 1px;
@@ -6330,7 +6330,7 @@
 #sharp-app .SharpUpload__close-icon {
   height: 10px;
   width: 10px;
-  fill: #5a6872;
+  fill: #8c9ba5;
   position: absolute;
   top: 3px;
   right: 1px;
@@ -6513,9 +6513,9 @@
   vertical-align: baseline;
   font-size: 0.875rem;
   font-weight: 400;
-  display: block;
+  display: inline-block;
   vertical-align: baseline;
-  margin-bottom: 0.625rem;
+  margin-bottom: 0.625rem !important;
   text-transform: uppercase;
 }
 
@@ -7613,7 +7613,46 @@
 }
 
 #sharp-app .SharpDate__input::-webkit-input-placeholder {
-  color: #5a6872;
+  color: #8c9ba5;
+}
+
+#sharp-app .SharpDate__clear-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  height: 16px;
+  width: 12px;
+  position: relative;
+  position: absolute;
+  height: 100%;
+  width: 2rem;
+  right: 0;
+  z-index: 12;
+  top: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+#sharp-app .SharpDate__clear-button:focus {
+  outline: 1px solid #314255;
+}
+
+#sharp-app .SharpDate__clear-button-icon {
+  height: 10px;
+  width: 10px;
+  fill: #8c9ba5;
+  position: absolute;
+  top: 3px;
+  right: 1px;
+  position: initial;
 }
 
 #sharp-app .SharpDate__input-wrapper {
@@ -7631,12 +7670,16 @@
   outline: 1px solid transparent;
 }
 
+#sharp-app .SharpDate .SharpDate__calendar {
+  height: auto !important;
+  min-height: 100%;
+}
+
 #sharp-app .SharpDate .SharpDate__picker {
   position: absolute;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  height: 14.375rem;
   margin-top: -1px;
 }
 
@@ -7673,12 +7716,12 @@
 #sharp-app .SharpDate .SharpDate__picker .SharpDate__time .dropdown {
   -webkit-box-shadow: none;
           box-shadow: none;
-  height: auto;
+  height: 100%;
   top: 0;
 }
 
 #sharp-app .SharpDate .SharpDate__picker .SharpDate__time .dropdown .select-list {
-  height: 10.75rem;
+  height: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -7742,10 +7785,10 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  padding: .875rem 1rem .25rem;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  padding: .875rem 1rem;
   width: 17.8125rem;
   height: 14.375rem;
   border-radius: 0;
@@ -7774,7 +7817,6 @@
 
 #sharp-app .SharpDate .SharpDate__picker .SharpDate__calendar > header .prev, #sharp-app .SharpDate .SharpDate__picker .SharpDate__calendar > header .next {
   padding: 0;
-  line-height: 1.25rem;
 }
 
 #sharp-app .SharpDate .SharpDate__picker .SharpDate__calendar > header .prev:hover svg, #sharp-app .SharpDate .SharpDate__picker .SharpDate__calendar > header .next:hover svg {
@@ -7792,9 +7834,20 @@
   cursor: pointer;
 }
 
+#sharp-app .SharpDate .SharpDate__picker .SharpDate__calendar .SharpDate__dayContainer, #sharp-app .SharpDate .SharpDate__picker .SharpDate__calendar .SharpDate__monthContainer, #sharp-app .SharpDate .SharpDate__picker .SharpDate__calendar .SharpDate__yearContainer {
+  height: auto !important;
+}
+
 #sharp-app .SharpDate .SharpDate__picker .SharpDate__calendar .SharpDate__innerContainer, #sharp-app .SharpDate .SharpDate__picker .SharpDate__calendar .SharpDate__rContainer {
   width: 14.0625rem !important;
-  height: 10.5rem !important;
+}
+
+#sharp-app .SharpDate .SharpDate__picker .SharpDate__calendar .SharpDate__innerContainer {
+  height: auto !important;
+}
+
+#sharp-app .SharpDate .SharpDate__picker .SharpDate__calendar .SharpDate__innerContainer .SharpDate__rContainer {
+  height: auto !important;
 }
 
 #sharp-app .SharpDate .SharpDate__picker .SharpDate__calendar .SharpDate__innerContainer .SharpDate__rContainer .SharpDate__weekdays {
@@ -7815,7 +7868,6 @@
   width: 14.0625rem;
   min-width: 14.0625rem;
   max-width: 14.0625rem;
-  height: 8.25rem;
 }
 
 #sharp-app .SharpDate .SharpDate__picker .SharpDate__calendar .SharpDate__innerContainer .SharpDate__rContainer .SharpDate__dayContainer .day {
@@ -7996,7 +8048,7 @@
 #sharp-app .SharpSelect__clear-button-icon {
   height: 10px;
   width: 10px;
-  fill: #5a6872;
+  fill: #8c9ba5;
   position: absolute;
   top: 3px;
   right: 1px;
@@ -8404,7 +8456,7 @@
 }
 
 #sharp-app .SharpTextarea::-webkit-input-placeholder {
-  color: #5a6872;
+  color: #8c9ba5;
 }
 
 #sharp-app .SharpTextarea:disabled {
@@ -8930,19 +8982,19 @@
 }
 
 #sharp-app .SharpSearch__input::-webkit-input-placeholder {
-  color: #5a6872;
+  color: #8c9ba5;
   font-style: italic;
   font-weight: 400;
 }
 
 #sharp-app .SharpSearch__input:-ms-input-placeholder {
-  color: #5a6872;
+  color: #8c9ba5;
   font-style: italic;
   font-weight: 400;
 }
 
 #sharp-app .SharpSearch__input::placeholder {
-  color: #5a6872;
+  color: #8c9ba5;
   font-style: italic;
   font-weight: 400;
 }

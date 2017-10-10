@@ -7,10 +7,10 @@
         <div class="dropdown">
             <div class="select-list">
                 <ul class="hours" ref="hours">
-                    <li v-for="hr in croppedHours" v-text="hr" :class="{active: hour === hr}" @click.stop="select2('hour', hr)"></li>
+                    <li v-for="hr in croppedHours" v-text="hr" :class="{active: value && hour === hr}" @click.stop="select2('hour', hr)"></li>
                 </ul>
                 <ul class="minutes" ref="minutes">
-                    <li v-for="m in croppedMinutes" v-text="m" :class="{active: minute === m}" @click.stop="select2('minute', m)"></li>
+                    <li v-for="m in croppedMinutes" v-text="m" :class="{active: value && minute === m}" @click.stop="select2('minute', m)"></li>
                 </ul>
                 <!--<ul class="seconds" ref="seconds" v-if="secondType">-->
                     <!--<li class="hint" v-text="secondType"></li>-->
@@ -105,7 +105,7 @@
                         return this.isSelection=false;
                     return {
                         list: this.$refs[listRef],
-                        item: _ => this.$refs[listRef].querySelector('.active')
+                        item: () => this.$refs[listRef].querySelector('.active')
                     };
                 }
             }

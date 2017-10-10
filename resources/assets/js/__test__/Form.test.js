@@ -144,6 +144,46 @@ describe('sharp-form', ()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
+    it('can mount sharp-form with alert', async ()=>{
+        let $form = await createVm({
+            propsData:{
+                independant: true,
+                props: {
+                    data:{
+                        title: null
+                    },
+                    fields: {
+                        title: {
+                            type: 'text'
+                        }
+                    },
+
+                    layout: {
+                        tabs : [
+                            {
+                                columns: [
+                                    {
+                                        fields: [
+                                            [{ key: 'title'}]
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        });
+
+        $form.errors = {
+            title: 'error'
+        };
+
+        await Vue.nextTick();
+
+        expect(document.body.innerHTML).toMatchSnapshot();
+    });
+
 });
 
 async function createVm(customOptions={}) {

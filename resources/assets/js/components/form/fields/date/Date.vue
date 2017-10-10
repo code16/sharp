@@ -2,6 +2,7 @@
     <div class="SharpDate" :class="{'SharpDate--open':showPicker}">
         <div class="SharpDate__input-wrapper">
             <input class="SharpDate__input"
+                   :placeholder="displayFormat"
                    :value="inputValue"
                    :disabled="readOnly"
                    @input="handleInput"
@@ -10,6 +11,12 @@
                    @keydown.up.prevent="increase"
                    @keydown.down.prevent="decrease"
                    ref="input">
+            <button class="SharpDate__clear-button" type="button" @click="clear()" ref="clearButton">
+                <svg class="SharpDate__clear-button-icon"
+                     aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd">
+                    <path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
+                </svg>
+            </button>
         </div>
         <div class="SharpDate__picker" v-show="showPicker" @mousedown.prevent>
             <sharp-date-picker v-if="hasDate"
@@ -37,6 +44,7 @@
     import SharpTimePicker from './Timepicker';
 
     import { Focusable, Localization } from '../../../../mixins';
+    import { lang } from '../../../../mixins/Localization';
 
     import moment from 'moment';
 
@@ -78,52 +86,63 @@
         },
         data() {
             return {
-                showPicker:false
+                showPicker: false,
+                localInputValue: null
             }
         },
         computed: {
             moment() {
-                return moment(this.value||Date.now());
+                return this.value && moment(this.value);
             },
             dateObject() {
-                return this.moment.toDate();
+                return this.moment ? this.moment.toDate() : null;
             },
             timeObject() {
-                return {
+                return this.moment ? {
                     HH: this.moment.format('HH'),
-                    mm: this.moment.format('mm'),
-                    ss: this.moment.format('ss')
-                }
+                    mm: this.moment.format('mm')
+                } : null;
             },
             inputValue() {
-                return this.moment.format(this.displayFormat);
+                return typeof this.localInputValue === 'string'
+                    ? this.localInputValue
+                    : (this.moment ? this.moment.format(this.displayFormat) : '');
             },
         },
         methods: {
+            getMoment() {
+                return this.moment || moment();
+            },
+
             handleDateSelect(date) {
-                this.moment.set({
+                let newMoment = this.getMoment();
+                newMoment.set({
                     year:date.getFullYear(),
                     month:date.getMonth(),
                     date:date.getDate()
                 });
-                this.$emit('input', this.moment);
+                this.$emit('input', newMoment);
             },
             handleTimeSelect({ data }) {
-                this.moment.set({
+                let newMoment = this.getMoment();
+                newMoment.set({
                     hour:data.HH,
                     minute:data.mm,
                     second:data.ss,
                 });
-                this.$emit('input', this.moment);
+                this.$emit('input', newMoment);
             },
             handleInput(e) {
                 let m = moment(e.target.value, this.displayFormat, true);
+                this.localInputValue = e.target.value;
                 if(!m.isValid()) {
-                    this.$field.$emit('error', "Format de l'heure invalide");
+                    this.$field.$emit('error', `${lang('form.date.validation_error.format')} (${this.displayFormat})`);
+                    this.showPicker = false;
                 }
                 else {
-                    this.$field.$emit('ok');
+                    this.rollback();
                     this.$emit('input', m);
+                    this.showPicker = true;
                 }
             },
 
@@ -178,11 +197,22 @@
                     end:this.displayFormat.lastIndexOf(ch)+1
                 };
             },
+
+            rollback() {
+                this.$field.$emit('clear');
+                this.localInputValue = null;
+            },
+
+            clear() {
+                this.rollback();
+                this.$emit('input', null);
+            },
+
             handleFocus() {
                 this.showPicker = true;
             },
             handleBlur() {
-                this.$field.$emit('clear');
+                this.rollback();
                 this.showPicker = false;
             }
         },

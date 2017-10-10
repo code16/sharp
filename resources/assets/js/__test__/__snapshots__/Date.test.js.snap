@@ -3,7 +3,7 @@
 exports[`date-field can mount "picker displayed" Date field 1`] = `
 <div id="app">
     <div class="SharpDate SharpDate--open">
-        <div class="SharpDate__input-wrapper"><input class="SharpDate__input"></div>
+        <div class="SharpDate__input-wrapper"><input placeholder="DD/MM/YYYY HH:mm" class="SharpDate__input"> <button type="button" class="SharpDate__clear-button"><svg aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd" class="SharpDate__clear-button-icon"><path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path></svg></button></div>
         <div class="SharpDate__picker" style="">
             <!---->
             <!---->
@@ -16,7 +16,7 @@ exports[`date-field can mount "picker displayed" Date field 1`] = `
 exports[`date-field can mount "read only" Date field 1`] = `
 <div id="app">
     <div class="SharpDate">
-        <div class="SharpDate__input-wrapper"><input disabled="disabled" class="SharpDate__input"></div>
+        <div class="SharpDate__input-wrapper"><input placeholder="DD/MM/YYYY HH:mm" disabled="disabled" class="SharpDate__input"> <button type="button" class="SharpDate__clear-button"><svg aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd" class="SharpDate__clear-button-icon"><path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path></svg></button></div>
         <div class="SharpDate__picker" style="display: none;">
             <!---->
             <!---->
@@ -29,7 +29,7 @@ exports[`date-field can mount "read only" Date field 1`] = `
 exports[`date-field can mount Date field 1`] = `
 <div id="app">
     <div class="SharpDate">
-        <div class="SharpDate__input-wrapper"><input class="SharpDate__input"></div>
+        <div class="SharpDate__input-wrapper"><input placeholder="DD/MM/YYYY HH:mm" class="SharpDate__input"> <button type="button" class="SharpDate__clear-button"><svg aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd" class="SharpDate__clear-button-icon"><path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path></svg></button></div>
         <div class="SharpDate__picker" style="display: none;">
             <div class="SharpDate__datepicker SharpDate__date"><input type="hidden" readonly="readonly">
                 <!---->
@@ -45,35 +45,35 @@ exports[`date-field can mount Date field 1`] = `
                             <div class="SharpDate__days">
                                 <div class="SharpDate__dayContainer"><span class="cell day blank"></span><span class="cell day blank"></span><span class="cell day blank"></span> <span class="cell day">1
                         </span><span class="cell day">2
-                        </span><span class="cell day">3
-                        </span><span class="cell day">4
+                        </span><span class="cell day weekend sat">3
+                        </span><span class="cell day weekend sun">4
                         </span><span class="cell day">5
                         </span><span class="cell day">6
                         </span><span class="cell day">7
                         </span><span class="cell day">8
                         </span><span class="cell day">9
-                        </span><span class="cell day">10
-                        </span><span class="cell day">11
+                        </span><span class="cell day weekend sat">10
+                        </span><span class="cell day weekend sun">11
                         </span><span class="cell day">12
                         </span><span class="cell day">13
                         </span><span class="cell day">14
                         </span><span class="cell day">15
                         </span><span class="cell day">16
-                        </span><span class="cell day">17
-                        </span><span class="cell day">18
+                        </span><span class="cell day weekend sat">17
+                        </span><span class="cell day weekend sun">18
                         </span><span class="cell day">19
                         </span><span class="cell day selected">20
                         </span><span class="cell day">21
                         </span><span class="cell day">22
                         </span><span class="cell day">23
-                        </span><span class="cell day">24
-                        </span><span class="cell day">25
+                        </span><span class="cell day weekend sat">24
+                        </span><span class="cell day weekend sun">25
                         </span><span class="cell day">26
                         </span><span class="cell day">27
                         </span><span class="cell day">28
                         </span><span class="cell day">29
                         </span><span class="cell day">30
-                        </span><span class="cell day">31
+                        </span><span class="cell day weekend sat">31
                         </span> <span class="cell day blank"></span></div>
                             </div>
                         </div>
@@ -148,7 +148,7 @@ exports[`date-field can mount Date field 1`] = `
 exports[`date-field can mount Date field without TimePicker 1`] = `
 <div id="app">
     <div class="SharpDate">
-        <div class="SharpDate__input-wrapper"><input class="SharpDate__input"></div>
+        <div class="SharpDate__input-wrapper"><input placeholder="DD/MM/YYYY HH:mm" class="SharpDate__input"> <button type="button" class="SharpDate__clear-button"><svg aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd" class="SharpDate__clear-button-icon"><path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path></svg></button></div>
         <div class="SharpDate__picker" style="display: none;">
             <div class="SharpDate__datepicker SharpDate__date"><input type="hidden" readonly="readonly">
                 <!---->
@@ -164,35 +164,35 @@ exports[`date-field can mount Date field without TimePicker 1`] = `
                             <div class="SharpDate__days">
                                 <div class="SharpDate__dayContainer"><span class="cell day blank"></span><span class="cell day blank"></span><span class="cell day blank"></span> <span class="cell day">1
                         </span><span class="cell day">2
-                        </span><span class="cell day">3
-                        </span><span class="cell day">4
+                        </span><span class="cell day weekend sat">3
+                        </span><span class="cell day weekend sun">4
                         </span><span class="cell day">5
                         </span><span class="cell day">6
                         </span><span class="cell day">7
                         </span><span class="cell day">8
                         </span><span class="cell day">9
-                        </span><span class="cell day">10
-                        </span><span class="cell day">11
+                        </span><span class="cell day weekend sat">10
+                        </span><span class="cell day weekend sun">11
                         </span><span class="cell day">12
                         </span><span class="cell day">13
                         </span><span class="cell day">14
                         </span><span class="cell day">15
                         </span><span class="cell day">16
-                        </span><span class="cell day">17
-                        </span><span class="cell day">18
+                        </span><span class="cell day weekend sat">17
+                        </span><span class="cell day weekend sun">18
                         </span><span class="cell day">19
                         </span><span class="cell day selected">20
                         </span><span class="cell day">21
                         </span><span class="cell day">22
                         </span><span class="cell day">23
-                        </span><span class="cell day">24
-                        </span><span class="cell day">25
+                        </span><span class="cell day weekend sat">24
+                        </span><span class="cell day weekend sun">25
                         </span><span class="cell day">26
                         </span><span class="cell day">27
                         </span><span class="cell day">28
                         </span><span class="cell day">29
                         </span><span class="cell day">30
-                        </span><span class="cell day">31
+                        </span><span class="cell day weekend sat">31
                         </span> <span class="cell day blank"></span></div>
                             </div>
                         </div>

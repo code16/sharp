@@ -2,7 +2,7 @@ import Vue from 'vue';
 import DateField from '../components/form/fields/date/Date.vue';
 import moment from 'moment-timezone';
 
-import { MockInjections, QueryComponent } from './utils';
+import { MockInjections, QueryComponent, MockI18n } from './utils';
 
 
 function date(...args) {
@@ -19,7 +19,8 @@ describe('date-field',()=>{
         document.documentElement.lang = 'fr';
         document.body.innerHTML = `
             <div id="app">
-                <sharp-date value="1996-08-20 12:11+00:00"
+                <sharp-date :value="typeof value == 'undefined' ? 
+                                    '1996-08-20 12:11+00:00' : value"
                             :has-date="!disableDate"
                             :has-time="!disableTime" 
                             :read-only="readOnly" 
@@ -32,7 +33,8 @@ describe('date-field',()=>{
                 </sharp-date>
                 <div ref="outsideElement"></div>
             </div>
-        `
+        `;
+        MockI18n.mockLangFunction();
     });
 
     it('can mount Date field', async () => {
@@ -97,8 +99,7 @@ describe('date-field',()=>{
         expect(timepicker.$props).toMatchObject({
             value: {
                 HH: '12',
-                mm: '11',
-                ss: '00'
+                mm: '11'
             },
             active: true,
             format: 'HH : mm',
@@ -159,7 +160,7 @@ describe('date-field',()=>{
         expect(inputEmitted.mock.calls[0][0].toDate()).toEqual(date(1996, 7, 20, 13, 20));
     });
 
-    it('emit input on input changed', async () => {
+    it('emit input on input changed and show picker', async () => {
         let $date = await createVm({
             displayFormat: 'DD/MM/YYYY HH:mm'
         });
@@ -167,21 +168,24 @@ describe('date-field',()=>{
         let { input } = $date.$refs;
 
         let inputEmitted = jest.fn();
-        let okEmitted = jest.fn();
+        let clearEmitted = jest.fn();
 
         $date.$on('input', inputEmitted);
-        $date.$field.$on('ok', okEmitted);
+        $date.$field.$on('clear', clearEmitted);
+
+        $date.showPicker = false;
 
         input.value = '22/08/1996 13:20';
         input.dispatchEvent(new Event('input', { bubbles: true }));
 
-        expect(okEmitted).toHaveBeenCalledTimes(1);
+        expect(clearEmitted).toHaveBeenCalledTimes(1);
         expect(inputEmitted).toHaveBeenCalledTimes(1);
         expect(inputEmitted.mock.calls[0][0]).toBeInstanceOf(moment);
         expect(inputEmitted.mock.calls[0][0].toDate()).toEqual(date(1996, 7, 22, 13, 20));
+        expect($date.showPicker).toBe(true);
     });
 
-    it('emit error on input changed if invalid', async () => {
+    it('emit error on input changed if invalid and hide picker', async () => {
         let $date = await createVm({
             displayFormat: 'DD/MM/YYYY HH:mm'
         });
@@ -197,8 +201,82 @@ describe('date-field',()=>{
         input.value = '20/08/1996 bug 12 : 40';
         input.dispatchEvent(new Event('input', { bubbles: true }));
 
-        expect(errorEmitted).toHaveBeenCalledTimes(1);
         expect(inputEmitted).toHaveBeenCalledTimes(0);
+        expect(errorEmitted).toHaveBeenCalledTimes(1);
+        expect($date.showPicker).toBe(false);
+    });
+
+    it('keep custom user input', async () => {
+        let $date = await createVm({
+            displayFormat: 'DD/MM/YYYY HH:mm'
+        });
+        let { input } = $date.$refs;
+
+        input.value = '20/08/1996 bug 12 : 40';
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        $date.$forceUpdate();
+
+        await Vue.nextTick();
+
+        expect(input.value).toBe('20/08/1996 bug 12 : 40');
+    });
+
+    it('rollback custom user input on blur', async () => {
+        let $date = await createVm({
+            displayFormat: 'DD/MM/YYYY HH:mm'
+        });
+        let { input } = $date.$refs;
+
+        input.value = '20/08/1996 bug 12 : 40';
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+
+        input.focus();
+        input.blur();
+
+        $date.$forceUpdate();
+        await Vue.nextTick();
+
+        expect(input.value).toBe('20/08/1996 12:11');
+    });
+
+    it('rollback custom user input on clear button', async () => {
+        let $date = await createVm({
+            displayFormat: 'DD/MM/YYYY HH:mm',
+        });
+        let { input, clearButton } = $date.$refs;
+
+        input.value = '20/08/1996 bug 12 : 40';
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+
+        clearButton.click();
+
+        $date.$forceUpdate();
+        await Vue.nextTick();
+
+        expect(input.value).toBe('20/08/1996 12:11');
+    });
+
+    it('clear when click on clear button', async () => {
+        let $date = await createVm();
+
+        let { input, clearButton } = $date.$refs;
+        let { $root: vm } = $date;
+
+        let clearEmitted = jest.fn();
+        let inputEmitted = jest.fn();
+
+        $date.$field.$on('clear', clearEmitted);
+        $date.$on('input', inputEmitted);
+
+        clearButton.click();
+        vm.value = null;
+
+        await Vue.nextTick();
+
+        expect(clearEmitted).toHaveBeenCalledTimes(1);
+        expect(inputEmitted).toHaveBeenCalledTimes(1);
+        expect(inputEmitted).toHaveBeenCalledWith(null);
+        expect(input.value).toBe('');
     });
 
     it('clear field state on blur', async () => {
@@ -372,7 +450,8 @@ async function createVm(customOptions={}) {
         'extends': {
             methods: {
                 inputEmitted:()=>{}
-            }
+            },
+            data: ()=>({ value: undefined })
         }
     });
 
