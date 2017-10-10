@@ -173,6 +173,7 @@
 
     & > span {
       //white-space: nowrap;
+      line-height: 2;
       overflow: hidden;
       text-overflow: ellipsis;
     }

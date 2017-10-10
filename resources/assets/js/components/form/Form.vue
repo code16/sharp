@@ -51,8 +51,6 @@
     import FieldsLayout from './FieldsLayout.vue';
 
 
-    import axios from 'axios';
-
     const noop = ()=>{}
 
     export default {

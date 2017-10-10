@@ -86,6 +86,7 @@ export default {
                 case 404:
                 case 403:
                 case 417:
+                case 500:
                     if(status !== 404 || method !== 'get')
                         this.actionsBus.$emit('showMainModal', {
                             ...modalOptions,
