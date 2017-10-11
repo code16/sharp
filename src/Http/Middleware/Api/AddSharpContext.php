@@ -34,13 +34,11 @@ class AddSharpContext
         if(count($segments) >= 4 && $segments[2] == "form") {
             $this->context->setIsForm();
 
-            if($request->method() == "POST") {
-                if(count($segments) == 5) {
-                    $this->context->setIsUpdate($segments[4]);
+            if (count($segments) == 5) {
+                $this->context->setIsUpdate($segments[4]);
 
-                } else {
-                    $this->context->setIsCreation();
-                }
+            } else {
+                $this->context->setIsCreation();
             }
         }
 
