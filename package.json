@@ -63,7 +63,7 @@
     "vue-multiselect": "^2.0.3",
     "vue2-timepicker": "^0.1.4",
     "vuedraggable": "^2.10.0",
-    "vuejs-datepicker": "^0.7.11"
+    "vuejs-datepicker": "^0.9.16"
   },
   "dependencies": {
     "carbon-components": "^7.10.2",

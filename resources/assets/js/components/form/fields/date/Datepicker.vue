@@ -19,7 +19,7 @@
                 <span
                         @click="previousMonth"
                         class="prev"
-                        v-bind:class="{ 'disabled' : previousMonthDisabled(currDate) }">
+                        v-bind:class="{ 'disabled' : previousMonthDisabled(pageTimestamp) }">
                     <svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd">
                         <path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path>
                     </svg>
@@ -31,7 +31,7 @@
                 <span
                         @click="nextMonth"
                         class="next"
-                        v-bind:class="{ 'disabled' : nextMonthDisabled(currDate) }">
+                        v-bind:class="{ 'disabled' : nextMonthDisabled(pageTimestamp) }">
                     <svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd">
                         <path d="M0 10.6L4.7 6 0 1.4 1.4 0l6.1 6-6.1 6z"></path>
                     </svg>
@@ -47,7 +47,7 @@
                             <span class="cell day blank" v-for="d in blankDays"></span>
                             <span class="cell day"
                                      v-for="day in days"
-                                     v-bind:class="{ 'selected':day.isSelected, 'disabled':day.isDisabled, 'highlighted': day.isHighlighted, 'today': isToday(day)}"
+                                     v-bind:class="dayClasses(day)"
                                      @click="selectDate(day)">{{ day.date }}
                             </span>
                             <span class="cell day blank" v-for="d in remainingDays"></span>
@@ -64,18 +64,18 @@
                 <span
                         @click="previousYear"
                         class="prev"
-                        v-bind:class="{ 'disabled' : previousYearDisabled(currDate) }">
+                        v-bind:class="{ 'disabled' : previousYearDisabled(pageTimestamp) }">
                     <svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd">
                         <path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path>
                     </svg>
                 </span>
                 <span @click="showYearCalendar" class="up">
-                    <span class="SharpDate__cur-year">{{ getYear() }}</span>
+                    <span class="SharpDate__cur-year">{{ getPageYear() }}</span>
                 </span>
                 <span
                         @click="nextYear"
                         class="next"
-                        v-bind:class="{ 'disabled' : nextYearDisabled(currDate) }">
+                        v-bind:class="{ 'disabled' : nextYearDisabled(pageTimestamp) }">
                     <svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd">
                         <path d="M0 10.6L4.7 6 0 1.4 1.4 0l6.1 6-6.1 6z"></path>
                     </svg>
@@ -97,16 +97,16 @@
         <div class="SharpDate__calendar" v-show="showYearView" :class="{open:showYearView}" v-bind:style="calendarStyle">
             <header>
                 <span @click="previousDecade" class="prev"
-                      v-bind:class="{ 'disabled' : previousDecadeDisabled(currDate) }">
+                      v-bind:class="{ 'disabled' : previousDecadeDisabled(pageTimestamp) }">
                     <svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd">
                         <path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path>
                     </svg>
                 </span>
                 <span class="up">
-                    <span class="SharpDate__cur-decade">{{ getDecade() }}</span>
+                    <span class="SharpDate__cur-decade">{{ getPageDecade() }}</span>
                 </span>
                 <span @click="nextDecade" class="next"
-                      v-bind:class="{ 'disabled' : nextMonthDisabled(currDate) }">
+                      v-bind:class="{ 'disabled' : nextMonthDisabled(pageTimestamp) }">
                     <svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd">
                         <path d="M0 10.6L4.7 6 0 1.4 1.4 0l6.1 6-6.1 6z"></path>
                     </svg>
@@ -135,18 +135,13 @@
 
         computed: {
             remainingDays() {
-                let rem = 35 - this.days.length - this.blankDays;
-                return rem < 0 ? 0 : rem;
+                let diff = this.days.length + this.blankDays;
+                let rem = diff > 35 ? 42 - diff : 35 - diff;
+                return rem;
             },
         },
 
         methods: {
-            isToday(day) {
-                let now = new Date();
-                let nowDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-                //if(day.isSelected) console.log(day.timestamp, nowDay, day.timestamp === nowDay);
-                return day.timestamp === nowDay;
-            },
             init() {
                 if (this.value) {
                     this.setValue(this.value)

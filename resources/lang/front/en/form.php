@@ -22,6 +22,8 @@ return [
 
     'autocomplete.no_results_text' => 'No result found',
 
+    'date.validation_error.format' => 'Invalid date format',
+
     'markdown.icons.bold.title' => 'Bold',
     'markdown.icons.italic.title' => 'Italic',
     'markdown.icons.strikethrough.title' => 'Strike through',

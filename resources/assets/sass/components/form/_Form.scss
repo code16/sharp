@@ -51,9 +51,9 @@
     @include reset;
     @include font-size('14');
     font-weight: $input-label-weight;
-    display: block;
+    display: inline-block;
     vertical-align: baseline;
-    margin-bottom: rem(10px);
+    margin-bottom: rem(10px) !important;
     text-transform: uppercase;
   }
 

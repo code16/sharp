@@ -40,6 +40,11 @@ function mockXhrResponse(data) {
 describe('vue-clip',() => {
     Vue.use(MockI18n);
 
+    let toLocaleString = Number.prototype.toLocaleString;
+    Number.prototype.toLocaleString = function(locale, options) {
+        return toLocaleString.call(this,'en-EN', options)
+    };
+
     beforeEach(()=>{
         document.body.innerHTML = `
             <div id="app">

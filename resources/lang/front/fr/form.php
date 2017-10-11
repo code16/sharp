@@ -22,6 +22,8 @@ return [
 
     'autocomplete.no_results_text' => 'Pas de résultats',
 
+    'date.validation_error.format' => 'Format de date invalide',
+
     'markdown.icons.bold.title' => 'Gras',
     'markdown.icons.italic.title' => 'Italique',
     'markdown.icons.strikethrough.title' => 'Barré',
