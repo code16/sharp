@@ -14,6 +14,18 @@ class ContextTest extends BaseApiTest
         $this->login();
     }
 
+    /** @test */
+    public function context_is_set_on_an_edit_case()
+    {
+        $this->buildTheWorld();
+
+        $context = app(SharpContext::class);
+
+        $this->json('get', '/sharp/api/form/person/50');
+
+        $this->assertTrue($context->isUpdate());
+        $this->assertEquals("50", $context->entityId());
+    }
 
     /** @test */
     public function context_is_set_on_a_update_case()
@@ -32,7 +44,19 @@ class ContextTest extends BaseApiTest
     }
 
     /** @test */
-    public function context_is_set_on_a_creation_case()
+    public function context_is_set_on_a_create_case()
+    {
+        $this->buildTheWorld();
+
+        $context = app(SharpContext::class);
+
+        $this->json('get', '/sharp/api/form/person');
+
+        $this->assertTrue($context->isCreation());
+    }
+
+    /** @test */
+    public function context_is_set_on_a_store_case()
     {
         $this->buildTheWorld();
         $this->configurePersonValidator();
