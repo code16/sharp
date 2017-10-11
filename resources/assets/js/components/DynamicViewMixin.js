@@ -13,7 +13,7 @@ function parseBlobJSONContent(blob) {
 }
 
 export default {
-    inject:['mainLoading', 'axiosInstance'],
+    inject:['mainLoading', 'axiosInstance', 'actionsBus'],
     
     data() {
         return {
@@ -25,8 +25,6 @@ export default {
     },
     methods: {
         get() {
-            if(this.test) return;
-
             return this.axiosInstance.get(this.apiPath, {
                     params : this.apiParams,
                     paramsSerializer : p => qs.serialize(p, {urlSeparator:false})
