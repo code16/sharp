@@ -13,8 +13,7 @@ exports[`sharp-form can mount "independant" sharp-form 1`] = `
         </div>
         <div id="MOCKED_TABBED_LAYOUT">
             <div id="MOCKED_GRID">
-                <div id="MOCKED_FIELDS_LAYOUT">
-                    <div> FIELD DISPLAY MOCK </div>
+                <div id="MOCKED_FIELDS_LAYOUT">__MOCKED_SFC_SharpFieldContainer__
                 </div>
             </div>
         </div>
@@ -35,8 +34,7 @@ exports[`sharp-form can mount sharp-form 1`] = `
         </div>
         <div id="MOCKED_TABBED_LAYOUT">
             <div id="MOCKED_GRID">
-                <div id="MOCKED_FIELDS_LAYOUT">
-                    <div> FIELD DISPLAY MOCK </div>
+                <div id="MOCKED_FIELDS_LAYOUT">__MOCKED_SFC_SharpFieldContainer__
                 </div>
             </div>
         </div>
@@ -57,8 +55,7 @@ exports[`sharp-form can mount sharp-form with alert 1`] = `
         </div>
         <div id="MOCKED_TABBED_LAYOUT">
             <div id="MOCKED_GRID">
-                <div id="MOCKED_FIELDS_LAYOUT">
-                    <div> FIELD DISPLAY MOCK </div>
+                <div id="MOCKED_FIELDS_LAYOUT">__MOCKED_SFC_SharpFieldContainer__
                 </div>
             </div>
         </div>

@@ -9,13 +9,13 @@
                     </div>
                 </div>
             </div>
-            <sharp-tabbed-layout :layout="layout">
+            <sharp-tabbed-layout :layout="layout" ref="tabbedLayout">
                 <!-- Tab -->
                 <template scope="tab">
-                    <sharp-grid :rows="[tab.columns]">
+                    <sharp-grid :rows="[tab.columns]" ref="columnsGrid">
                         <!-- column -->
                         <template scope="column">
-                            <sharp-fields-layout v-if="fields" :layout="column.fields" :visible="fieldVisible">
+                            <sharp-fields-layout v-if="fields" :layout="column.fields" :visible="fieldVisible" ref="fieldLayout">
                                 <!-- field -->
                                 <template scope="fieldLayout">
                                     <sharp-field-display :field-key="fieldLayout.key"
@@ -26,7 +26,8 @@
                                                          :error-identifier="fieldLayout.key"
                                                          :config-identifier="fieldLayout.key"
                                                          :update-data="updateData"
-                                                         :update-visibility="updateVisibility">
+                                                         :update-visibility="updateVisibility"
+                                                         ref="field">
                                     </sharp-field-display>
                                 </template>
                             </sharp-fields-layout>
@@ -241,7 +242,7 @@
             localeChanged(newLocale) {
                 this.locale = newLocale;
             },
-            reset({ entityKey }) {
+            reset({ entityKey }={}) {
                 if(entityKey && entityKey !== this.entityKey) return;
 
                 this.data = {};
@@ -273,7 +274,6 @@
         },
         mounted() {
             this.init();
-            //console.log(this);
         }
     }
 </script>

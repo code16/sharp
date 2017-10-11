@@ -1,16 +1,16 @@
 import Vue from 'vue';
 import Form from '../components/form/Form.vue';
+import * as fieldContainerModule from '../components/form/FieldContainer';
 
-import * as fieldDisplayModule from '../components/form/field-display/FieldDisplay';
 import * as gridModule from '../components/Grid.vue';
 import * as fieldsLayoutModule from '../components/form/FieldsLayout.vue';
 import * as tabbedLayoutModule from '../components/TabbedLayout.vue';
 
+
 import * as consts from '../consts';
 
-import { ErrorNode } from '../mixins';
 
-import { mockSFC, unmockSFC } from "./utils";
+import { mockSFC, unmockSFC, wait } from "./utils";
 
 import moxios from 'moxios';
 import {MockInjections, MockI18n} from "./utils";
@@ -21,12 +21,7 @@ describe('sharp-form', ()=>{
     MockI18n.mockLangFunction();
 
     Vue.component('sharp-form', Form);
-    Vue.component('sharp-field-display', {
-        name: 'SharpFieldContainer',
-        inheritAttrs: false,
-        mixins: [ ErrorNode ],
-        template: '<div> FIELD DISPLAY MOCK </div>'
-    });
+    Vue.component('sharp-field-display', mockSFC(fieldContainerModule));
 
     beforeAll(()=>{
         mockSFC(gridModule,{
@@ -40,7 +35,7 @@ describe('sharp-form', ()=>{
         mockSFC(fieldsLayoutModule, {
             template: `
             <div id="MOCKED_FIELDS_LAYOUT">
-                <slot v-bind="layout[0][0]"></slot>
+                <slot v-if="layout[0][0]" v-bind="layout[0][0]"></slot>
             </div>
             `
         });
@@ -58,6 +53,7 @@ describe('sharp-form', ()=>{
         unmockSFC(gridModule);
         unmockSFC(tabbedLayoutModule);
         unmockSFC(fieldsLayoutModule);
+        unmockSFC(fieldContainerModule);
     });
 
     beforeEach(()=>{
@@ -77,29 +73,6 @@ describe('sharp-form', ()=>{
     afterEach(()=>{
         moxios.uninstall();
     });
-
-    function mockComponent(mockedMethods) {
-        return {
-            'extends':Form,
-            created() {
-                mockedMethods.forEach(method=>this[method]=jest.fn());
-            }
-        }
-    }
-
-    const baseLayout = {
-        tabs : [
-            {
-                columns: [
-                    {
-                        fields: [
-                            [{ key:'title' }]
-                        ]
-                    }
-                ]
-            }
-        ]
-    };
 
     it('can mount sharp-form', async ()=>{
         await createVm();
@@ -201,7 +174,7 @@ describe('sharp-form', ()=>{
         });
 
         $form.errors = {
-            title: 'error'
+            title: ['required']
         };
 
         await Vue.nextTick();
@@ -244,7 +217,7 @@ describe('sharp-form', ()=>{
             propsData:{
                 independant: true,
                 props: {
-                    layout:baseLayout,
+                    layout:{ tabs:[{ columns:[{ fields:[[]] }] }] },
                     fields:{},
                     data:{},
                     authorizations: {
@@ -252,10 +225,7 @@ describe('sharp-form', ()=>{
                         update: false
                     }
                 }
-            },
-            // components: {
-            //     'sharp-form': mockComponent(['patchLayout'])
-            // }
+            }
         });
 
         let { $root:vm } = $form;
@@ -284,6 +254,650 @@ describe('sharp-form', ()=>{
         expect($form.isReadOnly).toBe(false);
 
     })
+
+    it('is synchronous', async () => {
+        let $form = await createVm({
+            propsData:{
+                independant: true,
+                props: {
+                    layout:{ tabs:[{ columns:[{ fields:[[]] }] }] },
+                    fields:{},
+                    data:{},
+                }
+            }
+        });
+
+        expect($form.synchronous).toBe(true);
+    });
+
+    it('is asynchronous', async () => {
+        let $form = await createVm();
+
+        expect($form.synchronous).toBe(false);
+    });
+
+
+    it('has errors', async () => {
+        let $form = await createVm();
+        expect($form.hasErrors).toBe(false);
+
+        $form.errors = { field: ['required'] };
+
+        expect($form.hasErrors).toBe(true);
+
+        Vue.set($form.errors.field, 'cleared', true);
+
+        expect($form.hasErrors).toBe(false);
+    });
+
+    it('expose appropriate props to layout components', async () => {
+        let $form = await createVm({
+            propsData:{
+                independant: true,
+                props: {
+                    layout:{ tabs:[{ columns:[{ fields:[[{key:'title'}]] }] }] },
+                    fields:{ title: { type:'text' } },
+                    data:{},
+                }
+            }
+        });
+
+        let { tabbedLayout, columnsGrid, fieldLayout } = $form.$refs;
+
+        expect(tabbedLayout.$options.propsData).toEqual({
+            layout: { tabs:[{ columns:[{ fields:[[{key:'title'}]] }] }] } // $form.layout
+        });
+        expect(columnsGrid.$options.propsData).toEqual({
+            rows: [[{ fields:[[{key:'title'}]] }]] // [$form.layout.tabs[0].columns]
+        });
+        expect(fieldLayout.$options.propsData).toEqual({
+            layout: [[{key:'title'}]], // $form.layout.tabs[0].columns[0].fields
+            visible: { title: true } // $form.fieldVisible
+        });
+    });
+
+    it('expose appropriate props to field', async () => {
+        let $form = await createVm({
+            propsData:{
+                independant: true,
+                props: {
+                    data:{
+                        title: null
+                    },
+                    fields: {
+                        title: {
+                            type: 'text'
+                        }
+                    },
+                    layout: {
+                        tabs : [
+                            {
+                                columns: [
+                                    {
+                                        fields: [
+                                            [{ key: 'title'}]
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        });
+
+        let { field } = $form.$refs;
+
+        expect(field.$options.propsData).toMatchObject({
+            fieldKey: 'title',
+            fieldLayout: { key: 'title' },
+            updateData: $form.updateData
+        });
+
+        expect(field.$attrs).toMatchObject({
+            'error-identifier': 'title',
+            'config-identifier': 'title',
+            'update-visibility': $form.updateVisibility,
+            'context-data': {
+                title: null
+            },
+            'context-fields': {
+                title: {
+                    type: 'text',
+                    readOnly: true
+                },
+            }
+        });
+
+        $form.authorizations = { create: true };
+
+        await Vue.nextTick();
+
+        expect(field.$attrs['context-fields'].readOnly).toBeFalsy();
+    });
+
+    it('update data', async () => {
+        let $form = await createVm({
+            propsData:{
+                independant: true,
+                props: {
+                    data:{
+                        title: null
+                    },
+                    fields: {
+                        title: {
+                            type: 'text'
+                        }
+                    },
+                    layout: {
+                        tabs : [
+                            {
+                                columns: [
+                                    {
+                                        fields: [
+                                            [{ key: 'title'}]
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        });
+
+        expect($form.data.title).toBe(null);
+
+        $form.updateData('title', 'text');
+
+        expect($form.data.title).toBe('text');
+    });
+
+
+    it('update visibility', async () => {
+        let $form = await createVm({
+            propsData:{
+                independant: true,
+                props: {
+                    data:{
+                        title: null
+                    },
+                    fields: {
+                        title: {
+                            type: 'text'
+                        }
+                    },
+                    layout: {
+                        tabs : [
+                            {
+                                columns: [
+                                    {
+                                        fields: [
+                                            [{ key: 'title'}]
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        });
+
+        expect($form.fieldVisible.title).toBe(true);
+
+        $form.updateVisibility('title', false);
+
+        expect($form.fieldVisible.title).toBe(false);
+    });
+
+    it('mount', async () => {
+        let $form = await createVm({
+            propsData:{
+                independant: true,
+                props: {
+                    data:{
+                        title: null
+                    },
+                    fields: {
+                        title: {
+                            type: 'text'
+                        }
+                    },
+                    layout: {
+                        tabs : [
+                            {
+                                columns: [
+                                    {
+                                        fields: [
+                                            [{ key: 'title'}]
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    authorizations: {
+                        create: true,
+                        update: false
+                    }
+                }
+            }
+        });
+
+        expect($form).toMatchObject({
+            data:{
+                title: null
+            },
+            fields: {
+                title: {
+                    type: 'text'
+                }
+            },
+            layout: {
+                tabs : [
+                    {
+                        columns: [
+                            {
+                                fields: [
+                                    [{ key: 'title'}]
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            authorizations: {
+                create: true,
+                update: false
+            }
+        });
+    });
+
+    it('mount async', async () => {
+        let $form = await createVm();
+
+        await nextRequestFulfilled({
+            status: 200,
+            response: {
+                data:{
+                    title: null
+                },
+                fields: {
+                    title: {
+                        type: 'text'
+                    }
+                },
+                layout: {
+                    tabs : [
+                        {
+                            columns: [
+                                {
+                                    fields: [
+                                        [{ key: 'title'}]
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                authorizations: {
+                    create: true,
+                    update: false
+                }
+            }
+        });
+
+        expect($form).toMatchObject({
+            data:{
+                title: null
+            },
+            fields: {
+                title: {
+                    type: 'text'
+                }
+            },
+            layout: {
+                tabs : [
+                    {
+                        columns: [
+                            {
+                                fields: [
+                                    [{ key: 'title'}]
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            authorizations: {
+                create: true,
+                update: false
+            }
+        });
+    });
+
+    it('handle 422', async () => {
+        let $form = await createVm();
+
+        $form.actionsBus.$emit('submit');
+
+        await nextRequestFulfilled({
+            status: 422,
+            response: {
+                errors: {
+                    title: ['invalid']
+                }
+            }
+        });
+
+        expect($form.errors).toEqual({
+            title: ['invalid']
+        });
+    });
+
+    it('patch layout', async () => {
+        let $form = await createVm({
+            propsData:{
+                independant: true,
+                props: {
+                    data:{
+                        title: null
+                    },
+                    fields: {
+                        title: {
+                            type: 'text'
+                        }
+                    },
+                    layout: {
+                        tabs : [
+                            {
+                                columns: [
+                                    {
+                                        fields: [
+                                            [{ legend:'fieldset', fields: [[]] }],
+                                            [{ legend:'fieldset', fields: [[]] }]
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        });
+
+        let {
+            tabs : [
+                {
+                    columns: [{ fields }]
+                }
+            ]
+        } = $form.layout;
+
+        expect(typeof fields[0][0].id).toBe('string');
+        expect(fields[0][0].id).not.toEqual(fields[1][0].id)
+    });
+
+
+    it('setup action bar correctly', async () => {
+        let $form = await createVm();
+
+        let { $root:vm } = $form;
+
+        let setupEmitted = jest.fn();
+        $form.actionsBus.$on('setup', setupEmitted);
+        $form.setupActionBar = jest.fn($form.setupActionBar);
+
+        await nextRequestFulfilled({
+            status: 200,
+            response: {
+                data:{
+                    title: null
+                },
+                fields: {
+                    title: {
+                        type: 'text'
+                    }
+                },
+                layout: {
+                    tabs : [
+                        {
+                            columns: [
+                                {
+                                    fields: [
+                                        [{ key: 'title'}]
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                authorizations: {
+                    create: false,
+                    update: false
+                }
+            }
+        });
+
+        expect($form.setupActionBar).toHaveBeenCalledTimes(1);
+        expect(setupEmitted).toHaveBeenCalledTimes(1);
+        expect(setupEmitted.mock.calls[0][0]).toMatchObject({
+            showSubmitButton: false,
+            showDeleteButton: false,
+            showBackButton: true,
+            opType: 'create'
+        });
+
+
+        $form.authorizations.create = true;
+
+        $form.setupActionBar();
+
+        expect(setupEmitted).toHaveBeenCalledTimes(2);
+        expect(setupEmitted.mock.calls[1][0]).toMatchObject({
+            showSubmitButton: true,
+            showDeleteButton: false,
+            showBackButton: false,
+            opType: 'create'
+        });
+
+
+        vm.instanceId = '10';
+        $form.authorizations.delete = true;
+
+        await Vue.nextTick();
+
+        $form.setupActionBar();
+
+        expect(setupEmitted).toHaveBeenCalledTimes(3);
+        expect(setupEmitted.mock.calls[2][0]).toMatchObject({
+            showSubmitButton: false,
+            showDeleteButton: true,
+            showBackButton: true,
+            opType: 'update'
+        });
+
+        $form.authorizations.update = true;
+
+        $form.setupActionBar();
+
+        expect(setupEmitted).toHaveBeenCalledTimes(4);
+        expect(setupEmitted.mock.calls[3][0]).toMatchObject({
+            showSubmitButton: true,
+            showDeleteButton: true,
+            showBackButton: false,
+            opType: 'update'
+        });
+
+    });
+
+    it('redirect to list', async () => {
+        let $form = await createVm();
+
+        let locationHrefModified = jest.fn();
+
+        Object.defineProperty(location, 'href', {
+            set:locationHrefModified
+        });
+
+        $form.redirectToList();
+        expect(locationHrefModified).toHaveBeenLastCalledWith('/sharp/list/spaceship?restore-context=1');
+
+        $form.redirectToList({ restoreContext: false });
+        expect(locationHrefModified).toHaveBeenLastCalledWith('/sharp/list/spaceship');
+
+        $form.redirectToList = jest.fn();
+        $form.actionsBus.$emit('submit');
+
+        await nextRequestFulfilled({
+            status: 200,
+            response: {
+                ok: true
+            }
+        }, 0);
+
+        expect($form.redirectToList).toHaveBeenCalledTimes(1);
+
+        $form.actionsBus.$emit('delete');
+
+        await nextRequestFulfilled({
+            status: 200
+        }, 0);
+
+        expect($form.redirectToList).toHaveBeenCalledTimes(2);
+
+        $form.actionsBus.$emit('cancel');
+
+        expect($form.redirectToList).toHaveBeenCalledTimes(3);
+    });
+
+    it('submit', async () => {
+        let $form = await createVm({
+            propsData: {
+                independant:true,
+                props: {
+                    data:{},
+                    fields: {},
+                    layout: {
+                        tabs : [
+                            {
+                                columns: [
+                                    {
+                                        fields: [[]]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            },
+        });
+
+        $form.post = jest.fn(async ()=>Promise.resolve({ data: { ok: true } }));
+
+        $form.actionsBus.$emit('submit', { entityKey:'planet' });
+
+        await wait(10);
+
+        expect($form.post).not.toHaveBeenCalled();
+
+        $form.pendingJobs.push('upload');
+        $form.actionsBus.$emit('submit');
+
+        await wait(10);
+
+        expect($form.post).not.toHaveBeenCalled();
+
+
+        let submittedEmmitted = jest.fn();
+        $form.$on('submitted', submittedEmmitted);
+        $form.pendingJobs = [];
+        $form.data = { title: 'My title' };
+
+        $form.actionsBus.$emit('submit', { endpoint:'/test-endpoint', dataFormatter: form => form.data });
+
+        await wait(10);
+
+        expect($form.post).toHaveBeenCalledTimes(1);
+        expect($form.post).toHaveBeenCalledWith('/test-endpoint', {
+            title: 'My title'
+        });
+        expect(submittedEmmitted).toHaveBeenCalledTimes(1);
+        expect(submittedEmmitted).toHaveBeenCalledWith({ ok: true });
+    });
+
+    it('dependant submit', async () => {
+        let $form = await createVm();
+
+        $form.post = jest.fn(async ()=>Promise.resolve({ data: { ok: true } }));
+        $form.handleError = jest.fn();
+
+        $form.actionsBus.$emit('submit');
+
+        await wait(10);
+
+        expect($form.post).toHaveBeenCalledTimes(1);
+        expect($form.post.mock.calls[0][0]).toBeUndefined();
+        expect($form.post.mock.calls[0][1]).toBeUndefined();
+
+
+        expect($form.handleError).not.toHaveBeenCalled();
+
+        $form.post = jest.fn(async ()=>Promise.reject({ error: true }));
+
+        $form.actionsBus.$emit('submit');
+
+        await wait(10);
+
+        expect($form.handleError).toHaveBeenCalledTimes(1);
+        expect($form.handleError).toHaveBeenCalledWith({ error: true });
+    });
+
+    it('delete', async ()=>{
+        // refer 'redirect to list' test
+    });
+
+    it('cancel', async ()=>{
+        // refer 'redirect to list' test
+    });
+
+    it('reset', async ()=>{
+        let $form = await createVm();
+
+        $form.data = { field: '...' };
+        $form.errors = { field: [] };
+
+        $form.actionsBus.$emit('reset', { entityKey: 'planet' });
+
+        expect($form.data).toEqual({ field: '...' });
+        expect($form.errors).toEqual({ field: [] });
+
+        $form.actionsBus.$emit('reset', { entityKey: 'spaceship'});
+
+        expect($form.data).toEqual({});
+        expect($form.errors).toEqual({});
+    });
+
+    it('pending jobs', async ()=> {
+        let $form = await createVm();
+        let updateActionsStateEmitted = jest.fn();
+
+        $form.actionsBus.$on('updateActionsState', updateActionsStateEmitted);
+
+        $form.actionsBus.$emit('setPendingJob', { key:'myUpload', origin:'upload' ,value:true });
+
+        expect($form.pendingJobs).toEqual(['myUpload']);
+        expect(updateActionsStateEmitted).toHaveBeenLastCalledWith({
+            state: 'pending',
+            modifier: 'upload'
+        });
+
+        $form.actionsBus.$emit('setPendingJob', { key:'myUpload', origin:'upload' ,value:false });
+
+        expect($form.pendingJobs).toEqual([]);
+        expect(updateActionsStateEmitted).toHaveBeenLastCalledWith(null);
+    });
 
 });
 

@@ -26,6 +26,7 @@ export function mockSFC (sfcModule, { template, render, ...extend }={}, mockOpti
     });
 
     //console.log(sfcModule);
+    return sfcModule.default;
 }
 
 export function unmockSFC(sfcModule) {
