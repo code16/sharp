@@ -12,6 +12,8 @@ import * as consts from '../consts';
 
 import { mockSFC, unmockSFC, wait } from "./utils";
 
+import { mockProperty, unmockProperty, setter } from "./utils/mock-utils";
+
 import moxios from 'moxios';
 import {MockInjections, MockI18n} from "./utils";
 import { nextRequestFulfilled } from './utils/moxios-utils';
@@ -70,8 +72,13 @@ describe('sharp-form', ()=>{
         `;
     });
 
+    beforeEach(()=> {
+        mockProperty(location, 'href');
+    });
+
     afterEach(()=>{
         moxios.uninstall();
+        unmockProperty(location, 'href');
     });
 
     it('can mount sharp-form', async ()=>{
@@ -735,17 +742,14 @@ describe('sharp-form', ()=>{
     it('redirect to list', async () => {
         let $form = await createVm();
 
-        let locationHrefModified = jest.fn();
-
-        Object.defineProperty(location, 'href', {
-            set:locationHrefModified
-        });
+        let locationHrefModified = setter(location,'href');
 
         $form.redirectToList();
         expect(locationHrefModified).toHaveBeenLastCalledWith('/sharp/list/spaceship?restore-context=1');
 
         $form.redirectToList({ restoreContext: false });
         expect(locationHrefModified).toHaveBeenLastCalledWith('/sharp/list/spaceship');
+
 
         $form.redirectToList = jest.fn();
         $form.actionsBus.$emit('submit');

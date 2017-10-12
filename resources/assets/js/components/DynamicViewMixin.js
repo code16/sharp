@@ -58,12 +58,14 @@ export default {
             this.mainLoading.$emit('hide');
             return response;
         }, async error => {
-            let { response: {status, data}, config: {method} } = error;
+            let { response, config: { method } } = error;
             this.mainLoading.$emit('hide');
 
-            if(data instanceof Blob) {
-                data = await parseBlobJSONContent(data);
+            if(response.data instanceof Blob && response.data.type === 'application/json') {
+                response.data = await parseBlobJSONContent(response.data);
             }
+
+            let { data, status } = response;
 
             let modalOptions = {
                 title: lang(`modals.${status}.title`) || lang(`modals.error.title`),
@@ -81,8 +83,8 @@ export default {
                 });
                     break;
 
-                case 404:
                 case 403:
+                case 404:
                 case 417:
                 case 500:
                     if(status !== 404 || method !== 'get')

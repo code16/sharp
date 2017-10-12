@@ -2,10 +2,10 @@ import Vue from 'vue';
 import axios from 'axios';
 
 
-const injectedCustoms = {
+const injectedCustoms = () => ({
     xsrfToken: 'xsrfTest',
     axiosInstance: axios.create()
-};
+});
 
 
 const injectedComponents = {
@@ -34,7 +34,7 @@ export default {
     provide() {
         return {
             ...resolveComponents(injectedComponents),
-            ...injectedCustoms
+            ...injectedCustoms()
         };
     }
 }

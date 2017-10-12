@@ -10,5 +10,7 @@ export default {
     mockLangFunction() {
         localizationFn.lang = jest.fn(mockLangImplementation);
         Localization.methods.l = jest.fn(mockLangImplementation);
-    }
+    },
+
+
 }

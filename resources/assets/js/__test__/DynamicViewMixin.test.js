@@ -1,11 +1,12 @@
 import Vue from 'vue';
 import DynamicViewMixin from '../components/DynamicViewMixin';
 
-import { MockInjections, MockI18n, wait } from "./utils/index";
+import { MockInjections, MockI18n } from "./utils";
+import { mockProperty, unmockProperty, setter } from "./utils/mock-utils";
 
 import moxios from 'moxios';
-
 import { nextRequestFulfilled } from "./utils/moxios-utils";
+
 
 describe('dynamic-view-mixin',()=>{
     Vue.component('sharp-dynamic-view', {
@@ -13,6 +14,7 @@ describe('dynamic-view-mixin',()=>{
         props: {
             apiPath: String,
             apiParams: Object,
+            synchronous: Boolean
         },
         methods: {
             mount() {}
@@ -26,7 +28,7 @@ describe('dynamic-view-mixin',()=>{
     beforeEach(()=>{
         document.body.innerHTML = `
             <div id="app">
-                <sharp-dynamic-view api-path="/test-api/path" :api-params="{ query: 'aaa' }"></sharp-dynamic-view>    
+                <sharp-dynamic-view api-path="/test-api/path" :api-params="{ query: 'aaa' }" :synchronous="synchronous"></sharp-dynamic-view>    
             </div>
         `;
         MockI18n.mockLangFunction();
@@ -142,12 +144,219 @@ describe('dynamic-view-mixin',()=>{
         expect(errorCallback).toHaveBeenCalled();
         expect(errorCallback.mock.calls[0][0].response).toEqual(response);
     });
+
+    it('intercept request : show main loading', async ()=>{
+        let $view = await createVm();
+
+        let { interceptors } = $view.axiosInstance;
+
+        let showLoadingEmitted = jest.fn();
+
+        $view.mainLoading.$on('show', showLoadingEmitted);
+
+        interceptors.request.forEach(({ fulfilled }) => {
+            fulfilled();
+        });
+
+        expect(showLoadingEmitted).toHaveBeenCalled();
+    });
+
+    it('intercept response [success]: hide main loading', async ()=>{
+        let $view = await createVm();
+
+        let { interceptors } = $view.axiosInstance;
+
+        let hideLoadingEmitted = jest.fn();
+
+        $view.mainLoading.$on('hide', hideLoadingEmitted);
+
+        interceptors.response.forEach(({ fulfilled }) => {
+            fulfilled();
+        });
+
+        expect(hideLoadingEmitted).toHaveBeenCalled();
+    });
+
+
+    describe('intercept response [error]', ()=>{
+        let defaultDelay = moxios.delay;
+        beforeAll(()=>moxios.delay = 10);
+        afterAll(()=>moxios.delay = defaultDelay);
+
+        it('hide loading', async ()=>{
+            let $view = await createVm();
+
+            let hideLoadingEmitted = jest.fn();
+
+            $view.mainLoading.$on('hide', hideLoadingEmitted);
+
+            $view.post().catch(e=>{
+                // console.log(e) //[debug]
+            });
+
+            await nextRequestFulfilled({
+                status: 400,
+                response: {}
+            });
+
+            expect(hideLoadingEmitted).toHaveBeenCalled();
+        });
+
+        it('parse blob to json', async ()=>{
+            let $view = await createVm();
+
+            $view.axiosInstance.get('/', { responseType: 'blob' }).catch(e=>{
+                //console.log(e) //[debug]
+            });
+
+            let response = await nextRequestFulfilled({
+                status: 400,
+                response: new Blob([JSON.stringify({ errors: {} })], { type: 'application/json' })
+            });
+
+            expect(response.data).toEqual({ errors: {} });
+        });
+
+        it('show error modal on 401 and redirect on login page when click OK', async ()=>{
+            let $view = await createVm();
+
+            let showMainMoadlEmitted = jest.fn();
+
+            $view.actionsBus.$on('showMainModal', showMainMoadlEmitted);
+
+            $view.axiosInstance.get('/').catch(e=>{
+                //console.log(e) //[debug]
+            });
+
+            await nextRequestFulfilled({
+                status: 401,
+                response: {
+                    message: 'unauthorized'
+                }
+            });
+
+            expect(showMainMoadlEmitted).toHaveBeenCalledTimes(1);
+            expect(showMainMoadlEmitted).toHaveBeenCalledWith({
+                title: expect.stringMatching(/.+/),
+                text: 'unauthorized',
+                isError: true,
+                okCallback: expect.any(Function)
+            });
+
+            let { okCallback } = showMainMoadlEmitted.mock.calls[0][0];
+
+            mockProperty(location,'href');
+
+            okCallback();
+
+            expect(setter(location,'href')).toHaveBeenCalledWith('/sharp/login');
+
+            unmockProperty(location,'href');
+        });
+
+        it('show error modal on else server response status', async () => {
+            let $view = await createVm();
+
+            let showMainMoadlEmitted = jest.fn();
+
+            $view.actionsBus.$on('showMainModal', showMainMoadlEmitted);
+
+            $view.axiosInstance.get('/').catch(e=>{});
+            await nextRequestFulfilled({
+                status: 403,
+                response: {}
+            });
+            expect(showMainMoadlEmitted).toHaveBeenCalledTimes(1);
+            expect(showMainMoadlEmitted).toHaveBeenLastCalledWith({
+                title: expect.stringMatching(/.+/),
+                text: expect.stringMatching(/.+/),
+                isError: true,
+                okCloseOnly: true
+            });
+
+            $view.axiosInstance.post('/').catch(e=>{});
+            await nextRequestFulfilled({
+                status: 404,
+                response: {
+                    message: 'Not found'
+                }
+            });
+            expect(showMainMoadlEmitted).toHaveBeenCalledTimes(2);
+            expect(showMainMoadlEmitted).toHaveBeenLastCalledWith({
+                title: expect.stringMatching(/.+/),
+                text: 'Not found',
+                isError: true,
+                okCloseOnly: true
+            });
+
+            $view.axiosInstance.get('/').catch(e=>{});
+            await nextRequestFulfilled({
+                status: 417,
+                response: {
+                    message: 'custom error'
+                }
+            });
+            expect(showMainMoadlEmitted).toHaveBeenCalledTimes(3);
+            expect(showMainMoadlEmitted).toHaveBeenLastCalledWith({
+                title: expect.stringMatching(/.+/),
+                text: 'custom error',
+                isError: true,
+                okCloseOnly: true
+            });
+
+            $view.axiosInstance.get('/').catch(e=>{});
+            await nextRequestFulfilled({
+                status: 500,
+                response: {}
+            });
+            expect(showMainMoadlEmitted).toHaveBeenCalledTimes(4);
+            expect(showMainMoadlEmitted).toHaveBeenLastCalledWith({
+                title: expect.stringMatching(/.+/),
+                text: expect.stringMatching(/.+/),
+                isError: true,
+                okCloseOnly: true
+            });
+
+            $view.axiosInstance.get('/').catch(e=>{});
+            await nextRequestFulfilled({
+                status: 404,
+                response: {}
+            });
+            expect(showMainMoadlEmitted).not.toHaveBeenCalledTimes(5);
+
+        });
+    });
+
+    it('show loading on created if asynchronous component', async () => {
+        let mainLoadingShowEmitted = jest.fn();
+        await createVm({
+            created() {
+                this._provided.mainLoading.$on('show',mainLoadingShowEmitted);
+            }
+        });
+        expect(mainLoadingShowEmitted).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not show loading on created if synchronous component', async () => {
+        let mainLoadingShowEmitted = jest.fn();
+        await createVm({
+            propsData: {
+                synchronous: true
+            },
+            created() {
+                this._provided.mainLoading.$on('show',mainLoadingShowEmitted);
+            }
+        });
+        expect(mainLoadingShowEmitted).toHaveBeenCalledTimes(0);
+    });
 });
 
 async function createVm(customOptions={}) {
     let vm = new Vue({
         el: '#app',
         mixins:[MockInjections, customOptions],
+
+        props:['synchronous'],
 
         created() {
             let { axiosInstance } = this._provided;
