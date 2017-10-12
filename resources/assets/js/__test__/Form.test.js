@@ -70,9 +70,6 @@ describe('sharp-form', ()=>{
                 </sharp-form>
             </div>
         `;
-    });
-
-    beforeEach(()=> {
         mockProperty(location, 'href');
     });
 

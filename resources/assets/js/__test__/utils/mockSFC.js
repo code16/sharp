@@ -1,16 +1,11 @@
-export function mockSFC (sfcModule, { template, render, ...extend }={}, mockOptions={}) {
-
-    let { isJsFile } = mockOptions;
-
-    if(isJsFile) {
-        sfcModule.__oldDefault__ = { ...sfcModule.default }
-    }
-
-    Object.assign(sfcModule.default, {
+function mockComponent(component, customOptions={}) {
+    let { template, render, ...extend } = customOptions;
+    let name = component.name || customOptions.name;
+    return Object.assign(component, {
         mixins: [],
         'extends': extend,
         template: template,
-        render: !template ? render || function() { return this._v(`__MOCKED_SFC_${sfcModule.name}__\n`) } : null,
+        render: !template ? render || function() { return this._v(`__MOCKED_SFC_${name}__\n`) } : null,
         watch: {},
         beforeCreate: ()=>{},
         created: ()=>{},
@@ -22,19 +17,22 @@ export function mockSFC (sfcModule, { template, render, ...extend }={}, mockOpti
         destroyed: ()=>{},
         data: ()=>({}),
         provide: {},
-        inject: [],
+        inject: []
     });
+}
 
-    //console.log(sfcModule);
-    return sfcModule.default;
+export function mockChildrenComponents(toMock, { customs={} }={}) {
+    Object.keys(toMock.components).forEach(compKey=>{
+        mockComponent(toMock.components[compKey],customs[compKey]);
+    });
+    return toMock;
+}
+
+export function mockSFC (sfcModule, customOptions) {
+    return mockComponent(sfcModule.default,customOptions);
 }
 
 export function unmockSFC(sfcModule) {
-    if(sfcModule.__oldDefault__) {
-        sfcModule.default = sfcModule.__oldDefault__;
-        return;
-    }
-
     let { 'default':defaultObj, ...options } = sfcModule;
     sfcModule.default = options;
 }
