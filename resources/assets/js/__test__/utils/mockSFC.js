@@ -5,7 +5,7 @@ function mockComponent(component, customOptions={}) {
         mixins: [],
         'extends': extend,
         template: template,
-        render: !template ? render || function() { return this._v(`__MOCKED_SFC_${name}__\n`) } : null,
+        render: !template ? render || function() { return this._v(`\n__MOCKED_SFC_${name}__\n`) } : null,
         watch: {},
         beforeCreate: ()=>{},
         created: ()=>{},
@@ -17,7 +17,8 @@ function mockComponent(component, customOptions={}) {
         destroyed: ()=>{},
         data: ()=>({}),
         provide: {},
-        inject: []
+        inject: [],
+        functional: false
     });
 }
 

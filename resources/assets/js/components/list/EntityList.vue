@@ -25,7 +25,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="d-none d-md-block" :style="headerAutoPadding">&nbsp</div>
+                        <div class="d-none d-md-block" :style="headerAutoPadding">&nbsp;</div>
                     </div>
                 </div>
                 <div class="SharpEntityList__tbody">
@@ -87,7 +87,7 @@
                          v-model="showFormModal[form.key]"
                          :key="form.key"
                          @ok="postCommandForm(form.key, $event)"
-                         @hidden="onCommandFormModalHidden(form.key)">
+                         @hidden="onCommandFormModalHidden(form.key)" ref="formModal">
                 <sharp-form :props="form"
                             :entity-key="form.key"
                             independant
@@ -254,7 +254,6 @@
                 }, {});
             },
             authorizationsByInstanceId() {
-
                 return this.data.items.reduce((res, {[this.idAttr]:id}) => {
                     res[id] = {
                         view: this.getAuthorizations({ type:'view', id }),

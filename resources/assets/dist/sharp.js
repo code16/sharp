@@ -12340,7 +12340,7 @@ function parseBlobJSONContent(blob) {
 }
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-    inject: ['mainLoading', 'axiosInstance'],
+    inject: ['mainLoading', 'axiosInstance', 'actionsBus'],
 
     data: function data() {
         return {
@@ -12354,8 +12354,6 @@ function parseBlobJSONContent(blob) {
     methods: {
         get: function get() {
             var _this = this;
-
-            if (this.test) return;
 
             return this.axiosInstance.get(this.apiPath, {
                 params: this.apiParams,
@@ -12397,55 +12395,55 @@ function parseBlobJSONContent(blob) {
             return response;
         }, function () {
             var _ref = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee(error) {
-                var _error$response, status, data, method, modalOptions;
-
+                var response, method, data, status, modalOptions;
                 return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
                             case 0:
-                                _error$response = error.response, status = _error$response.status, data = _error$response.data, method = error.config.method;
+                                response = error.response, method = error.config.method;
 
                                 _this2.mainLoading.$emit('hide');
 
-                                if (!(data instanceof Blob)) {
+                                if (!(response.data instanceof Blob && response.data.type === 'application/json')) {
                                     _context.next = 6;
                                     break;
                                 }
 
                                 _context.next = 5;
-                                return parseBlobJSONContent(data);
+                                return parseBlobJSONContent(response.data);
 
                             case 5:
-                                data = _context.sent;
+                                response.data = _context.sent;
 
                             case 6:
+                                data = response.data, status = response.status;
                                 modalOptions = {
                                     title: Object(__WEBPACK_IMPORTED_MODULE_4__mixins_Localization__["b" /* lang */])('modals.' + status + '.title') || Object(__WEBPACK_IMPORTED_MODULE_4__mixins_Localization__["b" /* lang */])('modals.error.title'),
                                     text: data.message || Object(__WEBPACK_IMPORTED_MODULE_4__mixins_Localization__["b" /* lang */])('modals.error.message'),
                                     isError: true
                                 };
                                 _context.t0 = status;
-                                _context.next = _context.t0 === 401 ? 10 : _context.t0 === 404 ? 12 : _context.t0 === 403 ? 12 : _context.t0 === 417 ? 12 : _context.t0 === 500 ? 12 : 14;
+                                _context.next = _context.t0 === 401 ? 11 : _context.t0 === 404 ? 13 : _context.t0 === 403 ? 13 : _context.t0 === 417 ? 13 : _context.t0 === 500 ? 13 : 15;
                                 break;
 
-                            case 10:
+                            case 11:
                                 _this2.actionsBus.$emit('showMainModal', __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, modalOptions, {
                                     okCallback: function okCallback() {
                                         location.href = '/sharp/login';
                                     }
                                 }));
-                                return _context.abrupt('break', 14);
+                                return _context.abrupt('break', 15);
 
-                            case 12:
+                            case 13:
                                 if (status !== 404 || method !== 'get') _this2.actionsBus.$emit('showMainModal', __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, modalOptions, {
                                     okCloseOnly: true
                                 }));
-                                return _context.abrupt('break', 14);
-
-                            case 14:
-                                return _context.abrupt('return', Promise.reject(error));
+                                return _context.abrupt('break', 15);
 
                             case 15:
+                                return _context.abrupt('return', Promise.reject(error));
+
+                            case 16:
                             case 'end':
                                 return _context.stop();
                         }

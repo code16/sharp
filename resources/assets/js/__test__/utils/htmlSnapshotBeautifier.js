@@ -2,9 +2,9 @@ const beautify = require('js-beautify').html;
 
 module.exports = {
     test(object) {
-        return typeof object == 'string' && object.trim()[0] === '<';
+        return typeof object === 'string' && object.trim()[0] === '<';
     },
     print(val, print, opts, colors){
-        return beautify(val, {});
+        return beautify(val, { indent_with_tabs: true });
     }
 };
