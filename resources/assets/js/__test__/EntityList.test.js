@@ -923,9 +923,13 @@ describe('entity-list', ()=>{
         $entityList.actionsBus.$on('setup', setupEmitted);
 
         $entityList.config = {
-            commands: []
+            commands: [],
+            reorderable: false,
+            searchable: false
         };
-        $entityList.authorizations = {};
+        $entityList.authorizations = {
+            create: false, update: false
+        };
 
         $entityList.data = {
             totalCount: 3
@@ -940,13 +944,169 @@ describe('entity-list', ()=>{
         };
         $entityList.setupActionBar();
         expect(setupEmitted).toHaveBeenLastCalledWith(expect.objectContaining({
-            itemsCount: 1
+            itemsCount: 1,
+        }));
+
+        expect(setupEmitted).toHaveBeenLastCalledWith(expect.objectContaining({
+            searchable: false,
+            showCreateButton: false,
+            showReorderButton: false
         }));
 
         $entityList.config = {
             filters: [{ key:'age' }],
-            commands: [{ type:'instance' }, { type:'entity', authorization: false }]
-        }
+            commands: [
+                { type:'instance' },
+                { type:'entity', authorization: false },
+                { type:'entity', authorization: true }
+            ],
+            searchable: true,
+            reorderable: true
+        };
+
+        $entityList.authorizations = {
+            create: true, update: false
+        };
+        $entityList.filtersValue = { age: 4 }
+        $entityList.setupActionBar();
+        expect(setupEmitted).toHaveBeenLastCalledWith(expect.objectContaining({
+            filters: [{ key:'age' }],
+            commands: [{type:'entity', authorization: true}],
+            filtersValue: $entityList.filtersValue,
+            searchable: true,
+            showCreateButton: true,
+            showReorderButton: false
+        }));
+
+        $entityList.authorizations = {
+            create: true, update: true
+        };
+        $entityList.setupActionBar();
+        expect(setupEmitted).toHaveBeenLastCalledWith(expect.objectContaining({
+            showReorderButton: true
+        }));
+    });
+
+    it('col classes', async () => {
+        let { colClasses } = await createVm();
+
+        let classes = colClasses({ sizeXS: 6, size:3 });
+        expect(classes).toEqual(expect.arrayContaining(['col-6', 'col-md-3']));
+
+        classes = colClasses({ sizeXS: 6, size:3, hideOnXS:true });
+        expect(classes).toEqual(expect.arrayContaining(['col-6', 'col-md-3', 'd-none d-md-flex']));
+
+        classes = colClasses({ sizeXS: 6, size:3}, { highlight: true });
+        expect(classes).toEqual(expect.arrayContaining(['col-6', 'col-md-3', { highlight: true }]));
+    });
+
+    it('is state class', async () => {
+        let { isStateClass } = await createVm();
+
+        expect(isStateClass('orange')).toBe(false);
+        expect(isStateClass('osharp_secondary')).toBe(false);
+        expect(isStateClass('sharp_primary')).toBe(true);
+    });
+
+    it('state classes', async () => {
+        let $entityList = await createVm();
+
+        $entityList.config = {
+            state: {
+                attribute: 'visibility',
+                values: [{
+                    value: "active",
+                    label: "Visible",
+                    color: "green"
+                },
+                {
+                    value: "inactive",
+                    label: "Not visible",
+                    color: "sharp_grey"
+                }]
+            }
+        };
+        let { stateClasses } = $entityList;
+        expect(stateClasses({ item: { visibility:'active' } })).toEqual([]);
+        expect(stateClasses({ item: { visibility:'inactive' } })).toEqual(['sharp_grey']);
+
+        expect(stateClasses({ value:'active' })).toEqual([]);
+        expect(stateClasses({ value:'inactive' })).toEqual(['sharp_grey']);
+    });
+
+    it('state style', async () => {
+        let $entityList = await createVm();
+
+        $entityList.config = {
+            state: {
+                attribute: 'visibility',
+                values: [
+                    {
+                        value: "active",
+                        label: "Visible",
+                        color: "green"
+                    },
+                    {
+                        value: "inactive",
+                        label: "Not visible",
+                        color: "sharp_grey"
+                    }
+                ]
+            }
+        };
+        let { stateStyle } = $entityList;
+        expect(stateStyle({ item: { visibility:'active' } })).toEqual({
+            fill: 'green', stroke: 'green'
+        });
+        expect(stateStyle({ item: { visibility:'inactive' } })).toEqual('');
+
+        expect(stateStyle({ value:'active' })).toEqual({
+            fill: 'green', stroke: 'green'
+        });
+        expect(stateStyle({ value:'inactive' })).toEqual('');
+    });
+
+    it('has state authorization', async ()=>{
+        let $entityList= await createVm();
+        let { hasStateAuthorization } = $entityList;
+
+        $entityList.config = {
+            instanceIdAttribute: 'id',
+            state: {}
+        };
+        $entityList.config.state.authorization = false;
+        expect(hasStateAuthorization({ id: 1 })).toBe(false);
+
+        $entityList.config.state.authorization = true;
+        expect(hasStateAuthorization({ id: 1 })).toBe(true);
+
+        $entityList.config.state.authorization = [3];
+        expect(hasStateAuthorization({ id: 1 })).toBe(false);
+        expect(hasStateAuthorization({ id: 3 })).toBe(true);
+    });
+
+    it('filter value or default', async () => {
+        let { filterValueOrDefault } = await createVm();
+        expect(filterValueOrDefault(1)).toBe(1);
+        expect(filterValueOrDefault(1, { default: 2 })).toBe(1);
+        expect(filterValueOrDefault([1], { default: [2], multiple: true })).toEqual([1]);
+        expect(filterValueOrDefault(null, { default: 3 })).toBe(3);
+        expect(filterValueOrDefault(null, { default: [3], multiple: true })).toEqual([3]);
+        expect(filterValueOrDefault(null, { })).toBeNull();
+        expect(filterValueOrDefault(null, { multiple: true })).toEqual([]);
+    });
+
+    it('instance commands', async ()=>{
+        let $entityList = await createVm();
+        $entityList.config = {
+            instanceIdAttribute: 'id',
+            commands:[{ type:'instance', authorization: [3] }]
+        };
+        $entityList.data = {
+            items: [{ id: 3 }]
+        };
+        let { instanceCommands } = $entityList;
+        expect(instanceCommands({ id: 3 })).toEqual([{ type: 'instance', authorization:[3] }]);
     });
 });
 

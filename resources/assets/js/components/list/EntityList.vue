@@ -337,10 +337,10 @@
              */
             colClasses({ sizeXS, size, hideOnXS }, extraClasses) {
                 return [
-                    extraClasses,
+                    ...(extraClasses ? [extraClasses] : []),
                     `col-${sizeXS}`,
                     `col-md-${size}`,
-                    hideOnXS?`d-none d-md-flex`:''
+                    ...(hideOnXS? ['d-none d-md-flex'] : [])
                 ]
             },
             isStateClass(color) {
