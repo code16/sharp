@@ -18,6 +18,7 @@ class CreateTravelsTable extends Migration
             $table->dateTime("departure_date");
             $table->unsignedInteger('spaceship_id');
             $table->string("destination");
+            $table->string("destination_coordinates")->nullable();
             $table->timestamps();
         });
     }

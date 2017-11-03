@@ -37,6 +37,10 @@ class TravelSharpForm extends SharpForm
                 ->setLabel("Destination")
 
         )->addField(
+            SharpFormTextField::make("destination_coordinates")
+                ->setLabel("Destination coordinates")
+
+        )->addField(
             SharpFormAutocompleteListField::make("delegates")
                 ->setLabel("Travel delegates")
                 ->setAddable()
@@ -56,7 +60,8 @@ class TravelSharpForm extends SharpForm
     {
         $this->addColumn(5, function(FormLayoutColumn $column) {
             $column->withSingleField("departure_date")
-                ->withSingleField("destination");
+                ->withSingleField("destination")
+                ->withSingleField("destination_coordinates");
         })->addColumn(7, function(FormLayoutColumn $column) {
             $column->withSingleField("spaceship_id")
                 ->withSingleField("delegates", function(FormLayoutColumn $listItem) {
