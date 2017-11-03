@@ -76,7 +76,7 @@ We'll get into all those classes in this document. The important thing to notice
 - [The Dashboard](docs/dashboard.md)
 - [How to transform data](docs/how-to-transform-data.md)
 - [Sharp built-in solution for uploads](docs/sharp-built-in-solution-for-uploads.md)
-- Handling data localization
+- Handling data localization (coming in 4.1)
 - [Testing with Sharp](docs/testing-with-sharp.md)
 - Extending Sharp
 - Style and visual theme
