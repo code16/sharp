@@ -16,6 +16,7 @@ class PilotSharpForm extends SharpForm
     {
         $this->addField(
             SharpFormTextField::make("name")
+                ->setMaxLength(50)
                 ->setLabel("Name")
         );
     }
