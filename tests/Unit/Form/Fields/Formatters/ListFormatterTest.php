@@ -84,6 +84,21 @@ class ListFormatterTest extends SharpTestCase
         $this->assertEquals($data, $formatter->toFront($field, $data));
     }
 
+    /** @test */
+    function non_valuated_values_are_initialized_to_null_when_formatting_to_front()
+    {
+        $formatter = new ListFormatter;
+        $field = SharpFormListField::make("list")
+            ->addItemField(SharpFormTextField::make("name"))
+            ->addItemField(SharpFormTextField::make("job"));
+
+        $this->assertEquals([
+            ["id" => 1, "name" => "John Wayne", "job" => null]
+        ], $formatter->toFront($field, [
+            ["id" => 1, "name" => "John Wayne"]
+        ]));
+    }
+
     /**
      * @return array
      */
