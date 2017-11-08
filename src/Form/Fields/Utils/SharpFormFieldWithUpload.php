@@ -25,6 +25,11 @@ trait SharpFormFieldWithUpload
     protected $storageBasePath = "data";
 
     /**
+     * @var bool
+     */
+    protected $compactThumbnail = false;
+
+    /**
      * @param float $maxFileSizeInMB
      * @return static
      */
@@ -42,6 +47,17 @@ trait SharpFormFieldWithUpload
     public function setCropRatio(string $ratio)
     {
         $this->cropRatio = explode(":", $ratio);
+
+        return $this;
+    }
+
+    /**
+     * @param bool $compactThumbnail
+     * @return static
+     */
+    public function setCompactThumbnail($compactThumbnail = true)
+    {
+        $this->compactThumbnail = $compactThumbnail;
 
         return $this;
     }

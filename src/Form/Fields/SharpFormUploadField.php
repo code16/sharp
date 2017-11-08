@@ -55,6 +55,7 @@ class SharpFormUploadField extends SharpFormField
             "maxFileSize" => "numeric",
             "ratioX" => "integer|nullable",
             "ratioY" => "integer|nullable",
+            "compactThumbnail" => "boolean"
         ];
     }
 
@@ -68,6 +69,7 @@ class SharpFormUploadField extends SharpFormField
             "fileFilter" => $this->fileFilter,
             "ratioX" => $this->cropRatio ? (int)$this->cropRatio[0] : null,
             "ratioY" => $this->cropRatio ? (int)$this->cropRatio[1] : null,
+            "compactThumbnail" => $this->compactThumbnail
         ]);
     }
 

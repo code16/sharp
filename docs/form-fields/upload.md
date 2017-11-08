@@ -46,6 +46,10 @@ Set the allowed file extensions. You can pass either an array or a comma-separat
 
 Just a `setFileFilter([".jpg",".jpeg",".gif",".png"])` shorthand.
 
+### `setCompactThumbnail($compactThumbnail = true)`
+
+If true and if the upload has a thumbnail, it is limited to 60px high (to compact in a list item, for instance).
+
 
 ## Formatter
 
