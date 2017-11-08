@@ -35,6 +35,9 @@
 
   &__close-button {
     @include close-button;
+    position: absolute;
+    right:.5rem;
+    top:.5rem;
     display: none;
     background: transparent;
   }
@@ -48,12 +51,12 @@
   }
 
   &__container {
-    display:flex;
+    //display:flex;
 
     .SharpUpload__thumbnail {
-      flex-basis:33%;
+      //flex-basis:33%;
       align-self: center;
-      margin-right: 1em;
+      //margin-right: 1em;
       img {
         display:block;
         margin:auto;
@@ -65,7 +68,7 @@
     }
 
     .SharpUpload__infos {
-      flex:1;
+      //flex:1;
       .progress-bar {
         transition: width .5s;
       }

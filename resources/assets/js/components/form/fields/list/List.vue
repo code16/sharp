@@ -26,7 +26,7 @@
                             </template>
 
                             <template v-else>
-                                <sharp-list-item :layout="fieldLayout.item" :error-identifier="i">
+                                <sharp-list-item :layout="fieldLayout.item" :visible="listItemData[visibilityMap]" :error-identifier="i">
                                     <template scope="itemFieldLayout">
                                         <sharp-field-display :field-key="itemFieldLayout.key"
                                                              :context-fields="updatedItemFields"
@@ -34,6 +34,7 @@
                                                              :error-identifier="itemFieldLayout.key"
                                                              :config-identifier="itemFieldLayout.key"
                                                              :update-data="update(i)"
+                                                             :update-visibility="updateVisibility(i)"
                                                              :locale="locale">
                                         </sharp-field-display>
                                     </template>
@@ -157,19 +158,35 @@
             showInsertButton() {
                 return this.showAddButton && this.sortable;
             },
+            itemFieldsKeys() {
+                return Object.keys(this.itemFields)
+            },
             dragIndexSymbol() {
                 return Symbol('dragIndex');
             },
             indexSymbol() {
                 return Symbol('index');
+            },
+            visibilityMap() {
+                return Symbol('visibilityMap')
             }
         },
         methods: {
             indexedList() {
-                return (this.value||[]).map((v,i)=>({[this.indexSymbol]:i,...v}));
+                return (this.value||[]).map((v,i)=>({
+                    [this.indexSymbol]:i,
+                    [this.visibilityMap]:this.createVisibilityMap(),
+                    ...v
+                }));
+            },
+            createVisibilityMap() {
+                return this.itemFieldsKeys.reduce((res, key)=>{
+                    res[key]=true;
+                    return res;
+                },{});
             },
             createItem() {
-                return Object.keys(this.itemFields).reduce((res, fieldKey) => {
+                return this.itemFieldsKeys.reduce((res, fieldKey) => {
                     if(this.$form.localized && this.itemFields[fieldKey].localized) {
                         res[fieldKey] = this.$form.config.locales.reduce((res, l)=>{
                             res[l] = null;
@@ -180,7 +197,8 @@
                     return res;
                 },{
                     [this.itemIdAttribute]:null,
-                    [this.indexSymbol]:this.lastIndex++
+                    [this.indexSymbol]:this.lastIndex++,
+                    [this.visibilityMap]:this.createVisibilityMap()
                 });
             },
             insertNewItem(i, $event) {
@@ -201,6 +219,12 @@
                     else this.list[i][key] = value;
                 }
             },
+            updateVisibility(i) {
+                return (key, visibility) => {
+                    console.log('update visibility');
+                    this.$set(this.list[i][this.visibilityMap],key,visibility);
+                }
+            },
             collapsedItemData(itemData) {
                 return {$index:itemData[this.dragIndexSymbol], ...itemData};
             },
@@ -218,6 +242,7 @@
         },
         created() {
             this.initList();
+            console.log(this);
         },
     }
 </script>

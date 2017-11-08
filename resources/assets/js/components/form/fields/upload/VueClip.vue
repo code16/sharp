@@ -8,12 +8,12 @@
                     </button>
                 </form>
                 <template v-if="file">
-                    <div class="SharpUpload__container">
-                        <div class="SharpUpload__thumbnail" v-if="!!imageSrc">
+                    <div class="SharpUpload__container row">
+                        <div class="SharpUpload__thumbnail col-4" v-if="!!imageSrc">
                             <img :src="imageSrc" @load="$emit('image-updated')">
                         </div>
-                        <div class="SharpUpload__infos">
-                            <div class="mb-3">
+                        <div class="SharpUpload__infos col-8">
+                            <div class="mb-3 text-truncate">
                                 <label class="SharpUpload__filename">{{ fileName }}</label>
                                 <div class="SharpUpload__info mt-2">
                                     <span v-show="size" class="mr-2">{{ size }}</span>

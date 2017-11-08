@@ -328,7 +328,7 @@
                     commands: this.config.commands.filter(c=>c.authorization && c.type==='entity'),
                     showCreateButton:this.authorizations.create,
                     searchable: this.config.searchable,
-                    showReorderButton: this.config.reorderable && this.authorizations.update
+                    showReorderButton: this.config.reorderable && this.authorizations.update && this.data.items.length>1
                 });
             },
 

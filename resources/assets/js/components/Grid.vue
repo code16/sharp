@@ -1,7 +1,7 @@
 <template>
     <div class="SharpGrid">
-        <div v-for="(row,i) in rows" class="row">
-            <div v-for="(col,j) in row" :class="colClass[i][j]">
+        <div v-for="(row,i) in rows" class="SharpGrid__row row">
+            <div v-for="(col,j) in row" :class="colClass[i][j]" class="SharpGrid__col">
                 <slot v-bind="col"></slot>
             </div>
         </div>

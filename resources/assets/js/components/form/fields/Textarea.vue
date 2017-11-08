@@ -1,10 +1,11 @@
 <template>
     <textarea class="SharpTextarea" :rows="rows" :placeholder="placeholder" :disabled="readOnly"
-              :value="value" @input="handleInput">
+              :value="value" v-maxlength="maxLength" @input="handleInput">
     </textarea>
 </template>
 
 <script>
+    import Maxlength from '../../../directives/Maxlength';
 
     export default {
         name:'SharpTextarea',
@@ -16,6 +17,8 @@
             placeholder: String,
             readOnly: Boolean,
 
+            maxLength: Number,
+
             rows: Number,
         },
         data() {
@@ -25,6 +28,9 @@
             handleInput(e) {
                 this.$emit('input', e.target.value);
             }
+        },
+        directives: {
+            Maxlength
         }
     }
 </script>

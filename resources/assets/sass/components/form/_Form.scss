@@ -30,6 +30,9 @@
     .row:last-child {
       margin-bottom: 0;
     }
+    [class^=col]:last-of-type {
+      margin-bottom: 0;
+    }
   }
 
   .row {
@@ -40,9 +43,10 @@
     .row {
       margin-bottom: 0;
     }
-    .SharpForm__form-item {
+    [class^=col] {
       margin-bottom: $form-item-margin-bottom;
     }
+
   }
 
   &__form-item {

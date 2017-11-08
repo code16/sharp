@@ -38,6 +38,8 @@
             maxFileSize: Number,
             thumbnail: String,
 
+            compactThumbnail: Boolean,
+
             ratioX:Number,
             ratioY:Number,
 
