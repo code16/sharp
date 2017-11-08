@@ -45,4 +45,16 @@ class SharpFormTextFieldTest extends SharpTestCase
             $formField->toArray()
         );
     }
+
+    /** @test */
+    function we_can_define_maxLength()
+    {
+        $formField = SharpFormTextField::make("text")
+            ->setMaxLength(10);
+
+        $this->assertArraySubset(
+            ["maxLength" => 10],
+            $formField->toArray()
+        );
+    }
 }

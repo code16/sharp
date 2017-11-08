@@ -8,6 +8,14 @@ Class: `Code16\Sharp\Form\Fields\SharpFormTextareaField`
 
 Used to set the textarea row count.
 
+### `setMaxLength(int $maxLength)`
+
+Set a max character count.
+
+### `setMaxLengthUnlimited()`
+
+Unset the max character count.
+
 
 ## Formatter
 

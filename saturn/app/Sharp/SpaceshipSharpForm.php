@@ -116,6 +116,7 @@ class SpaceshipSharpForm extends SharpForm
                 )->addItemField(
                     SharpFormTextareaField::make("comment")
                         ->setLabel("Comment")
+                        ->setMaxLength(50)
                         ->addConditionalDisplay("status", "ko")
                 )
         )->addField(
