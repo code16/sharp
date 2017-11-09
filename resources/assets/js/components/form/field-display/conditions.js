@@ -42,7 +42,7 @@ function computeCondition(fields, data, condition) {
         if(field.type === 'autocomplete' || field.type === 'select' || field.type === 'tags') {
             res = helpers.computeSelectCondition({
                 condValues: condField.values,
-                fieldValue: value,
+                fieldValue: field.type === 'autocomplete' ? value && value.id : value,
                 isSingleSelect: field.type === 'select' && !field.multiple || field.type === 'autocomplete'
             });
         }

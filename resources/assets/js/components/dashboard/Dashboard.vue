@@ -2,7 +2,7 @@
     <div class="SharpDashboard">
         <template v-if="ready">
             <sharp-grid :rows="layout.rows">
-                <template scope="widgetLayout">
+                <template slot-scope="widgetLayout">
                     <sharp-widget :widget-type="widgets[widgetLayout.key].type"
                                   :widget-props="widgets[widgetLayout.key]"
                                   :value="data[widgetLayout.key]">

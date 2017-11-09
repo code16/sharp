@@ -27,7 +27,7 @@
 
                             <template v-else>
                                 <sharp-list-item :layout="fieldLayout.item" :error-identifier="i">
-                                    <template scope="itemFieldLayout">
+                                    <template slot-scope="itemFieldLayout">
                                         <sharp-field-display :field-key="itemFieldLayout.key"
                                                              :context-fields="updatedItemFields"
                                                              :context-data="listItemData"
@@ -38,7 +38,7 @@
                                         </sharp-field-display>
                                     </template>
                                 </sharp-list-item>
-                                <button v-if="!disabled && removable" class="SharpButton SharpButton--danger SharpButton--sm" @click="remove(i)">{{ l('form.list.remove_button') }}</button>
+                                <button v-if="!disabled && removable" class="SharpButton SharpButton--danger SharpButton--sm mt-3" @click="remove(i)">{{ l('form.list.remove_button') }}</button>
                             </template>
 
                             <!-- Full size div use to handle the item when drag n drop (c.f draggable options) -->
@@ -157,6 +157,9 @@
             showInsertButton() {
                 return this.showAddButton && this.sortable;
             },
+            itemFieldsKeys() {
+                return Object.keys(this.itemFields)
+            },
             dragIndexSymbol() {
                 return Symbol('dragIndex');
             },
@@ -166,10 +169,12 @@
         },
         methods: {
             indexedList() {
-                return (this.value||[]).map((v,i)=>({[this.indexSymbol]:i,...v}));
+                return (this.value||[]).map((v,i)=>({
+                    [this.indexSymbol]:i, ...v
+                }));
             },
             createItem() {
-                return Object.keys(this.itemFields).reduce((res, fieldKey) => {
+                return this.itemFieldsKeys.reduce((res, fieldKey) => {
                     if(this.$form.localized && this.itemFields[fieldKey].localized) {
                         res[fieldKey] = this.$form.config.locales.reduce((res, l)=>{
                             res[l] = null;

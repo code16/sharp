@@ -12,6 +12,15 @@ Used to set the type to regular `text` (the default).
 
 Used to set the type to `password`.
 
+### `setMaxLength(int $maxLength)`
+
+Set a max character count.
+
+### `setMaxLengthUnlimited()`
+
+Unset the max character count.
+
+
 ## Formatter
 
 - `toFront`: expect a string.

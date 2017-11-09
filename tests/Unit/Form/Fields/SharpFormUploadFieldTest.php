@@ -13,7 +13,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
         $formField = SharpFormUploadField::make("file");
 
         $this->assertEquals([
-                "key" => "file", "type" => "upload"
+                "key" => "file", "type" => "upload", "compactThumbnail" => false
             ], $formField->toArray()
         );
     }
@@ -29,6 +29,19 @@ class SharpFormUploadFieldTest extends SharpTestCase
             $formField->toArray()
         );
     }
+
+    /** @test */
+    function we_can_define_compactThumbnail()
+    {
+        $formField = SharpFormUploadField::make("text")
+            ->setCompactThumbnail();
+
+        $this->assertArraySubset(
+            ["compactThumbnail" => true],
+            $formField->toArray()
+        );
+    }
+
 
     /** @test */
     function we_can_define_fileFilter()

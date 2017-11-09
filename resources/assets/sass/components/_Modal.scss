@@ -104,6 +104,10 @@
       .btn {
         @extend .SharpButton;
 
+        &:not(:first-of-type) {
+          margin-left: .5rem;
+        }
+
         &-primary {
           @extend .SharpButton--primary;
         }

@@ -3,11 +3,12 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Formatters\TextFormatter;
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithMaxLength;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 
 class SharpFormTextField extends SharpFormField
 {
-    use SharpFormFieldWithPlaceholder;
+    use SharpFormFieldWithPlaceholder, SharpFormFieldWithMaxLength;
 
     const FIELD_TYPE = "text";
 
@@ -63,6 +64,7 @@ class SharpFormTextField extends SharpFormField
         return parent::buildArray([
             "inputType" => $this->inputType,
             "placeholder" => $this->placeholder,
+            "maxLength" => $this->maxLength,
         ]);
     }
 }

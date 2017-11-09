@@ -11,13 +11,13 @@
             </div>
             <sharp-tabbed-layout :layout="layout" ref="tabbedLayout">
                 <!-- Tab -->
-                <template scope="tab">
+                <template slot-scope="tab">
                     <sharp-grid :rows="[tab.columns]" ref="columnsGrid">
                         <!-- column -->
-                        <template scope="column">
+                        <template slot-scope="column">
                             <sharp-fields-layout v-if="fields" :layout="column.fields" :visible="fieldVisible" ref="fieldLayout">
                                 <!-- field -->
-                                <template scope="fieldLayout">
+                                <template slot-scope="fieldLayout">
                                     <sharp-field-display :field-key="fieldLayout.key"
                                                          :context-fields="isReadOnly ? readOnlyFields : fields"
                                                          :context-data="data"

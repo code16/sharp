@@ -7,6 +7,7 @@
             :value="value"
             :ratioX="ratioX"
             :ratioY="ratioY"
+            :modifiers="modifiers"
             :on-added-file="handleAdded"
             @success="$emit('success',$event)"
             @removed="$emit('remove')"
@@ -26,11 +27,11 @@
 
     import { UPLOAD_URL } from '../../../../consts';
     import { UploadXSRF } from '../../../../mixins';
-
+    import { UploadModifiers } from '../upload/modifiers';
 
     export default Vue.extend({
 
-        mixins: [ UploadXSRF ],
+        mixins: [ UploadXSRF, UploadModifiers ],
 
         inject: [ 'xsrfToken'],
 

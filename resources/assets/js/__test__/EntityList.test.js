@@ -981,6 +981,7 @@ describe('entity-list', ()=>{
         $entityList.authorizations = {
             create: true, update: true
         };
+        $entityList.data.items = [{}, {}];
         $entityList.setupActionBar();
         expect(setupEmitted).toHaveBeenLastCalledWith(expect.objectContaining({
             showReorderButton: true

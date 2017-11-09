@@ -32,15 +32,14 @@
                             </div>
 
                         @endif
-
                         <div class="SharpModule">
                             <div class="SharpModule__inner">
                                 <div class="SharpModule__content">
-                                    <div class="SharpFieldContainer SharpForm__form-item">
+                                    <div class="SharpForm__form-item SharpForm__form-item--row">
                                         <input type="text" name="login" id="login" class="SharpText" value="{{ old('login') }}" placeholder="@lang('sharp::login.login_field')">
                                     </div>
 
-                                    <div class="SharpFieldContainer SharpForm__form-item">
+                                    <div class="SharpForm__form-item SharpForm__form-item--row">
                                         <input type="password" name="password" id="password" class="SharpText" placeholder="@lang('sharp::login.password_field')">
                                     </div>
                                     <button type="submit" id="submit" class="SharpButton SharpButton--primary">

@@ -21,7 +21,8 @@ class SharpFormListFieldTest extends SharpTestCase
                     "text" => [
                         "key" => "text",
                         "type" => "text",
-                        "inputType" => "text"
+                        "inputType" => "text",
+                        "maxLength" => 0
                     ]
                 ]
             ], $formField->toArray()

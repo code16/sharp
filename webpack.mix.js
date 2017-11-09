@@ -14,6 +14,10 @@ const path = require('path');
         return;
     }
 
+    // if(!mix.inProduction()) {
+    //     mix.sourceMaps();
+    // }
+
     mix.autoload({}).options({
             extractVueStyles:'.bin/vendor-components.css',
             processCssUrls: false

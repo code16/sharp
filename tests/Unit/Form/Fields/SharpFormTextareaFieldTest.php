@@ -14,7 +14,7 @@ class SharpFormTextareaFieldTest extends SharpTestCase
         $formField = SharpFormTextareaField::make("text");
 
         $this->assertEquals([
-                "key" => "text", "type" => "textarea"
+                "key" => "text", "type" => "textarea", "maxLength" => 0
             ], $formField->toArray()
         );
     }
@@ -39,5 +39,17 @@ class SharpFormTextareaFieldTest extends SharpTestCase
         SharpFormTextareaField::make("text")
             ->setRowCount(0)
             ->toArray();
+    }
+
+    /** @test */
+    function we_can_define_maxLength()
+    {
+        $formField = SharpFormTextareaField::make("text")
+            ->setMaxLength(10);
+
+        $this->assertArraySubset(
+            ["maxLength" => 10],
+            $formField->toArray()
+        );
     }
 }
