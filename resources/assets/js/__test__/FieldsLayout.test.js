@@ -30,7 +30,7 @@ describe('fields-layout', () => {
         document.body.innerHTML = `
             <div id="app">
                 <sharp-fields-layout :layout="layout" :visible="visible">
-                    <template scope="fieldLayout">
+                    <template slot-scope="fieldLayout">
                         <field-mock :data="fieldLayout" ref="fieldMock"></field-mock>           
                     </template>
                 </sharp-fields-layout>      

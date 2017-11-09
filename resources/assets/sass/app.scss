@@ -2,7 +2,7 @@ $css--reset:false;
 
 @import '~carbon-components/scss/globals/scss/colors';
 @import '~carbon-components/scss/globals/scss/vars';
-@import '~carbon-components/scss/globals/scss/typography';
+@import 'mixins/typography';
 @import '~carbon-components/scss/globals/scss/css--reset';
 
 

@@ -27,7 +27,7 @@
 
                             <template v-else>
                                 <sharp-list-item :layout="fieldLayout.item" :error-identifier="i">
-                                    <template scope="itemFieldLayout">
+                                    <template slot-scope="itemFieldLayout">
                                         <sharp-field-display :field-key="itemFieldLayout.key"
                                                              :context-fields="updatedItemFields"
                                                              :context-data="listItemData"

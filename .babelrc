@@ -3,7 +3,8 @@
     "transform-object-rest-spread",
     ["transform-runtime", {
       "polyfill": false,
-      "regenerator": true
+      "regenerator": true,
+      "helpers":true
     }]
   ],
   "presets": [
