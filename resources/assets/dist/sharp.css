@@ -6447,7 +6447,6 @@
   font-size: 100%;
   font-family: inherit;
   vertical-align: baseline;
-  margin-bottom: 2rem;
 }
 
 #sharp-app .SharpForm__fieldset > *,
@@ -6455,6 +6454,16 @@
 #sharp-app .SharpForm__fieldset > *:after {
   -webkit-box-sizing: inherit;
           box-sizing: inherit;
+}
+
+#sharp-app .SharpForm__fieldset .SharpGrid__row:last-child .SharpGrid__col {
+  margin-bottom: 0;
+}
+
+@media (max-width: 767px) {
+  #sharp-app .SharpForm__fieldset .SharpGrid__row:last-child .SharpGrid__col.col-12:not(:last-of-type) {
+    margin-bottom: 1.5rem;
+  }
 }
 
 #sharp-app .SharpForm__fieldset > .SharpModule__inner, #sharp-app .SharpUpload:not(.SharpUpload--empty) .SharpForm__fieldset > .SharpUpload__inner {
@@ -6474,25 +6483,8 @@
           box-shadow: 0 0 2px 0 #DAE3EE;
 }
 
-#sharp-app .SharpForm__fieldset .row:last-child {
-  margin-bottom: 0;
-}
-
-#sharp-app .SharpForm__fieldset [class^=col]:last-of-type {
-  margin-bottom: 0;
-}
-
-#sharp-app .SharpForm .row {
+#sharp-app .SharpForm .SharpGrid__col:not(.SharpGrid__col--empty), #sharp-app .SharpForm__form-item--row {
   margin-bottom: 1.5rem;
-}
-
-@media (max-width: 767px) {
-  #sharp-app .SharpForm .row {
-    margin-bottom: 0;
-  }
-  #sharp-app .SharpForm [class^=col] {
-    margin-bottom: 1.5rem;
-  }
 }
 
 #sharp-app .SharpForm__form-item {
@@ -6644,6 +6636,16 @@
   padding: 0;
   margin-bottom: 4px;
   position: relative;
+}
+
+#sharp-app .SharpList__item .SharpGrid__row:last-child .SharpGrid__col {
+  margin-bottom: 0;
+}
+
+@media (max-width: 767px) {
+  #sharp-app .SharpList__item .SharpGrid__row:last-child .SharpGrid__col.col-12:not(:last-of-type) {
+    margin-bottom: 1.5rem;
+  }
 }
 
 #sharp-app .SharpList__item .SharpForm--label {
@@ -8070,7 +8072,6 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  margin-top: 0.375rem;
 }
 
 #sharp-app .SharpSelect__radio-button-group--block {
@@ -8377,7 +8378,7 @@
 #sharp-app .SharpCheck__label .SharpCheck__appearance {
   display: inline-block;
   height: 1.125rem;
-  width: 1.125rem;
+  min-width: 1.125rem;
   margin-right: .5rem;
   background-color: #FFFFFF;
   border-radius: 2px;

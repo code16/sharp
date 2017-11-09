@@ -26,7 +26,7 @@
                             </template>
 
                             <template v-else>
-                                <sharp-list-item :layout="fieldLayout.item" :visible="listItemData[visibilityMap]" :error-identifier="i">
+                                <sharp-list-item :layout="fieldLayout.item" :error-identifier="i">
                                     <template scope="itemFieldLayout">
                                         <sharp-field-display :field-key="itemFieldLayout.key"
                                                              :context-fields="updatedItemFields"
@@ -34,12 +34,11 @@
                                                              :error-identifier="itemFieldLayout.key"
                                                              :config-identifier="itemFieldLayout.key"
                                                              :update-data="update(i)"
-                                                             :update-visibility="updateVisibility(i)"
                                                              :locale="locale">
                                         </sharp-field-display>
                                     </template>
                                 </sharp-list-item>
-                                <button v-if="!disabled && removable" class="SharpButton SharpButton--danger SharpButton--sm" @click="remove(i)">{{ l('form.list.remove_button') }}</button>
+                                <button v-if="!disabled && removable" class="SharpButton SharpButton--danger SharpButton--sm mt-3" @click="remove(i)">{{ l('form.list.remove_button') }}</button>
                             </template>
 
                             <!-- Full size div use to handle the item when drag n drop (c.f draggable options) -->
@@ -166,24 +165,13 @@
             },
             indexSymbol() {
                 return Symbol('index');
-            },
-            visibilityMap() {
-                return Symbol('visibilityMap')
             }
         },
         methods: {
             indexedList() {
                 return (this.value||[]).map((v,i)=>({
-                    [this.indexSymbol]:i,
-                    [this.visibilityMap]:this.createVisibilityMap(),
-                    ...v
+                    [this.indexSymbol]:i, ...v
                 }));
-            },
-            createVisibilityMap() {
-                return this.itemFieldsKeys.reduce((res, key)=>{
-                    res[key]=true;
-                    return res;
-                },{});
             },
             createItem() {
                 return this.itemFieldsKeys.reduce((res, fieldKey) => {
@@ -197,8 +185,7 @@
                     return res;
                 },{
                     [this.itemIdAttribute]:null,
-                    [this.indexSymbol]:this.lastIndex++,
-                    [this.visibilityMap]:this.createVisibilityMap()
+                    [this.indexSymbol]:this.lastIndex++
                 });
             },
             insertNewItem(i, $event) {
@@ -219,12 +206,6 @@
                     else this.list[i][key] = value;
                 }
             },
-            updateVisibility(i) {
-                return (key, visibility) => {
-                    console.log('update visibility');
-                    this.$set(this.list[i][this.visibilityMap],key,visibility);
-                }
-            },
             collapsedItemData(itemData) {
                 return {$index:itemData[this.dragIndexSymbol], ...itemData};
             },
@@ -242,7 +223,6 @@
         },
         created() {
             this.initList();
-            console.log(this);
         },
     }
 </script>

@@ -1,14 +1,14 @@
 webpackJsonp([2],{
 
-/***/ 670:
+/***/ 671:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(671);
+module.exports = __webpack_require__(672);
 
 
 /***/ }),
 
-/***/ 671:
+/***/ 672:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20,4 +20,4 @@ window.Vue = __WEBPACK_IMPORTED_MODULE_0_vue___default.a;
 
 /***/ })
 
-},[670]);
+},[671]);

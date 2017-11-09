@@ -1,7 +1,7 @@
 <template>
     <div class="SharpGrid">
         <div v-for="(row,i) in rows" class="SharpGrid__row row">
-            <div v-for="(col,j) in row" :class="colClass[i][j]" class="SharpGrid__col">
+            <div v-for="(col,j) in row" :class="colClass[i][j]" class="SharpGrid__col" v-empty-class="'SharpGrid__col--empty'">
                 <slot v-bind="col"></slot>
             </div>
         </div>
@@ -9,6 +9,7 @@
 </template>
 
 <script>
+    import EmptyClass from '../directives/EmptyClass';
 
     export default {
         name:'SharpGrid',
@@ -45,5 +46,8 @@
                 return res;
             }
         },
+        directives: {
+            EmptyClass
+        }
     }
 </script>
