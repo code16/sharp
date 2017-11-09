@@ -19,7 +19,8 @@
     "verbose": true,
     "setupFiles": [
       "<rootDir>/resources/assets/js/__test__/setup/mockument.js",
-      "<rootDir>/resources/assets/js/__test__/setup/mockBootstrapVue.js"
+      "<rootDir>/resources/assets/js/__test__/setup/mockBootstrapVue.js",
+      "<rootDir>/resources/assets/js/__test__/setup/setupVue.js"
     ]
   },
   "scripts": {
