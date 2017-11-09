@@ -50,11 +50,15 @@
     width: 100%;
   }
 
+  &--compacted {
+    .SharpUpload__thumbnail img {
+      max-height: 60px !important;
+    }
+  }
+
   &__container {
-    //display:flex;
 
     .SharpUpload__thumbnail {
-      //flex-basis:33%;
       align-self: center;
       //margin-right: 1em;
       img {
