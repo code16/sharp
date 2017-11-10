@@ -10,7 +10,7 @@ import SharpCheck from './Check.vue';
 import SharpList from './list/List.vue';
 import SharpSelect from './Select.vue';
 import SharpHtml from './Html.vue';
-import SharpGeolocation from './Geolocation.vue';
+import SharpGeolocation from './geolocation/Geolocation.vue';
 
 export default {
     'autocomplete' : SharpAutocomplete,
