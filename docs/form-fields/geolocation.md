@@ -15,6 +15,18 @@ Sets the coordinate display to be decimal degrees, eg:
 `0.36666667, 17.15722222`. 
 This is the default.
 
+### `setInitialPosition(float $lat, float $lng)` and `clearInitialPosition()`
+
+Sets the initial position of the edit map, when there in no marker yet.
+
+### `setBoundaries(float $northEastLat, float $northEastLng, float $southWestLat, float $southWestLng)` and `clearBoundaries()`
+
+If needed, set boundaries to the edit map, providing a north-east and a south-west position.
+
+### `setZoomLevel(int $zoomLevel)`
+
+Set the map zoom level, from 1 (the World) ou 25. Default is 10.
+
 ### `setGeocoding(bool $geocoding = true)`
 
 Autorize geocoding, meaning enter an address and get back the coordinates.
