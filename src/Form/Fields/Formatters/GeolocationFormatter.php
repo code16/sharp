@@ -17,9 +17,9 @@ class GeolocationFormatter extends SharpFieldFormatter
         if($value && strpos($value, ",")) {
             list($lat, $long) = explode(",", $value);
             $lat = trim($lat);
-            $long = trim($long);
+            $lng = trim($long);
 
-            return compact('lat', 'long');
+            return compact('lat', 'lng');
         }
 
         return null;
