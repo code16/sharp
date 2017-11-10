@@ -28,6 +28,8 @@ class SharpFormGeolocationField extends SharpFormField
      */
     protected $zoomLevel;
 
+    protected $boundaries;
+
     /**
      * @param string $key
      * @return static
@@ -80,11 +82,43 @@ class SharpFormGeolocationField extends SharpFormField
     }
 
     /**
+     * @param int $zoomLevel
      * @return $this
      */
     public function setZoomLevel(int $zoomLevel)
     {
         $this->zoomLevel = $zoomLevel;
+
+        return $this;
+    }
+
+    /**
+     * @param float $northEastLat
+     * @param float $northEastLng
+     * @param float $southWestLat
+     * @param float $southWestLng
+     * @return $this
+     */
+    public function setBoundaries(float $northEastLat, float $northEastLng, float $southWestLat, float $southWestLng)
+    {
+        $this->boundaries = [
+            "ne" => [
+                "lat" => $northEastLat, "lng" => $northEastLng
+            ],
+            "sw" => [
+                "lat" => $southWestLat, "lng" => $southWestLng
+            ]
+        ];
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function clearBoundaries()
+    {
+        $this->boundaries = null;
 
         return $this;
     }
@@ -98,7 +132,8 @@ class SharpFormGeolocationField extends SharpFormField
             "geocoding" => "required|bool",
             "apiKey" => "required_if:geocoding,1",
             "displayUnit" => "required|in:DD,DMS",
-            "zoomLevel" => "int|min:0|max:25|nullable"
+            "zoomLevel" => "int|min:0|max:25|nullable",
+            "boundaries" => "array|nullable"
         ];
     }
 
@@ -112,6 +147,7 @@ class SharpFormGeolocationField extends SharpFormField
             "displayUnit" => $this->displayUnit,
             "apiKey" => $this->apiKey,
             "zoomLevel" => $this->zoomLevel,
+            "boundaries" => $this->boundaries,
         ]);
     }
 }
