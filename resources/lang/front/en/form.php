@@ -11,6 +11,7 @@ return [
     'list.sort_button.active' => 'Finish',
     'list.empty' => 'Empty list',
 
+    'geolocation.browse_button' => 'Pick a location...',
 
     'upload.browse_button' => 'Browse...',
     'upload.remove_button' => 'Remove',

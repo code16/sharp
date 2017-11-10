@@ -60,6 +60,7 @@
     "vue-cropperjs": "^2.1.1",
     "vue-functional-data-merge": "^1.0.6",
     "vue-multiselect": "^2.0.3",
+    "vue2-google-maps": "^0.8.4",
     "vue2-timepicker": "^0.1.4",
     "vuedraggable": "^2.10.0",
     "vuejs-datepicker": "^0.9.16"

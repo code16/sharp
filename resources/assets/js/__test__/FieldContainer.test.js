@@ -24,7 +24,7 @@ describe('field-container', () => {
             </div>
         `;
 
-        fields.NameAssociation['test-field'] = {
+        fields.default['test-field'] = {
             template: '<div>Template field</div>'
         };
     });
