@@ -12,6 +12,8 @@ return [
     'list.empty' => 'Liste vide',
 
     'geolocation.browse_button' => 'Choisir un endroit...',
+    'geolocation.remove_button' => 'Remove',
+    'geolocation.edit_button' => 'Edit',
 
     'upload.browse_button' => 'Parcourir...',
     'upload.remove_button' => 'Supprimer',

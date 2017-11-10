@@ -1,17 +1,20 @@
 <template>
     <SharpModal :id="modalId" @hide="handleModalClosed">
         <!-- <SharpAutoComplete /> -->
-        <SharpText />
+
+        <SharpText class="mb-2"/>
         <GmapMap
+            class="mw-100"
+            style="padding-bottom: 80%;"
             :center="center"
             :zoom="4"
             :options="defaultMapOptions"
-            style="width: 500px; height: 300px"
-            class="mw-100"
+            @click="handleMapClicked"
             ref="map"
         >
-            <GmapMarker v-if="position" :position="position" draggable></GmapMarker>
+            <GmapMarker v-if="position" :position="position" draggable @dragend="handleMarkerDragged"></GmapMarker>
         </GmapMap>
+
     </SharpModal>
 </template>
 
@@ -35,7 +38,13 @@
 
         props: {
             value: Object,
-            center: Object,
+            center: {
+                type: Object,
+                default: ()=>({
+                    lat: 46.1445458,
+                    lng: -2.4343779
+                })
+            },
             modalId: String
         },
 
@@ -46,25 +55,21 @@
         },
 
         watch: {
-            value(value) {
-                this.position = value;
-            }
+            value:'updatePosition'
         },
 
         methods: {
-            localize() {
-                navigator.geolocation.getCurrentPosition(({ coords }) => {
-                    let pos = {
-                        lat: coords.latitude,
-                        lng: coords.longitude
-                    };
-                    this.$refs.map.$mapObject.setCenter(pos);
-                }, e => {
-                    console.log("can't locate", e);
-                });
-            },
             handleModalClosed(e) {
                 this.$emit('change', this.position);
+            },
+            handleMapClicked(e) {
+                this.updatePosition(e.latLng);
+            },
+            handleMarkerDragged(e) {
+                console.log(e);
+            },
+            updatePosition(latLng) {
+                this.position = latLng;
             }
         },
         mounted() {
