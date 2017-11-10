@@ -15,8 +15,8 @@ class GeolocationFormatterTest extends SharpTestCase
         $formatter = new GeolocationFormatter();
         $field = SharpFormGeolocationField::make("geo");
 
-        $this->assertEquals(["lat"=>12,"long"=>24], $formatter->toFront($field, "12,24"));
-        $this->assertEquals(["lat"=>12,"long"=>24], $formatter->toFront($field, "12 , 24"));
+        $this->assertEquals(["lat"=>12,"lng"=>24], $formatter->toFront($field, "12,24"));
+        $this->assertEquals(["lat"=>12,"lng"=>24], $formatter->toFront($field, "12 , 24"));
         $this->assertNull($formatter->toFront($field, "12"));
         $this->assertNull($formatter->toFront($field, ""));
     }
@@ -28,7 +28,7 @@ class GeolocationFormatterTest extends SharpTestCase
         $attribute = "attribute";
         $field = SharpFormGeolocationField::make("geo");
 
-        $this->assertEquals("12,24", $formatter->fromFront($field, $attribute, ["lat"=>12,"long"=>24]));
+        $this->assertEquals("12,24", $formatter->fromFront($field, $attribute, ["lat"=>12,"lng"=>24]));
         $this->assertNull($formatter->fromFront($field, $attribute, ""));
     }
 }
