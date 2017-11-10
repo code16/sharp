@@ -24,6 +24,11 @@ class SharpFormGeolocationField extends SharpFormField
     protected $geocoding = false;
 
     /**
+     * @var int
+     */
+    protected $zoomLevel;
+
+    /**
      * @param string $key
      * @return static
      */
@@ -75,6 +80,16 @@ class SharpFormGeolocationField extends SharpFormField
     }
 
     /**
+     * @return $this
+     */
+    public function setZoomLevel(int $zoomLevel)
+    {
+        $this->zoomLevel = $zoomLevel;
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     protected function validationRules()
@@ -83,6 +98,7 @@ class SharpFormGeolocationField extends SharpFormField
             "geocoding" => "required|bool",
             "apiKey" => "required_if:geocoding,1",
             "displayUnit" => "required|in:DD,DMS",
+            "zoomLevel" => "int|min:0|max:25|nullable"
         ];
     }
 
@@ -95,6 +111,7 @@ class SharpFormGeolocationField extends SharpFormField
             "geocoding" => $this->geocoding,
             "displayUnit" => $this->displayUnit,
             "apiKey" => $this->apiKey,
+            "zoomLevel" => $this->zoomLevel,
         ]);
     }
 }

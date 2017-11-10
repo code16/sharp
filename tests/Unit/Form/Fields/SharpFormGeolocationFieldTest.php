@@ -51,4 +51,16 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
             $formField->toArray()
         );
     }
+
+    /** @test */
+    function we_can_define_zoomLevel()
+    {
+        $formField = SharpFormGeolocationField::make("geo")
+            ->setZoomLevel(10);
+
+        $this->assertArraySubset(
+            ["zoomLevel" => 10],
+            $formField->toArray()
+        );
+    }
 }
