@@ -16,8 +16,8 @@ class GeolocationFormatter extends SharpFieldFormatter
     {
         if($value && strpos($value, ",")) {
             list($lat, $long) = explode(",", $value);
-            $lat = trim($lat);
-            $lng = trim($long);
+            $lat = (float) $lat;
+            $lng = (float) $long;
 
             return compact('lat', 'lng');
         }
@@ -34,7 +34,9 @@ class GeolocationFormatter extends SharpFieldFormatter
     function fromFront(SharpFormField $field, string $attribute, $value)
     {
         if($value && is_array($value)) {
-            return implode(",", $value);
+            return implode(",", array_map(function($val) {
+                return str_replace(',', '.', $val);
+            }, array_values($value)));
         }
 
         return null;
