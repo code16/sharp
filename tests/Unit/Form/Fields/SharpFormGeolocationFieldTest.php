@@ -14,7 +14,8 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
 
         $this->assertEquals([
                 "key" => "geo", "type" => "geolocation",
-                "displayUnit" => "DMS", "geocoding" => false
+                "displayUnit" => "DMS", "geocoding" => false,
+                "zoomLevel" => 10
             ], $formField->toArray()
         );
     }
@@ -56,10 +57,40 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
     function we_can_define_zoomLevel()
     {
         $formField = SharpFormGeolocationField::make("geo")
-            ->setZoomLevel(10);
+            ->setZoomLevel(15);
 
         $this->assertArraySubset(
-            ["zoomLevel" => 10],
+            ["zoomLevel" => 15],
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_initialPosition()
+    {
+        $formField = SharpFormGeolocationField::make("geo")
+            ->setInitialPosition(12.4, -3.461894989013672);
+
+        $this->assertArraySubset(
+            [
+                "initialPosition" => [
+                    "lat" => 12.4, "lng" => -3.461894989013672
+                ]
+            ],
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_clear_initialPosition()
+    {
+        $formField = SharpFormGeolocationField::make("geo")
+            ->setInitialPosition(12.4, 24.5);
+
+        $formField->clearInitialPosition();
+
+        $this->assertArrayNotHasKey(
+            "initialPosition",
             $formField->toArray()
         );
     }
@@ -81,6 +112,20 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
                     ]
                 ]
             ],
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_clear_boundaries()
+    {
+        $formField = SharpFormGeolocationField::make("geo")
+            ->setBoundaries(1, 2, 3, 4);
+
+        $formField->clearBoundaries();
+
+        $this->assertArrayNotHasKey(
+            "boundaries",
             $formField->toArray()
         );
     }
