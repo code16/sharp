@@ -30,6 +30,10 @@
     }
   }
 
+  .SharpGrid__col--empty {
+    display: none;
+  }
+
   .SharpGrid__col:not(.SharpGrid__col--empty), &__form-item--row {
     margin-bottom: $form-item-margin-bottom;
   }

@@ -51,7 +51,7 @@ function computeCondition(fields, data, condition) {
                 util.error(`Conditional display : 'values' must be a boolean for a 'check' field ('${condField.key}')`,condition,field);
                 res = true;
             }
-            else res = (value == condField.values);
+            else res = (!!value === condField.values);
         }
         else {
             util.error(`Conditional display : unprocessable field type '${field.type}'`, field);

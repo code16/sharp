@@ -7,7 +7,7 @@
                     <path d="M4.1 6.1L1.4 3.4 0 4.9 4.1 9l7.6-7.6L10.3 0z"></path>
                 </svg>
             </span>
-            <span class="SharpChek__label-text">{{text}}</span>
+            <span class="SharpCheck__label-text">{{text}}</span>
         </label>
     </div>
 </template>
