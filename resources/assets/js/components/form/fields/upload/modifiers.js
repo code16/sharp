@@ -1,11 +1,11 @@
 export const UploadModifiers = {
     props: {
-        compactedThumbnail: Boolean
+        compactThumbnail: Boolean
     },
     computed: {
         modifiers() {
             return {
-                compacted: this.compactedThumbnail
+                compacted: this.compactThumbnail
             }
         }
     }
