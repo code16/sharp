@@ -3043,6 +3043,25 @@
   clip: auto;
 }
 
+
+.vue-street-view-pano-container {
+  position: relative;
+}
+.vue-street-view-pano-container .vue-street-view-pano {
+  left: 0; right: 0; top: 0; bottom: 0;
+  position: absolute;
+}
+
+.vue-map-container {
+  position: relative;
+}
+.vue-map-container .vue-map {
+  left: 0; right: 0; top: 0; bottom: 0;
+  position: absolute;
+}
+.vue-map-hidden {
+  display: none;
+}
 .time-picker {
   display: inline-block;
   position: relative;
@@ -3164,26 +3183,221 @@
   font-size: 0.8em;
 }
 
-
-.vue-map-container {
-  position: relative;
-}
-.vue-map-container .vue-map {
-  left: 0; right: 0; top: 0; bottom: 0;
-  position: absolute;
-}
-.vue-map-hidden {
-  display: none;
-}
-
-.vue-street-view-pano-container {
-  position: relative;
-}
-.vue-street-view-pano-container .vue-street-view-pano {
-  left: 0; right: 0; top: 0; bottom: 0;
-  position: absolute;
-}
 @charset "UTF-8";
+strong, .bx--type-strong {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font-family: inherit;
+  vertical-align: baseline;
+  font-weight: 700;
+}
+
+strong > *,
+strong > *:before,
+strong > *:after, .bx--type-strong > *,
+.bx--type-strong > *:before,
+.bx--type-strong > *:after {
+  -webkit-box-sizing: inherit;
+          box-sizing: inherit;
+}
+
+p {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font-family: inherit;
+  vertical-align: baseline;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+p > *,
+p > *:before,
+p > *:after {
+  -webkit-box-sizing: inherit;
+          box-sizing: inherit;
+}
+
+em {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font-family: inherit;
+  vertical-align: baseline;
+  font-style: italic;
+}
+
+em > *,
+em > *:before,
+em > *:after {
+  -webkit-box-sizing: inherit;
+          box-sizing: inherit;
+}
+
+a {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font-family: inherit;
+  vertical-align: baseline;
+  color: #3d70b2;
+}
+
+a > *,
+a > *:before,
+a > *:after {
+  -webkit-box-sizing: inherit;
+          box-sizing: inherit;
+}
+
+h1, .bx--type-alpha {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font-family: inherit;
+  vertical-align: baseline;
+  font-size: 2rem;
+  line-height: 1.25;
+  letter-spacing: 0.5px;
+}
+
+h1 > *,
+h1 > *:before,
+h1 > *:after, .bx--type-alpha > *,
+.bx--type-alpha > *:before,
+.bx--type-alpha > *:after {
+  -webkit-box-sizing: inherit;
+          box-sizing: inherit;
+}
+
+h2, .bx--type-beta {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font-family: inherit;
+  vertical-align: baseline;
+  font-size: 1.625rem;
+  line-height: 1.25;
+  letter-spacing: 0.5px;
+}
+
+h2 > *,
+h2 > *:before,
+h2 > *:after, .bx--type-beta > *,
+.bx--type-beta > *:before,
+.bx--type-beta > *:after {
+  -webkit-box-sizing: inherit;
+          box-sizing: inherit;
+}
+
+h3, .bx--type-gamma {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font-family: inherit;
+  vertical-align: baseline;
+  font-size: 1.25rem;
+  line-height: 1.25;
+  letter-spacing: 0.5px;
+}
+
+h3 > *,
+h3 > *:before,
+h3 > *:after, .bx--type-gamma > *,
+.bx--type-gamma > *:before,
+.bx--type-gamma > *:after {
+  -webkit-box-sizing: inherit;
+          box-sizing: inherit;
+}
+
+h4, .bx--type-delta {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font-family: inherit;
+  vertical-align: baseline;
+  font-size: 1.125rem;
+  line-height: 1.25;
+}
+
+h4 > *,
+h4 > *:before,
+h4 > *:after, .bx--type-delta > *,
+.bx--type-delta > *:before,
+.bx--type-delta > *:after {
+  -webkit-box-sizing: inherit;
+          box-sizing: inherit;
+}
+
+h5, .bx--type-epsilon {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font-family: inherit;
+  vertical-align: baseline;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+h5 > *,
+h5 > *:before,
+h5 > *:after, .bx--type-epsilon > *,
+.bx--type-epsilon > *:before,
+.bx--type-epsilon > *:after {
+  -webkit-box-sizing: inherit;
+          box-sizing: inherit;
+}
+
+h6, .bx--type-zeta {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font-family: inherit;
+  vertical-align: baseline;
+  font-size: 0.875rem;
+  line-height: 1.25;
+}
+
+h6 > *,
+h6 > *:before,
+h6 > *:after, .bx--type-zeta > *,
+.bx--type-zeta > *:before,
+.bx--type-zeta > *:after {
+  -webkit-box-sizing: inherit;
+          box-sizing: inherit;
+}
+
 @-webkit-keyframes rotate {
   0% {
     -webkit-transform: rotate(0deg);
@@ -3194,6 +3408,7 @@
             transform: rotate(360deg);
   }
 }
+
 @keyframes rotate {
   0% {
     -webkit-transform: rotate(0deg);
@@ -8567,24 +8782,6 @@
 
 #sharp-app .SharpModal .modal .modal-body {
   margin-bottom: 1.5rem;
-}
-
-#sharp-app .SharpModal .modal .modal-body > * {
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font-family: inherit;
-  vertical-align: baseline;
-}
-
-#sharp-app .SharpModal .modal .modal-body > * > *,
-#sharp-app .SharpModal .modal .modal-body > * > *:before,
-#sharp-app .SharpModal .modal .modal-body > * > *:after {
-  -webkit-box-sizing: inherit;
-          box-sizing: inherit;
 }
 
 #sharp-app .SharpModal .modal .modal-content {
