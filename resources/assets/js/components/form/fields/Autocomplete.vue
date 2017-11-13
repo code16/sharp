@@ -41,7 +41,7 @@
 
 <script>
     import Template from '../../Template.vue';
-    import Loading from '../../Loading.vue';
+    import Loading from '../../ui/Loading.vue';
     import Multiselect from 'vue-multiselect';
 
     import SearchStrategy from '../../../app/models/SearchStrategy';

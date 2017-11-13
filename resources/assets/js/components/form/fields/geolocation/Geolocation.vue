@@ -1,17 +1,23 @@
 <template>
     <div class="SharpGeolocation">
-        <template v-if="!value">
+        <template v-if="!loaded">
+            {{ l('form.geolocation.loading') }}
+        </template>
+        <template v-else-if="!value">
             <SharpButton outline class="w-100" v-b-modal="modalId">
                 {{ l('form.geolocation.browse_button') }}
             </SharpButton>
         </template>
         <template v-else>
-            <SharpCard>
+            <SharpCard light class="SharpModule--closeable"
+                :has-close="!readOnly"
+                @close-click="handleRemoveButtonClicked"
+            >
                 <div class="row">
-                    <div class="col-8">
+                    <div class="col-7">
                         <GmapMap
                             :center="value"
-                            :zoom="4"
+                            :zoom="zoomLevel"
                             :options="defaultMapOptions"
                             style="padding-bottom: 80%"
                             class="mw-100"
@@ -20,15 +26,19 @@
                             <GmapMarker :position="value"></GmapMarker>
                         </GmapMap>
                     </div>
-                    <div class="col-4">
+                    <div class="col-5 pl-0">
                         <div class="d-flex flex-column justify-content-between h-100">
                             <div>
                                 <div><small>Latitude : {{ latLngString.lat }}</small></div>
                                 <div><small>Longitude : {{ latLngString.lng }}</small></div>
                             </div>
                             <div>
-                                <SharpButton small outline type="danger" @click="handleRemoveButtonClicked"> {{ l('form.geolocation.remove_button') }}</SharpButton>
-                                <SharpButton small outline v-b-modal="modalId"> {{ l('form.geolocation.edit_button') }} </SharpButton>
+                                <SharpButton small outline type="danger" class="remove-button" :disabled="readOnly" @click="handleRemoveButtonClicked">
+                                    {{ l('form.geolocation.remove_button') }}
+                                </SharpButton>
+                                <SharpButton small outline :disabled="readOnly" v-b-modal="modalId">
+                                    {{ l('form.geolocation.edit_button') }}
+                                </SharpButton>
                             </div>
                         </div>
                     </div>
@@ -38,7 +48,8 @@
         <SharpGeolocationEdit
             :modal-id="modalId"
             :value="value"
-            :center="initialPosition"
+            :center="value || initialPosition"
+            :zoom="zoomLevel"
             @change="handlePositionChanged"
         />
     </div>
@@ -46,31 +57,24 @@
 
 <script>
     import Vue from 'vue';
-    import { install as VueGoogleMaps, Map, Marker } from 'vue2-google-maps';
+    import * as VueGoogleMaps from 'vue2-google-maps';
 
     import { Localization } from '../../../../mixins';
 
     import { SharpCard, SharpButton } from '../../../ui';
-    import SharpGeolocationEdit from './Edit.vue';
+    import SharpGeolocationEdit from './GeolocationEdit.vue';
     import GeolocationCommons from './Commons';
 
-    import { error } from '../../../../util';
 
-    Vue.use(VueGoogleMaps, {
-        installComponents: false,
-        load: {
-            v: '3'
-        }
-    });
-
+    const _customApipKey={ beforeCreate() { this.$options.propsData.apiKey = 'AIzaSyDk6jNHh2x6TnFGJ5zv3bUrbXXY2dRFUio'; }};
 
     export default {
         name: 'SharpGeolocation',
-        mixins: [Localization, GeolocationCommons],
+        mixins: [Localization, GeolocationCommons, _customApipKey],
 
         components: {
-            GmapMap: Map,
-            GmapMarker: Marker,
+            GmapMap: VueGoogleMaps.Map,
+            GmapMarker: VueGoogleMaps.Marker,
             SharpGeolocationEdit,
             SharpCard,
             SharpButton
@@ -78,6 +82,7 @@
 
         props: {
             value: Object,
+            readOnly: Boolean,
             uniqueIdentifier: String,
             geocoding: Boolean,
             apiKey: String,
@@ -86,7 +91,14 @@
             initialPosition: Object,
             displayUnit: {
                 type: String,
-                default: 'DD'
+                default: 'DD',
+                validator: unit => unit==='DMS'||unit==='DD'
+            }
+        },
+
+        data() {
+            return {
+                loaded: false
             }
         },
 
@@ -101,7 +113,6 @@
                 else if(this.displayUnit === 'DD') {
                     return this.value;
                 }
-                error(`Geolocation, unknown displayUnit : '${this.displayUnit}'`);
             }
         },
 
@@ -111,11 +122,33 @@
             },
             handleRemoveButtonClicked() {
                 this.$emit('input', null);
+            },
+
+            async load() {
+                if(this.$root.$_gmapLoaded) {
+                    return this.$root.$_gmapLoaded;
+                }
+
+                let loadOptions = { v:'3' };
+                if(this.apiKey) loadOptions.key = this.apiKey;
+
+                Vue.use(VueGoogleMaps, {
+                    installComponents: false,
+                    load: loadOptions
+                });
+
+                this.$root.$_gmapLoaded = VueGoogleMaps.loaded;
+                return VueGoogleMaps.loaded;
             }
         },
 
+        async created() {
+            await this.load();
+            this.loaded = true;
+        },
+
         mounted() {
-            console.log(this.$refs.map);
+            console.log(this);
         }
     }
 </script>

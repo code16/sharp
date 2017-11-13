@@ -86,6 +86,7 @@ $small-breakpoint: sm;
   @import 'components/form/Check';
   @import 'components/form/Textarea';
   @import 'components/form/Radio';
+  @import 'components/form/Geolocation';
 
   // List
   @import 'components/list/EntityList';

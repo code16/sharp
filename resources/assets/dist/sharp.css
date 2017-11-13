@@ -3043,146 +3043,6 @@
   clip: auto;
 }
 
-
-.vue-street-view-pano-container {
-  position: relative;
-}
-.vue-street-view-pano-container .vue-street-view-pano {
-  left: 0; right: 0; top: 0; bottom: 0;
-  position: absolute;
-}
-
-.vue-map-container {
-  position: relative;
-}
-.vue-map-container .vue-map {
-  left: 0; right: 0; top: 0; bottom: 0;
-  position: absolute;
-}
-.vue-map-hidden {
-  display: none;
-}
-.time-picker {
-  display: inline-block;
-  position: relative;
-  font-size: 1em;
-  width: 10em;
-  font-family: sans-serif;
-  vertical-align: middle;
-}
-
-.time-picker * {
-  box-sizing: border-box;
-}
-
-.time-picker input.display-time {
-  border: 1px solid #d2d2d2;
-  width: 10em;
-  height: 2.2em;
-  padding: 0.3em 0.5em;
-  font-size: 1em;
-}
-
-.time-picker .clear-btn {
-  position: absolute;
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-  align-items: center;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  margin-top: -0.15em;
-  z-index: 3;
-  font-size: 1.1em;
-  line-height: 1em;
-  vertical-align: middle;
-  width: 1.3em;
-  color: #d2d2d2;
-  background: rgba(255,255,255,0);
-  text-align: center;
-  font-style: normal;
-
-  -webkit-transition: color .2s;
-  transition: color .2s;
-}
-
-.time-picker .clear-btn:hover {
-  color: #797979;
-  cursor: pointer;
-}
-
-.time-picker .time-picker-overlay {
-  z-index: 2;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.time-picker .dropdown {
-  position: absolute;
-  z-index: 5;
-  top: calc(2.2em + 2px);
-  left: 0;
-  background: #fff;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.15);
-  width: 10em;
-  height: 10em;
-  font-weight: normal;
-}
-
-.time-picker .dropdown .select-list {
-  width: 10em;
-  height: 10em;
-  overflow: hidden;
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: stretch;
-  justify-content: space-between;
-}
-
-.time-picker .dropdown ul {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-
-  flex: 1;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-.time-picker .dropdown ul.minutes,
-.time-picker .dropdown ul.seconds,
-.time-picker .dropdown ul.apms{
-  border-left: 1px solid #fff;
-}
-
-.time-picker .dropdown ul li {
-  text-align: center;
-  padding: 0.3em 0;
-  color: #161616;
-}
-
-.time-picker .dropdown ul li:not(.hint):hover {
-  background: rgba(0,0,0,.08);
-  color: #161616;
-  cursor: pointer;
-}
-
-.time-picker .dropdown ul li.active,
-.time-picker .dropdown ul li.active:hover {
-  background: #41B883;
-  color: #fff;
-}
-
-.time-picker .dropdown .hint {
-  color: #a5a5a5;
-  cursor: default;
-  font-size: 0.8em;
-}
-
 @charset "UTF-8";
 strong, .bx--type-strong {
   -webkit-box-sizing: border-box;
@@ -3555,7 +3415,7 @@ h6 > *:after, .bx--type-zeta > *,
   height: 2rem;
 }
 
-.SharpLoading--small .bx--loading__svg {
+.SharpLoading--small .SharpLoading__svg {
   stroke: #8c9ba5;
 }
 
@@ -5768,6 +5628,38 @@ h6 > *:after, .bx--type-zeta > *,
           box-sizing: inherit;
 }
 
+#sharp-app .SharpModule--light .SharpModule__inner, #sharp-app .SharpModule--light .SharpUpload:not(.SharpUpload--empty) .SharpUpload__inner, #sharp-app .SharpUpload:not(.SharpUpload--empty) .SharpModule--light .SharpUpload__inner {
+  background-color: #FFFFFF;
+}
+
+#sharp-app .SharpModule__close-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  height: 16px;
+  width: 12px;
+  position: relative;
+  position: absolute;
+  right: .5rem;
+  top: .5rem;
+  display: none;
+  background: transparent;
+}
+
+#sharp-app .SharpModule__close-button:focus {
+  outline: 1px solid #314255;
+}
+
+#sharp-app .SharpModule__close-icon {
+  height: 10px;
+  width: 10px;
+  fill: #8c9ba5;
+  position: absolute;
+  top: 3px;
+  right: 1px;
+}
+
 #sharp-app .SharpModule:first-of-type, #sharp-app .SharpUpload:first-of-type:not(.SharpUpload--empty), #sharp-app .SharpForm__fieldset:first-of-type, #sharp-app .SharpList__item:first-of-type, #sharp-app .SharpMarkdown:first-of-type {
   padding: 0;
 }
@@ -7235,6 +7127,18 @@ h6 > *:after, .bx--type-zeta > *,
 
 #sharp-app .SharpList__item .SharpUpload__close-button {
   display: initial;
+}
+
+#sharp-app .SharpList__item .SharpModule .remove-button, #sharp-app .SharpList__item .SharpUpload:not(.SharpUpload--empty) .remove-button, #sharp-app .SharpList__item .SharpForm__fieldset .remove-button, #sharp-app .SharpList__item .SharpList__item .remove-button, #sharp-app .SharpList__item .SharpMarkdown .remove-button, #sharp-app .SharpList__item .SharpModule [class*=remove-button], #sharp-app .SharpList__item .SharpUpload:not(.SharpUpload--empty) [class*=remove-button], #sharp-app .SharpList__item .SharpForm__fieldset [class*=remove-button], #sharp-app .SharpList__item .SharpList__item [class*=remove-button], #sharp-app .SharpList__item .SharpMarkdown [class*=remove-button] {
+  display: none;
+}
+
+#sharp-app .SharpList__item .SharpModule__inner, #sharp-app .SharpList__item .SharpUpload:not(.SharpUpload--empty) .SharpUpload__inner, #sharp-app .SharpUpload:not(.SharpUpload--empty) .SharpList__item .SharpUpload__inner {
+  position: relative;
+}
+
+#sharp-app .SharpList__item .SharpModule__close-button {
+  display: inline-block;
 }
 
 #sharp-app .SharpList__item .SharpList__overlay-handle {
@@ -10907,6 +10811,146 @@ h6 > *:after, .bx--type-zeta > *,
 .modal-open {
   overflow-y: hidden;
 }
+
+.vue-street-view-pano-container {
+  position: relative;
+}
+.vue-street-view-pano-container .vue-street-view-pano {
+  left: 0; right: 0; top: 0; bottom: 0;
+  position: absolute;
+}
+
+.vue-map-container {
+  position: relative;
+}
+.vue-map-container .vue-map {
+  left: 0; right: 0; top: 0; bottom: 0;
+  position: absolute;
+}
+.vue-map-hidden {
+  display: none;
+}
+.time-picker {
+  display: inline-block;
+  position: relative;
+  font-size: 1em;
+  width: 10em;
+  font-family: sans-serif;
+  vertical-align: middle;
+}
+
+.time-picker * {
+  box-sizing: border-box;
+}
+
+.time-picker input.display-time {
+  border: 1px solid #d2d2d2;
+  width: 10em;
+  height: 2.2em;
+  padding: 0.3em 0.5em;
+  font-size: 1em;
+}
+
+.time-picker .clear-btn {
+  position: absolute;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin-top: -0.15em;
+  z-index: 3;
+  font-size: 1.1em;
+  line-height: 1em;
+  vertical-align: middle;
+  width: 1.3em;
+  color: #d2d2d2;
+  background: rgba(255,255,255,0);
+  text-align: center;
+  font-style: normal;
+
+  -webkit-transition: color .2s;
+  transition: color .2s;
+}
+
+.time-picker .clear-btn:hover {
+  color: #797979;
+  cursor: pointer;
+}
+
+.time-picker .time-picker-overlay {
+  z-index: 2;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.time-picker .dropdown {
+  position: absolute;
+  z-index: 5;
+  top: calc(2.2em + 2px);
+  left: 0;
+  background: #fff;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.15);
+  width: 10em;
+  height: 10em;
+  font-weight: normal;
+}
+
+.time-picker .dropdown .select-list {
+  width: 10em;
+  height: 10em;
+  overflow: hidden;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+.time-picker .dropdown ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.time-picker .dropdown ul.minutes,
+.time-picker .dropdown ul.seconds,
+.time-picker .dropdown ul.apms{
+  border-left: 1px solid #fff;
+}
+
+.time-picker .dropdown ul li {
+  text-align: center;
+  padding: 0.3em 0;
+  color: #161616;
+}
+
+.time-picker .dropdown ul li:not(.hint):hover {
+  background: rgba(0,0,0,.08);
+  color: #161616;
+  cursor: pointer;
+}
+
+.time-picker .dropdown ul li.active,
+.time-picker .dropdown ul li.active:hover {
+  background: #41B883;
+  color: #fff;
+}
+
+.time-picker .dropdown .hint {
+  color: #a5a5a5;
+  cursor: default;
+  font-size: 0.8em;
+}
+
 
 /**
  * simplemde v1.11.2
