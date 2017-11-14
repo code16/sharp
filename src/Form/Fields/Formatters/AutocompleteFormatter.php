@@ -4,8 +4,20 @@ namespace Code16\Sharp\Form\Fields\Formatters;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
 
-class AutocompleteFormatter extends AbstractSimpleFormatter
+class AutocompleteFormatter extends SharpFieldFormatter
 {
+
+    /**
+     * @param SharpFormField $field
+     * @param $value
+     * @return mixed
+     */
+    function toFront(SharpFormField $field, $value)
+    {
+        return is_array($value)
+            ? $value
+            : [$field->itemIdAttribute() => $value];
+    }
 
     /**
      * @param SharpFormField $field
