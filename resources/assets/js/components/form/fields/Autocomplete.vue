@@ -173,11 +173,13 @@
                 // noinspection EqualityComparisonWithCoercionJS
                 return localValue[this.itemIdAttribute] == this.value[this.itemIdAttribute];
             },
-            checkFindLocalValue() {
-                if(this.value == null) return;
+            findLocalValue() {
+                if(this.value == null) return null;
                 if(!this.localValues.some(this.itemMatchValue)) {
                     error(`Autocomplete (key: ${this.fieldKey}) can't find local value matching : ${JSON.stringify(this.value)}`);
+                    return null;
                 }
+                return this.localValues.find(this.itemMatchValue);
             }
         },
         debounced: {
@@ -200,8 +202,7 @@
             }
 
             if(!this.isRemote) {
-                this.checkFindLocalValue();
-                this.$emit('input', this.localValues.find(this.itemMatchValue), { force: true });
+                this.$emit('input', this.findLocalValue(), { force: true });
             }
             await this.$nextTick();
             if(this.value) {
