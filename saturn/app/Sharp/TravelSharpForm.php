@@ -41,7 +41,7 @@ class TravelSharpForm extends SharpForm
                 ->setDisplayUnitDegreesMinutesSeconds()
                 ->setGeocoding()
                 ->setInitialPosition(47.636940302903845, -3.461894989013672)
-                ->setApiKey("my-key")
+                ->setApiKey(env("GMAPS_KEY", "my-api-key"))
                 ->setLabel("Destination coordinates")
 
         )->addField(
