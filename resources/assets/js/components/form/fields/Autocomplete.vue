@@ -174,7 +174,7 @@
                 return localValue[this.itemIdAttribute] == this.value[this.itemIdAttribute];
             },
             findLocalValue() {
-                if(this.value == null) return null;
+                if(!this.value || this.value[this.itemIdAttribute] == null) return null;
                 if(!this.localValues.some(this.itemMatchValue)) {
                     error(`Autocomplete (key: ${this.fieldKey}) can't find local value matching : ${JSON.stringify(this.value)}`);
                     return null;
