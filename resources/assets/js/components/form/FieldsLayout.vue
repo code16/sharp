@@ -1,6 +1,6 @@
 <template>
     <sharp-grid :rows="layout">
-        <template scope="fieldLayout">
+        <template slot-scope="fieldLayout">
             <slot v-if="!fieldLayout.legend" v-bind="fieldLayout"></slot>
 
             <fieldset class="SharpForm__fieldset" v-else v-show="isFieldsetVisible(fieldLayout)">
@@ -10,7 +10,7 @@
                     </div>
                     <div class="SharpModule__content">
                         <sharp-fields-layout :layout="fieldLayout.fields">
-                            <template scope="fieldset">
+                            <template slot-scope="fieldset">
                                 <slot v-bind="fieldset"></slot>
                             </template>
                         </sharp-fields-layout>

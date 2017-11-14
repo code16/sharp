@@ -11,6 +11,14 @@ return [
     'list.sort_button.active' => 'Terminer',
     'list.empty' => 'Liste vide',
 
+    'geolocation.loading' => 'Chargement de Google Maps...',
+    'geolocation.browse_button' => 'Choisir un endroit...',
+    'geolocation.remove_button' => 'Supprimer',
+    'geolocation.edit_button' => 'Modifier',
+    'geolocation.modal.title' => 'Recherchez une addresse ou cliquez sur la carte',
+    'geolocation.modal.geocode_input.placeholder' => 'Adresse',
+    'geolocation.modal.geocode_input.message.ERROR' => 'Erreur: Impossible de contacter Google maps',
+    'geolocation.modal.geocode_input.message.ZERO_RESULTS' => 'Aucun résultats',
 
     'upload.browse_button' => 'Parcourir...',
     'upload.remove_button' => 'Supprimer',

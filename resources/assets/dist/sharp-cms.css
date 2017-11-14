@@ -3072,6 +3072,10 @@ body {
   background-color: #EBF0F7;
 }
 
+small {
+  font-size: smaller;
+}
+
 .Sharp__login-page {
   display: -webkit-box;
   display: -ms-flexbox;

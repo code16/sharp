@@ -4,6 +4,11 @@
 
     import BVComp from '../mixins/BVComp';
 
+    /**
+     * CF --
+     * https://bootstrap-vue.js.org/docs/components/modal
+     * */
+
     export default {
         name:'SharpModal',
         functional: true,

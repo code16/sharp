@@ -1,4 +1,4 @@
-
+@import "../../mixins/fix-module-fields-margin";
 
 .SharpForm {
 
@@ -8,9 +8,10 @@
 
   &__fieldset {
     @include reset;
-    margin-bottom: 2rem;
+    //margin-bottom: 2rem;
 
     @extend .SharpModule;
+    @include fix-module-fields-margin;
 
     &>.SharpModule__inner {
       background: transparent;
@@ -27,22 +28,10 @@
         @include layer('raised');
       }
     }
-    .row:last-child {
-      margin-bottom: 0;
-    }
   }
 
-  .row {
+  .SharpGrid__col:not(.SharpGrid__col--empty), &__form-item--row {
     margin-bottom: $form-item-margin-bottom;
-  }
-
-  @include media-breakpoint-down(sm) {
-    .row {
-      margin-bottom: 0;
-    }
-    .SharpForm__form-item {
-      margin-bottom: $form-item-margin-bottom;
-    }
   }
 
   &__form-item {

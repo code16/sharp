@@ -29,7 +29,7 @@ exports[`vue-clip can mount "in progress" VueClip component 1`] = `
 				<div class="SharpUpload__container">
 					<!---->
 					<div class="SharpUpload__infos">
-						<div class="mb-3"><label class="SharpUpload__filename">Fichier.pdf</label>
+						<div class="mb-3 text-truncate"><label class="SharpUpload__filename">Fichier.pdf</label>
 							<div class="SharpUpload__info mt-2"><span class="mr-2">&lt;0.1 MB</span> <a href="" class="SharpUpload__download-link" style="display: none;">
                                     {{ form.upload.download_link }}
                                 </a></div>
@@ -80,10 +80,10 @@ exports[`vue-clip can mount initially image VueClip component 1`] = `
 				<form class="dropzone" style="display: none;"><button type="button" class="dz-message SharpButton SharpButton--secondary SharpUpload__upload-button">
                     {{ form.upload.browse_button }}
                 </button></form>
-				<div class="SharpUpload__container">
-					<div class="SharpUpload__thumbnail"><img src="/image.jpg"></div>
-					<div class="SharpUpload__infos">
-						<div class="mb-3"><label class="SharpUpload__filename">Image.jpg</label>
+				<div class="SharpUpload__container row">
+					<div class="SharpUpload__thumbnail col-4 col-md-4"><img src="/image.jpg"></div>
+					<div class="SharpUpload__infos col-8 col-md-8">
+						<div class="mb-3 text-truncate"><label class="SharpUpload__filename">Image.jpg</label>
 							<div class="SharpUpload__info mt-2"><span class="mr-2">&lt;0.1 MB</span> <a href="" class="SharpUpload__download-link">
                                     {{ form.upload.download_link }}
                                 </a></div>
@@ -102,23 +102,25 @@ exports[`vue-clip can mount initially image VueClip component 1`] = `
 				</div>
 			</div>
 		</div>
-		<div id="__BV_modal_outer_mocked" class="SharpModal">
-			<div id="mocked" aria-hidden="true" role="dialog" class="modal fade" style="display: none;">
-				<div class="modal-dialog modal-md">
-					<div tabindex="-1" role="document" aria-labelledby="__BV_modal_header_mocked" aria-describedby="__BV_modal_body_mocked" class="modal-content">
-						<header id="__BV_modal_header_mocked" class="modal-header">
-							<div>
-								<h5 class="SharpModal__heading">{{ modals.cropper.title }}</h5> <button type="button" class="SharpModal__close"><svg width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd" class="SharpModal__close-icon"><path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path></svg></button></div>
-						</header>
-						<div id="__BV_modal_body_mocked" class="modal-body">
-							<!---->
-							<div><button class="SharpButton SharpButton--primary"><i class="fa fa-rotate-left"></i></button> <button class="SharpButton SharpButton--primary"><i class="fa fa-rotate-right"></i></button></div>
+		<div class="SharpModal">
+			<div id="__BV_modal_outer_mocked">
+				<div id="mocked" aria-hidden="true" role="dialog" class="modal fade" style="display: none;">
+					<div class="modal-dialog modal-md">
+						<div tabindex="-1" role="document" aria-labelledby="__BV_modal_header_mocked" aria-describedby="__BV_modal_body_mocked" class="modal-content">
+							<header id="__BV_modal_header_mocked" class="modal-header">
+								<div>
+									<h5 class="SharpModal__heading">{{ modals.cropper.title }}</h5> <button type="button" class="SharpModal__close"><svg width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd" class="SharpModal__close-icon"><path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path></svg></button></div>
+							</header>
+							<div id="__BV_modal_body_mocked" class="modal-body">
+								<!---->
+								<div><button class="SharpButton SharpButton--primary"><i class="fa fa-rotate-left"></i></button> <button class="SharpButton SharpButton--primary"><i class="fa fa-rotate-right"></i></button></div>
+							</div>
+							<footer id="__BV_modal_footer_mocked" class="modal-footer"><button type="button" class="btn btn-secondary">{{ modals.cancel_button }}</button> <button type="button" class="btn btn-primary">{{ modals.ok_button }}</button></footer>
 						</div>
-						<footer id="__BV_modal_footer_mocked" class="modal-footer"><button type="button" class="btn btn-secondary">{{ modals.cancel_button }}</button><button type="button" class="btn btn-primary">{{ modals.ok_button }}</button></footer>
 					</div>
 				</div>
+				<!---->
 			</div>
-			<!---->
 		</div> <a style="display: none;"></a></div>
 </div>
 <input type="file" multiple="multiple" class="dz-hidden-input" style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">
@@ -135,7 +137,7 @@ exports[`vue-clip can mount initially non image VueClip component 1`] = `
 				<div class="SharpUpload__container">
 					<!---->
 					<div class="SharpUpload__infos">
-						<div class="mb-3"><label class="SharpUpload__filename">Fichier.pdf</label>
+						<div class="mb-3 text-truncate"><label class="SharpUpload__filename">Fichier.pdf</label>
 							<div class="SharpUpload__info mt-2"><span class="mr-2">&lt;0.1 MB</span> <a href="" class="SharpUpload__download-link">
                                     {{ form.upload.download_link }}
                                 </a></div>

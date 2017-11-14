@@ -28,7 +28,7 @@
                      @close="handleDropdownClose"
                      @open="opened=true"
                      ref="multiselect">
-            <template slot="option" scope="props">
+            <template slot="option" slot-scope="props">
                 <sharp-template name="ListItem" :template="listItemTemplate" :template-data="props.option"></sharp-template>
             </template>
             <template slot="loading">
@@ -41,7 +41,7 @@
 
 <script>
     import Template from '../../Template.vue';
-    import Loading from '../../Loading.vue';
+    import Loading from '../../ui/Loading.vue';
     import Multiselect from 'vue-multiselect';
 
     import SearchStrategy from '../../../app/models/SearchStrategy';

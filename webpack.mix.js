@@ -1,7 +1,6 @@
 const { mix } = require('laravel-mix');
 const webpack = require('webpack');
 const fs = require('fs-extra');
-const path = require('path');
 
 (function() {
     mix.copy('node_modules/vue-clip/src', 'resources/assets/js/components/vendor/vue-clip')
@@ -13,6 +12,10 @@ const path = require('path');
         });
         return;
     }
+
+    // if(!mix.inProduction()) {
+    //     mix.sourceMaps();
+    // }
 
     mix.autoload({}).options({
             extractVueStyles:'.bin/vendor-components.css',

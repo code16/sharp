@@ -3,11 +3,12 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Formatters\TextareaFormatter;
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithMaxLength;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 
 class SharpFormTextareaField extends SharpFormField
 {
-    use SharpFormFieldWithPlaceholder;
+    use SharpFormFieldWithPlaceholder, SharpFormFieldWithMaxLength;
 
     const FIELD_TYPE = "textarea";
 
@@ -54,6 +55,7 @@ class SharpFormTextareaField extends SharpFormField
         return parent::buildArray([
             "rows" => $this->rows,
             "placeholder" => $this->placeholder,
+            "maxLength" => $this->maxLength,
         ]);
     }
 }

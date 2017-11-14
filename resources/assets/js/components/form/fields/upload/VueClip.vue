@@ -1,5 +1,5 @@
 <template>
-    <div class="SharpUpload" :class="{'SharpUpload--empty':!file, 'SharpUpload--disabled':readOnly}">
+    <div class="SharpUpload" :class="[{'SharpUpload--empty':!file, 'SharpUpload--disabled':readOnly}, modifiersClasses]">
         <div class="SharpUpload__inner">
             <div class="SharpUpload__content">
                 <form v-show="!file" class="dropzone">
@@ -8,12 +8,12 @@
                     </button>
                 </form>
                 <template v-if="file">
-                    <div class="SharpUpload__container">
-                        <div class="SharpUpload__thumbnail" v-if="!!imageSrc">
+                    <div class="SharpUpload__container" :class="{ row:showThumbnail }">
+                        <div v-if="showThumbnail" class="SharpUpload__thumbnail" :class="[modifiers.compacted?'col-4 col-sm-3 col-xl-2':'col-4 col-md-4']">
                             <img :src="imageSrc" @load="$emit('image-updated')">
                         </div>
-                        <div class="SharpUpload__infos">
-                            <div class="mb-3">
+                        <div class="SharpUpload__infos" :class="{[modifiers.compacted?'col-8 col-sm-9 col-xl-10':'col-8 col-md-8']:showThumbnail}">
+                            <div class="mb-3 text-truncate">
                                 <label class="SharpUpload__filename">{{ fileName }}</label>
                                 <div class="SharpUpload__info mt-2">
                                     <span v-show="size" class="mr-2">{{ size }}</span>
@@ -86,6 +86,7 @@
     import rotateResize from './rotate';
 
     import { Localization } from '../../../../mixins';
+    import { VueClipModifiers } from './modifiers';
 
     import axios from 'axios';
 
@@ -101,7 +102,7 @@
 
         inject : [ 'actionsBus', 'axiosInstance' ,'$form', '$field' ],
 
-        mixins: [ Localization ],
+        mixins: [ Localization, VueClipModifiers ],
 
         props: {
             downloadId: String,
@@ -192,6 +193,9 @@
             },
             downloadLink() {
                 return `${this.$form.downloadLinkBase}/${this.downloadId}`;
+            },
+            showThumbnail() {
+                return this.imageSrc;
             }
         },
         methods: {

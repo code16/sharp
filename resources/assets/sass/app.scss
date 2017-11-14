@@ -2,7 +2,7 @@ $css--reset:false;
 
 @import '~carbon-components/scss/globals/scss/colors';
 @import '~carbon-components/scss/globals/scss/vars';
-@import '~carbon-components/scss/globals/scss/typography';
+@import 'mixins/typography';
 @import '~carbon-components/scss/globals/scss/css--reset';
 
 
@@ -15,6 +15,7 @@ $css--reset:false;
 @import '~bootstrap/scss/mixins/breakpoints';
 @import '~bootstrap/scss/mixins/visibility';
 
+@import "typography";
 
 @import 'components/loading/Loading';
 
@@ -44,8 +45,8 @@ $small-breakpoint: sm;
   .sharp_lightgray { @include sharp-color($color__navy-gray-9) }
   .sharp_darkgray { @include sharp-color($color__navy-gray-4) }
 
-  @import 'node_modules/bootstrap/scss/grid';
-  @import 'node_modules/bootstrap/scss/transitions';
+  @import '~bootstrap/scss/grid';
+  @import '~bootstrap/scss/transitions';
   @import '~bootstrap/scss/utilities/flex';
   @import '~bootstrap/scss/utilities/visibility';
 
@@ -85,6 +86,7 @@ $small-breakpoint: sm;
   @import 'components/form/Check';
   @import 'components/form/Textarea';
   @import 'components/form/Radio';
+  @import 'components/form/Geolocation';
 
   // List
   @import 'components/list/EntityList';

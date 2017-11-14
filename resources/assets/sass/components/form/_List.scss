@@ -1,3 +1,6 @@
+@import "../../mixins/fix-module-fields-margin";
+@import "../../mixins/module";
+
 .SharpList {
   &__empty-alert {
     opacity: .5;
@@ -52,6 +55,9 @@
 
   &__item {
     @extend .SharpModule;
+
+    @include fix-module-fields-margin;
+
     padding: 0;
     margin-bottom: 4px;
     position: relative;
@@ -65,9 +71,6 @@
       &__inner {
         box-shadow: none !important;
       }
-      &__content {
-        //padding: 0 !important;
-      }
 
       &__remove-button {
         display: none;
@@ -76,9 +79,9 @@
       &__close-button {
         display: initial;
       }
-
     }
 
+    @include module-contextual-close-button;
     ///
 
     .SharpList__overlay-handle {

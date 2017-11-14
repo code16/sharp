@@ -10,7 +10,7 @@ import CollapsibleItem from './components/menu/CollapsibleItem';
 import NavItem from './components/menu/NavItem';
 import LeftNav from './components/menu/LeftNav';
 
-import Loading from './components/Loading';
+import Loading from './components/ui/Loading';
 
 import axios from 'axios';
 import cookies from 'axios/lib/helpers/cookies';

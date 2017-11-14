@@ -116,6 +116,7 @@ class SpaceshipSharpForm extends SharpForm
                 )->addItemField(
                     SharpFormTextareaField::make("comment")
                         ->setLabel("Comment")
+                        ->setMaxLength(50)
                         ->addConditionalDisplay("status", "ko")
                 )
         )->addField(
@@ -129,6 +130,7 @@ class SpaceshipSharpForm extends SharpForm
                 ->addItemField(
                     SharpFormUploadField::make("file")
                         ->setFileFilterImages()
+                        ->setCompactThumbnail()
                         ->setCropRatio("16:9")
                         ->setStorageDisk("local")
                         ->setStorageBasePath("data/Spaceship/{id}/Pictures")

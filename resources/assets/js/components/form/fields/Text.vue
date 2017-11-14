@@ -1,6 +1,7 @@
 <template>
     <input :type="inputType" class="SharpText"
            :value="value"  :placeholder="placeholder" :disabled="readOnly"
+           v-maxlength="maxLength"
            @input="handleInput" ref="input"
     >
 </template>
@@ -8,6 +9,7 @@
 <script>
     import Vue from 'vue';
     import { Focusable } from '../../../mixins';
+    import Maxlength from '../../../directives/Maxlength';
 
     export default {
         name:'SharpText',
@@ -19,6 +21,9 @@
 
             placeholder: String,
             readOnly: Boolean,
+
+            maxLength:Number,
+
             inputType:  {
                 type:String,
                 default:'text'
@@ -35,6 +40,10 @@
 
         mounted() {
             this.setFocusable(this.$refs.input);
+        },
+
+        directives: {
+            Maxlength
         }
     }
 </script>

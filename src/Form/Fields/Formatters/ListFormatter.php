@@ -22,10 +22,9 @@ class ListFormatter extends SharpFieldFormatter
             $field->itemFields()->each(function($itemField) use($item, &$itemArray) {
                 $key = $itemField->key();
 
-                if(isset($item[$key])) {
-                    $itemArray[$key] = $itemField->formatter()
-                        ->toFront($itemField, $item[$key]);
-                }
+                $itemArray[$key] = isset($item[$key])
+                    ? $itemField->formatter()->toFront($itemField, $item[$key])
+                    : null;
             });
 
             return $itemArray;

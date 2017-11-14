@@ -6,6 +6,7 @@
                     :ratioX="ratioX"
                     :ratioY="ratioY"
                     :read-only="readOnly"
+                    :modifiers="modifiers"
                     @input="$emit('input',$event)"
                     @error="$field.$emit('error',$event)"
                     @reset="$field.$emit('clear')">
@@ -15,6 +16,8 @@
 <script>
     import Vue from 'vue';
     import SharpVueClip from './VueClip';
+    import { UploadModifiers } from './modifiers';
+
     import Messages from '../../../../messages';
 
     import { UPLOAD_URL } from '../../../../consts';
@@ -26,7 +29,7 @@
             SharpVueClip
         },
 
-        mixins: [ UploadXSRF ],
+        mixins: [ UploadXSRF, UploadModifiers ],
         inject: [ '$field', 'xsrfToken' ],
 
         props: {

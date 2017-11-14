@@ -11,6 +11,14 @@ return [
     'list.sort_button.active' => 'Finish',
     'list.empty' => 'Empty list',
 
+    'geolocation.loading' => 'Google Maps is loading...',
+    'geolocation.browse_button' => 'Pick a location...',
+    'geolocation.remove_button' => 'Remove',
+    'geolocation.edit_button' => 'Edit',
+    'geolocation.modal.title' => 'Type an address or click on the map',
+    'geolocation.modal.geocode_input.placeholder' => 'Full address',
+    'geolocation.modal.geocode_input.message.ERROR' => "Error: Can't reach Google Maps servers",
+    'geolocation.modal.geocode_input.message.ZERO_RESULTS' => 'No results',
 
     'upload.browse_button' => 'Browse...',
     'upload.remove_button' => 'Remove',

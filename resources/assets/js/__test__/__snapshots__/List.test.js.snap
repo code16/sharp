@@ -10,8 +10,8 @@ exports[`list-field can mount "read only" filled list field 1`] = `
 					<div class="SharpModule__inner">
 						<div class="SharpModule__content">
 							<div class="SharpGrid">
-								<div class="row">
-									<div class="col-md">
+								<div class="SharpGrid__row row">
+									<div class="SharpGrid__col col-md">
 										<div> FIELD DISPLAY MOCK </div>
 									</div>
 								</div>
@@ -39,7 +39,7 @@ exports[`list-field can mount collapsed list field 1`] = `
 				<div class="SharpList__item SharpList__item--collapsed">
 					<div class="SharpModule__inner">
 						<div class="SharpModule__content">
-							<div><span> Antoine </span></div>
+							<div class="SharpTemplate"><span> Antoine </span></div>
 							<div class="SharpList__overlay-handle"></div>
 						</div>
 					</div>
@@ -84,12 +84,12 @@ exports[`list-field can mount filled list field 1`] = `
 					<div class="SharpModule__inner">
 						<div class="SharpModule__content">
 							<div class="SharpGrid">
-								<div class="row">
-									<div class="col-md">
+								<div class="SharpGrid__row row">
+									<div class="SharpGrid__col col-md">
 										<div> FIELD DISPLAY MOCK </div>
 									</div>
 								</div>
-							</div> <button class="SharpButton SharpButton--danger SharpButton--sm">{{ form.list.remove_button }}</button>
+							</div> <button class="SharpButton SharpButton--danger SharpButton--sm mt-3">{{ form.list.remove_button }}</button>
 							<!---->
 						</div>
 					</div>
@@ -99,12 +99,12 @@ exports[`list-field can mount filled list field 1`] = `
 					<div class="SharpModule__inner">
 						<div class="SharpModule__content">
 							<div class="SharpGrid">
-								<div class="row">
-									<div class="col-md">
+								<div class="SharpGrid__row row">
+									<div class="SharpGrid__col col-md">
 										<div> FIELD DISPLAY MOCK </div>
 									</div>
 								</div>
-							</div> <button class="SharpButton SharpButton--danger SharpButton--sm">{{ form.list.remove_button }}</button>
+							</div> <button class="SharpButton SharpButton--danger SharpButton--sm mt-3">{{ form.list.remove_button }}</button>
 							<!---->
 						</div>
 					</div>
@@ -126,8 +126,8 @@ exports[`list-field can mount non addable, non removable, non sortable list fiel
 					<div class="SharpModule__inner">
 						<div class="SharpModule__content">
 							<div class="SharpGrid">
-								<div class="row">
-									<div class="col-md">
+								<div class="SharpGrid__row row">
+									<div class="SharpGrid__col col-md">
 										<div> FIELD DISPLAY MOCK </div>
 									</div>
 								</div>
@@ -142,8 +142,8 @@ exports[`list-field can mount non addable, non removable, non sortable list fiel
 					<div class="SharpModule__inner">
 						<div class="SharpModule__content">
 							<div class="SharpGrid">
-								<div class="row">
-									<div class="col-md">
+								<div class="SharpGrid__row row">
+									<div class="SharpGrid__col col-md">
 										<div> FIELD DISPLAY MOCK </div>
 									</div>
 								</div>
@@ -171,12 +171,12 @@ exports[`list-field can mount with full list 1`] = `
 					<div class="SharpModule__inner">
 						<div class="SharpModule__content">
 							<div class="SharpGrid">
-								<div class="row">
-									<div class="col-md">
+								<div class="SharpGrid__row row">
+									<div class="SharpGrid__col col-md">
 										<div> FIELD DISPLAY MOCK </div>
 									</div>
 								</div>
-							</div> <button class="SharpButton SharpButton--danger SharpButton--sm">{{ form.list.remove_button }}</button>
+							</div> <button class="SharpButton SharpButton--danger SharpButton--sm mt-3">{{ form.list.remove_button }}</button>
 							<!---->
 						</div>
 					</div>
@@ -186,12 +186,12 @@ exports[`list-field can mount with full list 1`] = `
 					<div class="SharpModule__inner">
 						<div class="SharpModule__content">
 							<div class="SharpGrid">
-								<div class="row">
-									<div class="col-md">
+								<div class="SharpGrid__row row">
+									<div class="SharpGrid__col col-md">
 										<div> FIELD DISPLAY MOCK </div>
 									</div>
 								</div>
-							</div> <button class="SharpButton SharpButton--danger SharpButton--sm">{{ form.list.remove_button }}</button>
+							</div> <button class="SharpButton SharpButton--danger SharpButton--sm mt-3">{{ form.list.remove_button }}</button>
 							<!---->
 						</div>
 					</div>
@@ -201,12 +201,12 @@ exports[`list-field can mount with full list 1`] = `
 					<div class="SharpModule__inner">
 						<div class="SharpModule__content">
 							<div class="SharpGrid">
-								<div class="row">
-									<div class="col-md">
+								<div class="SharpGrid__row row">
+									<div class="SharpGrid__col col-md">
 										<div> FIELD DISPLAY MOCK </div>
 									</div>
 								</div>
-							</div> <button class="SharpButton SharpButton--danger SharpButton--sm">{{ form.list.remove_button }}</button>
+							</div> <button class="SharpButton SharpButton--danger SharpButton--sm mt-3">{{ form.list.remove_button }}</button>
 							<!---->
 						</div>
 					</div>
@@ -216,12 +216,12 @@ exports[`list-field can mount with full list 1`] = `
 					<div class="SharpModule__inner">
 						<div class="SharpModule__content">
 							<div class="SharpGrid">
-								<div class="row">
-									<div class="col-md">
+								<div class="SharpGrid__row row">
+									<div class="SharpGrid__col col-md">
 										<div> FIELD DISPLAY MOCK </div>
 									</div>
 								</div>
-							</div> <button class="SharpButton SharpButton--danger SharpButton--sm">{{ form.list.remove_button }}</button>
+							</div> <button class="SharpButton SharpButton--danger SharpButton--sm mt-3">{{ form.list.remove_button }}</button>
 							<!---->
 						</div>
 					</div>
@@ -231,12 +231,12 @@ exports[`list-field can mount with full list 1`] = `
 					<div class="SharpModule__inner">
 						<div class="SharpModule__content">
 							<div class="SharpGrid">
-								<div class="row">
-									<div class="col-md">
+								<div class="SharpGrid__row row">
+									<div class="SharpGrid__col col-md">
 										<div> FIELD DISPLAY MOCK </div>
 									</div>
 								</div>
-							</div> <button class="SharpButton SharpButton--danger SharpButton--sm">{{ form.list.remove_button }}</button>
+							</div> <button class="SharpButton SharpButton--danger SharpButton--sm mt-3">{{ form.list.remove_button }}</button>
 							<!---->
 						</div>
 					</div>

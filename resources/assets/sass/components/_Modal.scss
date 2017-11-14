@@ -77,9 +77,9 @@
     .modal-body {
       margin-bottom: rem(24px);
 
-      > * {
-        @include reset;
-      }
+      //> * {
+      //  @include reset;
+      //}
     }
 
     .modal-content {
@@ -103,6 +103,10 @@
 
       .btn {
         @extend .SharpButton;
+
+        &:not(:first-of-type) {
+          margin-left: .5rem;
+        }
 
         &-primary {
           @extend .SharpButton--primary;
