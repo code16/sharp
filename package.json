@@ -16,6 +16,9 @@
       "^vue$": "vue/dist/vue.common.js",
       "\\.(css|less)$": "<rootDir>/resources/assets/js/__test__/__mocks__/styleMock.js"
     },
+    "transformIgnorePatterns": [
+      "node_modules/(?!vue2-google-maps)"
+    ],
     "verbose": true,
     "setupFiles": [
       "<rootDir>/resources/assets/js/__test__/setup/mockument.js",

@@ -65,12 +65,9 @@
     import SharpGeolocationEdit from './GeolocationEdit.vue';
     import GeolocationCommons from './Commons';
 
-
-    const _customApipKey={ beforeCreate() { this.$options.propsData.apiKey = 'AIzaSyDk6jNHh2x6TnFGJ5zv3bUrbXXY2dRFUio'; }};
-
     export default {
         name: 'SharpGeolocation',
-        mixins: [Localization, GeolocationCommons, _customApipKey],
+        mixins: [Localization, GeolocationCommons],
 
         components: {
             GmapMap: VueGoogleMaps.Map,

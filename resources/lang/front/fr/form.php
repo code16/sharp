@@ -18,7 +18,7 @@ return [
     'geolocation.modal.title' => 'Recherchez une addresse ou cliquez sur la carte',
     'geolocation.modal.geocode_input.placeholder' => 'Adresse',
     'geolocation.modal.geocode_input.message.ERROR' => 'Erreur: Impossible de contacter Google maps',
-    'geolocation.modal.geocode_input.message.ZERO_RESULTS' => 'Aucun résultats',
+    'geolocation.modal.geocode_input.message.ZERO_RESULTS' => 'Aucun résultats pour (...)',
 
     'upload.browse_button' => 'Parcourir...',
     'upload.remove_button' => 'Supprimer',

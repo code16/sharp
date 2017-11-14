@@ -68913,15 +68913,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-var _customApipKey = {
-    beforeCreate: function beforeCreate() {
-        this.$options.propsData.apiKey = 'AIzaSyDk6jNHh2x6TnFGJ5zv3bUrbXXY2dRFUio';
-    }
-};
-
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpGeolocation',
-    mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins__["g" /* Localization */], __WEBPACK_IMPORTED_MODULE_7__Commons__["a" /* default */], _customApipKey],
+    mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins__["g" /* Localization */], __WEBPACK_IMPORTED_MODULE_7__Commons__["a" /* default */]],
 
     components: {
         GmapMap: __WEBPACK_IMPORTED_MODULE_3_vue2_google_maps__["Map"],
@@ -76336,10 +76330,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Commons__ = __webpack_require__(201);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Modal_vue__ = __webpack_require__(70);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Modal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__Modal_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__FieldContainer__ = __webpack_require__(341);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__FieldContainer___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__FieldContainer__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ui__ = __webpack_require__(570);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__mixins__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ui__ = __webpack_require__(570);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__mixins__ = __webpack_require__(6);
 
 
 
@@ -76385,10 +76377,6 @@ var _components;
 //
 //
 //
-//
-//
-//
-
 
 
 
@@ -76400,9 +76388,9 @@ var _components;
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpGeolocationEdit',
 
-    mixins: [Object(__WEBPACK_IMPORTED_MODULE_9__mixins__["h" /* LocalizationBase */])('form.geolocation.modal'), __WEBPACK_IMPORTED_MODULE_5__Commons__["a" /* default */]],
+    mixins: [Object(__WEBPACK_IMPORTED_MODULE_8__mixins__["h" /* LocalizationBase */])('form.geolocation.modal'), __WEBPACK_IMPORTED_MODULE_5__Commons__["a" /* default */]],
 
-    components: (_components = {}, __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_3__Text_vue___default.a.name, __WEBPACK_IMPORTED_MODULE_3__Text_vue___default.a), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_6__Modal_vue___default.a.name, __WEBPACK_IMPORTED_MODULE_6__Modal_vue___default.a), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_7__FieldContainer___default.a.name, __WEBPACK_IMPORTED_MODULE_7__FieldContainer___default.a), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()(_components, 'GmapMap', __WEBPACK_IMPORTED_MODULE_4_vue2_google_maps__["Map"]), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()(_components, 'GmapMarker', __WEBPACK_IMPORTED_MODULE_4_vue2_google_maps__["Marker"]), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()(_components, 'SharpLoading', __WEBPACK_IMPORTED_MODULE_8__ui__["c" /* SharpLoading */]), _components),
+    components: (_components = {}, __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_3__Text_vue___default.a.name, __WEBPACK_IMPORTED_MODULE_3__Text_vue___default.a), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()(_components, __WEBPACK_IMPORTED_MODULE_6__Modal_vue___default.a.name, __WEBPACK_IMPORTED_MODULE_6__Modal_vue___default.a), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()(_components, 'GmapMap', __WEBPACK_IMPORTED_MODULE_4_vue2_google_maps__["Map"]), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()(_components, 'GmapMarker', __WEBPACK_IMPORTED_MODULE_4_vue2_google_maps__["Marker"]), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default()(_components, 'SharpLoading', __WEBPACK_IMPORTED_MODULE_7__ui__["c" /* SharpLoading */]), _components),
 
     props: {
         value: Object,
@@ -76427,6 +76415,7 @@ var _components;
             position: this.value,
             opened: false,
             loading: false,
+            search: '',
             status: null
         };
     },
@@ -76441,34 +76430,39 @@ var _components;
             return new google.maps.Geocoder();
         },
         message: function message() {
-            return status !== 'OK' && this.lSub('geocode_input.message.' + this.status);
+            var msg = this.lSub('geocode_input.message.' + this.status);
+            switch (this.status) {
+                case 'ZERO_RESULTS':
+                    return msg.replace('(...)', '\'' + this.search + '\'');
+            }
+            return msg;
         }
     },
 
     methods: {
+        reset: function reset() {
+            Object.assign(this, this.$options.data.call(this));
+            var $mapObject = this.$refs.map.$mapObject;
+
+            $mapObject.setCenter(this.center);
+            $mapObject.setZoom(this.zoom);
+        },
         handleModalOpened: function handleModalOpened() {
             this.opened = true;
         },
         handleModalClosed: function handleModalClosed() {
             this.opened = false;
-
-            // resetting values
-            this.position = this.value;
-            this.loading = false;
-            this.status = null;
+            this.reset();
         },
-        handleModalOk: function handleModalOk(e) {
+        handleModalOk: function handleModalOk() {
             this.$emit('change', this.position);
         },
         handleMapClicked: function handleMapClicked(e) {
             this.updatePosition(e.latLng);
         },
-        handleMarkerDragged: function handleMarkerDragged(e) {
-            console.log(e);
-        },
         handleGeocodeChanged: function () {
             var _ref = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee(e) {
-                var location;
+                var geo;
                 return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
@@ -76479,26 +76473,28 @@ var _components;
                                 return this.geocode(e.target.value);
 
                             case 4:
-                                location = _context.sent;
+                                geo = _context.sent;
 
-                                this.updatePosition(location, { pan: true });
-                                _context.next = 10;
+                                this.updatePosition(geo.location);
+                                this.move(geo);
+                                _context.next = 12;
                                 break;
 
-                            case 8:
-                                _context.prev = 8;
+                            case 9:
+                                _context.prev = 9;
                                 _context.t0 = _context['catch'](1);
+                                console.log(_context.t0);
 
-                            case 10:
-                                _context.prev = 10;
-                                this.loading = false;return _context.finish(10);
+                            case 12:
+                                _context.prev = 12;
+                                this.loading = false;return _context.finish(12);
 
-                            case 13:
+                            case 15:
                             case 'end':
                                 return _context.stop();
                         }
                     }
-                }, _callee, this, [[1, 8, 10, 13]]);
+                }, _callee, this, [[1, 9, 12, 15]]);
             }));
 
             function handleGeocodeChanged(_x) {
@@ -76518,7 +76514,7 @@ var _components;
                                 return _context2.abrupt('return', new Promise(function (resolve, reject) {
                                     _this.geocoder.geocode({ address: address }, function (results, status) {
                                         _this.status = status;
-                                        if (status === 'OK') resolve(results[0].geometry.location);else reject(status);
+                                        if (status === 'OK') resolve(results[0].geometry);else reject(status);
                                     });
                                 }));
 
@@ -76537,12 +76533,13 @@ var _components;
             return geocode;
         }(),
         updatePosition: function updatePosition(latLng) {
-            var _ref3 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-                pan = _ref3.pan;
-
-            this.status = null;
             this.position = latLng;
-            pan && this.$refs.map.$mapObject.panTo(latLng);
+        },
+        move: function move(geometry) {
+            var $mapObject = this.$refs.map.$mapObject;
+
+            $mapObject.setCenter(geometry.location);
+            $mapObject.fitBounds(geometry.viewport);
         }
     }
 });
@@ -76563,7 +76560,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "hidden": _vm.handleModalClosed,
       "ok": _vm.handleModalOk
     }
-  }, [(_vm.opened) ? [_c('div', {
+  }, [_c('div', {
     staticClass: "mb-2"
   }, [_c('div', {
     staticClass: "position-relative"
@@ -76576,6 +76573,13 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         if (!('button' in $event) && _vm._k($event.keyCode, "enter", 13, $event.key)) { return null; }
         _vm.handleGeocodeChanged($event)
       }
+    },
+    model: {
+      value: (_vm.search),
+      callback: function($$v) {
+        _vm.search = $$v
+      },
+      expression: "search"
     }
   }), _vm._v(" "), _c('SharpLoading', {
     directives: [{
@@ -76613,11 +76617,8 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     attrs: {
       "position": _vm.position,
       "draggable": ""
-    },
-    on: {
-      "dragend": _vm.handleMarkerDragged
     }
-  }) : _vm._e()], 1)] : _vm._e()], 2)
+  }) : _vm._e()], 1)], 1)
 }
 var staticRenderFns = []
 render._withStripped = true
