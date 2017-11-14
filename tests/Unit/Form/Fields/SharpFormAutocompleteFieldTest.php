@@ -102,17 +102,6 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
     }
 
     /** @test */
-    function we_cant_define_a_local_autocomplete_without_local_values()
-    {
-        $this->expectException(SharpFormFieldValidationException::class);
-
-        SharpFormAutocompleteField::make("field", "local")
-            ->setListItemTemplatePath("LIT.vue")
-            ->setResultItemTemplatePath("RIT.vue")
-            ->toArray();
-    }
-
-    /** @test */
     function we_cant_define_a_remote_autocomplete_without_remoteEndpoint()
     {
         $this->expectException(SharpFormFieldValidationException::class);

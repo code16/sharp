@@ -22,7 +22,7 @@ class SharpFormAutocompleteField extends SharpFormField
     /**
      * @var Collection|array
      */
-    protected $localValues;
+    protected $localValues = [];
 
     /**
      * @var array
@@ -232,7 +232,7 @@ class SharpFormAutocompleteField extends SharpFormField
             "listItemTemplate" => "required",
             "resultItemTemplate" => "required",
             "searchMinChars" => "required|integer",
-            "localValues" => "required_if:mode,local|array",
+            "localValues" => "array",
             "searchKeys" => "required_if:mode,local|array",
             "remoteEndpoint" => "required_if:mode,remote",
             "remoteMethod" => "required_if:mode,remote|in:GET,POST",
