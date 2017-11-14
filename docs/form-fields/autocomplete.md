@@ -11,7 +11,7 @@ Class: `Code16\Sharp\Form\Fields\SharpFormAutocompleteField`
 
 ### `setLocalValues($localValues)`
 
-Set the values of the dictionnary on mode=local, as an key=>value array.
+Set the values of the dictionnary on mode=local, as an object array with at least an `id` attribute (or the `setItemIdAttribute` value).
 
 ### `setLocalSearchKeys(array $searchKeys)`
 

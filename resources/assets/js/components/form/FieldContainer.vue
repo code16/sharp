@@ -11,8 +11,6 @@
                      ref="field">
         </sharp-field>
         <div class="SharpForm__form-requirement">{{stateMessage}}</div>
-
-        <!--TODO help message class-->
         <small class="SharpForm__help-message">{{helpMessage}}</small>
     </div>
 </template>

@@ -46,6 +46,7 @@ $factory->define(\App\Travel::class, function (Faker\Generator $faker) {
             return (\App\Spaceship::class)->create()->id;
         },
         'destination' => $faker->country,
+        'destination_coordinates' => $faker->latitude . "," . $faker->longitude
     ];
 });
 

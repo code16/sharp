@@ -1,7 +1,7 @@
 import ErrorNode from './ErrorNode';
 import Focusable from './Focusable';
 import UploadXSRF from './UploadXSRF';
-import Localization from './Localization';
+import Localization, { LocalizationBase } from './Localization';
 import ActionEvents from './ActionEvents';
 import ReadOnlyFields from './ReadOnlyFields';
 import QueryTree from './QueryTree';
@@ -15,6 +15,7 @@ export {
     Focusable,
     UploadXSRF,
     Localization,
+    LocalizationBase,
     ActionEvents,
     ReadOnlyFields,
     QueryTree,

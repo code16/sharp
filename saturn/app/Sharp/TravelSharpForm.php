@@ -8,6 +8,7 @@ use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteListField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
+use Code16\Sharp\Form\Fields\SharpFormGeolocationField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
@@ -36,6 +37,14 @@ class TravelSharpForm extends SharpForm
                 ->setLabel("Destination")
 
         )->addField(
+            SharpFormGeolocationField::make("destination_coordinates")
+                ->setDisplayUnitDegreesMinutesSeconds()
+                ->setGeocoding()
+                ->setInitialPosition(47.636940302903845, -3.461894989013672)
+                ->setApiKey(env("GMAPS_KEY", "my-api-key"))
+                ->setLabel("Destination coordinates")
+
+        )->addField(
             SharpFormAutocompleteListField::make("delegates")
                 ->setLabel("Travel delegates")
                 ->setAddable()
@@ -55,7 +64,8 @@ class TravelSharpForm extends SharpForm
     {
         $this->addColumn(5, function(FormLayoutColumn $column) {
             $column->withSingleField("departure_date")
-                ->withSingleField("destination");
+                ->withSingleField("destination")
+                ->withSingleField("destination_coordinates");
         })->addColumn(7, function(FormLayoutColumn $column) {
             $column->withSingleField("spaceship_id")
                 ->withSingleField("delegates", function(FormLayoutColumn $listItem) {
