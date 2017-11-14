@@ -11,10 +11,15 @@
       @include hidden;
     }
 
+    .SharpCheck__label-text {
+      user-select: none;
+    }
+
     .SharpCheck__appearance {
       display: inline-block;
       height: rem(18px);
       min-width: rem(18px);
+      max-width: rem(18px);
       margin-right: .5rem;
       background-color: $ui-01;
       border-radius: 2px;
