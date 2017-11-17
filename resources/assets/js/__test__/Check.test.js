@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue';
+import Vue from 'vue';
 import Check from '../components/form/fields/Check.vue';
 
 

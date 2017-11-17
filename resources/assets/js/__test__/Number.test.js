@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue';
+import Vue from 'vue';
 import NumberInput from '../components/form/fields/Number.vue';
 
 import { MockInjections } from './utils';

@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue';
+import Vue from 'vue';
 import Textarea from '../components/form/fields/Textarea.vue';
 
 describe('textarea-field',()=>{

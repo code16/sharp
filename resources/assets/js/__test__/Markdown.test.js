@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue';
+import Vue from 'vue';
 import Markdown from '../components/form/fields/markdown/Markdown.vue';
 
 import { MockI18n, MockInjections } from './utils';
