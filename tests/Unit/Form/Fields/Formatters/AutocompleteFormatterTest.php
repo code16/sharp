@@ -42,6 +42,27 @@ class AutocompleteFormatterTest extends SharpTestCase
     }
 
     /** @test */
+    function we_can_format_null_value_to_front()
+    {
+        $this->assertNull((new AutocompleteFormatter)->toFront(
+            SharpFormAutocompleteField::make("text", "local"),
+            null
+        ));
+    }
+
+    /** @test */
+    function we_can_format_null_value_from_front()
+    {
+        $this->assertNull(
+            (new AutocompleteFormatter)->fromFront(
+                SharpFormAutocompleteField::make("text", "local"),
+                "attribute",
+                null
+            )
+        );
+    }
+
+    /** @test */
     function we_can_format_local_value_from_front()
     {
         // Front always send an object
