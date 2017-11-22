@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue';
+import Vue from 'vue';
 import Text from '../components/form/fields/Text.vue';
 
 import { MockInjections } from './utils';

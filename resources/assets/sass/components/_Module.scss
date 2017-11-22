@@ -7,6 +7,26 @@
   flex: 1 0 auto;
   margin: 0;
 
+
+  // extra
+  &--light {
+    .SharpModule__inner {
+      background-color: $ui-01;
+    }
+  }
+  &__close-button {
+    @include close-button;
+    position: absolute;
+    right:.5rem;
+    top:.5rem;
+    display: none;
+    background: transparent;
+  }
+  &__close-icon {
+    @include close-icon;
+  }
+  //
+
   &:first-of-type {
     padding: 0;
   }
@@ -16,6 +36,7 @@
     background-color: $ui-03;
     border: 1px solid transparent;
   }
+
   .SharpModule__header {
     display: flex;
     align-items: center;

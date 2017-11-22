@@ -77,9 +77,9 @@
     .modal-body {
       margin-bottom: rem(24px);
 
-      > * {
-        @include reset;
-      }
+      //> * {
+      //  @include reset;
+      //}
     }
 
     .modal-content {

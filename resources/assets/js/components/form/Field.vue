@@ -1,10 +1,9 @@
 <script>
-    import Fields, { NameAssociation as fieldCompName } from './fields/index';
+    import Fields from './fields/index';
     import * as util from '../../util';
 
     export default {
         name:'SharpField',
-        components: Fields,
         inheritAttrs: false,
 
         provide() {
@@ -28,7 +27,7 @@
             //console.log(this);
         },
         render(h) {
-            if(!(this.fieldType in fieldCompName)) {
+            if(!(this.fieldType in Fields)) {
                 util.error(`SharpField '${this.fieldKey}', unknown type '${this.fieldType}'`, this.fieldProps);
                 return null;
             }
@@ -36,7 +35,7 @@
             let { key, ...fieldProps } = this.fieldProps;
 
 
-            return h(fieldCompName[this.fieldType],{
+            return h(Fields[this.fieldType],{
                 props : {
                     fieldKey:this.fieldKey,
                     fieldLayout:this.fieldLayout,

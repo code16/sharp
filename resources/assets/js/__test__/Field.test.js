@@ -36,7 +36,7 @@ describe('sharp-field', () => {
     });
 
     it('can mount field', async () => {
-        fields.NameAssociation['test-field'] = {
+        fields.default['test-field'] = {
             template: '<div>Template field</div>'
         };
 
@@ -125,7 +125,7 @@ describe('sharp-field', () => {
     });
 
     it('provide "$field" injection', async () => {
-        fields.NameAssociation['test-field'] = {
+        fields.default['test-field'] = {
             template: '<div>Template field</div>',
             inject:['$field']
         };

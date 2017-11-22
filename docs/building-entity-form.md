@@ -78,6 +78,7 @@ For the specifics of each field, here's the full list and documentation:
 - [Tags](form-fields/tags.md)
 - [List](form-fields/list.md)
 - [AutocompleteList](form-fields/autocomplete-list.md)
+- [Geolocation](form-fields/geolocation.md)
 
 ### `buildFormLayout()`
 

@@ -1,44 +1,29 @@
-import SharpAutocomplete from './Autocomplete';
-import SharpTextarea from './Textarea';
-import SharpText from './Text';
-import SharpMarkdown from './markdown/Markdown';
-import SharpNumber from './Number';
-import SharpUpload from './upload/Upload';
-import SharpTagInput from './Tags';
-import SharpDate from './date/Date';
-import SharpCheck from './Check';
-import SharpList from './list/List';
-import SharpSelect from './Select';
-import SharpHtml from './Html';
-
-//debugger
-
-export let NameAssociation = {
-    'autocomplete' : SharpAutocomplete.name,
-    'text'         : SharpText.name,
-    'textarea'     : SharpTextarea.name,
-    'markdown'     : SharpMarkdown.name,
-    'number'       : SharpNumber.name,
-    'upload'       : SharpUpload.name,
-    'tags'         : SharpTagInput.name,
-    'date'         : SharpDate.name,
-    'check'        : SharpCheck.name,
-    'list'         : SharpList.name,
-    'select'       : SharpSelect.name,
-    'html'         : SharpHtml.name
-};
+import SharpAutocomplete from './Autocomplete.vue';
+import SharpTextarea from './Textarea.vue';
+import SharpText from './Text.vue';
+import SharpMarkdown from './markdown/Markdown.vue';
+import SharpNumber from './Number.vue';
+import SharpUpload from './upload/Upload.vue';
+import SharpTagInput from './Tags.vue';
+import SharpDate from './date/Date.vue';
+import SharpCheck from './Check.vue';
+import SharpList from './list/List.vue';
+import SharpSelect from './Select.vue';
+import SharpHtml from './Html.vue';
+import SharpGeolocation from './geolocation/Geolocation.vue';
 
 export default {
-    [SharpAutocomplete.name] : SharpAutocomplete,
-    [SharpText.name] : SharpText,
-    [SharpTextarea.name] : SharpTextarea,
-    [SharpMarkdown.name] : SharpMarkdown,
-    [SharpNumber.name] : SharpNumber,
-    [SharpUpload.name] : SharpUpload,
-    [SharpTagInput.name] : SharpTagInput,
-    [SharpDate.name] : SharpDate,
-    [SharpCheck.name] : SharpCheck,
-    [SharpList.name] : SharpList,
-    [SharpSelect.name] : SharpSelect,
-    [SharpHtml.name] : SharpHtml
+    'autocomplete' : SharpAutocomplete,
+    'text'         : SharpText,
+    'textarea'     : SharpTextarea,
+    'markdown'     : SharpMarkdown,
+    'number'       : SharpNumber,
+    'upload'       : SharpUpload,
+    'tags'         : SharpTagInput,
+    'date'         : SharpDate,
+    'check'        : SharpCheck,
+    'list'         : SharpList,
+    'select'       : SharpSelect,
+    'html'         : SharpHtml,
+    'geolocation'  : SharpGeolocation
 };

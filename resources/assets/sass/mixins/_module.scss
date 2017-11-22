@@ -1,0 +1,13 @@
+@mixin module-contextual-close-button {
+  .SharpModule {
+    .remove-button, [class*=remove-button] {
+      display:none;
+    }
+    &__inner {
+      position:relative;
+    }
+    &__close-button {
+      display:inline-block;
+    }
+  }
+}

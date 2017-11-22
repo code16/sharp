@@ -3,7 +3,7 @@
          :class="[`SharpAutocomplete--${state}`,
                  {'SharpAutocomplete--remote':isRemote},
                  {'SharpAutocomplete--disabled':readOnly}]">
-        <div v-if="state=='valuated' && value" class="SharpAutocomplete__result-item">
+        <div v-if="state==='valuated' && value" class="SharpAutocomplete__result-item">
             <sharp-template name="ResultItem" :template="resultItemTemplate" :template-data="value"></sharp-template>
             <button class="SharpAutocomplete__result-item__close-button" type="button" @click="handleResetClick">
                 <svg class="SharpAutocomplete__result-item__close-icon"
@@ -12,7 +12,7 @@
                 </svg>
             </button>
         </div>
-        <multiselect v-if="state!='valuated'"
+        <multiselect v-if="state!=='valuated'"
                      class="SharpAutocomplete__multiselect"
                      :class="{'SharpAutocomplete__multiselect--hide-dropdown':hideDropdown}"
                      :value="value"
@@ -41,14 +41,14 @@
 
 <script>
     import Template from '../../Template.vue';
-    import Loading from '../../Loading.vue';
+    import Loading from '../../ui/Loading.vue';
     import Multiselect from 'vue-multiselect';
 
     import SearchStrategy from '../../../app/models/SearchStrategy';
 
     import axios from 'axios';
 
-    import { warn } from '../../../util';
+    import { warn, error } from '../../../util';
     import { Localization, Debounce } from '../../../mixins';
     import { lang } from '../../../mixins/Localization';
 
@@ -169,6 +169,18 @@
                     this.$refs.multiselect.activate();
                 });
             },
+            itemMatchValue(localValue) {
+                // noinspection EqualityComparisonWithCoercionJS
+                return localValue[this.itemIdAttribute] == this.value[this.itemIdAttribute];
+            },
+            findLocalValue() {
+                if(!this.value || this.value[this.itemIdAttribute] == null) return null;
+                if(!this.localValues.some(this.itemMatchValue)) {
+                    error(`Autocomplete (key: ${this.fieldKey}) can't find local value matching : ${JSON.stringify(this.value)}`);
+                    return null;
+                }
+                return this.localValues.find(this.itemMatchValue);
+            }
         },
         debounced: {
             wait: 200,
@@ -184,18 +196,18 @@
                 }
             },
         },
-        created() {
-            if(this.$props.mode === 'local' && !this.$options.propsData.searchKeys) {
+        async created() {
+            if(this.mode === 'local' && !this.searchKeys) {
                 warn(`Autocomplete (key: ${this.fieldKey}) has local mode but no searchKeys, default set to ['value']`);
             }
 
             if(!this.isRemote) {
-                this.$emit('input', this.localValues.find(v => v[this.itemIdAttribute] === this.value), { force: true });
+                this.$emit('input', this.findLocalValue(), { force: true });
             }
+            await this.$nextTick();
             if(this.value) {
-                this.$nextTick(()=>this.state = 'valuated');
+                this.state = 'valuated';
             }
-
         }
     }
 </script>

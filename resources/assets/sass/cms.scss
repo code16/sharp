@@ -26,6 +26,9 @@ body {
   background-color: $ui-02;
 }
 
+small {
+  font-size: smaller;
+}
 
 
 @import 'pages/LoginPage';
