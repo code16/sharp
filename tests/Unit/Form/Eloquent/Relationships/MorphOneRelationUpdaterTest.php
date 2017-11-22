@@ -4,6 +4,7 @@ namespace Code16\Sharp\Tests\Unit\Form\Eloquent\Relationships;
 
 use Code16\Sharp\Form\Eloquent\Relationships\MorphOneRelationUpdater;
 use Code16\Sharp\Tests\Fixtures\Person;
+use Code16\Sharp\Tests\Fixtures\Picture;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
 
 class MorphOneRelationUpdaterTest extends SharpFormEloquentBaseTest
@@ -53,11 +54,7 @@ class MorphOneRelationUpdaterTest extends SharpFormEloquentBaseTest
 
         $updater->update($person, "picture:file", null);
 
-//        $this->assertDatabaseHas("pictures", [
-//            "picturable_type" => Person::class,
-//            "picturable_id" => $person->id,
-//            "file" => "test.jpg",
-//        ]);
+        $this->assertCount(0, Picture::all());
     }
 
 }
