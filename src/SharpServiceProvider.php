@@ -13,6 +13,7 @@ use Code16\Sharp\Http\Middleware\Api\SaveEntityListParams;
 use Code16\Sharp\Http\Middleware\Api\SetSharpLocale;
 use Code16\Sharp\Http\Middleware\CheckIsSharpAuthenticated;
 use Code16\Sharp\Http\Middleware\CheckIsSharpGuest;
+use Code16\Sharp\Http\Middleware\HandleSharpErrors;
 use Code16\Sharp\Http\Middleware\RestoreEntityListParams;
 use Code16\Sharp\Http\SharpContext;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
@@ -146,6 +147,9 @@ class SharpServiceProvider extends ServiceProvider
 
         )->aliasMiddleware(
             'sharp_guest', CheckIsSharpGuest::class
+
+        )->aliasMiddleware(
+            'sharp_web_errors', HandleSharpErrors::class
         );
 
     }

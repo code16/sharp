@@ -4,6 +4,7 @@ namespace Code16\Sharp\Http\Middleware;
 
 use Closure;
 use Code16\Sharp\Exceptions\Auth\SharpAuthenticationException;
+use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Illuminate\Contracts\Auth\Factory as Auth;
 
 class CheckIsSharpAuthenticated
@@ -30,13 +31,15 @@ class CheckIsSharpAuthenticated
      * @param  string|null $guard
      * @return mixed
      * @throws SharpAuthenticationException
+     * @throws SharpAuthorizationException
      */
     public function handle($request, Closure $next, $guard = null)
     {
         if(!$this->userIsAllowedToUseSharp()) {
-            $this->auth->guard($this->getSharpGuard())->logout();
+            if($this->auth->guard($this->getSharpGuard())->check()) {
+                throw new SharpAuthorizationException("Unauthorized action");
 
-            if($request->wantsJson()) {
+            } elseif($request->wantsJson()) {
                 throw new SharpAuthenticationException("Unauthenticated user");
             }
 

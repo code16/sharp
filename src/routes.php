@@ -63,7 +63,7 @@ Route::group([
 // Web routes
 Route::group([
     'prefix' => '/sharp',
-    'middleware' => ['sharp_web'],
+    'middleware' => ['sharp_web', 'sharp_web_errors'],
     'namespace' => 'Code16\Sharp\Http'
 ], function() {
 

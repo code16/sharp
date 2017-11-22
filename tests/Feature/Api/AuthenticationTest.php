@@ -47,8 +47,8 @@ class AuthenticationTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        // We use our custom guard to avoid the need of a DB (otherwise
-        // this code would fail on the logout() stage)
+        // We use our custom guard to avoid the need of a DB
+        // (otherwise this code would fail on the logout() stage)
         $this->configureCustomAuthGuard();
 
         $this->app['config']->set(
@@ -57,8 +57,8 @@ class AuthenticationTest extends BaseApiTest
         );
 
         $this->actingAs(new User(["name" => "Bob"]));
-        $this->get('/sharp/list/person')->assertStatus(302);
-        $this->json('get', '/sharp/api/list/person')->assertStatus(401);
+        $this->get('/sharp/list/person')->assertStatus(403);
+        $this->json('get', '/sharp/api/list/person')->assertStatus(403);
 
         $this->actingAs(new User(["name" => "John"]));
         $this->get('/sharp/list/person')->assertStatus(200);
