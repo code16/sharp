@@ -10,6 +10,20 @@ class LoginController extends Controller
     use ValidatesRequests;
 
     /**
+     * LoginController constructor.
+     */
+    public function __construct()
+    {
+        $guardSuffix = config('sharp.auth.guard') ? ':' . config('sharp.auth.guard') : '';
+
+        $this->middleware('sharp_guest' . $guardSuffix)
+            ->only(['create','store']);
+
+        $this->middleware('sharp_auth' . $guardSuffix)
+            ->only('destroy');
+    }
+
+    /**
      * @return \Illuminate\View\View
      */
     public function create()
@@ -24,18 +38,11 @@ class LoginController extends Controller
             "password" => "required",
         ]);
 
-        $guard = auth()->guard($this->getSharpGuard());
-
-        if($guard->attempt([
+        if($this->guard()->attempt([
             $this->getSharpLoginAttribute() => request('login'),
             $this->getSharpPasswordAttribute() => request('password')
         ])) {
-            $check = $this->getSharpAuthCheck();
-            if(is_null($check) || $check->allowUserInSharp($guard->user())) {
-                return redirect()->intended('/sharp');
-            }
-
-            $guard->logout();
+            return redirect()->intended('/sharp');
         }
 
         return back()->with("invalid", true)->withInput();
@@ -43,14 +50,9 @@ class LoginController extends Controller
 
     public function destroy()
     {
-        auth()->guard($this->getSharpGuard())->logout();
+        $this->guard()->logout();
 
         return redirect()->route("code16.sharp.login");
-    }
-
-    protected function getSharpGuard()
-    {
-        return config("sharp.auth.guard", config("auth.defaults.guard"));
     }
 
     protected function getSharpLoginAttribute()
@@ -63,8 +65,8 @@ class LoginController extends Controller
         return config("sharp.auth.password_attribute", "password");
     }
 
-    protected function getSharpAuthCheck()
+    protected function guard()
     {
-        return config("sharp.auth.check") ? app(config("sharp.auth.check")) : null;
+        return auth()->guard(config('sharp.auth.guard'));
     }
 }

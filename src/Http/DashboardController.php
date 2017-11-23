@@ -2,9 +2,7 @@
 
 namespace Code16\Sharp\Http;
 
-use Illuminate\Routing\Controller;
-
-class DashboardController extends Controller
+class DashboardController extends SharpProtectedController
 {
 
     /**

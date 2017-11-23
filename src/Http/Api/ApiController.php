@@ -6,9 +6,9 @@ use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
 use Code16\Sharp\Form\SharpForm;
-use Illuminate\Routing\Controller;
+use Code16\Sharp\Http\SharpProtectedController;
 
-abstract class ApiController extends Controller
+abstract class ApiController extends SharpProtectedController
 {
 
     /**

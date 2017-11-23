@@ -3,12 +3,13 @@
 namespace Code16\Sharp\Http\Middleware;
 
 use Closure;
-use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 
-class HandleSharpErrors
+class SharpRedirectIfAuthenticated
 {
 
     /**
+     * Handle an incoming request.
+     *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
      * @param  string|null  $guard
@@ -16,12 +17,10 @@ class HandleSharpErrors
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        $response = $next($request);
-
-        if($response->exception && $response->exception instanceof SharpAuthorizationException) {
-            abort(403, $response->exception->getMessage());
+        if (auth()->guard($guard)->check()) {
+            return redirect(route("code16.sharp.dashboard"));
         }
 
-        return $response;
+        return $next($request);
     }
 }

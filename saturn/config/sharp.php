@@ -90,7 +90,6 @@ return [
     ],
 
     "auth" => [
-        "check" => \App\Sharp\Auth\SharpAuthCheck::class,
         "guard" => "sharp",
         "login_attribute" => "email",
         "password_attribute" => "password",

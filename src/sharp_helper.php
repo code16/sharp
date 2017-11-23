@@ -45,9 +45,7 @@ function sharp_page_title($sharpMenu, $entityKey)
  */
 function sharp_user()
 {
-    return auth()->guard(
-        config("sharp.auth.guard", config("auth.defaults.guard"))
-    )->user();
+    return auth()->user();
 }
 
 /**
