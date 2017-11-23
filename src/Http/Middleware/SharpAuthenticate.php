@@ -51,7 +51,7 @@ class SharpAuthenticate extends BaseAuthenticate
             }
 
             if($request->wantsJson()) {
-                abort(401, "Unauthenticated user");
+                return response()->json(['message' => "Unauthenticated user"], 401);
             }
 
             return redirect()->guest(route("code16.sharp.login"));
