@@ -14,6 +14,7 @@ import {MockInjections, MockI18n} from "./utils";
 import { nextRequestFulfilled } from './utils/moxios-utils';
 import HTMLElementsSerializer from './utils/htmlElementsSnapshotSerializer';
 
+
 describe('entity-list', ()=>{
     Vue.use(MockI18n);
     MockI18n.mockLangFunction();
@@ -1110,6 +1111,56 @@ describe('entity-list', ()=>{
         expect(instanceCommands({ id: 3 })).toEqual([{ type: 'instance', authorization:[3] }]);
     });
 
+    test('row has link', async () => {
+        let $entityList = await createVm();
+        $entityList.config = {
+            instanceIdAttribute: 'id',
+        };
+
+        // mock computed
+        Object.defineProperty($entityList,'authorizationsByInstanceId',{
+            get:()=>({
+                3: { view: false, update: true },
+                4: { view: true, update: false }
+            })
+        });
+
+        // row with link must have 'view' authorization defined
+        expect($entityList.rowHasLink({ id: 3 })).toBe(false);
+        expect($entityList.rowHasLink({ id: 4 })).toBe(true);
+    });
+
+    test('row link', async () => {
+        let $entityList = await createVm();
+        $entityList.config = {
+            instanceIdAttribute: 'id'
+        };
+        expect($entityList.rowLink({ id: 3 })).toBe('/sharp/form/spaceship/3');
+    });
+
+    test('get authorizations', async () => {
+        let $entityList = await createVm();
+        $entityList.authorizations = {
+            view: true, update: false
+        };
+        expect($entityList.getAuthorizations({ type:'view', id: 3 })).toBe(true);
+        expect($entityList.getAuthorizations({ type:'update', id: 7 })).toBe(false);
+        $entityList.authorizations.view = [
+            1,3,5
+        ];
+        expect($entityList.getAuthorizations({ type:'view', id: 4 })).toBe(false);
+        expect($entityList.getAuthorizations({ type:'view', id: 5 })).toBe(true);
+    });
+
+    test('page changed', async () => {
+        let $entityList = await createVm();
+        $entityList.update = jest.fn();
+        $entityList.pageChanged(2);
+        expect($entityList.page).toBe(2);
+        expect($entityList.update).toHaveBeenCalledWith({ resetPage: false });
+    });
+
+    test('sort toggle')
 
 });
 
