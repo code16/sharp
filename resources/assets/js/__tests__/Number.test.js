@@ -15,7 +15,7 @@ describe('number-field',()=>{
         `
     });
 
-    it('can mount Number field', async () => {
+    test('can mount Number field', async () => {
         await createVm();
 
         expect(document.body.innerHTML).toMatchSnapshot();

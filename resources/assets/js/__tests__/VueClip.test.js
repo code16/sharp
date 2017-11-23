@@ -63,13 +63,13 @@ describe('vue-clip',() => {
     });
 
 
-    it('can mount VueClip component', async () => {
+    test('can mount VueClip component', async () => {
         await createVm();
 
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount read-only VueClip component', async () => {
+    test('can mount read-only VueClip component', async () => {
         await createVm({
             propsData: {
                 readOnly: true
@@ -79,7 +79,7 @@ describe('vue-clip',() => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount initially non image VueClip component', async () => {
+    test('can mount initially non image VueClip component', async () => {
         await createVm({
             data: () => ({
                 value: {
@@ -92,7 +92,7 @@ describe('vue-clip',() => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount initially image VueClip component', async () => {
+    test('can mount initially image VueClip component', async () => {
         await createVm({
             propsData: {
                 ratioX: 1, ratioY: 2
@@ -109,7 +109,7 @@ describe('vue-clip',() => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount "in progress" VueClip component', async () => {
+    test('can mount "in progress" VueClip component', async () => {
         let $vueClip = await createVm();
 
         $vueClip.addedFile({
@@ -127,7 +127,7 @@ describe('vue-clip',() => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount "destroyed" VueClip component', async () => {
+    test('can mount "destroyed" VueClip component', async () => {
         let $vueClip = await createVm();
 
         $vueClip.$destroy();
@@ -137,7 +137,7 @@ describe('vue-clip',() => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('download', async () => {
+    test('download', async () => {
         let $vueClip = await createVm({
             data: () => ({
                 value: {
@@ -176,7 +176,7 @@ describe('vue-clip',() => {
         moxios.uninstall($vueClip.axiosInstance);
     });
 
-    it('emit update on image loaded', async () => {
+    test('emit update on image loaded', async () => {
         let $vueClip = await createVm({
             data: () => ({
                 value: {
@@ -197,7 +197,7 @@ describe('vue-clip',() => {
         expect(handleImageUpdated).toHaveBeenCalledTimes(1);
     });
 
-    it('init files and reset on value null', async () => {
+    test('init files and reset on value null', async () => {
         let $vueClip = await createVm({
             data: ()=>({
                 value: {
@@ -219,7 +219,7 @@ describe('vue-clip',() => {
         expect($vueClip.files).toEqual([]);
     });
 
-    it('call function on state changed', async () => {
+    test('call function on state changed', async () => {
         let $vueClip = await createVm({
             data: ()=>({
                 value: {
@@ -245,7 +245,7 @@ describe('vue-clip',() => {
         expect($vueClip.onStatusSuccess).toHaveBeenCalledTimes(1);
     });
 
-    it('file property is the first item of "files"', async () => {
+    test('file property is the first item of "files"', async () => {
         let $vueClip = await createVm({
             data: ()=>({
                 value: {
@@ -257,7 +257,7 @@ describe('vue-clip',() => {
         expect($vueClip.files[0]).toBe($vueClip.file);
     });
 
-    it('compute images properties correctly', async () => {
+    test('compute images properties correctly', async () => {
         let $vueClip = await createVm({
             data: ()=>({
                 value: {
@@ -291,7 +291,7 @@ describe('vue-clip',() => {
         expect($vueClip.imageSrc).toBe($vueClip.croppedImg);
     });
 
-    it('operations finished without any active', async () =>{
+    test('operations finished without any active', async () =>{
         let $vueClip = await createVm({
             data: ()=>({
                 value: {
@@ -311,7 +311,7 @@ describe('vue-clip',() => {
     });
 
 
-    it('operations finished with one active', async () => {
+    test('operations finished with one active', async () => {
         let $vueClip = await createVm({
             propsData: {
                 ratioX: 1,
@@ -341,7 +341,7 @@ describe('vue-clip',() => {
         });
     });
 
-    it('progress with operations', async () => {
+    test('progress with operations', async () => {
         let $vueClip = await createVm({
             propsData: {
                 ratioX: 1,
@@ -368,7 +368,7 @@ describe('vue-clip',() => {
         expect($vueClip.progress).toBe(100);
     });
 
-    it('file size', async () => {
+    test('file size', async () => {
         let $vueClip = await createVm({
             data: ()=>({
                 value: {
@@ -389,7 +389,7 @@ describe('vue-clip',() => {
         expect($vueClip.size).toBe('<0.1 MB');
     });
 
-    it('has crop', async () => {
+    test('has crop', async () => {
         let $vueClip = await createVm({
             propsData: {
                 ratioX:1, ratioY:1
@@ -407,7 +407,7 @@ describe('vue-clip',() => {
         expect($vueClip.hasCrop).toBe(false);
     });
 
-    it('filename', async () => {
+    test('filename', async () => {
         let $vueClip = await createVm({
             data:()=> ({
                 value: {
@@ -425,7 +425,7 @@ describe('vue-clip',() => {
         expect($vueClip.fileName).toBe('Photo2.jpg');
     });
 
-    it('set pending', async () => {
+    test('set pending', async () => {
         let $vueClip = await createVm({
             data:()=> ({
                 value: {
@@ -465,7 +465,7 @@ describe('vue-clip',() => {
         });
     });
 
-    it('on status added', async () => {
+    test('on status added', async () => {
         let $vueClip = await createVm();
 
         let handleReset = jest.fn();
@@ -476,7 +476,7 @@ describe('vue-clip',() => {
         expect(handleReset).toHaveBeenCalled();
     });
 
-    it('on status error', async () => {
+    test('on status error', async () => {
         let $vueClip = await createVm({
             data:()=> ({
                 value: {
@@ -498,7 +498,7 @@ describe('vue-clip',() => {
         expect($vueClip.remove).toHaveBeenCalled();
     });
 
-    it('on status success', async () => {
+    test('on status success', async () => {
         let $vueClip = await createVm({
             data:()=> ({
                 value: {
@@ -531,7 +531,7 @@ describe('vue-clip',() => {
         });
     });
 
-    it('remove', async () => {
+    test('remove', async () => {
         let $vueClip = await createVm({
             data:()=> ({
                 value: {
@@ -574,7 +574,7 @@ describe('vue-clip',() => {
         }
     }
 
-    it('crop', async () => {
+    test('crop', async () => {
         let $vueClip = await createVm({
             propsData: {
                 ratioX: 1,
@@ -659,7 +659,7 @@ describe('vue-clip',() => {
         expect($vueClip.croppedImg).toBe(null);
     });
 
-    it('cropper modal', async () => {
+    test('cropper modal', async () => {
         let $vueClip = await createVm({
             data:()=> ({
                 value: {

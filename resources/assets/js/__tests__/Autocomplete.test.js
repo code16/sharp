@@ -31,13 +31,13 @@ describe('autocomplete-field', ()=>{
             MockI18n.mockLangFunction();
         });
 
-        it('can mount Autocomplete field as multiselect', async () => {
+        test('can mount Autocomplete field as multiselect', async () => {
             await createVm();
 
             expect(document.body.innerHTML).toMatchSnapshot();
         });
 
-        it('can mount Autocomplete field as result item', async () => {
+        test('can mount Autocomplete field as result item', async () => {
             await createVm({
                 data: () => ({ value: {id:1, name:'Theodore Bagwell', alias:'T-Bag'} })
             });
@@ -45,7 +45,7 @@ describe('autocomplete-field', ()=>{
             expect(document.body.innerHTML).toMatchSnapshot();
         });
 
-        it('expose appropriate props to multiselect component', async ()=>{
+        test('expose appropriate props to multiselect component', async ()=>{
             let $autocomplete = await createVm({
                 propsData: {
                     readOnly: true
@@ -76,7 +76,7 @@ describe('autocomplete-field', ()=>{
             });
         });
 
-        it('expose appropriate arguments to the local search engine', async () => {
+        test('expose appropriate arguments to the local search engine', async () => {
             let $autocomplete = await createVm();
 
 
@@ -90,7 +90,7 @@ describe('autocomplete-field', ()=>{
             });
         });
 
-        it('update autocomplete state properly', async () => {
+        test('update autocomplete state properly', async () => {
             let $autocomplete = await createVm({
                 data: () => ({ value: null })
             });
@@ -114,7 +114,7 @@ describe('autocomplete-field', ()=>{
             expect($autocomplete.state).toBe('initial');
         });
 
-        it('is valuated on start if have value', async () => {
+        test('is valuated on start if have value', async () => {
             let $autocomplete = await createVm({
                 data: () => ({ value:{id:1, name:'Theodore Bagwell', alias:'T-Bag'} })
             });
@@ -122,7 +122,7 @@ describe('autocomplete-field', ()=>{
             expect($autocomplete.state).toBe('valuated');
         });
 
-        it('sync opened with multiselect', async () => {
+        test('sync opened with multiselect', async () => {
             let $autocomplete = await createVm({
                 data: () => ({ value:null })
             });
@@ -139,7 +139,7 @@ describe('autocomplete-field', ()=>{
             expect($autocomplete.opened).toBe(false);
         });
 
-        it('emit input on select & correct value', async () => {
+        test('emit input on select & correct value', async () => {
             let inputEmitted = jest.fn();
 
             let $autocomplete = await createVm({
@@ -156,13 +156,13 @@ describe('autocomplete-field', ()=>{
             expect(inputEmitted).toHaveBeenLastCalledWith({id:2, name:'Lincoln Burrows', alias: 'Linc'});
         });
 
-        it('define loading slot', async () => {
+        test('define loading slot', async () => {
             let $autocomplete = await createVm();
             let { multiselect } = $autocomplete.$refs;
             expect(multiselect.$slots.loading).toBeTruthy();
         });
 
-        it('define noResult slot', async () => {
+        test('define noResult slot', async () => {
             let $autocomplete = await createVm();
             let { multiselect } = $autocomplete.$refs;
             expect(multiselect.$slots.loading).toBeTruthy();
@@ -194,7 +194,7 @@ describe('autocomplete-field', ()=>{
             moxios.uninstall();
         });
 
-        it("'loading' computed property changes properly", async () => {
+        test("'loading' computed property changes properly", async () => {
             let $autocomplete = await createVm({
                 propsData: {
                     remoteMethod: 'POST'
@@ -225,7 +225,7 @@ describe('autocomplete-field', ()=>{
             expect($autocomplete.isLoading).toBe(false);
         });
 
-        it("'hide dropdown' computed property changes properly (query less than min chars)", async () => {
+        test("'hide dropdown' computed property changes properly (query less than min chars)", async () => {
             let $autocomplete = await createVm();
 
             let { multiselect } = $autocomplete.$refs;
@@ -240,7 +240,7 @@ describe('autocomplete-field', ()=>{
 
         });
 
-        it('Update autocomplete state after request', async () => {
+        test('Update autocomplete state after request', async () => {
             let $autocomplete = await createVm();
 
             let { multiselect } = $autocomplete.$refs;
@@ -253,7 +253,7 @@ describe('autocomplete-field', ()=>{
             expect($autocomplete.state).toBe('searching');
         });
 
-        it('Load response data', async () => {
+        test('Load response data', async () => {
             let $autocomplete = await createVm();
 
             let { multiselect } = $autocomplete.$refs;
@@ -264,7 +264,7 @@ describe('autocomplete-field', ()=>{
             expect($autocomplete.suggestions).toEqual([{id:1, name:'Theodore Bagwell', alias:'T-Bag'}]);
         });
 
-        it("Send proper GET request", async () => {
+        test("Send proper GET request", async () => {
             let $autocomplete = await createVm({
                 propsData: {
                     remoteMethod: 'GET'
@@ -283,7 +283,7 @@ describe('autocomplete-field', ()=>{
             expect(url).toBe('/autocomplete');
         });
 
-        it("Send proper POST request", async () => {
+        test("Send proper POST request", async () => {
             let $autocomplete = await createVm({
                 propsData: {
                     remoteMethod: 'POST'

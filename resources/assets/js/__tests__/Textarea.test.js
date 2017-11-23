@@ -12,13 +12,13 @@ describe('textarea-field',()=>{
         `
     });
 
-    it('can mount Textarea field', async () => {
+    test('can mount Textarea field', async () => {
         await createVm();
 
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('emit event on input', async () => {
+    test('emit event on input', async () => {
         let inputEmitted = jest.fn();
 
         await createVm({
@@ -31,7 +31,7 @@ describe('textarea-field',()=>{
         expect(inputEmitted.mock.calls.length).toBe(1);
     });
 
-    it('emit correct value', async () => {
+    test('emit correct value', async () => {
         let inputEmitted = jest.fn();
 
         await createVm({

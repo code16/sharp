@@ -38,7 +38,7 @@ describe('fields-layout', () => {
         `
     });
 
-    it('can mount fields layout', async () => {
+    test('can mount fields layout', async () => {
         await createVm({
             propsData: {
                 layout: [
@@ -50,7 +50,7 @@ describe('fields-layout', () => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount "fieldset" fields layout', async () => {
+    test('can mount "fieldset" fields layout', async () => {
         await createVm({
             propsData: {
                 layout: [
@@ -69,7 +69,7 @@ describe('fields-layout', () => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount "hidden fieldset" fields layout', async () => {
+    test('can mount "hidden fieldset" fields layout', async () => {
         await createVm({
             propsData: {
                 layout: [
@@ -88,7 +88,7 @@ describe('fields-layout', () => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('expose correct props', async () => {
+    test('expose correct props', async () => {
         let { $root:vm } = await createVm({
             propsData: {
                 layout: [
@@ -102,7 +102,7 @@ describe('fields-layout', () => {
         });
     });
 
-    it('expose correct fieldset props', async () => {
+    test('expose correct fieldset props', async () => {
         let { $root:vm } = await createVm({
             propsData: {
                 layout: [
@@ -120,7 +120,7 @@ describe('fields-layout', () => {
         });
     });
 
-    it('fieldset visible', async () => {
+    test('fieldset visible', async () => {
         let $fieldsLayout = await createVm({
             propsData: {
                 layout: [
@@ -145,7 +145,7 @@ describe('fields-layout', () => {
         expect($fieldsLayout.isFieldsetVisible({ id: 'fieldset_1'})).toBe(true);
     });
 
-    it('fieldset invisible', async () => {
+    test('fieldset invisible', async () => {
         let $fieldsLayout = await createVm({
             propsData: {
                 layout: [

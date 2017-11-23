@@ -37,13 +37,13 @@ describe('date-field',()=>{
         MockI18n.mockLangFunction();
     });
 
-    it('can mount Date field', async () => {
+    test('can mount Date field', async () => {
         await createVm();
 
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount Date field without TimePicker', async () => {
+    test('can mount Date field without TimePicker', async () => {
         await createVm({
             propsData: {
                 disableTime: true
@@ -53,7 +53,7 @@ describe('date-field',()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount "read only" Date field', async () => {
+    test('can mount "read only" Date field', async () => {
         await createVm({
             propsData: {
                 readOnly: true,
@@ -65,7 +65,7 @@ describe('date-field',()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount "picker displayed" Date field', async () => {
+    test('can mount "picker displayed" Date field', async () => {
         let $date = await createVm({
             propsData: {
                 disableTime: true,
@@ -80,7 +80,7 @@ describe('date-field',()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('expose appropriate props to TimePicker', async () => {
+    test('expose appropriate props to TimePicker', async () => {
         let $date = await createVm({
             propsData: {
                 displayFormat: 'HH : mm',
@@ -109,7 +109,7 @@ describe('date-field',()=>{
         })
     });
 
-    it('expose appropriate props to DatePicker', async () => {
+    test('expose appropriate props to DatePicker', async () => {
         let $date = await createVm();
 
         let datepicker = $date.$findChild('SharpDatepicker');
@@ -122,7 +122,7 @@ describe('date-field',()=>{
         });
     });
 
-    it('have correct input value', async () => {
+    test('have correct input value', async () => {
         let $date = await createVm({
             propsData: {
                 displayFormat: 'DD/MM/YYYY  HH : mm'
@@ -132,7 +132,7 @@ describe('date-field',()=>{
         expect($date.$refs.input.value).toBe('20/08/1996  12 : 11');
     });
 
-    it('emit input on date changed & correct value', async () => {
+    test('emit input on date changed & correct value', async () => {
         let $date = await createVm();
 
         let datepicker = $date.$findChild('SharpDatepicker');
@@ -146,7 +146,7 @@ describe('date-field',()=>{
         expect(inputEmitted.mock.calls[0][0].toDate()).toEqual(date(1996, 7, 22, 12, 11));
     });
 
-    it('emit input on time changed & correct value', async () => {
+    test('emit input on time changed & correct value', async () => {
         let $date = await createVm();
 
         let timepicker = $date.$findChild('SharpTimePicker');
@@ -160,7 +160,7 @@ describe('date-field',()=>{
         expect(inputEmitted.mock.calls[0][0].toDate()).toEqual(date(1996, 7, 20, 13, 20));
     });
 
-    it('emit input on input changed and show picker', async () => {
+    test('emit input on input changed and show picker', async () => {
         let $date = await createVm({
             displayFormat: 'DD/MM/YYYY HH:mm'
         });
@@ -185,7 +185,7 @@ describe('date-field',()=>{
         expect($date.showPicker).toBe(true);
     });
 
-    it('emit error on input changed if invalid and hide picker', async () => {
+    test('emit error on input changed if invalid and hide picker', async () => {
         let $date = await createVm({
             displayFormat: 'DD/MM/YYYY HH:mm'
         });
@@ -206,7 +206,7 @@ describe('date-field',()=>{
         expect($date.showPicker).toBe(false);
     });
 
-    it('keep custom user input', async () => {
+    test('keep custom user input', async () => {
         let $date = await createVm({
             displayFormat: 'DD/MM/YYYY HH:mm'
         });
@@ -221,7 +221,7 @@ describe('date-field',()=>{
         expect(input.value).toBe('20/08/1996 bug 12 : 40');
     });
 
-    it('rollback custom user input on blur', async () => {
+    test('rollback custom user input on blur', async () => {
         let $date = await createVm({
             displayFormat: 'DD/MM/YYYY HH:mm'
         });
@@ -239,7 +239,7 @@ describe('date-field',()=>{
         expect(input.value).toBe('20/08/1996 12:11');
     });
 
-    it('rollback custom user input on clear button', async () => {
+    test('rollback custom user input on clear button', async () => {
         let $date = await createVm({
             displayFormat: 'DD/MM/YYYY HH:mm',
         });
@@ -256,7 +256,7 @@ describe('date-field',()=>{
         expect(input.value).toBe('20/08/1996 12:11');
     });
 
-    it('clear when click on clear button', async () => {
+    test('clear when click on clear button', async () => {
         let $date = await createVm();
 
         let { input, clearButton } = $date.$refs;
@@ -279,7 +279,7 @@ describe('date-field',()=>{
         expect(input.value).toBe('');
     });
 
-    it('clear field state on blur', async () => {
+    test('clear field state on blur', async () => {
         let $date = await createVm();
 
         let { input } = $date.$refs;
@@ -294,7 +294,7 @@ describe('date-field',()=>{
         expect(clearEmitted).toHaveBeenCalled();
     });
 
-    it('increase/decrease date on keydown up/down', async () => {
+    test('increase/decrease date on keydown up/down', async () => {
         let $date = await createVm({
             propsData: {
                 displayFormat:'DD/MM/YYYY HH:mm',
@@ -371,7 +371,7 @@ describe('date-field',()=>{
         expect(inputEmitted.mock.calls[9][0].toDate()).toEqual(date(1996, 7, 20, 12, 10));
     });
 
-    it('increase/decrease minute properly', async () => {
+    test('increase/decrease minute properly', async () => {
         let $date = await createVm({
             propsData: {
                 displayFormat:'DD/MM/YYYY HH:mm',
@@ -399,7 +399,7 @@ describe('date-field',()=>{
         expect(inputEmitted.mock.calls[2][0].toDate()).toEqual(date(1996, 7, 20, 12, 10));
     })
 
-    it('select text properly after increase/descrease', async () => {
+    test('select text properly after increase/descrease', async () => {
         let $date = await createVm({
             propsData: {
                 displayFormat:'DD/MM/YYYY HH:mm',
@@ -418,7 +418,7 @@ describe('date-field',()=>{
         expect(input.setSelectionRange).toHaveBeenCalledWith(0,2);
     });
 
-    it('show on focus', async () => {
+    test('show on focus', async () => {
         let $date = await createVm();
 
         let { input } = $date.$refs;
@@ -428,7 +428,7 @@ describe('date-field',()=>{
         expect($date.showPicker).toBe(true);
     });
 
-    it('hide on blur', async () => {
+    test('hide on blur', async () => {
         let $date = await createVm();
 
         let { input } = $date.$refs;

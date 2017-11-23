@@ -18,13 +18,13 @@ describe('text-field', () => {
         `
     });
 
-    it('can mount Text field', async () => {
+    test('can mount Text field', async () => {
         await createVm();
 
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('emit event on input and correct value', async () => {
+    test('emit event on input and correct value', async () => {
         let inputEmitted = jest.fn();
 
         await createVm({
@@ -38,7 +38,7 @@ describe('text-field', () => {
         expect(inputEmitted).toHaveBeenCalledWith('AAA');
     });
 
-    it('take input type in account', async () => {
+    test('take input type in account', async () => {
         await createVm({
             propsData: {
                 inputType: 'password'

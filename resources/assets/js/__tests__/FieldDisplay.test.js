@@ -39,7 +39,7 @@ describe('field-display', () => {
         computeCondition = conditions.computeCondition = jest.fn(conditions.computeCondition);
     });
 
-    it('can mount field display', async () => {
+    test('can mount field display', async () => {
         await createVm({
             propsData: {
                 contextData: {
@@ -56,7 +56,7 @@ describe('field-display', () => {
 
     describe('conditional diplay', ()=>{
 
-        it('check', async () => {
+        test('check', async () => {
             let vm = await createVm({
                 propsData: {
                     contextData: {
@@ -87,7 +87,7 @@ describe('field-display', () => {
             expect(vm.$children).toHaveLength(0);
         });
 
-        it('multiple select (unique values)', async () => {
+        test('multiple select (unique values)', async () => {
             let vm = await createVm({
                 propsData: {
                     contextData: {
@@ -122,7 +122,7 @@ describe('field-display', () => {
             expect(vm.$children).toHaveLength(0);
         });
 
-        it('multiple select (multiple values)', async () => {
+        test('multiple select (multiple values)', async () => {
             let vm = await createVm({
                 propsData: {
                     contextData: {
@@ -158,7 +158,7 @@ describe('field-display', () => {
             expect(vm.$children).toHaveLength(0);
         });
 
-        it('single select (unique values)', async () => {
+        test('single select (unique values)', async () => {
             let vm = await createVm({
                 propsData: {
                     contextData: {
@@ -192,7 +192,7 @@ describe('field-display', () => {
             expect(vm.$children).toHaveLength(0);
         });
 
-        it('single select (multiple values)', async () => {
+        test('single select (multiple values)', async () => {
             let vm = await createVm({
                 propsData: {
                     contextData: {
@@ -226,7 +226,7 @@ describe('field-display', () => {
             expect(vm.$children).toHaveLength(0);
         });
 
-        it('multiple select (negative)', async () => {
+        test('multiple select (negative)', async () => {
             let vm = await createVm({
                 propsData: {
                     contextData: {
@@ -261,7 +261,7 @@ describe('field-display', () => {
             expect(vm.$children).toHaveLength(0);
         });
 
-        it('single select (negative)', async () => {
+        test('single select (negative)', async () => {
             let vm = await createVm({
                 propsData: {
                     contextData: {
@@ -295,7 +295,7 @@ describe('field-display', () => {
             expect(vm.$children).toHaveLength(0);
         });
 
-        it('or operator', async () => {
+        test('or operator', async () => {
             let vm = await createVm({
                 propsData: {
                     contextData: {
@@ -333,7 +333,7 @@ describe('field-display', () => {
             expect(vm.$children).toHaveLength(0);
         });
 
-        it('and operator', async () => {
+        test('and operator', async () => {
             let vm = await createVm({
                 propsData: {
                     contextData: {
@@ -367,7 +367,7 @@ describe('field-display', () => {
         });
     });
 
-    it('expose appropriate props', async () => {
+    test('expose appropriate props', async () => {
         let vm = await createVm({
             propsData: {
                 contextData: {
@@ -399,7 +399,7 @@ describe('field-display', () => {
         });
     });
 
-    it('call update visibility', async () => {
+    test('call update visibility', async () => {
         let updateVisibility = jest.fn();
         let vm = await createVm({
             propsData: {

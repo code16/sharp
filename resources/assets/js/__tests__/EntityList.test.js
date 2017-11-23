@@ -55,7 +55,7 @@ describe('entity-list', ()=>{
         moxios.uninstall();
     });
 
-    it('can mount entity list', async ()=>{
+    test('can mount entity list', async ()=>{
         await createVm();
 
         await nextRequestFulfilled({
@@ -89,7 +89,7 @@ describe('entity-list', ()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount "disabled all" entity list', async ()=>{
+    test('can mount "disabled all" entity list', async ()=>{
         let $entityList = await createVm();
 
         await nextRequestFulfilled({
@@ -123,7 +123,7 @@ describe('entity-list', ()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount "disabled one" entity list', async ()=>{
+    test('can mount "disabled one" entity list', async ()=>{
         await createVm();
 
         await nextRequestFulfilled({
@@ -157,7 +157,7 @@ describe('entity-list', ()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount "sortable" entity list', async ()=>{
+    test('can mount "sortable" entity list', async ()=>{
         await createVm();
 
         await nextRequestFulfilled({
@@ -192,7 +192,7 @@ describe('entity-list', ()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount "sortable selected" entity list', async ()=>{
+    test('can mount "sortable selected" entity list', async ()=>{
         await createVm();
 
         await nextRequestFulfilled({
@@ -228,7 +228,7 @@ describe('entity-list', ()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount "sortable selected ascending" entity list', async ()=>{
+    test('can mount "sortable selected ascending" entity list', async ()=>{
         await createVm();
 
         await nextRequestFulfilled({
@@ -265,7 +265,7 @@ describe('entity-list', ()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount "empty" entity list', async ()=>{
+    test('can mount "empty" entity list', async ()=>{
         await createVm();
 
         await nextRequestFulfilled({
@@ -299,7 +299,7 @@ describe('entity-list', ()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount "reordering" entity list', async ()=>{
+    test('can mount "reordering" entity list', async ()=>{
         let $entityList = await createVm();
 
         await nextRequestFulfilled({
@@ -338,7 +338,7 @@ describe('entity-list', ()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount "reordering reordered" entity list', async ()=>{
+    test('can mount "reordering reordered" entity list', async ()=>{
         let $entityList = await createVm();
 
         await nextRequestFulfilled({
@@ -379,7 +379,7 @@ describe('entity-list', ()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount "with html" entity list', async ()=>{
+    test('can mount "with html" entity list', async ()=>{
         await createVm();
 
         await nextRequestFulfilled({
@@ -414,7 +414,7 @@ describe('entity-list', ()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount "hide on XS" entity list', async ()=>{
+    test('can mount "hide on XS" entity list', async ()=>{
         await createVm();
 
         await nextRequestFulfilled({
@@ -448,7 +448,7 @@ describe('entity-list', ()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount "with commands" entity list', async ()=>{
+    test('can mount "with commands" entity list', async ()=>{
         await createVm();
 
         await nextRequestFulfilled({
@@ -497,7 +497,7 @@ describe('entity-list', ()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount "with state" entity list', async ()=>{
+    test('can mount "with state" entity list', async ()=>{
         await createVm();
 
         await nextRequestFulfilled({
@@ -550,7 +550,7 @@ describe('entity-list', ()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount "with pagination" entity list', async ()=>{
+    test('can mount "with pagination" entity list', async ()=>{
         await createVm();
 
         await nextRequestFulfilled({
@@ -586,7 +586,7 @@ describe('entity-list', ()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount "with form commands" entity list', async ()=>{
+    test('can mount "with form commands" entity list', async ()=>{
         await createVm();
 
         await nextRequestFulfilled({
@@ -634,7 +634,7 @@ describe('entity-list', ()=>{
         expect(document.querySelectorAll('.MOCKED_SHARP_MODAL')).toMatchSnapshot();
     });
 
-    it('filter params', async () => {
+    test('filter params', async () => {
         let $entityList = await createVm();
         $entityList.filtersValue = {
             'age': 30,
@@ -645,7 +645,7 @@ describe('entity-list', ()=>{
         });
     });
 
-    it('id attribute', async ()=>{
+    test('id attribute', async ()=>{
         let $entityList = await createVm();
 
         $entityList.config = {};
@@ -655,7 +655,7 @@ describe('entity-list', ()=>{
         expect($entityList.idAttr).toBe('id');
     });
 
-    it('state attribute', async ()=>{
+    test('state attribute', async ()=>{
         let $entityList = await createVm();
 
         $entityList.config = {};
@@ -671,7 +671,7 @@ describe('entity-list', ()=>{
         expect($entityList.stateAttr).toBe('visibility');
     });
 
-    it('filter by keys', async ()=>{
+    test('filter by keys', async ()=>{
         let $entityList = await createVm();
 
         $entityList.config = {
@@ -684,7 +684,7 @@ describe('entity-list', ()=>{
         });
     });
 
-    it('state by value', async ()=>{
+    test('state by value', async ()=>{
         let $entityList = await createVm();
 
         $entityList.config = {
@@ -706,7 +706,7 @@ describe('entity-list', ()=>{
         });
     });
 
-    it('index by instance id', async ()=>{
+    test('index by instance id', async ()=>{
         let $entityList = await createVm();
 
         $entityList.config = {
@@ -722,7 +722,7 @@ describe('entity-list', ()=>{
         });
     });
 
-    it('authorizations by instance id', async ()=>{
+    test('authorizations by instance id', async ()=>{
         let $entityList = await createVm();
 
         $entityList.config = {
@@ -751,7 +751,7 @@ describe('entity-list', ()=>{
     });
 
 
-    it('commands by instance id', async ()=> {
+    test('commands by instance id', async ()=> {
         let $entityList = await createVm();
 
         $entityList.config = {
@@ -779,7 +779,7 @@ describe('entity-list', ()=>{
         });
     });
 
-    it('no instance commands', async ()=>{
+    test('no instance commands', async ()=>{
         let $entityList = await createVm();
 
         $entityList.config = {
@@ -810,7 +810,7 @@ describe('entity-list', ()=>{
         expect($entityList.noInstanceCommands).toBe(false);
     });
 
-    it('command forms', async ()=>{
+    test('command forms', async ()=>{
         let $entityList = await createVm();
 
         $entityList.config = {
@@ -832,7 +832,7 @@ describe('entity-list', ()=>{
         }]);
     });
 
-    it('mount', async ()=>{
+    test('mount', async ()=>{
         let $entityList = await createVm();
 
         history.replaceState = jest.fn();
@@ -915,7 +915,7 @@ describe('entity-list', ()=>{
         });
     });
 
-    it('setup action bar', async ()=>{
+    test('setup action bar', async ()=>{
         let $entityList = await createVm();
 
         let setupEmitted = jest.fn();
@@ -988,7 +988,7 @@ describe('entity-list', ()=>{
         }));
     });
 
-    it('col classes', async () => {
+    test('col classes', async () => {
         let { colClasses } = await createVm();
 
         let classes = colClasses({ sizeXS: 6, size:3 });
@@ -1001,7 +1001,7 @@ describe('entity-list', ()=>{
         expect(classes).toEqual(expect.arrayContaining(['col-6', 'col-md-3', { highlight: true }]));
     });
 
-    it('is state class', async () => {
+    test('is state class', async () => {
         let { isStateClass } = await createVm();
 
         expect(isStateClass('orange')).toBe(false);
@@ -1009,7 +1009,7 @@ describe('entity-list', ()=>{
         expect(isStateClass('sharp_primary')).toBe(true);
     });
 
-    it('state classes', async () => {
+    test('state classes', async () => {
         let $entityList = await createVm();
 
         $entityList.config = {
@@ -1035,7 +1035,7 @@ describe('entity-list', ()=>{
         expect(stateClasses({ value:'inactive' })).toEqual(['sharp_grey']);
     });
 
-    it('state style', async () => {
+    test('state style', async () => {
         let $entityList = await createVm();
 
         $entityList.config = {
@@ -1067,7 +1067,7 @@ describe('entity-list', ()=>{
         expect(stateStyle({ value:'inactive' })).toEqual('');
     });
 
-    it('has state authorization', async ()=>{
+    test('has state authorization', async ()=>{
         let $entityList= await createVm();
         let { hasStateAuthorization } = $entityList;
 
@@ -1086,7 +1086,7 @@ describe('entity-list', ()=>{
         expect(hasStateAuthorization({ id: 3 })).toBe(true);
     });
 
-    it('filter value or default', async () => {
+    test('filter value or default', async () => {
         let { filterValueOrDefault } = await createVm();
         expect(filterValueOrDefault(1)).toBe(1);
         expect(filterValueOrDefault(1, { default: 2 })).toBe(1);
@@ -1097,7 +1097,7 @@ describe('entity-list', ()=>{
         expect(filterValueOrDefault(null, { multiple: true })).toEqual([]);
     });
 
-    it('instance commands', async ()=>{
+    test('instance commands', async ()=>{
         let $entityList = await createVm();
         $entityList.config = {
             instanceIdAttribute: 'id',
@@ -1109,6 +1109,8 @@ describe('entity-list', ()=>{
         let { instanceCommands } = $entityList;
         expect(instanceCommands({ id: 3 })).toEqual([{ type: 'instance', authorization:[3] }]);
     });
+
+
 });
 
 async function createVm(customOptions={}) {

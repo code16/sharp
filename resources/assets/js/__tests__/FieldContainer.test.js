@@ -29,13 +29,13 @@ describe('field-container', () => {
         };
     });
 
-    it('can mount field container', async () => {
+    test('can mount field container', async () => {
         await createVm();
 
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount field container with error', async () => {
+    test('can mount field container with error', async () => {
         let $fieldContainer = await createVm();
 
         $fieldContainer.$form.errors = {
@@ -48,7 +48,7 @@ describe('field-container', () => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount field container with success', async () => {
+    test('can mount field container with success', async () => {
         let $fieldContainer = await createVm();
 
         $fieldContainer.state = 'ok';
@@ -58,7 +58,7 @@ describe('field-container', () => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount field container with extra style', async () => {
+    test('can mount field container with extra style', async () => {
         await createVm({
            data: ()=>({
                 fieldProps: {
@@ -70,7 +70,7 @@ describe('field-container', () => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('set error on field emitted error', async () => {
+    test('set error on field emitted error', async () => {
         let $fieldContainer = await createVm();
 
         let { field } = $fieldContainer.$refs;
@@ -85,7 +85,7 @@ describe('field-container', () => {
         expect(tabErrorHandler).toHaveBeenCalledWith('error.title');
     });
 
-    it('set success on field emitted ok', async () => {
+    test('set success on field emitted ok', async () => {
         let $fieldContainer = await createVm();
 
         let { field } = $fieldContainer.$refs;
@@ -95,7 +95,7 @@ describe('field-container', () => {
         expect($fieldContainer.stateMessage).toBe('');
     });
 
-    it('clear on clear emitted', async () => {
+    test('clear on clear emitted', async () => {
         let $fieldContainer = await createVm();
 
         let { field } = $fieldContainer.$refs;
@@ -111,7 +111,7 @@ describe('field-container', () => {
         expect(formClearHandler).toHaveBeenCalledWith('error.title');
     });
 
-    it('expose proper props', async () => {
+    test('expose proper props', async () => {
         let $fieldContainer = await createVm();
 
         let { field } = $fieldContainer.$refs;
@@ -120,7 +120,7 @@ describe('field-container', () => {
         expect(field.fieldConfigIdentifier).toBe('config.title');
     });
 
-    it('responsive to $form.errors object', async () => {
+    test('responsive to $form.errors object', async () => {
         let $fieldContainer = await createVm();
 
         $fieldContainer.clear = jest.fn();

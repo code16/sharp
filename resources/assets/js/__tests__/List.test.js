@@ -41,7 +41,7 @@ describe('list-field', () => {
         MockI18n.mockLangFunction();
     });
 
-    it('can mount empty list field', async () => {
+    test('can mount empty list field', async () => {
         await createVm({
             propsData: {
                 addable:true, removable:true, sortable:true
@@ -51,7 +51,7 @@ describe('list-field', () => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount empty "read only" list field', async () => {
+    test('can mount empty "read only" list field', async () => {
         await createVm({
             propsData: {
                 readOnly: true,
@@ -62,7 +62,7 @@ describe('list-field', () => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount filled list field', async () => {
+    test('can mount filled list field', async () => {
         await createVm({
             propsData: {
                 addable:true, removable:true, sortable:true
@@ -75,7 +75,7 @@ describe('list-field', () => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount "read only" filled list field', async () => {
+    test('can mount "read only" filled list field', async () => {
         await createVm({
             propsData: {
                 readOnly:true,
@@ -89,7 +89,7 @@ describe('list-field', () => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount collapsed list field', async () => {
+    test('can mount collapsed list field', async () => {
         let $list = await createVm({
             propsData: {
                 addable: true, removable: true, sortable: true
@@ -107,7 +107,7 @@ describe('list-field', () => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount non addable, non removable, non sortable list field', async () => {
+    test('can mount non addable, non removable, non sortable list field', async () => {
         await createVm({
             propsData: {
                 addable: false, removable: false, sortable: false
@@ -120,7 +120,7 @@ describe('list-field', () => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount with full list', async () => {
+    test('can mount with full list', async () => {
         await createVm({
             propsData: {
                 addable:true, removable:true, sortable: true
@@ -133,7 +133,7 @@ describe('list-field', () => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('emit input on init to have list and value equals by reference (sync changes)', async () => {
+    test('emit input on init to have list and value equals by reference (sync changes)', async () => {
         let inputEmitted = jest.fn();
 
         let $list = await createVm({
@@ -146,7 +146,7 @@ describe('list-field', () => {
         expect(inputEmitted).toHaveBeenCalledWith($list.list);
     });
 
-    it('create appropriate item', async () => {
+    test('create appropriate item', async () => {
         let $list = await createVm();
 
         let item = $list.createItem();
@@ -154,7 +154,7 @@ describe('list-field', () => {
         expect(item).toMatchObject({ id: null, name: null });
     });
 
-    it('items have correct indexes', async () => {
+    test('items have correct indexes', async () => {
         let $list = await createVm({
             data:()=>({
                 value:[{id:0, name:'Antoine'},{id:1, name:'Samuel'},{id:2, name:'Solène'}]
@@ -174,7 +174,7 @@ describe('list-field', () => {
         ]);
     });
 
-    it('items have correct drag indexes', async () => {
+    test('items have correct drag indexes', async () => {
         let $list = await createVm({
             data:()=>({
                 value:[{id:0, name:'Antoine'},{id:1, name:'Samuel'},{id:2, name:'Solène'}]
@@ -190,7 +190,7 @@ describe('list-field', () => {
         ]);
     });
 
-    it('remove item correctly', async () => {
+    test('remove item correctly', async () => {
         let $list = await createVm({
             data:()=>({
                 value:[{id:0, name:'Antoine'},{id:1, name:'Samuel'},{id:2, name:'Solène'}]
@@ -206,7 +206,7 @@ describe('list-field', () => {
         ])
     });
 
-    it('expose appropriate collapsed item template props data', async () => {
+    test('expose appropriate collapsed item template props data', async () => {
         let $list = await createVm();
 
         let { dragIndexSymbol } = $list;
@@ -219,7 +219,7 @@ describe('list-field', () => {
         });
     });
 
-    it('update data properly', async () => {
+    test('update data properly', async () => {
         let $list = await createVm({
             data:()=>({
                 value:[{id:0, name:'Antoine'},{id:1, name:'Samuel'},{id:2, name:'Solène'}]
@@ -235,7 +235,7 @@ describe('list-field', () => {
         })
     });
 
-    it('insert item properly', async () => {
+    test('insert item properly', async () => {
         let $list = await createVm({
             data:()=>({
                 value:[{id:0, name:'Antoine'},{id:2, name:'Solène'}]
@@ -249,7 +249,7 @@ describe('list-field', () => {
         ])
     });
 
-    it('have proper field identifier', async () => {
+    test('have proper field identifier', async () => {
         let $list = await createVm({
             data:()=>({
                 value:[{id:0, name:'Antoine'}, {id:1, name:'Samuel'}]
