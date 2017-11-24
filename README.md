@@ -1,4 +1,4 @@
-<div style="text-align:center; margin-bottom: 2em;">
+<div align="center">
 
 ![Sharp 4](docs/img/logo.png)
 
