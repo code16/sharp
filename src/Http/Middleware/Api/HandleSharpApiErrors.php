@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Http\Middleware\Api;
 
 use Closure;
-use Code16\Sharp\Exceptions\Auth\SharpAuthenticationException;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Code16\Sharp\Exceptions\EntityList\SharpInvalidEntityStateException;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
@@ -44,10 +43,6 @@ class HandleSharpApiErrors
         if ($exception instanceof SharpApplicativeException) {
             // This is an applicative exception, we return it as a 417
             return 417;
-        }
-
-        if ($exception instanceof SharpAuthenticationException) {
-            return 401;
         }
 
         if ($exception instanceof SharpAuthorizationException) {
