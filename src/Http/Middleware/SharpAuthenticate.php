@@ -37,19 +37,6 @@ class SharpAuthenticate extends BaseAuthenticate
             $this->authenticate($guards);
 
         } catch (AuthenticationException $e) {
-            $logged = false;
-            foreach (config("auth.guards") as $guard => $config) {
-                if ($this->auth->guard($guard)->check()) {
-                    $logged = true;
-                    break;
-                }
-            }
-
-            if($logged) {
-                // User is logged, but not as a Sharp user
-                abort(403, "Unauthorized action");
-            }
-
             if($request->wantsJson()) {
                 return response()->json(['message' => "Unauthenticated user"], 401);
             }

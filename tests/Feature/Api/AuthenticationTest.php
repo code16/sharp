@@ -49,8 +49,8 @@ class AuthenticationTest extends BaseApiTest
         $authGuard->setInvalid();
 
         // We're logged, but not as a sharp user (our fake guard tells us that).
-        $this->get('/sharp/list/person')->assertStatus(403);
-        $this->json('get', '/sharp/api/list/person')->assertStatus(403);
+        $this->get('/sharp/list/person')->assertStatus(302);
+        $this->json('get', '/sharp/api/list/person')->assertStatus(401);
     }
 
     /**
