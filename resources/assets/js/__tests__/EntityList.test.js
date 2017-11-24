@@ -5,15 +5,26 @@ import DropdownItem from '../components/dropdown/DropdownItem.vue';
 import StateIcon from '../components/list/StateIcon.vue';
 import Modal from '../components/Modal.vue';
 
-import * as consts from '../consts';
-
 import { mockChildrenComponents } from "./utils/mockSFC";
 
+
 import moxios from 'moxios';
-import {MockInjections, MockI18n} from "./utils";
+import {MockInjections, MockI18n, wait } from "./utils";
+import { setter, mockProperty, unmockProperty } from "./utils/mock-utils";
 import { nextRequestFulfilled } from './utils/moxios-utils';
 import HTMLElementsSerializer from './utils/htmlElementsSnapshotSerializer';
 
+
+jest.mock('../helpers/querystring', ()=>({
+    parse: jest.fn(),
+    serialize: jest.fn(()=>'{{serialized}}')
+}));
+
+function mockComputed(vm, computedName, value) {
+    Object.defineProperty(vm, computedName, {
+        get:()=>value
+    });
+}
 
 describe('entity-list', ()=>{
     Vue.use(MockI18n);
@@ -1118,11 +1129,9 @@ describe('entity-list', ()=>{
         };
 
         // mock computed
-        Object.defineProperty($entityList,'authorizationsByInstanceId',{
-            get:()=>({
-                3: { view: false, update: true },
-                4: { view: true, update: false }
-            })
+        mockComputed($entityList,'authorizationsByInstanceId', {
+            3: { view: false, update: true },
+            4: { view: true, update: false }
         });
 
         // row with link must have 'view' authorization defined
@@ -1160,8 +1169,425 @@ describe('entity-list', ()=>{
         expect($entityList.update).toHaveBeenCalledWith({ resetPage: false });
     });
 
-    test('sort toggle')
+    test('sort toggle', async () => {
+        let $entityList = await createVm();
+        $entityList.sortDir = null;
+        $entityList.sortedBy = null;
 
+        $entityList.update = jest.fn();
+
+        $entityList.sortToggle('col1');
+        expect($entityList.sortDir).toBe('asc');
+        expect($entityList.sortedBy).toBe('col1');
+        expect($entityList.page).toBe(1);
+        expect($entityList.update).toHaveBeenCalled();
+
+        $entityList.sortToggle('col1');
+        expect($entityList.sortDir).toBe('desc');
+    });
+
+    test('set state', async () => {
+        let $entityList = await createVm();
+        $entityList.config = {
+            instanceIdAttribute: 'id',
+            state: { attribute: 'stateAttr' }
+        };
+
+        const items = {};
+        $entityList.actionRefresh = jest.fn();
+        mockComputed($entityList, 'apiPath', '{{apiPath}}');
+
+        $entityList.setState({ id: 3 }, { value:'active' });
+        let { request } = await nextRequestFulfilled({
+            status: 200,
+            response: {
+                action: 'refresh',
+                items
+            }
+        });
+        expect($entityList.actionRefresh).toHaveBeenCalledWith(items);
+        expect(request.config).toMatchObject({
+            method:'post',
+            data: JSON.stringify({
+                attribute: 'stateAttr',
+                value: 'active'
+            }),
+            url: '{{apiPath}}/state/3'
+        });
+
+        $entityList.actionReload = jest.fn();
+        $entityList.setState({ id: 3 }, { value:'active' });
+        await nextRequestFulfilled({
+            status: 200,
+            response: {
+                action: 'reload'
+            }
+        });
+        expect($entityList.actionReload).toHaveBeenCalled();
+
+        const showMainModalEmmitted = jest.fn();
+        $entityList.actionsBus.$on('showMainModal', showMainModalEmmitted);
+        $entityList.setState({ id: 3 }, { value:'active' });
+        await nextRequestFulfilled({
+            status: 422,
+            response: {
+                message: 'Error message'
+            }
+        });
+        expect(showMainModalEmmitted).toHaveBeenCalledWith({
+            title: expect.any(String),
+            text: 'Error message',
+            isError: true,
+            okCloseOnly: true
+        })
+    });
+
+    test('update', async ()=> {
+        let $entityList = await createVm();
+
+        $entityList.page = 3;
+        $entityList.updateData = jest.fn();
+        $entityList.updateHistory = jest.fn();
+
+        $entityList.update();
+        expect($entityList.page).toBe(1);
+        expect($entityList.updateData).toHaveBeenCalled();
+        expect($entityList.updateHistory).toHaveBeenCalled();
+
+        $entityList.page = 3;
+
+        $entityList.update({ resetPage: false });
+        expect($entityList.page).toBe(3);
+    });
+
+    test('update data', async ()=>{
+        let $entityList = await createVm();
+
+        const data = {};
+        $entityList.setupActionBar = jest.fn();
+        $entityList.get = jest.fn(()=>Promise.resolve({
+            data: {
+                data
+            }
+        }));
+        $entityList.updateData();
+        await wait(20);
+        expect($entityList.get).toHaveBeenCalled();
+        expect($entityList.data).toBe(data);
+        expect($entityList.setupActionBar).toHaveBeenCalled();
+    });
+
+    test('command endpoint', async () => {
+        let $entityList = await createVm();
+        $entityList.config = {
+            instanceIdAttribute: 'id'
+        };
+        mockComputed($entityList, 'apiPath', '{{apiPath}}');
+        expect($entityList.commandEndpoint('updateAll')).toBe('{{apiPath}}/command/updateAll');
+        expect($entityList.commandEndpoint('updateAll', { id: 3 })).toBe('{{apiPath}}/command/updateAll/3');
+    });
+
+    test('send command', async () => {
+        let $entityList = await createVm();
+
+        $entityList.commandEndpoint = jest.fn(()=>'{{commandEndpoint}}');
+        $entityList.handleCommandResponse = jest.fn();
+
+        mockComputed($entityList, 'apiParams', { param1: true });
+        $entityList.sendCommand({
+            key: 'updateAll'
+        });
+        const data = {
+            myData: 1
+        };
+        let { request } = await nextRequestFulfilled({
+            status: 200,
+            response: {
+                data
+            }
+        });
+        expect(request.config).toMatchObject({
+            method: 'post',
+            url: '{{commandEndpoint}}',
+            data: JSON.stringify({ query:{ param1: true } })
+        });
+
+        expect($entityList.handleCommandResponse).toHaveBeenCalledWith({ data });
+    });
+
+    test('handle command response', async ()=> {
+        let $entityList = await createVm();
+        $entityList.actionRefresh = jest.fn();
+        $entityList.actionReload = jest.fn();
+
+        const items = [];
+        $entityList.handleCommandResponse({ action: 'refresh', items });
+        expect($entityList.actionRefresh).toHaveBeenCalledWith(items);
+
+        $entityList.handleCommandResponse({ action: 'reload' });
+        expect($entityList.actionReload).toHaveBeenCalled();
+
+
+        let showMainModalEmitted = jest.fn();
+        $entityList.actionsBus.$on('showMainModal', showMainModalEmitted);
+
+        $entityList.handleCommandResponse({ action: 'info', message: 'My message' });
+        expect(showMainModalEmitted).toHaveBeenCalledWith({
+            title: expect.any(String),
+            text: 'My message',
+            okCloseOnly: true
+        });
+
+        $entityList.handleCommandResponse({ action: 'view', html:'<p></p>' });
+        expect($entityList.showViewPanel).toBe(true);
+        expect($entityList.viewPanelContent).toBe('<p></p>');
+    });
+
+    test('post command form', async () => {
+        let $entityList = await createVm();
+        let submitEmitted = jest.fn();
+        const modalEvent = { cancel:jest.fn() };
+
+        $entityList.showFormModal = {};
+        $entityList.commandEndpoint = jest.fn(()=>'{{commandEndpoint}}');
+        $entityList.actionsBus.$on('submit', submitEmitted);
+        $entityList.selectedInstance = {};
+        const apiParams = {};
+        mockComputed($entityList,'apiParams',apiParams);
+
+        $entityList.$set = jest.fn();
+        $entityList.postCommandForm('sendInfos', modalEvent);
+        expect($entityList.commandEndpoint).toHaveBeenCalledWith('sendInfos', $entityList.selectedInstance);
+        expect(submitEmitted).toHaveBeenCalledTimes(1);
+        expect(submitEmitted).toHaveBeenCalledWith({
+            entityKey: 'sendInfos',
+            endpoint: '{{commandEndpoint}}',
+            dataFormatter: expect.any(Function)
+        });
+
+        let { dataFormatter } = submitEmitted.mock.calls[0][0];
+        expect(dataFormatter({
+            data: {
+                someData: true
+            }
+        })).toEqual({
+            query:apiParams,
+            data:{ someData:true }
+        });
+
+        expect(modalEvent.cancel).toHaveBeenCalled();
+        expect($entityList.$set).toHaveBeenCalledWith($entityList.showFormModal, 'sendInfos', true);
+    });
+
+    test('command form submitted', async () => {
+        let $entityList = await createVm();
+        $entityList.selectedInstance = {};
+        $entityList.handleCommandResponse = jest.fn();
+        $entityList.$set = jest.fn();
+        $entityList.showFormModal = {};
+
+        const data = {};
+        $entityList.commandFormSubmitted('command1', data);
+        expect($entityList.selectedInstance).toBeNull();
+        expect($entityList.handleCommandResponse).toHaveBeenCalledWith(data);
+        await Vue.nextTick();
+        expect($entityList.$set).toHaveBeenCalledWith($entityList.showFormModal, 'command1', false);
+
+    });
+
+    test('on command form modal hidden', async () => {
+        let $entityList = await createVm();
+        let resetEmitted = jest.fn();
+
+        $entityList.actionsBus.$on('reset', resetEmitted);
+        $entityList.onCommandFormModalHidden('command1');
+        expect(resetEmitted).toHaveBeenCalledWith({ entityKey:'command1' });
+    });
+
+    test('action reload', async () => {
+        let $entityList = await createVm();
+        $entityList.updateData = jest.fn();
+
+        $entityList.actionReload();
+        expect($entityList.updateData).toHaveBeenCalled();
+    });
+
+    test('action refresh', async () => {
+        let $entityList = await createVm();
+        $entityList.config = {
+            instanceIdAttribute: 'id'
+        };
+        $entityList.$set = jest.fn();
+        $entityList.data = { items: [{ id: 3}] };
+        mockComputed($entityList, 'indexByInsstanceId', { 3: 0 });
+
+        $entityList.actionRefresh([{
+            id: 3
+        }]);
+        expect($entityList.$set).toHaveBeenCalledWith($entityList.data.items, 0, { id: 3 });
+    });
+
+    test('update history', async () => {
+        let $entityList = await createVm();
+
+        history.pushState = jest.fn();
+        const apiParams = {};
+        mockComputed($entityList,'apiParams',apiParams);
+
+        $entityList.updateHistory();
+
+        expect(history.pushState).toHaveBeenCalledWith(apiParams, null, '{{serialized}}');
+    });
+
+    test('bind params', async () => {
+        let $entityList = await createVm();
+        let searchChangedEmitted = jest.fn();
+
+        $entityList.page = 2;
+        $entityList.sortedBy = 'col3';
+        $entityList.sortDir = 'desc';
+
+        const filterByKey = {
+            age: {
+                key: 'age'
+            },
+            job: {
+                key: 'job',
+                multiple: true
+            },
+            wrong : {
+                key: 'wrong'
+            }
+        };
+        mockComputed($entityList,'filterByKey',filterByKey);
+
+        const filterValueOrDefault = Symbol('filter value or default');
+        $entityList.filterValueOrDefault = jest.fn(()=>filterValueOrDefault);
+
+        $entityList.actionsBus.$on('searchChanged', searchChangedEmitted);
+
+        $entityList.bindParams({ search: 'aaa', filter_age: 3, filter_job: 'teacher', _filter_wrong: 'wrong' });
+        expect($entityList.page).toBe(2);
+        expect($entityList.sortedBy).toBe('col3');
+        expect($entityList.sortDir).toBe('desc');
+
+        expect(searchChangedEmitted).toHaveBeenCalledWith('aaa', { isInput: false });
+        expect($entityList.filterValueOrDefault).toHaveBeenCalledWith(3, filterByKey.age);
+        expect($entityList.filterValueOrDefault).toHaveBeenCalledWith(['teacher'], filterByKey.job);
+        expect($entityList.filterValueOrDefault).not.toHaveBeenCalledWith('wrong', filterByKey.wrong);
+
+        expect($entityList.filtersValue).toEqual({
+            age: filterValueOrDefault,
+            job: filterValueOrDefault
+        });
+
+        $entityList.bindParams({ page: 1, sort: 'col1', dir: 'asc' });
+        expect($entityList.page).toBe(1);
+        expect($entityList.sortedBy).toBe('col1');
+        expect($entityList.sortDir).toBe('asc');
+    });
+
+    test('search changed (action)', async () => {
+        let $entityList = await createVm();
+        $entityList.update = jest.fn();
+        $entityList.actionsBus.$emit('searchChanged', 'new search');
+        expect($entityList.search).toBe('new search');
+        expect($entityList.update).toHaveBeenCalled();
+
+        $entityList.update.mockClear();
+        $entityList.actionsBus.$emit('searchChanged', 'new new search', { isInput: false });
+        expect($entityList.update).not.toHaveBeenCalled();
+    });
+
+    test('filter changed (action)', async () => {
+        let $entityList = await createVm();
+        $entityList.update = jest.fn();
+        $entityList.actionsBus.$emit('filterChanged', 'age', 3);
+        expect($entityList.filtersValue).toEqual({ age: 3 });
+        expect($entityList.update).toHaveBeenCalled();
+    });
+
+    test('command (action)', async () => {
+        let $entityList = await createVm();
+        $entityList.sendCommand = jest.fn();
+        $entityList.actionsBus.$emit('command');
+        expect($entityList.sendCommand).toHaveBeenCalled();
+    });
+
+    test('create (action)', async () => {
+        let $entityList = await createVm();
+        mockProperty(location, 'href');
+        $entityList.actionsBus.$emit('create');
+        expect(setter(location, 'href')).toHaveBeenCalledWith('/sharp/form/spaceship');
+        unmockProperty(location, 'href');
+    });
+
+    test('toggle reorder (action)', async () => {
+        let $entityList = await createVm();
+        $entityList.reorderActive = false;
+        $entityList.data = {
+            items: [{ id: 1 }, { id: 2 }]
+        };
+        $entityList.reorderedItems = [{ id: 2 }, { id: 1 }];
+        $entityList.actionsBus.$emit('toggleReorder');
+        expect($entityList.reorderActive).toBe(true);
+
+        $entityList.actionsBus.$emit('toggleReorder');
+        expect($entityList.reorderActive).toBe(false);
+        expect($entityList.reorderedItems).toEqual($entityList.data.items);
+
+
+    });
+    test('toggle reorder - apply (action)', async () => {
+        let $entityList = await createVm();
+        $entityList.reorderActive = true;
+        $entityList.config = {
+            instanceIdAttribute: 'id'
+        };
+        $entityList.data = {
+            items: [{ id: 1 }, { id: 2 }]
+        };
+        $entityList.reorderedItems = [{ id: 2 }, { id: 1 }];
+        $entityList.$set = jest.fn();
+
+        mockComputed($entityList, 'apiPath', '{{apiPath}}');
+        $entityList.actionsBus.$emit('toggleReorder', { apply: true });
+        let { request } = await nextRequestFulfilled({
+            status: 200
+        });
+        expect(request.config).toMatchObject({
+            method: 'post',
+            data: JSON.stringify({
+                instances: [2, 1]
+            })
+        });
+        expect($entityList.$set).toHaveBeenCalledTimes(1);
+        expect($entityList.$set).toHaveBeenCalledWith($entityList.data, 'items', expect.any(Array));
+        expect($entityList.$set.mock.calls[0][2]).toEqual($entityList.reorderedItems);
+        expect($entityList.reorderActive).toBe(false);
+    });
+
+    test('created', async () => {
+        let $entityList = await createVm();
+        $entityList.get = jest.fn(()=>Promise.resolve());
+
+        $entityList.verify=jest.fn();
+        $entityList.bindParams=jest.fn();
+        $entityList.setupActionBar=jest.fn();
+        $entityList.updateData=jest.fn();
+
+        EntityList.created.call($entityList);
+        await wait(20);
+        expect($entityList.verify).toHaveBeenCalled();
+        expect($entityList.bindParams).toHaveBeenCalled();
+        expect($entityList.setupActionBar).toHaveBeenCalled();
+
+        $entityList.updateData.mockClear();
+        const state = {};
+        window.onpopstate({ state });
+        expect($entityList.bindParams).toHaveBeenCalledWith(state);
+        expect($entityList.updateData).toHaveBeenCalled();
+    });
 });
 
 async function createVm(customOptions={}) {

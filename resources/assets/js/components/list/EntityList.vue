@@ -413,7 +413,7 @@
                         if(action === 'refresh') this.actionRefresh(items);
                         else if(action === 'reload') this.actionReload();
                     })
-                    .catch(({error:{response:{data, status}}}) => {
+                    .catch(({response:{data, status}}) => {
                         if(status === 422) {
                             this.actionsBus.$emit('showMainModal', {
                                 title: this.l('modals.state.422.title'),
@@ -440,13 +440,10 @@
             /**
              * Commands
              */
-            commandEnpoint(key, { [this.idAttr]:instanceId }={}) {
+            commandEndpoint(key, { [this.idAttr]:instanceId }={}) {
                 return `${this.apiPath}/command/${key}${instanceId?`/${instanceId}`:''}`;
             },
 
-            getFormModal(key) {
-                return this.$refs[`formModal-${key}`][0];
-            },
 
             /* (Command, Instance)
              * Display a form in a modal if the command require a form, else send API request
@@ -455,7 +452,6 @@
                 if(form) {
                     this.selectedInstance = instance;
                     this.$set(this.showFormModal,key,true);
-                    //this.getFormModal(key).show();
                     return;
                 }
                 if(confirmation) {
@@ -467,7 +463,7 @@
                         });
                     });
                 }
-                let { data } = await this.axiosInstance.post(this.commandEnpoint(key, instance), { query: this.apiParams });
+                let { data } = await this.axiosInstance.post(this.commandEndpoint(key, instance), { query: this.apiParams });
                 this.handleCommandResponse(data);
             },
 
@@ -497,7 +493,7 @@
             postCommandForm(key, event) {
                 this.actionsBus.$emit('submit', {
                     entityKey: key,
-                    endpoint: this.commandEnpoint(key, this.selectedInstance),
+                    endpoint: this.commandEndpoint(key, this.selectedInstance || {}),
                     dataFormatter:form=>({ query:this.apiParams, data:form.data })
                 });
                 event.cancel();
