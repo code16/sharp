@@ -2,13 +2,12 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
-use Code16\Sharp\Auth\SharpAuthCheck;
 use Code16\Sharp\Tests\Fixtures\User;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Support\Facades\Auth;
 
 class AuthenticationTest extends BaseApiTest
 {
+
     /** @test */
     public function unauthenticated_user_wont_pass_on_an_api_call()
     {
@@ -26,43 +25,32 @@ class AuthenticationTest extends BaseApiTest
     }
 
     /** @test */
+    public function authenticated_user_are_redirected_on_a_guest_route()
+    {
+        $this->buildTheWorld();
+
+        $this->login();
+
+        $this->get('/sharp/login')->assertStatus(302);
+    }
+
+    /** @test */
     public function we_can_configure_a_custom_auth_guard()
     {
         $this->buildTheWorld();
-        $this->login();
 
         $authGuard = $this->configureCustomAuthGuard();
+
+        $this->login();
 
         $this->get('/sharp/list/person')->assertStatus(200);
         $this->json('get', '/sharp/api/list/person')->assertStatus(200);
 
         $authGuard->setInvalid();
 
+        // We're logged, but not as a sharp user (our fake guard tells us that).
         $this->get('/sharp/list/person')->assertStatus(302);
         $this->json('get', '/sharp/api/list/person')->assertStatus(401);
-    }
-
-    /** @test */
-    public function we_can_configure_an_additional_auth_check()
-    {
-        $this->buildTheWorld();
-
-        // We use our custom guard to avoid the need of a DB (otherwise
-        // this code would fail on the logout() stage)
-        $this->configureCustomAuthGuard();
-
-        $this->app['config']->set(
-            'sharp.auth.check',
-            AuthenticationTestCheck::class
-        );
-
-        $this->actingAs(new User(["name" => "Bob"]));
-        $this->get('/sharp/list/person')->assertStatus(302);
-        $this->json('get', '/sharp/api/list/person')->assertStatus(401);
-
-        $this->actingAs(new User(["name" => "John"]));
-        $this->get('/sharp/list/person')->assertStatus(200);
-        $this->json('get', '/sharp/api/list/person')->assertStatus(200);
     }
 
     /**
@@ -72,7 +60,7 @@ class AuthenticationTest extends BaseApiTest
     {
         $authGuard = new AuthenticationTestGuard(true);
 
-        Auth::extend('sharp', function () use ($authGuard) {
+        auth()->extend('sharp', function () use ($authGuard) {
             return $authGuard;
         });
 
@@ -81,12 +69,12 @@ class AuthenticationTest extends BaseApiTest
             'sharp'
         );
 
-        $this->app['config']->set([
-            'auth.guards.sharp' => [
+        $this->app['config']->set(
+            'auth.guards.sharp', [
                 'driver' => 'sharp',
                 'provider' => 'users',
             ]
-        ]);
+        );
 
         return $authGuard;
     }
@@ -103,7 +91,7 @@ class AuthenticationTestGuard implements \Illuminate\Contracts\Auth\Guard
     }
     public function check()
     {
-       return $this->isValid;
+        return $this->isValid;
     }
     public function guest()
     {
@@ -111,7 +99,7 @@ class AuthenticationTestGuard implements \Illuminate\Contracts\Auth\Guard
     }
     public function user()
     {
-        return $this->isValid ? auth()->user() : null;
+        return $this->isValid ? new User() : null;
     }
     public function id()
     {
@@ -128,15 +116,11 @@ class AuthenticationTestGuard implements \Illuminate\Contracts\Auth\Guard
         $this->isValid = false;
     }
 
-    public function logout()
+    public function authenticate()
     {
     }
-}
 
-class AuthenticationTestCheck implements SharpAuthCheck
-{
-    function allowUserInSharp($user): bool
+    public function logout()
     {
-        return $user->name == "John";
     }
 }

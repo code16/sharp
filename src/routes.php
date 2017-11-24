@@ -3,7 +3,7 @@
 // API routes
 Route::group([
     'prefix' => '/sharp/api',
-    'middleware' => ['sharp_web', 'sharp_api_errors', 'sharp_auth', 'sharp_api_context', 'sharp_locale'],
+    'middleware' => ['sharp_web', 'sharp_api_errors', 'sharp_api_context', 'sharp_locale'],
     'namespace' => 'Code16\Sharp\Http\Api'
 ], function() {
 
@@ -67,50 +67,38 @@ Route::group([
     'namespace' => 'Code16\Sharp\Http'
 ], function() {
 
-    Route::group([
-        'middleware' => ['sharp_guest'],
-    ], function() {
+    Route::get('/login')
+        ->name("code16.sharp.login")
+        ->uses('LoginController@create');
 
-        Route::get('/login')
-            ->name("code16.sharp.login")
-            ->uses('LoginController@create');
+    Route::post('/login')
+        ->name("code16.sharp.login.post")
+        ->uses('LoginController@store');
 
-        Route::post('/login')
-            ->name("code16.sharp.login.post")
-            ->uses('LoginController@store');
+    Route::get('/')
+        ->name("code16.sharp.dashboard")
+        ->uses('DashboardController@index');
 
-    });
+    Route::get('/logout')
+        ->name("code16.sharp.logout")
+        ->uses('LoginController@destroy');
 
-    Route::group([
-        'middleware' => ['sharp_auth'],
-    ], function() {
+    Route::get('/list/{entityKey}')
+        ->name("code16.sharp.list")
+        ->middleware('sharp_restore_list_params')
+        ->uses('ListController@show');
 
-        Route::get('/')
-            ->name("code16.sharp.dashboard")
-            ->uses('DashboardController@index');
+    Route::get('/form/{entityKey}/{instanceId}')
+        ->name("code16.sharp.edit")
+        ->uses('FormController@edit');
 
-        Route::get('/logout')
-            ->name("code16.sharp.logout")
-            ->uses('LoginController@destroy');
+    Route::get('/form/{entityKey}')
+        ->name("code16.sharp.create")
+        ->uses('FormController@create');
 
-        Route::get('/list/{entityKey}')
-            ->name("code16.sharp.list")
-            ->middleware('sharp_restore_list_params')
-            ->uses('ListController@show');
-
-        Route::get('/form/{entityKey}/{instanceId}')
-            ->name("code16.sharp.edit")
-            ->uses('FormController@edit');
-
-        Route::get('/form/{entityKey}')
-            ->name("code16.sharp.create")
-            ->uses('FormController@create');
-
-        Route::post('/api/upload')
-            ->name("code16.sharp.api.form.upload")
-            ->uses('Api\FormUploadController@store');
-    });
-
+    Route::post('/api/upload')
+        ->name("code16.sharp.api.form.upload")
+        ->uses('Api\FormUploadController@store');
 });
 
 // Localization

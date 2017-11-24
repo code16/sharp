@@ -1,11 +1,14 @@
-# Sharp 4
+<div align="center">
+
+![Sharp 4](docs/img/logo.png)
+
+</div>
 
 Sharp is not a CMS: it's a content management framework, a toolset which provides help building a CMS section in a website, with some rules in mind:
-- the public website **should not have any knowledge of the CMS**;
-- the CMS **should not have any expectations from the persistence layer** (meaning: the DB structure has nothing to do with the CMS);
-- in fact, **removing the CMS should not have any effect on the project** (well, ok, except for the administrator);
-- administrators **should work with their data and terminology**, not CMS terms;
-- website developers **should not have to work on the front-end development** for the CMS. 
+- the public website **should not have any knowledge of the CMS** — the CMS is a part of the system, not the center of it. In fact, removing the CMS should not have any effect on the project.
+- The CMS **should not have any expectations from the persistence layer**: MySQL is cool — but it's not the perfect tool for every problem. And more important, the DB structure has nothing to do with the CMS.
+- Content administrators **should work with their data and terminology**, not CMS terms. I mean, if the project is about spaceships, space travels and pilots, why would the CMS talk about articles, categories and tags?
+- website developers **should not have to work on the front-end development** for the CMS. Yeah. Because life is complicated enough, Sharp takes care of all the responsive / CSS / JS stuff.
  
 Sharp intends to provide a clean solution to the following needs:
 - create, update or delete any structured data of the project, handling validation and errors;
@@ -16,11 +19,11 @@ Sharp intends to provide a clean solution to the following needs:
 
 Sharp 4 needs Laravel 5.4+ and PHP 7.0+.
 
-![](docs/img/dashboard.png)
+![Dashboard](docs/img/dashboard.png)
 
-![](docs/img/list.png)
+![Entity list](docs/img/list.png)
 
-![](docs/img/form.png)
+![Entity form](docs/img/form.png)
 
 ## Terminology, general concept
 

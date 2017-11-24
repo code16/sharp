@@ -11,9 +11,9 @@ use Code16\Sharp\Http\Middleware\Api\AppendListAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors;
 use Code16\Sharp\Http\Middleware\Api\SaveEntityListParams;
 use Code16\Sharp\Http\Middleware\Api\SetSharpLocale;
-use Code16\Sharp\Http\Middleware\CheckIsSharpAuthenticated;
-use Code16\Sharp\Http\Middleware\CheckIsSharpGuest;
 use Code16\Sharp\Http\Middleware\RestoreEntityListParams;
+use Code16\Sharp\Http\Middleware\SharpAuthenticate;
+use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
 use Code16\Sharp\Http\SharpContext;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Support\Facades\Gate;
@@ -142,10 +142,10 @@ class SharpServiceProvider extends ServiceProvider
             'sharp_restore_list_params', RestoreEntityListParams::class
 
         )->aliasMiddleware(
-            'sharp_auth', CheckIsSharpAuthenticated::class
+            'sharp_auth', SharpAuthenticate::class
 
         )->aliasMiddleware(
-            'sharp_guest', CheckIsSharpGuest::class
+            'sharp_guest', SharpRedirectIfAuthenticated::class
         );
 
     }
