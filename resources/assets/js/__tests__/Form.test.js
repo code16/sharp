@@ -78,7 +78,7 @@ describe('sharp-form', ()=>{
         unmockProperty(location, 'href');
     });
 
-    it('can mount sharp-form', async ()=>{
+    test('can mount sharp-form', async ()=>{
         await createVm();
 
         await nextRequestFulfilled({
@@ -112,7 +112,7 @@ describe('sharp-form', ()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount "independant" sharp-form', async ()=>{
+    test('can mount "independant" sharp-form', async ()=>{
         await createVm({
             propsData:{
                 independant: true,
@@ -146,7 +146,7 @@ describe('sharp-form', ()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount sharp-form with alert', async ()=>{
+    test('can mount sharp-form with alert', async ()=>{
         let $form = await createVm({
             propsData:{
                 independant: true,
@@ -186,7 +186,7 @@ describe('sharp-form', ()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('api path', async ()=> {
+    test('api path', async ()=> {
         consts.API_PATH = '/test-api';
         let $form = await createVm();
 
@@ -201,7 +201,7 @@ describe('sharp-form', ()=>{
         expect($form.apiPath).toBe('/test-api/form/spaceship/10');
     });
 
-    it('detect when is creation', async ()=>{
+    test('detect when is creation', async ()=>{
         let $form = await createVm();
 
         let { $root:vm } = $form;
@@ -216,7 +216,7 @@ describe('sharp-form', ()=>{
 
     });
 
-    it('is read only', async () => {
+    test('is read only', async () => {
         let $form = await createVm({
             propsData:{
                 independant: true,
@@ -259,7 +259,7 @@ describe('sharp-form', ()=>{
 
     })
 
-    it('is synchronous', async () => {
+    test('is synchronous', async () => {
         let $form = await createVm({
             propsData:{
                 independant: true,
@@ -274,14 +274,14 @@ describe('sharp-form', ()=>{
         expect($form.synchronous).toBe(true);
     });
 
-    it('is asynchronous', async () => {
+    test('is asynchronous', async () => {
         let $form = await createVm();
 
         expect($form.synchronous).toBe(false);
     });
 
 
-    it('has errors', async () => {
+    test('has errors', async () => {
         let $form = await createVm();
         expect($form.hasErrors).toBe(false);
 
@@ -294,7 +294,7 @@ describe('sharp-form', ()=>{
         expect($form.hasErrors).toBe(false);
     });
 
-    it('expose appropriate props to layout components', async () => {
+    test('expose appropriate props to layout components', async () => {
         let $form = await createVm({
             propsData:{
                 independant: true,
@@ -320,7 +320,7 @@ describe('sharp-form', ()=>{
         });
     });
 
-    it('expose appropriate props to field', async () => {
+    test('expose appropriate props to field', async () => {
         let $form = await createVm({
             propsData:{
                 independant: true,
@@ -380,7 +380,7 @@ describe('sharp-form', ()=>{
         expect(field.$attrs['context-fields'].readOnly).toBeFalsy();
     });
 
-    it('update data', async () => {
+    test('update data', async () => {
         let $form = await createVm({
             propsData:{
                 independant: true,
@@ -418,7 +418,7 @@ describe('sharp-form', ()=>{
     });
 
 
-    it('update visibility', async () => {
+    test('update visibility', async () => {
         let $form = await createVm({
             propsData:{
                 independant: true,
@@ -455,7 +455,7 @@ describe('sharp-form', ()=>{
         expect($form.fieldVisible.title).toBe(false);
     });
 
-    it('mount', async () => {
+    test('mount', async () => {
         let $form = await createVm({
             propsData:{
                 independant: true,
@@ -518,7 +518,7 @@ describe('sharp-form', ()=>{
         });
     });
 
-    it('mount async', async () => {
+    test('mount async', async () => {
         let $form = await createVm();
 
         await nextRequestFulfilled({
@@ -581,7 +581,7 @@ describe('sharp-form', ()=>{
         });
     });
 
-    it('handle 422', async () => {
+    test('handle 422', async () => {
         let $form = await createVm();
 
         $form.actionsBus.$emit('submit');
@@ -600,7 +600,7 @@ describe('sharp-form', ()=>{
         });
     });
 
-    it('patch layout', async () => {
+    test('patch layout', async () => {
         let $form = await createVm({
             propsData:{
                 independant: true,
@@ -644,7 +644,7 @@ describe('sharp-form', ()=>{
     });
 
 
-    it('setup action bar correctly', async () => {
+    test('setup action bar correctly', async () => {
         let $form = await createVm();
 
         let { $root:vm } = $form;
@@ -736,7 +736,7 @@ describe('sharp-form', ()=>{
 
     });
 
-    it('redirect to list', async () => {
+    test('redirect to list', async () => {
         let $form = await createVm();
 
         let locationHrefModified = setter(location,'href');
@@ -773,7 +773,7 @@ describe('sharp-form', ()=>{
         expect($form.redirectToList).toHaveBeenCalledTimes(3);
     });
 
-    it('submit', async () => {
+    test('submit', async () => {
         let $form = await createVm({
             propsData: {
                 independant:true,
@@ -828,7 +828,7 @@ describe('sharp-form', ()=>{
         expect(submittedEmmitted).toHaveBeenCalledWith({ ok: true });
     });
 
-    it('dependant submit', async () => {
+    test('dependant submit', async () => {
         let $form = await createVm();
 
         $form.post = jest.fn(async ()=>Promise.resolve({ data: { ok: true } }));
@@ -855,15 +855,15 @@ describe('sharp-form', ()=>{
         expect($form.handleError).toHaveBeenCalledWith({ error: true });
     });
 
-    it('delete', async ()=>{
+    test('delete', async ()=>{
         // refer 'redirect to list' test
     });
 
-    it('cancel', async ()=>{
+    test('cancel', async ()=>{
         // refer 'redirect to list' test
     });
 
-    it('reset', async ()=>{
+    test('reset', async ()=>{
         let $form = await createVm();
 
         $form.data = { field: '...' };
@@ -880,7 +880,7 @@ describe('sharp-form', ()=>{
         expect($form.errors).toEqual({});
     });
 
-    it('pending jobs', async ()=> {
+    test('pending jobs', async ()=> {
         let $form = await createVm();
         let updateActionsStateEmitted = jest.fn();
 

@@ -10,20 +10,21 @@
       ".*\\.(vue)$": "<rootDir>/node_modules/jest-vue-preprocessor"
     },
     "snapshotSerializers": [
-      "<rootDir>/resources/assets/js/__test__/utils/htmlSnapshotBeautifier.js"
+      "<rootDir>/resources/assets/js/__tests__/utils/htmlSnapshotBeautifier.js"
     ],
     "moduleNameMapper": {
       "^vue$": "vue/dist/vue.common.js",
-      "\\.(css|less)$": "<rootDir>/resources/assets/js/__test__/__mocks__/styleMock.js"
+      "\\.(css|less)$": "<rootDir>/resources/assets/js/__tests__/__mocks__/styleMock.js"
     },
     "transformIgnorePatterns": [
       "node_modules/(?!vue2-google-maps)"
     ],
+    "testMatch": [ "**/__tests__/**/?(*.)(spec|test).js?(x)" ],
     "verbose": true,
     "setupFiles": [
-      "<rootDir>/resources/assets/js/__test__/setup/mockument.js",
-      "<rootDir>/resources/assets/js/__test__/setup/mockBootstrapVue.js",
-      "<rootDir>/resources/assets/js/__test__/setup/setupVue.js"
+      "<rootDir>/resources/assets/js/__tests__/setup/mockument.js",
+      "<rootDir>/resources/assets/js/__tests__/setup/mockBootstrapVue.js",
+      "<rootDir>/resources/assets/js/__tests__/setup/setupVue.js"
     ]
   },
   "scripts": {

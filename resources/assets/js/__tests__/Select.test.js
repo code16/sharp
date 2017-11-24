@@ -27,14 +27,14 @@ describe('select-field',()=>{
         MockI18n.mockLangFunction();
     });
 
-    it('can mount Select field', async () => {
+    test('can mount Select field', async () => {
         await createVm({
             data:() => ({ value: null }) // possible String/Number value (no reactive)
         });
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount Select field with clear button', async () => {
+    test('can mount Select field with clear button', async () => {
         await createVm({
             propsData: {
                 multiple: false
@@ -44,7 +44,7 @@ describe('select-field',()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount Select field as checkboxes list', async () => {
+    test('can mount Select field as checkboxes list', async () => {
         await createVm({
             propsData: {
                 multiple: true,
@@ -55,7 +55,7 @@ describe('select-field',()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount "read only" Select field as checkboxes list', async () => {
+    test('can mount "read only" Select field as checkboxes list', async () => {
         await createVm({
             propsData: {
                 multiple: true,
@@ -67,7 +67,7 @@ describe('select-field',()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount Select field as radios list', async () => {
+    test('can mount Select field as radios list', async () => {
         await createVm({
             propsData: {
                 multiple: false,
@@ -78,7 +78,7 @@ describe('select-field',()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount "read only" Select field as radios list', async () => {
+    test('can mount "read only" Select field as radios list', async () => {
         await createVm({
             propsData: {
                 multiple: false,
@@ -90,7 +90,7 @@ describe('select-field',()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('expose appropriate props to multiselect component', async () => {
+    test('expose appropriate props to multiselect component', async () => {
 
         let $tags = await createVm({
             propsData: {
@@ -114,7 +114,7 @@ describe('select-field',()=>{
         });
     });
 
-    it('expose appropriate props to multiselect component when multiple is false', async () => {
+    test('expose appropriate props to multiselect component when multiple is false', async () => {
 
         let $tags = await createVm({
             propsData: {
@@ -133,7 +133,7 @@ describe('select-field',()=>{
         });
     });
 
-    it('clear on cross button clicked', async () => {
+    test('clear on cross button clicked', async () => {
         let inputEmitted = jest.fn();
 
         await createVm({
@@ -152,7 +152,7 @@ describe('select-field',()=>{
         expect(inputEmitted.mock.calls[0][0]).toBe(null);
     });
 
-    it('check correct checkboxes depending on value', async () => {
+    test('check correct checkboxes depending on value', async () => {
         let value = [];
         await createVm({
             propsData: {
@@ -173,7 +173,7 @@ describe('select-field',()=>{
         expect(checkboxes[1].checked).toBe(false);
     });
 
-    it('emit input on checkbox changed and correct value', async () => {
+    test('emit input on checkbox changed and correct value', async () => {
         let inputEmitted = jest.fn();
 
         await createVm({
@@ -195,7 +195,7 @@ describe('select-field',()=>{
         expect(inputEmitted).toHaveBeenCalledWith([3]);
     });
 
-    it('check correct radio depending on value', async () => {
+    test('check correct radio depending on value', async () => {
 
         let { $root:vm } = await createVm({
             propsData: {
@@ -216,7 +216,7 @@ describe('select-field',()=>{
         expect(radios[1].checked).toBe(false);
     });
 
-    it('emit input on radio clicked and correct value', async () => {
+    test('emit input on radio clicked and correct value', async () => {
         let inputEmitted = jest.fn();
 
         await createVm({
@@ -238,7 +238,7 @@ describe('select-field',()=>{
         expect(inputEmitted).toHaveBeenCalledWith(3);
     });
 
-    it('correct options labels', async () => {
+    test('correct options labels', async () => {
         let $select = await createVm({
             data: () => ({ value: null })
         });
@@ -247,7 +247,7 @@ describe('select-field',()=>{
         expect($select.multiselectLabel(4)).toBe('BBB');
     });
 
-    it('corresponding multiselect options ids', async () => {
+    test('corresponding multiselect options ids', async () => {
         let $select = await createVm({
             data: () => ({ value: null })
         });
@@ -255,7 +255,7 @@ describe('select-field',()=>{
         expect($select.multiselectOptions).toEqual([3,4]);
     });
 
-    it('corresponding input id and label for', async () => {
+    test('corresponding input id and label for', async () => {
         await createVm({
             propsData: {
                 multiple:false,

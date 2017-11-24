@@ -13,13 +13,13 @@ describe('check-field', () => {
         `
     });
 
-    it('can mount Check field', async () => {
+    test('can mount Check field', async () => {
         await createVm();
 
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount "read only" Check field', async () => {
+    test('can mount "read only" Check field', async () => {
         await createVm({
             propsData: {
                 readOnly: true
@@ -29,7 +29,7 @@ describe('check-field', () => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('emit event on checkbox changed & correct value', async () => {
+    test('emit event on checkbox changed & correct value', async () => {
         let inputEmitted = jest.fn();
 
         await createVm({

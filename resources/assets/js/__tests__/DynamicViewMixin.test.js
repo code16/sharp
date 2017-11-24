@@ -38,7 +38,7 @@ describe('dynamic-view-mixin',()=>{
         moxios.uninstall();
     });
 
-    it('get success', async ()=>{
+    test('get success', async ()=>{
         let $view = await createVm();
 
         expect($view.ready).toBe(false);
@@ -67,7 +67,7 @@ describe('dynamic-view-mixin',()=>{
         expect($view.ready).toBe(true);
     });
 
-    it('get error', async ()=>{
+    test('get error', async ()=>{
         let $view = await createVm();
 
         let errorCallback = jest.fn();
@@ -85,7 +85,7 @@ describe('dynamic-view-mixin',()=>{
         expect(errorCallback.mock.calls[0][0].response).toEqual(response);
     });
 
-    it('post success', async ()=>{
+    test('post success', async ()=>{
         let $view = await createVm();
 
         let successCallback = jest.fn();
@@ -110,7 +110,7 @@ describe('dynamic-view-mixin',()=>{
         });
     });
 
-    it('post custom config', async ()=>{
+    test('post custom config', async ()=>{
         let $view = await createVm();
 
         $view.post('/test-api/argument/path', { customData: {} });
@@ -128,7 +128,7 @@ describe('dynamic-view-mixin',()=>{
         });
     });
 
-    it('post error', async ()=>{
+    test('post error', async ()=>{
         let $view = await createVm();
 
         let errorCallback = jest.fn();
@@ -145,7 +145,7 @@ describe('dynamic-view-mixin',()=>{
         expect(errorCallback.mock.calls[0][0].response).toEqual(response);
     });
 
-    it('intercept request : show main loading', async ()=>{
+    test('intercept request : show main loading', async ()=>{
         let $view = await createVm();
 
         let { interceptors } = $view.axiosInstance;
@@ -161,7 +161,7 @@ describe('dynamic-view-mixin',()=>{
         expect(showLoadingEmitted).toHaveBeenCalled();
     });
 
-    it('intercept response [success]: hide main loading', async ()=>{
+    test('intercept response [success]: hide main loading', async ()=>{
         let $view = await createVm();
 
         let { interceptors } = $view.axiosInstance;
@@ -183,7 +183,7 @@ describe('dynamic-view-mixin',()=>{
         beforeAll(()=>moxios.delay = 10);
         afterAll(()=>moxios.delay = defaultDelay);
 
-        it('hide loading', async ()=>{
+        test('hide loading', async ()=>{
             let $view = await createVm();
 
             let hideLoadingEmitted = jest.fn();
@@ -202,7 +202,7 @@ describe('dynamic-view-mixin',()=>{
             expect(hideLoadingEmitted).toHaveBeenCalled();
         });
 
-        it('parse blob to json', async ()=>{
+        test('parse blob to json', async ()=>{
             let $view = await createVm();
 
             $view.axiosInstance.get('/', { responseType: 'blob' }).catch(e=>{
@@ -217,7 +217,7 @@ describe('dynamic-view-mixin',()=>{
             expect(response.data).toEqual({ errors: {} });
         });
 
-        it('show error modal on 401 and redirect on login page when click OK', async ()=>{
+        test('show error modal on 401 and redirect on login page when click OK', async ()=>{
             let $view = await createVm();
 
             let showMainMoadlEmitted = jest.fn();
@@ -254,7 +254,7 @@ describe('dynamic-view-mixin',()=>{
             unmockProperty(location,'href');
         });
 
-        it('show error modal on else server response status', async () => {
+        test('show error modal on else server response status', async () => {
             let $view = await createVm();
 
             let showMainMoadlEmitted = jest.fn();
@@ -327,7 +327,7 @@ describe('dynamic-view-mixin',()=>{
         });
     });
 
-    it('show loading on created if asynchronous component', async () => {
+    test('show loading on created if asynchronous component', async () => {
         let mainLoadingShowEmitted = jest.fn();
         await createVm({
             created() {
@@ -337,7 +337,7 @@ describe('dynamic-view-mixin',()=>{
         expect(mainLoadingShowEmitted).toHaveBeenCalledTimes(1);
     });
 
-    it('should not show loading on created if synchronous component', async () => {
+    test('should not show loading on created if synchronous component', async () => {
         let mainLoadingShowEmitted = jest.fn();
         await createVm({
             propsData: {

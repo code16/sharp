@@ -23,7 +23,7 @@ describe('sharp-field', () => {
         `;
     });
 
-    it("can't mount and display error if unknown field", async () => {
+    test("can't mount and display error if unknown field", async () => {
         util.error = jest.fn((...args)=>console.log(...args));
         await createVm({
             propsData: {
@@ -35,7 +35,7 @@ describe('sharp-field', () => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('can mount field', async () => {
+    test('can mount field', async () => {
         fields.default['test-field'] = {
             template: '<div>Template field</div>'
         };
@@ -50,7 +50,7 @@ describe('sharp-field', () => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('expose proper props', async () => {
+    test('expose proper props', async () => {
         let $field = await createVm({
             propsData: {
                 fieldType: 'text',
@@ -78,7 +78,7 @@ describe('sharp-field', () => {
         });
     });
 
-    it('call update if input emitted', async () => {
+    test('call update if input emitted', async () => {
         let updateData = jest.fn();
         let $field = await createVm({
             propsData: {
@@ -98,7 +98,7 @@ describe('sharp-field', () => {
         expect(updateData).toHaveBeenCalledWith('title','Coucou');
     });
 
-    it("don't call update when readOnly if input emitted", async () => {
+    test("don't call update when readOnly if input emitted", async () => {
         let updateData = jest.fn();
         let $field = await createVm({
             propsData: {
@@ -124,7 +124,7 @@ describe('sharp-field', () => {
 
     });
 
-    it('provide "$field" injection', async () => {
+    test('provide "$field" injection', async () => {
         fields.default['test-field'] = {
             template: '<div>Template field</div>',
             inject:['$field']

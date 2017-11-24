@@ -36,19 +36,19 @@ describe('markdown-field', () => {
     });
 
     describe('basic tests', () => {
-        it('can mount Markdown field', async () => {
+        test('can mount Markdown field', async () => {
             await createVm();
 
             expect(document.body.innerHTML).toMatchSnapshot();
         });
 
-        it('can mount "localized" Markdown field', async () => {
+        test('can mount "localized" Markdown field', async () => {
             await createVm();
 
             expect(document.body.innerHTML).toMatchSnapshot();
         });
 
-        it('can mount "read only" Markdown field', async () => {
+        test('can mount "read only" Markdown field', async () => {
             await createVm({
                 propsData: {
                     readOnly: true
@@ -58,7 +58,7 @@ describe('markdown-field', () => {
             expect(document.body.innerHTML).toMatchSnapshot();
         });
 
-        it('update value on locale changed', async () => {
+        test('update value on locale changed', async () => {
             let $markdown = await createVm({
                 propsData: {
                     locale: 'fr'
@@ -78,7 +78,7 @@ describe('markdown-field', () => {
             expect(simplemde.value()).toBe('Valeur 2');
         });
 
-        it('expose appropriate props to simplemde', async () => {
+        test('expose appropriate props to simplemde', async () => {
             let $markdown = await createVm({
                 propsData: {
                     toolbar: [{ name:'my action' }]
@@ -103,7 +103,7 @@ describe('markdown-field', () => {
 
         });
 
-        it('bound toolbar buttons custom action properly', async () =>{
+        test('bound toolbar buttons custom action properly', async () =>{
             let $markdown = await createVm({
                 propsData: {
                     toolbar: [{ name:'image'}]
@@ -119,7 +119,7 @@ describe('markdown-field', () => {
             expect($markdown.insertUploadImage).toHaveBeenCalled();
         });
 
-        it('set read only properly', async () => {
+        test('set read only properly', async () => {
             let $markdown = await createVm();
 
             let { simplemde } = $markdown;
@@ -132,7 +132,7 @@ describe('markdown-field', () => {
             expect(codemirror.getOption('readOnly')).toBe(true);
         });
 
-        it('add codemirror event listener properly', async () => {
+        test('add codemirror event listener properly', async () => {
             let $markdown = await createVm();
 
             let { simplemde: {codemirror}} = $markdown;
@@ -150,7 +150,7 @@ describe('markdown-field', () => {
             expect(callback).toHaveBeenCalled();
         });
 
-        it('emit input on text changed', async () => {
+        test('emit input on text changed', async () => {
             let inputEmitted = jest.fn();
             let $markdown = await createVm({
                 methods: {
@@ -186,7 +186,7 @@ describe('markdown-field', () => {
             }
         });
 
-        it('insert image uploader and text properly', async () => {
+        test('insert image uploader and text properly', async () => {
             let $markdown = await createVm();
 
             let { simplemde } = $markdown;
@@ -202,7 +202,7 @@ describe('markdown-field', () => {
             expect(simplemde.value()).toBe('Lorem\n\n![]()\n\nipsum');
         });
 
-        it('update image uploader and text properly', async () => {
+        test('update image uploader and text properly', async () => {
             let $markdown = await createVm();
 
             let { simplemde } = $markdown;
@@ -225,7 +225,7 @@ describe('markdown-field', () => {
             }]);
         });
 
-        it('parse and insert image uploader and text properly', async () => {
+        test('parse and insert image uploader and text properly', async () => {
             let $uploaders = [];
             let $markdown = await createVm({
                 data: ()=>({
@@ -274,7 +274,7 @@ describe('markdown-field', () => {
             });
         });
 
-        it('delete properly', async () => {
+        test('delete properly', async () => {
             let $uploader = null;
             let $markdown = await createVm({
                 data: ()=>({
@@ -307,7 +307,7 @@ describe('markdown-field', () => {
             expect($markdown.value.files).toEqual([]);
         });
 
-        it('register delete event and delete properly on backspace ', async () => {
+        test('register delete event and delete properly on backspace ', async () => {
             let $markdown = await createVm();
 
             let { simplemde } = $markdown;
@@ -334,7 +334,7 @@ describe('markdown-field', () => {
 
         });
 
-        it('Delete properly removing from upload component', async () => {
+        test('Delete properly removing from upload component', async () => {
             let $markdown = await createVm();
 
             let { simplemde } = $markdown;
@@ -360,7 +360,7 @@ describe('markdown-field', () => {
             expect($uploader.$destroy).toHaveBeenCalled();
         });
 
-        it('expose appropriate props to markdown upload component', async () =>{
+        test('expose appropriate props to markdown upload component', async () =>{
             let $uploaders = [];
             let $markdown = await createVm({
                 data: ()=>({
@@ -407,7 +407,7 @@ describe('markdown-field', () => {
             });
         });
 
-        it('index files correctly on mounted', async () => {
+        test('index files correctly on mounted', async () => {
             let $markdown = await createVm({
                 data:() => ({
                     value: {
@@ -433,7 +433,7 @@ describe('markdown-field', () => {
             }])
         });
 
-        it('refresh properly', async () => {
+        test('refresh properly', async () => {
             let $markdown = await createVm();
 
             let { simplemde } = $markdown;
@@ -452,7 +452,7 @@ describe('markdown-field', () => {
             expect(codemirror.focus).toHaveBeenCalled();
         })
 
-        it('update file data properly', async () => {
+        test('update file data properly', async () => {
             let $markdown = await createVm();
 
             let { simplemde } = $markdown;

@@ -23,12 +23,12 @@ describe('tags-field', () => {
         MockI18n.mockLangFunction();
     });
 
-    it('can mout Tags field', async () => {
+    test('can mout Tags field', async () => {
         await createVm();
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    it('expose appropriate props to multiselect component', async () => {
+    test('expose appropriate props to multiselect component', async () => {
         let $tags = await createVm({
             propsData: {
                 readOnly: true,
@@ -52,7 +52,7 @@ describe('tags-field', () => {
         });
     });
 
-    it('instantiate proper internal ids', async () => {
+    test('instantiate proper internal ids', async () => {
         let $tags = await createVm({
             propsData: {
                 value: [{ id:4, label:'BBB'}]
@@ -65,7 +65,7 @@ describe('tags-field', () => {
         expect($tags.indexedOptions[1].internalId).toEqual(1);
     });
 
-    it('adding a tag & with proper internal id', async () => {
+    test('adding a tag & with proper internal id', async () => {
         let $tags = await createVm({
             propsData: {
                 value: []
@@ -84,7 +84,7 @@ describe('tags-field', () => {
         expect($tags.tags[0]).toEqual({ id:null, label:'CCC', _internalId: 2 });
     });
 
-    it('emit a tag properly', async () => {
+    test('emit a tag properly', async () => {
         let $tags = await createVm({
             propsData: {
                 value: [{ id:4, label:'BBB'}]
