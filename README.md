@@ -1,4 +1,6 @@
-<div style="text-align:center; margin-bottom: 2em">![Sharp 4](docs/img/logo.png)</div>
+<div style="text-align:center; margin-bottom: 2em">
+![Sharp 4](docs/img/logo.png)
+</div>
 
 Sharp is not a CMS: it's a content management framework, a toolset which provides help building a CMS section in a website, with some rules in mind:
 - the public website **should not have any knowledge of the CMS** — the CMS is a part of the system, not the center of it. In fact, removing the CMS should not have any effect on the project.
