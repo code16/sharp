@@ -61,10 +61,6 @@
             }
         },
         computed: {
-            options() {
-                return Object.keys(this.values).map(key => ({id:key, label:this.values[key]}));
-            },
-
             autoScrollOptions() {
                 return {
                     list: this.$el.querySelector('.SharpDropdown__list'),
@@ -74,9 +70,6 @@
 
             empty() {
                 return !this.value || this.multiple && !this.value.length;
-            },
-            multiselect() {
-
             }
         },
         methods: {
