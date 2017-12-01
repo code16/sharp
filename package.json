@@ -19,7 +19,9 @@
     "transformIgnorePatterns": [
       "node_modules/(?!vue2-google-maps)"
     ],
-    "testMatch": [ "**/__tests__/**/?(*.)(spec|test).js?(x)" ],
+    "testMatch": [
+      "**/__tests__/**/?(*.)(spec|test).js?(x)"
+    ],
     "verbose": true,
     "setupFiles": [
       "<rootDir>/resources/assets/js/__tests__/setup/mockument.js",
@@ -64,6 +66,7 @@
     "vue-cropperjs": "^2.1.1",
     "vue-functional-data-merge": "^1.0.6",
     "vue-multiselect": "^2.0.3",
+    "vue-test-utils": "^1.0.0-beta.6",
     "vue2-google-maps": "^0.8.4",
     "vue2-timepicker": "^0.1.4",
     "vuedraggable": "^2.10.0",
