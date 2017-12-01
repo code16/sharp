@@ -17,10 +17,23 @@ class SharpRedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (auth()->guard($guard)->check()) {
+        if ($this->checkSharpUserAuthenticated($guard)) {
             return redirect(route("code16.sharp.dashboard"));
         }
 
         return $next($request);
+    }
+
+    protected function checkSharpUserAuthenticated($guard)
+    {
+        if(auth()->guard($guard)->check()) {
+            if ($checkHandler = config('sharp.auth.check_handler')) {
+                return app($checkHandler)->check(auth()->guard($guard)->user());
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }

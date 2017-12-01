@@ -31,6 +31,36 @@ It's very likely that you don't want to authorize all users to access Sharp. You
 
 Of course, this implies that you defined a "sharp" guard in `config/auth.php`, as detailed in the Laravel documentation.
 
+## Authentication check
+
+If you want a simple way to authorize some users to access Sharp in a project where you have other users, you can define an auth check rather than using custom guard.
+
+First write a class which implements `Code16\Sharp\Auth\SharpAuthenticationCheckHandler`:
+
+    class SharpCheckHandler implements SharpAuthenticationCheckHandler
+    {
+        /**
+         * @param $user
+         * @return bool
+         */
+        public function check($user): bool
+        {
+            return $user->hasGroup('sharp');
+        }
+    }
+
+Perform in the `check()` method any test you need to make on the authenticated user.
+
+Finally enable this feature adding a config key:
+
+    //in config/sharp.php
+
+    "auth" => [
+        "check_handler" => \App\Sharp\Auth\SharpCheckHandler::class,
+    ]
+
+And you are good to go.
+
 ---
 
 > next chapter : [Building an Entity List](building-entity-list.md).

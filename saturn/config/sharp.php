@@ -90,7 +90,8 @@ return [
     ],
 
     "auth" => [
-        "guard" => "sharp",
+//        "guard" => "sharp",
+        "check_handler" => \App\Sharp\Auth\SharpCheckHandler::class,
         "login_attribute" => "email",
         "password_attribute" => "password",
         "display_attribute" => "name",
