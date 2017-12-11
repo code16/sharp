@@ -53,6 +53,28 @@ class AuthenticationTest extends BaseApiTest
         $this->json('get', '/sharp/api/list/person')->assertStatus(401);
     }
 
+    /** @test */
+    public function we_can_configure_a_custom_auth_check()
+    {
+        $this->buildTheWorld();
+
+        $this->app['config']->set(
+            'sharp.auth.check_handler',
+            AuthenticationTestCheckHandler::class
+        );
+
+        $this->actingAs(new User(["name" => "ok"]));
+
+        $this->get('/sharp/list/person')->assertStatus(200);
+        $this->json('get', '/sharp/api/list/person')->assertStatus(200);
+
+        $this->actingAs(new User(["name" => "ko"]));
+
+        // We're logged, but not as a sharp user (our fake auth check tells us that).
+        $this->get('/sharp/list/person')->assertStatus(302);
+        $this->json('get', '/sharp/api/list/person')->assertStatus(401);
+    }
+
     /**
      * @return AuthenticationTestGuard
      */
@@ -78,7 +100,6 @@ class AuthenticationTest extends BaseApiTest
 
         return $authGuard;
     }
-
 }
 
 class AuthenticationTestGuard implements \Illuminate\Contracts\Auth\Guard
@@ -122,5 +143,14 @@ class AuthenticationTestGuard implements \Illuminate\Contracts\Auth\Guard
 
     public function logout()
     {
+    }
+}
+
+class AuthenticationTestCheckHandler
+{
+
+    public function check($user)
+    {
+        return $user->name == "ok";
     }
 }
