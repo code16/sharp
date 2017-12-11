@@ -95,7 +95,7 @@
                 $uploader.$on('update', data => this.updateFileData($uploader, data));
                 $uploader.$on('active', () => this.setMarkerActive($uploader));
                 $uploader.$on('inactive', () => this.setMarkerInactive($uploader));
-
+                $uploader.$on('escape', () => this.escapeMarker());
                 //console.log('create uploader', id, $uploader);
 
                 return $uploader;
@@ -126,6 +126,10 @@
 
                 $uploader.$destroy();
                 this.value.files = this.value.files.filter(f => f[this.idSymbol] !== id);
+            },
+
+            escapeMarker() {
+                this.codemirror.focus();
             },
 
             updateUploaderData({ id, marker }, data) {
@@ -201,10 +205,11 @@
                     clearWhenEmpty: false,
                     inclusiveRight: true,
                     inclusiveLeft: true,
+                    $component: $uploader
                 });
 
                 this.codemirror.addLineClass($uploader.marker.lines[0], 'wrap', 'SharpMarkdown__upload-line');
-                $uploader.marker.lines[0].on('delete', () => this.removeMarker($uploader, { isCMEvent: true, relativeFallbackLine }));
+                $uploader.marker.lines[0].on('delete', ()=>this.removeMarker($uploader, { isCMEvent: true, relativeFallbackLine }));
 
                 if(isInsertion)
                     $uploader.inputClick();
@@ -223,7 +228,14 @@
             },
 
             onBeforeChange(cm, change) {
-              // debugger
+                //console.log(change);
+                if(change && change.origin && change.origin.includes('delete')) {
+                    let markers = cm.findMarks(change.from, change.to);
+                    if(markers.length) {
+                        change.cancel();
+                        markers.forEach(marker => marker.$component.$emit('delete-intent'));
+                    }
+                }
             },
 
             onKeydown(cm, e) {

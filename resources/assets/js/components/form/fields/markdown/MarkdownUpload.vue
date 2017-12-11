@@ -29,6 +29,9 @@
     import { UploadXSRF } from '../../../../mixins';
     import { UploadModifiers } from '../upload/modifiers';
 
+    const removeKeys = ['Backspace', 'Enter'];
+    const escapeKeys = ['ArrowLeft', 'ArrowUp', 'ArrowDown', 'ArrowRight', 'Escape', 'Tab'];
+
     export default Vue.extend({
 
         mixins: [ UploadXSRF, UploadModifiers ],
@@ -92,6 +95,20 @@
                     setTimeout(this.checkCancelled, 100);
                 };
             },
+        },
+        mounted() {
+            this.$on('delete-intent', () => {
+                let removeButton = this.$el.querySelector('.SharpUpload__remove-button');
+                removeButton.focus();
+                removeButton.addEventListener('keydown', e => {
+                    if(removeKeys.includes(e.key)) {
+                        this.$emit('remove');
+                    }
+                    else if(escapeKeys.includes(e.key)) {
+                        this.$emit('escape');
+                    }
+                })
+            })
         }
     });
 </script>
