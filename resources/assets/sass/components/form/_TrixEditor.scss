@@ -1,0 +1,81 @@
+
+.SharpTrix {
+  @extend .SharpModule;
+  .editor-toolbar {
+    border: none;
+    border-radius: 0;
+    &:before { margin:0 }
+    &:after { margin:0 }
+    padding:0;
+  }
+
+  .separator {
+    display: inline-block;
+    width: 0;
+    border-left: 1px solid #d9d9d9;
+    border-right: 1px solid #fff;
+    color: transparent;
+    text-indent: -10px;
+    margin: 0 6px;
+  }
+
+  trix-toolbar {
+    display: block!important;
+  }
+
+  trix-editor {
+    overflow: auto;
+    border:none;
+    border-radius: 0;
+    background: white;
+    padding: 1rem !important;
+    min-height: 0 !important;
+    line-height: 1.5;
+    @include font-size('14');
+  }
+
+  .attachment {
+    position: relative;
+
+    &__remove {
+      position: absolute;
+      z-index: 4;
+      top: -3.4rem;
+      left: 50%;
+      margin: 0 0 0 -1.5rem;
+      width: 3rem;
+      height: 3rem;
+      border: 0;
+      border-radius: 5px;
+      background: #1b6ac9;
+      text-indent: 0;
+      color: transparent;
+
+      &:before {
+        background: none !important;
+        content: "\f1f8";
+        font-family: FontAwesome;
+        color: white;
+        opacity: 1;
+        font-size: 1rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      &:after {
+        content: ' ';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        height: 0;
+        width: 0;
+        border: 6px solid rgba(255,255,255,0);
+        border-top-color: #1b6ac9;
+        margin-left: -6px;
+        pointer-events: none;
+      }
+    }
+  }
+}
+
+

@@ -11,6 +11,7 @@ import SharpList from './list/List.vue';
 import SharpSelect from './Select.vue';
 import SharpHtml from './Html.vue';
 import SharpGeolocation from './geolocation/Geolocation.vue';
+import SharpTrix from './wysiwyg/TrixEditor.vue';
 
 export default {
     'autocomplete' : SharpAutocomplete,
@@ -25,5 +26,6 @@ export default {
     'list'         : SharpList,
     'select'       : SharpSelect,
     'html'         : SharpHtml,
-    'geolocation'  : SharpGeolocation
+    'geolocation'  : SharpGeolocation,
+    'wysiwyg'      : SharpTrix
 };

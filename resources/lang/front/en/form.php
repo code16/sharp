@@ -54,4 +54,7 @@ return [
     'markdown.icons.fullscreen.title' => 'Full screen',
     'markdown.icons.guide.title' => 'Guide',
 
+    'wysiwyg.dialogs.add_link.input_placeholder' => 'Insert link',
+    'wysiwyg.dialogs.add_link.unlink_button' => 'Unlink',
+    'wysiwyg.dialogs.add_link.link_button' => 'Link',
 ];
