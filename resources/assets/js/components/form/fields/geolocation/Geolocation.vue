@@ -50,6 +50,7 @@
             :value="value"
             :center="value || initialPosition"
             :zoom="zoomLevel"
+            :geocoding="geocoding"
             @change="handlePositionChanged"
         />
     </div>

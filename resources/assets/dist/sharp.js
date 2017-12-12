@@ -91020,6 +91020,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //
 //
 //
+//
 
 
 
@@ -94813,6 +94814,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             type: Number,
             default: 4
         },
+        geocoding: Boolean,
         modalId: String
     },
 
@@ -94966,7 +94968,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "hidden": _vm.handleModalClosed,
       "ok": _vm.handleModalOk
     }
-  }, [_c('div', {
+  }, [(_vm.geocoding) ? _c('div', {
     staticClass: "mb-2"
   }, [_c('div', {
     staticClass: "position-relative"
@@ -95005,7 +95007,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "inline": "",
       "visible": ""
     }
-  })], 1), _vm._v(" "), (_vm.message) ? _c('div', [_c('small', [_vm._v(_vm._s(_vm.message))])]) : _vm._e()]), _vm._v(" "), _c('GmapMap', {
+  })], 1), _vm._v(" "), (_vm.message) ? _c('div', [_c('small', [_vm._v(_vm._s(_vm.message))])]) : _vm._e()]) : _vm._e(), _vm._v(" "), _c('GmapMap', {
     ref: "map",
     staticClass: "mw-100",
     staticStyle: {
@@ -95114,7 +95116,8 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "modal-id": _vm.modalId,
       "value": _vm.value,
       "center": _vm.value || _vm.initialPosition,
-      "zoom": _vm.zoomLevel
+      "zoom": _vm.zoomLevel,
+      "geocoding": _vm.geocoding
     },
     on: {
       "change": _vm.handlePositionChanged
@@ -95379,6 +95382,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -95457,6 +95461,14 @@ var buttons = {
     decreaseNestingLevel: {
         action: 'decreaseNestingLevel',
         icon: 'fa-outdent'
+    },
+    undo: {
+        action: 'undo',
+        icon: 'fa-undo'
+    },
+    redo: {
+        action: 'redo',
+        icon: 'fa-repeat'
     }
 };
 
@@ -95470,7 +95482,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   }, [_vm._l((_vm.toolbar), function(part) {
     return [(part === '|') ? _c('i', {
       staticClass: "separator"
-    }, [_vm._v("|")]) : (_vm.buttons[part]) ? _c('a', {
+    }, [_vm._v("|")]) : (_vm.buttons[part]) ? _c('button', {
       directives: [{
         name: "button-data",
         rawName: "v-button-data",
@@ -95478,7 +95490,10 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         expression: "buttons[part]"
       }],
       staticClass: "fa",
-      class: _vm.buttons[part].icon
+      class: _vm.buttons[part].icon,
+      attrs: {
+        "tabindex": "-1"
+      }
     }) : _vm._e()]
   })], 2), _vm._v(" "), _c('div', {
     staticClass: "trix-dialogs",
@@ -95547,7 +95562,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     domProps: {
       "value": _vm.value.text
     }
-  }), _vm._v(" "), _c('trix-toolbar', {
+  }), _vm._v(" "), (_vm.toolbar) ? _c('trix-toolbar', {
     staticClass: "SharpModule__header",
     attrs: {
       "id": _vm.toolbarId
@@ -95556,7 +95571,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     attrs: {
       "toolbar": _vm.toolbar
     }
-  })], 1), _vm._v(" "), _c('trix-editor', {
+  })], 1) : _vm._e(), _vm._v(" "), _c('trix-editor', {
     staticClass: "SharpModule__content",
     style: ({
       height: (_vm.height + "px"),

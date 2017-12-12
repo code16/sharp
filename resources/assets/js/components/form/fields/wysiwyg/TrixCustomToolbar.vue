@@ -3,12 +3,13 @@
         <div class="editor-toolbar">
             <template v-for="part in toolbar">
                 <i v-if="part==='|'" class="separator">|</i>
-                <a v-else-if="buttons[part]"
+                <button v-else-if="buttons[part]"
+                    tabindex="-1"
                     class="fa"
                     :class="buttons[part].icon"
                     v-button-data="buttons[part]"
                 >
-                </a>
+                </button>
             </template>
         </div>
         <div class="trix-dialogs" data-trix-dialogs>
@@ -44,7 +45,7 @@
                 let { attribute, action } = value;
                 attribute && (el.dataset.trixAttribute = attribute);
                 action && (el.dataset.trixAction = action);
-            }
+            },
         }
     }
 </script>

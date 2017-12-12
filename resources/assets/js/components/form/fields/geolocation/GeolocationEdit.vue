@@ -7,7 +7,7 @@
         @hidden="handleModalClosed"
         @ok="handleModalOk"
     >
-        <div class="mb-2">
+        <div v-if="geocoding" class="mb-2">
             <div class="position-relative">
                 <SharpText v-model="search" :placeholder="lSub('geocode_input.placeholder')" @keyup.native.enter="handleGeocodeChanged"/>
                 <SharpLoading
@@ -71,6 +71,7 @@
                 type: Number,
                 default:4
             },
+            geocoding: Boolean,
             modalId: String
         },
 

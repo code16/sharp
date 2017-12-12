@@ -44,4 +44,12 @@ export const buttons = {
         action: 'decreaseNestingLevel',
         icon: 'fa-outdent'
     },
+    undo: {
+        action: 'undo',
+        icon: 'fa-undo'
+    },
+    redo: {
+        action: 'redo',
+        icon: 'fa-repeat'
+    }
 };

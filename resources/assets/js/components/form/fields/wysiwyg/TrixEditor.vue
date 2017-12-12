@@ -2,7 +2,7 @@
     <div class="SharpTrix">
         <div class="SharpModule__inner">
             <input :id="inputId" :value="value.text" type="hidden">
-            <trix-toolbar class="SharpModule__header" :id="toolbarId">
+            <trix-toolbar v-if="toolbar" class="SharpModule__header" :id="toolbarId">
                 <trix-custom-toolbar :toolbar="toolbar" />
             </trix-toolbar>
             <trix-editor class="SharpModule__content"
