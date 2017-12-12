@@ -35,8 +35,11 @@
     border: none;
     border-radius: 0;
     padding: 1rem !important;
-    min-height: 0 !important;
     line-height: 1.5;
     @include font-size('14');
+  }
+
+  .CodeMirror, .CodeMirror-scroll {
+    min-height: 0!important;
   }
 }

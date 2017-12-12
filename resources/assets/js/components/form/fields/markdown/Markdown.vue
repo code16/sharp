@@ -30,7 +30,10 @@
 
             placeholder:String,
             toolbar:Array,
-            height:Number,
+            height:{
+                type: Number,
+                default: 300
+            },
 
             innerComponents:Object,
 
