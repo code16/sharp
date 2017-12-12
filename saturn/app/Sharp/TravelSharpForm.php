@@ -39,6 +39,23 @@ class TravelSharpForm extends SharpForm
 
         )->addField(
             SharpFormWysiwygField::make("description")
+                ->setToolbar([
+                    SharpFormWysiwygField::B,
+                    SharpFormWysiwygField::I,
+                    SharpFormWysiwygField::A,
+                    SharpFormWysiwygField::S,
+                    SharpFormWysiwygField::SEPARATOR,
+                    SharpFormWysiwygField::H1,
+                    SharpFormWysiwygField::UL,
+                    SharpFormWysiwygField::OL,
+                    SharpFormWysiwygField::QUOTE,
+                    SharpFormWysiwygField::CODE,
+                    SharpFormWysiwygField::SEPARATOR,
+                    SharpFormWysiwygField::INCREASE_NESTING,
+                    SharpFormWysiwygField::DECREASE_NESTING,
+                    SharpFormWysiwygField::UNDO,
+                    SharpFormWysiwygField::REDO,
+                ])
                 ->setLabel("Description")
 
         )->addField(
