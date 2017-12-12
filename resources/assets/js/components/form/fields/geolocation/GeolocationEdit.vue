@@ -111,6 +111,7 @@
             },
             handleModalOpened() {
                 this.opened = true;
+                this.refreshMap();
             },
             handleModalClosed() {
                 this.opened = false;

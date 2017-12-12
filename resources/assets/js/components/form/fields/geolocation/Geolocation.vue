@@ -70,6 +70,8 @@
         name: 'SharpGeolocation',
         mixins: [Localization, GeolocationCommons],
 
+        inject: ['$tab'],
+
         components: {
             GmapMap: VueGoogleMaps.Map,
             GmapMarker: VueGoogleMaps.Marker,
@@ -79,7 +81,7 @@
         },
 
         props: {
-            value: Object,
+            //value: Object,
             readOnly: Boolean,
             uniqueIdentifier: String,
             geocoding: Boolean,
@@ -96,7 +98,8 @@
 
         data() {
             return {
-                loaded: false
+                loaded: false,
+                value: { lat: 0, lng: 0 }
             }
         },
 
@@ -146,7 +149,9 @@
         },
 
         mounted() {
-            console.log(this);
+            if(this.$tab) {
+                this.$tab.$on('active', ()=>this.refreshMap());
+            }
         }
     }
 </script>
