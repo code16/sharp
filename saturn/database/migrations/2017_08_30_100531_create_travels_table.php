@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateTravelsTable extends Migration
 {
@@ -17,6 +17,7 @@ class CreateTravelsTable extends Migration
             $table->increments('id');
             $table->dateTime("departure_date");
             $table->unsignedInteger('spaceship_id');
+            $table->text("description")->nullable();
             $table->string("destination");
             $table->string("destination_coordinates")->nullable();
             $table->timestamps();
