@@ -1,5 +1,5 @@
 <template>
-    <div class="SharpTrix">
+    <div class="SharpTrix" :class="{ 'SharpTrix--read-only': readOnly }">
         <div class="SharpModule__inner">
             <input :id="inputId" :value="value.text" type="hidden">
             <trix-toolbar v-if="toolbar" class="SharpModule__header" :id="toolbarId">
@@ -10,7 +10,6 @@
                 :toolbar="toolbarId"
                 :placeholder="placeholder"
                 :style="{ height: `${height}px`, maxHeight:`${height}px` }"
-                disabled
                 @trix-change="handleChanged"
             ></trix-editor>
         </div>
@@ -36,6 +35,7 @@
                 default: 250
             },
             placeholder: String,
+            readOnly: Boolean,
             uniqueIdentifier: String
         },
         computed: {

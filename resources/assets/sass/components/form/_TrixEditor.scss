@@ -1,5 +1,15 @@
 .SharpTrix {
   @extend .SharpModule;
+
+  &--read-only {
+    trix-editor {
+      opacity: 0.8;
+    }
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.8;
+  }
+
   .editor-toolbar {
     border: none;
     border-radius: 0;
@@ -60,6 +70,12 @@
     min-height: 0 !important;
     line-height: 1.5;
     @include font-size('14');
+
+    &[disabled] {
+      pointer-events: none;
+      cursor: default;
+      opacity: 0.8;
+    }
   }
 
   h1 {

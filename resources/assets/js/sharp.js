@@ -1,4 +1,4 @@
-import 'babel-polyfill';
+import './polyfill';
 import Vue from 'vue/dist/vue.common';
 
 import ActionView from './components/ActionView';

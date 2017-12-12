@@ -18,10 +18,9 @@
     import SharpVueClip from './VueClip';
     import { UploadModifiers } from './modifiers';
 
-    import Messages from '../../../../messages';
-
     import { UPLOAD_URL } from '../../../../consts';
     import { UploadXSRF } from '../../../../mixins';
+    import { lang } from '../../../../mixins/Localization';
 
     export default {
         name: 'SharpUpload',
@@ -56,13 +55,13 @@
                 if (this.fileFilter) {
                     opt.acceptedFiles = {
                         extensions: this.fileFilter,
-                        message: Messages.uploadFileBadExtension
+                        message: lang('form.upload.message.bad_extension')
                     }
                 }
                 if (this.maxFileSize) {
                     opt.maxFilesize = {
                         limit: this.maxFileSize,
-                        message: Messages.uploadFileTooBig
+                        message: lang('form.upload.message.file_too_big')
                     }
                 }
                 this.patchXsrf(opt);

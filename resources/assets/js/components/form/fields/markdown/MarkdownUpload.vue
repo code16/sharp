@@ -23,11 +23,11 @@
 <script>
     import Vue from 'vue';
     import SharpVueClip from '../upload/VueClip';
-    import Messages from '../../../../messages';
 
     import { UPLOAD_URL } from '../../../../consts';
     import { UploadXSRF } from '../../../../mixins';
     import { UploadModifiers } from '../upload/modifiers';
+    import { lang } from '../../../../mixins/Localization';
 
     const removeKeys = ['Backspace', 'Enter'];
     const escapeKeys = ['ArrowLeft', 'ArrowUp', 'ArrowDown', 'ArrowRight', 'Escape', 'Tab'];
@@ -65,11 +65,11 @@
                     uploadMultiple: false,
                     acceptedFiles: {
                         extensions: ['image/*'],
-                        message: Messages.uploadFileBadExtension
+                        message: lang('form.upload.message.bad_extension')
                     },
                     maxFilesize: {
                         limit: this.maxImageSize,
-                        message: Messages.uploadFileTooBig
+                        message: lang('form.upload.message.file_too_big')
                     }
                 });
             },
