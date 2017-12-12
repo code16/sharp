@@ -3,9 +3,9 @@
 namespace Code16\Sharp\Utils\Transformers;
 
 use Closure;
+use Code16\Sharp\Form\SharpForm;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 
 /**
  * This trait allows a class to handle a custom transformers array.
@@ -43,6 +43,16 @@ trait WithCustomTransformers
      */
     function transform($models)
     {
+        if($this instanceof SharpForm) {
+            // It's a Form, there's only one model.
+            // We must add Form Field Formatters in the process
+            return $this->applyFormatters(
+                $this->applyTransformers($models)
+            );
+        }
+
+        // SharpEntityList case
+
         if($models instanceof LengthAwarePaginatorContract) {
             return new LengthAwarePaginator(
                 $this->transform($models->items()),
@@ -52,21 +62,11 @@ trait WithCustomTransformers
             );
         }
 
-        if(is_array($models)) {
-            $models = collect($models);
-        }
-
-        if($models instanceof Collection) {
-            return $models->map(function($model) {
+        return collect($models)
+            ->map(function($model) {
                 return $this->applyTransformers($model);
-            })->all();
-        }
-
-        // Only one model, it's a Form: we must add
-        // Form Field Formatters in the process
-        return $this->applyFormatters(
-            $this->applyTransformers($models)
-        );
+            })
+            ->all();
     }
 
     /**
