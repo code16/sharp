@@ -50,6 +50,7 @@
             :value="value"
             :center="value || initialPosition"
             :zoom="zoomLevel"
+            :geocoding="geocoding"
             @change="handlePositionChanged"
         />
     </div>
@@ -57,7 +58,7 @@
 
 <script>
     import Vue from 'vue';
-    import * as VueGoogleMaps from 'vue2-google-maps';
+    import * as VueGoogleMaps from '../../../vendor/vue2-google-maps/main';
 
     import { Localization } from '../../../../mixins';
 
@@ -68,6 +69,8 @@
     export default {
         name: 'SharpGeolocation',
         mixins: [Localization, GeolocationCommons],
+
+        inject: ['$tab'],
 
         components: {
             GmapMap: VueGoogleMaps.Map,
@@ -86,17 +89,16 @@
             boundaries: Object,
             zoomLevel: Number,
             initialPosition: Object,
-            // displayUnit: {
-            //     type: String,
-            //     default: 'DD',
-            //     validator: unit => unit==='DMS'||unit==='DD'
-            // }
+            displayUnit: {
+                type: String,
+                default: 'DD',
+                validator: unit => unit==='DMS'||unit==='DD'
+            }
         },
 
         data() {
             return {
-                loaded: false,
-                displayUnit: 'DD'
+                loaded: false
             }
         },
 
@@ -146,7 +148,9 @@
         },
 
         mounted() {
-            console.log(this);
+            if(this.$tab) {
+                this.$tab.$on('active', ()=>this.refreshMap());
+            }
         }
     }
 </script>

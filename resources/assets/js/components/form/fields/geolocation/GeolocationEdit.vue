@@ -7,7 +7,7 @@
         @hidden="handleModalClosed"
         @ok="handleModalOk"
     >
-        <div class="mb-2">
+        <div v-if="geocoding" class="mb-2">
             <div class="position-relative">
                 <SharpText v-model="search" :placeholder="lSub('geocode_input.placeholder')" @keyup.native.enter="handleGeocodeChanged"/>
                 <SharpLoading
@@ -39,7 +39,7 @@
 
 <script>
     import Text from '../Text.vue';
-    import { Map, Marker } from 'vue2-google-maps';
+    import { Map, Marker } from '../../../vendor/vue2-google-maps/main';
     import GeolocationCommons from './Commons';
     import Modal from '../../../Modal.vue';
     import { SharpLoading } from "../../../ui";
@@ -71,6 +71,7 @@
                 type: Number,
                 default:4
             },
+            geocoding: Boolean,
             modalId: String
         },
 
@@ -110,6 +111,7 @@
             },
             handleModalOpened() {
                 this.opened = true;
+                this.refreshMap();
             },
             handleModalClosed() {
                 this.opened = false;

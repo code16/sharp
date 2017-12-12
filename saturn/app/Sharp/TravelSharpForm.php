@@ -11,6 +11,7 @@ use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormGeolocationField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Form\Fields\SharpFormWysiwygField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpForm;
 
@@ -35,6 +36,27 @@ class TravelSharpForm extends SharpForm
         )->addField(
             SharpFormTextField::make("destination")
                 ->setLabel("Destination")
+
+        )->addField(
+            SharpFormWysiwygField::make("description")
+                ->setToolbar([
+                    SharpFormWysiwygField::B,
+                    SharpFormWysiwygField::I,
+                    SharpFormWysiwygField::A,
+                    SharpFormWysiwygField::S,
+                    SharpFormWysiwygField::SEPARATOR,
+                    SharpFormWysiwygField::H1,
+                    SharpFormWysiwygField::UL,
+                    SharpFormWysiwygField::OL,
+                    SharpFormWysiwygField::QUOTE,
+                    SharpFormWysiwygField::CODE,
+                    SharpFormWysiwygField::SEPARATOR,
+                    SharpFormWysiwygField::INCREASE_NESTING,
+                    SharpFormWysiwygField::DECREASE_NESTING,
+                    SharpFormWysiwygField::UNDO,
+                    SharpFormWysiwygField::REDO,
+                ])
+                ->setLabel("Description")
 
         )->addField(
             SharpFormGeolocationField::make("destination_coordinates")
@@ -68,6 +90,7 @@ class TravelSharpForm extends SharpForm
                 ->withSingleField("destination_coordinates");
         })->addColumn(7, function(FormLayoutColumn $column) {
             $column->withSingleField("spaceship_id")
+                ->withSingleField("description")
                 ->withSingleField("delegates", function(FormLayoutColumn $listItem) {
                     $listItem->withSingleField("item");
                 });

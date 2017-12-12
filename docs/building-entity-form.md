@@ -68,6 +68,7 @@ For the specifics of each field, here's the full list and documentation:
 - [Text](form-fields/text.md)
 - [Textarea](form-fields/textarea.md)
 - [Markdown](form-fields/markdown.md)
+- [Wysiwyg](form-fields/wysiwyg.md)
 - [Number](form-fields/number.md)
 - [Html](form-fields/html.md)
 - [Check](form-fields/check.md)

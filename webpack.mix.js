@@ -4,7 +4,8 @@ const fs = require('fs-extra');
 
 (function() {
     mix.copy('node_modules/vue-clip/src', 'resources/assets/js/components/vendor/vue-clip')
-        .copy('node_modules/vue2-timepicker/src', 'resources/assets/js/components/vendor/vue2-timepicker');
+        .copy('node_modules/vue2-timepicker/src', 'resources/assets/js/components/vendor/vue2-timepicker')
+        .copy('node_modules/vue2-google-maps/src', 'resources/assets/js/components/vendor/vue2-google-maps');
 
     if(process.env.NODE_ENV === 'test') {
         mix.then(function() {
@@ -36,8 +37,8 @@ const fs = require('fs-extra');
         .styles([
             'resources/assets/dist/.bin/vendors.css',
             'resources/assets/dist/.bin/sharp-app.css',
-            //'node_modules/vue-multiselect/dist/vue-multiselect.min.css',
             'node_modules/simplemde/dist/simplemde.min.css',
+            'node_modules/trix/dist/trix.css'
         ], 'resources/assets/dist/sharp.css')
         .webpackConfig({
             plugins: [

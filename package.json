@@ -81,6 +81,7 @@
     "global": "^4.3.2",
     "moxios": "^0.4.0",
     "popper.js": "^1.12.6",
+    "trix": "^0.11.1",
     "vue": "^2.5.2",
     "vue-chartjs": "^2.8.7",
     "vue-loader": "13.0.2",

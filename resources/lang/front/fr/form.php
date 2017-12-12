@@ -54,4 +54,7 @@ return [
     'markdown.icons.fullscreen.title' => 'Plein écran',
     'markdown.icons.guide.title' => 'Guide',
 
+    'wysiwyg.dialogs.add_link.input_placeholder' => 'Insérez un lien',
+    'wysiwyg.dialogs.add_link.unlink_button' => 'Supprimer le lien',
+    'wysiwyg.dialogs.add_link.link_button' => 'Ajouter',
 ];

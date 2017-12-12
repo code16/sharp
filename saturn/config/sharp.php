@@ -40,6 +40,9 @@ return [
             "form" => \App\Sharp\FeatureSharpForm::class,
             "validator" => \App\Sharp\FeatureSharpValidator::class,
         ],
+        "test" => [
+            "form" => \App\Sharp\TestForm\TestForm::class,
+        ],
     ],
 
     "menu" => [
