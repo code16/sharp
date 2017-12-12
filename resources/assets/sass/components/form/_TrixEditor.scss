@@ -25,7 +25,8 @@
       border-radius: 3px;
       cursor: pointer;
       background: none;
-      &:hover {
+      padding:0;
+      &:hover, &[data-trix-active]{
         background: #fcfcfc;
         border-color: #95a5a6;
       }

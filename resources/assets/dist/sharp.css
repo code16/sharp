@@ -9060,9 +9060,10 @@ h6 > *:after, .bx--type-zeta > *,
   border-radius: 3px;
   cursor: pointer;
   background: none;
+  padding: 0;
 }
 
-#sharp-app .SharpTrix .editor-toolbar button:hover {
+#sharp-app .SharpTrix .editor-toolbar button:hover, #sharp-app .SharpTrix .editor-toolbar button[data-trix-active] {
   background: #fcfcfc;
   border-color: #95a5a6;
 }
