@@ -2,13 +2,13 @@
   "plugins": [
     "transform-object-rest-spread",
     ["transform-runtime", {
-      "polyfill": true,
+      "polyfill": false,
       "regenerator": true,
       "helpers": false
     }]
   ],
   "presets": [
-    ["es2015", {"modules": false }]
+    ["es2015", { "modules": false }]
   ],
   "env": {
     "test": {

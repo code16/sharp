@@ -4,7 +4,8 @@ const fs = require('fs-extra');
 
 (function() {
     mix.copy('node_modules/vue-clip/src', 'resources/assets/js/components/vendor/vue-clip')
-        .copy('node_modules/vue2-timepicker/src', 'resources/assets/js/components/vendor/vue2-timepicker');
+        .copy('node_modules/vue2-timepicker/src', 'resources/assets/js/components/vendor/vue2-timepicker')
+        .copy('node_modules/vue2-google-maps/src', 'resources/assets/js/components/vendor/vue2-google-maps');
 
     if(process.env.NODE_ENV === 'test') {
         mix.then(function() {

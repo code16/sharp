@@ -57,7 +57,7 @@
 
 <script>
     import Vue from 'vue';
-    import * as VueGoogleMaps from 'vue2-google-maps';
+    import * as VueGoogleMaps from '../../../vendor/vue2-google-maps/main';
 
     import { Localization } from '../../../../mixins';
 
