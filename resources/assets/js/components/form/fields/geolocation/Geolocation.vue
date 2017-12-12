@@ -86,16 +86,17 @@
             boundaries: Object,
             zoomLevel: Number,
             initialPosition: Object,
-            displayUnit: {
-                type: String,
-                default: 'DD',
-                validator: unit => unit==='DMS'||unit==='DD'
-            }
+            // displayUnit: {
+            //     type: String,
+            //     default: 'DD',
+            //     validator: unit => unit==='DMS'||unit==='DD'
+            // }
         },
 
         data() {
             return {
-                loaded: false
+                loaded: false,
+                displayUnit: 'DD'
             }
         },
 
@@ -108,7 +109,7 @@
                     return this.latLng2DMS(this.value)
                 }
                 else if(this.displayUnit === 'DD') {
-                    return this.value;
+                    return this.latLng2DD(this.value);
                 }
             }
         },

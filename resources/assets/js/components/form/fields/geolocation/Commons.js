@@ -22,6 +22,9 @@ export default {
                 lng: dd2dms(pos.lng, true)
             }
         },
+        latLng2DD(latLng) {
+            return this.isLatLngInstance(latLng) ? latLng.toJSON() : latLng;
+        },
         isLatLngInstance(latLng) {
             return latLng instanceof google.maps.LatLng;
         }
