@@ -39,11 +39,11 @@
 
 <script>
     import Vue from 'vue';
-    import BVComp from '../mixins/BVComp';
+    import Tabs from 'bootstrap-vue/es/components/tabs/tabs'
 
     export default {
         name:'SharpBTabs',
-        extends: BVComp('bTabs'),
+        extends: Tabs,
         mounted() {
             //console.log(this);
         }

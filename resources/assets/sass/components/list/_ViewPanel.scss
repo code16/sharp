@@ -22,18 +22,18 @@
   z-index: z('modal');
 
   &--collapsed {
-    width:0;
+    transform: translate3d(-100%,0,0);
   }
 
   &--collapsing {
-    transition: width 400ms $bx--standard-easing;
+    transition: transform 400ms $bx--standard-easing;
   }
 
   &--expanding {
-    transition: width 400ms $bx--standard-easing;
+    transition: transform 400ms $bx--standard-easing;
   }
 
   &--expanded {
-
+    transform: translate3d(0,0,0);
   }
 }

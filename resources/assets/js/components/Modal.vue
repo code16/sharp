@@ -2,7 +2,7 @@
     import { QueryTree } from '../mixins';
     import { lang } from '../mixins/Localization';
 
-    import BVComp from '../mixins/BVComp';
+    import Modal from 'bootstrap-vue/es/components/modal/modal';
 
     /**
      * CF --
@@ -14,7 +14,7 @@
         functional: true,
 
         render(h, ctx) {
-            const bModal = BVComp('bModal');
+            const bModal = Modal;
 
             ctx.data['class'] =
             [

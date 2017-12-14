@@ -1,22 +1,23 @@
 <script>
     import { ignoreWarns } from '../../util';
-    import BVComp from '../../mixins/BVComp';
+    import Pagination from 'bootstrap-vue/es/components/pagination/pagination';
+
+    // for props/events check
+    // https://bootstrap-vue.js.org/docs/components/pagination
 
     export default {
         name: 'SharpPagination',
         functional: true,
 
         render(h,ctx) {
-
             ctx.data.attrs.firstText = `<i class="fa fa-angle-double-left" aria-hidden="true"></i>`;
             ctx.data.attrs.prevText = `<i class="fa fa-angle-left" aria-hidden="true"></i>`;
             ctx.data.attrs.nextText = `<i class="fa fa-angle-right" aria-hidden="true"></i>`;
             ctx.data.attrs.lastText = `<i class="fa fa-angle-double-right" aria-hidden="true"></i>`;
 
-
             return h({
                 name:'SharpPagination',
-                extends:BVComp('bPagination'),
+                extends: Pagination,
 
                 watch: {
                     numberOfPages: {

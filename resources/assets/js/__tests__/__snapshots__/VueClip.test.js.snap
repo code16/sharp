@@ -104,7 +104,7 @@ exports[`vue-clip can mount initially image VueClip component 1`] = `
 		</div>
 		<div class="SharpModal">
 			<div id="__BV_modal_outer_mocked">
-				<div id="mocked" aria-hidden="true" role="dialog" class="modal fade" style="display: none;">
+				<div id="mocked" role="dialog" aria-hidden="true" class="modal fade" style="display: none;">
 					<div class="modal-dialog modal-md">
 						<div tabindex="-1" role="document" aria-labelledby="__BV_modal_header_mocked" aria-describedby="__BV_modal_body_mocked" class="modal-content">
 							<header id="__BV_modal_header_mocked" class="modal-header">
@@ -115,7 +115,7 @@ exports[`vue-clip can mount initially image VueClip component 1`] = `
 								<!---->
 								<div><button class="SharpButton SharpButton--primary"><i class="fa fa-rotate-left"></i></button> <button class="SharpButton SharpButton--primary"><i class="fa fa-rotate-right"></i></button></div>
 							</div>
-							<footer id="__BV_modal_footer_mocked" class="modal-footer"><button type="button" class="btn btn-secondary">{{ modals.cancel_button }}</button> <button type="button" class="btn btn-primary">{{ modals.ok_button }}</button></footer>
+							<footer id="__BV_modal_footer_mocked" class="modal-footer"><button type="button" class="btn btn-primary">{{ modals.ok_button }}</button><button type="button" class="btn btn-secondary">{{ modals.cancel_button }}</button></footer>
 						</div>
 					</div>
 				</div>
