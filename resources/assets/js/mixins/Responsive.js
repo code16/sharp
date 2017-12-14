@@ -18,7 +18,7 @@ export default function (breakpoint='sm') {
 
             const update = () => {
                 let { offsetWidth } = testElm;
-                this.isViewportSmall = offsetWidth;
+                this.isViewportSmall = !!offsetWidth;
             };
 
             update();

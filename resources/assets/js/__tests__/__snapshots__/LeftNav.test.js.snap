@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`left-nav can mount "not ready" LeftNav 1`] = `
+<div>
+	<nav role="navigation" aria-label="Menu Sharp" class="SharpLeftNav SharpLeftNav--collapseable SharpLeftNav--expanded" style="display: none;">
+		<div class="SharpLeftNav__top-icon"><i class="fa"></i></div>
+		<div>NAV CONTENT</div>
+		<div class="SharpLeftNav__collapse"><a href="#" class="SharpLeftNav__collapse-link"><svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd" class="SharpLeftNav__collapse-arrow"><path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path></svg></a></div>
+	</nav>
+</div>
+`;
+
+exports[`left-nav can mount "with current icon" LeftNav 1`] = `
+<div>
+	<nav role="navigation" aria-label="Menu Sharp" class="SharpLeftNav SharpLeftNav--collapseable SharpLeftNav--expanded" style="">
+		<div class="SharpLeftNav__top-icon"><i class="fa CURRENT_ICON"></i></div>
+		<div>NAV CONTENT</div>
+		<div class="SharpLeftNav__collapse"><a href="#" class="SharpLeftNav__collapse-link"><svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd" class="SharpLeftNav__collapse-arrow"><path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path></svg></a></div>
+	</nav>
+</div>
+`;
+
+exports[`left-nav can mount "with state" LeftNav 1`] = `
+<div>
+	<nav role="navigation" aria-label="Menu Sharp" class="SharpLeftNav SharpLeftNav--collapseable SharpLeftNav--STATE" style="">
+		<div class="SharpLeftNav__top-icon"><i class="fa"></i></div>
+		<div>NAV CONTENT</div>
+		<div class="SharpLeftNav__collapse"><a href="#" class="SharpLeftNav__collapse-link"><svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd" class="SharpLeftNav__collapse-arrow"><path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path></svg></a></div>
+	</nav>
+</div>
+`;
+
+exports[`left-nav can mount LeftNav 1`] = `
+<div>
+	<nav role="navigation" aria-label="Menu Sharp" class="SharpLeftNav SharpLeftNav--collapseable SharpLeftNav--expanded" style="">
+		<div class="SharpLeftNav__top-icon"><i class="fa"></i></div>
+		<div>NAV CONTENT</div>
+		<div class="SharpLeftNav__collapse"><a href="#" class="SharpLeftNav__collapse-link"><svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd" class="SharpLeftNav__collapse-arrow"><path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path></svg></a></div>
+	</nav>
+</div>
+`;
