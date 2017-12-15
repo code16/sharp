@@ -2,6 +2,8 @@
 
 Class: `Code16\Sharp\Form\Fields\SharpFormSelectField`
 
+![Example](select1.gif)
+
 ## Configuration
 
 ### Constructor `function make(string $key, array $options)`
@@ -33,6 +35,9 @@ This allows to write code like this:
 
 Allow multi-selection (default: false)
 
+![Example](select3.gif)
+
+
 ### `setClearable(bool $clearable = true)`
 
 Allow null value in non-multiple selection (default: false)
@@ -44,9 +49,13 @@ Display as a list (the default value):
 - radio if multiple=false
 - checkboxes if multiple=true
 
+![Example](select2.gif)
+
 ### `setDisplayAsDropdown()`
 
 Display as a classic dropdown.
+
+![Example](select1.gif)
 
 ### `setMaxSelected(int $maxSelected)`
 

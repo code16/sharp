@@ -2,6 +2,8 @@
 
 Class: `Code16\Sharp\Form\Fields\SharpFormUploadField`
 
+![Example](upload.gif)
+
 ## General configuration
 
 First, in order to get the upload part working, you have to define a "tmp" path where files will be stored until they are moved to the final folder. Here's the default:

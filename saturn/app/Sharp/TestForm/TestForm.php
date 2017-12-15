@@ -40,7 +40,7 @@ class TestForm extends SharpForm
         )->addField(
             SharpFormAutocompleteField::make("autocomplete_remote", "remote")
                 ->setLabel("Autocomplete remote")
-                ->setRemoteSearchAttribute("name")
+                ->setRemoteSearchAttribute("query")
                 ->setListItemInlineTemplate("{{name}}")
                 ->setResultItemInlineTemplate("{{name}} ({{num}})")
                 ->setRemoteEndpoint(url("/passengers"))

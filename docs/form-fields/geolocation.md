@@ -1,7 +1,10 @@
 # Form field: Geolocation
 
 A map-based field to pick a precise location and return its coordinates (latitude and longitude)
+
 Class: `Code16\Sharp\Form\Fields\SharpFormGeolocationField`
+
+![Example](geolocation.gif)
 
 ## Configuration
 
