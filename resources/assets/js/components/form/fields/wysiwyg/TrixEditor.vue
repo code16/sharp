@@ -52,19 +52,10 @@
             }
         },
         created() {
-            Vue.ignoredElements = Vue.ignoredElements || [];
-            if(!Vue.ignoredElements.includes('trix-editor')) {
-                Vue.ignoredElements = [
-                    ...Vue.ignoredElements, [
-                        'trix-editor',
-                        'trix-toolbar'
-                    ]
-                ];
-            }
             Trix.config.toolbar.getDefaultHTML = () => '';
         },
         mounted() {
-            console.log(Trix);
+            //console.log(Trix);
         }
     }
 </script>

@@ -44,7 +44,12 @@ const fs = require('fs-extra');
             plugins: [
                 new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
                 new webpack.WatchIgnorePlugin([/\/vendor\//]) //Do not watch files which are inside a 'vendor/' directories
-            ]
+            ],
+            resolve: {
+                alias: {
+                    'vue$': 'vue/dist/vue.common.js'
+                }
+            }
         })
         .then(function() {
             fs.removeSync('resources/assets/dist/.bin');

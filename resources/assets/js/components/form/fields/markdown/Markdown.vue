@@ -164,19 +164,22 @@
             insertUploadImage({ replaceBySelection, data, isInsertion } = {}) {
                 let selection = this.codemirror.getSelection(' ');
                 let curLineContent = this.codemirror.getLine(this.cursorPos.line);
-                let initialCursorPos = this.cursorPos;
+                //let initialCursorPos = this.cursorPos;
 
                 if(selection) {
                     this.codemirror.replaceSelection('');
                     curLineContent = this.codemirror.getLine(this.cursorPos.line);
                 }
 
-                if(curLineContent.length) {
+                if(curLineContent.length
+                    || this.cursorPos.line === 0 && this.cursorPos.ch === 0
+                    || this.codemirror.findMarksAt({ line: this.cursorPos.line-1, ch:0 }).length
+                ) {
                     this.codemirror.replaceRange('\n', this.cursorPos);
                 }
-                if(isInsertion) {
-                    this.codemirror.replaceRange('\n', this.cursorPos);
-                }
+                // if(isInsertion) {
+                //     this.codemirror.replaceRange('\n', this.cursorPos);
+                // }
 
                 this.codemirror.getInputField().blur();
 
@@ -185,7 +188,7 @@
                     : '![]()';// `![${selection||''}]()`;   take selection as title
 
 
-                let afterNewLinesCount = isInsertion ? 2 : 0;
+                let afterNewLinesCount = isInsertion ? 1 : 0;
 
                 md += '\n'.repeat(afterNewLinesCount);
 
@@ -193,7 +196,7 @@
                 this.codemirror.setCursor(this.cursorPos.line-afterNewLinesCount,0);
                 let from = this.cursorPos, to = { line:this.cursorPos.line, ch:this.cursorPos.ch+md.length };
 
-                let relativeFallbackLine = isInsertion ? this.cursorPos.line - initialCursorPos.line : 1;
+                let relativeFallbackLine = 1;//isInsertion ? this.cursorPos.line - initialCursorPos.line : 1;
 
                 let $uploader = this.createUploader({
                     id: data ? this.filesByName[data.name][this.idSymbol] : this.uploaderId++,

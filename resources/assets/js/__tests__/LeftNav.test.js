@@ -1,6 +1,5 @@
 import { mount } from 'vue-test-utils';
 import LeftNav from '../components/menu/LeftNav.vue';
-import Vue from 'vue';
 
 jest.useFakeTimers();
 

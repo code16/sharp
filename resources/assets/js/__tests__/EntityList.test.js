@@ -54,7 +54,9 @@ describe('entity-list', ()=>{
         }
     }));
 
-    moxios.delay = 10;
+    const oldDelay = moxios.delay;
+    beforeAll(() => moxios.delay = 10);
+    afterAll(() => moxios.delay = oldDelay);
 
     beforeEach(()=>{
         document.body.innerHTML = `
