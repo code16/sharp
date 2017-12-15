@@ -62,7 +62,7 @@ class TravelSharpForm extends SharpForm
             SharpFormGeolocationField::make("destination_coordinates")
                 ->setDisplayUnitDegreesMinutesSeconds()
                 ->setGeocoding()
-                ->setInitialPosition(47.636940302903845, -3.461894989013672)
+                ->setInitialPosition(48.5838961, 7.742182599999978)
                 ->setApiKey(env("GMAPS_KEY", "my-api-key"))
                 ->setLabel("Destination coordinates")
 

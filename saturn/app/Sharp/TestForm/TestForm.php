@@ -71,10 +71,10 @@ class TestForm extends SharpForm
             SharpFormGeolocationField::make("geolocation")
                 ->setLabel("Geolocation")
                 ->setApiKey(env("GMAPS_KEY"))
-                ->setDisplayUnitDecimalDegrees()
-//                ->setDisplayUnitDegreesMinutesSeconds()
+//                ->setDisplayUnitDecimalDegrees()
+                ->setDisplayUnitDegreesMinutesSeconds()
                 ->setGeocoding()
-                ->setInitialPosition(47.636940302903845, -3.461894989013672)
+                ->setInitialPosition(48.5838961, 7.742182599999978)
 
         )->addField(
             SharpFormHtmlField::make("html")
@@ -116,7 +116,7 @@ class TestForm extends SharpForm
                     SharpFormMarkdownField::IMG,
                 ])
                 ->setCropRatio("1:1")
-                ->setHeight(150)
+                ->setHeight(350)
                 ->setStorageDisk("local")
                 ->setStorageBasePath("data")
 

@@ -4,6 +4,8 @@ This form field is a markdown editor, with formatting and an optional toolbar.
 
 Class: `Code16\Sharp\Form\Fields\SharpFormMarkdownField`
 
+![Example](markdown.gif)
+
 
 ## Configuration
 
