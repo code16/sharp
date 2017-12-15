@@ -1,5 +1,4 @@
 <script>
-    import { QueryTree } from '../mixins';
     import { lang } from '../mixins/Localization';
 
     import Modal from 'bootstrap-vue/es/components/modal/modal';
@@ -47,18 +46,12 @@
                         </button>
                     </div>
                     `,
-                    mixins: [ QueryTree ],
                     props: { title: String, okOnly: Boolean },
-                    computed: {
-                        $modal() {
-                            return this.findAscendant('bModal');
-                        }
-                    },
                     methods: {
                         hide() {
-                            this.$modal.hide();
+                            this.$parent.hide();
                         }
-                    }
+                    },
                 }, {
                     slot: 'modal-header',
                     props: ctx.props

@@ -2,6 +2,7 @@
   transition: padding 300ms $bx--standard-easing;
   padding-left: rem(48px);
   padding-bottom: 3rem;
+  overflow: auto;
 }
 
 @include media-breakpoint-up($breakpoint-fixed-menu) {

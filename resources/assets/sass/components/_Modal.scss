@@ -95,6 +95,9 @@
       margin-right: -3vw;
       padding: rem(24px) rem(24px);
 
+      display: flex;
+      flex-direction: row-reverse;
+
       @include media-breakpoint-up(md) {
         margin-left: rem(-48px);
         margin-right: rem(-48px);
@@ -104,9 +107,7 @@
       .btn {
         @extend .SharpButton;
 
-        &:not(:first-of-type) {
-          margin-left: .5rem;
-        }
+        margin-left: .5rem;
 
         &-primary {
           @extend .SharpButton--primary;

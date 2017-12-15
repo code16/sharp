@@ -12,7 +12,6 @@ export default {
         l: lang
     }
 }
-
 export let LocalizationBase = baseKey => {
     return {
         methods: {
