@@ -1,29 +1,26 @@
-import { shallow, mount } from 'vue-test-utils';
+import { mount } from 'vue-test-utils';
 import Pagination from '../components/list/Pagination.vue';
 
-import * as BVCompModule from '../mixins/BVComp';
-
-BVCompModule.default = name => ({ name, render() { return this._v(`BVCOMP__${name}`) } });
-
-// jest.mock('../mixins/BVComp.js', ()=>{
-//     return name => ({ name, render() { return this._v(`BVCOMP__${name}`) } });
-// });
-
-jest.mock('bootstrap-vue');
-
 describe('pagination', ()=>{
-    let wrapper;
-    beforeEach(()=>{
-        wrapper = shallow(Pagination, {
+    function createPagination(props={}) {
+        return mount(Pagination, {
             context: {
-                data: {
-                    attrs: {}
+                attrs: {},
+                props: {
+                    minPageEndButtons: 3,
+                    totalRows: 100,
+                    perPage: 10,
+                    ...props
                 }
             }
         });
+    }
+
+    test('mount pagination', ()=>{
+        expect(createPagination().html()).toMatchSnapshot();
     });
 
-    xtest('mount pagination', ()=>{
-        test(wrapper.html()).toMatchSnapshot();
+    test('mount pagination without end buttons', ()=>{
+        expect(createPagination({ totalRows: 20 }).html()).toMatchSnapshot();
     });
 });

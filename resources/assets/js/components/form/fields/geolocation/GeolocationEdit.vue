@@ -1,7 +1,7 @@
 <template>
     <SharpModal
         :id="modalId"
-        :title="lSub('title')"
+        :title="lSub(geocoding ? 'title' : 'title-no-geocoding')"
         no-close-on-backdrop
         @show="handleModalOpened"
         @hidden="handleModalClosed"

@@ -1,8 +1,13 @@
 {
   "env": {
     "test": {
+      "plugins": ["transform-object-rest-spread"],
       "presets": [
-        "es2015"
+        ["babel-preset-env", {
+          "targets": {
+            "node": "current"
+          }
+        }]
       ]
     }
   }

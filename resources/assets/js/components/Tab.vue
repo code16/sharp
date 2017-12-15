@@ -1,9 +1,9 @@
 <script>
-    import BVComp from '../mixins/BVComp';
+    import Tab from 'bootstrap-vue/es/components/tabs/tab';
 
     export default {
         name:'SharpBTab',
-        extends: BVComp('bTab'),
+        extends: Tab,
         provide() {
             return  {
                 $tab:this
