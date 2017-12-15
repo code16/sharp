@@ -1,8 +1,6 @@
 import { shallow } from 'vue-test-utils';
 import TrixEditor from '../components/form/fields/wysiwyg/TrixEditor.vue';
 
-import Vue from 'vue';
-
 describe('trix-editor',()=>{
     let wrapper;
 

@@ -150,6 +150,6 @@
                 $mapObject.setCenter(geometry.location);
                 $mapObject.fitBounds(geometry.viewport);
             }
-        }
+        },
     }
 </script>

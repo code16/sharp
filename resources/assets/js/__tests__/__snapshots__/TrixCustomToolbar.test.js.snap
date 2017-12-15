@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`trix-custom-toolbar can mount TrixCustomToolbar 1`] = `
+<div>
+	<div class="editor-toolbar"><button tabindex="-1" class="fa fa-bold" data-trix-attribute="bold"></button><button tabindex="-1" class="fa fa-italic" data-trix-attribute="italic"></button><i class="separator">|</i><button tabindex="-1" class="fa fa-link" data-trix-attribute="href"
+		    data-trix-action="link"></button></div>
+	<div data-trix-dialogs="" class="trix-dialogs">
+		<div data-trix-dialog="href" data-trix-dialog-attribute="href" class="trix-dialog trix-dialog--link">
+			<div class="trix-dialog__link-fields"><input type="url" name="href" required="required" data-trix-input="" class="trix-input trix-input--dialog">
+				<div class="trix-button-group"><input type="button" data-trix-method="setAttribute" class="trix-button trix-button--dialog"> <input type="button" data-trix-method="removeAttribute" class="trix-button trix-button--dialog"></div>
+			</div>
+		</div>
+	</div>
+</div>
+`;

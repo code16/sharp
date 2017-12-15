@@ -43,8 +43,8 @@
         directives: {
             buttonData(el, { value }) {
                 let { attribute, action } = value;
-                attribute && (el.dataset.trixAttribute = attribute);
-                action && (el.dataset.trixAction = action);
+                attribute && el.setAttribute('data-trix-attribute', attribute);
+                action && el.setAttribute('data-trix-action', action);
             },
         }
     }

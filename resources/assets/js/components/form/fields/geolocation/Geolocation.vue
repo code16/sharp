@@ -59,6 +59,7 @@
 <script>
     import Vue from 'vue';
     import * as VueGoogleMaps from '../../../vendor/vue2-google-maps/main';
+    import bModal from 'bootstrap-vue/es/directives/modal/modal';
 
     import { Localization } from '../../../../mixins';
 
@@ -140,6 +141,10 @@
                 this.$root.$_gmapLoaded = VueGoogleMaps.loaded;
                 return VueGoogleMaps.loaded;
             }
+        },
+
+        directives: {
+            bModal
         },
 
         async created() {
