@@ -199,7 +199,7 @@ describe('markdown-field', () => {
 
             let $uploader = $markdown.insertUploadImage({ isInsertion:true });
 
-            expect(simplemde.value()).toBe('Lorem\n\n![]()\n\nipsum');
+            expect(simplemde.value()).toBe('Lorem\n![]()\nipsum');
         });
 
         test('update image uploader and text properly', async () => {
@@ -212,12 +212,12 @@ describe('markdown-field', () => {
 
             let $uploader = $markdown.insertUploadImage({ isInsertion:true });
 
-            expect(simplemde.value()).toBe('\n![]()\n\n');
+            expect(simplemde.value()).toBe('\n![]()\n');
 
             $uploader.marker.find = jest.fn(() => ({ from:{ line: 1, ch: 0 }, to:{ line: 1, ch:5 }}) );
             $uploader.$emit('success', { name: 'cat.jpg' });
 
-            expect(simplemde.value()).toBe('\n![](cat.jpg)\n\n');
+            expect(simplemde.value()).toBe('\n![](cat.jpg)\n');
 
             expect($markdown.value.files).toEqual([{
                 [$markdown.idSymbol]: 0,
