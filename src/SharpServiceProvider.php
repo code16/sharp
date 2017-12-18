@@ -25,7 +25,7 @@ class SharpServiceProvider extends ServiceProvider
     /**
      * @var string
      */
-    const VERSION = '4.0.2';
+    const VERSION = '4.0.3';
 
     public function boot()
     {
