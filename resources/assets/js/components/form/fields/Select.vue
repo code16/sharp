@@ -27,7 +27,7 @@
             </template>
             <slot name="option" slot="option"></slot>
         </sharp-multiselect>
-        <div v-else>
+        <template v-else>
             <template v-if="multiple">
                 <component :is="inline?'span':'div'"
                            v-for="option in options"
@@ -66,7 +66,7 @@
 
                 </component>
             </div>
-        </div>
+        </template>
     </div>
 </template>
 

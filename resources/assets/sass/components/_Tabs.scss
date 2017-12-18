@@ -9,6 +9,36 @@
     }
   }
 
+  @mixin create-collapsed-nav() {
+    .SharpTabs__nav:not(.SharpTabs__nav--ghost) {
+      height: auto;
+      flex-direction: column;
+      .SharpTabs__nav-link {
+        height: rem(40px);
+        padding: $button-padding;
+        border-right: 1px solid $brand-01 !important;;
+        &:not(:last-child) {
+          border-bottom: none;
+        }
+      }
+    }
+    .SharpTabs__collapse-btn {
+      display: inline-block;
+    }
+  }
+
+  &--nav-overflow {
+    @include create-collapsed-nav;
+  }
+  &:not(SharpTabs--nav-overflow) {
+    @include media-breakpoint-down(xs) {
+      &--collapse {
+        @include create-collapsed-nav;
+      }
+    }
+  }
+
+
   &__nav {
     display: flex;
     justify-content: center;
@@ -27,6 +57,7 @@
       text-decoration: none;
       border: 1px solid $brand-01;
       color: $brand-01;
+
 
       // Sharp specific
       font-size: $button-font-size;

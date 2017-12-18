@@ -261,7 +261,7 @@ describe('markdown-field', () => {
             }]);
 
             expect(codemirror.setSelection).toHaveBeenCalledTimes(1);
-            expect(codemirror.setSelection).toHaveBeenCalledWith({ line:1, ch:0 }, { line:1, ch:15 });
+            expect(codemirror.setSelection).toHaveBeenCalledWith({ line:1, ch:0 }, { line:1, ch:15 }, expect.anything());
 
             expect($markdown.insertUploadImage).toHaveBeenCalledTimes(1);
             expect($markdown.insertUploadImage).toHaveBeenCalledWith({ replaceBySelection:true, data:{ name:'cat.jpg', title:'Cat' } });
