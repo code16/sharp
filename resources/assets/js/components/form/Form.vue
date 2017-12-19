@@ -51,14 +51,15 @@
     import Grid from '../Grid';
     import FieldsLayout from './FieldsLayout.vue';
 
+    import localize from '../../mixins/localize/Form';
 
-    const noop = ()=>{}
+    const noop = ()=>{};
 
     export default {
         name:'SharpForm',
         extends: DynamicView,
 
-        mixins: [ActionEvents, ReadOnlyFields('fields'), Localization],
+        mixins: [ActionEvents, ReadOnlyFields('fields'), Localization, localize],
 
         components: {
             [TabbedLayout.name]: TabbedLayout,
@@ -194,7 +195,7 @@
                 const showSubmitButton = this.isCreation ? this.authorizations.create : this.authorizations.update;
 
                 this.actionsBus.$emit('setup', {
-                    locales: null, //this.config.locales,
+                    locales: this.config.locales,
                     showSubmitButton: showSubmitButton && !disable,
                     showDeleteButton: !this.isCreation && this.authorizations.delete && !disable,
                     showBackButton: this.isReadOnly,
