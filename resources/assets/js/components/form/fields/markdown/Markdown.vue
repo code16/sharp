@@ -38,7 +38,8 @@
             innerComponents:Object,
 
             readOnly: Boolean,
-            locale:String
+            locale: String,
+            localized: Boolean
         },
 
         inject: ['$tab'],
@@ -54,7 +55,7 @@
         watch: {
             /// On form locale change
             locale() {
-                this.simplemde.value(this.value.text);
+                this.localized && this.simplemde.value(this.value.text);
             }
         },
         computed: {
@@ -307,7 +308,7 @@
                 this.codemirror.refresh();
                 let images = this.parse();
                 if(images.length) {
-                    // reseet the scroll position because it change on widget insertion
+                    // reset the scroll position because it change on widget insertion
                     this.$nextTick(()=>window.scrollTo(0,0));
                 }
             }

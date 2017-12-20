@@ -57,9 +57,13 @@
     import bCollapse from 'bootstrap-vue/es/components/collapse/collapse';
     import SharpDropdownArrow from './dropdown/Arrow.vue';
     import HasOverflow from '../directives/HasOverflow';
+    import { Responsive } from '../mixins';
 
     export default {
         name:'SharpBTabs',
+
+        mixins: [Responsive('sm')],
+
         extends: Tabs,
         components: {
             bCollapse,
@@ -81,11 +85,8 @@
         },
         computed: {
             collapseActivated() {
-                return this.hasNavOverflow || this.tabs.length>2;
+                return this.isViewportSmall && (this.hasNavOverflow || this.tabs.length>2);
             }
-        },
-        mounted() {
-
         },
         directives: {
             HasOverflow

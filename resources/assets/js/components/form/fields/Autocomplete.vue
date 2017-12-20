@@ -4,7 +4,7 @@
                  {'SharpAutocomplete--remote':isRemote},
                  {'SharpAutocomplete--disabled':readOnly}]">
         <div v-if="state==='valuated' && value" class="SharpAutocomplete__result-item">
-            <sharp-template name="ResultItem" :template="resultItemTemplate" :template-data="value"></sharp-template>
+            <sharp-template name="ResultItem" :template="resultItemTemplate" :template-data="localizedTemplateData(value)"></sharp-template>
             <button class="SharpAutocomplete__result-item__close-button" type="button" @click="handleResetClick">
                 <svg class="SharpAutocomplete__result-item__close-icon"
                      aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd">
@@ -29,7 +29,7 @@
                      @open="opened=true"
                      ref="multiselect">
             <template slot="option" slot-scope="props">
-                <sharp-template name="ListItem" :template="listItemTemplate" :template-data="props.option"></sharp-template>
+                <sharp-template name="ListItem" :template="listItemTemplate" :template-data="localizedTemplateData(props.option)"></sharp-template>
             </template>
             <template slot="loading">
                 <sharp-loading :visible="isLoading" inline small></sharp-loading>
@@ -52,6 +52,9 @@
     import { Localization, Debounce } from '../../../mixins';
     import { lang } from '../../../mixins/Localization';
 
+    import localize from '../../../mixins/localize/Multiselect';
+    import { testLocalizedAutocomplete } from "../../../mixins/localize/test/test-mixins";
+
     export default {
         name:'SharpAutocomplete',
         components: {
@@ -60,7 +63,9 @@
             [Loading.name]: Loading
         },
 
-        mixins: [Localization, Debounce],
+        mixins: [Localization, Debounce, localize,
+            testLocalizedAutocomplete
+        ],
 
         props: {
             fieldKey: String,
@@ -96,7 +101,7 @@
             },
             readOnly: Boolean,
             listItemTemplate: String,
-            resultItemTemplate: String
+            resultItemTemplate: String,
         },
         data() {
             return {
@@ -104,6 +109,11 @@
                 suggestions: this.localValues,
                 opened: false,
                 state: 'initial'
+            }
+        },
+        watch: {
+            locale() {
+                this.initState();
             }
         },
         computed: {
@@ -152,6 +162,9 @@
                 this.state = 'searching';
             },
 
+            initState() {
+                this.state = this.value ? 'valuated' : 'initial';
+            },
             handleSelect(value) {
                 this.state = 'valuated';
                 this.$emit('input', value);
@@ -205,9 +218,7 @@
                 this.$emit('input', this.findLocalValue(), { force: true });
             }
             await this.$nextTick();
-            if(this.value) {
-                this.state = 'valuated';
-            }
+            this.initState();
         }
     }
 </script>

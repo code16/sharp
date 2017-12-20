@@ -11,6 +11,7 @@
                 :placeholder="placeholder"
                 :style="{ height: `${height}px`, maxHeight:`${height}px` }"
                 @trix-change="handleChanged"
+                ref="trix"
             ></trix-editor>
         </div>
     </div>
@@ -36,7 +37,14 @@
             },
             placeholder: String,
             readOnly: Boolean,
-            uniqueIdentifier: String
+            uniqueIdentifier: String,
+            locale: String,
+            localized: Boolean
+        },
+        watch: {
+            locale() {
+                this.localized && this.$refs.trix.editor.loadHTML(this.value.text);
+            }
         },
         computed: {
             inputId() {
