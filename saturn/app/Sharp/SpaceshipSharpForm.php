@@ -31,6 +31,7 @@ class SpaceshipSharpForm extends SharpForm
     {
         $this->addField(
             SharpFormTextField::make("name")
+                ->setLocalized()
                 ->setLabel("Name")
 
         )->addField(
