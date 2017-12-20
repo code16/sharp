@@ -35,11 +35,13 @@ Route::group([
     Route::get("/form/{entityKey}")
         ->name("code16.sharp.api.form.create")
         ->middleware('sharp_api_append_form_authorizations')
+        ->middleware('sharp_api_append_form_data_localizations')
         ->uses('FormController@create');
 
     Route::get("/form/{entityKey}/{instanceId}")
         ->name("code16.sharp.api.form.edit")
         ->middleware('sharp_api_append_form_authorizations')
+        ->middleware('sharp_api_append_form_data_localizations')
         ->uses('FormController@edit');
 
     Route::post("/form/{entityKey}/{instanceId}")

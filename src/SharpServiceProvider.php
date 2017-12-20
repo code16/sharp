@@ -7,6 +7,7 @@ use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Composers\MenuViewComposer;
 use Code16\Sharp\Http\Middleware\Api\AddSharpContext;
 use Code16\Sharp\Http\Middleware\Api\AppendFormAuthorizations;
+use Code16\Sharp\Http\Middleware\Api\AppendFormDataLocalizations;
 use Code16\Sharp\Http\Middleware\Api\AppendListAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors;
 use Code16\Sharp\Http\Middleware\Api\SaveEntityListParams;
@@ -125,6 +126,9 @@ class SharpServiceProvider extends ServiceProvider
 
         )->aliasMiddleware(
             'sharp_api_append_list_authorizations', AppendListAuthorizations::class
+
+        )->aliasMiddleware(
+            'sharp_api_append_form_data_localizations', AppendFormDataLocalizations::class
 
         )->aliasMiddleware(
             'sharp_api_errors', HandleSharpApiErrors::class

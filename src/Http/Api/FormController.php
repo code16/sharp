@@ -9,6 +9,8 @@ class FormController extends ApiController
      * @param string $entityKey
      * @param string $instanceId
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
+     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
     public function edit($entityKey, $instanceId)
     {
@@ -26,6 +28,8 @@ class FormController extends ApiController
     /**
      * @param string $entityKey
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
+     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
     public function create($entityKey)
     {
@@ -44,6 +48,9 @@ class FormController extends ApiController
      * @param string $entityKey
      * @param string $instanceId
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
+     * @throws \Code16\Sharp\Exceptions\Form\SharpFormUpdateException
+     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
     public function update($entityKey, $instanceId)
     {
@@ -61,6 +68,8 @@ class FormController extends ApiController
     /**
      * @param string $entityKey
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
+     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
     public function store($entityKey)
     {
@@ -79,6 +88,8 @@ class FormController extends ApiController
      * @param string $entityKey
      * @param string $instanceId
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
+     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
     public function delete($entityKey, $instanceId)
     {
