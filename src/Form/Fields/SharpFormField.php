@@ -222,6 +222,7 @@ abstract class SharpFormField
     /**
      * @param array $childArray
      * @return array
+     * @throws SharpFormFieldValidationException
      */
     protected function buildArray(array $childArray)
     {

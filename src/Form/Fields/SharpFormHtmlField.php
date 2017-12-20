@@ -62,6 +62,7 @@ class SharpFormHtmlField extends SharpFormField
 
     /**
      * @return array
+     * @throws \Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException
      */
     public function toArray(): array
     {
