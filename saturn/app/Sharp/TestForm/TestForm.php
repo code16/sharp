@@ -149,7 +149,8 @@ class TestForm extends SharpForm
                 ->setDisplayAsList()
 
         )->addField(
-            SharpFormTagsField::make("tags", $this->options())
+            SharpFormTagsField::make("tags", $this->options(true))
+                ->setLocalized()
                 ->setLabel("Tags")
                 ->setCreatable(true)
                 ->setCreateAttribute("label")
@@ -278,6 +279,8 @@ class TestForm extends SharpForm
 
     function update($id, array $data)
     {
+        print_r($data);
+        die();
     }
 
     function delete($id)
