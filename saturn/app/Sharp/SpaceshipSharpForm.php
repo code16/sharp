@@ -78,6 +78,7 @@ class SpaceshipSharpForm extends SharpForm
 
         )->addField(
             SharpFormTextField::make("picture:legend")
+                ->setLocalized()
                 ->setLabel("Legend")
 
         )->addField(
@@ -137,6 +138,7 @@ class SpaceshipSharpForm extends SharpForm
                         ->setStorageBasePath("data/Spaceship/{id}/Pictures")
                 )->addItemField(
                     SharpFormTextField::make("legend")
+                        ->setLocalized()
                         ->setPlaceholder("Legend")
                 )
         );
