@@ -26,7 +26,7 @@ class AppendFormDataLocalizations
     {
         $locales = config("sharp.locales");
 
-        if(!$locales) {
+        if(!$locales || !$this->hasLocalizedFields($jsonResponse->getData()->fields)) {
             return $jsonResponse;
         }
 
@@ -35,5 +35,20 @@ class AppendFormDataLocalizations
         $jsonResponse->setData($data);
 
         return $jsonResponse;
+    }
+
+    /**
+     * @param \stdClass $fields
+     * @return bool
+     */
+    protected function hasLocalizedFields($fields)
+    {
+        foreach($fields as $key => $attributes) {
+            if($attributes->localized ?? false) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
