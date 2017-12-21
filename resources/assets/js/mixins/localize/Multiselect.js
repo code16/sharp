@@ -11,7 +11,7 @@ export default {
     },
     computed:{
         locales() {
-            return (this.$form.config||{}).locales;
+            return this.$form.locales;
         }
     },
     methods: {

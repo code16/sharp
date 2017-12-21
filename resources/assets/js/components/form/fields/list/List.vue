@@ -176,7 +176,7 @@
             createItem() {
                 return this.itemFieldsKeys.reduce((res, fieldKey) => {
                     if(this.$form.localized && this.itemFields[fieldKey].localized) {
-                        res[fieldKey] = this.$form.config.locales.reduce((res, l)=>{
+                        res[fieldKey] = this.$form.locales.reduce((res, l)=>{
                             res[l] = null;
                             return res;
                         },{});

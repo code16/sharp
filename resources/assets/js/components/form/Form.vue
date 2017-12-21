@@ -95,11 +95,11 @@
         data() {
             return {
                 fields: null,
-                config: null,
                 authorizations: null,
 
                 errors:{},
                 locale: '',
+                locales: [],
 
                 fieldVisible: {},
                 curFieldsetId:0,
@@ -114,7 +114,7 @@
                 return path;
             },
             localized() {
-                return this.config && Array.isArray(this.config.locales);
+                return Array.isArray(this.locales);
             },
             isCreation() {
                 return !this.instanceId;
@@ -151,11 +151,11 @@
             updateVisibility(key, visibility) {
                 this.$set(this.fieldVisible, key, visibility);
             },
-            mount({fields, layout, data={}, config={}, authorizations={}}) {
+            mount({fields, layout, data={}, authorizations={}, locales,}) {
                 this.fields = fields;
                 this.layout = this.patchLayout(layout);
                 this.data = data;
-                this.config = config;
+                this.locales = locales;
                 this.authorizations = authorizations;
 
                 this.fieldVisible = Object.keys(this.fields).reduce((res, fKey) => {
@@ -199,15 +199,15 @@
                 const showSubmitButton = this.isCreation ? this.authorizations.create : this.authorizations.update;
 
                 this.actionsBus.$emit('setup', {
-                    locales: this.config.locales,
+                    locales: this.locales,
                     showSubmitButton: showSubmitButton && !disable,
                     showDeleteButton: !this.isCreation && this.authorizations.delete && !disable,
                     showBackButton: this.isReadOnly,
                     opType: this.isCreation ? 'create' : 'update'
                 });
 
-                if(setLocale && this.config.locales) {
-                    this.actionsBus.$emit('localeChanged', this.config.locales[0]);
+                if(setLocale && this.locales) {
+                    this.actionsBus.$emit('localeChanged', this.locales[0]);
                 }
             },
             redirectToList({ restoreContext=true }={}) {
