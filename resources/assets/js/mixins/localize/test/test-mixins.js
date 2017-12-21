@@ -10,7 +10,7 @@ export const testLocalizedForm = {
     },
     methods: {
         __localize(locales) {
-            this.$set(this.config,'locales',locales);
+            this.locales = locales;
             this.actionsBus.$emit('localeChanged', locales[0]);
 
             this.fields = Object.entries(this.fields).reduce((res, [fieldKey, field]) => ({

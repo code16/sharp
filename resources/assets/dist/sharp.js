@@ -29767,7 +29767,7 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
     },
     computed: {
         locales: function locales() {
-            return (this.$form.config || {}).locales;
+            return this.$form.locales;
         }
     },
     methods: {
@@ -31578,7 +31578,7 @@ var testLocalizedForm = {
         __localize: function __localize(locales) {
             var _this = this;
 
-            this.$set(this.config, 'locales', locales);
+            this.locales = locales;
             this.actionsBus.$emit('localeChanged', locales[0]);
 
             this.fields = Object.entries(this.fields).reduce(function (res, _ref) {
@@ -49888,11 +49888,11 @@ var noop = function noop() {};
     data: function data() {
         return {
             fields: null,
-            config: null,
             authorizations: null,
 
             errors: {},
             locale: '',
+            locales: [],
 
             fieldVisible: {},
             curFieldsetId: 0,
@@ -49908,7 +49908,7 @@ var noop = function noop() {};
             return path;
         },
         localized: function localized() {
-            return this.config && Array.isArray(this.config.locales);
+            return Array.isArray(this.locales);
         },
         isCreation: function isCreation() {
             return !this.instanceId;
@@ -49953,15 +49953,14 @@ var noop = function noop() {};
                 layout = _ref.layout,
                 _ref$data = _ref.data,
                 data = _ref$data === undefined ? {} : _ref$data,
-                _ref$config = _ref.config,
-                config = _ref$config === undefined ? {} : _ref$config,
                 _ref$authorizations = _ref.authorizations,
-                authorizations = _ref$authorizations === undefined ? {} : _ref$authorizations;
+                authorizations = _ref$authorizations === undefined ? {} : _ref$authorizations,
+                locales = _ref.locales;
 
             this.fields = fields;
             this.layout = this.patchLayout(layout);
             this.data = data;
-            this.config = config;
+            this.locales = locales;
             this.authorizations = authorizations;
 
             this.fieldVisible = Object.keys(this.fields).reduce(function (res, fKey) {
@@ -50010,15 +50009,15 @@ var noop = function noop() {};
             var showSubmitButton = this.isCreation ? this.authorizations.create : this.authorizations.update;
 
             this.actionsBus.$emit('setup', {
-                locales: this.config.locales,
+                locales: this.locales,
                 showSubmitButton: showSubmitButton && !disable,
                 showDeleteButton: !this.isCreation && this.authorizations.delete && !disable,
                 showBackButton: this.isReadOnly,
                 opType: this.isCreation ? 'create' : 'update'
             });
 
-            if (setLocale && this.config.locales) {
-                this.actionsBus.$emit('localeChanged', this.config.locales[0]);
+            if (setLocale && this.locales) {
+                this.actionsBus.$emit('localeChanged', this.locales[0]);
             }
         },
         redirectToList: function redirectToList() {
@@ -74260,7 +74259,7 @@ var noop = function noop() {};
 
             return this.itemFieldsKeys.reduce(function (res, fieldKey) {
                 if (_this2.$form.localized && _this2.itemFields[fieldKey].localized) {
-                    res[fieldKey] = _this2.$form.config.locales.reduce(function (res, l) {
+                    res[fieldKey] = _this2.$form.locales.reduce(function (res, l) {
                         res[l] = null;
                         return res;
                     }, {});
