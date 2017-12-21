@@ -605,5 +605,8 @@
 
             window.addEventListener('resize', this.updateHeaderAutoPadding);
         },
+        destroyed() {
+            window.removeEventListener('resize', this.updateHeaderAutoPadding);
+        }
     }
 </script>

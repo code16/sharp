@@ -10,7 +10,7 @@
                 <template v-if="file">
                     <div class="SharpUpload__container" :class="{ row:showThumbnail }">
                         <div v-if="showThumbnail" class="SharpUpload__thumbnail" :class="[modifiers.compacted?'col-4 col-sm-3 col-xl-2':'col-4 col-md-4']">
-                            <img :src="imageSrc" @load="$emit('image-updated')">
+                            <img :src="imageSrc" @load="handleImageLoaded">
                         </div>
                         <div class="SharpUpload__infos" :class="{[modifiers.compacted?'col-8 col-sm-9 col-xl-10':'col-8 col-md-8']:showThumbnail}">
                             <div class="mb-3 text-truncate">
@@ -121,7 +121,8 @@
                 resized: false,
                 croppable: false,
 
-                canDownload: this.value,
+                isNew: !this.value,
+                canDownload: !!this.value,
             }
         },
         watch: {
@@ -273,6 +274,12 @@
                 this.croppable = true;
             },
 
+            handleImageLoaded() {
+                if(this.isNew) {
+                    this.$emit('image-updated');
+                }
+            },
+
             onEditModalShown() {
                 if(!this.resized) {
                     this.$nextTick(()=>{
@@ -338,6 +345,7 @@
 
             updateCroppedImage() {
                 if(this.croppable) {
+                    this.isNew = true;
                     this.croppedImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
                 }
             },

@@ -38,7 +38,8 @@
             innerComponents:Object,
 
             readOnly: Boolean,
-            locale:String
+            locale: String,
+            localized: Boolean
         },
 
         inject: ['$tab'],
@@ -54,7 +55,7 @@
         watch: {
             /// On form locale change
             locale() {
-                this.simplemde.value(this.value.text);
+                this.localized && this.simplemde.value(this.value.text);
             }
         },
         computed: {
@@ -193,7 +194,7 @@
                 md += '\n'.repeat(afterNewLinesCount);
 
                 this.codemirror.replaceRange(md,this.cursorPos);
-                this.codemirror.setCursor(this.cursorPos.line-afterNewLinesCount,0);
+                this.codemirror.setCursor(this.cursorPos.line-afterNewLinesCount,0, { scroll:!!isInsertion });
                 let from = this.cursorPos, to = { line:this.cursorPos.line, ch:this.cursorPos.ch+md.length };
 
                 let relativeFallbackLine = 1;//isInsertion ? this.cursorPos.line - initialCursorPos.line : 1;
@@ -297,14 +298,19 @@
                 });
 
                 images.reverse().forEach(({ range, data }) => {
-                    this.codemirror.setSelection(range.start, range.end);
+                    this.codemirror.setSelection(range.start, range.end, { scroll: false });
                     this.insertUploadImage({ replaceBySelection:true, data });
                 });
+                return images;
             },
 
             refreshOnExternalChange() {
                 this.codemirror.refresh();
-                this.parse();
+                let images = this.parse();
+                if(images.length) {
+                    // reset the scroll position because it change on widget insertion
+                    this.$nextTick(()=>window.scrollTo(0,0));
+                }
             }
         },
         mounted() {

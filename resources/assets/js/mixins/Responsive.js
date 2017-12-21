@@ -2,27 +2,31 @@ export default function (breakpoint='sm') {
     return {
         data() {
             return {
-                isViewportSmall: false
+                isViewportSmall: false,
+            }
+        },
+        methods: {
+            $_responsiveUpdate() {
+                let { offsetWidth } = this.$_testElm;
+                this.isViewportSmall = !!offsetWidth;
             }
         },
         mounted() {
             let id = `viewport-down-${breakpoint}`;
-            let testElm = document.getElementById(id);
+            this.$_testElm = document.getElementById(id);
 
-            if(!testElm) {
-                testElm = document.createElement('div');
-                testElm.id = id;
-                testElm.classList.add(`d-${breakpoint}-none`);
-                document.body.appendChild(testElm);
+            if(!this.$_testElm) {
+                this.$_testElm = document.createElement('div');
+                this.$_testElm.id = id;
+                this.$_testElm.classList.add(`d-${breakpoint}-none`);
+                document.body.appendChild(this.$_testElm);
             }
 
-            const update = () => {
-                let { offsetWidth } = testElm;
-                this.isViewportSmall = !!offsetWidth;
-            };
-
-            update();
-            window.addEventListener('resize', update);
+            this.$_responsiveUpdate();
+            window.addEventListener('resize', this.$_responsiveUpdate);
+        },
+        destroyed() {
+            window.removeEventListener('resize', this.$_responsiveUpdate);
         }
     }
 }

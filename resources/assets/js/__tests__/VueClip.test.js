@@ -190,6 +190,7 @@ describe('vue-clip',() => {
         let $image = $vueClip.$el.querySelector('img');
         let handleImageUpdated = jest.fn();
 
+        $vueClip.isNew = true; // simulate new loaded image
         $vueClip.$on('image-updated', handleImageUpdated);
 
         $image.dispatchEvent(new UIEvent('load'));

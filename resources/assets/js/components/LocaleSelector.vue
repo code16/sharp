@@ -2,6 +2,7 @@
     <sharp-multiselect class="SharpLocaleSelector"
                        :options="locales"
                        :searchable="false"
+                       :allow-empty="false"
                        :value="value"
                        @input="$emit('input',$event)">
     </sharp-multiselect>

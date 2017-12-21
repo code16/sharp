@@ -1,7 +1,5 @@
-export default function($parent) {
+export default function($markdown) {
     return {
-        beforeCreate() {
-            this.$parent = $parent;
-        }
-    };
+        parent: $markdown
+    }
 }

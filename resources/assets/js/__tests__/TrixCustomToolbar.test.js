@@ -5,8 +5,7 @@ import { MockI18n } from "./utils";
 
 describe('trix-custom-toolbar',()=>{
     let wrapper;
-    Vue.use(MockI18n);
-    MockI18n.mockLangFunction();
+    Vue.use(MockI18n, { mockFn: true });
 
     beforeEach(()=>{
         wrapper = mount(TrixCustomToolbar, {

@@ -31,6 +31,8 @@ return [
     'multiselect.placeholder' => 'Select option',
     'multiselect.max_text' => 'Maximum items reached',
 
+    'tags.unknown_label' => 'Unknown',
+
     'autocomplete.no_results_text' => 'No result found',
 
     'date.validation_error.format' => 'Invalid date format',

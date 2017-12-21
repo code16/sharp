@@ -1,7 +1,7 @@
 import * as util from '../../../util';
 import FieldContainer from '../FieldContainer';
 import { computeCondition } from './conditions';
-
+import { isLocalizableValueField } from "../../../mixins/localize/utils";
 
 export function acceptCondition (fields, data, condition) {
     if(!condition)
@@ -11,8 +11,7 @@ export function acceptCondition (fields, data, condition) {
 }
 
 const getValue = (form, field, value, locale) => {
-
-    if(form.localized && field.localized) {
+    if(form.localized && field.localized && value && isLocalizableValueField(field)) {
         //console.log(form, field, value, locale);
         return value[locale];
     }

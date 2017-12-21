@@ -27,7 +27,7 @@
             </template>
             <slot name="option" slot="option"></slot>
         </sharp-multiselect>
-        <div v-else>
+        <template v-else>
             <template v-if="multiple">
                 <component :is="inline?'span':'div'"
                            v-for="option in options"
@@ -36,7 +36,7 @@
                            :class="{'SharpSelect__item--inline':inline}"
                 >
                     <sharp-check :value="checked(option.id)"
-                                 :text="option.label"
+                                 :text="optionsLabel[option.id]"
                                  :read-only="readOnly"
                                  @input="handleCheckboxChanged($event,option.id)">
                     </sharp-check>
@@ -61,21 +61,24 @@
                     >
                     <label class="SharpRadio__label" :for="`${uniqueIdentifier}${index}`">
                         <span class="SharpRadio__appearance"></span>
-                        {{option.label}}
+                        {{ optionsLabel[option.id] }}
                     </label>
 
                 </component>
             </div>
-        </div>
+        </template>
     </div>
 </template>
 
 <script>
     import Multiselect from '../../Multiselect';
     import SharpCheck from './Check.vue';
+    import localize from '../../../mixins/localize/Multiselect';
 
     export default {
         name: 'SharpSelect',
+
+        mixins: [localize],
 
         components: {
             [Multiselect.name]: Multiselect,
@@ -124,11 +127,11 @@
                 return this.options.map(o => o.id);
             },
             optionsLabel() {
-                if (this.display !== 'dropdown')
-                    return;
+                // if (this.display !== 'dropdown')
+                //     return;
 
                 return this.options.reduce((map, opt) => {
-                    map[opt.id] = opt.label;
+                    map[opt.id] = this.localizedCustomLabel(opt);
                     return map;
                 }, {});
             }
