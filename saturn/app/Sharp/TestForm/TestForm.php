@@ -32,11 +32,12 @@ class TestForm extends SharpForm
 
         )->addField(
             SharpFormAutocompleteField::make("autocomplete_local", "local")
+                ->setLocalized()
                 ->setLabel("Autocomplete local")
                 ->setLocalSearchKeys(["label"])
                 ->setListItemInlineTemplate("{{label}}")
                 ->setResultItemInlineTemplate("{{label}} ({{id}})")
-                ->setLocalValues($this->options())
+                ->setLocalValues($this->options(true))
 
         )->addField(
             SharpFormAutocompleteField::make("autocomplete_remote", "remote")
