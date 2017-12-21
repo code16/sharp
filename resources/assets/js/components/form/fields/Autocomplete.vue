@@ -64,7 +64,7 @@
         },
 
         mixins: [Localization, Debounce, localize,
-            testLocalizedAutocomplete
+            //testLocalizedAutocomplete
         ],
 
         props: {

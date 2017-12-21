@@ -61,7 +61,7 @@
         extends: DynamicView,
 
         mixins: [ActionEvents, ReadOnlyFields('fields'), Localization, localize,
-            testLocalizedForm
+            //testLocalizedForm
         ],
 
         components: {
