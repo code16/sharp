@@ -27,6 +27,7 @@ class TestForm extends SharpForm
     {
         $this->addField(
             SharpFormTextField::make("text")
+                ->setLocalized()
                 ->setLabel("Text")
 
         )->addField(
@@ -151,6 +152,7 @@ class TestForm extends SharpForm
 
         )->addField(
             SharpFormTextareaField::make("textarea")
+                ->setLocalized()
                 ->setLabel("Textarea")
                 ->setRowCount(4)
 
@@ -164,6 +166,7 @@ class TestForm extends SharpForm
 
         )->addField(
             SharpFormWysiwygField::make("wysiwyg")
+                ->setLocalized()
                 ->setLabel("Wysiwyg")
                 ->setToolbar([
                     SharpFormWysiwygField::B, SharpFormWysiwygField::I, SharpFormWysiwygField::A,
@@ -240,7 +243,10 @@ class TestForm extends SharpForm
         $faker = \Faker\Factory::create();
 
         return $this->transform([
-            "text" => $faker->words(3, true),
+            "text" => [
+                "fr" => $faker->words(3, true),
+                "en" => $faker->words(3, true),
+            ],
             "autocomplete_local" => 1,
             "autocomplete_remote" => null,
             "autocomplete_list" => null,
@@ -251,8 +257,14 @@ class TestForm extends SharpForm
             ],
             "markdown" => "Some **text** with *style*",
             "number" => $faker->numberBetween(1, 100),
-            "textarea" => $faker->paragraph(3),
-            "wysiwyg" => 'some <strong>html stuff</strong>'
+            "textarea" => [
+                "fr" => $faker->paragraph(3),
+                "en" => $faker->paragraph(3),
+            ],
+            "wysiwyg" => [
+                "fr" => 'des <strong>trucs en html</strong>',
+                "en" => 'some <strong>html stuff</strong>',
+            ]
         ]);
     }
 
