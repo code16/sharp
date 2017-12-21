@@ -1,19 +1,13 @@
-import Vue from 'vue';
+import localizeField from './field';
 import { isLocaleObject } from "./utils";
 
 export default {
-    inject: {
-        $form: { default:()=>new Vue() }
-    },
+    mixins: [localizeField],
     props: {
         locale: String,
         localized: Boolean
     },
-    computed:{
-        locales() {
-            return this.$form.locales;
-        }
-    },
+
     methods: {
         localizeLabel(label) {
             return this.localized ? label[this.locale] : label;

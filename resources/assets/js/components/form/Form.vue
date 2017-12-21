@@ -61,7 +61,7 @@
         extends: DynamicView,
 
         mixins: [ActionEvents, ReadOnlyFields('fields'), Localization, localize,
-            //testLocalizedForm
+            testLocalizedForm
         ],
 
         components: {
@@ -161,7 +161,9 @@
                 this.fieldVisible = Object.keys(this.fields).reduce((res, fKey) => {
                     res[fKey] = true;
                     return res;
-                },{})
+                },{});
+
+                this.normalizeLocalizedValue();
             },
             handleError({response}) {
                 if(response.status===422)

@@ -13,6 +13,7 @@
     import Widget from './MarkdownWidget';
 
     import { lang } from '../../../../mixins/Localization';
+    import localize from '../../../../mixins/localize/Editor';
 
     const noop = ()=>{};
 
@@ -20,6 +21,9 @@
 
     export default {
         name: 'SharpMarkdown',
+
+        mixins: [ localize({ textProp:'text' }) ],
+
         props: {
             uniqueIdentifier: String,
             fieldConfigIdentifier: String,
@@ -55,7 +59,7 @@
         watch: {
             /// On form locale change
             locale() {
-                this.localized && this.simplemde.value(this.value.text);
+                this.localized && this.simplemde.value(this.text);
             }
         },
         computed: {
@@ -76,6 +80,9 @@
                     res[file[this.idSymbol]] = index;
                     return res;
                 }, {});
+            },
+            text() {
+                return this.localized ? this.value.text[this.locale] : this.value.text;
             }
         },
         methods : {
@@ -229,9 +236,7 @@
             },
 
             onChange() {
-                this.$emit('input', {
-                    ...this.value, text: this.simplemde.value()
-                });
+                this.$emit('input', this.localizedValue(this.simplemde.value()));
             },
 
             onBeforeChange(cm, change) {
@@ -316,7 +321,7 @@
         mounted() {
             this.simplemde = new SimpleMDE({
                 element: this.$refs.textarea,
-                initialValue: this.value.text,
+                initialValue: this.text,
                 placeholder: this.placeholder,
                 spellChecker: false,
                 toolbar: this.toolbar,

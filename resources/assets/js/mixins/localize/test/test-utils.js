@@ -1,26 +1,27 @@
+import { LocalizableFields, LocalizableOptionsFields, localeObject } from "../utils";
 const noop = ()=>{};
 
-import { LocalizableFields, LocalizableOptionsFields, localeObject } from "../utils";
+function __createLocalizedText(text) {
+    return locale => `${text} ${locale.toUpperCase()}`;
+}
 
 export function __createLocalizedValue({ locales, type, value }) {
-    let textValue, create = noop;
-    if(['text', 'textarea'].includes(type)) {
-        textValue = value;
-        create = val => val;
+    if(['text', 'textarea'].includes(type) && typeof value === "string") {
+        return localeObject({ locales, resolve:__createLocalizedText(value) });
     }
-    else if(['markdown', 'wysiwyg'].includes(type)) {
-        textValue = value.text;
-        create = val => ({ ...value, text:val });
+    else if(['markdown', 'wysiwyg'].includes(type) && typeof value.text === "string") {
+        return {
+            ...value,
+            text: localeObject({ locales, resolve:__createLocalizedText(value.text) })
+        };
     }
-    else return value;
-
-    return localeObject({ locales, resolve:l=>create(`${textValue} ${l.toUpperCase()}`) });
+    return value;
 }
 
 export function __createLocalizedOptions({ locales, options=[] }) {
     return options.map(option => ({
         ...option,
-        label: localeObject({ locales, resolve:l=>`${option.label} ${l.toUpperCase()}` })
+        label: localeObject({ locales, resolve:__createLocalizedText(option.label) })
     }));
 }
 
@@ -43,7 +44,7 @@ export function __createLocalizedField({ locales, field }) {
 export function __createLocalizedAutocompleteSuggestions({ suggestions, locales }) {
     return suggestions.map(suggestion =>
         Object.entries(suggestion).reduce((res, [key, value])=>({
-            ...res, [key]: typeof value === 'string' ? localeObject({ locales, resolve: l=>`${value} ${l.toUpperCase()}` }) : value
+            ...res, [key]: typeof value === 'string' ? localeObject({ locales, resolve: __createLocalizedText(value) }) : value
         }), {})
     );
 }

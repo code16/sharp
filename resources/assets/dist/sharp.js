@@ -28358,7 +28358,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var LocalizableFields = ['text', 'markdown', 'textarea', 'wysiwyg', 'select', 'autocomplete', 'tags'];
 var LocalizableOptionsFields = ['select', 'autocomplete', 'tags'];
-var LocalizableValueFields = ['text', 'markdown', 'textarea', 'wysiwyg'];
+var LocalizableValueFields = ['text', 'textarea'];
 
 function isLocaleObject(obj, locales) {
     return obj && (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object' && Object.keys(obj).every(function (key) {
@@ -28372,7 +28372,10 @@ function isLocalizableValueField(field) {
 
 function localeObject(_ref) {
     var locales = _ref.locales,
-        resolve = _ref.resolve;
+        _ref$resolve = _ref.resolve,
+        resolve = _ref$resolve === undefined ? function () {
+        return null;
+    } : _ref$resolve;
 
     return locales.reduce(function (res, locale) {
         return _extends({}, res, _defineProperty({}, locale, resolve(locale)));
@@ -29747,8 +29750,7 @@ module.exports = defaults;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__field__ = __webpack_require__(569);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils__ = __webpack_require__(33);
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
@@ -29756,20 +29758,12 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-    inject: {
-        $form: { default: function _default() {
-                return new __WEBPACK_IMPORTED_MODULE_0_vue___default.a();
-            } }
-    },
+    mixins: [__WEBPACK_IMPORTED_MODULE_0__field__["a" /* default */]],
     props: {
         locale: String,
         localized: Boolean
     },
-    computed: {
-        locales: function locales() {
-            return this.$form.locales;
-        }
-    },
+
     methods: {
         localizeLabel: function localizeLabel(label) {
             return this.localized ? label[this.locale] : label;
@@ -31548,8 +31542,8 @@ module.exports = Component.exports
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* unused harmony export testLocalizedForm */
-/* unused harmony export testLocalizedAutocomplete */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return testLocalizedForm; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return testLocalizedAutocomplete; });
 /* unused harmony export testLocalizedList */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
@@ -31560,114 +31554,132 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 
 
 var testLocales = ['fr', 'en'];
 
-var testLocalizedForm = {
-    watch: {
-        ready: function ready() {
-            this.ready && this.__localize(testLocales);
+var testLocalizeMixin = {
+    computed: {
+        activateTest: function activateTest() {
+            return location.search.includes('mock');
         }
     },
     methods: {
-        __localize: function __localize(locales) {
+        _lockWatcher: function _lockWatcher(name, callback) {
             var _this = this;
 
-            this.locales = locales;
-            this.actionsBus.$emit('localeChanged', locales[0]);
+            return function () {
+                var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee(val, oldVal) {
+                    return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
+                        while (1) {
+                            switch (_context.prev = _context.next) {
+                                case 0:
+                                    if (!_this._lockedWatchers[name]) {
+                                        _context.next = 2;
+                                        break;
+                                    }
 
-            this.fields = Object.entries(this.fields).reduce(function (res, _ref) {
-                var _ref2 = _slicedToArray(_ref, 2),
-                    fieldKey = _ref2[0],
-                    field = _ref2[1];
+                                    return _context.abrupt('return');
 
-                return _extends({}, res, _defineProperty({}, fieldKey, Object(__WEBPACK_IMPORTED_MODULE_1__test_utils__["b" /* __createLocalizedField */])({ locales: locales, field: field })));
-            }, {});
+                                case 2:
+                                    _this._lockedWatchers[name] = true;
+                                    callback(val, oldVal);
+                                    _context.next = 6;
+                                    return _this.$nextTick();
 
-            this.data = Object.entries(this.data).reduce(function (res, _ref3) {
-                var _ref4 = _slicedToArray(_ref3, 2),
-                    fieldKey = _ref4[0],
-                    value = _ref4[1];
+                                case 6:
+                                    _this._lockedWatchers[name] = false;
 
-                return _extends({}, res, _defineProperty({}, fieldKey, Object(__WEBPACK_IMPORTED_MODULE_1__test_utils__["c" /* __createLocalizedValue */])({
-                    locales: locales, type: _this.fields[fieldKey].type, value: value
-                })));
-            }, {});
-        }
-    }
-};
-
-var lockWatcher = {
-    methods: {
-        _lockWatcher: function () {
-            var _ref5 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee(name, callback) {
-                return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
-                    while (1) {
-                        switch (_context.prev = _context.next) {
-                            case 0:
-                                if (!this._lockedWatchers[name]) {
-                                    _context.next = 2;
-                                    break;
-                                }
-
-                                return _context.abrupt('return');
-
-                            case 2:
-                                this._lockedWatchers[name] = true;
-                                callback();
-                                _context.next = 6;
-                                return this.$nextTick();
-
-                            case 6:
-                                this._lockedWatchers[name] = false;
-
-                            case 7:
-                            case 'end':
-                                return _context.stop();
+                                case 7:
+                                case 'end':
+                                    return _context.stop();
+                            }
                         }
-                    }
-                }, _callee, this);
-            }));
+                    }, _callee, _this);
+                }));
 
-            function _lockWatcher(_x, _x2) {
-                return _ref5.apply(this, arguments);
-            }
-
-            return _lockWatcher;
-        }()
+                return function (_x, _x2) {
+                    return _ref.apply(this, arguments);
+                };
+            }();
+        },
+        _addTestWatcher: function _addTestWatcher(prop, callback) {
+            this.activateTest && this.$watch(prop, callback);
+        },
+        _addLockedTestWatcher: function _addLockedTestWatcher(prop, callback) {
+            this.activateTest && this.$watch(prop, this._lockWatcher(prop, callback));
+        }
     },
     created: function created() {
         this._lockedWatchers = {};
     }
 };
 
-var testLocalizedAutocomplete = {
-    mixins: [lockWatcher],
-    watch: {
-        suggestions: function suggestions() {
+var testLocalizedForm = {
+    mixins: [testLocalizeMixin],
+
+    methods: {
+        __localize: function __localize() {
             var _this2 = this;
 
-            this._lockWatcher('suggestions', function () {
-                _this2.suggestions = Object(__WEBPACK_IMPORTED_MODULE_1__test_utils__["a" /* __createLocalizedAutocompleteSuggestions */])({
-                    suggestions: _this2.suggestions,
-                    locales: testLocales
-                });
+            if (!this.ready) return;
+
+            this.locales = testLocales;
+            this.actionsBus.$emit('localeChanged', this.locales[0]);
+
+            this.data = Object.entries(this.data).reduce(function (res, _ref2) {
+                var _ref3 = _slicedToArray(_ref2, 2),
+                    fieldKey = _ref3[0],
+                    value = _ref3[1];
+
+                return _extends({}, res, _defineProperty({}, fieldKey, Object(__WEBPACK_IMPORTED_MODULE_1__test_utils__["c" /* __createLocalizedValue */])({
+                    locales: _this2.locales, type: _this2.fields[fieldKey].type, value: value
+                })));
+            }, {});
+        }
+    },
+    created: function created() {
+        var _this3 = this;
+
+        this._addTestWatcher('ready', this.__localize);
+        this._addLockedTestWatcher('fields', function () {
+            _this3.fields = Object.entries(_this3.fields).reduce(function (res, _ref4) {
+                var _ref5 = _slicedToArray(_ref4, 2),
+                    fieldKey = _ref5[0],
+                    field = _ref5[1];
+
+                return _extends({}, res, _defineProperty({}, fieldKey, Object(__WEBPACK_IMPORTED_MODULE_1__test_utils__["b" /* __createLocalizedField */])({ locales: _this3.locales, field: field })));
+            }, {});
+        });
+    }
+};
+
+var testLocalizedAutocomplete = {
+    mixins: [testLocalizeMixin],
+    methods: {
+        __localizeSuggestions: function __localizeSuggestions() {
+            this.suggestions = Object(__WEBPACK_IMPORTED_MODULE_1__test_utils__["a" /* __createLocalizedAutocompleteSuggestions */])({
+                suggestions: this.suggestions,
+                locales: testLocales
             });
         }
+    },
+    created: function created() {
+        this._addLockedTestWatcher('suggestions', this.__localizeSuggestions);
     }
 };
 
 var testLocalizedList = {
-    mixins: [lockWatcher],
-    watch: {
-        list: function list() {
-            this._lockWatcher('list', function () {});
-        }
+    mixins: [testLocalizeMixin],
+    methods: {
+        __localize: function __localize() {}
+    },
+    created: function created() {
+        this._addLockedTestWatcher('list', this.__localize);
     }
 };
 
@@ -49861,7 +49873,7 @@ var noop = function noop() {};
     name: 'SharpForm',
     extends: __WEBPACK_IMPORTED_MODULE_4__DynamicViewMixin__["a" /* default */],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_3__mixins__["a" /* ActionEvents */], Object(__WEBPACK_IMPORTED_MODULE_3__mixins__["i" /* ReadOnlyFields */])('fields'), __WEBPACK_IMPORTED_MODULE_3__mixins__["g" /* Localization */], __WEBPACK_IMPORTED_MODULE_8__mixins_localize_Form__["a" /* default */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_3__mixins__["a" /* ActionEvents */], Object(__WEBPACK_IMPORTED_MODULE_3__mixins__["i" /* ReadOnlyFields */])('fields'), __WEBPACK_IMPORTED_MODULE_3__mixins__["g" /* Localization */], __WEBPACK_IMPORTED_MODULE_8__mixins_localize_Form__["a" /* default */], __WEBPACK_IMPORTED_MODULE_9__mixins_localize_test_test_mixins__["b" /* testLocalizedForm */]],
 
     components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_5__TabbedLayout___default.a.name, __WEBPACK_IMPORTED_MODULE_5__TabbedLayout___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_7__FieldsLayout_vue___default.a.name, __WEBPACK_IMPORTED_MODULE_7__FieldsLayout_vue___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_6__Grid___default.a.name, __WEBPACK_IMPORTED_MODULE_6__Grid___default.a), _components),
 
@@ -49967,6 +49979,8 @@ var noop = function noop() {};
                 res[fKey] = true;
                 return res;
             }, {});
+
+            this.normalizeLocalizedValue();
         },
         handleError: function handleError(_ref2) {
             var response = _ref2.response;
@@ -51659,11 +51673,28 @@ if (false) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(33);
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     methods: {
-        isLocalizableValueField: __WEBPACK_IMPORTED_MODULE_0__utils__["d" /* isLocalizableValueField */]
+        isLocalizableValueField: __WEBPACK_IMPORTED_MODULE_0__utils__["d" /* isLocalizableValueField */],
+        normalizeLocalizedValue: function normalizeLocalizedValue() {
+            var _this = this;
+
+            Object.entries(this.fields).forEach(function (_ref) {
+                var _ref2 = _slicedToArray(_ref, 2),
+                    key = _ref2[0],
+                    field = _ref2[1];
+
+                if (field.localized && _this.data[key] === null && Object(__WEBPACK_IMPORTED_MODULE_0__utils__["d" /* isLocalizableValueField */])(field)) {
+                    _this.$set(_this.data, key, Object(__WEBPACK_IMPORTED_MODULE_0__utils__["e" /* localeObject */])({ locales: _this.locales, resolve: function resolve() {
+                            return null;
+                        } }));
+                }
+            });
+        }
     }
 });
 
@@ -51683,32 +51714,28 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+
 var noop = function noop() {};
 
-
+function __createLocalizedText(text) {
+    return function (locale) {
+        return text + ' ' + locale.toUpperCase();
+    };
+}
 
 function __createLocalizedValue(_ref) {
     var locales = _ref.locales,
         type = _ref.type,
         value = _ref.value;
 
-    var textValue = void 0,
-        create = noop;
-    if (['text', 'textarea'].includes(type)) {
-        textValue = value;
-        create = function create(val) {
-            return val;
-        };
-    } else if (['markdown', 'wysiwyg'].includes(type)) {
-        textValue = value.text;
-        create = function create(val) {
-            return _extends({}, value, { text: val });
-        };
-    } else return value;
-
-    return Object(__WEBPACK_IMPORTED_MODULE_0__utils__["e" /* localeObject */])({ locales: locales, resolve: function resolve(l) {
-            return create(textValue + ' ' + l.toUpperCase());
-        } });
+    if (['text', 'textarea'].includes(type) && typeof value === "string") {
+        return Object(__WEBPACK_IMPORTED_MODULE_0__utils__["e" /* localeObject */])({ locales: locales, resolve: __createLocalizedText(value) });
+    } else if (['markdown', 'wysiwyg'].includes(type) && typeof value.text === "string") {
+        return _extends({}, value, {
+            text: Object(__WEBPACK_IMPORTED_MODULE_0__utils__["e" /* localeObject */])({ locales: locales, resolve: __createLocalizedText(value.text) })
+        });
+    }
+    return value;
 }
 
 function __createLocalizedOptions(_ref2) {
@@ -51718,9 +51745,7 @@ function __createLocalizedOptions(_ref2) {
 
     return options.map(function (option) {
         return _extends({}, option, {
-            label: Object(__WEBPACK_IMPORTED_MODULE_0__utils__["e" /* localeObject */])({ locales: locales, resolve: function resolve(l) {
-                    return option.label + ' ' + l.toUpperCase();
-                } })
+            label: Object(__WEBPACK_IMPORTED_MODULE_0__utils__["e" /* localeObject */])({ locales: locales, resolve: __createLocalizedText(option.label) })
         });
     });
 }
@@ -51757,9 +51782,7 @@ function __createLocalizedAutocompleteSuggestions(_ref6) {
                 key = _ref8[0],
                 value = _ref8[1];
 
-            return _extends({}, res, _defineProperty({}, key, typeof value === 'string' ? Object(__WEBPACK_IMPORTED_MODULE_0__utils__["e" /* localeObject */])({ locales: locales, resolve: function resolve(l) {
-                    return value + ' ' + l.toUpperCase();
-                } }) : value));
+            return _extends({}, res, _defineProperty({}, key, typeof value === 'string' ? Object(__WEBPACK_IMPORTED_MODULE_0__utils__["e" /* localeObject */])({ locales: locales, resolve: __createLocalizedText(value) }) : value));
         }, {});
     });
 }
@@ -52431,7 +52454,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         Multiselect: __WEBPACK_IMPORTED_MODULE_3_vue_multiselect___default.a
     }, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_1__Template_vue___default.a.name, __WEBPACK_IMPORTED_MODULE_1__Template_vue___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_2__ui_Loading_vue___default.a.name, __WEBPACK_IMPORTED_MODULE_2__ui_Loading_vue___default.a), _components),
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_7__mixins__["g" /* Localization */], __WEBPACK_IMPORTED_MODULE_7__mixins__["d" /* Debounce */], __WEBPACK_IMPORTED_MODULE_9__mixins_localize_Multiselect__["a" /* default */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_7__mixins__["g" /* Localization */], __WEBPACK_IMPORTED_MODULE_7__mixins__["d" /* Debounce */], __WEBPACK_IMPORTED_MODULE_9__mixins_localize_Multiselect__["a" /* default */], __WEBPACK_IMPORTED_MODULE_10__mixins_localize_test_test_mixins__["a" /* testLocalizedAutocomplete */]],
 
     props: {
         fieldKey: String,
@@ -54021,6 +54044,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__MarkdownUpload___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__MarkdownUpload__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__MarkdownWidget__ = __webpack_require__(364);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mixins_Localization__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mixins_localize_Editor__ = __webpack_require__(568);
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -54043,10 +54067,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 var noop = function noop() {};
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpMarkdown',
+
+    mixins: [Object(__WEBPACK_IMPORTED_MODULE_4__mixins_localize_Editor__["a" /* default */])({ textProp: 'text' })],
+
     props: {
         uniqueIdentifier: String,
         fieldConfigIdentifier: String,
@@ -54085,7 +54113,7 @@ var noop = function noop() {};
     watch: {
         /// On form locale change
         locale: function locale() {
-            this.localized && this.simplemde.value(this.value.text);
+            this.localized && this.simplemde.value(this.text);
         }
     },
     computed: {
@@ -54108,6 +54136,9 @@ var noop = function noop() {};
                 res[file[_this.idSymbol]] = index;
                 return res;
             }, {});
+        },
+        text: function text() {
+            return this.localized ? this.value.text[this.locale] : this.value.text;
         }
     },
     methods: {
@@ -54300,8 +54331,7 @@ var noop = function noop() {};
             this.cursorPos = this.codemirror.getCursor();
         },
         onChange: function onChange() {
-            this.$emit('input', _extends({}, this.value, { text: this.simplemde.value()
-            }));
+            this.$emit('input', this.localizedValue(this.simplemde.value()));
         },
         onBeforeChange: function onBeforeChange(cm, change) {
             //console.log(change);
@@ -54402,7 +54432,7 @@ var noop = function noop() {};
 
         this.simplemde = new __WEBPACK_IMPORTED_MODULE_0_simplemde___default.a({
             element: this.$refs.textarea,
-            initialValue: this.value.text,
+            initialValue: this.text,
             placeholder: this.placeholder,
             spellChecker: false,
             toolbar: this.toolbar,
@@ -80470,6 +80500,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_trix___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_trix__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TrixCustomToolbar_vue__ = __webpack_require__(440);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TrixCustomToolbar_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__TrixCustomToolbar_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mixins_localize_Editor__ = __webpack_require__(568);
 //
 //
 //
@@ -80489,6 +80520,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
+
 
 
 
@@ -80497,6 +80530,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpTrix',
+
+    mixins: [Object(__WEBPACK_IMPORTED_MODULE_3__mixins_localize_Editor__["a" /* default */])({ textProp: 'text' })],
+
     components: {
         TrixCustomToolbar: __WEBPACK_IMPORTED_MODULE_2__TrixCustomToolbar_vue___default.a
     },
@@ -80509,13 +80545,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         placeholder: String,
         readOnly: Boolean,
-        uniqueIdentifier: String,
-        locale: String,
-        localized: Boolean
+        uniqueIdentifier: String
+
     },
     watch: {
         locale: function locale() {
-            this.localized && this.$refs.trix.editor.loadHTML(this.value.text);
+            this.localized && this.$refs.trix.editor.loadHTML(this.text);
         }
     },
     computed: {
@@ -80524,11 +80559,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         toolbarId: function toolbarId() {
             return 'trix-toolbar-' + this.uniqueIdentifier;
+        },
+        text: function text() {
+            return this.localized ? this.value.text[this.locale] : this.value.text;
         }
     },
     methods: {
         handleChanged: function handleChanged(event) {
-            this.$emit('input', { text: event.target.value });
+            this.$emit('input', this.localizedValue(event.target.value));
         }
     },
     created: function created() {
@@ -80843,7 +80881,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "type": "hidden"
     },
     domProps: {
-      "value": _vm.value.text
+      "value": _vm.text
     }
   }), _vm._v(" "), (_vm.toolbar) ? _c('trix-toolbar', {
     staticClass: "SharpModule__header",
@@ -104348,6 +104386,95 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 555 */,
+/* 556 */,
+/* 557 */,
+/* 558 */,
+/* 559 */,
+/* 560 */,
+/* 561 */,
+/* 562 */,
+/* 563 */,
+/* 564 */,
+/* 565 */,
+/* 566 */,
+/* 567 */,
+/* 568 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__field__ = __webpack_require__(569);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+/**
+ * Can be used in Markdown, TrixEditor component
+ */
+/* harmony default export */ __webpack_exports__["a"] = (function (_ref) {
+    var textProp = _ref.textProp;
+
+    return {
+        mixins: [__WEBPACK_IMPORTED_MODULE_0__field__["a" /* default */]],
+        props: {
+            type: String,
+            locale: String,
+            localized: Boolean
+        },
+
+        methods: {
+            localizedValue: function localizedValue(text) {
+                var res = _extends({}, this.value);
+                if (this.localized) {
+                    res[textProp][this.locale] = text;
+                } else {
+                    res[textProp] = text;
+                }
+                return res;
+            }
+        },
+        created: function created() {
+            if (this.localized && this.value[textProp] === null) {
+                this.value.text = this.emptyLocaleObject('');
+            }
+        }
+    };
+});
+
+/***/ }),
+/* 569 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils__ = __webpack_require__(33);
+
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    inject: {
+        $form: { default: function _default() {
+                return new __WEBPACK_IMPORTED_MODULE_0_vue___default.a();
+            } }
+    },
+    computed: {
+        locales: function locales() {
+            return this.$form.locales;
+        }
+    },
+    methods: {
+        emptyLocaleObject: function emptyLocaleObject() {
+            var defaultValue = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+            return Object(__WEBPACK_IMPORTED_MODULE_1__utils__["e" /* localeObject */])({ locales: this.locales, resolve: function resolve() {
+                    return defaultValue;
+                } });
+        }
+    }
+});
 
 /***/ })
 ],[138]);

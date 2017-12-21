@@ -1,67 +1,87 @@
-import { __createLocalizedField, __createLocalizedValue, __createLocalizedAutocompleteSuggestions } from "./test-utils";
+import {
+    __createLocalizedField,
+    __createLocalizedValue,
+    __createLocalizedAutocompleteSuggestions
+} from "./test-utils";
 
 const testLocales = ['fr', 'en'];
 
-export const testLocalizedForm = {
-    watch: {
-        ready() {
-            this.ready && this.__localize(testLocales);
-        }
+const testLocalizeMixin = {
+    computed: {
+        activateTest: () => location.search.includes('mock')
     },
     methods: {
-        __localize(locales) {
-            this.locales = locales;
-            this.actionsBus.$emit('localeChanged', locales[0]);
-
-            this.fields = Object.entries(this.fields).reduce((res, [fieldKey, field]) => ({
-                ...res, [fieldKey]: __createLocalizedField({ locales, field })
-            }), {});
-
-            this.data = Object.entries(this.data).reduce((res, [fieldKey, value]) => ({
-                ...res, [fieldKey]: __createLocalizedValue({
-                    locales, type: this.fields[fieldKey].type, value
-                })
-            }), {});
+        _lockWatcher(name, callback) {
+            return async (val, oldVal) => {
+                if(this._lockedWatchers[name])return;
+                this._lockedWatchers[name] = true;
+                callback(val, oldVal);
+                await this.$nextTick();
+                this._lockedWatchers[name] = false;
+            }
         },
-    }
-};
-
-const lockWatcher = {
-    methods: {
-        async _lockWatcher(name, callback) {
-            if(this._lockedWatchers[name])return;
-            this._lockedWatchers[name] = true;
-            callback();
-            await this.$nextTick();
-            this._lockedWatchers[name] = false;
+        _addTestWatcher(prop, callback) {
+            this.activateTest && this.$watch(prop, callback);
         },
+        _addLockedTestWatcher(prop, callback) {
+            this.activateTest && this.$watch(prop, this._lockWatcher(prop, callback));
+        }
     },
     created() {
         this._lockedWatchers = {};
     }
 };
 
+export const testLocalizedForm = {
+    mixins:[testLocalizeMixin],
+
+    methods: {
+        __localize() {
+            if(!this.ready) return;
+
+            this.locales = testLocales;
+            this.actionsBus.$emit('localeChanged', this.locales[0]);
+
+            this.data = Object.entries(this.data).reduce((res, [fieldKey, value]) => ({
+                ...res, [fieldKey]: __createLocalizedValue({
+                    locales: this.locales, type: this.fields[fieldKey].type, value
+                })
+            }), {});
+        },
+    },
+    created() {
+        this._addTestWatcher('ready', this.__localize);
+        this._addLockedTestWatcher('fields',()=>{
+            this.fields = Object.entries(this.fields).reduce((res, [fieldKey, field]) => ({
+                ...res, [fieldKey]: __createLocalizedField({ locales: this.locales, field })
+            }), {});
+        });
+    }
+};
+
 export const testLocalizedAutocomplete = {
-    mixins: [lockWatcher],
-    watch: {
-        suggestions() {
-            this._lockWatcher('suggestions', () => {
-                this.suggestions = __createLocalizedAutocompleteSuggestions({
-                    suggestions:this.suggestions,
-                    locales:testLocales
-                });
+    mixins: [testLocalizeMixin],
+    methods: {
+        __localizeSuggestions() {
+            this.suggestions = __createLocalizedAutocompleteSuggestions({
+                suggestions:this.suggestions,
+                locales:testLocales
             });
         }
+    },
+    created() {
+        this._addLockedTestWatcher('suggestions', this.__localizeSuggestions);
     }
 };
 
 export const testLocalizedList = {
-    mixins: [lockWatcher],
-    watch: {
-        list() {
-            this._lockWatcher('list', () => {
+    mixins: [testLocalizeMixin],
+    methods: {
+        __localize() {
 
-            });
         }
-    }
+    },
+    created() {
+        this._addLockedTestWatcher('list', this.__localize);
+    },
 };
