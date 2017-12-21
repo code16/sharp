@@ -101,6 +101,7 @@ class TestForm extends SharpForm
 
         )->addField(
             SharpFormMarkdownField::make("markdown")
+                ->setLocalized()
                 ->setLabel("Markdown")
                 ->setToolbar([
                     SharpFormMarkdownField::B, SharpFormMarkdownField::I, SharpFormMarkdownField::A,
@@ -255,7 +256,10 @@ class TestForm extends SharpForm
             "html" => [
                 "name" => $faker->name
             ],
-            "markdown" => "Some **text** with *style*",
+            "markdown" => [
+                "fr" => "Du **texte** avec *style*",
+                "en" => "Some **text** with *style*",
+            ],
             "number" => $faker->numberBetween(1, 100),
             "textarea" => [
                 "fr" => $faker->paragraph(3),
