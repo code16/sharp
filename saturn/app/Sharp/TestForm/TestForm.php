@@ -129,17 +129,20 @@ class TestForm extends SharpForm
             ->setMax(100)
 
         )->addField(
-            SharpFormSelectField::make("select_dropdown", $this->options())
+            SharpFormSelectField::make("select_dropdown", $this->options(true))
+                ->setLocalized()
                 ->setLabel("Select dropdown")
                 ->setDisplayAsDropdown()
 
         )->addField(
-            SharpFormSelectField::make("select_list", $this->options())
+            SharpFormSelectField::make("select_list", $this->options(true))
+                ->setLocalized()
                 ->setLabel("Select list")
                 ->setDisplayAsList()
 
         )->addField(
-            SharpFormSelectField::make("select_list_multiple", $this->options())
+            SharpFormSelectField::make("select_list_multiple", $this->options(true))
+                ->setLocalized()
                 ->setLabel("Select list multiple")
                 ->setMultiple()
                 ->setDisplayAsList()
@@ -281,14 +284,23 @@ class TestForm extends SharpForm
     }
 
     /**
+     * @param bool $localized
      * @return array
      */
-    protected function options()
+    protected function options($localized = false)
     {
+        if(!$localized) {
+            return [
+                "1" => "Option one",
+                "2" => "Option two",
+                "3" => "Option three",
+            ];
+        }
+
         return [
-            "1" => "Option one",
-            "2" => "Option two",
-            "3" => "Option three",
+            "1" => ["en" => "Option one", "fr" => "Option un"],
+            "2" => ["en" => "Option two", "fr" => "Option deux"],
+            "3" => ["en" => "Option three", "fr" => "Option trois"],
         ];
     }
 }
