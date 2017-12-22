@@ -28,10 +28,10 @@ $factory->define(\App\Feature::class, function (Faker\Generator $faker) {
 
 $factory->define(\App\Spaceship::class, function (Faker\Generator $faker) {
     return [
-        'name' => json_encode([
+        'name' => [
             "fr" => $faker->lastName,
             "en" => $faker->lastName,
-        ]),
+        ],
         'description' => $faker->realText(400),
         'capacity' => $faker->numberBetween(5, 80) * 1000,
         'construction_date' => $faker->date(),
