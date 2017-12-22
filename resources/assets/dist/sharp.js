@@ -54144,7 +54144,7 @@ var noop = function noop() {};
                                 return this.$nextTick();
 
                             case 3:
-                                this.codemirror.refresh();
+                                this.refreshOnExternalChange();
 
                             case 4:
                             case 'end':
@@ -54166,7 +54166,7 @@ var noop = function noop() {};
             return this.localized ? this.simplemdeInstances[this.locale] : this.simplemdeInstances;
         },
         codemirror: function codemirror() {
-            return this.simplemde.codemirror;
+            return (this.simplemde || {}).codemirror;
         },
         idSymbol: function idSymbol() {
             return Symbol('fileIdSymbol');
@@ -54322,8 +54322,7 @@ var noop = function noop() {};
                 isInsertion = _ref8.isInsertion;
 
             var selection = this.codemirror.getSelection(' ');
-            var curLineContent = this.codemirror.getLine(this.cursorPos.line);
-            //let initialCursorPos = this.cursorPos;
+            var curLineContent = this.codemirror.getLine(this.cursorPos.line) || '';
 
             if (selection) {
                 this.codemirror.replaceSelection('');
@@ -54333,16 +54332,13 @@ var noop = function noop() {};
             if (curLineContent.length || this.cursorPos.line === 0 && this.cursorPos.ch === 0 || this.codemirror.findMarksAt({ line: this.cursorPos.line - 1, ch: 0 }).length) {
                 this.codemirror.replaceRange('\n', this.cursorPos);
             }
-            // if(isInsertion) {
-            //     this.codemirror.replaceRange('\n', this.cursorPos);
-            // }
 
             this.codemirror.getInputField().blur();
 
             var md = replaceBySelection ? selection : '![]()'; // `![${selection||''}]()`;   take selection as title
 
 
-            var afterNewLinesCount = isInsertion ? 1 : 0;
+            var afterNewLinesCount = isInsertion || this.cursorPos.line === this.codemirror.lineCount() - 1 ? 1 : 0;
 
             md += '\n'.repeat(afterNewLinesCount);
 
@@ -54378,11 +54374,13 @@ var noop = function noop() {};
 
             return $uploader;
         },
-        onCursorActivity: function onCursorActivity(codemirror) {
-            this.cursorPos = codemirror.getCursor();
+        onCursorActivity: function onCursorActivity() {
+            if (this.codemirror) {
+                this.cursorPos = this.codemirror.getCursor();
+            }
         },
         onChange: function onChange() {
-            if (this.simplemde) this.$emit('input', this.localizedValue(this.simplemde.value()));
+            this.codemirror && this.$emit('input', this.localizedValue(this.codemirror.getValue()));
         },
         onBeforeChange: function onBeforeChange(cm, change) {
             //console.log(change);
@@ -54468,14 +54466,22 @@ var noop = function noop() {};
             return images;
         },
         refreshOnExternalChange: function refreshOnExternalChange() {
-            this.codemirror.refresh();
-            var images = this.parse();
-            if (images.length) {
-                // reset the scroll position because it change on widget insertion
-                this.$nextTick(function () {
-                    return window.scrollTo(0, 0);
-                });
+            var _this8 = this;
+
+            if (!this.simplemde.parsed) {
+                var images = this.parse();
+                this.simplemde.parsed = true;
+                if (images.length) {
+                    // reset the scroll position because it change on widget insertion
+                    this.$nextTick(function () {
+                        return window.scrollTo(0, 0);
+                    });
+                }
             }
+
+            setTimeout(function () {
+                return _this8.codemirror.refresh();
+            }, 100);
         },
         createSimpleMDE: function createSimpleMDE(_ref10) {
             var element = _ref10.element,
@@ -54506,7 +54512,7 @@ var noop = function noop() {};
 
             //// CM events bindings
             this.codemirrorOn(codemirror, 'cursorActivity', this.onCursorActivity, true);
-            this.codemirrorOn(codemirror, 'change', this.onChange, true);
+            this.codemirrorOn(codemirror, 'change', this.onChange);
             this.codemirrorOn(codemirror, 'beforeChange', this.onBeforeChange);
 
             this.codemirrorOn(codemirror, 'keydown', this.onKeydown);
@@ -54515,7 +54521,7 @@ var noop = function noop() {};
     },
     mounted: function () {
         var _ref11 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2() {
-            var _this8 = this;
+            var _this9 = this;
 
             return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
                 while (1) {
@@ -54524,9 +54530,9 @@ var noop = function noop() {};
                             console.log(this);
                             if (this.localized) {
                                 this.simplemdeInstances = this.locales.reduce(function (res, locale) {
-                                    return _extends({}, res, _defineProperty({}, locale, _this8.createSimpleMDE({
-                                        element: _this8.$refs[_this8.localizedTextareaRef(locale)][0],
-                                        initialValue: _this8.value.text[locale]
+                                    return _extends({}, res, _defineProperty({}, locale, _this9.createSimpleMDE({
+                                        element: _this9.$refs[_this9.localizedTextareaRef(locale)][0],
+                                        initialValue: _this9.value.text[locale]
                                     })));
                                 }, {});
                             } else this.simplemdeInstances = this.createSimpleMDE({
@@ -54538,11 +54544,11 @@ var noop = function noop() {};
 
                             if (this.$tab) {
                                 this.$tab.$once('active', function () {
-                                    return _this8.refreshOnExternalChange();
+                                    return _this9.refreshOnExternalChange();
                                 });
                             } else {
                                 this.$nextTick(function () {
-                                    return _this8.refreshOnExternalChange();
+                                    return _this9.refreshOnExternalChange();
                                 });
                             }
 

@@ -68,7 +68,7 @@
             async locale() {
                 if(this.localized) {
                     await this.$nextTick();
-                    this.codemirror.refresh();
+                    this.refreshOnExternalChange();
                 }
             }
         },
@@ -77,7 +77,7 @@
                 return this.localized ? this.simplemdeInstances[this.locale] : this.simplemdeInstances;
             },
             codemirror() {
-                return this.simplemde.codemirror;
+                return (this.simplemde||{}).codemirror;
             },
             idSymbol() {
                 return Symbol('fileIdSymbol');
@@ -187,8 +187,7 @@
             // isInsertion : if the user click on 'insert image' button
             insertUploadImage({ replaceBySelection, data, isInsertion } = {}) {
                 let selection = this.codemirror.getSelection(' ');
-                let curLineContent = this.codemirror.getLine(this.cursorPos.line);
-                //let initialCursorPos = this.cursorPos;
+                let curLineContent = this.codemirror.getLine(this.cursorPos.line) || '';
 
                 if(selection) {
                     this.codemirror.replaceSelection('');
@@ -201,9 +200,6 @@
                 ) {
                     this.codemirror.replaceRange('\n', this.cursorPos);
                 }
-                // if(isInsertion) {
-                //     this.codemirror.replaceRange('\n', this.cursorPos);
-                // }
 
                 this.codemirror.getInputField().blur();
 
@@ -212,7 +208,7 @@
                     : '![]()';// `![${selection||''}]()`;   take selection as title
 
 
-                let afterNewLinesCount = isInsertion ? 1 : 0;
+                let afterNewLinesCount = isInsertion || this.cursorPos.line === this.codemirror.lineCount()-1 ? 1 : 0;
 
                 md += '\n'.repeat(afterNewLinesCount);
 
@@ -247,13 +243,14 @@
                 return $uploader;
             },
 
-            onCursorActivity(codemirror) {
-                this.cursorPos = codemirror.getCursor();
+            onCursorActivity() {
+                if(this.codemirror) {
+                    this.cursorPos = this.codemirror.getCursor();
+                }
             },
 
             onChange() {
-                if(this.simplemde)
-                    this.$emit('input', this.localizedValue(this.simplemde.value()));
+                this.codemirror && this.$emit('input', this.localizedValue(this.codemirror.getValue()));
             },
 
             onBeforeChange(cm, change) {
@@ -327,12 +324,16 @@
             },
 
             refreshOnExternalChange() {
-                this.codemirror.refresh();
-                let images = this.parse();
-                if(images.length) {
-                    // reset the scroll position because it change on widget insertion
-                    this.$nextTick(()=>window.scrollTo(0,0));
+                if(!this.simplemde.parsed) {
+                    let images = this.parse();
+                    this.simplemde.parsed = true;
+                    if(images.length) {
+                        // reset the scroll position because it change on widget insertion
+                        this.$nextTick(()=>window.scrollTo(0,0));
+                    }
                 }
+
+                setTimeout(()=>this.codemirror.refresh(), 100);
             },
 
             createSimpleMDE({ element, initialValue }) {
@@ -362,7 +363,7 @@
 
                 //// CM events bindings
                 this.codemirrorOn(codemirror, 'cursorActivity', this.onCursorActivity, true);
-                this.codemirrorOn(codemirror, 'change', this.onChange, true);
+                this.codemirrorOn(codemirror, 'change', this.onChange);
                 this.codemirrorOn(codemirror, 'beforeChange',this.onBeforeChange);
 
                 this.codemirrorOn(codemirror, 'keydown', this.onKeydown);
