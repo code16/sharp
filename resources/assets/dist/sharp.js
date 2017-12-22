@@ -49973,6 +49973,7 @@ var noop = function noop() {};
             this.layout = this.patchLayout(layout);
             this.data = data;
             this.locales = locales;
+            this.locale = locales && locales[0];
             this.authorizations = authorizations;
 
             this.fieldVisible = Object.keys(this.fields).reduce(function (res, fKey) {
@@ -50031,7 +50032,7 @@ var noop = function noop() {};
             });
 
             if (setLocale && this.locales) {
-                this.actionsBus.$emit('localeChanged', this.locales[0]);
+                this.actionsBus.$emit('localeChanged', this.locale);
             }
         },
         redirectToList: function redirectToList() {
@@ -51221,37 +51222,40 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
         }
     },
     watch: {
-        localActive: function () {
-            var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee(val) {
-                return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
-                    while (1) {
-                        switch (_context.prev = _context.next) {
-                            case 0:
-                                if (!val) {
-                                    _context.next = 4;
-                                    break;
-                                }
+        localActive: {
+            immediate: true,
+            handler: function () {
+                var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee(val) {
+                    return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
+                        while (1) {
+                            switch (_context.prev = _context.next) {
+                                case 0:
+                                    if (!val) {
+                                        _context.next = 4;
+                                        break;
+                                    }
 
-                                _context.next = 3;
-                                return this.$nextTick();
+                                    _context.next = 3;
+                                    return this.$nextTick();
 
-                            case 3:
-                                this.$emit('active');
+                                case 3:
+                                    this.$emit('active');
 
-                            case 4:
-                            case 'end':
-                                return _context.stop();
+                                case 4:
+                                case 'end':
+                                    return _context.stop();
+                            }
                         }
-                    }
-                }, _callee, this);
-            }));
+                    }, _callee, this);
+                }));
 
-            function localActive(_x) {
-                return _ref.apply(this, arguments);
-            }
+                function handler(_x) {
+                    return _ref.apply(this, arguments);
+                }
 
-            return localActive;
-        }()
+                return handler;
+            }()
+        }
     },
     methods: {
         setError: function setError(fieldKey) {
@@ -54038,19 +54042,32 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_simplemde__ = __webpack_require__(310);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_simplemde___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_simplemde__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__MarkdownUpload__ = __webpack_require__(326);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__MarkdownUpload___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__MarkdownUpload__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__MarkdownWidget__ = __webpack_require__(364);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mixins_Localization__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mixins_localize_Editor__ = __webpack_require__(568);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_simplemde__ = __webpack_require__(310);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_simplemde___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_simplemde__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__MarkdownUpload__ = __webpack_require__(326);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__MarkdownUpload___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__MarkdownUpload__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__MarkdownWidget__ = __webpack_require__(364);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mixins_Localization__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__mixins_localize_Editor__ = __webpack_require__(568);
+
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -54073,7 +54090,7 @@ var noop = function noop() {};
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpMarkdown',
 
-    mixins: [Object(__WEBPACK_IMPORTED_MODULE_4__mixins_localize_Editor__["a" /* default */])({ textProp: 'text' })],
+    mixins: [Object(__WEBPACK_IMPORTED_MODULE_5__mixins_localize_Editor__["a" /* default */])({ textProp: 'text' })],
 
     props: {
         uniqueIdentifier: String,
@@ -54103,7 +54120,7 @@ var noop = function noop() {};
 
     data: function data() {
         return {
-            simplemde: null,
+            simplemdeInstances: {},
             cursorPos: 0,
 
             uploaderId: (this.value.files || []).length
@@ -54112,11 +54129,42 @@ var noop = function noop() {};
 
     watch: {
         /// On form locale change
-        locale: function locale() {
-            this.localized && this.simplemde.value(this.text);
-        }
+        locale: function () {
+            var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
+                return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
+                    while (1) {
+                        switch (_context.prev = _context.next) {
+                            case 0:
+                                if (!this.localized) {
+                                    _context.next = 4;
+                                    break;
+                                }
+
+                                _context.next = 3;
+                                return this.$nextTick();
+
+                            case 3:
+                                this.codemirror.refresh();
+
+                            case 4:
+                            case 'end':
+                                return _context.stop();
+                        }
+                    }
+                }, _callee, this);
+            }));
+
+            function locale() {
+                return _ref.apply(this, arguments);
+            }
+
+            return locale;
+        }()
     },
     computed: {
+        simplemde: function simplemde() {
+            return this.localized ? this.simplemdeInstances[this.locale] : this.simplemdeInstances;
+        },
         codemirror: function codemirror() {
             return this.simplemde.codemirror;
         },
@@ -54142,6 +54190,9 @@ var noop = function noop() {};
         }
     },
     methods: {
+        localizedTextareaRef: function localizedTextareaRef(locale) {
+            return 'textarea_' + locale;
+        },
         indexedFiles: function indexedFiles() {
             var _this2 = this;
 
@@ -54149,15 +54200,15 @@ var noop = function noop() {};
                 return _extends(_defineProperty({}, _this2.idSymbol, i), file);
             });
         },
-        createUploader: function createUploader(_ref) {
+        createUploader: function createUploader(_ref2) {
             var _this3 = this;
 
-            var id = _ref.id,
-                value = _ref.value,
-                removeOptions = _ref.removeOptions;
+            var id = _ref2.id,
+                value = _ref2.value,
+                removeOptions = _ref2.removeOptions;
 
-            var $uploader = new __WEBPACK_IMPORTED_MODULE_1__MarkdownUpload___default.a({
-                mixins: [Object(__WEBPACK_IMPORTED_MODULE_2__MarkdownWidget__["a" /* default */])(this)],
+            var $uploader = new __WEBPACK_IMPORTED_MODULE_2__MarkdownUpload___default.a({
+                mixins: [Object(__WEBPACK_IMPORTED_MODULE_3__MarkdownWidget__["a" /* default */])(this)],
                 propsData: _extends({
                     id: id, value: value
                 }, this.innerComponents.upload, {
@@ -54199,9 +54250,9 @@ var noop = function noop() {};
         removeMarker: function removeMarker($uploader) {
             var _this4 = this;
 
-            var _ref2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-                isCMEvent = _ref2.isCMEvent,
-                relativeFallbackLine = _ref2.relativeFallbackLine;
+            var _ref3 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+                isCMEvent = _ref3.isCMEvent,
+                relativeFallbackLine = _ref3.relativeFallbackLine;
 
             var id = $uploader.id,
                 marker = $uploader.marker;
@@ -54229,9 +54280,9 @@ var noop = function noop() {};
         escapeMarker: function escapeMarker() {
             this.codemirror.focus();
         },
-        updateUploaderData: function updateUploaderData(_ref3, data) {
-            var id = _ref3.id,
-                marker = _ref3.marker;
+        updateUploaderData: function updateUploaderData(_ref4, data) {
+            var id = _ref4.id,
+                marker = _ref4.marker;
 
             var find = marker.find();
 
@@ -54240,18 +54291,18 @@ var noop = function noop() {};
 
             this.value.files.push(_extends(_defineProperty({}, this.idSymbol, id), data));
         },
-        setMarkerActive: function setMarkerActive(_ref4) {
-            var marker = _ref4.marker;
+        setMarkerActive: function setMarkerActive(_ref5) {
+            var marker = _ref5.marker;
 
             this.codemirror.addLineClass(marker.lines[0], 'wrap', 'SharpMarkdown__line--active');
         },
-        setMarkerInactive: function setMarkerInactive(_ref5) {
-            var marker = _ref5.marker;
+        setMarkerInactive: function setMarkerInactive(_ref6) {
+            var marker = _ref6.marker;
 
             this.codemirror.removeLineClass(marker.lines[0], 'wrap', 'SharpMarkdown__line--active');
         },
-        updateFileData: function updateFileData(_ref6, data) {
-            var id = _ref6.id;
+        updateFileData: function updateFileData(_ref7, data) {
+            var id = _ref7.id;
 
             var fileIndex = this.indexByFileId[id];
             var file = this.value.files[fileIndex];
@@ -54265,10 +54316,10 @@ var noop = function noop() {};
         insertUploadImage: function insertUploadImage() {
             var _this5 = this;
 
-            var _ref7 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-                replaceBySelection = _ref7.replaceBySelection,
-                data = _ref7.data,
-                isInsertion = _ref7.isInsertion;
+            var _ref8 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+                replaceBySelection = _ref8.replaceBySelection,
+                data = _ref8.data,
+                isInsertion = _ref8.isInsertion;
 
             var selection = this.codemirror.getSelection(' ');
             var curLineContent = this.codemirror.getLine(this.cursorPos.line);
@@ -54327,11 +54378,11 @@ var noop = function noop() {};
 
             return $uploader;
         },
-        onCursorActivity: function onCursorActivity() {
-            this.cursorPos = this.codemirror.getCursor();
+        onCursorActivity: function onCursorActivity(codemirror) {
+            this.cursorPos = codemirror.getCursor();
         },
         onChange: function onChange() {
-            this.$emit('input', this.localizedValue(this.simplemde.value()));
+            if (this.simplemde) this.$emit('input', this.localizedValue(this.simplemde.value()));
         },
         onBeforeChange: function onBeforeChange(cm, change) {
             //console.log(change);
@@ -54349,30 +54400,30 @@ var noop = function noop() {};
             //console.log('key down');
         },
         onKeyHandled: function onKeyHandled(cm, name, e) {},
-        codemirrorOn: function codemirrorOn(eventName, callback, immediate) {
-            immediate && callback(this.codemirror);
-            this.codemirror.on(eventName, callback);
+        codemirrorOn: function codemirrorOn(codemirror, eventName, callback, immediate) {
+            immediate && callback(codemirror);
+            codemirror.on(eventName, callback);
         },
-        localizeToolbar: function localizeToolbar() {
-            this.simplemde.toolbar.forEach(function (icon) {
+        localizeToolbar: function localizeToolbar(simplemde) {
+            simplemde.toolbar.forEach(function (icon) {
                 if ((typeof icon === 'undefined' ? 'undefined' : _typeof(icon)) === 'object') {
                     var lName = icon.name.replace(/-/g, '_');
-                    icon.title = Object(__WEBPACK_IMPORTED_MODULE_3__mixins_Localization__["c" /* lang */])('form.markdown.icons.' + lName + '.title');
+                    icon.title = Object(__WEBPACK_IMPORTED_MODULE_4__mixins_Localization__["c" /* lang */])('form.markdown.icons.' + lName + '.title');
                 }
             });
-            this.$el.querySelector('.editor-toolbar').remove();
-            this.simplemde.createToolbar();
+            simplemde.gui.toolbar.remove();
+            simplemde.createToolbar();
         },
-        setReadOnly: function setReadOnly() {
-            this.codemirror.setOption('readOnly', true);
-            this.simplemde.toolbar.forEach(function (icon) {
+        setReadOnly: function setReadOnly(simplemde) {
+            simplemde.codemirror.setOption('readOnly', true);
+            simplemde.toolbar.forEach(function (icon) {
                 return (typeof icon === 'undefined' ? 'undefined' : _typeof(icon)) === 'object' && (icon.action = noop);
             });
         },
-        bindImageAction: function bindImageAction() {
+        bindImageAction: function bindImageAction(simplemde) {
             var _this6 = this;
 
-            var imageBtn = this.simplemde.toolbar.find(function (btn) {
+            var imageBtn = simplemde.toolbar.find(function (btn) {
                 return btn.name === 'image';
             });
             (imageBtn || {}).action = function () {
@@ -54407,9 +54458,9 @@ var noop = function noop() {};
                 }
             });
 
-            images.reverse().forEach(function (_ref8) {
-                var range = _ref8.range,
-                    data = _ref8.data;
+            images.reverse().forEach(function (_ref9) {
+                var range = _ref9.range,
+                    data = _ref9.data;
 
                 _this7.codemirror.setSelection(range.start, range.end, { scroll: false });
                 _this7.insertUploadImage({ replaceBySelection: true, data: data });
@@ -54425,50 +54476,90 @@ var noop = function noop() {};
                     return window.scrollTo(0, 0);
                 });
             }
+        },
+        createSimpleMDE: function createSimpleMDE(_ref10) {
+            var element = _ref10.element,
+                initialValue = _ref10.initialValue;
+
+            console.log('initialValue', initialValue);
+            var simplemde = new __WEBPACK_IMPORTED_MODULE_1_simplemde___default.a({
+                element: element,
+                initialValue: initialValue,
+                placeholder: this.placeholder,
+                spellChecker: false,
+                toolbar: this.toolbar,
+                autoDownloadFontAwesome: false,
+                status: false
+            });
+            if (this.readOnly) {
+                this.setReadOnly(simplemde);
+            }
+            this.localizeToolbar(simplemde);
+            this.bindImageAction(simplemde);
+
+            this.initCM(simplemde.codemirror);
+
+            return simplemde;
+        },
+        initCM: function initCM(codemirror) {
+            codemirror.setSize('auto', this.height);
+
+            //// CM events bindings
+            this.codemirrorOn(codemirror, 'cursorActivity', this.onCursorActivity, true);
+            this.codemirrorOn(codemirror, 'change', this.onChange, true);
+            this.codemirrorOn(codemirror, 'beforeChange', this.onBeforeChange);
+
+            this.codemirrorOn(codemirror, 'keydown', this.onKeydown);
+            this.codemirrorOn(codemirror, 'keyHandled', this.onKeyHandled);
         }
     },
-    mounted: function mounted() {
-        var _this8 = this;
+    mounted: function () {
+        var _ref11 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2() {
+            var _this8 = this;
 
-        this.simplemde = new __WEBPACK_IMPORTED_MODULE_0_simplemde___default.a({
-            element: this.$refs.textarea,
-            initialValue: this.text,
-            placeholder: this.placeholder,
-            spellChecker: false,
-            toolbar: this.toolbar,
-            autoDownloadFontAwesome: false,
-            status: false
-        });
+            return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
+                while (1) {
+                    switch (_context2.prev = _context2.next) {
+                        case 0:
+                            console.log(this);
+                            if (this.localized) {
+                                this.simplemdeInstances = this.locales.reduce(function (res, locale) {
+                                    return _extends({}, res, _defineProperty({}, locale, _this8.createSimpleMDE({
+                                        element: _this8.$refs[_this8.localizedTextareaRef(locale)][0],
+                                        initialValue: _this8.value.text[locale]
+                                    })));
+                                }, {});
+                            } else this.simplemdeInstances = this.createSimpleMDE({
+                                element: this.$refs.textarea,
+                                initialValue: this.value.text
+                            });
 
-        this.value.files = this.indexedFiles();
+                            this.value.files = this.indexedFiles();
 
-        if (this.$tab) {
-            this.$tab.$once('active', function () {
-                return _this8.refreshOnExternalChange();
-            });
-        } else {
-            this.$nextTick(function () {
-                return _this8.refreshOnExternalChange();
-            });
+                            if (this.$tab) {
+                                this.$tab.$once('active', function () {
+                                    return _this8.refreshOnExternalChange();
+                                });
+                            } else {
+                                this.$nextTick(function () {
+                                    return _this8.refreshOnExternalChange();
+                                });
+                            }
+
+                        case 4:
+                        case 'end':
+                            return _context2.stop();
+                    }
+                }
+            }, _callee2, this);
+        }));
+
+        function mounted() {
+            return _ref11.apply(this, arguments);
         }
 
-        this.codemirror.setSize('auto', this.height);
-
-        if (this.readOnly) {
-            this.setReadOnly();
-        }
-        /// Custom mde setup
-        this.localizeToolbar();
-        this.bindImageAction();
-
-        //// CM events bindings
-        this.codemirrorOn('cursorActivity', this.onCursorActivity, true);
-        this.codemirrorOn('change', this.onChange, true);
-        this.codemirrorOn('beforeChange', this.onBeforeChange);
-
-        this.codemirrorOn('keydown', this.onKeydown);
-        this.codemirrorOn('keyHandled', this.onKeyHandled);
-    }
+        return mounted;
+    }()
 });
 
 /***/ }),
@@ -71721,9 +71812,24 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     }
   }, [_c('div', {
     staticClass: "SharpModule__inner"
-  }, [_c('textarea', {
+  }, [(_vm.localized) ? _vm._l((_vm.locales), function(loc) {
+    return _c('div', {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: (_vm.locale === loc),
+        expression: "locale === loc"
+      }]
+    }, [_c('textarea', {
+      ref: _vm.localizedTextareaRef(loc),
+      refInFor: true,
+      attrs: {
+        "id": _vm.localizedTextareaRef(loc)
+      }
+    })])
+  }) : [_c('textarea', {
     ref: "textarea"
-  })])])
+  })]], 2)])
 }
 var staticRenderFns = []
 render._withStripped = true

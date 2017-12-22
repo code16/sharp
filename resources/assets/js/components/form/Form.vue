@@ -156,6 +156,7 @@
                 this.layout = this.patchLayout(layout);
                 this.data = data;
                 this.locales = locales;
+                this.locale = locales && locales[0];
                 this.authorizations = authorizations;
 
                 this.fieldVisible = Object.keys(this.fields).reduce((res, fKey) => {
@@ -209,7 +210,7 @@
                 });
 
                 if(setLocale && this.locales) {
-                    this.actionsBus.$emit('localeChanged', this.locales[0]);
+                    this.actionsBus.$emit('localeChanged', this.locale);
                 }
             },
             redirectToList({ restoreContext=true }={}) {
