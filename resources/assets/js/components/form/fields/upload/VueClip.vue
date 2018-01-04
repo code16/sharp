@@ -256,6 +256,8 @@
                 this.removeFile(this.file);
                 this.files.splice(0, 1);
 
+                this.setPending(false);
+
                 this.resetEdit();
 
                 this.$emit('input', null);
