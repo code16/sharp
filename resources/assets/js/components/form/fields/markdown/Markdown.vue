@@ -264,13 +264,6 @@
                 }
             },
 
-            onKeydown(cm, e) {
-                //console.log('key down');
-            },
-
-            onKeyHandled(cm, name, e) {
-
-            },
             codemirrorOn(codemirror, eventName, callback, immediate) {
                 immediate && callback(codemirror);
                 codemirror.on(eventName, callback);
@@ -365,9 +358,6 @@
                 this.codemirrorOn(codemirror, 'cursorActivity', this.onCursorActivity, true);
                 this.codemirrorOn(codemirror, 'change', this.onChange);
                 this.codemirrorOn(codemirror, 'beforeChange',this.onBeforeChange);
-
-                this.codemirrorOn(codemirror, 'keydown', this.onKeydown);
-                this.codemirrorOn(codemirror, 'keyHandled', this.onKeyHandled);
             }
         },
         async mounted() {

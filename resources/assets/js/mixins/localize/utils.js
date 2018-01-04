@@ -5,7 +5,8 @@ export const LocalizableOptionsFields = [
     'select', 'autocomplete', 'tags'
 ];
 export const LocalizableValueFields = [
-    'text', 'textarea', //'markdown', 'wysiwyg'
+    'text', 'textarea', // localized value handled in Form/FieldDisplay components
+    //'markdown', 'wysiwyg' (markdown/wysiwyg fields handle localized value themselves)
 ];
 
 export function isLocaleObject(obj, locales) {
