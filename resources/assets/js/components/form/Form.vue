@@ -221,6 +221,7 @@
             async submit({entityKey, endpoint, dataFormatter=noop }={}) {
                 if(entityKey && entityKey !== this.entityKey || this.pendingJobs.length) return;
 
+                this.normalizeLocalizedValueBeforeSubmit();
                 try {
                     const { data } = await this.post(endpoint, dataFormatter(this));
                     if(this.independant) {

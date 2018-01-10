@@ -13,6 +13,13 @@ export function isLocaleObject(obj, locales) {
     return obj && typeof obj === 'object' && Object.keys(obj).every(key => locales.includes(key));
 }
 
+function isEmpty(value){
+    return value === null || value === '';
+}
+export function isLocaleObjectEmpty(obj) {
+    return Object.entries(obj).every(([locale, value])=>isEmpty(value));
+}
+
 export function isLocalizableValueField(field) {
     return LocalizableValueFields.includes(field.type);
 }
