@@ -69,9 +69,13 @@ export default {
 
             let modalOptions = {
                 title: lang(`modals.${status}.title`) || lang(`modals.error.title`),
-                text: data.message || lang(`modals.error.message`),
+                text: data.message || lang(`modals.${status}.message`) || lang(`modals.error.message`),
                 isError: true
             };
+
+            if(status === 419) {
+                modalOptions.okCallback = () => location.reload();
+            }
 
             switch(status) {
                 /// Unauthorized
@@ -86,6 +90,7 @@ export default {
                 case 403:
                 case 404:
                 case 417:
+                case 419:
                 case 500:
                     if(status !== 404 || method !== 'get')
                         this.actionsBus.$emit('showMainModal', {

@@ -3,6 +3,9 @@
 return [
     '401.title' => 'Unauthenticated',
     '403.title' => 'Unauthorized',
+    '419.title' => 'Invalid',
+    '419.message' => 'This action is no longer valid, probably because of a long period of inactivity. The page will be  automatically reloaded.',
+
     'command.confirm.title' => 'Confirm',
     'command.info.title' => 'Info',
     'state.422.title' => "Can't change state",

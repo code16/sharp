@@ -257,9 +257,14 @@
                 //console.log(change);
                 if(change && change.origin && change.origin.includes('delete')) {
                     let markers = cm.findMarks(change.from, change.to);
+                    console.log(markers);
                     if(markers.length) {
-                        change.cancel();
-                        markers.forEach(marker => marker.$component.$emit('delete-intent'));
+                        markers.forEach(marker => {
+                            if(marker.$component) {
+                                change.cancel();
+                                marker.$component.$emit('delete-intent');
+                            }
+                        });
                     }
                 }
             },

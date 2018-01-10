@@ -217,8 +217,6 @@
                 let msg = this.file.errorMessage;
                 this.remove();
                 this.$emit('error', msg);
-
-                this.setPending(false)
             },
             onStatusSuccess() {
                 let data = {};
@@ -255,6 +253,8 @@
                 this.canDownload = false;
                 this.removeFile(this.file);
                 this.files.splice(0, 1);
+
+                this.setPending(false);
 
                 this.resetEdit();
 
