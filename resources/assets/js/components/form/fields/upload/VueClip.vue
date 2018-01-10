@@ -217,8 +217,6 @@
                 let msg = this.file.errorMessage;
                 this.remove();
                 this.$emit('error', msg);
-
-                this.setPending(false)
             },
             onStatusSuccess() {
                 let data = {};
