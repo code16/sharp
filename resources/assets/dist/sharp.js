@@ -51800,14 +51800,22 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
         normalizeLocalizedValueBeforeSubmit: function normalizeLocalizedValueBeforeSubmit() {
             var _this2 = this;
 
-            debugger;
             if (!this.localized) return;
-            Object.entries(this.fields).forEach(function (key, field) {
+            console.log(JSON.parse(JSON.stringify(this.data)));
+            Object.entries(this.fields).forEach(function (_ref3) {
+                var _ref4 = _slicedToArray(_ref3, 2),
+                    key = _ref4[0],
+                    field = _ref4[1];
+
+                //console.log(`field '${field.name}', localized? ${field.localized}`,field.localized ? `empty? ${isLocaleObjectEmpty(this.data[key])}` : '');
                 if (field.localized && Object(__WEBPACK_IMPORTED_MODULE_0__utils__["d" /* isLocaleObjectEmpty */])(_this2.data[key])) {
                     console.log('is empty', field, _this2.data[key]);
                     _this2.data[key] = null;
                 }
             });
+            console.log(JSON.parse(JSON.stringify(this.data)));
+            // this.redirectToList = ()=>{};
+            // this.post = ()=>Promise.resolve();
         }
     }
 });
@@ -54496,10 +54504,13 @@ var noop = function noop() {};
             //console.log(change);
             if (change && change.origin && change.origin.includes('delete')) {
                 var markers = cm.findMarks(change.from, change.to);
+                console.log(markers);
                 if (markers.length) {
-                    change.cancel();
                     markers.forEach(function (marker) {
-                        return marker.$component.$emit('delete-intent');
+                        if (marker.$component) {
+                            change.cancel();
+                            marker.$component.$emit('delete-intent');
+                        }
                     });
                 }
             }

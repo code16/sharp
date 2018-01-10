@@ -269,7 +269,9 @@ h6,
   background-color: #007bff !important;
 }
 
-a.bg-primary:focus, a.bg-primary:hover {
+a.bg-primary:focus, a.bg-primary:hover,
+button.bg-primary:focus,
+button.bg-primary:hover {
   background-color: #0062cc !important;
 }
 
@@ -277,7 +279,9 @@ a.bg-primary:focus, a.bg-primary:hover {
   background-color: #868e96 !important;
 }
 
-a.bg-secondary:focus, a.bg-secondary:hover {
+a.bg-secondary:focus, a.bg-secondary:hover,
+button.bg-secondary:focus,
+button.bg-secondary:hover {
   background-color: #6c757d !important;
 }
 
@@ -285,7 +289,9 @@ a.bg-secondary:focus, a.bg-secondary:hover {
   background-color: #28a745 !important;
 }
 
-a.bg-success:focus, a.bg-success:hover {
+a.bg-success:focus, a.bg-success:hover,
+button.bg-success:focus,
+button.bg-success:hover {
   background-color: #1e7e34 !important;
 }
 
@@ -293,7 +299,9 @@ a.bg-success:focus, a.bg-success:hover {
   background-color: #17a2b8 !important;
 }
 
-a.bg-info:focus, a.bg-info:hover {
+a.bg-info:focus, a.bg-info:hover,
+button.bg-info:focus,
+button.bg-info:hover {
   background-color: #117a8b !important;
 }
 
@@ -301,7 +309,9 @@ a.bg-info:focus, a.bg-info:hover {
   background-color: #ffc107 !important;
 }
 
-a.bg-warning:focus, a.bg-warning:hover {
+a.bg-warning:focus, a.bg-warning:hover,
+button.bg-warning:focus,
+button.bg-warning:hover {
   background-color: #d39e00 !important;
 }
 
@@ -309,7 +319,9 @@ a.bg-warning:focus, a.bg-warning:hover {
   background-color: #dc3545 !important;
 }
 
-a.bg-danger:focus, a.bg-danger:hover {
+a.bg-danger:focus, a.bg-danger:hover,
+button.bg-danger:focus,
+button.bg-danger:hover {
   background-color: #bd2130 !important;
 }
 
@@ -317,7 +329,9 @@ a.bg-danger:focus, a.bg-danger:hover {
   background-color: #f8f9fa !important;
 }
 
-a.bg-light:focus, a.bg-light:hover {
+a.bg-light:focus, a.bg-light:hover,
+button.bg-light:focus,
+button.bg-light:hover {
   background-color: #dae0e5 !important;
 }
 
@@ -325,7 +339,9 @@ a.bg-light:focus, a.bg-light:hover {
   background-color: #343a40 !important;
 }
 
-a.bg-dark:focus, a.bg-dark:hover {
+a.bg-dark:focus, a.bg-dark:hover,
+button.bg-dark:focus,
+button.bg-dark:hover {
   background-color: #1d2124 !important;
 }
 
@@ -3084,7 +3100,7 @@ small {
   padding: 20vh 0;
 }
 
-@media (max-width: 575px) {
+@media (max-width: 575.99px) {
   .Sharp__login-page .container {
     width: 100%;
   }

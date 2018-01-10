@@ -6207,7 +6207,7 @@ h6 > *:after, .bx--type-zeta > *,
           align-items: center;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767.99px) {
   #sharp-app .SharpActionBar__extras {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
@@ -6223,7 +6223,7 @@ h6 > *:after, .bx--type-zeta > *,
   margin: 0 0 0 .5rem;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767.99px) {
   #sharp-app .SharpActionBar__extras .SharpFilterSelect {
     margin: .5rem 0 0 0;
   }
@@ -6276,7 +6276,7 @@ h6 > *:after, .bx--type-zeta > *,
   width: auto;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767.99px) {
   #sharp-app .SharpActionBar__actions-dropdown--commands .SharpDropdown__list, #sharp-app .SharpActionBar__actions-dropdown--commands .multiselect .multiselect__content, #sharp-app .multiselect .SharpActionBar__actions-dropdown--commands .multiselect__content, #sharp-app .SharpActionBar__actions-dropdown--commands .multiselect__content {
     min-width: 100%;
   }
@@ -6297,7 +6297,7 @@ h6 > *:after, .bx--type-zeta > *,
   border: 1px solid #314255;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767.99px) {
   #sharp-app .SharpActionBar.SharpActionBarList .col.left {
     -webkit-box-flex: 0 !important;
         -ms-flex: 0 !important;
@@ -6327,7 +6327,7 @@ h6 > *:after, .bx--type-zeta > *,
           box-shadow: 0 0 0 1px #FD7400;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767.99px) {
   #sharp-app .SharpActionBar__search.SharpSearch.SharpSearch--active {
     width: 100%;
   }
@@ -6385,7 +6385,7 @@ h6 > *:after, .bx--type-zeta > *,
   display: inline-block;
 }
 
-@media (max-width: 575px) {
+@media (max-width: 575.99px) {
   #sharp-app .SharpTabs:not(SharpTabs--nav-overflow)\--collapse .SharpTabs__nav:not(.SharpTabs__nav--ghost) {
     height: auto;
     -webkit-box-orient: vertical;
@@ -6968,7 +6968,7 @@ h6 > *:after, .bx--type-zeta > *,
   margin-bottom: 0;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767.99px) {
   #sharp-app .SharpForm__fieldset .SharpGrid__row:last-child .SharpGrid__col.col-12:not(:last-of-type) {
     margin-bottom: 1.5rem;
   }
@@ -7154,7 +7154,7 @@ h6 > *:after, .bx--type-zeta > *,
   margin-bottom: 0;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767.99px) {
   #sharp-app .SharpList__item .SharpGrid__row:last-child .SharpGrid__col.col-12:not(:last-of-type) {
     margin-bottom: 1.5rem;
   }
@@ -9370,7 +9370,7 @@ h6 > *:after, .bx--type-zeta > *,
   transition: 250ms cubic-bezier(0.5, 0, 0.1, 1);
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767.99px) {
   #sharp-app .SharpEntityList__row {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
@@ -9439,7 +9439,7 @@ h6 > *:after, .bx--type-zeta > *,
           justify-content: flex-end;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767.99px) {
   #sharp-app .SharpEntityList__row .SharpEntityList__row-actions {
     padding-top: 0;
   }
@@ -9606,7 +9606,7 @@ h6 > *:after, .bx--type-zeta > *,
   width: auto;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767.99px) {
   #sharp-app .SharpEntityList__state-dropdown .SharpDropdown__list, #sharp-app .SharpEntityList__state-dropdown .multiselect .multiselect__content, #sharp-app .multiselect .SharpEntityList__state-dropdown .multiselect__content, #sharp-app .SharpEntityList__state-dropdown .multiselect__content, #sharp-app .SharpEntityList__commands-dropdown .SharpDropdown__list, #sharp-app .SharpEntityList__commands-dropdown .multiselect .multiselect__content, #sharp-app .multiselect .SharpEntityList__commands-dropdown .multiselect__content, #sharp-app .SharpEntityList__commands-dropdown .multiselect__content {
     min-width: 100%;
   }
@@ -9919,7 +9919,7 @@ h6 > *:after, .bx--type-zeta > *,
   width: auto;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767.99px) {
   #sharp-app .SharpFilterSelect .SharpDropdown__list, #sharp-app .SharpFilterSelect .multiselect .multiselect__content, #sharp-app .multiselect .SharpFilterSelect .multiselect__content, #sharp-app .SharpFilterSelect .multiselect__content {
     min-width: 100%;
   }
@@ -9979,7 +9979,7 @@ h6 > *:after, .bx--type-zeta > *,
   margin-left: -.1875rem;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767.99px) {
   #sharp-app .SharpFilterSelect__select .multiselect__tag:not(:first-child):before {
     display: none;
   }
@@ -10019,7 +10019,7 @@ h6 > *:after, .bx--type-zeta > *,
           box-shadow: none;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767.99px) {
   #sharp-app .SharpFilterSelect__select .multiselect__tags-wrap {
     display: -webkit-box;
     display: -ms-flexbox;
