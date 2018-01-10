@@ -30,3 +30,8 @@ export function localeObject({ locales, resolve=()=>null }) {
     }), {});
 }
 
+export function localeObjectOrEmpty({ localeObject, locale, value }) {
+    let localizedValue = { ...localeObject, [locale]: value };
+    return !isLocaleObjectEmpty(localizedValue) ? localizedValue: null;
+}
+

@@ -142,11 +142,7 @@
                 return this.errors[key];
             },
             updateData(key,value) {
-                let field = this.fields[key];
-                if(field.localized && this.isLocalizableValueField(field)) {
-                    this.$set(this.data[key],this.locale,value);
-                }
-                else this.$set(this.data,key,value);
+                this.$set(this.data,key,this.fieldLocalizedValue(key, value));
             },
             updateVisibility(key, visibility) {
                 this.$set(this.fieldVisible, key, visibility);
@@ -163,8 +159,6 @@
                     res[fKey] = true;
                     return res;
                 },{});
-
-                this.normalizeLocalizedValue();
             },
             handleError({response}) {
                 if(response.status===422)
@@ -221,7 +215,6 @@
             async submit({entityKey, endpoint, dataFormatter=noop }={}) {
                 if(entityKey && entityKey !== this.entityKey || this.pendingJobs.length) return;
 
-                this.normalizeLocalizedValueBeforeSubmit();
                 try {
                     const { data } = await this.post(endpoint, dataFormatter(this));
                     if(this.independant) {

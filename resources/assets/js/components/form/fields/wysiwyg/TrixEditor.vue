@@ -58,7 +58,7 @@
                 return `trix-toolbar-${this.uniqueIdentifier}`;
             },
             text() {
-                return this.localized ? this.value.text[this.locale] : this.value.text;
+                return this.localized ? this.localizedText : this.value.text;
             }
         },
         methods: {

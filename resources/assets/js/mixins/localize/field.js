@@ -9,10 +9,5 @@ export default {
         locales() {
             return this.$form.locales;
         }
-    },
-    methods: {
-        emptyLocaleObject(defaultValue=null) {
-            return localeObject({ locales:this.locales, resolve:()=>defaultValue });
-        }
     }
 }

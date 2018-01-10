@@ -28208,9 +28208,10 @@ if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return LocalizableOptionsFields; });
 /* unused harmony export LocalizableValueFields */
 /* harmony export (immutable) */ __webpack_exports__["c"] = isLocaleObject;
-/* harmony export (immutable) */ __webpack_exports__["d"] = isLocaleObjectEmpty;
-/* harmony export (immutable) */ __webpack_exports__["e"] = isLocalizableValueField;
-/* harmony export (immutable) */ __webpack_exports__["f"] = localeObject;
+/* unused harmony export isLocaleObjectEmpty */
+/* harmony export (immutable) */ __webpack_exports__["d"] = isLocalizableValueField;
+/* harmony export (immutable) */ __webpack_exports__["e"] = localeObject;
+/* harmony export (immutable) */ __webpack_exports__["f"] = localeObjectOrEmpty;
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
@@ -28256,6 +28257,15 @@ function localeObject(_ref3) {
     return locales.reduce(function (res, locale) {
         return _extends({}, res, _defineProperty({}, locale, resolve(locale)));
     }, {});
+}
+
+function localeObjectOrEmpty(_ref4) {
+    var localeObject = _ref4.localeObject,
+        locale = _ref4.locale,
+        value = _ref4.value;
+
+    var localizedValue = _extends({}, localeObject, _defineProperty({}, locale, value));
+    return !isLocaleObjectEmpty(localizedValue) ? localizedValue : null;
 }
 
 /***/ }),
@@ -31082,15 +31092,6 @@ module.exports = Component.exports
         locales: function locales() {
             return this.$form.locales;
         }
-    },
-    methods: {
-        emptyLocaleObject: function emptyLocaleObject() {
-            var defaultValue = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-
-            return Object(__WEBPACK_IMPORTED_MODULE_1__utils__["f" /* localeObject */])({ locales: this.locales, resolve: function resolve() {
-                    return defaultValue;
-                } });
-        }
     }
 });
 
@@ -33418,7 +33419,11 @@ exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__field__ = __webpack_require__(101);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils__ = __webpack_require__(25);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -33436,20 +33441,15 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             localized: Boolean
         },
 
-        methods: {
-            localizedValue: function localizedValue(text) {
-                var res = _extends({}, this.value);
-                if (this.localized) {
-                    res[textProp][this.locale] = text;
-                } else {
-                    res[textProp] = text;
-                }
-                return res;
+        computed: {
+            localizedText: function localizedText() {
+                return this.value[textProp] !== null ? this.value[textProp][this.locale] : '';
             }
         },
-        created: function created() {
-            if (this.localized && this.value[textProp] === null) {
-                this.value.text = this.emptyLocaleObject('');
+
+        methods: {
+            localizedValue: function localizedValue(text) {
+                return _extends({}, this.value, _defineProperty({}, textProp, this.localized ? Object(__WEBPACK_IMPORTED_MODULE_1__utils__["f" /* localeObjectOrEmpty */])({ localeObject: this.value[textProp], locale: this.locale, value: text }) : text));
             }
         }
     };
@@ -50053,10 +50053,7 @@ var noop = function noop() {};
             return this.errors[key];
         },
         updateData: function updateData(key, value) {
-            var field = this.fields[key];
-            if (field.localized && this.isLocalizableValueField(field)) {
-                this.$set(this.data[key], this.locale, value);
-            } else this.$set(this.data, key, value);
+            this.$set(this.data, key, this.fieldLocalizedValue(key, value));
         },
         updateVisibility: function updateVisibility(key, visibility) {
             this.$set(this.fieldVisible, key, visibility);
@@ -50081,8 +50078,6 @@ var noop = function noop() {};
                 res[fKey] = true;
                 return res;
             }, {});
-
-            this.normalizeLocalizedValue();
         },
         handleError: function handleError(_ref2) {
             var response = _ref2.response;
@@ -50167,13 +50162,11 @@ var noop = function noop() {};
                                 return _context.abrupt('return');
 
                             case 2:
-
-                                this.normalizeLocalizedValueBeforeSubmit();
-                                _context.prev = 3;
-                                _context.next = 6;
+                                _context.prev = 2;
+                                _context.next = 5;
                                 return this.post(endpoint, dataFormatter(this));
 
-                            case 6:
+                            case 5:
                                 _ref7 = _context.sent;
                                 data = _ref7.data;
 
@@ -50183,21 +50176,21 @@ var noop = function noop() {};
                                     this.mainLoading.$emit('show');
                                     this.redirectToList();
                                 }
-                                _context.next = 14;
+                                _context.next = 13;
                                 break;
 
-                            case 11:
-                                _context.prev = 11;
-                                _context.t0 = _context['catch'](3);
+                            case 10:
+                                _context.prev = 10;
+                                _context.t0 = _context['catch'](2);
 
                                 this.handleError(_context.t0);
 
-                            case 14:
+                            case 13:
                             case 'end':
                                 return _context.stop();
                         }
                     }
-                }, _callee, this, [[3, 11]]);
+                }, _callee, this, [[2, 10]]);
             }));
 
             function submit() {
@@ -51780,51 +51773,16 @@ if (false) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(25);
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     methods: {
-        isLocalizableValueField: __WEBPACK_IMPORTED_MODULE_0__utils__["e" /* isLocalizableValueField */],
-        normalizeLocalizedValue: function normalizeLocalizedValue() {
-            var _this = this;
-
-            if (!this.localized) {
-                console.log('form not localized');
-                return;
+        fieldLocalizedValue: function fieldLocalizedValue(key, value) {
+            var field = this.fields[key];
+            if (field.localized && Object(__WEBPACK_IMPORTED_MODULE_0__utils__["d" /* isLocalizableValueField */])(field)) {
+                return Object(__WEBPACK_IMPORTED_MODULE_0__utils__["f" /* localeObjectOrEmpty */])({ localeObject: this.data[key], locale: this.locale, value: value });
             }
-            Object.entries(this.fields).forEach(function (_ref) {
-                var _ref2 = _slicedToArray(_ref, 2),
-                    key = _ref2[0],
-                    field = _ref2[1];
-
-                if (field.localized && _this.data[key] === null && Object(__WEBPACK_IMPORTED_MODULE_0__utils__["e" /* isLocalizableValueField */])(field)) {
-                    _this.$set(_this.data, key, Object(__WEBPACK_IMPORTED_MODULE_0__utils__["f" /* localeObject */])({ locales: _this.locales, resolve: function resolve() {
-                            return null;
-                        } }));
-                }
-            });
-        },
-        normalizeLocalizedValueBeforeSubmit: function normalizeLocalizedValueBeforeSubmit() {
-            var _this2 = this;
-
-            if (!this.localized) return;
-            console.log(JSON.parse(JSON.stringify(this.data)));
-            Object.entries(this.fields).forEach(function (_ref3) {
-                var _ref4 = _slicedToArray(_ref3, 2),
-                    key = _ref4[0],
-                    field = _ref4[1];
-
-                //console.log(`field '${field.name}', localized? ${field.localized}`,field.localized ? `empty? ${isLocaleObjectEmpty(this.data[key])}` : '');
-                if (field.localized && Object(__WEBPACK_IMPORTED_MODULE_0__utils__["d" /* isLocaleObjectEmpty */])(_this2.data[key])) {
-                    console.log('is empty', field, _this2.data[key]);
-                    _this2.data[key] = null;
-                }
-            });
-            console.log(JSON.parse(JSON.stringify(this.data)));
-            // this.redirectToList = ()=>{};
-            // this.post = ()=>Promise.resolve();
+            return value;
         }
     }
 });
@@ -51860,10 +51818,10 @@ function __createLocalizedValue(_ref) {
         value = _ref.value;
 
     if (['text', 'textarea'].includes(type) && typeof value === "string") {
-        return Object(__WEBPACK_IMPORTED_MODULE_0__utils__["f" /* localeObject */])({ locales: locales, resolve: __createLocalizedText(value) });
+        return Object(__WEBPACK_IMPORTED_MODULE_0__utils__["e" /* localeObject */])({ locales: locales, resolve: __createLocalizedText(value) });
     } else if (['markdown', 'wysiwyg'].includes(type) && typeof value.text === "string") {
         return _extends({}, value, {
-            text: Object(__WEBPACK_IMPORTED_MODULE_0__utils__["f" /* localeObject */])({ locales: locales, resolve: __createLocalizedText(value.text) })
+            text: Object(__WEBPACK_IMPORTED_MODULE_0__utils__["e" /* localeObject */])({ locales: locales, resolve: __createLocalizedText(value.text) })
         });
     }
     return value;
@@ -51876,7 +51834,7 @@ function __createLocalizedOptions(_ref2) {
 
     return options.map(function (option) {
         return _extends({}, option, {
-            label: Object(__WEBPACK_IMPORTED_MODULE_0__utils__["f" /* localeObject */])({ locales: locales, resolve: __createLocalizedText(option.label) })
+            label: Object(__WEBPACK_IMPORTED_MODULE_0__utils__["e" /* localeObject */])({ locales: locales, resolve: __createLocalizedText(option.label) })
         });
     });
 }
@@ -51913,7 +51871,7 @@ function __createLocalizedAutocompleteSuggestions(_ref6) {
                 key = _ref8[0],
                 value = _ref8[1];
 
-            return _extends({}, res, _defineProperty({}, key, typeof value === 'string' ? Object(__WEBPACK_IMPORTED_MODULE_0__utils__["f" /* localeObject */])({ locales: locales, resolve: __createLocalizedText(value) }) : value));
+            return _extends({}, res, _defineProperty({}, key, typeof value === 'string' ? Object(__WEBPACK_IMPORTED_MODULE_0__utils__["e" /* localeObject */])({ locales: locales, resolve: __createLocalizedText(value) }) : value));
         }, {});
     });
 }
@@ -52030,7 +51988,7 @@ function acceptCondition(fields, data, condition) {
 }
 
 var getValue = function getValue(form, field, value, locale) {
-    if (form.localized && field.localized && value && Object(__WEBPACK_IMPORTED_MODULE_3__mixins_localize_utils__["e" /* isLocalizableValueField */])(field)) {
+    if (form.localized && field.localized && value && Object(__WEBPACK_IMPORTED_MODULE_3__mixins_localize_utils__["d" /* isLocalizableValueField */])(field)) {
         //console.log(form, field, value, locale);
         return value[locale];
     }
@@ -54313,7 +54271,7 @@ var noop = function noop() {};
             }, {});
         },
         text: function text() {
-            return this.localized ? this.value.text[this.locale] : this.value.text;
+            return this.localized ? this.localizedText : this.value.text;
         }
     },
     methods: {
@@ -54513,10 +54471,13 @@ var noop = function noop() {};
             //console.log(change);
             if (change && change.origin && change.origin.includes('delete')) {
                 var markers = cm.findMarks(change.from, change.to);
+                console.log(markers);
                 if (markers.length) {
-                    change.cancel();
                     markers.forEach(function (marker) {
-                        return marker.$component.$emit('delete-intent');
+                        if (marker.$component) {
+                            change.cancel();
+                            marker.$component.$emit('delete-intent');
+                        }
                     });
                 }
             }
@@ -72457,7 +72418,7 @@ var Tag = function (_LabelledItem2) {
             var _this = this;
 
             // data
-            return this.localized ? Object(__WEBPACK_IMPORTED_MODULE_1__utils__["f" /* localeObject */])({
+            return this.localized ? Object(__WEBPACK_IMPORTED_MODULE_1__utils__["e" /* localeObject */])({
                 locales: this.locales,
                 resolve: function resolve(l) {
                     return l === _this.locale ? text : null;
@@ -80793,7 +80754,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return 'trix-toolbar-' + this.uniqueIdentifier;
         },
         text: function text() {
-            return this.localized ? this.value.text[this.locale] : this.value.text;
+            return this.localized ? this.localizedText : this.value.text;
         }
     },
     methods: {

@@ -1,4 +1,5 @@
 import localizeField from "./field";
+import { localeObjectOrEmpty } from "./utils";
 
 /**
  * Can be used in Markdown, TrixEditor component
@@ -12,21 +13,20 @@ export default function ({ textProp }) {
             localized: Boolean
         },
 
-        methods: {
-            localizedValue(text) {
-                let res = { ...this.value };
-                if(this.localized) {
-                    res[textProp][this.locale] = text;
-                }
-                else {
-                    res[textProp] = text;
-                }
-                return res;
+        computed: {
+            localizedText() {
+                return this.value[textProp] !== null ? this.value[textProp][this.locale] : '';
             }
         },
-        created() {
-            if(this.localized && this.value[textProp] === null) {
-                this.value.text = this.emptyLocaleObject('');
+
+        methods: {
+            localizedValue(text) {
+                return {
+                    ...this.value,
+                    [textProp]: this.localized
+                        ? localeObjectOrEmpty({ localeObject:this.value[textProp], locale:this.locale, value: text })
+                        : text
+                };
             }
         }
     }
