@@ -1,6 +1,6 @@
 import Fuse from 'fuse.js';
 
-class SearchStrategy {
+export default class SearchStrategy {
     constructor({list, minQueryLength, searchKeys}) {
         this.options = {
             caseSensitive:false,
@@ -29,5 +29,3 @@ class SearchStrategy {
         return this.fuse.search(querystring);
     }
 }
-
-export default SearchStrategy;

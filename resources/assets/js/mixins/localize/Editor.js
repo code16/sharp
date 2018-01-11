@@ -7,11 +7,6 @@ import { localeObjectOrEmpty } from "./utils";
 export default function ({ textProp }) {
     return {
         mixins: [localizeField],
-        props: {
-            type: String,
-            locale: String,
-            localized: Boolean
-        },
 
         computed: {
             localizedText() {

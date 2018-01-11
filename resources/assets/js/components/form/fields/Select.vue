@@ -73,7 +73,7 @@
 <script>
     import Multiselect from '../../Multiselect';
     import SharpCheck from './Check.vue';
-    import localize from '../../../mixins/localize/Multiselect';
+    import localize from '../../../mixins/localize/Select';
 
     export default {
         name: 'SharpSelect',

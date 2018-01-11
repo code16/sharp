@@ -52,8 +52,7 @@
     import { Localization, Debounce } from '../../../mixins';
     import { lang } from '../../../mixins/Localization';
 
-    import localize from '../../../mixins/localize/Multiselect';
-    import { testLocalizedAutocomplete } from "../../../mixins/localize/test/test-mixins";
+    import localize from '../../../mixins/localize/Autocomplete';
 
     export default {
         name:'SharpAutocomplete',
@@ -63,9 +62,7 @@
             [Loading.name]: Loading
         },
 
-        mixins: [Localization, Debounce, localize,
-            testLocalizedAutocomplete
-        ],
+        mixins: [Localization, Debounce, localize],
 
         props: {
             fieldKey: String,
@@ -127,11 +124,11 @@
                 return this.isRemote ? this.query.length < this.searchMinChars : false;
             },
             searchStrategy() {
-                return new SearchStrategy({
+                return !this.isRemote ? new SearchStrategy({
                     list: this.localValues,
                     minQueryLength: this.searchMinChars,
-                    searchKeys: this.searchKeys
-                });
+                    searchKeys: this.localizedSearchKeys
+                }) : null;
             },
         },
         methods: {
@@ -161,7 +158,6 @@
                 this.suggestions = this.searchStrategy.search(this.query);
                 this.state = 'searching';
             },
-
             initState() {
                 this.state = this.value ? 'valuated' : 'initial';
             },

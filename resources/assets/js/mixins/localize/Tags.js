@@ -1,10 +1,10 @@
-import localizeMultiselect from './Multiselect';
+import localizeSelect from './Select';
 import { localeObject } from "./utils";
 
 import { lang } from "../Localization";
 
 export default {
-    extends: localizeMultiselect,
+    extends: localizeSelect,
     methods: {
         localizeLabel(label) { // display
             return this.localized ? label[this.locale] || lang('form.tags.unknown_label') : label;

@@ -52,7 +52,6 @@
     import FieldsLayout from './FieldsLayout.vue';
 
     import localize from '../../mixins/localize/Form';
-    import { testLocalizedForm } from "../../mixins/localize/test/test-mixins";
 
     const noop = ()=>{};
 
@@ -60,9 +59,7 @@
         name:'SharpForm',
         extends: DynamicView,
 
-        mixins: [ActionEvents, ReadOnlyFields('fields'), Localization, localize,
-            testLocalizedForm
-        ],
+        mixins: [ActionEvents, ReadOnlyFields('fields'), Localization, localize],
 
         components: {
             [TabbedLayout.name]: TabbedLayout,
