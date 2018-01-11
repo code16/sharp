@@ -6410,9 +6410,6 @@ h6 > *:after, .bx--type-zeta > *,
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
   height: 2.5rem;
   margin-bottom: 1em;
 }
@@ -6440,6 +6437,7 @@ h6 > *:after, .bx--type-zeta > *,
   text-decoration: none;
   border: 1px solid #314255;
   color: #314255;
+  white-space: nowrap;
   font-size: 0.875rem;
   font-weight: 600;
   text-transform: uppercase;

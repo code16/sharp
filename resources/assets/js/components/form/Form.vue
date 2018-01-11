@@ -18,21 +18,25 @@
                             <sharp-fields-layout v-if="fields" :layout="column.fields" :visible="fieldVisible" ref="fieldLayout">
                                 <!-- field -->
                                 <template slot-scope="fieldLayout">
-                                    <sharp-field-display :field-key="fieldLayout.key"
-                                                         :context-fields="isReadOnly ? readOnlyFields : fields"
-                                                         :context-data="data"
-                                                         :field-layout="fieldLayout"
-                                                         :locale="locale"
-                                                         :error-identifier="fieldLayout.key"
-                                                         :config-identifier="fieldLayout.key"
-                                                         :update-data="updateData"
-                                                         :update-visibility="updateVisibility"
-                                                         ref="field">
-                                    </sharp-field-display>
+                                    <sharp-field-display
+                                        :field-key="fieldLayout.key"
+                                        :context-fields="isReadOnly ? readOnlyFields : fields"
+                                        :context-data="data"
+                                        :field-layout="fieldLayout"
+                                        :locale="locale"
+                                        :error-identifier="fieldLayout.key"
+                                        :config-identifier="fieldLayout.key"
+                                        :update-data="updateData"
+                                        :update-visibility="updateVisibility"
+                                        ref="field"
+                                    />
                                 </template>
                             </sharp-fields-layout>
                         </template>
                     </sharp-grid>
+                </template>
+                <template slot="nav-prepend">
+                    <sharp-locale-selector v-if="locales" class="mr-2" v-model="locale" :locales="locales" />
                 </template>
             </sharp-tabbed-layout>
         </template>
@@ -50,6 +54,7 @@
     import TabbedLayout from '../TabbedLayout'
     import Grid from '../Grid';
     import FieldsLayout from './FieldsLayout.vue';
+    import LocaleSelector from '../LocaleSelector.vue';
 
     import localize from '../../mixins/localize/Form';
 
@@ -65,6 +70,7 @@
             [TabbedLayout.name]: TabbedLayout,
             [FieldsLayout.name]: FieldsLayout,
             [Grid.name]: Grid,
+            [LocaleSelector.name]: LocaleSelector
         },
 
 
@@ -189,20 +195,15 @@
                 }
             },
 
-            setupActionBar({ disable=false ,setLocale=true }={}) {
+            setupActionBar({ disable=false }={}) {
                 const showSubmitButton = this.isCreation ? this.authorizations.create : this.authorizations.update;
 
                 this.actionsBus.$emit('setup', {
-                    locales: this.locales,
                     showSubmitButton: showSubmitButton && !disable,
                     showDeleteButton: !this.isCreation && this.authorizations.delete && !disable,
                     showBackButton: this.isReadOnly,
                     opType: this.isCreation ? 'create' : 'update'
                 });
-
-                if(setLocale && this.locales) {
-                    this.actionsBus.$emit('localeChanged', this.locale);
-                }
             },
             redirectToList({ restoreContext=true }={}) {
                 location.href = `/sharp/list/${this.entityKey}${restoreContext?'?restore-context=1':''}`
@@ -237,9 +238,6 @@
             },
             cancel() {
                 this.redirectToList();
-            },
-            localeChanged(newLocale) {
-                this.locale = newLocale;
             },
             reset({ entityKey }={}) {
                 if(entityKey && entityKey !== this.entityKey) return;

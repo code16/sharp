@@ -22,8 +22,6 @@
                     </template>
                 </collapse>
             </div>
-
-            <sharp-locale-selector v-if="locales" @input="l=>emitAction('localeChanged',l)" :value="locale" :locales="locales" />
         </template>
         <template slot="right">
             <button v-if="showSubmitButton" class="SharpButton SharpButton--accent" @click="emitAction('submit')">
@@ -37,7 +35,6 @@
     import ActionBar from './ActionBar';
     import ActionBarMixin from './ActionBarMixin';
 
-    import LocaleSelector from '../LocaleSelector';
     import { Dropdown, DropdownItem } from '../dropdown';
 
     import Collapse from '../Collapse';
@@ -51,16 +48,12 @@
         mixins: [ActionBarMixin, ActionEvents],
         components: {
             [ActionBar.name]:ActionBar,
-            [LocaleSelector.name]:LocaleSelector,
             [Dropdown.name]: Dropdown,
             [DropdownItem.name]: DropdownItem,
             Collapse
         },
         data() {
             return {
-                locales:null,
-                locale:'',
-
                 showSubmitButton: false,
                 showDeleteButton: false,
                 showBackButton: false,
@@ -88,13 +81,9 @@
             }
         },
         actions: {
-            localeChanged(newLocale) {
-                this.locale=newLocale
-            },
             setup(config) {
-                let { locales, showSubmitButton, showDeleteButton, showBackButton, opType } = config;
+                let { showSubmitButton, showDeleteButton, showBackButton, opType } = config;
 
-                this.locales = locales;
                 this.showSubmitButton = showSubmitButton;
                 this.showDeleteButton = showDeleteButton;
                 this.showBackButton = showBackButton;

@@ -1,5 +1,5 @@
 <template>
-    <sharp-multiselect class="SharpLocaleSelector"
+    <sharp-multiselect class="SharpLocaleSelector d-inline-block"
                        :options="locales"
                        :searchable="false"
                        :allow-empty="false"
