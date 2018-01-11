@@ -133,14 +133,12 @@
         },
         methods: {
             callApi(query) {
-                return this.remoteMethod === 'GET' ?
-                    axios.get(this.remoteEndpoint,{
-                        params: {
-                            [this.remoteSearchAttribute]:query
-                        }
-                    }): axios.post(this.remoteEndpoint,{
-                        [this.remoteSearchAttribute]:query
-                    })
+                let params = { [this.remoteSearchAttribute]:query };
+                if(this.localized)
+                    params.locale = this.locale;
+                return this.remoteMethod === 'GET'
+                    ? axios.get(this.remoteEndpoint, { params })
+                    : axios.post(this.remoteEndpoint, params)
             },
 
             updateSuggestions(query) {
