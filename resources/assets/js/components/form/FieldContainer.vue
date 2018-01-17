@@ -1,7 +1,7 @@
 <template>
     <div class="SharpFieldContainer SharpForm__form-item" :class="formGroupClasses" :style="extraStyle">
         <label class="SharpForm__label" v-show="label" @click="triggerFocus">
-            {{label}} <span v-if="fieldProps.localized" class="SharpFieldContainer__label-locale">({{locale}})</span>
+            {{label}} <small v-if="fieldProps.localized" class="SharpFieldContainer__label-locale p-1">{{locale}}</small>
         </label>
         <sharp-field v-bind="exposedProps"
                      @error="setError" 

@@ -1,4 +1,7 @@
 .SharpLocaleSelector {
   text-transform: uppercase;
   width: 4.5rem;
+  &, .multiselect__tags {
+    border-radius: 10px;
+  }
 }
