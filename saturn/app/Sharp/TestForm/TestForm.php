@@ -97,6 +97,7 @@ class TestForm extends SharpForm
                         ->setHasTime(false)
                 )->addItemField(
                     SharpFormTextField::make("text")
+                        ->setLocalized()
                         ->setLabel("Text")
                 )
 
