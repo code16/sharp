@@ -132,17 +132,9 @@
 
 
       &--has-error {
-        //padding-right: 0.5em;
-        &:after {
-          content: "•";
-          color: red;
-          padding-left:0.5rem;
-          display: inline-block;
-          text-decoration: none !important;
-        }
+        @extend .error-dot;
       }
     }
-
   }
 
 }

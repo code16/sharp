@@ -36,7 +36,7 @@
                     </sharp-grid>
                 </template>
                 <template slot="nav-prepend">
-                    <sharp-locale-selector v-if="locales" class="mr-2" v-model="locale" :locales="locales" />
+                    <sharp-locale-selector v-if="locales" class="mr-2" v-model="locale" :locales="locales" :errors="localeSelectorErrors"/>
                 </template>
             </sharp-tabbed-layout>
         </template>
@@ -135,6 +135,16 @@
 
             downloadLinkBase() {
                 return `${API_PATH}/download/${this.entityKey}/${this.instanceId}`;
+            },
+
+            localeSelectorErrors() {
+                return Object.keys(this.errors).reduce((res,errorKey)=>{
+                    let errorLocale = this.locales.find(l=>errorKey.endsWith(`.${l}`));
+                    if(errorLocale) {
+                        res[errorLocale] = true;
+                    }
+                    return res;
+                },{})
             }
         },
         methods: {
