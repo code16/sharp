@@ -76,10 +76,14 @@
 
       white-space: nowrap;
 
-      &:focus, &:hover {
+      &:focus {
         background-color: $brand-01;
         color: $inverse-01;
         outline: 1px solid transparent;
+      }
+      &:hover {
+        background-color: $brand-02;
+        color: $inverse-01;
       }
     }
   }

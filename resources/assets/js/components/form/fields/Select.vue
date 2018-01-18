@@ -161,5 +161,10 @@
                 this.$emit('input', optId);
             }
         },
+        created() {
+            if(!this.clearable && this.value == null && this.options.length>0) {
+                this.$emit('input', this.options[0].id);
+            }
+        }
     }
 </script>

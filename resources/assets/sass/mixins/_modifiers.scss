@@ -10,10 +10,15 @@
     }
   }
   .SharpDropdown__link:focus,
-  .SharpDropdown__link:hover,
-  .multiselect__option--highlight
+  .multiselect__option--selected
   {
     background-color: $brand-03;
+  }
+
+  .SharpDropdown__link:hover,
+  .multiselect__option--highlight {
+    color: $text-01;
+    background-color: lighten($brand-03, 20%);
   }
 }
 
