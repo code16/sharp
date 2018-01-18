@@ -56,7 +56,7 @@
     import FieldsLayout from './FieldsLayout.vue';
     import LocaleSelector from '../LocaleSelector.vue';
 
-    import localize from '../../mixins/localize/Form';
+    import localize from '../../mixins/localize/form';
 
     const noop = ()=>{};
 

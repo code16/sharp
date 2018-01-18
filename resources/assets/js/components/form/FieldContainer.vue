@@ -49,20 +49,12 @@
                 if(this.state === 'error')
                     this.clear();
             },
-            '$form.errors': {
-                handler(errors) {
-                    let error = errors[this.mergedErrorIdentifier];
-                    if(error == null) {
-                        this.clear();
-                    }
-                    else if(Array.isArray(error)) {
-                        this.setError(error[0]);
-                    }
-                    else {
-                        util.error(`FieldContainer : Not processable error "${this.mergedErrorIdentifier}" : `, error);
-                    }
-                }
+            '$form.errors'(errors) {
+                this.updateError(errors);
             },
+            locale() {
+                this.updateError(this.$form.errors);
+            }
         },
         computed: {
             formGroupClasses() {
@@ -83,6 +75,18 @@
             }
         },
         methods: {
+            updateError(errors) {
+                let error = errors[this.mergedErrorIdentifier];
+                if(error == null) {
+                    this.clear();
+                }
+                else if(Array.isArray(error)) {
+                    this.setError(error[0]);
+                }
+                else {
+                    util.error(`FieldContainer : Not processable error "${this.mergedErrorIdentifier}" : `, error);
+                }
+            },
             setError(error) {
                 this.state = 'error';
                 this.stateMessage = error;

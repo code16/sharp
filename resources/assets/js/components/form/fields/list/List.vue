@@ -28,14 +28,15 @@
                             <template v-else>
                                 <sharp-list-item :layout="fieldLayout.item" :error-identifier="i">
                                     <template slot-scope="itemFieldLayout">
-                                        <sharp-field-display :field-key="itemFieldLayout.key"
-                                                             :context-fields="updatedItemFields"
-                                                             :context-data="listItemData"
-                                                             :error-identifier="itemFieldLayout.key"
-                                                             :config-identifier="itemFieldLayout.key"
-                                                             :update-data="update(i)"
-                                                             :locale="locale">
-                                        </sharp-field-display>
+                                        <sharp-field-display
+                                            :field-key="itemFieldLayout.key"
+                                            :context-fields="updatedItemFields"
+                                            :context-data="listItemData"
+                                            :error-identifier="itemFieldLayout.key"
+                                            :config-identifier="itemFieldLayout.key"
+                                            :update-data="update(i)"
+                                            :locale="locale"
+                                        />
                                     </template>
                                 </sharp-list-item>
                                 <button v-if="!disabled && removable" class="SharpButton SharpButton--danger SharpButton--sm mt-3" @click="remove(i)">{{ l('form.list.remove_button') }}</button>
@@ -65,8 +66,8 @@
     import Template from '../../../Template';
 
     import { Localization, ReadOnlyFields } from '../../../../mixins';
+    import localize from '../../../../mixins/localize/form';
 
-    const noop = ()=>{};
 
     export default {
         name: 'SharpList',
@@ -79,16 +80,6 @@
             Draggable,
             [ListItem.name]:ListItem,
             [Template.name]:Template
-        },
-
-        provide() {
-            return {
-                uploadUtils: {
-                    getDownloadLink(fieldKey) {
-                        return `${this.$form.downloadLinkBase}/${this.fieldKey}.${fieldKey}`
-                    }
-                }
-            }
         },
 
         props: {
@@ -128,14 +119,6 @@
                 list:[],
                 dragActive: false,
                 lastIndex: 0
-            }
-        },
-        watch: {
-            locale() {
-                if(this.value == null) {
-                    this.initList();
-                }
-                else this.list = this.value;
             }
         },
         computed: {

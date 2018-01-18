@@ -49612,7 +49612,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__FieldsLayout_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__FieldsLayout_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__LocaleSelector_vue__ = __webpack_require__(285);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__LocaleSelector_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__LocaleSelector_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__mixins_localize_Form__ = __webpack_require__(288);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__mixins_localize_form__ = __webpack_require__(569);
 
 
 var _components;
@@ -49687,7 +49687,7 @@ var noop = function noop() {};
     name: 'SharpForm',
     extends: __WEBPACK_IMPORTED_MODULE_4__DynamicViewMixin__["a" /* default */],
 
-    mixins: [__WEBPACK_IMPORTED_MODULE_3__mixins__["a" /* ActionEvents */], Object(__WEBPACK_IMPORTED_MODULE_3__mixins__["i" /* ReadOnlyFields */])('fields'), __WEBPACK_IMPORTED_MODULE_3__mixins__["g" /* Localization */], __WEBPACK_IMPORTED_MODULE_9__mixins_localize_Form__["a" /* default */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_3__mixins__["a" /* ActionEvents */], Object(__WEBPACK_IMPORTED_MODULE_3__mixins__["i" /* ReadOnlyFields */])('fields'), __WEBPACK_IMPORTED_MODULE_3__mixins__["g" /* Localization */], __WEBPACK_IMPORTED_MODULE_9__mixins_localize_form__["a" /* default */]],
 
     components: (_components = {}, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_5__TabbedLayout___default.a.name, __WEBPACK_IMPORTED_MODULE_5__TabbedLayout___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_7__FieldsLayout_vue___default.a.name, __WEBPACK_IMPORTED_MODULE_7__FieldsLayout_vue___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_6__Grid___default.a.name, __WEBPACK_IMPORTED_MODULE_6__Grid___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_8__LocaleSelector_vue___default.a.name, __WEBPACK_IMPORTED_MODULE_8__LocaleSelector_vue___default.a), _components),
 
@@ -51607,26 +51607,7 @@ if (false) {
 }
 
 /***/ }),
-/* 288 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(24);
-
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-    methods: {
-        fieldLocalizedValue: function fieldLocalizedValue(key, value) {
-            var field = this.fields[key];
-            if (field.localized && Object(__WEBPACK_IMPORTED_MODULE_0__utils__["b" /* isLocalizableValueField */])(field)) {
-                return Object(__WEBPACK_IMPORTED_MODULE_0__utils__["d" /* localeObjectOrEmpty */])({ localeObject: this.data[key], locale: this.locale, value: value });
-            }
-            return value;
-        }
-    }
-});
-
-/***/ }),
+/* 288 */,
 /* 289 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -51922,18 +51903,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: function value() {
             if (this.state === 'error') this.clear();
         },
-
-        '$form.errors': {
-            handler: function handler(errors) {
-                var error = errors[this.mergedErrorIdentifier];
-                if (error == null) {
-                    this.clear();
-                } else if (Array.isArray(error)) {
-                    this.setError(error[0]);
-                } else {
-                    __WEBPACK_IMPORTED_MODULE_2__util__["a" /* error */]('FieldContainer : Not processable error "' + this.mergedErrorIdentifier + '" : ', error);
-                }
-            }
+        '$form.errors': function $formErrors(errors) {
+            this.updateError(errors);
+        },
+        locale: function locale() {
+            this.updateError(this.$form.errors);
         }
     },
     computed: {
@@ -51954,6 +51928,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
     },
     methods: {
+        updateError: function updateError(errors) {
+            var error = errors[this.mergedErrorIdentifier];
+            if (error == null) {
+                this.clear();
+            } else if (Array.isArray(error)) {
+                this.setError(error[0]);
+            } else {
+                __WEBPACK_IMPORTED_MODULE_2__util__["a" /* error */]('FieldContainer : Not processable error "' + this.mergedErrorIdentifier + '" : ', error);
+            }
+        },
         setError: function setError(error) {
             this.state = 'error';
             this.stateMessage = error;
@@ -74110,6 +74094,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Template__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Template___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__Template__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mixins__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mixins_localize_form__ = __webpack_require__(569);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _components;
@@ -74177,6 +74162,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -74184,7 +74170,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-var noop = function noop() {};
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'SharpList',
@@ -74196,17 +74181,6 @@ var noop = function noop() {};
     components: (_components = {
         Draggable: __WEBPACK_IMPORTED_MODULE_0_vuedraggable___default.a
     }, _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_1__ListItem___default.a.name, __WEBPACK_IMPORTED_MODULE_1__ListItem___default.a), _defineProperty(_components, __WEBPACK_IMPORTED_MODULE_2__Template___default.a.name, __WEBPACK_IMPORTED_MODULE_2__Template___default.a), _components),
-
-    provide: function provide() {
-        return {
-            uploadUtils: {
-                getDownloadLink: function getDownloadLink(fieldKey) {
-                    return this.$form.downloadLinkBase + '/' + this.fieldKey + '.' + fieldKey;
-                }
-            }
-        };
-    },
-
 
     props: {
         fieldKey: String,
@@ -74248,13 +74222,6 @@ var noop = function noop() {};
         };
     },
 
-    watch: {
-        locale: function locale() {
-            if (this.value == null) {
-                this.initList();
-            } else this.list = this.value;
-        }
-    },
     computed: {
         disabled: function disabled() {
             return this.readOnly || this.dragActive;
@@ -104402,6 +104369,39 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 556 */,
+/* 557 */,
+/* 558 */,
+/* 559 */,
+/* 560 */,
+/* 561 */,
+/* 562 */,
+/* 563 */,
+/* 564 */,
+/* 565 */,
+/* 566 */,
+/* 567 */,
+/* 568 */,
+/* 569 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(24);
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    methods: {
+        fieldLocalizedValue: function fieldLocalizedValue(key, value) {
+            var field = this.fields[key];
+            if (field.localized && Object(__WEBPACK_IMPORTED_MODULE_0__utils__["b" /* isLocalizableValueField */])(field)) {
+                return Object(__WEBPACK_IMPORTED_MODULE_0__utils__["d" /* localeObjectOrEmpty */])({ localeObject: this.data[key], locale: this.locale, value: value });
+            }
+            return value;
+        }
+    }
+});
 
 /***/ })
 ],[139]);
