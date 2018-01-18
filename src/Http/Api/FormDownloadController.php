@@ -25,6 +25,8 @@ class FormDownloadController extends ApiController
      * @param string $instanceId
      * @param string $formUploadFieldKey
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
+     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
     public function show($entityKey, $instanceId, $formUploadFieldKey)
     {
