@@ -1,0 +1,18 @@
+@mixin create-dot($char) {
+  &:after {
+    content: $char;
+    color: red;
+    padding-left:0.5rem;
+    display: inline-block;
+    text-decoration: none !important;
+    font-weight: normal;
+  }
+}
+
+.error-dot {
+  @include create-dot('•');
+}
+
+.error-dot--partial {
+  @include create-dot('◦');
+}
