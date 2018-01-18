@@ -12,7 +12,7 @@ exports[`tags-field can mout Tags field 1`] = `
 		<div class="multiselect__content-wrapper" style="max-height: 300px; display: none;">
 			<ul class="multiselect__content" style="display: inline-block;">
 				<!---->
-				<li class="multiselect__element"><span data-select="" data-selected="" data-deselect="" class="multiselect__option multiselect__option--highlight"><span>AAA</span></span>
+				<li class="multiselect__element"><span data-select="" data-selected="" data-deselect="" class="multiselect__option"><span>AAA</span></span>
 					<!---->
 				</li>
 				<li class="multiselect__element"><span data-select="" data-selected="" data-deselect="" class="multiselect__option"><span>BBB</span></span>

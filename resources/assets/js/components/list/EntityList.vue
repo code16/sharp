@@ -365,8 +365,15 @@
                 let { authorization:auth } = this.config.state;
                 return Array.isArray(auth) ? auth.indexOf(instanceId) !== -1 : auth;
             },
+            tryParseNumber(val) {
+                if(Array.isArray(val)) {
+                    return val.map(this.tryParseNumber);
+                }
+                let n = Number(val);
+                return isNaN(Number(n)) ? val : n;
+            },
             filterValueOrDefault(val, filter) {
-                return val || filter.default || (filter.multiple?[]:null);
+                return val ? this.tryParseNumber(val) : (filter.default || (filter.multiple?[]:null));
             },
             instanceCommands({[this.idAttr]:instanceId}) {
                 return this.commandsByInstanceId[instanceId]// || [];

@@ -95,8 +95,11 @@
       .multiselect__option {
         @extend .SharpDropdown__link;
 
-        &--highlight {
+        &--selected {
           @extend .SharpDropdown__link:focus;
+        }
+        &--highlight {
+          @extend .SharpDropdown__link:hover;
         }
       }
     }
