@@ -32,7 +32,7 @@ As we can see in this example, we defined two widgets giving them a mandatory `k
 Every widget has the optional following setters:
 
 - `setTitle(string $title)` for the widget title displayed above it
-- `setLink(string $entityKey, string $instanceId = null)` to make the whole widget linked to a specific entity. To link to the Entity List, pass the `$entityKey`, and add the `$instanceId` to link to the Entity Form.
+- `setLink(string $entityKey, string $instanceId = null, array $querystring = [])` to make the whole widget linked to a specific entity. To link to the Entity List, pass the `$entityKey`, and add the `$instanceId` to link to the Entity Form.
 
 And here's the full list and documentation of each widget available, for the specifics:
 

@@ -52,13 +52,14 @@ abstract class SharpWidget
     /**
      * @param string $entityKey
      * @param string|null $instanceId
+     * @param array $querystring
      * @return $this
      */
-    public function setLink(string $entityKey, string $instanceId = null)
+    public function setLink(string $entityKey, string $instanceId = null, array $querystring = [])
     {
         $this->link = $instanceId
-            ? route("code16.sharp.edit", compact('entityKey', 'instanceId'))
-            : route("code16.sharp.list", compact('entityKey'));
+            ? route("code16.sharp.edit", compact('entityKey', 'instanceId') + $querystring)
+            : route("code16.sharp.list", compact('entityKey') + $querystring);
 
         return $this;
     }
