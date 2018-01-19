@@ -37,10 +37,10 @@
 
             return h(Fields[this.fieldType],{
                 props : {
-                    fieldKey:this.fieldKey,
-                    fieldLayout:this.fieldLayout,
-                    value:this.value,
-                    locale:this.locale,
+                    fieldKey: this.fieldKey,
+                    fieldLayout: this.fieldLayout,
+                    value: this.value,
+                    locale: this.locale,
                     uniqueIdentifier: this.uniqueIdentifier,
                     fieldConfigIdentifier: this.fieldConfigIdentifier,
                     ...fieldProps

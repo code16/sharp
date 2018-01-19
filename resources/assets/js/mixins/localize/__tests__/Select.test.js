@@ -1,13 +1,14 @@
 import localizeSelect from '../Select';
 import localizeField from '../field';
 import { mount } from 'vue-test-utils';
+import { mockInjections } from "./mock";
 
 describe('localize-select', ()=>{
     let wrapper;
     beforeEach(()=>{
         wrapper = mount({
             mixins:[localizeSelect]
-        })
+        }, { provide:mockInjections({ localized:true }) })
     });
 
     test('has field mixin', ()=>{

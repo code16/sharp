@@ -10,7 +10,11 @@ export default function ({ textProp }) {
 
         computed: {
             localizedText() {
-                return this.value[textProp] !== null ? this.value[textProp][this.locale] : '';
+                return (
+                    this.isLocalized
+                    ? this.value[textProp] !== null ? this.value[textProp][this.locale] : ''
+                    : this.value[textProp]
+                );
             }
         },
 
@@ -18,7 +22,7 @@ export default function ({ textProp }) {
             localizedValue(text) {
                 return {
                     ...this.value,
-                    [textProp]: this.localized
+                    [textProp]: this.isLocalized
                         ? localeObjectOrEmpty({ localeObject:this.value[textProp], locale:this.locale, value: text })
                         : text
                 };

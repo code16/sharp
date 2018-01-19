@@ -1,6 +1,6 @@
 import localizeField from '../field';
 import { mount } from 'vue-test-utils';
-import Vue from 'vue';
+import { mockInjections } from "./mock";
 
 describe('localize-field', ()=>{
     let wrapper;
@@ -8,22 +8,29 @@ describe('localize-field', ()=>{
         wrapper = mount({
             mixins: [localizeField]
         }, {
-            propsData: { locale: 'fr', localized: true },
-            provide: {
-                $form: new Vue({ data:()=>({ locales:['en', 'fr'] })})
-            }
+            propsData: { locale: 'fr', localized: false },
+            provide: mockInjections({ locales:['en', 'fr'], localized: false })
         });
     });
 
     test('has locales', ()=>{
         expect(wrapper.vm.locales).toEqual(['en', 'fr']);
 
-        wrapper.vm._provided.$form.locales = ['en'];
+        wrapper.vm.$form.locales = ['en'];
 
         expect(wrapper.vm.locales).toEqual(['en']);
     });
 
+    test('isLocalized', ()=>{
+        expect(wrapper.vm.isLocalized).toEqual(false);
+        wrapper.vm.$form.localized = true;
+        wrapper.update();
+        expect(wrapper.vm.isLocalized).toEqual(false);
+        wrapper.setProps({ localized:true });
+        expect(wrapper.vm.isLocalized).toEqual(true);
+    });
+
     test('has props', ()=>{
-        expect(wrapper.vm.$props).toMatchObject({ locale:'fr', localized:true });
+        expect(wrapper.vm.$props).toMatchObject({ locale:'fr', localized:false });
     });
 });

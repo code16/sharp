@@ -36,7 +36,7 @@
                     </sharp-grid>
                 </template>
                 <template slot="nav-prepend">
-                    <sharp-locale-selector v-if="locales" class="mr-2" v-model="locale" :locales="locales" :errors="localeSelectorErrors"/>
+                    <sharp-locale-selector v-if="localized" class="mr-2" v-model="locale" :locales="locales" :errors="localeSelectorErrors"/>
                 </template>
             </sharp-tabbed-layout>
         </template>
@@ -102,7 +102,7 @@
 
                 errors:{},
                 locale: '',
-                locales: [],
+                locales: null,
 
                 fieldVisible: {},
                 curFieldsetId:0,
@@ -117,7 +117,7 @@
                 return path;
             },
             localized() {
-                return Array.isArray(this.locales);
+                return Array.isArray(this.locales) && !!this.locales.length;
             },
             isCreation() {
                 return !this.instanceId;
@@ -148,12 +148,6 @@
             }
         },
         methods: {
-            fieldErrors(key) {
-                if(this.fields[key].localized) {
-                    return (this.errors[key]||{})[this.locale];
-                }
-                return this.errors[key];
-            },
             updateData(key,value) {
                 this.$set(this.data,key,this.fieldLocalizedValue(key, value));
             },
@@ -168,10 +162,12 @@
                 this.locale = locales && locales[0];
                 this.authorizations = authorizations;
 
-                this.fieldVisible = Object.keys(this.fields).reduce((res, fKey) => {
-                    res[fKey] = true;
-                    return res;
-                },{});
+                if(fields) {
+                    this.fieldVisible = Object.keys(this.fields).reduce((res, fKey) => {
+                        res[fKey] = true;
+                        return res;
+                    },{});
+                }
             },
             handleError({response}) {
                 if(response.status===422)
@@ -179,6 +175,7 @@
             },
 
             patchLayout(layout) {
+                if(!layout)return;
                 let curFieldsetId = 0;
                 let mapFields = layout => {
                     if(layout.legend)

@@ -9,7 +9,6 @@ jest.mock('../utils', ()=>({
 }));
 
 
-
 describe('localize-form', ()=>{
     let wrapper;
     beforeEach(()=>{
@@ -21,7 +20,8 @@ describe('localize-form', ()=>{
                     fields: {
                         title: { type:'text', localized: false }
                     },
-                    locale: 'en'
+                    locale: 'en',
+                    localized: true
                 }
             },
             render:h=>h()

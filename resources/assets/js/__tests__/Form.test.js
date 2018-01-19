@@ -18,7 +18,21 @@ import moxios from 'moxios';
 import {MockInjections, MockI18n} from "./utils";
 import { nextRequestFulfilled } from './utils/moxios-utils';
 
-import localizeForm from '../mixins/localize/form';
+import { shallow } from 'vue-test-utils';
+
+
+
+function mock() {
+    return {
+        components: {
+            SharpForm: {
+                extends: Form,
+                beforeCreate() { this.$options.render = h=>h() },
+                created() { this.init = ()=>{} }
+            }
+        }
+    }
+}
 
 describe('sharp-form', ()=>{
     Vue.use(MockI18n);
@@ -203,6 +217,14 @@ describe('sharp-form', ()=>{
         expect($form.apiPath).toBe('/test-api/form/spaceship/10');
     });
 
+    test('localized', async ()=>{
+        let $form = await createVm(mock());
+        expect($form.localized).toBe(false);
+        $form.locales = ['fr', 'en'];
+        await Vue.nextTick();
+        expect($form.localized).toBe(true);
+    });
+
     test('detect when is creation', async ()=>{
         let $form = await createVm();
 
@@ -294,6 +316,16 @@ describe('sharp-form', ()=>{
         Vue.set($form.errors.field, 'cleared', true);
 
         expect($form.hasErrors).toBe(false);
+    });
+
+    test('locale selector errors', async ()=> {
+        let $form = await createVm();
+        $form.locales = ['fr', 'en', 'de'];
+        $form.errors = {
+            'label': 'error',
+            'title.fr': 'error',
+        };
+        expect($form.localeSelectorErrors).toEqual({ 'fr':true });
     });
 
     test('expose appropriate props to layout components', async () => {
@@ -411,12 +443,12 @@ describe('sharp-form', ()=>{
                 }
             }
         });
-
+        $form.fieldLocalizedValue = jest.fn(()=>'fieldLocalizedValue');
         expect($form.data.title).toBe(null);
 
         $form.updateData('title', 'text');
-
-        expect($form.data.title).toBe('text');
+        expect($form.fieldLocalizedValue).toHaveBeenCalledWith('title', 'text');
+        expect($form.data.title).toBe('fieldLocalizedValue');
     });
 
 
@@ -486,7 +518,8 @@ describe('sharp-form', ()=>{
                     authorizations: {
                         create: true,
                         update: false
-                    }
+                    },
+                    locales: ['en', 'fr']
                 }
             }
         });
@@ -516,8 +549,16 @@ describe('sharp-form', ()=>{
             authorizations: {
                 create: true,
                 update: false
-            }
+            },
+            locales: ['en', 'fr'],
+            locale: 'en'
         });
+
+        $form.patchLayout = ()=>{};
+        $form.ready = false;
+        $form.mount({ fields:{}, locales:null });
+
+        expect($form.locale).toBe(null);
     });
 
     test('mount async', async () => {

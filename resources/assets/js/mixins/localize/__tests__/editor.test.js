@@ -2,6 +2,7 @@ import localizeEditor from '../editor';
 import localizeField from '../field';
 import { localeObjectOrEmpty } from "../utils";
 import { mount } from 'vue-test-utils';
+import { mockInjections } from "./mock";
 
 jest.mock('../utils', ()=>({
     localeObjectOrEmpty:jest.fn(()=>'localeObjectOrEmpty')
@@ -17,7 +18,10 @@ describe('localize-editor', ()=>{
                     value: { text: null }
                 }
             }
-        }, { propsData: { localized:false, locale:'en' } });
+        }, {
+            propsData: { localized:false, locale:'en' },
+            provide: mockInjections({ locales:['en', 'fr'], localized: true })
+        });
     });
 
     test('has localize field mixin', ()=>{
@@ -25,6 +29,10 @@ describe('localize-editor', ()=>{
     });
 
     test('localizedText', ()=>{
+        expect(wrapper.vm.localizedText).toEqual(null);
+        wrapper.setProps({
+            localized: true
+        });
         expect(wrapper.vm.localizedText).toEqual('');
         wrapper.setData({
             value: { text: { en:'english text' } }

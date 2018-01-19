@@ -27,7 +27,7 @@ describe('localize-utils', ()=>{
         expect(isLocalizableValueField({ type:'markdown' })).toBe(false);
         expect(isLocalizableValueField({ type:'wysiwyg' })).toBe(false);
     });
-    test('localeObjectlocaleObject', ()=>{
+    test('localeObject', ()=>{
         expect(localeObject({ locales:['fr', 'en'] })).toEqual({ fr:null, en:null });
         expect(localeObject({ locales:['fr', 'en'], resolve:l=>l })).toEqual({ fr:'fr', en:'en' });
     });

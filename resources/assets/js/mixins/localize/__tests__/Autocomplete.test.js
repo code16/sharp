@@ -1,7 +1,8 @@
 import localizeAutocomplete from '../Autocomplete';
 import localizeField from '../field';
 import { mount } from 'vue-test-utils';
-import Vue from 'vue';
+
+import { mockInjections } from "./mock";
 
 describe('localize-autocomplete', ()=>{
     let wrapper;
@@ -14,9 +15,7 @@ describe('localize-autocomplete', ()=>{
             })
         }, {
             propsData: { localized: false, locale:'en'  },
-            provide: {
-                $form: new Vue({ data:()=>({ locales:['en', 'fr'] }) })
-            }
+            provide: mockInjections({ locales: ['en', 'fr'], localized:true })
         });
     });
 

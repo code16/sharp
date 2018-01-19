@@ -2,7 +2,7 @@ import localizeTags from '../Tags';
 import localizeSelect from '../Select';
 import { mount } from 'vue-test-utils';
 import { localeObject } from "../utils";
-import Vue from 'vue';
+import { mockInjections } from "./mock";
 
 
 jest.mock('../../Localization', ()=>({
@@ -16,9 +16,7 @@ describe('localize-select', ()=>{
     let wrapper;
     beforeEach(()=>{
         wrapper = mount(localizeTags, {
-            provide: {
-                $form: new Vue({ data:()=>({ locales:['en', 'fr'] })})
-            }
+            provide: mockInjections({ locales:['en', 'fr'], localized: true })
         })
     });
 
