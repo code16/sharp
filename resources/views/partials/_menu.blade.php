@@ -7,8 +7,7 @@
 
     <ul role="menubar" class="SharpLeftNav__list" aria-hidden="false" v-cloak>
         <sharp-nav-item disabled>
-            <span>
-                <i class="fa fa-fw fa-user"></i>
+            <span title="{{ $sharpMenu->user }}">
                 {{ $sharpMenu->user }}
             </span>
             <a href="{{ route('code16.sharp.logout') }}"><i class="fa fa-sign-out"></i></a>
