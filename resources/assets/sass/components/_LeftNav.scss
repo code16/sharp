@@ -105,6 +105,13 @@
         transition: background-color $transition--base;
         padding: .75rem 1.5rem .75rem rem(59px);
 
+        & > span {
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          width: 100%;
+        }
+
         &:focus {
           outline: 1px solid transparent;
           background-color: $color__gray-2;
