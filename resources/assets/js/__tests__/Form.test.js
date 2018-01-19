@@ -18,6 +18,8 @@ import moxios from 'moxios';
 import {MockInjections, MockI18n} from "./utils";
 import { nextRequestFulfilled } from './utils/moxios-utils';
 
+import localizeForm from '../mixins/localize/form';
+
 describe('sharp-form', ()=>{
     Vue.use(MockI18n);
     MockI18n.mockLangFunction();
@@ -899,7 +901,6 @@ describe('sharp-form', ()=>{
         expect($form.pendingJobs).toEqual([]);
         expect(updateActionsStateEmitted).toHaveBeenLastCalledWith(null);
     });
-
 });
 
 async function createVm(customOptions={}) {

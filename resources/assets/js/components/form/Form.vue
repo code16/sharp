@@ -64,7 +64,7 @@
         name:'SharpForm',
         extends: DynamicView,
 
-        mixins: [ActionEvents, ReadOnlyFields('fields'), Localization, localize],
+        mixins: [ActionEvents, ReadOnlyFields('fields'), Localization, localize('fields') ],
 
         components: {
             [TabbedLayout.name]: TabbedLayout,

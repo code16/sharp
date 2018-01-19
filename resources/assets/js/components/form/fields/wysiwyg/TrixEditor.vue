@@ -23,7 +23,7 @@
 
     import TrixCustomToolbar from './TrixCustomToolbar.vue';
 
-    import localize from '../../../../mixins/localize/Editor';
+    import localize from '../../../../mixins/localize/editor';
 
     export default {
         name:'SharpTrix',

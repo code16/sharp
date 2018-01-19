@@ -12,7 +12,6 @@ export function acceptCondition (fields, data, condition) {
 
 const getValue = (form, field, value, locale) => {
     if(form.localized && field.localized && value && isLocalizableValueField(field)) {
-        //console.log(form, field, value, locale);
         return value[locale];
     }
 

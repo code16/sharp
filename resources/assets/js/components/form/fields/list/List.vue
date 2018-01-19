@@ -74,7 +74,7 @@
 
         inject: ['$form'],
 
-        mixins: [ Localization, ReadOnlyFields('itemFields') ],
+        mixins: [ Localization, ReadOnlyFields('itemFields'), localize('itemFields') ],
 
         components: {
             Draggable,
@@ -158,13 +158,7 @@
             },
             createItem() {
                 return this.itemFieldsKeys.reduce((res, fieldKey) => {
-                    if(this.$form.localized && this.itemFields[fieldKey].localized) {
-                        res[fieldKey] = this.$form.locales.reduce((res, l)=>{
-                            res[l] = null;
-                            return res;
-                        },{});
-                    }
-                    else res[fieldKey] = null;
+                    res[fieldKey] = null;
                     return res;
                 },{
                     [this.itemIdAttribute]:null,
@@ -183,10 +177,7 @@
             },
             update(i) {
                 return (key, value) => {
-                    if(this.itemFields[key].localized) {
-                        this.list[i][key][this.locale] = value;
-                    }
-                    else this.list[i][key] = value;
+                    this.$set(this.list[i], key, this.fieldLocalizedValue(key, value, this.list[i]));
                 }
             },
             collapsedItemData(itemData) {

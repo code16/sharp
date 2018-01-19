@@ -20,7 +20,7 @@
     import Widget from './MarkdownWidget';
 
     import { lang } from '../../../../mixins/Localization';
-    import localize from '../../../../mixins/localize/Editor';
+    import localize from '../../../../mixins/localize/editor';
 
     const noop = ()=>{};
 

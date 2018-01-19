@@ -5287,6 +5287,24 @@ h6 > *:after, .bx--type-zeta > *,
   visibility: hidden !important;
 }
 
+#sharp-app .error-dot:after, #sharp-app .SharpTabs__nav .SharpTabs__nav-link--has-error:after, #sharp-app .SharpLocaleSelector--has-error .multiselect__single:after {
+  content: "\2022";
+  color: red;
+  padding-left: 0.5rem;
+  display: inline-block;
+  text-decoration: none !important;
+  font-weight: normal;
+}
+
+#sharp-app .error-dot--partial:after, #sharp-app .SharpLocaleSelector--has-partial-error .multiselect__single:after {
+  content: "\25E6";
+  color: red;
+  padding-left: 0.5rem;
+  display: inline-block;
+  text-decoration: none !important;
+  font-weight: normal;
+}
+
 #sharp-app .SharpButton, #sharp-app .SharpModal .modal .modal-footer .btn {
   font-family: inherit;
   overflow: hidden;
@@ -6515,14 +6533,6 @@ h6 > *:after, .bx--type-zeta > *,
   border-color: #314255;
 }
 
-#sharp-app .SharpTabs__nav .SharpTabs__nav-link--has-error:after {
-  content: "\2022";
-  color: red;
-  padding-left: 0.5rem;
-  display: inline-block;
-  text-decoration: none !important;
-}
-
 #sharp-app .SharpLocaleSelector {
   text-transform: uppercase;
   width: 4.5rem;
@@ -6530,6 +6540,10 @@ h6 > *:after, .bx--type-zeta > *,
 
 #sharp-app .SharpLocaleSelector, #sharp-app .SharpLocaleSelector .multiselect__tags {
   border-radius: 10px;
+}
+
+#sharp-app .SharpLocaleSelector--has-error, #sharp-app .SharpLocaleSelector--has-partial-error {
+  width: 5.5rem;
 }
 
 #sharp-app .multiselect.multiselect--active .multiselect__content {

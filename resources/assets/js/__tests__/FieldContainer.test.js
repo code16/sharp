@@ -15,6 +15,7 @@ describe('field-container', () => {
                     field-key="title"
                     field-type="test-field"
                     :field-props="fieldProps || {}"
+                    :locale="locale"
                     label="My beautiful field"
                     help-message="Do not fill this field"
                     error-identifier="title"
@@ -140,6 +141,20 @@ describe('field-container', () => {
         await Vue.nextTick();
         expect($fieldContainer.setError).toHaveBeenCalledWith('Error message');
     });
+
+    test('update errors on locale changed', async () => {
+        let $fieldContainer = await createVm({
+            data:()=>({locale:'en'})
+        });
+        let { $root:vm, $form } = $fieldContainer;
+
+        $fieldContainer.updateError = jest.fn();
+        $form.errors = { error1: 'text' };
+        vm.locale = 'fr';
+
+        await Vue.nextTick();
+        expect($fieldContainer.updateError).toHaveBeenCalledWith({ error1: 'text' });
+    });
 });
 
 async function createVm(customOptions={}) {
@@ -150,7 +165,8 @@ async function createVm(customOptions={}) {
 
         'extends': {
             data:()=>({
-                fieldProps: {}
+                fieldProps: {},
+                locale: null
             }),
             propsData: {
                 errorIdentifier: 'error',

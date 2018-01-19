@@ -1,13 +1,15 @@
 import { isLocalizableValueField, localeObjectOrEmpty } from "./utils";
 
-export default {
-    methods: {
-        fieldLocalizedValue(key, value) {
-            let field = this.fields[key];
-            if(field.localized && isLocalizableValueField(field)) {
-                return localeObjectOrEmpty({ localeObject:this.data[key], locale: this.locale, value });
+export default function (fieldsProp) {
+    return {
+        methods: {
+            fieldLocalizedValue(key, value, data=this.data) {
+                let field = this[fieldsProp][key];
+                if(field.localized && isLocalizableValueField(field)) {
+                    return localeObjectOrEmpty({ localeObject:data[key], locale: this.locale, value });
+                }
+                return value;
             }
-            return value;
         }
     }
 }

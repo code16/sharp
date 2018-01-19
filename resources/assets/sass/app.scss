@@ -50,6 +50,8 @@ $small-breakpoint: sm;
   @import '~bootstrap/scss/utilities/flex';
   @import '~bootstrap/scss/utilities/visibility';
 
+  @import "components/error";
+
   // from carbon design
   @import 'components/Button';
   @import 'components/Module';

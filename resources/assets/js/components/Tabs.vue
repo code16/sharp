@@ -6,7 +6,8 @@
                     :class="{ 'd-none':!hasNavOverflow }"
                     @click="expanded=!expanded"
             >
-                {{ tabs[currentTab] && tabs[currentTab].title }} <sharp-dropdown-arrow class="ml-1" :style="expanded && 'transform: rotate(180deg)'"/>
+                <span v-if="tabs[currentTab]" :class="dropdownButtonClasses">{{ tabs[currentTab].title }}</span>
+                <sharp-dropdown-arrow class="ml-1" :style="expanded && 'transform: rotate(180deg)'"/>
             </button>
             <div class="SharpTabs__nav SharpTabs__nav--ghost m-0 p-0" style="height:0;overflow: hidden" v-has-overflow.width="hasNavOverflow">
                 <div :style="{minWidth:`${extraNavGhostWidth}px`}">&nbsp;</div>
@@ -90,6 +91,12 @@
         computed: {
             collapseActivated() {
                 return this.isViewportSmall && (this.hasNavOverflow || this.tabs.length>2);
+            },
+            tabsHaveError() {
+                return this.tabs.some(tab => tab.hasError);
+            },
+            dropdownButtonClasses() {
+                return this.tabs[this.currentTab].hasError ? 'error-dot' : this.tabsHaveError ? 'error-dot--partial' : '';
             }
         },
         methods : {
