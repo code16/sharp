@@ -2,7 +2,7 @@ import {
     __createLocalizedField,
     __createLocalizedValue,
     __createLocalizedAutocompleteSuggestions
-} from "./test-utils";
+} from "./utils";
 
 const testLocales = ['fr', 'en'];
 

@@ -131,7 +131,7 @@
                 //     return;
 
                 return this.options.reduce((map, opt) => {
-                    map[opt.id] = this.localizedCustomLabel(opt);
+                    map[opt.id] = this.localizedOptionLabel(opt);
                     return map;
                 }, {});
             }

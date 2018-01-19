@@ -15,8 +15,9 @@ export default {
                 : this.searchKeys;
         },
         localizedDataKeys() {
-            return this.localValues.length &&
-                Object.keys(this.localValues[0]).filter(key => this.isLocaleObject(this.localValues[0][key]));
+            return (Array.isArray(this.localValues) && this.localValues.length
+                ? Object.keys(this.localValues[0]).filter(key => this.isLocaleObject(this.localValues[0][key]))
+                : []);
         }
     },
     methods: {

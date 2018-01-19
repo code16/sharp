@@ -10,7 +10,8 @@ export const LocalizableValueFields = [
 ];
 
 export function isLocaleObject(obj, locales) {
-    return obj && typeof obj === 'object' && Object.keys(obj).every(key => locales.includes(key));
+    if(!obj || typeof obj !== 'object') return false;
+    return locales.every(locale => locale in obj);
 }
 
 function isEmpty(value){

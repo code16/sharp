@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import { localeObject } from "./utils";
 
 export default {
     inject: {
