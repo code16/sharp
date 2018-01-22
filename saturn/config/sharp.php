@@ -18,13 +18,13 @@ return [
                     "icon" => "fa-user-o",
                     "label" => "Junior Pilot",
                     "form" => \App\Sharp\PilotJuniorSharpForm::class,
-                    "validator" => \App\Sharp\PilotSeniorSharpValidator::class,
+                    "validator" => \App\Sharp\PilotJuniorSharpValidator::class,
                 ],
                 "senior" => [
                     "icon" => "fa-user",
                     "label" => "Senior Pilot",
                     "form" => \App\Sharp\PilotSeniorSharpForm::class,
-                    "validator" => \App\Sharp\PilotJuniorSharpValidator::class,
+                    "validator" => \App\Sharp\PilotSeniorSharpValidator::class,
                 ]
             ],
         ],

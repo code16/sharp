@@ -5,6 +5,7 @@ namespace Code16\Sharp\Tests\Feature\Api;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpForm;
+use Illuminate\Foundation\Http\FormRequest;
 
 class MultiFormEntityFormControllerTest extends BaseApiTest
 {
@@ -47,6 +48,28 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
             "name" => "Jane Fonda"
         ])->assertStatus(200)
             ->assertJson(["ok" => true]);
+    }
+
+    /** @test */
+    public function we_can_validate_a_sub_entity_before_update()
+    {
+        $this->buildTheWorld();
+
+        $this->app['config']->set(
+            'sharp.entities.person.forms.big.validator',
+            BigPersonSharpValidator::class
+        );
+
+        $this->json('post', '/sharp/api/form/person:big/1', [
+            "name" => "Bob"
+        ])->assertStatus(422)
+            ->assertJson([
+                "errors" => [
+                    "height" => [
+                        "The height field is required."
+                    ]
+                ]
+            ]);
     }
 
     protected function buildTheWorld()
@@ -111,5 +134,15 @@ class BigPersonSharpForm extends SmallPersonSharpForm
     function find($id): array
     {
         return ["name" => "John Wayne", "height" => 180];
+    }
+}
+
+class BigPersonSharpValidator extends FormRequest
+{
+    public function authorize() { return true; }
+
+    public function rules()
+    {
+        return ['name' => 'required', "height" => "required|numeric"];
     }
 }

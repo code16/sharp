@@ -34,17 +34,17 @@ abstract class ApiController extends SharpProtectedController
     {
         if($this->isSubEntity($entityKey)) {
             list($entityKey, $subEntityKey) = explode(':', $entityKey);
-            $configKey = config("sharp.entities.{$entityKey}.forms.{$subEntityKey}.form");
+            $formClass = config("sharp.entities.{$entityKey}.forms.{$subEntityKey}.form");
 
         } else {
-            $configKey = config("sharp.entities.{$entityKey}.form");
+            $formClass = config("sharp.entities.{$entityKey}.form");
         }
 
-        if(!$configKey) {
+        if(! $formClass) {
             throw new SharpInvalidEntityKeyException("The entity [{$entityKey}] was not found.");
         }
 
-        return app($configKey);
+        return app($formClass);
     }
 
     /**
