@@ -177,7 +177,7 @@
             },
             update(i) {
                 return (key, value) => {
-                    this.$set(this.list[i], key, this.fieldLocalizedValue(key, value, this.list[i]));
+                    this.$set(this.list[i], key, this.fieldLocalizedValue(key, value, {...this.list[i]}));
                 }
             },
             collapsedItemData(itemData) {

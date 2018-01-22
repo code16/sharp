@@ -1,5 +1,5 @@
 import localizeField from '../field';
-import { mount } from 'vue-test-utils';
+import { mount } from '@vue/test-utils';
 import { mockInjections } from "./mock";
 
 describe('localize-field', ()=>{

@@ -1,4 +1,4 @@
-import { mount } from 'vue-test-utils';
+import { mount } from '@vue/test-utils';
 import ViewPanel from '../components/list/ViewPanel.vue';
 
 describe('view-panel', ()=>{

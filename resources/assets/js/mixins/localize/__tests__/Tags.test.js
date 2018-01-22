@@ -1,6 +1,6 @@
 import localizeTags from '../Tags';
 import localizeSelect from '../Select';
-import { mount } from 'vue-test-utils';
+import { mount } from '@vue/test-utils';
 import { localeObject } from "../utils";
 import { mockInjections } from "./mock";
 

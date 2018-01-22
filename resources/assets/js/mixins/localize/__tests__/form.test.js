@@ -1,5 +1,5 @@
 import localizeForm from '../form';
-import { mount } from 'vue-test-utils';
+import { mount } from '@vue/test-utils';
 import { isLocalizableValueField, localeObjectOrEmpty } from "../utils";
 
 
@@ -26,6 +26,10 @@ describe('localize-form', ()=>{
             },
             render:h=>h()
         });
+    });
+
+    test('has localizedForm option', ()=>{
+        expect(wrapper.vm.$options._localizedForm).toBe('fields');
     });
 
     test('fieldLocalizedValue', () => {

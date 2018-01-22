@@ -6,6 +6,7 @@ import { localeObjectOrEmpty } from "./utils";
  */
 export default function ({ textProp }) {
     return {
+        _localizedEditor: { textProp },
         mixins: [localizeField],
 
         computed: {

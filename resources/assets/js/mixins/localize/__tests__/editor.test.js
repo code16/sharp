@@ -1,7 +1,7 @@
 import localizeEditor from '../editor';
 import localizeField from '../field';
 import { localeObjectOrEmpty } from "../utils";
-import { mount } from 'vue-test-utils';
+import { mount } from '@vue/test-utils';
 import { mockInjections } from "./mock";
 
 jest.mock('../utils', ()=>({
