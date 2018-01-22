@@ -131,13 +131,8 @@ trait WithCustomTransformers
                 }
 
             } else {
-
-                if(!array_key_exists($attribute, $attributes)) {
-                    continue;
-                }
-
                 $attributes[$attribute] = $transformer->apply(
-                    $attributes[$attribute], $model, $attribute
+                    $attributes[$attribute] ?? null, $model, $attribute
                 );
             }
         }
