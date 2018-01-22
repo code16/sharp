@@ -49,7 +49,7 @@
                 <template v-if="showCreateButton">
                     <sharp-dropdown v-if="hasForms" class="SharpActionBar__forms-dropdown" :text="l('action_bar.list.forms_dropdown')">
                         <sharp-dropdown-item v-for="(form,key) in forms" @click="emitAction('create', form)" :key="key" >
-                            {{ form.label }}
+                            <sharp-item-visual :item="form" icon-class="fa-fw"/>{{ form.label }}
                         </sharp-dropdown-item>
                     </sharp-dropdown>
                     <button v-else class="SharpButton SharpButton--accent" @click="emitAction('create')">
@@ -69,17 +69,18 @@
             </template>
         </template>
         <template slot="extras">
-            <sharp-filter-select v-for="filter in filters"
-                                 v-show="!reorderActive"
-                                 :name="filter.label"
-                                 :filter-key="`actionbarlist_${filter.key}`"
-                                 :values="filter.values"
-                                 :value="filtersValue[filter.key]"
-                                 :multiple="filter.multiple"
-                                 :required="filter.required"
-                                 :key="filter.key"
-                                 @input="emitAction('filterChanged',filter.key,$event)">
-            </sharp-filter-select>
+            <sharp-filter-select
+                v-for="filter in filters"
+                v-show="!reorderActive"
+                :name="filter.label"
+                :filter-key="`actionbarlist_${filter.key}`"
+                :values="filter.values"
+                :value="filtersValue[filter.key]"
+                :multiple="filter.multiple"
+                :required="filter.required"
+                :key="filter.key"
+                @input="emitAction('filterChanged',filter.key,$event)"
+            />
         </template>
     </sharp-action-bar>
 </template>
@@ -95,6 +96,7 @@
 
     import Dropdown from '../dropdown/Dropdown';
     import DropdownItem from '../dropdown/DropdownItem';
+    import ItemVisual from '../ui/ItemVisual';
 
     export default {
         name: 'SharpActionBarList',
@@ -103,7 +105,8 @@
             [Text.name]: Text,
             [FilterSelect.name]: FilterSelect,
             [Dropdown.name]: Dropdown,
-            [DropdownItem.name]: DropdownItem
+            [DropdownItem.name]: DropdownItem,
+            [ItemVisual.name]: ItemVisual
         },
 
         mixins: [ActionBarMixin, ActionEvents, Localization],
