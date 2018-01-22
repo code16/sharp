@@ -43,7 +43,7 @@ class AppendListMultiform
                     "key" => $value,
                     "label" => $this->getMultiformLabelFor($value),
                     "instances" => $instanceIds
-                ];
+                ] + $this->getIconConfigFor($value);
             })
             ->keyBy("key");
 
@@ -85,5 +85,18 @@ class AppendListMultiform
         $entityKey = $this->determineEntityKey();
 
         return config("sharp.entities.{$entityKey}.forms.{$formSubKey}.label");
+    }
+
+    /**
+     * @param string $formSubKey
+     * @return array
+     */
+    protected function getIconConfigFor(string $formSubKey)
+    {
+        $entityKey = $this->determineEntityKey();
+
+        $icon = config("sharp.entities.{$entityKey}.forms.{$formSubKey}.icon");
+
+        return $icon ? compact('icon') : [];
     }
 }
