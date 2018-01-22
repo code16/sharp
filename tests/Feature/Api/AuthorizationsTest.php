@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
+use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
+
 class AuthorizationsTest extends BaseApiTest
 {
 
@@ -144,6 +146,37 @@ class AuthorizationsTest extends BaseApiTest
                 "view" => true,
             ]
         ]);
+    }
+
+    /** @test */
+    public function a_sub_entity_takes_its_main_entity_global_authorizations()
+    {
+        $this->buildTheWorld();
+        $this->login();
+
+        $this->app['config']->set(
+            'sharp.entities.person.form', null
+        );
+
+        $this->app['config']->set(
+            'sharp.entities.person.forms.big.form', PersonSharpForm::class
+        );
+
+        $this->app['config']->set(
+            'sharp.entities.person.authorizations', [
+                "delete" => false,
+                "create" => true,
+                "update" => true,
+                "view" => true,
+            ]
+        );
+
+        $this->json('post', '/sharp/api/form/person:big/50', [])->assertStatus(200);
+        $this->json('post', '/sharp/api/form/person:big', [])->assertStatus(200);
+        $this->json('delete', '/sharp/api/form/person:big/50')->assertStatus(403);
+        $this->json('get', '/sharp/api/form/person:big')->assertStatus(200);
+        $this->json('get', '/sharp/api/form/person:big/50')->assertStatus(200);
+        $this->json('get', '/sharp/api/list/person')->assertStatus(200);
     }
 
 }

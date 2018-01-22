@@ -13,6 +13,17 @@ return [
         ],
         "pilot" => [
             "list" => \App\Sharp\PilotSharpList::class,
+            "forms" => [
+                "junior" => [
+                    "form" => PilotSeniorSharpForm::class,
+                    "validator" => PilotSeniorSharpValidator::class,
+                ],
+                "senior" => [
+                    "form" => PilotJuniorSharpForm::class,
+                    "validator" => PilotJuniorSharpValidator::class,
+                ]
+            ],
+            // TODO remove this:
             "form" => \App\Sharp\PilotSharpForm::class,
             "validator" => \App\Sharp\PilotSharpValidator::class,
         ],
