@@ -2,26 +2,42 @@ import Vue from 'vue';
 import Markdown from '../components/form/fields/markdown/Markdown.vue';
 
 import { MockI18n, MockInjections } from './utils';
+import { mount } from '@vue/test-utils';
+
+import SimpleMDE from 'simplemde';
 
 describe('markdown-field', () => {
     Vue.use(MockI18n);
 
+    function createWrapper(customOptions={}) {
+        let { propsData, ...options } = customOptions;
+        return mount(Markdown, {
+            provide: MockInjections.provide,
+            propsData: {
+                value: { text:'' },
+                readOnly: false,
+                placeholder: 'Champ md',
+                height: 310,
+                innerComponents: { upload:{ maxImageSize:3 } },
+                fieldConfigIdentifier: 'my_markdown',
+                uniqueIdentifier: 'my_markdown',
+                ...propsData
+            },
+            ...options
+        });
+    }
+
+    function createLocalizedWrapper({ value, locale, locales }) {
+        return createWrapper({
+            propsData: { value, locale },
+            computed: {
+                isLocalized:()=>true,
+                locales:()=>locales
+            }
+        });
+    }
+
     beforeEach(()=>{
-        document.body.innerHTML = `
-            <div id="app">
-                <sharp-markdown :value="value" 
-                    :read-only="readOnly" 
-                    placeholder="Champ md" 
-                    :toolbar="toolbar" 
-                    :height="310"
-                    :inner-components="{upload:{ maxImageSize:3 }}"
-                    field-config-identifier="my_markdown"
-                    unique-identifier="my_markdown"
-                    :locale="locale"
-                    @input="inputEmitted">
-                </sharp-markdown>
-            </div>
-        `;
         // mock range functions
         document.body.createTextRange = () => ({
             getBoundingClientRect: () => ({ }),
@@ -36,137 +52,195 @@ describe('markdown-field', () => {
     });
 
     describe('basic tests', () => {
-        test('can mount Markdown field', async () => {
-            await createVm();
+        test('can mount Markdown field', () => {
+            let wrapper = createWrapper();
 
-            expect(document.body.innerHTML).toMatchSnapshot();
+            expect(wrapper.html()).toMatchSnapshot();
         });
 
-        test('can mount "localized" Markdown field', async () => {
-            await createVm();
+        test('can mount "localized" Markdown field', () => {
+            let wrapper = createLocalizedWrapper({
+                value: { text:{ fr:'', en: '' } },
+                locales: ['fr', 'en'],
+                locale: 'fr'
+            });
 
-            expect(document.body.innerHTML).toMatchSnapshot();
+            expect(wrapper.html()).toMatchSnapshot();
         });
 
-        test('can mount "read only" Markdown field', async () => {
-            await createVm({
+
+        test('can mount "read only" Markdown field', () => {
+           let wrapper = createWrapper({
                 propsData: {
                     readOnly: true
                 }
             });
 
-            expect(document.body.innerHTML).toMatchSnapshot();
+            expect(wrapper.html()).toMatchSnapshot();
         });
 
-        test('update value on locale changed', async () => {
-            let $markdown = await createVm({
-                propsData: {
-                    locale: 'fr'
-                },
-                data: ()=>({
-                    value: { text:'Valeur 1' }
-                })
+        test('handle locale changed', async () => {
+            let wrapper = createLocalizedWrapper({
+                value: { text:{ fr:'', en: '' } },
+                locales:['fr', 'en'],
+                locale: 'fr',
             });
 
-            let { $root:vm, simplemde } = $markdown;
-
-            vm.value.text = 'Valeur 2';
-            vm.locale = 'en';
+            wrapper.setProps({ locale:'en' });
+            wrapper.setMethods({ refreshOnExternalChange: jest.fn() });
 
             await Vue.nextTick();
 
-            expect(simplemde.value()).toBe('Valeur 2');
+            expect(wrapper.vm.refreshOnExternalChange).toHaveBeenCalled();
         });
 
-        test('expose appropriate props to simplemde', async () => {
-            let $markdown = await createVm({
-                propsData: {
-                    toolbar: [{ name:'my action' }]
-                },
-                data: ()=>({
-                    value: { text:'Valeur 1' }
-                })
+        test('localized: simplemde instances, current simplemde', ()=>{
+            let wrapper = createLocalizedWrapper({
+                value: { text:{ fr:'', en: '' } },
+                locales:['fr', 'en'],
+                locale: 'fr',
             });
 
-            let { simplemde } = $markdown;
-            let { textarea } = $markdown.$refs;
+            expect(wrapper.vm.simplemdeInstances).toEqual({ 'fr':expect.any(SimpleMDE), 'en':expect.any(SimpleMDE) });
+            expect(wrapper.vm.simplemde).toBe(wrapper.vm.simplemdeInstances['fr']);
+            expect(wrapper.vm.codemirror).toBe(wrapper.vm.simplemdeInstances['fr'].codemirror);
 
-            expect(simplemde.options).toMatchObject({
-                element: textarea,
-                initialValue: 'Valeur 1',
+            wrapper.setProps({ locale: 'en' });
+
+            expect(wrapper.vm.simplemde).toBe(wrapper.vm.simplemdeInstances['en']);
+            expect(wrapper.vm.codemirror).toBe(wrapper.vm.simplemdeInstances['en'].codemirror);
+        });
+
+        test('simplemde instances, current simplemde', ()=>{
+            let wrapper = createWrapper();
+            expect(wrapper.vm.simplemdeInstances).toEqual(expect.any(SimpleMDE));
+            expect(wrapper.vm.simplemde).toEqual(wrapper.vm.simplemdeInstances);
+            expect(wrapper.vm.codemirror).toEqual(wrapper.vm.simplemdeInstances.codemirror);
+        });
+
+        test('filesByName', ()=>{
+            let wrapper = createWrapper({
+                propsData: {
+                    value: {
+                        files: [{ name:'aaa.jpg' }, { name:'bbb.jpg' }]
+                    }
+                }
+            });
+            expect(wrapper.vm.filesByName).toMatchObject({
+                'aaa.jpg': { name:'aaa.jpg' },
+                'bbb.jpg': { name:'bbb.jpg' }
+            });
+        });
+
+        test('indexByFileId', ()=>{
+            let wrapper = createWrapper();
+            let id = wrapper.vm.idSymbol;
+            wrapper.setProps({
+                value: {
+                    files: [{ [id]:1 }, { [id]:6 }]
+                }
+            });
+            expect(wrapper.vm.indexByFileId).toEqual({
+                1: 0,
+                6: 1
+            });
+        });
+
+        test('createSimpleMDE', async () => {
+            let wrapper = createWrapper({
+                propsData:{
+                    value: { text: 'value' },
+                    toolbar: [{ name:'my action' }]
+                },
+                created() {
+                    jest.spyOn(this, 'createSimpleMDE');
+                }
+            });
+            let { element } = wrapper.find({ ref:'textarea' });
+            expect(wrapper.vm.createSimpleMDE).toHaveBeenCalledWith({ element, initialValue:'value' });
+            expect(wrapper.vm.simplemdeInstances.options).toMatchObject({
+                initialValue: 'value',
                 placeholder: 'Champ md',
                 spellChecker: false,
                 autoDownloadFontAwesome: false,
                 toolbar: [{ name:'my action' }],
             });
-
-
         });
 
-        test('bound toolbar buttons custom action properly', async () =>{
-            let $markdown = await createVm({
+        test('localizedTextareaRef', ()=>{
+            let wrapper = createWrapper();
+            expect(wrapper.vm.localizedTextareaRef('fr')).toEqual('textarea_fr');
+        });
+
+        test('bound toolbar buttons custom action properly', () =>{
+            let wrapper = createWrapper({
                 propsData: {
                     toolbar: [{ name:'image'}]
                 }
             });
 
-            let { simplemde } = $markdown;
-            $markdown.insertUploadImage = jest.fn();
+            let { simplemde } = wrapper.vm;
+            wrapper.vm.insertUploadImage = jest.fn();
 
             expect(simplemde.toolbar[0].action).toBeInstanceOf(Function);
             simplemde.toolbar[0].action();
 
-            expect($markdown.insertUploadImage).toHaveBeenCalled();
+            expect(wrapper.vm.insertUploadImage).toHaveBeenCalled();
         });
 
         test('set read only properly', async () => {
-            let $markdown = await createVm();
+            let wrapper = createWrapper();
 
-            let { simplemde } = $markdown;
-            let { codemirror } = simplemde;
+            let { simplemde, codemirror } = wrapper.vm;
 
             expect(codemirror.getOption('readOnly')).toBe(false);
 
-            $markdown.setReadOnly();
+            wrapper.vm.setReadOnly(simplemde);
 
             expect(codemirror.getOption('readOnly')).toBe(true);
         });
 
-        test('add codemirror event listener properly', async () => {
-            let $markdown = await createVm();
+        test('add codemirror event listener properly', () => {
+            let wrapper = createWrapper();
 
-            let { simplemde: {codemirror}} = $markdown;
+            let { codemirror } = wrapper.vm;
 
             let callback = jest.fn();
             codemirror.on = jest.fn();
 
-            $markdown.codemirrorOn('event', callback);
+            wrapper.vm.codemirrorOn(codemirror, 'event', callback);
             expect(codemirror.on).toHaveBeenCalledWith('event', callback);
             expect(callback).not.toHaveBeenCalled();
 
-            $markdown.codemirrorOn('event', callback, true);
+            wrapper.vm.codemirrorOn(codemirror, 'event', callback, true);
             expect(codemirror.on).toHaveBeenCalledTimes(2);
             expect(codemirror.on).toHaveBeenLastCalledWith('event', callback);
             expect(callback).toHaveBeenCalled();
         });
 
         test('emit input on text changed', async () => {
-            let inputEmitted = jest.fn();
-            let $markdown = await createVm({
-                methods: {
-                    inputEmitted
-                }
-            });
+            let wrapper = createWrapper();
 
-            let { simplemde } = $markdown;
+            let { simplemde } = wrapper.vm;
+
+            wrapper.setMethods({
+                localizedValue: jest.fn(()=>'localizedValue')
+            });
 
             simplemde.value('AAA');
 
-            expect(inputEmitted).toHaveBeenLastCalledWith(expect.objectContaining({ text:'AAA' }));
+            expect(wrapper.emitted().input).toHaveLength(1);
+            expect(wrapper.emitted().input[0]).toEqual(['localizedValue'])
+        });
+
+
+        test('has localized editor mixin with appropriate text prop', ()=>{
+            let wrapper = mount(Markdown, MockInjections);
+            expect(wrapper.vm.$options._localizedEditor).toEqual({ textProp:'text' });
         });
     });
 
-
+/*
     describe('uploader insertion', () => {
 
         let mockCodemirror = codemirror => {
@@ -473,30 +547,6 @@ describe('markdown-field', () => {
             }]);
         })
     });
+*/
 });
 
-async function createVm(customOptions={}) {
-
-    const vm = new Vue({
-        el: '#app',
-        mixins: [customOptions, MockInjections],
-
-        props:['readOnly', 'toolbar', 'locale'],
-
-        'extends': {
-            data:() => ({
-                value: {}
-            }),
-            methods: {
-                inputEmitted: ()=>{}
-            },
-            components: {
-                'sharp-markdown': Markdown
-            },
-        }
-    });
-
-    await Vue.nextTick();
-
-    return vm.$children[0];
-}

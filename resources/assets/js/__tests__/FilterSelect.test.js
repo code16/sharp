@@ -1,6 +1,6 @@
 import FilterSelect from '../components/list/FilterSelect.vue';
 import Select from '../components/form/fields/Select.vue';
-import { shallow } from 'vue-test-utils';
+import { shallow } from '@vue/test-utils';
 
 
 describe('filter-select', ()=>{

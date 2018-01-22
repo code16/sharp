@@ -18,21 +18,6 @@ import moxios from 'moxios';
 import {MockInjections, MockI18n} from "./utils";
 import { nextRequestFulfilled } from './utils/moxios-utils';
 
-import { shallow } from 'vue-test-utils';
-
-
-
-function mock() {
-    return {
-        components: {
-            SharpForm: {
-                extends: Form,
-                beforeCreate() { this.$options.render = h=>h() },
-                created() { this.init = ()=>{} }
-            }
-        }
-    }
-}
 
 describe('sharp-form', ()=>{
     Vue.use(MockI18n);
@@ -41,6 +26,7 @@ describe('sharp-form', ()=>{
     Vue.component('sharp-form', Form);
     Vue.component('sharp-field-display', mockSFC(fieldContainerModule));
 
+    const oldDelay = moxios.delay;
     beforeAll(()=>{
         mockSFC(gridModule,{
             template: `
@@ -65,6 +51,7 @@ describe('sharp-form', ()=>{
             </div>
             `
         });
+        moxios.delay = 10;
     });
 
     afterAll(()=>{
@@ -72,6 +59,7 @@ describe('sharp-form', ()=>{
         unmockSFC(tabbedLayoutModule);
         unmockSFC(fieldsLayoutModule);
         unmockSFC(fieldContainerModule);
+        moxios.delay = oldDelay;
     });
 
     beforeEach(()=>{
@@ -218,7 +206,7 @@ describe('sharp-form', ()=>{
     });
 
     test('localized', async ()=>{
-        let $form = await createVm(mock());
+        let $form = await createVm();
         expect($form.localized).toBe(false);
         $form.locales = ['fr', 'en'];
         await Vue.nextTick();
@@ -326,6 +314,11 @@ describe('sharp-form', ()=>{
             'title.fr': 'error',
         };
         expect($form.localeSelectorErrors).toEqual({ 'fr':true });
+
+        $form.errors = {
+            'label': 'error'
+        };
+        expect($form.localeSelectorErrors).toEqual({ });
     });
 
     test('expose appropriate props to layout components', async () => {
@@ -379,7 +372,8 @@ describe('sharp-form', ()=>{
                                 ]
                             }
                         ]
-                    }
+                    },
+                    locales: ['fr', 'en']
                 }
             }
         });
@@ -389,7 +383,8 @@ describe('sharp-form', ()=>{
         expect(field.$options.propsData).toMatchObject({
             fieldKey: 'title',
             fieldLayout: { key: 'title' },
-            updateData: $form.updateData
+            updateData: $form.updateData,
+            locale: 'fr'
         });
 
         expect(field.$attrs).toMatchObject({
@@ -404,7 +399,7 @@ describe('sharp-form', ()=>{
                     type: 'text',
                     readOnly: true
                 },
-            }
+            },
         });
 
         $form.authorizations = { create: true };
@@ -941,6 +936,11 @@ describe('sharp-form', ()=>{
 
         expect($form.pendingJobs).toEqual([]);
         expect(updateActionsStateEmitted).toHaveBeenLastCalledWith(null);
+    });
+
+    test('has localize mixin with right fieldsProps', async () => {
+        let $list = await createVm();
+        expect($list.$options._localizedForm).toBe('fields');
     });
 });
 

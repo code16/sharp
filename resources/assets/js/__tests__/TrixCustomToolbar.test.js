@@ -1,4 +1,4 @@
-import { mount } from 'vue-test-utils';
+import { mount } from '@vue/test-utils';
 import TrixCustomToolbar from '../components/form/fields/wysiwyg/TrixCustomToolbar.vue';
 import Vue from 'vue';
 import { MockI18n } from "./utils";

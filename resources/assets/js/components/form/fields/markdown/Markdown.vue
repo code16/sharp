@@ -1,7 +1,7 @@
 <template>
     <div class="SharpMarkdown" :class="{'SharpMarkdown--read-only':readOnly}">
         <div class="SharpModule__inner">
-            <template v-if="localized">
+            <template v-if="isLocalized">
                 <div v-for="loc in locales" v-show="locale === loc">
                     <textarea :id="localizedTextareaRef(loc)" :ref="localizedTextareaRef(loc)"></textarea>
                 </div>
@@ -24,7 +24,7 @@
 
     const noop = ()=>{};
 
-
+    const fileIdSymbol = Symbol('fileIdSymbol');
 
     export default {
         name: 'SharpMarkdown',
@@ -49,8 +49,6 @@
             innerComponents:Object,
 
             readOnly: Boolean,
-            locale: String,
-            localized: Boolean
         },
 
         inject: ['$tab'],
@@ -66,7 +64,7 @@
         watch: {
             /// On form locale change
             async locale() {
-                if(this.localized) {
+                if(this.isLocalized) {
                     await this.$nextTick();
                     this.refreshOnExternalChange();
                 }
@@ -74,13 +72,13 @@
         },
         computed: {
             simplemde() {
-                return this.localized ? this.simplemdeInstances[this.locale] : this.simplemdeInstances;
+                return this.isLocalized ? this.simplemdeInstances[this.locale] : this.simplemdeInstances;
             },
             codemirror() {
                 return (this.simplemde||{}).codemirror;
             },
             idSymbol() {
-                return Symbol('fileIdSymbol');
+                return fileIdSymbol;
             },
             filesByName() {
                 return this.value.files.reduce((res, file) => {
@@ -95,7 +93,7 @@
                 }, {});
             },
             text() {
-                return this.localized ? this.localizedText : this.value.text;
+                return this.localizedText;
             }
         },
         methods : {
@@ -335,7 +333,7 @@
             },
 
             createSimpleMDE({ element, initialValue }) {
-                console.log('initialValue',initialValue);
+                //console.log('initialValue',initialValue);
                 let simplemde = new SimpleMDE({
                     element,
                     initialValue,
@@ -365,9 +363,9 @@
                 this.codemirrorOn(codemirror, 'beforeChange',this.onBeforeChange);
             }
         },
-        async mounted() {
-            console.log(this);
-            if(this.localized) {
+        mounted() {
+            //console.log(this);
+            if(this.isLocalized) {
                 this.simplemdeInstances = this.locales.reduce((res, locale)=>({
                     ...res, [locale]: this.createSimpleMDE({
                         element: this.$refs[this.localizedTextareaRef(locale)][0],

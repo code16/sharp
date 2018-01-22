@@ -1,6 +1,6 @@
 import localizeAutocomplete from '../Autocomplete';
 import localizeField from '../field';
-import { mount } from 'vue-test-utils';
+import { mount } from '@vue/test-utils';
 
 import { mockInjections } from "./mock";
 

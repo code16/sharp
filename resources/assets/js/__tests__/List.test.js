@@ -1,41 +1,45 @@
 import Vue from 'vue';
 import List from '../components/form/fields/list/List.vue';
+import FieldDisplay from '../components/form/field-display/FieldDisplay';
 
 import { MockInjections, MockTransitions, MockI18n, QueryComponent } from './utils';
 import { ErrorNode } from '../mixins';
+
+import { mount } from '@vue/test-utils';
 
 describe('list-field', () => {
     Vue.use(MockTransitions);
     Vue.use(MockI18n);
     Vue.use(QueryComponent);
 
-    Vue.component('sharp-field-display', {
-        name: 'SharpFieldContainer',
-        inheritAttrs: false,
-        mixins: [ ErrorNode ],
-        template: '<div> FIELD DISPLAY MOCK </div>'
-    });
+   const fieldDisplayMock = Vue.component('sharp-field-display',{
+       name: 'SharpFieldContainer',
+       inheritAttrs: false,
+       mixins: [ ErrorNode ],
+       render:h=>h('div',' FIELD DISPLAY MOCK ')
+   });
 
     beforeEach(()=>{
         document.body.innerHTML = `    
             <div id="app">
-                <sharp-list :value="value" 
-                            :field-layout="{ 
-                                item:[
-                                    [ {key:'name'} ]
-                                ]
-                            }"
-                            :item-fields="{ name: { type:'text' } }"
-                            :addable="addable" 
-                            :sortable="sortable"
-                            :removable="removable"
-                            :collapsed-item-template="'<span> {{name}} </span>'"
-                            :max-item-count="5"
-                            item-id-attribute="id"
-                            :read-only="readOnly"
-                            locale="fr"
-                            @input="inputEmitted">
-                </sharp-list>
+                <sharp-list 
+                    :value="value" 
+                    :field-layout="{ 
+                        item:[
+                            [ {key:'name'} ]
+                        ]
+                    }"
+                    :item-fields="{ name: { type:'text' } }"
+                    :addable="addable" 
+                    :sortable="sortable"
+                    :removable="removable"
+                    :collapsed-item-template="'<span> {{name}} </span>'"
+                    :max-item-count="5"
+                    item-id-attribute="id"
+                    :read-only="readOnly"
+                    locale="fr"
+                    @input="inputEmitted" 
+                />
             </div>
         `;
         MockI18n.mockLangFunction();
@@ -219,6 +223,38 @@ describe('list-field', () => {
         });
     });
 
+    test('expose appropriate props to field-display', () => {
+        let wrapper = mount(List,{
+            provide: MockInjections.provide,
+            propsData: {
+                value: [ { id:0, name:'myName' }],
+                fieldLayout: {
+                    item:[
+                        [ {key:'name'} ]
+                    ]
+                },
+                itemFields: { name: { type:'text' } },
+                itemIdAttribute:"id",
+                locale: 'fr'
+            },
+            methods: {
+                update: jest.fn(i => `update ${i}`)
+            }
+        });
+        let $field = wrapper.find(fieldDisplayMock);
+        expect($field.vm.$options.propsData).toMatchObject({
+            errorIdentifier: 'name'
+        });
+        expect($field.vm.$attrs).toMatchObject({
+            'field-key': 'name',
+            'context-fields': { name: { type:'text' } },
+            'context-data':expect.objectContaining({ id: 0, name: 'myName' }),
+            'config-identifier': 'name',
+            'update-data': 'update 0',
+            locale: 'fr'
+        });
+    });
+
     test('update data properly', async () => {
         let $list = await createVm({
             data:()=>({
@@ -227,12 +263,12 @@ describe('list-field', () => {
         });
 
         let updateFn = $list.update(1);
+        $list.fieldLocalizedValue = jest.fn(()=>'fieldLocalizedValue');
 
         updateFn('name','George');
 
-        expect($list.list[1]).toMatchObject({
-            id:1, name:'George'
-        })
+        expect($list.list[1]).toMatchObject({ id:1, name:'fieldLocalizedValue'});
+        expect($list.fieldLocalizedValue).toHaveBeenCalledWith('name', 'George', expect.objectContaining({id:1, name:'Samuel'}));
     });
 
     test('insert item properly', async () => {
@@ -260,16 +296,21 @@ describe('list-field', () => {
 
         expect(identifiers).toEqual(expect.arrayContaining([ '0.name', '1.name' ]));
     });
+
+    test('has localize mixin with right fieldsProps', async () => {
+        let $list = await createVm();
+        expect($list.$options._localizedForm).toBe('itemFields');
+    });
 });
 
-async function createVm(customOptions={}) {
+async function createVm(customOptions={}, mock) {
 
     const vm = new Vue({
         el: '#app',
         mixins: [MockInjections, customOptions],
 
         components: {
-            'sharp-list':List
+            'sharp-list':mock||List
         },
 
         props:['readOnly', 'addable', 'sortable', 'removable'],
