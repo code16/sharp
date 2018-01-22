@@ -82,6 +82,12 @@
     max-width: 2rem;
 
     @extend %overflow-dropdown-list;
+
+    .SharpDropdown__text {
+      border: none;
+      height: 100%;
+    }
+
     .SharpDropdown__arrow {
       right: .75rem;
     }
