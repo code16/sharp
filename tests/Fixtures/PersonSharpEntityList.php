@@ -57,10 +57,10 @@ class PersonSharpEntityList extends SharpEntityList
         }
 
         if(request()->has("paginated")) {
-            return new LengthAwarePaginator($items, 20, 2, 1);
+            return $this->transform(new LengthAwarePaginator($items, 20, 2, 1));
         }
 
-        return $items;
+        return $this->transform($items);
     }
 
     /**

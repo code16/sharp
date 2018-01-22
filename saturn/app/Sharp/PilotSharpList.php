@@ -23,6 +23,7 @@ class PilotSharpList extends SharpEntityList
     {
         $this->setSearchable()
             ->setDefaultSort("name", "asc")
+            ->setMultiformAttribute("type")
             ->setPaginated();
     }
 
@@ -45,6 +46,10 @@ class PilotSharpList extends SharpEntityList
             }
         }
 
-        return $this->transform($pilots->paginate(30));
+        return $this
+            ->setCustomTransformer("type", function($nothing, $pilot) {
+                return $pilot->id%2 == 0 ? "senior" : "junior";
+            })
+            ->transform($pilots->paginate(30));
     }
 }

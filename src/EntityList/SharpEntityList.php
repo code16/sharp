@@ -32,6 +32,12 @@ abstract class SharpEntityList
     protected $instanceIdAttribute = "id";
 
     /** @var string */
+    protected $multiformAttribute = null;
+
+    /** @var array */
+    protected $multiformEntityKeys = [];
+
+    /** @var string */
     protected $displayMode = "list";
 
     /** @var bool */
@@ -45,7 +51,6 @@ abstract class SharpEntityList
 
     /** @var string */
     protected $defaultSort;
-
     /** @var string */
     protected $defaultSortDir;
 
@@ -120,6 +125,7 @@ abstract class SharpEntityList
                         return collect($row)->only(
                             array_merge(
                                 $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
+                                $this->multiformAttribute ? [$this->multiformAttribute] : [],
                                 [$this->instanceIdAttribute],
                                 $keys
                             )
@@ -225,6 +231,17 @@ abstract class SharpEntityList
     public function setPaginated(bool $paginated = true)
     {
         $this->paginated = $paginated;
+
+        return $this;
+    }
+
+    /**
+     * @param string $attribute
+     * @return $this
+     */
+    protected function setMultiformAttribute(string $attribute)
+    {
+        $this->multiformAttribute = $attribute;
 
         return $this;
     }

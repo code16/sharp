@@ -18,9 +18,7 @@ abstract class ApiController extends SharpProtectedController
      */
     protected function getListInstance(string $entityKey)
     {
-        $configKey = config("sharp.entities.{$entityKey}.list");
-
-        if(!$configKey) {
+        if(! $configKey = config("sharp.entities.{$entityKey}.list")) {
             throw new SharpInvalidEntityKeyException("The entity [{$entityKey}] was not found.");
         }
 
@@ -63,7 +61,7 @@ abstract class ApiController extends SharpProtectedController
      * @param string $entityKey
      * @return bool
      */
-    private function isSubEntity(string $entityKey): bool
+    protected function isSubEntity(string $entityKey): bool
     {
         return strpos($entityKey, ':') !== false;
     }
