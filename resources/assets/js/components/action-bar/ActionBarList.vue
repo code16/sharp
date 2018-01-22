@@ -45,20 +45,28 @@
                 </template>
             </template>
 
-
-            <button v-if="showCreateButton && !reorderActive" class="SharpButton SharpButton--accent" @click="emitAction('create')">
-                {{ l('action_bar.list.create_button') }}
-            </button>
-            <sharp-dropdown v-if="commands.length && !reorderActive"
-                            class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
-                            :show-arrow="false">
-                <div slot="text">
-                    <i class="fa fa-plus"></i>
-                </div>
-                <sharp-dropdown-item v-for="command in commands" @click="emitAction('command', command)" :key="command.key">
-                    {{ command.label }}
-                </sharp-dropdown-item>
-            </sharp-dropdown>
+            <template v-if="!reorderActive">
+                <template v-if="showCreateButton">
+                    <sharp-dropdown v-if="hasForms" class="SharpActionBar__forms-dropdown" :text="l('action_bar.list.create_button')">
+                        <sharp-dropdown-item v-for="(form,key) in forms" @click="emitAction('create', form)" :key="key" >
+                            {{ form.label }}
+                        </sharp-dropdown-item>
+                    </sharp-dropdown>
+                    <button v-else class="SharpButton SharpButton--accent" @click="emitAction('create')">
+                        {{ l('action_bar.list.create_button') }}
+                    </button>
+                </template>
+                <sharp-dropdown v-if="commands.length"
+                                class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
+                                :show-arrow="false">
+                    <div slot="text">
+                        <i class="fa fa-plus"></i>
+                    </div>
+                    <sharp-dropdown-item v-for="command in commands" @click="emitAction('command', command)" :key="command.key">
+                        {{ command.label }}
+                    </sharp-dropdown-item>
+                </sharp-dropdown>
+            </template>
         </template>
         <template slot="extras">
             <sharp-filter-select v-for="filter in filters"
@@ -107,6 +115,7 @@
                 filters: [],
                 filtersValue: {},
                 commands: [],
+                forms: {},
 
                 showCreateButton: false,
                 showReorderButton: false,
@@ -114,6 +123,11 @@
                 searchable: false,
 
                 reorderActive: false
+            }
+        },
+        computed: {
+            hasForms() {
+                return this.forms && Object.keys(this.forms).length > 0;
             }
         },
         methods: {
@@ -130,11 +144,12 @@
         },
         actions: {
             setup(config) {
-                let { itemsCount, filters, filtersValue, commands, showCreateButton, showReorderButton, searchable } = config;
+                let { itemsCount, filters, filtersValue, commands, showCreateButton, showReorderButton, searchable, forms } = config;
                 this.itemsCount = itemsCount;
                 this.filters = filters;
                 this.filtersValue = filtersValue;
                 this.commands = commands;
+                this.forms = forms;
 
                 this.showCreateButton = showCreateButton;
                 this.showReorderButton = showReorderButton;

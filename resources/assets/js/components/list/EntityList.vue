@@ -155,6 +155,7 @@
                 containers: null,
                 config: null,
                 authorizations: null,
+                forms: null,
 
                 page: 0,
                 search: '',
@@ -272,6 +273,16 @@
                     return res;
                 }, {}) : {};
             },
+            multiforms() {
+                return Object.values(this.forms);
+            },
+            multiformKeyByInstanceId() {
+                return this.data.items.reduce((res,{[this.idAttr]:id})=>{
+                    let multiform = this.multiforms.find(form => form.instances.includes(id)) || {};
+                    res[id] = multiform.key;
+                    return res;
+                }, {})
+            },
             noInstanceCommands() {
                 return !Object.keys(this.commandsByInstanceId).length;
             },
@@ -286,12 +297,13 @@
             /**
              * Initialization
              */
-            mount({ containers, layout, data={}, config={}, authorizations }) {
+            mount({ containers, layout, data={}, config={}, authorizations, forms }) {
                 this.containers = containers;
                 this.layout = layout;
                 this.data = data;
                 this.config = config;
                 this.authorizations = authorizations;
+                this.forms = forms;
 
                 this.config.commands = config.commands || [];
                 this.config.filters = config.filters || [];
@@ -328,7 +340,8 @@
                     commands: this.config.commands.filter(c=>c.authorization && c.type==='entity'),
                     showCreateButton:this.authorizations.create,
                     searchable: this.config.searchable,
-                    showReorderButton: this.config.reorderable && this.authorizations.update && this.data.items.length>1
+                    showReorderButton: this.config.reorderable && this.authorizations.update && this.data.items.length>1,
+                    forms: this.forms
                 });
             },
 
@@ -382,12 +395,19 @@
                 return this.authorizationsByInstanceId[instanceId].view;
             },
             rowLink({[this.idAttr]:instanceId}) {
-                return `/sharp/form/${this.entityKey}/${instanceId}`;
+                let multiformKey;
+                if(this.forms) {
+                    multiformKey = this.multiformKeyByInstanceId[instanceId];
+                }
+                return `${this.formEndpoint(multiformKey)}/${instanceId}`;
             },
             getAuthorizations({ type, id }) {
                 return typeof this.authorizations[type] === 'boolean'
                     ? this.authorizations[type]
                     : this.authorizations[type].indexOf(id) !== -1;
+            },
+            formEndpoint(multiformKey) {
+                return `/sharp/form/${this.entityKey}${multiformKey ? `:${multiformKey}` : ''}`
             },
 
             /**
@@ -578,8 +598,8 @@
                 this.update();
             },
             command: 'sendCommand',
-            create() {
-                location.href=`/sharp/form/${this.entityKey}`;
+            create(form) {
+                location.href=this.formEndpoint(form && form.key);
             },
             toggleReorder({ apply }={}) {
                 if(apply) {

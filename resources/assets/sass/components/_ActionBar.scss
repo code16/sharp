@@ -69,19 +69,19 @@
     }
   }
 
-  &__actions-dropdown {
-    align-self: stretch;
-    min-width: 2rem;
-    max-width: 2rem;
+  %overflow-dropdown-list {
     .SharpDropdown__list {
       width: auto;
       right:0;
     }
+  }
 
-    .SharpDropdown__text {
-      border: none;
-      height: 100%;
-    }
+  &__actions-dropdown {
+    align-self: stretch;
+    min-width: 2rem;
+    max-width: 2rem;
+
+    @extend %overflow-dropdown-list;
     .SharpDropdown__arrow {
       right: .75rem;
     }
@@ -100,6 +100,25 @@
       }
 
       @include nav-dropdown;
+    }
+  }
+
+  &__forms-dropdown {
+    width: auto;
+    padding-right: 2rem;
+    .SharpDropdown__text { z-index: auto }
+    @extend %overflow-dropdown-list;
+
+    &, .SharpDropdown__text {
+      background: $brand-03;
+    }
+    .SharpDropdown__text {
+      color: $inverse-01;
+      font-weight: normal;
+      text-transform: uppercase;
+    }
+    .SharpDropdown__arrow {
+      fill: $inverse-01;
     }
   }
 
