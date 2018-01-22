@@ -76,6 +76,7 @@ We'll get into all those classes in this document. The important thing to notice
 - [Reordering instances](docs/reordering-instances.md)
 - [Building an Entity Form](docs/building-entity-form.md)
 - [Entity Authorizations](docs/entity-authorizations.md)
+- [Multi-forms](docs/multiforms.md)
 - [The Dashboard](docs/dashboard.md)
 - [How to transform data](docs/how-to-transform-data.md)
 - [Sharp built-in solution for uploads](docs/sharp-built-in-solution-for-uploads.md)

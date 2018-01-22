@@ -88,4 +88,4 @@ This is straightforward:
 
 ---
 
-> next chapter: [The Dashboard](dashboard.md).
+> next chapter: [Multi-Forms](multiforms.md).
