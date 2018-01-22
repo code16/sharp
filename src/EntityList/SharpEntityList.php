@@ -143,6 +143,7 @@ abstract class SharpEntityList
     {
         $config = [
             "instanceIdAttribute" => $this->instanceIdAttribute,
+            "multiformAttribute" => $this->multiformAttribute,
             "displayMode" => $this->displayMode,
             "searchable" => $this->searchable,
             "paginated" => $this->paginated,

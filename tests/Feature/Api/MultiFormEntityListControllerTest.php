@@ -26,11 +26,11 @@ class MultiFormEntityListControllerTest extends BaseApiTest
             ->assertJson(["forms" => [
                 "big" => [
                     "label" => "Big person",
-                    "instances" => [1]
+                    "instances" => [2]
                 ],
                 "small" => [
                     "label" => "Small person",
-                    "instances" => [2]
+                    "instances" => [1]
                 ]
             ]]);
     }

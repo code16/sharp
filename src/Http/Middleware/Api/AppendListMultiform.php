@@ -26,12 +26,23 @@ class AppendListMultiform
 
     protected function addMultiformDataToJsonResponse(JsonResponse $jsonResponse)
     {
+        $multiformAttribute = $jsonResponse->getData()->config->multiformAttribute;
+        $instanceIdAttribute = $jsonResponse->getData()->config->instanceIdAttribute;
+
+        if(!$multiformAttribute) {
+            return $jsonResponse;
+        }
+
         $subFormKeys = collect($this->getMultiformKeys())
-            ->map(function($value) {
+            ->map(function($value) use($instanceIdAttribute, $multiformAttribute, $jsonResponse) {
+                $instanceIds = collect($jsonResponse->getData()->data->items)
+                    ->where($multiformAttribute, $value)
+                    ->pluck($instanceIdAttribute);
+
                 return [
                     "key" => $value,
                     "label" => $this->getMultiformLabelFor($value),
-                    "instances" => []
+                    "instances" => $instanceIds
                 ];
             })
             ->keyBy("key");
