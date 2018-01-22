@@ -47,7 +47,7 @@
 
             <template v-if="!reorderActive">
                 <template v-if="showCreateButton">
-                    <sharp-dropdown v-if="hasForms" class="SharpActionBar__forms-dropdown" :text="l('action_bar.list.create_button')">
+                    <sharp-dropdown v-if="hasForms" class="SharpActionBar__forms-dropdown" :text="l('action_bar.list.forms_dropdown')">
                         <sharp-dropdown-item v-for="(form,key) in forms" @click="emitAction('create', form)" :key="key" >
                             {{ form.label }}
                         </sharp-dropdown-item>

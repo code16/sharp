@@ -43836,7 +43836,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   }, [_vm._v("\n                    " + _vm._s(_vm.l('action_bar.list.reorder_button')) + "\n                ")])]] : _vm._e(), _vm._v(" "), (!_vm.reorderActive) ? [(_vm.showCreateButton) ? [(_vm.hasForms) ? _c('sharp-dropdown', {
     staticClass: "SharpActionBar__forms-dropdown",
     attrs: {
-      "text": _vm.l('action_bar.list.create_button')
+      "text": _vm.l('action_bar.list.forms_dropdown')
     }
   }, _vm._l((_vm.forms), function(form, key) {
     return _c('sharp-dropdown-item', {
