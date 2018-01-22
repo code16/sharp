@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreatePilotsTable extends Migration
 {
@@ -16,6 +16,8 @@ class CreatePilotsTable extends Migration
         Schema::create('pilots', function (Blueprint $table) {
             $table->increments('id');
             $table->string("name");
+            $table->string("role");
+            $table->unsignedSmallInteger("xp")->nullable();
             $table->timestamps();
         });
 

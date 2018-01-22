@@ -15,17 +15,18 @@ return [
             "list" => \App\Sharp\PilotSharpList::class,
             "forms" => [
                 "junior" => [
-                    "form" => PilotSeniorSharpForm::class,
-                    "validator" => PilotSeniorSharpValidator::class,
+                    "icon" => "fa-user-o",
+                    "label" => "Junior Pilot",
+                    "form" => \App\Sharp\PilotJuniorSharpForm::class,
+                    "validator" => \App\Sharp\PilotSeniorSharpValidator::class,
                 ],
                 "senior" => [
-                    "form" => PilotJuniorSharpForm::class,
-                    "validator" => PilotJuniorSharpValidator::class,
+                    "icon" => "fa-user",
+                    "label" => "Senior Pilot",
+                    "form" => \App\Sharp\PilotSeniorSharpForm::class,
+                    "validator" => \App\Sharp\PilotJuniorSharpValidator::class,
                 ]
             ],
-            // TODO remove this:
-            "form" => \App\Sharp\PilotSharpForm::class,
-            "validator" => \App\Sharp\PilotSharpValidator::class,
         ],
         "passenger" => [
             "list" => \App\Sharp\PassengerSharpList::class,
