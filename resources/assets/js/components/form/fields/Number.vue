@@ -6,6 +6,7 @@
         functional: true,
         render(h, {props: {step, min, max, showControls}, data }) {
             return h(Text, {
+                ...data,
                 'class': {
                     'hide-controls':!showControls, ...data['class']
                 },
@@ -14,7 +15,7 @@
                 },
                 attrs: {
                     step, min, max, ...data.attrs
-                }
+                },
             });
         }
     }
