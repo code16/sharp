@@ -12,6 +12,7 @@ import NavItem from './components/menu/NavItem';
 import LeftNav from './components/menu/LeftNav';
 
 import Loading from './components/ui/Loading';
+import ItemVisual from './components/ui/ItemVisual';
 
 import axios from 'axios';
 import cookies from 'axios/lib/helpers/cookies';
@@ -40,7 +41,8 @@ new Vue({
         [EntityList.name]:EntityList,
         [CollapsibleItem.name]:CollapsibleItem,
         [NavItem.name]:NavItem,
-        [LeftNav.name]:LeftNav
+        [LeftNav.name]:LeftNav,
+        [ItemVisual.name]:ItemVisual
     },
 
     created() {

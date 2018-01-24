@@ -126,6 +126,10 @@
                 return Object.keys(this.errors).some(errorKey => !this.errors[errorKey].cleared);
             },
 
+            baseEntityKey() {
+                return this.entityKey.split(':')[0];
+            },
+
             downloadLinkBase() {
                 return `${API_PATH}/download/${this.entityKey}/${this.instanceId}`;
             }
@@ -206,7 +210,7 @@
                 }
             },
             redirectToList({ restoreContext=true }={}) {
-                location.href = `/sharp/list/${this.entityKey}${restoreContext?'?restore-context=1':''}`
+                location.href = `/sharp/list/${this.baseEntityKey}${restoreContext?'?restore-context=1':''}`
             },
         },
         actions: {

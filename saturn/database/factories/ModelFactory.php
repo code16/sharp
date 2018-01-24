@@ -66,6 +66,8 @@ $factory->define(\App\Passenger::class, function (Faker\Generator $faker) {
 $factory->define(\App\Pilot::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
+        'role' => $faker->randomElement(["jr", "sr"]),
+        'xp' => $faker->numberBetween(1, 10)
     ];
 });
 

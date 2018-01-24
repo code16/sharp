@@ -10,13 +10,13 @@
             <span title="{{ $sharpMenu->user }}">
                 {{ $sharpMenu->user }}
             </span>
-            <a href="{{ route('code16.sharp.logout') }}"><i class="fa fa-sign-out"></i></a>
+            <a href="{{ route('code16.sharp.logout') }}"> <sharp-item-visual :item="{ icon:'fa-sign-out' }" icon-class="fa-fw"></sharp-item-visual></a>
         </sharp-nav-item>
 
         @if($sharpMenu->dashboard)
             <sharp-nav-item :current="{{ json_encode($dashboard ?? false) }}" link="{{ route('code16.sharp.dashboard') }}">
                 <span>
-                    <i class="fa fa-fw fa-dashboard"></i>
+                    <sharp-item-visual :item="{ icon:'fa-dashboard' }" icon-class="fa-fw"></sharp-item-visual>
                     @lang('sharp::menu.dashboard')
                 </span>
             </sharp-nav-item>
@@ -30,7 +30,7 @@
                                     link="{{ route('code16.sharp.list', $entity->key) }}">
                         <span>
                             @if($entity->icon)
-                                <i class="fa fa-fw {{ $entity->icon }}"></i>
+                                <sharp-item-visual :item="{{ json_encode($entity) }}" icon-class="fa-fw"></sharp-item-visual>
                             @endif
                             {{ $entity->label }}
                         </span>

@@ -9,6 +9,8 @@ class FormController extends ApiController
      * @param string $entityKey
      * @param string $instanceId
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
+     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
     public function edit($entityKey, $instanceId)
     {
@@ -26,6 +28,8 @@ class FormController extends ApiController
     /**
      * @param string $entityKey
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
+     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
     public function create($entityKey)
     {
@@ -44,6 +48,9 @@ class FormController extends ApiController
      * @param string $entityKey
      * @param string $instanceId
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
+     * @throws \Code16\Sharp\Exceptions\Form\SharpFormUpdateException
+     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
     public function update($entityKey, $instanceId)
     {
@@ -61,6 +68,8 @@ class FormController extends ApiController
     /**
      * @param string $entityKey
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
+     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
     public function store($entityKey)
     {
@@ -79,6 +88,8 @@ class FormController extends ApiController
      * @param string $entityKey
      * @param string $instanceId
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
+     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
     public function delete($entityKey, $instanceId)
     {
@@ -96,7 +107,13 @@ class FormController extends ApiController
      */
     protected function validateRequest(string $entityKey)
     {
-        $validatorClass = config("sharp.entities.{$entityKey}.validator");
+        if($this->isSubEntity($entityKey)) {
+            list($entityKey, $subEntityKey) = explode(':', $entityKey);
+            $validatorClass = config("sharp.entities.{$entityKey}.forms.{$subEntityKey}.validator");
+
+        } else {
+            $validatorClass = config("sharp.entities.{$entityKey}.validator");
+        }
 
         if(class_exists($validatorClass)) {
             // Validation is automatically called (FormRequest)

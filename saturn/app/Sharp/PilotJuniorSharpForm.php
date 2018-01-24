@@ -8,7 +8,7 @@ use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpForm;
 
-class PilotSharpForm extends SharpForm
+class PilotJuniorSharpForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
 
@@ -37,7 +37,7 @@ class PilotSharpForm extends SharpForm
     {
         $instance = $id ? Pilot::findOrFail($id) : new Pilot;
 
-        $this->save($instance, $data);
+        $this->save($instance, $data + ["role" => "jr"]);
     }
 
     function delete($id)

@@ -11,9 +11,12 @@ class SharpAuthorizationManager
      * @param string $ability
      * @param string $entityKey
      * @param string|null $instanceId
+     * @throws SharpAuthorizationException
      */
     public function check(string $ability, string $entityKey, $instanceId = null)
     {
+        $entityKey = $this->getBaseEntityKey($entityKey);
+
         // Check entity-level policy authorization
         $this->checkEntityLevelAuthorization($entityKey);
 
@@ -28,6 +31,10 @@ class SharpAuthorizationManager
         }
     }
 
+    /**
+     * @param string $entityKey
+     * @throws SharpAuthorizationException
+     */
     protected function checkEntityLevelAuthorization(string $entityKey)
     {
         if($this->isSpecificallyForbidden("entity", $entityKey)) {
@@ -35,6 +42,12 @@ class SharpAuthorizationManager
         }
     }
 
+    /**
+     * @param string $ability
+     * @param string $entityKey
+     * @param $instanceId
+     * @return bool
+     */
     protected function isGloballyForbidden(string $ability, string $entityKey, $instanceId): bool
     {
         $globalAuthorizations = config("sharp.entities.{$entityKey}.authorizations", []);
@@ -52,6 +65,12 @@ class SharpAuthorizationManager
             && !$globalAuthorizations[$ability];
     }
 
+    /**
+     * @param string $ability
+     * @param string $entityKey
+     * @param null $instanceId
+     * @return bool
+     */
     protected function isSpecificallyForbidden(string $ability, string $entityKey, $instanceId = null): bool
     {
         if(!$this->hasPolicyFor($entityKey)) {
@@ -69,11 +88,33 @@ class SharpAuthorizationManager
         }
     }
 
+    /**
+     * Return base entityKey in case of sub entity (for instance: returns car in car:hybrid)
+     *
+     * @param string $entityKey
+     * @return string
+     */
+    protected function getBaseEntityKey(string $entityKey): string
+    {
+        if(($pos = strpos($entityKey, ':')) !== false) {
+            return substr($entityKey, 0, $pos);
+        }
+
+        return $entityKey;
+    }
+
+    /**
+     * @throws SharpAuthorizationException
+     */
     private function deny()
     {
         throw new SharpAuthorizationException("Unauthorized action");
     }
 
+    /**
+     * @param string $entityKey
+     * @return bool
+     */
     private function hasPolicyFor(string $entityKey)
     {
         return config("sharp.entities.{$entityKey}.policy") != null;
