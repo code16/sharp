@@ -56,7 +56,7 @@
         data() {
             return {
                 simplemdeInstances: {},
-                cursorPos:0,
+                cursorPos:{ line:0, ch:0 },
 
                 uploaderId: (this.value.files||[]).length,
             }
