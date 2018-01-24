@@ -407,10 +407,9 @@ describe('markdown-field', () => {
 
             expect($uploader.$destroy).toHaveBeenCalled();
         });
-/*
-        test('expose appropriate props to markdown upload component', async () =>{
-            let $uploaders = [];
-            let wrapper.vm = await createVm({
+
+        xtest('expose appropriate props to markdown upload component', () =>{
+            let wrapper = createWrapper({
                 data: ()=>({
                     value: {
                         text:'aaa\n![Cat](cat.jpg)\nbbb',
@@ -419,10 +418,7 @@ describe('markdown-field', () => {
                             size: 123
                         }]
                     },
-                }),
-                components: {
-                    'sharp-markdown': mockMarkdown(u => $uploaders.push(u))
-                }
+                })
             });
 
             let { simplemde } = wrapper.vm;
@@ -454,7 +450,7 @@ describe('markdown-field', () => {
                 pendingKey: 'my_markdown.upload.1'
             });
         });
-
+/*
         test('index files correctly on mounted', async () => {
             let wrapper.vm = await createVm({
                 data:() => ({
