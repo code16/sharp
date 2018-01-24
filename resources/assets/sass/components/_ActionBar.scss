@@ -97,6 +97,7 @@
 
       .SharpDropdown__text {
         color: $brand-03;
+        line-height:1;
       }
 
       @include nav-dropdown;
@@ -110,7 +111,7 @@
     }
   }
 
-  .SharpButton {
+  .SharpButton:not(.SharpButton--primary) {
     border: 1px solid $brand-01;
   }
 
