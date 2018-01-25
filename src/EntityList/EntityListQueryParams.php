@@ -34,6 +34,9 @@ class EntityListQueryParams
      */
     protected $specificIds;
 
+    /**
+     * @return static
+     */
     public static function create()
     {
         return new static;
@@ -58,7 +61,9 @@ class EntityListQueryParams
      */
     public function setDefaultFilters($filters)
     {
-        $this->filters = (array)$filters;
+        collect((array) $filters)->each(function($value, $filter) {
+            $this->setFilterValue($filter, $value);
+        });
 
         return $this;
     }
@@ -86,12 +91,16 @@ class EntityListQueryParams
                 return starts_with($name, "filter_");
 
             })->each(function($value, $name) {
-               $this->filters[substr($name, strlen("filter_"))] = $value;
+               $this->setFilterValue(substr($name, strlen("filter_")), $value);
             });
 
         return $this;
     }
 
+    /**
+     * @param array $ids
+     * @return static
+     */
     public static function createFromArrayOfIds(array $ids)
     {
         $instance = new static;
@@ -178,6 +187,17 @@ class EntityListQueryParams
     public function specificIds()
     {
         return (array)$this->specificIds;
+    }
+
+    /**
+     * @param string $filter
+     * @param string $value
+     */
+    protected function setFilterValue(string $filter, string $value)
+    {
+        $this->filters[$filter] = $value;
+
+        event("filter-{$filter}-was-set", $value);
     }
 
 }

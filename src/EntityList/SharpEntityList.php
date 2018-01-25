@@ -51,6 +51,7 @@ abstract class SharpEntityList
 
     /** @var string */
     protected $defaultSort;
+
     /** @var string */
     protected $defaultSortDir;
 

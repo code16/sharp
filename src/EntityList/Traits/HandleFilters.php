@@ -2,9 +2,11 @@
 
 namespace Code16\Sharp\EntityList\Traits;
 
+use Closure;
 use Code16\Sharp\EntityList\EntityListFilter;
 use Code16\Sharp\EntityList\EntityListMultipleFilter;
 use Code16\Sharp\EntityList\EntityListRequiredFilter;
+use Illuminate\Support\Facades\Event;
 
 trait HandleFilters
 {
@@ -16,13 +18,20 @@ trait HandleFilters
     /**
      * @param string $filterName
      * @param string|EntityListFilter $filterHandler
+     * @param Closure|null $callback
      * @return $this
      */
-    protected function addFilter(string $filterName, $filterHandler)
+    protected function addFilter(string $filterName, $filterHandler, Closure $callback = null)
     {
         $this->filterHandlers[$filterName] = $filterHandler instanceof EntityListFilter
             ? $filterHandler
             : app($filterHandler);
+
+        if($callback) {
+            Event::listen("filter-{$filterName}-was-set", function ($value) use($callback) {
+                $callback($value);
+            });
+        }
 
         return $this;
     }

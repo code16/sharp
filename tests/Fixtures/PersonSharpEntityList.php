@@ -103,7 +103,9 @@ class PersonSharpEntityList extends SharpEntityList
     {
         $this->setSearchable()
             ->setReorderable(PersonSharpEntityListReorderHandler::class)
-            ->addFilter("age", PersonSharpEntityListAgeFilter::class)
+            ->addFilter("age", PersonSharpEntityListAgeFilter::class, function($value) {
+                session(["filter_age_was_set" => $value]);
+            })
             ->addFilter("age_multiple", PersonSharpEntityListAgeMultipleFilter::class)
             ->addFilter("age_required", PersonSharpEntityListAgeRequiredFilter::class);
     }

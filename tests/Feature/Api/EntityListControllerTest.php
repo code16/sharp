@@ -114,6 +114,18 @@ class EntityListControllerTest extends BaseApiTest
     }
 
     /** @test */
+    public function we_can_define_a_was_set_callback_on_a_filter()
+    {
+        $this->buildTheWorld();
+
+        $age = rand(1, 99);
+        $this->json('get', '/sharp/api/list/person?filter_age=' . $age);
+
+        // The age was put in session in the Callback
+        $this->assertEquals($age, session("filter_age_was_set"));
+    }
+
+    /** @test */
     public function we_wont_get_entity_attribute_for_a_non_form_data()
     {
         $this->buildTheWorld();

@@ -15,6 +15,7 @@ class EntityCommandController extends ApiController
      * @param string $commandKey
      * @return \Illuminate\Http\JsonResponse
      * @throws SharpAuthorizationException
+     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
     public function update($entityKey, $commandKey)
     {
