@@ -126,6 +126,21 @@ class EntityListControllerTest extends BaseApiTest
     }
 
     /** @test */
+    public function we_can_force_a_filter_value_in_a_callback()
+    {
+        $this->buildTheWorld();
+
+        // Filter `age` will be force set in the `age_forced` filter callback
+        $this->json('get', '/sharp/api/list/person?filter_age_forced=22&filter_age=12')
+            ->assertStatus(200)
+            ->assertJsonFragment(["data" => [
+                "items" => [
+                    ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
+                ]
+            ]]);
+    }
+
+    /** @test */
     public function we_wont_get_entity_attribute_for_a_non_form_data()
     {
         $this->buildTheWorld();

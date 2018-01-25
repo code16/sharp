@@ -28,8 +28,8 @@ trait HandleFilters
             : app($filterHandler);
 
         if($callback) {
-            Event::listen("filter-{$filterName}-was-set", function ($value) use($callback) {
-                $callback($value);
+            Event::listen("filter-{$filterName}-was-set", function ($value, $params) use($callback) {
+                $callback($value, $params);
             });
         }
 

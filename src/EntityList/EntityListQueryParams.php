@@ -172,6 +172,10 @@ class EntityListQueryParams
      */
     public function filterFor(string $filterName)
     {
+        if(isset($this->filters["/forced/$filterName"])) {
+            return $this->filterFor("/forced/$filterName");
+        }
+
         if(!isset($this->filters[$filterName])) {
             return null;
         }
@@ -193,11 +197,20 @@ class EntityListQueryParams
      * @param string $filter
      * @param string $value
      */
+    public function forceFilterValue(string $filter, $value)
+    {
+        $this->filters["/forced/$filter"] = $value;
+    }
+
+    /**
+     * @param string $filter
+     * @param string $value
+     */
     protected function setFilterValue(string $filter, string $value)
     {
         $this->filters[$filter] = $value;
 
-        event("filter-{$filter}-was-set", $value);
+        event("filter-{$filter}-was-set", [$value, $this]);
     }
 
 }
