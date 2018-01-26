@@ -49,8 +49,10 @@ class HasManyRelationUpdater
         }
 
         // Remove unsent items
-        $instance->$attribute()->whereNotIn($relatedModelKeyName, $this->handledIds)
-            ->delete();
+        $instance->$attribute->whereNotIn($relatedModelKeyName, $this->handledIds)
+            ->each(function($item) {
+                $item->delete();
+            });
     }
 
     /**
