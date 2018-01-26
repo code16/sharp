@@ -1,4 +1,4 @@
-<sharp-left-nav v-cloak current="{{ $entityKey ?? ($dashboard ? 'dashboard' : '') }}" :categories="{{ json_encode($sharpMenu->categories) }}">
+<sharp-left-nav v-cloak current="{{ $sharpMenu->currentEntity ?: ($dashboard ? 'dashboard' : '') }}" :categories="{{ json_encode($sharpMenu->categories) }}">
     <div class="SharpLeftNav__title-container">
         <h2 class="SharpLeftNav__title">{{ $sharpMenu->name }}</h2>
     </div>
@@ -26,7 +26,7 @@
             <sharp-collapsible-item label="{{ $category->label }}">
 
                 @foreach($category->entities as $entity)
-                    <sharp-nav-item :current="{{ json_encode(($entityKey??false)==$entity->key) }}"
+                    <sharp-nav-item :current="{{ json_encode($sharpMenu->currentEntity==$entity->key) }}"
                                     link="{{ route('code16.sharp.list', $entity->key) }}">
                         <span>
                             @if($entity->icon)

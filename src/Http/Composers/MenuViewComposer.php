@@ -32,7 +32,8 @@ class MenuViewComposer
             "name" => config("sharp.name", "Sharp"),
             "user" => sharp_user()->{config("sharp.auth.display_attribute", "name")},
             "dashboard" => $this->hasDashboard(),
-            "categories" => $categories
+            "categories" => $categories,
+            "currentEntity" => isset($view->entityKey) ? explode(':', $view->entityKey)[0] : null
         ];
 
         $view->with('sharpMenu', (object)$sharpMenu);
