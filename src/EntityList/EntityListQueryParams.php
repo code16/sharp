@@ -206,7 +206,7 @@ class EntityListQueryParams
      * @param string $filter
      * @param string $value
      */
-    protected function setFilterValue(string $filter, string $value)
+    protected function setFilterValue(string $filter, $value)
     {
         $this->filters[$filter] = $value;
 
