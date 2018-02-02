@@ -145,6 +145,32 @@ class EntityListFilterTest extends SharpTestCase
             ]
         ], $list->listConfig());
     }
+
+    /** @test */
+    function we_can_define_than_a_filter_is_master()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig()
+            {
+                $this->addFilter("test", new class extends SharpEntityListTestFilter {
+                    function isMaster() {
+                        return true;
+                    }
+                });
+            }
+        };
+
+        $list->buildListConfig();
+
+        $this->assertArraySubset([
+            "filters" => [
+                [
+                    "key" => "test",
+                    "master" => true,
+                ]
+            ]
+        ], $list->listConfig());
+    }
 }
 
 class SharpEntityListTestFilter implements EntityListFilter
