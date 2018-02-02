@@ -69,7 +69,7 @@ class EntityListControllerTest extends BaseApiTest
     }
 
     /** @test */
-    public function default_filter_value_is_used_if_no_value_was_went()
+    public function default_filter_value_is_used_if_no_value_was_sent()
     {
         $this->buildTheWorld();
 

@@ -97,14 +97,17 @@ abstract class SharpEntityList
         $items = $items ?: $this->getListData(
             EntityListQueryParams::create()
                 ->setDefaultSort($this->defaultSort, $this->defaultSortDir)
+                ->fillWithRequest()
                 ->setDefaultFilters(
-                    collect($this->filterHandlers)->filter(function($handler) {
-                        return $handler instanceof EntityListRequiredFilter;
+                    collect($this->filterHandlers)->filter(function($handler, $attribute) {
+                        return !request()->has("filter_$attribute")
+                            && $handler instanceof EntityListRequiredFilter;
+
                     })->map(function($handler, $attribute) {
                         return ["name" => $attribute, "value" => $handler->defaultValue()];
+
                     })->pluck("value", "name")->all()
                 )
-                ->fillWithRequest()
         );
 
         if($items instanceof LengthAwarePaginator) {

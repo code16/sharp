@@ -51,7 +51,8 @@ trait HandleFilters
                 "required" => $required,
                 "default" => $required ? $handler->defaultValue() : null,
                 "values" => $this->formatFilterValues($handler->values()),
-                "label" => method_exists($handler, "label") ? $handler->label() : $filterName
+                "label" => method_exists($handler, "label") ? $handler->label() : $filterName,
+                "master" => method_exists($handler, "isMaster") ? $handler->isMaster() : false,
             ];
         }
     }
