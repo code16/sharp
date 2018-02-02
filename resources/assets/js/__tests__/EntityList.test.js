@@ -1503,6 +1503,13 @@ describe('entity-list', ()=>{
 
     test('filter changed (action)', async () => {
         let $entityList = await createVm();
+
+        Object.defineProperty($entityList, 'filterByKey', {
+            value: {
+                age: { key: 'age '}
+            }
+        });
+
         $entityList.update = jest.fn();
         $entityList.actionsBus.$emit('filterChanged', 'age', 3);
         expect($entityList.filtersValue).toEqual({ age: 3 });
