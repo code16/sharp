@@ -94,6 +94,23 @@ To use a custom label for the filter, simply add a `label()` function that retur
         return "My label";
     }
 
+## Filter set callback
+
+The third and optional `addFilter` argument is a Closure, used as a set value callback.
+
+    $this->addFilter("pilots", PilotFilter::class, function($value, EntityListQueryParams $params) {
+        // Filter was set to $value. Do stuff, like putting a value in session.
+    });
+
+## Master filter
+
+In some cases (like linked filters, for instance: the second filter values depends on the first one), you want to ensure that selecting a filter value will reset all other filters. It's called: "master", and you only need to add a `isMaster()` function in your Filter handler:
+
+    public function isMaster(): bool
+    {
+        return true;
+    }
+
 
 ---
 
