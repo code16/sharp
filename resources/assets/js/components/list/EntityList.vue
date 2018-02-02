@@ -594,6 +594,11 @@
                 }
             },
             filterChanged(key, value) {
+                if(this.filterByKey[key].master) {
+                    this.filtersValue = Object.keys(this.filtersValue).reduce((res,key)=>({
+                        ...res, [key]:null
+                    }), {});
+                }
                 this.filtersValue[key] = value;
                 this.update();
             },
