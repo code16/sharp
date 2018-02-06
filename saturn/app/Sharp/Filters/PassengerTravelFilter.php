@@ -22,4 +22,9 @@ class PassengerTravelFilter implements EntityListFilter
     {
         return "Flies on";
     }
+
+    public function isSearchable(): bool
+    {
+        return true;
+    }
 }

@@ -53,6 +53,7 @@ trait HandleFilters
                 "values" => $this->formatFilterValues($handler->values()),
                 "label" => method_exists($handler, "label") ? $handler->label() : $filterName,
                 "master" => method_exists($handler, "isMaster") ? $handler->isMaster() : false,
+                "searchable" => method_exists($handler, "isSearchable") ? $handler->isSearchable() : false,
             ];
         }
     }
