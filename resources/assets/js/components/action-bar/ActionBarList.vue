@@ -78,6 +78,9 @@
                 :value="filtersValue[filter.key]"
                 :multiple="filter.multiple"
                 :required="filter.required"
+                :template="filter.template"
+                :search-keys="filter.searchKeys"
+                :searchable="filter.searchable"
                 :key="filter.key"
                 @input="emitAction('filterChanged',filter.key,$event)"
             />

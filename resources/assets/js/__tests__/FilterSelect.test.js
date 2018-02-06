@@ -1,10 +1,12 @@
 import FilterSelect from '../components/list/FilterSelect.vue';
 import Select from '../components/form/fields/Select.vue';
 import { shallow } from 'vue-test-utils';
-
+import { MockI18n } from "./utils";
+import Vue from 'vue';
 
 describe('filter-select', ()=>{
     let wrapper, select;
+    Vue.use(MockI18n, { mockFn:true });
 
     beforeEach(()=>{
         wrapper = shallow(FilterSelect, {
@@ -80,14 +82,6 @@ describe('filter-select', ()=>{
         expect(wrapper.vm.handleSelect).toHaveBeenCalled();
         label.trigger('click');
         expect(wrapper.vm.showMultiselect).toHaveBeenCalled();
-    });
-
-    test('bind opened', ()=>{
-        expect(wrapper.vm.opened).toBe(false);
-        select.vm.$emit('open');
-        expect(wrapper.vm.opened).toBe(true);
-        select.vm.$emit('close');
-        expect(wrapper.vm.opened).toBe(false);
     });
 
     test('empty', ()=>{

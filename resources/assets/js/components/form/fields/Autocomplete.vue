@@ -21,12 +21,14 @@
                      :internal-search="false"
                      :placeholder="placeholder"
                      :loading="isLoading"
+                     :multiple="multiple"
                      :disabled="readOnly"
+                     :hide-selected="hideSelected"
                      preserve-search
                      @search-change="updateSuggestions($event)"
                      @select="handleSelect"
                      @close="handleDropdownClose"
-                     @open="opened=true"
+                     @open="handleDropdownOpen"
                      ref="multiselect">
             <template slot="option" slot-scope="props">
                 <sharp-template name="ListItem" :template="listItemTemplate" :template-data="props.option"></sharp-template>
@@ -65,7 +67,7 @@
         props: {
             fieldKey: String,
 
-            value: [String, Number, Object],
+            value: [String, Number, Object, Array],
 
             mode: String,
             localValues: {
@@ -96,7 +98,10 @@
             },
             readOnly: Boolean,
             listItemTemplate: String,
-            resultItemTemplate: String
+            resultItemTemplate: String,
+            noResultItem: Boolean,
+            multiple: Boolean,
+            hideSelected: Boolean
         },
         data() {
             return {
@@ -160,6 +165,11 @@
                 if(this.state === 'searching')
                     this.state = 'initial';
                 this.opened = false;
+                this.$emit('close');
+            },
+            handleDropdownOpen() {
+                this.opened = true;
+                this.$emit('open');
             },
             handleResetClick() {
                 this.state = 'initial';
@@ -203,6 +213,9 @@
 
             if(!this.isRemote) {
                 this.$emit('input', this.findLocalValue(), { force: true });
+            }
+            if(this.noResultItem) {
+                Object.defineProperty(this, 'state', { get:()=>'initial' });
             }
             await this.$nextTick();
             if(this.value) {
