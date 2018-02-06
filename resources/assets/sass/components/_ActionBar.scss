@@ -24,7 +24,10 @@
   .left, .right {
     display: flex;
     align-items: center;
-    & > *{
+    & > *:not(.text-content) {
+      height: 100%
+    }
+    & > * {
       margin-left:.5rem;
     }
     & > *:first-child {
@@ -42,10 +45,19 @@
   &__bar {
     display: flex;
     align-items: center;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
     background: $brand-01;
     height: 5rem;
+    & > .container {
+      height: 100%;
+      & > .row {
+        height: 100%;
+        & > & .col {
+          height: 100%;
+        }
+      }
+    }
   }
 
   &__extras {
@@ -76,6 +88,10 @@
     }
   }
 
+  .SharpDropdown__text {
+    height: 100%;
+  }
+
   &__actions-dropdown {
     align-self: stretch;
     min-width: 2rem;
@@ -85,7 +101,6 @@
 
     .SharpDropdown__text {
       border: none;
-      height: 100%;
     }
 
     .SharpDropdown__arrow {
@@ -135,9 +150,8 @@
       color: $brand-01;
     }
   }
-
-  .SharpButton:not(.SharpButton--primary) {
-    border: 1px solid $brand-01;
+  .SharpButton--secondary-accent, .SharpButton--danger {
+    border: 1px solid $ui-01;
   }
 
 
@@ -164,6 +178,7 @@
     }
     .SharpSearch__input {
       box-shadow: unset;
+      height: 100%;
       &:focus {
         box-shadow: 0 0 0 1px $brand-03;
       }
