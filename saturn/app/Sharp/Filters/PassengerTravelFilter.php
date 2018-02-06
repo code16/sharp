@@ -35,6 +35,11 @@ class PassengerTravelFilter implements EntityListFilter
         return true;
     }
 
+    public function searchKeys(): array
+    {
+        return ["country", "continent"];
+    }
+
     public function template(): string
     {
         return "{{country}}<br><small>{{continent}}</small>";

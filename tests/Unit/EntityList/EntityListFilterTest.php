@@ -147,7 +147,7 @@ class EntityListFilterTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_define_than_a_filter_is_master()
+    function we_can_define_that_a_filter_is_master()
     {
         $list = new class extends SharpEntityDefaultTestList {
             function buildListConfig()
@@ -173,7 +173,7 @@ class EntityListFilterTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_define_than_a_filter_is_searchable()
+    function we_can_define_that_a_filter_is_searchable()
     {
         $list = new class extends SharpEntityDefaultTestList {
             function buildListConfig()
@@ -193,6 +193,37 @@ class EntityListFilterTest extends SharpTestCase
                 [
                     "key" => "test",
                     "searchable" => true,
+                    "searchKeys" => ["label"]
+                ]
+            ]
+        ], $list->listConfig());
+    }
+
+    /** @test */
+    function we_can_define_searchKeys_on_a_filter()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig()
+            {
+                $this->addFilter("test", new class extends SharpEntityListTestFilter {
+                    function isSearchable() {
+                        return true;
+                    }
+                    function searchKeys() {
+                        return ["a", "b"];
+                    }
+                });
+            }
+        };
+
+        $list->buildListConfig();
+
+        $this->assertArraySubset([
+            "filters" => [
+                [
+                    "key" => "test",
+                    "searchable" => true,
+                    "searchKeys" => ["a", "b"]
                 ]
             ]
         ], $list->listConfig());
