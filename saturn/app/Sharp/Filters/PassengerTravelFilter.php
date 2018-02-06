@@ -18,7 +18,7 @@ class PassengerTravelFilter implements EntityListFilter
             ->map(function(Travel $travel) {
                 return [
                     "id" => $travel->id,
-                    "country" => $travel->destination,
+                    "label" => $travel->destination,
                     "continent" => ["Europe", "America", "Oceania", "Asia", "Africa"][rand(0, 4)]
                 ];
             })
@@ -37,11 +37,11 @@ class PassengerTravelFilter implements EntityListFilter
 
     public function searchKeys(): array
     {
-        return ["country", "continent"];
+        return ["label", "continent"];
     }
 
     public function template(): string
     {
-        return "{{country}}<br><small>{{continent}}</small>";
+        return "{{label}}<br><small>{{continent}}</small>";
     }
 }
