@@ -1,28 +1,28 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`filter-select can mount "empty" FilterSelect 1`] = `
-<span tabindex="0" class="SharpFilterSelect SharpFilterSelect--empty"><span class="SharpFilterSelect__text">
+<span tabindex="0" class="SharpFilterSelect SharpFilterSelect--empty SharpFilterSelect--searchable"><!----> <span class="SharpFilterSelect__text">
         Web job<!----></span>
 <!---->
 </span>
 `;
 
 exports[`filter-select can mount "multiple empty" FilterSelect 1`] = `
-<span tabindex="0" class="SharpFilterSelect SharpFilterSelect--empty SharpFilterSelect--multiple"><span class="SharpFilterSelect__text">
+<span tabindex="0" class="SharpFilterSelect SharpFilterSelect--empty SharpFilterSelect--multiple SharpFilterSelect--searchable"><!----> <span class="SharpFilterSelect__text">
         Web job<!----></span>
 <!---->
 </span>
 `;
 
 exports[`filter-select can mount "multiple valuated" FilterSelect 1`] = `
-<span tabindex="0" class="SharpFilterSelect SharpFilterSelect--multiple"><span class="SharpFilterSelect__text">
+<span tabindex="0" class="SharpFilterSelect SharpFilterSelect--multiple SharpFilterSelect--searchable"><!----> <span class="SharpFilterSelect__text">
         Web job<span style="font-weight: normal;">&nbsp;&nbsp;</span></span>
 <!---->
 </span>
 `;
 
 exports[`filter-select can mount "valued" FilterSelect 1`] = `
-<span tabindex="0" class="SharpFilterSelect"><span class="SharpFilterSelect__text">
+<span tabindex="0" class="SharpFilterSelect SharpFilterSelect--searchable"><!----> <span class="SharpFilterSelect__text">
         Web job<span style="font-weight: normal;">&nbsp;&nbsp;</span></span>
 <!---->
 </span>
