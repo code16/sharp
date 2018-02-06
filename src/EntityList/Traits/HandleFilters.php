@@ -6,6 +6,7 @@ use Closure;
 use Code16\Sharp\EntityList\EntityListFilter;
 use Code16\Sharp\EntityList\EntityListMultipleFilter;
 use Code16\Sharp\EntityList\EntityListRequiredFilter;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Event;
 
 trait HandleFilters
@@ -50,22 +51,45 @@ trait HandleFilters
                 "multiple" => $multiple,
                 "required" => $required,
                 "default" => $required ? $handler->defaultValue() : null,
-                "values" => $this->formatFilterValues($handler->values()),
+                "values" => $this->formatFilterValues($handler),
                 "label" => method_exists($handler, "label") ? $handler->label() : $filterName,
                 "master" => method_exists($handler, "isMaster") ? $handler->isMaster() : false,
                 "searchable" => method_exists($handler, "isSearchable") ? $handler->isSearchable() : false,
+                "template" => $this->formatFilterTemplate($handler)
             ];
         }
     }
 
     /**
-     * @param array $values
+     * @param EntityListFilter $handler
      * @return array
      */
-    protected function formatFilterValues(array $values)
+    protected function formatFilterValues(EntityListFilter $handler)
     {
-        return collect($values)->map(function($label, $id) {
-            return compact('id', 'label');
-        })->values()->all();
+        if(!method_exists($handler, "template")) {
+            return collect($handler->values())->map(function ($label, $id) {
+                return compact('id', 'label');
+            })->values()->all();
+        }
+
+        // There is a user-defined template: just return the raw values() is this case
+        return $handler->values();
+    }
+
+    /**
+     * @param EntityListFilter $handler
+     * @return string
+     */
+    protected function formatFilterTemplate(EntityListFilter $handler)
+    {
+        if(!method_exists($handler, "template")) {
+            return '{{label}}';
+        }
+
+        if(($template = $handler->template()) instanceof View) {
+            return $template->render();
+        }
+
+        return $template;
     }
 }

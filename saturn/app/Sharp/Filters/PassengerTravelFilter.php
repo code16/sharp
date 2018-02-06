@@ -14,7 +14,14 @@ class PassengerTravelFilter implements EntityListFilter
     public function values()
     {
         return Travel::orderBy("destination")
-            ->pluck("destination", "id")
+            ->get()
+            ->map(function(Travel $travel) {
+                return [
+                    "id" => $travel->id,
+                    "country" => $travel->destination,
+                    "continent" => ["Europe", "America", "Oceania", "Asia", "Africa"][rand(0, 4)]
+                ];
+            })
             ->all();
     }
 
@@ -26,5 +33,10 @@ class PassengerTravelFilter implements EntityListFilter
     public function isSearchable(): bool
     {
         return true;
+    }
+
+    public function template(): string
+    {
+        return "{{country}}<br><small>{{continent}}</small>";
     }
 }
