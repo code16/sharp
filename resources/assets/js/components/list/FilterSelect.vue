@@ -14,6 +14,7 @@
                       :clearable="!required"
                       :inline="false"
                       :unique-identifier="filterKey"
+                      :placeholder="fixZeroValuePlaceholder"
                       ref="select"
                       @input="handleSelect"
                       @open="opened=true"
@@ -31,7 +32,6 @@
 
     export default {
         name: 'SharpFilterSelect',
-        mixins: [AutoScroll],
         components: {
             [Dropdown.name]: Dropdown,
             [Select.name]: Select
@@ -61,15 +61,11 @@
             }
         },
         computed: {
-            autoScrollOptions() {
-                return {
-                    list: this.$el.querySelector('.SharpDropdown__list'),
-                    item: _ => this.$refs.select.$el.querySelector('input:checked')
-                }
-            },
-
             empty() {
-                return !this.value || this.multiple && !this.value.length;
+                return this.value == null || this.multiple && !this.value.length;
+            },
+            fixZeroValuePlaceholder() {
+                return !this.multiple ? (this.values.find(option => option.id===0)||{}).label : '';
             }
         },
         methods: {

@@ -386,7 +386,7 @@
                 return isNaN(Number(n)) ? val : n;
             },
             filterValueOrDefault(val, filter) {
-                return val ? this.tryParseNumber(val) : (filter.default || (filter.multiple?[]:null));
+                return val != null && val !== '' ? this.tryParseNumber(val) : (filter.default || (filter.multiple?[]:null));
             },
             instanceCommands({[this.idAttr]:instanceId}) {
                 return this.commandsByInstanceId[instanceId]// || [];

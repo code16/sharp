@@ -18,11 +18,11 @@
     justify-content: space-between;
     align-items: center;
     &__close-button {
-      @include close-button;
+      @extend %select-close-button;
     }
 
     &__close-icon {
-      @include close-icon;
+      @extend %select-close-icon;
     }
   }
 
