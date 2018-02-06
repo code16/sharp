@@ -24,9 +24,11 @@
                      :multiple="multiple"
                      :disabled="readOnly"
                      :hide-selected="hideSelected"
+                     :allow-empty="allowEmpty"
                      preserve-search
                      @search-change="updateSuggestions($event)"
                      @select="handleSelect"
+                     @input="$emit('multiselect-input',$event)"
                      @close="handleDropdownClose"
                      @open="handleDropdownOpen"
                      ref="multiselect">
@@ -101,7 +103,8 @@
             resultItemTemplate: String,
             noResultItem: Boolean,
             multiple: Boolean,
-            hideSelected: Boolean
+            hideSelected: Boolean,
+            allowEmpty: Boolean
         },
         data() {
             return {

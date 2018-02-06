@@ -9,18 +9,20 @@
           tabindex="0" @click="open"
     >
         <sharp-autocomplete
-                class="SharpFilterSelect__select"
-                :value="autocompleteValue"
-                :local-values="values"
-                :search-keys="searchKeys"
-                :list-item-template="template"
-                :placeholder="l('entity_list.filter.search_placeholder')"
-                :multiple="multiple"
-                no-result-item hide-selected
-                mode="local"
-                ref="autocomplete"
-                @input="handleAutocompleteSelect"
-                @close="close"
+            class="SharpFilterSelect__select"
+            :value="autocompleteValue"
+            :local-values="values"
+            :search-keys="searchKeys"
+            :list-item-template="template"
+            :placeholder="l('entity_list.filter.search_placeholder')"
+            :multiple="multiple"
+            :hide-selected="multiple"
+            :allow-empty="!required"
+            no-result-item
+            mode="local"
+            ref="autocomplete"
+            @multiselect-input="handleAutocompleteInput"
+            @close="close"
         />
         <span class="SharpFilterSelect__text">
             {{name}}<span v-if="!empty" style="font-weight:normal">&nbsp;&nbsp;</span>
@@ -99,9 +101,8 @@
             handleSelect(value) {
                 this.$emit('input', value);
             },
-            handleAutocompleteSelect(value) {
-                if(value == null)return;
-                this.$emit('input', this.multiple ? [...this.value, value.id] : value.id);
+            handleAutocompleteInput(value) {
+                this.$emit('input', this.multiple ? value.map(v=>v.id) : (value||{}).id);
             },
             open() {
                 this.opened = true;
