@@ -2,7 +2,7 @@
     <sharp-action-bar class="SharpActionBarList" :class="{'SharpActionBarList--search-active':searchActive}" :ready="ready">
 
         <template slot="left">
-            <span>{{ itemsCount }} {{ l('action_bar.list.items_count') }}</span>
+            <span class="text-content">{{ itemsCount }} {{ l('action_bar.list.items_count') }}</span>
         </template>
         <template slot="right">
             <div v-if="searchable && !reorderActive" class="SharpActionBar__search SharpSearch SharpSearch--lg" :class="{'SharpSearch--active':searchActive}" role="search">
