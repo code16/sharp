@@ -27,15 +27,13 @@
   &--searchable {
     &.SharpFilterSelect--open {
       .SharpAutocomplete .multiselect__tags {
-        width: 10rem!important;
-        padding: 0 1rem!important;
+        width: 10rem !important;
+        padding: 0 1rem !important;
         top: 100%;
       }
     }
-    .SharpAutocomplete {
-      .multiselect__content {
-        padding-top: 3rem;
-      }
+    .SharpAutocomplete .multiselect__content {
+      border-top: 2.5rem solid white !important;
     }
   }
 
@@ -85,7 +83,7 @@
 
       &__content {
         left:0;
-        min-width: 10rem
+        min-width: 10rem;
       }
 
       &__tag {
