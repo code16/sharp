@@ -43,6 +43,10 @@
     .multiselect__input {
       width: 100% !important;
     }
+    .multiselect__option > .SharpTemplate {
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   &--remote {
