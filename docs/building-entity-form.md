@@ -325,7 +325,7 @@ Rich text fields (RTF) are structured in a certain way by Sharp. This means that
 
 To make it work, you have two options:
 
-- add a ".text" suffix to your field key in the rules:
+Either add a ".text" suffix to your field key in the rules:
 
     public function rules()
     {
@@ -334,7 +334,7 @@ To make it work, you have two options:
         ];
     }
 
-- or even simplier, make your FormRequest class extend `Code16\Sharp\Form\Validator\SharpFormRequest` instead of `Illuminate\Foundation\Http\FormRequest`. Note that in this case, if you have to define a `withValidator($validator)` function (see the [Laravel doc](https://laravel.com/docs/5.5/validation#form-request-validation)), make sure you call `parent::withValidator($validator)` in it.
+Or even simplier, make your FormRequest class extend `Code16\Sharp\Form\Validator\SharpFormRequest` instead of `Illuminate\Foundation\Http\FormRequest`. Note that in this case, if you have to define a `withValidator($validator)` function (see the [Laravel doc](https://laravel.com/docs/5.5/validation#form-request-validation)), make sure you call `parent::withValidator($validator)` in it.
 
 ---
 
