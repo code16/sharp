@@ -458,8 +458,9 @@
                 this.updateHistory();
             },
             updateData() {
-                this.get().then(({data:{ data }})=>{
+                this.get().then(({data:{ data, config }})=>{
                     this.data = data;
+                    this.config = config;
                     this.setupActionBar();
                 });
             },

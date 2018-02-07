@@ -25,7 +25,7 @@
                      :disabled="readOnly"
                      :hide-selected="hideSelected"
                      :allow-empty="allowEmpty"
-                     preserve-search
+                     :preserve-search="preserveSearch"
                      @search-change="updateSuggestions($event)"
                      @select="handleSelect"
                      @input="$emit('multiselect-input',$event)"
@@ -104,7 +104,12 @@
             noResultItem: Boolean,
             multiple: Boolean,
             hideSelected: Boolean,
-            allowEmpty: Boolean
+            allowEmpty: Boolean,
+            clearOnSelect: Boolean,
+            preserveSearch: {
+                type: Boolean,
+                default: true
+            }
         },
         data() {
             return {
@@ -113,6 +118,9 @@
                 opened: false,
                 state: 'initial'
             }
+        },
+        watch: {
+            localValues:'updateLocalSuggestions'
         },
         computed: {
             isRemote() {

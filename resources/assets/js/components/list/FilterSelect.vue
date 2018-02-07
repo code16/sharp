@@ -18,6 +18,7 @@
             :multiple="multiple"
             :hide-selected="multiple"
             :allow-empty="!required"
+            :preserve-search="false"
             no-result-item
             mode="local"
             ref="autocomplete"
@@ -87,6 +88,11 @@
             }
         },
         computed: {
+            optionById() {
+                return this.values.reduce((res, v)=> ({
+                    ...res, [v.id]: v
+                }), {});
+            },
             empty() {
                 return this.value == null || this.multiple && !this.value.length;
             },
@@ -94,7 +100,7 @@
                 return !this.multiple ? (this.values.find(option => option.id===0)||{}).label : '';
             },
             autocompleteValue() {
-                return this.values.find(opt=>opt.id===this.value);
+                return this.multiple ? this.value.map(value=>this.optionById[value]) : this.optionById[this.value];
             }
         },
         methods: {
@@ -109,7 +115,7 @@
                 this.showMultiselect();
             },
             close() {
-                this.opened =false;
+                this.opened = false;
             },
             showMultiselect() {
                 let { autocomplete:{ $refs: { multiselect } } } = this.$refs;
