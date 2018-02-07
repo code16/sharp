@@ -4,6 +4,7 @@ namespace Code16\Sharp;
 
 use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
+use Code16\Sharp\Form\Validator\SharpValidator;
 use Code16\Sharp\Http\Composers\MenuViewComposer;
 use Code16\Sharp\Http\Middleware\Api\AddSharpContext;
 use Code16\Sharp\Http\Middleware\Api\AppendFormAuthorizations;
@@ -47,6 +48,11 @@ class SharpServiceProvider extends ServiceProvider
             ['sharp::form', 'sharp::list', 'sharp::dashboard'],
             MenuViewComposer::class
         );
+
+        // Bind Sharp's specific Validator
+        $this->app->validator->resolver(function($translator, $data, $rules, $messages) {
+            return new SharpValidator($translator, $data, $rules, $messages);
+        });
     }
 
     public function register()

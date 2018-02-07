@@ -312,6 +312,30 @@ Of course you'll want to have an input validation on your form. Simply create a 
 
 Sharp will handle the error display in the form.
 
+### Validate rich text fields (markdown and wysiwyg)
+
+Rich text fields (RTF) are structured in a certain way by Sharp. This means that a rule like this will not work out of the box, if bio is a RTF:
+
+    public function rules()
+    {
+        return [
+            'bio' => 'required'
+        ];
+    }
+
+To make it work, you have two options:
+
+Either add a ".text" suffix to your field key in the rules:
+
+    public function rules()
+    {
+        return [
+            'bio.text' => 'required'
+        ];
+    }
+
+Or even simplier, make your FormRequest class extend `Code16\Sharp\Form\Validator\SharpFormRequest` instead of `Illuminate\Foundation\Http\FormRequest`. Note that in this case, if you have to define a `withValidator($validator)` function (see the [Laravel doc](https://laravel.com/docs/5.5/validation#form-request-validation)), make sure you call `parent::withValidator($validator)` in it.
+
 ---
 
 > next chapter: [Entity authorizations](entity-authorizations.md).
