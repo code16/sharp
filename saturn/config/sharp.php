@@ -36,6 +36,7 @@ return [
         "travel" => [
             "list" => \App\Sharp\TravelSharpList::class,
             "form" => \App\Sharp\TravelSharpForm::class,
+            "validator" => \App\Sharp\TravelSharpValidator::class,
         ],
         "user" => [
             "list" => \App\Sharp\UserSharpList::class,
