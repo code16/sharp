@@ -109,6 +109,7 @@ describe('autocomplete-field', ()=>{
 
             await Vue.nextTick();
             let clearBtn = document.querySelector('button');
+            // expect(document.body.innerHTML).toMatchSnapshot();
             clearBtn.click();
 
             expect($autocomplete.state).toBe('initial');

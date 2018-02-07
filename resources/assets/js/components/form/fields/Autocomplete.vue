@@ -104,7 +104,10 @@
             noResultItem: Boolean,
             multiple: Boolean,
             hideSelected: Boolean,
-            allowEmpty: Boolean,
+            allowEmpty: {
+                type: Boolean,
+                default: true
+            },
             clearOnSelect: Boolean,
             preserveSearch: {
                 type: Boolean,
@@ -120,7 +123,9 @@
             }
         },
         watch: {
-            localValues:'updateLocalSuggestions'
+            localValues() {
+                this.updateLocalSuggestions({ keepState:true });
+            }
         },
         computed: {
             isRemote() {
@@ -163,9 +168,11 @@
                 else this.updateLocalSuggestions();
             },
 
-            updateLocalSuggestions() {
+            updateLocalSuggestions({ keepState }={}) {
                 this.suggestions = this.searchStrategy.search(this.query);
-                this.state = 'searching';
+                if(!keepState) {
+                    this.state = 'searching';
+                }
             },
 
             handleSelect(value) {

@@ -100,7 +100,7 @@
                 return !this.multiple ? (this.values.find(option => option.id===0)||{}).label : '';
             },
             autocompleteValue() {
-                return this.multiple ? this.value.map(value=>this.optionById[value]) : this.optionById[this.value];
+                return this.multiple ? (this.value||[]).map(value=>this.optionById[value]) : this.optionById[this.value];
             }
         },
         methods: {
