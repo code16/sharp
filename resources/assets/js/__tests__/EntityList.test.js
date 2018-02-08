@@ -588,6 +588,7 @@ describe('entity-list', ()=>{
                 },
                 config:{
                     filters:[],
+                    paginated: true,
                     instanceIdAttribute: 'id'
                 },
                 authorizations:{

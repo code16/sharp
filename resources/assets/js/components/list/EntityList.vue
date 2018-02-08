@@ -73,7 +73,7 @@
                 </div>
             </div>
             <div class="SharpEntityList__pagination-container">
-                <sharp-pagination v-if="data.totalCount/data.pageSize > 1."
+                <sharp-pagination v-if="data.totalCount/data.pageSize > 1. && config.paginated"
                                   class="SharpPagination"
                                   :total-rows="data.totalCount"
                                   :per-page="data.pageSize"
