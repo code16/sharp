@@ -78,7 +78,7 @@ class MarkdownFormatterTest extends SharpTestCase
         $toFrontArray = $formatter->toFront($field, $value)["files"][0];
 
         $this->assertEquals("local:$image", $toFrontArray["name"]);
-        $this->assertEquals(1127, $toFrontArray["size"]);
+        $this->assertTrue($toFrontArray["size"] > 0);
         $this->assertStringStartsWith(url("thumbnails/data/1000-400/" . basename($image)), $toFrontArray["thumbnail"]);
     }
 
