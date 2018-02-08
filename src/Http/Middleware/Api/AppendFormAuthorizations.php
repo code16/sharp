@@ -47,11 +47,16 @@ class AppendFormAuthorizations
 
         if($this->hasPolicyFor($entityKey)) {
             $policies = [
-                "view" => $this->gate->check("sharp.{$entityKey}.view", $instanceId),
                 "create" => $this->gate->check("sharp.{$entityKey}.create"),
-                "update" => $this->gate->check("sharp.{$entityKey}.update", $instanceId),
-                "delete" => $this->gate->check("sharp.{$entityKey}.delete", $instanceId)
             ];
+
+            if($instanceId) {
+                $policies += [
+                    "view" => $this->gate->check("sharp.{$entityKey}.view", $instanceId),
+                    "update" => $this->gate->check("sharp.{$entityKey}.update", $instanceId),
+                    "delete" => $this->gate->check("sharp.{$entityKey}.delete", $instanceId)
+                ];
+            }
         }
 
         $globalAuthorizations = $this->getGlobalAuthorizations($entityKey);

@@ -12,11 +12,11 @@ class PolicyAuthorizationsTest extends BaseApiTest
         $this->login();
     }
 
-    protected function getPackageProviders($app)
+    protected function getEnvironmentSetUp($app)
     {
-        $app['config']['sharp.entities.person.policy'] = AuthorizationsTestPersonPolicy::class;
+        parent::getEnvironmentSetUp($app);
 
-        return parent::getPackageProviders($app);
+        $app['config']['sharp.entities.person.policy'] = AuthorizationsTestPersonPolicy::class;
     }
 
     /** @test */
@@ -46,7 +46,9 @@ class PolicyAuthorizationsTest extends BaseApiTest
 
         $this->json('get', '/sharp/api/form/person')->assertJson([
             "authorizations" => [
-                "delete" => false,
+                // Delete policy is false, but in a create case it will return true
+                // because there is no entity to check for.
+                "delete" => true,
                 "update" => true,
                 "create" => true,
                 "view" => true,
