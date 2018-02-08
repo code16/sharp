@@ -98,7 +98,7 @@ class SharpUploadModel extends Model
     private function isRealAttribute(string $name)
     {
         return in_array($name, [
-            "id", "model_id", "model_type", "model_key", "file_name",
+            "id", "model", "model_id", "model_type", "model_key", "file_name",
             "mime_type", "disk", "size", "custom_properties",
             "order", "created_at", "updated_at", "file", "transformed"
         ]);
