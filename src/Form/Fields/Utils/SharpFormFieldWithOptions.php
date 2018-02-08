@@ -17,7 +17,7 @@ trait SharpFormFieldWithOptions
 
         $options = collect($options);
 
-        if(is_array($options->first())) {
+        if(is_array($options->first()) || is_object($options->first())) {
             // We assume that we already have ["id", "label"] in this case
             return $options->all();
         }
