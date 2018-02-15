@@ -175,7 +175,7 @@ trait WithCustomTransformers
             })->each(function ($key) use (&$attributes, $model) {
                 // For each one, we create a "relation:attribute" key
                 // in the returned array
-                $attributes[$key[0]] = $model->{$key[1]} ? $model->{$key[1]}->{$key[2]} : null;
+                $attributes[$key[0]] = $model->{$key[1]} ? ($model->{$key[1]}->{$key[2]} ?? null) : null;
             });
 
         return $attributes;
