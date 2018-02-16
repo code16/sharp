@@ -79,8 +79,7 @@ class SharpAuthorizationManager
 
         if($instanceId) {
             // Form case: edit, update, store, delete
-            return request()->method() != 'GET'
-                && !app(Gate::class)->check("sharp.{$entityKey}.{$ability}", $instanceId);
+            return !app(Gate::class)->check("sharp.{$entityKey}.{$ability}", $instanceId);
         }
 
         if(in_array($ability, ["entity", "create"])) {
