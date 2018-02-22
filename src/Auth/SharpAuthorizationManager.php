@@ -85,6 +85,8 @@ class SharpAuthorizationManager
         if(in_array($ability, ["entity", "create"])) {
             return !app(Gate::class)->check("sharp.{$entityKey}.{$ability}");
         }
+
+        return false;
     }
 
     /**
