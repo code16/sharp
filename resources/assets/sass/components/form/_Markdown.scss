@@ -42,4 +42,8 @@
   .CodeMirror, .CodeMirror-scroll {
     min-height: 0!important;
   }
+
+  .CodeMirror-code .cm-header {
+    line-height: inherit!important;
+  }
 }
