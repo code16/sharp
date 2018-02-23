@@ -5,6 +5,7 @@ namespace Code16\Sharp\Tests\Feature\Api;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Tests\Fixtures\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class MultiFormEntityFormControllerTest extends BaseApiTest
@@ -13,6 +14,14 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
     {
         parent::setUp();
         $this->login();
+    }
+
+    protected function getEnvironmentSetUp($app)
+    {
+        parent::getEnvironmentSetUp($app);
+
+        // Policies have to be defined upfront
+        $app['config']['sharp.entities.person.policy'] = AuthorizationsTestMultiPersonPolicy::class;
     }
 
     /** @test */
@@ -70,6 +79,51 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
                     ]
                 ]
             ]);
+    }
+
+    /** @test */
+    public function global_authorizations_are_applied_sub_entities()
+    {
+        $this->buildTheWorld();
+
+        $this->app['config']->set('sharp.entities.person.authorizations', [
+            "view" => false
+        ]);
+
+        $this->json('get', '/sharp/api/form/person:small/1')
+            ->assertStatus(403);
+
+        $this->json('get', '/sharp/api/form/person:big/1')
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function policies_are_applied_to_sub_entities()
+    {
+        $this->buildTheWorld();
+
+        $this->json('get', '/sharp/api/form/person:small/3')
+            ->assertStatus(403);
+
+        $this->json('get', '/sharp/api/form/person:small/2')
+            ->assertStatus(200);
+
+        $this->json('get', '/sharp/api/form/person:big/3')
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function policy_authorizations_are_appended_to_the_response_for_a_sub_entity()
+    {
+        $this->buildTheWorld();
+
+        $this->json('get', '/sharp/api/form/person:small/4')->assertJson([
+            "authorizations" => [
+                "delete" => false,
+                "update" => false,
+                "view" => true,
+            ]
+        ]);
     }
 
     protected function buildTheWorld()
@@ -145,4 +199,13 @@ class BigPersonSharpValidator extends FormRequest
     {
         return ['name' => 'required', "height" => "required|numeric"];
     }
+}
+
+class AuthorizationsTestMultiPersonPolicy
+{
+    public function view(User $user, $id) { return $id != 3; }
+
+    public function update(User $user, $id) { return $id < 3; }
+
+    public function delete(User $user, $id) { return $id < 3; }
 }

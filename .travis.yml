@@ -28,5 +28,6 @@ script:
   - npm run test
 
 env:
+  - LARAVEL_VERSION=5.4.*
   - LARAVEL_VERSION=5.5.*
   - LARAVEL_VERSION=5.6.*

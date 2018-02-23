@@ -76,6 +76,23 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
     }
 
     /** @test */
+    function we_can_define_localValues_as_an_object_array()
+    {
+        $formField = $this->getDefaultLocalAutocomplete([
+            (object)["id" => 1, "label" => "Elem 1"],
+            (object)["id" => 2, "label" => "Elem 2"],
+        ]);
+
+        $this->assertArraySubset(
+            ["localValues" => [
+                (object)["id" => 1, "label" => "Elem 1"],
+                (object)["id" => 2, "label" => "Elem 2"],
+            ]],
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
     function we_can_define_searchMinChars()
     {
         $formField = $this->getDefaultLocalAutocomplete()
