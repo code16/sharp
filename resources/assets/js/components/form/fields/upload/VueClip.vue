@@ -365,6 +365,7 @@
         created() {
             this.options.thumbnailWidth = null;
             this.options.thumbnailHeight = null;
+            this.options.maxFiles = 1;
 
             if (!this.value)
                 return;
