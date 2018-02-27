@@ -7,7 +7,7 @@ Entity List Filters are a simple way for the user to filter list items on some a
 
 First, we need to write a class which implements the `Code16\Sharp\EntityList\EntityListFilter` interface, and therefore declare a `values()` function. This function must return an ["id" => "label"] array. For instance, with Eloquent:
 
-    class SpaceshipTypeFilter implements EntityListRequiredFilter
+    class SpaceshipTypeFilter implements EntityListFilter
     {
         public function values()
         {
