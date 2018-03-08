@@ -12,26 +12,29 @@
                 </svg>
             </button>
         </div>
-        <multiselect v-if="state!=='valuated'"
-                     class="SharpAutocomplete__multiselect"
-                     :class="{'SharpAutocomplete__multiselect--hide-dropdown':hideDropdown}"
-                     :value="value"
-                     :options="suggestions"
-                     :track-by="itemIdAttribute"
-                     :internal-search="false"
-                     :placeholder="placeholder"
-                     :loading="isLoading"
-                     :multiple="multiple"
-                     :disabled="readOnly"
-                     :hide-selected="hideSelected"
-                     :allow-empty="allowEmpty"
-                     :preserve-search="preserveSearch"
-                     @search-change="updateSuggestions($event)"
-                     @select="handleSelect"
-                     @input="$emit('multiselect-input',$event)"
-                     @close="handleDropdownClose"
-                     @open="handleDropdownOpen"
-                     ref="multiselect">
+        <multiselect
+            v-if="state!=='valuated'"
+            class="SharpAutocomplete__multiselect"
+            :class="{'SharpAutocomplete__multiselect--hide-dropdown':hideDropdown}"
+            :value="value"
+            :options="suggestions"
+            :track-by="itemIdAttribute"
+            :internal-search="false"
+            :placeholder="placeholder"
+            :loading="isLoading"
+            :multiple="multiple"
+            :disabled="readOnly"
+            :hide-selected="hideSelected"
+            :allow-empty="allowEmpty"
+            :preserve-search="preserveSearch"
+            :show-pointer="showPointer"
+            @search-change="updateSuggestions($event)"
+            @select="handleSelect"
+            @input="$emit('multiselect-input',$event)"
+            @close="handleDropdownClose"
+            @open="handleDropdownOpen"
+            ref="multiselect"
+        >
             <template slot="option" slot-scope="props">
                 <sharp-template name="ListItem" :template="listItemTemplate" :template-data="props.option"></sharp-template>
             </template>
@@ -112,6 +115,10 @@
             preserveSearch: {
                 type: Boolean,
                 default: true
+            },
+            showPointer: {
+                type:Boolean,
+                default:true
             }
         },
         data() {
