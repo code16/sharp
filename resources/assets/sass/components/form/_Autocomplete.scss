@@ -17,12 +17,22 @@
     display: inline-flex !important;
     justify-content: space-between;
     align-items: center;
+    height: auto;
+    padding-top: rem(9px);
+    padding-bottom: rem(9px);
+    padding-right: 2rem;
+    min-height: rem(40px);
+
     &__close-button {
       @extend %select-close-button;
     }
 
     &__close-icon {
       @extend %select-close-icon;
+    }
+    .SharpTemplate {
+      overflow:hidden;
+      text-overflow: ellipsis;
     }
   }
 

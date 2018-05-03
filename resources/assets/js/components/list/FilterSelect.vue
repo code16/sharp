@@ -8,6 +8,7 @@
           }"
           tabindex="0" @click="open"
     >
+        <!-- dropdown & search input -->
         <sharp-autocomplete
             class="SharpFilterSelect__select"
             :value="autocompleteValue"
@@ -19,6 +20,7 @@
             :hide-selected="multiple"
             :allow-empty="!required"
             :preserve-search="false"
+            :show-pointer="false"
             no-result-item
             mode="local"
             ref="autocomplete"
@@ -29,6 +31,7 @@
             {{name}}<span v-if="!empty" style="font-weight:normal">&nbsp;&nbsp;</span>
         </span>
 
+        <!-- value text & tags -->
         <sharp-select
             class="SharpFilterSelect__select"
             :value="value"

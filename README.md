@@ -19,6 +19,11 @@ Sharp intends to provide a clean solution to the following needs:
 
 Sharp 4 needs Laravel 5.4+ and PHP 7.0+.
 
+Here's a series of blog posts which present Sharp following a simple example:
+- [Part 1](https://medium.com/@lonchampt/about-sharp-for-laravel-part-1-74a826279fe0)
+- [Part 2](https://medium.com/@lonchampt/about-sharp-for-laravel-part-2-9c7779782f31)
+- to be continued...
+
 ![Dashboard](docs/img/dashboard.png)
 
 ![Entity list](docs/img/list.png)
