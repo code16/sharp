@@ -16,7 +16,7 @@ function sharp_version()
 function sharp_page_title($sharpMenu, $entityKey)
 {
     if(!$sharpMenu) {
-        $title = "Login";
+        $title = trans('sharp::login.login_page_title');
 
     } else {
         $entityLabel = $sharpMenu->dashboard
