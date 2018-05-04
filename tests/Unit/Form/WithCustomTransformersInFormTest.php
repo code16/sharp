@@ -9,6 +9,7 @@ use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
+use Illuminate\Support\Facades\DB;
 
 class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
 {
@@ -27,7 +28,26 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
             ], $form->find($person->id)
         );
     }
-
+    /** @test */
+    function we_can_retrieve_an_array_version_of_a_stdclass()
+    {
+        $person = Person::create([
+            "name" => "John Wayne"
+        ]);
+        $form = new class extends WithCustomTransformersTestForm
+        {
+            function find($id): array
+            {
+                return $this->transform(
+                    DB::table((new Person())->getTable())->where(['id'=>$id])->first()
+                );
+            }
+        };
+        $this->assertArraySubset([
+            "name" => "John Wayne"
+        ], $form->find($person->id)
+        );
+    }
     /** @test */
     function belongsTo_is_handled()
     {

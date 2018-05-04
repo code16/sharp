@@ -6,6 +6,7 @@ use Closure;
 use Code16\Sharp\Form\SharpForm;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
 use Illuminate\Pagination\LengthAwarePaginator;
+use stdClass;
 
 /**
  * This trait allows a class to handle a custom transformers array.
@@ -98,7 +99,7 @@ trait WithCustomTransformers
      */
     protected function applyTransformers($model, bool $forceFullObject = true)
     {
-        $attributes = is_array($model) ? $model : $model->toArray();
+        $attributes = is_array($model) ? $model: ($model instanceof stdClass ? (array)$model: $model->toArray());
 
         if($forceFullObject) {
             // Merge model attribute with form fields to be sure we have
