@@ -9,6 +9,7 @@ use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
+use Illuminate\Support\Facades\DB;
 
 class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
 {
@@ -23,6 +24,49 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
         $this->assertArraySubset(
             [["name" => "John Wayne"], ["name" => "Mary Wayne"]],
             $list->getListData(new EntityListQueryParams())
+        );
+    }
+    
+    /** @test */
+    function we_can_retrieve_an_array_version_of_a_db_raw_collection()
+    {
+        Person::create(["name" => "John Wayne"]);
+        Person::create(["name" => "Mary Wayne"]);
+        
+        $list = new class extends WithCustomTransformersTestList
+        {
+            function getListData(EntityListQueryParams $params)
+            {
+                return $this->transform(DB::table((new Person())->getTable())->get());
+            }
+        };
+    
+        $this->assertArraySubset(
+            [["name" => "John Wayne"], ["name" => "Mary Wayne"]],
+            $list->getListData(new EntityListQueryParams())
+        );
+    }
+    
+    /** @test */
+    function we_can_retrieve_an_array_version_of_a_db_raw_paginator()
+    {
+        Person::create(["name" => "A"]);
+        Person::create(["name" => "B"]);
+        Person::create(["name" => "C"]);
+        Person::create(["name" => "D"]);
+        Person::create(["name" => "E"]);
+        
+        $list = new class extends WithCustomTransformersTestList
+        {
+            function getListData(EntityListQueryParams $params)
+            {
+                return $this->transform(DB::table((new Person())->getTable())->paginate(2));
+            }
+        };
+        
+        $this->assertArraySubset(
+            [["name" => "A"], ["name" => "B"]],
+            $list->getListData(new EntityListQueryParams())->items()
         );
     }
 
