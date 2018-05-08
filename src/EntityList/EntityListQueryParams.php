@@ -208,9 +208,14 @@ class EntityListQueryParams
      */
     protected function setFilterValue(string $filter, $value)
     {
+        if(is_array($value)) {
+            // Force all filter values to be string, to be consistent with
+            // all use cases (filter in EntityList or in Command)
+            $value = empty($value) ? null : implode(',', $value);
+        }
+
         $this->filters[$filter] = $value;
 
         event("filter-{$filter}-was-set", [$value, $this]);
     }
-
 }
