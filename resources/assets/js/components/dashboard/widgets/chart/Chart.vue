@@ -12,7 +12,9 @@
 
 <script>
     // Removed because Vue duplication
-    import { Bar, Line, Pie } from 'vue-chartjs';
+    import Bar from 'vue-chartjs/es/BaseCharts/Bar';
+    import Line from 'vue-chartjs/es/BaseCharts/Line';
+    import Pie from 'vue-chartjs/es/BaseCharts/Pie';
     import Chartjs from './Chartjs';
     import Legend from './Legend';
 

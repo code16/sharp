@@ -23,7 +23,6 @@ exports[`list-field can mount "read only" filled list field 1`] = `
 					<!---->
 				</div>
 			</div>
-			<!---->
 		</div>
 		<!---->
 	</div>
@@ -46,7 +45,6 @@ exports[`list-field can mount collapsed list field 1`] = `
 					<!---->
 				</div>
 			</div>
-			<!---->
 		</div>
 		<!---->
 	</div>
@@ -59,7 +57,6 @@ exports[`list-field can mount empty "read only" list field 1`] = `
 		<!---->
 		<div>
 			<div></div>
-			<!---->
 		</div> <em class="SharpList__empty-alert">{{ form.list.empty }}</em></div>
 </div>
 `;
@@ -155,7 +152,6 @@ exports[`list-field can mount non addable, non removable, non sortable list fiel
 					<!---->
 				</div>
 			</div>
-			<!---->
 		</div>
 		<!---->
 	</div>
@@ -243,7 +239,6 @@ exports[`list-field can mount with full list 1`] = `
 					<!---->
 				</div>
 			</div>
-			<!---->
 		</div>
 		<!---->
 	</div>
