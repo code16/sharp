@@ -41,7 +41,6 @@
     "show-stats": "npm run stats && webpack-bundle-size-analyzer stats.json"
   },
   "devDependencies": {
-    "@fortawesome/fontawesome-free": "^5.1.0-4",
     "axios": "^0.15.2",
     "babel-jest": "^20.0.3",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
