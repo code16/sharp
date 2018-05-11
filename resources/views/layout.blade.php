@@ -6,8 +6,6 @@
     <title>{{ sharp_page_title($sharpMenu ?? null, $entityKey ?? null) }}</title>
     <link rel="stylesheet" href="/vendor/sharp/sharp.css?version={{ sharp_version() }}">
     <link rel="stylesheet" href="/vendor/sharp/sharp-cms.css?version={{ sharp_version() }}">
-
-    <script defer src="/vendor/sharp/fontawesome.js?version={{ sharp_version() }}"></script>
 </head>
 <body>
     <div id="glasspane"></div>
@@ -22,6 +20,6 @@
 
     <script src="/vendor/sharp/lang.js?version={{ sharp_version() }}&locale={{ app()->getLocale() }}"></script>
     <script src="/vendor/sharp/sharp.js?version={{ sharp_version() }}"></script>
-
+    <script id="loadFA" data-src="/vendor/sharp/fontawesome.js?version={{ sharp_version() }}"></script>
 </body>
 </html>

@@ -12,3 +12,11 @@ export const ignoreWarns = callback => {
     callback();
     Vue.config.silent = false;
 };
+
+export function loadFontAwesome() {
+    let script = document.getElementById('loadFA');
+    if(script.hasAttribute('data-src')) {
+        script.setAttribute('src', script.getAttribute('data-src'));
+        script.removeAttribute('data-src');
+    }
+}
