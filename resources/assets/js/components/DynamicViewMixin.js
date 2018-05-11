@@ -1,6 +1,6 @@
 import * as qs from '../helpers/querystring';
+
 import { lang } from '../mixins/Localization';
-import { loadFontAwesome } from "../util";
 
 function parseBlobJSONContent(blob) {
     return new Promise(resolve => {
@@ -32,7 +32,6 @@ export default {
                 .then(response=>{
                     this.mount(response.data);
                     this.ready = true;
-                    this.$nextTick(loadFontAwesome);
                     return Promise.resolve(response);
                 })
                 .catch(error=>{

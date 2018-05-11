@@ -57,8 +57,8 @@
                                 <sharp-dropdown v-if="!noInstanceCommands"
                                                 class="SharpEntityList__commands-dropdown"
                                                 :class="{'SharpEntityList__commands-dropdown--placeholder':!instanceCommands(item)}" :show-arrow="false">
-                                    <div slot="text" class="SharpEntityList__command-icon text-center">
-                                        <i class="fa fa-plus fa-xs align-baseline"></i>
+                                    <div slot="text" class="SharpEntityList__command-icon">
+                                        <i class="fa fa-plus"></i>
                                     </div>
                                     <sharp-dropdown-item v-for="command in instanceCommands(item)" @click="sendCommand(command, item)" :key="command.key">
                                         {{ command.label }}

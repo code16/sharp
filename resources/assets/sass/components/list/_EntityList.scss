@@ -241,8 +241,13 @@
       width: rem(12px);
       height: rem(12px);
       color: $brand-03;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-      font-size:.75rem;
+      .fa {
+        font-size : rem(8px);
+      }
     }
     &--placeholder {
       visibility: hidden;
