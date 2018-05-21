@@ -46,6 +46,20 @@ class CommandControllerTest extends BaseApiTest
     }
 
     /** @test */
+    public function we_can_call_a_link_entity_command()
+    {
+        $this->buildTheWorld();
+        $this->disableExceptionHandling();
+
+        $this->json('post', '/sharp/api/list/person/command/instance_link/1')
+            ->assertStatus(200)
+            ->assertJson([
+                "action" => "link",
+                "link"   => "/link/out"
+            ]);
+    }
+
+    /** @test */
     public function we_can_call_a_reload_entity_command()
     {
         $this->buildTheWorld();
@@ -242,6 +256,12 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
             public function label(): string { return "label"; }
             public function execute($instanceId, array $params = []): array {
                 return $this->refresh(1);
+            }
+
+        })->addInstanceCommand("instance_link", new class() extends InstanceCommand {
+            public function label(): string { return "label"; }
+            public function execute($instanceId, array $params = []): array {
+                return $this->link('/link/out');
             }
 
         })->addInstanceCommand("entity_exception", new class() extends EntityCommand {
