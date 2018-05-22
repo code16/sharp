@@ -31,7 +31,7 @@ class SharpFormUploadField extends SharpFormField
      */
     public function setFileFilter($fileFilter)
     {
-        $this->fileFilter = $this->formatFileFilter($fileFilter);
+        $this->fileFilter = $this->formatFileExtension($fileFilter);
 
         return $this;
     }
@@ -80,7 +80,7 @@ class SharpFormUploadField extends SharpFormField
      * @param $fileFilter
      * @return array
      */
-    private function formatFileFilter($fileFilter)
+    private function formatFileExtension($fileFilter)
     {
         if(!is_array($fileFilter)) {
             $fileFilter = explode(",", $fileFilter);

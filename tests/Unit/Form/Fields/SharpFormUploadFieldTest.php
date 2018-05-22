@@ -90,7 +90,15 @@ class SharpFormUploadFieldTest extends SharpTestCase
             ->setCropRatio("16:9", ["jpg", "jpeg"]);
 
         $this->assertArraySubset(
-            ["ratioX" => 16, "ratioY" => 9, "croppableFileTypes" => ["jpg", "jpeg"]],
+            ["ratioX" => 16, "ratioY" => 9, "croppableFileTypes" => [".jpg", ".jpeg"]],
+            $formField->toArray()
+        );
+
+        $formField = SharpFormUploadField::make("text")
+            ->setCropRatio("16:9", [".jpg", ".jpeg"]);
+
+        $this->assertArraySubset(
+            ["ratioX" => 16, "ratioY" => 9, "croppableFileTypes" => [".jpg", ".jpeg"]],
             $formField->toArray()
         );
     }
