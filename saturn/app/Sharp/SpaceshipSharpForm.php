@@ -71,7 +71,7 @@ class SpaceshipSharpForm extends SharpForm
             SharpFormUploadField::make("picture")
                 ->setLabel("Picture")
                 ->setFileFilterImages()
-                ->setCropRatio("1:1")
+                ->setCropRatio("1:1", ["jpg","jpeg","png"])
                 ->setStorageDisk("local")
                 ->setStorageBasePath("data/Spaceship/{id}")
 
