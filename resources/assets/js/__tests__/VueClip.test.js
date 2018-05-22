@@ -449,6 +449,17 @@ describe('vue-clip',() => {
         expect($vueClip.isCroppable).toBe(false);
     });
 
+    test('file extension', async () => {
+        let $vueClip = await createVm({
+            data: ()=>({
+                value: {
+                    name: 'Photo2.jpg'
+                }
+            })
+        });
+        expect($vueClip.fileExtension).toEqual('.jpg');
+    });
+
     test('filename', async () => {
         let $vueClip = await createVm({
             data:()=> ({
