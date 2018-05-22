@@ -55,8 +55,9 @@ describe('vue-clip',() => {
                     :modifiers="{}"
                     :ratio-x="ratioX" 
                     :ratio-y="ratioY"
-                    :read-only="readOnly">
-                </sharp-vue-clip>
+                    :read-only="readOnly"
+                    :croppable-file-types="croppableFileTypes"
+                />
             </div>
         `;
         MockI18n.mockLangFunction();
@@ -96,6 +97,23 @@ describe('vue-clip',() => {
         await createVm({
             propsData: {
                 ratioX: 1, ratioY: 2
+            },
+            data: () => ({
+                value: {
+                    name: 'Image.jpg',
+                    thumbnail: '/image.jpg',
+                    size: 15000
+                }
+            })
+        });
+
+        expect(document.body.innerHTML).toMatchSnapshot();
+    });
+
+    test('can mount non croppable image', async () => {
+        await createVm({
+            propsData: {
+                ratioX: 1, ratioY: 2, croppableFileTypes: ['.png']
             },
             data: () => ({
                 value: {
@@ -394,18 +412,41 @@ describe('vue-clip',() => {
         let $vueClip = await createVm({
             propsData: {
                 ratioX:1, ratioY:1
-            }
+            },
+            data: ()=>({
+                value: {
+                    name: 'Photo2.jpg',
+                }
+            })
         });
 
         let { $root:vm } = $vueClip;
 
-        expect($vueClip.hasCrop).toBe(true);
+        expect($vueClip.isCroppable).toBe(true);
+        expect($vueClip.fileTypeIsCroppable).toBe(true);
 
         vm.ratioX = 0;
 
         await Vue.nextTick();
 
-        expect($vueClip.hasCrop).toBe(false);
+        expect($vueClip.isCroppable).toBe(false);
+
+        vm.croppableFileTypes = ['.jpg'];
+
+        await Vue.nextTick();
+
+        expect($vueClip.fileTypeIsCroppable).toBe(true);
+        expect($vueClip.isCroppable).toBe(false);
+
+        vm.ratioX = 1;
+        await Vue.nextTick();
+
+        expect($vueClip.isCroppable).toBe(true);
+
+        $vueClip.file.name = 'visual.png';
+
+        expect($vueClip.fileTypeIsCroppable).toBe(false);
+        expect($vueClip.isCroppable).toBe(false);
     });
 
     test('filename', async () => {
@@ -610,7 +651,8 @@ describe('vue-clip',() => {
 
         await Vue.nextTick();
 
-        expect($vueClip.croppable).toBe(true);
+        expect($vueClip.allowCrop).toBe(true);
+        expect($vueClip.isCroppable).toBe(true);
         expect($vueClip.onCropperReady).toHaveBeenCalled();
 
         expect($vueClip.croppedImg).toBe('data:image/jpeg');
@@ -662,6 +704,9 @@ describe('vue-clip',() => {
 
     test('cropper modal', async () => {
         let $vueClip = await createVm({
+            propsData: {
+                ratioX: 1, ratioY:1
+            },
             data:()=> ({
                 value: {
                     name: 'Image.jpg',
@@ -711,7 +756,7 @@ async function createVm(customOptions={}) {
             }
         },
 
-        props:['readOnly', 'ratioX', 'ratioY'],
+        props:['readOnly', 'ratioX', 'ratioY', 'croppableFileTypes'],
 
         'extends': {
             data:() => ({

@@ -1,23 +1,24 @@
 <template>
     <sharp-vue-clip
-            v-show="show"
-            :pending-key="pendingKey"
-            :download-id="downloadId"
-            :options="options"
-            :value="value"
-            :ratioX="ratioX"
-            :ratioY="ratioY"
-            :modifiers="modifiers"
-            :on-added-file="handleAdded"
-            @success="$emit('success',$event)"
-            @removed="$emit('remove')"
-            @updated="$emit('update', $event)"
-            @active="$emit('active')"
-            @inactive="$emit('inactive')"
-            @image-updated="$emit('refresh')"
-            class="SharpMarkdownUpload"
-            ref="vueclip">
-    </sharp-vue-clip>
+        v-show="show"
+        class="SharpMarkdownUpload"
+        :pending-key="pendingKey"
+        :download-id="downloadId"
+        :options="options"
+        :value="value"
+        :ratioX="ratioX"
+        :ratioY="ratioY"
+        :croppable-file-types="croppableFileTypes"
+        :modifiers="modifiers"
+        :on-added-file="handleAdded"
+        @success="$emit('success',$event)"
+        @removed="$emit('remove')"
+        @updated="$emit('update', $event)"
+        @active="$emit('active')"
+        @inactive="$emit('inactive')"
+        @image-updated="$emit('refresh')"
+        ref="vueclip"
+    />
 </template>
 
 <script>
@@ -48,6 +49,7 @@
             maxImageSize: Number,
             ratioX: Number,
             ratioY: Number,
+            croppableFileTypes: Array,
         },
         components: {
             SharpVueClip

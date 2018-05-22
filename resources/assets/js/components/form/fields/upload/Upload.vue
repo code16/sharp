@@ -1,20 +1,21 @@
 <template>
-    <sharp-vue-clip :pending-key="uniqueIdentifier"
-                    :download-id="fieldConfigIdentifier"
-                    :options="options"
-                    :value="value"
-                    :ratioX="ratioX"
-                    :ratioY="ratioY"
-                    :read-only="readOnly"
-                    :modifiers="modifiers"
-                    @input="$emit('input',$event)"
-                    @error="$field.$emit('error',$event)"
-                    @reset="$field.$emit('clear')">
-    </sharp-vue-clip>
+    <sharp-vue-clip
+        :pending-key="uniqueIdentifier"
+        :download-id="fieldConfigIdentifier"
+        :options="options"
+        :value="value"
+        :ratioX="ratioX"
+        :ratioY="ratioY"
+        :croppable-file-types="croppableFileTypes"
+        :read-only="readOnly"
+        :modifiers="modifiers"
+        @input="$emit('input',$event)"
+        @error="$field.$emit('error',$event)"
+        @reset="$field.$emit('clear')"
+    />
 </template>
 
 <script>
-    import Vue from 'vue';
     import SharpVueClip from './VueClip';
     import { UploadModifiers } from './modifiers';
 
@@ -39,6 +40,7 @@
             fileFilter: Array,
             maxFileSize: Number,
             thumbnail: String,
+            croppableFileTypes: Array,
 
             ratioX:Number,
             ratioY:Number,

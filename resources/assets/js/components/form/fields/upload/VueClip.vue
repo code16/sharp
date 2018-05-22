@@ -29,9 +29,9 @@
                                 </transition>
                             </div>
                             <div v-show="!readOnly">
-                                    <button v-show="!!originalImageSrc && !inProgress" type="button" class="SharpButton SharpButton--sm SharpButton--secondary" @click="onEditButtonClick">
-                                        {{ l('form.upload.edit_button') }}
-                                    </button>
+                                <button v-show="!!originalImageSrc && !inProgress" type="button" class="SharpButton SharpButton--sm SharpButton--secondary" :disabled="!isCroppable" @click="onEditButtonClick">
+                                    {{ l('form.upload.edit_button') }}
+                                </button>
                                 <button type="button" class="SharpButton SharpButton--sm SharpButton--secondary SharpButton--danger SharpUpload__remove-button"
                                         @click="remove()" :disabled="readOnly">
                                     {{ l('form.upload.remove_button') }}
@@ -51,7 +51,7 @@
                 </div>
             </div>
         </div>
-        <template v-if="!!originalImageSrc">
+        <template v-if="!!originalImageSrc && isCroppable">
             <sharp-modal v-model="showEditModal" @ok="onEditModalOk" @shown="onEditModalShown" @hidden="onEditModalHidden" no-close-on-backdrop
                          :title="l('modals.cropper.title')" ref="modal">
                 <vue-cropper ref="cropper"
@@ -110,6 +110,7 @@
             ratioX: Number,
             ratioY: Number,
             value: Object,
+            croppableFileTypes:Array,
 
             readOnly: Boolean
         },
@@ -119,7 +120,7 @@
                 showEditModal: false,
                 croppedImg: null,
                 resized: false,
-                croppable: false,
+                allowCrop: false,
 
                 isNew: !this.value,
                 canDownload: !!this.value,
@@ -155,12 +156,9 @@
                 res += size.toLocaleString();
                 return `${res} MB`;
             },
-            hasCrop() {
-                return !!(this.ratioX && this.ratioY);
-            },
             operationFinished() {
                 return {
-                    crop: this.hasCrop ? !!this.croppedImg : null
+                    crop: this.isCroppable ? !!this.croppedImg : null
                 }
             },
             operations() {
@@ -192,11 +190,21 @@
                 let splitted = this.file.name.split('/');
                 return splitted.length ? splitted[splitted.length-1] : '';
             },
+            fileExtension() {
+                let extension = this.fileName.split('.').pop();
+                return extension ? `.${extension}` : null;
+            },
             downloadLink() {
                 return `${this.$form.downloadLinkBase}/${this.downloadId}`;
             },
             showThumbnail() {
                 return this.imageSrc;
+            },
+            fileTypeIsCroppable() {
+                return !this.croppableFileTypes || this.croppableFileTypes.includes(this.fileExtension);
+            },
+            isCroppable() {
+                return !!(this.ratioX && this.ratioY) && this.fileTypeIsCroppable;
             }
         },
         methods: {
@@ -231,7 +239,7 @@
 
                 this.setPending(false);
 
-                this.croppable = true;
+                this.allowCrop = true;
                 this.$nextTick(_=>{
                     this.isCropperReady() && this.onCropperReady();
                 });
@@ -271,7 +279,7 @@
             onEditButtonClick() {
                 this.$emit('active');
                 this.showEditModal = true;
-                this.croppable = true;
+                this.allowCrop = true;
             },
 
             handleImageLoaded() {
@@ -333,7 +341,7 @@
                     rotate: cropData.rotate * -1 // counterclockwise
                 };
 
-                if(this.croppable) {
+                if(this.allowCrop && this.isCroppable) {
                     let data = {
                         ...this.value,
                         cropData: relativeData,
@@ -344,7 +352,7 @@
             },
 
             updateCroppedImage() {
-                if(this.croppable) {
+                if(this.allowCrop && this.isCroppable) {
                     this.isNew = true;
                     this.croppedImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
                 }
