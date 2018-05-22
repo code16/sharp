@@ -55,12 +55,14 @@ class SharpFormUploadField extends SharpFormField
             "maxFileSize" => "numeric",
             "ratioX" => "integer|nullable",
             "ratioY" => "integer|nullable",
+            "croppableFileTypes" => "array",
             "compactThumbnail" => "boolean"
         ];
     }
 
     /**
      * @return array
+     * @throws \Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException
      */
     public function toArray(): array
     {
@@ -69,6 +71,7 @@ class SharpFormUploadField extends SharpFormField
             "fileFilter" => $this->fileFilter,
             "ratioX" => $this->cropRatio ? (int)$this->cropRatio[0] : null,
             "ratioY" => $this->cropRatio ? (int)$this->cropRatio[1] : null,
+            "croppableFileTypes" => $this->croppableFileTypes,
             "compactThumbnail" => $this->compactThumbnail
         ]);
     }

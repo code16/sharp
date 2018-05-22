@@ -109,6 +109,7 @@ class SharpFormMarkdownField extends SharpFormField
             "maxImageSize" => "numeric",
             "ratioX" => "integer|nullable",
             "ratioY" => "integer|nullable",
+            "croppableFileTypes" => "array|nullable",
         ];
     }
 
@@ -137,6 +138,7 @@ class SharpFormMarkdownField extends SharpFormField
         if($this->cropRatio) {
             $array["ratioX"] = (int)$this->cropRatio[0];
             $array["ratioY"] = (int)$this->cropRatio[1];
+            $array["croppableFileTypes"] = $this->croppableFileTypes;
         }
 
         return $array;

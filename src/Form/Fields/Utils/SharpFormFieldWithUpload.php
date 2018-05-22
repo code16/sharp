@@ -15,6 +15,11 @@ trait SharpFormFieldWithUpload
     protected $cropRatio;
 
     /**
+     * @var array
+     */
+    protected $croppableFileTypes;
+
+    /**
      * @var string
      */
     protected $storageDisk = "local";
@@ -42,11 +47,13 @@ trait SharpFormFieldWithUpload
 
     /**
      * @param string $ratio 16:9, 1:1, ...
+     * @param array|null $croppableFileTypes
      * @return static
      */
-    public function setCropRatio(string $ratio)
+    public function setCropRatio(string $ratio, array $croppableFileTypes = null)
     {
         $this->cropRatio = explode(":", $ratio);
+        $this->croppableFileTypes = $croppableFileTypes;
 
         return $this;
     }
