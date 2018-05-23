@@ -33,6 +33,18 @@ abstract class Command
     }
 
     /**
+     * @param string $link
+     * @return array
+     */
+    protected function link(string $link)
+    {
+        return [
+            "action" => "link",
+            "link" => $link
+        ];
+    }
+
+    /**
      * @return array
      */
     protected function reload()
