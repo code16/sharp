@@ -88,4 +88,4 @@ We'll get into all those classes in this document. The important thing to notice
 - Handling data localization (coming in 4.1)
 - [Testing with Sharp](docs/testing-with-sharp.md)
 - Extending Sharp
-- Style and visual theme
+- [Style & Visual Theme](docs/style-visual-theme.md)

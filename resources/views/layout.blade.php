@@ -6,6 +6,7 @@
     <title>{{ sharp_page_title($sharpMenu ?? null, $entityKey ?? null) }}</title>
     <link rel="stylesheet" href="/vendor/sharp/sharp.css?version={{ sharp_version() }}">
     <link rel="stylesheet" href="/vendor/sharp/sharp-cms.css?version={{ sharp_version() }}">
+    {!! array_get($injectedAssets ?? [], 'head') !!}
 </head>
 <body>
     <div id="glasspane"></div>
