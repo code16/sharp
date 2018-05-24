@@ -422,31 +422,31 @@ describe('vue-clip',() => {
 
         let { $root:vm } = $vueClip;
 
+        expect($vueClip.hasInitialCrop).toBe(true);
         expect($vueClip.isCroppable).toBe(true);
-        expect($vueClip.fileTypeIsCroppable).toBe(true);
 
         vm.ratioX = 0;
 
         await Vue.nextTick();
 
-        expect($vueClip.isCroppable).toBe(false);
+        expect($vueClip.hasInitialCrop).toBe(false);
 
         vm.croppableFileTypes = ['.jpg'];
 
         await Vue.nextTick();
 
-        expect($vueClip.fileTypeIsCroppable).toBe(true);
-        expect($vueClip.isCroppable).toBe(false);
+        expect($vueClip.isCroppable).toBe(true);
+        expect($vueClip.hasInitialCrop).toBe(false);
 
         vm.ratioX = 1;
         await Vue.nextTick();
 
-        expect($vueClip.isCroppable).toBe(true);
+        expect($vueClip.hasInitialCrop).toBe(true);
 
         $vueClip.file.name = 'visual.png';
 
-        expect($vueClip.fileTypeIsCroppable).toBe(false);
         expect($vueClip.isCroppable).toBe(false);
+        expect($vueClip.hasInitialCrop).toBe(false);
     });
 
     test('file extension', async () => {

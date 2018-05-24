@@ -158,7 +158,7 @@
             },
             operationFinished() {
                 return {
-                    crop: this.isCroppable ? !!this.croppedImg : null
+                    crop: this.hasInitialCrop ? !!this.croppedImg : null
                 }
             },
             operations() {
@@ -200,11 +200,11 @@
             showThumbnail() {
                 return this.imageSrc;
             },
-            fileTypeIsCroppable() {
-                return !this.croppableFileTypes || this.croppableFileTypes.includes(this.fileExtension);
+            hasInitialCrop() {
+                return !!(this.ratioX && this.ratioY) && this.isCroppable;
             },
             isCroppable() {
-                return !!(this.ratioX && this.ratioY) && this.fileTypeIsCroppable;
+                return !this.croppableFileTypes || this.croppableFileTypes.includes(this.fileExtension);
             }
         },
         methods: {
@@ -315,7 +315,7 @@
             },
 
             onCropperReady() {
-                if(this.ratioX && this.ratioY) {
+                if(this.hasInitialCrop) {
                     this.updateCroppedImage();
                     this.updateCropData();
                 }
@@ -341,7 +341,7 @@
                     rotate: cropData.rotate * -1 // counterclockwise
                 };
 
-                if(this.allowCrop && this.isCroppable) {
+                if(this.allowCrop) {
                     let data = {
                         ...this.value,
                         cropData: relativeData,
@@ -352,7 +352,7 @@
             },
 
             updateCroppedImage() {
-                if(this.allowCrop && this.isCroppable) {
+                if(this.allowCrop) {
                     this.isNew = true;
                     this.croppedImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
                 }
