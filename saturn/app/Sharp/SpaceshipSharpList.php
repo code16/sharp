@@ -2,6 +2,7 @@
 
 namespace App\Sharp;
 
+use App\Sharp\Commands\SpaceshipExternalLink;
 use App\Sharp\Commands\SpaceshipPreview;
 use App\Sharp\Commands\SpaceshipReload;
 use App\Sharp\Commands\SpaceshipSendMessage;
@@ -61,6 +62,7 @@ class SpaceshipSharpList extends SharpEntityList
             ->addEntityCommand("reload", SpaceshipReload::class)
             ->addInstanceCommand("message", SpaceshipSendMessage::class)
             ->addInstanceCommand("preview", SpaceshipPreview::class)
+            ->addInstanceCommand("external", SpaceshipExternalLink::class)
             ->setEntityState("state", SpaceshipEntityState::class)
 
             ->setPaginated();

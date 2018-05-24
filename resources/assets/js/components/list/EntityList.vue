@@ -498,7 +498,7 @@
             /* (CommandAPIResponse)
             * Execute the required command action
             */
-            handleCommandResponse({action, items, message, html}) {
+            handleCommandResponse({action, items, message, html, link}) {
                 //debugger;
                 if(action === 'refresh') this.actionRefresh(items);
                 else if(action === 'reload') this.actionReload();
@@ -512,6 +512,9 @@
                 else if(action === 'view') {
                     this.showViewPanel = true;
                     this.viewPanelContent = html;
+                }
+                else if(action === 'link') {
+                    window.location.href = link;
                 }
             },
 

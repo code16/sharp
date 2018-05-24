@@ -50,7 +50,7 @@ Example:
 
 ### Embed images in markdown
 
-The markdown field allows image embedding, throught the `IMG` tool (from the toolbar). To use this feature, you'll have to add the `IMG` tool in the toolbar, and configure the environement (see below).
+The markdown field allows image embedding, throught the `IMG` tool (from the toolbar). To use this feature, you'll have to add the `IMG` tool in the toolbar, and configure the environment (see below).
 
 Sharp take care of copying the file on the right folder (after transformation, if wanted), based on the configuration.
 
@@ -59,11 +59,13 @@ Sharp take care of copying the file on the right folder (after transformation, i
 
 Max file size allowed.
 
-#### `setCropRatio(string $ratio)`
+#### `setCropRatio(string $ratio, array $croppableFileTypes = null)`
 
 Set a ratio constraint to uploaded images, formatted like this: `width:height`. For instance: `16:9`, or `1:1`.
 
-When a crop ratio is set, any uploaded picture will be auto-cropped (centered), and the "edit" tool will be accessible.
+When a crop ratio is set, any uploaded picture will be auto-cropped (centered).
+
+The second argument, `$croppableFileTypes`, provide a way to limit the crop configuration to a list of image files extensions. For instance, it can be useful to define a crop for jpg and png, but not for gif because it will destroy animation.
 
 #### `setStorageDisk(string $storageDisk)`
 
