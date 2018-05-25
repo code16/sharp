@@ -4,6 +4,13 @@ return [
 
     "name" => "Saturn",
 
+    "assets" => [
+        "strategy" => "assets",
+        "head"     => [
+            "/css/inject.css",
+        ],
+    ],
+
     "entities" => [
         "spaceship" => [
             "list" => \App\Sharp\SpaceshipSharpList::class,
