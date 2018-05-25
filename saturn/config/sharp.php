@@ -5,7 +5,7 @@ return [
     "name" => "Saturn",
 
     "assets" => [
-        "strategy" => "assets",
+        "strategy" => "asset",
         "head"     => [
             "/css/inject.css",
         ],

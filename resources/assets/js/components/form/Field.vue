@@ -2,6 +2,8 @@
     import Fields from './fields/index';
     import * as util from '../../util';
 
+    const customFieldRE = /^custom-(.+)$/;
+
     export default {
         name:'SharpField',
         inheritAttrs: false,
@@ -23,19 +25,32 @@
             fieldConfigIdentifier: String,
             updateData: Function
         },
-        mounted() {
-            //console.log(this);
+        computed: {
+            isCustom() {
+                return customFieldRE.test(this.fieldType);
+            },
+            component() {
+                if(this.isCustom) {
+                    let [_, name] = this.fieldType.match(customFieldRE) || [];
+                    name = `SharpCustomField_${name}`;
+                    return Vue.options.components[name];
+                }
+                return Fields[this.fieldType];
+            }
         },
         render(h) {
-            if(!(this.fieldType in Fields)) {
-                util.error(`SharpField '${this.fieldKey}', unknown type '${this.fieldType}'`, this.fieldProps);
+            if(!this.component) {
+                let message = this.isCustom
+                    ? `unknown custom field type '${this.fieldType}', make sure you register it correctly`
+                    : `unknown type '${this.fieldType}'`;
+                util.error(`SharpField '${this.fieldKey}': ${message}`, this.fieldProps);
                 return null;
             }
 
             let { key, ...fieldProps } = this.fieldProps;
 
 
-            return h(Fields[this.fieldType],{
+            return h(this.component, {
                 props : {
                     fieldKey:this.fieldKey,
                     fieldLayout:this.fieldLayout,
