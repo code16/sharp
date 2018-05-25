@@ -19,7 +19,7 @@
 
     {{--Insert here custom field scripts--}}
     {{-- TODO injected js --}}
-    <script src="/js/sharp.js"></script>
+    <script src="/js/sharp-plugin.js"></script>
 
     <script src="/vendor/sharp/lang.js?version={{ sharp_version() }}&locale={{ app()->getLocale() }}"></script>
     <script src="/vendor/sharp/sharp.js?version={{ sharp_version() }}"></script>

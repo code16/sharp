@@ -1,4 +1,5 @@
 <script>
+    import Vue from 'vue';
     import Fields from './fields/index';
     import * as util from '../../util';
 
@@ -16,7 +17,7 @@
 
         props: {
             fieldKey: String,
-            fieldType:  String,
+            fieldType: String,
             fieldProps: Object,
             fieldLayout: Object,
             value: [String, Number, Boolean, Object, Array],

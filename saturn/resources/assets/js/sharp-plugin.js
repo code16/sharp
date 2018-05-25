@@ -1,9 +1,8 @@
 import Sharp from 'sharp-plugin';
+import TextIcon from './components/TextIcon';
 
 Vue.use(Sharp, {
     customFields: {
-        map: {
-            template: '<div>custom map field</div>'
-        }
+        'texticon': TextIcon
     }
 });
