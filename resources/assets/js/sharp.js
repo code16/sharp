@@ -19,6 +19,9 @@ import cookies from 'axios/lib/helpers/cookies';
 
 import * as qs from './helpers/querystring';
 
+import Notifications from 'vue-notification';
+
+Vue.use(Notifications);
 
 
 // prevent recursive components import

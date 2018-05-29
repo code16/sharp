@@ -31,6 +31,7 @@ export default {
                 })
                 .then(response=>{
                     this.mount(response.data);
+                    this.handleAlert(response.data);
                     this.ready = true;
                     return Promise.resolve(response);
                 })
@@ -45,6 +46,17 @@ export default {
                 .catch(error=>{
                     return Promise.reject(error);
                 });
+        },
+        handleAlert(data) {
+            if(typeof data.alert === 'object') {
+                let { level, title, message, autoHide } = data.alert;
+                setTimeout(()=>this.$notify({
+                    title,
+                    type: level,
+                    text: message,
+                    duration: autoHide ? 4000 : -1
+                }), 500);
+            }
         }
     },
     created() {

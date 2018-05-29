@@ -1,20 +1,38 @@
 <template>
     <div class="SharpActionView">
-        <template v-if="!showErrorPage">
-            <component v-if="barComp" :is="barComp"></component>
-        </template>
-        <div class="container">
-            <template v-if="showErrorPage">
-                <h1>Error {{errorPageData.status}}</h1>
-                <p>{{errorPageData.message}}</p>
+        <div class="position-relative">
+            <template v-if="!showErrorPage">
+                <component v-if="barComp" :is="barComp"></component>
             </template>
-            <template v-else>
-                <slot></slot>
-                <sharp-modal v-for="(modal,id) in mainModalsData" :key="id"
-                             v-bind="modal.props" @ok="modal.okCallback" @hidden="modal.hiddenCallback">
-                    {{modal.text}}
-                </sharp-modal>
-            </template>
+            <div class="container">
+                <template v-if="showErrorPage">
+                    <h1>Error {{errorPageData.status}}</h1>
+                    <p>{{errorPageData.message}}</p>
+                </template>
+                <template v-else>
+                    <slot></slot>
+                    <notifications position="top right" animation-name="slideRight" style="top:6rem">
+                        <template slot="body" slot-scope="{ item, close }">
+                            <div class="SharpToastNotification" :class="`SharpToastNotification--${item.type||'info'}`" role="alert">
+                                <div class="SharpToastNotification__details">
+                                    <h3 v-if="!!item.title" class="SharpToastNotification__title">{{ item.title }}</h3>
+                                    <p class="SharpToastNotification__subtitle"></p>
+                                    <p class="SharpToastNotification__caption" v-html="item.text"></p>
+                                </div>
+                                <button class="SharpToastNotification__close-button" type="button" @click="close">
+                                    <svg class="SharpToastNotification__icon" aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd">
+                                        <path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </template>
+                    </notifications>
+                    <sharp-modal v-for="(modal,id) in mainModalsData" :key="id"
+                        v-bind="modal.props" @ok="modal.okCallback" @hidden="modal.hiddenCallback">
+                        {{modal.text}}
+                    </sharp-modal>
+                </template>
+            </div>
         </div>
     </div>
 </template>
