@@ -11,6 +11,7 @@ use Code16\Sharp\Http\Middleware\Api\AddSharpContext;
 use Code16\Sharp\Http\Middleware\Api\AppendFormAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendListAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendListMultiform;
+use Code16\Sharp\Http\Middleware\Api\AppendNotifications;
 use Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors;
 use Code16\Sharp\Http\Middleware\Api\SaveEntityListParams;
 use Code16\Sharp\Http\Middleware\Api\SetSharpLocale;
@@ -141,6 +142,9 @@ class SharpServiceProvider extends ServiceProvider
 
         )->aliasMiddleware(
             'sharp_api_append_list_multiform', AppendListMultiform::class
+
+        )->aliasMiddleware(
+            'sharp_api_append_notifications', AppendNotifications::class
 
         )->aliasMiddleware(
             'sharp_api_errors', HandleSharpApiErrors::class

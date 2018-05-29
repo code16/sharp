@@ -203,6 +203,8 @@ class SpaceshipSharpForm extends SharpForm
             })
             ->save($instance, $data);
 
+        $this->notify("Spaceship was updated.", "Success", "success", false);
+
         return $instance->id;
     }
 
