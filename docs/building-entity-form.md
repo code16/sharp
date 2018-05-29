@@ -257,6 +257,32 @@ The message will be displayed to the user.
 
 This is important for some cases (when a field formatter needs to de delayed): this method should return the id of the updated or stored instance.
 
+#### Display notifications
+
+Sometimes you'll want to display a message to the user, after a creation or an update. Sharp way to do this is to call `->notify()` in the Form code:
+
+    function update($id, array $data)
+    {
+        $instance = $id ? Spaceship::findOrFail($id) : new Spaceship;
+
+        $this->save($instance, $data);
+
+        $this->notify("Spaceship was indeed updated.")
+             ->setDetail("As you asked.")
+             ->setLevelSuccess()
+             ->setAutoHide(false);
+
+        return $instance->id;
+    }
+
+A notification is made of a title, and optionally 
+- a texte detail,
+- a notification level: info (the default), warning, danger, success,
+- an auto-hide policy (if true, the toasted notification will hide after 4s).
+
+The notification will be displayed on the next screen, which is the Entity List.
+
+Note that you can add up notifications, calling the `notify()` function multiple times (which is useful to sometimes add a second notification, based on actual form data).
 
 ### `create(): array`
 
