@@ -11,15 +11,14 @@
 <body>
     <div id="glasspane"></div>
 
+
     @yield('content')
 
     <script src="/vendor/sharp/manifest.js?version={{ sharp_version() }}"></script>
     <script src="/vendor/sharp/vendor.js?version={{ sharp_version() }}"></script>
     <script src="/vendor/sharp/api.js?version={{ sharp_version() }}"></script>
 
-    {{--Insert here custom field scripts--}}
-    {{-- TODO injected js --}}
-    <script src="/js/sharp-plugin.js"></script>
+    {!! sharp_custom_form_fields() !!}
 
     <script src="/vendor/sharp/lang.js?version={{ sharp_version() }}&locale={{ app()->getLocale() }}"></script>
     <script src="/vendor/sharp/sharp.js?version={{ sharp_version() }}"></script>

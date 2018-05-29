@@ -163,6 +163,5 @@ class SharpServiceProvider extends ServiceProvider
         )->aliasMiddleware(
             'sharp_guest', SharpRedirectIfAuthenticated::class
         );
-
     }
 }

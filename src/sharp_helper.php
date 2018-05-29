@@ -105,3 +105,18 @@ function sharp_markdown_thumbnails(string $html, string $classNames, int $width 
 
     return $html;
 }
+
+/**
+ * Include <script> tag for sharp plugins if available.
+ *
+ * @return string
+ */
+function sharp_custom_form_fields()
+{
+    try {
+        return "<script src='" . mix('/js/sharp-plugin.js') . "'></script>";
+
+    } catch(\Exception $e) {
+        return "";
+    }
+}
