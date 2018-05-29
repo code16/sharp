@@ -109,7 +109,7 @@
     margin-top: 1rem;
   }
 
-  &--error {
+  &--danger {
     @include notification--color($support-01);
   }
 
@@ -152,7 +152,6 @@
     @include font-size('14');
     font-weight: 700;
     letter-spacing: 0;
-    line-height: 1;
     padding-bottom: .125rem;
   }
 
@@ -161,13 +160,11 @@
     color: $text-03;
     margin-top: 0;
     margin-bottom: 1rem;
-    line-height: 1.2;
   }
 
   &__caption {
     @include font-size('12');
-    color: $text-03;
-    line-height: 1;
+    color: $text-01;
   }
 }
 
