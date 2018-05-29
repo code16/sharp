@@ -220,16 +220,27 @@ class EntityListControllerTest extends BaseApiTest
 
         $this->json('get', '/sharp/api/list/person')
             ->assertStatus(200)
-            ->assertJson(["alert" => [
+            ->assertJson(["notifications" => [[
                 "level" => "success",
                 "title" => "title",
                 "message" => "body",
                 "autoHide" => false
-            ]]);
+            ]]]);
 
         $this->json('get', '/sharp/api/list/person')
             ->assertStatus(200)
             ->assertJsonMissing(["alert"]);
+
+        (new PersonSharpForm())->notify("title1");
+        (new PersonSharpForm())->notify("title2");
+
+        $this->json('get', '/sharp/api/list/person')
+            ->assertStatus(200)
+            ->assertJson(["notifications" => [[
+                "title" => "title1",
+            ], [
+                "title" => "title2",
+            ]]]);
     }
 
     /** @test */

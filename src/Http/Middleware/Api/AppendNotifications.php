@@ -18,21 +18,21 @@ class AppendNotifications
         $response = $next($request);
 
         return $response->status() == 200
-            ? $this->addAlertToResponse($response)
+            ? $this->addNotificationsToResponse($response)
             : $response;
     }
 
-    protected function addAlertToResponse(JsonResponse $jsonResponse)
+    protected function addNotificationsToResponse(JsonResponse $jsonResponse)
     {
-        if(! $alert = session("sharp_notification")) {
+        if(! $notifications = session("sharp_notifications")) {
             return $jsonResponse;
         }
 
-        session()->forget("sharp_notification");
+        session()->forget("sharp_notifications");
 
-        return tap($jsonResponse, function($jsonResponse) use($alert) {
+        return tap($jsonResponse, function($jsonResponse) use($notifications) {
             $data = $jsonResponse->getData();
-            $data->alert = $alert;
+            $data->notifications = array_values($notifications);
             $jsonResponse->setData($data);
         });
     }

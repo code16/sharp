@@ -4,18 +4,25 @@ namespace Code16\Sharp\Utils;
 
 class SharpNotification
 {
+    /** @var string */
+    protected $id;
 
     /**
      * @param string $title
      */
     public function __construct(string $title)
     {
-        session()->put("sharp_notification", [
+        $this->id = uniqid();
+        $notifications = session("sharp_notifications") ?? [];
+
+        $notifications[$this->id] = [
             "title" => $title,
             "level" => "info",
             "message" => null,
             "autoHide" => true
-        ]);
+        ];
+
+        session()->put("sharp_notifications", $notifications);
     }
 
     /**
@@ -74,9 +81,10 @@ class SharpNotification
      */
     protected function update(array $updatedArray)
     {
-        $notification = session("sharp_notification");
+        $notifications = session("sharp_notifications");
+        $notifications[$this->id] = array_merge($notifications[$this->id], $updatedArray);
 
-        session()->put("sharp_notification", array_merge($notification, $updatedArray));
+        session()->put("sharp_notifications", $notifications);
 
         return $this;
     }
