@@ -3,6 +3,6 @@ import TextIcon from './components/TextIcon';
 
 Vue.use(Sharp, {
     customFields: {
-        'texticon': TextIcon
+        'textIcon': TextIcon
     }
 });

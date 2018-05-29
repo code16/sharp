@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <input class="SharpText" :value="value" @change="handleChanged">
-        <i class="fa" :class="icon"></i>
+    <div class="d-flex align-items-center">
+        <i class="SharpTextIcon__icon fa" :class="icon"></i>
+        <input class="SharpText SharpTextIcon" :value="value" @change="handleChanged">
     </div>
 </template>
 
@@ -18,3 +18,12 @@
         }
     }
 </script>
+
+<style type="text/css" scoped>
+    .SharpTextIcon {
+        flex-grow: 1;
+    }
+    .SharpTextIcon__icon {
+        margin-right: .5em;
+    }
+</style>

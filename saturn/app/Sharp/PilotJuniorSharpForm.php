@@ -3,8 +3,8 @@
 namespace App\Sharp;
 
 use App\Pilot;
+use App\Sharp\CustomFormFields\SharpCustomFomFieldTextIcon;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
-use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpForm;
 
@@ -15,9 +15,9 @@ class PilotJuniorSharpForm extends SharpForm
     function buildFormFields()
     {
         $this->addField(
-            SharpFormTextField::make("name")
-                ->setMaxLength(50)
+            SharpCustomFomFieldTextIcon::make("name")
                 ->setLabel("Name")
+                ->setIcon("fa-user")
         );
     }
 
