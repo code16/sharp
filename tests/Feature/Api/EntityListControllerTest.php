@@ -213,7 +213,10 @@ class EntityListControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        (new PersonSharpForm())->notify("body", "title", "success", false);
+        (new PersonSharpForm())->notify("title")
+            ->setLevelSuccess()
+            ->setDetail("body")
+            ->setAutoHide(false);
 
         $this->json('get', '/sharp/api/list/person')
             ->assertStatus(200)

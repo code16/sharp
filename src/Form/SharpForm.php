@@ -5,6 +5,7 @@ namespace Code16\Sharp\Form;
 use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
+use Code16\Sharp\Utils\SharpNotification;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpForm
@@ -215,19 +216,12 @@ abstract class SharpForm
     /**
      * Display a notification next time entity list is shown.
      *
-     * @param string $body
-     * @param string|null $title
-     * @param string $level
-     * @param bool $autoHide
+     * @param string $title
+     * @return SharpNotification
      */
-    public function notify(string $body, string $title=null, $level="info", $autoHide=true)
+    public function notify(string $title): SharpNotification
     {
-        session()->put("sharp_notification", [
-            "level" => $level,
-            "title" => $title,
-            "message" => $body,
-            "autoHide" => $autoHide
-        ]);
+        return (new SharpNotification($title));
     }
 
     /**
