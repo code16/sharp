@@ -208,6 +208,10 @@ class SpaceshipSharpForm extends SharpForm
             ->setLevelSuccess()
             ->setAutoHide(false);
 
+        if($data["capacity"] >= 1000) {
+            $this->notify("this is a huge spaceship, by the way!");
+        }
+
         return $instance->id;
     }
 
