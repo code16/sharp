@@ -22,7 +22,9 @@ Sharp 4 needs Laravel 5.4+ and PHP 7.0+.
 Here's a series of blog posts which present Sharp following a simple example:
 - [Part 1](https://medium.com/@lonchampt/about-sharp-for-laravel-part-1-74a826279fe0)
 - [Part 2](https://medium.com/@lonchampt/about-sharp-for-laravel-part-2-9c7779782f31)
-- to be continued...
+- [Part 3: filters](https://medium.com/@lonchampt/about-sharp-for-laravel-part-3-2bb992d6a8e3)
+- [Part 4: form lists](https://medium.com/@lonchampt/about-sharp-for-laravel-part-4-cb2232caf234)
+- [Part 5: commands](https://medium.com/@lonchampt/about-sharp-for-laravel-part-5-44699e270647)
 
 ![Dashboard](docs/img/dashboard.png)
 
@@ -73,19 +75,48 @@ We'll get into all those classes in this document. The important thing to notice
 
 ## Full documentation
 
+### Auth
+
 - [Authentication](docs/authentication.md)
+
+### Entity Lists
+
 - [Building an Entity List](docs/building-entity-list.md)
 - [Filters](docs/filters.md)
 - [Commands](docs/commands.md)
 - [Entity States](docs/entity-states.md)
 - [Reordering instances](docs/reordering-instances.md)
+
+### Entity Forms
+
 - [Building an Entity Form](docs/building-entity-form.md)
+- Form fields:
+	- [Text](docs/form-fields/text.md)
+	- [Textarea](docs/form-fields/textarea.md)
+	- [Markdown](docs/form-fields/markdown.md)
+	- [Wysiwyg](docs/form-fields/wysiwyg.md)
+	- [Number](docs/form-fields/number.md)
+	- [Html](docs/form-fields/html.md)
+	- [Check](docs/form-fields/check.md)
+	- [Date](docs/form-fields/date.md)
+	- [Upload](docs/form-fields/upload.md)
+	- [Select](docs/form-fields/select.md)
+	- [Autocomplete](docs/form-fields/autocomplete.md)
+	- [Tags](docs/form-fields/tags.md)
+	- [List](docs/form-fields/list.md)
+	- [AutocompleteList](docs/form-fields/autocomplete-list.md)
+	- [Geolocation](docs/form-fields/geolocation.md)
 - [Entity Authorizations](docs/entity-authorizations.md)
 - [Multi-forms](docs/multiforms.md)
+- [Custom form fields](docs/custom-form-fields.md)
+
+### Generalities
 - [The Dashboard](docs/dashboard.md)
 - [How to transform data](docs/how-to-transform-data.md)
 - [Sharp built-in solution for uploads](docs/sharp-built-in-solution-for-uploads.md)
 - Handling data localization (coming in 4.1)
 - [Testing with Sharp](docs/testing-with-sharp.md)
-- Extending Sharp
+
+### Theming and CSS
 - [Style & Visual Theme](docs/style-visual-theme.md)
+- Redefine Sharp theme (coming soon)

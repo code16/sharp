@@ -1,0 +1,26 @@
+{
+  "name": "sharp-plugin",
+  "version": "0.0.1",
+  "description": "Add custom features to your Sharp back-office",
+  "main": "dist/sharp-plugin.js",
+  "scripts": {
+    "build": "NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dvlpp/sharp.git"
+  },
+  "keywords": [
+    "sharp"
+  ],
+  "author": "Code 16",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dvlpp/sharp/issues"
+  },
+  "homepage": "https://github.com/dvlpp/sharp#readme",
+  "devDependencies": {
+    "core-js": "^2.5.6",
+    "laravel-mix": "^2.1.11"
+  }
+}
