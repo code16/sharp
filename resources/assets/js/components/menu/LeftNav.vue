@@ -40,10 +40,10 @@
             collapsed: {
                 immediate: true,
                 handler(val, oldVal) {
-                    this.$root.$emit('setClass', 'leftNav--collapsed', this.collapsed);
                     if(oldVal === null) {
                         return this.updateState();
                     }
+                    this.$root.$emit('setClass', 'leftNav--collapsed', this.collapsed);
                     // apply transition
                     this.state = val ? 'collapsing' : 'expanding';
                     setTimeout(this.updateState, 250);

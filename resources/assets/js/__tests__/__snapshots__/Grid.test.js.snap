@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`grid can mount Grid 1`] = `
+<div class="SharpGrid">
+	<div class="SharpGrid__row row">
+		<div class="SharpGrid__col col-md-6 col-12 SharpGrid__col--empty"></div>
+		<div class="SharpGrid__col col-md-4 SharpGrid__col--empty"></div>
+	</div>
+	<div class="SharpGrid__row row">
+		<div class="SharpGrid__col col-md SharpGrid__col--empty"></div>
+		<div class="SharpGrid__col col-md SharpGrid__col--empty"></div>
+	</div>
+</div>
+`;

@@ -1,4 +1,4 @@
-import { mount } from 'vue-test-utils';
+import { mount } from '@vue/test-utils';
 import ActionBar from '../components/action-bar/ActionBar';
 
 describe('action-bar', ()=>{

@@ -1,5 +1,5 @@
 import Grid from '../components/Grid.vue';
-import { mount } from 'vue-test-utils';
+import { mount } from '@vue/test-utils';
 
 describe('grid',()=>{
     let wrapper, baseOptions;
@@ -14,7 +14,7 @@ describe('grid',()=>{
         });
     });
 
-    xtest('can mount Grid', ()=>{
+    test('can mount Grid', ()=>{
         expect(wrapper.html()).toMatchSnapshot();
     })
 
