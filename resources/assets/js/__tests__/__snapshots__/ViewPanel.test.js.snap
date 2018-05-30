@@ -14,7 +14,9 @@ exports[`view-panel mount "with content" ViewPanel 1`] = `
 <div>
 	<div class="SharpViewPanel__glasspane" style=""></div>
 	<div class="SharpViewPanel" style="" enter-class="SharpViewPanel--collapsed" enter-active-class="SharpViewPanel--expanding" enter-to-class="SharpViewPanel--expanded" leave-class="SharpViewPanel--expanded" leave-active-class="SharpViewPanel--collapsing"
-	    leave-to-class="SharpViewPanel--collapsed"><iframe src="data:text/html;charset=utf-8$,SOME%20HTML%20MARKUP" height="100%" width="100%" frameborder="0" style="height: 100%; width: 100%;"></iframe></div>
+	    leave-to-class="SharpViewPanel--collapsed">
+		<iframe src="data:text/html;charset=utf-8$,SOME%20HTML%20MARKUP" height="100%" width="100%" frameborder="0" style="height: 100%; width: 100%;"></iframe>
+	</div>
 </div>
 `;
 

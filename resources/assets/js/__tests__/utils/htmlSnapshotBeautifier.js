@@ -5,6 +5,6 @@ module.exports = {
         return typeof object === 'string' && object.trim()[0] === '<';
     },
     print(val, print, opts, colors){
-        return beautify(val, { indent_with_tabs: true });
+        return beautify(val, { indent_with_tabs: true, unformatted:[] });
     }
 };

@@ -2,7 +2,8 @@
 
 exports[`trix-editor can mount "read only" TrixEditor 1`] = `
 <div class="SharpTrix SharpTrix--read-only">
-	<div class="SharpModule__inner"><input id="trix-input-WYSIWYG_TEST" type="hidden">
+	<div class="SharpModule__inner">
+		<input id="trix-input-WYSIWYG_TEST" type="hidden">
 		<trix-toolbar id="trix-toolbar-WYSIWYG_TEST" class="SharpModule__header">
 			<!---->
 		</trix-toolbar>
@@ -13,7 +14,8 @@ exports[`trix-editor can mount "read only" TrixEditor 1`] = `
 
 exports[`trix-editor can mount TrixEditor 1`] = `
 <div class="SharpTrix">
-	<div class="SharpModule__inner"><input id="trix-input-WYSIWYG_TEST" type="hidden">
+	<div class="SharpModule__inner">
+		<input id="trix-input-WYSIWYG_TEST" type="hidden">
 		<trix-toolbar id="trix-toolbar-WYSIWYG_TEST" class="SharpModule__header">
 			<!---->
 		</trix-toolbar>
