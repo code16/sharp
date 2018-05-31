@@ -8,10 +8,14 @@ use Code16\Sharp\Tests\SharpTestCase;
 class SharpValidatorTest extends SharpTestCase
 {
 
-    /** @test */
-    function the_sharp_validator_is_binded()
+    protected function setUp()
     {
-        $this->assertInstanceOf(SharpValidator::class, $this->app->validator->make([], []));
+        parent::setUp();
+
+        // Bind Sharp's Validator
+        app()->validator->resolver(function($translator, $data, $rules, $messages) {
+            return new SharpValidator($translator, $data, $rules, $messages);
+        });
     }
 
     /** @test */
@@ -19,7 +23,6 @@ class SharpValidatorTest extends SharpTestCase
     {
         $validator = $this->app->validator->make([
             "name" => "John Wayne",
-//            "bio" => ["text" => "lorem ipsum"]
         ], [
             "name" => "required",
             "bio.text" => "required"
