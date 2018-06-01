@@ -1,16 +1,7 @@
 import * as qs from '../helpers/querystring';
-
+import { parseBlobJSONContent } from "../util";
 import { lang } from '../mixins/Localization';
 
-function parseBlobJSONContent(blob) {
-    return new Promise(resolve => {
-        let reader = new FileReader();
-        reader.addEventListener("loadend", function() {
-            resolve(JSON.parse(reader.result));
-        });
-        reader.readAsText(blob);
-    });
-}
 
 export default {
     inject:['mainLoading', 'axiosInstance', 'actionsBus'],

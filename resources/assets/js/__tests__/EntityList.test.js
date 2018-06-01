@@ -1305,9 +1305,7 @@ describe('entity-list', ()=>{
         };
         let { request } = await nextRequestFulfilled({
             status: 200,
-            response: {
-                data
-            }
+            response: new Blob([JSON.stringify(data)], { type:'application/json' })
         });
         expect(request.config).toMatchObject({
             method: 'post',
@@ -1315,7 +1313,34 @@ describe('entity-list', ()=>{
             data: JSON.stringify({ query:{ param1: true } })
         });
 
-        expect($entityList.handleCommandResponse).toHaveBeenCalledWith({ data });
+        expect($entityList.handleCommandResponse).toHaveBeenCalledWith(data);
+    });
+
+    test('download command', async ()=> {
+        let $entityList = await createVm();
+        URL.createObjectURL = jest.fn(()=>'blob:1234');
+
+        $entityList.commandEndpoint = jest.fn(()=>'{{commandEndpoint}}');
+        $entityList.handleCommandResponse = jest.fn();
+        jest.spyOn($entityList, 'actionDownload');
+
+        mockComputed($entityList, 'apiParams', {});
+
+        $entityList.sendCommand({
+            key: 'download'
+        });
+
+        await nextRequestFulfilled({
+            status: 200,
+            response: new Blob(['<<file content>>'], { type:'application/pdf' }),
+            headers: { ['Content-Disposition']: 'attachment; filename="file.pdf"' }
+        });
+
+        expect($entityList.actionDownload).toHaveBeenCalled();
+        let dlLink = $entityList.$el.lastChild;
+        expect(dlLink.tagName).toEqual('A');
+        expect(dlLink.download).toEqual('file.pdf');
+        expect(dlLink.href).toEqual('blob:1234');
     });
 
     test('handle command response', async ()=> {

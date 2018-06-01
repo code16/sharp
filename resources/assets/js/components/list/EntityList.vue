@@ -119,6 +119,7 @@
     import { ActionEvents, Localization } from '../../mixins';
 
     import * as qs from '../../helpers/querystring';
+    import { parseBlobJSONContent, getFileName } from "../../util";
 
 
     export default {
@@ -126,6 +127,7 @@
         extends: DynamicView,
 
         inject: [
+            'axiosInstance',
             'actionsBus',
             'params' // querystring params as an object
         ],
@@ -491,15 +493,25 @@
                         });
                     });
                 }
-                let { data } = await this.axiosInstance.post(this.commandEndpoint(key, instance), { query: this.apiParams });
-                this.handleCommandResponse(data);
+                try {
+                    let endpoint = this.commandEndpoint(key, instance);
+                    let response = await this.axiosInstance.post(endpoint, { query: this.apiParams }, { responseType: 'blob' });
+                    console.log(response.data.type);
+                    if(response.data.type === 'application/json') {
+                        let data = await parseBlobJSONContent(response.data);
+                        this.handleCommandResponse(data);
+                    } else {
+                        this.actionDownload(response);
+                    }
+                } catch(e) {
+                    console.error(e);
+                }
             },
 
             /* (CommandAPIResponse)
             * Execute the required command action
             */
-            handleCommandResponse({action, items, message, html, link}) {
-                //debugger;
+            handleCommandResponse({ action, items, message, html, link }) {
                 if(action === 'refresh') this.actionRefresh(items);
                 else if(action === 'reload') this.actionReload();
                 else if(action === 'info') {
@@ -552,7 +564,14 @@
                 this.updateData();
             },
             actionRefresh(items) {
-                items.forEach(item => this.$set(this.data.items,this.indexByInstanceId[item[this.idAttr]],item))
+                items.forEach(item => this.$set(this.data.items, this.indexByInstanceId[item[this.idAttr]],item))
+            },
+            actionDownload({ data:blob, headers }) {
+                let $link = document.createElement('a');
+                this.$el.appendChild($link);
+                $link.href = URL.createObjectURL(blob);
+                $link.download = getFileName(headers);
+                $link.click();
             },
 
             /**
