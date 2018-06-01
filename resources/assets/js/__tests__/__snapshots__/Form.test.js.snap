@@ -3,7 +3,7 @@
 exports[`sharp-form can mount "independant" sharp-form 1`] = `
 <div id="app">
 	<div class="SharpForm">
-		<div role="alert" class="SharpNotification SharpNotification__inline SharpNotification__inline--error" style="display: none;">
+		<div role="alert" class="SharpNotification SharpNotification--error" style="display: none;">
 			<div class="SharpNotification__details">
 				<div class="SharpNotification__text-wrapper">
 					<p class="SharpNotification__title">{{ form.validation_error.title }}</p>
@@ -25,7 +25,7 @@ exports[`sharp-form can mount "independant" sharp-form 1`] = `
 exports[`sharp-form can mount sharp-form 1`] = `
 <div id="app">
 	<div class="SharpForm">
-		<div role="alert" class="SharpNotification SharpNotification__inline SharpNotification__inline--error" style="display: none;">
+		<div role="alert" class="SharpNotification SharpNotification--error" style="display: none;">
 			<div class="SharpNotification__details">
 				<div class="SharpNotification__text-wrapper">
 					<p class="SharpNotification__title">{{ form.validation_error.title }}</p>
@@ -47,7 +47,7 @@ exports[`sharp-form can mount sharp-form 1`] = `
 exports[`sharp-form can mount sharp-form with alert 1`] = `
 <div id="app">
 	<div class="SharpForm">
-		<div role="alert" class="SharpNotification SharpNotification__inline SharpNotification__inline--error" style="">
+		<div role="alert" class="SharpNotification SharpNotification--error" style="">
 			<div class="SharpNotification__details">
 				<div class="SharpNotification__text-wrapper">
 					<p class="SharpNotification__title">{{ form.validation_error.title }}</p>

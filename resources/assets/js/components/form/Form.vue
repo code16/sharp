@@ -1,7 +1,7 @@
 <template>
     <div class="SharpForm">
         <template v-if="ready">
-            <div v-show="hasErrors" class="SharpNotification SharpNotification__inline SharpNotification__inline--error" role="alert">
+            <div v-show="hasErrors" class="SharpNotification SharpNotification--error" role="alert">
                 <div class="SharpNotification__details">
                     <div class="SharpNotification__text-wrapper">
                         <p class="SharpNotification__title">{{ l('form.validation_error.title') }}</p>
