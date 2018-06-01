@@ -4,7 +4,6 @@ namespace Code16\Sharp;
 
 use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
-use Code16\Sharp\Form\Validator\SharpValidator;
 use Code16\Sharp\Http\Composers\AssetViewComposer;
 use Code16\Sharp\Http\Composers\MenuViewComposer;
 use Code16\Sharp\Http\Middleware\Api\AddSharpContext;
@@ -12,6 +11,7 @@ use Code16\Sharp\Http\Middleware\Api\AppendFormAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendListAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendListMultiform;
 use Code16\Sharp\Http\Middleware\Api\AppendNotifications;
+use Code16\Sharp\Http\Middleware\Api\BindSharpValidationResolver;
 use Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors;
 use Code16\Sharp\Http\Middleware\Api\SaveEntityListParams;
 use Code16\Sharp\Http\Middleware\Api\SetSharpLocale;
@@ -29,7 +29,7 @@ class SharpServiceProvider extends ServiceProvider
     /**
      * @var string
      */
-    const VERSION = '4.0.9';
+    const VERSION = '4.0.10';
 
     public function boot()
     {
@@ -55,11 +55,6 @@ class SharpServiceProvider extends ServiceProvider
             ['sharp::form', 'sharp::list', 'sharp::dashboard', 'sharp::login', 'sharp::unauthorized'],
             AssetViewComposer::class
         );
-
-        // Bind Sharp's specific Validator
-        $this->app->validator->resolver(function($translator, $data, $rules, $messages) {
-            return new SharpValidator($translator, $data, $rules, $messages);
-        });
     }
 
     public function register()
@@ -151,6 +146,9 @@ class SharpServiceProvider extends ServiceProvider
 
         )->aliasMiddleware(
             'sharp_api_context', AddSharpContext::class
+
+        )->aliasMiddleware(
+            'sharp_api_validation', BindSharpValidationResolver::class
 
         )->aliasMiddleware(
             'sharp_locale', SetSharpLocale::class
