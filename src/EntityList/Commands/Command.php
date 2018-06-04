@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\EntityList\Commands;
 
-use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\HandleFormFields;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Illuminate\Contracts\Validation\Factory as Validator;
@@ -76,6 +75,20 @@ abstract class Command
         return [
             "action" => "view",
             "html" => view($bladeView, $params)->render()
+        ];
+    }
+
+    /**
+     * @param string $filePath
+     * @param string|null $diskName
+     * @return array
+     */
+    protected function download(string $filePath, $diskName = null)
+    {
+        return [
+            "action" => "download",
+            "file" => $filePath,
+            "disk" => $diskName
         ];
     }
 

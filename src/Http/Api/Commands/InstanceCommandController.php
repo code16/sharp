@@ -15,6 +15,7 @@ class InstanceCommandController extends ApiController
      * @param string $instanceId
      * @return \Illuminate\Http\JsonResponse
      * @throws SharpAuthorizationException
+     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
     public function update($entityKey, $commandKey, $instanceId)
     {
@@ -27,7 +28,7 @@ class InstanceCommandController extends ApiController
             throw new SharpAuthorizationException();
         }
 
-        return $this->returnAsJson(
+        return $this->returnCommandResult(
             $list,
             $commandHandler->execute(
                 $instanceId,

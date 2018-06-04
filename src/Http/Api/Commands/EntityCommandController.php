@@ -27,7 +27,7 @@ class EntityCommandController extends ApiController
             throw new SharpAuthorizationException();
         }
 
-        return $this->returnAsJson(
+        return $this->returnCommandResult(
             $list,
             $commandHandler->execute(
                 EntityListQueryParams::create()->fillWithRequest("query"),

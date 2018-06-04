@@ -4,14 +4,15 @@ namespace App\Sharp\Commands;
 
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
 
-class SpaceshipExternalLink extends InstanceCommand
+class PilotDownloadResume extends InstanceCommand
 {
+
     /**
      * @return string
      */
     public function label(): string
     {
-        return "A Link";
+        return "Download resume";
     }
 
     /**
@@ -21,13 +22,6 @@ class SpaceshipExternalLink extends InstanceCommand
      */
     public function execute($instanceId, array $data = []): array
     {
-        return $this->link(
-            route('code16.sharp.edit',
-                [
-                    'entityKey' => 'spaceship',
-                    'instanceId' => $instanceId
-                ]
-            )
-        );
+        return $this->download("pdf/pilot-resume.pdf", "local");
     }
 }

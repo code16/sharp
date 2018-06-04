@@ -8,6 +8,8 @@ use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class CommandControllerTest extends BaseApiTest
 {
@@ -140,6 +142,21 @@ class CommandControllerTest extends BaseApiTest
         $this->json('post', '/sharp/api/list/person/command/entity_form', [
             "data" => ["name" => "John"]
         ])->assertStatus(200);
+    }
+
+    /** @test */
+    public function we_can_call_a_download_entity_command()
+    {
+        $this->buildTheWorld();
+        $this->disableExceptionHandling();
+
+        $this->json('post', '/sharp/api/list/person/command/entity_download')
+            ->assertStatus(200)
+            ->assertHeader("content-type", "application/pdf")
+            ->assertHeader("content-disposition", "attachment; filename=\"account.pdf\"");
+
+        $this->json('post', '/sharp/api/list/person/command/entity_download_no_disk')
+            ->assertStatus(200);
     }
 
     /** @test */
@@ -278,6 +295,22 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
             public function execute(EntityListQueryParams $params, array $data = []): array {
                 $this->validate($data, ["name"=>"required"]);
                 return $this->reload();
+            }
+
+        })->addEntityCommand("entity_download", new class() extends EntityCommand {
+            public function label(): string { return "label"; }
+            public function execute(EntityListQueryParams $params, array $data = []): array {
+                Storage::fake('files');
+                UploadedFile::fake()->create('account.pdf')->storeAs('pdf', 'account.pdf', ['disk'=>'files']);
+                return $this->download("pdf/account.pdf", "files");
+            }
+
+        })->addEntityCommand("entity_download_no_disk", new class() extends EntityCommand {
+            public function label(): string { return "label"; }
+            public function execute(EntityListQueryParams $params, array $data = []): array {
+                Storage::fake('local');
+                UploadedFile::fake()->create('account.pdf')->storeAs('pdf', 'account.pdf');
+                return $this->download("pdf/account.pdf");
             }
 
         })->addInstanceCommand("entity_unauthorized", new class() extends EntityCommand {
