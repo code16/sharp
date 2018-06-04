@@ -150,10 +150,11 @@ class CommandControllerTest extends BaseApiTest
         $this->buildTheWorld();
         $this->disableExceptionHandling();
 
-        $this->json('post', '/sharp/api/list/person/command/entity_download')
+        $response = $this->json('post', '/sharp/api/list/person/command/entity_download')
             ->assertStatus(200)
-            ->assertHeader("content-type", "application/pdf")
-            ->assertHeader("content-disposition", "attachment; filename=\"account.pdf\"");
+            ->assertHeader("content-type", "application/pdf");
+
+        $this->assertContains("account.pdf", $response->headers->get("content-disposition"));
 
         $this->json('post', '/sharp/api/list/person/command/entity_download_no_disk')
             ->assertStatus(200);
