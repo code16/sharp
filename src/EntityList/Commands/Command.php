@@ -80,15 +80,17 @@ abstract class Command
 
     /**
      * @param string $filePath
+     * @param null $fileName
      * @param string|null $diskName
      * @return array
      */
-    protected function download(string $filePath, $diskName = null)
+    protected function download(string $filePath, $fileName = null, $diskName = null)
     {
         return [
             "action" => "download",
             "file" => $filePath,
-            "disk" => $diskName
+            "disk" => $diskName,
+            "name" => $fileName
         ];
     }
 

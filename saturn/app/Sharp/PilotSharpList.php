@@ -3,7 +3,7 @@
 namespace App\Sharp;
 
 use App\Pilot;
-use App\Sharp\Commands\PilotDownloadResume;
+use App\Sharp\Commands\PilotDownloadPhoto;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
@@ -32,7 +32,7 @@ class PilotSharpList extends SharpEntityList
             ->setDefaultSort("name", "asc")
             ->setMultiformAttribute("role")
             ->setPaginated()
-            ->addEntityCommand("download", PilotDownloadResume::class);
+            ->addEntityCommand("download", PilotDownloadPhoto::class);
     }
 
     function buildListLayout()

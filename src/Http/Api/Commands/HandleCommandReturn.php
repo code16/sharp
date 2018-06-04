@@ -18,7 +18,10 @@ trait HandleCommandReturn
     {
         if($returnedValue["action"] == "download") {
             // Download case is specific: we return a File Stream
-            return Storage::disk($returnedValue["disk"])->download($returnedValue["file"]);
+            return Storage::disk($returnedValue["disk"])->download(
+                $returnedValue["file"],
+                $returnedValue["name"]
+            );
         }
 
         if($returnedValue["action"] == "refresh") {

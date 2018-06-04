@@ -303,7 +303,7 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
             public function execute(EntityListQueryParams $params, array $data = []): array {
                 Storage::fake('files');
                 UploadedFile::fake()->create('account.pdf')->storeAs('pdf', 'account.pdf', ['disk'=>'files']);
-                return $this->download("pdf/account.pdf", "files");
+                return $this->download("pdf/account.pdf", "account.pdf", "files");
             }
 
         })->addEntityCommand("entity_download_no_disk", new class() extends EntityCommand {
