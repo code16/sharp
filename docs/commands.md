@@ -97,13 +97,14 @@ To add a confirmation message before a Command is executed, simply add a `confir
 
 ### Command return types
 
-Finally, let's review the return possibilities. After a Command has been executed, the code must return a "command return" to tell to the front what to do next. There are five of them:
+Finally, let's review the return possibilities. After a Command has been executed, the code must return a "command return" to tell to the front what to do next. There are six of them:
 
 - `return $this->info("some text")`: displays the entered text in a modal.
 - `return $this->reload()`: reload the current entity list (with context).
 - `return $this->refresh(1)`*: refresh only the instance with an id on `1`. We can pass an id array also to refresh more than one instance.
 - `return $this->view("view.name", ["some"=>"params"])`: display a  view right in Sharp. Useful for page previews.
 - `return $this->link("/path/to/redirect")`: redirect to the given path
+- `return $this->download("path", "diskName")`: the browser will download (as a stream) the specified file.
 
 \* In order for `refresh()` to work properly, your Entity List's  `getListData(EntityListQueryParams $params)` will be called, and `$params` will return all the wanted `id`s with `specificIds()`. Here's a code example:
 
