@@ -12,7 +12,7 @@ class AssetViewComposerTest extends BaseApiTest
         $this->buildTheWorld();
 
         $this->app['config']->set(
-            'sharp.assets.head',
+            'sharp.extensions.assets.head',
             ['/path/to/asset.css']
         );
 

@@ -1,6 +1,7 @@
 <?php
 
 namespace Code16\Sharp\Http\Composers;
+
 use Code16\Sharp\Exceptions\View\SharpInvalidAssetRenderStrategy;
 use Illuminate\View\View;
 
@@ -42,13 +43,14 @@ class AssetViewComposer
      * Bind data to the view
      *
      * @param View $view
+     * @throws SharpInvalidAssetRenderStrategy
      */
     public function compose(View $view)
     {
         $strategy = $this->getValidatedStrategyFromConfig();
         $output = [];
 
-        foreach((array)config("sharp.assets") as $position => $paths) {
+        foreach((array)config("sharp.extensions.assets") as $position => $paths) {
             foreach((array)$paths as $assetPath) {
                 if(!isset($output[$position])) {
                     $output[$position] = [];
@@ -56,7 +58,6 @@ class AssetViewComposer
 
                 // Only render valid assets
                 if(ends_with($assetPath, $this->assetTypes)) {
-
                     // Grab the relevant template based on the filetype
                     $template = array_get($this->renderTemplates, $this->getAssetFileType($assetPath));
 
@@ -103,11 +104,10 @@ class AssetViewComposer
         {
             case 'asset':
             case 'mix':
-
                 return $strategy($assetPath);
                 break;
-            default:
 
+            default:
                 return $assetPath;
                 break;
         }
@@ -121,10 +121,10 @@ class AssetViewComposer
      */
     protected function getValidatedStrategyFromConfig():string
     {
-        $strategy = config('sharp.assets.strategy', 'raw');
+        $strategy = config('sharp.extensions.assets.strategy', 'raw');
 
         if(!is_string($strategy)) {
-            throw new SharpInvalidAssetRenderStrategy('The asset strategy defined at sharp.assets.strategy is not a string');
+            throw new SharpInvalidAssetRenderStrategy('The asset strategy defined at sharp.extensions.assets.strategy is not a string');
         }
 
         if(!in_array($strategy, $this->renderStrategies)) {

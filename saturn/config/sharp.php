@@ -4,11 +4,15 @@ return [
 
     "name" => "Saturn",
 
-    "assets" => [
-        "strategy" => "asset",
-        "head"     => [
-            "/css/inject.css",
+    "extensions" => [
+        "assets" => [
+            "strategy" => "asset",
+            "head" => [
+                "/css/inject.css",
+            ],
         ],
+
+        "activate_custom_form_fields" => env("SHARP_CUSTOM_FORM_FIELDS", false),
     ],
 
     "entities" => [
