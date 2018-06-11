@@ -12,7 +12,7 @@ return [
             ],
         ],
 
-        "activate_custom_form_fields" => env("SHARP_CUSTOM_FORM_FIELDS", false),
+        "activate_custom_form_fields" => env("SHARP_CUSTOM_FORM_FIELDS", true),
     ],
 
     "entities" => [

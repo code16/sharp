@@ -90,6 +90,19 @@ You can `.version()` this JS file if you want to.
 
 ## On the back side
 
+### Activate custom form fields in config
+
+```php
+// config/sharp.php
+
+"extensions" => [
+   "activate_custom_form_fields" => true
+],
+
+// ...
+```
+
+
 ### Write the form field class and formatter
 
 Next step is to build your form field class. It must extend `Code16\Sharp\Form\Fields\SharpFormField`.
