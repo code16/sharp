@@ -7,11 +7,13 @@ You may globally inject custom CSS files after the Sharp assets by defining thei
 ```php
 // config/sharp.php
 
-"assets" => [
-    "strategy" => "raw",
-    "head"     => [
-        "/css/inject.css", // Outputs <link rel="stylesheet" href="/css/inject.css"> after sharp assets
-    ],
+"extensions" => [
+   "assets" => [
+      "strategy" => "raw",
+      "head"     => [
+         "/css/inject.css", // Outputs <link rel="stylesheet" href="/css/inject.css"> after sharp assets
+      ],
+   ],
 ],
 
 // ...
