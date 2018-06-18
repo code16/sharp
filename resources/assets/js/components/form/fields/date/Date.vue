@@ -92,7 +92,7 @@
         },
         computed: {
             moment() {
-                return this.value && moment(this.value);
+                return this.value && moment(this.value, this.hasTime && !this.hasDate ? 'HH:mm' : null);
             },
             dateObject() {
                 return this.moment ? this.moment.toDate() : null;
