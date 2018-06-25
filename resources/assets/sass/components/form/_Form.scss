@@ -40,13 +40,14 @@
 
   &__form-item {
     flex: 1;
+    height: 100%;
     //margin-right: 1rem;
 
     /*&:last-of-type {
       margin-right: 0;
       margin-bottom: 0;
     }*/
-  }
+  k
 
   &__label {
     @include reset;
