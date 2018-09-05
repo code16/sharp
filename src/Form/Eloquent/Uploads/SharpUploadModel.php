@@ -14,6 +14,7 @@ class SharpUploadModel extends Model
      */
     protected $casts = [
         'custom_properties' => 'array',
+        'size' => 'integer',
     ];
 
     public function model()

@@ -10,7 +10,7 @@
   }],
   "require": {
     "php": ">=7.0.0",
-    "laravel/framework": "5.4.*|5.5.*|5.6.*",
+    "laravel/framework": "5.4.*|5.5.*|5.6.*|5.7.*",
     "intervention/image": "^2.3"
   },
   "require-dev": {
@@ -18,7 +18,7 @@
     "mockery/mockery": "0.9.*",
     "phpunit/phpunit": "~6.0|~7.0",
     "doctrine/dbal": "~2.5",
-    "orchestra/testbench": "~3.4|~3.5|~3.6"
+    "orchestra/testbench": "~3.4|~3.5|~3.6|~3.7"
   },
   "autoload": {
     "files": [

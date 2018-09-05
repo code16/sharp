@@ -121,3 +121,19 @@ function sharp_custom_form_fields()
 
     return "";
 }
+
+/**
+ * Return true if current Laravel installation is newer than
+ * given version (ex: 5.6).
+ *
+ * @param string $version
+ * @return bool
+ */
+function sharp_laravel_version_gte($version)
+{
+    list($major, $minor) = explode(".", $version);
+    list($laravelMajor, $laravelMinor, $bugfix) = explode(".", app()::VERSION);
+
+    return $laravelMajor > $major
+        || ($laravelMajor == $major && $laravelMinor >= $minor);
+}
