@@ -2,34 +2,9 @@
 
 exports[`action-view can mount ActionView 1`] = `
 <div class="SharpActionView">
-	<!---->
+	<sharpactionbarform-stub></sharpactionbarform-stub>
 	<div class="container">
-		<!---->
-	</div>
-</div>
-`;
-
-exports[`action-view can mount ActionView with closed notification 1`] = `
-<div class="SharpActionView">
-	<!---->
-	<div class="container">
-		<div class="notifications" style="width: 300px; right: 0px;">
-			<span>
-				<div class="notification-wrapper slideRight-leave slideRight-leave-active">
-					<div role="alert" data-test="notification" class="SharpToastNotification SharpToastNotification--info">
-						<div class="SharpToastNotification__details">
-							<h3 class="SharpToastNotification__title mb-2"></h3>
-							<p class="SharpToastNotification__caption">message</p>
-						</div>
-						<button type="button" data-test="close-notification" class="SharpToastNotification__close-button">
-							<svg aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd" class="SharpToastNotification__icon">
-								<path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
-							</svg>
-						</button>
-					</div>
-				</div>
-			</span>
-		</div>
+		<notifications-stub group="" width="300" reverse="true" position="top right" classes="vue-notification" animationtype="css" animation="[object Object]" animationname="slideRight" speed="300" cooldown="0" duration="3000" delay="0" max="Infinity"></notifications-stub>
 	</div>
 </div>
 `;
@@ -46,25 +21,9 @@ exports[`action-view can mount ActionView with error page 1`] = `
 
 exports[`action-view can mount ActionView with notification 1`] = `
 <div class="SharpActionView">
-	<!---->
+	<sharpactionbarform-stub></sharpactionbarform-stub>
 	<div class="container">
-		<div class="notifications" style="width: 300px; right: 0px;">
-			<span>
-				<div class="notification-wrapper slideRight-enter slideRight-enter-active">
-					<div role="alert" data-test="notification" class="SharpToastNotification SharpToastNotification--TYPE">
-						<div class="SharpToastNotification__details">
-							<h3 class="SharpToastNotification__title mb-2">TITLE</h3>
-							<p class="SharpToastNotification__caption">MESSAGE</p>
-						</div>
-						<button type="button" data-test="close-notification" class="SharpToastNotification__close-button">
-							<svg aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd" class="SharpToastNotification__icon">
-								<path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
-							</svg>
-						</button>
-					</div>
-				</div>
-			</span>
-		</div>
+		<notifications-stub group="" width="300" reverse="true" position="top right" classes="vue-notification" animationtype="css" animation="[object Object]" animationname="slideRight" speed="300" cooldown="0" duration="3000" delay="0" max="Infinity"></notifications-stub>
 	</div>
 </div>
 `;
@@ -73,20 +32,16 @@ exports[`action-view can mount with action bar 1`] = `
 <div class="SharpActionView">
 	<div>BAR COMPONENT</div>
 	<div class="container">
-		<div class="notifications" style="width: 300px; right: 0px;">
-			<span></span>
-		</div>
+		<notifications-stub group="" width="300" reverse="true" position="top right" classes="vue-notification" animationtype="css" animation="[object Object]" animationname="slideRight" speed="300" cooldown="0" duration="3000" delay="0" max="Infinity"></notifications-stub>
 	</div>
 </div>
 `;
 
 exports[`action-view can mount with multiple modals 1`] = `
 <div class="SharpActionView">
-	<!---->
+	<sharpactionbarform-stub></sharpactionbarform-stub>
 	<div class="container">
-		<div class="notifications" style="width: 300px; right: 0px;">
-			<span></span>
-		</div>
+		<notifications-stub group="" width="300" reverse="true" position="top right" classes="vue-notification" animationtype="css" animation="[object Object]" animationname="slideRight" speed="300" cooldown="0" duration="3000" delay="0" max="Infinity"></notifications-stub>
 		<div visible="visible">
 			Modal 1
 		</div>
