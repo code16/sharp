@@ -11,6 +11,7 @@ class AuthenticationTest extends BaseApiTest
     /** @test */
     public function unauthenticated_user_wont_pass_on_an_api_call()
     {
+        $this->withoutExceptionHandling();
         $this->buildTheWorld();
 
         $this->json('get', '/sharp/api/list/person')->assertStatus(401);
