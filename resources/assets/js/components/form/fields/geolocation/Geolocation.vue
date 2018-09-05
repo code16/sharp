@@ -15,16 +15,7 @@
             >
                 <div class="row">
                     <div class="col-7">
-                        <GmapMap
-                            :center="value"
-                            :zoom="zoomLevel"
-                            :options="defaultMapOptions"
-                            style="padding-bottom: 80%"
-                            class="mw-100"
-                            ref="map"
-                        >
-                            <GmapMarker :position="value"></GmapMarker>
-                        </GmapMap>
+                        <slot />
                     </div>
                     <div class="col-5 pl-0">
                         <div class="d-flex flex-column justify-content-between h-100">
@@ -45,117 +36,49 @@
                 </div>
             </SharpCard>
         </template>
-        <SharpGeolocationEdit
-            :modal-id="modalId"
-            :value="value"
-            :center="value || initialPosition"
-            :zoom="zoomLevel"
-            :geocoding="geocoding"
-            @change="handlePositionChanged"
-        />
     </div>
 </template>
 
 <script>
-    import Vue from 'vue';
-    import * as VueGoogleMaps from '../../../vendor/vue2-google-maps/main';
-    import bModal from 'bootstrap-vue/es/directives/modal/modal';
-
-    import { Localization } from '../../../../mixins';
-
-    import { SharpCard, SharpButton } from '../../../ui';
-    import SharpGeolocationEdit from './GeolocationEdit.vue';
-    import GeolocationCommons from './Commons';
+    import { dd2dms } from "./util";
+    import SharpMap from './Map.vue';
+    import { SharpCard, SharpButton } from "../../../ui";
 
     export default {
-        name: 'SharpGeolocation',
-        mixins: [Localization, GeolocationCommons],
-
-        inject: ['$tab'],
-
         components: {
-            GmapMap: VueGoogleMaps.Map,
-            GmapMarker: VueGoogleMaps.Marker,
-            SharpGeolocationEdit,
+            SharpMap,
             SharpCard,
             SharpButton
         },
-
         props: {
+            loaded: false,
             value: Object,
-            readOnly: Boolean,
-            uniqueIdentifier: String,
-            geocoding: Boolean,
-            apiKey: String,
-            boundaries: Object,
-            zoomLevel: Number,
-            initialPosition: Object,
             displayUnit: {
                 type: String,
                 default: 'DD',
-                validator: unit => unit==='DMS'||unit==='DD'
+                validator: unit => unit==='DMS' || unit==='DD'
             }
         },
-
-        data() {
-            return {
-                loaded: false
-            }
-        },
-
         computed: {
-            modalId() {
-                return `${this.uniqueIdentifier.replace('.','-')}-modal`
-            },
             latLngString() {
                 if(this.displayUnit === 'DMS') {
-                    return this.latLng2DMS(this.value)
+                    return {
+                        lat: dd2dms(this.value.lat),
+                        lng: dd2dms(this.value.lng, true)
+                    }
                 }
                 else if(this.displayUnit === 'DD') {
-                    return this.latLng2DD(this.value);
+                    return this.value;
                 }
             }
         },
-
-        methods:{
-            handlePositionChanged(value) {
+        methods: {
+            handleInput(value) {
                 this.$emit('input', value);
             },
             handleRemoveButtonClicked() {
                 this.$emit('input', null);
             },
-
-            async load() {
-                if(this.$root.$_gmapLoaded) {
-                    return this.$root.$_gmapLoaded;
-                }
-
-                let loadOptions = { v:'3' };
-                if(this.apiKey) loadOptions.key = this.apiKey;
-
-                Vue.use(VueGoogleMaps, {
-                    installComponents: false,
-                    load: loadOptions
-                });
-
-                this.$root.$_gmapLoaded = VueGoogleMaps.loaded;
-                return VueGoogleMaps.loaded;
-            }
-        },
-
-        directives: {
-            bModal
-        },
-
-        async created() {
-            await this.load();
-            this.loaded = true;
-        },
-
-        mounted() {
-            if(this.$tab) {
-                this.$tab.$on('active', ()=>this.refreshMap());
-            }
         }
     }
 </script>

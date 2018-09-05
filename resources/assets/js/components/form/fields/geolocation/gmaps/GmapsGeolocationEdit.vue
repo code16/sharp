@@ -38,15 +38,15 @@
 </template>
 
 <script>
-    import Text from '../Text.vue';
-    import { Map, Marker } from '../../../vendor/vue2-google-maps/main';
-    import GeolocationCommons from './Commons';
-    import Modal from '../../../Modal.vue';
-    import { SharpLoading } from "../../../ui";
-    import { LocalizationBase } from '../../../../mixins';
+    import Text from '../../Text.vue';
+    import { Map, Marker } from '../../../../vendor/vue2-google-maps/main';
+    import GeolocationCommons from './commons';
+    import Modal from '../../../../Modal.vue';
+    import { SharpLoading } from "../../../../ui/index";
+    import { LocalizationBase } from '../../../../../mixins/index';
 
     export default {
-        name:'SharpGeolocationEdit',
+        name:'SharpGmapsGeolocationEdit',
 
         mixins: [ LocalizationBase('form.geolocation.modal'), GeolocationCommons],
 
