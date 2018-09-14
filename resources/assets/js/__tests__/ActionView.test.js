@@ -41,27 +41,20 @@ describe('action-view', ()=>{
     });
 
     test('can mount ActionView with notification', ()=>{
-        const wrapper = createWrapper({ notifications: true });
+        const wrapper = createWrapper();
         notify(wrapper, { title:'TITLE', text:'MESSAGE', type:'TYPE' });
-        expect(wrapper.html()).toMatchSnapshot();
-    });
-
-    test('can mount ActionView with closed notification', ()=>{
-        const wrapper = createWrapper({ notifications:true });
-        notify(wrapper, 'message');
-        wrapper.find('[data-test=close-notification]').trigger('click');
         expect(wrapper.html()).toMatchSnapshot();
     });
 
     test('can mount ActionView with error page', ()=>{
         const wrapper = createWrapper({
-            data: {
+            data: ()=>({
                 showErrorPage: true,
                 errorPageData: {
                     status: 404,
                     message: 'ERROR MESSAGE'
                 }
-            }
+            })
         });
 
         expect(wrapper.html()).toMatchSnapshot();
