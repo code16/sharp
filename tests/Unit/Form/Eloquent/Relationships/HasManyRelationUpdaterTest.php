@@ -47,6 +47,36 @@ class HasManyRelationUpdaterTest extends SharpFormEloquentBaseTest
     }
 
     /** @test */
+    function we_do_not_update_the_id_attribute_when_updating_a_related_item_in_a_hasMany_relation()
+    {
+        $mother = Person::create(["name" => "Jane Wayne"]);
+
+        (new HasManyRelationUpdater())->update($mother, "sons", [[
+            "id" => 'ABC', // Set a invalid id here to ensure it will be unset
+            "name" => "John Wayne"
+        ]]);
+
+        $john = Person::where("mother_id", $mother->id)->where("name", "John Wayne")->first();
+        $this->assertNotEquals('ABC', $john->id);
+    }
+
+    /** @test */
+    function we_certainly_do_update_the_id_attribute_when_updating_a_related_item_in_a_hasMany_relation_in_a_non_incrementing_id_case()
+    {
+        $mother = PersonWithFixedId::create(["name" => "Jane Wayne"]);
+
+        (new HasManyRelationUpdater())->update($mother, "sons", [[
+            "id" => 123,
+            "name" => "John Wayne"
+        ]]);
+
+        $this->assertDatabaseHas("people", [
+            "mother_id" => $mother->id,
+            "id" => 123
+        ]);
+    }
+
+    /** @test */
     function the_optional_getDefaultAttributesFor_method_is_called_on_an_item_creation()
     {
         $mother = new class extends Person {
@@ -88,5 +118,16 @@ class HasManyRelationUpdaterTest extends SharpFormEloquentBaseTest
             "id" => $son2->id,
             "mother_id" => $mother->id
         ]);
+    }
+}
+
+class PersonWithFixedId extends Person
+{
+    protected $table = "people";
+    public $incrementing = false;
+
+    public function sons()
+    {
+        return $this->hasMany(PersonWithFixedId::class, "mother_id");
     }
 }
