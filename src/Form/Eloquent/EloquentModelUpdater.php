@@ -58,7 +58,9 @@ class EloquentModelUpdater
      */
     protected function valuateAttribute($instance, string $attribute, $value)
     {
-        $instance->setAttribute($attribute, $value);
+        if($attribute !== 'id') {
+            $instance->setAttribute($attribute, $value);
+        }
     }
 
     /**
