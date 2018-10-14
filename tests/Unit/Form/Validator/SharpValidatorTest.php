@@ -4,6 +4,7 @@ namespace Code16\Sharp\Tests\Unit\Form\Validator;
 
 use Code16\Sharp\Form\Validator\SharpValidator;
 use Code16\Sharp\Tests\SharpTestCase;
+use Illuminate\Validation\ValidationException;
 
 class SharpValidatorTest extends SharpTestCase
 {
@@ -44,5 +45,15 @@ class SharpValidatorTest extends SharpTestCase
         $validator->passes();
 
         $this->assertEquals(["name" => ["The name field is required."]], $validator->messages()->toArray());
+    }
+
+    /** @test */
+    function compatible_with_laravel_validation_exception()
+    {
+        $exception = ValidationException::withMessages([
+            "name" => ["Test"]
+        ]);
+
+        $this->assertEquals(["name" => ["Test"]], $exception->errors());
     }
 }
