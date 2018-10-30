@@ -30,8 +30,8 @@ class LinkToEntityTest extends SharpTestCase
     function we_can_generate_a_link_with_a_search()
     {
         $this->assertEquals(
-            '<a href="http://localhost/sharp/list/my-entity?search=my%20search" title="">test</a>',
-            (new LinkToEntity("test", "my-entity"))->setSearch("my search")->render()
+            '<a href="http://localhost/sharp/list/my-entity?search=my-search" title="">test</a>',
+            (new LinkToEntity("test", "my-entity"))->setSearch("my-search")->render()
         );
     }
 
