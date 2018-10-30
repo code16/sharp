@@ -1,8 +1,6 @@
 function parseValue(val) {
-    if(val.indexOf(',')!==-1) {
-        return val.split(',');
-    }
-    return val;
+    const res = val.replace(/\+/g, ' ');
+    return res.includes(',') ? res.split(',') : res;
 }
 
 function parse() {
