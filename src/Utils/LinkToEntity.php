@@ -31,6 +31,9 @@ class LinkToEntity
     /** @var string */
     protected $sortDir;
 
+    /** @var array */
+    protected $fullQuerystring = [];
+
     /**
      * @param string $linkText
      * @param string $entityKey
@@ -100,20 +103,31 @@ class LinkToEntity
     }
 
     /**
+     * @param array $querystring
+     * @return $this
+     */
+    public function setFullQuerystring($querystring)
+    {
+        $this->fullQuerystring = $querystring;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function render()
     {
         return sprintf(
             '<a href="%s" title="%s">%s</a>',
-            $this->generateUrl(), $this->tooltip, $this->linkText
+            $this->renderAsUrl(), $this->tooltip, $this->linkText
         );
     }
 
     /**
      * @return string
      */
-    protected function generateUrl()
+    public function renderAsUrl()
     {
         if($this->instanceId) {
             return route("code16.sharp.edit",
@@ -134,6 +148,10 @@ class LinkToEntity
      */
     protected function generateQuerystring()
     {
+        if(count($this->fullQuerystring)) {
+            return $this->fullQuerystring;
+        }
+
         return collect()
             ->when($this->searchText, function(Collection $qs) {
                 return $qs->put('search', $this->searchText);
