@@ -74,11 +74,9 @@ class EntityListQueryParams
      */
     public function fillWithRequest(string $queryPrefix = null)
     {
-        $query = $queryPrefix
-            ? request("query")
-            : request()->all();
+        $query = $queryPrefix ? request($queryPrefix) : request()->all();
 
-        $this->search = $query["search"] ?? null;
+        $this->search = $query["search"] ?? null ? urldecode($query["search"]) : null;
         $this->page = $query["page"] ?? null;
 
         if(isset($query["sort"])) {
