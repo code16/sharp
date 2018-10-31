@@ -26,7 +26,7 @@
         mixins: [Responsive('lg')],
 
         props: {
-            categories: Array,
+            menuItems: Array,
             current: String
         },
         data() {
@@ -52,7 +52,16 @@
         },
         computed: {
             allEntities() {
-                return this.categories.reduce((res,category)=>[...res,...category.entities],[]);
+                var entities = [];
+                this.menuItems.forEach(function (menuItem) {
+                    if (menuItem.type == 'category') {
+                        menuItem.entities.forEach(function (entity) {
+                            entities.push(entity)
+                        });
+                    } else {
+                        entities.push(menuItem.entity);
+                    }
+                });
             },
             currentIcon() {
                 return this.current === 'dashboard'

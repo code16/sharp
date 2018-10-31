@@ -13,7 +13,7 @@ describe('left-nav', ()=>{
                 default: '<div>NAV CONTENT</div>'
             },
             propsData: {
-                categories: [{ entities:[] }]
+                menuItems: [{ entities:[] }]
             },
             created() {
                 jest.spyOn(this,'updateState');

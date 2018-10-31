@@ -16,14 +16,22 @@ class MenuViewComposer
      */
     public function compose(View $view)
     {
-        $categories = new Collection;
+        $menuItems = new Collection;
 
         if(config("sharp.menu")) {
             foreach (config("sharp.menu") as $categoryConfig) {
-                $category = new MenuCategory($categoryConfig);
+                $type = isset($categoryConfig['entity']) ? 'page' : 'category';
+                $menuItem = null;
+                if ($type == 'category') {
+                    $menuItem = new MenuCategory($categoryConfig);
+                    $menuItem->type = $type;
+                } else {
+                    $menuItem = new MenuEntity($categoryConfig['entity'], $categoryConfig['properties']);
+                    $menuItem->type = $type;
+                }
 
-                if(sizeof($category->entities)) {
-                    $categories->push($category);
+                if(($type == 'category' && sizeof($menuItem->entities)) || $type == 'page') {
+                    $menuItems->push($menuItem);
                 }
             }
         }
@@ -32,7 +40,7 @@ class MenuViewComposer
             "name" => config("sharp.name", "Sharp"),
             "user" => sharp_user()->{config("sharp.auth.display_attribute", "name")},
             "dashboard" => $this->hasDashboard(),
-            "categories" => $categories,
+            "menuItems" => $menuItems,
             "currentEntity" => isset($view->entityKey) ? explode(':', $view->entityKey)[0] : null
         ];
 
@@ -60,9 +68,11 @@ class MenuCategory
     {
         $this->label = $category["label"] ?? "Unnamed category";
 
-        foreach((array)$category["entities"] as $entityKey => $entity) {
-            if(sharp_has_ability("entity", $entityKey)) {
-                $this->entities[] = new MenuEntity($entityKey, $entity);
+        if (isset($category['entities'])) {
+            foreach ((array)$category["entities"] as $entityKey => $entity) {
+                if (sharp_has_ability("entity", $entityKey)) {
+                    $this->entities[] = new MenuEntity($entityKey, $entity);
+                }
             }
         }
     }

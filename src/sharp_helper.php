@@ -24,11 +24,17 @@ function sharp_page_title($sharpMenu, $entityKey)
             : "";
 
         if ($entityKey) {
-            foreach ($sharpMenu->categories as $category) {
-                foreach ($category->entities as $entity) {
-                    if ($entity->key == $entityKey) {
-                        $entityLabel = $entity->label;
-                        break 2;
+            foreach ($sharpMenu->menuItems as $menuItem) {
+                if ($menuItem->type == 'category') {
+                    foreach ($menuItem->entities as $entity) {
+                        if ($entity->key == $entityKey) {
+                            $entityLabel = $entity->label;
+                            break 2;
+                        }
+                    }
+                } else {
+                    if ($menuItem->key == $entityKey) {
+                        $entityLabel = $menuItem->label;
                     }
                 }
             }
