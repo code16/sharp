@@ -54,7 +54,7 @@ class MenuCategory
     public $label;
 
     /** @var array */
-    public $entities;
+    public $entities = [];
 
     public function __construct(array $category)
     {

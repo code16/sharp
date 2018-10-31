@@ -13,10 +13,12 @@ class SharpValidator extends Validator
 {
 
     /**
-     * @return MessageBag
+     * @return bool
      */
-    public function messages()
+    public function passes()
     {
+        $result = parent::passes();
+
         // First grab all messages which do not refer to a Rich Text Field (RTF)
         $newMessages = collect($this->messages->getMessages())->filter(function($messages, $key) {
             return !ends_with($key, ".text");
@@ -34,6 +36,8 @@ class SharpValidator extends Validator
                 });
             });
 
-        return new MessageBag($newMessages);
+        $this->messages = new MessageBag($newMessages);
+
+        return $result;
     }
 }
