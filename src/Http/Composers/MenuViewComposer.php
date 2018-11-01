@@ -19,18 +19,17 @@ class MenuViewComposer
         $menuItems = new Collection;
 
         if(config("sharp.menu")) {
-            foreach (config("sharp.menu") as $categoryConfig) {
-                $type = isset($categoryConfig['entity']) ? 'page' : 'category';
-                $menuItem = null;
+            foreach (config("sharp.menu") as $menuItemConfig) {
+                $type = $menuItemConfig['type'];
                 if ($type == 'category') {
-                    $menuItem = new MenuCategory($categoryConfig);
+                    $menuItem = new MenuCategory($menuItemConfig);
                     $menuItem->type = $type;
                 } else {
-                    $menuItem = new MenuEntity($categoryConfig['entity'], $categoryConfig['properties']);
+                    $menuItem = new MenuEntity($menuItemConfig['entity'], $menuItemConfig['properties']);
                     $menuItem->type = $type;
                 }
 
-                if(($type == 'category' && sizeof($menuItem->entities)) || $type == 'page') {
+                if(($type == 'category' && sizeof($menuItem->entities)) || $type == 'page' || $type == 'external') {
                     $menuItems->push($menuItem);
                 }
             }
@@ -89,10 +88,14 @@ class MenuEntity
     /** @var string */
     public $icon;
 
+    /** @var string */
+    public $url;
+
     public function __construct(string $key, array $entity)
     {
         $this->key = $key;
         $this->label = $entity["label"] ?? "Unnamed entity";
         $this->icon = $entity["icon"] ?? null;
+        $this->url = $entity["url"] ?? null;
     }
 }
