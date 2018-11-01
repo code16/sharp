@@ -1,10 +1,11 @@
 {
-    "/sharp.js": "/sharp.js?id=523253eeaceaf03b80c1",
-    "/.bin/vendors.css": "/.bin/vendors.css?id=b2a0b102d03403904f14",
-    "/sharp-cms.css": "/sharp-cms.css?id=8fc52805f7815b6b8413",
-    "/.bin/vendor-components.css": "/.bin/vendor-components.css?id=9d581172a65abc8dc71f",
-    "/vendor.js": "/vendor.js?id=afcdd10b0b96e56f761c",
-    "/api.js": "/api.js?id=9c74f18bd5f7d29c2533",
-    "/manifest.js": "/manifest.js?id=0225916a5d4fbc86a881",
-    "/sharp.css": "/sharp.css?id=0c42c6064b998fc6348f"
+    "/sharp.js": "/sharp.js?id=1553f0f47aeeb6be62a5",
+    "/.bin/sharp-app.css": "/.bin/sharp-app.css?id=3f406f95593a95e92637",
+    "/.bin/vendors.css": "/.bin/vendors.css?id=8c23b2ec30c7d6a2ae7d",
+    "/sharp-cms.css": "/sharp-cms.css?id=5d0483692bd5c5323e76",
+    "/.bin/vendor-components.css": "/.bin/vendor-components.css?id=7ab20dd3290aaeed7383",
+    "/vendor.js": "/vendor.js?id=ebac80b8b3c38826acdd",
+    "/api.js": "/api.js?id=72e392828ee42e5ff279",
+    "/manifest.js": "/manifest.js?id=7c0a19fb1a3afbe0a6cb",
+    "/sharp.css": "/sharp.css?id=9a9f77aae32da9e404de"
 }
