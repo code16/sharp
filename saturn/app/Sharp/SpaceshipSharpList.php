@@ -15,6 +15,7 @@ use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\Eloquent\Transformers\SharpUploadModelAttributeTransformer;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
+use Code16\Sharp\Utils\LinkToEntity;
 
 class SpaceshipSharpList extends SharpEntityList
 {
@@ -119,7 +120,12 @@ class SpaceshipSharpList extends SharpEntityList
                 return $spaceship->type->label;
             })
             ->setCustomTransformer("pilots", function($pilots, $spaceship) {
-                return $spaceship->pilots->pluck("name")->implode("<br>");
+                return $spaceship->pilots->map(function($pilot) {
+                    return (new LinkToEntity($pilot->name, "pilot"))
+                        ->setTooltip("See related pilot")
+                        ->setSearch($pilot->name)
+                        ->render();
+                })->implode("<br>");
             })
             ->setCustomTransformer("picture", new SharpUploadModelAttributeTransformer(100))
             ->transform(
