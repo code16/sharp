@@ -92,11 +92,28 @@ class MenuEntity
     /** @var string */
     public $url;
 
+    /** @var LinkTypes */
+    public $linkType;
+
     public function __construct(string $key, array $entity)
     {
         $this->key = $key;
         $this->label = $entity["label"] ?? "Unnamed entity";
         $this->icon = $entity["icon"] ?? null;
         $this->url = $entity["url"] ?? null;
+        if (isset($entity['link_type']) && $entity['link_type']) {
+            if ($entity['link_type'] == 'form') {
+                $this->linkType = LinkTypes::FORM;
+            } else {
+                $this->linkType = LinkTypes::LIST;
+            }
+        } else {
+            $this->linkType = LinkTypes::LIST;
+        }
     }
+}
+
+class LinkTypes {
+    const LIST = 0;
+    const FORM = 1;
 }

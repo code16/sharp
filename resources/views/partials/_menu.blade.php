@@ -41,7 +41,7 @@
                 </sharp-collapsible-item>
             @else
                 <sharp-nav-item :current="{{ json_encode($sharpMenu->currentEntity==$menuItem->key) }}"
-                                link="{{ ($menuItem->type == 'page') ?  route('code16.sharp.list', $menuItem->key) : $menuItem->url}}">
+                                link="{{ ($menuItem->type == 'page') ?  ($menuItem->linkType == \Code16\Sharp\Http\Composers\LinkTypes::LIST) ? route('code16.sharp.list', $menuItem->key) : route('code16.sharp.edit', ['entityKey' => $menuItem->key, 'instanceId' => null]) : $menuItem->url}}">
                         <span>
                             @if($menuItem->icon)
                                 <sharp-item-visual :item="{{ json_encode($menuItem) }}" icon-class="fa-fw"></sharp-item-visual>
