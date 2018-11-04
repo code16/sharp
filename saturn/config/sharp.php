@@ -71,6 +71,16 @@ return [
 
     "menu" => [
         [
+            "label" => "External URL",
+            "icon" => "fa-globe",
+            "url" => "https://google.com"
+        ],
+        [
+            "label" => "Spaceships",
+            "icon" => "fa-space-shuttle",
+            "entity" => "spaceship"
+        ],
+        [
             "label" => "Company",
             "entities" => [
                 "spaceship" => [

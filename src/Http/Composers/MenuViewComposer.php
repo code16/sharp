@@ -20,16 +20,17 @@ class MenuViewComposer
 
         if(config("sharp.menu")) {
             foreach (config("sharp.menu") as $menuItemConfig) {
-                $type = $menuItemConfig['type'];
-                if ($type == 'category') {
+                if (isset($menuItemConfig['entities'])) {
                     $menuItem = new MenuCategory($menuItemConfig);
-                    $menuItem->type = $type;
-                } else {
-                    $menuItem = new MenuEntity($menuItemConfig['entity'], $menuItemConfig['properties']);
-                    $menuItem->type = $type;
+                    $menuItem->type = 'category';
+                } else if (isset($menuItemConfig['entity'])) {
+                    $menuItem = new MenuEntity($menuItemConfig['entity'], $menuItemConfig);
+                    $menuItem->type = 'page';
+                } else if(isset($menuItemConfig['url'])) {
+                    $menuItem = new MenuEntity('url', $menuItemConfig);
+                    $menuItem->type = 'url';
                 }
-
-                if(($type == 'category' && sizeof($menuItem->entities)) || $type == 'page' || $type == 'external') {
+                if(($menuItem->type == 'category' && sizeof($menuItem->entities)) || $menuItem->type == 'page' || $menuItem->type == 'url') {
                     $menuItems->push($menuItem);
                 }
             }
