@@ -39,6 +39,7 @@
                     @endforeach
 
                 </sharp-collapsible-item>
+
             @else
                 <sharp-nav-item :current="{{ json_encode($sharpMenu->currentEntity==$menuItem->key) }}"
                                 link="{{ ($menuItem->type == 'page') ?  route('code16.sharp.list', $menuItem->key) : $menuItem->url}}">
@@ -55,6 +56,7 @@
 </sharp-left-nav>
 <script>
     import SharpNavItem from "../../assets/js/components/menu/NavItem";
+
     export default {
         components: {SharpNavItem}
     }

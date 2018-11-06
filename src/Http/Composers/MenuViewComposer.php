@@ -18,22 +18,19 @@ class MenuViewComposer
     {
         $menuItems = new Collection;
 
-        if(config("sharp.menu")) {
-            foreach (config("sharp.menu") as $menuItemConfig) {
-                if (isset($menuItemConfig['entities'])) {
-                    $menuItem = new MenuCategory($menuItemConfig);
-                    $menuItem->type = 'category';
-                } else if (isset($menuItemConfig['entity'])) {
-                    $menuItem = new MenuEntity($menuItemConfig['entity'], $menuItemConfig);
-                    $menuItem->type = 'page';
-                } else if(isset($menuItemConfig['url'])) {
-                    $menuItem = new MenuEntity('url', $menuItemConfig);
-                    $menuItem->type = 'url';
-                }
-                if(($menuItem->type == 'category' && sizeof($menuItem->entities)) || $menuItem->type == 'page' || $menuItem->type == 'url') {
-                    $menuItems->push($menuItem);
-                }
+        foreach (config("sharp.menu", []) as $menuItemConfig) {
+            if (isset($menuItemConfig['entities'])) {
+                $menuItem = new MenuCategory($menuItemConfig);
+
+            } else {
+                $menuItem = new MenuEntity(
+                    $menuItemConfig['entity'] ?? uniqid(),
+                    $menuItemConfig,
+                    isset($menuItemConfig['url']) ? "url" : "entity"
+                );
             }
+
+            $menuItems->push($menuItem);
         }
 
         $sharpMenu = [
@@ -61,18 +58,23 @@ class MenuCategory
     /** @var string */
     public $label;
 
+    /** @var string */
+    public $type;
+
     /** @var array */
     public $entities = [];
 
     public function __construct(array $category)
     {
+        $this->type = "category";
         $this->label = $category["label"] ?? "Unnamed category";
 
-        if (isset($category['entities'])) {
-            foreach ((array)$category["entities"] as $entityKey => $entity) {
-                if (sharp_has_ability("entity", $entityKey)) {
-                    $this->entities[] = new MenuEntity($entityKey, $entity);
-                }
+        foreach ((array)($category["entities"] ?? []) as $entityKey => $entity) {
+            // Allow $entityKey to be an array key (legacy) or the value of the entity attribute
+            $entityKey = $entity["entity"] ?? $entityKey;
+
+            if (sharp_has_ability("entity", $entityKey)) {
+                $this->entities[] = new MenuEntity($entityKey, $entity);
             }
         }
     }
@@ -92,9 +94,13 @@ class MenuEntity
     /** @var string */
     public $url;
 
-    public function __construct(string $key, array $entity)
+    /** @var string */
+    public $type;
+
+    public function __construct(string $key, array $entity, string $type = "entity")
     {
         $this->key = $key;
+        $this->type = $type;
         $this->label = $entity["label"] ?? "Unnamed entity";
         $this->icon = $entity["icon"] ?? null;
         $this->url = $entity["url"] ?? null;
