@@ -101,7 +101,9 @@
                 $uploader.$on('escape', () => this.escapeMarker());
                 //console.log('create uploader', id, $uploader);
 
-                return $uploader;
+                return new Promise(resolve => {
+                    $uploader.$on('added', resolve);
+                });
             },
 
             refreshCodemirror() {
@@ -205,7 +207,7 @@
                         relativeFallbackLine
                     }
                 });
-                //console.log($uploader);
+
                 $uploader.marker = this.codemirror.markText(from, to, {
                     replacedWith: $uploader.$mount().$el,
                     clearWhenEmpty: false,
