@@ -26,7 +26,7 @@
         mixins: [Responsive('lg')],
 
         props: {
-            menuitems: Array,
+            items: Array,
             current: String
         },
         data() {
@@ -51,23 +51,17 @@
             }
         },
         computed: {
-            allEntities() {
-                var entities = [];
-                this.menuitems.forEach(function (menuItem) {
-                    if (menuItem.type == 'category') {
-                        menuItem.entities.forEach(function (entity) {
-                            entities.push(entity)
-                        });
-                    } else {
-                        entities.push(menuItem);
-                    }
-                });
-                return entities;
+            flattenedItems() {
+                return this.items.reduce((res, item) =>
+                    item.type==='category'
+                        ? [ ...res, ...item.entities ]
+                        : [ ...res, item ]
+                ,[]);
             },
             currentIcon() {
                 return this.current === 'dashboard'
                     ? 'fa-dashboard'
-                    : (this.allEntities.find(e=>e.key===this.current)||{}).icon;
+                    : (this.flattenedItems.find(e => e.key===this.current)||{}).icon;
             }
         },
         methods: {

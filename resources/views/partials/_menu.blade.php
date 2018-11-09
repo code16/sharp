@@ -1,8 +1,10 @@
-<sharp-left-nav v-cloak current="{{ $sharpMenu->currentEntity ?: ($dashboard ? 'dashboard' : '') }}" :menuitems="{{ json_encode($sharpMenu->menuItems) }}">
+<sharp-left-nav v-cloak
+    current="{{ $sharpMenu->currentEntity ?: ($dashboard ? 'dashboard' : '') }}"
+    :items="{{ json_encode($sharpMenu->menuItems) }}"
+>
     <div class="SharpLeftNav__title-container">
         <h2 class="SharpLeftNav__title">{{ $sharpMenu->name }}</h2>
     </div>
-
     <div class="SharpLeftNav__shadow"></div>
 
     <ul role="menubar" class="SharpLeftNav__list" aria-hidden="false" v-cloak>
@@ -24,8 +26,10 @@
 
         @foreach($sharpMenu->menuItems as $menuItem)
             @if($menuItem->type == 'category')
+                @if(!count($menuItem->entities))
+                    @continue
+                @endif
                 <sharp-collapsible-item label="{{ $menuItem->label }}">
-
                     @foreach($menuItem->entities as $entity)
                         <sharp-nav-item :current="{{ json_encode($sharpMenu->currentEntity==$entity->key) }}"
                                         link="{{ route('code16.sharp.list', $entity->key) }}">
@@ -37,33 +41,21 @@
                         </span>
                         </sharp-nav-item>
                     @endforeach
-
                 </sharp-collapsible-item>
-
             @else
                 <sharp-nav-item :current="{{ json_encode($sharpMenu->currentEntity==$menuItem->key) }}"
-                                link="{{ ($menuItem->type == 'page') ?  route('code16.sharp.list', $menuItem->key) : $menuItem->url}}">
+                                link="{{ ($menuItem->type == 'entity') ? route('code16.sharp.list', $menuItem->key) : $menuItem->url}}">
                         <span>
                             @if($menuItem->icon)
                                 <sharp-item-visual :item="{{ json_encode($menuItem) }}" icon-class="fa-fw"></sharp-item-visual>
                             @endif
                             {{ $menuItem->label }}
+                            @if($menuItem->type === 'url')
+                                <i class="fa fa-external-link fa-fw" style="float:right; opacity:.5; line-height:inherit"></i>
+                            @endif
                         </span>
                 </sharp-nav-item>
             @endif
         @endforeach
     </ul>
 </sharp-left-nav>
-<script>
-    import SharpNavItem from "../../assets/js/components/menu/NavItem";
-
-    export default {
-        components: {SharpNavItem}
-    }
-</script>
-<script>
-    import SharpItemVisual from "../../assets/js/components/ui/ItemVisual";
-    export default {
-        components: {SharpItemVisual}
-    }
-</script>
