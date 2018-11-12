@@ -58,6 +58,7 @@ exports[`markdown-field basic tests can mount "localized" Markdown field 1`] = `
 			</div>
 			<div class="editor-preview-side"></div>
 		</div>
+		<div></div>
 	</div>
 </div>
 `;
@@ -120,6 +121,7 @@ exports[`markdown-field basic tests can mount "read only" Markdown field 1`] = `
 			</div>
 			<div class="editor-preview-side"></div>
 		</div>
+		<div></div>
 	</div>
 </div>
 `;
@@ -182,6 +184,7 @@ exports[`markdown-field basic tests can mount Markdown field 1`] = `
 			</div>
 			<div class="editor-preview-side"></div>
 		</div>
+		<div></div>
 	</div>
 </div>
 `;

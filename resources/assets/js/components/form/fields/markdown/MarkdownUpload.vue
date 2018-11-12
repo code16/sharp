@@ -87,13 +87,6 @@
                 this.show = true;
                 this.$emit('added');
             },
-            checkCancelled() {
-                if (!this.show) {
-                    this.$emit('remove');
-                    console.log('cancelled')
-                }
-                document.body.onfocus = null;
-            },
             inputClick() {
                 this.fileInput.click();
             },
