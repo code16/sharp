@@ -30,7 +30,9 @@ class MenuViewComposer
                 );
             }
 
-            $menuItems->push($menuItem);
+            if($menuItem->isValid()) {
+                $menuItems->push($menuItem);
+            }
         }
 
         $sharpMenu = [
@@ -78,6 +80,12 @@ class MenuCategory
             }
         }
     }
+
+    /** @return bool */
+    public function isValid()
+    {
+        return count($this->entities) != 0;
+    }
 }
 
 class MenuEntity
@@ -99,10 +107,20 @@ class MenuEntity
 
     public function __construct(string $key, array $entity, string $type = "entity")
     {
+        if (!sharp_has_ability("entity", $key)) {
+            return;
+        }
+
         $this->key = $key;
         $this->type = $type;
         $this->label = $entity["label"] ?? "Unnamed entity";
         $this->icon = $entity["icon"] ?? null;
         $this->url = $entity["url"] ?? null;
+    }
+
+    /** @return bool */
+    public function isValid()
+    {
+        return !is_null($this->key);
     }
 }

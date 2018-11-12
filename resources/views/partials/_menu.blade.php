@@ -26,9 +26,6 @@
 
         @foreach($sharpMenu->menuItems as $menuItem)
             @if($menuItem->type == 'category')
-                @if(!count($menuItem->entities))
-                    @continue
-                @endif
                 <sharp-collapsible-item label="{{ $menuItem->label }}">
                     @foreach($menuItem->entities as $entity)
                         <sharp-nav-item :current="{{ json_encode($sharpMenu->currentEntity==$entity->key) }}"
