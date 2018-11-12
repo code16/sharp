@@ -73,40 +73,51 @@ return [
         [
             "label" => "Company",
             "entities" => [
-                "spaceship" => [
+                [
                     "label" => "Spaceships",
-                    "icon" => "fa-space-shuttle"
+                    "icon" => "fa-space-shuttle",
+                    "entity" => "spaceship"
                 ],
-                "pilot" => [
+                [
                     "label" => "Pilots",
-                    "icon" => "fa-user"
+                    "icon" => "fa-user",
+                    "entity" => "pilot"
                 ]
             ]
         ], [
             "label" => "Travels",
             "entities" => [
-                "passenger" => [
+                [
                     "label" => "Passengers",
-                    "icon" => "fa-bed"
+                    "icon" => "fa-bed",
+                    "entity" => "passenger"
                 ],
-                "travel" => [
+                [
                     "label" => "Travel",
-                    "icon" => "fa-suitcase"
+                    "icon" => "fa-suitcase",
+                    "entity" => "travel"
                 ]
             ]
         ], [
             "label" => "Admin",
             "entities" => [
-                "user" => [
+                [
                     "label" => "Sharp users",
-                    "icon" => "fa-user-secret"
-                ],
-                "feature" => [
-                    "label" => "Features",
-                    "icon" => "fa-superpowers"
+                    "icon" => "fa-user-secret",
+                    "entity" => "user"
                 ]
             ]
         ],
+        [
+            "label" => "Public website",
+            "icon" => "fa-globe",
+            "url" => "https://google.com"
+        ],
+        [
+            "label" => "Features",
+            "icon" => "fa-superpowers",
+            "entity" => "feature"
+        ]
     ],
 
     "dashboard" => \App\Sharp\Dashboard::class,

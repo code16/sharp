@@ -13,7 +13,7 @@ describe('left-nav', ()=>{
                 default: '<div>NAV CONTENT</div>'
             },
             propsData: {
-                categories: [{ entities:[] }]
+                items: [{ entities:[] }]
             },
             created() {
                 jest.spyOn(this,'updateState');
@@ -84,15 +84,15 @@ describe('left-nav', ()=>{
         });
     });
 
-    test('allEntities', ()=>{
+    test('flattenedItems', ()=>{
         const wrapper = createWrapper();
         wrapper.setProps({
-            categories: [
-                { entities:[1] },
-                { entities:[2] },
+            items: [
+                { entities:[{ id:1 }], type:'category' },
+                { id: 2 },
             ]
         });
-        expect(wrapper.vm.allEntities).toEqual([1,2]);
+        expect(wrapper.vm.flattenedItems).toEqual([{ id:1 }, { id: 2 }]);
     });
 
     test('currentIcon', ()=>{
@@ -102,7 +102,7 @@ describe('left-nav', ()=>{
 
         wrapper = createWrapper({
             computed: {
-                allEntities:()=>[
+               flattenedItems: ()=>[
                     { key:1, icon:'firstIcon' },
                     { key:2, icon:'secondIcon' }
                 ]
