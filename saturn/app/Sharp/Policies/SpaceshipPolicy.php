@@ -7,6 +7,10 @@ use App\User;
 class SpaceshipPolicy
 {
 
+    /**
+     * @param User $user
+     * @return bool
+     */
     public function entity(User $user)
     {
         return true;
@@ -33,6 +37,7 @@ class SpaceshipPolicy
     }
 
     /**
+     * @param User $user
      * @return bool
      */
     public function create(User $user)

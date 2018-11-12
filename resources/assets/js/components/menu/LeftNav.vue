@@ -26,7 +26,7 @@
         mixins: [Responsive('lg')],
 
         props: {
-            categories: Array,
+            items: Array,
             current: String
         },
         data() {
@@ -51,13 +51,17 @@
             }
         },
         computed: {
-            allEntities() {
-                return this.categories.reduce((res,category)=>[...res,...category.entities],[]);
+            flattenedItems() {
+                return this.items.reduce((res, item) =>
+                    item.type==='category'
+                        ? [ ...res, ...item.entities ]
+                        : [ ...res, item ]
+                ,[]);
             },
             currentIcon() {
                 return this.current === 'dashboard'
                     ? 'fa-dashboard'
-                    : (this.allEntities.find(e=>e.key===this.current)||{}).icon;
+                    : (this.flattenedItems.find(e => e.key===this.current)||{}).icon;
             }
         },
         methods: {
