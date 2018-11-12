@@ -3,7 +3,6 @@
         <div class="SharpModule__inner">
             <textarea ref="textarea"></textarea>
         </div>
-        <div ref="uploader"></div>
     </div>
 </template>
 
@@ -102,7 +101,7 @@
                 $uploader.$on('escape', () => this.escapeMarker());
                 //console.log('create uploader', id, $uploader);
 
-                $uploader.$mount(this.$refs.uploader);
+                $uploader.$mount();
 
                 return $uploader;
             },
