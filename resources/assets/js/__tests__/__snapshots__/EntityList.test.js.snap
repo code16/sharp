@@ -584,7 +584,7 @@ exports[`entity-list can mount "with form commands" entity list 1`] = `
 <!--end document part-->
 <!--document part-->
 <div class="MOCKED_SHARP_MODAL">
-	__MOCKED_SFC_SharpForm__
+	<!---->
 </div>
 <!--end document part-->
 `;
