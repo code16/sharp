@@ -30,8 +30,8 @@ export default {
                     return Promise.reject(error);
                 });
         },
-        post(endpoint = this.apiPath, data = this.data) {
-            return this.axiosInstance.post(endpoint, data).then(response=>{
+        post(endpoint = this.apiPath, data = this.data, config) {
+            return this.axiosInstance.post(endpoint, data, config).then(response=>{
                     return Promise.resolve(response);
                 })
                 .catch(error=>{

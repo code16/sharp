@@ -496,13 +496,7 @@
                 try {
                     let endpoint = this.commandEndpoint(key, instance);
                     let response = await this.axiosInstance.post(endpoint, { query: this.apiParams }, { responseType: 'blob' });
-                    console.log(response.data.type);
-                    if(response.data.type === 'application/json') {
-                        let data = await parseBlobJSONContent(response.data);
-                        this.handleCommandResponse(data);
-                    } else {
-                        this.actionDownload(response);
-                    }
+                    await this.handleCommandResponse(response);
                 } catch(e) {
                     console.error(e);
                 }
@@ -511,22 +505,29 @@
             /* (CommandAPIResponse)
             * Execute the required command action
             */
-            handleCommandResponse({ action, items, message, html, link }) {
-                if(action === 'refresh') this.actionRefresh(items);
-                else if(action === 'reload') this.actionReload();
-                else if(action === 'info') {
-                    this.actionsBus.$emit('showMainModal', {
-                        title: this.l('modals.command.info.title'),
-                        text: message,
-                        okCloseOnly: true
-                    });
-                }
-                else if(action === 'view') {
-                    this.showViewPanel = true;
-                    this.viewPanelContent = html;
-                }
-                else if(action === 'link') {
-                    window.location.href = link;
+            async handleCommandResponse(response) {
+                if(response.data.type === 'application/json') {
+                    const data = await parseBlobJSONContent(response.data);
+                    const { action, items, message, html, link } = data;
+
+                    if(action === 'refresh') this.actionRefresh(items);
+                    else if(action === 'reload') this.actionReload();
+                    else if(action === 'info') {
+                        this.actionsBus.$emit('showMainModal', {
+                            title: this.l('modals.command.info.title'),
+                            text: message,
+                            okCloseOnly: true
+                        });
+                    }
+                    else if(action === 'view') {
+                        this.showViewPanel = true;
+                        this.viewPanelContent = html;
+                    }
+                    else if(action === 'link') {
+                        window.location.href = link;
+                    }
+                } else {
+                    this.actionDownload(response);
                 }
             },
 
@@ -537,18 +538,21 @@
                 this.actionsBus.$emit('submit', {
                     entityKey: key,
                     endpoint: this.commandEndpoint(key, this.selectedInstance || {}),
-                    dataFormatter:form=>({ query:this.apiParams, data:form.data })
+                    dataFormatter: form=>({ query:this.apiParams, data:form.data }),
+                    postConfig: {
+                        responseType: 'blob'
+                    }
                 });
-                event.cancel();
+                event.preventDefault();
                 this.$set(this.showFormModal,key,true);
             },
 
             /* (CommandKey, FormData)
             * Hide the current form modal after data correctly sent, handle actions
             */
-            async commandFormSubmitted(key, data) {
+            async commandFormSubmitted(key, response) {
                 this.selectedInstance = null;
-                this.handleCommandResponse(data);
+                await this.handleCommandResponse(response);
                 await this.$nextTick();
                 this.$set(this.showFormModal,key, false);
             },
