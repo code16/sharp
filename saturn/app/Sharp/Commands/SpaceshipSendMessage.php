@@ -4,6 +4,7 @@ namespace App\Sharp\Commands;
 
 use App\Spaceship;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
@@ -24,12 +25,17 @@ class SpaceshipSendMessage extends InstanceCommand
      * @param array $data
      * @return array
      * @throws \Illuminate\Validation\ValidationException
+     * @throws SharpApplicativeException
      */
     public function execute($instanceId, array $data = []): array
     {
         $this->validate($data, [
             "message" => "required"
         ]);
+
+        if($data["message"] == "error") {
+            throw new SharpApplicativeException("Message can't be «error»");
+        }
 
         Spaceship::where("id", $instanceId)
             ->increment('messages_sent_count');
