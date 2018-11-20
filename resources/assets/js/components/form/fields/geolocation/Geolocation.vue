@@ -58,7 +58,7 @@
 
 <script>
     import Vue from 'vue';
-    import * as VueGoogleMaps from '../../../vendor/vue2-google-maps/main';
+    import * as VueGoogleMaps from 'vue2-google-maps';
     import bModal from 'bootstrap-vue/es/directives/modal/modal';
 
     import { Localization } from '../../../../mixins';

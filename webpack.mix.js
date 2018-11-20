@@ -5,7 +5,6 @@ const fs = require('fs-extra');
 (function() {
     fs.copySync('node_modules/vue-clip/src', 'resources/assets/js/components/vendor/vue-clip');
     fs.copySync('node_modules/vue2-timepicker/src', 'resources/assets/js/components/vendor/vue2-timepicker');
-    fs.copySync('node_modules/vue2-google-maps/src', 'resources/assets/js/components/vendor/vue2-google-maps');
 
     if(process.env.NODE_ENV === 'test') {
         mix.then(function() {
@@ -28,7 +27,6 @@ const fs = require('fs-extra');
             'node_modules/trix/dist/trix.css'
         ], 'resources/assets/dist/sharp.css')
         .options({
-            extractVueStyles:'.bin/vendor-components.css',
             processCssUrls: false
         })
         .version() // hash modules id to prevent useless js files changed

@@ -39,7 +39,7 @@
 
 <script>
     import Text from '../Text.vue';
-    import { Map, Marker } from '../../../vendor/vue2-google-maps/main';
+    import { Map, Marker } from 'vue2-google-maps';
     import GeolocationCommons from './Commons';
     import Modal from '../../../Modal.vue';
     import { SharpLoading } from "../../../ui";
