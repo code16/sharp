@@ -1303,17 +1303,18 @@ describe('entity-list', ()=>{
         const data = {
             myData: 1
         };
-        let { request } = await nextRequestFulfilled({
+        const response = await nextRequestFulfilled({
             status: 200,
             response: new Blob([JSON.stringify(data)], { type:'application/json' })
         });
-        expect(request.config).toMatchObject({
+        expect(response.request.config).toMatchObject({
             method: 'post',
             url: '{{commandEndpoint}}',
-            data: JSON.stringify({ query:{ param1: true } })
+            data: JSON.stringify({ query:{ param1: true } }),
+            responseType: 'blob'
         });
 
-        expect($entityList.handleCommandResponse).toHaveBeenCalledWith(data);
+        expect($entityList.handleCommandResponse).toHaveBeenCalledWith(response);
     });
 
     test('download command', async ()=> {
@@ -1321,7 +1322,6 @@ describe('entity-list', ()=>{
         URL.createObjectURL = jest.fn(()=>'blob:1234');
 
         $entityList.commandEndpoint = jest.fn(()=>'{{commandEndpoint}}');
-        $entityList.handleCommandResponse = jest.fn();
         jest.spyOn($entityList, 'actionDownload');
 
         mockComputed($entityList, 'apiParams', {});
@@ -1347,34 +1347,41 @@ describe('entity-list', ()=>{
         let $entityList = await createVm();
         $entityList.actionRefresh = jest.fn();
         $entityList.actionReload = jest.fn();
+        $entityList.actionDownload = jest.fn();
+
+        const handleCommandResponseJSON = async data => {
+            await $entityList.handleCommandResponse({ data:new Blob([JSON.stringify(data)], { type:'application/json' }) });
+        };
 
         const items = [];
-        $entityList.handleCommandResponse({ action: 'refresh', items });
+        await handleCommandResponseJSON({ action: 'refresh', items });
         expect($entityList.actionRefresh).toHaveBeenCalledWith(items);
 
-        $entityList.handleCommandResponse({ action: 'reload' });
+        await handleCommandResponseJSON({ action: 'reload' });
         expect($entityList.actionReload).toHaveBeenCalled();
-
 
         let showMainModalEmitted = jest.fn();
         $entityList.actionsBus.$on('showMainModal', showMainModalEmitted);
 
-        $entityList.handleCommandResponse({ action: 'info', message: 'My message' });
+        await handleCommandResponseJSON({ action: 'info', message: 'My message' });
         expect(showMainModalEmitted).toHaveBeenCalledWith({
             title: expect.any(String),
             text: 'My message',
             okCloseOnly: true
         });
 
-        $entityList.handleCommandResponse({ action: 'view', html:'<p></p>' });
+        await handleCommandResponseJSON({ action: 'view', html:'<p></p>' });
         expect($entityList.showViewPanel).toBe(true);
         expect($entityList.viewPanelContent).toBe('<p></p>');
+
+        await $entityList.handleCommandResponse({ data:new Blob([], { type:'application/pdf' }) });
+        expect($entityList.actionDownload).toHaveBeenCalled();
     });
 
     test('post command form', async () => {
         let $entityList = await createVm();
         let submitEmitted = jest.fn();
-        const modalEvent = { cancel:jest.fn() };
+        const modalEvent = { preventDefault:jest.fn() };
 
         $entityList.showFormModal = {};
         $entityList.commandEndpoint = jest.fn(()=>'{{commandEndpoint}}');
@@ -1390,7 +1397,10 @@ describe('entity-list', ()=>{
         expect(submitEmitted).toHaveBeenCalledWith({
             entityKey: 'sendInfos',
             endpoint: '{{commandEndpoint}}',
-            dataFormatter: expect.any(Function)
+            dataFormatter: expect.any(Function),
+            postConfig: {
+                responseType: 'blob'
+            }
         });
 
         let { dataFormatter } = submitEmitted.mock.calls[0][0];
@@ -1403,7 +1413,7 @@ describe('entity-list', ()=>{
             data:{ someData:true }
         });
 
-        expect(modalEvent.cancel).toHaveBeenCalled();
+        expect(modalEvent.preventDefault).toHaveBeenCalled();
         expect($entityList.$set).toHaveBeenCalledWith($entityList.showFormModal, 'sendInfos', true);
     });
 
@@ -1415,12 +1425,10 @@ describe('entity-list', ()=>{
         $entityList.showFormModal = {};
 
         const data = {};
-        $entityList.commandFormSubmitted('command1', data);
+        await $entityList.commandFormSubmitted('command1', data);
         expect($entityList.selectedInstance).toBeNull();
         expect($entityList.handleCommandResponse).toHaveBeenCalledWith(data);
-        await Vue.nextTick();
         expect($entityList.$set).toHaveBeenCalledWith($entityList.showFormModal, 'command1', false);
-
     });
 
     test('on command form modal hidden', async () => {

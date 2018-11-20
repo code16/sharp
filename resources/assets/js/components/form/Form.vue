@@ -214,15 +214,15 @@
             },
         },
         actions: {
-            async submit({entityKey, endpoint, dataFormatter=noop }={}) {
+            async submit({ entityKey, endpoint, dataFormatter=noop, postConfig }={}) {
                 if(entityKey && entityKey !== this.entityKey || this.pendingJobs.length) return;
 
                 try {
-                    const { data } = await this.post(endpoint, dataFormatter(this));
+                    const response = await this.post(endpoint, dataFormatter(this), postConfig);
                     if(this.independant) {
-                        this.$emit('submitted', data);
+                        this.$emit('submitted', response);
                     }
-                    else if(data.ok) {
+                    else if(response.data.ok) {
                         this.mainLoading.$emit('show');
                         this.redirectToList();
                     }

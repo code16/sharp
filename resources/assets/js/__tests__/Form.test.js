@@ -816,16 +816,18 @@ describe('sharp-form', ()=>{
         $form.pendingJobs = [];
         $form.data = { title: 'My title' };
 
-        $form.actionsBus.$emit('submit', { endpoint:'/test-endpoint', dataFormatter: form => form.data });
+        $form.actionsBus.$emit('submit', { endpoint:'/test-endpoint', dataFormatter: form => form.data, postConfig:{ responseType:'blob' } });
 
         await wait(10);
 
         expect($form.post).toHaveBeenCalledTimes(1);
         expect($form.post).toHaveBeenCalledWith('/test-endpoint', {
             title: 'My title'
+        }, {
+            responseType:'blob'
         });
         expect(submittedEmmitted).toHaveBeenCalledTimes(1);
-        expect(submittedEmmitted).toHaveBeenCalledWith({ ok: true });
+        expect(submittedEmmitted).toHaveBeenCalledWith({ data: { ok: true } });
     });
 
     test('dependant submit', async () => {
