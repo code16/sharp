@@ -1,5 +1,6 @@
 import './polyfill';
 import Vue from 'vue';
+import { install as VueGoogleMaps } from 'vue2-google-maps';
 
 import ActionView from './components/ActionView';
 import Form from './components/form/Form';
@@ -22,7 +23,9 @@ import * as qs from './helpers/querystring';
 import Notifications from 'vue-notification';
 
 Vue.use(Notifications);
-
+Vue.use(VueGoogleMaps, {
+    installComponents: false
+});
 
 // prevent recursive components import
 Vue.component(FieldDisplay.name, FieldDisplay);
