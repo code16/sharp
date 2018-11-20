@@ -602,7 +602,7 @@ describe('entity-list', ()=>{
     });
 
     test('can mount "with form commands" entity list', async ()=>{
-        await createVm();
+        const $entityList = await createVm();
 
         await nextRequestFulfilled({
             status: 200,
@@ -644,6 +644,9 @@ describe('entity-list', ()=>{
                 }
             }
         });
+
+        $entityList.$set($entityList.showFormModal, 'validate', true);
+        await Vue.nextTick();
 
         expect.addSnapshotSerializer(HTMLElementsSerializer);
         expect(document.querySelectorAll('.MOCKED_SHARP_MODAL')).toMatchSnapshot();
@@ -1429,15 +1432,6 @@ describe('entity-list', ()=>{
         expect($entityList.selectedInstance).toBeNull();
         expect($entityList.handleCommandResponse).toHaveBeenCalledWith(data);
         expect($entityList.$set).toHaveBeenCalledWith($entityList.showFormModal, 'command1', false);
-    });
-
-    test('on command form modal hidden', async () => {
-        let $entityList = await createVm();
-        let resetEmitted = jest.fn();
-
-        $entityList.actionsBus.$on('reset', resetEmitted);
-        $entityList.onCommandFormModalHidden('command1');
-        expect(resetEmitted).toHaveBeenCalledWith({ entityKey:'command1' });
     });
 
     test('action reload', async () => {

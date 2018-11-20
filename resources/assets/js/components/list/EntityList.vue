@@ -83,17 +83,23 @@
                                   @change="pageChanged">
                 </sharp-pagination>
             </div>
-            <sharp-modal v-for="form in commandForms"
-                         v-model="showFormModal[form.key]"
-                         :key="form.key"
-                         @ok="postCommandForm(form.key, $event)"
-                         @hidden="onCommandFormModalHidden(form.key)" ref="formModal">
-                <sharp-form :props="form"
-                            :entity-key="form.key"
-                            independant
-                            ignore-authorizations
-                            @submitted="commandFormSubmitted(form.key, $event)">
-                </sharp-form>
+            <sharp-modal
+                v-for="form in commandForms"
+                v-model="showFormModal[form.key]"
+                @ok="postCommandForm(form.key, $event)"
+                :key="form.key"
+            >
+                <transition>
+                    <sharp-form
+                        v-if="showFormModal[form.key]"
+                        :props="form"
+                        :entity-key="form.key"
+                        independant
+                        ignore-authorizations
+                        style="transition-duration: 300ms"
+                        @submitted="commandFormSubmitted(form.key, $event)"
+                    />
+                </transition>
             </sharp-modal>
             <sharp-view-panel v-model="showViewPanel" :content="viewPanelContent"></sharp-view-panel>
         </template>
@@ -555,10 +561,6 @@
                 await this.handleCommandResponse(response);
                 await this.$nextTick();
                 this.$set(this.showFormModal,key, false);
-            },
-
-            onCommandFormModalHidden(key) {
-                this.actionsBus.$emit('reset', { entityKey: key });
             },
 
             /**
