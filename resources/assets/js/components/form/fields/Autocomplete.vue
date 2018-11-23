@@ -47,8 +47,8 @@
 </template>
 
 <script>
-    import Template from '../../Template.vue';
-    import Loading from '../../ui/Loading.vue';
+    import SharpTemplate from '../../Template.vue';
+    import SharpLoading from '../../ui/Loading.vue';
     import Multiselect from 'vue-multiselect';
 
     import SearchStrategy from '../../../app/models/SearchStrategy';
@@ -63,8 +63,8 @@
         name:'SharpAutocomplete',
         components: {
             Multiselect,
-            [Template.name]:Template,
-            [Loading.name]: Loading
+            SharpTemplate,
+            SharpLoading
         },
 
         mixins: [Localization, Debounce],

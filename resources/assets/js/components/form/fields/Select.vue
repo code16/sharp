@@ -71,14 +71,14 @@
 </template>
 
 <script>
-    import Multiselect from '../../Multiselect';
+    import SharpMultiselect from '../../Multiselect';
     import SharpCheck from './Check.vue';
 
     export default {
         name: 'SharpSelect',
 
         components: {
-            [Multiselect.name]: Multiselect,
+            SharpMultiselect,
             SharpCheck
         },
 

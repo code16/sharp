@@ -22,13 +22,13 @@
 </template>
 
 <script>
-    import Grid from '../Grid';
+    import SharpGrid from '../Grid';
 
     export default {
         name:'SharpFieldsLayout',
 
         components: {
-            [Grid.name]:Grid
+            SharpGrid
         },
 
         props: {

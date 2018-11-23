@@ -16,8 +16,8 @@
 </template>
 
 <script>
-    import Tabs from './Tabs';
-    import Tab from './Tab';
+    import SharpTabs from './Tabs';
+    import SharpTab from './Tab';
 
     export default {
         name:'SharpTabbedLayout',
@@ -30,8 +30,8 @@
             }
         },
         components: {
-            [Tabs.name]:Tabs,
-            [Tab.name]:Tab,
+            SharpTabs,
+            SharpTab,
         },
         computed: {
             showTabs() {

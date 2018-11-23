@@ -35,11 +35,10 @@
 </template>
 
 <script>
-    import ActionBars, { NameAssociation as actionBarCompName } from './action-bar/index';
+    import { actionBarByContext } from './action-bar';
     import EventBus from './EventBus';
 
-    import Modal from './Modal';
-    import Vue from 'vue';
+    import SharpModal from './Modal';
     import axios from 'axios';
 
     const noop=()=>{};
@@ -47,8 +46,7 @@
     export default {
         name:'SharpActionView',
         components: {
-            [Modal.name]: Modal,
-            ...ActionBars,
+            SharpModal
         },
 
         provide() {
@@ -59,9 +57,9 @@
         },
 
         props: {
-            context:{
-                type:String,
-                required:true
+            context: {
+                type: String,
+                required: true
             }
         },
 
@@ -75,7 +73,7 @@
         },
         computed: {
             barComp() {
-                return actionBarCompName[this.context];
+                return actionBarByContext(this.context);
             },
         },
         methods: {

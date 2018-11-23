@@ -3,13 +3,13 @@
 </template>
 
 <script>
-    import Template from '../../Template';
+    import SharpTemplate from '../../Template';
 
     export default {
         name: 'SharpHtml',
 
         components: {
-            [Template.name]:Template
+            SharpTemplate
         },
 
         props: {

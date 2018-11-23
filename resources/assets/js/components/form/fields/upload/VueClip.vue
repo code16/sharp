@@ -81,14 +81,12 @@
 <script>
     import VueClip from '../../../vendor/vue-clip/components/Clip/index';
     import File from '../../../vendor/vue-clip/File';
-    import Modal from '../../../Modal';
+    import SharpModal from '../../../Modal';
     import VueCropper from 'vue-cropperjs';
     import rotateResize from './rotate';
 
     import { Localization } from '../../../../mixins';
     import { VueClipModifiers } from './modifiers';
-
-    import axios from 'axios';
 
     export default {
         name: 'SharpVueClip',
@@ -96,7 +94,7 @@
         extends: VueClip,
 
         components: {
-            [Modal.name]: Modal,
+            SharpModal,
             VueCropper
         },
 

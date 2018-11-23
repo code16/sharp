@@ -5,15 +5,16 @@
 </template>
 
 <script>
-    import Template from '../../Template';
+    import SharpTemplate from '../../Template';
+
     export default {
         name:'SharpWidgetPanel',
         components: {
-            [Template.name]:Template
+            SharpTemplate
         },
         props: {
             value: Object,
-            template:String,
+            template: String,
         }
     }
 </script>

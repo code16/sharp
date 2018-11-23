@@ -14,9 +14,8 @@
 </template>
 
 <script>
-    import TabbedLayout from '../TabbedLayout';
-    import Grid from '../Grid';
-    import Widget from './Widget';
+    import SharpGrid from '../Grid';
+    import SharpWidget from './Widget';
     import DynamicView from '../DynamicViewMixin';
 
     import { API_PATH } from '../../consts';
@@ -25,11 +24,9 @@
         name:'SharpDashboard',
         extends: DynamicView,
 
-
         components: {
-            [TabbedLayout.name]:TabbedLayout,
-            [Grid.name]:Grid,
-            [Widget.name]:Widget
+            SharpGrid,
+            SharpWidget
         },
         data() {
             return {

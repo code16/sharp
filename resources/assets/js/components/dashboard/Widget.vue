@@ -10,21 +10,20 @@
     </article>
 </template>
 <script>
-    import Widgets, { NameAssociation as widgetCompName } from './widgets/index';
+    import { widgetByType } from './widgets/index';
 
     export default {
         name:'SharpWidget',
-        components:Widgets,
 
         props: {
-            widgetType:String,
-            widgetProps:Object,
-            value:Object
+            widgetType: String,
+            widgetProps: Object,
+            value: Object
         },
 
         computed: {
             widgetComp() {
-                return widgetCompName[this.widgetType]
+                return widgetByType(this.widgetType);
             },
             exposedProps() {
                 return { ...this.widgetProps, value:this.value }

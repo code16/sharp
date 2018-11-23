@@ -107,15 +107,14 @@
 </template>
 
 <script>
-    import Vue from 'vue';
     import DynamicView from '../DynamicViewMixin';
-    import Pagination from './Pagination';
-    import Dropdown from '../dropdown/Dropdown';
-    import DropdownItem from '../dropdown/DropdownItem';
-    import Modal from '../Modal';
-    import Form from '../form/Form';
-    import ViewPanel from './ViewPanel';
-    import StateIcon from './StateIcon';
+    import SharpPagination from './Pagination';
+    import SharpDropdown from '../dropdown/Dropdown';
+    import SharpDropdownItem from '../dropdown/DropdownItem';
+    import SharpModal from '../Modal';
+    import SharpForm from '../form/Form';
+    import SharpViewPanel from './ViewPanel';
+    import SharpStateIcon from './StateIcon';
 
     import Draggable from 'vuedraggable';
 
@@ -141,13 +140,13 @@
         mixins: [ ActionEvents, Localization ],
 
         components: {
-            [Pagination.name]: Pagination,
-            [Dropdown.name]: Dropdown,
-            [DropdownItem.name]: DropdownItem,
-            [Modal.name]: Modal,
-            [Form.name]: Form,
-            [ViewPanel.name]: ViewPanel,
-            [StateIcon.name]: StateIcon,
+            SharpPagination,
+            SharpDropdown,
+            SharpDropdownItem,
+            SharpModal,
+            SharpForm,
+            SharpViewPanel,
+            SharpStateIcon,
             Draggable
         },
 
