@@ -95,6 +95,7 @@ class TestForm extends SharpForm
                         ->setHasTime(false)
                 )->addItemField(
                     SharpFormCheckField::make("check", "check this")
+                        ->setLabel('')
                 )
 
         )->addField(

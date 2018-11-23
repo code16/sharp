@@ -47,6 +47,18 @@
       margin-right: 0;
       margin-bottom: 0;
     }*/
+
+    // For single check align with other field
+    &--type-check {
+      .SharpForm__label {
+        &::after {
+          content: "\a0\a0"
+        }
+      }
+      .SharpCheck {
+        height: 2.5rem;
+      }
+    }
   }
 
   &__label {

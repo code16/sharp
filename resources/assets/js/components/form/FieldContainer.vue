@@ -1,6 +1,6 @@
 <template>
     <div class="SharpFieldContainer SharpForm__form-item" :class="formGroupClasses" :style="extraStyle">
-        <label class="SharpForm__label" v-show="label" @click="triggerFocus">
+        <label v-if="showLabel" class="SharpForm__label" @click="triggerFocus">
             {{label}} <span v-if="fieldProps.localized" class="SharpFieldContainer__label-locale">({{locale}})</span>
         </label>
         <sharp-field v-bind="exposedProps"
@@ -66,10 +66,13 @@
         },
         computed: {
             formGroupClasses() {
-                return {
-                    'SharpForm__form-item--danger': this.state==='error',
-                    'SharpForm__form-item--success': this.state==='ok'
-                }
+                return [
+                    `SharpForm__form-item--type-${this.fieldType}`,
+                    {
+                        'SharpForm__form-item--danger': this.state==='error',
+                        'SharpForm__form-item--success': this.state==='ok'
+                    }
+                ];
             },
             extraStyle() {
                 return this.fieldProps.extraStyle;
@@ -80,6 +83,9 @@
                     uniqueIdentifier: this.mergedErrorIdentifier,
                     fieldConfigIdentifier: this.mergedConfigIdentifier
                 };
+            },
+            showLabel() {
+                return !!this.label || this.label === '';
             }
         },
         methods: {
