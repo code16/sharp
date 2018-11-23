@@ -94,8 +94,7 @@ class TestForm extends SharpForm
                         ->setDisplayFormat("YYYY/MM/DD")
                         ->setHasTime(false)
                 )->addItemField(
-                    SharpFormTextField::make("text")
-                        ->setLabel("Text")
+                    SharpFormCheckField::make("check", "check this")
                 )
 
         )->addField(
@@ -222,7 +221,7 @@ class TestForm extends SharpForm
                 });
             })->addColumn(6, function (FormLayoutColumn $column) {
                 $column->withSingleField("list", function (FormLayoutColumn $listItem) {
-                    $listItem->withFields("date|5", "text|7");
+                    $listItem->withFields("date|5", "check|7");
                 });
             });
 
