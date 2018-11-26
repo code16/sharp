@@ -1,9 +1,12 @@
 import Notifications from 'vue-notification';
-import { shallowMount, mount, createLocalVue, config } from '@vue/test-utils';
+import { shallowMount, createLocalVue, config } from '@vue/test-utils';
 import ActionView from '../components/ActionView.vue';
-import Vue from 'vue';
 
 config.stubs['transition-group'] = false;
+
+/* todo: fix tests on next release of vue-test-utils (1.0.0-beta.26)
+    dynamic component aren't currently stubbed ( <component :is="{ ... }" /> )
+*/
 
 describe('action-view', ()=>{
 
@@ -34,7 +37,6 @@ describe('action-view', ()=>{
             localVue
         })
     }
-
 
     test('can mount ActionView', ()=>{
         expect(createWrapper().html()).toMatchSnapshot();
@@ -81,7 +83,7 @@ describe('action-view', ()=>{
         const wrapper = createWrapper();
         const modalOptions = { text: 'Modal 1', okCallback:jest.fn(), hiddenCallback:jest.fn() };
         wrapper.vm.showMainModal(modalOptions);
-        
+
         let modal = wrapper.find(ModalStub);
 
         modal.vm.$emit('ok');

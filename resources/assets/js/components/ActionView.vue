@@ -35,11 +35,11 @@
 </template>
 
 <script>
+    import axios from 'axios';
     import { actionBarByContext } from './action-bar';
     import EventBus from './EventBus';
 
     import SharpModal from './Modal';
-    import axios from 'axios';
 
     const noop=()=>{};
 
@@ -77,9 +77,9 @@
             },
         },
         methods: {
-            showMainModal({text, okCallback=noop, okCloseOnly, isError, ...sharedProps}) {
+            showMainModal({ text, okCallback=noop, okCloseOnly, isError, ...sharedProps }) {
                 const curId = this.mainModalId;
-                const hiddenCallback = _=>this.$delete(this.mainModalsData, curId);
+                const hiddenCallback = () => this.$delete(this.mainModalsData, curId);
 
                 this.$set(this.mainModalsData,curId,{
                     props: {
