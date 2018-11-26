@@ -52,7 +52,7 @@
             </div>
         </div>
         <template v-if="!!originalImageSrc && isCroppable">
-            <sharp-modal v-model="showEditModal" @ok="onEditModalOk" @shown="onEditModalShown" @hidden="onEditModalHidden" no-close-on-backdrop
+            <sharp-modal :visible.sync="showEditModal" @ok="onEditModalOk" @shown="onEditModalShown" @hidden="onEditModalHidden" no-close-on-backdrop
                          :title="l('modals.cropper.title')" ref="modal">
                 <vue-cropper ref="cropper"
                              class="SharpUpload__modal-vue-cropper"

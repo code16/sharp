@@ -85,7 +85,7 @@
             </div>
             <sharp-modal
                 v-for="form in commandForms"
-                v-model="showFormModal[form.key]"
+                :visible.sync="showFormModal[form.key]"
                 @ok="postCommandForm(form.key, $event)"
                 :key="form.key"
             >
