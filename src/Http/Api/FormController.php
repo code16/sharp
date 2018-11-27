@@ -70,6 +70,7 @@ class FormController extends ApiController
      * @return \Illuminate\Http\JsonResponse
      * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
      * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
+     * @throws \Code16\Sharp\Exceptions\Form\SharpFormUpdateException
      */
     public function store($entityKey)
     {
