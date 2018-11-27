@@ -66,6 +66,24 @@ class SpaceshipSendMessage extends InstanceCommand
         );
     }
 
+    /**
+     * @param $instanceId
+     * @return array
+     */
+    protected function initialData($instanceId): array
+    {
+        return $this
+            ->setCustomTransformer("message", function($value, Spaceship $instance) {
+                return sprintf("%s, message #%s", $instance->name, $instance->messages_sent_count);
+            })
+            ->setCustomTransformer("level", function($value, Spaceship $instance) {
+                return array_random(["l","m","h",null]);
+            })
+            ->transform(
+                Spaceship::findOrFail($instanceId)
+            );
+    }
+
     public function authorizeFor($instanceId): bool
     {
         return $instanceId%2 == 0 && $instanceId > 10;

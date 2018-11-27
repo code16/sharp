@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Utils\Transformers;
 
 use Closure;
+use Code16\Sharp\EntityList\Commands\Command;
 use Code16\Sharp\Form\SharpForm;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -44,8 +45,8 @@ trait WithCustomTransformers
      */
     function transform($models)
     {
-        if($this instanceof SharpForm) {
-            // It's a Form, there's only one model.
+        if($this instanceof SharpForm || $this instanceof Command) {
+            // It's a Form (full entity or from a Command), there's only one model.
             // We must add Form Field Formatters in the process
             return $this->applyFormatters(
                 $this->applyTransformers($models)
