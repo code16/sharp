@@ -488,7 +488,7 @@
             },
             getCommandFormData(commandKey, instance) {
                 return this.axiosInstance.get(`${this.commandEndpoint(commandKey, instance)}/data`, {
-                    query: this.apiParams
+                    params: this.apiParams
                 }).then(response => response.data.data)
             },
 
