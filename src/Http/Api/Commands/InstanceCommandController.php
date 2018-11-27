@@ -2,12 +2,32 @@
 
 namespace Code16\Sharp\Http\Api\Commands;
 
+use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Code16\Sharp\Http\Api\ApiController;
 
 class InstanceCommandController extends ApiController
 {
     use HandleCommandReturn;
+
+    /**
+     * @param string $entityKey
+     * @param string $commandKey
+     * @param $instanceId
+     * @return \Illuminate\Http\JsonResponse
+     * @throws SharpAuthorizationException
+     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
+     */
+    public function show($entityKey, $commandKey, $instanceId)
+    {
+        $list = $this->getListInstance($entityKey);
+        $list->buildListConfig();
+        $commandHandler = $this->getCommandHandler($list, $commandKey, $instanceId);
+
+        return response()->json([
+            "data" => $commandHandler->formData($instanceId)
+        ]);
+    }
 
     /**
      * @param string $entityKey
@@ -21,6 +41,27 @@ class InstanceCommandController extends ApiController
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
+
+        $handler = $this->getCommandHandler($list, $commandKey, $instanceId);
+
+        return $this->returnCommandResult(
+            $list,
+            $handler->execute(
+                $instanceId,
+                $handler->formatRequestData((array)request("data"), $instanceId)
+            )
+        );
+    }
+
+    /**
+     * @param SharpEntityList $list
+     * @param string $commandKey
+     * @param $instanceId
+     * @return \Code16\Sharp\EntityList\Commands\InstanceCommand|null
+     * @throws SharpAuthorizationException
+     */
+    protected function getCommandHandler(SharpEntityList $list, $commandKey, $instanceId)
+    {
         $commandHandler = $list->instanceCommandHandler($commandKey);
 
         if(!$commandHandler->authorize()
@@ -28,12 +69,6 @@ class InstanceCommandController extends ApiController
             throw new SharpAuthorizationException();
         }
 
-        return $this->returnCommandResult(
-            $list,
-            $commandHandler->execute(
-                $instanceId,
-                $commandHandler->formatRequestData((array)request("data"), $instanceId)
-            )
-        );
+        return $commandHandler;
     }
 }

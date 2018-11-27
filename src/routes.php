@@ -32,6 +32,14 @@ Route::group([
         ->name("code16.sharp.api.list.command.instance")
         ->uses('Commands\InstanceCommandController@update');
 
+    Route::get("/list/{entityKey}/command/{commandKey}/data")
+        ->name("code16.sharp.api.list.command.entity.data")
+        ->uses('Commands\EntityCommandController@show');
+
+    Route::get("/list/{entityKey}/command/{commandKey}/{instanceId}/data")
+        ->name("code16.sharp.api.list.command.instance.data")
+        ->uses('Commands\InstanceCommandController@show');
+
     Route::get("/form/{entityKey}")
         ->name("code16.sharp.api.form.create")
         ->middleware('sharp_api_append_form_authorizations')

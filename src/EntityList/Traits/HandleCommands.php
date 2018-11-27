@@ -48,6 +48,7 @@ trait HandleCommands
         foreach($this->commandHandlers as $commandName => $handler) {
             $formFields = $handler->form();
             $formLayout = $formFields ? $handler->formLayout() : null;
+            $hasFormInitialData = $formFields ? $this->isInitialDataMethodImplemented($handler) : false;
 
             $config["commands"][] = [
                 "key" => $commandName,
@@ -58,6 +59,7 @@ trait HandleCommands
                     "fields" => $formFields,
                     "layout" => $formLayout
                 ] : null,
+                "fetch_initial_data" => $hasFormInitialData,
                 "authorization" => $handler->getGlobalAuthorization()
             ];
         }
@@ -128,5 +130,22 @@ trait HandleCommands
             : app($commandHandler);
 
         return $this;
+    }
+
+    /**
+     * @param $handler
+     * @return bool
+     */
+    private function isInitialDataMethodImplemented($handler)
+    {
+        try {
+            $foo = new \ReflectionMethod(get_class($handler), 'initialData');
+            $declaringClass = $foo->getDeclaringClass()->getName();
+
+            return $foo->getPrototype()->getDeclaringClass()->getName() !== $declaringClass;
+
+        } catch (\ReflectionException $e) {
+            return false;
+        }
     }
 }

@@ -225,6 +225,48 @@ class CommandControllerTest extends BaseApiTest
             ->assertStatus(200);
     }
 
+    /** @test */
+    public function we_can_initialize_form_data_in_an_entity_command()
+    {
+        $this->buildTheWorld();
+        $this->disableExceptionHandling();
+
+        $response = $this->getJson('/sharp/api/list/person')
+            ->assertStatus(200)
+            ->json();
+
+        $this->assertTrue(collect($response['config']['commands'])->where("key", "entity_with_init_data")->first()['fetch_initial_data']);
+
+        $this->getJson('/sharp/api/list/person/command/entity_with_init_data/data')
+            ->assertStatus(200)
+            ->assertExactJson([
+                "data" => [
+                    "name" => "John Wayne"
+                ]
+            ]);
+    }
+
+    /** @test */
+    public function we_can_initialize_form_data_in_an_instance_command()
+    {
+        $this->buildTheWorld();
+        $this->disableExceptionHandling();
+
+        $response = $this->getJson('/sharp/api/list/person')
+            ->assertStatus(200)
+            ->json();
+
+        $this->assertTrue(collect($response['config']['commands'])->where("key", "instance_with_init_data")->first()['fetch_initial_data']);
+
+        $this->getJson('/sharp/api/list/person/command/instance_with_init_data/25/data')
+            ->assertStatus(200)
+            ->assertExactJson([
+                "data" => [
+                    "name" => "John Wayne [25]"
+                ]
+            ]);
+    }
+
     protected function buildTheWorld()
     {
         parent::buildTheWorld();
@@ -335,6 +377,33 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
             {
                 return $this->info($params->sortedBy() . $params->sortedDir());
             }
+        })->addEntityCommand("entity_with_init_data", new class() extends EntityCommand {
+            public function label(): string { return "label"; }
+            public function buildFormFields() {
+                $this->addField(SharpFormTextField::make("name"));
+            }
+            protected function initialData(): array
+            {
+                return [
+                    "name" => "John Wayne",
+                    "age" => 32
+                ];
+            }
+            public function execute(EntityListQueryParams $params, array $data = []): array {}
+
+        })->addEntityCommand("instance_with_init_data", new class() extends InstanceCommand {
+            public function label(): string { return "label"; }
+            public function buildFormFields() {
+                $this->addField(SharpFormTextField::make("name"));
+            }
+            protected function initialData($instanceId): array
+            {
+                return [
+                    "name" => "John Wayne [$instanceId]",
+                    "age" => 32
+                ];
+            }
+            public function execute($instanceId, array $data = []): array {}
         });
 
     }

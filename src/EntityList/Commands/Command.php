@@ -4,6 +4,7 @@ namespace Code16\Sharp\EntityList\Commands;
 
 use Code16\Sharp\Form\HandleFormFields;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
@@ -17,7 +18,7 @@ use Illuminate\Validation\ValidationException;
  */
 abstract class Command
 {
-    use HandleFormFields;
+    use HandleFormFields, WithCustomTransformers;
 
     /**
      * @param string $message
@@ -69,6 +70,7 @@ abstract class Command
      * @param string $bladeView
      * @param array $params
      * @return array
+     * @throws \Throwable
      */
     protected function view(string $bladeView, array $params = [])
     {
