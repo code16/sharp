@@ -9,7 +9,7 @@ use Code16\Sharp\Dashboard\Widgets\SharpLineGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Illuminate\Support\Facades\DB;
 
-class Dashboard extends SharpDashboard
+class CompanyDashboard extends SharpDashboard
 {
 
     function buildWidgets()

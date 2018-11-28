@@ -7,9 +7,9 @@ Route::group([
     'namespace' => 'Code16\Sharp\Http\Api'
 ], function() {
 
-    Route::get("/dashboard")
+    Route::get("/dashboard/{dashboardKey?}")
         ->name("code16.sharp.api.dashboard")
-        ->uses('DashboardController@index');
+        ->uses('DashboardController@show');
 
     Route::get("/list/{entityKey}")
         ->name("code16.sharp.api.list")
@@ -84,8 +84,8 @@ Route::group([
         ->uses('LoginController@store');
 
     Route::get('/')
-        ->name("code16.sharp.dashboard")
-        ->uses('DashboardController@index');
+        ->name("code16.sharp.home")
+        ->uses('HomeController@index');
 
     Route::get('/logout')
         ->name("code16.sharp.logout")
@@ -103,6 +103,10 @@ Route::group([
     Route::get('/form/{entityKey}')
         ->name("code16.sharp.create")
         ->uses('FormController@create');
+
+    Route::get('/dashboard/{dashboardKey}')
+        ->name("code16.sharp.dashboard")
+        ->uses('DashboardController@show');
 
     Route::post('/api/upload')
         ->name("code16.sharp.api.form.upload")

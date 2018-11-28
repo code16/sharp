@@ -6,11 +6,12 @@ class DashboardController extends ApiController
 {
 
     /**
+     * @param $dashboardKey
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function show($dashboardKey = null)
     {
-        $dashboard = $this->getDashboardInstance();
+        $dashboard = $this->getDashboardInstance($dashboardKey ?: "company_dashboard");
 
         if(!$dashboard) {
             abort(404, "Dashboard not found");
