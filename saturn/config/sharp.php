@@ -74,6 +74,9 @@ return [
             "view" => \App\Sharp\CompanyDashboard::class,
             "policy" => \App\Sharp\Policies\CompanyDashboardPolicy::class,
         ],
+        "travels_dashboard" => [
+            "view" => \App\Sharp\TravelsDashboard::class,
+        ],
     ],
 
     "menu" => [
@@ -99,6 +102,11 @@ return [
         ], [
             "label" => "Travels",
             "entities" => [
+                [
+                    "label" => "Dashboard",
+                    "icon" => "fa-dashboard",
+                    "dashboard" => "travels_dashboard"
+                ],
                 [
                     "label" => "Passengers",
                     "icon" => "fa-bed",
