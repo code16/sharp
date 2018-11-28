@@ -31,6 +31,10 @@
             [Grid.name]:Grid,
             [Widget.name]:Widget
         },
+        props: {
+            dashboardKey: String
+        },
+
         data() {
             return {
                 widgets: null
@@ -38,7 +42,7 @@
         },
         computed: {
             apiPath() {
-                return `${API_PATH}/dashboard`
+                return `${API_PATH}/dashboard/${this.dashboardKey}`
             }
         },
         methods: {
