@@ -84,6 +84,38 @@ Then, is the `execute()` method, it's trivial to grab the entered value, and eve
         [...]
     }
 
+#### Initializing form data
+
+You may need to initialize the form with some data; in order to do that, you have to implement the `initialData()` method:
+
+    protected function initialData(): array
+    {
+        return [
+            "message" => "Some initial value"
+        ];
+    }
+    
+For an Instance command, add the `$instanceId` as a parameter:
+
+     protected function initialData($instanceId): array
+     {
+         [...]
+     }
+
+This method must return an array of formatted values, like for a regular [Entity Form](building-entity-form.md). This means you can [transform data](how-to-transform-data.md) here:
+
+    protected function initialData($instanceId): array
+    {
+        return $this
+            ->setCustomTransformer("message", function($value, Spaceship $instance) {
+                return sprintf("Message #%s:", $instance->messages_sent_count);
+            })
+            ->transform(
+                Spaceship::findOrFail($instanceId)
+            );
+    }
+
+Note that in both cases (Entity or Instance Command), you can access to the EntityList querystring via the request. 
 
 ### Command confirmation
 

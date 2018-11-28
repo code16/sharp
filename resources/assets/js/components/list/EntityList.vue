@@ -92,7 +92,7 @@
                 <transition>
                     <sharp-form
                         v-if="showFormModal[form.key]"
-                        :props="form"
+                        :props="formInitialProps(form)"
                         :entity-key="form.key"
                         independant
                         ignore-authorizations
@@ -174,6 +174,7 @@
                 reorderedItems: [],
                 filtersValue: {},
                 showFormModal: {},
+                currentFormData: {},
                 selectedInstance: null,
                 showViewPanel: false,
                 viewPanelContent: null,
@@ -416,6 +417,12 @@
             formEndpoint(multiformKey) {
                 return `/sharp/form/${this.entityKey}${multiformKey ? `:${multiformKey}` : ''}`
             },
+            formInitialProps(form) {
+                return {
+                    ...form,
+                    data: this.currentFormData
+                }
+            },
 
             /**
              * Events
@@ -478,14 +485,19 @@
             commandEndpoint(key, { [this.idAttr]:instanceId }={}) {
                 return `${this.apiPath}/command/${key}${instanceId?`/${instanceId}`:''}`;
             },
-
+            getCommandFormData(commandKey, instance) {
+                return this.axiosInstance.get(`${this.commandEndpoint(commandKey, instance)}/data`, {
+                    params: this.apiParams
+                }).then(response => response.data.data)
+            },
 
             /* (Command, Instance)
              * Display a form in a modal if the command require a form, else send API request
              */
-            async sendCommand({ key, form, confirmation }, instance) {
+            async sendCommand({ key, form, confirmation, fetch_initial_data }, instance) {
                 if(form) {
                     this.selectedInstance = instance;
+                    this.currentFormData = fetch_initial_data ? await this.getCommandFormData(key, instance) : {};
                     this.$set(this.showFormModal,key,true);
                     return;
                 }

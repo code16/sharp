@@ -14,6 +14,8 @@ class EntityStateController extends ApiController
      * @param string $instanceId
      * @return \Illuminate\Http\JsonResponse
      * @throws SharpAuthorizationException
+     * @throws \Code16\Sharp\Exceptions\EntityList\SharpInvalidEntityStateException
+     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
     public function update($entityKey, $instanceId)
     {

@@ -13,6 +13,7 @@ import {MockInjections, MockI18n, wait } from "./utils";
 import { setter, mockProperty, unmockProperty } from "./utils/mock-utils";
 import { nextRequestFulfilled } from './utils/moxios-utils';
 import HTMLElementsSerializer from './utils/htmlElementsSnapshotSerializer';
+import { createWrapper } from '@vue/test-utils';
 
 
 jest.mock('../helpers/querystring', ()=>({
@@ -1318,6 +1319,66 @@ describe('entity-list', ()=>{
         });
 
         expect($entityList.handleCommandResponse).toHaveBeenCalledWith(response);
+    });
+
+    test('send command with form', async () => {
+        let $entityList = await createVm();
+        const wrapper = createWrapper($entityList);
+        const commandForm = () => wrapper.find({ name:'SharpForm' });
+
+        $entityList.mount({
+            data: { items:[] },
+            config: {
+                commands:[{
+                    type: "entity",
+                    key: "update",
+                    authorization: [],
+                    form: {}
+                }, {
+                    type: "instance",
+                    key: "openForm",
+                    authorization: [],
+                    form: {}
+                }],
+                instanceIdAttribute: 'id'
+            }
+        });
+
+        $entityList.getCommandFormData = jest.fn(()=>Promise.resolve('form data'));
+
+        $entityList.sendCommand({
+            key: 'update',
+            form: {}
+        }, null);
+
+        expect($entityList.getCommandFormData).not.toHaveBeenCalled();
+        expect($entityList.currentFormData).toEqual({});
+        expect($entityList.showFormModal).toEqual({ update:true });
+        expect($entityList.selectedInstance).toBe(null);
+
+        await Vue.nextTick();
+        expect(commandForm().props()).toMatchObject({
+            entityKey: 'update',
+            props: { data:{} }
+        });
+
+        $entityList.showFormModal = {};
+        await $entityList.sendCommand({
+            key: 'openForm',
+            form: {},
+            fetch_initial_data: true
+        }, 'instance 2');
+
+        expect($entityList.getCommandFormData).toHaveBeenCalledWith('openForm',  'instance 2');
+        expect($entityList.currentFormData).toBe('form data');
+        expect($entityList.showFormModal).toEqual({ openForm:true });
+        expect($entityList.selectedInstance).toBe('instance 2');
+
+        await Vue.nextTick();
+        expect(commandForm().props()).toMatchObject({
+            entityKey: 'openForm',
+            props: { data:'form data' }
+        });
     });
 
     test('download command', async ()=> {
