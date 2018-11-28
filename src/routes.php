@@ -7,7 +7,7 @@ Route::group([
     'namespace' => 'Code16\Sharp\Http\Api'
 ], function() {
 
-    Route::get("/dashboard/{dashboardKey?}")
+    Route::get("/dashboard/{dashboardKey}")
         ->name("code16.sharp.api.dashboard")
         ->uses('DashboardController@show');
 
