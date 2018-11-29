@@ -25,6 +25,7 @@ Here's a series of blog posts which present Sharp following a simple example:
 - [Part 3: filters](https://medium.com/@lonchampt/about-sharp-for-laravel-part-3-2bb992d6a8e3)
 - [Part 4: form lists](https://medium.com/@lonchampt/about-sharp-for-laravel-part-4-cb2232caf234)
 - [Part 5: commands](https://medium.com/@lonchampt/about-sharp-for-laravel-part-5-44699e270647)
+- [Part 6: uploads](https://medium.com/@lonchampt/about-sharp-for-laravel-part-6-a03ee71cb2c5)
 
 ![Dashboard](docs/img/dashboard.png)
 
@@ -110,8 +111,10 @@ We'll get into all those classes in this document. The important thing to notice
 - [Multi-forms](docs/multiforms.md)
 - [Custom form fields](docs/custom-form-fields.md)
 
+### Dashboards
+- [Creating a Dashboard](docs/dashboard.md)
+
 ### Generalities
-- [The Dashboard](docs/dashboard.md)
 - [How to transform data](docs/how-to-transform-data.md)
 - [Sharp built-in solution for uploads](docs/sharp-built-in-solution-for-uploads.md)
 - Handling data localization (coming in 4.1)
