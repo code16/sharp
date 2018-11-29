@@ -1,4 +1,4 @@
-# Creating a Dashboard
+# Create a Dashboard
 
 A Dashboard is a good way to present synthetic data to the user, with graphs, stats, or personalized reminders for instance.
 

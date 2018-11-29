@@ -112,7 +112,7 @@ We'll get into all those classes in this document. The important thing to notice
 - [Custom form fields](docs/custom-form-fields.md)
 
 ### Dashboards
-- [Creating a Dashboard](docs/dashboard.md)
+- [Create a Dashboard](docs/dashboard.md)
 
 ### Generalities
 - [How to transform data](docs/how-to-transform-data.md)
