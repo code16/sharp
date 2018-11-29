@@ -94,6 +94,12 @@ class SharpServiceProvider extends ServiceProvider
                 }
             }
         }
+
+        foreach((array)config("sharp.dashboards") as $dashboardKey => $config) {
+            if(isset($config["policy"])) {
+                $this->definePolicy($dashboardKey, $config["policy"], 'view');
+            }
+        }
     }
 
     /**

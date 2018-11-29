@@ -8,9 +8,12 @@ class DashboardController extends ApiController
     /**
      * @param $dashboardKey
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
      */
     public function show($dashboardKey)
     {
+        sharp_check_ability("view", $dashboardKey);
+
         $dashboard = $this->getDashboardInstance($dashboardKey);
 
         if(!$dashboard) {
