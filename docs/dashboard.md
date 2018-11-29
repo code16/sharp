@@ -94,6 +94,35 @@ Once this class written, we have to declare the form in the sharp config file:
 
 In the menu, like an Entity, a Dashboard can be displayed anywhere.  
 
+## Dashboard policies
+
+Just like for an Entity, you can define a Policy for a Dashboard. The only available action is `view`.
+
+    // config/sharp.php
+    
+    return [
+        "entities" => [
+            [...]
+        ],
+        "dashboards" => [
+            "company_dashboard" => [
+                "view" => \App\Sharp\CompanyDashboard::class,
+                "policy" => \App\Sharp\Policies\CompanyDashboardPolicy::class,
+            ]
+        ],
+        [...]
+    ];
+
+And the policy class can be pretty straightforward:
+
+    class CompanyDashboardPolicy
+    {
+        public function view(User $user)
+        {
+            return $user->hasGroup("boss");
+        }
+    }
+
 ---
 
 > next chapter: [How to transform data](how-to-transform-data.md).
