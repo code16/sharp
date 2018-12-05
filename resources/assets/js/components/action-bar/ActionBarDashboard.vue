@@ -1,5 +1,5 @@
 <template>
-    <sharp-action-bar></sharp-action-bar>
+    <sharp-action-bar ready></sharp-action-bar>
 </template>
 
 <script>
@@ -11,6 +11,16 @@
         mixins: [ActionBarMixin],
         components: {
             SharpActionBar
+        },
+        data() {
+            return {
+                filters: []
+            }
+        },
+        actions: {
+            setup({ filters }) {
+                this.filters = filters;
+            }
         }
     }
 </script>
