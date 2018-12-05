@@ -31,6 +31,11 @@ export default {
         defaultValue() {
             return filter => filter.default;
         },
+        queryParams(state) {
+            return Object.entries(state.value).reduce(
+                (res, [filter, value]) => ({ ...res, [`filter_${filter}`]:value })
+            , {});
+        }
     },
 
     actions: {
