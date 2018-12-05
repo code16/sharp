@@ -2,18 +2,19 @@ import './polyfill';
 import Vue from 'vue';
 import { install as VueGoogleMaps } from 'vue2-google-maps';
 
-import ActionView from './components/ActionView';
-import Form from './components/form/Form';
-import FieldDisplay from './components/form/field-display/FieldDisplay';
-import EntityList from './components/list/EntityList';
-import Dashboard from './components/dashboard/Dashboard';
+import SharpActionView from './components/ActionView';
+import SharpForm from './components/form/Form';
+import SharpFieldDisplay from './components/form/field-display/FieldDisplay';
+import SharpEntityList from './components/list/EntityList';
+import SharpDashboard from './components/dashboard/Dashboard';
 
-import CollapsibleItem from './components/menu/CollapsibleItem';
-import NavItem from './components/menu/NavItem';
-import LeftNav from './components/menu/LeftNav';
+import SharpCollapsibleItem from './components/menu/CollapsibleItem';
+import SharpNavItem from './components/menu/NavItem';
+import SharpLeftNav from './components/menu/LeftNav';
 
+import SharpItemVisual from './components/ui/ItemVisual';
 import Loading from './components/ui/Loading';
-import ItemVisual from './components/ui/ItemVisual';
+
 
 import axios from 'axios';
 import cookies from 'axios/lib/helpers/cookies';
@@ -28,7 +29,7 @@ Vue.use(VueGoogleMaps, {
 });
 
 // prevent recursive components import
-Vue.component(FieldDisplay.name, FieldDisplay);
+Vue.component(SharpFieldDisplay.name, SharpFieldDisplay);
 const SharpLoading = Vue.extend(Loading);
 
 new Vue({
@@ -41,14 +42,14 @@ new Vue({
     },
 
     components: {
-        [ActionView.name]:ActionView,
-        [Form.name]:Form,
-        [Dashboard.name]:Dashboard,
-        [EntityList.name]:EntityList,
-        [CollapsibleItem.name]:CollapsibleItem,
-        [NavItem.name]:NavItem,
-        [LeftNav.name]:LeftNav,
-        [ItemVisual.name]:ItemVisual
+        SharpActionView,
+        SharpForm,
+        SharpDashboard,
+        SharpEntityList,
+        SharpCollapsibleItem,
+        SharpNavItem,
+        SharpLeftNav,
+        SharpItemVisual
     },
 
     created() {

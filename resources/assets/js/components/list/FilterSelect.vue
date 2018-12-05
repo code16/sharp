@@ -48,9 +48,9 @@
 </template>
 
 <script>
-    import Dropdown from '../dropdown/Dropdown';
-    import Select from '../form/fields/Select';
-    import Autocomplete from '../form/fields/Autocomplete';
+    import SharpDropdown from '../dropdown/Dropdown';
+    import SharpSelect from '../form/fields/Select';
+    import SharpAutocomplete from '../form/fields/Autocomplete';
 
     import { Localization } from '../../mixins';
 
@@ -59,9 +59,9 @@
         name: 'SharpFilterSelect',
         mixins:[Localization],
         components: {
-            [Dropdown.name]: Dropdown,
-            [Select.name]: Select,
-            [Autocomplete.name]: Autocomplete
+            SharpDropdown,
+            SharpSelect,
+            SharpAutocomplete
         },
         props: {
             filterKey: {

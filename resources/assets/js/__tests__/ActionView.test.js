@@ -1,9 +1,13 @@
 import Notifications from 'vue-notification';
-import { shallowMount, mount, createLocalVue, config } from '@vue/test-utils';
+import { shallowMount, createLocalVue, config } from '@vue/test-utils';
 import ActionView from '../components/ActionView.vue';
-import Vue from 'vue';
+import { createStub } from "./utils/vue-test-utils";
 
 config.stubs['transition-group'] = false;
+
+/* todo: fix tests on next release of vue-test-utils (1.0.0-beta.26)
+    dynamic component aren't currently stubbed ( <component :is="{ ... }" /> )
+*/
 
 describe('action-view', ()=>{
 
@@ -28,13 +32,17 @@ describe('action-view', ()=>{
                 context: 'form',
                 ...options.propsData
             },
+            computed: {
+                barComp() {
+                    return createStub(ActionView.computed.barComp.call(this));
+                }
+            },
             stubs: {
                 'SharpModal': ModalStub
             },
             localVue
         })
     }
-
 
     test('can mount ActionView', ()=>{
         expect(createWrapper().html()).toMatchSnapshot();
@@ -60,16 +68,6 @@ describe('action-view', ()=>{
         expect(wrapper.html()).toMatchSnapshot();
     });
 
-    test('can mount with action bar', ()=>{
-        const BarComponent = { name:'TestBarComponent', template:'<div>BAR COMPONENT</div>' };
-        const wrapper = createWrapper({
-            computed: {
-                barComp:()=>BarComponent
-            }
-        });
-        expect(wrapper.html()).toMatchSnapshot();
-    });
-
     test('can mount with multiple modals', ()=>{
         const wrapper = createWrapper();
         wrapper.vm.showMainModal({ text: 'Modal 1' });
@@ -81,7 +79,7 @@ describe('action-view', ()=>{
         const wrapper = createWrapper();
         const modalOptions = { text: 'Modal 1', okCallback:jest.fn(), hiddenCallback:jest.fn() };
         wrapper.vm.showMainModal(modalOptions);
-        
+
         let modal = wrapper.find(ModalStub);
 
         modal.vm.$emit('ok');

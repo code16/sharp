@@ -61,12 +61,11 @@
 </template>
 <script>
     import Draggable from 'vuedraggable';
-    import ListItem from './ListItem';
-    import Template from '../../../Template';
+    import SharpListItem from './ListItem';
+    import SharpTemplate from '../../../Template';
 
     import { Localization, ReadOnlyFields } from '../../../../mixins';
 
-    const noop = ()=>{};
 
     export default {
         name: 'SharpList',
@@ -77,8 +76,8 @@
 
         components: {
             Draggable,
-            [ListItem.name]:ListItem,
-            [Template.name]:Template
+            SharpListItem,
+            SharpTemplate
         },
 
         provide() {
