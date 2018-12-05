@@ -47,9 +47,9 @@
 
     import DynamicView from '../DynamicViewMixin';
 
-    import TabbedLayout from '../TabbedLayout'
-    import Grid from '../Grid';
-    import FieldsLayout from './FieldsLayout.vue';
+    import SharpTabbedLayout from '../TabbedLayout'
+    import SharpGrid from '../Grid';
+    import SharpFieldsLayout from './FieldsLayout.vue';
 
 
     const noop = ()=>{}
@@ -61,9 +61,9 @@
         mixins: [ActionEvents, ReadOnlyFields('fields'), Localization],
 
         components: {
-            [TabbedLayout.name]: TabbedLayout,
-            [FieldsLayout.name]: FieldsLayout,
-            [Grid.name]: Grid,
+            SharpTabbedLayout,
+            SharpFieldsLayout,
+            SharpGrid,
         },
 
 

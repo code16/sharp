@@ -21,7 +21,7 @@
 </template>
 
 <script>
-    import Multiselect from '../../Multiselect';
+    import SharpMultiselect from '../../Multiselect';
 
     class LabelledItem {
         constructor(item) {
@@ -46,7 +46,7 @@
     export default {
         name: 'SharpTags',
         components: {
-            [Multiselect.name]: Multiselect
+            SharpMultiselect
         },
         props: {
             value: Array, // [{id:0, label: 'AAA'}, ...]

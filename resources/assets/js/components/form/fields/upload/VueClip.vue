@@ -52,7 +52,7 @@
             </div>
         </div>
         <template v-if="!!originalImageSrc && isCroppable">
-            <sharp-modal v-model="showEditModal" @ok="onEditModalOk" @shown="onEditModalShown" @hidden="onEditModalHidden" no-close-on-backdrop
+            <sharp-modal :visible.sync="showEditModal" @ok="onEditModalOk" @shown="onEditModalShown" @hidden="onEditModalHidden" no-close-on-backdrop
                          :title="l('modals.cropper.title')" ref="modal">
                 <vue-cropper ref="cropper"
                              class="SharpUpload__modal-vue-cropper"
@@ -81,14 +81,12 @@
 <script>
     import VueClip from '../../../vendor/vue-clip/components/Clip/index';
     import File from '../../../vendor/vue-clip/File';
-    import Modal from '../../../Modal';
+    import SharpModal from '../../../Modal';
     import VueCropper from 'vue-cropperjs';
     import rotateResize from './rotate';
 
     import { Localization } from '../../../../mixins';
     import { VueClipModifiers } from './modifiers';
-
-    import axios from 'axios';
 
     export default {
         name: 'SharpVueClip',
@@ -96,7 +94,7 @@
         extends: VueClip,
 
         components: {
-            [Modal.name]: Modal,
+            SharpModal,
             VueCropper
         },
 

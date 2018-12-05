@@ -89,27 +89,26 @@
 </template>
 
 <script>
-    import ActionBar from './ActionBar';
+    import SharpActionBar from './ActionBar';
     import ActionBarMixin from './ActionBarMixin';
     import { Localization, ActionEvents } from '../../mixins';
 
-    import Text from '../form/fields/Text';
+    import SharpText from '../form/fields/Text';
+    import SharpFilterSelect from '../list/FilterSelect';
 
-    import FilterSelect from '../list/FilterSelect';
-
-    import Dropdown from '../dropdown/Dropdown';
-    import DropdownItem from '../dropdown/DropdownItem';
-    import ItemVisual from '../ui/ItemVisual';
+    import SharpDropdown from '../dropdown/Dropdown';
+    import SharpDropdownItem from '../dropdown/DropdownItem';
+    import SharpItemVisual from '../ui/ItemVisual';
 
     export default {
         name: 'SharpActionBarList',
         components : {
-            [ActionBar.name]: ActionBar,
-            [Text.name]: Text,
-            [FilterSelect.name]: FilterSelect,
-            [Dropdown.name]: Dropdown,
-            [DropdownItem.name]: DropdownItem,
-            [ItemVisual.name]: ItemVisual
+            SharpActionBar,
+            SharpText,
+            SharpFilterSelect,
+            SharpDropdown,
+            SharpDropdownItem,
+            SharpItemVisual
         },
 
         mixins: [ActionBarMixin, ActionEvents, Localization],

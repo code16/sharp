@@ -16,7 +16,7 @@
 </template>
 
 <script>
-    import Field from './Field';
+    import SharpField from './Field';
     import {ErrorNode, ConfigNode} from '../../mixins/index';
 
     import * as util from '../../util';
@@ -27,13 +27,13 @@
         mixins: [ ErrorNode, ConfigNode ],
 
         components: {
-            [Field.name]:Field
+            SharpField
         },
 
         inject:['$tab', '$form'],
 
         props : {
-            ...Field.props,
+            ...SharpField.props,
 
             label: String,
             helpMessage: String,
