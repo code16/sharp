@@ -1,5 +1,6 @@
 import './polyfill';
 import Vue from 'vue';
+import Vuex from 'vuex';
 import { install as VueGoogleMaps } from 'vue2-google-maps';
 
 import SharpActionView from './components/ActionView';
@@ -22,6 +23,8 @@ import cookies from 'axios/lib/helpers/cookies';
 import * as qs from './helpers/querystring';
 
 import Notifications from 'vue-notification';
+
+import store from './store';
 
 Vue.use(Notifications);
 Vue.use(VueGoogleMaps, {
@@ -57,7 +60,9 @@ new Vue({
             //console.log('setClass', className, active);
             this.$el.classList[active ? 'add' : 'remove'](className);
         });
-    }
+    },
+
+    store: new Vuex.Store(store)
 });
 
 
