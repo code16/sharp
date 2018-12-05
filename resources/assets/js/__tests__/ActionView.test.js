@@ -1,6 +1,7 @@
 import Notifications from 'vue-notification';
 import { shallowMount, createLocalVue, config } from '@vue/test-utils';
 import ActionView from '../components/ActionView.vue';
+import { createStub } from "./utils/vue-test-utils";
 
 config.stubs['transition-group'] = false;
 
@@ -31,6 +32,11 @@ describe('action-view', ()=>{
                 context: 'form',
                 ...options.propsData
             },
+            computed: {
+                barComp() {
+                    return createStub(ActionView.computed.barComp.call(this));
+                }
+            },
             stubs: {
                 'SharpModal': ModalStub
             },
@@ -59,16 +65,6 @@ describe('action-view', ()=>{
             })
         });
 
-        expect(wrapper.html()).toMatchSnapshot();
-    });
-
-    test('can mount with action bar', ()=>{
-        const BarComponent = { name:'TestBarComponent', template:'<div>BAR COMPONENT</div>' };
-        const wrapper = createWrapper({
-            computed: {
-                barComp:()=>BarComponent
-            }
-        });
         expect(wrapper.html()).toMatchSnapshot();
     });
 
