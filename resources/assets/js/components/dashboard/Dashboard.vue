@@ -3,10 +3,11 @@
         <template v-if="ready">
             <sharp-grid :rows="layout.rows">
                 <template slot-scope="widgetLayout">
-                    <sharp-widget :widget-type="widgets[widgetLayout.key].type"
-                                  :widget-props="widgets[widgetLayout.key]"
-                                  :value="data[widgetLayout.key]">
-                    </sharp-widget>
+                    <sharp-widget
+                        :widget-type="widgets[widgetLayout.key].type"
+                        :widget-props="widgets[widgetLayout.key]"
+                        :value="data[widgetLayout.key]"
+                    />
                 </template>
             </sharp-grid>
         </template>
@@ -19,7 +20,7 @@
     import DynamicView from '../DynamicViewMixin';
 
     import { API_PATH } from '../../consts';
-    import { mapState, mapGetters } from 'vuex';
+    import { mapGetters } from 'vuex';
 
     export default {
         name:'SharpDashboard',
@@ -63,9 +64,10 @@
             },
             async init() {
                 const { data } = await this.get();
+                const config = data.config || {};
 
                 await this.$store.dispatch('dashboard/filters/update', {
-                    filters: [{"key":"type","multiple":true,"required":false,"default":[],"values":[{"id":3,"label":"blanditiis"},{"id":4,"label":"officiis"},{"id":1,"label":"reiciendis"},{"id":2,"label":"ut"},{"id":5,"label":"velit"}],"label":"Ship type","master":false,"searchable":false,"searchKeys":["label"],"template":"{{label}}"}],
+                    filters: config.filters,
                     values: this.getFilterValuesFromQuery(this.$route.query)
                 });
             },
