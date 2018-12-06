@@ -1,5 +1,6 @@
 import './polyfill';
 import Vue from 'vue';
+import VueRouter from 'vue-router';
 import { install as VueGoogleMaps } from 'vue2-google-maps';
 
 import SharpActionView from './components/ActionView';
@@ -15,6 +16,7 @@ import SharpLeftNav from './components/menu/LeftNav';
 import SharpItemVisual from './components/ui/ItemVisual';
 import Loading from './components/ui/Loading';
 
+import routes from './routes';
 
 import axios from 'axios';
 import cookies from 'axios/lib/helpers/cookies';
@@ -57,7 +59,9 @@ new Vue({
             //console.log('setClass', className, active);
             this.$el.classList[active ? 'add' : 'remove'](className);
         });
-    }
+    },
+
+    router: new VueRouter({ mode:'history', routes })
 });
 
 
