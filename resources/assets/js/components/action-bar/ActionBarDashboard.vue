@@ -24,7 +24,7 @@
     import ActionBarMixin from './ActionBarMixin';
     import SharpFilterSelect from '../list/FilterSelect';
 
-    import { mapGetters, mapState } from 'vuex';
+    import { mapGetters } from 'vuex';
 
     export default {
         name: 'SharpActionBarDashboard',
@@ -34,11 +34,10 @@
             SharpFilterSelect
         },
         computed: {
-            ...mapState('dashboard/filters', {
-                filters: state => state.filters || []
-            }),
-            ...mapGetters('dashboard/filters', {
-                filterValue: 'value'
+            ...mapGetters('dashboard', {
+                filters: 'filters/filters',
+                filterValue: 'filters/value',
+                filterQueryKey: 'filters/filterQueryKey'
             }),
         },
         methods: {
@@ -46,7 +45,12 @@
                 return `actionbardashboard_${filter.key}`;
             },
             handleFilterChanged(filter, value) {
-                this.$store.dispatch('dashboard/filters/setFilterValue', { key:filter.key, value });
+                this.$router.push({
+                    query: {
+                        ...this.$route.query,
+                        [this.filterQueryKey(filter.key)]: value
+                    }
+                });
             }
         }
     }

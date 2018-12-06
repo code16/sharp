@@ -38,35 +38,40 @@
                 widgets: null
             }
         },
+        watch: {
+            '$route': 'init'
+        },
         computed: {
             apiPath() {
                 return `${API_PATH}/dashboard/${this.dashboardKey}`
             },
-            ...mapState('dashboard/filters', {
-                filtersValue: state => state.value,
+            apiParams() {
+                return {
+                    ...this.filtersQuery,
+                }
+            },
+            ...mapGetters('dashboard', {
+                filtersQuery: 'filters/queryParams',
+                getFilterValuesFromQuery: 'filters/getValuesFromQuery',
             }),
-            ...mapGetters('dashboard/filters', {
-                filtersQuery: 'queryParams'
-            })
-        },
-        watch: {
-            filterValue: 'handleFiltersChanged'
         },
         methods: {
-            mount({layout, data, widgets}) {
+            mount({ layout, data, widgets }) {
                 this.layout = layout;
                 this.data = data || {};
                 this.widgets = widgets;
             },
-            handleFiltersChanged() {
-                // this.$router.push({ query: { ...this.filtersQuery } });
-            }
+            async init() {
+                const { data } = await this.get();
+
+                await this.$store.dispatch('dashboard/filters/update', {
+                    filters: [{"key":"type","multiple":true,"required":false,"default":[],"values":[{"id":3,"label":"blanditiis"},{"id":4,"label":"officiis"},{"id":1,"label":"reiciendis"},{"id":2,"label":"ut"},{"id":5,"label":"velit"}],"label":"Ship type","master":false,"searchable":false,"searchKeys":["label"],"template":"{{label}}"}],
+                    values: this.getFilterValuesFromQuery(this.$route.query)
+                });
+            },
         },
         created() {
-            this.get();
-            // this.$store.dispatch('dashboard/filters/setFilters', [
-            //     {"key":"type","multiple":false,"required":true,"default":3,"values":[{"id":3,"label":"blanditiis"},{"id":4,"label":"officiis"},{"id":1,"label":"reiciendis"},{"id":2,"label":"ut"},{"id":5,"label":"velit"}],"label":"Ship type","master":false,"searchable":false,"searchKeys":["label"],"template":"{{label}}"}
-            // ]);
+            this.init();
         }
     }
 </script>
