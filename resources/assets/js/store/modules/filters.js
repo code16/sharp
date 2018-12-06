@@ -3,12 +3,15 @@ import Vue from 'vue';
 export const SET_FILTERS = 'SET_FILTERS';
 export const SET_FILTER_VALUE = 'SET_FILTER_VALUE';
 
+const filterQueryPrefix = 'filter_';
+const filterQueryRE = new RegExp(`^${filterQueryPrefix}`);
+
 export default {
     namespaced: true,
 
     state: {
         filters: null,
-        value: {}
+        values: {}
     },
 
     mutations: {
@@ -16,52 +19,71 @@ export default {
             state.filters = filters;
         },
         [SET_FILTER_VALUE](state, { key, value }) {
-            Vue.set(state.value, key, value);
+            Vue.set(state.values, key, value);
         }
     },
 
     getters: {
         value(state) {
-            return key => state.value[key];
+            return key => state.values[key];
         },
-        findByKey(state) {
-            return key => state.filters.find(filter => filter.key === key);
+        filters(state) {
+            return state.filters || []
         },
 
         defaultValue() {
-            return filter => filter.default;
+            return filter => (filter||{}).default;
         },
-        queryParams(state) {
-            return Object.entries(state.value).reduce(
-                (res, [filter, value]) => ({ ...res, [`filter_${filter}`]:value })
-            , {});
+
+        filterQueryKey() {
+            return key => `${filterQueryPrefix}${key}`;
+        },
+        queryParams(state, getters) {
+            return Object.entries(state.values)
+                .reduce((res, [key, value]) => ({
+                    ...res,
+                    [getters.filterQueryKey(key)]: value
+                }), {});
+        },
+        getValuesFromQuery() {
+            return query => Object.entries(query || {})
+                .filter(([key]) => filterQueryRE.test(key))
+                .reduce((res, [key, value]) => ({
+                    ...res,
+                    [key.replace(filterQueryRE, '')]: value
+                }), {});
+        },
+        resolveFilterValue(state, getters) {
+            return ({ filter, value }) => {
+                if(value == null) {
+                    return getters.defaultValue(filter);
+                }
+                if(filter.multiple && !Array.isArray(value)) {
+                    return [value];
+                }
+                return value;
+            }
         }
     },
 
     actions: {
-        setFilters({ commit, dispatch }, filters) {
+        update({ commit, dispatch }, { filters, values }) {
             commit(SET_FILTERS, filters);
 
             return Promise.all(
-                filters.map(filter =>
-                    dispatch('setFilterValueOrDefault', { filter })
-                )
+                filters.map(filter => {
+                    dispatch('setFilterValue', {
+                        filter,
+                        value: (values || {})[filter.key]
+                    })
+                })
             );
         },
-        setFilterValue({ dispatch, getters }, { key, value }) {
-            return dispatch('setFilterValueOrDefault', {
-                filter: getters.findByKey(key),
-                value
-            });
-        },
-        setFilterValueOrDefault({ commit, getters }, { filter, value }) {
+        setFilterValue({ commit, getters }, { filter, value }) {
             commit(SET_FILTER_VALUE, {
                 key: filter.key,
-                value: value == null
-                    ? getters.defaultValue(filter)
-                    : value
+                value: getters.resolveFilterValue({ filter, value })
             });
         }
     }
-
 }
