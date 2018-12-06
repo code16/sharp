@@ -71,7 +71,7 @@ export default {
             commit(SET_FILTERS, filters);
 
             return Promise.all(
-                filters.map(filter => {
+                (filters || []).map(filter => {
                     dispatch('setFilterValue', {
                         filter,
                         value: (values || {})[filter.key]
