@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Tests\Fixtures;
 
+use Code16\Sharp\Dashboard\DashboardQueryParams;
 use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
 use Code16\Sharp\Dashboard\SharpDashboard as AbstractSharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
@@ -38,7 +39,7 @@ class SharpDashboard extends AbstractSharpDashboard
             });
     }
 
-    protected function buildWidgetsData()
+    protected function buildWidgetsData(DashboardQueryParams $params)
     {
         $this->addGraphDataSet(
             "bars1",

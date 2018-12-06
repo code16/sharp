@@ -122,7 +122,20 @@ abstract class SharpDashboard
      */
     function data(): array
     {
-        $this->buildWidgetsData();
+        $this->buildWidgetsData(new DashboardQueryParams());
+//            DashboardQueryParams::create()
+//                ->fillWithRequest()
+//                ->setDefaultFilters(
+//                    collect($this->filterHandlers)->filter(function($handler, $attribute) {
+//                        return !request()->has("filter_$attribute")
+//                            && $handler instanceof EntityListRequiredFilter;
+//
+//                    })->map(function($handler, $attribute) {
+//                        return ["name" => $attribute, "value" => $handler->defaultValue()];
+//
+//                    })->pluck("value", "name")->all()
+//                )
+//        );
 
         // First, graph widgets dataSets
         $data = collect($this->graphWidgetDataSets)
@@ -193,6 +206,8 @@ abstract class SharpDashboard
 
     /**
      * Build dashboard's widgets data, using ->addGraphDataSet and ->setPanelData
+     *
+     * @param DashboardQueryParams $params
      */
-    protected abstract function buildWidgetsData();
+    protected abstract function buildWidgetsData(DashboardQueryParams $params);
 }
