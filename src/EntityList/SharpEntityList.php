@@ -99,14 +99,15 @@ abstract class SharpEntityList
                 ->setDefaultSort($this->defaultSort, $this->defaultSortDir)
                 ->fillWithRequest()
                 ->setDefaultFilters(
-                    collect($this->filterHandlers)->filter(function($handler, $attribute) {
-                        return !request()->has("filter_$attribute")
-                            && $handler instanceof EntityListRequiredFilter;
+                    collect($this->filterHandlers)
+                        ->filter(function($handler, $attribute) {
+                            return !request()->has("filter_$attribute")
+                                && $handler instanceof EntityListRequiredFilter;
 
-                    })->map(function($handler, $attribute) {
-                        return ["name" => $attribute, "value" => $handler->defaultValue()];
+                        })->map(function($handler, $attribute) {
+                            return ["name" => $attribute, "value" => $handler->defaultValue()];
 
-                    })->pluck("value", "name")->all()
+                        })->pluck("value", "name")->all()
                 )
         );
 

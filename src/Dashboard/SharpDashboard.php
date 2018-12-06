@@ -5,9 +5,11 @@ namespace Code16\Sharp\Dashboard;
 use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpWidget;
+use Code16\Sharp\Utils\Filters\HandleFilters;
 
 abstract class SharpDashboard
 {
+    use HandleFilters;
 
     /**
      * @var bool
@@ -122,20 +124,21 @@ abstract class SharpDashboard
      */
     function data(): array
     {
-        $this->buildWidgetsData(new DashboardQueryParams());
-//            DashboardQueryParams::create()
-//                ->fillWithRequest()
-//                ->setDefaultFilters(
-//                    collect($this->filterHandlers)->filter(function($handler, $attribute) {
-//                        return !request()->has("filter_$attribute")
-//                            && $handler instanceof EntityListRequiredFilter;
-//
-//                    })->map(function($handler, $attribute) {
-//                        return ["name" => $attribute, "value" => $handler->defaultValue()];
-//
-//                    })->pluck("value", "name")->all()
-//                )
-//        );
+        $this->buildWidgetsData(
+            DashboardQueryParams::create()
+                ->fillWithRequest()
+                ->setDefaultFilters(
+                    collect($this->filterHandlers)
+                        ->filter(function($handler, $attribute) {
+                            return !request()->has("filter_$attribute")
+                                && $handler instanceof DashboardRequiredFilter;
+
+                        })->map(function($handler, $attribute) {
+                            return ["name" => $attribute, "value" => $handler->defaultValue()];
+
+                        })->pluck("value", "name")->all()
+                )
+        );
 
         // First, graph widgets dataSets
         $data = collect($this->graphWidgetDataSets)

@@ -9,7 +9,6 @@ use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Tests\SharpTestCase;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 class SharpDashboardTest extends SharpTestCase
 {
