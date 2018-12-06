@@ -7,7 +7,7 @@ use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\Layout\EntityListLayoutColumn;
 use Code16\Sharp\EntityList\Traits\HandleCommands;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
-use Code16\Sharp\EntityList\Traits\HandleFilters;
+use Code16\Sharp\Utils\Filters\HandleFilters;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;

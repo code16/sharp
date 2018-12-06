@@ -2,6 +2,7 @@
 
 namespace App\Sharp;
 
+use Code16\Sharp\Dashboard\DashboardQueryParams;
 use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
 use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
@@ -40,7 +41,7 @@ class CompanyDashboard extends SharpDashboard
             });
     }
 
-    function buildWidgetsData()
+    function buildWidgetsData(DashboardQueryParams $params)
     {
         $capacities = DB::table('spaceships')
             ->select(DB::raw('ceil(capacity/10000) as label, count(*) as value'))
