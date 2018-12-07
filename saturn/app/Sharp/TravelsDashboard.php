@@ -38,6 +38,10 @@ class TravelsDashboard extends SharpDashboard
                 DB::table('travels')
                     ->select(DB::raw('year(departure_date) as label, count(*) as value'))
                     ->groupBy(DB::raw('year(departure_date)'))
+                    ->whereBetween("departure_date", [
+                        now()->startOfYear()->subYears($params->filterFor("period")),
+                        now()->endOfYear()->addYears($params->filterFor("period"))
+                    ])
                     ->get()
                     ->pluck("value", "label")
                 )

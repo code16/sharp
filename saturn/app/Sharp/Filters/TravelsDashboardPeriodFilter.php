@@ -9,20 +9,17 @@ class TravelsDashboardPeriodFilter implements DashboardRequiredFilter
 
     public function values()
     {
-        $years = [];
-        $currentYear = now()->year;
-
-        for($i=0; $i<3; $i++) {
-            $years[$currentYear] = ($currentYear-1) . " - " . $currentYear;
-            $currentYear--;
-        }
-
-        return $years;
+        return [
+            1 => "+/- 1 year",
+            3 => "+/- 3 years",
+            5 => "+/- 5 years",
+            10 => "+/- 10 years",
+        ];
     }
 
     public function defaultValue()
     {
-        return now()->year;
+        return 5;
     }
 
     public function label()
