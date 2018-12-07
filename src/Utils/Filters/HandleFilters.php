@@ -1,11 +1,8 @@
 <?php
 
-namespace Code16\Sharp\EntityList\Traits;
+namespace Code16\Sharp\Utils\Filters;
 
 use Closure;
-use Code16\Sharp\EntityList\EntityListFilter;
-use Code16\Sharp\EntityList\EntityListMultipleFilter;
-use Code16\Sharp\EntityList\EntityListRequiredFilter;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Event;
 
@@ -18,13 +15,13 @@ trait HandleFilters
 
     /**
      * @param string $filterName
-     * @param string|EntityListFilter $filterHandler
+     * @param string|ListFilter $filterHandler
      * @param Closure|null $callback
      * @return $this
      */
     protected function addFilter(string $filterName, $filterHandler, Closure $callback = null)
     {
-        $this->filterHandlers[$filterName] = $filterHandler instanceof EntityListFilter
+        $this->filterHandlers[$filterName] = $filterHandler instanceof ListFilter
             ? $filterHandler
             : app($filterHandler);
 
@@ -43,8 +40,8 @@ trait HandleFilters
     protected function appendFiltersToConfig(array &$config)
     {
         foreach($this->filterHandlers as $filterName => $handler) {
-            $multiple = $handler instanceof EntityListMultipleFilter;
-            $required = !$multiple && $handler instanceof EntityListRequiredFilter;
+            $multiple = $handler instanceof ListMultipleFilter;
+            $required = !$multiple && $handler instanceof ListRequiredFilter;
 
             $config["filters"][] = [
                 "key" => $filterName,
@@ -62,10 +59,10 @@ trait HandleFilters
     }
 
     /**
-     * @param EntityListFilter $handler
+     * @param ListFilter $handler
      * @return array
      */
-    protected function formatFilterValues(EntityListFilter $handler)
+    protected function formatFilterValues(ListFilter $handler)
     {
         if(!method_exists($handler, "template")) {
             return collect($handler->values())->map(function ($label, $id) {
@@ -78,10 +75,10 @@ trait HandleFilters
     }
 
     /**
-     * @param EntityListFilter $handler
+     * @param ListFilter $handler
      * @return string
      */
-    protected function formatFilterTemplate(EntityListFilter $handler)
+    protected function formatFilterTemplate(ListFilter $handler)
     {
         if(!method_exists($handler, "template")) {
             return '{{label}}';

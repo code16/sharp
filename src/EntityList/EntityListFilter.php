@@ -2,22 +2,18 @@
 
 namespace Code16\Sharp\EntityList;
 
-interface EntityListFilter
-{
-    /**
-     * @return array
-     */
-    public function values();
-}
+use Code16\Sharp\Utils\Filters\ListFilter;
+use Code16\Sharp\Utils\Filters\ListMultipleFilter;
+use Code16\Sharp\Utils\Filters\ListRequiredFilter;
 
-interface EntityListMultipleFilter extends EntityListFilter
+interface EntityListFilter extends ListFilter
 {
 }
 
-interface EntityListRequiredFilter extends EntityListFilter
+interface EntityListMultipleFilter extends ListMultipleFilter
 {
-    /**
-     * @return string|int
-     */
-    public function defaultValue();
+}
+
+interface EntityListRequiredFilter extends ListRequiredFilter
+{
 }

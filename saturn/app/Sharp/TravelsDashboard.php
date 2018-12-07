@@ -2,6 +2,8 @@
 
 namespace App\Sharp;
 
+use App\Sharp\Filters\TravelsDashboardPeriodFilter;
+use Code16\Sharp\Dashboard\DashboardQueryParams;
 use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
@@ -18,12 +20,17 @@ class TravelsDashboard extends SharpDashboard
         );
     }
 
+    function buildDashboardConfig()
+    {
+        $this->addFilter("period", TravelsDashboardPeriodFilter::class);
+    }
+
     function buildWidgetsLayout()
     {
         $this->addFullWidthWidget("travels");
     }
 
-    function buildWidgetsData()
+    function buildWidgetsData(DashboardQueryParams $params)
     {
         $this->addGraphDataSet(
             "travels",
@@ -36,7 +43,6 @@ class TravelsDashboard extends SharpDashboard
                 )
                 ->setLabel("Travels")
                 ->setColor("red")
-
         );
     }
 

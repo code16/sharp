@@ -20,8 +20,11 @@ class DashboardController extends ApiController
             abort(404, "Dashboard not found");
         }
 
+        $dashboard->buildDashboardConfig();
+
         return response()->json([
             "widgets" => $dashboard->widgets(),
+            "config" => $dashboard->dashboardConfig(),
             "layout" => $dashboard->widgetsLayout(),
             "data" => $dashboard->data(),
         ]);
