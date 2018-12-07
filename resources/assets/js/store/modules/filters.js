@@ -38,8 +38,8 @@ export default {
         filterQueryKey() {
             return key => `${filterQueryPrefix}${key}`;
         },
-        queryParams(state, getters) {
-            return Object.entries(state.values)
+        getQueryParams(state, getters) {
+            return values => Object.entries(values)
                 .reduce((res, [key, value]) => ({
                     ...res,
                     [getters.filterQueryKey(key)]: value
