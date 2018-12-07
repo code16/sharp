@@ -16,7 +16,7 @@
 
     <script src="/vendor/sharp/manifest.js?version={{ sharp_version() }}"></script>
     <script src="/vendor/sharp/vendor.js?version={{ sharp_version() }}"></script>
-    <script src="/vendor/sharp/api.js?version={{ sharp_version() }}"></script>
+    <script src="/vendor/sharp/client-api.js?version={{ sharp_version() }}"></script>
 
     {!! sharp_custom_form_fields() !!}
 

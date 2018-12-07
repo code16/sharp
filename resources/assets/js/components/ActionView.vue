@@ -38,7 +38,7 @@
     import axios from 'axios';
     import { actionBarByContext } from './action-bar';
     import EventBus from './EventBus';
-
+    import { api } from "../api";
     import SharpModal from './Modal';
 
     const noop=()=>{};
@@ -52,7 +52,7 @@
         provide() {
             return {
                 actionsBus: new EventBus({name:'SharpActionsEventBus'}),
-                axiosInstance: axios.create()
+                axiosInstance: api
             }
         },
 
