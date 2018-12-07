@@ -48,21 +48,18 @@ describe('store filters', () => {
             expect(filters.getters.filterQueryKey()('key')).toBe('filter_key');
         });
 
-        test('queryParams', ()=>{
+        test('getQueryParams', ()=>{
             const state = {
-                values: {}
             };
             const getters = {
                 filterQueryKey: jest.fn(key => `TEST_${key}`)
             };
-            expect(filters.getters.queryParams(state, getters)).toEqual({});
+            expect(filters.getters.getQueryParams(state, getters)({ })).toEqual({});
 
-            state.values = {
+            expect(filters.getters.getQueryParams(state, getters)({
                 type: 'aaa',
                 name: 'bbb',
-            };
-
-            expect(filters.getters.queryParams(state, getters)).toEqual({
+            })).toEqual({
                 'TEST_type': 'aaa', 'TEST_name': 'bbb'
             });
         });
