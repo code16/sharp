@@ -118,6 +118,23 @@ abstract class SharpDashboard
     }
 
     /**
+     * Build config, meaning add filters, if necessary.
+     */
+    public function buildDashboardConfig()
+    {
+    }
+
+    /**
+     * @return array
+     */
+    public function dashboardConfig()
+    {
+        return tap([], function(&$config) {
+            $this->appendFiltersToConfig($config);
+        });
+    }
+
+    /**
      * Return data, as an array.
      *
      * @return array
