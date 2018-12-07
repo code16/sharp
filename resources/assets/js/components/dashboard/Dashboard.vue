@@ -17,15 +17,13 @@
 <script>
     import SharpGrid from '../Grid';
     import SharpWidget from './Widget';
-    import DynamicView from '../DynamicViewMixin';
+    import { withAxiosInterceptors } from '../DynamicViewMixin';
 
-    import { API_PATH } from '../../consts';
-    import { mapGetters } from 'vuex';
+    import { mapState, mapGetters } from 'vuex';
 
     export default {
         name:'SharpDashboard',
-        extends: DynamicView,
-
+        mixins: [withAxiosInterceptors],
         components: {
             SharpGrid,
             SharpWidget
@@ -34,41 +32,25 @@
             dashboardKey: String
         },
 
-        data() {
-            return {
-                widgets: null
-            }
-        },
         watch: {
             '$route': 'init'
         },
         computed: {
-            apiPath() {
-                return `${API_PATH}/dashboard/${this.dashboardKey}`
-            },
-            apiParams() {
-                return {
-                    ...this.filtersQuery,
-                }
-            },
+            ...mapState('dashboard', {
+                ready: state => state.ready,
+                data: state => state.data,
+                widgets: state => state.widgets,
+                layout: state => state.layout
+            }),
             ...mapGetters('dashboard', {
-                filtersQuery: 'filters/queryParams',
                 getFilterValuesFromQuery: 'filters/getValuesFromQuery',
             }),
         },
         methods: {
-            mount({ layout, data, widgets }) {
-                this.layout = layout;
-                this.data = data || {};
-                this.widgets = widgets;
-            },
             async init() {
-                const { data } = await this.get();
-                const config = data.config || {};
-
-                await this.$store.dispatch('dashboard/filters/update', {
-                    filters: config.filters,
-                    values: this.getFilterValuesFromQuery(this.$route.query)
+                await this.$store.dispatch('dashboard/get', {
+                    dashboardKey: this.dashboardKey,
+                    filterValues: this.getFilterValuesFromQuery(this.$route.query)
                 });
             },
         },

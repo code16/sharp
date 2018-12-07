@@ -1,5 +1,5 @@
 <template>
-    <sharp-action-bar ready>
+    <sharp-action-bar :ready="ready">
         <template slot="extras">
             <sharp-filter-select
                 v-for="filter in filters"
@@ -21,19 +21,20 @@
 
 <script>
     import SharpActionBar from './ActionBar';
-    import ActionBarMixin from './ActionBarMixin';
     import SharpFilterSelect from '../list/FilterSelect';
 
-    import { mapGetters } from 'vuex';
+    import { mapState, mapGetters } from 'vuex';
 
     export default {
         name: 'SharpActionBarDashboard',
-        mixins: [ActionBarMixin],
         components: {
             SharpActionBar,
             SharpFilterSelect
         },
         computed: {
+            ...mapState('dashboard', {
+                ready: state => state.ready
+            }),
             ...mapGetters('dashboard', {
                 filters: 'filters/filters',
                 filterValue: 'filters/value',

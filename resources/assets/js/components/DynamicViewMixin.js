@@ -2,55 +2,9 @@ import * as qs from '../helpers/querystring';
 import { parseBlobJSONContent } from "../util";
 import { lang } from '../mixins/Localization';
 
-
-export default {
-    inject:['mainLoading', 'axiosInstance', 'actionsBus'],
-    
-    data() {
-        return {
-            data:null,
-            layout:null,
-
-            ready:false,
-        }
-    },
+export const withAxiosInterceptors = {
+    inject: ['mainLoading', 'axiosInstance', 'actionsBus'],
     methods: {
-        get() {
-            return this.axiosInstance.get(this.apiPath, {
-                    params : this.apiParams,
-                    paramsSerializer : p => qs.serialize(p, {urlSeparator:false})
-                })
-                .then(response=>{
-                    this.mount(response.data);
-                    this.handleNotifications(response.data);
-                    this.ready = true;
-                    return Promise.resolve(response);
-                })
-                .catch(error=>{
-                    return Promise.reject(error);
-                });
-        },
-        post(endpoint = this.apiPath, data = this.data, config) {
-            return this.axiosInstance.post(endpoint, data, config).then(response=>{
-                    return Promise.resolve(response);
-                })
-                .catch(error=>{
-                    return Promise.reject(error);
-                });
-        },
-        showNotification({ level, title, message, autoHide }) {
-            this.$notify({
-                title,
-                type: level,
-                text: message,
-                duration: autoHide ? 4000 : -1
-            });
-        },
-        handleNotifications(data={}) {
-            if(Array.isArray(data.notifications)) {
-                setTimeout(() => data.notifications.forEach(this.showNotification), 500);
-            }
-        },
         installInterceptors() {
             this.axiosInstance.interceptors.request.use(config => {
                 this.mainLoading.$emit('show');
@@ -105,12 +59,64 @@ export default {
                 }
                 return Promise.reject(error);
             });
-        }
+        },
     },
     created() {
         if(!this.synchronous) {
             this.installInterceptors();
             this.mainLoading.$emit('show');
         }
+    }
+};
+
+export default {
+    mixins: [withAxiosInterceptors],
+    inject: ['axiosInstance'],
+
+    data() {
+        return {
+            data:null,
+            layout:null,
+
+            ready:false,
+        }
+    },
+    methods: {
+        get() {
+            return this.axiosInstance.get(this.apiPath, {
+                    params : this.apiParams,
+                    paramsSerializer : p => qs.serialize(p, {urlSeparator:false})
+                })
+                .then(response=>{
+                    this.mount(response.data);
+                    this.handleNotifications(response.data);
+                    this.ready = true;
+                    return Promise.resolve(response);
+                })
+                .catch(error=>{
+                    return Promise.reject(error);
+                });
+        },
+        post(endpoint = this.apiPath, data = this.data, config) {
+            return this.axiosInstance.post(endpoint, data, config).then(response=>{
+                    return Promise.resolve(response);
+                })
+                .catch(error=>{
+                    return Promise.reject(error);
+                });
+        },
+        showNotification({ level, title, message, autoHide }) {
+            this.$notify({
+                title,
+                type: level,
+                text: message,
+                duration: autoHide ? 4000 : -1
+            });
+        },
+        handleNotifications(data={}) {
+            if(Array.isArray(data.notifications)) {
+                setTimeout(() => data.notifications.forEach(this.showNotification), 500);
+            }
+        },
     }
 }
