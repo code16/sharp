@@ -22,7 +22,7 @@
 </template>
 
 <script>
-    import Multiselect from '../../Multiselect';
+    import SharpMultiselect from '../../Multiselect';
     import localize from '../../../mixins/localize/Tags';
 
     class LabelledItem {
@@ -49,7 +49,7 @@
         name: 'SharpTags',
         mixins:[localize],
         components: {
-            [Multiselect.name]: Multiselect
+            SharpMultiselect
         },
         props: {
             value: Array, // [{id:0, label: 'AAA'}, ...]

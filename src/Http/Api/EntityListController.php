@@ -8,6 +8,8 @@ class EntityListController extends ApiController
     /**
      * @param string $entityKey
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
+     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
     public function show($entityKey)
     {
@@ -29,6 +31,8 @@ class EntityListController extends ApiController
      *
      * @param string $entityKey
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
+     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
     public function update($entityKey)
     {

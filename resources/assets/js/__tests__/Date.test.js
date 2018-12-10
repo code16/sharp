@@ -438,6 +438,31 @@ describe('date-field',()=>{
 
         expect($date.showPicker).toBe(false);
     });
+
+    test('time only value', async () => {
+        let $date = await createVm({
+            propsData: {
+                disableDate: true
+            },
+            data:()=>({ value:'13:00' })
+        });
+
+        expect($date.timeObject).toEqual({
+            HH: '13',
+            mm: '00'
+        })
+    });
+
+    test('date only value', async () => {
+        let $date = await createVm({
+            propsData: {
+                disableTime: true
+            },
+            data:()=>({ value:'2018-05-20' })
+        });
+
+        expect($date.dateObject).toEqual(date(2018, 4, 20));
+    });
 });
 
 async function createVm(customOptions={}) {

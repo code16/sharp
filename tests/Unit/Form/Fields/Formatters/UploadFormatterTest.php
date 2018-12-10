@@ -31,8 +31,8 @@ class UploadFormatterTest extends SharpTestCase
     function we_can_format_value_to_front()
     {
         $formatter = new UploadFormatter;
-        $field = SharpFormUploadField::make("upload");
 
+        $field = SharpFormUploadField::make("upload");
         $this->assertEquals(["name" => "test.png"], $formatter->toFront($field, ["name" => "test.png"]));
     }
 

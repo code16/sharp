@@ -2,8 +2,12 @@
 
 namespace Code16\Sharp\EntityList;
 
+use Code16\Sharp\Utils\Filters\HasFiltersInQuery;
+
 class EntityListQueryParams
 {
+    use HasFiltersInQuery;
+
     /**
      * @var int
      */
@@ -27,13 +31,11 @@ class EntityListQueryParams
     /**
      * @var array
      */
-    protected $filters;
-
-    /**
-     * @var array
-     */
     protected $specificIds;
 
+    /**
+     * @return static
+     */
     public static function create()
     {
         return new static;
@@ -53,27 +55,14 @@ class EntityListQueryParams
     }
 
     /**
-     * @param array $filters
-     * @return $this
-     */
-    public function setDefaultFilters($filters)
-    {
-        $this->filters = (array)$filters;
-
-        return $this;
-    }
-
-    /**
      * @param string|null $queryPrefix
      * @return $this
      */
     public function fillWithRequest(string $queryPrefix = null)
     {
-        $query = $queryPrefix
-            ? request("query")
-            : request()->all();
+        $query = $queryPrefix ? request($queryPrefix) : request()->all();
 
-        $this->search = $query["search"] ?? null;
+        $this->search = $query["search"] ?? null ? urldecode($query["search"]) : null;
         $this->page = $query["page"] ?? null;
 
         if(isset($query["sort"])) {
@@ -81,17 +70,15 @@ class EntityListQueryParams
             $this->sortedDir = $query["dir"];
         }
 
-        collect($query)->except(["search", "page", "sort", "dir"])
-            ->filter(function($value, $name) {
-                return starts_with($name, "filter_");
-
-            })->each(function($value, $name) {
-               $this->filters[substr($name, strlen("filter_"))] = $value;
-            });
+        $this->fillFilterWithRequest($query);
 
         return $this;
     }
 
+    /**
+     * @param array $ids
+     * @return static
+     */
     public static function createFromArrayOfIds(array $ids)
     {
         $instance = new static;
@@ -158,26 +145,10 @@ class EntityListQueryParams
     }
 
     /**
-     * @param string $filterName
-     * @return mixed|null
-     */
-    public function filterFor(string $filterName)
-    {
-        if(!isset($this->filters[$filterName])) {
-            return null;
-        }
-
-        return str_contains($this->filters[$filterName], ",")
-            ? explode(",", $this->filters[$filterName])
-            : $this->filters[$filterName];
-    }
-
-    /**
      * @return array
      */
     public function specificIds()
     {
         return (array)$this->specificIds;
     }
-
 }

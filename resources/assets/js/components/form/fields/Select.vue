@@ -71,7 +71,7 @@
 </template>
 
 <script>
-    import Multiselect from '../../Multiselect';
+    import SharpMultiselect from '../../Multiselect';
     import SharpCheck from './Check.vue';
     import localize from '../../../mixins/localize/Select';
 
@@ -81,7 +81,7 @@
         mixins: [localize],
 
         components: {
-            [Multiselect.name]: Multiselect,
+            SharpMultiselect,
             SharpCheck
         },
 

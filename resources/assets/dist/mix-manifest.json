@@ -1,10 +1,10 @@
 {
-    "/sharp.js": "/sharp.js",
-    "/.bin/sharp-app.css": "/.bin/sharp-app.css",
-    "/.bin/vendors.css": "/.bin/vendors.css",
-    "/sharp-cms.css": "/sharp-cms.css",
-    "/vendor.js": "/vendor.js",
-    "/api.js": "/api.js",
-    "/manifest.js": "/manifest.js",
-    "/sharp.css": "/sharp.css"
+    "/sharp.js": "/sharp.js?id=4efe50476d82d1d050da",
+    "/.bin/sharp-app.css": "/.bin/sharp-app.css?id=edd2b27b517b88cade5d",
+    "/.bin/vendors.css": "/.bin/vendors.css?id=b2a0b102d03403904f14",
+    "/sharp-cms.css": "/sharp-cms.css?id=6b051750a569f801c343",
+    "/vendor.js": "/vendor.js?id=d17dc17bd04a9f07a2ad",
+    "/client-api.js": "/client-api.js?id=265e96addfb142ad3613",
+    "/manifest.js": "/manifest.js?id=0225916a5d4fbc86a881",
+    "/sharp.css": "/sharp.css?id=0f7256c1ba0bbdc39283"
 }

@@ -37,4 +37,9 @@ class Person extends Model
     {
         return $this->morphMany(Picture::class, "picturable");
     }
+
+    public function getQueueableRelations()
+    {
+        return [];
+    }
 }

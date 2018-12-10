@@ -3,9 +3,11 @@
 namespace Code16\Sharp\Utils\Transformers;
 
 use Closure;
+use Code16\Sharp\EntityList\Commands\Command;
 use Code16\Sharp\Form\SharpForm;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
 use Illuminate\Pagination\LengthAwarePaginator;
+use stdClass;
 
 /**
  * This trait allows a class to handle a custom transformers array.
@@ -43,8 +45,8 @@ trait WithCustomTransformers
      */
     function transform($models)
     {
-        if($this instanceof SharpForm) {
-            // It's a Form, there's only one model.
+        if($this instanceof SharpForm || $this instanceof Command) {
+            // It's a Form (full entity or from a Command), there's only one model.
             // We must add Form Field Formatters in the process
             return $this->applyFormatters(
                 $this->applyTransformers($models)
@@ -98,7 +100,7 @@ trait WithCustomTransformers
      */
     protected function applyTransformers($model, bool $forceFullObject = true)
     {
-        $attributes = is_array($model) ? $model : $model->toArray();
+        $attributes = is_array($model) ? $model: ($model instanceof stdClass ? (array)$model: $model->toArray());
 
         if($forceFullObject) {
             // Merge model attribute with form fields to be sure we have
@@ -126,18 +128,13 @@ trait WithCustomTransformers
 
                 foreach ($model->$listAttribute as $k => $itemModel) {
                     $attributes[$listAttribute][$k][$itemAttribute] = $transformer->apply(
-                        $attributes[$listAttribute][$k][$itemAttribute], $itemModel, $itemAttribute
+                        $attributes[$listAttribute][$k][$itemAttribute] ?? null, $itemModel, $itemAttribute
                     );
                 }
 
             } else {
-
-                if(!array_key_exists($attribute, $attributes)) {
-                    continue;
-                }
-
                 $attributes[$attribute] = $transformer->apply(
-                    $attributes[$attribute], $model, $attribute
+                    $attributes[$attribute] ?? null, $model, $attribute
                 );
             }
         }
@@ -180,7 +177,7 @@ trait WithCustomTransformers
             })->each(function ($key) use (&$attributes, $model) {
                 // For each one, we create a "relation:attribute" key
                 // in the returned array
-                $attributes[$key[0]] = $model->{$key[1]} ? $model->{$key[1]}->{$key[2]} : null;
+                $attributes[$key[0]] = $model->{$key[1]} ? ($model->{$key[1]}->{$key[2]} ?? null) : null;
             });
 
         return $attributes;

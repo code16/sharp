@@ -3,21 +3,33 @@ sudo: trues
 php:
   - 7.0
   - 7.1
+  - 7.2
 
 matrix:
   fast_finish: true
+  exclude:
+    - php: 7.0
+      env: LARAVEL_VERSION=5.6.*
+    - php: 7.0
+      env: LARAVEL_VERSION=5.7.*
 
 install:
   ## back dependencies
   - travis_retry composer self-update
   - travis_retry composer install --prefer-source --no-interaction
+  - if [ "$LARAVEL_VERSION" != "" ]; then composer require "laravel/framework:${LARAVEL_VERSION}" --no-update; fi;
   ## front dependencies
   - . $HOME/.nvm/nvm.sh
-  - nvm install node
-  - nvm use node
-  - node -v
+  - nvm install 10.14.1
+  - nvm use 10.14.1
   - npm install
 
 script:
   - vendor/bin/phpunit
   - npm run test
+
+env:
+  - LARAVEL_VERSION=5.4.*
+  - LARAVEL_VERSION=5.5.*
+  - LARAVEL_VERSION=5.6.*
+  - LARAVEL_VERSION=5.7.*

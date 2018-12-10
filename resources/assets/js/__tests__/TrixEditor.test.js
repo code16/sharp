@@ -1,11 +1,11 @@
-import { shallow } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import TrixEditor from '../components/form/fields/wysiwyg/TrixEditor.vue';
 
 describe('trix-editor',()=>{
     let wrapper;
 
     beforeEach(() => {
-        wrapper = shallow(TrixEditor, {
+        wrapper = shallowMount(TrixEditor, {
             propsData: {
                 uniqueIdentifier: 'WYSIWYG_TEST',
                 value: {

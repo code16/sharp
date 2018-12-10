@@ -1,5 +1,19 @@
 import * as util from '../util';
 
+function getActionListener(vm, action) {
+    if(typeof action === 'string') {
+        if(typeof vm[action] !== 'function') {
+            util.error(`${vm.$options.name} (ActionEvents) : this.${action} is not a function`);
+            return;
+        }
+        return (...args) => vm[action].apply(vm, args);
+    }
+    else if(typeof action === 'function') {
+        return (...args) => action.apply(vm,args);
+    }
+    else util.error(`${vm.$options.name} (ActionEvents) : unprocessable action type (only function on string)`);
+}
+
 export default {
     inject:['actionsBus'],
     created() {
@@ -16,19 +30,15 @@ export default {
         }
 
         for(let actionName of Object.keys(this.$options.actions)) {
-            let action = actions[actionName];
-            if(typeof action === 'string') {
-                if(typeof this[action] !== 'function') {
-                    util.error(`${this.$options.name} (ActionEvents) : this.${action} is not a function`);
-                    continue;
-                }
+            const action = actions[actionName];
+            const listener = getActionListener(this, action);
 
-                this.actionsBus.$on(actionName, (...args) => this[action].apply(this,args));
+            if(listener) {
+                this.actionsBus.$on(actionName, listener);
+                this.$once('hook:beforeDestroy', ()=>{
+                    this.actionsBus.$off(actionName, listener);
+                });
             }
-            else if(typeof action === 'function') {
-                this.actionsBus.$on(actionName, (...args) => action.apply(this,args));
-            }
-            else util.error(`${this.$options.name} (ActionEvents) : unprocessable action type (only function on string)`);
         }
     }
 }

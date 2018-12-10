@@ -16,6 +16,24 @@ abstract class EntityCommand extends Command
     }
 
     /**
+     * @return array
+     */
+    public function formData(): array
+    {
+        return collect($this->initialData())
+            ->only($this->getDataKeys())
+            ->all();
+    }
+
+    /**
+     * @return array
+     */
+    protected function initialData(): array
+    {
+        return [];
+    }
+
+    /**
      * @param EntityListQueryParams $params
      * @param array $data
      * @return array

@@ -56,6 +56,13 @@
     @include reset;
     @include layer('overlay');
     width: 100%;
+    max-width: 15rem;
+    @include media-breakpoint-up(sm) {
+      max-width: 30rem!important;
+    }
+    @include media-breakpoint-up(md) {
+      max-width: 40rem!important;
+    }
     display: none;
     list-style: none;
     position: absolute;

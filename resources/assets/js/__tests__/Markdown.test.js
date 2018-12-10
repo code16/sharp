@@ -275,6 +275,56 @@ describe('markdown-field', () => {
             }
         };
 
+        let mockCodemirror = codemirror => {
+            codemirror.markText = jest.fn(() => ({
+                on: jest.fn(),
+                clear: jest.fn(),
+                lines: [{ on: jest.fn() }]
+            }));
+        };
+
+        let mockMarkdown = setUploader => ({
+            'extends': Markdown,
+            created() {
+                this.insertUploadImage = jest.fn((...args)=>
+                    setUploader(Markdown.methods.insertUploadImage.apply(this, args))
+                );
+            }
+        });
+
+        function createMarkdownForUpload(vmOptions={}, { onUploaderCreated=()=>{} }={}) {
+            return createVm({
+                ...vmOptions,
+                components: {
+                    'sharp-markdown': {
+                        extends: Markdown,
+                        methods: {
+                            createUploader(...args) {
+                                let $uploader = Markdown.methods.createUploader.apply(this, args);
+                                onUploaderCreated($uploader);
+                                setTimeout(()=>$uploader.$emit('added'), 0);
+                                return $uploader;
+                            }
+                        },
+                        created() {
+                            jest.spyOn(this, 'insertUploadImage');
+                        }
+                    }
+                }
+            });
+        }
+
+        test('insert image uploader and text properly', async () => {
+            let wrapper = createWrapper({
+                mixins:[mockMixin],
+                propsData: { value:{ text:'Lorem Elsass ipsum'} }
+            });
+
+            wrapper.vm.codemirror.setSelection({ line: 0, ch:5 }, { line: 0, ch:13 });
+
+            wrapper.vm.insertUploadImage({ isInsertion:true });
+            expect(wrapper.vm.simplemde.value()).toBe('Lorem\n![]()\nipsum');
+
         test('insert image uploader and text properly', () => {
             let wrapper = createWrapper({
                 mixins:[mockMixin],
@@ -307,10 +357,10 @@ describe('markdown-field', () => {
             }]);
         });
 
-        test('parse and insert image uploader and text properly',  () => {
-            let wrapper = createWrapper({
-                mixins:[mockMixin],
-                propsData :{
+        test('parse and insert image uploader and text properly', async () => {
+            let $uploaders = [];
+            let $markdown = await createMarkdownForUpload({
+                data: ()=>({
                     value: {
                         text:'aaa\n![Cat](cat.jpg)\nbbb',
                         files:[{
@@ -318,7 +368,9 @@ describe('markdown-field', () => {
                             size: 123
                         }]
                     },
-                }
+                })
+            }, {
+                onUploaderCreated: u => $uploaders.push(u)
             });
             /// Parse markdown content
             wrapper.vm.$tab.$emit('active');
@@ -345,9 +397,9 @@ describe('markdown-field', () => {
         });
 
         test('delete properly', async () => {
-            let wrapper = createWrapper({
-                mixins:[mockMixin],
-                propsData :{
+            let $uploader = null;
+            let $markdown = await createMarkdownForUpload({
+                data: ()=>({
                     value: {
                         text:'aaa\n![Cat](cat.jpg)\nbbb',
                         files:[{
@@ -355,7 +407,9 @@ describe('markdown-field', () => {
                             size: 123
                         }]
                     },
-                }
+                })
+            }, {
+                onUploaderCreated: u => $uploader = u
             });
             /// Parse markdown content
             wrapper.vm.$tab.$emit('active');
@@ -393,8 +447,18 @@ describe('markdown-field', () => {
                 mixins:[mockMixin]
             });
 
-            let $uploader = wrapper.vm.insertUploadImage({ isInsertion:true });
+        test('Delete properly removing from upload component', async () => {
+            let $markdown = await createMarkdownForUpload();
 
+            let { simplemde } = $markdown;
+            let { codemirror } = simplemde;
+
+            mockCodemirror(codemirror);
+
+            let $uploader = await $markdown.insertUploadImage({ isInsertion:true });
+
+            $markdown.removeMarker = jest.fn($markdown.removeMarker);
+            codemirror.replaceRange = jest.fn(codemirror.replaceRange);
             $uploader.marker.find = jest.fn(()=>({from:{ line: 1, ch:0 }, to:{ line:1, ch:5 }}));
 
             jest.spyOn($uploader, '$destroy');
@@ -408,8 +472,9 @@ describe('markdown-field', () => {
             expect($uploader.$destroy).toHaveBeenCalled();
         });
 
-        xtest('expose appropriate props to markdown upload component', () =>{
-            let wrapper = createWrapper({
+        test('expose appropriate props to markdown upload component', async () =>{
+            let $uploaders = [];
+            let $markdown = await createMarkdownForUpload({
                 data: ()=>({
                     value: {
                         text:'aaa\n![Cat](cat.jpg)\nbbb',
@@ -418,7 +483,9 @@ describe('markdown-field', () => {
                             size: 123
                         }]
                     },
-                })
+                }),
+            }, {
+                onUploaderCreated: u => $uploaders.push(u)
             });
 
             let { simplemde } = wrapper.vm;
@@ -452,7 +519,7 @@ describe('markdown-field', () => {
         });
 /*
         test('index files correctly on mounted', async () => {
-            let wrapper.vm = await createVm({
+            let $markdown = await createMarkdownForUpload({
                 data:() => ({
                     value: {
                         files:[{
@@ -478,14 +545,14 @@ describe('markdown-field', () => {
         });
 
         test('refresh properly', async () => {
-            let wrapper.vm = await createVm();
+            let $markdown = await createMarkdownForUpload();
 
             let { simplemde } = wrapper.vm;
             let { codemirror } = simplemde;
 
             mockCodemirror(codemirror);
 
-            let $uploader = wrapper.vm.insertUploadImage();
+            let $uploader = await $markdown.insertUploadImage();
 
             codemirror.refresh = jest.fn();
             codemirror.focus = jest.fn();
@@ -495,16 +562,16 @@ describe('markdown-field', () => {
             expect(codemirror.refresh).toHaveBeenCalled();
             expect(codemirror.focus).toHaveBeenCalled();
         })
-
+;
         test('update file data properly', async () => {
-            let wrapper.vm = await createVm();
+            let $markdown = await createMarkdownForUpload();
 
             let { simplemde } = wrapper.vm;
             let { codemirror } = simplemde;
 
             mockCodemirror(codemirror);
 
-            let $uploader = wrapper.vm.insertUploadImage({ isInsertion: true });
+            let $uploader = await $markdown.insertUploadImage({ isInsertion: true });
 
             $uploader.marker.find = jest.fn(() => ({ from:{ line: 1, ch: 0 }, to:{ line: 1, ch:5 }}) );
 

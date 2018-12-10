@@ -1,7 +1,7 @@
 <template>
     <div class="SharpFieldContainer SharpForm__form-item" :class="formGroupClasses" :style="extraStyle">
-        <label class="SharpForm__label" v-show="label" @click="triggerFocus">
-            {{label}} <small v-if="fieldProps.localized" class="SharpFieldContainer__label-locale p-1">{{locale}}</small>
+        <label v-if="showLabel" class="SharpForm__label" @click="triggerFocus">
+            {{label}} <span v-if="fieldProps.localized" class="SharpFieldContainer__label-locale">({{locale}})</span>
         </label>
         <sharp-field v-bind="exposedProps"
                      @error="setError" 
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-    import Field from './Field';
+    import SharpField from './Field';
     import {ErrorNode, ConfigNode} from '../../mixins/index';
 
     import * as util from '../../util';
@@ -27,13 +27,13 @@
         mixins: [ ErrorNode, ConfigNode ],
 
         components: {
-            [Field.name]:Field
+            SharpField
         },
 
         inject:['$tab', '$form'],
 
         props : {
-            ...Field.props,
+            ...SharpField.props,
 
             label: String,
             helpMessage: String,
@@ -58,10 +58,13 @@
         },
         computed: {
             formGroupClasses() {
-                return {
-                    'SharpForm__form-item--danger': this.state==='error',
-                    'SharpForm__form-item--success': this.state==='ok'
-                }
+                return [
+                    `SharpForm__form-item--type-${this.fieldType}`,
+                    {
+                        'SharpForm__form-item--danger': this.state==='error',
+                        'SharpForm__form-item--success': this.state==='ok'
+                    }
+                ];
             },
             extraStyle() {
                 return this.fieldProps.extraStyle;
@@ -72,6 +75,9 @@
                     uniqueIdentifier: this.mergedErrorIdentifier,
                     fieldConfigIdentifier: this.mergedConfigIdentifier
                 };
+            },
+            showLabel() {
+                return !!this.label || this.label === '';
             }
         },
         methods: {

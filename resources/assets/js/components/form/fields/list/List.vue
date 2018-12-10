@@ -62,8 +62,8 @@
 </template>
 <script>
     import Draggable from 'vuedraggable';
-    import ListItem from './ListItem';
-    import Template from '../../../Template';
+    import SharpListItem from './ListItem';
+    import SharpTemplate from '../../../Template';
 
     import { Localization, ReadOnlyFields } from '../../../../mixins';
     import localize from '../../../../mixins/localize/form';
@@ -78,8 +78,8 @@
 
         components: {
             Draggable,
-            [ListItem.name]:ListItem,
-            [Template.name]:Template
+            SharpListItem,
+            SharpTemplate
         },
 
         props: {

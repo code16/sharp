@@ -35,7 +35,7 @@ $small-breakpoint: sm;
 
 #sharp-app {
   color: $text-01;
-  line-height: 1;
+  line-height: 1.15;
 
   font-family: $font-family-base;
 
@@ -49,6 +49,8 @@ $small-breakpoint: sm;
   @import '~bootstrap/scss/transitions';
   @import '~bootstrap/scss/utilities/flex';
   @import '~bootstrap/scss/utilities/visibility';
+
+  @import "./transitions";
 
   @import "components/error";
 

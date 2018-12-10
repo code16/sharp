@@ -8,7 +8,8 @@ exports[`entity-list can mount "disabled all" entity list 1`] = `
 				<div class="SharpEntityList__row SharpEntityList__row--header container">
 					<div class="SharpEntityList__cols">
 						<div class="row">
-							<div class="SharpEntityList__th col-12 col-md-6"><span>Titre</span>
+							<div class="SharpEntityList__th col-12 col-md-6">
+								<span>Titre</span>
 								<!---->
 								<!---->
 							</div>
@@ -32,7 +33,9 @@ exports[`entity-list can mount "disabled all" entity list 1`] = `
 							<!---->
 							<!---->
 						</div>
-						<div class="SharpEntityList__row-actions" style="display: none;"><i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i></div>
+						<div class="SharpEntityList__row-actions" style="display: none;">
+							<i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i>
+						</div>
 					</div>
 					<div class="SharpEntityList__row container SharpEntityList__row--disabled">
 						<div class="SharpEntityList__cols">
@@ -47,7 +50,9 @@ exports[`entity-list can mount "disabled all" entity list 1`] = `
 							<!---->
 							<!---->
 						</div>
-						<div class="SharpEntityList__row-actions" style="display: none;"><i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i></div>
+						<div class="SharpEntityList__row-actions" style="display: none;">
+							<i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -68,7 +73,8 @@ exports[`entity-list can mount "disabled one" entity list 1`] = `
 				<div class="SharpEntityList__row SharpEntityList__row--header container">
 					<div class="SharpEntityList__cols">
 						<div class="row">
-							<div class="SharpEntityList__th col-12 col-md-6"><span>Titre</span>
+							<div class="SharpEntityList__th col-12 col-md-6">
+								<span>Titre</span>
 								<!---->
 								<!---->
 							</div>
@@ -85,12 +91,16 @@ exports[`entity-list can mount "disabled one" entity list 1`] = `
 								<div class="SharpEntityList__td col-12 col-md-6">
 									Super title
 								</div>
-							</div> <a href="/sharp/form/spaceship/1" class="SharpEntityList__row-link"></a></div>
+							</div>
+							<a href="/sharp/form/spaceship/1" class="SharpEntityList__row-link"></a>
+						</div>
 						<div class="SharpEntityList__row-actions">
 							<!---->
 							<!---->
 						</div>
-						<div class="SharpEntityList__row-actions" style="display: none;"><i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i></div>
+						<div class="SharpEntityList__row-actions" style="display: none;">
+							<i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i>
+						</div>
 					</div>
 					<div class="SharpEntityList__row container SharpEntityList__row--disabled">
 						<div class="SharpEntityList__cols">
@@ -105,7 +115,9 @@ exports[`entity-list can mount "disabled one" entity list 1`] = `
 							<!---->
 							<!---->
 						</div>
-						<div class="SharpEntityList__row-actions" style="display: none;"><i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i></div>
+						<div class="SharpEntityList__row-actions" style="display: none;">
+							<i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -138,7 +150,8 @@ exports[`entity-list can mount "hide on XS" entity list 1`] = `
 				<div class="SharpEntityList__row SharpEntityList__row--header container">
 					<div class="SharpEntityList__cols">
 						<div class="row">
-							<div class="SharpEntityList__th col-12 col-md-6"><span>Titre</span>
+							<div class="SharpEntityList__th col-12 col-md-6">
+								<span>Titre</span>
 								<!---->
 								<!---->
 							</div>
@@ -155,12 +168,16 @@ exports[`entity-list can mount "hide on XS" entity list 1`] = `
 								<div class="SharpEntityList__td col-12 col-md-6">
 									Super title
 								</div>
-							</div> <a href="/sharp/form/spaceship/1" class="SharpEntityList__row-link"></a></div>
+							</div>
+							<a href="/sharp/form/spaceship/1" class="SharpEntityList__row-link"></a>
+						</div>
 						<div class="SharpEntityList__row-actions">
 							<!---->
 							<!---->
 						</div>
-						<div class="SharpEntityList__row-actions" style="display: none;"><i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i></div>
+						<div class="SharpEntityList__row-actions" style="display: none;">
+							<i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -181,7 +198,8 @@ exports[`entity-list can mount "reordering reordered" entity list 1`] = `
 				<div class="SharpEntityList__row SharpEntityList__row--header container">
 					<div class="SharpEntityList__cols">
 						<div class="row">
-							<div class="SharpEntityList__th col-12 col-md-6"><span>Titre</span>
+							<div class="SharpEntityList__th col-12 col-md-6">
+								<span>Titre</span>
 								<!---->
 								<!---->
 							</div>
@@ -198,12 +216,16 @@ exports[`entity-list can mount "reordering reordered" entity list 1`] = `
 								<div class="SharpEntityList__td col-12 col-md-6">
 									Second title
 								</div>
-							</div> <a href="/sharp/form/spaceship/1" class="SharpEntityList__row-link"></a></div>
+							</div>
+							<a href="/sharp/form/spaceship/1" class="SharpEntityList__row-link"></a>
+						</div>
 						<div class="SharpEntityList__row-actions" style="display: none;">
 							<!---->
 							<!---->
 						</div>
-						<div class="SharpEntityList__row-actions" style=""><i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i></div>
+						<div class="SharpEntityList__row-actions" style="">
+							<i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i>
+						</div>
 					</div>
 					<div class="SharpEntityList__row container SharpEntityList__row--reorder">
 						<div class="SharpEntityList__cols">
@@ -211,12 +233,16 @@ exports[`entity-list can mount "reordering reordered" entity list 1`] = `
 								<div class="SharpEntityList__td col-12 col-md-6">
 									First title
 								</div>
-							</div> <a href="/sharp/form/spaceship/1" class="SharpEntityList__row-link"></a></div>
+							</div>
+							<a href="/sharp/form/spaceship/1" class="SharpEntityList__row-link"></a>
+						</div>
 						<div class="SharpEntityList__row-actions" style="display: none;">
 							<!---->
 							<!---->
 						</div>
-						<div class="SharpEntityList__row-actions" style=""><i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i></div>
+						<div class="SharpEntityList__row-actions" style="">
+							<i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -237,7 +263,8 @@ exports[`entity-list can mount "reordering" entity list 1`] = `
 				<div class="SharpEntityList__row SharpEntityList__row--header container">
 					<div class="SharpEntityList__cols">
 						<div class="row">
-							<div class="SharpEntityList__th col-12 col-md-6"><span>Titre</span>
+							<div class="SharpEntityList__th col-12 col-md-6">
+								<span>Titre</span>
 								<!---->
 								<!---->
 							</div>
@@ -254,12 +281,16 @@ exports[`entity-list can mount "reordering" entity list 1`] = `
 								<div class="SharpEntityList__td col-12 col-md-6">
 									First title
 								</div>
-							</div> <a href="/sharp/form/spaceship/1" class="SharpEntityList__row-link"></a></div>
+							</div>
+							<a href="/sharp/form/spaceship/1" class="SharpEntityList__row-link"></a>
+						</div>
 						<div class="SharpEntityList__row-actions" style="display: none;">
 							<!---->
 							<!---->
 						</div>
-						<div class="SharpEntityList__row-actions" style=""><i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i></div>
+						<div class="SharpEntityList__row-actions" style="">
+							<i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i>
+						</div>
 					</div>
 					<div class="SharpEntityList__row container SharpEntityList__row--reorder">
 						<div class="SharpEntityList__cols">
@@ -267,12 +298,16 @@ exports[`entity-list can mount "reordering" entity list 1`] = `
 								<div class="SharpEntityList__td col-12 col-md-6">
 									Second title
 								</div>
-							</div> <a href="/sharp/form/spaceship/2" class="SharpEntityList__row-link"></a></div>
+							</div>
+							<a href="/sharp/form/spaceship/2" class="SharpEntityList__row-link"></a>
+						</div>
 						<div class="SharpEntityList__row-actions" style="display: none;">
 							<!---->
 							<!---->
 						</div>
-						<div class="SharpEntityList__row-actions" style=""><i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i></div>
+						<div class="SharpEntityList__row-actions" style="">
+							<i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -293,7 +328,13 @@ exports[`entity-list can mount "sortable selected ascending" entity list 1`] = `
 				<div class="SharpEntityList__row SharpEntityList__row--header container">
 					<div class="SharpEntityList__cols">
 						<div class="row">
-							<div class="SharpEntityList__th col-12 col-md-6"><span>Titre</span> <svg width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd" class="SharpEntityList__carret SharpEntityList__carret--selected SharpEntityList__carret--ascending"><path d="M10 0L5 5 0 0z"></path></svg> <a href="" class="SharpEntityList__sort-link"></a></div>
+							<div class="SharpEntityList__th col-12 col-md-6">
+								<span>Titre</span>
+								<svg width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd" class="SharpEntityList__carret SharpEntityList__carret--selected SharpEntityList__carret--ascending">
+									<path d="M10 0L5 5 0 0z"></path>
+								</svg>
+								<a href="" class="SharpEntityList__sort-link"></a>
+							</div>
 						</div>
 					</div>
 					<div class="d-none d-md-block" style="width: 0px;">&nbsp;</div>
@@ -307,12 +348,16 @@ exports[`entity-list can mount "sortable selected ascending" entity list 1`] = `
 								<div class="SharpEntityList__td col-12 col-md-6">
 									Super title
 								</div>
-							</div> <a href="/sharp/form/spaceship/1" class="SharpEntityList__row-link"></a></div>
+							</div>
+							<a href="/sharp/form/spaceship/1" class="SharpEntityList__row-link"></a>
+						</div>
 						<div class="SharpEntityList__row-actions">
 							<!---->
 							<!---->
 						</div>
-						<div class="SharpEntityList__row-actions" style="display: none;"><i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i></div>
+						<div class="SharpEntityList__row-actions" style="display: none;">
+							<i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -333,7 +378,13 @@ exports[`entity-list can mount "sortable selected" entity list 1`] = `
 				<div class="SharpEntityList__row SharpEntityList__row--header container">
 					<div class="SharpEntityList__cols">
 						<div class="row">
-							<div class="SharpEntityList__th col-12 col-md-6"><span>Titre</span> <svg width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd" class="SharpEntityList__carret SharpEntityList__carret--selected"><path d="M10 0L5 5 0 0z"></path></svg> <a href="" class="SharpEntityList__sort-link"></a></div>
+							<div class="SharpEntityList__th col-12 col-md-6">
+								<span>Titre</span>
+								<svg width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd" class="SharpEntityList__carret SharpEntityList__carret--selected">
+									<path d="M10 0L5 5 0 0z"></path>
+								</svg>
+								<a href="" class="SharpEntityList__sort-link"></a>
+							</div>
 						</div>
 					</div>
 					<div class="d-none d-md-block" style="width: 0px;">&nbsp;</div>
@@ -347,12 +398,16 @@ exports[`entity-list can mount "sortable selected" entity list 1`] = `
 								<div class="SharpEntityList__td col-12 col-md-6">
 									Super title
 								</div>
-							</div> <a href="/sharp/form/spaceship/1" class="SharpEntityList__row-link"></a></div>
+							</div>
+							<a href="/sharp/form/spaceship/1" class="SharpEntityList__row-link"></a>
+						</div>
 						<div class="SharpEntityList__row-actions">
 							<!---->
 							<!---->
 						</div>
-						<div class="SharpEntityList__row-actions" style="display: none;"><i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i></div>
+						<div class="SharpEntityList__row-actions" style="display: none;">
+							<i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -373,7 +428,13 @@ exports[`entity-list can mount "sortable" entity list 1`] = `
 				<div class="SharpEntityList__row SharpEntityList__row--header container">
 					<div class="SharpEntityList__cols">
 						<div class="row">
-							<div class="SharpEntityList__th col-12 col-md-6"><span>Titre</span> <svg width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd" class="SharpEntityList__carret"><path d="M10 0L5 5 0 0z"></path></svg> <a href="" class="SharpEntityList__sort-link"></a></div>
+							<div class="SharpEntityList__th col-12 col-md-6">
+								<span>Titre</span>
+								<svg width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd" class="SharpEntityList__carret">
+									<path d="M10 0L5 5 0 0z"></path>
+								</svg>
+								<a href="" class="SharpEntityList__sort-link"></a>
+							</div>
 						</div>
 					</div>
 					<div class="d-none d-md-block" style="width: 0px;">&nbsp;</div>
@@ -387,12 +448,16 @@ exports[`entity-list can mount "sortable" entity list 1`] = `
 								<div class="SharpEntityList__td col-12 col-md-6">
 									Super title
 								</div>
-							</div> <a href="/sharp/form/spaceship/1" class="SharpEntityList__row-link"></a></div>
+							</div>
+							<a href="/sharp/form/spaceship/1" class="SharpEntityList__row-link"></a>
+						</div>
 						<div class="SharpEntityList__row-actions">
 							<!---->
 							<!---->
 						</div>
-						<div class="SharpEntityList__row-actions" style="display: none;"><i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i></div>
+						<div class="SharpEntityList__row-actions" style="display: none;">
+							<i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -413,7 +478,8 @@ exports[`entity-list can mount "with commands" entity list 1`] = `
 				<div class="SharpEntityList__row SharpEntityList__row--header container">
 					<div class="SharpEntityList__cols">
 						<div class="row">
-							<div class="SharpEntityList__th col-12 col-md-6"><span>Titre</span>
+							<div class="SharpEntityList__th col-12 col-md-6">
+								<span>Titre</span>
 								<!---->
 								<!---->
 							</div>
@@ -430,19 +496,25 @@ exports[`entity-list can mount "with commands" entity list 1`] = `
 								<div class="SharpEntityList__td col-12 col-md-6">
 									First title
 								</div>
-							</div> <a href="/sharp/form/spaceship/1" class="SharpEntityList__row-link"></a></div>
+							</div>
+							<a href="/sharp/form/spaceship/1" class="SharpEntityList__row-link"></a>
+						</div>
 						<div class="SharpEntityList__row-actions">
 							<!---->
 							<div class="MOCKED_SHARP_DROPDOWN SharpEntityList__commands-dropdown">
 								<div class="SLOT:text">
-									<div class="SharpEntityList__command-icon"><i class="fa fa-plus"></i></div>
+									<div class="SharpEntityList__command-icon">
+										<i class="fa fa-plus"></i>
+									</div>
 								</div>
 								<div class="MOCKED_SHARP_DROPDOWN_ITEM">
 									Should be visible in first title
 								</div>
 							</div>
 						</div>
-						<div class="SharpEntityList__row-actions" style="display: none;"><i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i></div>
+						<div class="SharpEntityList__row-actions" style="display: none;">
+							<i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i>
+						</div>
 					</div>
 					<div class="SharpEntityList__row container">
 						<div class="SharpEntityList__cols">
@@ -450,19 +522,25 @@ exports[`entity-list can mount "with commands" entity list 1`] = `
 								<div class="SharpEntityList__td col-12 col-md-6">
 									Second title
 								</div>
-							</div> <a href="/sharp/form/spaceship/2" class="SharpEntityList__row-link"></a></div>
+							</div>
+							<a href="/sharp/form/spaceship/2" class="SharpEntityList__row-link"></a>
+						</div>
 						<div class="SharpEntityList__row-actions">
 							<!---->
 							<div class="MOCKED_SHARP_DROPDOWN SharpEntityList__commands-dropdown">
 								<div class="SLOT:text">
-									<div class="SharpEntityList__command-icon"><i class="fa fa-plus"></i></div>
+									<div class="SharpEntityList__command-icon">
+										<i class="fa fa-plus"></i>
+									</div>
 								</div>
 								<div class="MOCKED_SHARP_DROPDOWN_ITEM">
 									Should be visible in second title
 								</div>
 							</div>
 						</div>
-						<div class="SharpEntityList__row-actions" style="display: none;"><i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i></div>
+						<div class="SharpEntityList__row-actions" style="display: none;">
+							<i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i>
+						</div>
 					</div>
 					<div class="SharpEntityList__row container">
 						<div class="SharpEntityList__cols">
@@ -470,16 +548,22 @@ exports[`entity-list can mount "with commands" entity list 1`] = `
 								<div class="SharpEntityList__td col-12 col-md-6">
 									Third title
 								</div>
-							</div> <a href="/sharp/form/spaceship/3" class="SharpEntityList__row-link"></a></div>
+							</div>
+							<a href="/sharp/form/spaceship/3" class="SharpEntityList__row-link"></a>
+						</div>
 						<div class="SharpEntityList__row-actions">
 							<!---->
 							<div class="MOCKED_SHARP_DROPDOWN SharpEntityList__commands-dropdown SharpEntityList__commands-dropdown--placeholder">
 								<div class="SLOT:text">
-									<div class="SharpEntityList__command-icon"><i class="fa fa-plus"></i></div>
+									<div class="SharpEntityList__command-icon">
+										<i class="fa fa-plus"></i>
+									</div>
 								</div>
 							</div>
 						</div>
-						<div class="SharpEntityList__row-actions" style="display: none;"><i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i></div>
+						<div class="SharpEntityList__row-actions" style="display: none;">
+							<i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -500,7 +584,7 @@ exports[`entity-list can mount "with form commands" entity list 1`] = `
 <!--end document part-->
 <!--document part-->
 <div class="MOCKED_SHARP_MODAL">
-	__MOCKED_SFC_SharpForm__
+	<!---->
 </div>
 <!--end document part-->
 `;
@@ -513,7 +597,8 @@ exports[`entity-list can mount "with html" entity list 1`] = `
 				<div class="SharpEntityList__row SharpEntityList__row--header container">
 					<div class="SharpEntityList__cols">
 						<div class="row">
-							<div class="SharpEntityList__th col-12 col-md-6"><span>Titre</span>
+							<div class="SharpEntityList__th col-12 col-md-6">
+								<span>Titre</span>
 								<!---->
 								<!---->
 							</div>
@@ -528,14 +613,20 @@ exports[`entity-list can mount "with html" entity list 1`] = `
 						<div class="SharpEntityList__cols">
 							<div class="row">
 								<div class="SharpEntityList__td col-12 col-md-6">
-									<div class="SharpEntityList__td-html-container"><span>HTML content</span></div>
+									<div class="SharpEntityList__td-html-container">
+										<span>HTML content</span>
+									</div>
 								</div>
-							</div> <a href="/sharp/form/spaceship/1" class="SharpEntityList__row-link"></a></div>
+							</div>
+							<a href="/sharp/form/spaceship/1" class="SharpEntityList__row-link"></a>
+						</div>
 						<div class="SharpEntityList__row-actions">
 							<!---->
 							<!---->
 						</div>
-						<div class="SharpEntityList__row-actions" style="display: none;"><i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i></div>
+						<div class="SharpEntityList__row-actions" style="display: none;">
+							<i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -568,7 +659,8 @@ exports[`entity-list can mount "with state" entity list 1`] = `
 				<div class="SharpEntityList__row SharpEntityList__row--header container">
 					<div class="SharpEntityList__cols">
 						<div class="row">
-							<div class="SharpEntityList__th col-12 col-md-6"><span>Titre</span>
+							<div class="SharpEntityList__th col-12 col-md-6">
+								<span>Titre</span>
 								<!---->
 								<!---->
 							</div>
@@ -585,18 +677,28 @@ exports[`entity-list can mount "with state" entity list 1`] = `
 								<div class="SharpEntityList__td col-12 col-md-6">
 									First title
 								</div>
-							</div> <a href="/sharp/form/spaceship/1" class="SharpEntityList__row-link"></a></div>
+							</div>
+							<a href="/sharp/form/spaceship/1" class="SharpEntityList__row-link"></a>
+						</div>
 						<div class="SharpEntityList__row-actions">
 							<div class="MOCKED_SHARP_DROPDOWN SharpEntityList__state-dropdown">
-								<div class="SLOT:text"><span class="MOCKED_STATE_ICON" style="fill: green; stroke: green;"></span></div>
-								<div class="MOCKED_SHARP_DROPDOWN_ITEM"><span class="MOCKED_STATE_ICON" style="fill: green; stroke: green;"></span> Visible
+								<div class="SLOT:text">
+									<span class="MOCKED_STATE_ICON" style="fill: green; stroke: green;"></span>
 								</div>
-								<div class="MOCKED_SHARP_DROPDOWN_ITEM"><span class="MOCKED_STATE_ICON sharp_grey"></span> Not visible
+								<div class="MOCKED_SHARP_DROPDOWN_ITEM">
+									<span class="MOCKED_STATE_ICON" style="fill: green; stroke: green;"></span>
+									Visible
+								</div>
+								<div class="MOCKED_SHARP_DROPDOWN_ITEM">
+									<span class="MOCKED_STATE_ICON sharp_grey"></span>
+									Not visible
 								</div>
 							</div>
 							<!---->
 						</div>
-						<div class="SharpEntityList__row-actions" style="display: none;"><i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i></div>
+						<div class="SharpEntityList__row-actions" style="display: none;">
+							<i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i>
+						</div>
 					</div>
 					<div class="SharpEntityList__row container">
 						<div class="SharpEntityList__cols">
@@ -604,18 +706,28 @@ exports[`entity-list can mount "with state" entity list 1`] = `
 								<div class="SharpEntityList__td col-12 col-md-6">
 									Second title
 								</div>
-							</div> <a href="/sharp/form/spaceship/2" class="SharpEntityList__row-link"></a></div>
+							</div>
+							<a href="/sharp/form/spaceship/2" class="SharpEntityList__row-link"></a>
+						</div>
 						<div class="SharpEntityList__row-actions">
 							<div class="MOCKED_SHARP_DROPDOWN SharpEntityList__state-dropdown [[ isDisabled ]]">
-								<div class="SLOT:text"><span class="MOCKED_STATE_ICON sharp_grey"></span></div>
-								<div class="MOCKED_SHARP_DROPDOWN_ITEM"><span class="MOCKED_STATE_ICON" style="fill: green; stroke: green;"></span> Visible
+								<div class="SLOT:text">
+									<span class="MOCKED_STATE_ICON sharp_grey"></span>
 								</div>
-								<div class="MOCKED_SHARP_DROPDOWN_ITEM"><span class="MOCKED_STATE_ICON sharp_grey"></span> Not visible
+								<div class="MOCKED_SHARP_DROPDOWN_ITEM">
+									<span class="MOCKED_STATE_ICON" style="fill: green; stroke: green;"></span>
+									Visible
+								</div>
+								<div class="MOCKED_SHARP_DROPDOWN_ITEM">
+									<span class="MOCKED_STATE_ICON sharp_grey"></span>
+									Not visible
 								</div>
 							</div>
 							<!---->
 						</div>
-						<div class="SharpEntityList__row-actions" style="display: none;"><i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i></div>
+						<div class="SharpEntityList__row-actions" style="display: none;">
+							<i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -636,7 +748,8 @@ exports[`entity-list can mount entity list 1`] = `
 				<div class="SharpEntityList__row SharpEntityList__row--header container">
 					<div class="SharpEntityList__cols">
 						<div class="row">
-							<div class="SharpEntityList__th col-12 col-md-6"><span>Titre</span>
+							<div class="SharpEntityList__th col-12 col-md-6">
+								<span>Titre</span>
 								<!---->
 								<!---->
 							</div>
@@ -653,12 +766,16 @@ exports[`entity-list can mount entity list 1`] = `
 								<div class="SharpEntityList__td col-12 col-md-6">
 									Super title
 								</div>
-							</div> <a href="/sharp/form/spaceship/1" class="SharpEntityList__row-link"></a></div>
+							</div>
+							<a href="/sharp/form/spaceship/1" class="SharpEntityList__row-link"></a>
+						</div>
 						<div class="SharpEntityList__row-actions">
 							<!---->
 							<!---->
 						</div>
-						<div class="SharpEntityList__row-actions" style="display: none;"><i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i></div>
+						<div class="SharpEntityList__row-actions" style="display: none;">
+							<i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i>
+						</div>
 					</div>
 				</div>
 			</div>

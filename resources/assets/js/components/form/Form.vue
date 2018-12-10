@@ -1,7 +1,7 @@
 <template>
     <div class="SharpForm">
         <template v-if="ready">
-            <div v-show="hasErrors" class="SharpNotification SharpNotification__inline SharpNotification__inline--error" role="alert">
+            <div v-show="hasErrors" class="SharpNotification SharpNotification--error" role="alert">
                 <div class="SharpNotification__details">
                     <div class="SharpNotification__text-wrapper">
                         <p class="SharpNotification__title">{{ l('form.validation_error.title') }}</p>
@@ -51,10 +51,10 @@
 
     import DynamicView from '../DynamicViewMixin';
 
-    import TabbedLayout from '../TabbedLayout'
-    import Grid from '../Grid';
-    import FieldsLayout from './FieldsLayout.vue';
-    import LocaleSelector from '../LocaleSelector.vue';
+    import SharpTabbedLayout from '../TabbedLayout'
+    import SharpGrid from '../Grid';
+    import SharpFieldsLayout from './FieldsLayout.vue';
+    import SharpLocaleSelector from '../LocaleSelector.vue';
 
     import localize from '../../mixins/localize/form';
 
@@ -67,10 +67,10 @@
         mixins: [ActionEvents, ReadOnlyFields('fields'), Localization, localize('fields')],
 
         components: {
-            [TabbedLayout.name]: TabbedLayout,
-            [FieldsLayout.name]: FieldsLayout,
-            [Grid.name]: Grid,
-            [LocaleSelector.name]: LocaleSelector
+            SharpTabbedLayout,
+            SharpFieldsLayout,
+            SharpGrid,
+            SharpLocaleSelector
         },
 
 
@@ -112,7 +112,7 @@
         },
         computed: {
             apiPath() {
-                let path = `${API_PATH}/form/${this.entityKey}`;
+                let path = `form/${this.entityKey}`;
                 if(this.instanceId) path+=`/${this.instanceId}`;
                 return path;
             },
@@ -131,6 +131,10 @@
             },
             hasErrors() {
                 return Object.keys(this.errors).some(errorKey => !this.errors[errorKey].cleared);
+            },
+
+            baseEntityKey() {
+                return this.entityKey.split(':')[0];
             },
 
             downloadLinkBase() {
@@ -213,19 +217,19 @@
                 });
             },
             redirectToList({ restoreContext=true }={}) {
-                location.href = `/sharp/list/${this.entityKey}${restoreContext?'?restore-context=1':''}`
+                location.href = `/sharp/list/${this.baseEntityKey}${restoreContext?'?restore-context=1':''}`
             },
         },
         actions: {
-            async submit({entityKey, endpoint, dataFormatter=noop }={}) {
+            async submit({ entityKey, endpoint, dataFormatter=noop, postConfig }={}) {
                 if(entityKey && entityKey !== this.entityKey || this.pendingJobs.length) return;
 
                 try {
-                    const { data } = await this.post(endpoint, dataFormatter(this));
+                    const response = await this.post(endpoint, dataFormatter(this), postConfig);
                     if(this.independant) {
-                        this.$emit('submitted', data);
+                        this.$emit('submitted', response);
                     }
-                    else if(data.ok) {
+                    else if(response.data.ok) {
                         this.mainLoading.$emit('show');
                         this.redirectToList();
                     }

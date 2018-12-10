@@ -2,6 +2,7 @@
 
 namespace App\Sharp;
 
+use App\Sharp\Commands\ExportUsersCommand;
 use App\User;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\EntityListQueryParams;
@@ -33,6 +34,7 @@ class UserSharpList extends SharpEntityList
     function buildListConfig()
     {
         $this->setInstanceIdAttribute("id")
+            ->addEntityCommand("export_users", ExportUsersCommand::class)
             ->setDefaultSort("name", "asc");
     }
 

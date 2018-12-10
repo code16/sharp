@@ -3,17 +3,17 @@
 // API routes
 Route::group([
     'prefix' => '/sharp/api',
-    'middleware' => ['sharp_web', 'sharp_api_errors', 'sharp_api_context', 'sharp_locale'],
+    'middleware' => ['sharp_web', 'sharp_api_errors', 'sharp_api_context', 'sharp_api_validation', 'sharp_locale'],
     'namespace' => 'Code16\Sharp\Http\Api'
 ], function() {
 
-    Route::get("/dashboard")
+    Route::get("/dashboard/{dashboardKey}")
         ->name("code16.sharp.api.dashboard")
-        ->uses('DashboardController@index');
+        ->uses('DashboardController@show');
 
     Route::get("/list/{entityKey}")
         ->name("code16.sharp.api.list")
-        ->middleware(['sharp_api_append_list_authorizations', 'sharp_save_list_params'])
+        ->middleware(['sharp_api_append_list_authorizations', 'sharp_api_append_list_multiform', 'sharp_save_list_params', 'sharp_api_append_notifications'])
         ->uses('EntityListController@show');
 
     Route::post("/list/{entityKey}/reorder")
@@ -31,6 +31,14 @@ Route::group([
     Route::post("/list/{entityKey}/command/{commandKey}/{instanceId}")
         ->name("code16.sharp.api.list.command.instance")
         ->uses('Commands\InstanceCommandController@update');
+
+    Route::get("/list/{entityKey}/command/{commandKey}/data")
+        ->name("code16.sharp.api.list.command.entity.data")
+        ->uses('Commands\EntityCommandController@show');
+
+    Route::get("/list/{entityKey}/command/{commandKey}/{instanceId}/data")
+        ->name("code16.sharp.api.list.command.instance.data")
+        ->uses('Commands\InstanceCommandController@show');
 
     Route::get("/form/{entityKey}")
         ->name("code16.sharp.api.form.create")
@@ -78,8 +86,8 @@ Route::group([
         ->uses('LoginController@store');
 
     Route::get('/')
-        ->name("code16.sharp.dashboard")
-        ->uses('DashboardController@index');
+        ->name("code16.sharp.home")
+        ->uses('HomeController@index');
 
     Route::get('/logout')
         ->name("code16.sharp.logout")
@@ -97,6 +105,10 @@ Route::group([
     Route::get('/form/{entityKey}')
         ->name("code16.sharp.create")
         ->uses('FormController@create');
+
+    Route::get('/dashboard/{dashboardKey}')
+        ->name("code16.sharp.dashboard")
+        ->uses('DashboardController@show');
 
     Route::post('/api/upload')
         ->name("code16.sharp.api.form.upload")

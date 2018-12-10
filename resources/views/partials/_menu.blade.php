@@ -1,8 +1,10 @@
-<sharp-left-nav v-cloak current="{{ $entityKey ?? ($dashboard ? 'dashboard' : '') }}" :categories="{{ json_encode($sharpMenu->categories) }}">
+<sharp-left-nav v-cloak
+    current="{{ $sharpMenu->currentEntity }}"
+    :items="{{ json_encode($sharpMenu->menuItems) }}"
+>
     <div class="SharpLeftNav__title-container">
         <h2 class="SharpLeftNav__title">{{ $sharpMenu->name }}</h2>
     </div>
-
     <div class="SharpLeftNav__shadow"></div>
 
     <ul role="menubar" class="SharpLeftNav__list" aria-hidden="false" v-cloak>
@@ -10,34 +12,25 @@
             <span title="{{ $sharpMenu->user }}">
                 {{ $sharpMenu->user }}
             </span>
-            <a href="{{ route('code16.sharp.logout') }}"><i class="fa fa-sign-out"></i></a>
+            <a href="{{ route('code16.sharp.logout') }}"> <sharp-item-visual :item="{ icon:'fa-sign-out' }" icon-class="fa-fw"></sharp-item-visual></a>
         </sharp-nav-item>
 
-        @if($sharpMenu->dashboard)
-            <sharp-nav-item :current="{{ json_encode($dashboard ?? false) }}" link="{{ route('code16.sharp.dashboard') }}">
-                <span>
-                    <i class="fa fa-fw fa-dashboard"></i>
-                    @lang('sharp::menu.dashboard')
-                </span>
-            </sharp-nav-item>
-        @endif
-
-        @foreach($sharpMenu->categories as $category)
-            <sharp-collapsible-item label="{{ $category->label }}">
-
-                @foreach($category->entities as $entity)
-                    <sharp-nav-item :current="{{ json_encode(($entityKey??false)==$entity->key) }}"
-                                    link="{{ route('code16.sharp.list', $entity->key) }}">
-                        <span>
-                            @if($entity->icon)
-                                <i class="fa fa-fw {{ $entity->icon }}"></i>
-                            @endif
-                            {{ $entity->label }}
-                        </span>
-                    </sharp-nav-item>
-                @endforeach
-
-            </sharp-collapsible-item>
+        @foreach($sharpMenu->menuItems as $menuItem)
+            @if($menuItem->type == 'category')
+                <sharp-collapsible-item label="{{ $menuItem->label }}">
+                    @foreach($menuItem->entities as $entity)
+                        @include('sharp::partials._menu-item', [
+                            'item' => $entity,
+                            'isCurrent' => $sharpMenu->currentEntity == $entity->key
+                        ])
+                    @endforeach
+                </sharp-collapsible-item>
+            @else
+                @include('sharp::partials._menu-item', [
+                    'item' => $menuItem,
+                    'isCurrent' => $sharpMenu->currentEntity == $menuItem->key
+                ])
+            @endif
         @endforeach
     </ul>
 </sharp-left-nav>

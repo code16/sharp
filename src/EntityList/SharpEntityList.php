@@ -7,7 +7,7 @@ use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\Layout\EntityListLayoutColumn;
 use Code16\Sharp\EntityList\Traits\HandleCommands;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
-use Code16\Sharp\EntityList\Traits\HandleFilters;
+use Code16\Sharp\Utils\Filters\HandleFilters;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -30,6 +30,12 @@ abstract class SharpEntityList
 
     /** @var string */
     protected $instanceIdAttribute = "id";
+
+    /** @var string */
+    protected $multiformAttribute = null;
+
+    /** @var array */
+    protected $multiformEntityKeys = [];
 
     /** @var string */
     protected $displayMode = "list";
@@ -91,14 +97,18 @@ abstract class SharpEntityList
         $items = $items ?: $this->getListData(
             EntityListQueryParams::create()
                 ->setDefaultSort($this->defaultSort, $this->defaultSortDir)
-                ->setDefaultFilters(
-                    collect($this->filterHandlers)->filter(function($handler) {
-                        return $handler instanceof EntityListRequiredFilter;
-                    })->map(function($handler, $attribute) {
-                        return ["name" => $attribute, "value" => $handler->defaultValue()];
-                    })->pluck("value", "name")->all()
-                )
                 ->fillWithRequest()
+                ->setDefaultFilters(
+                    collect($this->filterHandlers)
+                        ->filter(function($handler, $attribute) {
+                            return !request()->has("filter_$attribute")
+                                && $handler instanceof EntityListRequiredFilter;
+
+                        })->map(function($handler, $attribute) {
+                            return ["name" => $attribute, "value" => $handler->defaultValue()];
+
+                        })->pluck("value", "name")->all()
+                )
         );
 
         if($items instanceof LengthAwarePaginator) {
@@ -120,6 +130,7 @@ abstract class SharpEntityList
                         return collect($row)->only(
                             array_merge(
                                 $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
+                                $this->multiformAttribute ? [$this->multiformAttribute] : [],
                                 [$this->instanceIdAttribute],
                                 $keys
                             )
@@ -137,6 +148,7 @@ abstract class SharpEntityList
     {
         $config = [
             "instanceIdAttribute" => $this->instanceIdAttribute,
+            "multiformAttribute" => $this->multiformAttribute,
             "displayMode" => $this->displayMode,
             "searchable" => $this->searchable,
             "paginated" => $this->paginated,
@@ -225,6 +237,17 @@ abstract class SharpEntityList
     public function setPaginated(bool $paginated = true)
     {
         $this->paginated = $paginated;
+
+        return $this;
+    }
+
+    /**
+     * @param string $attribute
+     * @return $this
+     */
+    protected function setMultiformAttribute(string $attribute)
+    {
+        $this->multiformAttribute = $attribute;
 
         return $this;
     }

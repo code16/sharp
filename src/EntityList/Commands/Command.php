@@ -2,9 +2,9 @@
 
 namespace Code16\Sharp\EntityList\Commands;
 
-use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\HandleFormFields;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
@@ -18,7 +18,7 @@ use Illuminate\Validation\ValidationException;
  */
 abstract class Command
 {
-    use HandleFormFields;
+    use HandleFormFields, WithCustomTransformers;
 
     /**
      * @param string $message
@@ -29,6 +29,18 @@ abstract class Command
         return [
             "action" => "info",
             "message" => $message
+        ];
+    }
+
+    /**
+     * @param string $link
+     * @return array
+     */
+    protected function link(string $link)
+    {
+        return [
+            "action" => "link",
+            "link" => $link
         ];
     }
 
@@ -58,12 +70,29 @@ abstract class Command
      * @param string $bladeView
      * @param array $params
      * @return array
+     * @throws \Throwable
      */
     protected function view(string $bladeView, array $params = [])
     {
         return [
             "action" => "view",
             "html" => view($bladeView, $params)->render()
+        ];
+    }
+
+    /**
+     * @param string $filePath
+     * @param null $fileName
+     * @param string|null $diskName
+     * @return array
+     */
+    protected function download(string $filePath, $fileName = null, $diskName = null)
+    {
+        return [
+            "action" => "download",
+            "file" => $filePath,
+            "disk" => $diskName,
+            "name" => $fileName
         ];
     }
 

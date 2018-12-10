@@ -1,5 +1,5 @@
 <template>
-    <article class="SharpWidget SharpCard" :class="{'SharpWidget--chart':widgetType=='graph', 'SharpWidget--link':hasLink}">
+    <article class="SharpWidget SharpCard" :class="{'SharpWidget--chart':widgetType==='graph', 'SharpWidget--link':hasLink}">
         <component :is="hasLink ? 'a' : 'div'" :href="widgetProps.link" :class="{SharpWidget__link:hasLink}">
             <div class="SharpCard__overview">
                 <div class="SharpCard__overview-about">
@@ -10,21 +10,20 @@
     </article>
 </template>
 <script>
-    import Widgets, { NameAssociation as widgetCompName } from './widgets/index';
+    import { widgetByType } from './widgets/index';
 
     export default {
         name:'SharpWidget',
-        components:Widgets,
 
         props: {
-            widgetType:String,
-            widgetProps:Object,
-            value:Object
+            widgetType: String,
+            widgetProps: Object,
+            value: Object
         },
 
         computed: {
             widgetComp() {
-                return widgetCompName[this.widgetType]
+                return widgetByType(this.widgetType);
             },
             exposedProps() {
                 return { ...this.widgetProps, value:this.value }

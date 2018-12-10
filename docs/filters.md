@@ -7,7 +7,7 @@ Entity List Filters are a simple way for the user to filter list items on some a
 
 First, we need to write a class which implements the `Code16\Sharp\EntityList\EntityListFilter` interface, and therefore declare a `values()` function. This function must return an ["id" => "label"] array. For instance, with Eloquent:
 
-    class SpaceshipTypeFilter implements EntityListRequiredFilter
+    class SpaceshipTypeFilter implements EntityListFilter
     {
         public function values()
         {
@@ -92,6 +92,70 @@ To use a custom label for the filter, simply add a `label()` function that retur
     public function label() 
     {
         return "My label";
+    }
+
+## Filter search
+
+If you need to add a search textfield on top of your filter list, it's as simple as defining this function:
+
+    public function isSearchable()
+    {
+        return true;
+    }
+
+## Filter template
+
+Sometimes you need your filter results to be a little more than a label. For this, use a template; first define a `template()` function in the Filter's class:
+
+    public function template()
+    {
+        return "{{label}}<br><small>{{detail}}</small>";
+    }
+
+You can also, for more control, return a view here.
+
+The template will be [interpreted by Vue.js](https://vuejs.org/v2/guide/syntax.html), meaning you can add data placeholders, DOM structure but also directives, and anything that Vue will parse. It's the same as [Autocomplete's templates](form-fields/autocomplete.md).
+
+You'll need also to change your `values()` function, returning more than an ["id"=>"value"] array. For instance:
+
+    public function values()
+    {
+        return SpaceshipType::orderBy("label")
+            ->get()
+            ->map(function($type) {
+              return [
+			    "id" => $type->id,
+			    "label" => $type=>label,
+			    "detail" => $type->detail_text
+              ];
+            });
+    }
+
+Note that **the label attribute is mandatory**: it is used for the result display of the filter.
+
+Finally, if your filter is also searchable, you'll need a `searchKeys()` function to define which attributes should be searched in the template:
+
+    public function searchKeys(): array
+    {
+        return ["label", "detail"];
+    }
+
+
+## Filter set callback
+
+The third and optional `addFilter` argument is a Closure, used as a set value callback.
+
+    $this->addFilter("pilots", PilotFilter::class, function($value, EntityListQueryParams $params) {
+        // Filter was set to $value. Do stuff, like putting a value in session.
+    });
+
+## Master filter
+
+In some cases (like linked filters, for instance: the second filter values depends on the first one), you want to ensure that selecting a filter value will reset all other filters. It's called: "master", and you only need to add a `isMaster()` function in your Filter handler:
+
+    public function isMaster(): bool
+    {
+        return true;
     }
 
 

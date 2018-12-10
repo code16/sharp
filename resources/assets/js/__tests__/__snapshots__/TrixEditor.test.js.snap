@@ -2,9 +2,10 @@
 
 exports[`trix-editor can mount "read only" TrixEditor 1`] = `
 <div class="SharpTrix SharpTrix--read-only">
-	<div class="SharpModule__inner"><input id="trix-input-WYSIWYG_TEST" type="hidden">
+	<div class="SharpModule__inner">
+		<input id="trix-input-WYSIWYG_TEST" type="hidden">
 		<trix-toolbar id="trix-toolbar-WYSIWYG_TEST" class="SharpModule__header">
-			<!---->
+			<trixcustomtoolbar-stub toolbar="bold,italic,|,link"></trixcustomtoolbar-stub>
 		</trix-toolbar>
 		<trix-editor contenteditable="" input="trix-input-WYSIWYG_TEST" toolbar="trix-toolbar-WYSIWYG_TEST" placeholder="placeholder" class="SharpModule__content" style="height: 199px; max-height: 199px;"></trix-editor>
 	</div>
@@ -13,9 +14,10 @@ exports[`trix-editor can mount "read only" TrixEditor 1`] = `
 
 exports[`trix-editor can mount TrixEditor 1`] = `
 <div class="SharpTrix">
-	<div class="SharpModule__inner"><input id="trix-input-WYSIWYG_TEST" type="hidden">
+	<div class="SharpModule__inner">
+		<input id="trix-input-WYSIWYG_TEST" type="hidden">
 		<trix-toolbar id="trix-toolbar-WYSIWYG_TEST" class="SharpModule__header">
-			<!---->
+			<trixcustomtoolbar-stub toolbar="bold,italic,|,link"></trixcustomtoolbar-stub>
 		</trix-toolbar>
 		<trix-editor contenteditable="" input="trix-input-WYSIWYG_TEST" toolbar="trix-toolbar-WYSIWYG_TEST" placeholder="placeholder" class="SharpModule__content" style="height: 199px; max-height: 199px;"></trix-editor>
 	</div>

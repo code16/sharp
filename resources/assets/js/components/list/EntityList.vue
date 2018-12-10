@@ -73,7 +73,7 @@
                 </div>
             </div>
             <div class="SharpEntityList__pagination-container">
-                <sharp-pagination v-if="data.totalCount/data.pageSize > 1."
+                <sharp-pagination v-if="data.totalCount/data.pageSize > 1. && config.paginated"
                                   class="SharpPagination"
                                   :total-rows="data.totalCount"
                                   :per-page="data.pageSize"
@@ -83,17 +83,23 @@
                                   @change="pageChanged">
                 </sharp-pagination>
             </div>
-            <sharp-modal v-for="form in commandForms"
-                         v-model="showFormModal[form.key]"
-                         :key="form.key"
-                         @ok="postCommandForm(form.key, $event)"
-                         @hidden="onCommandFormModalHidden(form.key)" ref="formModal">
-                <sharp-form :props="form"
-                            :entity-key="form.key"
-                            independant
-                            ignore-authorizations
-                            @submitted="commandFormSubmitted(form.key, $event)">
-                </sharp-form>
+            <sharp-modal
+                v-for="form in commandForms"
+                :visible.sync="showFormModal[form.key]"
+                @ok="postCommandForm(form.key, $event)"
+                :key="form.key"
+            >
+                <transition>
+                    <sharp-form
+                        v-if="showFormModal[form.key]"
+                        :props="formInitialProps(form)"
+                        :entity-key="form.key"
+                        independant
+                        ignore-authorizations
+                        style="transition-duration: 300ms"
+                        @submitted="commandFormSubmitted(form.key, $event)"
+                    />
+                </transition>
             </sharp-modal>
             <sharp-view-panel v-model="showViewPanel" :content="viewPanelContent"></sharp-view-panel>
         </template>
@@ -101,15 +107,14 @@
 </template>
 
 <script>
-    import Vue from 'vue';
     import DynamicView from '../DynamicViewMixin';
-    import Pagination from './Pagination';
-    import Dropdown from '../dropdown/Dropdown';
-    import DropdownItem from '../dropdown/DropdownItem';
-    import Modal from '../Modal';
-    import Form from '../form/Form';
-    import ViewPanel from './ViewPanel';
-    import StateIcon from './StateIcon';
+    import SharpPagination from './Pagination';
+    import SharpDropdown from '../dropdown/Dropdown';
+    import SharpDropdownItem from '../dropdown/DropdownItem';
+    import SharpModal from '../Modal';
+    import SharpForm from '../form/Form';
+    import SharpViewPanel from './ViewPanel';
+    import SharpStateIcon from './StateIcon';
 
     import Draggable from 'vuedraggable';
 
@@ -119,6 +124,7 @@
     import { ActionEvents, Localization } from '../../mixins';
 
     import * as qs from '../../helpers/querystring';
+    import { parseBlobJSONContent, getFileName } from "../../util";
 
 
     export default {
@@ -126,6 +132,7 @@
         extends: DynamicView,
 
         inject: [
+            'axiosInstance',
             'actionsBus',
             'params' // querystring params as an object
         ],
@@ -133,13 +140,13 @@
         mixins: [ ActionEvents, Localization ],
 
         components: {
-            [Pagination.name]: Pagination,
-            [Dropdown.name]: Dropdown,
-            [DropdownItem.name]: DropdownItem,
-            [Modal.name]: Modal,
-            [Form.name]: Form,
-            [ViewPanel.name]: ViewPanel,
-            [StateIcon.name]: StateIcon,
+            SharpPagination,
+            SharpDropdown,
+            SharpDropdownItem,
+            SharpModal,
+            SharpForm,
+            SharpViewPanel,
+            SharpStateIcon,
             Draggable
         },
 
@@ -155,6 +162,7 @@
                 containers: null,
                 config: null,
                 authorizations: null,
+                forms: null,
 
                 page: 0,
                 search: '',
@@ -166,6 +174,7 @@
                 reorderedItems: [],
                 filtersValue: {},
                 showFormModal: {},
+                currentFormData: {},
                 selectedInstance: null,
                 showViewPanel: false,
                 viewPanelContent: null,
@@ -194,7 +203,7 @@
             },
 
             apiPath() {
-                return `${API_PATH}/list/${this.entityKey}`;
+                return `list/${this.entityKey}`;
             },
             apiParams() {
                 if(!this.ready) {
@@ -272,6 +281,16 @@
                     return res;
                 }, {}) : {};
             },
+            multiforms() {
+                return Object.values(this.forms);
+            },
+            multiformKeyByInstanceId() {
+                return this.data.items.reduce((res,{[this.idAttr]:id})=>{
+                    let multiform = this.multiforms.find(form => form.instances.includes(id)) || {};
+                    res[id] = multiform.key;
+                    return res;
+                }, {})
+            },
             noInstanceCommands() {
                 return !Object.keys(this.commandsByInstanceId).length;
             },
@@ -286,12 +305,13 @@
             /**
              * Initialization
              */
-            mount({ containers, layout, data={}, config={}, authorizations }) {
+            mount({ containers, layout, data={}, config={}, authorizations, forms }) {
                 this.containers = containers;
                 this.layout = layout;
                 this.data = data;
                 this.config = config;
                 this.authorizations = authorizations;
+                this.forms = forms;
 
                 this.config.commands = config.commands || [];
                 this.config.filters = config.filters || [];
@@ -328,7 +348,8 @@
                     commands: this.config.commands.filter(c=>c.authorization && c.type==='entity'),
                     showCreateButton:this.authorizations.create,
                     searchable: this.config.searchable,
-                    showReorderButton: this.config.reorderable && this.authorizations.update && this.data.items.length>1
+                    showReorderButton: this.config.reorderable && this.authorizations.update && this.data.items.length>1,
+                    forms: this.forms
                 });
             },
 
@@ -373,7 +394,7 @@
                 return isNaN(Number(n)) ? val : n;
             },
             filterValueOrDefault(val, filter) {
-                return val ? this.tryParseNumber(val) : (filter.default || (filter.multiple?[]:null));
+                return val != null && val !== '' ? this.tryParseNumber(val) : (filter.default || (filter.multiple?[]:null));
             },
             instanceCommands({[this.idAttr]:instanceId}) {
                 return this.commandsByInstanceId[instanceId]// || [];
@@ -382,12 +403,25 @@
                 return this.authorizationsByInstanceId[instanceId].view;
             },
             rowLink({[this.idAttr]:instanceId}) {
-                return `/sharp/form/${this.entityKey}/${instanceId}`;
+                let multiformKey;
+                if(this.forms) {
+                    multiformKey = this.multiformKeyByInstanceId[instanceId];
+                }
+                return `${this.formEndpoint(multiformKey)}/${instanceId}`;
             },
             getAuthorizations({ type, id }) {
                 return typeof this.authorizations[type] === 'boolean'
                     ? this.authorizations[type]
                     : this.authorizations[type].indexOf(id) !== -1;
+            },
+            formEndpoint(multiformKey) {
+                return `/sharp/form/${this.entityKey}${multiformKey ? `:${multiformKey}` : ''}`
+            },
+            formInitialProps(form) {
+                return {
+                    ...form,
+                    data: this.currentFormData
+                }
             },
 
             /**
@@ -438,8 +472,9 @@
                 this.updateHistory();
             },
             updateData() {
-                this.get().then(({data:{ data }})=>{
+                this.get().then(({data:{ data, config }})=>{
                     this.data = data;
+                    this.config = config;
                     this.setupActionBar();
                 });
             },
@@ -450,14 +485,19 @@
             commandEndpoint(key, { [this.idAttr]:instanceId }={}) {
                 return `${this.apiPath}/command/${key}${instanceId?`/${instanceId}`:''}`;
             },
-
+            getCommandFormData(commandKey, instance) {
+                return this.axiosInstance.get(`${this.commandEndpoint(commandKey, instance)}/data`, {
+                    params: this.apiParams
+                }).then(response => response.data.data)
+            },
 
             /* (Command, Instance)
              * Display a form in a modal if the command require a form, else send API request
              */
-            async sendCommand({ key, form, confirmation }, instance) {
+            async sendCommand({ key, form, confirmation, fetch_initial_data }, instance) {
                 if(form) {
                     this.selectedInstance = instance;
+                    this.currentFormData = fetch_initial_data ? await this.getCommandFormData(key, instance) : {};
                     this.$set(this.showFormModal,key,true);
                     return;
                 }
@@ -470,27 +510,41 @@
                         });
                     });
                 }
-                let { data } = await this.axiosInstance.post(this.commandEndpoint(key, instance), { query: this.apiParams });
-                this.handleCommandResponse(data);
+                try {
+                    let endpoint = this.commandEndpoint(key, instance);
+                    let response = await this.axiosInstance.post(endpoint, { query: this.apiParams }, { responseType: 'blob' });
+                    await this.handleCommandResponse(response);
+                } catch(e) {
+                    console.error(e);
+                }
             },
 
             /* (CommandAPIResponse)
             * Execute the required command action
             */
-            handleCommandResponse({action, items, message, html}) {
-                //debugger;
-                if(action === 'refresh') this.actionRefresh(items);
-                else if(action === 'reload') this.actionReload();
-                else if(action === 'info') {
-                    this.actionsBus.$emit('showMainModal', {
-                        title: this.l('modals.command.info.title'),
-                        text: message,
-                        okCloseOnly: true
-                    });
-                }
-                else if(action === 'view') {
-                    this.showViewPanel = true;
-                    this.viewPanelContent = html;
+            async handleCommandResponse(response) {
+                if(response.data.type === 'application/json') {
+                    const data = await parseBlobJSONContent(response.data);
+                    const { action, items, message, html, link } = data;
+
+                    if(action === 'refresh') this.actionRefresh(items);
+                    else if(action === 'reload') this.actionReload();
+                    else if(action === 'info') {
+                        this.actionsBus.$emit('showMainModal', {
+                            title: this.l('modals.command.info.title'),
+                            text: message,
+                            okCloseOnly: true
+                        });
+                    }
+                    else if(action === 'view') {
+                        this.showViewPanel = true;
+                        this.viewPanelContent = html;
+                    }
+                    else if(action === 'link') {
+                        window.location.href = link;
+                    }
+                } else {
+                    this.actionDownload(response);
                 }
             },
 
@@ -501,24 +555,23 @@
                 this.actionsBus.$emit('submit', {
                     entityKey: key,
                     endpoint: this.commandEndpoint(key, this.selectedInstance || {}),
-                    dataFormatter:form=>({ query:this.apiParams, data:form.data })
+                    dataFormatter: form=>({ query:this.apiParams, data:form.data }),
+                    postConfig: {
+                        responseType: 'blob'
+                    }
                 });
-                event.cancel();
+                event.preventDefault();
                 this.$set(this.showFormModal,key,true);
             },
 
             /* (CommandKey, FormData)
             * Hide the current form modal after data correctly sent, handle actions
             */
-            async commandFormSubmitted(key, data) {
+            async commandFormSubmitted(key, response) {
                 this.selectedInstance = null;
-                this.handleCommandResponse(data);
+                await this.handleCommandResponse(response);
                 await this.$nextTick();
                 this.$set(this.showFormModal,key, false);
-            },
-
-            onCommandFormModalHidden(key) {
-                this.actionsBus.$emit('reset', { entityKey: key });
             },
 
             /**
@@ -528,7 +581,14 @@
                 this.updateData();
             },
             actionRefresh(items) {
-                items.forEach(item => this.$set(this.data.items,this.indexByInstanceId[item[this.idAttr]],item))
+                items.forEach(item => this.$set(this.data.items, this.indexByInstanceId[item[this.idAttr]],item))
+            },
+            actionDownload({ data:blob, headers }) {
+                let $link = document.createElement('a');
+                this.$el.appendChild($link);
+                $link.href = URL.createObjectURL(blob);
+                $link.download = getFileName(headers);
+                $link.click();
             },
 
             /**
@@ -574,12 +634,17 @@
                 }
             },
             filterChanged(key, value) {
+                if(this.filterByKey[key].master) {
+                    this.filtersValue = Object.keys(this.filtersValue).reduce((res,key)=>({
+                        ...res, [key]:null
+                    }), {});
+                }
                 this.filtersValue[key] = value;
                 this.update();
             },
             command: 'sendCommand',
-            create() {
-                location.href=`/sharp/form/${this.entityKey}`;
+            create(form) {
+                location.href=this.formEndpoint(form && form.key);
             },
             toggleReorder({ apply }={}) {
                 if(apply) {

@@ -23,11 +23,13 @@ This `tmp_dir` path is relative to the `local` filesystem defined in the Laravel
 
 Max file size allowed. 
 
-### `setCropRatio(string $ratio)`
+### `setCropRatio(string $ratio, array $croppableFileTypes = null)`
 
 Set a ratio constraint to uploaded images, formatted like this: `width:height`. For instance: `16:9`, or `1:1`.
 
 When a crop ratio is set, any uploaded picture will be auto-cropped (centered).
+
+The second argument, `$croppableFileTypes`, provide a way to limit the crop configuration to a list of image files extensions. For instance, it can be useful to define a crop for jpg and png, but not for gif because it will destroy animation.
 
 ### `setStorageDisk(string $storageDisk)`
 

@@ -15,26 +15,30 @@ function sharp_version()
  */
 function sharp_page_title($sharpMenu, $entityKey)
 {
-    if(!$sharpMenu) {
-        $title = "Login";
+    $title = trans('sharp::login.login_page_title');
 
-    } else {
-        $entityLabel = $sharpMenu->dashboard
-            ? trans('sharp::menu.dashboard')
-            : "";
+    if ($sharpMenu) {
+        $entityLabel = "";
 
-        if ($entityKey) {
-            foreach ($sharpMenu->categories as $category) {
-                foreach ($category->entities as $entity) {
-                    if ($entity->key == $entityKey) {
-                        $entityLabel = $entity->label;
-                        break 2;
-                    }
-                }
+        foreach ($sharpMenu->menuItems as $menuItem) {
+            if ($menuItem->type == 'category') {
+                $entityLabel = collect($menuItem->entities)
+                    ->where("key", $entityKey)
+                    ->first()
+                    ->label ?? "";
+
+            } elseif ($menuItem->type == 'entity' && $menuItem->key == $entityKey) {
+                $entityLabel = $menuItem->label;
+            }
+
+            if ($entityLabel) {
+                break;
             }
         }
 
-        $title = $sharpMenu->name . ', ' .$entityLabel;
+        $title = $sharpMenu->name
+            . ', '
+            . $entityLabel;
     }
 
     return  "$title | Sharp " . sharp_version();
@@ -104,4 +108,36 @@ function sharp_markdown_thumbnails(string $html, string $classNames, int $width 
     }
 
     return $html;
+}
+
+/**
+ * Include <script> tag for sharp plugins if available.
+ *
+ * @return string
+ */
+function sharp_custom_form_fields()
+{
+    if(config("sharp.extensions.activate_custom_form_fields", false)) {
+        try {
+            return "<script src='" . mix('/js/sharp-plugin.js') . "'></script>";
+        } catch (\Exception $forget) {}
+    }
+
+    return "";
+}
+
+/**
+ * Return true if current Laravel installation is newer than
+ * given version (ex: 5.6).
+ *
+ * @param string $version
+ * @return bool
+ */
+function sharp_laravel_version_gte($version)
+{
+    list($major, $minor) = explode(".", $version);
+    list($laravelMajor, $laravelMinor, $bugfix) = explode(".", app()::VERSION);
+
+    return $laravelMajor > $major
+        || ($laravelMajor == $major && $laravelMinor >= $minor);
 }

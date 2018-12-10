@@ -12,22 +12,29 @@
                 </svg>
             </button>
         </div>
-        <multiselect v-if="state!=='valuated'"
-                     class="SharpAutocomplete__multiselect"
-                     :class="{'SharpAutocomplete__multiselect--hide-dropdown':hideDropdown}"
-                     :value="value"
-                     :options="suggestions"
-                     :track-by="itemIdAttribute"
-                     :internal-search="false"
-                     :placeholder="placeholder"
-                     :loading="isLoading"
-                     :disabled="readOnly"
-                     preserve-search
-                     @search-change="updateSuggestions($event)"
-                     @select="handleSelect"
-                     @close="handleDropdownClose"
-                     @open="opened=true"
-                     ref="multiselect">
+        <multiselect
+            v-if="state!=='valuated'"
+            class="SharpAutocomplete__multiselect"
+            :class="{'SharpAutocomplete__multiselect--hide-dropdown':hideDropdown}"
+            :value="value"
+            :options="suggestions"
+            :track-by="itemIdAttribute"
+            :internal-search="false"
+            :placeholder="placeholder"
+            :loading="isLoading"
+            :multiple="multiple"
+            :disabled="readOnly"
+            :hide-selected="hideSelected"
+            :allow-empty="allowEmpty"
+            :preserve-search="preserveSearch"
+            :show-pointer="showPointer"
+            @search-change="updateSuggestions($event)"
+            @select="handleSelect"
+            @input="$emit('multiselect-input',$event)"
+            @close="handleDropdownClose"
+            @open="handleDropdownOpen"
+            ref="multiselect"
+        >
             <template slot="option" slot-scope="props">
                 <sharp-template name="ListItem" :template="listItemTemplate" :template-data="localizedTemplateData(props.option)"></sharp-template>
             </template>
@@ -40,8 +47,8 @@
 </template>
 
 <script>
-    import Template from '../../Template.vue';
-    import Loading from '../../ui/Loading.vue';
+    import SharpTemplate from '../../Template.vue';
+    import SharpLoading from '../../ui/Loading.vue';
     import Multiselect from 'vue-multiselect';
 
     import SearchStrategy from '../../../app/models/SearchStrategy';
@@ -58,8 +65,8 @@
         name:'SharpAutocomplete',
         components: {
             Multiselect,
-            [Template.name]:Template,
-            [Loading.name]: Loading
+            SharpTemplate,
+            SharpLoading
         },
 
         mixins: [Localization, Debounce, localize],
@@ -67,7 +74,7 @@
         props: {
             fieldKey: String,
 
-            value: [String, Number, Object],
+            value: [String, Number, Object, Array],
 
             mode: String,
             localValues: {
@@ -99,6 +106,22 @@
             readOnly: Boolean,
             listItemTemplate: String,
             resultItemTemplate: String,
+            noResultItem: Boolean,
+            multiple: Boolean,
+            hideSelected: Boolean,
+            allowEmpty: {
+                type: Boolean,
+                default: true
+            },
+            clearOnSelect: Boolean,
+            preserveSearch: {
+                type: Boolean,
+                default: true
+            },
+            showPointer: {
+                type:Boolean,
+                default:true
+            }
         },
         data() {
             return {
@@ -109,9 +132,12 @@
             }
         },
         watch: {
+            localValues() {
+                this.updateLocalSuggestions({ keepState:true });
+            },
             locale() {
                 this.initState();
-            }
+            },
         },
         computed: {
             isRemote() {
@@ -152,9 +178,11 @@
                 else this.updateLocalSuggestions();
             },
 
-            updateLocalSuggestions() {
+            updateLocalSuggestions({ keepState }={}) {
                 this.suggestions = this.searchStrategy.search(this.query);
-                this.state = 'searching';
+                if(!keepState) {
+                    this.state = 'searching';
+                }
             },
             initState() {
                 this.state = this.value ? 'valuated' : 'initial';
@@ -167,6 +195,11 @@
                 if(this.state === 'searching')
                     this.state = 'initial';
                 this.opened = false;
+                this.$emit('close');
+            },
+            handleDropdownOpen() {
+                this.opened = true;
+                this.$emit('open');
             },
             handleResetClick() {
                 this.state = 'initial';
@@ -210,6 +243,9 @@
 
             if(!this.isRemote) {
                 this.$emit('input', this.findLocalValue(), { force: true });
+            }
+            if(this.noResultItem) {
+                Object.defineProperty(this, 'state', { get:()=>'initial' });
             }
             await this.$nextTick();
             this.initState();

@@ -3,11 +3,10 @@
 namespace Code16\Sharp\Form;
 
 use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
-use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
+use Code16\Sharp\Utils\SharpNotification;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
-use Illuminate\Database\Eloquent\Model;
 
 abstract class SharpForm
 {
@@ -176,6 +175,7 @@ abstract class SharpForm
 
     /**
      * @param $data
+     * @throws SharpFormUpdateException
      */
     public function storeInstance($data)
     {
@@ -211,6 +211,17 @@ abstract class SharpForm
                 return $this->attributes;
             }
         });
+    }
+
+    /**
+     * Display a notification next time entity list is shown.
+     *
+     * @param string $title
+     * @return SharpNotification
+     */
+    public function notify(string $title): SharpNotification
+    {
+        return (new SharpNotification($title));
     }
 
     /**

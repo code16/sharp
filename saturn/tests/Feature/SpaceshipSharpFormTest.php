@@ -26,7 +26,7 @@ class SpaceshipSharpFormTest extends TestCase
     {
         $this->loginAsSharpUser(factory(User::class)->create(["group" => "sharp"]));
 
-        $spaceship = factory(Spaceship::class)->create();
+        $spaceship = factory(Spaceship::class)->create(["id" => 2]);
 
         $this->getSharpForm("spaceship", $spaceship->id)
             ->assertSharpFormHasFieldOfType("name", SharpFormTextField::class)
@@ -67,7 +67,7 @@ class SpaceshipSharpFormTest extends TestCase
     {
         $this->loginAsSharpUser(factory(User::class)->create(["group" => "sharp"]));
 
-        $spaceship = factory(Spaceship::class)->create(["id"=>1]);
+        $spaceship = factory(Spaceship::class)->create(["id"=>11]);
 
         $this->getSharpForm("spaceship", $spaceship->id)
             ->assertSharpHasNotAuthorization("update");

@@ -136,7 +136,7 @@ class MarkdownFormatter extends SharpFieldFormatter
 
             return Storage::disk($disk)->size($filename);
 
-        } catch(\RuntimeException $ex) {
+        } catch(\Exception $ex) {
             return null;
         }
     }

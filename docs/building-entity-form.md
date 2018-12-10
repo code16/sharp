@@ -257,6 +257,32 @@ The message will be displayed to the user.
 
 This is important for some cases (when a field formatter needs to de delayed): this method should return the id of the updated or stored instance.
 
+#### Display notifications
+
+Sometimes you'll want to display a message to the user, after a creation or an update. Sharp way to do this is to call `->notify()` in the Form code:
+
+    function update($id, array $data)
+    {
+        $instance = $id ? Spaceship::findOrFail($id) : new Spaceship;
+
+        $this->save($instance, $data);
+
+        $this->notify("Spaceship was indeed updated.")
+             ->setDetail("As you asked.")
+             ->setLevelSuccess()
+             ->setAutoHide(false);
+
+        return $instance->id;
+    }
+
+A notification is made of a title, and optionally 
+- a texte detail,
+- a notification level: info (the default), warning, danger, success,
+- an auto-hide policy (if true, the toasted notification will hide after 4s).
+
+The notification will be displayed on the next screen, which is the Entity List.
+
+Note that you can add up notifications, calling the `notify()` function multiple times (which is useful to sometimes add a second notification, based on actual form data).
 
 ### `create(): array`
 
@@ -311,6 +337,30 @@ Of course you'll want to have an input validation on your form. Simply create a 
     ];
 
 Sharp will handle the error display in the form.
+
+### Validate rich text fields (markdown and wysiwyg)
+
+Rich text fields (RTF) are structured in a certain way by Sharp. This means that a rule like this will not work out of the box, if bio is a RTF:
+
+    public function rules()
+    {
+        return [
+            'bio' => 'required'
+        ];
+    }
+
+To make it work, you have two options:
+
+Either add a ".text" suffix to your field key in the rules:
+
+    public function rules()
+    {
+        return [
+            'bio.text' => 'required'
+        ];
+    }
+
+Or even simplier, make your FormRequest class extend `Code16\Sharp\Form\Validator\SharpFormRequest` instead of `Illuminate\Foundation\Http\FormRequest`. Note that in this case, if you have to define a `withValidator($validator)` function (see the [Laravel doc](https://laravel.com/docs/5.5/validation#form-request-validation)), make sure you call `parent::withValidator($validator)` in it.
 
 ---
 

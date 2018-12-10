@@ -70,6 +70,9 @@ class FormController extends ApiController
      * @return \Illuminate\Http\JsonResponse
      * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
      * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
+     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
+     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
+     * @throws \Code16\Sharp\Exceptions\Form\SharpFormUpdateException
      */
     public function store($entityKey)
     {
@@ -107,7 +110,13 @@ class FormController extends ApiController
      */
     protected function validateRequest(string $entityKey)
     {
-        $validatorClass = config("sharp.entities.{$entityKey}.validator");
+        if($this->isSubEntity($entityKey)) {
+            list($entityKey, $subEntityKey) = explode(':', $entityKey);
+            $validatorClass = config("sharp.entities.{$entityKey}.forms.{$subEntityKey}.validator");
+
+        } else {
+            $validatorClass = config("sharp.entities.{$entityKey}.validator");
+        }
 
         if(class_exists($validatorClass)) {
             // Validation is automatically called (FormRequest)

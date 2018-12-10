@@ -44,7 +44,7 @@ $factory->define(\App\Spaceship::class, function (Faker\Generator $faker) {
 
 $factory->define(\App\Travel::class, function (Faker\Generator $faker) {
     return [
-        'departure_date' => $faker->dateTimeThisYear,
+        'departure_date' => $faker->dateTimeInInterval('-10 years', '+10 years'),
         'spaceship_id' => function() {
             return (\App\Spaceship::class)->create()->id;
         },
@@ -69,6 +69,8 @@ $factory->define(\App\Passenger::class, function (Faker\Generator $faker) {
 $factory->define(\App\Pilot::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
+        'role' => $faker->randomElement(["jr", "sr"]),
+        'xp' => $faker->numberBetween(1, 10)
     ];
 });
 

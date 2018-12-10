@@ -101,4 +101,33 @@ class SharpFormDateFieldTest extends SharpTestCase
         );
     }
 
+    /** @test */
+    function default_displayFormat_depends_on_date_time_configuration()
+    {
+        $dateFormField = SharpFormDateField::make("date")
+            ->setHasDate();
+
+        $dateTimeFormField = SharpFormDateField::make("date")
+            ->setHasTime();
+
+        $timeFormField = SharpFormDateField::make("date")
+            ->setHasTime()
+            ->setHasDate(false);
+
+        $this->assertArraySubset(
+            ["displayFormat" => "YYYY-MM-DD"],
+            $dateFormField->toArray()
+        );
+
+        $this->assertArraySubset(
+            ["displayFormat" => "YYYY-MM-DD HH:mm"],
+            $dateTimeFormField->toArray()
+        );
+
+        $this->assertArraySubset(
+            ["displayFormat" => "HH:mm"],
+            $timeFormField->toArray()
+        );
+    }
+
 }

@@ -1,29 +1,49 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`filter-select can mount "empty" FilterSelect 1`] = `
-<span tabindex="0" class="SharpFilterSelect SharpFilterSelect--empty"><span class="SharpFilterSelect__text">
-        Web job<!----></span>
-<!---->
+<span tabindex="0" class="SharpFilterSelect SharpFilterSelect--empty">
+	<sharpautocomplete-stub mode="local" localvalues="[object Object],[object Object]" placeholder="{{ entity_list.filter.search_placeholder }}" remotesearchattribute="query" itemidattribute="id" searchminchars="1" searchkeys="value" noresultitem="true" allowempty="true"
+	    class="SharpFilterSelect__select"></sharpautocomplete-stub>
+	<span class="SharpFilterSelect__text">
+		Web job
+		<!---->
+	</span>
+	<sharpselect-stub uniqueidentifier="job" options="[object Object],[object Object]" display="dropdown" clearable="true" placeholder="-" class="SharpFilterSelect__select"></sharpselect-stub>
 </span>
 `;
 
 exports[`filter-select can mount "multiple empty" FilterSelect 1`] = `
-<span tabindex="0" class="SharpFilterSelect SharpFilterSelect--empty SharpFilterSelect--multiple"><span class="SharpFilterSelect__text">
-        Web job<!----></span>
-<!---->
+<span tabindex="0" class="SharpFilterSelect SharpFilterSelect--empty SharpFilterSelect--multiple">
+	<sharpautocomplete-stub value="" mode="local" localvalues="[object Object],[object Object]" placeholder="{{ entity_list.filter.search_placeholder }}" remotesearchattribute="query" itemidattribute="id" searchminchars="1" searchkeys="value" noresultitem="true"
+	    multiple="true" hideselected="true" allowempty="true" class="SharpFilterSelect__select"></sharpautocomplete-stub>
+	<span class="SharpFilterSelect__text">
+		Web job
+		<!---->
+	</span>
+	<sharpselect-stub uniqueidentifier="job" options="[object Object],[object Object]" multiple="true" display="dropdown" clearable="true" placeholder="" class="SharpFilterSelect__select"></sharpselect-stub>
 </span>
 `;
 
 exports[`filter-select can mount "multiple valuated" FilterSelect 1`] = `
-<span tabindex="0" class="SharpFilterSelect SharpFilterSelect--multiple"><span class="SharpFilterSelect__text">
-        Web job<span style="font-weight: normal;">&nbsp;&nbsp;</span></span>
-<!---->
+<span tabindex="0" class="SharpFilterSelect SharpFilterSelect--multiple">
+	<sharpautocomplete-stub value="[object Object],[object Object]" mode="local" localvalues="[object Object],[object Object]" placeholder="{{ entity_list.filter.search_placeholder }}" remotesearchattribute="query" itemidattribute="id" searchminchars="1"
+	    searchkeys="value" noresultitem="true" multiple="true" hideselected="true" allowempty="true" class="SharpFilterSelect__select"></sharpautocomplete-stub>
+	<span class="SharpFilterSelect__text">
+		Web job
+		<span style="font-weight: normal;">&nbsp;&nbsp;</span>
+	</span>
+	<sharpselect-stub value="1,2" uniqueidentifier="job" options="[object Object],[object Object]" multiple="true" display="dropdown" clearable="true" placeholder="" class="SharpFilterSelect__select"></sharpselect-stub>
 </span>
 `;
 
-exports[`filter-select can mount "valued" FilterSelect 1`] = `
-<span tabindex="0" class="SharpFilterSelect"><span class="SharpFilterSelect__text">
-        Web job<span style="font-weight: normal;">&nbsp;&nbsp;</span></span>
-<!---->
+exports[`filter-select can mount "valuated" FilterSelect 1`] = `
+<span tabindex="0" class="SharpFilterSelect">
+	<sharpautocomplete-stub value="[object Object]" mode="local" localvalues="[object Object],[object Object]" placeholder="{{ entity_list.filter.search_placeholder }}" remotesearchattribute="query" itemidattribute="id" searchminchars="1" searchkeys="value"
+	    noresultitem="true" allowempty="true" class="SharpFilterSelect__select"></sharpautocomplete-stub>
+	<span class="SharpFilterSelect__text">
+		Web job
+		<span style="font-weight: normal;">&nbsp;&nbsp;</span>
+	</span>
+	<sharpselect-stub value="1" uniqueidentifier="job" options="[object Object],[object Object]" display="dropdown" clearable="true" placeholder="-" class="SharpFilterSelect__select"></sharpselect-stub>
 </span>
 `;

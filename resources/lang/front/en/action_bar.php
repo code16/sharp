@@ -5,6 +5,7 @@ return [
     'list.items_count' => 'item(s)',
     'list.search.placeholder' => 'Search',
     'list.create_button' => 'New...',
+    'list.forms_dropdown' => 'New',
     'list.reorder_button' => 'Reorder',
     'list.reorder_button.finish' => 'Finish',
     'list.reorder_button.cancel' => 'Cancel',

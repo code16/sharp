@@ -37,6 +37,11 @@ class HasManyRelationUpdater
                 );
             }
 
+            if($relatedInstance->incrementing) {
+                // Remove the id
+                unset($item[$relatedModelKeyName]);
+            }
+
             $model = app(EloquentModelUpdater::class)->update($relatedInstance, $item);
 
             if($sortConfiguration) {
@@ -49,8 +54,10 @@ class HasManyRelationUpdater
         }
 
         // Remove unsent items
-        $instance->$attribute()->whereNotIn($relatedModelKeyName, $this->handledIds)
-            ->delete();
+        $instance->$attribute->whereNotIn($relatedModelKeyName, $this->handledIds)
+            ->each(function($item) {
+                $item->delete();
+            });
     }
 
     /**

@@ -50,11 +50,6 @@ Set the name of the id attribute for items. This is useful :
 - to designate the id attribute in the remote API call return.
 Default: `"id"`
 
-### `setItemLabelAttribute(string $itemLabelAttribute)`
-
-Set the name of the label attribute for items. Only useful when mode=remote, for which you have to pass an object as the data for the autocomplete (meaning: in the formatter's `toFront`), for initial valuation.
-Default: `"label"`
-
 ### `setListItemInlineTemplate(string $template)` and `setResultItemInlineTemplate(string $template)`
 
 Just write the template as a string, using placeholders for data like this: `{{var}}`.

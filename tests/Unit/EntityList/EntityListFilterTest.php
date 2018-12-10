@@ -145,6 +145,126 @@ class EntityListFilterTest extends SharpTestCase
             ]
         ], $list->listConfig());
     }
+
+    /** @test */
+    function we_can_define_that_a_filter_is_master()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig()
+            {
+                $this->addFilter("test", new class extends SharpEntityListTestFilter {
+                    function isMaster() {
+                        return true;
+                    }
+                });
+            }
+        };
+
+        $list->buildListConfig();
+
+        $this->assertArraySubset([
+            "filters" => [
+                [
+                    "key" => "test",
+                    "master" => true,
+                ]
+            ]
+        ], $list->listConfig());
+    }
+
+    /** @test */
+    function we_can_define_that_a_filter_is_searchable()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig()
+            {
+                $this->addFilter("test", new class extends SharpEntityListTestFilter {
+                    function isSearchable() {
+                        return true;
+                    }
+                });
+            }
+        };
+
+        $list->buildListConfig();
+
+        $this->assertArraySubset([
+            "filters" => [
+                [
+                    "key" => "test",
+                    "searchable" => true,
+                    "searchKeys" => ["label"]
+                ]
+            ]
+        ], $list->listConfig());
+    }
+
+    /** @test */
+    function we_can_define_searchKeys_on_a_filter()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig()
+            {
+                $this->addFilter("test", new class extends SharpEntityListTestFilter {
+                    function isSearchable() {
+                        return true;
+                    }
+                    function searchKeys() {
+                        return ["a", "b"];
+                    }
+                });
+            }
+        };
+
+        $list->buildListConfig();
+
+        $this->assertArraySubset([
+            "filters" => [
+                [
+                    "key" => "test",
+                    "searchable" => true,
+                    "searchKeys" => ["a", "b"]
+                ]
+            ]
+        ], $list->listConfig());
+    }
+
+    /** @test */
+    function we_can_define_an_inline_template_for_a_filter()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig()
+            {
+                $this->addFilter("test", new class extends SharpEntityListTestFilter {
+                    public function values()
+                    {
+                        return [
+                            ["id"=>1, "letter"=>"a", "maj"=>"A"],
+                            ["id"=>2, "letter"=>"b", "maj"=>"B"]
+                        ];
+                    }
+                    function template() {
+                        return "{{letter}} {{maj}}";
+                    }
+                });
+            }
+        };
+
+        $list->buildListConfig();
+
+        $this->assertArraySubset([
+            "filters" => [
+                [
+                    "key" => "test",
+                    "values" => [
+                        ["id"=>1, "letter"=>"a", "maj"=>"A"],
+                        ["id"=>2, "letter"=>"b", "maj"=>"B"]
+                    ],
+                    "template" => "{{letter}} {{maj}}"
+                ]
+            ]
+        ], $list->listConfig());
+    }
 }
 
 class SharpEntityListTestFilter implements EntityListFilter

@@ -46,21 +46,27 @@ class MarkdownFormatterTest extends SharpTestCase
     /** @test */
     function when_text_has_an_embedded_upload_the_files_array_is_handled_to_front()
     {
+        $image = (new FileFactory)->image("test.png")->store("data");
+
         $formatter = new MarkdownFormatter;
         $field = SharpFormMarkdownField::make("md");
-        $value = "![](local:test.png)";
+        $value = "![](local:$image)";
 
         $this->assertEquals(
-            "local:test.png",
+            "local:$image",
             $formatter->toFront($field, $value)["files"][0]["name"]);
     }
 
     /** @test */
     function when_text_has_multiple_embedded_uploads_the_files_array_is_handled_to_front()
     {
+        $image1 = (new FileFactory)->image("test.png")->store("data");
+        $image2 = (new FileFactory)->image("test2.png")->store("data");
+        $image3 = (new FileFactory)->image("test3.png")->store("data");
+
         $formatter = new MarkdownFormatter;
         $field = SharpFormMarkdownField::make("md");
-        $value = "![](local:test.png)\n![](local:test2.png)\n![](local:test3.png)";
+        $value = "![](local:$image1)\n![](local:$image2)\n![](local:$image3)";
 
         $this->assertCount(3, $formatter->toFront($field, $value)["files"]);
     }
@@ -78,7 +84,7 @@ class MarkdownFormatterTest extends SharpTestCase
         $toFrontArray = $formatter->toFront($field, $value)["files"][0];
 
         $this->assertEquals("local:$image", $toFrontArray["name"]);
-        $this->assertEquals(1127, $toFrontArray["size"]);
+        $this->assertTrue($toFrontArray["size"] > 0);
         $this->assertStringStartsWith(url("thumbnails/data/1000-400/" . basename($image)), $toFrontArray["thumbnail"]);
     }
 

@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Dashboard\Widgets;
 
 use Code16\Sharp\Exceptions\Dashboard\SharpWidgetValidationException;
+use Code16\Sharp\Utils\LinkToEntity;
 use Illuminate\Support\Facades\Validator;
 
 abstract class SharpWidget
@@ -52,13 +53,15 @@ abstract class SharpWidget
     /**
      * @param string $entityKey
      * @param string|null $instanceId
+     * @param array $querystring
      * @return $this
      */
-    public function setLink(string $entityKey, string $instanceId = null)
+    public function setLink(string $entityKey, string $instanceId = null, array $querystring = [])
     {
-        $this->link = $instanceId
-            ? route("code16.sharp.edit", compact('entityKey', 'instanceId'))
-            : route("code16.sharp.list", compact('entityKey'));
+        $this->link = (new LinkToEntity("", $entityKey))
+            ->setInstanceId($instanceId)
+            ->setFullQuerystring($querystring)
+            ->renderAsUrl();
 
         return $this;
     }
@@ -89,6 +92,7 @@ abstract class SharpWidget
     /**
      * @param array $childArray
      * @return array
+     * @throws SharpWidgetValidationException
      */
     protected function buildArray(array $childArray)
     {

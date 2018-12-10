@@ -14,7 +14,7 @@ describe('grid',()=>{
         });
     });
 
-    xtest('can mount Grid', ()=>{
+    test('can mount Grid', ()=>{
         expect(wrapper.html()).toMatchSnapshot();
     })
 

@@ -32,10 +32,12 @@
 </template>
 
 <script>
-    import ActionBar from './ActionBar';
+    import SharpActionBar from './ActionBar';
     import ActionBarMixin from './ActionBarMixin';
 
-    import { Dropdown, DropdownItem } from '../dropdown';
+    import SharpLocaleSelector from '../LocaleSelector';
+    import SharpDropdown from '../dropdown/Dropdown.vue';
+    import SharpDropdownItem from '../dropdown/DropdownItem.vue';
 
     import Collapse from '../Collapse';
 
@@ -47,9 +49,10 @@
         name: 'SharpActionBarForm',
         mixins: [ActionBarMixin, ActionEvents],
         components: {
-            [ActionBar.name]:ActionBar,
-            [Dropdown.name]: Dropdown,
-            [DropdownItem.name]: DropdownItem,
+            SharpActionBar,
+            SharpLocaleSelector,
+            SharpDropdown,
+            SharpDropdownItem,
             Collapse
         },
         data() {

@@ -11,11 +11,52 @@
 
   &--open {
     @extend .SharpDropdown--open;
+    .SharpSelect {
+      .multiselect {
+        @extend .multiselect--active;
+      }
+    }
   }
 
   &--empty, &--multiple {
     .multiselect__single {
       display:none;
+    }
+  }
+
+  &--searchable {
+    &.SharpFilterSelect--open {
+      .SharpAutocomplete .multiselect__tags {
+        width: 10rem !important;
+        padding: 0 1rem !important;
+        top: 100%;
+      }
+    }
+    .SharpAutocomplete .multiselect__content {
+      border-top: 2.5rem solid white !important;
+    }
+  }
+
+  .SharpAutocomplete {
+    .multiselect__tags {
+      position:absolute;
+      padding: 0;
+      width: 0;
+    }
+    .multiselect__tags-wrap {
+      display:none;
+    }
+    .multiselect__content {
+      top: 100%;
+    }
+  }
+  .SharpSelect {
+    width: 100%;
+    .multiselect__content {
+      display:none!important;
+    }
+    .multiselect {
+      box-shadow: none!important;
     }
   }
 
@@ -35,7 +76,6 @@
 
   &__select {
     display: inline-block;
-    width: 100%;
 
     .multiselect {
       position: initial;
@@ -43,6 +83,7 @@
 
       &__content {
         left:0;
+        min-width: 10rem;
       }
 
       &__tag {
@@ -59,6 +100,10 @@
           @include media-breakpoint-down(sm) {
             display: none;
           }
+        }
+
+        &-icon {
+          line-height: 20px;
         }
 
         &-icon:after {

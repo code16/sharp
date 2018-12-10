@@ -25,7 +25,7 @@ class HandleSharpApiErrors
     {
         $response = $next($request);
 
-        if($response->exception) {
+        if(isset($response->exception) && $response->exception) {
             if ($response->exception instanceof ValidationException) {
                 return $this->handleValidationException($response);
             }

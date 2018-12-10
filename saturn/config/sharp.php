@@ -4,6 +4,17 @@ return [
 
     "name" => "Saturn",
 
+    "extensions" => [
+        "assets" => [
+            "strategy" => "asset",
+            "head" => [
+                "/css/inject.css",
+            ],
+        ],
+
+        "activate_custom_form_fields" => env("SHARP_CUSTOM_FORM_FIELDS", true),
+    ],
+
     "entities" => [
         "spaceship" => [
             "list" => \App\Sharp\SpaceshipSharpList::class,
@@ -13,8 +24,20 @@ return [
         ],
         "pilot" => [
             "list" => \App\Sharp\PilotSharpList::class,
-            "form" => \App\Sharp\PilotSharpForm::class,
-            "validator" => \App\Sharp\PilotSharpValidator::class,
+            "forms" => [
+                "junior" => [
+                    "icon" => "fa-user-o",
+                    "label" => "Junior Pilot",
+                    "form" => \App\Sharp\PilotJuniorSharpForm::class,
+                    "validator" => \App\Sharp\PilotJuniorSharpValidator::class,
+                ],
+                "senior" => [
+                    "icon" => "fa-user",
+                    "label" => "Senior Pilot",
+                    "form" => \App\Sharp\PilotSeniorSharpForm::class,
+                    "validator" => \App\Sharp\PilotSeniorSharpValidator::class,
+                ]
+            ],
         ],
         "passenger" => [
             "list" => \App\Sharp\PassengerSharpList::class,
@@ -24,6 +47,7 @@ return [
         "travel" => [
             "list" => \App\Sharp\TravelSharpList::class,
             "form" => \App\Sharp\TravelSharpForm::class,
+            "validator" => \App\Sharp\TravelSharpValidator::class,
         ],
         "user" => [
             "list" => \App\Sharp\UserSharpList::class,
@@ -45,47 +69,81 @@ return [
         ],
     ],
 
+    "dashboards" => [
+        "company_dashboard" => [
+            "view" => \App\Sharp\CompanyDashboard::class,
+            "policy" => \App\Sharp\Policies\CompanyDashboardPolicy::class,
+        ],
+        "travels_dashboard" => [
+            "view" => \App\Sharp\TravelsDashboard::class,
+        ],
+    ],
+
     "menu" => [
         [
             "label" => "Company",
             "entities" => [
-                "spaceship" => [
-                    "label" => "Spaceships",
-                    "icon" => "fa-space-shuttle"
+                [
+                    "label" => "Dashboard",
+                    "icon" => "fa-dashboard",
+                    "dashboard" => "company_dashboard"
                 ],
-                "pilot" => [
+                [
+                    "label" => "Spaceships",
+                    "icon" => "fa-space-shuttle",
+                    "entity" => "spaceship"
+                ],
+                [
                     "label" => "Pilots",
-                    "icon" => "fa-user"
+                    "icon" => "fa-user",
+                    "entity" => "pilot"
                 ]
             ]
         ], [
             "label" => "Travels",
             "entities" => [
-                "passenger" => [
-                    "label" => "Passengers",
-                    "icon" => "fa-bed"
+                [
+                    "label" => "Dashboard",
+                    "icon" => "fa-dashboard",
+                    "dashboard" => "travels_dashboard"
                 ],
-                "travel" => [
+                [
+                    "label" => "Passengers",
+                    "icon" => "fa-bed",
+                    "entity" => "passenger"
+                ],
+                [
                     "label" => "Travel",
-                    "icon" => "fa-suitcase"
-                ]
+                    "icon" => "fa-suitcase",
+                    "entity" => "travel"
+                ],
+                [
+                    "label" => "Some external link",
+                    "icon" => "fa-globe",
+                    "url" => "https://google.com"
+                ],
             ]
         ], [
             "label" => "Admin",
             "entities" => [
-                "user" => [
+                [
                     "label" => "Sharp users",
-                    "icon" => "fa-user-secret"
-                ],
-                "feature" => [
-                    "label" => "Features",
-                    "icon" => "fa-superpowers"
+                    "icon" => "fa-user-secret",
+                    "entity" => "user"
                 ]
             ]
         ],
+        [
+            "label" => "Public website",
+            "icon" => "fa-globe",
+            "url" => "https://google.com"
+        ],
+        [
+            "label" => "Features",
+            "icon" => "fa-superpowers",
+            "entity" => "feature"
+        ]
     ],
-
-    "dashboard" => \App\Sharp\Dashboard::class,
 
     "locales" => ["en", "fr"],
 

@@ -36,7 +36,7 @@ abstract class SharpFormField
     /**
      * @var array
      */
-    protected $conditionalDisplayFields;
+    protected $conditionalDisplayFields = [];
 
     /**
      * @var bool

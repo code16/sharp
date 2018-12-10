@@ -29,9 +29,9 @@
                                 </transition>
                             </div>
                             <div v-show="!readOnly">
-                                    <button v-show="!!originalImageSrc && !inProgress" type="button" class="SharpButton SharpButton--sm SharpButton--secondary" @click="onEditButtonClick">
-                                        {{ l('form.upload.edit_button') }}
-                                    </button>
+                                <button v-show="!!originalImageSrc && !inProgress" type="button" class="SharpButton SharpButton--sm SharpButton--secondary" :disabled="!isCroppable" @click="onEditButtonClick">
+                                    {{ l('form.upload.edit_button') }}
+                                </button>
                                 <button type="button" class="SharpButton SharpButton--sm SharpButton--secondary SharpButton--danger SharpUpload__remove-button"
                                         @click="remove()" :disabled="readOnly">
                                     {{ l('form.upload.remove_button') }}
@@ -51,8 +51,8 @@
                 </div>
             </div>
         </div>
-        <template v-if="!!originalImageSrc">
-            <sharp-modal v-model="showEditModal" @ok="onEditModalOk" @shown="onEditModalShown" @hidden="onEditModalHidden" no-close-on-backdrop
+        <template v-if="!!originalImageSrc && isCroppable">
+            <sharp-modal :visible.sync="showEditModal" @ok="onEditModalOk" @shown="onEditModalShown" @hidden="onEditModalHidden" no-close-on-backdrop
                          :title="l('modals.cropper.title')" ref="modal">
                 <vue-cropper ref="cropper"
                              class="SharpUpload__modal-vue-cropper"
@@ -81,14 +81,12 @@
 <script>
     import VueClip from '../../../vendor/vue-clip/components/Clip/index';
     import File from '../../../vendor/vue-clip/File';
-    import Modal from '../../../Modal';
+    import SharpModal from '../../../Modal';
     import VueCropper from 'vue-cropperjs';
     import rotateResize from './rotate';
 
     import { Localization } from '../../../../mixins';
     import { VueClipModifiers } from './modifiers';
-
-    import axios from 'axios';
 
     export default {
         name: 'SharpVueClip',
@@ -96,7 +94,7 @@
         extends: VueClip,
 
         components: {
-            [Modal.name]: Modal,
+            SharpModal,
             VueCropper
         },
 
@@ -110,6 +108,7 @@
             ratioX: Number,
             ratioY: Number,
             value: Object,
+            croppableFileTypes:Array,
 
             readOnly: Boolean
         },
@@ -119,7 +118,7 @@
                 showEditModal: false,
                 croppedImg: null,
                 resized: false,
-                croppable: false,
+                allowCrop: false,
 
                 isNew: !this.value,
                 canDownload: !!this.value,
@@ -155,12 +154,9 @@
                 res += size.toLocaleString();
                 return `${res} MB`;
             },
-            hasCrop() {
-                return !!(this.ratioX && this.ratioY);
-            },
             operationFinished() {
                 return {
-                    crop: this.hasCrop ? !!this.croppedImg : null
+                    crop: this.hasInitialCrop ? !!this.croppedImg : null
                 }
             },
             operations() {
@@ -192,11 +188,21 @@
                 let splitted = this.file.name.split('/');
                 return splitted.length ? splitted[splitted.length-1] : '';
             },
+            fileExtension() {
+                let extension = this.fileName.split('.').pop();
+                return extension ? `.${extension}` : null;
+            },
             downloadLink() {
                 return `${this.$form.downloadLinkBase}/${this.downloadId}`;
             },
             showThumbnail() {
                 return this.imageSrc;
+            },
+            hasInitialCrop() {
+                return !!(this.ratioX && this.ratioY) && this.isCroppable;
+            },
+            isCroppable() {
+                return !this.croppableFileTypes || this.croppableFileTypes.includes(this.fileExtension);
             }
         },
         methods: {
@@ -231,7 +237,7 @@
 
                 this.setPending(false);
 
-                this.croppable = true;
+                this.allowCrop = true;
                 this.$nextTick(_=>{
                     this.isCropperReady() && this.onCropperReady();
                 });
@@ -271,7 +277,7 @@
             onEditButtonClick() {
                 this.$emit('active');
                 this.showEditModal = true;
-                this.croppable = true;
+                this.allowCrop = true;
             },
 
             handleImageLoaded() {
@@ -307,7 +313,7 @@
             },
 
             onCropperReady() {
-                if(this.ratioX && this.ratioY) {
+                if(this.hasInitialCrop) {
                     this.updateCroppedImage();
                     this.updateCropData();
                 }
@@ -333,7 +339,7 @@
                     rotate: cropData.rotate * -1 // counterclockwise
                 };
 
-                if(this.croppable) {
+                if(this.allowCrop) {
                     let data = {
                         ...this.value,
                         cropData: relativeData,
@@ -344,7 +350,7 @@
             },
 
             updateCroppedImage() {
-                if(this.croppable) {
+                if(this.allowCrop) {
                     this.isNew = true;
                     this.croppedImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
                 }
@@ -365,6 +371,7 @@
         created() {
             this.options.thumbnailWidth = null;
             this.options.thumbnailHeight = null;
+            this.options.maxFiles = 1;
 
             if (!this.value)
                 return;

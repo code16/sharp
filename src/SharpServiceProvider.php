@@ -4,11 +4,15 @@ namespace Code16\Sharp;
 
 use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
+use Code16\Sharp\Http\Composers\AssetViewComposer;
 use Code16\Sharp\Http\Composers\MenuViewComposer;
 use Code16\Sharp\Http\Middleware\Api\AddSharpContext;
 use Code16\Sharp\Http\Middleware\Api\AppendFormAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendFormDataLocalizations;
 use Code16\Sharp\Http\Middleware\Api\AppendListAuthorizations;
+use Code16\Sharp\Http\Middleware\Api\AppendListMultiform;
+use Code16\Sharp\Http\Middleware\Api\AppendNotifications;
+use Code16\Sharp\Http\Middleware\Api\BindSharpValidationResolver;
 use Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors;
 use Code16\Sharp\Http\Middleware\Api\SaveEntityListParams;
 use Code16\Sharp\Http\Middleware\Api\SetSharpLocale;
@@ -26,7 +30,7 @@ class SharpServiceProvider extends ServiceProvider
     /**
      * @var string
      */
-    const VERSION = '4.0.4';
+    const VERSION = '4.0.20';
 
     public function boot()
     {
@@ -44,8 +48,13 @@ class SharpServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         view()->composer(
-            ['sharp::form', 'sharp::list', 'sharp::dashboard'],
+            ['sharp::form', 'sharp::list', 'sharp::dashboard', 'sharp::welcome'],
             MenuViewComposer::class
+        );
+
+        view()->composer(
+            ['sharp::form', 'sharp::list', 'sharp::dashboard', 'sharp::welcome', 'sharp::login', 'sharp::unauthorized'],
+            AssetViewComposer::class
         );
     }
 
@@ -84,6 +93,12 @@ class SharpServiceProvider extends ServiceProvider
                 foreach(['entity', 'view', 'update', 'create', 'delete'] as $action) {
                     $this->definePolicy($entityKey, $config["policy"], $action);
                 }
+            }
+        }
+
+        foreach((array)config("sharp.dashboards") as $dashboardKey => $config) {
+            if(isset($config["policy"])) {
+                $this->definePolicy($dashboardKey, $config["policy"], 'view');
             }
         }
     }
@@ -131,10 +146,19 @@ class SharpServiceProvider extends ServiceProvider
             'sharp_api_append_form_data_localizations', AppendFormDataLocalizations::class
 
         )->aliasMiddleware(
+            'sharp_api_append_list_multiform', AppendListMultiform::class
+
+        )->aliasMiddleware(
+            'sharp_api_append_notifications', AppendNotifications::class
+
+        )->aliasMiddleware(
             'sharp_api_errors', HandleSharpApiErrors::class
 
         )->aliasMiddleware(
             'sharp_api_context', AddSharpContext::class
+
+        )->aliasMiddleware(
+            'sharp_api_validation', BindSharpValidationResolver::class
 
         )->aliasMiddleware(
             'sharp_locale', SetSharpLocale::class
@@ -151,6 +175,5 @@ class SharpServiceProvider extends ServiceProvider
         )->aliasMiddleware(
             'sharp_guest', SharpRedirectIfAuthenticated::class
         );
-
     }
 }

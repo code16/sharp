@@ -3,79 +3,42 @@
 namespace Code16\Sharp\Auth;
 
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
-use Illuminate\Contracts\Auth\Access\Gate;
 
 class SharpAuthorizationManager
 {
+
     /**
      * @param string $ability
      * @param string $entityKey
      * @param string|null $instanceId
+     * @throws SharpAuthorizationException
      */
     public function check(string $ability, string $entityKey, $instanceId = null)
     {
-        // Check entity-level policy authorization
-        $this->checkEntityLevelAuthorization($entityKey);
+        $entityKey = $this->getBaseEntityKey($entityKey);
 
-        // Check global authorization
-        if ($this->isGloballyForbidden($ability, $entityKey, $instanceId)) {
-            $this->deny();
-        }
+        if(config("sharp.entities.{$entityKey}")) {
+            (new SharpAuthorizationManagerForEntities())
+                ->checkForEntity($ability, $entityKey, $instanceId);
 
-        // Check policy authorization
-        if($this->isSpecificallyForbidden($ability, $entityKey, $instanceId)) {
-            $this->deny();
+        } elseif(config("sharp.dashboards.{$entityKey}")) {
+            (new SharpAuthorizationManagerForDashboards())
+                ->checkForDashboard($ability, $entityKey);
         }
     }
 
-    protected function checkEntityLevelAuthorization(string $entityKey)
+    /**
+     * Return base entityKey in case of sub entity (for instance: returns car in car:hybrid)
+     *
+     * @param string $entityKey
+     * @return string
+     */
+    protected function getBaseEntityKey(string $entityKey): string
     {
-        if($this->isSpecificallyForbidden("entity", $entityKey)) {
-            $this->deny();
-        }
-    }
-
-    protected function isGloballyForbidden(string $ability, string $entityKey, $instanceId): bool
-    {
-        $globalAuthorizations = config("sharp.entities.{$entityKey}.authorizations", []);
-
-        if(!isset($globalAuthorizations[$ability])) {
-            return false;
+        if(($pos = strpos($entityKey, ':')) !== false) {
+            return substr($entityKey, 0, $pos);
         }
 
-        if(($instanceId && $ability == "view") || $ability == "create") {
-            // Create or edit form case: we check for the global ability even on a GET
-            return !$globalAuthorizations[$ability];
-        }
-
-        return request()->method() != 'GET'
-            && !$globalAuthorizations[$ability];
-    }
-
-    protected function isSpecificallyForbidden(string $ability, string $entityKey, $instanceId = null): bool
-    {
-        if(!$this->hasPolicyFor($entityKey)) {
-            return false;
-        }
-
-        if($instanceId) {
-            // Form case: edit, update, store, delete
-            return request()->method() != 'GET'
-                && !app(Gate::class)->check("sharp.{$entityKey}.{$ability}", $instanceId);
-        }
-
-        if(in_array($ability, ["entity", "create"])) {
-            return !app(Gate::class)->check("sharp.{$entityKey}.{$ability}");
-        }
-    }
-
-    private function deny()
-    {
-        throw new SharpAuthorizationException("Unauthorized action");
-    }
-
-    private function hasPolicyFor(string $entityKey)
-    {
-        return config("sharp.entities.{$entityKey}.policy") != null;
+        return $entityKey;
     }
 }

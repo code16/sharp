@@ -72,7 +72,7 @@ class SpaceshipSharpForm extends SharpForm
             SharpFormUploadField::make("picture")
                 ->setLabel("Picture")
                 ->setFileFilterImages()
-                ->setCropRatio("1:1")
+                ->setCropRatio("1:1", ["jpg","jpeg","png"])
                 ->setStorageDisk("local")
                 ->setStorageBasePath("data/Spaceship/{id}")
 
@@ -132,7 +132,7 @@ class SpaceshipSharpForm extends SharpForm
                 ->addItemField(
                     SharpFormUploadField::make("file")
                         ->setFileFilterImages()
-                        ->setCompactThumbnail()
+//                        ->setCompactThumbnail()
                         ->setCropRatio("16:9")
                         ->setStorageDisk("local")
                         ->setStorageBasePath("data/Spaceship/{id}/Pictures")
@@ -205,6 +205,15 @@ class SpaceshipSharpForm extends SharpForm
                 return $capacity * 1000;
             })
             ->save($instance, $data);
+
+        $this->notify("Spaceship was updated with success!")
+            ->setDetail("Congratulations, this was not an easy thing to do.")
+            ->setLevelSuccess()
+            ->setAutoHide(false);
+
+        if($data["capacity"] >= 1000) {
+            $this->notify("this is a huge spaceship, by the way!");
+        }
 
         return $instance->id;
     }

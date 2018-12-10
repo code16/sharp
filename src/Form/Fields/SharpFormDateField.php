@@ -41,7 +41,7 @@ class SharpFormDateField extends SharpFormField
     /**
      * @var string
      */
-    protected $displayFormat = "YYYY-MM-DD";
+    protected $displayFormat = null;
 
     /**
      * @var string
@@ -193,7 +193,7 @@ class SharpFormDateField extends SharpFormField
             "maxTime" => $this->maxTime,
             "stepTime" => $this->stepTime,
             "mondayFirst" => $this->mondayFirst,
-            "displayFormat" => $this->displayFormat,
+            "displayFormat" => $this->displayFormat ?: $this->detectDisplayFormat(),
             "language" => $this->language
         ]);
     }
@@ -208,5 +208,20 @@ class SharpFormDateField extends SharpFormField
         return str_pad($hours, 2, "0", STR_PAD_LEFT)
             . ":"
             . str_pad($minutes, 2, "0", STR_PAD_LEFT);
+    }
+
+    /**
+     * @return string
+     */
+    protected function detectDisplayFormat()
+    {
+        if($this->hasDate()) {
+            if($this->hasTime()) {
+                return "YYYY-MM-DD HH:mm";
+            }
+            return "YYYY-MM-DD";
+        }
+
+        return $this->hasTime() ? "HH:mm" : "";
     }
 }

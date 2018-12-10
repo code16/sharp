@@ -123,7 +123,23 @@
                 $uploader.$on('escape', () => this.escapeMarker());
                 //console.log('create uploader', id, $uploader);
 
+                $uploader.$mount();
+
                 return $uploader;
+            },
+            createUserUploader(options) {
+                let uploader = null;
+                if(this.lastUploader) {
+                    this.lastUploader.$destroy();
+                }
+                uploader = this.lastUploader = this.createUploader(options);
+                uploader.inputClick();
+                return new Promise(resolve => {
+                    uploader.$on('added', () => {
+                        this.lastUploader = null;
+                        resolve(uploader)
+                    });
+                });
             },
 
             refreshCodemirror() {
@@ -183,9 +199,20 @@
             // replaceBySelection : put the selected text inside the marker (existing tag from parsing)
             // data : contains de title and name from the image tag
             // isInsertion : if the user click on 'insert image' button
-            insertUploadImage({ replaceBySelection, data, isInsertion } = {}) {
+            async insertUploadImage({ replaceBySelection, data, isInsertion } = {}) {
                 let selection = this.codemirror.getSelection(' ');
                 let curLineContent = this.codemirror.getLine(this.cursorPos.line) || '';
+
+                let options = {
+                    id: data ? this.filesByName[data.name][this.idSymbol] : this.uploaderId++,
+                    value: data && this.filesByName[data.name],
+                    removeOptions: {
+                        relativeFallbackLine: 1
+                    }
+                };
+                let $uploader = isInsertion
+                    ? await this.createUserUploader(options)
+                    : this.createUploader(options);
 
                 if(selection) {
                     this.codemirror.replaceSelection('');
@@ -214,18 +241,8 @@
                 this.codemirror.setCursor(this.cursorPos.line-afterNewLinesCount,0, { scroll:!!isInsertion });
                 let from = this.cursorPos, to = { line:this.cursorPos.line, ch:this.cursorPos.ch+md.length };
 
-                let relativeFallbackLine = 1;//isInsertion ? this.cursorPos.line - initialCursorPos.line : 1;
-
-                let $uploader = this.createUploader({
-                    id: data ? this.filesByName[data.name][this.idSymbol] : this.uploaderId++,
-                    value: data && this.filesByName[data.name],
-                    removeOptions: {
-                        relativeFallbackLine
-                    }
-                });
-                //console.log($uploader);
                 $uploader.marker = this.codemirror.markText(from, to, {
-                    replacedWith: $uploader.$mount().$el,
+                    replacedWith: $uploader.$el,
                     clearWhenEmpty: false,
                     inclusiveRight: true,
                     inclusiveLeft: true,
@@ -233,10 +250,7 @@
                 });
 
                 this.codemirror.addLineClass($uploader.marker.lines[0], 'wrap', 'SharpMarkdown__upload-line');
-                $uploader.marker.lines[0].on('delete', ()=>this.removeMarker($uploader, { isCMEvent: true, relativeFallbackLine }));
-
-                if(isInsertion)
-                    $uploader.inputClick();
+                $uploader.marker.lines[0].on('delete', ()=>this.removeMarker($uploader, { isCMEvent: true, relativeFallbackLine:1 }));
 
                 return $uploader;
             },
@@ -323,13 +337,13 @@
                 if(!this.simplemde.parsed) {
                     let images = this.parse();
                     this.simplemde.parsed = true;
-                    if(images.length) {
+                    if (images.length) {
                         // reset the scroll position because it change on widget insertion
-                        this.$nextTick(()=>window.scrollTo(0,0));
+                        this.$nextTick(() => window.scrollTo(0, 0));
                     }
                 }
 
-                setTimeout(()=>this.codemirror.refresh(), 100);
+                setTimeout(()=>this.codemirror.refresh(), 50);
             },
 
             createSimpleMDE({ element, initialValue }) {
@@ -364,7 +378,6 @@
             }
         },
         mounted() {
-            //console.log(this);
             if(this.isLocalized) {
                 this.simplemdeInstances = this.locales.reduce((res, locale)=>({
                     ...res, [locale]: this.createSimpleMDE({
@@ -381,7 +394,7 @@
             this.value.files = this.indexedFiles();
 
             if(this.$tab) {
-                this.$tab.$once('active', () => this.refreshOnExternalChange())
+                this.$tab.$once('active', () => this.refreshOnExternalChange());
             }
             else {
                 this.$nextTick(() => this.refreshOnExternalChange());

@@ -3,10 +3,11 @@
         <template v-if="ready">
             <sharp-grid :rows="layout.rows">
                 <template slot-scope="widgetLayout">
-                    <sharp-widget :widget-type="widgets[widgetLayout.key].type"
-                                  :widget-props="widgets[widgetLayout.key]"
-                                  :value="data[widgetLayout.key]">
-                    </sharp-widget>
+                    <sharp-widget
+                        :widget-type="widgets[widgetLayout.key].type"
+                        :widget-props="widgets[widgetLayout.key]"
+                        :value="data[widgetLayout.key]"
+                    />
                 </template>
             </sharp-grid>
         </template>
@@ -14,42 +15,47 @@
 </template>
 
 <script>
-    import TabbedLayout from '../TabbedLayout';
-    import Grid from '../Grid';
-    import Widget from './Widget';
-    import DynamicView from '../DynamicViewMixin';
+    import SharpGrid from '../Grid';
+    import SharpWidget from './Widget';
+    import { withAxiosInterceptors } from '../DynamicViewMixin';
 
-    import { API_PATH } from '../../consts';
+    import { mapState, mapGetters } from 'vuex';
 
     export default {
         name:'SharpDashboard',
-        extends: DynamicView,
-
-
+        mixins: [withAxiosInterceptors],
         components: {
-            [TabbedLayout.name]:TabbedLayout,
-            [Grid.name]:Grid,
-            [Widget.name]:Widget
+            SharpGrid,
+            SharpWidget
         },
-        data() {
-            return {
-                widgets: null
-            }
+        props: {
+            dashboardKey: String
+        },
+
+        watch: {
+            '$route': 'init'
         },
         computed: {
-            apiPath() {
-                return `${API_PATH}/dashboard`
-            }
+            ...mapState('dashboard', {
+                ready: state => state.ready,
+                data: state => state.data,
+                widgets: state => state.widgets,
+                layout: state => state.layout
+            }),
+            ...mapGetters('dashboard', {
+                getFilterValuesFromQuery: 'filters/getValuesFromQuery',
+            }),
         },
         methods: {
-            mount({layout, data, widgets}) {
-                this.layout = layout;
-                this.data = data || {};
-                this.widgets = widgets;
-            }
+            async init() {
+                await this.$store.dispatch('dashboard/get', {
+                    dashboardKey: this.dashboardKey,
+                    filterValues: this.getFilterValuesFromQuery(this.$route.query)
+                });
+            },
         },
         created() {
-            this.get();
+            this.init();
         }
     }
 </script>

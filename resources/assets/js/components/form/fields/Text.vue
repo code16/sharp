@@ -7,7 +7,6 @@
 </template>
 
 <script>
-    import Vue from 'vue';
     import { Focusable } from '../../../mixins';
     import Maxlength from '../../../directives/Maxlength';
 

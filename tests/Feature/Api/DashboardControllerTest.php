@@ -15,7 +15,7 @@ class DashboardControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->json('get', '/sharp/api/dashboard')
+        $this->getJson(route('code16.sharp.api.dashboard', 'personal_dashboard'))
             ->assertStatus(200)
             ->assertJson(["widgets" => [
                 "bars" => [
@@ -31,7 +31,7 @@ class DashboardControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->json('get', '/sharp/api/dashboard')
+        $this->getJson(route('code16.sharp.api.dashboard', 'personal_dashboard'))
             ->assertStatus(200)
             ->assertJson(["layout" => [
                 "rows" => [
@@ -50,7 +50,7 @@ class DashboardControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->json('get', '/sharp/api/dashboard')
+        $this->getJson(route('code16.sharp.api.dashboard', 'personal_dashboard'))
             ->assertStatus(200)
             ->assertJson(["data" => [
                 "bars1" => [
@@ -81,19 +81,4 @@ class DashboardControllerTest extends BaseApiTest
                 ]
             ]]);
     }
-
-    /** @test */
-    public function we_get_a_404_if_no_dashboard_is_configured()
-    {
-        $this->buildTheWorld();
-
-        $this->app['config']->set(
-            'sharp.dashboard',
-            ''
-        );
-
-        $this->json('get', '/sharp/api/dashboard')
-            ->assertStatus(404);
-    }
-
 }

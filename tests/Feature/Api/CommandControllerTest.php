@@ -8,6 +8,8 @@ use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class CommandControllerTest extends BaseApiTest
 {
@@ -42,6 +44,20 @@ class CommandControllerTest extends BaseApiTest
             ->assertJson([
                 "action" => "info",
                 "message" => "ok",
+            ]);
+    }
+
+    /** @test */
+    public function we_can_call_a_link_entity_command()
+    {
+        $this->buildTheWorld();
+        $this->disableExceptionHandling();
+
+        $this->json('post', '/sharp/api/list/person/command/instance_link/1')
+            ->assertStatus(200)
+            ->assertJson([
+                "action" => "link",
+                "link"   => "/link/out"
             ]);
     }
 
@@ -129,6 +145,22 @@ class CommandControllerTest extends BaseApiTest
     }
 
     /** @test */
+    public function we_can_call_a_download_entity_command()
+    {
+        $this->buildTheWorld();
+        $this->disableExceptionHandling();
+
+        $response = $this->json('post', '/sharp/api/list/person/command/entity_download')
+            ->assertStatus(200)
+            ->assertHeader("content-type", "application/pdf");
+
+        $this->assertContains("account.pdf", $response->headers->get("content-disposition"));
+
+        $this->json('post', '/sharp/api/list/person/command/entity_download_no_disk')
+            ->assertStatus(200);
+    }
+
+    /** @test */
     public function applicative_exception_returns_a_417_as_always()
     {
         $this->buildTheWorld();
@@ -193,6 +225,48 @@ class CommandControllerTest extends BaseApiTest
             ->assertStatus(200);
     }
 
+    /** @test */
+    public function we_can_initialize_form_data_in_an_entity_command()
+    {
+        $this->buildTheWorld();
+        $this->disableExceptionHandling();
+
+        $response = $this->getJson('/sharp/api/list/person')
+            ->assertStatus(200)
+            ->json();
+
+        $this->assertTrue(collect($response['config']['commands'])->where("key", "entity_with_init_data")->first()['fetch_initial_data']);
+
+        $this->getJson('/sharp/api/list/person/command/entity_with_init_data/data')
+            ->assertStatus(200)
+            ->assertExactJson([
+                "data" => [
+                    "name" => "John Wayne"
+                ]
+            ]);
+    }
+
+    /** @test */
+    public function we_can_initialize_form_data_in_an_instance_command()
+    {
+        $this->buildTheWorld();
+        $this->disableExceptionHandling();
+
+        $response = $this->getJson('/sharp/api/list/person')
+            ->assertStatus(200)
+            ->json();
+
+        $this->assertTrue(collect($response['config']['commands'])->where("key", "instance_with_init_data")->first()['fetch_initial_data']);
+
+        $this->getJson('/sharp/api/list/person/command/instance_with_init_data/25/data')
+            ->assertStatus(200)
+            ->assertExactJson([
+                "data" => [
+                    "name" => "John Wayne [25]"
+                ]
+            ]);
+    }
+
     protected function buildTheWorld()
     {
         parent::buildTheWorld();
@@ -244,6 +318,12 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
                 return $this->refresh(1);
             }
 
+        })->addInstanceCommand("instance_link", new class() extends InstanceCommand {
+            public function label(): string { return "label"; }
+            public function execute($instanceId, array $params = []): array {
+                return $this->link('/link/out');
+            }
+
         })->addInstanceCommand("entity_exception", new class() extends EntityCommand {
             public function label(): string { return "label"; }
             public function execute(EntityListQueryParams $params, array $data = []): array {
@@ -258,6 +338,22 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
             public function execute(EntityListQueryParams $params, array $data = []): array {
                 $this->validate($data, ["name"=>"required"]);
                 return $this->reload();
+            }
+
+        })->addEntityCommand("entity_download", new class() extends EntityCommand {
+            public function label(): string { return "label"; }
+            public function execute(EntityListQueryParams $params, array $data = []): array {
+                Storage::fake('files');
+                UploadedFile::fake()->create('account.pdf')->storeAs('pdf', 'account.pdf', ['disk'=>'files']);
+                return $this->download("pdf/account.pdf", "account.pdf", "files");
+            }
+
+        })->addEntityCommand("entity_download_no_disk", new class() extends EntityCommand {
+            public function label(): string { return "label"; }
+            public function execute(EntityListQueryParams $params, array $data = []): array {
+                Storage::fake('local');
+                UploadedFile::fake()->create('account.pdf')->storeAs('pdf', 'account.pdf');
+                return $this->download("pdf/account.pdf");
             }
 
         })->addInstanceCommand("entity_unauthorized", new class() extends EntityCommand {
@@ -281,6 +377,33 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
             {
                 return $this->info($params->sortedBy() . $params->sortedDir());
             }
+        })->addEntityCommand("entity_with_init_data", new class() extends EntityCommand {
+            public function label(): string { return "label"; }
+            public function buildFormFields() {
+                $this->addField(SharpFormTextField::make("name"));
+            }
+            protected function initialData(): array
+            {
+                return [
+                    "name" => "John Wayne",
+                    "age" => 32
+                ];
+            }
+            public function execute(EntityListQueryParams $params, array $data = []): array {}
+
+        })->addEntityCommand("instance_with_init_data", new class() extends InstanceCommand {
+            public function label(): string { return "label"; }
+            public function buildFormFields() {
+                $this->addField(SharpFormTextField::make("name"));
+            }
+            protected function initialData($instanceId): array
+            {
+                return [
+                    "name" => "John Wayne [$instanceId]",
+                    "age" => 32
+                ];
+            }
+            public function execute($instanceId, array $data = []): array {}
         });
 
     }

@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
+use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
+
 class EntityListControllerTest extends BaseApiTest
 {
     protected function setUp()
@@ -69,7 +71,7 @@ class EntityListControllerTest extends BaseApiTest
     }
 
     /** @test */
-    public function default_filter_value_is_used_if_no_value_was_went()
+    public function default_filter_value_is_used_if_no_value_was_sent()
     {
         $this->buildTheWorld();
 
@@ -105,6 +107,33 @@ class EntityListControllerTest extends BaseApiTest
         $this->buildTheWorld();
 
         $this->json('get', '/sharp/api/list/person?filter_age_multiple=22')
+            ->assertStatus(200)
+            ->assertJsonFragment(["data" => [
+                "items" => [
+                    ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
+                ]
+            ]]);
+    }
+
+    /** @test */
+    public function we_can_define_a_was_set_callback_on_a_filter()
+    {
+        $this->buildTheWorld();
+
+        $age = rand(1, 99);
+        $this->json('get', '/sharp/api/list/person?filter_age=' . $age);
+
+        // The age was put in session in the Callback
+        $this->assertEquals($age, session("filter_age_was_set"));
+    }
+
+    /** @test */
+    public function we_can_force_a_filter_value_in_a_callback()
+    {
+        $this->buildTheWorld();
+
+        // Filter `age` will be force set in the `age_forced` filter callback
+        $this->json('get', '/sharp/api/list/person?filter_age_forced=22&filter_age=12')
             ->assertStatus(200)
             ->assertJsonFragment(["data" => [
                 "items" => [
@@ -177,6 +206,41 @@ class EntityListControllerTest extends BaseApiTest
                 "searchable" => true,
                 "paginated" => false
             ]]);
+    }
+
+    /** @test */
+    public function we_can_get_notifications()
+    {
+        $this->buildTheWorld();
+
+        (new PersonSharpForm())->notify("title")
+            ->setLevelSuccess()
+            ->setDetail("body")
+            ->setAutoHide(false);
+
+        $this->json('get', '/sharp/api/list/person')
+            ->assertStatus(200)
+            ->assertJson(["notifications" => [[
+                "level" => "success",
+                "title" => "title",
+                "message" => "body",
+                "autoHide" => false
+            ]]]);
+
+        $this->json('get', '/sharp/api/list/person')
+            ->assertStatus(200)
+            ->assertJsonMissing(["alert"]);
+
+        (new PersonSharpForm())->notify("title1");
+        (new PersonSharpForm())->notify("title2");
+
+        $this->json('get', '/sharp/api/list/person')
+            ->assertStatus(200)
+            ->assertJson(["notifications" => [[
+                "title" => "title1",
+            ], [
+                "title" => "title2",
+            ]]]);
     }
 
     /** @test */

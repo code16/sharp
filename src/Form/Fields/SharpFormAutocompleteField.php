@@ -216,14 +216,6 @@ class SharpFormAutocompleteField extends SharpFormField
     }
 
     /**
-     * @return string
-     */
-    public function itemLabelAttribute()
-    {
-        return $this->itemLabelAttribute;
-    }
-
-    /**
      * @return array
      */
     protected function validationRules()

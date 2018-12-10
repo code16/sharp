@@ -31,7 +31,7 @@ class SharpFormUploadField extends SharpFormField
      */
     public function setFileFilter($fileFilter)
     {
-        $this->fileFilter = $this->formatFileFilter($fileFilter);
+        $this->fileFilter = $this->formatFileExtension($fileFilter);
 
         return $this;
     }
@@ -55,6 +55,7 @@ class SharpFormUploadField extends SharpFormField
             "maxFileSize" => "numeric",
             "ratioX" => "integer|nullable",
             "ratioY" => "integer|nullable",
+            "croppableFileTypes" => "array",
             "compactThumbnail" => "boolean"
         ];
     }
@@ -70,6 +71,7 @@ class SharpFormUploadField extends SharpFormField
             "fileFilter" => $this->fileFilter,
             "ratioX" => $this->cropRatio ? (int)$this->cropRatio[0] : null,
             "ratioY" => $this->cropRatio ? (int)$this->cropRatio[1] : null,
+            "croppableFileTypes" => $this->croppableFileTypes,
             "compactThumbnail" => $this->compactThumbnail
         ]);
     }
@@ -78,7 +80,7 @@ class SharpFormUploadField extends SharpFormField
      * @param $fileFilter
      * @return array
      */
-    private function formatFileFilter($fileFilter)
+    private function formatFileExtension($fileFilter)
     {
         if(!is_array($fileFilter)) {
             $fileFilter = explode(",", $fileFilter);
