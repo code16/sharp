@@ -105,7 +105,7 @@
         },
         computed: {
             apiPath() {
-                let path = `${API_PATH}/form/${this.entityKey}`;
+                let path = `form/${this.entityKey}`;
                 if(this.instanceId) path+=`/${this.instanceId}`;
                 return path;
             },

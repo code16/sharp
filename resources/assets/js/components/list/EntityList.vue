@@ -203,7 +203,7 @@
             },
 
             apiPath() {
-                return `${API_PATH}/list/${this.entityKey}`;
+                return `list/${this.entityKey}`;
             },
             apiParams() {
                 if(!this.ready) {
