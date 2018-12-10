@@ -41,7 +41,7 @@
     "show-stats": "npm run stats && webpack-bundle-size-analyzer stats.json"
   },
   "devDependencies": {
-    "@vue/test-utils": "^1.0.0-beta.24",
+    "@vue/test-utils": "^1.0.0-beta.25",
     "axios": "^0.15.2",
     "babel-jest": "^20.0.3",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
@@ -78,6 +78,7 @@
     "font-awesome": "^4.7.0",
     "trix": "^0.11.1",
     "vue": "^2.5.16",
-    "vue-router": "^2.8.1"
+    "vue-router": "^3.0.2",
+    "vuex": "^3.0.1"
   }
 }

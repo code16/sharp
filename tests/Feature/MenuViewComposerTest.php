@@ -15,6 +15,7 @@ class MenuViewComposerTest extends BaseApiTest
     /** @test */
     function we_can_define_an_external_url_in_the_menu()
     {
+        $this->withoutExceptionHandling();
         $this->buildTheWorld();
 
         $this->app['config']->set(
@@ -38,7 +39,7 @@ class MenuViewComposerTest extends BaseApiTest
     }
 
     /** @test */
-    function we_can_define_an_direct_entity_link_in_the_menu()
+    function we_can_define_a_direct_entity_link_in_the_menu()
     {
         $this->buildTheWorld();
 
@@ -52,7 +53,7 @@ class MenuViewComposerTest extends BaseApiTest
             ]
         );
 
-        $menu = $this->get('/sharp/')->getOriginalContent()["sharpMenu"];
+        $menu = $this->followingRedirects()->get('/sharp/')->getOriginalContent()["sharpMenu"];
 
         $this->assertArraySubset([
             "key" => "person",
@@ -63,7 +64,7 @@ class MenuViewComposerTest extends BaseApiTest
     }
 
     /** @test */
-    function we_can_define_an_category_in_the_menu()
+    function we_can_define_a_category_in_the_menu()
     {
         $this->buildTheWorld();
 
@@ -82,7 +83,7 @@ class MenuViewComposerTest extends BaseApiTest
             ]
         );
 
-        $menu = $this->get('/sharp/')->getOriginalContent()["sharpMenu"];
+        $menu = $this->followingRedirects()->get('/sharp/')->getOriginalContent()["sharpMenu"];
 
         $this->assertEquals("Data", $menu->menuItems[0]->label);
         $this->assertEquals("category", $menu->menuItems[0]->type);
@@ -96,31 +97,27 @@ class MenuViewComposerTest extends BaseApiTest
     }
 
     /** @test */
-    function we_can_define_an_category_in_the_menu_with_the_legacy_format()
+    function we_can_define_a_dashboard_in_the_menu()
     {
         $this->buildTheWorld();
 
         $this->app['config']->set(
             'sharp.menu', [
                 [
-                    "label" => "Data",
-                    "entities" => [
-                        "person" => [
-                            "label" => "people",
-                            "icon" => "fa-user",
-                        ]
-                    ]
+                    "label" => "My Dashboard",
+                    "icon" => "fa-dashboard",
+                    "dashboard" => "personal_dashboard"
                 ]
             ]
         );
 
-        $menu = $this->get('/sharp/')->getOriginalContent()["sharpMenu"];
+        $menu = $this->followingRedirects()->get('/sharp/')->getOriginalContent()["sharpMenu"];
 
         $this->assertArraySubset([
-            "key" => "person",
-            "label" => "people",
-            "icon" => "fa-user",
-            "type" => "entity"
-        ], (array)$menu->menuItems[0]->entities[0]);
+            "key" => "personal_dashboard",
+            "label" => "My Dashboard",
+            "icon" => "fa-dashboard",
+            "type" => "dashboard"
+        ], (array)$menu->menuItems[0]);
     }
 }

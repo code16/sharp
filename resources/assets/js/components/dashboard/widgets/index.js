@@ -1,12 +1,15 @@
 import SharpWidgetPanel from './Panel';
 import SharpWidgetChart from './chart/Chart';
 
-export const NameAssociation = {
-    'graph': SharpWidgetChart.name,
-    'panel': SharpWidgetPanel.name
-};
+export function widgetByType(type) {
+    if(type === 'graph') {
+        return SharpWidgetChart;
+    } else if(type === 'panel') {
+        return SharpWidgetPanel;
+    }
+}
 
-export default {
-    [SharpWidgetChart.name]: SharpWidgetChart,
-    [SharpWidgetPanel.name]: SharpWidgetPanel
+export {
+    SharpWidgetChart,
+    SharpWidgetPanel
 };

@@ -41,7 +41,7 @@ $factory->define(\App\Spaceship::class, function (Faker\Generator $faker) {
 
 $factory->define(\App\Travel::class, function (Faker\Generator $faker) {
     return [
-        'departure_date' => $faker->dateTimeThisYear,
+        'departure_date' => $faker->dateTimeInInterval('-10 years', '+10 years'),
         'spaceship_id' => function() {
             return (\App\Spaceship::class)->create()->id;
         },

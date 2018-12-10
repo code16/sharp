@@ -1,10 +1,10 @@
-# The Dashboard
+# Create a Dashboard
 
-By default, the sharp homepage is a welcome text, with the side menu to navigate. You can decide to integrate here a Dashboard, with graphs (bars and line) and stat data, or with personalized reminders for instance.
+A Dashboard is a good way to present synthetic data to the user, with graphs, stats, or personalized reminders for instance.
 
 ## Write the class
 
-The Dashboard is very much like an Entity Form, except it readonly. So the first step is to create a new class extending `Code16\Sharp\Dashboard\SharpDashboard` which lead us to implement three functions:
+A Dashboard is very much like an Entity Form, except it readonly. So the first step is to create a new class extending `Code16\Sharp\Dashboard\SharpDashboard` which lead us to implement three functions:
 
 - `buildWidgets()`, similar to Entity Form's `buildForm()`
 - `buildWidgetsLayout()`, similar to `buildLayout()`
@@ -39,7 +39,6 @@ And here's the full list and documentation of each widget available, for the spe
 - [Graph](dashboard-widgets/graph.md)
 - [Panel](dashboard-widgets/panel.md)
 
-
 ### `buildWidgetsLayout()`
 
 The layout API is a bit different of Entity Form here, because we think in terms of rows and not columns. So for instance:
@@ -54,7 +53,6 @@ The layout API is a bit different of Entity Form here, because we think in terms
     }
 
 We can only add rows and "full width widgets" (which are a shortcut for a single widget row). A row groups widgets in a 12-based grid.
-
 
 ### `buildWidgetsData()`
 
@@ -73,10 +71,57 @@ Once this class written, we have to declare the form in the sharp config file:
         "entities" => [
             [...]
         ],
-        "dashboard" => \App\Sharp\Dashboard::class
+        "dashboards" => [
+            "company_dashboard" => [
+                "view" => \App\Sharp\CompanyDashboard::class
+            ]
+        ],
+        [...]
+        "menu" => [
+            [
+                "label" => "Company",
+                "entities" => [
+                    [
+                        "label" => "Dashboard",
+                        "icon" => "fa-dashboard",
+                        "dashboard" => "company_dashboard"
+                    ],
+                    [...]
+                ]
+            ]
+        ]
     ];
 
-This will display the Dashboard on the `/sharp` home URL, and add a link in the side menu.
+In the menu, like an Entity, a Dashboard can be displayed anywhere.  
+
+## Dashboard policies
+
+Just like for an Entity, you can define a Policy for a Dashboard. The only available action is `view`.
+
+    // config/sharp.php
+    
+    return [
+        "entities" => [
+            [...]
+        ],
+        "dashboards" => [
+            "company_dashboard" => [
+                "view" => \App\Sharp\CompanyDashboard::class,
+                "policy" => \App\Sharp\Policies\CompanyDashboardPolicy::class,
+            ]
+        ],
+        [...]
+    ];
+
+And the policy class can be pretty straightforward:
+
+    class CompanyDashboardPolicy
+    {
+        public function view(User $user)
+        {
+            return $user->hasGroup("boss");
+        }
+    }
 
 ---
 

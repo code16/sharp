@@ -6,18 +6,25 @@ class DashboardController extends ApiController
 {
 
     /**
+     * @param $dashboardKey
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
      */
-    public function index()
+    public function show($dashboardKey)
     {
-        $dashboard = $this->getDashboardInstance();
+        sharp_check_ability("view", $dashboardKey);
+
+        $dashboard = $this->getDashboardInstance($dashboardKey);
 
         if(!$dashboard) {
             abort(404, "Dashboard not found");
         }
 
+        $dashboard->buildDashboardConfig();
+
         return response()->json([
             "widgets" => $dashboard->widgets(),
+            "config" => $dashboard->dashboardConfig(),
             "layout" => $dashboard->widgetsLayout(),
             "data" => $dashboard->data(),
         ]);

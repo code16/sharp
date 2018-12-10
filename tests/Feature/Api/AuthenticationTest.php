@@ -28,6 +28,7 @@ class AuthenticationTest extends BaseApiTest
     /** @test */
     public function authenticated_user_are_redirected_on_a_guest_route()
     {
+        $this->withoutExceptionHandling();
         $this->buildTheWorld();
 
         $this->login();

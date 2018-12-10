@@ -1,53 +1,37 @@
 <template>
     <div class="SharpGrid">
-        <div v-for="(row,i) in rows" class="SharpGrid__row row">
-            <div v-for="(col,j) in row" :class="colClass[i][j]" class="SharpGrid__col" v-empty-class="'SharpGrid__col--empty'">
-                <slot v-bind="col"></slot>
+        <div v-for="row in rows" class="SharpGrid__row row">
+            <div v-for="col in row" :class="colClasses(col)" class="SharpGrid__col" v-empty-class="'SharpGrid__col--empty'">
+                <slot v-bind="col" />
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import EmptyClass from '../directives/EmptyClass';
+    import emptyClass from '../directives/EmptyClass';
 
     export default {
-        name:'SharpGrid',
+        name: 'SharpGrid',
 
         props: {
-            rows: { // 2D array [ligne][col]
+            rows: { // 2D array [row][col]
                 type: Array,
                 required: true
             }
         },
-        computed : {
-            colClass() {
-                let res=[];
-                for(let i=0;i<this.rows.length;i++) {
-                    res[i] = [];
-                    let equals=false;
-                    for(let j=0;j<this.rows[i].length;j++) {
-                        let col = this.rows[i][j];
-                        if(equals || !col.size) {
-                            if(!equals) {
-                                res[i].fill('col-md');
-                                equals = true;
-                            }
-                            res[i][j] = 'col-md';
-                        }
-                        else {
-                            res[i][j] = `col-md-${col.size}`;
-                            if(col.sizeXS) {
-                                res[i][j] += ` col-${col.sizeXS}`;
-                            }
-                        }
-                    }
+        methods: {
+            colClasses({ size, sizeXS }) {
+                const hasSize = !!size;
+                return {
+                    [`col-${sizeXS}`]: sizeXS,
+                    [`col-md-${size}`]: hasSize,
+                    'col-md': !hasSize
                 }
-                return res;
             }
         },
         directives: {
-            EmptyClass
+            'empty-class': emptyClass
         }
     }
 </script>

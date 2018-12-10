@@ -8,12 +8,12 @@
 </template>
 
 <script>
-    import Multiselect from './Multiselect';
+    import SharpMultiselect from './Multiselect';
 
     export default {
         name: 'SharpLocaleSelector',
         components: {
-            [Multiselect.name]: Multiselect
+            SharpMultiselect
         },
         props: {
             locales: Array,

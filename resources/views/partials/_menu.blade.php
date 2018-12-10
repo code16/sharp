@@ -1,5 +1,5 @@
 <sharp-left-nav v-cloak
-    current="{{ $sharpMenu->currentEntity ?: ($dashboard ? 'dashboard' : '') }}"
+    current="{{ $sharpMenu->currentEntity }}"
     :items="{{ json_encode($sharpMenu->menuItems) }}"
 >
     <div class="SharpLeftNav__title-container">
@@ -15,43 +15,21 @@
             <a href="{{ route('code16.sharp.logout') }}"> <sharp-item-visual :item="{ icon:'fa-sign-out' }" icon-class="fa-fw"></sharp-item-visual></a>
         </sharp-nav-item>
 
-        @if($sharpMenu->dashboard)
-            <sharp-nav-item :current="{{ json_encode($dashboard ?? false) }}" link="{{ route('code16.sharp.dashboard') }}">
-                <span>
-                    <sharp-item-visual :item="{ icon:'fa-dashboard' }" icon-class="fa-fw"></sharp-item-visual>
-                    @lang('sharp::menu.dashboard')
-                </span>
-            </sharp-nav-item>
-        @endif
-
         @foreach($sharpMenu->menuItems as $menuItem)
             @if($menuItem->type == 'category')
                 <sharp-collapsible-item label="{{ $menuItem->label }}">
                     @foreach($menuItem->entities as $entity)
-                        <sharp-nav-item :current="{{ json_encode($sharpMenu->currentEntity==$entity->key) }}"
-                                        link="{{ route('code16.sharp.list', $entity->key) }}">
-                        <span>
-                            @if($entity->icon)
-                                <sharp-item-visual :item="{{ json_encode($entity) }}" icon-class="fa-fw"></sharp-item-visual>
-                            @endif
-                            {{ $entity->label }}
-                        </span>
-                        </sharp-nav-item>
+                        @include('sharp::partials._menu-item', [
+                            'item' => $entity,
+                            'isCurrent' => $sharpMenu->currentEntity == $entity->key
+                        ])
                     @endforeach
                 </sharp-collapsible-item>
             @else
-                <sharp-nav-item :current="{{ json_encode($sharpMenu->currentEntity==$menuItem->key) }}"
-                                link="{{ ($menuItem->type == 'entity') ? route('code16.sharp.list', $menuItem->key) : $menuItem->url}}">
-                        <span>
-                            @if($menuItem->icon)
-                                <sharp-item-visual :item="{{ json_encode($menuItem) }}" icon-class="fa-fw"></sharp-item-visual>
-                            @endif
-                            {{ $menuItem->label }}
-                            @if($menuItem->type === 'url')
-                                <i class="fa fa-external-link fa-fw" style="float:right; opacity:.5; line-height:inherit"></i>
-                            @endif
-                        </span>
-                </sharp-nav-item>
+                @include('sharp::partials._menu-item', [
+                    'item' => $menuItem,
+                    'isCurrent' => $sharpMenu->currentEntity == $menuItem->key
+                ])
             @endif
         @endforeach
     </ul>

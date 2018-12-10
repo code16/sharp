@@ -69,10 +69,25 @@ return [
         ],
     ],
 
+    "dashboards" => [
+        "company_dashboard" => [
+            "view" => \App\Sharp\CompanyDashboard::class,
+            "policy" => \App\Sharp\Policies\CompanyDashboardPolicy::class,
+        ],
+        "travels_dashboard" => [
+            "view" => \App\Sharp\TravelsDashboard::class,
+        ],
+    ],
+
     "menu" => [
         [
             "label" => "Company",
             "entities" => [
+                [
+                    "label" => "Dashboard",
+                    "icon" => "fa-dashboard",
+                    "dashboard" => "company_dashboard"
+                ],
                 [
                     "label" => "Spaceships",
                     "icon" => "fa-space-shuttle",
@@ -88,6 +103,11 @@ return [
             "label" => "Travels",
             "entities" => [
                 [
+                    "label" => "Dashboard",
+                    "icon" => "fa-dashboard",
+                    "dashboard" => "travels_dashboard"
+                ],
+                [
                     "label" => "Passengers",
                     "icon" => "fa-bed",
                     "entity" => "passenger"
@@ -96,7 +116,12 @@ return [
                     "label" => "Travel",
                     "icon" => "fa-suitcase",
                     "entity" => "travel"
-                ]
+                ],
+                [
+                    "label" => "Some external link",
+                    "icon" => "fa-globe",
+                    "url" => "https://google.com"
+                ],
             ]
         ], [
             "label" => "Admin",
@@ -119,8 +144,6 @@ return [
             "entity" => "feature"
         ]
     ],
-
-    "dashboard" => \App\Sharp\Dashboard::class,
 
     "uploads" => [
         "tmp_dir" => env("SHARP_UPLOADS_TMP_DIR", "tmp"),

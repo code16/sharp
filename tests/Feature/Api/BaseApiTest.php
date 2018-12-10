@@ -50,7 +50,7 @@ abstract class BaseApiTest extends SharpTestCase
         );
 
         $this->app['config']->set(
-            'sharp.dashboard',
+            'sharp.dashboards.personal_dashboard.view',
             SharpDashboard::class
         );
 

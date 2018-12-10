@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Tests\Unit\Dashboard;
 
+use Code16\Sharp\Dashboard\DashboardQueryParams;
 use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
 use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
@@ -72,7 +73,7 @@ class SharpDashboardTest extends SharpTestCase
             {
                 $this->addWidget(SharpBarGraphWidget::make("widget"));
             }
-            protected function buildWidgetsData()
+            protected function buildWidgetsData(DashboardQueryParams $params)
             {
                 $this->addGraphDataSet("widget", SharpGraphWidgetDataSet::make([
                     "a" => 10, "b" => 20, "c" => 30,
@@ -104,7 +105,7 @@ class SharpDashboardTest extends SharpTestCase
             {
                 $this->addWidget(SharpBarGraphWidget::make("widget"));
             }
-            protected function buildWidgetsData()
+            protected function buildWidgetsData(DashboardQueryParams $params)
             {
                 $this->addGraphDataSet("widget", SharpGraphWidgetDataSet::make([
                     "a" => 10, "b" => 20, "c" => 30,
@@ -145,7 +146,7 @@ class SharpDashboardTest extends SharpTestCase
                     SharpPanelWidget::make("widget")->setInlineTemplate('<b>Hello {{user}}</b>')
                 );
             }
-            protected function buildWidgetsData()
+            protected function buildWidgetsData(DashboardQueryParams $params)
             {
                 $this->setPanelData("widget", ["user" => "John Wayne"]);
             }
@@ -166,5 +167,5 @@ class SharpDashboardTestDashboard extends SharpDashboard
 {
     protected function buildWidgets() {}
     protected function buildWidgetsLayout() {}
-    protected function buildWidgetsData() { }
+    protected function buildWidgetsData(DashboardQueryParams $params) { }
 }

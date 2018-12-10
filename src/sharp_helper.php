@@ -38,7 +38,7 @@ function sharp_page_title($sharpMenu, $entityKey)
 
         $title = $sharpMenu->name
             . ', '
-            . ($entityLabel ?: ($sharpMenu->dashboard ? trans('sharp::menu.dashboard') : ""));
+            . $entityLabel;
     }
 
     return  "$title | Sharp " . sharp_version();

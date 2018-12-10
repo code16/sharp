@@ -48,11 +48,12 @@ abstract class ApiController extends SharpProtectedController
     }
 
     /**
+     * @param string $dashboardKey
      * @return SharpDashboard|null
      */
-    protected function getDashboardInstance()
+    protected function getDashboardInstance(string $dashboardKey)
     {
-        $dashboardClass = config("sharp.dashboard");
+        $dashboardClass = config("sharp.dashboards.$dashboardKey.view");
 
         return $dashboardClass ? app($dashboardClass) : null;
     }

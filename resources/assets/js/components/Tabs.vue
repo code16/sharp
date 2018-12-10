@@ -7,7 +7,7 @@
                     @click="expanded=!expanded"
             >
                 <span v-if="tabs[currentTab]" :class="dropdownButtonClasses">{{ tabs[currentTab].title }}</span>
-                <sharp-dropdown-arrow class="ml-1" :style="expanded && 'transform: rotate(180deg)'"/>
+                <dropdown-arrow class="ml-1" :style="expanded && 'transform: rotate(180deg)'"/>
             </button>
             <div class="SharpTabs__nav SharpTabs__nav--ghost m-0 p-0" style="height:0;overflow: hidden" v-has-overflow.width="hasNavOverflow">
                 <div :style="{minWidth:`${extraNavGhostWidth}px`}">&nbsp;</div>
@@ -59,7 +59,7 @@
     import Vue from 'vue';
     import Tabs from 'bootstrap-vue/es/components/tabs/tabs'
     import bCollapse from 'bootstrap-vue/es/components/collapse/collapse';
-    import SharpDropdownArrow from './dropdown/Arrow.vue';
+    import DropdownArrow from './dropdown/Arrow.vue';
     import HasOverflow from '../directives/HasOverflow';
     import { Responsive } from '../mixins';
 
@@ -71,7 +71,7 @@
         extends: Tabs,
         components: {
             bCollapse,
-            SharpDropdownArrow
+            DropdownArrow
         },
 
         data() {

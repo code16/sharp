@@ -5,9 +5,11 @@ namespace Code16\Sharp\Dashboard;
 use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpWidget;
+use Code16\Sharp\Utils\Filters\HandleFilters;
 
 abstract class SharpDashboard
 {
+    use HandleFilters;
 
     /**
      * @var bool
@@ -116,13 +118,44 @@ abstract class SharpDashboard
     }
 
     /**
+     * Build config, meaning add filters, if necessary.
+     */
+    public function buildDashboardConfig()
+    {
+    }
+
+    /**
+     * @return array
+     */
+    public function dashboardConfig()
+    {
+        return tap([], function(&$config) {
+            $this->appendFiltersToConfig($config);
+        });
+    }
+
+    /**
      * Return data, as an array.
      *
      * @return array
      */
     function data(): array
     {
-        $this->buildWidgetsData();
+        $this->buildWidgetsData(
+            DashboardQueryParams::create()
+                ->fillWithRequest()
+                ->setDefaultFilters(
+                    collect($this->filterHandlers)
+                        ->filter(function($handler, $attribute) {
+                            return !request()->has("filter_$attribute")
+                                && $handler instanceof DashboardRequiredFilter;
+
+                        })->map(function($handler, $attribute) {
+                            return ["name" => $attribute, "value" => $handler->defaultValue()];
+
+                        })->pluck("value", "name")->all()
+                )
+        );
 
         // First, graph widgets dataSets
         $data = collect($this->graphWidgetDataSets)
@@ -193,6 +226,8 @@ abstract class SharpDashboard
 
     /**
      * Build dashboard's widgets data, using ->addGraphDataSet and ->setPanelData
+     *
+     * @param DashboardQueryParams $params
      */
-    protected abstract function buildWidgetsData();
+    protected abstract function buildWidgetsData(DashboardQueryParams $params);
 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>{{ sharp_page_title($sharpMenu ?? null, $entityKey ?? null) }}</title>
+    <title>{{ sharp_page_title($sharpMenu ?? null, $entityKey ?? $dashboardKey ?? null) }}</title>
     <link rel="stylesheet" href="/vendor/sharp/sharp.css?version={{ sharp_version() }}">
     <link rel="stylesheet" href="/vendor/sharp/sharp-cms.css?version={{ sharp_version() }}">
     {!! array_get($injectedAssets ?? [], 'head') !!}
@@ -16,7 +16,7 @@
 
     <script src="/vendor/sharp/manifest.js?version={{ sharp_version() }}"></script>
     <script src="/vendor/sharp/vendor.js?version={{ sharp_version() }}"></script>
-    <script src="/vendor/sharp/api.js?version={{ sharp_version() }}"></script>
+    <script src="/vendor/sharp/client-api.js?version={{ sharp_version() }}"></script>
 
     {!! sharp_custom_form_fields() !!}
 

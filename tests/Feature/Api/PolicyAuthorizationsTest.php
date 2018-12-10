@@ -17,6 +17,7 @@ class PolicyAuthorizationsTest extends BaseApiTest
         parent::getEnvironmentSetUp($app);
 
         $app['config']['sharp.entities.person.policy'] = AuthorizationsTestPersonPolicy::class;
+        app()['config']['sharp.dashboards.personal_dashboard.policy'] = AuthorizationsTestPersonalDashboardPolicy::class;
     }
 
     /** @test */
@@ -122,6 +123,17 @@ class PolicyAuthorizationsTest extends BaseApiTest
         $this->json('post', '/sharp/api/form/person', [])->assertStatus(403);
         $this->json('delete', '/sharp/api/form/person/50')->assertStatus(403);
     }
+
+    /** @test */
+    public function dashboard_policy_can_be_set_to_handle_whole_dashboard_visibility()
+    {
+        $this->buildTheWorld();
+
+        $this->json('get', '/sharp/api/dashboard/personal_dashboard')->assertStatus(200);
+
+        $this->actingAs(new User(["name" => "Unauthorized-User"]));
+        $this->json('get', '/sharp/api/dashboard/personal_dashboard')->assertStatus(403);
+    }
 }
 
 class AuthorizationsTestPersonPolicy
@@ -136,4 +148,12 @@ class AuthorizationsTestPersonPolicy
     public function update(User $user, $id) { return $id < 2; }
 
     public function delete(User $user, $id) { return false; }
+}
+
+class AuthorizationsTestPersonalDashboardPolicy
+{
+    public function view(User $user)
+    {
+        return $user->name != "Unauthorized-User";
+    }
 }

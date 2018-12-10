@@ -15,8 +15,8 @@
     import Bar from 'vue-chartjs/es/BaseCharts/Bar';
     import Line from 'vue-chartjs/es/BaseCharts/Line';
     import Pie from 'vue-chartjs/es/BaseCharts/Pie';
-    import Chartjs from './Chartjs';
-    import Legend from './Legend';
+    import SharpChartjs from './Chartjs';
+    import SharpLegend from './Legend';
 
     const noop = ()=>{};
 
@@ -24,8 +24,8 @@
         name:'SharpWidgetChart',
 
         components: {
-            [Chartjs.name]:Chartjs,
-            [Legend.name]:Legend
+            SharpChartjs,
+            SharpLegend
         },
 
         props: {

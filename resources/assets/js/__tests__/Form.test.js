@@ -186,7 +186,7 @@ describe('sharp-form', ()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    test('api path', async ()=> {
+    xtest('api path', async ()=> {
         consts.API_PATH = '/test-api';
         let $form = await createVm();
 
