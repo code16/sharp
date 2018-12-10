@@ -1,0 +1,1 @@
+webpackJsonp([2],{2:function(e,n,o){e.exports=o("pOC0")},pOC0:function(e,n,o){"use strict";Object.defineProperty(n,"__esModule",{value:!0});var t=o("I3G/"),p=o.n(t);window.Vue=p.a}},[2]);
