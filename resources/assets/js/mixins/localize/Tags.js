@@ -15,5 +15,8 @@ export default {
                 resolve:l => l===this.locale ? text : null
             }) : text;
         },
+        localizedCustomLabel(option) {
+            return this.localizeLabel(option.label)
+        }
     }
 }

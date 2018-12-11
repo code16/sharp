@@ -6,7 +6,8 @@ describe('localize-field', ()=>{
     let wrapper;
     beforeEach(()=>{
         wrapper = mount({
-            mixins: [localizeField]
+            mixins: [localizeField],
+            render: h => h(null)
         }, {
             propsData: { locale: 'fr', localized: false },
             provide: mockInjections({ locales:['en', 'fr'], localized: false })
@@ -24,7 +25,6 @@ describe('localize-field', ()=>{
     test('isLocalized', ()=>{
         expect(wrapper.vm.isLocalized).toEqual(false);
         wrapper.vm.$form.localized = true;
-        wrapper.update();
         expect(wrapper.vm.isLocalized).toEqual(false);
         wrapper.setProps({ localized:true });
         expect(wrapper.vm.isLocalized).toEqual(true);

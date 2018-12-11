@@ -15,7 +15,10 @@ jest.mock('../utils', ()=>({
 describe('localize-select', ()=>{
     let wrapper;
     beforeEach(()=>{
-        wrapper = mount(localizeTags, {
+        wrapper = mount({
+            mixins:[localizeTags],
+            render: h => h(null)
+        }, {
             provide: mockInjections({ locales:['en', 'fr'], localized: true })
         })
     });
