@@ -53,9 +53,6 @@
         },
         created() {
             Trix.config.toolbar.getDefaultHTML = () => '';
-        },
-        mounted() {
-            //console.log(Trix);
         }
     }
 </script>

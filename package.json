@@ -76,7 +76,7 @@
   "dependencies": {
     "carbon-components": "^7.26.2",
     "font-awesome": "^4.7.0",
-    "trix": "^0.11.1",
+    "trix": "^1.0.0",
     "vue": "^2.5.16",
     "vue-router": "^3.0.2",
     "vuex": "^3.0.1"

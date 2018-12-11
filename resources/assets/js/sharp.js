@@ -33,6 +33,8 @@ Vue.use(VueGoogleMaps, {
     installComponents: false
 });
 
+Vue.config.ignoredElements = [/^trix-/];
+
 // prevent recursive components import
 Vue.component(SharpFieldDisplay.name, SharpFieldDisplay);
 const SharpLoading = Vue.extend(Loading);
