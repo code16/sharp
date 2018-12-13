@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Form\Fields\Utils;
 
+use Illuminate\Support\Collection;
+
 trait SharpFormFieldWithOptions
 {
 

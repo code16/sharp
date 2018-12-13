@@ -28,7 +28,6 @@ class SpaceshipSharpValidator extends FormRequest
     {
         return [
             'name.fr' => 'required',
-            'name.en' => 'required',
             'type_id' => 'required',
 //            'picture' => 'required',
             'pictures.*.file' => 'required',

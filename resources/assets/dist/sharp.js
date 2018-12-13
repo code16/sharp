@@ -89096,6 +89096,9 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
                     return l === _this.locale ? text : null;
                 }
             }) : text;
+        },
+        localizedCustomLabel: function localizedCustomLabel(option) {
+            return this.localizeLabel(option.label);
         }
     }
 });
