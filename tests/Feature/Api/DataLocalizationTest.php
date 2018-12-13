@@ -55,7 +55,7 @@ class DataLocalizationTest extends BaseApiTest
     {
         $this->app['config']->set(
             'sharp.entities.person.form',
-            PersonSharpForm::class
+            DataLocalizationWithoutLocalizedFieldTestForm::class
         );
 
         $this->json('get', '/sharp/api/form/person')
@@ -72,6 +72,15 @@ class DataLocalizationTestForm extends PersonSharpForm
     {
         $this->addField(SharpFormTextField::make("name")->setLocalized());
     }
+
+    function getDataLocalizations()
+    {
+        return ["fr", "en"];
+    }
+}
+
+class DataLocalizationWithoutLocalizedFieldTestForm extends PersonSharpForm
+{
 
     function getDataLocalizations()
     {
