@@ -20,17 +20,12 @@ class DataLocalizationTest extends BaseApiTest
         $this->login();
     }
 
-
     /** @test */
     function we_add_the_locales_array_if_configured_to_the_form()
     {
         $this->app['config']->set(
             'sharp.entities.person.form',
             DataLocalizationTestForm::class
-        );
-
-        $this->app['config']->set(
-            'sharp.locales', ["fr", "en"]
         );
 
         $this->json('get', '/sharp/api/form/person')
@@ -45,7 +40,7 @@ class DataLocalizationTest extends BaseApiTest
     {
         $this->app['config']->set(
             'sharp.entities.person.form',
-            DataLocalizationTestForm::class
+            PersonSharpForm::class
         );
 
         $this->json('get', '/sharp/api/form/person')
@@ -63,10 +58,6 @@ class DataLocalizationTest extends BaseApiTest
             PersonSharpForm::class
         );
 
-        $this->app['config']->set(
-            'sharp.locales', ["fr", "en"]
-        );
-
         $this->json('get', '/sharp/api/form/person')
             ->assertJsonMissing(["locales"]);
 
@@ -80,5 +71,10 @@ class DataLocalizationTestForm extends PersonSharpForm
     function buildFormFields()
     {
         $this->addField(SharpFormTextField::make("name")->setLocalized());
+    }
+
+    function getDataLocalizations()
+    {
+        return ["fr", "en"];
     }
 }

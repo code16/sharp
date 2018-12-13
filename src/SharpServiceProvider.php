@@ -143,9 +143,6 @@ class SharpServiceProvider extends ServiceProvider
             'sharp_api_append_list_authorizations', AppendListAuthorizations::class
 
         )->aliasMiddleware(
-            'sharp_api_append_form_data_localizations', AppendFormDataLocalizations::class
-
-        )->aliasMiddleware(
             'sharp_api_append_list_multiform', AppendListMultiform::class
 
         )->aliasMiddleware(

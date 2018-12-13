@@ -176,6 +176,14 @@ class SpaceshipSharpForm extends SharpForm
         });
     }
 
+    /**
+     * @return array
+     */
+    function getDataLocalizations()
+    {
+        return ["fr", "en"];
+    }
+
     function create(): array
     {
         return $this->transform(new Spaceship(["name" => "new"]));
