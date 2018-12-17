@@ -1,11 +1,25 @@
 <template>
     <div class="SharpFieldContainer SharpForm__form-item" :class="formGroupClasses" :style="extraStyle">
-        <label v-if="showLabel" class="SharpForm__label" @click="triggerFocus">
-            {{label}} <span v-if="fieldProps.localized" class="SharpFieldContainer__label-locale">({{locale}})</span>
-        </label>
+        <div class="row">
+            <div class="col">
+                <label v-if="showLabel" class="SharpForm__label" @click="triggerFocus">
+                    {{label}}
+                </label>
+            </div>
+            <template v-if="fieldProps.localized">
+                <div class="col-auto">
+                    <SharpFieldLocaleSelector
+                        :locales="$form.locales"
+                        :current-locale="locale"
+                        :field-value="originalValue"
+                        @change="handleLocaleChanged"
+                    />
+                </div>
+            </template>
+        </div>
         <sharp-field v-bind="exposedProps"
-                     @error="setError" 
-                     @ok="setOk" 
+                     @error="setError"
+                     @ok="setOk"
                      @clear="clear"
                      @blur="handleBlur"
                      ref="field">
@@ -17,6 +31,7 @@
 
 <script>
     import SharpField from './Field';
+    import SharpFieldLocaleSelector from './FieldLocaleSelector';
     import {ErrorNode, ConfigNode} from '../../mixins/index';
 
     import * as util from '../../util';
@@ -27,7 +42,8 @@
         mixins: [ ErrorNode, ConfigNode ],
 
         components: {
-            SharpField
+            SharpField,
+            SharpFieldLocaleSelector,
         },
 
         inject:['$tab', '$form'],
@@ -37,6 +53,7 @@
 
             label: String,
             helpMessage: String,
+            originalValue: [String, Number, Boolean, Object, Array],
         },
         data() {
             return {
@@ -117,6 +134,9 @@
             },
             handleBlur() {
                 this.$set(this.fieldProps,'focused',false);
+            },
+            handleLocaleChanged(locale) {
+                this.$emit('locale-change', this.fieldKey, locale);
             }
         },
         mounted() {

@@ -7,7 +7,11 @@ export default function (fieldsProp) {
             fieldLocalizedValue(key, value, data=this.data) {
                 let field = this[fieldsProp][key];
                 if(this.localized && field.localized && isLocalizableValueField(field)) {
-                    return localeObjectOrEmpty({ localeObject:data[key], locale: this.locale, value });
+                    return localeObjectOrEmpty({
+                        localeObject: data[key],
+                        locale: this.fieldLocale[key],
+                        value
+                    });
                 }
                 return value;
             }
