@@ -26,18 +26,19 @@
                 type: String,
                 required: true,
             },
-            fieldValue: Object
+            fieldValue: [String, Number, Boolean, Object, Array],
+            isLocaleObject: Boolean,
         },
         methods: {
             isActive(locale) {
                 return this.currentLocale === locale;
             },
             isEmpty(locale) {
-                return !this.fieldValue || !this.fieldValue[locale];
+                return this.isLocaleObject ? !this.fieldValue || !this.fieldValue[locale] : false;
             },
             handleButtonClicked(locale) {
                 this.$emit('change', locale);
-            }
+            },
         }
     }
 </script>

@@ -11,7 +11,8 @@
                     <SharpFieldLocaleSelector
                         :locales="$form.locales"
                         :current-locale="locale"
-                        :field-value="originalValue"
+                        :field-value="resolvedOriginalValue"
+                        :is-locale-object="isLocaleObject"
                         @change="handleLocaleChanged"
                     />
                 </div>
@@ -32,7 +33,8 @@
 <script>
     import SharpField from './Field';
     import SharpFieldLocaleSelector from './FieldLocaleSelector';
-    import {ErrorNode, ConfigNode} from '../../mixins/index';
+    import { ErrorNode, ConfigNode}  from '../../mixins/index';
+    import { resolveTextValue, isLocaleObject } from '../../mixins/localize/utils';
 
     import * as util from '../../util';
 
@@ -95,6 +97,12 @@
             },
             showLabel() {
                 return !!this.label || this.label === '';
+            },
+            resolvedOriginalValue() {
+                return resolveTextValue({ field:this.fieldProps, value:this.originalValue });
+            },
+            isLocaleObject() {
+                return this.fieldProps.localized && isLocaleObject(this.resolvedOriginalValue, this.$form.locales);
             }
         },
         methods: {
