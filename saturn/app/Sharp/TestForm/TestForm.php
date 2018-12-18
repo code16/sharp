@@ -288,6 +288,14 @@ class TestForm extends SharpForm
     }
 
     /**
+     * @return array
+     */
+    function getDataLocalizations()
+    {
+        return ["fr", "en"];
+    }
+
+    /**
      * @param bool $localized
      * @return array
      */
