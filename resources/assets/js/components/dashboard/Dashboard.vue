@@ -32,12 +32,16 @@
             dashboardKey: String
         },
 
+        data() {
+            return {
+                ready: false
+            }
+        },
         watch: {
             '$route': 'init'
         },
         computed: {
             ...mapState('dashboard', {
-                ready: state => state.ready,
                 data: state => state.data,
                 widgets: state => state.widgets,
                 layout: state => state.layout
@@ -52,6 +56,7 @@
                     dashboardKey: this.dashboardKey,
                     filterValues: this.getFilterValuesFromQuery(this.$route.query)
                 });
+                this.ready = true;
             },
         },
         created() {
