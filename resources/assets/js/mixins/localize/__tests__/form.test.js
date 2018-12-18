@@ -20,7 +20,7 @@ describe('localize-form', ()=>{
                     fields: {
                         title: { type:'text', localized: false }
                     },
-                    locale: 'en',
+                    fieldLocale: { title:'en' },
                     localized: true
                 }
             },
