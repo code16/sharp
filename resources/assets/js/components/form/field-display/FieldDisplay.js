@@ -33,7 +33,7 @@ export default {
 
 
 
-    render(h, { props, injections }) {
+    render(h, { props, injections, data }) {
         let { fieldKey,
             contextFields,
             contextData,
@@ -56,11 +56,13 @@ export default {
         updateVisibility && updateVisibility(fieldKey, isVisible);
 
         return isVisible ? h(FieldContainer, {
-            props: {
+            ...data,
+            attrs: {
                 fieldKey,
                 fieldProps: field,
                 fieldType: field.type,
                 value: getValue($form, field, value, props.locale),
+                originalValue: value,
                 label: field.label,
                 helpMessage: field.helpMessage,
                 errorIdentifier: getIdentifier(errorIdentifier, field, props.locale),

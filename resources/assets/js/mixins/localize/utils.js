@@ -36,3 +36,9 @@ export function localeObjectOrEmpty({ localeObject, locale, value }) {
     return !isLocaleObjectEmpty(localizedValue) ? localizedValue: null;
 }
 
+export function resolveTextValue({ field, value }) {
+    if(field.type === 'markdown' || field.type === 'wysiwyg') {
+        return (value || {}).text;
+    }
+    return value;
+}

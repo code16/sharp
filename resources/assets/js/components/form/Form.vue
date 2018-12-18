@@ -23,20 +23,18 @@
                                         :context-fields="isReadOnly ? readOnlyFields : fields"
                                         :context-data="data"
                                         :field-layout="fieldLayout"
-                                        :locale="locale"
+                                        :locale="fieldLocale[fieldLayout.key]"
                                         :error-identifier="fieldLayout.key"
                                         :config-identifier="fieldLayout.key"
                                         :update-data="updateData"
                                         :update-visibility="updateVisibility"
+                                        @locale-change="updateLocale"
                                         ref="field"
                                     />
                                 </template>
                             </sharp-fields-layout>
                         </template>
                     </sharp-grid>
-                </template>
-                <template slot="nav-prepend">
-                    <sharp-locale-selector v-if="localized" class="mr-2" v-model="locale" :locales="locales" :errors="localeSelectorErrors"/>
                 </template>
             </sharp-tabbed-layout>
         </template>
@@ -54,7 +52,7 @@
     import SharpTabbedLayout from '../TabbedLayout'
     import SharpGrid from '../Grid';
     import SharpFieldsLayout from './FieldsLayout.vue';
-    import SharpLocaleSelector from '../LocaleSelector.vue';
+    // import SharpLocaleSelector from '../LocaleSelector.vue';
 
     import localize from '../../mixins/localize/form';
 
@@ -70,7 +68,7 @@
             SharpTabbedLayout,
             SharpFieldsLayout,
             SharpGrid,
-            SharpLocaleSelector
+            // SharpLocaleSelector
         },
 
 
@@ -101,7 +99,7 @@
                 authorizations: null,
 
                 errors:{},
-                locale: '',
+                fieldLocale: {},
                 locales: null,
 
                 fieldVisible: {},
@@ -152,18 +150,21 @@
             }
         },
         methods: {
-            updateData(key,value) {
+            updateData(key, value) {
                 this.$set(this.data,key,this.fieldLocalizedValue(key, value));
             },
             updateVisibility(key, visibility) {
                 this.$set(this.fieldVisible, key, visibility);
+            },
+            updateLocale(key, locale) {
+                this.$set(this.fieldLocale, key, locale);
             },
             mount({fields, layout, data={}, authorizations={}, locales,}) {
                 this.fields = fields;
                 this.layout = this.patchLayout(layout);
                 this.data = data;
                 this.locales = locales;
-                this.locale = locales && locales[0];
+                // this.locale = locales && locales[0];
                 this.authorizations = authorizations;
 
                 if(fields) {
@@ -171,6 +172,9 @@
                         res[fKey] = true;
                         return res;
                     },{});
+                    this.fieldLocale = Object.values(this.fields)
+                        .filter(field => field.localized)
+                        .reduce((res, field) => ({ ...res, [field.key]:locales && locales[0] }),{})
                 }
             },
             handleError({response}) {
