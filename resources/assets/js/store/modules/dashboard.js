@@ -1,7 +1,7 @@
 import filters from './filters';
 import { getDashboard } from "../../api";
 
-
+export const SET_READY = 'SET_READY';
 export const UPDATE = 'UPDATE';
 
 export default {
@@ -10,6 +10,7 @@ export default {
         filters
     },
     state: {
+        ready: false,
         data: null,
         widgets: null,
         config: null,
@@ -21,6 +22,9 @@ export default {
             state.widgets = widgets;
             state.layout = layout;
             state.config = config;
+        },
+        [SET_READY](state, ready) {
+            state.ready = ready;
         }
     },
     actions: {
@@ -39,6 +43,7 @@ export default {
                 filters: data.config.filters,
                 values: filterValues
             });
+            commit(SET_READY, true);
         }
     }
 }

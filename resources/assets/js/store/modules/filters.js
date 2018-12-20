@@ -1,5 +1,6 @@
 import Vue from 'vue';
 
+export const SET_VALUES = 'SET_VALUES';
 export const SET_FILTERS = 'SET_FILTERS';
 export const SET_FILTER_VALUE = 'SET_FILTER_VALUE';
 
@@ -20,7 +21,10 @@ export default {
         },
         [SET_FILTER_VALUE](state, { key, value }) {
             Vue.set(state.values, key, value);
-        }
+        },
+        // [SET_VALUES](state, values) {
+        //     state.values = values;
+        // },
     },
 
     getters: {
@@ -63,7 +67,33 @@ export default {
                 }
                 return value;
             }
-        }
+        },
+        // normalizeValues(state, getters) {
+        //     return ({ filters, values }) => filters.reduce((filter, res) => ({
+        //         ...res,
+        //         [filter.key]: getters.normalizeFilterValue({
+        //             filter, value: values ? values[filter.key] : null
+        //         })
+        //     }), {});
+        // },
+
+        // nextValues(state) {
+        //     return ({ filter, value }) => {
+        //         const values = filter.master ? {} : state.values;
+        //         return {
+        //             ...values,
+        //             [filter.key]: value
+        //         }
+        //     }
+        // },
+        // nextRouteQuery(state, getters) {
+        //     return ({ filter, value }) => {
+        //         console.log(getters.nextValues({ filter, value }));
+        //         return getters.getQueryParams(
+        //             getters.nextValues({ filter, value })
+        //         )
+        //     };
+        // },
     },
 
     actions: {
