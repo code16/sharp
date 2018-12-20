@@ -22,7 +22,10 @@ class TravelsDashboard extends SharpDashboard
 
     function buildDashboardConfig()
     {
-        $this->addFilter("period", TravelsDashboardPeriodFilter::class);
+        $this->addFilter(
+            "period",
+            TravelsDashboardPeriodFilter::class
+        );
     }
 
     function buildWidgetsLayout()
@@ -32,22 +35,21 @@ class TravelsDashboard extends SharpDashboard
 
     function buildWidgetsData(DashboardQueryParams $params)
     {
+        $data = DB::table('travels')
+            ->select(DB::raw('year(departure_date) as label, count(*) as value'))
+            ->groupBy(DB::raw('year(departure_date)'))
+            ->whereBetween("departure_date", [
+                now()->startOfYear()->subYears($params->filterFor("period")),
+                now()->endOfYear()->addYears($params->filterFor("period"))
+            ])
+            ->get()
+            ->pluck("value", "label");
+
         $this->addGraphDataSet(
             "travels",
-            SharpGraphWidgetDataSet::make(
-                DB::table('travels')
-                    ->select(DB::raw('year(departure_date) as label, count(*) as value'))
-                    ->groupBy(DB::raw('year(departure_date)'))
-                    ->whereBetween("departure_date", [
-                        now()->startOfYear()->subYears($params->filterFor("period")),
-                        now()->endOfYear()->addYears($params->filterFor("period"))
-                    ])
-                    ->get()
-                    ->pluck("value", "label")
-                )
+            SharpGraphWidgetDataSet::make($data)
                 ->setLabel("Travels")
                 ->setColor("red")
         );
     }
-
 }
