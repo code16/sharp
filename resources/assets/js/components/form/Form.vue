@@ -176,6 +176,19 @@
                         .filter(field => field.localized)
                         .reduce((res, field) => ({ ...res, [field.key]:locales && locales[0] }),{})
                 }
+                this.validate();
+            },
+            validate() {
+                const localizedFields = Object.keys(this.fieldLocale);
+                const alert = text => this.actionsBus.$emit('showMainModal', {
+                    title: 'Data error',
+                    text,
+                    isError: true,
+                    okCloseOnly: true,
+                });
+                if(localizedFields.length > 0 && !this.locales.length) {
+                    alert("Some fields are localized but the form hasn't any locales configured");
+                }
             },
             handleError({response}) {
                 if(response.status===422)

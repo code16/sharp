@@ -357,7 +357,9 @@ describe('sharp-form', ()=>{
                     },
                     fields: {
                         title: {
-                            type: 'text'
+                            key: 'title',
+                            type: 'text',
+                            localized: true,
                         }
                     },
                     layout: {
@@ -494,7 +496,9 @@ describe('sharp-form', ()=>{
                     },
                     fields: {
                         title: {
-                            type: 'text'
+                            key: 'title',
+                            type: 'text',
+                            localized: true,
                         }
                     },
                     layout: {
@@ -525,7 +529,7 @@ describe('sharp-form', ()=>{
             },
             fields: {
                 title: {
-                    type: 'text'
+                    type: 'text',
                 }
             },
             layout: {
@@ -534,7 +538,7 @@ describe('sharp-form', ()=>{
                         columns: [
                             {
                                 fields: [
-                                    [{ key: 'title'}]
+                                    [{ key: 'title' }]
                                 ]
                             }
                         ]
@@ -546,14 +550,16 @@ describe('sharp-form', ()=>{
                 update: false
             },
             locales: ['en', 'fr'],
-            locale: 'en'
+            fieldLocale: {
+                title: 'en'
+            }
         });
 
         $form.patchLayout = ()=>{};
         $form.ready = false;
         $form.mount({ fields:{}, locales:null });
 
-        expect($form.locale).toBe(null);
+        expect($form.fieldLocale).toEqual({ title:undefined });
     });
 
     test('mount async', async () => {
