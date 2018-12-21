@@ -118,7 +118,7 @@
 
     import Draggable from 'vuedraggable';
 
-    import { API_PATH } from '../../consts';
+    import { BASE_URL } from '../../consts';
     import * as util from '../../util';
 
     import { ActionEvents, Localization } from '../../mixins';
@@ -415,7 +415,7 @@
                     : this.authorizations[type].indexOf(id) !== -1;
             },
             formEndpoint(multiformKey) {
-                return `/sharp/form/${this.entityKey}${multiformKey ? `:${multiformKey}` : ''}`
+                return `${BASE_URL}/form/${this.entityKey}${multiformKey ? `:${multiformKey}` : ''}`
             },
             formInitialProps(form) {
                 return {
