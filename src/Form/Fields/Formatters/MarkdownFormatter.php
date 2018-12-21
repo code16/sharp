@@ -45,6 +45,12 @@ class MarkdownFormatter extends SharpFieldFormatter
             $uploadFormatter = app(UploadFormatter::class);
 
             foreach($value["files"] as $file) {
+                // Fist we remove the disk from the file name in order to make
+                // the UploadFormatter fromFront code work properly
+                if(($pos = strpos($file["name"], ':')) !== false) {
+                    $file["name"] = substr($file["name"], $pos+1);
+                }
+
                 $upload = $uploadFormatter
                     ->setInstanceId($this->instanceId)
                     ->fromFront($field, $attribute, $file);
@@ -61,7 +67,7 @@ class MarkdownFormatter extends SharpFieldFormatter
                 } elseif($upload["transformed"] ?? false) {
                     // File was pre-existing and was transformed: we must
                     // refresh all its thumbnails (meaning delete them)
-                    $this->deleteThumbnails($file["name"]);
+                    $this->deleteThumbnails($field->storageDisk() . ':' . $file["name"]);
                 }
             }
         }
@@ -134,5 +140,4 @@ class MarkdownFormatter extends SharpFieldFormatter
             return null;
         }
     }
-
 }
