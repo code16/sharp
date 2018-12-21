@@ -41,7 +41,7 @@
 
 <script>
     import * as util from '../../util';
-    import { API_PATH } from '../../consts';
+    import { API_PATH, BASE_URL } from '../../consts';
 
     import { ActionEvents, ReadOnlyFields, Localization } from '../../mixins';
 
@@ -210,7 +210,7 @@
                 }
             },
             redirectToList({ restoreContext=true }={}) {
-                location.href = `/sharp/list/${this.baseEntityKey}${restoreContext?'?restore-context=1':''}`
+                location.href = `${BASE_URL}/list/${this.baseEntityKey}${restoreContext?'?restore-context=1':''}`
             },
         },
         actions: {

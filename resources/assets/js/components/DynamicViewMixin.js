@@ -1,6 +1,7 @@
 import * as qs from '../helpers/querystring';
 import { parseBlobJSONContent } from "../util";
 import { lang } from '../mixins/Localization';
+import { BASE_URL } from "../consts";
 
 export const withAxiosInterceptors = {
     inject: ['mainLoading', 'axiosInstance', 'actionsBus'],
@@ -40,7 +41,7 @@ export const withAxiosInterceptors = {
                     case 401: this.actionsBus.$emit('showMainModal', {
                         ...modalOptions,
                         okCallback() {
-                            location.href = '/sharp/login';
+                            location.href = `${BASE_URL}/login`;
                         },
                     });
                         break;
