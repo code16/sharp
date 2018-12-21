@@ -59,7 +59,7 @@ class MarkdownFormatter extends SharpFieldFormatter
                     // New file was uploaded. We have to update
                     // the name of the file in the markdown
                     $text = str_replace(
-                        "![]({$file["name"]})",
+                        "![]({$field->storageDisk()}:{$file["name"]})",
                         "![]({$field->storageDisk()}:{$upload["file_name"]})",
                         $text
                     );
