@@ -47,8 +47,9 @@ class MarkdownFormatter extends SharpFieldFormatter
             foreach($value["files"] as $file) {
                 // Fist we remove the disk from the file name in order to make
                 // the UploadFormatter fromFront code work properly
-                if(($pos = strpos($file["name"], ':')) !== false) {
-                    $file["name"] = substr($file["name"], $pos+1);
+                $originalName = $file["name"];
+                if(($pos = strpos($originalName, ':')) !== false) {
+                    $file["name"] = substr($originalName, $pos+1);
                 }
 
                 $upload = $uploadFormatter
@@ -59,7 +60,7 @@ class MarkdownFormatter extends SharpFieldFormatter
                     // New file was uploaded. We have to update
                     // the name of the file in the markdown
                     $text = str_replace(
-                        "![]({$field->storageDisk()}:{$file["name"]})",
+                        "![]({$originalName})",
                         "![]({$field->storageDisk()}:{$upload["file_name"]})",
                         $text
                     );
@@ -67,7 +68,7 @@ class MarkdownFormatter extends SharpFieldFormatter
                 } elseif($upload["transformed"] ?? false) {
                     // File was pre-existing and was transformed: we must
                     // refresh all its thumbnails (meaning delete them)
-                    $this->deleteThumbnails($field->storageDisk() . ':' . $file["name"]);
+                    $this->deleteThumbnails($originalName);
                 }
             }
         }
