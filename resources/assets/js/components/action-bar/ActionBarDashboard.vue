@@ -38,7 +38,7 @@
             ...mapGetters('dashboard', {
                 filters: 'filters/filters',
                 filterValue: 'filters/value',
-                filterQueryKey: 'filters/filterQueryKey'
+                filterNextQuery: 'filters/nextQuery'
             }),
         },
         methods: {
@@ -49,7 +49,7 @@
                 this.$router.push({
                     query: {
                         ...this.$route.query,
-                        [this.filterQueryKey(filter.key)]: value
+                        ...this.filterNextQuery({ filter, value }),
                     }
                 });
             }
