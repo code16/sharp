@@ -52,6 +52,7 @@ class UploadFormatter extends SharpFieldFormatter
      * @param string $attribute
      * @param $value
      * @throws SharpFormFieldFormattingMustBeDelayedException
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @return array|null
      */
     function fromFront(SharpFormField $field, string $attribute, $value)
