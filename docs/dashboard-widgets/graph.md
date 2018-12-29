@@ -16,7 +16,7 @@ There are two graph types, and they share the exact same API. To choose one or t
 ### Bar graph
 
     $this->addWidget(
-        SharpLineGraphWidget::make("capacities");
+        SharpBarGraphWidget::make("capacities");
     );
 
 
