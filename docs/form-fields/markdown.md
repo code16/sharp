@@ -38,6 +38,7 @@ Override the default toolbar, providing an array built with `SharpFormMarkdownFi
 
 Example:
 
+```php
     SharpFormMarkdownField::make("description")
             ->setToolbar([
                 SharpFormMarkdownField::B, SharpFormMarkdownField::I,
@@ -46,7 +47,7 @@ Example:
                 SharpFormMarkdownField::SEPARATOR,
                 SharpFormMarkdownField::A,
              ]);
-
+```
 
 ### Embed images in markdown
 

@@ -47,9 +47,11 @@ Display an inline checklist (if multiple + display=list).
 	
 - `fromFront`: returns an array of arrays with the "id" key, and the "createAttribute" key in creation case:
 
+```php
     [
         ["id" => 1],
         ["id" => null, "name" => "Bob Marley]
     ]
+```
 
 In this example, the user selected one tag and created another one with the "Bob Marley" text.

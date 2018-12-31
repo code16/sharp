@@ -17,6 +17,7 @@ Same goes for [Validators](building-entity-form.md#input-validation), if needed.
 
 Once the classes written, you must to declare the forms in the sharp config file. So instead of:
 
+```php
     // config/sharp.php
     
     return [
@@ -28,9 +29,11 @@ Once the classes written, you must to declare the forms in the sharp config file
             ]
         ]
     ];
+```
 
-You'll have somehing like:
+You'll have something like:
 
+```php
     // config/sharp.php
     
     return [
@@ -50,6 +53,7 @@ You'll have somehing like:
             ]
         ]
     ];
+```
 
 At this stage, you need only one more thing: configure the Entity List to handle Multi-Form.
 
@@ -60,6 +64,7 @@ Now we want to "merge" out Car entity in the Entity List, and allow the user to 
 
 To achieve this final step, you'll have to first update the global configuration to add a label and an optional icon to each type:
 
+```php
     // config/sharp.php
     
     return [
@@ -81,6 +86,7 @@ To achieve this final step, you'll have to first update the global configuration
             ]
         ]
     ];
+```
 
 This allow the "new" button to display a dropdown with each type, leading to the right Form.
 
@@ -88,6 +94,7 @@ Last, you must configure an instance attribute to disambiguate each type: each i
 
 You declare this attribute in the Entity List `buildListConfig()` method:
 
+```php
     function buildListConfig()
     {
         $this->setSearchable()
@@ -95,9 +102,11 @@ You declare this attribute in the Entity List `buildListConfig()` method:
             ->setMultiformAttribute("engine")
             ->setPaginated();
     }
+```
 
 Here, the `engine` attribute must be filled for each instance car. So how you do that? Obviously, the first way is to keep the same attribute you use in your database: in many cases, you already have this `engine` value in a column. If not, or if the value is something less readable (an ID for instance), use a [custom transformer](how-to-transform-data.md):
 
+```php
     function getListData(EntityListQueryParams $params)
     {
         return $this
@@ -106,7 +115,7 @@ Here, the `engine` attribute must be filled for each instance car. So how you do
             })
             ->transform(Car::paginate(30));
     }
-
+```
 
 ---
 

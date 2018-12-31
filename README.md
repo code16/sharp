@@ -53,6 +53,7 @@ Each `entity` in Sharp can be displayed:
 
 Sharp needs a `config/sharp.php` config file, mainly to declare `entities`. Here's a simple example:
 
+```php
     return [
         "entities" => [
             "spaceship" => [
@@ -63,6 +64,7 @@ Sharp needs a `config/sharp.php` config file, mainly to declare `entities`. Here
             ]
         ]
     ];
+```
 
 As we can see, each `entity` (like `spaceship`, here), can define:
 

@@ -65,6 +65,7 @@ Very similar to entity lists, except that `entity` is replaced by a `dashboard` 
 
 Categories are simply groups that can be collapsed
 
+```php
     "menu" => [
         [
             "label" => "Company",
@@ -83,7 +84,7 @@ Categories are simply groups that can be collapsed
             ]
         ]
     ]
-
+```
 ---
 
 > next chapter: [How to transform data](how-to-transform-data.md).

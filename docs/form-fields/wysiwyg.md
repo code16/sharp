@@ -22,6 +22,7 @@ Show or hide the toolbar (shown by default).
 
 Override the default toolbar, providing an array built with `SharpFormWysiwygField`'s constants:
 
+```php
     const B = "bold";
     const I = "italic";
     const UL = "unordered-list";
@@ -35,9 +36,11 @@ Override the default toolbar, providing an array built with `SharpFormWysiwygFie
     const DECREASE_NESTING = "decreaseNestingLevel"
     const UNDO = "undo";
     const REDO = "undo";
+```
 
 Example:
 
+```php
     SharpFormWysiwygField::make("description")
             ->setToolbar([
                 SharpFormWysiwygField::B, 
@@ -47,7 +50,7 @@ Example:
                 SharpFormWysiwygField::SEPARATOR,
                 SharpFormWysiwygField::A,
              ]);
-
+```
 
 ## Formatter
 

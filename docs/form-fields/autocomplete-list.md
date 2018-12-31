@@ -8,6 +8,7 @@ First let's see a use case: imagine you want to handle a list of `winners` by se
 
 You can in fact define the list as this:
 
+```php
     SharpFormAutocompleteListField::make("winners")
             ->setLabel("Winners")
             ->setItemField(
@@ -16,6 +17,7 @@ You can in fact define the list as this:
                     [...]
             )
     );
+```
 
 > Note that the key of the Autocomplete, `item` here, could be anything you want, as soon you stay consistent in the `buildFormLayout()` part.
 

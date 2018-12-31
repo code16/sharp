@@ -8,17 +8,19 @@ There are two graph types, and they share the exact same API. To choose one or t
 
 ### Line graph
 
+```php
     $this->addWidget(
         SharpLineGraphWidget::make("capacities");
     );
-
+```
 
 ### Bar graph
 
+```php
     $this->addWidget(
         SharpBarGraphWidget::make("capacities");
     );
-
+```
 
 ## Attributes (setters)
 
@@ -31,12 +33,14 @@ This attribute is used to define the graph ratio, which will be consistent in re
 
 Valuation is handled by a dedicated `$this->addGraphDataSet(string $graphWidgetKey, SharpGraphWidgetDataSet $dataSet)` in the Dashboard class:
 
+```php
     $this->addGraphDataSet(
         "capacities",
         SharpGraphWidgetDataSet::make($values)
             ->setLabel("Capacities")
             ->setColor("blue")
     );
+```
 
 We use an instance of `Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet` to handle graph data. This object is built with a `$values` array which must contain numeric values.
 
