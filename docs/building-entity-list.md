@@ -173,27 +173,7 @@ In the sharp config file, we have to declare our entity, and link it to the Enti
 Then we can access the Entity List at the following URL:
 **/sharp/list/spaceship** (replace "spaceship" by our entity key).
 
-### The sharp side menu
-
-In order to display a link to the entity in the side menu, we have to write a little extra config in the same file:
-
-    [...]
-    "menu" => [
-        [
-            "label" => "Equipment",
-            "entities" => [
-                "spaceship" => [
-                    "label" => "Spaceships",
-                    "icon" => "fa-space-shuttle"
-                ]
-            ]
-        ]
-    ]
-
-As describe, we want to add a "Equipment" section containing the `spaceship` entity with a "Spaceships" label.
-
-The icon, which is optional, must be a valid [Font Awesome 4 icon](http://fontawesome.io/icons/) name.
-
+To go ahead and learn how to add a link in the Sharp side menu, [look here](building-menu.md).
 
 ---
 

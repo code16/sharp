@@ -117,6 +117,7 @@ We'll get into all those classes in this document. The important thing to notice
 - [Create a Dashboard](docs/dashboard.md)
 
 ### Generalities
+- [Building the menu](docs/building-menu.md)
 - [How to transform data](docs/how-to-transform-data.md)
 - [Sharp built-in solution for uploads](docs/sharp-built-in-solution-for-uploads.md)
 - Handling data localization (coming in 4.1)

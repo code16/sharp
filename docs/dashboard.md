@@ -125,4 +125,4 @@ And the policy class can be pretty straightforward:
 
 ---
 
-> next chapter: [How to transform data](how-to-transform-data.md).
+> next chapter: [Building the menu](building-menu.md).
