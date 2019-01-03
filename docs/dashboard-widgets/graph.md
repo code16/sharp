@@ -22,6 +22,14 @@ There are two graph types, and they share the exact same API. To choose one or t
     );
 ```
 
+### Pie graph
+
+```php
+    $this->addWidget(
+        SharpPieGraphWidget::make("capacities");
+    );
+```
+
 ## Attributes (setters)
 
 ### `setRatio(string $ratio)`
