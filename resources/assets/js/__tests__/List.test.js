@@ -235,7 +235,6 @@ describe('list-field', () => {
                 },
                 itemFields: { name: { type:'text' } },
                 itemIdAttribute:"id",
-                locale: 'fr'
             },
             methods: {
                 update: jest.fn(i => `update ${i}`)
@@ -245,18 +244,26 @@ describe('list-field', () => {
         expect($field.vm.$options.propsData).toMatchObject({
             errorIdentifier: 'name'
         });
-        expect($field.vm.$attrs).toMatchObject({
+        expect($field.vm.$attrs).toEqual({
             'field-key': 'name',
             'context-fields': { name: { type:'text' } },
-            'context-data':expect.objectContaining({ id: 0, name: 'myName' }),
+            'context-data': expect.objectContaining({ id: 0, name: 'myName', _fieldsLocale: {} }),
             'config-identifier': 'name',
             'update-data': 'update 0',
-            locale: 'fr'
+            locale: undefined
         });
     });
 
     test('update data properly', async () => {
         let $list = await createVm({
+            provide: { $form: { localized:true, locales:['fr', 'en'] } },
+            props: {
+                itemFields: {
+                    name: { type:'text' },
+                    localizedField: { type:'text', localized: true }
+                },
+            },
+
             data:()=>({
                 value:[{id:0, name:'Antoine'},{id:1, name:'Samuel'},{id:2, name:'Solène'}]
             })
@@ -266,9 +273,13 @@ describe('list-field', () => {
         $list.fieldLocalizedValue = jest.fn(()=>'fieldLocalizedValue');
 
         updateFn('name','George');
+        expect($list.list[1]).toMatchObject({ id:1, name:'fieldLocalizedValue' });
+        expect($list.fieldLocalizedValue).toHaveBeenCalledWith('name', 'George', expect.objectContaining({id:1, name:'Samuel'}), { });
 
-        expect($list.list[1]).toMatchObject({ id:1, name:'fieldLocalizedValue'});
-        expect($list.fieldLocalizedValue).toHaveBeenCalledWith('name', 'George', expect.objectContaining({id:1, name:'Samuel'}));
+        $list.fieldLocalizedValue.mockReset();
+        updateFn('localizedField', 'aaa');
+        expect($list.list[1]).toMatchObject({ id:1, name:'fieldLocalizedValue', localizedField:undefined });
+        expect($list.fieldLocalizedValue).toHaveBeenCalledWith('localizedField', 'aaa', expect.objectContaining({id:1, name:'fieldLocalizedValue' }), { localizedField:'fr' });
     });
 
     test('insert item properly', async () => {

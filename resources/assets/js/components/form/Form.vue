@@ -172,9 +172,7 @@
                         res[fKey] = true;
                         return res;
                     },{});
-                    this.fieldLocale = Object.values(this.fields)
-                        .filter(field => field.localized)
-                        .reduce((res, field) => ({ ...res, [field.key]:locales && locales[0] }),{})
+                    this.fieldLocale = this.defaultFieldLocaleMap({ fields, locales });
                 }
                 this.validate();
             },
