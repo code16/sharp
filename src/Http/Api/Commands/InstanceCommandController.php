@@ -11,6 +11,8 @@ class InstanceCommandController extends ApiController
     use HandleCommandReturn;
 
     /**
+     * Display the Command form.
+     *
      * @param string $entityKey
      * @param string $commandKey
      * @param $instanceId
@@ -30,6 +32,8 @@ class InstanceCommandController extends ApiController
     }
 
     /**
+     * Execute the Command.
+     *
      * @param string $entityKey
      * @param string $commandKey
      * @param string $instanceId
