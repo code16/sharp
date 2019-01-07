@@ -40,7 +40,7 @@
             :clearable="!required"
             :inline="false"
             :unique-identifier="filterKey"
-            :placeholder="fixZeroValuePlaceholder"
+            :placeholder="fixZeroValuePlaceholder || ' '"
             ref="select"
             @input="handleSelect"
         />

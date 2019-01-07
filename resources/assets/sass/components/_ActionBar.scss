@@ -94,17 +94,13 @@
 
   &__actions-dropdown {
     align-self: stretch;
-    min-width: 2rem;
-    max-width: 2rem;
+    //min-width: 2rem;
+    //max-width: 2rem;
 
     @extend %overflow-dropdown-list;
 
     .SharpDropdown__text {
-      border: none;
-    }
-
-    .SharpDropdown__arrow {
-      right: .75rem;
+      //border: none;
     }
 
     .SharpDropdown__link {
@@ -112,12 +108,12 @@
     }
 
     &--commands {
-      width: 2.5rem;
-      min-width: 2.5rem;
-      max-width: 2.5rem;
+      //width: 2.5rem;
+      //min-width: 2.5rem;
+      //max-width: 2.5rem;
 
       .SharpDropdown__text {
-        color: $brand-03;
+        //color: $brand-03;
         line-height:1;
       }
 
@@ -132,7 +128,7 @@
     @extend %overflow-dropdown-list;
 
     &, .SharpDropdown__text {
-      background: $brand-03;
+      //background: $brand-03;
     }
     .SharpDropdown__text {
       color: $inverse-01;

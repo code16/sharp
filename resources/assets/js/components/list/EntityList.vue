@@ -47,19 +47,25 @@
                                 <a class="SharpEntityList__row-link" v-if="rowHasLink(item)" :href="rowLink(item)"></a>
                             </div>
                             <div v-show="!reorderActive" class="SharpEntityList__row-actions" ref="actionsCol">
-                                <sharp-dropdown v-if="config.state" class="SharpEntityList__state-dropdown" :show-arrow="false" :disabled="!hasStateAuthorization(item)">
-                                    <sharp-state-icon slot="text" :class="stateClasses({item})" :style="stateStyle({item})"></sharp-state-icon>
+                                <sharp-dropdown v-if="config.state" class="SharpEntityList__state-dropdown" :disabled="!hasStateAuthorization(item)">
+                                    <template slot="text"><sharp-state-icon :class="stateClasses({item})" :style="stateStyle({item})" />
+                                        <span class="text-truncate">
+                                            {{ stateLabel(item) }}
+                                        </span>
+                                    </template>
                                     <sharp-dropdown-item v-for="state in config.state.values" @click="setState(item,state)" :key="state.value">
-                                        <sharp-state-icon :class="stateClasses({ value:state.value })" :style="stateStyle({ value:state.value })"></sharp-state-icon>
+                                        <sharp-state-icon :class="stateClasses({ value:state.value })" :style="stateStyle({ value:state.value })" />&nbsp;
                                         {{ state.label }}
                                     </sharp-dropdown-item>
                                 </sharp-dropdown>
                                 <sharp-dropdown v-if="!noInstanceCommands"
-                                                class="SharpEntityList__commands-dropdown"
-                                                :class="{'SharpEntityList__commands-dropdown--placeholder':!instanceCommands(item)}" :show-arrow="false">
-                                    <div slot="text" class="SharpEntityList__command-icon">
-                                        <i class="fa fa-plus"></i>
-                                    </div>
+                                                class="SharpEntityList__commands-dropdown mt-2"
+                                                :class="{'SharpEntityList__commands-dropdown--placeholder':!instanceCommands(item)}">
+                                    <template slot="text">
+                                        <div class="text-left">
+                                            <small>ACTIONS</small>
+                                        </div>
+                                    </template>
                                     <sharp-dropdown-item v-for="command in instanceCommands(item)" @click="sendCommand(command, item)" :key="command.key">
                                         {{ command.label }}
                                     </sharp-dropdown-item>
@@ -376,9 +382,12 @@
                 let state = item ? item[this.stateAttr] : value;
                 let { color } = this.stateByValue[state];
                 return !this.isStateClass(color) ? {
-                    fill: color,
-                    stroke: color,
+                    background: color
                 } : '';
+            },
+            stateLabel(item) {
+                const state = item[this.stateAttr];
+                return this.stateByValue[state].label;
             },
             hasStateAuthorization({[this.idAttr]:instanceId}) {
                 if(!this.config.state) return false;

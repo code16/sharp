@@ -117,16 +117,9 @@
       }
     }
     .SharpEntityList__row-actions {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-
+      min-width: 6rem;
       @include media-breakpoint-down(sm) {
         padding-top: 0;
-      }
-
-      & > * {
-        flex: 0;
       }
     }
   }
@@ -240,21 +233,9 @@
 
 
   &__commands-dropdown {
-    border: 1px solid $brand-03 !important;
+    //border: 1px solid $brand-03 !important;
     .SharpDropdown__text {
       //border: 1px solid $brand-03;
-    }
-    .SharpEntityList__command-icon {
-      width: rem(12px);
-      height: rem(12px);
-      color: $brand-03;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      .fa {
-        font-size : rem(8px);
-      }
     }
     &--placeholder {
       visibility: hidden;
@@ -263,7 +244,8 @@
 
   &__state-dropdown {
     .SharpDropdown__text {
-      border: 0;
+      color: $text-01!important;
+
     }
     .SharpDropdown__link {
       display: flex;
@@ -278,6 +260,7 @@
   &__state-dropdown, &__commands-dropdown {
     margin: 0 .2rem;
     background:transparent;
+    width: 5.5rem;
 
     @include nav-dropdown;
 
@@ -288,11 +271,18 @@
     }
 
     .SharpDropdown__text {
-      padding: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%
+      padding: .25rem 1.25rem .25rem .35rem;
+      background: $ui-02;
+      //text-align: center;
+      border: none;
+      //display: flex;
+      //align-items: center;
+      //justify-content: center;
+      font-size: .875em;
+      color: $text-02;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .SharpDropdown__list {

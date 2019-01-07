@@ -3,8 +3,9 @@
 .SharpFilterSelect {
   width: auto;
   display:flex;
-  border: 1px solid $brand-03;
+  border: $dropdown-border;
   cursor: default;
+  border-radius: $btn-border-radius;
 
   @extend .SharpDropdown;
   @include nav-dropdown;
@@ -20,7 +21,7 @@
 
   &--empty, &--multiple {
     .multiselect__single {
-      display:none;
+      &::before { content: '\200B' }
     }
   }
 
@@ -69,7 +70,7 @@
     position: relative;
     background: $ui-01;
     z-index: z('dropdownText');
-    text-transform: uppercase;
+    //text-transform: uppercase;
     //color: $text-02;
     white-space: nowrap;
   }
@@ -88,28 +89,29 @@
 
       &__tag {
         background: $ui-01;
-        &:not(:first-child):before {
-          content: "|";
-          position: absolute;
-          left:0;
-          top:0;
-          font-weight: normal;
-          @include font-size('16');
-          margin-left: -.1875rem;
+        height: auto;
+        font-weight: bold;
 
-          @include media-breakpoint-down(sm) {
-            display: none;
-          }
+        @extend .py-0;
+        @extend .mb-0;
+
+        &:not(:first-child){
+          border-left: 1px solid $ui-03;
         }
 
         &-icon {
-          line-height: 20px;
+          line-height: .75;
+          font-weight: normal;
         }
 
         &-icon:after {
           content: "x";
           color: $brand-03;
         }
+      }
+
+      &__single {
+        font-weight: bold;
       }
 
       .SharpSelect__clear-button {
@@ -133,9 +135,11 @@
       }
 
       &__tags {
-        padding-right: 2rem;
-        padding-left:0;
+        padding: .5rem 2rem .5rem 0;
+        line-height: 1;
         box-shadow: none;
+        border: none;
+        min-height: 0;
       }
 
       &__tags-wrap {
