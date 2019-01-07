@@ -56,6 +56,9 @@ abstract class InstanceCommand extends Command
         return true;
     }
 
+    /**
+     * @param $instanceId
+     */
     public function checkAndStoreAuthorizationFor($instanceId)
     {
         if($this->authorizeFor($instanceId)) {
@@ -63,6 +66,9 @@ abstract class InstanceCommand extends Command
         }
     }
 
+    /**
+     * @return bool|array
+     */
     public function getGlobalAuthorization()
     {
         if(!$this->authorize()) {

@@ -13,13 +13,16 @@ The `$options` array can be either:
 - a simple key-value array
 - an array of arrays with `id` and `label` keys. Fore instance:
 
+```php
     [
         ["id"=>1, "label"=>"Label 1"],
         ["id"=>2, "label"=>"Label 2"],
     ]
+```
 
 This allows to write code like this:
 
+```php
     SharpFormSelectField::make("travel_id",
         Travel::orderBy("departure_date")->get()->map(function($travel) {
             return [
@@ -29,7 +32,7 @@ This allows to write code like this:
             ];
         })->all()
     )
-
+```
 
 ### `setMultiple(bool $multiple = true)`
 
@@ -84,7 +87,9 @@ Set the id name attribute of options (default: "id").
 	- a single id value if multiple=false
 	- an array of arrays with the "id" key otherwise:
 
+```php
     [
         ["id" => 1],
         ["id" => 2]
     ]
+```

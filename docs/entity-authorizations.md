@@ -19,6 +19,7 @@ As a first step, in some cases you will want to forbid some actions to anyone: j
 
 Just add the rule in a special `authorizations` key in the config:
 
+```php
     // in config/sharp.php
 
     "entities" => [
@@ -31,9 +32,9 @@ Just add the rule in a special `authorizations` key in the config:
             ]
         ]
     ]
+```
 
 Note that you can't define here the `entity` permission.
-
 
 ## Policies
 
@@ -41,6 +42,7 @@ For user-based rules, create a Laravel `Policy` class which is just a plain clas
 
 ### Write the class
 
+```php
     class SpaceshipPolicy
     {
     
@@ -69,6 +71,7 @@ For user-based rules, create a Laravel `Policy` class which is just a plain clas
             [...]
         }
     }
+```
 
 Only write methods which don't return true, as this is the default behaviour.
 
@@ -76,6 +79,7 @@ Only write methods which don't return true, as this is the default behaviour.
 
 This is straightforward:
 
+```php
     // in config/sharp.php
 
     "entities" => [
@@ -85,6 +89,7 @@ This is straightforward:
             "policy" => \App\Sharp\Policies\SpaceshipPolicy::class,
         ]
     ]
+```
 
 ---
 

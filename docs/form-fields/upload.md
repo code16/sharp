@@ -8,11 +8,13 @@ Class: `Code16\Sharp\Form\Fields\SharpFormUploadField`
 
 First, in order to get the upload part working, you have to define a "tmp" path where files will be stored until they are moved to the final folder. Here's the default:
 
+```php
     // in config/sharp.php
     
     "uploads" => [
         "tmp_dir" => env("SHARP_UPLOADS_TMP_DIR", "tmp"),
     ]
+```
 
 This `tmp_dir` path is relative to the `local` filesystem defined in the Laravel configuration.
 
@@ -68,14 +70,17 @@ Here's the documentation for the non built-in solution:
 
 The front expects an array with three keys:
 
+```php
     [
         "name" => "", // Relative file path
         "thumbnail" => "", // 1000px w * 400px h thumbnail full url
         "size" => x, // Size in bytes
     ]
+```
 
-The formatter can't handle it automatically, it too project-sepecific. You'll have to provide this in a custom transformer ([see full documentation](how-to-transform-data.md)) like this:
+The formatter can't handle it automatically, it too project-specific. You'll have to provide this in a custom transformer ([see full documentation](how-to-transform-data.md)) like this:
 
+```php
     function find($id): array
     {
         return $this->setCustomTransformer("picture", 
@@ -90,6 +95,7 @@ The formatter can't handle it automatically, it too project-sepecific. You'll ha
                 Spaceship::findOrFail($id)
             );
     }
+```
 
 ### `fromFront`
 
@@ -99,6 +105,7 @@ There are four cases:
 
 The formatter will perform any transformation, store the file on the configured location, and return an array like this:
 
+```php
     [
         "file_name" => "", // Relative file path
         "size" => x, // File size in bytes
@@ -106,11 +113,13 @@ The formatter will perform any transformation, store the file on the configured 
         "disk" => "", // Storage disk name
         "transformed" => true // True if the file was transformed
     ];
+```
 
 It's up to you then to store any of these values in a DB or elsewhere.
 
 Using the `Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater`, you will probably reach a solution like this:
 
+```php
     function update($id, array $data)
     {
         $instance = $id ? Spaceship::findOrFail($id) : new Spaceship;
@@ -119,15 +128,17 @@ Using the `Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater`, you will pr
         
         // Then handle $data["picture"] here
     }
-
+```
 
 #### existing transformed file 
 
 In this case, the file was already stored, but was transformed (cropped, or rotated). The formatter will transform the file, store the result and simply return and array with one key:
 
+```php
     [
         "transformed" => true
     ];
+```
 
 Then you'll have to catch that if needed (to destroy all previous generated thumbnails for instance).
 
