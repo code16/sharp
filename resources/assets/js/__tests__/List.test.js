@@ -29,7 +29,7 @@ describe('list-field', () => {
                             [ {key:'name'} ]
                         ]
                     }"
-                    :item-fields="{ name: { type:'text' } }"
+                    :item-fields="itemFields || { name: { type:'text' } }"
                     :addable="addable" 
                     :sortable="sortable"
                     :removable="removable"
@@ -249,37 +249,47 @@ describe('list-field', () => {
             'context-fields': { name: { type:'text' } },
             'context-data': expect.objectContaining({ id: 0, name: 'myName', _fieldsLocale: {} }),
             'config-identifier': 'name',
-            'update-data': 'update 0',
-            locale: undefined
+            'update-data': 'update 0'
         });
     });
 
     test('update data properly', async () => {
         let $list = await createVm({
-            provide: { $form: { localized:true, locales:['fr', 'en'] } },
-            props: {
+            provide: {
+                $form: { localized:true, locales:['fr', 'en'] }
+            },
+            propsData: {
                 itemFields: {
-                    name: { type:'text' },
-                    localizedField: { type:'text', localized: true }
+                    name: { key:'name', type:'text' },
+                    localizedField: { key:'localizedField', type:'text', localized: true }
                 },
             },
 
             data:()=>({
                 value:[{id:0, name:'Antoine'},{id:1, name:'Samuel'},{id:2, name:'Solène'}]
             })
-        });
+        }, null, { mockInjections:false });
 
         let updateFn = $list.update(1);
         $list.fieldLocalizedValue = jest.fn(()=>'fieldLocalizedValue');
 
         updateFn('name','George');
         expect($list.list[1]).toMatchObject({ id:1, name:'fieldLocalizedValue' });
-        expect($list.fieldLocalizedValue).toHaveBeenCalledWith('name', 'George', expect.objectContaining({id:1, name:'Samuel'}), { });
+        expect($list.fieldLocalizedValue).toHaveBeenCalledWith(
+            'name', 'George',
+            expect.objectContaining({id:1, name:'Samuel'}),
+            { localizedField:'fr' }
+        );
 
-        $list.fieldLocalizedValue.mockReset();
+        jest.resetAllMocks();
+
         updateFn('localizedField', 'aaa');
         expect($list.list[1]).toMatchObject({ id:1, name:'fieldLocalizedValue', localizedField:undefined });
-        expect($list.fieldLocalizedValue).toHaveBeenCalledWith('localizedField', 'aaa', expect.objectContaining({id:1, name:'fieldLocalizedValue' }), { localizedField:'fr' });
+        expect($list.fieldLocalizedValue).toHaveBeenCalledWith(
+            'localizedField', 'aaa',
+            expect.objectContaining({id:1, name:'fieldLocalizedValue' }),
+            { localizedField:'fr' }
+        );
     });
 
     test('insert item properly', async () => {
@@ -314,17 +324,20 @@ describe('list-field', () => {
     });
 });
 
-async function createVm(customOptions={}, mock) {
+async function createVm(customOptions={}, mock, { mockInjections=true }={}) {
 
     const vm = new Vue({
         el: '#app',
-        mixins: [MockInjections, customOptions],
+        mixins: [
+            mockInjections ? MockInjections: {},
+            customOptions
+        ],
 
         components: {
             'sharp-list':mock||List
         },
 
-        props:['readOnly', 'addable', 'sortable', 'removable'],
+        props:['readOnly', 'addable', 'sortable', 'removable', 'itemFields'],
 
         'extends': {
             data:() => ({
