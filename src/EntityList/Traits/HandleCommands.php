@@ -73,25 +73,23 @@ trait HandleCommands
      */
     protected function addInstanceCommandsAuthorizationsToConfigForItems($items)
     {
-        // Take all instance commands...
-        $instanceHandlers = collect($this->commandHandlers)
+        collect($this->commandHandlers)
+            // Take all instance commands...
             ->filter(function($commandHandler) {
                 return $commandHandler->type() == "instance" && $commandHandler->authorize();
+            })
+            // ... and Entity State if present...
+            ->when($this->entityStateHandler, function(Collection $collection) {
+                return $collection->push($this->entityStateHandler);
+            })
+            // ... and for each of them, set authorization for every $item
+            ->each(function(InstanceCommand $commandHandler) use($items) {
+                foreach ($items as $item) {
+                    $commandHandler->checkAndStoreAuthorizationFor(
+                        $item[$this->instanceIdAttribute]
+                    );
+                }
             });
-
-        // ... and Entity State if present...
-        if($this->entityStateHandler) {
-            $instanceHandlers->push($this->entityStateHandler);
-        }
-
-        // ... and for each of them, set authorization for every $item
-        $instanceHandlers->each(function(InstanceCommand $commandHandler) use($items) {
-            foreach ($items as $item) {
-                $commandHandler->checkAndStoreAuthorizationFor(
-                    $item[$this->instanceIdAttribute]
-                );
-            }
-        });
     }
 
     /**

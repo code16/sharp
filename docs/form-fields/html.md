@@ -13,10 +13,11 @@ Just write the template as a string, using placeholders for data like this: `{{v
 
 Example:
 
+```php
     $panel->setInlineTemplate(
         "<h1>{{count}}</h1> spaceships in activity"
     )
-
+```
 
 ### `setTemplatePath(string $templatePath)`
 
