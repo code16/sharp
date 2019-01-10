@@ -72,8 +72,11 @@
     .multiselect__tag {
       position: relative;
       padding: 4px 20px 4px 8px;
-      margin-top: 0;
+      margin-top:0;
       margin-left: 0;
+      &:last-child {
+        margin:0;
+      }
     }
   }
 

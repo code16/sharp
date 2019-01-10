@@ -7,6 +7,9 @@
   cursor: default;
   border-radius: $btn-border-radius;
 
+  $dropdown-top: calc(100% + #{$btn-border-radius});
+  $search-input-height: 2.5rem;
+
   @extend .SharpDropdown;
   @include nav-dropdown;
 
@@ -30,11 +33,13 @@
       .SharpAutocomplete .multiselect__tags {
         width: 10rem !important;
         padding: 0 1rem !important;
-        top: 100%;
+        top: $dropdown-top;
+        border-radius: $btn-border-radius;
+        height: $search-input-height;
       }
     }
     .SharpAutocomplete .multiselect__content {
-      border-top: 2.5rem solid white !important;
+      border-top: $search-input-height solid white !important;
     }
   }
 
@@ -48,7 +53,7 @@
       display:none;
     }
     .multiselect__content {
-      top: 100%;
+      top: $dropdown-top;
     }
   }
   .SharpSelect {
@@ -77,13 +82,14 @@
 
   &__select {
     display: inline-block;
+    position: static;
 
     .multiselect {
-      position: initial;
+      position: static;
       background: none;
 
       &__content {
-        left:0;
+        right:0;
         min-width: 10rem;
       }
 
@@ -100,13 +106,14 @@
         }
 
         &-icon {
-          line-height: .75;
+          line-height: 10px;
           font-weight: normal;
+          font-size: 1rem;
         }
 
         &-icon:after {
-          content: "x";
           color: $brand-03;
+          font-size: inherit;
         }
       }
 
@@ -114,20 +121,10 @@
         font-weight: bold;
       }
 
-      .SharpSelect__clear-button {
-        position: absolute;
-        font-size: 100%;
-        font-weight: bold;
-        line-height: 0;
-        width: 22px;
-        padding-right: 1rem;
-        &-icon {
-          display: none;
-        }
-        &:after {
-          content: "x";
-          color: $brand-03;
-        }
+      .SharpSelect__clear-button-icon {
+        fill: $brand-03;
+        width: 8px;
+        height: 8px;
       }
 
       .SharpSelect__clear-button ~ .multiselect__tags {
@@ -140,6 +137,8 @@
         box-shadow: none;
         border: none;
         min-height: 0;
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
       }
 
       &__tags-wrap {
