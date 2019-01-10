@@ -260,12 +260,15 @@
     background:transparent;
     width: 100%;
 
+    $bg-color: $ui-02;
+    $hover-bg-color: darken($bg-color, 5%);
+
     @include nav-dropdown;
 
     &.SharpDropdown--open {
       .SharpDropdown__text {
         border-color: $dropdown-focus-border-color;
-        //color: $brand-03;
+        background: $hover-bg-color;
       }
       //.SharpDropdown__arrow {fill: $brand-03}
     }
@@ -277,6 +280,7 @@
       }
       .SharpDropdown__text {
         padding-right: .25rem;
+        background: $bg-color!important;
       }
     }
 
@@ -289,6 +293,9 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      &:hover {
+        background: $hover-bg-color;
+      }
     }
 
     .SharpDropdown__list {

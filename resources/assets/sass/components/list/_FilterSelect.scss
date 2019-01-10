@@ -4,8 +4,12 @@
   width: auto;
   display:flex;
   border: $dropdown-border;
-  cursor: default;
   border-radius: $btn-border-radius;
+  transition: $dropdown-transition;
+
+  &:hover {
+    border-color: $dropdown-hover-border-color;
+  }
 
   $list-offset: $dropdown-list-offset + 2px;
   $search-input-height: 2.5rem;
@@ -78,6 +82,7 @@
     position: relative;
     background: $ui-01;
     z-index: z('dropdownText');
+    cursor: pointer;
     //text-transform: uppercase;
     //color: $text-02;
     white-space: nowrap;
@@ -145,6 +150,7 @@
         min-height: 0;
         border-bottom-left-radius: 0;
         border-top-left-radius: 0;
+        cursor: pointer;
       }
 
       &__tags-wrap {

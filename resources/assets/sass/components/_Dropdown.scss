@@ -67,6 +67,11 @@
     background: $ui-01;
     position:relative;
     user-select: none;
+
+    transition: $dropdown-transition;
+    &:hover {
+      border-color: $dropdown-hover-border-color;
+    }
   }
 
   &__list {

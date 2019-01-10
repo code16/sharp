@@ -32,4 +32,6 @@ $btn-border-radius: 3px;
 $dropdown-list-border-radius: 3px;
 $dropdown-border: 2px solid $ui-04;
 $dropdown-focus-border-color: $brand-01-light;
+$dropdown-hover-border-color: lighten($dropdown-focus-border-color, 25%);
 $dropdown-list-offset: 3px;
+$dropdown-transition: all 100ms ease-in-out;
