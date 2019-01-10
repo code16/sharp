@@ -66,6 +66,7 @@
     border-radius: $btn-border-radius;
     background: $ui-01;
     position:relative;
+    user-select: none;
   }
 
   &__list {

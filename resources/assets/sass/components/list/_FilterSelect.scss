@@ -107,6 +107,9 @@
         &:not(:first-child){
           border-left: 1px solid $ui-03;
         }
+        &:last-child {
+          margin:0;
+        }
 
         &-icon {
           line-height: 10px;
