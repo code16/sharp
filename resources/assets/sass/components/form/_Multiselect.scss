@@ -99,10 +99,10 @@
         @extend .SharpDropdown__link;
 
         &--selected {
-          @extend .SharpDropdown__link:focus;
+          @extend %dropdown-link-focus;
         }
         &--highlight {
-          @extend .SharpDropdown__link:hover;
+          @extend %dropdown-link-hover;
         }
       }
     }

@@ -79,10 +79,9 @@
 </template>
 
 <script>
-    import VueClip from '../../../vendor/vue-clip/components/Clip/index';
-    import File from '../../../vendor/vue-clip/File';
-    import SharpModal from '../../../Modal';
+    import VueClip from 'vue-clip/src/components/Clip';
     import VueCropper from 'vue-cropperjs';
+    import SharpModal from '../../../Modal';
     import rotateResize from './rotate';
 
     import { Localization } from '../../../../mixins';
@@ -376,10 +375,7 @@
             if (!this.value)
                 return;
 
-            this.files.push(new File({
-                ...this.value,
-                upload: {}
-            }));
+            this.addedFile({ ...this.value, upload: {} });
             this.file.thumbnail = this.value.thumbnail;
             this.file.status = 'exist';
         },
