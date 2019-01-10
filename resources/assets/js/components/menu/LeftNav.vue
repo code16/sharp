@@ -5,13 +5,22 @@
             <div class="SharpLeftNav__top-icon">
                 <i class="fa" :class="currentIcon"></i>
             </div>
-            <slot></slot>
-            <div class="SharpLeftNav__collapse" @click.stop="collapsed = !collapsed">
-                <a class="SharpLeftNav__collapse-link" href="#" @click.prevent>
-                    <svg class="SharpLeftNav__collapse-arrow" width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd">
-                        <path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path>
-                    </svg>
-                </a>
+            <div class="SharpLeftNav__title-container">
+                <h2 class="SharpLeftNav__title">{{ title }}</h2>
+            </div>
+            <div class="SharpLeftNav__content d-flex flex-column h-100">
+                <div class="flex-grow-1" style="min-height: 0; overflow: auto">
+                    <slot />
+                </div>
+                <div class="flex-grow-0">
+                    <div class="SharpLeftNav__collapse" @click.stop="collapsed = !collapsed">
+                        <a class="SharpLeftNav__collapse-link" href="#" @click.prevent>
+                            <svg class="SharpLeftNav__collapse-arrow" width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd">
+                                <path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
             </div>
         </nav>
     </div>
@@ -27,7 +36,8 @@
 
         props: {
             items: Array,
-            current: String
+            current: String,
+            title: String
         },
         data() {
             return {
