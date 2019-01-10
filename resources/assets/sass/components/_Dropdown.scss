@@ -27,6 +27,8 @@
   &--above {
     .SharpDropdown__list {
       bottom: 100%;
+      margin-bottom: 3px;
+      margin-top: 0;
     }
   }
 
@@ -84,6 +86,7 @@
     max-height: 20rem;
     overflow: auto;
     background: $ui-02;
+    margin-top: 3px;
   }
 
   &__item {
@@ -106,16 +109,16 @@
 
   &--open {
     //@include focus-outline('layer');
-    .SharpDropdown__text {
-      border-color: $brand-01-light;
-    }
+
     z-index: z('dropdownActive');
     .SharpDropdown__arrow {
       @include SharpDropdownOpenArrow;
     }
-
     .SharpDropdown__list {
       @include SharpDropdownOpenList;
+    }
+    .SharpDropdown__text {
+      border-color: $dropdown-focus-border-color;
     }
 
     &:focus {

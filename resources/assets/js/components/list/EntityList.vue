@@ -46,7 +46,7 @@
                                 </div>
                                 <a class="SharpEntityList__row-link" v-if="rowHasLink(item)" :href="rowLink(item)"></a>
                             </div>
-                            <div v-show="!reorderActive" class="SharpEntityList__row-actions" ref="actionsCol">
+                            <div v-show="!reorderActive" class="SharpEntityList__row-actions align-self-center" ref="actionsCol">
                                 <sharp-dropdown v-if="config.state" class="SharpEntityList__state-dropdown" :disabled="!hasStateAuthorization(item)">
                                     <template slot="text"><sharp-state-icon :class="stateClasses({item})" :style="stateStyle({item})" />
                                         <span class="text-truncate">
@@ -59,7 +59,7 @@
                                     </sharp-dropdown-item>
                                 </sharp-dropdown>
                                 <sharp-dropdown v-if="!noInstanceCommands"
-                                                class="SharpEntityList__commands-dropdown mt-2"
+                                                class="SharpEntityList__commands-dropdown"
                                                 :class="{'SharpEntityList__commands-dropdown--placeholder':!instanceCommands(item)}">
                                     <template slot="text">
                                         <div class="text-left">

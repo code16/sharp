@@ -7,7 +7,6 @@
   cursor: default;
   border-radius: $btn-border-radius;
 
-  $dropdown-top: calc(100% + #{$btn-border-radius});
   $search-input-height: 2.5rem;
 
   @extend .SharpDropdown;
@@ -20,6 +19,7 @@
         @extend .multiselect--active;
       }
     }
+    border-color: $dropdown-focus-border-color!important;
   }
 
   &--empty, &--multiple {
@@ -33,7 +33,8 @@
       .SharpAutocomplete .multiselect__tags {
         width: 10rem !important;
         padding: 0 1rem !important;
-        top: $dropdown-top;
+        top: 100%;
+        margin-top: $btn-border-radius;
         border-radius: $btn-border-radius;
         height: $search-input-height;
       }
@@ -53,7 +54,8 @@
       display:none;
     }
     .multiselect__content {
-      top: $dropdown-top;
+      top: 100%;
+      margin-top: $btn-border-radius;
     }
   }
   .SharpSelect {
@@ -89,7 +91,7 @@
       background: none;
 
       &__content {
-        right:0;
+        left: 0;
         min-width: 10rem;
       }
 
