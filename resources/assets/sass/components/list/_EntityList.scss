@@ -117,9 +117,10 @@
       }
     }
     .SharpEntityList__row-actions {
-      min-width: 6rem;
+      width: 5rem;
       @include media-breakpoint-down(sm) {
         padding-top: 0;
+        width: 100%;
       }
     }
   }
@@ -243,7 +244,7 @@
 
   &__state-dropdown {
     .SharpDropdown__text {
-      color: $text-01!important;
+      //color: $text-01!important;
     }
     .SharpDropdown__link {
       display: flex;
@@ -257,17 +258,27 @@
 
   &__state-dropdown, &__commands-dropdown {
     background:transparent;
-    width: 5.5rem;
+    width: 100%;
 
     @include nav-dropdown;
 
     &.SharpDropdown--open {
       .SharpDropdown__text {
         border-color: $dropdown-focus-border-color;
+        //color: $brand-03;
       }
+      //.SharpDropdown__arrow {fill: $brand-03}
     }
 
-    &:first-child { margin-bottom: .5rem; }
+    &.SharpDropdown--disabled {
+      opacity: 1;
+      .SharpDropdown__arrow {
+        display: none;
+      }
+      .SharpDropdown__text {
+        padding-right: .25rem;
+      }
+    }
 
     .SharpDropdown__text {
       padding: .25rem 1.25rem .25rem .35rem;
