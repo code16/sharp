@@ -15,26 +15,44 @@ trait HandleCommands
     /** @var array */
     protected $instanceCommandHandlers = [];
 
+    /** @var int */
+    protected $instanceCommandCurrentGroupNumber = 0;
+
+    /** @var int */
+    protected $entityCommandCurrentGroupNumber = 0;
+
     /**
      * @param string $commandName
-     * @param string|EntityCommand $commandHandler
+     * @param string|EntityCommand $commandHandlerOrClassName
      * @return $this
      */
-    protected function addEntityCommand(string $commandName, $commandHandler)
+    protected function addEntityCommand(string $commandName, $commandHandlerOrClassName)
     {
-        $this->addCommandTo($this->entityCommandHandlers, $commandName, $commandHandler);
+        $commandHandler = is_string($commandHandlerOrClassName)
+            ? app($commandHandlerOrClassName)
+            : $commandHandlerOrClassName;
+
+        $commandHandler->setGroupIndex($this->entityCommandCurrentGroupNumber);
+
+        $this->entityCommandHandlers[$commandName] = $commandHandler;
 
         return $this;
     }
 
     /**
      * @param string $commandName
-     * @param string|InstanceCommand $commandHandler
+     * @param string|InstanceCommand $commandHandlerOrClassName
      * @return $this
      */
-    protected function addInstanceCommand(string $commandName, $commandHandler)
+    protected function addInstanceCommand(string $commandName, $commandHandlerOrClassName)
     {
-        $this->addCommandTo($this->instanceCommandHandlers, $commandName, $commandHandler);
+        $commandHandler = is_string($commandHandlerOrClassName)
+            ? app($commandHandlerOrClassName)
+            : $commandHandlerOrClassName;
+
+        $commandHandler->setGroupIndex($this->instanceCommandCurrentGroupNumber);
+
+        $this->instanceCommandHandlers[$commandName] = $commandHandler;
 
         return $this;
     }
@@ -44,7 +62,17 @@ trait HandleCommands
      */
     protected function addInstanceCommandSeparator()
     {
+        $this->instanceCommandCurrentGroupNumber++;
 
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function addEntityCommandSeparator()
+    {
+        $this->entityCommandCurrentGroupNumber++;
 
         return $this;
     }
@@ -63,7 +91,7 @@ trait HandleCommands
                 $formLayout = $formFields ? $handler->formLayout() : null;
                 $hasFormInitialData = $formFields ? $this->isInitialDataMethodImplemented($handler) : false;
 
-                $config["commands"][$handler->type()][] = [
+                $config["commands"][$handler->type()][$handler->groupIndex()][] = [
                     "key" => $commandName,
                     "label" => $handler->label(),
                     "description" => $handler->description(),
@@ -128,21 +156,6 @@ trait HandleCommands
         return isset($this->instanceCommandHandlers[$commandKey])
             ? $this->instanceCommandHandlers[$commandKey]
             : null;
-    }
-
-    /**
-     * @param array $handlers
-     * @param string $commandName
-     * @param string|Command $commandHandler
-     * @return $this
-     */
-    private function addCommandTo(array &$handlers, string $commandName, $commandHandler)
-    {
-        $handlers[$commandName] = $commandHandler instanceof Command
-            ? $commandHandler
-            : app($commandHandler);
-
-        return $this;
     }
 
     /**

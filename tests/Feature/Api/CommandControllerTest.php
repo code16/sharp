@@ -236,7 +236,7 @@ class CommandControllerTest extends BaseApiTest
             ->json();
 
         $this->assertTrue(
-            collect($response['config']['commands']['entity'])->where("key", "entity_with_init_data")->first()['fetch_initial_data']
+            collect($response['config']['commands']['entity'][0])->where("key", "entity_with_init_data")->first()['fetch_initial_data']
         );
 
         $this->getJson('/sharp/api/list/person/command/entity_with_init_data/data')
@@ -259,7 +259,7 @@ class CommandControllerTest extends BaseApiTest
             ->json();
 
         $this->assertTrue(
-            collect($response['config']['commands']['instance'])->where("key", "instance_with_init_data")->first()['fetch_initial_data']
+            collect($response['config']['commands']['instance'][0])->where("key", "instance_with_init_data")->first()['fetch_initial_data']
         );
 
         $this->getJson('/sharp/api/list/person/command/instance_with_init_data/25/data')

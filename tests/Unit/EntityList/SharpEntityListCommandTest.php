@@ -40,17 +40,21 @@ class SharpEntityListCommandTest extends SharpTestCase
             "commands" => [
                 'entity' => [
                     [
-                        "key" => "entityCommand",
-                        "label" => "My Entity Command",
-                        "type" => "entity",
-                        "authorization" => true
+                        [
+                            "key" => "entityCommand",
+                            "label" => "My Entity Command",
+                            "type" => "entity",
+                            "authorization" => true
+                        ]
                     ]
                 ], 'instance' => [
                     [
-                        "key" => "instanceCommand",
-                        "label" => "My Instance Command",
-                        "type" => "instance",
-                        "authorization" => []
+                        [
+                            "key" => "instanceCommand",
+                            "label" => "My Instance Command",
+                            "type" => "instance",
+                            "authorization" => []
+                        ]
                     ]
                 ]
             ]
@@ -73,9 +77,11 @@ class SharpEntityListCommandTest extends SharpTestCase
             "commands" => [
                 "entity" => [
                     [
-                        "key" => "entityCommand",
-                        "label" => "My Entity Command",
-                        "type" => "entity"
+                        [
+                            "key" => "entityCommand",
+                            "label" => "My Entity Command",
+                            "type" => "entity"
+                        ]
                     ]
                 ]
             ]
@@ -107,10 +113,12 @@ class SharpEntityListCommandTest extends SharpTestCase
             "commands" => [
                 "entity" => [
                     [
-                        "key" => "entityCommand",
-                        "label" => "My Entity Command",
-                        "type" => "entity",
-                        "confirmation" => "Sure?"
+                        [
+                            "key" => "entityCommand",
+                            "label" => "My Entity Command",
+                            "type" => "entity",
+                            "confirmation" => "Sure?"
+                        ]
                     ]
                 ]
             ]
@@ -144,19 +152,21 @@ class SharpEntityListCommandTest extends SharpTestCase
             "commands" => [
                 "entity" => [
                     [
-                        "key" => "entityCommand",
-                        "label" => "My Entity Command",
-                        "type" => "entity",
-                        "form" => [
-                            "fields" => [
-                                "message" => [
-                                    "key" => "message",
-                                    "type" => "text",
-                                    "inputType" => "text"
+                        [
+                            "key" => "entityCommand",
+                            "label" => "My Entity Command",
+                            "type" => "entity",
+                            "form" => [
+                                "fields" => [
+                                    "message" => [
+                                        "key" => "message",
+                                        "type" => "text",
+                                        "inputType" => "text"
+                                    ]
+                                ],
+                                "layout" => [
+                                    [["key" => "message", "size" => 12, "sizeXS" => 12]]
                                 ]
-                            ],
-                            "layout" => [
-                                [["key" => "message", "size" => 12, "sizeXS" => 12]]
                             ]
                         ]
                     ]
@@ -190,10 +200,12 @@ class SharpEntityListCommandTest extends SharpTestCase
             "commands" => [
                 "entity" => [
                     [
-                        "form" => [
-                            "layout" => [
-                                [["key" => "message", "size" => 12, "sizeXS" => 12]],
-                                [["key" => "message2", "size" => 12, "sizeXS" => 12]],
+                        [
+                            "form" => [
+                                "layout" => [
+                                    [["key" => "message", "size" => 12, "sizeXS" => 12]],
+                                    [["key" => "message2", "size" => 12, "sizeXS" => 12]],
+                                ]
                             ]
                         ]
                     ]
@@ -226,10 +238,12 @@ class SharpEntityListCommandTest extends SharpTestCase
             "commands" => [
                 "entity" => [
                     [
-                        "key" => "entityCommand",
-                        "label" => "My Entity Command",
-                        "type" => "entity",
-                        "authorization" => false,
+                        [
+                            "key" => "entityCommand",
+                            "label" => "My Entity Command",
+                            "type" => "entity",
+                            "authorization" => false,
+                        ]
                     ]
                 ]
             ]
@@ -264,10 +278,12 @@ class SharpEntityListCommandTest extends SharpTestCase
             "commands" => [
                 "instance" => [
                     [
-                        "key" => "command",
-                        "label" => "My Instance Command",
-                        "type" => "instance",
-                        "authorization" => [1,2],
+                        [
+                            "key" => "command",
+                            "label" => "My Instance Command",
+                            "type" => "instance",
+                            "authorization" => [1,2],
+                        ]
                     ]
                 ]
             ]
@@ -298,10 +314,12 @@ class SharpEntityListCommandTest extends SharpTestCase
             "commands" => [
                 "entity" => [
                     [
-                        "key" => "entityCommand",
-                        "label" => "My Entity Command",
-                        "description" => "My Entity Command description",
-                        "type" => "entity",
+                        [
+                            "key" => "entityCommand",
+                            "label" => "My Entity Command",
+                            "description" => "My Entity Command description",
+                            "type" => "entity",
+                        ]
                     ]
                 ]
             ]
