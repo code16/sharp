@@ -1,5 +1,6 @@
 const mix = require('laravel-mix');
 const webpack = require('webpack');
+const path = require('path');
 
 mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
     .js('resources/assets/js/client-api.js', 'resources/assets/dist/client-api.js')
@@ -10,18 +11,21 @@ mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
         processCssUrls: false
     })
     .version()
-    .extract(['vue'])
+    .extract()
     .setPublicPath('resources/assets/dist')
     .webpackConfig({
         plugins: [
-            new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+            new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+            // new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
         ],
         // transpile vue-clip package
         module: {
             rules: [
                 {
                     test: /\.js$/,
-                    exclude: /node_modules(?!\/vue-clip)/,
+                    include: [
+                        path.resolve(__dirname, 'node_modules/vue-clip')
+                    ],
                     use: [
                         {
                             loader: 'babel-loader',
