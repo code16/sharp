@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="base-url" content="{{ config('sharp.custom_url_segment') }}">
     <title>{{ sharp_page_title($sharpMenu ?? null, $entityKey ?? $dashboardKey ?? null) }}</title>
     <link rel="stylesheet" href="/vendor/sharp/sharp.css?version={{ sharp_version() }}">
     <link rel="stylesheet" href="/vendor/sharp/sharp-cms.css?version={{ sharp_version() }}">

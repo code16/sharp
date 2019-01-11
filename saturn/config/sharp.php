@@ -4,6 +4,8 @@ return [
 
     "name" => "Saturn",
 
+    "custom_url_segment" => "admin",
+
     "extensions" => [
         "assets" => [
             "strategy" => "asset",

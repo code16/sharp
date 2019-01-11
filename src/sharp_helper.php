@@ -141,3 +141,11 @@ function sharp_laravel_version_gte($version)
     return $laravelMajor > $major
         || ($laravelMajor == $major && $laravelMinor >= $minor);
 }
+
+/**
+ * @return string
+ */
+function sharp_base_url_segment()
+{
+    return config("sharp.custom_url_segment", "sharp");
+}

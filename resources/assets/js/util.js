@@ -34,3 +34,8 @@ export function getFileName(headers={}) {
     }
     return null;
 }
+
+export function getBaseUrl() {
+    const meta = document.head.querySelector('meta[name=base-url]');
+    return meta ? `/${meta.content}` : '/sharp';
+}
