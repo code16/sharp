@@ -14,8 +14,7 @@ $padding: (
   @if map-has-key($padding, $value) {
     @return map-get($padding, $value);
   } @else {
-    @warn 'padding: could not find #{$value} in $padding map.
-          Please make sure it is defined';
+    @warn 'padding: could not find #{$value} in $padding map. Please make sure it is defined';
   }
 }
 

@@ -30,9 +30,9 @@
   &--nav-overflow {
     @include create-collapsed-nav;
   }
-  &:not(SharpTabs--nav-overflow) {
+  &:not(.SharpTabs--nav-overflow) {
     @include media-breakpoint-down(xs) {
-      &--collapse {
+      &.SharpTabs--collapse {
         @include create-collapsed-nav;
       }
     }
