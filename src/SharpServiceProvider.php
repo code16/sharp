@@ -8,6 +8,7 @@ use Code16\Sharp\Http\Composers\AssetViewComposer;
 use Code16\Sharp\Http\Composers\MenuViewComposer;
 use Code16\Sharp\Http\Middleware\Api\AddSharpContext;
 use Code16\Sharp\Http\Middleware\Api\AppendFormAuthorizations;
+use Code16\Sharp\Http\Middleware\Api\AppendFormDataLocalizations;
 use Code16\Sharp\Http\Middleware\Api\AppendListAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendListMultiform;
 use Code16\Sharp\Http\Middleware\Api\AppendNotifications;

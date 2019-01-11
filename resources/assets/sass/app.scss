@@ -94,6 +94,7 @@ $small-breakpoint: sm;
   @import 'components/form/Radio';
   @import 'components/form/Geolocation';
   @import 'components/form/TrixEditor';
+  @import 'components/form/FieldLocaleSelector';
 
   // List
   @import 'components/list/EntityList';

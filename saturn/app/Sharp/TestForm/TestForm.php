@@ -27,15 +27,17 @@ class TestForm extends SharpForm
     {
         $this->addField(
             SharpFormTextField::make("text")
+                ->setLocalized()
                 ->setLabel("Text")
 
         )->addField(
             SharpFormAutocompleteField::make("autocomplete_local", "local")
+                ->setLocalized()
                 ->setLabel("Autocomplete local")
                 ->setLocalSearchKeys(["label"])
                 ->setListItemInlineTemplate("{{label}}")
                 ->setResultItemInlineTemplate("{{label}} ({{id}})")
-                ->setLocalValues($this->options())
+                ->setLocalValues($this->options(true))
 
         )->addField(
             SharpFormAutocompleteField::make("autocomplete_remote", "remote")
@@ -100,6 +102,7 @@ class TestForm extends SharpForm
 
         )->addField(
             SharpFormMarkdownField::make("markdown")
+                ->setLocalized()
                 ->setLabel("Markdown")
                 ->setToolbar([
                     SharpFormMarkdownField::B, SharpFormMarkdownField::I, SharpFormMarkdownField::A,
@@ -127,23 +130,27 @@ class TestForm extends SharpForm
             ->setMax(100)
 
         )->addField(
-            SharpFormSelectField::make("select_dropdown", $this->options())
+            SharpFormSelectField::make("select_dropdown", $this->options(true))
+                ->setLocalized()
                 ->setLabel("Select dropdown")
                 ->setDisplayAsDropdown()
 
         )->addField(
-            SharpFormSelectField::make("select_list", $this->options())
+            SharpFormSelectField::make("select_list", $this->options(true))
+                ->setLocalized()
                 ->setLabel("Select list")
                 ->setDisplayAsList()
 
         )->addField(
-            SharpFormSelectField::make("select_list_multiple", $this->options())
+            SharpFormSelectField::make("select_list_multiple", $this->options(true))
+                ->setLocalized()
                 ->setLabel("Select list multiple")
                 ->setMultiple()
                 ->setDisplayAsList()
 
         )->addField(
-            SharpFormTagsField::make("tags", $this->options())
+            SharpFormTagsField::make("tags", $this->options(true))
+                ->setLocalized()
                 ->setLabel("Tags")
                 ->setCreatable(true)
                 ->setCreateAttribute("label")
@@ -151,6 +158,7 @@ class TestForm extends SharpForm
 
         )->addField(
             SharpFormTextareaField::make("textarea")
+                ->setLocalized()
                 ->setLabel("Textarea")
                 ->setRowCount(4)
 
@@ -164,6 +172,7 @@ class TestForm extends SharpForm
 
         )->addField(
             SharpFormWysiwygField::make("wysiwyg")
+                ->setLocalized()
                 ->setLabel("Wysiwyg")
                 ->setToolbar([
                     SharpFormWysiwygField::B, SharpFormWysiwygField::I, SharpFormWysiwygField::A,
@@ -240,7 +249,10 @@ class TestForm extends SharpForm
         $faker = \Faker\Factory::create();
 
         return $this->transform([
-            "text" => $faker->words(3, true),
+            "text" => [
+                "fr" => $faker->words(3, true),
+                "en" => $faker->words(3, true),
+            ],
             "autocomplete_local" => 1,
             "autocomplete_remote" => null,
             "autocomplete_list" => null,
@@ -249,15 +261,26 @@ class TestForm extends SharpForm
             "html" => [
                 "name" => $faker->name
             ],
-            "markdown" => "Some **text** with *style*",
+            "markdown" => [
+                "fr" => "Du **texte** avec *style*",
+                "en" => "Some **text** with *style*",
+            ],
             "number" => $faker->numberBetween(1, 100),
-            "textarea" => $faker->paragraph(3),
-            "wysiwyg" => 'some <strong>html stuff</strong>'
+            "textarea" => [
+                "fr" => $faker->paragraph(3),
+                "en" => $faker->paragraph(3),
+            ],
+            "wysiwyg" => [
+                "fr" => 'des <strong>trucs en html</strong>',
+                "en" => 'some <strong>html stuff</strong>',
+            ]
         ]);
     }
 
     function update($id, array $data)
     {
+        print_r($data);
+        die();
     }
 
     function delete($id)
@@ -267,12 +290,29 @@ class TestForm extends SharpForm
     /**
      * @return array
      */
-    protected function options()
+    function getDataLocalizations()
     {
+        return ["fr", "en"];
+    }
+
+    /**
+     * @param bool $localized
+     * @return array
+     */
+    protected function options($localized = false)
+    {
+        if(!$localized) {
+            return [
+                "1" => "Option one",
+                "2" => "Option two",
+                "3" => "Option three",
+            ];
+        }
+
         return [
-            "1" => "Option one",
-            "2" => "Option two",
-            "3" => "Option three",
+            "1" => ["en" => "Option one", "fr" => "Option un"],
+            "2" => ["en" => "Option two", "fr" => "Option deux"],
+            "3" => ["en" => "Option three", "fr" => "Option trois"],
         ];
     }
 }

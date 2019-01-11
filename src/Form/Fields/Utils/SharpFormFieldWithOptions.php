@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Form\Fields\Utils;
 
+use Illuminate\Support\Collection;
+
 trait SharpFormFieldWithOptions
 {
 
@@ -17,7 +19,8 @@ trait SharpFormFieldWithOptions
 
         $options = collect($options);
 
-        if(is_array($options->first()) || is_object($options->first())) {
+        if((is_array($options->first()) || is_object($options->first()))
+            && isset(((array)$options->first())["id"])) {
             // We assume that we already have ["id", "label"] in this case
             return $options->all();
         }

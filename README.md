@@ -122,7 +122,7 @@ We'll get into all those classes in this document. The important thing to notice
 - [Building the menu](docs/building-menu.md)
 - [How to transform data](docs/how-to-transform-data.md)
 - [Sharp built-in solution for uploads](docs/sharp-built-in-solution-for-uploads.md)
-- Handling data localization (coming in 4.1)
+- [Handling form data localization](docs/form-data-localization.md)
 - [Testing with Sharp](docs/testing-with-sharp.md)
 
 ### Theming and CSS

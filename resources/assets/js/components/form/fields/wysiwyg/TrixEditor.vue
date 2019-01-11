@@ -1,7 +1,7 @@
 <template>
     <div class="SharpTrix" :class="{ 'SharpTrix--read-only': readOnly }">
         <div class="SharpModule__inner">
-            <input :id="inputId" :value="value.text" type="hidden">
+            <input :id="inputId" :value="text" type="hidden">
             <trix-toolbar v-if="toolbar" class="SharpModule__header" :id="toolbarId">
                 <trix-custom-toolbar :toolbar="toolbar" />
             </trix-toolbar>
@@ -11,6 +11,7 @@
                 :placeholder="placeholder"
                 :style="{ height: `${height}px`, maxHeight:`${height}px` }"
                 @trix-change="handleChanged"
+                ref="trix"
             ></trix-editor>
         </div>
     </div>
@@ -22,8 +23,13 @@
 
     import TrixCustomToolbar from './TrixCustomToolbar.vue';
 
+    import localize from '../../../../mixins/localize/editor';
+
     export default {
         name:'SharpTrix',
+
+        mixins: [ localize({ textProp:'text' }) ],
+
         components: {
             TrixCustomToolbar
         },
@@ -36,7 +42,13 @@
             },
             placeholder: String,
             readOnly: Boolean,
-            uniqueIdentifier: String
+            uniqueIdentifier: String,
+
+        },
+        watch: {
+            locale() {
+                this.localized && this.$refs.trix.editor.loadHTML(this.text);
+            }
         },
         computed: {
             inputId() {
@@ -44,11 +56,14 @@
             },
             toolbarId() {
                 return `trix-toolbar-${this.uniqueIdentifier}`;
+            },
+            text() {
+                return this.localized ? this.localizedText : this.value.text;
             }
         },
         methods: {
             handleChanged(event) {
-                this.$emit('input', { text:event.target.value });
+                this.$emit('input', this.localizedValue(event.target.value));
             }
         },
         created() {

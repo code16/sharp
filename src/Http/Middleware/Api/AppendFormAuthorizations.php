@@ -8,9 +8,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 /**
- * Class CheckSharpAuthorizations
- * @package Code16\Sharp\Http\Middleware\Api
- *
  * This middleware appends authorizations for GET form request to the response.
  */
 class AppendFormAuthorizations

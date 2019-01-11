@@ -36,7 +36,7 @@
                            :class="{'SharpSelect__item--inline':inline}"
                 >
                     <sharp-check :value="checked(option.id)"
-                                 :text="option.label"
+                                 :text="optionsLabel[option.id]"
                                  :read-only="readOnly"
                                  @input="handleCheckboxChanged($event,option.id)">
                     </sharp-check>
@@ -61,7 +61,7 @@
                     >
                     <label class="SharpRadio__label" :for="`${uniqueIdentifier}${index}`">
                         <span class="SharpRadio__appearance"></span>
-                        {{option.label}}
+                        {{ optionsLabel[option.id] }}
                     </label>
 
                 </component>
@@ -73,9 +73,12 @@
 <script>
     import SharpMultiselect from '../../Multiselect';
     import SharpCheck from './Check.vue';
+    import localize from '../../../mixins/localize/Select';
 
     export default {
         name: 'SharpSelect',
+
+        mixins: [localize],
 
         components: {
             SharpMultiselect,
@@ -124,11 +127,11 @@
                 return this.options.map(o => o.id);
             },
             optionsLabel() {
-                if (this.display !== 'dropdown')
-                    return;
+                // if (this.display !== 'dropdown')
+                //     return;
 
                 return this.options.reduce((map, opt) => {
-                    map[opt.id] = opt.label;
+                    map[opt.id] = this.localizedOptionLabel(opt);
                     return map;
                 }, {});
             }

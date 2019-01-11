@@ -3,12 +3,12 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Formatters\SelectFormatter;
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithOptions;
-use Illuminate\Support\Collection;
 
 class SharpFormSelectField extends SharpFormField
 {
-    use SharpFormFieldWithOptions;
+    use SharpFormFieldWithOptions, SharpFormFieldWithDataLocalization;
 
     const FIELD_TYPE = "select";
 
@@ -178,6 +178,7 @@ class SharpFormSelectField extends SharpFormField
 
     /**
      * @return array
+     * @throws \Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException
      */
     public function toArray(): array
     {
@@ -188,6 +189,7 @@ class SharpFormSelectField extends SharpFormField
             "display" => $this->display,
             "inline" => $this->inline,
             "maxSelected" => $this->maxSelected,
+            "localized" => $this->localized
         ]);
     }
 }

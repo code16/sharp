@@ -132,6 +132,19 @@ class MarkdownFormatterTest extends SharpTestCase
     }
 
     /** @test */
+    function files_are_handled_for_a_localized_markdown()
+    {
+        $formatter = new MarkdownFormatter;
+        $field = SharpFormMarkdownField::make("md")->setLocalized();
+        $value = [
+            "fr" => "![](local:test_fr.png)\n![](local:test2_fr.png)",
+            "en" => "![](local:test_en.png)",
+        ];
+
+        $this->assertCount(3, $formatter->toFront($field, $value)["files"]);
+    }
+
+    /** @test */
     function we_apply_transformations_from_front_on_already_existing_files()
     {
         $file = (new FileFactory)->image("image.png", 100, 100);

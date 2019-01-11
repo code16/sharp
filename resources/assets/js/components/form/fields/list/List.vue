@@ -28,14 +28,16 @@
                             <template v-else>
                                 <sharp-list-item :layout="fieldLayout.item" :error-identifier="i">
                                     <template slot-scope="itemFieldLayout">
-                                        <sharp-field-display :field-key="itemFieldLayout.key"
-                                                             :context-fields="updatedItemFields"
-                                                             :context-data="listItemData"
-                                                             :error-identifier="itemFieldLayout.key"
-                                                             :config-identifier="itemFieldLayout.key"
-                                                             :update-data="update(i)"
-                                                             :locale="locale">
-                                        </sharp-field-display>
+                                        <sharp-field-display
+                                            :field-key="itemFieldLayout.key"
+                                            :context-fields="updatedItemFields"
+                                            :context-data="listItemData"
+                                            :error-identifier="itemFieldLayout.key"
+                                            :config-identifier="itemFieldLayout.key"
+                                            :update-data="update(i)"
+                                            :locale="listItemData._fieldsLocale[itemFieldLayout.key]"
+                                            @locale-change="(key, value)=>updateLocale(i, key, value)"
+                                        />
                                     </template>
                                 </sharp-list-item>
                                 <button v-if="!disabled && removable" class="SharpButton SharpButton--danger SharpButton--sm mt-3" @click="remove(i)">{{ l('form.list.remove_button') }}</button>
@@ -65,6 +67,7 @@
     import SharpTemplate from '../../../Template';
 
     import { Localization, ReadOnlyFields } from '../../../../mixins';
+    import localize from '../../../../mixins/localize/form';
 
 
     export default {
@@ -72,22 +75,12 @@
 
         inject: ['$form'],
 
-        mixins: [ Localization, ReadOnlyFields('itemFields') ],
+        mixins: [ Localization, ReadOnlyFields('itemFields'), localize('itemFields') ],
 
         components: {
             Draggable,
             SharpListItem,
             SharpTemplate
-        },
-
-        provide() {
-            return {
-                uploadUtils: {
-                    getDownloadLink(fieldKey) {
-                        return `${this.$form.downloadLinkBase}/${this.fieldKey}.${fieldKey}`
-                    }
-                }
-            }
         },
 
         props: {
@@ -124,17 +117,10 @@
         },
         data() {
             return {
-                list:[],
+                list: [],
+                itemFieldsLocale: [],
                 dragActive: false,
                 lastIndex: 0
-            }
-        },
-        watch: {
-            locale() {
-                if(this.value == null) {
-                    this.initList();
-                }
-                else this.list = this.value;
             }
         },
         computed: {
@@ -164,28 +150,22 @@
             },
             indexSymbol() {
                 return Symbol('index');
-            }
+            },
         },
         methods: {
             indexedList() {
-                return (this.value||[]).map((v,i)=>({
+                return (this.value||[]).map((v,i) => this.withLocale({
                     [this.indexSymbol]:i, ...v
                 }));
             },
             createItem() {
                 return this.itemFieldsKeys.reduce((res, fieldKey) => {
-                    if(this.$form.localized && this.itemFields[fieldKey].localized) {
-                        res[fieldKey] = this.$form.config.locales.reduce((res, l)=>{
-                            res[l] = null;
-                            return res;
-                        },{});
-                    }
-                    else res[fieldKey] = null;
+                    res[fieldKey] = null;
                     return res;
-                },{
+                }, this.withLocale({
                     [this.itemIdAttribute]:null,
                     [this.indexSymbol]:this.lastIndex++
-                });
+                }));
             },
             insertNewItem(i, $event) {
                 $event.target && $event.target.blur();
@@ -199,11 +179,12 @@
             },
             update(i) {
                 return (key, value) => {
-                    if(this.itemFields[key].localized) {
-                        this.list[i][key][this.locale] = value;
-                    }
-                    else this.list[i][key] = value;
+                    const item = this.list[i];
+                    this.$set(item, key, this.fieldLocalizedValue(key, value, { ...item }, item._fieldsLocale));
                 }
+            },
+            updateLocale(i, key, value) {
+                this.$set(this.list[i]._fieldsLocale, key, value);
             },
             collapsedItemData(itemData) {
                 return {$index:itemData[this.dragIndexSymbol], ...itemData};
@@ -211,6 +192,14 @@
             toggleDrag() {
                 this.dragActive = !this.dragActive;
                 this.list.forEach((item,i) => item[this.dragIndexSymbol] = i);
+            },
+            withLocale(item) {
+                return {
+                    ...item, _fieldsLocale: this.defaultFieldLocaleMap({
+                        fields: this.itemFields,
+                        locales: this.$form.locales
+                    })
+                };
             },
 
             initList() {
@@ -221,6 +210,7 @@
             },
         },
         created() {
+            this.localized = this.$form.localized;
             this.initList();
         },
     }

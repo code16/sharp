@@ -77,15 +77,21 @@ class MarkdownFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param string $md
+     * @param string|array $texts
      * @return array
      */
-    protected function extractEmbeddedUploads($md)
+    protected function extractEmbeddedUploads($texts)
     {
-        preg_match_all(
-            '/!\[[^\]]*\]\((?<filename>.*?)(?=\"|\))(?<optionalpart>\".*\")?\)/',
-            $md, $matches, PREG_SET_ORDER, 0
-        );
+        $matches = [];
+
+        foreach((array)$texts as $md) {
+            preg_match_all(
+                '/!\[[^\]]*\]\((?<filename>.*?)(?=\"|\))(?<optionalpart>\".*\")?\)/',
+                $md, $localeMatches, PREG_SET_ORDER, 0
+            );
+
+            $matches = array_merge($matches, $localeMatches);
+        }
 
         return collect($matches)->map(function($match) {
             return trim($match["filename"]);
@@ -137,7 +143,7 @@ class MarkdownFormatter extends SharpFieldFormatter
 
             return Storage::disk($disk)->size($filename);
 
-        } catch(\RuntimeException $ex) {
+        } catch(\Exception $ex) {
             return null;
         }
     }
