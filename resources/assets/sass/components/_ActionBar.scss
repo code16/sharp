@@ -123,7 +123,8 @@
 
   &__forms-dropdown {
     width: auto;
-    padding-right: 2rem;
+    @include nav-dropdown;
+
     .SharpDropdown__text { z-index: auto }
     @extend %overflow-dropdown-list;
 
@@ -131,9 +132,21 @@
       //background: $brand-03;
     }
     .SharpDropdown__text {
+      &:hover {
+        border-color: lighten($brand-03, 20%);
+      }
+      border-color: $brand-03;
+      background: $brand-03;
       color: $inverse-01;
       font-weight: normal;
       text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+    }
+    &.SharpDropdown--open {
+      .SharpDropdown__text {
+        border-color: lighten($brand-03, 30%);
+      }
     }
     .SharpDropdown__arrow {
       fill: $inverse-01;

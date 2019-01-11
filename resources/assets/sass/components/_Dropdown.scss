@@ -68,7 +68,7 @@
     position:relative;
     user-select: none;
 
-    transition: $dropdown-transition;
+    transition: $dropdown-btn-transition;
     &:hover {
       border-color: $dropdown-hover-border-color;
     }
@@ -103,6 +103,8 @@
       padding: 1rem 1.5rem 1rem 1rem;
       white-space: nowrap;
       background: $ui-02;
+
+      transition: $dropdown-item-transition;
 
       &:focus {
         @extend %dropdown-link-focus;

@@ -13,13 +13,12 @@
   .SharpDropdown__link:focus,
   .multiselect__option--selected
   {
-    background-color: white;
-    color: $text-03;
+    background-color: white!important;
   }
 
   .SharpDropdown__link:hover,
   .multiselect__option--highlight {
-    background-color: lighten($ui-02, 5%);
+    background-color: lighten($brand-02, 25%)!important;
     color: $text-01;
   }
 }
