@@ -50,7 +50,7 @@ trait HandleCommands
             $formLayout = $formFields ? $handler->formLayout() : null;
             $hasFormInitialData = $formFields ? $this->isInitialDataMethodImplemented($handler) : false;
 
-            $config["commands"][] = [
+            $config["commands"][$handler->type()][] = [
                 "key" => $commandName,
                 "label" => $handler->label(),
                 "description" => $handler->description(),
