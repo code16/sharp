@@ -63,6 +63,7 @@ class SpaceshipSharpList extends SharpEntityList
             ->addEntityCommand("reload", SpaceshipReload::class)
             ->addInstanceCommand("message", SpaceshipSendMessage::class)
             ->addInstanceCommand("preview", SpaceshipPreview::class)
+            ->addInstanceCommandSeparator()
             ->addInstanceCommand("external", SpaceshipExternalLink::class)
             ->setEntityState("state", SpaceshipEntityState::class)
 

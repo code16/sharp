@@ -328,7 +328,7 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
                 return $this->link('/link/out');
             }
 
-        })->addInstanceCommand("entity_exception", new class() extends EntityCommand {
+        })->addEntityCommand("entity_exception", new class() extends EntityCommand {
             public function label(): string { return "label"; }
             public function execute(EntityListQueryParams $params, array $data = []): array {
                 throw new SharpApplicativeException("error");
@@ -360,7 +360,7 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
                 return $this->download("pdf/account.pdf");
             }
 
-        })->addInstanceCommand("entity_unauthorized", new class() extends EntityCommand {
+        })->addEntityCommand("entity_unauthorized", new class() extends EntityCommand {
             public function label(): string { return "label"; }
             public function authorize(): bool { return false; }
             public function execute(EntityListQueryParams $params, array $data = []): array {
@@ -395,7 +395,7 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
             }
             public function execute(EntityListQueryParams $params, array $data = []): array {}
 
-        })->addEntityCommand("instance_with_init_data", new class() extends InstanceCommand {
+        })->addInstanceCommand("instance_with_init_data", new class() extends InstanceCommand {
             public function label(): string { return "label"; }
             public function buildFormFields() {
                 $this->addField(SharpFormTextField::make("name"));
