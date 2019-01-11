@@ -163,6 +163,17 @@
     border: 1px solid $ui-01;
   }
 
+  .SharpButton {
+    border-radius: $btn-border-radius;
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .SharpSearch__input {
+    border-radius: $input-border-radius;
+  }
+
 
   &.SharpActionBarList {
     @include media-breakpoint-down(sm) {
