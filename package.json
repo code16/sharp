@@ -35,9 +35,7 @@
     "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "prod": "npm run production",
-    "test": "jest",
-    "stats": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js --profile --json | tail -n +3 > stats.json",
-    "show-stats": "npm run stats && webpack-bundle-size-analyzer stats.json"
+    "test": "jest"
   },
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.25",
@@ -76,7 +74,8 @@
     "vue2-google-maps": "^0.10.3",
     "vue2-timepicker": "^0.1.4",
     "vuedraggable": "^2.10.0",
-    "vuejs-datepicker": "^0.9.16"
+    "vuejs-datepicker": "^0.9.16",
+    "webpack-bundle-analyzer": "^3.0.3"
   },
   "dependencies": {
     "carbon-components": "^7.26.2",
