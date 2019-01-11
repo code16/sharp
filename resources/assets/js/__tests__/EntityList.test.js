@@ -1076,12 +1076,12 @@ describe('entity-list', ()=>{
         };
         let { stateStyle } = $entityList;
         expect(stateStyle({ item: { visibility:'active' } })).toEqual({
-            fill: 'green', stroke: 'green'
+            background: 'green'
         });
         expect(stateStyle({ item: { visibility:'inactive' } })).toEqual('');
 
         expect(stateStyle({ value:'active' })).toEqual({
-            fill: 'green', stroke: 'green'
+            background: 'green'
         });
         expect(stateStyle({ value:'inactive' })).toEqual('');
     });

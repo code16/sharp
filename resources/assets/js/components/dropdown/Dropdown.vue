@@ -2,7 +2,8 @@
     <div class="SharpDropdown"
          :class="{'SharpDropdown--open':opened,
          'SharpDropdown--disabled':disabled,
-         'SharpDropdown--above':isAbove}"
+         'SharpDropdown--above':isAbove,
+         'SharpDropdown--no-arrow':!showArrow}"
          :tabindex="disabled?-1:0"
          @focus="handleFocus" @blur="handleBlur">
         <div class="SharpDropdown__text" @mousedown="toggleIfFocused">

@@ -56,16 +56,6 @@
                         {{ l('action_bar.list.create_button') }}
                     </button>
                 </template>
-                <sharp-dropdown v-if="commands.length"
-                                class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
-                                :show-arrow="false">
-                    <div slot="text">
-                        <i class="fa fa-plus"></i>
-                    </div>
-                    <sharp-dropdown-item v-for="command in commands" @click="emitAction('command', command)" :key="command.key">
-                        {{ command.label }}
-                    </sharp-dropdown-item>
-                </sharp-dropdown>
             </template>
         </template>
         <template slot="extras">
@@ -84,6 +74,17 @@
                 :key="filter.key"
                 @input="emitAction('filterChanged',filter.key,$event)"
             />
+        </template>
+        <template v-if="commands.length" slot="extras-right">
+            <sharp-dropdown
+                class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands">
+                <div slot="text">
+                    Actions
+                </div>
+                <sharp-dropdown-item v-for="command in commands" @click="emitAction('command', command)" :key="command.key">
+                    {{ command.label }}
+                </sharp-dropdown-item>
+            </sharp-dropdown>
         </template>
     </sharp-action-bar>
 </template>

@@ -1,12 +1,8 @@
 <sharp-left-nav v-cloak
     current="{{ $sharpMenu->currentEntity }}"
+    title="{{ $sharpMenu->name }}"
     :items="{{ json_encode($sharpMenu->menuItems) }}"
 >
-    <div class="SharpLeftNav__title-container">
-        <h2 class="SharpLeftNav__title">{{ $sharpMenu->name }}</h2>
-    </div>
-    <div class="SharpLeftNav__shadow"></div>
-
     <ul role="menubar" class="SharpLeftNav__list" aria-hidden="false" v-cloak>
         <sharp-nav-item disabled>
             <span title="{{ $sharpMenu->user }}">

@@ -8,7 +8,7 @@ exports[`filter-select can mount "empty" FilterSelect 1`] = `
 		Web job
 		<!---->
 	</span>
-	<sharpselect-stub uniqueidentifier="job" options="[object Object],[object Object]" display="dropdown" clearable="true" placeholder="-" class="SharpFilterSelect__select"></sharpselect-stub>
+	<sharpselect-stub uniqueidentifier="job" options="[object Object],[object Object]" display="dropdown" clearable="true" placeholder=" " class="SharpFilterSelect__select"></sharpselect-stub>
 </span>
 `;
 
@@ -20,7 +20,7 @@ exports[`filter-select can mount "multiple empty" FilterSelect 1`] = `
 		Web job
 		<!---->
 	</span>
-	<sharpselect-stub uniqueidentifier="job" options="[object Object],[object Object]" multiple="true" display="dropdown" clearable="true" placeholder="" class="SharpFilterSelect__select"></sharpselect-stub>
+	<sharpselect-stub uniqueidentifier="job" options="[object Object],[object Object]" multiple="true" display="dropdown" clearable="true" placeholder=" " class="SharpFilterSelect__select"></sharpselect-stub>
 </span>
 `;
 
@@ -32,7 +32,7 @@ exports[`filter-select can mount "multiple valuated" FilterSelect 1`] = `
 		Web job
 		<span style="font-weight: normal;">&nbsp;&nbsp;</span>
 	</span>
-	<sharpselect-stub value="1,2" uniqueidentifier="job" options="[object Object],[object Object]" multiple="true" display="dropdown" clearable="true" placeholder="" class="SharpFilterSelect__select"></sharpselect-stub>
+	<sharpselect-stub value="1,2" uniqueidentifier="job" options="[object Object],[object Object]" multiple="true" display="dropdown" clearable="true" placeholder=" " class="SharpFilterSelect__select"></sharpselect-stub>
 </span>
 `;
 
@@ -44,6 +44,6 @@ exports[`filter-select can mount "valuated" FilterSelect 1`] = `
 		Web job
 		<span style="font-weight: normal;">&nbsp;&nbsp;</span>
 	</span>
-	<sharpselect-stub value="1" uniqueidentifier="job" options="[object Object],[object Object]" display="dropdown" clearable="true" placeholder="-" class="SharpFilterSelect__select"></sharpselect-stub>
+	<sharpselect-stub value="1" uniqueidentifier="job" options="[object Object],[object Object]" display="dropdown" clearable="true" placeholder=" " class="SharpFilterSelect__select"></sharpselect-stub>
 </span>
 `;
