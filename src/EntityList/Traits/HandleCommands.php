@@ -53,6 +53,7 @@ trait HandleCommands
             $config["commands"][] = [
                 "key" => $commandName,
                 "label" => $handler->label(),
+                "description" => $handler->description(),
                 "type" => $handler->type(),
                 "confirmation" => $handler->confirmationText() ?: null,
                 "form" => $formFields ? [

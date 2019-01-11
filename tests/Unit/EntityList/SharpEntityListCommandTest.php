@@ -257,6 +257,39 @@ class SharpEntityListCommandTest extends SharpTestCase
             ]
         ], $list->listConfig());
     }
+
+    /** @test */
+    function we_can_define_a_description_on_a_command()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig()
+            {
+                $this->addEntityCommand("entityCommand", new class extends EntityCommand {
+                    public function label(): string {
+                        return "My Entity Command";
+                    }
+                    public function description(): string {
+                        return "My Entity Command description";
+                    }
+                    public function execute(EntityListQueryParams $params, array $data = []): array {}
+                });
+            }
+        };
+
+        $list->buildListConfig();
+
+        $this->assertArraySubset([
+            "commands" => [
+                [
+                    "key" => "entityCommand",
+                    "label" => "My Entity Command",
+                    "description" => "My Entity Command description",
+                    "type" => "entity",
+                ]
+            ]
+        ], $list->listConfig());
+    }
+
 }
 
 class SharpEntityListCommandTestCommand extends EntityCommand
