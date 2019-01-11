@@ -1,5 +1,16 @@
 @import '../mixins/dropdown';
 
+%dropdown-link-focus {
+  background-color: $brand-01;
+  color: $inverse-01;
+  outline: 1px solid transparent;
+}
+
+%dropdown-link-hover {
+  background-color: $brand-02;
+  color: $inverse-01;
+}
+
 .SharpDropdown {
   @include reset;
   @include font-size('14');
@@ -84,13 +95,10 @@
       white-space: nowrap;
 
       &:focus {
-        background-color: $brand-01;
-        color: $inverse-01;
-        outline: 1px solid transparent;
+        @extend %dropdown-link-focus;
       }
       &:hover {
-        background-color: $brand-02;
-        color: $inverse-01;
+        @extend %dropdown-link-hover;
       }
     }
   }
