@@ -527,15 +527,15 @@ exports[`entity-list can mount "with commands" entity list 1`] = `
 							<div class="row justify-content-end no-gutters">
 								<!---->
 								<div class="col-auto col-md-12 pl-2 pl-md-0 my-1">
-									<div class="MOCKED_SHARP_DROPDOWN SharpEntityList__commands-dropdown">
+									<div class="MOCKED_SHARP_DROPDOWN SharpCommandsDropdown SharpEntityList__commands-dropdown">
 										<div class="SLOT:text">
-											<div class="text-left">
-												Actions
-											</div>
+											Actions
 										</div>
 										<div class="MOCKED_SHARP_DROPDOWN_ITEM">
 											Should be visible in first title
+											<!---->
 										</div>
+										<li class="SharpDropdown__separator"></li>
 									</div>
 								</div>
 							</div>
@@ -557,15 +557,15 @@ exports[`entity-list can mount "with commands" entity list 1`] = `
 							<div class="row justify-content-end no-gutters">
 								<!---->
 								<div class="col-auto col-md-12 pl-2 pl-md-0 my-1">
-									<div class="MOCKED_SHARP_DROPDOWN SharpEntityList__commands-dropdown">
+									<div class="MOCKED_SHARP_DROPDOWN SharpCommandsDropdown SharpEntityList__commands-dropdown">
 										<div class="SLOT:text">
-											<div class="text-left">
-												Actions
-											</div>
+											Actions
 										</div>
 										<div class="MOCKED_SHARP_DROPDOWN_ITEM">
 											Should be visible in second title
+											<!---->
 										</div>
+										<li class="SharpDropdown__separator"></li>
 									</div>
 								</div>
 							</div>
@@ -587,11 +587,9 @@ exports[`entity-list can mount "with commands" entity list 1`] = `
 							<div class="row justify-content-end no-gutters">
 								<!---->
 								<div class="col-auto col-md-12 pl-2 pl-md-0 my-1">
-									<div class="MOCKED_SHARP_DROPDOWN SharpEntityList__commands-dropdown SharpEntityList__commands-dropdown--placeholder">
+									<div class="MOCKED_SHARP_DROPDOWN SharpCommandsDropdown SharpEntityList__commands-dropdown">
 										<div class="SLOT:text">
-											<div class="text-left">
-												Actions
-											</div>
+											Actions
 										</div>
 									</div>
 								</div>
