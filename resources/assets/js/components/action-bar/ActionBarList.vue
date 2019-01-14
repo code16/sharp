@@ -81,7 +81,7 @@
                 @select="emitAction('command', $event)"
             >
                 <div slot="text">
-                    Actions
+                    {{ l('entity_list.commands.entity.label') }}
                 </div>
             </SharpCommandsDropdown>
         </template>

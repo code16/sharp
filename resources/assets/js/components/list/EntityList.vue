@@ -71,7 +71,7 @@
                                                 @select="sendCommand($event, item)"
                                             >
                                                 <template slot="text">
-                                                    Actions
+                                                    {{ l('entity_list.commands.instance.label') }}
                                                 </template>
                                             </SharpCommandsDropdown>
                                         </div>
@@ -417,11 +417,11 @@
                 return val != null && val !== '' ? this.tryParseNumber(val) : (filter.default || (filter.multiple?[]:null));
             },
             instanceCommands({[this.idAttr]:instanceId}) {
-                return this.commandsByInstanceId[instanceId]// || [];
+                return this.commandsByInstanceId[instanceId] || [];
             },
             hasCommands(instance) {
-                const commands = this.instanceCommands(instance);
-                return Array.isArray(commands) && commands.length > 0;
+                const allCommands = this.instanceCommands(instance).flat();
+                return allCommands.length > 0;
             },
             rowHasLink({[this.idAttr]:instanceId}) {
                 return this.authorizationsByInstanceId[instanceId].view;
