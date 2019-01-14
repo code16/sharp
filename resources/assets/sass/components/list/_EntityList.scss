@@ -99,8 +99,8 @@
       @include focus-outline('border');
     }
 
-    &:hover:not(.SharpEntityList__row--header, .SharpEntityList__row--disabled) {
-      background-color: $ui-02;
+    &:hover:not(.SharpEntityList__row--header):not(.SharpEntityList__row--disabled) {
+      box-shadow: inset 5px 0 0 lighten($brand-03, 25%);
     }
 
     .SharpEntityList__cols {

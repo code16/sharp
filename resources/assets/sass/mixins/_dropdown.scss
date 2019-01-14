@@ -6,7 +6,6 @@
   @include font-size('14');
   display: flex;
   flex-direction: column;
-  background-color: $ui-01;
 }
 
 @mixin SharpDropdownShadowBottom {

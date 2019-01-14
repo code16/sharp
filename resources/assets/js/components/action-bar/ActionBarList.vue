@@ -76,15 +76,14 @@
             />
         </template>
         <template v-if="commands.length" slot="extras-right">
-            <sharp-dropdown
-                class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands">
+            <SharpCommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
+                :commands="commands"
+                @select="emitAction('command', $event)"
+            >
                 <div slot="text">
                     Actions
                 </div>
-                <sharp-dropdown-item v-for="command in commands" @click="emitAction('command', command)" :key="command.key">
-                    {{ command.label }}
-                </sharp-dropdown-item>
-            </sharp-dropdown>
+            </SharpCommandsDropdown>
         </template>
     </sharp-action-bar>
 </template>
@@ -100,6 +99,7 @@
     import SharpDropdown from '../dropdown/Dropdown';
     import SharpDropdownItem from '../dropdown/DropdownItem';
     import SharpItemVisual from '../ui/ItemVisual';
+    import SharpCommandsDropdown from '../list/CommandsDropdown';
 
     export default {
         name: 'SharpActionBarList',
@@ -109,7 +109,8 @@
             SharpFilterSelect,
             SharpDropdown,
             SharpDropdownItem,
-            SharpItemVisual
+            SharpItemVisual,
+            SharpCommandsDropdown
         },
 
         mixins: [ActionBarMixin, ActionEvents, Localization],

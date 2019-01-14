@@ -20,6 +20,8 @@ abstract class Command
 {
     use HandleFormFields, WithCustomTransformers;
 
+    protected $groupIndex = 0;
+
     /**
      * @param string $message
      * @return array
@@ -165,6 +167,22 @@ abstract class Command
         }
 
         return $column->fieldsToArray()["fields"];
+    }
+
+    /**
+     * @param $index
+     */
+    public function setGroupIndex($index)
+    {
+        $this->groupIndex = $index;
+    }
+
+    /**
+     * @return int
+     */
+    public function groupIndex()
+    {
+        return $this->groupIndex;
     }
 
     /**
