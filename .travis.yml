@@ -20,8 +20,8 @@ install:
   - if [ "$LARAVEL_VERSION" != "" ]; then composer require "laravel/framework:${LARAVEL_VERSION}" --no-update; fi;
   ## front dependencies
   - . $HOME/.nvm/nvm.sh
-  - nvm install 10.14.1
-  - nvm use 10.14.1
+  - nvm install 11.6
+  - nvm use 11.6
   - npm install
 
 script:

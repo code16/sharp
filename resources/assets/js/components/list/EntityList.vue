@@ -63,20 +63,17 @@
                                             </sharp-dropdown>
                                         </div>
                                     </template>
-                                    <template v-if="!noInstanceCommands">
+                                    <template v-if="hasCommands(item)">
                                         <div class="col-auto col-md-12 pl-2 pl-md-0 my-1">
-                                            <sharp-dropdown
+                                            <SharpCommandsDropdown
                                                 class="SharpEntityList__commands-dropdown"
-                                                :class="{'SharpEntityList__commands-dropdown--placeholder':!instanceCommands(item)}">
+                                                :commands="instanceCommands(item)"
+                                                @select="sendCommand($event, item)"
+                                            >
                                                 <template slot="text">
-                                                    <div class="text-left">
-                                                        Actions
-                                                    </div>
+                                                    Actions
                                                 </template>
-                                                <sharp-dropdown-item v-for="command in instanceCommands(item)" @click="sendCommand(command, item)" :key="command.key">
-                                                    {{ command.label }}
-                                                </sharp-dropdown-item>
-                                            </sharp-dropdown>
+                                            </SharpCommandsDropdown>
                                         </div>
                                     </template>
                                 </div>
@@ -131,6 +128,7 @@
     import SharpForm from '../form/Form';
     import SharpViewPanel from './ViewPanel';
     import SharpStateIcon from './StateIcon';
+    import SharpCommandsDropdown from './CommandsDropdown';
 
     import Draggable from 'vuedraggable';
 
@@ -163,6 +161,7 @@
             SharpForm,
             SharpViewPanel,
             SharpStateIcon,
+            SharpCommandsDropdown,
             Draggable
         },
 
@@ -288,14 +287,14 @@
                 }, {});
             },
             commandsByInstanceId() {
-                let instCmds = this.config.commands.filter(c=>c.type==='instance');
+                let instCmds = this.config.commands.instance || [];
 
-                return instCmds.length ? this.data.items.reduce((res, {[this.idAttr]:id}) => {
-                    let authorizedCmds = instCmds.filter(c=>c.authorization.indexOf(id) !== -1);
-                    if(authorizedCmds.length)
-                        res[id] = authorizedCmds;
-                    return res;
-                }, {}) : {};
+                return instCmds.length ? this.data.items.reduce((res, {[this.idAttr]:id}) => ({
+                    ...res,
+                    [id]: instCmds.reduce((res, group) => [
+                        ...res, group.filter(command => command.authorization.includes(id))
+                    ],[])
+                }), {}) : {};
             },
             multiforms() {
                 return Object.values(this.forms);
@@ -307,11 +306,13 @@
                     return res;
                 }, {})
             },
-            noInstanceCommands() {
-                return !Object.keys(this.commandsByInstanceId).length;
-            },
             commandForms() {
-                return this.config.commands.filter(({form})=>form).map(({form, key}) => ({
+                const { entity, instance } = this.config.commands;
+                const commands = [
+                    ...(entity||[]).flat(),
+                    ...(instance||[]).flat()
+                ];
+                return commands.filter(({form})=>form).map(({form, key}) => ({
                     ...form, key,
                     layout: { tabs: [{ columns: [{fields:form.layout}]}] },
                 }));
@@ -329,7 +330,7 @@
                 this.authorizations = authorizations;
                 this.forms = forms;
 
-                this.config.commands = config.commands || [];
+                this.config.commands = config.commands || {};
                 this.config.filters = config.filters || [];
 
                 this.page = this.data.page;
@@ -361,7 +362,7 @@
                     itemsCount: this.data.totalCount || this.data.items.length,
                     filters: this.config.filters,
                     filtersValue: this.filtersValue,
-                    commands: this.config.commands.filter(c=>c.authorization && c.type==='entity'),
+                    commands: (this.config.commands.entity || []).map(group => group.filter(command => command.authorization)),
                     showCreateButton:this.authorizations.create,
                     searchable: this.config.searchable,
                     showReorderButton: this.config.reorderable && this.authorizations.update && this.data.items.length>1,
@@ -417,6 +418,10 @@
             },
             instanceCommands({[this.idAttr]:instanceId}) {
                 return this.commandsByInstanceId[instanceId]// || [];
+            },
+            hasCommands(instance) {
+                const commands = this.instanceCommands(instance);
+                return Array.isArray(commands) && commands.length > 0;
             },
             rowHasLink({[this.idAttr]:instanceId}) {
                 return this.authorizationsByInstanceId[instanceId].view;

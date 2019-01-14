@@ -19,7 +19,6 @@
   display: block;
   //background-color: $field-01;
   width: 100%;
-  cursor: pointer;
   color: $text-01;
 
   outline: 1px solid transparent;
@@ -67,6 +66,7 @@
     background: $ui-01;
     position:relative;
     user-select: none;
+    cursor: pointer;
 
     transition: $dropdown-btn-transition;
     &:hover {
@@ -100,9 +100,10 @@
       display: block;
       color: currentColor;
       text-decoration: none;
-      padding: 1rem 1.5rem 1rem 1rem;
+      padding: .5rem 1.5rem .5rem 1rem;
       white-space: nowrap;
       background: $ui-02;
+      cursor: pointer;
 
       transition: $dropdown-item-transition;
 
@@ -112,6 +113,17 @@
       &:hover {
         @extend %dropdown-link-hover;
       }
+    }
+  }
+
+  &__separator {
+    height: 0;
+    margin: .5rem;
+    overflow: hidden;
+    border-top: 1px solid darken($ui-03, 5%);
+    cursor: default;
+    &:last-child {
+      display: none;
     }
   }
 
