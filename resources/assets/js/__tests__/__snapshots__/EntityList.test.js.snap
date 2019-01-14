@@ -529,7 +529,7 @@ exports[`entity-list can mount "with commands" entity list 1`] = `
 								<div class="col-auto col-md-12 pl-2 pl-md-0 my-1">
 									<div class="MOCKED_SHARP_DROPDOWN SharpCommandsDropdown SharpEntityList__commands-dropdown">
 										<div class="SLOT:text">
-											Actions
+											{{ entity_list.commands.instance.label }}
 										</div>
 										<div class="MOCKED_SHARP_DROPDOWN_ITEM">
 											Should be visible in first title
@@ -559,7 +559,7 @@ exports[`entity-list can mount "with commands" entity list 1`] = `
 								<div class="col-auto col-md-12 pl-2 pl-md-0 my-1">
 									<div class="MOCKED_SHARP_DROPDOWN SharpCommandsDropdown SharpEntityList__commands-dropdown">
 										<div class="SLOT:text">
-											Actions
+											{{ entity_list.commands.instance.label }}
 										</div>
 										<div class="MOCKED_SHARP_DROPDOWN_ITEM">
 											Should be visible in second title
@@ -586,13 +586,7 @@ exports[`entity-list can mount "with commands" entity list 1`] = `
 						<div class="SharpEntityList__row-actions align-self-center">
 							<div class="row justify-content-end no-gutters">
 								<!---->
-								<div class="col-auto col-md-12 pl-2 pl-md-0 my-1">
-									<div class="MOCKED_SHARP_DROPDOWN SharpCommandsDropdown SharpEntityList__commands-dropdown">
-										<div class="SLOT:text">
-											Actions
-										</div>
-									</div>
-								</div>
+								<!---->
 							</div>
 						</div>
 						<div class="SharpEntityList__row-actions" style="display: none;">
