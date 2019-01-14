@@ -181,7 +181,7 @@ class SpaceshipSharpForm extends SharpForm
      */
     function getDataLocalizations()
     {
-        return ["fr", "en"];
+        return ["fr", "en", "it"];
     }
 
     function create(): array
