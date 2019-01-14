@@ -9,29 +9,32 @@ This chapter is about another strategy, where a `Book` can have English and Fren
 
 First, define which locales the Form should handle:
 
-    class SpaceshipSharpForm extends SharpForm
-    {
-        [...]
+```php
+class SpaceshipSharpForm extends SharpForm
+{
+    [...]
 
-        function getDataLocalizations()
-        {
-            return ["fr", "en"];
-        }
+    function getDataLocalizations()
+    {
+        return ["fr", "en"];
     }
+}
+```
 
 
 ## Configure the form fields
 
 Next, each localized field must be marqued, using `setLocalized()`:
 
-    function buildFormFields()
-    {
-        $this->addField(
-            SharpFormTextField::make("title")
-                ->setLocalized()
-                ->setLabel("Name")
-    }
-
+```php
+function buildFormFields()
+{
+    $this->addField(
+        SharpFormTextField::make("title")
+            ->setLocalized()
+            ->setLabel("Name")
+}
+```
 
 ## Transform the data accordingly
 
@@ -39,35 +42,39 @@ Next, each localized field must be marqued, using `setLocalized()`:
 
 Sharp is expecting, for localized fields, a key / value array where the locales are keys. Here's a example of how it could be achieved:
 
-    function find($id): array
-    {
-        return $this->setCustomTransformer("title", function($title, $book) {
-                return [
-                   "fr" => $book->title_french,
-                   "en" => $book->title_english
-                ];
-            })
-            ->transform(
-                Book::findOrFail($id)
-            );
-    }
+```php
+function find($id): array
+{
+    return $this->setCustomTransformer("title", function($title, $book) {
+            return [
+               "fr" => $book->title_french,
+               "en" => $book->title_english
+            ];
+        })
+        ->transform(
+            Book::findOrFail($id)
+        );
+}
+```
 
 
 The `update()` method should of course be updated too:
 
-    function update($id, array $data)
-    {
-        $instance = $id ? Book::findOrFail($id) : new Book;
+```php
+function update($id, array $data)
+{
+    $instance = $id ? Book::findOrFail($id) : new Book;
 
-        $data["title_french"] = $data["title"]["fr"];
-        $data["title_english"] = $data["title"]["en"];
+    $data["title_french"] = $data["title"]["fr"];
+    $data["title_english"] = $data["title"]["en"];
 
-        $this
-            ->ignore("title")
-            ->save($instance, $data);
+    $this
+        ->ignore("title")
+        ->save($instance, $data);
 
-        return $instance->id;
-    }
+    return $instance->id;
+}
+```
 
 As you see here, Sharp data structure for localized values is the name of the field suffixed with a dot and the locale. So if `title` is a localized field, and "en" and "fr" locales are configured for the Form, Sharp will expect `title` to be an key / value array with the locales as keys, and will send it back in the `update()` method with this same format.
 
@@ -75,51 +82,56 @@ As you see here, Sharp data structure for localized values is the name of the fi
 
 This data structure is in fact pretty common for localization in the database structure, using JSON-based fields. Spatie's popular [laravel-translatable](https://github.com/spatie/laravel-translatable) package is using it, for instance. With this package, here's how our `Book` Model can be written:
 
-    class Book extends Model
-    {
-        use Spatie\Translatable\HasTranslations;
+```php
+class Book extends Model
+{
+    use Spatie\Translatable\HasTranslations;
 
-        public $translatable = ['title'];
+    public $translatable = ['title'];
 
-        [...]
-    }
+    [...]
+}
+```
 
 And since the package, like other, is using this array with locales convention, it should work right away, without any tricks in the Sharp Form:
 
 
-    function find($id): array
-    {
-        return $this->transform(Book::findOrFail($id));
-    }
+```php
+function find($id): array
+{
+    return $this->transform(Book::findOrFail($id));
+}
 
 
-    function update($id, array $data)
-    {
-        $instance = $id ? Book::findOrFail($id) : new Book;
+function update($id, array $data)
+{
+    $instance = $id ? Book::findOrFail($id) : new Book;
 
-        $this->save($instance, $data);
+    $this->save($instance, $data);
 
-        return $instance->id;
-    }
-
+    return $instance->id;
+}
+```
 
 ## Validation
 
 Validation is not more complicated, and allows to differenciate rules between locales:
 
-    public function rules()
-    {
-        return [
-            'title.fr' => 'required',
-        ];
-    }
+```php
+public function rules()
+{
+    return [
+        'title.fr' => 'required',
+    ];
+}
+```
 
 
 ## The front side
 
 On the front side of the Form, here's how localized fields are displayed:
 
-<TODO>
+\[TODO add screenshot\]
 
 
 
