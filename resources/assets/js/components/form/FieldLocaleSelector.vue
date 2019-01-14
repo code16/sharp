@@ -34,7 +34,8 @@
                 return this.currentLocale === locale;
             },
             isEmpty(locale) {
-                return this.isLocaleObject ? !this.fieldValue || !this.fieldValue[locale] : false;
+                const value = this.isLocaleObject ? (this.fieldValue || {})[locale] : this.fieldValue;
+                return Array.isArray(value) ? !value.length : !value;
             },
             handleButtonClicked(locale) {
                 this.$emit('change', locale);

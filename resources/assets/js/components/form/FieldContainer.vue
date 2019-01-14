@@ -34,7 +34,7 @@
     import SharpField from './Field';
     import SharpFieldLocaleSelector from './FieldLocaleSelector';
     import { ErrorNode, ConfigNode}  from '../../mixins/index';
-    import { resolveTextValue, isLocaleObject } from '../../mixins/localize/utils';
+    import { resolveTextValue, isLocalizableValueField } from '../../mixins/localize/utils';
 
     import * as util from '../../util';
 
@@ -102,7 +102,7 @@
                 return resolveTextValue({ field:this.fieldProps, value:this.originalValue });
             },
             isLocaleObject() {
-                return this.fieldProps.localized && isLocaleObject(this.resolvedOriginalValue, this.$form.locales);
+                return isLocalizableValueField(this.fieldProps);
             }
         },
         methods: {
