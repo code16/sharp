@@ -8,7 +8,6 @@ use Code16\Sharp\Http\Composers\AssetViewComposer;
 use Code16\Sharp\Http\Composers\MenuViewComposer;
 use Code16\Sharp\Http\Middleware\Api\AddSharpContext;
 use Code16\Sharp\Http\Middleware\Api\AppendFormAuthorizations;
-use Code16\Sharp\Http\Middleware\Api\AppendFormDataLocalizations;
 use Code16\Sharp\Http\Middleware\Api\AppendListAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendListMultiform;
 use Code16\Sharp\Http\Middleware\Api\AppendNotifications;
@@ -30,7 +29,7 @@ class SharpServiceProvider extends ServiceProvider
     /**
      * @var string
      */
-    const VERSION = '4.0.20';
+    const VERSION = '4.1.0';
 
     public function boot()
     {
