@@ -4,7 +4,7 @@ exports[`autocomplete-field common & local can mount Autocomplete field as multi
 <div id="app">
 	<div class="SharpAutocomplete SharpAutocomplete--initial">
 		<!---->
-		<div tabindex="0" class="multiselect SharpAutocomplete__multiselect">
+		<div tabindex="-1" class="multiselect SharpAutocomplete__multiselect">
 			<div class="multiselect__select"></div>
 			<div class="multiselect__tags">
 				<div class="multiselect__tags-wrap" style="display: none;"></div>
@@ -14,10 +14,13 @@ exports[`autocomplete-field common & local can mount Autocomplete field as multi
 						<circle cx="0" cy="0" r="37.5"></circle>
 					</svg>
 				</div>
-				<input name="" type="text" autocomplete="off" placeholder="nom" class="multiselect__input">
+				<input name="" type="text" autocomplete="off" placeholder="nom" tabindex="0" class="multiselect__input" style="width: 0px; position: absolute; padding: 0px;">
 				<!---->
+				<span class="multiselect__placeholder">
+					nom
+				</span>
 			</div>
-			<div class="multiselect__content-wrapper" style="max-height: 300px; display: none;">
+			<div tabindex="-1" class="multiselect__content-wrapper" style="max-height: 300px; display: none;">
 				<ul class="multiselect__content" style="display: inline-block;">
 					<!---->
 					<li class="multiselect__element">
@@ -38,6 +41,9 @@ exports[`autocomplete-field common & local can mount Autocomplete field as multi
 					</li>
 					<li style="display: none;">
 						<span class="multiselect__option">{{ form.autocomplete.no_results_text }}</span>
+					</li>
+					<li style="display: none;">
+						<span class="multiselect__option">List is empty.</span>
 					</li>
 				</ul>
 			</div>

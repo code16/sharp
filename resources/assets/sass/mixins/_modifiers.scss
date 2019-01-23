@@ -16,6 +16,10 @@
     background-color: white!important;
   }
 
+  .multiselect__option--selected {
+    font-weight: bold;
+  }
+
   .SharpDropdown__link:hover,
   .multiselect__option--highlight {
     background-color: lighten($brand-02, 25%)!important;
