@@ -382,7 +382,7 @@
                 this.simplemdeInstances = this.locales.reduce((res, locale)=>({
                     ...res, [locale]: this.createSimpleMDE({
                         element: this.$refs[this.localizedTextareaRef(locale)][0],
-                        initialValue: this.value.text[locale]
+                        initialValue: (this.value.text || {})[locale]
                     })
                 }), {});
             }
