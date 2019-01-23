@@ -27,10 +27,8 @@
     border-color: $dropdown-focus-border-color!important;
   }
 
-  &--empty, &--multiple {
-    .multiselect__single {
-      &::before { content: '\200B' }
-    }
+  .multiselect__placeholder {
+    &::before { content: '\200B' }
   }
 
   &--searchable {
@@ -51,11 +49,13 @@
 
   .SharpAutocomplete {
     .multiselect__tags {
-      position:absolute;
+      position: absolute;
       padding: 0;
       width: 0;
     }
-    .multiselect__tags-wrap {
+    .multiselect__tags-wrap,
+    .multiselect__single,
+    .multiselect__placeholder {
       display:none;
     }
     .multiselect__content {
@@ -151,6 +151,10 @@
         border-bottom-left-radius: 0;
         border-top-left-radius: 0;
         cursor: default;
+      }
+
+      &__tags-wrap, &__single {
+        padding-left: .5rem;
       }
 
       &__tags-wrap {
