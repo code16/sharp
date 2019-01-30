@@ -28,11 +28,6 @@ $css--reset:false;
 @import 'mixins/modifiers';
 @import 'mixins/close-button';
 
-@mixin sharp-color($color) {
-  fill: $color;
-  stroke: $color;
-}
-
 $small-breakpoint: sm;
 
 #sharp-app {
@@ -40,12 +35,6 @@ $small-breakpoint: sm;
   line-height: 1.15;
 
   font-family: $font-family-base;
-
-  .sharp_primary { @include sharp-color($brand-02) }
-  .sharp_secondary { @include sharp-color($brand-03) }
-  .sharp_gray { @include sharp-color($color__navy-gray-7) }
-  .sharp_lightgray { @include sharp-color($color__navy-gray-9) }
-  .sharp_darkgray { @include sharp-color($color__navy-gray-4) }
 
   @import '~bootstrap/scss/grid';
   @import '~bootstrap/scss/transitions';
@@ -104,6 +93,7 @@ $small-breakpoint: sm;
   @import 'components/list/FilterSelect';
   @import 'components/list/ViewPanel';
   @import 'components/list/CommandsDropdown';
+  @import 'components/list/StateIcon';
 
   // Menu
   @import 'components/LeftNav';
