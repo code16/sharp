@@ -8,7 +8,8 @@ A Dashboard is very much like an Entity Form, except it readonly. So the first s
 
 - `buildWidgets()`, similar to Entity Form's `buildForm()`
 - `buildWidgetsLayout()`, similar to `buildLayout()`
-- and `buildWidgetsData()`, for the actual Dashboard data, like Entity Form's `find()` method.
+- `buildDashboardConfig()`, for optional filters
+- and `buildWidgetsData(DashboardQueryParams $params)`, for the actual Dashboard data, like Entity Form's `find()` method.
 
 ### `buildWidgets()`
 
@@ -58,12 +59,16 @@ The layout API is a bit different of Entity Form here, because we think in terms
 
 We can only add rows and "full width widgets" (which are a shortcut for a single widget row). A row groups widgets in a 12-based grid.
 
-### `buildWidgetsData()`
+### `buildWidgetsData(DashboardQueryParams $params)`
 
 Widget data is set with specific methods depending of their type. The documentation is therefore split:
 
 - [Graph](dashboard-widgets/graph.md)
 - [Panel](dashboard-widgets/panel.md)
+
+## Dashboard filters
+
+Just like EntityLists, Dashboard can display [filters](filters.md). First we need to create  
 
 ## Configure the Dashboard
 
