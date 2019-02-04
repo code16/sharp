@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\EntityList\Traits;
 
-use Code16\Sharp\EntityList\Commands\Command;
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Illuminate\Support\Collection;

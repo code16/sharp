@@ -1,7 +1,8 @@
-# Entity List Filters
+# Filters
 
-Entity List Filters are a simple way for the user to filter list items on some attribute, like for instance display only books that cost more than 15 euros.
+Filters are a simple way for the user to filter list items or dashboard (see below) widgets on some attribute, like for instance display only books that cost more than 15 euros.
 
+This documentation is written for the EntityList case, but the API is the same for Dashboard (as explained at the end of this page). 
 
 ## Write the filter class
 
@@ -178,6 +179,15 @@ In some cases (like linked filters, for instance: the second filter values depen
         return true;
     }
 ```
+
+## Filters for Dashboards
+
+[Dashboards](dashboard.md) can too take advantage of filters; the API is almost the same, here's the specifics:
+
+- There is obviously no Entity or Instance distinction: the only available option are `Code16\Sharp\Dashboard\DashboardFilter`, `Code16\Sharp\Dashboard\DashboardMultipleFilter` and `Code16\Sharp\Dashboard\DashboardRequiredFilter`.
+- Filters must be declared in the `buildDashboardConfig()` method of the Dashboard.
+- And finally, Sharp will not call `getListData(EntityListQueryParams $params)` but `buildWidgetsData(DashboardQueryParams $params)`. The API is the same, meaning we can call `$params->filterFor('...')`. 
+
 
 ---
 
