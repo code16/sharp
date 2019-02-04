@@ -3,7 +3,6 @@
 namespace Code16\Sharp\EntityList\Traits;
 
 use Code16\Sharp\Dashboard\Commands\DashboardCommand;
-use Code16\Sharp\EntityList\Commands\EntityCommand;
 
 trait HandleDashboardCommands
 {
@@ -72,7 +71,7 @@ trait HandleDashboardCommands
 
     /**
      * @param string $commandKey
-     * @return EntityCommand|null
+     * @return DashboardCommand|null
      */
     public function dashboardCommandHandler(string $commandKey)
     {

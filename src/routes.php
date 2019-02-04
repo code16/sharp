@@ -11,6 +11,10 @@ Route::group([
         ->name("code16.sharp.api.dashboard")
         ->uses('DashboardController@show');
 
+    Route::post("/dashboard/{dashboardKey}/command/{commandKey}")
+        ->name("code16.sharp.api.dashboard.command")
+        ->uses('Commands\DashboardCommandController@update');
+
     Route::get("/list/{entityKey}")
         ->name("code16.sharp.api.list")
         ->middleware(['sharp_api_append_list_authorizations', 'sharp_api_append_list_multiform', 'sharp_save_list_params', 'sharp_api_append_notifications'])
