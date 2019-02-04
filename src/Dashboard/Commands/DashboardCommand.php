@@ -35,6 +35,16 @@ abstract class DashboardCommand extends Command
     }
 
     /**
+     * @param mixed $ids
+     * @return array
+     */
+    protected function refresh($ids)
+    {
+        // Refresh has no meaning in the Dashboard; we just do a classic reload.
+        return $this->reload();
+    }
+
+    /**
      * @param DashboardQueryParams $params
      * @param array $data
      * @return array
