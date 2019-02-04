@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\EntityList\Traits;
 
-use Code16\Sharp\EntityList\Commands\Command;
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Illuminate\Support\Collection;
@@ -89,7 +88,9 @@ trait HandleCommands
             ->each(function($handler, $commandName) use(&$config) {
                 $formFields = $handler->form();
                 $formLayout = $formFields ? $handler->formLayout() : null;
-                $hasFormInitialData = $formFields ? $this->isInitialDataMethodImplemented($handler) : false;
+                $hasFormInitialData = $formFields
+                    ? is_method_implemented_in_concrete_class($handler, 'initialData')
+                    : false;
 
                 $config["commands"][$handler->type()][$handler->groupIndex()][] = [
                     "key" => $commandName,
@@ -156,22 +157,5 @@ trait HandleCommands
         return isset($this->instanceCommandHandlers[$commandKey])
             ? $this->instanceCommandHandlers[$commandKey]
             : null;
-    }
-
-    /**
-     * @param $handler
-     * @return bool
-     */
-    private function isInitialDataMethodImplemented($handler)
-    {
-        try {
-            $foo = new \ReflectionMethod(get_class($handler), 'initialData');
-            $declaringClass = $foo->getDeclaringClass()->getName();
-
-            return $foo->getPrototype()->getDeclaringClass()->getName() !== $declaringClass;
-
-        } catch (\ReflectionException $e) {
-            return false;
-        }
     }
 }
