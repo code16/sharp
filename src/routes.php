@@ -11,6 +11,10 @@ Route::group([
         ->name("code16.sharp.api.dashboard")
         ->uses('DashboardController@show');
 
+    Route::get("/dashboard/{dashboardKey}/command/{commandKey}/data")
+        ->name("code16.sharp.api.dashboard.command.data")
+        ->uses('Commands\DashboardCommandController@show');
+
     Route::post("/dashboard/{dashboardKey}/command/{commandKey}")
         ->name("code16.sharp.api.dashboard.command")
         ->uses('Commands\DashboardCommandController@update');

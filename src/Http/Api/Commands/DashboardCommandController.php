@@ -16,18 +16,17 @@ class DashboardCommandController extends ApiController
      * @param string $commandKey
      * @return \Illuminate\Http\JsonResponse
      * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
-     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
-//    public function show($entityKey, $commandKey)
-//    {
-//        $list = $this->getListInstance($entityKey);
-//        $list->buildListConfig();
-//        $commandHandler = $this->getCommandHandler($list, $commandKey);
-//
-//        return response()->json([
-//            "data" => $commandHandler->formData()
-//        ]);
-//    }
+    public function show($entityKey, $commandKey)
+    {
+        $dashboard = $this->getDashboardInstance($entityKey);
+        $dashboard->buildDashboardConfig();
+        $commandHandler = $this->getCommandHandler($dashboard, $commandKey);
+
+        return response()->json([
+            "data" => $commandHandler->formData()
+        ]);
+    }
 
     /**
      * @param string $entityKey

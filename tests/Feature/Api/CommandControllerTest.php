@@ -288,6 +288,21 @@ class CommandControllerTest extends BaseApiTest
             ]);
     }
 
+    /** @test */
+    public function we_can_initialize_form_data_in_an_dashboard_command()
+    {
+        $this->buildTheWorldForDashboard();
+        $this->disableExceptionHandling();
+
+        $this->getJson('/sharp/api/dashboard/my_dashboard/command/dashboard_form/data')
+            ->assertStatus(200)
+            ->assertJson([
+                "data" => [
+                    "name" => "John Wayne"
+                ]
+            ]);
+    }
+
     protected function buildTheWorld()
     {
         parent::buildTheWorld();
@@ -449,6 +464,20 @@ class CommandControllerTestDashboardView extends SharpDashboard
                 public function execute(DashboardQueryParams $params, array $data= []): array {
                     return $this->info("ok");
                 }
+            })
+            ->addDashboardCommand("dashboard_form", new class() extends DashboardCommand {
+                public function label(): string { return "label"; }
+                public function buildFormFields() {
+                    $this->addField(SharpFormTextField::make("name"));
+                }
+                protected function initialData(): array
+                {
+                    return [
+                        "name" => "John Wayne",
+                        "age" => 32
+                    ];
+                }
+                public function execute(DashboardQueryParams $params, array $data = []): array {}
             });
     }
 }
