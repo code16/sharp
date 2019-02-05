@@ -122,12 +122,12 @@ class FiltersInRequestTest extends BaseApiTest
 
         $this->buildTheWorld();
 
-        $this->assertFalse(!!session("_sharp_filter_active"));
+        $this->assertFalse(!!session("_sharp_retained_filter_active"));
 
         // Call to retain the filter on session
         $this->json('get', '/sharp/api/list/person?filter_active=1');
 
-        $this->assertTrue(!!session("_sharp_filter_active"));
+        $this->assertTrue(!!session("_sharp_retained_filter_active"));
     }
 
     /** @test */

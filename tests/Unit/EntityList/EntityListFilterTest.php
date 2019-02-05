@@ -281,7 +281,7 @@ class EntityListFilterTest extends SharpTestCase
         };
 
         // Artificially put retained value in session
-        session()->put("_sharp_filter_test", 2);
+        session()->put("_sharp_retained_filter_test", 2);
 
         $list->buildListConfig();
 
@@ -313,7 +313,7 @@ class EntityListFilterTest extends SharpTestCase
         };
 
         // Artificially put retained value in session
-        session()->put("_sharp_filter_test", 2);
+        session()->put("_sharp_retained_filter_test", 2);
 
         $list->buildListConfig();
 

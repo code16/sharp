@@ -114,7 +114,7 @@ trait HandleFilters
                 if($this->isRetainedFilter($handler, $attribute, true)) {
                     return [
                         "name" => $attribute,
-                        "value" => session("_sharp_filter_$attribute")
+                        "value" => session("_sharp_retained_filter_$attribute")
                     ];
                 }
 
@@ -141,7 +141,7 @@ trait HandleFilters
             })
             ->each(function($handler, $attribute) {
                 session()->put(
-                    "_sharp_filter_$attribute",
+                    "_sharp_retained_filter_$attribute",
                     request()->get("filter_$attribute")
                 );
             });
@@ -159,7 +159,7 @@ trait HandleFilters
     {
         return method_exists($handler, "retainValueInSession")
             && $handler->retainValueInSession()
-            && (!$onlyValued || session()->has("_sharp_filter_$attribute"));
+            && (!$onlyValued || session()->has("_sharp_retained_filter_$attribute"));
     }
 
     /**
@@ -176,8 +176,8 @@ trait HandleFilters
     {
         if($this->isRetainedFilter($handler, $attribute, true)) {
             return $handler instanceof ListMultipleFilter
-                ? explode(",", session("_sharp_filter_$attribute"))
-                : session("_sharp_filter_$attribute");
+                ? explode(",", session("_sharp_retained_filter_$attribute"))
+                : session("_sharp_retained_filter_$attribute");
         }
 
         return $handler instanceof ListRequiredFilter
