@@ -6,6 +6,7 @@ use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
 use Code16\Sharp\Utils\Filters\ListFilter;
 use Code16\Sharp\Utils\Filters\ListMultipleFilter;
+use Code16\Sharp\Utils\Filters\ListRequiredFilter;
 
 class FiltersInRequestTest extends BaseApiTest
 {
@@ -258,6 +259,53 @@ class FiltersInRequestTest extends BaseApiTest
                 ]
             ]]);
     }
+
+    /** @test */
+    public function retained_filter_works_with_required_filter()
+    {
+        app()->bind(
+            PersonSharpEntityList::class,
+            function() {
+                return new class() extends PersonSharpEntityList {
+                    function getListData(EntityListQueryParams $params)
+                    {
+                        $items = [
+                            ["id" => 1, "name" => "John", "age" => 30],
+                            ["id" => 2, "name" => "Mary", "age" => 32],
+                            ["id" => 3, "name" => "Baby", "age" => 2],
+                        ];
+
+                        $items = collect($items)
+                            ->where("age", $params->filterFor("age"))
+                            ->values();
+
+                        return $this->transform($items);
+                    }
+                    function buildListConfig()
+                    {
+                        $this->addFilter(
+                            "age",
+                            FiltersInRequestTestRetainedAgeRequiredFilter::class
+                        );
+                    }
+                };
+            }
+        );
+
+        $this->buildTheWorld();
+
+        // First call to retain the filter on session (default is 2)
+        $this->json('get', '/sharp/api/list/person?filter_age=30');
+
+        // Second call: filter should be valued to 30
+        $this->json('get', '/sharp/api/list/person')
+            ->assertStatus(200)
+            ->assertJsonFragment(["data" => [
+                "items" => [
+                    ["id" => 1, "name" => "John", "age" => 30],
+                ]
+            ]]);
+    }
 }
 
 class FiltersInRequestTestRetainedActiveFilter implements ListFilter
@@ -277,6 +325,24 @@ class FiltersInRequestTestRetainedAgeMultipleFilter implements ListMultipleFilte
     public function values()
     {
         return range(0, 80);
+    }
+
+    public function retainValueInSession()
+    {
+        return true;
+    }
+}
+
+class FiltersInRequestTestRetainedAgeRequiredFilter implements ListRequiredFilter
+{
+    public function values()
+    {
+        return range(0, 80);
+    }
+
+    public function defaultValue()
+    {
+        return 2;
     }
 
     public function retainValueInSession()

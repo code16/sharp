@@ -48,7 +48,7 @@ trait HandleFilters
                 "key" => $filterName,
                 "multiple" => $multiple,
                 "required" => $required,
-                "default" => $required ? $handler->defaultValue() : null,
+                "default" => $this->getFilterDefaultValue($handler, $filterName),
                 "values" => $this->formatFilterValues($handler),
                 "label" => method_exists($handler, "label") ? $handler->label() : $filterName,
                 "master" => method_exists($handler, "isMaster") ? $handler->isMaster() : false,
@@ -160,5 +160,28 @@ trait HandleFilters
         return method_exists($handler, "retainValueInSession")
             && $handler->retainValueInSession()
             && (!$onlyValued || session()->has("_sharp_filter_$attribute"));
+    }
+
+    /**
+     * Return the filter default value, which can be, in that order:
+     * - the retained value, if the filter is retained
+     * - the default value is the filter is required
+     * - or null
+     *
+     * @param $handler
+     * @param string $attribute
+     * @return int|string|null
+     */
+    protected function getFilterDefaultValue($handler, $attribute)
+    {
+        if($this->isRetainedFilter($handler, $attribute, true)) {
+            return $handler instanceof ListMultipleFilter
+                ? explode(",", session("_sharp_filter_$attribute"))
+                : session("_sharp_filter_$attribute");
+        }
+
+        return $handler instanceof ListRequiredFilter
+            ? $handler->defaultValue()
+            : null;
     }
 }
