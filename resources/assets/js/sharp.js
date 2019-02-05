@@ -27,6 +27,7 @@ import * as qs from './helpers/querystring';
 import Notifications from 'vue-notification';
 
 import store from './store';
+import { BASE_URL } from "./consts";
 
 Vue.use(Notifications);
 Vue.use(VueGoogleMaps, {
@@ -67,7 +68,11 @@ new Vue({
     },
 
     store: new Vuex.Store(store),
-    router: new VueRouter({ mode:'history', routes })
+    router: new VueRouter({
+        mode: 'history',
+        routes,
+        base: `${BASE_URL}/`
+    })
 });
 
 
