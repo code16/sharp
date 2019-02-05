@@ -11,7 +11,7 @@ export default {
 
     state: {
         filters: null,
-        values: {}
+        values: {},
     },
 
     mutations: {
@@ -20,7 +20,7 @@ export default {
         },
         [SET_FILTER_VALUE](state, { key, value }) {
             Vue.set(state.values, key, value);
-        }
+        },
     },
 
     getters: {
@@ -63,7 +63,21 @@ export default {
                 }
                 return value;
             }
-        }
+        },
+        nextValues(state) {
+            return ({ filter, value }) => {
+                let base = state.values;
+                if(filter.master) {
+                    base = Object.keys(state.values).reduce((res, key) => ({ ...res, [key]:null }), {});
+                }
+                return { ...base, [filter.key]: value };
+            };
+        },
+        nextQuery(state, getters) {
+            return ({ filter, value }) => {
+                return getters.getQueryParams(getters.nextValues({ filter, value }));
+            }
+        },
     },
 
     actions: {
@@ -84,6 +98,6 @@ export default {
                 key: filter.key,
                 value: getters.resolveFilterValue({ filter, value })
             });
-        }
+        },
     }
 }

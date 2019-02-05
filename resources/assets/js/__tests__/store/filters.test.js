@@ -95,6 +95,36 @@ describe('store filters', () => {
                 filter: { multiple: true }, value: [3]
             })).toEqual([3]);
         });
+
+        test('nextValues', ()=>{
+            const state = {
+                values: {
+                    type: 'aa'
+                }
+            };
+
+            expect(filters.getters.nextValues(state)({ filter: { key:'filter' }, value: 1 }))
+                .toEqual({
+                    type: 'aa',
+                    filter: 1
+                });
+            expect(filters.getters.nextValues(state)({ filter: { key:'filter', master: true }, value: 1 }))
+                .toEqual({
+                    type: null,
+                    filter: 1
+                });
+        });
+
+        test('nextQuery', ()=>{
+            const getters = {
+                getQueryParams: jest.fn(()=>'query params'),
+                nextValues: jest.fn(()=>'next values')
+            };
+
+            expect(filters.getters.nextQuery(null, getters)({ filter:{ key:'filter' }, value:1 })).toEqual('query params');
+            expect(getters.getQueryParams).toHaveBeenCalledWith('next values');
+            expect(getters.nextValues).toHaveBeenCalledWith({ filter:{ key:'filter' }, value:1 });
+        });
     });
 
     describe('actions', () => {

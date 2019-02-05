@@ -1,7 +1,6 @@
 import filters from './filters';
 import { getDashboard } from "../../api";
 
-
 export const SET_READY = 'SET_READY';
 export const UPDATE = 'UPDATE';
 
