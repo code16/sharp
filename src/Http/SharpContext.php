@@ -80,10 +80,15 @@ class SharpContext
      */
     public function globalFilterFor(string $filterName)
     {
-        $handler = app(config("sharp.global_filters.$filterName"));
+        if(!$handlerClass = config("sharp.global_filters.$filterName")) {
+            return null;
+        }
+
+        $handler = app($handlerClass);
 
         if(session()->has("_sharp_retained_global_filter_$filterName")) {
             $value = session()->get("_sharp_retained_global_filter_$filterName");
+
             return $handler instanceof GlobalMultipleFilter
                 ? explode(",", $value)
                 : $value;
