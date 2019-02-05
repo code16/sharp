@@ -95,7 +95,7 @@ class GlobalFiltersTest extends BaseApiTest
 
         $this
             ->postJson('/sharp/api/filters/test', ["value" => 5])
-            ->assertOK();
+            ->assertStatus(200);
 
         $this->json('get', '/sharp/api/form/person/50');
 
@@ -103,7 +103,7 @@ class GlobalFiltersTest extends BaseApiTest
 
         $this
             ->postJson('/sharp/api/filters/test')
-            ->assertOK();
+            ->assertStatus(200);
 
         $this->json('get', '/sharp/api/form/person/50');
 
@@ -120,7 +120,7 @@ class GlobalFiltersTest extends BaseApiTest
 
         $this
             ->postJson('/sharp/api/filters/test', ["value" => 20])
-            ->assertOK();
+            ->assertStatus(200);
 
         $this->json('get', '/sharp/api/form/person/50');
 
@@ -138,7 +138,7 @@ class GlobalFiltersTest extends BaseApiTest
 
         $this
             ->getJson('/sharp/api/filters')
-            ->assertOK()
+            ->assertStatus(200)
             ->assertJson([
                 "filters" => [
                     [
