@@ -180,6 +180,29 @@ In some cases (like linked filters, for instance: the second filter values depen
     }
 ```
 
+## Retained filters
+
+Sometimes you'll want to make the filter's value persistent across calls. Say for example that you have a "country" filter, which is common to several Entity Lists: the idea is to keep the user choice even when he changes the current displayed list.
+
+To do that, add a `retainValueInSession()` function to your filter:
+
+```php
+ class CountryFilter implements EntityListFilter
+ {
+     public function values()
+     {
+         [...]
+     } 
+ 
+     public function retainValueInSession()
+     {
+         return true;
+     }
+ }
+ ```
+
+And that's it, Sharp will keep the filter value in session and ensure it is valued on next requests (if not overridden). This feature works for all types of filters (required, multiple).
+
 ## Filters for Dashboards
 
 [Dashboards](dashboard.md) can too take advantage of filters; the API is almost the same, here's the specifics:
