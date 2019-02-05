@@ -18,6 +18,11 @@ class Spaceship extends Model
         return $this->belongsTo(SpaceshipType::class);
     }
 
+    public function corporation()
+    {
+        return $this->belongsTo(Corporation::class);
+    }
+
     public function reviews()
     {
         return $this->hasMany(TechnicalReview::class)
