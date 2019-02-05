@@ -12,7 +12,6 @@
 
   &:focus {
     border: $button-border-width solid $ui-02;
-    outline: $button-border-width solid $hover-bg-color;
   }
 
   &:disabled:hover,

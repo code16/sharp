@@ -1,10 +1,65 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`markdown-field basic tests can mount "localized" Markdown field 1`] = `
-<div id="app">
-	<div class="SharpMarkdown">
-		<div class="SharpModule__inner">
-			<textarea style="display: none;"></textarea>
+<div class="SharpMarkdown">
+	<div class="SharpModule__inner">
+		<div>
+			<textarea id="textarea_fr" style="display: none;"></textarea>
+			<div class="editor-toolbar">
+				<a title="{{ form.markdown.icons.bold.title }} (Ctrl-B)" tabindex="-1" class="fa fa-bold"></a>
+				<a title="{{ form.markdown.icons.italic.title }} (Ctrl-I)" tabindex="-1" class="fa fa-italic"></a>
+				<a title="{{ form.markdown.icons.heading.title }} (Ctrl-H)" tabindex="-1" class="fa fa-header"></a>
+				<i class="separator">|</i>
+				<a title="{{ form.markdown.icons.quote.title }} (Ctrl-')" tabindex="-1" class="fa fa-quote-left"></a>
+				<a title="{{ form.markdown.icons.unordered_list.title }} (Ctrl-L)" tabindex="-1" class="fa fa-list-ul"></a>
+				<a title="{{ form.markdown.icons.ordered_list.title }} (Ctrl-Alt-L)" tabindex="-1" class="fa fa-list-ol"></a>
+				<i class="separator">|</i>
+				<a title="{{ form.markdown.icons.link.title }} (Ctrl-K)" tabindex="-1" class="fa fa-link"></a>
+				<a title="{{ form.markdown.icons.image.title }}" tabindex="-1" class="fa fa-picture-o"></a>
+				<i class="separator">|</i>
+				<a title="{{ form.markdown.icons.preview.title }} (Ctrl-P)" tabindex="-1" class="fa fa-eye no-disable"></a>
+				<a title="{{ form.markdown.icons.side_by_side.title }} (F9)" tabindex="-1" class="fa fa-columns no-disable no-mobile"></a>
+				<a title="{{ form.markdown.icons.fullscreen.title }} (F11)" tabindex="-1" class="fa fa-arrows-alt no-disable no-mobile"></a>
+				<i class="separator">|</i>
+				<a title="{{ form.markdown.icons.guide.title }}" tabindex="-1" class="fa fa-question-circle" href="https://simplemde.com/markdown-guide" target="_blank"></a>
+			</div>
+			<div class="CodeMirror cm-s-paper CodeMirror-wrap CodeMirror-empty" style="width: auto; height: 310px;">
+				<div style="overflow: hidden; position: relative; width: 3px; height: 0px;">
+					<textarea style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;" autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0"></textarea>
+				</div>
+				<div class="CodeMirror-vscrollbar" cm-not-content="true">
+					<div style="min-width: 1px;"></div>
+				</div>
+				<div class="CodeMirror-hscrollbar" cm-not-content="true">
+					<div style="height: 100%; min-height: 1px;"></div>
+				</div>
+				<div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div>
+				<div class="CodeMirror-gutter-filler" cm-not-content="true"></div>
+				<div class="CodeMirror-scroll" tabindex="-1">
+					<div class="CodeMirror-sizer" style="margin-left: 0px;">
+						<div style="position: relative;">
+							<div class="CodeMirror-lines" role="presentation">
+								<div style="position: relative; outline: none;" role="presentation">
+									<pre style="height: 0px; overflow: visible;" class="CodeMirror-placeholder">Champ md</pre>
+									<div class="CodeMirror-measure">
+										<pre><span>xxxxxxxxxx</span></pre>
+									</div>
+									<div class="CodeMirror-measure"></div>
+									<div style="position: relative; z-index: 1;"></div>
+									<div class="CodeMirror-cursors"></div>
+									<div class="CodeMirror-code" role="presentation"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div style="position: absolute; height: 30px; width: 1px;"></div>
+					<div class="CodeMirror-gutters" style="display: none;"></div>
+				</div>
+			</div>
+			<div class="editor-preview-side"></div>
+		</div>
+		<div style="display: none;">
+			<textarea id="textarea_en" style="display: none;"></textarea>
 			<div class="editor-toolbar">
 				<a title="{{ form.markdown.icons.bold.title }} (Ctrl-B)" tabindex="-1" class="fa fa-bold"></a>
 				<a title="{{ form.markdown.icons.italic.title }} (Ctrl-I)" tabindex="-1" class="fa fa-italic"></a>
@@ -63,125 +118,121 @@ exports[`markdown-field basic tests can mount "localized" Markdown field 1`] = `
 `;
 
 exports[`markdown-field basic tests can mount "read only" Markdown field 1`] = `
-<div id="app">
-	<div class="SharpMarkdown SharpMarkdown--read-only">
-		<div class="SharpModule__inner">
-			<textarea style="display: none;"></textarea>
-			<div class="editor-toolbar">
-				<a title="{{ form.markdown.icons.bold.title }}" tabindex="-1" class="fa fa-bold"></a>
-				<a title="{{ form.markdown.icons.italic.title }}" tabindex="-1" class="fa fa-italic"></a>
-				<a title="{{ form.markdown.icons.heading.title }}" tabindex="-1" class="fa fa-header"></a>
-				<i class="separator">|</i>
-				<a title="{{ form.markdown.icons.quote.title }}" tabindex="-1" class="fa fa-quote-left"></a>
-				<a title="{{ form.markdown.icons.unordered_list.title }}" tabindex="-1" class="fa fa-list-ul"></a>
-				<a title="{{ form.markdown.icons.ordered_list.title }}" tabindex="-1" class="fa fa-list-ol"></a>
-				<i class="separator">|</i>
-				<a title="{{ form.markdown.icons.link.title }}" tabindex="-1" class="fa fa-link"></a>
-				<a title="{{ form.markdown.icons.image.title }}" tabindex="-1" class="fa fa-picture-o"></a>
-				<i class="separator">|</i>
-				<a title="{{ form.markdown.icons.preview.title }}" tabindex="-1" class="fa fa-eye no-disable"></a>
-				<a title="{{ form.markdown.icons.side_by_side.title }}" tabindex="-1" class="fa fa-columns no-disable no-mobile"></a>
-				<a title="{{ form.markdown.icons.fullscreen.title }}" tabindex="-1" class="fa fa-arrows-alt no-disable no-mobile"></a>
-				<i class="separator">|</i>
-				<a title="{{ form.markdown.icons.guide.title }}" tabindex="-1" class="fa fa-question-circle"></a>
+<div class="SharpMarkdown SharpMarkdown--read-only">
+	<div class="SharpModule__inner">
+		<textarea style="display: none;"></textarea>
+		<div class="editor-toolbar">
+			<a title="{{ form.markdown.icons.bold.title }}" tabindex="-1" class="fa fa-bold"></a>
+			<a title="{{ form.markdown.icons.italic.title }}" tabindex="-1" class="fa fa-italic"></a>
+			<a title="{{ form.markdown.icons.heading.title }}" tabindex="-1" class="fa fa-header"></a>
+			<i class="separator">|</i>
+			<a title="{{ form.markdown.icons.quote.title }}" tabindex="-1" class="fa fa-quote-left"></a>
+			<a title="{{ form.markdown.icons.unordered_list.title }}" tabindex="-1" class="fa fa-list-ul"></a>
+			<a title="{{ form.markdown.icons.ordered_list.title }}" tabindex="-1" class="fa fa-list-ol"></a>
+			<i class="separator">|</i>
+			<a title="{{ form.markdown.icons.link.title }}" tabindex="-1" class="fa fa-link"></a>
+			<a title="{{ form.markdown.icons.image.title }}" tabindex="-1" class="fa fa-picture-o"></a>
+			<i class="separator">|</i>
+			<a title="{{ form.markdown.icons.preview.title }}" tabindex="-1" class="fa fa-eye no-disable"></a>
+			<a title="{{ form.markdown.icons.side_by_side.title }}" tabindex="-1" class="fa fa-columns no-disable no-mobile"></a>
+			<a title="{{ form.markdown.icons.fullscreen.title }}" tabindex="-1" class="fa fa-arrows-alt no-disable no-mobile"></a>
+			<i class="separator">|</i>
+			<a title="{{ form.markdown.icons.guide.title }}" tabindex="-1" class="fa fa-question-circle"></a>
+		</div>
+		<div class="CodeMirror cm-s-paper CodeMirror-wrap CodeMirror-empty" style="width: auto; height: 310px;">
+			<div style="overflow: hidden; position: relative; width: 3px; height: 0px;">
+				<textarea style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;" autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0"></textarea>
 			</div>
-			<div class="CodeMirror cm-s-paper CodeMirror-wrap CodeMirror-empty" style="width: auto; height: 310px;">
-				<div style="overflow: hidden; position: relative; width: 3px; height: 0px;">
-					<textarea style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;" autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0"></textarea>
-				</div>
-				<div class="CodeMirror-vscrollbar" cm-not-content="true">
-					<div style="min-width: 1px;"></div>
-				</div>
-				<div class="CodeMirror-hscrollbar" cm-not-content="true">
-					<div style="height: 100%; min-height: 1px;"></div>
-				</div>
-				<div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div>
-				<div class="CodeMirror-gutter-filler" cm-not-content="true"></div>
-				<div class="CodeMirror-scroll" tabindex="-1">
-					<div class="CodeMirror-sizer" style="margin-left: 0px;">
-						<div style="position: relative;">
-							<div class="CodeMirror-lines" role="presentation">
-								<div style="position: relative; outline: none;" role="presentation">
-									<pre style="height: 0px; overflow: visible;" class="CodeMirror-placeholder">Champ md</pre>
-									<div class="CodeMirror-measure">
-										<pre><span>xxxxxxxxxx</span></pre>
-									</div>
-									<div class="CodeMirror-measure"></div>
-									<div style="position: relative; z-index: 1;"></div>
-									<div class="CodeMirror-cursors"></div>
-									<div class="CodeMirror-code" role="presentation"></div>
+			<div class="CodeMirror-vscrollbar" cm-not-content="true">
+				<div style="min-width: 1px;"></div>
+			</div>
+			<div class="CodeMirror-hscrollbar" cm-not-content="true">
+				<div style="height: 100%; min-height: 1px;"></div>
+			</div>
+			<div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div>
+			<div class="CodeMirror-gutter-filler" cm-not-content="true"></div>
+			<div class="CodeMirror-scroll" tabindex="-1">
+				<div class="CodeMirror-sizer" style="margin-left: 0px;">
+					<div style="position: relative;">
+						<div class="CodeMirror-lines" role="presentation">
+							<div style="position: relative; outline: none;" role="presentation">
+								<pre style="height: 0px; overflow: visible;" class="CodeMirror-placeholder">Champ md</pre>
+								<div class="CodeMirror-measure">
+									<pre><span>xxxxxxxxxx</span></pre>
 								</div>
+								<div class="CodeMirror-measure"></div>
+								<div style="position: relative; z-index: 1;"></div>
+								<div class="CodeMirror-cursors"></div>
+								<div class="CodeMirror-code" role="presentation"></div>
 							</div>
 						</div>
 					</div>
-					<div style="position: absolute; height: 30px; width: 1px;"></div>
-					<div class="CodeMirror-gutters" style="display: none;"></div>
 				</div>
+				<div style="position: absolute; height: 30px; width: 1px;"></div>
+				<div class="CodeMirror-gutters" style="display: none;"></div>
 			</div>
-			<div class="editor-preview-side"></div>
 		</div>
+		<div class="editor-preview-side"></div>
 	</div>
 </div>
 `;
 
 exports[`markdown-field basic tests can mount Markdown field 1`] = `
-<div id="app">
-	<div class="SharpMarkdown">
-		<div class="SharpModule__inner">
-			<textarea style="display: none;"></textarea>
-			<div class="editor-toolbar">
-				<a title="{{ form.markdown.icons.bold.title }} (Ctrl-B)" tabindex="-1" class="fa fa-bold"></a>
-				<a title="{{ form.markdown.icons.italic.title }} (Ctrl-I)" tabindex="-1" class="fa fa-italic"></a>
-				<a title="{{ form.markdown.icons.heading.title }} (Ctrl-H)" tabindex="-1" class="fa fa-header"></a>
-				<i class="separator">|</i>
-				<a title="{{ form.markdown.icons.quote.title }} (Ctrl-')" tabindex="-1" class="fa fa-quote-left"></a>
-				<a title="{{ form.markdown.icons.unordered_list.title }} (Ctrl-L)" tabindex="-1" class="fa fa-list-ul"></a>
-				<a title="{{ form.markdown.icons.ordered_list.title }} (Ctrl-Alt-L)" tabindex="-1" class="fa fa-list-ol"></a>
-				<i class="separator">|</i>
-				<a title="{{ form.markdown.icons.link.title }} (Ctrl-K)" tabindex="-1" class="fa fa-link"></a>
-				<a title="{{ form.markdown.icons.image.title }} (Ctrl-Alt-I)" tabindex="-1" class="fa fa-picture-o"></a>
-				<i class="separator">|</i>
-				<a title="{{ form.markdown.icons.preview.title }} (Ctrl-P)" tabindex="-1" class="fa fa-eye no-disable"></a>
-				<a title="{{ form.markdown.icons.side_by_side.title }} (F9)" tabindex="-1" class="fa fa-columns no-disable no-mobile"></a>
-				<a title="{{ form.markdown.icons.fullscreen.title }} (F11)" tabindex="-1" class="fa fa-arrows-alt no-disable no-mobile"></a>
-				<i class="separator">|</i>
-				<a title="{{ form.markdown.icons.guide.title }}" tabindex="-1" class="fa fa-question-circle" href="https://simplemde.com/markdown-guide" target="_blank"></a>
+<div class="SharpMarkdown">
+	<div class="SharpModule__inner">
+		<textarea style="display: none;"></textarea>
+		<div class="editor-toolbar">
+			<a title="{{ form.markdown.icons.bold.title }} (Ctrl-B)" tabindex="-1" class="fa fa-bold"></a>
+			<a title="{{ form.markdown.icons.italic.title }} (Ctrl-I)" tabindex="-1" class="fa fa-italic"></a>
+			<a title="{{ form.markdown.icons.heading.title }} (Ctrl-H)" tabindex="-1" class="fa fa-header"></a>
+			<i class="separator">|</i>
+			<a title="{{ form.markdown.icons.quote.title }} (Ctrl-')" tabindex="-1" class="fa fa-quote-left"></a>
+			<a title="{{ form.markdown.icons.unordered_list.title }} (Ctrl-L)" tabindex="-1" class="fa fa-list-ul"></a>
+			<a title="{{ form.markdown.icons.ordered_list.title }} (Ctrl-Alt-L)" tabindex="-1" class="fa fa-list-ol"></a>
+			<i class="separator">|</i>
+			<a title="{{ form.markdown.icons.link.title }} (Ctrl-K)" tabindex="-1" class="fa fa-link"></a>
+			<a title="{{ form.markdown.icons.image.title }} (Ctrl-Alt-I)" tabindex="-1" class="fa fa-picture-o"></a>
+			<i class="separator">|</i>
+			<a title="{{ form.markdown.icons.preview.title }} (Ctrl-P)" tabindex="-1" class="fa fa-eye no-disable"></a>
+			<a title="{{ form.markdown.icons.side_by_side.title }} (F9)" tabindex="-1" class="fa fa-columns no-disable no-mobile"></a>
+			<a title="{{ form.markdown.icons.fullscreen.title }} (F11)" tabindex="-1" class="fa fa-arrows-alt no-disable no-mobile"></a>
+			<i class="separator">|</i>
+			<a title="{{ form.markdown.icons.guide.title }}" tabindex="-1" class="fa fa-question-circle" href="https://simplemde.com/markdown-guide" target="_blank"></a>
+		</div>
+		<div class="CodeMirror cm-s-paper CodeMirror-wrap CodeMirror-empty" style="width: auto; height: 310px;">
+			<div style="overflow: hidden; position: relative; width: 3px; height: 0px;">
+				<textarea style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;" autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0"></textarea>
 			</div>
-			<div class="CodeMirror cm-s-paper CodeMirror-wrap CodeMirror-empty" style="width: auto; height: 310px;">
-				<div style="overflow: hidden; position: relative; width: 3px; height: 0px;">
-					<textarea style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;" autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0"></textarea>
-				</div>
-				<div class="CodeMirror-vscrollbar" cm-not-content="true">
-					<div style="min-width: 1px;"></div>
-				</div>
-				<div class="CodeMirror-hscrollbar" cm-not-content="true">
-					<div style="height: 100%; min-height: 1px;"></div>
-				</div>
-				<div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div>
-				<div class="CodeMirror-gutter-filler" cm-not-content="true"></div>
-				<div class="CodeMirror-scroll" tabindex="-1">
-					<div class="CodeMirror-sizer" style="margin-left: 0px;">
-						<div style="position: relative;">
-							<div class="CodeMirror-lines" role="presentation">
-								<div style="position: relative; outline: none;" role="presentation">
-									<pre style="height: 0px; overflow: visible;" class="CodeMirror-placeholder">Champ md</pre>
-									<div class="CodeMirror-measure">
-										<pre><span>xxxxxxxxxx</span></pre>
-									</div>
-									<div class="CodeMirror-measure"></div>
-									<div style="position: relative; z-index: 1;"></div>
-									<div class="CodeMirror-cursors"></div>
-									<div class="CodeMirror-code" role="presentation"></div>
+			<div class="CodeMirror-vscrollbar" cm-not-content="true">
+				<div style="min-width: 1px;"></div>
+			</div>
+			<div class="CodeMirror-hscrollbar" cm-not-content="true">
+				<div style="height: 100%; min-height: 1px;"></div>
+			</div>
+			<div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div>
+			<div class="CodeMirror-gutter-filler" cm-not-content="true"></div>
+			<div class="CodeMirror-scroll" tabindex="-1">
+				<div class="CodeMirror-sizer" style="margin-left: 0px;">
+					<div style="position: relative;">
+						<div class="CodeMirror-lines" role="presentation">
+							<div style="position: relative; outline: none;" role="presentation">
+								<pre style="height: 0px; overflow: visible;" class="CodeMirror-placeholder">Champ md</pre>
+								<div class="CodeMirror-measure">
+									<pre><span>xxxxxxxxxx</span></pre>
 								</div>
+								<div class="CodeMirror-measure"></div>
+								<div style="position: relative; z-index: 1;"></div>
+								<div class="CodeMirror-cursors"></div>
+								<div class="CodeMirror-code" role="presentation"></div>
 							</div>
 						</div>
 					</div>
-					<div style="position: absolute; height: 30px; width: 1px;"></div>
-					<div class="CodeMirror-gutters" style="display: none;"></div>
 				</div>
+				<div style="position: absolute; height: 30px; width: 1px;"></div>
+				<div class="CodeMirror-gutters" style="display: none;"></div>
 			</div>
-			<div class="editor-preview-side"></div>
 		</div>
+		<div class="editor-preview-side"></div>
 	</div>
 </div>
 `;

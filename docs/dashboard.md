@@ -8,12 +8,14 @@ A Dashboard is very much like an Entity Form, except it readonly. So the first s
 
 - `buildWidgets()`, similar to Entity Form's `buildForm()`
 - `buildWidgetsLayout()`, similar to `buildLayout()`
-- and `buildWidgetsData()`, for the actual Dashboard data, like Entity Form's `find()` method.
+- `buildDashboardConfig()`, for optional filters
+- and `buildWidgetsData(DashboardQueryParams $params)`, for the actual Dashboard data, like Entity Form's `find()` method.
 
 ### `buildWidgets()`
 
 We're suppose to use here `$this->addWidget()` to configure all the Dashboard widgets.
 
+```php
     function buildWidgets()
     {
         $this->addWidget(
@@ -26,6 +28,7 @@ We're suppose to use here `$this->addWidget()` to configure all the Dashboard wi
                 ->setLink('spaceship')
         );
     }
+```
 
 As we can see in this example, we defined two widgets giving them a mandatory `key` and some optional properties depending of their type. 
 
@@ -43,6 +46,7 @@ And here's the full list and documentation of each widget available, for the spe
 
 The layout API is a bit different of Entity Form here, because we think in terms of rows and not columns. So for instance:
 
+```php
     function buildWidgetsLayout()
     {
         $this->addFullWidthWidget("capacities")
@@ -51,20 +55,26 @@ The layout API is a bit different of Entity Form here, because we think in terms
                     ->addWidget(6, "inactiveSpaceships");
             });
     }
+```
 
 We can only add rows and "full width widgets" (which are a shortcut for a single widget row). A row groups widgets in a 12-based grid.
 
-### `buildWidgetsData()`
+### `buildWidgetsData(DashboardQueryParams $params)`
 
 Widget data is set with specific methods depending of their type. The documentation is therefore split:
 
 - [Graph](dashboard-widgets/graph.md)
 - [Panel](dashboard-widgets/panel.md)
 
+## Dashboard filters
+
+Just like EntityLists, Dashboard can display [filters](filters.md). First we need to create  
+
 ## Configure the Dashboard
 
 Once this class written, we have to declare the form in the sharp config file:
 
+```php
     // config/sharp.php
     
     return [
@@ -91,6 +101,7 @@ Once this class written, we have to declare the form in the sharp config file:
             ]
         ]
     ];
+```
 
 In the menu, like an Entity, a Dashboard can be displayed anywhere.  
 
@@ -98,6 +109,7 @@ In the menu, like an Entity, a Dashboard can be displayed anywhere.
 
 Just like for an Entity, you can define a Policy for a Dashboard. The only available action is `view`.
 
+```php
     // config/sharp.php
     
     return [
@@ -112,9 +124,11 @@ Just like for an Entity, you can define a Policy for a Dashboard. The only avail
         ],
         [...]
     ];
+```
 
 And the policy class can be pretty straightforward:
 
+```php
     class CompanyDashboardPolicy
     {
         public function view(User $user)
@@ -122,7 +136,8 @@ And the policy class can be pretty straightforward:
             return $user->hasGroup("boss");
         }
     }
+```
 
 ---
 
-> next chapter: [How to transform data](how-to-transform-data.md).
+> next chapter: [Building the menu](building-menu.md).

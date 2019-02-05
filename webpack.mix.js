@@ -1,52 +1,47 @@
-const { mix } = require('laravel-mix');
+const mix = require('laravel-mix');
 const webpack = require('webpack');
-const fs = require('fs-extra');
+const path = require('path');
 
-(function() {
-    fs.copySync('node_modules/vue-clip/src', 'resources/assets/js/components/vendor/vue-clip');
-    fs.copySync('node_modules/vue2-timepicker/src', 'resources/assets/js/components/vendor/vue2-timepicker');
-
-    if(process.env.NODE_ENV === 'test') {
-        mix.then(function() {
-            fs.removeSync('mix-manifest.json');
-        });
-        return;
-    }
-
-    mix
-        .copy('node_modules/font-awesome/fonts','resources/assets/dist/fonts')
-        .js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
-        .js('resources/assets/js/client-api.js', 'resources/assets/dist/client-api.js')
-        .sass('resources/assets/sass/app.scss', 'resources/assets/dist/.bin/sharp-app.css')
-        .sass('resources/assets/sass/vendors.scss', 'resources/assets/dist/.bin/vendors.css')
-        .sass('resources/assets/sass/cms.scss', 'resources/assets/dist/sharp-cms.css')
-        .styles([
-            'resources/assets/dist/.bin/vendors.css',
-            'resources/assets/dist/.bin/sharp-app.css',
-            'node_modules/simplemde/dist/simplemde.min.css',
-            'node_modules/trix/dist/trix.css'
-        ], 'resources/assets/dist/sharp.css')
-        .options({
-            processCssUrls: false
-        })
-        .version() // hash modules id to prevent useless js files changed
-        .extract(['vue'])
-        .setPublicPath('resources/assets/dist')
-        .webpackConfig({
-            plugins: [
-                new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-                new webpack.WatchIgnorePlugin([/\/vendor\//]) //Do not watch files which are inside a 'vendor/' directories
-            ],
-            resolve: {
-                alias: {
-                    'vue$': 'vue/dist/vue.common.js'
+mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
+    .js('resources/assets/js/client-api.js', 'resources/assets/dist/client-api.js')
+    .sass('resources/assets/sass/app.scss', 'resources/assets/dist/sharp.css')
+    .sass('resources/assets/sass/cms.scss', 'resources/assets/dist/sharp-cms.css')
+    .copy('node_modules/font-awesome/fonts','resources/assets/dist/fonts')
+    .options({
+        processCssUrls: false
+    })
+    .version()
+    .extract()
+    .setPublicPath('resources/assets/dist')
+    .webpackConfig({
+        plugins: [
+            new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+            // new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
+        ],
+        // transpile vue-clip package
+        module: {
+            rules: [
+                {
+                    test: /\.js$/,
+                    include: [
+                        path.resolve(__dirname, 'node_modules/vue-clip')
+                    ],
+                    use: [
+                        {
+                            loader: 'babel-loader',
+                            options: Config.babel()
+                        }
+                    ]
                 }
+            ]
+        },
+        resolve: {
+            alias: {
+                // resolve core-js@2.0 polyfills (now 3.0)
+                'core-js/fn': 'core-js/features'
             }
-        })
-        .then(function() {
-            fs.removeSync('resources/assets/dist/.bin');
-        });
-})();
+        }
+    });
 
 
 

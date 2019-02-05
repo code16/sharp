@@ -4,7 +4,7 @@
                  {'SharpAutocomplete--remote':isRemote},
                  {'SharpAutocomplete--disabled':readOnly}]">
         <div v-if="state==='valuated' && value" class="SharpAutocomplete__result-item">
-            <sharp-template name="ResultItem" :template="resultItemTemplate" :template-data="value"></sharp-template>
+            <sharp-template name="ResultItem" :template="resultItemTemplate" :template-data="localizedTemplateData(value)"></sharp-template>
             <button class="SharpAutocomplete__result-item__close-button" type="button" @click="handleResetClick">
                 <svg class="SharpAutocomplete__result-item__close-icon"
                      aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd">
@@ -36,7 +36,7 @@
             ref="multiselect"
         >
             <template slot="option" slot-scope="props">
-                <sharp-template name="ListItem" :template="listItemTemplate" :template-data="props.option"></sharp-template>
+                <sharp-template name="ListItem" :template="listItemTemplate" :template-data="localizedTemplateData(props.option)"></sharp-template>
             </template>
             <template slot="loading">
                 <sharp-loading :visible="isLoading" inline small></sharp-loading>
@@ -59,6 +59,8 @@
     import { Localization, Debounce } from '../../../mixins';
     import { lang } from '../../../mixins/Localization';
 
+    import localize from '../../../mixins/localize/Autocomplete';
+
     export default {
         name:'SharpAutocomplete',
         components: {
@@ -67,7 +69,7 @@
             SharpLoading
         },
 
-        mixins: [Localization, Debounce],
+        mixins: [Localization, Debounce, localize],
 
         props: {
             fieldKey: String,
@@ -132,7 +134,10 @@
         watch: {
             localValues() {
                 this.updateLocalSuggestions({ keepState:true });
-            }
+            },
+            locale() {
+                this.initState();
+            },
         },
         computed: {
             isRemote() {
@@ -145,23 +150,21 @@
                 return this.isRemote ? this.query.length < this.searchMinChars : false;
             },
             searchStrategy() {
-                return new SearchStrategy({
+                return !this.isRemote ? new SearchStrategy({
                     list: this.localValues,
                     minQueryLength: this.searchMinChars,
-                    searchKeys: this.searchKeys
-                });
+                    searchKeys: this.localizedSearchKeys
+                }) : null;
             },
         },
         methods: {
             callApi(query) {
-                return this.remoteMethod === 'GET' ?
-                    axios.get(this.remoteEndpoint,{
-                        params: {
-                            [this.remoteSearchAttribute]:query
-                        }
-                    }): axios.post(this.remoteEndpoint,{
-                        [this.remoteSearchAttribute]:query
-                    })
+                let params = { [this.remoteSearchAttribute]:query };
+                if(this.localized)
+                    params.locale = this.locale;
+                return this.remoteMethod === 'GET'
+                    ? axios.get(this.remoteEndpoint, { params })
+                    : axios.post(this.remoteEndpoint, params)
             },
 
             updateSuggestions(query) {
@@ -181,7 +184,9 @@
                     this.state = 'searching';
                 }
             },
-
+            initState() {
+                this.state = this.value ? 'valuated' : 'initial';
+            },
             handleSelect(value) {
                 this.state = 'valuated';
                 this.$emit('input', value);
@@ -243,9 +248,7 @@
                 Object.defineProperty(this, 'state', { get:()=>'initial' });
             }
             await this.$nextTick();
-            if(this.value) {
-                this.state = 'valuated';
-            }
+            this.initState();
         }
     }
 </script>

@@ -99,8 +99,8 @@
       @include focus-outline('border');
     }
 
-    &:hover:not(.SharpEntityList__row--header, .SharpEntityList__row--disabled) {
-      background-color: $ui-02;
+    &:hover:not(.SharpEntityList__row--header):not(.SharpEntityList__row--disabled) {
+      box-shadow: inset 5px 0 0 lighten($brand-03, 25%);
     }
 
     .SharpEntityList__cols {
@@ -117,16 +117,10 @@
       }
     }
     .SharpEntityList__row-actions {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-
+      width: 5rem;
       @include media-breakpoint-down(sm) {
         padding-top: 0;
-      }
-
-      & > * {
-        flex: 0;
+        width: 100%;
       }
     }
   }
@@ -238,23 +232,10 @@
     fill: $brand-02;
   }
 
-
   &__commands-dropdown {
-    border: 1px solid $brand-03 !important;
+    //border: 1px solid $brand-03 !important;
     .SharpDropdown__text {
       //border: 1px solid $brand-03;
-    }
-    .SharpEntityList__command-icon {
-      width: rem(12px);
-      height: rem(12px);
-      color: $brand-03;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      .fa {
-        font-size : rem(8px);
-      }
     }
     &--placeholder {
       visibility: hidden;
@@ -263,7 +244,7 @@
 
   &__state-dropdown {
     .SharpDropdown__text {
-      border: 0;
+      //color: $text-01!important;
     }
     .SharpDropdown__link {
       display: flex;
@@ -276,23 +257,45 @@
   }
 
   &__state-dropdown, &__commands-dropdown {
-    margin: 0 .2rem;
     background:transparent;
+    width: 100%;
+
+    $bg-color: $ui-02;
+    $hover-bg-color: darken($bg-color, 5%);
 
     @include nav-dropdown;
 
     &.SharpDropdown--open {
       .SharpDropdown__text {
-        background: $ui-01;
+        border-color: $dropdown-focus-border-color;
+        background: $hover-bg-color;
+      }
+      //.SharpDropdown__arrow {fill: $brand-03}
+    }
+
+    &.SharpDropdown--disabled {
+      opacity: 1;
+      .SharpDropdown__arrow {
+        display: none;
+      }
+      .SharpDropdown__text {
+        padding-right: .25rem;
+        background: $bg-color!important;
       }
     }
 
     .SharpDropdown__text {
-      padding: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%
+      padding: .25rem 1.25rem .25rem .35rem;
+      background: $ui-02;
+      border: 1px solid transparent;
+      font-size: .875em;
+      color: $text-02;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      &:hover {
+        background: $hover-bg-color;
+      }
     }
 
     .SharpDropdown__list {

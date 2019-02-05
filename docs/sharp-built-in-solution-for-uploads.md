@@ -12,13 +12,14 @@ The base Model class is `Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel`. J
 
 You'll have to define the Eloquent `$table` attribute to indicate the table name. So for instance, let's say your Model name choice is `Media`, here's the class code:
 
+```php
     use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 
     class Media extends SharpUploadModel
     {
         protected $table = "medias";
     }
-
+```
 
 ## Create the migration
 
@@ -29,6 +30,7 @@ Pass your specific table name in the `table_name` argument ("medias" in our exam
 
 This command will create a migration file like this one:
 
+```php
     class CreateMediasTable extends Migration
     {
         public function up()
@@ -52,12 +54,13 @@ This command will create a migration file like this one:
             Schema::dropIfExists('medias');
         }
     }
-
+```
 
 ## Link to your Models
 
 Now, you need to define the relationships. Let's say you have a Book model, and you want the user to be able to upload its cover and PDF version.
 
+```php
     class Book extends Model
     {
 	    public function cover()
@@ -72,7 +75,7 @@ Now, you need to define the relationships. Let's say you have a Book model, and 
                 ->where("model_key", "pdf");
         }
     }
-
+```
 
 ## Use it!
 
@@ -103,11 +106,13 @@ Thumbnail creation, for image, is built-in, with this function:
 
 You must first define the thumbnail directory, in Sharp's config:
 
+```php
     // config/sharp.php
     
     "uploads" => [
         "thumbnails_dir" => "thumbnails",
     ],
+```
 
 This path is relative to the `public` directory.
 
@@ -131,10 +136,11 @@ But of course you can provide here a custom one. You'll need for that to first c
 
 Once the class is created, simply pass the full class path as filter name:
 
+```php
     return $this->thumbnail($size, $size, [
         CustomThumbnailFilter::class => ["w"=>$w, 'fill'=>'#ffffff']
     ]);
-
+```
 
 ## Update with Sharp
 
@@ -142,6 +148,7 @@ The best part is this: Sharp will take care of everything related to update and 
 
 First declare your upload, like usual:
 
+```php
     function buildFormFields()
     {
         $this->addField(
@@ -154,9 +161,11 @@ First declare your upload, like usual:
             )
         );
     }
+```
 
 Then add a customTransformer:
 
+```php
     function find($id): array
     {
         return $this->setCustomTransformer(
@@ -166,17 +175,20 @@ Then add a customTransformer:
             Book::with("cover")->findOrFail($id)
         );
     }
+```
 
 The full path of this transformer is `Code16\Sharp\Form\Eloquent\Transformers\FormUploadModelTransformer`.
 
 And finally, and this is a sad exception to the "don't touch the applicative code for Sharp", add this in your Model that declares an upload relationship (Book, in our example):
 
+```php
     public function getDefaultAttributesFor($attribute)
     {
         return in_array($attribute, ["cover"])
             ? ["model_key" => $attribute]
             : [];
     }
+```
 
 This will tell SharpEloquentUpdater to add the necessary `model_key`attribute when creating a new upload.
 
@@ -186,10 +198,12 @@ And... voilà! From there, Sharp will handle the rest.
 
 So we want to add an `author` custom attribute to our cover field. It's very easy, add the field in the Sharp Entity Form, using the `:` separator to designate a related attribute:
 
+```php
     $this->addField(
         SharpFormTextField::make("cover:author")
             ->setLabel("Author")
     );
+```
 
 Here we intend to update the `author` attribute of the `cover` relation.
 
@@ -198,15 +212,18 @@ Here we intend to update the `author` attribute of the `cover` relation.
 
 So let's say we want to add pictures of inner pages, for our Book. It can be easily done by creating a `morphMany` relation in the Book Model:
 
+```php
     public function pictures()
     {
         return $this->morphMany(Media::class, "model")
             ->where("model_key", "pictures")
             ->orderBy("order");
     }
+```
 
 And then add the field in the Sharp Entity Form:
 
+```php
     $this->addField(
         SharpFormListField::make("pictures")
             ->setLabel("Additional pictures")
@@ -222,22 +239,26 @@ And then add the field in the Sharp Entity Form:
             )
         )
     );
+```
 
 Note that we use the a special `file` key for the SharpFormUploadField in the item.
 
 You'll have next to update your Model special `getDefaultAttributesFor()` function:
 
+```php
     public function getDefaultAttributesFor($attribute)
     {
         return in_array($attribute, ["cover","pictures"])
             ? ["model_key" => $attribute]
             : [];
     }
+```
 
 All set.
 
 #### Updating custom attributes in upload lists
 
+```php
     $this->addField(
         SharpFormListField::make("pictures")
             [...]
@@ -249,6 +270,10 @@ All set.
             )
         )
     );
-
+```
 
 In this code, the `legend` designates a custom attribute.
+
+---
+
+> Next chapter : [Form data localization](form-data-localization.md)

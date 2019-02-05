@@ -17,7 +17,7 @@
       "\\.(css|less)$": "<rootDir>/resources/assets/js/__tests__/__mocks__/styleMock.js"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!(vue2-google-maps|bootstrap-vue))"
+      "node_modules/(?!(vue2-google-maps|bootstrap-vue|vue-clip|vue2-timepicker))"
     ],
     "testMatch": [
       "**/__tests__/**/?(*.)(spec|test).js?(x)"
@@ -29,16 +29,13 @@
       "<rootDir>/resources/assets/js/__tests__/setup/setupVue.js"
     ]
   },
-  "test": "jest",
   "scripts": {
     "dev": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "watch": "npm run dev -- --watch",
     "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "prod": "npm run production",
-    "test": "cross-env NODE_ENV=test node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js; node_modules/.bin/jest",
-    "stats": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js --profile --json | tail -n +3 > stats.json",
-    "show-stats": "npm run stats && webpack-bundle-size-analyzer stats.json"
+    "test": "jest"
   },
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.25",
@@ -47,37 +44,44 @@
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-latest": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
     "bootstrap": "^4.1.3",
     "bootstrap-vue": "^1.3.0",
     "chart.js": "^2.7.2",
-    "core-js": "^2.5.3",
+    "core-js": "^3.0.0-beta.8",
     "cross-env": "3.1.3",
     "fuse.js": "^2.6.2",
     "jest": "^20.0.4",
-    "jest-cli": "^21.0.1",
     "jest-vue-preprocessor": "^1.3.1",
     "js-beautify": "^1.7.4",
-    "laravel-mix": "^2.1.11",
+    "laravel-mix": "^4.0.13",
     "moment": "^2.19.1",
     "moment-timezone": "^0.5.13",
     "moxios": "^0.4.0",
+    "sass": "^1.16.0",
+    "sass-loader": "^7.1.0",
     "simplemde": "^1.11.2",
     "vue-chartjs": "^2.8.7",
     "vue-clip": "^1.0.0",
     "vue-cropperjs": "^2.1.1",
-    "vue-multiselect": "^2.0.3",
+    "vue-loader": "^15.5.1",
+    "vue-multiselect": "^2.1.3",
     "vue-notification": "^1.3.7",
+    "vue-template-compiler": "^2.5.21",
     "vue2-animate": "^2.0.0",
     "vue2-google-maps": "^0.10.3",
     "vue2-timepicker": "^0.1.4",
     "vuedraggable": "^2.10.0",
-    "vuejs-datepicker": "^0.9.16"
+    "vuejs-datepicker": "^0.9.16",
+    "webpack-bundle-analyzer": "^3.0.3"
   },
   "dependencies": {
     "carbon-components": "^7.26.2",
     "font-awesome": "^4.7.0",
     "trix": "^1.0.0",
-    "vue": "^2.5.16",
+    "vue": "^2.5.21",
     "vue-router": "^3.0.2",
     "vuex": "^3.0.1"
   }

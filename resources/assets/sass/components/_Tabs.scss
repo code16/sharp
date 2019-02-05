@@ -30,9 +30,9 @@
   &--nav-overflow {
     @include create-collapsed-nav;
   }
-  &:not(SharpTabs--nav-overflow) {
+  &:not(.SharpTabs--nav-overflow) {
     @include media-breakpoint-down(xs) {
-      &--collapse {
+      &.SharpTabs--collapse {
         @include create-collapsed-nav;
       }
     }
@@ -57,6 +57,7 @@
       text-decoration: none;
       border: 1px solid $brand-01;
       color: $brand-01;
+      white-space: nowrap;
 
 
       // Sharp specific
@@ -131,17 +132,9 @@
 
 
       &--has-error {
-        //padding-right: 0.5em;
-        &:after {
-          content: "•";
-          color: red;
-          padding-left:0.5rem;
-          display: inline-block;
-          text-decoration: none !important;
-        }
+        @extend .error-dot;
       }
     }
-
   }
 
 }

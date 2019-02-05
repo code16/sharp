@@ -20,6 +20,11 @@ class SpaceshipSendMessage extends InstanceCommand
         return "Send a text message";
     }
 
+    public function description(): string
+    {
+        return "Will pretend to send a message and increment message count.";
+    }
+
     /**
      * @param string $instanceId
      * @param array $data

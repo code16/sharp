@@ -2,6 +2,5 @@ node_modules
 vendor
 .idea
 .DS_Store
-composer.lock
-stats.json
+/composer.lock
 /public

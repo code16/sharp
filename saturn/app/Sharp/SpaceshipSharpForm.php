@@ -31,6 +31,7 @@ class SpaceshipSharpForm extends SharpForm
     {
         $this->addField(
             SharpFormTextField::make("name")
+                ->setLocalized()
                 ->setLabel("Name")
 
         )->addField(
@@ -77,6 +78,7 @@ class SpaceshipSharpForm extends SharpForm
 
         )->addField(
             SharpFormTextField::make("picture:legend")
+                ->setLocalized()
                 ->setLabel("Legend")
 
         )->addField(
@@ -136,6 +138,7 @@ class SpaceshipSharpForm extends SharpForm
                         ->setStorageBasePath("data/Spaceship/{id}/Pictures")
                 )->addItemField(
                     SharpFormTextField::make("legend")
+                        ->setLocalized()
                         ->setPlaceholder("Legend")
                 )
         );
@@ -171,6 +174,14 @@ class SpaceshipSharpForm extends SharpForm
                 $column->withSingleField("description");
             });
         });
+    }
+
+    /**
+     * @return array
+     */
+    function getDataLocalizations()
+    {
+        return ["fr", "en", "it"];
     }
 
     function create(): array

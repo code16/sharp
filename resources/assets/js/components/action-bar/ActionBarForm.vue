@@ -22,8 +22,6 @@
                     </template>
                 </collapse>
             </div>
-
-            <!--<sharp-locale-selector v-if="locales" @input="l=>emitAction('localeChanged',l)" :value="locale" :locales="locales"></sharp-locale-selector>-->
         </template>
         <template slot="right">
             <button v-if="showSubmitButton" class="SharpButton SharpButton--accent" @click="emitAction('submit')">
@@ -59,9 +57,6 @@
         },
         data() {
             return {
-                locales:null,
-                locale:'',
-
                 showSubmitButton: false,
                 showDeleteButton: false,
                 showBackButton: false,
@@ -89,13 +84,9 @@
             }
         },
         actions: {
-            localChanged(newLocale) {
-                this.locale=newLocale
-            },
             setup(config) {
-                let { locales, showSubmitButton, showDeleteButton, showBackButton, opType } = config;
+                let { showSubmitButton, showDeleteButton, showBackButton, opType } = config;
 
-                this.locales = locales;
                 this.showSubmitButton = showSubmitButton;
                 this.showDeleteButton = showDeleteButton;
                 this.showBackButton = showBackButton;

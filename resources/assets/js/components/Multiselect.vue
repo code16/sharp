@@ -19,7 +19,13 @@
             let carretSlot = slots().caret;
 
             return h({
-                'extends':Multiselect,
+                'extends': Multiselect,
+                computed: {
+                    isSingleLabelVisible() {
+                        // vue-multiselect #851
+                        return this.singleValue === 0 || Multiselect.computed.isSingleLabelVisible.call(this);
+                    },
+                },
                 mounted() {
                     this.$el.addEventListener('blur', () => this.deactivate());
                 }

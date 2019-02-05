@@ -1,14 +1,24 @@
 @import '../mixins/dropdown';
 
+%dropdown-link-focus {
+  background-color: $brand-01;
+  color: $inverse-01;
+  outline: 1px solid transparent;
+}
+
+%dropdown-link-hover {
+  background-color: $brand-02;
+  color: $inverse-01;
+}
+
 .SharpDropdown {
   @include reset;
   @include font-size('14');
   position: relative;
   list-style: none;
   display: block;
-  background-color: $field-01;
+  //background-color: $field-01;
   width: 100%;
-  cursor: pointer;
   color: $text-01;
 
   outline: 1px solid transparent;
@@ -16,6 +26,8 @@
   &--above {
     .SharpDropdown__list {
       bottom: 100%;
+      margin-bottom: $dropdown-list-offset;
+      margin-top: 0;
     }
   }
 
@@ -23,10 +35,8 @@
     z-index: z('dropdownIcon');
     fill: $brand-01;
     position: absolute;
-    right: 1rem;
-    top: 1.175rem;
-    width: rem(10px);
-    height: rem(5px);
+    right: .5rem;
+    top: calc(50% - 2px);
     pointer-events: none;
     transition: transform $transition--base ease-in-out;
     transform-origin: 50% 45%;
@@ -41,15 +51,27 @@
     color: $text-03;
   }
 
+  &--no-arrow {
+    .SharpDropdown__text {
+      padding-right: .5rem;
+    }
+  }
+
   &__text {
     z-index: z('dropdownText');
-    padding-top: rem(13px);
-    padding-bottom: rem(13px);
-    padding-left: 1rem;
-    font-weight: 700;
-    border: $input-border;
+    padding: .5rem 1.5rem .5rem .75rem;
+    //font-weight: 700;
+    border: $dropdown-border;
+    border-radius: $btn-border-radius;
     background: $ui-01;
     position:relative;
+    user-select: none;
+    cursor: pointer;
+
+    transition: $dropdown-btn-transition;
+    &:hover {
+      border-color: $dropdown-hover-border-color;
+    }
   }
 
   &__list {
@@ -69,6 +91,8 @@
     z-index: z('dropdown');
     max-height: 20rem;
     overflow: auto;
+    background: $ui-02;
+    margin-top: $dropdown-list-offset;
   }
 
   &__item {
@@ -76,34 +100,45 @@
       display: block;
       color: currentColor;
       text-decoration: none;
-      padding-top: 1rem;
-      padding-bottom: 1rem;
-      padding-left: 1rem;
-      padding-right: 1.5rem;
-
+      padding: .5rem 1.5rem .5rem 1rem;
       white-space: nowrap;
+      background: $ui-02;
+      cursor: pointer;
+
+      transition: $dropdown-item-transition;
 
       &:focus {
-        background-color: $brand-01;
-        color: $inverse-01;
-        outline: 1px solid transparent;
+        @extend %dropdown-link-focus;
       }
       &:hover {
-        background-color: $brand-02;
-        color: $inverse-01;
+        @extend %dropdown-link-hover;
       }
     }
   }
 
+  &__separator {
+    height: 0;
+    margin: .5rem;
+    overflow: hidden;
+    border-top: 1px solid darken($ui-03, 5%);
+    cursor: default;
+    &:last-child {
+      display: none;
+    }
+  }
+
   &--open {
-    @include focus-outline('layer');
+    //@include focus-outline('layer');
+
     z-index: z('dropdownActive');
     .SharpDropdown__arrow {
       @include SharpDropdownOpenArrow;
     }
-
     .SharpDropdown__list {
       @include SharpDropdownOpenList;
+    }
+    .SharpDropdown__text {
+      border-color: $dropdown-focus-border-color;
     }
 
     &:focus {

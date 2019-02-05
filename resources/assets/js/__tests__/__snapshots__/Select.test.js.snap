@@ -68,9 +68,12 @@ exports[`select-field can mount Select field 1`] = `
 				<!---->
 				<div class="multiselect__spinner" style="display: none;"></div>
 				<!---->
-				<span class="multiselect__single">placeholder</span>
+				<!---->
+				<span class="multiselect__placeholder">
+					placeholder
+				</span>
 			</div>
-			<div class="multiselect__content-wrapper" style="max-height: 300px; display: none;">
+			<div tabindex="-1" class="multiselect__content-wrapper" style="max-height: 300px; display: none;">
 				<ul class="multiselect__content" style="display: inline-block;">
 					<!---->
 					<li class="multiselect__element">
@@ -87,6 +90,9 @@ exports[`select-field can mount Select field 1`] = `
 					</li>
 					<li style="display: none;">
 						<span class="multiselect__option">No elements found. Consider changing the search query.</span>
+					</li>
+					<li style="display: none;">
+						<span class="multiselect__option">List is empty.</span>
 					</li>
 				</ul>
 			</div>
@@ -166,8 +172,9 @@ exports[`select-field can mount Select field with clear button 1`] = `
 				<div class="multiselect__spinner" style="display: none;"></div>
 				<!---->
 				<span class="multiselect__single">AAA</span>
+				<!---->
 			</div>
-			<div class="multiselect__content-wrapper" style="max-height: 300px; display: none;">
+			<div tabindex="-1" class="multiselect__content-wrapper" style="max-height: 300px; display: none;">
 				<ul class="multiselect__content" style="display: inline-block;">
 					<!---->
 					<li class="multiselect__element">
@@ -184,6 +191,9 @@ exports[`select-field can mount Select field with clear button 1`] = `
 					</li>
 					<li style="display: none;">
 						<span class="multiselect__option">No elements found. Consider changing the search query.</span>
+					</li>
+					<li style="display: none;">
+						<span class="multiselect__option">List is empty.</span>
 					</li>
 				</ul>
 			</div>

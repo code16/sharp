@@ -53,6 +53,7 @@ Each `entity` in Sharp can be displayed:
 
 Sharp needs a `config/sharp.php` config file, mainly to declare `entities`. Here's a simple example:
 
+```php
     return [
         "entities" => [
             "spaceship" => [
@@ -63,6 +64,7 @@ Sharp needs a `config/sharp.php` config file, mainly to declare `entities`. Here
             ]
         ]
     ];
+```
 
 As we can see, each `entity` (like `spaceship`, here), can define:
 
@@ -117,9 +119,10 @@ We'll get into all those classes in this document. The important thing to notice
 - [Create a Dashboard](docs/dashboard.md)
 
 ### Generalities
+- [Building the menu](docs/building-menu.md)
 - [How to transform data](docs/how-to-transform-data.md)
 - [Sharp built-in solution for uploads](docs/sharp-built-in-solution-for-uploads.md)
-- Handling data localization (coming in 4.1)
+- [Handling form data localization](docs/form-data-localization.md)
 - [Testing with Sharp](docs/testing-with-sharp.md)
 
 ### Theming and CSS

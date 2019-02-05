@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Form;
 
 use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
+use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Utils\SharpNotification;
@@ -74,6 +75,26 @@ abstract class SharpForm
             ->all();
 
         return sizeof($data) ? $data : null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasDataLocalizations()
+    {
+        return collect($this->fields())
+            ->filter(function($field) {
+                return $field["localized"] ?? false;
+            })
+            ->count() > 0;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDataLocalizations()
+    {
+        return [];
     }
 
     /**

@@ -56,16 +56,6 @@
                         {{ l('action_bar.list.create_button') }}
                     </button>
                 </template>
-                <sharp-dropdown v-if="commands.length"
-                                class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
-                                :show-arrow="false">
-                    <div slot="text">
-                        <i class="fa fa-plus"></i>
-                    </div>
-                    <sharp-dropdown-item v-for="command in commands" @click="emitAction('command', command)" :key="command.key">
-                        {{ command.label }}
-                    </sharp-dropdown-item>
-                </sharp-dropdown>
             </template>
         </template>
         <template slot="extras">
@@ -85,6 +75,16 @@
                 @input="emitAction('filterChanged',filter.key,$event)"
             />
         </template>
+        <template v-if="commands.length" slot="extras-right">
+            <SharpCommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
+                :commands="commands"
+                @select="emitAction('command', $event)"
+            >
+                <div slot="text">
+                    {{ l('entity_list.commands.entity.label') }}
+                </div>
+            </SharpCommandsDropdown>
+        </template>
     </sharp-action-bar>
 </template>
 
@@ -99,6 +99,7 @@
     import SharpDropdown from '../dropdown/Dropdown';
     import SharpDropdownItem from '../dropdown/DropdownItem';
     import SharpItemVisual from '../ui/ItemVisual';
+    import SharpCommandsDropdown from '../list/CommandsDropdown';
 
     export default {
         name: 'SharpActionBarList',
@@ -108,7 +109,8 @@
             SharpFilterSelect,
             SharpDropdown,
             SharpDropdownItem,
-            SharpItemVisual
+            SharpItemVisual,
+            SharpCommandsDropdown
         },
 
         mixins: [ActionBarMixin, ActionEvents, Localization],

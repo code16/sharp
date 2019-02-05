@@ -20,6 +20,8 @@ abstract class Command
 {
     use HandleFormFields, WithCustomTransformers;
 
+    protected $groupIndex = 0;
+
     /**
      * @param string $message
      * @return array
@@ -168,6 +170,22 @@ abstract class Command
     }
 
     /**
+     * @param $index
+     */
+    public function setGroupIndex($index)
+    {
+        $this->groupIndex = $index;
+    }
+
+    /**
+     * @return int
+     */
+    public function groupIndex()
+    {
+        return $this->groupIndex;
+    }
+
+    /**
      * Validates the request in a form case.
      *
      * @param array $params
@@ -184,6 +202,14 @@ abstract class Command
                 $validator, new JsonResponse($validator->errors()->getMessages(), 422)
             );
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function description(): string
+    {
+        return "";
     }
 
     /**

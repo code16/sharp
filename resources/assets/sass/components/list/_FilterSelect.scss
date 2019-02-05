@@ -3,8 +3,16 @@
 .SharpFilterSelect {
   width: auto;
   display:flex;
-  border: 1px solid $brand-03;
-  cursor: default;
+  border: $dropdown-border;
+  border-radius: $btn-border-radius;
+  transition: $dropdown-btn-transition;
+
+  &:hover {
+    border-color: $dropdown-hover-border-color;
+  }
+
+  $list-offset: $dropdown-list-offset + 2px;
+  $search-input-height: 2.5rem;
 
   @extend .SharpDropdown;
   @include nav-dropdown;
@@ -16,12 +24,11 @@
         @extend .multiselect--active;
       }
     }
+    border-color: $dropdown-focus-border-color!important;
   }
 
-  &--empty, &--multiple {
-    .multiselect__single {
-      display:none;
-    }
+  .multiselect__placeholder {
+    &::before { content: '\200B' }
   }
 
   &--searchable {
@@ -30,24 +37,30 @@
         width: 10rem !important;
         padding: 0 1rem !important;
         top: 100%;
+        margin-top: $list-offset;
+        border-radius: $btn-border-radius;
+        height: $search-input-height;
       }
     }
     .SharpAutocomplete .multiselect__content {
-      border-top: 2.5rem solid white !important;
+      border-top: $search-input-height solid white !important;
     }
   }
 
   .SharpAutocomplete {
     .multiselect__tags {
-      position:absolute;
+      position: absolute;
       padding: 0;
       width: 0;
     }
-    .multiselect__tags-wrap {
+    .multiselect__tags-wrap,
+    .multiselect__single,
+    .multiselect__placeholder {
       display:none;
     }
     .multiselect__content {
       top: 100%;
+      margin-top: $list-offset;
     }
   }
   .SharpSelect {
@@ -69,63 +82,60 @@
     position: relative;
     background: $ui-01;
     z-index: z('dropdownText');
-    text-transform: uppercase;
+    cursor: default;
+    //text-transform: uppercase;
     //color: $text-02;
     white-space: nowrap;
   }
 
   &__select {
     display: inline-block;
+    position: static;
 
     .multiselect {
-      position: initial;
+      position: static;
       background: none;
 
       &__content {
-        left:0;
+        left: 0;
         min-width: 10rem;
       }
 
       &__tag {
         background: $ui-01;
-        &:not(:first-child):before {
-          content: "|";
-          position: absolute;
-          left:0;
-          top:0;
-          font-weight: normal;
-          @include font-size('16');
-          margin-left: -.1875rem;
+        height: auto;
+        font-weight: bold;
 
-          @include media-breakpoint-down(sm) {
-            display: none;
-          }
+        @extend .py-0;
+        @extend .mb-0;
+
+        &:not(:first-child){
+          border-left: 1px solid $ui-03;
+        }
+        &:last-child {
+          margin:0;
         }
 
         &-icon {
-          line-height: 20px;
+          line-height: 10px;
+          font-weight: normal;
+          font-size: 1rem;
         }
 
         &-icon:after {
-          content: "x";
           color: $brand-03;
+          font-size: inherit;
         }
       }
 
-      .SharpSelect__clear-button {
-        position: absolute;
-        font-size: 100%;
+      &__single {
         font-weight: bold;
-        line-height: 0;
-        width: 22px;
-        padding-right: 1rem;
-        &-icon {
-          display: none;
-        }
-        &:after {
-          content: "x";
-          color: $brand-03;
-        }
+      }
+
+      .SharpSelect__clear-button-icon {
+        fill: $brand-03;
+        width: 8px;
+        height: 8px;
       }
 
       .SharpSelect__clear-button ~ .multiselect__tags {
@@ -133,9 +143,18 @@
       }
 
       &__tags {
-        padding-right: 2rem;
-        padding-left:0;
+        padding: .5rem 2rem .5rem 0;
+        line-height: 1;
         box-shadow: none;
+        border: none;
+        min-height: 0;
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+        cursor: default;
+      }
+
+      &__tags-wrap, &__single {
+        padding-left: .5rem;
       }
 
       &__tags-wrap {

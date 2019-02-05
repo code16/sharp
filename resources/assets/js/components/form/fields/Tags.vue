@@ -11,6 +11,7 @@
             :disabled="readOnly"
             track-by="_internalId"
             label="label"
+            :custom-label="localizedCustomLabel"
             multiple searchable hide-selected
             :show-labels="false"
             @search-change="handleTextInput"
@@ -22,6 +23,7 @@
 
 <script>
     import SharpMultiselect from '../../Multiselect';
+    import localize from '../../../mixins/localize/Tags';
 
     class LabelledItem {
         constructor(item) {
@@ -45,6 +47,7 @@
 
     export default {
         name: 'SharpTags',
+        mixins:[localize],
         components: {
             SharpMultiselect
         },
@@ -93,7 +96,7 @@
                 return patchedTag;
             },
             handleNewTag(val) {
-                let newTag = new Tag({id: null, label: val});
+                let newTag = new Tag({id: null, label: this.localizedTagLabel(val) });
                 newTag.internalId = this.lastIndex++;
                 this.tags.push(newTag);
             },

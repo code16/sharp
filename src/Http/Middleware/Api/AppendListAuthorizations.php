@@ -39,6 +39,10 @@ class AppendListAuthorizations
             : $response;
     }
 
+    /**
+     * @param JsonResponse $jsonResponse
+     * @return JsonResponse
+     */
     protected function addAuthorizationsToJsonResponse(JsonResponse $jsonResponse)
     {
         $entityKey = $this->determineEntityKey();
@@ -92,16 +96,27 @@ class AppendListAuthorizations
         return $jsonResponse;
     }
 
+    /**
+     * @param $entityKey
+     * @return bool
+     */
     protected function hasPolicyFor($entityKey)
     {
         return config("sharp.entities.{$entityKey}.policy") != null;
     }
 
+    /**
+     * @param string $entityKey
+     * @return \Illuminate\Config\Repository|mixed
+     */
     protected function getGlobalAuthorizations(string $entityKey)
     {
         return config("sharp.entities.{$entityKey}.authorizations", []);
     }
 
+    /**
+     * @return string|null
+     */
     protected function determineEntityKey()
     {
         return request()->segment(4);

@@ -235,7 +235,9 @@ class CommandControllerTest extends BaseApiTest
             ->assertStatus(200)
             ->json();
 
-        $this->assertTrue(collect($response['config']['commands'])->where("key", "entity_with_init_data")->first()['fetch_initial_data']);
+        $this->assertTrue(
+            collect($response['config']['commands']['entity'][0])->where("key", "entity_with_init_data")->first()['fetch_initial_data']
+        );
 
         $this->getJson('/sharp/api/list/person/command/entity_with_init_data/data')
             ->assertStatus(200)
@@ -256,7 +258,9 @@ class CommandControllerTest extends BaseApiTest
             ->assertStatus(200)
             ->json();
 
-        $this->assertTrue(collect($response['config']['commands'])->where("key", "instance_with_init_data")->first()['fetch_initial_data']);
+        $this->assertTrue(
+            collect($response['config']['commands']['instance'][0])->where("key", "instance_with_init_data")->first()['fetch_initial_data']
+        );
 
         $this->getJson('/sharp/api/list/person/command/instance_with_init_data/25/data')
             ->assertStatus(200)
@@ -324,7 +328,7 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
                 return $this->link('/link/out');
             }
 
-        })->addInstanceCommand("entity_exception", new class() extends EntityCommand {
+        })->addEntityCommand("entity_exception", new class() extends EntityCommand {
             public function label(): string { return "label"; }
             public function execute(EntityListQueryParams $params, array $data = []): array {
                 throw new SharpApplicativeException("error");
@@ -356,7 +360,7 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
                 return $this->download("pdf/account.pdf");
             }
 
-        })->addInstanceCommand("entity_unauthorized", new class() extends EntityCommand {
+        })->addEntityCommand("entity_unauthorized", new class() extends EntityCommand {
             public function label(): string { return "label"; }
             public function authorize(): bool { return false; }
             public function execute(EntityListQueryParams $params, array $data = []): array {
@@ -391,7 +395,7 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
             }
             public function execute(EntityListQueryParams $params, array $data = []): array {}
 
-        })->addEntityCommand("instance_with_init_data", new class() extends InstanceCommand {
+        })->addInstanceCommand("instance_with_init_data", new class() extends InstanceCommand {
             public function label(): string { return "label"; }
             public function buildFormFields() {
                 $this->addField(SharpFormTextField::make("name"));

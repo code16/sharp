@@ -4,6 +4,7 @@ namespace Code16\Sharp\Tests\Unit\Form\Fields\Formatters;
 
 use Code16\Sharp\Form\Fields\Formatters\MarkdownFormatter;
 use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
+use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormMarkdownField;
 use Code16\Sharp\Tests\SharpTestCase;
 use Illuminate\Http\Testing\FileFactory;
@@ -107,16 +108,15 @@ class MarkdownFormatterTest extends SharpTestCase
         $value = "![](local:new_test.png)";
         $attribute = "attribute";
 
-        $service = Mockery::mock();
-        $service->shouldReceive('setInstanceId')
-            ->andReturnSelf();
-        $service->shouldReceive('fromFront')
-            ->andReturn([
-                "file_name" => "uploaded_test.png",
-            ]);
-
-        app()->bind(UploadFormatter::class, function() use($service) {
-            return $service;
+        app()->bind(UploadFormatter::class, function() {
+            return new class extends UploadFormatter {
+                function fromFront(SharpFormField $field, string $attribute, $value)
+                {
+                    return [
+                        "file_name" => "uploaded_test.png"
+                    ];
+                }
+            };
         });
 
         $this->assertEquals(
@@ -129,5 +129,58 @@ class MarkdownFormatterTest extends SharpTestCase
                 ]]
             ])
         );
+    }
+
+    /** @test */
+    function files_are_handled_for_a_localized_markdown()
+    {
+        $formatter = new MarkdownFormatter;
+        $field = SharpFormMarkdownField::make("md")->setLocalized();
+        $value = [
+            "fr" => "![](local:test_fr.png)\n![](local:test2_fr.png)",
+            "en" => "![](local:test_en.png)",
+        ];
+
+        $this->assertCount(3, $formatter->toFront($field, $value)["files"]);
+    }
+
+    /** @test */
+    function we_apply_transformations_from_front_on_already_existing_files()
+    {
+        $file = (new FileFactory)->image("image.png", 100, 100);
+        $filePath = $file->store("data/Test");
+
+        // We create an implementation where deleteThumbnails() is faked
+        // in order to check that it's called without changing anything
+        // else in the class. The fact that deleteThumbnails() is called
+        // is a proof that the image was transformed.
+        $formatter = new class extends MarkdownFormatter {
+            public $thumbnailsDeleted = false;
+
+            protected function deleteThumbnails($fullFileName)
+            {
+                $this->thumbnailsDeleted = true;
+            }
+        };
+
+        $field = SharpFormMarkdownField::make("md")
+            ->setStorageDisk("local")
+            ->setStorageBasePath("data/Test");
+
+        $this->assertEquals(
+            "![](local:$filePath)",
+            $formatter->fromFront($field, "attribute", [
+                "text" => "![](local:$filePath)",
+                "files" => [[
+                    "name" => "local:$filePath",
+                    "uploaded" => false,
+                    "cropData" => [
+                        "height" => .8, "width" => .6, "x" => 0, "y" => .1, "rotate" => 0
+                    ]
+                ]]
+            ])
+        );
+
+        $this->assertTrue($formatter->thumbnailsDeleted);
     }
 }

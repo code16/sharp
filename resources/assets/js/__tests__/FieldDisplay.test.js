@@ -13,7 +13,7 @@ describe('field-display', () => {
 
 
     beforeAll(() => {
-        mockSFC(fieldContainerModule);
+        mockSFC(fieldContainerModule, { props: { errorIdentifier:String } });
     });
 
     afterAll(()=> {
@@ -28,6 +28,7 @@ describe('field-display', () => {
                     :context-data="contextData"
                     :context-fields="contextFields"
                     :update-visibility="updateVisibility"
+                    :locale="locale"
                     config-identifier="title"
                     error-identifier="title"
                 >
@@ -41,14 +42,14 @@ describe('field-display', () => {
 
     test('can mount field display', async () => {
         await createVm({
-            propsData: {
+            data:()=>({
                 contextData: {
                     title: null
                 },
                 contextFields: {
                     title: { type: 'text' }
                 }
-            }
+            })
         });
 
         expect(document.body.innerHTML).toMatchSnapshot();
@@ -58,7 +59,7 @@ describe('field-display', () => {
 
         test('check', async () => {
             let vm = await createVm({
-                propsData: {
+                data:()=>({
                     contextData: {
                         title: null,
                         check: true
@@ -73,7 +74,7 @@ describe('field-display', () => {
                         },
                         check: { type: 'check' }
                     }
-                }
+                })
             });
 
 
@@ -89,7 +90,7 @@ describe('field-display', () => {
 
         test('multiple select (unique values)', async () => {
             let vm = await createVm({
-                propsData: {
+                data:()=>({
                     contextData: {
                         title: null,
                         select: [ 2, 3 ]
@@ -109,7 +110,7 @@ describe('field-display', () => {
                             multiple: true
                         }
                     }
-                }
+                })
             });
 
             expect(computeSelectCondition).toHaveBeenCalledWith({ condValues: 2, fieldValue: [2,3], isSingleSelect: false });
@@ -124,7 +125,7 @@ describe('field-display', () => {
 
         test('multiple select (multiple values)', async () => {
             let vm = await createVm({
-                propsData: {
+                data:()=>({
                     contextData: {
                         title: null,
                         select: [ 2, 3 ]
@@ -144,7 +145,7 @@ describe('field-display', () => {
                             multiple: true
                         }
                     }
-                }
+                })
             });
 
             expect(computeSelectCondition).toHaveBeenLastCalledWith({ condValues: [2,6], fieldValue: [2,3], isSingleSelect: false });
@@ -160,7 +161,7 @@ describe('field-display', () => {
 
         test('single select (unique values)', async () => {
             let vm = await createVm({
-                propsData: {
+                data:()=>({
                     contextData: {
                         title: null,
                         select: 4
@@ -179,7 +180,7 @@ describe('field-display', () => {
                             type: 'select'
                         }
                     }
-                }
+                })
             });
 
             expect(computeSelectCondition).toHaveBeenLastCalledWith({ condValues: 4, fieldValue: 4, isSingleSelect: true });
@@ -194,7 +195,7 @@ describe('field-display', () => {
 
         test('single select (multiple values)', async () => {
             let vm = await createVm({
-                propsData: {
+                data:()=>({
                     contextData: {
                         title: null,
                         select: 4
@@ -213,7 +214,7 @@ describe('field-display', () => {
                             type: 'select'
                         }
                     }
-                }
+                })
             });
 
             expect(computeSelectCondition).toHaveBeenLastCalledWith({ condValues: [4,8], fieldValue: 4, isSingleSelect: true });
@@ -228,7 +229,7 @@ describe('field-display', () => {
 
         test('multiple select (negative)', async () => {
             let vm = await createVm({
-                propsData: {
+                data:()=>({
                     contextData: {
                         title: null,
                         select: [ 4, 6 ]
@@ -248,7 +249,7 @@ describe('field-display', () => {
                             multiple: true
                         }
                     }
-                }
+                })
             });
 
             expect(computeSelectCondition).toHaveBeenLastCalledWith({ condValues: '!5', fieldValue: [4,6], isSingleSelect: false });
@@ -263,7 +264,7 @@ describe('field-display', () => {
 
         test('single select (negative)', async () => {
             let vm = await createVm({
-                propsData: {
+                data:()=>({
                     contextData: {
                         title: null,
                         select: 3
@@ -282,7 +283,7 @@ describe('field-display', () => {
                             type: 'select'
                         }
                     }
-                }
+                })
             });
 
             expect(computeSelectCondition).toHaveBeenLastCalledWith({ condValues: '!6', fieldValue: 3, isSingleSelect: true });
@@ -297,7 +298,7 @@ describe('field-display', () => {
 
         test('or operator', async () => {
             let vm = await createVm({
-                propsData: {
+                data:()=>({
                     contextData: {
                         title: null,
                         check1: true,
@@ -317,7 +318,7 @@ describe('field-display', () => {
                         check1: { type: 'check' },
                         check2: { type: 'check' }
                     }
-                }
+                })
             });
 
             expect(vm.$children).toHaveLength(1);
@@ -335,7 +336,7 @@ describe('field-display', () => {
 
         test('and operator', async () => {
             let vm = await createVm({
-                propsData: {
+                data:()=>({
                     contextData: {
                         title: null,
                         check1: true,
@@ -355,7 +356,7 @@ describe('field-display', () => {
                         check1: { type: 'check' },
                         check2: { type: 'check' }
                     }
-                }
+                })
             });
 
             expect(vm.$children).toHaveLength(1);
@@ -369,7 +370,7 @@ describe('field-display', () => {
 
     test('expose appropriate props', async () => {
         let vm = await createVm({
-            propsData: {
+            data:()=>({
                 contextData: {
                     title: 'myTitle',
                 },
@@ -381,7 +382,7 @@ describe('field-display', () => {
                         helpMessage: 'Super help message'
                     }
                 }
-            }
+            })
         });
 
         let { $children:[$fieldContainer] } = vm;
@@ -402,7 +403,7 @@ describe('field-display', () => {
     test('call update visibility', async () => {
         let updateVisibility = jest.fn();
         let vm = await createVm({
-            propsData: {
+            data:()=>({
                 contextData: {
                     title: 'myTitle',
                     check: true,
@@ -417,7 +418,7 @@ describe('field-display', () => {
                     },
                     check: { type: 'check' }
                 }
-            },
+            }),
             methods: {
                 updateVisibility
             }
@@ -432,7 +433,72 @@ describe('field-display', () => {
 
         expect(updateVisibility).toHaveBeenCalledTimes(2);
         expect(updateVisibility).toHaveBeenLastCalledWith('title',false);
-    })
+    });
+
+    test('handle localized value', async () => {
+        let vm = await createVm({
+            data:()=>({
+                contextData: {
+                    title: null,
+                },
+                contextFields: {
+                    title: { type: 'text', localized: true  },
+                },
+                locale: 'fr'
+            })
+        });
+        let { $children:[$fieldContainer] } = vm;
+
+        const testType = async (type, expectedValue) => {
+            Vue.set(vm.contextFields.title,'type',type);
+            await Vue.nextTick();
+            expect($fieldContainer.$options.propsData.value).toEqual(expectedValue);
+        };
+
+        vm._provided.$form.localized = true;
+
+        await testType('text', null);
+
+        Vue.set(vm.contextData,'title',{ fr:'texte FR', en:'texte EN' });
+
+        await testType('text', 'texte FR');
+        await testType('textarea', 'texte FR');
+        await testType('markdown', { fr:'texte FR', en:'texte EN' });
+        await testType('wysiwyg', { fr:'texte FR', en:'texte EN' });
+
+        vm.locale = 'en';
+
+        await testType('text', 'texte EN');
+
+        Vue.set(vm.contextFields.title, 'localized', false);
+        await testType('text', { fr:'texte FR', en:'texte EN' });
+
+        Vue.set(vm.contextFields.title, 'localized', true);
+        vm._provided.$form.localized = false;
+
+        await testType('text', { fr:'texte FR', en:'texte EN' });
+    });
+
+    test('handle localized identifier', async () => {
+        let vm = await createVm({
+            data:()=>({
+                contextData: {
+                    title: null,
+                },
+                contextFields: {
+                    title: { type: 'text', localized: true  },
+                },
+                locale: 'fr'
+            })
+        });
+        let { $children:[$fieldContainer] } = vm;
+
+        expect($fieldContainer.$options.propsData.errorIdentifier).toEqual('title.fr');
+
+        vm.contextFields.title.localized = false;
+        await Vue.nextTick();
+        expect($fieldContainer.$options.propsData.errorIdentifier).toEqual('title');
+    });
 });
 
 async function createVm(customOptions={}) {
@@ -440,12 +506,12 @@ async function createVm(customOptions={}) {
     const vm = new Vue({
         el: '#app',
         mixins: [MockInjections, customOptions],
-
-        props:['contextData', 'contextFields'],
         
         'extends': {
             data:()=>({
-                value: null
+                locale: null,
+                contextData: null,
+                contextFields: null
             }),
             methods:{
                 updateVisibility: ()=>{}

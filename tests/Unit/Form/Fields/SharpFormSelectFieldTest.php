@@ -117,6 +117,40 @@ class SharpFormSelectFieldTest extends SharpTestCase
         );
     }
 
+    /** @test */
+    function we_can_define_localized_options()
+    {
+        $formField = $this->getDefaultSelect([
+            "1" => ["en" => "Option one", "fr" => "Option un"],
+            "2" => ["en" => "Option two", "fr" => "Option deux"],
+        ])->setLocalized();
+
+        $this->assertArraySubset(
+            ["options" => [
+                ["id" => 1, "label" => ["en" => "Option one", "fr" => "Option un"]],
+                ["id" => 2, "label" => ["en" => "Option two", "fr" => "Option deux"]],
+            ]],
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_localized_options_with_id_label_array()
+    {
+        $formField = $this->getDefaultSelect([
+            ["id" => "1", "label" => ["en" => "Option one", "fr" => "Option un"]],
+            ["id" => "2", "label" => ["en" => "Option two", "fr" => "Option deux"]],
+        ])->setLocalized();
+
+        $this->assertArraySubset(
+            ["options" => [
+                ["id" => 1, "label" => ["en" => "Option one", "fr" => "Option un"]],
+                ["id" => 2, "label" => ["en" => "Option two", "fr" => "Option deux"]],
+            ]],
+            $formField->toArray()
+        );
+    }
+
     /**
      * @param array|null $options
      * @return SharpFormSelectField

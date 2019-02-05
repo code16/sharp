@@ -28,7 +28,7 @@
             @close="close"
         />
         <span class="SharpFilterSelect__text">
-            {{name}}<span v-if="!empty" style="font-weight:normal">&nbsp;&nbsp;</span>
+            {{name}}
         </span>
 
         <!-- value text & tags -->
@@ -40,7 +40,7 @@
             :clearable="!required"
             :inline="false"
             :unique-identifier="filterKey"
-            :placeholder="fixZeroValuePlaceholder"
+            placeholder=" "
             ref="select"
             @input="handleSelect"
         />
@@ -98,9 +98,6 @@
             },
             empty() {
                 return this.value == null || this.multiple && !this.value.length;
-            },
-            fixZeroValuePlaceholder() {
-                return !this.multiple ? (this.values.find(option => option.id===0)||{}).label : '';
             },
             autocompleteValue() {
                 return this.multiple ? (this.value||[]).map(value=>this.optionById[value]) : this.optionById[this.value];

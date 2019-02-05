@@ -4,10 +4,12 @@ This simple widget is based on the HTML Form Entity field, and intend to display
 
 ## Attributes (setters)
 
+```php
     $this->addWidget(
         SharpPanelWidget::make("activeSpaceships")
             ->setInlineTemplate("<h1>{{count}}</h1> spaceships in activity")
             ->setLink('spaceship');
+```
 
 The Panel needs a view template, that you can provide in two ways:
 
@@ -17,10 +19,11 @@ Just write the template as a string, using placeholders for data like this: `{{v
 
 Example:
 
+```php
     $panel->setInlineTemplate(
         "<h1>{{count}}</h1> spaceships in activity"
     )
-
+```
 
 ### `setTemplatePath(string $templatePath)`
 
@@ -37,6 +40,7 @@ The template will be [interpreted by Vue.js](https://vuejs.org/v2/guide/syntax.h
 
 Valuation is handled by a dedicated `$this->setPanelData(string $panelWidgetKey, array $data)` in the Dashboard class:
 
+```php
     function buildWidgetsData()
     {
         $count = [...];
@@ -45,5 +49,6 @@ Valuation is handled by a dedicated `$this->setPanelData(string $panelWidgetKey,
             "activeSpaceships", ["count" => $count]
         );
     }
+```
 
 Simply pass there the widget `key` and an array with the data required by your template.

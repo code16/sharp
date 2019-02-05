@@ -63,6 +63,7 @@ class SpaceshipSharpList extends SharpEntityList
             ->addEntityCommand("reload", SpaceshipReload::class)
             ->addInstanceCommand("message", SpaceshipSendMessage::class)
             ->addInstanceCommand("preview", SpaceshipPreview::class)
+            ->addInstanceCommandSeparator()
             ->addInstanceCommand("external", SpaceshipExternalLink::class)
             ->setEntityState("state", SpaceshipEntityState::class)
 
@@ -113,7 +114,11 @@ class SpaceshipSharpList extends SharpEntityList
             }
         }
 
-        return $this->setCustomTransformer("capacity", function($capacity) {
+        return $this
+            ->setCustomTransformer("name", function($name, $spaceship) {
+                return $spaceship->name;
+            })
+            ->setCustomTransformer("capacity", function($capacity) {
                 return number_format($capacity / 1000, 0) . "k";
             })
             ->setCustomTransformer("type", function($type, $spaceship) {

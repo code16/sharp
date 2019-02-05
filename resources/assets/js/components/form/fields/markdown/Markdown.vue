@@ -1,7 +1,14 @@
 <template>
     <div class="SharpMarkdown" :class="{'SharpMarkdown--read-only':readOnly}">
         <div class="SharpModule__inner">
-            <textarea ref="textarea"></textarea>
+            <template v-if="isLocalized">
+                <div v-for="loc in locales" v-show="locale === loc">
+                    <textarea :id="localizedTextareaRef(loc)" :ref="localizedTextareaRef(loc)"></textarea>
+                </div>
+            </template>
+            <template v-else>
+                <textarea ref="textarea"></textarea>
+            </template>
         </div>
     </div>
 </template>
@@ -13,13 +20,17 @@
     import Widget from './MarkdownWidget';
 
     import { lang } from '../../../../mixins/Localization';
+    import localize from '../../../../mixins/localize/editor';
 
     const noop = ()=>{};
 
-
+    const fileIdSymbol = Symbol('fileIdSymbol');
 
     export default {
         name: 'SharpMarkdown',
+
+        mixins: [ localize({ textProp:'text' }) ],
+
         props: {
             uniqueIdentifier: String,
             fieldConfigIdentifier: String,
@@ -38,31 +49,36 @@
             innerComponents:Object,
 
             readOnly: Boolean,
-            locale:String
         },
 
         inject: ['$tab'],
 
         data() {
             return {
-                simplemde:null,
-                cursorPos:0,
+                simplemdeInstances: {},
+                cursorPos:{ line:0, ch:0 },
 
                 uploaderId: (this.value.files||[]).length,
             }
         },
         watch: {
             /// On form locale change
-            locale() {
-                this.simplemde.value(this.value.text);
+            async locale() {
+                if(this.isLocalized) {
+                    await this.$nextTick();
+                    this.refreshOnExternalChange();
+                }
             }
         },
         computed: {
+            simplemde() {
+                return this.isLocalized ? this.simplemdeInstances[this.locale] : this.simplemdeInstances;
+            },
             codemirror() {
-                return this.simplemde.codemirror;
+                return (this.simplemde||{}).codemirror;
             },
             idSymbol() {
-                return Symbol('fileIdSymbol');
+                return fileIdSymbol;
             },
             filesByName() {
                 return this.value.files.reduce((res, file) => {
@@ -75,9 +91,15 @@
                     res[file[this.idSymbol]] = index;
                     return res;
                 }, {});
+            },
+            text() {
+                return this.localizedText;
             }
         },
         methods : {
+            localizedTextareaRef(locale) {
+                return `textarea_${locale}`;
+            },
             indexedFiles() {
                 return (this.value.files||[]).map( (file,i) => ({ [this.idSymbol]:i, ...file }) );
             },
@@ -179,8 +201,7 @@
             // isInsertion : if the user click on 'insert image' button
             async insertUploadImage({ replaceBySelection, data, isInsertion } = {}) {
                 let selection = this.codemirror.getSelection(' ');
-                let curLineContent = this.codemirror.getLine(this.cursorPos.line);
-                //let initialCursorPos = this.cursorPos;
+                let curLineContent = this.codemirror.getLine(this.cursorPos.line) || '';
 
                 let options = {
                     id: data ? this.filesByName[data.name][this.idSymbol] : this.uploaderId++,
@@ -192,7 +213,7 @@
                 let $uploader = isInsertion
                     ? await this.createUserUploader(options)
                     : this.createUploader(options);
-                
+
                 if(selection) {
                     this.codemirror.replaceSelection('');
                     curLineContent = this.codemirror.getLine(this.cursorPos.line);
@@ -204,9 +225,6 @@
                 ) {
                     this.codemirror.replaceRange('\n', this.cursorPos);
                 }
-                // if(isInsertion) {
-                //     this.codemirror.replaceRange('\n', this.cursorPos);
-                // }
 
                 this.codemirror.getInputField().blur();
 
@@ -215,7 +233,7 @@
                     : '![]()';// `![${selection||''}]()`;   take selection as title
 
 
-                let afterNewLinesCount = isInsertion ? 1 : 0;
+                let afterNewLinesCount = isInsertion || this.cursorPos.line === this.codemirror.lineCount()-1 ? 1 : 0;
 
                 md += '\n'.repeat(afterNewLinesCount);
 
@@ -238,13 +256,13 @@
             },
 
             onCursorActivity() {
-                this.cursorPos = this.codemirror.getCursor();
+                if(this.codemirror) {
+                    this.cursorPos = this.codemirror.getCursor();
+                }
             },
 
             onChange() {
-                this.$emit('input', {
-                    ...this.value, text: this.simplemde.value()
-                });
+                this.codemirror && this.$emit('input', this.localizedValue(this.codemirror.getValue()));
             },
 
             onBeforeChange(cm, change) {
@@ -263,34 +281,27 @@
                 }
             },
 
-            onKeydown(cm, e) {
-                //console.log('key down');
+            codemirrorOn(codemirror, eventName, callback, immediate) {
+                immediate && callback(codemirror);
+                codemirror.on(eventName, callback);
             },
 
-            onKeyHandled(cm, name, e) {
-
-            },
-            codemirrorOn(eventName, callback, immediate) {
-                immediate && callback(this.codemirror);
-                this.codemirror.on(eventName, callback);
-            },
-
-            localizeToolbar() {
-                this.simplemde.toolbar.forEach(icon => {
+            localizeToolbar(simplemde) {
+                simplemde.toolbar.forEach(icon => {
                     if(typeof icon === 'object') {
                         let lName = icon.name.replace(/-/g,'_');
                         icon.title = lang(`form.markdown.icons.${lName}.title`);
                     }
                 });
-                this.$el.querySelector('.editor-toolbar').remove();
-                this.simplemde.createToolbar();
+                simplemde.gui.toolbar.remove();
+                simplemde.createToolbar();
             },
-            setReadOnly() {
-                this.codemirror.setOption('readOnly', true);
-                this.simplemde.toolbar.forEach(icon => typeof icon === 'object' && (icon.action = noop));
+            setReadOnly(simplemde) {
+                simplemde.codemirror.setOption('readOnly', true);
+                simplemde.toolbar.forEach(icon => typeof icon === 'object' && (icon.action = noop));
             },
-            bindImageAction() {
-                let imageBtn = this.simplemde.toolbar.find(btn => btn.name === 'image');
+            bindImageAction(simplemde) {
+                let imageBtn = simplemde.toolbar.find(btn => btn.name === 'image');
                 (imageBtn||{}).action = () => this.insertUploadImage({ isInsertion:true });
             },
 
@@ -323,23 +334,61 @@
             },
 
             refreshOnExternalChange() {
-                let images = this.parse();
-                if(images.length) {
-                    // reset the scroll position because it change on widget insertion
-                    this.$nextTick(()=>window.scrollTo(0,0));
+                if(!this.simplemde.parsed) {
+                    let images = this.parse();
+                    this.simplemde.parsed = true;
+                    if (images.length) {
+                        // reset the scroll position because it change on widget insertion
+                        this.$nextTick(() => window.scrollTo(0, 0));
+                    }
                 }
+
                 setTimeout(()=>this.codemirror.refresh(), 50);
+            },
+
+            createSimpleMDE({ element, initialValue }) {
+                //console.log('initialValue',initialValue);
+                let simplemde = new SimpleMDE({
+                    element,
+                    initialValue,
+                    placeholder: this.placeholder,
+                    spellChecker: false,
+                    toolbar: this.toolbar,
+                    autoDownloadFontAwesome: false,
+                    status: false
+                });
+                if(this.readOnly) {
+                    this.setReadOnly(simplemde);
+                }
+                this.localizeToolbar(simplemde);
+                this.bindImageAction(simplemde);
+
+                this.initCM(simplemde.codemirror);
+
+                return simplemde;
+            },
+
+            initCM(codemirror) {
+                codemirror.setSize('auto',this.height);
+
+                //// CM events bindings
+                this.codemirrorOn(codemirror, 'cursorActivity', this.onCursorActivity, true);
+                this.codemirrorOn(codemirror, 'change', this.onChange);
+                this.codemirrorOn(codemirror, 'beforeChange',this.onBeforeChange);
             }
         },
         mounted() {
-            this.simplemde = new SimpleMDE({
+            if(this.isLocalized) {
+                this.simplemdeInstances = this.locales.reduce((res, locale)=>({
+                    ...res, [locale]: this.createSimpleMDE({
+                        element: this.$refs[this.localizedTextareaRef(locale)][0],
+                        initialValue: (this.value.text || {})[locale]
+                    })
+                }), {});
+            }
+            else this.simplemdeInstances = this.createSimpleMDE({
                 element: this.$refs.textarea,
-                initialValue: this.value.text,
-                placeholder: this.placeholder,
-                spellChecker: false,
-                toolbar: this.toolbar,
-                autoDownloadFontAwesome: false,
-                status: false
+                initialValue: this.value.text
             });
 
             this.value.files = this.indexedFiles();
@@ -350,23 +399,6 @@
             else {
                 this.$nextTick(() => this.refreshOnExternalChange());
             }
-
-            this.codemirror.setSize('auto',this.height);
-
-            if(this.readOnly) {
-                this.setReadOnly();
-            }
-            /// Custom mde setup
-            this.localizeToolbar();
-            this.bindImageAction();
-
-            //// CM events bindings
-            this.codemirrorOn('cursorActivity', this.onCursorActivity, true);
-            this.codemirrorOn('change', this.onChange, true);
-            this.codemirrorOn('beforeChange',this.onBeforeChange);
-
-            this.codemirrorOn('keydown', this.onKeydown);
-            this.codemirrorOn('keyHandled', this.onKeyHandled);
         }
     }
 </script>

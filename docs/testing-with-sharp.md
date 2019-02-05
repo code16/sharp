@@ -7,13 +7,14 @@ Sharp provide a fexw assertions and helpers to help you testing your Sharp code.
 
 The `Code16\Sharp\Utils\Testing\SharpAssertions` trait is intended to be used in a Feature test. It has to be intialized, like this:
 
+```php
     protected function setUp()
     {
         parent::setUp();
 
         $this->initSharpAssertions();
     }
-
+```
 
 ### Helpers
 
@@ -54,6 +55,7 @@ Call the `$commandKey` Instance Command with the optional `$data`.
 
 First, and of course, you can use regular assertions, like for instance:
 
+```php
     $this->updateSharpForm(
             "orders", 
             $order->id, 
@@ -62,7 +64,7 @@ First, and of course, you can use regular assertions, like for instance:
                 "payment_delay" => 10
             ]))
         ->assertStatus(200);
-
+```
 
 But sometimes you'll want to test some specific Sharp things. Here's the list of custom assertions added by the `SharpAssertions` trait:
 
@@ -70,36 +72,42 @@ But sometimes you'll want to test some specific Sharp things. Here's the list of
 
 Example:
 
+```php
     $this->getSharpForm("orders", $order->id)
          ->assertSharpHasAuthorization("update")
          ->assertSharpHasAuthorization("delete");
+```
 
 #### `assertSharpFormHasFields($names)`
 
 Example:
 
+```php
     $this->getSharpForm("orders")
          ->assertSharpFormHasFields([
                "number", "client"
          ]);
-
+```
 
 #### `assertSharpFormHasFieldOfType($name, $formFieldClassName)`
 
 Example:
 
+```php
     $this->getSharpForm("orders", $order->id)
          ->assertSharpFormHasFieldOfType(
              "number", SharpFormTextField::class
          );
+```
 
 #### `assertSharpFormDataEquals($name, $value)`
 
 Example:
 
+```php
     $this->getSharpForm("orders", $order->id)
          ->assertSharpFormDataEquals("number", $order->number);
-
+```
 
 
 ## Browser testing (Laravel Dusk)

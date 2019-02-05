@@ -27,7 +27,7 @@ class SpaceshipSharpValidator extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
+            'name.fr' => 'required',
             'type_id' => 'required',
 //            'picture' => 'required',
             'pictures.*.file' => 'required',

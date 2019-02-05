@@ -142,7 +142,7 @@ class SharpCustomFomFieldTextIcon extends SharpFormField
         ]);
     }
 }
-````
+```
 
 A few things to note:
 
@@ -158,7 +158,7 @@ Next step is... using the new form field. Well, this should be the easiest part:
 
 *in some `Code16\Sharp\Form\SharpForm` subclass:*
 
-````php
+```php
 function buildFormFields()
 {
     $this->addField(
@@ -167,5 +167,5 @@ function buildFormFields()
             ->setIcon("fa-user")
     );
 }
-````
+```
 

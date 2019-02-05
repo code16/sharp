@@ -46,24 +46,37 @@
                                 </div>
                                 <a class="SharpEntityList__row-link" v-if="rowHasLink(item)" :href="rowLink(item)"></a>
                             </div>
-                            <div v-show="!reorderActive" class="SharpEntityList__row-actions" ref="actionsCol">
-                                <sharp-dropdown v-if="config.state" class="SharpEntityList__state-dropdown" :show-arrow="false" :disabled="!hasStateAuthorization(item)">
-                                    <sharp-state-icon slot="text" :class="stateClasses({item})" :style="stateStyle({item})"></sharp-state-icon>
-                                    <sharp-dropdown-item v-for="state in config.state.values" @click="setState(item,state)" :key="state.value">
-                                        <sharp-state-icon :class="stateClasses({ value:state.value })" :style="stateStyle({ value:state.value })"></sharp-state-icon>
-                                        {{ state.label }}
-                                    </sharp-dropdown-item>
-                                </sharp-dropdown>
-                                <sharp-dropdown v-if="!noInstanceCommands"
+                            <div v-show="!reorderActive" class="SharpEntityList__row-actions align-self-center" ref="actionsCol">
+                                <div class="row justify-content-end no-gutters">
+                                    <template v-if="config.state">
+                                        <div class="col-auto col-md-12 my-1">
+                                            <sharp-dropdown class="SharpEntityList__state-dropdown" :disabled="!hasStateAuthorization(item)">
+                                                <template slot="text"><sharp-state-icon :class="stateClasses({item})" :style="stateStyle({item})" />
+                                                    <span class="text-truncate">
+                                                    {{ stateLabel(item) }}
+                                                </span>
+                                                </template>
+                                                <sharp-dropdown-item v-for="state in config.state.values" @click="setState(item,state)" :key="state.value">
+                                                    <sharp-state-icon :class="stateClasses({ value:state.value })" :style="stateStyle({ value:state.value })" />&nbsp;
+                                                    {{ state.label }}
+                                                </sharp-dropdown-item>
+                                            </sharp-dropdown>
+                                        </div>
+                                    </template>
+                                    <template v-if="hasCommands(item)">
+                                        <div class="col-auto col-md-12 pl-2 pl-md-0 my-1">
+                                            <SharpCommandsDropdown
                                                 class="SharpEntityList__commands-dropdown"
-                                                :class="{'SharpEntityList__commands-dropdown--placeholder':!instanceCommands(item)}" :show-arrow="false">
-                                    <div slot="text" class="SharpEntityList__command-icon">
-                                        <i class="fa fa-plus"></i>
-                                    </div>
-                                    <sharp-dropdown-item v-for="command in instanceCommands(item)" @click="sendCommand(command, item)" :key="command.key">
-                                        {{ command.label }}
-                                    </sharp-dropdown-item>
-                                </sharp-dropdown>
+                                                :commands="instanceCommands(item)"
+                                                @select="sendCommand($event, item)"
+                                            >
+                                                <template slot="text">
+                                                    {{ l('entity_list.commands.instance.label') }}
+                                                </template>
+                                            </SharpCommandsDropdown>
+                                        </div>
+                                    </template>
+                                </div>
                             </div>
                             <div v-show="reorderActive" class="SharpEntityList__row-actions" ref="actionsCol">
                                 <i class="fa fa-ellipsis-v SharpEntityList__reorder-icon"></i>
@@ -115,6 +128,7 @@
     import SharpForm from '../form/Form';
     import SharpViewPanel from './ViewPanel';
     import SharpStateIcon from './StateIcon';
+    import SharpCommandsDropdown from './CommandsDropdown';
 
     import Draggable from 'vuedraggable';
 
@@ -147,6 +161,7 @@
             SharpForm,
             SharpViewPanel,
             SharpStateIcon,
+            SharpCommandsDropdown,
             Draggable
         },
 
@@ -272,14 +287,14 @@
                 }, {});
             },
             commandsByInstanceId() {
-                let instCmds = this.config.commands.filter(c=>c.type==='instance');
+                let instCmds = this.config.commands.instance || [];
 
-                return instCmds.length ? this.data.items.reduce((res, {[this.idAttr]:id}) => {
-                    let authorizedCmds = instCmds.filter(c=>c.authorization.indexOf(id) !== -1);
-                    if(authorizedCmds.length)
-                        res[id] = authorizedCmds;
-                    return res;
-                }, {}) : {};
+                return instCmds.length ? this.data.items.reduce((res, {[this.idAttr]:id}) => ({
+                    ...res,
+                    [id]: instCmds.reduce((res, group) => [
+                        ...res, group.filter(command => command.authorization.includes(id))
+                    ],[])
+                }), {}) : {};
             },
             multiforms() {
                 return Object.values(this.forms);
@@ -291,11 +306,13 @@
                     return res;
                 }, {})
             },
-            noInstanceCommands() {
-                return !Object.keys(this.commandsByInstanceId).length;
-            },
             commandForms() {
-                return this.config.commands.filter(({form})=>form).map(({form, key}) => ({
+                const { entity, instance } = this.config.commands;
+                const commands = [
+                    ...(entity||[]).flat(),
+                    ...(instance||[]).flat()
+                ];
+                return commands.filter(({form})=>form).map(({form, key}) => ({
                     ...form, key,
                     layout: { tabs: [{ columns: [{fields:form.layout}]}] },
                 }));
@@ -313,7 +330,7 @@
                 this.authorizations = authorizations;
                 this.forms = forms;
 
-                this.config.commands = config.commands || [];
+                this.config.commands = config.commands || {};
                 this.config.filters = config.filters || [];
 
                 this.page = this.data.page;
@@ -345,7 +362,7 @@
                     itemsCount: this.data.totalCount || this.data.items.length,
                     filters: this.config.filters,
                     filtersValue: this.filtersValue,
-                    commands: this.config.commands.filter(c=>c.authorization && c.type==='entity'),
+                    commands: (this.config.commands.entity || []).map(group => group.filter(command => command.authorization)),
                     showCreateButton:this.authorizations.create,
                     searchable: this.config.searchable,
                     showReorderButton: this.config.reorderable && this.authorizations.update && this.data.items.length>1,
@@ -376,9 +393,12 @@
                 let state = item ? item[this.stateAttr] : value;
                 let { color } = this.stateByValue[state];
                 return !this.isStateClass(color) ? {
-                    fill: color,
-                    stroke: color,
+                    background: color
                 } : '';
+            },
+            stateLabel(item) {
+                const state = item[this.stateAttr];
+                return this.stateByValue[state].label;
             },
             hasStateAuthorization({[this.idAttr]:instanceId}) {
                 if(!this.config.state) return false;
@@ -397,7 +417,11 @@
                 return val != null && val !== '' ? this.tryParseNumber(val) : (filter.default || (filter.multiple?[]:null));
             },
             instanceCommands({[this.idAttr]:instanceId}) {
-                return this.commandsByInstanceId[instanceId]// || [];
+                return this.commandsByInstanceId[instanceId] || [];
+            },
+            hasCommands(instance) {
+                const allCommands = this.instanceCommands(instance).flat();
+                return allCommands.length > 0;
             },
             rowHasLink({[this.idAttr]:instanceId}) {
                 return this.authorizationsByInstanceId[instanceId].view;

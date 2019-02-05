@@ -15,33 +15,37 @@ function sharp_version()
  */
 function sharp_page_title($sharpMenu, $entityKey)
 {
-    $title = trans('sharp::login.login_page_title');
+    $title = "";
 
-    if ($sharpMenu) {
-        $entityLabel = "";
+    if(request()->is(sharp_base_url_segment() . "/login")) {
+        $title = trans('sharp::login.login_page_title');
 
-        foreach ($sharpMenu->menuItems as $menuItem) {
-            if ($menuItem->type == 'category') {
-                $entityLabel = collect($menuItem->entities)
-                    ->where("key", $entityKey)
-                    ->first()
+    } elseif ($sharpMenu) {
+        $menuItems = collect($sharpMenu->menuItems);
+
+        // Handle Multiforms
+        $entityKey = explode(':', $entityKey)[0];
+
+        $label = $menuItems
+                ->where('type', 'entity')
+                ->firstWhere('key', $entityKey)
+                ->label ?? "";
+
+        if(!$label) {
+            $label = $menuItems
+                    ->where('type', 'category')
+                    ->pluck('entities')
+                    ->flatten()
+                    ->firstWhere('key', $entityKey)
                     ->label ?? "";
-
-            } elseif ($menuItem->type == 'entity' && $menuItem->key == $entityKey) {
-                $entityLabel = $menuItem->label;
-            }
-
-            if ($entityLabel) {
-                break;
-            }
         }
 
-        $title = $sharpMenu->name
-            . ', '
-            . $entityLabel;
+        $title = $sharpMenu->name . ($label ? ', ' . $label : '');
     }
 
-    return  "$title | Sharp " . sharp_version();
+    return config("sharp.display_sharp_version_in_title", true)
+        ? "$title | Sharp " . sharp_version()
+        : $title;
 }
 
 /**

@@ -114,4 +114,14 @@
     line-height: 1.5;
   }
 
+  /// reset multiselect new Design
+  .multiselect__tags {
+    border-radius: 0;
+    border: none;
+  }
+
+  .multiselect__option:not(:hover):not(.multiselect__option--selected):not(.multiselect__option--highlighted)
+  {
+      background: white!important;
+  }
 }

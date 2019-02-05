@@ -26,7 +26,7 @@
 </template>
 
 <script>
-    import TimePicker from '../../../vendor/vue2-timepicker/vue-timepicker';
+    import TimePicker from 'vue2-timepicker';
 
     import moment from 'moment';
 
@@ -39,8 +39,8 @@
     } = TimePicker;
 
     export default {
-        name:'SharpTimePicker',
-        mixins:[TimePicker, AutoScroll],
+        name: 'SharpTimePicker',
+        mixins: [TimePicker, AutoScroll],
         props: {
             active:Boolean,
             min:String,

@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Http\Api;
 
+use Code16\Sharp\Form\SharpForm;
+
 class FormController extends ApiController
 {
 
@@ -22,7 +24,7 @@ class FormController extends ApiController
             "fields" => $form->fields(),
             "layout" => $form->formLayout(),
             "data" => $form->instance($instanceId)
-        ]);
+        ] + $this->dataLocalizations($form));
     }
 
     /**
@@ -41,7 +43,7 @@ class FormController extends ApiController
             "fields" => $form->fields(),
             "layout" => $form->formLayout(),
             "data" => $form->newInstance()
-        ]);
+        ] + $this->dataLocalizations($form));
     }
 
     /**
@@ -68,6 +70,8 @@ class FormController extends ApiController
     /**
      * @param string $entityKey
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
+     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
      * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      * @throws \Code16\Sharp\Exceptions\Form\SharpFormUpdateException
@@ -120,5 +124,16 @@ class FormController extends ApiController
             // Validation is automatically called (FormRequest)
             app($validatorClass);
         }
+    }
+
+    /**
+     * @param SharpForm $form
+     * @return array
+     */
+    protected function dataLocalizations(SharpForm $form)
+    {
+        return $form->hasDataLocalizations()
+            ? ["locales" => $form->getDataLocalizations()]
+            : [];
     }
 }

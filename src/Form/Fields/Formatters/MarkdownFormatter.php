@@ -45,6 +45,13 @@ class MarkdownFormatter extends SharpFieldFormatter
             $uploadFormatter = app(UploadFormatter::class);
 
             foreach($value["files"] as $file) {
+                // Fist we remove the disk from the file name in order to make
+                // the UploadFormatter fromFront code work properly
+                $originalName = $file["name"];
+                if(($pos = strpos($originalName, ':')) !== false) {
+                    $file["name"] = substr($originalName, $pos+1);
+                }
+
                 $upload = $uploadFormatter
                     ->setInstanceId($this->instanceId)
                     ->fromFront($field, $attribute, $file);
@@ -53,7 +60,7 @@ class MarkdownFormatter extends SharpFieldFormatter
                     // New file was uploaded. We have to update
                     // the name of the file in the markdown
                     $text = str_replace(
-                        "![]({$file["name"]})",
+                        "![]({$originalName})",
                         "![]({$field->storageDisk()}:{$upload["file_name"]})",
                         $text
                     );
@@ -61,7 +68,7 @@ class MarkdownFormatter extends SharpFieldFormatter
                 } elseif($upload["transformed"] ?? false) {
                     // File was pre-existing and was transformed: we must
                     // refresh all its thumbnails (meaning delete them)
-                    $this->deleteThumbnails($file["name"]);
+                    $this->deleteThumbnails($originalName);
                 }
             }
         }
@@ -70,15 +77,21 @@ class MarkdownFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param string $md
+     * @param string|array $texts
      * @return array
      */
-    protected function extractEmbeddedUploads($md)
+    protected function extractEmbeddedUploads($texts)
     {
-        preg_match_all(
-            '/!\[[^\]]*\]\((?<filename>.*?)(?=\"|\))(?<optionalpart>\".*\")?\)/',
-            $md, $matches, PREG_SET_ORDER, 0
-        );
+        $matches = [];
+
+        foreach((array)$texts as $md) {
+            preg_match_all(
+                '/!\[[^\]]*\]\((?<filename>.*?)(?=\"|\))(?<optionalpart>\".*\")?\)/',
+                $md, $localeMatches, PREG_SET_ORDER, 0
+            );
+
+            $matches = array_merge($matches, $localeMatches);
+        }
 
         return collect($matches)->map(function($match) {
             return trim($match["filename"]);
@@ -130,9 +143,8 @@ class MarkdownFormatter extends SharpFieldFormatter
 
             return Storage::disk($disk)->size($filename);
 
-        } catch(\RuntimeException $ex) {
+        } catch(\Exception $ex) {
             return null;
         }
     }
-
 }

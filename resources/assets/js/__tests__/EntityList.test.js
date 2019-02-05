@@ -2,10 +2,11 @@ import Vue from 'vue';
 import EntityList from '../components/list/EntityList.vue';
 import Dropdown from '../components/dropdown/Dropdown.vue';
 import DropdownItem from '../components/dropdown/DropdownItem.vue';
+import CommandsDropdown from '../components/list/CommandsDropdown.vue';
 import StateIcon from '../components/list/StateIcon.vue';
 import Modal from '../components/Modal.vue';
 
-import { mockChildrenComponents } from "./utils/mockSFC";
+import {mockChildrenComponents, mockSFC} from "./utils/mockSFC";
 
 
 import moxios from 'moxios';
@@ -33,12 +34,12 @@ describe('entity-list', ()=>{
 
     Vue.component('sharp-entity-list', mockChildrenComponents(EntityList, {
         customs: {
+            SharpCommandsDropdown: CommandsDropdown,
             [Dropdown.name]: {
-                template:
-                    `<div class="MOCKED_SHARP_DROPDOWN" :class="{ '[[ isDisabled ]]':disabled }">
-                        <div class="SLOT:text"><slot name="text"></slot></div>
-                        <slot></slot>
-                    </div>`
+                template: `<div class="MOCKED_SHARP_DROPDOWN" :class="{ '[[ isDisabled ]]':disabled }">
+                            <div class="SLOT:text"><slot name="text"></slot></div>
+                            <slot></slot>
+                        </div>`
             },
             [DropdownItem.name]: {
                 template: '<div class="MOCKED_SHARP_DROPDOWN_ITEM"><slot></slot></div>'
@@ -489,17 +490,21 @@ describe('entity-list', ()=>{
                 },
                 config:{
                     filters:[],
-                    commands:[{
-                        type: "instance",
-                        key: "validate",
-                        label: "Should be visible in first title",
-                        authorization: [1]
-                    },{
-                        type: "instance",
-                        key: "delete",
-                        label: "Should be visible in second title",
-                        authorization: [2]
-                    }],
+                    commands:{
+                        instance: [
+                            [{
+                                type: "instance",
+                                key: "validate",
+                                label: "Should be visible in first title",
+                                authorization: [1]
+                            }, {
+                                type: "instance",
+                                key: "delete",
+                                label: "Should be visible in second title",
+                                authorization: [2]
+                            }]
+                        ],
+                    },
                     instanceIdAttribute: 'id'
                 },
                 authorizations:{
@@ -624,19 +629,23 @@ describe('entity-list', ()=>{
                 },
                 config:{
                     filters:[],
-                    commands:[{
-                        type: "instance",
-                        key: "validate",
-                        label: "Should be visible in first title",
-                        authorization: [],
-                        form: {}
-                    },{
-                        type: "instance",
-                        key: "delete",
-                        label: "Should be visible in second title",
-                        authorization: [],
-                        form: {}
-                    }],
+                    commands:{
+                        instance: [
+                            [{
+                                type: "instance",
+                                key: "validate",
+                                label: "Should be visible in first title",
+                                authorization: [],
+                                form: {}
+                            },{
+                                type: "instance",
+                                key: "delete",
+                                label: "Should be visible in second title",
+                                authorization: [],
+                                form: {}
+                            }],
+                        ],
+                    },
                     instanceIdAttribute: 'id'
                 },
                 authorizations:{
@@ -774,15 +783,21 @@ describe('entity-list', ()=>{
         let $entityList = await createVm();
 
         $entityList.config = {
-            commands: [{
-                type: "entity",
-                key: "synchronize",
+            commands: {
+                entity: [
+                    [{
+                        type: "entity",
+                        key: "synchronize",
+                    }]
+                ],
+                instance: [
+                    [{
+                        type: "instance",
+                        key: "validate",
+                        authorization: ['4']
+                    }]
+                ],
             },
-            {
-                type: "instance",
-                key: "validate",
-                authorization: ['4']
-            }],
             instanceIdAttribute: 'id'
         };
         $entityList.data = {
@@ -790,65 +805,45 @@ describe('entity-list', ()=>{
         };
 
         expect($entityList.commandsByInstanceId).toEqual({
-            '4': [{
+            '4': [[{
                 type: "instance",
                 key: "validate",
                 authorization: ['4']
-            }]
+            }]],
+            '6': [[]]
         });
-    });
-
-    test('no instance commands', async ()=>{
-        let $entityList = await createVm();
-
-        $entityList.config = {
-            commands: [
-                {
-                    type: "entity",
-                    key: "synchronize",
-                }
-            ],
-            instanceIdAttribute: 'id'
-        };
-        $entityList.data = {
-            items: [{id: '4'}, {id: '6'}]
-        };
-
-        expect($entityList.noInstanceCommands).toBe(true);
-
-        $entityList.config.commands.push({
-            type: "instance",
-            key: "validate",
-            authorization: ['5']
-        });
-
-        expect($entityList.noInstanceCommands).toBe(true);
-
-        Vue.set($entityList.config.commands[1],'authorization',['6']);
-
-        expect($entityList.noInstanceCommands).toBe(false);
     });
 
     test('command forms', async ()=>{
         let $entityList = await createVm();
 
         $entityList.config = {
-            commands: [{
-                key: 'synchronize',
-                form: {
-                    fields: { title:{} },
-                    data: {},
-                    layout: [[ { key: 'title' }]]
-                }
-            }]
+            commands: {
+                entity: [
+                    [{
+                        key: 'synchronize',
+                        form: {
+                            fields: { title:{} },
+                            data: {},
+                            layout: [[ { key: 'title' }]]
+                        }
+                    }]
+                ],
+                instance: [
+                    [{ key: 'command2', form: { } }]
+                ]
+            }
         };
 
-        expect($entityList.commandForms).toEqual([{
-            key: 'synchronize',
-            fields: { title:{} },
-            data: {},
-            layout: { tabs: [{ columns: [{ fields: [[ { key: 'title' } ]] }] }] }
-        }]);
+        expect($entityList.commandForms).toEqual([
+            {
+                key: 'synchronize',
+                fields: { title:{} },
+                data: {},
+                layout: { tabs: [{ columns: [{ fields: [[ { key: 'title' } ]] }] }] }
+            },
+            expect.objectContaining({ key: 'command2' })
+        ]);
     });
 
     test('mount', async ()=>{
@@ -886,7 +881,7 @@ describe('entity-list', ()=>{
                 filters: [{ key:'age', 'default':4 }],
                 defaultSortDir: 'desc',
                 defaultSort: 'title',
-                commands: [],
+                commands: {},
             },
             authorizations: {
                 view: false, update: false
@@ -917,7 +912,11 @@ describe('entity-list', ()=>{
                 filters: [{ key:'age', 'default':5 }, { key:'date', multiple: true }],
                 defaultSortDir: 'desc',
                 defaultSort: 'title',
-                commands: [{ key:'synchronize', authorization:[] }]
+                commands: {
+                    instance: [
+                        [{ key:'synchronize', authorization:[] }]
+                    ],
+                },
             },
             authorizations: {
                 view: false, update: false
@@ -942,7 +941,7 @@ describe('entity-list', ()=>{
         $entityList.actionsBus.$on('setup', setupEmitted);
 
         $entityList.config = {
-            commands: [],
+            commands: {},
             reorderable: false,
             searchable: false
         };
@@ -974,11 +973,14 @@ describe('entity-list', ()=>{
 
         $entityList.config = {
             filters: [{ key:'age' }],
-            commands: [
-                { type:'instance' },
-                { type:'entity', authorization: false },
-                { type:'entity', authorization: true }
-            ],
+            commands: {
+                instance: [
+                    [{ type:'instance' }]
+                ],
+                entity: [
+                    [{type: 'entity', authorization: false}], [{type: 'entity', authorization: true}]
+                ],
+            },
             searchable: true,
             reorderable: true
         };
@@ -986,11 +988,13 @@ describe('entity-list', ()=>{
         $entityList.authorizations = {
             create: true, update: false
         };
-        $entityList.filtersValue = { age: 4 }
+        $entityList.filtersValue = { age: 4 };
         $entityList.setupActionBar();
         expect(setupEmitted).toHaveBeenLastCalledWith(expect.objectContaining({
             filters: [{ key:'age' }],
-            commands: [{type:'entity', authorization: true}],
+            commands: [
+                [], [{type:'entity', authorization: true}]
+            ],
             filtersValue: $entityList.filtersValue,
             searchable: true,
             showCreateButton: true,
@@ -1076,12 +1080,12 @@ describe('entity-list', ()=>{
         };
         let { stateStyle } = $entityList;
         expect(stateStyle({ item: { visibility:'active' } })).toEqual({
-            fill: 'green', stroke: 'green'
+            background: 'green'
         });
         expect(stateStyle({ item: { visibility:'inactive' } })).toEqual('');
 
         expect(stateStyle({ value:'active' })).toEqual({
-            fill: 'green', stroke: 'green'
+            background: 'green'
         });
         expect(stateStyle({ value:'inactive' })).toEqual('');
     });
@@ -1120,13 +1124,17 @@ describe('entity-list', ()=>{
         let $entityList = await createVm();
         $entityList.config = {
             instanceIdAttribute: 'id',
-            commands:[{ type:'instance', authorization: [3] }]
+            commands: {
+                instance: [[{ type:'instance', authorization: [3] }]]
+            },
         };
         $entityList.data = {
             items: [{ id: 3 }]
         };
         let { instanceCommands } = $entityList;
-        expect(instanceCommands({ id: 3 })).toEqual([{ type: 'instance', authorization:[3] }]);
+        expect(instanceCommands({ id: 3 })).toEqual([
+            [{ type: 'instance', authorization:[3] }]
+        ]);
     });
 
     test('row has link', async () => {
@@ -1329,17 +1337,24 @@ describe('entity-list', ()=>{
         $entityList.mount({
             data: { items:[] },
             config: {
-                commands:[{
-                    type: "entity",
-                    key: "update",
-                    authorization: [],
-                    form: {}
-                }, {
-                    type: "instance",
-                    key: "openForm",
-                    authorization: [],
-                    form: {}
-                }],
+                commands:{
+                    entity:[
+                        [{
+                            type: "entity",
+                            key: "update",
+                            authorization: [],
+                            form: {}
+                        }]
+                    ],
+                    instance:[
+                        [{
+                            type: "instance",
+                            key: "openForm",
+                            authorization: [],
+                            form: {}
+                        }]
+                    ],
+                },
                 instanceIdAttribute: 'id'
             }
         });
