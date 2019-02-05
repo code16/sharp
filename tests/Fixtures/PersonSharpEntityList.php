@@ -126,14 +126,12 @@ class PersonSharpEntityListAgeFilter implements EntityListFilter
 }
 
 class PersonSharpEntityListAgeMultipleFilter
-    extends PersonSharpEntityListAgeFilter
-    implements EntityListMultipleFilter
+    extends PersonSharpEntityListAgeFilter implements EntityListMultipleFilter
 {
 }
 
 class PersonSharpEntityListAgeRequiredFilter
-    extends PersonSharpEntityListAgeFilter
-    implements EntityListRequiredFilter
+    extends PersonSharpEntityListAgeFilter implements EntityListRequiredFilter
 {
     /**
      * @return string|int
@@ -144,8 +142,7 @@ class PersonSharpEntityListAgeRequiredFilter
     }
 }
 
-class PersonSharpEntityListReorderHandler
-    implements ReorderHandler
+class PersonSharpEntityListReorderHandler implements ReorderHandler
 {
     function reorder(array $ids)
     {
