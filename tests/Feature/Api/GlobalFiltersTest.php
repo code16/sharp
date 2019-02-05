@@ -84,6 +84,82 @@ class GlobalFiltersTest extends BaseApiTest
 
         $this->assertEquals($value, $context->globalFilterFor("mul_test"));
     }
+
+    /** @test */
+    function we_can_set_a_global_filter_value_via_the_endpoint()
+    {
+        $this->buildTheWorld();
+        $context = app(SharpContext::class);
+
+        config()->set("sharp.global_filters.test", GlobalFiltersTestGlobalFilter::class);
+
+        $this
+            ->postJson('/sharp/api/filters/test', ["value" => 5])
+            ->assertOK();
+
+        $this->json('get', '/sharp/api/form/person/50');
+
+        $this->assertEquals(5, $context->globalFilterFor("test"));
+
+        $this
+            ->postJson('/sharp/api/filters/test')
+            ->assertOK();
+
+        $this->json('get', '/sharp/api/form/person/50');
+
+        $this->assertNull($context->globalFilterFor("test"));
+    }
+
+    /** @test */
+    function we_cant_set_an_invalid_global_filter_value_via_the_endpoint()
+    {
+        $this->buildTheWorld();
+        $context = app(SharpContext::class);
+
+        config()->set("sharp.global_filters.test", GlobalFiltersTestGlobalFilter::class);
+
+        $this
+            ->postJson('/sharp/api/filters/test', ["value" => 20])
+            ->assertOK();
+
+        $this->json('get', '/sharp/api/form/person/50');
+
+        $this->assertNull($context->globalFilterFor("test"));
+    }
+
+    /** @test */
+    function we_can_get_global_filter_values_via_the_endpoint()
+    {
+        $this->buildTheWorld();
+
+        config()->set("sharp.global_filters.testA", GlobalFiltersTestGlobalFilter::class);
+        config()->set("sharp.global_filters.testB", GlobalFiltersTestGlobalRequiredFilter::class);
+        config()->set("sharp.global_filters.testC", GlobalFiltersTestGlobalMultipleFilter::class);
+
+        $this
+            ->getJson('/sharp/api/filters')
+            ->assertOK()
+            ->assertJson([
+                "filters" => [
+                    [
+                        "key" => "testA",
+                        "multiple" => false,
+                        "required" => false,
+                    ],
+                    [
+                        "key" => "testB",
+                        "multiple" => false,
+                        "required" => true,
+                        "default" => "default",
+                    ],
+                    [
+                        "key" => "testC",
+                        "multiple" => true,
+                        "required" => false,
+                    ]
+                ]
+            ]);
+    }
 }
 
 class GlobalFiltersTestGlobalFilter implements GlobalFilter
