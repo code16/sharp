@@ -1,6 +1,19 @@
 @import '../../mixins/entity-list';
 
 .SharpDataList {
+  &--reordering {
+    .SharpDataList__row:not(.SharpDataList__row--header) {
+      cursor: move;
+      background: darken($ui-01, 5%) !important;
+      border-bottom: 0;
+      border-color: transparent;
+      margin-bottom: .25rem;
+      .SharpDataList__row-link {
+        display: none;
+      }
+    }
+  }
+
   &__table {
     @include reset;
     //display: table;
@@ -48,7 +61,7 @@
       cursor: inherit;
     }
 
-    .SharpDataList__cols, .SharpDataList__row-extra {
+    .SharpDataList__cols, .SharpDataList__row-append  {
       padding: 1em 0;
     }
 
@@ -73,23 +86,12 @@
         left:0; right: 0; top: 0; bottom:0;
       }
     }
-    .SharpDataList__row-extra {
+    .SharpDataList__row-append {
       width: 5rem;
       @include media-breakpoint-down(sm) {
         padding-top: 0;
         width: 100%;
       }
-    }
-  }
-
-  &__row--reorder {
-    cursor: move;
-    background: darken($ui-01, 5%) !important;
-    border-bottom: 0;
-    border-color: transparent;
-    margin-bottom: .25rem;
-    .SharpDataList__row-link {
-      display: none;
     }
   }
 

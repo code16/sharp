@@ -1,84 +1,94 @@
 <template>
     <div>
-        <SharpActionBarList
-            :results-count="resultsCount"
-            :search="search"
-            :filters="filters"
-            :filters-value="filtersValue"
-            :commands="allowedEntityCommands"
-            :forms="multiforms"
-            :reorder-active="reorderActive"
-            :can-create="canCreate"
-            :can-reorder="canReorder"
-            :can-search="canSearch"
-            @search-change="handleSearchChanged"
-            @search-submit="handleSearchSubmitted"
-            @filter-change="handleFilterChanged"
-            @reorder-click="handleReorderButtonClicked"
-            @reorder-submit="handleReorderSubmitted"
-            @command="handleEntityCommandRequested"
-            @create="handleCreateButtonClicked"
-        />
+        <template v-if="ready">
+            <SharpActionBarList
+                :count="itemsCount"
+                :search="search"
+                :filters="filters"
+                :filters-value="filtersValue"
+                :commands="allowedEntityCommands"
+                :forms="multiforms"
+                :reorder-active="reorderActive"
+                :can-create="canCreate"
+                :can-reorder="canReorder"
+                :can-search="canSearch"
+                @search-change="handleSearchChanged"
+                @search-submit="handleSearchSubmitted"
+                @filter-change="handleFilterChanged"
+                @reorder-click="handleReorderButtonClicked"
+                @reorder-submit="handleReorderSubmitted"
+                @command="handleEntityCommandRequested"
+                @create="handleCreateButtonClicked"
+            />
 
-        <SharpDataList
-            :items="items"
-            :columns="columns"
-            :page="page"
-            :paginated="paginated"
-            :total-count="totalCount"
-            :page-size="pageSize"
-            :reorder-active="reorderActive"
-
-            @change="handleReorderedItemsChanged"
-            @sort-change="handleSortChanged"
-        >
-            <template slot="empty">
-                {{ l('entity_list.empty_text') }}
-            </template>
-            <template slot="row-extra" slot-scope="{ item }">
-                <div class="row">
-                    <template v-if="instanceHasState(item)">
-                        <div class="col-auto col-md-12 my-1">
-                            <SharpDropdown class="SharpEntityList__state-dropdown" :disabled="!instanceHasStateAuthorization(item)">
-                                <template slot="text">
-                                    <SharpStateIcon :color="instanceStateIconColor(item)" />
-                                    <span class="text-truncate">
-                                    {{ instanceStateLabel(item) }}
-                                </span>
-                                </template>
-                                <SharpDropdownItem
-                                    v-for="stateOptions in config.state.values"
-                                    @click="handleInstanceStateChanged(item, stateOptions.value)"
-                                    :key="stateOptions.value"
-                                >
-                                    <SharpStateIcon :color="stateOptions.color" />&nbsp;
-                                    {{ state.label }}
-                                </SharpDropdownItem>
-                            </SharpDropdown>
-                        </div>
-                    </template>
-                    <template v-if="instanceHasCommands(item)">
-                        <div class="col-auto col-md-12 pl-2 pl-md-0 my-1">
-                            <SharpCommandsDropdown
-                                class="SharpEntityList__commands-dropdown"
-                                :commands="instanceCommands(item)"
-                                @select="handleInstanceCommandRequested($event, item)"
-                            >
-                                <template slot="text">
-                                    {{ l('entity_list.commands.instance.label') }}
-                                </template>
-                            </SharpCommandsDropdown>
-                        </div>
-                    </template>
-                </div>
-            </template>
-        </SharpDataList>
+            <SharpDataList
+                :items="items"
+                :columns="columns"
+                :page="page"
+                :paginated="paginated"
+                :total-count="totalCount"
+                :page-size="pageSize"
+                :reorder-active="reorderActive"
+                :sort="sortedBy"
+                :dir="sortDir"
+                @change="handleReorderedItemsChanged"
+                @sort-change="handleSortChanged"
+            >
+                <template slot="empty">
+                    {{ l('entity_list.empty_text') }}
+                </template>
+                <template slot="item" slot-scope="{ item }">
+                    <SharpDataListRow :url="instanceFormUrl(item)" :columns="columns" :row="item">
+                        <template v-if="instanceHasState(item) && instanceHasCommands(item)">
+                            <template slot="append">
+                                <div class="row">
+                                    <template v-if="instanceHasState(item)">
+                                        <div class="col-auto col-md-12 my-1">
+                                            <SharpDropdown class="SharpEntityList__state-dropdown" :disabled="!instanceHasStateAuthorization(item)">
+                                                <template slot="text">
+                                                    <SharpStateIcon :color="instanceStateIconColor(item)" />
+                                                    <span class="text-truncate">
+                                                    {{ instanceStateLabel(item) }}
+                                                </span>
+                                                </template>
+                                                <SharpDropdownItem
+                                                    v-for="stateOptions in config.state.values"
+                                                    @click="handleInstanceStateChanged(item, stateOptions.value)"
+                                                    :key="stateOptions.value"
+                                                >
+                                                    <SharpStateIcon :color="stateOptions.color" />&nbsp;
+                                                    {{ stateOptions.label }}
+                                                </SharpDropdownItem>
+                                            </SharpDropdown>
+                                        </div>
+                                    </template>
+                                    <template v-if="instanceHasCommands(item)">
+                                        <div class="col-auto col-md-12 my-1">
+                                            <SharpCommandsDropdown
+                                                class="SharpEntityList__commands-dropdown"
+                                                :commands="instanceCommands(item)"
+                                                @select="handleInstanceCommandRequested($event, item)"
+                                            >
+                                                <template slot="text">
+                                                    {{ l('entity_list.commands.instance.label') }}
+                                                </template>
+                                            </SharpCommandsDropdown>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+                        </template>
+                    </SharpDataListRow>
+                </template>
+            </SharpDataList>
+        </template>
     </div>
 </template>
 
 <script>
     import SharpActionBarList from '../action-bar/ActionBarList.vue';
     import SharpDataList from '../list/DataList.vue';
+    import SharpDataListRow from '../list/DataListRow.vue';
     import SharpStateIcon from '../list/StateIcon.vue';
     import SharpCommandsDropdown from '../list/CommandsDropdown.vue';
     import { SharpDropdown, SharpDropdownItem } from "../ui";
@@ -93,6 +103,7 @@
         components: {
             SharpActionBarList,
             SharpDataList,
+            SharpDataListRow,
 
             SharpStateIcon,
             SharpCommandsDropdown,
@@ -121,11 +132,27 @@
             entityKey() {
                 return this.$route.params.id;
             },
+            hasMultiforms() {
+                return !!this.forms;
+            },
+            apiParams() {
+                return this.$route.query;
+            },
+            apiPath() {
+                return `list/${this.entityKey}`;
+            },
+            filterParams() {
+                return Object.keys(this.filtersValue || {}).reduce((res, filterKey)=>{
+                    if(this.filtersValue[filterKey] != null)
+                        res[`filter_${filterKey}`] = this.filtersValue[filterKey];
+                    return res;
+                },{});
+            },
 
             /**
              * Action bar computed data
              */
-            resultsCount() {
+            itemsCount() {
                 return (this.data.items || []).length;
             },
             filters() {
@@ -136,7 +163,7 @@
                     .map(group => group.filter(command => command.authorization))
             },
             multiforms() {
-                return this.config.forms;
+                return this.forms && Object.values(this.forms);
             },
             canCreate() {
                 return this.authorizations.create;
@@ -153,6 +180,9 @@
             /**
              * Data list props
              */
+            items() {
+                return this.data.items;
+            },
             columns() {
                 return this.layout.map(columnLayout => ({
                     ...columnLayout,
@@ -179,7 +209,8 @@
             handleSearchSubmitted() {
                 this.$router.push({ query: { ...this.$route.query, search:this.search } });
             },
-            handleFilterChanged() {
+            handleFilterChanged(key, value) {
+                this.$set(this.filtersValue, key, value);
                 this.$router.push({ query: { ...this.$route.query, ...this.filterParams }});
             },
             handleReorderButtonClicked() {
@@ -202,7 +233,7 @@
             },
             handleCreateButtonClicked(multiform) {
                 const formUrl = multiform
-                    ? this.formUrl(multiform.key)
+                    ? this.formUrl({ formKey:multiform.key })
                     : this.formUrl();
 
                 location.href = formUrl;
@@ -264,6 +295,19 @@
                 }
                 return this.config.state.values.find(stateValue => stateValue.value === instanceState);
             },
+            instanceForm(instance) {
+                const instanceId = this.instanceId(instance);
+                return this.multiforms.find(form => form.instances.includes(instanceId));
+            },
+            instanceFormUrl(instance) {
+                const instanceId = this.instanceId(instance);
+                if(this.hasMultiforms) {
+                    const form = this.instanceForm(instance);
+                    return this.formUrl({ formKey:form.key, instanceId });
+                }
+                return this.formUrl({ instanceId });
+            },
+
 
             filterByKey(key) {
                 return this.config.filters.find(filter => filter.key === key);
@@ -345,8 +389,8 @@
             /**
              * Helpers
              */
-            formUrl(multiformKey) {
-                return `${BASE_URL}/form/${this.entityKey}${multiformKey ? `:${multiformKey}` : ''}`
+            formUrl({ formKey, instanceId }={}) {
+                return `${BASE_URL}/form/${this.entityKey}${formKey?`:${formKey}`:''}${instanceId?`/${instanceId}`:''}`
             },
             tryParseNumber(val) {
                 if(Array.isArray(val)) {
@@ -379,15 +423,15 @@
                 !this.sortedBy && (this.sortedBy = this.config.defaultSort);
 
                 this.filtersValue = this.config.filters.reduce((res, filter) => {
-                    res[filter.key] = this.filterValueOrDefault(this.filtersValue[filter.key], filter);
+                    res[filter.key] = this.filterValueOrDefault((this.filtersValue||{})[filter.key], filter);
                     return res;
                 }, {});
             },
             bindParams(params) {
                 let { search, page, sort, dir, ...dynamicParams } = params;
-                this.actionsBus.$emit('searchChanged', search, { isInput: false });
 
-                page && (this.page = parseInt(page));
+                this.search = search;
+                page && (this.page = Number(page));
                 sort && (this.sortedBy = sort);
                 dir && (this.sortDir = dir);
 

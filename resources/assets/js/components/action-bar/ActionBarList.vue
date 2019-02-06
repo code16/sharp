@@ -1,10 +1,10 @@
 <template>
-    <sharp-action-bar class="SharpActionBarList" :class="{'SharpActionBarList--search-active':searchActive}" :ready="ready">
+    <sharp-action-bar class="SharpActionBarList" :class="{'SharpActionBarList--search-active':searchActive}" :ready="true">
         <template slot="left">
-            <span class="text-content">{{ itemsCount }} {{ l('action_bar.list.items_count') }}</span>
+            <span class="text-content">{{ count }} {{ l('action_bar.list.items_count') }}</span>
         </template>
         <template slot="right">
-            <div v-if="searchable && !reorderActive" class="SharpActionBar__search SharpSearch SharpSearch--lg" :class="{'SharpSearch--active':searchActive}" role="search">
+            <div v-if="canSearch && !reorderActive" class="SharpActionBar__search SharpSearch SharpSearch--lg" :class="{'SharpSearch--active':searchActive}" role="search">
                 <form @submit.prevent="handleSearchSubmitted">
                     <label id="ab-search-label" class="SharpSearch__label" for="ab-search-input">{{ l('action_bar.list.search.placeholder') }}</label>
                     <input class="SharpSearch__input"
@@ -30,7 +30,7 @@
                     </svg>
                 </form>
             </div>
-            <template v-if="showReorderButton">
+            <template v-if="canReorder">
                 <template v-if="reorderActive">
                     <button class="SharpButton SharpButton--secondary-accent" @click="handleReorderButtonClicked">
                         {{ l('action_bar.list.reorder_button.cancel') }}
@@ -47,7 +47,7 @@
             </template>
 
             <template v-if="!reorderActive">
-                <template v-if="showCreateButton">
+                <template v-if="canCreate">
                     <sharp-dropdown v-if="hasForms" class="SharpActionBar__forms-dropdown" :text="l('action_bar.list.forms_dropdown')">
                         <sharp-dropdown-item v-for="(form,key) in forms" @click="handleCreateFormSelected(form)" :key="key" >
                             <sharp-item-visual :item="form" icon-class="fa-fw"/>{{ form.label }}
@@ -116,12 +116,12 @@
         mixins: [Localization],
 
         props: {
-            resultsCount: Number,
+            count: Number,
             search: String,
             filters: Array,
             filtersValue: Object,
             commands: Array,
-            forms: Object,
+            forms: Array,
 
             canCreate: Boolean,
             canReorder: Boolean,
@@ -137,7 +137,7 @@
         },
         computed: {
             hasForms() {
-                return this.forms && Object.keys(this.forms).length > 0;
+                return this.forms && this.forms.length > 0;
             }
         },
         methods: {

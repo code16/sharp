@@ -12,7 +12,7 @@
                 </div>
             </div>
         </div>
-        <div class="container">
+        <div>
             <div class="row">
                 <div class="col">
                     <div class="SharpActionBar__extras">
