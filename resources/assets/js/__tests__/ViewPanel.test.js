@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import ViewPanel from '../components/list/ViewPanel.vue';
+import ViewPanel from '../components/commands/CommandViewPanel.vue';
 
 describe('view-panel', ()=>{
     let wrapper;

@@ -67,7 +67,7 @@
                                             <SharpCommandsDropdown
                                                 class="SharpEntityList__commands-dropdown"
                                                 :commands="instanceCommands(item)"
-                                                @select="handleInstanceCommandRequested($event, item)"
+                                                @select="handleInstanceCommandRequested(item, $event)"
                                             >
                                                 <template slot="text">
                                                     {{ l('entity_list.commands.instance.label') }}
@@ -82,6 +82,9 @@
                 </template>
             </SharpDataList>
         </template>
+
+        <SharpCommandFormModal :form="commandCurrentForm" ref="commandForm" />
+        <SharpCommandViewPanel :content="commandViewContent" @close="handleCommandViewPanelClosed" />
     </div>
 </template>
 
@@ -91,15 +94,20 @@
     import SharpDataListRow from '../list/DataListRow.vue';
     import SharpStateIcon from '../list/StateIcon.vue';
     import SharpCommandsDropdown from '../list/CommandsDropdown.vue';
+    import SharpCommandFormModal from '../commands/CommandFormModal.vue';
+    import SharpCommandViewPanel from '../commands/CommandViewPanel.vue';
+
     import { SharpDropdown, SharpDropdownItem } from "../ui";
+
 
     import { Localization } from '../../mixins';
     import DynamicViewMixin from '../DynamicViewMixin';
+    import withCommands from '../../mixins/page/with-commands';
 
     import { BASE_URL } from "../../consts";
 
     export default {
-        mixins: [DynamicViewMixin, Localization],
+        mixins: [DynamicViewMixin, Localization, withCommands],
         components: {
             SharpActionBarList,
             SharpDataList,
@@ -110,6 +118,9 @@
 
             SharpDropdown,
             SharpDropdownItem,
+
+            SharpCommandFormModal,
+            SharpCommandViewPanel,
         },
         data() {
             return {
@@ -229,7 +240,9 @@
                 });
             },
             handleEntityCommandRequested(command) {
-                this.sendCommand(command);
+                this.handleCommandRequested(command, {
+                    endpoint: this.commandEndpoint(command.key),
+                });
             },
             handleCreateButtonClicked(multiform) {
                 const formUrl = multiform
@@ -337,30 +350,6 @@
                     }
                 })
             },
-            async sendCommand({ key, form, confirmation, fetch_initial_data }, instance) {
-                if(form) {
-                    this.selectedInstance = instance;
-                    this.currentFormData = fetch_initial_data ? await this.getCommandFormData(key, instance) : {};
-                    this.$set(this.showFormModal,key,true);
-                    return;
-                }
-                if(confirmation) {
-                    await new Promise(resolve => {
-                        this.actionsBus.$emit('showMainModal', {
-                            title: this.l('modals.command.confirm.title'),
-                            text: confirmation,
-                            okCallback: resolve,
-                        });
-                    });
-                }
-                try {
-                    let endpoint = this.commandEndpoint(key, instance);
-                    let response = await this.axiosInstance.post(endpoint, { query: this.apiParams }, { responseType: 'blob' });
-                    await this.handleCommandResponse(response);
-                } catch(e) {
-                    console.error(e);
-                }
-            },
 
 
             /**
@@ -370,7 +359,10 @@
                 this.setState(instance, state);
             },
             handleInstanceCommandRequested(instance, command) {
-                this.sendCommand(instance, command);
+                const instanceId = this.instanceId(instance);
+                this.handleCommandRequested(command, {
+                    endpoint: this.commandEndpoint(command.key, instanceId),
+                });
             },
             handleSortChanged({ prop, dir }) {
                 this.$router.push({
@@ -403,6 +395,32 @@
                 return val != null && val !== '' ? this.tryParseNumber(val) : (filter.default || (filter.multiple?[]:null));
             },
 
+            /**
+             * Commands
+             */
+            initCommands() {
+                this.addCommandActionHandlers({
+                    'refresh': this.handleRefreshCommand
+                });
+            },
+            handleCommandRequested(command, { endpoint }) {
+                const query = this.$route.query;
+
+                this.sendCommand(command, {
+                    postCommand: () => this.axiosInstance.post(endpoint, { query }, { responseType:'blob' }),
+                    postForm: data => this.axiosInstance.post(endpoint, { query, data }, { responseType:'blob' }),
+                    getFormData: () => this.axiosInstance.get(`${endpoint}/data`, { params:query }).then(response => response.data.data),
+                });
+            },
+            handleRefreshCommand(data) {
+                const findInstance = (list, instance) => list.find(item => this.instanceId(instance) === this.instanceId(item));
+                this.data.items = this.data.items.map(item =>
+                     findInstance(data.items, item) || item
+                );
+            },
+            commandEndpoint(commandKey, instanceId) {
+                return `${this.apiPath}/command/${commandKey}${instanceId?`/${instanceId}`:''}`;
+            },
 
             /**
              * Data
@@ -456,6 +474,7 @@
         },
         created() {
             this.init();
+            this.initCommands();
         }
     }
 </script>

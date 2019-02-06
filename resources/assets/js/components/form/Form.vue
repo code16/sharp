@@ -234,15 +234,12 @@
             redirectToList({ restoreContext=true }={}) {
                 location.href = `${BASE_URL}/list/${this.baseEntityKey}${restoreContext?'?restore-context=1':''}`
             },
-        },
-        actions: {
-            async submit({ entityKey, endpoint, dataFormatter=noop, postConfig }={}) {
-                if(entityKey && entityKey !== this.entityKey || this.pendingJobs.length) return;
-
+            async submit({ postFn }={}) {
                 try {
-                    const response = await this.post(endpoint, dataFormatter(this), postConfig);
+                    const response = postFn ? await postFn(this.data) : await this.post();
                     if(this.independant) {
-                        this.$emit('submitted', response);
+                        this.$emit('submit', response);
+                        return response;
                     }
                     else if(response.data.ok) {
                         this.mainLoading.$emit('show');
@@ -251,8 +248,12 @@
                 }
                 catch(error) {
                     this.handleError(error);
+                    return Promise.reject(error);
                 }
-            },
+            }
+        },
+        actions: {
+            submit: 'submit',
             async 'delete'() {
                 try {
                     await this.axiosInstance.delete(this.apiPath);
