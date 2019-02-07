@@ -33,6 +33,7 @@
                 :dir="sortDir"
                 @change="handleReorderedItemsChanged"
                 @sort-change="handleSortChanged"
+                @page-change="handlePageChanged"
             >
                 <template slot="empty">
                     {{ l('entity_list.empty_text') }}
@@ -233,7 +234,7 @@
             },
             handleReorderSubmitted() {
                 this.axiosInstance.post(`${this.apiPath}/reorder`, {
-                    instances: this.reorderedItems.map(item => item[this.idAttr])
+                    instances: this.reorderedItems.map(item => this.instanceId(item))
                 }).then(() => {
                     this.$set(this.data, 'items', [ ...this.reorderedItems ]);
                     this.reorderedItems = null;
@@ -316,7 +317,7 @@
             instanceFormUrl(instance) {
                 const instanceId = this.instanceId(instance);
                 if(this.hasMultiforms) {
-                    const form = this.instanceForm(instance);
+                    const form = this.instanceForm(instance) || {};
                     return this.formUrl({ formKey:form.key, instanceId });
                 }
                 return this.formUrl({ instanceId });
@@ -377,6 +378,14 @@
             },
             handleReorderedItemsChanged(items) {
                 this.reorderedItems = items;
+            },
+            handlePageChanged(page) {
+                this.$router.push({
+                    query: {
+                        ...this.$router.query,
+                        page
+                    }
+                });
             },
 
             /**

@@ -46,7 +46,7 @@
                     :min-page-end-buttons="3"
                     :limit="7"
                     :value="page"
-                    @change="pageChanged"
+                    @change="handlePageChanged"
                 />
             </div>
         </template>
@@ -121,6 +121,9 @@
                         ? (this.dir === 'asc' ? 'desc' : 'asc')
                         : 'asc'
                 });
+            },
+            handlePageChanged(page) {
+                this.$emit('page-change', page);
             },
             updateLayout() {
                 const append = this.$el.querySelector('.SharpDataList__row-append');
