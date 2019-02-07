@@ -465,7 +465,7 @@
 
                 for(let paramKey of Object.keys(dynamicParams)) {
                     let paramValue = dynamicParams[paramKey];
-                    if(paramKey.startsWith('filter_')) {
+                    if(/^filter_/.test(paramKey)) {
                         const filterKey = paramKey.replace('filter_', '');
                         const filter = this.filterByKey(filterKey);
 
