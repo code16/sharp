@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EntityListPage can mount entity list 1`] = `
+<div class="SharpEntityListPage">
+	<sharpactionbarlist-stub count="1" search="" filters="" commands=""></sharpactionbarlist-stub>
+	<div class="MOCKED_SharpDataList">
+		<div class="MOCKED_SharpDataListRow"></div>
+	</div>
+	<sharpcommandformmodal-stub></sharpcommandformmodal-stub>
+	<sharpcommandviewpanel-stub></sharpcommandviewpanel-stub>
+</div>
+`;

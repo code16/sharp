@@ -136,6 +136,13 @@
 
                 reorderActive: false,
                 reorderedItems: null,
+
+                containers: null,
+                layout: null,
+                data: null,
+                config: null,
+                authorizations: null,
+                forms: null,
             }
         },
         watch: {
