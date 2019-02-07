@@ -2,13 +2,12 @@
 
 @section("content")
 
-    <div id="sharp-app" class="Sharp__dashboard-page">
+    <div id="sharp-app" class="dashboard">
         @include("sharp::partials._menu")
 
         <sharp-action-view context="dashboard" v-cloak>
-            <sharp-dashboard dashboard-key="{{ $dashboardKey }}"></sharp-dashboard>
+            <router-view></router-view>
         </sharp-action-view>
-
     </div>
 
 @endsection

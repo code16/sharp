@@ -1,5 +1,5 @@
 <template>
-    <sharp-action-bar class="SharpActionBarList" :class="{'SharpActionBarList--search-active':searchActive}" :ready="true">
+    <sharp-action-bar class="SharpActionBarList" :class="{'SharpActionBarList--search-active':searchActive}">
         <template slot="left">
             <span class="text-content">{{ count }} {{ l('action_bar.list.items_count') }}</span>
         </template>
@@ -99,7 +99,7 @@
     import SharpDropdown from '../dropdown/Dropdown';
     import SharpDropdownItem from '../dropdown/DropdownItem';
     import SharpItemVisual from '../ui/ItemVisual';
-    import SharpCommandsDropdown from '../list/CommandsDropdown';
+    import SharpCommandsDropdown from '../commands/CommandsDropdown';
 
     export default {
         name: 'SharpActionBarList',

@@ -1,20 +1,26 @@
+import {
+    getDashboard,
+    postDashboardCommand,
+    getDashboardCommandFormData,
+} from "../../api";
 import filters from './filters';
-import { getDashboard } from "../../api";
+import commands from './commands';
 
-export const SET_READY = 'SET_READY';
 export const UPDATE = 'UPDATE';
+export const SET_DASHBOARD_KEY = 'SET_DASHBOARD_KEY';
 
 export default {
     namespaced: true,
     modules: {
-        filters
+        filters,
+        commands,
     },
     state: {
-        ready: false,
+        dashboardKey: null,
         data: null,
         widgets: null,
         config: null,
-        layout: null
+        layout: null,
     },
     mutations: {
         [UPDATE](state, { data, layout, widgets, config }) {
@@ -23,27 +29,56 @@ export default {
             state.layout = layout;
             state.config = config;
         },
-        [SET_READY](state, ready) {
-            state.ready = ready;
+        [SET_DASHBOARD_KEY](state, dashboardKey) {
+            state.dashboardKey = dashboardKey;
         }
     },
     actions: {
-        async get({ state, commit, dispatch, getters }, { dashboardKey, filterValues }) {
+        update({ commit, dispatch }, { data, widgets, layout, config, filterValues }) {
+            commit(UPDATE, {
+                data,
+                widgets,
+                layout,
+                config,
+            });
+            return Promise.all([
+                dispatch('filters/update', {
+                    filters: config.filters,
+                    values: filterValues
+                }),
+                dispatch('commands/update', {
+                    commands: config.commands
+                })
+            ]);
+        },
+        async get({ state, dispatch, getters }, { filterValues }) {
             const data = await getDashboard({
-                dashboardKey,
+                dashboardKey: state.dashboardKey,
                 filters: getters['filters/getQueryParams'](filterValues)
             });
-            commit(UPDATE, {
+            await dispatch('update', {
                 data: data.data,
                 widgets: data.widgets,
                 layout: data.layout,
-                config: data.config
+                config: data.config,
+                filterValues,
             });
-            await dispatch('filters/update', {
-                filters: data.config.filters,
-                values: filterValues
+        },
+        postCommand({ state }, { data, query }) {
+            return postDashboardCommand({
+                dashboardKey: state.dashboardKey,
+                data,
+                query,
             });
-            commit(SET_READY, true);
+        },
+        getCommandFormData({ state }, { query }) {
+            return getDashboardCommandFormData({
+                dashboardKey: state.dashboardKey,
+                query,
+            });
+        },
+        setDashboardKey({ commit }, dashboardKey) {
+            commit(SET_DASHBOARD_KEY, dashboardKey);
         }
     }
 }

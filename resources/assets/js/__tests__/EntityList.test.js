@@ -2,7 +2,7 @@ import Vue from 'vue';
 import EntityList from '../components/list/EntityList.vue';
 import Dropdown from '../components/dropdown/Dropdown.vue';
 import DropdownItem from '../components/dropdown/DropdownItem.vue';
-import CommandsDropdown from '../components/list/CommandsDropdown.vue';
+import CommandsDropdown from '../components/commands/CommandsDropdown.vue';
 import StateIcon from '../components/list/StateIcon.vue';
 import Modal from '../components/Modal.vue';
 

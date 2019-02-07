@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="SharpEntityListPage">
         <template v-if="ready">
             <SharpActionBarList
                 :count="itemsCount"
@@ -93,7 +93,7 @@
     import SharpDataList from '../list/DataList.vue';
     import SharpDataListRow from '../list/DataListRow.vue';
     import SharpStateIcon from '../list/StateIcon.vue';
-    import SharpCommandsDropdown from '../list/CommandsDropdown.vue';
+    import SharpCommandsDropdown from '../commands/CommandsDropdown.vue';
     import SharpCommandFormModal from '../commands/CommandFormModal.vue';
     import SharpCommandViewPanel from '../commands/CommandViewPanel.vue';
 
@@ -107,6 +107,7 @@
     import { BASE_URL } from "../../consts";
 
     export default {
+        name: 'SharpEntityListPage',
         mixins: [DynamicViewMixin, Localization, withCommands],
         components: {
             SharpActionBarList,

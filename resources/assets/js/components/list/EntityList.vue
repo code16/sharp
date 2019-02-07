@@ -128,7 +128,7 @@
     import SharpForm from '../form/Form';
     import SharpViewPanel from '../commands/CommandViewPanel';
     import SharpStateIcon from './StateIcon';
-    import SharpCommandsDropdown from './CommandsDropdown';
+    import SharpCommandsDropdown from '../commands/CommandsDropdown';
 
     import Draggable from 'vuedraggable';
 

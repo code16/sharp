@@ -14,6 +14,30 @@ export default {
                 layout: { tabs: [{ columns: [{fields:form.layout}] }] }
             };
         },
+        downloadCommandFile(response) {
+            let $link = document.createElement('a');
+            this.$el.appendChild($link);
+            $link.href = URL.createObjectURL(response.data);
+            $link.download = getFileName(response.headers);
+            $link.click();
+        },
+        async handleCommandResponse(response) {
+            if(response.data.type === 'application/json') {
+                const data = await parseBlobJSONContent(response.data);
+                const handler = this.commandHandlers[data.action];
+
+                if(handler) {
+                    handler(data);
+                }
+            } else {
+                this.downloadCommandFile(response);
+            }
+        },
+        async postCommandForm({ postFn }) {
+            const response = await this.$refs.commandForm.submit({ postFn });
+            await this.handleCommandResponse(response);
+            this.commandCurrentForm = null;
+        },
         async showCommandForm(command, { postForm, getFormData }) {
             const data = command.fetch_initial_data ? await getFormData() : {};
             const post = () => this.postCommandForm({ postFn:postForm });
@@ -48,19 +72,7 @@ export default {
             }
         },
 
-        async handleCommandResponse(response) {
-            if(response.data.type === 'application/json') {
-                const data = await parseBlobJSONContent(response.data);
-                const handler = this.commandHandlers[data.action];
-
-                if(handler) {
-                    handler(data);
-                }
-            } else {
-                this.downloadCommandFile(response);
-            }
-        },
-
+        /** mixin API */
         addCommandActionHandlers(handlers) {
             this.commandHandlers = {
                 ...this.commandHandlers,
@@ -68,6 +80,7 @@ export default {
             };
         },
 
+        /** Command actions handlers */
         handleReloadCommand() {
             this.init();
         },
@@ -85,21 +98,9 @@ export default {
             window.location.href = data.link;
         },
 
+        /** Events */
         handleCommandViewPanelClosed() {
             this.commandViewContent = null;
-        },
-
-        async postCommandForm({ postFn }) {
-            const response = await this.$refs.commandForm.submit({ postFn });
-            await this.handleCommandResponse(response);
-            this.commandCurrentForm = null;
-        },
-        downloadCommandFile(response) {
-            let $link = document.createElement('a');
-            this.$el.appendChild($link);
-            $link.href = URL.createObjectURL(response.data);
-            $link.download = getFileName(response.headers);
-            $link.click();
         },
     },
     created() {

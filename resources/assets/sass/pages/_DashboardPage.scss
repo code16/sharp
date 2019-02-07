@@ -1,6 +1,12 @@
-.Sharp__dashboard-page {
+.dashboard {
   .Sharp__empty-view {
     height: 100vh;
     color: rgba($text-02, .5);
+  }
+
+  .SharpDashboardPage {
+    .row+.row {
+      margin-top: 1rem;
+    }
   }
 }

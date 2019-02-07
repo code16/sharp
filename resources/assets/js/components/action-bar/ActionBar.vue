@@ -35,7 +35,10 @@
     export default {
         name: 'SharpActionBar',
         props: {
-            ready: Boolean
+            ready: {
+                type: Boolean,
+                default: true,
+            }
         }
     }
 </script>
