@@ -11,15 +11,15 @@ export function getDashboard({ dashboardKey, filters }) {
     }).then(response => response.data);
 }
 
-export function postDashboardCommand({ dashboardKey, query, data }) {
-    return api.post(`dashboard/${dashboardKey}/command`, {
+export function postDashboardCommand({ dashboardKey, commandKey, query, data }) {
+    return api.post(`dashboard/${dashboardKey}/command/${commandKey}`, {
         query,
         data,
     }, { responseType: 'blob' });
 }
 
-export function getDashboardCommandFormData({ dashboardKey, query }) {
-    return api.get(`dashboard/${dashboardKey}/command/data`, {
+export function getDashboardCommandFormData({ dashboardKey, commandKey, query }) {
+    return api.get(`dashboard/${dashboardKey}/command/${commandKey}/data`, {
         params: {
             ...query,
         },

@@ -22,7 +22,7 @@
                 @select="handleCommandSelected"
             >
                 <div slot="text">
-                    <!--{{ l('entity_list.commands.entity.label') }}-->
+                    {{ l('dashboard.commands.dashboard.label') }}
                 </div>
             </SharpCommandsDropdown>
         </template>
@@ -52,7 +52,6 @@
                 filters: 'filters/filters',
                 filterValue: 'filters/value',
                 filterNextQuery: 'filters/nextQuery',
-                commandsForType: 'commands/forType'
             })
         },
         methods: {

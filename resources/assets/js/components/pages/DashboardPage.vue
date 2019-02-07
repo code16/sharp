@@ -68,9 +68,9 @@
             handleCommandRequested(command) {
                 const query = this.$route.query;
                 this.sendCommand(command, {
-                    postCommand: () => this.$store.dispatch('dashboard/postCommand', { query }),
-                    postForm: data => this.$store.dispatch('dashboard/postCommand', { query, data }),
-                    getFormData: () => this.$store.dispatch('dashboard/getCommandFormData', { query }),
+                    postCommand: () => this.$store.dispatch('dashboard/postCommand', { command, query }),
+                    postForm: data => this.$store.dispatch('dashboard/postCommand', { command, query, data }),
+                    getFormData: () => this.$store.dispatch('dashboard/getCommandFormData', { command, query }),
                 });
             },
             async init() {
