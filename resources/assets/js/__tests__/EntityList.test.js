@@ -28,7 +28,7 @@ function mockComputed(vm, computedName, value) {
     });
 }
 
-describe('entity-list', ()=>{
+describe.skip('entity-list', ()=>{
     Vue.use(MockI18n);
     MockI18n.mockLangFunction();
 

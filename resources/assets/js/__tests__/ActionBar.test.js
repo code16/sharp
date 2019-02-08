@@ -3,7 +3,7 @@ import ActionBar from '../components/action-bar/ActionBar';
 
 describe('action-bar', ()=>{
     test('can mount non ready ActionBar', ()=>{
-        expect(mount(ActionBar).html()).toMatchSnapshot();
+        expect(mount(ActionBar, { propsData: { ready: false } }).html()).toMatchSnapshot();
     });
     test('can mount ready ActionBar', ()=>{
         expect(mount(ActionBar, { propsData: { ready: true } }).html()).toMatchSnapshot();

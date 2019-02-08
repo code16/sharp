@@ -138,6 +138,9 @@
             downloadLinkBase() {
                 return `${API_PATH}/download/${this.entityKey}/${this.instanceId}`;
             },
+            listUrl() {
+                return `${BASE_URL}/list/${this.baseEntityKey}?restore-context=1`;
+            },
 
             localeSelectorErrors() {
                 return Object.keys(this.errors).reduce((res,errorKey)=>{
@@ -231,10 +234,13 @@
                     opType: this.isCreation ? 'create' : 'update'
                 });
             },
-            redirectToList({ restoreContext=true }={}) {
-                location.href = `${BASE_URL}/list/${this.baseEntityKey}${restoreContext?'?restore-context=1':''}`
+            redirectToList() {
+                location.href = this.listUrl;
             },
             async submit({ postFn }={}) {
+                if(this.pendingJobs.length) {
+                    return;
+                }
                 try {
                     const response = postFn ? await postFn(this.data) : await this.post();
                     if(this.independant) {
@@ -253,7 +259,9 @@
             }
         },
         actions: {
-            submit: 'submit',
+            submit() {
+                this.submit().catch(()=>{});
+            },
             async 'delete'() {
                 try {
                     await this.axiosInstance.delete(this.apiPath);
@@ -265,12 +273,6 @@
             },
             cancel() {
                 this.redirectToList();
-            },
-            reset({ entityKey }={}) {
-                if(entityKey && entityKey !== this.entityKey) return;
-
-                this.data = {};
-                this.errors = {};
             },
 
             setPendingJob({ key, origin, value:isPending }) {

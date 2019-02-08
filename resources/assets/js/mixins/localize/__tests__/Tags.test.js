@@ -16,8 +16,8 @@ describe('localize-select', ()=>{
     let wrapper;
     beforeEach(()=>{
         wrapper = mount({
-            mixins:[localizeTags],
-            render: h => h(null)
+            mixins: [localizeTags],
+            render() {}
         }, {
             provide: mockInjections({ locales:['en', 'fr'], localized: true })
         })

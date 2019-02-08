@@ -3,9 +3,9 @@
 exports[`store dashboard state matches snapshot 1`] = `
 Object {
   "config": null,
+  "dashboardKey": null,
   "data": null,
   "layout": null,
-  "ready": false,
   "widgets": null,
 }
 `;

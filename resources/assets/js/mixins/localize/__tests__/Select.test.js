@@ -8,7 +8,7 @@ describe('localize-select', ()=>{
     beforeEach(()=>{
         wrapper = mount({
             mixins:[localizeSelect],
-            render: h => h(null)
+            render() {}
         }, { provide:mockInjections({ localized:true }) })
     });
 

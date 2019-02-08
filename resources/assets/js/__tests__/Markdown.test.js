@@ -44,6 +44,12 @@ describe('markdown-field', () => {
         });
     }
 
+    beforeAll(()=>{
+        // prevent jsdom errors
+        window.focus = jest.fn();
+        window.scrollTo = jest.fn();
+    });
+
     beforeEach(()=>{
         // mock range functions
         document.body.createTextRange = () => ({
