@@ -1,19 +1,19 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-import SharpEntityListPage from '../../components/pages/EntityListPage.vue';
-
 import merge from 'lodash/merge';
 
-import { MockI18n } from "../utils";
-import { shallowMount } from '@vue/test-utils';
+import Vuex from 'vuex';
+import SharpEntityListPage from '../../components/pages/EntityListPage.vue';
+import entityListModule from '../../store/modules/entity-list';
 
+import { shallowMount, createLocalVue } from '@vue/test-utils';
+
+jest.mock('../../mixins/Localization');
 jest.mock('../../components/DynamicViewMixin');
+jest.mock('../../store/modules/entity-list');
 
 describe('EntityListPage', () => {
-    Vue.use(MockI18n);
-    MockI18n.mockLangFunction();
-
-    function createWrapper({ ...options }={}) {
+    function createWrapper({ storeModule={}, ...options }={}) {
+        const localVue = createLocalVue();
+        localVue.use(Vuex);
         const wrapper = shallowMount(SharpEntityListPage, {
             extends: options,
             stubs: {
@@ -34,8 +34,15 @@ describe('EntityListPage', () => {
                 $router: {
                     push: jest.fn()
                 },
-            }
+            },
+            store: new Vuex.Store({
+                modules: {
+                    'entity-list': merge(entityListModule, storeModule),
+                }
+            }),
+            localVue,
         });
+        wrapper.vm.$store.dispatch = jest.fn(()=>Promise.resolve());
         return wrapper;
     }
 
@@ -79,8 +86,13 @@ describe('EntityListPage', () => {
 
     describe('computed', () => {
         test('entityKey', () => {
-            const wrapper = createWrapper();
-            wrapper.vm.$route.params.id = 'spaceship';
+            const wrapper = createWrapper({
+                storeModule: {
+                    state: {
+                        entityKey: 'spaceship',
+                    },
+                },
+            });
             expect(wrapper.vm.entityKey).toEqual('spaceship');
         });
 
@@ -350,6 +362,23 @@ describe('EntityListPage', () => {
             wrapper.vm.handleReorderButtonClicked();
             expect(wrapper.vm.reorderActive).toBe(false);
             expect(wrapper.vm.reorderedItems).toEqual(null);
+        });
+
+        test('handleReorderSubmitted', async () => {
+            const wrapper = createWrapper();
+            wrapper.vm.$route.params.id = 'spaceship';
+            wrapper.setData({
+                reorderedItems: [{ id:1 }],
+                data: {}
+            });
+            wrapper.setMethods({
+                instanceId: ()=>'id'
+            });
+            await wrapper.vm.handleReorderSubmitted();
+            expect(wrapper.vm.$store.dispatch).toHaveBeenCalledWith('entity-list/reorder', { instances:['id'] });
+            expect(wrapper.vm.data.items).toEqual([{ id:1 }]);
+            expect(wrapper.vm.reorderedItems).toEqual(null);
+            expect(wrapper.vm.reorderActive).toEqual(false);
         });
     });
 });

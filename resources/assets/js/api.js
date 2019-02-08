@@ -25,3 +25,7 @@ export function getDashboardCommandFormData({ dashboardKey, commandKey, query })
         },
     }).then(response => response.data.data);
 }
+
+export function postEntityListReorder({ entityKey, instances }) {
+    return api.post(`list/${entityKey}/reorder`, { instances });
+}

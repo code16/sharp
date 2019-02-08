@@ -100,12 +100,13 @@
 
     import { SharpDropdown, SharpDropdownItem } from "../ui";
 
-
     import { Localization } from '../../mixins';
     import DynamicViewMixin from '../DynamicViewMixin';
     import withCommands from '../../mixins/page/with-commands';
 
     import { BASE_URL } from "../../consts";
+
+    import { mapState } from 'vuex';
 
     export default {
         name: 'SharpEntityListPage',
@@ -149,9 +150,9 @@
             '$route': 'init',
         },
         computed: {
-            entityKey() {
-                return this.$route.params.id;
-            },
+            ...mapState('entity-list', {
+                entityKey: state => state.entityKey,
+            }),
             hasMultiforms() {
                 return !!this.forms;
             },
@@ -241,7 +242,7 @@
                 this.reorderedItems = this.reorderActive ? [ ...this.data.items ] : null;
             },
             handleReorderSubmitted() {
-                this.axiosInstance.post(`${this.apiPath}/reorder`, {
+                return this.$store.dispatch('entity-list/reorder', {
                     instances: this.reorderedItems.map(item => this.instanceId(item))
                 }).then(() => {
                     this.$set(this.data, 'items', [ ...this.reorderedItems ]);
@@ -485,6 +486,7 @@
                 }
             },
             init() {
+                this.$store.dispatch('entity-list/setEntityKey', this.$route.params.id);
                 this.get().then(() => {
                     this.bindParams(this.$route.query);
                 });
