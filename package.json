@@ -7,7 +7,7 @@
     ],
     "transform": {
       "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
-      ".*\\.(vue)$": "<rootDir>/node_modules/jest-vue-preprocessor"
+      "^.+\\.vue$": "<rootDir>/node_modules/vue-jest"
     },
     "snapshotSerializers": [
       "<rootDir>/resources/assets/js/__tests__/utils/htmlSnapshotBeautifier.js"
@@ -40,7 +40,7 @@
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.29",
     "axios": "^0.15.2",
-    "babel-jest": "^20.0.3",
+    "babel-jest": "^24.1.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
@@ -66,6 +66,7 @@
     "vue-chartjs": "^2.8.7",
     "vue-clip": "^1.0.0",
     "vue-cropperjs": "^2.1.1",
+    "vue-jest": "^4.0.0-beta.1",
     "vue-loader": "^15.5.1",
     "vue-multiselect": "^2.1.3",
     "vue-notification": "^1.3.7",
