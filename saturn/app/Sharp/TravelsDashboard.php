@@ -2,6 +2,7 @@
 
 namespace App\Sharp;
 
+use App\Sharp\Commands\TravelsDashboardDownloadCommand;
 use App\Sharp\Filters\TravelsDashboardPeriodFilter;
 use Code16\Sharp\Dashboard\DashboardQueryParams;
 use Code16\Sharp\Dashboard\SharpDashboard;
@@ -22,10 +23,9 @@ class TravelsDashboard extends SharpDashboard
 
     function buildDashboardConfig()
     {
-        $this->addFilter(
-            "period",
-            TravelsDashboardPeriodFilter::class
-        );
+        $this
+            ->addFilter("period", TravelsDashboardPeriodFilter::class)
+            ->addDashboardCommand("download", TravelsDashboardDownloadCommand::class);
     }
 
     function buildWidgetsLayout()

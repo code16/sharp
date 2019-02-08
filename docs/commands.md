@@ -2,6 +2,8 @@
 
 Commands in Sharp are a powerful way to integrate functional processes in the content management. They can be used for instance to re-send an order to the customer, on synchronize pictures of a product, or preview a page...
 
+Commands can be defined in an EntityList or in a Dashboard. This documentation will take the EntityList case, but the API is very similar in both cases, as explained at the end of this page.
+
 ## Write the Command class
 
 First we need to write a class for our Command. It must extend the `Code16\Sharp\EntityList\Commands\EntityCommand` abstract class (for "entity commands", more on that below), and implement two functions. 
@@ -201,6 +203,14 @@ For instance Commands we have to know the instance involved, which means the sig
         return Spaceship::findOrFail($instanceId)->owner_id == sharp_user()->id;
     }
 ```
+
+## Commands for Dashboard
+
+Dashboard can use the power of Commands too. The API is very similar, here's the differences:
+
+- There is no Instance or Entity distinction; a command handler must extend `Code16\Sharp\Dashboard\Commands\DashboardCommand`.
+- Commands must be declared in the `buildDashboardConfig()` method of the Dashboard.
+- And finally, a Dashboard Command can not return a `refresh()` action, since there is no Instance.
 
 ---
 

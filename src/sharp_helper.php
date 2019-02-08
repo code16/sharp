@@ -153,3 +153,24 @@ function sharp_base_url_segment()
 {
     return config("sharp.custom_url_segment", "sharp");
 }
+
+/**
+ * Return true if the $handler class actually implements the $methodName method;
+ * return false if the method is defined as concrete in a super class and not overridden.
+ *
+ * @param $handler
+ * @param string $methodName
+ * @return bool
+ */
+function is_method_implemented_in_concrete_class($handler, string $methodName)
+{
+    try {
+        $foo = new \ReflectionMethod(get_class($handler), $methodName);
+        $declaringClass = $foo->getDeclaringClass()->getName();
+
+        return $foo->getPrototype()->getDeclaringClass()->getName() !== $declaringClass;
+
+    } catch (\ReflectionException $e) {
+        return false;
+    }
+}

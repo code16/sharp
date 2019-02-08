@@ -24,7 +24,7 @@ class PilotDownloadPhoto extends InstanceCommand
      */
     public function execute($instanceId, array $data = []): array
     {
-        if(! Storage::exists("pdf/pilot-photo.jpg")) {
+        if(! Storage::exists("photos/pilot-photo.jpg")) {
             UploadedFile::fake()->image('pilot-photo.jpg', 120, 120)->storeAs('photos', 'pilot-photo.jpg');
         }
 
