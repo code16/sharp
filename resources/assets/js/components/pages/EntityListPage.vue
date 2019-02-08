@@ -183,10 +183,10 @@
                     .map(group => group.filter(command => command.authorization))
             },
             multiforms() {
-                return this.forms && Object.values(this.forms);
+                return this.forms ? Object.values(this.forms) : null;
             },
             canCreate() {
-                return this.authorizations.create;
+                return !!this.authorizations.create;
             },
             canReorder() {
                 return this.config.reorderable
@@ -194,7 +194,7 @@
                     && this.data.items.length > 1;
             },
             canSearch() {
-                return this.config.searchable;
+                return !!this.config.searchable;
             },
 
             /**
@@ -210,7 +210,7 @@
                 }));
             },
             paginated() {
-                return this.config.paginated;
+                return !!this.config.paginated;
             },
             totalCount() {
                 return this.data.totalCount;
@@ -230,14 +230,15 @@
                 this.$router.push({ query: { ...this.$route.query, search:this.search } });
             },
             handleFilterChanged(key, value) {
-                this.$set(this.filtersValue, key, value);
+                this.filtersValue = {
+                    ...this.filtersValue,
+                    [key]: value,
+                };
                 this.$router.push({ query: { ...this.$route.query, ...this.filterParams }});
             },
             handleReorderButtonClicked() {
                 this.reorderActive = !this.reorderActive;
-                if(this.reorderActive) {
-                    this.reorderedItems = [ ...this.data.items ];
-                }
+                this.reorderedItems = this.reorderActive ? [ ...this.data.items ] : null;
             },
             handleReorderSubmitted() {
                 this.axiosInstance.post(`${this.apiPath}/reorder`, {
