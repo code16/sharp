@@ -1,10 +1,40 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`EntityListPage can mount entity list 1`] = `
+exports[`EntityListPage mount 1`] = `
 <div class="SharpEntityListPage">
-	<sharpactionbarlist-stub count="1" search="" filters="" commands=""></sharpactionbarlist-stub>
+	<sharpactionbarlist-stub count="0" search="" commands=""></sharpactionbarlist-stub>
 	<div class="MOCKED_SharpDataList">
-		<div class="MOCKED_SharpDataListRow"></div>
+		<div url="instanceFormUrl" class="MOCKED_SharpDataListRow"></div>
+	</div>
+	<sharpcommandformmodal-stub></sharpcommandformmodal-stub>
+	<sharpcommandviewpanel-stub></sharpcommandviewpanel-stub>
+</div>
+`;
+
+exports[`EntityListPage mount with row actions 1`] = `
+<div class="SharpEntityListPage">
+	<sharpactionbarlist-stub count="0" search="" commands=""></sharpactionbarlist-stub>
+	<div class="MOCKED_SharpDataList">
+		<div url="instanceFormUrl" class="MOCKED_SharpDataListRow">
+			<div class="row">
+				<div class="col-auto col-md-12 my-1">
+					<div class="MOCKED_SharpDropdown SharpEntityList__state-dropdown">
+						<div color="instanceStateIconColor" class="MOCKED_SharpStateIcon"></div>
+						<span class="text-truncate">
+							instanceStateLabel
+						</span>
+						<div class="MOCKED_SharpDropdownItem">
+							<div color="#000" class="MOCKED_SharpStateIcon"></div>&nbsp; state 1
+						</div>
+					</div>
+				</div>
+				<div class="col-auto col-md-12 my-1">
+					<div class="MOCKED_SharpCommandsDropdown SharpEntityList__commands-dropdown">
+						{{ entity_list.commands.instance.label }}
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 	<sharpcommandformmodal-stub></sharpcommandformmodal-stub>
 	<sharpcommandviewpanel-stub></sharpcommandviewpanel-stub>

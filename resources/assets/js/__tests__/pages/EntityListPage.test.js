@@ -21,11 +21,11 @@ describe('EntityListPage', () => {
             extends: options,
             stubs: {
                 'SharpDataList': `<div class="MOCKED_SharpDataList"> <slot name="item" :item="{}" /> </div>`,
-                'SharpDataListRow': `<div class="MOCKED_SharpDataListRow"> <slot name="append" /> </div>`,
-                'SharpDropdown':`<div class="MOCKED_SharpDropdown"> <slot /> </div>`,
+                'SharpDataListRow': `<div class="MOCKED_SharpDataListRow" :url="url"> <slot name="append" /> </div>`,
+                'SharpDropdown':`<div class="MOCKED_SharpDropdown"> <slot name="text"/> <slot /> </div>`,
                 'SharpDropdownItem': `<div class="MOCKED_SharpDropdownItem"> <slot /> </div>`,
-                'SharpCommandsDropdown': `<div class="MOCKED_SharpCommandsDropdown"> <slot /> </div>`,
-                'SharpStateIcon': `<div class="MOCKED_SharpStateIcon"> <slot /> </div>`
+                'SharpCommandsDropdown': `<div class="MOCKED_SharpCommandsDropdown"> <slot name="text" /> <slot /> </div>`,
+                'SharpStateIcon': `<div class="MOCKED_SharpStateIcon" :color="color"> <slot /> </div>`,
             },
             mocks: {
                 $route: {
@@ -51,36 +51,44 @@ describe('EntityListPage', () => {
 
     function withDefaults(data) {
         return merge({
+            layout: [],
+            containers: {},
+            data: {},
             config: {
                 commands: {}
-            }
+            },
+            authorizations: {},
         }, data);
     }
 
-    test('can mount entity list', ()=>{
+    test('mount', ()=>{
         const wrapper = createWrapper();
+        wrapper.setMethods({
+            instanceFormUrl:()=>'instanceFormUrl',
+        });
+        wrapper.setData(withDefaults({}));
+        wrapper.setData({ ready:true });
+        expect(wrapper.html()).toMatchSnapshot();
+    });
+
+    test('mount with row actions', ()=>{
+        const wrapper = createWrapper({
+            computed: {
+                hasActionsColumn: ()=>true,
+            }
+        });
+        wrapper.setMethods({
+            instanceFormUrl: ()=>'instanceFormUrl',
+            instanceHasState: ()=>true,
+            instanceHasCommands: ()=>true,
+            instanceStateIconColor: ()=>'instanceStateIconColor',
+            instanceStateLabel: ()=>'instanceStateLabel'
+        });
         wrapper.setData(withDefaults({
-            containers: {
-                title: {
-                    key: 'title',
-                    label: 'Titre'
-                }
-            },
-            layout: [{
-                key: 'title',
-                size: 6,
-                sizeXS: 12
-            }],
-            data: {
-                items : [{ id: 1, title: 'Super title' }]
-            },
             config: {
-                filters: [],
-                instanceIdAttribute: 'id'
-            },
-            authorizations:{
-                view: true,
-                update: true
+                state: {
+                    values: [{ value:1, label:'state 1', color: '#000' }]
+                }
             }
         }));
         wrapper.setData({ ready:true });
