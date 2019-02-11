@@ -5,7 +5,7 @@
         </template>
         <template v-else>
             <div class="SharpDataList__table SharpDataList__table--border">
-                <div class="SharpDataList__thead">
+                <div class="SharpDataList__thead" ref="head">
                     <SharpDataListRow :columns="columns" header>
                         <template slot="cell" slot-scope="{ column }">
                             <span>{{ column.label }}</span>
@@ -28,13 +28,13 @@
                     </SharpDataListRow>
                 </div>
                 <div class="SharpDataList__tbody" ref="body">
-                    <draggable :options="draggableOptions" :value="reorderedItems" @input="handleItemsChanged">
+                    <Draggable :options="draggableOptions" :value="reorderedItems" @input="handleItemsChanged">
                         <template v-for="item in currentItems">
                             <slot name="item" :item="item">
                                 <SharpDataListRow :columns="columns" :row="item" />
                             </slot>
                         </template>
-                    </draggable>
+                    </Draggable>
                 </div>
             </div>
         </template>
@@ -83,17 +83,17 @@
                 reorderedItems: null,
 
                 //layout
-                headerRowAppendWidth: 0
+                headerRowAppendWidth: 0,
             }
         },
         watch: {
             reorderActive(active) {
-                this.reorderedItems = active ? [...this.items] : null;
-            },
+                this.handleReorderActiveChanged(active);
+            }
         },
         computed: {
             hasPagination() {
-                return this.totalCount/this.pageSize > 1 && this.paginated;
+                return !!this.paginated && this.totalCount/this.pageSize > 1;
             },
             draggableOptions() {
                 return {
@@ -125,10 +125,15 @@
             handlePageChanged(page) {
                 this.$emit('page-change', page);
             },
+            handleReorderActiveChanged(active) {
+                this.reorderedItems = active ? [...this.items] : null;
+            },
             updateLayout() {
                 const body = this.$refs.body;
-                const append = body.querySelector('.SharpDataList__row-append');
-                this.headerRowAppendWidth = append ? `${append.offsetWidth}px` : 0;
+                if(body) {
+                    const append = body.querySelector('.SharpDataList__row-append');
+                    this.headerRowAppendWidth = append ? `${append.offsetWidth}px` : 0;
+                }
             }
         },
         mounted() {

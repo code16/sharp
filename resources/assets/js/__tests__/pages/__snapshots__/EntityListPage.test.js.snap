@@ -19,13 +19,13 @@ exports[`EntityListPage mount with row actions 1`] = `
 			<div class="row">
 				<div class="col-auto col-md-12 my-1">
 					<div class="MOCKED_SharpDropdown SharpEntityList__state-dropdown">
-						<div color="instanceStateIconColor" class="MOCKED_SharpStateIcon"></div>
+						<sharpstateicon-stub color="instanceStateIconColor"></sharpstateicon-stub>
 						<span class="text-truncate">
 							instanceStateLabel
 						</span>
-						<div class="MOCKED_SharpDropdownItem">
-							<div color="#000" class="MOCKED_SharpStateIcon"></div>&nbsp; state 1
-						</div>
+						<sharpdropdownitem-stub>
+							<sharpstateicon-stub color="#000"></sharpstateicon-stub>&nbsp; state 1
+						</sharpdropdownitem-stub>
 					</div>
 				</div>
 				<div class="col-auto col-md-12 my-1">

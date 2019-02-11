@@ -18,14 +18,11 @@ describe('EntityListPage', () => {
         const localVue = createLocalVue();
         localVue.use(Vuex);
         const wrapper = shallowMount(SharpEntityListPage, {
-            extends: options,
             stubs: {
                 'SharpDataList': `<div class="MOCKED_SharpDataList"> <slot name="item" :item="{}" /> </div>`,
                 'SharpDataListRow': `<div class="MOCKED_SharpDataListRow" :url="url"> <slot name="append" /> </div>`,
                 'SharpDropdown':`<div class="MOCKED_SharpDropdown"> <slot name="text"/> <slot /> </div>`,
-                'SharpDropdownItem': `<div class="MOCKED_SharpDropdownItem"> <slot /> </div>`,
-                'SharpCommandsDropdown': `<div class="MOCKED_SharpCommandsDropdown"> <slot name="text" /> <slot /> </div>`,
-                'SharpStateIcon': `<div class="MOCKED_SharpStateIcon" :color="color"> <slot /> </div>`,
+                'SharpCommandsDropdown': `<div class="MOCKED_SharpCommandsDropdown"> <slot name="text" /> <slot /> </div>`
             },
             mocks: {
                 $route: {
@@ -44,6 +41,7 @@ describe('EntityListPage', () => {
                 }
             }),
             localVue,
+            ...options,
         });
         wrapper.vm.$store.dispatch = jest.fn(()=>Promise.resolve());
         return wrapper;
