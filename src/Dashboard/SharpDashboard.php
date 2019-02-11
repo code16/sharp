@@ -143,20 +143,12 @@ abstract class SharpDashboard
      */
     function data(): array
     {
+        $this->putRetainedFilterValuesInSession();
+
         $this->buildWidgetsData(
             DashboardQueryParams::create()
                 ->fillWithRequest()
-                ->setDefaultFilters(
-                    collect($this->filterHandlers)
-                        ->filter(function($handler, $attribute) {
-                            return !request()->has("filter_$attribute")
-                                && $handler instanceof DashboardRequiredFilter;
-
-                        })->map(function($handler, $attribute) {
-                            return ["name" => $attribute, "value" => $handler->defaultValue()];
-
-                        })->pluck("value", "name")->all()
-                )
+                ->setDefaultFilters($this->getFilterDefaultValues())
         );
 
         // First, graph widgets dataSets

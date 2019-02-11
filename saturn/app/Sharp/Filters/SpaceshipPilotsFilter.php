@@ -16,4 +16,9 @@ class SpaceshipPilotsFilter implements EntityListMultipleFilter
             ->pluck("name", "id")
             ->all();
     }
+
+    public function retainValueInSession()
+    {
+        return true;
+    }
 }

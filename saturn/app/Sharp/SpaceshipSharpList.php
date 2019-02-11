@@ -15,10 +15,12 @@ use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\Eloquent\Transformers\SharpUploadModelAttributeTransformer;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
+use Code16\Sharp\Http\WithSharpFormContext;
 use Code16\Sharp\Utils\LinkToEntity;
 
 class SpaceshipSharpList extends SharpEntityList
 {
+    use WithSharpFormContext;
 
     function buildListDataContainers()
     {
@@ -82,7 +84,9 @@ class SpaceshipSharpList extends SharpEntityList
 
     function getListData(EntityListQueryParams $params)
     {
-        $spaceships = Spaceship::select("spaceships.*")->distinct();
+        $spaceships = Spaceship::select("spaceships.*")
+            ->where("corporation_id", $this->context()->globalFilterFor("corporation"))
+            ->distinct();
 
         if($params->specificIds()) {
             $spaceships->whereIn("id", $params->specificIds());

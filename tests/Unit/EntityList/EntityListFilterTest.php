@@ -265,6 +265,67 @@ class EntityListFilterTest extends SharpTestCase
             ]
         ], $list->listConfig());
     }
+
+    /** @test */
+    function we_can_define_that_a_filter_is_retained_and_sets_its_default_value()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig()
+            {
+                $this->addFilter("test", new class extends SharpEntityListTestFilter {
+                    function retainValueInSession() {
+                        return true;
+                    }
+                });
+            }
+        };
+
+        // Artificially put retained value in session
+        session()->put("_sharp_retained_filter_test", 2);
+
+        $list->buildListConfig();
+
+        $this->assertArraySubset([
+            "filters" => [
+                [
+                    "key" => "test",
+                    "default" => 2,
+                ]
+            ]
+        ], $list->listConfig());
+    }
+
+    /** @test */
+    function a_required_and_retained_filters_returns_retained_value_as_its_default_value()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig()
+            {
+                $this->addFilter("test", new class extends SharpEntityListTestRequiredFilter {
+                    function retainValueInSession() {
+                        return true;
+                    }
+                    public function defaultValue() {
+                        return 1;
+                    }
+                });
+            }
+        };
+
+        // Artificially put retained value in session
+        session()->put("_sharp_retained_filter_test", 2);
+
+        $list->buildListConfig();
+
+        $this->assertArraySubset([
+            "filters" => [
+                [
+                    "key" => "test",
+                    "default" => 2,
+                ]
+            ]
+        ], $list->listConfig());
+    }
 }
 
 class SharpEntityListTestFilter implements EntityListFilter

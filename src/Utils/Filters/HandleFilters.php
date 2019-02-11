@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Utils\Filters;
 
 use Closure;
+use Code16\Sharp\EntityList\EntityListRequiredFilter;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Event;
 
@@ -47,7 +48,7 @@ trait HandleFilters
                 "key" => $filterName,
                 "multiple" => $multiple,
                 "required" => $required,
-                "default" => $required ? $handler->defaultValue() : null,
+                "default" => $this->getFilterDefaultValue($handler, $filterName),
                 "values" => $this->formatFilterValues($handler),
                 "label" => method_exists($handler, "label") ? $handler->label() : $filterName,
                 "master" => method_exists($handler, "isMaster") ? $handler->isMaster() : false,
@@ -89,5 +90,98 @@ trait HandleFilters
         }
 
         return $template;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getFilterDefaultValues()
+    {
+        return collect($this->filterHandlers)
+
+            // Only filters which aren't in the request
+            ->filter(function($handler, $attribute) {
+                return !request()->has("filter_$attribute");
+            })
+
+            // Only required filters or retained filters with value saved in session
+            ->filter(function($handler, $attribute) {
+                return $handler instanceof EntityListRequiredFilter
+                    || $this->isRetainedFilter($handler, $attribute, true);
+            })
+
+            ->map(function($handler, $attribute) {
+                if($this->isRetainedFilter($handler, $attribute, true)) {
+                    return [
+                        "name" => $attribute,
+                        "value" => session("_sharp_retained_filter_$attribute")
+                    ];
+                }
+
+                return [
+                    "name" => $attribute,
+                    "value" => $handler->defaultValue()
+                ];
+            })
+            ->pluck("value", "name")
+            ->all();
+    }
+
+    /**
+     * Save "retain" filter values in session. Retain filters
+     * are those whose handler is defining a retainValueInSession()
+     * function which returns true.
+     */
+    protected function putRetainedFilterValuesInSession()
+    {
+        collect($this->filterHandlers)
+            ->filter(function($handler, $attribute) {
+                return request()->has("filter_$attribute")
+                    && $this->isRetainedFilter($handler, $attribute);
+            })
+            ->each(function($handler, $attribute) {
+                session()->put(
+                    "_sharp_retained_filter_$attribute",
+                    request()->get("filter_$attribute")
+                );
+            });
+
+        session()->save();
+    }
+
+    /**
+     * @param $handler
+     * @param $attribute
+     * @param bool $onlyValued
+     * @return bool
+     */
+    protected function isRetainedFilter($handler, $attribute, $onlyValued = false)
+    {
+        return method_exists($handler, "retainValueInSession")
+            && $handler->retainValueInSession()
+            && (!$onlyValued || session()->has("_sharp_retained_filter_$attribute"));
+    }
+
+    /**
+     * Return the filter default value, which can be, in that order:
+     * - the retained value, if the filter is retained
+     * - the default value is the filter is required
+     * - or null
+     *
+     * @param $handler
+     * @param string $attribute
+     * @return int|string|null
+     */
+    protected function getFilterDefaultValue($handler, $attribute)
+    {
+        if($this->isRetainedFilter($handler, $attribute, true)) {
+            return $handler instanceof ListMultipleFilter
+                ? explode(",", session("_sharp_retained_filter_$attribute"))
+                : session("_sharp_retained_filter_$attribute");
+        }
+
+        return $handler instanceof ListRequiredFilter
+            ? $handler->defaultValue()
+            : null;
     }
 }

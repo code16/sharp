@@ -7,7 +7,6 @@ use Code16\Sharp\EntityList\EntityListRequiredFilter;
 
 class SpaceshipTypeFilter implements EntityListRequiredFilter
 {
-
     public function values()
     {
         return SpaceshipType::orderBy("label")
@@ -23,5 +22,10 @@ class SpaceshipTypeFilter implements EntityListRequiredFilter
     public function label()
     {
         return "Ship type";
+    }
+
+    public function retainValueInSession()
+    {
+        return true;
     }
 }

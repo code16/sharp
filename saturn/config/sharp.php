@@ -82,6 +82,10 @@ return [
         ],
     ],
 
+    "global_filters" => [
+        "corporation" => \App\Sharp\Filters\CorporationGlobalFilter::class
+    ],
+
     "menu" => [
         [
             "label" => "Company",
