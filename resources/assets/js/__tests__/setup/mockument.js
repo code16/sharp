@@ -21,3 +21,9 @@ global.window.document.createRange = function createRange() {
         createContextualFragment
     };
 };
+
+// prevent errors when modifying location props
+delete window.location;
+window.location = {
+    set href(href) {}
+};

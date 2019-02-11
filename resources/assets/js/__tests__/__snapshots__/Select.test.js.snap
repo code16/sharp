@@ -38,14 +38,14 @@ exports[`select-field can mount "read only" Select field as radios list 1`] = `
 	<div class="SharpSelect SharpSelect--list">
 		<div class="SharpSelect__radio-button-group">
 			<span class="SharpSelect__item SharpSelect__item--inline">
-				<input type="radio" tabindex="0" id="select0" disabled="disabled" name="select" class="SharpRadio">
+				<input type="radio" tabindex="0" id="select0" disabled="disabled" name="select" class="SharpRadio" value="3">
 				<label for="select0" class="SharpRadio__label">
 					<span class="SharpRadio__appearance"></span>
 					AAA
 				</label>
 			</span>
 			<span class="SharpSelect__item SharpSelect__item--inline">
-				<input type="radio" tabindex="0" id="select1" disabled="disabled" name="select" class="SharpRadio">
+				<input type="radio" tabindex="0" id="select1" disabled="disabled" name="select" class="SharpRadio" value="4">
 				<label for="select1" class="SharpRadio__label">
 					<span class="SharpRadio__appearance"></span>
 					BBB
@@ -139,14 +139,14 @@ exports[`select-field can mount Select field as radios list 1`] = `
 	<div class="SharpSelect SharpSelect--list">
 		<div class="SharpSelect__radio-button-group">
 			<span class="SharpSelect__item SharpSelect__item--inline">
-				<input type="radio" tabindex="0" id="select0" name="select" class="SharpRadio">
+				<input type="radio" tabindex="0" id="select0" name="select" class="SharpRadio" value="3">
 				<label for="select0" class="SharpRadio__label">
 					<span class="SharpRadio__appearance"></span>
 					AAA
 				</label>
 			</span>
 			<span class="SharpSelect__item SharpSelect__item--inline">
-				<input type="radio" tabindex="0" id="select1" name="select" class="SharpRadio">
+				<input type="radio" tabindex="0" id="select1" name="select" class="SharpRadio" value="4">
 				<label for="select1" class="SharpRadio__label">
 					<span class="SharpRadio__appearance"></span>
 					BBB

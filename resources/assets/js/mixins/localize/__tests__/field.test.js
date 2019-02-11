@@ -7,7 +7,7 @@ describe('localize-field', ()=>{
     beforeEach(()=>{
         wrapper = mount({
             mixins: [localizeField],
-            render: h => h(null)
+            render() {}
         }, {
             propsData: { locale: 'fr', localized: false },
             provide: mockInjections({ locales:['en', 'fr'], localized: false })

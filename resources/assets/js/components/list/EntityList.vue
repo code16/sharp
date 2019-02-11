@@ -126,9 +126,9 @@
     import SharpDropdownItem from '../dropdown/DropdownItem';
     import SharpModal from '../Modal';
     import SharpForm from '../form/Form';
-    import SharpViewPanel from './ViewPanel';
+    import SharpViewPanel from '../commands/CommandViewPanel';
     import SharpStateIcon from './StateIcon';
-    import SharpCommandsDropdown from './CommandsDropdown';
+    import SharpCommandsDropdown from '../commands/CommandsDropdown';
 
     import Draggable from 'vuedraggable';
 

@@ -24,7 +24,7 @@ describe('localize-form', ()=>{
                     localized: true
                 }
             },
-            render: h => h(null)
+            render() {}
         });
     });
 

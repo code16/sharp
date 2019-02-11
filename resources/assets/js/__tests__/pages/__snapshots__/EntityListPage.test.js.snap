@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EntityListPage mount 1`] = `
+<div class="SharpEntityListPage">
+	<sharpactionbarlist-stub count="0" search="" commands=""></sharpactionbarlist-stub>
+	<div class="MOCKED_SharpDataList">
+		<div url="instanceFormUrl" class="MOCKED_SharpDataListRow"></div>
+	</div>
+	<sharpcommandformmodal-stub></sharpcommandformmodal-stub>
+	<sharpcommandviewpanel-stub></sharpcommandviewpanel-stub>
+</div>
+`;
+
+exports[`EntityListPage mount with row actions 1`] = `
+<div class="SharpEntityListPage">
+	<sharpactionbarlist-stub count="0" search="" commands=""></sharpactionbarlist-stub>
+	<div class="MOCKED_SharpDataList">
+		<div url="instanceFormUrl" class="MOCKED_SharpDataListRow">
+			<div class="row">
+				<div class="col-auto col-md-12 my-1">
+					<div class="MOCKED_SharpDropdown SharpEntityList__state-dropdown">
+						<sharpstateicon-stub color="instanceStateIconColor"></sharpstateicon-stub>
+						<span class="text-truncate">
+							instanceStateLabel
+						</span>
+						<sharpdropdownitem-stub>
+							<sharpstateicon-stub color="#000"></sharpstateicon-stub>&nbsp; state 1
+						</sharpdropdownitem-stub>
+					</div>
+				</div>
+				<div class="col-auto col-md-12 my-1">
+					<div class="MOCKED_SharpCommandsDropdown SharpEntityList__commands-dropdown">
+						{{ entity_list.commands.instance.label }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<sharpcommandformmodal-stub></sharpcommandformmodal-stub>
+	<sharpcommandviewpanel-stub></sharpcommandviewpanel-stub>
+</div>
+`;

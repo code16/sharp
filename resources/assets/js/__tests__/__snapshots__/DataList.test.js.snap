@@ -1,0 +1,95 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DataList mount empty 1`] = `
+<div class="SharpDataList">Empty text
+	<!---->
+</div>
+`;
+
+exports[`DataList mount header: columns 1`] = `
+<div class="SharpDataList__thead">
+	<div row="[object Object]" header="true" class="MOCKED_SharpDataListRow" columns="[object Object],[object Object]">
+		<span>col1</span>
+		<!---->
+		<span>col2</span>
+		<svg width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd" class="SharpDataList__caret">
+			<path d="M10 0L5 5 0 0z"></path>
+		</svg>
+		<a href="" class="SharpDataList__sort-link"></a>
+	</div>
+</div>
+`;
+
+exports[`DataList mount header: default 1`] = `
+<div class="SharpDataList__thead">
+	<div row="[object Object]" header="true" class="MOCKED_SharpDataListRow"></div>
+</div>
+`;
+
+exports[`DataList mount header: sort ascending 1`] = `
+<div class="SharpDataList__thead">
+	<div row="[object Object]" header="true" class="MOCKED_SharpDataListRow" columns="[object Object],[object Object]">
+		<span>col1</span>
+		<!---->
+		<span>col2</span>
+		<svg width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd" class="SharpDataList__caret SharpDataList__caret--selected SharpDataList__caret--ascending">
+			<path d="M10 0L5 5 0 0z"></path>
+		</svg>
+		<a href="" class="SharpDataList__sort-link"></a>
+	</div>
+</div>
+`;
+
+exports[`DataList mount header: sort selected 1`] = `
+<div class="SharpDataList__thead">
+	<div row="[object Object]" header="true" class="MOCKED_SharpDataListRow" columns="[object Object],[object Object]">
+		<span>col1</span>
+		<!---->
+		<span>col2</span>
+		<svg width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd" class="SharpDataList__caret SharpDataList__caret--selected">
+			<path d="M10 0L5 5 0 0z"></path>
+		</svg>
+		<a href="" class="SharpDataList__sort-link"></a>
+	</div>
+</div>
+`;
+
+exports[`DataList mount items 1`] = `
+<div class="SharpDataList">
+	<div class="SharpDataList__table SharpDataList__table--border">
+		<div class="SharpDataList__thead">
+			<div row="[object Object]" header="true" class="MOCKED_SharpDataListRow"></div>
+		</div>
+		<div class="SharpDataList__tbody">
+			<div class="MOCKED_Draggable">
+				<div row="[object Object]" class="MOCKED_SharpDataListRow"></div>
+			</div>
+		</div>
+	</div>
+	<!---->
+</div>
+`;
+
+exports[`DataList mount items slot 1`] = `
+<div class="SharpDataList">
+	<div class="SharpDataList__table SharpDataList__table--border">
+		<div class="SharpDataList__thead">
+			<div row="[object Object]" header="true" class="MOCKED_SharpDataListRow"></div>
+		</div>
+		<div class="SharpDataList__tbody">
+			<div class="MOCKED_Draggable">
+				<div item="[object Object]">mockedText</div>
+			</div>
+		</div>
+	</div>
+	<!---->
+</div>
+`;
+
+exports[`DataList mount pagination 1`] = `
+<div class="SharpDataList">
+	<div class="SharpDataList__pagination-container">
+		<sharppagination-stub minpageendbuttons="3" limit="7" min-page-end-buttons="3" totalrows="10" total-rows="10" perpage="3" per-page="3" value="2"></sharppagination-stub>
+	</div>
+</div>
+`;

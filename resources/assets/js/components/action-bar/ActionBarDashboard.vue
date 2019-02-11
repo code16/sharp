@@ -1,7 +1,7 @@
 <template>
-    <sharp-action-bar :ready="ready">
+    <SharpActionBar>
         <template slot="extras">
-            <sharp-filter-select
+            <SharpFilterSelect
                 v-for="filter in filters"
                 :name="filter.label"
                 :values="filter.values"
@@ -16,30 +16,43 @@
                 @input="handleFilterChanged(filter, $event)"
             />
         </template>
-    </sharp-action-bar>
+        <template v-if="commands.length" slot="extras-right">
+            <SharpCommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
+                :commands="commands"
+                @select="handleCommandSelected"
+            >
+                <div slot="text">
+                    {{ l('dashboard.commands.dashboard.label') }}
+                </div>
+            </SharpCommandsDropdown>
+        </template>
+    </SharpActionBar>
 </template>
 
 <script>
-    import SharpActionBar from './ActionBar';
-    import SharpFilterSelect from '../list/FilterSelect';
-
-    import { mapState, mapGetters } from 'vuex';
+    import SharpActionBar from './ActionBar.vue';
+    import SharpFilterSelect from '../list/FilterSelect.vue';
+    import SharpCommandsDropdown from '../commands/CommandsDropdown.vue';
+    import { Localization } from "../../mixins";
+    import { mapGetters } from 'vuex';
 
     export default {
         name: 'SharpActionBarDashboard',
+        mixins: [Localization],
         components: {
             SharpActionBar,
-            SharpFilterSelect
+            SharpFilterSelect,
+            SharpCommandsDropdown,
+        },
+        props: {
+            commands: Array,
         },
         computed: {
-            ...mapState('dashboard', {
-                ready: state => state.ready
-            }),
             ...mapGetters('dashboard', {
                 filters: 'filters/filters',
                 filterValue: 'filters/value',
-                filterNextQuery: 'filters/nextQuery'
-            }),
+                filterNextQuery: 'filters/nextQuery',
+            })
         },
         methods: {
             filterKey(filter) {
@@ -52,6 +65,9 @@
                         ...this.filterNextQuery({ filter, value }),
                     }
                 });
+            },
+            handleCommandSelected(command) {
+                this.$emit('command', command);
             }
         }
     }

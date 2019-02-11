@@ -6,9 +6,8 @@ jest.useFakeTimers();
 
 
 describe('left-nav', ()=>{
-    let wrapper;
     function createWrapper(options) {
-        let vm = mount(LeftNav, {
+        let wrapper = mount(LeftNav, {
             slots: {
                 default: '<div>NAV CONTENT</div>'
             },
@@ -20,30 +19,35 @@ describe('left-nav', ()=>{
             },
             ...options
         });
-        vm.setData({ ready:true });
         jest.runAllTimers();
-        jest.runAllTicks();
-        return vm;
+        return wrapper;
     }
-    beforeEach(()=>{
 
-    });
+    test('can mount LeftNav', async ()=>{
+        const wrapper = createWrapper({ sync:false });
 
-    test('can mount LeftNav', ()=>{
-        expect(createWrapper().html()).toMatchSnapshot();
+        await wrapper.vm.$nextTick();
+        expect(wrapper.html()).toMatchSnapshot();
     });
-    test('can mount "not ready" LeftNav', ()=>{
-        const wrapper = createWrapper();
+    test('can mount "not ready" LeftNav', async ()=>{
+        const wrapper = createWrapper({ sync:false });
+        await wrapper.vm.$nextTick();
+
         wrapper.setData({ ready:false });
+        await wrapper.vm.$nextTick();
         expect(wrapper.html()).toMatchSnapshot();
     });
-    test('can mount "with state" LeftNav', ()=>{
-        const wrapper = createWrapper();
+    test('can mount "with state" LeftNav', async ()=>{
+        const wrapper = await createWrapper({ sync:false });
+
         wrapper.setData({ state:'STATE' });
+        await wrapper.vm.$nextTick();
         expect(wrapper.html()).toMatchSnapshot();
     });
-    test('can mount "with current icon" LeftNav', ()=>{
-        let wrapper = createWrapper({ computed:{ currentIcon:()=>'CURRENT_ICON' }});
+    test('can mount "with current icon" LeftNav', async ()=>{
+        let wrapper = createWrapper({ computed:{ currentIcon:()=>'CURRENT_ICON' }, sync: false });
+
+        await wrapper.vm.$nextTick();
         expect(wrapper.html()).toMatchSnapshot();
     });
 

@@ -1,16 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`view-panel mount "visible" ViewPanel 1`] = `
-<div>
-	<div class="SharpViewPanel__glasspane" style=""></div>
-	<div class="SharpViewPanel" style="" enter-class="SharpViewPanel--collapsed" enter-active-class="SharpViewPanel--expanding" enter-to-class="SharpViewPanel--expanded" leave-class="SharpViewPanel--expanded" leave-active-class="SharpViewPanel--collapsing"
-	    leave-to-class="SharpViewPanel--collapsed">
-		<!---->
-	</div>
-</div>
-`;
-
-exports[`view-panel mount "with content" ViewPanel 1`] = `
+exports[`view-panel mount "visible with content" ViewPanel 1`] = `
 <div>
 	<div class="SharpViewPanel__glasspane" style=""></div>
 	<div class="SharpViewPanel" style="" enter-class="SharpViewPanel--collapsed" enter-active-class="SharpViewPanel--expanding" enter-to-class="SharpViewPanel--expanded" leave-class="SharpViewPanel--expanded" leave-active-class="SharpViewPanel--collapsing"

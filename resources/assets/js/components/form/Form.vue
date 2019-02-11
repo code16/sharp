@@ -138,6 +138,9 @@
             downloadLinkBase() {
                 return `${API_PATH}/download/${this.entityKey}/${this.instanceId}`;
             },
+            listUrl() {
+                return `${BASE_URL}/list/${this.baseEntityKey}?restore-context=1`;
+            },
 
             localeSelectorErrors() {
                 return Object.keys(this.errors).reduce((res,errorKey)=>{
@@ -231,18 +234,18 @@
                     opType: this.isCreation ? 'create' : 'update'
                 });
             },
-            redirectToList({ restoreContext=true }={}) {
-                location.href = `${BASE_URL}/list/${this.baseEntityKey}${restoreContext?'?restore-context=1':''}`
+            redirectToList() {
+                location.href = this.listUrl;
             },
-        },
-        actions: {
-            async submit({ entityKey, endpoint, dataFormatter=noop, postConfig }={}) {
-                if(entityKey && entityKey !== this.entityKey || this.pendingJobs.length) return;
-
+            async submit({ postFn }={}) {
+                if(this.pendingJobs.length) {
+                    return;
+                }
                 try {
-                    const response = await this.post(endpoint, dataFormatter(this), postConfig);
+                    const response = postFn ? await postFn(this.data) : await this.post();
                     if(this.independant) {
-                        this.$emit('submitted', response);
+                        this.$emit('submit', response);
+                        return response;
                     }
                     else if(response.data.ok) {
                         this.mainLoading.$emit('show');
@@ -251,7 +254,13 @@
                 }
                 catch(error) {
                     this.handleError(error);
+                    return Promise.reject(error);
                 }
+            }
+        },
+        actions: {
+            submit() {
+                this.submit().catch(()=>{});
             },
             async 'delete'() {
                 try {
@@ -264,12 +273,6 @@
             },
             cancel() {
                 this.redirectToList();
-            },
-            reset({ entityKey }={}) {
-                if(entityKey && entityKey !== this.entityKey) return;
-
-                this.data = {};
-                this.errors = {};
             },
 
             setPendingJob({ key, origin, value:isPending }) {

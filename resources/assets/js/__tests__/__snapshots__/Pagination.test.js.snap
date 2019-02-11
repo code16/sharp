@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`pagination mount pagination 1`] = `
-<ul role="menubar" aria-disabled="false" aria-label="Pagination" class="pagination b-pagination pagination-md">
+<ul role="menubar" aria-disabled="false" aria-label="Pagination" class="SharpPagination pagination b-pagination pagination-md">
 	<li role="none presentation" aria-hidden="true" class="page-item disabled">
 		<span class="page-link">
 			<i class="fa fa-angle-double-left" aria-hidden="true"></i>
@@ -46,7 +46,7 @@ exports[`pagination mount pagination 1`] = `
 `;
 
 exports[`pagination mount pagination without end buttons 1`] = `
-<ul role="menubar" aria-disabled="false" aria-label="Pagination" class="pagination b-pagination pagination-md">
+<ul role="menubar" aria-disabled="false" aria-label="Pagination" class="SharpPagination pagination b-pagination pagination-md">
 	<!---->
 	<li role="none presentation" aria-hidden="true" class="page-item disabled">
 		<span class="page-link">

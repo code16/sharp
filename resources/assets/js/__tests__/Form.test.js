@@ -12,8 +12,6 @@ import * as consts from '../consts';
 
 import { mockSFC, unmockSFC, wait } from "./utils";
 
-import { mockProperty, unmockProperty, setter } from "./utils/mock-utils";
-
 import moxios from 'moxios';
 import {MockInjections, MockI18n} from "./utils";
 import { nextRequestFulfilled } from './utils/moxios-utils';
@@ -74,12 +72,10 @@ describe('sharp-form', ()=>{
                 </sharp-form>
             </div>
         `;
-        mockProperty(location, 'href');
     });
 
     afterEach(()=>{
         moxios.uninstall();
-        unmockProperty(location, 'href');
     });
 
     test('can mount sharp-form', async ()=>{
@@ -783,14 +779,7 @@ describe('sharp-form', ()=>{
     test('redirect to list', async () => {
         let $form = await createVm();
 
-        let locationHrefModified = setter(location,'href');
-
-        $form.redirectToList();
-        expect(locationHrefModified).toHaveBeenLastCalledWith('/sharp/list/spaceship?restore-context=1');
-
-        $form.redirectToList({ restoreContext: false });
-        expect(locationHrefModified).toHaveBeenLastCalledWith('/sharp/list/spaceship');
-
+        expect($form.listUrl).toEqual('/sharp/list/spaceship?restore-context=1');
 
         $form.redirectToList = jest.fn();
         $form.actionsBus.$emit('submit');
@@ -839,13 +828,7 @@ describe('sharp-form', ()=>{
             },
         });
 
-        $form.post = jest.fn(async ()=>Promise.resolve({ data: { ok: true } }));
-
-        $form.actionsBus.$emit('submit', { entityKey:'planet' });
-
-        await wait(10);
-
-        expect($form.post).not.toHaveBeenCalled();
+        $form.post = jest.fn(()=>Promise.resolve({ data: { ok: true } }));
 
         $form.pendingJobs.push('upload');
         $form.actionsBus.$emit('submit');
@@ -856,28 +839,19 @@ describe('sharp-form', ()=>{
 
 
         let submittedEmmitted = jest.fn();
-        $form.$on('submitted', submittedEmmitted);
         $form.pendingJobs = [];
-        $form.data = { title: 'My title' };
 
-        $form.actionsBus.$emit('submit', { endpoint:'/test-endpoint', dataFormatter: form => form.data, postConfig:{ responseType:'blob' } });
+        $form.actionsBus.$emit('submit');
 
         await wait(10);
 
         expect($form.post).toHaveBeenCalledTimes(1);
-        expect($form.post).toHaveBeenCalledWith('/test-endpoint', {
-            title: 'My title'
-        }, {
-            responseType:'blob'
-        });
-        expect(submittedEmmitted).toHaveBeenCalledTimes(1);
-        expect(submittedEmmitted).toHaveBeenCalledWith({ data: { ok: true } });
     });
 
     test('dependant submit', async () => {
         let $form = await createVm();
 
-        $form.post = jest.fn(async ()=>Promise.resolve({ data: { ok: true } }));
+        $form.post = jest.fn(()=>Promise.resolve({ data: { ok: true } }));
         $form.handleError = jest.fn();
 
         $form.actionsBus.$emit('submit');
@@ -891,7 +865,7 @@ describe('sharp-form', ()=>{
 
         expect($form.handleError).not.toHaveBeenCalled();
 
-        $form.post = jest.fn(async ()=>Promise.reject({ error: true }));
+        $form.post = jest.fn(()=>Promise.reject({ error: true }));
 
         $form.actionsBus.$emit('submit');
 
@@ -907,23 +881,6 @@ describe('sharp-form', ()=>{
 
     test('cancel', async ()=>{
         // refer 'redirect to list' test
-    });
-
-    test('reset', async ()=>{
-        let $form = await createVm();
-
-        $form.data = { field: '...' };
-        $form.errors = { field: [] };
-
-        $form.actionsBus.$emit('reset', { entityKey: 'planet' });
-
-        expect($form.data).toEqual({ field: '...' });
-        expect($form.errors).toEqual({ field: [] });
-
-        $form.actionsBus.$emit('reset', { entityKey: 'spaceship'});
-
-        expect($form.data).toEqual({});
-        expect($form.errors).toEqual({});
     });
 
     test('pending jobs', async ()=> {

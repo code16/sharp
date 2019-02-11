@@ -1,0 +1,192 @@
+@import '../../mixins/entity-list';
+
+.SharpDataList {
+  &--reordering {
+    .SharpDataList__row:not(.SharpDataList__row--header) {
+      cursor: move;
+      background: darken($ui-01, 5%) !important;
+      border-bottom: 0;
+      border-color: transparent;
+      margin-bottom: .25rem;
+      .SharpDataList__row-link {
+        display: none;
+      }
+    }
+  }
+
+  &__table {
+    @include reset;
+    //display: table;
+    //overflow-x: auto;
+    //overflow-y: hidden;
+    width: 100%;
+    //min-width: 500px;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-bottom: 3rem;
+    background-color: transparent;
+
+    //padding: 0 1em;
+
+    &--border {
+      border: 1px solid $ui-04;
+      background-color: $ui-01;
+    }
+  }
+
+  &__tbody {
+    //display: table-row-group;
+    vertical-align: middle;
+  }
+
+  &__thead {
+    //display: table-header-group;
+    border-bottom: 1px solid $brand-01;
+    vertical-align: middle;
+    //padding-right: 4em;
+  }
+
+  &__row {
+    //display: table-row;
+    display:flex;
+    border-bottom: 1px solid $ui-04;
+    transition: $transition--base $bx--standard-easing;
+
+    @include media-breakpoint-down(sm) {
+      flex-flow: column;
+    }
+
+    &--header {
+      border: none;
+      cursor: inherit;
+      .SharpDataList__row-append {
+        width: auto;
+      }
+    }
+
+    .SharpDataList__cols, .SharpDataList__row-append  {
+      padding: 1em 0;
+    }
+
+    &:focus:not(.SharpDataList__row--header) {
+      @include focus-outline('border');
+    }
+
+    &:hover:not(.SharpDataList__row--header):not(.SharpDataList__row--disabled) {
+      box-shadow: inset 5px 0 0 lighten($brand-03, 25%);
+    }
+
+    .SharpDataList__cols {
+      flex: 1;
+      display: flex;
+      position: relative;
+      .row {
+        flex:1;
+        align-items: center;
+      }
+      .SharpDataList__row-link {
+        position: absolute;
+        left:0; right: 0; top: 0; bottom:0;
+      }
+    }
+    .SharpDataList__row-append {
+      @include media-breakpoint-down(sm) {
+        padding-top: 0;
+        width: 100%;
+      }
+    }
+  }
+
+  &__th {
+    //@include reset;
+    //@include padding-th;
+    //display: table-cell;
+    display: flex;
+    align-items: center;
+    font-size: rem(12px);
+    font-weight: 700;
+    height: rem(40px);
+    letter-spacing: 1px;
+    text-align: left;
+    text-transform: uppercase;
+    vertical-align: middle;
+    position: relative;
+
+    & > span {
+      //white-space: nowrap;
+      line-height: 2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .SharpDataList__sort-link {
+      position: absolute;
+      left:0; right: 0; top: 0; bottom:0;
+    }
+  }
+
+  &__td {
+    //@include reset;
+    @include font-size('14');
+    @include line-height('body');
+    //@include padding-td;
+    position: relative;
+    //display: table-cell;
+
+    &-html-container {
+      max-width: 100%;
+      * {
+        font-size: rem(14px) !important;
+      }
+      img {
+        max-width: 100%;
+      }
+      small {
+        font-size: smaller !important;
+      }
+      b, strong {
+        font-weight: bold !important;
+      }
+      em {
+        font-style: italic !important;
+      }
+      a {
+        position: relative;
+        z-index: 1;
+        &:hover {
+          color: darken($color__blue-51, 25%);
+        }
+      }
+    }
+  }
+
+  &__caret {
+    fill: $ui-05;
+    width: 8px;
+    min-width: 8px;
+    height: 8px;
+    transform: rotate(0deg);
+    transition: transform 200ms $bx--standard-easing;
+
+    margin-left: .5em;
+    cursor: pointer;
+
+    &--ascending  {
+      transform: rotate(180deg);
+      transition: transform 200ms $bx--standard-easing;
+    }
+
+    &--selected {
+      fill: $brand-01;
+    }
+  }
+
+  &__pagination-container {
+    display: flex;
+    justify-content: center;
+
+    .SharpPagination {
+      width: auto;
+    }
+  }
+}

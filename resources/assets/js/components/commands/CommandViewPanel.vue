@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="SharpViewPanel__glasspane" v-show="show" @click="$emit('change', false)"></div>
+        <div class="SharpViewPanel__glasspane" v-show="visible" @click="handleBackdropClicked"></div>
         <transition
             enter-class="SharpViewPanel--collapsed"
             enter-active-class="SharpViewPanel--expanding"
@@ -9,8 +9,8 @@
             leave-active-class="SharpViewPanel--collapsing"
             leave-to-class="SharpViewPanel--collapsed"
         >
-            <div class="SharpViewPanel" v-show="show">
-                <iframe v-if="content" :src="`data:text/html;charset=utf-8$,${encodeURIComponent(content)}`"
+            <div class="SharpViewPanel" v-show="visible">
+                <iframe v-if="visible" :src="`data:text/html;charset=utf-8$,${encodeURIComponent(content)}`"
                         style="height:100%;width:100%" height="100%" width="100%" frameborder="0">
                 </iframe>
             </div>
@@ -21,13 +21,18 @@
 <script>
     export default {
         name: 'SharpViewPanel',
-        model: {
-            prop: 'show',
-            event: 'change'
-        },
         props: {
-            show: Boolean,
             content: String
+        },
+        computed:{
+            visible() {
+                return !!this.content;
+            }
+        },
+        methods: {
+            handleBackdropClicked() {
+                this.$emit('close');
+            },
         }
     }
 </script>

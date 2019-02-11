@@ -18,7 +18,7 @@ describe('localize-editor', ()=>{
                     value: { text: null }
                 }
             },
-            render: h => h(null)
+            render() {}
         }, {
             propsData: { localized:false, locale:'en' },
             provide: mockInjections({ locales:['en', 'fr'], localized: true })

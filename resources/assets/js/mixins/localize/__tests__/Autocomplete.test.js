@@ -13,7 +13,7 @@ describe('localize-autocomplete', ()=>{
                 searchKeys:['title', 'label'],
                 localValues: []
             }),
-            render: h => h(null)
+            render() {}
         }, {
             propsData: { localized: false, locale:'en'  },
             provide: mockInjections({ locales: ['en', 'fr'], localized:true })
