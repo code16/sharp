@@ -27,7 +27,7 @@
                         </template>
                     </SharpDataListRow>
                 </div>
-                <div class="SharpDataList__tbody">
+                <div class="SharpDataList__tbody" ref="body">
                     <draggable :options="draggableOptions" :value="reorderedItems" @input="handleItemsChanged">
                         <template v-for="item in currentItems">
                             <slot name="item" :item="item">
@@ -126,11 +126,13 @@
                 this.$emit('page-change', page);
             },
             updateLayout() {
-                const append = this.$el.querySelector('.SharpDataList__row-append');
+                const body = this.$refs.body;
+                const append = body.querySelector('.SharpDataList__row-append');
                 this.headerRowAppendWidth = append ? `${append.offsetWidth}px` : 0;
             }
         },
         mounted() {
+            this.updateLayout();
             window.addEventListener('resize', this.updateLayout);
         },
         destroyed() {

@@ -40,7 +40,7 @@
                 </template>
                 <template slot="item" slot-scope="{ item }">
                     <SharpDataListRow :url="instanceFormUrl(item)" :columns="columns" :row="item">
-                        <template v-if="instanceHasState(item) && instanceHasCommands(item)">
+                        <template v-if="hasActionsColumn">
                             <template slot="append">
                                 <div class="row">
                                     <template v-if="instanceHasState(item)">
@@ -202,7 +202,7 @@
              * Data list props
              */
             items() {
-                return this.data.items;
+                return this.data.items || [];
             },
             columns() {
                 return this.layout.map(columnLayout => ({
@@ -218,7 +218,14 @@
             },
             pageSize() {
                 return this.data.pageSize;
-            }
+            },
+
+            hasActionsColumn() {
+                return this.items.some(instance =>
+                    this.instanceHasState(instance) ||
+                    this.instanceHasCommands(instance)
+                );
+            },
         },
         methods: {
             /**

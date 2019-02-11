@@ -59,6 +59,9 @@
     &--header {
       border: none;
       cursor: inherit;
+      .SharpDataList__row-append {
+        width: auto;
+      }
     }
 
     .SharpDataList__cols, .SharpDataList__row-append  {
@@ -87,7 +90,6 @@
       }
     }
     .SharpDataList__row-append {
-      width: 5rem;
       @include media-breakpoint-down(sm) {
         padding-top: 0;
         width: 100%;
