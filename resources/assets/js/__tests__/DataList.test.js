@@ -5,7 +5,7 @@ import { shallowMount } from '@vue/test-utils';
 
 describe('DataList', ()=>{
 
-    function createWrapper({ showRowAppend, ...options }={}) {
+    function createWrapper({ ...options }={}) {
         return shallowMount(SharpDataList, {
             stubs: {
                 'SharpDataListRow': `<div class="MOCKED_SharpDataListRow" v-bind="$props">
@@ -79,7 +79,7 @@ describe('DataList', ()=>{
     test('mount items slot', ()=>{
         const wrapper = createWrapper(withDefaultMocks({
             scopedSlots: {
-                item: `<div>{{ props.item.text }}</div>`,
+                item: `<div v-bind="props">{{ props.item.text }}</div>`,
             },
         }));
         wrapper.setProps({

@@ -2,7 +2,7 @@
     <div class="SharpDataList__row container"
         :class="{
             'SharpDataList__row--header': header,
-            'SharpDataList__row--disabled': !header && hasLink,
+            'SharpDataList__row--disabled': !header && !hasLink,
         }"
     >
         <div class="SharpDataList__cols">
