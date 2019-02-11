@@ -78,7 +78,7 @@ exports[`DataList mount items slot 1`] = `
 		</div>
 		<div class="SharpDataList__tbody">
 			<div class="MOCKED_Draggable">
-				<div>mockedText</div>
+				<div item="[object Object]">mockedText</div>
 			</div>
 		</div>
 	</div>
