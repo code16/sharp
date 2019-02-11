@@ -64,10 +64,6 @@
             SharpAutocomplete
         },
         props: {
-            filterKey: {
-                type: String,
-                required: true
-            },
             name : {
                 type: String,
                 required: true
@@ -83,7 +79,9 @@
             required: Boolean,
             searchable: Boolean,
             searchKeys: Array,
-            template: String
+            template: String,
+
+            filterKey: String,
         },
         data() {
             return {

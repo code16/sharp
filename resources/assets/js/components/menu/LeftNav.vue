@@ -9,6 +9,7 @@
                 <h2 class="SharpLeftNav__title">{{ title }}</h2>
             </div>
             <div class="SharpLeftNav__content d-flex flex-column h-100">
+                <GlobalFilters />
                 <div class="flex-grow-1" style="min-height: 0; overflow: auto">
                     <slot />
                 </div>
@@ -28,11 +29,16 @@
 
 <script>
     import { Responsive } from '../../mixins';
+    import GlobalFilters from './GlobalFilters.vue';
 
     export default {
         name: 'SharpLeftNav',
 
         mixins: [Responsive('lg')],
+
+        components: {
+            GlobalFilters,
+        },
 
         props: {
             items: Array,

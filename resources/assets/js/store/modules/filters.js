@@ -9,10 +9,10 @@ const filterQueryRE = new RegExp(`^${filterQueryPrefix}`);
 export default {
     namespaced: true,
 
-    state: {
+    state: ()=>({
         filters: null,
         values: {},
-    },
+    }),
 
     mutations: {
         [SET_FILTERS](state, filters) {
