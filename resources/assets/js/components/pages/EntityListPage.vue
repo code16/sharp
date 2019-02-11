@@ -334,7 +334,7 @@
 
 
             filterByKey(key) {
-                return this.config.filters.find(filter => filter.key === key);
+                return (this.config.filters || []).find(filter => filter.key === key);
             },
 
             /**

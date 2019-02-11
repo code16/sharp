@@ -24,4 +24,6 @@ global.window.document.createRange = function createRange() {
 
 // prevent errors when modifying location props
 delete window.location;
-window.location = {};
+window.location = {
+    set href(href) {}
+};

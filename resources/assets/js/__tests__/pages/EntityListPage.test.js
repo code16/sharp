@@ -9,6 +9,9 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 jest.mock('../../mixins/Localization');
 jest.mock('../../components/DynamicViewMixin');
 jest.mock('../../store/modules/entity-list');
+jest.mock('../../consts', () => ({
+    BASE_URL: 'BASE_URL'
+}));
 
 describe('EntityListPage', () => {
     function createWrapper({ storeModule={}, ...options }={}) {
@@ -379,6 +382,274 @@ describe('EntityListPage', () => {
             expect(wrapper.vm.data.items).toEqual([{ id:1 }]);
             expect(wrapper.vm.reorderedItems).toEqual(null);
             expect(wrapper.vm.reorderActive).toEqual(false);
+        });
+
+        test('handleEntityCommandRequested', () => {
+            const wrapper = createWrapper();
+            wrapper.setMethods({
+                handleCommandRequested: jest.fn(),
+                commandEndpoint: jest.fn(()=>'commandEndpoint'),
+            });
+            wrapper.vm.handleEntityCommandRequested({ key:'sync' });
+            expect(wrapper.vm.handleCommandRequested).toHaveBeenCalledWith({ key:'sync' }, {
+                endpoint: 'commandEndpoint',
+            });
+            expect(wrapper.vm.commandEndpoint).toHaveBeenCalledWith('sync');
+        });
+
+        test('handleCreateButtonClicked', () => {
+            const wrapper = createWrapper();
+            const locationHrefSpy = jest.spyOn(window.location, 'href', 'set');
+            wrapper.setMethods({
+                formUrl: jest.fn(()=>'formUrl')
+            });
+            wrapper.vm.handleCreateButtonClicked();
+            expect(locationHrefSpy).toHaveBeenCalledWith('formUrl');
+
+            locationHrefSpy.mockClear();
+            wrapper.vm.handleCreateButtonClicked({ key:'form' });
+            expect(wrapper.vm.formUrl).toHaveBeenCalledWith({ formKey:'form' });
+            expect(locationHrefSpy).toHaveBeenCalledWith('formUrl');
+        });
+
+        test('instanceId', () => {
+            const wrapper = createWrapper();
+            wrapper.setData({
+                config: {
+                }
+            });
+            expect(wrapper.vm.instanceId({ id:3 })).toEqual(3);
+            wrapper.setData({
+                config: {
+                    instanceIdAttribute: 'key'
+                }
+            });
+            expect(wrapper.vm.instanceId({ key:3 })).toEqual(3);
+        });
+
+        test('instanceState', () => {
+            const wrapper = createWrapper();
+            wrapper.setMethods({
+                instanceHasState: jest.fn(()=>false)
+            });
+            expect(wrapper.vm.instanceState({})).toEqual(null);
+            wrapper.setMethods({
+                instanceHasState: jest.fn(()=>true)
+            });
+            wrapper.setData({
+                config: {
+                    state: {
+                    }
+                }
+            });
+            expect(wrapper.vm.instanceState({ state:'verified' })).toEqual('verified');
+            wrapper.setData({
+                config: {
+                    state: {
+                        attribute: 'stateKey'
+                    }
+                }
+            });
+            expect(wrapper.vm.instanceState({ stateKey:'validated' })).toEqual('validated');
+        });
+
+        test('instanceHasState', () => {
+            const wrapper = createWrapper();
+            wrapper.setData({
+                config: {
+                }
+            });
+            expect(wrapper.vm.instanceHasState({})).toEqual(false);
+            wrapper.setData({
+                config: {
+                    state: {
+                        attribute: 'state',
+                        values: [],
+                    }
+                }
+            });
+            expect(wrapper.vm.instanceHasState({})).toEqual(true);
+        });
+
+        test('instanceHasComands', () => {
+            const wrapper = createWrapper();
+            wrapper.setMethods({
+                instanceCommands: jest.fn(() => [[]])
+            });
+            expect(wrapper.vm.instanceHasCommands({})).toEqual(false);
+            wrapper.setMethods({
+                instanceCommands: jest.fn(() => [[{ id:1 }], [{ id:5 }]])
+            });
+            expect(wrapper.vm.instanceHasCommands({})).toEqual(true);
+        });
+
+        test('instanceHasStateAuthorization', () => {
+            const wrapper = createWrapper();
+            wrapper.setMethods({
+                instanceHasState: jest.fn(()=>false)
+            });
+            expect(wrapper.vm.instanceHasStateAuthorization({})).toEqual(false);
+            wrapper.setMethods({
+                instanceHasState: jest.fn(()=>true),
+                instanceId: jest.fn(()=>1),
+            });
+            wrapper.setData({
+                config: {
+                    state: {
+                    }
+                }
+            });
+            expect(wrapper.vm.instanceHasStateAuthorization({})).toEqual(false);
+            wrapper.setData({
+                config: {
+                    state: {
+                        authorization: true
+                    }
+                }
+            });
+            expect(wrapper.vm.instanceHasStateAuthorization({})).toEqual(true);
+            wrapper.setData({
+                config: {
+                    state: {
+                        authorization: [2, 3]
+                    }
+                }
+            });
+            expect(wrapper.vm.instanceHasStateAuthorization({})).toEqual(false);
+            wrapper.setData({
+                config: {
+                    state: {
+                        authorization: [1, 2]
+                    }
+                }
+            });
+            expect(wrapper.vm.instanceHasStateAuthorization({})).toEqual(true);
+        });
+
+        test('instanceCommands', () => {
+            const wrapper = createWrapper();
+            wrapper.setMethods({
+                instanceId: jest.fn(()=>1),
+            });
+            wrapper.setData({
+                config: {
+                    commands: {
+                    }
+                }
+            });
+            expect(wrapper.vm.instanceCommands({})).toEqual([]);
+            wrapper.setData({
+                config: {
+                    commands: {
+                        instance: [[{ authorization:[2, 3] }], [{ authorization:[1,2] }]]
+                    }
+                }
+            });
+            expect(wrapper.vm.instanceCommands({})).toEqual([[], [{ authorization:[1,2] }]]);
+        });
+
+        test('instanceForm', () => {
+            const wrapper = createWrapper({
+                computed: {
+                    multiforms: ()=>[{ instances:[3,4] }, { instances:[1,2] }]
+                }
+            });
+            wrapper.setMethods({
+                instanceId: jest.fn(()=>1)
+            });
+            expect(wrapper.vm.instanceForm({})).toEqual({ instances:[1,2] });
+        });
+
+        test('instanceFormUrl', () => {
+            let wrapper;
+            wrapper = createWrapper({
+                computed: {
+                    hasMultiforms: ()=>false
+                }
+            });
+            wrapper.setMethods({
+                instanceId: jest.fn(()=>1),
+                formUrl: jest.fn(()=>'formUrl')
+            });
+            expect(wrapper.vm.instanceFormUrl({})).toEqual('formUrl');
+            expect(wrapper.vm.formUrl).toHaveBeenCalledWith({ instanceId:1 });
+
+            wrapper = createWrapper({
+                computed: {
+                    hasMultiforms: ()=>true
+                }
+            });
+            wrapper.setMethods({
+                instanceId: jest.fn(()=>1),
+                formUrl: jest.fn(()=>'formUrl')
+            });
+            wrapper.setMethods({
+                instanceForm: jest.fn(()=>null),
+            });
+            expect(wrapper.vm.instanceFormUrl({})).toEqual('formUrl');
+            expect(wrapper.vm.formUrl).toHaveBeenCalledWith({ formKey:undefined, instanceId:1 });
+
+            wrapper.setMethods({
+                instanceForm: jest.fn(()=>({ key:'form' })),
+            });
+            expect(wrapper.vm.instanceFormUrl({})).toEqual('formUrl');
+            expect(wrapper.vm.formUrl).toHaveBeenCalledWith({ formKey:'form', instanceId:1 });
+        });
+
+        test('filterByKey', () => {
+            const wrapper = createWrapper();
+            wrapper.setData({
+                config: {
+                }
+            });
+            expect(wrapper.vm.filterByKey('name')).toBeUndefined();
+            wrapper.setData({
+                config: {
+                    filters:[{ key:'age' }, { key:'name' }]
+                }
+            });
+            expect(wrapper.vm.filterByKey('name')).toEqual({ key:'name' });
+        });
+
+        test('formUrl', () => {
+            const wrapper = createWrapper({
+                computed: {
+                    entityKey:()=>'entityKey'
+                }
+            });
+            expect(wrapper.vm.formUrl()).toEqual('BASE_URL/form/entityKey');
+            expect(wrapper.vm.formUrl({ instanceId:'instanceId' })).toEqual('BASE_URL/form/entityKey/instanceId');
+            expect(wrapper.vm.formUrl({ formKey:'formKey', instanceId:'instanceId' })).toEqual('BASE_URL/form/entityKey:formKey/instanceId');
+        });
+
+        test('handleCommandRequested', ()=>{
+            const wrapper = createWrapper();
+            wrapper.setMethods({
+                sendCommand: jest.fn()
+            });
+            wrapper.vm.handleCommandRequested('command', { endpoint:'endpoint' });
+            expect(wrapper.vm.sendCommand).toHaveBeenCalledWith('command', expect.objectContaining({
+                postCommand: expect.any(Function),
+                postForm: expect.any(Function),
+                getFormData: expect.any(Function),
+            }));
+        });
+
+        test('commandEndpoint', ()=>{
+            const wrapper = createWrapper({
+                computed: {
+                    apiPath:()=>'apiPath'
+                }
+            });
+            expect(wrapper.vm.commandEndpoint('commandKey')).toEqual('apiPath/command/commandKey');
+            expect(wrapper.vm.commandEndpoint('commandKey', 'instanceId')).toEqual('apiPath/command/commandKey/instanceId');
+        });
+
+        test('init', ()=>{
+            const wrapper = createWrapper();
+            wrapper.vm.$route.params.id = 'entityKey';
+            wrapper.vm.init();
+            expect(wrapper.vm.$store.dispatch).toHaveBeenCalledWith('entity-list/setEntityKey', 'entityKey');
         });
     });
 });
