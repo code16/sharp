@@ -34,8 +34,8 @@
   &--searchable {
     &.SharpFilterSelect--open {
       .SharpAutocomplete .multiselect__tags {
-        width: 10rem !important;
-        padding: 0 1rem !important;
+        width: 10rem;
+        padding: 0 1rem;
         top: 100%;
         margin-top: $list-offset;
         border-radius: $btn-border-radius;
