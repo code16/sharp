@@ -2,6 +2,7 @@
     current="{{ $sharpMenu->currentEntity }}"
     title="{{ $sharpMenu->name }}"
     :items="{{ json_encode($sharpMenu->menuItems) }}"
+    :has-global-filters="{{ json_encode($hasGlobalFilters) }}"
 >
     <ul role="menubar" class="SharpLeftNav__list" aria-hidden="false" v-cloak>
         <sharp-nav-item disabled>

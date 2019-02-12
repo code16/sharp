@@ -58,7 +58,8 @@
             collapseable: {
                 type: Boolean,
                 default: true,
-            }
+            },
+            hasGlobalFilters: Boolean,
         },
         data() {
             return {
@@ -118,7 +119,9 @@
                 }
             },
             async init() {
-                await this.$store.dispatch('global-filters/get');
+                if(this.hasGlobalFilters) {
+                    await this.$store.dispatch('global-filters/get');
+                }
                 this.ready = true;
             },
         },
