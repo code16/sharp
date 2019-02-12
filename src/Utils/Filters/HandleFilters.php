@@ -163,6 +163,17 @@ trait HandleFilters
     }
 
     /**
+     * @param $handler
+     * @return bool
+     */
+    protected function isGlobalFilter($handler)
+    {
+        return $handler instanceof GlobalFilter
+            || $handler instanceof GlobalRequiredFilter
+            || $handler instanceof GlobalMultipleFilter;
+    }
+
+    /**
      * Return the filter default value, which can be, in that order:
      * - the retained value, if the filter is retained
      * - the default value is the filter is required
@@ -174,10 +185,16 @@ trait HandleFilters
      */
     protected function getFilterDefaultValue($handler, $attribute)
     {
-        if($this->isRetainedFilter($handler, $attribute, true)) {
+        if($isGlobalFilter = $this->isGlobalFilter($handler)) {
+            $sessionValue = session("_sharp_retained_global_filter_$attribute");
+        } else {
+            $sessionValue = session("_sharp_retained_filter_$attribute");
+        }
+
+        if(!is_null($sessionValue) && ($isGlobalFilter || $this->isRetainedFilter($handler, $attribute, true))) {
             return $handler instanceof ListMultipleFilter
-                ? explode(",", session("_sharp_retained_filter_$attribute"))
-                : session("_sharp_retained_filter_$attribute");
+                ? explode(",", $sessionValue)
+                : $sessionValue;
         }
 
         return $handler instanceof ListRequiredFilter

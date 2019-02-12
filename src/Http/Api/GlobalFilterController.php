@@ -33,7 +33,8 @@ class GlobalFilterController extends ApiController
         abort_if(is_null($handlerClass = config("sharp.global_filters.$filterName")), 404);
 
         // Ensure value is in the filter value-set
-        $value = isset($this->formatFilterValues(app($handlerClass))[request("value")])
+        $allowedFilterValues = collect($this->formatFilterValues(app($handlerClass)));
+        $value = $allowedFilterValues->where("id", request("value"))->first()
             ? request("value")
             : null;
 
