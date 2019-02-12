@@ -185,13 +185,13 @@ trait HandleFilters
      */
     protected function getFilterDefaultValue($handler, $attribute)
     {
-        if($isGlobalFilter = $this->isGlobalFilter($handler)) {
-            $sessionValue = session("_sharp_retained_global_filter_$attribute");
-        } else {
-            $sessionValue = session("_sharp_retained_filter_$attribute");
+        if($this->isGlobalFilter($handler)) {
+            return session("_sharp_retained_global_filter_$attribute") ?: $handler->defaultValue();
         }
 
-        if(!is_null($sessionValue) && ($isGlobalFilter || $this->isRetainedFilter($handler, $attribute, true))) {
+        if($this->isRetainedFilter($handler, $attribute, true)) {
+            $sessionValue = session("_sharp_retained_filter_$attribute");
+
             return $handler instanceof ListMultipleFilter
                 ? explode(",", $sessionValue)
                 : $sessionValue;

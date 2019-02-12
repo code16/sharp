@@ -17,13 +17,13 @@ class CorporationGlobalFilter implements GlobalRequiredFilter
             ->all();
     }
 
-    public function label()
-    {
-        return "";
-    }
-
     public function defaultValue()
     {
         return Corporation::first()->id;
+    }
+
+    public function isSearchable()
+    {
+        return true;
     }
 }

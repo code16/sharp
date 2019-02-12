@@ -3,8 +3,6 @@
 namespace Code16\Sharp\Tests\Feature\Api;
 
 use Code16\Sharp\Http\SharpContext;
-use Code16\Sharp\Utils\Filters\GlobalFilter;
-use Code16\Sharp\Utils\Filters\GlobalMultipleFilter;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 
 class GlobalFiltersTest extends BaseApiTest
@@ -14,29 +12,6 @@ class GlobalFiltersTest extends BaseApiTest
         parent::setUp();
 
         $this->login();
-    }
-
-    /** @test */
-    public function we_can_retrieve_a_global_filter_value_from_context()
-    {
-        $this->buildTheWorld();
-
-        config()->set("sharp.global_filters.test", GlobalFiltersTestGlobalFilter::class);
-
-        $context = app(SharpContext::class);
-
-        // First call without any value in session
-        $this->json('get', '/sharp/api/form/person/50');
-
-        $this->assertNull($context->globalFilterFor("test"));
-
-        // Second call with a value in session
-        $value = str_random();
-        session()->put("_sharp_retained_global_filter_test", $value);
-
-        $this->json('get', '/sharp/api/form/person/50');
-
-        $this->assertEquals($value, $context->globalFilterFor("test"));
     }
 
     /** @test */
@@ -63,35 +38,12 @@ class GlobalFiltersTest extends BaseApiTest
     }
 
     /** @test */
-    public function we_can_retrieve_a_global_multiple_filter_value_from_context()
-    {
-        $this->buildTheWorld();
-
-        config()->set("sharp.global_filters.mul_test", GlobalFiltersTestGlobalMultipleFilter::class);
-
-        $context = app(SharpContext::class);
-
-        // First call without any value in session
-        $this->json('get', '/sharp/api/form/person/50');
-
-        $this->assertNull($context->globalFilterFor("mul_test"));
-
-        // Second call with a value in session
-        $value = [str_random(), str_random()];
-        session()->put("_sharp_retained_global_filter_mul_test", implode(",", $value));
-
-        $this->json('get', '/sharp/api/form/person/50');
-
-        $this->assertEquals($value, $context->globalFilterFor("mul_test"));
-    }
-
-    /** @test */
     function we_can_set_a_global_filter_value_via_the_endpoint()
     {
         $this->buildTheWorld();
         $context = app(SharpContext::class);
 
-        config()->set("sharp.global_filters.test", GlobalFiltersTestGlobalFilter::class);
+        config()->set("sharp.global_filters.test", GlobalFiltersTestGlobalRequiredFilter::class);
 
         $this
             ->postJson('/sharp/api/filters/test', ["value" => 5])
@@ -107,7 +59,7 @@ class GlobalFiltersTest extends BaseApiTest
 
         $this->json('get', '/sharp/api/form/person/50');
 
-        $this->assertNull($context->globalFilterFor("test"));
+        $this->assertEquals("default", $context->globalFilterFor("test"));
     }
 
     /** @test */
@@ -116,7 +68,7 @@ class GlobalFiltersTest extends BaseApiTest
         $this->buildTheWorld();
         $context = app(SharpContext::class);
 
-        config()->set("sharp.global_filters.test", GlobalFiltersTestGlobalFilter::class);
+        config()->set("sharp.global_filters.test", GlobalFiltersTestGlobalRequiredFilter::class);
 
         $this
             ->postJson('/sharp/api/filters/test', ["value" => 20])
@@ -124,7 +76,7 @@ class GlobalFiltersTest extends BaseApiTest
 
         $this->json('get', '/sharp/api/form/person/50');
 
-        $this->assertNull($context->globalFilterFor("test"));
+        $this->assertEquals("default", $context->globalFilterFor("test"));
     }
 
     /** @test */
@@ -132,9 +84,7 @@ class GlobalFiltersTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        config()->set("sharp.global_filters.testA", GlobalFiltersTestGlobalFilter::class);
-        config()->set("sharp.global_filters.testB", GlobalFiltersTestGlobalRequiredFilter::class);
-        config()->set("sharp.global_filters.testC", GlobalFiltersTestGlobalMultipleFilter::class);
+        config()->set("sharp.global_filters.test", GlobalFiltersTestGlobalRequiredFilter::class);
 
         $this
             ->getJson('/sharp/api/filters')
@@ -142,44 +92,25 @@ class GlobalFiltersTest extends BaseApiTest
             ->assertJson([
                 "filters" => [
                     [
-                        "key" => "testA",
-                        "multiple" => false,
-                        "required" => false,
-                    ],
-                    [
-                        "key" => "testB",
+                        "key" => "test",
                         "multiple" => false,
                         "required" => true,
                         "default" => "default",
                     ],
-                    [
-                        "key" => "testC",
-                        "multiple" => true,
-                        "required" => false,
-                    ]
                 ]
             ]);
     }
 }
 
-class GlobalFiltersTestGlobalFilter implements GlobalFilter
+class GlobalFiltersTestGlobalRequiredFilter implements GlobalRequiredFilter
 {
     public function values()
     {
         return range(0, 10);
     }
-}
 
-class GlobalFiltersTestGlobalRequiredFilter
-    extends GlobalFiltersTestGlobalFilter implements GlobalRequiredFilter
-{
     public function defaultValue()
     {
         return "default";
     }
-}
-
-class GlobalFiltersTestGlobalMultipleFilter
-    extends GlobalFiltersTestGlobalFilter implements GlobalMultipleFilter
-{
 }
