@@ -1616,7 +1616,7 @@ describe.skip('entity-list', ()=>{
 
         $entityList.update = jest.fn();
         $entityList.actionsBus.$emit('filterChanged', 'age', 3);
-        expect($entityList.filtersValue).toEqual({ age: 3 });
+        expect($entityList.filtersValues).toEqual({ age: 3 });
         expect($entityList.update).toHaveBeenCalled();
     });
 

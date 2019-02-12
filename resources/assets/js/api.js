@@ -1,7 +1,11 @@
 import axios from 'axios';
+import qs from 'qs';
 import { API_PATH } from "./consts";
 
-export const api = axios.create({ baseURL:API_PATH });
+export const api = axios.create({
+    baseURL: API_PATH,
+    paramsSerializer: params => qs.stringify(params, { arrayFormat:'comma' }),
+});
 
 export function getDashboard({ dashboardKey, filters }) {
     return api.get(`dashboard/${dashboardKey}`, {

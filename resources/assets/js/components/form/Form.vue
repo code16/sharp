@@ -95,6 +95,8 @@
 
         data() {
             return {
+                ready: false,
+
                 fields: null,
                 authorizations: null,
 
@@ -211,14 +213,16 @@
                 return layout;
             },
 
-            init() {
+            async init() {
                 if(this.independant) {
                     this.mount(this.props);
                     this.ready = true;
                 }
                 else {
                     if(this.entityKey) {
-                        this.get().then(_=>this.setupActionBar());
+                        await this.get();
+                        this.setupActionBar();
+                        this.ready = true;
                     }
                     else util.error('no entity key provided');
                 }

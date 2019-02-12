@@ -5,7 +5,7 @@
                 :count="itemsCount"
                 :search="search"
                 :filters="filters"
-                :filters-value="filtersValue"
+                :filters-values="filtersValues"
                 :commands="allowedEntityCommands"
                 :forms="multiforms"
                 :reorder-active="reorderActive"
@@ -106,7 +106,7 @@
 
     import { BASE_URL } from "../../consts";
 
-    import { mapState } from 'vuex';
+    import { mapState, mapGetters } from 'vuex';
 
     export default {
         name: 'SharpEntityListPage',
@@ -127,7 +127,7 @@
         },
         data() {
             return {
-                filtersValue: null,
+                ready: false,
 
                 page: 0,
                 search: '',
@@ -153,6 +153,12 @@
             ...mapState('entity-list', {
                 entityKey: state => state.entityKey,
             }),
+            ...mapGetters('entity-list', {
+                filters: 'filters/filters',
+                filtersValues: 'filters/values',
+                filterNextQuery: 'filters/nextQuery',
+                getFiltersValuesFromQuery: 'filters/getValuesFromQuery',
+            }),
             hasMultiforms() {
                 return !!this.forms;
             },
@@ -162,22 +168,12 @@
             apiPath() {
                 return `list/${this.entityKey}`;
             },
-            filterParams() {
-                return Object.keys(this.filtersValue || {}).reduce((res, filterKey)=>{
-                    if(this.filtersValue[filterKey] != null)
-                        res[`filter_${filterKey}`] = this.filtersValue[filterKey];
-                    return res;
-                },{});
-            },
 
             /**
              * Action bar computed data
              */
             itemsCount() {
                 return (this.data.items || []).length;
-            },
-            filters() {
-                return this.config.filters;
             },
             allowedEntityCommands() {
                 return (this.config.commands.entity || [])
@@ -237,12 +233,13 @@
             handleSearchSubmitted() {
                 this.$router.push({ query: { ...this.$route.query, search:this.search } });
             },
-            handleFilterChanged(key, value) {
-                this.filtersValue = {
-                    ...this.filtersValue,
-                    [key]: value,
-                };
-                this.$router.push({ query: { ...this.$route.query, ...this.filterParams }});
+            handleFilterChanged(filter, value) {
+                this.$router.push({
+                    query: {
+                        ...this.$route.query,
+                        ...this.filterNextQuery({ filter, value }),
+                    }
+                });
             },
             handleReorderButtonClicked() {
                 this.reorderActive = !this.reorderActive;
@@ -465,43 +462,32 @@
                 this.page = this.data.page;
                 !this.sortDir && (this.sortDir = this.config.defaultSortDir);
                 !this.sortedBy && (this.sortedBy = this.config.defaultSort);
-
-                this.filtersValue = this.config.filters.reduce((res, filter) => {
-                    res[filter.key] = this.filterValueOrDefault((this.filtersValue||{})[filter.key], filter);
-                    return res;
-                }, {});
             },
             bindParams(params) {
-                let { search, page, sort, dir, ...dynamicParams } = params;
+                let { search, page, sort, dir } = params;
 
                 this.search = search;
                 page && (this.page = Number(page));
                 sort && (this.sortedBy = sort);
                 dir && (this.sortDir = dir);
-
-                for(let paramKey of Object.keys(dynamicParams)) {
-                    let paramValue = dynamicParams[paramKey];
-                    if(/^filter_/.test(paramKey)) {
-                        const filterKey = paramKey.replace('filter_', '');
-                        const filter = this.filterByKey(filterKey);
-
-                        if((filter || {}).multiple && paramValue && !Array.isArray(paramValue)) {
-                            paramValue = [paramValue];
-                        }
-                        this.filtersValue[filterKey] = this.filterValueOrDefault(paramValue, filter);
-                    }
-                }
             },
-            init() {
-                this.$store.dispatch('entity-list/setEntityKey', this.$route.params.id);
-                this.get().then(() => {
-                    this.bindParams(this.$route.query);
+            async init() {
+                await this.$store.dispatch('entity-list/setEntityKey', this.$route.params.id);
+                // legacy
+                this.disableAutoReady = true;
+                await this.get();
+                this.bindParams(this.$route.query);
+
+                await this.$store.dispatch('entity-list/update', {
+                    config: this.config,
+                    filtersValues: this.getFiltersValuesFromQuery(this.$route.query)
                 });
+                this.ready = true;
             },
         },
-        created() {
+        beforeMount() {
             this.init();
             this.initCommands();
-        }
+        },
     }
 </script>
