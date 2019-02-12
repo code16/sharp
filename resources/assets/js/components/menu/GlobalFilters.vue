@@ -24,8 +24,14 @@
     import SharpFilterSelect from '../list/FilterSelect.vue';
     import { BASE_URL } from "../../consts";
     import debounce from 'lodash/debounce';
+    import Vue from 'vue';
 
     export default {
+        inject: {
+            mainLoading: {
+                default: new Vue()
+            },
+        },
         components: {
             SharpFilterSelect
         },
@@ -39,6 +45,7 @@
             handleFilterChanged(filter, value) {
                 this.$store.dispatch('global-filters/post', { filter, value })
                     .then(() => {
+                        this.mainLoading.$emit('show');
                         location.href = BASE_URL;
                     });
             },
