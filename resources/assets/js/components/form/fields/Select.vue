@@ -25,6 +25,12 @@
                     </svg>
                 </button>
             </template>
+            <template slot="tag" slot-scope="{ option, remove }">
+                <span class="multiselect__tag" :key="option">
+                    <span>{{ multiselectLabel(option) }}</span>
+                    <i aria-hidden="true" tabindex="1" @keypress.enter.prevent="remove(option)" @mousedown.prevent.stop="remove(option)" class="multiselect__tag-icon"></i>
+                </span>
+            </template>
             <slot name="option" slot="option"></slot>
         </sharp-multiselect>
         <template v-else>

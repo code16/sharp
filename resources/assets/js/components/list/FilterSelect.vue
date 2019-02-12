@@ -6,7 +6,7 @@
               'SharpFilterSelect--multiple':multiple,
               'SharpFilterSelect--searchable':searchable
           }"
-          tabindex="0" @click="open"
+          tabindex="0"
     >
         <!-- dropdown & search input -->
         <sharp-autocomplete
@@ -27,7 +27,7 @@
             @multiselect-input="handleAutocompleteInput"
             @close="close"
         />
-        <span class="SharpFilterSelect__text">
+        <span class="SharpFilterSelect__text" @mousedown="handleMouseDown">
             {{name}}
         </span>
 
@@ -43,6 +43,7 @@
             placeholder=" "
             ref="select"
             @input="handleSelect"
+            @mousedown.native="handleMouseDown"
         />
     </span>
 </template>
@@ -57,7 +58,7 @@
 
     export default {
         name: 'SharpFilterSelect',
-        mixins:[Localization],
+        mixins: [Localization],
         components: {
             SharpDropdown,
             SharpSelect,
@@ -108,19 +109,31 @@
             handleAutocompleteInput(value) {
                 this.$emit('input', this.multiple ? value.map(v=>v.id) : (value||{}).id);
             },
+            handleMouseDown() {
+                if(this.opened) {
+                    this.close();
+                } else {
+                    this.open();
+                }
+            },
             open() {
                 this.opened = true;
                 this.$emit('open');
-                this.showMultiselect();
+                this.showDropdown();
             },
             close() {
                 this.opened = false;
-                this.$emit('close')
+                this.$emit('close');
+                this.$nextTick(this.blur);
             },
-            showMultiselect() {
+            showDropdown() {
                 let { autocomplete:{ $refs: { multiselect } } } = this.$refs;
                 multiselect.activate();
-            }
+            },
+            blur() {
+                let { select:{ $refs: { multiselect } } } = this.$refs;
+                multiselect.deactivate();
+            },
         }
     }
 </script>
