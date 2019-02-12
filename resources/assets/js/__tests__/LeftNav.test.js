@@ -1,12 +1,15 @@
-import { mount } from '@vue/test-utils';
+import Vuex from 'vuex';
+import { mount, createLocalVue } from '@vue/test-utils';
 import LeftNav from '../components/menu/LeftNav.vue';
-import Vue from 'vue';
+import globalFiltersModule from '../store/modules/global-filters';
+
+jest.mock('../store/modules/global-filters');
 jest.useFakeTimers();
-
-
 
 describe('left-nav', ()=>{
     function createWrapper(options) {
+        const localVue = createLocalVue();
+        localVue.use(Vuex);
         let wrapper = mount(LeftNav, {
             slots: {
                 default: '<div>NAV CONTENT</div>'
@@ -15,11 +18,16 @@ describe('left-nav', ()=>{
                 items: [{ entities:[] }]
             },
             created() {
-                jest.spyOn(this,'updateState');
+                jest.spyOn(this, 'updateState');
             },
+            localVue,
+            store: new Vuex.Store({
+                modules: {
+                    'global-filters': globalFiltersModule,
+                },
+            }),
             ...options
         });
-        jest.runAllTimers();
         return wrapper;
     }
 
@@ -53,10 +61,6 @@ describe('left-nav', ()=>{
 
 
     describe('watch collapsed', ()=>{
-        test('is immediate', ()=>{
-            expect(createWrapper().vm.$options.watch.collapsed.immediate).toBe(true);
-        });
-
         test('updating state for intermediate animations and set root class', async ()=>{
             const wrapper = createWrapper({ sync:false });
             const collapsedClass = 'leftNav--collapsed';
@@ -64,14 +68,13 @@ describe('left-nav', ()=>{
 
             $root.$emit = jest.fn();
 
-            await Vue.nextTick();
+            await wrapper.vm.$nextTick();
             expect($root.$emit).not.toHaveBeenCalledWith('setClass', collapsedClass, expect.anything());
-            expect(wrapper.vm.updateState).toHaveBeenCalledTimes(1);
 
             $root.$emit.mockClear();
             wrapper.setData({ collapsed: true });
 
-            await Vue.nextTick();
+            await wrapper.vm.$nextTick();
             expect($root.$emit).toHaveBeenCalledWith('setClass', collapsedClass, true);
             expect(setTimeout).toHaveBeenCalledWith(wrapper.vm.updateState, 250); // update state called at the end of the animation
             expect(wrapper.vm.state).toBe('collapsing');
@@ -79,12 +82,12 @@ describe('left-nav', ()=>{
             $root.$emit.mockClear();
             wrapper.setData({ collapsed: false });
 
-            await Vue.nextTick();
+            await wrapper.vm.$nextTick();
             expect($root.$emit).toHaveBeenCalledWith('setClass', collapsedClass, false);
             expect(wrapper.vm.state).toBe('expanding');
 
             jest.runOnlyPendingTimers();
-            expect(wrapper.vm.updateState).toHaveBeenCalledTimes(3);
+            expect(wrapper.vm.updateState).toHaveBeenCalledTimes(2);
         });
     });
 
@@ -128,22 +131,5 @@ describe('left-nav', ()=>{
         wrapper.setData({ collapsed: false });
         wrapper.vm.updateState();
         expect(wrapper.vm.state).toBe('expanded');
-    });
-
-    test('mounted hook', ()=>{
-        const wrapper = mount({
-            render:()=>null,
-            data:()=>({
-                isViewportSmall: false,
-                collapsed: null,
-                ready: false
-            })
-        });
-        LeftNav.mounted.call(wrapper.vm);
-        expect(wrapper.vm.collapsed).toBe(false);
-
-        wrapper.setData({ isViewportSmall: true });
-        LeftNav.mounted.call(wrapper.vm);
-        expect(wrapper.vm.collapsed).toBe(true);
     });
 });

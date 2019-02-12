@@ -63,9 +63,9 @@
         },
         data() {
             return {
-                collapsed: null,
-                state: 'expanded',
                 ready: false,
+                collapsed: false,
+                state: 'expanded',
 
                 filterOpened: false,
             }
