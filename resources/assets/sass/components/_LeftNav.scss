@@ -14,6 +14,9 @@
 
   &__content {
     box-shadow: 2px 0 3px 0 $ui-03;
+  }
+
+  &__inner {
     overflow: auto;
   }
 
@@ -220,7 +223,7 @@
   ///////////////////////////////////////////////////
 
   @mixin transition-elements() {
-    ul, li, hr, .SharpLeftNav__title-container ,.SharpLeftNav__collapse-target {
+    ul, li, hr, .SharpLeftNav__title-container ,.SharpLeftNav__collapse-target, .SharpGlobalFilters {
       @content;
     }
   }
@@ -418,6 +421,12 @@
   &--expanded {
     .SharpLeftNav__top-icon {
       display:none;
+    }
+  }
+
+  &--filter-opened {
+    .SharpLeftNav__inner {
+      overflow: hidden;
     }
   }
 }

@@ -110,10 +110,12 @@
             },
             open() {
                 this.opened = true;
+                this.$emit('open');
                 this.showMultiselect();
             },
             close() {
                 this.opened = false;
+                this.$emit('close')
             },
             showMultiselect() {
                 let { autocomplete:{ $refs: { multiselect } } } = this.$refs;

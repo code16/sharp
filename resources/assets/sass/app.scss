@@ -107,6 +107,8 @@ $small-breakpoint: sm;
   @import 'components/dashboard/Legend';
   @import 'components/Card';
 
+  @import 'components/GlobalFilters';
+
   input[type="number"].hide-controls {
     &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
       -webkit-appearance: none;
