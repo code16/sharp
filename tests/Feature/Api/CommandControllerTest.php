@@ -278,7 +278,6 @@ class CommandControllerTest extends BaseApiTest
     public function we_can_call_an_info_dashboard_command()
     {
         $this->buildTheWorldForDashboard();
-        $this->disableExceptionHandling();
 
         $this->json('post', '/sharp/api/dashboard/my_dashboard/command/dashboard_info')
             ->assertStatus(200)
@@ -292,7 +291,6 @@ class CommandControllerTest extends BaseApiTest
     public function we_can_initialize_form_data_in_an_dashboard_command()
     {
         $this->buildTheWorldForDashboard();
-        $this->disableExceptionHandling();
 
         $this->getJson('/sharp/api/dashboard/my_dashboard/command/dashboard_form/data')
             ->assertStatus(200)
