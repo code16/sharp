@@ -7,8 +7,6 @@ import { install as VueGoogleMaps } from 'vue2-google-maps';
 import SharpActionView from './components/ActionView';
 import SharpForm from './components/form/Form';
 import SharpFieldDisplay from './components/form/field-display/FieldDisplay';
-import SharpEntityList from './components/list/EntityList';
-import SharpDashboard from './components/dashboard/Dashboard';
 
 import SharpCollapsibleItem from './components/menu/CollapsibleItem';
 import SharpNavItem from './components/menu/NavItem';
@@ -50,8 +48,6 @@ new Vue({
     components: {
         SharpActionView,
         SharpForm,
-        SharpDashboard,
-        SharpEntityList,
         SharpCollapsibleItem,
         SharpNavItem,
         SharpLeftNav,
@@ -69,7 +65,7 @@ new Vue({
         mode: 'history',
         routes,
         base: `${BASE_URL}/`,
-        parseQuery: query => qs.parse(query),
+        parseQuery: query => qs.parse(query, { strictNullHandling: true }),
         stringifyQuery: query => qs.stringify(query, { addQueryPrefix: true, skipNulls: true }),
     })
 });
