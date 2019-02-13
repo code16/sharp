@@ -69,7 +69,7 @@ new Vue({
         mode: 'history',
         routes,
         base: `${BASE_URL}/`,
-        parseQuery: query => qs.parse(query, { comma: true }),
+        parseQuery: query => qs.parse(query),
     })
 });
 
