@@ -30,6 +30,9 @@ export default {
         filters(state) {
             return state.filters || []
         },
+        values(state) {
+            return state.values;
+        },
 
         defaultValue() {
             return filter => (filter||{}).default;

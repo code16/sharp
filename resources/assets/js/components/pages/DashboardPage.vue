@@ -57,7 +57,7 @@
                 layout: state => state.layout
             }),
             ...mapGetters('dashboard', {
-                getFilterValuesFromQuery: 'filters/getValuesFromQuery',
+                getFiltersValuesFromQuery: 'filters/getValuesFromQuery',
                 commandsForType: 'commands/forType',
             }),
             commands() {
@@ -76,7 +76,7 @@
             async init() {
                 await this.$store.dispatch('dashboard/setDashboardKey', this.$route.params.id);
                 await this.$store.dispatch('dashboard/get', {
-                    filterValues: this.getFilterValuesFromQuery(this.$route.query)
+                    filtersValues: this.getFiltersValuesFromQuery(this.$route.query)
                 });
                 this.ready = true;
             },

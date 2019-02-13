@@ -63,7 +63,7 @@ Now, you need to define the relationships. Let's say you have a Book model, and 
 ```php
     class Book extends Model
     {
-	    public function cover()
+	public function cover()
         {
             return $this->morphOne(Media::class, "model")
                 ->where("model_key", "cover");
@@ -169,11 +169,12 @@ Then add a customTransformer:
     function find($id): array
     {
         return $this->setCustomTransformer(
-            "cover", 
-            new FormUploadModelTransformer()
-        )->transform(
-            Book::with("cover")->findOrFail($id)
-        );
+                "cover", 
+                new FormUploadModelTransformer()
+            )
+	    ->transform(
+                Book::with("cover")->findOrFail($id)
+            );
     }
 ```
 

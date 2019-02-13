@@ -35,6 +35,9 @@ describe('EntityListPage', () => {
                     push: jest.fn()
                 },
             },
+            created() {
+                jest.spyOn(this, 'init').mockImplementation();
+            },
             store: new Vuex.Store({
                 modules: {
                     'entity-list': merge(entityListModule, storeModule),
@@ -135,20 +138,6 @@ describe('EntityListPage', () => {
             expect(wrapper.vm.apiPath).toEqual('list/entity-key');
         });
 
-        test('filterParams', () => {
-            const wrapper = createWrapper();
-            wrapper.setData({
-                filtersValue: {
-                    'age': 30,
-                    'type': null
-                }
-            });
-            expect(wrapper.vm.filterParams).toEqual({
-                'filter_age': 30
-            });
-        });
-
-
 
         test('itemsCount', () => {
             const wrapper = createWrapper();
@@ -160,16 +149,6 @@ describe('EntityListPage', () => {
                 data: { items: [{}] }
             });
             expect(wrapper.vm.itemsCount).toEqual(1);
-        });
-
-        test('filters', () => {
-            const wrapper = createWrapper();
-            wrapper.setData({
-                config: {
-                    filters: [{ key:'name' }]
-                }
-            });
-            expect(wrapper.vm.filters).toEqual([{ key:'name' }]);
         });
 
         test('allowedEntityCommands', () => {
@@ -342,16 +321,14 @@ describe('EntityListPage', () => {
         test('handleFilterChanged', ()=>{
             const wrapper = createWrapper({
                 computed: {
-                    filterParams:()=>({ filter_name:'George' })
+                    filterNextQuery:() => jest.fn(()=>({ filter:'nextQuery' })),
                 }
             });
-            wrapper.vm.handleFilterChanged('name', 'George');
-            expect(wrapper.vm.filtersValue).toEqual({
-                name: 'George'
-            });
+            wrapper.vm.handleFilterChanged({ key:'name' }, 'George');
+            expect(wrapper.vm.filterNextQuery).toHaveBeenCalledWith({ filter:{ key:'name' }, value:'George' });
             expect(wrapper.vm.$router.push).toHaveBeenCalledWith({
                 query: {
-                    filter_name: 'George',
+                    filter: 'nextQuery',
                 },
             });
         });
@@ -653,7 +630,9 @@ describe('EntityListPage', () => {
 
         test('init', ()=>{
             const wrapper = createWrapper();
+            wrapper.setData(withDefaults());
             wrapper.vm.$route.params.id = 'entityKey';
+            wrapper.vm.init.mockRestore();
             wrapper.vm.init();
             expect(wrapper.vm.$store.dispatch).toHaveBeenCalledWith('entity-list/setEntityKey', 'entityKey');
         });
