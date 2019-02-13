@@ -3,7 +3,7 @@ import qs from 'qs';
 function transformValue(value) {
     if(Array.isArray(value) && !value.length) {
         // when value is an empty array send the param anyway (values[] => ?values&... )
-        // used in «retained filters» to signify the filter as be resetted
+        // used in «retained filters» to signify the filter has been resetted
         return null;
     }
     return value;
