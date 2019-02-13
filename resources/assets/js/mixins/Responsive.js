@@ -1,3 +1,5 @@
+import debounce from 'lodash/debounce';
+
 export default function (breakpoint='sm') {
     return {
         data() {
@@ -11,7 +13,7 @@ export default function (breakpoint='sm') {
                 this.isViewportSmall = !!offsetWidth;
             }
         },
-        mounted() {
+        created() {
             let id = `viewport-down-${breakpoint}`;
             this.$_testElm = document.getElementById(id);
 
@@ -23,10 +25,11 @@ export default function (breakpoint='sm') {
             }
 
             this.$_responsiveUpdate();
-            window.addEventListener('resize', this.$_responsiveUpdate);
+            this.$_debouncedRespnsiveUpdate = debounce(this.$_responsiveUpdate, 300);
+            window.addEventListener('resize', this.$_debouncedRespnsiveUpdate);
         },
         destroyed() {
-            window.removeEventListener('resize', this.$_responsiveUpdate);
+            window.removeEventListener('resize', this.$_debouncedRespnsiveUpdate);
         }
     }
 }

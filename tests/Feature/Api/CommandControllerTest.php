@@ -26,7 +26,7 @@ class CommandControllerTest extends BaseApiTest
     public function we_can_call_an_info_entity_command()
     {
         $this->buildTheWorld();
-        $this->disableExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $this->json('post', '/sharp/api/list/person/command/entity_info')
             ->assertStatus(200)
@@ -40,7 +40,7 @@ class CommandControllerTest extends BaseApiTest
     public function we_can_call_an_info_instance_command()
     {
         $this->buildTheWorld();
-        $this->disableExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $this->json('post', '/sharp/api/list/person/command/instance_info/1')
             ->assertStatus(200)
@@ -54,7 +54,7 @@ class CommandControllerTest extends BaseApiTest
     public function we_can_call_a_link_entity_command()
     {
         $this->buildTheWorld();
-        $this->disableExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $this->json('post', '/sharp/api/list/person/command/instance_link/1')
             ->assertStatus(200)
@@ -68,7 +68,7 @@ class CommandControllerTest extends BaseApiTest
     public function we_can_call_a_reload_entity_command()
     {
         $this->buildTheWorld();
-        $this->disableExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $this->json('post', '/sharp/api/list/person/command/entity_reload')
             ->assertStatus(200)
@@ -81,7 +81,7 @@ class CommandControllerTest extends BaseApiTest
     public function we_can_call_a_view_entity_command()
     {
         $this->buildTheWorld();
-        $this->disableExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $this->json('post', '/sharp/api/list/person/command/entity_view')
             ->assertStatus(200)
@@ -94,7 +94,7 @@ class CommandControllerTest extends BaseApiTest
     public function we_can_call_a_refresh_entity_command()
     {
         $this->buildTheWorld();
-        $this->disableExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $this->json('post', '/sharp/api/list/person/command/entity_refresh')
             ->assertStatus(200)
@@ -118,7 +118,7 @@ class CommandControllerTest extends BaseApiTest
     public function we_can_call_a_refresh_instance_command()
     {
         $this->buildTheWorld();
-        $this->disableExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $json = $this->json('post', '/sharp/api/list/person/command/instance_refresh/1')
             ->assertStatus(200)
@@ -140,7 +140,7 @@ class CommandControllerTest extends BaseApiTest
     public function we_can_call_a_form_entity_command()
     {
         $this->buildTheWorld();
-        $this->disableExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $this->json('post', '/sharp/api/list/person/command/entity_form', [
             "data" => ["name" => "John"]
@@ -151,7 +151,7 @@ class CommandControllerTest extends BaseApiTest
     public function we_can_call_a_download_entity_command()
     {
         $this->buildTheWorld();
-        $this->disableExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $response = $this->json('post', '/sharp/api/list/person/command/entity_download')
             ->assertStatus(200)
@@ -195,7 +195,7 @@ class CommandControllerTest extends BaseApiTest
     public function we_get_the_full_query_in_an_entity_command()
     {
         $this->buildTheWorld();
-        $this->disableExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $this->json('post', '/sharp/api/list/person/command/entity_params', [
             "query" => ["sort" => "name", "dir" => "desc"]
@@ -232,7 +232,7 @@ class CommandControllerTest extends BaseApiTest
     public function we_can_initialize_form_data_in_an_entity_command()
     {
         $this->buildTheWorld();
-        $this->disableExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $response = $this->getJson('/sharp/api/list/person')
             ->assertStatus(200)
@@ -255,7 +255,7 @@ class CommandControllerTest extends BaseApiTest
     public function we_can_initialize_form_data_in_an_instance_command()
     {
         $this->buildTheWorld();
-        $this->disableExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $response = $this->getJson('/sharp/api/list/person')
             ->assertStatus(200)
@@ -278,7 +278,6 @@ class CommandControllerTest extends BaseApiTest
     public function we_can_call_an_info_dashboard_command()
     {
         $this->buildTheWorldForDashboard();
-        $this->disableExceptionHandling();
 
         $this->json('post', '/sharp/api/dashboard/my_dashboard/command/dashboard_info')
             ->assertStatus(200)
@@ -292,7 +291,6 @@ class CommandControllerTest extends BaseApiTest
     public function we_can_initialize_form_data_in_an_dashboard_command()
     {
         $this->buildTheWorldForDashboard();
-        $this->disableExceptionHandling();
 
         $this->getJson('/sharp/api/dashboard/my_dashboard/command/dashboard_form/data')
             ->assertStatus(200)

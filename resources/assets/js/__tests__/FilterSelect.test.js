@@ -80,13 +80,13 @@ describe('filter-select', ()=>{
         const select = findSelect(wrapper);
 
         wrapper.setMethods({
-            showMultiselect: jest.fn()
+            showDropdown: jest.fn()
         });
 
         select.vm.$emit('input');
         expect(wrapper.vm.handleSelect).toHaveBeenCalled();
-        label.trigger('click');
-        expect(wrapper.vm.showMultiselect).toHaveBeenCalled();
+        label.trigger('mousedown');
+        expect(wrapper.vm.showDropdown).toHaveBeenCalled();
     });
 
     test('empty', ()=>{

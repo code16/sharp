@@ -74,6 +74,13 @@ Route::group([
         ->name("code16.sharp.api.form.download")
         ->uses('FormDownloadController@show');
 
+    Route::get("/filters")
+        ->name("code16.sharp.api.filter.index")
+        ->uses('GlobalFilterController@index');
+
+    Route::post("/filters/{filterKey}")
+        ->name("code16.sharp.api.filter.update")
+        ->uses('GlobalFilterController@update');
 });
 
 // Web routes

@@ -33,3 +33,11 @@ export function getDashboardCommandFormData({ dashboardKey, commandKey, query })
 export function postEntityListReorder({ entityKey, instances }) {
     return api.post(`list/${entityKey}/reorder`, { instances });
 }
+
+export function getGlobalFilters() {
+    return api.get(`filters`).then(response => response.data);
+}
+
+export function postGlobalFilters({ filterKey, value }) {
+    return api.post(`filters/${filterKey}`, { value });
+}

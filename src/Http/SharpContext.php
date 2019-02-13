@@ -2,6 +2,9 @@
 
 namespace Code16\Sharp\Http;
 
+use Code16\Sharp\Utils\Filters\GlobalMultipleFilter;
+use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
+
 class SharpContext
 {
     /**
@@ -68,6 +71,31 @@ class SharpContext
     {
         return $this->isUpdate()
             ? $this->entityId
+            : null;
+    }
+
+    /**
+     * @param string $filterName
+     * @return array|string|null
+     */
+    public function globalFilterFor(string $filterName)
+    {
+        if(!$handlerClass = config("sharp.global_filters.$filterName")) {
+            return null;
+        }
+
+        $handler = app($handlerClass);
+
+        if(session()->has("_sharp_retained_global_filter_$filterName")) {
+            $value = session()->get("_sharp_retained_global_filter_$filterName");
+
+            return $handler instanceof GlobalMultipleFilter
+                ? explode(",", $value)
+                : $value;
+        }
+
+        return $handler instanceof GlobalRequiredFilter
+            ? $handler->defaultValue()
             : null;
     }
 }

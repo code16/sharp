@@ -12,7 +12,7 @@ class EntityStateControllerTest extends BaseApiTest
     public function we_can_update_the_state_of_an_entity()
     {
         $this->buildTheWorld();
-        $this->disableExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $this->json('post', '/sharp/api/list/person/state/1', [
                 "attribute" => "state",

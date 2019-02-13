@@ -8,25 +8,23 @@ use Code16\Sharp\Tests\Fixtures\PersonSharpValidator;
 use Code16\Sharp\Tests\Fixtures\SharpDashboard;
 use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Tests\SharpTestCase;
-use Illuminate\Contracts\Debug\ExceptionHandler;
-use Orchestra\Testbench\Exceptions\Handler;
 
 abstract class BaseApiTest extends SharpTestCase
 {
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->app['config']->set(
+            'app.key', 'base64:'.base64_encode(random_bytes(
+                $this->app['config']['app.cipher'] == 'AES-128-CBC' ? 16 : 32
+            ))
+        );
+    }
+
     protected function login()
     {
         $this->actingAs(new User);
-    }
-
-    protected function disableExceptionHandling()
-    {
-        $this->app->instance(ExceptionHandler::class, new class extends Handler {
-            public function __construct() {}
-            public function report(\Exception $e) {}
-            public function render($request, \Exception $e) {
-                throw $e;
-            }
-        });
     }
 
     protected function configurePersonValidator()
@@ -52,12 +50,6 @@ abstract class BaseApiTest extends SharpTestCase
         $this->app['config']->set(
             'sharp.dashboards.personal_dashboard.view',
             SharpDashboard::class
-        );
-
-        $this->app['config']->set(
-            'app.key', 'base64:'.base64_encode(random_bytes(
-                $this->app['config']['app.cipher'] == 'AES-128-CBC' ? 16 : 32
-            ))
         );
     }
 }

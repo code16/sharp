@@ -33,5 +33,7 @@ class MenuViewComposer
                 ? explode(':', $view->entityKey)[0]
                 : ($view->dashboardKey ?? null)
         ]);
+
+        $view->with('hasGlobalFilters', sizeof(config('sharp.global_filters') ?? []) > 0);
     }
 }

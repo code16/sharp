@@ -25,6 +25,11 @@ $factory->define(\App\Feature::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->define(\App\Corporation::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->company,
+    ];
+});
 
 $factory->define(\App\Spaceship::class, function (Faker\Generator $faker) {
     return [
@@ -38,6 +43,9 @@ $factory->define(\App\Spaceship::class, function (Faker\Generator $faker) {
         'state' => $faker->randomElement(["inactive", "active", "building", "conception"]),
         'type_id' => function() {
             return factory(\App\SpaceshipType::class)->create()->id;
+        },
+        'corporation_id' => function() {
+            return factory(\App\Corporation::class)->create()->id;
         }
     ];
 });

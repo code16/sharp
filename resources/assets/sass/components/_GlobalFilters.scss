@@ -1,0 +1,79 @@
+.SharpGlobalFilters {
+  $primary: $brand-01-light;
+  $border-color: $ui-03;
+
+  .SharpFilterSelect {
+    border: none;
+    border-radius: 0;
+    border-top: 1px solid $border-color!important;
+
+    &__text {
+      display: none;
+    }
+    &--open {
+      .SharpSelect .multiselect__tags {
+        box-shadow: 0 2px 4px darken($primary, 10%);
+      }
+    }
+    &--searchable {
+      .SharpAutocomplete .multiselect__content {
+        padding-top: 3rem;
+      }
+    }
+  }
+  .multiselect {
+    color: $inverse-01;
+    &__single {
+      font-weight: normal;
+      padding-left: 0;
+    }
+    &__select {
+      fill: $inverse-01;
+    }
+    &__tags {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      background: $primary;
+      border-radius: 0;
+      padding-left: 1rem;
+      cursor: pointer;
+    }
+  }
+  .SharpAutocomplete {
+    $input-border-color: lighten($primary, 15%);
+    .multiselect__tags {
+      margin: .5rem 1rem 0 1rem !important;
+      height: 2rem!important;
+      padding: 0!important;
+      width: calc(100% - 2rem)!important;
+      border-bottom: 2px solid $input-border-color;
+      border-radius: 0!important;
+    }
+    .multiselect__input {
+      color: $inverse-01;
+      &::placeholder {
+        color: $input-border-color;
+      }
+    }
+    .multiselect__content-wrapper {
+      max-height: none;
+    }
+    .multiselect__content {
+      margin-top: 0;
+      width: 100%;
+      border-radius: 0;
+      padding-top: .25rem;
+      box-shadow: none!important;
+      border: none!important;
+      background: $primary;
+      max-height: none;
+    }
+    .multiselect__option {
+      background: $primary!important;
+      &--selected {
+        background: lighten($primary, 10%)!important;
+        font-weight: normal!important;
+      }
+    }
+  }
+}

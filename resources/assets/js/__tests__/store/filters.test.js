@@ -1,10 +1,9 @@
-import Vue from 'vue';
 import filters from '../../store/modules/filters';
 import { SET_FILTERS, SET_FILTER_VALUE } from "../../store/modules/filters";
 
 describe('store filters', () => {
     test('state match snapshot', ()=>{
-        expect(filters.state).toMatchSnapshot();
+        expect(filters.state()).toMatchSnapshot();
     });
 
     describe('mutations', () => {
