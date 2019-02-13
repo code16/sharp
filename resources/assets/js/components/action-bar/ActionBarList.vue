@@ -66,14 +66,14 @@
                 :name="filter.label"
                 :filter-key="`actionbarlist_${filter.key}`"
                 :values="filter.values"
-                :value="filtersValue[filter.key]"
+                :value="filtersValues[filter.key]"
                 :multiple="filter.multiple"
                 :required="filter.required"
                 :template="filter.template"
                 :search-keys="filter.searchKeys"
                 :searchable="filter.searchable"
                 :key="filter.key"
-                @input="handleFilterChanged(filter.key, $event)"
+                @input="handleFilterChanged(filter, $event)"
             />
         </template>
         <template v-if="commands.length" slot="extras-right">
@@ -119,7 +119,7 @@
             count: Number,
             search: String,
             filters: Array,
-            filtersValue: Object,
+            filtersValues: Object,
             commands: Array,
             forms: Array,
 
@@ -157,8 +157,8 @@
             handleSearchSubmitted() {
                 this.$emit('search-submit');
             },
-            handleFilterChanged(filterKey, value) {
-                this.$emit('filter-change', filterKey, value);
+            handleFilterChanged(filter, value) {
+                this.$emit('filter-change', filter, value);
             },
             handleReorderButtonClicked() {
                 this.$emit('reorder-click');

@@ -34,7 +34,7 @@ export default {
         }
     },
     actions: {
-        update({ commit, dispatch }, { data, widgets, layout, config, filterValues }) {
+        update({ commit, dispatch }, { data, widgets, layout, config, filtersValues }) {
             commit(UPDATE, {
                 data,
                 widgets,
@@ -44,24 +44,24 @@ export default {
             return Promise.all([
                 dispatch('filters/update', {
                     filters: config.filters,
-                    values: filterValues
+                    values: filtersValues
                 }),
                 dispatch('commands/update', {
                     commands: config.commands
                 })
             ]);
         },
-        async get({ state, dispatch, getters }, { filterValues }) {
+        async get({ state, dispatch, getters }, { filtersValues }) {
             const data = await getDashboard({
                 dashboardKey: state.dashboardKey,
-                filters: getters['filters/getQueryParams'](filterValues)
+                filters: getters['filters/getQueryParams'](filtersValues)
             });
             await dispatch('update', {
                 data: data.data,
                 widgets: data.widgets,
                 layout: data.layout,
                 config: data.config,
-                filterValues,
+                filtersValues,
             });
         },
         postCommand({ state }, { command, data, query }) {

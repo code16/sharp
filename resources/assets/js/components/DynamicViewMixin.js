@@ -1,4 +1,3 @@
-import * as qs from '../helpers/querystring';
 import { parseBlobJSONContent } from "../util";
 import { lang } from '../mixins/Localization';
 import { BASE_URL } from "../consts";
@@ -78,20 +77,16 @@ export default {
         return {
             data:null,
             layout:null,
-
-            ready:false,
         }
     },
     methods: {
         get() {
             return this.axiosInstance.get(this.apiPath, {
-                    params : this.apiParams,
-                    paramsSerializer : p => qs.serialize(p, {urlSeparator:false})
+                    params : this.apiParams
                 })
                 .then(response=>{
                     this.mount(response.data);
                     this.handleNotifications(response.data);
-                    this.ready = true;
                     return Promise.resolve(response);
                 })
                 .catch(error=>{
