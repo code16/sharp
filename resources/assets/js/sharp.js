@@ -70,6 +70,7 @@ new Vue({
         routes,
         base: `${BASE_URL}/`,
         parseQuery: query => qs.parse(query),
+        stringifyQuery: query => qs.stringify(query, { addQueryPrefix: true, skipNulls: true }),
     })
 });
 
