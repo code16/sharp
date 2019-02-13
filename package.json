@@ -60,7 +60,7 @@
     "moment": "^2.19.1",
     "moment-timezone": "^0.5.13",
     "moxios": "^0.4.0",
-    "qs": "github:ljharb/qs#c9720febaad015f372d94a621f5944a7c5570e47",
+    "qs": "^6.6.0",
     "sass": "^1.16.0",
     "sass-loader": "^7.1.0",
     "simplemde": "^1.11.2",

@@ -1,4 +1,3 @@
-import qs from 'qs';
 import { parseBlobJSONContent } from "../util";
 import { lang } from '../mixins/Localization';
 import { BASE_URL } from "../consts";
