@@ -140,10 +140,19 @@ trait HandleFilters
                     && $this->isRetainedFilter($handler, $attribute);
             })
             ->each(function($handler, $attribute) {
-                session()->put(
-                    "_sharp_retained_filter_$attribute",
-                    request()->get("filter_$attribute")
-                );
+                $value = is_array(request()->get("filter_$attribute"))
+                    ? implode(",", request()->get("filter_$attribute"))
+                    : request()->get("filter_$attribute");
+
+                if(!strlen(trim($value))) {
+                    session()->forget("_sharp_retained_filter_$attribute");
+
+                } else {
+                    session()->put(
+                        "_sharp_retained_filter_$attribute",
+                        $value
+                    );
+                }
             });
 
         session()->save();
@@ -168,9 +177,7 @@ trait HandleFilters
      */
     protected function isGlobalFilter($handler)
     {
-        return $handler instanceof GlobalFilter
-            || $handler instanceof GlobalRequiredFilter
-            || $handler instanceof GlobalMultipleFilter;
+        return $handler instanceof GlobalRequiredFilter;
     }
 
     /**
