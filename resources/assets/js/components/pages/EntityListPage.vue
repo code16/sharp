@@ -474,7 +474,6 @@
             async init() {
                 await this.$store.dispatch('entity-list/setEntityKey', this.$route.params.id);
                 // legacy
-                this.disableAutoReady = true;
                 await this.get();
                 this.bindParams(this.$route.query);
 
