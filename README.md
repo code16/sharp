@@ -27,6 +27,12 @@ Here's a series of blog posts which present Sharp following a simple example:
 - [Part 5: commands](https://medium.com/@lonchampt/about-sharp-for-laravel-part-5-44699e270647)
 - [Part 6: uploads](https://medium.com/@lonchampt/about-sharp-for-laravel-part-6-a03ee71cb2c5)
 
+And a few more articles on specific features:
+- [Dashboards](https://medium.com/@lonchampt/sharp-for-laravel-version-4-1-dashboard-generalization-69648df9baf9)
+- [Multi-Forms](https://medium.com/@lonchampt/sharp-for-laravel-a-quick-presentation-of-multi-forms-fc49f0e51176)
+- [What's new in 4.1](https://medium.com/@lonchampt/sharp-for-laravel-4-1-is-now-released-964c8b6b0491)
+- [New features in 4.1.3](https://medium.com/@lonchampt/sharp-4-1-3-and-its-new-features-a498c8b67629)
+
 ![Dashboard](docs/img/dashboard.png)
 
 ![Entity list](docs/img/list.png)
@@ -121,6 +127,7 @@ We'll get into all those classes in this document. The important thing to notice
 ### Generalities
 - [Building the menu](docs/building-menu.md)
 - [How to transform data](docs/how-to-transform-data.md)
+- [Get the request context](docs/context.md)
 - [Sharp built-in solution for uploads](docs/sharp-built-in-solution-for-uploads.md)
 - [Handling form data localization](docs/form-data-localization.md)
 - [Testing with Sharp](docs/testing-with-sharp.md)

@@ -2,9 +2,12 @@
 
 namespace Code16\Sharp\Http;
 
-trait WithSharpFormContext
+trait WithSharpContext
 {
 
+    /**
+     * @return SharpContext
+     */
     function context(): SharpContext
     {
         return app(SharpContext::class);

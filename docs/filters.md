@@ -180,7 +180,7 @@ In some cases (like linked filters, for instance: the second filter values depen
     }
 ```
 
-## Retained filters
+## Retained filters value in session
 
 Sometimes you'll want to make the filter's value persistent across calls. Say for example that you have a "country" filter, which is common to several Entity Lists: the idea is to keep the user choice even when he changes the current displayed list.
 
@@ -213,7 +213,58 @@ And that's it, Sharp will keep the filter value in session and ensure it is valu
 - Filters must be declared in the `buildDashboardConfig()` method of the Dashboard.
 - And finally, Sharp will not call `getListData(EntityListQueryParams $params)` but `buildWidgetsData(DashboardQueryParams $params)`. The API is the same, meaning we can call `$params->filterFor('...')`. 
 
+## Global menu Filters
 
+Sometimes you may want to "scope" the entire data set. An example could be a user which can manage several organizations.
+
+Instead of adding a filter on almost every Entity List, in this case, you can define a global filter, which will appear like this (on the left menu):
+
+![Example](img/global-filter.png)
+
+To achieve this, first write the filter class, like any filter, except it must implement `\Code16\Sharp\Utils\Filters\GlobalRequiredFilter` — meaning it must be a required filter.
+
+```php
+class OrganizationGlobalFilter implements GlobalRequiredFilter
+{
+
+    public function values()
+    {
+        return Organization::orderBy("name")
+            ->pluck("name", "id")
+            ->all();
+    }
+
+    public function defaultValue()
+    {
+        return Organization::first()->id;
+    }
+}
+```
+
+And then, we declare it in Sharp's config file:
+
+```php
+// sharp.php
+
+return [
+    [...]
+
+    "global_filters" => [
+        "organization" => OrganizationGlobalFilter::class
+    ],
+    
+    [...]
+];
+```
+
+Finally, to get the actual value of the filter on your Entity List or Form classes, you must use `SharpContext`:
+
+```php
+app(SharpContext::class)->globalFilterFor('organization')
+```
+
+The usage of SharpContext is [detailed here](context.md).
+ 
 ---
 
 > Next chapter : [Commands](commands.md)

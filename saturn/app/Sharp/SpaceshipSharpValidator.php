@@ -2,12 +2,12 @@
 
 namespace App\Sharp;
 
-use Code16\Sharp\Http\WithSharpFormContext;
+use Code16\Sharp\Http\WithSharpContext;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SpaceshipSharpValidator extends FormRequest
 {
-    use WithSharpFormContext;
+    use WithSharpContext;
 
     /**
      * Determine if the user is authorized to make this request.

@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Utils\Filters;
 
 use Closure;
-use Code16\Sharp\EntityList\EntityListRequiredFilter;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Event;
 
@@ -106,7 +105,7 @@ trait HandleFilters
 
             // Only required filters or retained filters with value saved in session
             ->filter(function($handler, $attribute) {
-                return $handler instanceof EntityListRequiredFilter
+                return $handler instanceof ListRequiredFilter
                     || $this->isRetainedFilter($handler, $attribute, true);
             })
 
@@ -135,16 +134,20 @@ trait HandleFilters
     protected function putRetainedFilterValuesInSession()
     {
         collect($this->filterHandlers)
+            // Only filters sent which are declared "retained"
             ->filter(function($handler, $attribute) {
                 return request()->has("filter_$attribute")
                     && $this->isRetainedFilter($handler, $attribute);
             })
             ->each(function($handler, $attribute) {
+                // Array case: we store a coma separated string
+                // (to be consistent and only store strings on filter session)
                 $value = is_array(request()->get("filter_$attribute"))
                     ? implode(",", request()->get("filter_$attribute"))
                     : request()->get("filter_$attribute");
 
-                if(!strlen(trim($value))) {
+                if(strlen(trim($value)) === 0) {
+                    // No value, we have to unset the retained value
                     session()->forget("_sharp_retained_filter_$attribute");
 
                 } else {
