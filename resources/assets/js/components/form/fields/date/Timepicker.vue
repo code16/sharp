@@ -93,7 +93,7 @@
                 else if(hour===this.maxMoment.hours) {
                     return this.minutes.filter(m => {
                         m = parseInt(m);
-                        return m<=this.minMoment.minutes;
+                        return m<=this.maxMoment.minutes;
                     });
                 }
                 return this.minutes;
