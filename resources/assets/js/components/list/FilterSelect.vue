@@ -21,6 +21,7 @@
             :allow-empty="!required"
             :preserve-search="false"
             :show-pointer="false"
+            :searchable="searchable"
             no-result-item
             mode="local"
             ref="autocomplete"
@@ -119,7 +120,7 @@
             open() {
                 this.opened = true;
                 this.$emit('open');
-                this.showDropdown();
+                this.$nextTick(this.showDropdown);
             },
             close() {
                 this.opened = false;

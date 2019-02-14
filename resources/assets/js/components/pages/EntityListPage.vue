@@ -329,11 +329,21 @@
             },
             instanceFormUrl(instance) {
                 const instanceId = this.instanceId(instance);
+                if(!this.instanceHasViewAuthorization(instance)) {
+                    return null;
+                }
                 if(this.hasMultiforms) {
                     const form = this.instanceForm(instance) || {};
                     return this.formUrl({ formKey:form.key, instanceId });
                 }
                 return this.formUrl({ instanceId });
+            },
+            instanceHasViewAuthorization(instance) {
+                const instanceId = this.instanceId(instance);
+                const viewAuthorizations = this.authorizations.view;
+                return Array.isArray(viewAuthorizations)
+                    ? viewAuthorizations.includes(instanceId)
+                    : !!viewAuthorizations;
             },
 
 

@@ -547,15 +547,21 @@ describe('EntityListPage', () => {
             let wrapper;
             wrapper = createWrapper({
                 computed: {
-                    hasMultiforms: ()=>false
+                    hasMultiforms: ()=>false,
                 }
             });
             wrapper.setMethods({
                 instanceId: jest.fn(()=>1),
-                formUrl: jest.fn(()=>'formUrl')
+                formUrl: jest.fn(()=>'formUrl'),
+                instanceHasViewAuthorization: jest.fn(()=>true),
             });
             expect(wrapper.vm.instanceFormUrl({})).toEqual('formUrl');
             expect(wrapper.vm.formUrl).toHaveBeenCalledWith({ instanceId:1 });
+
+            wrapper.setMethods({
+                instanceHasViewAuthorization: jest.fn(()=>false),
+            });
+            expect(wrapper.vm.instanceFormUrl({})).toBe(null);
 
             wrapper = createWrapper({
                 computed: {
@@ -564,7 +570,8 @@ describe('EntityListPage', () => {
             });
             wrapper.setMethods({
                 instanceId: jest.fn(()=>1),
-                formUrl: jest.fn(()=>'formUrl')
+                formUrl: jest.fn(()=>'formUrl'),
+                instanceHasViewAuthorization: jest.fn(()=>true),
             });
             wrapper.setMethods({
                 instanceForm: jest.fn(()=>null),
@@ -577,6 +584,36 @@ describe('EntityListPage', () => {
             });
             expect(wrapper.vm.instanceFormUrl({})).toEqual('formUrl');
             expect(wrapper.vm.formUrl).toHaveBeenCalledWith({ formKey:'form', instanceId:1 });
+        });
+
+        test('instanceHasViewAuthorization', ()=>{
+            const wrapper = createWrapper();
+            wrapper.setMethods({
+                instanceId: jest.fn(()=>1)
+            });
+            wrapper.setData({
+                authorizations: {
+                }
+            });
+            expect(wrapper.vm.instanceHasViewAuthorization({})).toEqual(false);
+            wrapper.setData({
+                authorizations: {
+                    view: true,
+                }
+            });
+            expect(wrapper.vm.instanceHasViewAuthorization({})).toEqual(true);
+            wrapper.setData({
+                authorizations: {
+                    view: [2],
+                }
+            });
+            expect(wrapper.vm.instanceHasViewAuthorization({})).toEqual(false);
+            wrapper.setData({
+                authorizations: {
+                    view: [2, 1],
+                }
+            });
+            expect(wrapper.vm.instanceHasViewAuthorization({})).toEqual(true);
         });
 
         test('filterByKey', () => {

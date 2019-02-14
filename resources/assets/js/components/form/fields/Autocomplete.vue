@@ -28,6 +28,7 @@
             :allow-empty="allowEmpty"
             :preserve-search="preserveSearch"
             :show-pointer="showPointer"
+            :searchable="searchable"
             @search-change="updateSuggestions($event)"
             @select="handleSelect"
             @input="$emit('multiselect-input',$event)"
@@ -109,6 +110,10 @@
             noResultItem: Boolean,
             multiple: Boolean,
             hideSelected: Boolean,
+            searchable: {
+                type: Boolean,
+                default: true,
+            },
             allowEmpty: {
                 type: Boolean,
                 default: true
