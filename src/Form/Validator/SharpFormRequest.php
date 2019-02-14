@@ -2,12 +2,12 @@
 
 namespace Code16\Sharp\Form\Validator;
 
-use Code16\Sharp\Http\WithSharpFormContext;
+use Code16\Sharp\Http\WithSharpContext;
 use Illuminate\Foundation\Http\FormRequest;
 
 abstract class SharpFormRequest extends FormRequest
 {
-    use WithSharpFormContext;
+    use WithSharpContext;
 
     /**
      * Determine if the user is authorized to make this request.

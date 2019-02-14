@@ -2,8 +2,6 @@
 
 namespace Code16\Sharp\Http;
 
-use Code16\Sharp\Utils\Filters\GlobalMultipleFilter;
-
 class SharpContext
 {
     /**
