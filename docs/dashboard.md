@@ -66,10 +66,6 @@ Widget data is set with specific methods depending of their type. The documentat
 - [Graph](dashboard-widgets/graph.md)
 - [Panel](dashboard-widgets/panel.md)
 
-## Dashboard filters
-
-Just like EntityLists, Dashboard can display [filters](filters.md). First we need to create  
-
 ## Configure the Dashboard
 
 Once this class written, we have to declare the form in the sharp config file:
@@ -104,6 +100,14 @@ Once this class written, we have to declare the form in the sharp config file:
 ```
 
 In the menu, like an Entity, a Dashboard can be displayed anywhere.  
+
+## Dashboard filters
+
+Just like EntityLists, Dashboard can display filters, as [documented on the Filter page](filters.md).
+
+## Dashboard commands
+
+Like again EntityLists, Commands can be attached to a Dashboard: [see the Command documentation](commands.md).
 
 ## Dashboard policies
 
