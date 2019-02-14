@@ -77,6 +77,7 @@
     .SharpDate__time {
       background: #fff;
       width: 10em;
+      min-height: 200px;
       padding: .875rem 0 .25rem;
       @include font-size('12');
 
