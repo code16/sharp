@@ -84,6 +84,7 @@ We'll get into all those classes in this document. The important thing to notice
 ## Full documentation
 
 - [Upgrading from 4.0 to 4.1](docs/upgrading/4.1.md)
+- [Upgrading from 4.1 to 4.2](docs/upgrading/4.2.md)
 
 ### Auth
 
