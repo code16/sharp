@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Utils\Filters;
 
 use Closure;
-use Code16\Sharp\EntityList\EntityListRequiredFilter;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Event;
 
@@ -106,7 +105,7 @@ trait HandleFilters
 
             // Only required filters or retained filters with value saved in session
             ->filter(function($handler, $attribute) {
-                return $handler instanceof EntityListRequiredFilter
+                return $handler instanceof ListRequiredFilter
                     || $this->isRetainedFilter($handler, $attribute, true);
             })
 
