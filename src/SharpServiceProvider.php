@@ -82,6 +82,7 @@ class SharpServiceProvider extends ServiceProvider
             \Code16\Sharp\Console\ListFilterMakeCommand::class,
             \Code16\Sharp\Console\CommandMakeCommand::class,
             \Code16\Sharp\Console\StateMakeCommand::class,
+            \Code16\Sharp\Console\ReorderHandlerMakeCommand::class,
         ]);
 
         $this->app->register(ImageServiceProviderLaravel5::class);
