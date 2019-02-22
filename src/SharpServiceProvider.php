@@ -77,7 +77,8 @@ class SharpServiceProvider extends ServiceProvider
         });
 
         $this->commands([
-            CreateUploadsMigration::class
+            CreateUploadsMigration::class,
+            \Code16\Sharp\Console\ListMakeCommand::class,
         ]);
 
         $this->app->register(ImageServiceProviderLaravel5::class);
