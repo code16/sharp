@@ -9,7 +9,7 @@ Sharp is not a CMS: it's a content management framework, a toolset which provide
 - The CMS **should not have any expectations from the persistence layer**: MySQL is cool — but it's not the perfect tool for every problem. And more important, the DB structure has nothing to do with the CMS.
 - Content administrators **should work with their data and terminology**, not CMS terms. I mean, if the project is about spaceships, space travels and pilots, why would the CMS talk about articles, categories and tags?
 - website developers **should not have to work on the front-end development** for the CMS. Yeah. Because life is complicated enough, Sharp takes care of all the responsive / CSS / JS stuff.
- 
+
 Sharp intends to provide a clean solution to the following needs:
 - create, update or delete any structured data of the project, handling validation and errors;
 - display, search, sort or filter data;
@@ -123,6 +123,9 @@ We'll get into all those classes in this document. The important thing to notice
 
 ### Dashboards
 - [Create a Dashboard](docs/dashboard.md)
+
+### Artisan Generators
+- [Artisan Generators](docs/artisan-generators.md)
 
 ### Generalities
 - [Building the menu](docs/building-menu.md)
