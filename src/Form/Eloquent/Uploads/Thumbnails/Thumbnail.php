@@ -161,7 +161,7 @@ class Thumbnail
             }
         }
 
-        return url($thumbName) . ($this->appendTimestamp ? "?" . filectime($thumbnailDisk->path($thumbName)) : "");
+        return $thumbnailDisk->url($thumbName) . ($this->appendTimestamp ? "?" . filectime($thumbnailDisk->path($thumbName)) : "");
     }
 
     /**
