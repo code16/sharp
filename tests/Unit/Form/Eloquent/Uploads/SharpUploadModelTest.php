@@ -56,7 +56,7 @@ class SharpUploadModelTest extends SharpFormEloquentBaseTest
         $upload = $this->createSharpUploadModel($file);
 
         $this->assertStringStartsWith(
-            url("thumbnails/data/-150/" . basename($file)),
+            "/storage/thumbnails/data/-150/" . basename($file),
             $upload->thumbnail(null, 150)
         );
 
