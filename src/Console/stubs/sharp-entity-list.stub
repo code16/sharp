@@ -32,7 +32,7 @@ class DummyClass extends SharpEntityList
 
     public function buildListLayout()
     {
-        $this->addColumn('Name', 12);
+        $this->addColumn('name', 12);
     }
 
     /**

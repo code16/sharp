@@ -6,9 +6,12 @@ use DummyFullModelClass;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 
 class DummyClass extends SharpForm
 {
+    use WithSharpFormEloquentUpdater;
+
     /**
      * Retrieve a Model for the form and pack all its data as JSON.
      *
