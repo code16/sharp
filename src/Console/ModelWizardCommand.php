@@ -36,17 +36,13 @@ class ModelWizardCommand extends Command
         $modelClass = class_basename($fullModelClass);
         $classSlug = Str::snake(class_basename($pluralModelClass));
 
-        if ($fullModelClass && ! class_exists($fullModelClass)) {
-            $this->call('make:model', ['name' => $fullModelClass]);
-        }
+        $this->call('make:model', ['name' => $fullModelClass]);
 
-        if ($listClass = $this->ask("List class name", "{$pluralModelClass}/{$modelClass}List")) {
-            $this->call('sharp:make:list', ['name' => $listClass, '--model' => $inputModelClass]);
-        }
+        $listClass = $this->ask("List class name", "{$pluralModelClass}/{$modelClass}List");
+        $this->call('sharp:make:list', ['name' => $listClass, '--model' => $inputModelClass]);
 
-        if ($formClass = $this->ask("Form class name", "{$pluralModelClass}/{$modelClass}Form")) {
-            $this->call('sharp:make:form', ['name' => $formClass, '--model' => $inputModelClass]);
-        }
+        $formClass = $this->ask("Form class name", "{$pluralModelClass}/{$modelClass}Form");
+        $this->call('sharp:make:form', ['name' => $formClass, '--model' => $inputModelClass]);
 
         $this->info('Wizard complete!');
         $this->line('Add this to entities in `config/sharp.php`:');
