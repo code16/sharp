@@ -79,9 +79,10 @@ class SharpServiceProvider extends ServiceProvider
         $this->commands([
             CreateUploadsMigration::class,
             \Code16\Sharp\Console\ListMakeCommand::class,
-            \Code16\Sharp\Console\ListFilterMakeCommand::class,
-            \Code16\Sharp\Console\CommandMakeCommand::class,
+            \Code16\Sharp\Console\FormMakeCommand::class,
             \Code16\Sharp\Console\StateMakeCommand::class,
+            \Code16\Sharp\Console\CommandMakeCommand::class,
+            \Code16\Sharp\Console\ListFilterMakeCommand::class,
             \Code16\Sharp\Console\ReorderHandlerMakeCommand::class,
         ]);
 

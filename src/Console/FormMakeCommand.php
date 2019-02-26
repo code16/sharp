@@ -7,28 +7,28 @@ use InvalidArgumentException;
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;
 
-class ListMakeCommand extends GeneratorCommand
+class FormMakeCommand extends GeneratorCommand
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'sharp:make:list';
+    protected $name = 'sharp:make:form';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a new entity list class';
+    protected $description = 'Create a new entity form class';
 
     /**
      * The type of class being generated.
      *
      * @var string
      */
-    protected $type = 'SharpEntityList';
+    protected $type = 'SharpForm';
 
     /**
      * Build the class with the given name.
@@ -38,8 +38,6 @@ class ListMakeCommand extends GeneratorCommand
      */
     protected function buildClass($name)
     {
-        $namespace = $this->getNamespace($name);
-
         $replace = [];
 
         if ($this->option('model')) {
@@ -104,8 +102,8 @@ class ListMakeCommand extends GeneratorCommand
     protected function getStub()
     {
         return $this->option('model')
-                    ? __DIR__.'/stubs/sharp-entity-list.stub'
-                    : __DIR__.'/stubs/sharp-entity-list.plain.stub';
+                    ? __DIR__.'/stubs/entity-form.model.stub'
+                    : __DIR__.'/stubs/entity-form.stub';
     }
 
     /**
