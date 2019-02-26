@@ -21,6 +21,9 @@ php artisan sharp:make:reorder-handler <class name> [--model=<model name>]
 # Generate a model state
 php artisan sharp:make:state <class name> [--model=<model name>]
 
+# Generate sharp media model
+php artisan sharp:make:media <class name> [--table=<db table name>]
+
 # Run a wizard that will create a model, list & form in one go
 php artisan sharp:model-wizard [--model=<model name>]
 ```
