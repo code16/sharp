@@ -83,6 +83,7 @@ class SharpServiceProvider extends ServiceProvider
             \Code16\Sharp\Console\StateMakeCommand::class,
             \Code16\Sharp\Console\ModelWizardCommand::class,
             \Code16\Sharp\Console\CommandMakeCommand::class,
+            \Code16\Sharp\Console\DashboardMakeCommand::class,
             \Code16\Sharp\Console\ListFilterMakeCommand::class,
             \Code16\Sharp\Console\ReorderHandlerMakeCommand::class,
         ]);
