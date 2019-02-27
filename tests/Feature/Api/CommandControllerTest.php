@@ -16,9 +16,10 @@ use Illuminate\Support\Facades\Storage;
 
 class CommandControllerTest extends BaseApiTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
+
         $this->login();
     }
 
@@ -157,7 +158,7 @@ class CommandControllerTest extends BaseApiTest
             ->assertStatus(200)
             ->assertHeader("content-type", "application/pdf");
 
-        $this->assertContains("account.pdf", $response->headers->get("content-disposition"));
+        $this->assertStringContainsString("account.pdf", $response->headers->get("content-disposition"));
 
         $this->json('post', '/sharp/api/list/person/command/entity_download_no_disk')
             ->assertStatus(200);

@@ -6,9 +6,10 @@ use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
 
 class MenuViewComposerTest extends BaseApiTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
+
         $this->login();
     }
 

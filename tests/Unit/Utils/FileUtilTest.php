@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\File;
 
 class FileUtilTest extends SharpTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

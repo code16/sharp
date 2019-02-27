@@ -9,7 +9,7 @@ use Illuminate\Validation\ValidationException;
 class SharpValidatorTest extends SharpTestCase
 {
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

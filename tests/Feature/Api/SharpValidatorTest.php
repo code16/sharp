@@ -7,9 +7,10 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class SharpValidatorTest extends BaseApiTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
+
         $this->login();
     }
 

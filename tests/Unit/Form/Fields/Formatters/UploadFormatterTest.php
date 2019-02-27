@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\File;
 class UploadFormatterTest extends SharpTestCase
 {
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

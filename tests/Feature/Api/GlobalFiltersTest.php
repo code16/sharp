@@ -7,7 +7,7 @@ use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 
 class GlobalFiltersTest extends BaseApiTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

@@ -8,7 +8,7 @@ use Code16\Sharp\Tests\SharpTestCase;
 
 class SharpFormAutocompleteFieldTest extends SharpTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
