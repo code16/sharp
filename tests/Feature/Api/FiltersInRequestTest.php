@@ -10,7 +10,7 @@ use Code16\Sharp\Utils\Filters\ListRequiredFilter;
 
 class FiltersInRequestTest extends BaseApiTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->login();

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\File;
 class MarkdownFormatterTest extends SharpTestCase
 {
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

@@ -7,7 +7,7 @@ use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
 
 class DataLocalizationTest extends BaseApiTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

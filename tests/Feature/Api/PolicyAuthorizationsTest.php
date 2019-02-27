@@ -6,9 +6,10 @@ use Code16\Sharp\Tests\Fixtures\User;
 
 class PolicyAuthorizationsTest extends BaseApiTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
+
         $this->login();
     }
 

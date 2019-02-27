@@ -4,12 +4,12 @@ namespace Code16\Sharp\Tests\Feature\Api;
 
 class FormControllerTest extends BaseApiTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
+
         $this->login();
     }
-
 
     /** @test */
     public function we_can_get_form_data_for_an_entity()

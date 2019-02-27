@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ContextTest extends BaseApiTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

@@ -11,7 +11,7 @@ use Code16\Sharp\Tests\SharpTestCase;
 
 abstract class BaseApiTest extends SharpTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
