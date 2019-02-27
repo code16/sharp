@@ -54,6 +54,11 @@ class ModelWizardCommand extends Command
             $config->push(['policy' => "\\{$this->parseClassname($policyClass, 'Sharp')}::class"]);
         }
 
+        if ($this->option('validator') || $this->confirm('Would you like to generate a validator class for this model?')) {
+            $validatorClass = $this->ask('Validator class name', "{$pluralModelClass}/{$modelClass}Validator");
+            $this->call('sharp:make:validator', ['name' => $validatorClass]);
+            $config->push(['validator' => "\\{$this->parseClassname($validatorClass, 'Sharp')}::class"]);
+        }
 
         $this->info('Wizard complete!');
         $this->line('Add this to entities in `config/sharp.php`:');
@@ -98,7 +103,8 @@ class ModelWizardCommand extends Command
     {
         return [
             ['model', 'm', InputOption::VALUE_REQUIRED, 'The model that the list displays'],
-            ['policy', 'p', InputOption::VALUE_NONE, 'Create a policy for the model'],
+            ['policy', null, InputOption::VALUE_NONE, 'Create a policy for the model'],
+            ['validator', null, InputOption::VALUE_NONE, 'Create a validator for the model'],
         ];
     }
 }
