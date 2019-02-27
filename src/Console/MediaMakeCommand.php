@@ -93,7 +93,7 @@ class MediaMakeCommand extends GeneratorCommand
     protected function getOptions()
     {
         return [
-            ['table', 't', InputOption::VALUE_OPTIONAL, 'Database table name'],
+            ['table', 't', InputOption::VALUE_REQUIRED, 'Database table name'],
         ];
     }
 }

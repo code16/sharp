@@ -126,7 +126,7 @@ class ReorderHandlerMakeCommand extends GeneratorCommand
     protected function getOptions()
     {
         return [
-            ['model', 'm', InputOption::VALUE_OPTIONAL, 'The model that the state governs'],
+            ['model', 'm', InputOption::VALUE_REQUIRED, 'The model that the state governs'],
         ];
     }
 }

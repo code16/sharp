@@ -127,7 +127,7 @@ class ListMakeCommand extends GeneratorCommand
     protected function getOptions()
     {
         return [
-            ['model', 'm', InputOption::VALUE_OPTIONAL, 'The model that the list displays'],
+            ['model', 'm', InputOption::VALUE_REQUIRED, 'The model that the list displays'],
         ];
     }
 }
