@@ -7,8 +7,8 @@ use Closure;
 class SaveEntityListParams
 {
     /**
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -23,7 +23,7 @@ class SaveEntityListParams
      */
     protected function saveQuerystring($request)
     {
-        session()->put($this->getCacheKey($request), $request->getQueryString(), 10);
+        session()->put($this->getCacheKey($request), $request->getQueryString());
     }
 
     /**
