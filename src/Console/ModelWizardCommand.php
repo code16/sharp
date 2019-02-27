@@ -36,19 +36,32 @@ class ModelWizardCommand extends Command
         $modelClass = class_basename($fullModelClass);
         $classSlug = Str::snake(class_basename($pluralModelClass));
 
+        $config = collect();
+
         $this->call('make:model', ['name' => $fullModelClass]);
 
         $listClass = $this->ask("List class name", "{$pluralModelClass}/{$modelClass}List");
         $this->call('sharp:make:list', ['name' => $listClass, '--model' => $inputModelClass]);
+        $config->push(['list' => "\\{$this->parseClassname($listClass, 'Sharp')}::class"]);
 
         $formClass = $this->ask("Form class name", "{$pluralModelClass}/{$modelClass}Form");
         $this->call('sharp:make:form', ['name' => $formClass, '--model' => $inputModelClass]);
+        $config->push(['form' => "\\{$this->parseClassname($formClass, 'Sharp')}::class"]);
+
+        if ($this->option('policy') || $this->confirm('Would you like to generate a policy class for this model?')) {
+            $policyClass = $this->ask('Policy class name', "{$pluralModelClass}/{$modelClass}Policy");
+            $this->call('sharp:make:policy', ['name' => $policyClass, '--model' => $inputModelClass]);
+            $config->push(['policy' => "\\{$this->parseClassname($policyClass, 'Sharp')}::class"]);
+        }
+
 
         $this->info('Wizard complete!');
         $this->line('Add this to entities in `config/sharp.php`:');
+        $configString = $config->collapse()->map(function ($class, $key) {
+            return "'{$key}' => {$class},";
+        })->implode("\n            ");
         $this->comment("        '{$classSlug}' => [
-            'list' => \\{$this->parseClassname($listClass, 'Sharp')}::class,
-            'form' => \\{$this->parseClassname($formClass, 'Sharp')}::class,
+            {$configString}
         ],");
     }
 
@@ -84,7 +97,8 @@ class ModelWizardCommand extends Command
     protected function getOptions()
     {
         return [
-            ['model', 'm', InputOption::VALUE_OPTIONAL, 'The model that the list displays'],
+            ['model', 'm', InputOption::VALUE_REQUIRED, 'The model that the list displays'],
+            ['policy', 'p', InputOption::VALUE_NONE, 'Create a policy for the model'],
         ];
     }
 }
