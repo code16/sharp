@@ -12,7 +12,7 @@
                 </div>
             </div>
         </div>
-        <div>
+        <div :class="{ 'container':container }">
             <div class="row">
                 <div class="col">
                     <div class="SharpActionBar__extras">
@@ -38,7 +38,8 @@
             ready: {
                 type: Boolean,
                 default: true,
-            }
+            },
+            container: Boolean,
         }
     }
 </script>

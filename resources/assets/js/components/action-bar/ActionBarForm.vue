@@ -1,5 +1,5 @@
 <template>
-    <sharp-action-bar :ready="ready">
+    <sharp-action-bar :ready="ready" container>
         <template slot="left">
             <button class="SharpButton SharpButton--secondary-accent" @click="emitAction('cancel')">
                 {{ showBackButton ? label('back_button') : label('cancel_button') }}
