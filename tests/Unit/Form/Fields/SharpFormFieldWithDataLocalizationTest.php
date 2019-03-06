@@ -26,7 +26,7 @@ class SharpFormFieldWithDataLocalizationTest extends SharpTestCase
 
         $formField->setLocalized();
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["localized" => true], $formField->toArray()
         );
     }
@@ -37,7 +37,7 @@ class SharpFormFieldWithDataLocalizationTest extends SharpTestCase
         $formField = SharpFormTextareaField::make("name")
             ->setLocalized();
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["localized" => true], $formField->toArray()
         );
     }
@@ -48,7 +48,7 @@ class SharpFormFieldWithDataLocalizationTest extends SharpTestCase
         $formField = SharpFormWysiwygField::make("name")
             ->setLocalized();
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["localized" => true], $formField->toArray()
         );
     }
@@ -59,7 +59,7 @@ class SharpFormFieldWithDataLocalizationTest extends SharpTestCase
         $formField = SharpFormMarkdownField::make("name")
             ->setLocalized();
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["localized" => true], $formField->toArray()
         );
     }
@@ -70,7 +70,7 @@ class SharpFormFieldWithDataLocalizationTest extends SharpTestCase
         $formField = SharpFormSelectField::make("name", ["1"=>"one"])
             ->setLocalized();
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["localized" => true], $formField->toArray()
         );
     }
@@ -84,7 +84,7 @@ class SharpFormFieldWithDataLocalizationTest extends SharpTestCase
             ->setListItemInlineTemplate("{{id}}")
             ->setLocalized();
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["localized" => true], $formField->toArray()
         );
     }
@@ -95,7 +95,7 @@ class SharpFormFieldWithDataLocalizationTest extends SharpTestCase
         $formField = SharpFormTagsField::make("name", ["1"=>"one"])
             ->setLocalized();
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["localized" => true], $formField->toArray()
         );
     }

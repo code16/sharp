@@ -36,7 +36,7 @@ class SharpEntityListCommandTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "commands" => [
                 'entity' => [
                     [
@@ -73,7 +73,7 @@ class SharpEntityListCommandTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "commands" => [
                 "entity" => [
                     [
@@ -109,7 +109,7 @@ class SharpEntityListCommandTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "commands" => [
                 "entity" => [
                     [
@@ -148,7 +148,7 @@ class SharpEntityListCommandTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "commands" => [
                 "entity" => [
                     [
@@ -196,7 +196,7 @@ class SharpEntityListCommandTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "commands" => [
                 "entity" => [
                     [
@@ -234,7 +234,7 @@ class SharpEntityListCommandTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "commands" => [
                 "entity" => [
                     [
@@ -274,7 +274,7 @@ class SharpEntityListCommandTest extends SharpTestCase
             ["id" => 4], ["id" => 5], ["id" => 6],
         ]);
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "commands" => [
                 "instance" => [
                     [
@@ -310,7 +310,7 @@ class SharpEntityListCommandTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "commands" => [
                 "entity" => [
                     [
@@ -351,7 +351,7 @@ class SharpEntityListCommandTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "commands" => [
                 "instance" => [
                     [
@@ -396,7 +396,7 @@ class SharpEntityListCommandTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "commands" => [
                 "entity" => [
                     [

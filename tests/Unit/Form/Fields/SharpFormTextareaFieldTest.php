@@ -25,7 +25,7 @@ class SharpFormTextareaFieldTest extends SharpTestCase
         $formField = SharpFormTextareaField::make("text")
             ->setRowCount(5);
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["rows" => 5],
             $formField->toArray()
         );
@@ -47,7 +47,7 @@ class SharpFormTextareaFieldTest extends SharpTestCase
         $formField = SharpFormTextareaField::make("text")
             ->setMaxLength(10);
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["maxLength" => 10],
             $formField->toArray()
         );

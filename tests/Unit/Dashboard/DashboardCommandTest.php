@@ -28,7 +28,7 @@ class DashboardCommandTest extends SharpTestCase
 
         $dashboard->buildDashboardConfig();
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "commands" => [
                 'dashboard' => [
                     [
@@ -67,7 +67,7 @@ class DashboardCommandTest extends SharpTestCase
 
         $list->buildDashboardConfig();
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "commands" => [
                 "dashboard" => [
                     [

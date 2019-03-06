@@ -26,7 +26,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
         $formField = SharpFormGeolocationField::make("geo")
             ->setDisplayUnitDegreesMinutesSeconds();
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["displayUnit" => "DMS"],
             $formField->toArray()
         );
@@ -34,7 +34,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
         $formField = SharpFormGeolocationField::make("geo")
             ->setDisplayUnitDecimalDegrees();
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["displayUnit" => "DD"],
             $formField->toArray()
         );
@@ -47,7 +47,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
             ->setGeocoding()
             ->setApiKey("my-key");
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["geocoding" => true, "apiKey" => "my-key"],
             $formField->toArray()
         );
@@ -59,7 +59,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
         $formField = SharpFormGeolocationField::make("geo")
             ->setZoomLevel(15);
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["zoomLevel" => 15],
             $formField->toArray()
         );
@@ -71,7 +71,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
         $formField = SharpFormGeolocationField::make("geo")
             ->setInitialPosition(12.4, -3.461894989013672);
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             [
                 "initialPosition" => [
                     "lat" => 12.4, "lng" => -3.461894989013672
@@ -101,7 +101,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
         $formField = SharpFormGeolocationField::make("geo")
             ->setBoundaries(1, 2, 3, 4);
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             [
                 "boundaries" => [
                     "ne" => [

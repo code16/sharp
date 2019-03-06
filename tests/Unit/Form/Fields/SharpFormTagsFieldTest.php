@@ -34,7 +34,7 @@ class SharpFormTagsFieldTest extends SharpTestCase
         $formField = $this->getDefaultTags()
             ->setCreatable(true);
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["creatable" => true],
             $formField->toArray()
         );
@@ -46,7 +46,7 @@ class SharpFormTagsFieldTest extends SharpTestCase
         $formField = $this->getDefaultTags()
             ->setCreateText("A");
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["createText" => "A"],
             $formField->toArray()
         );
@@ -58,7 +58,7 @@ class SharpFormTagsFieldTest extends SharpTestCase
         $formField = $this->getDefaultTags()
             ->setMaxTagCount(2);
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["maxTagCount" => 2],
             $formField->toArray()
         );

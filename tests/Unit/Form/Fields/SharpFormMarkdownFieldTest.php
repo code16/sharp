@@ -31,7 +31,7 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
         $formField = SharpFormMarkdownField::make("text")
             ->setHeight(50);
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["height" => 50],
             $formField->toArray()
         );
@@ -43,7 +43,7 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
         $formField = SharpFormMarkdownField::make("text")
             ->setMaxFileSize(50);
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "innerComponents" => [
                 "upload" => [
                     "maxImageSize" => 50
@@ -53,7 +53,7 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
 
         $formField->setCropRatio("16:9");
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "innerComponents" => [
                 "upload" => [
                     "maxImageSize" => 50,
@@ -74,7 +74,7 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
                 SharpFormMarkdownField::UL,
             ]);
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["toolbar" => [
                 SharpFormMarkdownField::IMG,
                 SharpFormMarkdownField::SEPARATOR,

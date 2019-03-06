@@ -21,7 +21,7 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
 
         $list = new WithCustomTransformersTestList();
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             [["name" => "John Wayne"], ["name" => "Mary Wayne"]],
             $list->getListData(new EntityListQueryParams())
         );
@@ -41,7 +41,7 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
             }
         };
     
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             [["name" => "John Wayne"], ["name" => "Mary Wayne"]],
             $list->getListData(new EntityListQueryParams())
         );
@@ -64,7 +64,7 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
             }
         };
         
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             [["name" => "A"], ["name" => "B"]],
             $list->getListData(new EntityListQueryParams())->items()
         );
@@ -87,7 +87,7 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
             }
         };
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             [["name" => "A"], ["name" => "B"]],
             $list->getListData(new EntityListQueryParams())->items()
         );
@@ -108,12 +108,12 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
             }
         };
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["name" => "Mary Wayne", "mother:name" => "Jane Wayne"],
             $list->getListData(new EntityListQueryParams())[1]
         );
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["name" => "John Wayne", "mother:name" => null],
             $list->getListData(new EntityListQueryParams())[2]
         );
@@ -134,7 +134,7 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
             }
         };
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["name" => "JOHN WAYNE"],
             $list->getListData(new EntityListQueryParams())[0]
         );
@@ -154,7 +154,7 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
             }
         };
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["name" => "JOHN WAYNE"],
             $list->getListData(new EntityListQueryParams())[0]
         );
@@ -174,7 +174,7 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
             }
         };
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["name" => "JOHN WAYNE"],
             $list->getListData(new EntityListQueryParams())[0]
         );

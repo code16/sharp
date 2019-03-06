@@ -26,7 +26,7 @@ class SharpFormNumberFieldTest extends SharpTestCase
             ->setMin(5)
             ->setMax(15);
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["min" => 5, "max" => 15],
             $formField->toArray()
         );
@@ -38,7 +38,7 @@ class SharpFormNumberFieldTest extends SharpTestCase
         $formField = SharpFormNumberField::make("text")
             ->setStep(5);
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["step" => 5],
             $formField->toArray()
         );
@@ -50,7 +50,7 @@ class SharpFormNumberFieldTest extends SharpTestCase
         $formField = SharpFormNumberField::make("text")
             ->setShowControls();
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["showControls" => true],
             $formField->toArray()
         );

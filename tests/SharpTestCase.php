@@ -33,7 +33,7 @@ abstract class SharpTestCase extends TestCase
      * @link https://github.com/laravel/framework/blob/695a29928d5f3e595363306cf62ba4ff653d73ba/src/Illuminate/Foundation/Testing/Assert.php
      * @link https://github.com/sebastianbergmann/phpunit/issues/3494
      */
-    public static function assertArraySubset($subset, $array, bool $checkForObjectIdentity = false, string $message = ''): void
+    public static function assertArrayContainsSubset($subset, $array, bool $checkForObjectIdentity = false, string $message = ''): void
     {
         if (! (is_array($subset) || $subset instanceof ArrayAccess)) {
             throw InvalidArgumentHelper::factory(1, 'array or ArrayAccess');
@@ -46,5 +46,17 @@ abstract class SharpTestCase extends TestCase
         $constraint = new ArraySubset($subset, $checkForObjectIdentity);
 
         static::assertThat($array, $constraint, $message);
+    }
+
+    /**
+     * Redefine this to allow execution on older versions of Laravel (5.4).
+     *
+     * @param array $except
+     */
+    public function withoutExceptionHandling(array $except = [])
+    {
+        if(method_exists('Parent', "withoutExceptionHandling")) {
+            parent::withoutExceptionHandling($except);
+        }
     }
 }
