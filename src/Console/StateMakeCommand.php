@@ -13,7 +13,7 @@ class StateMakeCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $name = 'sharp:make:state';
+    protected $name = 'sharp:make:entity-state';
 
     /**
      * The console command description.

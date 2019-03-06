@@ -14,7 +14,7 @@ class ListMakeCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $name = 'sharp:make:list';
+    protected $name = 'sharp:make:entity-list';
 
     /**
      * The console command description.
