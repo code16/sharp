@@ -2,6 +2,11 @@
 
 Entity states are a little bit of sugar to easily propose a state management on entities. It could be a simple "draft / publish" state for a page, or something more advanced for an order, for instance.
 
+## Generator
+
+```sh
+php artisan sharp:make:state <class_name> [--model=<model_name>]
+```
 
 ## Write the Entity state class
 

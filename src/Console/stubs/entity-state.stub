@@ -1,0 +1,26 @@
+<?php
+
+namespace DummyNamespace;
+
+use Code16\Sharp\EntityList\Commands\EntityState;
+
+class DummyClass extends EntityState
+{
+    /**
+     * @return mixed
+     */
+    protected function buildStates()
+    {
+        // $this->addState("active", "Active", "green");
+    }
+
+    /**
+     * @param string $instanceId
+     * @param string $stateId
+     * @return mixed
+     */
+    protected function updateState($instanceId, $stateId)
+    {
+        //
+    }
+}

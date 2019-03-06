@@ -2,20 +2,26 @@
 
 It's sometimes useful to allow the user to rearrange instances right from the Entity List. Let's say we want to let the user choose some `pages` order:
 
+## Generator Command
+
+```sh
+php artisan sharp:make:reorder-handler <class_name> [--model=<model_name>]
+```
+
 ## Write the class
 
-First, we need to write a class for the reordering itself, which must implement `Code16\Sharp\EntityList\Commands\ReorderHandler`, and therefore the `reorder(array $ids)` function. 
+First, we need to write a class for the reordering itself, which must implement `Code16\Sharp\EntityList\Commands\ReorderHandler`, and therefore the `reorder(array $ids)` function.
 
 Here's an example with Eloquent and a numerical `order` column:
 
 ```php
     class PageReorderHandler implements ReorderHandler
     {
-    
+
         function reorder(array $ids)
         {
             $pages = Page::whereIn("id", $ids)->get();
-    
+
             foreach($pages as $page) {
                 $page->order = array_search($page->id, $ids) + 1;
                 $page->save();

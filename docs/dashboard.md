@@ -2,6 +2,12 @@
 
 A Dashboard is a good way to present synthetic data to the user, with graphs, stats, or personalized reminders for instance.
 
+## Generator
+
+```sh
+php artisan sharp:make:dashboard <class_name>
+```
+
 ## Write the class
 
 A Dashboard is very much like an Entity Form, except it readonly. So the first step is to create a new class extending `Code16\Sharp\Dashboard\SharpDashboard` which lead us to implement three functions:
@@ -30,7 +36,7 @@ We're suppose to use here `$this->addWidget()` to configure all the Dashboard wi
     }
 ```
 
-As we can see in this example, we defined two widgets giving them a mandatory `key` and some optional properties depending of their type. 
+As we can see in this example, we defined two widgets giving them a mandatory `key` and some optional properties depending of their type.
 
 Every widget has the optional following setters:
 
@@ -72,7 +78,7 @@ Once this class written, we have to declare the form in the sharp config file:
 
 ```php
     // config/sharp.php
-    
+
     return [
         "entities" => [
             [...]
@@ -99,7 +105,7 @@ Once this class written, we have to declare the form in the sharp config file:
     ];
 ```
 
-In the menu, like an Entity, a Dashboard can be displayed anywhere.  
+In the menu, like an Entity, a Dashboard can be displayed anywhere.
 
 ## Dashboard filters
 
@@ -115,7 +121,7 @@ Just like for an Entity, you can define a Policy for a Dashboard. The only avail
 
 ```php
     // config/sharp.php
-    
+
     return [
         "entities" => [
             [...]

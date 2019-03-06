@@ -2,6 +2,12 @@
 
 Sharp is mostly made of Entity Lists to display, search, filter, act on instances, and of Entity Forms to create or update entities.
 
+## Generator
+
+```sh
+php artisan sharp:make:form <class_name> [--model=<model_name>]
+```
+
 ## Write the class
 
 As usual in Sharp, we begin by creating a class dedicated to our Entity Form and make it extend `Code16\Sharp\Form\SharpForm`; and we'll have to implement at least 5 functions:
@@ -31,7 +37,7 @@ In short, this method is meant to host the code responsible for the declaration 
     }
 ```
 
-As we can see in this simple example, we defined two text fields giving them a mandatory `key` and an optional label. 
+As we can see in this simple example, we defined two text fields giving them a mandatory `key` and an optional label.
 
 #### Form fields shared attributes
 
@@ -110,7 +116,7 @@ Here's another possible layout, with two unequally large columns:
     {
         $this->addColumn(7, function(FormLayoutColumn $column) {
             $column->withSingleField("name");
-                
+
         })->addColumn(5, function(FormLayoutColumn $column) {
             $column->withSingleField("capacity");
         });
@@ -216,11 +222,11 @@ As for the Entity List, you'll want to transform your data before sending it. Tr
 
 ### `update($id, array $data)`
 
-Well, this is the core: how to write the actual update code. 
+Well, this is the core: how to write the actual update code.
 
 #### Form field format
 
-Before going into the details, please note that the `$data` array contains the per-field formatted data: depending on the type of SharpFormField you used, the structure may change. 
+Before going into the details, please note that the `$data` array contains the per-field formatted data: depending on the type of SharpFormField you used, the structure may change.
 
 For instance, a `SharpFormMarkdownField` content will be formated as an array with a `text` attribute for the full text and an optional `fields` attribute with embedded fields (see the Markdown field documentation for more details).
 
@@ -230,7 +236,7 @@ Now let's review two cases:
 
 #### General case: you are on your own
 
-If you are not using Eloquent (and maybe no database at all), you'll have to do it manually. 
+If you are not using Eloquent (and maybe no database at all), you'll have to do it manually.
 
 Remember: Sharp aims to be as permissive as possible. So just write the code to update the instance designated by `$id` with the values in the formatted `$data` array.
 
@@ -301,7 +307,7 @@ Sometimes you'll want to display a message to the user, after a creation or an u
     }
 ```
 
-A notification is made of a title, and optionally 
+A notification is made of a title, and optionally
 - a texte detail,
 - a notification level: info (the default), warning, danger, success,
 - an auto-hide policy (if true, the toasted notification will hide after 4s).
@@ -338,7 +344,7 @@ Once this class written, we have to declare the form in the sharp config file:
 
 ```php
     // config/sharp.php
-    
+
     return [
         "entities" => [
             "spaceship" => [
@@ -355,7 +361,7 @@ Of course you'll want to have an input validation on your form. Simply create a 
 
 ```php
     // config/sharp.php
-    
+
     return [
         "entities" => [
             "spaceship" => [

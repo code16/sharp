@@ -2,11 +2,17 @@
 
 We need an Entity List to display the list of `instances` for an `entity`. This list can be paginated, searchable, filtered, ... as we'll see below.
 
+## Generator
+
+```sh
+php artisan sharp:make:list <class_name> [--model=<model_name>]
+```
+
 ## Write the class
 
 First let's write the applicative class, and make it extend `Code16\Sharp\EntityList\SharpEntityList`. Therefore there are four abstract methods to implement:
 
-- `buildListDataContainers()` and `buildListLayout()` for the structure, 
+- `buildListDataContainers()` and `buildListLayout()` for the structure,
 - `getListData(EntityListQueryParams $params)` for the data,
 - and `buildListConfig()` for... the list config.
 
@@ -73,7 +79,7 @@ So for instance, if we defined 2 columns `name` and `capacity`:
             ], [
                 "id" => 2,
                 "name" => "USS Agamemnon",
-                "capacity" => "20k"			
+                "capacity" => "20k"
             ]
         ];
     }
@@ -173,7 +179,7 @@ In the sharp config file, we have to declare our entity, and link it to the Enti
 
 ```php
     // config/sharp.php
-    
+
     return [
         "entities" => [
             "spaceship" => [
