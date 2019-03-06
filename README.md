@@ -124,9 +124,6 @@ We'll get into all those classes in this document. The important thing to notice
 ### Dashboards
 - [Create a Dashboard](docs/dashboard.md)
 
-### Artisan Generators
-- [Artisan Generators](docs/artisan-generators.md)
-
 ### Generalities
 - [Building the menu](docs/building-menu.md)
 - [How to transform data](docs/how-to-transform-data.md)
@@ -134,6 +131,7 @@ We'll get into all those classes in this document. The important thing to notice
 - [Sharp built-in solution for uploads](docs/sharp-built-in-solution-for-uploads.md)
 - [Handling form data localization](docs/form-data-localization.md)
 - [Testing with Sharp](docs/testing-with-sharp.md)
+- [Artisan Generators](docs/artisan-generators.md)
 
 ### Theming and CSS
 - [Style & Visual Theme](docs/style-visual-theme.md)
