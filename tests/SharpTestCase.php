@@ -47,16 +47,4 @@ abstract class SharpTestCase extends TestCase
 
         static::assertThat($array, $constraint, $message);
     }
-
-    /**
-     * Redefine this to allow execution on older versions of Laravel (5.4).
-     *
-     * @param array $except
-     */
-    public function withoutExceptionHandling(array $except = [])
-    {
-        if(method_exists('Parent', "withoutExceptionHandling")) {
-            parent::withoutExceptionHandling($except);
-        }
-    }
 }
