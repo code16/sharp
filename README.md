@@ -17,7 +17,7 @@ Sharp intends to provide a clean solution to the following needs:
 - handle authorizations and validation;
 - all without write a line of front code, and using a clean API in the PHP app.
 
-Sharp 4 needs Laravel 5.4+ and PHP 7.0+.
+Sharp 4 needs Laravel 5.5+ and PHP 7.1.3+.
 
 Here's a series of blog posts which present Sharp following a simple example:
 - [Part 1](https://medium.com/@lonchampt/about-sharp-for-laravel-part-1-74a826279fe0)
@@ -52,7 +52,6 @@ Each `entity` in Sharp can be displayed:
 ## Installation
 
 - Add the package with composer: `composer require code16/sharp`,
-- [Laravel 5.4 only] Register the service provider `Code16\Sharp\SharpServiceProvider` in the provider array of `config/app.php`,
 - Publish assets: `php artisan vendor:publish --tag=assets`.
 
 ## Configuration
