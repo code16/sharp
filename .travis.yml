@@ -23,7 +23,6 @@ install:
   ## back dependencies
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction --prefer-dist
-  - travis_retry composer install --prefer-source --no-interaction
   ## front dependencies
   - . $HOME/.nvm/nvm.sh
   - nvm install 11.6
