@@ -4,9 +4,15 @@ Commands in Sharp are a powerful way to integrate functional processes in the co
 
 Commands can be defined in an EntityList or in a Dashboard. This documentation will take the EntityList case, but the API is very similar in both cases, as explained at the end of this page.
 
+## Generator
+
+```sh
+php artisan sharp:make:list-command <class_name> [--model=<model_name>]
+```
+
 ## Write the Command class
 
-First we need to write a class for our Command. It must extend the `Code16\Sharp\EntityList\Commands\EntityCommand` abstract class (for "entity commands", more on that below), and implement two functions. 
+First we need to write a class for our Command. It must extend the `Code16\Sharp\EntityList\Commands\EntityCommand` abstract class (for "entity commands", more on that below), and implement two functions.
 
 First one is `label(): string`, and must simply return the text label of the Command, displayed to the user:
 
@@ -21,7 +27,7 @@ The second one, `execute(EntityListQueryParams $params, array $data=[]): array` 
 
 ```php
     public function execute(
-        EntityListQueryParams $params, 
+        EntityListQueryParams $params,
         array $data=[]): array
     {
         return $this->reload();
@@ -77,7 +83,7 @@ Then, is the `execute()` method, it's trivial to grab the entered value, and eve
         $this->validate($data, [
             "message" => "required"
         ]);
-        
+
         $text = $data["message"];
         [...]
     }
@@ -95,7 +101,7 @@ You may need to initialize the form with some data; in order to do that, you hav
         ];
     }
 ```
-    
+
 For an Instance command, add the `$instanceId` as a parameter:
 
 ```php
@@ -120,7 +126,7 @@ This method must return an array of formatted values, like for a regular [Entity
     }
 ```
 
-Note that in both cases (Entity or Instance Command), you can access to the EntityList querystring via the request. 
+Note that in both cases (Entity or Instance Command), you can access to the EntityList querystring via the request.
 
 ### Command confirmation
 
@@ -154,7 +160,7 @@ Finally, let's review the return possibilities. After a Command has been execute
         if($params->specificIds()) {
             $spaceships->whereIn("id", $params->specificIds());
         }
-        
+
         [...]
     }
 ```

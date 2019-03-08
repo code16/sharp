@@ -21,6 +21,12 @@ You'll have to define the Eloquent `$table` attribute to indicate the table name
     }
 ```
 
+### Generator
+
+```sh
+php artisan sharp:make:media <model_name> --table=<table_name>
+```
+
 ## Create the migration
 
 Sharp provides an artisan command for that:
@@ -48,7 +54,7 @@ This command will create a migration file like this one:
                 $table->timestamps();
             });
         }
-        
+
         public function down()
         {
             Schema::dropIfExists('medias');
@@ -108,7 +114,7 @@ You must first define the thumbnail directory, in Sharp's config:
 
 ```php
     // config/sharp.php
-    
+
     "uploads" => [
         "thumbnails_dir" => "thumbnails",
     ],
@@ -169,7 +175,7 @@ Then add a customTransformer:
     function find($id): array
     {
         return $this->setCustomTransformer(
-                "cover", 
+                "cover",
                 new FormUploadModelTransformer()
             )
 	    ->transform(

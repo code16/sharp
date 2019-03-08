@@ -1,0 +1,35 @@
+<?php
+
+namespace DummyNamespace;
+
+use Code16\Sharp\Dashboard\SharpDashboard;
+use Code16\Sharp\Dashboard\DashboardQueryParams;
+
+class DummyClass extends SharpDashboard
+{
+    /**
+     * Build dashboard's widget using ->addWidget.
+     */
+    protected function buildWidgets()
+    {
+        //
+    }
+
+    /**
+     * Build dashboard's widgets layout.
+     */
+    protected function buildWidgetsLayout()
+    {
+        //
+    }
+
+    /**
+     * Build dashboard's widgets data, using ->addGraphDataSet and ->setPanelData
+     *
+     * @param DashboardQueryParams $params
+     */
+    protected function buildWidgetsData(DashboardQueryParams $params)
+    {
+        //
+    }
+}

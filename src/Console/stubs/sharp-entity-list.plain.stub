@@ -1,0 +1,51 @@
+<?php
+
+namespace DummyNamespace;
+
+use Code16\Sharp\EntityList\SharpEntityList;
+use Code16\Sharp\EntityList\EntityListQueryParams;
+use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
+
+class DummyClass extends SharpEntityList
+{
+    /**
+    * Build list containers using ->addDataContainer()
+    *
+    * @return void
+    */
+    public function buildListDataContainers()
+    {
+        //
+    }
+
+    /**
+    * Build list layout using ->addColumn()
+    *
+    * @return void
+    */
+    public function buildListLayout()
+    {
+        //
+    }
+
+    /**
+    * Build list config
+    *
+    * @return void
+    */
+    public function buildListConfig()
+    {
+        //
+    }
+
+	/**
+	* Retrieve all rows data as array.
+	*
+	* @param EntityListQueryParams $params
+	* @return array
+	*/
+    public function getListData(EntityListQueryParams $params)
+    {
+        //
+    }
+}

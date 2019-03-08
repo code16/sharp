@@ -1,0 +1,25 @@
+<?php
+
+namespace DummyNamespace;
+
+use Code16\Sharp\EntityList\EntityListRequiredFilter;
+use Code16\Sharp\EntityList\EntityListMultipleFilter;
+
+class DummyClassName implements EntityListRequiredFilter, EntityListMultipleFilter
+{
+    /**
+    * @return array
+    */
+    public function values()
+    {
+        //
+    }
+
+    /**
+    * @return string|int
+    */
+    public function defaultValue()
+    {
+        //
+    }
+}
