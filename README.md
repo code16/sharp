@@ -1,6 +1,6 @@
 <div align="center">
 
-![Sharp 4](docs/img/logo.png)
+![Sharp 4](docs/img/logo2.png)
 
 </div>
 
@@ -52,7 +52,20 @@ Each `entity` in Sharp can be displayed:
 ## Installation
 
 - Add the package with composer: `composer require code16/sharp`,
-- Publish assets: `php artisan vendor:publish --tag=assets`.
+- Publish assets: `php artisan vendor:publish --provider="Code16\Sharp\SharpServiceProvider" --tag=assets`.
+
+A tip on this last command: you'll need fresh assets each time Sharp is updated, so a good practice is to add the command in the `scripts.post-autoload-dump` section of your `composer.json` file:
+
+```json
+"scripts": {
+    [...]
+    "post-autoload-dump": [
+        "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+        "@php artisan vendor:publish --provider=Code16\\Sharp\\SharpServiceProvider --tag=assets --force",
+        "@php artisan package:discover"
+    ]
+},
+``` 
 
 ## Configuration
 
