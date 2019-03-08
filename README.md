@@ -56,7 +56,7 @@ Each `entity` in Sharp can be displayed:
 
 A tip on this last command: you'll need fresh assets each time Sharp is updated, so a good practice is to add the command in the `scripts.post-autoload-dump` section of your `composer.json` file:
 
-```json
+```
 "scripts": {
     [...]
     "post-autoload-dump": [
