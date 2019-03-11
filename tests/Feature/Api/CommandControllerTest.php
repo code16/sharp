@@ -13,6 +13,7 @@ use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
 use Code16\Sharp\Tests\Fixtures\SharpDashboard;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class CommandControllerTest extends BaseApiTest
 {
@@ -158,7 +159,11 @@ class CommandControllerTest extends BaseApiTest
             ->assertStatus(200)
             ->assertHeader("content-type", "application/pdf");
 
-        $this->assertStringContainsString("account.pdf", $response->headers->get("content-disposition"));
+        $this->assertTrue(
+            Str::contains(
+                $response->headers->get("content-disposition"), "account.pdf"
+            )
+        );
 
         $this->json('post', '/sharp/api/list/person/command/entity_download_no_disk')
             ->assertStatus(200);

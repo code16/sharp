@@ -33,7 +33,7 @@ abstract class SharpTestCase extends TestCase
      * @link https://github.com/laravel/framework/blob/695a29928d5f3e595363306cf62ba4ff653d73ba/src/Illuminate/Foundation/Testing/Assert.php
      * @link https://github.com/sebastianbergmann/phpunit/issues/3494
      */
-    public static function assertArraySubset($subset, $array, bool $checkForObjectIdentity = false, string $message = ''): void
+    public static function assertArrayContainsSubset($subset, $array, bool $checkForObjectIdentity = false, string $message = ''): void
     {
         if (! (is_array($subset) || $subset instanceof ArrayAccess)) {
             throw InvalidArgumentHelper::factory(1, 'array or ArrayAccess');

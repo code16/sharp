@@ -27,7 +27,7 @@ class SharpFormFieldTest extends SharpTestCase
     {
         $formField = SomeTestFormField::make("name", "test");
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["key" => "name", "type" => "test"],
             $formField->toArray()
         );
@@ -50,7 +50,7 @@ class SharpFormFieldTest extends SharpTestCase
         $formField = SomeTestFormField::make("name")
             ->setLabel("label");
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["label" => "label"],
             $formField->toArray()
         );
@@ -62,7 +62,7 @@ class SharpFormFieldTest extends SharpTestCase
         $formField = SomeTestFormField::make("name")
             ->setHelpMessage("message");
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["helpMessage" => "message"],
             $formField->toArray()
         );
@@ -79,7 +79,7 @@ class SharpFormFieldTest extends SharpTestCase
             ->addConditionalDisplay("!hidden")
             ->addConditionalDisplay("really_hidden", false);
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "conditionalDisplay" => [
                 "operator" => "or",
                 "fields" => [
@@ -110,7 +110,7 @@ class SharpFormFieldTest extends SharpTestCase
         $formField = SomeTestFormField::make("name")
             ->setReadOnly();
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["readOnly" => true],
             $formField->toArray()
         );
@@ -122,7 +122,7 @@ class SharpFormFieldTest extends SharpTestCase
         $formField = SomeTestFormField::make("name")
             ->setExtraStyle("font-weight: bold");
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["extraStyle" => "font-weight: bold"],
             $formField->toArray()
         );

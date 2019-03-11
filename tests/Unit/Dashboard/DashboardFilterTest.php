@@ -22,7 +22,7 @@ class DashboardFilterTest extends SharpTestCase
 
         $dashboard->buildDashboardConfig();
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "filters" => [
                 [
                     "key" => "test",

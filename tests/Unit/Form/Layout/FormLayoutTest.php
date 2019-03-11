@@ -44,7 +44,7 @@ class FormLayoutTest extends SharpTestCase
             }
         };
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["title" => "label", "columns" => []],
             $form->formLayout()["tabs"][0]
         );
@@ -56,7 +56,7 @@ class FormLayoutTest extends SharpTestCase
             }
         };
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "columns" => [
                 ["size" => 2]
             ]],

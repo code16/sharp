@@ -27,7 +27,7 @@ class SharpFormWysiwygFieldTest extends SharpTestCase
         $formField = SharpFormWysiwygField::make("text")
             ->setHeight(500);
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["height" => 500],
             $formField->toArray()
         );
@@ -43,7 +43,7 @@ class SharpFormWysiwygFieldTest extends SharpTestCase
                 SharpFormWysiwygField::UL,
             ]);
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["toolbar" => [
                 SharpFormWysiwygField::B,
                 SharpFormWysiwygField::SEPARATOR,

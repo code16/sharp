@@ -1,0 +1,10 @@
+<?php
+
+namespace DummyNamespace;
+
+use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
+
+class DummyClass extends SharpUploadModel
+{
+    protected $table = 'DummyTable';
+}
