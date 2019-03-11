@@ -24,7 +24,8 @@ mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
                 {
                     test: /\.js$/,
                     include: [
-                        path.resolve(__dirname, 'node_modules/vue-clip')
+                        path.resolve(__dirname, 'node_modules/vue-clip'),
+                        path.resolve(__dirname, 'node_modules/vue2-timepicker')
                     ],
                     use: [
                         {
