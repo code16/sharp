@@ -2,6 +2,7 @@
   @extend .SharpModule;
   position: relative;
   z-index : z('markdown');
+  padding: 0!important;
 
   .editor-toolbar {
     @extend .SharpModule__header;
