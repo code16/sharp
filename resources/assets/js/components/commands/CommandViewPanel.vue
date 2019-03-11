@@ -9,11 +9,11 @@
             leave-active-class="SharpViewPanel--collapsing"
             leave-to-class="SharpViewPanel--collapsed"
         >
-            <div class="SharpViewPanel" v-show="visible">
-                <iframe v-if="visible" :src="`data:text/html;charset=utf-8$,${encodeURIComponent(content)}`"
-                        style="height:100%;width:100%" height="100%" width="100%" frameborder="0">
-                </iframe>
-            </div>
+            <template v-if="visible">
+                <div class="SharpViewPanel">
+                    <iframe src="about:blank" v-srcdoc="content" sandbox="allow-forms allow-scripts allow-same-origin allow-popups"></iframe>
+                </div>
+            </template>
         </transition>
     </div>
 </template>
@@ -27,12 +27,19 @@
         computed:{
             visible() {
                 return !!this.content;
-            }
+            },
         },
         methods: {
             handleBackdropClicked() {
                 this.$emit('close');
             },
-        }
+        },
+        directives: {
+            srcdoc: {
+                inserted(el, { value }) {
+                    el.contentWindow.document.write(value);
+                }
+            }
+        },
     }
 </script>
