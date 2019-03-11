@@ -1,10 +1,10 @@
 <template>
     <div class="SharpGeolocation">
-        <template v-if="!loaded">
+        <template v-if="isLoading">
             {{ l('form.geolocation.loading') }}
         </template>
-        <template v-else-if="!value">
-            <SharpButton outline class="w-100" v-b-modal="modalId">
+        <template v-else-if="isEmpty">
+            <SharpButton outline class="w-100" @click="handleShowModalButtonClicked">
                 {{ l('form.geolocation.browse_button') }}
             </SharpButton>
         </template>
@@ -15,7 +15,13 @@
             >
                 <div class="row">
                     <div class="col-7">
-                        <slot />
+                        <component
+                            :is="mapComponent"
+                            :position="value"
+                            :center="value || initialPosition"
+                            :bounds="boundaries"
+                            :zoom="zoomLevel"
+                        />
                     </div>
                     <div class="col-5 pl-0">
                         <div class="d-flex flex-column justify-content-between h-100">
@@ -27,7 +33,7 @@
                                 <SharpButton small outline type="danger" class="remove-button" :disabled="readOnly" @click="handleRemoveButtonClicked">
                                     {{ l('form.geolocation.remove_button') }}
                                 </SharpButton>
-                                <SharpButton small outline :disabled="readOnly" v-b-modal="modalId">
+                                <SharpButton small outline :disabled="readOnly" @click="handleEditButtonClicked">
                                     {{ l('form.geolocation.edit_button') }}
                                 </SharpButton>
                             </div>
@@ -36,18 +42,25 @@
                 </div>
             </SharpCard>
         </template>
+        <SharpGeolocationModal
+            :visible.sync="modalVisible"
+            :geocoding="geocoding"
+            :center="value || initialPosition"
+            :bounds="boundaries"
+            :zoom="zoomLevel"
+            @submit="handleModalSubmitted"
+        />
     </div>
 </template>
 
 <script>
-    import bModal from 'bootstrap-vue/es/directives/modal/modal';
-    import { dd2dms } from "./util";
-    import SharpMap from './Map.vue';
-
     import { Localization } from '../../../../mixins';
-
     import { SharpCard, SharpButton } from "../../../ui";
 
+    import { getMapByProvider, loadMapProvider } from "./maps";
+    import { dd2dms } from "./util";
+
+    import SharpGeolocationModal from './GeolocationModal.vue';
 
 
     export default {
@@ -55,9 +68,9 @@
         mixins: [Localization],
 
         components: {
-            SharpMap,
             SharpCard,
-            SharpButton
+            SharpButton,
+            SharpGeolocationModal,
         },
 
         props: {
@@ -73,11 +86,24 @@
                 type: String,
                 default: 'DD',
                 validator: unit => unit==='DMS' || unit==='DD'
+            },
+            provider: {
+                type: String,
+                default: 'gmaps',
+            },
+        },
+        data() {
+            return {
+                ready: false,
+                modalVisible: false,
             }
         },
         computed: {
-            modalId() {
-                return `${this.uniqueIdentifier.replace('.','-')}-modal`
+            isLoading() {
+                return !this.ready;
+            },
+            isEmpty() {
+                return !this.value;
             },
             latLngString() {
                 if(this.displayUnit === 'DMS') {
@@ -89,19 +115,33 @@
                 else if(this.displayUnit === 'DD') {
                     return this.value;
                 }
-            }
+            },
+            mapComponent() {
+                return getMapByProvider(this.provider);
+            },
         },
         methods: {
-            handleInput(value) {
-                this.$emit('input', value);
+            handleModalSubmitted(position) {
+                this.$emit('input', position);
             },
             handleRemoveButtonClicked() {
                 this.$emit('input', null);
             },
+            handleShowModalButtonClicked() {
+                this.modalVisible = true;
+            },
+            handleEditButtonClicked() {
+                this.modalVisible = true;
+            },
+            async init() {
+                await loadMapProvider(this.provider, {
+                    apiKey: this.apiKey
+                });
+                this.ready = true;
+            }
         },
-
-        directives: {
-            bModal
+        created() {
+            this.init();
         },
     }
 </script>
