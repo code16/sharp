@@ -2,20 +2,25 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
+use Code16\Sharp\Dashboard\Commands\DashboardCommand;
+use Code16\Sharp\Dashboard\DashboardQueryParams;
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
+use Code16\Sharp\Tests\Fixtures\SharpDashboard;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class CommandControllerTest extends BaseApiTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
+
         $this->login();
     }
 
@@ -23,7 +28,7 @@ class CommandControllerTest extends BaseApiTest
     public function we_can_call_an_info_entity_command()
     {
         $this->buildTheWorld();
-        $this->disableExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $this->json('post', '/sharp/api/list/person/command/entity_info')
             ->assertStatus(200)
@@ -37,7 +42,7 @@ class CommandControllerTest extends BaseApiTest
     public function we_can_call_an_info_instance_command()
     {
         $this->buildTheWorld();
-        $this->disableExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $this->json('post', '/sharp/api/list/person/command/instance_info/1')
             ->assertStatus(200)
@@ -51,7 +56,7 @@ class CommandControllerTest extends BaseApiTest
     public function we_can_call_a_link_entity_command()
     {
         $this->buildTheWorld();
-        $this->disableExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $this->json('post', '/sharp/api/list/person/command/instance_link/1')
             ->assertStatus(200)
@@ -65,7 +70,7 @@ class CommandControllerTest extends BaseApiTest
     public function we_can_call_a_reload_entity_command()
     {
         $this->buildTheWorld();
-        $this->disableExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $this->json('post', '/sharp/api/list/person/command/entity_reload')
             ->assertStatus(200)
@@ -78,7 +83,7 @@ class CommandControllerTest extends BaseApiTest
     public function we_can_call_a_view_entity_command()
     {
         $this->buildTheWorld();
-        $this->disableExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $this->json('post', '/sharp/api/list/person/command/entity_view')
             ->assertStatus(200)
@@ -91,7 +96,7 @@ class CommandControllerTest extends BaseApiTest
     public function we_can_call_a_refresh_entity_command()
     {
         $this->buildTheWorld();
-        $this->disableExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $this->json('post', '/sharp/api/list/person/command/entity_refresh')
             ->assertStatus(200)
@@ -115,7 +120,7 @@ class CommandControllerTest extends BaseApiTest
     public function we_can_call_a_refresh_instance_command()
     {
         $this->buildTheWorld();
-        $this->disableExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $json = $this->json('post', '/sharp/api/list/person/command/instance_refresh/1')
             ->assertStatus(200)
@@ -137,7 +142,7 @@ class CommandControllerTest extends BaseApiTest
     public function we_can_call_a_form_entity_command()
     {
         $this->buildTheWorld();
-        $this->disableExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $this->json('post', '/sharp/api/list/person/command/entity_form', [
             "data" => ["name" => "John"]
@@ -148,13 +153,17 @@ class CommandControllerTest extends BaseApiTest
     public function we_can_call_a_download_entity_command()
     {
         $this->buildTheWorld();
-        $this->disableExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $response = $this->json('post', '/sharp/api/list/person/command/entity_download')
             ->assertStatus(200)
             ->assertHeader("content-type", "application/pdf");
 
-        $this->assertContains("account.pdf", $response->headers->get("content-disposition"));
+        $this->assertTrue(
+            Str::contains(
+                $response->headers->get("content-disposition"), "account.pdf"
+            )
+        );
 
         $this->json('post', '/sharp/api/list/person/command/entity_download_no_disk')
             ->assertStatus(200);
@@ -192,7 +201,7 @@ class CommandControllerTest extends BaseApiTest
     public function we_get_the_full_query_in_an_entity_command()
     {
         $this->buildTheWorld();
-        $this->disableExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $this->json('post', '/sharp/api/list/person/command/entity_params', [
             "query" => ["sort" => "name", "dir" => "desc"]
@@ -225,6 +234,79 @@ class CommandControllerTest extends BaseApiTest
             ->assertStatus(200);
     }
 
+    /** @test */
+    public function we_can_initialize_form_data_in_an_entity_command()
+    {
+        $this->buildTheWorld();
+        $this->withoutExceptionHandling();
+
+        $response = $this->getJson('/sharp/api/list/person')
+            ->assertStatus(200)
+            ->json();
+
+        $this->assertTrue(
+            collect($response['config']['commands']['entity'][0])->where("key", "entity_with_init_data")->first()['fetch_initial_data']
+        );
+
+        $this->getJson('/sharp/api/list/person/command/entity_with_init_data/data')
+            ->assertStatus(200)
+            ->assertExactJson([
+                "data" => [
+                    "name" => "John Wayne"
+                ]
+            ]);
+    }
+
+    /** @test */
+    public function we_can_initialize_form_data_in_an_instance_command()
+    {
+        $this->buildTheWorld();
+        $this->withoutExceptionHandling();
+
+        $response = $this->getJson('/sharp/api/list/person')
+            ->assertStatus(200)
+            ->json();
+
+        $this->assertTrue(
+            collect($response['config']['commands']['instance'][0])->where("key", "instance_with_init_data")->first()['fetch_initial_data']
+        );
+
+        $this->getJson('/sharp/api/list/person/command/instance_with_init_data/25/data')
+            ->assertStatus(200)
+            ->assertExactJson([
+                "data" => [
+                    "name" => "John Wayne [25]"
+                ]
+            ]);
+    }
+
+    /** @test */
+    public function we_can_call_an_info_dashboard_command()
+    {
+        $this->buildTheWorldForDashboard();
+
+        $this->json('post', '/sharp/api/dashboard/my_dashboard/command/dashboard_info')
+            ->assertStatus(200)
+            ->assertJson([
+                "action" => "info",
+                "message" => "ok",
+            ]);
+    }
+
+    /** @test */
+    public function we_can_initialize_form_data_in_an_dashboard_command()
+    {
+        $this->buildTheWorldForDashboard();
+
+        $this->getJson('/sharp/api/dashboard/my_dashboard/command/dashboard_form/data')
+            ->assertStatus(200)
+            ->assertJson([
+                "data" => [
+                    "name" => "John Wayne"
+                ]
+            ]);
+    }
+
     protected function buildTheWorld()
     {
         parent::buildTheWorld();
@@ -232,6 +314,16 @@ class CommandControllerTest extends BaseApiTest
         $this->app['config']->set(
             'sharp.entities.person.list',
             EntityCommandPersonSharpEntityList::class
+        );
+    }
+
+    protected function buildTheWorldForDashboard()
+    {
+        parent::buildTheWorld();
+
+        $this->app['config']->set(
+            'sharp.dashboards.my_dashboard.view',
+            CommandControllerTestDashboardView::class
         );
     }
 }
@@ -282,7 +374,7 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
                 return $this->link('/link/out');
             }
 
-        })->addInstanceCommand("entity_exception", new class() extends EntityCommand {
+        })->addEntityCommand("entity_exception", new class() extends EntityCommand {
             public function label(): string { return "label"; }
             public function execute(EntityListQueryParams $params, array $data = []): array {
                 throw new SharpApplicativeException("error");
@@ -314,7 +406,7 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
                 return $this->download("pdf/account.pdf");
             }
 
-        })->addInstanceCommand("entity_unauthorized", new class() extends EntityCommand {
+        })->addEntityCommand("entity_unauthorized", new class() extends EntityCommand {
             public function label(): string { return "label"; }
             public function authorize(): bool { return false; }
             public function execute(EntityListQueryParams $params, array $data = []): array {
@@ -335,7 +427,61 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
             {
                 return $this->info($params->sortedBy() . $params->sortedDir());
             }
-        });
+        })->addEntityCommand("entity_with_init_data", new class() extends EntityCommand {
+            public function label(): string { return "label"; }
+            public function buildFormFields() {
+                $this->addField(SharpFormTextField::make("name"));
+            }
+            protected function initialData(): array
+            {
+                return [
+                    "name" => "John Wayne",
+                    "age" => 32
+                ];
+            }
+            public function execute(EntityListQueryParams $params, array $data = []): array {}
 
+        })->addInstanceCommand("instance_with_init_data", new class() extends InstanceCommand {
+            public function label(): string { return "label"; }
+            public function buildFormFields() {
+                $this->addField(SharpFormTextField::make("name"));
+            }
+            protected function initialData($instanceId): array
+            {
+                return [
+                    "name" => "John Wayne [$instanceId]",
+                    "age" => 32
+                ];
+            }
+            public function execute($instanceId, array $data = []): array {}
+        });
+    }
+}
+
+class CommandControllerTestDashboardView extends SharpDashboard
+{
+    function buildDashboardConfig()
+    {
+        $this
+            ->addDashboardCommand("dashboard_info", new class() extends DashboardCommand {
+                public function label(): string { return "label"; }
+                public function execute(DashboardQueryParams $params, array $data= []): array {
+                    return $this->info("ok");
+                }
+            })
+            ->addDashboardCommand("dashboard_form", new class() extends DashboardCommand {
+                public function label(): string { return "label"; }
+                public function buildFormFields() {
+                    $this->addField(SharpFormTextField::make("name"));
+                }
+                protected function initialData(): array
+                {
+                    return [
+                        "name" => "John Wayne",
+                        "age" => 32
+                    ];
+                }
+                public function execute(DashboardQueryParams $params, array $data = []): array {}
+            });
     }
 }

@@ -19,6 +19,26 @@ abstract class InstanceCommand extends Command
     }
 
     /**
+     * @param $instanceId
+     * @return array
+     */
+    public function formData($instanceId): array
+    {
+        return collect($this->initialData($instanceId))
+            ->only($this->getDataKeys())
+            ->all();
+    }
+
+    /**
+     * @param $instanceId
+     * @return array
+     */
+    protected function initialData($instanceId): array
+    {
+        return [];
+    }
+
+    /**
      * @param string $instanceId
      * @param array $data
      * @return array
@@ -36,6 +56,9 @@ abstract class InstanceCommand extends Command
         return true;
     }
 
+    /**
+     * @param $instanceId
+     */
     public function checkAndStoreAuthorizationFor($instanceId)
     {
         if($this->authorizeFor($instanceId)) {
@@ -43,6 +66,9 @@ abstract class InstanceCommand extends Command
         }
     }
 
+    /**
+     * @return bool|array
+     */
     public function getGlobalAuthorization()
     {
         if(!$this->authorize()) {

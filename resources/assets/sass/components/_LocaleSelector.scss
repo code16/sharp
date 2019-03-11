@@ -1,4 +1,16 @@
 .SharpLocaleSelector {
   text-transform: uppercase;
   width: 4.5rem;
+  &, .multiselect__tags {
+    border-radius: 10px;
+  }
+  &--has-error, &--has-partial-error {
+    width: 5.5rem;
+  }
+  &--has-error .multiselect__single {
+    @extend .error-dot;
+  }
+  &--has-partial-error .multiselect__single {
+    @extend .error-dot--partial;
+  }
 }

@@ -1,19 +1,27 @@
-# The Dashboard
+# Create a Dashboard
 
-By default, the sharp homepage is a welcome text, with the side menu to navigate. You can decide to integrate here a Dashboard, with graphs (bars and line) and stat data, or with personalized reminders for instance.
+A Dashboard is a good way to present synthetic data to the user, with graphs, stats, or personalized reminders for instance.
+
+## Generator
+
+```sh
+php artisan sharp:make:dashboard <class_name>
+```
 
 ## Write the class
 
-The Dashboard is very much like an Entity Form, except it readonly. So the first step is to create a new class extending `Code16\Sharp\Dashboard\SharpDashboard` which lead us to implement three functions:
+A Dashboard is very much like an Entity Form, except it readonly. So the first step is to create a new class extending `Code16\Sharp\Dashboard\SharpDashboard` which lead us to implement three functions:
 
 - `buildWidgets()`, similar to Entity Form's `buildForm()`
 - `buildWidgetsLayout()`, similar to `buildLayout()`
-- and `buildWidgetsData()`, for the actual Dashboard data, like Entity Form's `find()` method.
+- `buildDashboardConfig()`, for optional filters
+- and `buildWidgetsData(DashboardQueryParams $params)`, for the actual Dashboard data, like Entity Form's `find()` method.
 
 ### `buildWidgets()`
 
 We're suppose to use here `$this->addWidget()` to configure all the Dashboard widgets.
 
+```php
     function buildWidgets()
     {
         $this->addWidget(
@@ -26,8 +34,9 @@ We're suppose to use here `$this->addWidget()` to configure all the Dashboard wi
                 ->setLink('spaceship')
         );
     }
+```
 
-As we can see in this example, we defined two widgets giving them a mandatory `key` and some optional properties depending of their type. 
+As we can see in this example, we defined two widgets giving them a mandatory `key` and some optional properties depending of their type.
 
 Every widget has the optional following setters:
 
@@ -39,11 +48,11 @@ And here's the full list and documentation of each widget available, for the spe
 - [Graph](dashboard-widgets/graph.md)
 - [Panel](dashboard-widgets/panel.md)
 
-
 ### `buildWidgetsLayout()`
 
 The layout API is a bit different of Entity Form here, because we think in terms of rows and not columns. So for instance:
 
+```php
     function buildWidgetsLayout()
     {
         $this->addFullWidthWidget("capacities")
@@ -52,11 +61,11 @@ The layout API is a bit different of Entity Form here, because we think in terms
                     ->addWidget(6, "inactiveSpaceships");
             });
     }
+```
 
 We can only add rows and "full width widgets" (which are a shortcut for a single widget row). A row groups widgets in a 12-based grid.
 
-
-### `buildWidgetsData()`
+### `buildWidgetsData(DashboardQueryParams $params)`
 
 Widget data is set with specific methods depending of their type. The documentation is therefore split:
 
@@ -67,17 +76,78 @@ Widget data is set with specific methods depending of their type. The documentat
 
 Once this class written, we have to declare the form in the sharp config file:
 
+```php
     // config/sharp.php
-    
+
     return [
         "entities" => [
             [...]
         ],
-        "dashboard" => \App\Sharp\Dashboard::class
+        "dashboards" => [
+            "company_dashboard" => [
+                "view" => \App\Sharp\CompanyDashboard::class
+            ]
+        ],
+        [...]
+        "menu" => [
+            [
+                "label" => "Company",
+                "entities" => [
+                    [
+                        "label" => "Dashboard",
+                        "icon" => "fa-dashboard",
+                        "dashboard" => "company_dashboard"
+                    ],
+                    [...]
+                ]
+            ]
+        ]
     ];
+```
 
-This will display the Dashboard on the `/sharp` home URL, and add a link in the side menu.
+In the menu, like an Entity, a Dashboard can be displayed anywhere.
+
+## Dashboard filters
+
+Just like EntityLists, Dashboard can display filters, as [documented on the Filter page](filters.md).
+
+## Dashboard commands
+
+Like again EntityLists, Commands can be attached to a Dashboard: [see the Command documentation](commands.md).
+
+## Dashboard policies
+
+Just like for an Entity, you can define a Policy for a Dashboard. The only available action is `view`.
+
+```php
+    // config/sharp.php
+
+    return [
+        "entities" => [
+            [...]
+        ],
+        "dashboards" => [
+            "company_dashboard" => [
+                "view" => \App\Sharp\CompanyDashboard::class,
+                "policy" => \App\Sharp\Policies\CompanyDashboardPolicy::class,
+            ]
+        ],
+        [...]
+    ];
+```
+
+And the policy class can be pretty straightforward:
+
+```php
+    class CompanyDashboardPolicy
+    {
+        public function view(User $user)
+        {
+            return $user->hasGroup("boss");
+        }
+    }
+```
 
 ---
 
-> next chapter: [How to transform data](how-to-transform-data.md).
+> next chapter: [Building the menu](building-menu.md).

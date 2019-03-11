@@ -1,31 +1,40 @@
 import './polyfill';
 import Vue from 'vue';
+import Vuex from 'vuex';
+import VueRouter from 'vue-router';
+import { install as VueGoogleMaps } from 'vue2-google-maps';
 
-import ActionView from './components/ActionView';
-import Form from './components/form/Form';
-import FieldDisplay from './components/form/field-display/FieldDisplay';
-import EntityList from './components/list/EntityList';
-import Dashboard from './components/dashboard/Dashboard';
+import SharpActionView from './components/ActionView';
+import SharpForm from './components/form/Form';
+import SharpFieldDisplay from './components/form/field-display/FieldDisplay';
 
-import CollapsibleItem from './components/menu/CollapsibleItem';
-import NavItem from './components/menu/NavItem';
-import LeftNav from './components/menu/LeftNav';
+import SharpCollapsibleItem from './components/menu/CollapsibleItem';
+import SharpNavItem from './components/menu/NavItem';
+import SharpLeftNav from './components/menu/LeftNav';
 
+import SharpItemVisual from './components/ui/ItemVisual';
 import Loading from './components/ui/Loading';
-import ItemVisual from './components/ui/ItemVisual';
+
+import routes from './routes';
 
 import axios from 'axios';
 import cookies from 'axios/lib/helpers/cookies';
-
-import * as qs from './helpers/querystring';
+import qs from 'qs';
 
 import Notifications from 'vue-notification';
 
-Vue.use(Notifications);
+import store from './store';
+import { BASE_URL } from "./consts";
 
+Vue.use(Notifications);
+Vue.use(VueGoogleMaps, {
+    installComponents: false
+});
+
+Vue.config.ignoredElements = [/^trix-/];
 
 // prevent recursive components import
-Vue.component(FieldDisplay.name, FieldDisplay);
+Vue.component(SharpFieldDisplay.name, SharpFieldDisplay);
 const SharpLoading = Vue.extend(Loading);
 
 new Vue({
@@ -33,27 +42,32 @@ new Vue({
 
     provide: {
         mainLoading: new SharpLoading({ el: '#glasspane' }),
-        xsrfToken: cookies.read(axios.defaults.xsrfCookieName),
-        params: qs.parse()
+        xsrfToken: cookies.read(axios.defaults.xsrfCookieName)
     },
 
     components: {
-        [ActionView.name]:ActionView,
-        [Form.name]:Form,
-        [Dashboard.name]:Dashboard,
-        [EntityList.name]:EntityList,
-        [CollapsibleItem.name]:CollapsibleItem,
-        [NavItem.name]:NavItem,
-        [LeftNav.name]:LeftNav,
-        [ItemVisual.name]:ItemVisual
+        SharpActionView,
+        SharpForm,
+        SharpCollapsibleItem,
+        SharpNavItem,
+        SharpLeftNav,
+        SharpItemVisual
     },
 
     created() {
         this.$on('setClass',(className,active)=> {
-            //console.log('setClass', className, active);
             this.$el.classList[active ? 'add' : 'remove'](className);
         });
-    }
+    },
+
+    store: new Vuex.Store(store),
+    router: new VueRouter({
+        mode: 'history',
+        routes,
+        base: `${BASE_URL}/`,
+        parseQuery: query => qs.parse(query, { strictNullHandling: true }),
+        stringifyQuery: query => qs.stringify(query, { addQueryPrefix: true, skipNulls: true }),
+    })
 });
 
 

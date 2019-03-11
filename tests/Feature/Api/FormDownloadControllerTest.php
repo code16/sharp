@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\File;
 
 class FormDownloadControllerTest extends BaseApiTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

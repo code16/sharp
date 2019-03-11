@@ -5,7 +5,7 @@
     <div id="sharp-app">
         @include("sharp::partials._menu")
         <sharp-action-view context="list">
-            <sharp-entity-list entity-key="{{ $entityKey }}"></sharp-entity-list>
+            <router-view></router-view>
         </sharp-action-view>
     </div>
 

@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`store dashboard state matches snapshot 1`] = `
+Object {
+  "config": null,
+  "dashboardKey": null,
+  "data": null,
+  "layout": null,
+  "widgets": null,
+}
+`;

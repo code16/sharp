@@ -1,5 +1,5 @@
 <template>
-    <li class="SharpDropdown__item" >
+    <li class="SharpDropdown__item">
         <a class="SharpDropdown__link" :class="customClass" href="" @mousedown.prevent="" @click.prevent="handleClick">
             <slot></slot>
         </a>

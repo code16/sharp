@@ -12,7 +12,7 @@ class SharpContext
     /**
      * @var mixed
      */
-    protected $entityId;
+    protected $instanceId;
 
     /**
      * @var string
@@ -24,10 +24,13 @@ class SharpContext
         $this->page = "FORM";
     }
 
-    public function setIsUpdate($entityId)
+    /**
+     * @param $instanceId
+     */
+    public function setIsUpdate($instanceId)
     {
         $this->setIsForm();
-        $this->entityId = $entityId;
+        $this->instanceId = $instanceId;
         $this->action = "UPDATE";
     }
 
@@ -64,10 +67,29 @@ class SharpContext
     /**
      * @return mixed|null
      */
-    public function entityId()
+    public function instanceId()
     {
         return $this->isUpdate()
-            ? $this->entityId
+            ? $this->instanceId
             : null;
+    }
+
+    /**
+     * @param string $filterName
+     * @return array|string|null
+     */
+    public function globalFilterFor(string $filterName)
+    {
+        if(!$handlerClass = config("sharp.global_filters.$filterName")) {
+            return null;
+        }
+
+        $handler = app($handlerClass);
+
+        if(session()->has("_sharp_retained_global_filter_$filterName")) {
+            return session()->get("_sharp_retained_global_filter_$filterName");
+        }
+
+        return $handler->defaultValue();
     }
 }

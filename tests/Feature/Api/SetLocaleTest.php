@@ -6,7 +6,7 @@ use Carbon\Carbon;
 
 class SetLocaleTest extends BaseApiTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

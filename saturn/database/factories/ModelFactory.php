@@ -25,23 +25,34 @@ $factory->define(\App\Feature::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->define(\App\Corporation::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->company,
+    ];
+});
 
 $factory->define(\App\Spaceship::class, function (Faker\Generator $faker) {
     return [
-        'name' => $faker->lastName,
+        'name' => [
+            "fr" => $faker->lastName,
+            "en" => $faker->lastName,
+        ],
         'description' => $faker->realText(400),
         'capacity' => $faker->numberBetween(5, 80) * 1000,
         'construction_date' => $faker->date(),
         'state' => $faker->randomElement(["inactive", "active", "building", "conception"]),
         'type_id' => function() {
             return factory(\App\SpaceshipType::class)->create()->id;
+        },
+        'corporation_id' => function() {
+            return factory(\App\Corporation::class)->create()->id;
         }
     ];
 });
 
 $factory->define(\App\Travel::class, function (Faker\Generator $faker) {
     return [
-        'departure_date' => $faker->dateTimeThisYear,
+        'departure_date' => $faker->dateTimeInInterval('-10 years', '+10 years'),
         'spaceship_id' => function() {
             return (\App\Spaceship::class)->create()->id;
         },

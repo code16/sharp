@@ -29,7 +29,7 @@ class SharpEntityListStateTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "state" => [
                 "attribute" => "_state",
                 "values" => [
@@ -52,7 +52,7 @@ class SharpEntityListStateTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "state" => [
                 "attribute" => "_state",
                 "values" => [
@@ -128,7 +128,7 @@ class SharpEntityListStateTest extends SharpTestCase
             ["id" => 4], ["id" => 5], ["id" => 6],
         ]);
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "state" => [
                 "attribute" => "_state",
                 "values" => [

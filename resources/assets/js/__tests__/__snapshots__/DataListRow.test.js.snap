@@ -1,0 +1,88 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DataListRow mount 1`] = `
+<div class="SharpDataList__row container SharpDataList__row--disabled">
+	<div class="SharpDataList__cols">
+		<div class="row"></div>
+		<!---->
+	</div>
+	<!---->
+</div>
+`;
+
+exports[`DataListRow mount append 1`] = `
+<div class="SharpDataList__row container SharpDataList__row--disabled">
+	<div class="SharpDataList__cols">
+		<div class="row"></div>
+		<!---->
+	</div>
+	<div class="SharpDataList__row-append align-self-center">mockedAppend</div>
+</div>
+`;
+
+exports[`DataListRow mount cell slot 1`] = `
+<div class="SharpDataList__row container SharpDataList__row--disabled">
+	<div class="SharpDataList__cols">
+		<div class="row">
+			<div class="SharpDataList__td colClasses">
+				<div row="[object Object]" column="[object Object]">name:John</div>
+			</div>
+		</div>
+		<!---->
+	</div>
+	<!---->
+</div>
+`;
+
+exports[`DataListRow mount columns 1`] = `
+<div class="SharpDataList__row container SharpDataList__row--disabled">
+	<div class="SharpDataList__cols">
+		<div class="row">
+			<div class="SharpDataList__td colClasses">
+				John
+			</div>
+			<div class="SharpDataList__td colClasses">
+				<div class="SharpDataList__td-html-container">
+					<span>3</span>
+				</div>
+			</div>
+		</div>
+		<!---->
+	</div>
+	<!---->
+</div>
+`;
+
+exports[`DataListRow mount header 1`] = `
+<div class="SharpDataList__row container SharpDataList__row--header">
+	<div class="SharpDataList__cols">
+		<div class="row"></div>
+		<!---->
+	</div>
+	<!---->
+</div>
+`;
+
+exports[`DataListRow mount header: columns 1`] = `
+<div class="SharpDataList__row container SharpDataList__row--header">
+	<div class="SharpDataList__cols">
+		<div class="row">
+			<div class="SharpDataList__th colClasses">
+				label
+			</div>
+		</div>
+		<!---->
+	</div>
+	<!---->
+</div>
+`;
+
+exports[`DataListRow mount with url 1`] = `
+<div class="SharpDataList__row container">
+	<div class="SharpDataList__cols">
+		<div class="row"></div>
+		<a class="SharpDataList__row-link" href="http://example.org"></a>
+	</div>
+	<!---->
+</div>
+`;

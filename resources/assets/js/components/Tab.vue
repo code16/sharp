@@ -20,10 +20,13 @@
             }
         },
         watch: {
-            async localActive(val) {
-                if(val) {
-                    await this.$nextTick();
-                    this.$emit('active');
+            localActive: {
+                immediate: true,
+                async handler(val) {
+                    if(val) {
+                        await this.$nextTick();
+                        this.$emit('active');
+                    }
                 }
             }
         },
@@ -38,6 +41,6 @@
         created() {
             this.$on('error', key=>this.setError(key));
             this.$on('clear', key=>this.clearError(key));
-        }
+        },
     }
 </script>

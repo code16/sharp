@@ -34,7 +34,7 @@ class SharpFormSelectFieldTest extends SharpTestCase
         $formField = $this->getDefaultSelect()
             ->setMultiple(true);
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["multiple" => true],
             $formField->toArray()
         );
@@ -46,7 +46,7 @@ class SharpFormSelectFieldTest extends SharpTestCase
         $formField = $this->getDefaultSelect()
             ->setInline();
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["inline" => true],
             $formField->toArray()
         );
@@ -58,7 +58,7 @@ class SharpFormSelectFieldTest extends SharpTestCase
         $formField = $this->getDefaultSelect()
             ->setMaxSelected(12);
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["maxSelected" => 12],
             $formField->toArray()
         );
@@ -70,7 +70,7 @@ class SharpFormSelectFieldTest extends SharpTestCase
         $formField = $this->getDefaultSelect()
             ->setClearable(true);
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["clearable" => true],
             $formField->toArray()
         );
@@ -82,7 +82,7 @@ class SharpFormSelectFieldTest extends SharpTestCase
         $formField = $this->getDefaultSelect()
             ->setDisplayAsList();
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["display" => "list"],
             $formField->toArray()
         );
@@ -94,7 +94,7 @@ class SharpFormSelectFieldTest extends SharpTestCase
         $formField = $this->getDefaultSelect()
             ->setDisplayAsDropdown();
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["display" => "dropdown"],
             $formField->toArray()
         );
@@ -108,10 +108,44 @@ class SharpFormSelectFieldTest extends SharpTestCase
             ["id" => 2, "label" => "Elem 2"],
         ]);
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["options" => [
                 ["id" => 1, "label" => "Elem 1"],
                 ["id" => 2, "label" => "Elem 2"],
+            ]],
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_localized_options()
+    {
+        $formField = $this->getDefaultSelect([
+            "1" => ["en" => "Option one", "fr" => "Option un"],
+            "2" => ["en" => "Option two", "fr" => "Option deux"],
+        ])->setLocalized();
+
+        $this->assertArrayContainsSubset(
+            ["options" => [
+                ["id" => 1, "label" => ["en" => "Option one", "fr" => "Option un"]],
+                ["id" => 2, "label" => ["en" => "Option two", "fr" => "Option deux"]],
+            ]],
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_localized_options_with_id_label_array()
+    {
+        $formField = $this->getDefaultSelect([
+            ["id" => "1", "label" => ["en" => "Option one", "fr" => "Option un"]],
+            ["id" => "2", "label" => ["en" => "Option two", "fr" => "Option deux"]],
+        ])->setLocalized();
+
+        $this->assertArrayContainsSubset(
+            ["options" => [
+                ["id" => 1, "label" => ["en" => "Option one", "fr" => "Option un"]],
+                ["id" => 2, "label" => ["en" => "Option two", "fr" => "Option deux"]],
             ]],
             $formField->toArray()
         );

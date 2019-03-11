@@ -3,14 +3,24 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Translatable\HasTranslations;
 
 class Spaceship extends Model
 {
+    use HasTranslations;
+
+    public $translatable = ['name'];
+
     protected $guarded = [];
 
     public function type()
     {
         return $this->belongsTo(SpaceshipType::class);
+    }
+
+    public function corporation()
+    {
+        return $this->belongsTo(Corporation::class);
     }
 
     public function reviews()

@@ -34,7 +34,14 @@ class SharpAuthenticate extends BaseAuthenticate
     public function handle($request, Closure $next, ...$guards)
     {
         try {
-            $this->authenticate($guards);
+            if(sharp_laravel_version_gte('5.7')) {
+                // Laravel's API changed in 5.7
+                // @see https://laravel.com/docs/5.7/upgrade
+                $this->authenticate($request, $guards);
+
+            } else {
+                $this->authenticate($guards);
+            }
 
             if($checkHandler = config('sharp.auth.check_handler')) {
                 if(!app($checkHandler)->check(auth()->guard($guards[0] ?? null)->user())) {

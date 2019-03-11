@@ -16,6 +16,11 @@ class SpaceshipSynchronize extends EntityCommand
         return "Synchronize the gamma-spectrum";
     }
 
+    public function description(): string
+    {
+        return "Let's be honest: this command is a fraud. It's just an empty command for test purpose.";
+    }
+
     /**
      * @param EntityListQueryParams $params
      * @param array $data

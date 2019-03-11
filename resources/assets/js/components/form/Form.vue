@@ -18,17 +18,19 @@
                             <sharp-fields-layout v-if="fields" :layout="column.fields" :visible="fieldVisible" ref="fieldLayout">
                                 <!-- field -->
                                 <template slot-scope="fieldLayout">
-                                    <sharp-field-display :field-key="fieldLayout.key"
-                                                         :context-fields="isReadOnly ? readOnlyFields : fields"
-                                                         :context-data="data"
-                                                         :field-layout="fieldLayout"
-                                                         :locale="locale"
-                                                         :error-identifier="fieldLayout.key"
-                                                         :config-identifier="fieldLayout.key"
-                                                         :update-data="updateData"
-                                                         :update-visibility="updateVisibility"
-                                                         ref="field">
-                                    </sharp-field-display>
+                                    <sharp-field-display
+                                        :field-key="fieldLayout.key"
+                                        :context-fields="isReadOnly ? readOnlyFields : fields"
+                                        :context-data="data"
+                                        :field-layout="fieldLayout"
+                                        :locale="fieldLocale[fieldLayout.key]"
+                                        :error-identifier="fieldLayout.key"
+                                        :config-identifier="fieldLayout.key"
+                                        :update-data="updateData"
+                                        :update-visibility="updateVisibility"
+                                        @locale-change="updateLocale"
+                                        ref="field"
+                                    />
                                 </template>
                             </sharp-fields-layout>
                         </template>
@@ -41,29 +43,32 @@
 
 <script>
     import * as util from '../../util';
-    import { API_PATH } from '../../consts';
+    import { API_PATH, BASE_URL } from '../../consts';
 
     import { ActionEvents, ReadOnlyFields, Localization } from '../../mixins';
 
     import DynamicView from '../DynamicViewMixin';
 
-    import TabbedLayout from '../TabbedLayout'
-    import Grid from '../Grid';
-    import FieldsLayout from './FieldsLayout.vue';
+    import SharpTabbedLayout from '../TabbedLayout'
+    import SharpGrid from '../Grid';
+    import SharpFieldsLayout from './FieldsLayout.vue';
+    // import SharpLocaleSelector from '../LocaleSelector.vue';
 
+    import localize from '../../mixins/localize/form';
 
-    const noop = ()=>{}
+    const noop = ()=>{};
 
     export default {
         name:'SharpForm',
         extends: DynamicView,
 
-        mixins: [ActionEvents, ReadOnlyFields('fields'), Localization],
+        mixins: [ActionEvents, ReadOnlyFields('fields'), Localization, localize('fields')],
 
         components: {
-            [TabbedLayout.name]: TabbedLayout,
-            [FieldsLayout.name]: FieldsLayout,
-            [Grid.name]: Grid,
+            SharpTabbedLayout,
+            SharpFieldsLayout,
+            SharpGrid,
+            // SharpLocaleSelector
         },
 
 
@@ -90,12 +95,14 @@
 
         data() {
             return {
+                ready: false,
+
                 fields: null,
-                config: null,
                 authorizations: null,
 
                 errors:{},
-                locale: '',
+                fieldLocale: {},
+                locales: null,
 
                 fieldVisible: {},
                 curFieldsetId:0,
@@ -105,12 +112,12 @@
         },
         computed: {
             apiPath() {
-                let path = `${API_PATH}/form/${this.entityKey}`;
+                let path = `form/${this.entityKey}`;
                 if(this.instanceId) path+=`/${this.instanceId}`;
                 return path;
             },
             localized() {
-                return this.config && Array.isArray(this.config.locales);
+                return Array.isArray(this.locales) && !!this.locales.length;
             },
             isCreation() {
                 return !this.instanceId;
@@ -132,35 +139,59 @@
 
             downloadLinkBase() {
                 return `${API_PATH}/download/${this.entityKey}/${this.instanceId}`;
+            },
+            listUrl() {
+                return `${BASE_URL}/list/${this.baseEntityKey}?restore-context=1`;
+            },
+
+            localeSelectorErrors() {
+                return Object.keys(this.errors).reduce((res,errorKey)=>{
+                    let errorLocale = this.locales.find(l=>errorKey.endsWith(`.${l}`));
+                    if(errorLocale) {
+                        res[errorLocale] = true;
+                    }
+                    return res;
+                },{})
             }
         },
         methods: {
-            fieldErrors(key) {
-                if(this.fields[key].localized) {
-                    return (this.errors[key]||{})[this.locale];
-                }
-                return this.errors[key];
-            },
-            updateData(key,value) {
-                if(this.fields[key].localized) {
-                    this.$set(this.data[key],this.locale,value);
-                }
-                else this.$set(this.data,key,value);
+            updateData(key, value) {
+                this.$set(this.data,key,this.fieldLocalizedValue(key, value));
             },
             updateVisibility(key, visibility) {
                 this.$set(this.fieldVisible, key, visibility);
             },
-            mount({fields, layout, data={}, config={}, authorizations={}}) {
+            updateLocale(key, locale) {
+                this.$set(this.fieldLocale, key, locale);
+            },
+            mount({fields, layout, data={}, authorizations={}, locales,}) {
                 this.fields = fields;
                 this.layout = this.patchLayout(layout);
                 this.data = data;
-                this.config = config;
+                this.locales = locales;
+                // this.locale = locales && locales[0];
                 this.authorizations = authorizations;
 
-                this.fieldVisible = Object.keys(this.fields).reduce((res, fKey) => {
-                    res[fKey] = true;
-                    return res;
-                },{})
+                if(fields) {
+                    this.fieldVisible = Object.keys(this.fields).reduce((res, fKey) => {
+                        res[fKey] = true;
+                        return res;
+                    },{});
+                    this.fieldLocale = this.defaultFieldLocaleMap({ fields, locales });
+                }
+                this.validate();
+            },
+            validate() {
+                const localizedFields = Object.keys(this.fieldLocale);
+                const alert = text => this.actionsBus.$emit('showMainModal', {
+                    title: 'Data error',
+                    text,
+                    isError: true,
+                    okCloseOnly: true,
+                });
+                if(localizedFields.length > 0 && !this.locales.length) {
+                    alert("Some fields are localized but the form hasn't any locales configured");
+                }
             },
             handleError({response}) {
                 if(response.status===422)
@@ -168,6 +199,7 @@
             },
 
             patchLayout(layout) {
+                if(!layout)return;
                 let curFieldsetId = 0;
                 let mapFields = layout => {
                     if(layout.legend)
@@ -181,55 +213,58 @@
                 return layout;
             },
 
-            init() {
+            async init() {
                 if(this.independant) {
                     this.mount(this.props);
                     this.ready = true;
                 }
                 else {
                     if(this.entityKey) {
-                        this.get().then(_=>this.setupActionBar());
+                        await this.get();
+                        this.setupActionBar();
+                        this.ready = true;
                     }
                     else util.error('no entity key provided');
                 }
             },
 
-            setupActionBar({ disable=false ,setLocale=true }={}) {
+            setupActionBar({ disable=false }={}) {
                 const showSubmitButton = this.isCreation ? this.authorizations.create : this.authorizations.update;
 
                 this.actionsBus.$emit('setup', {
-                    locales: null, //this.config.locales,
                     showSubmitButton: showSubmitButton && !disable,
                     showDeleteButton: !this.isCreation && this.authorizations.delete && !disable,
                     showBackButton: this.isReadOnly,
                     opType: this.isCreation ? 'create' : 'update'
                 });
-
-                if(setLocale && this.config.locales) {
-                    this.actionsBus.$emit('localeChanged', this.config.locales[0]);
+            },
+            redirectToList() {
+                location.href = this.listUrl;
+            },
+            async submit({ postFn }={}) {
+                if(this.pendingJobs.length) {
+                    return;
                 }
-            },
-            redirectToList({ restoreContext=true }={}) {
-                location.href = `/sharp/list/${this.baseEntityKey}${restoreContext?'?restore-context=1':''}`
-            },
-        },
-        actions: {
-            async submit({entityKey, endpoint, dataFormatter=noop }={}) {
-                if(entityKey && entityKey !== this.entityKey || this.pendingJobs.length) return;
-
                 try {
-                    const { data } = await this.post(endpoint, dataFormatter(this));
+                    const response = postFn ? await postFn(this.data) : await this.post();
                     if(this.independant) {
-                        this.$emit('submitted', data);
+                        this.$emit('submit', response);
+                        return response;
                     }
-                    else if(data.ok) {
+                    else if(response.data.ok) {
                         this.mainLoading.$emit('show');
                         this.redirectToList();
                     }
                 }
                 catch(error) {
                     this.handleError(error);
+                    return Promise.reject(error);
                 }
+            }
+        },
+        actions: {
+            submit() {
+                this.submit().catch(()=>{});
             },
             async 'delete'() {
                 try {
@@ -242,15 +277,6 @@
             },
             cancel() {
                 this.redirectToList();
-            },
-            localeChanged(newLocale) {
-                this.locale = newLocale;
-            },
-            reset({ entityKey }={}) {
-                if(entityKey && entityKey !== this.entityKey) return;
-
-                this.data = {};
-                this.errors = {};
             },
 
             setPendingJob({ key, origin, value:isPending }) {

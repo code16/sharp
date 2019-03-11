@@ -15,9 +15,12 @@ use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\Eloquent\Transformers\SharpUploadModelAttributeTransformer;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
+use Code16\Sharp\Http\WithSharpContext;
+use Code16\Sharp\Utils\LinkToEntity;
 
 class SpaceshipSharpList extends SharpEntityList
 {
+    use WithSharpContext;
 
     function buildListDataContainers()
     {
@@ -62,6 +65,7 @@ class SpaceshipSharpList extends SharpEntityList
             ->addEntityCommand("reload", SpaceshipReload::class)
             ->addInstanceCommand("message", SpaceshipSendMessage::class)
             ->addInstanceCommand("preview", SpaceshipPreview::class)
+            ->addInstanceCommandSeparator()
             ->addInstanceCommand("external", SpaceshipExternalLink::class)
             ->setEntityState("state", SpaceshipEntityState::class)
 
@@ -80,7 +84,9 @@ class SpaceshipSharpList extends SharpEntityList
 
     function getListData(EntityListQueryParams $params)
     {
-        $spaceships = Spaceship::select("spaceships.*")->distinct();
+        $spaceships = Spaceship::select("spaceships.*")
+            ->where("corporation_id", $this->context()->globalFilterFor("corporation"))
+            ->distinct();
 
         if($params->specificIds()) {
             $spaceships->whereIn("id", $params->specificIds());
@@ -112,14 +118,23 @@ class SpaceshipSharpList extends SharpEntityList
             }
         }
 
-        return $this->setCustomTransformer("capacity", function($capacity) {
+        return $this
+            ->setCustomTransformer("name", function($name, $spaceship) {
+                return $spaceship->name;
+            })
+            ->setCustomTransformer("capacity", function($capacity) {
                 return number_format($capacity / 1000, 0) . "k";
             })
             ->setCustomTransformer("type", function($type, $spaceship) {
                 return $spaceship->type->label;
             })
             ->setCustomTransformer("pilots", function($pilots, $spaceship) {
-                return $spaceship->pilots->pluck("name")->implode("<br>");
+                return $spaceship->pilots->map(function($pilot) {
+                    return (new LinkToEntity($pilot->name, "pilot"))
+                        ->setTooltip("See related pilot")
+                        ->setSearch($pilot->name)
+                        ->render();
+                })->implode("<br>");
             })
             ->setCustomTransformer("picture", new SharpUploadModelAttributeTransformer(100))
             ->transform(

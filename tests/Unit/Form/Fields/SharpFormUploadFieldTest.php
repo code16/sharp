@@ -24,7 +24,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
         $formField = SharpFormUploadField::make("text")
             ->setMaxFileSize(.5);
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["maxFileSize" => 0.5],
             $formField->toArray()
         );
@@ -36,7 +36,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
         $formField = SharpFormUploadField::make("text")
             ->setCompactThumbnail();
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["compactThumbnail" => true],
             $formField->toArray()
         );
@@ -49,7 +49,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
         $formField = SharpFormUploadField::make("text")
             ->setFileFilter("jpg");
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["fileFilter" => [".jpg"]],
             $formField->toArray()
         );
@@ -57,7 +57,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
         $formField = SharpFormUploadField::make("text")
             ->setFileFilter("jpg, gif");
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["fileFilter" => [".jpg", ".gif"]],
             $formField->toArray()
         );
@@ -65,7 +65,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
         $formField = SharpFormUploadField::make("text")
             ->setFileFilter(["jpg", "gif "]);
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["fileFilter" => [".jpg", ".gif"]],
             $formField->toArray()
         );
@@ -77,7 +77,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
         $formField = SharpFormUploadField::make("text")
             ->setCropRatio("16:9");
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["ratioX" => 16, "ratioY" => 9],
             $formField->toArray()
         );
@@ -89,7 +89,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
         $formField = SharpFormUploadField::make("text")
             ->setCropRatio("16:9", ["jpg", "jpeg"]);
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["ratioX" => 16, "ratioY" => 9, "croppableFileTypes" => [".jpg", ".jpeg"]],
             $formField->toArray()
         );
@@ -97,7 +97,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
         $formField = SharpFormUploadField::make("text")
             ->setCropRatio("16:9", [".jpg", ".jpeg"]);
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["ratioX" => 16, "ratioY" => 9, "croppableFileTypes" => [".jpg", ".jpeg"]],
             $formField->toArray()
         );

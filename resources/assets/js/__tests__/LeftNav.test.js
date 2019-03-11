@@ -1,96 +1,105 @@
-import { mount } from '@vue/test-utils';
+import Vuex from 'vuex';
+import { mount, createLocalVue } from '@vue/test-utils';
 import LeftNav from '../components/menu/LeftNav.vue';
-import Vue from 'vue';
+import globalFiltersModule from '../store/modules/global-filters';
+
+jest.mock('../store/modules/global-filters');
 jest.useFakeTimers();
 
-
-
 describe('left-nav', ()=>{
-    let wrapper;
     function createWrapper(options) {
-        let vm = mount(LeftNav, {
+        const localVue = createLocalVue();
+        localVue.use(Vuex);
+        let wrapper = mount(LeftNav, {
             slots: {
                 default: '<div>NAV CONTENT</div>'
             },
             propsData: {
-                categories: [{ entities:[] }]
+                items: [{ entities:[] }]
             },
             created() {
-                jest.spyOn(this,'updateState');
+                jest.spyOn(this, 'updateState');
             },
+            localVue,
+            store: new Vuex.Store({
+                modules: {
+                    'global-filters': globalFiltersModule,
+                },
+            }),
             ...options
         });
-        vm.setData({ ready:true });
-        jest.runAllTimers();
-        jest.runAllTicks();
-        return vm;
+        return wrapper;
     }
-    beforeEach(()=>{
 
-    });
+    test('can mount LeftNav', async ()=>{
+        const wrapper = createWrapper({ sync:false });
 
-    test('can mount LeftNav', ()=>{
-        expect(createWrapper().html()).toMatchSnapshot();
+        await wrapper.vm.$nextTick();
+        expect(wrapper.html()).toMatchSnapshot();
     });
-    test('can mount "not ready" LeftNav', ()=>{
-        const wrapper = createWrapper();
+    test('can mount "not ready" LeftNav', async ()=>{
+        const wrapper = createWrapper({ sync:false });
+        await wrapper.vm.$nextTick();
+
         wrapper.setData({ ready:false });
+        await wrapper.vm.$nextTick();
         expect(wrapper.html()).toMatchSnapshot();
     });
-    test('can mount "with state" LeftNav', ()=>{
-        const wrapper = createWrapper();
+    test('can mount "with state" LeftNav', async ()=>{
+        const wrapper = await createWrapper({ sync:false });
+
         wrapper.setData({ state:'STATE' });
+        await wrapper.vm.$nextTick();
         expect(wrapper.html()).toMatchSnapshot();
     });
-    test('can mount "with current icon" LeftNav', ()=>{
-        let wrapper = createWrapper({ computed:{ currentIcon:()=>'CURRENT_ICON' }});
+    test('can mount "with current icon" LeftNav', async ()=>{
+        let wrapper = createWrapper({ computed:{ currentIcon:()=>'CURRENT_ICON' }, sync: false });
+
+        await wrapper.vm.$nextTick();
         expect(wrapper.html()).toMatchSnapshot();
     });
 
 
     describe('watch collapsed', ()=>{
-        test('is immediate', ()=>{
-            expect(createWrapper().vm.$options.watch.collapsed.immediate).toBe(true);
-        });
-
         test('updating state for intermediate animations and set root class', async ()=>{
             const wrapper = createWrapper({ sync:false });
             const collapsedClass = 'leftNav--collapsed';
+            const { $root } = wrapper.vm;
 
-            await Vue.nextTick();
+            $root.$emit = jest.fn();
 
-            expect(wrapper.emitted()['setClass']).toHaveLength(1);
-            expect(wrapper.vm.updateState).toHaveBeenCalledTimes(1);
+            await wrapper.vm.$nextTick();
+            expect($root.$emit).not.toHaveBeenCalledWith('setClass', collapsedClass, expect.anything());
 
+            $root.$emit.mockClear();
             wrapper.setData({ collapsed: true });
 
-            await Vue.nextTick();
-
-            expect(wrapper.emitted()['setClass'][1]).toEqual([collapsedClass, true]);
+            await wrapper.vm.$nextTick();
+            expect($root.$emit).toHaveBeenCalledWith('setClass', collapsedClass, true);
             expect(setTimeout).toHaveBeenCalledWith(wrapper.vm.updateState, 250); // update state called at the end of the animation
             expect(wrapper.vm.state).toBe('collapsing');
 
+            $root.$emit.mockClear();
             wrapper.setData({ collapsed: false });
 
-            await Vue.nextTick();
-
-            expect(wrapper.emitted()['setClass'][2]).toEqual([collapsedClass, false]);
+            await wrapper.vm.$nextTick();
+            expect($root.$emit).toHaveBeenCalledWith('setClass', collapsedClass, false);
             expect(wrapper.vm.state).toBe('expanding');
 
             jest.runOnlyPendingTimers();
-            expect(wrapper.vm.updateState).toHaveBeenCalledTimes(3);
+            expect(wrapper.vm.updateState).toHaveBeenCalledTimes(2);
         });
     });
 
-    test('allEntities', ()=>{
+    test('flattenedItems', ()=>{
         const wrapper = createWrapper();
         wrapper.setProps({
-            categories: [
-                { entities:[1] },
-                { entities:[2] },
+            items: [
+                { entities:[{ id:1 }], type:'category' },
+                { id: 2 },
             ]
         });
-        expect(wrapper.vm.allEntities).toEqual([1,2]);
+        expect(wrapper.vm.flattenedItems).toEqual([{ id:1 }, { id: 2 }]);
     });
 
     test('currentIcon', ()=>{
@@ -100,7 +109,7 @@ describe('left-nav', ()=>{
 
         wrapper = createWrapper({
             computed: {
-                allEntities:()=>[
+               flattenedItems: ()=>[
                     { key:1, icon:'firstIcon' },
                     { key:2, icon:'secondIcon' }
                 ]
@@ -122,22 +131,5 @@ describe('left-nav', ()=>{
         wrapper.setData({ collapsed: false });
         wrapper.vm.updateState();
         expect(wrapper.vm.state).toBe('expanded');
-    });
-
-    test('mounted hook', ()=>{
-        const wrapper = mount({
-            render:()=>null,
-            data:()=>({
-                isViewportSmall: false,
-                collapsed: null,
-                ready: false
-            })
-        });
-        LeftNav.mounted.call(wrapper.vm);
-        expect(wrapper.vm.collapsed).toBe(false);
-
-        wrapper.setData({ isViewportSmall: true });
-        LeftNav.mounted.call(wrapper.vm);
-        expect(wrapper.vm.collapsed).toBe(true);
     });
 });

@@ -37,6 +37,11 @@ class HasManyRelationUpdater
                 );
             }
 
+            if($relatedInstance->incrementing) {
+                // Remove the id
+                unset($item[$relatedModelKeyName]);
+            }
+
             $model = app(EloquentModelUpdater::class)->update($relatedInstance, $item);
 
             if($sortConfiguration) {

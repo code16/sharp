@@ -1,0 +1,25 @@
+.SharpFieldLocaleSelector {
+  margin-bottom: 0.625rem;
+  &__btn {
+    text-transform: uppercase;
+    background: $ui-01;
+    border: 1px solid $ui-03;
+    color: $text-02;
+    border-radius: 5px;
+    -webkit-appearance: none;
+    outline: 0;
+    cursor: pointer;
+
+    &:hover {
+      border: 1px solid $brand-01;
+    }
+  }
+  &__btn--empty {
+    border: 1px dashed $brand-01;
+    background: transparent;
+  }
+  &__btn--active {
+    background: $brand-01;
+    color: $inverse-01;
+  }
+}

@@ -26,10 +26,8 @@ use Intervention\Image\ImageServiceProviderLaravel5;
 
 class SharpServiceProvider extends ServiceProvider
 {
-    /**
-     * @var string
-     */
-    const VERSION = '4.0.13';
+    /** @var string */
+    const VERSION = '4.1.4';
 
     public function boot()
     {
@@ -47,12 +45,12 @@ class SharpServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         view()->composer(
-            ['sharp::form', 'sharp::list', 'sharp::dashboard'],
+            ['sharp::form', 'sharp::list', 'sharp::dashboard', 'sharp::welcome'],
             MenuViewComposer::class
         );
 
         view()->composer(
-            ['sharp::form', 'sharp::list', 'sharp::dashboard', 'sharp::login', 'sharp::unauthorized'],
+            ['sharp::form', 'sharp::list', 'sharp::dashboard', 'sharp::welcome', 'sharp::login', 'sharp::unauthorized'],
             AssetViewComposer::class
         );
     }
@@ -79,7 +77,18 @@ class SharpServiceProvider extends ServiceProvider
         });
 
         $this->commands([
-            CreateUploadsMigration::class
+            CreateUploadsMigration::class,
+            \Code16\Sharp\Console\ListMakeCommand::class,
+            \Code16\Sharp\Console\FormMakeCommand::class,
+            \Code16\Sharp\Console\StateMakeCommand::class,
+            \Code16\Sharp\Console\MediaMakeCommand::class,
+            \Code16\Sharp\Console\PolicyMakeCommand::class,
+            \Code16\Sharp\Console\ModelWizardCommand::class,
+            \Code16\Sharp\Console\CommandMakeCommand::class,
+            \Code16\Sharp\Console\DashboardMakeCommand::class,
+            \Code16\Sharp\Console\ValidatorMakeCommand::class,
+            \Code16\Sharp\Console\ListFilterMakeCommand::class,
+            \Code16\Sharp\Console\ReorderHandlerMakeCommand::class,
         ]);
 
         $this->app->register(ImageServiceProviderLaravel5::class);
@@ -92,6 +101,12 @@ class SharpServiceProvider extends ServiceProvider
                 foreach(['entity', 'view', 'update', 'create', 'delete'] as $action) {
                     $this->definePolicy($entityKey, $config["policy"], $action);
                 }
+            }
+        }
+
+        foreach((array)config("sharp.dashboards") as $dashboardKey => $config) {
+            if(isset($config["policy"])) {
+                $this->definePolicy($dashboardKey, $config["policy"], 'view');
             }
         }
     }

@@ -70,7 +70,7 @@ describe('filter-select', ()=>{
         });
     });
 
-    test('call appropriate handlers',()=>{
+    test('call appropriate handlers', async ()=>{
         const wrapper = createWrapper({
             created() {
                 this.handleSelect = jest.fn();
@@ -80,13 +80,14 @@ describe('filter-select', ()=>{
         const select = findSelect(wrapper);
 
         wrapper.setMethods({
-            showMultiselect: jest.fn()
+            showDropdown: jest.fn()
         });
 
         select.vm.$emit('input');
         expect(wrapper.vm.handleSelect).toHaveBeenCalled();
-        label.trigger('click');
-        expect(wrapper.vm.showMultiselect).toHaveBeenCalled();
+        label.trigger('mousedown');
+        await wrapper.vm.$nextTick();
+        expect(wrapper.vm.showDropdown).toHaveBeenCalled();
     });
 
     test('empty', ()=>{

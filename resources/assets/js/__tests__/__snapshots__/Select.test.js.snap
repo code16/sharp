@@ -38,14 +38,14 @@ exports[`select-field can mount "read only" Select field as radios list 1`] = `
 	<div class="SharpSelect SharpSelect--list">
 		<div class="SharpSelect__radio-button-group">
 			<span class="SharpSelect__item SharpSelect__item--inline">
-				<input type="radio" tabindex="0" id="select0" disabled="disabled" name="select" class="SharpRadio">
+				<input type="radio" tabindex="0" id="select0" disabled="disabled" name="select" class="SharpRadio" value="3">
 				<label for="select0" class="SharpRadio__label">
 					<span class="SharpRadio__appearance"></span>
 					AAA
 				</label>
 			</span>
 			<span class="SharpSelect__item SharpSelect__item--inline">
-				<input type="radio" tabindex="0" id="select1" disabled="disabled" name="select" class="SharpRadio">
+				<input type="radio" tabindex="0" id="select1" disabled="disabled" name="select" class="SharpRadio" value="4">
 				<label for="select1" class="SharpRadio__label">
 					<span class="SharpRadio__appearance"></span>
 					BBB
@@ -68,9 +68,12 @@ exports[`select-field can mount Select field 1`] = `
 				<!---->
 				<div class="multiselect__spinner" style="display: none;"></div>
 				<!---->
-				<span class="multiselect__single">placeholder</span>
+				<!---->
+				<span class="multiselect__placeholder">
+					placeholder
+				</span>
 			</div>
-			<div class="multiselect__content-wrapper" style="max-height: 300px; display: none;">
+			<div tabindex="-1" class="multiselect__content-wrapper" style="max-height: 300px; display: none;">
 				<ul class="multiselect__content" style="display: inline-block;">
 					<!---->
 					<li class="multiselect__element">
@@ -87,6 +90,9 @@ exports[`select-field can mount Select field 1`] = `
 					</li>
 					<li style="display: none;">
 						<span class="multiselect__option">No elements found. Consider changing the search query.</span>
+					</li>
+					<li style="display: none;">
+						<span class="multiselect__option">List is empty.</span>
 					</li>
 				</ul>
 			</div>
@@ -133,14 +139,14 @@ exports[`select-field can mount Select field as radios list 1`] = `
 	<div class="SharpSelect SharpSelect--list">
 		<div class="SharpSelect__radio-button-group">
 			<span class="SharpSelect__item SharpSelect__item--inline">
-				<input type="radio" tabindex="0" id="select0" name="select" class="SharpRadio">
+				<input type="radio" tabindex="0" id="select0" name="select" class="SharpRadio" value="3">
 				<label for="select0" class="SharpRadio__label">
 					<span class="SharpRadio__appearance"></span>
 					AAA
 				</label>
 			</span>
 			<span class="SharpSelect__item SharpSelect__item--inline">
-				<input type="radio" tabindex="0" id="select1" name="select" class="SharpRadio">
+				<input type="radio" tabindex="0" id="select1" name="select" class="SharpRadio" value="4">
 				<label for="select1" class="SharpRadio__label">
 					<span class="SharpRadio__appearance"></span>
 					BBB
@@ -166,8 +172,9 @@ exports[`select-field can mount Select field with clear button 1`] = `
 				<div class="multiselect__spinner" style="display: none;"></div>
 				<!---->
 				<span class="multiselect__single">AAA</span>
+				<!---->
 			</div>
-			<div class="multiselect__content-wrapper" style="max-height: 300px; display: none;">
+			<div tabindex="-1" class="multiselect__content-wrapper" style="max-height: 300px; display: none;">
 				<ul class="multiselect__content" style="display: inline-block;">
 					<!---->
 					<li class="multiselect__element">
@@ -184,6 +191,9 @@ exports[`select-field can mount Select field with clear button 1`] = `
 					</li>
 					<li style="display: none;">
 						<span class="multiselect__option">No elements found. Consider changing the search query.</span>
+					</li>
+					<li style="display: none;">
+						<span class="multiselect__option">List is empty.</span>
 					</li>
 				</ul>
 			</div>

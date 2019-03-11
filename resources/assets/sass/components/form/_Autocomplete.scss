@@ -50,8 +50,10 @@
     .multiselect__tags {
       padding-right: 2rem !important;
     }
-    .multiselect__input {
-      width: 100% !important;
+    &.multiselect--active {
+      .multiselect__input {
+        width: 100%!important;
+      }
     }
     .multiselect__option > .SharpTemplate {
       overflow:hidden;

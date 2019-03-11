@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import ViewPanel from '../components/list/ViewPanel.vue';
+import ViewPanel from '../components/commands/CommandViewPanel.vue';
 
 describe('view-panel', ()=>{
     let wrapper;
@@ -11,13 +11,8 @@ describe('view-panel', ()=>{
         expect(wrapper.html()).toMatchSnapshot();
     });
 
-    test('mount "visible" ViewPanel', ()=>{
-        wrapper.setProps({ show: true });
-        expect(wrapper.html()).toMatchSnapshot();
-    });
-
-    test('mount "with content" ViewPanel', ()=>{
-        wrapper.setProps({ show: true, content: 'SOME HTML MARKUP' });
+    test('mount "visible with content" ViewPanel', ()=>{
+        wrapper.setProps({ content: 'SOME HTML MARKUP' });
         expect(wrapper.html()).toMatchSnapshot();
     });
 
@@ -25,7 +20,7 @@ describe('view-panel', ()=>{
         wrapper.setProps({ show: true });
         let glasspane = wrapper.find('.SharpViewPanel__glasspane');
         glasspane.trigger('click');
-        expect(wrapper.emitted().change).toEqual([[false]]);
+        expect(wrapper.emitted().close).toHaveLength(1);
     });
 
 });

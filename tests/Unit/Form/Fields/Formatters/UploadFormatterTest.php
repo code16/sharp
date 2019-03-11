@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\File;
 class UploadFormatterTest extends SharpTestCase
 {
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -98,7 +98,7 @@ class UploadFormatterTest extends SharpTestCase
 
         $file = $this->uploadedFile();
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "file_name" => "data/Test/50/{$file[0]}"
         ], $formatter->setInstanceId(50)->fromFront(
             $field, "attribute", ["name" => $file[0], "uploaded" => true]
@@ -116,7 +116,7 @@ class UploadFormatterTest extends SharpTestCase
             ->setCropRatio("16:9");
         $attribute = "attribute";
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "file_name" => "data/Test/{$file[0]}",
             "transformed" => true
 
@@ -140,7 +140,7 @@ class UploadFormatterTest extends SharpTestCase
             ->setStorageDisk("local")
             ->setStorageBasePath("data/Test");
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "transformed" => true
 
         ], $formatter->fromFront(

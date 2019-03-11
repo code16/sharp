@@ -75,13 +75,9 @@ class HandleSharpApiErrors
      */
     protected function handleValidationException($response)
     {
-        $errorsBag = starts_with(app()::VERSION, '5.4')
-            ? $response->exception->validator->errors()
-            : $response->exception->errors();
-
         return response()->json([
             "message" => $response->exception->getMessage(),
-            "errors" => $errorsBag
+            "errors" => $response->exception->errors()
         ], 422);
     }
 }

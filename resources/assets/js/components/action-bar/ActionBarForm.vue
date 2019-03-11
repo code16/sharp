@@ -1,5 +1,5 @@
 <template>
-    <sharp-action-bar :ready="ready">
+    <sharp-action-bar :ready="ready" container>
         <template slot="left">
             <button class="SharpButton SharpButton--secondary-accent" @click="emitAction('cancel')">
                 {{ showBackButton ? label('back_button') : label('cancel_button') }}
@@ -22,8 +22,6 @@
                     </template>
                 </collapse>
             </div>
-
-            <!--<sharp-locale-selector v-if="locales" @input="l=>emitAction('localeChanged',l)" :value="locale" :locales="locales"></sharp-locale-selector>-->
         </template>
         <template slot="right">
             <button v-if="showSubmitButton" class="SharpButton SharpButton--accent" @click="emitAction('submit')">
@@ -34,11 +32,12 @@
 </template>
 
 <script>
-    import ActionBar from './ActionBar';
+    import SharpActionBar from './ActionBar';
     import ActionBarMixin from './ActionBarMixin';
 
-    import LocaleSelector from '../LocaleSelector';
-    import { Dropdown, DropdownItem } from '../dropdown';
+    import SharpLocaleSelector from '../LocaleSelector';
+    import SharpDropdown from '../dropdown/Dropdown.vue';
+    import SharpDropdownItem from '../dropdown/DropdownItem.vue';
 
     import Collapse from '../Collapse';
 
@@ -50,17 +49,14 @@
         name: 'SharpActionBarForm',
         mixins: [ActionBarMixin, ActionEvents],
         components: {
-            [ActionBar.name]:ActionBar,
-            [LocaleSelector.name]:LocaleSelector,
-            [Dropdown.name]: Dropdown,
-            [DropdownItem.name]: DropdownItem,
+            SharpActionBar,
+            SharpLocaleSelector,
+            SharpDropdown,
+            SharpDropdownItem,
             Collapse
         },
         data() {
             return {
-                locales:null,
-                locale:'',
-
                 showSubmitButton: false,
                 showDeleteButton: false,
                 showBackButton: false,
@@ -88,13 +84,9 @@
             }
         },
         actions: {
-            localChanged(newLocale) {
-                this.locale=newLocale
-            },
             setup(config) {
-                let { locales, showSubmitButton, showDeleteButton, showBackButton, opType } = config;
+                let { showSubmitButton, showDeleteButton, showBackButton, opType } = config;
 
-                this.locales = locales;
                 this.showSubmitButton = showSubmitButton;
                 this.showDeleteButton = showDeleteButton;
                 this.showBackButton = showBackButton;

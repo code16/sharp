@@ -1,0 +1,59 @@
+<?php
+
+namespace DummyNamespace;
+
+use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Form\Fields\SharpFormTextField;
+
+class DummyClass extends SharpForm
+{
+    /**
+     * Retrieve a Model for the form and pack all its data as JSON.
+     *
+     * @param $id
+     * @return array
+     */
+    public function find($id): array
+    {
+        //
+    }
+
+    /**
+     * @param $id
+     * @param array $data
+     * @return mixed the instance id
+     */
+    public function update($id, array $data)
+    {
+        //
+    }
+
+    /**
+     * @param $id
+     */
+    public function delete($id)
+    {
+        //
+    }
+
+    /**
+     * Build form fields using ->addField()
+     *
+     * @return void
+     */
+    public function buildFormFields()
+    {
+        //
+    }
+
+    /**
+     * Build form layout using ->addTab() or ->addColumn()
+     *
+     * @return void
+     */
+    public function buildFormLayout()
+    {
+        //
+    }
+}

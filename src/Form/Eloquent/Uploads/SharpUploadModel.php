@@ -14,6 +14,7 @@ class SharpUploadModel extends Model
      */
     protected $casts = [
         'custom_properties' => 'array',
+        'size' => 'integer',
     ];
 
     public function model()
@@ -82,7 +83,7 @@ class SharpUploadModel extends Model
      * @param $value
      * @return $this
      */
-    private function updateCustomProperty($key, $value)
+    protected function updateCustomProperty($key, $value)
     {
         $properties = $this->getAttribute("custom_properties");
         $properties[$key] = $value;
@@ -95,7 +96,7 @@ class SharpUploadModel extends Model
      * @param string $name
      * @return bool
      */
-    private function isRealAttribute(string $name)
+    protected function isRealAttribute(string $name)
     {
         return in_array($name, [
             "id", "model", "model_id", "model_type", "model_key", "file_name",

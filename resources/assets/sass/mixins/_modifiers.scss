@@ -1,9 +1,10 @@
 @mixin nav-dropdown() {
   .SharpDropdown__list, .multiselect__content {
-    outline: 1px solid $brand-03 !important;
+    //outline: 1px solid $brand-03 !important;
     border: 1px solid transparent !important;
-    box-shadow: 0 0 7px 0 $brand-01 !important;
+    box-shadow: 0 0 2px 0 $brand-01 !important;
     width: auto;
+    border-radius: $dropdown-list-border-radius;
 
     @include media-breakpoint-down(sm) {
       min-width: 100%;
@@ -12,13 +13,17 @@
   .SharpDropdown__link:focus,
   .multiselect__option--selected
   {
-    background-color: $brand-03;
+    background-color: white!important;
+  }
+
+  .multiselect__option--selected {
+    font-weight: bold;
   }
 
   .SharpDropdown__link:hover,
   .multiselect__option--highlight {
+    background-color: lighten($brand-02, 25%)!important;
     color: $text-01;
-    background-color: lighten($brand-03, 20%);
   }
 }
 

@@ -9,7 +9,7 @@ use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
 
 class MultiFormEntityListControllerTest extends BaseApiTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->login();

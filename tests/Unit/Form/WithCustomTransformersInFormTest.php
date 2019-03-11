@@ -23,7 +23,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
 
         $form = new WithCustomTransformersTestForm();
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
                 "name" => "John Wayne"
             ], $form->find($person->id)
         );
@@ -43,7 +43,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
                 );
             }
         };
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "name" => "John Wayne"
         ], $form->find($person->id)
         );
@@ -62,7 +62,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
 
         $form = new WithCustomTransformersTestForm();
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
                 "mother_id" => $person->mother_id,
                 "mother" => ["id" => $mother->id, "name" => $mother->name],
             ], $form->find($person->id)
@@ -83,7 +83,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
 
         $form = new WithCustomTransformersTestForm();
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "elder_son" => ["id" => $son->id, "name" => $son->name],
         ], $form->find($mother->id)
         );
@@ -108,7 +108,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
 
         $form = new WithCustomTransformersTestForm();
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
                 "sons" => [
                     ["id" => $son1->id, "name" => $son1->name],
                     ["id" => $son2->id, "name" => $son2->name],
@@ -138,7 +138,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
 
         $form = new WithCustomTransformersTestForm();
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
                 "friends" => [
                     ["id" => $person2->id, "name" => $person2->name],
                     ["id" => $person3->id, "name" => $person3->name],
@@ -155,7 +155,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
 
         $form = new WithCustomTransformersTestForm();
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
                 "picture" => ["file" => "test.jpg"],
             ], $form->find($person->id)
         );
@@ -169,7 +169,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
 
         $form = new WithCustomTransformersTestForm();
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
                 "pictures" => [["file" => "test.jpg"]],
             ], $form->find($person->id)
         );
@@ -188,12 +188,12 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
             }
         };
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
                 "mother:name" => "Jane Wayne"
             ], $form->find($son->id)
         );
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
                 "mother:name" => null
             ], $form->find($person->id)
         );
@@ -211,7 +211,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
             return strtoupper($name);
         });
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["name" => "JOHN WAYNE"],
             $form->find($person->id)
         );
@@ -227,7 +227,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
         $form = new WithCustomTransformersTestForm;
         $form->setCustomTransformer("name", SharpAttributeUppercaseTransformer::class);
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["name" => "JOHN WAYNE"],
             $form->find($person->id)
         );
@@ -252,12 +252,12 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
             return strtoupper($name);
         });
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["name" => "AAA"],
             $form->find($mother->id)["sons"][0]
         );
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["name" => "BBB"],
             $form->find($mother->id)["sons"][1]
         );

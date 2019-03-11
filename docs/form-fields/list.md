@@ -8,6 +8,7 @@ Let's review a simple use case: a museum with all kind of art pieces. In the DB 
 
 Here how we can build this:
 
+```php
     function buildFormFields()
     {
         $this->addField(
@@ -29,7 +30,7 @@ Here how we can build this:
                 )
         );
     }
-
+```
 
 ## Configuration
 
@@ -68,9 +69,11 @@ For inline template, just write the template as a string, using placeholders for
 
 Example:
 
+```php
     $list->setCollapsedItemInlineTemplate(
         "Foreground: <strong>{{color}}</strong>"
     )
+```
 
 For template path, give the relative path of a template file (stating in the views Laravel folder).
 The template will be [interpreted by Vue.js](https://vuejs.org/v2/guide/syntax.html), meaning you can add data placeholders, DOM structure but also directives, and anything that Vue will parse. For instance:
@@ -95,6 +98,7 @@ The List item layout must be defined like the form itself, in the `buildFormLayo
 
 Here's an example for the Museum List defined above:
 
+```php
     $this->addColumn(6, function(FormLayoutColumn $column) {
          $column->withSingleField("pieces", function(FormLayoutColumn $listItem) {
             $listItem->withSingleField("acquisition_date")
@@ -102,7 +106,7 @@ Here's an example for the Museum List defined above:
                      ->withSingleField("artist_id")
          });
      });
-
+```
 
 ## Formatter
 

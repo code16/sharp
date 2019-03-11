@@ -3,12 +3,13 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Formatters\TextareaFormatter;
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithMaxLength;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 
 class SharpFormTextareaField extends SharpFormField
 {
-    use SharpFormFieldWithPlaceholder, SharpFormFieldWithMaxLength;
+    use SharpFormFieldWithPlaceholder, SharpFormFieldWithMaxLength, SharpFormFieldWithDataLocalization;
 
     const FIELD_TYPE = "textarea";
 
@@ -49,6 +50,7 @@ class SharpFormTextareaField extends SharpFormField
 
     /**
      * @return array
+     * @throws \Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException
      */
     public function toArray(): array
     {
@@ -56,6 +58,7 @@ class SharpFormTextareaField extends SharpFormField
             "rows" => $this->rows,
             "placeholder" => $this->placeholder,
             "maxLength" => $this->maxLength,
+            "localized" => $this->localized
         ]);
     }
 }

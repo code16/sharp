@@ -43,8 +43,6 @@ describe('dynamic-view-mixin',()=>{
 
         $view.handleNotifications = jest.fn();
 
-        expect($view.ready).toBe(false);
-
         let successCallback = jest.fn();
 
         $view.get().then(successCallback);
@@ -67,8 +65,6 @@ describe('dynamic-view-mixin',()=>{
         expect($view.mount).toHaveBeenCalledWith({ layout: {} });
 
         expect($view.handleNotifications).toHaveBeenCalledWith({ layout: {} });
-
-        expect($view.ready).toBe(true);
     });
 
     test('get error', async ()=>{

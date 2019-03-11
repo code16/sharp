@@ -1,7 +1,7 @@
 import * as util from '../../../util';
 import FieldContainer from '../FieldContainer';
 import { computeCondition } from './conditions';
-
+import { isLocalizableValueField } from "../../../mixins/localize/utils";
 
 export function acceptCondition (fields, data, condition) {
     if(!condition)
@@ -11,9 +11,7 @@ export function acceptCondition (fields, data, condition) {
 }
 
 const getValue = (form, field, value, locale) => {
-
-    if(form.localized && field.localized) {
-        //console.log(form, field, value, locale);
+    if(form.localized && field.localized && value && isLocalizableValueField(field)) {
         return value[locale];
     }
 
@@ -35,7 +33,7 @@ export default {
 
 
 
-    render(h, { props, injections }) {
+    render(h, { props, injections, data }) {
         let { fieldKey,
             contextFields,
             contextData,
@@ -58,11 +56,13 @@ export default {
         updateVisibility && updateVisibility(fieldKey, isVisible);
 
         return isVisible ? h(FieldContainer, {
-            props: {
+            ...data,
+            attrs: {
                 fieldKey,
                 fieldProps: field,
                 fieldType: field.type,
                 value: getValue($form, field, value, props.locale),
+                originalValue: value,
                 label: field.label,
                 helpMessage: field.helpMessage,
                 errorIdentifier: getIdentifier(errorIdentifier, field, props.locale),

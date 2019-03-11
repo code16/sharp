@@ -1,32 +1,34 @@
 language: php
 sudo: trues
 php:
-  - 7.0
   - 7.1
   - 7.2
+  - 7.3
+
+env:
+  - ILLUMINATE_VERSION=5.5.* PHPUNIT_VERSION=~6.0
+  - ILLUMINATE_VERSION=5.6.* PHPUNIT_VERSION=~7.0
+  - ILLUMINATE_VERSION=5.7.* PHPUNIT_VERSION=~7.0
+  - ILLUMINATE_VERSION=5.8.* PHPUNIT_VERSION=~7.5
 
 matrix:
   fast_finish: true
-  exclude:
-    - php: 7.0
-      env: LARAVEL_VERSION=5.6.*
+
+before_install:
+  - composer require "laravel/framework:${ILLUMINATE_VERSION}" --no-update --prefer-dist
+  - composer require "orchestra/testbench:${ILLUMINATE_VERSION/5\./3\.}" --no-update --prefer-dist
+  - composer require "phpunit/phpunit:${PHPUNIT_VERSION}" --no-update --prefer-dist
 
 install:
   ## back dependencies
   - travis_retry composer self-update
-  - travis_retry composer install --prefer-source --no-interaction
-  - if [ "$LARAVEL_VERSION" != "" ]; then composer require "laravel/framework:${LARAVEL_VERSION}" --no-update; fi;
+  - travis_retry composer install --no-interaction --prefer-dist
   ## front dependencies
   - . $HOME/.nvm/nvm.sh
-  - nvm install 8.11.1
-  - nvm use 8.11.1
+  - nvm install 11.6
+  - nvm use 11.6
   - npm install
 
 script:
   - vendor/bin/phpunit
   - npm run test
-
-env:
-  - LARAVEL_VERSION=5.4.*
-  - LARAVEL_VERSION=5.5.*
-  - LARAVEL_VERSION=5.6.*

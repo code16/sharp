@@ -15,6 +15,8 @@
             ctx.data.attrs.nextText = `<i class="fa fa-angle-right" aria-hidden="true"></i>`;
             ctx.data.attrs.lastText = `<i class="fa fa-angle-double-right" aria-hidden="true"></i>`;
 
+            ctx.data.staticClass = 'SharpPagination';
+
             return h({
                 name:'SharpPagination',
                 extends: Pagination,

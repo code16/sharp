@@ -3,12 +3,13 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Formatters\MarkdownFormatter;
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 
 class SharpFormMarkdownField extends SharpFormField
 {
-    use SharpFormFieldWithPlaceholder, SharpFormFieldWithUpload;
+    use SharpFormFieldWithPlaceholder, SharpFormFieldWithUpload, SharpFormFieldWithDataLocalization;
 
     const FIELD_TYPE = "markdown";
 
@@ -115,6 +116,7 @@ class SharpFormMarkdownField extends SharpFormField
 
     /**
      * @return array
+     * @throws \Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException
      */
     public function toArray(): array
     {
@@ -122,6 +124,7 @@ class SharpFormMarkdownField extends SharpFormField
             "height" => $this->height,
             "toolbar" => $this->showToolbar ? $this->toolbar : null,
             "placeholder" => $this->placeholder,
+            "localized" => $this->localized,
             "innerComponents" => [
                 "upload" => $this->innerComponentUploadConfiguration()
             ]

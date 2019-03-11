@@ -4,6 +4,7 @@ namespace Code16\Sharp\EntityList\Commands;
 
 use Code16\Sharp\Form\HandleFormFields;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
@@ -17,7 +18,9 @@ use Illuminate\Validation\ValidationException;
  */
 abstract class Command
 {
-    use HandleFormFields;
+    use HandleFormFields, WithCustomTransformers;
+
+    protected $groupIndex = 0;
 
     /**
      * @param string $message
@@ -69,6 +72,7 @@ abstract class Command
      * @param string $bladeView
      * @param array $params
      * @return array
+     * @throws \Throwable
      */
     protected function view(string $bladeView, array $params = [])
     {
@@ -166,6 +170,22 @@ abstract class Command
     }
 
     /**
+     * @param $index
+     */
+    public function setGroupIndex($index)
+    {
+        $this->groupIndex = $index;
+    }
+
+    /**
+     * @return int
+     */
+    public function groupIndex()
+    {
+        return $this->groupIndex;
+    }
+
+    /**
      * Validates the request in a form case.
      *
      * @param array $params
@@ -182,6 +202,14 @@ abstract class Command
                 $validator, new JsonResponse($validator->errors()->getMessages(), 422)
             );
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function description(): string
+    {
+        return "";
     }
 
     /**

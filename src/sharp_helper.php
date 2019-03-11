@@ -15,29 +15,37 @@ function sharp_version()
  */
 function sharp_page_title($sharpMenu, $entityKey)
 {
-    if(!$sharpMenu) {
+    $title = "";
+
+    if(request()->is(sharp_base_url_segment() . "/login")) {
         $title = trans('sharp::login.login_page_title');
 
-    } else {
-        $entityLabel = $sharpMenu->dashboard
-            ? trans('sharp::menu.dashboard')
-            : "";
+    } elseif ($sharpMenu) {
+        $menuItems = collect($sharpMenu->menuItems);
 
-        if ($entityKey) {
-            foreach ($sharpMenu->categories as $category) {
-                foreach ($category->entities as $entity) {
-                    if ($entity->key == $entityKey) {
-                        $entityLabel = $entity->label;
-                        break 2;
-                    }
-                }
-            }
+        // Handle Multiforms
+        $entityKey = explode(':', $entityKey)[0];
+
+        $label = $menuItems
+                ->where('type', 'entity')
+                ->firstWhere('key', $entityKey)
+                ->label ?? "";
+
+        if(!$label) {
+            $label = $menuItems
+                    ->where('type', 'category')
+                    ->pluck('entities')
+                    ->flatten()
+                    ->firstWhere('key', $entityKey)
+                    ->label ?? "";
         }
 
-        $title = $sharpMenu->name . ', ' .$entityLabel;
+        $title = $sharpMenu->name . ($label ? ', ' . $label : '');
     }
 
-    return  "$title | Sharp " . sharp_version();
+    return config("sharp.display_sharp_version_in_title", true)
+        ? "$title | Sharp " . sharp_version()
+        : $title;
 }
 
 /**
@@ -120,4 +128,49 @@ function sharp_custom_form_fields()
     }
 
     return "";
+}
+
+/**
+ * Return true if current Laravel installation is newer than
+ * given version (ex: 5.6).
+ *
+ * @param string $version
+ * @return bool
+ */
+function sharp_laravel_version_gte($version)
+{
+    list($major, $minor) = explode(".", $version);
+    list($laravelMajor, $laravelMinor, $bugfix) = explode(".", app()::VERSION);
+
+    return $laravelMajor > $major
+        || ($laravelMajor == $major && $laravelMinor >= $minor);
+}
+
+/**
+ * @return string
+ */
+function sharp_base_url_segment()
+{
+    return config("sharp.custom_url_segment", "sharp");
+}
+
+/**
+ * Return true if the $handler class actually implements the $methodName method;
+ * return false if the method is defined as concrete in a super class and not overridden.
+ *
+ * @param $handler
+ * @param string $methodName
+ * @return bool
+ */
+function is_method_implemented_in_concrete_class($handler, string $methodName)
+{
+    try {
+        $foo = new \ReflectionMethod(get_class($handler), $methodName);
+        $declaringClass = $foo->getDeclaringClass()->getName();
+
+        return $foo->getPrototype()->getDeclaringClass()->getName() !== $declaringClass;
+
+    } catch (\ReflectionException $e) {
+        return false;
+    }
 }

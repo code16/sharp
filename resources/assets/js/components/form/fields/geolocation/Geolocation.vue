@@ -40,19 +40,35 @@
 </template>
 
 <script>
+    import bModal from 'bootstrap-vue/es/directives/modal/modal';
     import { dd2dms } from "./util";
     import SharpMap from './Map.vue';
+
+    import { Localization } from '../../../../mixins';
+
     import { SharpCard, SharpButton } from "../../../ui";
 
+
+
     export default {
+        name: 'SharpGeolocation',
+        mixins: [Localization],
+
         components: {
             SharpMap,
             SharpCard,
             SharpButton
         },
+
         props: {
-            loaded: false,
             value: Object,
+            readOnly: Boolean,
+            uniqueIdentifier: String,
+            geocoding: Boolean,
+            apiKey: String,
+            boundaries: Object,
+            zoomLevel: Number,
+            initialPosition: Object,
             displayUnit: {
                 type: String,
                 default: 'DD',
@@ -60,6 +76,9 @@
             }
         },
         computed: {
+            modalId() {
+                return `${this.uniqueIdentifier.replace('.','-')}-modal`
+            },
             latLngString() {
                 if(this.displayUnit === 'DMS') {
                     return {
@@ -79,6 +98,10 @@
             handleRemoveButtonClicked() {
                 this.$emit('input', null);
             },
-        }
+        },
+
+        directives: {
+            bModal
+        },
     }
 </script>

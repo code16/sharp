@@ -26,3 +26,14 @@ $breakpoint-fixed-menu: 'lg';
 $form-item-margin-bottom : 1.5rem;
 
 $transition-collapse: height 300ms $bx--standard-easing;
+
+$border-radius: 3px;
+$btn-border-radius: $border-radius;
+$input-border-radius: $border-radius;
+$dropdown-list-border-radius: 3px;
+$dropdown-border: 2px solid $ui-04;
+$dropdown-focus-border-color: $brand-01-light;
+$dropdown-hover-border-color: lighten($dropdown-focus-border-color, 25%);
+$dropdown-list-offset: 3px;
+$dropdown-btn-transition: all 100ms ease-in-out;
+$dropdown-item-transition: background 50ms ease-in-out;

@@ -29,10 +29,11 @@ The endpoint to hit with mode=remote.
 
 If this endpoint is yours (`remote` mode here is useful to avoid loading a lot of data in the view), you can add the `sharp_auth` middleware to the API route to handle authentication and prevent this API endpoint to be called by non-sharp users:
 
+```php
     Route::get('/api/sharp/clients')
         ->middleware('sharp_auth')
         ->uses("MySharpApiClientController@index")
-
+```
 
 ### `setRemoteSearchAttribute(string $remoteSearchAttribute)`
 
@@ -56,9 +57,11 @@ Just write the template as a string, using placeholders for data like this: `{{v
 
 Example:
 
+```php
     $panel->setInlineTemplate(
         "Foreground: <strong>{{color}}</strong>"
     )
+```
 
 The template will be use, depending on the function, to display either the list item (in the result dropdown) or the result item (meaning the valuated form input).
 

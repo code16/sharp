@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ContextTest extends BaseApiTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -24,7 +24,7 @@ class ContextTest extends BaseApiTest
         $this->json('get', '/sharp/api/form/person/50');
 
         $this->assertTrue($context->isUpdate());
-        $this->assertEquals("50", $context->entityId());
+        $this->assertEquals("50", $context->instanceId());
     }
 
     /** @test */
@@ -40,7 +40,7 @@ class ContextTest extends BaseApiTest
         ]);
 
         $this->assertTrue($context->isUpdate());
-        $this->assertEquals("50", $context->entityId());
+        $this->assertEquals("50", $context->instanceId());
     }
 
     /** @test */

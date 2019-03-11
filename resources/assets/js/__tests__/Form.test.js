@@ -12,11 +12,10 @@ import * as consts from '../consts';
 
 import { mockSFC, unmockSFC, wait } from "./utils";
 
-import { mockProperty, unmockProperty, setter } from "./utils/mock-utils";
-
 import moxios from 'moxios';
 import {MockInjections, MockI18n} from "./utils";
 import { nextRequestFulfilled } from './utils/moxios-utils';
+
 
 describe('sharp-form', ()=>{
     Vue.use(MockI18n);
@@ -25,6 +24,7 @@ describe('sharp-form', ()=>{
     Vue.component('sharp-form', Form);
     Vue.component('sharp-field-display', mockSFC(fieldContainerModule));
 
+    const oldDelay = moxios.delay;
     beforeAll(()=>{
         mockSFC(gridModule,{
             template: `
@@ -49,6 +49,7 @@ describe('sharp-form', ()=>{
             </div>
             `
         });
+        moxios.delay = 10;
     });
 
     afterAll(()=>{
@@ -56,6 +57,7 @@ describe('sharp-form', ()=>{
         unmockSFC(tabbedLayoutModule);
         unmockSFC(fieldsLayoutModule);
         unmockSFC(fieldContainerModule);
+        moxios.delay = oldDelay;
     });
 
     beforeEach(()=>{
@@ -70,12 +72,10 @@ describe('sharp-form', ()=>{
                 </sharp-form>
             </div>
         `;
-        mockProperty(location, 'href');
     });
 
     afterEach(()=>{
         moxios.uninstall();
-        unmockProperty(location, 'href');
     });
 
     test('can mount sharp-form', async ()=>{
@@ -186,7 +186,7 @@ describe('sharp-form', ()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    test('api path', async ()=> {
+    xtest('api path', async ()=> {
         consts.API_PATH = '/test-api';
         let $form = await createVm();
 
@@ -199,6 +199,14 @@ describe('sharp-form', ()=>{
         await Vue.nextTick();
 
         expect($form.apiPath).toBe('/test-api/form/spaceship/10');
+    });
+
+    test('localized', async ()=>{
+        let $form = await createVm();
+        expect($form.localized).toBe(false);
+        $form.locales = ['fr', 'en'];
+        await Vue.nextTick();
+        expect($form.localized).toBe(true);
     });
 
     test('detect when is creation', async ()=>{
@@ -294,6 +302,21 @@ describe('sharp-form', ()=>{
         expect($form.hasErrors).toBe(false);
     });
 
+    test('locale selector errors', async ()=> {
+        let $form = await createVm();
+        $form.locales = ['fr', 'en', 'de'];
+        $form.errors = {
+            'label': 'error',
+            'title.fr': 'error',
+        };
+        expect($form.localeSelectorErrors).toEqual({ 'fr':true });
+
+        $form.errors = {
+            'label': 'error'
+        };
+        expect($form.localeSelectorErrors).toEqual({ });
+    });
+
     test('expose appropriate props to layout components', async () => {
         let $form = await createVm({
             propsData:{
@@ -330,7 +353,9 @@ describe('sharp-form', ()=>{
                     },
                     fields: {
                         title: {
-                            type: 'text'
+                            key: 'title',
+                            type: 'text',
+                            localized: true,
                         }
                     },
                     layout: {
@@ -345,7 +370,8 @@ describe('sharp-form', ()=>{
                                 ]
                             }
                         ]
-                    }
+                    },
+                    locales: ['fr', 'en']
                 }
             }
         });
@@ -355,7 +381,8 @@ describe('sharp-form', ()=>{
         expect(field.$options.propsData).toMatchObject({
             fieldKey: 'title',
             fieldLayout: { key: 'title' },
-            updateData: $form.updateData
+            updateData: $form.updateData,
+            locale: 'fr'
         });
 
         expect(field.$attrs).toMatchObject({
@@ -370,7 +397,7 @@ describe('sharp-form', ()=>{
                     type: 'text',
                     readOnly: true
                 },
-            }
+            },
         });
 
         $form.authorizations = { create: true };
@@ -409,12 +436,12 @@ describe('sharp-form', ()=>{
                 }
             }
         });
-
+        $form.fieldLocalizedValue = jest.fn(()=>'fieldLocalizedValue');
         expect($form.data.title).toBe(null);
 
         $form.updateData('title', 'text');
-
-        expect($form.data.title).toBe('text');
+        expect($form.fieldLocalizedValue).toHaveBeenCalledWith('title', 'text');
+        expect($form.data.title).toBe('fieldLocalizedValue');
     });
 
 
@@ -465,7 +492,9 @@ describe('sharp-form', ()=>{
                     },
                     fields: {
                         title: {
-                            type: 'text'
+                            key: 'title',
+                            type: 'text',
+                            localized: true,
                         }
                     },
                     layout: {
@@ -484,7 +513,8 @@ describe('sharp-form', ()=>{
                     authorizations: {
                         create: true,
                         update: false
-                    }
+                    },
+                    locales: ['en', 'fr']
                 }
             }
         });
@@ -495,7 +525,7 @@ describe('sharp-form', ()=>{
             },
             fields: {
                 title: {
-                    type: 'text'
+                    type: 'text',
                 }
             },
             layout: {
@@ -504,7 +534,7 @@ describe('sharp-form', ()=>{
                         columns: [
                             {
                                 fields: [
-                                    [{ key: 'title'}]
+                                    [{ key: 'title' }]
                                 ]
                             }
                         ]
@@ -514,8 +544,18 @@ describe('sharp-form', ()=>{
             authorizations: {
                 create: true,
                 update: false
+            },
+            locales: ['en', 'fr'],
+            fieldLocale: {
+                title: 'en'
             }
         });
+
+        $form.patchLayout = ()=>{};
+        $form.ready = false;
+        $form.mount({ fields:{}, locales:null });
+
+        expect($form.fieldLocale).toEqual({ title:undefined });
     });
 
     test('mount async', async () => {
@@ -739,14 +779,7 @@ describe('sharp-form', ()=>{
     test('redirect to list', async () => {
         let $form = await createVm();
 
-        let locationHrefModified = setter(location,'href');
-
-        $form.redirectToList();
-        expect(locationHrefModified).toHaveBeenLastCalledWith('/sharp/list/spaceship?restore-context=1');
-
-        $form.redirectToList({ restoreContext: false });
-        expect(locationHrefModified).toHaveBeenLastCalledWith('/sharp/list/spaceship');
-
+        expect($form.listUrl).toEqual('/sharp/list/spaceship?restore-context=1');
 
         $form.redirectToList = jest.fn();
         $form.actionsBus.$emit('submit');
@@ -795,13 +828,7 @@ describe('sharp-form', ()=>{
             },
         });
 
-        $form.post = jest.fn(async ()=>Promise.resolve({ data: { ok: true } }));
-
-        $form.actionsBus.$emit('submit', { entityKey:'planet' });
-
-        await wait(10);
-
-        expect($form.post).not.toHaveBeenCalled();
+        $form.post = jest.fn(()=>Promise.resolve({ data: { ok: true } }));
 
         $form.pendingJobs.push('upload');
         $form.actionsBus.$emit('submit');
@@ -812,26 +839,19 @@ describe('sharp-form', ()=>{
 
 
         let submittedEmmitted = jest.fn();
-        $form.$on('submitted', submittedEmmitted);
         $form.pendingJobs = [];
-        $form.data = { title: 'My title' };
 
-        $form.actionsBus.$emit('submit', { endpoint:'/test-endpoint', dataFormatter: form => form.data });
+        $form.actionsBus.$emit('submit');
 
         await wait(10);
 
         expect($form.post).toHaveBeenCalledTimes(1);
-        expect($form.post).toHaveBeenCalledWith('/test-endpoint', {
-            title: 'My title'
-        });
-        expect(submittedEmmitted).toHaveBeenCalledTimes(1);
-        expect(submittedEmmitted).toHaveBeenCalledWith({ ok: true });
     });
 
     test('dependant submit', async () => {
         let $form = await createVm();
 
-        $form.post = jest.fn(async ()=>Promise.resolve({ data: { ok: true } }));
+        $form.post = jest.fn(()=>Promise.resolve({ data: { ok: true } }));
         $form.handleError = jest.fn();
 
         $form.actionsBus.$emit('submit');
@@ -845,7 +865,7 @@ describe('sharp-form', ()=>{
 
         expect($form.handleError).not.toHaveBeenCalled();
 
-        $form.post = jest.fn(async ()=>Promise.reject({ error: true }));
+        $form.post = jest.fn(()=>Promise.reject({ error: true }));
 
         $form.actionsBus.$emit('submit');
 
@@ -861,23 +881,6 @@ describe('sharp-form', ()=>{
 
     test('cancel', async ()=>{
         // refer 'redirect to list' test
-    });
-
-    test('reset', async ()=>{
-        let $form = await createVm();
-
-        $form.data = { field: '...' };
-        $form.errors = { field: [] };
-
-        $form.actionsBus.$emit('reset', { entityKey: 'planet' });
-
-        expect($form.data).toEqual({ field: '...' });
-        expect($form.errors).toEqual({ field: [] });
-
-        $form.actionsBus.$emit('reset', { entityKey: 'spaceship'});
-
-        expect($form.data).toEqual({});
-        expect($form.errors).toEqual({});
     });
 
     test('pending jobs', async ()=> {
@@ -900,6 +903,10 @@ describe('sharp-form', ()=>{
         expect(updateActionsStateEmitted).toHaveBeenLastCalledWith(null);
     });
 
+    test('has localize mixin with right fieldsProps', async () => {
+        let $list = await createVm();
+        expect($list.$options._localizedForm).toBe('fields');
+    });
 });
 
 async function createVm(customOptions={}) {

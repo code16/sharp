@@ -47,6 +47,18 @@
       margin-right: 0;
       margin-bottom: 0;
     }*/
+
+    // For single check align with other field
+    &--type-check {
+      .SharpForm__label {
+        &::after {
+          content: "\a0\a0"
+        }
+      }
+      .SharpCheck {
+        height: 2.5rem;
+      }
+    }
   }
 
   &__label {
@@ -102,4 +114,14 @@
     line-height: 1.5;
   }
 
+  /// reset multiselect new Design
+  .multiselect__tags {
+    border-radius: 0;
+    border: none;
+  }
+
+  .multiselect__option:not(:hover):not(.multiselect__option--selected):not(.multiselect__option--highlighted)
+  {
+      background: white!important;
+  }
 }

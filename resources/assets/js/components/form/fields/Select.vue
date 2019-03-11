@@ -25,6 +25,12 @@
                     </svg>
                 </button>
             </template>
+            <template slot="tag" slot-scope="{ option, remove }">
+                <span class="multiselect__tag" :key="option">
+                    <span>{{ multiselectLabel(option) }}</span>
+                    <i aria-hidden="true" tabindex="1" @keypress.enter.prevent="remove(option)" @mousedown.prevent.stop="remove(option)" class="multiselect__tag-icon"></i>
+                </span>
+            </template>
             <slot name="option" slot="option"></slot>
         </sharp-multiselect>
         <template v-else>
@@ -36,7 +42,7 @@
                            :class="{'SharpSelect__item--inline':inline}"
                 >
                     <sharp-check :value="checked(option.id)"
-                                 :text="option.label"
+                                 :text="optionsLabel[option.id]"
                                  :read-only="readOnly"
                                  @input="handleCheckboxChanged($event,option.id)">
                     </sharp-check>
@@ -61,7 +67,7 @@
                     >
                     <label class="SharpRadio__label" :for="`${uniqueIdentifier}${index}`">
                         <span class="SharpRadio__appearance"></span>
-                        {{option.label}}
+                        {{ optionsLabel[option.id] }}
                     </label>
 
                 </component>
@@ -71,14 +77,17 @@
 </template>
 
 <script>
-    import Multiselect from '../../Multiselect';
+    import SharpMultiselect from '../../Multiselect';
     import SharpCheck from './Check.vue';
+    import localize from '../../../mixins/localize/Select';
 
     export default {
         name: 'SharpSelect',
 
+        mixins: [localize],
+
         components: {
-            [Multiselect.name]: Multiselect,
+            SharpMultiselect,
             SharpCheck
         },
 
@@ -124,11 +133,11 @@
                 return this.options.map(o => o.id);
             },
             optionsLabel() {
-                if (this.display !== 'dropdown')
-                    return;
+                // if (this.display !== 'dropdown')
+                //     return;
 
                 return this.options.reduce((map, opt) => {
-                    map[opt.id] = opt.label;
+                    map[opt.id] = this.localizedOptionLabel(opt);
                     return map;
                 }, {});
             }

@@ -3,11 +3,12 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Formatters\WysiwygFormatter;
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 
 class SharpFormWysiwygField extends SharpFormField
 {
-    use SharpFormFieldWithPlaceholder;
+    use SharpFormFieldWithPlaceholder, SharpFormFieldWithDataLocalization;
 
     const FIELD_TYPE = "wysiwyg";
 
@@ -113,6 +114,7 @@ class SharpFormWysiwygField extends SharpFormField
 
     /**
      * @return array
+     * @throws \Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException
      */
     public function toArray(): array
     {
@@ -120,6 +122,7 @@ class SharpFormWysiwygField extends SharpFormField
             "height" => $this->height,
             "toolbar" => $this->showToolbar ? $this->toolbar : null,
             "placeholder" => $this->placeholder,
+            "localized" => $this->localized
         ]);
     }
 }

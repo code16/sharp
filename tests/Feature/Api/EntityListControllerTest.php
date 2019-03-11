@@ -6,7 +6,7 @@ use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
 
 class EntityListControllerTest extends BaseApiTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->login();
@@ -43,97 +43,11 @@ class EntityListControllerTest extends BaseApiTest
     }
 
     /** @test */
-    public function we_can_search_for_an_entity()
+    public function we_can_search_for_an_instance()
     {
         $this->buildTheWorld();
 
         $this->json('get', '/sharp/api/list/person?search=john')
-            ->assertStatus(200)
-            ->assertJsonFragment(["data" => [
-                "items" => [
-                    ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
-                ]
-            ]]);
-    }
-
-    /** @test */
-    public function we_can_filter_entities()
-    {
-        $this->buildTheWorld();
-
-        $this->json('get', '/sharp/api/list/person?filter_age=22')
-            ->assertStatus(200)
-            ->assertJsonFragment(["data" => [
-                "items" => [
-                    ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22]
-                ]
-            ]]);
-    }
-
-    /** @test */
-    public function default_filter_value_is_used_if_no_value_was_sent()
-    {
-        $this->buildTheWorld();
-
-        // We use a special QS key "default_age" only for test purpose
-        // to know that we should use default value in this case
-        $this->json('get', '/sharp/api/list/person?default_age=true')
-            ->assertStatus(200)
-            ->assertJsonFragment(["data" => [
-                "items" => [
-                    ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22]
-                ]
-            ]]);
-    }
-
-    /** @test */
-    public function we_can_filter_with_multiple_values_on_entities()
-    {
-        $this->buildTheWorld();
-
-        $this->json('get', '/sharp/api/list/person?filter_age_multiple=22,26')
-            ->assertStatus(200)
-            ->assertJsonFragment(["data" => [
-                "items" => [
-                    ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
-                    ["id" => 2, "name" => "Mary <b>Wayne</b>", "age" => 26]
-                ]
-            ]]);
-    }
-
-    /** @test */
-    public function we_can_filter_on_a_single_value_with_a_multiple_values_filter()
-    {
-        $this->buildTheWorld();
-
-        $this->json('get', '/sharp/api/list/person?filter_age_multiple=22')
-            ->assertStatus(200)
-            ->assertJsonFragment(["data" => [
-                "items" => [
-                    ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
-                ]
-            ]]);
-    }
-
-    /** @test */
-    public function we_can_define_a_was_set_callback_on_a_filter()
-    {
-        $this->buildTheWorld();
-
-        $age = rand(1, 99);
-        $this->json('get', '/sharp/api/list/person?filter_age=' . $age);
-
-        // The age was put in session in the Callback
-        $this->assertEquals($age, session("filter_age_was_set"));
-    }
-
-    /** @test */
-    public function we_can_force_a_filter_value_in_a_callback()
-    {
-        $this->buildTheWorld();
-
-        // Filter `age` will be force set in the `age_forced` filter callback
-        $this->json('get', '/sharp/api/list/person?filter_age_forced=22&filter_age=12')
             ->assertStatus(200)
             ->assertJsonFragment(["data" => [
                 "items" => [

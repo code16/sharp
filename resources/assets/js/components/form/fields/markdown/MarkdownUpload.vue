@@ -85,17 +85,10 @@
         methods: {
             handleAdded() {
                 this.show = true;
-            },
-            checkCancelled() {
-                if (!this.show)
-                    this.$emit('remove');
-                document.body.onfocus = null;
+                this.$emit('added');
             },
             inputClick() {
                 this.fileInput.click();
-                document.body.onfocus = () => {
-                    setTimeout(this.checkCancelled, 100);
-                };
             },
         },
         mounted() {

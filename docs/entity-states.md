@@ -2,6 +2,11 @@
 
 Entity states are a little bit of sugar to easily propose a state management on entities. It could be a simple "draft / publish" state for a page, or something more advanced for an order, for instance.
 
+## Generator
+
+```sh
+php artisan sharp:make:state <class_name> [--model=<model_name>]
+```
 
 ## Write the Entity state class
 
@@ -14,6 +19,7 @@ You'll have to implement two functions: `buildStates()` and `updateState($instan
 
 The goal is to declare the available states for the entity, using `$this->addState()`:
 
+```php
     protected function buildStates()
     {
         $this->addState("active", "Active", "green")
@@ -21,6 +27,7 @@ The goal is to declare the available states for the entity, using `$this->addSta
             ->addState("building", "Building process", static::GRAY_COLOR)
             ->addState("conception", "Conception phase", static::DARKGRAY_COLOR);
     }
+```
 
 `$this->addState()` take 3 parameters:
 
@@ -39,6 +46,7 @@ For the color, you may indicate:
 
 When the user clicks on a state to update it, this is the functional code called.
 
+```php
     public function updateState($instanceId, $stateId)
     {
         Spaceship::findOrFail($instanceId)->update([
@@ -47,6 +55,7 @@ When the user clicks on a state to update it, this is the functional code called
 
         return $this->refresh($instanceId);
     }
+```
 
 Note the `return $this->refresh($instanceId);`: Entity states can return either a refresh or a reload (as described in the previous chapter, [Commands](commands.md)), but if omited the refresh of the `$instanceId` is the default (meaning in the code sample above this line can be deleted).
 
@@ -55,11 +64,13 @@ Note the `return $this->refresh($instanceId);`: Entity states can return either 
 
 Once the Entity state class is defined, we have to add it in the Entity List config:
 
+```php
     function buildListConfig()
     {
         $this->setEntityState("state", SpaceshipEntityState::class)
         [...]
     }
+```
 
 The first parameter is a key which should be the name of the attribute.
 
@@ -68,10 +79,11 @@ The first parameter is a key which should be the name of the attribute.
 
 Entity states can declare an authorization check very much like Instance Commands:
 
+```php
     public function authorizeFor($instanceId): bool {
         return Spaceship::findOrFail($instanceId)->owner_id == sharp_user()->id;
     }
-
+```
 
 ---
 

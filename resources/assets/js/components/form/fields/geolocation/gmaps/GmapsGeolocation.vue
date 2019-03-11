@@ -24,9 +24,7 @@
 </template>
 
 <script>
-    import Vue from 'vue';
-    import * as VueGoogleMaps from '../../../../vendor/vue2-google-maps/main';
-    
+    import { Map, Marker, loadGmapApi } from 'vue2-google-maps';
     import SharpGmapsGeolocationEdit from './GmapsGeolocationEdit.vue';
     import GeolocationCommons from './commons';
     import SharpGeolocation from '../Geolocation.vue';
@@ -38,8 +36,8 @@
         inject: ['$tab'],
 
         components: {
-            GmapMap: VueGoogleMaps.Map,
-            GmapMarker: VueGoogleMaps.Marker,
+            GmapMap: Map,
+            GmapMarker: Marker,
             SharpGmapsGeolocationEdit,
             SharpGeolocation
         },
@@ -72,21 +70,15 @@
                 this.$emit('input', value.toJson());
             },
 
-            async load() {
-                if(this.$root.$_gmapLoaded) {
-                    return this.$root.$_gmapLoaded;
+            load() {
+                if(!this.$root.$_gmapInit) {
+                    let loadOptions = { v:'3' };
+                    if(this.apiKey) loadOptions.key = this.apiKey;
+
+                    loadGmapApi(loadOptions);
+                    this.$root.$_gmapInit = true;
                 }
-
-                let loadOptions = { v:'3' };
-                if(this.apiKey) loadOptions.key = this.apiKey;
-
-                Vue.use(VueGoogleMaps, {
-                    installComponents: false,
-                    load: loadOptions
-                });
-
-                this.$root.$_gmapLoaded = VueGoogleMaps.loaded;
-                return VueGoogleMaps.loaded;
+                return this.$gmapApiPromiseLazy();
             }
         },
 
@@ -99,6 +91,6 @@
             if(this.$tab) {
                 this.$tab.$on('active', ()=>this.refreshMap());
             }
-        }
+        },
     }
 </script>

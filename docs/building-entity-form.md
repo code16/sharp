@@ -2,6 +2,12 @@
 
 Sharp is mostly made of Entity Lists to display, search, filter, act on instances, and of Entity Forms to create or update entities.
 
+## Generator
+
+```sh
+php artisan sharp:make:form <class_name> [--model=<model_name>]
+```
+
 ## Write the class
 
 As usual in Sharp, we begin by creating a class dedicated to our Entity Form and make it extend `Code16\Sharp\Form\SharpForm`; and we'll have to implement at least 5 functions:
@@ -17,6 +23,7 @@ Let's see the specifics:
 
 In short, this method is meant to host the code responsible for the declaration and configuration of each form field. This must be done calling `$this->addField`:
 
+```php
     function buildFormFields()
     {
         $this->addField(
@@ -28,8 +35,9 @@ In short, this method is meant to host the code responsible for the declaration 
                 ->setLabel("Capacity (x1000)")
         );
     }
+```
 
-As we can see in this simple example, we defined two text fields giving them a mandatory `key` and an optional label. 
+As we can see in this simple example, we defined two text fields giving them a mandatory `key` and an optional label.
 
 #### Form fields shared attributes
 
@@ -89,6 +97,7 @@ Now let's build the form layout. A form layout is made of `columns`,  which cont
 
 Here's how we can define the layout for the simple two-fields form we built above:
 
+```php
     function buildFormLayout()
     {
         $this->addColumn(6, function(FormLayoutColumn $column) {
@@ -96,35 +105,42 @@ Here's how we can define the layout for the simple two-fields form we built abov
                 ->withSingleField("capacity");
         });
     }
+```
 
 This will result in a 50% column (columns width are 12-based, like in Entity Lists) with the 2 fields in separate rows. Note that fields are referenced with their key, previously defined in `buildFormFields()`.
 
 Here's another possible layout, with two unequally large columns:
 
+```php
     function buildFormLayout()
     {
         $this->addColumn(7, function(FormLayoutColumn $column) {
             $column->withSingleField("name");
-                
+
         })->addColumn(5, function(FormLayoutColumn $column) {
             $column->withSingleField("capacity");
         });
     }
+```
 
 ##### Putting fields on the same row
 
 One final way is to put fields side by side on the same column:
 
+```php
     function buildFormLayout()
     {
         $this->addColumn(6, function(FormLayoutColumn $column) {
             $column->withFields("name", "capacity");
         });
     }
+```
 
 This will align the two fields on the row. They'll have the same width (50%), but we can act on this adding a special suffix:
 
+```php
     $column->withFields("name|8", "capacity|4");
+```
 
 Once again, it's a 12-based grid, so `name` will take 2/3 of the width, and `capacity` 1/3.
 
@@ -134,7 +150,9 @@ Columns are only used in medium to large screens (768 pixels and up).
 
 Same for fields put on the same row: on smaller screens, they'll be placed on different rows, except if another layout is intentionally configured, using this convention:
 
+```php
     $column->withFields("name|8,6", "capacity|4,6");
+```
 
 Here, `name` will take 8/12 of the width on large screens, and 6/12 on smaller one.
 
@@ -143,12 +161,14 @@ Here, `name` will take 8/12 of the width on large screens, and 6/12 on smaller o
 
 Fieldsets are useful to group some fields in a labelled block. Here's how they work:
 
+```php
     $this->addColumn(6, function(FormLayoutColumn $column) {
         $column->withFieldset("Details", function(FormLayoutFieldset $fieldset) {
             return $fieldset->withSingleField("name")
                             ->withSingleField("capacity");
         });
     });
+```
 
 "Details" is here the legend of the fieldset.
 
@@ -157,10 +177,12 @@ Fieldsets are useful to group some fields in a labelled block. Here's how they w
 
 In a `List` case, which is a form fields container [documented here](form-fields/list.md), we have to describe the list item layout. It goes like this:
 
+```php
     $column->withSingleField("pictures", function(FormLayoutColumn $listItem) {
         $listItem->withSingleField("file")
                  ->withSingleField("legend");
     });
+```
 
 Notice we added a `Closure` on a `withSingleField()` call, meaning we define a "item layout" for this field. The item is made of two fields in this example.
 
@@ -169,12 +191,14 @@ Notice we added a `Closure` on a `withSingleField()` call, meaning we define a "
 
 Finally, columns can be wrapped in tabs in the form needs to be in parts. This is easy, just wrap the code:
 
+```php
     $this->addTab("tab 1", function(FormLayoutTab $tab) {
         $tab->addColumn(6, function(FormLayoutColumn $column) {
             $column->withSingleField("name");
             [...]
         });
     })->addTab([...])
+```
 
 The tab will here be labelled "tab1".
 
@@ -183,6 +207,7 @@ The tab will here be labelled "tab1".
 
 Next, we have to write the code responsible for the instance data (in an update case). The method must return a key-value array:
 
+```php
     function find($id): array
     {
         return [
@@ -190,17 +215,18 @@ Next, we have to write the code responsible for the instance data (in an update 
             "capacity" => 3000
         ];
     }
+```
 
 As for the Entity List, you'll want to transform your data before sending it. Transformers are explained in the detailled [How to transform data](how-to-transform-data.md) documentation.
 
 
 ### `update($id, array $data)`
 
-Well, this is the core: how to write the actual update code. 
+Well, this is the core: how to write the actual update code.
 
 #### Form field format
 
-Before going into the details, please note that the `$data` array contains the per-field formatted data: depending on the type of SharpFormField you used, the structure may change. 
+Before going into the details, please note that the `$data` array contains the per-field formatted data: depending on the type of SharpFormField you used, the structure may change.
 
 For instance, a `SharpFormMarkdownField` content will be formated as an array with a `text` attribute for the full text and an optional `fields` attribute with embedded fields (see the Markdown field documentation for more details).
 
@@ -210,7 +236,7 @@ Now let's review two cases:
 
 #### General case: you are on your own
 
-If you are not using Eloquent (and maybe no database at all), you'll have to do it manually. 
+If you are not using Eloquent (and maybe no database at all), you'll have to do it manually.
 
 Remember: Sharp aims to be as permissive as possible. So just write the code to update the instance designated by `$id` with the values in the formatted `$data` array.
 
@@ -218,6 +244,7 @@ Remember: Sharp aims to be as permissive as possible. So just write the code to 
 
 Sharp also aims to help the applicative code to be as small as possible, and if you're using Eloquent, you can import a dedicated trait: `Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater`. And then, write this kind of code:
 
+```php
     function update($id, array $data)
     {
         $instance = $id ? Spaceship::findOrFail($id) : new Spaceship;
@@ -229,6 +256,7 @@ Sharp also aims to help the applicative code to be as small as possible, and if 
             ->ignore("pilots")
             ->save($instance, $data);
     }
+```
 
 We first define a custom transformer (see [detailled documentation](how-to-transform-data.md)).
 
@@ -241,6 +269,7 @@ Finally we call `$this->save()` with the instance and the sent data. This kind o
 
 In the `update($id, array $data)` method you may want to throw an exception on a special case, other than validation (which is explain below). Here's how to do that:
 
+```php
     function update($id, array $data)
     {
         [...]
@@ -250,6 +279,7 @@ In the `update($id, array $data)` method you may want to throw an exception on a
         }
         [...]
     }
+```
 
 The message will be displayed to the user.
 
@@ -261,6 +291,7 @@ This is important for some cases (when a field formatter needs to de delayed): t
 
 Sometimes you'll want to display a message to the user, after a creation or an update. Sharp way to do this is to call `->notify()` in the Form code:
 
+```php
     function update($id, array $data)
     {
         $instance = $id ? Spaceship::findOrFail($id) : new Spaceship;
@@ -274,8 +305,9 @@ Sometimes you'll want to display a message to the user, after a creation or an u
 
         return $instance->id;
     }
+```
 
-A notification is made of a title, and optionally 
+A notification is made of a title, and optionally
 - a texte detail,
 - a notification level: info (the default), warning, danger, success,
 - an auto-hide policy (if true, the toasted notification will hide after 4s).
@@ -288,28 +320,31 @@ Note that you can add up notifications, calling the `notify()` function multiple
 
 This method **is not mandatory**, a default implementation is proposed by Sharp, but you can override it if necessary. The aim is to return an array version of a new instance (for the creation form). For instance, with Eloquent and the `Code16\Sharp\Utils\Transformers\SharpAttributeTransformer` trait:
 
+```php
     function create(): array
     {
         return $this->transform(new Spaceship(["name" => "new"]));
     }
-
+```
 
 ### `delete($id)`
 
 Finally (!), here you must write the code performed on a deletion of the instance. It can be anything, here's an Eloquent example:
 
+```php
     function delete($id)
     {
         Spaceship::findOrFail($id)->delete();
     }
-
+```
 
 ## Configure the form
 
 Once this class written, we have to declare the form in the sharp config file:
 
+```php
     // config/sharp.php
-    
+
     return [
         "entities" => [
             "spaceship" => [
@@ -318,14 +353,15 @@ Once this class written, we have to declare the form in the sharp config file:
             ]
         ]
     ];
-
+```
 
 ## Input validation
 
 Of course you'll want to have an input validation on your form. Simply create a [Laravel Form Request class](https://laravel.com/docs/5.4/validation#form-request-validation), and link it in the config:
 
+```php
     // config/sharp.php
-    
+
     return [
         "entities" => [
             "spaceship" => [
@@ -335,6 +371,7 @@ Of course you'll want to have an input validation on your form. Simply create a 
             ]
         ]
     ];
+```
 
 Sharp will handle the error display in the form.
 
@@ -342,25 +379,29 @@ Sharp will handle the error display in the form.
 
 Rich text fields (RTF) are structured in a certain way by Sharp. This means that a rule like this will not work out of the box, if bio is a RTF:
 
+```php
     public function rules()
     {
         return [
             'bio' => 'required'
         ];
     }
+```
 
 To make it work, you have two options:
 
 Either add a ".text" suffix to your field key in the rules:
 
+```php
     public function rules()
     {
         return [
             'bio.text' => 'required'
         ];
     }
+```
 
-Or even simplier, make your FormRequest class extend `Code16\Sharp\Form\Validator\SharpFormRequest` instead of `Illuminate\Foundation\Http\FormRequest`. Note that in this case, if you have to define a `withValidator($validator)` function (see the [Laravel doc](https://laravel.com/docs/5.5/validation#form-request-validation)), make sure you call `parent::withValidator($validator)` in it.
+Or even easier, make your FormRequest class extend `Code16\Sharp\Form\Validator\SharpFormRequest` instead of `Illuminate\Foundation\Http\FormRequest`. Note that in this case, if you have to define a `withValidator($validator)` function (see the [Laravel doc](https://laravel.com/docs/5.5/validation#form-request-validation)), make sure you call `parent::withValidator($validator)` in it.
 
 ---
 

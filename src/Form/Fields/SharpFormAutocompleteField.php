@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Formatters\AutocompleteFormatter;
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithOptions;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithTemplates;
@@ -10,7 +11,8 @@ use Illuminate\Support\Collection;
 
 class SharpFormAutocompleteField extends SharpFormField
 {
-    use SharpFormFieldWithPlaceholder, SharpFormFieldWithTemplates, SharpFormFieldWithOptions;
+    use SharpFormFieldWithPlaceholder, SharpFormFieldWithTemplates,
+        SharpFormFieldWithOptions, SharpFormFieldWithDataLocalization;
 
     const FIELD_TYPE = "autocomplete";
 
@@ -234,6 +236,7 @@ class SharpFormAutocompleteField extends SharpFormField
 
     /**
      * @return array
+     * @throws \Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException
      */
     public function toArray(): array
     {
@@ -249,6 +252,7 @@ class SharpFormAutocompleteField extends SharpFormField
             "listItemTemplate" => $this->template("list"),
             "resultItemTemplate" => $this->template("result"),
             "searchMinChars" => $this->searchMinChars,
+            "localized" => $this->localized,
         ]);
     }
 }

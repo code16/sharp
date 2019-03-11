@@ -14,7 +14,8 @@ const injectedComponents = {
     $form:{
         data: () => ({
             errors: {},
-            downloadLinkBase:''
+            downloadLinkBase:'',
+            localized: false
         })
     },
     $tab:{},

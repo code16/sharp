@@ -2,18 +2,19 @@
     <div class="SharpDropdown"
          :class="{'SharpDropdown--open':opened,
          'SharpDropdown--disabled':disabled,
-         'SharpDropdown--above':isAbove}"
+         'SharpDropdown--above':isAbove,
+         'SharpDropdown--no-arrow':!showArrow}"
          :tabindex="disabled?-1:0"
          @focus="handleFocus" @blur="handleBlur">
-        <li class="SharpDropdown__text" @mousedown="toggleIfFocused">
+        <div class="SharpDropdown__text" @mousedown="toggleIfFocused">
             <slot name="text">{{text}}</slot>
-        </li>
+        </div>
         <dropdown-arrow v-if="showArrow" class="SharpDropdown__arrow"></dropdown-arrow>
-        <li v-if="!disabled">
+        <div v-if="!disabled">
             <ul class="SharpDropdown__list" ref="list">
                 <slot></slot>
             </ul>
-        </li>
+        </div>
     </div>
 </template>
 

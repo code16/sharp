@@ -2,8 +2,12 @@
 
 namespace Code16\Sharp\EntityList;
 
+use Code16\Sharp\Utils\Filters\HasFiltersInQuery;
+
 class EntityListQueryParams
 {
+    use HasFiltersInQuery;
+
     /**
      * @var int
      */
@@ -23,11 +27,6 @@ class EntityListQueryParams
      * @var string
      */
     protected $sortedDir;
-
-    /**
-     * @var array
-     */
-    protected $filters;
 
     /**
      * @var array
@@ -56,29 +55,14 @@ class EntityListQueryParams
     }
 
     /**
-     * @param array $filters
-     * @return $this
-     */
-    public function setDefaultFilters($filters)
-    {
-        collect((array) $filters)->each(function($value, $filter) {
-            $this->setFilterValue($filter, $value);
-        });
-
-        return $this;
-    }
-
-    /**
      * @param string|null $queryPrefix
      * @return $this
      */
     public function fillWithRequest(string $queryPrefix = null)
     {
-        $query = $queryPrefix
-            ? request("query")
-            : request()->all();
+        $query = $queryPrefix ? request($queryPrefix) : request()->all();
 
-        $this->search = $query["search"] ?? null;
+        $this->search = $query["search"] ?? null ? urldecode($query["search"]) : null;
         $this->page = $query["page"] ?? null;
 
         if(isset($query["sort"])) {
@@ -86,13 +70,7 @@ class EntityListQueryParams
             $this->sortedDir = $query["dir"];
         }
 
-        collect($query)->except(["search", "page", "sort", "dir"])
-            ->filter(function($value, $name) {
-                return starts_with($name, "filter_");
-
-            })->each(function($value, $name) {
-               $this->setFilterValue(substr($name, strlen("filter_")), $value);
-            });
+        $this->fillFilterWithRequest($query);
 
         return $this;
     }
@@ -167,55 +145,10 @@ class EntityListQueryParams
     }
 
     /**
-     * @param string $filterName
-     * @return mixed|null
-     */
-    public function filterFor(string $filterName)
-    {
-        if(isset($this->filters["/forced/$filterName"])) {
-            return $this->filterFor("/forced/$filterName");
-        }
-
-        if(!isset($this->filters[$filterName])) {
-            return null;
-        }
-
-        return str_contains($this->filters[$filterName], ",")
-            ? explode(",", $this->filters[$filterName])
-            : $this->filters[$filterName];
-    }
-
-    /**
      * @return array
      */
     public function specificIds()
     {
         return (array)$this->specificIds;
-    }
-
-    /**
-     * @param string $filter
-     * @param string $value
-     */
-    public function forceFilterValue(string $filter, $value)
-    {
-        $this->filters["/forced/$filter"] = $value;
-    }
-
-    /**
-     * @param string $filter
-     * @param string $value
-     */
-    protected function setFilterValue(string $filter, $value)
-    {
-        if(is_array($value)) {
-            // Force all filter values to be string, to be consistent with
-            // all use cases (filter in EntityList or in Command)
-            $value = empty($value) ? null : implode(',', $value);
-        }
-
-        $this->filters[$filter] = $value;
-
-        event("filter-{$filter}-was-set", [$value, $this]);
     }
 }

@@ -8,7 +8,7 @@ use Code16\Sharp\Tests\SharpTestCase;
 
 class SharpFormAutocompleteFieldTest extends SharpTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -51,7 +51,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
             ->setRemoteEndpoint("endpoint")
             ->setRemoteSearchAttribute("attribute");
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
                 "remoteMethod" => "POST", "remoteEndpoint" => "endpoint",
                 "remoteSearchAttribute" => "attribute"
             ], $formField->toArray()
@@ -66,7 +66,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
             ["id" => 2, "label" => "Elem 2"],
         ]);
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["localValues" => [
                 ["id" => 1, "label" => "Elem 1"],
                 ["id" => 2, "label" => "Elem 2"],
@@ -83,7 +83,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
             (object)["id" => 2, "label" => "Elem 2"],
         ]);
 
-        $this->assertArraySubset(
+        $this->assertArrayContainsSubset(
             ["localValues" => [
                 (object)["id" => 1, "label" => "Elem 1"],
                 (object)["id" => 2, "label" => "Elem 2"],
@@ -98,7 +98,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
         $formField = $this->getDefaultLocalAutocomplete()
             ->setSearchMinChars(3);
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
                 "searchMinChars" => 3
             ], $formField->toArray()
         );
@@ -111,7 +111,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
             ->setListItemInlineTemplate('<strong>LIT</strong>')
             ->setResultItemInlineTemplate('<strong>RIT</strong>');
 
-        $this->assertArraySubset([
+        $this->assertArrayContainsSubset([
             "listItemTemplate" => "<strong>LIT</strong>",
             "resultItemTemplate" => "<strong>RIT</strong>"
         ], $formField->toArray()

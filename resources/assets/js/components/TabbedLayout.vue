@@ -1,13 +1,15 @@
 <template>
     <div class="SharpTabbedLayout">
         <template v-if="showTabs">
-            <sharp-b-tabs>
-                <sharp-b-tab v-for="(tab,i) in layout.tabs" :title="tab.title" :key="i">
+            <SharpTabs>
+                <template slot="nav-prepend"><slot name="nav-prepend"></slot></template>
+                <SharpTab v-for="(tab,i) in layout.tabs" :title="tab.title" :key="i">
                     <slot v-bind="tab"></slot>
-                </sharp-b-tab>
-            </sharp-b-tabs>
+                </SharpTab>
+            </SharpTabs>
         </template>
         <template v-else>
+            <div><slot name="nav-prepend"></slot></div>
             <div v-for="tab in layout.tabs">
                 <slot v-bind="tab"></slot>
             </div>
@@ -16,8 +18,8 @@
 </template>
 
 <script>
-    import Tabs from './Tabs';
-    import Tab from './Tab';
+    import SharpTabs from './Tabs';
+    import SharpTab from './Tab';
 
     export default {
         name:'SharpTabbedLayout',
@@ -30,8 +32,8 @@
             }
         },
         components: {
-            [Tabs.name]:Tabs,
-            [Tab.name]:Tab,
+            SharpTabs,
+            SharpTab,
         },
         computed: {
             showTabs() {

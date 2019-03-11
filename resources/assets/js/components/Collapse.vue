@@ -1,7 +1,6 @@
 <template>
     <transition-group :leave-active-class="transitionClass"
-                      :enter-active-class="transitionClass"
-                enter-active-class="collapse-enter-active"
+                      :enter-active-class="enterActiveClass"
                 @before-enter="beforeEnter"
                 @enter="enter"
                 @after-enter="afterEnter"
@@ -33,6 +32,11 @@
                 leavingElm:null,
 
                 afterEnterCallback:noop
+            }
+        },
+        computed: {
+            enterActiveClass() {
+                return `${this.transitionClass} collapse-enter-active`;
             }
         },
         methods: {

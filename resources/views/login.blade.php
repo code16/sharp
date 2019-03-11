@@ -2,7 +2,7 @@
 
 @section("content")
 
-    <div id="sharp-app" class="Sharp__login-page">
+    <div id="sharp-app" class="login">
         <div class="container">
             <form method="POST" action="{{ route("code16.sharp.login.post") }}">
                 {{ csrf_field() }}

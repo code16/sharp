@@ -1,15 +1,13 @@
-import ActionBarForm from './ActionBarForm';
-import ActionBarList from './ActionBarList';
-//import ActionBarDashboard from './ActionBarDashboard';
+import SharpActionBarForm from './ActionBarForm';
 
-export const NameAssociation = {
-    'form' : ActionBarForm.name,
-    'list': ActionBarList.name,
-    //'dashboard': ActionBarDashboard.name
-};
 
-export default {
-    [ActionBarForm.name]:ActionBarForm,
-    [ActionBarList.name]:ActionBarList,
-    //[ActionBarDashboard.name]:ActionBarDashboard
+
+export function actionBarByContext(context) {
+    if(context === 'form') {
+        return SharpActionBarForm;
+    }
+}
+
+export {
+    SharpActionBarForm
 };

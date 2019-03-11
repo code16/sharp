@@ -1,6 +1,6 @@
 <div align="center">
 
-![Sharp 4](docs/img/logo.png)
+![Sharp 4](docs/img/logo2.png)
 
 </div>
 
@@ -9,7 +9,7 @@ Sharp is not a CMS: it's a content management framework, a toolset which provide
 - The CMS **should not have any expectations from the persistence layer**: MySQL is cool — but it's not the perfect tool for every problem. And more important, the DB structure has nothing to do with the CMS.
 - Content administrators **should work with their data and terminology**, not CMS terms. I mean, if the project is about spaceships, space travels and pilots, why would the CMS talk about articles, categories and tags?
 - website developers **should not have to work on the front-end development** for the CMS. Yeah. Because life is complicated enough, Sharp takes care of all the responsive / CSS / JS stuff.
- 
+
 Sharp intends to provide a clean solution to the following needs:
 - create, update or delete any structured data of the project, handling validation and errors;
 - display, search, sort or filter data;
@@ -17,7 +17,7 @@ Sharp intends to provide a clean solution to the following needs:
 - handle authorizations and validation;
 - all without write a line of front code, and using a clean API in the PHP app.
 
-Sharp 4 needs Laravel 5.4+ and PHP 7.0+.
+Sharp 4 needs Laravel 5.5+ and PHP 7.1.3+.
 
 Here's a series of blog posts which present Sharp following a simple example:
 - [Part 1](https://medium.com/@lonchampt/about-sharp-for-laravel-part-1-74a826279fe0)
@@ -25,6 +25,13 @@ Here's a series of blog posts which present Sharp following a simple example:
 - [Part 3: filters](https://medium.com/@lonchampt/about-sharp-for-laravel-part-3-2bb992d6a8e3)
 - [Part 4: form lists](https://medium.com/@lonchampt/about-sharp-for-laravel-part-4-cb2232caf234)
 - [Part 5: commands](https://medium.com/@lonchampt/about-sharp-for-laravel-part-5-44699e270647)
+- [Part 6: uploads](https://medium.com/@lonchampt/about-sharp-for-laravel-part-6-a03ee71cb2c5)
+
+And a few more articles on specific features:
+- [Dashboards](https://medium.com/@lonchampt/sharp-for-laravel-version-4-1-dashboard-generalization-69648df9baf9)
+- [Multi-Forms](https://medium.com/@lonchampt/sharp-for-laravel-a-quick-presentation-of-multi-forms-fc49f0e51176)
+- [What's new in 4.1](https://medium.com/@lonchampt/sharp-for-laravel-4-1-is-now-released-964c8b6b0491)
+- [New features in 4.1.3](https://medium.com/@lonchampt/sharp-4-1-3-and-its-new-features-a498c8b67629)
 
 ![Dashboard](docs/img/dashboard.png)
 
@@ -45,13 +52,26 @@ Each `entity` in Sharp can be displayed:
 ## Installation
 
 - Add the package with composer: `composer require code16/sharp`,
-- [Laravel 5.4 only] Register the service provider `Code16\Sharp\SharpServiceProvider` in the provider array of `config/app.php`,
-- Publish assets: `php artisan vendor:publish --tag=assets`.
+- Publish assets: `php artisan vendor:publish --provider="Code16\Sharp\SharpServiceProvider" --tag=assets`.
+
+A tip on this last command: you'll need fresh assets each time Sharp is updated, so a good practice is to add the command in the `scripts.post-autoload-dump` section of your `composer.json` file:
+
+```
+"scripts": {
+    [...]
+    "post-autoload-dump": [
+        "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+        "@php artisan vendor:publish --provider=Code16\\Sharp\\SharpServiceProvider --tag=assets --force",
+        "@php artisan package:discover"
+    ]
+},
+``` 
 
 ## Configuration
 
 Sharp needs a `config/sharp.php` config file, mainly to declare `entities`. Here's a simple example:
 
+```php
     return [
         "entities" => [
             "spaceship" => [
@@ -62,6 +82,7 @@ Sharp needs a `config/sharp.php` config file, mainly to declare `entities`. Here
             ]
         ]
     ];
+```
 
 As we can see, each `entity` (like `spaceship`, here), can define:
 
@@ -74,6 +95,8 @@ As we can see, each `entity` (like `spaceship`, here), can define:
 We'll get into all those classes in this document. The important thing to notice is that Sharp provides base classes to handle all the wiring (and more), but as we'll see, the applicative code is totally up to you.
 
 ## Full documentation
+
+- [Upgrading from 4.0 to 4.1](docs/upgrading/4.1.md)
 
 ### Auth
 
@@ -110,12 +133,17 @@ We'll get into all those classes in this document. The important thing to notice
 - [Multi-forms](docs/multiforms.md)
 - [Custom form fields](docs/custom-form-fields.md)
 
+### Dashboards
+- [Create a Dashboard](docs/dashboard.md)
+
 ### Generalities
-- [The Dashboard](docs/dashboard.md)
+- [Building the menu](docs/building-menu.md)
 - [How to transform data](docs/how-to-transform-data.md)
+- [Get the request context](docs/context.md)
 - [Sharp built-in solution for uploads](docs/sharp-built-in-solution-for-uploads.md)
-- Handling data localization (coming in 4.1)
+- [Handling form data localization](docs/form-data-localization.md)
 - [Testing with Sharp](docs/testing-with-sharp.md)
+- [Artisan Generators](docs/artisan-generators.md)
 
 ### Theming and CSS
 - [Style & Visual Theme](docs/style-visual-theme.md)

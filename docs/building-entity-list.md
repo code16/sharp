@@ -2,11 +2,17 @@
 
 We need an Entity List to display the list of `instances` for an `entity`. This list can be paginated, searchable, filtered, ... as we'll see below.
 
+## Generator
+
+```sh
+php artisan sharp:make:list <class_name> [--model=<model_name>]
+```
+
 ## Write the class
 
 First let's write the applicative class, and make it extend `Code16\Sharp\EntityList\SharpEntityList`. Therefore there are four abstract methods to implement:
 
-- `buildListDataContainers()` and `buildListLayout()` for the structure, 
+- `buildListDataContainers()` and `buildListLayout()` for the structure,
 - `getListData(EntityListQueryParams $params)` for the data,
 - and `buildListConfig()` for... the list config.
 
@@ -16,6 +22,7 @@ Each one is detailed here:
 
 A "data container" is simply a column in the `Entity List`, named this way to abstract the presentation. This first function is responsible to describe each column:
 
+```php
     function buildListDataContainers()
     {
         $this->addDataContainer(
@@ -25,6 +32,7 @@ A "data container" is simply a column in the `Entity List`, named this way to ab
                 ->setHtml()
         )->addDataContainer([...]);
     }
+```
 
 Setting the label, allowing the column to be sortable and to display html is optionnal.
 
@@ -32,12 +40,14 @@ Setting the label, allowing the column to be sortable and to display html is opt
 
 Next step, define how those columns are displayed:
 
+```php
     function buildListLayout()
     {
         $this->addColumn("picture", 1, 2)
             ->addColumn("name", 9, 10)
             ->addColumnLarge("capacity", 2);
     }
+```
 
 We add columns giving:
 
@@ -58,6 +68,7 @@ The returned array is meant to be build with 2 rules:
 
 So for instance, if we defined 2 columns `name` and `capacity`:
 
+```php
     function getListData(EntityListQueryParams $params)
     {
 	    return [
@@ -68,10 +79,11 @@ So for instance, if we defined 2 columns `name` and `capacity`:
             ], [
                 "id" => 2,
                 "name" => "USS Agamemnon",
-                "capacity" => "20k"			
+                "capacity" => "20k"
             ]
         ];
     }
+```
 
 Of course, real code would imply some data request in a DB, or a file for instance; the important thing is that Sharp don't care.
 
@@ -100,12 +112,14 @@ Note that the ability of sorting a column is defined in `buildListDataContainers
 
 `$params->hasSearch()` returns true if the user entered a search, and `$params->searchWords()` returns an array of search terms. This last method can take parameters, here's its full signature:
 
+```php
     public function searchWords(
         $isLike = true,
         $handleStar = true,
         $noStarTermPrefix = '%',
         $noStarTermSuffix = '%'
     )
+```
 
 - `$isLike`: if true, each term will be surrounded by `%` (by default).
 - `$handleStar`: if true, and if a char `*` is found in a term, it will be replaced by `%` (default), and this term won't be surrounded by `%` (to allow "starts with" or "ends with" searches).
@@ -113,6 +127,7 @@ Note that the ability of sorting a column is defined in `buildListDataContainers
 
 Here's a code sample with an Eloquent Model:
 
+```php
     if ($params->hasSearch()) {
         foreach ($params->searchWords() as $word) {
             $spaceships->where(function ($query) use ($word) {
@@ -122,6 +137,7 @@ Here's a code sample with an Eloquent Model:
             }
         }
     }
+```
 
 ##### Filters
 
@@ -137,6 +153,7 @@ With `Eloquent` or the `QueryBuilder`, this means calling `->paginate($count)` o
 
 Finally, this last function must describe... the list config. Let's see an example:
 
+```php
     function buildListConfig()
     {
         $this->setInstanceIdAttribute("id")
@@ -144,6 +161,7 @@ Finally, this last function must describe... the list config. Let's see an examp
             ->setDefaultSort("name", "asc")
             ->setPaginated();
     }
+```
 
 Here we declare that:
 
@@ -155,13 +173,13 @@ Here we declare that:
 This config can also contain things related to Filters, Commands or State, and all of this is discussed on following chapters.
 
 
-
 ## Configure the entity
 
 In the sharp config file, we have to declare our entity, and link it to the Entity List class:
 
+```php
     // config/sharp.php
-    
+
     return [
         "entities" => [
             "spaceship" => [
@@ -169,31 +187,12 @@ In the sharp config file, we have to declare our entity, and link it to the Enti
             ]
         ]
     ];
+```
 
 Then we can access the Entity List at the following URL:
 **/sharp/list/spaceship** (replace "spaceship" by our entity key).
 
-### The sharp side menu
-
-In order to display a link to the entity in the side menu, we have to write a little extra config in the same file:
-
-    [...]
-    "menu" => [
-        [
-            "label" => "Equipment",
-            "entities" => [
-                "spaceship" => [
-                    "label" => "Spaceships",
-                    "icon" => "fa-space-shuttle"
-                ]
-            ]
-        ]
-    ]
-
-As describe, we want to add a "Equipment" section containing the `spaceship` entity with a "Spaceships" label.
-
-The icon, which is optional, must be a valid [Font Awesome 4 icon](http://fontawesome.io/icons/) name.
-
+To go ahead and learn how to add a link in the Sharp side menu, [look here](building-menu.md).
 
 ---
 

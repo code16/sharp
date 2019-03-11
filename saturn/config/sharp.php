@@ -4,6 +4,9 @@ return [
 
     "name" => "Saturn",
 
+    "custom_url_segment" => "admin",
+    "display_sharp_version_in_title" => true,
+
     "extensions" => [
         "assets" => [
             "strategy" => "asset",
@@ -69,47 +72,85 @@ return [
         ],
     ],
 
+    "dashboards" => [
+        "company_dashboard" => [
+            "view" => \App\Sharp\CompanyDashboard::class,
+            "policy" => \App\Sharp\Policies\CompanyDashboardPolicy::class,
+        ],
+        "travels_dashboard" => [
+            "view" => \App\Sharp\TravelsDashboard::class,
+        ],
+    ],
+
+    "global_filters" => [
+        "corporation" => \App\Sharp\Filters\CorporationGlobalFilter::class
+    ],
+
     "menu" => [
         [
             "label" => "Company",
             "entities" => [
-                "spaceship" => [
-                    "label" => "Spaceships",
-                    "icon" => "fa-space-shuttle"
+                [
+                    "label" => "Dashboard",
+                    "icon" => "fa-dashboard",
+                    "dashboard" => "company_dashboard"
                 ],
-                "pilot" => [
+                [
+                    "label" => "Spaceships",
+                    "icon" => "fa-space-shuttle",
+                    "entity" => "spaceship"
+                ],
+                [
                     "label" => "Pilots",
-                    "icon" => "fa-user"
+                    "icon" => "fa-user",
+                    "entity" => "pilot"
                 ]
             ]
         ], [
             "label" => "Travels",
             "entities" => [
-                "passenger" => [
-                    "label" => "Passengers",
-                    "icon" => "fa-bed"
+                [
+                    "label" => "Dashboard",
+                    "icon" => "fa-dashboard",
+                    "dashboard" => "travels_dashboard"
                 ],
-                "travel" => [
+                [
+                    "label" => "Passengers",
+                    "icon" => "fa-bed",
+                    "entity" => "passenger"
+                ],
+                [
                     "label" => "Travel",
-                    "icon" => "fa-suitcase"
-                ]
+                    "icon" => "fa-suitcase",
+                    "entity" => "travel"
+                ],
+                [
+                    "label" => "Some external link",
+                    "icon" => "fa-globe",
+                    "url" => "https://google.com"
+                ],
             ]
         ], [
             "label" => "Admin",
             "entities" => [
-                "user" => [
+                [
                     "label" => "Sharp users",
-                    "icon" => "fa-user-secret"
-                ],
-                "feature" => [
-                    "label" => "Features",
-                    "icon" => "fa-superpowers"
+                    "icon" => "fa-user-secret",
+                    "entity" => "user"
                 ]
             ]
         ],
+        [
+            "label" => "Public website",
+            "icon" => "fa-globe",
+            "url" => "https://google.com"
+        ],
+        [
+            "label" => "Features",
+            "icon" => "fa-superpowers",
+            "entity" => "feature"
+        ]
     ],
-
-    "dashboard" => \App\Sharp\Dashboard::class,
 
     "uploads" => [
         "tmp_dir" => env("SHARP_UPLOADS_TMP_DIR", "tmp"),

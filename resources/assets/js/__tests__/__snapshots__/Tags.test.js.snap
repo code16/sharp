@@ -2,7 +2,7 @@
 
 exports[`tags-field can mout Tags field 1`] = `
 <div id="app">
-	<div tabindex="0" class="multiselect SharpTags">
+	<div tabindex="-1" class="multiselect SharpTags">
 		<svg width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd" class="multiselect__select">
 			<path d="M10 0L5 5 0 0z"></path>
 		</svg>
@@ -10,10 +10,13 @@ exports[`tags-field can mout Tags field 1`] = `
 			<div class="multiselect__tags-wrap" style="display: none;"></div>
 			<!---->
 			<div class="multiselect__spinner" style="display: none;"></div>
-			<input name="" type="text" autocomplete="off" placeholder="placeholder" class="multiselect__input">
+			<input name="" type="text" autocomplete="off" placeholder="placeholder" tabindex="0" class="multiselect__input" style="width: 0px; position: absolute; padding: 0px;">
 			<!---->
+			<span class="multiselect__placeholder">
+				placeholder
+			</span>
 		</div>
-		<div class="multiselect__content-wrapper" style="max-height: 300px; display: none;">
+		<div tabindex="-1" class="multiselect__content-wrapper" style="max-height: 300px; display: none;">
 			<ul class="multiselect__content" style="display: inline-block;">
 				<!---->
 				<li class="multiselect__element">
@@ -30,6 +33,9 @@ exports[`tags-field can mout Tags field 1`] = `
 				</li>
 				<li style="display: none;">
 					<span class="multiselect__option">No elements found. Consider changing the search query.</span>
+				</li>
+				<li style="display: none;">
+					<span class="multiselect__option">List is empty.</span>
 				</li>
 			</ul>
 		</div>

@@ -4,6 +4,7 @@ namespace Code16\Sharp\Tests\Unit\Form\Eloquent\Uploads;
 
 use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\Utils\TestWithSharpUploadModel;
+use Illuminate\Support\Facades\Storage;
 
 class SharpUploadModelTest extends SharpFormEloquentBaseTest
 {
@@ -18,11 +19,15 @@ class SharpUploadModelTest extends SharpFormEloquentBaseTest
 
         $upload->thumbnail(100, 100);
 
-        $this->assertTrue(file_exists(public_path("thumbnails/data/100-100/" . basename($file))));
+        $this->assertTrue(
+            Storage::disk('public')->exists("thumbnails/data/100-100/" . basename($file))
+        );
 
         $upload->transformed = true;
 
-        $this->assertFalse(file_exists(public_path("thumbnails/data/100-100/" . basename($file))));
+        $this->assertFalse(
+            Storage::disk('public')->exists("thumbnails/data/100-100/" . basename($file))
+        );
     }
 
     /** @test */
@@ -51,10 +56,12 @@ class SharpUploadModelTest extends SharpFormEloquentBaseTest
         $upload = $this->createSharpUploadModel($file);
 
         $this->assertStringStartsWith(
-            url("thumbnails/data/-150/" . basename($file)),
+            "/storage/thumbnails/data/-150/" . basename($file),
             $upload->thumbnail(null, 150)
         );
 
-        $this->assertTrue(file_exists(public_path("thumbnails/data/-150/" . basename($file))));
+        $this->assertTrue(
+            Storage::disk('public')->exists("thumbnails/data/-150/" . basename($file))
+        );
     }
 }

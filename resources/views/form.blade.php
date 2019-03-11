@@ -2,7 +2,7 @@
 
 @section("content")
 
-    <div id="sharp-app" class="Sharp__form-page">
+    <div id="sharp-app" class="form">
         @include("sharp::partials._menu")
         <sharp-action-view context="form">
             <sharp-form entity-key="{{ $entityKey }}"

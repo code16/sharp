@@ -35,33 +35,31 @@
 </template>
 
 <script>
-    import ActionBars, { NameAssociation as actionBarCompName } from './action-bar/index';
-    import EventBus from './EventBus';
-
-    import Modal from './Modal';
-    import Vue from 'vue';
     import axios from 'axios';
+    import { actionBarByContext } from './action-bar';
+    import EventBus from './EventBus';
+    import { api } from "../api";
+    import SharpModal from './Modal';
 
     const noop=()=>{};
 
     export default {
         name:'SharpActionView',
         components: {
-            [Modal.name]: Modal,
-            ...ActionBars,
+            SharpModal
         },
 
         provide() {
             return {
                 actionsBus: new EventBus({name:'SharpActionsEventBus'}),
-                axiosInstance: axios.create()
+                axiosInstance: api
             }
         },
 
         props: {
-            context:{
-                type:String,
-                required:true
+            context: {
+                type: String,
+                required: true
             }
         },
 
@@ -75,13 +73,13 @@
         },
         computed: {
             barComp() {
-                return actionBarCompName[this.context];
+                return actionBarByContext(this.context);
             },
         },
         methods: {
-            showMainModal({text, okCallback=noop, okCloseOnly, isError, ...sharedProps}) {
+            showMainModal({ text, okCallback=noop, okCloseOnly, isError, ...sharedProps }) {
                 const curId = this.mainModalId;
-                const hiddenCallback = _=>this.$delete(this.mainModalsData, curId);
+                const hiddenCallback = () => this.$delete(this.mainModalsData, curId);
 
                 this.$set(this.mainModalsData,curId,{
                     props: {

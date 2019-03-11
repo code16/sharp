@@ -18,7 +18,7 @@ class SharpRedirectIfAuthenticated
     public function handle($request, Closure $next, $guard = null)
     {
         if ($this->checkSharpUserAuthenticated($guard)) {
-            return redirect(route("code16.sharp.dashboard"));
+            return redirect(route("code16.sharp.home"));
         }
 
         return $next($request);

@@ -2,11 +2,15 @@
 
 exports[`field-container can mount field container 1`] = `
 <div id="app">
-	<div class="SharpFieldContainer SharpForm__form-item">
-		<label class="SharpForm__label">
-			My beautiful field
+	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--type-test-field">
+		<div class="row">
+			<div class="col">
+				<label class="SharpForm__label">
+					My beautiful field
+				</label>
+			</div>
 			<!---->
-		</label>
+		</div>
 		<div>Template field</div>
 		<div class="SharpForm__form-requirement"></div>
 		<small class="SharpForm__help-message">Do not fill this field</small>
@@ -16,11 +20,15 @@ exports[`field-container can mount field container 1`] = `
 
 exports[`field-container can mount field container with error 1`] = `
 <div id="app">
-	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--danger">
-		<label class="SharpForm__label">
-			My beautiful field
+	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--type-test-field SharpForm__form-item--danger">
+		<div class="row">
+			<div class="col">
+				<label class="SharpForm__label">
+					My beautiful field
+				</label>
+			</div>
 			<!---->
-		</label>
+		</div>
 		<div>Template field</div>
 		<div class="SharpForm__form-requirement">Must be a number</div>
 		<small class="SharpForm__help-message">Do not fill this field</small>
@@ -30,11 +38,15 @@ exports[`field-container can mount field container with error 1`] = `
 
 exports[`field-container can mount field container with extra style 1`] = `
 <div id="app">
-	<div class="SharpFieldContainer SharpForm__form-item" style="background: red;">
-		<label class="SharpForm__label">
-			My beautiful field
+	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--type-test-field" style="background: red;">
+		<div class="row">
+			<div class="col">
+				<label class="SharpForm__label">
+					My beautiful field
+				</label>
+			</div>
 			<!---->
-		</label>
+		</div>
 		<div>Template field</div>
 		<div class="SharpForm__form-requirement"></div>
 		<small class="SharpForm__help-message">Do not fill this field</small>
@@ -44,11 +56,15 @@ exports[`field-container can mount field container with extra style 1`] = `
 
 exports[`field-container can mount field container with success 1`] = `
 <div id="app">
-	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--success">
-		<label class="SharpForm__label">
-			My beautiful field
+	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--type-test-field SharpForm__form-item--success">
+		<div class="row">
+			<div class="col">
+				<label class="SharpForm__label">
+					My beautiful field
+				</label>
+			</div>
 			<!---->
-		</label>
+		</div>
 		<div>Template field</div>
 		<div class="SharpForm__form-requirement"></div>
 		<small class="SharpForm__help-message">Do not fill this field</small>
