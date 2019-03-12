@@ -8,18 +8,15 @@
         @click="handleMapClicked"
         ref="map"
     >
-        <GmapMarker
-            v-if="position"
-            :position="position"
-            draggable
-        >
-        </GmapMarker>
+        <template v-if="hasMarker">
+            <GmapMarker :position="markerPosition" draggable />
+        </template>
     </GmapMap>
 </template>
 
 <script>
     import { Map, Marker } from 'vue2-google-maps';
-    import { defaultMapOptions } from "./util";
+    import { defaultMapOptions, toLatLngBounds } from "./util";
 
     export default {
         name: 'SharpGmapsEditable',
@@ -30,8 +27,8 @@
         },
 
         props: {
-            position: Object,
-            bounds: Object,
+            markerPosition: Object,
+            bounds: Array,
             center: {
                 type: Object,
                 default: ()=>({
@@ -41,7 +38,7 @@
             },
             zoom: {
                 type: Number,
-                default:4
+                default: 4
             },
         },
 
@@ -49,13 +46,25 @@
             options() {
                 return {
                     ...defaultMapOptions,
+                    draggableCursor: 'crosshair',
                 }
+            },
+            hasMarker() {
+                return !!this.markerPosition;
             }
+        },
+        watch: {
+            bounds(bounds) {
+                const latLngBounds = toLatLngBounds(bounds);
+                if(latLngBounds) {
+                    this.$refs.map.$mapObject.fitBounds(latLngBounds);
+                }
+            },
         },
 
         methods: {
             handleMapClicked(e) {
-                this.$emit('map-click', e.latLng);
+                this.$emit('map-click', e.latLng.toJSON());
             },
         },
     }

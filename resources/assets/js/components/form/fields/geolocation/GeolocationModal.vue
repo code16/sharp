@@ -1,35 +1,43 @@
 <template>
     <SharpModal
+        class="SharpGeolocationModal"
+        :class="classes"
         :title="lSub(geocoding ? 'title' : 'title-no-geocoding')"
-        no-close-on-backdrop
         :visible="visible"
+        no-close-on-backdrop
         @change="handleVisibilityChanged"
         @ok="handleOkButtonClicked"
     >
-        <div v-if="geocoding" class="mb-2">
-            <div class="position-relative">
+        <template v-if="hasGeocoding">
+            <div class="mb-2">
                 <form @submit.prevent="handleSearchSubmitted">
-                    <SharpText :value="search" :placeholder="lSub('geocode_input.placeholder')" @input="handleSearchInput" />
+                    <div class="row no-gutters">
+                        <div class="col position-relative">
+                            <SharpText :value="search" class="SharpGeolocationModal__input" :placeholder="lSub('geocode_input.placeholder')" @input="handleSearchInput" />
+                            <template v-if="loading">
+                                <SharpLoading visible small inline
+                                    class="SharpGeolocationModal__loading"
+                                />
+                            </template>
+                        </div>
+                        <div class="col-auto pl-2">
+                            <SharpButton outline>Rechercher</SharpButton>
+                        </div>
+                    </div>
                 </form>
-                <template v-if="loading">
-                    <SharpLoading
-                        small inline visible
-                        class="position-absolute m-auto"
-                        style="top:0;right:0;bottom:0"
-                    />
+
+                <template v-if="message">
+                    <small>{{ message }}</small>
                 </template>
             </div>
-            <template v-if="message">
-                <small>{{ message }}</small>
-            </template>
-        </div>
+        </template>
 
         <template v-if="visible">
             <component
                 :is="editableMapComponent"
-                :position="currentPosition"
-                :center="currentPosition || center"
-                :bounds="currentBounds || bounds"
+                :marker-position="currentLocation"
+                :center="resolvedCenter"
+                :bounds="resolvedBounds"
                 :zoom="zoom"
                 @map-click="handleMapClicked"
             />
@@ -38,7 +46,7 @@
 </template>
 
 <script>
-    import { SharpLoading } from "../../../ui";
+    import { SharpLoading, SharpButton } from "../../../ui";
     import SharpModal from '../../../Modal';
     import SharpText from '../Text';
     import { LocalizationBase } from '../../../../mixins';
@@ -50,15 +58,20 @@
             SharpLoading,
             SharpModal,
             SharpText,
+            SharpButton,
         },
         props: {
             visible: Boolean,
-            position: Object,
+            location: Object,
             center: Object,
             bounds: Object,
             zoom: Number,
             geocoding: Boolean,
-            provider: {
+            mapsProvider: {
+                type: String,
+                default: 'gmaps',
+            },
+            geocodingProvider: {
                 type: String,
                 default: 'gmaps',
             },
@@ -66,26 +79,30 @@
         data() {
             return {
                 loading: false,
-                search: '',
-                status: null,
+                search: null,
+                message: null,
 
-                currentPosition: this.position,
+                currentLocation: this.location,
                 currentBounds: this.bounds,
             }
         },
         computed: {
-            geocoder() {
-                return new google.maps.Geocoder();
-            },
-            message() {
-                let msg = this.lSub(`geocode_input.message.${this.status}`);
-                switch(this.status) {
-                    case 'ZERO_RESULTS': return msg.replace('(...)', `'${this.search}'`);
-                }
-                return msg;
-            },
             editableMapComponent() {
-                return getEditableMapByProvider(this.provider);
+                return getEditableMapByProvider(this.mapsProvider);
+            },
+            resolvedCenter() {
+                return this.$props.center;
+            },
+            resolvedBounds() {
+                return this.currentBounds || this.$props.bounds;
+            },
+            hasGeocoding() {
+                return this.geocoding;
+            },
+            classes() {
+                return {
+                    'SharpGeolocationModal--loading': this.loading,
+                }
             },
         },
         methods: {
@@ -93,23 +110,42 @@
                 this.$emit('update:visible', visible);
             },
             handleOkButtonClicked() {
-                this.$emit('submit', this.currentPosition);
+                this.$emit('submit', this.currentLocation);
             },
             handleSearchInput(search) {
                 this.search = search;
             },
             handleMapClicked(position) {
-                this.currentPosition = position;
+                this.currentLocation = position;
+                this.message = '';
+                if(this.hasGeocoding) {
+                    this.loading = true;
+                    geocode(this.geocodingProvider, { latLng:position })
+                        .then(results => {
+                            if(results.length > 0) {
+                                this.search = results[0].address;
+                            }
+                        })
+                        .finally(()=>{
+                            this.loading = false;
+                        });
+                }
             },
-            handleSearchSubmitted(e) {
+            handleSearchSubmitted() {
+                const address = this.search;
+                this.message = '';
                 this.loading = true;
-                geocode(this.provider, e.target.value)
-                    .then(result => {
-                        this.currentPosition = result[0].location;
-                        this.currentBounds = result[0].bounds;
+                geocode(this.geocodingProvider, { address })
+                    .then(results => {
+                        if(results.length > 0) {
+                            this.currentLocation = results[0].location;
+                            this.currentBounds = results[0].bounds;
+                        } else {
+                            this.message = this.lSub(`geocode_input.message.no_results`).replace(':query', address);
+                        }
                     })
-                    .catch(e => {
-                        console.log(e);
+                    .catch(status => {
+                        this.message = `${this.lSub(`geocode_input.message.error`)}${status?` (${status})`:''}`;
                     })
                     .finally(() => {
                         this.loading = false;

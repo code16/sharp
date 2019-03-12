@@ -1,9 +1,12 @@
 import Gmaps from './gmaps/Gmaps.vue';
 import GmapsEditable from './gmaps/GmapsEditable.vue';
+import loadGmaps from './gmaps/load';
+import gmapsGeocode from './gmaps/geocode';
+
 import Osm from './osm/Osm.vue';
 import OsmEditable from './osm/OsmEditable.vue';
-import loadGmaps from './gmaps/loader';
-import gmapsGeocode from './gmaps/geocoder';
+import osmGeocode from './osm/geocode';
+
 
 export function getMapByProvider(provider) {
     if(provider === 'gmaps') {
@@ -31,6 +34,8 @@ export function loadMapProvider(provider, options) {
 export function geocode(provider, address) {
     if(provider === 'gmaps') {
         return gmapsGeocode(address);
+    } else if(provider === 'osm') {
+        return osmGeocode(address);
     }
     return Promise.resolve([]);
 }

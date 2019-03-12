@@ -85,6 +85,7 @@ $small-breakpoint: sm;
   @import 'components/form/Geolocation';
   @import 'components/form/TrixEditor';
   @import 'components/form/FieldLocaleSelector';
+  @import 'components/form/GeolocationModal';
 
   // List
   @import 'components/list/EntityList';

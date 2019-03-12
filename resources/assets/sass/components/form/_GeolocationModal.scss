@@ -1,0 +1,14 @@
+.SharpGeolocationModal {
+  &--loading {
+    .SharpGeolocationModal__input {
+      padding-right: 2rem;
+    }
+  }
+  .SharpGeolocationModal__loading {
+    position: absolute;
+    top:0;
+    right:0;
+    bottom:0;
+    margin: auto;
+  }
+}

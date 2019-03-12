@@ -44,10 +44,13 @@
         </template>
         <SharpGeolocationModal
             :visible.sync="modalVisible"
-            :geocoding="geocoding"
+            :location="value"
             :center="value || initialPosition"
             :bounds="boundaries"
             :zoom="zoomLevel"
+            :maps-provider="mapsProvider"
+            :geocoding="geocoding"
+            :geocoding-provider="geocodingProvider"
             @submit="handleModalSubmitted"
         />
     </div>
@@ -87,7 +90,11 @@
                 default: 'DD',
                 validator: unit => unit==='DMS' || unit==='DD'
             },
-            provider: {
+            mapsProvider: {
+                type: String,
+                default: 'gmaps',
+            },
+            geocodingProvider: {
                 type: String,
                 default: 'gmaps',
             },
@@ -117,7 +124,7 @@
                 }
             },
             mapComponent() {
-                return getMapByProvider(this.provider);
+                return getMapByProvider(this.mapsProvider);
             },
         },
         methods: {
@@ -134,7 +141,7 @@
                 this.modalVisible = true;
             },
             async init() {
-                await loadMapProvider(this.provider, {
+                await loadMapProvider(this.mapsProvider, {
                     apiKey: this.apiKey
                 });
                 this.ready = true;
