@@ -3,9 +3,9 @@
 exports[`view-panel mount "visible with content" ViewPanel 1`] = `
 <div>
 	<div class="SharpViewPanel__glasspane" style=""></div>
-	<div class="SharpViewPanel" style="" enter-class="SharpViewPanel--collapsed" enter-active-class="SharpViewPanel--expanding" enter-to-class="SharpViewPanel--expanded" leave-class="SharpViewPanel--expanded" leave-active-class="SharpViewPanel--collapsing"
+	<div class="SharpViewPanel" enter-class="SharpViewPanel--collapsed" enter-active-class="SharpViewPanel--expanding" enter-to-class="SharpViewPanel--expanded" leave-class="SharpViewPanel--expanded" leave-active-class="SharpViewPanel--collapsing"
 	    leave-to-class="SharpViewPanel--collapsed">
-		<iframe src="data:text/html;charset=utf-8$,SOME%20HTML%20MARKUP" height="100%" width="100%" frameborder="0" style="height: 100%; width: 100%;"></iframe>
+		<iframe src="about:blank" sandbox="allow-forms allow-scripts allow-same-origin allow-popups"></iframe>
 	</div>
 </div>
 `;
@@ -13,9 +13,6 @@ exports[`view-panel mount "visible with content" ViewPanel 1`] = `
 exports[`view-panel mount ViewPanel 1`] = `
 <div>
 	<div class="SharpViewPanel__glasspane" style="display: none;"></div>
-	<div class="SharpViewPanel" style="display: none;" enter-class="SharpViewPanel--collapsed" enter-active-class="SharpViewPanel--expanding" enter-to-class="SharpViewPanel--expanded" leave-class="SharpViewPanel--expanded" leave-active-class="SharpViewPanel--collapsing"
-	    leave-to-class="SharpViewPanel--collapsed">
-		<!---->
-	</div>
+	<!---->
 </div>
 `;
