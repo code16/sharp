@@ -1,23 +1,14 @@
 <template>
-    <SharpModal
-        class="SharpGeolocationModal"
-        :class="classes"
-        :title="lSub(geocoding ? 'title' : 'title-no-geocoding')"
-        :visible="visible"
-        no-close-on-backdrop
-        @show="handleShow"
-        @change="handleVisibilityChanged"
-        @ok="handleOkButtonClicked"
-    >
+    <div class="SharpGeolocationEdit" :class="classes">
         <template v-if="hasGeocoding">
             <div class="mb-2">
                 <form @submit.prevent="handleSearchSubmitted">
                     <div class="row no-gutters">
                         <div class="col position-relative">
-                            <SharpText :value="search" class="SharpGeolocationModal__input" :placeholder="lSub('geocode_input.placeholder')" @input="handleSearchInput" />
+                            <SharpText :value="search" class="SharpGeolocationEdit__input" :placeholder="lSub('geocode_input.placeholder')" @input="handleSearchInput" />
                             <template v-if="loading">
                                 <SharpLoading visible small inline
-                                    class="SharpGeolocationModal__loading"
+                                    class="SharpGeolocationEdit__loading"
                                 />
                             </template>
                         </div>
@@ -33,17 +24,15 @@
             </div>
         </template>
 
-        <template v-if="visible">
-            <component
-                :is="editableMapComponent"
-                :marker-position="currentLocation"
-                :center="resolvedCenter"
-                :bounds="resolvedBounds"
-                :zoom="zoom"
-                @map-click="handleMapClicked"
-            />
-        </template>
-    </SharpModal>
+        <component
+            :is="editableMapComponent"
+            :marker-position="currentLocation"
+            :center="center"
+            :bounds="currentBounds"
+            :zoom="zoom"
+            @map-click="handleMapClicked"
+        />
+    </div>
 </template>
 
 <script>
@@ -62,7 +51,6 @@
             SharpButton,
         },
         props: {
-            visible: Boolean,
             location: Object,
             center: Object,
             bounds: Object,
@@ -83,48 +71,31 @@
                 search: null,
                 message: null,
 
-                currentLocation: null,
-                currentBounds: null,
+                currentLocation: this.location,
+                currentBounds: this.bounds,
             }
         },
         computed: {
             editableMapComponent() {
                 return getEditableMapByProvider(this.mapsProvider);
             },
-            resolvedCenter() {
-                return this.$props.center;
-            },
-            resolvedBounds() {
-                return this.currentBounds;
-            },
             hasGeocoding() {
                 return this.geocoding;
             },
             classes() {
                 return {
-                    'SharpGeolocationModal--loading': this.loading,
+                    'SharpGeolocationEdit--loading': this.loading,
                 }
             },
         },
         methods: {
-            handleShow() {
-                this.currentLocation = this.location;
-                this.currentBounds = this.bounds;
-                this.search = null;
-                this.message = null;
-            },
-            handleVisibilityChanged(visible) {
-                this.$emit('update:visible', visible);
-            },
-            handleOkButtonClicked() {
-                this.$emit('submit', this.currentLocation);
-            },
             handleSearchInput(search) {
                 this.search = search;
             },
             handleMapClicked(position) {
                 this.currentLocation = position;
                 this.message = '';
+                this.$emit('change', this.currentLocation);
                 if(this.hasGeocoding) {
                     this.loading = true;
                     geocode(this.geocodingProvider, { latLng:position })
@@ -147,6 +118,7 @@
                         if(results.length > 0) {
                             this.currentLocation = results[0].location;
                             this.currentBounds = results[0].bounds;
+                            this.$emit('change', this.currentLocation);
                         } else {
                             this.message = this.lSub(`geocode_input.message.no_results`).replace(':query', address || '');
                         }

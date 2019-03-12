@@ -42,28 +42,39 @@
                 </div>
             </SharpCard>
         </template>
-        <SharpGeolocationModal
+        <SharpModal
+            :title="modalTitle"
             :visible.sync="modalVisible"
-            :location="value"
-            :center="value || initialPosition"
-            :bounds="boundaries"
-            :zoom="zoomLevel"
-            :maps-provider="mapsProvider"
-            :geocoding="geocoding"
-            :geocoding-provider="geocodingProvider"
-            @submit="handleModalSubmitted"
-        />
+            no-close-on-backdrop
+            @ok="handleModalSubmitted"
+        >
+            <transition :duration="300">
+                <template v-if="modalVisible">
+                    <SharpGeolocationEdit
+                        :location="value"
+                        :center="value || initialPosition"
+                        :bounds="boundaries"
+                        :zoom="zoomLevel"
+                        :maps-provider="mapsProvider"
+                        :geocoding="geocoding"
+                        :geocoding-provider="geocodingProvider"
+                        @change="handleLocationChanged"
+                    />
+                </template>
+            </transition>
+        </SharpModal>
     </div>
 </template>
 
 <script>
     import { Localization } from '../../../../mixins';
     import { SharpCard, SharpButton } from "../../../ui";
+    import SharpModal from '../../../Modal';
 
     import { getMapByProvider, loadMapProvider } from "./maps";
     import { dd2dms } from "./util";
 
-    import SharpGeolocationModal from './GeolocationModal.vue';
+    import SharpGeolocationEdit from './GeolocationEdit.vue';
 
 
     export default {
@@ -71,9 +82,10 @@
         mixins: [Localization],
 
         components: {
+            SharpGeolocationEdit,
             SharpCard,
             SharpButton,
-            SharpGeolocationModal,
+            SharpModal,
         },
 
         props: {
@@ -103,6 +115,7 @@
             return {
                 ready: false,
                 modalVisible: false,
+                location: this.value,
             }
         },
         computed: {
@@ -126,10 +139,15 @@
             mapComponent() {
                 return getMapByProvider(this.mapsProvider);
             },
+            modalTitle() {
+                return this.geocoding
+                    ? this.l('form.geolocation.modal.title')
+                    : this.l('form.geolocation.modal.title-no-geocoding');
+            },
         },
         methods: {
-            handleModalSubmitted(position) {
-                this.$emit('input', position);
+            handleModalSubmitted() {
+                this.$emit('input', this.location);
             },
             handleRemoveButtonClicked() {
                 this.$emit('input', null);
@@ -139,6 +157,9 @@
             },
             handleEditButtonClicked() {
                 this.modalVisible = true;
+            },
+            handleLocationChanged(location) {
+                this.location = location;
             },
             async init() {
                 await loadMapProvider(this.mapsProvider, {

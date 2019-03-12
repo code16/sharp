@@ -1,10 +1,10 @@
-.SharpGeolocationModal {
+.SharpGeolocationEdit {
   &--loading {
-    .SharpGeolocationModal__input {
+    .SharpGeolocationEdit__input {
       padding-right: 2rem;
     }
   }
-  .SharpGeolocationModal__loading {
+  .SharpGeolocationEdit__loading {
     position: absolute;
     top:0;
     right:0;
