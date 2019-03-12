@@ -5,6 +5,7 @@
         :title="lSub(geocoding ? 'title' : 'title-no-geocoding')"
         :visible="visible"
         no-close-on-backdrop
+        @show="handleShow"
         @change="handleVisibilityChanged"
         @ok="handleOkButtonClicked"
     >
@@ -82,8 +83,8 @@
                 search: null,
                 message: null,
 
-                currentLocation: this.location,
-                currentBounds: this.bounds,
+                currentLocation: null,
+                currentBounds: null,
             }
         },
         computed: {
@@ -94,7 +95,7 @@
                 return this.$props.center;
             },
             resolvedBounds() {
-                return this.currentBounds || this.$props.bounds;
+                return this.currentBounds;
             },
             hasGeocoding() {
                 return this.geocoding;
@@ -106,6 +107,12 @@
             },
         },
         methods: {
+            handleShow() {
+                this.currentLocation = this.location;
+                this.currentBounds = this.bounds;
+                this.search = null;
+                this.message = null;
+            },
             handleVisibilityChanged(visible) {
                 this.$emit('update:visible', visible);
             },
@@ -141,7 +148,7 @@
                             this.currentLocation = results[0].location;
                             this.currentBounds = results[0].bounds;
                         } else {
-                            this.message = this.lSub(`geocode_input.message.no_results`).replace(':query', address);
+                            this.message = this.lSub(`geocode_input.message.no_results`).replace(':query', address || '');
                         }
                     })
                     .catch(status => {
