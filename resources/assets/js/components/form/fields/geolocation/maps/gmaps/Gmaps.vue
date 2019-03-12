@@ -1,13 +1,13 @@
 <template>
     <GmapMap
-        :center="position"
+        class="mw-100"
+        style="padding-bottom: 80%"
+        :center="center"
         :zoom="zoom"
         :options="options"
-        style="padding-bottom: 80%"
-        class="mw-100"
         ref="map"
     >
-        <GmapMarker :position="position" />
+        <GmapMarker :position="markerPosition" />
     </GmapMap>
 </template>
 
@@ -26,8 +26,8 @@
         },
 
         props: {
-            position: Object,
-            bounds: Object,
+            markerPosition: Object,
+            center: Object,
             zoom: Number,
         },
 

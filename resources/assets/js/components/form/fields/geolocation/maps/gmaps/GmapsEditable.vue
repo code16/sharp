@@ -1,7 +1,7 @@
 <template>
     <GmapMap
         class="mw-100"
-        style="padding-bottom: 80%;"
+        style="padding-bottom: 80%"
         :center="center"
         :zoom="zoom"
         :options="options"
@@ -29,17 +29,8 @@
         props: {
             markerPosition: Object,
             bounds: Array,
-            center: {
-                type: Object,
-                default: ()=>({
-                    lat: 46.1445458,
-                    lng: -2.4343779
-                })
-            },
-            zoom: {
-                type: Number,
-                default: 4
-            },
+            center: Object,
+            zoom: Number,
         },
 
         computed: {

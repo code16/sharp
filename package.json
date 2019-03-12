@@ -87,9 +87,11 @@
   "dependencies": {
     "carbon-components": "^7.26.2",
     "font-awesome": "^4.7.0",
+    "leaflet": "^1.4.0",
     "trix": "^1.0.0",
     "vue": "^2.5.21",
     "vue-router": "^3.0.2",
+    "vue2-leaflet": "^2.0.2",
     "vuex": "^3.0.1"
   }
 }

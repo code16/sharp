@@ -28,6 +28,8 @@ $css--reset:false;
 @import 'mixins/modifiers';
 @import 'mixins/close-button';
 
+@import "~leaflet/dist/leaflet.css";
+
 $small-breakpoint: sm;
 
 #sharp-app {
