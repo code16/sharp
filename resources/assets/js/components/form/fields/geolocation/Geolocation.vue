@@ -17,9 +17,8 @@
                     <div class="col-7">
                         <component
                             :is="mapComponent"
-                            :position="value"
+                            :marker-position="value"
                             :center="value || initialPosition"
-                            :bounds="boundaries"
                             :zoom="zoomLevel"
                         />
                     </div>
@@ -53,7 +52,6 @@
                     <SharpGeolocationEdit
                         :location="value"
                         :center="value || initialPosition"
-                        :bounds="boundaries"
                         :zoom="zoomLevel"
                         :maps-provider="mapsProvider"
                         :geocoding="geocoding"
@@ -95,8 +93,17 @@
             geocoding: Boolean,
             apiKey: String,
             boundaries: Object,
-            zoomLevel: Number,
-            initialPosition: Object,
+            zoomLevel: {
+                type: Number,
+                default: 4
+            },
+            initialPosition: {
+                type: Object,
+                default: () => ({
+                    lat: 46.1445458,
+                    lng: -2.4343779
+                })
+            },
             displayUnit: {
                 type: String,
                 default: 'DD',
