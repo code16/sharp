@@ -4,7 +4,11 @@ import ViewPanel from '../components/commands/CommandViewPanel.vue';
 describe('view-panel', ()=>{
     let wrapper;
     beforeEach(()=>{
-        wrapper = mount(ViewPanel);
+        wrapper = mount(ViewPanel, {
+            directives: {
+                srcdoc() {}
+            }
+        });
     });
 
     test('mount ViewPanel', ()=>{
