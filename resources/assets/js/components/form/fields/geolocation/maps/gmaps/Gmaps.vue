@@ -16,8 +16,6 @@
     export default {
         name: 'SharpGmaps',
 
-        inject: ['$tab'],
-
         components: {
             GmapMap: Map,
             GmapMarker: Marker,
@@ -35,21 +33,6 @@
                     ...defaultMapOptions,
                 };
             },
-        },
-
-        methods:{
-            refresh() {
-                if(this.$refs.map) {
-                    google.maps.event.trigger(this.$refs.map.$mapObject, 'resize');
-                }
-                else console.log('Geolocation : no $refs map');
-            },
-        },
-
-        mounted() {
-            if(this.$tab) {
-                this.$tab.$on('active', this.refresh);
-            }
         },
     }
 </script>

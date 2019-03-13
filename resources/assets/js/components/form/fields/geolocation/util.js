@@ -16,7 +16,7 @@ export function providerName(providerData) {
 
 export function providerOptions(providerData) {
     return providerData
-        ? providerData.options
+        ? providerData.options || {}
         : {};
 }
 
@@ -24,4 +24,14 @@ export function tilesUrl(mapsOptions) {
     return mapsOptions
         ? mapsOptions.tilesUrl
         : null;
+}
+
+export function triggerResize() {
+    if (typeof Event === 'function') {
+        window.dispatchEvent(new Event('resize'));
+    } else {
+        const evt = document.createEvent('UIEvents');
+        evt.initUIEvent('resize', true, false, window, 0);
+        window.dispatchEvent(evt);
+    }
 }

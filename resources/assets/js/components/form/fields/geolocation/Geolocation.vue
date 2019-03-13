@@ -20,7 +20,7 @@
                             class="SharpGeolocation__map"
                             :class="mapClasses"
                             :marker-position="value"
-                            :center="value || initialPosition"
+                            :center="value"
                             :zoom="zoomLevel"
                             :tiles-url="tilesUrl"
                         />
@@ -75,7 +75,7 @@
     import SharpModal from '../../../Modal';
 
     import { getMapByProvider, loadMapProvider } from "./maps";
-    import { dd2dms, tilesUrl, providerName, providerOptions } from "./util";
+    import { dd2dms, tilesUrl, providerName, providerOptions, triggerResize } from "./util";
 
     import SharpGeolocationEdit from './GeolocationEdit.vue';
 
@@ -83,6 +83,12 @@
     export default {
         name: 'SharpGeolocation',
         mixins: [Localization],
+
+        inject: {
+            $tab: {
+                default: null
+            }
+        },
 
         components: {
             SharpGeolocationEdit,
@@ -206,5 +212,13 @@
         created() {
             this.init();
         },
+        mounted() {
+            if(this.$tab) {
+                this.$tab.$once('active', () => {
+                    // force update maps components on tab active
+                    triggerResize();
+                });
+            }
+        }
     }
 </script>
