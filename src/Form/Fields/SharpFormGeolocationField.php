@@ -39,6 +39,16 @@ class SharpFormGeolocationField extends SharpFormField
     protected $initialPosition;
 
     /**
+     * @var string
+     */
+    protected $mapsProvider = "gmaps";
+
+    /**
+     * @var string
+     */
+    protected $geocodingProvider = "gmaps";
+
+    /**
      * @param string $key
      * @return static
      */
@@ -122,6 +132,28 @@ class SharpFormGeolocationField extends SharpFormField
     }
 
     /**
+     * @param string $provider
+     * @return $this
+     */
+    public function setMapsProvider(string $provider)
+    {
+        $this->mapsProvider = $provider;
+
+        return $this;
+    }
+
+    /**
+     * @param string $provider
+     * @return $this
+     */
+    public function setGeocodingProvider(string $provider)
+    {
+        $this->geocodingProvider = $provider;
+
+        return $this;
+    }
+
+    /**
      * @param float $lat
      * @param float $lng
      * @return $this
@@ -164,7 +196,9 @@ class SharpFormGeolocationField extends SharpFormField
             "displayUnit" => "required|in:DD,DMS",
             "zoomLevel" => "int|min:0|max:25|required",
             "initialPosition" => "array|nullable",
-            "boundaries" => "array|nullable"
+            "boundaries" => "array|nullable",
+            "mapsProvider" => "required|in:gmaps,osm",
+            "geocodingProvider" => "required|in:gmaps,osm",
         ];
     }
 
@@ -181,6 +215,8 @@ class SharpFormGeolocationField extends SharpFormField
             "zoomLevel" => $this->zoomLevel,
             "initialPosition" => $this->initialPosition,
             "boundaries" => $this->boundaries,
+            "mapsProvider" => $this->mapsProvider,
+            "geocodingProvider" => $this->geocodingProvider,
         ]);
     }
 }

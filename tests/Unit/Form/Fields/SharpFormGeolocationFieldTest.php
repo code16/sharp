@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Tests\Unit\Form\Fields;
 
+use Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException;
 use Code16\Sharp\Form\Fields\SharpFormGeolocationField;
 use Code16\Sharp\Tests\SharpTestCase;
 
@@ -15,6 +16,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
         $this->assertEquals([
                 "key" => "geo", "type" => "geolocation",
                 "displayUnit" => "DMS", "geocoding" => false,
+                "mapsProvider" => "gmaps", "geocodingProvider" => "gmaps",
                 "zoomLevel" => 10
             ], $formField->toArray()
         );
@@ -114,6 +116,42 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
             ],
             $formField->toArray()
         );
+    }
+
+    /** @test */
+    function we_can_define_providers()
+    {
+        $formField = SharpFormGeolocationField::make("geo")
+            ->setMapsProvider("osm")
+            ->setGeocodingProvider("osm");
+
+        $this->assertArrayContainsSubset(
+            [
+                "mapsProvider" => "osm",
+                "geocodingProvider" => "osm",
+            ],
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_cant_define_an_unknown_maps_provider()
+    {
+        $this->expectException(SharpFormFieldValidationException::class);
+
+        SharpFormGeolocationField::make("geo")
+            ->setMapsProvider("apple")
+            ->toArray();
+    }
+
+    /** @test */
+    function we_cant_define_an_unknown_geocoding_provider()
+    {
+        $this->expectException(SharpFormFieldValidationException::class);
+
+        SharpFormGeolocationField::make("geo")
+            ->setGeocodingProvider("apple")
+            ->toArray();
     }
 
     /** @test */
