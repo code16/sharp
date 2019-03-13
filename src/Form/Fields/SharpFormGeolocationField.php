@@ -11,11 +11,6 @@ class SharpFormGeolocationField extends SharpFormField
     /**
      * @var string
      */
-    protected $apiKey;
-
-    /**
-     * @var string
-     */
     protected $displayUnit = "DMS";
 
     /**
@@ -47,6 +42,16 @@ class SharpFormGeolocationField extends SharpFormField
      * @var string
      */
     protected $geocodingProvider = "gmaps";
+
+    /**
+     * @var array
+     */
+    protected $mapsProviderOptions = [];
+
+    /**
+     * @var array
+     */
+    protected $geocodingProviderOptions = [];
 
     /**
      * @param string $key
@@ -94,7 +99,28 @@ class SharpFormGeolocationField extends SharpFormField
      */
     public function setApiKey(string $apiKey)
     {
-        $this->apiKey = $apiKey;
+        return $this->setMapsApiKey($apiKey)
+            ->setGeocodingApiKey($apiKey);
+    }
+
+    /**
+     * @param string $apiKey
+     * @return $this
+     */
+    public function setMapsApiKey(string $apiKey)
+    {
+        $this->mapsProviderOptions["apiKey"] = $apiKey;
+
+        return $this;
+    }
+
+    /**
+     * @param string $apiKey
+     * @return $this
+     */
+    public function setGeocodingApiKey(string $apiKey)
+    {
+        $this->geocodingProviderOptions['apiKey'] = $apiKey;
 
         return $this;
     }
@@ -133,22 +159,26 @@ class SharpFormGeolocationField extends SharpFormField
 
     /**
      * @param string $provider
+     * @param array $options
      * @return $this
      */
-    public function setMapsProvider(string $provider)
+    public function setMapsProvider(string $provider, array $options = [])
     {
         $this->mapsProvider = $provider;
+        $this->mapsProviderOptions += $options;
 
         return $this;
     }
 
     /**
      * @param string $provider
+     * @param array $options
      * @return $this
      */
-    public function setGeocodingProvider(string $provider)
+    public function setGeocodingProvider(string $provider, array $options = [])
     {
         $this->geocodingProvider = $provider;
+        $this->geocodingProviderOptions += $options;
 
         return $this;
     }
@@ -192,13 +222,12 @@ class SharpFormGeolocationField extends SharpFormField
     {
         return [
             "geocoding" => "required|bool",
-            "apiKey" => "required_if:geocoding,1",
             "displayUnit" => "required|in:DD,DMS",
             "zoomLevel" => "int|min:0|max:25|required",
             "initialPosition" => "array|nullable",
             "boundaries" => "array|nullable",
-            "mapsProvider" => "required|in:gmaps,osm",
-            "geocodingProvider" => "required|in:gmaps,osm",
+            "mapsProvider.name" => "required|in:gmaps,osm",
+            "geocodingProvider.name" => "required|in:gmaps,osm",
         ];
     }
 
@@ -211,12 +240,17 @@ class SharpFormGeolocationField extends SharpFormField
         return parent::buildArray([
             "geocoding" => $this->geocoding,
             "displayUnit" => $this->displayUnit,
-            "apiKey" => $this->apiKey,
             "zoomLevel" => $this->zoomLevel,
             "initialPosition" => $this->initialPosition,
             "boundaries" => $this->boundaries,
-            "mapsProvider" => $this->mapsProvider,
-            "geocodingProvider" => $this->geocodingProvider,
+            "mapsProvider" => [
+                "name" => $this->mapsProvider,
+                "options" => $this->mapsProviderOptions
+            ],
+            "geocodingProvider" => [
+                "name" => $this->geocodingProvider,
+                "options" => $this->geocodingProviderOptions
+            ],
         ]);
     }
 }

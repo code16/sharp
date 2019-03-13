@@ -30,7 +30,7 @@ If needed, set boundaries to the edit map, providing a north-east and a south-we
 
 Set the map zoom level, from 1 (the World) ou 25. Default is 10.
 
-### `setMapsProvider(string $provider)`
+### `setMapsProvider(string $provider, array $options = [])`
 
 You can choose between 2 providers for the Maps display:
 - "gmaps" for Google Maps (requires an API key, see below)
@@ -41,7 +41,7 @@ You can choose between 2 providers for the Maps display:
 Authorize geocoding, meaning enter an address and get back the coordinates.
 Default is false. May require an API key depending on the provider (see below).
 
-### `setGeocodingProvider(string $provider)`
+### `setGeocodingProvider(string $provider, array $options = [])`
 
 You can choose between 2 providers for geocoding:
 - "gmaps" for Google Maps (requires an API key, see below)
@@ -50,6 +50,15 @@ You can choose between 2 providers for geocoding:
 ### `setApiKey(string $apiKey)`
 
 If you use Google Maps as provider, for maps ou geocoding, you'll need a valid Google Maps Api key.
+This method will set the API key for both maps and geocoding.
+
+### `setGeocodingApiKey(string $apiKey)`
+
+This method will set the API key for geocoding only.
+
+### `setMapsApiKey(string $apiKey)`
+
+This method will set the API key for maps only.
 
 
 ## Formatter
