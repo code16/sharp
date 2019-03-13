@@ -6,3 +6,22 @@ export function dd2dms(D, lng){
 
     return `${deg}°${min}"${sec}' ${dir}`;
 }
+
+
+export function providerName(providerData) {
+    return providerData
+        ? providerData.name
+        : null;
+}
+
+export function providerOptions(providerData) {
+    return providerData
+        ? providerData.options
+        : {};
+}
+
+export function tilesUrl(mapsOptions) {
+    return mapsOptions
+        ? mapsOptions.tilesUrl
+        : null;
+}

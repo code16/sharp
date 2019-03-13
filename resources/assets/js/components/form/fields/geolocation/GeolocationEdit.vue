@@ -35,6 +35,7 @@
             :center="center"
             :bounds="currentBounds"
             :zoom="zoom"
+            :tiles-url="tilesUrl"
             @change="handleMarkerPositionChanged"
         />
     </div>
@@ -46,6 +47,7 @@
     import SharpText from '../Text';
     import { LocalizationBase } from '../../../../mixins';
     import { getEditableMapByProvider, geocode } from "./maps";
+    import { tilesUrl } from "./util";
 
     export default {
         mixins: [LocalizationBase('form.geolocation.modal')],
@@ -65,10 +67,12 @@
                 type: String,
                 default: 'gmaps',
             },
+            mapsOptions: Object,
             geocodingProvider: {
                 type: String,
                 default: 'gmaps',
             },
+            geocodingOptions: Object,
         },
         data() {
             return {
@@ -97,6 +101,9 @@
                     `SharpGeolocationEdit__map--${this.mapsProvider}`,
                 ]
             },
+            tilesUrl() {
+                return tilesUrl(this.mapsOptions);
+            },
         },
         methods: {
             handleSearchInput(search) {
@@ -108,7 +115,7 @@
                 this.$emit('change', this.currentLocation);
                 if(this.hasGeocoding) {
                     this.loading = true;
-                    geocode(this.geocodingProvider, { latLng:position })
+                    geocode(this.geocodingProvider, { latLng:position }, this.geocodingOptions)
                         .then(results => {
                             if(results.length > 0) {
                                 this.search = results[0].address;
@@ -123,7 +130,7 @@
                 const address = this.search;
                 this.message = '';
                 this.loading = true;
-                geocode(this.geocodingProvider, { address })
+                geocode(this.geocodingProvider, { address }, this.geocodingOptions)
                     .then(results => {
                         if(results.length > 0) {
                             this.currentLocation = results[0].location;
