@@ -30,14 +30,26 @@ If needed, set boundaries to the edit map, providing a north-east and a south-we
 
 Set the map zoom level, from 1 (the World) ou 25. Default is 10.
 
+### `setMapsProvider(string $provider)`
+
+You can choose between 2 providers for the Maps display:
+- "gmaps" for Google Maps (requires an API key, see below)
+- "osm" for Open Street Maps
+
 ### `setGeocoding(bool $geocoding = true)`
 
-Autorize geocoding, meaning enter an address and get back the coordinates.
-Default is false. Require an api key (see below).
+Authorize geocoding, meaning enter an address and get back the coordinates.
+Default is false. May require an API key depending on the provider (see below).
+
+### `setGeocodingProvider(string $provider)`
+
+You can choose between 2 providers for geocoding:
+- "gmaps" for Google Maps (requires an API key, see below)
+- "osm" for Open Street Maps ([Nominatim](https://nominatim.openstreetmap.org))
 
 ### `setApiKey(string $apiKey)`
 
-A valid Google Maps Api key, needed for geocoding.
+If you use Google Maps as provider, for maps ou geocoding, you'll need a valid Google Maps Api key.
 
 
 ## Formatter
