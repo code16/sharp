@@ -5,11 +5,14 @@
                 <form @submit.prevent="handleSearchSubmitted">
                     <div class="row no-gutters">
                         <div class="col position-relative">
-                            <SharpText :value="search" class="SharpGeolocationEdit__input" :placeholder="lSub('geocode_input.placeholder')" @input="handleSearchInput" />
+                            <SharpText
+                                class="SharpGeolocationEdit__input"
+                                :value="search"
+                                :placeholder="lSub('geocode_input.placeholder')"
+                                @input="handleSearchInput"
+                            />
                             <template v-if="loading">
-                                <SharpLoading visible small inline
-                                    class="SharpGeolocationEdit__loading"
-                                />
+                                <SharpLoading class="SharpGeolocationEdit__loading" visible small inline />
                             </template>
                         </div>
                         <div class="col-auto pl-2">
@@ -26,11 +29,13 @@
 
         <component
             :is="editableMapComponent"
+            class="SharpGeolocationEdit__map"
+            :class="mapClasses"
             :marker-position="currentLocation"
             :center="center"
             :bounds="currentBounds"
             :zoom="zoom"
-            @map-click="handleMapClicked"
+            @change="handleMarkerPositionChanged"
         />
     </div>
 </template>
@@ -87,12 +92,17 @@
                     'SharpGeolocationEdit--loading': this.loading,
                 }
             },
+            mapClasses() {
+                return [
+                    `SharpGeolocationEdit__map--${this.mapsProvider}`,
+                ]
+            },
         },
         methods: {
             handleSearchInput(search) {
                 this.search = search;
             },
-            handleMapClicked(position) {
+            handleMarkerPositionChanged(position) {
                 this.currentLocation = position;
                 this.message = '';
                 this.$emit('change', this.currentLocation);

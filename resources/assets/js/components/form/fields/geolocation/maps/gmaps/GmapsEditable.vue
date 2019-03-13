@@ -1,7 +1,5 @@
 <template>
     <GmapMap
-        class="mw-100"
-        style="padding-bottom: 80%"
         :center="center"
         :zoom="zoom"
         :options="options"
@@ -9,7 +7,7 @@
         ref="map"
     >
         <template v-if="hasMarker">
-            <GmapMarker :position="markerPosition" draggable />
+            <GmapMarker :position="markerPosition" draggable @dragend="handleMarkerDragEnd" />
         </template>
     </GmapMap>
 </template>
@@ -55,8 +53,11 @@
 
         methods: {
             handleMapClicked(e) {
-                this.$emit('map-click', e.latLng.toJSON());
+                this.$emit('change', e.latLng.toJSON());
             },
+            handleMarkerDragEnd(e) {
+                this.$emit('change', e.latLng.toJSON());
+            }
         },
     }
 </script>

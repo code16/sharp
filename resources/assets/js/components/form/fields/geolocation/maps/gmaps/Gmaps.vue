@@ -1,7 +1,5 @@
 <template>
     <GmapMap
-        class="mw-100"
-        style="padding-bottom: 80%"
         :center="center"
         :zoom="zoom"
         :options="options"
@@ -40,10 +38,6 @@
         },
 
         methods:{
-            handlePositionChanged(value) {
-                this.$emit('input', value.toJson());
-            },
-
             refresh() {
                 if(this.$refs.map) {
                     google.maps.event.trigger(this.$refs.map.$mapObject, 'resize');

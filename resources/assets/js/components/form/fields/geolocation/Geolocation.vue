@@ -17,6 +17,8 @@
                     <div class="col-7">
                         <component
                             :is="mapComponent"
+                            class="SharpGeolocation__map"
+                            :class="mapClasses"
                             :marker-position="value"
                             :center="value || initialPosition"
                             :zoom="zoomLevel"
@@ -145,6 +147,11 @@
             },
             mapComponent() {
                 return getMapByProvider(this.mapsProvider);
+            },
+            mapClasses() {
+                return [
+                    `SharpGeolocation__map--${this.mapsProvider}`,
+                ];
             },
             modalTitle() {
                 return this.geocoding

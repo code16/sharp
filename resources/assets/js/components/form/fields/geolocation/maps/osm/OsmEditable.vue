@@ -1,6 +1,5 @@
 <template>
     <LMap
-        style="padding-bottom: 80%"
         :zoom="zoom"
         :center="center"
         :bounds="transformedBounds"
@@ -8,7 +7,7 @@
     >
         <LTileLayer :url="tilesUrl" />
         <template v-if="hasMarker">
-            <LMarker :lat-lng="markerPosition" />
+            <LMarker :lat-lng="markerPosition" draggable @dragend="handleMarkerDragEnd" />
         </template>
     </LMap>
 </template>
@@ -46,8 +45,11 @@
         },
         methods: {
             handleMapClicked(e) {
-                this.$emit('map-click', e.latlng);
-            }
+                this.$emit('change', e.latlng);
+            },
+            handleMarkerDragEnd(e) {
+                this.$emit('change', e.target.getLatLng());
+            },
         }
     }
 </script>
