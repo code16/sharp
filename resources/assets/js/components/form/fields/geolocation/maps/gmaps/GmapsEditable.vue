@@ -14,7 +14,7 @@
 
 <script>
     import { Map, Marker } from 'vue2-google-maps';
-    import { defaultMapOptions, toLatLngBounds } from "./util";
+    import { defaultMapOptions, toLatLngBounds, createMapOptions } from "./util";
 
     export default {
         name: 'SharpGmapsEditable',
@@ -29,14 +29,16 @@
             bounds: Array,
             center: Object,
             zoom: Number,
+            maxBounds: Array,
         },
 
         computed: {
             options() {
-                return {
+                return createMapOptions({
                     ...defaultMapOptions,
+                    maxBounds: this.maxBounds,
                     draggableCursor: 'crosshair',
-                }
+                });
             },
             hasMarker() {
                 return !!this.markerPosition;

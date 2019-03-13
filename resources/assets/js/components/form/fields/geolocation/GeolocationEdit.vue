@@ -35,6 +35,7 @@
             :center="center"
             :bounds="currentBounds"
             :zoom="zoom"
+            :max-bounds="maxBounds"
             :tiles-url="tilesUrl"
             @change="handleMarkerPositionChanged"
         />
@@ -62,6 +63,7 @@
             center: Object,
             bounds: Object,
             zoom: Number,
+            maxBounds: Array,
             geocoding: Boolean,
             mapsProvider: {
                 type: String,

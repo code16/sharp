@@ -22,6 +22,7 @@
                             :marker-position="value"
                             :center="value"
                             :zoom="zoomLevel"
+                            :max-bounds="maxBounds"
                             :tiles-url="tilesUrl"
                         />
                     </div>
@@ -56,6 +57,7 @@
                         :location="value"
                         :center="value || initialPosition"
                         :zoom="zoomLevel"
+                        :max-bounds="maxBounds"
                         :maps-provider="providerName(mapsProvider)"
                         :maps-options="providerOptions(mapsProvider)"
                         :geocoding="geocoding"
@@ -165,14 +167,19 @@
                     `SharpGeolocation__map--${providerName(this.mapsProvider)}`,
                 ];
             },
+            tilesUrl() {
+                const mapsOptions = providerOptions(this.mapsProvider);
+                return tilesUrl(mapsOptions);
+            },
+            maxBounds() {
+                return this.boundaries
+                    ? [this.boundaries.sw, this.boundaries.ne]
+                    : null;
+            },
             modalTitle() {
                 return this.geocoding
                     ? this.l('form.geolocation.modal.title')
                     : this.l('form.geolocation.modal.title-no-geocoding');
-            },
-            tilesUrl() {
-                const mapsOptions = providerOptions(this.mapsProvider);
-                return tilesUrl(mapsOptions);
             },
         },
         methods: {

@@ -11,7 +11,7 @@
 
 <script>
     import { Map, Marker, loadGmapApi } from 'vue2-google-maps';
-    import { defaultMapOptions } from "./util";
+    import { defaultMapOptions, createMapOptions } from "./util";
 
     export default {
         name: 'SharpGmaps',
@@ -29,9 +29,10 @@
 
         computed: {
             options() {
-                return {
+                return createMapOptions({
                     ...defaultMapOptions,
-                };
+                    maxBounds: this.maxBounds,
+                });
             },
         },
     }

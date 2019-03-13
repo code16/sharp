@@ -18,3 +18,13 @@ export function toLatLngBounds(normalizedBounds) {
         ? new google.maps.LatLngBounds(bounds[0], bounds[1])
         : null;
 }
+
+export function createMapOptions({ maxBounds, ...options }) {
+    const res = { ...options };
+    if(Array.isArray(maxBounds)) {
+        res.restriction = {
+            latLngBounds: toLatLngBounds(maxBounds),
+        };
+    }
+    return res;
+}

@@ -24,11 +24,11 @@
             markerPosition: Object,
             zoom: Number,
             center: Object,
+            maxBounds: Array,
             tilesUrl: {
                 type: String,
                 default: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
             },
-            maxBounds: Array,
         },
         computed: {
             transformedMaxBounds() {

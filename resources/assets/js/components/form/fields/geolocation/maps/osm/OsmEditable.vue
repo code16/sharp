@@ -3,6 +3,7 @@
         :zoom="zoom"
         :center="center"
         :bounds="transformedBounds"
+        :max-bounds="transformedMaxBounds"
         @click="handleMapClicked"
     >
         <LTileLayer :url="tilesUrl" />
@@ -13,8 +14,8 @@
 </template>
 
 <script>
-    import { latLngBounds } from 'leaflet';
     import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
+    import { toLatLngBounds } from "./util";
 
     export default {
         name: 'SharpOsmEditable',
@@ -28,6 +29,7 @@
             center: Object,
             zoom: Number,
             bounds: Array,
+            maxBounds: Array,
             tilesUrl: {
                 type: String,
                 default: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
@@ -38,9 +40,10 @@
                 return !!this.markerPosition;
             },
             transformedBounds() {
-                return Array.isArray(this.bounds)
-                    ? latLngBounds(this.bounds[0], this.bounds[1])
-                    : null;
+                return toLatLngBounds(this.bounds);
+            },
+            transformedMaxBounds() {
+                return toLatLngBounds(this.maxBounds);
             }
         },
         methods: {
