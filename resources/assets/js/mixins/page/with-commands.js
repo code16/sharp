@@ -24,11 +24,7 @@ export default {
         async handleCommandResponse(response) {
             if(response.data.type === 'application/json') {
                 const data = await parseBlobJSONContent(response.data);
-                const handler = this.commandHandlers[data.action];
-
-                if(handler) {
-                    handler(data);
-                }
+                this.handleCommandActionRequested(data.action, data);
             } else {
                 this.downloadCommandFile(response);
             }
@@ -78,6 +74,13 @@ export default {
                 ...this.commandHandlers,
                 ...handlers,
             };
+        },
+        handleCommandActionRequested(action, data) {
+            const handler = this.commandHandlers[action];
+
+            if(handler) {
+                handler(data);
+            }
         },
 
         /** Command actions handlers */

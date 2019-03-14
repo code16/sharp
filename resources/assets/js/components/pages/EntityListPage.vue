@@ -360,12 +360,13 @@
                     attribute: this.config.state.attribute,
                     value: state
                 })
-                .then(({ data:{ action, items } })=>{
-                    if(action === 'refresh') this.actionRefresh(items);
-                    else if(action === 'reload') this.actionReload();
+                .then(response => {
+                    const { data } = response;
+                    this.handleCommandActionRequested(data.action, data);
                 })
-                .catch(({response:{data, status}}) => {
-                    if(status === 422) {
+                .catch(error => {
+                    const { data } = error.response;
+                    if(error.response.status === 422) {
                         this.actionsBus.$emit('showMainModal', {
                             title: this.l('modals.state.422.title'),
                             text: data.message,
