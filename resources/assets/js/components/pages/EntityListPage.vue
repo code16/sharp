@@ -356,7 +356,7 @@
              */
             setState(instance, state) {
                 const instanceId = this.instanceId(instance);
-                this.axiosInstance.post(`${this.apiPath}/state/${instanceId}`, {
+                return this.axiosInstance.post(`${this.apiPath}/state/${instanceId}`, {
                     attribute: this.config.state.attribute,
                     value: state
                 })

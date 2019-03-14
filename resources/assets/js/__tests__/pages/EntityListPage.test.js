@@ -665,6 +665,38 @@ describe('EntityListPage', () => {
             expect(wrapper.vm.commandEndpoint('commandKey', 'instanceId')).toEqual('apiPath/command/commandKey/instanceId');
         });
 
+        test('setState', async ()=>{
+            const wrapper = createWrapper({
+                computed: {
+                    apiPath:()=>'apiPath',
+                }
+            });
+            wrapper.setData({
+                config: {
+                    state: {
+                        attribute: 'stateAttribute',
+                    }
+                }
+            });
+            wrapper.setMethods({
+                handleCommandActionRequested: jest.fn(),
+                instanceId: ()=>'id',
+            });
+            wrapper.vm.axiosInstance = {
+                post: jest.fn(() => Promise.resolve({
+                    data: {
+                        action: 'action',
+                    }
+                })),
+            };
+            await wrapper.vm.setState({}, 'STATE');
+            expect(wrapper.vm.axiosInstance.post).toHaveBeenCalledWith('apiPath/state/id', {
+                attribute: 'stateAttribute',
+                value: 'STATE',
+            });
+            expect(wrapper.vm.handleCommandActionRequested).toHaveBeenCalledWith('action', { action: 'action' });
+        });
+
         test('init', ()=>{
             const wrapper = createWrapper();
             wrapper.setData(withDefaults());
