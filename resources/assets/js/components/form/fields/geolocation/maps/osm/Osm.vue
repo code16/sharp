@@ -1,15 +1,17 @@
 <template>
     <LMap
-        style="padding-bottom: 80%"
-        :zoom="10"
-        :center="[0,0]"
+        :zoom="zoom"
+        :center="center"
+        :max-bounds="transformedMaxBounds"
     >
-        <LTileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
+        <LTileLayer :url="tilesUrl" />
+        <LMarker :lat-lng="markerPosition" />
     </LMap>
 </template>
 
 <script>
     import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
+    import { toLatLngBounds } from './util';
 
     export default {
         name: 'SharpOsm',
@@ -17,6 +19,21 @@
             LMap,
             LMarker,
             LTileLayer,
+        },
+        props: {
+            markerPosition: Object,
+            zoom: Number,
+            center: Object,
+            maxBounds: Array,
+            tilesUrl: {
+                type: String,
+                default: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+            },
+        },
+        computed: {
+            transformedMaxBounds() {
+                return toLatLngBounds(this.maxBounds);
+            },
         },
     }
 </script>

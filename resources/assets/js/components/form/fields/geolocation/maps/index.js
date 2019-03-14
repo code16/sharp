@@ -26,16 +26,16 @@ export function getEditableMapByProvider(provider) {
 
 export function loadMapProvider(provider, options) {
     if(provider === 'gmaps') {
-        return loadGmaps(options);
+        return Promise.resolve(loadGmaps(options));
     }
     return Promise.resolve();
 }
 
-export function geocode(provider, address) {
+export function geocode(provider, data, options) {
     if(provider === 'gmaps') {
-        return gmapsGeocode(address);
+        return gmapsGeocode(data);
     } else if(provider === 'osm') {
-        return osmGeocode(address);
+        return osmGeocode(data);
     }
     return Promise.resolve([]);
 }

@@ -1,21 +1,21 @@
 <template>
     <LMap
-        style="padding-bottom: 80%"
         :zoom="zoom"
         :center="center"
         :bounds="transformedBounds"
+        :max-bounds="transformedMaxBounds"
         @click="handleMapClicked"
     >
         <LTileLayer :url="tilesUrl" />
         <template v-if="hasMarker">
-            <LMarker :lat-lng="markerPosition" />
+            <LMarker :lat-lng="markerPosition" draggable @dragend="handleMarkerDragEnd" />
         </template>
     </LMap>
 </template>
 
 <script>
-    import { latLngBounds } from 'leaflet';
     import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
+    import { toLatLngBounds } from "./util";
 
     export default {
         name: 'SharpOsmEditable',
@@ -29,6 +29,7 @@
             center: Object,
             zoom: Number,
             bounds: Array,
+            maxBounds: Array,
             tilesUrl: {
                 type: String,
                 default: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
@@ -39,15 +40,19 @@
                 return !!this.markerPosition;
             },
             transformedBounds() {
-                return Array.isArray(this.bounds)
-                    ? latLngBounds(this.bounds[0], this.bounds[1])
-                    : null;
+                return toLatLngBounds(this.bounds);
+            },
+            transformedMaxBounds() {
+                return toLatLngBounds(this.maxBounds);
             }
         },
         methods: {
             handleMapClicked(e) {
-                this.$emit('map-click', e.latlng);
-            }
+                this.$emit('change', e.latlng);
+            },
+            handleMarkerDragEnd(e) {
+                this.$emit('change', e.target.getLatLng());
+            },
         }
     }
 </script>

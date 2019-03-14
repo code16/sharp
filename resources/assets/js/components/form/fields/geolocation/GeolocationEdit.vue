@@ -5,11 +5,14 @@
                 <form @submit.prevent="handleSearchSubmitted">
                     <div class="row no-gutters">
                         <div class="col position-relative">
-                            <SharpText :value="search" class="SharpGeolocationEdit__input" :placeholder="lSub('geocode_input.placeholder')" @input="handleSearchInput" />
+                            <SharpText
+                                class="SharpGeolocationEdit__input"
+                                :value="search"
+                                :placeholder="lSub('geocode_input.placeholder')"
+                                @input="handleSearchInput"
+                            />
                             <template v-if="loading">
-                                <SharpLoading visible small inline
-                                    class="SharpGeolocationEdit__loading"
-                                />
+                                <SharpLoading class="SharpGeolocationEdit__loading" visible small inline />
                             </template>
                         </div>
                         <div class="col-auto pl-2">
@@ -26,11 +29,15 @@
 
         <component
             :is="editableMapComponent"
+            class="SharpGeolocationEdit__map"
+            :class="mapClasses"
             :marker-position="currentLocation"
             :center="center"
             :bounds="currentBounds"
             :zoom="zoom"
-            @map-click="handleMapClicked"
+            :max-bounds="maxBounds"
+            :tiles-url="tilesUrl"
+            @change="handleMarkerPositionChanged"
         />
     </div>
 </template>
@@ -41,6 +48,7 @@
     import SharpText from '../Text';
     import { LocalizationBase } from '../../../../mixins';
     import { getEditableMapByProvider, geocode } from "./maps";
+    import { tilesUrl } from "./util";
 
     export default {
         mixins: [LocalizationBase('form.geolocation.modal')],
@@ -55,15 +63,18 @@
             center: Object,
             bounds: Object,
             zoom: Number,
+            maxBounds: Array,
             geocoding: Boolean,
             mapsProvider: {
                 type: String,
                 default: 'gmaps',
             },
+            mapsOptions: Object,
             geocodingProvider: {
                 type: String,
                 default: 'gmaps',
             },
+            geocodingOptions: Object,
         },
         data() {
             return {
@@ -87,18 +98,26 @@
                     'SharpGeolocationEdit--loading': this.loading,
                 }
             },
+            mapClasses() {
+                return [
+                    `SharpGeolocationEdit__map--${this.mapsProvider}`,
+                ]
+            },
+            tilesUrl() {
+                return tilesUrl(this.mapsOptions);
+            },
         },
         methods: {
             handleSearchInput(search) {
                 this.search = search;
             },
-            handleMapClicked(position) {
+            handleMarkerPositionChanged(position) {
                 this.currentLocation = position;
                 this.message = '';
                 this.$emit('change', this.currentLocation);
                 if(this.hasGeocoding) {
                     this.loading = true;
-                    geocode(this.geocodingProvider, { latLng:position })
+                    geocode(this.geocodingProvider, { latLng:position }, this.geocodingOptions)
                         .then(results => {
                             if(results.length > 0) {
                                 this.search = results[0].address;
@@ -113,7 +132,7 @@
                 const address = this.search;
                 this.message = '';
                 this.loading = true;
-                geocode(this.geocodingProvider, { address })
+                geocode(this.geocodingProvider, { address }, this.geocodingOptions)
                     .then(results => {
                         if(results.length > 0) {
                             this.currentLocation = results[0].location;
