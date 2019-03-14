@@ -9,9 +9,6 @@ class LoginController extends Controller
 {
     use ValidatesRequests;
 
-    /**
-     * LoginController constructor.
-     */
     public function __construct()
     {
         $guardSuffix = config('sharp.auth.guard') ? ':' . config('sharp.auth.guard') : '';
@@ -35,6 +32,9 @@ class LoginController extends Controller
         return view("sharp::login");
     }
 
+    /**
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store()
     {
         $this->validate(request(), [
@@ -46,12 +46,15 @@ class LoginController extends Controller
             $this->getSharpLoginAttribute() => request('login'),
             $this->getSharpPasswordAttribute() => request('password')
         ])) {
-            return redirect()->intended('/sharp');
+            return redirect()->intended('/' . sharp_base_url_segment());
         }
 
         return back()->with("invalid", true)->withInput();
     }
 
+    /**
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function destroy()
     {
         $this->guard()->logout();
@@ -61,16 +64,25 @@ class LoginController extends Controller
         );
     }
 
+    /**
+     * @return string
+     */
     protected function getSharpLoginAttribute()
     {
         return config("sharp.auth.login_attribute", "email");
     }
 
+    /**
+     * @return string
+     */
     protected function getSharpPasswordAttribute()
     {
         return config("sharp.auth.password_attribute", "password");
     }
 
+    /**
+     * @return mixed
+     */
     protected function guard()
     {
         return auth()->guard(config('sharp.auth.guard'));

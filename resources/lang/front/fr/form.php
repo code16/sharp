@@ -18,8 +18,8 @@ return [
     'geolocation.modal.title' => 'Recherchez une addresse ou cliquez sur la carte',
     'geolocation.modal.title-no-geocoding' => 'Cliquez sur la carte',
     'geolocation.modal.geocode_input.placeholder' => 'Adresse',
-    'geolocation.modal.geocode_input.message.ERROR' => 'Erreur: Impossible de contacter Google maps',
-    'geolocation.modal.geocode_input.message.ZERO_RESULTS' => 'Aucun résultats pour (...)',
+    'geolocation.modal.geocode_input.message.error' => "Erreur: Impossible de contacter le service de Geocoding",
+    'geolocation.modal.geocode_input.message.no_results' => 'Aucun résultats pour ":query"',
 
     'upload.browse_button' => 'Parcourir...',
     'upload.remove_button' => 'Supprimer',

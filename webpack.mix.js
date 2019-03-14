@@ -7,6 +7,7 @@ mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
     .sass('resources/assets/sass/app.scss', 'resources/assets/dist/sharp.css')
     .sass('resources/assets/sass/cms.scss', 'resources/assets/dist/sharp-cms.css')
     .copy('node_modules/font-awesome/fonts','resources/assets/dist/fonts')
+    .copy('node_modules/leaflet/dist/images/*','resources/assets/dist/images')
     .options({
         processCssUrls: false
     })

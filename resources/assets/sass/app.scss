@@ -28,6 +28,8 @@ $css--reset:false;
 @import 'mixins/modifiers';
 @import 'mixins/close-button';
 
+@import "~leaflet/dist/leaflet.css";
+
 $small-breakpoint: sm;
 
 #sharp-app {
@@ -85,6 +87,7 @@ $small-breakpoint: sm;
   @import 'components/form/Geolocation';
   @import 'components/form/TrixEditor';
   @import 'components/form/FieldLocaleSelector';
+  @import 'components/form/GeolocationEdit';
 
   // List
   @import 'components/list/EntityList';

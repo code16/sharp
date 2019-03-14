@@ -15,6 +15,6 @@ class Travel extends Model
 
     public function delegates()
     {
-        return $this->belongsToMany(Passenger::class, 'travel_delegates');
+        return $this->belongsToMany(Passenger::class, 'travel_delegates')->withTimestamps();
     }
 }

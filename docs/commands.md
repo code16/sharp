@@ -214,8 +214,29 @@ For instance Commands we have to know the instance involved, which means the sig
 
 Dashboard can use the power of Commands too. The API is very similar, here's the differences:
 
-- There is no Instance or Entity distinction; a command handler must extend `Code16\Sharp\Dashboard\Commands\DashboardCommand`.
+- There is no Instance or Entity distinction; a command handler must extend `Code16\Sharp\Dashboard\Commands\DashboardCommand` ans implements execute method such as:
+
+```php
+    public function execute(
+        DashboardQueryParams $params,
+        array $data=[]): array
+    {
+        ...
+        
+        return $this->download(...);
+    }
+```
+
 - Commands must be declared in the `buildDashboardConfig()` method of the Dashboard.
+
+```php
+    function buildDashboardConfig()
+    {
+        $this->addDashboardCommand("download", DashboardDownload::class)
+            [...]
+    }
+```
+
 - And finally, a Dashboard Command can not return a `refresh()` action, since there is no Instance.
 
 ---
