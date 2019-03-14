@@ -17,9 +17,13 @@
                     <div class="col-7">
                         <component
                             :is="mapComponent"
+                            class="SharpGeolocation__map"
+                            :class="mapClasses"
                             :marker-position="value"
-                            :center="value || initialPosition"
+                            :center="value"
                             :zoom="zoomLevel"
+                            :max-bounds="maxBounds"
+                            :tiles-url="tilesUrl"
                         />
                     </div>
                     <div class="col-5 pl-0">
@@ -53,9 +57,12 @@
                         :location="value"
                         :center="value || initialPosition"
                         :zoom="zoomLevel"
-                        :maps-provider="mapsProvider"
+                        :max-bounds="maxBounds"
+                        :maps-provider="providerName(mapsProvider)"
+                        :maps-options="providerOptions(mapsProvider)"
                         :geocoding="geocoding"
-                        :geocoding-provider="geocodingProvider"
+                        :geocoding-provider="providerName(geocodingProvider)"
+                        :geocoding-options="providerOptions(geocodingProvider)"
                         @change="handleLocationChanged"
                     />
                 </template>
@@ -70,7 +77,7 @@
     import SharpModal from '../../../Modal';
 
     import { getMapByProvider, loadMapProvider } from "./maps";
-    import { dd2dms } from "./util";
+    import { dd2dms, tilesUrl, providerName, providerOptions, triggerResize } from "./util";
 
     import SharpGeolocationEdit from './GeolocationEdit.vue';
 
@@ -78,6 +85,12 @@
     export default {
         name: 'SharpGeolocation',
         mixins: [Localization],
+
+        inject: {
+            $tab: {
+                default: null
+            }
+        },
 
         components: {
             SharpGeolocationEdit,
@@ -110,12 +123,16 @@
                 validator: unit => unit==='DMS' || unit==='DD'
             },
             mapsProvider: {
-                type: String,
-                default: 'gmaps',
+                type: Object,
+                default: ()=>({
+                    name: 'gmaps',
+                }),
             },
             geocodingProvider: {
-                type: String,
-                default: 'gmaps',
+                type: Object,
+                default:() => ({
+                    name: 'gmaps',
+                }),
             },
         },
         data() {
@@ -138,13 +155,26 @@
                         lat: dd2dms(this.value.lat),
                         lng: dd2dms(this.value.lng, true)
                     }
-                }
-                else if(this.displayUnit === 'DD') {
+                } else if(this.displayUnit === 'DD') {
                     return this.value;
                 }
             },
             mapComponent() {
-                return getMapByProvider(this.mapsProvider);
+                return getMapByProvider(providerName(this.mapsProvider));
+            },
+            mapClasses() {
+                return [
+                    `SharpGeolocation__map--${providerName(this.mapsProvider)}`,
+                ];
+            },
+            tilesUrl() {
+                const mapsOptions = providerOptions(this.mapsProvider);
+                return tilesUrl(mapsOptions);
+            },
+            maxBounds() {
+                return this.boundaries
+                    ? [this.boundaries.sw, this.boundaries.ne]
+                    : null;
             },
             modalTitle() {
                 return this.geocoding
@@ -153,6 +183,9 @@
             },
         },
         methods: {
+            providerName,
+            providerOptions,
+
             handleModalSubmitted() {
                 this.$emit('input', this.location);
             },
@@ -168,15 +201,31 @@
             handleLocationChanged(location) {
                 this.location = location;
             },
-            async init() {
-                await loadMapProvider(this.mapsProvider, {
-                    apiKey: this.apiKey
+            loadProvider(providerData) {
+                const name = providerName(providerData);
+                const { apiKey } = providerOptions(providerData);
+                return loadMapProvider(name, {
+                    apiKey,
                 });
+            },
+            async init() {
+                await this.loadProvider(this.mapsProvider);
+                if(this.geocodingProvider) {
+                    await this.loadProvider(this.geocodingProvider);
+                }
                 this.ready = true;
             }
         },
         created() {
             this.init();
         },
+        mounted() {
+            if(this.$tab) {
+                this.$tab.$once('active', () => {
+                    // force update maps components on tab active
+                    triggerResize();
+                });
+            }
+        }
     }
 </script>
