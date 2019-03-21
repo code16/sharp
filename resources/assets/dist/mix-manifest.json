@@ -1,8 +1,13 @@
 {
     "/manifest.js": "/manifest.js?id=01c8731923a46c30aaed",
-    "/vendor.js": "/vendor.js?id=2242c5bf3f2e35488392",
+    "/vendor.js": "/vendor.js?id=e756a81692cf840e13db",
     "/client-api.js": "/client-api.js?id=7e022aad8155f6031752",
-    "/sharp.js": "/sharp.js?id=ce1943a4c2fa3f94271c",
-    "/sharp.css": "/sharp.css?id=f9519c70c8effdcbe861",
-    "/sharp-cms.css": "/sharp-cms.css?id=80bfd58c614874a6969c"
+    "/sharp.js": "/sharp.js?id=930cada27c31648243a9",
+    "/sharp.css": "/sharp.css?id=93881c3cfc4ae3da6ec3",
+    "/sharp-cms.css": "/sharp-cms.css?id=80bfd58c614874a6969c",
+    "/images/layers-2x.png": "/images/layers-2x.png?id=12d2d921c62e13d8e22a",
+    "/images/layers.png": "/images/layers.png?id=41753e1baa3220040580",
+    "/images/marker-icon-2x.png": "/images/marker-icon-2x.png?id=0c4988cf0607e4938996",
+    "/images/marker-icon.png": "/images/marker-icon.png?id=6563720b968db81ea665",
+    "/images/marker-shadow.png": "/images/marker-shadow.png?id=c3400784829d28fe2698"
 }
