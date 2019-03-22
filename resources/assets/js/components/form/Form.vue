@@ -138,7 +138,7 @@
             },
 
             downloadLinkBase() {
-                return `${API_PATH}/download/${this.entityKey}/${this.instanceId}`;
+                return `/download/${this.entityKey}/${this.instanceId}`;
             },
             listUrl() {
                 return `${BASE_URL}/list/${this.baseEntityKey}?restore-context=1`;
