@@ -18,6 +18,12 @@ Default: "Create"
 
 The name of the attribute which should be used for the creation.
 
+### `setCreateAdditionalAttributes(array $attributes)`
+
+Optional additional attributes to be set at creation.
+Example: with `->setCreateAdditionalAttributes(["group"=>"public"])`, the `group` attribute of a created tag would be set to "public".
+Default: []
+
 ### `setIdAttribute(string $idAttribute)`
 
 Set the id name attribute of tags.
