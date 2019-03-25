@@ -147,6 +147,26 @@ class TagsFormatterTest extends SharpTestCase
         );
     }
 
+    /** @test */
+    function we_handle_additional_create_attributes_from_front()
+    {
+        $formatter = new TagsFormatter;
+        $attribute = "attribute";
+        $field = SharpFormTagsField::make("tags", $this->getTagsData())
+            ->setCreatable()
+            ->setCreateAdditionalAttributes([
+                "group" => "test"
+            ])
+            ->setCreateAttribute("name");
+
+        $this->assertEquals(
+            [["id"=>1],["id"=>2],["id"=>null,"name"=>"green","group"=>"test"]],
+            $formatter->fromFront(
+                $field, $attribute, [["id"=>1],["id"=>2],["id"=>null,"label"=>"green"]]
+            )
+        );
+    }
+
     /**
      * @return array
      */

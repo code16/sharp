@@ -74,6 +74,7 @@ class EloquentModelUpdater
     /**
      * @param Model $instance
      * @param array $relationships
+     * @throws \ReflectionException
      */
     protected function saveRelationships($instance, array $relationships)
     {

@@ -39,10 +39,11 @@ class TagsFormatter extends SharpFieldFormatter
     {
         $options = collect($field->options())->keyBy("id")->all();
 
-        return collect($value)->filter(function($item) use($field, $options) {
-            // Strip values that aren't in configured options
-            return is_null($item["id"]) || isset($options[$item["id"]]);
-        })
+        return collect($value)
+            ->filter(function($item) use($field, $options) {
+                // Strip values that aren't in configured options
+                return is_null($item["id"]) || isset($options[$item["id"]]);
+            })
 
         ->when(! $field->creatable(), function($collection) {
             // Field isn't creatable, let's just strip all null ids
@@ -53,10 +54,11 @@ class TagsFormatter extends SharpFieldFormatter
 
         ->map(function($item) use($field) {
             if(is_null($item["id"])) {
-                return [
-                    $field->idAttribute() => null,
-                    $field->createAttribute() => $item["label"]
-                ];
+                return array_merge([
+                        $field->idAttribute() => null,
+                        $field->createAttribute() => $item["label"]
+                    ], $field->createAdditionalAttributes()
+                );
             }
 
             return [

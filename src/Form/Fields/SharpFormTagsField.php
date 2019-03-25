@@ -42,6 +42,11 @@ class SharpFormTagsField extends SharpFormField
     protected $options = [];
 
     /**
+     * @var array
+     */
+    protected $createAdditionalAttributes = [];
+
+    /**
      * @param string $key
      * @param array $options
      * @return static
@@ -93,6 +98,17 @@ class SharpFormTagsField extends SharpFormField
     }
 
     /**
+     * @param array $attributes
+     * @return static
+     */
+    public function setCreateAdditionalAttributes(array $attributes)
+    {
+        $this->createAdditionalAttributes = $attributes;
+
+        return $this;
+    }
+
+    /**
      * @param string $idAttribute
      * @return static
      */
@@ -138,6 +154,14 @@ class SharpFormTagsField extends SharpFormField
     public function createAttribute()
     {
         return $this->createAttribute;
+    }
+
+    /**
+     * @return array
+     */
+    public function createAdditionalAttributes()
+    {
+        return $this->createAdditionalAttributes;
     }
 
     /**
