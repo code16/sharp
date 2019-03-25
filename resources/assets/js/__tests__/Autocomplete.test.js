@@ -90,38 +90,6 @@ describe('autocomplete-field', ()=>{
             });
         });
 
-        test('update autocomplete state properly', async () => {
-            let $autocomplete = await createVm({
-                data: () => ({ value: null })
-            });
-
-            let { $root:vm } = $autocomplete;
-            let { multiselect } = $autocomplete.$refs;
-
-            expect($autocomplete.state).toBe('initial');
-
-            multiselect.$emit('search-change', 'T');
-            expect($autocomplete.state).toBe('searching');
-
-            multiselect.$emit('select', {id:1, name:'Theodore Bagwell', alias:'T-Bag'});
-            vm.value = {id:1, name:'Theodore Bagwell', alias:'T-Bag'};
-            expect($autocomplete.state).toBe('valuated');
-
-            await Vue.nextTick();
-            let clearBtn = document.querySelector('button');
-            // expect(document.body.innerHTML).toMatchSnapshot();
-            clearBtn.click();
-
-            expect($autocomplete.state).toBe('initial');
-        });
-
-        test('is valuated on start if have value', async () => {
-            let $autocomplete = await createVm({
-                data: () => ({ value:{id:1, name:'Theodore Bagwell', alias:'T-Bag'} })
-            });
-
-            expect($autocomplete.state).toBe('valuated');
-        });
 
         test('sync opened with multiselect', async () => {
             let $autocomplete = await createVm({
@@ -174,19 +142,20 @@ describe('autocomplete-field', ()=>{
         beforeEach(()=>{
             document.body.innerHTML = `
             <div id="app">
-                <sharp-autocomplete :value="value" 
-                                    :read-only="readOnly" 
-                                    mode="remote"
-                                    placeholder="nom"
-                                    item-id-attribute="id" 
-                                    remote-endpoint="/autocomplete"
-                                    :search-min-chars="3"
-                                    :remote-method="remoteMethod"
-                                    remote-search-attribute="search"
-                                    :list-item-template="'<em>{{name}}, {{alias}}</em>'"
-                                    :result-item-template="'<b>{{name}}, {{alias}}</b>'"
-                                    @input="inputEmitted($event)">
-                </sharp-autocomplete>
+                <sharp-autocomplete 
+                    :value="value" 
+                    :read-only="readOnly" 
+                    mode="remote"
+                    placeholder="nom"
+                    item-id-attribute="id" 
+                    remote-endpoint="/autocomplete"
+                    :search-min-chars="3"
+                    :remote-method="remoteMethod || 'GET'"
+                    remote-search-attribute="search"
+                    :list-item-template="'<em>{{name}}, {{alias}}</em>'"
+                    :result-item-template="'<b>{{name}}, {{alias}}</b>'"
+                    @input="inputEmitted($event)"
+                />
             </div>`;
             moxios.install();
         });
@@ -202,21 +171,13 @@ describe('autocomplete-field', ()=>{
                 }
             });
 
-            expect.assertions(6);
-
             let { multiselect } = $autocomplete.$refs;
 
             expect($autocomplete.isLoading).toBeFalsy();
 
-            $autocomplete.state = 'loading';
-            expect($autocomplete.isLoading).toBe(true);
-
-            $autocomplete.state = 'initial';
-            expect($autocomplete.isLoading).toBe(false);
-
             multiselect.$emit('open');
             multiselect.$emit('search-change','Li'); // less than min chars
-            expect($autocomplete.isLoading).toBe(true);
+            expect($autocomplete.isLoading).toBe(false);
 
             multiselect.$emit('search-change','Linc');
             expect($autocomplete.isLoading).toBe(true);
@@ -239,19 +200,6 @@ describe('autocomplete-field', ()=>{
             multiselect.$emit('search-change', 'The');
             expect($autocomplete.hideDropdown).toBe(false);
 
-        });
-
-        test('Update autocomplete state after request', async () => {
-            let $autocomplete = await createVm();
-
-            let { multiselect } = $autocomplete.$refs;
-
-            expect($autocomplete.state).toBe('initial');
-
-            multiselect.$emit('search-change', 'Theo');
-            await nextRequestFulfilled({ status:200, response:[] }, 210);
-
-            expect($autocomplete.state).toBe('searching');
         });
 
         test('Load response data', async () => {

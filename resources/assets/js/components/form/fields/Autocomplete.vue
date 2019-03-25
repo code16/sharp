@@ -1,49 +1,61 @@
 <template>
-    <div class="SharpAutocomplete"
-         :class="[`SharpAutocomplete--${state}`,
-                 {'SharpAutocomplete--remote':isRemote},
-                 {'SharpAutocomplete--disabled':readOnly}]">
-        <div v-if="state==='valuated' && value" class="SharpAutocomplete__result-item">
-            <sharp-template name="ResultItem" :template="resultItemTemplate" :template-data="localizedTemplateData(value)"></sharp-template>
-            <button class="SharpAutocomplete__result-item__close-button" type="button" @click="handleResetClick">
-                <svg class="SharpAutocomplete__result-item__close-icon"
-                     aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd">
-                    <path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
-                </svg>
-            </button>
-        </div>
-        <multiselect
-            v-if="state!=='valuated'"
-            class="SharpAutocomplete__multiselect"
-            :class="{'SharpAutocomplete__multiselect--hide-dropdown':hideDropdown}"
-            :value="value"
-            :options="suggestions"
-            :track-by="itemIdAttribute"
-            :internal-search="false"
-            :placeholder="placeholder"
-            :loading="isLoading"
-            :multiple="multiple"
-            :disabled="readOnly"
-            :hide-selected="hideSelected"
-            :allow-empty="allowEmpty"
-            :preserve-search="preserveSearch"
-            :show-pointer="showPointer"
-            :searchable="searchable"
-            @search-change="updateSuggestions($event)"
-            @select="handleSelect"
-            @input="$emit('multiselect-input',$event)"
-            @close="handleDropdownClose"
-            @open="handleDropdownOpen"
-            ref="multiselect"
-        >
-            <template slot="option" slot-scope="props">
-                <sharp-template name="ListItem" :template="listItemTemplate" :template-data="localizedTemplateData(props.option)"></sharp-template>
-            </template>
-            <template slot="loading">
-                <sharp-loading :visible="isLoading" inline small></sharp-loading>
-            </template>
-            <template slot="noResult">{{ l('form.autocomplete.no_results_text') }}</template>
-        </multiselect>
+    <div class="SharpAutocomplete" :class="classes">
+        <template v-if="ready">
+            <multiselect
+                class="SharpAutocomplete__multiselect"
+                :class="{ 'SharpAutocomplete__multiselect--hide-dropdown':hideDropdown }"
+                :value="value"
+                :options="suggestions"
+                :track-by="itemIdAttribute"
+                :internal-search="false"
+                :placeholder="placeholder"
+                :loading="isLoading"
+                :multiple="multiple"
+                :disabled="readOnly"
+                :hide-selected="hideSelected"
+                :allow-empty="allowEmpty"
+                :preserve-search="preserveSearch"
+                :show-pointer="showPointer"
+                :searchable="searchable"
+                @search-change="updateSuggestions($event)"
+                @select="handleSelect"
+                @input="$emit('multiselect-input',$event)"
+                @close="handleDropdownClose"
+                @open="handleDropdownOpen"
+                ref="multiselect"
+            >
+                <template slot="clear">
+                    <template v-if="clearButtonVisible">
+                        <button class="SharpAutocomplete__result-item__close-button" type="button" @click="handleClearButtonClicked">
+                            <svg class="SharpAutocomplete__result-item__close-icon"
+                                aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd">
+                                <path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
+                            </svg>
+                        </button>
+                    </template>
+                </template>
+                <template slot="singleLabel" slot-scope="{ option }">
+                    <SharpTemplate
+                        name="ResultItem"
+                        :template="resultItemTemplate"
+                        :template-data="localizedTemplateData(option)"
+                    />
+                </template>
+                <template slot="option" slot-scope="{ option }">
+                    <SharpTemplate
+                        name="ListItem"
+                        :template="listItemTemplate"
+                        :template-data="localizedTemplateData(option)"
+                    />
+                </template>
+                <template slot="loading">
+                    <SharpLoading :visible="isLoading" inline small />
+                </template>
+                <template slot="noResult">
+                    {{ l('form.autocomplete.no_results_text') }}
+                </template>
+            </multiselect>
+        </template>
     </div>
 </template>
 
@@ -54,12 +66,12 @@
 
     import SearchStrategy from '../../../app/models/SearchStrategy';
 
-    import axios from 'axios';
+    import debounce from 'lodash/debounce';
 
     import { warn, error } from '../../../util';
     import { Localization, Debounce } from '../../../mixins';
     import { lang } from '../../../mixins/Localization';
-
+    import { getAutocompleteSuggestions } from "../../../api";
     import localize from '../../../mixins/localize/Autocomplete';
 
     export default {
@@ -87,7 +99,7 @@
                 default: () => lang('form.multiselect.placeholder')
             },
             remoteEndpoint: String,
-            remoteMethod:String,
+            remoteMethod: String,
             remoteSearchAttribute: {
                 type: String,
                 default: 'query'
@@ -130,29 +142,27 @@
         },
         data() {
             return {
+                ready: false,
                 query: '',
                 suggestions: this.localValues,
                 opened: false,
-                state: 'initial'
+                isLoading: false,
             }
         },
         watch: {
             localValues() {
-                this.updateLocalSuggestions({ keepState:true });
-            },
-            locale() {
-                this.initState();
+                this.updateLocalSuggestions();
             },
         },
         computed: {
             isRemote() {
                 return this.mode === 'remote';
             },
-            isLoading() {
-                return this.state === 'loading' || this.opened && !!this.query.length && this.hideDropdown;
-            },
             hideDropdown() {
-                return this.isRemote ? this.query.length < this.searchMinChars : false;
+                return this.isQueryTooShort;
+            },
+            isQueryTooShort() {
+                return this.isRemote && this.query.length < this.searchMinChars;
             },
             searchStrategy() {
                 return !this.isRemote ? new SearchStrategy({
@@ -161,44 +171,54 @@
                     searchKeys: this.localizedSearchKeys
                 }) : null;
             },
+            clearButtonVisible() {
+                return !!this.value && !this.opened;
+            },
+            classes() {
+                return [
+                    { 'SharpAutocomplete--remote': this.isRemote },
+                    { 'SharpAutocomplete--disabled': this.readOnly }
+                ];
+            },
         },
         methods: {
-            callApi(query) {
-                let params = { [this.remoteSearchAttribute]:query };
-                if(this.localized)
-                    params.locale = this.locale;
-                return this.remoteMethod === 'GET'
-                    ? axios.get(this.remoteEndpoint, { params })
-                    : axios.post(this.remoteEndpoint, params)
-            },
-
             updateSuggestions(query) {
                 this.query = query;
-                if(this.hideDropdown)
+                if(this.isQueryTooShort) {
                     return;
-                if(this.isRemote) {
-                    this.state = 'loading';
-                    this.updateRemoteSuggestions();
                 }
-                else this.updateLocalSuggestions();
+                if(this.isRemote) {
+                    this.isLoading = true;
+                    this.updateRemoteSuggestions(query);
+                }
+                else {
+                    this.updateLocalSuggestions(query);
+                }
             },
 
-            updateLocalSuggestions({ keepState }={}) {
-                this.suggestions = this.searchStrategy.search(this.query);
-                if(!keepState) {
-                    this.state = 'searching';
-                }
+            updateLocalSuggestions(query) {
+                this.suggestions = this.searchStrategy.search(query);
             },
-            initState() {
-                this.state = this.value ? 'valuated' : 'initial';
-            },
+            updateRemoteSuggestions: debounce(function(query) {
+                return getAutocompleteSuggestions({
+                    url: this.remoteEndpoint,
+                    method: this.remoteMethod,
+                    locale: this.locale,
+                    searchAttribute: this.remoteSearchAttribute,
+                    query,
+                })
+                .then(suggestions => {
+                    this.suggestions = suggestions;
+                })
+                .finally(() => {
+                    this.isLoading = false;
+                });
+            }, 200),
+
             handleSelect(value) {
-                this.state = 'valuated';
                 this.$emit('input', value);
             },
             handleDropdownClose() {
-                if(this.state === 'searching')
-                    this.state = 'initial';
                 this.opened = false;
                 this.$emit('close');
             },
@@ -206,11 +226,9 @@
                 this.opened = true;
                 this.$emit('open');
             },
-            handleResetClick() {
-                this.state = 'initial';
-
+            handleClearButtonClicked() {
                 this.$emit('input', null);
-                this.$nextTick(()=>{
+                this.$nextTick(() => {
                     this.$refs.multiselect.activate();
                 });
             },
@@ -227,33 +245,17 @@
                 return this.localValues.find(this.itemMatchValue);
             }
         },
-        debounced: {
-            wait: 200,
-            async updateRemoteSuggestions() {
-                //console.log('remote');
-                try {
-                    let { data } = await this.callApi(this.query);
-                    this.state = 'searching';
-                    this.suggestions = data;
-                }
-                catch(e) {
-                    console.log('error', e)
-                }
-            },
-        },
         async created() {
             if(this.mode === 'local' && !this.searchKeys) {
                 warn(`Autocomplete (key: ${this.fieldKey}) has local mode but no searchKeys, default set to ['value']`);
             }
-
-            if(!this.isRemote) {
+            if(this.isRemote) {
+                this.ready = true;
+            } else {
                 this.$emit('input', this.findLocalValue(), { force: true });
+                await this.$nextTick();
+                this.ready = true;
             }
-            if(this.noResultItem) {
-                Object.defineProperty(this, 'state', { get:()=>'initial' });
-            }
-            await this.$nextTick();
-            this.initState();
         }
     }
 </script>

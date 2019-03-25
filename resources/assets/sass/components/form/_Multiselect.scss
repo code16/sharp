@@ -39,6 +39,10 @@
     }
   }
 
+  .multiselect__placeholder {
+    color: $text-03;
+  }
+
   .multiselect__select {
     @extend .SharpDropdown__arrow;
   }
