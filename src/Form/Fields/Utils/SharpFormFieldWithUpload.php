@@ -50,13 +50,19 @@ trait SharpFormFieldWithUpload
      * @param array|null $croppableFileTypes
      * @return static
      */
-    public function setCropRatio(string $ratio, array $croppableFileTypes = null)
+    public function setCropRatio(string $ratio = null, array $croppableFileTypes = null)
     {
-        $this->cropRatio = explode(":", $ratio);
-        
-        $this->croppableFileTypes = $croppableFileTypes
-            ? $this->formatFileExtension($croppableFileTypes)
-            : null;
+        if($ratio) {
+            $this->cropRatio = explode(":", $ratio);
+
+            $this->croppableFileTypes = $croppableFileTypes
+                ? $this->formatFileExtension($croppableFileTypes)
+                : null;
+
+        } else {
+            $this->cropRatio = null;
+            $this->croppableFileTypes = null;
+        }
 
         return $this;
     }
