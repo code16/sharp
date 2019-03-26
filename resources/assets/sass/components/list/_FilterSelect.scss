@@ -62,6 +62,9 @@
       top: 100%;
       margin-top: $list-offset;
     }
+    &__result-item__close-button {
+      display: none;
+    }
   }
   .SharpSelect {
     width: 100%;
