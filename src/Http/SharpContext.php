@@ -17,11 +17,32 @@ class SharpContext
     /**
      * @var string
      */
+    protected $entityKey;
+
+    /**
+     * @var string
+     */
     protected $action;
+
 
     public function setIsForm()
     {
         $this->page = "FORM";
+    }
+
+    public function setIsEntityList()
+    {
+        $this->page = "LIST";
+    }
+
+    public function setIsDashboard()
+    {
+        $this->page = "DASHBOARD";
+    }
+
+    public function setEntityKey($entityKey)
+    {
+        $this->entityKey = $entityKey;
     }
 
     /**
@@ -51,6 +72,22 @@ class SharpContext
     /**
      * @return bool
      */
+    public function isEntityList(): bool
+    {
+        return $this->page == "LIST";
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDashboard(): bool
+    {
+        return $this->page == "DASHBOARD";
+    }
+
+    /**
+     * @return bool
+     */
     public function isUpdate(): bool
     {
         return $this->isForm() && $this->action == "UPDATE";
@@ -72,6 +109,14 @@ class SharpContext
         return $this->isUpdate()
             ? $this->instanceId
             : null;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function entityKey()
+    {
+        return $this->entityKey;
     }
 
     /**

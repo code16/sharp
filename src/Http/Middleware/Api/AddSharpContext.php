@@ -31,14 +31,24 @@ class AddSharpContext
     {
         $segments = $request->segments();
 
-        if(count($segments) >= 4 && $segments[2] == "form") {
-            $this->context->setIsForm();
+        if(count($segments) > 3) {
+            $this->context->setEntityKey($segments[3]);
 
-            if (count($segments) == 5) {
-                $this->context->setIsUpdate($segments[4]);
+            if($segments[2] == "form") {
+                $this->context->setIsForm();
 
-            } else {
-                $this->context->setIsCreation();
+                if (count($segments) == 5) {
+                    $this->context->setIsUpdate($segments[4]);
+
+                } else {
+                    $this->context->setIsCreation();
+                }
+
+            } elseif($segments[2] == "list") {
+                $this->context->setIsEntityList();
+
+            } elseif($segments[2] == "dashboard") {
+                $this->context->setIsDashboard();
             }
         }
 

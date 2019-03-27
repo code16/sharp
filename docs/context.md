@@ -35,6 +35,7 @@ Here's a quick example:
 
 For now, `SharpContext` allows to:
 
+- grab the entityKey: `entityKey()`
 - (Form) know if we a on a creation or in an update case: `isUpdate()` and `isCreation()`
 - (Form) grab the instance id (in an update case): `instanceId()`
 
