@@ -141,7 +141,7 @@ class SharpFormDateField extends SharpFormField
      * @param string $displayFormat
      * @return $this
      */
-    public function setDisplayFormat(string $displayFormat)
+    public function setDisplayFormat(string $displayFormat = null)
     {
         $this->displayFormat = $displayFormat;
 
