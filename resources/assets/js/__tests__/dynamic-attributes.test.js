@@ -21,7 +21,7 @@ import {
 
 describe('Dynamic attributes', () => {
     beforeEach(() => {
-        jest.resetAllMocks();
+        jest.restoreAllMocks()
     });
 
     test('getDynamicAttributesOptions', () => {
