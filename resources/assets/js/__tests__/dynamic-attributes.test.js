@@ -167,12 +167,15 @@ describe('Dynamic attributes', () => {
             });
         });
 
-        test('resolve default', () => {
+        test('resolve default & empty', () => {
             jest.spyOn(dynamicAttributesUtil, 'getEmptyValueSources').mockImplementation(()=>(['field']));
             jest.spyOn(dynamicAttributesUtil, 'getDynamicAttributeOptions').mockImplementation(()=>({
                 default: 'defaultValue',
             }));
-            expect(resolveValue('attr', 'value', {})).toEqual({ isDefault: true, value:'defaultValue', });
+            expect(resolveValue('attr', 'value', {})).toEqual({ isEmpty: false, value:'defaultValue', });
+
+            getDynamicAttributeOptions.mockImplementation(()=>({}));
+            expect(resolveValue('attr', 'value', {})).toEqual({ isEmpty: true, value:undefined });
         });
     });
 
@@ -192,7 +195,7 @@ describe('Dynamic attributes', () => {
                 localValues: 'resolvedValue',
                 placeholder: 'resolvedValue',
             },
-            resolvedDefaultAttributes: [],
+            resolvedEmptyAttributes: [],
         });
 
         expect(resolveValue).toHaveBeenCalledWith('localValues', [], {
@@ -203,9 +206,9 @@ describe('Dynamic attributes', () => {
         });
     });
 
-    test('transformAttributes with defaults', () => {
+    test('transformAttributes with empty', () => {
         jest.spyOn(dynamicAttributesResolve, 'resolveValue').mockImplementation(()=>({
-            value:'defaultValue', isDefault: true
+            value:'defaultValue', isEmpty: true,
         }));
         expect(
             transformAttributes({
@@ -217,7 +220,7 @@ describe('Dynamic attributes', () => {
                 localValues: 'defaultValue',
                 placeholder: 'defaultValue',
             },
-            resolvedDefaultAttributes: ['localValues', 'placeholder'],
+            resolvedEmptyAttributes: ['localValues', 'placeholder'],
         });
     });
 

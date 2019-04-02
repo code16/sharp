@@ -20,15 +20,15 @@ export function transformAttributes(attributes, dynamicAttributes, contextData) 
                 dynamicAttributes,
                 contextData,
             });
-            const defaults = res.resolvedDefaultAttributes || [];
+            const emptyAttrs = res.resolvedEmptyAttributes || [];
 
-            if(resolvedData.isDefault) {
-                defaults.push(attributeName);
+            if(resolvedData.isEmpty) {
+                emptyAttrs.push(attributeName);
             }
 
             return {
                 ...res,
-                resolvedDefaultAttributes: defaults,
+                resolvedEmptyAttributes: emptyAttrs,
                 attributes: {
                     ...res.attributes,
                     [attributeName]: resolvedData.value,
@@ -38,6 +38,6 @@ export function transformAttributes(attributes, dynamicAttributes, contextData) 
 
     return {
         attributes: transformedData.attributes,
-        resolvedDefaultAttributes: transformedData.resolvedDefaultAttributes,
+        resolvedEmptyAttributes: transformedData.resolvedEmptyAttributes,
     };
 }

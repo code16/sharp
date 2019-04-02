@@ -50,7 +50,7 @@ export function resolveValue(attributeName, attributeValue, { dynamicAttributes,
     if(emptyValueSources.length > 0) {
         // warnEmptyValue(emptyValueSources, { sourceName, attributeName });
         return {
-            isDefault: true,
+            isEmpty: dynamicOptions.default == null,
             value: dynamicOptions.default,
         };
     }
