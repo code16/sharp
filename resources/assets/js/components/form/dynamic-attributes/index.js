@@ -1,5 +1,17 @@
 import { resolveValue } from "./resolve";
+import { getContextSources } from "./resolve";
 
+
+export function hasDependency(sourceKey, dynamicAttributes, attributes) {
+    return (dynamicAttributes || []).some(options => {
+        const attributeValue = attributes[options.name];
+        const contextSources = getContextSources({
+            dynamicOptions: options,
+            attributeValue,
+        });
+        return contextSources.includes(sourceKey);
+    });
+}
 
 export function transformAttributes(attributes, dynamicAttributes, contextData) {
     const transformedData = Object.entries(attributes || {})

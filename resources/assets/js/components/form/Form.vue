@@ -55,6 +55,7 @@
     // import SharpLocaleSelector from '../LocaleSelector.vue';
 
     import localize from '../../mixins/localize/form';
+    import { getDependantFieldsResetData } from "../../util/form";
 
     const noop = ()=>{};
 
@@ -152,11 +153,17 @@
                     }
                     return res;
                 },{})
-            }
+            },
         },
         methods: {
             updateData(key, value) {
-                this.$set(this.data,key,this.fieldLocalizedValue(key, value));
+                this.data = {
+                    ...this.data,
+                    ...getDependantFieldsResetData(this.fields, key,
+                        field => this.fieldLocalizedValue(field.key, null),
+                    ),
+                    [key]: this.fieldLocalizedValue(key, value),
+                }
             },
             updateVisibility(key, visibility) {
                 this.$set(this.fieldVisible, key, visibility);

@@ -2,11 +2,13 @@ import * as dynamicAttributesUtil from '../components/form/dynamic-attributes/ut
 import * as dynamicAttributesResolve from '../components/form/dynamic-attributes/resolve';
 
 import {
-    transformAttributes
+    transformAttributes,
+    hasDependency,
 } from "../components/form/dynamic-attributes";
 
 import {
     resolveValue,
+    getContextSources,
 } from '../components/form/dynamic-attributes/resolve';
 
 import {
@@ -85,6 +87,22 @@ describe('Dynamic attributes', () => {
                 field5: 'aaa'
             },
         })).toEqual(['field1', 'field2', 'field3']);
+    });
+
+    test('getContextSources', () => {
+        expect(getContextSources({
+            dynamicOptions: { type:'map', path:'path' }
+        })).toBe('path');
+
+        jest.spyOn(dynamicAttributesUtil, 'getSourcesFromTemplate')
+            .mockImplementation(()=>'templateResolvedSources');
+        expect(getContextSources({
+            dynamicOptions: { type:'template' },
+            attributeValue: '/name'
+        })).toBe('templateResolvedSources');
+        expect(getSourcesFromTemplate).toHaveBeenCalledWith('/name');
+
+        expect(getContextSources({})).toEqual([]);
     });
 
     describe('resolveValue', () => {
@@ -201,5 +219,33 @@ describe('Dynamic attributes', () => {
             },
             resolvedDefaultAttributes: ['localValues', 'placeholder'],
         });
+    });
+
+    test('hasDependency', () => {
+        jest.spyOn(dynamicAttributesResolve, 'getContextSources')
+            .mockImplementation(() => ['autocomplete']);
+
+        expect(
+            hasDependency(
+                'autocomplete', [
+                    { name: 'options' }
+                ],
+                { options: [] },
+            )
+        ).toBe(true);
+        expect(getContextSources).toHaveBeenCalledWith({
+            dynamicOptions: { name: 'options' },
+            attributeValue: [],
+        });
+
+        expect(
+            hasDependency(
+                'select', [
+                    { name: 'dynamicAttribute' }
+                ],
+                { dynamicAttribute: [] },
+            )
+        ).toBe(false);
+        expect(hasDependency()).toBe(false);
     });
 });

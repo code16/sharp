@@ -2,6 +2,7 @@ import * as util from '../../../util';
 import FieldContainer from '../FieldContainer';
 import { computeCondition } from './conditions';
 import { isLocalizableValueField } from "../../../mixins/localize/utils";
+import { transformAttributes } from "../dynamic-attributes";
 
 export function acceptCondition (fields, data, condition) {
     if(!condition)
@@ -52,6 +53,7 @@ export default {
         }
 
         let isVisible = acceptCondition(contextFields, contextData, field.conditionalDisplay);
+        const { attributes } = transformAttributes(field, field.dynamicAttributes, contextData);
 
         updateVisibility && updateVisibility(fieldKey, isVisible);
 
@@ -59,7 +61,7 @@ export default {
             ...data,
             attrs: {
                 fieldKey,
-                fieldProps: field,
+                fieldProps: attributes,
                 fieldType: field.type,
                 value: getValue($form, field, value, props.locale),
                 originalValue: value,
