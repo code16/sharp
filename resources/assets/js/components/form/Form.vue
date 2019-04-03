@@ -20,7 +20,7 @@
                                 <template slot-scope="fieldLayout">
                                     <sharp-field-display
                                         :field-key="fieldLayout.key"
-                                        :context-fields="isReadOnly ? readOnlyFields : fields"
+                                        :context-fields="isReadOnly ? readOnlyFields : transformedFields"
                                         :context-data="data"
                                         :field-layout="fieldLayout"
                                         :locale="fieldLocale[fieldLayout.key]"
@@ -55,7 +55,7 @@
     // import SharpLocaleSelector from '../LocaleSelector.vue';
 
     import localize from '../../mixins/localize/form';
-    import { getDependantFieldsResetData } from "../../util/form";
+    import { getDependantFieldsResetData, transformFields } from "../../util/form";
 
     const noop = ()=>{};
 
@@ -154,14 +154,18 @@
                     return res;
                 },{})
             },
+
+            transformedFields() {
+                return transformFields(this.fields, this.data);
+            },
         },
         methods: {
-            updateData(key, value) {
+            async updateData(key, value, { forced }) {
                 this.data = {
                     ...this.data,
-                    ...getDependantFieldsResetData(this.fields, key,
+                    ...(!forced ? getDependantFieldsResetData(this.fields, key,
                         field => this.fieldLocalizedValue(field.key, null),
-                    ),
+                    ) : null),
                     [key]: this.fieldLocalizedValue(key, value),
                 }
             },
@@ -173,11 +177,38 @@
             },
             mount({fields, layout, data={}, authorizations={}, locales,}) {
                 this.fields = fields;
-                this.layout = this.patchLayout(layout);
                 this.data = data;
+                this.layout = this.patchLayout(layout);
                 this.locales = locales;
-                // this.locale = locales && locales[0];
                 this.authorizations = authorizations;
+
+                this.fields['autocomplete_local'] = {
+                    ...this.fields['autocomplete_local'],
+                    dynamicAttributes: [
+                        {
+                            name: 'localValues',
+                            type: 'map',
+                            path: ['select_dropdown']
+                        }
+                    ],
+                    localValues: {
+                        1: [
+                            { id:1, label:'aaa' },
+                            { id:2, label:'bbb' },
+                            { id:3, label:'ccc' },
+                        ],
+                        2: [
+                            { id:4, label:'ddd' },
+                            { id:5, label:'eee' },
+                            { id:6, label:'fff' },
+                        ],
+                        3: [
+                            { id:7, label:'ggg' },
+                            { id:8, label:'hhh' },
+                            { id:9, label:'iii' },
+                        ]
+                    },
+                };
 
                 if(fields) {
                     this.fieldVisible = Object.keys(this.fields).reduce((res, fKey) => {

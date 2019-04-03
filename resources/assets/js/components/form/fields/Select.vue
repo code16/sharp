@@ -80,6 +80,7 @@
     import SharpMultiselect from '../../Multiselect';
     import SharpCheck from './Check.vue';
     import localize from '../../../mixins/localize/Select';
+    import {setDefaultValue} from "../../../util/field";
 
     export default {
         name: 'SharpSelect',
@@ -169,7 +170,9 @@
         },
         created() {
             if(!this.clearable && this.value == null && this.options.length>0) {
-                this.$emit('input', this.options[0].id);
+                setDefaultValue(this, 'options', () => {
+                    this.$emit('input', this.options[0].id, { force:true });
+                });
             }
         }
     }

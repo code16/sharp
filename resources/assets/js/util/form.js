@@ -1,4 +1,4 @@
-import { hasDependency } from "../components/form/dynamic-attributes";
+import { hasDependency, transformAttributes } from "../components/form/dynamic-attributes";
 
 
 export function getDependantFieldsResetData(fields, key, transformValue) {
@@ -10,4 +10,23 @@ export function getDependantFieldsResetData(fields, key, transformValue) {
                 ? transformValue(field, null)
                 : null,
         }), {});
+}
+
+export function transformFields(fields, data) {
+    return Object.entries(fields).reduce((res, [fieldKey, field]) => {
+        const {
+            attributes,
+            resolvedEmptyAttributes,
+        } = transformAttributes(field, field.dynamicAttributes, data);
+
+        const readOnly = resolvedEmptyAttributes.length > 0;
+
+        return {
+            ...res,
+            [fieldKey]: {
+                ...attributes,
+                readOnly,
+            },
+        };
+    }, {});
 }
