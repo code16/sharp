@@ -245,6 +245,11 @@
                     return null;
                 }
                 return this.localValues.find(this.itemMatchValue);
+            },
+            async setDefault() {
+                this.$emit('input', this.findLocalValue(), { force: true });
+                await this.$nextTick();
+                this.ready = true;
             }
         },
         created() {
@@ -254,11 +259,9 @@
             if(this.isRemote) {
                 this.ready = true;
             } else {
-                setDefaultValue(this, async () => {
-                    this.$emit('input', this.findLocalValue(), { force: true });
-                    await this.$nextTick();
-                    this.ready = true;
-                }, 'localValues');
+                setDefaultValue(this, this.setDefault, {
+                    dependantAttributes: ['localValues'],
+                });
             }
         }
     }

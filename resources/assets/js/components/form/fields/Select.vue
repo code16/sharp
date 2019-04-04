@@ -166,14 +166,17 @@
             },
             handleRadioChanged(optId) {
                 this.$emit('input', optId);
-            }
+            },
+            setDefault() {
+                if(!this.clearable && this.value == null && this.options.length>0) {
+                    this.$emit('input', this.options[0].id, { force:true });
+                }
+            },
         },
         created() {
-            if(!this.clearable && this.value == null && this.options.length>0) {
-                setDefaultValue(this, 'options', () => {
-                    this.$emit('input', this.options[0].id, { force:true });
-                });
-            }
+            setDefaultValue(this, this.setDefault, {
+                dependantAttributes: ['options'],
+            });
         }
     }
 </script>
