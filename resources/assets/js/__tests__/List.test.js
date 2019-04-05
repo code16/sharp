@@ -246,7 +246,7 @@ describe('list-field', () => {
         });
         expect($field.vm.$attrs).toEqual({
             'field-key': 'name',
-            'context-fields': { name: { type:'text' } },
+            'context-fields': { name: { type:'text', readOnly:false, } },
             'context-data': expect.objectContaining({ id: 0, name: 'myName', _fieldsLocale: {} }),
             'config-identifier': 'name',
             'update-data': 'update 0'
