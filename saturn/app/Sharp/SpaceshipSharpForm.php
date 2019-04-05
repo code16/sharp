@@ -69,6 +69,46 @@ class SpaceshipSharpForm extends SharpForm
                 )
 
         )->addField(
+            SharpFormSelectField::make(
+                "brand",
+                SpaceshipType::all()
+                    ->mapWithKeys(function($spaceshipType) {
+                        return [
+                            $spaceshipType->id => collect($spaceshipType->brands)
+                                ->mapWithKeys(function($values, $key) {
+                                    return [$key => $key];
+                                })->all()
+                        ];
+                    })
+                ->all()
+            )
+                ->setLabel("Brand")
+                ->setDisplayAsDropdown()
+                ->setOptionsLinkedTo("type_id")
+
+        )->addField(
+            SharpFormSelectField::make(
+                "model",
+                SpaceshipType::all()
+                    ->mapWithKeys(function($spaceshipType) {
+                        return [
+                            $spaceshipType->id => collect($spaceshipType->brands)
+                                ->mapWithKeys(function($values, $key) {
+                                    return [
+                                        $key => collect($values)->mapWithKeys(function($value) {
+                                            return [$value => $value];
+                                        })->all()
+                                    ];
+                                })->all()
+                        ];
+                    })
+                    ->all()
+            )
+                ->setLabel("Model")
+                ->setDisplayAsDropdown()
+                ->setOptionsLinkedTo("type_id", "brand")
+
+        )->addField(
             SharpFormUploadField::make("picture")
                 ->setLabel("Picture")
                 ->setFileFilterImages()
@@ -150,6 +190,7 @@ class SpaceshipSharpForm extends SharpForm
             $tab->addColumn(6, function(FormLayoutColumn $column) {
                 $column->withSingleField("name")
                     ->withSingleField("type_id")
+                    ->withFields("brand|6", "model|6")
                     ->withSingleField("pilots")
                     ->withSingleField("reviews", function(FormLayoutColumn $listItem) {
                         $listItem->withSingleField("starts_at")
