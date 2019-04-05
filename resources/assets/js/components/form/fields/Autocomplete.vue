@@ -73,6 +73,7 @@
     import { lang } from '../../../mixins/Localization';
     import { getAutocompleteSuggestions } from "../../../api";
     import localize from '../../../mixins/localize/Autocomplete';
+    import { setDefaultValue } from "../../../util/field";
 
     export default {
         name:'SharpAutocomplete',
@@ -138,7 +139,8 @@
             showPointer: {
                 type:Boolean,
                 default:true
-            }
+            },
+            dynamicAttributes: Array,
         },
         data() {
             return {
@@ -243,18 +245,23 @@
                     return null;
                 }
                 return this.localValues.find(this.itemMatchValue);
+            },
+            async setDefault() {
+                this.$emit('input', this.findLocalValue(), { force: true });
+                await this.$nextTick();
+                this.ready = true;
             }
         },
-        async created() {
+        created() {
             if(this.mode === 'local' && !this.searchKeys) {
                 warn(`Autocomplete (key: ${this.fieldKey}) has local mode but no searchKeys, default set to ['value']`);
             }
             if(this.isRemote) {
                 this.ready = true;
             } else {
-                this.$emit('input', this.findLocalValue(), { force: true });
-                await this.$nextTick();
-                this.ready = true;
+                setDefaultValue(this, this.setDefault, {
+                    dependantAttributes: ['localValues'],
+                });
             }
         }
     }

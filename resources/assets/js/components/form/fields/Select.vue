@@ -80,6 +80,7 @@
     import SharpMultiselect from '../../Multiselect';
     import SharpCheck from './Check.vue';
     import localize from '../../../mixins/localize/Select';
+    import {setDefaultValue} from "../../../util/field";
 
     export default {
         name: 'SharpSelect',
@@ -96,7 +97,8 @@
             uniqueIdentifier: String,
             options: {
                 type: Array,
-                required: true
+                required: true,
+                default: ()=>[],
             },
             multiple: {
                 type: Boolean,
@@ -126,6 +128,11 @@
         data() {
             return {
                 checkboxes: this.value
+            }
+        },
+        watch: {
+            options() {
+                this.init();
             }
         },
         computed: {
@@ -165,12 +172,20 @@
             },
             handleRadioChanged(optId) {
                 this.$emit('input', optId);
+            },
+            setDefault() {
+                if(!this.clearable && this.value == null && this.options.length>0) {
+                    this.$emit('input', this.options[0].id, { force:true });
+                }
+            },
+            init() {
+                setDefaultValue(this, this.setDefault, {
+                    dependantAttributes: ['options'],
+                });
             }
         },
         created() {
-            if(!this.clearable && this.value == null && this.options.length>0) {
-                this.$emit('input', this.options[0].id);
-            }
+            this.init();
         }
     }
 </script>

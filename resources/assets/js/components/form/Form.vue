@@ -20,7 +20,7 @@
                                 <template slot-scope="fieldLayout">
                                     <sharp-field-display
                                         :field-key="fieldLayout.key"
-                                        :context-fields="isReadOnly ? readOnlyFields : fields"
+                                        :context-fields="isReadOnly ? readOnlyFields : transformedFields"
                                         :context-data="data"
                                         :field-layout="fieldLayout"
                                         :locale="fieldLocale[fieldLayout.key]"
@@ -55,7 +55,7 @@
     // import SharpLocaleSelector from '../LocaleSelector.vue';
 
     import localize from '../../mixins/localize/form';
-    import { getDependantFieldsResetData } from "../../util/form";
+    import { getDependantFieldsResetData, transformFields } from "../../util/form";
 
     const noop = ()=>{};
 
@@ -154,14 +154,18 @@
                     return res;
                 },{})
             },
+
+            transformedFields() {
+                return transformFields(this.fields, this.data);
+            },
         },
         methods: {
-            updateData(key, value) {
+            async updateData(key, value, { forced } = {}) {
                 this.data = {
                     ...this.data,
-                    ...getDependantFieldsResetData(this.fields, key,
+                    ...(!forced ? getDependantFieldsResetData(this.fields, key,
                         field => this.fieldLocalizedValue(field.key, null),
-                    ),
+                    ) : null),
                     [key]: this.fieldLocalizedValue(key, value),
                 }
             },
@@ -173,10 +177,9 @@
             },
             mount({fields, layout, data={}, authorizations={}, locales,}) {
                 this.fields = fields;
-                this.layout = this.patchLayout(layout);
                 this.data = data;
+                this.layout = this.patchLayout(layout);
                 this.locales = locales;
-                // this.locale = locales && locales[0];
                 this.authorizations = authorizations;
 
                 if(fields) {

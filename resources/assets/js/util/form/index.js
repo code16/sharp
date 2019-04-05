@@ -1,4 +1,4 @@
-import { hasDependency } from "../components/form/dynamic-attributes";
+import { hasDependency } from "../../components/form/dynamic-attributes";
 
 
 export function getDependantFieldsResetData(fields, key, transformValue) {
@@ -11,3 +11,7 @@ export function getDependantFieldsResetData(fields, key, transformValue) {
                 : null,
         }), {});
 }
+
+export {
+    transformFields
+} from './transform-fields';

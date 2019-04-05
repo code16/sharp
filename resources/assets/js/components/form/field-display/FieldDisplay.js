@@ -53,10 +53,6 @@ export default {
         }
 
         let isVisible = acceptCondition(contextFields, contextData, field.conditionalDisplay);
-        const {
-            attributes,
-            resolvedEmptyAttributes,
-        } = transformAttributes(field, field.dynamicAttributes, contextData);
 
         updateVisibility && updateVisibility(fieldKey, isVisible);
 
@@ -64,10 +60,7 @@ export default {
             ...data,
             attrs: {
                 fieldKey,
-                fieldProps: {
-                    ...attributes,
-                    readOnly: resolvedEmptyAttributes.length > 0,
-                },
+                fieldProps: field,
                 fieldType: field.type,
                 value: getValue($form, field, value, props.locale),
                 originalValue: value,
