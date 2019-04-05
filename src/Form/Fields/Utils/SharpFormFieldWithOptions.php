@@ -26,10 +26,38 @@ trait SharpFormFieldWithOptions
         }
 
         // Simple [key => value] array case
-        return $options->map(function($label, $id) {
-            return [
-                "id" => $id, "label" => $label
-            ];
-        })->values()->all();
+        return $options
+            ->map(function($label, $id) {
+                return compact('id', 'label');
+            })
+            ->values()
+            ->all();
+    }
+
+    /**
+     * @param array|Collection $options
+     * @param int $depth
+     * @return array
+     */
+    protected static function formatDynamicOptions(&$options, int $depth)
+    {
+        if(! sizeof($options)) {
+            return [];
+        }
+
+        return collect($options)
+            ->map(function($values, $masterKey) use($depth) {
+                if($depth > 1) {
+                    return self::formatDynamicOptions($values, $depth-1);
+                }
+
+                return collect($values)
+                    ->map(function($label, $id) {
+                        return compact('id', 'label');
+                    })
+                    ->values()
+                    ->all();
+            })
+            ->all();
     }
 }

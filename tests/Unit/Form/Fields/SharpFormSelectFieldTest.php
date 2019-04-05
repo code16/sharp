@@ -151,6 +151,109 @@ class SharpFormSelectFieldTest extends SharpTestCase
         );
     }
 
+    /** @test */
+    function we_can_define_linked_options_with_dynamic_attributes()
+    {
+        $formField = $this->getDefaultSelect([
+            "A" => [
+                "A1" => "test A1",
+                "A2" => "test A2"
+            ],
+            "B" => [
+                "B1" => "test B1",
+                "B2" => "test B2"
+            ]
+        ])->setOptionsLinkedTo("master");
+
+        $this->assertArrayContainsSubset(
+            ["options" => [
+                "A" => [
+                    ["id" => "A1", "label" => "test A1"],
+                    ["id" => "A2", "label" => "test A2"],
+                ],
+                "B" => [
+                    ["id" => "B1", "label" => "test B1"],
+                    ["id" => "B2", "label" => "test B2"],
+                ]
+            ]],
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_linked_options_with_dynamic_attributes_and_localization()
+    {
+        $formField = $this->getDefaultSelect([
+            "A" => [
+                "A1" => ["fr" => "test A1 fr", "en" => "test A1 en"],
+                "A2" => ["fr" => "test A2 fr", "en" => "test A2 en"]
+            ],
+            "B" => [
+                "B1" => ["fr" => "test B1 fr", "en" => "test B1 en"],
+                "B2" => ["fr" => "test B2 fr", "en" => "test B2 en"]
+            ]
+        ])->setOptionsLinkedTo("master")->setLocalized();
+
+        $this->assertArrayContainsSubset(
+            ["options" => [
+                "A" => [
+                    ["id" => "A1", "label" => ["fr" => "test A1 fr", "en" => "test A1 en"]],
+                    ["id" => "A2", "label" => ["fr" => "test A2 fr", "en" => "test A2 en"]],
+                ],
+                "B" => [
+                    ["id" => "B1", "label" => ["fr" => "test B1 fr", "en" => "test B1 en"]],
+                    ["id" => "B2", "label" => ["fr" => "test B2 fr", "en" => "test B2 en"]],
+                ]
+            ]],
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_linked_options_with_dynamic_attributes_on_multiple_master_fields()
+    {
+        $formField = $this->getDefaultSelect([
+            "A" => [
+                "A1" => [
+                    "A11" => "test A11",
+                    "A12" => "test A12"
+                ],
+                "A2" => [
+                    "A21" => "test A21",
+                    "A22" => "test A22"
+                ],
+            ],
+            "B" => [
+                "B1" => [
+                    "B11" => "test B11",
+                    "B12" => "test B12"
+                ]
+            ]
+        ])->setOptionsLinkedTo("master", "master2");
+
+        $this->assertArrayContainsSubset(
+            ["options" => [
+                "A" => [
+                    "A1" => [
+                        ["id" => "A11", "label" => "test A11"],
+                        ["id" => "A12", "label" => "test A12"],
+                    ],
+                    "A2" => [
+                        ["id" => "A21", "label" => "test A21"],
+                        ["id" => "A22", "label" => "test A22"],
+                    ]
+                ],
+                "B" => [
+                    "B1" => [
+                        ["id" => "B11", "label" => "test B11"],
+                        ["id" => "B12", "label" => "test B12"],
+                    ]
+                ]
+            ]],
+            $formField->toArray()
+        );
+    }
+
     /**
      * @param array|null $options
      * @return SharpFormSelectField
