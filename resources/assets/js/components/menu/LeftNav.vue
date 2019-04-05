@@ -8,31 +8,35 @@
         <div class="SharpLeftNav__top-icon">
             <i class="fa" :class="currentIcon"></i>
         </div>
-        <div class="SharpLeftNav__title-container">
-            <h2 class="SharpLeftNav__title">{{ title }}</h2>
+        <div class="flex-grow-0">
+            <div class="SharpLeftNav__title-container position-relative">
+                <h2 class="SharpLeftNav__title">{{ title }}</h2>
+            </div>
         </div>
-        <template v-if="ready">
-            <div class="SharpLeftNav__content d-flex flex-column h-100">
-                <div class="SharpLeftNav__inner flex-grow-1" style="min-height: 0">
-                    <GlobalFilters @open="handleGlobalFilterOpened" @close="handleGlobalFilterClosed" />
-                    <slot />
-                </div>
-                <div class="flex-grow-0">
-                    <div class="SharpLeftNav__collapse" @click.stop="collapsed = !collapsed">
-                        <a class="SharpLeftNav__collapse-link" href="#" @click.prevent>
-                            <svg class="SharpLeftNav__collapse-arrow" width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd">
-                                <path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path>
-                            </svg>
-                        </a>
+        <div class="flex-grow-1" style="min-height: 0">
+            <template v-if="ready">
+                <div class="SharpLeftNav__content d-flex flex-column h-100">
+                    <div class="SharpLeftNav__inner flex-grow-1" style="min-height: 0">
+                        <GlobalFilters @open="handleGlobalFilterOpened" @close="handleGlobalFilterClosed" />
+                        <slot />
+                    </div>
+                    <div class="flex-grow-0">
+                        <div class="SharpLeftNav__collapse" @click.stop="collapsed = !collapsed">
+                            <a class="SharpLeftNav__collapse-link" href="#" @click.prevent>
+                                <svg class="SharpLeftNav__collapse-arrow" width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd">
+                                    <path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path>
+                                </svg>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </template>
-        <template v-else>
-            <div class="d-flex align-items-center justify-content-center h-100">
-                <SharpLoading visible inline small />
-            </div>
-        </template>
+            </template>
+            <template v-else>
+                <div class="d-flex align-items-center justify-content-center h-100">
+                    <SharpLoading visible inline small />
+                </div>
+            </template>
+        </div>
     </nav>
 </template>
 
