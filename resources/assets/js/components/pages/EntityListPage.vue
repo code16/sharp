@@ -42,9 +42,9 @@
                     <SharpDataListRow :url="instanceFormUrl(item)" :columns="columns" :row="item">
                         <template v-if="hasActionsColumn">
                             <template slot="append">
-                                <div class="row">
+                                <div class="row justify-content-end justify-content-md-start mx-n2">
                                     <template v-if="instanceHasState(item)">
-                                        <div class="col-auto col-md-12 my-1">
+                                        <div class="col-auto col-md-12 my-1 px-2">
                                             <SharpDropdown class="SharpEntityList__state-dropdown" :disabled="!instanceHasStateAuthorization(item)">
                                                 <template slot="text">
                                                     <SharpStateIcon :color="instanceStateIconColor(item)" />
@@ -64,7 +64,7 @@
                                         </div>
                                     </template>
                                     <template v-if="instanceHasCommands(item)">
-                                        <div class="col-auto col-md-12 my-1">
+                                        <div class="col-auto col-md-12 my-1 px-2">
                                             <SharpCommandsDropdown
                                                 class="SharpEntityList__commands-dropdown"
                                                 :commands="instanceCommands(item)"
