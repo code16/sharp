@@ -182,33 +182,33 @@
                 this.locales = locales;
                 this.authorizations = authorizations;
 
-                this.fields['autocomplete_local'] = {
-                    ...this.fields['autocomplete_local'],
-                    dynamicAttributes: [
-                        {
-                            name: 'localValues',
-                            type: 'map',
-                            path: ['select_dropdown']
-                        }
-                    ],
-                    localValues: {
-                        1: [
-                            { id:1, label:'aaa' },
-                            { id:2, label:'bbb' },
-                            { id:3, label:'ccc' },
-                        ],
-                        2: [
-                            { id:4, label:'ddd' },
-                            { id:5, label:'eee' },
-                            { id:6, label:'fff' },
-                        ],
-                        3: [
-                            { id:7, label:'ggg' },
-                            { id:8, label:'hhh' },
-                            { id:9, label:'iii' },
-                        ]
-                    },
-                };
+                // this.fields['autocomplete_local'] = {
+                //     ...this.fields['autocomplete_local'],
+                //     dynamicAttributes: [
+                //         {
+                //             name: 'localValues',
+                //             type: 'map',
+                //             path: ['select_dropdown']
+                //         }
+                //     ],
+                //     localValues: {
+                //         1: [
+                //             { id:1, label:'aaa' },
+                //             { id:2, label:'bbb' },
+                //             { id:3, label:'ccc' },
+                //         ],
+                //         2: [
+                //             { id:4, label:'ddd' },
+                //             { id:5, label:'eee' },
+                //             { id:6, label:'fff' },
+                //         ],
+                //         3: [
+                //             { id:7, label:'ggg' },
+                //             { id:8, label:'hhh' },
+                //             { id:9, label:'iii' },
+                //         ]
+                //     },
+                // };
 
                 if(fields) {
                     this.fieldVisible = Object.keys(this.fields).reduce((res, fKey) => {
