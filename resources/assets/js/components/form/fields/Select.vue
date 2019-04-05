@@ -97,7 +97,8 @@
             uniqueIdentifier: String,
             options: {
                 type: Array,
-                required: true
+                required: true,
+                default: ()=>[],
             },
             multiple: {
                 type: Boolean,
@@ -127,6 +128,11 @@
         data() {
             return {
                 checkboxes: this.value
+            }
+        },
+        watch: {
+            options() {
+                this.init();
             }
         },
         computed: {
@@ -172,11 +178,14 @@
                     this.$emit('input', this.options[0].id, { force:true });
                 }
             },
+            init() {
+                setDefaultValue(this, this.setDefault, {
+                    dependantAttributes: ['options'],
+                });
+            }
         },
         created() {
-            setDefaultValue(this, this.setDefault, {
-                dependantAttributes: ['options'],
-            });
+            this.init();
         }
     }
 </script>
