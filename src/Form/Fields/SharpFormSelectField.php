@@ -146,9 +146,11 @@ class SharpFormSelectField extends SharpFormField
     public function setOptionsLinkedTo(string ...$fieldKeys)
     {
         $this->dynamicAttributes = [
-            "name" => "options",
-            "type" => "map",
-            "path" => $fieldKeys
+            [
+                "name" => "options",
+                "type" => "map",
+                "path" => $fieldKeys
+            ]
         ];
 
         return $this;
@@ -205,7 +207,7 @@ class SharpFormSelectField extends SharpFormField
         return parent::buildArray(
             array_merge([
                 "options" => $this->dynamicAttributes
-                    ? self::formatDynamicOptions($this->options, count($this->dynamicAttributes["path"]))
+                    ? self::formatDynamicOptions($this->options, count($this->dynamicAttributes[0]["path"]))
                     : self::formatOptions($this->options),
                 "multiple" => $this->multiple,
                 "clearable" => $this->clearable,
