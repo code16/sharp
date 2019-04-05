@@ -160,7 +160,7 @@
             },
         },
         methods: {
-            async updateData(key, value, { forced }) {
+            async updateData(key, value, { forced } = {}) {
                 this.data = {
                     ...this.data,
                     ...(!forced ? getDependantFieldsResetData(this.fields, key,
