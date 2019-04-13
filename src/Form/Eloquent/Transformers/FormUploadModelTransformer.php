@@ -46,7 +46,7 @@ class FormUploadModelTransformer implements SharpAttributeTransformer
     {
         return ($upload->file_name ? [
                 "name" => $upload->file_name,
-                "thumbnail" => $upload->thumbnail(1000, 400),
+                "thumbnail" => $upload->thumbnail(config("sharp.uploads.default_thumbnail.width", 1000), config("sharp.uploads.default_thumbnail.height", 400)),
                 "size" => $upload->size,
             ] : [])
             + ($upload->custom_properties ?? [])
