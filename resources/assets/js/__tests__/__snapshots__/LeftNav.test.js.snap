@@ -5,14 +5,18 @@ exports[`left-nav can mount "not ready" LeftNav 1`] = `
 	<div class="SharpLeftNav__top-icon">
 		<i class="fa"></i>
 	</div>
-	<div class="SharpLeftNav__title-container">
-		<h2 class="SharpLeftNav__title"></h2>
+	<div class="flex-grow-0">
+		<div class="SharpLeftNav__title-container position-relative">
+			<h2 class="SharpLeftNav__title"></h2>
+		</div>
 	</div>
-	<div class="d-flex align-items-center justify-content-center h-100">
-		<div class="SharpLoading SharpLoading--small">
-			<svg viewBox="-75 -75 150 150" class="SharpLoading__svg">
-				<circle cx="0" cy="0" r="37.5"></circle>
-			</svg>
+	<div class="flex-grow-1" style="min-height: 0;">
+		<div class="d-flex align-items-center justify-content-center h-100">
+			<div class="SharpLoading SharpLoading--small">
+				<svg viewBox="-75 -75 150 150" class="SharpLoading__svg">
+					<circle cx="0" cy="0" r="37.5"></circle>
+				</svg>
+			</div>
 		</div>
 	</div>
 </nav>
@@ -23,21 +27,25 @@ exports[`left-nav can mount "with current icon" LeftNav 1`] = `
 	<div class="SharpLeftNav__top-icon">
 		<i class="fa CURRENT_ICON"></i>
 	</div>
-	<div class="SharpLeftNav__title-container">
-		<h2 class="SharpLeftNav__title"></h2>
-	</div>
-	<div class="SharpLeftNav__content d-flex flex-column h-100">
-		<div class="SharpLeftNav__inner flex-grow-1" style="min-height: 0;">
-			<div class="SharpGlobalFilters"></div>
-			<div>NAV CONTENT</div>
+	<div class="flex-grow-0">
+		<div class="SharpLeftNav__title-container position-relative">
+			<h2 class="SharpLeftNav__title"></h2>
 		</div>
-		<div class="flex-grow-0">
-			<div class="SharpLeftNav__collapse">
-				<a href="#" class="SharpLeftNav__collapse-link">
-					<svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd" class="SharpLeftNav__collapse-arrow">
-						<path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path>
-					</svg>
-				</a>
+	</div>
+	<div class="flex-grow-1" style="min-height: 0;">
+		<div class="SharpLeftNav__content d-flex flex-column h-100">
+			<div class="SharpLeftNav__inner flex-grow-1" style="min-height: 0;">
+				<div class="SharpGlobalFilters"></div>
+				<div>NAV CONTENT</div>
+			</div>
+			<div class="flex-grow-0">
+				<div class="SharpLeftNav__collapse">
+					<a href="#" class="SharpLeftNav__collapse-link">
+						<svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd" class="SharpLeftNav__collapse-arrow">
+							<path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path>
+						</svg>
+					</a>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -49,21 +57,25 @@ exports[`left-nav can mount "with state" LeftNav 1`] = `
 	<div class="SharpLeftNav__top-icon">
 		<i class="fa"></i>
 	</div>
-	<div class="SharpLeftNav__title-container">
-		<h2 class="SharpLeftNav__title"></h2>
-	</div>
-	<div class="SharpLeftNav__content d-flex flex-column h-100">
-		<div class="SharpLeftNav__inner flex-grow-1" style="min-height: 0;">
-			<div class="SharpGlobalFilters"></div>
-			<div>NAV CONTENT</div>
+	<div class="flex-grow-0">
+		<div class="SharpLeftNav__title-container position-relative">
+			<h2 class="SharpLeftNav__title"></h2>
 		</div>
-		<div class="flex-grow-0">
-			<div class="SharpLeftNav__collapse">
-				<a href="#" class="SharpLeftNav__collapse-link">
-					<svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd" class="SharpLeftNav__collapse-arrow">
-						<path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path>
-					</svg>
-				</a>
+	</div>
+	<div class="flex-grow-1" style="min-height: 0;">
+		<div class="SharpLeftNav__content d-flex flex-column h-100">
+			<div class="SharpLeftNav__inner flex-grow-1" style="min-height: 0;">
+				<div class="SharpGlobalFilters"></div>
+				<div>NAV CONTENT</div>
+			</div>
+			<div class="flex-grow-0">
+				<div class="SharpLeftNav__collapse">
+					<a href="#" class="SharpLeftNav__collapse-link">
+						<svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd" class="SharpLeftNav__collapse-arrow">
+							<path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path>
+						</svg>
+					</a>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -75,21 +87,25 @@ exports[`left-nav can mount LeftNav 1`] = `
 	<div class="SharpLeftNav__top-icon">
 		<i class="fa"></i>
 	</div>
-	<div class="SharpLeftNav__title-container">
-		<h2 class="SharpLeftNav__title"></h2>
-	</div>
-	<div class="SharpLeftNav__content d-flex flex-column h-100">
-		<div class="SharpLeftNav__inner flex-grow-1" style="min-height: 0;">
-			<div class="SharpGlobalFilters"></div>
-			<div>NAV CONTENT</div>
+	<div class="flex-grow-0">
+		<div class="SharpLeftNav__title-container position-relative">
+			<h2 class="SharpLeftNav__title"></h2>
 		</div>
-		<div class="flex-grow-0">
-			<div class="SharpLeftNav__collapse">
-				<a href="#" class="SharpLeftNav__collapse-link">
-					<svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd" class="SharpLeftNav__collapse-arrow">
-						<path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path>
-					</svg>
-				</a>
+	</div>
+	<div class="flex-grow-1" style="min-height: 0;">
+		<div class="SharpLeftNav__content d-flex flex-column h-100">
+			<div class="SharpLeftNav__inner flex-grow-1" style="min-height: 0;">
+				<div class="SharpGlobalFilters"></div>
+				<div>NAV CONTENT</div>
+			</div>
+			<div class="flex-grow-0">
+				<div class="SharpLeftNav__collapse">
+					<a href="#" class="SharpLeftNav__collapse-link">
+						<svg width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd" class="SharpLeftNav__collapse-arrow">
+							<path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path>
+						</svg>
+					</a>
+				</div>
 			</div>
 		</div>
 	</div>
