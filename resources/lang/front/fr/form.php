@@ -20,6 +20,7 @@ return [
     'geolocation.modal.geocode_input.placeholder' => 'Adresse',
     'geolocation.modal.geocode_input.message.error' => "Erreur: Impossible de contacter le service de Geocoding",
     'geolocation.modal.geocode_input.message.no_results' => 'Aucun résultats pour ":query"',
+    'geolocation.modal.search_button' => 'Rechercher',
 
     'upload.browse_button' => 'Parcourir...',
     'upload.remove_button' => 'Supprimer',
