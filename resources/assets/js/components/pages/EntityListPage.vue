@@ -2,7 +2,7 @@
     <div class="SharpEntityListPage">
         <template v-if="ready">
             <SharpActionBarList
-                :count="itemsCount"
+                :count="totalCount"
                 :search="search"
                 :filters="filters"
                 :filters-values="filtersValues"
@@ -172,9 +172,6 @@
             /**
              * Action bar computed data
              */
-            itemsCount() {
-                return (this.data.items || []).length;
-            },
             allowedEntityCommands() {
                 return (this.config.commands.entity || [])
                     .map(group => group.filter(command => command.authorization))

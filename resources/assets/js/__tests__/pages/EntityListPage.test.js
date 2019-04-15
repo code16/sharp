@@ -54,7 +54,9 @@ describe('EntityListPage', () => {
         return merge({
             layout: [],
             containers: {},
-            data: {},
+            data: {
+                totalCount: 0,
+            },
             config: {
                 commands: {}
             },
@@ -136,19 +138,6 @@ describe('EntityListPage', () => {
                 }
             });
             expect(wrapper.vm.apiPath).toEqual('list/entity-key');
-        });
-
-
-        test('itemsCount', () => {
-            const wrapper = createWrapper();
-            wrapper.setData({
-                data: { items: null }
-            });
-            expect(wrapper.vm.itemsCount).toEqual(0);
-            wrapper.setData({
-                data: { items: [{}] }
-            });
-            expect(wrapper.vm.itemsCount).toEqual(1);
         });
 
         test('allowedEntityCommands', () => {
