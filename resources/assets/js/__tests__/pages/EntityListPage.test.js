@@ -315,7 +315,7 @@ describe('EntityListPage', () => {
                 search: 'search'
             });
             wrapper.vm.handleSearchSubmitted();
-            expect(wrapper.vm.$router.push).toHaveBeenCalledWith({ query: { search:'search' } })
+            expect(wrapper.vm.$router.push).toHaveBeenCalledWith({ query: { search:'search', page: 1, } })
         });
 
         test('handleFilterChanged', ()=>{
@@ -329,6 +329,7 @@ describe('EntityListPage', () => {
             expect(wrapper.vm.$router.push).toHaveBeenCalledWith({
                 query: {
                     filter: 'nextQuery',
+                    page: 1,
                 },
             });
         });

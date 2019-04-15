@@ -231,13 +231,20 @@
                 this.search = search;
             },
             handleSearchSubmitted() {
-                this.$router.push({ query: { ...this.$route.query, search:this.search } });
+                this.$router.push({
+                    query: {
+                        ...this.$route.query,
+                        search: this.search,
+                        page: 1,
+                    }
+                });
             },
             handleFilterChanged(filter, value) {
                 this.$router.push({
                     query: {
                         ...this.$route.query,
                         ...this.filterNextQuery({ filter, value }),
+                        page: 1,
                     }
                 });
             },
