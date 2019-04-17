@@ -16,7 +16,7 @@
                             </template>
                         </div>
                         <div class="col-auto pl-2">
-                            <SharpButton outline>Rechercher</SharpButton>
+                            <SharpButton outline>{{ lSub('search_button') }}</SharpButton>
                         </div>
                     </div>
                 </form>

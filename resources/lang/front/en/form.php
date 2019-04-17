@@ -20,6 +20,7 @@ return [
     'geolocation.modal.geocode_input.placeholder' => 'Full address',
     'geolocation.modal.geocode_input.message.error' => "Error: Can't reach Geocoding server",
     'geolocation.modal.geocode_input.message.no_results' => 'No results for ":query"',
+    'geolocation.modal.search_button' => 'Search',
 
     'upload.browse_button' => 'Browse...',
     'upload.remove_button' => 'Remove',

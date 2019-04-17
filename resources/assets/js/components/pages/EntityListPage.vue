@@ -2,7 +2,7 @@
     <div class="SharpEntityListPage">
         <template v-if="ready">
             <SharpActionBarList
-                :count="itemsCount"
+                :count="totalCount"
                 :search="search"
                 :filters="filters"
                 :filters-values="filtersValues"
@@ -172,9 +172,6 @@
             /**
              * Action bar computed data
              */
-            itemsCount() {
-                return (this.data.items || []).length;
-            },
             allowedEntityCommands() {
                 return (this.config.commands.entity || [])
                     .map(group => group.filter(command => command.authorization))
@@ -231,13 +228,20 @@
                 this.search = search;
             },
             handleSearchSubmitted() {
-                this.$router.push({ query: { ...this.$route.query, search:this.search } });
+                this.$router.push({
+                    query: {
+                        ...this.$route.query,
+                        search: this.search,
+                        page: 1,
+                    }
+                });
             },
             handleFilterChanged(filter, value) {
                 this.$router.push({
                     query: {
                         ...this.$route.query,
                         ...this.filterNextQuery({ filter, value }),
+                        page: 1,
                     }
                 });
             },
