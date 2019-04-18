@@ -149,5 +149,9 @@
       }
     }
   }
+}
 
+.SharpForm__form-item--no-label .SharpList--can-sort {
+  // if the list has no label put margin for the sort button
+  margin-top: 1.5rem;
 }

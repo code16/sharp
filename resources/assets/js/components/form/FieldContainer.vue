@@ -81,7 +81,8 @@
                     `SharpForm__form-item--type-${this.fieldType}`,
                     {
                         'SharpForm__form-item--danger': this.state==='error',
-                        'SharpForm__form-item--success': this.state==='ok'
+                        'SharpForm__form-item--success': this.state==='ok',
+                        'SharpForm__form-item--no-label': !this.showLabel,
                     }
                 ];
             },

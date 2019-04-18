@@ -1,6 +1,6 @@
 <template>
-    <div class="SharpList" :class="{ 'SharpList--sort': dragActive }">
-        <template v-if="sortable && list.length > 1">
+    <div class="SharpList" :class="classes">
+        <template v-if="showSortButton">
             <button type="button"
                     class="SharpButton SharpButton--ghost SharpList__sort-button"
                     :class="{'SharpButton--active':dragActive}"
@@ -124,6 +124,11 @@
             }
         },
         computed: {
+            classes() {
+                return {
+                    'SharpList--can-sort': this.showSortButton,
+                }
+            },
             disabled() {
                 return this.readOnly || this.dragActive;
             },
@@ -141,6 +146,9 @@
             },
             showInsertButton() {
                 return this.showAddButton && this.sortable;
+            },
+            showSortButton() {
+                return this.sortable && this.list.length > 1;
             },
             itemFieldsKeys() {
                 return Object.keys(this.itemFields)
