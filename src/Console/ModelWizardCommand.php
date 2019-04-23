@@ -41,7 +41,7 @@ class ModelWizardCommand extends Command
         $this->call('make:model', ['name' => $fullModelClass]);
 
         $listClass = $this->ask("List class name", "{$pluralModelClass}/{$modelClass}List");
-        $this->call('sharp:make:list', ['name' => $listClass, '--model' => $inputModelClass]);
+        $this->call('sharp:make:entity-list', ['name' => $listClass, '--model' => $inputModelClass]);
         $config->push(['list' => "\\{$this->parseClassname($listClass, 'Sharp')}::class"]);
 
         $formClass = $this->ask("Form class name", "{$pluralModelClass}/{$modelClass}Form");
