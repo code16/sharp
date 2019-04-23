@@ -31,7 +31,7 @@ exports[`list-field can mount "read only" filled list field 1`] = `
 
 exports[`list-field can mount collapsed list field 1`] = `
 <div id="app">
-	<div class="SharpList SharpList--sort">
+	<div class="SharpList">
 		<!---->
 		<div>
 			<div>
@@ -80,7 +80,7 @@ exports[`list-field can mount empty list field 1`] = `
 
 exports[`list-field can mount filled list field 1`] = `
 <div id="app">
-	<div class="SharpList">
+	<div class="SharpList SharpList--can-sort">
 		<button type="button" data-inactive-text="{{ form.list.sort_button.inactive }}" data-active-text="{{ form.list.sort_button.active }}" class="SharpButton SharpButton--ghost SharpList__sort-button">
 			<svg width="24" height="22" viewBox="0 0 24 22" fill-rule="evenodd" class="SharpButton__icon">
 				<path d="M20 14V0h-4v14h-4l6 8 6-8zM4 8v14h4V8h4L6 0 0 8z"></path>
@@ -177,7 +177,7 @@ exports[`list-field can mount non addable, non removable, non sortable list fiel
 
 exports[`list-field can mount with full list 1`] = `
 <div id="app">
-	<div class="SharpList">
+	<div class="SharpList SharpList--can-sort">
 		<button type="button" data-inactive-text="{{ form.list.sort_button.inactive }}" data-active-text="{{ form.list.sort_button.active }}" class="SharpButton SharpButton--ghost SharpList__sort-button">
 			<svg width="24" height="22" viewBox="0 0 24 22" fill-rule="evenodd" class="SharpButton__icon">
 				<path d="M20 14V0h-4v14h-4l6 8 6-8zM4 8v14h4V8h4L6 0 0 8z"></path>
