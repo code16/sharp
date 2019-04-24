@@ -6,12 +6,12 @@ Class: `Code16\Sharp\Form\Fields\SharpFormAutocompleteField`
 
 ### Constructor: `make(string $key, string $mode)`
 
-`$mode` must be either "local" (dictionnary is defined locally with `setLocalValues()`) or "remote" (a endpoint must be provided).
+`$mode` must be either "local" (dictionary is defined locally with `setLocalValues()`) or "remote" (a endpoint must be provided).
 
 
 ### `setLocalValues($localValues)`
 
-Set the values of the dictionnary on mode=local, as an object array with at least an `id` attribute (or the `setItemIdAttribute` value).
+Set the values of the dictionary on mode=local, as an object array with at least an `id` attribute (or the `setItemIdAttribute` value).
 
 ### `setLocalSearchKeys(array $searchKeys)`
 
@@ -20,7 +20,7 @@ Default: `["value"]`
 
 ### `setSearchMinChars(int $searchMinChars)`
 
-Set a miminum number of character to type before perfoming the search.
+Set a minimum number of character to type before performing the search.
 Default: `1`
 
 ### `setRemoteEndpoint(string $remoteEndpoint)`
@@ -102,9 +102,9 @@ You may need to provide a default value for the endpoint, used when `country` (i
 ```php
     SharpFormAutocompleteField::make("model", "remote")
         ->setDynamicRemoteEndpoint("/models/{{country}}/{{brand}}", [
-		    "country" => "france",
-		    "brand" => "renault"
-		]);
+	        "country" => "france",
+	        "brand" => "renault"
+        ]);
 ```
 
 The default endpoint would be `/brands/france/renault`.

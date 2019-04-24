@@ -86,14 +86,14 @@ For instance:
 ```php
     SharpFormSelectField::make("brand",
         [
-		   "France" => [
-		       ["id"=>1, "label"=>"Renault"],
-               ["id"=>2, "label"=>"Peugeot"],
-		   ], "Germany" => [
-		       ["id"=>3, "label"=>"Audi"],
-               ["id"=>4, "label"=>"Mercedes"],
-		   ]
-		]
+            "France" => [
+                ["id"=>1, "label"=>"Renault"],
+                ["id"=>2, "label"=>"Peugeot"],
+            ], "Germany" => [
+                ["id"=>3, "label"=>"Audi"],
+                ["id"=>4, "label"=>"Mercedes"],
+            ]
+        ]
     )->setOptionsLinkedTo("country")
 ```
 
@@ -104,14 +104,14 @@ In some cases you may want to depend on more than one field; you must add a nest
 ```php
     SharpFormSelectField::make("model",
         [
-		   "France" => [
-		       1 => [["id"=>67, "label"=>"Clio"], ...],
-               2 => ...
-		   ], "Germany" => [
-		       3 => [["id"=>98, "label"=>"A4"], ...],
-               4 => ...
-		   ]
-		]
+            "France" => [
+                1 => [["id"=>67, "label"=>"Clio"], ...],
+                2 => ...
+            ], "Germany" => [
+                3 => [["id"=>98, "label"=>"A4"], ...],
+                4 => ...
+            ]
+        ]
     )->setOptionsLinkedTo("country", "brand")
 ```
 
