@@ -5,6 +5,7 @@ namespace Code16\Sharp\Tests\Unit\Form\Fields;
 use Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Tests\SharpTestCase;
+use Illuminate\Support\Str;
 
 class SharpFormAutocompleteFieldTest extends SharpTestCase
 {
@@ -159,7 +160,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_define_linked_options_with_dynamic_attributes_and_localization()
+    function we_can_define_linked_localValues_with_dynamic_attributes_and_localization()
     {
         $formField = $this->getDefaultLocalAutocomplete([
             "A" => [
@@ -188,7 +189,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_define_linked_options_with_dynamic_attributes_on_multiple_master_fields()
+    function we_can_define_linked_localValues_with_dynamic_attributes_on_multiple_master_fields()
     {
         $formField = $this->getDefaultLocalAutocomplete([
             "A" => [
@@ -232,6 +233,78 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
         );
     }
 
+    /** @test */
+    function we_can_define_linked_remote_endpoint_with_dynamic_attributes()
+    {
+        $formField = $this->getDefaultDynamicRemoteAutocomplete(
+            "autocomplete/{{master}}/endpoint"
+        );
+
+        $this->assertArrayContainsSubset([
+                "remoteEndpoint" => "autocomplete/{{master}}/endpoint",
+                "dynamicAttributes" => [
+                    [
+                        "name" => "remoteEndpoint",
+                        "type" => "template",
+                    ]
+                ]
+            ],
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_linked_remote_endpoint_with_default_value_with_dynamic_attributes()
+    {
+        $master = Str::random(4);
+
+        $formField = $this->getDefaultDynamicRemoteAutocomplete(
+            "autocomplete/{{master}}/endpoint", [
+                "master" => $master
+            ]
+        );
+
+        $this->assertArrayContainsSubset([
+                "remoteEndpoint" => "autocomplete/{{master}}/endpoint",
+                "dynamicAttributes" => [
+                    [
+                        "name" => "remoteEndpoint",
+                        "type" => "template",
+                        "default" => "autocomplete/$master/endpoint"
+                    ]
+                ]
+            ],
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_linked_remote_endpoint_with_multiple_default_value_with_dynamic_attributes()
+    {
+        $master = Str::random(4);
+        $secondary = Str::random(4);
+
+        $formField = $this->getDefaultDynamicRemoteAutocomplete(
+            "autocomplete/{{master}}/{{secondary}}/endpoint", [
+                "master" => $master,
+                "secondary" => $secondary,
+            ]
+        );
+
+        $this->assertArrayContainsSubset([
+                "remoteEndpoint" => "autocomplete/{{master}}/{{secondary}}/endpoint",
+                "dynamicAttributes" => [
+                    [
+                        "name" => "remoteEndpoint",
+                        "type" => "template",
+                        "default" => "autocomplete/$master/$secondary/endpoint"
+                    ]
+                ]
+            ],
+            $formField->toArray()
+        );
+    }
+
     /**
      * @param array|null $localValues
      * @return SharpFormAutocompleteField
@@ -246,4 +319,16 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
             ]);
     }
 
+    /**
+     * @param string $remoteEndpoint
+     * @param array $defaultValues
+     * @return SharpFormAutocompleteField
+     */
+    private function getDefaultDynamicRemoteAutocomplete($remoteEndpoint, array $defaultValues = [])
+    {
+        return SharpFormAutocompleteField::make("field", "remote")
+            ->setListItemTemplatePath("LIT.vue")
+            ->setResultItemTemplatePath("RIT.vue")
+            ->setDynamicRemoteEndpoint($remoteEndpoint, $defaultValues);
+    }
 }

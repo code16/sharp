@@ -108,6 +108,38 @@ class SharpFormAutocompleteField extends SharpFormField
     }
 
     /**
+     * @param string $dynamicRemoteEndpoint
+     * @param array $defaultValues
+     * @return $this
+     */
+    public function setDynamicRemoteEndpoint(string $dynamicRemoteEndpoint, array $defaultValues = [])
+    {
+        $this->remoteEndpoint = $dynamicRemoteEndpoint;
+
+        if($defaultValues) {
+            $defaultEndpoint = $dynamicRemoteEndpoint;
+            collect($defaultValues)
+                ->each(function ($value, $name) use (&$defaultEndpoint) {
+                    $defaultEndpoint = str_replace("{{" . $name . "}}", $value, $defaultEndpoint);
+                });
+        }
+
+        $this->dynamicAttributes = [
+            array_merge(
+                [
+                    "name" => "remoteEndpoint",
+                    "type"  => "template"
+                ],
+                ($defaultEndpoint ?? false)
+                    ? ["default" => $defaultEndpoint]
+                    : []
+            )
+        ];
+
+        return $this;
+    }
+
+    /**
      * @param string $remoteSearchAttribute
      * @return $this
      */
@@ -266,9 +298,9 @@ class SharpFormAutocompleteField extends SharpFormField
             array_merge([
                 "mode" => $this->mode,
                 "placeholder" => $this->placeholder,
-                "localValues" => $this->dynamicAttributes
+                "localValues" => $this->isLocal() && $this->dynamicAttributes
                     ? self::formatDynamicOptions($this->localValues, count($this->dynamicAttributes[0]["path"]))
-                    : self::formatOptions($this->localValues),
+                    : ($this->isLocal() ? self::formatOptions($this->localValues) : []),
                 "itemIdAttribute" => $this->itemIdAttribute,
                 "searchKeys" => $this->localSearchKeys,
                 "remoteEndpoint" => $this->remoteEndpoint,

@@ -82,7 +82,7 @@ class SpaceshipSharpForm extends SharpForm
                     })
                 ->all()
             )
-                ->setLabel("Brand")
+                ->setLabel("Brand (depends on type)")
                 ->setDisplayAsDropdown()
                 ->setOptionsLinkedTo("type_id")
 
@@ -104,9 +104,16 @@ class SpaceshipSharpForm extends SharpForm
                     })
                     ->all()
             )
-                ->setLabel("Model")
+                ->setLabel("Model (depends on brand)")
                 ->setDisplayAsDropdown()
                 ->setOptionsLinkedTo("type_id", "brand")
+
+        )->addField(
+            SharpFormAutocompleteField::make("serial_number", "remote")
+                ->setLabel("S/N")
+                ->setListItemInlineTemplate("{{serial}}")
+                ->setResultItemInlineTemplate("{{serial}}")
+                ->setDynamicRemoteEndpoint("/spaceships/serial_numbers/{{type_id}}")
 
         )->addField(
             SharpFormUploadField::make("picture")
@@ -190,6 +197,7 @@ class SpaceshipSharpForm extends SharpForm
             $tab->addColumn(6, function(FormLayoutColumn $column) {
                 $column->withSingleField("name")
                     ->withSingleField("type_id")
+                    ->withSingleField("serial_number")
                     ->withFields("brand|6", "model|6")
                     ->withSingleField("pilots")
                     ->withSingleField("reviews", function(FormLayoutColumn $listItem) {
@@ -232,8 +240,15 @@ class SpaceshipSharpForm extends SharpForm
 
     function find($id): array
     {
-        return $this->setCustomTransformer("capacity", function($capacity) {
+        return $this
+            ->setCustomTransformer("capacity", function($capacity) {
                 return $capacity / 1000;
+            })
+            ->setCustomTransformer("serial_number", function($serial) {
+                return [
+                    "id" => $serial,
+                    "serial" => str_pad($serial, 5, "0", STR_PAD_LEFT)
+                ];
             })
             ->setCustomTransformer("picture", new FormUploadModelTransformer())
             ->setCustomTransformer("pictures", new FormUploadModelTransformer())
