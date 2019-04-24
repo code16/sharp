@@ -245,10 +245,10 @@ class SpaceshipSharpForm extends SharpForm
                 return $capacity / 1000;
             })
             ->setCustomTransformer("serial_number", function($serial) {
-                return [
+                return $serial ? [
                     "id" => $serial,
                     "serial" => str_pad($serial, 5, "0", STR_PAD_LEFT)
-                ];
+                ] : null;
             })
             ->setCustomTransformer("picture", new FormUploadModelTransformer())
             ->setCustomTransformer("pictures", new FormUploadModelTransformer())
