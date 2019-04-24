@@ -81,6 +81,10 @@ The template will be use, depending on the function, to display either the list 
 
 Be aware that you'll need for this to work to pass a valuated object to the Autocomplete, as data.
 
+### `setLocalValuesLinkedTo(string ...$fieldKeys)`
+
+This method is useful to link the dataset (aka: the `localValues`) to another form field. Please refer to [the documentation of the select field's `setOptionsLinkedTo()` method](select.md), which is identical.
+
 
 ## Formatter
 
