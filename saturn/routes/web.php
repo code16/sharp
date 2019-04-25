@@ -25,5 +25,6 @@ Route::get('/spaceships/serial_numbers/{typeId}', function ($typeId) {
         })
         ->filter(function($number) {
             return \Illuminate\Support\Str::startsWith($number["id"], request('query'));
-        });
+        })
+        ->values();
 });
