@@ -151,7 +151,9 @@
         },
         watch: {
             localValues() {
-                this.updateLocalSuggestions();
+                if(!this.isRemote) {
+                    this.updateLocalSuggestions();
+                }
             },
         },
         computed: {
