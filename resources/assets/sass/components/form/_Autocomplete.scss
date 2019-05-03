@@ -48,6 +48,21 @@
     }
   }
 
+  &__overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 2rem;
+    bottom: 0;
+    width: auto;
+
+    .multiselect__tags {
+      padding-right: 0;
+      box-shadow: none!important;
+      user-select: auto!important;
+    }
+  }
+
   &--remote {
     .multiselect__select {
       display: none;

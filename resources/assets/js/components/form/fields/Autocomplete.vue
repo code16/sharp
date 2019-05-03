@@ -55,6 +55,18 @@
                     {{ l('form.autocomplete.no_results_text') }}
                 </template>
             </multiselect>
+
+            <template v-if="overlayVisible">
+                <div class="SharpAutocomplete__overlay multiselect">
+                    <div class="multiselect__tags">
+                        <SharpTemplate
+                            name="ResultItem"
+                            :template="resultItemTemplate"
+                            :template-data="localizedTemplateData(value)"
+                        />
+                    </div>
+                </div>
+            </template>
         </template>
     </div>
 </template>
@@ -182,6 +194,10 @@
                     { 'SharpAutocomplete--disabled': this.readOnly }
                 ];
             },
+            overlayVisible() {
+                const isFormField = !!this.fieldKey;
+                return this.value && isFormField;
+            }
         },
         methods: {
             updateSuggestions(query) {
