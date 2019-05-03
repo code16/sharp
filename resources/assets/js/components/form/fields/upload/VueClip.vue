@@ -3,7 +3,7 @@
         <div class="SharpUpload__inner">
             <div class="SharpUpload__content">
                 <form v-show="!file" class="dropzone">
-                    <button type="button" class="dz-message SharpButton SharpButton--secondary SharpUpload__upload-button" :disabled="readOnly">
+                    <button type="button" class="dz-message SharpButton SharpButton--ghost SharpUpload__upload-button" :disabled="readOnly">
                         {{ l('form.upload.browse_button') }}
                     </button>
                 </form>
