@@ -1,42 +1,44 @@
 <template>
     <div class="SharpForm">
         <template v-if="ready">
-            <div v-show="hasErrors" class="SharpNotification SharpNotification--error" role="alert">
-                <div class="SharpNotification__details">
-                    <div class="SharpNotification__text-wrapper">
-                        <p class="SharpNotification__title">{{ l('form.validation_error.title') }}</p>
-                        <p class="SharpNotification__subtitle">{{ l('form.validation_error.description') }}</p>
+            <div class="container">
+                <div v-show="hasErrors" class="SharpNotification SharpNotification--error" role="alert">
+                    <div class="SharpNotification__details">
+                        <div class="SharpNotification__text-wrapper">
+                            <p class="SharpNotification__title">{{ l('form.validation_error.title') }}</p>
+                            <p class="SharpNotification__subtitle">{{ l('form.validation_error.description') }}</p>
+                        </div>
                     </div>
                 </div>
+                <sharp-tabbed-layout :layout="layout" ref="tabbedLayout">
+                    <!-- Tab -->
+                    <template slot-scope="tab">
+                        <sharp-grid :rows="[tab.columns]" ref="columnsGrid">
+                            <!-- column -->
+                            <template slot-scope="column">
+                                <sharp-fields-layout v-if="fields" :layout="column.fields" :visible="fieldVisible" ref="fieldLayout">
+                                    <!-- field -->
+                                    <template slot-scope="fieldLayout">
+                                        <sharp-field-display
+                                            :field-key="fieldLayout.key"
+                                            :context-fields="isReadOnly ? readOnlyFields : fields"
+                                            :context-data="data"
+                                            :field-layout="fieldLayout"
+                                            :locale="fieldLocale[fieldLayout.key]"
+                                            :error-identifier="fieldLayout.key"
+                                            :config-identifier="fieldLayout.key"
+                                            :update-data="updateData"
+                                            :update-visibility="updateVisibility"
+                                            @locale-change="updateLocale"
+                                            ref="field"
+                                        />
+                                    </template>
+                                </sharp-fields-layout>
+                            </template>
+                        </sharp-grid>
+                    </template>
+                </sharp-tabbed-layout>
             </div>
-            <sharp-tabbed-layout :layout="layout" ref="tabbedLayout">
-                <!-- Tab -->
-                <template slot-scope="tab">
-                    <sharp-grid :rows="[tab.columns]" ref="columnsGrid">
-                        <!-- column -->
-                        <template slot-scope="column">
-                            <sharp-fields-layout v-if="fields" :layout="column.fields" :visible="fieldVisible" ref="fieldLayout">
-                                <!-- field -->
-                                <template slot-scope="fieldLayout">
-                                    <sharp-field-display
-                                        :field-key="fieldLayout.key"
-                                        :context-fields="isReadOnly ? readOnlyFields : fields"
-                                        :context-data="data"
-                                        :field-layout="fieldLayout"
-                                        :locale="fieldLocale[fieldLayout.key]"
-                                        :error-identifier="fieldLayout.key"
-                                        :config-identifier="fieldLayout.key"
-                                        :update-data="updateData"
-                                        :update-visibility="updateVisibility"
-                                        @locale-change="updateLocale"
-                                        ref="field"
-                                    />
-                                </template>
-                            </sharp-fields-layout>
-                        </template>
-                    </sharp-grid>
-                </template>
-            </sharp-tabbed-layout>
         </template>
     </div>
 </template>
