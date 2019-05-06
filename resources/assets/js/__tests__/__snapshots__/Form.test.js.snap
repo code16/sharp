@@ -3,18 +3,20 @@
 exports[`sharp-form can mount "independant" sharp-form 1`] = `
 <div id="app">
 	<div class="SharpForm">
-		<div role="alert" class="SharpNotification SharpNotification--error" style="display: none;">
-			<div class="SharpNotification__details">
-				<div class="SharpNotification__text-wrapper">
-					<p class="SharpNotification__title">{{ form.validation_error.title }}</p>
-					<p class="SharpNotification__subtitle">{{ form.validation_error.description }}</p>
+		<div class="container">
+			<div role="alert" class="SharpNotification SharpNotification--error" style="display: none;">
+				<div class="SharpNotification__details">
+					<div class="SharpNotification__text-wrapper">
+						<p class="SharpNotification__title">{{ form.validation_error.title }}</p>
+						<p class="SharpNotification__subtitle">{{ form.validation_error.description }}</p>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div id="MOCKED_TABBED_LAYOUT">
-			<div id="MOCKED_GRID">
-				<div id="MOCKED_FIELDS_LAYOUT">
-					__MOCKED_SFC_SharpFieldContainer__
+			<div id="MOCKED_TABBED_LAYOUT">
+				<div id="MOCKED_GRID">
+					<div id="MOCKED_FIELDS_LAYOUT">
+						__MOCKED_SFC_SharpFieldContainer__
+					</div>
 				</div>
 			</div>
 		</div>
@@ -25,18 +27,20 @@ exports[`sharp-form can mount "independant" sharp-form 1`] = `
 exports[`sharp-form can mount sharp-form 1`] = `
 <div id="app">
 	<div class="SharpForm">
-		<div role="alert" class="SharpNotification SharpNotification--error" style="display: none;">
-			<div class="SharpNotification__details">
-				<div class="SharpNotification__text-wrapper">
-					<p class="SharpNotification__title">{{ form.validation_error.title }}</p>
-					<p class="SharpNotification__subtitle">{{ form.validation_error.description }}</p>
+		<div class="container">
+			<div role="alert" class="SharpNotification SharpNotification--error" style="display: none;">
+				<div class="SharpNotification__details">
+					<div class="SharpNotification__text-wrapper">
+						<p class="SharpNotification__title">{{ form.validation_error.title }}</p>
+						<p class="SharpNotification__subtitle">{{ form.validation_error.description }}</p>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div id="MOCKED_TABBED_LAYOUT">
-			<div id="MOCKED_GRID">
-				<div id="MOCKED_FIELDS_LAYOUT">
-					__MOCKED_SFC_SharpFieldContainer__
+			<div id="MOCKED_TABBED_LAYOUT">
+				<div id="MOCKED_GRID">
+					<div id="MOCKED_FIELDS_LAYOUT">
+						__MOCKED_SFC_SharpFieldContainer__
+					</div>
 				</div>
 			</div>
 		</div>
@@ -47,18 +51,20 @@ exports[`sharp-form can mount sharp-form 1`] = `
 exports[`sharp-form can mount sharp-form with alert 1`] = `
 <div id="app">
 	<div class="SharpForm">
-		<div role="alert" class="SharpNotification SharpNotification--error" style="">
-			<div class="SharpNotification__details">
-				<div class="SharpNotification__text-wrapper">
-					<p class="SharpNotification__title">{{ form.validation_error.title }}</p>
-					<p class="SharpNotification__subtitle">{{ form.validation_error.description }}</p>
+		<div class="container">
+			<div role="alert" class="SharpNotification SharpNotification--error" style="">
+				<div class="SharpNotification__details">
+					<div class="SharpNotification__text-wrapper">
+						<p class="SharpNotification__title">{{ form.validation_error.title }}</p>
+						<p class="SharpNotification__subtitle">{{ form.validation_error.description }}</p>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div id="MOCKED_TABBED_LAYOUT">
-			<div id="MOCKED_GRID">
-				<div id="MOCKED_FIELDS_LAYOUT">
-					__MOCKED_SFC_SharpFieldContainer__
+			<div id="MOCKED_TABBED_LAYOUT">
+				<div id="MOCKED_GRID">
+					<div id="MOCKED_FIELDS_LAYOUT">
+						__MOCKED_SFC_SharpFieldContainer__
+					</div>
 				</div>
 			</div>
 		</div>

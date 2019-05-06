@@ -49,6 +49,7 @@ exports[`autocomplete-field common & local can mount Autocomplete field as multi
 				</ul>
 			</div>
 		</div>
+		<!---->
 	</div>
 </div>
 `;
@@ -109,6 +110,7 @@ exports[`autocomplete-field common & local can mount Autocomplete field as resul
 				</ul>
 			</div>
 		</div>
+		<!---->
 	</div>
 </div>
 `;
