@@ -6,7 +6,7 @@ exports[`vue-clip can mount "destroyed" VueClip component 1`] = `
 		<div class="SharpUpload__inner">
 			<div class="SharpUpload__content">
 				<form class="dropzone">
-					<button type="button" class="dz-message SharpButton SharpButton--secondary SharpUpload__upload-button">
+					<button type="button" class="dz-message SharpButton SharpButton--ghost SharpUpload__upload-button">
 						{{ form.upload.browse_button }}
 					</button>
 				</form>
@@ -28,7 +28,7 @@ exports[`vue-clip can mount "in progress" VueClip component 1`] = `
 		<div class="SharpUpload__inner dz-clickable">
 			<div class="SharpUpload__content">
 				<form class="dropzone" style="display: none;">
-					<button type="button" class="dz-message SharpButton SharpButton--secondary SharpUpload__upload-button">
+					<button type="button" class="dz-message SharpButton SharpButton--ghost SharpUpload__upload-button">
 						{{ form.upload.browse_button }}
 					</button>
 				</form>
@@ -80,7 +80,7 @@ exports[`vue-clip can mount VueClip component 1`] = `
 		<div class="SharpUpload__inner dz-clickable">
 			<div class="SharpUpload__content">
 				<form class="dropzone">
-					<button type="button" class="dz-message SharpButton SharpButton--secondary SharpUpload__upload-button">
+					<button type="button" class="dz-message SharpButton SharpButton--ghost SharpUpload__upload-button">
 						{{ form.upload.browse_button }}
 					</button>
 				</form>
@@ -103,7 +103,7 @@ exports[`vue-clip can mount initially image VueClip component 1`] = `
 		<div class="SharpUpload__inner dz-clickable">
 			<div class="SharpUpload__content">
 				<form class="dropzone" style="display: none;">
-					<button type="button" class="dz-message SharpButton SharpButton--secondary SharpUpload__upload-button">
+					<button type="button" class="dz-message SharpButton SharpButton--ghost SharpUpload__upload-button">
 						{{ form.upload.browse_button }}
 					</button>
 				</form>
@@ -192,7 +192,7 @@ exports[`vue-clip can mount initially non image VueClip component 1`] = `
 		<div class="SharpUpload__inner dz-clickable">
 			<div class="SharpUpload__content">
 				<form class="dropzone" style="display: none;">
-					<button type="button" class="dz-message SharpButton SharpButton--secondary SharpUpload__upload-button">
+					<button type="button" class="dz-message SharpButton SharpButton--ghost SharpUpload__upload-button">
 						{{ form.upload.browse_button }}
 					</button>
 				</form>
@@ -244,7 +244,7 @@ exports[`vue-clip can mount non croppable image 1`] = `
 		<div class="SharpUpload__inner dz-clickable">
 			<div class="SharpUpload__content">
 				<form class="dropzone" style="display: none;">
-					<button type="button" class="dz-message SharpButton SharpButton--secondary SharpUpload__upload-button">
+					<button type="button" class="dz-message SharpButton SharpButton--ghost SharpUpload__upload-button">
 						{{ form.upload.browse_button }}
 					</button>
 				</form>
@@ -298,7 +298,7 @@ exports[`vue-clip can mount read-only VueClip component 1`] = `
 		<div class="SharpUpload__inner dz-clickable">
 			<div class="SharpUpload__content">
 				<form class="dropzone">
-					<button type="button" disabled="disabled" class="dz-message SharpButton SharpButton--secondary SharpUpload__upload-button">
+					<button type="button" disabled="disabled" class="dz-message SharpButton SharpButton--ghost SharpUpload__upload-button">
 						{{ form.upload.browse_button }}
 					</button>
 				</form>
