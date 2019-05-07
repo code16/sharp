@@ -57,7 +57,7 @@
     }
   }
 
-  .SharpDate__calendar {
+  &__calendar {
     height: auto!important; // #auto-version
     min-height: 100%;
     @extend .flatpickr-calendar;
