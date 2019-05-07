@@ -48,13 +48,14 @@
                         </div>
                     </div>
                     <div v-if="!disabled && showInsertButton && i<list.length-1" class="SharpList__new-item-zone">
-                        <button class="SharpButton SharpButton--secondary SharpButton--sm" @click="insertNewItem(i, $event)">{{ l('form.list.insert_button') }}</button>
+                        <button class="SharpButton SharpButton--sm" @click="insertNewItem(i, $event)">{{ l('form.list.insert_button') }}</button>
                     </div>
                 </div>
             </transition-group><!-- Important comment, do not remove
          --><template slot="footer">
                 <button v-if="!disabled && showAddButton" type="button" :key="-1"
-                        class="SharpButton SharpButton--secondary SharpList__add-button"
+                        class="SharpButton SharpList__add-button"
+                        :class="'SharpButton--ghost' "
                         @click="add">{{addText}}</button>
             </template>
         </draggable>

@@ -71,7 +71,7 @@ exports[`list-field can mount empty list field 1`] = `
 		<!---->
 		<div>
 			<div></div>
-			<button type="button" class="SharpButton SharpButton--secondary SharpList__add-button">Ajouter un élément</button>
+			<button type="button" class="SharpButton SharpList__add-button SharpButton--ghost">Ajouter un élément</button>
 		</div>
 		<!---->
 	</div>
@@ -103,7 +103,7 @@ exports[`list-field can mount filled list field 1`] = `
 						</div>
 					</div>
 					<div class="SharpList__new-item-zone">
-						<button class="SharpButton SharpButton--secondary SharpButton--sm">{{ form.list.insert_button }}</button>
+						<button class="SharpButton SharpButton--sm">{{ form.list.insert_button }}</button>
 					</div>
 				</div>
 				<div class="SharpList__item">
@@ -123,7 +123,7 @@ exports[`list-field can mount filled list field 1`] = `
 					<!---->
 				</div>
 			</div>
-			<button type="button" class="SharpButton SharpButton--secondary SharpList__add-button">Ajouter un élément</button>
+			<button type="button" class="SharpButton SharpList__add-button SharpButton--ghost">Ajouter un élément</button>
 		</div>
 		<!---->
 	</div>
