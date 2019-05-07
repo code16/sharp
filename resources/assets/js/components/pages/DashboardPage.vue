@@ -2,15 +2,17 @@
     <div class="SharpDashboardPage">
         <template v-if="ready">
             <SharpActionBarDashboard :commands="commands" @command="handleCommandRequested" />
-            <SharpGrid :rows="layout.rows">
-                <template slot-scope="widgetLayout">
-                    <SharpWidget
-                        :widget-type="widgets[widgetLayout.key].type"
-                        :widget-props="widgets[widgetLayout.key]"
-                        :value="data[widgetLayout.key]"
-                    />
-                </template>
-            </SharpGrid>
+            <div class="container">
+                <SharpGrid :rows="layout.rows">
+                    <template slot-scope="widgetLayout">
+                        <SharpWidget
+                            :widget-type="widgets[widgetLayout.key].type"
+                            :widget-props="widgets[widgetLayout.key]"
+                            :value="data[widgetLayout.key]"
+                        />
+                    </template>
+                </SharpGrid>
+            </div>
         </template>
 
         <SharpCommandFormModal :form="commandCurrentForm" ref="commandForm" />

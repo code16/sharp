@@ -21,67 +21,69 @@
                 @create="handleCreateButtonClicked"
             />
 
-            <SharpDataList
-                :items="items"
-                :columns="columns"
-                :page="page"
-                :paginated="paginated"
-                :total-count="totalCount"
-                :page-size="pageSize"
-                :reorder-active="reorderActive"
-                :sort="sortedBy"
-                :dir="sortDir"
-                @change="handleReorderedItemsChanged"
-                @sort-change="handleSortChanged"
-                @page-change="handlePageChanged"
-            >
-                <template slot="empty">
-                    {{ l('entity_list.empty_text') }}
-                </template>
-                <template slot="item" slot-scope="{ item }">
-                    <SharpDataListRow :url="instanceFormUrl(item)" :columns="columns" :row="item">
-                        <template v-if="hasActionsColumn">
-                            <template slot="append">
-                                <div class="row justify-content-end justify-content-md-start mx-n2">
-                                    <template v-if="instanceHasState(item)">
-                                        <div class="col-auto col-md-12 my-1 px-2">
-                                            <SharpDropdown class="SharpEntityList__state-dropdown" :disabled="!instanceHasStateAuthorization(item)">
-                                                <template slot="text">
-                                                    <SharpStateIcon :color="instanceStateIconColor(item)" />
-                                                    <span class="text-truncate">
+            <div class="container">
+                <SharpDataList
+                    :items="items"
+                    :columns="columns"
+                    :page="page"
+                    :paginated="paginated"
+                    :total-count="totalCount"
+                    :page-size="pageSize"
+                    :reorder-active="reorderActive"
+                    :sort="sortedBy"
+                    :dir="sortDir"
+                    @change="handleReorderedItemsChanged"
+                    @sort-change="handleSortChanged"
+                    @page-change="handlePageChanged"
+                >
+                    <template slot="empty">
+                        {{ l('entity_list.empty_text') }}
+                    </template>
+                    <template slot="item" slot-scope="{ item }">
+                        <SharpDataListRow :url="instanceFormUrl(item)" :columns="columns" :row="item">
+                            <template v-if="hasActionsColumn">
+                                <template slot="append">
+                                    <div class="row justify-content-end justify-content-md-start mx-n2">
+                                        <template v-if="instanceHasState(item)">
+                                            <div class="col-auto col-md-12 my-1 px-2">
+                                                <SharpDropdown class="SharpEntityList__state-dropdown" :disabled="!instanceHasStateAuthorization(item)">
+                                                    <template slot="text">
+                                                        <SharpStateIcon :color="instanceStateIconColor(item)" />
+                                                        <span class="text-truncate">
                                                     {{ instanceStateLabel(item) }}
                                                 </span>
-                                                </template>
-                                                <SharpDropdownItem
-                                                    v-for="stateOptions in config.state.values"
-                                                    @click="handleInstanceStateChanged(item, stateOptions.value)"
-                                                    :key="stateOptions.value"
+                                                    </template>
+                                                    <SharpDropdownItem
+                                                        v-for="stateOptions in config.state.values"
+                                                        @click="handleInstanceStateChanged(item, stateOptions.value)"
+                                                        :key="stateOptions.value"
+                                                    >
+                                                        <SharpStateIcon :color="stateOptions.color" />&nbsp;
+                                                        {{ stateOptions.label }}
+                                                    </SharpDropdownItem>
+                                                </SharpDropdown>
+                                            </div>
+                                        </template>
+                                        <template v-if="instanceHasCommands(item)">
+                                            <div class="col-auto col-md-12 my-1 px-2">
+                                                <SharpCommandsDropdown
+                                                    class="SharpEntityList__commands-dropdown"
+                                                    :commands="instanceCommands(item)"
+                                                    @select="handleInstanceCommandRequested(item, $event)"
                                                 >
-                                                    <SharpStateIcon :color="stateOptions.color" />&nbsp;
-                                                    {{ stateOptions.label }}
-                                                </SharpDropdownItem>
-                                            </SharpDropdown>
-                                        </div>
-                                    </template>
-                                    <template v-if="instanceHasCommands(item)">
-                                        <div class="col-auto col-md-12 my-1 px-2">
-                                            <SharpCommandsDropdown
-                                                class="SharpEntityList__commands-dropdown"
-                                                :commands="instanceCommands(item)"
-                                                @select="handleInstanceCommandRequested(item, $event)"
-                                            >
-                                                <template slot="text">
-                                                    {{ l('entity_list.commands.instance.label') }}
-                                                </template>
-                                            </SharpCommandsDropdown>
-                                        </div>
-                                    </template>
-                                </div>
+                                                    <template slot="text">
+                                                        {{ l('entity_list.commands.instance.label') }}
+                                                    </template>
+                                                </SharpCommandsDropdown>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
                             </template>
-                        </template>
-                    </SharpDataListRow>
-                </template>
-            </SharpDataList>
+                        </SharpDataListRow>
+                    </template>
+                </SharpDataList>
+            </div>
         </template>
 
         <SharpCommandFormModal :form="commandCurrentForm" ref="commandForm" />

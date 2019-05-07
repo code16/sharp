@@ -1,4 +1,3 @@
-@import "../../mixins/fix-module-fields-margin";
 @import "../../mixins/module";
 
 .SharpList {
@@ -56,8 +55,6 @@
 
   &__item {
     @extend .SharpModule;
-
-    @include fix-module-fields-margin;
 
     padding: 0;
     margin-bottom: 4px;
