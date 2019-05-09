@@ -14,14 +14,29 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(\App\SpaceshipType::class, function (Faker\Generator $faker) {
+    $brands = [];
+    for($k=0; $k<5; $k++) {
+        $brand = $faker->unique()->word;
+
+        for($i=0; $i<rand(4,10); $i++) {
+            $brands[$brand][] = $faker->words(2, true);
+        }
+    }
+
     return [
         'label' => $faker->word,
+        'brands' => $brands
     ];
 });
 
 $factory->define(\App\Feature::class, function (Faker\Generator $faker) {
+    $type = $faker->randomElement(array_keys(\App\Feature::TYPES));
+    $subtype = $faker->randomElement(array_keys(\App\Feature::SUBTYPES[$type]));
+
     return [
         'name' => $faker->word,
+        'type' =>  $type,
+        'subtype' =>  $subtype,
     ];
 });
 

@@ -16,6 +16,9 @@ class FeatureSharpList extends SharpEntityList
         $this->addDataContainer(
             EntityListDataContainer::make("name")
                 ->setLabel("Name")
+        )->addDataContainer(
+            EntityListDataContainer::make("type")
+                ->setLabel("Type")
         );
     }
 
@@ -26,13 +29,21 @@ class FeatureSharpList extends SharpEntityList
 
     function buildListLayout()
     {
-        $this->addColumn("name", 12);
+        $this
+            ->addColumn("name", 6)
+            ->addColumn("type", 6);
     }
 
     function getListData(EntityListQueryParams $params)
     {
-        return $this->transform(
-            Feature::orderBy('order', 'asc')->get()
-        );
+        return $this
+            ->setCustomTransformer("type", function($value, $instance) {
+                return (Feature::TYPES[$instance->type] ?? "?")
+                    . " / "
+                    . (Feature::SUBTYPES[$instance->type][$instance->subtype] ?? "?");
+            })
+            ->transform(
+                Feature::orderBy('order', 'asc')->get()
+            );
     }
 }

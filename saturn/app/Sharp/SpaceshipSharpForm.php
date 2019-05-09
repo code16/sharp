@@ -69,6 +69,53 @@ class SpaceshipSharpForm extends SharpForm
                 )
 
         )->addField(
+            SharpFormSelectField::make(
+                "brand",
+                SpaceshipType::all()
+                    ->mapWithKeys(function($spaceshipType) {
+                        return [
+                            $spaceshipType->id => collect($spaceshipType->brands)
+                                ->mapWithKeys(function($values, $key) {
+                                    return [$key => $key];
+                                })->all()
+                        ];
+                    })
+                ->all()
+            )
+                ->setLabel("Brand (depends on type)")
+                ->setDisplayAsDropdown()
+                ->setOptionsLinkedTo("type_id")
+
+        )->addField(
+            SharpFormSelectField::make(
+                "model",
+                SpaceshipType::all()
+                    ->mapWithKeys(function($spaceshipType) {
+                        return [
+                            $spaceshipType->id => collect($spaceshipType->brands)
+                                ->mapWithKeys(function($values, $key) {
+                                    return [
+                                        $key => collect($values)->mapWithKeys(function($value) {
+                                            return [$value => $value];
+                                        })->all()
+                                    ];
+                                })->all()
+                        ];
+                    })
+                    ->all()
+            )
+                ->setLabel("Model (depends on brand)")
+                ->setDisplayAsDropdown()
+                ->setOptionsLinkedTo("type_id", "brand")
+
+        )->addField(
+            SharpFormAutocompleteField::make("serial_number", "remote")
+                ->setLabel("S/N")
+                ->setListItemInlineTemplate("{{serial}}")
+                ->setResultItemInlineTemplate("{{serial}}")
+                ->setDynamicRemoteEndpoint("/spaceships/serial_numbers/{{type_id}}")
+
+        )->addField(
             SharpFormUploadField::make("picture")
                 ->setLabel("Picture")
                 ->setFileFilterImages()
@@ -150,6 +197,8 @@ class SpaceshipSharpForm extends SharpForm
             $tab->addColumn(6, function(FormLayoutColumn $column) {
                 $column->withSingleField("name")
                     ->withSingleField("type_id")
+                    ->withSingleField("serial_number")
+                    ->withFields("brand|6", "model|6")
                     ->withSingleField("pilots")
                     ->withSingleField("reviews", function(FormLayoutColumn $listItem) {
                         $listItem->withSingleField("starts_at")
@@ -191,8 +240,15 @@ class SpaceshipSharpForm extends SharpForm
 
     function find($id): array
     {
-        return $this->setCustomTransformer("capacity", function($capacity) {
+        return $this
+            ->setCustomTransformer("capacity", function($capacity) {
                 return $capacity / 1000;
+            })
+            ->setCustomTransformer("serial_number", function($serial) {
+                return $serial ? [
+                    "id" => $serial,
+                    "serial" => str_pad($serial, 5, "0", STR_PAD_LEFT)
+                ] : null;
             })
             ->setCustomTransformer("picture", new FormUploadModelTransformer())
             ->setCustomTransformer("pictures", new FormUploadModelTransformer())

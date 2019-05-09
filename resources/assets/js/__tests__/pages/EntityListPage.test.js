@@ -270,14 +270,22 @@ describe('EntityListPage', () => {
             expect(wrapper.vm.paginated).toEqual(true);
         });
 
-        test('totalCount', ()=>{
+        test('totalCount', async ()=>{
             const wrapper = createWrapper();
             wrapper.setData({
                 data: {
+                    items: [],
                     totalCount: 10
                 }
             });
             expect(wrapper.vm.totalCount).toBe(10);
+            wrapper.setData({
+                data: {
+                    items: [1, 2, 3],
+                    totalCount: null,
+                }
+            });
+            expect(wrapper.vm.totalCount).toBe(3);
         });
 
         test('pageSize', ()=>{

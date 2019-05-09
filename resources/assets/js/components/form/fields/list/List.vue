@@ -30,7 +30,7 @@
                                     <template slot-scope="itemFieldLayout">
                                         <sharp-field-display
                                             :field-key="itemFieldLayout.key"
-                                            :context-fields="updatedItemFields"
+                                            :context-fields="transformedFields(i)"
                                             :context-data="listItemData"
                                             :error-identifier="itemFieldLayout.key"
                                             :config-identifier="itemFieldLayout.key"
@@ -69,7 +69,7 @@
 
     import { Localization, ReadOnlyFields } from '../../../../mixins';
     import localize from '../../../../mixins/localize/form';
-
+    import { transformFields, getDependantFieldsResetData } from "../../../../util/form";
 
     export default {
         name: 'SharpList',
@@ -133,12 +133,6 @@
             disabled() {
                 return this.readOnly || this.dragActive;
             },
-            updatedItemFields() {
-                if(this.readOnly || this.dragActive) {
-                    return this.readOnlyFields;
-                }
-                return this.itemFields;
-            },
             dragOptions() {
                 return { disabled:!this.dragActive, handle: '.SharpList__overlay-handle' };
             },
@@ -162,6 +156,18 @@
             },
         },
         methods: {
+            itemData(item) {
+                const { id, _fieldsLocale, ...data } = item;
+                return data;
+            },
+            transformedFields(i) {
+                const item = this.list[i];
+                const data = this.itemData(item);
+                const fields = this.readOnly || this.dragActive
+                    ? this.readOnlyFields
+                    : this.itemFields;
+                return transformFields(fields, data);
+            },
             indexedList() {
                 return (this.value||[]).map((v,i) => this.withLocale({
                     [this.indexSymbol]:i, ...v
@@ -187,9 +193,15 @@
                 this.list.splice(i,1);
             },
             update(i) {
-                return (key, value) => {
-                    const item = this.list[i];
-                    this.$set(item, key, this.fieldLocalizedValue(key, value, { ...item }, item._fieldsLocale));
+                return (key, value, { forced } = {}) => {
+                    const item = { ...this.list[i] };
+                    const data = {
+                        ...(!forced ? getDependantFieldsResetData(this.itemFields, key, () =>
+                            this.fieldLocalizedValue(key, null, item, item._fieldsLocale)
+                        ) : null),
+                        [key]: this.fieldLocalizedValue(key, value, item, item._fieldsLocale),
+                    };
+                    Object.assign(this.list[i], data);
                 }
             },
             updateLocale(i, key, value) {

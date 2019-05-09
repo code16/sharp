@@ -1,3 +1,4 @@
+@import "../../mixins/fix-module-fields-margin";
 
 .SharpForm {
 
@@ -10,6 +11,7 @@
     //margin-bottom: 2rem;
 
     @extend .SharpModule;
+    @include fix-module-fields-margin;
 
     &>.SharpModule__inner {
       background: transparent;
@@ -28,22 +30,12 @@
     }
   }
 
-  &__form-item--row {
-    margin-bottom: $form-item-margin-bottom;
+  .SharpGrid__col--empty {
+    display: none;
   }
 
-  .SharpGrid__col {
-    margin-top: $form-item-margin-bottom;
-    &--empty {
-      display: none;
-    }
-  }
-  .SharpGrid  {
-    .SharpGrid__row:first-child {
-      > .SharpGrid__col {
-        margin-top: 0;
-      }
-    }
+  .SharpGrid__col:not(.SharpGrid__col--empty), &__form-item--row {
+    margin-bottom: $form-item-margin-bottom;
   }
 
   &__form-item {

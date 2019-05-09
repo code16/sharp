@@ -77,6 +77,45 @@ Display an inline checklist (if multiple + display=list).
 
 Set the id name attribute of options (default: "id").
 
+### `setOptionsLinkedTo(string ...$fieldKeys)`
+
+Thanks to this feature, you can link the dataset (meaning: the `options`) of the select to another field of the form (or even: to some other fields). In this case, the `options` array must be indexed with the value of the linked field. 
+
+For instance:
+
+```php
+    SharpFormSelectField::make("brand",
+        [
+            "France" => [
+                ["id"=>1, "label"=>"Renault"],
+                ["id"=>2, "label"=>"Peugeot"],
+            ], "Germany" => [
+                ["id"=>3, "label"=>"Audi"],
+                ["id"=>4, "label"=>"Mercedes"],
+            ]
+        ]
+    )->setOptionsLinkedTo("country")
+```
+
+This would work on relation with a `country` form field, which may be valued with "France" or "Germany".
+
+In some cases you may want to depend on more than one field; you must add a nested level in the `options` array:
+
+```php
+    SharpFormSelectField::make("model",
+        [
+            "France" => [
+                1 => [["id"=>67, "label"=>"Clio"], ...],
+                2 => ...
+            ], "Germany" => [
+                3 => [["id"=>98, "label"=>"A4"], ...],
+                4 => ...
+            ]
+        ]
+    )->setOptionsLinkedTo("country", "brand")
+```
+
+
 ## Formatter
 
 - `toFront`: expects

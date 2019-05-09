@@ -61,13 +61,15 @@
                     fieldConfigIdentifier: this.fieldConfigIdentifier,
                     ...fieldProps
                 },
+                attrs: {
+                    dynamicAttributes: fieldProps.dynamicAttributes,
+                },
                 on: {
                     input: (val, options={}) => {
-                        let { force } = options;
-                        if(this.fieldProps.readOnly && !force)
+                        if(this.fieldProps.readOnly && !options.force)
                             util.log(`SharpField '${this.fieldKey}', can't update because is readOnly`);
                         else
-                            this.updateData(this.fieldKey,val);
+                            this.updateData(this.fieldKey, val, { forced:options.force });
                     },
                     blur: () => {
                         this.fieldProps.focused = false;

@@ -209,7 +209,7 @@
                 return !!this.config.paginated;
             },
             totalCount() {
-                return this.data.totalCount;
+                return this.data.totalCount || this.items.length;
             },
             pageSize() {
                 return this.data.pageSize;

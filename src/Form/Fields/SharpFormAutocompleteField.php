@@ -57,6 +57,11 @@ class SharpFormAutocompleteField extends SharpFormField
     protected $searchMinChars = 1;
 
     /**
+     * @var array
+     */
+    protected $dynamicAttributes;
+
+    /**
      * @param string $key
      * @param string $mode "local" or "remote"
      * @return static
@@ -75,7 +80,7 @@ class SharpFormAutocompleteField extends SharpFormField
      */
     public function setLocalValues($localValues)
     {
-        $this->localValues = static::formatOptions($localValues);
+        $this->localValues = $localValues;
 
         return $this;
     }
@@ -98,6 +103,38 @@ class SharpFormAutocompleteField extends SharpFormField
     public function setRemoteEndpoint(string $remoteEndpoint)
     {
         $this->remoteEndpoint = $remoteEndpoint;
+
+        return $this;
+    }
+
+    /**
+     * @param string $dynamicRemoteEndpoint
+     * @param array $defaultValues
+     * @return $this
+     */
+    public function setDynamicRemoteEndpoint(string $dynamicRemoteEndpoint, array $defaultValues = [])
+    {
+        $this->remoteEndpoint = $dynamicRemoteEndpoint;
+
+        if($defaultValues) {
+            $defaultEndpoint = $dynamicRemoteEndpoint;
+            collect($defaultValues)
+                ->each(function ($value, $name) use (&$defaultEndpoint) {
+                    $defaultEndpoint = str_replace("{{" . $name . "}}", $value, $defaultEndpoint);
+                });
+        }
+
+        $this->dynamicAttributes = [
+            array_merge(
+                [
+                    "name" => "remoteEndpoint",
+                    "type"  => "template"
+                ],
+                ($defaultEndpoint ?? false)
+                    ? ["default" => $defaultEndpoint]
+                    : []
+            )
+        ];
 
         return $this;
     }
@@ -192,6 +229,23 @@ class SharpFormAutocompleteField extends SharpFormField
     }
 
     /**
+     * @param string ...$fieldKeys
+     * @return $this
+     */
+    public function setLocalValuesLinkedTo(string ...$fieldKeys)
+    {
+        $this->dynamicAttributes = [
+            [
+                "name" => "localValues",
+                "type" => "map",
+                "path" => $fieldKeys
+            ]
+        ];
+
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function isRemote()
@@ -240,19 +294,26 @@ class SharpFormAutocompleteField extends SharpFormField
      */
     public function toArray(): array
     {
-        return parent::buildArray([
-            "mode" => $this->mode,
-            "placeholder" => $this->placeholder,
-            "localValues" => $this->localValues,
-            "itemIdAttribute" => $this->itemIdAttribute,
-            "searchKeys" => $this->localSearchKeys,
-            "remoteEndpoint" => $this->remoteEndpoint,
-            "remoteMethod" => $this->remoteMethod,
-            "remoteSearchAttribute" => $this->remoteSearchAttribute,
-            "listItemTemplate" => $this->template("list"),
-            "resultItemTemplate" => $this->template("result"),
-            "searchMinChars" => $this->searchMinChars,
-            "localized" => $this->localized,
-        ]);
+        return parent::buildArray(
+            array_merge([
+                "mode" => $this->mode,
+                "placeholder" => $this->placeholder,
+                "localValues" => $this->isLocal() && $this->dynamicAttributes
+                    ? self::formatDynamicOptions($this->localValues, count($this->dynamicAttributes[0]["path"]))
+                    : ($this->isLocal() ? self::formatOptions($this->localValues) : []),
+                "itemIdAttribute" => $this->itemIdAttribute,
+                "searchKeys" => $this->localSearchKeys,
+                "remoteEndpoint" => $this->remoteEndpoint,
+                "remoteMethod" => $this->remoteMethod,
+                "remoteSearchAttribute" => $this->remoteSearchAttribute,
+                "listItemTemplate" => $this->template("list"),
+                "resultItemTemplate" => $this->template("result"),
+                "searchMinChars" => $this->searchMinChars,
+                "localized" => $this->localized,
+            ], $this->dynamicAttributes
+                ? ["dynamicAttributes" => $this->dynamicAttributes]
+                : []
+            )
+        );
     }
 }
