@@ -31,7 +31,8 @@
     "setupFiles": [
       "<rootDir>/resources/assets/js/__tests__/setup/mockument.js",
       "<rootDir>/resources/assets/js/__tests__/setup/mockBootstrapVue.js",
-      "<rootDir>/resources/assets/js/__tests__/setup/setupVue.js"
+      "<rootDir>/resources/assets/js/__tests__/setup/setupVue.js",
+      "<rootDir>/resources/assets/js/polyfill.js"
     ]
   },
   "scripts": {

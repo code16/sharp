@@ -6,12 +6,12 @@ Class: `Code16\Sharp\Form\Fields\SharpFormAutocompleteField`
 
 ### Constructor: `make(string $key, string $mode)`
 
-`$mode` must be either "local" (dictionnary is defined locally with `setLocalValues()`) or "remote" (a endpoint must be provided).
+`$mode` must be either "local" (dictionary is defined locally with `setLocalValues()`) or "remote" (a endpoint must be provided).
 
 
 ### `setLocalValues($localValues)`
 
-Set the values of the dictionnary on mode=local, as an object array with at least an `id` attribute (or the `setItemIdAttribute` value).
+Set the values of the dictionary on mode=local, as an object array with at least an `id` attribute (or the `setItemIdAttribute` value).
 
 ### `setLocalSearchKeys(array $searchKeys)`
 
@@ -20,7 +20,7 @@ Default: `["value"]`
 
 ### `setSearchMinChars(int $searchMinChars)`
 
-Set a miminum number of character to type before perfoming the search.
+Set a minimum number of character to type before performing the search.
 Default: `1`
 
 ### `setRemoteEndpoint(string $remoteEndpoint)`
@@ -80,6 +80,34 @@ The template will be [interpreted by Vue.js](https://vuejs.org/v2/guide/syntax.h
 The template will be use, depending on the function, to display either the list item (in the result dropdown) or the result item (meaning the valuated form input).
 
 Be aware that you'll need for this to work to pass a valuated object to the Autocomplete, as data.
+
+### `setLocalValuesLinkedTo(string ...$fieldKeys)`
+
+This method is useful to link the dataset of a local autocomplete (aka: the `localValues`) to another form field. Please refer to [the documentation of the select field's `setOptionsLinkedTo()` method](select.md), which is identical.
+
+### setDynamicRemoteEndpoint(string $dynamicRemoteEndpoint, array $defaultValues)
+
+In a remote autocomplete case, you can use this method instead of `setRemoteEndpoint` to handle a dynamic URL, based on another form field. Here's how, for example:
+
+```php
+    SharpFormAutocompleteField::make("brand", "remote")
+        ->setDynamicRemoteEndpoint("/brands/{{country}}");
+```
+
+In this example, the `{{country}}` placeholder will be replaced by the value of the `country` form field. You can define multiple replacements if necessary.
+
+You may need to provide a default value for the endpoint, used when `country` (in our example) is not valued (without default, the autocomplete field will be displayed as disabled). To do that,
+ fill the second argument:
+
+```php
+    SharpFormAutocompleteField::make("model", "remote")
+        ->setDynamicRemoteEndpoint("/models/{{country}}/{{brand}}", [
+	        "country" => "france",
+	        "brand" => "renault"
+        ]);
+```
+
+The default endpoint would be `/brands/france/renault`.
 
 
 ## Formatter

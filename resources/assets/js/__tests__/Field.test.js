@@ -95,7 +95,13 @@ describe('sharp-field', () => {
         renderedField.$emit('input', 'Coucou');
 
         expect(updateData).toHaveBeenCalledTimes(1);
-        expect(updateData).toHaveBeenCalledWith('title','Coucou');
+        expect(updateData).toHaveBeenCalledWith('title','Coucou', { forced:undefined });
+
+        updateData.mockClear();
+        renderedField.$emit('input', 'Bonjour', { force: true });
+
+        expect(updateData).toHaveBeenCalledTimes(1);
+        expect(updateData).toHaveBeenCalledWith('title', 'Bonjour', { forced: true });
     });
 
     test("don't call update when readOnly if input emitted", async () => {

@@ -24,7 +24,7 @@ trait HasFieldRows
     }
 
     /**
-     * @param \string[] ...$fieldKeys
+     * @param string ...$fieldKeys
      * @return $this
      */
     public function withFields(string ...$fieldKeys)
