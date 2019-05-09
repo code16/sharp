@@ -19,7 +19,6 @@ use Code16\Sharp\Http\Middleware\RestoreEntityListParams;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
 use Code16\Sharp\Http\SharpContext;
-use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Intervention\Image\ImageServiceProviderLaravel5;
@@ -68,13 +67,13 @@ class SharpServiceProvider extends ServiceProvider
         );
 
         // Override Laravel's Gate to handle Sharp's ability to define a custom Guard
-        $this->app->singleton(GateContract::class, function ($app) {
-            return new \Illuminate\Auth\Access\Gate($app, function () use ($app) {
-                return request()->is("sharp") || request()->is("sharp/*")
-                    ? sharp_user()
-                    : auth()->guard(config("auth.defaults.guard"))->user();
-            });
-        });
+//        $this->app->singleton(GateContract::class, function ($app) {
+//            return new \Illuminate\Auth\Access\Gate($app, function () use ($app) {
+//                return request()->is("sharp") || request()->is("sharp/*")
+//                    ? sharp_user()
+//                    : auth()->guard(config("auth.defaults.guard"))->user();
+//            });
+//        });
 
         $this->commands([
             CreateUploadsMigration::class,
