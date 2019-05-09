@@ -127,6 +127,11 @@ $small-breakpoint: sm;
   .sortable-chosen {
     @include focus-outline('border');
   }
+
+  .popover {
+    z-index: 200;
+    @include focus-outline('layer');
+  }
 }
 
 .modal-open {

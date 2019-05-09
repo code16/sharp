@@ -18,8 +18,8 @@
                 </svg>
             </button>
         </div>
-        <b-popover :target="()=>$refs.input" :show.sync="showPicker" container="sharp-app" triggers="">
-            <div class="SharpDate__picker" v-show="showPicker" @mousedown.prevent>
+        <b-popover :target="()=>$refs.input" :show.sync="showPicker" container="sharp-app" triggers="" placement="bottomright" ref="popper">
+            <div class="SharpDate__picker position-static">
                 <sharp-date-picker v-if="hasDate"
                     class="SharpDate__date"
                     :language="language"
