@@ -15,7 +15,9 @@ The Panel needs a view template, that you can provide in two ways:
 
 ### `setInlineTemplate(string $template)`
 
+::: v-pre
 Just write the template as a string, using placeholders for data like this: `{{var}}`.
+:::
 
 Example:
 
@@ -44,7 +46,7 @@ Valuation is handled by a dedicated `$this->setPanelData(string $panelWidgetKey,
     function buildWidgetsData()
     {
         $count = [...];
-        
+
         $this->setPanelData(
             "activeSpaceships", ["count" => $count]
         );

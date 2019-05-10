@@ -2,7 +2,7 @@
 
 Class: `Code16\Sharp\Form\Fields\SharpFormDateField`
 
-![Example](date.gif)
+![Example](./date.gif)
 
 ## Configuration
 

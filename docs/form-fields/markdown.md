@@ -4,7 +4,7 @@ This form field is a markdown editor, with formatting and an optional toolbar.
 
 Class: `Code16\Sharp\Form\Fields\SharpFormMarkdownField`
 
-![Example](markdown.gif)
+![Example](./markdown.gif)
 
 
 ## Configuration
@@ -74,7 +74,7 @@ Set the destination storage disk (as configured in Laravel's  `config/filesystem
 
 #### `setStorageBasePath(string $storageBasePath)`
 
-Set the destination base storage path. You can use the `{id}` special placeholder to add the instance id in the path. 
+Set the destination base storage path. You can use the `{id}` special placeholder to add the instance id in the path.
 
 For instance:
 `$field->setStorageBasePath('/users/{id}/markdown')`

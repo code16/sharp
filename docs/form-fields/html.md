@@ -9,7 +9,9 @@ This field is read-only, and is meant to display some dynamic information in the
 
 ### `setInlineTemplate(string $template)`
 
+::: v-pre
 Just write the template as a string, using placeholders for data like this: `{{var}}`.
+:::
 
 Example:
 

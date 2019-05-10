@@ -9,7 +9,7 @@ The front-end of Sharp 4 is made with the JS framework [Vue.js](https://vuejs.or
 
 Diagrams in this document follows this convention :
 
-![Diagrams legend](imgs/HowToRead.png)
+![Diagrams legend](./imgs/HowToRead.png)
 
 1. An abstract entity isn't defined, it's purpose is to give a context to descendant entities (for the clarity of the diagram)
 2. A slot component is explicitly written in a `.blade` file
@@ -18,7 +18,7 @@ Diagrams in this document follows this convention :
 ---
 ## The root component
 
-![Sharp root component](imgs/RootComponent.png)
+![Sharp root component](./imgs/RootComponent.png)
 
 Components above are defined in each `.blade` Sharp pages :
 * Dashboard
@@ -28,9 +28,9 @@ Components above are defined in each `.blade` Sharp pages :
 ---
 ## Action view
 
-![Action view component](imgs/ActionView.png)
+![Action view component](./imgs/ActionView.png)
 
-1. The «main modal» can be called in every child components. To do so, emit the event showMainModal with the actionsBus. 
+1. The «main modal» can be called in every child components. To do so, emit the event showMainModal with the actionsBus.
 Used to show text/error message.
 
 ### Props
@@ -41,7 +41,7 @@ Prop name | Required | Description
 ---
 
 ## Form
-![Form component](imgs/Form.png)
+![Form component](./imgs/Form.png)
 
 1. If the field's layout define a fieldset, it display another FieldsLayout component corresponding of the fieldset layout. Else the FieldDisplay component is used
 
@@ -56,7 +56,7 @@ Prop name | Required | Type | Default | Description
 `reset-data-after-submitted` | `false` | *Boolean* | `false` | Reset data object after sucessful submission
 
 ### FieldDisplay
-![Field Display component](imgs/FieldDisplay.png)
+![Field Display component](./imgs/FieldDisplay.png)
 
 The *FieldDiplay* component :
 * Decide if the Field is visible (it compute the given field's conditional display with the other context's fields)
@@ -87,7 +87,7 @@ Prop name | Required | Type | Description
 ---
 
 ## EntitiesList
-![EntitiesList component](imgs/EntitiesList.png)
+![EntitiesList component](./imgs/EntitiesList.png)
 
 1. These modals instantiate each command forms. If the user click on a command with a form, the corresponding modal is displayed
 
@@ -99,4 +99,4 @@ Prop name | Required | Type | Description
 ---
 
 ## Dashboard
-![Dashboard component](imgs/Dashboard.png) 
+![Dashboard component](./imgs/Dashboard.png)

@@ -225,7 +225,7 @@ Sometimes you may want to "scope" the entire data set. An example could be a use
 
 Instead of adding a filter on almost every Entity List, in this case, you can define a global filter, which will appear like this (on the left menu):
 
-![Example](img/global-filter.png)
+![Example](./img/global-filter.png)
 
 To achieve this, first write the filter class, like any filter, except it must implement `\Code16\Sharp\Utils\Filters\GlobalRequiredFilter` — meaning it must be a required filter.
 

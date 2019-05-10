@@ -1,6 +1,6 @@
 <div align="center">
 
-![Sharp 4](docs/img/logo2.png)
+![Sharp 4](./docs/img/logo2.png)
 
 </div>
 
@@ -33,11 +33,11 @@ And a few more articles on specific features:
 - [What's new in 4.1](https://medium.com/@lonchampt/sharp-for-laravel-4-1-is-now-released-964c8b6b0491)
 - [New features in 4.1.3](https://medium.com/@lonchampt/sharp-4-1-3-and-its-new-features-a498c8b67629)
 
-![Dashboard](docs/img/dashboard.png)
+![Dashboard](./docs/img/dashboard.png)
 
-![Entity list](docs/img/list.png)
+![Entity list](./docs/img/list.png)
 
-![Entity form](docs/img/form.png)
+![Entity form](./docs/img/form.png)
 
 ## Terminology, general concept
 
@@ -65,7 +65,7 @@ A tip on this last command: you'll need fresh assets each time Sharp is updated,
         "@php artisan package:discover"
     ]
 },
-``` 
+```
 
 ## Configuration
 

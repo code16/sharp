@@ -4,7 +4,7 @@ Wysiwyg stands for What You See Is What You Get. This is therefore an HTML edito
 
 Class: `Code16\Sharp\Form\Fields\SharpFormWysiwygField`
 
-![Example](wysiwyg.gif)
+![Example](./wysiwyg.gif)
 
 
 ## Configuration
@@ -43,7 +43,7 @@ Example:
 ```php
     SharpFormWysiwygField::make("description")
             ->setToolbar([
-                SharpFormWysiwygField::B, 
+                SharpFormWysiwygField::B,
                 SharpFormWysiwygField::I,
                 SharpFormWysiwygField::SEPARATOR,
                 SharpFormWysiwygField::H1,

@@ -53,6 +53,7 @@ Default: `"id"`
 
 ### `setListItemInlineTemplate(string $template)` and `setResultItemInlineTemplate(string $template)`
 
+::: v-pre
 Just write the template as a string, using placeholders for data like this: `{{var}}`.
 
 Example:
@@ -114,7 +115,7 @@ The default endpoint would be `/brands/france/renault`.
 
 ### `toFront`
 
-If **mode=local**, you must pass there either: 
+If **mode=local**, you must pass there either:
 - an single id, since the label will be grabbed from the `localValues` array,
 - or an object with an `id` (or whatever was configure through `setItemIdAttribute()`) property.
 

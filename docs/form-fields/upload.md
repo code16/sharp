@@ -2,7 +2,7 @@
 
 Class: `Code16\Sharp\Form\Fields\SharpFormUploadField`
 
-![Example](upload.gif)
+![Example](./upload.gif)
 
 ## General configuration
 
@@ -10,7 +10,7 @@ First, in order to get the upload part working, you have to define a "tmp" path 
 
 ```php
     // in config/sharp.php
-    
+
     "uploads" => [
         "tmp_dir" => env("SHARP_UPLOADS_TMP_DIR", "tmp"),
     ]
@@ -23,7 +23,7 @@ This `tmp_dir` path is relative to the `local` filesystem defined in the Laravel
 
 ### `setMaxFileSize(float $sizeInMB)`
 
-Max file size allowed. 
+Max file size allowed.
 
 ### `setCropRatio(string $ratio, array $croppableFileTypes = null)`
 
@@ -39,7 +39,7 @@ Set the destination storage disk (as configured in Laravel's  `config/filesystem
 
 ### `setStorageBasePath(string $storageBasePath)`
 
-Set the destination base storage path. You can use the `{id}` special placeholder to add the instance id in the path. 
+Set the destination base storage path. You can use the `{id}` special placeholder to add the instance id in the path.
 
 For instance:
 `$field->setStorageBasePath('/users/{id}/avatar')`
@@ -59,9 +59,9 @@ If true and if the upload has a thumbnail, it is limited to 60px high (to compac
 
 ## Formatter
 
-This part is more complex for this field than others... 
+This part is more complex for this field than others...
 
-First, let's mention that Sharp provides an Eloquent built-in solution for uploads with the `SharpUploadModel` class, as [detailed here](../sharp-built-in-solution-for-uploads.md), which greatly simplify the work. 
+First, let's mention that Sharp provides an Eloquent built-in solution for uploads with the `SharpUploadModel` class, as [detailed here](../sharp-built-in-solution-for-uploads.md), which greatly simplify the work.
 
 Here's the documentation for the non built-in solution:
 
@@ -83,7 +83,7 @@ The formatter can't handle it automatically, it too project-specific. You'll hav
 ```php
     function find($id): array
     {
-        return $this->setCustomTransformer("picture", 
+        return $this->setCustomTransformer("picture",
             function($value, $spaceship, $attribute) {
                 return [
                     "name" => $spaceship->picture->name,
@@ -125,12 +125,12 @@ Using the `Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater`, you will pr
         $instance = $id ? Spaceship::findOrFail($id) : new Spaceship;
 
         $this->ignore("picture")->save($instance, $data);
-        
+
         // Then handle $data["picture"] here
     }
 ```
 
-#### existing transformed file 
+#### existing transformed file
 
 In this case, the file was already stored, but was transformed (cropped, or rotated). The formatter will transform the file, store the result and simply return and array with one key:
 

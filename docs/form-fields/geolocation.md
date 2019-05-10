@@ -4,7 +4,7 @@ A map-based field to pick a precise location and return its coordinates (latitud
 
 Class: `Code16\Sharp\Form\Fields\SharpFormGeolocationField`
 
-![Example](geolocation.gif)
+![Example](./geolocation.gif)
 
 ## Configuration
 
@@ -14,8 +14,8 @@ Sets the coordinate display to be degrees-minutes-second, eg: `17°10'16'', 89°
 
 ### `setDisplayUnitDecimalDegrees()`
 
-Sets the coordinate display to be decimal degrees, eg: 
-`0.36666667, 17.15722222`. 
+Sets the coordinate display to be decimal degrees, eg:
+`0.36666667, 17.15722222`.
 This is the default.
 
 ### `setInitialPosition(float $lat, float $lng)` and `clearInitialPosition()`

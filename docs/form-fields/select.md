@@ -2,7 +2,7 @@
 
 Class: `Code16\Sharp\Form\Fields\SharpFormSelectField`
 
-![Example](select1.gif)
+![Example](./select1.gif)
 
 ## Configuration
 
@@ -38,7 +38,7 @@ This allows to write code like this:
 
 Allow multi-selection (default: false)
 
-![Example](select3.gif)
+![Example](./select3.gif)
 
 
 ### `setClearable(bool $clearable = true)`
@@ -52,13 +52,13 @@ Display as a list (the default value):
 - radio if multiple=false
 - checkboxes if multiple=true
 
-![Example](select2.gif)
+![Example](./select2.gif)
 
 ### `setDisplayAsDropdown()`
 
 Display as a classic dropdown.
 
-![Example](select1.gif)
+![Example](./select1.gif)
 
 ### `setMaxSelected(int $maxSelected)`
 
@@ -79,7 +79,7 @@ Set the id name attribute of options (default: "id").
 
 ### `setOptionsLinkedTo(string ...$fieldKeys)`
 
-Thanks to this feature, you can link the dataset (meaning: the `options`) of the select to another field of the form (or even: to some other fields). In this case, the `options` array must be indexed with the value of the linked field. 
+Thanks to this feature, you can link the dataset (meaning: the `options`) of the select to another field of the form (or even: to some other fields). In this case, the `options` array must be indexed with the value of the linked field.
 
 For instance:
 
@@ -121,7 +121,7 @@ In some cases you may want to depend on more than one field; you must add a nest
 - `toFront`: expects
 	- a single id value if multiple=false
 	- an array of id values OR an array of models if multiple=true
-	
+
 - `fromFront`: returns
 	- a single id value if multiple=false
 	- an array of arrays with the "id" key otherwise:
