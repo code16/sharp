@@ -1,0 +1,23 @@
+.popover {
+  z-index: 80;
+  position: absolute;
+  top: 0;
+  left: 0;
+  @include focus-outline('layer');
+  .arrow {
+    position: absolute;
+    display: block;
+    width: $popover-arrow-width;
+    height: $popover-arrow-height;
+    margin: 0 $border-radius-lg;
+
+    &::before,
+    &::after {
+      position: absolute;
+      display: block;
+      content: "";
+      border-color: transparent;
+      border-style: solid;
+    }
+  }
+}

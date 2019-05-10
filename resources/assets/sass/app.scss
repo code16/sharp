@@ -17,6 +17,7 @@ $css--reset:false;
 @import '~bootstrap/scss/mixins/breakpoints';
 @import '~bootstrap/scss/mixins/visibility';
 
+
 @import "typography";
 
 @import 'components/loading/Loading';
@@ -112,6 +113,8 @@ $small-breakpoint: sm;
 
   @import 'components/GlobalFilters';
 
+  @import "components/popover";
+
   input[type="number"].hide-controls {
     &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
       -webkit-appearance: none;
@@ -126,11 +129,6 @@ $small-breakpoint: sm;
 
   .sortable-chosen {
     @include focus-outline('border');
-  }
-
-  .popover {
-    z-index: 200;
-    @include focus-outline('layer');
   }
 }
 
