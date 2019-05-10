@@ -17,6 +17,7 @@ $css--reset:false;
 @import '~bootstrap/scss/mixins/breakpoints';
 @import '~bootstrap/scss/mixins/visibility';
 
+
 @import "typography";
 
 @import 'components/loading/Loading';
@@ -43,6 +44,7 @@ $small-breakpoint: sm;
   @import '~bootstrap/scss/utilities/flex';
   @import '~bootstrap/scss/utilities/visibility';
   @import '~bootstrap/scss/utilities/spacing';
+  @import '~bootstrap-vue/src/utilities';
 
   @import "./transitions";
 
@@ -111,6 +113,8 @@ $small-breakpoint: sm;
   @import 'components/Card';
 
   @import 'components/GlobalFilters';
+
+  @import "components/popover";
 
   input[type="number"].hide-controls {
     &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {

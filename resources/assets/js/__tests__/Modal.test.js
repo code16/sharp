@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import { mount } from '@vue/test-utils';
 import SharpModal from '../components/Modal.vue';
 
@@ -18,7 +19,8 @@ describe('modal', ()=>{
                 okTitle: 'ok title',
                 okOnly: false,
                 title: 'title',
-            }
+            },
+            localVue: Vue,
         });
         expect(wrapper.html()).toMatchSnapshot();
     });

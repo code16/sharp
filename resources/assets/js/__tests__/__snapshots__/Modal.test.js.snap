@@ -2,11 +2,11 @@
 
 exports[`modal mount 1`] = `
 <div class="SharpModal">
-	<div id="__BV_modal_outer_mocked">
-		<div id="mocked" role="dialog" aria-hidden="true" class="modal fade" style="display: none;">
+	<div id="modal-id___BV_modal_outer_" style="position: absolute; z-index: 1040;">
+		<div id="modal-id" role="dialog" tabindex="-1" aria-hidden="true" class="modal fade" style="display: none;">
 			<div class="modal-dialog modal-md">
-				<div tabindex="-1" role="document" aria-labelledby="__BV_modal_header_mocked" aria-describedby="__BV_modal_body_mocked" class="modal-content">
-					<header id="__BV_modal_header_mocked" class="modal-header">
+				<div role="document" id="modal-id___BV_modal_content_" aria-labelledby="modal-id___BV_modal_header_" aria-describedby="modal-id___BV_modal_body_" class="modal-content">
+					<header id="modal-id___BV_modal_header_" class="modal-header">
 						<div>
 							<h5 class="SharpModal__heading">title</h5>
 							<button type="button" class="SharpModal__close">
@@ -16,14 +16,15 @@ exports[`modal mount 1`] = `
 							</button>
 						</div>
 					</header>
-					<div id="__BV_modal_body_mocked" class="modal-body"></div>
-					<footer id="__BV_modal_footer_mocked" class="modal-footer">
-						<button type="button" class="btn btn-primary">ok title</button>
+					<div id="modal-id___BV_modal_body_" class="modal-body"></div>
+					<footer id="modal-id___BV_modal_footer_" class="modal-footer">
 						<button type="button" class="btn btn-secondary">cancel title</button>
+						<button type="button" class="btn btn-primary">ok title</button>
 					</footer>
 				</div>
 			</div>
 		</div>
+		<!---->
 		<!---->
 	</div>
 </div>
@@ -31,24 +32,25 @@ exports[`modal mount 1`] = `
 
 exports[`modal mount ok only 1`] = `
 <div class="SharpModal">
-	<div id="__BV_modal_outer_mocked">
-		<div id="mocked" role="dialog" aria-hidden="true" class="modal fade" style="display: none;">
+	<div id="mocked___BV_modal_outer_" style="position: absolute; z-index: 1040;">
+		<div id="mocked" role="dialog" tabindex="-1" aria-hidden="true" class="modal fade" style="display: none;">
 			<div class="modal-dialog modal-md">
-				<div tabindex="-1" role="document" aria-labelledby="__BV_modal_header_mocked" aria-describedby="__BV_modal_body_mocked" class="modal-content">
-					<header id="__BV_modal_header_mocked" class="modal-header">
+				<div role="document" id="mocked___BV_modal_content_" aria-labelledby="mocked___BV_modal_header_" aria-describedby="mocked___BV_modal_body_" class="modal-content">
+					<header id="mocked___BV_modal_header_" class="modal-header">
 						<div>
 							<h5 class="SharpModal__heading"></h5>
 							<!---->
 						</div>
 					</header>
-					<div id="__BV_modal_body_mocked" class="modal-body"></div>
-					<footer id="__BV_modal_footer_mocked" class="modal-footer">
-						<button type="button" class="btn btn-primary">{{ modals.ok_button }}</button>
+					<div id="mocked___BV_modal_body_" class="modal-body"></div>
+					<footer id="mocked___BV_modal_footer_" class="modal-footer">
 						<!---->
+						<button type="button" class="btn btn-primary">{{ modals.ok_button }}</button>
 					</footer>
 				</div>
 			</div>
 		</div>
+		<!---->
 		<!---->
 	</div>
 </div>
@@ -56,11 +58,11 @@ exports[`modal mount ok only 1`] = `
 
 exports[`modal mount visible 1`] = `
 <div class="SharpModal">
-	<div id="__BV_modal_outer_mocked">
-		<div id="mocked" role="dialog" class="modal fade" style="">
+	<div id="mocked___BV_modal_outer_" style="position: absolute; z-index: 1040;">
+		<div id="mocked" role="dialog" tabindex="-1" class="modal fade" style="" aria-modal="true">
 			<div class="modal-dialog modal-md">
-				<div tabindex="-1" role="document" aria-labelledby="__BV_modal_header_mocked" aria-describedby="__BV_modal_body_mocked" class="modal-content">
-					<header id="__BV_modal_header_mocked" class="modal-header">
+				<div role="document" id="mocked___BV_modal_content_" aria-labelledby="mocked___BV_modal_header_" aria-describedby="mocked___BV_modal_body_" class="modal-content">
+					<header id="mocked___BV_modal_header_" class="modal-header">
 						<div>
 							<h5 class="SharpModal__heading"></h5>
 							<button type="button" class="SharpModal__close">
@@ -70,15 +72,16 @@ exports[`modal mount visible 1`] = `
 							</button>
 						</div>
 					</header>
-					<div id="__BV_modal_body_mocked" class="modal-body"></div>
-					<footer id="__BV_modal_footer_mocked" class="modal-footer">
-						<button type="button" class="btn btn-primary">{{ modals.ok_button }}</button>
+					<div id="mocked___BV_modal_body_" class="modal-body"></div>
+					<footer id="mocked___BV_modal_footer_" class="modal-footer">
 						<button type="button" class="btn btn-secondary">{{ modals.cancel_button }}</button>
+						<button type="button" class="btn btn-primary">{{ modals.ok_button }}</button>
 					</footer>
 				</div>
 			</div>
 		</div>
-		<div id="__BV_modal_backdrop_mocked" class="modal-backdrop fade"></div>
+		<!---->
+		<div id="mocked___BV_modal_backdrop_" class="modal-backdrop fade"></div>
 	</div>
 </div>
 `;

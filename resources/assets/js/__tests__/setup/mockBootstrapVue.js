@@ -4,12 +4,16 @@ const mockPlugin = {
     install(Vue) {
         Vue.mixin({
             created() {
-                if(typeof this.safeId === 'function') {
-                    this.safeId = jest.fn(prepend => `${prepend||''}mocked`);
+                if(this.localId_ !== 'mocked') {
+                    Object.defineProperty(this, 'localId_', {
+                        get:()=>'mocked'
+                    });
                 }
             }
         })
     }
 };
+
+process.env.BOOTSTRAP_VUE_NO_WARN = true;
 
 Vue.use(mockPlugin);

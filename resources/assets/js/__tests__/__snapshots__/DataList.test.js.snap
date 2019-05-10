@@ -89,7 +89,7 @@ exports[`DataList mount items slot 1`] = `
 exports[`DataList mount pagination 1`] = `
 <div class="SharpDataList">
 	<div class="SharpDataList__pagination-container">
-		<sharppagination-stub minpageendbuttons="3" limit="7" min-page-end-buttons="3" totalrows="10" total-rows="10" perpage="3" per-page="3" value="2"></sharppagination-stub>
+		<sharppagination-stub minpageendbuttons="3" limit="7" totalrows="10" perpage="3" value="2"></sharppagination-stub>
 	</div>
 </div>
 `;

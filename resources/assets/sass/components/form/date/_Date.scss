@@ -51,19 +51,18 @@
   }
 
   &--open {
-    z-index: 200;
     .SharpDate__picker, .SharpDate__input-wrapper {
       @include focus-outline('layer');
     }
   }
 
-  .SharpDate__calendar {
+  &__calendar {
     height: auto!important; // #auto-version
     min-height: 100%;
     @extend .flatpickr-calendar;
   }
 
-  .SharpDate__picker {
+  @at-root &__picker {
     position: absolute;
     display: flex;
     //min-height: rem(215px);

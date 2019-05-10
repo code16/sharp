@@ -2,7 +2,7 @@ import Vue from 'vue';
 import DateField from '../components/form/fields/date/Date.vue';
 import moment from 'moment-timezone';
 
-import { MockInjections, QueryComponent, MockI18n } from './utils';
+import { MockInjections, MockI18n } from './utils';
 
 
 function date(...args) {
@@ -11,7 +11,6 @@ function date(...args) {
 
 describe('date-field',()=>{
     Vue.component('sharp-date', DateField);
-    Vue.use(QueryComponent);
 
     moment.tz.setDefault('UTC');
 
@@ -90,7 +89,7 @@ describe('date-field',()=>{
             }
         });
 
-        let timepicker = $date.$findChild('SharpTimePicker');
+        let timepicker = $date.$refs.timepicker;
 
         $date.showPicker = true;
 
@@ -112,7 +111,7 @@ describe('date-field',()=>{
     test('expose appropriate props to DatePicker', async () => {
         let $date = await createVm();
 
-        let datepicker = $date.$findChild('SharpDatepicker');
+        let datepicker = $date.$refs.datepicker;
 
         expect(datepicker.$props).toMatchObject({
             value: date(1996, 7, 20, 12, 11),
@@ -135,7 +134,7 @@ describe('date-field',()=>{
     test('emit input on date changed & correct value', async () => {
         let $date = await createVm();
 
-        let datepicker = $date.$findChild('SharpDatepicker');
+        let datepicker = $date.$refs.datepicker;
 
         let inputEmitted = jest.fn();
         $date.$on('input', inputEmitted);
@@ -149,7 +148,7 @@ describe('date-field',()=>{
     test('emit input on time changed & correct value', async () => {
         let $date = await createVm();
 
-        let timepicker = $date.$findChild('SharpTimePicker');
+        let timepicker = $date.$refs.timepicker;
 
         let inputEmitted = jest.fn();
         $date.$on('input', inputEmitted);
