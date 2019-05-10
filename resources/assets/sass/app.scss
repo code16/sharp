@@ -44,6 +44,7 @@ $small-breakpoint: sm;
   @import '~bootstrap/scss/utilities/flex';
   @import '~bootstrap/scss/utilities/visibility';
   @import '~bootstrap/scss/utilities/spacing';
+  @import '~bootstrap-vue/src/utilities';
 
   @import "./transitions";
 

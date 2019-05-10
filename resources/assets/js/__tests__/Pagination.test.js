@@ -2,25 +2,38 @@ import { mount } from '@vue/test-utils';
 import Pagination from '../components/list/Pagination.vue';
 
 describe('pagination', ()=>{
-    function createPagination(props={}) {
+    function createWrapper() {
         return mount(Pagination, {
-            context: {
-                attrs: {},
-                props: {
-                    minPageEndButtons: 3,
-                    totalRows: 100,
-                    perPage: 10,
-                    ...props
-                }
+            propsData: {
+                value: 1,
+                minPageEndButtons: 3,
+                totalRows: 100,
+                perPage: 10,
             }
         });
     }
 
     test('mount pagination', ()=>{
-        expect(createPagination().html()).toMatchSnapshot();
+        expect(createWrapper().html()).toMatchSnapshot();
     });
 
     test('mount pagination without end buttons', ()=>{
-        expect(createPagination({ totalRows: 20 }).html()).toMatchSnapshot();
+        const wrapper = createWrapper();
+        wrapper.setProps({
+            totalRows: 20,
+            perPage: 10,
+            minPageEndButtons: 3,
+        });
+        expect(wrapper.html()).toMatchSnapshot();
+    });
+
+    test('hideGotoEndPagination', ()=>{
+        const wrapper = createWrapper();
+        wrapper.setProps({
+            totalRows: 20,
+            perPage: 10,
+            minPageEndButtons: 3,
+        });
+        expect(wrapper.vm.hideGotoEndButtons).toEqual(true);
     });
 });
