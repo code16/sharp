@@ -20,22 +20,28 @@
         </div>
         <b-popover :target="()=>$refs.input" :show.sync="showPicker" container="sharp-app" triggers="" placement="bottom">
             <div class="SharpDate__picker position-static">
-                <sharp-date-picker v-if="hasDate"
-                    class="SharpDate__date"
-                    :language="language"
-                    inline monday-first
-                    :value="dateObject"
-                    @selected="handleDateSelect">
-                </sharp-date-picker>
-                <sharp-time-picker v-if="hasTime"
-                    class="SharpDate__time"
-                    :value="timeObject"
-                    :active="showPicker"
-                    :format="displayFormat"
-                    :minute-interval="stepTime"
-                    :min="minTime" :max="maxTime"
-                    @change="handleTimeSelect">
-                </sharp-time-picker>
+                <template v-if="hasDate">
+                    <sharp-date-picker
+                        class="SharpDate__date"
+                        :language="language"
+                        inline monday-first
+                        :value="dateObject"
+                        @selected="handleDateSelect"
+                        ref="datepicker"
+                    />
+                </template>
+                <template v-if="hasTime">
+                    <sharp-time-picker
+                        class="SharpDate__time"
+                        :value="timeObject"
+                        :active="showPicker"
+                        :format="displayFormat"
+                        :minute-interval="stepTime"
+                        :min="minTime" :max="maxTime"
+                        @change="handleTimeSelect"
+                        ref="timepicker"
+                    />
+                </template>
             </div>
         </b-popover>
     </div>
