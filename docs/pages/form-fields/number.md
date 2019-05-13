@@ -1,4 +1,4 @@
-# Form field: Number
+# Number
 
 Designate a integer-only textfield.
 Class: `Code16\Sharp\Form\Fields\SharpFormNumberField`

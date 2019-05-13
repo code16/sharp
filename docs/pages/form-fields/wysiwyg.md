@@ -1,4 +1,4 @@
-# Form field: Wysiwyg
+# Wysiwyg
 
 Wysiwyg stands for What You See Is What You Get. This is therefore an HTML editor, based on [Basecamp's Trix editor](https://github.com/basecamp/trix).
 

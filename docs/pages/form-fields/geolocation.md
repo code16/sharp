@@ -1,4 +1,4 @@
-# Form field: Geolocation
+# Geolocation
 
 A map-based field to pick a precise location and return its coordinates (latitude and longitude)
 

@@ -1,4 +1,4 @@
-# Form field: Markdown
+# Markdown
 
 This form field is a markdown editor, with formatting and an optional toolbar.
 

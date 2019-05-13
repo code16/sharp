@@ -1,4 +1,4 @@
-# Form field: Check
+# Check
 
 Designate a checkbox field.
 

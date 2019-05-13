@@ -1,4 +1,4 @@
-# Form field: Tags
+# Tags
 
 Class: `Code16\Sharp\Form\Fields\SharpFormTagsField`
 

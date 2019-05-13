@@ -1,4 +1,4 @@
-# Form field: List
+# List
 
 Class: `Code16\Sharp\Form\Fields\SharpFormListField`
 

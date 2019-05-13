@@ -1,4 +1,4 @@
-# Form field: Select
+# Select
 
 Class: `Code16\Sharp\Form\Fields\SharpFormSelectField`
 

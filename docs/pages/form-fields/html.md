@@ -1,4 +1,4 @@
-# Form field: Html
+# Html
 
 Class: `Code16\Sharp\Form\Fields\SharpFormHtmlField`
 

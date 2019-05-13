@@ -1,4 +1,4 @@
-# Form field: Date
+# Date
 
 Class: `Code16\Sharp\Form\Fields\SharpFormDateField`
 

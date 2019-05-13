@@ -1,4 +1,4 @@
-# Form field: Text
+# Text
 
 Class: `Code16\Sharp\Form\Fields\SharpFormTextField`
 

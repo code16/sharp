@@ -1,4 +1,4 @@
-# Form field: Upload
+# Upload
 
 Class: `Code16\Sharp\Form\Fields\SharpFormUploadField`
 

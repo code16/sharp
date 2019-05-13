@@ -1,4 +1,4 @@
-# Dashboard widget: Panel
+# Panel widget
 
 This simple widget is based on the HTML Form Entity field, and intend to display any useful information to the user.
 

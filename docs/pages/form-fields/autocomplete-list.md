@@ -1,4 +1,4 @@
-# Form field: AutocompleteList
+# AutocompleteList
 
 Class: `Code16\Sharp\Form\Fields\SharpFormAutocompleteListField`
 

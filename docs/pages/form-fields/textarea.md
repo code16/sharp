@@ -1,4 +1,4 @@
-# Form field: Textarea
+# Textarea
 
 Class: `Code16\Sharp\Form\Fields\SharpFormTextareaField`
 

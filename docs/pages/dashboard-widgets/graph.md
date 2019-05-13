@@ -1,4 +1,4 @@
-# Dashboard widget: Graph
+# Graph widget
 
 This widget intends to display a graph visualization of any data.
 
