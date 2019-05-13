@@ -1,19 +1,25 @@
 @import 'override';
 
+$hoverColor = rgba($accentColor, .35);
+
 .content {
   a {
     text-decoration: underline;
     color: $textColor;
+    &:hover {
+      background: $hoverColor;
+    }
   }
   h3, h4 {
     code {
-      display inline-block;
-      width: 100%;
+      display block;
+      width: calc(100% + 1rem);
       padding: 1rem;
       font-size: 1rem;
       box-sizing: border-box;
       border-bottom: 1px solid rgba(27,31,35,0.25);
       margin-bottom -.5rem;
+      margin-left: -1rem;
     }
   }
 }
@@ -21,11 +27,20 @@
 a.header-anchor {
   text-decoration: none;
   color: lighten($textColor, 50%);
+  position: relative;
+  z-index: 1;
+  &:hover {
+    background: none;
+  }
 }
 
 
 a.sidebar-link {
-  &:hover, &.active {
+  &:hover {
+    color: $textColor;
+    background: $hoverColor;
+  }
+  &.active {
     color: $textColor;
     background: $accentColor;
   }
@@ -46,7 +61,7 @@ a.sidebar-link {
   a {
     color: $textColor;
     &:hover {
-      color: $accentColor;
+      background: $hoverColor;
     }
   }
 }
