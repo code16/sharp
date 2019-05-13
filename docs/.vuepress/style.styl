@@ -1,0 +1,52 @@
+@import 'override';
+
+.content {
+  a {
+    text-decoration: underline;
+    color: $textColor;
+  }
+  h3, h4 {
+    code {
+      display inline-block;
+      width: 100%;
+      padding: 1rem;
+      font-size: 1rem;
+      box-sizing: border-box;
+      border-bottom: 1px solid rgba(27,31,35,0.25);
+      margin-bottom -.5rem;
+    }
+  }
+}
+
+a.header-anchor {
+  text-decoration: none;
+  color: lighten($textColor, 50%);
+}
+
+
+a.sidebar-link {
+  &:hover, &.active {
+    color: $textColor;
+    background: $accentColor;
+  }
+}
+
+.sidebar-sub-header {
+  a.sidebar-link {
+    &:hover, &.active {
+      background: none;
+    }
+    &:hover {
+      color: $accentColor;
+    }
+  }
+}
+
+.page-nav {
+  a {
+    color: $textColor;
+    &:hover {
+      color: $accentColor;
+    }
+  }
+}
