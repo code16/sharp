@@ -209,7 +209,9 @@ To do that, add a `retainValueInSession()` function to your filter:
 
 And that's it, Sharp will keep the filter value in session and ensure it is valued on next requests (if not overridden). This feature works for all types of filters (required, multiple).
 
-**Warning**: in order to make this feature work, since filters are generalized, you'll need to have unique filters name.
+::: warning
+In order to make this feature work, since filters are generalized, you'll need to have unique filters name.
+:::
 
 ## Filters for Dashboards
 
@@ -271,6 +273,3 @@ app(SharpContext::class)->globalFilterFor('organization')
 
 The usage of SharpContext is [detailed here](context.md).
 
----
-
-> Next chapter : [Commands](commands.md)

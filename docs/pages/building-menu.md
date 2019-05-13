@@ -85,6 +85,3 @@ Categories are simply groups that can be collapsed
     ]
 ]
 ```
----
-
-> next chapter: [How to transform data](how-to-transform-data.md).

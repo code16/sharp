@@ -280,7 +280,3 @@ All set.
 ```
 
 In this code, the `legend` designates a custom attribute.
-
----
-
-> Next chapter : [Form data localization](form-data-localization.md)

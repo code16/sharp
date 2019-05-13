@@ -238,7 +238,3 @@ function buildDashboardConfig()
 ```
 
 - And finally, a Dashboard Command can not return a `refresh()` action, since there is no Instance.
-
----
-
-> Next chapter : [Entity states](entity-states.md)

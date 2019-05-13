@@ -73,7 +73,10 @@ Vue.use(Sharp, {
 ```
 
 
-> Warning: Vue is exposed to the window scope, it's  the current Vue version used by sharp (cf. package.json). Using any other Vue plugins in this file may harm your back-office, at your own risks!
+Vue is exposed to the window scope, it's the current Vue version used by sharp (cf. package.json).
+::: warning
+It's not recommended to use other Vue plugins in this file because it may change the behavior of the Sharp front-end.
+:::
 
 #### Add to Laravel Mix
 
@@ -83,7 +86,9 @@ Vue.use(Sharp, {
 mix.js('/resources/assets/js/sharp-plugin.js', '/public/js')
 ```
 
-> Warning: the file name must be sharp-plugin.js in order to ensure Sharp will find it.
+::: warning
+The file name must be **sharp-plugin.js** in order to ensure Sharp will find it.
+:::
 
 You can `.version()` this JS file if you want to.
 

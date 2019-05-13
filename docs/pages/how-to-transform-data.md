@@ -102,8 +102,3 @@ function buildFormFields()
 ```
 
 The `:` separator used here will be interpreted in `transform()`, and the `$post->author->name` attribute will be used.
-
-
----
-
-> next chapter: [Get request context](context.md).

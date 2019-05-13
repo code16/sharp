@@ -148,6 +148,3 @@ class CompanyDashboardPolicy
 }
 ```
 
----
-
-> next chapter: [Building the menu](building-menu.md).

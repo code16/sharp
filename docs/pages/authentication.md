@@ -67,7 +67,3 @@ Finally enable this feature adding a config key:
 ```
 
 And you are good to go.
-
----
-
-> next chapter : [Building an Entity List](building-entity-list.md).

@@ -85,6 +85,3 @@ public function authorizeFor($instanceId): bool {
 }
 ```
 
----
-
-> Next chapter : [Building an Entity Form](building-entity-form.md)

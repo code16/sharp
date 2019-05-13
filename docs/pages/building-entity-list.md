@@ -193,7 +193,3 @@ Then we can access the Entity List at the following URL:
 **/sharp/list/spaceship** (replace "spaceship" by our entity key).
 
 To go ahead and learn how to add a link in the Sharp side menu, [look here](building-menu.md).
-
----
-
-> next chapter: [Filters](filters.md).

@@ -402,7 +402,3 @@ public function rules()
 ```
 
 Or even easier, make your FormRequest class extend `Code16\Sharp\Form\Validator\SharpFormRequest` instead of `Illuminate\Foundation\Http\FormRequest`. Note that in this case, if you have to define a `withValidator($validator)` function (see the [Laravel doc](https://laravel.com/docs/5.5/validation#form-request-validation)), make sure you call `parent::withValidator($validator)` in it.
-
----
-
-> next chapter: [Entity authorizations](entity-authorizations.md).

@@ -116,7 +116,3 @@ function getListData(EntityListQueryParams $params)
         ->transform(Car::paginate(30));
 }
 ```
-
----
-
-> next chapter: [The Dashboard](dashboard.md).

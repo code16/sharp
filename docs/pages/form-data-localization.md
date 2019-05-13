@@ -132,10 +132,3 @@ public function rules()
 On the front side of the Form, here's how localized fields are displayed:
 
 \[TODO add screenshot\]
-
-
-
-
----
-
-> Next chapter : [Testing with Sharp](testing-with-sharp.md)

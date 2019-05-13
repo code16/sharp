@@ -90,7 +90,3 @@ This is straightforward:
     ]
 ]
 ```
-
----
-
-> next chapter: [Multi-Forms](multiforms.md).
