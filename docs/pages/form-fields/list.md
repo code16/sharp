@@ -48,7 +48,8 @@ Default: false.
 Define the text of the Add item button.
 Default: "Add an item".
 
-### `setMaxItemCount(int $maxItemCount)` and `setMaxItemCountUnlimited()`
+### `setMaxItemCount(int $maxItemCount)`
+### `setMaxItemCountUnlimited()`
 
 If the List is `addable`, you can specify a maximum item count with these.
 Default: unlimited.
@@ -62,7 +63,8 @@ Default: false.
 
 This is only useful when using the `WithSharpFormEloquentUpdater` trait. You can define here the name of an numerical order attribute (typically: `order`), and it will be automatically updated in the `save()` process.
 
-### `setCollapsedItemInlineTemplate(string $template)` and `setCollapsedItemTemplatePath(string $template)`
+### `setCollapsedItemInlineTemplate(string $template)`
+### `setCollapsedItemTemplatePath(string $template)`
 
 ::: v-pre
 The UI for a `sortable` List is to add a "reorder" button, which swaps the list in a readonly state. But for big List items it can be useful to define a special template for this reordering state.
@@ -80,9 +82,10 @@ $list->setCollapsedItemInlineTemplate(
 For template path, give the relative path of a template file (stating in the views Laravel folder).
 The template will be [interpreted by Vue.js](https://vuejs.org/v2/guide/syntax.html), meaning you can add data placeholders, DOM structure but also directives, and anything that Vue will parse. For instance:
 
-`<div v-if="show">result is {{value}}</div>`
-`<div v-else>result is unknown</div>`
-
+```vue
+<div v-if="show">result is {{value}}</div>
+<div v-else>result is unknown</div>
+```
 
 
 ### `setRemovable(bool $removable = true)`

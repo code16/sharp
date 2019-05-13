@@ -1,3 +1,7 @@
+---
+sidebarDepth: 3
+---
+
 # Building an Entity Form
 
 Sharp is mostly made of Entity Lists to display, search, filter, act on instances, and of Entity Forms to create or update entities.

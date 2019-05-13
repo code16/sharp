@@ -43,13 +43,13 @@ Example:
 
 ```php
 SharpFormMarkdownField::make("description")
-        ->setToolbar([
-            SharpFormMarkdownField::B, SharpFormMarkdownField::I,
-            SharpFormMarkdownField::SEPARATOR,
-            SharpFormMarkdownField::IMG,
-            SharpFormMarkdownField::SEPARATOR,
-            SharpFormMarkdownField::A,
-         ]);
+    ->setToolbar([
+        SharpFormMarkdownField::B, SharpFormMarkdownField::I,
+        SharpFormMarkdownField::SEPARATOR,
+        SharpFormMarkdownField::IMG,
+        SharpFormMarkdownField::SEPARATOR,
+        SharpFormMarkdownField::A,
+     ]);
 ```
 
 ### Embed images in markdown

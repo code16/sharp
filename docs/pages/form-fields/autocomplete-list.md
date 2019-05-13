@@ -19,7 +19,9 @@ SharpFormAutocompleteListField::make("winners")
 );
 ```
 
-> Note that the key of the Autocomplete, `item` here, could be anything you want, as soon you stay consistent in the `buildFormLayout()` part.
+::: tip
+The key of the Autocomplete, `item` here, could be anything you want, as soon you stay consistent in the `buildFormLayout()` part.
+:::
 
 But why can't we use a classic List for this? Well, the `model->winners` relation is N-N, here (`belongsToMany`), but Lists are meant to handle 1-N relationships (`hasMany`). Here we want one field, the Autocomplete, to represent the whole item object.
 

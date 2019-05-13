@@ -1,3 +1,7 @@
+---
+sidebarDepth: 3
+---
+
 # Building an Entity List
 
 We need an Entity List to display the list of `instances` for an `entity`. This list can be paginated, searchable, filtered, ... as we'll see below.
