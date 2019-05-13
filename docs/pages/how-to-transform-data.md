@@ -2,8 +2,9 @@
 
 Data transformation is useful when sending data to the front, which happens in the Entity List `getListData()` and in the Entity Form `find()` methods.
 
-> Note that transformers need your data models to allow a direct access to their attributes, like for instance `spaceship->capacity`, and to implement `Illuminate\Contracts\Support\Arrayable` interface. Eloquent Model fulfill those needs.
-
+::: warning
+Note that transformers need your data models to allow a direct access to their attributes, like for instance `spaceship->capacity`, and to implement `Illuminate\Contracts\Support\Arrayable` interface. Eloquent Model fulfill those needs.
+:::
 
 ## The `transform()` function
 
