@@ -27,33 +27,41 @@ module.exports = {
                     collapsable: false,
                     children: [
                         'building-entity-form',
-                        ...[
-                            'text',
-                            'textarea',
-                            'markdown',
-                            'wysiwyg',
-                            'number',
-                            'html',
-                            'check',
-                            'date',
-                            'upload',
-                            'select',
-                            'autocomplete',
-                            'tags',
-                            'list',
-                            'autocomplete-list',
-                            'geolocation'
-                        ].map(page => `form-fields/${page}`),
                         'entity-authorizations',
                         'multiforms',
                         'custom-form-fields'
                     ]
                 },
                 {
+                    title: 'Form fields',
+                    collapsable: false,
+                    children: [
+                        'text',
+                        'textarea',
+                        'markdown',
+                        'wysiwyg',
+                        'number',
+                        'html',
+                        'check',
+                        'date',
+                        'upload',
+                        'select',
+                        'autocomplete',
+                        'tags',
+                        'list',
+                        'autocomplete-list',
+                        'geolocation',
+                    ].map(page => `form-fields/${page}`),
+                },
+                {
                     title: 'Dashboard',
                     collapsable: false,
                     children: [
-                        'dashboard'
+                        'dashboard',
+                        ...[
+                            'graph',
+                            'panel',
+                        ].map(page => `dashboard-widgets/${page}`),
                     ],
                 },
                 {
