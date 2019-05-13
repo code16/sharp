@@ -14,7 +14,8 @@ Class: `Code16\Sharp\Form\Fields\SharpFormWysiwygField`
 
 Set the textarea height, in pixels.
 
-### `showToolbar()` and `hideToolbar()`
+### `showToolbar()`
+### `hideToolbar()`
 
 Show or hide the toolbar (shown by default).
 

@@ -1,6 +1,12 @@
+@import '~bootstrap/dist/css/bootstrap-grid.css';
 @import 'override';
+@import 'home';
 
 $hoverColor = rgba($accentColor, .35);
+
+code.inline {
+  @import "inline_code";
+}
 
 .content {
   a {
@@ -10,6 +16,7 @@ $hoverColor = rgba($accentColor, .35);
       background: $hoverColor;
     }
   }
+
   h3, h4 {
     code {
       display block;
@@ -20,6 +27,16 @@ $hoverColor = rgba($accentColor, .35);
       border-bottom: 1px solid rgba(27,31,35,0.25);
       margin-bottom -.5rem;
       margin-left: -1rem;
+      background: #f3f4f4;
+      color: #6996bf;
+    }
+  }
+  h3 + h3 {
+    margin-top: -4em!important;
+  }
+  ul, p {
+    code * {
+      color: #476582!important;
     }
   }
 }

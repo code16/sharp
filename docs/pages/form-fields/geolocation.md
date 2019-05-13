@@ -22,7 +22,8 @@ This is the default.
 
 Sets the initial position of the edit map, when there in no marker yet.
 
-### `setBoundaries(float $northEastLat, float $northEastLng, float $southWestLat, float $southWestLng)` and `clearBoundaries()`
+### `setBoundaries(float $northEastLat, float $northEastLng, float $southWestLat, float $southWestLng)`
+### `clearBoundaries()`
 
 If needed, set boundaries to the edit map, providing a north-east and a south-west position.
 

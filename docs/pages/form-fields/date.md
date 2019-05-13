@@ -22,7 +22,8 @@ Put monday as the first day in the calendar (default: false).
 
 Put sunday as the first day in the calendar (default: true).
 
-### `setMinTime(int $hours, int $minutes = 0)` and `setMaxTime(int $hours, int $minutes = 0)`
+### `setMinTime(int $hours, int $minutes = 0)`
+### `setMaxTime(int $hours, int $minutes = 0)`
 
 If set, the time-chooser will be constraint as defined.
 

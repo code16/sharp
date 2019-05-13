@@ -4,7 +4,7 @@ Class: `Code16\Sharp\Form\Fields\SharpFormAutocompleteField`
 
 ## Configuration
 
-### Constructor: `make(string $key, string $mode)`
+### `self::make(string $key, string $mode)`
 
 `$mode` must be either "local" (dictionary is defined locally with `setLocalValues()`) or "remote" (a endpoint must be provided).
 
@@ -40,7 +40,8 @@ Route::get('/api/sharp/clients')
 The attribute name sent to the remote endpoint as search key.
 Default: `"query"`
 
-### `setRemoteMethodGET()` and `setRemoteMethodPOST()`
+### `setRemoteMethodGET()`
+### `setRemoteMethodPOST()`
 
 Set the remote method to GET (default) or POST.
 
@@ -51,10 +52,11 @@ Set the name of the id attribute for items. This is useful :
 - to designate the id attribute in the remote API call return.
 Default: `"id"`
 
-### `setListItemInlineTemplate(string $template)` and `setResultItemInlineTemplate(string $template)`
-
+### `setListItemInlineTemplate(string $template)`
+### `setResultItemInlineTemplate(string $template)`
 ::: v-pre
 Just write the template as a string, using placeholders for data like this: `{{var}}`.
+:::
 
 Example:
 
@@ -69,7 +71,8 @@ The template will be use, depending on the function, to display either the list 
 Be aware that you'll need for this to work to pass a valuated object to the Autocomplete, as data.
 
 
-### `setListItemTemplatePath(string $listItemTemplatePath)` and `setResultItemTemplatePath(string $resultItemTemplate)`
+### `setListItemTemplatePath(string $listItemTemplatePath)`
+### `setResultItemTemplatePath(string $resultItemTemplate)`
 
 Use this if you need more control: give the path of a full template, in its own file.
 
@@ -86,7 +89,7 @@ Be aware that you'll need for this to work to pass a valuated object to the Auto
 
 This method is useful to link the dataset of a local autocomplete (aka: the `localValues`) to another form field. Please refer to [the documentation of the select field's `setOptionsLinkedTo()` method](select.md), which is identical.
 
-### setDynamicRemoteEndpoint(string $dynamicRemoteEndpoint, array $defaultValues)
+### `setDynamicRemoteEndpoint(string $dynamicRemoteEndpoint, array $defaultValues)`
 
 In a remote autocomplete case, you can use this method instead of `setRemoteEndpoint` to handle a dynamic URL, based on another form field. Here's how, for example:
 

@@ -4,7 +4,7 @@ We need an Entity List to display the list of `instances` for an `entity`. This 
 
 ## Generator
 
-```sh
+```bash
 php artisan sharp:make:list <class_name> [--model=<model_name>]
 ```
 

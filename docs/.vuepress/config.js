@@ -1,3 +1,5 @@
+var Prism = require('prismjs');
+
 module.exports = {
     title: 'Sharp',
     themeConfig: {
@@ -78,7 +80,17 @@ module.exports = {
                     ]
                 },
                 'style-visual-theme'
-            ],
+            ]
         },
+    },
+    markdown: {
+        config: md => {
+            md.renderer.rules['code_inline'] = (tokens, idx, options, env, slf) => {
+                let token = tokens[idx];
+                return '<code class="inline">' +
+                    Prism.highlight(token.content, Prism.languages.php) +
+                '</code>';
+            };
+        }
     }
 };

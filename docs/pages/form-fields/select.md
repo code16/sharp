@@ -6,7 +6,7 @@ Class: `Code16\Sharp\Form\Fields\SharpFormSelectField`
 
 ## Configuration
 
-### Constructor `function make(string $key, array $options)`
+### `self::make(string $key, array $options)`
 
 The `$options` array can be either:
 
