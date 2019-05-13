@@ -1,14 +1,20 @@
 ---
-pageClass: home
+home: true
+heroImage: https://github.com/code16/sharp/raw/master/docs/img/logo2.png
+heroText: null
+actionText: Get Started →
+actionLink: /pages/
+tagline: The Laravel Content Management Framework
 ---
-![Logo Sharp](./pages/img/logo2.png)
+
+Sharp is not a CMS: it's a content management framework, a toolset which provides help building a CMS section in a website, with some rules in mind:
+- the public website **should not have any knowledge of the CMS** — the CMS is a part of the system, not the center of it. In fact, removing the CMS should not have any effect on the project.
+- The CMS **should not have any expectations from the persistence layer**: MySQL is cool — but it's not the perfect tool for every problem. And more important, the DB structure has nothing to do with the CMS.
+- Content administrators **should work with their data and terminology**, not CMS terms. I mean, if the project is about spaceships, space travels and pilots, why would the CMS talk about articles, categories and tags?
+- website developers **should not have to work on the front-end development** for the CMS. Yeah. Because life is complicated enough, Sharp takes care of all the responsive / CSS / JS stuff.
+
 <div class="section">
     <div class="row">
-        <div class="col">
-            <h2 class="section-title">
-                Create, update or delete any structured data of the project, handling validation and errors.
-            </h2>
-        </div>
         <div class="col-auto">
             <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" class="heroicon-form heroicon heroicons-lg">
                 <path class="heroicon-form-clipboard heroicon-component-accent heroicon-component-fill" d="M0 16.01A6 6 0 0 1 6 10h66a6 6 0 0 1 6 6.01v77.98a6 6 0 0 1-6 6.01H6a6 6 0 0 1-6-6.01V16.01z"></path>
@@ -21,22 +27,29 @@ pageClass: home
                 <path class="heroicon-outline" fill-rule="nonzero" d="M55 9.33V10h17.16A6 6 0 0 1 78 16V93.99a6 6 0 0 1-6 6.01H6a6 6 0 0 1-6-6.01V16a6 6 0 0 1 6-6h17v-.67a39.7 39.7 0 0 1 8.1-2.55 8 8 0 0 1 15.8 0A39.7 39.7 0 0 1 55 9.33zM55 14h16v76H7V14h16v-2H6a4 4 0 0 0-4 4.01V94c.91 1.22 2.36 2 4 2h66c1.64 0 3.09-.78 4-2V16.01A4 4 0 0 0 72 12H55v2zM9 16v67h60V16H55v4H23v-4H9zm10.5 47a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm1.5-2.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0zm5-.5h24v1H26v-1zm35 7v1H17v-1h44zm-20 6v1H17v-1h24zm-24-3h40v1H17v-1zm40-41v1H17v-1h40zm-40 3h42v1H17v-1zm24 3v1H17v-1h24zM25 17v1h28v-1H25zm0-1h28v-5.34a37.7 37.7 0 0 0-6.49-1.92l-1.37-.27-.2-1.39a6 6 0 0 0-11.87 0l-.21 1.39-1.37.27A37.7 37.7 0 0 0 25 10.66V16zm14-5a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm2-3a2 2 0 1 0-4 0 2 2 0 0 0 4 0zM6 98h66a4 4 0 0 0 3.55-2.16A5.96 5.96 0 0 1 72.01 97H5.99a5.96 5.96 0 0 1-3.54-1.16c.67 1.28 2 2.16 3.54 2.16zm63-13H9v1h35v1H9v1h60v-1h-6v-1h6v-1zm21-69v-2h6v7h2a2 2 0 0 1 2 2v18a1 1 0 1 1-2 0V26h-1v53l-3 12h-2l-3-12V21h1v-5zm4 0h-2v5h2v-5zm-3 8h7v-1h-7v1zm4 1h-4v30h4V25zm-4 32h4v-1h-4v1zm4 20h-4v1h4v-1zm-2 9.75L94.94 79h-3.88L93 86.75zM95 76V58h-4v18h4zM26 54h24v1H26v-1zm-6.5 3a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm1.5-2.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0zm5-6.5h24v1H26v-1zm-6.5 3a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm1.5-2.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0zm5-6.5h24v1H26v-1zm-4 .5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0zM19.5 44a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM17 26h44v1H17v-1z"></path>
             </svg>
         </div>
+        <div class="col">
+            <h2 class="section-title">
+                Create, update or delete any structured data of the project, handling validation and errors.
+            </h2>
+        </div>
     </div>
 </div>
 
+![Entity form](./pages/img/form.png)
+
 <div class="section">
     <div class="row">
-      <div class="col-auto">
-                <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" class="heroicon-magnify heroicon heroicons-lg">
-                    <path class="heroicon-magnify-glass-edge heroicon-component-accent heroicon-component-fill" d="M70 36a34 34 0 1 1-68 0 34 34 0 0 1 68 0z"></path>
-                    <path class="heroicon-magnify-glass heroicon-component-fill" d="M61 36a25 25 0 1 1-50 0 25 25 0 0 1 50 0z"></path>
-                    <polygon class="heroicon-magnify-handle heroicon-component-fill" points="94.879 87.707 75.293 68.121 68.121 75.293 87.707 94.879"></polygon>
-                    <path class="heroicon-magnify-handle-connector heroicon-component-fill" d="M63.92 58.73L65.16 60 60 65.17l-1.26-1.26a36.22 36.22 0 0 0 5.18-5.18zm-.5 5.86l1.17-1.18 4 4-1.18 1.18-4-4z"></path>
-                    <path class="heroicon-magnify-handle-edge heroicon-component-accent heroicon-component-fill" d="M90 97.17l-1.59-1.58 7.18-7.18L97.17 90 90 97.17zM73 65.83l1.59 1.58-7.18 7.18L65.83 73 73 65.83z"></path>
-                    <path class="heroicon-shadows" d="M6.04 37.5a30 30 0 1 1 59.93 0 30 30 0 0 0-59.93 0z"></path>
-                    <path class="heroicon-outline" fill-rule="nonzero" d="M65.14 57.14l1.45 1.45L68 60l-1.41 1.41L66 62l4 4 1.59-1.59L73 63l1.41 1.41L76 66l.7.7 19.6 19.6.7.7 1.59 1.59L100 90l-1.41 1.41-7.18 7.18L90 100l-1.41-1.41L87 97l-.7-.7-19.6-19.6-.7-.7-1.59-1.59L63 73l1.41-1.41L66 70l-4-4-.59.59L60 68l-1.41-1.41-1.45-1.45h.01a36 36 0 1 1 8-8zM70 36a34 34 0 1 0-68 0 34 34 0 0 0 68 0zm-6.08 22.73a36.22 36.22 0 0 1-5.18 5.18L60 65.17 65.17 60l-1.26-1.26zm-.5 5.86l4 4 1.17-1.18-4-4-1.18 1.18zM90 97.17L97.17 90l-1.58-1.59-7.18 7.18L90 97.17zm4.88-9.46L75.29 68.12l-7.17 7.17 19.59 19.59 7.17-7.17zM73 65.83L65.83 73l1.58 1.59 7.18-7.18L73 65.83zM66 36a30 30 0 1 1-60 0 30 30 0 0 1 60 0zM36 65a29 29 0 1 0 0-58 29 29 0 0 0 0 58zm0-2a27 27 0 1 1 0-54 27 27 0 0 1 0 54zm25-27a25 25 0 1 0-50 0 25 25 0 0 0 50 0zM36 15v1a20 20 0 0 0-17.9 28.95l-.89.44A21 21 0 0 1 36 15zm37.65 61.35l.7-.7 14 14-.7.7-14-14z"></path>
-                </svg>
-            </div>
+        <div class="col-auto">
+            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" class="heroicon-magnify heroicon heroicons-lg">
+                <path class="heroicon-magnify-glass-edge heroicon-component-accent heroicon-component-fill" d="M70 36a34 34 0 1 1-68 0 34 34 0 0 1 68 0z"></path>
+                <path class="heroicon-magnify-glass heroicon-component-fill" d="M61 36a25 25 0 1 1-50 0 25 25 0 0 1 50 0z"></path>
+                <polygon class="heroicon-magnify-handle heroicon-component-fill" points="94.879 87.707 75.293 68.121 68.121 75.293 87.707 94.879"></polygon>
+                <path class="heroicon-magnify-handle-connector heroicon-component-fill" d="M63.92 58.73L65.16 60 60 65.17l-1.26-1.26a36.22 36.22 0 0 0 5.18-5.18zm-.5 5.86l1.17-1.18 4 4-1.18 1.18-4-4z"></path>
+                <path class="heroicon-magnify-handle-edge heroicon-component-accent heroicon-component-fill" d="M90 97.17l-1.59-1.58 7.18-7.18L97.17 90 90 97.17zM73 65.83l1.59 1.58-7.18 7.18L65.83 73 73 65.83z"></path>
+                <path class="heroicon-shadows" d="M6.04 37.5a30 30 0 1 1 59.93 0 30 30 0 0 0-59.93 0z"></path>
+                <path class="heroicon-outline" fill-rule="nonzero" d="M65.14 57.14l1.45 1.45L68 60l-1.41 1.41L66 62l4 4 1.59-1.59L73 63l1.41 1.41L76 66l.7.7 19.6 19.6.7.7 1.59 1.59L100 90l-1.41 1.41-7.18 7.18L90 100l-1.41-1.41L87 97l-.7-.7-19.6-19.6-.7-.7-1.59-1.59L63 73l1.41-1.41L66 70l-4-4-.59.59L60 68l-1.41-1.41-1.45-1.45h.01a36 36 0 1 1 8-8zM70 36a34 34 0 1 0-68 0 34 34 0 0 0 68 0zm-6.08 22.73a36.22 36.22 0 0 1-5.18 5.18L60 65.17 65.17 60l-1.26-1.26zm-.5 5.86l4 4 1.17-1.18-4-4-1.18 1.18zM90 97.17L97.17 90l-1.58-1.59-7.18 7.18L90 97.17zm4.88-9.46L75.29 68.12l-7.17 7.17 19.59 19.59 7.17-7.17zM73 65.83L65.83 73l1.58 1.59 7.18-7.18L73 65.83zM66 36a30 30 0 1 1-60 0 30 30 0 0 1 60 0zM36 65a29 29 0 1 0 0-58 29 29 0 0 0 0 58zm0-2a27 27 0 1 1 0-54 27 27 0 0 1 0 54zm25-27a25 25 0 1 0-50 0 25 25 0 0 0 50 0zM36 15v1a20 20 0 0 0-17.9 28.95l-.89.44A21 21 0 0 1 36 15zm37.65 61.35l.7-.7 14 14-.7.7-14-14z"></path>
+            </svg>
+        </div>
         <div class="col">
             <h2 class="section-title">
                 Display, search, sort or filter data
@@ -44,6 +57,8 @@ pageClass: home
         </div>
     </div>
 </div>
+
+![Entity list](./pages/img/list.png)
 
 <div class="section">
     <div class="row">
@@ -65,42 +80,51 @@ pageClass: home
     </div>
 </div>
 
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" class="heroicon-code heroicon heroicon-lg">
-            <path class="heroicon-code-interface heroicon-component-fill" d="M0 18h100v59.997c0 2.21-1.8 4.003-3.997 4.003H3.997C1.79 82 0 80.205 0 77.997V18z"></path>
-            <path class="heroicon-code-side heroicon-component-fill" d="M1 17h7v64H4.01C2.346 81 1 79.663 1 78V17z"></path>
-            <path class="heroicon-code-menu-bar heroicon-component-accent heroicon-component-fill" d="M0 5.996C0 3.79 1.8 2 3.997 2h92.006C98.21 2 100 3.79 100 5.996V18H0V5.996z"></path>
-            <circle class="heroicon-code-circle heroicon-component-accent heroicon-component-fill" cx="82" cy="81" r="18"></circle>
-            <path class="heroicon-code-symbol heroicon-component-fill" d="M76.707 80.293L76 81l.707.707 3.586 3.586L81 86l-.707.707-1.586 1.586L78 89l-.707-.707-6.586-6.586L70 81l.707-.707 6.586-6.586L78 73l.707.707 1.586 1.586L81 76l-.707.707-3.586 3.586zm7-3.586L83 76l.707-.707 1.586-1.586L86 73l.707.707 6.586 6.586L94 81l-.707.707-6.586 6.586L86 89l-.707-.707-1.586-1.586L83 86l.707-.707 3.586-3.586L88 81l-.707-.707-3.586-3.586z"></path>
-            <path class="heroicon-outline" fill-rule="nonzero" d="M3.997 2h92.006C98.21 2 100 3.783 100 5.995v72.01c0 .328-.04.647-.115.952.076.67.115 1.352.115 2.043 0 9.94-8.06 18-18 18-9.606 0-17.454-7.524-17.973-17H3.997C1.79 82 0 80.217 0 78.005V5.995C0 3.788 1.8 2 3.997 2zM82 63c6.966 0 13.007 3.957 16 9.746V18H9v62h55.027c.52-9.476 8.367-17 17.973-17zm16-51V5.995C98 4.89 97.108 4 96.003 4H3.997C2.9 4 2 4.897 2 5.995V12h16l6-6h18l6 6h50zM2 14v2h96v-2H47.172l-6-6H24.828l-6 6H2zm0 4v60.005C2 79.11 2.892 80 3.997 80H7V18H2zm80 79c8.837 0 16-7.163 16-16s-7.163-16-16-16-16 7.163-16 16 7.163 16 16 16zM11 20h4v1h-4v-1zm14 0v1h-8v-1h8zm2 0h6v1h-6v-1zm20 0v1H35v-1h12zm-26 3v1H11v-1h10zm8 0v1h-6v-1h6zm10 0v1h-8v-1h8zm14 1H41v-1h12v1zm2-1h6v1h-6v-1zm-34 4h-8v-1h8v1zm2-1h6v1h-6v-1zm18 0v1H31v-1h10zm2 0h6v1h-6v-1zm16 1h-8v-1h8v1zm-40 2v1h-4v-1h4zm10 1h-8v-1h8v1zm2-1h10v1H31v-1zm24 1H43v-1h12v1zm10-1v1h-8v-1h8zm10 0v1h-8v-1h8zM25 56v1h-8v-1h8zm-4 4h-4v-1h4v1zm10-1v1h-8v-1h8zm12 0v1H33v-1h10zm2 0h10v1H45v-1zm-18-3h10v1H27v-1zm20 0v1h-8v-1h8zm8 0v1h-6v-1h6zm2 0h10v1H57v-1zm18 0v1h-6v-1h6zm2 0h10v1H77v-1zm19 0v1h-7v-1h7zM21 32v1h-6v-1h6zm12 0v1H23v-1h10zm-16 3h7v1h-7v-1zm5 18v1h-7v-1h7zm-7 9h9v1h-9v-1zm5 3v1h-5v-1h5zm-3 3h7v1h-7v-1zm16 0v1h-7v-1h7zm12 0v1H35v-1h10zm8 0v1h-6v-1h6zm-32 3v1h-6v-1h6zm-8 3h6v1h-6v-1zm4 3v1h-6v-1h6zm10 1h-8v-1h8v1zm10-1v1h-8v-1h8zm-9-11h-6v-1h6v1zm2-1h8v1h-8v-1zm0-27v1H19v-1h11zm2 0h8v1h-8v-1zm-7 3v1h-8v-1h8zm-10 3h6v1h-6v-1zm8 6v1h-8v-1h8zm6 0v1h-4v-1h4zm0-6v1h-6v-1h6zm-12 3h10v1H17v-1zm18 0v1h-6v-1h6zm2 0h4v1h-4v-1zm8-15v1H35v-1h10zM6 10c-1.105 0-2-.895-2-2s.895-2 2-2 2 .895 2 2-.895 2-2 2zm7-2c0 1.105-.895 2-2 2s-2-.895-2-2 .895-2 2-2 2 .895 2 2zm3 2c-1.105 0-2-.895-2-2s.895-2 2-2 2 .895 2 2-.895 2-2 2zM4 20h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm63 4c0-7.732 6.268-14 14-14v1c-7.18 0-13 5.82-13 13 0 1.652.308 3.232.87 4.686l-.908.425C68.342 84.53 68 82.805 68 81zm8.707-.707L76 81l.707.707 3.586 3.586L81 86l-.707.707-1.586 1.586L78 89l-.707-.707-6.586-6.586L70 81l.707-.707 6.586-6.586L78 73l.707.707 1.586 1.586L81 76l-.707.707-3.586 3.586zM79.587 86l-4.294-4.293-.707-.707.707-.707L79.586 76 78 74.414 71.414 81 78 87.586 79.586 86zm4.12-9.293L83 76l.707-.707 1.586-1.586L86 73l.707.707 6.586 6.586L94 81l-.707.707-6.586 6.586L86 89l-.707-.707-1.586-1.586L83 86l.707-.707 3.586-3.586L88 81l-.707-.707-3.586-3.586zm5 5L84.414 86 86 87.586 92.586 81 86 74.414 84.414 76l4.293 4.293.707.707-.707.707z"></path>
-        </svg>
-        <p class="h5-like">
-            Using a clean and documented PHP API to create list, forms, filters, searches, commands, ...
-        </p>
+<div class="section">
+    <div class="row">
+        <div class="col-auto">
+            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" class="heroicon-code heroicon heroicon-lg">
+                <path class="heroicon-code-interface heroicon-component-fill" d="M0 18h100v59.997c0 2.21-1.8 4.003-3.997 4.003H3.997C1.79 82 0 80.205 0 77.997V18z"></path>
+                <path class="heroicon-code-side heroicon-component-fill" d="M1 17h7v64H4.01C2.346 81 1 79.663 1 78V17z"></path>
+                <path class="heroicon-code-menu-bar heroicon-component-accent heroicon-component-fill" d="M0 5.996C0 3.79 1.8 2 3.997 2h92.006C98.21 2 100 3.79 100 5.996V18H0V5.996z"></path>
+                <circle class="heroicon-code-circle heroicon-component-accent heroicon-component-fill" cx="82" cy="81" r="18"></circle>
+                <path class="heroicon-code-symbol heroicon-component-fill" d="M76.707 80.293L76 81l.707.707 3.586 3.586L81 86l-.707.707-1.586 1.586L78 89l-.707-.707-6.586-6.586L70 81l.707-.707 6.586-6.586L78 73l.707.707 1.586 1.586L81 76l-.707.707-3.586 3.586zm7-3.586L83 76l.707-.707 1.586-1.586L86 73l.707.707 6.586 6.586L94 81l-.707.707-6.586 6.586L86 89l-.707-.707-1.586-1.586L83 86l.707-.707 3.586-3.586L88 81l-.707-.707-3.586-3.586z"></path>
+                <path class="heroicon-outline" fill-rule="nonzero" d="M3.997 2h92.006C98.21 2 100 3.783 100 5.995v72.01c0 .328-.04.647-.115.952.076.67.115 1.352.115 2.043 0 9.94-8.06 18-18 18-9.606 0-17.454-7.524-17.973-17H3.997C1.79 82 0 80.217 0 78.005V5.995C0 3.788 1.8 2 3.997 2zM82 63c6.966 0 13.007 3.957 16 9.746V18H9v62h55.027c.52-9.476 8.367-17 17.973-17zm16-51V5.995C98 4.89 97.108 4 96.003 4H3.997C2.9 4 2 4.897 2 5.995V12h16l6-6h18l6 6h50zM2 14v2h96v-2H47.172l-6-6H24.828l-6 6H2zm0 4v60.005C2 79.11 2.892 80 3.997 80H7V18H2zm80 79c8.837 0 16-7.163 16-16s-7.163-16-16-16-16 7.163-16 16 7.163 16 16 16zM11 20h4v1h-4v-1zm14 0v1h-8v-1h8zm2 0h6v1h-6v-1zm20 0v1H35v-1h12zm-26 3v1H11v-1h10zm8 0v1h-6v-1h6zm10 0v1h-8v-1h8zm14 1H41v-1h12v1zm2-1h6v1h-6v-1zm-34 4h-8v-1h8v1zm2-1h6v1h-6v-1zm18 0v1H31v-1h10zm2 0h6v1h-6v-1zm16 1h-8v-1h8v1zm-40 2v1h-4v-1h4zm10 1h-8v-1h8v1zm2-1h10v1H31v-1zm24 1H43v-1h12v1zm10-1v1h-8v-1h8zm10 0v1h-8v-1h8zM25 56v1h-8v-1h8zm-4 4h-4v-1h4v1zm10-1v1h-8v-1h8zm12 0v1H33v-1h10zm2 0h10v1H45v-1zm-18-3h10v1H27v-1zm20 0v1h-8v-1h8zm8 0v1h-6v-1h6zm2 0h10v1H57v-1zm18 0v1h-6v-1h6zm2 0h10v1H77v-1zm19 0v1h-7v-1h7zM21 32v1h-6v-1h6zm12 0v1H23v-1h10zm-16 3h7v1h-7v-1zm5 18v1h-7v-1h7zm-7 9h9v1h-9v-1zm5 3v1h-5v-1h5zm-3 3h7v1h-7v-1zm16 0v1h-7v-1h7zm12 0v1H35v-1h10zm8 0v1h-6v-1h6zm-32 3v1h-6v-1h6zm-8 3h6v1h-6v-1zm4 3v1h-6v-1h6zm10 1h-8v-1h8v1zm10-1v1h-8v-1h8zm-9-11h-6v-1h6v1zm2-1h8v1h-8v-1zm0-27v1H19v-1h11zm2 0h8v1h-8v-1zm-7 3v1h-8v-1h8zm-10 3h6v1h-6v-1zm8 6v1h-8v-1h8zm6 0v1h-4v-1h4zm0-6v1h-6v-1h6zm-12 3h10v1H17v-1zm18 0v1h-6v-1h6zm2 0h4v1h-4v-1zm8-15v1H35v-1h10zM6 10c-1.105 0-2-.895-2-2s.895-2 2-2 2 .895 2 2-.895 2-2 2zm7-2c0 1.105-.895 2-2 2s-2-.895-2-2 .895-2 2-2 2 .895 2 2zm3 2c-1.105 0-2-.895-2-2s.895-2 2-2 2 .895 2 2-.895 2-2 2zM4 20h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm63 4c0-7.732 6.268-14 14-14v1c-7.18 0-13 5.82-13 13 0 1.652.308 3.232.87 4.686l-.908.425C68.342 84.53 68 82.805 68 81zm8.707-.707L76 81l.707.707 3.586 3.586L81 86l-.707.707-1.586 1.586L78 89l-.707-.707-6.586-6.586L70 81l.707-.707 6.586-6.586L78 73l.707.707 1.586 1.586L81 76l-.707.707-3.586 3.586zM79.587 86l-4.294-4.293-.707-.707.707-.707L79.586 76 78 74.414 71.414 81 78 87.586 79.586 86zm4.12-9.293L83 76l.707-.707 1.586-1.586L86 73l.707.707 6.586 6.586L94 81l-.707.707-6.586 6.586L86 89l-.707-.707-1.586-1.586L83 86l.707-.707 3.586-3.586L88 81l-.707-.707-3.586-3.586zm5 5L84.414 86 86 87.586 92.586 81 86 74.414 84.414 76l4.293 4.293.707.707-.707.707z"></path>
+            </svg>
+        </div>
+       <div class="col">
+            <h2 class="section-title">
+                Using a clean and documented PHP API to create list, forms, filters, searches, commands, ...
+            </h2>
+        </div>
+    </div>
+</div>
 
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" class="heroicon-devices heroicon heroicons-lg">
-            <path class="heroicon-devices-tablet-edge-outer heroicon-component-accent heroicon-component-fill" d="M6 2h68a4 4 0 0 1 4 4v22h-1V6a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v88a3 3 0 0 0 3 3h52.8c.21.36.45.7.73 1H6a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4z"></path>
-            <path class="heroicon-devices-tablet-edge-inner heroicon-component-accent heroicon-component-fill" d="M58.34 96a5.99 5.99 0 0 1-.34-2v-5H7V11h66v17h3V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v88c0 1.1.9 2 2 2h52.34z"></path>
-            <path class="heroicon-devices-tablet-screen heroicon-component-fill" d="M72 28V12H8v76h50V34a6 6 0 0 1 6-6h8z"></path>
-            <path class="heroicon-devices-tablet-button heroicon-component-fill" d="M43.5 92h-7a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1z"></path>
-            <path class="heroicon-devices-phone-edge-outer heroicon-component-accent heroicon-component-fill" d="M64 30h30a4 4 0 0 1 4 4v60a4 4 0 0 1-4 4H64a4 4 0 0 1-4-4V34a4 4 0 0 1 4-4z"></path>
-            <path class="heroicon-devices-phone-edge-inner heroicon-component-accent heroicon-component-fill" d="M94 32H64a2 2 0 0 0-2 2v60c0 1.1.9 2 2 2h30a2 2 0 0 0 2-2V34a2 2 0 0 0-2-2z"></path>
-            <polygon class="heroicon-devices-phone-screen heroicon-component-fill" points="64 40 94 40 94 88 64 88"></polygon>
-            <path class="heroicon-devices-phone-button heroicon-component-fill" d="M75.5 92h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1z"></path>
-            <path class="heroicon-shadows" d="M64 28h-5a6 6 0 0 0-6 6v66h11v-.08A6 6 0 0 1 59 94V34a6 6 0 0 1 5-5.92V28z"></path>
-            <path class="heroicon-outline" fill-rule="nonzero" d="M64 100H6a6 6 0 0 1-6-6V6a6 6 0 0 1 6-6h68a6 6 0 0 1 6 6v22h14a6 6 0 0 1 6 6v60a6 6 0 0 1-6 6H64zM6 2a4 4 0 0 0-4 4v88a4 4 0 0 0 4 4h53.53c-.28-.3-.52-.64-.73-1H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h68a3 3 0 0 1 3 3v22h1V6a4 4 0 0 0-4-4H6zm52.34 94a5.99 5.99 0 0 1-.34-2v-5H7V11h66v17h3V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v88c0 1.1.9 2 2 2h52.34zM72 28V12H8v76h50V34a6 6 0 0 1 6-6h8zm-8 2a4 4 0 0 0-4 4v60a4 4 0 0 0 4 4h30a4 4 0 0 0 4-4V34a4 4 0 0 0-4-4H64zm0 1h30a3 3 0 0 1 3 3v60a3 3 0 0 1-3 3H64a3 3 0 0 1-3-3V34a3 3 0 0 1 3-3zm30 1H64a2 2 0 0 0-2 2v60c0 1.1.9 2 2 2h30a2 2 0 0 0 2-2V34a2 2 0 0 0-2-2zm-31 7h32v50H63V39zm1 1v48h30V40H64zM37 7h6v1h-6V7zm-.5 84h7a1.5 1.5 0 0 1 0 3h-7a1.5 1.5 0 0 1 0-3zm7 1h-7a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1zm.95-54.78l-10 20-.9-.44 10-20 .9.44zm1 6l-6 12-.9-.44 6-12 .9.44zm27.1 28.56l10-20 .9.44-10 20-.9-.44zm5.9-1.56l-.9-.44 6-12 .9.44-6 12zM74 92.5c0-.83.67-1.5 1.5-1.5h7a1.5 1.5 0 0 1 0 3h-7a1.5 1.5 0 0 1-1.5-1.5zm1.5-.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zM82 35v1h-6v-1h6z"></path>
-        </svg>
-        <p class="h5-like">
-            Taking advantage of custom Vue.js-based components for uploads and image cropping,
-            multiselects, lists, autocompletes, ... all responsive, and without having to write a
-            single line of front code.
-        </p>
-
-
-Sharp is not a CMS: it's a content management framework, a toolset which provides help building a CMS section in a website, with some rules in mind:
-- the public website **should not have any knowledge of the CMS** — the CMS is a part of the system, not the center of it. In fact, removing the CMS should not have any effect on the project.
-- The CMS **should not have any expectations from the persistence layer**: MySQL is cool — but it's not the perfect tool for every problem. And more important, the DB structure has nothing to do with the CMS.
-- Content administrators **should work with their data and terminology**, not CMS terms. I mean, if the project is about spaceships, space travels and pilots, why would the CMS talk about articles, categories and tags?
-- website developers **should not have to work on the front-end development** for the CMS. Yeah. Because life is complicated enough, Sharp takes care of all the responsive / CSS / JS stuff.
+<div class="section">
+    <div class="row">
+        <div class="col">
+            <h2 class="section-title">
+                Taking advantage of custom Vue.js-based components for uploads and image cropping,
+                multiselects, lists, autocompletes, ... all responsive, and without having to write a
+                single line of front code.
+            </h2>
+        </div>
+        <div class="col-auto">
+            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" class="heroicon-devices heroicon heroicons-lg">
+                <path class="heroicon-devices-tablet-edge-outer heroicon-component-accent heroicon-component-fill" d="M6 2h68a4 4 0 0 1 4 4v22h-1V6a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v88a3 3 0 0 0 3 3h52.8c.21.36.45.7.73 1H6a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4z"></path>
+                <path class="heroicon-devices-tablet-edge-inner heroicon-component-accent heroicon-component-fill" d="M58.34 96a5.99 5.99 0 0 1-.34-2v-5H7V11h66v17h3V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v88c0 1.1.9 2 2 2h52.34z"></path>
+                <path class="heroicon-devices-tablet-screen heroicon-component-fill" d="M72 28V12H8v76h50V34a6 6 0 0 1 6-6h8z"></path>
+                <path class="heroicon-devices-tablet-button heroicon-component-fill" d="M43.5 92h-7a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1z"></path>
+                <path class="heroicon-devices-phone-edge-outer heroicon-component-accent heroicon-component-fill" d="M64 30h30a4 4 0 0 1 4 4v60a4 4 0 0 1-4 4H64a4 4 0 0 1-4-4V34a4 4 0 0 1 4-4z"></path>
+                <path class="heroicon-devices-phone-edge-inner heroicon-component-accent heroicon-component-fill" d="M94 32H64a2 2 0 0 0-2 2v60c0 1.1.9 2 2 2h30a2 2 0 0 0 2-2V34a2 2 0 0 0-2-2z"></path>
+                <polygon class="heroicon-devices-phone-screen heroicon-component-fill" points="64 40 94 40 94 88 64 88"></polygon>
+                <path class="heroicon-devices-phone-button heroicon-component-fill" d="M75.5 92h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1z"></path>
+                <path class="heroicon-shadows" d="M64 28h-5a6 6 0 0 0-6 6v66h11v-.08A6 6 0 0 1 59 94V34a6 6 0 0 1 5-5.92V28z"></path>
+                <path class="heroicon-outline" fill-rule="nonzero" d="M64 100H6a6 6 0 0 1-6-6V6a6 6 0 0 1 6-6h68a6 6 0 0 1 6 6v22h14a6 6 0 0 1 6 6v60a6 6 0 0 1-6 6H64zM6 2a4 4 0 0 0-4 4v88a4 4 0 0 0 4 4h53.53c-.28-.3-.52-.64-.73-1H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h68a3 3 0 0 1 3 3v22h1V6a4 4 0 0 0-4-4H6zm52.34 94a5.99 5.99 0 0 1-.34-2v-5H7V11h66v17h3V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v88c0 1.1.9 2 2 2h52.34zM72 28V12H8v76h50V34a6 6 0 0 1 6-6h8zm-8 2a4 4 0 0 0-4 4v60a4 4 0 0 0 4 4h30a4 4 0 0 0 4-4V34a4 4 0 0 0-4-4H64zm0 1h30a3 3 0 0 1 3 3v60a3 3 0 0 1-3 3H64a3 3 0 0 1-3-3V34a3 3 0 0 1 3-3zm30 1H64a2 2 0 0 0-2 2v60c0 1.1.9 2 2 2h30a2 2 0 0 0 2-2V34a2 2 0 0 0-2-2zm-31 7h32v50H63V39zm1 1v48h30V40H64zM37 7h6v1h-6V7zm-.5 84h7a1.5 1.5 0 0 1 0 3h-7a1.5 1.5 0 0 1 0-3zm7 1h-7a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1zm.95-54.78l-10 20-.9-.44 10-20 .9.44zm1 6l-6 12-.9-.44 6-12 .9.44zm27.1 28.56l10-20 .9.44-10 20-.9-.44zm5.9-1.56l-.9-.44 6-12 .9.44-6 12zM74 92.5c0-.83.67-1.5 1.5-1.5h7a1.5 1.5 0 0 1 0 3h-7a1.5 1.5 0 0 1-1.5-1.5zm1.5-.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zM82 35v1h-6v-1h6z"></path>
+            </svg>
+        </div>
+    </div>
+</div>
 
 Sharp intends to provide a clean solution to the following needs:
 - create, update or delete any structured data of the project, handling validation and errors;
@@ -112,7 +136,3 @@ Sharp intends to provide a clean solution to the following needs:
 Sharp 4 needs Laravel 5.5+ and PHP 7.1.3+.
 
 ![Dashboard](./pages/img/dashboard.png)
-
-![Entity list](./pages/img/list.png)
-
-![Entity form](./pages/img/form.png)

@@ -1,5 +1,5 @@
 @import '~bootstrap/dist/css/bootstrap-grid.css';
-@import 'override';
+@import 'palette';
 @import 'home';
 
 $hoverColor = rgba($accentColor, .35);
@@ -57,11 +57,11 @@ div[class~="language-php"]:before {
 
 a.sidebar-link {
   &:hover {
-    color: $textColor;
+    color: $textColor !important;
     background: $hoverColor;
   }
   &.active {
-    color: $textColor;
+    color: $textColor!important;
     background: $accentColor;
   }
 }
@@ -72,7 +72,7 @@ a.sidebar-link {
       background: none;
     }
     &:hover {
-      color: $accentColor;
+      color: $accentColor!important;
     }
   }
 }

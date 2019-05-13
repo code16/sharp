@@ -13,8 +13,14 @@ module.exports = {
         ],
         sidebar: {
             '/pages/': [
-                '',
-                'authentication',
+                {
+                    title: 'Introduction',
+                    collapsable: false,
+                    children: [
+                        '',
+                        'authentication',
+                    ]
+                },
                 {
                     title: 'Entity Lists',
                     collapsable: false,
@@ -78,15 +84,15 @@ module.exports = {
                         'sharp-built-in-solution-for-uploads',
                         'form-data-localization',
                         'testing-with-sharp',
-                        'artisan-generators'
+                        'artisan-generators',
+                        'style-visual-theme'
                     ]
-                },
-                'style-visual-theme'
+                }
             ]
         },
     },
     markdown: {
-        config: md => {
+        extendMarkdown: md => {
             md.renderer.rules['code_inline'] = (tokens, idx, options, env, slf) => {
                 let token = tokens[idx];
                 return '<code class="inline">' +
