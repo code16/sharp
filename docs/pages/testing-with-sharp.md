@@ -68,7 +68,8 @@ $this->updateSharpForm(
 
 But sometimes you'll want to test some specific Sharp things. Here's the list of custom assertions added by the `SharpAssertions` trait:
 
-#### `assertSharpHasAuthorization($authorization)` and `assertSharpHasNotAuthorization($authorization)`
+#### `assertSharpHasAuthorization($authorization)`
+#### `assertSharpHasNotAuthorization($authorization)`
 
 Example:
 

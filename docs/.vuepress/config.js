@@ -1,4 +1,6 @@
 var Prism = require('prismjs');
+var loadLanguages = require('prismjs/components/');
+loadLanguages(['php']);
 
 module.exports = {
     title: 'Sharp',

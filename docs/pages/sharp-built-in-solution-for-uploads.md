@@ -23,7 +23,7 @@ class Media extends SharpUploadModel
 
 ### Generator
 
-```sh
+```bash
 php artisan sharp:make:media <model_name> --table=<table_name>
 ```
 

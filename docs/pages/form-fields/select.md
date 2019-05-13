@@ -65,7 +65,7 @@ Display as a classic dropdown.
 Set a maximum item selection (multiple only).
 Default: unlimited.
 
-### `setMaxSelectedUnlimited`
+### `setMaxSelectedUnlimited()`
 
 Unset a maximum item selection (multiple only).
 

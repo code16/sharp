@@ -18,7 +18,8 @@ Sets the coordinate display to be decimal degrees, eg:
 `0.36666667, 17.15722222`.
 This is the default.
 
-### `setInitialPosition(float $lat, float $lng)` and `clearInitialPosition()`
+### `setInitialPosition(float $lat, float $lng)`
+### `clearInitialPosition()`
 
 Sets the initial position of the edit map, when there in no marker yet.
 

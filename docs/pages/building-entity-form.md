@@ -4,7 +4,7 @@ Sharp is mostly made of Entity Lists to display, search, filter, act on instance
 
 ## Generator
 
-```sh
+```bash
 php artisan sharp:make:form <class_name> [--model=<model_name>]
 ```
 

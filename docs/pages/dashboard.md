@@ -4,7 +4,7 @@ A Dashboard is a good way to present synthetic data to the user, with graphs, st
 
 ## Generator
 
-```sh
+```bash
 php artisan sharp:make:dashboard <class_name>
 ```
 

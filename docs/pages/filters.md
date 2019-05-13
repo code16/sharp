@@ -6,7 +6,7 @@ This documentation is written for the EntityList case, but the API is the same f
 
 ## Generator
 
-```sh
+```bash
 php artisan sharp:make:list-filter <class_name> [--required,--multiple]
 ```
 

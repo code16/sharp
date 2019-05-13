@@ -78,7 +78,7 @@ The front expects an array with three keys:
 ]
 ```
 
-The formatter can't handle it automatically, it too project-specific. You'll have to provide this in a custom transformer ([see full documentation](how-to-transform-data.md)) like this:
+The formatter can't handle it automatically, it too project-specific. You'll have to provide this in a custom transformer ([see full documentation](../how-to-transform-data.md)) like this:
 
 ```php
 function find($id): array

@@ -33,9 +33,10 @@ Use this if you need more control: give the path of a full template, in its own 
 
 The template will be [interpreted by Vue.js](https://vuejs.org/v2/guide/syntax.html), meaning you can add data placeholders, DOM structure but also directives, and anything that Vue will parse. For instance:
 
-`<div v-if="show">result is {{value}}</div>`
-`<div v-else>result is unknown</div>`
-
+```vue
+<div v-if="show">result is {{value}}</div>
+<div v-else>result is unknown</div>
+```
 
 
 ## Data valuation

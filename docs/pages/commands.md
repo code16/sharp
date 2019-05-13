@@ -6,7 +6,7 @@ Commands can be defined in an EntityList or in a Dashboard. This documentation w
 
 ## Generator
 
-```sh
+```bash
 php artisan sharp:make:list-command <class_name> [--model=<model_name>]
 ```
 

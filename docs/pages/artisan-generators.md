@@ -2,7 +2,7 @@
 
 For more information on each command and its options & arguments run `php artisan <command> --help`
 
-```sh
+```bash
 # Generate a dashboard class
 php artisan sharp:make:dashboard <class_name>
 

@@ -4,7 +4,7 @@ It's sometimes useful to allow the user to rearrange instances right from the En
 
 ## Generator Command
 
-```sh
+```bash
 php artisan sharp:make:reorder-handler <class_name> [--model=<model_name>]
 ```
 
