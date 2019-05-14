@@ -36,9 +36,16 @@
     }
   }
   .content {
-    $textWidth = 660px;
+    // fix custom not applied
+    padding: 0!important;
+    margin: 0;
+    max-width: 100%;
+    *:first-child {
+      margin-top: 0;
+    }
+
     p, ul {
-      max-width: $textWidth;
+      max-width: 660px;
       margin-left: auto;
       margin-right: auto;
     }
