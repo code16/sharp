@@ -96,7 +96,7 @@ Of course, real code would imply some data request in a DB, or a file for instan
 
 In a more realistic project, you'll want to transform your data before sending it to the front code. Sharp can help with that, as explained in the detailled [How to transform data](how-to-transform-data.md) documentation.
 
-#### Handle query `$params`
+#### Handle query params
 
 As you may have noticed, `getListData()` accepts as an argument a `EntityListQueryParams` instance. This object will be filled by Sharp with query params:
 

@@ -15,7 +15,7 @@ First, you'll have to write a class that extends the `Code16\Sharp\EntityList\Co
 You'll have to implement two functions: `buildStates()` and `updateState($instanceId, $stateId)`.
 
 
-### Build the states (`buildStates()`)
+### Build the states
 
 The goal is to declare the available states for the entity, using `$this->addState()`:
 
