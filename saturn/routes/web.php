@@ -1,7 +1,7 @@
 <?php
 
 Route::get('/', function () {
-    return "SATURN";
+    return redirect("/docs/index.html");
 });
 
 Route::get('/passengers', function () {
