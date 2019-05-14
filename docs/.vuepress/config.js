@@ -4,6 +4,7 @@ loadLanguages(['php']);
 
 module.exports = {
     title: 'Sharp',
+    base: '/docs/',
     themeConfig: {
         nav: [
             { text: 'Home', link: '/' },
