@@ -4,6 +4,10 @@
 
 $hoverColor = rgba($accentColor, .35);
 
+code {
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+
 code.inline {
   @import "inline_code";
 }
@@ -84,4 +88,27 @@ a.sidebar-link {
       background: $hoverColor;
     }
   }
+}
+
+.navbar {
+  padding-top: 0;
+  padding-bottom: 0;
+  .search-box {
+    margin-right: 2rem;
+    input {
+      border-radius: 4px;
+      background-position: 0.45rem 0.45rem;
+    }
+  }
+  .site-name {
+    line-height: $navbarHeight;
+    font-size: 2rem;
+    font-weight: 400;
+    text-transform: lowercase;
+    letter-spacing .025em;
+  }
+}
+
+.sidebar {
+  background: #f9fafc;
 }
