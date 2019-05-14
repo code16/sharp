@@ -8,12 +8,12 @@ module.exports = {
     themeConfig: {
         nav: [
             { text: 'Home', link: '/' },
-            { text: 'Documentation', link: '/pages/' },
+            { text: 'Documentation', link: '/guide/' },
             { text: 'Github', link:'https://github.com/code16/sharp' },
             { text: 'Medium', link:'https://medium.com/code16/tagged/sharp' },
         ],
         sidebar: {
-            '/pages/': [
+            '/guide/': [
                 {
                     title: 'Introduction',
                     collapsable: false,

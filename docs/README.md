@@ -35,7 +35,7 @@ Sharp is not a CMS: it's a content management framework, a toolset which provide
     </div>
 </div>
 
-![Entity form](./pages/img/form.png)
+![Entity form](./img/form.png)
 
 <div class="section">
     <div class="row">
@@ -58,7 +58,7 @@ Sharp is not a CMS: it's a content management framework, a toolset which provide
     </div>
 </div>
 
-![Entity list](./pages/img/list.png)
+![Entity list](./img/list.png)
 
 <div class="section">
     <div class="row">
@@ -133,4 +133,4 @@ Sharp intends to provide a clean solution to the following needs:
 - handle authorizations and validation;
 - all without write a line of front code, and using a clean API in the PHP app.
 
-![Dashboard](./pages/img/dashboard.png)
+![Dashboard](./img/dashboard.png)
