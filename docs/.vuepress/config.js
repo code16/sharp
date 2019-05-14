@@ -88,7 +88,15 @@ module.exports = {
                         'artisan-generators',
                         'style-visual-theme'
                     ]
-                }
+                },
+                {
+                    title: 'Migrations guide',
+                    collapsable: false,
+                    children: [
+                        'upgrading/4.1',
+                        'upgrading/4.1.3',
+                    ],
+                },
             ]
         },
     },
