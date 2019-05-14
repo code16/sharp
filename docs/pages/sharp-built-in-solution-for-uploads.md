@@ -140,7 +140,7 @@ But of course you can provide here a custom one. You'll need for that to first c
 - `function applyFilter(Intervention\Image\Image $image)`: apply you filter, using the great [Intervention API](http://image.intervention.io).
 - `function resized()`: (optional, default to false) Return true if the resize is part of the `applyFilter()` code.
 
-Once the class is created, simply pass the full class path as filter name:
+Once the class is created, pass the full class path as filter name:
 
 ```php
     return $this->thumbnail($size, $size, [
@@ -203,7 +203,7 @@ And... voilà! From there, Sharp will handle the rest.
 
 ### Updating custom attributes
 
-So we want to add an `author` custom attribute to our cover field. It's very easy, add the field in the Sharp Entity Form, using the `:` separator to designate a related attribute:
+So we want to add an `author` custom attribute to our cover field: for this we add the field in the Sharp Entity Form, using the `:` separator to designate a related attribute:
 
 ```php
     $this->addField(

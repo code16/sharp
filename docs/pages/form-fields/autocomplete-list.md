@@ -36,7 +36,7 @@ You can use this function instead of `addItemField`, since items of Autocomplete
 
 ### `addItemField(SharpFormField $field)`
 
-Simply know that this method is an alias for `setItemField()`, meaning that y ou can only pass an Autocomplete, and it can only be called once.
+This method is an alias for `setItemField()`, meaning that you can only pass an Autocomplete, and it can only be called once.
 
 
 ## Formatter

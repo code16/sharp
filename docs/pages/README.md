@@ -12,8 +12,10 @@ Each `entity` in Sharp can be displayed:
 
 ## Installation
 
-- Add the package with composer: `composer require code16/sharp`,
-- Publish assets: `php artisan vendor:publish --provider="Code16\Sharp\SharpServiceProvider" --tag=assets`.
+Sharp 4 needs Laravel 5.5+ and PHP 7.1.3+.
+
+- Add the package with composer: `composer require code16/sharp`
+- And then publish assets: `php artisan vendor:publish --provider="Code16\Sharp\SharpServiceProvider" --tag=assets`
 
 A tip on this last command: you'll need fresh assets each time Sharp is updated, so a good practice is to add the command in the `scripts.post-autoload-dump` section of your `composer.json` file:
 
@@ -30,7 +32,7 @@ A tip on this last command: you'll need fresh assets each time Sharp is updated,
 
 ## Configuration
 
-Sharp needs a `config/sharp.php` config file, mainly to declare `entities`. Here's a simple example:
+Sharp needs a `config/sharp.php` config file, mainly to declare `entities`. Here's an example:
 
 ```php
 return [

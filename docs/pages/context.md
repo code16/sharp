@@ -10,7 +10,7 @@ The class handling the context is `Code16\Sharp\Http\SharpContext`, a singleton.
 app(Code16\Sharp\Http\SharpContext::class);
 ```
 
-Sharp provides a very simple trait, `Code16\Sharp\Http\WithSharpContext`, which allow you to call `$this->context()` instead.
+Sharp provides a trait, `Code16\Sharp\Http\WithSharpContext`, which allow you to call `$this->context()` instead.
 
 Here's a quick example:
 

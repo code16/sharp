@@ -85,7 +85,7 @@ You'll have to declare another function, `defaultValue()`, which must return the
 
 ## Multiple filter
 
-First, notice that you can have as many filters as you want for an EntityList. The "multiple filter" here designate something else: allowing the user to select more than one value for a filter. To achieve this, simply replace the interface implemented with `Code16\Sharp\EntityList\EntityListMultipleFilter`, and that's it.
+First, notice that you can have as many filters as you want for an EntityList. The "multiple filter" here designate something else: allowing the user to select more than one value for a filter. To achieve this, replace the interface implemented with `Code16\Sharp\EntityList\EntityListMultipleFilter`.
 
 In this case, with Eloquent for instance, your might have to modify your code to ensure that you have an array (Sharp will return either null, and id or an array of id, depending on the user selection):
 
@@ -102,7 +102,7 @@ Note that a filter can't be required AND multiple.
 
 ## Filter label
 
-To use a custom label for the filter, simply add a `label()` function that returns a string in the Filter class.
+To use a custom label for the filter, add a `label()` function that returns a string in the Filter class.
 
 ```php
 public function label()
@@ -113,7 +113,7 @@ public function label()
 
 ## Filter search
 
-If you need to add a search textfield on top of your filter list, it's as simple as defining this function:
+If you need to add a search textfield on top of your filter list, define this function:
 
 ```php
 public function isSearchable()

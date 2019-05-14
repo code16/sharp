@@ -14,7 +14,7 @@ php artisan sharp:make:list-command <class_name> [--model=<model_name>]
 
 First we need to write a class for our Command. It must extend the `Code16\Sharp\EntityList\Commands\EntityCommand` abstract class (for "entity commands", more on that below), and implement two functions.
 
-First one is `label(): string`, and must simply return the text label of the Command, displayed to the user:
+First one is `label(): string`, and must return the text label of the Command, displayed to the user:
 
 ```php
 public function label(): string
@@ -130,7 +130,7 @@ Note that in both cases (Entity or Instance Command), you can access to the Enti
 
 ### Command confirmation
 
-To add a confirmation message before a Command is executed, simply add a `confirmationText()` method:
+To add a confirmation message before a Command is executed, add a `confirmationText()` method:
 
 ```php
 public function confirmationText()
@@ -187,7 +187,7 @@ Of course, it's often mandatory to add authorizations to a Command. Here's how t
 
 ### Authorizations for entity Commands
 
-Simply implement the `authorize():bool` function, which must return a boolean to allow or disallow the Command execution, based on any logic of yours. It can be for instance:
+Implement the `authorize():bool` function, which must return a boolean to allow or disallow the Command execution, based on any logic of yours. It can be for instance:
 
 ```php
 public function authorize():bool

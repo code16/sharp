@@ -193,7 +193,7 @@ Notice we added a `Closure` on a `withSingleField()` call, meaning we define a "
 
 #### Tabs
 
-Finally, columns can be wrapped in tabs in the form needs to be in parts. This is easy, just wrap the code:
+Finally, columns can be wrapped in tabs in the form needs to be in parts:
 
 ```php
 $this->addTab("tab 1", function(FormLayoutTab $tab) {
@@ -361,7 +361,7 @@ return [
 
 ## Input validation
 
-Of course you'll want to have an input validation on your form. Simply create a [Laravel Form Request class](https://laravel.com/docs/5.4/validation#form-request-validation), and link it in the config:
+Of course you'll want to have an input validation on your form; create a [Laravel Form Request class](https://laravel.com/docs/5.4/validation#form-request-validation), and link it in the config:
 
 ```php
 // config/sharp.php

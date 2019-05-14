@@ -24,7 +24,7 @@ Each one is detailed here:
 
 ### `buildListDataContainers()`
 
-A "data container" is simply a column in the `Entity List`, named this way to abstract the presentation. This first function is responsible to describe each column:
+A "data container" is a column in the `Entity List`, named this way to abstract the presentation. This first function is responsible to describe each column:
 
 ```php
 function buildListDataContainers()
@@ -145,11 +145,11 @@ if ($params->hasSearch()) {
 
 ##### Filters
 
-We haven't see yet how we can build a `Filter`, but at this stage, a filter is simply a `key` and a `value`. So we can grab this calling `$filterValue = $params->filterFor($filterKey)`, and use the value in our query code.
+We haven't see yet how we can build a `Filter`, but at this stage, a filter is a `key` and a `value`. So we can grab this calling `$filterValue = $params->filterFor($filterKey)`, and use the value in our query code.
 
 #### Pagination
 
-It's very common to return in `getListData()` paginated results:  simply return a `Illuminate\Contracts\Pagination\LengthAwarePaginator` in this case.
+It's very common to return in `getListData()` paginated results:  return a `Illuminate\Contracts\Pagination\LengthAwarePaginator` in this case.
 
 With `Eloquent` or the `QueryBuilder`, this means calling `->paginate($count)` on the query.
 

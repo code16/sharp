@@ -63,7 +63,7 @@ Very similar to entity lists, except that `entity` is replaced by a `dashboard` 
 
 ## Group links in categories
 
-Categories are simply groups that can be collapsed
+Categories are groups that can be collapsed
 
 ```php
 "menu" => [

@@ -1,6 +1,6 @@
 # Panel widget
 
-This simple widget is based on the HTML Form Entity field, and intend to display any useful information to the user.
+This widget is based on the HTML Form Entity field, and intend to display any useful information to the user.
 
 ## Attributes (setters)
 
@@ -54,4 +54,4 @@ function buildWidgetsData()
 }
 ```
 
-Simply pass there the widget `key` and an array with the data required by your template.
+Pass there the widget `key` and an array with the data required by your template.

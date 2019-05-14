@@ -4,7 +4,7 @@ heroImage: https://github.com/code16/sharp/raw/master/docs/img/logo2.png
 heroText: null
 actionText: Get Started →
 actionLink: /pages/
-tagline: The Laravel Content Management Framework
+tagline: The Content Management Framework for Laravel
 ---
 
 Sharp is not a CMS: it's a content management framework, a toolset which provides help building a CMS section in a website, with some rules in mind:
@@ -132,7 +132,5 @@ Sharp intends to provide a clean solution to the following needs:
 - execute custom commands on one instance, a selection or all instances;
 - handle authorizations and validation;
 - all without write a line of front code, and using a clean API in the PHP app.
-
-Sharp 4 needs Laravel 5.5+ and PHP 7.1.3+.
 
 ![Dashboard](./pages/img/dashboard.png)
