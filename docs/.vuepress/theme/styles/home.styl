@@ -14,6 +14,11 @@
     border-bottom: none;
     font-size: 1.125rem;
     font-weight: normal;
+    margin-top: 2rem;
+    padding-bottom: 0;
+  }
+  .home {
+    max-width: 1024px;
   }
   .hero {
     .action-button {
@@ -25,21 +30,22 @@
       }
     }
     img {
-      margin-left: 0;
-      margin-right: 0;
+      margin-left: auto;
+      margin-right: auto;
       max-height: none;
     }
   }
   .content {
+    $textWidth = 660px;
     p, ul {
-      max-width: 740px;
+      max-width: $textWidth;
       margin-left: auto;
       margin-right: auto;
     }
     img {
-      max-width: calc(100% + 156px);
-      margin-left -78px;
-      margin-right -78px;
+      max-width: calc(100% + 300px);
+      margin-left -150px;
+      margin-right -150px;
     }
   }
   .heroicon-component-fill {
@@ -66,5 +72,10 @@
     .navbar .site-name {
       opacity: 1;
     }
+  }
+  .card {
+    background: #f9fafc;
+    padding: 1.5rem 1rem;
+    height 100%;
   }
 }
