@@ -13,6 +13,9 @@ code.inline {
 }
 
 .content {
+  &:not(.custom) {
+    padding-top: $navbarHeight;
+  }
   a {
     text-decoration: underline;
     color: $textColor;
@@ -103,9 +106,6 @@ a.sidebar-link {
   .site-name {
     line-height: $navbarHeight;
     font-size: 2rem;
-    font-weight: 400;
-    text-transform: lowercase;
-    letter-spacing .025em;
   }
 }
 
