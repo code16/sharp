@@ -29,6 +29,8 @@ A Sharp instance of a dummy demo project is online here: [sharp.code16.fr/sharp/
 - admin@example.com / secret
 - boss@example.com / secret (has a few more permissions)
 
+Data of this demo is reset each hour. 
+
 ## Additional resources
 
 Here's a series of blog posts which present Sharp following a simple example:

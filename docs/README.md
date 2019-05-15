@@ -112,12 +112,13 @@ Sharp is not a CMS: it's a content management framework, a toolset which provide
     </div>
 </div>
 
-Sharp intends to provide a clean solution to the following needs:
-- create, update or delete any structured data of the project, handling validation and errors;
-- display, search, sort or filter data;
-- execute custom commands on one instance, a selection or all instances;
-- handle authorizations and validation;
-- all without write a line of front code, and using a clean API in the PHP app.
+A Sharp instance of a dummy demo project is online here: [sharp.code16.fr/sharp/](http://sharp.code16.fr/sharp/). 
+
+Use these accounts to login:
+- admin@example.com / secret
+- boss@example.com / secret (has a few more permissions)
+
+Data of this demo is reset each hour. 
 
 <br>
 
