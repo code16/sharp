@@ -19,6 +19,18 @@ Sharp intends to provide a clean solution to the following needs:
 
 Sharp 4 needs Laravel 5.5+ and PHP 7.1.3+.
 
+## Documentation
+
+The full documentation is available here: [sharp.code16.fr/docs](http://sharp.code16.fr/docs).
+
+## Online example
+
+A Sharp instance of a dummy demo project is online here: [sharp.code16.fr/sharp/](http://sharp.code16.fr/sharp/). Use these accounts to login:
+- admin@example.com / secret
+- boss@example.com / secret (has a few more permissions)
+
+## Additional resources
+
 Here's a series of blog posts which present Sharp following a simple example:
 - [Part 1](https://medium.com/@lonchampt/about-sharp-for-laravel-part-1-74a826279fe0)
 - [Part 2](https://medium.com/@lonchampt/about-sharp-for-laravel-part-2-9c7779782f31)
@@ -33,118 +45,3 @@ And a few more articles on specific features:
 - [What's new in 4.1](https://medium.com/@lonchampt/sharp-for-laravel-4-1-is-now-released-964c8b6b0491)
 - [New features in 4.1.3](https://medium.com/@lonchampt/sharp-4-1-3-and-its-new-features-a498c8b67629)
 
-![Dashboard](./docs/img/dashboard.png)
-
-![Entity list](./docs/img/list.png)
-
-![Entity form](./docs/img/form.png)
-
-## Terminology, general concept
-
-In Sharp, we handle `entities`; and `entity` is simply a data structure which has a meaning in the applicative context. For instance, a `Person`, a `Post` or an `Order`. In the Eloquent world, for which Sharp is optimized, it's typically a Model — but it's not necessarily a 1-1 relationship, a Sharp `entity` can represent a portion of a Model, or several Models.
-
-Each instance of an `entity` is called... an `instance`.
-
-Each `entity` in Sharp can be displayed:
-- in an `Entity List`, which is the list of all the `instances` for this `entity`: with some configuration and code, the user can sort the data, add filters, and perform a search. From there we also gain access to applicative `commands` applied to an `instance` or the whole list, and to a simple `state` changer (the publish state of an Article, for instance). All of that is described below.
-- And in a `Form`, either to update or create a new `instance`.
-
-## Installation
-
-- Add the package with composer: `composer require code16/sharp`,
-- Publish assets: `php artisan vendor:publish --provider="Code16\Sharp\SharpServiceProvider" --tag=assets`.
-
-A tip on this last command: you'll need fresh assets each time Sharp is updated, so a good practice is to add the command in the `scripts.post-autoload-dump` section of your `composer.json` file:
-
-```
-"scripts": {
-    [...]
-    "post-autoload-dump": [
-        "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-        "@php artisan vendor:publish --provider=Code16\\Sharp\\SharpServiceProvider --tag=assets --force",
-        "@php artisan package:discover"
-    ]
-},
-```
-
-## Configuration
-
-Sharp needs a `config/sharp.php` config file, mainly to declare `entities`. Here's a simple example:
-
-```php
-    return [
-        "entities" => [
-            "spaceship" => [
-                "list" => \App\Sharp\SpaceshipSharpList::class,
-                "form" => \App\Sharp\SpaceshipSharpForm::class,
-                "validator" => \App\Sharp\SpaceshipSharpValidator::class,
-                "policy" => \App\Sharp\Policies\SpaceshipPolicy::class
-            ]
-        ]
-    ];
-```
-
-As we can see, each `entity` (like `spaceship`, here), can define:
-
-- a `list` class, responsible for the `Entity List`,
-- a `form` class, responsible for... the `Form`
-- and optionally:
-	- a `validator` class, to handle form validation
-	- and a `policy` class, for authorization.
-
-We'll get into all those classes in this document. The important thing to notice is that Sharp provides base classes to handle all the wiring (and more), but as we'll see, the applicative code is totally up to you.
-
-## Full documentation
-
-- [Upgrading from 4.0 to 4.1](docs/upgrading/4.1.md)
-
-### Auth
-
-- [Authentication](docs/authentication.md)
-
-### Entity Lists
-
-- [Building an Entity List](docs/building-entity-list.md)
-- [Filters](docs/filters.md)
-- [Commands](docs/commands.md)
-- [Entity States](docs/entity-states.md)
-- [Reordering instances](docs/reordering-instances.md)
-
-### Entity Forms
-
-- [Building an Entity Form](docs/building-entity-form.md)
-- Form fields:
-	- [Text](docs/form-fields/text.md)
-	- [Textarea](docs/form-fields/textarea.md)
-	- [Markdown](docs/form-fields/markdown.md)
-	- [Wysiwyg](docs/form-fields/wysiwyg.md)
-	- [Number](docs/form-fields/number.md)
-	- [Html](docs/form-fields/html.md)
-	- [Check](docs/form-fields/check.md)
-	- [Date](docs/form-fields/date.md)
-	- [Upload](docs/form-fields/upload.md)
-	- [Select](docs/form-fields/select.md)
-	- [Autocomplete](docs/form-fields/autocomplete.md)
-	- [Tags](docs/form-fields/tags.md)
-	- [List](docs/form-fields/list.md)
-	- [AutocompleteList](docs/form-fields/autocomplete-list.md)
-	- [Geolocation](docs/form-fields/geolocation.md)
-- [Entity Authorizations](docs/entity-authorizations.md)
-- [Multi-forms](docs/multiforms.md)
-- [Custom form fields](docs/custom-form-fields.md)
-
-### Dashboards
-- [Create a Dashboard](docs/dashboard.md)
-
-### Generalities
-- [Building the menu](docs/building-menu.md)
-- [How to transform data](docs/how-to-transform-data.md)
-- [Get the request context](docs/context.md)
-- [Sharp built-in solution for uploads](docs/sharp-built-in-solution-for-uploads.md)
-- [Handling form data localization](docs/form-data-localization.md)
-- [Testing with Sharp](docs/testing-with-sharp.md)
-- [Artisan Generators](docs/artisan-generators.md)
-
-### Theming and CSS
-- [Style & Visual Theme](docs/style-visual-theme.md)
-- Redefine Sharp theme (coming soon)
