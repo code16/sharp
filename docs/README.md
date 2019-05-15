@@ -15,10 +15,10 @@ Sharp is not a CMS: it's a content management framework, a toolset which provide
 - Content administrators **should work with their data and terminology**, not CMS terms. I mean, if the project is about spaceships, space travels and pilots, why would the CMS talk about articles, categories and tags?
 - website developers **should not have to work on the front-end development** for the CMS. Yeah. Because life is complicated enough, Sharp takes care of all the responsive / CSS / JS stuff.
 
-<div class="my-5">
-    <div class="section my-3">
+<div class="mb-3 mt-4 mt-md-5 mb-md-4">
+    <div class="section mb-0">
         <div class="row mx-n2">
-            <div class="col px-2">
+            <div class="col-sm-6 col-md-4 col-lg-3 px-2 mb-3">
                 <div class="card">
                     <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" class="heroicon-form heroicon heroicons-lg">
                         <path class="heroicon-form-clipboard heroicon-component-accent heroicon-component-fill" d="M0 16.01A6 6 0 0 1 6 10h66a6 6 0 0 1 6 6.01v77.98a6 6 0 0 1-6 6.01H6a6 6 0 0 1-6-6.01V16.01z"></path>
@@ -35,7 +35,7 @@ Sharp is not a CMS: it's a content management framework, a toolset which provide
                     </h2>
                 </div>
             </div>
-            <div class="col px-2">
+            <div class="col-sm-6 col-md-4 col-lg-3 px-2 mb-3">
                 <div class="card">
                     <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" class="heroicon-magnify heroicon heroicons-lg">
                         <path class="heroicon-magnify-glass-edge heroicon-component-accent heroicon-component-fill" d="M70 36a34 34 0 1 1-68 0 34 34 0 0 1 68 0z"></path>
@@ -51,7 +51,7 @@ Sharp is not a CMS: it's a content management framework, a toolset which provide
                     </h2>
                 </div>
             </div>
-            <div class="col px-2">
+            <div class="col-sm-6 col-md-4 col-lg-3 px-2 mb-3">
                 <div class="card">
                     <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" class="heroicon-cog heroicon heroicons-lg">
                         <path class="heroicon-cog-front-outer heroicon-component-fill" d="M39.17 26.08l.13-1.6.54-6.48h4.32l.54 6.49.13 1.6 1.59.21a31 31 0 0 1 3.61.72l1.53.4.74-1.4 3.05-5.8 3.98 1.68-2.03 6.14-.5 1.53 1.4.82c1.08.64 2.08 1.31 3.09 2.07l1.27.97 1.23-1.03 4.97-4.21 3.05 3.05-4.2 4.97-1.04 1.23.97 1.27c.75 1 1.41 1.98 2.04 3.06l.8 1.36 1.52-.47 6.26-1.94 1.62 4L74 47.65l-1.44.72.4 1.57c.32 1.2.55 2.39.73 3.65l.22 1.59 1.6.13 6.48.54v4.32l-6.49.54-1.6.13-.21 1.59a31 31 0 0 1-.72 3.61l-.4 1.53 1.4.74 5.8 3.05-1.68 3.98-6.14-2.03-1.53-.5-.82 1.4a31.2 31.2 0 0 1-2.07 3.09l-.97 1.27 1.03 1.23 4.21 4.97-3.05 3.05-4.97-4.2-1.23-1.04-1.27.97a31.2 31.2 0 0 1-3.06 2.04l-1.36.8.47 1.52 1.94 6.26-4 1.62L52.35 90l-.72-1.44-1.57.4c-1.2.32-2.39.55-3.65.73l-1.59.22-.13 1.6-.54 6.48h-4.32l-.54-6.49-.13-1.6-1.59-.21a31 31 0 0 1-3.61-.72l-1.53-.4-.74 1.4-3.05 5.8-3.98-1.68 2.03-6.14.5-1.53-1.4-.82a31.2 31.2 0 0 1-3.09-2.07l-1.27-.97-1.23 1.03-4.97 4.21-3.05-3.05 4.2-4.97 1.04-1.23-.97-1.27c-.76-1-1.43-2-2.07-3.1l-.82-1.39-1.53.5-6.14 2.03-1.69-3.98 5.8-3.05 1.4-.74-.4-1.53a31 31 0 0 1-.7-3.61l-.23-1.59-1.6-.13L2 60.16v-4.32l6.49-.54 1.6-.13.21-1.59a31 31 0 0 1 .72-3.61l.4-1.53-1.4-.74-5.8-3.05 1.68-3.98 6.14 2.03 1.53.5.82-1.4a31.2 31.2 0 0 1 2.07-3.09l.97-1.27-1.03-1.23-4.21-4.97 3.05-3.05 4.97 4.2 1.23 1.04 1.27-.97c1-.75 1.98-1.41 3.06-2.05l1.36-.8-.47-1.51-1.94-6.26 4-1.62L31.65 26l.72 1.44 1.57-.4c1.2-.32 2.39-.55 3.65-.73l1.59-.22zM42 72a14 14 0 1 0 0-28 14 14 0 0 0 0 28z"></path>
@@ -66,7 +66,7 @@ Sharp is not a CMS: it's a content management framework, a toolset which provide
                     </h2>
                 </div>
             </div>
-            <div class="col px-2">
+            <div class="col-sm-6 col-md-4 col-lg-3 px-2 mb-3">
                 <div class="card">
                     <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" class="heroicon-code heroicon heroicon-lg">
                         <path class="heroicon-code-interface heroicon-component-fill" d="M0 18h100v59.997c0 2.21-1.8 4.003-3.997 4.003H3.997C1.79 82 0 80.205 0 77.997V18z"></path>
@@ -81,32 +81,32 @@ Sharp is not a CMS: it's a content management framework, a toolset which provide
                     </h2>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="section my-3">
-        <div class="card">
-            <div class="row align-items-center">
-                 <div class="col-3">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" class="heroicon-devices heroicon heroicons-lg">
-                          <path class="heroicon-devices-tablet-edge-outer heroicon-component-accent heroicon-component-fill" d="M6 2h68a4 4 0 0 1 4 4v22h-1V6a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v88a3 3 0 0 0 3 3h52.8c.21.36.45.7.73 1H6a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4z"></path>
-                          <path class="heroicon-devices-tablet-edge-inner heroicon-component-accent heroicon-component-fill" d="M58.34 96a5.99 5.99 0 0 1-.34-2v-5H7V11h66v17h3V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v88c0 1.1.9 2 2 2h52.34z"></path>
-                          <path class="heroicon-devices-tablet-screen heroicon-component-fill" d="M72 28V12H8v76h50V34a6 6 0 0 1 6-6h8z"></path>
-                          <path class="heroicon-devices-tablet-button heroicon-component-fill" d="M43.5 92h-7a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1z"></path>
-                          <path class="heroicon-devices-phone-edge-outer heroicon-component-accent heroicon-component-fill" d="M64 30h30a4 4 0 0 1 4 4v60a4 4 0 0 1-4 4H64a4 4 0 0 1-4-4V34a4 4 0 0 1 4-4z"></path>
-                          <path class="heroicon-devices-phone-edge-inner heroicon-component-accent heroicon-component-fill" d="M94 32H64a2 2 0 0 0-2 2v60c0 1.1.9 2 2 2h30a2 2 0 0 0 2-2V34a2 2 0 0 0-2-2z"></path>
-                          <polygon class="heroicon-devices-phone-screen heroicon-component-fill" points="64 40 94 40 94 88 64 88"></polygon>
-                          <path class="heroicon-devices-phone-button heroicon-component-fill" d="M75.5 92h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1z"></path>
-                          <path class="heroicon-shadows" d="M64 28h-5a6 6 0 0 0-6 6v66h11v-.08A6 6 0 0 1 59 94V34a6 6 0 0 1 5-5.92V28z"></path>
-                          <path class="heroicon-outline" fill-rule="nonzero" d="M64 100H6a6 6 0 0 1-6-6V6a6 6 0 0 1 6-6h68a6 6 0 0 1 6 6v22h14a6 6 0 0 1 6 6v60a6 6 0 0 1-6 6H64zM6 2a4 4 0 0 0-4 4v88a4 4 0 0 0 4 4h53.53c-.28-.3-.52-.64-.73-1H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h68a3 3 0 0 1 3 3v22h1V6a4 4 0 0 0-4-4H6zm52.34 94a5.99 5.99 0 0 1-.34-2v-5H7V11h66v17h3V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v88c0 1.1.9 2 2 2h52.34zM72 28V12H8v76h50V34a6 6 0 0 1 6-6h8zm-8 2a4 4 0 0 0-4 4v60a4 4 0 0 0 4 4h30a4 4 0 0 0 4-4V34a4 4 0 0 0-4-4H64zm0 1h30a3 3 0 0 1 3 3v60a3 3 0 0 1-3 3H64a3 3 0 0 1-3-3V34a3 3 0 0 1 3-3zm30 1H64a2 2 0 0 0-2 2v60c0 1.1.9 2 2 2h30a2 2 0 0 0 2-2V34a2 2 0 0 0-2-2zm-31 7h32v50H63V39zm1 1v48h30V40H64zM37 7h6v1h-6V7zm-.5 84h7a1.5 1.5 0 0 1 0 3h-7a1.5 1.5 0 0 1 0-3zm7 1h-7a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1zm.95-54.78l-10 20-.9-.44 10-20 .9.44zm1 6l-6 12-.9-.44 6-12 .9.44zm27.1 28.56l10-20 .9.44-10 20-.9-.44zm5.9-1.56l-.9-.44 6-12 .9.44-6 12zM74 92.5c0-.83.67-1.5 1.5-1.5h7a1.5 1.5 0 0 1 0 3h-7a1.5 1.5 0 0 1-1.5-1.5zm1.5-.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zM82 35v1h-6v-1h6z"></path>
-                      </svg>
-                 </div>
-                 <div class="col">
-                      <h2 class="section-title mt-0" style="text-align: left">
-                          Taking advantage of custom Vue.js-based components for uploads and image cropping,
-                          multiselects, lists, autocompletes, ... all responsive, and without having to write a
-                          single line of front code.
-                      </h2>
-                 </div>
+            <div class="col-md-8 col-lg-12 px-2 mb-3">
+                <div class="card">
+                    <div class="row align-items-center">
+                         <div class="col-lg-3">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" class="heroicon-devices heroicon heroicons-lg">
+                                  <path class="heroicon-devices-tablet-edge-outer heroicon-component-accent heroicon-component-fill" d="M6 2h68a4 4 0 0 1 4 4v22h-1V6a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v88a3 3 0 0 0 3 3h52.8c.21.36.45.7.73 1H6a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4z"></path>
+                                  <path class="heroicon-devices-tablet-edge-inner heroicon-component-accent heroicon-component-fill" d="M58.34 96a5.99 5.99 0 0 1-.34-2v-5H7V11h66v17h3V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v88c0 1.1.9 2 2 2h52.34z"></path>
+                                  <path class="heroicon-devices-tablet-screen heroicon-component-fill" d="M72 28V12H8v76h50V34a6 6 0 0 1 6-6h8z"></path>
+                                  <path class="heroicon-devices-tablet-button heroicon-component-fill" d="M43.5 92h-7a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1z"></path>
+                                  <path class="heroicon-devices-phone-edge-outer heroicon-component-accent heroicon-component-fill" d="M64 30h30a4 4 0 0 1 4 4v60a4 4 0 0 1-4 4H64a4 4 0 0 1-4-4V34a4 4 0 0 1 4-4z"></path>
+                                  <path class="heroicon-devices-phone-edge-inner heroicon-component-accent heroicon-component-fill" d="M94 32H64a2 2 0 0 0-2 2v60c0 1.1.9 2 2 2h30a2 2 0 0 0 2-2V34a2 2 0 0 0-2-2z"></path>
+                                  <polygon class="heroicon-devices-phone-screen heroicon-component-fill" points="64 40 94 40 94 88 64 88"></polygon>
+                                  <path class="heroicon-devices-phone-button heroicon-component-fill" d="M75.5 92h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1z"></path>
+                                  <path class="heroicon-shadows" d="M64 28h-5a6 6 0 0 0-6 6v66h11v-.08A6 6 0 0 1 59 94V34a6 6 0 0 1 5-5.92V28z"></path>
+                                  <path class="heroicon-outline" fill-rule="nonzero" d="M64 100H6a6 6 0 0 1-6-6V6a6 6 0 0 1 6-6h68a6 6 0 0 1 6 6v22h14a6 6 0 0 1 6 6v60a6 6 0 0 1-6 6H64zM6 2a4 4 0 0 0-4 4v88a4 4 0 0 0 4 4h53.53c-.28-.3-.52-.64-.73-1H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h68a3 3 0 0 1 3 3v22h1V6a4 4 0 0 0-4-4H6zm52.34 94a5.99 5.99 0 0 1-.34-2v-5H7V11h66v17h3V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v88c0 1.1.9 2 2 2h52.34zM72 28V12H8v76h50V34a6 6 0 0 1 6-6h8zm-8 2a4 4 0 0 0-4 4v60a4 4 0 0 0 4 4h30a4 4 0 0 0 4-4V34a4 4 0 0 0-4-4H64zm0 1h30a3 3 0 0 1 3 3v60a3 3 0 0 1-3 3H64a3 3 0 0 1-3-3V34a3 3 0 0 1 3-3zm30 1H64a2 2 0 0 0-2 2v60c0 1.1.9 2 2 2h30a2 2 0 0 0 2-2V34a2 2 0 0 0-2-2zm-31 7h32v50H63V39zm1 1v48h30V40H64zM37 7h6v1h-6V7zm-.5 84h7a1.5 1.5 0 0 1 0 3h-7a1.5 1.5 0 0 1 0-3zm7 1h-7a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1zm.95-54.78l-10 20-.9-.44 10-20 .9.44zm1 6l-6 12-.9-.44 6-12 .9.44zm27.1 28.56l10-20 .9.44-10 20-.9-.44zm5.9-1.56l-.9-.44 6-12 .9.44-6 12zM74 92.5c0-.83.67-1.5 1.5-1.5h7a1.5 1.5 0 0 1 0 3h-7a1.5 1.5 0 0 1-1.5-1.5zm1.5-.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zM82 35v1h-6v-1h6z"></path>
+                              </svg>
+                         </div>
+                         <div class="col-lg-9">
+                              <h2 class="section-title mt-lg-0" style="text-align: left">
+                                  Taking advantage of custom Vue.js-based components for uploads and image cropping,
+                                  multiselects, lists, autocompletes, ... all responsive, and without having to write a
+                                  single line of front code.
+                              </h2>
+                         </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

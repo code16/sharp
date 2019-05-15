@@ -109,5 +109,8 @@ module.exports = {
                 '</code>';
             };
         }
+    },
+    scss: {
+        implementation: require('sass'),
     }
 };

@@ -35,5 +35,6 @@
     }
 </script>
 
+<style src="@theme/styles/vendors.scss" lang="scss"></style>
 <style src="@theme/styles/index.styl" lang="stylus"></style>
 
