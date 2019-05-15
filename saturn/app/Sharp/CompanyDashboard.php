@@ -61,7 +61,7 @@ class CompanyDashboard extends SharpDashboard
             "capacities",
             SharpGraphWidgetDataSet::make($capacities)
                 ->setLabel("Capacities")
-                ->setColor("red")
+                ->setColor("#3e9651")
 
         )->setPanelData(
             "activeSpaceships", ["count" => $spaceships->where("state", "active")->first()->count]
@@ -76,7 +76,7 @@ class CompanyDashboard extends SharpDashboard
                 return $value * rand(1, 3);
             }))
                 ->setLabel("Capacities 2")
-                ->setColor("blue")
+                ->setColor("#6b4c9a")
         );
     }
 
