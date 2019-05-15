@@ -1,0 +1,114 @@
+@import '~bootstrap/dist/css/bootstrap-grid.css';
+@import 'palette';
+@import 'home';
+
+$hoverColor = rgba($accentColor, .35);
+
+code {
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+
+code.inline {
+  @import "inline_code";
+}
+
+.content {
+  &:not(.custom) {
+    padding-top: $navbarHeight;
+  }
+  a {
+    text-decoration: underline;
+    color: $textColor;
+    &:hover {
+      background: $hoverColor;
+    }
+  }
+
+  h3, h4 {
+    code {
+      display block;
+      width: calc(100% + 1rem);
+      padding: 1rem;
+      font-size: 1rem;
+      box-sizing: border-box;
+      border-bottom: 1px solid rgba(27,31,35,0.25);
+      margin-bottom -.5rem;
+      margin-left: -1rem;
+      background: #f3f4f4;
+      color: #6996bf;
+    }
+  }
+  h3 + h3, h4 + h4 {
+    margin-top: -1.5rem - $navbarHeight !important;
+  }
+  ul, p {
+    code * {
+      color: #476582!important;
+    }
+  }
+}
+
+a.header-anchor {
+  text-decoration: none;
+  color: lighten($textColor, 50%);
+  position: relative;
+  z-index: 1;
+  &:hover {
+    background: none;
+  }
+}
+
+div[class~="language-php"]:before {
+  content: 'php';
+}
+
+a.sidebar-link {
+  &:hover {
+    color: $textColor !important;
+    background: $hoverColor;
+  }
+  &.active {
+    color: $textColor!important;
+    background: $accentColor;
+  }
+}
+
+.sidebar-sub-header {
+  a.sidebar-link {
+    &:hover, &.active {
+      background: none;
+    }
+    &:hover {
+      color: $accentColor!important;
+    }
+  }
+}
+
+.page-nav {
+  a {
+    color: $textColor;
+    &:hover {
+      background: $hoverColor;
+    }
+  }
+}
+
+.navbar {
+  padding-top: 0;
+  padding-bottom: 0;
+  .search-box {
+    margin-right: 2rem;
+    input {
+      border-radius: 4px;
+      background-position: 0.45rem 0.45rem;
+    }
+  }
+  .site-name {
+    line-height: $navbarHeight;
+    font-size: 2rem;
+  }
+}
+
+.sidebar {
+  background: #f9fafc;
+}

@@ -4,7 +4,7 @@ return [
 
     "name" => "Saturn",
 
-    "custom_url_segment" => "admin",
+//    "custom_url_segment" => "admin",
     "display_sharp_version_in_title" => true,
 
     "extensions" => [
