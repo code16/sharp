@@ -112,7 +112,7 @@ Sharp is not a CMS: it's a content management framework, a toolset which provide
     </div>
 </div>
 
-A Sharp instance of a dummy demo project is online here: [sharp.code16.fr/sharp/](http://sharp.code16.fr/sharp/). 
+A Sharp instance for a demo project is online here: [sharp.code16.fr/sharp/](http://sharp.code16.fr/sharp/). 
 
 Use these accounts to login:
 - admin@example.com / secret
