@@ -24,6 +24,9 @@
   &--disabled {
     cursor: default;
     opacity: 0.7;
+    .SharpUpload__upload-button {
+      pointer-events: none;
+    }
   }
 
   .dropzone {
