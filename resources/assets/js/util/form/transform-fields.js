@@ -26,7 +26,7 @@ export function transformFields(fields, data) {
             resolvedEmptyAttributes,
         } = transformAttributes(field, field.dynamicAttributes, serializedData);
 
-        const readOnly = resolvedEmptyAttributes.length > 0;
+        const readOnly = attributes.readOnly || resolvedEmptyAttributes.length > 0;
 
         return {
             ...res,
