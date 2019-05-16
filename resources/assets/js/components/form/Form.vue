@@ -21,7 +21,7 @@
                                     <template slot-scope="fieldLayout">
                                         <sharp-field-display
                                             :field-key="fieldLayout.key"
-                                            :context-fields="isReadOnly ? readOnlyFields : transformedFields"
+                                            :context-fields="transformedFields"
                                             :context-data="data"
                                             :field-layout="fieldLayout"
                                             :locale="fieldLocale[fieldLayout.key]"
@@ -158,7 +158,10 @@
             },
 
             transformedFields() {
-                return transformFields(this.fields, this.data);
+                const fields = this.isReadOnly
+                    ? this.readOnlyFields
+                    : this.fields;
+                return transformFields(fields, this.data);
             },
         },
         methods: {
