@@ -629,6 +629,35 @@ describe('EntityListPage', () => {
             expect(wrapper.vm.filterByKey('name')).toEqual({ key:'name' });
         });
 
+        test('handleSortChanged', () => {
+            const wrapper = createWrapper();
+            wrapper.vm.$route.query.search = 'abc';
+            wrapper.vm.handleSortChanged({
+                prop: 'name',
+                dir: 'desc',
+            });
+            expect(wrapper.vm.$router.push).toHaveBeenCalledWith({
+                query: {
+                    search: 'abc',
+                    page: 1,
+                    sort: 'name',
+                    dir: 'desc',
+                }
+            });
+        });
+
+        test('handlePageChanged', () => {
+            const wrapper = createWrapper();
+            wrapper.vm.$route.query.sort = 'name';
+            wrapper.vm.handlePageChanged(2);
+            expect(wrapper.vm.$router.push).toHaveBeenCalledWith({
+                query: {
+                    sort: 'name',
+                    page: 2,
+                }
+            });
+        });
+
         test('formUrl', () => {
             const wrapper = createWrapper({
                 computed: {
