@@ -399,7 +399,7 @@
             handleSortChanged({ prop, dir }) {
                 this.$router.push({
                     query: {
-                        ...this.$router.query,
+                        ...this.$route.query,
                         page: 1,
                         sort: prop,
                         dir: dir,
@@ -412,7 +412,7 @@
             handlePageChanged(page) {
                 this.$router.push({
                     query: {
-                        ...this.$router.query,
+                        ...this.$route.query,
                         page
                     }
                 });
