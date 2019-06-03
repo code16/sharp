@@ -46,4 +46,5 @@ And a few more articles on specific features:
 - [Multi-Forms](https://medium.com/@lonchampt/sharp-for-laravel-a-quick-presentation-of-multi-forms-fc49f0e51176)
 - [What's new in 4.1](https://medium.com/@lonchampt/sharp-for-laravel-4-1-is-now-released-964c8b6b0491)
 - [New features in 4.1.3](https://medium.com/@lonchampt/sharp-4-1-3-and-its-new-features-a498c8b67629)
+- [New feature in 4.1.12: linked dropdowns](https://medium.com/code16/sharp-4-1-12-is-out-and-it-brings-linked-dropdowns-88d474946489)
 
