@@ -107,6 +107,11 @@ describe('modal', ()=>{
         wrapper.vm.show();
         await wrapper.vm.$nextTick();
         expect(wrapper.emitted()['update:visible'][0]).toEqual([true]);
+        // update visible prop manually like "update:" event handler
+        wrapper.setProps({
+            visible: true,
+        });
+        await wrapper.vm.$nextTick();
         wrapper.vm.hide();
         await wrapper.vm.$nextTick();
         expect(wrapper.emitted()['update:visible'][1]).toEqual([false]);
