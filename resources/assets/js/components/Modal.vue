@@ -8,8 +8,7 @@
         :ok-only="okOnly"
         no-enforce-focus
         v-on="$listeners"
-        @show="handleShow"
-        @hide="handleHide"
+        @change="handleVisiblityChanged"
         ref="modal"
     >
         <template slot="modal-header">
@@ -60,11 +59,8 @@
             hide() {
                 this.$refs.modal.hide();
             },
-            handleShow() {
-                this.$emit('update:visible', true);
-            },
-            handleHide() {
-                this.$emit('update:visible', false);
+            handleVisiblityChanged(visible) {
+                this.$emit('update:visible', visible);
             },
         }
     }
