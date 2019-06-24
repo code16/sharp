@@ -10,6 +10,10 @@ interface ListFilter
     public function values();
 }
 
+interface ListRangeFilter extends ListFilter
+{
+}
+
 interface ListMultipleFilter extends ListFilter
 {
 }

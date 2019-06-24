@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Utils\Filters;
 
+use Carbon\Carbon;
+
 trait HasFiltersInQuery
 {
     /**
@@ -23,9 +25,24 @@ trait HasFiltersInQuery
             return null;
         }
 
-        return str_contains($this->filters[$filterName], ",")
-            ? explode(",", $this->filters[$filterName])
-            : $this->filters[$filterName];
+        if(str_contains($this->filters[$filterName], "..")){
+            $rangeValues = array_slice(
+                explode("..", $this->filters[$filterName]),
+                0,
+                2
+            );
+
+            return [
+                "start" => Carbon::createFromFormat('Ymd',$rangeValues[0]),
+                "end" => Carbon::createFromFormat('Ymd',$rangeValues[0]),
+            ];
+        }
+
+        if(str_contains($this->filters[$filterName], ",")){
+            return explode(",", $this->filters[$filterName]);
+        }
+
+        return $this->filters[$filterName];
     }
 
     /**
