@@ -7,7 +7,6 @@
                    :disabled="readOnly"
                    @input="handleInput"
                    @blur="handleBlur"
-                   @focus="handleFocus"
                    @keydown.up.prevent="increase"
                    @keydown.down.prevent="decrease"
                    ref="input">
@@ -18,7 +17,7 @@
                 </svg>
             </button>
         </div>
-        <b-popover :target="()=>$refs.input" :show.sync="showPicker" container="sharp-app" triggers="" placement="bottom">
+        <b-popover :target="()=>$refs.input" :show.sync="showPicker" container="sharp-app" triggers="focus" placement="bottom">
             <div class="SharpDate__picker position-static">
                 <template v-if="hasDate">
                     <sharp-date-picker
@@ -218,12 +217,8 @@
                 this.$emit('input', null);
             },
 
-            handleFocus() {
-                this.showPicker = true;
-            },
             handleBlur() {
                 this.rollback();
-                this.showPicker = false;
             }
         },
         mounted() {
