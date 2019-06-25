@@ -24,6 +24,9 @@ $css--typography: true;
 
 body {
   background-color: $ui-02;
+  color: $text-01;
+  line-height: 1.15;
+  font-family: $font-family-base;
 }
 
 small {

@@ -11,7 +11,7 @@
     padding-top: 5rem;
     overflow: visible;
   }
-  &.leftNav--collapsed {
+  #sharp-app.leftNav--collapsed {
     .SharpActionView {
       padding-left: rem(48px);
     }

@@ -17,7 +17,7 @@
                 </svg>
             </button>
         </div>
-        <b-popover :target="()=>$refs.input" :show.sync="showPicker" container="sharp-app" triggers="focus" placement="bottom">
+        <b-popover :target="()=>$refs.input" :show.sync="showPicker" triggers="focus" placement="bottom">
             <div class="SharpDate__picker position-static">
                 <template v-if="hasDate">
                     <sharp-date-picker
