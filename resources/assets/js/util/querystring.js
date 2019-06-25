@@ -1,15 +1,26 @@
 
 export function parseRange(rangeStr) {
-    const [start, end] = rangeStr.split('..');
+    const [start, end] = (rangeStr || '').split('..');
     return {
         start: start || null,
         end: end || null,
     }
 }
 
-export function serializeRange(rangeObj) {
-    const range = rangeObj || {};
-    const start = range.start instanceof Date ? range.start.toISOString() : range.start;
-    const end = range.end instanceof Date ? range.end.toISOString() : range.end;
-    return `${start || ''}..${end || ''}`;
+function serializeRangeValue(value) {
+    if(value instanceof Date) {
+        return value.toISOString();
+    }
+    if(typeof value === 'number') {
+        return value.toString();
+    }
+    return value || '';
+}
+
+export function serializeRange(range) {
+    const start = serializeRangeValue((range || {}).start);
+    const end = serializeRangeValue((range || {}).end);
+    return start || end
+        ? `${start}..${end}`
+        : null;
 }
