@@ -56,3 +56,15 @@ As we can see, each `entity` (like `spaceship`, here), can define:
 	- and a `policy` class, for authorization.
 
 We'll get into all those classes in this document. The important thing to notice is that Sharp provides base classes to handle all the wiring (and more), but as we'll see, the applicative code is totally up to you.
+
+## Access to Sharp
+
+Once installed, Sharp is accessible via the url `/sharp`, by default. If you wish to change this default value, you'll need to define the `custom_url_segment` config value, in `config/sharp.php`:
+
+```php
+return [
+    "name" => "Saturn",
+    "custom_url_segment" => "admin",
+    [...]
+]
+```

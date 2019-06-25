@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Form;
 
 use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
-use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Utils\SharpNotification;
@@ -83,10 +82,10 @@ abstract class SharpForm
     public function hasDataLocalizations()
     {
         return collect($this->fields())
-            ->filter(function($field) {
-                return $field["localized"] ?? false;
-            })
-            ->count() > 0;
+                ->filter(function($field) {
+                    return $field["localized"] ?? false;
+                })
+                ->count() > 0;
     }
 
     /**
@@ -224,7 +223,18 @@ abstract class SharpForm
                 $this->attributes = $attributes;
 
                 foreach($attributes as $name => $value) {
-                    $this->$name = $value;
+                    if(strpos($name, ':')) {
+                        list($subModel, $attr) = explode(':', $name);
+
+                        if(!isset($this->$subModel)) {
+                            $this->$subModel = new \stdClass();
+                        }
+
+                        $this->$subModel->$attr = $value;
+
+                    } else {
+                        $this->$name = $value;
+                    }
                 }
             }
             public function toArray()

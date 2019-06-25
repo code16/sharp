@@ -146,7 +146,7 @@ return [
             "url" => "https://google.com"
         ],
         [
-            "label" => "Features",
+            "label" => "Some powerful Features",
             "icon" => "fa-superpowers",
             "entity" => "feature"
         ]

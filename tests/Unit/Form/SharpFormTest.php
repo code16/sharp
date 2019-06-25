@@ -36,6 +36,26 @@ class SharpFormTest extends SharpTestCase
     }
 
     /** @test */
+    function we_get_formatted_data_in_creation_with_the_default_create_function_with_subclasses()
+    {
+        $sharpForm = new class extends BaseSharpForm {
+            function buildFormFields()
+            {
+                $this->addField(
+                    SharpFormTextField::make("name")
+                )->addField(
+                    SharpFormMarkdownField::make("subclass:company")
+                );
+            }
+        };
+
+        $this->assertEquals([
+            "name" => "",
+            "subclass:company" => ["text" => null],
+        ], $sharpForm->newInstance());
+    }
+
+    /** @test */
     function if_the_field_formatter_needs_it_we_can_delay_its_execution_after_first_save()
     {
         $sharpForm = new class extends BaseSharpForm
