@@ -38,6 +38,9 @@ return [
 
     'date.validation_error.format' => 'Invalid date format',
 
+    'daterange.start_placeholder' => 'Start date',
+    'daterange.end_placeholder' => 'End date',
+
     'markdown.icons.bold.title' => 'Bold',
     'markdown.icons.italic.title' => 'Italic',
     'markdown.icons.strikethrough.title' => 'Strike through',
