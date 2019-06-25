@@ -26,6 +26,18 @@ import Notifications from 'vue-notification';
 import store from './store';
 import { BASE_URL } from "./consts";
 
+// import locale from 'element-ui/lib/locale';
+//
+// function elLang() {
+//     const lang = document.documentElement.lang;
+//     const locales = {
+//         'fr': require('element-ui/lib/locale/lang/fr').default,
+//         'ru': require('element-ui/lib/locale/lang/ru-RU').default,
+//     };
+//     return locales[lang] || require('element-ui/lib/locale/lang/en').default;
+// }
+// locale.use(elLang());
+
 Vue.use(Notifications);
 Vue.use(VueGoogleMaps, {
     installComponents: false

@@ -1,5 +1,6 @@
 <template>
     <el-date-picker
+        class="SharpDateRange"
         :value="transformedValue"
         :format="transformedFormat"
         :start-placeholder="startPlaceholder"
@@ -7,6 +8,7 @@
         :disabled="readOnly"
         :clearable="clearable"
         type="daterange"
+        popper-class="SharpDateRange__popper"
         @change="handleChanged"
     />
 </template>
@@ -55,8 +57,8 @@
             },
             transformedFormat() {
                 return this.displayFormat
-                    .replace('D', 'd')
-                    .replace('Y', 'y');
+                    .replace(/D/g, 'd')
+                    .replace(/Y/g, 'y');
             },
         },
         methods: {

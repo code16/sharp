@@ -75,6 +75,7 @@
                 :key="filter.key"
                 @input="handleFilterChanged(filter, $event)"
             />
+<!--            <SharpFilterRange />-->
         </template>
         <template v-if="commands.length" slot="extras-right">
             <SharpCommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
@@ -95,6 +96,7 @@
 
     import SharpText from '../form/fields/Text';
     import SharpFilterSelect from '../list/FilterSelect';
+    import SharpFilterRange from '../list/FilterRange';
 
     import SharpDropdown from '../dropdown/Dropdown';
     import SharpDropdownItem from '../dropdown/DropdownItem';
@@ -107,6 +109,7 @@
             SharpActionBar,
             SharpText,
             SharpFilterSelect,
+            SharpFilterRange,
             SharpDropdown,
             SharpDropdownItem,
             SharpItemVisual,
