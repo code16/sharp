@@ -41,14 +41,12 @@ trait HandleFilters
     {
         foreach($this->filterHandlers as $filterName => $handler) {
             $multiple = $handler instanceof ListMultipleFilter;
-            $required = !$multiple && $handler instanceof ListRequiredFilter;
-            $range = $handler instanceof ListDateRangeFilter;
 
             $config["filters"][] = [
                 "key" => $filterName,
                 "multiple" => $multiple,
-                "required" => $required,
-                "range" => $range,
+                "required" => !$multiple && $handler instanceof ListRequiredFilter,
+                "dateRange" => $handler instanceof ListDateRangeFilter,
                 "default" => $this->getFilterDefaultValue($handler, $filterName),
                 "values" => $this->formatFilterValues($handler),
                 "label" => method_exists($handler, "label") ? $handler->label() : $filterName,
