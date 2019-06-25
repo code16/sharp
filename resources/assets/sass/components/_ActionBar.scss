@@ -9,7 +9,7 @@
       z-index: z('actionBar');
     }
   }
-  &.leftNav--collapsed {
+  #sharp-app.leftNav--collapsed {
     .SharpActionBar__bar {
       left: rem(48px);
       padding-left: 0;
