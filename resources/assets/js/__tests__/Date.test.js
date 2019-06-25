@@ -417,27 +417,6 @@ describe('date-field',()=>{
         expect(input.setSelectionRange).toHaveBeenCalledWith(0,2);
     });
 
-    test('show on focus', async () => {
-        let $date = await createVm();
-
-        let { input } = $date.$refs;
-
-        input.focus();
-
-        expect($date.showPicker).toBe(true);
-    });
-
-    test('hide on blur', async () => {
-        let $date = await createVm();
-
-        let { input } = $date.$refs;
-
-        input.focus();
-        input.blur();
-
-        expect($date.showPicker).toBe(false);
-    });
-
     test('time only value', async () => {
         let $date = await createVm({
             propsData: {
