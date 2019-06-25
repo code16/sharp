@@ -42,7 +42,7 @@ trait HandleFilters
         foreach($this->filterHandlers as $filterName => $handler) {
             $multiple = $handler instanceof ListMultipleFilter;
             $required = !$multiple && $handler instanceof ListRequiredFilter;
-            $range = $handler instanceof ListRangeFilter;
+            $range = $handler instanceof ListDateRangeFilter;
 
             $config["filters"][] = [
                 "key" => $filterName,

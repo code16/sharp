@@ -10,7 +10,7 @@ interface ListFilter
     public function values();
 }
 
-interface ListRangeFilter extends ListFilter
+interface ListDateRangeFilter extends ListFilter
 {
 }
 
