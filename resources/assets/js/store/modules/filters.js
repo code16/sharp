@@ -34,6 +34,9 @@ export default {
         values(state) {
             return state.values;
         },
+        filter(state) {
+            return key => (state.filters || []).find(filter => filter.key === key);
+        },
 
         defaultValue() {
             return filter => (filter||{}).default;
@@ -46,7 +49,10 @@ export default {
             return values => Object.entries(values)
                 .reduce((res, [key, value]) => ({
                     ...res,
-                    [getters.filterQueryKey(key)]: value,
+                    [getters.filterQueryKey(key)]: getters.serializeValue({
+                        filter: getters.filter(key),
+                        value,
+                    }),
                 }), {});
         },
         getValuesFromQuery() {
