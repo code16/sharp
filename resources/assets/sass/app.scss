@@ -38,99 +38,99 @@ $small-breakpoint: sm;
   line-height: 1.15;
 
   font-family: $font-family-base;
+}
 
-  @import '~bootstrap/scss/grid';
-  @import '~bootstrap/scss/transitions';
-  @import '~bootstrap/scss/utilities/flex';
-  @import '~bootstrap/scss/utilities/visibility';
-  @import '~bootstrap/scss/utilities/spacing';
-  @import '~bootstrap-vue/src/utilities';
+@import '~bootstrap/scss/grid';
+@import '~bootstrap/scss/transitions';
+@import '~bootstrap/scss/utilities/flex';
+@import '~bootstrap/scss/utilities/visibility';
+@import '~bootstrap/scss/utilities/spacing';
+@import '~bootstrap-vue/src/utilities';
 
-  @import "./transitions";
+@import "./transitions";
 
-  @import "components/error";
+@import "components/error";
 
-  // from carbon design
-  @import 'components/Button';
-  @import 'components/Module';
-  @import 'components/Dropdown';
-  @import 'components/Tag';
-  @import 'components/Notification';
-
-
-  // Action bar and viewer
-  @import 'components/ActionView';
-  @import 'components/ActionBar';
-  @import 'components/Tabs';
-  @import 'components/LocaleSelector';
+// from carbon design
+@import 'components/Button';
+@import 'components/Module';
+@import 'components/Dropdown';
+@import 'components/Tag';
+@import 'components/Notification';
 
 
-  // overriding default vendor components style
-  @import 'components/form/Multiselect';
+// Action bar and viewer
+@import 'components/ActionView';
+@import 'components/ActionBar';
+@import 'components/Tabs';
+@import 'components/LocaleSelector';
 
 
-  // Form components
-  @import 'components/form/Text';
-  @import 'components/form/Autocomplete';
-  @import 'components/form/Upload';
-  @import 'components/form/Form';
-  @import 'components/form/Grid';
-  @import 'components/form/List';
-  @import 'components/form/date/Date';
-  @import 'components/form/Markdown';
-  @import 'components/form/MarkdownUpload';
-  @import 'components/form/Select';
-  @import 'components/Modal';
-  @import 'components/form/FieldContainer';
-  @import 'components/form/Tags';
-  @import 'components/form/Check';
-  @import 'components/form/Textarea';
-  @import 'components/form/Radio';
-  @import 'components/form/Geolocation';
-  @import 'components/form/TrixEditor';
-  @import 'components/form/FieldLocaleSelector';
-  @import 'components/form/GeolocationEdit';
+// overriding default vendor components style
+@import 'components/form/Multiselect';
 
-  // List
-  @import 'components/list/EntityList';
-  @import 'components/Search';
-  @import 'components/list/Pagination';
-  @import 'components/list/FilterSelect';
-  @import 'components/list/ViewPanel';
-  @import 'components/list/CommandsDropdown';
-  @import 'components/list/StateIcon';
-  @import 'components/list/DataList';
 
-  // Menu
-  @import 'components/LeftNav';
+// Form components
+@import 'components/form/Text';
+@import 'components/form/Autocomplete';
+@import 'components/form/Upload';
+@import 'components/form/Form';
+@import 'components/form/Grid';
+@import 'components/form/List';
+@import 'components/form/date/Date';
+@import 'components/form/Markdown';
+@import 'components/form/MarkdownUpload';
+@import 'components/form/Select';
+@import 'components/Modal';
+@import 'components/form/FieldContainer';
+@import 'components/form/Tags';
+@import 'components/form/Check';
+@import 'components/form/Textarea';
+@import 'components/form/Radio';
+@import 'components/form/Geolocation';
+@import 'components/form/TrixEditor';
+@import 'components/form/FieldLocaleSelector';
+@import 'components/form/GeolocationEdit';
 
-  // Dashboard
-  @import 'components/dashboard/Widget';
-  @import 'components/dashboard/Chart';
-  @import 'components/dashboard/Panel';
-  @import 'components/dashboard/Dashboard';
-  @import 'components/dashboard/Legend';
-  @import 'components/Card';
+// List
+@import 'components/list/EntityList';
+@import 'components/Search';
+@import 'components/list/Pagination';
+@import 'components/list/FilterSelect';
+@import 'components/list/ViewPanel';
+@import 'components/list/CommandsDropdown';
+@import 'components/list/StateIcon';
+@import 'components/list/DataList';
 
-  @import 'components/GlobalFilters';
+// Menu
+@import 'components/LeftNav';
 
-  @import "components/popover";
+// Dashboard
+@import 'components/dashboard/Widget';
+@import 'components/dashboard/Chart';
+@import 'components/dashboard/Panel';
+@import 'components/dashboard/Dashboard';
+@import 'components/dashboard/Legend';
+@import 'components/Card';
 
-  input[type="number"].hide-controls {
-    &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-    -moz-appearance: textfield;
+@import 'components/GlobalFilters';
+
+@import "components/popover";
+
+input[type="number"].hide-controls {
+  &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
+  -moz-appearance: textfield;
+}
 
-  [v-cloak] {
-    display: none;
-  }
+[v-cloak] {
+  display: none;
+}
 
-  .sortable-chosen {
-    @include focus-outline('border');
-  }
+.sortable-chosen {
+  @include focus-outline('border');
 }
 
 .modal-open {
