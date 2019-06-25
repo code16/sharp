@@ -1,10 +1,10 @@
 import Vue from 'vue';
 import Autocomplete from '../components/form/fields/Autocomplete.vue';
 
-import { nextRequestFulfilled } from './utils/moxios-utils';
+import { nextRequestFulfilled } from './test-utils/moxios-utils';
 import moxios from 'moxios';
 
-import { MockI18n } from './utils';
+import { MockI18n } from './test-utils';
 
 
 describe('autocomplete-field', ()=>{

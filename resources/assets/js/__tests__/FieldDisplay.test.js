@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import * as fieldContainerModule from '../components/form/FieldContainer.vue';
 
-import { MockInjections, mockSFC, unmockSFC } from "./utils";
+import { MockInjections, mockSFC, unmockSFC } from "./test-utils";
 
 import FieldDisplay from '../components/form/field-display/FieldDisplay';
 import * as conditions from '../components/form/field-display/conditions';
@@ -363,7 +363,7 @@ describe('field-display', () => {
 
             Vue.set(vm.contextData,'check1',false);
             await Vue.nextTick();
-            
+
             expect(vm.$children).toHaveLength(0);
         });
     });
@@ -506,7 +506,7 @@ async function createVm(customOptions={}) {
     const vm = new Vue({
         el: '#app',
         mixins: [MockInjections, customOptions],
-        
+
         'extends': {
             data:()=>({
                 locale: null,
