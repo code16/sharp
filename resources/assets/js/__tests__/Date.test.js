@@ -2,7 +2,7 @@ import Vue from 'vue';
 import DateField from '../components/form/fields/date/Date.vue';
 import moment from 'moment-timezone';
 
-import { MockInjections, MockI18n } from './utils';
+import { MockInjections, MockI18n } from './test-utils';
 
 
 function date(...args) {

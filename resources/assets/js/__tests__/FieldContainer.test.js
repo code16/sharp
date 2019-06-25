@@ -2,7 +2,7 @@ import Vue from 'vue';
 import FieldContainer from '../components/form/FieldContainer.vue';
 import * as fields from '../components/form/fields';
 
-import { MockInjections } from "./utils/index";
+import { MockInjections } from "./test-utils/index";
 import { ErrorNode, ConfigNode } from '../mixins';
 
 describe('field-container', () => {

@@ -2,7 +2,7 @@ import Vue from 'vue';
 import List from '../components/form/fields/list/List.vue';
 import FieldDisplay from '../components/form/field-display/FieldDisplay';
 
-import { MockInjections, MockTransitions, MockI18n, QueryComponent } from './utils';
+import { MockInjections, MockTransitions, MockI18n, QueryComponent } from './test-utils';
 import { ErrorNode } from '../mixins';
 
 import { mount } from '@vue/test-utils';

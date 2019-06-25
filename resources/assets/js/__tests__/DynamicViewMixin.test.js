@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import DynamicViewMixin from '../components/DynamicViewMixin';
 
-import { MockInjections, MockI18n } from "./utils";
-import { mockProperty, unmockProperty, setter } from "./utils/mock-utils";
+import { MockInjections, MockI18n } from "./test-utils";
+import { mockProperty, unmockProperty, setter } from "./test-utils/mock-utils";
 
 import moxios from 'moxios';
-import { nextRequestFulfilled } from "./utils/moxios-utils";
+import { nextRequestFulfilled } from "./test-utils/moxios-utils";
 
 
 describe('dynamic-view-mixin',()=>{
