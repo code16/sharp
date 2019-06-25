@@ -12,6 +12,7 @@ import SharpSelect from './Select.vue';
 import SharpHtml from './Html.vue';
 import SharpGeolocation from './geolocation/Geolocation';
 import SharpTrix from './wysiwyg/TrixEditor.vue';
+import SharpDateRange from './date-range/DateRange';
 
 export default {
     'autocomplete' : SharpAutocomplete,
@@ -27,5 +28,6 @@ export default {
     'select'       : SharpSelect,
     'html'         : SharpHtml,
     'geolocation'  : SharpGeolocation,
-    'wysiwyg'      : SharpTrix
+    'wysiwyg'      : SharpTrix,
+    'daterange'    : SharpDateRange,
 };

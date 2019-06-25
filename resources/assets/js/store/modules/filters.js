@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import {parseRange, serializeRange} from "../../util/querystring";
 
 export const SET_FILTERS = 'SET_FILTERS';
 export const SET_FILTER_VALUE = 'SET_FILTER_VALUE';
@@ -45,7 +46,7 @@ export default {
             return values => Object.entries(values)
                 .reduce((res, [key, value]) => ({
                     ...res,
-                    [getters.filterQueryKey(key)]: value
+                    [getters.filterQueryKey(key)]: value,
                 }), {});
         },
         getValuesFromQuery() {
@@ -64,8 +65,19 @@ export default {
                 if(filter.multiple && !Array.isArray(value)) {
                     return [value];
                 }
+                if(filter.dateRange) {
+                    return parseRange(value);
+                }
                 return value;
             }
+        },
+        serializeValue() {
+            return ({ filter, value }) => {
+                if(filter.dateRange) {
+                    return serializeRange(value);
+                }
+                return value;
+            };
         },
         nextValues(state) {
             return ({ filter, value }) => {
