@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Tests\Unit\EntityList;
 
+use Carbon\Carbon;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\Tests\SharpTestCase;
 
@@ -53,6 +54,23 @@ class EntitiesListQueryParamsTest extends SharpTestCase
         $this->assertEquals(
             "1",
             $this->buildParams(1, "", null, null, ["type" => 1])->filterFor("type")
+        );
+
+        $this->assertEquals(
+            [
+                "toto",
+                "titi",
+                "tata"
+            ],
+            $this->buildParams(1, "", null, null, ["type" => "toto,titi,tata"])->filterFor("type")
+        );
+
+        $this->assertEquals(
+            [
+                "start" => Carbon::createFromFormat('Y-m-d','2019-02-01'),
+                "end" => Carbon::createFromFormat('Y-m-d','2019-02-10'),
+            ],
+            $this->buildParams(1, "", null, null, ["range" => "20190201..20190210"])->filterFor("range")
         );
 
         $this->assertNull(

@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Tests\Unit\EntityList;
 
+use Code16\Sharp\EntityList\EntityListDateRangeFilter;
 use Code16\Sharp\EntityList\EntityListFilter;
 use Code16\Sharp\EntityList\EntityListMultipleFilter;
 use Code16\Sharp\EntityList\EntityListRequiredFilter;
@@ -326,6 +327,31 @@ class EntityListFilterTest extends SharpTestCase
             ]
         ], $list->listConfig());
     }
+
+    /** @test */
+    function we_can_get_list_date_range_filters_config_with_a_class_name()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig()
+            {
+                $this->addFilter("test", SharpEntityListDateRangeTestFilter::class);
+            }
+        };
+
+        $list->buildListConfig();
+
+        $this->assertArrayContainsSubset([
+            "filters" => [
+                [
+                    "key" => "test",
+                    "multiple" => false,
+                    "required" => false,
+                    "dateRange" => true,
+                    "values" => [],
+                ]
+            ]
+        ], $list->listConfig());
+    }
 }
 
 class SharpEntityListTestFilter implements EntityListFilter
@@ -353,5 +379,13 @@ class SharpEntityListTestRequiredFilter implements EntityListRequiredFilter
     public function defaultValue()
     {
         return 2;
+    }
+}
+
+class SharpEntityListDateRangeTestFilter implements EntityListDateRangeFilter
+{
+    public function values()
+    {
+        return [];
     }
 }

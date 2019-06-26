@@ -34,7 +34,7 @@ trait HasFiltersInQuery
 
             return [
                 "start" => Carbon::createFromFormat('Ymd',$rangeValues[0]),
-                "end" => Carbon::createFromFormat('Ymd',$rangeValues[0]),
+                "end" => Carbon::createFromFormat('Ymd',$rangeValues[1]),
             ];
         }
 
