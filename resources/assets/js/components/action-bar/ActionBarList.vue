@@ -60,22 +60,29 @@
             </template>
         </template>
         <template slot="extras">
-            <sharp-filter-select
-                v-for="filter in filters"
-                v-show="!reorderActive"
-                :name="filter.label"
-                :filter-key="`actionbarlist_${filter.key}`"
-                :values="filter.values"
-                :value="filtersValues[filter.key]"
-                :multiple="filter.multiple"
-                :required="filter.required"
-                :template="filter.template"
-                :search-keys="filter.searchKeys"
-                :searchable="filter.searchable"
-                :key="filter.key"
-                @input="handleFilterChanged(filter, $event)"
-            />
-<!--            <SharpFilterRange />-->
+            <div class="row mx-n2">
+                <template v-for="filter in filters">
+                    <div class="col-auto px-2">
+                        <sharp-filter-select
+                            v-show="!reorderActive"
+                            :name="filter.label"
+                            :filter-key="`actionbarlist_${filter.key}`"
+                            :values="filter.values"
+                            :value="filtersValues[filter.key]"
+                            :multiple="filter.multiple"
+                            :required="filter.required"
+                            :template="filter.template"
+                            :search-keys="filter.searchKeys"
+                            :searchable="filter.searchable"
+                            :key="filter.key"
+                            @input="handleFilterChanged(filter, $event)"
+                        />
+                    </div>
+                </template>
+<!--                <div class="col-auto px-2">-->
+<!--                    <SharpFilterRange />-->
+<!--                </div>-->
+            </div>
         </template>
         <template v-if="commands.length" slot="extras-right">
             <SharpCommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"

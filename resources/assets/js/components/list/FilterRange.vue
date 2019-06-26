@@ -1,6 +1,6 @@
 <template>
     <SharpDateRange
-
+        class="SharpFilterRange"
     />
 </template>
 

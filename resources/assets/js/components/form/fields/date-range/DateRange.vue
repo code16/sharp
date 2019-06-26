@@ -50,10 +50,10 @@
         computed: {
             transformedValue() {
                 const value = this.value || {};
-                return [
+                return value.start || value.end ? [
                     value.start,
                     value.end,
-                ];
+                ] : null;
             },
             transformedFormat() {
                 return this.displayFormat
