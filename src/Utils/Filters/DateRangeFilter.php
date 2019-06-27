@@ -14,8 +14,8 @@ interface DateRangeRequiredFilter extends DateRangeFilter
      * awaited format:
      *
      *    [
-     *       "start" => 20180101,
-     *       "end" => 20181231,
+     *       "start" => Carbon::yesterday(),
+     *       "end" => Carbon::today(),
      *    ]
      *
      */

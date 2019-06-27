@@ -57,6 +57,13 @@ class PassengerSharpList extends SharpEntityList
             $passengers->where("travel_id", $travelFilter);
         }
 
+        if($birthdateFilter = $params->filterFor("birthdate")) {
+            $passengers->whereBetween("birth_date", [
+                $birthdateFilter['start'],
+                $birthdateFilter['end'],
+            ]);
+        }
+
         if ($params->hasSearch()) {
             foreach ($params->searchWords() as $word) {
                 $passengers->where('name', 'like', $word);
