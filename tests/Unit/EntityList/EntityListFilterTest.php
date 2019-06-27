@@ -344,10 +344,8 @@ class EntityListFilterTest extends SharpTestCase
             "filters" => [
                 [
                     "key" => "test",
-                    "multiple" => false,
+                    "type" => "dateRange",
                     "required" => false,
-                    "dateRange" => true,
-                    "values" => [],
                 ]
             ]
         ], $list->listConfig());
@@ -384,8 +382,4 @@ class SharpEntityListTestRequiredFilter implements EntityListRequiredFilter
 
 class SharpEntityListDateRangeTestFilter implements EntityListDateRangeFilter
 {
-    public function values()
-    {
-        return [];
-    }
 }

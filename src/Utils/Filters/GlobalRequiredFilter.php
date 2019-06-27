@@ -2,6 +2,6 @@
 
 namespace Code16\Sharp\Utils\Filters;
 
-interface GlobalRequiredFilter extends ListRequiredFilter
+interface GlobalRequiredFilter extends SelectRequiredFilter
 {
 }

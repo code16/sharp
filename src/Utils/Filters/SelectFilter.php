@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Utils\Filters;
 
-interface ListFilter
+interface SelectFilter extends Filter
 {
     /**
      * @return array
@@ -10,15 +10,11 @@ interface ListFilter
     public function values();
 }
 
-interface ListDateRangeFilter extends ListFilter
+interface SelectMultipleFilter extends SelectFilter
 {
 }
 
-interface ListMultipleFilter extends ListFilter
-{
-}
-
-interface ListRequiredFilter extends ListFilter
+interface SelectRequiredFilter extends SelectFilter
 {
     /**
      * @return string|int

@@ -57,11 +57,9 @@ class DashboardFilterTest extends SharpTestCase
             "filters" => [
                 [
                     "key" => "test",
+                    "type" => "dateRange",
                     "label" => "test",
-                    "multiple" => false,
                     "required" => false,
-                    "dateRange" => true,
-                    "values" => []
                 ]
             ]
         ], $dashboard->dashboardConfig());
