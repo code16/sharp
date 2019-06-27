@@ -4,6 +4,7 @@ namespace App\Sharp;
 
 use App\Sharp\Commands\TravelsDashboardDownloadCommand;
 use App\Sharp\Filters\TravelsDashboardPeriodFilter;
+use App\Sharp\Filters\TravelsDashboardSpaceshipsFilter;
 use Code16\Sharp\Dashboard\DashboardQueryParams;
 use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
@@ -17,13 +18,14 @@ class TravelsDashboard extends SharpDashboard
     {
         $this->addWidget(
             SharpBarGraphWidget::make("travels")
-                ->setTitle("Travels by year")
+                ->setTitle("Travel counts")
         );
     }
 
     function buildDashboardConfig()
     {
         $this
+            ->addFilter("spaceships", TravelsDashboardSpaceshipsFilter::class)
             ->addFilter("period", TravelsDashboardPeriodFilter::class)
             ->addDashboardCommand("download", TravelsDashboardDownloadCommand::class);
     }
@@ -35,13 +37,23 @@ class TravelsDashboard extends SharpDashboard
 
     function buildWidgetsData(DashboardQueryParams $params)
     {
-        $data = DB::table('travels')
-            ->select(DB::raw('year(departure_date) as label, count(*) as value'))
-            ->groupBy(DB::raw('year(departure_date)'))
-            ->whereBetween("departure_date", [
-                now()->startOfYear()->subYears($params->filterFor("period")),
-                now()->endOfYear()->addYears($params->filterFor("period"))
-            ])
+        $query = DB::table('travels')
+            ->select(DB::raw('year(departure_date) as label, count(*) as value'));
+
+        if($spaceships = $params->filterFor("spaceships")){
+            $query->whereIn("spaceship_id", (array)$spaceships);
+        }
+
+        $query->groupBy(DB::raw('year(departure_date)'));
+
+        if($departurePeriodRange = $params->filterFor("period")){
+            $query->whereBetween("departure_date", [
+                $departurePeriodRange['start'],
+                $departurePeriodRange['end']
+            ]);
+        }
+
+        $data = $query
             ->get()
             ->pluck("value", "label");
 

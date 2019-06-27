@@ -2,24 +2,14 @@
 
 namespace App\Sharp\Filters;
 
-use Code16\Sharp\Dashboard\DashboardRequiredFilter;
+use Code16\Sharp\Dashboard\DashboardDateRangeFilter;
 
-class TravelsDashboardPeriodFilter implements DashboardRequiredFilter
+class TravelsDashboardPeriodFilter implements DashboardDateRangeFilter
 {
 
     public function values()
     {
-        return [
-            1 => "+/- 1 year",
-            3 => "+/- 3 years",
-            5 => "+/- 5 years",
-            10 => "+/- 10 years",
-        ];
-    }
-
-    public function defaultValue()
-    {
-        return 5;
+        return [];
     }
 
     public function label()
