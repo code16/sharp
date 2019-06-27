@@ -9,7 +9,8 @@
         :clearable="clearable"
         type="daterange"
         popper-class="SharpDateRange__popper"
-        @change="handleChanged"
+        ref="picker"
+        @input="handleChanged"
     />
 </template>
 
@@ -23,7 +24,6 @@
         },
         props: {
             value: {
-                type: Object,
                 default: () => ({
                     start: null,
                     end: null,

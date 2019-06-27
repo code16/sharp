@@ -1,0 +1,30 @@
+
+.SharpFilterDateRange {
+  &__field {
+    border: none;
+    height: 30px;
+    padding-top: 0!important;
+    padding-bottom: 0!important;
+    width: 220px!important;
+  }
+
+  .el-input__icon {
+    display: none;
+  }
+  .el-range-input {
+    width: 100%;
+  }
+  .el-range-separator {
+    color: $text-01;
+  }
+
+  &--empty {
+    .SharpFilterDateRange__field {
+      & > * {
+        display: none;
+      }
+      width: 0!important;
+      padding: 0!important;
+    }
+  }
+}

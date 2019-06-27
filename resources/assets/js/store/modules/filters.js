@@ -41,6 +41,9 @@ export default {
         defaultValue() {
             return filter => (filter||{}).default;
         },
+        isDateRange() {
+            return filter => (filter||{}).type === 'daterange';
+        },
 
         filterQueryKey() {
             return key => `${filterQueryPrefix}${key}`;
@@ -71,15 +74,15 @@ export default {
                 if(filter.multiple && !Array.isArray(value)) {
                     return [value];
                 }
-                if(filter.dateRange) {
+                if(getters.isDateRange(filter)) {
                     return parseRange(value);
                 }
                 return value;
             }
         },
-        serializeValue() {
+        serializeValue(state, getters) {
             return ({ filter, value }) => {
-                if(filter.dateRange) {
+                if(getters.isDateRange(filter)) {
                     return serializeRange(value);
                 }
                 return value;

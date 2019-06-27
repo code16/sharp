@@ -57,6 +57,11 @@ describe('store filters', () => {
             expect(filters.getters.defaultValue()({ default:'default' })).toEqual('default');
         });
 
+        test('isDateRange', ()=>{
+            expect(filters.getters.isDateRange()(null)).toBe(false);
+            expect(filters.getters.isDateRange()({ type:'daterange' })).toBe(true);
+        });
+
         test('filterQueryKey', ()=>{
             expect(filters.getters.filterQueryKey()('key')).toBe('filter_key');
         });
@@ -92,7 +97,8 @@ describe('store filters', () => {
         test('resolveFilterValue', ()=>{
             const state = {};
             const getters = {
-                defaultValue: jest.fn(()=>'defaultValue')
+                defaultValue: jest.fn(()=>'defaultValue'),
+                isDateRange: jest.fn(()=>false),
             };
             const resolveFilterValue = (...args) => filters.getters.resolveFilterValue(state, getters)(...args);
 
@@ -114,25 +120,29 @@ describe('store filters', () => {
 
             jest.spyOn(querystringUtils, 'parseRange')
                 .mockImplementation(() => 'parsedRange');
+            getters.isDateRange.mockReturnValue(true);
             expect(resolveFilterValue({
-                filter: { dateRange:true }, value: '2019-06-21..2019-06-24',
+                filter: {}, value: '2019-06-21..2019-06-24',
             })).toEqual('parsedRange');
             expect(querystringUtils.parseRange)
                 .toHaveBeenCalledWith('2019-06-21..2019-06-24');
         });
 
         test('serializeValue', ()=>{
-            expect(filters.getters.serializeValue()({
+            const state = {};
+            const getters = {
+                isDateRange: jest.fn(()=>false),
+            };
+            expect(filters.getters.serializeValue(state, getters)({
                 filter: {},
                 value: 'val'
             })).toEqual('val');
 
             jest.spyOn(querystringUtils, 'serializeRange')
                 .mockImplementation(() => 'serializedRange');
-            expect(filters.getters.serializeValue()({
-                filter: {
-                    dateRange: true,
-                },
+            getters.isDateRange.mockReturnValue(true);
+            expect(filters.getters.serializeValue(state, getters)({
+                filter: {},
                 value: {
                     start: 'start',
                     end: 'end',

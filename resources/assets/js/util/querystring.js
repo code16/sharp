@@ -1,26 +1,31 @@
+import moment from 'moment';
+
+const RANGE_DATE_FORMAT = 'YYYYMMDD';
 
 export function parseRange(rangeStr) {
     const [start, end] = (rangeStr || '').split('..');
     return {
-        start: start || null,
-        end: end || null,
+        start: start
+            ? moment(start, RANGE_DATE_FORMAT).toDate()
+            : null,
+        end: end
+            ? moment(end, RANGE_DATE_FORMAT).toDate()
+            : null,
     }
-}
-
-function serializeRangeValue(value) {
-    if(value instanceof Date) {
-        return value.toISOString();
-    }
-    if(typeof value === 'number') {
-        return value.toString();
-    }
-    return value || '';
 }
 
 export function serializeRange(range) {
-    const start = serializeRangeValue((range || {}).start);
-    const end = serializeRangeValue((range || {}).end);
+    let start = (range || {}).start;
+    let end = (range || {}).end;
+
+    if(start) {
+        start = moment(start).format(RANGE_DATE_FORMAT);
+    }
+    if(end) {
+        end = moment(end).format(RANGE_DATE_FORMAT);
+    }
+
     return start || end
-        ? `${start}..${end}`
+        ? `${start || ''}..${end || ''}`
         : null;
 }

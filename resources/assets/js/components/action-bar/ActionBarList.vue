@@ -60,28 +60,17 @@
             </template>
         </template>
         <template slot="extras">
+            <template v-if="!reorderActive"></template>
             <div class="row mx-n2">
                 <template v-for="filter in filters">
                     <div class="col-auto px-2">
-                        <sharp-filter-select
-                            v-show="!reorderActive"
-                            :name="filter.label"
-                            :filter-key="`actionbarlist_${filter.key}`"
-                            :values="filter.values"
+                        <SharpFilter
+                            :filter="filter"
                             :value="filtersValues[filter.key]"
-                            :multiple="filter.multiple"
-                            :required="filter.required"
-                            :template="filter.template"
-                            :search-keys="filter.searchKeys"
-                            :searchable="filter.searchable"
-                            :key="filter.key"
                             @input="handleFilterChanged(filter, $event)"
                         />
                     </div>
                 </template>
-<!--                <div class="col-auto px-2">-->
-<!--                    <SharpFilterRange />-->
-<!--                </div>-->
             </div>
         </template>
         <template v-if="commands.length" slot="extras-right">
@@ -102,8 +91,7 @@
     import { Localization } from '../../mixins';
 
     import SharpText from '../form/fields/Text';
-    import SharpFilterSelect from '../list/FilterSelect';
-    import SharpFilterRange from '../list/FilterRange';
+    import SharpFilter from '../list/Filter';
 
     import SharpDropdown from '../dropdown/Dropdown';
     import SharpDropdownItem from '../dropdown/DropdownItem';
@@ -115,12 +103,11 @@
         components : {
             SharpActionBar,
             SharpText,
-            SharpFilterSelect,
-            SharpFilterRange,
             SharpDropdown,
             SharpDropdownItem,
             SharpItemVisual,
-            SharpCommandsDropdown
+            SharpCommandsDropdown,
+            SharpFilter,
         },
 
         mixins: [Localization],

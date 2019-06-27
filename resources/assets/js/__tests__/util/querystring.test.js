@@ -9,17 +9,17 @@ describe('querystring utils', () => {
             start: null,
             end: null,
         });
-        expect(parseRange('..2018-06-05')).toEqual({
+        expect(parseRange('..20190605')).toEqual({
             start: null,
-            end: '2018-06-05',
+            end:  new Date(2019, 5, 5),
         });
-        expect(parseRange('2019-06-01..')).toEqual({
-            start: '2019-06-01',
+        expect(parseRange('20190601..')).toEqual({
+            start: new Date(2019, 5, 1),
             end: null,
         });
-        expect(parseRange('2019-06-01..2018-06-05')).toEqual({
-            start: '2019-06-01',
-            end: '2018-06-05',
+        expect(parseRange('20190601..20190605')).toEqual({
+            start: new Date(2019, 5, 1),
+            end: new Date(2019, 5, 5),
         });
     });
 
@@ -34,21 +34,16 @@ describe('querystring utils', () => {
         expect(serializeRange({
             start: new Date(Date.UTC(2019, 5, 1)),
             end: null,
-        })).toEqual('2019-06-01T00:00:00.000Z..');
+        })).toEqual('20190601..');
 
         expect(serializeRange({
             start: null,
             end: new Date(Date.UTC(2019, 5, 5)),
-        })).toEqual('..2019-06-05T00:00:00.000Z');
+        })).toEqual('..20190605');
 
         expect(serializeRange({
             start: new Date(Date.UTC(2019, 5, 1)),
             end: new Date(Date.UTC(2019, 5, 5)),
-        })).toEqual('2019-06-01T00:00:00.000Z..2019-06-05T00:00:00.000Z');
-
-        expect(serializeRange({
-            start: 0,
-            end: 2,
-        })).toEqual('0..2');
+        })).toEqual('20190601..20190605');
     });
 });

@@ -31,7 +31,7 @@
 
 <script>
     import SharpActionBar from './ActionBar.vue';
-    import SharpFilterSelect from '../list/FilterSelect.vue';
+    import SharpFilterSelect from '../list/filters/FilterSelect.vue';
     import SharpCommandsDropdown from '../commands/CommandsDropdown.vue';
     import { Localization } from "../../mixins";
     import { mapGetters } from 'vuex';

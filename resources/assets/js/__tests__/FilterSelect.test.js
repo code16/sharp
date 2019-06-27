@@ -1,4 +1,4 @@
-import FilterSelect from '../components/list/FilterSelect.vue';
+import FilterSelect from '../components/list/filters/FilterSelect.vue';
 import Select from '../components/form/fields/Select.vue';
 import { shallowMount } from '@vue/test-utils';
 import { MockI18n } from "./test-utils";

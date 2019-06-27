@@ -1,5 +1,5 @@
 <template>
-    <span class="SharpFilterSelect"
+    <div class="SharpFilterSelect"
           :class="{
               'SharpFilterSelect--open':opened,
               'SharpFilterSelect--empty':empty,
@@ -28,33 +28,30 @@
             @multiselect-input="handleAutocompleteInput"
             @close="close"
         />
-        <span class="SharpFilterSelect__text" @mousedown="handleMouseDown">
-            {{name}}
-        </span>
-
-        <!-- value text & tags -->
-        <sharp-select
-            class="SharpFilterSelect__select"
-            :value="value"
-            :options="values"
-            :multiple="multiple"
-            :clearable="!required"
-            :inline="false"
-            :unique-identifier="filterKey"
-            placeholder=" "
-            ref="select"
-            @input="handleSelect"
-            @mousedown.native="handleMouseDown"
-        />
-    </span>
+        <SharpFilterControl :label="label" no-caret @mousedown.native="handleMouseDown">
+            <!-- value text & tags -->
+            <sharp-select
+                class="SharpFilterSelect__select"
+                :value="value"
+                :options="values"
+                :multiple="multiple"
+                :clearable="!required"
+                :inline="false"
+                placeholder=" "
+                ref="select"
+                @input="handleSelect"
+                @mousedown.native="handleMouseDown"
+            />
+        </SharpFilterControl>
+    </div>
 </template>
 
 <script>
-    import SharpDropdown from '../dropdown/Dropdown';
-    import SharpSelect from '../form/fields/Select';
-    import SharpAutocomplete from '../form/fields/Autocomplete';
-
-    import { Localization } from '../../mixins';
+    import SharpDropdown from '../../dropdown/Dropdown';
+    import SharpSelect from '../../form/fields/Select';
+    import SharpAutocomplete from '../../form/fields/Autocomplete';
+    import SharpFilterControl from '../FilterControl';
+    import { Localization } from '../../../mixins';
 
 
     export default {
@@ -63,10 +60,11 @@
         components: {
             SharpDropdown,
             SharpSelect,
-            SharpAutocomplete
+            SharpAutocomplete,
+            SharpFilterControl,
         },
         props: {
-            name : {
+            label : {
                 type: String,
                 required: true
             },
@@ -82,8 +80,6 @@
             searchable: Boolean,
             searchKeys: Array,
             template: String,
-
-            filterKey: String,
         },
         data() {
             return {
