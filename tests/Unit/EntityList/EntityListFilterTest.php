@@ -344,7 +344,7 @@ class EntityListFilterTest extends SharpTestCase
             "filters" => [
                 [
                     "key" => "test",
-                    "type" => "dateRange",
+                    "type" => "daterange",
                     "required" => false,
                 ]
             ]

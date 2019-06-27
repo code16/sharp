@@ -57,7 +57,7 @@ class DashboardFilterTest extends SharpTestCase
             "filters" => [
                 [
                     "key" => "test",
-                    "type" => "dateRange",
+                    "type" => "daterange",
                     "label" => "test",
                     "required" => false,
                 ]

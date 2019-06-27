@@ -64,7 +64,7 @@ trait HandleFilters
 
                     $filterConfigData = [
                         "key" => $filterName,
-                        "type" =>  'dateRange',
+                        "type" =>  'daterange',
                         "required" => $handler instanceof DateRangeRequiredFilter,
                         "default" => $this->getFilterDefaultValue($handler, $filterName),
                         "label" => method_exists($handler, "label") ? $handler->label() : $filterName,
