@@ -29,6 +29,7 @@
             value: {
                 required: true,
             },
+            required: Boolean,
             label: String,
         },
 
