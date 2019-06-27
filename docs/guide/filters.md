@@ -12,10 +12,10 @@ php artisan sharp:make:list-filter <class_name> [--required,--multiple]
 
 ## Write the filter class
 
-First, we need to write a class which implements the `Code16\Sharp\EntityList\EntityListFilter` interface, and therefore declare a `values()` function. This function must return an ["id" => "label"] array. For instance, with Eloquent:
+First, we need to write a class which implements the `Code16\Sharp\EntityList\EntityListSelectFilter` interface, and therefore declare a `values()` function. This function must return an ["id" => "label"] array. For instance, with Eloquent:
 
 ```php
-class SpaceshipTypeFilter implements EntityListFilter
+class SpaceshipTypeFilter implements EntityListSelectFilter
 {
     public function values()
     {
@@ -59,33 +59,13 @@ function getListData(EntityListQueryParams $params)
 }
 ```
 
-## Required filters
-
-Sometimes we'd like to have a filter which can't be null. Just implement `Code16\Sharp\EntityList\EntityListRequiredFilter` subinterface:
-
-```php
-class SpaceshipTypeFilter implements EntityListRequiredFilter
-{
-
-    public function values()
-    {
-        return SpaceshipType::orderBy("label")
-            ->pluck("label", "id");
-    }
-
-    public function defaultValue()
-    {
-        return SpaceshipType::orderBy("label")->first()->id;
-    }
-}
-```
 
 You'll have to declare another function, `defaultValue()`, which must return the id of the default filter if nothing selected.
 
 
 ## Multiple filter
 
-First, notice that you can have as many filters as you want for an EntityList. The "multiple filter" here designate something else: allowing the user to select more than one value for a filter. To achieve this, replace the interface implemented with `Code16\Sharp\EntityList\EntityListMultipleFilter`.
+First, notice that you can have as many filters as you want for an EntityList. The "multiple filter" here designate something else: allowing the user to select more than one value for a filter. To achieve this, replace the interface implemented with `Code16\Sharp\EntityList\EntityListSelectMultipleFilter`.
 
 In this case, with Eloquent for instance, your might have to modify your code to ensure that you have an array (Sharp will return either null, and id or an array of id, depending on the user selection):
 
@@ -120,7 +100,50 @@ if ($range = $params->filterFor("createdAt")) {
 }
 ```
 
+
+## Required filters
+
+Sometimes we'd like to have a filter which can't be null. All you need to do is use the right "Required" subinterface instead of the and define a proper default value.
+
+For "Select" filter, use the `Code16\Sharp\EntityList\EntityListSelectRequiredFilter` subinterface:
+
+```php
+class SpaceshipTypeFilter implements EntityListSelectRequiredFilter
+{
+
+    public function values()
+    {
+        return SpaceshipType::orderBy("label")
+            ->pluck("label", "id");
+    }
+
+    public function defaultValue()
+    {
+        return SpaceshipType::orderBy("label")->first()->id;
+    }
+}
+```
+
 Note that a filter can't be required AND multiple.
+
+
+For "Date Range" filter, use the `Code16\Sharp\EntityList\EntityListDateRangeRequiredFilter` subinterface:
+
+```php
+class TravelPeriodFilter implements EntityListDateRangeRequiredFilter
+{
+
+    public function defaultValue()
+    {
+        return [
+            "start" => Carbon::yesterday(),
+            "end" => Carbon::today(),
+        ];
+    }
+}
+```
+
+
 
 ## Filter label
 
