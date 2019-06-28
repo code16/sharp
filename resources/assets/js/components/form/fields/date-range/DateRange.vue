@@ -7,6 +7,7 @@
         :end-placeholder="endPlaceholder"
         :disabled="readOnly"
         :clearable="clearable"
+        :picker-options="pickerOptions"
         type="daterange"
         popper-class="SharpDateRange__popper"
         ref="picker"
@@ -48,6 +49,7 @@
                 default: true,
             },
             readOnly: Boolean,
+            mondayFirst: Boolean,
         },
         computed: {
             transformedValue() {
@@ -61,6 +63,11 @@
                 return this.displayFormat
                     .replace(/D/g, 'd')
                     .replace(/Y/g, 'y');
+            },
+            pickerOptions() {
+                return {
+                    firstDayOfWeek: this.mondayFirst ? 1 : 7,
+                }
             },
         },
         methods: {

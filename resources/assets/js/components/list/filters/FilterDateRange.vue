@@ -5,6 +5,7 @@
                 class="SharpFilterDateRange__field"
                 :value="value"
                 :display-format="displayFormat"
+                :monday-first="mondayFirst"
                 @input="handleInput"
                 @focus="handlePickerFocused"
                 @blur="handlePickerBlur"
@@ -32,6 +33,7 @@
             },
             required: Boolean,
             displayFormat: String,
+            mondayFirst: Boolean,
             label: String,
         },
 
