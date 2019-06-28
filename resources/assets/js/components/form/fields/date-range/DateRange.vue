@@ -1,6 +1,7 @@
 <template>
     <el-date-picker
         class="SharpDateRange"
+        :class="classes"
         :value="transformedValue"
         :format="transformedFormat"
         :start-placeholder="startPlaceholder"
@@ -67,6 +68,11 @@
             pickerOptions() {
                 return {
                     firstDayOfWeek: this.mondayFirst ? 1 : 7,
+                }
+            },
+            classes() {
+                return {
+                    'SharpDateRange--clearable': this.clearable,
                 }
             },
         },

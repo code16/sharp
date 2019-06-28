@@ -6,6 +6,7 @@
                 :value="value"
                 :display-format="displayFormat"
                 :monday-first="mondayFirst"
+                :clearable="!required"
                 @input="handleInput"
                 @focus="handlePickerFocused"
                 @blur="handlePickerBlur"
@@ -54,7 +55,7 @@
                 return {
                     'SharpFilterDateRange--empty': this.empty,
                 }
-            }
+            },
         },
 
         methods: {
