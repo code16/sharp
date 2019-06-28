@@ -39,11 +39,11 @@
             },
             startPlaceholder: {
                 type: String,
-                default: lang('form.daterange.start_placeholder'),
+                default: () => lang('form.daterange.start_placeholder'),
             },
             endPlaceholder: {
                 type: String,
-                default: lang('form.daterange.end_placeholder'),
+                default: () => lang('form.daterange.end_placeholder'),
             },
             clearable: {
                 type: Boolean,

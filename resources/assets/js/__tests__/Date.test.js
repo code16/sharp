@@ -27,6 +27,7 @@ describe('date-field',()=>{
                             :step-time="stepTime" 
                             :min-time="minTime" 
                             :max-time="maxTime"
+                            :monday-first="mondayFirst"
                             @input="inputEmitted"
                             >
                 </sharp-date>
@@ -79,6 +80,20 @@ describe('date-field',()=>{
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
+    test('can mount "monday first" Date field', async () => {
+        let $date = await createVm({
+            propsData: {
+                mondayFirst: true,
+            }
+        });
+
+        $date.showPicker = true;
+
+        await Vue.nextTick();
+
+        expect(document.body.innerHTML).toMatchSnapshot();
+    });
+
     test('expose appropriate props to TimePicker', async () => {
         let $date = await createVm({
             propsData: {
@@ -117,7 +132,7 @@ describe('date-field',()=>{
             value: date(1996, 7, 20, 12, 11),
             language: 'fr',
             inline: true,
-            mondayFirst: true
+            mondayFirst: undefined,
         });
     });
 
@@ -448,7 +463,7 @@ async function createVm(customOptions={}) {
         el: '#app',
 
         mixins: [customOptions, MockInjections],
-        props: ['readOnly', 'disableTime','disableDate' ,'displayFormat', 'stepTime', 'minTime', 'maxTime'],
+        props: ['readOnly', 'disableTime','disableDate' ,'displayFormat', 'stepTime', 'minTime', 'maxTime','mondayFirst'],
 
         'extends': {
             methods: {

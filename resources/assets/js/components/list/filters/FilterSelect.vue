@@ -29,7 +29,7 @@
             @close="close"
         />
 
-        <SharpFilterControl :label="label" no-caret @click="handleMouseDown">
+        <SharpFilterControl :label="label" no-caret @click="handleClick">
             <!-- value text & tags -->
             <sharp-select
                 class="SharpFilterSelect__select"
@@ -106,7 +106,7 @@
             handleAutocompleteInput(value) {
                 this.$emit('input', this.multiple ? value.map(v=>v.id) : (value||{}).id);
             },
-            handleMouseDown() {
+            handleClick() {
                 if(this.opened) {
                     this.close();
                 } else {

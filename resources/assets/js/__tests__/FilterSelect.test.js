@@ -13,7 +13,7 @@ describe('filter-select', ()=>{
             ...options,
             propsData : {
                 filterKey: 'job',
-                name:'Web job',
+                label: 'Web job',
                 values: [
                     { id:1, label:'front' },
                     { id:2, label:'back' },
@@ -66,7 +66,6 @@ describe('filter-select', ()=>{
             multiple: true,
             clearable: false,
             inline: false,
-            uniqueIdentifier: 'job'
         });
     });
 
@@ -76,18 +75,10 @@ describe('filter-select', ()=>{
                 this.handleSelect = jest.fn();
             }
         });
-        const label = wrapper.find('.SharpFilterSelect__text');
         const select = findSelect(wrapper);
-
-        wrapper.setMethods({
-            showDropdown: jest.fn()
-        });
 
         select.vm.$emit('input');
         expect(wrapper.vm.handleSelect).toHaveBeenCalled();
-        label.trigger('mousedown');
-        await wrapper.vm.$nextTick();
-        expect(wrapper.vm.showDropdown).toHaveBeenCalled();
     });
 
     test('empty', ()=>{
