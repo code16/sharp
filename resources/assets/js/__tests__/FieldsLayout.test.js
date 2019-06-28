@@ -3,7 +3,7 @@ import FieldsLayout from '../components/form/FieldsLayout.vue';
 
 import * as gridModule from '../components/Grid.vue';
 
-import { MockInjections, mockSFC, unmockSFC } from "./utils";
+import { MockInjections, mockSFC, unmockSFC } from "./test-utils";
 
 describe('fields-layout', () => {
     Vue.component('sharp-fields-layout', FieldsLayout);

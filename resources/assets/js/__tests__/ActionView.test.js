@@ -1,7 +1,7 @@
 import Notifications from 'vue-notification';
 import { shallowMount, createLocalVue, config } from '@vue/test-utils';
 import ActionView from '../components/ActionView.vue';
-import { createStub } from "./utils/vue-test-utils";
+import { createStub } from "./test-utils/vue-test-utils";
 
 config.stubs['transition-group'] = false;
 

@@ -10,11 +10,11 @@ import * as tabbedLayoutModule from '../components/TabbedLayout.vue';
 import * as consts from '../consts';
 
 
-import { mockSFC, unmockSFC, wait } from "./utils";
+import { mockSFC, unmockSFC, wait } from "./test-utils";
 
 import moxios from 'moxios';
-import {MockInjections, MockI18n} from "./utils";
-import { nextRequestFulfilled } from './utils/moxios-utils';
+import {MockInjections, MockI18n} from "./test-utils";
+import { nextRequestFulfilled } from './test-utils/moxios-utils';
 
 
 describe('sharp-form', ()=>{

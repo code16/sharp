@@ -1,8 +1,8 @@
 import Vue from 'vue';
-import { MockInjections, MockI18n, wait } from "./utils";
+import { MockInjections, MockI18n, wait } from "./test-utils";
 
 import VueClip from '../components/form/fields/upload/VueClip';
-import { nextRequestFulfilled } from './utils/moxios-utils';
+import { nextRequestFulfilled } from './test-utils/moxios-utils';
 
 import moxios from 'moxios';
 

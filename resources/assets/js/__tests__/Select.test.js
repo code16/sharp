@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Select from '../components/form/fields/Select.vue';
 
-import { MockI18n } from './utils';
+import { MockI18n } from './test-utils';
 
 
 
