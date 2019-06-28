@@ -15,6 +15,10 @@ export function parseRange(rangeStr) {
 }
 
 export function serializeRange(range) {
+    if(typeof range === 'string') {
+        return range;
+    }
+
     let start = (range || {}).start;
     let end = (range || {}).end;
 

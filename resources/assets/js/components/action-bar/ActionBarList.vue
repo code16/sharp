@@ -68,6 +68,7 @@
                             :filter="filter"
                             :value="filtersValues[filter.key]"
                             @input="handleFilterChanged(filter, $event)"
+                            :key="filter.id"
                         />
                     </div>
                 </template>
