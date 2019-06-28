@@ -37,6 +37,7 @@
   }
 
   &--open {
+    border-color: $dropdown-focus-border-color!important;
     .SharpFilterControl__caret {
       @include SharpDropdownOpenArrow;
     }
