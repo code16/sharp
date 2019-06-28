@@ -32,4 +32,14 @@ class PassengerBirthdateFilter implements EntityListDateRangeRequiredFilter
             "end" => (new Carbon())->setDate(2014,12,31),
         ];
     }
+
+    public function dateFormat()
+    {
+        return "YYYY-MM-DD";
+    }
+
+    public function isMondayFirst()
+    {
+        return false;
+    }
 }
