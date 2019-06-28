@@ -84,7 +84,7 @@ Note that a filter can't be required AND multiple.
 
 ## Date range filter
 
-You might find usefull to filter list elements on a specific date range. Date range filters enable you to show only data that meets a given time period. To implement such a filter, all you need to do is replace the interface implemented with `Code16\Sharp\EntityList\EntityListDateRangeFilter`.
+You might find useful to filter list elements on a specific date range. Date range filters enable you to show only data that meets a given time period. To implement such a filter, you'll need to implement the interface `Code16\Sharp\EntityList\EntityListDateRangeFilter`.
 
 Then you need to adjust the query with selected range (Sharp will return an associative array of two Carbon date objects). In this case, with Eloquent for instance, you might add a condition like:
 
@@ -97,6 +97,22 @@ if ($range = $params->filterFor("createdAt")) {
             $range['end']
         ]
     );
+}
+```
+
+### Options
+
+You can define the date display format (default is `MM-DD-YYYY`, using [the Moment.js parser syntax](https://momentjs.com/docs/#/parsing/string-format/)) and choose if the week should start on monday (default is sunday) implementing those two optional methods in your filter implementation:
+
+```php
+function dateFormat()
+{
+    return "YYYY-MM-DD";
+}
+
+function isMondayFirst()
+{
+    return false;
 }
 ```
 
@@ -127,7 +143,7 @@ class SpaceshipTypeFilter implements EntityListSelectRequiredFilter
 Note that a filter can't be required AND multiple.
 
 
-For "Date Range" filter, use the `Code16\Sharp\EntityList\EntityListDateRangeRequiredFilter` subinterface:
+For "Date Range" filter, use the `Code16\Sharp\EntityList\EntityListDateRangeRequiredFilter` interface:
 
 ```php
 class TravelPeriodFilter implements EntityListDateRangeRequiredFilter

@@ -376,6 +376,60 @@ class EntityListFilterTest extends SharpTestCase
             ]
         ], $list->listConfig());
     }
+
+    /** @test */
+    function we_can_define_a_date_display_format_for_a_date_range_filter()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig()
+            {
+                $this->addFilter("test", new class extends SharpEntityListDateRangeTestFilter {
+                    function dateFormat()
+                    {
+                        return "YYYY-MM-DD";
+                    }
+                });
+            }
+        };
+
+        $list->buildListConfig();
+
+        $this->assertArrayContainsSubset([
+            "filters" => [
+                [
+                    "key" => "test",
+                    "displayFormat" => "YYYY-MM-DD",
+                ]
+            ]
+        ], $list->listConfig());
+    }
+
+    /** @test */
+    function we_can_define_the_monday_first_attribute_for_a_date_range_filter()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig()
+            {
+                $this->addFilter("test", new class extends SharpEntityListDateRangeTestFilter {
+                    function isMondayFirst()
+                    {
+                        return false;
+                    }
+                });
+            }
+        };
+
+        $list->buildListConfig();
+
+        $this->assertArrayContainsSubset([
+            "filters" => [
+                [
+                    "key" => "test",
+                    "mondayFirst" => false,
+                ]
+            ]
+        ], $list->listConfig());
+    }
 }
 
 class SharpEntityListTestFilter implements EntityListSelectFilter

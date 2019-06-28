@@ -64,6 +64,8 @@ trait HandleFilters
                 $filterConfigData += [
                     "type" =>  'daterange',
                     "required" => $handler instanceof DateRangeRequiredFilter,
+                    "mondayFirst" => method_exists($handler, "isMondayFirst") ? $handler->isMondayFirst() : true,
+                    "displayFormat" => method_exists($handler, "dateFormat") ? $handler->dateFormat() : "MM-DD-YYYY"
                 ];
             }
 
