@@ -28,7 +28,8 @@
             @multiselect-input="handleAutocompleteInput"
             @close="close"
         />
-        <SharpFilterControl :label="label" no-caret @mousedown.native="handleMouseDown">
+
+        <SharpFilterControl :label="label" no-caret @click="handleMouseDown">
             <!-- value text & tags -->
             <sharp-select
                 class="SharpFilterSelect__select"
@@ -40,7 +41,6 @@
                 placeholder=" "
                 ref="select"
                 @input="handleSelect"
-                @mousedown.native="handleMouseDown"
             />
         </SharpFilterControl>
     </div>

@@ -1,5 +1,5 @@
 <template>
-    <div class="SharpFilterControl" @click="handleClicked">
+    <div class="SharpFilterControl" :class="classes" @click="handleClicked">
         <span class="SharpFilterControl__text">
             {{ label }}
         </span>
@@ -18,20 +18,22 @@
     export default {
         name: 'SharpFilterControl',
         props: {
+            opened: Boolean,
             label: String,
             noCaret: Boolean,
         },
         components: {
             DropdownArrow,
         },
-        data() {
-            return {
-                opened: false,
-            }
+        computed: {
+            classes() {
+                return {
+                    'SharpFilterControl--open': this.opened,
+                }
+            },
         },
         methods: {
             handleClicked() {
-                this.opened = !this.opened;
                 this.$emit('click');
             },
         },

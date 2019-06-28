@@ -27,9 +27,6 @@
             filterComp() {
                 return filterByType(this.filter.type);
             },
-            label() {
-                return this.field.label;
-            },
         },
 
         methods: {

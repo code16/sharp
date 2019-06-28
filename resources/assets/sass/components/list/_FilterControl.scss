@@ -31,4 +31,14 @@
     align-items: center;
     justify-content: center;
   }
+  &__caret {
+    transition: transform $transition--base ease-in-out;
+    transform-origin: 50% 45%;
+  }
+
+  &--open {
+    .SharpFilterControl__caret {
+      @include SharpDropdownOpenArrow;
+    }
+  }
 }

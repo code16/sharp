@@ -11,6 +11,8 @@
         popper-class="SharpDateRange__popper"
         ref="picker"
         @input="handleChanged"
+        @focus="handleFocused"
+        @blur="handleBlur"
     />
 </template>
 
@@ -68,6 +70,12 @@
                     start: range[0],
                     end: range[1],
                 });
+            },
+            handleFocused() {
+                this.$emit('focus');
+            },
+            handleBlur() {
+                this.$emit('blur');
             },
         },
     }

@@ -1,13 +1,14 @@
 <template>
-    <div class="SharpFilterDateRange" :class="{
-        'SharpFilterDateRange--empty': empty,
-    }">
-        <SharpFilterControl :label="label" @click="handleClicked">
+    <div class="SharpFilterDateRange" :class="classes">
+        <SharpFilterControl :opened="opened" :label="label" :no-caret="noCaret" @click="handleClicked">
             <SharpDateRange
                 class="SharpFilterDateRange__field"
                 :value="value"
-                ref="range"
+                :display-format="displayFormat"
                 @input="handleInput"
+                @focus="handlePickerFocused"
+                @blur="handlePickerBlur"
+                ref="range"
             />
         </SharpFilterControl>
     </div>
@@ -30,13 +31,28 @@
                 required: true,
             },
             required: Boolean,
+            displayFormat: String,
             label: String,
+        },
+
+        data() {
+            return {
+                opened: false,
+            }
         },
 
         computed: {
             empty() {
                 return !this.value;
             },
+            noCaret() {
+                return !!this.value && !this.required;
+            },
+            classes() {
+                return {
+                    'SharpFilterDateRange--empty': this.empty,
+                }
+            }
         },
 
         methods: {
@@ -45,7 +61,13 @@
             },
             handleInput(range) {
                 this.$emit('input', range);
-            }
+            },
+            handlePickerFocused() {
+                this.opened = true;
+            },
+            handlePickerBlur() {
+                this.opened = false;
+            },
         }
     }
 </script>
