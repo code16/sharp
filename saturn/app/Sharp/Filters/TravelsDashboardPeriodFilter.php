@@ -9,6 +9,6 @@ class TravelsDashboardPeriodFilter implements DashboardDateRangeFilter
 
     public function label()
     {
-        return "Period";
+        return "period";
     }
 }

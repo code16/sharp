@@ -40,36 +40,31 @@ trait HandleFilters
     protected function appendFiltersToConfig(array &$config)
     {
         foreach($this->filterHandlers as $filterName => $handler) {
+            $filterConfigData = [
+                "key" => $filterName,
+                "default" => $this->getFilterDefaultValue($handler, $filterName),
+                "label" => method_exists($handler, "label") ? $handler->label() : $filterName,
+            ];
 
-            switch(true){
-                case $handler instanceof SelectFilter:
+            if($handler instanceof SelectFilter) {
+                $multiple = $handler instanceof SelectMultipleFilter;
 
-                    $multiple = $handler instanceof SelectMultipleFilter;
+                $filterConfigData += [
+                    "type" => 'select',
+                    "multiple" => $multiple,
+                    "required" => !$multiple && $handler instanceof SelectRequiredFilter,
+                    "values" => $this->formatSelectFilterValues($handler),
+                    "master" => method_exists($handler, "isMaster") ? $handler->isMaster() : false,
+                    "searchable" => method_exists($handler, "isSearchable") ? $handler->isSearchable() : false,
+                    "searchKeys" => method_exists($handler, "searchKeys") ? $handler->searchKeys() : ["label"],
+                    "template" => $this->formatSelectFilterTemplate($handler)
+                ];
 
-                    $filterConfigData = [
-                        "key" => $filterName,
-                        "type" =>  'select',
-                        "multiple" => $multiple,
-                        "required" => !$multiple && $handler instanceof SelectRequiredFilter,
-                        "default" => $this->getFilterDefaultValue($handler, $filterName),
-                        "values" => $this->formatSelectFilterValues($handler),
-                        "label" => method_exists($handler, "label") ? $handler->label() : $filterName,
-                        "master" => method_exists($handler, "isMaster") ? $handler->isMaster() : false,
-                        "searchable" => method_exists($handler, "isSearchable") ? $handler->isSearchable() : false,
-                        "searchKeys" => method_exists($handler, "searchKeys") ? $handler->searchKeys() : ["label"],
-                        "template" => $this->formatSelectFilterTemplate($handler)
-                    ];
-                    break;
-                case $handler instanceof DateRangeFilter:
-
-                    $filterConfigData = [
-                        "key" => $filterName,
-                        "type" =>  'daterange',
-                        "required" => $handler instanceof DateRangeRequiredFilter,
-                        "default" => $this->getFilterDefaultValue($handler, $filterName),
-                        "label" => method_exists($handler, "label") ? $handler->label() : $filterName,
-                    ];
-                    break;
+            } elseif($handler instanceof DateRangeFilter) {
+                $filterConfigData += [
+                    "type" =>  'daterange',
+                    "required" => $handler instanceof DateRangeRequiredFilter,
+                ];
             }
 
             $config["filters"][] = $filterConfigData;
@@ -221,28 +216,28 @@ trait HandleFilters
         if($this->isRetainedFilter($handler, $attribute, true)) {
             $sessionValue = session("_sharp_retained_filter_$attribute");
 
-            if($handler instanceof SelectMultipleFilter){
+            if($handler instanceof SelectMultipleFilter) {
                 return explode(",", $sessionValue);
             }
 
-            if($handler instanceof DateRangeFilter){
-                $rangeValues = array_slice(
-                    explode("..", $sessionValue),
-                    0,
-                    2
-                );
+            if($handler instanceof DateRangeFilter) {
+                list($start, $end) = explode("..", $sessionValue);
 
-                return [
-                    "start" => $rangeValues[0],
-                    "end" => $rangeValues[1]
-                ];
+                return compact("start", "end");
             }
 
             return $sessionValue;
         }
 
-        return $handler instanceof SelectRequiredFilter || $handler instanceof DateRangeRequiredFilter
-            ? $handler->defaultValue()
-            : null;
+        if($handler instanceof SelectRequiredFilter) {
+            return $handler->defaultValue();
+        }
+
+        if($handler instanceof DateRangeRequiredFilter) {
+            return collect($handler->defaultValue())
+                ->map->format("Y-m-d")->toArray();
+        }
+
+        return null;
     }
 }

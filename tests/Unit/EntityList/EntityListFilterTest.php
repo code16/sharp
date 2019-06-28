@@ -2,10 +2,12 @@
 
 namespace Code16\Sharp\Tests\Unit\EntityList;
 
+use Carbon\Carbon;
 use Code16\Sharp\EntityList\EntityListDateRangeFilter;
-use Code16\Sharp\EntityList\EntityListFilter;
-use Code16\Sharp\EntityList\EntityListMultipleFilter;
-use Code16\Sharp\EntityList\EntityListRequiredFilter;
+use Code16\Sharp\EntityList\EntityListDateRangeRequiredFilter;
+use Code16\Sharp\EntityList\EntityListSelectFilter;
+use Code16\Sharp\EntityList\EntityListSelectMultipleFilter;
+use Code16\Sharp\EntityList\EntityListSelectRequiredFilter;
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Tests\Unit\EntityList\Utils\SharpEntityDefaultTestList;
 
@@ -18,7 +20,7 @@ class EntityListFilterTest extends SharpTestCase
         $list = new class extends SharpEntityDefaultTestList {
             function buildListConfig()
             {
-                $this->addFilter("test", new class implements EntityListFilter {
+                $this->addFilter("test", new class implements EntityListSelectFilter {
                     public function values() { return [1 => "A", 2 => "B"]; }
                 });
             }
@@ -350,9 +352,33 @@ class EntityListFilterTest extends SharpTestCase
             ]
         ], $list->listConfig());
     }
+
+    /** @test */
+    function a_date_range_filter_can_be_required()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig()
+            {
+                $this->addFilter("test", SharpEntityListDateRangeRequiredTestFilter::class);
+            }
+        };
+
+        $list->buildListConfig();
+
+        $this->assertArrayContainsSubset([
+            "filters" => [
+                [
+                    "default" => [
+                        "start" => Carbon::now()->subDay()->format('Y-m-d'),
+                        "end" => Carbon::now()->format('Y-m-d'),
+                    ]
+                ]
+            ]
+        ], $list->listConfig());
+    }
 }
 
-class SharpEntityListTestFilter implements EntityListFilter
+class SharpEntityListTestFilter implements EntityListSelectFilter
 {
     public function values()
     {
@@ -360,7 +386,7 @@ class SharpEntityListTestFilter implements EntityListFilter
     }
 }
 
-class SharpEntityListTestMultipleFilter implements EntityListMultipleFilter
+class SharpEntityListTestMultipleFilter implements EntityListSelectMultipleFilter
 {
     public function values()
     {
@@ -368,7 +394,7 @@ class SharpEntityListTestMultipleFilter implements EntityListMultipleFilter
     }
 }
 
-class SharpEntityListTestRequiredFilter implements EntityListRequiredFilter
+class SharpEntityListTestRequiredFilter implements EntityListSelectRequiredFilter
 {
     public function values()
     {
@@ -382,4 +408,12 @@ class SharpEntityListTestRequiredFilter implements EntityListRequiredFilter
 
 class SharpEntityListDateRangeTestFilter implements EntityListDateRangeFilter
 {
+}
+
+class SharpEntityListDateRangeRequiredTestFilter implements EntityListDateRangeRequiredFilter
+{
+    public function defaultValue()
+    {
+        return ["start" => Carbon::now()->subDay(), "end" => Carbon::now()];
+    }
 }
