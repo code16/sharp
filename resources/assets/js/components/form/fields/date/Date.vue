@@ -23,7 +23,8 @@
                     <sharp-date-picker
                         class="SharpDate__date"
                         :language="language"
-                        inline monday-first
+                        :monday-first="mondayFirst"
+                        inline
                         :value="dateObject"
                         @selected="handleDateSelect"
                         ref="datepicker"
@@ -84,6 +85,7 @@
                 type: String,
                 default:'DD/MM/YYYY HH:mm'
             },
+            mondayFirst: Boolean,
             stepTime: {
                 type:Number,
                 default:30
