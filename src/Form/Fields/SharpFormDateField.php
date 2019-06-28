@@ -21,7 +21,7 @@ class SharpFormDateField extends SharpFormField
     /**
      * @var bool
      */
-    protected $mondayFirst = false;
+    protected $mondayFirst = true;
 
     /**
      * @var string
