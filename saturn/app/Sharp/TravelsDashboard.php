@@ -38,15 +38,15 @@ class TravelsDashboard extends SharpDashboard
     function buildWidgetsData(DashboardQueryParams $params)
     {
         $query = DB::table('travels')
-            ->select(DB::raw('year(departure_date) as label, count(*) as value'));
+            ->select(DB::raw("DATE_FORMAT(departure_date,'%Y-%m') as label, count(*) as value"));
 
-        if($spaceships = $params->filterFor("spaceships")){
+        if($spaceships = $params->filterFor("spaceships")) {
             $query->whereIn("spaceship_id", (array)$spaceships);
         }
 
-        $query->groupBy(DB::raw('year(departure_date)'));
+        $query->groupBy(DB::raw('label'));
 
-        if($departurePeriodRange = $params->filterFor("period")){
+        if($departurePeriodRange = $params->filterFor("period")) {
             $query->whereBetween("departure_date", [
                 $departurePeriodRange['start'],
                 $departurePeriodRange['end']
