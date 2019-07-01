@@ -138,7 +138,6 @@ class SharpEntityListTest extends SharpTestCase
             "reorderable" => false,
             "instanceIdAttribute" => "id",
             "multiformAttribute" => null,
-            "displayMode" => "list",
             "defaultSort" => null,
             "defaultSortDir" => null
         ], $list->listConfig());
