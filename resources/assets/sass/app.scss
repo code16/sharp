@@ -91,6 +91,7 @@ $small-breakpoint: sm;
 @import 'components/form/TrixEditor';
 @import 'components/form/FieldLocaleSelector';
 @import 'components/form/GeolocationEdit';
+@import 'components/form/DateRange';
 
 // List
 @import 'components/list/EntityList';
@@ -101,6 +102,8 @@ $small-breakpoint: sm;
 @import 'components/list/CommandsDropdown';
 @import 'components/list/StateIcon';
 @import 'components/list/DataList';
+@import 'components/list/FilterDateRange';
+@import 'components/list/FilterControl';
 
 // Menu
 @import 'components/LeftNav';

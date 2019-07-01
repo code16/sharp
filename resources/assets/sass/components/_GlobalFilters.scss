@@ -2,7 +2,8 @@
   $primary: $brand-01-light;
   $border-color: $ui-03;
 
-  .SharpFilterSelect {
+  .SharpFilterControl {
+    width: 100%;
     border: none;
     border-radius: 0;
     border-top: 1px solid $border-color!important;
@@ -10,6 +11,8 @@
     &__text {
       display: none;
     }
+  }
+  .SharpFilterSelect {
     &--open {
       .SharpSelect .multiselect__tags {
         box-shadow: 0 2px 4px darken($primary, 10%);

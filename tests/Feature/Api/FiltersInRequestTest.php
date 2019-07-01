@@ -3,10 +3,10 @@
 namespace Code16\Sharp\Tests\Feature\Api;
 
 use Code16\Sharp\EntityList\EntityListQueryParams;
+use Code16\Sharp\EntityList\EntityListSelectFilter;
+use Code16\Sharp\EntityList\EntityListSelectMultipleFilter;
+use Code16\Sharp\EntityList\EntityListSelectRequiredFilter;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
-use Code16\Sharp\Utils\Filters\ListFilter;
-use Code16\Sharp\Utils\Filters\ListMultipleFilter;
-use Code16\Sharp\Utils\Filters\ListRequiredFilter;
 
 class FiltersInRequestTest extends BaseApiTest
 {
@@ -308,7 +308,7 @@ class FiltersInRequestTest extends BaseApiTest
     }
 }
 
-class FiltersInRequestTestRetainedActiveFilter implements ListFilter
+class FiltersInRequestTestRetainedActiveFilter implements EntityListSelectFilter
 {
     public function values()
     {
@@ -320,7 +320,7 @@ class FiltersInRequestTestRetainedActiveFilter implements ListFilter
     }
 }
 
-class FiltersInRequestTestRetainedAgeMultipleFilter implements ListMultipleFilter
+class FiltersInRequestTestRetainedAgeMultipleFilter implements EntityListSelectMultipleFilter
 {
     public function values()
     {
@@ -333,7 +333,7 @@ class FiltersInRequestTestRetainedAgeMultipleFilter implements ListMultipleFilte
     }
 }
 
-class FiltersInRequestTestRetainedAgeRequiredFilter implements ListRequiredFilter
+class FiltersInRequestTestRetainedAgeRequiredFilter implements EntityListSelectRequiredFilter
 {
     public function values()
     {

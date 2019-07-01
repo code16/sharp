@@ -6,8 +6,9 @@ mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
     .js('resources/assets/js/client-api.js', 'resources/assets/dist/client-api.js')
     .sass('resources/assets/sass/app.scss', 'resources/assets/dist/sharp.css')
     .sass('resources/assets/sass/cms.scss', 'resources/assets/dist/sharp-cms.css')
-    .copy('node_modules/font-awesome/fonts','resources/assets/dist/fonts')
-    .copy('node_modules/leaflet/dist/images/*','resources/assets/dist/images')
+    .copy('node_modules/element-ui/packages/theme-chalk/lib/fonts', 'resources/assets/dist/fonts')
+    .copy('node_modules/font-awesome/fonts', 'resources/assets/dist/fonts')
+    .copy('node_modules/leaflet/dist/images','resources/assets/dist/images')
     .options({
         processCssUrls: false
     })
@@ -17,6 +18,7 @@ mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
     .webpackConfig({
         plugins: [
             new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+            new webpack.NormalModuleReplacementPlugin(/element-ui[\/\\]lib[\/\\]locale[\/\\]lang[\/\\]zh-CN/, 'element-ui/lib/locale/lang/en'),
             // new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
         ],
         // transpile vue-clip package

@@ -1,7 +1,12 @@
 import filters from '../../store/modules/filters';
 import { SET_FILTERS, SET_FILTER_VALUE } from "../../store/modules/filters";
+import * as querystringUtils from "../../util/querystring";
 
 describe('store filters', () => {
+    beforeEach(() => {
+        jest.restoreAllMocks()
+    });
+
     test('state match snapshot', ()=>{
         expect(filters.state()).toMatchSnapshot();
     });
@@ -38,9 +43,23 @@ describe('store filters', () => {
             expect(filters.getters.filters({ filters: [{}] })).toEqual([{}]);
         });
 
+        test('filter', ()=>{
+            expect(filters.getters.filter({ filters: null })('name')).toEqual(undefined);
+            expect(
+                filters.getters.filter({
+                    filters: [{ key:'name' }],
+                })('name')
+            ).toEqual({ key:'name'});
+        });
+
         test('defaultValue', ()=>{
             expect(filters.getters.defaultValue()(null)).toBeUndefined();
             expect(filters.getters.defaultValue()({ default:'default' })).toEqual('default');
+        });
+
+        test('isDateRange', ()=>{
+            expect(filters.getters.isDateRange()(null)).toBe(false);
+            expect(filters.getters.isDateRange()({ type:'daterange' })).toBe(true);
         });
 
         test('filterQueryKey', ()=>{
@@ -51,7 +70,9 @@ describe('store filters', () => {
             const state = {
             };
             const getters = {
-                filterQueryKey: jest.fn(key => `TEST_${key}`)
+                filterQueryKey: jest.fn(key => `TEST_${key}`),
+                filter: jest.fn(key => ({ key })),
+                serializeValue: jest.fn(({ filter, value }) => value),
             };
             expect(filters.getters.getQueryParams(state, getters)({ })).toEqual({});
 
@@ -61,6 +82,8 @@ describe('store filters', () => {
             })).toEqual({
                 'TEST_type': 'aaa', 'TEST_name': 'bbb'
             });
+            expect(getters.serializeValue).toHaveBeenCalledWith({ filter:{ key:'type' }, value:'aaa' });
+            expect(getters.serializeValue).toHaveBeenCalledWith({ filter:{ key:'name' }, value:'bbb' });
         });
 
         test('getValuesFromQuery', ()=>{
@@ -74,7 +97,8 @@ describe('store filters', () => {
         test('resolveFilterValue', ()=>{
             const state = {};
             const getters = {
-                defaultValue: jest.fn(()=>'defaultValue')
+                defaultValue: jest.fn(()=>'defaultValue'),
+                isDateRange: jest.fn(()=>false),
             };
             const resolveFilterValue = (...args) => filters.getters.resolveFilterValue(state, getters)(...args);
 
@@ -93,6 +117,38 @@ describe('store filters', () => {
             expect(resolveFilterValue({
                 filter: { multiple: true }, value: [3]
             })).toEqual([3]);
+
+            jest.spyOn(querystringUtils, 'parseRange')
+                .mockImplementation(() => 'parsedRange');
+            getters.isDateRange.mockReturnValue(true);
+            expect(resolveFilterValue({
+                filter: {}, value: '2019-06-21..2019-06-24',
+            })).toEqual('parsedRange');
+            expect(querystringUtils.parseRange)
+                .toHaveBeenCalledWith('2019-06-21..2019-06-24');
+        });
+
+        test('serializeValue', ()=>{
+            const state = {};
+            const getters = {
+                isDateRange: jest.fn(()=>false),
+            };
+            expect(filters.getters.serializeValue(state, getters)({
+                filter: {},
+                value: 'val'
+            })).toEqual('val');
+
+            jest.spyOn(querystringUtils, 'serializeRange')
+                .mockImplementation(() => 'serializedRange');
+            getters.isDateRange.mockReturnValue(true);
+            expect(filters.getters.serializeValue(state, getters)({
+                filter: {},
+                value: {
+                    start: 'start',
+                    end: 'end',
+                }
+            })).toEqual('serializedRange');
+            expect(querystringUtils.serializeRange).toHaveBeenCalledWith({ start:'start', end: 'end' });
         });
 
         test('nextValues', ()=>{

@@ -15,13 +15,13 @@ trait HandleFilters
 
     /**
      * @param string $filterName
-     * @param string|ListFilter $filterHandler
+     * @param string|Filter $filterHandler
      * @param Closure|null $callback
      * @return $this
      */
     protected function addFilter(string $filterName, $filterHandler, Closure $callback = null)
     {
-        $this->filterHandlers[$filterName] = $filterHandler instanceof ListFilter
+        $this->filterHandlers[$filterName] = $filterHandler instanceof Filter
             ? $filterHandler
             : app($filterHandler);
 
@@ -40,29 +40,44 @@ trait HandleFilters
     protected function appendFiltersToConfig(array &$config)
     {
         foreach($this->filterHandlers as $filterName => $handler) {
-            $multiple = $handler instanceof ListMultipleFilter;
-            $required = !$multiple && $handler instanceof ListRequiredFilter;
-
-            $config["filters"][] = [
+            $filterConfigData = [
                 "key" => $filterName,
-                "multiple" => $multiple,
-                "required" => $required,
                 "default" => $this->getFilterDefaultValue($handler, $filterName),
-                "values" => $this->formatFilterValues($handler),
                 "label" => method_exists($handler, "label") ? $handler->label() : $filterName,
-                "master" => method_exists($handler, "isMaster") ? $handler->isMaster() : false,
-                "searchable" => method_exists($handler, "isSearchable") ? $handler->isSearchable() : false,
-                "searchKeys" => method_exists($handler, "searchKeys") ? $handler->searchKeys() : ["label"],
-                "template" => $this->formatFilterTemplate($handler)
             ];
+
+            if($handler instanceof SelectFilter) {
+                $multiple = $handler instanceof SelectMultipleFilter;
+
+                $filterConfigData += [
+                    "type" => 'select',
+                    "multiple" => $multiple,
+                    "required" => !$multiple && $handler instanceof SelectRequiredFilter,
+                    "values" => $this->formatSelectFilterValues($handler),
+                    "master" => method_exists($handler, "isMaster") ? $handler->isMaster() : false,
+                    "searchable" => method_exists($handler, "isSearchable") ? $handler->isSearchable() : false,
+                    "searchKeys" => method_exists($handler, "searchKeys") ? $handler->searchKeys() : ["label"],
+                    "template" => $this->formatSelectFilterTemplate($handler)
+                ];
+
+            } elseif($handler instanceof DateRangeFilter) {
+                $filterConfigData += [
+                    "type" =>  'daterange',
+                    "required" => $handler instanceof DateRangeRequiredFilter,
+                    "mondayFirst" => method_exists($handler, "isMondayFirst") ? $handler->isMondayFirst() : true,
+                    "displayFormat" => method_exists($handler, "dateFormat") ? $handler->dateFormat() : "MM-DD-YYYY"
+                ];
+            }
+
+            $config["filters"][] = $filterConfigData;
         }
     }
 
     /**
-     * @param ListFilter $handler
+     * @param SelectFilter $handler
      * @return array
      */
-    protected function formatFilterValues(ListFilter $handler)
+    protected function formatSelectFilterValues(SelectFilter $handler)
     {
         if(!method_exists($handler, "template")) {
             return collect($handler->values())->map(function ($label, $id) {
@@ -75,10 +90,10 @@ trait HandleFilters
     }
 
     /**
-     * @param ListFilter $handler
+     * @param SelectFilter $handler
      * @return string
      */
-    protected function formatFilterTemplate(ListFilter $handler)
+    protected function formatSelectFilterTemplate(SelectFilter $handler)
     {
         if(!method_exists($handler, "template")) {
             return '{{label}}';
@@ -105,7 +120,8 @@ trait HandleFilters
 
             // Only required filters or retained filters with value saved in session
             ->filter(function($handler, $attribute) {
-                return $handler instanceof ListRequiredFilter
+                return $handler instanceof SelectRequiredFilter
+                    || $handler instanceof DateRangeRequiredFilter
                     || $this->isRetainedFilter($handler, $attribute, true);
             })
 
@@ -191,7 +207,7 @@ trait HandleFilters
      *
      * @param $handler
      * @param string $attribute
-     * @return int|string|null
+     * @return int|string|array|null
      */
     protected function getFilterDefaultValue($handler, $attribute)
     {
@@ -202,13 +218,28 @@ trait HandleFilters
         if($this->isRetainedFilter($handler, $attribute, true)) {
             $sessionValue = session("_sharp_retained_filter_$attribute");
 
-            return $handler instanceof ListMultipleFilter
-                ? explode(",", $sessionValue)
-                : $sessionValue;
+            if($handler instanceof SelectMultipleFilter) {
+                return explode(",", $sessionValue);
+            }
+
+            if($handler instanceof DateRangeFilter) {
+                list($start, $end) = explode("..", $sessionValue);
+
+                return compact("start", "end");
+            }
+
+            return $sessionValue;
         }
 
-        return $handler instanceof ListRequiredFilter
-            ? $handler->defaultValue()
-            : null;
+        if($handler instanceof SelectRequiredFilter) {
+            return $handler->defaultValue();
+        }
+
+        if($handler instanceof DateRangeRequiredFilter) {
+            return collect($handler->defaultValue())
+                ->map->format("Y-m-d")->toArray();
+        }
+
+        return null;
     }
 }

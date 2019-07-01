@@ -26,6 +26,11 @@ import Notifications from 'vue-notification';
 import store from './store';
 import { BASE_URL } from "./consts";
 
+import locale from 'element-ui/lib/locale';
+import { elLang } from './util/element-ui';
+
+locale.use(elLang());
+
 Vue.use(Notifications);
 Vue.use(VueGoogleMaps, {
     installComponents: false

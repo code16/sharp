@@ -3,6 +3,7 @@
 namespace App\Sharp;
 
 use App\Passenger;
+use App\Sharp\Filters\PassengerBirthdateFilter;
 use App\Sharp\Filters\PassengerTravelFilter;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\EntityListQueryParams;
@@ -33,6 +34,7 @@ class PassengerSharpList extends SharpEntityList
         $this->setSearchable()
             ->setDefaultSort("name", "asc")
             ->addFilter("travel", PassengerTravelFilter::class)
+            ->addFilter("birthdate", PassengerBirthdateFilter::class)
             ->setPaginated();
     }
 
@@ -53,6 +55,13 @@ class PassengerSharpList extends SharpEntityList
 
         if($travelFilter = $params->filterFor("travel")) {
             $passengers->where("travel_id", $travelFilter);
+        }
+
+        if($birthdateFilter = $params->filterFor("birthdate")) {
+            $passengers->whereBetween("birth_date", [
+                $birthdateFilter['start'],
+                $birthdateFilter['end'],
+            ]);
         }
 
         if ($params->hasSearch()) {
