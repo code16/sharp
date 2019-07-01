@@ -1,5 +1,8 @@
-$fa-font-path: '/vendor/sharp/fonts';
+$font-path: '/vendor/sharp/fonts';
+$fa-font-path: $font-path;
+$--font-path: $font-path;
 
 @import '~font-awesome/scss/font-awesome';
 @import '~simplemde/dist/simplemde.min.css';
 @import '~trix/dist/trix.css';
+@import '~element-ui/packages/theme-chalk/src/icon';

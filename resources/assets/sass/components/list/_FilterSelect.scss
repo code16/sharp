@@ -1,15 +1,7 @@
 @import '../../mixins/dropdown';
 
 .SharpFilterSelect {
-  width: auto;
-  display:flex;
-  border: $dropdown-border;
-  border-radius: $btn-border-radius;
-  transition: $dropdown-btn-transition;
-
-  &:hover {
-    border-color: $dropdown-hover-border-color;
-  }
+  display: flex;
 
   $list-offset: $dropdown-list-offset + 2px;
   $search-input-height: 2.5rem;
@@ -24,7 +16,9 @@
         @extend .multiselect--active;
       }
     }
-    border-color: $dropdown-focus-border-color!important;
+    .SharpFilterControl {
+      border-color: $dropdown-focus-border-color!important;
+    }
   }
 
   .multiselect__placeholder {
@@ -52,6 +46,7 @@
       position: absolute;
       padding: 0;
       width: 0;
+      height: 0;
     }
     .multiselect__tags-wrap,
     .multiselect__single,

@@ -89,6 +89,7 @@
   },
   "dependencies": {
     "carbon-components": "^7.26.2",
+    "element-ui": "^2.9.2",
     "font-awesome": "^4.7.0",
     "leaflet": "^1.4.0",
     "trix": "^1.0.0",

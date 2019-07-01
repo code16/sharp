@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Utils\Filters;
 
+use Carbon\Carbon;
+
 trait HasFiltersInQuery
 {
     /**
@@ -23,9 +25,20 @@ trait HasFiltersInQuery
             return null;
         }
 
-        return str_contains($this->filters[$filterName], ",")
-            ? explode(",", $this->filters[$filterName])
-            : $this->filters[$filterName];
+        if(str_contains($this->filters[$filterName], "..")) {
+            list($start, $end) = explode("..", $this->filters[$filterName]);
+
+            return [
+                "start" => Carbon::createFromFormat('Ymd', $start),
+                "end" => Carbon::createFromFormat('Ymd', $end),
+            ];
+        }
+
+        if(str_contains($this->filters[$filterName], ",")){
+            return explode(",", $this->filters[$filterName]);
+        }
+
+        return $this->filters[$filterName];
     }
 
     /**
@@ -71,9 +84,19 @@ trait HasFiltersInQuery
     protected function setFilterValue(string $filter, $value)
     {
         if(is_array($value)) {
-            // Force all filter values to be string, to be consistent with
-            // all use cases (filter in EntityList or in Command)
-            $value = empty($value) ? null : implode(',', $value);
+            // Force all filter values to be string, to be consistent with all use cases
+            // (filter in EntityList or in Command)
+            if(empty($value)) {
+                $value = null;
+
+            } elseif(isset($value["start"]) && $value["start"] instanceof Carbon) {
+                // RangeFilter case
+                $value = collect($value)->map->format("Ymd")->implode("..");
+
+            } else {
+                // Multiple filter case
+                $value = implode(',', $value);
+            }
         }
 
         $this->filters[$filter] = $value;

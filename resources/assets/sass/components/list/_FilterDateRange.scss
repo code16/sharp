@@ -1,0 +1,42 @@
+
+.SharpFilterDateRange {
+  &__field {
+    border: none;
+    height: 30px;
+    padding-top: 0!important;
+    padding-bottom: 0!important;
+    padding-left: .25rem!important;
+    padding-right: 0!important;
+    width: 220px!important;
+  }
+
+  .el-input__icon:first-child {
+    display: none;
+  }
+  .el-range-input {
+    color: $text-01;
+    width: 50%;
+    font-weight: bold;
+    font-size: 13px;
+  }
+  .el-range-separator {
+    color: $text-01;
+    padding: 0;
+  }
+
+  .el-range__close-icon {
+    color: $brand-03;
+    line-height: 28px;
+    width: 2rem;
+  }
+
+  &--empty {
+    .SharpFilterDateRange__field {
+      & > * {
+        display: none;
+      }
+      width: 0!important;
+      padding: 0!important;
+    }
+  }
+}

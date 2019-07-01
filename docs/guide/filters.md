@@ -12,10 +12,10 @@ php artisan sharp:make:list-filter <class_name> [--required,--multiple]
 
 ## Write the filter class
 
-First, we need to write a class which implements the `Code16\Sharp\EntityList\EntityListFilter` interface, and therefore declare a `values()` function. This function must return an ["id" => "label"] array. For instance, with Eloquent:
+First, we need to write a class which implements the `Code16\Sharp\EntityList\EntityListSelectFilter` interface, and therefore declare a `values()` function. This function must return an ["id" => "label"] array. For instance, with Eloquent:
 
 ```php
-class SpaceshipTypeFilter implements EntityListFilter
+class SpaceshipTypeFilter implements EntityListSelectFilter
 {
     public function values()
     {
@@ -59,12 +59,72 @@ function getListData(EntityListQueryParams $params)
 }
 ```
 
-## Required filters
 
-Sometimes we'd like to have a filter which can't be null. Just implement `Code16\Sharp\EntityList\EntityListRequiredFilter` subinterface:
+You'll have to declare another function, `defaultValue()`, which must return the id of the default filter if nothing selected.
+
+
+## Multiple filter
+
+First, notice that you can have as many filters as you want for an EntityList. The "multiple filter" here designate something else: allowing the user to select more than one value for a filter. To achieve this, replace the interface implemented with `Code16\Sharp\EntityList\EntityListSelectMultipleFilter`.
+
+In this case, with Eloquent for instance, your might have to modify your code to ensure that you have an array (Sharp will return either null, and id or an array of id, depending on the user selection):
 
 ```php
-class SpaceshipTypeFilter implements EntityListRequiredFilter
+if ($params->filterFor("pilots")) {
+    $spaceships->whereIn(
+        "pilots.id",
+        (array)$params->filterFor("pilots")
+    );
+}
+```
+
+Note that a filter can't be required AND multiple.
+
+
+
+## Date range filter
+
+You might find useful to filter list elements on a specific date range. Date range filters enable you to show only data that meets a given time period. To implement such a filter, you'll need to implement the interface `Code16\Sharp\EntityList\EntityListDateRangeFilter`.
+
+Then you need to adjust the query with selected range (Sharp will return an associative array of two Carbon date objects). In this case, with Eloquent for instance, you might add a condition like:
+
+```php
+if ($range = $params->filterFor("createdAt")) {
+    $spaceships->whereBetween(
+        "created_at",
+        [
+            $range['start'],
+            $range['end']
+        ]
+    );
+}
+```
+
+### Options
+
+You can define the date display format (default is `MM-DD-YYYY`, using [the Moment.js parser syntax](https://momentjs.com/docs/#/parsing/string-format/)) and choose if the week should start on monday (default is sunday) implementing those two optional methods in your filter implementation:
+
+```php
+function dateFormat()
+{
+    return "YYYY-MM-DD";
+}
+
+function isMondayFirst()
+{
+    return false;
+}
+```
+
+
+## Required filters
+
+Sometimes we'd like to have a filter which can't be null. All you need to do is use the right "Required" subinterface instead of the and define a proper default value.
+
+For "Select" filter, use the `Code16\Sharp\EntityList\EntityListSelectRequiredFilter` subinterface:
+
+```php
+class SpaceshipTypeFilter implements EntityListSelectRequiredFilter
 {
 
     public function values()
@@ -80,25 +140,26 @@ class SpaceshipTypeFilter implements EntityListRequiredFilter
 }
 ```
 
-You'll have to declare another function, `defaultValue()`, which must return the id of the default filter if nothing selected.
+Note that a filter can't be required AND multiple.
 
 
-## Multiple filter
-
-First, notice that you can have as many filters as you want for an EntityList. The "multiple filter" here designate something else: allowing the user to select more than one value for a filter. To achieve this, replace the interface implemented with `Code16\Sharp\EntityList\EntityListMultipleFilter`.
-
-In this case, with Eloquent for instance, your might have to modify your code to ensure that you have an array (Sharp will return either null, and id or an array of id, depending on the user selection):
+For "Date Range" filter, use the `Code16\Sharp\EntityList\EntityListDateRangeRequiredFilter` interface:
 
 ```php
-if ($params->filterFor("pilots")) {
-    $spaceships->whereIn(
-        "pilots.id",
-        (array)$params->filterFor("pilots")
-    );
+class TravelPeriodFilter implements EntityListDateRangeRequiredFilter
+{
+
+    public function defaultValue()
+    {
+        return [
+            "start" => Carbon::yesterday(),
+            "end" => Carbon::today(),
+        ];
+    }
 }
 ```
 
-Note that a filter can't be required AND multiple.
+
 
 ## Filter label
 
