@@ -223,18 +223,7 @@ abstract class SharpForm
                 $this->attributes = $attributes;
 
                 foreach($attributes as $name => $value) {
-                    if(strpos($name, ':')) {
-                        list($subModel, $attr) = explode(':', $name);
-
-                        if(!isset($this->$subModel)) {
-                            $this->$subModel = new \stdClass();
-                        }
-
-                        $this->$subModel->$attr = $value;
-
-                    } else {
-                        $this->$name = $value;
-                    }
+                    $this->$name = $value;
                 }
             }
             public function toArray()
