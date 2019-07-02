@@ -37,9 +37,6 @@ abstract class SharpEntityList
     /** @var array */
     protected $multiformEntityKeys = [];
 
-    /** @var string */
-    protected $displayMode = "list";
-
     /** @var bool */
     protected $searchable = false;
 
@@ -141,7 +138,6 @@ abstract class SharpEntityList
         $config = [
             "instanceIdAttribute" => $this->instanceIdAttribute,
             "multiformAttribute" => $this->multiformAttribute,
-            "displayMode" => $this->displayMode,
             "searchable" => $this->searchable,
             "paginated" => $this->paginated,
             "reorderable" => !is_null($this->reorderHandler),
@@ -165,17 +161,6 @@ abstract class SharpEntityList
     public function setInstanceIdAttribute(string $instanceIdAttribute)
     {
         $this->instanceIdAttribute = $instanceIdAttribute;
-
-        return $this;
-    }
-
-    /**
-     * @param string $displayMode
-     * @return $this
-     */
-    public function setDisplayMode(string $displayMode)
-    {
-        $this->displayMode = $displayMode;
 
         return $this;
     }

@@ -67,8 +67,8 @@ class EntitiesListQueryParamsTest extends SharpTestCase
 
         $this->assertEquals(
             [
-                "start" => Carbon::createFromFormat('Y-m-d','2019-02-01'),
-                "end" => Carbon::createFromFormat('Y-m-d','2019-02-10'),
+                "start" => Carbon::createFromFormat('Y-m-d','2019-02-01')->hours(0)->minutes(0)->seconds(0)->microseconds(0),
+                "end" => Carbon::createFromFormat('Y-m-d','2019-02-10')->hours(23)->minutes(59)->seconds(59)->microseconds(999),
             ],
             $this->buildParams(1, "", null, null, ["range" => "20190201..20190210"])->filterFor("range")
         );
