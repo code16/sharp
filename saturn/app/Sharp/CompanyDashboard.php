@@ -8,6 +8,7 @@ use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpLineGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
+use Code16\Sharp\Dashboard\Widgets\SharpPieGraphWidget;
 use Illuminate\Support\Facades\DB;
 
 class CompanyDashboard extends SharpDashboard
@@ -16,10 +17,9 @@ class CompanyDashboard extends SharpDashboard
     function buildWidgets()
     {
         $this->addWidget(
-//            SharpBarGraphWidget::make("capacities")
-//                ->setTitle("Spaceships by capacity")
-//            SharpPieGraphWidget::make("capacities")
-//                ->setTitle("Spaceships by capacity")
+            SharpPieGraphWidget::make("capacities_pie")
+                ->setTitle("Spaceships by capacity")
+        )->addWidget(
             SharpLineGraphWidget::make("capacities")
                 ->setTitle("Spaceships by capacity")
         )->addWidget(
@@ -34,7 +34,11 @@ class CompanyDashboard extends SharpDashboard
 
     function buildWidgetsLayout()
     {
-        $this->addFullWidthWidget("capacities")
+        $this
+            ->addRow(function(DashboardLayoutRow $row) {
+                $row->addWidget(6, "capacities_pie")
+                    ->addWidget(6, "capacities");
+            })
             ->addRow(function(DashboardLayoutRow $row) {
                 $row->addWidget(6, "activeSpaceships")
                     ->addWidget(6, "inactiveSpaceships");
@@ -77,6 +81,36 @@ class CompanyDashboard extends SharpDashboard
             }))
                 ->setLabel("Capacities 2")
                 ->setColor("#6b4c9a")
+        );
+
+
+        //pie
+
+        $this->addGraphDataSet(
+            "capacities_pie",
+            SharpGraphWidgetDataSet::make([
+                rand(1, 3)
+            ])
+                ->setLabel("Capacities 1")
+                ->setColor("#3e9651")
+        );
+
+        $this->addGraphDataSet(
+            "capacities_pie",
+            SharpGraphWidgetDataSet::make([
+                    rand(2, 6)
+            ])
+                ->setLabel("Capacities 2")
+                ->setColor("#6b4c9a")
+        );
+
+        $this->addGraphDataSet(
+            "capacities_pie",
+            SharpGraphWidgetDataSet::make([
+                rand(4, 9)
+            ])
+                ->setLabel("Capacities 3")
+                ->setColor("#2d2d2d")
         );
     }
 
