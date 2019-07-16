@@ -7,6 +7,7 @@ use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
 use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpLineGraphWidget;
+use Code16\Sharp\Dashboard\Widgets\SharpListWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Illuminate\Support\Facades\DB;
 
@@ -29,6 +30,8 @@ class CompanyDashboard extends SharpDashboard
         )->addWidget(
             SharpPanelWidget::make("inactiveSpaceships")
                 ->setInlineTemplate("<h1>{{count}}</h1> inactive spaceships")
+        )->addWidget(
+            SharpListWidget::make("topSpaceshipModels")
         );
     }
 
@@ -38,6 +41,9 @@ class CompanyDashboard extends SharpDashboard
             ->addRow(function(DashboardLayoutRow $row) {
                 $row->addWidget(6, "activeSpaceships")
                     ->addWidget(6, "inactiveSpaceships");
+            })
+            ->addRow(function(DashboardLayoutRow $row) {
+                $row->addWidget(6, "topSpaceshipModels");
             });
     }
 
@@ -63,11 +69,6 @@ class CompanyDashboard extends SharpDashboard
                 ->setLabel("Capacities")
                 ->setColor("#3e9651")
 
-        )->setPanelData(
-            "activeSpaceships", ["count" => $spaceships->where("state", "active")->first()->count]
-
-        )->setPanelData(
-            "inactiveSpaceships", ["count" => $spaceships->where("state", "inactive")->first()->count]
         );
 
         $this->addGraphDataSet(
@@ -77,6 +78,20 @@ class CompanyDashboard extends SharpDashboard
             }))
                 ->setLabel("Capacities 2")
                 ->setColor("#6b4c9a")
+        );
+
+        $this->setPanelData(
+            "activeSpaceships", ["count" => $spaceships->where("state", "active")->first()->count]
+        )->setPanelData(
+            "inactiveSpaceships", ["count" => $spaceships->where("state", "inactive")->first()->count]
+        );
+
+        $this->setListData(
+            "topSpaceshipModels", [
+                "toto" => "999",
+                "titi" => "991",
+                "tata" => "875",
+            ]
         );
     }
 

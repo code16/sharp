@@ -1,5 +1,5 @@
 <template>
-    <article class="SharpWidget SharpCard" :class="{'SharpWidget--chart':widgetType==='graph', 'SharpWidget--link':hasLink}">
+    <article class="SharpWidget SharpCard" :class="{'SharpWidget--chart':widgetType==='graph', 'SharpWidget--list':widgetType==='list', 'SharpWidget--link':hasLink}">
         <component :is="hasLink ? 'a' : 'div'" :href="widgetProps.link" :class="{SharpWidget__link:hasLink}">
             <div class="SharpCard__overview">
                 <div class="SharpCard__overview-about">
