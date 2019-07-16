@@ -4,12 +4,7 @@
             {{ title }}
         </h2>
         <div v-for="(val,key) in value.data">
-            <div v-if="withCounts">
-                {{ key }} <span class="count">{{ val }}</span>
-            </div>
-            <div v-else>
-                {{ val }}
-            </div>
+            {{ key }} | count: {{ val.count ? val.count : "n/a" }} | link: {{ val.link ? val.link : "n/a" }}
         </div>
     </div>
 </template>

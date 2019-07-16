@@ -174,8 +174,12 @@ class SharpDashboardTest extends SharpTestCase
             protected function buildWidgetsData(DashboardQueryParams $params)
             {
                 $this->setListGroupData("widget", [
-                    "John Wayne" => 888,
-                    "Toto" => 97
+                    "John Wayne" => [
+                        "count" => 888,
+                    ],
+                    "Toto" => [
+                        "count" => 771,
+                    ],
                 ]);
             }
         };
@@ -184,8 +188,12 @@ class SharpDashboardTest extends SharpTestCase
             "widget" => [
                 "key" => "widget",
                 "data" => [
-                    "John Wayne" => 888,
-                    "Toto" => 97
+                    "John Wayne" => [
+                        "count" => 888,
+                    ],
+                    "Toto" => [
+                        "count" => 771,
+                    ],
                 ]
             ]
         ], $dashboard->data());

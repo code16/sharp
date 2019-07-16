@@ -32,7 +32,6 @@ class CompanyDashboard extends SharpDashboard
                 ->setInlineTemplate("<h1>{{count}}</h1> inactive spaceships")
         )->addWidget(
             SharpListGroupWidget::make("topSpaceshipModels")
-                ->setWithCounts()
                 ->setTitle("Top popular spaceship models")
         );
     }
@@ -90,9 +89,16 @@ class CompanyDashboard extends SharpDashboard
 
         $this->setListGroupData(
             "topSpaceshipModels", [
-                "toto" => "999",
-                "titi" => "991",
-                "tata" => "875",
+                "toto" => [
+                    "count" => "999",
+                ],
+                "titi" => [
+                    "link" => "https://toto.fr/19141",
+                ],
+                "tata" => [
+                    "count" => "864",
+                    "link" => "https://toto.fr/194561",
+                ],
             ]
         );
     }
