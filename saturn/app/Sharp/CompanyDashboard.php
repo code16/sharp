@@ -32,6 +32,7 @@ class CompanyDashboard extends SharpDashboard
                 ->setInlineTemplate("<h1>{{count}}</h1> inactive spaceships")
         )->addWidget(
             SharpListWidget::make("topSpaceshipModels")
+                ->setWithCounts()
         );
     }
 
