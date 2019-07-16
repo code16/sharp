@@ -1,5 +1,8 @@
 <template>
-    <div class="SharpWidgetList">
+    <div class="SharpWidgetListGroup">
+        <h2 class="title">
+            {{ title }}
+        </h2>
         <div v-for="(val,key) in value.data">
             <div v-if="withCounts">
                 {{ key }} <span class="count">{{ val }}</span>
@@ -13,10 +16,11 @@
 
 <script>
     export default {
-        name:'SharpWidgetList',
+        name:'SharpWidgetListGroup',
         props: {
             value: Object,
-            withCounts: Boolean
+            withCounts: Boolean,
+            title: String,
         }
     }
 </script>

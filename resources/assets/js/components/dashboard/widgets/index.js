@@ -1,5 +1,5 @@
 import SharpWidgetPanel from './Panel';
-import SharpWidgetList from './List';
+import SharpWidgetListGroup from './ListGroup';
 import SharpWidgetChart from './chart/Chart';
 
 export function widgetByType(type) {
@@ -8,12 +8,12 @@ export function widgetByType(type) {
     } else if(type === 'panel') {
         return SharpWidgetPanel;
     } else if(type === 'list') {
-        return SharpWidgetList;
+        return SharpWidgetListGroup;
     }
 }
 
 export {
     SharpWidgetChart,
     SharpWidgetPanel,
-    SharpWidgetList
+    SharpWidgetListGroup
 };

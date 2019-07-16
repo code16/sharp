@@ -7,7 +7,7 @@ use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
 use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpLineGraphWidget;
-use Code16\Sharp\Dashboard\Widgets\SharpListWidget;
+use Code16\Sharp\Dashboard\Widgets\SharpListGroupWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Illuminate\Support\Facades\DB;
 
@@ -31,8 +31,9 @@ class CompanyDashboard extends SharpDashboard
             SharpPanelWidget::make("inactiveSpaceships")
                 ->setInlineTemplate("<h1>{{count}}</h1> inactive spaceships")
         )->addWidget(
-            SharpListWidget::make("topSpaceshipModels")
+            SharpListGroupWidget::make("topSpaceshipModels")
                 ->setWithCounts()
+                ->setTitle("Top popular spaceship models")
         );
     }
 
@@ -87,7 +88,7 @@ class CompanyDashboard extends SharpDashboard
             "inactiveSpaceships", ["count" => $spaceships->where("state", "inactive")->first()->count]
         );
 
-        $this->setListData(
+        $this->setListGroupData(
             "topSpaceshipModels", [
                 "toto" => "999",
                 "titi" => "991",

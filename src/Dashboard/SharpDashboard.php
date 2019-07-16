@@ -40,7 +40,7 @@ abstract class SharpDashboard
     /**
      * @var array
      */
-    protected $listWidgetsData = [];
+    protected $listGroupWidgetsData = [];
 
     /**
      * @var array
@@ -180,9 +180,9 @@ abstract class SharpDashboard
             })
         );
 
-        // Then, list widgets data
+        // Then, list group widgets data
         return $data->merge(
-            collect($this->listWidgetsData)->map(function($value, $key) {
+            collect($this->listGroupWidgetsData)->map(function($value, $key) {
                 return [
                     "key" => $key,
                     "data" => $value
@@ -220,9 +220,9 @@ abstract class SharpDashboard
      * @param array $data
      * @return $this
      */
-    protected function setListData(string $panelWidgetKey, array $data)
+    protected function setListGroupData(string $panelWidgetKey, array $data)
     {
-        $this->listWidgetsData[$panelWidgetKey] = $data;
+        $this->listGroupWidgetsData[$panelWidgetKey] = $data;
 
         return $this;
     }

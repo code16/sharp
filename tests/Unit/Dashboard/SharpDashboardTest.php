@@ -7,7 +7,7 @@ use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
 use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
-use Code16\Sharp\Dashboard\Widgets\SharpListWidget;
+use Code16\Sharp\Dashboard\Widgets\SharpListGroupWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Tests\SharpTestCase;
 
@@ -169,11 +169,11 @@ class SharpDashboardTest extends SharpTestCase
         $dashboard = new class extends SharpDashboardTestDashboard {
             protected function buildWidgets()
             {
-                $this->addWidget(SharpListWidget::make("widget"));
+                $this->addWidget(SharpListGroupWidget::make("widget"));
             }
             protected function buildWidgetsData(DashboardQueryParams $params)
             {
-                $this->setListData("widget", [
+                $this->setListGroupData("widget", [
                     "John Wayne" => 888,
                     "Toto" => 97
                 ]);
