@@ -7,6 +7,7 @@ use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
 use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
+use Code16\Sharp\Dashboard\Widgets\SharpListWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Tests\SharpTestCase;
 
@@ -157,6 +158,34 @@ class SharpDashboardTest extends SharpTestCase
                 "key" => "widget",
                 "data" => [
                     "user" => "John Wayne"
+                ]
+            ]
+        ], $dashboard->data());
+    }
+
+    /** @test */
+    function we_can_get_list_widget_data()
+    {
+        $dashboard = new class extends SharpDashboardTestDashboard {
+            protected function buildWidgets()
+            {
+                $this->addWidget(SharpListWidget::make("widget"));
+            }
+            protected function buildWidgetsData(DashboardQueryParams $params)
+            {
+                $this->setListData("widget", [
+                    "John Wayne" => 888,
+                    "Toto" => 97
+                ]);
+            }
+        };
+
+        $this->assertEquals([
+            "widget" => [
+                "key" => "widget",
+                "data" => [
+                    "John Wayne" => 888,
+                    "Toto" => 97
                 ]
             ]
         ], $dashboard->data());
