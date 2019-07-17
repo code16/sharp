@@ -31,8 +31,8 @@ class CompanyDashboard extends SharpDashboard
             SharpPanelWidget::make("inactiveSpaceships")
                 ->setInlineTemplate("<h1>{{count}}</h1> inactive spaceships")
         )->addWidget(
-            SharpListGroupWidget::make("topSpaceshipModels")
-                ->setTitle("Top popular spaceship models")
+            SharpListGroupWidget::make("topTravelledSpaceshipModels")
+                ->setTitle("Top travelled spaceship types")
         );
     }
 
@@ -44,7 +44,7 @@ class CompanyDashboard extends SharpDashboard
                     ->addWidget(6, "inactiveSpaceships");
             })
             ->addRow(function(DashboardLayoutRow $row) {
-                $row->addWidget(6, "topSpaceshipModels");
+                $row->addWidget(6, "topTravelledSpaceshipModels");
             });
     }
 
@@ -88,16 +88,16 @@ class CompanyDashboard extends SharpDashboard
         );
 
         $this->setListGroupData(
-            "topSpaceshipModels", [
-                "toto" => [
-                    "count" => "999",
+            "topTravelledShipTypes", [
+                "Adams" => [
+                    "count" => "78",
                 ],
-                "titi" => [
-                    "link" => "https://toto.fr/19141",
+                "Eos" => [
+                    "link" => "https://sharp.test/shiptype/12",
                 ],
-                "tata" => [
-                    "count" => "864",
-                    "link" => "https://toto.fr/194561",
+                "Quia" => [
+                    "count" => "55",
+                    "link" => "https://sharp.test/shiptype/31",
                 ],
             ]
         );
