@@ -29,8 +29,8 @@ trait HasFiltersInQuery
             list($start, $end) = explode("..", $this->filters[$filterName]);
 
             return [
-                "start" => Carbon::createFromFormat('Ymd', $start)->hours(0)->minutes(0)->seconds(0)->microseconds(0),
-                "end" => Carbon::createFromFormat('Ymd', $end)->hours(23)->minutes(59)->seconds(59)->microseconds(999),
+                "start" => Carbon::createFromFormat('Ymd', $start)->setTime(0,0,0,0),
+                "end" => Carbon::createFromFormat('Ymd', $end)->setTime(23,59,59,999999),
             ];
         }
 
