@@ -9,6 +9,7 @@ module.exports = {
         nav: [
             { text: 'Home', link: '/' },
             { text: 'Documentation', link: '/guide/' },
+            { text: 'Demo', link: 'http://sharp.code16.fr/sharp/' },
             { text: 'Github', link:'https://github.com/code16/sharp' },
             { text: 'Medium', link:'https://medium.com/code16/tagged/sharp' },
         ],
