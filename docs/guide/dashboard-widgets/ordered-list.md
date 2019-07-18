@@ -40,6 +40,7 @@ function buildWidgetsData()
 }
 ```
 
-Pass there the widget `key` and an array with the data. Data should be an associative array. Each given key (as a string), will be displayed as a ordered list element. Each value should also be an associative array itself, which lets you, optionally define for each list item:
- - a link with key `link` associated with a valid url 
- - a count with key `count' associated with an integer
+Pass there the widget `key` and an array with the data as an array. Each array of the item should be an associative array. The key `label` is mandatory as it defines the ordered list item main content. You can also optionally define :
+ - a link with key `link` associated with a valid url, the item then becomes clickable
+ - a count with key `count` associated with a number, it will show a badge with given value
+ 
