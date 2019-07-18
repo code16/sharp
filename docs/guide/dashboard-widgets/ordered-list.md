@@ -19,17 +19,22 @@ function buildWidgetsData()
 
     $this->setListGroupData(
         "topTravelledShipTypes", [
-            "model EF5978" => [
+            [
+                "label" => "model EF5978",
                 "link" => "/sharp/form/shiptype/12
                 "count" => 89
             ],
-            "model TT4448" => [
+            [
+                "label" => "model TT4448",
                 "link" => "/sharp/form/shiptype/24
             ],
-            "model EF5978" => [
+            [
+                "label" => "model EF5978",
                 "count" => 17
             ],
-            "model YY5557" => []
+            [
+                "label" => "model YY5557"
+            ]
         ]
     );
 }
