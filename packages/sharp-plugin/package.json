@@ -1,6 +1,6 @@
 {
   "name": "sharp-plugin",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Add custom features to your Sharp back-office",
   "main": "dist/sharp-plugin.js",
   "scripts": {
@@ -21,6 +21,7 @@
   "homepage": "https://github.com/dvlpp/sharp#readme",
   "devDependencies": {
     "core-js": "^2.5.6",
-    "laravel-mix": "^2.1.11"
-  }
+    "laravel-mix": "^4.1.2"
+  },
+  "dependencies": {}
 }
