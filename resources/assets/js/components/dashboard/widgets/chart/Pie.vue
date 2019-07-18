@@ -11,16 +11,14 @@
 </template>
 
 <script>
-    // Removed because Vue duplication
-    import Bar from 'vue-chartjs/es/BaseCharts/Bar';
-    import Line from 'vue-chartjs/es/BaseCharts/Line';
+    import Pie from 'vue-chartjs/es/BaseCharts/Pie';
     import SharpChartjs from './Chartjs';
     import SharpLegend from './Legend';
 
     const noop = ()=>{};
 
     export default {
-        name:'SharpWidgetChart',
+        name:'SharpWidgetPie',
 
         components: {
             SharpChartjs,
@@ -44,7 +42,7 @@
             },
             chartComp() {
                 const map = {
-                    bar:Bar, line:Line
+                    pie:Pie
                 };
                 return map[this.display];
             },
@@ -57,31 +55,26 @@
                         display: false
                     },
                     maintainAspectRatio:false,
-                    legendCallback: noop
+                    legendCallback: noop,
+                    cutoutPercentage: 50
                 }
             },
             data() {
                 return {
                     ...this.value,
-                    datasets: this.datasets
+                    datasets: this.datasets,
+                    labels: this.labels,
                 }
             },
             datasets() {
-                return this.value.datasets.map(dataset=>({
-                    ...dataset,
-                    ...this.datasetColor(dataset)
-                }))
+                return [{
+                    "data": this.value.datasets.reduce((ac, dataset) => [...ac, dataset.data[0]], []),
+                    "backgroundColor": this.value.datasets.reduce((ac, dataset) => [...ac, dataset.color], []),
+                }];
+            },
+            labels() {
+                return this.value.datasets.reduce((ac, dataset) => [...ac, dataset.label], []);
             }
         },
-        methods: {
-            datasetColor({ color }) {
-                return this.display==='line'
-                    ? { borderColor: color, fill: false }
-                    : { backgroundColor: color };
-            }
-        },
-        mounted() {
-
-        }
     }
 </script>
