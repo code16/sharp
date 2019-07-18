@@ -23,7 +23,7 @@
 
         computed: {
             widgetComp() {
-                return widgetByType(this.widgetType);
+                return widgetByType(this.widgetType, this.widgetProps.display);
             },
             exposedProps() {
                 return { ...this.widgetProps, value:this.value }
