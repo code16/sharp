@@ -122,16 +122,19 @@ class CompanyDashboard extends SharpDashboard
         );
 
         $this->setListGroupData(
-            "topTravelledShipTypes", [
-                "Adams" => [
-                    "count" => "78",
+            "topTravelledSpaceshipModels", [
+                [
+                    "label" => "Adams",
+                    "count" => 78,
                 ],
-                "Eos" => [
-                    "link" => "https://sharp.test/shiptype/12",
+                [
+                    "label" => "Adams",
+                    "url" => "https://sharp.test/shiptype/12",
                 ],
-                "Quia" => [
-                    "count" => "55",
-                    "link" => "https://sharp.test/shiptype/31",
+                [
+                    "label" => "Quia",
+                    "count" => 55,
+                    "url" => "https://sharp.test/shiptype/31",
                 ],
             ]
         );
