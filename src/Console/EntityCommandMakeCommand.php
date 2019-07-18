@@ -2,11 +2,9 @@
 
 namespace Code16\Sharp\Console;
 
-use Illuminate\Support\Str;
 use Illuminate\Console\GeneratorCommand;
-use Symfony\Component\Console\Input\InputOption;
 
-class CommandMakeCommand extends GeneratorCommand
+class EntityCommandMakeCommand extends GeneratorCommand
 {
     /**
      * The console command name.

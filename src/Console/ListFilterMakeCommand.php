@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Console;
 
-use Illuminate\Support\Str;
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;
 

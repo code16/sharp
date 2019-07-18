@@ -4,28 +4,28 @@ namespace Code16\Sharp\Console;
 
 use Illuminate\Console\GeneratorCommand;
 
-class DashboardMakeCommand extends GeneratorCommand
+class InstanceCommandMakeCommand extends GeneratorCommand
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'sharp:make:dashboard';
+    protected $name = 'sharp:make:instance-command';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a new dashboard';
+    protected $description = 'Create a new instance command class';
 
     /**
      * The type of class being generated.
      *
      * @var string
      */
-    protected $type = 'Dashboard';
+    protected $type = 'InstanceCommand';
 
     /**
      * Get the stub file for the generator.
@@ -34,7 +34,7 @@ class DashboardMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__.'/stubs/dashboard.stub';
+        return __DIR__.'/stubs/instance-command.stub';
     }
 
     /**
