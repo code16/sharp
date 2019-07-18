@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Dashboard\Widgets;
 
-class SharpListGroupWidget extends SharpWidget
+class SharpOrderedListWidget extends SharpWidget
 {
 
     /**

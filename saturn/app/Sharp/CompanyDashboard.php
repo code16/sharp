@@ -7,7 +7,7 @@ use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
 use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpLineGraphWidget;
-use Code16\Sharp\Dashboard\Widgets\SharpListGroupWidget;
+use Code16\Sharp\Dashboard\Widgets\SharpOrderedListWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPieGraphWidget;
 use Illuminate\Support\Facades\DB;
@@ -31,7 +31,7 @@ class CompanyDashboard extends SharpDashboard
             SharpPanelWidget::make("inactiveSpaceships")
                 ->setInlineTemplate("<h1>{{count}}</h1> inactive spaceships")
         )->addWidget(
-            SharpListGroupWidget::make("topTravelledSpaceshipModels")
+            SharpOrderedListWidget::make("topTravelledSpaceshipModels")
                 ->setTitle("Top travelled spaceship types")
         );
     }
@@ -121,7 +121,7 @@ class CompanyDashboard extends SharpDashboard
             "inactiveSpaceships", ["count" => $spaceships->where("state", "inactive")->first()->count]
         );
 
-        $this->setListGroupData(
+        $this->setOrderedListData(
             "topTravelledSpaceshipModels", [
                 [
                     "label" => "Adams",

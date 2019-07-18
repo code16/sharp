@@ -1,23 +1,23 @@
-# List group widget
+# Ordered list widget
 
 This widget intends to display data as an ordered list of items
 
 ```php
 $this->addWidget(
-    SharpListGroupWidget::make("topTravelledShipTypes");
+    SharpOrderedListWidget::make("topTravelledShipTypes");
 );
 ```
 
 ## Data valuation
 
-Valuation is handled by a dedicated `$this->setListGroupData(string $panelWidgetKey, array $data)` in the Dashboard class:
+Valuation is handled by a dedicated `$this->setOrderedListData(string $panelWidgetKey, array $data)` in the Dashboard class:
 
 ```php
 function buildWidgetsData()
 {
     $count = [...];
 
-    $this->setListGroupData(
+    $this->setOrderedListData(
         "topTravelledShipTypes", [
             [
                 "label" => "model EF5978",
@@ -40,6 +40,6 @@ function buildWidgetsData()
 }
 ```
 
-Pass there the widget `key` and an array with the data. Data should be an associative array. Each given key (as a string), will be displayed as a list group element. Each value should also be an associative array itself, which lets you, optionally define for each list item:
+Pass there the widget `key` and an array with the data. Data should be an associative array. Each given key (as a string), will be displayed as a ordered list element. Each value should also be an associative array itself, which lets you, optionally define for each list item:
  - a link with key `link` associated with a valid url 
  - a count with key `count' associated with an integer

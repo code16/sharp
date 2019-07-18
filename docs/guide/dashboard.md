@@ -47,7 +47,7 @@ And here's the full list and documentation of each widget available, for the spe
 
 - [Graph](dashboard-widgets/graph.md)
 - [Panel](dashboard-widgets/panel.md)
-- [ListGroup](dashboard-widgets/list-group.md)
+- [OrderedList](dashboard-widgets/list-group.md)
 
 ### `buildWidgetsLayout()`
 
@@ -72,7 +72,7 @@ Widget data is set with specific methods depending of their type. The documentat
 
 - [Graph](dashboard-widgets/graph.md)
 - [Panel](dashboard-widgets/panel.md)
-- [ListGroup](dashboard-widgets/list-group.md)
+- [OrderedList](dashboard-widgets/list-group.md)
 
 ## Configure the Dashboard
 
