@@ -34,43 +34,39 @@
             <slot name="option" slot="option"></slot>
         </sharp-multiselect>
         <template v-else>
-            <template v-if="multiple">
-                <component :is="inline?'span':'div'"
-                           v-for="option in options"
-                           :key="option.id"
-                           class="SharpSelect__item"
-                           :class="{'SharpSelect__item--inline':inline}"
-                >
-                    <sharp-check :value="checked(option.id)"
-                                 :text="optionsLabel[option.id]"
-                                 :read-only="readOnly"
-                                 @input="handleCheckboxChanged($event,option.id)">
-                    </sharp-check>
-                </component>
-            </template>
-            <div v-else class="SharpSelect__radio-button-group" :class="{'SharpSelect__radio-button-group--block':!inline}">
-                <component :is="inline?'span':'div'"
-                           v-for="(option, index) in options"
-                           :key="option.id"
-                           class="SharpSelect__item"
-                           :class="{'SharpSelect__item--inline':inline}"
-                >
-                    <input type="radio"
-                           class="SharpRadio"
-                           tabindex="0"
-                           :id="`${uniqueIdentifier}${index}`"
-                           :checked="value===option.id"
-                           :value="option.id"
-                           :disabled="readOnly"
-                           :name="uniqueIdentifier"
-                           @change="handleRadioChanged(option.id)"
-                    >
-                    <label class="SharpRadio__label" :for="`${uniqueIdentifier}${index}`">
-                        <span class="SharpRadio__appearance"></span>
-                        {{ optionsLabel[option.id] }}
-                    </label>
-
-                </component>
+            <div class="SharpSelect__group" :class="{'SharpSelect__group--block':!inline}">
+                <template v-if="multiple">
+                    <template v-for="option in options">
+                        <div class="SharpSelect__item" :class="itemClasses" :key="option.id">
+                            <SharpCheck
+                                :value="checked(option.id)"
+                                :text="optionsLabel[option.id]"
+                                :read-only="readOnly"
+                                @input="handleCheckboxChanged($event,option.id)"
+                            />
+                        </div>
+                    </template>
+                </template>
+                <template v-else>
+                    <template v-for="(option, index) in options">
+                        <div class="SharpSelect__item" :class="itemClasses" :key="option.id">
+                            <input type="radio"
+                                class="SharpRadio"
+                                tabindex="0"
+                                :id="`${uniqueIdentifier}${index}`"
+                                :checked="value===option.id"
+                                :value="option.id"
+                                :disabled="readOnly"
+                                :name="uniqueIdentifier"
+                                @change="handleRadioChanged(option.id)"
+                            >
+                            <label class="SharpRadio__label" :for="`${uniqueIdentifier}${index}`">
+                                <span class="SharpRadio__appearance"></span>
+                                {{ optionsLabel[option.id] }}
+                            </label>
+                        </div>
+                    </template>
+                </template>
             </div>
         </template>
     </div>
@@ -147,7 +143,12 @@
                     map[opt.id] = this.localizedOptionLabel(opt);
                     return map;
                 }, {});
-            }
+            },
+            itemClasses() {
+                return {
+                    'SharpSelect__item--inline': this.inline,
+                }
+            },
         },
         methods: {
             remove() {

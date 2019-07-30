@@ -3,6 +3,7 @@
   &--list {
     background: $ui-03;
     padding: 1rem;
+    overflow: hidden;
   }
 
   &__clear-button {
@@ -18,26 +19,28 @@
     padding-right: 2rem;
   }
 
-  &__radio-button-group {
+  &__group {
     display: flex;
-    //flex-flow: row wrap;
+    flex-wrap: wrap;
     align-items: center;
-    //margin-top: rem(6px);
-
+    margin-bottom: -$checkbox-inline-margin-bottom;
     &--block {
       display: block;
+      margin-bottom: 0;
     }
   }
 
   &__item {
-    margin-top: .3rem;
-    &:first-child, &--inline {
-      margin-top: 0;
+    margin-bottom: .3rem;
+    &:last-child {
+      margin-bottom: 0;
     }
     &--inline {
-      margin-left: 1rem;
-      &:first-child {
-        margin-left: 0;
+      margin-right: 1rem;
+      margin-bottom: $checkbox-inline-margin-bottom;
+      &:last-child {
+        margin-right: 0;
+        margin-bottom: $checkbox-inline-margin-bottom;
       }
     }
   }
