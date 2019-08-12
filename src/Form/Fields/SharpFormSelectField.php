@@ -208,7 +208,7 @@ class SharpFormSelectField extends SharpFormField
             array_merge([
                 "options" => $this->dynamicAttributes
                     ? self::formatDynamicOptions($this->options, count($this->dynamicAttributes[0]["path"]))
-                    : self::formatOptions($this->options),
+                    : self::formatOptions($this->options, $this->idAttribute),
                 "multiple" => $this->multiple,
                 "clearable" => $this->clearable,
                 "display" => $this->display,

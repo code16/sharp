@@ -300,7 +300,7 @@ class SharpFormAutocompleteField extends SharpFormField
                 "placeholder" => $this->placeholder,
                 "localValues" => $this->isLocal() && $this->dynamicAttributes
                     ? self::formatDynamicOptions($this->localValues, count($this->dynamicAttributes[0]["path"]))
-                    : ($this->isLocal() ? self::formatOptions($this->localValues) : []),
+                    : ($this->isLocal() ? self::formatOptions($this->localValues, $this->itemIdAttribute) : []),
                 "itemIdAttribute" => $this->itemIdAttribute,
                 "searchKeys" => $this->localSearchKeys,
                 "remoteEndpoint" => $this->remoteEndpoint,

@@ -9,9 +9,10 @@ trait SharpFormFieldWithOptions
 
     /**
      * @param array|Collection $options
+     * @param string $idAttribute
      * @return array
      */
-    protected static function formatOptions($options)
+    protected static function formatOptions($options, $idAttribute = "id")
     {
         if(! sizeof($options)) {
             return [];
@@ -20,7 +21,7 @@ trait SharpFormFieldWithOptions
         $options = collect($options);
 
         if((is_array($options->first()) || is_object($options->first()))
-            && isset(((array)$options->first())["id"])) {
+            && isset(((array)$options->first())[$idAttribute])) {
             // We assume that we already have ["id", "label"] in this case
             return $options->all();
         }

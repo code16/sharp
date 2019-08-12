@@ -118,6 +118,23 @@ class SharpFormSelectFieldTest extends SharpTestCase
     }
 
     /** @test */
+    function we_can_define_options_as_a_custom_array()
+    {
+        $formField = $this->getDefaultSelect([
+            ["key" => "Elem-1"],
+            ["key" => "Elem-2"],
+        ])->setIdAttribute("key");
+
+        $this->assertArrayContainsSubset(
+            ["options" => [
+                ["key" => "Elem-1"],
+                ["key" => "Elem-2"],
+            ]],
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
     function we_can_define_localized_options()
     {
         $formField = $this->getDefaultSelect([
