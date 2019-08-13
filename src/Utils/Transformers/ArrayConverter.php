@@ -26,6 +26,7 @@ class ArrayConverter
             return (array)$model;
         }
 
+        // Model is not a structured data. We return it as it is.
         return $model;
     }
 }

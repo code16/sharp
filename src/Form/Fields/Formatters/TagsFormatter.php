@@ -47,28 +47,28 @@ class TagsFormatter extends SharpFieldFormatter
                 return is_null($item["id"]) || isset($options[$item["id"]]);
             })
 
-        ->when(! $field->creatable(), function($collection) {
-            // Field isn't creatable, let's just strip all null ids
-            return $collection->filter(function($item) {
-                return !is_null($item["id"]);
-            });
-        })
+            ->when(! $field->creatable(), function($collection) {
+                // Field isn't creatable, let's just strip all null ids
+                return $collection->filter(function($item) {
+                    return !is_null($item["id"]);
+                });
+            })
 
-        ->map(function($item) use($field) {
-            if(is_null($item["id"])) {
-                return array_merge([
-                        $field->idAttribute() => null,
-                        $field->createAttribute() => $item["label"]
-                    ], $field->createAdditionalAttributes()
-                );
-            }
+            ->map(function($item) use($field) {
+                if(is_null($item["id"])) {
+                    return array_merge([
+                            $field->idAttribute() => null,
+                            $field->createAttribute() => $item["label"]
+                        ], $field->createAdditionalAttributes()
+                    );
+                }
 
-            return [
-                $field->idAttribute() => $item["id"]
-            ];
+                return [
+                    $field->idAttribute() => $item["id"]
+                ];
 
-        })
-        ->values()
-        ->all();
+            })
+            ->values()
+            ->all();
     }
 }
