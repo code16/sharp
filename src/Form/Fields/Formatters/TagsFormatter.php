@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Form\Fields\Formatters;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
+use Code16\Sharp\Utils\Transformers\ArrayConverter;
 
 class TagsFormatter extends SharpFieldFormatter
 {
@@ -16,10 +17,11 @@ class TagsFormatter extends SharpFieldFormatter
     {
         return collect((array)$value)
             ->map(function($item) use($field) {
+                $item = ArrayConverter::modelToArray($item);
 
-                if(is_object($item) || is_array($item)) {
+                if(is_array($item)) {
                     return [
-                        "id" => ((array)$item)[$field->idAttribute()],
+                        "id" => $item[$field->idAttribute()],
                     ];
                 }
 

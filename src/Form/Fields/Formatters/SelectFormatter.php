@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Form\Fields\Formatters;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
+use Code16\Sharp\Utils\Transformers\ArrayConverter;
 
 class SelectFormatter extends SharpFieldFormatter
 {
@@ -16,20 +17,11 @@ class SelectFormatter extends SharpFieldFormatter
         if($field->multiple()) {
             return collect((array)$value)
                 ->map(function($item) use($field) {
+                    $item = ArrayConverter::modelToArray($item);
 
-                    if(is_array($item)) {
-                        return $item[$field->idAttribute()];
-                    }
-
-                    if(is_object($item)) {
-                        if(method_exists($item, "toArray")) {
-                            return $item->toArray()[$field->idAttribute()];
-                        }
-
-                        return ((array)$item)[$field->idAttribute()];
-                    }
-
-                    return $item;
+                    return is_array($item)
+                        ? $item[$field->idAttribute()]
+                        : $item;
                 })
                 ->all();
 
