@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Form\Fields\Formatters;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
+use Code16\Sharp\Utils\Transformers\ArrayConverter;
 
 class SelectFormatter extends SharpFieldFormatter
 {
@@ -14,11 +15,15 @@ class SelectFormatter extends SharpFieldFormatter
     function toFront(SharpFormField $field, $value)
     {
         if($field->multiple()) {
-            return collect((array)$value)->map(function($item) use($field) {
-                return is_array($item) || is_object($item)
-                    ? ((array)$item)[$field->idAttribute()]
-                    : $item;
-            })->all();
+            return collect((array)$value)
+                ->map(function($item) use($field) {
+                    $item = ArrayConverter::modelToArray($item);
+
+                    return is_array($item)
+                        ? $item[$field->idAttribute()]
+                        : $item;
+                })
+                ->all();
 
         } elseif(is_array($value)) {
             // Strip other values is not configured to be multiple
@@ -38,9 +43,11 @@ class SelectFormatter extends SharpFieldFormatter
     {
         if($field->multiple()) {
             // We must transform items into associative arrays with the "id" key
-            return collect((array)$value)->map(function ($item) {
-                return ["id" => $item];
-            })->all();
+            return collect((array)$value)
+                ->map(function ($item) use($field) {
+                    return [$field->idAttribute() => $item];
+                })
+                ->all();
 
         } elseif(is_array($value)) {
             return $value[0];

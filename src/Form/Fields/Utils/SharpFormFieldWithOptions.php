@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Form\Fields\Utils;
 
+use Code16\Sharp\Utils\Transformers\ArrayConverter;
 use Illuminate\Support\Collection;
 
 trait SharpFormFieldWithOptions
@@ -19,9 +20,9 @@ trait SharpFormFieldWithOptions
         }
 
         $options = collect($options);
+        $firstOption = ArrayConverter::modelToArray($options->first());
 
-        if((is_array($options->first()) || is_object($options->first()))
-            && isset(((array)$options->first())[$idAttribute])) {
+        if(is_array($firstOption) && isset($firstOption[$idAttribute])) {
             // We assume that we already have ["id", "label"] in this case
             return $options->all();
         }

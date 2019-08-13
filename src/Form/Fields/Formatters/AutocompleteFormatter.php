@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Form\Fields\Formatters;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
+use Code16\Sharp\Utils\Transformers\ArrayConverter;
 
 class AutocompleteFormatter extends SharpFieldFormatter
 {
@@ -14,6 +15,8 @@ class AutocompleteFormatter extends SharpFieldFormatter
      */
     function toFront(SharpFormField $field, $value)
     {
+        $value = ArrayConverter::modelToArray($value);
+
         return is_null($value) || is_array($value)
             ? $value
             : [$field->itemIdAttribute() => $value];

@@ -25,6 +25,28 @@ class AutocompleteFormatterTest extends SharpTestCase
             SharpFormAutocompleteField::make("text", "local")->setItemIdAttribute("num"),
             $value
         ));
+
+        $this->assertEquals(["id" => $value], (new AutocompleteFormatter)->toFront(
+            SharpFormAutocompleteField::make("text", "local"),
+            ["id" => $value]
+        ));
+
+        $this->assertEquals(["id" => $value], (new AutocompleteFormatter)->toFront(
+            SharpFormAutocompleteField::make("text", "local"),
+            (object)["id" => $value]
+        ));
+
+        $this->assertEquals(["id" => $value], (new AutocompleteFormatter)->toFront(
+            SharpFormAutocompleteField::make("text", "local"),
+            new class($value) {
+                function __construct($value) {
+                    $this->value = $value;
+                }
+                function toArray() {
+                    return ["id" => $this->value];
+                }
+            }
+        ));
     }
 
     /** @test */
