@@ -161,6 +161,7 @@ trait WithCustomTransformers
      * a hasOne or belongsTo relationship. Ex: with "mother:name",
      * we add a transformed mother:name attribute in the array
      *
+     * @param $attributes
      * @param $model
      * @return mixed
      */

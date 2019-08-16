@@ -13,9 +13,7 @@ use Illuminate\Http\Request;
 class AppendFormAuthorizations
 {
 
-    /**
-     * @var Gate
-     */
+    /** @var Gate */
     protected $gate;
 
     /**

@@ -48,6 +48,11 @@ Route::group([
         ->name("code16.sharp.api.list.command.instance.data")
         ->uses('Commands\InstanceCommandController@show');
 
+    Route::get("/show/{entityKey}/{instanceId}")
+        ->name("code16.sharp.api.show.show")
+        ->middleware('sharp_api_append_form_authorizations')
+        ->uses('ShowController@show');
+
     Route::get("/form/{entityKey}")
         ->name("code16.sharp.api.form.create")
         ->middleware('sharp_api_append_form_authorizations')
