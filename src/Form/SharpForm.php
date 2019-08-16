@@ -41,9 +41,9 @@ abstract class SharpForm
 
         return [
             "tabbed" => $this->tabbed,
-            "tabs" => collect($this->tabs)->map(function($tab) {
-                return $tab->toArray();
-            })->all()
+            "tabs" => collect($this->tabs)
+                ->map->toArray()
+                ->all()
         ];
     }
 

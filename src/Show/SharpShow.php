@@ -3,15 +3,32 @@
 namespace Code16\Sharp\Show;
 
 use Code16\Sharp\Form\HandleFormFields;
+use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpShow
 {
     use WithCustomTransformers, HandleFormFields;
 
+    /** @var bool */
+    protected $layoutBuilt = false;
+
+    /** @var array */
+    protected $sections = [];
+
+
     public function showLayout()
     {
-        return [];
+        if(!$this->layoutBuilt) {
+            $this->buildShowLayout();
+            $this->layoutBuilt = true;
+        }
+
+        return [
+            "sections" => collect($this->sections)
+                ->map->toArray()
+                ->all()
+        ];
     }
 
     /**
@@ -31,6 +48,25 @@ abstract class SharpShow
     function buildFormFields()
     {
         $this->buildShowFields();
+    }
+
+    /**
+     * @param string $label
+     * @param \Closure|null $callback
+     * @return $this
+     */
+    protected function addSection(string $label, \Closure $callback = null)
+    {
+        $this->layoutBuilt = false;
+
+        $section = new ShowLayoutSection($label);
+        $this->sections[] = $section;
+
+        if($callback) {
+            $callback($section);
+        }
+
+        return $this;
     }
 
     /**

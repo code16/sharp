@@ -2,7 +2,9 @@
 
 namespace Code16\Sharp\Tests\Fixtures;
 
+use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
+use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Show\SharpShow;
 
 class PersonSharpShow extends SharpShow
@@ -25,13 +27,11 @@ class PersonSharpShow extends SharpShow
     function buildShowLayout()
     {
         $this
-            ->addSection(function(ShowLayoutSection $section) {
+            ->addSection("Identity", function(ShowLayoutSection $section) {
                 $section
-                    ->setTitle("Identity")
-                    ->addColumn(6, function(ShowLayoutColumn $column) {
-                        $column->withSingleLabel("name");
+                    ->addColumn(6, function(FormLayoutColumn $column) {
+                        $column->withSingleField("name");
                     });
-
             });
     }
 
