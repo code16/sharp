@@ -3,7 +3,9 @@
 namespace App\Sharp;
 
 use App\Spaceship;
+use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
+use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Show\SharpShow;
 
 class SpaceshipSharpShow extends SharpShow
@@ -19,13 +21,11 @@ class SpaceshipSharpShow extends SharpShow
     function buildShowLayout()
     {
         $this
-            ->addSection(function(ShowLayoutSection $section) {
+            ->addSection('Identity', function(ShowLayoutSection $section) {
                 $section
-                    ->setTitle("Identity")
-                    ->addColumn(7, function(ShowLayoutColumn $column) {
-                        $column->withSingleLabel("name");
+                    ->addColumn(7, function(FormLayoutColumn $column) {
+                        $column->withSingleField("name");
                     });
-
             });
     }
 
