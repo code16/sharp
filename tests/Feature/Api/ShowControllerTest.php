@@ -54,6 +54,30 @@ class ShowControllerTest extends BaseApiTest
             ]]);
     }
 
+    /** @test */
+    public function we_can_get_show_layout_for_an_entity()
+    {
+        $this->buildTheWorld();
+
+        $this->json('get', '/sharp/api/show/person/1')
+            ->assertStatus(200)
+            ->assertJson(["layout" => [
+                "sections" => [[
+                    "title" => "Identity",
+                    "columns" => [
+                        [
+                            "size" => 6,
+                            "fields" => [
+                                [
+                                    ["key" => "name"]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]]
+            ]]);
+    }
+
     protected function buildTheWorld()
     {
         parent::buildTheWorld();

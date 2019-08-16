@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Tests\Fixtures;
 
-use Code16\Sharp\Show\Labels\SharpShowTextLabel;
+use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\SharpShow;
 
 class PersonSharpShow extends SharpShow
@@ -14,7 +14,7 @@ class PersonSharpShow extends SharpShow
      */
     function buildShowFields()
     {
-        $this->addField(SharpShowTextLabel::make("name"));
+        $this->addField(SharpShowTextField::make("name"));
     }
 
     /**
@@ -24,7 +24,15 @@ class PersonSharpShow extends SharpShow
      */
     function buildShowLayout()
     {
-        // TODO: Implement buildShowLayout() method.
+        $this
+            ->addSection(function(ShowLayoutSection $section) {
+                $section
+                    ->setTitle("Identity")
+                    ->addColumn(6, function(ShowLayoutColumn $column) {
+                        $column->withSingleLabel("name");
+                    });
+
+            });
     }
 
     function find($id): array

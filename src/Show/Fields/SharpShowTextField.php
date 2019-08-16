@@ -1,8 +1,8 @@
 <?php
 
-namespace Code16\Sharp\Show\Labels;
+namespace Code16\Sharp\Show\Fields;
 
-class SharpShowTextLabel extends SharpShowLabel
+class SharpShowTextField extends SharpShowField
 {
     const FIELD_TYPE = "text";
 
@@ -37,7 +37,7 @@ class SharpShowTextLabel extends SharpShowLabel
     public function toArray(): array
     {
         return parent::buildArray([
-            "prependLAbelWith" => $this->prependText,
+            "prependLabelWith" => $this->prependText,
         ]);
     }
 }

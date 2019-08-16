@@ -3,7 +3,7 @@
 namespace App\Sharp;
 
 use App\Spaceship;
-use Code16\Sharp\Show\Labels\SharpShowTextLabel;
+use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\SharpShow;
 
 class SpaceshipSharpShow extends SharpShow
@@ -11,7 +11,7 @@ class SpaceshipSharpShow extends SharpShow
     function buildShowFields()
     {
         $this->addField(
-            SharpShowTextLabel::make("name")
+            SharpShowTextField::make("name")
                 ->prependLabelWith("Spaceship name: ")
         );
     }

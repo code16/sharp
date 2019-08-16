@@ -4,7 +4,7 @@ namespace Code16\Sharp\Form;
 
 use Code16\Sharp\Exceptions\Form\SharpFormFieldFormattingMustBeDelayedException;
 use Code16\Sharp\Form\Fields\SharpFormField;
-use Code16\Sharp\Show\Labels\SharpShowLabel;
+use Code16\Sharp\Show\Fields\SharpShowField;
 
 trait HandleFormFields
 {
@@ -51,7 +51,7 @@ trait HandleFormFields
      * Find a field by its key.
      *
      * @param string $key
-     * @return SharpFormField|SharpShowLabel
+     * @return SharpFormField|SharpShowField
      */
     function findFieldByKey(string $key)
     {
@@ -72,7 +72,7 @@ trait HandleFormFields
     /**
      * Add a field.
      *
-     * @param SharpFormField|SharpShowLabel $field
+     * @param SharpFormField|SharpShowField $field
      * @return $this
      */
     protected function addField($field)

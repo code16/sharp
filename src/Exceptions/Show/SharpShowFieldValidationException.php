@@ -5,7 +5,7 @@ namespace Code16\Sharp\Exceptions\Show;
 use Code16\Sharp\Exceptions\SharpException;
 use Illuminate\Support\MessageBag;
 
-class SharpShowLabelValidationException extends SharpException
+class SharpShowFieldValidationException extends SharpException
 {
 
     /**

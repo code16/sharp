@@ -1,11 +1,11 @@
 <?php
 
-namespace Code16\Sharp\Show\Labels;
+namespace Code16\Sharp\Show\Fields;
 
-use Code16\Sharp\Exceptions\Show\SharpShowLabelValidationException;
+use Code16\Sharp\Exceptions\Show\SharpShowFieldValidationException;
 use Illuminate\Support\Facades\Validator;
 
-abstract class SharpShowLabel
+abstract class SharpShowField
 {
     /** @var string */
     protected $key;
@@ -26,7 +26,7 @@ abstract class SharpShowLabel
     /**
      * @param array $childArray
      * @return array
-     * @throws SharpShowLabelValidationException
+     * @throws SharpShowFieldValidationException
      */
     protected function buildArray(array $childArray)
     {
@@ -48,7 +48,7 @@ abstract class SharpShowLabel
      * Throw an exception in case of invalid attribute value.
      *
      * @param array $properties
-     * @throws SharpShowLabelValidationException
+     * @throws SharpShowFieldValidationException
      */
     protected function validate(array $properties)
     {
@@ -58,7 +58,7 @@ abstract class SharpShowLabel
         ] + $this->validationRules());
 
         if ($validator->fails()) {
-            throw new SharpShowLabelValidationException($validator->errors());
+            throw new SharpShowFieldValidationException($validator->errors());
         }
     }
 
