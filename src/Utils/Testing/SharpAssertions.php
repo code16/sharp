@@ -87,6 +87,18 @@ trait SharpAssertions
 
     /**
      * @param string $entityKey
+     * @param $instanceId
+     * @return mixed
+     */
+    protected function deleteSharpForm(string $entityKey, $instanceId)
+    {
+        return $this->deleteJson(
+            route("code16.sharp.api.form.delete", [$entityKey, $instanceId])
+        );
+    }
+
+    /**
+     * @param string $entityKey
      * @param mixed|null $instanceId
      * @return mixed
      */
