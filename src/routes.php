@@ -116,6 +116,10 @@ Route::group([
         ->middleware('sharp_restore_list_params')
         ->uses('ListController@show');
 
+    Route::get('/show/{entityKey}/{instanceId}')
+        ->name("code16.sharp.show")
+        ->uses('ShowController@show');
+
     Route::get('/form/{entityKey}/{instanceId}')
         ->name("code16.sharp.edit")
         ->uses('FormController@edit');
