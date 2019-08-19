@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\EntityList\Eloquent\Transformers;
+namespace Code16\Sharp\Utils\Transformers\Attributes\Eloquent;
 
 use Code16\Sharp\Exceptions\SharpException;
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;

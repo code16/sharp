@@ -3,12 +3,13 @@
 namespace App\Sharp;
 
 use App\Spaceship;
-use Code16\Sharp\EntityList\Eloquent\Transformers\SharpUploadModelThumbnailUrlTransformer;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Show\Fields\SharpShowPictureField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Show\SharpShow;
+use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
+use Code16\Sharp\Utils\Transformers\Attributes\MarkdownAttributeTransformer;
 
 class SpaceshipSharpShow extends SharpShow
 {
@@ -29,6 +30,9 @@ class SpaceshipSharpShow extends SharpShow
                     ->setLabel("Brand / model:")
             )->addField(
                 SharpShowPictureField::make("picture")
+            )->addField(
+                SharpShowTextField::make("description")
+                    ->collapseToWordCount(150)
             );
     }
 
@@ -48,6 +52,13 @@ class SpaceshipSharpShow extends SharpShow
                         $column
                             ->withSingleField("picture");
                     });
+            })
+            ->addSection('Description', function(ShowLayoutSection $section) {
+                $section
+                    ->addColumn(9, function(FormLayoutColumn $column) {
+                        $column
+                            ->withSingleField("description");
+                    });
             });
     }
 
@@ -61,6 +72,7 @@ class SpaceshipSharpShow extends SharpShow
                 return $spaceship->name;
             })
             ->setCustomTransformer("picture", new SharpUploadModelThumbnailUrlTransformer(250))
+            ->setCustomTransformer("description", new MarkdownAttributeTransformer())
             ->transform(Spaceship::findOrFail($id));
     }
 }
