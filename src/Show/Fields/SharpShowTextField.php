@@ -7,7 +7,7 @@ class SharpShowTextField extends SharpShowField
     const FIELD_TYPE = "text";
 
     /** @var string */
-    protected $prependText = "";
+    protected $label = "";
 
     /**
      * @param string $key
@@ -19,12 +19,12 @@ class SharpShowTextField extends SharpShowField
     }
 
     /**
-     * @param string $prependText
+     * @param string $label
      * @return $this
      */
-    public function prependLabelWith(string $prependText)
+    public function setLabel(string $label)
     {
-        $this->prependText = $prependText;
+        $this->label = $label;
 
         return $this;
     }
@@ -33,11 +33,12 @@ class SharpShowTextField extends SharpShowField
      * Create the properties array for the field, using parent::buildArray()
      *
      * @return array
+     * @throws \Code16\Sharp\Exceptions\Show\SharpShowFieldValidationException
      */
     public function toArray(): array
     {
         return parent::buildArray([
-            "prependLabelWith" => $this->prependText,
+            "label" => $this->label,
         ]);
     }
 }
