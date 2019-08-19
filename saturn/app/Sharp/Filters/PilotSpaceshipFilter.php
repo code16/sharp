@@ -5,7 +5,7 @@ namespace App\Sharp\Filters;
 use App\Spaceship;
 use Code16\Sharp\EntityList\EntityListSelectFilter;
 
-class PilotSpaceshipsFilter implements EntityListSelectFilter
+class PilotSpaceshipFilter implements EntityListSelectFilter
 {
     /**
      * @return array

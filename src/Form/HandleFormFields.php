@@ -28,9 +28,7 @@ trait HandleFormFields
         $this->checkFormIsBuilt();
 
         return collect($this->fields)
-            ->map(function($field) {
-                return $field->toArray();
-            })
+            ->map->toArray()
             ->keyBy("key")
             ->all();
     }

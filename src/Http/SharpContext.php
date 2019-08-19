@@ -24,6 +24,11 @@ class SharpContext
      */
     protected $action;
 
+    public function setIsShow($instanceId)
+    {
+        $this->page = "SHOW";
+        $this->instanceId = $instanceId;
+    }
 
     public function setIsForm()
     {
@@ -59,6 +64,14 @@ class SharpContext
     {
         $this->setIsForm();
         $this->action = "CREATION";
+    }
+
+    /**
+     * @return bool
+     */
+    public function isShow(): bool
+    {
+        return $this->page == "SHOW";
     }
 
     /**
@@ -106,7 +119,7 @@ class SharpContext
      */
     public function instanceId()
     {
-        return $this->isUpdate()
+        return $this->isUpdate() || $this->isShow()
             ? $this->instanceId
             : null;
     }

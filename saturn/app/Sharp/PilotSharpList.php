@@ -4,7 +4,8 @@ namespace App\Sharp;
 
 use App\Pilot;
 use App\Sharp\Commands\PilotDownloadPhoto;
-use App\Sharp\Filters\PilotSpaceshipsFilter;
+use App\Sharp\Filters\PilotRoleFilter;
+use App\Sharp\Filters\PilotSpaceshipFilter;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
@@ -33,7 +34,8 @@ class PilotSharpList extends SharpEntityList
             ->setDefaultSort("name", "asc")
             ->setMultiformAttribute("role")
             ->setPaginated()
-            ->addFilter("spaceship", PilotSpaceshipsFilter::class)
+            ->addFilter("spaceship", PilotSpaceshipFilter::class)
+            ->addFilter("role", PilotRoleFilter::class)
             ->addEntityCommand("download", PilotDownloadPhoto::class);
     }
 
@@ -52,6 +54,10 @@ class PilotSharpList extends SharpEntityList
             $pilots->leftJoin("pilot_spaceship", "pilots.id", "=", "pilot_spaceship.pilot_id")
                 ->leftJoin("spaceships", "spaceships.id", "=", "pilot_spaceship.spaceship_id")
                 ->where("spaceships.id", $spaceship);
+        }
+
+        if($role = $params->filterFor("role")) {
+            $pilots->where("role", $role);
         }
 
         if($params->sortedBy()) {

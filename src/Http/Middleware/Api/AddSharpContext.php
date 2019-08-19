@@ -44,6 +44,9 @@ class AddSharpContext
                     $this->context->setIsCreation();
                 }
 
+            } elseif($segments[2] == "show") {
+                $this->context->setIsShow($segments[4]);
+
             } elseif($segments[2] == "list") {
                 $this->context->setIsEntityList();
 

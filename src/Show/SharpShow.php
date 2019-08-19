@@ -16,7 +16,9 @@ abstract class SharpShow
     /** @var array */
     protected $sections = [];
 
-
+    /**
+     * @return array
+     */
     public function showLayout()
     {
         if(!$this->layoutBuilt) {
@@ -65,6 +67,25 @@ abstract class SharpShow
         if($callback) {
             $callback($section);
         }
+
+        return $this;
+    }
+
+    /**
+     * @param string $label
+     * @param string $entityListKey
+     * @return $this
+     */
+    protected function addEntityListSection(string $label, string $entityListKey)
+    {
+        $this->layoutBuilt = false;
+
+        $section = new ShowLayoutSection($label);
+        $section->addColumn(12, function($column) use($entityListKey) {
+            $column->withSingleField($entityListKey);
+        });
+
+        $this->sections[] = $section;
 
         return $this;
     }

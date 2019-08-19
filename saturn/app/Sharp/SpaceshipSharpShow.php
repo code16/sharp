@@ -4,6 +4,7 @@ namespace App\Sharp;
 
 use App\Spaceship;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\Fields\SharpShowPictureField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
@@ -33,6 +34,12 @@ class SpaceshipSharpShow extends SharpShow
             )->addField(
                 SharpShowTextField::make("description")
                     ->collapseToWordCount(150)
+            )->addField(
+                SharpShowEntityListField::make("pilots", "pilot")
+                    ->showFilters(["role"])
+                    ->setFilterValue("spaceship", function($instanceId) {
+                        return $instanceId;
+                    })
             );
     }
 
@@ -49,17 +56,16 @@ class SpaceshipSharpShow extends SharpShow
                             ->withSingleField("brand");
                     })
                     ->addColumn(5, function(FormLayoutColumn $column) {
-                        $column
-                            ->withSingleField("picture");
+                        $column->withSingleField("picture");
                     });
             })
             ->addSection('Description', function(ShowLayoutSection $section) {
                 $section
                     ->addColumn(9, function(FormLayoutColumn $column) {
-                        $column
-                            ->withSingleField("description");
+                        $column->withSingleField("description");
                     });
-            });
+            })
+            ->addEntityListSection('Pilots', "pilots");
     }
 
     function find($id): array
