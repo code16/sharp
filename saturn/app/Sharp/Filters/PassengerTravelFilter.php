@@ -3,9 +3,9 @@
 namespace App\Sharp\Filters;
 
 use App\Travel;
-use Code16\Sharp\EntityList\EntityListFilter;
+use Code16\Sharp\EntityList\EntityListSelectFilter;
 
-class PassengerTravelFilter implements EntityListFilter
+class PassengerTravelFilter implements EntityListSelectFilter
 {
 
     /**
