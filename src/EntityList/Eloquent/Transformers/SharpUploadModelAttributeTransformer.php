@@ -54,7 +54,7 @@ class SharpUploadModelAttributeTransformer implements SharpAttributeTransformer
         }
 
         if(!$instance->$attribute instanceof SharpUploadModel) {
-            throw new SharpException("[$attribute] mist be an instance of SharpUploadModel");
+            throw new SharpException("[$attribute] must be an instance of SharpUploadModel");
         }
 
         return '<img src="'
