@@ -19,6 +19,7 @@ class SharpShowEntityListFieldTest extends SharpTestCase
             "showEntityState" => true,
             "showCreateButton" => true,
             "showReorderButton" => true,
+            "showSearchField" => true,
             "hiddenFilters" => [],
             "hiddenCommands" => ["entity" => [], "instance" => []],
         ], $field->toArray());
@@ -84,6 +85,18 @@ class SharpShowEntityListFieldTest extends SharpTestCase
             "showCreateButton" => false
         ], $field->toArray());
     }
+
+    /** @test */
+    function we_can_define_showSearchField()
+    {
+        $field = SharpShowEntityListField::make("entityListField", "entityKey")
+            ->showSearchField(false);
+
+        $this->assertArrayContainsSubset([
+            "showSearchField" => false
+        ], $field->toArray());
+    }
+
 
     /** @test */
     function we_can_define_hideEntityCommands()

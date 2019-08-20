@@ -29,6 +29,9 @@ class SharpShowEntityListField extends SharpShowField
     /** @var bool */
     protected $showCreateButton = true;
 
+    /** @var bool */
+    protected $showSearchField = true;
+
     /**
      * @param string $key
      * @param string $entityListKey
@@ -113,6 +116,17 @@ class SharpShowEntityListField extends SharpShowField
     }
 
     /**
+     * @param bool $showSearchField
+     * @return $this
+     */
+    public function showSearchField(bool $showSearchField = true)
+    {
+        $this->showSearchField = $showSearchField;
+
+        return $this;
+    }
+
+    /**
      * Create the properties array for the field, using parent::buildArray()
      *
      * @return array
@@ -125,6 +139,7 @@ class SharpShowEntityListField extends SharpShowField
             "showEntityState" => $this->showEntityState,
             "showCreateButton" => $this->showCreateButton,
             "showReorderButton" => $this->showReorderButton,
+            "showSearchField" => $this->showSearchField,
             "hiddenCommands" => $this->hiddenCommands,
             "hiddenFilters" => collect($this->hiddenFilters)
                 ->map(function($value, $filter) {
