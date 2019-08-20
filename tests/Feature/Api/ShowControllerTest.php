@@ -15,7 +15,7 @@ class ShowControllerTest extends BaseApiTest
     }
 
     /** @test */
-    public function we_can_get_show_data_for_an_entity()
+    public function we_can_get_show_data_for_an_instance()
     {
         $this->withoutExceptionHandling();
         $this->buildTheWorld();
@@ -41,7 +41,7 @@ class ShowControllerTest extends BaseApiTest
     }
 
     /** @test */
-    public function we_can_get_show_fields_for_an_entity()
+    public function we_can_get_show_fields_for_an_instance()
     {
         $this->buildTheWorld();
 
@@ -55,7 +55,7 @@ class ShowControllerTest extends BaseApiTest
     }
 
     /** @test */
-    public function we_can_get_show_layout_for_an_entity()
+    public function we_can_get_show_layout_for_an_instance()
     {
         $this->buildTheWorld();
 
@@ -75,6 +75,37 @@ class ShowControllerTest extends BaseApiTest
                         ]
                     ]
                 ]]
+            ]]);
+    }
+
+    /** @test */
+    public function we_can_get_show_config_for_an_instance()
+    {
+        $this->buildTheWorld();
+
+        $this->json('get', '/sharp/api/show/person/1')
+            ->assertStatus(200)
+            ->assertJson(["config" => [
+                "commands" => [
+                    "instance" => [
+                        [
+                            [
+                                "key" => "test_command",
+                                "label" => "Label"
+                            ]
+                        ]
+                    ]
+                ],
+                "state" => [
+                    "attribute" => "state",
+                    "values" => [
+                        [
+                            "value" => "active",
+                            "label" => "Label",
+                            "color" => "blue"
+                        ]
+                    ]
+                ]
             ]]);
     }
 

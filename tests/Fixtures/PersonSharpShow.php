@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Tests\Fixtures;
 
+use Code16\Sharp\EntityList\Commands\EntityState;
+use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
@@ -17,6 +19,29 @@ class PersonSharpShow extends SharpShow
     function buildShowFields()
     {
         $this->addField(SharpShowTextField::make("name"));
+    }
+
+    function buildShowConfig()
+    {
+        $this
+            ->addInstanceCommand("test_command", new class extends InstanceCommand {
+                public function label(): string
+                {
+                    return "Label";
+                }
+                public function execute($instanceId, array $data = []): array
+                {
+                }
+            })
+            ->setEntityState("state", new class extends EntityState {
+                protected function buildStates()
+                {
+                    $this->addState("active", "Label", "blue");
+                }
+                protected function updateState($instanceId, $stateId)
+                {
+                }
+            });
     }
 
     /**
