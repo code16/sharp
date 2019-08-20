@@ -40,6 +40,11 @@ class SpaceshipSharpShow extends SharpShow
                     ->setFilterValue("spaceship", function($instanceId) {
                         return $instanceId;
                     })
+                    ->showEntityState()
+                    ->showEntityCommands(["updateXP"])
+                    ->showInstanceCommands(["seniorify"])
+                    ->showReorderButton(false)
+                    ->showCreateButton()
             );
     }
 

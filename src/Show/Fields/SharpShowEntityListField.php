@@ -14,6 +14,21 @@ class SharpShowEntityListField extends SharpShowField
     /** @var array */
     protected $filters = [];
 
+    /** @var array */
+    protected $commands = [
+        "entity" => [],
+        "instance" => []
+    ];
+
+    /** @var bool */
+    protected $showEntityState = false;
+
+    /** @var bool */
+    protected $showReorderButton = false;
+
+    /** @var bool */
+    protected $showCreateButton = false;
+
     /**
      * @param string $key
      * @param string $entityListKey
@@ -52,6 +67,65 @@ class SharpShowEntityListField extends SharpShowField
     }
 
     /**
+     * @param array $commands
+     * @return $this
+     */
+    public function showEntityCommands(array $commands)
+    {
+        foreach($commands as $command) {
+            $this->commands["entity"][$command]["display"] = true;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param array $commands
+     * @return $this
+     */
+    public function showInstanceCommands(array $commands)
+    {
+        foreach($commands as $command) {
+            $this->commands["instance"][$command]["display"] = true;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param bool $showEntityState
+     * @return $this
+     */
+    public function showEntityState(bool $showEntityState = true)
+    {
+        $this->showEntityState = $showEntityState;
+
+        return $this;
+    }
+
+    /**
+     * @param bool $showCreateButton
+     * @return $this
+     */
+    public function showCreateButton(bool $showCreateButton = true)
+    {
+        $this->showCreateButton = $showCreateButton;
+
+        return $this;
+    }
+
+    /**
+     * @param bool $showReorderButton
+     * @return $this
+     */
+    public function showReorderButton(bool $showReorderButton = true)
+    {
+        $this->showReorderButton = $showReorderButton;
+
+        return $this;
+    }
+
+    /**
      * Create the properties array for the field, using parent::buildArray()
      *
      * @return array
@@ -61,6 +135,10 @@ class SharpShowEntityListField extends SharpShowField
     {
         return parent::buildArray([
             "entityListKey" => $this->entityListKey,
+            "showEntityState" => $this->showEntityState,
+            "showCreateButton" => $this->showCreateButton,
+            "showReorderButton" => $this->showReorderButton,
+            "commands" => $this->commands,
             "filters" => collect($this->filters)
                 ->map(function($values, $filter) {
                     // Force display to be set
@@ -85,6 +163,12 @@ class SharpShowEntityListField extends SharpShowField
     {
         return [
             "entityListKey" => "required",
+            "showEntityState" => "required|boolean",
+            "showCreateButton" => "required|boolean",
+            "showReorderButton" => "required|boolean",
+            "commands" => "array",
+            "commands.*.entity" => "array",
+            "commands.*.instance" => "array",
             "filters" => "array",
             "filters.*.display" => "required|boolean",
         ];
