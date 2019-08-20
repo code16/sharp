@@ -28,6 +28,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
             ], $form->find($person->id)
         );
     }
+
     /** @test */
     function we_can_retrieve_an_array_version_of_a_stdclass()
     {
@@ -48,6 +49,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
         ], $form->find($person->id)
         );
     }
+
     /** @test */
     function belongsTo_is_handled()
     {

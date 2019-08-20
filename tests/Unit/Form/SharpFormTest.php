@@ -30,9 +30,9 @@ class SharpFormTest extends SharpTestCase
         };
 
         $this->assertEquals([
-                "md" => ["text" => null],
-                "check" => false
-            ], $sharpForm->newInstance());
+            "md" => ["text" => null],
+            "check" => false
+        ], $sharpForm->newInstance());
     }
 
     /** @test */
