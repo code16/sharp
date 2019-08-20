@@ -61,7 +61,11 @@ abstract class SharpShow
      */
     function showConfig(): array
     {
-        return tap([], function(&$config) {
+        $config = [
+//            "showBackToEntityList" =>
+        ];
+
+        return tap($config, function(&$config) {
             $this->appendEntityStateToConfig($config);
             $this->appendCommandsToConfig($config);
         });
