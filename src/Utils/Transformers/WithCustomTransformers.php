@@ -45,12 +45,17 @@ trait WithCustomTransformers
      */
     function transform($models)
     {
-        if($this instanceof SharpForm || $this instanceof Command || $this instanceof SharpShow) {
+        if($this instanceof SharpForm || $this instanceof Command) {
             // It's a Form (full entity or from a Command), there's only one model.
             // We must add Form Field Formatters in the process
             return $this->applyFormatters(
                 $this->applyTransformers($models)
             );
+        }
+
+        if($this instanceof SharpShow) {
+            // It's a Show, there's only one model.
+            return $this->applyTransformers($models, false);
         }
 
         // SharpEntityList case
@@ -105,14 +110,17 @@ trait WithCustomTransformers
         if($forceFullObject) {
             // Merge model attribute with form fields to be sure we have
             // all attributes which the front code needed.
-            $attributes = array_merge(
-                collect($this->getDataKeys())->flip()->map(function () {
+            $attributes = collect($this->getDataKeys())
+                ->flip()
+                ->map(function () {
                     return null;
-                })->all(), $attributes);
+                })
+                ->merge($attributes)
+                ->all();
+        }
 
-            if (is_object($model)) {
-                $attributes = $this->handleAutoRelatedAttributes($attributes, $model);
-            }
+        if (is_object($model)) {
+            $attributes = $this->handleAutoRelatedAttributes($attributes, $model);
         }
 
         // Apply transformers
