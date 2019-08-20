@@ -4,6 +4,7 @@ namespace Code16\Sharp\EntityList\Traits;
 
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\Exceptions\SharpException;
 use Illuminate\Support\Collection;
 
 trait HandleCommands
@@ -24,12 +25,17 @@ trait HandleCommands
      * @param string $commandName
      * @param string|EntityCommand $commandHandlerOrClassName
      * @return $this
+     * @throws SharpException
      */
     protected function addEntityCommand(string $commandName, $commandHandlerOrClassName)
     {
         $commandHandler = is_string($commandHandlerOrClassName)
             ? app($commandHandlerOrClassName)
             : $commandHandlerOrClassName;
+
+        if(!$commandHandler instanceof EntityCommand) {
+            throw new SharpException("Handler class for entity command [{$commandName}] is not an subclass of " . EntityCommand::class);
+        }
 
         $commandHandler->setGroupIndex($this->entityCommandCurrentGroupNumber);
 
@@ -42,12 +48,17 @@ trait HandleCommands
      * @param string $commandName
      * @param string|InstanceCommand $commandHandlerOrClassName
      * @return $this
+     * @throws SharpException
      */
     protected function addInstanceCommand(string $commandName, $commandHandlerOrClassName)
     {
         $commandHandler = is_string($commandHandlerOrClassName)
             ? app($commandHandlerOrClassName)
             : $commandHandlerOrClassName;
+
+        if(!$commandHandler instanceof InstanceCommand) {
+            throw new SharpException("Handler class for instance command [{$commandName}] is not an subclass of " . InstanceCommand::class);
+        }
 
         $commandHandler->setGroupIndex($this->instanceCommandCurrentGroupNumber);
 

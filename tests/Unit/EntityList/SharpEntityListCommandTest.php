@@ -25,7 +25,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                     }
                     public function execute(EntityListQueryParams $params, array $data = []): array {}
                 });
-                $this->addEntityCommand("instanceCommand", new class extends InstanceCommand {
+                $this->addInstanceCommand("instanceCommand", new class extends InstanceCommand {
                     public function label(): string {
                         return "My Instance Command";
                     }
