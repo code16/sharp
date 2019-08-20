@@ -12,22 +12,22 @@ class SharpShowEntityListField extends SharpShowField
     protected $entityListKey;
 
     /** @var array */
-    protected $filters = [];
+    protected $hiddenFilters = [];
 
     /** @var array */
-    protected $commands = [
+    protected $hiddenCommands = [
         "entity" => [],
         "instance" => []
     ];
 
     /** @var bool */
-    protected $showEntityState = false;
+    protected $showEntityState = true;
 
     /** @var bool */
-    protected $showReorderButton = false;
+    protected $showReorderButton = true;
 
     /** @var bool */
-    protected $showCreateButton = false;
+    protected $showCreateButton = true;
 
     /**
      * @param string $key
@@ -42,51 +42,38 @@ class SharpShowEntityListField extends SharpShowField
     }
 
     /**
-     * @param array $filterNames
-     * @return $this
-     */
-    public function showFilters(array $filterNames)
-    {
-        foreach($filterNames as $filterName) {
-            $this->filters[$filterName]["display"] = true;
-        }
-
-        return $this;
-    }
-
-    /**
      * @param string $filterName
-     * @param $value
+     * @param mixed $value
      * @return $this
      */
-    public function setFilterValue(string $filterName, $value)
+    public function hideFilterWithValue(string $filterName, $value)
     {
-        $this->filters[$filterName]["value"] = $value;
+        $this->hiddenFilters[$filterName] = $value;
 
         return $this;
     }
 
     /**
-     * @param array $commands
+     * @param array|string $commands
      * @return $this
      */
-    public function showEntityCommands(array $commands)
+    public function hideEntityCommand($commands)
     {
-        foreach($commands as $command) {
-            $this->commands["entity"][$command]["display"] = true;
+        foreach((array)$commands as $command) {
+            $this->hiddenCommands["entity"][] = $command;
         }
 
         return $this;
     }
 
     /**
-     * @param array $commands
+     * @param array|string $commands
      * @return $this
      */
-    public function showInstanceCommands(array $commands)
+    public function hideInstanceCommand($commands)
     {
-        foreach($commands as $command) {
-            $this->commands["instance"][$command]["display"] = true;
+        foreach((array)$commands as $command) {
+            $this->hiddenCommands["instance"][] = $command;
         }
 
         return $this;
@@ -138,19 +125,16 @@ class SharpShowEntityListField extends SharpShowField
             "showEntityState" => $this->showEntityState,
             "showCreateButton" => $this->showCreateButton,
             "showReorderButton" => $this->showReorderButton,
-            "commands" => $this->commands,
-            "filters" => collect($this->filters)
-                ->map(function($values, $filter) {
-                    // Force display to be set
-                    $values["display"] = $values["display"] ?? false;
-
+            "hiddenCommands" => $this->hiddenCommands,
+            "hiddenFilters" => collect($this->hiddenFilters)
+                ->map(function($value, $filter) {
                     // Filter value can be a Closure
-                    if(isset($values["value"]) && is_callable($values["value"])) {
+                    if(is_callable($value)) {
                         // Call it with current instanceId from Context
-                        $values["value"] = $values["value"](app(SharpContext::class)->instanceId());
+                        return $value(app(SharpContext::class)->instanceId());
                     }
 
-                    return $values;
+                    return $value;
                 })
                 ->all()
         ]);
@@ -166,11 +150,10 @@ class SharpShowEntityListField extends SharpShowField
             "showEntityState" => "required|boolean",
             "showCreateButton" => "required|boolean",
             "showReorderButton" => "required|boolean",
-            "commands" => "array",
-            "commands.*.entity" => "array",
-            "commands.*.instance" => "array",
-            "filters" => "array",
-            "filters.*.display" => "required|boolean",
+            "hiddenCommands" => "required|array",
+            "hiddenCommands.entity" => "array",
+            "hiddenCommands.instance" => "array",
+            "hiddenFilters" => "array",
         ];
     }
 }
