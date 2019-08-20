@@ -2,13 +2,20 @@
 
 namespace Code16\Sharp\Show;
 
+use Code16\Sharp\EntityList\Commands\EntityCommand;
+use Code16\Sharp\EntityList\Traits\HandleCommands;
+use Code16\Sharp\EntityList\Traits\HandleEntityState;
+use Code16\Sharp\Exceptions\SharpException;
 use Code16\Sharp\Form\HandleFormFields;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpShow
 {
-    use WithCustomTransformers, HandleFormFields;
+    use WithCustomTransformers,
+        HandleFormFields,
+        HandleEntityState,
+        HandleCommands;
 
     /** @var bool */
     protected $layoutBuilt = false;
@@ -45,6 +52,19 @@ abstract class SharpShow
             // Filter model attributes on actual show labels
             ->only($this->getDataKeys())
             ->all();
+    }
+
+    /**
+     * Return the show config values (commands and state).
+     *
+     * @return array
+     */
+    function showConfig(): array
+    {
+        return tap([], function(&$config) {
+            $this->appendEntityStateToConfig($config);
+            $this->appendCommandsToConfig($config);
+        });
     }
 
     function buildFormFields()
@@ -88,6 +108,26 @@ abstract class SharpShow
         $this->sections[] = $section;
 
         return $this;
+    }
+
+    /**
+     * @param string $commandName
+     * @param string|EntityCommand $commandHandlerOrClassName
+     * @throws SharpException
+     */
+    protected function addEntityCommand(string $commandName, $commandHandlerOrClassName)
+    {
+        throw new SharpException("Entity commands are not allowed in Show view");
+    }
+
+    /**
+     * Build show config using ->addInstanceCommand() and ->setEntityState()
+     *
+     * @return void
+     */
+    function buildShowConfig()
+    {
+        // No default implementation
     }
 
     /**

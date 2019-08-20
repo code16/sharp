@@ -2,6 +2,10 @@
 
 namespace App\Sharp;
 
+use App\Sharp\Commands\SpaceshipExternalLink;
+use App\Sharp\Commands\SpaceshipPreview;
+use App\Sharp\Commands\SpaceshipSendMessage;
+use App\Sharp\States\SpaceshipEntityState;
 use App\Spaceship;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
@@ -45,6 +49,19 @@ class SpaceshipSharpShow extends SharpShow
                     ->showReorderButton(false)
                     ->showCreateButton()
             );
+    }
+
+    /**
+     * @throws \Code16\Sharp\Exceptions\SharpException
+     */
+    function buildShowConfig()
+    {
+        $this
+            ->addInstanceCommand("message", SpaceshipSendMessage::class)
+            ->addInstanceCommand("preview", SpaceshipPreview::class)
+            ->addInstanceCommandSeparator()
+            ->addInstanceCommand("external", SpaceshipExternalLink::class)
+            ->setEntityState("state", SpaceshipEntityState::class);
     }
 
     function buildShowLayout()

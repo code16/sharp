@@ -19,8 +19,10 @@ class ShowController extends ApiController
         sharp_check_ability("view", $entityKey, $instanceId);
 
         $show = $this->getShowInstance($entityKey);
+        $show->buildShowConfig();
 
         return response()->json([
+            "config" => $show->showConfig(),
             "fields" => $show->fields(),
             "layout" => $show->showLayout(),
             "data" => $show->instance($instanceId)
