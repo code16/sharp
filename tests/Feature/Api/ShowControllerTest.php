@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Tests\Feature\Api;
 
 use Code16\Sharp\Tests\Fixtures\PersonSharpShow;
+use Code16\Sharp\Tests\Fixtures\PersonSharpSingleShow;
 
 class ShowControllerTest extends BaseApiTest
 {
@@ -17,7 +18,6 @@ class ShowControllerTest extends BaseApiTest
     /** @test */
     public function we_can_get_show_data_for_an_instance()
     {
-        $this->withoutExceptionHandling();
         $this->buildTheWorld();
 
         $this->getJson('/sharp/api/show/person/1')
@@ -27,6 +27,9 @@ class ShowControllerTest extends BaseApiTest
                     "name" => "John Wayne"
                 ]
             ]);
+
+        $this->getJson('/sharp/api/show/person')
+            ->assertStatus(404);
     }
 
     /** @test */
@@ -110,13 +113,38 @@ class ShowControllerTest extends BaseApiTest
             ]]);
     }
 
-    protected function buildTheWorld()
+    /** @test */
+    public function we_can_get_show_data_for_a_single_instance()
+    {
+        $this->buildTheWorld(true);
+
+        $this->getJson('/sharp/api/show/person')
+            ->assertStatus(200)
+            ->assertJson([
+                "data" => [
+                    "name" => "John Wayne"
+                ]
+            ]);
+
+        $this->getJson('/sharp/api/show/person/1')
+            ->assertStatus(404);
+    }
+
+    protected function buildTheWorld($single = false)
     {
         parent::buildTheWorld();
 
-        $this->app['config']->set(
-            'sharp.entities.person.show',
-            PersonSharpShow::class
-        );
+        if($single) {
+            $this->app['config']->set(
+                'sharp.entities.person.show',
+                PersonSharpSingleShow::class
+            );
+
+        } else {
+            $this->app['config']->set(
+                'sharp.entities.person.show',
+                PersonSharpShow::class
+            );
+        }
     }
 }

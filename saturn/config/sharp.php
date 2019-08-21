@@ -63,6 +63,9 @@ return [
                 "view" => false
             ]
         ],
+        "account" => [
+            "show" => \App\Sharp\AccountSharpShow::class,
+        ],
         "feature" => [
             "list" => \App\Sharp\FeatureSharpList::class,
             "form" => \App\Sharp\FeatureSharpForm::class,
@@ -134,6 +137,12 @@ return [
         ], [
             "label" => "Admin",
             "entities" => [
+                [
+                    "label" => "My account",
+                    "icon" => "fa-user",
+                    "entity" => "account",
+                    "single" => true
+                ],
                 [
                     "label" => "Sharp users",
                     "icon" => "fa-user-secret",

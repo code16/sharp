@@ -60,7 +60,8 @@ class MenuViewComposerTest extends BaseApiTest
             "key" => "person",
             "label" => "people",
             "icon" => "fa-user",
-            "type" => "entity"
+            "type" => "entity",
+            "url" => route("code16.sharp.list", "person"),
         ], (array)$menu->menuItems[0]);
     }
 
@@ -93,7 +94,8 @@ class MenuViewComposerTest extends BaseApiTest
             "key" => "person",
             "label" => "people",
             "icon" => "fa-user",
-            "type" => "entity"
+            "type" => "entity",
+            "url" => route("code16.sharp.list", "person"),
         ], (array)$menu->menuItems[0]->entities[0]);
     }
 
@@ -118,7 +120,35 @@ class MenuViewComposerTest extends BaseApiTest
             "key" => "personal_dashboard",
             "label" => "My Dashboard",
             "icon" => "fa-dashboard",
-            "type" => "dashboard"
+            "type" => "dashboard",
+            "url" => route("code16.sharp.dashboard", "personal_dashboard"),
+        ], (array)$menu->menuItems[0]);
+    }
+
+    /** @test */
+    function we_can_define_a_single_show_entity_link_in_the_menu()
+    {
+        $this->buildTheWorld();
+
+        $this->app['config']->set(
+            'sharp.menu', [
+                [
+                    "label" => "people",
+                    "icon" => "fa-user",
+                    "entity" => "person",
+                    "single" => true
+                ]
+            ]
+        );
+
+        $menu = $this->followingRedirects()->get('/sharp/')->getOriginalContent()["sharpMenu"];
+
+        $this->assertArrayContainsSubset([
+            "key" => "person",
+            "label" => "people",
+            "icon" => "fa-user",
+            "type" => "entity",
+            "url" => route("code16.sharp.show", "person"),
         ], (array)$menu->menuItems[0]);
     }
 }
