@@ -139,9 +139,10 @@ abstract class SharpEntityList
     /**
      * Return the data config values.
      *
+     * @param bool $hasShowPage
      * @return array
      */
-    function listConfig(): array
+    function listConfig(bool $hasShowPage = false): array
     {
         $config = [
             "instanceIdAttribute" => $this->instanceIdAttribute,
@@ -151,6 +152,7 @@ abstract class SharpEntityList
             "reorderable" => !is_null($this->reorderHandler),
             "defaultSort" => $this->defaultSort,
             "defaultSortDir" => $this->defaultSortDir,
+            "hasShowPage" => $hasShowPage,
         ];
 
         $this->appendFiltersToConfig($config);

@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Tests\Feature\Api;
 
 use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
+use Code16\Sharp\Tests\Fixtures\PersonSharpShow;
 
 class EntityListControllerTest extends BaseApiTest
 {
@@ -117,6 +118,7 @@ class EntityListControllerTest extends BaseApiTest
             ->assertJson(["config" => [
                 "instanceIdAttribute" => "id",
                 "searchable" => true,
+                "hasShowPage" => false,
                 "paginated" => false
             ]]);
     }
@@ -172,5 +174,22 @@ class EntityListControllerTest extends BaseApiTest
         $this->json('post', '/sharp/api/list/person/reorder', [
             3,2,1
         ])->assertStatus(200);
+    }
+
+    /** @test */
+    public function list_config_contains_hasShowPage_is_relevant()
+    {
+        $this->buildTheWorld();
+        // Configure a Show Page for the entity
+        $this->app['config']->set(
+            'sharp.entities.person.show',
+            PersonSharpShow::class
+        );
+
+        $this->json('get', '/sharp/api/list/person')
+            ->assertStatus(200)
+            ->assertJson(["config" => [
+                "hasShowPage" => true,
+            ]]);
     }
 }
