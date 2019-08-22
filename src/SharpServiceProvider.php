@@ -41,6 +41,10 @@ class SharpServiceProvider extends ServiceProvider
             __DIR__.'/../resources/assets/dist' => public_path('vendor/sharp')
         ], 'assets');
 
+        $this->publishes([
+            __DIR__.'/../config/config.php' => config_path('sharp.php'),
+        ], 'config');
+
         $this->registerPolicies();
 
         view()->composer(
@@ -56,6 +60,8 @@ class SharpServiceProvider extends ServiceProvider
 
     public function register()
     {
+        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'sharp');
+
         $this->registerMiddleware();
 
         $this->app->singleton(
@@ -65,15 +71,6 @@ class SharpServiceProvider extends ServiceProvider
         $this->app->singleton(
             SharpAuthorizationManager::class, SharpAuthorizationManager::class
         );
-
-        // Override Laravel's Gate to handle Sharp's ability to define a custom Guard
-//        $this->app->singleton(GateContract::class, function ($app) {
-//            return new \Illuminate\Auth\Access\Gate($app, function () use ($app) {
-//                return request()->is("sharp") || request()->is("sharp/*")
-//                    ? sharp_user()
-//                    : auth()->guard(config("auth.defaults.guard"))->user();
-//            });
-//        });
 
         $this->commands([
             CreateUploadsMigration::class,
