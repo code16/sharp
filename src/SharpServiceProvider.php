@@ -7,17 +7,17 @@ use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Composers\AssetViewComposer;
 use Code16\Sharp\Http\Composers\MenuViewComposer;
 use Code16\Sharp\Http\Middleware\Api\AddSharpContext;
+use Code16\Sharp\Http\Middleware\Api\AppendBreadcrumb;
 use Code16\Sharp\Http\Middleware\Api\AppendFormAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendListAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendListMultiform;
 use Code16\Sharp\Http\Middleware\Api\AppendNotifications;
 use Code16\Sharp\Http\Middleware\Api\BindSharpValidationResolver;
 use Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors;
-use Code16\Sharp\Http\Middleware\Api\SaveEntityListParams;
 use Code16\Sharp\Http\Middleware\Api\SetSharpLocale;
-use Code16\Sharp\Http\Middleware\RestoreEntityListParams;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
+use Code16\Sharp\Http\Middleware\StoreBreadcrumb;
 use Code16\Sharp\Http\SharpContext;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -65,15 +65,6 @@ class SharpServiceProvider extends ServiceProvider
         $this->app->singleton(
             SharpAuthorizationManager::class, SharpAuthorizationManager::class
         );
-
-        // Override Laravel's Gate to handle Sharp's ability to define a custom Guard
-//        $this->app->singleton(GateContract::class, function ($app) {
-//            return new \Illuminate\Auth\Access\Gate($app, function () use ($app) {
-//                return request()->is("sharp") || request()->is("sharp/*")
-//                    ? sharp_user()
-//                    : auth()->guard(config("auth.defaults.guard"))->user();
-//            });
-//        });
 
         $this->commands([
             CreateUploadsMigration::class,
@@ -166,19 +157,20 @@ class SharpServiceProvider extends ServiceProvider
             'sharp_api_validation', BindSharpValidationResolver::class
 
         )->aliasMiddleware(
+            'sharp_api_append_breadcrumb', AppendBreadcrumb::class
+
+        )->aliasMiddleware(
             'sharp_locale', SetSharpLocale::class
-
-        )->aliasMiddleware(
-            'sharp_save_list_params', SaveEntityListParams::class
-
-        )->aliasMiddleware(
-            'sharp_restore_list_params', RestoreEntityListParams::class
 
         )->aliasMiddleware(
             'sharp_auth', SharpAuthenticate::class
 
         )->aliasMiddleware(
             'sharp_guest', SharpRedirectIfAuthenticated::class
+
+        )->aliasMiddleware(
+            'sharp_store_breadcrumb', StoreBreadcrumb::class
+
         );
     }
 }
