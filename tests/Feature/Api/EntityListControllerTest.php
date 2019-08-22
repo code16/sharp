@@ -118,7 +118,6 @@ class EntityListControllerTest extends BaseApiTest
             ->assertJson(["config" => [
                 "instanceIdAttribute" => "id",
                 "searchable" => true,
-                "hasShowPage" => false,
                 "paginated" => false
             ]]);
     }
