@@ -44,7 +44,7 @@ class SharpServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         view()->composer(
-            ['sharp::form', 'sharp::list', 'sharp::dashboard', 'sharp::welcome'],
+            ['sharp::form', 'sharp::show', 'sharp::list', 'sharp::dashboard', 'sharp::welcome'],
             MenuViewComposer::class
         );
 
