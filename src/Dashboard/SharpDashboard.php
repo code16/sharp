@@ -40,6 +40,11 @@ abstract class SharpDashboard
     /**
      * @var array
      */
+    protected $orderedListWidgetsData = [];
+
+    /**
+     * @var array
+     */
     protected $rows = [];
 
     /**
@@ -166,8 +171,18 @@ abstract class SharpDashboard
             });
 
         // Then, panel widgets data
-        return $data->merge(
+        $data = $data->merge(
             collect($this->panelWidgetsData)->map(function($value, $key) {
+                return [
+                    "key" => $key,
+                    "data" => $value
+                ];
+            })
+        );
+
+        // Then, list group widgets data
+        return $data->merge(
+            collect($this->orderedListWidgetsData)->map(function($value, $key) {
                 return [
                     "key" => $key,
                     "data" => $value
@@ -196,6 +211,18 @@ abstract class SharpDashboard
     protected function setPanelData(string $panelWidgetKey, array $data)
     {
         $this->panelWidgetsData[$panelWidgetKey] = $data;
+
+        return $this;
+    }
+
+    /**
+     * @param string $panelWidgetKey
+     * @param array $data
+     * @return $this
+     */
+    protected function setOrderedListData(string $panelWidgetKey, array $data)
+    {
+        $this->orderedListWidgetsData[$panelWidgetKey] = $data;
 
         return $this;
     }

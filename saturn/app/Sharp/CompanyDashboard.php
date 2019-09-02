@@ -7,6 +7,7 @@ use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
 use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpLineGraphWidget;
+use Code16\Sharp\Dashboard\Widgets\SharpOrderedListWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPieGraphWidget;
 use Illuminate\Support\Facades\DB;
@@ -29,6 +30,9 @@ class CompanyDashboard extends SharpDashboard
         )->addWidget(
             SharpPanelWidget::make("inactiveSpaceships")
                 ->setInlineTemplate("<h1>{{count}}</h1> inactive spaceships")
+        )->addWidget(
+            SharpOrderedListWidget::make("topTravelledSpaceshipModels")
+                ->setTitle("Top travelled spaceship types")
         );
     }
 
@@ -42,6 +46,9 @@ class CompanyDashboard extends SharpDashboard
             ->addRow(function(DashboardLayoutRow $row) {
                 $row->addWidget(6, "activeSpaceships")
                     ->addWidget(6, "inactiveSpaceships");
+            })
+            ->addRow(function(DashboardLayoutRow $row) {
+                $row->addWidget(6, "topTravelledSpaceshipModels");
             });
     }
 
@@ -67,11 +74,6 @@ class CompanyDashboard extends SharpDashboard
                 ->setLabel("Capacities")
                 ->setColor("#3e9651")
 
-        )->setPanelData(
-            "activeSpaceships", ["count" => $spaceships->where("state", "active")->first()->count]
-
-        )->setPanelData(
-            "inactiveSpaceships", ["count" => $spaceships->where("state", "inactive")->first()->count]
         );
 
         $this->addGraphDataSet(
@@ -111,6 +113,30 @@ class CompanyDashboard extends SharpDashboard
             ])
                 ->setLabel("Capacities 3")
                 ->setColor("#2d2d2d")
+        );
+
+        $this->setPanelData(
+            "activeSpaceships", ["count" => $spaceships->where("state", "active")->first()->count]
+        )->setPanelData(
+            "inactiveSpaceships", ["count" => $spaceships->where("state", "inactive")->first()->count]
+        );
+
+        $this->setOrderedListData(
+            "topTravelledSpaceshipModels", [
+                [
+                    "label" => "Adams",
+                    "count" => 78,
+                ],
+                [
+                    "label" => "Adams",
+                    "url" => "https://sharp.test/shiptype/12",
+                ],
+                [
+                    "label" => "Quia",
+                    "count" => 55,
+                    "url" => "https://sharp.test/shiptype/31",
+                ],
+            ]
         );
     }
 

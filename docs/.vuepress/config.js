@@ -73,6 +73,7 @@ module.exports = {
                         ...[
                             'graph',
                             'panel',
+                            'ordered-list',
                         ].map(page => `dashboard-widgets/${page}`),
                     ],
                 },
