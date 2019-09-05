@@ -37,7 +37,7 @@ class SpaceshipSharpForm extends SharpForm
 
         )->addField(
             SharpFormHtmlField::make("html")
-                ->setInlineTemplate("The name of the spaceship is <strong>{{name}}</strong>")
+                ->setInlineTemplate("The name of the spaceship localized in FR is <strong>{{nameFr}}</strong>")
 
         )->addField(
             SharpFormTextField::make("capacity")
@@ -258,6 +258,11 @@ class SpaceshipSharpForm extends SharpForm
             })
             ->setCustomTransformer("picture", new FormUploadModelTransformer())
             ->setCustomTransformer("pictures", new FormUploadModelTransformer())
+            ->setCustomTransformer("html", function($html, Spaceship $spaceship){
+                return [
+                    "nameFr" => $spaceship->getTranslation('name','fr'),
+                ];
+            })
             ->transform(
                 Spaceship::with("reviews", "pilots", "picture", "pictures", "features")->findOrFail($id)
             );

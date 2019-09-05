@@ -10,16 +10,37 @@ This field is read-only, and is meant to display some dynamic information in the
 ### `setInlineTemplate(string $template)`
 
 ::: v-pre
-Just write the template as a string, using placeholders for data like this: `{{var}}`.
+Just write the template as a string, using placeholders for data like this: `{{var}}` where "var" is some key to data sent to the front
 :::
+
+
 
 Example:
 
 ```php
-$panel->setInlineTemplate(
-    "<h1>{{count}}</h1> spaceships in activity"
-)
+SharpFormHtmlField::make("panel")
+    ->setInlineTemplate(
+        "<h1>{{count}}</h1> spaceships in activity"
+    )
 ```
+
+works when transformed data has been added for the html field:
+
+```php
+function find($id): array
+    {
+        return $this
+            ->setCustomTransformer("panel", function($spaceship) {
+                return [
+                    "count" => $spaceship->activities->count()
+                ];
+            })
+            ->transform(
+                Spaceship::with("activities")->findOrFail($id)
+            );
+    }
+```
+
 
 ### `setTemplatePath(string $templatePath)`
 
