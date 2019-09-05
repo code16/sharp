@@ -11,6 +11,7 @@ use Code16\Sharp\Form\Eloquent\Transformers\FormUploadModelTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
+use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormMarkdownField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
@@ -33,6 +34,10 @@ class SpaceshipSharpForm extends SharpForm
             SharpFormTextField::make("name")
                 ->setLocalized()
                 ->setLabel("Name")
+
+        )->addField(
+            SharpFormHtmlField::make("html")
+                ->setInlineTemplate("The name of the spaceship is <strong>{{name}}</strong>")
 
         )->addField(
             SharpFormTextField::make("capacity")
@@ -196,6 +201,7 @@ class SpaceshipSharpForm extends SharpForm
         $this->addTab("General info", function(FormLayoutTab $tab) {
             $tab->addColumn(6, function(FormLayoutColumn $column) {
                 $column->withSingleField("name")
+                    ->withSingleField("html")
                     ->withSingleField("type_id")
                     ->withSingleField("serial_number")
                     ->withFields("brand|6", "model|6")
