@@ -9,11 +9,7 @@ This field is read-only, and is meant to display some dynamic information in the
 
 ### `setInlineTemplate(string $template)`
 
-::: v-pre
-Just write the template as a string, using placeholders for data like this: `{{var}}` where "var" is some key to data sent to the front
-:::
-
-
+Write the template as a string, using placeholders for data like this: `{{var}}` where "var" is some key to data sent to the front
 
 Example:
 
@@ -24,7 +20,7 @@ SharpFormHtmlField::make("panel")
     )
 ```
 
-works when transformed data has been added for the html field:
+Like other fields, this example would mean that your transformed data has an object named `panel` containing a `count` attribute. Here more than elsewhere you may need to use a custom transformer, like this is this piece of code:
 
 ```php
 function find($id): array
