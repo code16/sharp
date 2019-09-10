@@ -23,10 +23,11 @@ use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Http\WithSharpContext;
 
 class SpaceshipSharpForm extends SharpForm
 {
-    use WithSharpFormEloquentUpdater;
+    use WithSharpFormEloquentUpdater, WithSharpContext;
 
     function buildFormFields()
     {
@@ -241,7 +242,12 @@ class SpaceshipSharpForm extends SharpForm
 
     function create(): array
     {
-        return $this->transform(new Spaceship(["name" => "new"]));
+        return $this->transform(new Spaceship([
+            "name" => [
+                "en" => "new",
+                "fr" => "nouveau",
+            ]
+        ]));
     }
 
     function find($id): array
@@ -270,7 +276,9 @@ class SpaceshipSharpForm extends SharpForm
 
     function update($id, array $data)
     {
-        $instance = $id ? Spaceship::findOrFail($id) : new Spaceship;
+        $instance = $id ? Spaceship::findOrFail($id) : new Spaceship([
+            "corporation_id" => $this->context()->globalFilterFor("corporation")
+        ]);
 
         if(isset($data["name"]) && $data["name"] == "error") {
             throw new SharpApplicativeException("Name can't be «error»");
@@ -279,6 +287,7 @@ class SpaceshipSharpForm extends SharpForm
         $this->setCustomTransformer("capacity", function($capacity) {
                 return $capacity * 1000;
             })
+            ->ignore("html")
             ->save($instance, $data);
 
         $this->notify("Spaceship was updated with success!")
