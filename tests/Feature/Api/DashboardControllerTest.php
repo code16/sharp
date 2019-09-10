@@ -14,6 +14,7 @@ class DashboardControllerTest extends BaseApiTest
     /** @test */
     public function we_can_get_dashboard_widgets()
     {
+        $this->withoutExceptionHandling();
         $this->buildTheWorld();
 
         $this->getJson(route('code16.sharp.api.dashboard', 'personal_dashboard'))

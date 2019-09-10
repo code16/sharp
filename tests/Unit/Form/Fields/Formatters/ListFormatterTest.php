@@ -6,6 +6,7 @@ use Code16\Sharp\Form\Fields\Formatters\ListFormatter;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\SharpTestCase;
+use Illuminate\Support\Arr;
 
 class ListFormatterTest extends SharpTestCase
 {
@@ -31,7 +32,7 @@ class ListFormatterTest extends SharpTestCase
             ->addItemField(SharpFormTextField::make("name"));
 
         $expectedData = collect($this->getData())->map(function($item) {
-            return array_except($item, "job");
+            return Arr::except($item, "job");
         })->all();
 
         $this->assertEquals($expectedData, $formatter->toFront($field, $this->getData()));
@@ -60,7 +61,7 @@ class ListFormatterTest extends SharpTestCase
             ->addItemField(SharpFormTextField::make("name"));
 
         $expectedData = collect($this->getData())->map(function($item) {
-            return array_except($item, "job");
+            return Arr::except($item, "job");
         })->all();
 
         $this->assertEquals($expectedData, $formatter->fromFront($field, $attribute, $this->getData()));
@@ -78,7 +79,7 @@ class ListFormatterTest extends SharpTestCase
         $data = collect($this->getData())->map(function($item) {
             return array_merge([
                 "number" => $item["id"],
-            ], array_except($item, "id"));
+            ], Arr::except($item, "id"));
         })->all();
 
         $this->assertEquals($data, $formatter->toFront($field, $data));

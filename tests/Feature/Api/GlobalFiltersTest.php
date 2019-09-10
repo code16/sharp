@@ -4,6 +4,7 @@ namespace Code16\Sharp\Tests\Feature\Api;
 
 use Code16\Sharp\Http\SharpContext;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
+use Illuminate\Support\Str;
 
 class GlobalFiltersTest extends BaseApiTest
 {
@@ -29,7 +30,7 @@ class GlobalFiltersTest extends BaseApiTest
         $this->assertEquals("default", $context->globalFilterFor("req_test"));
 
         // Second call with a value in session
-        $value = str_random();
+        $value = Str::random();
         session()->put("_sharp_retained_global_filter_req_test", $value);
 
         $this->json('get', '/sharp/api/form/person/50');

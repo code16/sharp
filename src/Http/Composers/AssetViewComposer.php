@@ -3,6 +3,8 @@
 namespace Code16\Sharp\Http\Composers;
 
 use Code16\Sharp\Exceptions\View\SharpInvalidAssetRenderStrategy;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 /**
@@ -57,9 +59,9 @@ class AssetViewComposer
                 }
 
                 // Only render valid assets
-                if(ends_with($assetPath, $this->assetTypes)) {
+                if(Str::endsWith($assetPath, $this->assetTypes)) {
                     // Grab the relevant template based on the filetype
-                    $template = array_get($this->renderTemplates, $this->getAssetFileType($assetPath));
+                    $template = Arr::get($this->renderTemplates, $this->getAssetFileType($assetPath));
 
                     // Apply the strategy (run through asset() or mix()
                     $resolvedAssetPath = $this->getAssetPathWithStrategyApplied($strategy, $assetPath);
@@ -88,7 +90,7 @@ class AssetViewComposer
     {
         $parts = explode('.', $assetPath);
 
-        return array_last($parts);
+        return Arr::last($parts);
     }
 
     /**
