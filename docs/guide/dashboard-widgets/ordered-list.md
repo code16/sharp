@@ -21,12 +21,12 @@ function buildWidgetsData()
         "topTravelledShipTypes", [
             [
                 "label" => "model EF5978",
-                "link" => "/sharp/form/shiptype/12",
+                "url" => "/sharp/form/shiptype/12",
                 "count" => 89
             ],
             [
                 "label" => "model TT4448",
-                "link" => "/sharp/form/shiptype/24",
+                "url" => "/sharp/form/shiptype/24",
             ],
             [
                 "label" => "model EF5978",
@@ -41,6 +41,6 @@ function buildWidgetsData()
 ```
 
 Pass there the widget `key` and an array with the data as an array. Each array of the item should be an associative array. The key `label` is mandatory as it defines the ordered list item main content. You can also optionally define :
- - a link with key `link` associated with a valid url, the item then becomes clickable
+ - a link with key `url` associated with a valid url, the item then becomes clickable
  - a count with key `count` associated with a number, it will show a badge with given value
  
