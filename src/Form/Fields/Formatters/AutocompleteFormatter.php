@@ -30,7 +30,7 @@ class AutocompleteFormatter extends SharpFieldFormatter
      */
     function fromFront(SharpFormField $field, string $attribute, $value)
     {
-        return is_null($value) || is_array($value)
+        return is_array($value)
             ? $value[$field->itemIdAttribute()]
             : $value;
     }
