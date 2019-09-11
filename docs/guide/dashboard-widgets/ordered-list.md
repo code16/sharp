@@ -21,12 +21,12 @@ function buildWidgetsData()
         "topTravelledShipTypes", [
             [
                 "label" => "model EF5978",
-                "link" => "/sharp/form/shiptype/12
+                "link" => "/sharp/form/shiptype/12",
                 "count" => 89
             ],
             [
                 "label" => "model TT4448",
-                "link" => "/sharp/form/shiptype/24
+                "link" => "/sharp/form/shiptype/24",
             ],
             [
                 "label" => "model EF5978",
