@@ -9,6 +9,7 @@ class AssetViewComposerTest extends BaseApiTest
     /** @test */
     public function we_can_define_assets_to_render_in_views()
     {
+        $this->withoutExceptionHandling();
         $this->buildTheWorld();
 
         $this->app['config']->set(

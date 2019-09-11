@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Form\Validator;
 
 use Illuminate\Support\MessageBag;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
 
 /**
@@ -21,13 +22,13 @@ class SharpValidator extends Validator
 
         // First grab all messages which do not refer to a Rich Text Field (RTF)
         $newMessages = collect($this->messages->getMessages())->filter(function($messages, $key) {
-            return !ends_with($key, ".text");
+            return !Str::endsWith($key, ".text");
         })->all();
 
         // Then for all RFT fields, remove the .text in their key (description.text -> description)
         collect($this->messages->getMessages())
             ->filter(function($messages, $key) {
-                return ends_with($key, ".text");
+                return Str::endsWith($key, ".text");
             })
             ->each(function($messages, $key) use(&$newMessages) {
                 collect($messages)->each(function($message) use($key, &$newMessages) {

@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Utils\Filters;
 
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 trait HasFiltersInQuery
 {
@@ -25,7 +26,7 @@ trait HasFiltersInQuery
             return null;
         }
 
-        if(str_contains($this->filters[$filterName], "..")) {
+        if(Str::contains($this->filters[$filterName], "..")) {
             list($start, $end) = explode("..", $this->filters[$filterName]);
 
             return [
@@ -34,7 +35,7 @@ trait HasFiltersInQuery
             ];
         }
 
-        if(str_contains($this->filters[$filterName], ",")){
+        if(Str::contains($this->filters[$filterName], ",")){
             return explode(",", $this->filters[$filterName]);
         }
 
@@ -61,7 +62,7 @@ trait HasFiltersInQuery
     {
         collect($query)
             ->filter(function($value, $name) {
-                return starts_with($name, "filter_");
+                return Str::startsWith($name, "filter_");
 
             })->each(function($value, $name) {
                 $this->setFilterValue(substr($name, strlen("filter_")), $value);

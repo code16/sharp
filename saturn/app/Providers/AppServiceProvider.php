@@ -27,9 +27,5 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->register(SharpServiceProvider::class);
-
-        if ($this->app->environment('local', 'testing')) {
-            $this->app->register(DuskServiceProvider::class);
-        }
     }
 }

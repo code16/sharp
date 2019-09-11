@@ -7,6 +7,7 @@ use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpWidget;
 use Code16\Sharp\EntityList\Traits\HandleDashboardCommands;
 use Code16\Sharp\Utils\Filters\HandleFilters;
+use Illuminate\Support\Arr;
 
 abstract class SharpDashboard
 {
@@ -164,7 +165,7 @@ abstract class SharpDashboard
                 return [
                     "key" => $key,
                     "datasets" => $dataSetsValues->map(function($dataSet) {
-                        return array_except($dataSet, "labels");
+                        return Arr::except($dataSet, "labels");
                     })->all(),
                     "labels" => $dataSetsValues->first()["labels"]
                 ];
