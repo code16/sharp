@@ -129,12 +129,12 @@ class CompanyDashboard extends SharpDashboard
                 ],
                 [
                     "label" => "Adams",
-                    "url" => "https://sharp.test/shiptype/12",
+                    "url" => "/shiptype/12",
                 ],
                 [
                     "label" => "Quia",
                     "count" => 55,
-                    "url" => "https://sharp.test/shiptype/31",
+                    "url" => "/shiptype/31",
                 ],
             ]
         );
