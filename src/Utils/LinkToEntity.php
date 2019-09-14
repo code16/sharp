@@ -6,7 +6,6 @@ use Illuminate\Support\Collection;
 
 class LinkToEntity
 {
-
     /** @var string */
     protected $linkText;
 
