@@ -72,6 +72,14 @@ abstract class SharpWidget
     }
 
     /**
+     * @return string
+     */
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    /**
      * Throw an exception in case of invalid attribute value.
      *
      * @param array $properties

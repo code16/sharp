@@ -100,9 +100,10 @@ abstract class SharpDashboard
     {
         $this->checkDashboardIsBuilt();
 
-        return collect($this->widgets)->map(function(SharpWidget $widget) {
-            return $widget->toArray();
-        })->keyBy("key")->all();
+        return collect($this->widgets)
+            ->map->toArray()
+            ->keyBy("key")
+            ->all();
     }
 
     /**
@@ -118,9 +119,9 @@ abstract class SharpDashboard
         }
 
         return [
-            "rows" => collect($this->rows)->map(function(DashboardLayoutRow $row) {
-                return $row->toArray();
-            })->all()
+            "rows" => collect($this->rows)
+                ->map->toArray()
+                ->all()
         ];
     }
 
@@ -173,23 +174,38 @@ abstract class SharpDashboard
 
         // Then, panel widgets data
         $data = $data->merge(
-            collect($this->panelWidgetsData)->map(function($value, $key) {
-                return [
-                    "key" => $key,
-                    "data" => $value
-                ];
-            })
+            collect($this->panelWidgetsData)
+                ->map(function($value, $key) {
+                    return [
+                        "key" => $key,
+                        "data" => $value
+                    ];
+                })
         );
 
         // Then, list group widgets data
-        return $data->merge(
-            collect($this->orderedListWidgetsData)->map(function($value, $key) {
-                return [
-                    "key" => $key,
-                    "data" => $value
-                ];
-            })
-        )->all();
+        return $data
+            ->merge(
+                collect($this->orderedListWidgetsData)
+                    ->map(function($items, $key) {
+                        $widget = $this->findWidgetByKey($key);
+
+                        $data = collect($items)
+                            ->map(function($item) use($widget) {
+                                return array_merge(
+                                    $item,
+                                    ["url" => $widget->getItemUrl($item)]
+                                );
+                            })
+                            ->all();
+
+                        return [
+                            "key" => $key,
+                            "data" => $data
+                        ];
+                    })
+            )
+            ->all();
     }
 
     /**
@@ -234,6 +250,19 @@ abstract class SharpDashboard
             $this->buildWidgets();
             $this->dashboardBuilt = true;
         }
+    }
+
+    /**
+     * @param string $key
+     * @return SharpWidget|null
+     */
+    private function findWidgetByKey($key)
+    {
+        return collect($this->widgets)
+            ->filter(function($widget) use($key) {
+                return $widget->getKey() == $key;
+            })
+            ->first();
     }
 
     /**
