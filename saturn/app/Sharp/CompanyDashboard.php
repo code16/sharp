@@ -35,9 +35,10 @@ class CompanyDashboard extends SharpDashboard
         )->addWidget(
             SharpOrderedListWidget::make("topTravelledSpaceshipModels")
                 ->setTitle("Top travelled spaceship types")
-                ->setItemLink(function(LinkToEntity $link, $item) {
-                    return $link->setEntityKey("spaceship")
-                        ->addFilter("type", $item->id);
+                ->buildItemLink(function(LinkToEntity $link, $item) {
+                    return $link
+                        ->setEntityKey("spaceship")
+                        ->addFilter("type", $item['id']);
                 })
         );
     }
