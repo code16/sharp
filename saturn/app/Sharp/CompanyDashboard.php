@@ -2,6 +2,7 @@
 
 namespace App\Sharp;
 
+use App\SpaceshipType;
 use Code16\Sharp\Dashboard\DashboardQueryParams;
 use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
 use Code16\Sharp\Dashboard\SharpDashboard;
@@ -10,6 +11,7 @@ use Code16\Sharp\Dashboard\Widgets\SharpLineGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpOrderedListWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPieGraphWidget;
+use Code16\Sharp\Utils\LinkToEntity;
 use Illuminate\Support\Facades\DB;
 
 class CompanyDashboard extends SharpDashboard
@@ -33,6 +35,10 @@ class CompanyDashboard extends SharpDashboard
         )->addWidget(
             SharpOrderedListWidget::make("topTravelledSpaceshipModels")
                 ->setTitle("Top travelled spaceship types")
+                ->setItemLink(function(LinkToEntity $link, $item) {
+                    return $link->setEntityKey("spaceship")
+                        ->addFilter("type", $item->id);
+                })
         );
     }
 
@@ -85,7 +91,6 @@ class CompanyDashboard extends SharpDashboard
                 ->setColor("#6b4c9a")
         );
 
-
         //pie
 
         $this->addGraphDataSet(
@@ -122,21 +127,23 @@ class CompanyDashboard extends SharpDashboard
         );
 
         $this->setOrderedListData(
-            "topTravelledSpaceshipModels", [
-                [
-                    "label" => "Adams",
-                    "count" => 78,
-                ],
-                [
-                    "label" => "Adams",
-                    "url" => "https://sharp.test/shiptype/12",
-                ],
-                [
-                    "label" => "Quia",
-                    "count" => 55,
-                    "url" => "https://sharp.test/shiptype/31",
-                ],
-            ]
+            "topTravelledSpaceshipModels",
+            SpaceshipType::inRandomOrder()
+                ->take(4)
+                ->get()
+                ->map(function(SpaceshipType $type) {
+                    return [
+                        "id" => $type->id,
+                        "label" => $type->label,
+                        "count" => rand(20, 100),
+//                        "url" => (new LinkToEntity("link", "spaceship"))
+//                            ->addFilter("type", $type->id)
+//                            ->renderAsUrl()
+                    ];
+                })
+                ->sortByDesc("count")
+                ->values()
+                ->all()
         );
     }
 
