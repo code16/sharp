@@ -36,6 +36,9 @@ class CompanyDashboard extends SharpDashboard
             SharpOrderedListWidget::make("topTravelledSpaceshipModels")
                 ->setTitle("Top travelled spaceship types")
                 ->buildItemLink(function(LinkToEntity $link, $item) {
+                    if($item['id'] >= 5) {
+                        return null;
+                    }
                     return $link
                         ->setEntityKey("spaceship")
                         ->addFilter("type", $item['id']);
@@ -130,16 +133,13 @@ class CompanyDashboard extends SharpDashboard
         $this->setOrderedListData(
             "topTravelledSpaceshipModels",
             SpaceshipType::inRandomOrder()
-                ->take(4)
+                ->take(5)
                 ->get()
                 ->map(function(SpaceshipType $type) {
                     return [
                         "id" => $type->id,
                         "label" => $type->label,
-                        "count" => rand(20, 100),
-//                        "url" => (new LinkToEntity("link", "spaceship"))
-//                            ->addFilter("type", $type->id)
-//                            ->renderAsUrl()
+                        "count" => $type->id >= 5 ? null : rand(20, 100),
                     ];
                 })
                 ->sortByDesc("count")

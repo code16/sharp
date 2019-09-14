@@ -39,7 +39,11 @@ class SharpOrderedListWidget extends SharpWidget
     public function getItemUrl(array $item)
     {
         if($closure = $this->itemLinkBuilderClosure) {
-            return $closure(new LinkToEntity(), $item)->renderAsUrl();
+            if($link = $closure(new LinkToEntity(), $item)) {
+                return $link->renderAsUrl();
+            }
+
+            return null;
         }
 
         return null;

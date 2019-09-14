@@ -218,9 +218,11 @@ class SharpDashboardTest extends SharpTestCase
                 $this->addWidget(
                     SharpOrderedListWidget::make("widget")
                         ->buildItemLink(function(LinkToEntity $link, $item) {
-                            return $link
-                                ->setEntityKey("my-entity")
-                                ->addFilter("type", $item['id']);
+                            return $item['id'] == 3
+                                ? null
+                                : $link
+                                    ->setEntityKey("my-entity")
+                                    ->addFilter("type", $item['id']);
                         })
                 );
             }
@@ -234,8 +236,13 @@ class SharpDashboardTest extends SharpTestCase
                     ],
                     [
                         "id" => 2,
-                        "label" => "Toto",
+                        "label" => "Jane Wayne",
                         "count" => 771,
+                    ],
+                    [
+                        "id" => 3,
+                        "label" => "John Ford",
+                        "count" => 112,
                     ],
                 ]);
             }
@@ -256,9 +263,15 @@ class SharpDashboardTest extends SharpTestCase
                     ],
                     [
                         "id" => 2,
-                        "label" => "Toto",
+                        "label" => "Jane Wayne",
                         "count" => 771,
                         "url" => "http://localhost/sharp/list/my-entity?filter_type=2"
+                    ],
+                    [
+                        "id" => 3,
+                        "label" => "John Ford",
+                        "count" => 112,
+                        "url" => null
                     ],
                 ]
             ]
