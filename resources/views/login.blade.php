@@ -9,7 +9,7 @@
                 <div class="row justify-content-center">
                     <div class="col-sm-9 col-md-6 col-lg-5 col-xl-4">
 
-                        <h1 class="text-center mb-3">Sharp</h1>
+                        <h1 class="text-center mb-3">{{config('sharp.name')}}</h1>
 
                         @if ($errors->any())
 
@@ -48,6 +48,7 @@
                                 </div>
                             </div>
                         </div>
+                        <p class="text-center mt-3">with <a href="https://sharp.code16.fr/docs/">Sharp {{sharp_version()}}</a></p>
 
                     </div>
                 </div>
