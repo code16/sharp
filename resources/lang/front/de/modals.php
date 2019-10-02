@@ -1,7 +1,7 @@
 <?php
 
 return [
-    '401.title' => 'Unauthenticated',
+    '401.title' => 'Fehlende Authentisierung',
     '403.title' => 'Fehlende Berechtigungen',
     '419.title' => 'Ungültig',
     '419.message' => 'Diese Aktion ist ungültig, Höchstwahrscheinlich ist zu viel Zeit vergangen. Die Seite lädt neu.',

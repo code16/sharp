@@ -7,7 +7,7 @@ return [
     'list.create_button' => 'Neu...',
     'list.forms_dropdown' => 'Neu',
     'list.reorder_button' => 'Umsortieren',
-    'list.reorder_button.finish' => 'Abschließen',
+    'list.reorder_button.finish' => 'Anwenden',
     'list.reorder_button.cancel' => 'Abbrechen',
     'locale_selector.label' => 'Sprache wählen',
     'form.submit_button.create' => 'Erstellen',

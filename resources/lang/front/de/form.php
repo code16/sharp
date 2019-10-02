@@ -3,12 +3,12 @@
 return [
 
     'validation_error.title' => 'Ihre Eingabe ist ungültig',
-    'validation_error.description' => 'Bitte prüfen Sie Ihre Eingabe. Beachten Sie die Angaben unter den Feldern',
+    'validation_error.description' => 'Bitte prüfen Sie Ihre Eingabe. Beachten Sie die Angaben unter den Feldern.',
 
-    'list.remove_button' => 'Entfernen',
+    'list.remove_button' => 'Löschen',
     'list.insert_button' => 'Einfügen',
     'list.sort_button.inactive' => 'Sortieren',
-    'list.sort_button.active' => 'Fertigstellen',
+    'list.sort_button.active' => 'Anwenden',
     'list.empty' => 'Leere Seite',
 
     'geolocation.loading' => 'Google Maps lädt...',
@@ -27,7 +27,7 @@ return [
     'upload.edit_button' => 'Bearbeiten',
     'upload.download_link' => 'Download',
     'upload.message.file_too_big' => 'Die gewählte Datei ist zu groß',
-    'upload.message.bad_extension' => 'Dateierweiterung ungültig',
+    'upload.message.bad_extension' => 'Dateierweiterung nicht verarbeitbar',
 
     'multiselect.placeholder' => 'Wählen',
     'multiselect.max_text' => 'Maximale Anzahl von Elementen erreicht',
