@@ -9,7 +9,7 @@
                 <div class="row justify-content-center">
                     <div class="col-sm-9 col-md-6 col-lg-5 col-xl-4">
 
-                        <h1 class="text-center mb-3">{{config('sharp.name')}}</h1>
+                        <h1 class="text-center mb-3">{{config("sharp.name", "Sharp")}}</h1>
 
                         @if ($errors->any())
 
