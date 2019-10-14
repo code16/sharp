@@ -7,7 +7,7 @@ Commands can be defined in an EntityList or in a Dashboard. This documentation w
 ## Generator
 
 ```bash
-php artisan sharp:make:list-command <class_name> [--model=<model_name>]
+php artisan sharp:make:entity-command <class_name> [--model=<model_name>]
 ```
 
 ## Write the Command class
