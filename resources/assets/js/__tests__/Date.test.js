@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import DateField from '../components/form/fields/date/Date.vue';
+import SharpDate from '../components/form/fields/date/Date.vue';
 import moment from 'moment-timezone';
 
 import { MockInjections, MockI18n } from './test-utils';
@@ -10,7 +10,14 @@ function date(...args) {
 }
 
 describe('date-field',()=>{
-    Vue.component('sharp-date', DateField);
+    Vue.component('sharp-date', {
+        extends: SharpDate,
+        components: {
+            BPopover: {
+                template:'<div><slot v-bind="{}" /></div>',
+            }
+        }
+    });
 
     moment.tz.setDefault('UTC');
 

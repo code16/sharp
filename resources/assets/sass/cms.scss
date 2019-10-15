@@ -22,6 +22,10 @@ $css--typography: true;
 
 @import 'vars';
 
+::before, ::after {
+  box-sizing: border-box;
+}
+
 body {
   background-color: $ui-02;
   color: $text-01;

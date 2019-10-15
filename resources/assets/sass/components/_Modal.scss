@@ -1,105 +1,93 @@
 .SharpModal {
-  &.SharpModal--error {
-    .modal .modal-dialog {
-      border-top: $support-01 4px solid;
-    }
-  }
-
   line-height: 1.5;
 
-  .modal {
-    @include reset;
+  &.modal {
+    //@include reset;
     position: fixed;
+    width: 100%;
+    height: 100%;
     top: 0;
-    right: 0;
     bottom: 0;
-    left: 0;
-    z-index: z('hidden');
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    content: '';
-    opacity: 0;
-    background-color: rgba(0,0,0, .7);
-    transition: opacity 200ms, z-index 0s 200ms, visibility 0s 200ms;
-    visibility: hidden;
+    outline: 0;
+    overflow: hidden;
+    display: none;
 
-    //&.is-visible {
+    &.fade {
+      transition: opacity .15s linear;
+    }
+
     &.show {
       z-index: z('modal');
       opacity: 1;
-      transition: opacity 200ms;
       visibility: visible;
-      overflow-y:auto;
+      overflow-x: hidden;
+      overflow-y: auto;
+      display: none;
     }
 
 
     // &__container {
     .modal-dialog {
-      @include reset;
-      //@include layer('pop-out');
+      //@include reset;
       position: relative;
+      pointer-events: none;
+      min-height: calc(100% - 1rem);
+      margin: 1.75rem auto;
+      width: auto;
+
+      // centered
       display: flex;
-      flex-direction: column;
-      background-color: $ui-02;
-      border-top: $brand-01 4px solid;
-      //max-height: 100%;
-      //height: 100%;
-      padding: rem(32px) 3% 0rem 3%;
+      align-items: center;
+      justify-content: center;
 
-      outline: 2px solid white;
+      &::before {
+        content: "";
+        display: block;
+        height: calc(100vh - 1rem);
+      }
 
-      width: 100%;
-      max-width: 100%;
-      margin: 0 1rem;
+      //outline: 2px solid white;
+      //
+      //
 
       @include media-breakpoint-up(sm) {
-        width: 400px;
         max-width: 400px;
-        margin: 0;
+        margin: 1.75rem auto;
+        min-height: calc(100% - 3.5rem);
+        &::before {
+          height: calc(100% - 3.5rem);
+        }
       }
 
       @include media-breakpoint-up(md) {
-        width: 600px;
         max-width: 600px;
-        padding: rem(44px) rem(48px) 0 rem(48px);
-        margin: 0;
       }
-    }
-
-
-    //&__header {
-    .modal-header {
-      margin-bottom: rem(24px);
-    }
-
-    //&__content {
-    .modal-body {
-      margin-bottom: rem(24px);
-
-      //> * {
-      //  @include reset;
-      //}
     }
 
     .modal-content {
-      outline: none;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      outline: 0;
+      width: 100%;
+      pointer-events: auto;
+      background-color: $ui-02;
+      border: 2px solid white;
     }
 
-    //&__footer {
+    .modal-header {
+      border-top: $brand-01 4px solid;
+      padding: 1.5rem 3rem 0;
+    }
+
+    .modal-body {
+      padding: 1.5rem 3rem;
+    }
+
     .modal-footer {
-      margin-top: auto;
       text-align: right;
       background-color: $ui-01;
-      margin-left: -3vw;
-      margin-right: -3vw;
-      padding: rem(24px) rem(24px);
-
-      @include media-breakpoint-up(md) {
-        margin-left: rem(-48px);
-        margin-right: rem(-48px);
-        //padding: rem(24px) rem(48px);
-      }
+      padding: 1.5rem;
 
       .btn {
         @extend .SharpButton;
@@ -118,8 +106,8 @@
 
   &__close {
     position: absolute;
-    top: rem(16px);
-    right: rem(16px);
+    top: 1rem;
+    right: 1rem;
     //padding: 0;
     overflow: hidden;
     cursor: pointer;
@@ -156,4 +144,22 @@
     font-weight: 300;
     color: $text-02;
   }
+
+  &.SharpModal--error {
+    .modal-header {
+      border-top-color: $support-01;
+    }
+  }
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1040;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+  opacity: .7;
+  transition: opacity 200ms;
 }

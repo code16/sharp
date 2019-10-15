@@ -1,11 +1,12 @@
 <template>
-    <b-modal class="SharpModal" :class="{ 'SharpModal--error': isError }"
-        v-bind="$attrs"
+    <b-modal v-bind="$attrs"
         :title="title"
         :visible="visible"
         :cancel-title="cancelTitle || l('modals.cancel_button')"
         :ok-title="okTitle || l('modals.ok_button')"
         :ok-only="okOnly"
+        :static="static"
+        :modal-class="['SharpModal', {'SharpModal--error': isError}]"
         no-enforce-focus
         v-on="$listeners"
         @change="handleVisiblityChanged"
@@ -29,7 +30,7 @@
 
 <script>
     import Localization from '../mixins/Localization';
-    import BModal from 'bootstrap-vue/es/components/modal/modal';
+    import { BModal } from 'bootstrap-vue';
 
     export default {
         name: 'SharpModal',
@@ -50,6 +51,7 @@
 
             // custom props
             isError: Boolean,
+            static: Boolean,
         },
 
         methods: {
