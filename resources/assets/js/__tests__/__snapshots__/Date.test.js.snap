@@ -11,7 +11,7 @@ exports[`date-field can mount "monday first" Date field 1`] = `
 				</svg>
 			</button>
 		</div>
-		<div target="function () { [native code] }" triggers="focus" placement="bottom" show="true">
+		<div target="function () { [native code] }" no-fade="" triggers="focus" placement="bottom" show="true">
 			<div class="SharpDate__picker position-static">
 				<div class="SharpDate__datepicker SharpDate__date">
 					<input type="hidden" readonly="readonly" value="20 Août 1996">
@@ -244,7 +244,7 @@ exports[`date-field can mount "picker displayed" Date field 1`] = `
 				</svg>
 			</button>
 		</div>
-		<div target="function () { [native code] }" triggers="focus" placement="bottom" show="true">
+		<div target="function () { [native code] }" no-fade="" triggers="focus" placement="bottom" show="true">
 			<div class="SharpDate__picker position-static">
 				<!---->
 				<!---->
@@ -266,7 +266,7 @@ exports[`date-field can mount "read only" Date field 1`] = `
 				</svg>
 			</button>
 		</div>
-		<div target="function () { [native code] }" triggers="focus" placement="bottom">
+		<div target="function () { [native code] }" no-fade="" triggers="focus" placement="bottom">
 			<div class="SharpDate__picker position-static">
 				<!---->
 				<!---->
@@ -288,7 +288,7 @@ exports[`date-field can mount Date field 1`] = `
 				</svg>
 			</button>
 		</div>
-		<div target="function () { [native code] }" triggers="focus" placement="bottom">
+		<div target="function () { [native code] }" no-fade="" triggers="focus" placement="bottom">
 			<div class="SharpDate__picker position-static">
 				<div class="SharpDate__datepicker SharpDate__date">
 					<input type="hidden" readonly="readonly" value="20 Août 1996">
@@ -521,7 +521,7 @@ exports[`date-field can mount Date field without TimePicker 1`] = `
 				</svg>
 			</button>
 		</div>
-		<div target="function () { [native code] }" triggers="focus" placement="bottom">
+		<div target="function () { [native code] }" no-fade="" triggers="focus" placement="bottom">
 			<div class="SharpDate__picker position-static">
 				<div class="SharpDate__datepicker SharpDate__date">
 					<input type="hidden" readonly="readonly" value="20 Août 1996">
