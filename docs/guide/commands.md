@@ -4,11 +4,18 @@ Commands in Sharp are a powerful way to integrate functional processes in the co
 
 Commands can be defined in an EntityList or in a Dashboard. This documentation will take the EntityList case, but the API is very similar in both cases, as explained at the end of this page.
 
-## Generator
+## Generator for an 'EntityList' command
 
 ```bash
-php artisan sharp:make:entity-command <class_name> [--model=<model_name>]
+php artisan sharp:make:entity-command <class_name>
 ```
+
+## Generator for an 'Instance' command
+
+```bash
+php artisan sharp:make:instance-command <class_name>
+```
+
 
 ## Write the Command class
 
