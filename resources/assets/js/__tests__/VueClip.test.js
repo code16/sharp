@@ -763,16 +763,7 @@ async function createVm(customOptions={}) {
             'sharp-vue-clip': {
                 'extends': VueClip,
                 components: {
-                    'vue-cropper': { render() {} },
-                    'sharp-modal': {
-                        extends: SharpModal,
-                        props: {
-                            static: {
-                                type: Boolean,
-                                default: true,
-                            }
-                        },
-                    },
+                    'vue-cropper': { render() {} }
                 }
             }
         },
