@@ -53,7 +53,6 @@ before_install:
 
 install:
   - travis_retry composer update ${COMPOSER_FLAGS} --prefer-dist --no-interaction --no-suggest
-  - travis_retry yarn install --non-interactive
   ## front dependencies
   - . $HOME/.nvm/nvm.sh
   - nvm install 11.6

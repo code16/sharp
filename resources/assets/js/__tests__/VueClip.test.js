@@ -2,6 +2,7 @@ import Vue from 'vue';
 import { MockInjections, MockI18n, wait } from "./test-utils";
 
 import VueClip from '../components/form/fields/upload/VueClip';
+import SharpModal from '../components/Modal';
 import { nextRequestFulfilled } from './test-utils/moxios-utils';
 
 import moxios from 'moxios';
@@ -762,7 +763,7 @@ async function createVm(customOptions={}) {
             'sharp-vue-clip': {
                 'extends': VueClip,
                 components: {
-                    'vue-cropper': { render() {} },
+                    'vue-cropper': { render() {} }
                 }
             }
         },

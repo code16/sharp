@@ -1,8 +1,8 @@
-html, body {
+html {
   height: 100%;
 }
 
-#sharp-app {
+body {
   min-height:  100%;
 }
 
@@ -21,6 +21,10 @@ $css--typography: true;
 @import '~bootstrap/scss/utilities';
 
 @import 'vars';
+
+::before, ::after {
+  box-sizing: border-box;
+}
 
 body {
   background-color: $ui-02;
