@@ -59,30 +59,34 @@
                 </template>
             </template>
         </template>
-        <template slot="extras">
-            <template v-if="!reorderActive"></template>
-            <div class="row mx-n2">
-                <template v-for="filter in filters">
-                    <div class="col-auto px-2">
-                        <SharpFilter
-                            :filter="filter"
-                            :value="filtersValues[filter.key]"
-                            @input="handleFilterChanged(filter, $event)"
-                            :key="filter.id"
-                        />
-                    </div>
-                </template>
-            </div>
-        </template>
-        <template v-if="commands.length" slot="extras-right">
-            <SharpCommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
-                :commands="commands"
-                @select="handleCommandSelected"
-            >
-                <div slot="text">
-                    {{ l('entity_list.commands.entity.label') }}
+        <template v-if="!reorderActive">
+            <template slot="extras">
+                <div class="row mx-n2">
+                    <template v-for="filter in filters">
+                        <div class="col-auto px-2">
+                            <SharpFilter
+                                :filter="filter"
+                                :value="filtersValues[filter.key]"
+                                @input="handleFilterChanged(filter, $event)"
+                                :key="filter.id"
+                            />
+                        </div>
+                    </template>
                 </div>
-            </SharpCommandsDropdown>
+            </template>
+
+            <template slot="extras-right">
+                <template v-if="hasCommands">
+                    <SharpCommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
+                        :commands="commands"
+                        @select="handleCommandSelected"
+                    >
+                        <div slot="text">
+                            {{ l('entity_list.commands.entity.label') }}
+                        </div>
+                    </SharpCommandsDropdown>
+                </template>
+            </template>
         </template>
     </sharp-action-bar>
 </template>
@@ -136,7 +140,10 @@
         computed: {
             hasForms() {
                 return this.forms && this.forms.length > 0;
-            }
+            },
+            hasCommands() {
+                return this.commands && this.commands.some(group => group && group.length > 0);
+            },
         },
         methods: {
             handleSearchFocused() {
