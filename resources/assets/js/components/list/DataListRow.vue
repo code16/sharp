@@ -6,9 +6,9 @@
         }"
     >
         <div class="SharpDataList__cols">
-            <div class="row">
+            <div class="row mx-n2 mx-md-n3">
                 <template v-for="column in columns">
-                    <div :class="[
+                    <div class="px-2 px-md-3" :class="[
                         header ? 'SharpDataList__th' : 'SharpDataList__td',
                         colClasses(column)
                     ]">
