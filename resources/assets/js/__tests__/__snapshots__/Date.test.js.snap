@@ -4,7 +4,7 @@ exports[`date-field can mount "monday first" Date field 1`] = `
 <div id="app">
 	<div class="SharpDate SharpDate--open">
 		<div class="SharpDate__input-wrapper">
-			<input id="date" placeholder="DD/MM/YYYY HH:mm" class="SharpDate__input">
+			<input id="date" placeholder="DD/MM/YYYY HH:mm" autocomplete="off" class="SharpDate__input">
 			<button type="button" class="SharpDate__clear-button">
 				<svg aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd" class="SharpDate__clear-button-icon">
 					<path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
@@ -237,7 +237,7 @@ exports[`date-field can mount "picker displayed" Date field 1`] = `
 <div id="app">
 	<div class="SharpDate SharpDate--open">
 		<div class="SharpDate__input-wrapper">
-			<input id="date" placeholder="DD/MM/YYYY HH:mm" class="SharpDate__input">
+			<input id="date" placeholder="DD/MM/YYYY HH:mm" autocomplete="off" class="SharpDate__input">
 			<button type="button" class="SharpDate__clear-button">
 				<svg aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd" class="SharpDate__clear-button-icon">
 					<path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
@@ -259,7 +259,7 @@ exports[`date-field can mount "read only" Date field 1`] = `
 <div id="app">
 	<div class="SharpDate">
 		<div class="SharpDate__input-wrapper">
-			<input id="date" placeholder="DD/MM/YYYY HH:mm" disabled="disabled" class="SharpDate__input">
+			<input id="date" placeholder="DD/MM/YYYY HH:mm" disabled="disabled" autocomplete="off" class="SharpDate__input">
 			<button type="button" class="SharpDate__clear-button">
 				<svg aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd" class="SharpDate__clear-button-icon">
 					<path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
@@ -281,7 +281,7 @@ exports[`date-field can mount Date field 1`] = `
 <div id="app">
 	<div class="SharpDate">
 		<div class="SharpDate__input-wrapper">
-			<input id="date" placeholder="DD/MM/YYYY HH:mm" class="SharpDate__input">
+			<input id="date" placeholder="DD/MM/YYYY HH:mm" autocomplete="off" class="SharpDate__input">
 			<button type="button" class="SharpDate__clear-button">
 				<svg aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd" class="SharpDate__clear-button-icon">
 					<path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
@@ -514,7 +514,7 @@ exports[`date-field can mount Date field without TimePicker 1`] = `
 <div id="app">
 	<div class="SharpDate">
 		<div class="SharpDate__input-wrapper">
-			<input id="date" placeholder="DD/MM/YYYY HH:mm" class="SharpDate__input">
+			<input id="date" placeholder="DD/MM/YYYY HH:mm" autocomplete="off" class="SharpDate__input">
 			<button type="button" class="SharpDate__clear-button">
 				<svg aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd" class="SharpDate__clear-button-icon">
 					<path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
