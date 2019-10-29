@@ -48,8 +48,7 @@
                                 </div>
                             </div>
                         </div>
-                        <p class="text-center mt-3">with <a href="https://sharp.code16.fr/docs/">Sharp {{sharp_version()}}</a></p>
-
+                        <p class="text-center mt-3 text-muted" style="font-size: .75em">powered by <a href="https://sharp.code16.fr/docs/">Sharp {{sharp_version()}}</a></p>
                     </div>
                 </div>
             </form>
