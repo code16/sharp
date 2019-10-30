@@ -4,9 +4,9 @@
     :items="{{ json_encode($sharpMenu->menuItems) }}"
     :has-global-filters="{{ json_encode($hasGlobalFilters) }}"
 >
-    @if(file_exists(public_path('/sharp/menu-icon.png')))
+    @if(file_exists(public_path('/sharp-assets/menu-icon.png')))
         <template slot="title">
-            <img src="{{ asset('/sharp/menu-icon.png') }}" alt="{{ $sharpMenu->name }}" width="150" class="w-auto h-auto" style="max-height: 50px;">
+            <img src="{{ asset('/sharp-assets/menu-icon.png') }}" alt="{{ $sharpMenu->name }}" width="150" class="w-auto h-auto" style="max-height: 50px;">
         </template>
     @endif
     <ul role="menubar" class="SharpLeftNav__list" aria-hidden="false">
