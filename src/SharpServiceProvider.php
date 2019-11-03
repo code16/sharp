@@ -21,7 +21,7 @@ use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
 use Code16\Sharp\Http\SharpContext;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
-use Intervention\Image\ImageServiceProviderLaravel5;
+use \Intervention\Image\ImageServiceProviderLaravelRecent;
 
 class SharpServiceProvider extends ServiceProvider
 {
@@ -88,7 +88,7 @@ class SharpServiceProvider extends ServiceProvider
             \Code16\Sharp\Console\ReorderHandlerMakeCommand::class,
         ]);
 
-        $this->app->register(ImageServiceProviderLaravel5::class);
+        $this->app->register(ImageServiceProviderLaravelRecent::class);
     }
 
     protected function registerPolicies()
