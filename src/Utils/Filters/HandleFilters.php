@@ -223,7 +223,20 @@ trait HandleFilters
             }
 
             if($handler instanceof DateRangeFilter) {
-                list($start, $end) = explode("..", $sessionValue);
+                list($start, $end) = collect(explode("..", $sessionValue))
+                    ->map(function($date) {
+                        if(strlen($date) == 8) {
+                            // Date was stored with a Ymd format, we need Y-m-d
+                            return sprintf("%s-%s-%s",
+                                substr($date, 0, 4),
+                                substr($date, 4, 2),
+                                substr($date, 6, 2)
+                            );
+                        }
+
+                        return $date;
+                    })
+                    ->toArray();
 
                 return compact("start", "end");
             }
