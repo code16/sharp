@@ -21,12 +21,12 @@ use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
 use Code16\Sharp\Http\SharpContext;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
-use \Intervention\Image\ImageServiceProviderLaravelRecent;
+use Intervention\Image\ImageServiceProviderLaravelRecent;
 
 class SharpServiceProvider extends ServiceProvider
 {
     /** @var string */
-    const VERSION = '4.1.23';
+    const VERSION = '4.1.24';
 
     public function boot()
     {
