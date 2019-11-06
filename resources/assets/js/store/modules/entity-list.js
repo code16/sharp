@@ -2,6 +2,7 @@ import { postEntityListReorder } from "../../api";
 import filters from './filters';
 
 export const SET_ENTITY_KEY = 'SET_ENTITY_KEY';
+export const SET_QUERY = 'SET_QUERY';
 
 export default {
     namespaced: true,
@@ -9,13 +10,25 @@ export default {
         filters,
     },
 
-    state: {
-        entityKey: null,
+    state() {
+        return {
+            entityKey: null,
+            query: {},
+        }
     },
 
     mutations: {
         [SET_ENTITY_KEY](state, entityKey) {
             state.entityKey = entityKey;
+        },
+        [SET_QUERY](state, query) {
+            state.query = query;
+        }
+    },
+
+    getters: {
+        query(state) {
+            return state.query;
         },
     },
 
@@ -36,6 +49,9 @@ export default {
         },
         setEntityKey({ commit }, entityKey) {
             commit(SET_ENTITY_KEY, entityKey);
+        },
+        setQuery({ commit }, query) {
+            commit(SET_QUERY, query);
         }
     }
 }
