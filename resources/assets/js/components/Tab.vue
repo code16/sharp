@@ -1,9 +1,9 @@
 <script>
-    import Tab from 'bootstrap-vue/es/components/tabs/tab';
+    import { BTab } from 'bootstrap-vue';
 
     export default {
-        name:'SharpBTab',
-        extends: Tab,
+        name: 'SharpBTab',
+        extends: BTab,
         provide() {
             return  {
                 $tab:this

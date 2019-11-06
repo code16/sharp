@@ -21,12 +21,12 @@ use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
 use Code16\Sharp\Http\SharpContext;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
-use Intervention\Image\ImageServiceProviderLaravel5;
+use Intervention\Image\ImageServiceProviderLaravelRecent;
 
 class SharpServiceProvider extends ServiceProvider
 {
     /** @var string */
-    const VERSION = '4.1.16';
+    const VERSION = '4.1.24';
 
     public function boot()
     {
@@ -40,6 +40,10 @@ class SharpServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../resources/assets/dist' => public_path('vendor/sharp')
         ], 'assets');
+
+        $this->publishes([
+            __DIR__.'/../config/config.php' => config_path('sharp.php'),
+        ], 'config');
 
         $this->registerPolicies();
 
@@ -56,6 +60,8 @@ class SharpServiceProvider extends ServiceProvider
 
     public function register()
     {
+        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'sharp');
+
         $this->registerMiddleware();
 
         $this->app->singleton(
@@ -65,15 +71,6 @@ class SharpServiceProvider extends ServiceProvider
         $this->app->singleton(
             SharpAuthorizationManager::class, SharpAuthorizationManager::class
         );
-
-        // Override Laravel's Gate to handle Sharp's ability to define a custom Guard
-//        $this->app->singleton(GateContract::class, function ($app) {
-//            return new \Illuminate\Auth\Access\Gate($app, function () use ($app) {
-//                return request()->is("sharp") || request()->is("sharp/*")
-//                    ? sharp_user()
-//                    : auth()->guard(config("auth.defaults.guard"))->user();
-//            });
-//        });
 
         $this->commands([
             CreateUploadsMigration::class,
@@ -91,7 +88,7 @@ class SharpServiceProvider extends ServiceProvider
             \Code16\Sharp\Console\ReorderHandlerMakeCommand::class,
         ]);
 
-        $this->app->register(ImageServiceProviderLaravel5::class);
+        $this->app->register(ImageServiceProviderLaravelRecent::class);
     }
 
     protected function registerPolicies()

@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import { mount } from '@vue/test-utils';
 import SharpModal from '../components/Modal.vue';
 
@@ -19,8 +18,8 @@ describe('modal', ()=>{
                 okTitle: 'ok title',
                 okOnly: false,
                 title: 'title',
+                static: true,
             },
-            localVue: Vue,
         });
         expect(wrapper.html()).toMatchSnapshot();
     });
@@ -29,13 +28,19 @@ describe('modal', ()=>{
         const wrapper = mount(SharpModal, {
             propsData: {
                 okOnly: true,
+                static: true,
             }
         });
         expect(wrapper.html()).toMatchSnapshot();
     });
 
     test('mount visible', async ()=>{
-        const wrapper = mount(SharpModal, { sync:false });
+        const wrapper = mount(SharpModal, {
+            propsData: {
+                static: true,
+            },
+            sync:false,
+        });
         wrapper.setProps({ visible:true });
         await wrapper.vm.$nextTick();
         expect(wrapper.html()).toMatchSnapshot();
@@ -45,17 +50,24 @@ describe('modal', ()=>{
         const wrapper = mount(SharpModal, {
             propsData: {
                 isError: true,
+                static: true,
             }
         });
-        wrapper.element.innerHTML = '';
+        wrapper.find('.modal').element.innerHTML = '';
         expect(wrapper.html()).toMatchSnapshot();
     });
 
-    test('close', () => {
-        const wrapper = mount(SharpModal);
+    test('close', async () => {
+        const wrapper = mount(SharpModal, {
+            propsData: {
+                static: true,
+            },
+            sync:false,
+        });
         wrapper.setMethods({
             hide: jest.fn()
         });
+        await wrapper.vm.$nextTick();
         wrapper.find('.SharpModal__close').trigger('click');
         expect(wrapper.vm.hide).toHaveBeenCalled();
     });
@@ -63,7 +75,7 @@ describe('modal', ()=>{
     test('pass props', () => {
         const wrapper = mount(SharpModal, {
             propsData: {
-                id: 'modal-id'
+                id: 'modal-id',
             }
         });
 
@@ -93,7 +105,12 @@ describe('modal', ()=>{
     });
 
     test('show/hide methods and emit updates', async ()=>{
-        const wrapper = mount(SharpModal, { sync:false });
+        const wrapper = mount(SharpModal, {
+            propsData:{
+                static: true,
+            },
+            sync: false
+        });
         wrapper.vm.show();
         await wrapper.vm.$nextTick();
         expect(wrapper.find('.modal').isVisible()).toBe(true);

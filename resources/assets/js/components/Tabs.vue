@@ -51,8 +51,7 @@
 </template>
 
 <script>
-    import Tabs from 'bootstrap-vue/es/components/tabs/tabs'
-    import bCollapse from 'bootstrap-vue/es/components/collapse/collapse';
+    import { BTabs, BCollapse } from 'bootstrap-vue';
     import DropdownArrow from './dropdown/Arrow.vue';
     import HasOverflow from '../directives/HasOverflow';
     import { Responsive } from '../mixins';
@@ -62,9 +61,9 @@
 
         mixins: [Responsive('sm')],
 
-        extends: Tabs,
+        extends: BTabs,
         components: {
-            bCollapse,
+            BCollapse,
             DropdownArrow
         },
 

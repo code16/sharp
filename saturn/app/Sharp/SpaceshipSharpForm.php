@@ -11,6 +11,7 @@ use Code16\Sharp\Form\Eloquent\Transformers\FormUploadModelTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
+use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormMarkdownField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
@@ -22,10 +23,11 @@ use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Http\WithSharpContext;
 
 class SpaceshipSharpForm extends SharpForm
 {
-    use WithSharpFormEloquentUpdater;
+    use WithSharpFormEloquentUpdater, WithSharpContext;
 
     function buildFormFields()
     {
@@ -33,6 +35,10 @@ class SpaceshipSharpForm extends SharpForm
             SharpFormTextField::make("name")
                 ->setLocalized()
                 ->setLabel("Name")
+
+        )->addField(
+            SharpFormHtmlField::make("html")
+                ->setInlineTemplate("The name of the spaceship localized in FR is <strong>{{nameFr}}</strong>")
 
         )->addField(
             SharpFormTextField::make("capacity")
@@ -196,6 +202,7 @@ class SpaceshipSharpForm extends SharpForm
         $this->addTab("General info", function(FormLayoutTab $tab) {
             $tab->addColumn(6, function(FormLayoutColumn $column) {
                 $column->withSingleField("name")
+                    ->withSingleField("html")
                     ->withSingleField("type_id")
                     ->withSingleField("serial_number")
                     ->withFields("brand|6", "model|6")
@@ -235,7 +242,12 @@ class SpaceshipSharpForm extends SharpForm
 
     function create(): array
     {
-        return $this->transform(new Spaceship(["name" => "new"]));
+        return $this->transform(new Spaceship([
+            "name" => [
+                "en" => "new",
+                "fr" => "nouveau",
+            ]
+        ]));
     }
 
     function find($id): array
@@ -252,6 +264,11 @@ class SpaceshipSharpForm extends SharpForm
             })
             ->setCustomTransformer("picture", new FormUploadModelTransformer())
             ->setCustomTransformer("pictures", new FormUploadModelTransformer())
+            ->setCustomTransformer("html", function($html, Spaceship $spaceship){
+                return [
+                    "nameFr" => $spaceship->getTranslation('name','fr'),
+                ];
+            })
             ->transform(
                 Spaceship::with("reviews", "pilots", "picture", "pictures", "features")->findOrFail($id)
             );
@@ -259,7 +276,9 @@ class SpaceshipSharpForm extends SharpForm
 
     function update($id, array $data)
     {
-        $instance = $id ? Spaceship::findOrFail($id) : new Spaceship;
+        $instance = $id ? Spaceship::findOrFail($id) : new Spaceship([
+            "corporation_id" => $this->context()->globalFilterFor("corporation")
+        ]);
 
         if(isset($data["name"]) && $data["name"] == "error") {
             throw new SharpApplicativeException("Name can't be «error»");
@@ -268,6 +287,7 @@ class SpaceshipSharpForm extends SharpForm
         $this->setCustomTransformer("capacity", function($capacity) {
                 return $capacity * 1000;
             })
+            ->ignore("html")
             ->save($instance, $data);
 
         $this->notify("Spaceship was updated with success!")

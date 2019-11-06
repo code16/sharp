@@ -64,4 +64,13 @@ class LinkToEntityTest extends SharpTestCase
             (new LinkToEntity("test", "my-entity"))->setTooltip("tooltip")->render()
         );
     }
+
+    /** @test */
+    function we_can_generate_an_url()
+    {
+        $this->assertEquals(
+            'http://localhost/sharp/list/my-entity',
+            (new LinkToEntity())->setEntityKey( "my-entity")->renderAsUrl()
+        );
+    }
 }

@@ -1,15 +1,19 @@
 <template>
     <div class="SharpDate" :class="{'SharpDate--open':showPicker}">
         <div class="SharpDate__input-wrapper">
-            <input class="SharpDate__input"
-                   :placeholder="displayFormat"
-                   :value="inputValue"
-                   :disabled="readOnly"
-                   @input="handleInput"
-                   @blur="handleBlur"
-                   @keydown.up.prevent="increase"
-                   @keydown.down.prevent="decrease"
-                   ref="input">
+            <input
+                id="date"
+                class="SharpDate__input"
+                :placeholder="displayFormat"
+                :value="inputValue"
+                :disabled="readOnly"
+                autocomplete="off"
+                @input="handleInput"
+                @blur="handleBlur"
+                @keydown.up.prevent="increase"
+                @keydown.down.prevent="decrease"
+                ref="input"
+            >
             <button class="SharpDate__clear-button" type="button" @click="clear()" ref="clearButton">
                 <svg class="SharpDate__clear-button-icon"
                      aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd">
@@ -17,32 +21,34 @@
                 </svg>
             </button>
         </div>
-        <b-popover :target="()=>$refs.input" :show.sync="showPicker" triggers="focus" placement="bottom">
-            <div class="SharpDate__picker position-static">
-                <template v-if="hasDate">
-                    <sharp-date-picker
-                        class="SharpDate__date"
-                        :language="language"
-                        :monday-first="mondayFirst"
-                        inline
-                        :value="dateObject"
-                        @selected="handleDateSelect"
-                        ref="datepicker"
-                    />
-                </template>
-                <template v-if="hasTime">
-                    <sharp-time-picker
-                        class="SharpDate__time"
-                        :value="timeObject"
-                        :active="showPicker"
-                        :format="displayFormat"
-                        :minute-interval="stepTime"
-                        :min="minTime" :max="maxTime"
-                        @change="handleTimeSelect"
-                        ref="timepicker"
-                    />
-                </template>
-            </div>
+        <b-popover :target="target" :show.sync="showPicker" no-fade triggers="focus" placement="bottom">
+            <template slot-scope="props">
+                <div class="SharpDate__picker position-static" >
+                    <template v-if="hasDate">
+                        <sharp-date-picker
+                            class="SharpDate__date"
+                            :language="language"
+                            :monday-first="mondayFirst"
+                            inline
+                            :value="dateObject"
+                            @selected="handleDateSelect"
+                            ref="datepicker"
+                        />
+                    </template>
+                    <template v-if="hasTime">
+                        <sharp-time-picker
+                            class="SharpDate__time"
+                            :value="timeObject"
+                            :active="showPicker"
+                            :format="displayFormat"
+                            :minute-interval="stepTime"
+                            :min="minTime" :max="maxTime"
+                            @change="handleTimeSelect"
+                            ref="timepicker"
+                        />
+                    </template>
+                </div>
+            </template>
         </b-popover>
     </div>
 </template>
@@ -55,14 +61,14 @@
     import { lang } from '../../../../mixins/Localization';
 
     import moment from 'moment';
-    import bPopover from 'bootstrap-vue/es/components/popover/popover';
+    import { BPopover } from 'bootstrap-vue';
 
     export default {
         name:'SharpDate',
         components: {
             SharpDatePicker,
             SharpTimePicker,
-            bPopover,
+            BPopover,
         },
 
         inject:['$field'],
@@ -121,6 +127,10 @@
             },
         },
         methods: {
+            target() {
+                return this.$refs.input;
+            },
+
             getMoment() {
                 return this.moment || moment();
             },

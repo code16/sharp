@@ -46,6 +46,7 @@ class EntityListControllerTest extends BaseApiTest
     /** @test */
     public function we_can_search_for_an_instance()
     {
+        $this->withoutExceptionHandling();
         $this->buildTheWorld();
 
         $this->json('get', '/sharp/api/list/person?search=john')

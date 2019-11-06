@@ -5,6 +5,7 @@ namespace Code16\Sharp\Form\Eloquent\Uploads\Thumbnails;
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\FilesystemManager;
+use Illuminate\Support\Str;
 use Intervention\Image\Exception\NotReadableException;
 use Intervention\Image\ImageManager;
 
@@ -171,7 +172,7 @@ class Thumbnail
      */
     private function resolveFilterClass($class, array $params)
     {
-        if(! str_contains($class, "\\")) {
+        if(! Str::contains($class, "\\")) {
             $class = 'Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\\' . ucfirst($class) . 'Filter';
         }
 

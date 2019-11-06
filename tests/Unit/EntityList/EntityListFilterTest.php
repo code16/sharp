@@ -331,6 +331,38 @@ class EntityListFilterTest extends SharpTestCase
     }
 
     /** @test */
+    function date_range_filter_retained_value_is_formatted()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig()
+            {
+                $this->addFilter("test", new class extends SharpEntityListDateRangeTestFilter {
+                    function retainValueInSession() {
+                        return true;
+                    }
+                });
+            }
+        };
+
+        // Artificially put retained value in session
+        session()->put("_sharp_retained_filter_test", "20190922..20190925");
+
+        $list->buildListConfig();
+
+        $this->assertArrayContainsSubset([
+            "filters" => [
+                [
+                    "key" => "test",
+                    "default" => [
+                        "start" => "2019-09-22",
+                        "end" => "2019-09-25",
+                    ],
+                ]
+            ]
+        ], $list->listConfig());
+    }
+
+    /** @test */
     function we_can_get_list_date_range_filters_config_with_a_class_name()
     {
         $list = new class extends SharpEntityDefaultTestList {

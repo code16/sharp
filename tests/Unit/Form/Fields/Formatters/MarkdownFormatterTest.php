@@ -9,6 +9,7 @@ use Code16\Sharp\Form\Fields\SharpFormMarkdownField;
 use Code16\Sharp\Tests\SharpTestCase;
 use Illuminate\Http\Testing\FileFactory;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class MarkdownFormatterTest extends SharpTestCase
 {
@@ -38,7 +39,7 @@ class MarkdownFormatterTest extends SharpTestCase
     {
         $formatter = new MarkdownFormatter;
         $field = SharpFormMarkdownField::make("md");
-        $value = str_random();
+        $value = Str::random();
 
         $this->assertEquals(["text" => $value], $formatter->toFront($field, $value));
     }
@@ -93,7 +94,7 @@ class MarkdownFormatterTest extends SharpTestCase
     {
         $formatter = new MarkdownFormatter;
         $field = SharpFormMarkdownField::make("md");
-        $value = str_random();
+        $value = Str::random();
         $attribute = "attribute";
 
         $this->assertEquals($value, $formatter->fromFront($field, $attribute, ["text"=>$value]));

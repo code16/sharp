@@ -7,8 +7,10 @@ use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
 use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
+use Code16\Sharp\Dashboard\Widgets\SharpOrderedListWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Utils\LinkToEntity;
 
 class SharpDashboardTest extends SharpTestCase
 {
@@ -157,6 +159,120 @@ class SharpDashboardTest extends SharpTestCase
                 "key" => "widget",
                 "data" => [
                     "user" => "John Wayne"
+                ]
+            ]
+        ], $dashboard->data());
+    }
+
+    /** @test */
+    function we_can_get_ordered_list_widget_data()
+    {
+        $dashboard = new class extends SharpDashboardTestDashboard {
+            protected function buildWidgets()
+            {
+                $this->addWidget(SharpOrderedListWidget::make("widget"));
+            }
+            protected function buildWidgetsData(DashboardQueryParams $params)
+            {
+                $this->setOrderedListData("widget", [
+                    [
+                        "label" => "John Wayne",
+                        "count" => 888,
+                    ],
+                    [
+                        "label" => "Toto",
+                        "count" => 771,
+                    ],
+                ]);
+            }
+        };
+
+        // Have to manually call this to ensure widgets are loaded
+        $dashboard->widgets();
+
+        $this->assertEquals([
+            "widget" => [
+                "key" => "widget",
+                "data" => [
+                    [
+                        "label" => "John Wayne",
+                        "count" => 888,
+                        "url" => null
+                    ],
+                    [
+                        "label" => "Toto",
+                        "count" => 771,
+                        "url" => null
+                    ],
+                ]
+            ]
+        ], $dashboard->data());
+    }
+
+    /** @test */
+    function we_can_get_ordered_list_widget_item_url()
+    {
+        $dashboard = new class extends SharpDashboardTestDashboard {
+            protected function buildWidgets()
+            {
+                $this->addWidget(
+                    SharpOrderedListWidget::make("widget")
+                        ->buildItemLink(function(LinkToEntity $link, $item) {
+                            return $item['id'] == 3
+                                ? null
+                                : $link
+                                    ->setEntityKey("my-entity")
+                                    ->addFilter("type", $item['id']);
+                        })
+                );
+            }
+            protected function buildWidgetsData(DashboardQueryParams $params)
+            {
+                $this->setOrderedListData("widget", [
+                    [
+                        "id" => 1,
+                        "label" => "John Wayne",
+                        "count" => 888,
+                    ],
+                    [
+                        "id" => 2,
+                        "label" => "Jane Wayne",
+                        "count" => 771,
+                    ],
+                    [
+                        "id" => 3,
+                        "label" => "John Ford",
+                        "count" => 112,
+                    ],
+                ]);
+            }
+        };
+
+        // Have to manually call this to ensure widgets are loaded
+        $dashboard->widgets();
+
+        $this->assertEquals([
+            "widget" => [
+                "key" => "widget",
+                "data" => [
+                    [
+                        "id" => 1,
+                        "label" => "John Wayne",
+                        "count" => 888,
+                        "url" => "http://localhost/sharp/list/my-entity?filter_type=1"
+                    ],
+                    [
+                        "id" => 2,
+                        "label" => "Jane Wayne",
+                        "count" => 771,
+                        "url" => "http://localhost/sharp/list/my-entity?filter_type=2"
+                    ],
+                    [
+                        "id" => 3,
+                        "label" => "John Ford",
+                        "count" => 112,
+                        "url" => null
+                    ],
                 ]
             ]
         ], $dashboard->data());

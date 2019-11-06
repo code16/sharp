@@ -23,7 +23,7 @@
 </template>
 
 <script>
-    import bPagination from 'bootstrap-vue/es/components/pagination/pagination';
+    import { BPagination } from 'bootstrap-vue';
 
     // for props/events check
     // https://bootstrap-vue.js.org/docs/components/pagination
@@ -32,6 +32,10 @@
         name: 'SharpPagination',
         inheritAttrs: false,
 
+        components: {
+            BPagination
+        },
+
         props: {
             totalRows: Number,
             perPage: Number,
@@ -39,10 +43,6 @@
                 type: Number,
                 default: 0,
             },
-        },
-
-        components: {
-            bPagination,
         },
 
         computed: {

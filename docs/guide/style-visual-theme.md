@@ -1,5 +1,11 @@
 # Style & Visual Theme
 
+### Login and menu logos
+
+By default, the `config('sharp.name')` is displayed on the login page and on top of the menu. You can if you wish display images instead: Sharp will look for PNGs named `login-icon.png` and `menu-icon.png`, in a `/public/sharp-assets/` directory. Note that :
+- `login-icon.png` is limited to 200 pixels in width and 100 pixels in height,
+- and `menu-icon.png` must fit in 150 pixels in width and 50 pixels in height.
+
 ### Injecting Assets
 
 You may globally inject custom CSS files after the Sharp assets by defining their paths in the `config/sharp.php` config file.

@@ -394,7 +394,7 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
             public function label(): string { return "label"; }
             public function execute(EntityListQueryParams $params, array $data = []): array {
                 Storage::fake('files');
-                UploadedFile::fake()->create('account.pdf')->storeAs('pdf', 'account.pdf', ['disk'=>'files']);
+                UploadedFile::fake()->create('account.pdf', 100)->storeAs('pdf', 'account.pdf', ['disk'=>'files']);
                 return $this->download("pdf/account.pdf", "account.pdf", "files");
             }
 
@@ -402,7 +402,7 @@ class EntityCommandPersonSharpEntityList extends PersonSharpEntityList {
             public function label(): string { return "label"; }
             public function execute(EntityListQueryParams $params, array $data = []): array {
                 Storage::fake('local');
-                UploadedFile::fake()->create('account.pdf')->storeAs('pdf', 'account.pdf');
+                UploadedFile::fake()->create('account.pdf', 100)->storeAs('pdf', 'account.pdf');
                 return $this->download("pdf/account.pdf");
             }
 

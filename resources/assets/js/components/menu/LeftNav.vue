@@ -10,7 +10,9 @@
         </div>
         <div class="flex-grow-0">
             <div class="SharpLeftNav__title-container position-relative">
-                <h2 class="SharpLeftNav__title">{{ title }}</h2>
+                <slot name="title">
+                    <h2 class="SharpLeftNav__title">{{ title }}</h2>
+                </slot>
             </div>
         </div>
         <div class="flex-grow-1" style="min-height: 0">

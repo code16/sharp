@@ -1,8 +1,8 @@
 {
     "/manifest.js": "/manifest.js?id=01c8731923a46c30aaed",
-    "/vendor.js": "/vendor.js?id=028476aba7cfdac645ea",
+    "/vendor.js": "/vendor.js?id=de27430943c00e9059f0",
     "/client-api.js": "/client-api.js?id=7e022aad8155f6031752",
-    "/sharp.js": "/sharp.js?id=f434c06ac11e84860187",
-    "/sharp.css": "/sharp.css?id=ecb4dff5f9887a7313ea",
-    "/sharp-cms.css": "/sharp-cms.css?id=bf37770538c9101d4b8e"
+    "/sharp.js": "/sharp.js?id=d9a1d1d302b39ac99a4e",
+    "/sharp.css": "/sharp.css?id=420dcaaded7b76d1e62a",
+    "/sharp-cms.css": "/sharp-cms.css?id=7f0b86d6a85ab17bbda3"
 }

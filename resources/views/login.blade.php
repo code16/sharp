@@ -9,7 +9,13 @@
                 <div class="row justify-content-center">
                     <div class="col-sm-9 col-md-6 col-lg-5 col-xl-4">
 
-                        <h1 class="text-center mb-3">Sharp</h1>
+                        @if(file_exists(public_path('/sharp-assets/login-icon.png')))
+                            <div class="text-center">
+                                <img src="{{ asset('/sharp-assets/login-icon.png') }}" alt="{{config("sharp.name", "Sharp")}}" width="300" class="w-auto h-auto" style="max-height: 100px;max-width: 200px">
+                            </div>
+                        @else
+                            <h1 class="text-center mb-3">{{config("sharp.name", "Sharp")}}</h1>
+                        @endif
 
                         @if ($errors->any())
 
@@ -48,7 +54,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        <p class="text-center mt-3 text-muted" style="font-size: .75em">powered by <a href="https://sharp.code16.fr/docs/">Sharp {{sharp_version()}}</a></p>
                     </div>
                 </div>
             </form>

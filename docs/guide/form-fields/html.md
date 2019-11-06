@@ -9,17 +9,34 @@ This field is read-only, and is meant to display some dynamic information in the
 
 ### `setInlineTemplate(string $template)`
 
-::: v-pre
-Just write the template as a string, using placeholders for data like this: `{{var}}`.
-:::
+Write the template as a string, using placeholders for data like this: `{{var}}` where "var" is some key to data sent to the front
 
 Example:
 
 ```php
-$panel->setInlineTemplate(
-    "<h1>{{count}}</h1> spaceships in activity"
-)
+SharpFormHtmlField::make("panel")
+    ->setInlineTemplate(
+        "<h1>{{count}}</h1> spaceships in activity"
+    )
 ```
+
+Like other fields, this example would mean that your transformed data has an object named `panel` containing a `count` attribute. Here more than elsewhere you may need to use a custom transformer, like this is this piece of code:
+
+```php
+function find($id): array
+    {
+        return $this
+            ->setCustomTransformer("panel", function($spaceship) {
+                return [
+                    "count" => $spaceship->activities->count()
+                ];
+            })
+            ->transform(
+                Spaceship::with("activities")->findOrFail($id)
+            );
+    }
+```
+
 
 ### `setTemplatePath(string $templatePath)`
 

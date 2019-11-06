@@ -2,11 +2,11 @@
     <div class="SharpActionBar" v-if="ready">
         <div class="SharpActionBar__bar">
             <div class="container">
-                <div class="row">
-                    <div class="col left pr-0 pr-sm-3">
+                <div class="row mx-n2">
+                    <div class="col left px-2 my-2 my-sm-0">
                         <slot name="left"></slot>
                     </div>
-                    <div class="col right pl-0 pl-sm-3">
+                    <div class="col right px-2">
                         <slot name="right"></slot>
                     </div>
                 </div>

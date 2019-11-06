@@ -92,7 +92,7 @@
     .SharpDataList__row-append {
       @include media-breakpoint-down(sm) {
         padding-top: 0;
-        width: 100%;
+        width: 100%!important;
       }
     }
   }
@@ -135,6 +135,9 @@
 
     &-html-container {
       max-width: 100%;
+      @include media-breakpoint-down(xs) {
+        overflow-wrap: break-word;
+      }
       * {
         font-size: rem(14px) !important;
       }

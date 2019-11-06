@@ -48,7 +48,9 @@
     padding-top: 1.25rem;
     padding-bottom: 1.25rem;
     background: $brand-01;
-    height: 5rem;
+    @include media-breakpoint-up(sm) {
+      height: 5rem;
+    }
     & > .container {
       height: 100%;
       & > .row {
@@ -165,6 +167,12 @@
 
   .SharpButton {
     border-radius: $btn-border-radius;
+    padding-top: .75em;
+    padding-bottom: .75em;
+    @include media-breakpoint-up(sm) {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
     &:focus {
       outline: none;
     }
@@ -207,7 +215,11 @@
     @include media-breakpoint-down(sm) {
       &.SharpSearch--active {
         width: 100%;
-        .SharpSearch__input, .SharpSearch__magnifier {
+        .SharpSearch__input {
+          z-index: 101;
+          width: 100%;
+        }
+        .SharpSearch__magnifier {
           z-index: 101;
         }
 
@@ -231,6 +243,8 @@
       }
       .SharpSearch__input {
         padding-right: 0;
+        padding-top: .75em;
+        padding-bottom: .75em;
       }
     }
   }

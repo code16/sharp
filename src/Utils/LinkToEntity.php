@@ -6,7 +6,6 @@ use Illuminate\Support\Collection;
 
 class LinkToEntity
 {
-
     /** @var string */
     protected $linkText;
 
@@ -38,10 +37,21 @@ class LinkToEntity
      * @param string $linkText
      * @param string $entityKey
      */
-    public function __construct($linkText, $entityKey)
+    public function __construct($linkText = null, $entityKey = null)
     {
         $this->linkText = $linkText;
         $this->entityKey = $entityKey;
+    }
+
+    /**
+     * @param string $entityKey
+     * @return $this
+     */
+    public function setEntityKey($entityKey)
+    {
+        $this->entityKey = $entityKey;
+
+        return $this;
     }
 
     /**

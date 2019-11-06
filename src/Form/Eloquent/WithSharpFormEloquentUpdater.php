@@ -20,7 +20,10 @@ trait WithSharpFormEloquentUpdater
      */
     function ignore($attribute)
     {
-        $this->ignoredAttributes += (array)$attribute;
+        $this->ignoredAttributes = array_merge(
+            $this->ignoredAttributes,
+            (array)$attribute
+        );
 
         return $this;
     }

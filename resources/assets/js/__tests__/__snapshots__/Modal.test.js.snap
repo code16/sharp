@@ -1,89 +1,91 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`modal mount 1`] = `
-<div class="SharpModal">
-	<div id="modal-id___BV_modal_outer_" style="position: absolute; z-index: 1040;">
-		<div id="modal-id" role="dialog" tabindex="-1" aria-hidden="true" class="modal fade" style="display: none;">
-			<div class="modal-dialog modal-md">
-				<div role="document" id="modal-id___BV_modal_content_" aria-labelledby="modal-id___BV_modal_header_" aria-describedby="modal-id___BV_modal_body_" class="modal-content">
-					<header id="modal-id___BV_modal_header_" class="modal-header">
-						<div>
-							<h5 class="SharpModal__heading">title</h5>
-							<button type="button" class="SharpModal__close">
-								<svg width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd" class="SharpModal__close-icon">
-									<path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
-								</svg>
-							</button>
-						</div>
-					</header>
-					<div id="modal-id___BV_modal_body_" class="modal-body"></div>
-					<footer id="modal-id___BV_modal_footer_" class="modal-footer">
-						<button type="button" class="btn btn-secondary">cancel title</button>
-						<button type="button" class="btn btn-primary">ok title</button>
-					</footer>
-				</div>
+<div id="modal-id___BV_modal_outer_" style="position: absolute; z-index: 1040;">
+	<div id="modal-id" role="dialog" aria-hidden="true" aria-labelledby="modal-id___BV_modal_title_" aria-describedby="modal-id___BV_modal_body_" class="modal fade SharpModal" style="display: none;">
+		<div class="modal-dialog modal-md">
+			<!---->
+			<div role="document" id="modal-id___BV_modal_content_" tabindex="-1" class="modal-content">
+				<header id="modal-id___BV_modal_header_" class="modal-header">
+					<div>
+						<h5 class="SharpModal__heading">title</h5>
+						<button type="button" class="SharpModal__close">
+							<svg width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd" class="SharpModal__close-icon">
+								<path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
+							</svg>
+						</button>
+					</div>
+				</header>
+				<div id="modal-id___BV_modal_body_" class="modal-body"></div>
+				<footer id="modal-id___BV_modal_footer_" class="modal-footer">
+					<button type="button" class="btn btn-secondary">cancel title</button>
+					<button type="button" class="btn btn-primary">ok title</button>
+				</footer>
 			</div>
+			<!---->
 		</div>
-		<!---->
-		<!---->
 	</div>
+	<!---->
 </div>
 `;
 
 exports[`modal mount ok only 1`] = `
-<div class="SharpModal">
-	<div id="mocked___BV_modal_outer_" style="position: absolute; z-index: 1040;">
-		<div id="mocked" role="dialog" tabindex="-1" aria-hidden="true" class="modal fade" style="display: none;">
-			<div class="modal-dialog modal-md">
-				<div role="document" id="mocked___BV_modal_content_" aria-labelledby="mocked___BV_modal_header_" aria-describedby="mocked___BV_modal_body_" class="modal-content">
-					<header id="mocked___BV_modal_header_" class="modal-header">
-						<div>
-							<h5 class="SharpModal__heading"></h5>
-							<!---->
-						</div>
-					</header>
-					<div id="mocked___BV_modal_body_" class="modal-body"></div>
-					<footer id="mocked___BV_modal_footer_" class="modal-footer">
+<div id="mocked___BV_modal_outer_" style="position: absolute; z-index: 1040;">
+	<div id="mocked" role="dialog" aria-hidden="true" aria-describedby="mocked___BV_modal_body_" class="modal fade SharpModal" style="display: none;">
+		<div class="modal-dialog modal-md">
+			<!---->
+			<div role="document" id="mocked___BV_modal_content_" tabindex="-1" class="modal-content">
+				<header id="mocked___BV_modal_header_" class="modal-header">
+					<div>
+						<h5 class="SharpModal__heading"></h5>
 						<!---->
-						<button type="button" class="btn btn-primary">{{ modals.ok_button }}</button>
-					</footer>
-				</div>
+					</div>
+				</header>
+				<div id="mocked___BV_modal_body_" class="modal-body"></div>
+				<footer id="mocked___BV_modal_footer_" class="modal-footer">
+					<!---->
+					<button type="button" class="btn btn-primary">{{ modals.ok_button }}</button>
+				</footer>
 			</div>
+			<!---->
 		</div>
-		<!---->
-		<!---->
 	</div>
+	<!---->
 </div>
 `;
 
 exports[`modal mount visible 1`] = `
-<div class="SharpModal">
-	<div id="mocked___BV_modal_outer_" style="position: absolute; z-index: 1040;">
-		<div id="mocked" role="dialog" tabindex="-1" class="modal fade" style="" aria-modal="true">
-			<div class="modal-dialog modal-md">
-				<div role="document" id="mocked___BV_modal_content_" aria-labelledby="mocked___BV_modal_header_" aria-describedby="mocked___BV_modal_body_" class="modal-content">
-					<header id="mocked___BV_modal_header_" class="modal-header">
-						<div>
-							<h5 class="SharpModal__heading"></h5>
-							<button type="button" class="SharpModal__close">
-								<svg width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd" class="SharpModal__close-icon">
-									<path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
-								</svg>
-							</button>
-						</div>
-					</header>
-					<div id="mocked___BV_modal_body_" class="modal-body"></div>
-					<footer id="mocked___BV_modal_footer_" class="modal-footer">
-						<button type="button" class="btn btn-secondary">{{ modals.cancel_button }}</button>
-						<button type="button" class="btn btn-primary">{{ modals.ok_button }}</button>
-					</footer>
-				</div>
+<div id="mocked___BV_modal_outer_" style="position: absolute; z-index: 1040;">
+	<div id="mocked" role="dialog" aria-describedby="mocked___BV_modal_body_" class="modal fade SharpModal" style="" aria-modal="true">
+		<div class="modal-dialog modal-md">
+			<!---->
+			<div role="document" id="mocked___BV_modal_content_" tabindex="-1" class="modal-content">
+				<header id="mocked___BV_modal_header_" class="modal-header">
+					<div>
+						<h5 class="SharpModal__heading"></h5>
+						<button type="button" class="SharpModal__close">
+							<svg width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd" class="SharpModal__close-icon">
+								<path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
+							</svg>
+						</button>
+					</div>
+				</header>
+				<div id="mocked___BV_modal_body_" class="modal-body"></div>
+				<footer id="mocked___BV_modal_footer_" class="modal-footer">
+					<button type="button" class="btn btn-secondary">{{ modals.cancel_button }}</button>
+					<button type="button" class="btn btn-primary">{{ modals.ok_button }}</button>
+				</footer>
 			</div>
+			<!---->
 		</div>
-		<!---->
-		<div id="mocked___BV_modal_backdrop_" class="modal-backdrop fade"></div>
 	</div>
+	<div id="mocked___BV_modal_backdrop_" class="modal-backdrop"></div>
 </div>
 `;
 
-exports[`modal mount with modifiers classes 1`] = `<div class="SharpModal SharpModal--error"></div>`;
+exports[`modal mount with modifiers classes 1`] = `
+<div id="mocked___BV_modal_outer_" style="position: absolute; z-index: 1040;">
+	<div id="mocked" role="dialog" aria-hidden="true" aria-describedby="mocked___BV_modal_body_" class="modal fade SharpModal SharpModal--error" style="display: none;"></div>
+	<!---->
+</div>
+`;

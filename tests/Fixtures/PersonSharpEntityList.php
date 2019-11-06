@@ -10,6 +10,7 @@ use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\EntityListRequiredFilter;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Str;
 
 class PersonSharpEntityList extends SharpEntityList
 {
@@ -29,7 +30,7 @@ class PersonSharpEntityList extends SharpEntityList
 
         if($params->hasSearch()) {
             $items = collect($items)->filter(function($item) use($params) {
-                return str_contains(strtolower($item["name"]), $params->searchWords(false));
+                return Str::contains(strtolower($item["name"]), $params->searchWords(false));
             })->all();
         }
 
