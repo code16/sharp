@@ -35,8 +35,8 @@ export function postEntityListReorder({ entityKey, instances }) {
 }
 
 export function getShowView({ entityKey, instanceId }) {
-    return api.post(`show/${entityKey}/${instanceId}`)
-        .then(response => response.data.data);
+    return api.get(`show/${entityKey}/${instanceId || ''}`)
+        .then(response => response.data);
 }
 
 export function getGlobalFilters() {

@@ -67,7 +67,7 @@ describe('EntityListPage', () => {
     test('mount', ()=>{
         const wrapper = createWrapper();
         wrapper.setMethods({
-            instanceFormUrl:()=>'instanceFormUrl',
+            instanceUrl:()=>'instanceUrl',
         });
         wrapper.setData(withDefaults({}));
         wrapper.setData({ ready:true });
@@ -81,7 +81,7 @@ describe('EntityListPage', () => {
             }
         });
         wrapper.setMethods({
-            instanceFormUrl: ()=>'instanceFormUrl',
+            instanceUrl: ()=>'instanceUrl',
             instanceHasState: ()=>true,
             instanceHasCommands: ()=>true,
             instanceStateIconColor: ()=>'instanceStateIconColor',
@@ -119,6 +119,20 @@ describe('EntityListPage', () => {
                 }
             });
             expect(wrapper.vm.hasMultiforms).toEqual(true);
+        });
+
+        test('hasShowPage', () => {
+            const wrapper = createWrapper();
+            wrapper.setData({
+                config: {}
+            });
+            expect(wrapper.vm.hasShowPage).toEqual(false);
+            wrapper.setData({
+                config: {
+                    hasShowPage: true,
+                }
+            });
+            expect(wrapper.vm.hasShowPage).toEqual(true);
         });
 
         test('apiParams', () => {
@@ -541,11 +555,14 @@ describe('EntityListPage', () => {
             expect(wrapper.vm.instanceForm({})).toEqual({ instances:[1,2] });
         });
 
-        test('instanceFormUrl', () => {
+        test('instanceUrl', () => {
             let wrapper;
+
+            //classic form
             wrapper = createWrapper({
                 computed: {
                     hasMultiforms: ()=>false,
+                    hasShowPage: ()=>false,
                 }
             });
             wrapper.setMethods({
@@ -553,17 +570,19 @@ describe('EntityListPage', () => {
                 formUrl: jest.fn(()=>'formUrl'),
                 instanceHasViewAuthorization: jest.fn(()=>true),
             });
-            expect(wrapper.vm.instanceFormUrl({})).toEqual('formUrl');
+            expect(wrapper.vm.instanceUrl({})).toEqual('formUrl');
             expect(wrapper.vm.formUrl).toHaveBeenCalledWith({ instanceId:1 });
 
             wrapper.setMethods({
                 instanceHasViewAuthorization: jest.fn(()=>false),
             });
-            expect(wrapper.vm.instanceFormUrl({})).toBe(null);
+            expect(wrapper.vm.instanceUrl({})).toBe(null);
 
+            //multiforms
             wrapper = createWrapper({
                 computed: {
-                    hasMultiforms: ()=>true
+                    hasMultiforms: ()=>true,
+                    hasShowPage: ()=>false,
                 }
             });
             wrapper.setMethods({
@@ -574,14 +593,29 @@ describe('EntityListPage', () => {
             wrapper.setMethods({
                 instanceForm: jest.fn(()=>null),
             });
-            expect(wrapper.vm.instanceFormUrl({})).toEqual('formUrl');
+            expect(wrapper.vm.instanceUrl({})).toEqual('formUrl');
             expect(wrapper.vm.formUrl).toHaveBeenCalledWith({ formKey:undefined, instanceId:1 });
 
             wrapper.setMethods({
                 instanceForm: jest.fn(()=>({ key:'form' })),
             });
-            expect(wrapper.vm.instanceFormUrl({})).toEqual('formUrl');
+            expect(wrapper.vm.instanceUrl({})).toEqual('formUrl');
             expect(wrapper.vm.formUrl).toHaveBeenCalledWith({ formKey:'form', instanceId:1 });
+
+            //show page
+            wrapper = createWrapper({
+                computed: {
+                    hasMultiforms: ()=>false,
+                    hasShowPage: ()=>true,
+                }
+            });
+            wrapper.setMethods({
+                instanceId: jest.fn(()=>1),
+                showUrl: jest.fn(()=>'showUrl'),
+                instanceHasViewAuthorization: jest.fn(()=>true),
+            });
+            expect(wrapper.vm.instanceUrl({})).toEqual('showUrl');
+            expect(wrapper.vm.showUrl).toHaveBeenCalledWith({ instanceId:1 });
         });
 
         test('instanceHasViewAuthorization', ()=>{
@@ -667,6 +701,16 @@ describe('EntityListPage', () => {
             expect(wrapper.vm.formUrl()).toEqual('BASE_URL/form/entityKey');
             expect(wrapper.vm.formUrl({ instanceId:'instanceId' })).toEqual('BASE_URL/form/entityKey/instanceId');
             expect(wrapper.vm.formUrl({ formKey:'formKey', instanceId:'instanceId' })).toEqual('BASE_URL/form/entityKey:formKey/instanceId');
+        });
+
+        test('showUrl', () => {
+            const wrapper = createWrapper({
+                computed: {
+                    entityKey:()=>'entityKey'
+                }
+            });
+            expect(wrapper.vm.showUrl()).toEqual('BASE_URL/show/entityKey');
+            expect(wrapper.vm.showUrl({ instanceId:'instanceId' })).toEqual('BASE_URL/show/entityKey/instanceId');
         });
 
         test('handleCommandRequested', ()=>{

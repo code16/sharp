@@ -40,7 +40,7 @@
                         {{ l('entity_list.empty_text') }}
                     </template>
                     <template slot="item" slot-scope="{ item }">
-                        <SharpDataListRow :url="instanceFormUrl(item)" :columns="columns" :row="item">
+                        <SharpDataListRow :url="instanceUrl(item)" :columns="columns" :row="item">
                             <template v-if="hasActionsColumn">
                                 <template slot="append">
                                     <div class="row justify-content-end justify-content-md-start mx-n2">
@@ -163,6 +163,9 @@
             }),
             hasMultiforms() {
                 return !!this.forms;
+            },
+            hasShowPage() {
+                return !!this.config.hasShowPage;
             },
             apiParams() {
                 return this.$route.query;
@@ -333,10 +336,13 @@
                 const instanceId = this.instanceId(instance);
                 return this.multiforms.find(form => form.instances.includes(instanceId));
             },
-            instanceFormUrl(instance) {
+            instanceUrl(instance) {
                 const instanceId = this.instanceId(instance);
                 if(!this.instanceHasViewAuthorization(instance)) {
                     return null;
+                }
+                if(this.hasShowPage) {
+                    return this.showUrl({ instanceId });
                 }
                 if(this.hasMultiforms) {
                     const form = this.instanceForm(instance) || {};
@@ -423,6 +429,9 @@
              */
             formUrl({ formKey, instanceId }={}) {
                 return `${BASE_URL}/form/${this.entityKey}${formKey?`:${formKey}`:''}${instanceId?`/${instanceId}`:''}`
+            },
+            showUrl({ instanceId }={}) {
+                return `${BASE_URL}/show/${this.entityKey}${instanceId ? `/${instanceId}` : ''}`;
             },
             tryParseNumber(val) {
                 if(Array.isArray(val)) {
