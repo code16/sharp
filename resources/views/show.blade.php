@@ -6,4 +6,8 @@
         @include("sharp::partials._menu")
     </div>
 
+    <sharp-action-view context="show">
+        <router-view></router-view>
+    </sharp-action-view>
+
 @endsection
