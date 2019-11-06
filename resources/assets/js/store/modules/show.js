@@ -3,24 +3,27 @@ import {getShowView} from "../../api";
 
 const SET_ENTITY_KEY = 'SET_ENTITY_KEY';
 const SET_INSTANCE_ID = 'SET_INSTANCE_ID';
-const SET_SHOW_VIEW = 'SET_SHOW_VIEW';
+const SET_SHOW = 'SET_SHOW_VIEW';
 
 
 export default {
     namespaced: true,
     modules: {
         filters,
+        'entity-lists': {
+            namespaced: true,
+        }
     },
 
     state: {
         entityKey: null,
         instanceId: null,
-        showView: null,
+        show: null,
     },
 
     mutations: {
-        [SET_SHOW_VIEW](state, showView) {
-            state.showView = showView;
+        [SET_SHOW](state, show) {
+            state.show = show;
         },
         [SET_ENTITY_KEY](state, entityKey) {
             state.entityKey = entityKey;
@@ -32,19 +35,19 @@ export default {
 
     getters: {
         config(state) {
-            return state.showView.config;
+            return state.show.config;
         },
         fields(state) {
-            return state.showView.fields;
+            return state.show.fields;
         },
         layout(state) {
-            return state.showView.layout;
+            return state.show.layout;
         },
         data(state) {
-            return state.showView.data;
+            return state.show.data;
         },
         authorizations(state) {
-            return state.showView.authorizations;
+            return state.show.authorizations;
         },
         canEdit(state, getters) {
             return getters.authorizations.update;
@@ -57,7 +60,7 @@ export default {
                 entityKey: state.entityKey,
                 instanceId: state.instanceId,
             });
-            commit(SET_SHOW_VIEW, data);
+            commit(SET_SHOW, data);
         },
         setEntityKey({ commit }, entityKey) {
             commit(SET_ENTITY_KEY, entityKey);
