@@ -70,7 +70,7 @@ describe('store filters', () => {
             const state = {
             };
             const getters = {
-                filterQueryKey: jest.fn(key => `TEST_${key}`),
+                filterQueryKey: jest.fn(key => `filter_${key}`),
                 filter: jest.fn(key => ({ key })),
                 serializeValue: jest.fn(({ filter, value }) => value),
             };
@@ -80,7 +80,7 @@ describe('store filters', () => {
                 type: 'aaa',
                 name: 'bbb',
             })).toEqual({
-                'TEST_type': 'aaa', 'TEST_name': 'bbb'
+                'filter_type': 'aaa', 'filter_name': 'bbb'
             });
             expect(getters.serializeValue).toHaveBeenCalledWith({ filter:{ key:'type' }, value:'aaa' });
             expect(getters.serializeValue).toHaveBeenCalledWith({ filter:{ key:'name' }, value:'bbb' });

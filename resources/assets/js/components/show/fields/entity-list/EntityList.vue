@@ -5,12 +5,11 @@
         :show-create-button="showCreateButton"
         :show-reorder-button="showReorderButton"
         :show-search-field="showSearchField"
-        :hidden-filters="hiddenFilters"
         :hidden-commands="hiddenCommands"
         inline
     >
         <template slot="action-bar" slot-scope="{ props, listeners }">
-            <ActionBar v-if="props" v-bind="props" v-on="listeners" />
+            <ActionBar v-bind="props" v-on="listeners" />
         </template>
     </SharpEntityList>
 </template>
@@ -19,6 +18,7 @@
     import EntityListModule from '../../../../store/modules/entity-list';
     import SharpEntityList from "../../../list/EntityList";
     import ActionBar from "./ActionBar";
+    import { getFiltersQueryParams } from "../../../../util/filters";
 
     export default {
         props: {
@@ -40,6 +40,7 @@
         },
         created() {
             this.$store.registerModule(this.storeModule.split('/'), EntityListModule);
+            this.$store.dispatch(`${this.storeModule}/setQuery`, getFiltersQueryParams(this.hiddenFilters));
         },
     }
 </script>

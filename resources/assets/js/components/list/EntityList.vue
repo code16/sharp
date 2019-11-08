@@ -126,7 +126,6 @@
                 type: Boolean,
                 default: true,
             },
-            hiddenFilters: Object,
             hiddenCommands: Object,
         },
         data() {
@@ -550,10 +549,7 @@
 
                 await this.storeDispatch('update', {
                     config: this.config,
-                    filtersValues: {
-                        ...this.getFiltersValuesFromQuery(this.query),
-                        ...this.hiddenFilters,
-                    },
+                    filtersValues: this.getFiltersValuesFromQuery(this.query),
                 });
                 this.ready = true;
             },

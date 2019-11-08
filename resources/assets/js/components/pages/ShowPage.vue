@@ -8,15 +8,21 @@
                     @command="handleEntityCommandRequested"
                 />
 
-                <SharpEntityList
-                    v-if="fields.pilots"
-                    :entity-key="fields.pilots.entityListKey"
-                    :show-create-button="fields.pilots.showCreateButton"
-                    :show-reorder-button="fields.pilots.showReorderButton"
-                    :show-search-field="fields.pilots.showSearchField"
-                    module="show/entity-lists/pilot"
-                    inline
-                />
+                <template v-for="section in layout.sections">
+                    <SharpGrid :rows="[section.columns]">
+                        <template slot-scope="fieldsLayout">
+                            <SharpGrid :rows="fieldsLayout.fields">
+                                <template slot-scope="fieldLayout">
+                                    <SharpShowField
+                                        :options="fieldOptions(fieldLayout)"
+                                        :value="fieldValue(fieldLayout)"
+                                    />
+                                </template>
+                            </SharpGrid>
+                        </template>
+                    </SharpGrid>
+                </template>
+
             </template>
         </div>
     </div>
@@ -29,12 +35,14 @@
     import SharpActionBarShow from "../action-bar/ActionBarShow";
     import SharpEntityList from '../list/EntityList';
     import SharpGrid from "../Grid";
+    import SharpShowField from '../show/Field';
 
     export default {
         components: {
             SharpActionBarShow,
             SharpEntityList,
             SharpGrid,
+            SharpShowField,
         },
 
         data() {
@@ -50,24 +58,31 @@
             }),
             ...mapGetters('show', [
                 'canEdit',
-                'fields'
+                'fields',
+                'layout',
+                'data',
             ]),
+
             formUrl() {
                 return `${BASE_URL}/form/${this.entityKey}/${this.instanceId}`;
             },
         },
 
         methods: {
+            fieldOptions(layout) {
+                console.log(layout);
+                return this.fields[layout.key];
+            },
+            fieldValue(layout) {
+                return this.data[layout.key];
+            },
+            handleEntityCommandRequested() {
+
+            },
             async init() {
                 await this.$store.dispatch('show/setEntityKey', this.$route.params.entityKey);
                 await this.$store.dispatch('show/setInstanceId', this.$route.params.instanceId);
                 await this.$store.dispatch('show/get');
-
-                Object.values(this.fields).forEach(field => {
-                    if(field.type === 'entityList') {
-                        this.$store.registerModule(['show', 'entity-lists', field.entityListKey], EntityListModule);
-                    }
-                });
 
                 this.ready = true;
             }
