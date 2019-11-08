@@ -6,7 +6,11 @@
                 <SharpEntityList
                     :entity-key="entityKey"
                     module="entity-list"
-                />
+                >
+                    <template slot="action-bar" slot-scope="{ props, listeners }">
+                        <SharpActionBarList v-bind="props" v-on="listeners" />
+                    </template>
+                </SharpEntityList>
             </template>
         </div>
     </div>
@@ -14,13 +18,15 @@
 
 <script>
     import isEqual from 'lodash/isEqual';
-    import SharpEntityList from '../list/EntityList';
     import { mapGetters } from 'vuex';
+    import SharpEntityList from '../list/EntityList';
+    import SharpActionBarList from '../action-bar/ActionBarList';
 
     export default {
         name: 'SharpEntityListPage',
         components: {
             SharpEntityList,
+            SharpActionBarList,
         },
         data() {
             return {

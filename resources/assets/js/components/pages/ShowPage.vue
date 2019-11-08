@@ -28,11 +28,13 @@
     import { mapState, mapGetters } from 'vuex';
     import SharpActionBarShow from "../action-bar/ActionBarShow";
     import SharpEntityList from '../list/EntityList';
+    import SharpGrid from "../Grid";
 
     export default {
         components: {
             SharpActionBarShow,
             SharpEntityList,
+            SharpGrid,
         },
 
         data() {

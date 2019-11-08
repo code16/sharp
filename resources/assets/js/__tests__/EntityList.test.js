@@ -1,39 +1,33 @@
 import merge from 'lodash/merge';
 
 import Vuex from 'vuex';
-import SharpEntityListPage from '../../components/pages/EntityListPage.vue';
-import entityListModule from '../../store/modules/entity-list';
+import SharpEntityList from '../components/list/EntityList.vue';
+import entityListModule from '../store/modules/entity-list';
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 
-jest.mock('../../mixins/Localization');
-jest.mock('../../components/DynamicViewMixin');
-jest.mock('../../store/modules/entity-list');
-jest.mock('../../consts', () => ({
+jest.mock('../mixins/Localization');
+jest.mock('../components/DynamicViewMixin');
+jest.mock('../store/modules/entity-list');
+jest.mock('../consts', () => ({
     BASE_URL: 'BASE_URL'
 }));
 
-describe('EntityListPage', () => {
-    function createWrapper({ storeModule={}, ...options }={}) {
+describe('EntityList', () => {
+    function createWrapper({ storeModule={}, propsData, ...options }={}) {
         const localVue = createLocalVue();
         localVue.use(Vuex);
-        const wrapper = shallowMount(SharpEntityListPage, {
+        const wrapper = shallowMount(SharpEntityList, {
             stubs: {
                 'SharpDataList': `<div class="MOCKED_SharpDataList"> <slot name="item" :item="{}" /> </div>`,
                 'SharpDataListRow': `<div class="MOCKED_SharpDataListRow" :url="url"> <slot name="append" /> </div>`,
                 'SharpDropdown':`<div class="MOCKED_SharpDropdown"> <slot name="text"/> <slot /> </div>`,
                 'SharpCommandsDropdown': `<div class="MOCKED_SharpCommandsDropdown"> <slot name="text" /> <slot /> </div>`
             },
-            mocks: {
-                $route: {
-                    params: {
-                        id: 'spaceship'
-                    },
-                    query: {}
-                },
-                $router: {
-                    push: jest.fn()
-                },
+            propsData: {
+                entityKey: 'spaceship',
+                module: 'entity-list',
+                ...propsData,
             },
             created() {
                 jest.spyOn(this, 'init').mockImplementation();
@@ -44,6 +38,9 @@ describe('EntityListPage', () => {
                 }
             }),
             localVue,
+            scopedSlots: {
+                'action-bar': '<div>Action bar</div>',
+            },
             ...options,
         });
         wrapper.vm.$store.dispatch = jest.fn(()=>Promise.resolve());
@@ -99,17 +96,6 @@ describe('EntityListPage', () => {
     });
 
     describe('computed', () => {
-        test('entityKey', () => {
-            const wrapper = createWrapper({
-                storeModule: {
-                    state: {
-                        entityKey: 'spaceship',
-                    },
-                },
-            });
-            expect(wrapper.vm.entityKey).toEqual('spaceship');
-        });
-
         test('hasMultiforms', () => {
             const wrapper = createWrapper();
             expect(wrapper.vm.hasMultiforms).toEqual(false);
@@ -136,20 +122,23 @@ describe('EntityListPage', () => {
         });
 
         test('apiParams', () => {
-            const wrapper = createWrapper();
-            wrapper.vm.$route.query = {
-                search: 'search',
-            };
+            const wrapper = createWrapper({
+                computed: {
+                    query: () => ({
+                        search: 'search',
+                    })
+                }
+            });
             expect(wrapper.vm.apiParams).toEqual({
-                search:'search',
+                search: 'search',
             });
         });
 
         test('apiPath', () => {
             const wrapper = createWrapper({
-                computed: {
-                    entityKey:()=>'entity-key'
-                }
+                propsData: {
+                    entityKey: 'entity-key'
+                },
             });
             expect(wrapper.vm.apiPath).toEqual('list/entity-key');
         });
@@ -314,6 +303,16 @@ describe('EntityListPage', () => {
     });
 
     describe('methods',()=>{
+        test('storeGetter', ()=>{
+            const wrapper = createWrapper({
+                storeModule: {
+                    getters: {
+                        getter: ()=>'test',
+                    }
+                }
+            });
+            expect(wrapper.vm.storeGetter('getter')).toBe('test');
+        });
         test('handleSearchChanged', ()=>{
             const wrapper = createWrapper();
             wrapper.vm.handleSearchChanged('search');
@@ -326,7 +325,10 @@ describe('EntityListPage', () => {
                 search: 'search'
             });
             wrapper.vm.handleSearchSubmitted();
-            expect(wrapper.vm.$router.push).toHaveBeenCalledWith({ query: { search:'search', page: 1, } })
+            expect(wrapper.vm.$store.dispatch).toHaveBeenCalledWith('entity-list/setQuery', {
+                search:'search',
+                page: 1,
+            });
         });
 
         test('handleFilterChanged', ()=>{
@@ -337,11 +339,9 @@ describe('EntityListPage', () => {
             });
             wrapper.vm.handleFilterChanged({ key:'name' }, 'George');
             expect(wrapper.vm.filterNextQuery).toHaveBeenCalledWith({ filter:{ key:'name' }, value:'George' });
-            expect(wrapper.vm.$router.push).toHaveBeenCalledWith({
-                query: {
-                    filter: 'nextQuery',
-                    page: 1,
-                },
+            expect(wrapper.vm.$store.dispatch).toHaveBeenCalledWith('entity-list/setQuery', {
+                filter: 'nextQuery',
+                page: 1,
             });
         });
 
@@ -364,7 +364,7 @@ describe('EntityListPage', () => {
 
         test('handleReorderSubmitted', async () => {
             const wrapper = createWrapper();
-            wrapper.vm.$route.params.id = 'spaceship';
+            // wrapper.vm.$route.params.id = 'spaceship';
             wrapper.setData({
                 reorderedItems: [{ id:1 }],
                 data: {}
@@ -664,38 +664,44 @@ describe('EntityListPage', () => {
         });
 
         test('handleSortChanged', () => {
-            const wrapper = createWrapper();
-            wrapper.vm.$route.query.search = 'abc';
+            const wrapper = createWrapper({
+                computed: {
+                    query: ()=>({
+                        search: 'abc',
+                    })
+                }
+            });
             wrapper.vm.handleSortChanged({
                 prop: 'name',
                 dir: 'desc',
             });
-            expect(wrapper.vm.$router.push).toHaveBeenCalledWith({
-                query: {
-                    search: 'abc',
-                    page: 1,
-                    sort: 'name',
-                    dir: 'desc',
-                }
+            expect(wrapper.vm.$store.dispatch).toHaveBeenCalledWith('entity-list/setQuery', {
+                search: 'abc',
+                page: 1,
+                sort: 'name',
+                dir: 'desc',
             });
         });
 
         test('handlePageChanged', () => {
-            const wrapper = createWrapper();
-            wrapper.vm.$route.query.sort = 'name';
-            wrapper.vm.handlePageChanged(2);
-            expect(wrapper.vm.$router.push).toHaveBeenCalledWith({
-                query: {
-                    sort: 'name',
-                    page: 2,
+            const wrapper = createWrapper({
+                computed: {
+                    query: () => ({
+                        sort: 'name',
+                    })
                 }
+            });
+            wrapper.vm.handlePageChanged(2);
+            expect(wrapper.vm.$store.dispatch).toHaveBeenCalledWith('entity-list/setQuery', {
+                sort: 'name',
+                page: 2,
             });
         });
 
         test('formUrl', () => {
             const wrapper = createWrapper({
-                computed: {
-                    entityKey:()=>'entityKey'
+                propsData: {
+                    entityKey: 'entityKey'
                 }
             });
             expect(wrapper.vm.formUrl()).toEqual('BASE_URL/form/entityKey');
@@ -705,8 +711,8 @@ describe('EntityListPage', () => {
 
         test('showUrl', () => {
             const wrapper = createWrapper({
-                computed: {
-                    entityKey:()=>'entityKey'
+                propsData: {
+                    entityKey: 'entityKey'
                 }
             });
             expect(wrapper.vm.showUrl()).toEqual('BASE_URL/show/entityKey');
@@ -734,6 +740,35 @@ describe('EntityListPage', () => {
             });
             expect(wrapper.vm.commandEndpoint('commandKey')).toEqual('apiPath/command/commandKey');
             expect(wrapper.vm.commandEndpoint('commandKey', 'instanceId')).toEqual('apiPath/command/commandKey/instanceId');
+        });
+
+        test('isEntityCommandAllowed', ()=>{
+            const wrapper = createWrapper();
+            expect(wrapper.vm.isEntityCommandAllowed({ authorization:true })).toEqual(true);
+            expect(wrapper.vm.isEntityCommandAllowed({ })).toEqual(false);
+            wrapper.setProps({
+                hiddenCommands: {
+                    entity: ['command']
+                },
+            });
+            expect(wrapper.vm.isEntityCommandAllowed({ key:'command', authorization:true })).toEqual(false);
+        });
+
+        test('isInstanceCommandAllowed', ()=>{
+            const wrapper = createWrapper();
+            wrapper.setMethods({
+                instanceId: jest.fn(()=>1),
+            });
+            expect(wrapper.vm.isInstanceCommandAllowed({}, { authorization:[1] })).toEqual(true);
+            expect(wrapper.vm.isInstanceCommandAllowed({}, { authorization:[2] })).toEqual(false);
+            expect(wrapper.vm.isInstanceCommandAllowed({}, { authorization:true })).toEqual(true);
+            expect(wrapper.vm.isInstanceCommandAllowed({}, { })).toEqual(false);
+            wrapper.setProps({
+                hiddenCommands: {
+                    instance: ['command']
+                },
+            });
+            expect(wrapper.vm.isInstanceCommandAllowed({}, { key:'command', authorization:true })).toEqual(false);
         });
 
         test('setState', async ()=>{
@@ -769,9 +804,12 @@ describe('EntityListPage', () => {
         });
 
         test('init', ()=>{
-            const wrapper = createWrapper();
+            const wrapper = createWrapper({
+                propsData: {
+                    entityKey: 'entityKey'
+                }
+            });
             wrapper.setData(withDefaults());
-            wrapper.vm.$route.params.id = 'entityKey';
             wrapper.vm.init.mockRestore();
             wrapper.vm.init();
             expect(wrapper.vm.$store.dispatch).toHaveBeenCalledWith('entity-list/setEntityKey', 'entityKey');

@@ -1,15 +1,12 @@
 <template>
     <div class="SharpEntityList">
         <template v-if="ready">
-            <template v-if="inline">
-                Inline action bar
-            </template>
-            <template v-else>
-                <SharpActionBarList
-                    v-bind="actionBarProps"
-                    v-on="actionBarListeners"
-                />
-            </template>
+            <slot
+                name="action-bar"
+                :props="actionBarProps"
+                :listeners="actionBarListeners"
+            />
+
             <SharpDataList
                 :items="items"
                 :columns="columns"
@@ -129,6 +126,8 @@
                 type: Boolean,
                 default: true,
             },
+            hiddenFilters: Object,
+            hiddenCommands: Object,
         },
         data() {
             return {
@@ -215,7 +214,7 @@
              */
             allowedEntityCommands() {
                 return (this.config.commands.entity || [])
-                    .map(group => group.filter(command => command.authorization))
+                    .map(group => group.filter(command => this.isEntityCommandAllowed(command)))
             },
             multiforms() {
                 return this.forms ? Object.values(this.forms) : null;
@@ -349,11 +348,8 @@
                     : !!authorization;
             },
             instanceCommands(instance) {
-                const allInstanceCommands = this.config.commands.instance || [];
-                const instanceId = this.instanceId(instance);
-
-                return allInstanceCommands.reduce((res, group) => [
-                    ...res, group.filter(command => command.authorization.includes(instanceId))
+                return (this.config.commands.instance || []).reduce((res, group) => [
+                    ...res, group.filter(command => this.isInstanceCommandAllowed(instance, command))
                 ], []);
             },
             instanceStateIconColor(instance) {
@@ -507,6 +503,18 @@
             commandEndpoint(commandKey, instanceId) {
                 return `${this.apiPath}/command/${commandKey}${instanceId?`/${instanceId}`:''}`;
             },
+            isEntityCommandAllowed(command) {
+                const hiddenCommands = this.hiddenCommands ? this.hiddenCommands.entity : null;
+                return !!command.authorization && !(hiddenCommands || []).includes(command.key);
+            },
+            isInstanceCommandAllowed(instance, command) {
+                const instanceId = this.instanceId(instance);
+                const hiddenCommands = this.hiddenCommands ? this.hiddenCommands.instance : null;
+                const hasAuthorization = Array.isArray(command.authorization)
+                    ? command.authorization.includes(instanceId)
+                    : !!command.authorization;
+                return hasAuthorization && !(hiddenCommands || []).includes(command.key);
+            },
 
             /**
              * Data
@@ -542,7 +550,10 @@
 
                 await this.storeDispatch('update', {
                     config: this.config,
-                    filtersValues: this.getFiltersValuesFromQuery(this.query)
+                    filtersValues: {
+                        ...this.getFiltersValuesFromQuery(this.query),
+                        ...this.hiddenFilters,
+                    },
                 });
                 this.ready = true;
             },
