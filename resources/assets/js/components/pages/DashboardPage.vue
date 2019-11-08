@@ -1,8 +1,8 @@
 <template>
     <div class="SharpDashboardPage">
         <template v-if="ready">
-            <SharpActionBarDashboard :commands="commands" @command="handleCommandRequested" />
             <div class="container">
+                <SharpActionBarDashboard :commands="commands" @command="handleCommandRequested" />
                 <SharpGrid :rows="layout.rows">
                     <template slot-scope="widgetLayout">
                         <SharpWidget

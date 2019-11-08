@@ -13,6 +13,7 @@
 </template>
 
 <script>
+    import isEqual from 'lodash/isEqual';
     import SharpEntityList from '../list/EntityList';
     import { mapGetters } from 'vuex';
 
@@ -28,6 +29,7 @@
         },
         watch: {
             'query': 'handleQueryChanged',
+            '$route.query': 'init',
         },
         computed: {
             ...mapGetters('entity-list', [
@@ -38,7 +40,10 @@
             },
         },
         methods: {
-            handleQueryChanged(query) {
+            handleQueryChanged(query, oldQuery) {
+                if(isEqual(query, oldQuery)) {
+                    return;
+                }
                 this.$router.push({
                     query: { ...query }
                 });
