@@ -29,13 +29,12 @@
 </template>
 
 <script>
-    import EntityListModule from "../../store/modules/entity-list";
-    import { BASE_URL } from "../../consts";
     import { mapState, mapGetters } from 'vuex';
     import SharpActionBarShow from "../action-bar/ActionBarShow";
     import SharpEntityList from '../list/EntityList';
     import SharpGrid from "../Grid";
     import SharpShowField from '../show/Field';
+    import { formUrl } from "../../util/url";
 
     export default {
         components: {
@@ -64,13 +63,15 @@
             ]),
 
             formUrl() {
-                return `${BASE_URL}/form/${this.entityKey}/${this.instanceId}`;
+                return formUrl({
+                    entityKey: this.entityKey,
+                    instanceId: this.instanceId,
+                });
             },
         },
 
         methods: {
             fieldOptions(layout) {
-                console.log(layout);
                 return this.fields[layout.key];
             },
             fieldValue(layout) {

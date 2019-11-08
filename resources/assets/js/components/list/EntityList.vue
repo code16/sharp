@@ -91,6 +91,7 @@
     import withCommands from '../../mixins/page/with-commands';
 
     import { BASE_URL } from "../../consts";
+    import {formUrl, listUrl, showUrl} from "../../util/url";
 
     export default {
         name: 'SharpEntityList',
@@ -460,10 +461,16 @@
              * Helpers
              */
             formUrl({ formKey, instanceId }={}) {
-                return `${BASE_URL}/form/${this.entityKey}${formKey?`:${formKey}`:''}${instanceId?`/${instanceId}`:''}`
+                return formUrl({
+                    entityKey: formKey ? `${this.entityKey}:${formKey}` : this.entityKey,
+                    instanceId
+                });
             },
             showUrl({ instanceId }={}) {
-                return `${BASE_URL}/show/${this.entityKey}${instanceId ? `/${instanceId}` : ''}`;
+                return showUrl({
+                    entityKey: this.entityKey,
+                    instanceId,
+                });
             },
             tryParseNumber(val) {
                 if(Array.isArray(val)) {

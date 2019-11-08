@@ -58,6 +58,7 @@
 
     import localize from '../../mixins/localize/form';
     import { getDependantFieldsResetData, transformFields } from "../../util/form";
+    import { getBackUrl, getListBackUrl } from "../../util/url";
 
     const noop = ()=>{};
 
@@ -102,6 +103,7 @@
 
                 fields: null,
                 authorizations: null,
+                breadcrumb: null,
 
                 errors:{},
                 fieldLocale: {},
@@ -180,12 +182,13 @@
             updateLocale(key, locale) {
                 this.$set(this.fieldLocale, key, locale);
             },
-            mount({fields, layout, data={}, authorizations={}, locales,}) {
+            mount({ fields, layout, data={}, authorizations={}, locales, breadcrumb }) {
                 this.fields = fields;
                 this.data = data;
                 this.layout = this.patchLayout(layout);
                 this.locales = locales;
                 this.authorizations = authorizations;
+                this.breadcrumb = breadcrumb;
 
                 if(fields) {
                     this.fieldVisible = Object.keys(this.fields).reduce((res, fKey) => {
@@ -254,7 +257,10 @@
                 });
             },
             redirectToList() {
-                location.href = this.listUrl;
+                location.href = getListBackUrl(this.breadcumb, this.baseEntityKey);
+            },
+            redirectToParentPage() {
+                location.href = getBackUrl(this.breadcrumb);
             },
             async submit({ postFn }={}) {
                 if(this.pendingJobs.length) {
@@ -268,7 +274,7 @@
                     }
                     else if(response.data.ok) {
                         this.mainLoading.$emit('show');
-                        this.redirectToList();
+                        this.redirectToParentPage();
                     }
                 }
                 catch(error) {
@@ -291,7 +297,7 @@
                 }
             },
             cancel() {
-                this.redirectToList();
+                this.redirectToParentPage();
             },
 
             setPendingJob({ key, origin, value:isPending }) {
