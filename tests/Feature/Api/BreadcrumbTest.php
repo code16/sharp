@@ -238,4 +238,42 @@ class BreadcrumbTest extends BaseApiTest
             session("sharp_breadcrumb")
         );
     }
+
+    /** @test */
+    public function previous_breadcrumb_item_is_updated_regarding_referer_to_manage_updated_querystring()
+    {
+        $this->buildTheWorld();
+
+        $this->get('/sharp/list/person');
+        $this
+            ->withHeader("Referer", url('/sharp/list/person?filter_type=4&page=2'))
+            ->get('/sharp/show/person/1');
+
+        $this->assertEquals(
+            [url('/sharp/list/person?filter_type=4&page=2'), url('/sharp/show/person/1')],
+            session("sharp_breadcrumb")
+        );
+
+        // Test with bad referer host
+        $this->get('/sharp/list/person');
+        $this
+            ->withHeader("Referer", 'http://some-url.com')
+            ->get('/sharp/show/person/1');
+
+        $this->assertEquals(
+            [url('/sharp/list/person'), url('/sharp/show/person/1')],
+            session("sharp_breadcrumb")
+        );
+
+        // Test with bad referer path
+        $this->get('/sharp/list/person');
+        $this
+            ->withHeader("Referer", url('/sharp/list/spaceship'))
+            ->get('/sharp/show/person/1');
+
+        $this->assertEquals(
+            [url('/sharp/list/person'), url('/sharp/show/person/1')],
+            session("sharp_breadcrumb")
+        );
+    }
 }

@@ -4,6 +4,7 @@ namespace Code16\Sharp\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 /**
  * This middleware is responsible for storing the current breadcrumb
@@ -39,6 +40,11 @@ class StoreBreadcrumb
 
                 } elseif ($breadcrumb[$segmentCount - 1] != $request->fullUrl()) {
                     // Navigate forward: append to breadcrumb
+                    $breadcrumb = $this->updatePreviousBreadcrumbItemWithReferer(
+                        $breadcrumb,
+                        $request->header("referer")
+                    );
+
                     $breadcrumb[] = $request->fullUrl();
 
                 } // Else: current page reload. Do nothing.
@@ -133,6 +139,29 @@ class StoreBreadcrumb
         }
 
         $breadcrumb[] = request()->fullUrl();
+
+        return $breadcrumb;
+    }
+
+    /**
+     * Replace the last breadcrumb item with $referer if both
+     * URL are the same minus the querystring (which we
+     * know to be OK in the $referer URL).
+     *
+     * @param array $breadcrumb
+     * @param string|null $referer
+     * @return array
+     */
+    private function updatePreviousBreadcrumbItemWithReferer($breadcrumb, $referer)
+    {
+        if($referer && sizeof($breadcrumb)) {
+            $lastItem = parse_url(Arr::last($breadcrumb));
+            $refererUrl = parse_url($referer);
+
+            if ($lastItem["host"] == $refererUrl["host"] && $lastItem["path"] == $refererUrl["path"]) {
+                $breadcrumb[sizeof($breadcrumb) - 1] = $referer;
+            }
+        }
 
         return $breadcrumb;
     }
