@@ -9,6 +9,7 @@ Route::group([
 
     Route::get("/dashboard/{dashboardKey}")
         ->name("code16.sharp.api.dashboard")
+        ->middleware(['sharp_api_append_breadcrumb'])
         ->uses('DashboardController@show');
 
     Route::get("/dashboard/{dashboardKey}/command/{commandKey}/data")
@@ -21,7 +22,7 @@ Route::group([
 
     Route::get("/list/{entityKey}")
         ->name("code16.sharp.api.list")
-        ->middleware(['sharp_api_append_list_authorizations', 'sharp_api_append_list_multiform', 'sharp_save_list_params', 'sharp_api_append_notifications'])
+        ->middleware(['sharp_api_append_list_authorizations', 'sharp_api_append_list_multiform', 'sharp_api_append_notifications', 'sharp_api_append_breadcrumb'])
         ->uses('EntityListController@show');
 
     Route::post("/list/{entityKey}/reorder")
@@ -50,17 +51,17 @@ Route::group([
 
     Route::get("/show/{entityKey}/{instanceId?}")
         ->name("code16.sharp.api.show.show")
-        ->middleware('sharp_api_append_form_authorizations')
+        ->middleware(['sharp_api_append_form_authorizations', 'sharp_api_append_breadcrumb'])
         ->uses('ShowController@show');
 
     Route::get("/form/{entityKey}")
         ->name("code16.sharp.api.form.create")
-        ->middleware('sharp_api_append_form_authorizations')
+        ->middleware(['sharp_api_append_form_authorizations', 'sharp_api_append_breadcrumb'])
         ->uses('FormController@create');
 
     Route::get("/form/{entityKey}/{instanceId}")
         ->name("code16.sharp.api.form.edit")
-        ->middleware('sharp_api_append_form_authorizations')
+        ->middleware(['sharp_api_append_form_authorizations', 'sharp_api_append_breadcrumb'])
         ->uses('FormController@edit');
 
     Route::post("/form/{entityKey}/{instanceId}")
@@ -113,23 +114,27 @@ Route::group([
 
     Route::get('/list/{entityKey}')
         ->name("code16.sharp.list")
-        ->middleware('sharp_restore_list_params')
+        ->middleware('sharp_store_breadcrumb')
         ->uses('ListController@show');
 
     Route::get('/show/{entityKey}/{instanceId?}')
         ->name("code16.sharp.show")
+        ->middleware('sharp_store_breadcrumb')
         ->uses('ShowController@show');
 
     Route::get('/form/{entityKey}/{instanceId}')
         ->name("code16.sharp.edit")
+        ->middleware('sharp_store_breadcrumb')
         ->uses('FormController@edit');
 
     Route::get('/form/{entityKey}')
         ->name("code16.sharp.create")
+        ->middleware('sharp_store_breadcrumb')
         ->uses('FormController@create');
 
     Route::get('/dashboard/{dashboardKey}')
         ->name("code16.sharp.dashboard")
+        ->middleware('sharp_store_breadcrumb')
         ->uses('DashboardController@show');
 
     Route::post('/api/upload')

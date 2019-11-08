@@ -307,9 +307,9 @@ class CommandControllerTest extends BaseApiTest
             ]);
     }
 
-    protected function buildTheWorld()
+    protected function buildTheWorld($singleShow = false)
     {
-        parent::buildTheWorld();
+        parent::buildTheWorld($singleShow);
 
         $this->app['config']->set(
             'sharp.entities.person.list',
