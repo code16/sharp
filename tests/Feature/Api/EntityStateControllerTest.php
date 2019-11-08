@@ -114,9 +114,9 @@ class EntityStateControllerTest extends BaseApiTest
         ])->assertStatus(403);
     }
 
-    protected function buildTheWorld()
+    protected function buildTheWorld($singleShow = false)
     {
-        parent::buildTheWorld();
+        parent::buildTheWorld($singleShow);
         $this->login();
 
         $this->app['config']->set(
