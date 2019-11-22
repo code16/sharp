@@ -67,6 +67,12 @@
                         </template>
                     </SharpDataListRow>
                 </template>
+
+                <template v-if="$scopedSlots['append-head']">
+                    <template slot="append-head">
+                        <slot name="append-head" :props="actionBarProps" :listeners="actionBarListeners" />
+                    </template>
+                </template>
             </SharpDataList>
         </template>
 

@@ -23,9 +23,11 @@
                                     <a class="SharpDataList__sort-link" @click.prevent="handleSortClicked(column.key)" href=""></a>
                                 </template>
                             </template>
-                            <template v-if="!!headerRowAppendWidth">
+                            <template v-if="$slots['append-head'] || !!headerRowAppendWidth">
                                 <template slot="append">
-                                    <div class="d-none d-md-block" :style="{ width: headerRowAppendWidth }">&nbsp;</div>
+                                    <slot name="append-head">
+                                        <div class="d-none d-md-block" :style="{ width: headerRowAppendWidth }">&nbsp;</div>
+                                    </slot>
                                 </template>
                             </template>
                         </SharpDataListRow>

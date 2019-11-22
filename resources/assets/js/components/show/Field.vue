@@ -1,10 +1,13 @@
 <template>
     <div class="show-field">
-        <component
-            :is="component"
-            :value="value"
-            v-bind="props"
-        />
+        <template v-if="isVisible">
+            <component
+                :is="component"
+                :value="value"
+                v-bind="props"
+            />
+        </template>
+
     </div>
 </template>
 
@@ -24,6 +27,14 @@
                 return {
                     ...this.options,
                 }
+            },
+            isVisible() {
+                if(!this.value) {
+                    if(this.options.type === 'picture') {
+                        return false;
+                    }
+                }
+                return true;
             }
         }
     }

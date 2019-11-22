@@ -79,7 +79,6 @@
     import SharpActionBar from './ActionBar';
     import { Localization } from '../../mixins';
 
-    import SharpText from '../form/fields/Text';
     import SharpFilter from '../list/Filter';
 
     import SharpDropdown from '../dropdown/Dropdown';
@@ -95,7 +94,6 @@
 
         components : {
             SharpActionBar,
-            SharpText,
             SharpDropdown,
             SharpDropdownItem,
             SharpItemVisual,
