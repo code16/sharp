@@ -25,9 +25,7 @@
                             </template>
                             <template v-if="$slots['append-head'] || !!headerRowAppendWidth">
                                 <template slot="append">
-                                    <slot name="append-head">
-                                        <div class="d-none d-md-block" :style="{ width: headerRowAppendWidth }">&nbsp;</div>
-                                    </slot>
+                                    <div class="d-none d-md-block" :style="{ width: headerRowAppendWidth || 'auto' }"><slot name="append-head"></slot></div>
                                 </template>
                             </template>
                         </SharpDataListRow>
