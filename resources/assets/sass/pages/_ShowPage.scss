@@ -1,0 +1,18 @@
+.ShowPage {
+  &__section {
+    background: white;
+    padding: 1rem;
+    &--no-container {
+      background: transparent;
+      padding: 0;
+    }
+  }
+  &__fields-grid {
+    .SharpGrid__row {
+      margin-bottom: 1rem;
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

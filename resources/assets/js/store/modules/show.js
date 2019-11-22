@@ -56,16 +56,18 @@ export default {
             return getters.authorizations.update;
         },
         canChangeState(state, getters) {
-            // TODO https://github.com/code16/sharp-dev/issues/3
-            return getters.config.state && getters.config.state.authorizaton;
+            return getters.config.state && getters.config.state.authorization;
         },
         authorizedCommands(state, getters) {
-            // TODO https://github.com/code16/sharp-dev/issues/3
             return (getters.config.commands.instance || [])
                 .map(group => group.filter(command => command.authorization));
         },
-        instanceState() {
-            // TODO https://github.com/code16/sharp-dev/issues/5
+        instanceState(state, getters) {
+            const stateOptions = getters.config.state;
+            if(stateOptions) {
+                const stateValue =  getters.data[stateOptions.attribute];
+                return getters.config.state.values.find(item => item.value === stateValue);
+            }
             return null;
         },
         stateValues(state, getters) {
@@ -101,6 +103,7 @@ export default {
         postState({ state, getters }, value) {
             return postShowState({
                 entityKey: state.entityKey,
+                instanceId: state.instanceId,
                 attribute: getters.config.state.attribute,
                 value,
             });

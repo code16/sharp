@@ -1,5 +1,5 @@
 <template>
-    <div class="SharpShowPage">
+    <div class="ShowPage">
         <div class="container">
             <template v-if="ready">
                 <SharpActionBarShow
@@ -16,18 +16,23 @@
                 />
 
                 <template v-for="section in layout.sections">
-                    <SharpGrid :rows="[section.columns]">
-                        <template slot-scope="fieldsLayout">
-                            <SharpGrid :rows="fieldsLayout.fields">
-                                <template slot-scope="fieldLayout">
-                                    <SharpShowField
-                                        :options="fieldOptions(fieldLayout)"
-                                        :value="fieldValue(fieldLayout)"
-                                    />
-                                </template>
-                            </SharpGrid>
-                        </template>
-                    </SharpGrid>
+                    <template v-if="section.title">
+                        <h2>{{ section.title }}</h2>
+                    </template>
+                    <div class="ShowPage__section mb-3" :class="sectionClasses(section)">
+                        <SharpGrid :rows="[section.columns]">
+                            <template slot-scope="fieldsLayout">
+                                <SharpGrid class="ShowPage__fields-grid" :rows="fieldsLayout.fields">
+                                    <template slot-scope="fieldLayout">
+                                        <SharpShowField
+                                            :options="fieldOptions(fieldLayout)"
+                                            :value="fieldValue(fieldLayout)"
+                                        />
+                                    </template>
+                                </SharpGrid>
+                            </template>
+                        </SharpGrid>
+                    </div>
                 </template>
 
             </template>
@@ -102,6 +107,18 @@
             fieldValue(layout) {
                 return this.data[layout.key];
             },
+            sectionClasses(section) {
+                return {
+                    'ShowPage__section--no-container': this.sectionHasField(section, 'entityList'),
+                }
+            },
+            sectionHasField(section, type) {
+                const sectionFields = section.columns.reduce((res, column) => [...res, ...column.fields.flat()], []);
+                return sectionFields.some(fieldLayout => {
+                    const options = this.fieldOptions(fieldLayout);
+                    return options.type === type;
+                });
+            },
             handleCommandRequested(command) {
                 this.sendCommand(command, {
                     postCommand: () => this.$store.dispatch('show/postCommand', { command }),
@@ -111,13 +128,11 @@
             },
             handleStateChanged(state) {
                 this.$store.dispatch('show/postState', state)
-                    .then(response => {
-                        // TODO https://github.com/code16/sharp-dev/issues/6
-                        const { data } = response;
+                    .then(data => {
                         this.handleCommandActionRequested(data.action, data);
                     })
                     .catch(error => {
-                        const { data } = error.response;
+                        const data = error.response.data;
                         if(error.response.status === 422) {
                             this.actionsBus.$emit('showMainModal', {
                                 title: this.l('modals.state.422.title'),
