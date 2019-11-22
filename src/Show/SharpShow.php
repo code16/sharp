@@ -68,7 +68,7 @@ abstract class SharpShow
         ];
 
         return tap($config, function(&$config) use($instanceId) {
-            $this->appendEntityStateToConfig($config);
+            $this->appendEntityStateToConfig($config, $instanceId);
             $this->appendCommandsToConfig($config, $instanceId);
         });
     }

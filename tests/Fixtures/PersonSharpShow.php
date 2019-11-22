@@ -32,18 +32,9 @@ class PersonSharpShow extends SharpShow
                 public function execute($instanceId, array $data = []): array
                 {
                 }
-            })
-            ->addInstanceCommand("unauthorized_command", new class extends InstanceCommand {
-                public function label(): string
-                {
-                    return "Label";
-                }
-                public function execute($instanceId, array $data = []): array
-                {
-                }
                 public function authorizeFor($instanceId): bool
                 {
-                    return false;
+                    return $instanceId < 10;
                 }
             })
             ->setEntityState("state", new class extends EntityState {
@@ -53,6 +44,10 @@ class PersonSharpShow extends SharpShow
                 }
                 protected function updateState($instanceId, $stateId)
                 {
+                }
+                public function authorizeFor($instanceId): bool
+                {
+                    return $instanceId < 10;
                 }
             });
     }

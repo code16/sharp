@@ -132,6 +132,26 @@ class ShowControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
+        $this->json('get', '/sharp/api/show/person/11')
+            ->assertStatus(200)
+            ->assertJson(["config" => [
+                "showBackToEntityList" => true,
+                "commands" => [
+                    "instance" => [
+                        [
+                            [
+                                "key" => "test_command",
+                                "authorization" => false
+                            ],
+                        ]
+                    ]
+                ],
+                "state" => [
+                    "attribute" => "state",
+                    "authorization" => false
+                ]
+            ]]);
+
         $this->json('get', '/sharp/api/show/person/1')
             ->assertStatus(200)
             ->assertJson(["config" => [
@@ -142,13 +162,13 @@ class ShowControllerTest extends BaseApiTest
                             [
                                 "key" => "test_command",
                                 "authorization" => true
-                            ],
-                            [
-                                "key" => "unauthorized_command",
-                                "authorization" => false
                             ]
                         ]
                     ]
+                ],
+                "state" => [
+                    "attribute" => "state",
+                    "authorization" => true
                 ]
             ]]);
     }
