@@ -39,6 +39,22 @@ export function getShowView({ entityKey, instanceId }) {
         .then(response => response.data);
 }
 
+export function postShowCommand({ entityKey, instanceId, commandKey, data }) {
+    return api.post(`list/${entityKey}/command/${commandKey}/${instanceId}`, {
+        data,
+    }, { responseType: 'blob' });
+}
+
+export function getShowCommandFormData({ entityKey, instanceId, commandKey }) {
+    return api.get(`list/${entityKey}/command/${commandKey}/${instanceId}/data`)
+        .then(response => response.data.data);
+}
+
+export function postShowState({ entityKey, instanceId }) {
+    return api.get(`list/${entityKey}/${instanceId}/state`)
+        .then(response => response.data.data);
+}
+
 export function getGlobalFilters() {
     return api.get(`filters`).then(response => response.data);
 }

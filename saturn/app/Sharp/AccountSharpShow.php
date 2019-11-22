@@ -20,7 +20,7 @@ class AccountSharpShow extends SharpSingleShow
                 SharpShowTextField::make("email")
                     ->setLabel("Email:")
             )->addField(
-                SharpShowTextField::make("group")
+                SharpShowTextField::make("groups")
                     ->setLabel("Groups:")
             );
     }

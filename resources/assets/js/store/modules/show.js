@@ -1,26 +1,29 @@
 import filters from './filters';
-import {getShowView} from "../../api";
+import { getShowView, postShowCommand, getShowCommandFormData, postShowState } from "../../api";
 
 const SET_ENTITY_KEY = 'SET_ENTITY_KEY';
 const SET_INSTANCE_ID = 'SET_INSTANCE_ID';
-const SET_SHOW_VIEW = 'SET_SHOW_VIEW';
+const SET_SHOW = 'SET_SHOW_VIEW';
 
 
 export default {
     namespaced: true,
     modules: {
         filters,
+        'entity-lists': {
+            namespaced: true,
+        }
     },
 
     state: {
         entityKey: null,
         instanceId: null,
-        showView: null,
+        show: null,
     },
 
     mutations: {
-        [SET_SHOW_VIEW](state, showView) {
-            state.showView = showView;
+        [SET_SHOW](state, show) {
+            state.show = show;
         },
         [SET_ENTITY_KEY](state, entityKey) {
             state.entityKey = entityKey;
@@ -32,22 +35,43 @@ export default {
 
     getters: {
         config(state) {
-            return state.showView.config;
+            return state.show.config;
         },
         fields(state) {
-            return state.showView.fields;
+            return state.show.fields;
         },
         layout(state) {
-            return state.showView.layout;
+            return state.show.layout;
         },
         data(state) {
-            return state.showView.data;
+            return state.show.data;
+        },
+        breadcrumb(state) {
+            return state.show.breadcrumb;
         },
         authorizations(state) {
-            return state.showView.authorizations;
+            return state.show.authorizations;
         },
         canEdit(state, getters) {
             return getters.authorizations.update;
+        },
+        canChangeState(state, getters) {
+            // TODO https://github.com/code16/sharp-dev/issues/3
+            return getters.config.state && getters.config.state.authorizaton;
+        },
+        authorizedCommands(state, getters) {
+            // TODO https://github.com/code16/sharp-dev/issues/3
+            return (getters.config.commands.instance || [])
+                .map(group => group.filter(command => command.authorization));
+        },
+        instanceState() {
+            // TODO https://github.com/code16/sharp-dev/issues/5
+            return null;
+        },
+        stateValues(state, getters) {
+            return getters.config.state
+                ? getters.config.state.values
+                : null;
         },
     },
 
@@ -57,7 +81,29 @@ export default {
                 entityKey: state.entityKey,
                 instanceId: state.instanceId,
             });
-            commit(SET_SHOW_VIEW, data);
+            commit(SET_SHOW, data);
+        },
+        postCommand({ state }, { command, data }) {
+            return postShowCommand({
+                entityKey: state.entityKey,
+                instanceId: state.instanceId,
+                commandKey: command.key,
+                data,
+            });
+        },
+        getCommandFormData({ state }, { command }) {
+            return getShowCommandFormData({
+                entityKey: state.entityKey,
+                instanceId: state.instanceId,
+                commandKey: command.key,
+            });
+        },
+        postState({ state, getters }, value) {
+            return postShowState({
+                entityKey: state.entityKey,
+                attribute: getters.config.state.attribute,
+                value,
+            });
         },
         setEntityKey({ commit }, entityKey) {
             commit(SET_ENTITY_KEY, entityKey);

@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import {parseRange, serializeRange} from "../../util/querystring";
+import { getFiltersQueryParams, getFiltersValuesFromQuery } from "../../util/filters";
 
 export const SET_FILTERS = 'SET_FILTERS';
 export const SET_FILTER_VALUE = 'SET_FILTER_VALUE';
@@ -49,22 +50,14 @@ export default {
             return key => `${filterQueryPrefix}${key}`;
         },
         getQueryParams(state, getters) {
-            return values => Object.entries(values)
-                .reduce((res, [key, value]) => ({
-                    ...res,
-                    [getters.filterQueryKey(key)]: getters.serializeValue({
-                        filter: getters.filter(key),
-                        value,
-                    }),
-                }), {});
+            return values => {
+                return getFiltersQueryParams(values, (value, key) =>
+                    getters.serializeValue({ filter:getters.filter(key), value })
+                );
+            }
         },
         getValuesFromQuery() {
-            return query => Object.entries(query || {})
-                .filter(([key]) => filterQueryRE.test(key))
-                .reduce((res, [key, value]) => ({
-                    ...res,
-                    [key.replace(filterQueryRE, '')]: value
-                }), {});
+            return query => getFiltersValuesFromQuery(query);
         },
         resolveFilterValue(state, getters) {
             return ({ filter, value }) => {

@@ -5,32 +5,13 @@
         </template>
         <template slot="right">
             <template v-if="canSearch && !reorderActive">
-                <div class="SharpActionBar__search SharpSearch SharpSearch--lg" :class="{'SharpSearch--active':searchActive}" role="search">
-                    <form class="h-100" @submit.prevent="handleSearchSubmitted">
-                        <label id="ab-search-label" class="SharpSearch__label" for="ab-search-input">{{ l('action_bar.list.search.placeholder') }}</label>
-                        <input class="SharpSearch__input w-100"
-                            :value="search"
-                            :placeholder="l('action_bar.list.search.placeholder')"
-                            type="text"
-                            id="ab-search-input"
-                            role="search"
-                            aria-labelledby="ab-search-label"
-                            @input="handleSearchInput"
-                            @focus="handleSearchFocused"
-                            @blur="handleSearchBlur"
-                            ref="search"
-                        >
-                        <svg class="SharpSearch__magnifier" width="16" height="16" viewBox="0 0 16 16" fill-rule="evenodd">
-                            <path d="M6 2c2.2 0 4 1.8 4 4s-1.8 4-4 4-4-1.8-4-4 1.8-4 4-4zm0-2C2.7 0 0 2.7 0 6s2.7 6 6 6 6-2.7 6-6-2.7-6-6-6zM16 13.8L13.8 16l-3.6-3.6 2.2-2.2z"></path>
-                            <path d="M16 13.8L13.8 16l-3.6-3.6 2.2-2.2z"></path>
-                        </svg>
-                        <svg class="SharpSearch__close" :class="{'SharpSearch__close--hidden':!(search||'').length}"
-                            @click="handleClearButtonClicked"
-                            width="16" height="16" viewBox="0 0 16 16" fill-rule="evenodd">
-                            <path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm3.5 10.1l-1.4 1.4L8 9.4l-2.1 2.1-1.4-1.4L6.6 8 4.5 5.9l1.4-1.4L8 6.6l2.1-2.1 1.4 1.4L9.4 8l2.1 2.1z"></path>
-                        </svg>
-                    </form>
-                </div>
+                <SharpSearch
+                    :value="search"
+                    :active.sync="searchActive"
+                    :placeholder="l('action_bar.list.search.placeholder')"
+                    @input="handleSearchInput"
+                    @submit="handleSearchSubmitted"
+                />
             </template>
 
             <template v-if="canReorder">
@@ -105,9 +86,13 @@
     import SharpDropdownItem from '../dropdown/DropdownItem';
     import SharpItemVisual from '../ui/ItemVisual';
     import SharpCommandsDropdown from '../commands/CommandsDropdown';
+    import SharpSearch from '../ui/Search';
 
     export default {
         name: 'SharpActionBarList',
+
+        mixins: [Localization],
+
         components : {
             SharpActionBar,
             SharpText,
@@ -116,9 +101,8 @@
             SharpItemVisual,
             SharpCommandsDropdown,
             SharpFilter,
+            SharpSearch,
         },
-
-        mixins: [Localization],
 
         props: {
             count: Number,
@@ -149,18 +133,8 @@
             },
         },
         methods: {
-            handleSearchFocused() {
-                this.searchActive = true;
-            },
-            handleSearchBlur() {
-                this.searchActive = false;
-            },
-            handleSearchInput(e) {
-                this.$emit('search-change', e.target.value);
-            },
-            handleClearButtonClicked() {
-                this.$emit('search-change', '');
-                this.$refs.search.focus();
+            handleSearchInput(search) {
+                this.$emit('search-change', search);
             },
             handleSearchSubmitted() {
                 this.$emit('search-submit');

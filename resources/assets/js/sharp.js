@@ -15,16 +15,13 @@ import SharpLeftNav from './components/menu/LeftNav';
 import SharpItemVisual from './components/ui/ItemVisual';
 import Loading from './components/ui/Loading';
 
-import routes from './routes';
+import { router } from "./router";
 
 import axios from 'axios';
 import cookies from 'axios/lib/helpers/cookies';
-import qs from 'qs';
-
 import Notifications from 'vue-notification';
 
 import store from './store';
-import { BASE_URL } from "./consts";
 
 import locale from 'element-ui/lib/locale';
 import { elLang } from './util/element-ui';
@@ -66,13 +63,7 @@ new Vue({
     },
 
     store: new Vuex.Store(store),
-    router: new VueRouter({
-        mode: 'history',
-        routes,
-        base: `${BASE_URL}/`,
-        parseQuery: query => qs.parse(query, { strictNullHandling: true }),
-        stringifyQuery: query => qs.stringify(query, { addQueryPrefix: true, skipNulls: true }),
-    })
+    router: router(),
 });
 
 

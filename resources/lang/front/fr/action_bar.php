@@ -15,6 +15,8 @@ return [
     'form.cancel_button' => 'Annuler',
     'form.delete_button' => 'Supprimer',
     'form.back_button' => 'Retour',
+    'show.edit_button' => 'Modifier...',
+    'show.back_button' => 'Retour',
 
     'form.submit_button.pending.upload' => 'Téléchargement...',
 ];

@@ -1,6 +1,6 @@
-import EntityListPage from './components/pages/EntityListPage.vue';
-import DashboardPage from './components/pages/DashboardPage.vue';
-import ShowPage from './components/pages/ShowPage';
+import EntityListPage from '../components/pages/EntityListPage.vue';
+import DashboardPage from '../components/pages/DashboardPage.vue';
+import ShowPage from '../components/pages/ShowPage';
 
 export default [
     {
@@ -17,5 +17,9 @@ export default [
         name: 'show',
         path: '/show/:entityKey/:instanceId?',
         component: ShowPage,
+    },
+    {
+        name: 'form',
+        path: '/form/:entityKey/:instanceId?',
     }
 ];
