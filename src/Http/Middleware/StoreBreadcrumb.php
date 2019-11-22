@@ -45,6 +45,7 @@ class StoreBreadcrumb
 
                 } elseif ($breadcrumb[$segmentCount - 1]["url"] != $request->fullUrl()) {
                     // Navigate forward: append to breadcrumb
+                    // TODO must handle direct URL case.
                     $breadcrumb = $this->updatePreviousBreadcrumbItemWithReferer(
                         $breadcrumb,
                         $request->header("referer")

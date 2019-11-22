@@ -74,7 +74,7 @@ class PilotSharpList extends SharpEntityList
 
             if ($params->hasSearch()) {
                 foreach ($params->searchWords() as $word) {
-                    $pilots->where('name', 'like', $word);
+                    $pilots->where('pilots.name', 'like', $word);
                 }
             }
         }
