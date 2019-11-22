@@ -12,7 +12,7 @@ exports[`action-bar can mount ready ActionBar 1`] = `
 			</div>
 		</div>
 	</div>
-	<div class="container">
+	<div class="">
 		<div class="row">
 			<div class="col">
 				<div class="SharpActionBar__extras"></div>
@@ -37,7 +37,7 @@ exports[`action-bar can mount with slots ActionBar 1`] = `
 			</div>
 		</div>
 	</div>
-	<div class="container">
+	<div class="">
 		<div class="row">
 			<div class="col">
 				<div class="SharpActionBar__extras">
