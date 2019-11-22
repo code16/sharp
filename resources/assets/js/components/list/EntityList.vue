@@ -35,8 +35,8 @@
                                                 <template slot="text">
                                                     <SharpStateIcon :color="instanceStateIconColor(item)" />
                                                     <span class="text-truncate">
-                                                {{ instanceStateLabel(item) }}
-                                            </span>
+                                                        {{ instanceStateLabel(item) }}
+                                                    </span>
                                                 </template>
                                                 <SharpDropdownItem
                                                     v-for="stateOptions in config.state.values"
@@ -90,8 +90,7 @@
     import DynamicViewMixin from '../DynamicViewMixin';
     import withCommands from '../../mixins/page/with-commands';
 
-    import { BASE_URL } from "../../consts";
-    import {formUrl, listUrl, showUrl} from "../../util/url";
+    import { formUrl, showUrl } from "../../util/url";
 
     export default {
         name: 'SharpEntityList',

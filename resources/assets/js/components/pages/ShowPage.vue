@@ -3,9 +3,16 @@
         <div class="container">
             <template v-if="ready">
                 <SharpActionBarShow
-                    :can-edit="canEdit"
+                    :commands="authorizedCommands"
+                    :state="instanceState"
+                    :state-values="config.state.values"
                     :form-url="formUrl"
-                    @command="handleEntityCommandRequested"
+                    :back-url="backUrl"
+                    :can-edit="canEdit"
+                    :can-change-state="canChangeState"
+                    :show-back-button="config.showBackToEntityList"
+                    @command="handleCommandRequested"
+                    @state-change="handleStateChanged"
                 />
 
                 <template v-for="section in layout.sections">
@@ -25,6 +32,9 @@
 
             </template>
         </div>
+
+        <SharpCommandFormModal :form="commandCurrentForm" ref="commandForm" />
+        <SharpCommandViewPanel :content="commandViewContent" @close="handleCommandViewPanelClosed" />
     </div>
 </template>
 
@@ -33,15 +43,22 @@
     import SharpActionBarShow from "../action-bar/ActionBarShow";
     import SharpEntityList from '../list/EntityList';
     import SharpGrid from "../Grid";
+    import SharpCommandFormModal from '../commands/CommandFormModal';
+    import SharpCommandViewPanel from '../commands/CommandViewPanel';
     import SharpShowField from '../show/Field';
-    import { formUrl } from "../../util/url";
+    import { formUrl, getBackUrl } from "../../util/url";
+    import withCommands from '../../mixins/page/with-commands';
 
     export default {
+        mixins: [withCommands],
+
         components: {
             SharpActionBarShow,
             SharpEntityList,
             SharpGrid,
             SharpShowField,
+            SharpCommandFormModal,
+            SharpCommandViewPanel,
         },
 
         data() {
@@ -56,10 +73,15 @@
                 instanceId: state => state.instanceId,
             }),
             ...mapGetters('show', [
-                'canEdit',
                 'fields',
                 'layout',
                 'data',
+                'config',
+                'breadcrumb',
+                'instanceState',
+                'canEdit',
+                'authorizedCommands',
+                'canChangeState',
             ]),
 
             formUrl() {
@@ -67,6 +89,9 @@
                     entityKey: this.entityKey,
                     instanceId: this.instanceId,
                 });
+            },
+            backUrl() {
+                return getBackUrl(this.breadcrumb);
             },
         },
 
@@ -77,8 +102,39 @@
             fieldValue(layout) {
                 return this.data[layout.key];
             },
-            handleEntityCommandRequested() {
-
+            handleCommandRequested(command) {
+                this.sendCommand(command, {
+                    postCommand: () => this.$store.dispatch('show/postCommand', { command }),
+                    postForm: data => this.$store.dispatch('show/postCommand', { command, data }),
+                    getFormData: () => this.$store.dispatch('show/getCommandFormData', { command }),
+                });
+            },
+            handleStateChanged(state) {
+                this.$store.dispatch('show/postState', state)
+                    .then(response => {
+                        // TODO https://github.com/code16/sharp-dev/issues/6
+                        const { data } = response;
+                        this.handleCommandActionRequested(data.action, data);
+                    })
+                    .catch(error => {
+                        const { data } = error.response;
+                        if(error.response.status === 422) {
+                            this.actionsBus.$emit('showMainModal', {
+                                title: this.l('modals.state.422.title'),
+                                text: data.message,
+                                isError: true,
+                                okCloseOnly: true
+                            });
+                        }
+                    });
+            },
+            handleRefreshCommand() {
+                this.init();
+            },
+            initCommands() {
+                this.addCommandActionHandlers({
+                    'refresh': this.handleRefreshCommand,
+                });
             },
             async init() {
                 await this.$store.dispatch('show/setEntityKey', this.$route.params.entityKey);
@@ -91,6 +147,7 @@
 
         created() {
             this.init();
+            this.initCommands();
         },
     }
 </script>
