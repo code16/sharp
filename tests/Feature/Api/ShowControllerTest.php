@@ -36,6 +36,16 @@ class ShowControllerTest extends BaseApiTest
 
         $result = $this->getJson('/sharp/api/show/person/1');
 
+        $this->assertArrayHasKey("state", $result->json()["data"]);
+    }
+
+    /** @test */
+    public function we_do_get_entity_attribute_for_the_state_if_defined()
+    {
+        $this->buildTheWorld();
+
+        $result = $this->getJson('/sharp/api/show/person/1');
+
         $this->assertArrayHasKey("name", $result->json()["data"]);
         $this->assertArrayNotHasKey("job", $result->json()["data"]);
     }

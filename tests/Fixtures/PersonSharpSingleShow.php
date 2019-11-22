@@ -42,6 +42,6 @@ class PersonSharpSingleShow extends SharpSingleShow
      */
     function findSingle(): array
     {
-        return ["name" => "John Wayne", "job" => "actor"];
+        return ["name" => "John Wayne", "job" => "actor", "state" => "active"];
     }
 }

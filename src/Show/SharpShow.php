@@ -50,7 +50,12 @@ abstract class SharpShow
     {
         return collect($this->find($id))
             // Filter model attributes on actual show labels
-            ->only($this->getDataKeys())
+            ->only(
+                array_merge(
+                    $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
+                    $this->getDataKeys()
+                )
+            )
             ->all();
     }
 

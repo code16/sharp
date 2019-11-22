@@ -70,6 +70,6 @@ class PersonSharpShow extends SharpShow
 
     function find($id): array
     {
-        return ["name" => "John Wayne", "job" => "actor"];
+        return ["name" => "John Wayne", "job" => "actor", "state" => "active"];
     }
 }
