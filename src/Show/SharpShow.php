@@ -50,25 +50,31 @@ abstract class SharpShow
     {
         return collect($this->find($id))
             // Filter model attributes on actual show labels
-            ->only($this->getDataKeys())
+            ->only(
+                array_merge(
+                    $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
+                    $this->getDataKeys()
+                )
+            )
             ->all();
     }
 
     /**
      * Return the show config values (commands and state).
      *
+     * @param $instanceId
      * @param boolean $hasEntityList
      * @return array
      */
-    function showConfig(bool $hasEntityList): array
+    function showConfig($instanceId, bool $hasEntityList): array
     {
         $config = [
             "showBackToEntityList" => $hasEntityList
         ];
 
-        return tap($config, function(&$config) {
-            $this->appendEntityStateToConfig($config);
-            $this->appendCommandsToConfig($config);
+        return tap($config, function(&$config) use($instanceId) {
+            $this->appendEntityStateToConfig($config, $instanceId);
+            $this->appendCommandsToConfig($config, $instanceId);
         });
     }
 

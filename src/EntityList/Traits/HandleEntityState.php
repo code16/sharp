@@ -42,8 +42,9 @@ trait HandleEntityState
 
     /**
      * @param array $config
+     * @param null $instanceId
      */
-    protected function appendEntityStateToConfig(array &$config)
+    protected function appendEntityStateToConfig(array &$config, $instanceId = null)
     {
         if($this->entityStateAttribute) {
             $config["state"] = [
@@ -56,7 +57,9 @@ trait HandleEntityState
                             "color" => $state[1]
                         ];
                     })->values()->all(),
-                "authorization" => $this->entityStateHandler->getGlobalAuthorization()
+                "authorization" => $instanceId
+                    ? $this->entityStateHandler->authorizeFor($instanceId)
+                    : $this->entityStateHandler->getGlobalAuthorization()
             ];
         }
     }

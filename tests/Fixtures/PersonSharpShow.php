@@ -32,6 +32,10 @@ class PersonSharpShow extends SharpShow
                 public function execute($instanceId, array $data = []): array
                 {
                 }
+                public function authorizeFor($instanceId): bool
+                {
+                    return $instanceId < 10;
+                }
             })
             ->setEntityState("state", new class extends EntityState {
                 protected function buildStates()
@@ -40,6 +44,10 @@ class PersonSharpShow extends SharpShow
                 }
                 protected function updateState($instanceId, $stateId)
                 {
+                }
+                public function authorizeFor($instanceId): bool
+                {
+                    return $instanceId < 10;
                 }
             });
     }
@@ -62,6 +70,6 @@ class PersonSharpShow extends SharpShow
 
     function find($id): array
     {
-        return ["name" => "John Wayne", "job" => "actor"];
+        return ["name" => "John Wayne", "job" => "actor", "state" => "active"];
     }
 }
