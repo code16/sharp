@@ -57,18 +57,19 @@ abstract class SharpShow
     /**
      * Return the show config values (commands and state).
      *
+     * @param $instanceId
      * @param boolean $hasEntityList
      * @return array
      */
-    function showConfig(bool $hasEntityList): array
+    function showConfig($instanceId, bool $hasEntityList): array
     {
         $config = [
             "showBackToEntityList" => $hasEntityList
         ];
 
-        return tap($config, function(&$config) {
+        return tap($config, function(&$config) use($instanceId) {
             $this->appendEntityStateToConfig($config);
-            $this->appendCommandsToConfig($config);
+            $this->appendCommandsToConfig($config, $instanceId);
         });
     }
 

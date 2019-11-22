@@ -91,12 +91,13 @@ trait HandleCommands
      * Append the commands to the config returned to the front.
      *
      * @param array $config
+     * @param null $instanceId
      */
-    protected function appendCommandsToConfig(array &$config)
+    protected function appendCommandsToConfig(array &$config, $instanceId = null)
     {
         collect($this->entityCommandHandlers)
             ->merge(collect($this->instanceCommandHandlers))
-            ->each(function($handler, $commandName) use(&$config) {
+            ->each(function($handler, $commandName) use(&$config, $instanceId) {
                 $formFields = $handler->form();
                 $formLayout = $formFields ? $handler->formLayout() : null;
                 $hasFormInitialData = $formFields
@@ -114,7 +115,9 @@ trait HandleCommands
                         "layout" => $formLayout
                     ] : null,
                     "fetch_initial_data" => $hasFormInitialData,
-                    "authorization" => $handler->getGlobalAuthorization()
+                    "authorization" => $instanceId
+                        ? $handler->authorizeFor($instanceId)
+                        : $handler->getGlobalAuthorization()
                 ];
             });
     }

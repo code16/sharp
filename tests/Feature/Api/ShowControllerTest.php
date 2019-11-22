@@ -126,4 +126,30 @@ class ShowControllerTest extends BaseApiTest
         $this->getJson('/sharp/api/show/person/1')
             ->assertStatus(404);
     }
+
+    /** @test */
+    public function we_can_get_command_authorizations_for_an_instance()
+    {
+        $this->buildTheWorld();
+
+        $this->json('get', '/sharp/api/show/person/1')
+            ->assertStatus(200)
+            ->assertJson(["config" => [
+                "showBackToEntityList" => true,
+                "commands" => [
+                    "instance" => [
+                        [
+                            [
+                                "key" => "test_command",
+                                "authorization" => true
+                            ],
+                            [
+                                "key" => "unauthorized_command",
+                                "authorization" => false
+                            ]
+                        ]
+                    ]
+                ]
+            ]]);
+    }
 }
