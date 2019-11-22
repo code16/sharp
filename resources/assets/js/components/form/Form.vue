@@ -257,7 +257,7 @@
                 });
             },
             redirectToList() {
-                location.href = getListBackUrl(this.breadcumb, this.baseEntityKey);
+                location.href = getListBackUrl(this.breadcrumb);
             },
             redirectToParentPage() {
                 location.href = getBackUrl(this.breadcrumb);

@@ -6,12 +6,13 @@ function routeUrl(location) {
 }
 
 export function getBackUrl(breadcrumb) {
-    return breadcrumb[breadcrumb.length - 2];
+    const item = breadcrumb[breadcrumb.length - 2];
+    return item.url;
 }
 
-export function getListBackUrl(breadcrumb, entityKey) {
-    // TODO retrieve this in breadcrumb
-    return listUrl(entityKey);
+export function getListBackUrl(breadcrumb) {
+    const listItem = breadcrumb.find(item => item.type === 'entityList');
+    return listItem.url;
 }
 
 export function formUrl({ entityKey, instanceId }) {
