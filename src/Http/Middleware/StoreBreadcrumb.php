@@ -21,7 +21,12 @@ class StoreBreadcrumb
     {
         if($this->isListOrDashboardOrSingleShowRequest()) {
             // Simple: reset breadcrumb
-            session()->put("sharp_breadcrumb", [$request->fullUrl()]);
+            session()->put("sharp_breadcrumb", [
+                [
+                    "type" => $this->getRequestType(),
+                    "url" => $request->fullUrl()
+                ]
+            ]);
 
             return $next($request);
         }
@@ -34,18 +39,21 @@ class StoreBreadcrumb
             } else {
                 $segmentCount = sizeof($breadcrumb);
 
-                if ($segmentCount > 1 && $breadcrumb[$segmentCount - 2] == $request->fullUrl()) {
+                if ($segmentCount > 1 && $breadcrumb[$segmentCount - 2]["url"] == $request->fullUrl()) {
                     // Navigate back: we must remove last breadcrumb segment
                     array_pop($breadcrumb);
 
-                } elseif ($breadcrumb[$segmentCount - 1] != $request->fullUrl()) {
+                } elseif ($breadcrumb[$segmentCount - 1]["url"] != $request->fullUrl()) {
                     // Navigate forward: append to breadcrumb
                     $breadcrumb = $this->updatePreviousBreadcrumbItemWithReferer(
                         $breadcrumb,
                         $request->header("referer")
                     );
 
-                    $breadcrumb[] = $request->fullUrl();
+                    $breadcrumb[] = [
+                        "type" => $this->getRequestType(),
+                        "url" => $request->fullUrl()
+                    ];
 
                 } // Else: current page reload. Do nothing.
             }
@@ -54,6 +62,30 @@ class StoreBreadcrumb
         }
 
         return $next($request);
+    }
+
+    /**
+     * @return string
+     */
+    private function getRequestType()
+    {
+        if($this->isListRequest()) {
+            return "entityList";
+        }
+
+        if($this->isFormRequest()) {
+            return "form";
+        }
+
+        if($this->isShowRequest() || $this->isSingleShowRequest()) {
+            return "show";
+        }
+
+        if($this->isDashboardRequest()) {
+            return "dashboard";
+        }
+
+        return "?";
     }
 
     /**
@@ -67,6 +99,14 @@ class StoreBreadcrumb
     /**
      * @return boolean
      */
+    private function isSingleShowRequest()
+    {
+        return request()->is('sharp/show/*') && !$this->isShowRequest();
+    }
+
+    /**
+     * @return boolean
+     */
     private function isFormRequest()
     {
         return request()->is('sharp/form/*/*');
@@ -75,11 +115,27 @@ class StoreBreadcrumb
     /**
      * @return boolean
      */
+    private function isListRequest()
+    {
+        return request()->is('sharp/list/*');
+    }
+
+    /**
+     * @return boolean
+     */
+    private function isDashboardRequest()
+    {
+        return request()->is('sharp/dashboard/*');
+    }
+
+    /**
+     * @return boolean
+     */
     private function isListOrDashboardOrSingleShowRequest()
     {
-        return request()->is('sharp/list/*')
-            || request()->is('sharp/dashboard/*')
-            || (request()->is('sharp/show/*') && !$this->isShowRequest());
+        return $this->isListRequest()
+            || $this->isDashboardRequest()
+            || $this->isSingleShowRequest();
     }
 
     /**
@@ -111,8 +167,13 @@ class StoreBreadcrumb
         if($this->isShowRequest()) {
             // Build a List URL in previous history
             return [
-                url(sprintf('sharp/list/%s', $this->determineEntityKey())),
-                request()->fullUrl()
+                [
+                    "type" => "entityList",
+                    "url" => url(sprintf('sharp/list/%s', $this->determineEntityKey()))
+                ], [
+                    "type" => "show",
+                    "url" => request()->fullUrl()
+                ]
             ];
         }
 
@@ -120,25 +181,37 @@ class StoreBreadcrumb
         if(config(sprintf('sharp.entities.%s.list', $this->determineEntityKey()))) {
             // Entity has a List configured
             $breadcrumb = [
-                url(sprintf('sharp/list/%s', $this->determineEntityKey()))
+                [
+                    "type" => "entityList",
+                    "url" => url(sprintf('sharp/list/%s', $this->determineEntityKey()))
+                ]
             ];
 
             if(config(sprintf('sharp.entities.%s.show', $this->determineEntityKey()))) {
                 // Entity has also a Show configured
-                $breadcrumb[] = url(sprintf('sharp/show/%s/%s',
-                    $this->determineEntityKey(),
-                    $this->determineInstanceId()
-                ));
+                $breadcrumb[] = [
+                    "type" => "show",
+                    "url" => url(sprintf('sharp/show/%s/%s',
+                        $this->determineEntityKey(),
+                        $this->determineInstanceId()
+                    ))
+                ];
             }
 
         } else {
             // Then it MUST be a SingleShow case
             $breadcrumb = [
-                url(sprintf('sharp/show/%s', $this->determineEntityKey())),
+                [
+                    "type" => "show",
+                    "url" => url(sprintf('sharp/show/%s', $this->determineEntityKey()))
+                ]
             ];
         }
 
-        $breadcrumb[] = request()->fullUrl();
+        $breadcrumb[] = [
+            "type" => $this->getRequestType(),
+            "url" => request()->fullUrl()
+        ];
 
         return $breadcrumb;
     }
@@ -155,11 +228,11 @@ class StoreBreadcrumb
     private function updatePreviousBreadcrumbItemWithReferer($breadcrumb, $referer)
     {
         if($referer && sizeof($breadcrumb)) {
-            $lastItem = parse_url(Arr::last($breadcrumb));
+            $lastItem = parse_url(Arr::last($breadcrumb)["url"]);
             $refererUrl = parse_url($referer);
 
             if ($lastItem["host"] == $refererUrl["host"] && $lastItem["path"] == $refererUrl["path"]) {
-                $breadcrumb[sizeof($breadcrumb) - 1] = $referer;
+                $breadcrumb[sizeof($breadcrumb) - 1]["url"] = $referer;
             }
         }
 
