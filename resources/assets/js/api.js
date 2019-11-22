@@ -50,9 +50,9 @@ export function getShowCommandFormData({ entityKey, instanceId, commandKey }) {
         .then(response => response.data.data);
 }
 
-export function postShowState({ entityKey, instanceId }) {
-    return api.get(`list/${entityKey}/${instanceId}/state`)
-        .then(response => response.data.data);
+export function postShowState({ entityKey, instanceId, value }) {
+    return api.post(`list/${entityKey}/state/${instanceId}`, { value })
+        .then(response => response.data);
 }
 
 export function getGlobalFilters() {

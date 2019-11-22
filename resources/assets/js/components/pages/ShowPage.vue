@@ -128,13 +128,11 @@
             },
             handleStateChanged(state) {
                 this.$store.dispatch('show/postState', state)
-                    .then(response => {
-                        // TODO https://github.com/code16/sharp-dev/issues/6
-                        const { data } = response;
+                    .then(data => {
                         this.handleCommandActionRequested(data.action, data);
                     })
                     .catch(error => {
-                        const { data } = error.response;
+                        const data = error.response.data;
                         if(error.response.status === 422) {
                             this.actionsBus.$emit('showMainModal', {
                                 title: this.l('modals.state.422.title'),
