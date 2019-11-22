@@ -23,19 +23,43 @@ class BreadcrumbTest extends BaseApiTest
 
         $this->get('/sharp/list/person');
         $this->assertEquals(
-            [url('/sharp/list/person')],
+            [
+                [
+                    "type" => "entityList",
+                    "url" => url('/sharp/list/person')
+                ]
+            ],
             session("sharp_breadcrumb")
         );
 
         $this->get('/sharp/show/person/1');
         $this->assertEquals(
-            [url('/sharp/list/person'), url('/sharp/show/person/1')],
+            [
+                [
+                    "type" => "entityList",
+                    "url" => url('/sharp/list/person')
+                ], [
+                    "type" => "show",
+                    "url" => url('/sharp/show/person/1')
+                ]
+            ],
             session("sharp_breadcrumb")
         );
 
         $this->get('/sharp/form/person/1');
         $this->assertEquals(
-            [url('/sharp/list/person'), url('/sharp/show/person/1'), url('/sharp/form/person/1')],
+            [
+                [
+                    "type" => "entityList",
+                    "url" => url('/sharp/list/person')
+                ], [
+                    "type" => "show",
+                    "url" => url('/sharp/show/person/1')
+                ], [
+                    "type" => "form",
+                    "url" => url('/sharp/form/person/1')
+                ]
+            ],
             session("sharp_breadcrumb")
         );
     }
@@ -52,7 +76,12 @@ class BreadcrumbTest extends BaseApiTest
         $this->get('/sharp/list/person');
 
         $this->assertEquals(
-            [url('/sharp/list/person')],
+            [
+                [
+                    "type" => "entityList",
+                    "url" => url('/sharp/list/person')
+                ]
+            ],
             session("sharp_breadcrumb")
         );
     }
@@ -69,7 +98,12 @@ class BreadcrumbTest extends BaseApiTest
         $this->get('/sharp/dashboard/personal_dashboard');
 
         $this->assertEquals(
-            [url('/sharp/dashboard/personal_dashboard')],
+            [
+                [
+                    "type" => "dashboard",
+                    "url" => url('/sharp/dashboard/personal_dashboard')
+                ]
+            ],
             session("sharp_breadcrumb")
         );
     }
@@ -85,7 +119,12 @@ class BreadcrumbTest extends BaseApiTest
         $this->get('/sharp/show/person');
 
         $this->assertEquals(
-            [url('/sharp/show/person')],
+            [
+                [
+                    "type" => "show",
+                    "url" => url('/sharp/show/person')
+                ]
+            ],
             session("sharp_breadcrumb")
         );
     }
@@ -99,7 +138,10 @@ class BreadcrumbTest extends BaseApiTest
 
         $this->getJson('/sharp/api/list/person')->assertJson([
             "breadcrumb" => [
-                url('/sharp/list/person')
+                [
+                    "type" => "entityList",
+                    "url" => url('/sharp/list/person')
+                ]
             ]
         ]);
 
@@ -107,8 +149,13 @@ class BreadcrumbTest extends BaseApiTest
 
         $this->getJson('/sharp/api/show/person/1')->assertJson([
             "breadcrumb" => [
-                url('/sharp/list/person'),
-                url('/sharp/show/person/1')
+                [
+                    "type" => "entityList",
+                    "url" => url('/sharp/list/person')
+                ], [
+                    "type" => "show",
+                    "url" => url('/sharp/show/person/1')
+                ]
             ]
         ]);
 
@@ -116,9 +163,16 @@ class BreadcrumbTest extends BaseApiTest
 
         $this->getJson('/sharp/api/form/person/1')->assertJson([
             "breadcrumb" => [
-                url('/sharp/list/person'),
-                url('/sharp/show/person/1'),
-                url('/sharp/form/person/1')
+                [
+                    "type" => "entityList",
+                    "url" => url('/sharp/list/person')
+                ], [
+                    "type" => "show",
+                    "url" => url('/sharp/show/person/1')
+                ], [
+                    "type" => "form",
+                    "url" => url('/sharp/form/person/1')
+                ]
             ]
         ]);
 
@@ -126,7 +180,10 @@ class BreadcrumbTest extends BaseApiTest
 
         $this->getJson('/sharp/api/dashboard/personal_dashboard')->assertJson([
             "breadcrumb" => [
-                url('/sharp/dashboard/personal_dashboard')
+                [
+                    "type" => "dashboard",
+                    "url" => url('/sharp/dashboard/personal_dashboard')
+                ]
             ]
         ]);
     }
@@ -147,14 +204,33 @@ class BreadcrumbTest extends BaseApiTest
         $this->get('/sharp/form/person/1');
 
         $this->assertEquals(
-            [url('/sharp/list/person'), url('/sharp/show/person/1'), url('/sharp/form/person/1')],
+            [
+                [
+                    "type" => "entityList",
+                    "url" => url('/sharp/list/person')
+                ], [
+                    "type" => "show",
+                    "url" => url('/sharp/show/person/1')
+                ], [
+                    "type" => "form",
+                    "url" => url('/sharp/form/person/1')
+                ]
+            ],
             session("sharp_breadcrumb")
         );
 
         $this->get('/sharp/show/person/1');
 
         $this->assertEquals(
-            [url('/sharp/list/person'), url('/sharp/show/person/1')],
+            [
+                [
+                    "type" => "entityList",
+                    "url" => url('/sharp/list/person')
+                ], [
+                    "type" => "show",
+                    "url" => url('/sharp/show/person/1')
+                ]
+            ],
             session("sharp_breadcrumb")
         );
 
@@ -163,14 +239,36 @@ class BreadcrumbTest extends BaseApiTest
         $this->get('/sharp/show/person/2');
 
         $this->assertEquals(
-            [url('/sharp/list/person'), url('/sharp/show/person/1'), url('/sharp/show/person/2')],
+            [
+                [
+                    "type" => "entityList",
+                    "url" => url('/sharp/list/person')
+                ], [
+                    "type" => "show",
+                    "url" => url('/sharp/show/person/1')
+                ], [
+                    "type" => "show",
+                    "url" => url('/sharp/show/person/2')
+                ]
+            ],
             session("sharp_breadcrumb")
         );
 
         $this->get('/sharp/show/person/2');
 
         $this->assertEquals(
-            [url('/sharp/list/person'), url('/sharp/show/person/1'), url('/sharp/show/person/2')],
+            [
+                [
+                    "type" => "entityList",
+                    "url" => url('/sharp/list/person')
+                ], [
+                    "type" => "show",
+                    "url" => url('/sharp/show/person/1')
+                ], [
+                    "type" => "show",
+                    "url" => url('/sharp/show/person/2')
+                ]
+            ],
             session("sharp_breadcrumb")
         );
     }
@@ -183,7 +281,15 @@ class BreadcrumbTest extends BaseApiTest
         $this->get('/sharp/show/person/1');
 
         $this->assertEquals(
-            [url('/sharp/list/person'), url('/sharp/show/person/1')],
+            [
+                [
+                    "type" => "entityList",
+                    "url" => url('/sharp/list/person')
+                ], [
+                    "type" => "show",
+                    "url" => url('/sharp/show/person/1')
+                ]
+            ],
             session("sharp_breadcrumb")
         );
     }
@@ -196,7 +302,18 @@ class BreadcrumbTest extends BaseApiTest
         $this->get('/sharp/form/person/1');
 
         $this->assertEquals(
-            [url('/sharp/list/person'), url('/sharp/show/person/1'), url('/sharp/form/person/1')],
+            [
+                [
+                    "type" => "entityList",
+                    "url" => url('/sharp/list/person')
+                ], [
+                    "type" => "show",
+                    "url" => url('/sharp/show/person/1')
+                ], [
+                    "type" => "form",
+                    "url" => url('/sharp/form/person/1')
+                ]
+            ],
             session("sharp_breadcrumb")
         );
     }
@@ -215,7 +332,15 @@ class BreadcrumbTest extends BaseApiTest
         $this->get('/sharp/form/person/1');
 
         $this->assertEquals(
-            [url('/sharp/list/person'), url('/sharp/form/person/1')],
+            [
+                [
+                    "type" => "entityList",
+                    "url" => url('/sharp/list/person')
+                ], [
+                    "type" => "form",
+                    "url" => url('/sharp/form/person/1')
+                ]
+            ],
             session("sharp_breadcrumb")
         );
     }
@@ -234,7 +359,15 @@ class BreadcrumbTest extends BaseApiTest
         $this->get('/sharp/form/person/1');
 
         $this->assertEquals(
-            [url('/sharp/show/person'), url('/sharp/form/person/1')],
+            [
+                [
+                    "type" => "show",
+                    "url" => url('/sharp/show/person')
+                ], [
+                    "type" => "form",
+                    "url" => url('/sharp/form/person/1')
+                ]
+            ],
             session("sharp_breadcrumb")
         );
     }
@@ -250,7 +383,16 @@ class BreadcrumbTest extends BaseApiTest
             ->get('/sharp/show/person/1');
 
         $this->assertEquals(
-            [url('/sharp/list/person?filter_type=4&page=2'), url('/sharp/show/person/1')],
+//            [url('/sharp/list/person?filter_type=4&page=2'), url('/sharp/show/person/1')],
+            [
+                [
+                    "type" => "entityList",
+                    "url" => url('/sharp/list/person?filter_type=4&page=2')
+                ], [
+                    "type" => "show",
+                    "url" => url('/sharp/show/person/1')
+                ]
+            ],
             session("sharp_breadcrumb")
         );
 
@@ -261,7 +403,15 @@ class BreadcrumbTest extends BaseApiTest
             ->get('/sharp/show/person/1');
 
         $this->assertEquals(
-            [url('/sharp/list/person'), url('/sharp/show/person/1')],
+            [
+                [
+                    "type" => "entityList",
+                    "url" => url('/sharp/list/person')
+                ], [
+                    "type" => "show",
+                    "url" => url('/sharp/show/person/1')
+                ]
+            ],
             session("sharp_breadcrumb")
         );
 
@@ -272,7 +422,15 @@ class BreadcrumbTest extends BaseApiTest
             ->get('/sharp/show/person/1');
 
         $this->assertEquals(
-            [url('/sharp/list/person'), url('/sharp/show/person/1')],
+            [
+                [
+                    "type" => "entityList",
+                    "url" => url('/sharp/list/person')
+                ], [
+                    "type" => "show",
+                    "url" => url('/sharp/show/person/1')
+                ]
+            ],
             session("sharp_breadcrumb")
         );
     }
