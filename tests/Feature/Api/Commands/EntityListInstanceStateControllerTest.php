@@ -1,23 +1,31 @@
 <?php
 
-namespace Code16\Sharp\Tests\Feature\Api;
+namespace Code16\Sharp\Tests\Feature\Api\Commands;
 
 use Code16\Sharp\EntityList\Commands\EntityState;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
+use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
 
-class EntityStateControllerTest extends BaseApiTest
+class EntityListInstanceStateControllerTest extends BaseApiTest
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->login();
+    }
+
     /** @test */
-    public function we_can_update_the_state_of_an_entity()
+    public function we_can_update_the_state_of_an_entity_from_a_list()
     {
         $this->buildTheWorld();
         $this->withoutExceptionHandling();
 
         $this->json('post', '/sharp/api/list/person/state/1', [
-                "attribute" => "state",
-                "value" => "ok"
-            ])
+            "attribute" => "state",
+            "value" => "ok"
+        ])
             ->assertStatus(200)
             ->assertJson([
                 "action" => "refresh",
@@ -47,9 +55,9 @@ class EntityStateControllerTest extends BaseApiTest
         $this->buildTheWorld();
 
         $this->json('post', '/sharp/api/list/person/state/1', [
-                "attribute" => "state",
-                "value" => "ok_refresh_items"
-            ])
+            "attribute" => "state",
+            "value" => "ok_refresh_items"
+        ])
             ->assertStatus(200)
             ->assertJson([
                 "action" => "refresh",
@@ -69,15 +77,10 @@ class EntityStateControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->app['config']->set(
-            'sharp.entities.person.list',
-            EntityStatePersonSharpEntitiesList::class
-        );
-
         $this->json('post', '/sharp/api/list/person/state/1', [
-                "attribute" => "state",
-                "value" => "invalid"
-            ])
+            "attribute" => "state",
+            "value" => "invalid"
+        ])
             ->assertStatus(422);
     }
 
@@ -86,15 +89,10 @@ class EntityStateControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->app['config']->set(
-            'sharp.entities.person.list',
-            EntityStatePersonSharpEntitiesList::class
-        );
-
         $this->json('post', '/sharp/api/list/person/state/1', [
-                "attribute" => "state",
-                "value" => "ko"
-            ])
+            "attribute" => "state",
+            "value" => "ko"
+        ])
             ->assertStatus(417);
     }
 
@@ -102,11 +100,6 @@ class EntityStateControllerTest extends BaseApiTest
     public function we_cant_update_the_state_if_unauthorized()
     {
         $this->buildTheWorld();
-
-        $this->app['config']->set(
-            'sharp.entities.person.list',
-            EntityStatePersonSharpEntitiesList::class
-        );
 
         $this->json('post', '/sharp/api/list/person/state/100', [
             "attribute" => "state",
@@ -117,16 +110,15 @@ class EntityStateControllerTest extends BaseApiTest
     protected function buildTheWorld($singleShow = false)
     {
         parent::buildTheWorld($singleShow);
-        $this->login();
 
         $this->app['config']->set(
             'sharp.entities.person.list',
-            EntityStatePersonSharpEntitiesList::class
+            EntityListInstanceStatePersonSharpEntityList::class
         );
     }
 }
 
-class EntityStatePersonSharpEntitiesList extends PersonSharpEntityList {
+class EntityListInstanceStatePersonSharpEntityList extends PersonSharpEntityList {
 
     function buildListConfig()
     {
