@@ -5,32 +5,32 @@ namespace Code16\Sharp\Http\Api\Commands;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Code16\Sharp\Http\Api\ApiController;
 
-class EntityStateController extends ApiController
+class ShowInstanceStateController extends ApiController
 {
     use HandleCommandReturn;
 
     /**
      * @param string $entityKey
-     * @param string $instanceId
+     * @param string|null $instanceId
      * @return \Illuminate\Http\JsonResponse
      * @throws SharpAuthorizationException
      * @throws \Code16\Sharp\Exceptions\EntityList\SharpInvalidEntityStateException
      * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
-    public function update($entityKey, $instanceId)
+    public function update($entityKey, $instanceId = null)
     {
-        $list = $this->getListInstance($entityKey);
-        $list->buildListConfig();
+        $showPage = $this->getShowInstance($entityKey);
+        $showPage->buildShowConfig();
 
-        if(!$list->entityStateHandler()->authorize()
-            || !$list->entityStateHandler()->authorizeFor($instanceId)) {
+        if(!$showPage->entityStateHandler()->authorize()
+            || !$showPage->entityStateHandler()->authorizeFor($instanceId)) {
             throw new SharpAuthorizationException();
         }
 
         return $this->returnCommandResult(
-            $list,
+            $showPage,
             array_merge(
-                $list->entityStateHandler()->execute($instanceId, request()->only("value")),
+                $showPage->entityStateHandler()->execute($instanceId, request()->only("value")),
                 ["value" => request("value")]
             )
         );

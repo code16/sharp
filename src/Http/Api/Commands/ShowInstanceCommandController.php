@@ -35,12 +35,12 @@ class ShowInstanceCommandController extends ApiController
      *
      * @param string $entityKey
      * @param string $commandKey
-     * @param string $instanceId
+     * @param string|null $instanceId
      * @return \Illuminate\Http\JsonResponse
      * @throws SharpAuthorizationException
      * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
-    public function update($entityKey, $commandKey, $instanceId)
+    public function update($entityKey, $commandKey, $instanceId = null)
     {
         $showPage = $this->getShowPage($entityKey, $instanceId);
         $commandHandler = $this->getInstanceCommandHandler($showPage, $commandKey, $instanceId);

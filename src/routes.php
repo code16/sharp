@@ -31,7 +31,7 @@ Route::group([
 
     Route::post("/list/{entityKey}/state/{instanceId}")
         ->name("code16.sharp.api.list.state")
-        ->uses('Commands\EntityStateController@update');
+        ->uses('Commands\EntityListInstanceStateController@update');
 
     Route::post("/list/{entityKey}/command/{commandKey}")
         ->name("code16.sharp.api.list.command.entity")
@@ -61,6 +61,10 @@ Route::group([
     Route::get("/show/{entityKey}/command/{commandKey}/{instanceId?}/data")
         ->name("code16.sharp.api.show.command.instance.data")
         ->uses('Commands\ShowInstanceCommandController@show');
+
+    Route::post("/show/{entityKey}/state/{instanceId?}")
+        ->name("code16.sharp.api.show.state")
+        ->uses('Commands\ShowInstanceStateController@update');
 
     Route::get("/form/{entityKey}")
         ->name("code16.sharp.api.form.create")
