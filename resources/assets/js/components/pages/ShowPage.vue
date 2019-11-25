@@ -17,9 +17,9 @@
 
                 <template v-for="section in layout.sections">
                     <template v-if="section.title">
-                        <h2>{{ section.title }}</h2>
+                        <h2 class="ShowPage__section-title mb-2">{{ section.title }}</h2>
                     </template>
-                    <div class="ShowPage__section mb-3" :class="sectionClasses(section)">
+                    <div class="ShowPage__section mb-4" :class="sectionClasses(section)">
                         <SharpGrid :rows="[section.columns]">
                             <template slot-scope="fieldsLayout">
                                 <SharpGrid class="ShowPage__fields-grid" :rows="fieldsLayout.fields">

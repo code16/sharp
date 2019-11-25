@@ -1,5 +1,6 @@
 <template>
     <SharpEntityList
+        class="ShowEntityListField"
         :entity-key="entityListKey"
         :module="storeModule"
         :show-create-button="showCreateButton"

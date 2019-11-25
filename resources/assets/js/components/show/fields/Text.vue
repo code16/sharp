@@ -1,7 +1,7 @@
 <template>
     <div class="ShowTextField">
         <template v-if="label">
-            <span class="text-uppercase"></span>{{ label }}
+            <span class="text-uppercase">{{ label }}</span>
         </template>
         <span v-html="value"></span>
     </div>

@@ -117,6 +117,8 @@ $small-breakpoint: sm;
 @import 'components/dashboard/OrderedList';
 @import 'components/Card';
 
+@import 'components/show/EntityList';
+
 @import 'components/GlobalFilters';
 
 @import "components/popover";

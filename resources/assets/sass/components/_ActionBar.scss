@@ -83,7 +83,7 @@
     }
   }
 
-  %overflow-dropdown-list {
+  @mixin overflow-dropdown-list {
     .SharpDropdown__list {
       width: auto;
       right:0;
@@ -99,7 +99,7 @@
     //min-width: 2rem;
     //max-width: 2rem;
 
-    @extend %overflow-dropdown-list;
+    @include overflow-dropdown-list;
 
     .SharpDropdown__text {
       //border: none;
@@ -109,10 +109,12 @@
       padding-right: 1rem;
     }
 
-    &--commands {
+    &--commands, &--state {
       //width: 2.5rem;
       //min-width: 2.5rem;
       //max-width: 2.5rem;
+
+      white-space: nowrap;
 
       .SharpDropdown__text {
         //color: $brand-03;
@@ -128,7 +130,7 @@
     @include nav-dropdown;
 
     .SharpDropdown__text { z-index: auto }
-    @extend %overflow-dropdown-list;
+    @include overflow-dropdown-list;
 
     &, .SharpDropdown__text {
       //background: $brand-03;

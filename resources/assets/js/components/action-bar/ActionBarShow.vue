@@ -15,32 +15,38 @@
             </template>
         </template>
         <template slot="extras-right">
-            <template v-if="hasState">
-                <SharpDropdown class="SharpEntityList__state-dropdown" :disabled="!canChangeState">
-                    <template slot="text">
-                        <SharpStateIcon :color="state.color" />
-                        <span class="text-truncate">{{ state.label }}</span>
-                    </template>
-                    <SharpDropdownItem
-                        v-for="stateOptions in stateValues"
-                        @click="handleStateChanged(stateOptions.value)"
-                        :key="stateOptions.value"
-                    >
-                        <SharpStateIcon :color="stateOptions.color" />&nbsp;
-                        {{ stateOptions.label }}
-                    </SharpDropdownItem>
-                </SharpDropdown>
-            </template>
-            <template v-if="hasCommands">
-                <SharpCommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
-                    :commands="commands"
-                    @select="handleCommandSelected"
-                >
-                    <div slot="text">
-                        {{ l('entity_list.commands.instance.label') }}
+            <div class="row mx-n1">
+                <template v-if="hasState">
+                    <div class="col-auto px-1">
+                        <SharpDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--state" :disabled="!canChangeState">
+                            <template slot="text">
+                                <SharpStateIcon :color="state.color" />
+                                <span class="text-truncate">{{ state.label }}</span>
+                            </template>
+                            <SharpDropdownItem
+                                v-for="stateOptions in stateValues"
+                                @click="handleStateChanged(stateOptions.value)"
+                                :key="stateOptions.value"
+                            >
+                                <SharpStateIcon :color="stateOptions.color" />&nbsp;
+                                {{ stateOptions.label }}
+                            </SharpDropdownItem>
+                        </SharpDropdown>
                     </div>
-                </SharpCommandsDropdown>
-            </template>
+                </template>
+                <template v-if="hasCommands">
+                    <div class="col-auto px-1">
+                        <SharpCommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
+                            :commands="commands"
+                            @select="handleCommandSelected"
+                        >
+                            <div slot="text">
+                                {{ l('entity_list.commands.instance.label') }}
+                            </div>
+                        </SharpCommandsDropdown>
+                    </div>
+                </template>
+            </div>
         </template>
     </SharpActionBar>
 </template>
