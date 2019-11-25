@@ -1,5 +1,5 @@
 <template>
-    <div class="ShowPictureField">
+    <div class="ShowPictureField text-center">
         <img class="img-responsive" :src="value" alt="">
     </div>
 </template>
