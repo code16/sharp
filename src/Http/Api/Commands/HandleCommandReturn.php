@@ -2,16 +2,17 @@
 
 namespace Code16\Sharp\Http\Api\Commands;
 
-use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
+use Code16\Sharp\EntityList\Traits\HandleCommands;
+use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Illuminate\Support\Facades\Storage;
 
 trait HandleCommandReturn
 {
 
     /**
-     * @param SharpEntityList|SharpDashboard $commandContainer
+     * @param HandleCommands $commandContainer
      * @param array $returnedValue
      * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\File\Stream
      */
@@ -37,5 +38,24 @@ trait HandleCommandReturn
         }
 
         return response()->json($returnedValue);
+    }
+
+    /**
+     * @param HandleCommands $commandContainer
+     * @param string $commandKey
+     * @param $instanceId
+     * @return \Code16\Sharp\EntityList\Commands\InstanceCommand|null
+     * @throws SharpAuthorizationException
+     */
+    protected function getInstanceCommandHandler($commandContainer, $commandKey, $instanceId)
+    {
+        $commandHandler = $commandContainer->instanceCommandHandler($commandKey);
+
+        if(!$commandHandler->authorize()
+            || !$commandHandler->authorizeFor($instanceId)) {
+            throw new SharpAuthorizationException();
+        }
+
+        return $commandHandler;
     }
 }

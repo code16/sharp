@@ -2,11 +2,10 @@
 
 namespace Code16\Sharp\Http\Api\Commands;
 
-use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Code16\Sharp\Http\Api\ApiController;
 
-class InstanceCommandController extends ApiController
+class EntityListInstanceCommandController extends ApiController
 {
     use HandleCommandReturn;
 
@@ -24,7 +23,7 @@ class InstanceCommandController extends ApiController
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
-        $commandHandler = $this->getCommandHandler($list, $commandKey, $instanceId);
+        $commandHandler = $this->getInstanceCommandHandler($list, $commandKey, $instanceId);
 
         return response()->json([
             "data" => $commandHandler->formData($instanceId)
@@ -46,7 +45,7 @@ class InstanceCommandController extends ApiController
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
 
-        $handler = $this->getCommandHandler($list, $commandKey, $instanceId);
+        $handler = $this->getInstanceCommandHandler($list, $commandKey, $instanceId);
 
         return $this->returnCommandResult(
             $list,
@@ -55,24 +54,5 @@ class InstanceCommandController extends ApiController
                 $handler->formatRequestData((array)request("data"), $instanceId)
             )
         );
-    }
-
-    /**
-     * @param SharpEntityList $list
-     * @param string $commandKey
-     * @param $instanceId
-     * @return \Code16\Sharp\EntityList\Commands\InstanceCommand|null
-     * @throws SharpAuthorizationException
-     */
-    protected function getCommandHandler(SharpEntityList $list, $commandKey, $instanceId)
-    {
-        $commandHandler = $list->instanceCommandHandler($commandKey);
-
-        if(!$commandHandler->authorize()
-            || !$commandHandler->authorizeFor($instanceId)) {
-            throw new SharpAuthorizationException();
-        }
-
-        return $commandHandler;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Sharp;
 
+use App\Sharp\Commands\AccountUpdateName;
 use App\User;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
@@ -37,6 +38,14 @@ class AccountSharpShow extends SharpSingleShow
                             ->withSingleField("groups");
                     });
             });
+    }
+
+    /**
+     * @throws \Code16\Sharp\Exceptions\SharpException
+     */
+    function buildShowConfig()
+    {
+        $this->addInstanceCommand("rename", AccountUpdateName::class);
     }
 
     function findSingle(): array

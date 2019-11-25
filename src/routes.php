@@ -37,22 +37,30 @@ Route::group([
         ->name("code16.sharp.api.list.command.entity")
         ->uses('Commands\EntityCommandController@update');
 
-    Route::post("/list/{entityKey}/command/{commandKey}/{instanceId}")
-        ->name("code16.sharp.api.list.command.instance")
-        ->uses('Commands\InstanceCommandController@update');
-
     Route::get("/list/{entityKey}/command/{commandKey}/data")
         ->name("code16.sharp.api.list.command.entity.data")
         ->uses('Commands\EntityCommandController@show');
 
+    Route::post("/list/{entityKey}/command/{commandKey}/{instanceId}")
+        ->name("code16.sharp.api.list.command.instance")
+        ->uses('Commands\EntityListInstanceCommandController@update');
+
     Route::get("/list/{entityKey}/command/{commandKey}/{instanceId}/data")
         ->name("code16.sharp.api.list.command.instance.data")
-        ->uses('Commands\InstanceCommandController@show');
+        ->uses('Commands\EntityListInstanceCommandController@show');
 
     Route::get("/show/{entityKey}/{instanceId?}")
         ->name("code16.sharp.api.show.show")
         ->middleware(['sharp_api_append_form_authorizations', 'sharp_api_append_breadcrumb'])
         ->uses('ShowController@show');
+
+    Route::post("/show/{entityKey}/command/{commandKey}/{instanceId?}")
+        ->name("code16.sharp.api.show.command.instance")
+        ->uses('Commands\ShowInstanceCommandController@update');
+
+    Route::get("/show/{entityKey}/command/{commandKey}/{instanceId?}/data")
+        ->name("code16.sharp.api.show.command.instance.data")
+        ->uses('Commands\ShowInstanceCommandController@show');
 
     Route::get("/form/{entityKey}")
         ->name("code16.sharp.api.form.create")
