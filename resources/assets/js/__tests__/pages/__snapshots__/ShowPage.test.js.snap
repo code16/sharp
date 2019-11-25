@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`show page can mount 1`] = `
+<div class="ShowPage">
+	<div class="container">
+		<!---->
+	</div>
+	<sharpcommandformmodal-stub></sharpcommandformmodal-stub>
+	<sharpcommandviewpanel-stub></sharpcommandviewpanel-stub>
+</div>
+`;
+
+exports[`show page can mount with fields 1`] = `
+<div class="ShowPage">
+	<div class="container">
+		<sharpactionbarshow-stub statevalues=""></sharpactionbarshow-stub>
+		<h2>Section title</h2>
+		<div class="ShowPage__section mb-3">
+			<div rows="" class="MOCKED_SharpGrid">
+				<div class="MOCKED_SharpGrid ShowPage__fields-grid">
+					<sharpshowfield-stub></sharpshowfield-stub>
+				</div>
+			</div>
+		</div>
+	</div>
+	<sharpcommandformmodal-stub></sharpcommandformmodal-stub>
+	<sharpcommandviewpanel-stub></sharpcommandviewpanel-stub>
+</div>
+`;
