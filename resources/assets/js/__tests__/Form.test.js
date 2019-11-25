@@ -16,6 +16,8 @@ import moxios from 'moxios';
 import {MockInjections, MockI18n} from "./test-utils";
 import { nextRequestFulfilled } from './test-utils/moxios-utils';
 
+jest.mock('../util/url');
+
 
 describe('sharp-form', ()=>{
     Vue.use(MockI18n);
@@ -782,16 +784,6 @@ describe('sharp-form', ()=>{
         expect($form.listUrl).toEqual('/sharp/list/spaceship?restore-context=1');
 
         $form.redirectToList = jest.fn();
-        $form.actionsBus.$emit('submit');
-
-        await nextRequestFulfilled({
-            status: 200,
-            response: {
-                ok: true
-            }
-        }, 0);
-
-        expect($form.redirectToList).toHaveBeenCalledTimes(1);
 
         $form.actionsBus.$emit('delete');
 
@@ -799,11 +791,8 @@ describe('sharp-form', ()=>{
             status: 200
         }, 0);
 
-        expect($form.redirectToList).toHaveBeenCalledTimes(2);
+        expect($form.redirectToList).toHaveBeenCalledTimes(1);
 
-        $form.actionsBus.$emit('cancel');
-
-        expect($form.redirectToList).toHaveBeenCalledTimes(3);
     });
 
     test('submit', async () => {

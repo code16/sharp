@@ -704,9 +704,9 @@ describe('EntityList', () => {
                     entityKey: 'entityKey'
                 }
             });
-            expect(wrapper.vm.formUrl()).toEqual('BASE_URL/form/entityKey');
-            expect(wrapper.vm.formUrl({ instanceId:'instanceId' })).toEqual('BASE_URL/form/entityKey/instanceId');
-            expect(wrapper.vm.formUrl({ formKey:'formKey', instanceId:'instanceId' })).toEqual('BASE_URL/form/entityKey:formKey/instanceId');
+            expect(wrapper.vm.formUrl()).toEqual('/BASE_URL/form/entityKey');
+            expect(wrapper.vm.formUrl({ instanceId:'instanceId' })).toEqual('/BASE_URL/form/entityKey/instanceId');
+            expect(wrapper.vm.formUrl({ formKey:'formKey', instanceId:'instanceId' })).toEqual('/BASE_URL/form/entityKey:formKey/instanceId');
         });
 
         test('showUrl', () => {
@@ -715,8 +715,8 @@ describe('EntityList', () => {
                     entityKey: 'entityKey'
                 }
             });
-            expect(wrapper.vm.showUrl()).toEqual('BASE_URL/show/entityKey');
-            expect(wrapper.vm.showUrl({ instanceId:'instanceId' })).toEqual('BASE_URL/show/entityKey/instanceId');
+            expect(wrapper.vm.showUrl()).toEqual('/BASE_URL/show/entityKey');
+            expect(wrapper.vm.showUrl({ instanceId:'instanceId' })).toEqual('/BASE_URL/show/entityKey/instanceId');
         });
 
         test('handleCommandRequested', ()=>{
