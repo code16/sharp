@@ -72,27 +72,27 @@ Route::group([
         ->name("code16.sharp.api.show.state")
         ->uses('Commands\ShowInstanceStateController@update');
 
-    Route::get("/form/{entityKey}")
+    Route::get("/form/{entityKey}/create")
         ->name("code16.sharp.api.form.create")
         ->middleware(['sharp_api_append_form_authorizations', 'sharp_api_append_breadcrumb'])
         ->uses('FormController@create');
 
-    Route::get("/form/{entityKey}/{instanceId}")
+    Route::post("/form/{entityKey}/store")
+        ->name("code16.sharp.api.form.store")
+        ->uses('FormController@store');
+
+    Route::get("/form/{entityKey}/edit/{instanceId?}")
         ->name("code16.sharp.api.form.edit")
         ->middleware(['sharp_api_append_form_authorizations', 'sharp_api_append_breadcrumb'])
         ->uses('FormController@edit');
 
-    Route::post("/form/{entityKey}/{instanceId}")
+    Route::post("/form/{entityKey}/update/{instanceId?}")
         ->name("code16.sharp.api.form.update")
         ->uses('FormController@update');
 
-    Route::delete("/form/{entityKey}/{instanceId}")
+    Route::delete("/form/{entityKey}/delete/{instanceId?}")
         ->name("code16.sharp.api.form.delete")
         ->uses('FormController@delete');
-
-    Route::post("/form/{entityKey}")
-        ->name("code16.sharp.api.form.store")
-        ->uses('FormController@store');
 
     Route::post("/download/{entityKey}/{instanceId}/{formUploadFieldKey}")
         ->name("code16.sharp.api.form.download")

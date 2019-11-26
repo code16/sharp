@@ -161,7 +161,7 @@ class BreadcrumbTest extends BaseApiTest
 
         $this->get('/sharp/form/person/1');
 
-        $this->getJson('/sharp/api/form/person/1')->assertJson([
+        $this->getJson('/sharp/api/form/person/edit/1')->assertJson([
             "breadcrumb" => [
                 [
                     "type" => "entityList",

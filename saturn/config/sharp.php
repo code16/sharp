@@ -65,6 +65,7 @@ return [
         ],
         "account" => [
             "show" => \App\Sharp\AccountSharpShow::class,
+            "form" => \App\Sharp\AccountSharpForm::class,
         ],
         "feature" => [
             "list" => \App\Sharp\FeatureSharpList::class,
