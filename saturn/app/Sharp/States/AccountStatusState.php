@@ -28,6 +28,6 @@ class AccountStatusState extends SingleEntityState
             "status" => $stateId
         ]);
 
-        return $stateId;
+        return $this->reload();
     }
 }
