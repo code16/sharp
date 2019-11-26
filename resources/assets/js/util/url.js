@@ -7,7 +7,7 @@ function routeUrl(location) {
 
 export function getBackUrl(breadcrumb) {
     const item = breadcrumb[breadcrumb.length - 2];
-    return item.url;
+    return item ? item.url : null;
 }
 
 export function getListBackUrl(breadcrumb) {
