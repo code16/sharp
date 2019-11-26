@@ -2,7 +2,9 @@
 
 namespace Code16\Sharp\Show;
 
+use Code16\Sharp\EntityList\Commands\EntityState;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\EntityList\Commands\SingleEntityState;
 use Code16\Sharp\EntityList\Commands\SingleInstanceCommand;
 use Code16\Sharp\Exceptions\SharpException;
 
@@ -32,10 +34,41 @@ abstract class SharpSingleShow extends SharpShow
             : $commandHandlerOrClassName;
 
         if(!$commandHandler instanceof SingleInstanceCommand) {
-            throw new SharpException("Handler class for instance command [{$commandName}] is not an subclass of " . SingleInstanceCommand::class);
+            throw new SharpException(
+                sprintf(
+                    "Handler class for instance command [%s] is not an subclass of %s as it should be since it's a part of a SharpSingleShow",
+                    $commandName,
+                    SingleInstanceCommand::class
+                )
+            );
         }
 
         return parent::addInstanceCommand($commandName, $commandHandlerOrClassName);
+    }
+
+    /**
+     * @param string $stateAttribute
+     * @param EntityState|string $stateHandlerOrClassName
+     * @return SharpShow
+     * @throws SharpException
+     */
+    protected function setEntityState(string $stateAttribute, $stateHandlerOrClassName)
+    {
+        $entityStateHandler = is_string($stateHandlerOrClassName)
+            ? app($stateHandlerOrClassName)
+            : $stateHandlerOrClassName;
+
+        if(!$entityStateHandler instanceof SingleEntityState) {
+            throw new SharpException(
+                sprintf(
+                    "Handler class for entity state handler [%s] is not an subclass of %s as it should be since it's a part of a SharpSingleShow",
+                    $stateAttribute,
+                    SingleEntityState::class
+                )
+            );
+        }
+
+        return parent::setEntityState($stateAttribute, $stateHandlerOrClassName);
     }
 
     /**

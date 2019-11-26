@@ -18,16 +18,16 @@ trait HandleEntityState
 
     /**
      * @param string $stateAttribute
-     * @param EntityState|string $stateHandler
+     * @param EntityState|string $stateHandlerOrClassName
      * @return $this
      */
-    protected function setEntityState(string $stateAttribute, $stateHandler)
+    protected function setEntityState(string $stateAttribute, $stateHandlerOrClassName)
     {
         $this->entityStateAttribute = $stateAttribute;
 
-        $this->entityStateHandler = $stateHandler instanceof EntityState
-            ? $stateHandler
-            : app($stateHandler);
+        $this->entityStateHandler = $stateHandlerOrClassName instanceof EntityState
+            ? $stateHandlerOrClassName
+            : app($stateHandlerOrClassName);
 
         return $this;
     }

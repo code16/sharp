@@ -3,9 +3,8 @@
 namespace Code16\Sharp\Tests\Feature\Api\Commands;
 
 use Code16\Sharp\EntityList\Commands\EntityState;
-use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
+use Code16\Sharp\EntityList\Commands\SingleEntityState;
 use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
-use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
 use Code16\Sharp\Tests\Fixtures\PersonSharpShow;
 use Code16\Sharp\Tests\Fixtures\PersonSharpSingleShow;
 
@@ -22,7 +21,6 @@ class ShowInstanceStateControllerTest extends BaseApiTest
     public function we_can_update_the_state_of_an_entity_from_a_show()
     {
         $this->buildTheWorld();
-//        $this->withoutExceptionHandling();
 
         $this->postJson('/sharp/api/show/person/state/1', [
             "attribute" => "state",
@@ -45,7 +43,6 @@ class ShowInstanceStateControllerTest extends BaseApiTest
     public function we_can_update_the_state_of_an_entity_from_a_single_show()
     {
         $this->buildTheWorld(true);
-        $this->withoutExceptionHandling();
 
         $this->postJson('/sharp/api/show/person/state', [
             "attribute" => "state",
@@ -79,7 +76,7 @@ class ShowInstanceStateControllerTest extends BaseApiTest
 
 class ShowInstanceStatePersonSharpShow extends PersonSharpShow {
 
-    function buildListConfig()
+    function buildShowConfig()
     {
         $this->setEntityState("state", new class() extends EntityState {
             protected function buildStates()
@@ -105,7 +102,7 @@ class ShowInstanceStatePersonSharpShow extends PersonSharpShow {
 
 class ShowInstanceStatePersonSharpSingleShow extends PersonSharpSingleShow {
 
-    function buildListConfig()
+    function buildShowConfig()
     {
         $this->setEntityState("state", new class() extends SingleEntityState {
             protected function buildStates()
@@ -114,9 +111,9 @@ class ShowInstanceStatePersonSharpSingleShow extends PersonSharpSingleShow {
                 $this->addState("ko", "KO2", "red");
             }
 
-            protected function updateState($stateId)
+            protected function updateSingleState(string $stateId)
             {
-                if($stateId == "ok_refresh_items") {
+                if($stateId == "ok") {
                     return $this->reload();
                 }
             }
