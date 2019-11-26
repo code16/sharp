@@ -47,7 +47,7 @@ class AccountSharpForm extends SharpSingleForm
      */
     protected function findSingle()
     {
-        return $this->transform(User::findOrFail(auth()->id));
+        return $this->transform(User::findOrFail(auth()->id()));
     }
 
     /**
@@ -56,7 +56,7 @@ class AccountSharpForm extends SharpSingleForm
      */
     protected function updateSingle(array $data)
     {
-        $this->save(User::findOrFail(auth()->id), $data);
+        $this->save(User::findOrFail(auth()->id()), $data);
     }
 
     protected function deleteSingle()
