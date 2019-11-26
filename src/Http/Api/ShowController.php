@@ -31,7 +31,7 @@ class ShowController extends ApiController
         $show->buildShowConfig();
 
         return response()->json([
-            "config" => $show->showConfig($instanceId, config()->has("sharp.entities.{$entityKey}.list")),
+            "config" => $show->showConfig($instanceId),
             "fields" => $show->fields(),
             "layout" => $show->showLayout(),
             "data" => $show->instance($instanceId)

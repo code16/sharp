@@ -96,7 +96,6 @@ class ShowControllerTest extends BaseApiTest
         $this->json('get', '/sharp/api/show/person/1')
             ->assertStatus(200)
             ->assertJson(["config" => [
-                "showBackToEntityList" => true,
                 "commands" => [
                     "instance" => [
                         [
@@ -145,7 +144,6 @@ class ShowControllerTest extends BaseApiTest
         $this->json('get', '/sharp/api/show/person/11')
             ->assertStatus(200)
             ->assertJson(["config" => [
-                "showBackToEntityList" => true,
                 "commands" => [
                     "instance" => [
                         [
@@ -165,7 +163,6 @@ class ShowControllerTest extends BaseApiTest
         $this->json('get', '/sharp/api/show/person/1')
             ->assertStatus(200)
             ->assertJson(["config" => [
-                "showBackToEntityList" => true,
                 "commands" => [
                     "instance" => [
                         [
