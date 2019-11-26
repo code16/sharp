@@ -40,18 +40,18 @@ export function getShowView({ entityKey, instanceId }) {
 }
 
 export function postShowCommand({ entityKey, instanceId, commandKey, data }) {
-    return api.post(`list/${entityKey}/command/${commandKey}/${instanceId}`, {
+    return api.post(`show/${entityKey}/command/${commandKey}/${instanceId || ''}`, {
         data,
     }, { responseType: 'blob' });
 }
 
 export function getShowCommandFormData({ entityKey, instanceId, commandKey }) {
-    return api.get(`list/${entityKey}/command/${commandKey}/${instanceId}/data`)
+    return api.get(`show/${entityKey}/command/${commandKey}${instanceId ? `/${instanceId}` : ''}/data`)
         .then(response => response.data.data);
 }
 
 export function postShowState({ entityKey, instanceId, value }) {
-    return api.post(`list/${entityKey}/state/${instanceId}`, { value })
+    return api.post(`show/${entityKey}/state/${instanceId}`, { value })
         .then(response => response.data);
 }
 

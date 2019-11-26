@@ -1,11 +1,9 @@
 import './polyfill';
 import Vue from 'vue';
 import Vuex from 'vuex';
-import VueRouter from 'vue-router';
 import { install as VueGoogleMaps } from 'vue2-google-maps';
 
 import SharpActionView from './components/ActionView';
-import SharpForm from './components/form/Form';
 import SharpFieldDisplay from './components/form/field-display/FieldDisplay';
 
 import SharpCollapsibleItem from './components/menu/CollapsibleItem';
@@ -49,7 +47,6 @@ new Vue({
 
     components: {
         SharpActionView,
-        SharpForm,
         SharpCollapsibleItem,
         SharpNavItem,
         SharpLeftNav,
