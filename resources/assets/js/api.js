@@ -51,7 +51,7 @@ export function getShowCommandFormData({ entityKey, instanceId, commandKey }) {
 }
 
 export function postShowState({ entityKey, instanceId, value }) {
-    return api.post(`show/${entityKey}/state/${instanceId}`, { value })
+    return api.post(`show/${entityKey}/state/${instanceId || ''}`, { value })
         .then(response => response.data);
 }
 
