@@ -66,6 +66,10 @@ return [
         "account" => [
             "show" => \App\Sharp\AccountSharpShow::class,
             "form" => \App\Sharp\AccountSharpForm::class,
+            "authorizations" => [
+                "create" => false,
+                "delete" => false,
+            ]
         ],
         "feature" => [
             "list" => \App\Sharp\FeatureSharpList::class,
