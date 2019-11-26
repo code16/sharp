@@ -20,7 +20,7 @@ class SetLocaleTest extends BaseApiTest
 
         $this->assertEquals("monday", strtolower(Carbon::now()->startOfWeek()->formatLocalized("%A")));
 
-        $this->json('get', '/sharp/api/form/person/1');
+        $this->getJson('/sharp/api/form/person/edit/1');
 
         $this->assertEquals("monday", strtolower(Carbon::now()->startOfWeek()->formatLocalized("%A")));
     }
@@ -35,7 +35,7 @@ class SetLocaleTest extends BaseApiTest
         $this->assertEquals("monday", strtolower(Carbon::now()->startOfWeek()->formatLocalized("%A")));
 
         // Locale is set through the SetSharpLocale middleware for the request
-        $this->json('get', '/sharp/api/form/person/1');
+        $this->getJson('/sharp/api/form/person/edit/1');
 
         $this->assertEquals("lundi", strtolower(Carbon::now()->startOfWeek()->formatLocalized("%A")));
     }
