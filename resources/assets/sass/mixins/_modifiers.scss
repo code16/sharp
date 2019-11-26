@@ -20,6 +20,16 @@
     font-weight: bold;
   }
 
+  &.SharpDropdown--disabled {
+    opacity: 1;
+    .SharpDropdown__text {
+      padding-right: .75rem;
+    }
+    .SharpDropdown__arrow {
+      display: none;
+    }
+  }
+
   .SharpDropdown__link:hover,
   .multiselect__option--highlight {
     background-color: lighten($brand-02, 25%)!important;
