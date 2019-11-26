@@ -63,11 +63,12 @@ abstract class SharpShow
      * Return the show config values (commands and state).
      *
      * @param $instanceId
+     * @param array $config
      * @return array
      */
-    function showConfig($instanceId): array
+    function showConfig($instanceId, $config = []): array
     {
-        return tap([], function(&$config) use($instanceId) {
+        return tap($config, function(&$config) use($instanceId) {
             $this->appendEntityStateToConfig($config, $instanceId);
             $this->appendCommandsToConfig($config, $instanceId);
         });

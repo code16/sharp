@@ -25,6 +25,7 @@ class FormController extends ApiController
         return response()->json([
             "fields" => $form->fields(),
             "layout" => $form->formLayout(),
+            "config" => $form->formConfig(),
             "data" => $form->instance($instanceId)
         ] + $this->dataLocalizations($form));
     }
@@ -48,6 +49,7 @@ class FormController extends ApiController
         return response()->json([
             "fields" => $form->fields(),
             "layout" => $form->formLayout(),
+            "config" => $form->formConfig(),
             "data" => $form->newInstance()
         ] + $this->dataLocalizations($form));
     }

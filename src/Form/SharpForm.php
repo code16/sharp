@@ -97,6 +97,14 @@ abstract class SharpForm
     }
 
     /**
+     * @return array
+     */
+    public function formConfig()
+    {
+        return [];
+    }
+
+    /**
      * @param string $label
      * @param \Closure|null $callback
      * @return $this

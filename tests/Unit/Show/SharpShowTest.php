@@ -4,6 +4,7 @@ namespace Code16\Sharp\Tests\Unit\Show;
 
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\SharpShow;
+use Code16\Sharp\Show\SharpSingleShow;
 use Code16\Sharp\Tests\SharpTestCase;
 
 class SharpShowTest extends SharpTestCase
@@ -48,6 +49,18 @@ class SharpShowTest extends SharpTestCase
             ],
         ], $sharpShow->showLayout());
     }
+
+    /** @test */
+    function single_shows_have_are_declared_in_config()
+    {
+        $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpSingleShow
+        {
+        };
+
+        $this->assertEquals([
+            "isSingle" => true
+        ], $sharpShow->showConfig(null));
+    }
 }
 
 class BaseSharpShow extends SharpShow
@@ -59,6 +72,19 @@ class BaseSharpShow extends SharpShow
     {
     }
     function buildShowLayout()
+    {
+    }
+}
+
+class BaseSharpSingleShow extends SharpSingleShow
+{
+    function buildShowFields()
+    {
+    }
+    function buildShowLayout()
+    {
+    }
+    function findSingle(): array
     {
     }
 }

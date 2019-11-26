@@ -2,11 +2,21 @@
 
 namespace Code16\Sharp\Form;
 
-use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Code16\Sharp\Exceptions\SharpException;
 
 abstract class SharpSingleForm extends SharpForm
 {
+    /**
+     * @return array
+     */
+    public function formConfig()
+    {
+        return array_merge(
+            parent::formConfig(),
+            ["isSingle" => true]
+        );
+    }
+
     /**
      * Retrieve a Model for the form and pack all its data as JSON.
      *

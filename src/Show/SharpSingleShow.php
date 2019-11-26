@@ -10,6 +10,21 @@ use Code16\Sharp\Exceptions\SharpException;
 
 abstract class SharpSingleShow extends SharpShow
 {
+
+    /**
+     * Return the show config values (commands and state).
+     *
+     * @param $instanceId
+     * @param array $config
+     * @return array
+     */
+    function showConfig($instanceId, $config = []): array
+    {
+        return parent::showConfig(null, [
+            "isSingle" => true
+        ]);
+    }
+
     /*
      * Retrieve a Model for the form and pack all its data as JSON.
      *
