@@ -7,6 +7,7 @@
         :show-reorder-button="showReorderButton"
         :show-search-field="showSearchField"
         :hidden-commands="hiddenCommands"
+        :hidden-filters="hiddenFilters"
         inline
     >
         <template slot="action-bar" slot-scope="{ props, listeners }">

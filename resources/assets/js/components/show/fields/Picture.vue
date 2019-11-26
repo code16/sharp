@@ -1,6 +1,6 @@
 <template>
     <div class="ShowPictureField text-center">
-        <img class="img-responsive" :src="value" alt="">
+        <img class="ShowPictureField__thumbnail" :src="value" alt="">
     </div>
 </template>
 

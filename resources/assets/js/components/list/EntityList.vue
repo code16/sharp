@@ -133,6 +133,7 @@
                 default: true,
             },
             hiddenCommands: Object,
+            hiddenFilters: Object,
         },
         data() {
             return {
@@ -192,7 +193,7 @@
                 return {
                     count: this.totalCount,
                     search: this.search,
-                    filters: this.filters,
+                    filters: this.visibleFilters,
                     filtersValues: this.filtersValues,
                     commands: this.allowedEntityCommands,
                     forms: this.multiforms,
@@ -220,6 +221,11 @@
             allowedEntityCommands() {
                 return (this.config.commands.entity || [])
                     .map(group => group.filter(command => this.isEntityCommandAllowed(command)))
+            },
+            visibleFilters() {
+                return this.hiddenFilters
+                    ? this.filters.filter(filter => !this.hiddenFilters[filter.key])
+                    : this.filters;
             },
             multiforms() {
                 return this.forms ? Object.values(this.forms) : null;

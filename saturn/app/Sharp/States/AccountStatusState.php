@@ -24,7 +24,7 @@ class AccountStatusState extends SingleEntityState
      */
     protected function updateSingleState(string $stateId)
     {
-        User::findOrFail(auth()->id)->update([
+        User::findOrFail(auth()->id())->update([
             "status" => $stateId
         ]);
 
