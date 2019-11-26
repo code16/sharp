@@ -3,6 +3,7 @@
 namespace App\Sharp;
 
 use App\Sharp\Commands\AccountUpdateName;
+use App\Sharp\States\AccountStatusState;
 use App\User;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
@@ -45,7 +46,9 @@ class AccountSharpShow extends SharpSingleShow
      */
     function buildShowConfig()
     {
-        $this->addInstanceCommand("rename", AccountUpdateName::class);
+        $this
+            ->addInstanceCommand("rename", AccountUpdateName::class)
+            ->setEntityState("status", AccountStatusState::class);
     }
 
     function findSingle(): array
