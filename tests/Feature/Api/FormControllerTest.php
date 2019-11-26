@@ -2,6 +2,11 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
+use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
+use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Form\SharpSingleForm;
+
 class FormControllerTest extends BaseApiTest
 {
     protected function setUp(): void
@@ -155,5 +160,95 @@ class FormControllerTest extends BaseApiTest
             ->assertJson([
                 "message" => "notanid is not a valid id"
             ]);
+    }
+
+    /** @test */
+    public function we_can_get_form_data_for_an_entity_on_a_single_form_case()
+    {
+        $this->buildTheWorld(true);
+
+        $this->getJson('/sharp/api/form/person/edit')
+            ->assertStatus(200)
+            ->assertJson(["data" => [
+                "name" => "Single John Wayne"
+            ]]);
+
+        $this->getJson('/sharp/api/form/person/edit/1')->assertStatus(404);
+    }
+
+    /** @test */
+    public function we_can_update_an_entity_on_a_single_form_case()
+    {
+        $this->buildTheWorld(true);
+
+        $this
+            ->postJson('/sharp/api/form/person/update', [
+                "name" => "Jane Fonda"
+            ])
+            ->assertStatus(200)
+            ->assertJson(["ok" => true]);
+
+        $this->postJson('/sharp/api/form/person/update/1', [])->assertStatus(404);
+    }
+
+    /** @test */
+    public function we_can_delete_an_entity_on_a_single_form_case()
+    {
+        $this->buildTheWorld(true);
+
+        $this->deleteJson('/sharp/api/form/person/delete')
+            ->assertStatus(200)
+            ->assertJson(["ok" => true]);
+
+        $this->deleteJson('/sharp/api/form/person/delete/1')->assertStatus(404);
+    }
+
+    protected function buildTheWorld($singleShow = false)
+    {
+        parent::buildTheWorld($singleShow);
+
+        if($singleShow) {
+            $this->app['config']->set(
+                'sharp.entities.person.form',
+                PersonSharpSingleForm::class
+            );
+        }
+    }
+}
+
+class PersonSharpSingleForm extends SharpSingleForm
+{
+
+    function buildFormFields()
+    {
+        $this->addField(SharpFormTextField::make("name"));
+    }
+
+    function buildFormLayout()
+    {
+        $this->addColumn(6, function(FormLayoutColumn $column) {
+            return $column->withSingleField("name");
+        });
+    }
+
+    /**
+     * @return array
+     */
+    protected function findSingle()
+    {
+        return ["name" => "Single John Wayne", "job" => "actor"];
+    }
+
+    /**
+     * @param array $data
+     * @return mixed
+     */
+    protected function updateSingle(array $data)
+    {
+        return true;
+    }
+
+    protected function deleteSingle()
+    {
     }
 }

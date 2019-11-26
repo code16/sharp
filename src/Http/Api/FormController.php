@@ -2,23 +2,26 @@
 
 namespace Code16\Sharp\Http\Api;
 
+use Code16\Sharp\Exceptions\SharpException;
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Form\SharpSingleForm;
 
 class FormController extends ApiController
 {
 
     /**
      * @param string $entityKey
-     * @param string $instanceId
+     * @param string|null $instanceId
      * @return \Illuminate\Http\JsonResponse
      * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
      * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
-    public function edit($entityKey, $instanceId)
+    public function edit($entityKey, $instanceId = null)
     {
         sharp_check_ability("view", $entityKey, $instanceId);
 
         $form = $this->getFormInstance($entityKey);
+        $this->checkFormImplementation($form, $instanceId);
 
         return response()->json([
             "fields" => $form->fields(),
@@ -48,19 +51,20 @@ class FormController extends ApiController
 
     /**
      * @param string $entityKey
-     * @param string $instanceId
+     * @param string|null $instanceId
      * @return \Illuminate\Http\JsonResponse
      * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
      * @throws \Code16\Sharp\Exceptions\Form\SharpFormUpdateException
      * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
-    public function update($entityKey, $instanceId)
+    public function update($entityKey, $instanceId = null)
     {
         sharp_check_ability("update", $entityKey, $instanceId);
 
         $this->validateRequest($entityKey);
 
         $form = $this->getFormInstance($entityKey);
+        $this->checkFormImplementation($form, $instanceId);
 
         $form->updateInstance($instanceId, request()->all());
 
@@ -91,16 +95,17 @@ class FormController extends ApiController
 
     /**
      * @param string $entityKey
-     * @param string $instanceId
+     * @param string|null $instanceId
      * @return \Illuminate\Http\JsonResponse
      * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
      * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
-    public function delete($entityKey, $instanceId)
+    public function delete($entityKey, $instanceId = null)
     {
         sharp_check_ability("delete", $entityKey, $instanceId);
 
         $form = $this->getFormInstance($entityKey);
+        $this->checkFormImplementation($form, $instanceId);
 
         $form->delete($instanceId);
 
@@ -135,5 +140,20 @@ class FormController extends ApiController
         return $form->hasDataLocalizations()
             ? ["locales" => $form->getDataLocalizations()]
             : [];
+    }
+
+    /**
+     * @param SharpForm $form
+     * @param string|null $instanceId
+     */
+    protected function checkFormImplementation(SharpForm $form, ?string $instanceId)
+    {
+        if(!$instanceId && !$form instanceof SharpSingleForm) {
+            abort(404);
+        }
+
+        if($instanceId && $form instanceof SharpSingleForm) {
+            abort(404);
+        }
     }
 }
