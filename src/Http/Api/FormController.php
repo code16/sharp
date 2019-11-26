@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Http\Api;
 
-use Code16\Sharp\Exceptions\SharpException;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpSingleForm;
 
