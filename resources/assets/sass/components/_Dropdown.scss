@@ -43,8 +43,12 @@
   }
 
   &--disabled {
-    cursor: default;
     opacity: 0.5;
+
+    .SharpDropdown__text {
+      cursor: default;
+      pointer-events: none;
+    }
   }
 
   &[data-value=''] &__text {

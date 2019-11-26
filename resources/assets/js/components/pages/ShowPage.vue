@@ -10,7 +10,7 @@
                     :back-url="backUrl"
                     :can-edit="canEdit"
                     :can-change-state="canChangeState"
-                    :show-back-button="config.showBackToEntityList"
+                    :show-back-button="showBackButton"
                     @command="handleCommandRequested"
                     @state-change="handleStateChanged"
                 />
@@ -97,6 +97,9 @@
             },
             backUrl() {
                 return getBackUrl(this.breadcrumb);
+            },
+            showBackButton() {
+                return !!this.backUrl;
             },
         },
 
