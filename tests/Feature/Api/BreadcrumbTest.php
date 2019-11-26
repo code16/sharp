@@ -86,6 +86,29 @@ class BreadcrumbTest extends BaseApiTest
         );
     }
 
+
+    /** @test */
+    public function breadcrumb_path_is_updated_if_we_navigate_to_a_form_in_create_mode()
+    {
+        $this->buildTheWorld();
+
+        $this->get('/sharp/list/person');
+        $this->get('/sharp/form/person');
+
+        $this->assertEquals(
+            [
+                [
+                    "type" => "entityList",
+                    "url" => url('/sharp/list/person')
+                ], [
+                "type" => "form",
+                "url" => url('/sharp/form/person')
+            ]
+            ],
+            session("sharp_breadcrumb")
+        );
+    }
+
     /** @test */
     public function breadcrumb_path_is_reset_if_we_navigate_to_a_dashboard()
     {

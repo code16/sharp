@@ -110,7 +110,7 @@ class StoreBreadcrumb
      */
     private function isFormRequest()
     {
-        return request()->is('sharp/form/*/*');
+        return request()->is('sharp/form/*');
     }
 
     /**
