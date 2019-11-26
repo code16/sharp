@@ -38,9 +38,13 @@ class FormController extends ApiController
      */
     public function create($entityKey)
     {
-        sharp_check_ability("create", $entityKey);
-
         $form = $this->getFormInstance($entityKey);
+
+        if($form instanceof SharpSingleForm) {
+            return $this->edit($entityKey);
+        }
+
+        sharp_check_ability("create", $entityKey);
 
         return response()->json([
             "fields" => $form->fields(),
@@ -82,11 +86,15 @@ class FormController extends ApiController
      */
     public function store($entityKey)
     {
+        $form = $this->getFormInstance($entityKey);
+
+        if($form instanceof SharpSingleForm) {
+            return $this->update($entityKey);
+        }
+
         sharp_check_ability("create", $entityKey);
 
         $this->validateRequest($entityKey);
-
-        $form = $this->getFormInstance($entityKey);
 
         $form->storeInstance(request()->all());
 

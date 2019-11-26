@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
-use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpSingleForm;
@@ -21,7 +20,7 @@ class FormControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->getJson('/sharp/api/form/person/edit/1')
+        $this->getJson('/sharp/api/form/person/1')
             ->assertStatus(200)
             ->assertJson(["data" => [
                 "name" => "John Wayne"
@@ -32,8 +31,9 @@ class FormControllerTest extends BaseApiTest
     public function we_can_get_form_initial_data_for_an_entity_in_creation()
     {
         $this->buildTheWorld();
+        $this->withoutExceptionHandling();
 
-        $this->getJson('/sharp/api/form/person/create')
+        $this->getJson('/sharp/api/form/person')
             ->assertStatus(200)
             ->assertJson(["data" => [
                 "name" => "default name"
@@ -45,7 +45,7 @@ class FormControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $result = $this->getJson('/sharp/api/form/person/edit/1');
+        $result = $this->getJson('/sharp/api/form/person/1');
 
         $this->assertArrayHasKey("name", $result->json()["data"]);
         $this->assertArrayNotHasKey("job", $result->json()["data"]);
@@ -56,7 +56,7 @@ class FormControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->getJson('/sharp/api/form/person/edit/1')
+        $this->getJson('/sharp/api/form/person/1')
             ->assertStatus(200)
             ->assertJson(["fields" => [
                 "name" => [
@@ -70,7 +70,7 @@ class FormControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->getJson('/sharp/api/form/person/edit/1')
+        $this->getJson('/sharp/api/form/person/1')
             ->assertStatus(200)
             ->assertJson(["layout" => [
                 "tabbed" => true,
@@ -95,7 +95,7 @@ class FormControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->postJson('/sharp/api/form/person/update/1', [
+        $this->postJson('/sharp/api/form/person/1', [
             "name" => "Jane Fonda"
         ])->assertStatus(200)
             ->assertJson(["ok" => true]);
@@ -106,7 +106,7 @@ class FormControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->deleteJson('/sharp/api/form/person/delete/1')
+        $this->deleteJson('/sharp/api/form/person/1')
             ->assertStatus(200)
             ->assertJson(["ok" => true]);
     }
@@ -117,7 +117,7 @@ class FormControllerTest extends BaseApiTest
         $this->buildTheWorld();
         $this->configurePersonValidator();
 
-        $this->postJson('/sharp/api/form/person/update/1', [
+        $this->postJson('/sharp/api/form/person/1', [
             "age" => 22
         ])->assertStatus(422)
             ->assertJson([
@@ -134,7 +134,7 @@ class FormControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->postJson('/sharp/api/form/person/store', [
+        $this->postJson('/sharp/api/form/person', [
             "name" => "Jane Fonda"
         ])->assertStatus(200)
             ->assertJson(["ok" => true]);
@@ -145,7 +145,7 @@ class FormControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->getJson('/sharp/api/form/notanvalidentity/create')
+        $this->getJson('/sharp/api/form/notanvalidentity')
             ->assertStatus(404);
     }
 
@@ -154,7 +154,7 @@ class FormControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->postJson('/sharp/api/form/person/update/notanid', [
+        $this->postJson('/sharp/api/form/person/notanid', [
             "name" => "Jane Fonda"
         ])->assertStatus(417)
             ->assertJson([
@@ -167,13 +167,13 @@ class FormControllerTest extends BaseApiTest
     {
         $this->buildTheWorld(true);
 
-        $this->getJson('/sharp/api/form/person/edit')
+        $this->getJson('/sharp/api/form/person')
             ->assertStatus(200)
             ->assertJson(["data" => [
                 "name" => "Single John Wayne"
             ]]);
 
-        $this->getJson('/sharp/api/form/person/edit/1')->assertStatus(404);
+        $this->getJson('/sharp/api/form/person/1')->assertStatus(404);
     }
 
     /** @test */
@@ -182,13 +182,13 @@ class FormControllerTest extends BaseApiTest
         $this->buildTheWorld(true);
 
         $this
-            ->postJson('/sharp/api/form/person/update', [
+            ->postJson('/sharp/api/form/person', [
                 "name" => "Jane Fonda"
             ])
             ->assertStatus(200)
             ->assertJson(["ok" => true]);
 
-        $this->postJson('/sharp/api/form/person/update/1', [])->assertStatus(404);
+        $this->postJson('/sharp/api/form/person/1', [])->assertStatus(404);
     }
 
     /** @test */
@@ -196,11 +196,11 @@ class FormControllerTest extends BaseApiTest
     {
         $this->buildTheWorld(true);
 
-        $this->deleteJson('/sharp/api/form/person/delete')
+        $this->deleteJson('/sharp/api/form/person')
             ->assertStatus(200)
             ->assertJson(["ok" => true]);
 
-        $this->deleteJson('/sharp/api/form/person/delete/1')->assertStatus(404);
+        $this->deleteJson('/sharp/api/form/person/1')->assertStatus(404);
     }
 
     protected function buildTheWorld($singleShow = false)

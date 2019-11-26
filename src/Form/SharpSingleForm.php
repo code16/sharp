@@ -2,6 +2,9 @@
 
 namespace Code16\Sharp\Form;
 
+use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
+use Code16\Sharp\Exceptions\SharpException;
+
 abstract class SharpSingleForm extends SharpForm
 {
     /**
@@ -23,6 +26,15 @@ abstract class SharpSingleForm extends SharpForm
     final function update($id, array $data)
     {
         return $this->updateSingle($data);
+    }
+
+    /**
+     * @param $data
+     * @throws SharpException
+     */
+    final public function storeInstance($data)
+    {
+        throw new SharpException("Store is not possible in a SingleSharpForm.");
     }
 
     /**

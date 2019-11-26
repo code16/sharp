@@ -28,10 +28,10 @@ class DataLocalizationTest extends BaseApiTest
             DataLocalizationTestForm::class
         );
 
-        $this->getJson('/sharp/api/form/person/create')
+        $this->getJson('/sharp/api/form/person')
             ->assertJson(["locales" => ["fr", "en"]]);
 
-        $this->getJson('/sharp/api/form/person/edit/50')
+        $this->getJson('/sharp/api/form/person/50')
             ->assertJson(["locales" => ["fr", "en"]]);
     }
 
@@ -43,10 +43,10 @@ class DataLocalizationTest extends BaseApiTest
             PersonSharpForm::class
         );
 
-        $this->getJson('/sharp/api/form/person/create')
+        $this->getJson('/sharp/api/form/person')
             ->assertJsonMissing(["locales"]);
 
-        $this->getJson('/sharp/api/form/person/edit/50')
+        $this->getJson('/sharp/api/form/person/50')
             ->assertJsonMissing(["locales"]);
     }
 
@@ -58,10 +58,10 @@ class DataLocalizationTest extends BaseApiTest
             DataLocalizationWithoutLocalizedFieldTestForm::class
         );
 
-        $this->getJson('/sharp/api/form/person/create')
+        $this->getJson('/sharp/api/form/person')
             ->assertJsonMissing(["locales"]);
 
-        $this->getJson('/sharp/api/form/person/edit/50')
+        $this->getJson('/sharp/api/form/person/50')
             ->assertJsonMissing(["locales"]);
     }
 }

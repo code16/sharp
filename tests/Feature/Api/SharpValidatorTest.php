@@ -24,7 +24,7 @@ class SharpValidatorTest extends BaseApiTest
             ValidatorTestPersonSharpValidator::class
         );
 
-        $this->postJson('/sharp/api/form/person/update/1', [
+        $this->postJson('/sharp/api/form/person/1', [
             "name.text" => ""
         ])->assertStatus(422)
             ->assertJson([
@@ -44,7 +44,7 @@ class SharpValidatorTest extends BaseApiTest
             ValidatorTestPersonExtendingSharpFormRequestSharpValidator::class
         );
 
-        $this->postJson('/sharp/api/form/person/update/1', [
+        $this->postJson('/sharp/api/form/person/1', [
             "name.text" => ""
         ])->assertStatus(422)
             ->assertJson([

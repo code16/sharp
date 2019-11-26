@@ -21,7 +21,7 @@ class ContextTest extends BaseApiTest
 
         $context = app(SharpContext::class);
 
-        $this->getJson('/sharp/api/form/person/edit/50');
+        $this->getJson('/sharp/api/form/person/50');
 
         $this->assertTrue($context->isUpdate());
         $this->assertEquals("50", $context->instanceId());
@@ -36,7 +36,7 @@ class ContextTest extends BaseApiTest
 
         $context = app(SharpContext::class);
 
-        $this->postJson('/sharp/api/form/person/update/50', [
+        $this->postJson('/sharp/api/form/person/50', [
             "name" => "Jane Fonda"
         ]);
 
@@ -52,7 +52,7 @@ class ContextTest extends BaseApiTest
 
         $context = app(SharpContext::class);
 
-        $this->getJson('/sharp/api/form/person/create');
+        $this->getJson('/sharp/api/form/person');
 
         $this->assertTrue($context->isCreation());
         $this->assertEquals("person", $context->entityKey());
@@ -66,7 +66,7 @@ class ContextTest extends BaseApiTest
 
         $context = app(SharpContext::class);
 
-        $this->postJson('/sharp/api/form/person/store', [
+        $this->postJson('/sharp/api/form/person', [
             "name" => "Jane Fonda"
         ]);
 
@@ -84,15 +84,15 @@ class ContextTest extends BaseApiTest
             PersonSharpValidatorWithContext::class
         );
 
-        $this->postJson('/sharp/api/form/person/store', [
+        $this->postJson('/sharp/api/form/person', [
             "name" => "Jane Fonda"
         ])->assertStatus(200);
 
-        $this->postJson('/sharp/api/form/person/update/1', [
+        $this->postJson('/sharp/api/form/person/1', [
             "name" => "Jane Fonda"
         ])->assertStatus(422);
 
-        $this->postJson('/sharp/api/form/person/update/1', [
+        $this->postJson('/sharp/api/form/person/1', [
             "name" => "Jane Fonda",
             "age" => 42
         ])->assertStatus(200);

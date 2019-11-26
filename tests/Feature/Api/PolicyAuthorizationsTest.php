@@ -27,18 +27,18 @@ class PolicyAuthorizationsTest extends BaseApiTest
         $this->buildTheWorld();
 
         // Update policy returns true
-        $this->postJson('/sharp/api/form/person/update/1', [])->assertStatus(200);
+        $this->postJson('/sharp/api/form/person/1', [])->assertStatus(200);
         $this->getJson('/sharp/api/list/person')->assertStatus(200);
 
         // Create has no policy, and should therefore return 200
-        $this->getJson('/sharp/api/form/person/create')->assertStatus(200);
-        $this->postJson('/sharp/api/form/person/store', [])->assertStatus(200);
+        $this->getJson('/sharp/api/form/person')->assertStatus(200);
+        $this->postJson('/sharp/api/form/person', [])->assertStatus(200);
 
         // Delete policy returns false
-        $this->deleteJson('/sharp/api/form/person/delete/50')->assertStatus(403);
+        $this->deleteJson('/sharp/api/form/person/50')->assertStatus(403);
 
         // Update policy with an id > 1 returns 403
-        $this->postJson('/sharp/api/form/person/update/10', [])->assertStatus(403);
+        $this->postJson('/sharp/api/form/person/10', [])->assertStatus(403);
     }
 
     /** @test */
@@ -46,7 +46,7 @@ class PolicyAuthorizationsTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->getJson('/sharp/api/form/person/create')->assertJson([
+        $this->getJson('/sharp/api/form/person')->assertJson([
             "authorizations" => [
                 // Delete policy is false, but in a create case it will return true
                 // because there is no entity to check for.
@@ -57,7 +57,7 @@ class PolicyAuthorizationsTest extends BaseApiTest
             ]
         ]);
 
-        $this->getJson('/sharp/api/form/person/edit/1')->assertJson([
+        $this->getJson('/sharp/api/form/person/1')->assertJson([
             "authorizations" => [
                 "delete" => false,
                 "update" => true,
@@ -66,7 +66,7 @@ class PolicyAuthorizationsTest extends BaseApiTest
             ]
         ]);
 
-        $this->getJson('/sharp/api/form/person/edit/10')->assertJson([
+        $this->getJson('/sharp/api/form/person/10')->assertJson([
             "authorizations" => [
                 "delete" => false,
                 "update" => false,
@@ -102,7 +102,7 @@ class PolicyAuthorizationsTest extends BaseApiTest
             ]
         );
 
-        $this->getJson('/sharp/api/form/person/create')->assertJson([
+        $this->getJson('/sharp/api/form/person')->assertJson([
             "authorizations" => [
                 "delete" => true,
                 "update" => false,
@@ -118,11 +118,11 @@ class PolicyAuthorizationsTest extends BaseApiTest
         $this->buildTheWorld();
         $this->actingAs(new User(["name" => "Unauthorized-User"]));
 
-        $this->getJson('/sharp/api/form/person/create')->assertStatus(403);
-        $this->postJson('/sharp/api/form/person/update/1', [])->assertStatus(403);
+        $this->getJson('/sharp/api/form/person')->assertStatus(403);
+        $this->postJson('/sharp/api/form/person/1', [])->assertStatus(403);
         $this->getJson('/sharp/api/list/person')->assertStatus(403);
-        $this->postJson('/sharp/api/form/person/store', [])->assertStatus(403);
-        $this->deleteJson('/sharp/api/form/person/delete/50')->assertStatus(403);
+        $this->postJson('/sharp/api/form/person', [])->assertStatus(403);
+        $this->deleteJson('/sharp/api/form/person/50')->assertStatus(403);
     }
 
     /** @test */

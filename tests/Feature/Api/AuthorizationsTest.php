@@ -22,13 +22,13 @@ class AuthorizationsTest extends BaseApiTest
             ]
         );
 
-        $this->postJson('/sharp/api/form/person/update/50', [])->assertStatus(403);
-        $this->postJson('/sharp/api/form/person/store', [])->assertStatus(403);
-        $this->deleteJson('/sharp/api/form/person/delete/50')->assertStatus(403);
-        $this->getJson('/sharp/api/form/person/create')->assertStatus(403);
+        $this->postJson('/sharp/api/form/person/50', [])->assertStatus(403);
+        $this->postJson('/sharp/api/form/person', [])->assertStatus(403);
+        $this->deleteJson('/sharp/api/form/person/50')->assertStatus(403);
+        $this->getJson('/sharp/api/form/person')->assertStatus(403);
 
         // Can't neither see the form, since view is false
-        $this->getJson('/sharp/api/form/person/edit/50')->assertStatus(403);
+        $this->getJson('/sharp/api/form/person/50')->assertStatus(403);
 
 
         // We can still view the list
@@ -49,11 +49,11 @@ class AuthorizationsTest extends BaseApiTest
         );
 
         $this->getJson('/sharp/api/list/person')->assertStatus(200);
-        $this->getJson('/sharp/api/form/person/create')->assertStatus(200);
-        $this->getJson('/sharp/api/form/person/edit/50')->assertStatus(200);
-        $this->postJson('/sharp/api/form/person/store', [])->assertStatus(200);
-        $this->postJson('/sharp/api/form/person/update/50', [])->assertStatus(403);
-        $this->deleteJson('/sharp/api/form/person/delete/50')->assertStatus(403);
+        $this->getJson('/sharp/api/form/person')->assertStatus(200);
+        $this->getJson('/sharp/api/form/person/50')->assertStatus(200);
+        $this->postJson('/sharp/api/form/person', [])->assertStatus(200);
+        $this->postJson('/sharp/api/form/person/50', [])->assertStatus(403);
+        $this->deleteJson('/sharp/api/form/person/50')->assertStatus(403);
     }
 
     /** @test */
@@ -70,7 +70,7 @@ class AuthorizationsTest extends BaseApiTest
         );
 
         // Create
-        $this->getJson('/sharp/api/form/person/create')->assertJson([
+        $this->getJson('/sharp/api/form/person')->assertJson([
             "authorizations" => [
                 "delete" => false,
                 "update" => false,
@@ -80,7 +80,7 @@ class AuthorizationsTest extends BaseApiTest
         ]);
 
         // Edit
-        $this->getJson('/sharp/api/form/person/edit/1')->assertJson([
+        $this->getJson('/sharp/api/form/person/1')->assertJson([
             "authorizations" => [
                 "delete" => false,
                 "update" => false,
@@ -119,7 +119,7 @@ class AuthorizationsTest extends BaseApiTest
         $this->login();
 
         // Create
-        $this->getJson('/sharp/api/form/person/create')->assertJson([
+        $this->getJson('/sharp/api/form/person')->assertJson([
             "authorizations" => [
                 "delete" => true,
                 "update" => true,
@@ -129,7 +129,7 @@ class AuthorizationsTest extends BaseApiTest
         ]);
 
         // Edit
-        $this->getJson('/sharp/api/form/person/edit/1')->assertJson([
+        $this->getJson('/sharp/api/form/person/1')->assertJson([
             "authorizations" => [
                 "delete" => true,
                 "update" => true,
@@ -172,11 +172,11 @@ class AuthorizationsTest extends BaseApiTest
             ]
         );
 
-        $this->postJson('/sharp/api/form/person:big/update/50', [])->assertStatus(200);
-        $this->postJson('/sharp/api/form/person:big/store', [])->assertStatus(200);
+        $this->postJson('/sharp/api/form/person:big/50', [])->assertStatus(200);
+        $this->postJson('/sharp/api/form/person:big', [])->assertStatus(200);
 //        $this->json('delete', '/sharp/api/form/person:big/50')->assertStatus(403);
-        $this->getJson('/sharp/api/form/person:big/create')->assertStatus(200);
-        $this->getJson('/sharp/api/form/person:big/edit/50')->assertStatus(200);
+        $this->getJson('/sharp/api/form/person:big')->assertStatus(200);
+        $this->getJson('/sharp/api/form/person:big/50')->assertStatus(200);
         $this->getJson('/sharp/api/list/person')->assertStatus(200);
     }
 

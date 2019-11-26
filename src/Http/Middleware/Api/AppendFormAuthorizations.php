@@ -81,7 +81,7 @@ class AppendFormAuthorizations
     protected function determineEntityKeys()
     {
         $entityKey = request()->segment(4);
-        $instanceId = request()->segment(6) ?? null;
+        $instanceId = request()->segment(5) ?? null;
 
         if(($pos = strpos($entityKey, ':')) !== false) {
             $entityKey = substr($entityKey, 0, $pos);
