@@ -14,8 +14,8 @@ exports[`show page can mount with fields 1`] = `
 <div class="ShowPage">
 	<div class="container">
 		<sharpactionbarshow-stub statevalues=""></sharpactionbarshow-stub>
-		<h2>Section title</h2>
-		<div class="ShowPage__section mb-3">
+		<h2 class="ShowPage__section-title mb-2">Section title</h2>
+		<div class="ShowPage__section mb-4">
 			<div rows="" class="MOCKED_SharpGrid">
 				<div class="MOCKED_SharpGrid ShowPage__fields-grid">
 					<sharpshowfield-stub></sharpshowfield-stub>
