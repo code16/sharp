@@ -104,6 +104,7 @@
                 fields: null,
                 authorizations: null,
                 breadcrumb: null,
+                config: null,
 
                 errors:{},
                 fieldLocale: {},
@@ -125,10 +126,15 @@
                 return Array.isArray(this.locales) && !!this.locales.length;
             },
             isCreation() {
-                return !this.instanceId;
+                return !(this.config || {}).isSingle && !this.instanceId;
             },
             isReadOnly() {
-                return !this.ignoreAuthorizations && !(this.isCreation ? this.authorizations.create : this.authorizations.update);
+                if(this.ignoreAuthorizations) {
+                    return false;
+                }
+                return this.isCreation
+                    ? !this.authorizations.create
+                    : !this.authorizations.update;
             },
             // don't show loading on creation
             synchronous() {
@@ -182,13 +188,14 @@
             updateLocale(key, locale) {
                 this.$set(this.fieldLocale, key, locale);
             },
-            mount({ fields, layout, data={}, authorizations={}, locales, breadcrumb }) {
+            mount({ fields, layout, data={}, authorizations={}, locales, breadcrumb, config }) {
                 this.fields = fields;
                 this.data = data;
                 this.layout = this.patchLayout(layout);
                 this.locales = locales;
                 this.authorizations = authorizations;
                 this.breadcrumb = breadcrumb;
+                this.config = config;
 
                 if(fields) {
                     this.fieldVisible = Object.keys(this.fields).reduce((res, fKey) => {
