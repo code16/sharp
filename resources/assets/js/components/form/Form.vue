@@ -125,8 +125,13 @@
             localized() {
                 return Array.isArray(this.locales) && !!this.locales.length;
             },
+            isSingle() {
+                return this.config
+                    ? this.config.isSingle
+                    : false
+            },
             isCreation() {
-                return !(this.config || {}).isSingle && !this.instanceId;
+                return !this.isSingle && !this.instanceId;
             },
             isReadOnly() {
                 if(this.ignoreAuthorizations) {
@@ -253,12 +258,12 @@
                 }
             },
 
-            setupActionBar({ disable=false }={}) {
-                const showSubmitButton = this.isCreation ? this.authorizations.create : this.authorizations.update;
-
+            setupActionBar() {
                 this.actionsBus.$emit('setup', {
-                    showSubmitButton: showSubmitButton && !disable,
-                    showDeleteButton: !this.isCreation && this.authorizations.delete && !disable,
+                    showSubmitButton: this.isCreation
+                        ? this.authorizations.create
+                        : this.authorizations.update,
+                    showDeleteButton: !this.isCreation && !this.isSingle && this.authorizations.delete,
                     showBackButton: this.isReadOnly,
                     opType: this.isCreation ? 'create' : 'update'
                 });
