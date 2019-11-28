@@ -132,6 +132,10 @@
                 type: Boolean,
                 default: true,
             },
+            showEntityState: {
+                type: Boolean,
+                default: true,
+            },
             hiddenCommands: Object,
             hiddenFilters: Object,
         },
@@ -341,7 +345,7 @@
                 return stateAttribute ? instance[stateAttribute] : instance.state;
             },
             instanceHasState(instance) {
-                return !!this.config.state;
+                return !!this.config.state && this.showEntityState;
             },
             instanceHasCommands(instance) {
                 const allCommands = this.instanceCommands(instance).flat();
