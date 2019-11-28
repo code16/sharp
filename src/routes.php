@@ -110,7 +110,7 @@ Route::group([
 // Web routes
 Route::group([
     'prefix' => '/' . sharp_base_url_segment(),
-    'middleware' => ['sharp_web'],
+    'middleware' => ['sharp_web', 'sharp_invalidate_cache'],
     'namespace' => 'Code16\Sharp\Http'
 ], function() {
 
