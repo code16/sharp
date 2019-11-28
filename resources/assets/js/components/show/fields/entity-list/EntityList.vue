@@ -12,9 +12,7 @@
         inline
     >
         <template slot="action-bar" slot-scope="{ props, listeners }">
-            <div class="mb-2">
-                <ActionBar v-bind="props" v-on="listeners" />
-            </div>
+            <ActionBar class="ShowEntityListField__action-bar" v-bind="props" v-on="listeners" />
         </template>
         <template slot="append-head" slot-scope="{ props: { commands }, listeners }">
             <template v-if="hasCommands(commands)">

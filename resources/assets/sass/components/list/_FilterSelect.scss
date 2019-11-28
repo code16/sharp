@@ -46,7 +46,7 @@
       position: absolute;
       padding: 0;
       width: 0;
-      height: 0;
+      height: 0!important;
     }
     .multiselect__tags-wrap,
     .multiselect__single,
@@ -173,6 +173,14 @@
     }
     .SharpSelect__clear-button {
       width: 2rem;
+    }
+  }
+
+  &.h-100 {
+    .SharpSelect {
+      .multiselect, .multiselect__tags {
+        height: 100%;
+      }
     }
   }
 }

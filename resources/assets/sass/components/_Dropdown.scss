@@ -151,5 +151,11 @@
       }
     }
   }
+
+  &.h-100 {
+    .SharpDropdown__text {
+      height: 100%;
+    }
+  }
 }
 

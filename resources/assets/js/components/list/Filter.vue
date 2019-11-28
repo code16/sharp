@@ -1,12 +1,10 @@
 <template>
-    <div class="SharpFilter">
-        <component
-            :is="filterComp"
-            :value="value"
-            v-bind="filter"
-            @input="handleInput"
-        />
-    </div>
+    <component
+        :is="filterComp"
+        :value="value"
+        v-bind="filter"
+        @input="handleInput"
+    />
 </template>
 
 <script>

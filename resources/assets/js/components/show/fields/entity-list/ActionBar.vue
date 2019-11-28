@@ -1,63 +1,83 @@
 <template>
-    <div>
-        <div class="row">
-            <div class="col">
+    <div class="action-bar">
+        <div class="row action-bar__row">
+            <div class="col-sm action-bar__col">
                 <template v-if="!reorderActive">
-                    <div class="row mx-n2">
+                    <div class="row action-bar__row">
                         <template v-for="filter in filters">
-                            <div class="col-auto px-2">
-                                <SharpFilter
-                                    :filter="filter"
-                                    :value="filtersValues[filter.key]"
-                                    @input="handleFilterChanged(filter, $event)"
-                                    :key="filter.id"
-                                />
+                            <div class="col-auto action-bar__col mb-2">
+                                <div class="action-bar__element">
+                                    <SharpFilter
+                                        class="h-100"
+                                        :filter="filter"
+                                        :value="filtersValues[filter.key]"
+                                        @input="handleFilterChanged(filter, $event)"
+                                        :key="filter.id"
+                                    />
+                                </div>
                             </div>
                         </template>
                         <template v-if="canSearch">
-                            <div class="col-auto px-2">
-                                <SharpSearch
-                                    class="h-100"
-                                    :value="search"
-                                    :active.sync="searchActive"
-                                    :placeholder="l('action_bar.list.search.placeholder')"
-                                    @input="handleSearchInput"
-                                    @submit="handleSearchSubmitted"
-                                />
+                            <div class="col-auto action-bar__col mb-2">
+                                <div class="action-bar__element">
+                                    <SharpSearch
+                                        class="h-100"
+                                        :value="search"
+                                        :active.sync="searchActive"
+                                        :placeholder="l('action_bar.list.search.placeholder')"
+                                        @input="handleSearchInput"
+                                        @submit="handleSearchSubmitted"
+                                    />
+                                </div>
                             </div>
                         </template>
                     </div>
                 </template>
             </div>
-            <div class="col-auto">
-                <template v-if="canReorder">
-                    <template v-if="reorderActive">
-                        <button class="SharpButton SharpButton--secondary-accent" @click="handleReorderButtonClicked">
-                            {{ l('action_bar.list.reorder_button.cancel') }}
-                        </button>
-                        <button class="SharpButton SharpButton--accent" @click="handleReorderSubmitButtonClicked">
-                            {{ l('action_bar.list.reorder_button.finish') }}
-                        </button>
+            <div class="col-sm-auto action-bar__col">
+                <div class="row flex-nowrap justify-content-end action-bar__row">
+                    <template v-if="canReorder">
+                        <div class="col-auto action-bar__col mb-2">
+                            <template v-if="reorderActive">
+                                <div class="row action-bar__row">
+                                    <div class="col-auto action-bar__col">
+                                        <button class="SharpButton SharpButton--secondary-accent" @click="handleReorderButtonClicked">
+                                            {{ l('action_bar.list.reorder_button.cancel') }}
+                                        </button>
+                                    </div>
+                                    <div class="col-auto action-bar__col">
+                                        <button class="SharpButton SharpButton--accent" @click="handleReorderSubmitButtonClicked">
+                                            {{ l('action_bar.list.reorder_button.finish') }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </template>
+                            <template v-else>
+                                <button class="SharpButton SharpButton--secondary-accent" @click="handleReorderButtonClicked">
+                                    {{ l('action_bar.list.reorder_button') }}
+                                </button>
+                            </template>
+                        </div>
                     </template>
-                    <template v-else>
-                        <button class="SharpButton SharpButton--secondary-accent" @click="handleReorderButtonClicked">
-                            {{ l('action_bar.list.reorder_button') }}
-                        </button>
+                    <template v-if="canCreate && !reorderActive">
+                        <div class="col-auto action-bar__col mb-2">
+                            <div class="action-bar__element">
+                                <template v-if="hasForms">
+                                    <SharpDropdown class="SharpActionBar__forms-dropdown h-100" :text="l('action_bar.list.forms_dropdown')">
+                                        <SharpDropdownItem v-for="(form,key) in forms" @click="handleCreateFormSelected(form)" :key="key" >
+                                            <SharpItemVisual :item="form" icon-class="fa-fw"/>{{ form.label }}
+                                        </SharpDropdownItem>
+                                    </SharpDropdown>
+                                </template>
+                                <template v-else>
+                                    <button class="SharpButton SharpButton--accent" @click="handleCreateButtonClicked">
+                                        {{ l('action_bar.list.create_button') }}
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
                     </template>
-                </template>
-
-                <template v-if="!reorderActive">
-                    <template v-if="canCreate">
-                        <SharpDropdown v-if="hasForms" class="SharpActionBar__forms-dropdown" :text="l('action_bar.list.forms_dropdown')">
-                            <SharpDropdownItem v-for="(form,key) in forms" @click="handleCreateFormSelected(form)" :key="key" >
-                                <SharpItemVisual :item="form" icon-class="fa-fw"/>{{ form.label }}
-                            </SharpDropdownItem>
-                        </SharpDropdown>
-                        <button v-else class="SharpButton SharpButton--accent" @click="handleCreateButtonClicked">
-                            {{ l('action_bar.list.create_button') }}
-                        </button>
-                    </template>
-                </template>
+                </div>
             </div>
         </div>
     </div>
