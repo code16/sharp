@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
+use Code16\Sharp\Http\SharpContext;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
 use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
 use Code16\Sharp\Tests\Fixtures\PersonSharpSingleShow;
@@ -455,6 +456,60 @@ class BreadcrumbTest extends BaseApiTest
                 ]
             ],
             session("sharp_breadcrumb")
+        );
+    }
+
+    /** @test */
+    public function we_can_get_breadcrumb_parts_with_sharp_context()
+    {
+        $this->buildTheWorld();
+
+        $this->get('/sharp/list/person');
+
+        $this->assertEquals(
+            ["list", "person"],
+            app(SharpContext::class)->getPreviousPageFromBreadcrumb()->toArray()
+        );
+        $this->assertEquals(
+            ["list", "person"],
+            app(SharpContext::class)->getPreviousPageFromBreadcrumb("list")->toArray()
+        );
+        $this->assertNull(
+            app(SharpContext::class)->getPreviousPageFromBreadcrumb("form")
+        );
+
+        $this->get('/sharp/show/person/1');
+
+        $this->assertEquals(
+            ["show", "person", "1"],
+            app(SharpContext::class)->getPreviousPageFromBreadcrumb()->toArray()
+        );
+        $this->assertEquals(
+            ["show", "person", "1"],
+            app(SharpContext::class)->getPreviousPageFromBreadcrumb("show")->toArray()
+        );
+        $this->assertEquals(
+            ["list", "person"],
+            app(SharpContext::class)->getPreviousPageFromBreadcrumb("list")->toArray()
+        );
+
+        $this->get('/sharp/form/person/1');
+
+        $this->assertEquals(
+            ["form", "person", "1"],
+            app(SharpContext::class)->getPreviousPageFromBreadcrumb()->toArray()
+        );
+        $this->assertEquals(
+            ["form", "person", "1"],
+            app(SharpContext::class)->getPreviousPageFromBreadcrumb("form")->toArray()
+        );
+        $this->assertEquals(
+            ["show", "person", "1"],
+            app(SharpContext::class)->getPreviousPageFromBreadcrumb("show")->toArray()
+        );
+        $this->assertEquals(
+            ["list", "person"],
+            app(SharpContext::class)->getPreviousPageFromBreadcrumb("list")->toArray()
         );
     }
 }

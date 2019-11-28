@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Http;
 
+use Illuminate\Support\Collection;
+
 class SharpContext
 {
     /**
@@ -149,5 +151,36 @@ class SharpContext
         }
 
         return $handler->defaultValue();
+    }
+
+    /**
+     * Return the latest page of type $pageType in the current breadcrumb,
+     * formatted as an array [type, entityKey, instanceId?].
+     *
+     * @param string $pageType
+     * @return Collection|null
+     */
+    public function getPreviousPageFromBreadcrumb(string $pageType = null)
+    {
+        $page = collect(session("sharp_breadcrumb"))
+            ->reverse()
+            ->when($pageType, function($collection) use($pageType) {
+                return $collection->filter(function ($breadcrumbPart) use ($pageType) {
+                    $pageType = $pageType == "list" ? "entityList" : $pageType;
+                    return $breadcrumbPart["type"] == $pageType;
+                });
+            })
+            ->first();
+
+        if($page) {
+            return collect(explode("/", parse_url($page["url"])["path"]))
+                ->filter(function($part) {
+                    return strlen($part);
+                })
+                ->values()->except(0)
+                ->values();
+        }
+
+        return null;
     }
 }
