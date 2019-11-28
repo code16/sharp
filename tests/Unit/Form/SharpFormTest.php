@@ -188,7 +188,4 @@ class BaseSharpSingleForm extends SharpSingleForm
     protected function updateSingle(array $data)
     {
     }
-    protected function deleteSingle()
-    {
-    }
 }

@@ -58,8 +58,4 @@ class AccountSharpForm extends SharpSingleForm
     {
         $this->save(User::findOrFail(auth()->id()), $data);
     }
-
-    protected function deleteSingle()
-    {
-    }
 }

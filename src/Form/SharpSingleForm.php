@@ -49,10 +49,11 @@ abstract class SharpSingleForm extends SharpForm
 
     /**
      * @param $id
+     * @throws SharpException
      */
     final function delete($id)
     {
-        $this->deleteSingle();
+        throw new SharpException("Delete is not possible in a SingleSharpForm.");
     }
 
     /**
@@ -65,6 +66,4 @@ abstract class SharpSingleForm extends SharpForm
      * @return mixed
      */
     abstract protected function updateSingle(array $data);
-
-    abstract protected function deleteSingle();
 }

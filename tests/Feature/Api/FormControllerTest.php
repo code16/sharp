@@ -192,13 +192,12 @@ class FormControllerTest extends BaseApiTest
     }
 
     /** @test */
-    public function we_can_delete_an_entity_on_a_single_form_case()
+    public function we_cant_delete_an_entity_on_a_single_form_case()
     {
         $this->buildTheWorld(true);
 
         $this->deleteJson('/sharp/api/form/person')
-            ->assertStatus(200)
-            ->assertJson(["ok" => true]);
+            ->assertStatus(500);
 
         $this->deleteJson('/sharp/api/form/person/1')->assertStatus(404);
     }
@@ -246,9 +245,5 @@ class PersonSharpSingleForm extends SharpSingleForm
     protected function updateSingle(array $data)
     {
         return true;
-    }
-
-    protected function deleteSingle()
-    {
     }
 }
