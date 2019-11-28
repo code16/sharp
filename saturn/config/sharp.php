@@ -43,6 +43,23 @@ return [
                 ]
             ],
         ],
+        "spaceship_pilot" => [
+            "list" => \App\Sharp\EmbeddedEntityLists\SpaceshipPilotSharpList::class,
+            "forms" => [
+                "junior" => [
+                    "icon" => "fa-user-o",
+                    "label" => "Junior Pilot",
+                    "form" => \App\Sharp\PilotJuniorSharpForm::class,
+                    "validator" => \App\Sharp\PilotJuniorSharpValidator::class,
+                ],
+                "senior" => [
+                    "icon" => "fa-user",
+                    "label" => "Senior Pilot",
+                    "form" => \App\Sharp\PilotSeniorSharpForm::class,
+                    "validator" => \App\Sharp\PilotSeniorSharpValidator::class,
+                ]
+            ],
+        ],
         "passenger" => [
             "list" => \App\Sharp\PassengerSharpList::class,
             "form" => \App\Sharp\PassengerSharpForm::class,

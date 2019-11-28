@@ -39,14 +39,14 @@ class SpaceshipSharpShow extends SharpShow
                 SharpShowTextField::make("description")
                     ->collapseToWordCount(150)
             )->addField(
-                SharpShowEntityListField::make("pilots", "pilot")
+                SharpShowEntityListField::make("pilots", "spaceship_pilot")
                     ->hideFilterWithValue("spaceship", function($instanceId) {
                         return $instanceId;
                     })
                     ->showEntityState(false)
-//                    ->hideEntityCommands(["updateXP"])
-//                    ->hideInstanceCommands(["seniorify"])
-                    ->showReorderButton(false)
+//                    ->hideEntityCommand("updateXP")
+//                    ->hideInstanceCommand("download")
+                    ->showReorderButton(true)
                     ->showCreateButton()
             );
     }
