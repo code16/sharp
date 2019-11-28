@@ -205,6 +205,10 @@ describe('EntityList', () => {
                 }
             });
             expect(wrapper.vm.canCreate).toEqual(true);
+            wrapper.setProps({
+                showCreateButton: false,
+            });
+            expect(wrapper.vm.canCreate).toEqual(false);
         });
 
         test('canReorder', () => {
@@ -236,6 +240,12 @@ describe('EntityList', () => {
                 }
             }));
             expect(wrapper.vm.canReorder).toBe(false);
+
+            wrapper.setData(reorderableConfig);
+            wrapper.setProps({
+                showReorderButton: false,
+            });
+            expect(wrapper.vm.canReorder).toBe(false);
         });
 
         test('canSearch', () => {
@@ -250,6 +260,10 @@ describe('EntityList', () => {
                 }
             });
             expect(wrapper.vm.canSearch).toBe(true);
+            wrapper.setProps({
+                showSearchField: false,
+            });
+            expect(wrapper.vm.canSearch).toBe(false);
         });
 
         test('items', ()=>{
@@ -480,6 +494,10 @@ describe('EntityList', () => {
                 }
             });
             expect(wrapper.vm.instanceHasState({})).toEqual(true);
+            wrapper.setProps({
+                showEntityState: false,
+            });
+            expect(wrapper.vm.instanceHasState({})).toEqual(false);
         });
 
         test('instanceHasComands', () => {

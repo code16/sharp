@@ -6,6 +6,7 @@
         :show-create-button="showCreateButton"
         :show-reorder-button="showReorderButton"
         :show-search-field="showSearchField"
+        :show-entity-state="showEntityState"
         :hidden-commands="hiddenCommands"
         :hidden-filters="hiddenFilters"
         inline
@@ -48,6 +49,7 @@
             showCreateButton: Boolean,
             showReorderButton: Boolean,
             showSearchField: Boolean,
+            showEntityState: Boolean,
             hiddenFilters: Object,
             hiddenCommands: Object,
         },
