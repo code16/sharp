@@ -61,7 +61,7 @@ function buildShowFields()
 }
 ```
 
-Sharp will consider this as a regular Entity List, meaning it will look for a `entities.pilot.list` EntityList class in the `sharp.php` config, build it and display it it the Show as a field (see below for layout), with the full feature set of an Entity List: filters, commands, reorder, entity state, search, ...
+Sharp will consider this as a regular Entity List, meaning it will look for a `sharp.entities.pilot.list` config key containing an EntityList class name, build it and display it it the Show as a field (see below for layout), with the full feature set of an Entity List: filters, commands, reorder, entity state, search, ...
 
 Clicking a row in the EntityList can lead to whatever you've configured for this entity: a Show or a Form. Sharp will maintain a navigation breadcrumb under the hood to, in this case, get back to the spaceship Show after a pilot update or creation.
 
