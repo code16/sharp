@@ -26,7 +26,7 @@ abstract class SharpShow
     /**
      * @return array
      */
-    public function showLayout()
+    final public function showLayout()
     {
         if(!$this->layoutBuilt) {
             $this->buildShowLayout();
@@ -46,7 +46,7 @@ abstract class SharpShow
      * @param $id
      * @return array
      */
-    function instance($id): array
+    final public function instance($id): array
     {
         return collect($this->find($id))
             // Filter model attributes on actual show labels
@@ -66,7 +66,7 @@ abstract class SharpShow
      * @param array $config
      * @return array
      */
-    function showConfig($instanceId, $config = []): array
+    public function showConfig($instanceId, $config = []): array
     {
         return tap($config, function(&$config) use($instanceId) {
             $this->appendEntityStateToConfig($config, $instanceId);
@@ -74,7 +74,7 @@ abstract class SharpShow
         });
     }
 
-    function buildFormFields()
+    private function buildFormFields()
     {
         $this->buildShowFields();
     }
@@ -84,7 +84,7 @@ abstract class SharpShow
      * @param \Closure|null $callback
      * @return $this
      */
-    protected function addSection(string $label, \Closure $callback = null)
+    final protected function addSection(string $label, \Closure $callback = null)
     {
         $this->layoutBuilt = false;
 
@@ -103,7 +103,7 @@ abstract class SharpShow
      * @param string $entityListKey
      * @return $this
      */
-    protected function addEntityListSection(string $label, string $entityListKey)
+    final protected function addEntityListSection(string $label, string $entityListKey)
     {
         $this->layoutBuilt = false;
 
@@ -122,7 +122,7 @@ abstract class SharpShow
      * @param string|EntityCommand $commandHandlerOrClassName
      * @throws SharpException
      */
-    protected function addEntityCommand(string $commandName, $commandHandlerOrClassName)
+    final protected function addEntityCommand(string $commandName, $commandHandlerOrClassName)
     {
         throw new SharpException("Entity commands are not allowed in Show view");
     }
