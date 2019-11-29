@@ -8,6 +8,7 @@ Each instance of an `entity` is called... an `instance`.
 
 Each `entity` in Sharp can be displayed:
 - in an `Entity List`, which is the list of all the `instances` for this `entity`: with some configuration and code, the user can sort the data, add filters, and perform a search. From there we also gain access to applicative `commands` applied to an `instance` or the whole list, and to a simple `state` changer (the publish state of an Article, for instance). All of that is described below.
+- In a `Show`, optionally, to display an `instance` details.
 - And in a `Form`, either to update or create a new `instance`.
 
 ## Installation
@@ -40,6 +41,7 @@ return [
         "spaceship" => [
             "list" => \App\Sharp\SpaceshipSharpList::class,
             "form" => \App\Sharp\SpaceshipSharpForm::class,
+            "show" => \App\Sharp\SpaceshipSharpShow::class,
             "validator" => \App\Sharp\SpaceshipSharpValidator::class,
             "policy" => \App\Sharp\Policies\SpaceshipPolicy::class
         ]
@@ -50,10 +52,12 @@ return [
 As we can see, each `entity` (like `spaceship`, here), can define:
 
 - a `list` class, responsible for the `Entity List`,
+- a `show` class, responsible for displaying an `instance`,
 - a `form` class, responsible for... the `Form`
-- and optionally:
-	- a `validator` class, to handle form validation
-	- and a `policy` class, for authorization.
+- a `validator` class, to handle form validation
+- and a `policy` class, for authorization.
+
+Almost each one in optional, in fact: we could skip the `show` and go straight to the `form` from the `list`, for instance. 
 
 We'll get into all those classes in this document. The important thing to notice is that Sharp provides base classes to handle all the wiring (and more), but as we'll see, the applicative code is totally up to you.
 

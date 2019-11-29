@@ -7,10 +7,10 @@ use App\Sharp\Commands\SpaceshipPreview;
 use App\Sharp\Commands\SpaceshipSendMessage;
 use App\Sharp\States\SpaceshipEntityState;
 use App\Spaceship;
-use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\Fields\SharpShowPictureField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
+use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Show\SharpShow;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
@@ -69,20 +69,20 @@ class SpaceshipSharpShow extends SharpShow
         $this
             ->addSection('Identity', function(ShowLayoutSection $section) {
                 $section
-                    ->addColumn(7, function(FormLayoutColumn $column) {
+                    ->addColumn(7, function(ShowLayoutColumn $column) {
                         $column
                             ->withSingleField("name")
                             ->withSingleField("type:label")
                             ->withSingleField("serial_number")
                             ->withSingleField("brand");
                     })
-                    ->addColumn(5, function(FormLayoutColumn $column) {
+                    ->addColumn(5, function(ShowLayoutColumn $column) {
                         $column->withSingleField("picture");
                     });
             })
             ->addSection('Description', function(ShowLayoutSection $section) {
                 $section
-                    ->addColumn(9, function(FormLayoutColumn $column) {
+                    ->addColumn(9, function(ShowLayoutColumn $column) {
                         $column->withSingleField("description");
                     });
             })

@@ -50,11 +50,15 @@ trait HasFieldRows
     function fieldsToArray(): array
     {
         return [
-            "fields" => collect($this->rows)->map(function($row) {
-                return collect($row)->map(function($field) {
-                    return $field->toArray();
-                })->all();
-            })->all()
+            "fields" => collect($this->rows)
+                ->map(function($row) {
+                    return collect($row)
+                        ->map(function($field) {
+                            return $field->toArray();
+                        })
+                        ->all();
+                })
+                ->all()
         ];
     }
 }

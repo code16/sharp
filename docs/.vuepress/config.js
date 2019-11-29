@@ -45,28 +45,14 @@ module.exports = {
                     ]
                 },
                 {
-                    title: 'Form fields',
+                    title: 'Entity Shows',
                     collapsable: false,
                     children: [
-                        'text',
-                        'textarea',
-                        'markdown',
-                        'wysiwyg',
-                        'number',
-                        'html',
-                        'check',
-                        'date',
-                        'upload',
-                        'select',
-                        'autocomplete',
-                        'tags',
-                        'list',
-                        'autocomplete-list',
-                        'geolocation',
-                    ].map(page => `form-fields/${page}`),
+                        'building-entity-show',
+                    ]
                 },
                 {
-                    title: 'Dashboard',
+                    title: 'Dashboards',
                     collapsable: false,
                     children: [
                         'dashboard',
@@ -90,6 +76,36 @@ module.exports = {
                         'artisan-generators',
                         'style-visual-theme'
                     ]
+                },
+                {
+                    title: 'Form fields',
+                    collapsable: false,
+                    children: [
+                        'text',
+                        'textarea',
+                        'markdown',
+                        'wysiwyg',
+                        'number',
+                        'html',
+                        'check',
+                        'date',
+                        'upload',
+                        'select',
+                        'autocomplete',
+                        'tags',
+                        'list',
+                        'autocomplete-list',
+                        'geolocation',
+                    ].map(page => `form-fields/${page}`),
+                },
+                {
+                    title: 'Show fields',
+                    collapsable: false,
+                    children: [
+                        'text',
+                        'picture',
+                        'embedded-entity-list',
+                    ].map(page => `show-fields/${page}`),
                 },
                 {
                     title: 'Migrations guide',

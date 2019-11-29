@@ -7,6 +7,7 @@ sidebarDepth: 3
 Sharp is mostly made of Entity Lists to display, search, filter, act on instances, and of Entity Forms to create or update entities.
 
 ## Generator
+## Generator
 
 ```bash
 php artisan sharp:make:form <class_name> [--model=<model_name>]
@@ -148,7 +149,7 @@ $column->withFields("name|8", "capacity|4");
 
 Once again, it's a 12-based grid, so `name` will take 2/3 of the width, and `capacity` 1/3.
 
-##### A word on smalll screens
+##### A word on small screens
 
 Columns are only used in medium to large screens (768 pixels and up).
 
