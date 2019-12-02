@@ -177,3 +177,37 @@ function buildShowConfig()
 ```
 
 Refer [to Commands](commands.md) (keep in mind only `InstanceCommand`s are possible in a Show) and [EntityState](entity-states.md) documentations.
+
+
+## Accessing the navigation breadcrumb
+
+A common pattern for Shows is to add an embedded EntityList with related entities, and to allow update but also creation from there. Taking back our spaceship / pilots example, we may need to add a pilot to the spaceship. Question is: how can we attach a newly created pilot to a spaceship? 
+
+Answer is: accessing the navigation breadcrumb, with [SharpContext](context.md), and more precisely with its `getPreviousPageFromBreadcrumb()` method. Here's a full example:
+
+```php
+class PilotSharpForm extends SharpForm
+{
+    use WithSharpFormEloquentUpdater, WithSharpContext;
+
+    [...]
+
+    function update($id, array $data)
+    {
+        $pilot = $id ? Pilot::findOrFail($id) : new Pilot;
+        $pilot = $this->save($pilot, $data);
+
+        if($this->context()->isCreation()) {
+            if($breadcrumb = $this->context()->getPreviousPageFromBreadcrumb("show")) {
+                list($type, $entityKey, $instanceId) = $breadcrumb;
+                if ($entityKey == "spaceship") {
+                    Spaceship::findOrFail($instanceId)
+                        ->pilots()
+                        ->attach($pilot->id);
+                }
+            }
+        }
+    }
+}
+```
+
