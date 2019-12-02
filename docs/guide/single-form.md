@@ -10,7 +10,7 @@ Sometimes you will need to configure a "unique" resource that does not fit into 
 ## Generator
 
 ```sh
-php artisan sharp:make:form <class_name> --single [--model=<model_name>]
+php artisan sharp:make:single-form <class_name> [--model=<model_name>]
 ```
 
 

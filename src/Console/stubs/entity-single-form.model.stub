@@ -1,0 +1,66 @@
+<?php
+
+namespace DummyNamespace;
+
+use DummyFullModelClass;
+use Code16\Sharp\Form\SharpSingleForm;
+use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
+
+class DummyClass extends SharpSingleForm
+{
+    use WithSharpFormEloquentUpdater;
+
+    /**
+     * Retrieve a Model for the form and pack all its data as JSON.
+     *
+     * @return array
+     */
+    public function findSingle(): array
+    {
+        // Replace/complete this code
+        $DummyModelVariable = DummyModelClass::findOrFail(1);
+
+        return $this->transform($DummyModelVariable);
+    }
+
+    /**
+     * @param array $data
+     * @return mixed the instance id
+     */
+    public function updateSingle(array $data)
+    {
+        // Replace/complete this code
+        $DummyModelVariable = DummyModelClass::findOrFail(1);
+
+        $this->save($DummyModelVariable, $data);
+
+        return 1;
+    }
+
+    /**
+     * Build form fields using ->addField()
+     *
+     * @return void
+     */
+    public function buildFormFields()
+    {
+        $this->addField(
+            SharpFormTextField::make('name')
+                ->setLabel('Name')
+        );
+    }
+
+    /**
+     * Build form layout using ->addTab() or ->addColumn()
+     *
+     * @return void
+     */
+    public function buildFormLayout()
+    {
+        $this->addColumn(6, function(FormLayoutColumn $column) {
+            $column->withSingleField('name');
+        });
+    }
+}

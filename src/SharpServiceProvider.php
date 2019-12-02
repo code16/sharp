@@ -77,6 +77,7 @@ class SharpServiceProvider extends ServiceProvider
             CreateUploadsMigration::class,
             \Code16\Sharp\Console\ListMakeCommand::class,
             \Code16\Sharp\Console\FormMakeCommand::class,
+            \Code16\Sharp\Console\SingleFormMakeCommand::class,
             \Code16\Sharp\Console\StateMakeCommand::class,
             \Code16\Sharp\Console\MediaMakeCommand::class,
             \Code16\Sharp\Console\PolicyMakeCommand::class,

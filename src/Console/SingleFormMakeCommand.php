@@ -6,7 +6,7 @@ use Code16\Sharp\Console\Utils\WithModel;
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;
 
-class FormMakeCommand extends GeneratorCommand
+class SingleFormMakeCommand extends GeneratorCommand
 {
     use WithModel;
 
@@ -15,21 +15,21 @@ class FormMakeCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $name = 'sharp:make:form';
+    protected $name = 'sharp:make:single-form';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a new entity form class';
+    protected $description = 'Create a new entity single form class';
 
     /**
      * The type of class being generated.
      *
      * @var string
      */
-    protected $type = 'SharpForm';
+    protected $type = 'SharpSingleForm';
 
     /**
      * Build the class with the given name.
@@ -61,8 +61,8 @@ class FormMakeCommand extends GeneratorCommand
     protected function getStub()
     {
         return $this->option('model')
-            ? __DIR__.'/stubs/entity-form.model.stub'
-            : __DIR__.'/stubs/entity-form.stub';
+            ? __DIR__.'/stubs/entity-single-form.model.stub'
+            : __DIR__.'/stubs/entity-single-form.stub';
     }
 
     /**
