@@ -103,3 +103,34 @@ function buildFormFields()
 ```
 
 The `:` separator used here will be interpreted in `transform()`, and the `$post->author->name` attribute will be used.
+
+
+## The built-in `MarkdownAttributeTransformer`
+
+Transforms a markdown formatted text into HTML. Example:
+
+```php
+function find($id): array
+{
+    return $this
+        ->setCustomTransformer(
+            "description", 
+            new MarkdownAttributeTransformer()
+        )
+        ->transform([...]);
+}
+```
+
+You can handle embedded images (see the [markdown form field documentation for details on that](form-fields/markdown.html)) if needed, with `handleImages(int $width = null, int $height = null, array $filters = [])`:
+
+```php
+function find($id): array
+{
+    return $this
+        ->setCustomTransformer(
+            "description", 
+            (new MarkdownAttributeTransformer())->handleImages(200)
+        )
+        ->transform([...]);
+}
+```

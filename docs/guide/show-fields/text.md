@@ -28,4 +28,4 @@ function find($id): array
 }
 ```
 
-See [related documentation of this transformer here](../how-to-transform-data.md#MarkdownAttributeTransformer).
+See [related documentation of this transformer here](../how-to-transform-data.md#the-built-in-markdownattributetransformer).
