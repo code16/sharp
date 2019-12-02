@@ -49,6 +49,7 @@ module.exports = {
                     collapsable: false,
                     children: [
                         'building-entity-show',
+                        'single-show',
                     ]
                 },
                 {
