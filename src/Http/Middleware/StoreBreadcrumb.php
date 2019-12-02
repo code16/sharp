@@ -5,6 +5,7 @@ namespace Code16\Sharp\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 /**
  * This middleware is responsible for storing the current breadcrumb
@@ -24,7 +25,7 @@ class StoreBreadcrumb
             session()->put("sharp_breadcrumb", [
                 [
                     "type" => $this->getRequestType(),
-                    "url" => $request->fullUrl()
+                    "url" => $this->getFullUrl($request)
                 ]
             ]);
 
@@ -38,23 +39,30 @@ class StoreBreadcrumb
 
             } else {
                 $segmentCount = sizeof($breadcrumb);
+                $fullUrl = $this->getFullUrl($request);
 
-                if ($segmentCount > 1 && $breadcrumb[$segmentCount - 2]["url"] == $request->fullUrl()) {
+                if ($segmentCount > 1 && $breadcrumb[$segmentCount - 2]["url"] == $fullUrl) {
                     // Navigate back: we must remove last breadcrumb segment
                     array_pop($breadcrumb);
 
-                } elseif ($breadcrumb[$segmentCount - 1]["url"] != $request->fullUrl()) {
+                } elseif ($breadcrumb[$segmentCount - 1]["url"] != $fullUrl) {
                     // Navigate forward: append to breadcrumb
-                    // TODO must handle direct URL case.
-                    $breadcrumb = $this->updatePreviousBreadcrumbItemWithReferer(
-                        $breadcrumb,
-                        $request->header("referer")
-                    );
+                    if($request->get("x-access-from") != "ui") {
+                        // Direct URL case: we treat this as a new request, we reset the breadcrumb.
+                        $breadcrumb = $this->buildPreviousState();
 
-                    $breadcrumb[] = [
-                        "type" => $this->getRequestType(),
-                        "url" => $request->fullUrl()
-                    ];
+                    } else {
+                        // "Pile up" case: we add the new URL to the breadcrumb.
+                        $breadcrumb = $this->updatePreviousBreadcrumbItemWithReferer(
+                            $breadcrumb,
+                            $request->header("referer")
+                        );
+
+                        $breadcrumb[] = [
+                            "type" => $this->getRequestType(),
+                            "url" => $this->getFullUrl($request)
+                        ];
+                    }
 
                 } // Else: current page reload. Do nothing.
             }
@@ -238,5 +246,28 @@ class StoreBreadcrumb
         }
 
         return $breadcrumb;
+    }
+
+    /**
+     * Return the current full URL.
+     *
+     * @param Request $request
+     * @return string
+     */
+    private function getFullUrl(Request $request)
+    {
+        if($value = $request->get("x-access-from")) {
+            // we have to strip the  "x-access-from=ui" part since we don't want
+            // this technical attribute to be store in the breadcrumb.
+            $url = Str::replaceFirst("x-access-from={$value}", "", $request->fullUrl());
+
+            if(Str::endsWith($url, "?")) {
+                return substr($url, 0, strlen($url) - 1);
+            }
+
+            return $url;
+        }
+
+        return $request->fullUrl();
     }
 }
