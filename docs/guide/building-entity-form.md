@@ -7,7 +7,6 @@ sidebarDepth: 3
 Sharp is mostly made of Entity Lists to display, search, filter, act on instances, and of Entity Forms to create or update entities.
 
 ## Generator
-## Generator
 
 ```bash
 php artisan sharp:make:form <class_name> [--model=<model_name>]

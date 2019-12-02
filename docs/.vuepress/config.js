@@ -41,6 +41,7 @@ module.exports = {
                         'building-entity-form',
                         'entity-authorizations',
                         'multiforms',
+                        'single-form',
                         'custom-form-fields'
                     ]
                 },

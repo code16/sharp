@@ -47,14 +47,15 @@ config/sharp.php
 return [
     [...]
     "entities" => [
-	    [...],
-	    "account" => [
-		    "show" => AccountSingleSharpShow::class
-		]
-	],
-	"menu" => [
-	    [...],
-	    [
+        [...],
+        "account" => [
+            "show" => AccountSingleSharpShow::class,
+            "form" => AccountSingleSharpForm::class,
+    	]
+    ],
+    "menu" => [
+        [...],
+        [
             "label" => "My account",
             "icon" => "fa-user",
             "entity" => "account",
@@ -65,3 +66,7 @@ return [
 ```
 
 Nothing different on the `entities` part, but do note the `"single" => true` in the `menu` to tell Sharp to treat this entity as a SingleShow.
+
+## What if you need a Form?
+
+Well, that's a [SingleForm](single-form.md) then.
