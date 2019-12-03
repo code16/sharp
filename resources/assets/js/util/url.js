@@ -1,4 +1,17 @@
-import { router } from '../router';
+import { router, stringifyQuery, parseQuery } from '../router';
+
+const defaultQuery = {
+    'x-access-from': 'ui'
+};
+
+function normalize(url) {
+    const urlLocation = new URL(url, /^\//.test(url) ? location.origin : undefined);
+    const query = {
+        ...parseQuery(urlLocation.search),
+        ...defaultQuery,
+    };
+    return urlLocation.pathname + stringifyQuery(query);
+}
 
 function routeUrl(location) {
     const { href } = router().resolve(location);
@@ -7,28 +20,28 @@ function routeUrl(location) {
 
 export function getBackUrl(breadcrumb) {
     const item = breadcrumb[breadcrumb.length - 2];
-    return item ? item.url : null;
+    return item ? normalize(item.url) : null;
 }
 
 export function getListBackUrl(breadcrumb) {
     const listItem = breadcrumb.find(item => item.type === 'entityList');
-    return listItem.url;
+    return normalize(listItem.url);
 }
 
 export function formUrl({ entityKey, instanceId }) {
-    return routeUrl({
+    return normalize(routeUrl({
         name: 'form', params: { entityKey, instanceId },
-    });
+    }));
 }
 
 export function listUrl(entityKey) {
-    return routeUrl({
+    return normalize(routeUrl({
         name: 'entity-list', params: { id: entityKey },
-    });
+    }));
 }
 
 export function showUrl({ entityKey, instanceId }) {
-    return routeUrl({
+    return normalize(routeUrl({
         name: 'show', params: { entityKey, instanceId }
-    })
+    }));
 }
