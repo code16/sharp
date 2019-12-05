@@ -33,7 +33,7 @@ class BreadcrumbTest extends BaseApiTest
             session("sharp_breadcrumb")
         );
 
-        $this->get('/sharp/show/person/1');
+        $this->get('/sharp/show/person/1?x-access-from=ui');
         $this->assertEquals(
             [
                 [
@@ -47,7 +47,7 @@ class BreadcrumbTest extends BaseApiTest
             session("sharp_breadcrumb")
         );
 
-        $this->get('/sharp/form/person/1');
+        $this->get('/sharp/form/person/1?x-access-from=ui');
         $this->assertEquals(
             [
                 [
@@ -71,8 +71,8 @@ class BreadcrumbTest extends BaseApiTest
         $this->buildTheWorld();
 
         $this->get('/sharp/list/person');
-        $this->get('/sharp/show/person/1');
-        $this->get('/sharp/form/person/1');
+        $this->get('/sharp/show/person/1?x-access-from=ui');
+        $this->get('/sharp/form/person/1?x-access-from=ui');
 
         $this->get('/sharp/list/person');
 
@@ -94,7 +94,7 @@ class BreadcrumbTest extends BaseApiTest
         $this->buildTheWorld();
 
         $this->get('/sharp/list/person');
-        $this->get('/sharp/form/person');
+        $this->get('/sharp/form/person?x-access-from=ui');
 
         $this->assertEquals(
             [
@@ -102,9 +102,9 @@ class BreadcrumbTest extends BaseApiTest
                     "type" => "entityList",
                     "url" => url('/sharp/list/person')
                 ], [
-                "type" => "form",
-                "url" => url('/sharp/form/person')
-            ]
+                    "type" => "form",
+                    "url" => url('/sharp/form/person')
+                ]
             ],
             session("sharp_breadcrumb")
         );
@@ -116,8 +116,8 @@ class BreadcrumbTest extends BaseApiTest
         $this->buildTheWorld();
 
         $this->get('/sharp/list/person');
-        $this->get('/sharp/show/person/1');
-        $this->get('/sharp/form/person/1');
+        $this->get('/sharp/show/person/1?x-access-from=ui');
+        $this->get('/sharp/form/person/1?x-access-from=ui');
 
         $this->get('/sharp/dashboard/personal_dashboard');
 
@@ -138,9 +138,9 @@ class BreadcrumbTest extends BaseApiTest
         $this->buildTheWorld(true);
 
         $this->get('/sharp/list/person');
-        $this->get('/sharp/form/person/1');
+        $this->get('/sharp/form/person/1?x-access-from=ui');
 
-        $this->get('/sharp/show/person');
+        $this->get('/sharp/show/person?x-access-from=ui');
 
         $this->assertEquals(
             [
@@ -169,7 +169,7 @@ class BreadcrumbTest extends BaseApiTest
             ]
         ]);
 
-        $this->get('/sharp/show/person/1');
+        $this->get('/sharp/show/person/1?x-access-from=ui');
 
         $this->getJson('/sharp/api/show/person/1')->assertJson([
             "breadcrumb" => [
@@ -183,7 +183,7 @@ class BreadcrumbTest extends BaseApiTest
             ]
         ]);
 
-        $this->get('/sharp/form/person/1');
+        $this->get('/sharp/form/person/1?x-access-from=ui');
 
         $this->getJson('/sharp/api/form/person/1')->assertJson([
             "breadcrumb" => [
@@ -218,14 +218,14 @@ class BreadcrumbTest extends BaseApiTest
         $this->buildTheWorld();
 
         $this->get('/sharp/list/person');
-        $this->get('/sharp/show/person/1');
-        $this->get('/sharp/form/person/1');
+        $this->get('/sharp/show/person/1?x-access-from=ui');
+        $this->get('/sharp/form/person/1?x-access-from=ui');
 
         // Go back and forth between Show and Form
-        $this->get('/sharp/show/person/1');
-        $this->get('/sharp/form/person/1');
-        $this->get('/sharp/show/person/1');
-        $this->get('/sharp/form/person/1');
+        $this->get('/sharp/show/person/1?x-access-from=ui');
+        $this->get('/sharp/form/person/1?x-access-from=ui');
+        $this->get('/sharp/show/person/1?x-access-from=ui');
+        $this->get('/sharp/form/person/1?x-access-from=ui');
 
         $this->assertEquals(
             [
@@ -243,7 +243,7 @@ class BreadcrumbTest extends BaseApiTest
             session("sharp_breadcrumb")
         );
 
-        $this->get('/sharp/show/person/1');
+        $this->get('/sharp/show/person/1?x-access-from=ui');
 
         $this->assertEquals(
             [
@@ -258,9 +258,9 @@ class BreadcrumbTest extends BaseApiTest
             session("sharp_breadcrumb")
         );
 
-        $this->get('/sharp/show/person/2');
-        $this->get('/sharp/form/person/2');
-        $this->get('/sharp/show/person/2');
+        $this->get('/sharp/show/person/2?x-access-from=ui');
+        $this->get('/sharp/form/person/2?x-access-from=ui');
+        $this->get('/sharp/show/person/2?x-access-from=ui');
 
         $this->assertEquals(
             [
@@ -278,7 +278,7 @@ class BreadcrumbTest extends BaseApiTest
             session("sharp_breadcrumb")
         );
 
-        $this->get('/sharp/show/person/2');
+        $this->get('/sharp/show/person/2?x-access-from=ui');
 
         $this->assertEquals(
             [
@@ -404,10 +404,9 @@ class BreadcrumbTest extends BaseApiTest
         $this->get('/sharp/list/person');
         $this
             ->withHeader("Referer", url('/sharp/list/person?filter_type=4&page=2'))
-            ->get('/sharp/show/person/1');
+            ->get('/sharp/show/person/1?x-access-from=ui');
 
         $this->assertEquals(
-//            [url('/sharp/list/person?filter_type=4&page=2'), url('/sharp/show/person/1')],
             [
                 [
                     "type" => "entityList",
@@ -424,7 +423,7 @@ class BreadcrumbTest extends BaseApiTest
         $this->get('/sharp/list/person');
         $this
             ->withHeader("Referer", 'http://some-url.com')
-            ->get('/sharp/show/person/1');
+            ->get('/sharp/show/person/1?x-access-from=ui');
 
         $this->assertEquals(
             [
@@ -443,7 +442,7 @@ class BreadcrumbTest extends BaseApiTest
         $this->get('/sharp/list/person');
         $this
             ->withHeader("Referer", url('/sharp/list/spaceship'))
-            ->get('/sharp/show/person/1');
+            ->get('/sharp/show/person/1?x-access-from=ui');
 
         $this->assertEquals(
             [
@@ -510,6 +509,49 @@ class BreadcrumbTest extends BaseApiTest
         $this->assertEquals(
             ["list", "person"],
             app(SharpContext::class)->getPreviousPageFromBreadcrumb("list")->toArray()
+        );
+    }
+
+    /** @test */
+    public function breadcrumb_path_is_reset_if_we_access_content_through_direct_urls()
+    {
+        $this->buildTheWorld();
+
+        $this->get('/sharp/list/person');
+        $this->get('/sharp/show/person/1?x-access-from=ui');
+        $this->get('/sharp/show/person/2');
+
+        $this->assertEquals(
+            [
+                [
+                    "type" => "entityList",
+                    "url" => url('/sharp/list/person')
+                ], [
+                    "type" => "show",
+                    "url" => url('/sharp/show/person/2')
+                ]
+            ],
+            session("sharp_breadcrumb")
+        );
+
+        $this->get('/sharp/list/person');
+        $this->get('/sharp/show/person/1?x-access-from=ui');
+        $this->get('/sharp/form/person/2');
+
+        $this->assertEquals(
+            [
+                [
+                    "type" => "entityList",
+                    "url" => url('/sharp/list/person')
+                ], [
+                    "type" => "show",
+                    "url" => url('/sharp/show/person/2')
+                ], [
+                    "type" => "form",
+                    "url" => url('/sharp/form/person/2')
+                ]
+            ],
+            session("sharp_breadcrumb")
         );
     }
 }

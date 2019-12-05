@@ -57,6 +57,15 @@ new Vue({
         this.$on('setClass',(className,active)=> {
             this.$el.classList[active ? 'add' : 'remove'](className);
         });
+        if(this.$route.query['x-access-from']) {
+            this.$router.replace({
+                ...this.$route,
+                query: {
+                    ...this.$route.query,
+                    'x-access-from': undefined
+                }
+            });
+        }
     },
 
     store: new Vuex.Store(store),

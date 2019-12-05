@@ -5,14 +5,22 @@ import { BASE_URL } from "../consts";
 
 let currentRouter = null;
 
+export function stringifyQuery(query) {
+    return qs.stringify(query, { addQueryPrefix: true, skipNulls: true });
+}
+
+export function parseQuery(query) {
+    return qs.parse(query, { ignoreQueryPrefix: true, strictNullHandling: true });
+}
+
 export function router() {
     return currentRouter || (
         currentRouter = new VueRouter({
             mode: 'history',
             routes,
             base: `${BASE_URL}/`,
-            parseQuery: query => qs.parse(query, { strictNullHandling: true }),
-            stringifyQuery: query => qs.stringify(query, { addQueryPrefix: true, skipNulls: true }),
+            parseQuery,
+            stringifyQuery,
         })
     );
 }
