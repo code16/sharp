@@ -13,12 +13,12 @@ exports[`show page can mount 1`] = `
 exports[`show page can mount with fields 1`] = `
 <div class="ShowPage">
 	<div class="container">
-		<sharpactionbarshow-stub statevalues=""></sharpactionbarshow-stub>
+		<sharpactionbarshow-stub formurl="formUrl"></sharpactionbarshow-stub>
 		<h2 class="ShowPage__section-title mb-2">Section title</h2>
 		<div class="ShowPage__section mb-4">
 			<div rows="" class="MOCKED_SharpGrid">
 				<div class="MOCKED_SharpGrid ShowPage__fields-grid">
-					<sharpshowfield-stub></sharpshowfield-stub>
+					<sharpshowfield-stub options="[object Object]" value="[object Object]"></sharpshowfield-stub>
 				</div>
 			</div>
 		</div>

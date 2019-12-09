@@ -5,7 +5,9 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import showModule from "../../store/modules/show";
 
 jest.mock('../../store/modules/show');
-jest.mock('../../util/url');
+jest.mock('../../consts', () => ({
+    BASE_URL: 'BASE_URL'
+}));
 
 
 describe('show page', () => {
@@ -16,7 +18,11 @@ describe('show page', () => {
             extends: {
                 computed: {
                     breadcrumb: () => [],
-                    config: () => withDefaultConfig(),
+                    config: () => ({}),
+                },
+                methods: {
+                    fieldOptions: () => ({}),
+                    fieldValue: () => ({}),
                 },
             },
             localVue,
@@ -30,20 +36,12 @@ describe('show page', () => {
             }),
             stubs: {
                 'SharpGrid': {
-                    template: '<div class="MOCKED_SharpGrid" v-bind="$attrs"><slot v-bind="{}" /></div>',
+                    template: `<div class="MOCKED_SharpGrid" v-bind="$attrs"><slot v-bind="{ key:'name' }" /></div>`,
                 },
             },
             ...options,
         });
         return wrapper;
-    }
-
-    function withDefaultConfig(config) {
-        return merge({
-            state: {
-                values: [],
-            }
-        }, config);
     }
 
     test('can mount', () => {
@@ -61,11 +59,22 @@ describe('show page', () => {
                         }
                     ]
                 }),
-                fields: () => ({}),
-                data: () => ({}),
+                formUrl: () => 'formUrl',
             }
         });
         wrapper.setData({ ready: true });
         expect(wrapper.html()).toMatchSnapshot();
+    });
+
+    test('formUrl', () => {
+        const wrapper = createWrapper({
+            storeModule: {
+                state: {
+                    entityKey: 'entityKey',
+                    instanceId: 'instanceId',
+                }
+            }
+        });
+        expect(wrapper.vm.formUrl).toEqual('/BASE_URL/form/entityKey/instanceId?x-access-from=ui');
     });
 });
