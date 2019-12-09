@@ -59,13 +59,14 @@ export default {
             return getters.config.state && getters.config.state.authorization;
         },
         authorizedCommands(state, getters) {
-            return (getters.config.commands.instance || [])
+            const commands = getters.config.commands || {};
+            return (commands.instance || [])
                 .map(group => group.filter(command => command.authorization));
         },
         instanceState(state, getters) {
             const stateOptions = getters.config.state;
             if(stateOptions) {
-                const stateValue =  getters.data[stateOptions.attribute];
+                const stateValue = getters.data[stateOptions.attribute];
                 return getters.config.state.values.find(item => item.value === stateValue);
             }
             return null;

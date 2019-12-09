@@ -5,7 +5,7 @@
                 <SharpActionBarShow
                     :commands="authorizedCommands"
                     :state="instanceState"
-                    :state-values="config.state.values"
+                    :state-values="stateValues"
                     :form-url="formUrl"
                     :back-url="backUrl"
                     :can-edit="canEdit"
@@ -86,6 +86,7 @@
                 'instanceState',
                 'canEdit',
                 'authorizedCommands',
+                'stateValues',
                 'canChangeState',
             ]),
 
