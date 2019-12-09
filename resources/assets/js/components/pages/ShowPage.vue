@@ -24,10 +24,15 @@
                             <template slot-scope="fieldsLayout">
                                 <SharpGrid class="ShowPage__fields-grid" :rows="fieldsLayout.fields">
                                     <template slot-scope="fieldLayout">
-                                        <SharpShowField
-                                            :options="fieldOptions(fieldLayout)"
-                                            :value="fieldValue(fieldLayout)"
-                                        />
+                                        <template v-if="fieldOptions(fieldLayout)">
+                                            <SharpShowField
+                                                :options="fieldOptions(fieldLayout)"
+                                                :value="fieldValue(fieldLayout)"
+                                            />
+                                        </template>
+                                        <template v-else>
+                                            <SharpShowUnknownField :name="fieldLayout.key" />
+                                        </template>
                                     </template>
                                 </SharpGrid>
                             </template>
@@ -51,6 +56,7 @@
     import SharpCommandFormModal from '../commands/CommandFormModal';
     import SharpCommandViewPanel from '../commands/CommandViewPanel';
     import SharpShowField from '../show/Field';
+    import SharpShowUnknownField from '../dev/UnknownField';
     import { formUrl, getBackUrl } from "../../util/url";
     import withCommands from '../../mixins/page/with-commands';
 
@@ -62,6 +68,7 @@
             SharpEntityList,
             SharpGrid,
             SharpShowField,
+            SharpShowUnknownField,
             SharpCommandFormModal,
             SharpCommandViewPanel,
         },

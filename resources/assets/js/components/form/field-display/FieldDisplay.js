@@ -1,5 +1,6 @@
 import * as util from '../../../util';
 import FieldContainer from '../FieldContainer';
+import UnknownField from "../../dev/UnknownField";
 import { computeCondition } from './conditions';
 import { isLocalizableValueField } from "../../../mixins/localize/utils";
 import { transformAttributes } from "../dynamic-attributes";
@@ -49,7 +50,7 @@ export default {
 
         if(!(fieldKey in contextFields)) {
             util.error(`Field display ('layout') : Can't find a field with key '${fieldKey}' in 'fields'`,contextFields);
-            return null;
+            return h(UnknownField, { props: { name: fieldKey } });
         }
 
         let isVisible = acceptCondition(contextFields, contextData, field.conditionalDisplay);
