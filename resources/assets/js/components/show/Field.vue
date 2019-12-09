@@ -21,7 +21,9 @@
         },
         computed: {
             component() {
-                return getFieldByType(this.options.type);
+                return this.options
+                    ? getFieldByType(this.options.type)
+                    : null;
             },
             props() {
                 return {
@@ -29,10 +31,11 @@
                 }
             },
             isVisible() {
-                if(!this.value) {
-                    if(this.options.type === 'picture') {
-                        return false;
-                    }
+                if(!this.component) {
+                    return false;
+                }
+                if(this.options.type === 'picture') {
+                    return !!this.value;
                 }
                 return true;
             }

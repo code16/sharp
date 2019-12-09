@@ -106,7 +106,11 @@
 
         methods: {
             fieldOptions(layout) {
-                return this.fields[layout.key];
+                const options = this.fields[layout.key];
+                if(!options) {
+                    console.error(`Show page: unknown field "${layout.key}"`);
+                }
+                return options;
             },
             fieldValue(layout) {
                 return this.data[layout.key];
@@ -120,7 +124,7 @@
                 const sectionFields = section.columns.reduce((res, column) => [...res, ...column.fields.flat()], []);
                 return sectionFields.some(fieldLayout => {
                     const options = this.fieldOptions(fieldLayout);
-                    return options.type === type;
+                    return options && options.type === type;
                 });
             },
             handleCommandRequested(command) {
