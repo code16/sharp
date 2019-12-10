@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`store show get integration 1`] = `
+Object {
+  "authorizations": Symbol(authorizations),
+  "breadcrumb": Symbol(breadcrumb),
+  "config": Symbol(config),
+  "data": Symbol(data),
+  "fields": Symbol(fields),
+  "layout": Symbol(layout),
+}
+`;
+
+exports[`store show state match snapshot 1`] = `
+Object {
+  "entityKey": null,
+  "instanceId": null,
+  "show": null,
+}
+`;

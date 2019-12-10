@@ -56,7 +56,7 @@ export default {
             return getters.authorizations.update;
         },
         canChangeState(state, getters) {
-            return getters.config.state && getters.config.state.authorization;
+            return !!getters.config.state && getters.config.state.authorization;
         },
         authorizedCommands(state, getters) {
             const commands = getters.config.commands || {};
@@ -67,7 +67,7 @@ export default {
             const stateOptions = getters.config.state;
             if(stateOptions) {
                 const stateValue = getters.data[stateOptions.attribute];
-                return getters.config.state.values.find(item => item.value === stateValue);
+                return stateOptions.values.find(item => item.value === stateValue);
             }
             return null;
         },

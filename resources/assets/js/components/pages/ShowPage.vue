@@ -113,14 +113,18 @@
 
         methods: {
             fieldOptions(layout) {
-                const options = this.fields[layout.key];
+                const options = this.fields
+                    ? this.fields[layout.key]
+                    : null;
                 if(!options) {
                     console.error(`Show page: unknown field "${layout.key}"`);
                 }
                 return options;
             },
             fieldValue(layout) {
-                return this.data[layout.key];
+                return this.data
+                    ? this.data[layout.key]
+                    : null;
             },
             sectionClasses(section) {
                 return {
@@ -142,7 +146,7 @@
                 });
             },
             handleStateChanged(state) {
-                this.$store.dispatch('show/postState', state)
+                return this.$store.dispatch('show/postState', state)
                     .then(data => {
                         this.handleCommandActionRequested(data.action, data);
                     })
