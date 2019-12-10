@@ -27,3 +27,21 @@ exports[`show page can mount with fields 1`] = `
 	<sharpcommandviewpanel-stub></sharpcommandviewpanel-stub>
 </div>
 `;
+
+exports[`show page can mount with unknown field 1`] = `
+<div class="ShowPage">
+	<div class="container">
+		<sharpactionbarshow-stub formurl="formUrl"></sharpactionbarshow-stub>
+		<h2 class="ShowPage__section-title mb-2">Section title</h2>
+		<div class="ShowPage__section mb-4">
+			<div rows="" class="MOCKED_SharpGrid">
+				<div class="MOCKED_SharpGrid ShowPage__fields-grid">
+					<sharpshowunknownfield-stub name="name"></sharpshowunknownfield-stub>
+				</div>
+			</div>
+		</div>
+	</div>
+	<sharpcommandformmodal-stub></sharpcommandformmodal-stub>
+	<sharpcommandviewpanel-stub></sharpcommandviewpanel-stub>
+</div>
+`;
