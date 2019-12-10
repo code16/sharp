@@ -66,6 +66,27 @@ describe('show page', () => {
         expect(wrapper.html()).toMatchSnapshot();
     });
 
+    test('can mount with unknown field', () => {
+        const wrapper = createWrapper({
+            computed: {
+                layout: () => ({
+                    sections: [
+                        {
+                            title: 'Section title',
+                            columns: []
+                        }
+                    ]
+                }),
+                formUrl: () => 'formUrl',
+            }
+        });
+        wrapper.setMethods({
+            fieldOptions: () => null,
+        });
+        wrapper.setData({ ready: true });
+        expect(wrapper.html()).toMatchSnapshot();
+    });
+
     test('formUrl', () => {
         const wrapper = createWrapper({
             storeModule: {
