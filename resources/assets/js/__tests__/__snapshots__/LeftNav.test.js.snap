@@ -10,7 +10,7 @@ exports[`left-nav can mount "not ready" LeftNav 1`] = `
 			<h2 class="SharpLeftNav__title"></h2>
 		</div>
 	</div>
-	<div class="flex-grow-1" style="min-height: 0;">
+	<div class="flex-grow-1 position-relative" style="min-height: 0;">
 		<div class="d-flex align-items-center justify-content-center h-100">
 			<div class="SharpLoading SharpLoading--small">
 				<svg viewBox="-75 -75 150 150" class="SharpLoading__svg">
@@ -32,8 +32,8 @@ exports[`left-nav can mount "with current icon" LeftNav 1`] = `
 			<h2 class="SharpLeftNav__title"></h2>
 		</div>
 	</div>
-	<div class="flex-grow-1" style="min-height: 0;">
-		<div class="SharpLeftNav__content d-flex flex-column h-100">
+	<div class="flex-grow-1 position-relative" style="min-height: 0;">
+		<div class="SharpLeftNav__content d-flex flex-column">
 			<div class="SharpLeftNav__inner flex-grow-1" style="min-height: 0;">
 				<div class="SharpGlobalFilters"></div>
 				<div>NAV CONTENT</div>
@@ -62,8 +62,8 @@ exports[`left-nav can mount "with state" LeftNav 1`] = `
 			<h2 class="SharpLeftNav__title"></h2>
 		</div>
 	</div>
-	<div class="flex-grow-1" style="min-height: 0;">
-		<div class="SharpLeftNav__content d-flex flex-column h-100">
+	<div class="flex-grow-1 position-relative" style="min-height: 0;">
+		<div class="SharpLeftNav__content d-flex flex-column">
 			<div class="SharpLeftNav__inner flex-grow-1" style="min-height: 0;">
 				<div class="SharpGlobalFilters"></div>
 				<div>NAV CONTENT</div>
@@ -92,8 +92,8 @@ exports[`left-nav can mount LeftNav 1`] = `
 			<h2 class="SharpLeftNav__title"></h2>
 		</div>
 	</div>
-	<div class="flex-grow-1" style="min-height: 0;">
-		<div class="SharpLeftNav__content d-flex flex-column h-100">
+	<div class="flex-grow-1 position-relative" style="min-height: 0;">
+		<div class="SharpLeftNav__content d-flex flex-column">
 			<div class="SharpLeftNav__inner flex-grow-1" style="min-height: 0;">
 				<div class="SharpGlobalFilters"></div>
 				<div>NAV CONTENT</div>
