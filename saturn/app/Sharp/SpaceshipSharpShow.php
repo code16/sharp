@@ -37,7 +37,7 @@ class SpaceshipSharpShow extends SharpShow
                 SharpShowPictureField::make("picture")
             )->addField(
                 SharpShowTextField::make("description")
-                    ->collapseToWordCount(150)
+                    ->collapseToWordCount(50)
             )->addField(
                 SharpShowEntityListField::make("pilots", "spaceship_pilot")
                     ->hideFilterWithValue("spaceship", function($instanceId) {
@@ -98,7 +98,7 @@ class SpaceshipSharpShow extends SharpShow
             ->setCustomTransformer("name", function($value, $spaceship) {
                 return $spaceship->name;
             })
-            ->setCustomTransformer("picture", new SharpUploadModelThumbnailUrlTransformer(600))
+            ->setCustomTransformer("picture", new SharpUploadModelThumbnailUrlTransformer(140))
             ->setCustomTransformer("description", (new MarkdownAttributeTransformer())->handleImages(200))
             ->transform(Spaceship::findOrFail($id));
     }
