@@ -5,7 +5,9 @@ const defaultQuery = {
 };
 
 function normalize(url) {
-    const urlLocation = new URL(url, /^\//.test(url) ? location.origin : undefined);
+    const urlLocation = /^\//.test(url)
+        ? new URL(url, location.origin)
+        : new URL(url);
     const query = {
         ...parseQuery(urlLocation.search),
         ...defaultQuery,
