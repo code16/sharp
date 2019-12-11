@@ -15,9 +15,9 @@
                 </slot>
             </div>
         </div>
-        <div class="flex-grow-1" style="min-height: 0">
+        <div class="flex-grow-1 position-relative" style="min-height: 0">
             <template v-if="ready">
-                <div class="SharpLeftNav__content d-flex flex-column h-100">
+                <div class="SharpLeftNav__content d-flex flex-column">
                     <div class="SharpLeftNav__inner flex-grow-1" style="min-height: 0">
                         <GlobalFilters @open="handleGlobalFilterOpened" @close="handleGlobalFilterClosed" />
                         <slot />
