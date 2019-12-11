@@ -113,8 +113,9 @@ module.exports = {
                     title: 'Migrations guide',
                     collapsable: false,
                     children: [
-                        'upgrading/4.1',
+                        'upgrading/4.2',
                         'upgrading/4.1.3',
+                        'upgrading/4.1',
                     ],
                 },
             ]
