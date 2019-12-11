@@ -2,6 +2,8 @@
 .ShowTextField {
   &__label {
     text-transform: uppercase;
+    font-variant: all-small-caps;
+    color: #7f7f7f;
   }
   &__content {
     @mixin font-size($size) { font-size: $size }
