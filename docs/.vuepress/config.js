@@ -120,6 +120,14 @@ module.exports = {
                 },
             ]
         },
+        algolia: {
+            apiKey: 'd88cea985d718328d4b892ff6a05dba8',
+            indexName: 'code16_sharp',
+            // debug: true,
+            algoliaOptions: {
+                hitsPerPage: 5,
+            },
+        }
     },
     markdown: {
         extendMarkdown: md => {
