@@ -57,7 +57,7 @@ As we can see, each `entity` (like `spaceship`, here), can define:
 - a `validator` class, to handle form validation
 - and a `policy` class, for authorization.
 
-Almost each one in optional, in fact: we could skip the `show` and go straight to the `form` from the `list`, for instance. 
+Almost each one is optional, in fact: we could skip the `show` and go straight to the `form` from the `list`, for instance. 
 
 We'll get into all those classes in this document. The important thing to notice is that Sharp provides base classes to handle all the wiring (and more), but as we'll see, the applicative code is totally up to you.
 

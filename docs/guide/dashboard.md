@@ -10,7 +10,7 @@ php artisan sharp:make:dashboard <class_name>
 
 ## Write the class
 
-A Dashboard is very much like an Entity Form, except it readonly. So the first step is to create a new class extending `Code16\Sharp\Dashboard\SharpDashboard` which lead us to implement three functions:
+A Dashboard is very much like an Entity Form, except it is readonly. So the first step is to create a new class extending `Code16\Sharp\Dashboard\SharpDashboard` which leads us to implement three functions:
 
 - `buildWidgets()`, similar to Entity Form's `buildForm()`
 - `buildWidgetsLayout()`, similar to `buildLayout()`
@@ -19,7 +19,7 @@ A Dashboard is very much like an Entity Form, except it readonly. So the first s
 
 ### `buildWidgets()`
 
-We're suppose to use here `$this->addWidget()` to configure all the Dashboard widgets.
+We're supposed to use here `$this->addWidget()` to configure all the Dashboard widgets.
 
 ```php
 function buildWidgets()

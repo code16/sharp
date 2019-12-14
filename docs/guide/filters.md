@@ -1,6 +1,6 @@
 # Filters
 
-Filters are a simple way for the user to filter list items or dashboard (see below) widgets on some attribute, like for instance display only books that cost more than 15 euros.
+Filters are a simple way for the user to filter list items or dashboard (see below) widgets on some attribute, for instance display only books that cost more than 15 euros.
 
 This documentation is written for the EntityList case, but the API is the same for Dashboard (as explained at the end of this page).
 
