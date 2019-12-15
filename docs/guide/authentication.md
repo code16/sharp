@@ -1,6 +1,6 @@
 # Authentication
 
-Let's start with authentication, even if this subject seems to be non Sharp related: its is, actually, and without a bit of configuration nothing will work, because Sharp can't be used as a guest.
+Let's start with authentication, even if this subject seems to be non Sharp related: it is, actually, and without a bit of configuration nothing will work, because Sharp can't be used as a guest.
 
 Sharp uses the standard Laravel authentication.
 
@@ -22,7 +22,7 @@ The third attribute, `display_attribute`, is used to display the user name in th
 
 ## Custom guard
 
-It's very likely that you don't want to authorize all users to access Sharp. You can hook into the the [Laravel custom guards](https://laravel.com/docs/5.4/authentication#adding-custom-guards) functionality, with one config key:
+It's very likely that you don't want to authorize all users to access Sharp. You can hook into the [Laravel custom guards](https://laravel.com/docs/5.4/authentication#adding-custom-guards) functionality, with one config key:
 
 ```php
 //in config/sharp.php
@@ -56,7 +56,7 @@ class SharpCheckHandler implements SharpAuthenticationCheckHandler
 
 Perform in the `check()` method any test you need to make on the authenticated user.
 
-Finally enable this feature adding a config key:
+Finally enable this feature by adding a config key:
 
 ```php
 //in config/sharp.php
