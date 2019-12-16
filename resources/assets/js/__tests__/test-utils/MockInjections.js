@@ -15,7 +15,9 @@ const injectedComponents = {
         data: () => ({
             errors: {},
             downloadLinkBase:'',
-            localized: false
+            localized: false,
+            locales: null,
+            pendingJobs: [],
         })
     },
     $tab:{},

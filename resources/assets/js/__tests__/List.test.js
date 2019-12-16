@@ -254,10 +254,11 @@ describe('list-field', () => {
     });
 
     test('update data properly', async () => {
+        const provided = MockInjections.provide();
+        provided.$form.localized = true;
+        provided.$form.locales = ['fr', 'en'];
         let $list = await createVm({
-            provide: {
-                $form: { localized:true, locales:['fr', 'en'] }
-            },
+            provide: provided,
             propsData: {
                 itemFields: {
                     name: { key:'name', type:'text' },
