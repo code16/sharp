@@ -29,7 +29,7 @@ Links can be grouped in categories, like Company, Travels and Admin in this exam
 
 The `entity` value must correspond to some entity key described in the same `sharp.php` file.
 
-## Link to an single entity show
+## Link to a single entity show
 
 ```php
 // sharp.php

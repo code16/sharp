@@ -57,4 +57,4 @@ We use an instance of `Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet` t
 - `setLabel(string $label)` to set the legend label
 - `setColor(string $color)`, where $color can be an HTML constant or an hexadecimal value, to set the data color.
 
-You can chain call to `addGraphDataSet()` to add multiple data sets, with different colors and labels.
+You can chain calls to `addGraphDataSet()` to add multiple data sets, with different colors and labels.

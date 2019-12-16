@@ -1,6 +1,6 @@
 # Testing with Sharp
 
-Sharp provide a fexw assertions and helpers to help you testing your Sharp code.
+Sharp provides a few assertions and helpers to help you testing your Sharp code.
 
 
 ## The `SharpAssertions` trait
@@ -53,7 +53,7 @@ Call the `$commandKey` Instance Command with the optional `$data`.
 
 ### Assertions
 
-First, and of course, you can use regular assertions, like for instance:
+And of course, you can use regular assertions, for instance:
 
 ```php
 $this->updateSharpForm(

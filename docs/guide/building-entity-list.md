@@ -38,7 +38,7 @@ function buildListDataContainers()
 }
 ```
 
-Setting the label, allowing the column to be sortable and to display html is optionnal.
+Setting the label, allowing the column to be sortable and to display html is optional.
 
 ### `buildListLayout()`
 
@@ -65,7 +65,7 @@ In this example, `picture` and `name` will be displayed respectively on 1/12 and
 
 Now the real work: grab and return the actual list data. This method must return an array of `instances` of our `entity`. You can do this however you want, so let's see a generic example:
 
-The returned array is meant to be build with 2 rules:
+The returned array is meant to be built with 2 rules:
 
 - each item must define the keys declared in the `buildDatacontainer()` function,
 - plus one attribute for the identifier, which is `id` by default (more on that later).
@@ -174,7 +174,7 @@ Here we declare that:
 - the list must be sorted by "name", meaning that the `EntityListQueryParams` instance will be filled with this default value;
 - and finally, the list is paginated, meaning that `getListData(EntityListQueryParams $params)` must return an instance of `LengthAwarePaginator` (see above) and that Sharp will display pagination links if needed.
 
-This config can also contain things related to Filters, Commands or State, and all of this is discussed on following chapters.
+This config can also contain things related to Filters, Commands or State, and all of this is discussed in following chapters.
 
 
 ## Configure the entity
