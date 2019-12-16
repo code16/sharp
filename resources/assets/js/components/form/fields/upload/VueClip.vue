@@ -380,6 +380,7 @@
             this.file.status = 'exist';
         },
         beforeDestroy() {
+            this.setPending(false);
             this.uploader._uploader.destroy();
         },
     }

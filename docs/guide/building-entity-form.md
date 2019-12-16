@@ -58,7 +58,7 @@ In addition, all text fields have one more generic setter:
 
 #### Conditional display
 
-The idea is to hide or show a field depending of some other field value, called "master" in this relation. To do that, use the `addConditionalDisplay(string $fieldKey, $values = true)` setter giving:
+The idea is to hide or show a field depending on some other field value, called "master" in this relation. To do that, use the `addConditionalDisplay(string $fieldKey, $values = true)` setter giving:
 - the master `$fieldKey`, which should refer to either a Check, Select, Tags or Autocomplete field,
 - the `$values` of the master field for which the "slave" field must be visible. You can put there a boolean for a Check master field, and for other fields (Select, Tags, Autocomplete), either:
 	- a string value, like for instance `"red"`: the slave field is visible only when the master field value is "red"
@@ -188,12 +188,12 @@ $column->withSingleField("pictures", function(FormLayoutColumn $listItem) {
 });
 ```
 
-Notice we added a `Closure` on a `withSingleField()` call, meaning we define a "item layout" for this field. The item is made of two fields in this example.
+Notice we added a `Closure` on a `withSingleField()` call, meaning we define an "item layout" for this field. The item is made of two fields in this example.
 
 
 #### Tabs
 
-Finally, columns can be wrapped in tabs in the form needs to be in parts:
+Finally, columns can be wrapped in tabs if the form needs to be in parts:
 
 ```php
 $this->addTab("tab 1", function(FormLayoutTab $tab) {
@@ -271,7 +271,7 @@ Finally we call `$this->save()` with the instance and the sent data. This kind o
 
 #### Handle applicative exceptions
 
-In the `update($id, array $data)` method you may want to throw an exception on a special case, other than validation (which is explain below). Here's how to do that:
+In the `update($id, array $data)` method you may want to throw an exception on a special case, other than validation (which is explained below). Here's how to do that:
 
 ```php
 function update($id, array $data)
@@ -312,7 +312,7 @@ function update($id, array $data)
 ```
 
 A notification is made of a title, and optionally
-- a texte detail,
+- a text detail,
 - a notification level: info (the default), warning, danger, success,
 - an auto-hide policy (if true, the toasted notification will hide after 4s).
 

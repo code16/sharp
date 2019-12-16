@@ -35,7 +35,7 @@ return [
 //        "my_global_filter" => \App\Sharp\Filters\MyGlobalFilter::class
     ],
 
-    // Required. The main menu (left bar), which may contains links to entities, dashboards
+    // Required. The main menu (left bar), which may contain links to entities, dashboards
     // or external URLs, grouped in categories.
     "menu" => [
 //        [

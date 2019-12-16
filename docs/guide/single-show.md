@@ -4,7 +4,7 @@ sidebarDepth: 3
 
 # Using SingleShow for unique resources
 
-Sometimes you will need to configure a "unique" resource that does not fit into a List / Show schema, like for instance an account, or a configuration item. Ti handle this kind of "unique" resource, Sharp provides a way to build SingleShows.
+Sometimes you will need to configure a "unique" resource that does not fit into a List / Show schema, like for instance an account, or a configuration item. To handle this kind of "unique" resource, Sharp provides a way to build SingleShows.
 
 
 ## Generator

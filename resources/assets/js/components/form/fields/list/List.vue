@@ -143,7 +143,7 @@
                 return this.showAddButton && this.sortable;
             },
             showSortButton() {
-                return this.sortable && this.list.length > 1;
+                return !this.hasPendingActions && this.sortable && this.list.length > 1;
             },
             itemFieldsKeys() {
                 return Object.keys(this.itemFields)
@@ -153,6 +153,10 @@
             },
             indexSymbol() {
                 return Symbol('index');
+            },
+            hasPendingActions() {
+                const filteredPendingJobs = this.$form.pendingJobs.filter(key => key.startsWith(this.fieldKey));
+                return filteredPendingJobs.length > 0;
             },
         },
         methods: {

@@ -1,6 +1,6 @@
 # Panel widget
 
-This widget is based on the HTML Form Entity field, and intend to display any useful information to the user.
+This widget is based on the HTML Form Entity field, and is intended to display any useful information to the user.
 
 ## Attributes (setters)
 

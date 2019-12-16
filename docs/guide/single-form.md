@@ -74,4 +74,4 @@ class AccountSharpForm extends SharpSingleForm
 
 ## How to declare it?
 
-Like said before, SingleForms will only work in pair a SingleShow; please refer [to this documentation](single-show.md#linking-a-singleshow-to-the-main-menu) to find out how to declare single show and form in the sharp config file.
+Like said before, SingleForms will only work in pair with a SingleShow; please refer [to this documentation](single-show.md#linking-a-singleshow-to-the-main-menu) to find out how to declare a single show and form in the sharp config file.
