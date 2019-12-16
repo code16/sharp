@@ -3,7 +3,7 @@
 namespace DummyNamespace;
 
 use Code16\Sharp\Show\SharpShow;
-use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
 
@@ -44,7 +44,7 @@ class DummyClass extends SharpShow
     public function buildShowLayout()
     {
          $this->addSection('Section', function(ShowLayoutSection $section) {
-              $section->addColumn(6, function(FormLayoutColumn $column) {
+              $section->addColumn(6, function(ShowLayoutColumn $column) {
                   $column->withSingleField("name");
               });
          });
