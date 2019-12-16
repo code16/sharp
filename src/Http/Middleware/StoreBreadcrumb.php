@@ -102,7 +102,7 @@ class StoreBreadcrumb
      */
     private function isShowRequest()
     {
-        return request()->is('sharp/show/*/*');
+        return request()->is(sprintf('%s/show/*/*', sharp_base_url_segment()));
     }
 
     /**
@@ -110,7 +110,7 @@ class StoreBreadcrumb
      */
     private function isSingleShowRequest()
     {
-        return request()->is('sharp/show/*') && !$this->isShowRequest();
+        return request()->is(sprintf('%s/show/*', sharp_base_url_segment())) && !$this->isShowRequest();
     }
 
     /**
@@ -118,7 +118,7 @@ class StoreBreadcrumb
      */
     private function isFormRequest()
     {
-        return request()->is('sharp/form/*');
+        return request()->is(sprintf('%s/form/*', sharp_base_url_segment()));
     }
 
     /**
@@ -126,7 +126,7 @@ class StoreBreadcrumb
      */
     private function isListRequest()
     {
-        return request()->is('sharp/list/*');
+        return request()->is(sprintf('%s/list/*', sharp_base_url_segment()));
     }
 
     /**
@@ -134,7 +134,7 @@ class StoreBreadcrumb
      */
     private function isDashboardRequest()
     {
-        return request()->is('sharp/dashboard/*');
+        return request()->is(sprintf('%s/dashboard/*', sharp_base_url_segment()));
     }
 
     /**
@@ -178,7 +178,10 @@ class StoreBreadcrumb
             return [
                 [
                     "type" => "entityList",
-                    "url" => url(sprintf('sharp/list/%s', $this->determineEntityKey()))
+                    "url" => url(sprintf('%s/list/%s',
+                        sharp_base_url_segment(),
+                        $this->determineEntityKey()
+                    ))
                 ], [
                     "type" => "show",
                     "url" => request()->fullUrl()
@@ -192,7 +195,10 @@ class StoreBreadcrumb
             $breadcrumb = [
                 [
                     "type" => "entityList",
-                    "url" => url(sprintf('sharp/list/%s', $this->determineEntityKey()))
+                    "url" => url(sprintf('%s/list/%s',
+                        sharp_base_url_segment(),
+                        $this->determineEntityKey()
+                    ))
                 ]
             ];
 
@@ -200,7 +206,8 @@ class StoreBreadcrumb
                 // Entity has also a Show configured
                 $breadcrumb[] = [
                     "type" => "show",
-                    "url" => url(sprintf('sharp/show/%s/%s',
+                    "url" => url(sprintf('%s/show/%s/%s',
+                        sharp_base_url_segment(),
                         $this->determineEntityKey(),
                         $this->determineInstanceId()
                     ))
@@ -212,7 +219,10 @@ class StoreBreadcrumb
             $breadcrumb = [
                 [
                     "type" => "show",
-                    "url" => url(sprintf('sharp/show/%s', $this->determineEntityKey()))
+                    "url" => url(sprintf('%s/show/%s',
+                        sharp_base_url_segment(),
+                        $this->determineEntityKey()
+                    ))
                 ]
             ];
         }
