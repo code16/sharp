@@ -3,7 +3,7 @@
 return [
 
     'validation_error.title' => 'Uw invoer is onjuist.',
-    'validation_error.description' => 'Controleer uw invoer, fouten worden weergegeven onder ieder veld.',
+    'validation_error.description' => 'Controleer uw invoer, de fouten worden weergegeven onder ieder invulveld.',
 
     'list.remove_button' => 'Verwijderen',
     'list.insert_button' => 'Invoegen',
