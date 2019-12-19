@@ -2,8 +2,8 @@
 
 return [
 
-    'validation_error.title' => 'Je invoer is invalide.',
-    'validation_error.description' => 'Controlleer uw invoer, fouten worden weergegeven onder ieder veld.',
+    'validation_error.title' => 'Uw invoer is onjuist.',
+    'validation_error.description' => 'Controleer uw invoer, fouten worden weergegeven onder ieder veld.',
 
     'list.remove_button' => 'Verwijderen',
     'list.insert_button' => 'Invoegen',
@@ -27,7 +27,7 @@ return [
     'upload.edit_button' => 'Bewerken',
     'upload.download_link' => 'Download',
     'upload.message.file_too_big' => 'Het geselecteerde bestand is te groot',
-    'upload.message.bad_extension' => 'De bestands extensie is niet valide',
+    'upload.message.bad_extension' => 'De bestandsextensie is onjuist',
 
     'multiselect.placeholder' => 'Selecteer optie',
     'multiselect.max_text' => 'Maximum aantal artikelen is bereikt',
@@ -59,11 +59,11 @@ return [
     'markdown.icons.table.title' => 'Tabel',
     'markdown.icons.horizontal_rule.title' => 'Horizontale regel',
     'markdown.icons.preview.title' => 'Voorbeeld',
-    'markdown.icons.side_by_side.title' => 'Zijn aan zij',
+    'markdown.icons.side_by_side.title' => 'Zij aan zij',
     'markdown.icons.fullscreen.title' => 'Volledig scherm',
     'markdown.icons.guide.title' => 'Gids',
 
-    'wysiwyg.dialogs.add_link.input_placeholder' => 'Voeg link to',
+    'wysiwyg.dialogs.add_link.input_placeholder' => 'Voeg link toe',
     'wysiwyg.dialogs.add_link.unlink_button' => 'Unlink',
     'wysiwyg.dialogs.add_link.link_button' => 'Link',
 ];
