@@ -18,8 +18,9 @@ return [
     'geolocation.modal.title' => 'Введите адрес или отметьте на карте',
     'geolocation.modal.title-no-geocoding' => 'Отметьте на карте',
     'geolocation.modal.geocode_input.placeholder' => 'Полный адрес',
-    'geolocation.modal.geocode_input.message.ERROR' => "Ошибка: сервер Google Maps не доступен",
-    'geolocation.modal.geocode_input.message.ZERO_RESULTS' => 'Ничего не найдено для (...)',
+    'geolocation.modal.geocode_input.message.error' => "Ошибка: сервер карт не доступен",
+    'geolocation.modal.geocode_input.message.no_results' => 'Ничего не найдено по запросу ":query"',
+    'geolocation.modal.search_button' => 'Поиск',
 
     'upload.browse_button' => 'Загрузить...',
     'upload.remove_button' => 'Удалить',
@@ -34,6 +35,9 @@ return [
     'autocomplete.no_results_text' => 'Ничего не найдено',
 
     'date.validation_error.format' => 'Некорректный формат даты',
+
+    'daterange.start_placeholder' => 'Начало периода',
+    'daterange.end_placeholder' => 'Конец периода',
 
     'markdown.icons.bold.title' => 'Жирный',
     'markdown.icons.italic.title' => 'Курсив',
