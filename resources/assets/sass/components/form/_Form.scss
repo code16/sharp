@@ -114,6 +114,33 @@
     line-height: 1.5;
   }
 
+  &__locale-dropdown {
+    text-transform: uppercase;
+    width: 4rem;
+    align-self: center;
+    margin-right: 1rem;
+    @include media-breakpoint-up(md) {
+      position: absolute;
+      left: 0;
+      top: 0;
+      margin-right: 0;
+    }
+  }
+  .SharpTabs--nav-overflow {
+    .SharpForm__locale-dropdown {
+      order: 1;
+      margin-top: .5rem;
+      align-self: flex-start;
+    }
+    .SharpTabs__content {
+      display: flex;
+      flex-direction: column;
+    }
+    .SharpTabs__collapse-btn {
+      align-self: flex-start;
+    }
+  }
+
   /// reset multiselect new Design
   .multiselect__tags {
     border-radius: 0;

@@ -1,7 +1,7 @@
 <template>
-    <div class="SharpForm">
+    <div class="SharpForm container">
         <template v-if="ready">
-            <div class="container">
+            <div class="position-relative">
                 <div v-show="hasErrors" class="SharpNotification SharpNotification--error" role="alert">
                     <div class="SharpNotification__details">
                         <div class="SharpNotification__text-wrapper">
@@ -10,20 +10,22 @@
                         </div>
                     </div>
                 </div>
-                <template v-if="localized">
-                    <SharpDropdown class="text-uppercase" style="width:4rem">
-                        <template slot="text">
-                            <template v-if="currentLocale">{{ currentLocale }}</template>
-                            <template v-else>-</template>
-                        </template>
-                        <template v-for="locale in locales">
-                            <SharpDropdownItem @click="handleLocaleChanged(locale)" :key="locale">
-                                {{ locale }}
-                            </SharpDropdownItem>
-                        </template>
-                    </SharpDropdown>
-                </template>
                 <sharp-tabbed-layout :layout="layout" ref="tabbedLayout">
+                    <template slot="nav-prepend">
+                        <template v-if="localized">
+                            <SharpDropdown class="SharpForm__locale-dropdown">
+                                <template slot="text">
+                                    <template v-if="currentLocale">{{ currentLocale }}</template>
+                                    <template v-else>-</template>
+                                </template>
+                                <template v-for="locale in locales">
+                                    <SharpDropdownItem @click="handleLocaleChanged(locale)" :key="locale">
+                                        {{ locale }}
+                                    </SharpDropdownItem>
+                                </template>
+                            </SharpDropdown>
+                        </template>
+                    </template>
                     <!-- Tab -->
                     <template slot-scope="tab">
                         <sharp-grid :rows="[tab.columns]" ref="columnsGrid">
