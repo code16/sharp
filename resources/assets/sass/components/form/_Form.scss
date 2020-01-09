@@ -126,15 +126,12 @@
       margin-right: 0;
     }
   }
+
   .SharpTabs--nav-overflow {
     .SharpForm__locale-dropdown {
       order: 1;
       margin-top: .5rem;
       align-self: flex-start;
-    }
-    .SharpTabs__content {
-      display: flex;
-      flex-direction: column;
     }
     .SharpTabs__collapse-btn {
       align-self: flex-start;

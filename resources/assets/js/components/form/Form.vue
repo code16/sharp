@@ -1,7 +1,7 @@
 <template>
-    <div class="SharpForm container">
+    <div class="SharpForm">
         <template v-if="ready">
-            <div class="position-relative">
+            <div class="container">
                 <div v-show="hasErrors" class="SharpNotification SharpNotification--error" role="alert">
                     <div class="SharpNotification__details">
                         <div class="SharpNotification__text-wrapper">

@@ -13,6 +13,10 @@
   }
 
   @mixin create-collapsed-nav() {
+    .SharpTabs__inner {
+      display: flex;
+      flex-direction: column;
+    }
     .SharpTabs__nav:not(.SharpTabs__nav--ghost) {
       height: auto;
       flex-direction: column;
@@ -27,6 +31,7 @@
     }
     .SharpTabs__collapse-btn {
       display: inline-block;
+      align-self: flex-start;
     }
   }
 
@@ -41,6 +46,9 @@
     }
   }
 
+  &__inner {
+    position: relative;
+  }
 
   &__nav {
     display: flex;

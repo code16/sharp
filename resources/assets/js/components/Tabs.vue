@@ -1,6 +1,6 @@
 <template>
     <div :id="id || null" class="SharpTabs" :class="classes">
-        <div class="SharpTabs__content mb-3" :class="{ 'm-sm-0':!hasNavOverflow  }">
+        <div class="SharpTabs__inner mb-3" :class="{ 'm-sm-0':!hasNavOverflow  }">
             <template v-if="hasNavOverflow">
                 <slot name="nav-prepend" />
             </template>
@@ -120,6 +120,7 @@
             },
         },
         mounted() {
+            this.layout();
             this.debouncedLayout = debounce(this.layout, 150);
             window.addEventListener('resize', this.debouncedLayout);
         },
