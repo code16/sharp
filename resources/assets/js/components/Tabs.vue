@@ -1,43 +1,46 @@
 <template>
-    <div :id="id || null" class="SharpTabs" :class="{ 'SharpTabs--collapse':collapseActivated , 'SharpTabs--nav-overflow':hasNavOverflow }">
-        <div class="mb-3" :class="{ 'm-sm-0':!hasNavOverflow  }">
-            <slot v-if="hasNavOverflow" name="nav-prepend"></slot>
+    <div :id="id || null" class="SharpTabs" :class="classes">
+        <div class="SharpTabs__content mb-3" :class="{ 'm-sm-0':!hasNavOverflow  }">
+            <template v-if="hasNavOverflow">
+                <slot name="nav-prepend" />
+            </template>
             <button class="SharpTabs__collapse-btn SharpButton SharpButton--secondary mb-1"
-                    :class="{ 'd-none':!hasNavOverflow }"
-                    @click="expanded=!expanded"
+                :class="{ 'd-none':!hasNavOverflow }"
+                @click="handleCollapseClicked"
             >
-                <span v-if="tabs[currentTab]" :class="dropdownButtonClasses">{{ tabs[currentTab].title }}</span>
-                <dropdown-arrow class="ml-1" :style="expanded && 'transform: rotate(180deg)'"/>
+                <template v-if="tabs[currentTab]">
+                    <span :class="dropdownButtonClasses">{{ tabs[currentTab].title }}</span>
+                </template>
+                <DropdownArrow class="ml-1" :style="expanded && 'transform: rotate(180deg)'" />
             </button>
-            <div class="SharpTabs__nav SharpTabs__nav--ghost m-0 p-0" style="height:0;overflow: hidden" v-has-overflow.width="hasNavOverflow">
-                <div :style="{minWidth:`${extraNavGhostWidth}px`}">&nbsp;</div>
-                <a v-for="tab in tabs" class="SharpTabs__nav-link" v-html="tab.title"></a>
-            </div>
             <b-collapse id="tabs" :visible="expanded" :class="{ 'd-block':!hasNavOverflow }">
                 <div class="SharpTabs__nav mb-0 mb-sm-3"
-                     role="tablist"
-                     :aria-setsize="tabs.length"
-                     :aria-posinset="currentTab + 1"
+                    role="tablist"
+                    :aria-setsize="tabs.length"
+                    :aria-posinset="currentTab + 1"
+                    ref="nav"
                 >
-                    <slot v-if="!hasNavOverflow" name="nav-prepend"></slot>
-                    <a v-for="tab in tabs"
-                        class="SharpTabs__nav-link"
-                        :class="{'SharpTabs__nav-link--has-error':tab.hasError,
-                         'SharpTabs__nav-link--active': tab.localActive,
-                         'SharpTabs__nav-link--disabled': tab.disabled}"
-                        :href="tab.href"
-                        role="tab"
-                        :aria-selected="tab.localActive ? 'true' : 'false'"
-                        :aria-controls="tab.id || null"
-                        :id="tab.controlledBy || null"
-                        @click.prevent.stop="clickTab(tab)"
-                        @keydown.space.prevent.stop="clickTab(tab)"
-                        @keydown.left="previousTab"
-                        @keydown.up="previousTab"
-                        @keydown.right="nextTab"
-                        @keydown.down="nextTab"
-                        v-html="tab.title"
-                    ></a>
+                    <template v-if="!hasNavOverflow">
+                        <slot name="nav-prepend" />
+                    </template>
+
+                    <template v-for="tab in tabs">
+                        <a class="SharpTabs__nav-link"
+                            :class="linkClasses(tab)"
+                            :href="tab.href"
+                            role="tab"
+                            :aria-selected="tab.localActive ? 'true' : 'false'"
+                            :aria-controls="tab.id || null"
+                            :id="tab.controlledBy || null"
+                            @click.prevent.stop="clickTab(tab)"
+                            @keydown.space.prevent.stop="clickTab(tab)"
+                            @keydown.left="previousTab"
+                            @keydown.up="previousTab"
+                            @keydown.right="nextTab"
+                            @keydown.down="nextTab"
+                            v-html="tab.title"
+                        ></a>
+                    </template>
                 </div>
             </b-collapse>
         </div>
@@ -53,11 +56,11 @@
 <script>
     import { BTabs, BCollapse } from 'bootstrap-vue';
     import DropdownArrow from './dropdown/Arrow.vue';
-    import HasOverflow from '../directives/HasOverflow';
+    import { debounce } from "../mixins/Debounce";
     import { Responsive } from '../mixins';
 
     export default {
-        name:'SharpBTabs',
+        name: 'SharpBTabs',
 
         mixins: [Responsive('sm')],
 
@@ -90,22 +93,39 @@
             },
             dropdownButtonClasses() {
                 return this.tabs[this.currentTab].hasError ? 'error-dot' : this.tabsHaveError ? 'error-dot--partial' : '';
-            }
+            },
+            classes() {
+                return {
+                    'SharpTabs--collapse': this.collapseActivated,
+                    'SharpTabs--nav-overflow': this.hasNavOverflow,
+                }
+            },
         },
         methods : {
-            addExtraNavGhostWidthForSlot(name) {
-                let $slot = this.$slots[name];
-                if($slot && $slot[0] && $slot[0].elm) {
-                    this.extraNavGhostWidth += $slot[0].elm.offsetWidth;
-                }
-            }
+            linkClasses(tab) {
+                return {
+                    'SharpTabs__nav-link--has-error': tab.hasError,
+                    'SharpTabs__nav-link--active': tab.localActive,
+                    'SharpTabs__nav-link--disabled': tab.disabled
+                };
+            },
+            handleCollapseClicked() {
+                this.expanded = !this.expanded;
+            },
+            async layout() {
+                this.hasNavOverflow = false;
+                await this.$nextTick();
+                const nav = this.$refs.nav;
+                this.hasNavOverflow = nav.scrollWidth > nav.offsetWidth;
+            },
         },
         mounted() {
-            this.addExtraNavGhostWidthForSlot('nav-prepend');
+            this.debouncedLayout = debounce(this.layout, 150);
+            window.addEventListener('resize', this.debouncedLayout);
         },
-        directives: {
-            HasOverflow
-        }
+        destroyed() {
+            window.removeEventListener('resize', this.debouncedLayout);
+        },
     }
 </script>
 
