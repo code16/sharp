@@ -15,10 +15,13 @@ export default function (fieldsProp) {
                 }
                 return value;
             },
-            defaultFieldLocaleMap({ fields, locales }) {
+            defaultFieldLocaleMap({ fields, locales }, locale) {
                 return Object.values(fields)
                     .filter(field => field.localized)
-                    .reduce((res, field) => ({ ...res, [field.key]:locales && locales[0] }),{})
+                    .reduce((res, field) => ({
+                        ...res,
+                        [field.key]: locale || locales && locales[0],
+                    }),{})
             }
         },
     }

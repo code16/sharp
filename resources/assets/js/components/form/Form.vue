@@ -10,6 +10,19 @@
                         </div>
                     </div>
                 </div>
+                <template v-if="localized">
+                    <SharpDropdown class="text-uppercase" style="width:4rem">
+                        <template slot="text">
+                            <template v-if="currentLocale">{{ currentLocale }}</template>
+                            <template v-else>-</template>
+                        </template>
+                        <template v-for="locale in locales">
+                            <SharpDropdownItem @click="handleLocaleChanged(locale)" :key="locale">
+                                {{ locale }}
+                            </SharpDropdownItem>
+                        </template>
+                    </SharpDropdown>
+                </template>
                 <sharp-tabbed-layout :layout="layout" ref="tabbedLayout">
                     <!-- Tab -->
                     <template slot-scope="tab">
@@ -54,6 +67,7 @@
     import SharpTabbedLayout from '../TabbedLayout'
     import SharpGrid from '../Grid';
     import SharpFieldsLayout from './FieldsLayout.vue';
+    import { SharpDropdown, SharpDropdownItem } from "../ui";
     // import SharpLocaleSelector from '../LocaleSelector.vue';
 
     import localize from '../../mixins/localize/form';
@@ -72,6 +86,8 @@
             SharpTabbedLayout,
             SharpFieldsLayout,
             SharpGrid,
+            SharpDropdown,
+            SharpDropdownItem,
             // SharpLocaleSelector
         },
 
@@ -176,6 +192,11 @@
                     : this.fields;
                 return transformFields(fields, this.data);
             },
+
+            currentLocale() {
+                const locales = [...new Set(Object.values(this.fieldLocale))];
+                return locales.length === 1 ? locales[0] : null;
+            }
         },
         methods: {
             async updateData(key, value, { forced } = {}) {
@@ -192,6 +213,9 @@
             },
             updateLocale(key, locale) {
                 this.$set(this.fieldLocale, key, locale);
+            },
+            handleLocaleChanged(locale) {
+                this.fieldLocale = this.defaultFieldLocaleMap({ fields: this.fields, locales: this.locales }, locale);
             },
             mount({ fields, layout, data={}, authorizations={}, locales, breadcrumb, config }) {
                 this.fields = fields;
