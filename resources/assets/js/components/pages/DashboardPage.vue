@@ -59,16 +59,24 @@
                 layout: state => state.layout
             }),
             ...mapGetters('dashboard', {
+                filtersValues: 'filters/values',
+                getFiltersQueryParams: 'filters/getQueryParams',
                 getFiltersValuesFromQuery: 'filters/getValuesFromQuery',
                 commandsForType: 'commands/forType',
             }),
             commands() {
                 return this.commandsForType('dashboard') || [];
             },
+            commandsQuery() {
+                return {
+                    ...this.getFiltersQueryParams(this.filtersValues),
+                    ...this.$route.query,
+                }
+            },
         },
         methods: {
             handleCommandRequested(command) {
-                const query = this.$route.query;
+                const query = this.commandsQuery;
                 this.sendCommand(command, {
                     postCommand: () => this.$store.dispatch('dashboard/postCommand', { command, query }),
                     postForm: data => this.$store.dispatch('dashboard/postCommand', { command, query, data }),
