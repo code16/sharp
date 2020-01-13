@@ -83,7 +83,9 @@
         },
         data() {
             return {
-                opened: false
+                opened: false,
+                // dev only, check it in devtools to keep dropdown open
+                debug: false,
             }
         },
         computed: {
@@ -119,6 +121,9 @@
                 this.$nextTick(this.showDropdown);
             },
             close() {
+                if(this.debug) {
+                    return;
+                }
                 this.opened = false;
                 this.$emit('close');
                 this.$nextTick(this.blur);
@@ -126,6 +131,11 @@
             showDropdown() {
                 let { autocomplete:{ $refs: { multiselect } } } = this.$refs;
                 multiselect.activate();
+
+                if(this.debug) {
+                    this.unwatch && this.unwatch();
+                    this.unwatch = multiselect.$watch('isOpen', function (isOpen) { if(!isOpen)this.isOpen = true; }, { sync: true });
+                }
             },
             blur() {
                 let { select:{ $refs: { multiselect } } } = this.$refs;

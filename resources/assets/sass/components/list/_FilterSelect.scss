@@ -33,6 +33,8 @@
         top: 100%;
         margin-top: $list-offset;
         border-radius: $btn-border-radius;
+      }
+      .SharpAutocomplete .multiselect__input {
         height: $search-input-height;
       }
     }
@@ -47,6 +49,10 @@
       padding: 0;
       width: 0;
       height: 0!important;
+      transition: none;
+    }
+    .multiselect__input {
+      transition: none;
     }
     .multiselect__tags-wrap,
     .multiselect__single,
