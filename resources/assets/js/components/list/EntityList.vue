@@ -174,10 +174,17 @@
                 return this.storeGetter('filters/nextQuery');
             },
             getFiltersValuesFromQuery() {
-                return this.storeGetter('filters/getValuesFromQuery')
+                return this.storeGetter('filters/getValuesFromQuery');
             },
             query() {
                 return this.storeGetter('query');
+            },
+            commandsQuery() {
+                const getFiltersQueryParams = this.storeGetter('filters/getQueryParams');
+                return {
+                    ...getFiltersQueryParams(this.filtersValues),
+                    ...this.query,
+                }
             },
 
             hasMultiforms() {
@@ -507,7 +514,7 @@
                 });
             },
             handleCommandRequested(command, { endpoint }) {
-                const query = this.query;
+                const query = this.commandsQuery;
 
                 this.sendCommand(command, {
                     postCommand: () => this.axiosInstance.post(endpoint, { query }, { responseType:'blob' }),

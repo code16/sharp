@@ -8,6 +8,9 @@ export default {
         getValuesFromQuery() {
             return jest.fn();
         },
+        getQueryParams() {
+            return jest.fn();
+        },
         nextQuery() {
             return jest.fn();
         },
