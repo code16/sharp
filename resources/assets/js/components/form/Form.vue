@@ -11,6 +11,11 @@
                     </div>
                 </div>
                 <sharp-tabbed-layout :layout="layout" ref="tabbedLayout">
+                    <template slot="nav-prepend">
+                        <template v-if="localized">
+                            <SharpLocaleSelect :locale="currentLocale" :locales="locales" @change="handleLocaleChanged" />
+                        </template>
+                    </template>
                     <!-- Tab -->
                     <template slot-scope="tab">
                         <sharp-grid :rows="[tab.columns]" ref="columnsGrid">
@@ -54,7 +59,8 @@
     import SharpTabbedLayout from '../TabbedLayout'
     import SharpGrid from '../Grid';
     import SharpFieldsLayout from './FieldsLayout.vue';
-    // import SharpLocaleSelector from '../LocaleSelector.vue';
+    import { SharpDropdown, SharpDropdownItem } from "../ui";
+    import SharpLocaleSelect from './LocaleSelect';
 
     import localize from '../../mixins/localize/form';
     import { getDependantFieldsResetData, transformFields } from "../../util/form";
@@ -72,7 +78,9 @@
             SharpTabbedLayout,
             SharpFieldsLayout,
             SharpGrid,
-            // SharpLocaleSelector
+            SharpDropdown,
+            SharpDropdownItem,
+            SharpLocaleSelect,
         },
 
 
@@ -176,6 +184,11 @@
                     : this.fields;
                 return transformFields(fields, this.data);
             },
+
+            currentLocale() {
+                const locales = [...new Set(Object.values(this.fieldLocale))];
+                return locales.length === 1 ? locales[0] : null;
+            }
         },
         methods: {
             async updateData(key, value, { forced } = {}) {
@@ -192,6 +205,9 @@
             },
             updateLocale(key, locale) {
                 this.$set(this.fieldLocale, key, locale);
+            },
+            handleLocaleChanged(locale) {
+                this.fieldLocale = this.defaultFieldLocaleMap({ fields: this.fields, locales: this.locales }, locale);
             },
             mount({ fields, layout, data={}, authorizations={}, locales, breadcrumb, config }) {
                 this.fields = fields;

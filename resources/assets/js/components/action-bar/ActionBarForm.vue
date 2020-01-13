@@ -35,7 +35,6 @@
     import SharpActionBar from './ActionBar';
     import ActionBarMixin from './ActionBarMixin';
 
-    import SharpLocaleSelector from '../LocaleSelector';
     import SharpDropdown from '../dropdown/Dropdown.vue';
     import SharpDropdownItem from '../dropdown/DropdownItem.vue';
 
@@ -50,7 +49,6 @@
         mixins: [ActionBarMixin, ActionEvents],
         components: {
             SharpActionBar,
-            SharpLocaleSelector,
             SharpDropdown,
             SharpDropdownItem,
             Collapse
