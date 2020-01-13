@@ -13,17 +13,7 @@
                 <sharp-tabbed-layout :layout="layout" ref="tabbedLayout">
                     <template slot="nav-prepend">
                         <template v-if="localized">
-                            <SharpDropdown class="SharpForm__locale-dropdown">
-                                <template slot="text">
-                                    <template v-if="currentLocale">{{ currentLocale }}</template>
-                                    <template v-else>-</template>
-                                </template>
-                                <template v-for="locale in locales">
-                                    <SharpDropdownItem @click="handleLocaleChanged(locale)" :key="locale">
-                                        {{ locale }}
-                                    </SharpDropdownItem>
-                                </template>
-                            </SharpDropdown>
+                            <SharpLocaleSelect :locale="currentLocale" :locales="locales" @change="handleLocaleChanged" />
                         </template>
                     </template>
                     <!-- Tab -->
@@ -70,7 +60,7 @@
     import SharpGrid from '../Grid';
     import SharpFieldsLayout from './FieldsLayout.vue';
     import { SharpDropdown, SharpDropdownItem } from "../ui";
-    // import SharpLocaleSelector from '../LocaleSelector.vue';
+    import SharpLocaleSelect from './LocaleSelect';
 
     import localize from '../../mixins/localize/form';
     import { getDependantFieldsResetData, transformFields } from "../../util/form";
@@ -90,7 +80,7 @@
             SharpGrid,
             SharpDropdown,
             SharpDropdownItem,
-            // SharpLocaleSelector
+            SharpLocaleSelect,
         },
 
 
