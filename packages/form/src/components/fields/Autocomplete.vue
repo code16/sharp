@@ -1,7 +1,7 @@
 <template>
     <div class="SharpAutocomplete" :class="classes">
         <template v-if="ready">
-            <multiselect
+            <Multiselect
                 class="SharpAutocomplete__multiselect"
                 :class="{ 'SharpAutocomplete__multiselect--hide-dropdown':hideDropdown }"
                 :value="value"
@@ -35,21 +35,21 @@
                     </template>
                 </template>
                 <template slot="singleLabel" slot-scope="{ option }">
-                    <SharpTemplate
+                    <TemplateRenderer
                         name="ResultItem"
                         :template="resultItemTemplate"
                         :template-data="localizedTemplateData(option)"
                     />
                 </template>
                 <template slot="option" slot-scope="{ option }">
-                    <SharpTemplate
+                    <TemplateRenderer
                         name="ListItem"
                         :template="listItemTemplate"
                         :template-data="localizedTemplateData(option)"
                     />
                 </template>
                 <template slot="loading">
-                    <SharpLoading :visible="isLoading" inline small />
+                    <Loading :visible="isLoading" inline small />
                 </template>
                 <template slot="noResult">
                     {{ l('form.autocomplete.no_results_text') }}
@@ -59,7 +59,7 @@
             <template v-if="overlayVisible">
                 <div class="SharpAutocomplete__overlay multiselect">
                     <div class="multiselect__tags">
-                        <SharpTemplate
+                        <TemplateRenderer
                             name="ResultItem"
                             :template="resultItemTemplate"
                             :template-data="localizedTemplateData(value)"
@@ -72,27 +72,23 @@
 </template>
 
 <script>
-    import SharpTemplate from '../../Template.vue';
-    import SharpLoading from '../../ui/Loading.vue';
-    import Multiselect from 'vue-multiselect';
-
-    import SearchStrategy from '../../../app/models/SearchStrategy';
 
     import debounce from 'lodash/debounce';
+    import Multiselect from 'vue-multiselect';
+    import { warn, logError, lang, search } from 'sharp';
+    import { TemplateRenderer, Loading } from 'sharp/components';
+    import { Localization, Debounce } from 'sharp/mixins';
 
-    import { warn, error } from '../../../util';
-    import { Localization, Debounce } from '../../../mixins';
-    import { lang } from '../../../mixins/Localization';
-    import { getAutocompleteSuggestions } from "../../../api";
-    import localize from '../../../mixins/localize/Autocomplete';
-    import { setDefaultValue } from "../../../util/field";
+    import { getAutocompleteSuggestions } from "../../api";
+    import localize from '../../mixins/localize/Autocomplete';
+    import { setDefaultValue } from "../../util";
 
     export default {
         name:'SharpAutocomplete',
         components: {
             Multiselect,
-            SharpTemplate,
-            SharpLoading
+            TemplateRenderer,
+            Loading
         },
 
         mixins: [Localization, Debounce, localize],
@@ -180,13 +176,6 @@
             isQueryTooShort() {
                 return this.isRemote && this.query.length < this.searchMinChars;
             },
-            searchStrategy() {
-                return !this.isRemote ? new SearchStrategy({
-                    list: this.localValues,
-                    minQueryLength: this.searchMinChars,
-                    searchKeys: this.localizedSearchKeys
-                }) : null;
-            },
             clearButtonVisible() {
                 return !!this.value && !this.opened;
             },
@@ -217,7 +206,9 @@
             },
 
             updateLocalSuggestions(query) {
-                this.suggestions = this.searchStrategy.search(query);
+                this.suggestions = query.length >= this.searchMinChars 
+                    ? search(this.localValues, query, { searchKeys: this.searchKeys })
+                    : this.localValues;
             },
             updateRemoteSuggestions: debounce(function(query) {
                 return getAutocompleteSuggestions({

@@ -1,8 +1,9 @@
 import { logError } from 'sharp';
 import { UnknownField } from "sharp/components";
 import FieldContainer from './ui/FieldContainer';
+import { isLocalizableValueField } from "../util/locale";
 import { computeCondition } from '../util/conditional-display';
-import { isLocalizableValueField } from "../../../mixins/localize/utils";
+
 
 export function acceptCondition (fields, data, condition) {
     if(!condition)

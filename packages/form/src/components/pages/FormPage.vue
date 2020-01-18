@@ -1,15 +1,15 @@
 <template>
     <div class="FormPage">
-        <SharpForm :entity-key="entityKey" :instance-id="instanceId" />
+        <Form :entity-key="entityKey" :instance-id="instanceId" />
     </div>
 </template>
 
 <script>
-    import SharpForm from '../form/Form';
+    import Form from '../Form';
 
     export default {
         components: {
-            SharpForm,
+            Form,
         },
         computed: {
             entityKey() {

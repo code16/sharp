@@ -15,12 +15,12 @@
 
 <script>
     import SimpleMDE from 'simplemde';
+    
+    import { lang } from 'sharp';
     import MarkdownUpload from './MarkdownUpload';
-
     import Widget from './MarkdownWidget';
-
-    import { lang } from '../../../../mixins/Localization';
-    import localize from '../../../../mixins/localize/editor';
+    
+    import localize from '../../../mixins/localize/editor';
 
     const noop = ()=>{};
 

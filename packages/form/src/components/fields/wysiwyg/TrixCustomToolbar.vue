@@ -28,7 +28,7 @@
 
 <script>
     import { buttons } from "./config";
-    import { LocalizationBase } from "../../../../mixins";
+    import { LocalizationBase } from "sharp/mixins";
 
     export default {
         mixins:[ LocalizationBase('form.wysiwyg') ],

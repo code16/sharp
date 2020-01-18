@@ -4,12 +4,12 @@
             {{ l('form.geolocation.loading') }}
         </template>
         <template v-else-if="isEmpty">
-            <SharpButton outline class="w-100" @click="handleShowModalButtonClicked">
+            <Button outline class="w-100" @click="handleShowModalButtonClicked">
                 {{ l('form.geolocation.browse_button') }}
-            </SharpButton>
+            </Button>
         </template>
         <template v-else>
-            <SharpCard light class="SharpModule--closeable"
+            <Card light class="SharpModule--closeable"
                 :has-close="!readOnly"
                 @close-click="handleRemoveButtonClicked"
             >
@@ -33,19 +33,19 @@
                                 <div><small>Longitude : {{ latLngString.lng }}</small></div>
                             </div>
                             <div>
-                                <SharpButton small outline type="danger" class="remove-button" :disabled="readOnly" @click="handleRemoveButtonClicked">
+                                <Button small outline type="danger" class="remove-button" :disabled="readOnly" @click="handleRemoveButtonClicked">
                                     {{ l('form.geolocation.remove_button') }}
-                                </SharpButton>
-                                <SharpButton small outline :disabled="readOnly" @click="handleEditButtonClicked">
+                                </Button>
+                                <Button small outline :disabled="readOnly" @click="handleEditButtonClicked">
                                     {{ l('form.geolocation.edit_button') }}
-                                </SharpButton>
+                                </Button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </SharpCard>
+            </Card>
         </template>
-        <SharpModal
+        <Modal
             :title="modalTitle"
             :visible.sync="modalVisible"
             no-close-on-backdrop
@@ -53,7 +53,7 @@
         >
             <transition :duration="300">
                 <template v-if="modalVisible">
-                    <SharpGeolocationEdit
+                    <GeolocationEdit
                         :location="value"
                         :center="value || initialPosition"
                         :zoom="zoomLevel"
@@ -67,19 +67,18 @@
                     />
                 </template>
             </transition>
-        </SharpModal>
+        </Modal>
     </div>
 </template>
 
 <script>
-    import { Localization } from '../../../../mixins';
-    import { SharpCard, SharpButton } from "../../../ui";
-    import SharpModal from '../../../Modal';
+    import { Modal, Card, Button } from "sharp/components";
+    import { Localization } from 'sharp/mixins';
 
     import { getMapByProvider, loadMapProvider } from "./maps";
     import { dd2dms, tilesUrl, providerName, providerOptions, triggerResize } from "./util";
 
-    import SharpGeolocationEdit from './GeolocationEdit.vue';
+    import GeolocationEdit from './GeolocationEdit';
 
 
     export default {
@@ -93,10 +92,10 @@
         },
 
         components: {
-            SharpGeolocationEdit,
-            SharpCard,
-            SharpButton,
-            SharpModal,
+            GeolocationEdit,
+            Card,
+            Button,
+            Modal,
         },
 
         props: {

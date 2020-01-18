@@ -1,5 +1,5 @@
 <template>
-    <sharp-vue-clip
+    <VueClip
         :pending-key="uniqueIdentifier"
         :download-id="fieldConfigIdentifier"
         :options="options"
@@ -16,17 +16,16 @@
 </template>
 
 <script>
-    import SharpVueClip from './VueClip';
+    import { UPLOAD_URL, lang } from 'sharp';
+    import { UploadXSRF } from 'sharp/mixins';
+    import VueClip from './VueClip';
     import { UploadModifiers } from './modifiers';
 
-    import { UPLOAD_URL } from '../../../../consts';
-    import { UploadXSRF } from '../../../../mixins';
-    import { lang } from '../../../../mixins/Localization';
 
     export default {
         name: 'SharpUpload',
         components: {
-            SharpVueClip
+            VueClip
         },
 
         mixins: [ UploadXSRF, UploadModifiers ],

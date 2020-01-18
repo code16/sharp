@@ -1,5 +1,5 @@
 <template>
-    <sharp-vue-clip
+    <VueClip
         v-show="show"
         class="SharpMarkdownUpload"
         :pending-key="pendingKey"
@@ -23,12 +23,12 @@
 
 <script>
     import Vue from 'vue';
-    import SharpVueClip from '../upload/VueClip';
+    import { UPLOAD_URL, lang } from 'sharp';
+    import { UploadXSRF } from 'sharp/mixins';
 
-    import { UPLOAD_URL } from '../../../../consts';
-    import { UploadXSRF } from '../../../../mixins';
-    import { UploadModifiers } from '../upload/modifiers';
-    import { lang } from '../../../../mixins/Localization';
+    import VueClip from '../upload/VueClip';
+
+    import { UploadModifiers } from '../upload/modifiers';   
 
     const removeKeys = ['Backspace', 'Enter'];
     const escapeKeys = ['ArrowLeft', 'ArrowUp', 'ArrowDown', 'ArrowRight', 'Escape', 'Tab'];
@@ -38,6 +38,10 @@
         mixins: [ UploadXSRF, UploadModifiers ],
 
         inject: [ 'xsrfToken'],
+
+        components: {
+            VueClip
+        },
 
         props: {
             downloadId: String,
@@ -51,9 +55,7 @@
             ratioY: Number,
             croppableFileTypes: Array,
         },
-        components: {
-            SharpVueClip
-        },
+        
         data() {
             return {
                 show: this.value,

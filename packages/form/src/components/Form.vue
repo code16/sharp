@@ -49,17 +49,22 @@
 </template>
 
 <script>
-    import * as util from '../../util';
-    import { API_PATH, BASE_URL } from 'sharp';
+    import {
+        BASE_URL,
+        getBackUrl, 
+        getListBackUrl, 
+        logError,
+    } from "sharp";
+
     import { TabbedLayout, Grid, Dropdown, DropdownItem, } from 'sharp/components';
     import { ActionEvents, ReadOnlyFields, Localization, DynamicView } from 'sharp/mixins';
     
-    import FieldsLayout from './ui/FieldsLayout.vue';
+    import FieldsLayout from './ui/FieldsLayout';
     import LocaleSelect from './LocaleSelect';
+    import localize from '../mixins/localize';
 
-    import localize from '../../mixins/localize/form';
     import { getDependantFieldsResetData, transformFields } from "../util";
-    import { getBackUrl, getListBackUrl } from "sharp";
+    
 
     const noop = ()=>{};
 
@@ -70,12 +75,12 @@
         mixins: [ActionEvents, ReadOnlyFields('fields'), Localization, localize('fields')],
 
         components: {
-            SharpTabbedLayout,
-            SharpFieldsLayout,
-            SharpGrid,
-            SharpDropdown,
-            SharpDropdownItem,
-            SharpLocaleSelect,
+            TabbedLayout,
+            FieldsLayout,
+            Grid,
+            Dropdown,
+            DropdownItem,
+            LocaleSelect,
         },
 
 
@@ -265,7 +270,7 @@
                         this.setupActionBar();
                         this.ready = true;
                     }
-                    else util.error('no entity key provided');
+                    else logError('no entity key provided');
                 }
             },
 

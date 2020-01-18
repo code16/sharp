@@ -1,5 +1,5 @@
 <template>
-    <sharp-grid :rows="layout">
+    <Grid :rows="layout">
         <template slot-scope="fieldLayout">
             <slot v-if="!fieldLayout.legend" v-bind="fieldLayout"></slot>
 
@@ -18,17 +18,17 @@
                 </div>
             </fieldset>
         </template>
-    </sharp-grid>
+    </Grid>
 </template>
 
 <script>
-    import SharpGrid from '../Grid';
+    import { Grid } from 'sharp/components';
 
     export default {
         name:'SharpFieldsLayout',
 
         components: {
-            SharpGrid
+            Grid
         },
 
         props: {

@@ -30,7 +30,7 @@
 
     import moment from 'moment';
 
-    import { AutoScroll } from '../../../../mixins';
+    import { AutoScroll } from 'sharp/mixins';
 
     const {
         methods: {

@@ -12,7 +12,7 @@
                 </svg>
             </button>
         </template>
-        <draggable :options="dragOptions" :list="list" ref="draggable">
+        <Draggable :options="dragOptions" :list="list" ref="draggable">
             <transition-group name="expand" tag="div">
                 <div v-for="(listItemData, i) in list" :key="listItemData[indexSymbol]"
                     class="SharpList__item"
@@ -22,13 +22,17 @@
                         <div class="SharpModule__content">
 
                             <template v-if="dragActive && collapsedItemTemplate">
-                                <sharp-template name="CollapsedItem" :template="collapsedItemTemplate" :template-data="collapsedItemData(listItemData)"></sharp-template>
+                                <TemplateRenderer 
+                                    name="CollapsedItem" 
+                                    :template="collapsedItemTemplate" 
+                                    :template-data="collapsedItemData(listItemData)"
+                                />
                             </template>
 
                             <template v-else>
-                                <sharp-list-item :layout="fieldLayout.item" :error-identifier="i">
+                                <ListItem :layout="fieldLayout.item" :error-identifier="i">
                                     <template slot-scope="itemFieldLayout">
-                                        <sharp-field-display
+                                        <FieldDisplay
                                             :field-key="itemFieldLayout.key"
                                             :context-fields="transformedFields(i)"
                                             :context-data="listItemData"
@@ -39,7 +43,7 @@
                                             @locale-change="(key, value)=>updateLocale(i, key, value)"
                                         />
                                     </template>
-                                </sharp-list-item>
+                                </ListItem>
                                 <button v-if="!disabled && removable" class="SharpButton SharpButton--danger SharpButton--sm mt-3" @click="remove(i)">{{ l('form.list.remove_button') }}</button>
                             </template>
 
@@ -58,18 +62,18 @@
                         :class="'SharpButton--ghost' "
                         @click="add">{{addText}}</button>
             </template>
-        </draggable>
+        </Draggable>
         <em v-if="readOnly && !list.length" class="SharpList__empty-alert">{{l('form.list.empty')}}</em>
     </div>
 </template>
 <script>
     import Draggable from 'vuedraggable';
-    import SharpListItem from './ListItem';
-    import SharpTemplate from '../../../Template';
+    import { TemplateRenderer } from 'sharp/components';
+    import { Localization, ReadOnlyFields } from 'sharp/mixins';
+    import ListItem from './ListItem';
 
-    import { Localization, ReadOnlyFields } from '../../../../mixins';
-    import localize from '../../../../mixins/localize/form';
-    import { transformFields, getDependantFieldsResetData } from "../../../../util/form";
+    import localize from '../../../mixins/localize/form';
+    import { transformFields, getDependantFieldsResetData } from "../../../util";
 
     export default {
         name: 'SharpList',
@@ -80,8 +84,8 @@
 
         components: {
             Draggable,
-            SharpListItem,
-            SharpTemplate
+            ListItem,
+            TemplateRenderer,
         },
 
         props: {

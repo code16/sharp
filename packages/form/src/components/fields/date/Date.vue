@@ -25,7 +25,7 @@
             <template slot-scope="props">
                 <div class="SharpDate__picker position-static" >
                     <template v-if="hasDate">
-                        <sharp-date-picker
+                        <DatePicker
                             class="SharpDate__date"
                             :language="language"
                             :monday-first="mondayFirst"
@@ -36,7 +36,7 @@
                         />
                     </template>
                     <template v-if="hasTime">
-                        <sharp-time-picker
+                        <TimePicker
                             class="SharpDate__time"
                             :value="timeObject"
                             :active="showPicker"
@@ -54,20 +54,20 @@
 </template>
 
 <script>
-    import SharpDatePicker from './Datepicker';
-    import SharpTimePicker from './Timepicker';
-
-    import { Focusable, Localization } from '../../../../mixins';
-    import { lang } from '../../../../mixins/Localization';
-
     import moment from 'moment';
     import { BPopover } from 'bootstrap-vue';
+
+    import { lang } from 'sharp';
+    import { Focusable, Localization } from 'sharp/mixins';
+    import DatePicker from './Datepicker';
+    import TimePicker from './Timepicker';
+    
 
     export default {
         name:'SharpDate',
         components: {
-            SharpDatePicker,
-            SharpTimePicker,
+            DatePicker,
+            TimePicker,
             BPopover,
         },
 

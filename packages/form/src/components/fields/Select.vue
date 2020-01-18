@@ -1,22 +1,23 @@
 <template>
     <div class="SharpSelect" :class="[{'SharpSelect--multiple':multiple}, `SharpSelect--${display}`]">
-        <sharp-multiselect
-                v-if="display==='dropdown'"
-                :value="value"
-                :searchable="false"
-                :options="multiselectOptions"
-                :multiple="multiple"
-                :hide-selected="multiple"
-                :close-on-select="!multiple"
-                :custom-label="multiselectLabel"
-                :placeholder="placeholder"
-                :disabled="readOnly"
-                :max="maxSelected"
-                :allow-empty="clearable"
-                @input="handleInput"
-                @open="$emit('open')"
-                @close="$emit('close')"
-                ref="multiselect">
+        <Multiselect
+            v-if="display==='dropdown'"
+            :value="value"
+            :searchable="false"
+            :options="multiselectOptions"
+            :multiple="multiple"
+            :hide-selected="multiple"
+            :close-on-select="!multiple"
+            :custom-label="multiselectLabel"
+            :placeholder="placeholder"
+            :disabled="readOnly"
+            :max="maxSelected"
+            :allow-empty="clearable"
+            @input="handleInput"
+            @open="$emit('open')"
+            @close="$emit('close')"
+            ref="multiselect"
+        >
             <template v-if="clearable && !multiple && value!=null">
                 <button slot="caret" class="SharpSelect__clear-button" type="button" @mousedown.stop.prevent="remove()">
                     <svg class="SharpSelect__clear-button-icon"
@@ -32,13 +33,13 @@
                 </span>
             </template>
             <slot name="option" slot="option"></slot>
-        </sharp-multiselect>
+        </Multiselect>
         <template v-else>
             <div class="SharpSelect__group" :class="{'SharpSelect__group--block':!inline}">
                 <template v-if="multiple">
                     <template v-for="option in options">
                         <div class="SharpSelect__item" :class="itemClasses" :key="option.id">
-                            <SharpCheck
+                            <Check
                                 :value="checked(option.id)"
                                 :text="optionsLabel[option.id]"
                                 :read-only="readOnly"
@@ -73,10 +74,10 @@
 </template>
 
 <script>
-    import SharpMultiselect from '../../Multiselect';
-    import SharpCheck from './Check.vue';
-    import localize from '../../../mixins/localize/Select';
-    import {setDefaultValue} from "../../../util/field";
+    import { Multiselect } from 'sharp/components';
+    import Check from './Check.vue';
+    import localize from '../../mixins/localize/Select';
+    import { setDefaultValue } from "../../util";
 
     export default {
         name: 'SharpSelect',
@@ -84,8 +85,8 @@
         mixins: [localize],
 
         components: {
-            SharpMultiselect,
-            SharpCheck
+            Multiselect,
+            Check
         },
 
         props: {

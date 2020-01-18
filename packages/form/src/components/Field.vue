@@ -1,7 +1,7 @@
 <script>
     import Vue from 'vue';
+    import { log, logError } from 'sharp';
     import Fields from './fields/index';
-    import * as util from '../../util';
 
     const customFieldRE = /^custom-(.+)$/;
 
@@ -44,7 +44,7 @@
                 let message = this.isCustom
                     ? `unknown custom field type '${this.fieldType}', make sure you register it correctly`
                     : `unknown type '${this.fieldType}'`;
-                util.error(`SharpField '${this.fieldKey}': ${message}`, this.fieldProps);
+                logError(`SharpField '${this.fieldKey}': ${message}`, this.fieldProps);
                 return null;
             }
 
@@ -67,7 +67,7 @@
                 on: {
                     input: (val, options={}) => {
                         if(this.fieldProps.readOnly && !options.force)
-                            util.log(`SharpField '${this.fieldKey}', can't update because is readOnly`);
+                            log(`SharpField '${this.fieldKey}', can't update because is readOnly`);
                         else
                             this.updateData(this.fieldKey, val, { forced:options.force });
                     },

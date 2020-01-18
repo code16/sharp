@@ -1,15 +1,19 @@
 <template>
-    <sharp-template name="Html" :template="template" :template-data="value"></sharp-template>
+    <TemplateRenderer 
+        name="Html" 
+        :template="template" 
+        :template-data="value"
+    />
 </template>
 
 <script>
-    import SharpTemplate from '../../Template';
+    import { TemplateRenderer } from 'sharp/components';
 
     export default {
         name: 'SharpHtml',
 
         components: {
-            SharpTemplate
+            TemplateRenderer,
         },
 
         props: {

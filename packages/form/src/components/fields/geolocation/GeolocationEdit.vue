@@ -43,10 +43,9 @@
 </template>
 
 <script>
-    import { SharpLoading, SharpButton } from "../../../ui";
-    import SharpModal from '../../../Modal';
-    import SharpText from '../Text';
-    import { LocalizationBase } from '../../../../mixins';
+    import { Loading, Button, Modal } from 'sharp';
+    import { LocalizationBase } from 'sharp/mixins';
+    import Text from '../Text';
     import { getEditableMapByProvider, geocode } from "./maps";
     import { tilesUrl } from "./util";
 

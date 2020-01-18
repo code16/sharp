@@ -1,24 +1,24 @@
 <template>
-    <SharpDropdown class="SharpForm__locale-dropdown">
+    <Dropdown class="SharpForm__locale-dropdown">
         <template slot="text">
             <template v-if="locale">{{ locale }}</template>
             <template v-else>-</template>
         </template>
         <template v-for="locale in locales">
-            <SharpDropdownItem @click="handleChanged(locale)" :key="locale">
+            <DropdownItem @click="handleChanged(locale)" :key="locale">
                 {{ locale }}
-            </SharpDropdownItem>
+            </DropdownItem>
         </template>
-    </SharpDropdown>
+    </Dropdown>
 </template>
 
 <script>
-    import { SharpDropdown, SharpDropdownItem } from "../ui";
+    import { Dropdown, DropdownItem } from "sharp/components";
 
     export default {
         components: {
-            SharpDropdown,
-            SharpDropdownItem,
+            Dropdown,
+            DropdownItem,
         },
         props: {
             locale: String,

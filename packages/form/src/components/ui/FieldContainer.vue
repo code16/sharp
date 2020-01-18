@@ -8,7 +8,7 @@
             </div>
             <template v-if="fieldProps.localized">
                 <div class="col-auto">
-                    <SharpFieldLocaleSelector
+                    <FieldLocaleSelect
                         :locales="$form.locales"
                         :current-locale="locale"
                         :field-value="resolvedOriginalValue"
@@ -18,25 +18,25 @@
                 </div>
             </template>
         </div>
-        <sharp-field v-bind="exposedProps"
-                     @error="setError"
-                     @ok="setOk"
-                     @clear="clear"
-                     @blur="handleBlur"
-                     ref="field">
-        </sharp-field>
+        <Field v-bind="exposedProps"
+            @error="setError"
+            @ok="setOk"
+            @clear="clear"
+            @blur="handleBlur"
+            ref="field" 
+        />
         <div class="SharpForm__form-requirement">{{stateMessage}}</div>
         <small class="SharpForm__help-message">{{helpMessage}}</small>
     </div>
 </template>
 
 <script>
-    import SharpField from './Field';
-    import SharpFieldLocaleSelector from './FieldLocaleSelector';
-    import { ErrorNode, ConfigNode}  from '../../mixins/index';
-    import { resolveTextValue, isLocalizableValueField } from '../../mixins/localize/utils';
+    import { logError } from 'sharp';
+    import { ErrorNode, ConfigNode }  from 'sharp/mixins';
+    import Field from './Field';
+    import FieldLocaleSelect from './FieldLocaleSelect';
+    import { resolveTextValue, isLocalizableValueField } from '../../util/locale';
 
-    import * as util from '../../util';
 
     export default {
         name: 'SharpFieldContainer',
@@ -44,14 +44,14 @@
         mixins: [ ErrorNode, ConfigNode ],
 
         components: {
-            SharpField,
-            SharpFieldLocaleSelector,
+            Field,
+            FieldLocaleSelect,
         },
 
         inject:['$tab', '$form'],
 
         props : {
-            ...SharpField.props,
+            ...Field.props,
 
             label: String,
             helpMessage: String,
@@ -116,7 +116,7 @@
                     this.setError(error[0]);
                 }
                 else {
-                    util.error(`FieldContainer : Not processable error "${this.mergedErrorIdentifier}" : `, error);
+                    logError(`FieldContainer : Not processable error "${this.mergedErrorIdentifier}" : `, error);
                 }
             },
             setError(error) {

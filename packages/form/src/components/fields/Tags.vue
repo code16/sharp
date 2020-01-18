@@ -1,29 +1,29 @@
 <template>
-    <sharp-multiselect
-            class="SharpTags"
-            :value="tags"
-            :options="indexedOptions"
-            :placeholder="dynamicPlaceholder"
-            :tag-placeholder="createText"
-            :max="maxTagCount"
-            :taggable="creatable"
-            :close-on-select="false"
-            :disabled="readOnly"
-            track-by="_internalId"
-            label="label"
-            :custom-label="localizedCustomLabel"
-            multiple searchable hide-selected
-            :show-labels="false"
-            @search-change="handleTextInput"
-            @input="handleInput"
-            @tag="handleNewTag"
-            ref="multiselect">
-    </sharp-multiselect>
+    <Multiselect
+        class="SharpTags"
+        :value="tags"
+        :options="indexedOptions"
+        :placeholder="dynamicPlaceholder"
+        :tag-placeholder="createText"
+        :max="maxTagCount"
+        :taggable="creatable"
+        :close-on-select="false"
+        :disabled="readOnly"
+        track-by="_internalId"
+        label="label"
+        :custom-label="localizedCustomLabel"
+        multiple searchable hide-selected
+        :show-labels="false"
+        @search-change="handleTextInput"
+        @input="handleInput"
+        @tag="handleNewTag"
+        ref="multiselect"
+    />
 </template>
 
 <script>
-    import SharpMultiselect from '../../Multiselect';
-    import localize from '../../../mixins/localize/Tags';
+    import { Multiselect } from 'sharp';
+    import localize from '../../mixins/localize/Tags';
 
     class LabelledItem {
         constructor(item) {
@@ -49,7 +49,7 @@
         name: 'SharpTags',
         mixins:[localize],
         components: {
-            SharpMultiselect
+            Multiselect
         },
         props: {
             value: Array, // [{id:0, label: 'AAA'}, ...]

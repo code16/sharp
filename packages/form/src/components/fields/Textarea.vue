@@ -1,11 +1,16 @@
 <template>
-    <textarea class="SharpTextarea" :rows="rows" :placeholder="placeholder" :disabled="readOnly"
-              :value="value" v-maxlength="maxLength" @input="handleInput">
-    </textarea>
+    <textarea 
+        class="SharpTextarea" 
+        :rows="rows" 
+        :placeholder="placeholder" 
+        :disabled="readOnly"
+        v-maxlength="maxLength" 
+        @input="handleInput"
+    >{{ value }}</textarea>
 </template>
 
 <script>
-    import Maxlength from '../../../directives/Maxlength';
+    import { maxlength } from 'sharp/directives';
 
     export default {
         name:'SharpTextarea',
@@ -30,7 +35,7 @@
             }
         },
         directives: {
-            Maxlength
+            maxlength
         }
     }
 </script>

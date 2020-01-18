@@ -1,16 +1,16 @@
 <template>
     <div class="SharpWidgetPanel">
-        <Template name="WidgetPanel" :template="template" :template-data="value.data" />
+        <TemplateRenderer name="WidgetPanel" :template="template" :template-data="value.data" />
     </div>
 </template>
 
 <script>
-    import { Template } from 'sharp/components';
+    import { TemplateRenderer } from 'sharp/components';
 
     export default {
         name:'SharpWidgetPanel',
         components: {
-            Template
+            TemplateRenderer
         },
         props: {
             value: Object,

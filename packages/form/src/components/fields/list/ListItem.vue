@@ -1,6 +1,6 @@
 <script>
+    import { ErrorNode } from 'sharp/mixins';
     import FieldsLayout from '../../FieldsLayout';
-    import { ErrorNode } from '../../../../mixins/index';
 
     export default {
         name:'SharpListItem',

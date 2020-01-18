@@ -1,14 +1,19 @@
 <template>
-    <input :type="inputType" class="SharpText"
-           :value="value"  :placeholder="placeholder" :disabled="readOnly"
-           v-maxlength="maxLength"
-           @input="handleInput" ref="input"
+    <input 
+        class="SharpText"
+        :type="inputType" 
+        :value="value"
+        :placeholder="placeholder"
+        :disabled="readOnly"
+        v-maxlength="maxLength"
+        @input="handleInput"
+        ref="input"
     >
 </template>
 
 <script>
-    import { Focusable } from '../../../mixins';
-    import Maxlength from '../../../directives/Maxlength';
+    import { Focusable } from 'sharp/mixins';
+    import { maxlength } from 'sharp/directives';
 
     export default {
         name:'SharpText',
@@ -42,7 +47,7 @@
         },
 
         directives: {
-            Maxlength
+            maxlength
         }
     }
 </script>

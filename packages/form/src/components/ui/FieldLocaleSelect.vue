@@ -1,11 +1,11 @@
 <template>
-    <div class="SharpFieldLocaleSelector">
+    <div class="SharpFieldLocaleSelect">
         <template v-for="locale in locales">
             <button
-                class="SharpFieldLocaleSelector__btn ml-2"
+                class="SharpFieldLocaleSelect__btn ml-2"
                 :class="{
-                    'SharpFieldLocaleSelector__btn--active': isActive(locale),
-                    'SharpFieldLocaleSelector__btn--empty': isEmpty(locale),
+                    'SharpFieldLocaleSelect__btn--active': isActive(locale),
+                    'SharpFieldLocaleSelect__btn--empty': isEmpty(locale),
                 }"
                 @click="handleButtonClicked(locale)"
             >

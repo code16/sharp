@@ -52,7 +52,7 @@
             </div>
         </div>
         <template v-if="!!originalImageSrc && isCroppable">
-            <sharp-modal :visible.sync="showEditModal" @ok="onEditModalOk" @shown="onEditModalShown" @hidden="onEditModalHidden" no-close-on-backdrop
+            <Modal :visible.sync="showEditModal" @ok="onEditModalOk" @shown="onEditModalShown" @hidden="onEditModalHidden" no-close-on-backdrop
                          :title="l('modals.cropper.title')" static ref="modal">
                 <vue-cropper ref="cropper"
                              class="SharpUpload__modal-vue-cropper"
@@ -72,7 +72,7 @@
                     <button class="SharpButton SharpButton--primary" @click="rotate(-90)"><i class="fa fa-rotate-left"></i></button>
                     <button class="SharpButton SharpButton--primary" @click="rotate(90)"><i class="fa fa-rotate-right"></i></button>
                 </div>
-            </sharp-modal>
+            </Modal>
         </template>
         <a style="display: none" ref="dlLink"></a>
     </div>
@@ -81,11 +81,12 @@
 <script>
     import VueClip from 'vue-clip/src/components/Clip';
     import VueCropper from 'vue-cropperjs';
-    import SharpModal from '../../../Modal';
-    import rotateResize from './rotate';
 
-    import { Localization } from '../../../../mixins';
+    import { Modal } from 'sharp/components';
+    import { Localization } from 'sharp/mixins';
+
     import { VueClipModifiers } from './modifiers';
+    import rotateResize from './rotate';
 
     export default {
         name: 'SharpVueClip',
@@ -93,7 +94,7 @@
         extends: VueClip,
 
         components: {
-            SharpModal,
+            Modal,
             VueCropper
         },
 
