@@ -1,9 +1,8 @@
-import * as util from '../../../util';
-import FieldContainer from '../FieldContainer';
-import UnknownField from "../../dev/UnknownField";
-import { computeCondition } from './conditions';
+import { logError } from 'sharp';
+import { UnknownField } from "sharp/components";
+import FieldContainer from './ui/FieldContainer';
+import { computeCondition } from '../util/conditional-display';
 import { isLocalizableValueField } from "../../../mixins/localize/utils";
-import { transformAttributes } from "../dynamic-attributes";
 
 export function acceptCondition (fields, data, condition) {
     if(!condition)
@@ -49,7 +48,7 @@ export default {
         let value = contextData[fieldKey];
 
         if(!(fieldKey in contextFields)) {
-            util.error(`Field display ('layout') : Can't find a field with key '${fieldKey}' in 'fields'`,contextFields);
+            logError(`Field display ('layout') : Can't find a field with key '${fieldKey}' in 'fields'`,contextFields);
             return h(UnknownField, { props: { name: fieldKey } });
         }
 

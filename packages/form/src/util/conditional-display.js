@@ -19,7 +19,7 @@ const helpers = {
     }
 };
 
-function computeCondition(fields, data, condition) {
+export function computeCondition(fields, data, condition) {
     let res = true;
 
     let { operator } = condition;
@@ -67,5 +67,5 @@ function computeCondition(fields, data, condition) {
 }
 
 export {
-    helpers, computeCondition
+    helpers
 }

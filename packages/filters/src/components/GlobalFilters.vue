@@ -1,7 +1,7 @@
 <template>
     <div class="SharpGlobalFilters">
         <template v-for="filter in filters">
-            <SharpFilterSelect
+            <FilterSelect
                 :label="filter.label"
                 :values="filter.values"
                 :value="filterValue(filter.key)"
@@ -24,7 +24,7 @@
     import debounce from 'lodash/debounce';
     import { mapGetters } from 'vuex';
     import { BASE_URL } from "sharp";
-    import { FilterSelect } from './filters';
+    import FilterSelect from './filters/FilterSelect';
 
     export default {
         inject: {
@@ -33,7 +33,7 @@
             },
         },
         components: {
-            SharpFilterSelect
+            FilterSelect
         },
         computed: {
             ...mapGetters('global-filters', {

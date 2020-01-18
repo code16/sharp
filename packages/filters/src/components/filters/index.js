@@ -8,8 +8,3 @@ export function filterByType(type) {
         return FilterDateRange;
     }
 }
-
-export {
-    FilterSelect,
-    FilterDateRange,
-}

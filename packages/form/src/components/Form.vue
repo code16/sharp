@@ -10,21 +10,21 @@
                         </div>
                     </div>
                 </div>
-                <sharp-tabbed-layout :layout="layout" ref="tabbedLayout">
+                <TabbedLayout :layout="layout" ref="tabbedLayout">
                     <template slot="nav-prepend">
                         <template v-if="localized">
-                            <SharpLocaleSelect :locale="currentLocale" :locales="locales" @change="handleLocaleChanged" />
+                            <LocaleSelect :locale="currentLocale" :locales="locales" @change="handleLocaleChanged" />
                         </template>
                     </template>
                     <!-- Tab -->
                     <template slot-scope="tab">
-                        <sharp-grid :rows="[tab.columns]" ref="columnsGrid">
+                        <Grid :rows="[tab.columns]" ref="columnsGrid">
                             <!-- column -->
                             <template slot-scope="column">
-                                <sharp-fields-layout v-if="fields" :layout="column.fields" :visible="fieldVisible" ref="fieldLayout">
+                                <FieldsLayout v-if="fields" :layout="column.fields" :visible="fieldVisible" ref="fieldLayout">
                                     <!-- field -->
                                     <template slot-scope="fieldLayout">
-                                        <sharp-field-display
+                                        <FieldDisplay
                                             :field-key="fieldLayout.key"
                                             :context-fields="transformedFields"
                                             :context-data="data"
@@ -38,11 +38,11 @@
                                             ref="field"
                                         />
                                     </template>
-                                </sharp-fields-layout>
+                                </FieldsLayout>
                             </template>
-                        </sharp-grid>
+                        </Grid>
                     </template>
-                </sharp-tabbed-layout>
+                </TabbedLayout>
             </div>
         </template>
     </div>
@@ -50,21 +50,16 @@
 
 <script>
     import * as util from '../../util';
-    import { API_PATH, BASE_URL } from '../../consts';
-
-    import { ActionEvents, ReadOnlyFields, Localization } from '../../mixins';
-
-    import DynamicView from '../DynamicViewMixin';
-
-    import SharpTabbedLayout from '../TabbedLayout'
-    import SharpGrid from '../Grid';
-    import SharpFieldsLayout from './FieldsLayout.vue';
-    import { SharpDropdown, SharpDropdownItem } from "../ui";
-    import SharpLocaleSelect from './LocaleSelect';
+    import { API_PATH, BASE_URL } from 'sharp';
+    import { TabbedLayout, Grid, Dropdown, DropdownItem, } from 'sharp/components';
+    import { ActionEvents, ReadOnlyFields, Localization, DynamicView } from 'sharp/mixins';
+    
+    import FieldsLayout from './ui/FieldsLayout.vue';
+    import LocaleSelect from './LocaleSelect';
 
     import localize from '../../mixins/localize/form';
-    import { getDependantFieldsResetData, transformFields } from "../../util/form";
-    import { getBackUrl, getListBackUrl } from "../../util/url";
+    import { getDependantFieldsResetData, transformFields } from "../util";
+    import { getBackUrl, getListBackUrl } from "sharp";
 
     const noop = ()=>{};
 
