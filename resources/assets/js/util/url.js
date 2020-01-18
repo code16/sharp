@@ -15,9 +15,9 @@ function normalize(url) {
     return urlLocation.pathname + stringifyQuery(query);
 }
 
-function routeUrl(location) {
+export function routeUrl(location, { normalized=true }={}) {
     const { href } = router().resolve(location);
-    return href;
+    return normalized ? normalize(href) : href;
 }
 
 export function getBackUrl(breadcrumb) {

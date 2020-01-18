@@ -5,7 +5,7 @@
         </template>
         <template slot="right">
             <template v-if="canSearch && !reorderActive">
-                <SharpSearch
+                <Search
                     :value="search"
                     :active.sync="searchActive"
                     :placeholder="l('action_bar.list.search.placeholder')"
@@ -32,11 +32,11 @@
 
             <template v-if="!reorderActive">
                 <template v-if="canCreate">
-                    <sharp-dropdown v-if="hasForms" class="SharpActionBar__forms-dropdown" :text="l('action_bar.list.forms_dropdown')">
-                        <sharp-dropdown-item v-for="(form,key) in forms" @click="handleCreateFormSelected(form)" :key="key" >
-                            <sharp-item-visual :item="form" icon-class="fa-fw"/>{{ form.label }}
-                        </sharp-dropdown-item>
-                    </sharp-dropdown>
+                    <Drodpown v-if="hasForms" class="SharpActionBar__forms-dropdown" :text="l('action_bar.list.forms_dropdown')">
+                        <DropdownItem v-for="(form,key) in forms" @click="handleCreateFormSelected(form)" :key="key" >
+                            <ItemVisual :item="form" icon-class="fa-fw"/>{{ form.label }}
+                        </DropdownItem>
+                    </Drodpown>
                     <button v-else class="SharpButton SharpButton--accent" @click="handleCreateButtonClicked">
                         {{ l('action_bar.list.create_button') }}
                     </button>
@@ -61,14 +61,14 @@
 
             <template slot="extras-right">
                 <template v-if="hasCommands">
-                    <SharpCommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
+                    <CommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
                         :commands="commands"
                         @select="handleCommandSelected"
                     >
                         <div slot="text">
                             {{ l('entity_list.commands.entity.label') }}
                         </div>
-                    </SharpCommandsDropdown>
+                    </CommandsDropdown>
                 </template>
             </template>
         </template>
@@ -76,16 +76,17 @@
 </template>
 
 <script>
-    import SharpActionBar from './ActionBar';
-    import { Localization } from '../../mixins';
+    import { 
+        ActionBar, 
+        Filter, 
+        Dropdown, 
+        DropdownItem, 
+        ItemVisual, 
+        CommandsDropdown, 
+        Search,
+    } from 'sharp/components';
 
-    import SharpFilter from '../list/Filter';
-
-    import SharpDropdown from '../dropdown/Dropdown';
-    import SharpDropdownItem from '../dropdown/DropdownItem';
-    import SharpItemVisual from '../ui/ItemVisual';
-    import SharpCommandsDropdown from '../commands/CommandsDropdown';
-    import SharpSearch from '../ui/Search';
+    import { Localization } from 'sharp/mixins';
 
     export default {
         name: 'SharpActionBarList',
@@ -93,13 +94,13 @@
         mixins: [Localization],
 
         components : {
-            SharpActionBar,
-            SharpDropdown,
-            SharpDropdownItem,
-            SharpItemVisual,
-            SharpCommandsDropdown,
-            SharpFilter,
-            SharpSearch,
+            ActionBar,
+            Dropdown,
+            DropdownItem,
+            ItemVisual,
+            CommandsDropdown,
+            Filter,
+            Search,
         },
 
         props: {

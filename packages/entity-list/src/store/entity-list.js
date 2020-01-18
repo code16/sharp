@@ -1,5 +1,6 @@
-import { postEntityListReorder } from "../api";
 import { filters } from 'sharp/store';
+import { postEntityListReorder } from "../api";
+
 
 export const SET_ENTITY_KEY = 'SET_ENTITY_KEY';
 export const SET_QUERY = 'SET_QUERY';

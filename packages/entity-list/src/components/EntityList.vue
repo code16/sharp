@@ -7,7 +7,7 @@
                 :listeners="actionBarListeners"
             />
 
-            <SharpDataList
+            <DataList
                 :items="items"
                 :columns="columns"
                 :page="page"
@@ -25,33 +25,33 @@
                     {{ l('entity_list.empty_text') }}
                 </template>
                 <template slot="item" slot-scope="{ item }">
-                    <SharpDataListRow :url="instanceUrl(item)" :columns="columns" :row="item">
+                    <DataListRow :url="instanceUrl(item)" :columns="columns" :row="item">
                         <template v-if="hasActionsColumn">
                             <template slot="append">
                                 <div class="row justify-content-end justify-content-md-start mx-n2">
                                     <template v-if="instanceHasState(item)">
                                         <div class="col-auto col-md-12 my-1 px-2">
-                                            <SharpDropdown class="SharpEntityList__state-dropdown" :disabled="!instanceHasStateAuthorization(item)">
+                                            <Dropdown class="SharpEntityList__state-dropdown" :disabled="!instanceHasStateAuthorization(item)">
                                                 <template slot="text">
-                                                    <SharpStateIcon :color="instanceStateIconColor(item)" />
+                                                    <StateIcon :color="instanceStateIconColor(item)" />
                                                     <span class="text-truncate">
                                                         {{ instanceStateLabel(item) }}
                                                     </span>
                                                 </template>
-                                                <SharpDropdownItem
+                                                <DropdownItem
                                                     v-for="stateOptions in config.state.values"
                                                     @click="handleInstanceStateChanged(item, stateOptions.value)"
                                                     :key="stateOptions.value"
                                                 >
-                                                    <SharpStateIcon :color="stateOptions.color" />&nbsp;
+                                                    <StateIcon :color="stateOptions.color" />&nbsp;
                                                     {{ stateOptions.label }}
-                                                </SharpDropdownItem>
-                                            </SharpDropdown>
+                                                </DropdownItem>
+                                            </Dropdown>
                                         </div>
                                     </template>
                                     <template v-if="instanceHasCommands(item)">
                                         <div class="col-auto col-md-12 my-1 px-2">
-                                            <SharpCommandsDropdown
+                                            <CommandsDropdown
                                                 class="SharpEntityList__commands-dropdown"
                                                 :commands="instanceCommands(item)"
                                                 @select="handleInstanceCommandRequested(item, $event)"
@@ -59,13 +59,13 @@
                                                 <template slot="text">
                                                     {{ l('entity_list.commands.instance.label') }}
                                                 </template>
-                                            </SharpCommandsDropdown>
+                                            </CommandsDropdown>
                                         </div>
                                     </template>
                                 </div>
                             </template>
                         </template>
-                    </SharpDataListRow>
+                    </DataListRow>
                 </template>
 
                 <template v-if="$scopedSlots['append-head']">
@@ -73,47 +73,45 @@
                         <slot name="append-head" :props="actionBarProps" :listeners="actionBarListeners" />
                     </template>
                 </template>
-            </SharpDataList>
+            </DataList>
         </template>
 
-        <SharpCommandFormModal :form="commandCurrentForm" ref="commandForm" />
-        <SharpCommandViewPanel :content="commandViewContent" @close="handleCommandViewPanelClosed" />
+        <CommandFormModal :form="commandCurrentForm" ref="commandForm" />
+        <CommandViewPanel :content="commandViewContent" @close="handleCommandViewPanelClosed" />
     </div>
 </template>
 
 <script>
-    import SharpActionBarList from '../action-bar/ActionBarList.vue';
-    import SharpDataList from '../list/DataList.vue';
-    import SharpDataListRow from '../list/DataListRow.vue';
-    import SharpStateIcon from '../list/StateIcon.vue';
-    import SharpCommandsDropdown from '../commands/CommandsDropdown.vue';
-    import SharpCommandFormModal from '../commands/CommandFormModal.vue';
-    import SharpCommandViewPanel from '../commands/CommandViewPanel.vue';
+    import { formUrl, showUrl } from 'sharp';
+    import { 
+        DataList, 
+        DataListRow, 
+        StateIcon,
+        CommandsDropdown,
+        CommandFormModal,
+        CommandViewPanel,
+        Dropdown,
+        DropdownItem
+    } from 'sharp/components';
 
-    import { SharpDropdown, SharpDropdownItem } from "../ui";
-
-    import { Localization } from '../../mixins';
-    import DynamicViewMixin from '../DynamicViewMixin';
-    import withCommands from '../../mixins/page/with-commands';
-
-    import { formUrl, showUrl } from "../../util/url";
+    import { Localization, DynamicView, withCommands } from 'sharp/mixins';
+    
 
     export default {
         name: 'SharpEntityList',
-        mixins: [DynamicViewMixin, Localization, withCommands],
+        mixins: [DynamicView, Localization, withCommands],
         components: {
-            SharpActionBarList,
-            SharpDataList,
-            SharpDataListRow,
+            DataList,
+            DataListRow,
 
-            SharpStateIcon,
-            SharpCommandsDropdown,
+            StateIcon,
+            CommandsDropdown,
 
-            SharpDropdown,
-            SharpDropdownItem,
+            Dropdown,
+            DropdownItem,
 
-            SharpCommandFormModal,
-            SharpCommandViewPanel,
+            CommandFormModal,
+            CommandViewPanel,
         },
         props: {
             entityKey: String,

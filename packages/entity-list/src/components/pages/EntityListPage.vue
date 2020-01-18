@@ -3,14 +3,14 @@
         <div class="container">
             <template v-if="ready">
                 <!-- Action bar is defined inside entity list component -->
-                <SharpEntityList
+                <EntityList
                     :entity-key="entityKey"
                     module="entity-list"
                 >
                     <template slot="action-bar" slot-scope="{ props, listeners }">
-                        <SharpActionBarList v-bind="props" v-on="listeners" />
+                        <ActionBarList v-bind="props" v-on="listeners" />
                     </template>
-                </SharpEntityList>
+                </EntityList>
             </template>
         </div>
     </div>
@@ -19,14 +19,14 @@
 <script>
     import isEqual from 'lodash/isEqual';
     import { mapGetters } from 'vuex';
-    import SharpEntityList from '../list/EntityList';
-    import SharpActionBarList from '../action-bar/ActionBarList';
+    import EntityList from '../EntityList';
+    import ActionBarList from '../ActionBar';
 
     export default {
         name: 'SharpEntityListPage',
         components: {
-            SharpEntityList,
-            SharpActionBarList,
+            EntityList,
+            ActionBarList,
         },
         data() {
             return {

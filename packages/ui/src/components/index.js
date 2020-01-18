@@ -2,6 +2,8 @@ export { default as ActionBar } from './ActionBar';
 export { default as Button } from './Button';
 export { default as Card } from './Card';
 export { default as Collapse } from './Collapse';
+export { default as DataList } from './DataList';
+export { default as DataListRow } from './DataListRow';
 export { default as Dropdown } from './dropdown/Dropdown';
 export { default as DropdownItem } from './dropdown/DropdownItem';
 export { default as DropdownSeparator } from './dropdown/DropdownSeparator';
