@@ -13,7 +13,7 @@
 </template>
 
 <script>
-    import DropdownArrow from '../dropdown/Arrow';
+    import { DropdownArrow } from 'sharp';
 
     export default {
         name: 'SharpFilterControl',

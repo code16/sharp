@@ -1,7 +1,7 @@
 <template>
     <div class="SharpFilterDateRange" :class="classes">
-        <SharpFilterControl :opened="opened" :label="label" :no-caret="noCaret" @click="handleClicked">
-            <SharpDateRange
+        <FilterControl :opened="opened" :label="label" :no-caret="noCaret" @click="handleClicked">
+            <DateRange
                 class="SharpFilterDateRange__field"
                 :value="value"
                 :display-format="displayFormat"
@@ -12,13 +12,13 @@
                 @blur="handlePickerBlur"
                 ref="range"
             />
-        </SharpFilterControl>
+        </FilterControl>
     </div>
 </template>
 
 <script>
-    import SharpFilterControl from '../FilterControl';
-    import SharpDateRange from '../../form/fields/date-range/DateRange';
+    import { DateRange } from 'sharp/components';
+    import FilterControl from '../FilterControl';
 
     export default {
         name: 'SharpFilterDateRange',

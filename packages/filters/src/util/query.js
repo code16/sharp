@@ -1,6 +1,6 @@
 
-const filterQueryPrefix = 'filter_';
-const filterQueryRE = new RegExp(`^${filterQueryPrefix}`);
+export const filterQueryPrefix = 'filter_';
+export const filterQueryRE = new RegExp(`^${filterQueryPrefix}`);
 
 export function filterQueryKey(key) {
     return `${filterQueryPrefix}${key}`;

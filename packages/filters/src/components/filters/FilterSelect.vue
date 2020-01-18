@@ -9,7 +9,7 @@
           tabindex="0"
     >
         <!-- dropdown & search input -->
-        <sharp-autocomplete
+        <Autocomplete
             class="SharpFilterSelect__select"
             :value="autocompleteValue"
             :local-values="values"
@@ -29,9 +29,9 @@
             @close="close"
         />
 
-        <SharpFilterControl :label="label" no-caret @click="handleClick">
+        <FilterControl :label="label" no-caret @click="handleClick">
             <!-- value text & tags -->
-            <sharp-select
+            <Select
                 class="SharpFilterSelect__select"
                 :value="value"
                 :options="values"
@@ -42,26 +42,23 @@
                 ref="select"
                 @input="handleSelect"
             />
-        </SharpFilterControl>
+        </FilterControl>
     </div>
 </template>
 
 <script>
-    import SharpDropdown from '../../dropdown/Dropdown';
-    import SharpSelect from '../../form/fields/Select';
-    import SharpAutocomplete from '../../form/fields/Autocomplete';
-    import SharpFilterControl from '../FilterControl';
-    import { Localization } from '../../../mixins';
-
-
+    import { Autocomplete, Select, Dropdown } from 'sharp/components';
+    import { Localization } from 'sharp/mixins';
+    import FilterControl from '../FilterControl';
+    
     export default {
         name: 'SharpFilterSelect',
         mixins: [Localization],
         components: {
-            SharpDropdown,
-            SharpSelect,
-            SharpAutocomplete,
-            SharpFilterControl,
+            Dropdown,
+            Select,
+            Autocomplete,
+            FilterControl,
         },
         props: {
             label : {

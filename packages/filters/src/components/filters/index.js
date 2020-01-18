@@ -1,15 +1,15 @@
-import SharpFilterDateRange from './FilterDateRange';
-import SharpFilterSelect from './FilterSelect';
+import FilterDateRange from './FilterDateRange';
+import FilterSelect from './FilterSelect';
 
 export function filterByType(type) {
     if(type === 'select') {
-        return SharpFilterSelect;
+        return FilterSelect;
     } else if(type === 'daterange') {
-        return SharpFilterDateRange;
+        return FilterDateRange;
     }
 }
 
 export {
-    SharpFilterSelect,
-    SharpFilterDateRange,
+    FilterSelect,
+    FilterDateRange,
 }

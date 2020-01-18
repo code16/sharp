@@ -1,12 +1,9 @@
 import Vue from 'vue';
 import { parseRange, serializeRange } from "sharp";
-import { getFiltersQueryParams, getFiltersValuesFromQuery } from '../util/query';
+import { getFiltersQueryParams, getFiltersValuesFromQuery, filterQueryKey } from '../util/query';
 
 export const SET_FILTERS = 'SET_FILTERS';
 export const SET_FILTER_VALUE = 'SET_FILTER_VALUE';
-
-const filterQueryPrefix = 'filter_';
-const filterQueryRE = new RegExp(`^${filterQueryPrefix}`);
 
 export default {
     namespaced: true,
@@ -47,7 +44,7 @@ export default {
         },
 
         filterQueryKey() {
-            return key => `${filterQueryPrefix}${key}`;
+            return key => filterQueryKey(key);
         },
         getQueryParams(state, getters) {
             return values => {
