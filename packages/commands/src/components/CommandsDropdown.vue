@@ -1,32 +1,30 @@
 <template>
-    <SharpDropdown class="SharpCommandsDropdown">
+    <Dropdown class="SharpCommandsDropdown">
         <template slot="text">
             <slot name="text" />
         </template>
         <template v-for="group in commandGroups">
-            <SharpDropdownItem v-for="command in group" @click="handleCommandClicked(command)" :key="command.key">
+            <DropdownItem v-for="command in group" @click="handleCommandClicked(command)" :key="command.key">
                 {{ command.label }}
                 <div v-if="command.description" class="SharpCommandsDropdown__description mt-1">
                     {{ command.description }}
                 </div>
-            </SharpDropdownItem>
-            <SharpDropdownSeparator />
+            </DropdownItem>
+            <DropdownSeparator />
         </template>
-    </SharpDropdown>
+    </Dropdown>
 </template>
 
 <script>
-    import SharpDropdown from '../dropdown/Dropdown';
-    import SharpDropdownItem from '../dropdown/DropdownItem';
-    import SharpDropdownSeparator from '../dropdown/DropdownSeparator';
+    import { Dropdown, DropdownItem, DropdownSeparator } from 'sharp/components';
 
     export default {
         name: 'SharpCommandsDropdown',
 
         components: {
-            SharpDropdown,
-            SharpDropdownItem,
-            SharpDropdownSeparator,
+            Dropdown,
+            DropdownItem,
+            DropdownSeparator,
         },
 
         props: {

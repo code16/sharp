@@ -1,3 +1,3 @@
 
-export { filters } from 'sharp-filters/store';
-export { commands } from 'sharp-commands/store';
+export { filters } from 'sharp-filters/src/store';
+export { commands } from 'sharp-commands/src/store';

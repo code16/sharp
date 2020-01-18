@@ -1,7 +1,7 @@
 <template>
-    <SharpModal :visible.sync="visible" @ok="handleSubmitButtonClicked" @hidden="handleClosed">
+    <Modal :visible.sync="visible" @ok="handleSubmitButtonClicked" @hidden="handleClosed">
         <transition>
-            <SharpForm
+            <Form
                 v-if="visible"
                 :props="form"
                 independant
@@ -10,12 +10,11 @@
                 ref="form"
             />
         </transition>
-    </SharpModal>
+    </Modal>
 </template>
 
 <script>
-    import SharpModal from '../Modal.vue';
-    import SharpForm from '../form/Form.vue';
+    import { Form, Modal } from 'sharp/components';
 
     export default {
         components: {

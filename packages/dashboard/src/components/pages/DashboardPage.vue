@@ -2,8 +2,8 @@
     <div class="SharpDashboardPage">
         <template v-if="ready">
             <div class="container">
-                <SharpActionBarDashboard :commands="commands" @command="handleCommandRequested" />
-                <SharpGrid :rows="layout.rows">
+                <ActionBarDashboard :commands="commands" @command="handleCommandRequested" />
+                <Grid :rows="layout.rows">
                     <template slot-scope="widgetLayout">
                         <SharpWidget
                             :widget-type="widgets[widgetLayout.key].type"
@@ -11,37 +11,32 @@
                             :value="data[widgetLayout.key]"
                         />
                     </template>
-                </SharpGrid>
+                </Grid>
             </div>
         </template>
 
-        <SharpCommandFormModal :form="commandCurrentForm" ref="commandForm" />
-        <SharpCommandViewPanel :content="commandViewContent" @close="handleCommandViewPanelClosed" />
+        <CommandFormModal :form="commandCurrentForm" ref="commandForm" />
+        <CommandViewPanel :content="commandViewContent" @close="handleCommandViewPanelClosed" />
     </div>
 </template>
 
 <script>
-    import SharpGrid from '../Grid.vue';
-    import SharpWidget from '../dashboard/Widget.vue';
-    import SharpActionBarDashboard from '../action-bar/ActionBarDashboard.vue';
-    import SharpCommandFormModal from '../commands/CommandFormModal.vue';
-    import SharpCommandViewPanel from '../commands/CommandViewPanel.vue';
-
-    import { withAxiosInterceptors } from "../DynamicViewMixin";
-    import withCommands from '../../mixins/page/with-commands';
-
     import { mapState, mapGetters } from 'vuex';
+    import { Grid, CommandFormModal, CommandViewPanel } from 'sharp/components';
+    import { withAxiosInterceptors, withCommands } from "sharp/mixins";
+    import Widget from '../Widget';
+    import ActionBarDashboard from '../ActionBar';
 
     export default {
         name:'SharpDashboardPage',
         mixins: [withAxiosInterceptors, withCommands],
 
         components: {
-            SharpGrid,
-            SharpWidget,
-            SharpActionBarDashboard,
-            SharpCommandFormModal,
-            SharpCommandViewPanel,
+            Grid,
+            Widget,
+            ActionBarDashboard,
+            CommandFormModal,
+            CommandViewPanel,
         },
 
         data() {

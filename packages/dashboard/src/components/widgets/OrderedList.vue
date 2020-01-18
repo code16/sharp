@@ -3,30 +3,29 @@
         <h2 class="mb-3">
             {{ title }}
         </h2>
-        <SharpDataList class="SharpWidgetOrderedList__list" :items="items" :columns="columns" hide-header>
+        <DataList class="SharpWidgetOrderedList__list" :items="items" :columns="columns" hide-header>
             <template slot="item" slot-scope="{ item }">
-                <SharpDataListRow :url="item.url" :columns="columns" :row="item">
+                <DataListRow :url="item.url" :columns="columns" :row="item">
                     <template v-if="hasCount(item)">
                         <template slot="append">
                             <span class="SharpTag SharpTag--default">{{ item.count }}</span>
                         </template>
                     </template>
-                </SharpDataListRow>
+                </DataListRow>
             </template>
-        </SharpDataList>
+        </DataList>
     </div>
 </template>
 
 <script>
-    import SharpDataList from '../../list/DataList';
-    import SharpDataListRow from '../../list/DataListRow';
+    import { DataList, DataListRow } from 'sharp/components';
 
     export default {
         name: 'SharpWidgetOrderedList',
 
         components: {
-            SharpDataList,
-            SharpDataListRow,
+            DataList,
+            DataListRow,
         },
 
         props: {

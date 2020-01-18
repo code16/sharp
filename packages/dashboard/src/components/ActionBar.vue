@@ -28,12 +28,10 @@
 </template>
 
 <script>
-    import SharpActionBar from './ActionBar.vue';
-    import SharpFilter from '../list/Filter';
-    import SharpCommandsDropdown from '../commands/CommandsDropdown.vue';
-    import { Localization } from "../../mixins";
     import { mapGetters } from 'vuex';
-
+    import { ActionBar, Filter, CommandsDropdown } from 'sharp/components';
+    import { Localization } from "sharp/mixins";
+    
     export default {
         name: 'SharpActionBarDashboard',
         mixins: [Localization],

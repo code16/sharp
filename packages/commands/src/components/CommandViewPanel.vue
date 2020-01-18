@@ -19,6 +19,8 @@
 </template>
 
 <script>
+    import { srcDoc } from 'sharp/directives';
+    
     export default {
         name: 'SharpViewPanel',
         props: {
