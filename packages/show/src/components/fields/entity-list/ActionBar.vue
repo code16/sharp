@@ -84,6 +84,7 @@
 </template>
 
 <script>
+    import { Localization } from 'sharp/mixins';
     import { Search, ItemVisual, Dropdown, DropdownItem, Filter } from 'sharp/components';
 
 

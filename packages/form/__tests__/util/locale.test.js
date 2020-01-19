@@ -4,7 +4,7 @@ import {
     isLocalizableValueField,
     isLocaleObjectEmpty,
     localeObject
-} from "../utils";
+} from "../../src/util/locale";
 
 describe('localize-utils', ()=>{
     test('isLocaleObject', ()=>{

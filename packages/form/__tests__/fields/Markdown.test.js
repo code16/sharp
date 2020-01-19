@@ -7,7 +7,7 @@ import { mount } from '@vue/test-utils';
 import SimpleMDE from 'simplemde';
 
 
-jest.mock('../components/form/fields/upload/VueClip', ()=>({
+jest.mock('../../src/components/fields/upload/VueClip', ()=>({
     data:()=>({ uploader:({ _uploader:{ hiddenFileInput:{ click:jest.fn() } } }) }),
     render:h=>h()
 }));

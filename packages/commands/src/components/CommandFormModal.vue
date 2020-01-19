@@ -18,8 +18,8 @@
 
     export default {
         components: {
-            SharpModal,
-            SharpForm,
+            Modal,
+            Form,
         },
         props: {
             form: Object,

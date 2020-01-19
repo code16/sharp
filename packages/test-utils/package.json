@@ -1,4 +1,5 @@
 {
     "name": "sharp-test-utils",
-    "private": true
+    "private": true,
+    "main": "src/index.js"
 }

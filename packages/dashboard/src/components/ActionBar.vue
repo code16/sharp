@@ -36,9 +36,9 @@
         name: 'SharpActionBarDashboard',
         mixins: [Localization],
         components: {
-            SharpActionBar,
-            SharpFilter,
-            SharpCommandsDropdown,
+            ActionBar,
+            Filter,
+            CommandsDropdown,
         },
         props: {
             commands: Array,

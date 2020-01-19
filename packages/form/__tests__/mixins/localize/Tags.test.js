@@ -1,14 +1,14 @@
-import localizeTags from '../Tags';
-import localizeSelect from '../Select';
+import localizeTags from '../../../src/mixins/localize/Tags';
+import localizeSelect from '../../../src/mixins/localize/Select';
 import { mount } from '@vue/test-utils';
-import { localeObject } from "../utils";
+import { localeObject } from "../../../src/util/locale";
 import { mockInjections } from "./mock";
 
 
-jest.mock('../../Localization', ()=>({
+jest.mock('sharp', ()=>({
     lang: jest.fn(key=>key)
 }));
-jest.mock('../utils', ()=>({
+jest.mock('../../../src/util/locale', ()=>({
     localeObject: jest.fn(()=>'localeObject')
 }));
 

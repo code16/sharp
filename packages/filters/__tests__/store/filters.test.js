@@ -1,5 +1,5 @@
-import filters from '../../src/store/modules/filters';
-import { SET_FILTERS, SET_FILTER_VALUE } from "../../src/store/modules/filters";
+import filters from '../../src/store/filters';
+import { SET_FILTERS, SET_FILTER_VALUE } from "../../src/store/filters";
 import * as querystringUtils from "sharp/util/querystring";
 
 describe('store filters', () => {

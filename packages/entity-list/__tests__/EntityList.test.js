@@ -3,15 +3,14 @@ import merge from 'lodash/merge';
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import SharpEntityList from '../src/components/EntityList.vue';
-import entityListModule from '../src/store/modules/entity-list';
-
+import entityListModule from '../src/store/entity-list';
 
 jest.mock('sharp/mixins/Localization');
 jest.mock('sharp/mixins/DynamicView');
 jest.mock('sharp/consts', () => ({
     BASE_URL: 'BASE_URL'
 }));
-jest.mock('../store/entity-list');
+jest.mock('../src/store/entity-list');
 
 
 describe('EntityList', () => {

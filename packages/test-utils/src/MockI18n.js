@@ -1,10 +1,14 @@
-import Localization,* as localizationFn from '../../../resources/assets/js/mixins/Localization';
+import * as i18n from 'sharp/util/i18n';
+import * as mixins from 'sharp/mixins';
+import * as localizationModule from 'sharp/mixins/Localization';
+
+console.log(localizationModule);
 
 const mockLangImplementation = localeKey => `{{ ${localeKey} }}`;
 function mockLangFunction() {
-    localizationFn.lang = jest.fn(mockLangImplementation);
-    Localization.methods.l = jest.fn(mockLangImplementation);
-    localizationFn.LocalizationBase = baseKey => ({
+    i18n.lang = jest.fn(mockLangImplementation);
+    mixins.Localization.methods.l = jest.fn(mockLangImplementation);
+    localizationModule.LocalizationBase = baseKey => ({
         methods: {
             lSub: jest.fn(key => mockLangImplementation(`${baseKey}.${key}`))
         }

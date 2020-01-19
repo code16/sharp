@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Text from '../../src/components/form/fields/Text.vue';
+import Text from '../../src/components/fields/Text.vue';
 
 import { MockInjections } from 'sharp-test-utils';
 

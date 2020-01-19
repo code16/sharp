@@ -1,16 +1,21 @@
 import Vue from 'vue';
-import DynamicViewMixin from '../components/DynamicViewMixin';
+import DynamicView from '../../mixins/DynamicView';
 
-import { MockInjections, MockI18n } from "../test-utils";
-import { mockProperty, unmockProperty, setter } from "../test-utils/mock-utils";
+import {
+    MockInjections, 
+    MockI18n, 
+    mockProperty,
+    unmockProperty, 
+    setter,
+    nextRequestFulfilled
+} from "sharp-test-utils";
 
 import moxios from 'moxios';
-import { nextRequestFulfilled } from "../test-utils/moxios-utils";
 
 
 describe('dynamic-view',()=>{
     Vue.component('sharp-dynamic-view', {
-        mixins:[DynamicViewMixin],
+        mixins:[DynamicView],
         props: {
             apiPath: String,
             apiParams: Object,

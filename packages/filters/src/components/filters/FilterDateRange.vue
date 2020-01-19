@@ -24,8 +24,8 @@
         name: 'SharpFilterDateRange',
 
         components: {
-            SharpDateRange,
-            SharpFilterControl,
+            DateRange,
+            FilterControl,
         },
 
         props: {

@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import List from '../../src/components/fields/list/List.vue';
-import FieldDisplay from '../../src/components/FieldDisplay';
 
 import { MockInjections, MockTransitions, MockI18n, QueryComponent } from 'sharp-test-utils';
 import { ErrorNode } from 'sharp/mixins';

@@ -52,10 +52,10 @@
     export default {
         mixins: [LocalizationBase('form.geolocation.modal')],
         components: {
-            SharpLoading,
-            SharpModal,
-            SharpText,
-            SharpButton,
+            Loading,
+            Modal,
+            Text,
+            Button,
         },
         props: {
             location: Object,

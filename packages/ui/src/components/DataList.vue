@@ -7,7 +7,7 @@
             <div class="SharpDataList__table SharpDataList__table--border">
                 <template v-if="!hideHeader">
                     <div class="SharpDataList__thead" ref="head">
-                        <SharpDataListRow :columns="columns" header>
+                        <DataListRow :columns="columns" header>
                             <template slot="cell" slot-scope="{ column }">
                                 <span>{{ column.label }}</span>
                                 <template v-if="column.sortable">
@@ -28,14 +28,14 @@
                                     <div class="d-none d-md-block" :style="{ width: headerRowAppendWidth || 'auto' }"><slot name="append-head"></slot></div>
                                 </template>
                             </template>
-                        </SharpDataListRow>
+                        </DataListRow>
                     </div>
                 </template>
                 <div class="SharpDataList__tbody" ref="body">
                     <Draggable :options="draggableOptions" :value="reorderedItems" @input="handleItemsChanged">
                         <template v-for="item in currentItems">
                             <slot name="item" :item="item">
-                                <SharpDataListRow :columns="columns" :row="item" />
+                                <DataListRow :columns="columns" :row="item" />
                             </slot>
                         </template>
                     </Draggable>
@@ -44,7 +44,7 @@
         </template>
         <template v-if="hasPagination">
             <div class="SharpDataList__pagination-container">
-                <SharpPagination
+                <Pagination
                     :total-rows="totalCount"
                     :per-page="pageSize"
                     :min-page-end-buttons="3"
@@ -58,14 +58,14 @@
 </template>
 
 <script>
-    import SharpPagination from './Pagination.vue';
-    import SharpDataListRow from './DataListRow.vue';
+    import Pagination from './Pagination.vue';
+    import DataListRow from './DataListRow.vue';
     import Draggable from 'vuedraggable';
 
     export default {
         components: {
-            SharpPagination,
-            SharpDataListRow,
+            Pagination,
+            DataListRow,
             Draggable,
         },
         props: {

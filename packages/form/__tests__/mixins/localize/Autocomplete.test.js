@@ -1,5 +1,5 @@
-import localizeAutocomplete from '../Autocomplete';
-import localizeField from '../field';
+import localizeAutocomplete from '../../../src/mixins/localize/Autocomplete';
+import localizeField from '../../../src/mixins/localize/field';
 import { mount } from '@vue/test-utils';
 
 import { mockInjections } from "./mock";

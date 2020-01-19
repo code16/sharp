@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import * as fieldContainerModule from '../src/components/FieldContainer.vue';
+import * as fieldContainerModule from '../src/components/ui/FieldContainer.vue';
 import FieldDisplay from '../src/components/FieldDisplay';
 import * as conditions from '../src/util/conditional-display';
 

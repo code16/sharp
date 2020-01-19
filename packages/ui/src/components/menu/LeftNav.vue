@@ -53,7 +53,7 @@
 
         components: {
             GlobalFilters,
-            SharpLoading,
+            Loading,
         },
 
         props: {

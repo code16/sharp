@@ -54,7 +54,7 @@
 <script>
     import { 
         ActionBar, 
-        SharpCommandsDropdown, 
+        CommandsDropdown, 
         Dropdown, 
         DropdownItem, 
         StateIcon, 

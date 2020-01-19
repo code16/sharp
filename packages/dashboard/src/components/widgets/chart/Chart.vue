@@ -3,7 +3,7 @@
         <template v-if="title">
             <h2 class="mb-2">{{title}}</h2>
         </template>
-        <SharpChartLegend :datasets="value.datasets" />
+        <ChartLegend :datasets="value.datasets" />
         <div :class="classes" :style="style">
             <component :is="chartComp" :chart-data="chartData" class="SharpWidgetChart__inner" />
         </div>
@@ -12,13 +12,13 @@
 
 <script>
     import { getChartByType, transformData } from './index';
-    import SharpChartLegend from './Legend';
+    import ChartLegend from './Legend';
 
     export default {
         name: 'SharpWidgetChart',
 
         components: {
-            SharpChartLegend,
+            ChartLegend,
         },
 
         props: {

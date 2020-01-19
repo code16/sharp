@@ -15,11 +15,13 @@
       "^.+\\.vue$": "<rootDir>/node_modules/vue-jest"
     },
     "snapshotSerializers": [
-      "<rootDir>/resources/assets/js/__tests__/test-utils/htmlSnapshotBeautifier.js"
+      "<rootDir>/packages/test-utils/src/htmlSnapshotBeautifier.js"
     ],
     "moduleNameMapper": {
       "^vue$": "vue/dist/vue.common.js",
-      "\\.(css|less)$": "<rootDir>/resources/assets/js/__tests__/test-setup/styleMock.js"
+      "^sharp((\/(.*))|$)": "<rootDir>/resources/assets/js$1",
+      "^sharp-test-utils$": "<rootDir>/packages/test-utils",
+      "\\.(css|less)$": "<rootDir>/packages/test-utils/src/setup/styleMock.js"
     },
     "transformIgnorePatterns": [
       "node_modules/(?!(vue2-google-maps|bootstrap-vue|vue-clip|vue2-timepicker))"
@@ -29,9 +31,9 @@
     ],
     "verbose": true,
     "setupFiles": [
-      "<rootDir>/resources/assets/js/__tests__/test-setup/mockument.js",
-      "<rootDir>/resources/assets/js/__tests__/test-setup/mockBootstrapVue.js",
-      "<rootDir>/resources/assets/js/__tests__/test-setup/setupVue.js",
+      "<rootDir>/packages/test-utils/src/setup/mockument.js",
+      "<rootDir>/packages/test-utils/src/setup/mockBootstrapVue.js",
+      "<rootDir>/packages/test-utils/src/setup/setupVue.js",
       "<rootDir>/resources/assets/js/polyfill.js"
     ]
   },

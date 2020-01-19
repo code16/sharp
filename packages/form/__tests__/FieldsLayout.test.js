@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Grid as gridModule } from 'sharp/components';
-import FieldsLayout from '../src/components/form/FieldsLayout.vue';
+import FieldsLayout from '../src/components/form/ui/FieldsLayout.vue';
 
 import { MockInjections, mockSFC, unmockSFC } from "sharp-test-utils";
 

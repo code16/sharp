@@ -4,7 +4,7 @@ import TemplateRenderer from '../components/TemplateRenderer';
 
 
 describe('template-renderer',()=>{
-    Vue.component('sharp-template', TemplateRenreder);
+    Vue.component('sharp-template', TemplateRenderer);
 
     beforeEach(()=>{
         document.body.innerHTML = `

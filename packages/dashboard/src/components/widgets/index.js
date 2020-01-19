@@ -11,9 +11,3 @@ export function widgetByType(type) {
         return SharpWidgetOrderedList;
     }
 }
-
-export {
-    SharpWidgetChart,
-    SharpWidgetPanel,
-    SharpWidgetOrderedList,
-};

@@ -1,4 +1,4 @@
-import filters from './filters';
+import { filters } from 'sharp/store';
 
 export default {
     namespaced: true,
