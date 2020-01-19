@@ -1,0 +1,191 @@
+@import '../mixins/button';
+
+
+.SharpButton {
+  font-family: inherit;
+
+  overflow: hidden;
+
+  &__collapse-transition {
+    transition: width 100ms $bx--standard-easing;
+  }
+
+  &::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+  }
+  &__icon {
+    position: relative;
+    vertical-align: middle;
+    top: -1px;
+
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+      top: 0;
+    }
+
+    width: rem(16px);
+    height: rem(16px);
+    margin-left: .5rem;
+    //transition-duration: $transition--base;
+    //transition-timing-function: ease-in;
+  }
+
+  @include reset;
+  @include font-smoothing;
+  //@include letter-spacing;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: $button-font-size;
+  font-weight: $button-font-weight;
+  height: rem($button-height);
+  padding: $button-padding;
+  border-radius: $button-border-radius;
+  text-align: center;
+  text-decoration: none;
+  //transition-duration: $transition--base;
+  //transition-timing-function: ease-in;
+  white-space: nowrap;
+  line-height: 16px;
+
+  // Sharp specific
+  text-transform: uppercase;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: .5;
+  }
+
+
+  &--primary {
+    @include button-theme(
+      $brand-01,   // bg-color
+      transparent, // border-color
+      $inverse-01, // font-color
+      $brand-02,   // hover-bg-color
+      $ui-01       // icon-color
+    );
+  }
+
+  &--accent {
+    @include button-theme(
+      $brand-03,   // bg-color
+      transparent, // border-color
+      $inverse-01, // font-color
+      lighten($brand-03, 10%),   // hover-bg-color
+      $ui-01       // icon-color
+    );
+  }
+
+  &--secondary {
+    @include button-theme(
+      $ui-01, // bg-color
+      $brand-01,   // border-color
+      $brand-01,   // font-color
+      $brand-01,   // hover-bg-color
+      $brand-01 // icon-color
+    );
+
+    &:hover,
+    &:focus {
+      color: $inverse-01;
+    }
+
+    &:hover > svg,
+    &:focus > svg {
+      fill: $inverse-01;
+    }
+
+    &:hover:disabled,
+    &:focus:disabled {
+      color: $brand-01;
+    }
+  }
+
+  &--secondary-accent {
+    @include button-theme(
+      $ui-01,   // bg-color
+      $brand-01, // border-color
+      $brand-03, // font-color
+      darken($ui-01, 10%),   // hover-bg-color
+      $brand-03       // icon-color
+    );
+  }
+
+  &--ghost {
+    @include button-theme(
+                    transparent, // bg-color
+                    transparent,   // border-color
+                    $brand-01,   // font-color
+                    $ui-01,   // hover-bg-color
+                    $brand-01 // icon-color
+    );
+    box-shadow: 0 3px 0 $ui-03;
+
+    //&:hover,
+    //&:focus {
+    //  color: $inverse-01;
+    //
+    //  svg {
+    //    fill: $inverse-01;
+    //  }
+    //}
+
+    svg {
+      margin-left: .275rem;
+    }
+
+    &:hover:disabled,
+    &:focus:disabled {
+      color: $brand-01;
+
+      svg {
+        fill: $brand-01;
+      }
+    }
+  }
+
+  &--danger {
+    @include button-theme(
+      $ui-01,  // bg-color
+      $support-01, // border-color
+      $support-01,  // font-color
+      $support-01,  // hover-bg-color
+      $brand-01       // icon-color
+    );
+
+    &:hover {
+      color: $inverse-01;
+      border: $button-border-width solid transparent;
+    }
+
+    &:focus {
+      color: $inverse-01;
+    }
+
+    &:hover:disabled,
+    &:focus:disabled {
+      color: $ui-05;
+      border: $button-border-width solid currentColor;
+    }
+
+    &:hover > svg,
+    &:focus > svg {
+      fill: $inverse-01;
+    }
+  }
+
+  &--sm {
+    height: 1.6rem;
+    font-size: .75rem;
+    padding: $button-padding-sm;
+    letter-spacing: 0;
+  }
+
+  &--secondary + &--primary {
+    margin-left: 1rem;
+  }
+
+}

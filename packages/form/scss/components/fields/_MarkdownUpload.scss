@@ -1,0 +1,25 @@
+.SharpMarkdownUpload {
+  width: 100%;
+  display:inline-block;
+  padding:0;
+
+  white-space: normal !important;
+
+  .SharpUpload__inner {
+    border: 1px solid $ui-03 !important;
+  }
+
+  //&, .SharpUpload__inner, .SharpUpload__content {
+  //  height: 7rem;
+  //}
+  //
+  //.SharpUpload__container {
+  //  height: 5rem
+  //}
+  //
+  //.SharpUpload__thumbnail {
+  //  img {
+  //    max-height: 5rem
+  //  }
+  //}
+}

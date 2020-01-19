@@ -1,5 +1,5 @@
 <template>
-    <SharpEntityList
+    <EntityList
         class="ShowEntityListField"
         :entity-key="entityListKey"
         :module="storeModule"
@@ -16,30 +16,29 @@
         </template>
         <template slot="append-head" slot-scope="{ props: { commands }, listeners }">
             <template v-if="hasCommands(commands)">
-                <SharpCommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
+                <CommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
                     :commands="commands"
                     @select="listeners['command']"
                 >
                     <div slot="text">{{ l('entity_list.commands.entity.label') }}</div>
-                </SharpCommandsDropdown>
+                </CommandsDropdown>
             </template>
         </template>
-    </SharpEntityList>
+    </EntityList>
 </template>
 
 <script>
-    import EntityListModule from '../../../../store/modules/entity-list';
-    import SharpEntityList from "../../../list/EntityList";
-    import ActionBar from "./ActionBar";
-    import SharpCommandsDropdown from "../../../commands/CommandsDropdown";
-    import { getFiltersQueryParams } from "../../../../util/filters";
-    import { Localization } from "../../../../mixins";
+    import { EntityList, CommandsDropdown } from 'sharp/components';
+    import { Localization } from "sharp/mixins";
+    import { entityList as entityListModule } from 'sharp/store';
+    
+    import ActionBar from "./ActionBar"; 
 
     export default {
         mixins: [Localization],
         components: {
-            SharpEntityList,
-            SharpCommandsDropdown,
+            EntityList,
+            CommandsDropdown,
             ActionBar,
         },
         props: {
@@ -55,15 +54,21 @@
             storeModule() {
                 return `show/entity-lists/${this.entityListKey}`;
             },
+            getFiltersQueryParams() {
+                return this.storeGetter('filters/getQueryParams');
+            },
         },
         methods: {
             hasCommands(commands) {
                 return commands && commands.some(group => group && group.length > 0);
             },
+            storeGetter(name) {
+                return this.$store.getters[`${this.storeModule}/${name}`];
+            },
         },
         created() {
-            this.$store.registerModule(this.storeModule.split('/'), EntityListModule);
-            this.$store.dispatch(`${this.storeModule}/setQuery`, getFiltersQueryParams(this.hiddenFilters));
+            this.$store.registerModule(this.storeModule.split('/'), entityListModule);
+            this.$store.dispatch(`${this.storeModule}/setQuery`, this.getFiltersQueryParams(this.hiddenFilters));
         },
     }
 </script>

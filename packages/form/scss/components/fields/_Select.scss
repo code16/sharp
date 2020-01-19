@@ -1,0 +1,53 @@
+.SharpSelect {
+
+  &--list {
+    background: $ui-03;
+    padding: 1rem;
+    overflow: hidden;
+  }
+
+  &__clear-button {
+    @extend %select-close-button;
+
+    &-icon {
+      @extend %select-close-icon;
+      position: initial;
+    }
+  }
+
+  .SharpSelect__clear-button ~ .multiselect__tags {
+    padding-right: 2rem;
+  }
+
+  &__group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: -$checkbox-inline-margin-bottom;
+    &--block {
+      display: block;
+      margin-bottom: 0;
+    }
+  }
+
+  &__item {
+    margin-bottom: .3rem;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    &--inline {
+      margin-right: 1rem;
+      margin-bottom: $checkbox-inline-margin-bottom;
+      &:last-child {
+        margin-right: 0;
+        margin-bottom: $checkbox-inline-margin-bottom;
+      }
+    }
+  }
+
+  &--multiple {
+    .multiselect__tags {
+      padding-bottom: rem(9px) - .1875rem;
+    }
+  }
+}

@@ -1,0 +1,44 @@
+.SharpWidget {
+  &--link {
+    &.SharpCard {
+      &:hover {
+        @include focus-outline('layer');
+      }
+    }
+  }
+
+  &.SharpWidget--chart {
+    &.SharpCard {
+      display: block;
+      .SharpCard__overview {
+        display:block;
+        .SharpCard__overview-about {
+          display:block;
+        }
+      }
+    }
+  }
+
+  &.SharpCard {
+    height: 100%;
+
+    .SharpWidget__link {
+      color: $color__blue-90;
+      text-decoration: none;
+
+      &:focus {
+        @include focus-outline('border');
+      }
+    }
+
+    .SharpCard__overview {
+      height: 100%;
+      padding: 1rem;
+
+      .SharpCard__overview-about {
+        padding: 0;
+        justify-content: center;
+      }
+    }
+  }
+}

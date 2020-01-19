@@ -20,7 +20,7 @@
 </template>
 
 <script>
-    import { Localization } from '../../../mixins';
+    import { Localization } from 'sharp/mixins';
     import clip from 'text-clipper';
 
     function stripTags(html) {

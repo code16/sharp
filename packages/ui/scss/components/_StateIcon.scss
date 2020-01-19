@@ -1,0 +1,16 @@
+.StateIcon {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+
+  @mixin color($color) {
+    background: $color;
+  }
+
+  &.sharp_primary { @include color($brand-02) }
+  &.sharp_secondary { @include color($brand-03) }
+  &.sharp_gray { @include color($color__navy-gray-7) }
+  &.sharp_lightgray { @include color($color__navy-gray-9) }
+  &.sharp_darkgray { @include color($color__navy-gray-4) }
+}

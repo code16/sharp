@@ -1,25 +1,31 @@
 import './polyfill';
 import Vue from 'vue';
 import Vuex from 'vuex';
+import VueRouter from 'vue-router';
 import { install as VueGoogleMaps } from 'vue2-google-maps';
 
-import SharpActionView from './components/ActionView';
-import SharpFieldDisplay from './components/form/field-display/FieldDisplay';
+import SharpCommands from 'sharp-commands';
+import SharpDashboard from 'sharp-dashboard';
+import SharpEntityList from 'sharp-entity-list';
+import SharpFilters from 'sharp-filters';
+import SharpForm from 'sharp-form';
+import SharpShow from 'sharp-show';
+import SharpUI from 'sharp-ui';
 
-import SharpCollapsibleItem from './components/menu/CollapsibleItem';
-import SharpNavItem from './components/menu/NavItem';
-import SharpLeftNav from './components/menu/LeftNav';
+import ActionView from './components/ActionView';
 
-import SharpItemVisual from './components/ui/ItemVisual';
+import CollapsibleItem from './components/menu/CollapsibleItem';
+import NavItem from './components/menu/NavItem';
+import LeftNav from './components/menu/LeftNav';
+
+import ItemVisual from './components/ui/ItemVisual';
 import Loading from './components/ui/Loading';
 
-import { router } from "./router";
+import { router as getRouter } from "./router";
 
 import axios from 'axios';
 import cookies from 'axios/lib/helpers/cookies';
 import Notifications from 'vue-notification';
-
-import store from './store';
 
 import locale from 'element-ui/lib/locale';
 import { elLang } from './util/element-ui';
@@ -31,10 +37,23 @@ Vue.use(VueGoogleMaps, {
     installComponents: false
 });
 
+Vue.use(VueRouter);
+Vue.use(Vuex);
+
+const store = new Vuex.Store();
+const router = getRouter();
+
+Vue.use(SharpCommands, { store, router });
+Vue.use(SharpDashboard, { store, router });
+Vue.use(SharpEntityList, { store, router });
+Vue.use(SharpFilters, { store, router });
+Vue.use(SharpForm, { store, router });
+Vue.use(SharpShow, { store, router });
+Vue.use(SharpUI, { store, router });
+
+
 Vue.config.ignoredElements = [/^trix-/];
 
-// prevent recursive components import
-Vue.component(SharpFieldDisplay.name, SharpFieldDisplay);
 const SharpLoading = Vue.extend(Loading);
 
 new Vue({
@@ -46,11 +65,11 @@ new Vue({
     },
 
     components: {
-        SharpActionView,
-        SharpCollapsibleItem,
-        SharpNavItem,
-        SharpLeftNav,
-        SharpItemVisual
+        'sharp-action-view': ActionView,
+        'sharp-left-nav': LeftNav,
+        'sharp-collapsible-item': CollapsibleItem,
+        'sharp-nav-item': NavItem,
+        'sharp-item-visual': ItemVisual
     },
 
     created() {
@@ -68,8 +87,8 @@ new Vue({
         }
     },
 
-    store: new Vuex.Store(store),
-    router: router(),
+    store,
+    router,
 });
 
 

@@ -1,0 +1,58 @@
+.SharpPagination {
+  @include reset;
+  width: 100%;
+  background-color: $ui-01;
+  padding: .5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid $ui-04;
+
+
+  .page-item {
+    width: rem(30px);
+    height: rem(30px);
+
+    .page-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      transition: $transition--base;
+      text-decoration:none;
+
+      outline: none;
+
+      @include font-size('18');
+
+      &[aria-posinset] {
+        @include font-size('14');
+        font-weight: 700;
+      }
+
+      &:hover {
+        cursor: pointer;
+        background-color: $ui-02;
+      }
+    }
+
+    &.active {
+      .page-link {
+        background-color: $brand-01;
+        color: $ui-01;
+      }
+    }
+
+    &.disabled {
+      .page-link {
+        cursor: not-allowed !important;
+        opacity: .5;
+      }
+      .page-link:hover {
+        background: transparent;
+        color: $text-01;
+      }
+    }
+  }
+}

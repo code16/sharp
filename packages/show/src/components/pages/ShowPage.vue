@@ -2,7 +2,7 @@
     <div class="ShowPage">
         <div class="container">
             <template v-if="ready">
-                <SharpActionBarShow
+                <ActionBarShow
                     :commands="authorizedCommands"
                     :state="instanceState"
                     :state-values="stateValues"
@@ -20,57 +20,54 @@
                         <h2 class="ShowPage__section-title mb-2">{{ section.title }}</h2>
                     </template>
                     <div class="ShowPage__section mb-4" :class="sectionClasses(section)">
-                        <SharpGrid :rows="[section.columns]">
+                        <Grid :rows="[section.columns]">
                             <template slot-scope="fieldsLayout">
-                                <SharpGrid class="ShowPage__fields-grid" :rows="fieldsLayout.fields">
+                                <Grid class="ShowPage__fields-grid" :rows="fieldsLayout.fields">
                                     <template slot-scope="fieldLayout">
                                         <template v-if="fieldOptions(fieldLayout)">
-                                            <SharpShowField
+                                            <ShowField
                                                 :options="fieldOptions(fieldLayout)"
                                                 :value="fieldValue(fieldLayout)"
                                             />
                                         </template>
                                         <template v-else>
-                                            <SharpShowUnknownField :name="fieldLayout.key" />
+                                            <UnknownField :name="fieldLayout.key" />
                                         </template>
                                     </template>
-                                </SharpGrid>
+                                </Grid>
                             </template>
-                        </SharpGrid>
+                        </Grid>
                     </div>
                 </template>
 
             </template>
         </div>
 
-        <SharpCommandFormModal :form="commandCurrentForm" ref="commandForm" />
-        <SharpCommandViewPanel :content="commandViewContent" @close="handleCommandViewPanelClosed" />
+        <CommandFormModal :form="commandCurrentForm" ref="commandForm" />
+        <CommandViewPanel :content="commandViewContent" @close="handleCommandViewPanelClosed" />
     </div>
 </template>
 
 <script>
     import { mapState, mapGetters } from 'vuex';
-    import SharpActionBarShow from "../action-bar/ActionBarShow";
-    import SharpEntityList from '../list/EntityList';
-    import SharpGrid from "../Grid";
-    import SharpCommandFormModal from '../commands/CommandFormModal';
-    import SharpCommandViewPanel from '../commands/CommandViewPanel';
-    import SharpShowField from '../show/Field';
-    import SharpShowUnknownField from '../dev/UnknownField';
-    import { formUrl, getBackUrl } from "../../util/url";
-    import withCommands from '../../mixins/page/with-commands';
+    import { formUrl, getBackUrl } from 'sharp';
+    import { EntityList, Grid, CommandFormModal, CommandViewPanel, UnknownField } from 'sharp/components';
+    import { withCommands } from 'sharp/mixins';
+    import ActionBarShow from "../ActionBar";
+
+    import ShowField from '../Field';
 
     export default {
         mixins: [withCommands],
 
         components: {
-            SharpActionBarShow,
-            SharpEntityList,
-            SharpGrid,
-            SharpShowField,
-            SharpShowUnknownField,
-            SharpCommandFormModal,
-            SharpCommandViewPanel,
+            ActionBarShow,
+            EntityList,
+            Grid,
+            ShowField,
+            UnknownField,
+            CommandFormModal,
+            CommandViewPanel,
         },
 
         data() {

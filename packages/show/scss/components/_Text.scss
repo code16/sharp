@@ -1,0 +1,59 @@
+
+.ShowTextField {
+  &__label {
+    text-transform: uppercase;
+    font-variant: all-small-caps;
+    color: #7f7f7f;
+  }
+  &__content {
+    @mixin font-size($size) { font-size: $size }
+    @import "~bootstrap/scss/reboot";
+    @import "~bootstrap/scss/mixins/lists";
+    @import "~bootstrap/scss/type";
+    h1, h2, h3, h4, h5, h6 {
+      letter-spacing: normal;
+    }
+    h1 {
+      font-size: 2rem;
+    }
+    h2 {
+      font-size: 1.5rem;
+    }
+    h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+    h4 {
+      font-size: 1rem;
+      font-weight: bold;
+    }
+    h5 {
+      font-size: .875rem;
+      font-weight: bold;
+    }
+    img {
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 200px;
+      @include media-breakpoint-up(md) {
+        max-width: 75%;
+        max-height: 300px;
+      }
+    }
+    ol, ul {
+      margin-bottom: 1rem;
+      list-style: initial;
+      padding-left: 2rem;
+      p {
+        margin-bottom: 0;
+      }
+    }
+    :last-child {
+      margin-bottom: 0;
+    }
+  }
+  &__label + &__content {
+    display: inline;
+  }
+}

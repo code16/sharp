@@ -1,0 +1,50 @@
+.SharpMarkdown {
+  @extend .SharpModule;
+  position: relative;
+  z-index : z('markdown');
+  padding: 0;
+
+  .editor-toolbar {
+    @extend .SharpModule__header;
+    border: none;
+    border-radius: 0;
+  }
+
+  &__upload-line {
+    .CodeMirror-line {
+      & > span {
+        padding-right: 0 !important;
+      }
+    }
+  }
+
+  &__line--active {
+    z-index: 3;
+  }
+
+  &--read-only {
+    .CodeMirror {
+      opacity: 0.8;
+    }
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.8;
+  }
+
+  .CodeMirror {
+    @extend .SharpModule__content;
+    border: none;
+    border-radius: 0;
+    padding: 1rem !important;
+    line-height: 1.5;
+    @include font-size('14');
+  }
+
+  .CodeMirror, .CodeMirror-scroll {
+    min-height: 0!important;
+  }
+
+  .CodeMirror-code .cm-header {
+    line-height: inherit!important;
+  }
+}
