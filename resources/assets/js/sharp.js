@@ -2,6 +2,7 @@ import './polyfill';
 import Vue from 'vue';
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
+import Trix from 'trix';
 import { install as VueGoogleMaps } from 'vue2-google-maps';
 import Notifications from 'vue-notification';
 import locale from 'element-ui/lib/locale';

@@ -4,12 +4,11 @@ import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import SharpEntityList from '../src/components/EntityList.vue';
 import entityListModule from '../src/store/entity-list';
+import { formUrl, showUrl } from 'sharp';
 
 jest.mock('sharp/mixins/Localization');
 jest.mock('sharp/mixins/DynamicView');
-jest.mock('sharp/consts', () => ({
-    BASE_URL: 'BASE_URL'
-}));
+jest.mock('sharp');
 jest.mock('../src/store/entity-list');
 
 
@@ -19,10 +18,10 @@ describe('EntityList', () => {
         localVue.use(Vuex);
         const wrapper = shallowMount(SharpEntityList, {
             stubs: {
-                'SharpDataList': `<div class="MOCKED_SharpDataList"> <slot name="item" :item="{}" /> </div>`,
-                'SharpDataListRow': `<div class="MOCKED_SharpDataListRow" :url="url"> <slot name="append" /> </div>`,
-                'SharpDropdown':`<div class="MOCKED_SharpDropdown"> <slot name="text"/> <slot /> </div>`,
-                'SharpCommandsDropdown': `<div class="MOCKED_SharpCommandsDropdown"> <slot name="text" /> <slot /> </div>`
+                'DataList': `<div class="MOCKED_SharpDataList"> <slot name="item" :item="{}" /> </div>`,
+                'DataListRow': `<div class="MOCKED_SharpDataListRow" :url="url"> <slot name="append" /> </div>`,
+                'Dropdown':`<div class="MOCKED_SharpDropdown"> <slot name="text"/> <slot /> </div>`,
+                'CommandsDropdown': `<div class="MOCKED_SharpCommandsDropdown"> <slot name="text" /> <slot /> </div>`
             },
             propsData: {
                 entityKey: 'spaceship',
@@ -738,9 +737,15 @@ describe('EntityList', () => {
                     entityKey: 'entityKey'
                 }
             });
-            expect(wrapper.vm.formUrl()).toEqual('/BASE_URL/form/entityKey?x-access-from=ui');
-            expect(wrapper.vm.formUrl({ instanceId:'instanceId' })).toEqual('/BASE_URL/form/entityKey/instanceId?x-access-from=ui');
-            expect(wrapper.vm.formUrl({ formKey:'formKey', instanceId:'instanceId' })).toEqual('/BASE_URL/form/entityKey:formKey/instanceId?x-access-from=ui');
+
+            formUrl.mockClear();
+            wrapper.vm.formUrl({ instanceId:'instanceId' });
+            expect(formUrl).toHaveBeenCalledWith({ entityKey:'entityKey', instanceId:'instanceId' });
+
+            
+            formUrl.mockClear();
+            wrapper.vm.formUrl({ instanceId:'instanceId', formKey:'formKey' });
+            expect(formUrl).toHaveBeenCalledWith({ entityKey:'entityKey:formKey', instanceId:'instanceId' });
         });
 
         test('showUrl', () => {
@@ -749,8 +754,9 @@ describe('EntityList', () => {
                     entityKey: 'entityKey'
                 }
             });
-            expect(wrapper.vm.showUrl()).toEqual('/BASE_URL/show/entityKey?x-access-from=ui');
-            expect(wrapper.vm.showUrl({ instanceId:'instanceId' })).toEqual('/BASE_URL/show/entityKey/instanceId?x-access-from=ui');
+            showUrl.mockClear();
+            wrapper.vm.showUrl({ instanceId:'instanceId' })
+            expect(showUrl).toHaveBeenCalledWith({ entityKey:'entityKey', instanceId:'instanceId' });
         });
 
         test('handleCommandRequested', ()=>{

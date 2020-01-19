@@ -19,7 +19,6 @@
 
 <script>
     import Vue from 'vue';
-    import Trix from 'trix';
 
     import TrixCustomToolbar from './TrixCustomToolbar.vue';
 
