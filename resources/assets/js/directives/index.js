@@ -1,2 +1,2 @@
-export { default as emptyClass } from './EmptyClass';
-export { default as maxlength } from './Maxlength';
+export { default as emptyClass } from './emptyClass';
+export { default as maxlength } from './maxlength';

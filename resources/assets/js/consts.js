@@ -1,4 +1,4 @@
-import { getBaseUrl } from "./util";
+import { getBaseUrl } from "./util/url";
 
 export let BASE_URL = getBaseUrl();
 export let API_PATH = `${BASE_URL}/api`;

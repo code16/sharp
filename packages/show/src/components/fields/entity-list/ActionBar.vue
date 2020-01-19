@@ -7,7 +7,7 @@
                         <template v-for="filter in filters">
                             <div class="col-auto action-bar__col mb-2">
                                 <div class="action-bar__element">
-                                    <SharpFilter
+                                    <Filter
                                         class="h-100"
                                         :filter="filter"
                                         :value="filtersValues[filter.key]"
@@ -20,7 +20,7 @@
                         <template v-if="canSearch">
                             <div class="col-auto action-bar__col mb-2">
                                 <div class="action-bar__element">
-                                    <SharpSearch
+                                    <Search
                                         class="h-100"
                                         :value="search"
                                         :active.sync="searchActive"
@@ -63,11 +63,11 @@
                         <div class="col-auto action-bar__col mb-2">
                             <div class="action-bar__element">
                                 <template v-if="hasForms">
-                                    <SharpDropdown class="SharpActionBar__forms-dropdown h-100" :text="l('action_bar.list.forms_dropdown')">
-                                        <SharpDropdownItem v-for="(form,key) in forms" @click="handleCreateFormSelected(form)" :key="key" >
-                                            <SharpItemVisual :item="form" icon-class="fa-fw"/>{{ form.label }}
-                                        </SharpDropdownItem>
-                                    </SharpDropdown>
+                                    <Dropdown class="SharpActionBar__forms-dropdown h-100" :text="l('action_bar.list.forms_dropdown')">
+                                        <DropdownItem v-for="(form,key) in forms" @click="handleCreateFormSelected(form)" :key="key" >
+                                            <ItemVisual :item="form" icon-class="fa-fw"/>{{ form.label }}
+                                        </DropdownItem>
+                                    </Dropdown>
                                 </template>
                                 <template v-else>
                                     <button class="SharpButton SharpButton--accent" @click="handleCreateButtonClicked">
@@ -84,21 +84,17 @@
 </template>
 
 <script>
-    import { Localization } from '../../../../mixins';
-    import SharpSearch from '../../../ui/Search';
-    import SharpItemVisual from '../../../ui/ItemVisual';
-    import SharpDropdown from '../../../dropdown/Dropdown';
-    import SharpDropdownItem from '../../../dropdown/DropdownItem';
-    import SharpFilter from '../../../list/Filter';
+    import { Search, ItemVisual, Dropdown, DropdownItem, Filter } from 'sharp/components';
+
 
     export default {
         mixins: [Localization],
         components: {
-            SharpItemVisual,
-            SharpSearch,
-            SharpDropdown,
-            SharpDropdownItem,
-            SharpFilter,
+            ItemVisual,
+            Search,
+            Dropdown,
+            DropdownItem,
+            Filter,
         },
         props: {
             search: String,

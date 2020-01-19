@@ -54,10 +54,10 @@
 </template>
 
 <script>
+    import debounce from 'lodash/debounce';
     import { BTabs, BCollapse } from 'bootstrap-vue';
-    import DropdownArrow from './dropdown/Arrow.vue';
-    import { debounce } from "../mixins/Debounce";
-    import { Responsive } from '../mixins';
+    import { DropdownArrow } from 'sharp/components';
+    import { Responsive } from "sharp/mixins";
 
     export default {
         name: 'SharpBTabs',

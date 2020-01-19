@@ -1,8 +1,8 @@
 <script>
     import Multiselect from 'vue-multiselect';
-    import DropdownArrow from './dropdown/Arrow';
+    import { DropdownArrow } from './index';
 
-    import { lang } from '../mixins/Localization';
+    import { lang } from '../util/i18n';
 
 
     export default {

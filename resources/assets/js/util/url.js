@@ -30,20 +30,7 @@ export function getListBackUrl(breadcrumb) {
     return normalize(listItem.url);
 }
 
-export function formUrl({ entityKey, instanceId }) {
-    return normalize(routeUrl({
-        name: 'form', params: { entityKey, instanceId },
-    }));
-}
-
-export function listUrl(entityKey) {
-    return normalize(routeUrl({
-        name: 'entity-list', params: { id: entityKey },
-    }));
-}
-
-export function showUrl({ entityKey, instanceId }) {
-    return normalize(routeUrl({
-        name: 'show', params: { entityKey, instanceId }
-    }));
+export function getBaseUrl() {
+    const meta = document.head.querySelector('meta[name=base-url]');
+    return meta ? `/${meta.content}` : '/sharp';
 }

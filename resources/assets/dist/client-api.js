@@ -1,1 +1,31 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[2],{"1Zub":function(n,o,u){"use strict";u.r(o);var w=u("XuX8"),i=u.n(w);window.Vue=i.a},2:function(n,o,u){n.exports=u("1Zub")}},[[2,0,1]]]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["/client-api"],{
+
+/***/ "./resources/assets/js/client-api.js":
+/*!*******************************************!*\
+  !*** ./resources/assets/js/client-api.js ***!
+  \*******************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+
+window.Vue = vue__WEBPACK_IMPORTED_MODULE_0___default.a;
+
+/***/ }),
+
+/***/ 2:
+/*!*************************************************!*\
+  !*** multi ./resources/assets/js/client-api.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! C:\Users\Antoine\code\sharp\resources\assets\js\client-api.js */"./resources/assets/js/client-api.js");
+
+
+/***/ })
+
+},[[2,"/manifest","/vendor"]]]);

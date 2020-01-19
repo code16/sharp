@@ -28,7 +28,7 @@
                 {{ label('submit_button',opType) }}
             </button>
         </template>
-    </Act>
+    </ActionBar>
 </template>
 
 <script>

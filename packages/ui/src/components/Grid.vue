@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import emptyClass from '../directives/EmptyClass';
+    import { emptyClass } from 'sharp/directives';
 
     export default {
         name: 'SharpGrid',

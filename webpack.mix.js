@@ -42,7 +42,9 @@ mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
         resolve: {
             alias: {
                 // resolve core-js@2.0 polyfills (now 3.0)
-                'core-js/fn': 'core-js/features'
+                'core-js/fn': 'core-js/features',
+                'sharp/scss': path.resolve(__dirname, 'resources/assets/sass'),
+                'sharp': path.resolve(__dirname, 'resources/assets/js'),
             }
         }
     });

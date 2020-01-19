@@ -3,6 +3,13 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import { install as VueGoogleMaps } from 'vue2-google-maps';
+import Notifications from 'vue-notification';
+import locale from 'element-ui/lib/locale';
+import { elLang } from './util/element-ui';
+
+import axios from 'axios';
+import cookies from 'axios/lib/helpers/cookies';
+
 
 import SharpCommands from 'sharp-commands';
 import SharpDashboard from 'sharp-dashboard';
@@ -12,23 +19,16 @@ import SharpForm from 'sharp-form';
 import SharpShow from 'sharp-show';
 import SharpUI from 'sharp-ui';
 
-import ActionView from './components/ActionView';
-
-import CollapsibleItem from './components/menu/CollapsibleItem';
-import NavItem from './components/menu/NavItem';
-import LeftNav from './components/menu/LeftNav';
-
-import ItemVisual from './components/ui/ItemVisual';
-import Loading from './components/ui/Loading';
+import {
+    ActionView,
+    CollapsibleItem,
+    NavItem,
+    LeftNav,
+    ItemVisual,
+    Loading,
+} from './components';
 
 import { router as getRouter } from "./router";
-
-import axios from 'axios';
-import cookies from 'axios/lib/helpers/cookies';
-import Notifications from 'vue-notification';
-
-import locale from 'element-ui/lib/locale';
-import { elLang } from './util/element-ui';
 
 locale.use(elLang());
 

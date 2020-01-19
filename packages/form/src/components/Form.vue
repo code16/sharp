@@ -60,8 +60,8 @@
     import { ActionEvents, ReadOnlyFields, Localization, DynamicView } from 'sharp/mixins';
     
     import FieldsLayout from './ui/FieldsLayout';
-    import LocaleSelect from './LocaleSelect';
-    import localize from '../mixins/localize';
+    import LocaleSelect from './ui/LocaleSelect';
+    import localize from '../mixins/localize/form';
 
     import { getDependantFieldsResetData, transformFields } from "../util";
     

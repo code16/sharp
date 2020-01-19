@@ -29,7 +29,7 @@
 </template>
 
 <script>
-    import Localization from '../mixins/Localization';
+    import { Localization } from 'sharp/mixins';
     import { BModal } from 'bootstrap-vue';
 
     export default {

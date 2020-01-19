@@ -1,4 +1,4 @@
-import { transformAttributes } from "../../components/form/dynamic-attributes";
+import { transformAttributes } from "./dynamic-attributes";
 
 
 function serializeValue(fieldType, value) {

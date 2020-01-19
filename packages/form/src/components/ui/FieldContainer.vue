@@ -33,7 +33,7 @@
 <script>
     import { logError } from 'sharp';
     import { ErrorNode, ConfigNode }  from 'sharp/mixins';
-    import Field from './Field';
+    import Field from '../Field';
     import FieldLocaleSelect from './FieldLocaleSelect';
     import { resolveTextValue, isLocalizableValueField } from '../../util/locale';
 

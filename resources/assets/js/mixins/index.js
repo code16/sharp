@@ -9,5 +9,5 @@ export { default as AutoScroll } from './AutoScroll';
 export { default as Responsive } from './Responsive';
 export { default as ConfigNode } from './ConfigNode';
 export { default as Debounce } from './Debounce';
-export { default as DynamicView } from '../components/DynamicViewMixin';
+export { default as DynamicView, withAxiosInterceptors } from './DynamicView';
 export { default as withCommands } from './page/with-commands';

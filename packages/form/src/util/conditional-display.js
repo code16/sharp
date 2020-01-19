@@ -1,4 +1,4 @@
-import * as util from '../../../util';
+import { logError } from 'sharp';
 
 const helpers = {
     computeSelectCondition({ condValues, fieldValue, isSingleSelect }) {
@@ -25,13 +25,13 @@ export function computeCondition(fields, data, condition) {
     let { operator } = condition;
 
     if(operator !== 'or' && operator !== 'and') {
-        util.error(`Conditional display : unknown operator '${operator}'`, condition);
+        logError(`Conditional display : unknown operator '${operator}'`, condition);
         return true;
     }
 
     for(let condField of condition.fields) {
         if(!(condField.key in fields)) {
-            util.error(`Conditional display : can't find a field with key '${condition.key}' in 'fields'`, condition);
+            logError(`Conditional display : can't find a field with key '${condition.key}' in 'fields'`, condition);
             res = true;
         }
 
@@ -48,13 +48,13 @@ export function computeCondition(fields, data, condition) {
         }
         else if(field.type === 'check') {
             if(typeof condField.values !== "boolean") {
-                util.error(`Conditional display : 'values' must be a boolean for a 'check' field ('${condField.key}')`,condition,field);
+                logError(`Conditional display : 'values' must be a boolean for a 'check' field ('${condField.key}')`,condition,field);
                 res = true;
             }
             else res = (!!value === condField.values);
         }
         else {
-            util.error(`Conditional display : unprocessable field type '${field.type}'`, field);
+            logError(`Conditional display : unprocessable field type '${field.type}'`, field);
             res = true;
         }
 
