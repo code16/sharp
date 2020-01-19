@@ -13,14 +13,15 @@ export function parseQuery(query) {
     return qs.parse(query, { ignoreQueryPrefix: true, strictNullHandling: true });
 }
 
-export function router() {
-    return currentRouter || (
-        currentRouter = new VueRouter({
+export function router(fresh) {
+    if(!currentRouter || fresh) {
+        return currentRouter = new VueRouter({
             mode: 'history',
             routes,
             base: `${BASE_URL}/`,
             parseQuery,
             stringifyQuery,
         })
-    );
+    }
+    return currentRouter;
 }
