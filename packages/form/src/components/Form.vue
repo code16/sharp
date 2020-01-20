@@ -56,7 +56,7 @@
         logError,
     } from "sharp";
 
-    import { TabbedLayout, Grid, Dropdown, DropdownItem, } from 'sharp/components';
+    import { TabbedLayout, Grid, Dropdown, DropdownItem, } from 'sharp-ui';
     import { ActionEvents, ReadOnlyFields, Localization, DynamicView } from 'sharp/mixins';
     
     import FieldsLayout from './ui/FieldsLayout';

@@ -51,7 +51,9 @@
 <script>
     import { mapState, mapGetters } from 'vuex';
     import { formUrl, getBackUrl } from 'sharp';
-    import { EntityList, Grid, CommandFormModal, CommandViewPanel, UnknownField } from 'sharp/components';
+    import { CommandFormModal, CommandViewPanel } from 'sharp-commands';
+    import { Grid } from 'sharp-ui';
+    import { UnknownField } from 'sharp/components';
     import { withCommands } from 'sharp/mixins';
     import ActionBarShow from "../ActionBar";
 
@@ -62,7 +64,6 @@
 
         components: {
             ActionBarShow,
-            EntityList,
             Grid,
             ShowField,
             UnknownField,

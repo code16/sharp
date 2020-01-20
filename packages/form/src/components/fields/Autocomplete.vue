@@ -76,19 +76,22 @@
     import debounce from 'lodash/debounce';
     import Multiselect from 'vue-multiselect';
     import { warn, logError, lang, search } from 'sharp';
-    import { TemplateRenderer, Loading } from 'sharp/components';
+    import { TemplateRenderer } from 'sharp/components';
+    import { Loading } from 'sharp-ui';
     import { Localization, Debounce } from 'sharp/mixins';
 
     import { getAutocompleteSuggestions } from "../../api";
     import localize from '../../mixins/localize/Autocomplete';
     import { setDefaultValue } from "../../util";
 
+    console.log(Loading);
+
     export default {
         name:'SharpAutocomplete',
         components: {
             Multiselect,
             TemplateRenderer,
-            Loading
+            Loading,
         },
 
         mixins: [Localization, Debounce, localize],

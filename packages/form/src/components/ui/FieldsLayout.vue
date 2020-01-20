@@ -9,11 +9,11 @@
                         <legend class="SharpModule__title">{{fieldLayout.legend}}</legend>
                     </div>
                     <div class="SharpModule__content">
-                        <sharp-fields-layout :layout="fieldLayout.fields">
+                        <FieldsLayout :layout="fieldLayout.fields">
                             <template slot-scope="fieldset">
                                 <slot v-bind="fieldset"></slot>
                             </template>
-                        </sharp-fields-layout>
+                        </FieldsLayout>
                     </div>
                 </div>
             </fieldset>
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-    import { Grid } from 'sharp/components';
+    import { Grid } from 'sharp-ui';
 
     export default {
         name:'SharpFieldsLayout',

@@ -87,12 +87,15 @@
         DataList, 
         DataListRow, 
         StateIcon,
+        Dropdown,
+        DropdownItem,
+    } from 'sharp-ui';
+
+    import { 
         CommandsDropdown,
         CommandFormModal,
         CommandViewPanel,
-        Dropdown,
-        DropdownItem
-    } from 'sharp/components';
+    } from 'sharp-commands';
 
     import { Localization, DynamicView, withCommands } from 'sharp/mixins';
     

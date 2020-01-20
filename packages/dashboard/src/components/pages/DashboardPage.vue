@@ -5,7 +5,7 @@
                 <ActionBarDashboard :commands="commands" @command="handleCommandRequested" />
                 <Grid :rows="layout.rows">
                     <template slot-scope="widgetLayout">
-                        <SharpWidget
+                        <Widget
                             :widget-type="widgets[widgetLayout.key].type"
                             :widget-props="widgets[widgetLayout.key]"
                             :value="data[widgetLayout.key]"
@@ -22,7 +22,8 @@
 
 <script>
     import { mapState, mapGetters } from 'vuex';
-    import { Grid, CommandFormModal, CommandViewPanel } from 'sharp/components';
+    import { Grid } from 'sharp-ui';
+    import { CommandFormModal, CommandViewPanel } from 'sharp-commands';
     import { withAxiosInterceptors, withCommands } from "sharp/mixins";
     import Widget from '../Widget';
     import ActionBarDashboard from '../ActionBar';

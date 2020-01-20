@@ -54,11 +54,14 @@
 <script>
     import { 
         ActionBar, 
-        CommandsDropdown, 
         Dropdown, 
         DropdownItem, 
         StateIcon, 
-    } from 'sharp/components';
+    } from 'sharp-ui';
+
+    import {
+        CommandsDropdown
+    } from 'sharp-commands';
 
     import { Localization } from "sharp/mixins";
 

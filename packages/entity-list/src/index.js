@@ -9,3 +9,5 @@ export default function(Vue, { router, store }) {
 export {
     listUrl,
 }
+
+export * from './components';

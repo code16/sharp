@@ -10,3 +10,5 @@ export default function (Vue, { router, store }) {
 export {
     formUrl,
 }
+
+export * from './components';

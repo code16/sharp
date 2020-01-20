@@ -33,7 +33,7 @@
 
 <script>
     import { lang } from 'sharp';
-    import { ActionBar, Collapse } from 'sharp/components';
+    import { ActionBar, Collapse } from 'sharp-ui';
     import { ActionEvents } from 'sharp/mixins';
     
 

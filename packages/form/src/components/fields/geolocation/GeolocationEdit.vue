@@ -5,18 +5,18 @@
                 <form @submit.prevent="handleSearchSubmitted">
                     <div class="row no-gutters">
                         <div class="col position-relative">
-                            <SharpText
+                            <Text
                                 class="SharpGeolocationEdit__input"
                                 :value="search"
                                 :placeholder="lSub('geocode_input.placeholder')"
                                 @input="handleSearchInput"
                             />
                             <template v-if="loading">
-                                <SharpLoading class="SharpGeolocationEdit__loading" visible small inline />
+                                <Loading class="SharpGeolocationEdit__loading" visible small inline />
                             </template>
                         </div>
                         <div class="col-auto pl-2">
-                            <SharpButton outline>{{ lSub('search_button') }}</SharpButton>
+                            <Button outline>{{ lSub('search_button') }}</Button>
                         </div>
                     </div>
                 </form>
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-    import { Loading, Button, Modal } from 'sharp';
+    import { Loading, Button, Modal } from 'sharp-ui';
     import { LocalizationBase } from 'sharp/mixins';
     import Text from '../Text';
     import { getEditableMapByProvider, geocode } from "./maps";

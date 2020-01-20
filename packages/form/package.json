@@ -2,5 +2,8 @@
     "name": "sharp-form",
     "private": true,
     "version": "1.0.0",
-    "main": "src/index.js"
+    "main": "src/index.js",
+    "dependencies": {
+        "sharp-ui": "file:../ui"
+    }
 }

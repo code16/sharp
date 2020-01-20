@@ -82,7 +82,7 @@
     import VueClip from 'vue-clip/src/components/Clip';
     import VueCropper from 'vue-cropperjs';
 
-    import { Modal } from 'sharp/components';
+    import { Modal } from 'sharp-ui';
     import { Localization } from 'sharp/mixins';
 
     import { VueClipModifiers } from './modifiers';

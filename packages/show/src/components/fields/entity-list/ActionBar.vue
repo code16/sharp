@@ -7,7 +7,7 @@
                         <template v-for="filter in filters">
                             <div class="col-auto action-bar__col mb-2">
                                 <div class="action-bar__element">
-                                    <Filter
+                                    <FilterDropdown
                                         class="h-100"
                                         :filter="filter"
                                         :value="filtersValues[filter.key]"
@@ -85,8 +85,8 @@
 
 <script>
     import { Localization } from 'sharp/mixins';
-    import { Search, ItemVisual, Dropdown, DropdownItem, Filter } from 'sharp/components';
-
+    import { Search, ItemVisual, Dropdown, DropdownItem } from 'sharp-ui';
+    import { FilterDropdown } from 'sharp-filters';
 
     export default {
         mixins: [Localization],
@@ -95,7 +95,7 @@
             Search,
             Dropdown,
             DropdownItem,
-            Filter,
+            FilterDropdown,
         },
         props: {
             search: String,

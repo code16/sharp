@@ -19,7 +19,7 @@
     ],
     "moduleNameMapper": {
       "^vue$": "vue/dist/vue.common.js",
-      "^sharp((\/(.*))|$)": "<rootDir>/resources/assets/js$1",
+      "^sharp((/(.*))|$)": "<rootDir>/resources/assets/js$1",
       "^sharp-test-utils$": "<rootDir>/packages/test-utils",
       "\\.(css|less)$": "<rootDir>/packages/test-utils/src/setup/styleMock.js"
     },
@@ -60,6 +60,7 @@
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.4",
     "chart.js": "^2.8.0",
+    "circular-dependency-plugin": "^5.2.0",
     "core-js": "^3.0.0-beta.8",
     "cross-env": "3.1.3",
     "fuse.js": "^2.6.2",

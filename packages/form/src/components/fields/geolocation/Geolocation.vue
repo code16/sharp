@@ -72,7 +72,7 @@
 </template>
 
 <script>
-    import { Modal, Card, Button } from "sharp/components";
+    import { Modal, Card, Button } from "sharp-ui";
     import { Localization } from 'sharp/mixins';
 
     import { getMapByProvider, loadMapProvider } from "./maps";

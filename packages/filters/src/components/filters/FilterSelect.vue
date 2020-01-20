@@ -47,7 +47,7 @@
 </template>
 
 <script>
-    import { Autocomplete, Select, Dropdown } from 'sharp/components';
+    import { Autocomplete, Select } from 'sharp-form'
     import { Localization } from 'sharp/mixins';
     import FilterControl from '../FilterControl';
     
@@ -55,7 +55,6 @@
         name: 'SharpFilterSelect',
         mixins: [Localization],
         components: {
-            Dropdown,
             Select,
             Autocomplete,
             FilterControl,

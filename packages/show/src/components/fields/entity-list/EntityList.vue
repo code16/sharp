@@ -28,7 +28,8 @@
 </template>
 
 <script>
-    import { EntityList, CommandsDropdown } from 'sharp/components';
+    import { EntityList } from 'sharp-entity-list';
+    import { CommandsDropdown } from 'sharp-commands';
     import { Localization } from "sharp/mixins";
     import { entityList as entityListModule } from 'sharp/store';
     

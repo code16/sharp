@@ -13,7 +13,7 @@
 </template>
 
 <script>
-    import { DropdownArrow } from 'sharp/components';
+    import { DropdownArrow } from 'sharp-ui';
 
     export default {
         name: 'SharpFilterControl',

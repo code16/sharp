@@ -1,10 +1,10 @@
 <template>
-    <SharpActionBar>
+    <ActionBar>
         <template slot="extras">
             <div class="row mx-n2">
                 <template v-for="filter in filters">
                     <div class="col-auto px-2">
-                        <SharpFilter
+                        <FilterDropdown
                             :filter="filter"
                             :value="filterValue(filter.key)"
                             @input="handleFilterChanged(filter, $event)"
@@ -15,21 +15,23 @@
             </div>
         </template>
         <template v-if="commands.length" slot="extras-right">
-            <SharpCommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
+            <CommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
                 :commands="commands"
                 @select="handleCommandSelected"
             >
                 <div slot="text">
                     {{ l('dashboard.commands.dashboard.label') }}
                 </div>
-            </SharpCommandsDropdown>
+            </CommandsDropdown>
         </template>
-    </SharpActionBar>
+    </ActionBar>
 </template>
 
 <script>
     import { mapGetters } from 'vuex';
-    import { ActionBar, Filter, CommandsDropdown } from 'sharp/components';
+    import { ActionBar } from 'sharp-ui';
+    import { FilterDropdown } from 'sharp-filters';
+    import { CommandsDropdown } from 'sharp-commands';
     import { Localization } from "sharp/mixins";
     
     export default {
@@ -37,7 +39,7 @@
         mixins: [Localization],
         components: {
             ActionBar,
-            Filter,
+            FilterDropdown,
             CommandsDropdown,
         },
         props: {

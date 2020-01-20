@@ -16,7 +16,7 @@
 </template>
 
 <script>
-    import { Dropdown, DropdownItem, DropdownSeparator } from 'sharp/components';
+    import { Dropdown, DropdownItem, DropdownSeparator } from 'sharp-ui';
 
     export default {
         name: 'SharpCommandsDropdown',

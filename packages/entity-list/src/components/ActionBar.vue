@@ -1,5 +1,5 @@
 <template>
-    <sharp-action-bar class="SharpActionBarList" :class="{'SharpActionBarList--search-active':searchActive}">
+    <ActionBar class="SharpActionBarList" :class="{'SharpActionBarList--search-active':searchActive}">
         <template slot="left">
             <span class="text-content text-nowrap">{{ count }} {{ l('action_bar.list.items_count') }}</span>
         </template>
@@ -48,7 +48,7 @@
                 <div class="row mx-n2">
                     <template v-for="filter in filters">
                         <div class="col-auto px-2">
-                            <SharpFilter
+                            <FilterDropdown
                                 :filter="filter"
                                 :value="filtersValues[filter.key]"
                                 @input="handleFilterChanged(filter, $event)"
@@ -72,19 +72,13 @@
                 </template>
             </template>
         </template>
-    </sharp-action-bar>
+    </ActionBar>
 </template>
 
 <script>
-    import { 
-        ActionBar, 
-        Filter, 
-        Dropdown, 
-        DropdownItem, 
-        ItemVisual, 
-        CommandsDropdown, 
-        Search,
-    } from 'sharp/components';
+    import { ActionBar, Dropdown,  DropdownItem, ItemVisual, Search } from 'sharp-ui';
+    import { FilterDropdown } from 'sharp-filters';
+    import { CommandsDropdown } from 'sharp-commands';
 
     import { Localization } from 'sharp/mixins';
 
@@ -99,7 +93,7 @@
             DropdownItem,
             ItemVisual,
             CommandsDropdown,
-            Filter,
+            FilterDropdown,
             Search,
         },
 

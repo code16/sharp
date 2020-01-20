@@ -56,7 +56,7 @@
 <script>
     import debounce from 'lodash/debounce';
     import { BTabs, BCollapse } from 'bootstrap-vue';
-    import { DropdownArrow } from 'sharp/components';
+    import DropdownArrow from './dropdown/Arrow';
     import { Responsive } from "sharp/mixins";
 
     export default {

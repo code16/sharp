@@ -1,6 +1,7 @@
 const mix = require('laravel-mix');
 const webpack = require('webpack');
 const path = require('path');
+const CircularDependencyPlugin = require('circular-dependency-plugin');
 
 mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
     .js('resources/assets/js/client-api.js', 'resources/assets/dist/client-api.js')
@@ -20,6 +21,17 @@ mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
             new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
             new webpack.NormalModuleReplacementPlugin(/element-ui[\/\\]lib[\/\\]locale[\/\\]lang[\/\\]zh-CN/, 'element-ui/lib/locale/lang/en'),
             // new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
+            new CircularDependencyPlugin({
+                // exclude detection of files based on a RegExp
+                exclude: /node_modules/,
+                // add errors to webpack instead of warnings
+                failOnError: true,
+                // allow import cycles that include an asyncronous import,
+                // e.g. via import(/* webpackMode: "weak" */ './file.js')
+                allowAsyncCycles: false,
+                // set the current working directory for displaying module paths
+                cwd: process.cwd(),
+              })
         ],
         // transpile vue-clip package
         module: {

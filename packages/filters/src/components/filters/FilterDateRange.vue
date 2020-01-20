@@ -17,7 +17,7 @@
 </template>
 
 <script>
-    import { DateRange } from 'sharp/components';
+    import { DateRange } from 'sharp-form';
     import FilterControl from '../FilterControl';
 
     export default {

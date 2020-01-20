@@ -1,6 +1,6 @@
 <script>
     import Multiselect from 'vue-multiselect';
-    import { DropdownArrow } from './index';
+    import { DropdownArrow } from 'sharp-ui';
 
     import { lang } from '../util/i18n';
 

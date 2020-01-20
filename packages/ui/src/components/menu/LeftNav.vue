@@ -43,7 +43,8 @@
 </template>
 
 <script>
-    import { Loading, GlobalFilters } from "sharp/components";
+    import Loading from '../Loading';
+    import { GlobalFilters } from "sharp-filters";
     import { Responsive } from 'sharp/mixins';
 
     export default {

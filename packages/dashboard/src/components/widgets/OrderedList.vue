@@ -18,7 +18,7 @@
 </template>
 
 <script>
-    import { DataList, DataListRow } from 'sharp/components';
+    import { DataList, DataListRow } from 'sharp-ui';
 
     export default {
         name: 'SharpWidgetOrderedList',

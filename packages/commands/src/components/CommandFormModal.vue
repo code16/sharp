@@ -14,7 +14,8 @@
 </template>
 
 <script>
-    import { Form, Modal } from 'sharp/components';
+    import { Modal } from 'sharp-ui';
+    import { Form } from 'sharp-form';
 
     export default {
         components: {
