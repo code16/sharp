@@ -167,17 +167,6 @@
             listUrl() {
                 return `${BASE_URL}/list/${this.baseEntityKey}?restore-context=1`;
             },
-
-            localeSelectorErrors() {
-                return Object.keys(this.errors).reduce((res,errorKey)=>{
-                    let errorLocale = this.locales.find(l=>errorKey.endsWith(`.${l}`));
-                    if(errorLocale) {
-                        res[errorLocale] = true;
-                    }
-                    return res;
-                },{})
-            },
-
             transformedFields() {
                 const fields = this.isReadOnly
                     ? this.readOnlyFields

@@ -1,232 +1,163 @@
 import Vue from 'vue';
-import { Grid as gridModule, TabbedLayout as tabbedLayoutModule } from 'sharp/components';
+import axios from 'axios';
 import * as consts from 'sharp/consts';
 import Form from '../src/components/Form.vue';
-import * as fieldContainerModule from '../src/components/ui/FieldContainer';
-import * as fieldsLayoutModule from '../src/components/ui/FieldsLayout.vue';
 
 
-import { mockSFC, unmockSFC, wait, MockInjections, MockI18n, nextRequestFulfilled } from "sharp-test-utils";
+import { wait, MockInjections, MockI18n, nextRequestFulfilled } from "sharp-test-utils";
 import moxios from 'moxios';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 
 jest.mock('sharp');
 
 
 describe('sharp-form', ()=>{
     Vue.use(MockI18n);
-    MockI18n.mockLangFunction();
 
-    Vue.component('sharp-form', Form);
-    Vue.component('sharp-field-display', mockSFC(fieldContainerModule));
+    function createWrapper({ propsData } = {}) {
+        return shallowMount(Form, {
+            propsData: {
+                entityKey: 'spaceship',
+                instanceId: null,
+                ignoreAuthorizations: null,
+                ...propsData,
+            },
+            inject: {
+                axiosInstance: {default:()=>axios.create()},
+                actionsBus: {default:()=>new Vue()},
+                mainLoading: {default:()=>new Vue()},
+            },
+            stubs: {
+                Grid: 
+                    `<div id="MOCKED_GRID">
+                        <slot v-bind="rows[0][0]" />
+                    </div>`,
+                FieldsLayout: 
+                    `<div id="MOCKED_FIELDS_LAYOUT"> 
+                        <slot v-if="layout[0][0]" v-bind="layout[0][0]" />
+                    </div>`,
+                FieldDisplay: true,
+                TabbedLayout: 
+                    `<div id="MOCKED_TABBED_LAYOUT">
+                        <slot v-bind="layout.tabs[0]" />
+                    </div>`,
+            },
+            created() {
+                moxios.install(this.axiosInstance);
+                moxios.uninstall = moxios.uninstall.bind(moxios, this.axiosInstance);
+            }
+        });
+    }
+
+    function createLayout(fields) {
+        return {
+            tabs : [
+                {
+                    columns: [
+                        {
+                            fields,
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+
+    function createForm({ key='title', type='text', ...props } = {}) {
+        return {
+            data: { [key]: null },
+            fields: {
+                [key]: {
+                    key,
+                    type,
+                    ...props,
+                }
+            },
+            layout: createLayout([[{ key }]]),
+        }
+    }
+
 
     const oldDelay = moxios.delay;
-    beforeAll(()=>{
-        mockSFC(gridModule,{
-            template: `
-            <div id="MOCKED_GRID">
-                <slot v-bind="rows[0][0]"></slot>
-            </div>
-            `
-        });
+    moxios.delay = 10;
 
-        mockSFC(fieldsLayoutModule, {
-            template: `
-            <div id="MOCKED_FIELDS_LAYOUT">
-                <slot v-if="layout[0][0]" v-bind="layout[0][0]"></slot>
-            </div>
-            `
-        });
-
-        mockSFC(tabbedLayoutModule, {
-            template:`
-            <div id="MOCKED_TABBED_LAYOUT">
-                <slot v-bind="layout.tabs[0]"></slot>
-            </div>
-            `
-        });
-        moxios.delay = 10;
-    });
-
-    afterAll(()=>{
-        unmockSFC(gridModule);
-        unmockSFC(tabbedLayoutModule);
-        unmockSFC(fieldsLayoutModule);
-        unmockSFC(fieldContainerModule);
+    afterAll(() => {
         moxios.delay = oldDelay;
     });
-
-    beforeEach(()=>{
-        document.body.innerHTML = `
-            <div id="app">
-                <sharp-form 
-                    entity-key="spaceship" 
-                    :instance-id="instanceId"
-                    :independant="independant" 
-                    :props="props"
-                    :ignore-authorizations="ignoreAuthorizations">
-                </sharp-form>
-            </div>
-        `;
-    });
-
+    // beforeEach(() => {
+    //     moxios.install();
+    // });
     afterEach(()=>{
         moxios.uninstall();
     });
 
     test('can mount sharp-form', async ()=>{
-        await createVm();
+        const wrapper = createWrapper();
 
         await nextRequestFulfilled({
             status: 200,
-            response: {
-                data:{
-                    title: null
-                },
-                fields: {
-                    title: {
-                        type: 'text'
-                    }
-                },
+            response: createForm(),
+        });
 
-                layout: {
-                    tabs : [
-                        {
-                            columns: [
-                                {
-                                    fields: [
-                                        [{ key: 'title'}]
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                }
+        expect(wrapper.html()).toMatchSnapshot();
+    });
+
+    test('can mount "independant" sharp-form', ()=>{
+        const wrapper = createWrapper({
+            propsData:{
+                independant: true,
+                props: createForm()
             }
         });
 
-        expect(document.body.innerHTML).toMatchSnapshot();
+        expect(wrapper.html()).toMatchSnapshot();
     });
 
-    test('can mount "independant" sharp-form', async ()=>{
-        await createVm({
+    test('can mount sharp-form with alert', ()=>{
+        const wrapper = createWrapper({
             propsData:{
                 independant: true,
-                props: {
-                    data:{
-                        title: null
-                    },
-                    fields: {
-                        title: {
-                            type: 'text'
-                        }
-                    },
-
-                    layout: {
-                        tabs : [
-                            {
-                                columns: [
-                                    {
-                                        fields: [
-                                            [{ key: 'title'}]
-                                        ]
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                }
+                props: createForm()
             }
         });
 
-        expect(document.body.innerHTML).toMatchSnapshot();
-    });
-
-    test('can mount sharp-form with alert', async ()=>{
-        let $form = await createVm({
-            propsData:{
-                independant: true,
-                props: {
-                    data:{
-                        title: null
-                    },
-                    fields: {
-                        title: {
-                            type: 'text'
-                        }
-                    },
-
-                    layout: {
-                        tabs : [
-                            {
-                                columns: [
-                                    {
-                                        fields: [
-                                            [{ key: 'title'}]
-                                        ]
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                }
+        wrapper.setData({
+            errors: {
+                title: ['required']
             }
         });
 
-        $form.errors = {
-            title: ['required']
-        };
-
-        await Vue.nextTick();
-
-        expect(document.body.innerHTML).toMatchSnapshot();
+        expect(wrapper.html()).toMatchSnapshot();
     });
 
-    xtest('api path', async ()=> {
-        consts.API_PATH = '/test-api';
-        let $form = await createVm();
-
-        let { $root:vm } = $form;
-
-        expect($form.apiPath).toBe('/test-api/form/spaceship');
-
-        vm.instanceId = '10';
-
-        await Vue.nextTick();
-
-        expect($form.apiPath).toBe('/test-api/form/spaceship/10');
+    test('localized', ()=>{
+        const wrapper = createWrapper();
+        expect(wrapper.vm.localized).toBe(false);
+        wrapper.setData({
+            locales: ['fr', 'en']
+        });
+        expect(wrapper.vm.localized).toBe(true);
     });
 
-    test('localized', async ()=>{
-        let $form = await createVm();
-        expect($form.localized).toBe(false);
-        $form.locales = ['fr', 'en'];
-        await Vue.nextTick();
-        expect($form.localized).toBe(true);
-    });
+    test('detect when is creation', ()=>{
+        const wrapper = createWrapper();
 
-    test('detect when is creation', async ()=>{
-        let $form = await createVm();
+        expect(wrapper.vm.isCreation).toBe(true);
 
-        let { $root:vm } = $form;
+        wrapper.setProps({
+            instanceId: '10',
+        });
 
-        expect($form.isCreation).toBe(true);
-
-        vm.instanceId = '10';
-
-        await Vue.nextTick();
-
-        expect($form.isCreation).toBe(false);
+        expect(wrapper.vm.isCreation).toBe(false);
 
     });
 
-    test('is read only', async () => {
-        let $form = await createVm({
+    test('is read only', () => {
+        const wrapper = createWrapper({
             propsData:{
                 independant: true,
                 props: {
-                    layout:{ tabs:[{ columns:[{ fields:[[]] }] }] },
-                    fields:{},
-                    data:{},
+                    ...createForm(),
                     authorizations: {
                         create: false,
                         update: false
@@ -234,97 +165,87 @@ describe('sharp-form', ()=>{
                 }
             }
         });
+        expect(wrapper.vm.isReadOnly).toBe(true);
 
-        let { $root:vm } = $form;
+        wrapper.setData({
+            authorizations: {
+                create: true,
+                update: false,
+            }
+        });
+        expect(wrapper.vm.isReadOnly).toBe(false);
 
-        expect($form.isReadOnly).toBe(true);
+        wrapper.setProps({
+            instanceId: '10',
+        });
+        expect(wrapper.vm.isReadOnly).toBe(true);
 
-        Vue.set($form.authorizations, 'create', true);
-
-        expect($form.isReadOnly).toBe(false);
-
-        vm.instanceId = '10';
-
-        await Vue.nextTick();
-
-        expect($form.isReadOnly).toBe(true);
-
-        Vue.set($form.authorizations, 'update', true);
-
-        expect($form.isReadOnly).toBe(false);
-
-        vm.ignoreAuthorizations = true;
-        $form.authorizations = { create:false, update:false };
-
-        await Vue.nextTick();
-
-        expect($form.isReadOnly).toBe(false);
-
+        wrapper.setData({
+            authorizations: {
+                create: true,
+                update: true,
+            }
+        });
+        expect(wrapper.vm.isReadOnly).toBe(false);
+        
+        wrapper.setProps({
+            ignoreAuthorizations: true,
+        });
+        wrapper.setData({
+            authorizations: {
+                create: false,
+                update: false,
+            }
+        });
+        expect(wrapper.vm.isReadOnly).toBe(false);
     })
 
-    test('is synchronous', async () => {
-        let $form = await createVm({
+    test('synchronous', () => {
+        const wrapper = createWrapper({
             propsData:{
                 independant: true,
-                props: {
-                    layout:{ tabs:[{ columns:[{ fields:[[]] }] }] },
-                    fields:{},
-                    data:{},
-                }
+                props: createForm(),
             }
         });
 
-        expect($form.synchronous).toBe(true);
+        expect(wrapper.vm.synchronous).toBe(true);
+
+        wrapper.setProps({ independant: false });
+
+        expect(wrapper.vm.synchronous).toBe(false);
     });
 
-    test('is asynchronous', async () => {
-        let $form = await createVm();
 
-        expect($form.synchronous).toBe(false);
-    });
-
-
-    test('has errors', async () => {
-        let $form = await createVm();
-        expect($form.hasErrors).toBe(false);
-
-        $form.errors = { field: ['required'] };
-
-        expect($form.hasErrors).toBe(true);
-
-        Vue.set($form.errors.field, 'cleared', true);
-
-        expect($form.hasErrors).toBe(false);
-    });
-
-    test('locale selector errors', async ()=> {
-        let $form = await createVm();
-        $form.locales = ['fr', 'en', 'de'];
-        $form.errors = {
-            'label': 'error',
-            'title.fr': 'error',
-        };
-        expect($form.localeSelectorErrors).toEqual({ 'fr':true });
-
-        $form.errors = {
-            'label': 'error'
-        };
-        expect($form.localeSelectorErrors).toEqual({ });
-    });
-
-    test('expose appropriate props to layout components', async () => {
-        let $form = await createVm({
-            propsData:{
-                independant: true,
-                props: {
-                    layout:{ tabs:[{ columns:[{ fields:[[{key:'title'}]] }] }] },
-                    fields:{ title: { type:'text' } },
-                    data:{},
-                }
+    test('has errors', () => {
+        const wrapper = createWrapper();
+        expect(wrapper.vm.hasErrors).toBe(false);
+        
+        wrapper.setData({
+            errors: {
+                field: ['required']
             }
         });
 
-        let { tabbedLayout, columnsGrid, fieldLayout } = $form.$refs;
+        expect(wrapper.vm.hasErrors).toBe(true);
+
+        wrapper.setData({
+            errors: {
+                field: { cleared:true },
+            }
+        });
+
+        expect(wrapper.vm.hasErrors).toBe(false);
+    });
+
+    test('expose appropriate props to layout components', () => {
+        const wrapper = createWrapper({
+            propsData: {
+                independant: true,
+                props: createForm()
+            }
+        });
+
+        let { tabbedLayout, columnsGrid, fieldLayout } = wrapper.vm.$refs;
 
         expect(tabbedLayout.$options.propsData).toEqual({
             layout: { tabs:[{ columns:[{ fields:[[{key:'title'}]] }] }] } // $form.layout
@@ -339,51 +260,26 @@ describe('sharp-form', ()=>{
     });
 
     test('expose appropriate props to field', async () => {
-        let $form = await createVm({
+        const wrapper = createWrapper({
             propsData:{
                 independant: true,
                 props: {
-                    data:{
-                        title: null
-                    },
-                    fields: {
-                        title: {
-                            key: 'title',
-                            type: 'text',
-                            localized: true,
-                        }
-                    },
-                    layout: {
-                        tabs : [
-                            {
-                                columns: [
-                                    {
-                                        fields: [
-                                            [{ key: 'title'}]
-                                        ]
-                                    }
-                                ]
-                            }
-                        ]
-                    },
+                    ...createForm({ localized: true }),
                     locales: ['fr', 'en']
                 }
             }
         });
-
-        let { field } = $form.$refs;
-
-        expect(field.$options.propsData).toMatchObject({
-            fieldKey: 'title',
-            fieldLayout: { key: 'title' },
-            updateData: $form.updateData,
-            locale: 'fr'
-        });
+        await wrapper.vm.$nextTick();
+        const field = wrapper.find({ ref:'field' }).vm;
 
         expect(field.$attrs).toMatchObject({
+            'field-key': 'title',
+            'field-layout': { key: 'title' },
+            'update-data': wrapper.vm.updateData,
+            'locale': 'fr',
             'error-identifier': 'title',
             'config-identifier': 'title',
-            'update-visibility': $form.updateVisibility,
+            'update-visibility': wrapper.vm.updateVisibility,
             'context-data': {
                 title: null
             },
@@ -395,116 +291,50 @@ describe('sharp-form', ()=>{
             },
         });
 
-        $form.authorizations = { create: true };
-
-        await Vue.nextTick();
+        wrapper.setData({
+            authorizations: { create: true }
+        });
 
         expect(field.$attrs['context-fields'].readOnly).toBeFalsy();
     });
 
-    test('update data', async () => {
-        let $form = await createVm({
+    test('update data', () => {
+        const wrapper = createWrapper({
             propsData:{
                 independant: true,
-                props: {
-                    data:{
-                        title: null
-                    },
-                    fields: {
-                        title: {
-                            type: 'text'
-                        }
-                    },
-                    layout: {
-                        tabs : [
-                            {
-                                columns: [
-                                    {
-                                        fields: [
-                                            [{ key: 'title'}]
-                                        ]
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                }
+                props: createForm(),
             }
         });
-        $form.fieldLocalizedValue = jest.fn(()=>'fieldLocalizedValue');
-        expect($form.data.title).toBe(null);
+        wrapper.vm.fieldLocalizedValue = jest.fn(()=>'fieldLocalizedValue');
+        expect(wrapper.vm.data.title).toBe(null);
 
-        $form.updateData('title', 'text');
-        expect($form.fieldLocalizedValue).toHaveBeenCalledWith('title', 'text');
-        expect($form.data.title).toBe('fieldLocalizedValue');
+        wrapper.vm.updateData('title', 'text');
+        expect(wrapper.vm.fieldLocalizedValue).toHaveBeenCalledWith('title', 'text');
+        expect(wrapper.vm.data.title).toBe('fieldLocalizedValue');
     });
 
 
     test('update visibility', async () => {
-        let $form = await createVm({
+        const wrapper = createWrapper({
             propsData:{
                 independant: true,
-                props: {
-                    data:{
-                        title: null
-                    },
-                    fields: {
-                        title: {
-                            type: 'text'
-                        }
-                    },
-                    layout: {
-                        tabs : [
-                            {
-                                columns: [
-                                    {
-                                        fields: [
-                                            [{ key: 'title'}]
-                                        ]
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                }
+                props: createForm()
             }
         });
 
-        expect($form.fieldVisible.title).toBe(true);
+        expect(wrapper.vm.fieldVisible.title).toBe(true);
 
-        $form.updateVisibility('title', false);
+        wrapper.vm.updateVisibility('title', false);
 
-        expect($form.fieldVisible.title).toBe(false);
+        expect(wrapper.vm.fieldVisible.title).toBe(false);
     });
 
-    test('mount', async () => {
-        let $form = await createVm({
+    test('mount', () => {
+        const wrapper = createWrapper({
             propsData:{
                 independant: true,
                 props: {
-                    data:{
-                        title: null
-                    },
-                    fields: {
-                        title: {
-                            key: 'title',
-                            type: 'text',
-                            localized: true,
-                        }
-                    },
-                    layout: {
-                        tabs : [
-                            {
-                                columns: [
-                                    {
-                                        fields: [
-                                            [{ key: 'title'}]
-                                        ]
-                                    }
-                                ]
-                            }
-                        ]
-                    },
+                    ...createForm({ localized:true }),
                     authorizations: {
                         create: true,
                         update: false
@@ -514,28 +344,8 @@ describe('sharp-form', ()=>{
             }
         });
 
-        expect($form).toMatchObject({
-            data:{
-                title: null
-            },
-            fields: {
-                title: {
-                    type: 'text',
-                }
-            },
-            layout: {
-                tabs : [
-                    {
-                        columns: [
-                            {
-                                fields: [
-                                    [{ key: 'title' }]
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            },
+        expect(wrapper.vm).toMatchObject({
+            ...createForm({ localized:true }),
             authorizations: {
                 create: true,
                 update: false
@@ -546,40 +356,20 @@ describe('sharp-form', ()=>{
             }
         });
 
-        $form.patchLayout = ()=>{};
-        $form.ready = false;
-        $form.mount({ fields:{}, locales:null });
+        wrapper.vm.patchLayout = ()=>{};
+        wrapper.vm.ready = false;
+        wrapper.vm.mount({ fields:{}, locales:null });
 
-        expect($form.fieldLocale).toEqual({ title:undefined });
+        expect(wrapper.vm.fieldLocale).toEqual({ title:undefined });
     });
 
     test('mount async', async () => {
-        let $form = await createVm();
+        const wrapper = createWrapper();
 
         await nextRequestFulfilled({
             status: 200,
             response: {
-                data:{
-                    title: null
-                },
-                fields: {
-                    title: {
-                        type: 'text'
-                    }
-                },
-                layout: {
-                    tabs : [
-                        {
-                            columns: [
-                                {
-                                    fields: [
-                                        [{ key: 'title'}]
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
+                ...createForm(),
                 authorizations: {
                     create: true,
                     update: false
@@ -587,28 +377,8 @@ describe('sharp-form', ()=>{
             }
         });
 
-        expect($form).toMatchObject({
-            data:{
-                title: null
-            },
-            fields: {
-                title: {
-                    type: 'text'
-                }
-            },
-            layout: {
-                tabs : [
-                    {
-                        columns: [
-                            {
-                                fields: [
-                                    [{ key: 'title'}]
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            },
+        expect(wrapper.vm).toMatchObject({
+            ...createForm(),
             authorizations: {
                 create: true,
                 update: false
@@ -617,9 +387,9 @@ describe('sharp-form', ()=>{
     });
 
     test('handle 422', async () => {
-        let $form = await createVm();
+        const wrapper = createWrapper();
 
-        $form.actionsBus.$emit('submit');
+        wrapper.vm.actionsBus.$emit('submit');
 
         await nextRequestFulfilled({
             status: 422,
@@ -630,38 +400,21 @@ describe('sharp-form', ()=>{
             }
         });
 
-        expect($form.errors).toEqual({
+        expect(wrapper.vm.errors).toEqual({
             title: ['invalid']
         });
     });
 
     test('patch layout', async () => {
-        let $form = await createVm({
+        const wrapper = createWrapper({
             propsData:{
                 independant: true,
                 props: {
-                    data:{
-                        title: null
-                    },
-                    fields: {
-                        title: {
-                            type: 'text'
-                        }
-                    },
-                    layout: {
-                        tabs : [
-                            {
-                                columns: [
-                                    {
-                                        fields: [
-                                            [{ legend:'fieldset', fields: [[]] }],
-                                            [{ legend:'fieldset', fields: [[]] }]
-                                        ]
-                                    }
-                                ]
-                            }
-                        ]
-                    }
+                    ...createForm(),
+                    layout: createLayout( [
+                        [{ legend:'fieldset', fields: [[]] }],
+                        [{ legend:'fieldset', fields: [[]] }]
+                    ]),
                 }
             }
         });
@@ -672,7 +425,7 @@ describe('sharp-form', ()=>{
                     columns: [{ fields }]
                 }
             ]
-        } = $form.layout;
+        } = wrapper.vm.layout;
 
         expect(typeof fields[0][0].id).toBe('string');
         expect(fields[0][0].id).not.toEqual(fields[1][0].id)
@@ -680,38 +433,16 @@ describe('sharp-form', ()=>{
 
 
     test('setup action bar correctly', async () => {
-        let $form = await createVm();
-
-        let { $root:vm } = $form;
+        const wrapper = createWrapper();
 
         let setupEmitted = jest.fn();
-        $form.actionsBus.$on('setup', setupEmitted);
-        $form.setupActionBar = jest.fn($form.setupActionBar);
+        wrapper.vm.actionsBus.$on('setup', setupEmitted);
+        jest.spyOn(wrapper.vm, 'setupActionBar');
 
         await nextRequestFulfilled({
             status: 200,
             response: {
-                data:{
-                    title: null
-                },
-                fields: {
-                    title: {
-                        type: 'text'
-                    }
-                },
-                layout: {
-                    tabs : [
-                        {
-                            columns: [
-                                {
-                                    fields: [
-                                        [{ key: 'title'}]
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
+                ...createForm(),
                 authorizations: {
                     create: false,
                     update: false
@@ -719,7 +450,7 @@ describe('sharp-form', ()=>{
             }
         });
 
-        expect($form.setupActionBar).toHaveBeenCalledTimes(1);
+        expect(wrapper.vm.setupActionBar).toHaveBeenCalledTimes(1);
         expect(setupEmitted).toHaveBeenCalledTimes(1);
         expect(setupEmitted.mock.calls[0][0]).toMatchObject({
             showSubmitButton: false,
@@ -729,9 +460,9 @@ describe('sharp-form', ()=>{
         });
 
 
-        $form.authorizations.create = true;
+        wrapper.vm.authorizations.create = true;
 
-        $form.setupActionBar();
+        wrapper.vm.setupActionBar();
 
         expect(setupEmitted).toHaveBeenCalledTimes(2);
         expect(setupEmitted.mock.calls[1][0]).toMatchObject({
@@ -742,12 +473,12 @@ describe('sharp-form', ()=>{
         });
 
 
-        vm.instanceId = '10';
-        $form.authorizations.delete = true;
+        wrapper.setProps({
+            instanceId: '10',
+        });
+        wrapper.vm.authorizations.delete = true;
 
-        await Vue.nextTick();
-
-        $form.setupActionBar();
+        wrapper.vm.setupActionBar();
 
         expect(setupEmitted).toHaveBeenCalledTimes(3);
         expect(setupEmitted.mock.calls[2][0]).toMatchObject({
@@ -757,9 +488,9 @@ describe('sharp-form', ()=>{
             opType: 'update'
         });
 
-        $form.authorizations.update = true;
+        wrapper.vm.authorizations.update = true;
 
-        $form.setupActionBar();
+        wrapper.vm.setupActionBar();
 
         expect(setupEmitted).toHaveBeenCalledTimes(4);
         expect(setupEmitted.mock.calls[3][0]).toMatchObject({
@@ -772,89 +503,75 @@ describe('sharp-form', ()=>{
     });
 
     test('redirect to list', async () => {
-        let $form = await createVm();
+        const wrapper = createWrapper();
 
-        expect($form.listUrl).toEqual('/sharp/list/spaceship?restore-context=1');
+        expect(wrapper.vm.listUrl).toEqual('/sharp/list/spaceship?restore-context=1');
 
-        $form.redirectToList = jest.fn();
+        wrapper.vm.redirectToList = jest.fn();
 
-        $form.actionsBus.$emit('delete');
+        wrapper.vm.actionsBus.$emit('delete');
 
         await nextRequestFulfilled({
             status: 200
         }, 0);
 
-        expect($form.redirectToList).toHaveBeenCalledTimes(1);
+        expect(wrapper.vm.redirectToList).toHaveBeenCalledTimes(1);
 
     });
 
     test('submit', async () => {
-        let $form = await createVm({
+        const wrapper = createWrapper({
             propsData: {
                 independant:true,
-                props: {
-                    data:{},
-                    fields: {},
-                    layout: {
-                        tabs : [
-                            {
-                                columns: [
-                                    {
-                                        fields: [[]]
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                }
+                props: createForm(),
             },
         });
 
-        $form.post = jest.fn(()=>Promise.resolve({ data: { ok: true } }));
+        wrapper.vm.post = jest.fn(()=>Promise.resolve({ data: { ok: true } }));
 
-        $form.pendingJobs.push('upload');
-        $form.actionsBus.$emit('submit');
+        wrapper.vm.pendingJobs.push('upload');
+        wrapper.vm.actionsBus.$emit('submit');
 
         await wait(10);
 
-        expect($form.post).not.toHaveBeenCalled();
+        expect(wrapper.vm.post).not.toHaveBeenCalled();
 
 
         let submittedEmmitted = jest.fn();
-        $form.pendingJobs = [];
+        wrapper.vm.pendingJobs = [];
 
-        $form.actionsBus.$emit('submit');
+        wrapper.vm.actionsBus.$emit('submit');
 
         await wait(10);
 
-        expect($form.post).toHaveBeenCalledTimes(1);
+        expect(wrapper.vm.post).toHaveBeenCalledTimes(1);
     });
 
     test('dependant submit', async () => {
-        let $form = await createVm();
+        const wrapper = createWrapper();
 
-        $form.post = jest.fn(()=>Promise.resolve({ data: { ok: true } }));
-        $form.handleError = jest.fn();
+        wrapper.vm.post = jest.fn(()=>Promise.resolve({ data: { ok: true } }));
+        wrapper.vm.handleError = jest.fn();
 
-        $form.actionsBus.$emit('submit');
-
-        await wait(10);
-
-        expect($form.post).toHaveBeenCalledTimes(1);
-        expect($form.post.mock.calls[0][0]).toBeUndefined();
-        expect($form.post.mock.calls[0][1]).toBeUndefined();
-
-
-        expect($form.handleError).not.toHaveBeenCalled();
-
-        $form.post = jest.fn(()=>Promise.reject({ error: true }));
-
-        $form.actionsBus.$emit('submit');
+        wrapper.vm.actionsBus.$emit('submit');
 
         await wait(10);
 
-        expect($form.handleError).toHaveBeenCalledTimes(1);
-        expect($form.handleError).toHaveBeenCalledWith({ error: true });
+        expect(wrapper.vm.post).toHaveBeenCalledTimes(1);
+        expect(wrapper.vm.post.mock.calls[0][0]).toBeUndefined();
+        expect(wrapper.vm.post.mock.calls[0][1]).toBeUndefined();
+
+
+        expect(wrapper.vm.handleError).not.toHaveBeenCalled();
+
+        wrapper.vm.post = jest.fn(()=>Promise.reject({ error: true }));
+
+        wrapper.vm.actionsBus.$emit('submit');
+
+        await wait(10);
+
+        expect(wrapper.vm.handleError).toHaveBeenCalledTimes(1);
+        expect(wrapper.vm.handleError).toHaveBeenCalledWith({ error: true });
     });
 
     test('delete', async ()=>{
@@ -866,54 +583,27 @@ describe('sharp-form', ()=>{
     });
 
     test('pending jobs', async ()=> {
-        let $form = await createVm();
+        const wrapper = createWrapper();
         let updateActionsStateEmitted = jest.fn();
 
-        $form.actionsBus.$on('updateActionsState', updateActionsStateEmitted);
+        wrapper.vm.actionsBus.$on('updateActionsState', updateActionsStateEmitted);
 
-        $form.actionsBus.$emit('setPendingJob', { key:'myUpload', origin:'upload' ,value:true });
+        wrapper.vm.actionsBus.$emit('setPendingJob', { key:'myUpload', origin:'upload' ,value:true });
 
-        expect($form.pendingJobs).toEqual(['myUpload']);
+        expect(wrapper.vm.pendingJobs).toEqual(['myUpload']);
         expect(updateActionsStateEmitted).toHaveBeenLastCalledWith({
             state: 'pending',
             modifier: 'upload'
         });
 
-        $form.actionsBus.$emit('setPendingJob', { key:'myUpload', origin:'upload' ,value:false });
+        wrapper.vm.actionsBus.$emit('setPendingJob', { key:'myUpload', origin:'upload' ,value:false });
 
-        expect($form.pendingJobs).toEqual([]);
+        expect(wrapper.vm.pendingJobs).toEqual([]);
         expect(updateActionsStateEmitted).toHaveBeenLastCalledWith(null);
     });
 
     test('has localize mixin with right fieldsProps', async () => {
-        let $list = await createVm();
-        expect($list.$options._localizedForm).toBe('fields');
+        const wrapper = await createWrapper();
+        expect(wrapper.vm.$options._localizedForm).toBe('fields');
     });
 });
-
-async function createVm(customOptions={}) {
-
-    const vm = new Vue({
-        el: '#app',
-        mixins: [MockInjections, customOptions],
-
-        props: ['independant', 'props'],
-
-        'extends': {
-            data:()=>({
-                instanceId: null,
-                ignoreAuthorizations: null
-            })
-        },
-
-        created() {
-            let { axiosInstance } = this._provided;
-            moxios.install(axiosInstance);
-            moxios.uninstall = moxios.uninstall.bind(moxios, axiosInstance);
-        }
-    });
-
-    await Vue.nextTick();
-
-    return vm.$children[0];
-}
