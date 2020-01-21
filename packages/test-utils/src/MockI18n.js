@@ -2,7 +2,6 @@ import * as i18n from 'sharp/util/i18n';
 import * as mixins from 'sharp/mixins';
 import * as localizationModule from 'sharp/mixins/Localization';
 
-console.log(localizationModule);
 
 const mockLangImplementation = localeKey => `{{ ${localeKey} }}`;
 function mockLangFunction() {
