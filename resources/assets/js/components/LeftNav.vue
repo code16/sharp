@@ -43,7 +43,7 @@
 </template>
 
 <script>
-    import Loading from '../Loading';
+    import { Loading } from 'sharp-ui';
     import { GlobalFilters } from "sharp-filters";
     import { Responsive } from 'sharp/mixins';
 

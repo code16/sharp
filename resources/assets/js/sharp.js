@@ -20,15 +20,13 @@ import SharpForm from 'sharp-form';
 import SharpShow from 'sharp-show';
 import SharpUI from 'sharp-ui';
 
+import ActionView from './components/ActionView';
+import LeftNav from './components/LeftNav';
 import {
-    ActionView
-} from './components';
-import {
-    CollapsibleItem,
-    NavItem,
-    LeftNav,
     ItemVisual,
     Loading,
+    CollapsibleItem,
+    NavItem,
 } from 'sharp-ui';
 
 import { router as getRouter } from "./router";

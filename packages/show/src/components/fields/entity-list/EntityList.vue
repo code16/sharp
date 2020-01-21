@@ -28,10 +28,9 @@
 </template>
 
 <script>
-    import { EntityList } from 'sharp-entity-list';
+    import { EntityList, entityListModule } from 'sharp-entity-list';
     import { CommandsDropdown } from 'sharp-commands';
     import { Localization } from "sharp/mixins";
-    import { entityList as entityListModule } from 'sharp/store';
     
     import ActionBar from "./ActionBar"; 
 

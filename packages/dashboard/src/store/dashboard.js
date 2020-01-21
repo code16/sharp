@@ -3,7 +3,8 @@ import {
     postDashboardCommand,
     getDashboardCommandFormData,
 } from "../api";
-import { filters, commands } from 'sharp/store';
+import { filtersModule as filters } from 'sharp-filters';
+import { commandsModule as commands } from 'sharp-commands';
 
 export const UPDATE = 'UPDATE';
 export const SET_DASHBOARD_KEY = 'SET_DASHBOARD_KEY';

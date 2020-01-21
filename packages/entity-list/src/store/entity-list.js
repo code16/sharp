@@ -1,4 +1,4 @@
-import { filters } from 'sharp/store';
+import { filtersModule as filters } from 'sharp-filters';
 import { postEntityListReorder } from "../api";
 
 
