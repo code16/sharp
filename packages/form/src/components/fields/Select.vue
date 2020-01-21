@@ -74,7 +74,7 @@
 </template>
 
 <script>
-    import { Multiselect } from 'sharp/components';
+    import { Multiselect } from 'sharp-ui';
     import Check from './Check.vue';
     import localize from '../../mixins/localize/Select';
     import { setDefaultValue } from "../../util";

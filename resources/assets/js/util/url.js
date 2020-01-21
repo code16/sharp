@@ -17,10 +17,10 @@ export function normalizeUrl(url) {
 
 export function getBackUrl(breadcrumb) {
     const item = breadcrumb[breadcrumb.length - 2];
-    return item ? normalize(item.url) : null;
+    return item ? normalizeUrl(item.url) : null;
 }
 
 export function getListBackUrl(breadcrumb) {
     const listItem = breadcrumb.find(item => item.type === 'entityList');
-    return normalize(listItem.url);
+    return normalizeUrl(listItem.url);
 }

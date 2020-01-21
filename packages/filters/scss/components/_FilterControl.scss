@@ -1,3 +1,5 @@
+@import '~sharp-ui/scss/mixins/dropdown';
+
 .SharpFilterControl {
   @include font-size('14');
   display: flex;
