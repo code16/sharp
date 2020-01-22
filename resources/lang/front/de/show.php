@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'commands.entity.label' => 'Actions',
-    'text.show_more' => 'Show more',
-    'text.show_less' => 'Show less',
+    'commands.entity.label' => 'Aktionen',
+    'text.show_more' => 'Zeige mehr ..',
+    'text.show_less' => 'Zeige weniger ..',
 ];
