@@ -54,7 +54,7 @@ class SharpServiceProvider extends ServiceProvider
         );
 
         view()->composer(
-            ['sharp::form', 'sharp::list', 'sharp::dashboard', 'sharp::welcome', 'sharp::login', 'sharp::unauthorized'],
+            ['sharp::form','sharp::show', 'sharp::list', 'sharp::dashboard', 'sharp::welcome', 'sharp::login', 'sharp::unauthorized'],
             AssetViewComposer::class
         );
     }
