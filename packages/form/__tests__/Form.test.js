@@ -22,10 +22,10 @@ describe('sharp-form', ()=>{
                 ignoreAuthorizations: null,
                 ...propsData,
             },
-            inject: {
-                axiosInstance: {default:()=>axios.create()},
-                actionsBus: {default:()=>new Vue()},
-                mainLoading: {default:()=>new Vue()},
+            provide: {
+                axiosInstance: axios.create(),
+                actionsBus: new Vue(),
+                mainLoading: new Vue(),
             },
             stubs: {
                 Grid: 
