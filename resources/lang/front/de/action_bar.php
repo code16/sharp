@@ -15,6 +15,8 @@ return [
     'form.cancel_button' => 'Abbrechen',
     'form.delete_button' => 'Löschen',
     'form.back_button' => 'Zurück',
+    'show.edit_button' => 'Bearbeiten...',
+    'show.back_button' => 'Zurück',
 
     /// element.state.modifier
     'form.submit_button.pending.upload' => 'Hochladen...',
