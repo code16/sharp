@@ -1,44 +1,29 @@
-import Vue from 'vue';
-import { Grid as gridModule } from 'sharp/components';
-import FieldsLayout from '../src/components/form/ui/FieldsLayout.vue';
+import FieldsLayout from '../src/components/ui/FieldsLayout.vue';
 
-import { MockInjections, mockSFC, unmockSFC } from "sharp-test-utils";
+import { shallowMount } from '@vue/test-utils';
 
 describe('fields-layout', () => {
-    Vue.component('sharp-fields-layout', FieldsLayout);
-
-    beforeAll(()=>{
-        mockSFC(gridModule,{
-            template: `
-            <div id="MOCKED_GRID">
-                <slot v-bind="rows[0][0]"></slot>
-            </div>
-            `
+    const FieldMock = { template:'<div id="FIELD_MOCK"></div>' };
+    function createWrapper({ propsData }) {
+        return shallowMount(FieldsLayout, {
+            propsData: {
+                ...propsData,
+            },
+            stubs: {
+                Grid:
+                    `<div id="MOCKED_GRID">
+                        <slot v-bind="rows[0][0]"></slot>
+                    </div>`,
+                FieldsLayout: true,
+            },
+            scopedSlots: {
+                default: '<Field :data="props" />',
+            },
         });
-    });
+    }
 
-    afterAll(()=>{
-        unmockSFC(gridModule);
-    });
-
-    beforeEach(()=>{
-        Vue.component('field-mock', {
-            render() { return this._v('FIELD MOCK'); }
-        });
-
-        document.body.innerHTML = `
-            <div id="app">
-                <sharp-fields-layout :layout="layout" :visible="visible">
-                    <template slot-scope="fieldLayout">
-                        <field-mock :data="fieldLayout" ref="fieldMock"></field-mock>           
-                    </template>
-                </sharp-fields-layout>      
-            </div>
-        `
-    });
-
-    test('can mount fields layout', async () => {
-        await createVm({
+    test('can mount fields layout', () => {
+        const wrapper = createWrapper({
             propsData: {
                 layout: [
                     [{ key:'title' }]
@@ -46,11 +31,11 @@ describe('fields-layout', () => {
             }
         });
 
-        expect(document.body.innerHTML).toMatchSnapshot();
+        expect(wrapper.html()).toMatchSnapshot();
     });
 
-    test('can mount "fieldset" fields layout', async () => {
-        await createVm({
+    test('can mount "fieldset" fields layout', () => {
+        const wrapper = createWrapper({
             propsData: {
                 layout: [
                     [{
@@ -65,11 +50,11 @@ describe('fields-layout', () => {
             }
         });
 
-        expect(document.body.innerHTML).toMatchSnapshot();
+        expect(wrapper.html()).toMatchSnapshot();
     });
 
-    test('can mount "hidden fieldset" fields layout', async () => {
-        await createVm({
+    test('can mount "hidden fieldset" fields layout', () => {
+        const wrapper = createWrapper({
             propsData: {
                 layout: [
                     [{
@@ -84,11 +69,11 @@ describe('fields-layout', () => {
             }
         });
 
-        expect(document.body.innerHTML).toMatchSnapshot();
+        expect(wrapper.html()).toMatchSnapshot();
     });
 
-    test('expose correct props', async () => {
-        let { $root:vm } = await createVm({
+    test('expose correct props', () => {
+        const wrapper = createWrapper({
             propsData: {
                 layout: [
                     [{ key:'list' }]
@@ -96,13 +81,13 @@ describe('fields-layout', () => {
             }
         });
 
-        expect(vm.$refs.fieldMock.$attrs).toEqual({
+        expect(wrapper.find(FieldMock).vm.$attrs).toEqual({
             data: { key: 'list' }
-        });
+        })
     });
 
-    test('expose correct fieldset props', async () => {
-        let { $root:vm } = await createVm({
+    test('expose correct fieldset props', () => {
+        const wrapper = createWrapper({
             propsData: {
                 layout: [
                     [{
@@ -114,13 +99,13 @@ describe('fields-layout', () => {
             }
         });
 
-        expect(vm.$refs.fieldMock.$attrs).toEqual({
+        expect(wrapper.find(FieldMock).vm.$attrs).toEqual({
             data: { key: 'title' }
         });
     });
 
-    test('fieldset visible', async () => {
-        let $fieldsLayout = await createVm({
+    test('fieldset visible', () => {
+        const wrapper = createWrapper({
             propsData: {
                 layout: [
                     [{
@@ -137,15 +122,15 @@ describe('fields-layout', () => {
             }
         });
 
-        expect($fieldsLayout.fieldsetMap).toEqual({
+        expect(wrapper.vm.fieldsetMap).toEqual({
             'fieldset_1':[{ key: 'title' }, { key: 'subtitle' },{ key: 'name' }]
         });
 
-        expect($fieldsLayout.isFieldsetVisible({ id: 'fieldset_1'})).toBe(true);
+        expect(wrapper.vm.isFieldsetVisible({ id: 'fieldset_1'})).toBe(true);
     });
 
-    test('fieldset invisible', async () => {
-        let $fieldsLayout = await createVm({
+    test('fieldset invisible', () => {
+        const wrapper = createWrapper({
             propsData: {
                 layout: [
                     [{
@@ -162,25 +147,11 @@ describe('fields-layout', () => {
             }
         });
 
-        expect($fieldsLayout.fieldsetMap).toEqual({
+        expect(wrapper.vm.fieldsetMap).toEqual({
             'fieldset_1':[{ key: 'title' }, { key: 'subtitle' },{ key: 'name' }]
         });
 
-        expect($fieldsLayout.isFieldsetVisible({ id: 'fieldset_1'})).toBe(false);
+        expect(wrapper.vm.isFieldsetVisible({ id: 'fieldset_1'})).toBe(false);
     })
 
 });
-
-async function createVm(customOptions={}) {
-
-    const vm = new Vue({
-        el: '#app',
-        mixins: [MockInjections, customOptions],
-
-        props: ['layout', 'visible']
-    });
-
-    await Vue.nextTick();
-
-    return vm.$children[0];
-}
