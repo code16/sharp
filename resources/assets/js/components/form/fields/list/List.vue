@@ -70,6 +70,7 @@
     import { Localization, ReadOnlyFields } from '../../../../mixins';
     import localize from '../../../../mixins/localize/form';
     import { transformFields, getDependantFieldsResetData } from "../../../../util/form";
+    import { fieldEmptyValue } from "../../../../util/field";
 
     export default {
         name: 'SharpList',
@@ -145,9 +146,6 @@
             showSortButton() {
                 return !this.hasPendingActions && this.sortable && this.list.length > 1;
             },
-            itemFieldsKeys() {
-                return Object.keys(this.itemFields)
-            },
             dragIndexSymbol() {
                 return Symbol('dragIndex');
             },
@@ -178,8 +176,8 @@
                 }));
             },
             createItem() {
-                return this.itemFieldsKeys.reduce((res, fieldKey) => {
-                    res[fieldKey] = null;
+                return Object.entries(this.itemFields).reduce((res, [key, field]) => {
+                    res[key] = fieldEmptyValue(field.type);
                     return res;
                 }, this.withLocale({
                     [this.itemIdAttribute]:null,
