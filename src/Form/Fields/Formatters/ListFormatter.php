@@ -25,9 +25,18 @@ class ListFormatter extends SharpFieldFormatter
                     ->each(function($itemField) use($item, &$itemArray) {
                         $key = $itemField->key();
 
-                        $itemArray[$key] = isset($item[$key])
-                            ? $itemField->formatter()->toFront($itemField, $item[$key])
-                            : null;
+                        if(strpos($key, ':') !== false) {
+                            // It's a sub attribute (like mother:name)
+                            list($attribute, $subAttribute) = explode(':', $key);
+                            $itemArray[$key] = isset($item[$attribute][$subAttribute])
+                                ? $itemField->formatter()->toFront($itemField, $item[$attribute][$subAttribute])
+                                : null;
+
+                        } else {
+                            $itemArray[$key] = isset($item[$key])
+                                ? $itemField->formatter()->toFront($itemField, $item[$key])
+                                : null;
+                        }
                     });
 
                 return $itemArray;
