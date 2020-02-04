@@ -17,13 +17,4 @@ export default function ({ router, siteData }) {
             console.error(e);
         }
     };
-
-    // https://github.com/vuejs/vuepress/issues/1802
-    router.beforeEach((to, from, next) => {
-        if(to.path && /^\/docs/.test(to.path)) {
-            next({ path:to.path.replace(/^\/docs/, ''), hash:to.hash });
-        } else {
-            next();
-        }
-    });
 }
