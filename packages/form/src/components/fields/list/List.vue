@@ -22,9 +22,9 @@
                         <div class="SharpModule__content">
 
                             <template v-if="dragActive && collapsedItemTemplate">
-                                <TemplateRenderer 
-                                    name="CollapsedItem" 
-                                    :template="collapsedItemTemplate" 
+                                <TemplateRenderer
+                                    name="CollapsedItem"
+                                    :template="collapsedItemTemplate"
                                     :template-data="collapsedItemData(listItemData)"
                                 />
                             </template>
@@ -73,7 +73,7 @@
     import ListItem from './ListItem';
 
     import localize from '../../../mixins/localize/form';
-    import { transformFields, getDependantFieldsResetData } from "../../../util";
+    import { transformFields, getDependantFieldsResetData, fieldEmptyValue } from "../../../util";
 
     export default {
         name: 'SharpList',
@@ -149,9 +149,6 @@
             showSortButton() {
                 return !this.hasPendingActions && this.sortable && this.list.length > 1;
             },
-            itemFieldsKeys() {
-                return Object.keys(this.itemFields)
-            },
             dragIndexSymbol() {
                 return Symbol('dragIndex');
             },
@@ -182,8 +179,8 @@
                 }));
             },
             createItem() {
-                return this.itemFieldsKeys.reduce((res, fieldKey) => {
-                    res[fieldKey] = null;
+                return Object.entries(this.itemFields).reduce((res, [key, field]) => {
+                    res[key] = fieldEmptyValue(field.type);
                     return res;
                 }, this.withLocale({
                     [this.itemIdAttribute]:null,

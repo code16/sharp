@@ -23,3 +23,10 @@ export function setDefaultValue(field, callback, { dependantAttributes } = {}) {
         callback();
     }
 }
+
+export function fieldEmptyValue(fieldType) {
+    if(fieldType === 'markdown') {
+        return {};
+    }
+    return null;
+}
