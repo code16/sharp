@@ -10,7 +10,7 @@
         </div>
         @if($item->type === 'url')
         <div class="col-auto">
-            <i class="fa fa-external-link fa-fw" style="opacity:.5; line-height:inherit"></i>
+            <i class="fa fa-external-link-alt fa-fw" style="opacity:.5; line-height:inherit"></i>
         </div>
         @endif
     </div>

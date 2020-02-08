@@ -14,7 +14,7 @@
             <span title="{{ $sharpMenu->user }}">
                 {{ $sharpMenu->user }}
             </span>
-            <a href="{{ route('code16.sharp.logout') }}"> <sharp-item-visual :item="{ icon:'fa-sign-out' }" icon-class="fa-fw"></sharp-item-visual></a>
+            <a href="{{ route('code16.sharp.logout') }}"> <sharp-item-visual :item="{ icon:'fa-sign-out-alt' }" icon-class="fa-fw"></sharp-item-visual></a>
         </sharp-nav-item>
 
         @foreach($sharpMenu->menuItems as $menuItem)
