@@ -2,7 +2,13 @@ $font-path: '/vendor/sharp/fonts';
 $fa-font-path: $font-path;
 $--font-path: $font-path;
 
-@import '~font-awesome/scss/font-awesome';
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import '~@fortawesome/fontawesome-free/scss/regular';
+@import '~@fortawesome/fontawesome-free/scss/brands';
+@import '~@fortawesome/fontawesome-free/scss/v4-shims';
+
+
 @import '~simplemde/dist/simplemde.min.css';
 @import '~trix/dist/trix.css';
 @import '~element-ui/packages/theme-chalk/src/icon';

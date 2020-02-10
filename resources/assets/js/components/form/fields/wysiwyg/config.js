@@ -1,55 +1,57 @@
+import { getToolbarIcon } from "../../../../util/icons";
+
 export const buttons = {
     bold: {
         attribute: 'bold',
-        icon: 'fa-bold',
+        icon: getToolbarIcon('bold'),
     },
     italic: {
         attribute: 'italic',
-        icon: 'fa-italic'
+        icon: getToolbarIcon('italic')
     },
     strike: {
         attribute: 'strike',
-        icon: 'fa-strikethrough'
+        icon: getToolbarIcon('strike')
     },
     link: {
         action: 'link',
         attribute: 'href',
-        icon: 'fa-link'
+        icon: getToolbarIcon('link')
     },
     heading1: {
         attribute: 'heading1',
-        icon: 'fa-header'
+        icon: getToolbarIcon('h1')
     },
     quote: {
         attribute: 'quote',
-        icon: 'fa-quote-right'
+        icon: getToolbarIcon('quote')
     },
     code: {
         attribute: 'code',
-        icon: 'fa-code'
+        icon: getToolbarIcon('code')
     },
     bullet: {
         attribute: 'bullet',
-        icon: 'fa-list-ul'
+        icon: getToolbarIcon('ul')
     },
     number: {
         attribute: 'number',
-        icon: 'fa-list-ol'
+        icon: getToolbarIcon('ol')
     },
     increaseNestingLevel: {
         action: 'increaseNestingLevel',
-        icon: 'fa-indent'
+        icon: getToolbarIcon('indent')
     },
     decreaseNestingLevel: {
         action: 'decreaseNestingLevel',
-        icon: 'fa-outdent'
+        icon: getToolbarIcon('de-indent')
     },
     undo: {
         action: 'undo',
-        icon: 'fa-undo'
+        icon: getToolbarIcon('undo')
     },
     redo: {
         action: 'redo',
-        icon: 'fa-repeat'
+        icon: getToolbarIcon('redo')
     }
 };

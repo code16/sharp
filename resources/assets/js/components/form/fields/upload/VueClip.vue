@@ -69,8 +69,8 @@
                              alt="Source image">
                 </vue-cropper>
                 <div>
-                    <button class="SharpButton SharpButton--primary" @click="rotate(-90)"><i class="fa fa-rotate-left"></i></button>
-                    <button class="SharpButton SharpButton--primary" @click="rotate(90)"><i class="fa fa-rotate-right"></i></button>
+                    <button class="SharpButton SharpButton--primary" @click="rotate(-90)"><i class="fas fa-undo"></i></button>
+                    <button class="SharpButton SharpButton--primary" @click="rotate(90)"><i class="fas fa-redo"></i></button>
                 </div>
             </sharp-modal>
         </template>

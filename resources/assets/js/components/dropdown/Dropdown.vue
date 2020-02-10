@@ -75,6 +75,7 @@
             }
         },
         mounted() {
+            this.$watch('opened', () => this.opened = true, { sync:true });
         }
     }
 </script>

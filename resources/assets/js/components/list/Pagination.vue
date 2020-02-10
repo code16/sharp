@@ -8,16 +8,16 @@
         v-on="$listeners"
     >
         <template slot="first-text">
-            <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+            <i class="fas fa-angle-double-left" aria-hidden="true"></i>
         </template>
         <template slot="prev-text">
-            <i class="fa fa-angle-left" aria-hidden="true"></i>
+            <i class="fas fa-angle-left" aria-hidden="true"></i>
         </template>
         <template slot="next-text">
-            <i class="fa fa-angle-right" aria-hidden="true"></i>
+            <i class="fas fa-angle-right" aria-hidden="true"></i>
         </template>
         <template slot="last-text">
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+            <i class="fas fa-angle-double-right" aria-hidden="true"></i>
         </template>
     </b-pagination>
 </template>

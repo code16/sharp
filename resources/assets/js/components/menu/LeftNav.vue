@@ -96,7 +96,7 @@
             },
             currentIcon() {
                 return this.current === 'dashboard'
-                    ? 'fa-dashboard'
+                    ? 'fas fa-tachometer-alt'
                     : (this.flattenedItems.find(e => e.key===this.current)||{}).icon;
             },
             classes() {

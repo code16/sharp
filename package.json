@@ -88,9 +88,9 @@
     "webpack-bundle-analyzer": "^3.0.3"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.12.1",
     "carbon-components": "^7.26.2",
     "element-ui": "^2.9.2",
-    "font-awesome": "^4.7.0",
     "leaflet": "^1.4.0",
     "trix": "^1.0.0",
     "vue": "^2.5.21",
