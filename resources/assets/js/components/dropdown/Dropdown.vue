@@ -74,8 +74,5 @@
                 this.isAbove = bottom > window.innerHeight;
             }
         },
-        mounted() {
-            this.$watch('opened', () => this.opened = true, { sync:true });
-        }
     }
 </script>
