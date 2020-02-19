@@ -105,7 +105,7 @@ describe('left-nav', ()=>{
     test('currentIcon', ()=>{
         let wrapper = createWrapper();
         wrapper.setProps({ current:'dashboard' });
-        expect(wrapper.vm.currentIcon).toBe('fa-dashboard');
+        expect(wrapper.vm.currentIcon).toBe('fas fa-tachometer-alt');
 
         wrapper = createWrapper({
             computed: {

@@ -1,23 +1,23 @@
 import Vue from 'vue';
 import Markdown from '../components/form/fields/markdown/Markdown.vue';
 
-import { MockI18n, MockInjections, wait } from './test-utils';
-import { mount, shallow } from '@vue/test-utils';
+import { MockI18n, MockInjections } from './test-utils';
+import { mount } from '@vue/test-utils';
 
 import SimpleMDE from 'simplemde';
 
 
 jest.mock('../components/form/fields/upload/VueClip', ()=>({
-    data:()=>({ uploader:({ _uploader:{ hiddenFileInput:{ click:jest.fn() } } }) }),
-    render:h=>h()
+    data: ()=>({ uploader:({ _uploader:{ hiddenFileInput:{ click:jest.fn() } } }) }),
+    render: h=>h()
 }));
 
 describe('markdown-field', () => {
     Vue.use(MockI18n);
 
-    function createWrapper(customOptions={}) {
+    async function createWrapper(customOptions={}) {
         let { propsData, ...options } = customOptions;
-        return mount(Markdown, {
+        const wrapper = mount(Markdown, {
             attachToDocument: true,
             provide: MockInjections.provide,
             propsData: {
@@ -28,10 +28,13 @@ describe('markdown-field', () => {
                 innerComponents: { upload:{ maxImageSize:3 } },
                 fieldConfigIdentifier: 'my_markdown',
                 uniqueIdentifier: 'my_markdown',
+                toolbar: ['bold', 'italic'],
                 ...propsData
             },
             ...options
         });
+        await wrapper.vm.$nextTick();
+        return wrapper;
     }
 
     function createLocalizedWrapper({ value, locale, locales }) {
@@ -65,14 +68,14 @@ describe('markdown-field', () => {
     });
 
     describe('basic tests', () => {
-        test('can mount Markdown field', () => {
-            let wrapper = createWrapper();
+        test('can mount Markdown field', async () => {
+            let wrapper = await createWrapper();
 
             expect(wrapper.html()).toMatchSnapshot();
         });
 
-        test('can mount "localized" Markdown field', () => {
-            let wrapper = createLocalizedWrapper({
+        test('can mount "localized" Markdown field', async () => {
+            let wrapper = await createLocalizedWrapper({
                 value: { text:{ fr:'', en: '' } },
                 locales: ['fr', 'en'],
                 locale: 'fr'
@@ -82,8 +85,8 @@ describe('markdown-field', () => {
         });
 
 
-        test('can mount "read only" Markdown field', () => {
-           let wrapper = createWrapper({
+        test('can mount "read only" Markdown field', async () => {
+           let wrapper = await createWrapper({
                 propsData: {
                     readOnly: true
                 }
@@ -93,7 +96,7 @@ describe('markdown-field', () => {
         });
 
         test('handle locale changed', async () => {
-            let wrapper = createLocalizedWrapper({
+            let wrapper = await createLocalizedWrapper({
                 value: { text:{ fr:'', en: '' } },
                 locales:['fr', 'en'],
                 locale: 'fr',
@@ -102,13 +105,13 @@ describe('markdown-field', () => {
             wrapper.setProps({ locale:'en' });
             wrapper.setMethods({ refreshOnExternalChange: jest.fn() });
 
-            await Vue.nextTick();
+            await wrapper.vm.$nextTick();
 
             expect(wrapper.vm.refreshOnExternalChange).toHaveBeenCalled();
         });
 
-        test('localized: simplemde instances, current simplemde', ()=>{
-            let wrapper = createLocalizedWrapper({
+        test('localized: simplemde instances, current simplemde', async () => {
+            let wrapper = await createLocalizedWrapper({
                 value: { text:{ fr:'', en: '' } },
                 locales:['fr', 'en'],
                 locale: 'fr',
@@ -124,15 +127,15 @@ describe('markdown-field', () => {
             expect(wrapper.vm.codemirror).toBe(wrapper.vm.simplemdeInstances['en'].codemirror);
         });
 
-        test('simplemde instances, current simplemde', ()=>{
-            let wrapper = createWrapper();
+        test('simplemde instances, current simplemde', async () => {
+            let wrapper = await createWrapper();
             expect(wrapper.vm.simplemdeInstances).toEqual(expect.any(SimpleMDE));
             expect(wrapper.vm.simplemde).toEqual(wrapper.vm.simplemdeInstances);
             expect(wrapper.vm.codemirror).toEqual(wrapper.vm.simplemdeInstances.codemirror);
         });
 
-        test('filesByName', ()=>{
-            let wrapper = createWrapper({
+        test('filesByName', async () => {
+            let wrapper = await createWrapper({
                 propsData: {
                     value: {
                         files: [{ name:'aaa.jpg' }, { name:'bbb.jpg' }]
@@ -145,8 +148,8 @@ describe('markdown-field', () => {
             });
         });
 
-        test('indexByFileId', ()=>{
-            let wrapper = createWrapper();
+        test('indexByFileId', async () => {
+            let wrapper = await createWrapper();
             let id = wrapper.vm.idSymbol;
             wrapper.setProps({
                 value: {
@@ -160,10 +163,10 @@ describe('markdown-field', () => {
         });
 
         test('createSimpleMDE', async () => {
-            let wrapper = createWrapper({
+            let wrapper = await createWrapper({
                 propsData:{
                     value: { text: 'value' },
-                    toolbar: [{ name:'my action' }]
+                    toolbar: ['bold']
                 },
                 created() {
                     jest.spyOn(this, 'createSimpleMDE');
@@ -176,19 +179,24 @@ describe('markdown-field', () => {
                 placeholder: 'Champ md',
                 spellChecker: false,
                 autoDownloadFontAwesome: false,
-                toolbar: [{ name:'my action' }],
+                toolbar: [{
+                    action: expect.any(Function),
+                    className: 'fas fa-bold',
+                    name: 'bold',
+                    title: '{{ form.markdown.icons.bold.title }}'
+                }],
             });
         });
 
-        test('localizedTextareaRef', ()=>{
-            let wrapper = createWrapper();
+        test('localizedTextareaRef', async () => {
+            let wrapper = await createWrapper();
             expect(wrapper.vm.localizedTextareaRef('fr')).toEqual('textarea_fr');
         });
 
-        test('bound toolbar buttons custom action properly', () =>{
-            let wrapper = createWrapper({
+        test('bound toolbar buttons custom action properly', async () =>{
+            let wrapper = await createWrapper({
                 propsData: {
-                    toolbar: [{ name:'image'}]
+                    toolbar: ['image']
                 }
             });
 
@@ -202,7 +210,7 @@ describe('markdown-field', () => {
         });
 
         test('set read only properly', async () => {
-            let wrapper = createWrapper();
+            let wrapper = await createWrapper();
 
             let { simplemde, codemirror } = wrapper.vm;
 
@@ -213,8 +221,8 @@ describe('markdown-field', () => {
             expect(codemirror.getOption('readOnly')).toBe(true);
         });
 
-        test('add codemirror event listener properly', () => {
-            let wrapper = createWrapper();
+        test('add codemirror event listener properly', async () => {
+            let wrapper = await createWrapper();
 
             let { codemirror } = wrapper.vm;
 
@@ -232,7 +240,7 @@ describe('markdown-field', () => {
         });
 
         test('emit input on text changed', async () => {
-            let wrapper = createWrapper();
+            let wrapper = await createWrapper();
 
             let { simplemde } = wrapper.vm;
 
@@ -246,14 +254,8 @@ describe('markdown-field', () => {
             expect(wrapper.emitted().input[0]).toEqual(['localizedValue'])
         });
 
-
-        test('has localized editor mixin with appropriate text prop', ()=>{
-            let wrapper = mount(Markdown, MockInjections);
-            expect(wrapper.vm.$options._localizedEditor).toEqual({ textProp:'text' });
-        });
-
-        test('mount with null localized value', ()=>{
-            let wrapper = createLocalizedWrapper({ value: { text: null }, locales:['fr', 'en'], locale:'fr' });
+        test('mount with null localized value', async () => {
+            let wrapper = await createLocalizedWrapper({ value: { text: null }, locales:['fr', 'en'], locale:'fr' });
             expect(wrapper.find(Markdown).isVueInstance()).toBe(true);
         });
     });
@@ -305,7 +307,7 @@ describe('markdown-field', () => {
         };
 
         test('insert image uploader and text properly', async () => {
-            let wrapper = createWrapper({
+            let wrapper = await createWrapper({
                 mixins: [mockMixin],
                 propsData: {
                     value: { text: 'Lorem Elsass ipsum' }
@@ -320,7 +322,7 @@ describe('markdown-field', () => {
         });
 
         test('update image uploader and text properly', async () => {
-            let wrapper = createWrapper({
+            let wrapper = await createWrapper({
                 mixins:[mockMixin]
             });
 
@@ -339,8 +341,8 @@ describe('markdown-field', () => {
             }]);
         });
 
-        test('parse and insert image uploader and text properly', () => {
-            let wrapper = createWrapper({
+        test('parse and insert image uploader and text properly', async () => {
+            let wrapper = await createWrapper({
                 mixins: [mockMixin],
                 propsData: {
                     value: {
@@ -377,7 +379,7 @@ describe('markdown-field', () => {
         });
 
         test('delete properly', async () => {
-            let wrapper = createWrapper({
+            let wrapper = await createWrapper({
                 mixins: [mockMixin],
                 propsData: {
                     value: {
@@ -403,7 +405,7 @@ describe('markdown-field', () => {
         });
 
         test('register delete event and delete properly on event', async () => {
-            let wrapper = createWrapper({
+            let wrapper = await createWrapper({
                 mixins:[mockMixin]
             });
             let $uploader = await wrapper.vm.insertUploadImage({ isInsertion:true });
@@ -422,7 +424,7 @@ describe('markdown-field', () => {
 
 
         test('Delete properly removing from upload component', async () => {
-            let wrapper = createWrapper({
+            let wrapper = await createWrapper({
                 mixins:[mockMixin]
             });
 
@@ -442,7 +444,7 @@ describe('markdown-field', () => {
         });
 
         test('expose appropriate props to markdown upload component', async () =>{
-            let wrapper = createWrapper({
+            let wrapper = await createWrapper({
                 mixins: [mockMixin],
                 propsData: {
                     value: {
@@ -481,7 +483,7 @@ describe('markdown-field', () => {
         });
 
         test('index files correctly on mounted', async () => {
-            let wrapper = createWrapper({
+            let wrapper = await createWrapper({
                 propsData: {
                     value: {
                         files:[{
@@ -507,7 +509,7 @@ describe('markdown-field', () => {
         });
 
         test('refresh properly', async () => {
-            let wrapper = createWrapper({ mixins:[mockMixin] });
+            let wrapper = await createWrapper({ mixins:[mockMixin] });
 
             let { simplemde } = wrapper.vm;
             let { codemirror } = simplemde;
@@ -524,7 +526,7 @@ describe('markdown-field', () => {
         });
 
         test('update file data properly', async () => {
-            let wrapper = createWrapper({ mixins:[mockMixin] });
+            let wrapper = await createWrapper({ mixins:[mockMixin] });
             let $uploader = await wrapper.vm.insertUploadImage({ isInsertion: true });
 
             $uploader.marker.find = jest.fn(() => ({ from:{ line: 1, ch: 0 }, to:{ line: 1, ch:5 }}) );

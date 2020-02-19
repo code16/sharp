@@ -3,10 +3,10 @@
 exports[`trix-custom-toolbar can mount TrixCustomToolbar 1`] = `
 <div>
 	<div class="editor-toolbar">
-		<button tabindex="-1" class="fa fa-bold" data-trix-attribute="bold"></button>
-		<button tabindex="-1" class="fa fa-italic" data-trix-attribute="italic"></button>
+		<button tabindex="-1" class="fa fas fa-bold" data-trix-attribute="bold"></button>
+		<button tabindex="-1" class="fa fas fa-italic" data-trix-attribute="italic"></button>
 		<i class="separator">|</i>
-		<button tabindex="-1" class="fa fa-link" data-trix-attribute="href" data-trix-action="link"></button>
+		<button tabindex="-1" class="fa fas fa-link" data-trix-attribute="href" data-trix-action="link"></button>
 	</div>
 	<div data-trix-dialogs="" class="trix-dialogs">
 		<div data-trix-dialog="href" data-trix-dialog-attribute="href" class="trix-dialog trix-dialog--link">
