@@ -6,8 +6,8 @@
     <meta name="base-url" content="{{ sharp_base_url_segment() }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{{ sharp_page_title($sharpMenu ?? null, $entityKey ?? $dashboardKey ?? null) }}</title>
-    <link rel="stylesheet" href="/vendor/sharp/sharp.css?version={{ sharp_version() }}">
-    <link rel="stylesheet" href="/vendor/sharp/sharp-cms.css?version={{ sharp_version() }}">
+    <link rel="stylesheet" href="{{ mix('sharp.css', '/vendor/sharp') }}">
+    <link rel="stylesheet" href="{{ mix('sharp-cms.css', '/vendor/sharp') }}">
     {!! \Illuminate\Support\Arr::get($injectedAssets ?? [], 'head') !!}
 </head>
 <body>
@@ -16,13 +16,13 @@
 
     @yield('content')
 
-    <script src="/vendor/sharp/manifest.js?version={{ sharp_version() }}"></script>
-    <script src="/vendor/sharp/vendor.js?version={{ sharp_version() }}"></script>
-    <script src="/vendor/sharp/client-api.js?version={{ sharp_version() }}"></script>
+    <script src="{{ mix('manifest.js', '/vendor/sharp') }}"></script>
+    <script src="{{ mix('vendor.js', '/vendor/sharp') }}"></script>
+    <script src="{{ mix('client-api.js', '/vendor/sharp') }}"></script>
 
     {!! sharp_custom_form_fields() !!}
 
     <script src="/vendor/sharp/lang.js?version={{ sharp_version() }}&locale={{ app()->getLocale() }}"></script>
-    <script src="/vendor/sharp/sharp.js?version={{ sharp_version() }}"></script>
+    <script src="{{ mix('sharp.js', '/vendor/sharp') }}"></script>
 </body>
 </html>
