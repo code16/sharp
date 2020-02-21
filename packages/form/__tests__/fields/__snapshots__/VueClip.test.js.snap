@@ -163,10 +163,10 @@ exports[`vue-clip can mount initially image VueClip component 1`] = `
 							<!---->
 							<div>
 								<button class="SharpButton SharpButton--primary">
-									<i class="fa fa-rotate-left"></i>
+									<i class="fas fa-undo"></i>
 								</button>
 								<button class="SharpButton SharpButton--primary">
-									<i class="fa fa-rotate-right"></i>
+									<i class="fas fa-redo"></i>
 								</button>
 							</div>
 						</div>

@@ -4,12 +4,12 @@ exports[`pagination mount pagination 1`] = `
 <ul role="menubar" aria-disabled="false" aria-label="Pagination" class="pagination SharpPagination b-pagination">
 	<li role="presentation" aria-hidden="true" class="page-item disabled">
 		<span role="menuitem" aria-label="Go to first page" aria-disabled="true" class="page-link">
-			<i aria-hidden="true" class="fa fa-angle-double-left"></i>
+			<i aria-hidden="true" class="fas fa-angle-double-left"></i>
 		</span>
 	</li>
 	<li role="presentation" aria-hidden="true" class="page-item disabled">
 		<span role="menuitem" aria-label="Go to previous page" aria-disabled="true" class="page-link">
-			<i aria-hidden="true" class="fa fa-angle-left"></i>
+			<i aria-hidden="true" class="fas fa-angle-left"></i>
 		</span>
 	</li>
 	<!---->
@@ -30,12 +30,12 @@ exports[`pagination mount pagination 1`] = `
 	</li>
 	<li role="presentation" class="page-item">
 		<a role="menuitem" tabindex="-1" aria-label="Go to next page" target="_self" href="#" class="page-link">
-			<i aria-hidden="true" class="fa fa-angle-right"></i>
+			<i aria-hidden="true" class="fas fa-angle-right"></i>
 		</a>
 	</li>
 	<li role="presentation" class="page-item">
 		<a role="menuitem" tabindex="-1" aria-label="Go to last page" target="_self" href="#" class="page-link">
-			<i aria-hidden="true" class="fa fa-angle-double-right"></i>
+			<i aria-hidden="true" class="fas fa-angle-double-right"></i>
 		</a>
 	</li>
 </ul>
@@ -46,7 +46,7 @@ exports[`pagination mount pagination without end buttons 1`] = `
 	<!---->
 	<li role="presentation" aria-hidden="true" class="page-item disabled">
 		<span role="menuitem" aria-label="Go to previous page" aria-disabled="true" class="page-link">
-			<i aria-hidden="true" class="fa fa-angle-left"></i>
+			<i aria-hidden="true" class="fas fa-angle-left"></i>
 		</span>
 	</li>
 	<!---->
@@ -59,7 +59,7 @@ exports[`pagination mount pagination without end buttons 1`] = `
 	<!---->
 	<li role="presentation" class="page-item">
 		<a role="menuitem" tabindex="-1" aria-label="Go to next page" target="_self" href="#" class="page-link">
-			<i aria-hidden="true" class="fa fa-angle-right"></i>
+			<i aria-hidden="true" class="fas fa-angle-right"></i>
 		</a>
 	</li>
 	<!---->

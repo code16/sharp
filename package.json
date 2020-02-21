@@ -70,7 +70,9 @@
     "moment": "^2.19.1",
     "moment-timezone": "^0.5.13",
     "moxios": "^0.4.0",
+    "node-sass": "^4.13.1",
     "qs": "^6.6.0",
+    "resolve-url-loader": "^3.1.0",
     "sass": "^1.16.0",
     "sass-loader": "^7.1.0",
     "simplemde": "^1.11.2",
@@ -91,9 +93,9 @@
     "webpack-bundle-analyzer": "^3.0.3"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.12.1",
     "carbon-components": "^7.26.2",
     "element-ui": "^2.9.2",
-    "font-awesome": "^4.7.0",
     "leaflet": "^1.4.0",
     "sharp-commands": "file:packages/commands",
     "sharp-dashboard": "file:packages/dashboard",

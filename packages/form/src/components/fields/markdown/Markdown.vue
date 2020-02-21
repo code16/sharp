@@ -15,12 +15,13 @@
 
 <script>
     import SimpleMDE from 'simplemde';
-    
+
     import { lang } from 'sharp';
     import MarkdownUpload from './MarkdownUpload';
     import Widget from './MarkdownWidget';
-    
+
     import localize from '../../../mixins/localize/editor';
+    import { buttons } from './config';
 
     const noop = ()=>{};
 
@@ -94,7 +95,10 @@
             },
             text() {
                 return this.localizedText;
-            }
+            },
+            transformedToolbar() {
+                return (this.toolbar || []).map(key => key !== '|' ? buttons[key] : key);
+            },
         },
         methods : {
             localizedTextareaRef(locale) {
@@ -353,7 +357,7 @@
                     initialValue,
                     placeholder: this.placeholder,
                     spellChecker: false,
-                    toolbar: this.toolbar,
+                    toolbar: this.transformedToolbar,
                     autoDownloadFontAwesome: false,
                     status: false
                 });

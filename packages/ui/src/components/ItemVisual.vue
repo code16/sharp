@@ -1,7 +1,11 @@
 <template>
     <span>
-        <i v-if="item.icon" class="fa" :class="iconClasses"></i>
-        <img v-else-if="item.image" :src="item.image">
+        <template v-if="item.icon">
+            <i class="fa" :class="iconClasses"></i>
+        </template>
+        <template v-else-if="item.image">
+            <img :src="item.image">
+        </template>
     </span>
 </template>
 

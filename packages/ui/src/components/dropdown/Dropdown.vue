@@ -74,7 +74,5 @@
                 this.isAbove = bottom > window.innerHeight;
             }
         },
-        mounted() {
-        }
     }
 </script>

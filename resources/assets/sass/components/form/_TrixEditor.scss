@@ -36,6 +36,7 @@
       cursor: pointer;
       background: none;
       padding:0;
+      font-size: 1rem;
       &:hover, &[data-trix-active]{
         background: #fcfcfc;
         border-color: #95a5a6;
