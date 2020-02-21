@@ -13,6 +13,16 @@ use Code16\Sharp\Tests\SharpTestCase;
 
 abstract class BaseApiTest extends SharpTestCase
 {
+    protected function getEnvironmentSetUp($app)
+    {
+        parent::getEnvironmentSetUp($app);
+
+        if (!file_exists(public_path('vendor/sharp'))) {
+            mkdir(public_path('vendor/sharp'), 0777, true);
+        }
+        touch(public_path('vendor/sharp/mix-manifest.json'));
+    }
+    
     protected function setUp(): void
     {
         parent::setUp();
