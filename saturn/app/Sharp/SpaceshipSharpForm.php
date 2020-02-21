@@ -280,7 +280,7 @@ class SpaceshipSharpForm extends SharpForm
             "corporation_id" => $this->context()->globalFilterFor("corporation")
         ]);
 
-        if(isset($data["name"]) && $data["name"] == "error") {
+        if(($data["name"] ?? "") == "error") {
             throw new SharpApplicativeException("Name can't be «error»");
         }
 
@@ -290,12 +290,16 @@ class SpaceshipSharpForm extends SharpForm
             ->ignore("html")
             ->save($instance, $data);
 
-        $this->notify("Spaceship was updated with success!")
-            ->setDetail("Congratulations, this was not an easy thing to do.")
-            ->setLevelSuccess()
-            ->setAutoHide(false);
+        if(isset($data["name"])) {
+            // Workaround to display this only once, in case of a double pass in this method
+            // by Sharp, to handle relationships in a creation case.
+            $this->notify("Spaceship was updated with success!")
+                ->setDetail("Congratulations, this was not an easy thing to do.")
+                ->setLevelSuccess()
+                ->setAutoHide(false);
+        }
 
-        if($data["capacity"] >= 1000) {
+        if(($data["capacity"] ?? 0) >= 1000) {
             $this->notify("this is a huge spaceship, by the way!");
         }
 
