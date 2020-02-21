@@ -217,7 +217,7 @@ describe('dynamic-view',()=>{
             let response = await nextRequestFulfilled({
                 status: 400,
                 response: new Blob([JSON.stringify({ errors: {} })], { type: 'application/json' })
-            });
+            }, 100);
 
             expect(response.data).toEqual({ errors: {} });
         });
