@@ -177,7 +177,7 @@
             }
         },
 
-        created() {
+        beforeMount() {
             this.init();
             this.initCommands();
         },

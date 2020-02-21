@@ -7,11 +7,18 @@ describe('DataList', ()=>{
 
     function createWrapper({ ...options }={}) {
         return shallowMount(SharpDataList, {
+            // language=Vue
             stubs: {
-                'SharpDataListRow': `<div class="MOCKED_SharpDataListRow" v-bind="$props">
-                    <template v-for="column in columns"><slot name="cell" :column="column" /></template>
-                </div>`,
-                'Draggable': `<div class="MOCKED_Draggable"><slot /></div>`,
+                DataListRow:
+                    `<div class="MOCKED_SharpDataListRow" v-bind="$props">
+                        <template v-for="column in columns">
+                            <slot name="cell" :column="column" />
+                        </template>
+                    </div>`,
+                Draggable:
+                    `<div class="MOCKED_Draggable">
+                        <slot />
+                    </div>`,
             },
             ...options,
         });

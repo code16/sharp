@@ -2,13 +2,13 @@ import Vue from 'vue';
 import DynamicView from '../../mixins/DynamicView';
 
 import {
-    MockInjections, 
-    MockI18n, 
+    MockInjections,
+    MockI18n,
     mockProperty,
-    unmockProperty, 
+    unmockProperty,
     setter,
     nextRequestFulfilled
-} from "sharp-test-utils";
+} from "@sharp/test-utils";
 
 import moxios from 'moxios';
 

@@ -3,7 +3,7 @@ import { ErrorNode, ConfigNode } from 'sharp/mixins';
 import FieldContainer from '../src/components/ui/FieldContainer.vue';
 import * as fields from '../src/components/fields';
 
-import { MockInjections } from "sharp-test-utils";
+import { MockInjections } from "@sharp/test-utils";
 
 
 describe('field-container', () => {

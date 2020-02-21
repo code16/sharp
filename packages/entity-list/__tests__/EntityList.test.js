@@ -17,11 +17,26 @@ describe('EntityList', () => {
         const localVue = createLocalVue();
         localVue.use(Vuex);
         const wrapper = shallowMount(SharpEntityList, {
+            // language=Vue
             stubs: {
-                'DataList': `<div class="MOCKED_SharpDataList"> <slot name="item" :item="{}" /> </div>`,
-                'DataListRow': `<div class="MOCKED_SharpDataListRow" :url="url"> <slot name="append" /> </div>`,
-                'Dropdown':`<div class="MOCKED_SharpDropdown"> <slot name="text"/> <slot /> </div>`,
-                'CommandsDropdown': `<div class="MOCKED_SharpCommandsDropdown"> <slot name="text" /> <slot /> </div>`
+                DataList:
+                    `<div class="MOCKED_SharpDataList"> 
+                        <slot name="item" :item="{}" />
+                    </div>`,
+                DataListRow:
+                    `<div class="MOCKED_SharpDataListRow" :url="url"> 
+                        <slot name="append" /> 
+                    </div>`,
+                Dropdown:
+                    `<div class="MOCKED_SharpDropdown">
+                        <slot name="text"/>
+                        <slot />
+                    </div>`,
+                CommandsDropdown:
+                    `<div class="MOCKED_SharpCommandsDropdown">
+                        <slot name="text" />
+                        <slot />
+                    </div>`
             },
             propsData: {
                 entityKey: 'spaceship',
@@ -742,7 +757,7 @@ describe('EntityList', () => {
             wrapper.vm.formUrl({ instanceId:'instanceId' });
             expect(formUrl).toHaveBeenCalledWith({ entityKey:'entityKey', instanceId:'instanceId' });
 
-            
+
             formUrl.mockClear();
             wrapper.vm.formUrl({ instanceId:'instanceId', formKey:'formKey' });
             expect(formUrl).toHaveBeenCalledWith({ entityKey:'entityKey:formKey', instanceId:'instanceId' });

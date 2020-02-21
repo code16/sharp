@@ -20,7 +20,6 @@
     "moduleNameMapper": {
       "^vue$": "vue/dist/vue.common.js",
       "^sharp((/(.*))|$)": "<rootDir>/resources/assets/js$1",
-      "^sharp-test-utils$": "<rootDir>/packages/test-utils",
       "\\.(css|less)$": "<rootDir>/packages/test-utils/src/setup/styleMock.js"
     },
     "transformIgnorePatterns": [
@@ -94,6 +93,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.12.1",
+    "@sharp/test-utils": "file:packages/test-utils",
     "carbon-components": "^7.26.2",
     "element-ui": "^2.9.2",
     "leaflet": "^1.4.0",

@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Tags from '../../src/components/fields/Tags.vue';
 
-import { MockI18n } from 'sharp-test-utils';
+import { MockI18n } from '@sharp/test-utils';
 
 describe('tags-field', () => {
     Vue.use(MockI18n);

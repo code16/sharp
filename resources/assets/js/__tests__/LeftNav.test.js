@@ -1,7 +1,7 @@
 import Vuex from 'vuex';
 import { mount, createLocalVue } from '@vue/test-utils';
 import globalFiltersModule from 'sharp-filters/src/store/global-filters';
-import LeftNav from '../src/components/menu/LeftNav.vue';
+import LeftNav from '../components/LeftNav.vue';
 
 jest.mock('sharp-filters/src/store/global-filters');
 jest.useFakeTimers();

@@ -1,6 +1,11 @@
 import { shallowMount } from '@vue/test-utils';
 import TrixEditor from '../../src/components/fields/wysiwyg/TrixEditor.vue';
 
+jest.mock('../../src/util/trix', () => ({
+    __esModule: true,
+    default: require('trix'),
+}));
+
 describe('trix-editor',()=>{
     let wrapper;
 

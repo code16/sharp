@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Markdown from '../../src/components/fields/markdown/Markdown.vue';
 
-import { MockI18n, MockInjections } from 'sharp-test-utils';
+import { MockI18n, MockInjections } from '@sharp/test-utils';
 import { mount } from '@vue/test-utils';
 
 import SimpleMDE from 'simplemde';

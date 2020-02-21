@@ -3,18 +3,25 @@ import FieldsLayout from '../src/components/ui/FieldsLayout.vue';
 import { shallowMount } from '@vue/test-utils';
 
 describe('fields-layout', () => {
-    const FieldMock = { template:'<div id="FIELD_MOCK"></div>' };
+
+    const FieldMock = { name:'Field', template:'<div class="FIELD_MOCK"></div>' };
     function createWrapper({ propsData }) {
         return shallowMount(FieldsLayout, {
             propsData: {
                 ...propsData,
             },
+            // language=Vue
             stubs: {
                 Grid:
-                    `<div id="MOCKED_GRID">
+                    `<div class="GRID_MOCK">
                         <slot v-bind="rows[0][0]"></slot>
                     </div>`,
-                FieldsLayout: true,
+                FieldsLayout:
+                    // render first field from given layout
+                    `<div class="FIELDS_LAYOUT_MOCK">
+                        <slot v-bind="$attrs.layout[0][0]"></slot>
+                    </div>`,
+                Field: FieldMock,
             },
             scopedSlots: {
                 default: '<Field :data="props" />',
@@ -81,7 +88,7 @@ describe('fields-layout', () => {
             }
         });
 
-        expect(wrapper.find(FieldMock).vm.$attrs).toEqual({
+        expect(wrapper.find({ name: 'Field' }).vm.$attrs).toEqual({
             data: { key: 'list' }
         })
     });
@@ -99,7 +106,7 @@ describe('fields-layout', () => {
             }
         });
 
-        expect(wrapper.find(FieldMock).vm.$attrs).toEqual({
+        expect(wrapper.find({ name: 'Field' }).vm.$attrs).toEqual({
             data: { key: 'title' }
         });
     });
@@ -123,7 +130,7 @@ describe('fields-layout', () => {
         });
 
         expect(wrapper.vm.fieldsetMap).toEqual({
-            'fieldset_1':[{ key: 'title' }, { key: 'subtitle' },{ key: 'name' }]
+            'fieldset_1': [{ key: 'title' }, { key: 'subtitle' },{ key: 'name' }]
         });
 
         expect(wrapper.vm.isFieldsetVisible({ id: 'fieldset_1'})).toBe(true);
@@ -148,7 +155,7 @@ describe('fields-layout', () => {
         });
 
         expect(wrapper.vm.fieldsetMap).toEqual({
-            'fieldset_1':[{ key: 'title' }, { key: 'subtitle' },{ key: 'name' }]
+            'fieldset_1': [{ key: 'title' }, { key: 'subtitle' },{ key: 'name' }]
         });
 
         expect(wrapper.vm.isFieldsetVisible({ id: 'fieldset_1'})).toBe(false);

@@ -1,9 +1,13 @@
 import Vue from 'vue';
 import Autocomplete from '../../src/components/fields/Autocomplete.vue';
 
-import { MockI18n, nextRequestFulfilled } from 'sharp-test-utils';
+import { MockI18n, nextRequestFulfilled } from '@sharp/test-utils';
 import moxios from 'moxios';
+import { search } from 'sharp';
 
+jest.mock('sharp/util/search', ()=>({
+    search: jest.fn(()=>[]),
+}));
 
 describe('autocomplete-field', ()=>{
     Vue.use(MockI18n);
@@ -74,18 +78,29 @@ describe('autocomplete-field', ()=>{
             });
         });
 
-        test('expose appropriate arguments to the local search engine', async () => {
+        test('search', async () => {
             let $autocomplete = await createVm();
 
+            let { multiselect } = $autocomplete.$refs;
 
-            expect($autocomplete.searchStrategy).toMatchObject({
-                fuse: {
-                    list: [{id:1, name:'Theodore Bagwell', alias:'T-Bag'}, {id:2, name:'Lincoln Burrows', alias: 'Linc'}]
-                },
-                options: {
-                    keys: ['name', 'alias']
+            multiselect.$emit('search-change', 'query');
+
+            expect(search).toHaveBeenCalledWith(
+                [{id:1, name:'Theodore Bagwell', alias:'T-Bag'}, {id:2, name:'Lincoln Burrows', alias: 'Linc'}],
+                'query',
+                {
+                    searchKeys: ['name', 'alias']
                 }
-            });
+            );
+
+            // expect($autocomplete.searchStrategy).toMatchObject({
+            //     fuse: {
+            //         list: [{id:1, name:'Theodore Bagwell', alias:'T-Bag'}, {id:2, name:'Lincoln Burrows', alias: 'Linc'}]
+            //     },
+            //     options: {
+            //         keys: ['name', 'alias']
+            //     }
+            // });
         });
 
 

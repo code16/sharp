@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Text from '../../src/components/fields/Text.vue';
 
-import { MockInjections } from 'sharp-test-utils';
+import { MockInjections } from '@sharp/test-utils';
 
 describe('text-field', () => {
     Vue.component('sharp-text', Text);

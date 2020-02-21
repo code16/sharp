@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Select from '../../src/components/fields/Select.vue';
 
-import { MockI18n } from 'sharp-test-utils';
+import { MockI18n } from '@sharp/test-utils';
 
 
 

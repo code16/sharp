@@ -4,7 +4,7 @@ import * as consts from 'sharp/consts';
 import Form from '../src/components/Form.vue';
 
 
-import { wait, MockInjections, MockI18n, nextRequestFulfilled } from "sharp-test-utils";
+import { wait, MockInjections, MockI18n, nextRequestFulfilled } from "@sharp/test-utils";
 import moxios from 'moxios';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 
@@ -27,17 +27,18 @@ describe('sharp-form', ()=>{
                 actionsBus: new Vue(),
                 mainLoading: new Vue(),
             },
+            // language=Vue
             stubs: {
-                Grid: 
+                Grid:
                     `<div id="MOCKED_GRID">
                         <slot v-bind="rows[0][0]" />
                     </div>`,
-                FieldsLayout: 
+                FieldsLayout:
                     `<div id="MOCKED_FIELDS_LAYOUT"> 
                         <slot v-if="layout[0][0]" v-bind="layout[0][0]" />
                     </div>`,
                 FieldDisplay: true,
-                TabbedLayout: 
+                TabbedLayout:
                     `<div id="MOCKED_TABBED_LAYOUT">
                         <slot v-bind="layout.tabs[0]" />
                     </div>`,
@@ -187,7 +188,7 @@ describe('sharp-form', ()=>{
             }
         });
         expect(wrapper.vm.isReadOnly).toBe(false);
-        
+
         wrapper.setProps({
             ignoreAuthorizations: true,
         });
@@ -219,7 +220,7 @@ describe('sharp-form', ()=>{
     test('has errors', () => {
         const wrapper = createWrapper();
         expect(wrapper.vm.hasErrors).toBe(false);
-        
+
         wrapper.setData({
             errors: {
                 field: ['required']

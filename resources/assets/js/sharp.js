@@ -52,7 +52,7 @@ Vue.use(SharpForm, { store, router });
 Vue.use(SharpShow, { store, router });
 Vue.use(SharpUI, { store, router });
 
-
+window.Trix = Trix;
 Vue.config.ignoredElements = [/^trix-/];
 
 const SharpLoading = Vue.extend(Loading);

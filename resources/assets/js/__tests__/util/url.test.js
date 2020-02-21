@@ -1,12 +1,12 @@
 import { router } from '../../router';
-import { 
-    formUrl, 
-    showUrl, 
-    listUrl, 
-    routeUrl, 
-    getBackUrl, 
+import {
+    formUrl,
+    showUrl,
+    listUrl,
+    getBackUrl,
     getListBackUrl,
 } from 'sharp';
+import { routeUrl } from 'sharp/router';
 import listRoutes from 'sharp-entity-list/src/routes';
 import formRoutes from 'sharp-form/src/routes';
 import showRoutes from 'sharp-show/src/routes';
@@ -40,16 +40,16 @@ describe('url', ()=>{
     });
     test('getBackUrl', () => {
         expect(getBackUrl([
-            { url:'/list', type: 'entityList' }, 
-            { url:'/show', type: 'show' }, 
+            { url:'/list', type: 'entityList' },
+            { url:'/show', type: 'show' },
             { url:'/form', type: 'form' }
         ]))
         .toEqual('/show?x-access-from=ui');
     });
     test('getListBackUrl', () => {
         expect(getListBackUrl([
-            { url:'/list', type: 'entityList' }, 
-            { url:'/show', type: 'show' }, 
+            { url:'/list', type: 'entityList' },
+            { url:'/show', type: 'show' },
             { url:'/form', type: 'form' }
         ]))
         .toEqual('/list?x-access-from=ui');

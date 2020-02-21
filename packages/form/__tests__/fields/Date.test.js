@@ -2,7 +2,7 @@ import Vue from 'vue';
 import SharpDate from '../../src/components/fields/date/Date.vue';
 import moment from 'moment-timezone';
 
-import { MockInjections, MockI18n } from 'sharp-test-utils';
+import { MockInjections, MockI18n } from '@sharp/test-utils';
 
 
 function date(...args) {

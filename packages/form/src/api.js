@@ -1,3 +1,4 @@
+import axios from 'axios';
 
 export function getAutocompleteSuggestions({ url, method, locale, searchAttribute, query, }) {
     const params = {

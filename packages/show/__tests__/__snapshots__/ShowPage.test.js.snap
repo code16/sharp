@@ -5,57 +5,61 @@ exports[`show page can mount 1`] = `
 	<div class="container">
 		<!---->
 	</div>
-	<sharpcommandformmodal-stub></sharpcommandformmodal-stub>
-	<sharpcommandviewpanel-stub></sharpcommandviewpanel-stub>
+	<commandformmodal-stub></commandformmodal-stub>
+	<commandviewpanel-stub></commandviewpanel-stub>
 </div>
 `;
 
 exports[`show page can mount with fields 1`] = `
 <div class="ShowPage">
 	<div class="container">
-		<sharpactionbarshow-stub formurl="formUrl"></sharpactionbarshow-stub>
+		<actionbarshow-stub formurl="formUrl"></actionbarshow-stub>
 		<h2 class="ShowPage__section-title mb-2">Section title</h2>
 		<div class="ShowPage__section mb-4">
 			<div rows="[object Object]" class="MOCKED_SharpGrid">
-				<div class="MOCKED_SharpGrid ShowPage__fields-grid">
-					<sharpshowfield-stub options="[object Object]" value="[object Object]"></sharpshowfield-stub>
+				<div rows="[object Object]" class="MOCKED_SharpGrid ShowPage__fields-grid">
+					<showfield-stub options="[object Object]" value="[object Object]"></showfield-stub>
 				</div>
 			</div>
 		</div>
 	</div>
-	<sharpcommandformmodal-stub></sharpcommandformmodal-stub>
-	<sharpcommandviewpanel-stub></sharpcommandviewpanel-stub>
+	<commandformmodal-stub></commandformmodal-stub>
+	<commandviewpanel-stub></commandviewpanel-stub>
 </div>
 `;
 
 exports[`show page can mount with no container section 1`] = `
 <div class="ShowPage">
 	<div class="container">
-		<sharpactionbarshow-stub formurl="formUrl"></sharpactionbarshow-stub>
+		<actionbarshow-stub formurl="formUrl"></actionbarshow-stub>
 		<h2 class="ShowPage__section-title mb-2">Section title</h2>
 		<div class="ShowPage__section mb-4 ShowPage__section--no-container">
-			<sharpgrid-stub rows="[object Object]"></sharpgrid-stub>
+			<div rows="[object Object]" class="MOCKED_SharpGrid">
+				<div rows="[object Object]" class="MOCKED_SharpGrid ShowPage__fields-grid">
+					<showfield-stub options="[object Object]"></showfield-stub>
+				</div>
+			</div>
 		</div>
 	</div>
-	<sharpcommandformmodal-stub></sharpcommandformmodal-stub>
-	<sharpcommandviewpanel-stub></sharpcommandviewpanel-stub>
+	<commandformmodal-stub></commandformmodal-stub>
+	<commandviewpanel-stub></commandviewpanel-stub>
 </div>
 `;
 
 exports[`show page can mount with unknown field 1`] = `
 <div class="ShowPage">
 	<div class="container">
-		<sharpactionbarshow-stub formurl="formUrl"></sharpactionbarshow-stub>
+		<actionbarshow-stub formurl="formUrl"></actionbarshow-stub>
 		<h2 class="ShowPage__section-title mb-2">Section title</h2>
 		<div class="ShowPage__section mb-4">
 			<div rows="[object Object]" class="MOCKED_SharpGrid">
-				<div class="MOCKED_SharpGrid ShowPage__fields-grid">
-					<sharpshowunknownfield-stub name="name"></sharpshowunknownfield-stub>
+				<div rows="[object Object]" class="MOCKED_SharpGrid ShowPage__fields-grid">
+					<unknownfield-stub name="name"></unknownfield-stub>
 				</div>
 			</div>
 		</div>
 	</div>
-	<sharpcommandformmodal-stub></sharpcommandformmodal-stub>
-	<sharpcommandviewpanel-stub></sharpcommandviewpanel-stub>
+	<commandformmodal-stub></commandformmodal-stub>
+	<commandviewpanel-stub></commandviewpanel-stub>
 </div>
 `;

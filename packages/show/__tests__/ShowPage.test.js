@@ -3,17 +3,21 @@ import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import ShowPage from "../src/components/pages/ShowPage";
 import showModule from "../src/store/show";
+import { formUrl } from "sharp";
 
 jest.mock('../src/store/show');
 jest.mock('sharp/consts', () => ({
     BASE_URL: 'BASE_URL'
 }));
+jest.mock('sharp');
 
 
 describe('show page', () => {
+
     function createWrapper({ storeModule, ...options } = {}) {
         const localVue = createLocalVue();
         localVue.use(Vuex);
+
         const wrapper = shallowMount(ShowPage, {
             extends: {
                 computed: {
@@ -21,7 +25,6 @@ describe('show page', () => {
                     config: () => ({}),
                 },
             },
-            localVue,
             created() {
                 jest.spyOn(this, 'init').mockImplementation();
                 jest.spyOn(this.$store, 'dispatch').mockImplementation(()=>Promise.resolve());
@@ -31,6 +34,17 @@ describe('show page', () => {
                     'show': merge(showModule, storeModule),
                 }
             }),
+            // language=Vue
+            stubs: {
+                Grid:
+                    `<div class="MOCKED_SharpGrid" v-bind="$props">
+                        <slot v-bind="rows[0][0]" />
+                    </div>`,
+            },
+            mocks: {
+                $route: { params: { } },
+            },
+            localVue,
             ...options,
         });
         return wrapper;
@@ -48,19 +62,15 @@ describe('show page', () => {
                         {
                             title: 'Section title',
                             columns: [{
-                                fields:[{}]
+                                fields: [[{}]]
                             }]
                         }
                     ]
                 }),
                 formUrl: () => 'formUrl',
             },
-            stubs: {
-                'SharpGrid': {
-                    template: `<div class="MOCKED_SharpGrid" v-bind="$attrs"><slot v-bind="{}" /></div>`,
-                },
-            },
         });
+
         wrapper.setMethods({
             fieldOptions: () => ({}),
             fieldValue: () => ({}),
@@ -77,19 +87,15 @@ describe('show page', () => {
                         {
                             title: 'Section title',
                             columns: [{
-                                fields:[{}]
+                                fields: [[{ key:'name' }]]
                             }]
                         }
                     ]
                 }),
                 formUrl: () => 'formUrl',
             },
-            stubs: {
-                'SharpGrid': {
-                    template: `<div class="MOCKED_SharpGrid" v-bind="$attrs"><slot v-bind="{ key:'name' }" /></div>`,
-                },
-            },
         });
+
         wrapper.setMethods({
             fieldOptions: () => null,
         });
@@ -121,6 +127,7 @@ describe('show page', () => {
     });
 
     test('formUrl', () => {
+        formUrl.mockReturnValue('formUrl');
         const wrapper = createWrapper({
             storeModule: {
                 state: {
@@ -129,7 +136,11 @@ describe('show page', () => {
                 }
             }
         });
-        expect(wrapper.vm.formUrl).toEqual('/BASE_URL/form/entityKey/instanceId?x-access-from=ui');
+        expect(wrapper.vm.formUrl).toEqual('formUrl');
+        expect(formUrl).toHaveBeenCalledWith({
+            entityKey: 'entityKey',
+            instanceId: 'instanceId',
+        });
     });
 
     test('fieldOptions', () => {

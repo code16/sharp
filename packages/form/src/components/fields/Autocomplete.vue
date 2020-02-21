@@ -75,7 +75,7 @@
 
     import debounce from 'lodash/debounce';
     import Multiselect from 'vue-multiselect';
-    import { warn, logError, lang, search } from 'sharp';
+    import { warn, lang, search } from 'sharp';
     import { TemplateRenderer } from 'sharp/components';
     import { Loading } from 'sharp-ui';
     import { Localization, Debounce } from 'sharp/mixins';
@@ -84,7 +84,6 @@
     import localize from '../../mixins/localize/Autocomplete';
     import { setDefaultValue } from "../../util";
 
-    console.log(Loading);
 
     export default {
         name:'SharpAutocomplete',
@@ -209,7 +208,7 @@
             },
 
             updateLocalSuggestions(query) {
-                this.suggestions = query.length >= this.searchMinChars 
+                this.suggestions = query.length >= this.searchMinChars
                     ? search(this.localValues, query, { searchKeys: this.searchKeys })
                     : this.localValues;
             },

@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import List from '../../src/components/fields/list/List.vue';
 
-import { MockInjections, MockTransitions, MockI18n, QueryComponent } from 'sharp-test-utils';
+import { MockInjections, MockTransitions, MockI18n, QueryComponent } from '@sharp/test-utils';
 import { ErrorNode } from 'sharp/mixins';
 
 import { mount } from '@vue/test-utils';
@@ -11,7 +11,7 @@ describe('list-field', () => {
     Vue.use(MockI18n);
     Vue.use(QueryComponent);
 
-   const fieldDisplayMock = Vue.component('sharp-field-display',{
+   const fieldDisplayMock = Vue.component('FieldDisplay',{
        name: 'SharpFieldContainer',
        inheritAttrs: false,
        mixins: [ ErrorNode ],

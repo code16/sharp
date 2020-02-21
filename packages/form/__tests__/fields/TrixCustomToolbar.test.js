@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
 import Vue from 'vue';
 import TrixCustomToolbar from '../../src/components/fields/wysiwyg/TrixCustomToolbar.vue';
-import { MockI18n } from "sharp-test-utils";
+import { MockI18n } from "@sharp/test-utils";
 
 describe('trix-custom-toolbar',()=>{
     let wrapper;

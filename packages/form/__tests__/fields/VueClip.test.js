@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueClip from '../../src/components/fields/upload/VueClip';
 
-import { MockInjections, MockI18n, nextRequestFulfilled } from 'sharp-test-utils';
+import { MockInjections, MockI18n, nextRequestFulfilled } from '@sharp/test-utils';
 import moxios from 'moxios';
 
 

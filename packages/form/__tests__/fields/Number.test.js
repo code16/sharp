@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import NumberInput from '../../src/components/fields/Number.vue';
 
-import { MockInjections } from 'sharp-test-utils';
+import { MockInjections } from '@sharp/test-utils';
 
 
 describe('number-field',()=>{
