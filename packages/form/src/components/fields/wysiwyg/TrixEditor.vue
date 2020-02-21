@@ -18,7 +18,6 @@
 </template>
 
 <script>
-    import Trix from '../../../util/trix';
     import TrixCustomToolbar from './TrixCustomToolbar.vue';
 
     import localize from '../../../mixins/localize/editor';
@@ -65,7 +64,7 @@
             }
         },
         created() {
-            Trix.config.toolbar.getDefaultHTML = () => '';
+            window.Trix.config.toolbar.getDefaultHTML = () => '';
         }
     }
 </script>
