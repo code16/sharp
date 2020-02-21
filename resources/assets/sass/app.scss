@@ -59,13 +59,13 @@ $small-breakpoint: sm;
 @import 'components/Notification';
 
 
-@import '~sharp-commands/scss/commands';
-@import '~sharp-dashboard/scss/dashboard';
-@import '~sharp-entity-list/scss/entity-list';
-@import '~sharp-filters/scss/filters';
-@import '~sharp-form/scss/form';
-@import '~sharp-show/scss/show';
 @import '~sharp-ui/scss/ui';
+@import '~sharp-commands/scss/commands';
+@import '~sharp-form/scss/form';
+@import '~sharp-entity-list/scss/entity-list';
+@import '~sharp-dashboard/scss/dashboard';
+@import '~sharp-show/scss/show';
+@import '~sharp-filters/scss/filters';
 
 
 // // Action bar and viewer
