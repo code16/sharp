@@ -158,7 +158,7 @@ The formatter will return an empty array.
 
 ## Delayed creation
 
-As described in the `setStorageBasePath()` section of this document, you can configure the file storage path with an {id} placeholder, meaning that `/users/{id}/avatar` will be converted (by the field formatter) in `/users/1/avatar` for instance. 
+As described in the `setStorageBasePath()` section of this document, you can configure the file storage path with an `{id}` placeholder, meaning that `/users/{id}/avatar` will be converted (by the field formatter) in `/users/1/avatar` for instance. 
 
 But in order to do this in a creation case, when there is no id yet, Sharp will need your instance to be stored first. To do so, the `update()` method of your Form will be called twice:
 
@@ -168,24 +168,24 @@ But in order to do this in a creation case, when there is no id yet, Sharp will 
 This is usually OK, but in some cases this could lead to unexpected errors. Consider this code taken from Saturn (Sharp's demo project) where we handle Spaceships with a visual configured with an `{id}` placeholder in its path: 
 
 ```php
-    // in SpaceshipForm.php
-    function update($id, array $data)
-    {
-        $instance = $id ? Spaceship::findOrFail($id) : new Spaceship();
+// in SpaceshipForm.php
+function update($id, array $data)
+{
+    $instance = $id ? Spaceship::findOrFail($id) : new Spaceship();
 
-        $this->save($instance, $data);
+    $this->save($instance, $data);
 
-        if(($data["capacity"]) >= 1000) {
-            $this->notify("this is a huge spaceship, by the way!");
-        }
-
-        return $instance->id;
+    if(($data["capacity"]) >= 1000) {
+        $this->notify("this is a huge spaceship, by the way!");
     }
+
+    return $instance->id;
+}
 ```
 Here we're using the `notify()` feature to display a message back to the user, and it's working, execpted in one case: on a Spaceship creation with a visual, Sharp will delay the upload handling and call this method twice. On the second pass (for the upload), PHP will crash on the `if(($data["capacity"]) >= 1000)` row because `$data["capacity"]` is not set (only the upload field would be set on this second pass). This has to be addressed, and a working solution could be to replace this line with:
 
 ```php
-    if(($data["capacity"] ?? 0) >= 1000) {
-        [...]
-    }
+if(($data["capacity"] ?? 0) >= 1000) {
+    [...]
+}
 ```
