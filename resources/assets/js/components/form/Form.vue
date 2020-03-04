@@ -1,5 +1,5 @@
 <template>
-    <div class="SharpForm">
+    <div class="SharpForm" data-popover-boundary>
         <template v-if="ready">
             <div class="container">
                 <div v-show="hasErrors" class="SharpNotification SharpNotification--error" role="alert">
