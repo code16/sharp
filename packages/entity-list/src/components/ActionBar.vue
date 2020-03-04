@@ -1,47 +1,62 @@
 <template>
-    <ActionBar class="SharpActionBarList" :class="{'SharpActionBarList--search-active':searchActive}">
+    <ActionBar
+        class="SharpActionBarList"
+        :class="{'SharpActionBarList--search-active':searchActive}"
+        right-class="d-block"
+    >
         <template slot="left">
             <span class="text-content text-nowrap">{{ count }} {{ l('action_bar.list.items_count') }}</span>
         </template>
         <template slot="right">
-            <template v-if="canSearch && !reorderActive">
-                <Search
-                    :value="search"
-                    :active.sync="searchActive"
-                    :placeholder="l('action_bar.list.search.placeholder')"
-                    @input="handleSearchInput"
-                    @submit="handleSearchSubmitted"
-                />
-            </template>
+            <div class="row justify-content-end">
+                <template v-if="canSearch && !reorderActive">
+                    <div class="col col-lg-auto">
+                        <Search
+                            class="h-100"
+                            :value="search"
+                            :active.sync="searchActive"
+                            :placeholder="l('action_bar.list.search.placeholder')"
+                            @input="handleSearchInput"
+                            @submit="handleSearchSubmitted"
+                        />
+                    </div>
+                </template>
 
-            <template v-if="canReorder">
-                <template v-if="reorderActive">
-                    <button class="SharpButton SharpButton--secondary-accent" @click="handleReorderButtonClicked">
-                        {{ l('action_bar.list.reorder_button.cancel') }}
-                    </button>
-                    <button class="SharpButton SharpButton--accent" @click="handleReorderSubmitButtonClicked">
-                        {{ l('action_bar.list.reorder_button.finish') }}
-                    </button>
+                <template v-if="canReorder">
+                    <div class="col-auto">
+                        <template v-if="reorderActive">
+                            <button class="SharpButton SharpButton--secondary-accent h-100" @click="handleReorderButtonClicked">
+                                {{ l('action_bar.list.reorder_button.cancel') }}
+                            </button>
+                            <button class="SharpButton SharpButton--accent h-100" @click="handleReorderSubmitButtonClicked">
+                                {{ l('action_bar.list.reorder_button.finish') }}
+                            </button>
+                        </template>
+                        <template v-else>
+                            <button class="SharpButton SharpButton--secondary-accent h-100" @click="handleReorderButtonClicked">
+                                {{ l('action_bar.list.reorder_button') }}
+                            </button>
+                        </template>
+                    </div>
                 </template>
-                <template v-else>
-                    <button class="SharpButton SharpButton--secondary-accent" @click="handleReorderButtonClicked">
-                        {{ l('action_bar.list.reorder_button') }}
-                    </button>
-                </template>
-            </template>
 
-            <template v-if="!reorderActive">
-                <template v-if="canCreate">
-                    <Drodpown v-if="hasForms" class="SharpActionBar__forms-dropdown" :text="l('action_bar.list.forms_dropdown')">
-                        <DropdownItem v-for="(form,key) in forms" @click="handleCreateFormSelected(form)" :key="key" >
-                            <ItemVisual :item="form" icon-class="fa-fw"/>{{ form.label }}
-                        </DropdownItem>
-                    </Drodpown>
-                    <button v-else class="SharpButton SharpButton--accent" @click="handleCreateButtonClicked">
-                        {{ l('action_bar.list.create_button') }}
-                    </button>
+                <template v-if="canCreate && !reorderActive">
+                    <div class="col-auto">
+                        <template v-if="hasForms">
+                            <Dropdown class="SharpActionBar__forms-dropdown h-100" :text="l('action_bar.list.forms_dropdown')">
+                                <DropdownItem v-for="(form,key) in forms" @click="handleCreateFormSelected(form)" :key="key" >
+                                    <ItemVisual :item="form" icon-class="fa-fw"/>{{ form.label }}
+                                </DropdownItem>
+                            </Dropdown>
+                        </template>
+                        <template v-else>
+                            <button class="SharpButton SharpButton--accent h-100" @click="handleCreateButtonClicked">
+                                {{ l('action_bar.list.create_button') }}
+                            </button>
+                        </template>
+                    </div>
                 </template>
-            </template>
+            </div>
         </template>
         <template v-if="!reorderActive">
             <template slot="extras">

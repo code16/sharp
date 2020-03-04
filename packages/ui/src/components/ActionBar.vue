@@ -6,7 +6,7 @@
                     <div class="col left px-2 my-1 my-sm-0">
                         <slot name="left"></slot>
                     </div>
-                    <div class="col right px-2 my-1 my-sm-0">
+                    <div class="col right px-2 my-1 my-sm-0" :class="rightClass">
                         <slot name="right"></slot>
                     </div>
                 </div>
@@ -40,6 +40,7 @@
                 default: true,
             },
             container: Boolean,
+            rightClass: Boolean,
         }
     }
 </script>
