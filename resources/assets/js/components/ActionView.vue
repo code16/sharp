@@ -7,7 +7,6 @@
             </div>
         </template>
         <template v-else>
-            <component v-if="barComp" :is="barComp" />
             <slot />
             <notifications position="top right" animation-name="slideRight" style="top:6rem" reverse>
                 <template slot="body" slot-scope="{ item, close }">
@@ -24,27 +23,26 @@
                     </div>
                 </template>
             </notifications>
-            <sharp-modal v-for="(modal,id) in mainModalsData" :key="id"
+            <Modal v-for="(modal,id) in mainModalsData" :key="id"
                 v-bind="modal.props" @ok="modal.okCallback" @hidden="modal.hiddenCallback">
                 {{modal.text}}
-            </sharp-modal>
+            </Modal>
         </template>
     </div>
 </template>
 
 <script>
     import axios from 'axios';
-    import { actionBarByContext } from './action-bar';
     import EventBus from './EventBus';
     import { api } from "../api";
-    import SharpModal from './Modal';
+    import { Modal } from 'sharp-ui';
 
     const noop=()=>{};
 
     export default {
         name:'SharpActionView',
         components: {
-            SharpModal
+            Modal
         },
 
         provide() {
@@ -68,11 +66,6 @@
                 showErrorPage: false,
                 errorPageData: null
             }
-        },
-        computed: {
-            barComp() {
-                return actionBarByContext(this.context);
-            },
         },
         methods: {
             showMainModal({ text, okCallback=noop, okCloseOnly, isError, ...sharedProps }) {

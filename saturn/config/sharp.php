@@ -30,13 +30,13 @@ return [
             "list" => \App\Sharp\PilotSharpList::class,
             "forms" => [
                 "junior" => [
-                    "icon" => "fa-user-o",
+                    "icon" => "far fa-user",
                     "label" => "Junior Pilot",
                     "form" => \App\Sharp\PilotJuniorSharpForm::class,
                     "validator" => \App\Sharp\PilotJuniorSharpValidator::class,
                 ],
                 "senior" => [
-                    "icon" => "fa-user",
+                    "icon" => "fas fa-user",
                     "label" => "Senior Pilot",
                     "form" => \App\Sharp\PilotSeniorSharpForm::class,
                     "validator" => \App\Sharp\PilotSeniorSharpValidator::class,
@@ -47,13 +47,13 @@ return [
             "list" => \App\Sharp\EmbeddedEntityLists\SpaceshipPilotSharpList::class,
             "forms" => [
                 "junior" => [
-                    "icon" => "fa-user-o",
+                    "icon" => "far fa-user",
                     "label" => "Junior Pilot",
                     "form" => \App\Sharp\PilotJuniorSharpForm::class,
                     "validator" => \App\Sharp\PilotJuniorSharpValidator::class,
                 ],
                 "senior" => [
-                    "icon" => "fa-user",
+                    "icon" => "fas fa-user",
                     "label" => "Senior Pilot",
                     "form" => \App\Sharp\PilotSeniorSharpForm::class,
                     "validator" => \App\Sharp\PilotSeniorSharpValidator::class,
@@ -114,17 +114,17 @@ return [
             "entities" => [
                 [
                     "label" => "Dashboard",
-                    "icon" => "fa-dashboard",
+                    "icon" => "fas fa-tachometer-alt",
                     "dashboard" => "company_dashboard"
                 ],
                 [
                     "label" => "Spaceships",
-                    "icon" => "fa-space-shuttle",
+                    "icon" => "fas fa-space-shuttle",
                     "entity" => "spaceship"
                 ],
                 [
                     "label" => "Pilots",
-                    "icon" => "fa-user",
+                    "icon" => "fas fa-user",
                     "entity" => "pilot"
                 ]
             ]
@@ -133,22 +133,22 @@ return [
             "entities" => [
                 [
                     "label" => "Dashboard",
-                    "icon" => "fa-dashboard",
+                    "icon" => "fas fa-tachometer-alt",
                     "dashboard" => "travels_dashboard"
                 ],
                 [
                     "label" => "Passengers",
-                    "icon" => "fa-bed",
+                    "icon" => "fas fa-bed",
                     "entity" => "passenger"
                 ],
                 [
                     "label" => "Travel",
-                    "icon" => "fa-suitcase",
+                    "icon" => "fas fa-suitcase",
                     "entity" => "travel"
                 ],
                 [
                     "label" => "Some external link",
-                    "icon" => "fa-globe",
+                    "icon" => "fas fa-globe",
                     "url" => "https://google.com"
                 ],
             ]
@@ -157,25 +157,25 @@ return [
             "entities" => [
                 [
                     "label" => "My account",
-                    "icon" => "fa-user",
+                    "icon" => "fas fa-user",
                     "entity" => "account",
                     "single" => true
                 ],
                 [
                     "label" => "Sharp users",
-                    "icon" => "fa-user-secret",
+                    "icon" => "fas fa-user-secret",
                     "entity" => "user"
                 ]
             ]
         ],
         [
             "label" => "Public website",
-            "icon" => "fa-globe",
+            "icon" => "fas fa-globe",
             "url" => "https://google.com"
         ],
         [
             "label" => "Some powerful Features",
-            "icon" => "fa-superpowers",
+            "icon" => "fab fa-superpowers",
             "entity" => "feature"
         ]
     ],

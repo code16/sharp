@@ -1,13 +1,8 @@
 import Notifications from 'vue-notification';
 import { shallowMount, createLocalVue, config } from '@vue/test-utils';
 import ActionView from '../components/ActionView.vue';
-import { createStub } from "./test-utils/vue-test-utils";
 
 config.stubs['transition-group'] = false;
-
-/* todo: fix tests on next release of vue-test-utils (1.0.0-beta.26)
-    dynamic component aren't currently stubbed ( <component :is="{ ... }" /> )
-*/
 
 describe('action-view', ()=>{
 
@@ -31,11 +26,6 @@ describe('action-view', ()=>{
             propsData: {
                 context: 'form',
                 ...options.propsData
-            },
-            computed: {
-                barComp() {
-                    return createStub(ActionView.computed.barComp.call(this));
-                }
             },
             stubs: {
                 'SharpModal': ModalStub

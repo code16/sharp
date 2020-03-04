@@ -1,6 +1,15 @@
+import qs from 'qs';
 import moment from 'moment';
 
 const RANGE_DATE_FORMAT = 'YYYYMMDD';
+
+export function stringifyQuery(query) {
+    return qs.stringify(query, { addQueryPrefix: true, skipNulls: true });
+}
+
+export function parseQuery(query) {
+    return qs.parse(query, { ignoreQueryPrefix: true, strictNullHandling: true });
+}
 
 export function parseRange(rangeStr) {
     const [start, end] = (rangeStr || '').split('..');

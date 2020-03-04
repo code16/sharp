@@ -2,9 +2,7 @@
 
 exports[`action-view can mount ActionView 1`] = `
 <div class="SharpActionView">
-	<sharpactionbarform-stub></sharpactionbarform-stub>
-	<notifications-stub group="" width="300" reverse="true" position="top right" classes="vue-notification" animationtype="css" animation="[object Object]" animationname="slideRight" speed="300" cooldown="0" duration="3000" delay="0"
-	    max="Infinity" style="top: 6rem;"></notifications-stub>
+	<notifications-stub group="" width="300" reverse="true" position="top right" classes="vue-notification" animationtype="css" animation="[object Object]" animationname="slideRight" speed="300" cooldown="0" duration="3000" delay="0" max="Infinity" style="top: 6rem;"></notifications-stub>
 </div>
 `;
 
@@ -19,22 +17,18 @@ exports[`action-view can mount ActionView with error page 1`] = `
 
 exports[`action-view can mount ActionView with notification 1`] = `
 <div class="SharpActionView">
-	<sharpactionbarform-stub></sharpactionbarform-stub>
-	<notifications-stub group="" width="300" reverse="true" position="top right" classes="vue-notification" animationtype="css" animation="[object Object]" animationname="slideRight" speed="300" cooldown="0" duration="3000" delay="0"
-	    max="Infinity" style="top: 6rem;"></notifications-stub>
+	<notifications-stub group="" width="300" reverse="true" position="top right" classes="vue-notification" animationtype="css" animation="[object Object]" animationname="slideRight" speed="300" cooldown="0" duration="3000" delay="0" max="Infinity" style="top: 6rem;"></notifications-stub>
 </div>
 `;
 
 exports[`action-view can mount with multiple modals 1`] = `
 <div class="SharpActionView">
-	<sharpactionbarform-stub></sharpactionbarform-stub>
-	<notifications-stub group="" width="300" reverse="true" position="top right" classes="vue-notification" animationtype="css" animation="[object Object]" animationname="slideRight" speed="300" cooldown="0" duration="3000" delay="0"
-	    max="Infinity" style="top: 6rem;"></notifications-stub>
-	<div visible="visible">
+	<notifications-stub group="" width="300" reverse="true" position="top right" classes="vue-notification" animationtype="css" animation="[object Object]" animationname="slideRight" speed="300" cooldown="0" duration="3000" delay="0" max="Infinity" style="top: 6rem;"></notifications-stub>
+	<modal-stub visible="true">
 		Modal 1
-	</div>
-	<div visible="visible">
+	</modal-stub>
+	<modal-stub visible="true">
 		Modal 2
-	</div>
+	</modal-stub>
 </div>
 `;

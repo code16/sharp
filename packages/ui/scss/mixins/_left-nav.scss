@@ -1,0 +1,29 @@
+// enhanced menu style
+// apply to SharpLeftNav__list
+@mixin enhanced-item-border-and-spacing() {
+  &.SharpLeftNav__list--nested {
+    .SharpLeftNav__item:last-child {
+      margin-bottom: 0;
+    }
+  }
+  &:not(.SharpLeftNav__list--nested) {
+    & > .SharpLeftNav__item {
+      border-bottom: 1px solid $ui-03;
+      padding-bottom: 1rem;
+      margin-bottom: .5rem;
+    }
+  }
+}
+
+// apply to SharpLeftNav__list
+@mixin enhanced-item-font-size() {
+  .SharpLeftNav__item {
+    @include font-size('16');
+    &--has-children {
+      & > .SharpLeftNav__item-link {
+        @include font-size('12');
+      }
+    }
+  }
+}
+//

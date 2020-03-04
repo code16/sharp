@@ -1,0 +1,10 @@
+{
+    "name": "sharp-filters",
+    "private": true,
+    "version": "1.0.0",
+    "main": "src/index.js",
+    "dependencies": {
+        "sharp-form": "file:../form",
+        "sharp-ui": "file:../ui"
+    }
+}
