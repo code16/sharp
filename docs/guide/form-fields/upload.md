@@ -39,7 +39,9 @@ Set the destination storage disk (as configured in Laravel's  `config/filesystem
 
 ### `setStorageBasePath(string $storageBasePath)`
 
-Set the destination base storage path. You can use the `{id}` special placeholder to add the instance id in the path.
+Set the destination base storage path. 
+
+You can use the `{id}` special placeholder to add the instance id in the path, which can be useful sometimes; **be sure to read the "Delayed creation" section, at the end of this page if you do.**
 
 For instance:
 `$field->setStorageBasePath('/users/{id}/avatar')`
@@ -83,14 +85,16 @@ The formatter can't handle it automatically, it too project-specific. You'll hav
 ```php
 function find($id): array
 {
-    return $this->setCustomTransformer("picture",
-        function($value, $spaceship, $attribute) {
-            return [
-                "name" => $spaceship->picture->name,
-                "thumbnail" => [...],
-                "size" => $spaceship->picture->size,
-            ];
-        })
+    return $this
+        ->setCustomTransformer("picture",
+            function($value, $spaceship, $attribute) {
+                return [
+                    "name" => $spaceship->picture->name,
+                    "thumbnail" => [...],
+                    "size" => $spaceship->picture->size,
+                ];
+            }
+        )
         ->transform(
             Spaceship::findOrFail($id)
         );
@@ -103,7 +107,7 @@ There are four cases:
 
 #### newly uploaded file
 
-The formatter will perform any transformation, store the file on the configured location, and return an array like this:
+The formatter will not perform any transformation, store the file on the configured location, and return an array like this:
 
 ```php
 [
@@ -151,3 +155,37 @@ The formatter will return null (note that the file **will not** be deleted from 
 #### existing and unchanged file
 
 The formatter will return an empty array.
+
+## Delayed creation
+
+As described in the `setStorageBasePath()` section of this document, you can configure the file storage path with an `{id}` placeholder, meaning that `/users/{id}/avatar` will be converted (by the field formatter) in `/users/1/avatar` for instance. 
+
+But in order to do this in a creation case, when there is no id yet, Sharp will need your instance to be stored first. To do so, the `update()` method of your Form will be called twice:
+
+- one first time without any upload which needs the `{id}`,
+- and one second time only with these fields, using the new id returned by `update()`.
+
+This is usually OK, but in some cases this could lead to unexpected errors. Consider this code taken from Saturn (Sharp's demo project) where we handle Spaceships with a visual configured with an `{id}` placeholder in its path: 
+
+```php
+// in SpaceshipForm.php
+function update($id, array $data)
+{
+    $instance = $id ? Spaceship::findOrFail($id) : new Spaceship();
+
+    $this->save($instance, $data);
+
+    if(($data["capacity"]) >= 1000) {
+        $this->notify("this is a huge spaceship, by the way!");
+    }
+
+    return $instance->id;
+}
+```
+Here we're using the `notify()` feature to display a message back to the user, and it's working, execpted in one case: on a Spaceship creation with a visual, Sharp will delay the upload handling and call this method twice. On the second pass (for the upload), PHP will crash on the `if(($data["capacity"]) >= 1000)` row because `$data["capacity"]` is not set (only the upload field would be set on this second pass). This has to be addressed, and a working solution could be to replace this line with:
+
+```php
+if(($data["capacity"] ?? 0) >= 1000) {
+    [...]
+}
+```

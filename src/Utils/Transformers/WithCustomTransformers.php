@@ -108,7 +108,7 @@ trait WithCustomTransformers
         $attributes = ArrayConverter::modelToArray($model);
 
         if($forceFullObject) {
-            // Merge model attribute with form fields to be sure we have
+            // Merge model attributes with form fields to be sure we have
             // all attributes which the front code needed.
             $attributes = collect($this->getDataKeys())
                 ->flip()

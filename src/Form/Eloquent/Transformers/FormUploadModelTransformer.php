@@ -25,15 +25,18 @@ class FormUploadModelTransformer implements SharpAttributeTransformer
 
         if($instance->$attribute() instanceof MorphMany) {
             // We are handling a list of uploads
-            return $instance->$attribute->map(function($upload) {
-                $array = $this->transformUpload($upload);
-
-                $file = Arr::only($array, ["name", "thumbnail", "size"]);
-
-                return [
-                    "file" => sizeof($file) ? $file : null,
-                ] + Arr::except($array, ["name", "thumbnail", "size"]);
-            })->all();
+            return $instance->$attribute
+                ->map(function($upload) {
+                    $array = $this->transformUpload($upload);
+    
+                    $file = Arr::only($array, ["name", "thumbnail", "size"]);
+    
+                    return array_merge(
+                        ["file" => sizeof($file) ? $file : null],
+                        Arr::except($array, ["name", "thumbnail", "size"])
+                    );
+                })
+                ->all();
         };
 
         return $this->transformUpload($instance->$attribute);
@@ -45,12 +48,16 @@ class FormUploadModelTransformer implements SharpAttributeTransformer
      */
     protected function transformUpload($upload)
     {
-        return ($upload->file_name ? [
-                "name" => $upload->file_name,
-                "thumbnail" => $upload->thumbnail(1000, 400),
-                "size" => $upload->size,
-            ] : [])
-            + ($upload->custom_properties ?? [])
-            + ["id" => $upload->id];
+        return array_merge(
+            $upload->file_name 
+                ? [
+                    "name" => $upload->file_name,
+                    "thumbnail" => $upload->thumbnail(1000, 400),
+                    "size" => $upload->size,
+                ] 
+                : [],
+                $upload->custom_properties ?? [],
+                ["id" => $upload->id]
+        );
     }
 }
