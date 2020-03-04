@@ -2,11 +2,9 @@
 
 namespace Code16\Sharp\Tests;
 
-use ArrayAccess;
 use Code16\Sharp\SharpServiceProvider;
 use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Constraint\ArraySubset;
-use PHPUnit\Util\InvalidArgumentHelper;
 
 abstract class SharpTestCase extends TestCase
 {
@@ -35,14 +33,6 @@ abstract class SharpTestCase extends TestCase
      */
     public static function assertArrayContainsSubset($subset, $array, bool $checkForObjectIdentity = false, string $message = ''): void
     {
-        if (! (is_array($subset) || $subset instanceof ArrayAccess)) {
-            throw InvalidArgumentHelper::factory(1, 'array or ArrayAccess');
-        }
-
-        if (! (is_array($array) || $array instanceof ArrayAccess)) {
-            throw InvalidArgumentHelper::factory(2, 'array or ArrayAccess');
-        }
-
         $constraint = new ArraySubset($subset, $checkForObjectIdentity);
 
         static::assertThat($array, $constraint, $message);
