@@ -90,6 +90,7 @@ class FormController extends ApiController
         $form = $this->getFormInstance($entityKey);
 
         if($form instanceof SharpSingleForm) {
+            // There is no creation in SingleForms
             return $this->update($entityKey);
         }
 
