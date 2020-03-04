@@ -25,7 +25,7 @@
     import { Grid } from 'sharp-ui';
 
     export default {
-        name:'SharpFieldsLayout',
+        name: 'FieldsLayout',
 
         components: {
             Grid
