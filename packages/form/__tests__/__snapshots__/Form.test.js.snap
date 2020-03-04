@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`sharp-form can mount "independant" sharp-form 1`] = `
-<div class="SharpForm">
+<div data-popover-boundary="" class="SharpForm">
 	<div class="container">
 		<div role="alert" class="SharpNotification SharpNotification--error" style="display: none;">
 			<div class="SharpNotification__details">
@@ -23,7 +23,7 @@ exports[`sharp-form can mount "independant" sharp-form 1`] = `
 `;
 
 exports[`sharp-form can mount sharp-form 1`] = `
-<div class="SharpForm">
+<div data-popover-boundary="" class="SharpForm">
 	<div class="container">
 		<div role="alert" class="SharpNotification SharpNotification--error" style="display: none;">
 			<div class="SharpNotification__details">
@@ -45,7 +45,7 @@ exports[`sharp-form can mount sharp-form 1`] = `
 `;
 
 exports[`sharp-form can mount sharp-form with alert 1`] = `
-<div class="SharpForm">
+<div data-popover-boundary="" class="SharpForm">
 	<div class="container">
 		<div role="alert" class="SharpNotification SharpNotification--error" style="">
 			<div class="SharpNotification__details">
