@@ -33,7 +33,11 @@ A tip on this last command: you'll need fresh assets each time Sharp is updated,
 
 ## Configuration
 
-Sharp needs a `config/sharp.php` config file, mainly to declare `entities`. Here's an example:
+Sharp needs a `config/sharp.php` config file, mainly to declare `entities`. 
+
+You can init this file with: `php artisan vendor:publish --provider="Code16\Sharp\SharpServiceProvider" --tag=config`
+
+Here's an example:
 
 ```php
 return [

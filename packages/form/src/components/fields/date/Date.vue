@@ -21,7 +21,14 @@
                 </svg>
             </button>
         </div>
-        <b-popover :target="target" :show.sync="showPicker" no-fade triggers="focus" placement="bottom">
+        <b-popover
+            :target="popoverTarget"
+            :show.sync="showPicker"
+            :boundary="popoverBoundary"
+            no-fade
+            triggers="focus"
+            placement="bottom"
+        >
             <template slot-scope="props">
                 <div class="SharpDate__picker position-static" >
                     <template v-if="hasDate">
@@ -125,9 +132,12 @@
                     ? this.localInputValue
                     : (this.moment ? this.moment.format(this.displayFormat) : '');
             },
+            popoverBoundary() {
+                return document.querySelector('[data-popover-boundary]');
+            },
         },
         methods: {
-            target() {
+            popoverTarget() {
                 return this.$refs.input;
             },
 
