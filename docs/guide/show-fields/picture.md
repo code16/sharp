@@ -8,7 +8,7 @@ The picture field has no configuration.
 
 ## Transformer
 
-You must value this fields with an URL of the image.
+You must value this field with an URL of the image.
 
 If you are using [Sharp built-in Upoad solution](../sharp-built-in-solution-for-uploads.md), be sure to use the  `SharpUploadModelThumbnailUrlTransformer`:
 

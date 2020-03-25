@@ -45,7 +45,7 @@ function buildShowFields()
 #### Available simple Show fields
 
 - [Text](show-fields/text.md)
-- [picture](show-fields/picture.md)
+- [Picture](show-fields/picture.md)
 
 
 #### Embedding an Entity List in a Show
