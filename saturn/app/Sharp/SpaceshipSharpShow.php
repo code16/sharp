@@ -7,7 +7,11 @@ use App\Sharp\Commands\SpaceshipPreview;
 use App\Sharp\Commands\SpaceshipSendMessage;
 use App\Sharp\States\SpaceshipEntityState;
 use App\Spaceship;
+use Code16\Sharp\EntityList\Eloquent\Transformers\SharpUploadModelAttributeTransformer;
+use Code16\Sharp\Form\Eloquent\Transformers\FormUploadModelTransformer;
+use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
+use Code16\Sharp\Show\Fields\SharpShowListField;
 use Code16\Sharp\Show\Fields\SharpShowPictureField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
@@ -38,6 +42,11 @@ class SpaceshipSharpShow extends SharpShow
             )->addField(
                 SharpShowTextField::make("description")
                     ->collapseToWordCount(50)
+            )->addField(
+                SharpShowListField::make("pictures")
+                    ->setLabel("additional pictures")
+//                    ->addItemField(SharpShowFileField::make("file"))
+//                    ->addItemField(SharpShowTextField::make("legend"))
             )->addField(
                 SharpShowEntityListField::make("pilots", "spaceship_pilot")
                     ->hideFilterWithValue("spaceship", function($instanceId) {
@@ -83,7 +92,12 @@ class SpaceshipSharpShow extends SharpShow
             ->addSection('Description', function(ShowLayoutSection $section) {
                 $section
                     ->addColumn(9, function(ShowLayoutColumn $column) {
-                        $column->withSingleField("description");
+                        $column
+                            ->withSingleField("description")
+                            ->withSingleField("pictures", function(ShowLayoutColumn $listItem) {
+                                $listItem->withSingleField("file")
+                                    ->withSingleField("legend");
+                            });
                     });
             })
             ->addEntityListSection('Pilots', "pilots");
@@ -99,7 +113,9 @@ class SpaceshipSharpShow extends SharpShow
                 return $spaceship->name;
             })
             ->setCustomTransformer("picture", new SharpUploadModelThumbnailUrlTransformer(140))
+            ->setCustomTransformer("pictures", new FormUploadModelTransformer())
+//            ->setCustomTransformer("pictures", new SharpShowUploadModelTransformer())
             ->setCustomTransformer("description", (new MarkdownAttributeTransformer())->handleImages(200))
-            ->transform(Spaceship::findOrFail($id));
+            ->transform(Spaceship::with("pictures")->findOrFail($id));
     }
 }
