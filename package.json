@@ -15,11 +15,12 @@
       "^.+\\.vue$": "<rootDir>/node_modules/vue-jest"
     },
     "snapshotSerializers": [
-      "<rootDir>/resources/assets/js/__tests__/test-utils/htmlSnapshotBeautifier.js"
+      "<rootDir>/packages/test-utils/src/htmlSnapshotBeautifier.js"
     ],
     "moduleNameMapper": {
       "^vue$": "vue/dist/vue.common.js",
-      "\\.(css|less)$": "<rootDir>/resources/assets/js/__tests__/test-setup/styleMock.js"
+      "^sharp((/(.*))|$)": "<rootDir>/resources/assets/js$1",
+      "\\.(css|less)$": "<rootDir>/packages/test-utils/src/setup/styleMock.js"
     },
     "transformIgnorePatterns": [
       "node_modules/(?!(vue2-google-maps|bootstrap-vue|vue-clip|vue2-timepicker))"
@@ -29,9 +30,9 @@
     ],
     "verbose": true,
     "setupFiles": [
-      "<rootDir>/resources/assets/js/__tests__/test-setup/mockument.js",
-      "<rootDir>/resources/assets/js/__tests__/test-setup/mockBootstrapVue.js",
-      "<rootDir>/resources/assets/js/__tests__/test-setup/setupVue.js",
+      "<rootDir>/packages/test-utils/src/setup/mockument.js",
+      "<rootDir>/packages/test-utils/src/setup/mockBootstrapVue.js",
+      "<rootDir>/packages/test-utils/src/setup/setupVue.js",
       "<rootDir>/resources/assets/js/polyfill.js"
     ]
   },
@@ -58,6 +59,7 @@
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.4",
     "chart.js": "^2.8.0",
+    "circular-dependency-plugin": "^5.2.0",
     "core-js": "^3.0.0-beta.8",
     "cross-env": "3.1.3",
     "fuse.js": "^2.6.2",
@@ -67,7 +69,9 @@
     "moment": "^2.19.1",
     "moment-timezone": "^0.5.13",
     "moxios": "^0.4.0",
+    "node-sass": "^4.13.1",
     "qs": "^6.6.0",
+    "resolve-url-loader": "^3.1.0",
     "sass": "^1.16.0",
     "sass-loader": "^7.1.0",
     "simplemde": "^1.11.2",
@@ -88,10 +92,18 @@
     "webpack-bundle-analyzer": "^3.0.3"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.12.1",
+    "@sharp/test-utils": "file:packages/test-utils",
     "carbon-components": "^7.26.2",
     "element-ui": "^2.9.2",
-    "font-awesome": "^4.7.0",
     "leaflet": "^1.4.0",
+    "sharp-commands": "file:packages/commands",
+    "sharp-dashboard": "file:packages/dashboard",
+    "sharp-entity-list": "file:packages/entity-list",
+    "sharp-filters": "file:packages/filters",
+    "sharp-form": "file:packages/form",
+    "sharp-show": "file:packages/show",
+    "sharp-ui": "file:packages/ui",
     "trix": "^1.0.0",
     "vue": "^2.5.21",
     "vue-router": "^3.0.2",

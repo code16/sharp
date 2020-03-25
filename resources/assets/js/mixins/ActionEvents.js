@@ -1,9 +1,9 @@
-import * as util from '../util';
+import { logError, log } from '../util/log';
 
 function getActionListener(vm, action) {
     if(typeof action === 'string') {
         if(typeof vm[action] !== 'function') {
-            util.error(`${vm.$options.name} (ActionEvents) : this.${action} is not a function`);
+            logError(`${vm.$options.name} (ActionEvents) : this.${action} is not a function`);
             return;
         }
         return (...args) => vm[action].apply(vm, args);
@@ -11,7 +11,7 @@ function getActionListener(vm, action) {
     else if(typeof action === 'function') {
         return (...args) => action.apply(vm,args);
     }
-    else util.error(`${vm.$options.name} (ActionEvents) : unprocessable action type (only function on string)`);
+    else logError(`${vm.$options.name} (ActionEvents) : unprocessable action type (only function on string)`);
 }
 
 export default {
@@ -21,11 +21,11 @@ export default {
 
         if(!actions) return;
         if(typeof actions._disabled === 'function' && actions._disabled.call(this)) {
-            util.log(`${this.$options.name} : actions are disabled`);
+            log(`${this.$options.name} : actions are disabled`);
             return;
         }
         if(!this.actionsBus) {
-            util.error('Use of action options without actionsBus injected');
+            logError('Use of action options without actionsBus injected');
             return;
         }
 

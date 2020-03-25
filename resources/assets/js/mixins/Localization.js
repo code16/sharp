@@ -1,6 +1,4 @@
-export let lang = (key) => {
-    return window.i18n[key];
-};
+import { lang } from '../util/i18n';
 
 export default {
     computed: {

@@ -1,4 +1,4 @@
-import { parseBlobJSONContent, getFileName } from "../../util";
+import { parseBlobJSONContent, getFileName } from "../../util/request";
 
 export default {
     data() {

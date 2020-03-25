@@ -1,9 +1,9 @@
 import Vuex from 'vuex';
 import { mount, createLocalVue } from '@vue/test-utils';
-import LeftNav from '../components/menu/LeftNav.vue';
-import globalFiltersModule from '../store/modules/global-filters';
+import globalFiltersModule from 'sharp-filters/src/store/global-filters';
+import LeftNav from '../components/LeftNav.vue';
 
-jest.mock('../store/modules/global-filters');
+jest.mock('sharp-filters/src/store/global-filters');
 jest.useFakeTimers();
 
 describe('left-nav', ()=>{
@@ -105,7 +105,7 @@ describe('left-nav', ()=>{
     test('currentIcon', ()=>{
         let wrapper = createWrapper();
         wrapper.setProps({ current:'dashboard' });
-        expect(wrapper.vm.currentIcon).toBe('fa-dashboard');
+        expect(wrapper.vm.currentIcon).toBe('fas fa-tachometer-alt');
 
         wrapper = createWrapper({
             computed: {

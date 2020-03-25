@@ -1,26 +1,13 @@
-import ErrorNode from './ErrorNode';
-import Focusable from './Focusable';
-import UploadXSRF from './UploadXSRF';
-import Localization, { LocalizationBase } from './Localization';
-import ActionEvents from './ActionEvents';
-import ReadOnlyFields from './ReadOnlyFields';
-import QueryTree from './QueryTree';
-import AutoScroll from './AutoScroll';
-import Responsive from './Responsive';
-import ConfigNode from './ConfigNode';
-import Debounce from './Debounce';
-
-export {
-    ErrorNode,
-    Focusable,
-    UploadXSRF,
-    Localization,
-    LocalizationBase,
-    ActionEvents,
-    ReadOnlyFields,
-    QueryTree,
-    AutoScroll,
-    Responsive,
-    ConfigNode,
-    Debounce
-}
+export { default as ErrorNode } from './ErrorNode';
+export { default as Focusable } from './Focusable';
+export { default as UploadXSRF } from './UploadXSRF';
+export { default as Localization, LocalizationBase } from './Localization';
+export { default as ActionEvents } from './ActionEvents';
+export { default as ReadOnlyFields } from './ReadOnlyFields';
+export { default as QueryTree } from './QueryTree';
+export { default as AutoScroll } from './AutoScroll';
+export { default as Responsive } from './Responsive';
+export { default as ConfigNode } from './ConfigNode';
+export { default as Debounce } from './Debounce';
+export { default as DynamicView, withAxiosInterceptors } from './DynamicView';
+export { default as withCommands } from './page/with-commands';
