@@ -9,6 +9,7 @@ use App\Sharp\States\SpaceshipEntityState;
 use App\Spaceship;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
+use Code16\Sharp\Show\Fields\SharpShowFileField;
 use Code16\Sharp\Show\Fields\SharpShowListField;
 use Code16\Sharp\Show\Fields\SharpShowPictureField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
@@ -43,7 +44,7 @@ class SpaceshipSharpShow extends SharpShow
             )->addField(
                 SharpShowListField::make("pictures")
                     ->setLabel("additional pictures")
-//                    ->addItemField(SharpShowFileField::make("file"))
+                    ->addItemField(SharpShowFileField::make("file"))
                     ->addItemField(SharpShowTextField::make("legend"))
             )->addField(
                 SharpShowEntityListField::make("pilots", "spaceship_pilot")
