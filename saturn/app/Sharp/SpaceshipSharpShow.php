@@ -46,7 +46,7 @@ class SpaceshipSharpShow extends SharpShow
                 SharpShowListField::make("pictures")
                     ->setLabel("additional pictures")
 //                    ->addItemField(SharpShowFileField::make("file"))
-//                    ->addItemField(SharpShowTextField::make("legend"))
+                    ->addItemField(SharpShowTextField::make("legend"))
             )->addField(
                 SharpShowEntityListField::make("pilots", "spaceship_pilot")
                     ->hideFilterWithValue("spaceship", function($instanceId) {

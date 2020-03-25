@@ -208,8 +208,7 @@ class SharpFormListField extends SharpFormField
     {
         return $this->sortable;
     }
-
-
+    
     /**
      * @return array
      */
