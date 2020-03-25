@@ -7,9 +7,7 @@ use App\Sharp\Commands\SpaceshipPreview;
 use App\Sharp\Commands\SpaceshipSendMessage;
 use App\Sharp\States\SpaceshipEntityState;
 use App\Spaceship;
-use Code16\Sharp\EntityList\Eloquent\Transformers\SharpUploadModelAttributeTransformer;
-use Code16\Sharp\Form\Eloquent\Transformers\FormUploadModelTransformer;
-use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\Fields\SharpShowListField;
 use Code16\Sharp\Show\Fields\SharpShowPictureField;
@@ -113,8 +111,7 @@ class SpaceshipSharpShow extends SharpShow
                 return $spaceship->name;
             })
             ->setCustomTransformer("picture", new SharpUploadModelThumbnailUrlTransformer(140))
-            ->setCustomTransformer("pictures", new FormUploadModelTransformer())
-//            ->setCustomTransformer("pictures", new SharpShowUploadModelTransformer())
+            ->setCustomTransformer("pictures", new SharpUploadModelFormAttributeTransformer())
             ->setCustomTransformer("description", (new MarkdownAttributeTransformer())->handleImages(200))
             ->transform(Spaceship::with("pictures")->findOrFail($id));
     }
