@@ -6,7 +6,7 @@
                     <img class="ShowFileField__thumbnail mw-100 h-auto" :src="thumbnailUrl" alt="">
                 </template>
             </div>
-            <div class="col px-2">
+            <div class="col px-2" style="min-width: 0">
                 <div class="ShowFileField__label text-truncate mb-2">
                     {{ fileLabel }}
                 </div>

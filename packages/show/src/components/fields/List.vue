@@ -1,23 +1,29 @@
 <template>
     <div class="ShowListField">
-        <template v-for="item in value">
-            <div class="ShowListField__item">
-                <Grid class="ShowListField__fields-grid" :rows="layout.item">
-                    <template slot-scope="fieldLayout">
-                        <template v-if="fieldOptions(fieldLayout)">
-                            <ShowField
-                                :options="fieldOptions(fieldLayout)"
-                                :value="fieldValue(item, fieldLayout)"
-                                :config-identifier="fieldLayout.key"
-                            />
+        <div class="ShowListField__label mb-3">
+            {{ label }}
+        </div>
+        <div class="ShowListField__content">
+            <template v-for="item in value">
+                <div class="ShowListField__item">
+                    <Grid class="ShowListField__fields-grid" :rows="layout.item">
+                        <template slot-scope="fieldLayout">
+                            <template v-if="fieldOptions(fieldLayout)">
+                                <ShowField
+                                    :options="fieldOptions(fieldLayout)"
+                                    :value="fieldValue(item, fieldLayout)"
+                                    :config-identifier="fieldLayout.key"
+                                />
+                            </template>
+                            <template v-else>
+                                <UnknownField :name="fieldLayout.key" />
+                            </template>
                         </template>
-                        <template v-else>
-                            <UnknownField :name="fieldLayout.key" />
-                        </template>
-                    </template>
-                </Grid>
-            </div>
-        </template>
+                    </Grid>
+                    <hr>
+                </div>
+            </template>
+        </div>
     </div>
 </template>
 
@@ -37,6 +43,7 @@
                 required: true,
             },
             layout: Object,
+            label: String,
         },
         methods: {
             fieldOptions(layout) {

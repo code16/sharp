@@ -2,9 +2,10 @@
 .ShowFileField {
   &__label {
     font-weight: 600;
-    font-size: .875em;
+    font-size: 1em;
+    white-space: nowrap;
   }
   &__size {
-    font-size: .75em;
+    font-size: .875em;
   }
 }

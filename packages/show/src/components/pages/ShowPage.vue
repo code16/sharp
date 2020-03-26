@@ -22,7 +22,7 @@
                     <div class="ShowPage__section mb-4" :class="sectionClasses(section)">
                         <Grid :rows="[section.columns]">
                             <template slot-scope="fieldsLayout">
-                                <Grid class="ShowPage__fields-grid" :rows="fieldsLayout.fields">
+                                <Grid class="ShowPage__fields-grid" :rows="fieldsLayout.fields" :row-class="fieldsRowClass">
                                     <template slot-scope="fieldLayout">
                                         <template v-if="fieldOptions(fieldLayout)">
                                             <ShowField
@@ -128,6 +128,12 @@
                 return {
                     'ShowPage__section--no-container': this.sectionHasField(section, 'entityList'),
                 }
+            },
+            fieldsRowClass(row) {
+                return row.map(fieldLayout => {
+                    const field = this.fieldOptions(fieldLayout);
+                    return `ShowPage__fields-row--${field.type}`;
+                });
             },
             sectionHasField(section, type) {
                 const sectionFields = section.columns.reduce((res, column) => [...res, ...column.fields.flat()], []);

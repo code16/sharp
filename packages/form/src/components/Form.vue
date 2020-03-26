@@ -51,20 +51,20 @@
 <script>
     import {
         BASE_URL,
-        getBackUrl, 
-        getListBackUrl, 
+        getBackUrl,
+        getListBackUrl,
         logError,
     } from "sharp";
 
     import { TabbedLayout, Grid, Dropdown, DropdownItem, } from 'sharp-ui';
     import { ActionEvents, ReadOnlyFields, Localization, DynamicView } from 'sharp/mixins';
-    
+
     import FieldsLayout from './ui/FieldsLayout';
     import LocaleSelect from './ui/LocaleSelect';
     import localize from '../mixins/localize/form';
 
     import { getDependantFieldsResetData, transformFields } from "../util";
-    
+
 
     const noop = ()=>{};
 
