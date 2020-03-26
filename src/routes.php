@@ -54,7 +54,7 @@ Route::group([
         ->middleware(['sharp_api_append_form_authorizations', 'sharp_api_append_breadcrumb'])
         ->uses('ShowController@show');
 
-    Route::get("/show/download/{formUploadFieldKey}/{entityKey}/{instanceId?}")
+    Route::get("/show/download/{fieldKey}/{entityKey}/{instanceId?}")
         ->name("code16.sharp.api.show.download")
         ->uses('DownloadController@show');
 
@@ -98,7 +98,7 @@ Route::group([
         ->name("code16.sharp.api.form.delete")
         ->uses('FormController@delete');
 
-    Route::get("/form/download/{formUploadFieldKey}/{entityKey}/{instanceId?}")
+    Route::get("/form/download/{fieldKey}/{entityKey}/{instanceId?}")
         ->name("code16.sharp.api.form.download")
         ->uses('DownloadController@show');
 

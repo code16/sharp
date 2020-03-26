@@ -34,7 +34,7 @@ class DownloadControllerTest extends BaseApiTest
         $response = $this
             ->getJson(
                 route('code16.sharp.api.form.download', [
-                    'formUploadFieldKey' => 'file',
+                    'fieldKey' => 'file',
                     'entityKey' => 'download',
                     'instanceId' => 1,
                     'fileName' => 'test.jpg'
@@ -59,7 +59,7 @@ class DownloadControllerTest extends BaseApiTest
         $response = $this
             ->getJson(
                 route('code16.sharp.api.show.download', [
-                    'formUploadFieldKey' => 'file',
+                    'fieldKey' => 'file',
                     'entityKey' => 'download',
                     'instanceId' => 1,
                     'fileName' => 'test.jpg'
@@ -94,7 +94,7 @@ class DownloadControllerTest extends BaseApiTest
         $this
             ->getJson(
                 route('code16.sharp.api.form.download', [
-                    'formUploadFieldKey' => 'file',
+                    'fieldKey' => 'file',
                     'entityKey' => 'download',
                     'instanceId' => 1,
                     'fileName' => 'test.jpg'
@@ -109,7 +109,7 @@ class DownloadControllerTest extends BaseApiTest
         $this
             ->getJson(
                 route('code16.sharp.api.form.download', [
-                    'formUploadFieldKey' => 'file',
+                    'fieldKey' => 'file',
                     'entityKey' => 'download',
                     'instanceId' => 1,
                     'fileName' => 'test.jpg'
@@ -124,16 +124,20 @@ class DownloadControllerTest extends BaseApiTest
         $file = UploadedFile::fake()->image('test.jpg', 600, 600);
         $file->storeAs('/list-files', 'test.jpg', ['disk' => 'local']);
 
-        $response = $this->postJson(
+        $response = $this
+            ->getJson(
             route('code16.sharp.api.form.download', [
                 'entityKey' => 'download',
                 'instanceId' => 1,
-                'formUploadFieldKey' => 'list.file'
+                'fieldKey' => 'list.file',
+                'fileName' => 'test.jpg'
             ]),
-            ['fileName' => 'test.jpg']
         )->assertStatus(200);
 
-        $this->assertStringEqualsFile(storage_path('app/list-files/test.jpg'), $response->content());
+        $this->assertStringEqualsFile(
+            Storage::disk('local')->path('list-files/test.jpg'),
+            $response->content()
+        );
     }
 }
 
@@ -177,8 +181,8 @@ class DownloadControllerTestShow extends SharpShow
     {
         $this->addField(
             SharpShowFileField::make("file")
-//                ->setStorageDisk("local")
-//                ->setStorageBasePath("files")
+                ->setStorageDisk("local")
+                ->setStorageBasePath("files")
         );/*->addField(
             SharpFormListField::make("list")
                 ->addItemField(

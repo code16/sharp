@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Validator;
 abstract class SharpShowField
 {
     /** @var string */
-    protected $key;
+    public $key;
 
     /** @var string */
     protected $type;

@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Api;
 
+use Code16\Sharp\Exceptions\SharpException;
 use Code16\Sharp\Http\SharpContext;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\Str;
@@ -28,6 +29,7 @@ class DownloadController extends ApiController
      * @return \Illuminate\Http\Response
      * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
      * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
+     * @throws SharpException
      */
     public function show($fieldKey, $entityKey, $instanceId = null)
     {
@@ -54,10 +56,13 @@ class DownloadController extends ApiController
      * @param null $instanceId
      * @return array
      * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
+     * @throws SharpException
      */
     protected function determineDiskAndFilePath(string $fileName, string $fieldKey, string $entityKey, $instanceId = null)
     {
-        $field = $this->getField($entityKey, $fieldKey);
+        if(!$field = $this->getField($entityKey, $fieldKey)) {
+            throw new SharpException("Field [$fieldKey] can't be found in Form or Show of [$entityKey]");
+        }
         
         $basePath = $instanceId 
             ? str_replace('{id}', $instanceId, $field->storageBasePath())
