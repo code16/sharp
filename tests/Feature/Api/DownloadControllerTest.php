@@ -8,7 +8,6 @@ use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Show\Fields\SharpShowFileField;
 use Code16\Sharp\Show\SharpShow;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class DownloadControllerTest extends BaseApiTest
