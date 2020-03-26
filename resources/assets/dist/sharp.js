@@ -7595,6 +7595,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -7608,7 +7614,8 @@ __webpack_require__.r(__webpack_exports__);
       type: Object,
       required: true
     },
-    layout: Object
+    layout: Object,
+    label: String
   },
   methods: {
     fieldOptions: function fieldOptions(layout) {
@@ -8143,51 +8150,60 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         'ShowPage__section--no-container': this.sectionHasField(section, 'entityList')
       };
     },
-    sectionHasField: function sectionHasField(section, type) {
+    fieldsRowClass: function fieldsRowClass(row) {
       var _this = this;
+
+      return row.map(function (fieldLayout) {
+        var field = _this.fieldOptions(fieldLayout);
+
+        return "ShowPage__fields-row--".concat(field.type);
+      });
+    },
+    sectionHasField: function sectionHasField(section, type) {
+      var _this2 = this;
 
       var sectionFields = section.columns.reduce(function (res, column) {
         return [].concat(_toConsumableArray(res), _toConsumableArray(column.fields.flat()));
       }, []);
       return sectionFields.some(function (fieldLayout) {
-        var options = _this.fieldOptions(fieldLayout);
+        var options = _this2.fieldOptions(fieldLayout);
 
         return options && options.type === type;
       });
     },
     handleCommandRequested: function handleCommandRequested(command) {
-      var _this2 = this;
+      var _this3 = this;
 
       this.sendCommand(command, {
         postCommand: function postCommand() {
-          return _this2.$store.dispatch('show/postCommand', {
+          return _this3.$store.dispatch('show/postCommand', {
             command: command
           });
         },
         postForm: function postForm(data) {
-          return _this2.$store.dispatch('show/postCommand', {
+          return _this3.$store.dispatch('show/postCommand', {
             command: command,
             data: data
           });
         },
         getFormData: function getFormData() {
-          return _this2.$store.dispatch('show/getCommandFormData', {
+          return _this3.$store.dispatch('show/getCommandFormData', {
             command: command
           });
         }
       });
     },
     handleStateChanged: function handleStateChanged(state) {
-      var _this3 = this;
+      var _this4 = this;
 
       return this.$store.dispatch('show/postState', state).then(function (data) {
-        _this3.handleCommandActionRequested(data.action, data);
+        _this4.handleCommandActionRequested(data.action, data);
       })["catch"](function (error) {
         var data = error.response.data;
 
         if (error.response.status === 422) {
-          _this3.actionsBus.$emit('showMainModal', {
-            title: _this3.l('modals.state.422.title'),
+          _this4.actionsBus.$emit('showMainModal', {
+            title: _this4.l('modals.state.422.title'),
             text: data.message,
             isError: true,
             okCloseOnly: true
@@ -8736,6 +8752,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       // 2D array [row][col]
       type: Array,
       required: true
+    },
+    rowClass: {
+      type: Function,
+      "default": function _default() {
+        return null;
+      }
     }
   },
   methods: {
@@ -15716,19 +15738,27 @@ var render = function() {
         2
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "col px-2" }, [
-        _c("div", { staticClass: "ShowFileField__label text-truncate mb-2" }, [
-          _vm._v(
-            "\n                " + _vm._s(_vm.fileLabel) + "\n            "
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "ShowFileField__size text-muted" }, [
-          _vm._v(
-            "\n                " + _vm._s(_vm.sizeLabel) + "\n            "
-          )
-        ])
-      ]),
+      _c(
+        "div",
+        { staticClass: "col px-2", staticStyle: { "min-width": "0" } },
+        [
+          _c(
+            "div",
+            { staticClass: "ShowFileField__label text-truncate mb-2" },
+            [
+              _vm._v(
+                "\n                " + _vm._s(_vm.fileLabel) + "\n            "
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "ShowFileField__size text-muted" }, [
+            _vm._v(
+              "\n                " + _vm._s(_vm.sizeLabel) + "\n            "
+            )
+          ])
+        ]
+      ),
       _vm._v(" "),
       _c(
         "div",
@@ -15780,52 +15810,60 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "ShowListField" },
-    [
-      _vm._l(_vm.value, function(item) {
-        return [
-          _c(
-            "div",
-            { staticClass: "ShowListField__item" },
-            [
-              _c("Grid", {
-                staticClass: "ShowListField__fields-grid",
-                attrs: { rows: _vm.layout.item },
-                scopedSlots: _vm._u([
-                  {
-                    key: "default",
-                    fn: function(fieldLayout) {
-                      return [
-                        _vm.fieldOptions(fieldLayout)
-                          ? [
-                              _c("ShowField", {
-                                attrs: {
-                                  options: _vm.fieldOptions(fieldLayout),
-                                  value: _vm.fieldValue(item, fieldLayout),
-                                  "config-identifier": fieldLayout.key
-                                }
-                              })
-                            ]
-                          : [
-                              _c("UnknownField", {
-                                attrs: { name: fieldLayout.key }
-                              })
-                            ]
-                      ]
+  return _c("div", { staticClass: "ShowListField" }, [
+    _c("div", { staticClass: "ShowListField__label mb-3" }, [
+      _vm._v("\n        " + _vm._s(_vm.label) + "\n    ")
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "ShowListField__content" },
+      [
+        _vm._l(_vm.value, function(item) {
+          return [
+            _c(
+              "div",
+              { staticClass: "ShowListField__item" },
+              [
+                _c("Grid", {
+                  staticClass: "ShowListField__fields-grid",
+                  attrs: { rows: _vm.layout.item },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "default",
+                      fn: function(fieldLayout) {
+                        return [
+                          _vm.fieldOptions(fieldLayout)
+                            ? [
+                                _c("ShowField", {
+                                  attrs: {
+                                    options: _vm.fieldOptions(fieldLayout),
+                                    value: _vm.fieldValue(item, fieldLayout),
+                                    "config-identifier": fieldLayout.key
+                                  }
+                                })
+                              ]
+                            : [
+                                _c("UnknownField", {
+                                  attrs: { name: fieldLayout.key }
+                                })
+                              ]
+                        ]
+                      }
                     }
-                  }
-                ])
-              })
-            ],
-            1
-          )
-        ]
-      })
-    ],
-    2
-  )
+                  ])
+                }),
+                _vm._v(" "),
+                _c("hr")
+              ],
+              1
+            )
+          ]
+        })
+      ],
+      2
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -16391,7 +16429,10 @@ var render = function() {
                                 return [
                                   _c("Grid", {
                                     staticClass: "ShowPage__fields-grid",
-                                    attrs: { rows: fieldsLayout.fields },
+                                    attrs: {
+                                      rows: fieldsLayout.fields,
+                                      "row-class": _vm.fieldsRowClass
+                                    },
                                     scopedSlots: _vm._u([
                                       {
                                         key: "default",
@@ -17061,7 +17102,7 @@ var render = function() {
     _vm._l(_vm.rows, function(row) {
       return _c(
         "div",
-        { staticClass: "SharpGrid__row row" },
+        { staticClass: "SharpGrid__row row", class: _vm.rowClass(row) },
         _vm._l(row, function(col) {
           return _c(
             "div",

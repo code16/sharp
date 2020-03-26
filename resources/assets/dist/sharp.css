@@ -28213,6 +28213,14 @@ span.flatpickr-weekday,
   margin-bottom: 0;
 }
 
+.ShowPage__fields-row--list {
+  margin-top: 1.5rem;
+}
+
+.ShowPage__fields-row:first-child {
+  margin-top: 0;
+}
+
 .ShowEntityListField .SharpDataList__row-append {
   width: 5.5rem;
 }
@@ -28778,11 +28786,33 @@ span.flatpickr-weekday,
 
 .ShowFileField__label {
   font-weight: 600;
-  font-size: .875em;
+  font-size: 1em;
+  white-space: nowrap;
 }
 
 .ShowFileField__size {
-  font-size: .75em;
+  font-size: .875em;
+}
+
+.ShowListField {
+  font-size: .875em;
+}
+
+.ShowListField__label {
+  font-size: 1em;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.ShowListField__item hr {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 0;
+  border-top: 1px solid #dfe3e6;
+}
+
+.ShowListField__item:last-child hr {
+  display: none;
 }
 
 .ShowListField__fields-grid .SharpGrid__row {
