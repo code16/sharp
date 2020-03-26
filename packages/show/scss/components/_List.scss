@@ -1,0 +1,11 @@
+
+.ShowListField {
+  &__fields-grid {
+    .SharpGrid__row {
+      margin-bottom: .5rem;
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

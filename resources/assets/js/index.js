@@ -1,9 +1,10 @@
 
-export { api } from './api';
+export { api, apiUrl } from './api';
 export { lang } from './util/i18n';
 export { search } from './util/search';
 export * from './util/querystring';
 export * from './util/log';
+export * from './util/file';
 export * from './consts';
 export { getBackUrl, getListBackUrl } from './util/url';
 export { formUrl } from 'sharp-form/src/util/url';

@@ -28,6 +28,8 @@
                                             <ShowField
                                                 :options="fieldOptions(fieldLayout)"
                                                 :value="fieldValue(fieldLayout)"
+                                                :config-identifier="fieldLayout.key"
+                                                :layout="fieldLayout"
                                             />
                                         </template>
                                         <template v-else>
@@ -49,7 +51,7 @@
 </template>
 
 <script>
-    import { mapState, mapGetters } from 'vuex';
+    import { mapGetters } from 'vuex';
     import { formUrl, getBackUrl } from 'sharp';
     import { CommandFormModal, CommandViewPanel } from 'sharp-commands';
     import { Grid } from 'sharp-ui';
@@ -78,11 +80,9 @@
         },
 
         computed: {
-            ...mapState('show', {
-                entityKey: state => state.entityKey,
-                instanceId: state => state.instanceId,
-            }),
             ...mapGetters('show', [
+                'entityKey',
+                'instanceId',
                 'fields',
                 'layout',
                 'data',
