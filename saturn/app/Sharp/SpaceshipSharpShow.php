@@ -44,7 +44,11 @@ class SpaceshipSharpShow extends SharpShow
             )->addField(
                 SharpShowListField::make("pictures")
                     ->setLabel("additional pictures")
-                    ->addItemField(SharpShowFileField::make("file"))
+                    ->addItemField(
+                        SharpShowFileField::make("file")
+                            ->setStorageDisk("local")
+                            ->setStorageBasePath("data/Spaceship/{id}/Pictures")
+                    )
                     ->addItemField(SharpShowTextField::make("legend"))
             )->addField(
                 SharpShowEntityListField::make("pilots", "spaceship_pilot")
