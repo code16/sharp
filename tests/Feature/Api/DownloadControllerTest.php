@@ -149,20 +149,21 @@ class DownloadControllerTest extends BaseApiTest
     }
 
     /** @test */
-    function we_can_download_a_file_in_a_list()
+    function we_can_download_a_file_from_a_form_list_field()
     {
         $file = UploadedFile::fake()->image('test.jpg', 600, 600);
         $file->storeAs('/list-files', 'test.jpg', ['disk' => 'local']);
 
         $response = $this
             ->getJson(
-            route('code16.sharp.api.form.download', [
-                'entityKey' => 'download',
-                'instanceId' => 1,
-                'fieldKey' => 'list.file',
-                'fileName' => 'test.jpg'
-            ]),
-        )->assertStatus(200);
+                route('code16.sharp.api.form.download', [
+                    'entityKey' => 'download',
+                    'instanceId' => 1,
+                    'fieldKey' => 'list.file',
+                    'fileName' => 'test.jpg'
+                ]),
+            )
+            ->assertStatus(200);
 
         $this->assertStringEqualsFile(
             Storage::disk('local')->path('list-files/test.jpg'),
@@ -175,18 +176,20 @@ class DownloadControllerTestForm extends SharpForm
 {
     function buildFormFields()
     {
-        $this->addField(
-            SharpFormUploadField::make("file")
-                ->setStorageDisk("local")
-                ->setStorageBasePath("files")
-        )->addField(
-            SharpFormListField::make("list")
-                ->addItemField(
-                    SharpFormUploadField::make("file")
-                        ->setStorageDisk("local")
-                        ->setStorageBasePath("list-files")
-                )
-        );
+        $this
+            ->addField(
+                SharpFormUploadField::make("file")
+                    ->setStorageDisk("local")
+                    ->setStorageBasePath("files")
+            )
+            ->addField(
+                SharpFormListField::make("list")
+                    ->addItemField(
+                        SharpFormUploadField::make("file")
+                            ->setStorageDisk("local")
+                            ->setStorageBasePath("list-files")
+                    )
+            );
     }
     function buildFormLayout()
     {
@@ -209,18 +212,12 @@ class DownloadControllerTestShow extends SharpShow
 {
     function buildShowFields()
     {
-        $this->addField(
-            SharpShowFileField::make("file")
-                ->setStorageDisk("local")
-                ->setStorageBasePath("files")
-        );/*->addField(
-            SharpFormListField::make("list")
-                ->addItemField(
-                    SharpFormUploadField::make("file")
-                        ->setStorageDisk("local")
-                        ->setStorageBasePath("list-files")
-                )
-        );*/
+        $this
+            ->addField(
+                SharpShowFileField::make("file")
+                    ->setStorageDisk("local")
+                    ->setStorageBasePath("files")
+            );
     }
     function find($id): array
     {
