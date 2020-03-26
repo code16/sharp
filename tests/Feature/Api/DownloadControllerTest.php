@@ -51,8 +51,6 @@ class DownloadControllerTest extends BaseApiTest
     /** @test */
     function we_can_download_a_file_from_a_show_field()
     {
-        $this->withoutExceptionHandling();
-        
         $file = UploadedFile::fake()->image('test.jpg', 600, 600);
         $file->storeAs('/files', 'test.jpg', ['disk' => 'local']);
 
@@ -76,13 +74,45 @@ class DownloadControllerTest extends BaseApiTest
     /** @test */
     function we_can_download_a_file_from_a_single_form_field()
     {
-        $this->markTestIncomplete();
+        $file = UploadedFile::fake()->image('test.jpg', 600, 600);
+        $file->storeAs('/files', 'test.jpg', ['disk' => 'local']);
+
+        $response = $this
+            ->getJson(
+                route('code16.sharp.api.form.download', [
+                    'fieldKey' => 'file',
+                    'entityKey' => 'download',
+                    'fileName' => 'test.jpg'
+                ])
+            )
+            ->assertStatus(200);
+
+        $this->assertStringEqualsFile(
+            Storage::disk('local')->path('files/test.jpg'),
+            $response->content()
+        );
     }
 
     /** @test */
     function we_can_download_a_file_from_a_single_show_field()
     {
-        $this->markTestIncomplete();
+        $file = UploadedFile::fake()->image('test.jpg', 600, 600);
+        $file->storeAs('/files', 'test.jpg', ['disk' => 'local']);
+
+        $response = $this
+            ->getJson(
+                route('code16.sharp.api.show.download', [
+                    'fieldKey' => 'file',
+                    'entityKey' => 'download',
+                    'fileName' => 'test.jpg'
+                ])
+            )
+            ->assertStatus(200);
+
+        $this->assertStringEqualsFile(
+            Storage::disk('local')->path('files/test.jpg'),
+            $response->content()
+        );
     }
 
     /** @test */
