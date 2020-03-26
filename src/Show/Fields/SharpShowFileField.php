@@ -2,8 +2,6 @@
 
 namespace Code16\Sharp\Show\Fields;
 
-use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
-
 class SharpShowFileField extends SharpShowField
 {
     const FIELD_TYPE = "file";

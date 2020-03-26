@@ -52,10 +52,15 @@ abstract class SharpShowField
      */
     protected function validate(array $properties)
     {
-        $validator = Validator::make($properties, [
-            'key' => 'required',
-            'type' => 'required',
-        ] + $this->validationRules());
+        $validator = Validator::make($properties, 
+            array_merge(
+                [
+                    'key' => 'required',
+                    'type' => 'required',
+                ], 
+                $this->validationRules()
+            )
+        );
 
         if ($validator->fails()) {
             throw new SharpShowFieldValidationException($validator->errors());
