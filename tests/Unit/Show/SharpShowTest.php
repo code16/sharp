@@ -19,18 +19,20 @@ class SharpShowTest extends SharpTestCase
             {
                 $this->addField(
                     SharpShowEntityListField::make("entityList", "entityKey")
+                        ->setLabel("Test")
+                    
                 );
             }
             function buildShowLayout()
             {
-                $this->addEntityListSection('Test', "entityList");
+                $this->addEntityListSection("entityList");
             }
         };
 
         $this->assertEquals([
             "sections" => [
                 [
-                    "title" => "Test",
+                    "title" => "",
                     "columns" => [
                         [
                             "size" => 12,

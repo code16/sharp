@@ -52,6 +52,7 @@ class SpaceshipSharpShow extends SharpShow
                     ->addItemField(SharpShowTextField::make("legend")->setLabel("Legend"))
             )->addField(
                 SharpShowEntityListField::make("pilots", "spaceship_pilot")
+                    ->setLabel("Pilots")
                     ->hideFilterWithValue("spaceship", function($instanceId) {
                         return $instanceId;
                     })
