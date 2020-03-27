@@ -52,11 +52,11 @@
 </template>
 
 <script>
-    import { 
-        ActionBar, 
-        Dropdown, 
-        DropdownItem, 
-        StateIcon, 
+    import {
+        ActionBar,
+        Dropdown,
+        DropdownItem,
+        StateIcon,
     } from 'sharp-ui';
 
     import {

@@ -20,7 +20,7 @@
                         <template v-if="section.title">
                             <h2 class="ShowPage__section-title mb-2">{{ section.title }}</h2>
                         </template>
-                        <div class="ShowPage__section-content mb-4">
+                        <div class="ShowPage__section-content">
                             <Grid class="ShowPage__section-grid" :rows="[section.columns]" :col-class="sectionColClass">
                                 <template slot-scope="fieldsLayout">
                                     <Grid class="ShowPage__fields-grid"

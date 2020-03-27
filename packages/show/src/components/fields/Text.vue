@@ -1,7 +1,7 @@
 <template>
     <div class="ShowTextField">
         <template v-if="label">
-            <span class="ShowTextField__label">{{ label }}</span>
+            <div class="ShowTextField__label">{{ label }}</div>
         </template>
         <div class="ShowTextField__content" v-html="currentContent" ref="content"></div>
         <template v-if="hasCollapsed">

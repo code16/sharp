@@ -26,16 +26,16 @@ class SpaceshipSharpShow extends SharpShow
         $this
             ->addField(
                 SharpShowTextField::make("name")
-                    ->setLabel("Ship name:")
+                    ->setLabel("Ship name")
             )->addField(
                 SharpShowTextField::make("type:label")
-                    ->setLabel("Type:")
+                    ->setLabel("Type")
             )->addField(
                 SharpShowTextField::make("serial_number")
-                    ->setLabel("S/N:")
+                    ->setLabel("S/N")
             )->addField(
                 SharpShowTextField::make("brand")
-                    ->setLabel("Brand / model:")
+                    ->setLabel("Brand / model")
             )->addField(
                 SharpShowPictureField::make("picture")
             )->addField(
@@ -104,6 +104,9 @@ class SpaceshipSharpShow extends SharpShow
                                 ->withSingleField("legend");
                         });
                     });
+//                    ->addColumn(6, function(ShowLayoutColumn $column) {
+//                        $column
+//                    });
             })
             ->addEntityListSection("pilots");
     }

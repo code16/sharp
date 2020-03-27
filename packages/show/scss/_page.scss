@@ -1,5 +1,6 @@
 .ShowPage {
   &__section {
+    margin-bottom: 2rem;
     &--no-container {
       .ShowPage__section-content {
         background: transparent;
@@ -9,30 +10,30 @@
   }
   &__section-content {
     background: white;
-    padding: 1rem;
+    padding: 1rem 1.25rem;
   }
   &__section-title {
     font-size: 1em;
-    font-weight: bold;
+    font-weight: 600;
     text-transform: uppercase;
   }
   &__section-grid {
-    margin-bottom: -1.5rem;
+    margin-bottom: -2rem;
   }
   &__section-col {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
   }
 
   &__fields-grid {
-    margin-bottom: -1rem;
+    margin-bottom: -1.5rem;
   }
   .show-field {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
   }
 
   &__fields-row {
     &--list {
-      margin-top: 1.5rem;
+      margin-top: .5rem;
     }
     &:first-child {
       margin-top: 0;
