@@ -21,8 +21,6 @@ export function postShowState({ entityKey, instanceId, value }) {
         .then(response => response.data);
 }
 
-console.dir(api);
-
 export function downloadFileUrl({ entityKey, instanceId, fieldKey, fileName }) {
     return apiUrl(`show/download/${fieldKey}/${entityKey}/${instanceId}`, {
         params: {

@@ -16,10 +16,15 @@
                             <div class="mb-3 text-truncate">
                                 <label class="SharpUpload__filename">{{ fileName }}</label>
                                 <div class="SharpUpload__info mt-2">
-                                    <span v-show="size" class="mr-2">{{ size }}</span>
-                                    <a v-show="canDownload" class="SharpUpload__download-link" @click.prevent="download" href="">
-                                        {{ l('form.upload.download_link') }}
-                                    </a>
+                                    <template v-if="size">
+                                        <span class="mr-2">{{ size }}</span>
+                                    </template>
+                                    <template v-if="canDownload">
+                                        <a class="SharpUpload__download-link" :href="downloadUrl" :download="fileName">
+                                            <i class="fas fa-download"></i>
+                                            {{ l('form.upload.download_link') }}
+                                        </a>
+                                    </template>
                                 </div>
                                 <transition name="SharpUpload__progress">
                                     <div class="SharpUpload__progress mt-2" v-show="inProgress">
@@ -84,9 +89,11 @@
 
     import { Modal } from 'sharp-ui';
     import { Localization } from 'sharp/mixins';
+    import { filesizeLabel } from 'sharp';
 
     import { VueClipModifiers } from './modifiers';
     import rotateResize from './rotate';
+    import { downloadFileUrl } from "../../../api";
 
     export default {
         name: 'SharpVueClip',
@@ -145,14 +152,9 @@
                 return this.croppedImg || this.originalImageSrc;
             },
             size() {
-                if(this.file.size == null) {
-                    return '';
-                }
-                let size = (parseFloat((this.file.size).toFixed(2))/1024)/1024;
-                let res = '';
-                if(size<0.1) { res+='<'; size=0.1 }
-                res += size.toLocaleString();
-                return `${res} MB`;
+                return this.file.size != null
+                    ? filesizeLabel(this.file.size)
+                    : null;
             },
             operationFinished() {
                 return {
@@ -192,8 +194,13 @@
                 let extension = this.fileName.split('.').pop();
                 return extension ? `.${extension}` : null;
             },
-            downloadLink() {
-                return `${this.$form.downloadLinkBase}/${this.downloadId}`;
+            downloadUrl() {
+                return downloadFileUrl({
+                    entityKey: this.$form.entityKey,
+                    instanceId: this.$form.instanceId,
+                    fieldKey: this.downloadId,
+                    fileName: this.fileName,
+                });
             },
             showThumbnail() {
                 return this.imageSrc;
@@ -241,17 +248,6 @@
                 this.$nextTick(_=>{
                     this.isCropperReady() && this.onCropperReady();
                 });
-            },
-
-            async download() {
-                if(!this.value.uploaded) {
-                    let { data } = await this.axiosInstance.post(this.downloadLink, { fileName: this.value.name }, { responseType: 'blob' });
-                    //console.log(data);
-                    let $link = this.$refs.dlLink;
-                    $link.href = URL.createObjectURL(data);
-                    $link.download = this.fileName;
-                    $link.click();
-                }
             },
 
             // actions
