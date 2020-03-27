@@ -1,11 +1,31 @@
 
 .ShowFileField {
-  &__label {
+  &__name {
     font-weight: 600;
     font-size: 1em;
     white-space: nowrap;
   }
   &__size {
     font-size: .875em;
+  }
+  &__download-button {
+    padding: .25em 1em;
+    line-height: 1.75;
+    font-size: .75em;
+    height: auto;
+  }
+  //noinspection CssOverwrittenProperties
+  &__thumbnail {
+    display: block;
+    max-width: 100%;
+  }
+  &__thumbnail-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  &__placeholder {
+    color: rgba(0,0,0,.25);
+    font-size: 3rem;
   }
 }

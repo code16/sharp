@@ -6,12 +6,20 @@
       background: transparent;
       padding: 0;
     }
+    overflow: hidden;
   }
   &__section-title {
     font-size: 1em;
     font-weight: bold;
     text-transform: uppercase;
   }
+  &__section-grid {
+    margin-bottom: -1.5rem;
+  }
+  &__section-col {
+    margin-bottom: 1.5rem;
+  }
+
   &__fields-grid {
     .SharpGrid__row {
       margin-bottom: 1rem;

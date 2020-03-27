@@ -19,10 +19,13 @@
                     <template v-if="section.title">
                         <h2 class="ShowPage__section-title mb-2">{{ section.title }}</h2>
                     </template>
-                    <div class="ShowPage__section mb-4" :class="sectionClasses(section)">
-                        <Grid :rows="[section.columns]">
+                    <div class="ShowPage__section mb-4" :class="sectionClasses(section)" >
+                        <Grid class="ShowPage__section-grid" :rows="[section.columns]" :col-class="sectionColClass">
                             <template slot-scope="fieldsLayout">
-                                <Grid class="ShowPage__fields-grid" :rows="fieldsLayout.fields" :row-class="fieldsRowClass">
+                                <Grid class="ShowPage__fields-grid"
+                                    :rows="fieldsLayout.fields"
+                                    :row-class="fieldsRowClass"
+                                >
                                     <template slot-scope="fieldLayout">
                                         <template v-if="fieldOptions(fieldLayout)">
                                             <ShowField
@@ -130,10 +133,21 @@
                 }
             },
             fieldsRowClass(row) {
-                return row.map(fieldLayout => {
+                const fieldsTypeClasses = row.map(fieldLayout => {
                     const field = this.fieldOptions(fieldLayout);
                     return `ShowPage__fields-row--${field.type}`;
                 });
+                return [
+                    'ShowPage__fields-row',
+                    ...fieldsTypeClasses,
+                ]
+            },
+            sectionColClass(col) {
+                // const fieldsTypeClasses = col.fields.flat().map(fieldLayout => {
+                //     const field = this.fieldOptions(fieldLayout);
+                //     return `ShowPage__section-col--${field.type}`;
+                // });
+                return 'ShowPage__section-col';
             },
             sectionHasField(section, type) {
                 const sectionFields = section.columns.reduce((res, column) => [...res, ...column.fields.flat()], []);
