@@ -5,18 +5,16 @@
     font-size: 1em;
     font-weight: bold;
     text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  &__list {
+    border: 1px solid #dfe3e6;
   }
   &__item {
-    hr {
-      margin-top: 1rem;
-      margin-bottom: 1rem;
-      border: 0;
-      border-top: 1px solid #dfe3e6;
-    }
+    padding: 1em;
+    border-bottom: 1px solid #dfe3e6;
     &:last-child {
-      hr {
-        display: none;
-      }
+      border-bottom: 0;
     }
   }
   &__fields-grid {
@@ -25,6 +23,11 @@
       &:last-of-type {
         margin-bottom: 0;
       }
+    }
+  }
+  &--empty {
+    .ShowListField__label {
+      margin-bottom: .5rem;
     }
   }
 }
