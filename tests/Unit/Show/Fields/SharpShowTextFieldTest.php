@@ -16,6 +16,7 @@ class SharpShowTextFieldTest extends SharpTestCase
         $this->assertEquals([
             "key" => "textfield",
             "type" => "text",
+            "emptyVisible" => false,
             "label" => "Label"
         ], $field->toArray());
     }
@@ -29,7 +30,21 @@ class SharpShowTextFieldTest extends SharpTestCase
         $this->assertEquals([
             "key" => "textfield",
             "type" => "text",
+            "emptyVisible" => false,
             "collapseToWordCount" => 15
+        ], $field->toArray());
+    }
+
+    /** @test */
+    function we_can_define_showIfEmpty()
+    {
+        $field = SharpShowTextField::make("textfield")
+            ->setShowIfEmpty(true);
+
+        $this->assertEquals([
+            "key" => "textfield",
+            "type" => "text",
+            "emptyVisible" => true,
         ], $field->toArray());
     }
 
@@ -44,6 +59,7 @@ class SharpShowTextFieldTest extends SharpTestCase
         $this->assertEquals([
             "key" => "textfield",
             "type" => "text",
+            "emptyVisible" => false,
         ], $field->toArray());
     }
 }

@@ -12,6 +12,9 @@ abstract class SharpShowField
 
     /** @var string */
     protected $type;
+    
+    /** @var bool */
+    protected $emptyVisible = false;
 
     /**
      * @param string $key
@@ -21,6 +24,13 @@ abstract class SharpShowField
     {
         $this->key = $key;
         $this->type = $type;
+    }
+
+    public function setShowIfEmpty(bool $showIfEmpty = true)
+    {
+        $this->emptyVisible = $showIfEmpty;
+        
+        return $this;
     }
 
     /**
@@ -33,6 +43,7 @@ abstract class SharpShowField
         $array = collect([
                 "key" => $this->key,
                 "type" => $this->type,
+                "emptyVisible" => $this->emptyVisible
             ] + $childArray)
             ->filter(function($value) {
                 return !is_null($value);
@@ -57,6 +68,7 @@ abstract class SharpShowField
                 [
                     'key' => 'required',
                     'type' => 'required',
+                    'emptyVisible' => 'required|bool'
                 ], 
                 $this->validationRules()
             )

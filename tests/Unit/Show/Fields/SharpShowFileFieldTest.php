@@ -17,6 +17,7 @@ class SharpShowFileFieldTest extends SharpTestCase
             "key" => "fileField",
             "type" => "file",
             "label" => "test",
+            "emptyVisible" => false,
         ], $field->toArray());
     }
 }
