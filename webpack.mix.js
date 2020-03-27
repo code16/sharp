@@ -7,10 +7,12 @@ mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
     .js('resources/assets/js/client-api.js', 'resources/assets/dist/client-api.js')
     .sass('resources/assets/sass/app.scss', 'resources/assets/dist/sharp.css', { implementation:require('node-sass') })
     .sass('resources/assets/sass/cms.scss', 'resources/assets/dist/sharp-cms.css', { implementation:require('node-sass') })
+    .copy('node_modules/@fortawesome/fontawesome-free/webfonts/*', 'resources/assets/dist/fonts')
+    .copy('node_modules/element-ui/lib/theme-chalk/fonts/*', 'resources/assets/dist/fonts')
+    .copy('node_modules/leaflet/dist/images/*', 'resources/assets/dist/images')
     .options({
-        processCssUrls: true,
+        processCssUrls: false,
     })
-    .version()
     .extract()
     .setResourceRoot('/vendor/sharp')
     .setPublicPath('resources/assets/dist')
@@ -20,14 +22,9 @@ mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
             new webpack.NormalModuleReplacementPlugin(/element-ui[\/\\]lib[\/\\]locale[\/\\]lang[\/\\]zh-CN/, 'element-ui/lib/locale/lang/en'),
             // new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
             new CircularDependencyPlugin({
-                // exclude detection of files based on a RegExp
                 exclude: /node_modules/,
-                // add errors to webpack instead of warnings
                 failOnError: true,
-                // allow import cycles that include an asyncronous import,
-                // e.g. via import(/* webpackMode: "weak" */ './file.js')
                 allowAsyncCycles: false,
-                // set the current working directory for displaying module paths
                 cwd: process.cwd(),
               })
         ],
@@ -60,4 +57,7 @@ mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
     });
 
 
+if(mix.inProduction()) {
+    mix.version();
+}
 
