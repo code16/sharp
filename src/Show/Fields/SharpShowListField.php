@@ -40,6 +40,17 @@ class SharpShowListField extends SharpShowField
     }
 
     /**
+     * @param string $key
+     * @return SharpShowField
+     */
+    public function findItemFormFieldByKey(string $key)
+    {
+        return collect($this->itemFields)
+            ->where("key", $key)
+            ->first();
+    }
+
+    /**
      * @return array
      */
     protected function validationRules()
