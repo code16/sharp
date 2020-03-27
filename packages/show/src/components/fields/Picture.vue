@@ -13,7 +13,7 @@
         },
         computed: {
             isVisible() {
-                return !this.value;
+                return !!this.value;
             }
         },
         created() {
