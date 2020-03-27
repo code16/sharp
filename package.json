@@ -97,6 +97,7 @@
     "carbon-components": "^7.26.2",
     "element-ui": "^2.9.2",
     "filesize": "^6.1.0",
+    "font-awesome-filetypes": "^2.1.0",
     "leaflet": "^1.4.0",
     "sharp-commands": "file:packages/commands",
     "sharp-dashboard": "file:packages/dashboard",
