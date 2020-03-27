@@ -3,7 +3,7 @@
         <template v-for="row in rows">
             <div class="SharpGrid__row row" :class="rowClass(row)">
                 <template v-for="col in row">
-                    <div :class="colClasses(col)" class="SharpGrid__col" v-empty-class="'SharpGrid__col--empty'">
+                    <div class="SharpGrid__col" :class="colClasses(col)" v-empty-class="'SharpGrid__col--empty'">
                         <slot v-bind="col" />
                     </div>
                 </template>

@@ -9,6 +9,7 @@
         :show-entity-state="showEntityState"
         :hidden-commands="hiddenCommands"
         :hidden-filters="hiddenFilters"
+        @change="handleChanged"
         inline
     >
         <template slot="action-bar" slot-scope="{ props, listeners }">
@@ -31,8 +32,9 @@
     import { EntityList, entityListModule } from 'sharp-entity-list';
     import { CommandsDropdown } from 'sharp-commands';
     import { Localization } from "sharp/mixins";
-    
-    import ActionBar from "./ActionBar"; 
+
+    import ActionBar from "./ActionBar";
+    import {syncVisibility} from "../../../util/fields/visiblity";
 
     export default {
         mixins: [Localization],
@@ -50,12 +52,28 @@
             hiddenFilters: Object,
             hiddenCommands: Object,
         },
+        data() {
+            return {
+                list: null,
+            }
+        },
         computed: {
             storeModule() {
                 return `show/entity-lists/${this.entityListKey}`;
             },
             getFiltersQueryParams() {
                 return this.storeGetter('filters/getQueryParams');
+            },
+            isVisible() {
+                if(this.list) {
+                    const { data, authorizations } = this.list;
+                    return !!(
+                        data.items && data.items.length > 0 ||
+                        this.showCreateButton && authorizations.create ||
+                        this.emptyVisible
+                    );
+                }
+                return this.emptyVisible;
             },
         },
         methods: {
@@ -65,10 +83,15 @@
             storeGetter(name) {
                 return this.$store.getters[`${this.storeModule}/${name}`];
             },
+            handleChanged(list) {
+                this.list = list;
+            },
         },
         created() {
             this.$store.registerModule(this.storeModule.split('/'), entityListModule);
             this.$store.dispatch(`${this.storeModule}/setQuery`, this.getFiltersQueryParams(this.hiddenFilters));
+
+            syncVisibility(this, () => this.isVisible, { lazy:true });
         },
     }
 </script>

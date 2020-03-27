@@ -18,12 +18,10 @@
     }
   }
   &__fields-grid {
-    .SharpGrid__row {
-      margin-bottom: .5rem;
-      &:last-of-type {
-        margin-bottom: 0;
-      }
-    }
+    margin-bottom: -.5rem;
+  }
+  .show-field {
+    margin-bottom: .5rem;
   }
   &--empty {
     .ShowListField__label {

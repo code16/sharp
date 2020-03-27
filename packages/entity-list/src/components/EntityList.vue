@@ -83,22 +83,22 @@
 
 <script>
     import { formUrl, showUrl } from 'sharp';
-    import { 
-        DataList, 
-        DataListRow, 
+    import {
+        DataList,
+        DataListRow,
         StateIcon,
         Dropdown,
         DropdownItem,
     } from 'sharp-ui';
 
-    import { 
+    import {
         CommandsDropdown,
         CommandFormModal,
         CommandViewPanel,
     } from 'sharp-commands';
 
     import { Localization, DynamicView, withCommands } from 'sharp/mixins';
-    
+
 
     export default {
         name: 'SharpEntityList',
@@ -576,6 +576,15 @@
                 // legacy
                 await this.get();
                 this.bindParams(this.query);
+
+                this.$emit('change', {
+                    data: this.data,
+                    layout: this.layout,
+                    config: this.config,
+                    containers: this.containers,
+                    authorizations: this.authorizations,
+                    forms: this.forms,
+                });
 
                 await this.storeDispatch('update', {
                     config: this.config,

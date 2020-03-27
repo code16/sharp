@@ -22,6 +22,7 @@
 <script>
     import { Localization } from 'sharp/mixins';
     import clip from 'text-clipper';
+    import { syncVisibility } from "../../util/fields/visiblity";
 
     function stripTags(html) {
         const el = document.createElement('div');
@@ -42,6 +43,7 @@
             value: String,
             collapseToWordCount: Number,
             label: String,
+            emptyVisible: Boolean,
         },
         data() {
             return {
@@ -69,11 +71,17 @@
                     ? clip(html, truncated.length + 2, { html: true })
                     : null;
             },
+            isVisible() {
+                return !!this.value || this.emptyVisible;
+            },
         },
         methods: {
             handleToggleClicked() {
                 this.expanded = !this.expanded;
             },
+        },
+        created() {
+            syncVisibility(this, () => this.isVisible);
         },
     }
 </script>

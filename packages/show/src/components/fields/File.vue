@@ -57,6 +57,7 @@
     import { lang, filesizeLabel } from 'sharp';
     import { downloadFileUrl } from "../../api";
     import { getClassNameForExtension } from 'font-awesome-filetypes';
+    import {syncVisibility} from "../../util/fields/visiblity";
 
 
     export default {
@@ -115,6 +116,9 @@
                 const extension = this.fileName.split('.').pop();
                 return getClassNameForExtension(extension);
             },
+            isVisible() {
+                return !!this.value;
+            },
         },
         methods: {
             lang,
@@ -126,6 +130,9 @@
             handleThumbnailLoaded() {
                 this.layout();
             }
+        },
+        created() {
+            syncVisibility(this, () => this.isVisible);
         },
         mounted() {
             this.layout();

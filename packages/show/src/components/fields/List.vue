@@ -37,6 +37,7 @@
     import { Grid } from 'sharp-ui';
     import { UnknownField } from 'sharp/components';
     import { lang } from 'sharp';
+    import {syncVisibility} from "../../util/fields/visiblity";
 
     export default {
         components: {
@@ -51,10 +52,14 @@
             },
             layout: Object,
             label: String,
+            emptyVisible: Boolean,
         },
         computed: {
             isEmpty() {
                 return !this.value || this.value.length === 0;
+            },
+            isVisible() {
+                return !this.isEmpty || this.emptyVisible;
             },
             classes() {
                 return {
@@ -76,6 +81,9 @@
             fieldValue(item, layout) {
                 return item ? item[layout.key] : null;
             }
+        },
+        created() {
+            syncVisibility(this, () => this.isVisible);
         }
     }
 </script>

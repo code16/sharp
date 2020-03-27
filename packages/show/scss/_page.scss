@@ -21,13 +21,12 @@
   }
 
   &__fields-grid {
-    .SharpGrid__row {
-      margin-bottom: 1rem;
-      &:last-of-type {
-        margin-bottom: 0;
-      }
-    }
+    margin-bottom: -1rem;
   }
+  .show-field {
+    margin-bottom: 1rem;
+  }
+
   &__fields-row {
     &--list {
       margin-top: 1.5rem;

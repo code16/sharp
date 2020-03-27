@@ -19,7 +19,7 @@
                     <template v-if="section.title">
                         <h2 class="ShowPage__section-title mb-2">{{ section.title }}</h2>
                     </template>
-                    <div class="ShowPage__section mb-4" :class="sectionClasses(section)" >
+                    <div class="ShowPage__section mb-4" :class="sectionClasses(section)" v-show="isSectionVisible(section)">
                         <Grid class="ShowPage__section-grid" :rows="[section.columns]" :col-class="sectionColClass">
                             <template slot-scope="fieldsLayout">
                                 <Grid class="ShowPage__fields-grid"
@@ -33,6 +33,7 @@
                                                 :value="fieldValue(fieldLayout)"
                                                 :config-identifier="fieldLayout.key"
                                                 :layout="fieldLayout"
+                                                @visible-change="handleFieldVisibilityChanged(fieldLayout.key, $event)"
                                             />
                                         </template>
                                         <template v-else>
@@ -79,6 +80,7 @@
         data() {
             return {
                 ready: false,
+                fieldsVisible: null,
             }
         },
 
@@ -127,10 +129,8 @@
                     ? this.data[layout.key]
                     : null;
             },
-            sectionClasses(section) {
-                return {
-                    'ShowPage__section--no-container': this.sectionHasField(section, 'entityList'),
-                }
+            isFieldVisible(layout) {
+                return !this.fieldsVisible || this.fieldsVisible[layout.key] !== false;
             },
             fieldsRowClass(row) {
                 const fieldsTypeClasses = row.map(fieldLayout => {
@@ -142,19 +142,33 @@
                     ...fieldsTypeClasses,
                 ]
             },
-            sectionColClass(col) {
-                // const fieldsTypeClasses = col.fields.flat().map(fieldLayout => {
-                //     const field = this.fieldOptions(fieldLayout);
-                //     return `ShowPage__section-col--${field.type}`;
-                // });
+            sectionClasses(section) {
+                return {
+                    'ShowPage__section--no-container': this.sectionHasField(section, 'entityList'),
+                }
+            },
+            sectionColClass() {
                 return 'ShowPage__section-col';
             },
+            sectionFields(section) {
+                return section.columns.reduce((res, column) => [...res, ...column.fields.flat()], []);
+            },
+            isSectionVisible(section) {
+                const sectionFields = this.sectionFields(section);
+                return sectionFields.some(fieldLayout => this.isFieldVisible(fieldLayout));
+            },
             sectionHasField(section, type) {
-                const sectionFields = section.columns.reduce((res, column) => [...res, ...column.fields.flat()], []);
+                const sectionFields = this.sectionFields(section);
                 return sectionFields.some(fieldLayout => {
                     const options = this.fieldOptions(fieldLayout);
                     return options && options.type === type;
                 });
+            },
+            handleFieldVisibilityChanged(key, visible) {
+                this.fieldsVisible = {
+                    ...this.fieldsVisible,
+                    [key]: visible,
+                }
             },
             handleCommandRequested(command) {
                 this.sendCommand(command, {
