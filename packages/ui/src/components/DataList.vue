@@ -1,7 +1,9 @@
 <template>
     <div class="SharpDataList" :class="{ 'SharpDataList--reordering': reorderActive }">
         <template v-if="isEmpty">
-            <slot name="empty" />
+            <div class="SharpDataList__empty p-3 mt-1">
+                <slot name="empty" />
+            </div>
         </template>
         <template v-else>
             <div class="SharpDataList__table SharpDataList__table--border">

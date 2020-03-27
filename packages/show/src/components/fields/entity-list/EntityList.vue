@@ -9,11 +9,15 @@
         :show-entity-state="showEntityState"
         :hidden-commands="hiddenCommands"
         :hidden-filters="hiddenFilters"
-        @change="handleChanged"
         inline
+        @change="handleChanged"
     >
         <template slot="action-bar" slot-scope="{ props, listeners }">
-            <ActionBar class="ShowEntityListField__action-bar" v-bind="props" v-on="listeners" />
+            <ActionBar class="ShowEntityListField__action-bar" v-bind="props" v-on="listeners">
+                <div class="ShowEntityListField__label">
+                     {{ label }}
+                </div>
+            </ActionBar>
         </template>
         <template slot="append-head" slot-scope="{ props: { commands }, listeners }">
             <template v-if="hasCommands(commands)">
@@ -51,6 +55,7 @@
             showEntityState: Boolean,
             hiddenFilters: Object,
             hiddenCommands: Object,
+            label: String,
         },
         data() {
             return {
