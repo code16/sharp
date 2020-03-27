@@ -49,7 +49,7 @@ class SpaceshipSharpShow extends SharpShow
                             ->setStorageDisk("local")
                             ->setStorageBasePath("data/Spaceship/{id}/Pictures")
                     )
-                    ->addItemField(SharpShowTextField::make("legend"))
+                    ->addItemField(SharpShowTextField::make("legend")->setLabel("Legend"))
             )->addField(
                 SharpShowEntityListField::make("pilots", "spaceship_pilot")
                     ->hideFilterWithValue("spaceship", function($instanceId) {
@@ -94,13 +94,14 @@ class SpaceshipSharpShow extends SharpShow
             })
             ->addSection('Description', function(ShowLayoutSection $section) {
                 $section
-                    ->addColumn(9, function(ShowLayoutColumn $column) {
-                        $column
-                            ->withSingleField("description")
-                            ->withSingleField("pictures", function(ShowLayoutColumn $listItem) {
-                                $listItem->withSingleField("file")
-                                    ->withSingleField("legend");
-                            });
+                    ->addColumn(6, function(ShowLayoutColumn $column) {
+                        $column->withSingleField("description");
+                    })
+                    ->addColumn(6, function(ShowLayoutColumn $column) {
+                        $column->withSingleField("pictures", function(ShowLayoutColumn $listItem) {
+                            $listItem->withSingleField("file")
+                                ->withSingleField("legend");
+                        });
                     });
             })
             ->addEntityListSection('Pilots', "pilots");
