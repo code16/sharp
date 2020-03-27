@@ -104,7 +104,7 @@ class SpaceshipSharpShow extends SharpShow
                         });
                     });
             })
-            ->addEntityListSection('Pilots', "pilots");
+            ->addEntityListSection("pilots");
     }
 
     function find($id): array
