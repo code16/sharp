@@ -48,7 +48,7 @@
   },
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.29",
-    "axios": "^0.18.1",
+    "axios": "^0.19.2",
     "babel-jest": "^24.1.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-plugin-transform-runtime": "^6.23.0",
@@ -96,6 +96,7 @@
     "@sharp/test-utils": "file:packages/test-utils",
     "carbon-components": "^7.26.2",
     "element-ui": "^2.9.2",
+    "filesize": "^6.1.0",
     "leaflet": "^1.4.0",
     "sharp-commands": "file:packages/commands",
     "sharp-dashboard": "file:packages/dashboard",

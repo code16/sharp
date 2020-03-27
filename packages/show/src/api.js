@@ -1,5 +1,5 @@
-import { api } from 'sharp';
- 
+import { api, apiUrl } from 'sharp';
+
 export function getShowView({ entityKey, instanceId }) {
     return api.get(`show/${entityKey}/${instanceId || ''}`)
         .then(response => response.data);
@@ -19,4 +19,14 @@ export function getShowCommandFormData({ entityKey, instanceId, commandKey }) {
 export function postShowState({ entityKey, instanceId, value }) {
     return api.post(`show/${entityKey}/state/${instanceId || ''}`, { value })
         .then(response => response.data);
+}
+
+console.dir(api);
+
+export function downloadFileUrl({ entityKey, instanceId, fieldKey, fileName }) {
+    return apiUrl(`show/download/${fieldKey}/${entityKey}/${instanceId}`, {
+        params: {
+            fileName,
+        },
+    })
 }

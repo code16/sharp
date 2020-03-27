@@ -1,5 +1,13 @@
 <template>
-    <button class="SharpButton" :class="buttonClasses" v-on="$listeners"><slot></slot></button>
+    <component
+        :is="tag"
+        class="SharpButton"
+        :class="classes"
+        :href="href"
+        v-on="$listeners"
+    >
+        <slot />
+    </component>
 </template>
 
 <script>
@@ -8,10 +16,11 @@
             type: String,
             outline: Boolean,
             danger: Boolean,
-            small: Boolean
+            small: Boolean,
+            href: String,
         },
         computed:{
-            buttonClasses() {
+            classes() {
                 return [
                     this.type ? `SharpButton--${this.type}` : '', {
                         'SharpButton--secondary': this.outline,
@@ -19,7 +28,10 @@
                         'SharpButton--sm': this.small
                     }
                 ]
-            }
+            },
+            tag() {
+                return this.href ? 'a' : 'button';
+            },
         }
     }
 </script>

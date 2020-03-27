@@ -34,6 +34,12 @@ export default {
     },
 
     getters: {
+        entityKey(state) {
+            return state.entityKey;
+        },
+        instanceId(state) {
+            return state.instanceId;
+        },
         config(state) {
             return state.show.config;
         },

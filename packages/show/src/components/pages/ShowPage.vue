@@ -22,12 +22,14 @@
                     <div class="ShowPage__section mb-4" :class="sectionClasses(section)">
                         <Grid :rows="[section.columns]">
                             <template slot-scope="fieldsLayout">
-                                <Grid class="ShowPage__fields-grid" :rows="fieldsLayout.fields">
+                                <Grid class="ShowPage__fields-grid" :rows="fieldsLayout.fields" :row-class="fieldsRowClass">
                                     <template slot-scope="fieldLayout">
                                         <template v-if="fieldOptions(fieldLayout)">
                                             <ShowField
                                                 :options="fieldOptions(fieldLayout)"
                                                 :value="fieldValue(fieldLayout)"
+                                                :config-identifier="fieldLayout.key"
+                                                :layout="fieldLayout"
                                             />
                                         </template>
                                         <template v-else>
@@ -49,7 +51,7 @@
 </template>
 
 <script>
-    import { mapState, mapGetters } from 'vuex';
+    import { mapGetters } from 'vuex';
     import { formUrl, getBackUrl } from 'sharp';
     import { CommandFormModal, CommandViewPanel } from 'sharp-commands';
     import { Grid } from 'sharp-ui';
@@ -78,11 +80,9 @@
         },
 
         computed: {
-            ...mapState('show', {
-                entityKey: state => state.entityKey,
-                instanceId: state => state.instanceId,
-            }),
             ...mapGetters('show', [
+                'entityKey',
+                'instanceId',
                 'fields',
                 'layout',
                 'data',
@@ -128,6 +128,12 @@
                 return {
                     'ShowPage__section--no-container': this.sectionHasField(section, 'entityList'),
                 }
+            },
+            fieldsRowClass(row) {
+                return row.map(fieldLayout => {
+                    const field = this.fieldOptions(fieldLayout);
+                    return `ShowPage__fields-row--${field.type}`;
+                });
             },
             sectionHasField(section, type) {
                 const sectionFields = section.columns.reduce((res, column) => [...res, ...column.fields.flat()], []);
