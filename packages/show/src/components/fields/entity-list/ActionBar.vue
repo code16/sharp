@@ -111,6 +111,7 @@
             FilterDropdown,
         },
         props: {
+            count: Number,
             search: String,
             filters: Array,
             filtersValues: Object,
@@ -133,7 +134,8 @@
                 return this.forms && this.forms.length > 0;
             },
             hasLeftControls() {
-                return (this.filters || []).length > 0 || this.canSearch;
+                const filters = this.filters || [];
+                return this.count > 0 && (filters.length > 0 || this.canSearch);
             },
         },
         methods: {
