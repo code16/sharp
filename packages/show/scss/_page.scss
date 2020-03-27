@@ -1,12 +1,15 @@
 .ShowPage {
   &__section {
+    &--no-container {
+      .ShowPage__section-content {
+        background: transparent;
+        padding: 0;
+      }
+    }
+  }
+  &__section-content {
     background: white;
     padding: 1rem;
-    &--no-container {
-      background: transparent;
-      padding: 0;
-    }
-    overflow: hidden;
   }
   &__section-title {
     font-size: 1em;

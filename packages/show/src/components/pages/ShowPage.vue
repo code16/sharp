@@ -16,33 +16,35 @@
                 />
 
                 <template v-for="section in layout.sections">
-                    <template v-if="section.title">
-                        <h2 class="ShowPage__section-title mb-2">{{ section.title }}</h2>
-                    </template>
-                    <div class="ShowPage__section mb-4" :class="sectionClasses(section)" v-show="isSectionVisible(section)">
-                        <Grid class="ShowPage__section-grid" :rows="[section.columns]" :col-class="sectionColClass">
-                            <template slot-scope="fieldsLayout">
-                                <Grid class="ShowPage__fields-grid"
-                                    :rows="fieldsLayout.fields"
-                                    :row-class="fieldsRowClass"
-                                >
-                                    <template slot-scope="fieldLayout">
-                                        <template v-if="fieldOptions(fieldLayout)">
-                                            <ShowField
-                                                :options="fieldOptions(fieldLayout)"
-                                                :value="fieldValue(fieldLayout)"
-                                                :config-identifier="fieldLayout.key"
-                                                :layout="fieldLayout"
-                                                @visible-change="handleFieldVisibilityChanged(fieldLayout.key, $event)"
-                                            />
+                    <div class="ShowPage__section" :class="sectionClasses(section)" v-show="isSectionVisible(section)">
+                        <template v-if="section.title">
+                            <h2 class="ShowPage__section-title mb-2">{{ section.title }}</h2>
+                        </template>
+                        <div class="ShowPage__section-content mb-4">
+                            <Grid class="ShowPage__section-grid" :rows="[section.columns]" :col-class="sectionColClass">
+                                <template slot-scope="fieldsLayout">
+                                    <Grid class="ShowPage__fields-grid"
+                                        :rows="fieldsLayout.fields"
+                                        :row-class="fieldsRowClass"
+                                    >
+                                        <template slot-scope="fieldLayout">
+                                            <template v-if="fieldOptions(fieldLayout)">
+                                                <ShowField
+                                                    :options="fieldOptions(fieldLayout)"
+                                                    :value="fieldValue(fieldLayout)"
+                                                    :config-identifier="fieldLayout.key"
+                                                    :layout="fieldLayout"
+                                                    @visible-change="handleFieldVisibilityChanged(fieldLayout.key, $event)"
+                                                />
+                                            </template>
+                                            <template v-else>
+                                                <UnknownField :name="fieldLayout.key" />
+                                            </template>
                                         </template>
-                                        <template v-else>
-                                            <UnknownField :name="fieldLayout.key" />
-                                        </template>
-                                    </template>
-                                </Grid>
-                            </template>
-                        </Grid>
+                                    </Grid>
+                                </template>
+                            </Grid>
+                        </div>
                     </div>
                 </template>
 
