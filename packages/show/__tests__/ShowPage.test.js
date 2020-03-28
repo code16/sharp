@@ -62,7 +62,7 @@ describe('show page', () => {
                         {
                             title: 'Section title',
                             columns: [{
-                                fields: [[{}]]
+                                fields: [[{ key:'name' }]]
                             }]
                         }
                     ]
@@ -111,7 +111,7 @@ describe('show page', () => {
                         {
                             title: 'Section title',
                             columns: [{
-                                fields:[{}]
+                                fields:[[{ key:'name' }]]
                             }]
                         }
                     ]
@@ -130,9 +130,9 @@ describe('show page', () => {
         formUrl.mockReturnValue('formUrl');
         const wrapper = createWrapper({
             storeModule: {
-                state: {
-                    entityKey: 'entityKey',
-                    instanceId: 'instanceId',
+                getters: {
+                    entityKey: () => 'entityKey',
+                    instanceId: () => 'instanceId',
                 }
             }
         });

@@ -13,6 +13,8 @@ const injectedComponents = {
     $field:{},
     $form:{
         data: () => ({
+            entityKey: 'entityKey',
+            instanceId: 'instanceId',
             errors: {},
             downloadLinkBase:'',
             localized: false,
