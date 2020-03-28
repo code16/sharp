@@ -3,14 +3,12 @@
         <template v-if="ready">
             <div class="container">
                 <ActionBarDashboard :commands="commands" @command="handleCommandRequested" />
-                <Grid :rows="layout.rows">
-                    <template slot-scope="widgetLayout">
-                        <Widget
-                            :widget-type="widgets[widgetLayout.key].type"
-                            :widget-props="widgets[widgetLayout.key]"
-                            :value="data[widgetLayout.key]"
-                        />
-                    </template>
+                <Grid :rows="layout.rows" v-slot="{ itemLayout }">
+                    <Widget
+                        :widget-type="widgets[itemLayout.key].type"
+                        :widget-props="widgets[itemLayout.key]"
+                        :value="data[itemLayout.key]"
+                    />
                 </Grid>
             </div>
         </template>

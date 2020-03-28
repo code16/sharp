@@ -11,35 +11,35 @@
                     </div>
                 </div>
                 <TabbedLayout :layout="layout" ref="tabbedLayout">
-                    <template slot="nav-prepend">
-                        <template v-if="localized">
-                            <LocaleSelect :locale="currentLocale" :locales="locales" @change="handleLocaleChanged" />
-                        </template>
+                    <template v-if="localized" v-slot:nav-prepend>
+                        <LocaleSelect
+                            :locale="currentLocale"
+                            :locales="locales"
+                            @change="handleLocaleChanged"
+                        />
                     </template>
-                    <!-- Tab -->
-                    <template slot-scope="tab">
-                        <Grid :rows="[tab.columns]" ref="columnsGrid">
-                            <!-- column -->
-                            <template slot-scope="column">
-                                <FieldsLayout v-if="fields" :layout="column.fields" :visible="fieldVisible" ref="fieldLayout">
-                                    <!-- field -->
-                                    <template slot-scope="fieldLayout">
-                                        <FieldDisplay
-                                            :field-key="fieldLayout.key"
-                                            :context-fields="transformedFields"
-                                            :context-data="data"
-                                            :field-layout="fieldLayout"
-                                            :locale="fieldLocale[fieldLayout.key]"
-                                            :error-identifier="fieldLayout.key"
-                                            :config-identifier="fieldLayout.key"
-                                            :update-data="updateData"
-                                            :update-visibility="updateVisibility"
-                                            @locale-change="updateLocale"
-                                            ref="field"
-                                        />
-                                    </template>
-                                </FieldsLayout>
-                            </template>
+                    <template v-slot:default="{ tab }">
+                        <Grid :rows="[tab.columns]" ref="columnsGrid" v-slot="{ itemLayout:column }">
+                            <FieldsLayout
+                                :layout="column.fields"
+                                :visible="fieldVisible"
+                                ref="fieldLayout"
+                                v-slot="{ fieldLayout }"
+                            >
+                                <FieldDisplay
+                                    :field-key="fieldLayout.key"
+                                    :context-fields="transformedFields"
+                                    :context-data="data"
+                                    :field-layout="fieldLayout"
+                                    :locale="fieldLocale[fieldLayout.key]"
+                                    :error-identifier="fieldLayout.key"
+                                    :config-identifier="fieldLayout.key"
+                                    :update-data="updateData"
+                                    :update-visibility="updateVisibility"
+                                    @locale-change="updateLocale"
+                                    ref="field"
+                                />
+                            </FieldsLayout>
                         </Grid>
                     </template>
                 </TabbedLayout>

@@ -12,20 +12,22 @@
         inline
         @change="handleChanged"
     >
-        <template slot="action-bar" slot-scope="{ props, listeners }">
+        <template v-slot:action-bar="{ props, listeners }">
             <ActionBar class="ShowEntityListField__action-bar" v-bind="props" v-on="listeners">
                 <div class="ShowEntityListField__label">
                      {{ label }}
                 </div>
             </ActionBar>
         </template>
-        <template slot="append-head" slot-scope="{ props: { commands }, listeners }">
+        <template v-slot:append-head="{ props: { commands }, listeners }">
             <template v-if="hasCommands(commands)">
                 <CommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
                     :commands="commands"
                     @select="listeners['command']"
                 >
-                    <div slot="text">{{ l('entity_list.commands.entity.label') }}</div>
+                    <template v-slot:text>
+                        {{ l('entity_list.commands.entity.label') }}
+                    </template>
                 </CommandsDropdown>
             </template>
         </template>
@@ -38,7 +40,7 @@
     import { Localization } from "sharp/mixins";
 
     import ActionBar from "./ActionBar";
-    import {syncVisibility} from "../../../util/fields/visiblity";
+    import { syncVisibility } from "../../../util/fields/visiblity";
 
     export default {
         mixins: [Localization],

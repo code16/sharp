@@ -7,7 +7,7 @@
                     :entity-key="entityKey"
                     module="entity-list"
                 >
-                    <template slot="action-bar" slot-scope="{ props, listeners }">
+                    <template v-slot:action-bar="{ props, listeners }">
                         <ActionBarList v-bind="props" v-on="listeners" />
                     </template>
                 </EntityList>

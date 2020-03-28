@@ -1,22 +1,21 @@
 <template>
-    <Grid :rows="layout">
-        <template slot-scope="fieldLayout">
-            <slot v-if="!fieldLayout.legend" v-bind="fieldLayout"></slot>
-
-            <fieldset class="SharpForm__fieldset" v-else v-show="isFieldsetVisible(fieldLayout)">
+    <Grid :rows="layout" v-slot="{ itemLayout:fieldLayout }">
+        <template v-if="isFieldset(fieldLayout)">
+            <fieldset class="SharpForm__fieldset" v-show="isFieldsetVisible(fieldLayout)">
                 <div class="SharpModule__inner">
                     <div class="SharpModule__header">
-                        <legend class="SharpModule__title">{{fieldLayout.legend}}</legend>
+                        <div class="SharpModule__title">{{fieldLayout.legend}}</div>
                     </div>
                     <div class="SharpModule__content">
-                        <FieldsLayout :layout="fieldLayout.fields">
-                            <template slot-scope="fieldset">
-                                <slot v-bind="fieldset"></slot>
-                            </template>
+                        <FieldsLayout :layout="fieldLayout.fields" v-slot="{ fieldLayout }">
+                            <slot :field-layout="fieldLayout" />
                         </FieldsLayout>
                     </div>
                 </div>
             </fieldset>
+        </template>
+        <template v-else>
+            <slot :field-layout="fieldLayout" />
         </template>
     </Grid>
 </template>
@@ -49,11 +48,12 @@
         },
 
         methods: {
-            isFieldsetVisible(fieldLayout) {
-                let { id, fields } = fieldLayout;
-
-                let map = this.fieldsetMap[id] || (this.fieldsetMap[id] = [].concat.apply([],fields));
-                return map.some(f => this.visible[f.key]);
+            isFieldset(fieldLayout) {
+                return !!fieldLayout.legend;
+            },
+            isFieldsetVisible(fieldsetLayout) {
+                return fieldsetLayout.fields
+                    .some(fieldLayout => this.visible[fieldLayout.key]);
             }
         }
     }

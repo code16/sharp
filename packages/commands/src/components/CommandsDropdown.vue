@@ -1,15 +1,19 @@
 <template>
     <Dropdown class="SharpCommandsDropdown">
-        <template slot="text">
+        <template v-slot:text>
             <slot name="text" />
         </template>
         <template v-for="group in commandGroups">
-            <DropdownItem v-for="command in group" @click="handleCommandClicked(command)" :key="command.key">
-                {{ command.label }}
-                <div v-if="command.description" class="SharpCommandsDropdown__description mt-1">
-                    {{ command.description }}
-                </div>
-            </DropdownItem>
+            <template v-for="command in group">
+                <DropdownItem @click="handleCommandClicked(command)" :key="command.key">
+                    {{ command.label }}
+                    <template v-if="command.description">
+                        <div class="SharpCommandsDropdown__description mt-1">
+                            {{ command.description }}
+                        </div>
+                    </template>
+                </DropdownItem>
+            </template>
             <DropdownSeparator />
         </template>
     </Dropdown>

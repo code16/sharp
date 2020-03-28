@@ -5,7 +5,7 @@ import { shallowMount } from '@vue/test-utils';
 describe('fields-layout', () => {
 
     const FieldMock = { name:'Field', template:'<div class="FIELD_MOCK"></div>' };
-    function createWrapper({ propsData }) {
+    function createWrapper({ propsData } = {}) {
         return shallowMount(FieldsLayout, {
             propsData: {
                 ...propsData,
@@ -14,17 +14,17 @@ describe('fields-layout', () => {
             stubs: {
                 Grid:
                     `<div class="GRID_MOCK">
-                        <slot v-bind="rows[0][0]"></slot>
+                        <slot :item-layout="rows[0][0]" />
                     </div>`,
                 FieldsLayout:
                     // render first field from given layout
                     `<div class="FIELDS_LAYOUT_MOCK">
-                        <slot v-bind="$attrs.layout[0][0]"></slot>
+                        <slot :field-layout="$attrs.layout[0][0]" />
                     </div>`,
                 Field: FieldMock,
             },
             scopedSlots: {
-                default: '<Field :data="props" />',
+                default: '<Field :data="props.fieldLayout" />',
             },
         });
     }
@@ -114,51 +114,38 @@ describe('fields-layout', () => {
     test('fieldset visible', () => {
         const wrapper = createWrapper({
             propsData: {
-                layout: [
-                    [{
-                        legend: 'Fieldset 1',
-                        id: 'fieldset_1',
-                        fields: [
-                            [{ key: 'title' }, { key: 'subtitle' }],[{ key: 'name' }]
-                        ]
-                    }]
-                ],
-                visible: {
-                    title: true, subtitle: true, name: false,
-                }
-            }
+                layout: [[{}]],
+            },
         });
 
-        expect(wrapper.vm.fieldsetMap).toEqual({
-            'fieldset_1': [{ key: 'title' }, { key: 'subtitle' },{ key: 'name' }]
+        wrapper.setProps({
+            visible: {
+                title: true,
+                subtitle: false,
+            },
         });
 
-        expect(wrapper.vm.isFieldsetVisible({ id: 'fieldset_1'})).toBe(true);
+        expect(
+            wrapper.vm.isFieldsetVisible({
+                id: 'fieldset_1',
+                legend: 'Fieldset 1',
+                fields: [{ key: 'title' }, { key: 'subtitle' }],
+            })
+        ).toBe(true);
+
+        wrapper.setProps({
+            visible: {
+                title: false,
+                subtitle: false,
+            },
+        });
+
+        expect(
+            wrapper.vm.isFieldsetVisible({
+                id: 'fieldset_1',
+                legend: 'Fieldset 1',
+                fields: [{ key: 'title' }, { key: 'subtitle' }],
+            })
+        ).toBe(false);
     });
-
-    test('fieldset invisible', () => {
-        const wrapper = createWrapper({
-            propsData: {
-                layout: [
-                    [{
-                        legend: 'Fieldset 1',
-                        id: 'fieldset_1',
-                        fields: [
-                            [{ key: 'title' }, { key: 'subtitle' }],[{ key: 'name' }]
-                        ]
-                    }]
-                ],
-                visible: {
-                    title: false, subtitle: false, name: false,
-                }
-            }
-        });
-
-        expect(wrapper.vm.fieldsetMap).toEqual({
-            'fieldset_1': [{ key: 'title' }, { key: 'subtitle' },{ key: 'name' }]
-        });
-
-        expect(wrapper.vm.isFieldsetVisible({ id: 'fieldset_1'})).toBe(false);
-    })
-
 });

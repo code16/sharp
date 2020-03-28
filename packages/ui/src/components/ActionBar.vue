@@ -40,7 +40,7 @@
                 default: true,
             },
             container: Boolean,
-            rightClass: Boolean,
+            rightClass: String,
         }
     }
 </script>

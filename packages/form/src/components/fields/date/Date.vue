@@ -29,33 +29,31 @@
             triggers="focus"
             placement="bottom"
         >
-            <template slot-scope="props">
-                <div class="SharpDate__picker position-static" >
-                    <template v-if="hasDate">
-                        <DatePicker
-                            class="SharpDate__date"
-                            :language="language"
-                            :monday-first="mondayFirst"
-                            inline
-                            :value="dateObject"
-                            @selected="handleDateSelect"
-                            ref="datepicker"
-                        />
-                    </template>
-                    <template v-if="hasTime">
-                        <TimePicker
-                            class="SharpDate__time"
-                            :value="timeObject"
-                            :active="showPicker"
-                            :format="displayFormat"
-                            :minute-interval="stepTime"
-                            :min="minTime" :max="maxTime"
-                            @change="handleTimeSelect"
-                            ref="timepicker"
-                        />
-                    </template>
-                </div>
-            </template>
+            <div class="SharpDate__picker position-static">
+                <template v-if="hasDate">
+                    <DatePicker
+                        class="SharpDate__date"
+                        :language="language"
+                        :monday-first="mondayFirst"
+                        inline
+                        :value="dateObject"
+                        @selected="handleDateSelect"
+                        ref="datepicker"
+                    />
+                </template>
+                <template v-if="hasTime">
+                    <TimePicker
+                        class="SharpDate__time"
+                        :value="timeObject"
+                        :active="showPicker"
+                        :format="displayFormat"
+                        :minute-interval="stepTime"
+                        :min="minTime" :max="maxTime"
+                        @change="handleTimeSelect"
+                        ref="timepicker"
+                    />
+                </template>
+            </div>
         </b-popover>
     </div>
 </template>
@@ -68,7 +66,7 @@
     import { Focusable, Localization } from 'sharp/mixins';
     import DatePicker from './Datepicker';
     import TimePicker from './Timepicker';
-    
+
 
     export default {
         name:'SharpDate',

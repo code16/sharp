@@ -16,8 +16,8 @@ exports[`show page can mount with fields 1`] = `
 		<actionbarshow-stub formurl="formUrl"></actionbarshow-stub>
 		<h2 class="ShowPage__section-title mb-2">Section title</h2>
 		<div class="ShowPage__section mb-4">
-			<div rows="[object Object]" class="MOCKED_SharpGrid">
-				<div rows="[object Object]" class="MOCKED_SharpGrid ShowPage__fields-grid">
+			<div class="MOCKED_SharpGrid">
+				<div class="MOCKED_SharpGrid ShowPage__fields-grid">
 					<showfield-stub options="[object Object]" value="[object Object]"></showfield-stub>
 				</div>
 			</div>
@@ -34,8 +34,8 @@ exports[`show page can mount with no container section 1`] = `
 		<actionbarshow-stub formurl="formUrl"></actionbarshow-stub>
 		<h2 class="ShowPage__section-title mb-2">Section title</h2>
 		<div class="ShowPage__section mb-4 ShowPage__section--no-container">
-			<div rows="[object Object]" class="MOCKED_SharpGrid">
-				<div rows="[object Object]" class="MOCKED_SharpGrid ShowPage__fields-grid">
+			<div class="MOCKED_SharpGrid">
+				<div class="MOCKED_SharpGrid ShowPage__fields-grid">
 					<showfield-stub options="[object Object]"></showfield-stub>
 				</div>
 			</div>
@@ -52,8 +52,8 @@ exports[`show page can mount with unknown field 1`] = `
 		<actionbarshow-stub formurl="formUrl"></actionbarshow-stub>
 		<h2 class="ShowPage__section-title mb-2">Section title</h2>
 		<div class="ShowPage__section mb-4">
-			<div rows="[object Object]" class="MOCKED_SharpGrid">
-				<div rows="[object Object]" class="MOCKED_SharpGrid ShowPage__fields-grid">
+			<div class="MOCKED_SharpGrid">
+				<div class="MOCKED_SharpGrid ShowPage__fields-grid">
 					<unknownfield-stub name="name"></unknownfield-stub>
 				</div>
 			</div>

@@ -1,36 +1,37 @@
 <template>
     <ActionBar>
-        <template slot="left">
+        <template v-slot:left>
             <template v-if="showBackButton">
                 <a :href="backUrl" class="SharpButton SharpButton--secondary-accent">
                     {{ l('action_bar.show.back_button') }}
                 </a>
             </template>
         </template>
-        <template slot="right">
+        <template v-slot:right>
             <template v-if="canEdit">
                 <a :href="formUrl" class="SharpButton SharpButton--accent">
                     {{ l('action_bar.show.edit_button') }}
                 </a>
             </template>
         </template>
-        <template slot="extras-right">
+        <template v-slot:extras-right>
             <div class="row mx-n1">
                 <template v-if="hasState">
                     <div class="col-auto px-1">
                         <Dropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--state" :disabled="!canChangeState">
-                            <template slot="text">
+                            <template v-slot:text>
                                 <StateIcon :color="state.color" />
                                 <span class="text-truncate">{{ state.label }}</span>
                             </template>
-                            <DropdownItem
-                                v-for="stateOptions in stateValues"
-                                @click="handleStateChanged(stateOptions.value)"
-                                :key="stateOptions.value"
-                            >
-                                <StateIcon :color="stateOptions.color" />&nbsp;
-                                {{ stateOptions.label }}
-                            </DropdownItem>
+                            <template v-for="stateOptions in stateValues">
+                                <DropdownItem
+                                    @click="handleStateChanged(stateOptions.value)"
+                                    :key="stateOptions.value"
+                                >
+                                    <StateIcon :color="stateOptions.color" />&nbsp;
+                                    {{ stateOptions.label }}
+                                </DropdownItem>
+                            </template>
                         </Dropdown>
                     </div>
                 </template>
@@ -40,9 +41,9 @@
                             :commands="commands"
                             @select="handleCommandSelected"
                         >
-                            <div slot="text">
+                            <template v-slot:text>
                                 {{ l('entity_list.commands.instance.label') }}
-                            </div>
+                            </template>
                         </CommandsDropdown>
                     </div>
                 </template>

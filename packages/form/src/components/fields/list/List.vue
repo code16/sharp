@@ -30,40 +30,47 @@
                             </template>
 
                             <template v-else>
-                                <ListItem :layout="fieldLayout.item" :error-identifier="i">
-                                    <template slot-scope="itemFieldLayout">
-                                        <FieldDisplay
-                                            :field-key="itemFieldLayout.key"
-                                            :context-fields="transformedFields(i)"
-                                            :context-data="listItemData"
-                                            :error-identifier="itemFieldLayout.key"
-                                            :config-identifier="itemFieldLayout.key"
-                                            :update-data="update(i)"
-                                            :locale="listItemData._fieldsLocale[itemFieldLayout.key]"
-                                            @locale-change="(key, value)=>updateLocale(i, key, value)"
-                                        />
-                                    </template>
+                                <ListItem :layout="fieldLayout.item" :error-identifier="i" v-slot="{ fieldLayout }">
+                                    <FieldDisplay
+                                        :field-key="fieldLayout.key"
+                                        :context-fields="transformedFields(i)"
+                                        :context-data="listItemData"
+                                        :error-identifier="fieldLayout.key"
+                                        :config-identifier="fieldLayout.key"
+                                        :update-data="update(i)"
+                                        :locale="listItemData._fieldsLocale[fieldLayout.key]"
+                                        @locale-change="(key, value)=>updateLocale(i, key, value)"
+                                    />
                                 </ListItem>
-                                <button v-if="!disabled && removable" class="SharpButton SharpButton--danger SharpButton--sm mt-3" @click="remove(i)">{{ l('form.list.remove_button') }}</button>
+                                <template v-if="showRemoveButton">
+                                    <button class="SharpButton SharpButton--danger SharpButton--sm mt-3" @click="remove(i)">
+                                        {{ l('form.list.remove_button') }}
+                                    </button>
+                                </template>
                             </template>
 
                             <!-- Full size div use to handle the item when drag n drop (c.f draggable options) -->
-                            <div v-if="dragActive" class="SharpList__overlay-handle"></div>
+                            <template v-if="dragActive">
+                                <div class="SharpList__overlay-handle"></div>
+                            </template>
                         </div>
                     </div>
-                    <div v-if="!disabled && showInsertButton && i<list.length-1" class="SharpList__new-item-zone">
-                        <button class="SharpButton SharpButton--sm" @click="insertNewItem(i, $event)">{{ l('form.list.insert_button') }}</button>
-                    </div>
+                    <template v-if="showInsertButton && i < list.length-1">
+                        <div class="SharpList__new-item-zone">
+                            <button class="SharpButton SharpButton--sm" @click="insertNewItem(i, $event)">{{ l('form.list.insert_button') }}</button>
+                        </div>
+                    </template>
                 </div>
-            </transition-group><!-- Important comment, do not remove
-         --><template slot="footer">
-                <button v-if="!disabled && showAddButton" type="button" :key="-1"
-                        class="SharpButton SharpList__add-button"
-                        :class="'SharpButton--ghost' "
-                        @click="add">{{addText}}</button>
+            </transition-group>
+            <template v-if="showAddButton" v-slot:footer>
+                <button class="SharpButton SharpButton--ghost SharpList__add-button" type="button" @click="add" :key="-1">
+                    {{addText}}
+                </button>
             </template>
         </Draggable>
-        <em v-if="readOnly && !list.length" class="SharpList__empty-alert">{{l('form.list.empty')}}</em>
+        <template v-if="readOnly && !list.length">
+            <em class="SharpList__empty-alert">{{l('form.list.empty')}}</em>
+        </template>
     </div>
 </template>
 <script>
@@ -138,16 +145,24 @@
                 return this.readOnly || this.dragActive;
             },
             dragOptions() {
-                return { disabled:!this.dragActive, handle: '.SharpList__overlay-handle' };
+                return {
+                    disabled:!this.dragActive,
+                    handle: '.SharpList__overlay-handle',
+                };
             },
             showAddButton() {
-                return this.addable && (this.list.length<this.maxItemCount || !this.maxItemCount);
+                return this.addable &&
+                    (this.list.length < this.maxItemCount || !this.maxItemCount) &&
+                    !this.disabled;
             },
             showInsertButton() {
-                return this.showAddButton && this.sortable;
+                return this.showAddButton && this.sortable && !this.disabled;
             },
             showSortButton() {
                 return !this.hasPendingActions && this.sortable && this.list.length > 1;
+            },
+            showRemoveButton() {
+                return this.removable && !this.disabled;
             },
             dragIndexSymbol() {
                 return Symbol('dragIndex');

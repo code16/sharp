@@ -7,16 +7,16 @@
         v-bind="$attrs"
         v-on="$listeners"
     >
-        <template slot="first-text">
+        <template v-slot:first-text>
             <i class="fas fa-angle-double-left" aria-hidden="true"></i>
         </template>
-        <template slot="prev-text">
+        <template v-slot:prev-text>
             <i class="fas fa-angle-left" aria-hidden="true"></i>
         </template>
-        <template slot="next-text">
+        <template v-slot:next-text>
             <i class="fas fa-angle-right" aria-hidden="true"></i>
         </template>
-        <template slot="last-text">
+        <template v-slot:last-text>
             <i class="fas fa-angle-double-right" aria-hidden="true"></i>
         </template>
     </b-pagination>

@@ -37,8 +37,8 @@ describe('show page', () => {
             // language=Vue
             stubs: {
                 Grid:
-                    `<div class="MOCKED_SharpGrid" v-bind="$props">
-                        <slot v-bind="rows[0][0]" />
+                    `<div class="MOCKED_SharpGrid">
+                        <slot :item-layout="rows[0][0]" />
                     </div>`,
             },
             mocks: {

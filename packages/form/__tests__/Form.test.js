@@ -31,16 +31,16 @@ describe('sharp-form', ()=>{
             stubs: {
                 Grid:
                     `<div id="MOCKED_GRID">
-                        <slot v-bind="rows[0][0]" />
+                        <slot :item-layout="rows[0][0]" />
                     </div>`,
                 FieldsLayout:
                     `<div id="MOCKED_FIELDS_LAYOUT"> 
-                        <slot v-if="layout[0][0]" v-bind="layout[0][0]" />
+                        <slot v-if="layout[0][0]" :field-layout="layout[0][0]" />
                     </div>`,
                 FieldDisplay: true,
                 TabbedLayout:
                     `<div id="MOCKED_TABBED_LAYOUT">
-                        <slot v-bind="layout.tabs[0]" />
+                        <slot :tab="layout.tabs[0]" />
                     </div>`,
             },
             created() {

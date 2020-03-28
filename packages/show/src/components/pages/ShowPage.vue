@@ -21,28 +21,29 @@
                             <h2 class="ShowPage__section-title mb-2">{{ section.title }}</h2>
                         </template>
                         <div class="ShowPage__section-content">
-                            <Grid class="ShowPage__section-grid" :rows="[section.columns]" :col-class="sectionColClass">
-                                <template slot-scope="fieldsLayout">
-                                    <Grid class="ShowPage__fields-grid"
-                                        :rows="fieldsLayout.fields"
-                                        :row-class="fieldsRowClass"
-                                    >
-                                        <template slot-scope="fieldLayout">
-                                            <template v-if="fieldOptions(fieldLayout)">
-                                                <ShowField
-                                                    :options="fieldOptions(fieldLayout)"
-                                                    :value="fieldValue(fieldLayout)"
-                                                    :config-identifier="fieldLayout.key"
-                                                    :layout="fieldLayout"
-                                                    @visible-change="handleFieldVisibilityChanged(fieldLayout.key, $event)"
-                                                />
-                                            </template>
-                                            <template v-else>
-                                                <UnknownField :name="fieldLayout.key" />
-                                            </template>
-                                        </template>
-                                    </Grid>
-                                </template>
+                            <Grid class="ShowPage__section-grid"
+                                :rows="[section.columns]"
+                                :col-class="sectionColClass"
+                                v-slot="{ itemLayout:column }"
+                            >
+                                <Grid class="ShowPage__fields-grid"
+                                    :rows="column.fields"
+                                    :row-class="fieldsRowClass"
+                                    v-slot="{ itemLayout:fieldLayout }"
+                                >
+                                    <template v-if="fieldOptions(fieldLayout)">
+                                        <ShowField
+                                            :options="fieldOptions(fieldLayout)"
+                                            :value="fieldValue(fieldLayout)"
+                                            :config-identifier="fieldLayout.key"
+                                            :layout="fieldLayout"
+                                            @visible-change="handleFieldVisibilityChanged(fieldLayout.key, $event)"
+                                        />
+                                    </template>
+                                    <template v-else>
+                                        <UnknownField :name="fieldLayout.key" />
+                                    </template>
+                                </Grid>
                             </Grid>
                         </div>
                     </div>
