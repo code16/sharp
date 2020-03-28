@@ -1,6 +1,6 @@
 <template>
     <ActionBar>
-        <template slot="extras">
+        <template v-slot:extras>
             <div class="row mx-n2">
                 <template v-for="filter in filters">
                     <div class="col-auto px-2">
@@ -14,14 +14,14 @@
                 </template>
             </div>
         </template>
-        <template v-if="commands.length" slot="extras-right">
+        <template v-if="commands.length" v-slot:extras-right>
             <CommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
                 :commands="commands"
                 @select="handleCommandSelected"
             >
-                <div slot="text">
+                <template v-slot:text>
                     {{ l('dashboard.commands.dashboard.label') }}
-                </div>
+                </template>
             </CommandsDropdown>
         </template>
     </ActionBar>
@@ -33,7 +33,7 @@
     import { FilterDropdown } from 'sharp-filters';
     import { CommandsDropdown } from 'sharp-commands';
     import { Localization } from "sharp/mixins";
-    
+
     export default {
         name: 'SharpActionBarDashboard',
         mixins: [Localization],

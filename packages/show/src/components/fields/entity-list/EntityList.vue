@@ -11,16 +11,18 @@
         :hidden-filters="hiddenFilters"
         inline
     >
-        <template slot="action-bar" slot-scope="{ props, listeners }">
+        <template v-slot:action-bar="{ props, listeners }">
             <ActionBar class="ShowEntityListField__action-bar" v-bind="props" v-on="listeners" />
         </template>
-        <template slot="append-head" slot-scope="{ props: { commands }, listeners }">
+        <template v-slot:append-head="{ props: { commands }, listeners }">
             <template v-if="hasCommands(commands)">
                 <CommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
                     :commands="commands"
                     @select="listeners['command']"
                 >
-                    <div slot="text">{{ l('entity_list.commands.entity.label') }}</div>
+                    <template v-slot:text>
+                        {{ l('entity_list.commands.entity.label') }}
+                    </template>
                 </CommandsDropdown>
             </template>
         </template>
@@ -31,8 +33,8 @@
     import { EntityList, entityListModule } from 'sharp-entity-list';
     import { CommandsDropdown } from 'sharp-commands';
     import { Localization } from "sharp/mixins";
-    
-    import ActionBar from "./ActionBar"; 
+
+    import ActionBar from "./ActionBar";
 
     export default {
         mixins: [Localization],

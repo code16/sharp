@@ -1,6 +1,6 @@
 <template>
     <Dropdown class="SharpForm__locale-dropdown">
-        <template slot="text">
+        <template v-slot:text>
             <template v-if="locale">{{ locale }}</template>
             <template v-else>-</template>
         </template>

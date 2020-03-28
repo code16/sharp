@@ -24,7 +24,7 @@
                 @open="handleDropdownOpen"
                 ref="multiselect"
             >
-                <template slot="clear">
+                <template v-slot:clear>
                     <template v-if="clearButtonVisible">
                         <button class="SharpAutocomplete__result-item__close-button" type="button" @click="handleClearButtonClicked">
                             <svg class="SharpAutocomplete__result-item__close-icon"
@@ -34,24 +34,24 @@
                         </button>
                     </template>
                 </template>
-                <template slot="singleLabel" slot-scope="{ option }">
+                <template v-slot:singleLabel="{ option }">
                     <TemplateRenderer
                         name="ResultItem"
                         :template="resultItemTemplate"
                         :template-data="localizedTemplateData(option)"
                     />
                 </template>
-                <template slot="option" slot-scope="{ option }">
+                <template v-slot:option="{ option }">
                     <TemplateRenderer
                         name="ListItem"
                         :template="listItemTemplate"
                         :template-data="localizedTemplateData(option)"
                     />
                 </template>
-                <template slot="loading">
+                <template v-slot:loading>
                     <Loading :visible="isLoading" inline small />
                 </template>
-                <template slot="noResult">
+                <template v-slot:noResult>
                     {{ l('form.autocomplete.no_results_text') }}
                 </template>
             </multiselect>

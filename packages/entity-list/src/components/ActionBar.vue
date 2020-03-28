@@ -4,10 +4,10 @@
         :class="{'SharpActionBarList--search-active':searchActive}"
         right-class="d-block"
     >
-        <template slot="left">
+        <template v-slot:left>
             <span class="text-content text-nowrap">{{ count }} {{ l('action_bar.list.items_count') }}</span>
         </template>
-        <template slot="right">
+        <template v-slot:right>
             <div class="row justify-content-end">
                 <template v-if="canSearch && !reorderActive">
                     <div class="col col-lg-auto">
@@ -58,33 +58,30 @@
                 </template>
             </div>
         </template>
-        <template v-if="!reorderActive">
-            <template slot="extras">
-                <div class="row mx-n2">
-                    <template v-for="filter in filters">
-                        <div class="col-auto px-2">
-                            <FilterDropdown
-                                :filter="filter"
-                                :value="filtersValues[filter.key]"
-                                @input="handleFilterChanged(filter, $event)"
-                                :key="filter.id"
-                            />
-                        </div>
-                    </template>
-                </div>
-            </template>
-
-            <template slot="extras-right">
-                <template v-if="hasCommands">
-                    <CommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
-                        :commands="commands"
-                        @select="handleCommandSelected"
-                    >
-                        <div slot="text">
-                            {{ l('entity_list.commands.entity.label') }}
-                        </div>
-                    </CommandsDropdown>
+        <template v-if="!reorderActive" v-slot:extras>
+            <div class="row mx-n2">
+                <template v-for="filter in filters">
+                    <div class="col-auto px-2">
+                        <FilterDropdown
+                            :filter="filter"
+                            :value="filtersValues[filter.key]"
+                            @input="handleFilterChanged(filter, $event)"
+                            :key="filter.id"
+                        />
+                    </div>
                 </template>
+            </div>
+        </template>
+        <template v-if="!reorderActive" v-slot:extras-right>
+            <template v-if="hasCommands">
+                <CommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
+                    :commands="commands"
+                    @select="handleCommandSelected"
+                >
+                    <div slot="text">
+                        {{ l('entity_list.commands.entity.label') }}
+                    </div>
+                </CommandsDropdown>
             </template>
         </template>
     </ActionBar>

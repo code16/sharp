@@ -1,10 +1,14 @@
 <template>
     <div class="SharpGrid">
-        <div v-for="row in rows" class="SharpGrid__row row">
-            <div v-for="col in row" :class="colClasses(col)" class="SharpGrid__col" v-empty-class="'SharpGrid__col--empty'">
-                <slot v-bind="col" />
+        <template v-for="row in rows">
+            <div class="SharpGrid__row row" :class="rowClass(row)">
+                <template v-for="col in row">
+                    <div class="SharpGrid__col" :class="colClasses(col)" v-empty-class="'SharpGrid__col--empty'">
+                        <slot :item-layout="col" />
+                    </div>
+                </template>
             </div>
-        </div>
+        </template>
     </div>
 </template>
 
@@ -18,16 +22,28 @@
             rows: { // 2D array [row][col]
                 type: Array,
                 required: true
-            }
+            },
+            rowClass: {
+                type: Function,
+                default: () => null,
+            },
+            colClass: {
+                type: Function,
+                default: () => null,
+            },
         },
         methods: {
-            colClasses({ size, sizeXS }) {
+            colClasses(col) {
+                const { size, sizeXS } = col;
                 const hasSize = !!size;
-                return {
-                    [`col-${sizeXS}`]: sizeXS,
-                    [`col-md-${size}`]: hasSize,
-                    'col-md': !hasSize
-                }
+                return [
+                    {
+                        [`col-${sizeXS}`]: sizeXS,
+                        [`col-md-${size}`]: hasSize,
+                        'col-md': !hasSize
+                    },
+                    this.colClass(col),
+                ];
             }
         },
         directives: {

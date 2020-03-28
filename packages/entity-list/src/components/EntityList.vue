@@ -21,18 +21,17 @@
                 @sort-change="handleSortChanged"
                 @page-change="handlePageChanged"
             >
-                <template slot="empty">
+                <template v-slot:empty>
                     {{ l('entity_list.empty_text') }}
                 </template>
-                <template slot="item" slot-scope="{ item }">
+                <template v-slot:item="{ item }">
                     <DataListRow :url="instanceUrl(item)" :columns="columns" :row="item">
-                        <template v-if="hasActionsColumn">
-                            <template slot="append">
-                                <div class="row justify-content-end justify-content-md-start mx-n2">
+                        <template v-if="hasActionsColumn" v-slot:append>
+                            <div class="row justify-content-end justify-content-md-start mx-n2">
                                     <template v-if="instanceHasState(item)">
                                         <div class="col-auto col-md-12 my-1 px-2">
                                             <Dropdown class="SharpEntityList__state-dropdown" :disabled="!instanceHasStateAuthorization(item)">
-                                                <template slot="text">
+                                                <template v-slot:text>
                                                     <StateIcon :color="instanceStateIconColor(item)" />
                                                     <span class="text-truncate">
                                                         {{ instanceStateLabel(item) }}
@@ -56,22 +55,19 @@
                                                 :commands="instanceCommands(item)"
                                                 @select="handleInstanceCommandRequested(item, $event)"
                                             >
-                                                <template slot="text">
+                                                <template v-slot:text>
                                                     {{ l('entity_list.commands.instance.label') }}
                                                 </template>
                                             </CommandsDropdown>
                                         </div>
                                     </template>
                                 </div>
-                            </template>
                         </template>
                     </DataListRow>
                 </template>
 
-                <template v-if="$scopedSlots['append-head']">
-                    <template slot="append-head">
-                        <slot name="append-head" :props="actionBarProps" :listeners="actionBarListeners" />
-                    </template>
+                <template v-slot:append-head>
+                    <slot name="append-head" :props="actionBarProps" :listeners="actionBarListeners" />
                 </template>
             </DataList>
         </template>
@@ -83,22 +79,22 @@
 
 <script>
     import { formUrl, showUrl } from 'sharp';
-    import { 
-        DataList, 
-        DataListRow, 
+    import {
+        DataList,
+        DataListRow,
         StateIcon,
         Dropdown,
         DropdownItem,
     } from 'sharp-ui';
 
-    import { 
+    import {
         CommandsDropdown,
         CommandFormModal,
         CommandViewPanel,
     } from 'sharp-commands';
 
     import { Localization, DynamicView, withCommands } from 'sharp/mixins';
-    
+
 
     export default {
         name: 'SharpEntityList',

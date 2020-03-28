@@ -12,7 +12,7 @@
         @change="handleVisiblityChanged"
         ref="modal"
     >
-        <template slot="modal-header">
+        <template v-slot:modal-header>
             <div>
                 <h5 class="SharpModal__heading">
                     <slot name="title">{{ title }}</slot>

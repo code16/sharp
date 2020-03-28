@@ -20,22 +20,21 @@
                         <h2 class="ShowPage__section-title mb-2">{{ section.title }}</h2>
                     </template>
                     <div class="ShowPage__section mb-4" :class="sectionClasses(section)">
-                        <Grid :rows="[section.columns]">
-                            <template slot-scope="fieldsLayout">
-                                <Grid class="ShowPage__fields-grid" :rows="fieldsLayout.fields">
-                                    <template slot-scope="fieldLayout">
-                                        <template v-if="fieldOptions(fieldLayout)">
-                                            <ShowField
-                                                :options="fieldOptions(fieldLayout)"
-                                                :value="fieldValue(fieldLayout)"
-                                            />
-                                        </template>
-                                        <template v-else>
-                                            <UnknownField :name="fieldLayout.key" />
-                                        </template>
-                                    </template>
-                                </Grid>
-                            </template>
+                        <Grid :rows="[section.columns]" v-slot="{ itemLayout:column }">
+                            <Grid class="ShowPage__fields-grid"
+                                :rows="column.fields"
+                                v-slot="{ itemLayout:fieldLayout }"
+                            >
+                                <template v-if="fieldOptions(fieldLayout)">
+                                    <ShowField
+                                        :options="fieldOptions(fieldLayout)"
+                                        :value="fieldValue(fieldLayout)"
+                                    />
+                                </template>
+                                <template v-else>
+                                    <UnknownField :name="fieldLayout.key" />
+                                </template>
+                            </Grid>
                         </Grid>
                     </div>
                 </template>

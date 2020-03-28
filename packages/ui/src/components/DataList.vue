@@ -8,14 +8,14 @@
                 <template v-if="!hideHeader">
                     <div class="SharpDataList__thead" ref="head">
                         <DataListRow :columns="columns" header>
-                            <template slot="cell" slot-scope="{ column }">
+                            <template v-slot:cell="{ column }">
                                 <span>{{ column.label }}</span>
                                 <template v-if="column.sortable">
                                     <svg class="SharpDataList__caret"
                                         :class="{
-                                      'SharpDataList__caret--selected': sort === column.key,
-                                      'SharpDataList__caret--ascending': sort === column.key && dir === 'asc'
-                                    }"
+                                          'SharpDataList__caret--selected': sort === column.key,
+                                          'SharpDataList__caret--ascending': sort === column.key && dir === 'asc'
+                                        }"
                                         width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd"
                                     >
                                         <path d="M10 0L5 5 0 0z"></path>
@@ -23,10 +23,10 @@
                                     <a class="SharpDataList__sort-link" @click.prevent="handleSortClicked(column.key)" href=""></a>
                                 </template>
                             </template>
-                            <template v-if="$slots['append-head'] || !!headerRowAppendWidth">
-                                <template slot="append">
-                                    <div class="d-none d-md-block" :style="{ width: headerRowAppendWidth || 'auto' }"><slot name="append-head"></slot></div>
-                                </template>
+                            <template v-if="$slots['append-head'] || !!headerRowAppendWidth" v-slot:append>
+                                <div class="d-none d-md-block" :style="{ width: headerRowAppendWidth || 'auto' }">
+                                    <slot name="append-head" />
+                                </div>
                             </template>
                         </DataListRow>
                     </div>

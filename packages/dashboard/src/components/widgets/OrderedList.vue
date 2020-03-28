@@ -4,12 +4,10 @@
             {{ title }}
         </h2>
         <DataList class="SharpWidgetOrderedList__list" :items="items" :columns="columns" hide-header>
-            <template slot="item" slot-scope="{ item }">
+            <template v-slot:item="{ item }">
                 <DataListRow :url="item.url" :columns="columns" :row="item">
-                    <template v-if="hasCount(item)">
-                        <template slot="append">
-                            <span class="SharpTag SharpTag--default">{{ item.count }}</span>
-                        </template>
+                    <template v-if="hasCount(item)" v-slot:append>
+                        <span class="SharpTag SharpTag--default">{{ item.count }}</span>
                     </template>
                 </DataListRow>
             </template>
