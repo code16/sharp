@@ -45,7 +45,7 @@ function buildShowFields()
 #### Available simple Show fields
 
 - [Text](show-fields/text.md)
-- [picture](show-fields/picture.md)
+- [Picture](show-fields/picture.md)
 
 
 #### Embedding an Entity List in a Show
@@ -93,9 +93,8 @@ function buildShowLayout()
         function(ShowLayoutSection $section) {
             ...
         }
-    )
+    );
 }
-
 ```
 
 
@@ -116,12 +115,22 @@ function buildShowLayout()
                 }
             );
         }
-    )
+    );
 }
-
 ```
 
 A `ShowLayoutColumn`, very much like a `FormLayoutColumn`, can declare single field rows and multi fields rows. Report to the [Form layout documentation](building-entity-form.md#buildformlayout) to find out how.
+
+#### Embedded Entity Lists
+
+An embedded Entity List in treated as a special section; its label will be displayed as section title. 
+
+```php
+function buildShowLayout()
+{
+    $this->addEntityListSection('members');
+}
+```
 
 
 ### `find($id): array`

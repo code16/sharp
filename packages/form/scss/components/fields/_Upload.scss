@@ -92,10 +92,6 @@
       .SharpUpload__download-link {
         @include font-size('12');
         text-decoration: none;
-        &:before {
-          font-family: FontAwesome;
-          content: "\f019";
-        }
       }
 
       .SharpUpload__filename {

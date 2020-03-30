@@ -1,7 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DataList mount empty 1`] = `
-<div class="SharpDataList">Empty text
+<div class="SharpDataList">
+	<div class="SharpDataList__empty p-3">Empty text</div>
 	<!---->
 </div>
 `;
@@ -88,6 +89,7 @@ exports[`DataList mount items slot 1`] = `
 
 exports[`DataList mount pagination 1`] = `
 <div class="SharpDataList">
+	<div class="SharpDataList__empty p-3"></div>
 	<div class="SharpDataList__pagination-container">
 		<pagination-stub minpageendbuttons="3" limit="7" totalrows="10" perpage="3" value="2"></pagination-stub>
 	</div>

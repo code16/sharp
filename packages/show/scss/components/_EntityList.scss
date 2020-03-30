@@ -18,4 +18,9 @@
       border-color: $ui-04;
     }
   }
+  &__label {
+    font-size: 1em;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
 }

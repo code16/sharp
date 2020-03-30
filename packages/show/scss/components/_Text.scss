@@ -2,8 +2,9 @@
 .ShowTextField {
   &__label {
     text-transform: uppercase;
-    font-variant: all-small-caps;
-    color: #7f7f7f;
+    font-size: .875em;
+    font-weight: 700;
+    margin-bottom: .5em;
   }
   &__content {
     @mixin font-size($size) { font-size: $size }
@@ -52,8 +53,5 @@
     :last-child {
       margin-bottom: 0;
     }
-  }
-  &__label + &__content {
-    display: inline;
   }
 }

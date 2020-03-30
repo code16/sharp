@@ -16,26 +16,36 @@
                 />
 
                 <template v-for="section in layout.sections">
-                    <template v-if="section.title">
-                        <h2 class="ShowPage__section-title mb-2">{{ section.title }}</h2>
-                    </template>
-                    <div class="ShowPage__section mb-4" :class="sectionClasses(section)">
-                        <Grid :rows="[section.columns]" v-slot="{ itemLayout:column }">
-                            <Grid class="ShowPage__fields-grid"
-                                :rows="column.fields"
-                                v-slot="{ itemLayout:fieldLayout }"
+                    <div class="ShowPage__section" :class="sectionClasses(section)" v-show="isSectionVisible(section)">
+                        <template v-if="section.title">
+                            <h2 class="ShowPage__section-title mb-2">{{ section.title }}</h2>
+                        </template>
+                        <div class="ShowPage__section-content">
+                            <Grid class="ShowPage__section-grid"
+                                :rows="[section.columns]"
+                                :col-class="sectionColClass"
+                                v-slot="{ itemLayout:column }"
                             >
-                                <template v-if="fieldOptions(fieldLayout)">
-                                    <ShowField
-                                        :options="fieldOptions(fieldLayout)"
-                                        :value="fieldValue(fieldLayout)"
-                                    />
-                                </template>
-                                <template v-else>
-                                    <UnknownField :name="fieldLayout.key" />
-                                </template>
+                                <Grid class="ShowPage__fields-grid"
+                                    :rows="column.fields"
+                                    :row-class="fieldsRowClass"
+                                    v-slot="{ itemLayout:fieldLayout }"
+                                >
+                                    <template v-if="fieldOptions(fieldLayout)">
+                                        <ShowField
+                                            :options="fieldOptions(fieldLayout)"
+                                            :value="fieldValue(fieldLayout)"
+                                            :config-identifier="fieldLayout.key"
+                                            :layout="fieldLayout"
+                                            @visible-change="handleFieldVisibilityChanged(fieldLayout.key, $event)"
+                                        />
+                                    </template>
+                                    <template v-else>
+                                        <UnknownField :name="fieldLayout.key" />
+                                    </template>
+                                </Grid>
                             </Grid>
-                        </Grid>
+                        </div>
                     </div>
                 </template>
 
@@ -48,7 +58,7 @@
 </template>
 
 <script>
-    import { mapState, mapGetters } from 'vuex';
+    import { mapGetters } from 'vuex';
     import { formUrl, getBackUrl } from 'sharp';
     import { CommandFormModal, CommandViewPanel } from 'sharp-commands';
     import { Grid } from 'sharp-ui';
@@ -73,15 +83,14 @@
         data() {
             return {
                 ready: false,
+                fieldsVisible: null,
             }
         },
 
         computed: {
-            ...mapState('show', {
-                entityKey: state => state.entityKey,
-                instanceId: state => state.instanceId,
-            }),
             ...mapGetters('show', [
+                'entityKey',
+                'instanceId',
                 'fields',
                 'layout',
                 'data',
@@ -123,17 +132,46 @@
                     ? this.data[layout.key]
                     : null;
             },
+            isFieldVisible(layout) {
+                return !this.fieldsVisible || this.fieldsVisible[layout.key] !== false;
+            },
+            fieldsRowClass(row) {
+                const fieldsTypeClasses = row.map(fieldLayout => {
+                    const field = this.fieldOptions(fieldLayout);
+                    return `ShowPage__fields-row--${field.type}`;
+                });
+                return [
+                    'ShowPage__fields-row',
+                    ...fieldsTypeClasses,
+                ]
+            },
             sectionClasses(section) {
                 return {
                     'ShowPage__section--no-container': this.sectionHasField(section, 'entityList'),
                 }
             },
+            sectionColClass() {
+                return 'ShowPage__section-col';
+            },
+            sectionFields(section) {
+                return section.columns.reduce((res, column) => [...res, ...column.fields.flat()], []);
+            },
+            isSectionVisible(section) {
+                const sectionFields = this.sectionFields(section);
+                return sectionFields.some(fieldLayout => this.isFieldVisible(fieldLayout));
+            },
             sectionHasField(section, type) {
-                const sectionFields = section.columns.reduce((res, column) => [...res, ...column.fields.flat()], []);
+                const sectionFields = this.sectionFields(section);
                 return sectionFields.some(fieldLayout => {
                     const options = this.fieldOptions(fieldLayout);
                     return options && options.type === type;
                 });
+            },
+            handleFieldVisibilityChanged(key, visible) {
+                this.fieldsVisible = {
+                    ...this.fieldsVisible,
+                    [key]: visible,
+                }
             },
             handleCommandRequested(command) {
                 this.sendCommand(command, {

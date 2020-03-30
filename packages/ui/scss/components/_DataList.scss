@@ -14,6 +14,12 @@
     }
   }
 
+  &__empty {
+    background: white;
+    border: 1px solid $ui-04;
+    border-bottom-width: 2px;
+  }
+
   &__table {
     @include reset;
     //display: table;

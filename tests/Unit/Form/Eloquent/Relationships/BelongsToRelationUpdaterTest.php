@@ -31,7 +31,6 @@ class BelongsToRelationUpdaterTest extends SharpFormEloquentBaseTest
         $person = Person::create(["name" => "John Wayne"]);
 
         $updater = new BelongsToRelationUpdater();
-
         $updater->update($person, "mother:name", "Jane Wayne");
 
         $this->assertCount(2, Person::all());
@@ -42,5 +41,33 @@ class BelongsToRelationUpdaterTest extends SharpFormEloquentBaseTest
             "id" => $person->id,
             "mother_id" => $mother->id
         ]);
+    }
+
+    /** @test */
+    function we_set_default_attributes_when_creating_a_belongsTo_relation()
+    {
+        $person = PersonWithDefaultAttributes::create(["name" => "John Wayne"]);
+
+        $updater = new BelongsToRelationUpdater();
+        $updater->update($person, "mother:name", "Jane Wayne");
+
+        $this->assertDatabaseHas("people", [
+            "name" => "Jane Wayne",
+            "age" => 60
+        ]);
+    }
+}
+
+class PersonWithDefaultAttributes extends Person
+{
+    protected $table = "people";
+    
+    public function getDefaultAttributesFor($attribute)
+    {
+        if($attribute == "mother") {
+            return ["age" => 60];
+        }
+
+        return [];
     }
 }

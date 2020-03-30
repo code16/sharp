@@ -2,8 +2,11 @@
 
 namespace Code16\Sharp\Form\Eloquent\Relationships;
 
+use Code16\Sharp\Form\Eloquent\Relationships\Utils\CanCreateRelatedModel;
+
 class HasOneRelationUpdater
 {
+    use CanCreateRelatedModel;
 
     /**
      * @param $instance
@@ -57,27 +60,5 @@ class HasOneRelationUpdater
         $relatedModel->find($value)->setAttribute(
             $foreignKeyName, $instance->id
         )->save();
-    }
-
-    /**
-     * @param $instance
-     * @param $attribute
-     * @param array $data
-     */
-    protected function createRelatedModel($instance, $attribute, $data = [])
-    {
-        // Creation: we call the optional getDefaultAttributesFor($attribute)
-        // on the model, to get some default values for required attributes
-        $defaultAttributes = method_exists($instance, 'getDefaultAttributesFor')
-            ? $instance->getDefaultAttributesFor($attribute)
-            : [];
-
-        $instance->$attribute()->create(
-            $defaultAttributes + $data
-        );
-
-        // Force relation reload, in case there is
-        // more attributes to update in the request
-        $instance->load($attribute);
     }
 }

@@ -1,0 +1,31 @@
+
+.ShowListField {
+  font-size: .875em;
+  &__label {
+    font-size: 1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  &__list {
+    border: 1px solid #dfe3e6;
+  }
+  &__item {
+    padding: 1em;
+    border-bottom: 1px solid #dfe3e6;
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+  &__fields-grid {
+    margin-bottom: -.5rem;
+  }
+  .show-field {
+    margin-bottom: .5rem;
+  }
+  &--empty {
+    .ShowListField__label {
+      margin-bottom: .5rem;
+    }
+  }
+}

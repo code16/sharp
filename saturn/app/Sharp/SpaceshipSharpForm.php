@@ -7,7 +7,8 @@ use App\Pilot;
 use App\Spaceship;
 use App\SpaceshipType;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
-use Code16\Sharp\Form\Eloquent\Transformers\FormUploadModelTransformer;
+use Code16\Sharp\Form\Eloquent\Transformers\FormUploadModelFormTransformer;
+use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
@@ -262,8 +263,8 @@ class SpaceshipSharpForm extends SharpForm
                     "serial" => str_pad($serial, 5, "0", STR_PAD_LEFT)
                 ] : null;
             })
-            ->setCustomTransformer("picture", new FormUploadModelTransformer())
-            ->setCustomTransformer("pictures", new FormUploadModelTransformer())
+            ->setCustomTransformer("picture", new SharpUploadModelFormAttributeTransformer())
+            ->setCustomTransformer("pictures", new SharpUploadModelFormAttributeTransformer())
             ->setCustomTransformer("html", function($html, Spaceship $spaceship){
                 return [
                     "nameFr" => $spaceship->getTranslation('name','fr'),

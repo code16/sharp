@@ -1,23 +1,33 @@
 <template>
-    <div class="show-field">
-        <template v-if="isVisible">
-            <component
-                :is="component"
-                :value="value"
-                v-bind="props"
-            />
-        </template>
-
+    <div class="show-field" v-show="isVisible">
+        <component
+            :is="component"
+            :field-key="options.key"
+            :field-config-identifier="mergedConfigIdentifier"
+            :value="value"
+            :layout="layout"
+            v-bind="props"
+            @visible-change="handleVisiblityChanged"
+        />
     </div>
 </template>
 
 <script>
     import { getFieldByType } from "./fields";
+    import { ConfigNode } from "sharp/mixins";
+    import {syncVisibility} from "../util/fields/visiblity";
 
     export default {
+        mixins: [ConfigNode],
         props: {
+            value: {},
             options: Object,
-            value: null,
+            layout: Object,
+        },
+        data() {
+            return {
+                visible: true,
+            }
         },
         computed: {
             component() {
@@ -31,14 +41,14 @@
                 }
             },
             isVisible() {
-                if(!this.component) {
-                    return false;
-                }
-                if(this.options.type === 'picture') {
-                    return !!this.value;
-                }
-                return true;
+                return !!this.component && this.visible;
             }
-        }
+        },
+        methods: {
+            handleVisiblityChanged(visible) {
+                this.visible = visible;
+                this.$emit('visible-change', visible);
+            },
+        },
     }
 </script>

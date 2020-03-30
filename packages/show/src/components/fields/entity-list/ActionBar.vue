@@ -1,39 +1,52 @@
 <template>
     <div class="action-bar">
-        <div class="row action-bar__row">
-            <div class="col-sm action-bar__col">
-                <template v-if="!reorderActive">
-                    <div class="row action-bar__row">
-                        <template v-for="filter in filters">
-                            <div class="col-auto action-bar__col mb-2">
-                                <div class="action-bar__element">
-                                    <FilterDropdown
-                                        class="h-100"
-                                        :filter="filter"
-                                        :value="filtersValues[filter.key]"
-                                        @input="handleFilterChanged(filter, $event)"
-                                        :key="filter.id"
-                                    />
-                                </div>
-                            </div>
-                        </template>
-                        <template v-if="canSearch">
-                            <div class="col-auto action-bar__col mb-2">
-                                <div class="action-bar__element">
-                                    <Search
-                                        class="h-100"
-                                        :value="search"
-                                        :active.sync="searchActive"
-                                        :placeholder="l('action_bar.list.search.placeholder')"
-                                        @input="handleSearchInput"
-                                        @submit="handleSearchSubmitted"
-                                    />
-                                </div>
-                            </div>
-                        </template>
-                    </div>
-                </template>
+        <template v-if="hasLeftControls && $slots.default">
+            <div class="mb-2">
+                <slot />
             </div>
+        </template>
+        <div class="row action-bar__row">
+            <template v-if="hasLeftControls">
+                <div class="col-sm action-bar__col">
+                    <template v-if="!reorderActive">
+                        <div class="row action-bar__row">
+                            <template v-for="filter in filters">
+                                <div class="col-auto action-bar__col mb-2">
+                                    <div class="action-bar__element">
+                                        <FilterDropdown
+                                            class="h-100"
+                                            :filter="filter"
+                                            :value="filtersValues[filter.key]"
+                                            @input="handleFilterChanged(filter, $event)"
+                                            :key="filter.id"
+                                        />
+                                    </div>
+                                </div>
+                            </template>
+                            <template v-if="canSearch">
+                                <div class="col-auto action-bar__col mb-2">
+                                    <div class="action-bar__element">
+                                        <Search
+                                            class="h-100"
+                                            :value="search"
+                                            :active.sync="searchActive"
+                                            :placeholder="l('action_bar.list.search.placeholder')"
+                                            @input="handleSearchInput"
+                                            @submit="handleSearchSubmitted"
+                                        />
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </template>
+            <template v-else>
+                <div class="col-sm align-self-center action-bar__col mb-2">
+                    <slot />
+                </div>
+            </template>
+
             <div class="col-sm-auto action-bar__col">
                 <div class="row flex-nowrap justify-content-end action-bar__row">
                     <template v-if="canReorder">
@@ -98,6 +111,7 @@
             FilterDropdown,
         },
         props: {
+            count: Number,
             search: String,
             filters: Array,
             filtersValues: Object,
@@ -118,6 +132,10 @@
         computed: {
             hasForms() {
                 return this.forms && this.forms.length > 0;
+            },
+            hasLeftControls() {
+                const filters = this.filters || [];
+                return this.count > 0 && (filters.length > 0 || this.canSearch);
             },
         },
         methods: {

@@ -99,15 +99,14 @@ abstract class SharpShow
     }
 
     /**
-     * @param string $label
      * @param string $entityListKey
      * @return $this
      */
-    final protected function addEntityListSection(string $label, string $entityListKey)
+    final protected function addEntityListSection(string $entityListKey)
     {
         $this->layoutBuilt = false;
 
-        $section = new ShowLayoutSection($label);
+        $section = new ShowLayoutSection("");
         $section->addColumn(12, function($column) use($entityListKey) {
             $column->withSingleField($entityListKey);
         });

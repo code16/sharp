@@ -2,9 +2,12 @@
 
 namespace Code16\Sharp\Form\Eloquent\Relationships;
 
+use Code16\Sharp\Form\Eloquent\Relationships\Utils\CanCreateRelatedModel;
+
 class BelongsToRelationUpdater
 {
-
+    use CanCreateRelatedModel;
+    
     /**
      * @param $instance
      * @param string $attribute
@@ -29,9 +32,7 @@ class BelongsToRelationUpdater
                 return;
             }
 
-            $value = $instance->$attribute()->create([
-                $subAttribute => $value
-            ]);
+            $value = $this->createRelatedModel($instance, $attribute, [$subAttribute => $value]);
         }
 
         $instance->$attribute()->associate($value);

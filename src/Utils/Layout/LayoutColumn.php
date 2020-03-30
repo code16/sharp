@@ -26,8 +26,9 @@ abstract class LayoutColumn
      */
     function toArray(): array
     {
-        return [
-            "size" => $this->size
-        ] + $this->fieldsToArray();
+        return array_merge(
+            ["size" => $this->size],
+            $this->fieldsToArray()
+        );
     }
 }

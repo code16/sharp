@@ -573,6 +573,15 @@
                 await this.get();
                 this.bindParams(this.query);
 
+                this.$emit('change', {
+                    data: this.data,
+                    layout: this.layout,
+                    config: this.config,
+                    containers: this.containers,
+                    authorizations: this.authorizations,
+                    forms: this.forms,
+                });
+
                 await this.storeDispatch('update', {
                     config: this.config,
                     filtersValues: this.getFiltersValuesFromQuery(this.query),

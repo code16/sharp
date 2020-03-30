@@ -11,44 +11,28 @@ class SharpFormListField extends SharpFormField
 
     const FIELD_TYPE = "list";
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $addable = false;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $sortable = false;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $removable = false;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $addText = "Add an item";
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $itemIdAttribute = "id";
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $orderAttribute = null;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $maxItemCount = null;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $itemFields = [];
 
     /**
@@ -224,8 +208,7 @@ class SharpFormListField extends SharpFormField
     {
         return $this->sortable;
     }
-
-
+    
     /**
      * @return array
      */
@@ -255,9 +238,12 @@ class SharpFormListField extends SharpFormField
             "collapsedItemTemplate" => $this->template("item"),
             "maxItemCount" => $this->maxItemCount,
             "itemIdAttribute" => $this->itemIdAttribute,
-            "itemFields" => collect($this->itemFields)->map(function($field) {
-                return $field->toArray();
-            })->keyBy("key")->all()
+            "itemFields" => collect($this->itemFields)
+                ->map(function($field) {
+                    return $field->toArray();
+                })
+                ->keyBy("key")
+                ->all()
         ]);
     }
 }

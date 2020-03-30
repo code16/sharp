@@ -153,45 +153,6 @@ describe('vue-clip',() => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    test('download', async () => {
-        let $vueClip = await createVm({
-            data: () => ({
-                value: {
-                    name: 'Fichier.pdf',
-                    size: 15000
-                }
-            })
-        });
-
-        moxios.install($vueClip.axiosInstance);
-
-        let { dlLink } = $vueClip.$refs;
-
-        dlLink.onclick = jest.fn();
-        URL.createObjectURL = jest.fn(()=>'blob:1234');
-
-        $vueClip.$form.downloadLinkBase = '/sharp/api';
-
-        $vueClip.download();
-
-        let { request } = await nextRequestFulfilled({ status: 200, response: '<<file_content>>' });
-
-        expect(URL.createObjectURL).toHaveBeenCalled();
-        expect(dlLink.href).toBe('blob:1234');
-        expect(dlLink.onclick).toHaveBeenCalled();
-
-        expect(request.config).toMatchObject({
-            method: 'post',
-            responseType: 'blob',
-            data: JSON.stringify({
-                fileName: 'Fichier.pdf'
-            }),
-            url: '/sharp/api/my_upload'
-        });
-
-        moxios.uninstall($vueClip.axiosInstance);
-    });
-
     test('emit update on image loaded', async () => {
         let $vueClip = await createVm({
             data: () => ({
@@ -399,11 +360,11 @@ describe('vue-clip',() => {
 
         $vueClip.file.size = 1024*1024/2;
 
-        expect($vueClip.size).toBe('0.5 MB');
+        expect($vueClip.size).toBe('512 KB');
         expect(Number.prototype.toLocaleString).toHaveBeenCalled();
 
-        $vueClip.file.size = 1024;
-        expect($vueClip.size).toBe('<0.1 MB');
+        $vueClip.file.size = 768;
+        expect($vueClip.size).toBe('0.75 KB');
     });
 
     test('has crop', async () => {

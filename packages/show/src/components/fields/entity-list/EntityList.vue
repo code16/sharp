@@ -10,9 +10,14 @@
         :hidden-commands="hiddenCommands"
         :hidden-filters="hiddenFilters"
         inline
+        @change="handleChanged"
     >
         <template v-slot:action-bar="{ props, listeners }">
-            <ActionBar class="ShowEntityListField__action-bar" v-bind="props" v-on="listeners" />
+            <ActionBar class="ShowEntityListField__action-bar" v-bind="props" v-on="listeners">
+                <div class="ShowEntityListField__label">
+                     {{ label }}
+                </div>
+            </ActionBar>
         </template>
         <template v-slot:append-head="{ props: { commands }, listeners }">
             <template v-if="hasCommands(commands)">
@@ -35,6 +40,7 @@
     import { Localization } from "sharp/mixins";
 
     import ActionBar from "./ActionBar";
+    import { syncVisibility } from "../../../util/fields/visiblity";
 
     export default {
         mixins: [Localization],
@@ -51,6 +57,12 @@
             showEntityState: Boolean,
             hiddenFilters: Object,
             hiddenCommands: Object,
+            label: String,
+        },
+        data() {
+            return {
+                list: null,
+            }
         },
         computed: {
             storeModule() {
@@ -58,6 +70,17 @@
             },
             getFiltersQueryParams() {
                 return this.storeGetter('filters/getQueryParams');
+            },
+            isVisible() {
+                if(this.list) {
+                    const { data, authorizations } = this.list;
+                    return !!(
+                        data.items && data.items.length > 0 ||
+                        this.showCreateButton && authorizations.create ||
+                        this.emptyVisible
+                    );
+                }
+                return this.emptyVisible;
             },
         },
         methods: {
@@ -67,10 +90,15 @@
             storeGetter(name) {
                 return this.$store.getters[`${this.storeModule}/${name}`];
             },
+            handleChanged(list) {
+                this.list = list;
+            },
         },
         created() {
             this.$store.registerModule(this.storeModule.split('/'), entityListModule);
             this.$store.dispatch(`${this.storeModule}/setQuery`, this.getFiltersQueryParams(this.hiddenFilters));
+
+            syncVisibility(this, () => this.isVisible, { lazy:true });
         },
     }
 </script>

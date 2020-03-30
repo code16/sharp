@@ -1,12 +1,12 @@
 <?php
 
-namespace Code16\Sharp\Form\Eloquent\Transformers;
+namespace Code16\Sharp\Form\Eloquent\Uploads\Transformers;
 
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Arr;
 
-class FormUploadModelTransformer implements SharpAttributeTransformer
+class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransformer
 {
 
     /**
@@ -28,9 +28,9 @@ class FormUploadModelTransformer implements SharpAttributeTransformer
             return $instance->$attribute
                 ->map(function($upload) {
                     $array = $this->transformUpload($upload);
-    
+
                     $file = Arr::only($array, ["name", "thumbnail", "size"]);
-    
+
                     return array_merge(
                         ["file" => sizeof($file) ? $file : null],
                         Arr::except($array, ["name", "thumbnail", "size"])
@@ -49,15 +49,15 @@ class FormUploadModelTransformer implements SharpAttributeTransformer
     protected function transformUpload($upload)
     {
         return array_merge(
-            $upload->file_name 
+            $upload->file_name
                 ? [
                     "name" => $upload->file_name,
                     "thumbnail" => $upload->thumbnail(1000, 400),
                     "size" => $upload->size,
-                ] 
+                ]
                 : [],
-                $upload->custom_properties ?? [],
-                ["id" => $upload->id]
+            $upload->custom_properties ?? [],
+            ["id" => $upload->id]
         );
     }
 }

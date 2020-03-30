@@ -78,9 +78,9 @@
                     :commands="commands"
                     @select="handleCommandSelected"
                 >
-                    <div slot="text">
+                    <template v-slot:text>
                         {{ l('entity_list.commands.entity.label') }}
-                    </div>
+                    </template>
                 </CommandsDropdown>
             </template>
         </template>

@@ -32,6 +32,9 @@ class SharpShowEntityListField extends SharpShowField
     /** @var bool */
     protected $showSearchField = true;
 
+    /** @var string */
+    protected $label = null;
+
     /**
      * @param string $key
      * @param string $entityListKey
@@ -127,6 +130,17 @@ class SharpShowEntityListField extends SharpShowField
     }
 
     /**
+     * @param string $label
+     * @return $this
+     */
+    public function setLabel(string $label): self
+    {
+        $this->label = $label;
+
+        return $this;
+    }
+
+    /**
      * Create the properties array for the field, using parent::buildArray()
      *
      * @return array
@@ -135,6 +149,7 @@ class SharpShowEntityListField extends SharpShowField
     public function toArray(): array
     {
         return parent::buildArray([
+            "label" => $this->label,
             "entityListKey" => $this->entityListKey,
             "showEntityState" => $this->showEntityState,
             "showCreateButton" => $this->showCreateButton,

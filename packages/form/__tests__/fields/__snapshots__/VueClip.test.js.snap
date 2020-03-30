@@ -38,10 +38,8 @@ exports[`vue-clip can mount "in progress" VueClip component 1`] = `
 						<div class="mb-3 text-truncate">
 							<label class="SharpUpload__filename">Fichier.pdf</label>
 							<div class="SharpUpload__info mt-2">
-								<span class="mr-2">&lt;0.1 MB</span>
-								<a href="" class="SharpUpload__download-link" style="display: none;">
-									{{ form.upload.download_link }}
-								</a>
+								<span class="mr-2">14.65 KB</span>
+								<!---->
 							</div>
 							<div class="SharpUpload__progress mt-2">
 								<div role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" class="SharpUpload__progress-bar" style="width: 50%;"></div>
@@ -115,8 +113,9 @@ exports[`vue-clip can mount initially image VueClip component 1`] = `
 						<div class="mb-3 text-truncate">
 							<label class="SharpUpload__filename">Image.jpg</label>
 							<div class="SharpUpload__info mt-2">
-								<span class="mr-2">&lt;0.1 MB</span>
-								<a href="" class="SharpUpload__download-link">
+								<span class="mr-2">14.65 KB</span>
+								<a href="/sharp/api/form/download/my_upload/entityKey/instanceId?fileName=Image.jpg" download="Image.jpg" class="SharpUpload__download-link">
+									<i class="fas fa-download"></i>
 									{{ form.upload.download_link }}
 								</a>
 							</div>
@@ -202,8 +201,9 @@ exports[`vue-clip can mount initially non image VueClip component 1`] = `
 						<div class="mb-3 text-truncate">
 							<label class="SharpUpload__filename">Fichier.pdf</label>
 							<div class="SharpUpload__info mt-2">
-								<span class="mr-2">&lt;0.1 MB</span>
-								<a href="" class="SharpUpload__download-link">
+								<span class="mr-2">14.65 KB</span>
+								<a href="/sharp/api/form/download/my_upload/entityKey/instanceId?fileName=Fichier.pdf" download="Fichier.pdf" class="SharpUpload__download-link">
+									<i class="fas fa-download"></i>
 									{{ form.upload.download_link }}
 								</a>
 							</div>
@@ -256,8 +256,9 @@ exports[`vue-clip can mount non croppable image 1`] = `
 						<div class="mb-3 text-truncate">
 							<label class="SharpUpload__filename">Image.jpg</label>
 							<div class="SharpUpload__info mt-2">
-								<span class="mr-2">&lt;0.1 MB</span>
-								<a href="" class="SharpUpload__download-link">
+								<span class="mr-2">14.65 KB</span>
+								<a href="/sharp/api/form/download/my_upload/entityKey/instanceId?fileName=Image.jpg" download="Image.jpg" class="SharpUpload__download-link">
+									<i class="fas fa-download"></i>
 									{{ form.upload.download_link }}
 								</a>
 							</div>
