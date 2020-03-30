@@ -186,7 +186,7 @@ class DownloadControllerTest extends BaseApiTest
                     'instanceId' => 1,
                     'fieldKey' => 'list.file',
                     'fileName' => 'test.jpg'
-                ]),
+                ])
             )
             ->assertStatus(200);
 
