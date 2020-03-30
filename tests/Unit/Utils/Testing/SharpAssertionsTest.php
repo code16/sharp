@@ -15,8 +15,15 @@ class SharpAssertionsTest extends SharpTestCase
     function we_can_assert_has_authorization()
     {
         $this->initSharpAssertions();
+
+        // TestResponse was renamed in Laravel 7.0
+        if(class_exists("Illuminate\Testing\TestResponse")) {
+            $testResponseClass = "Illuminate\Testing\TestResponse";
+        } else {
+            $testResponseClass = "Illuminate\Foundation\Testing\TestResponse";
+        }
         
-        $response = TestResponse::fromBaseResponse(
+        $response = $testResponseClass::fromBaseResponse(
             JsonResponse::create([
                 "authorizations" => [
                     "create" => true,
