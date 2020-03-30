@@ -104,9 +104,6 @@ class SpaceshipSharpShow extends SharpShow
                                 ->withSingleField("legend");
                         });
                     });
-//                    ->addColumn(6, function(ShowLayoutColumn $column) {
-//                        $column
-//                    });
             })
             ->addEntityListSection("pilots");
     }
