@@ -11,18 +11,16 @@
                 <div class="ShowListField__list">
                     <template v-for="item in value">
                         <div class="ShowListField__item">
-                            <Grid class="ShowListField__fields-grid" :rows="layout.item">
-                                <template slot-scope="fieldLayout">
-                                    <template v-if="fieldOptions(fieldLayout)">
-                                        <ShowField
-                                            :options="fieldOptions(fieldLayout)"
-                                            :value="fieldValue(item, fieldLayout)"
-                                            :config-identifier="fieldLayout.key"
-                                        />
-                                    </template>
-                                    <template v-else>
-                                        <UnknownField :name="fieldLayout.key" />
-                                    </template>
+                            <Grid class="ShowListField__fields-grid" :rows="layout.item" v-slot="{ itemLayout:fieldLayout }">
+                                <template v-if="fieldOptions(fieldLayout)">
+                                    <ShowField
+                                        :options="fieldOptions(fieldLayout)"
+                                        :value="fieldValue(item, fieldLayout)"
+                                        :config-identifier="fieldLayout.key"
+                                    />
+                                </template>
+                                <template v-else>
+                                    <UnknownField :name="fieldLayout.key" />
                                 </template>
                             </Grid>
                         </div>
