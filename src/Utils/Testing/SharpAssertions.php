@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Utils\Testing;
 
-use Illuminate\Foundation\Testing\TestResponse;
+use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Assert as PHPUnit;
 
 trait SharpAssertions
