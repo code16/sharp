@@ -9,13 +9,13 @@ use Illuminate\Support\Arr;
 class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransformer
 {
     /** @var bool */
-    protected bool $withThumbnails;
+    protected $withThumbnails;
     
     /** @var int */
-    protected int $thumbnailWidth;
+    protected $thumbnailWidth;
     
     /** @var int */
-    protected int $thumbnailHeight;
+    protected $thumbnailHeight;
 
     /**
      * @param bool $withThumbnails
