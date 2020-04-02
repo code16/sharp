@@ -29,10 +29,17 @@ class HandleSharpApiErrors
             if ($response->exception instanceof ValidationException) {
                 return $this->handleValidationException($response);
             }
-
-            return response()->json([
-                "message" => $response->exception->getMessage()
-            ], $this->getHttpCodeFor($response->exception));
+            
+            $code = $this->getHttpCodeFor($response->exception);
+            
+            if($code != 500) {
+                return response()->json(
+                    ["message" => $response->exception->getMessage()], 
+                    $code
+                );
+            }
+            
+            // Let Laravel regular ErrorHandler manage the error
         }
 
         return $response;
@@ -49,8 +56,7 @@ class HandleSharpApiErrors
             return 403;
         }
 
-        if ($exception instanceof SharpInvalidEntityKeyException
-            ||$exception instanceof ModelNotFoundException) {
+        if ($exception instanceof SharpInvalidEntityKeyException || $exception instanceof ModelNotFoundException) {
             return 404;
         }
 
