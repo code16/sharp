@@ -11,7 +11,7 @@
   &__download-container {
     &::before {
       content: "";
-      height: 20%;
+      height: calc(50% - 2em);
       max-height: calc(100% - 2.4em);
       display: block;
     }

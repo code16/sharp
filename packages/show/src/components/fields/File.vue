@@ -32,7 +32,7 @@
                                     {{ sizeLabel }}
                                 </div>
                             </div>
-                            <div class="col-auto px-2">
+                            <div class="col-auto px-2 mt-2">
                                 <div class="ShowFileField__download-container h-100">
                                     <Button
                                         class="ShowFileField__download-button"
