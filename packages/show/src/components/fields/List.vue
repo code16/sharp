@@ -64,21 +64,39 @@
                     'ShowListField--empty': this.isEmpty,
                 }
             },
+            fileFieldsCollapsed() {
+                const fileValues = this.allValuesOfType('file');
+                return fileValues.every(value => value && !value.thumbnail);
+            },
         },
         methods: {
             lang,
             fieldOptions(layout) {
                 const options = this.itemFields
-                    ? this.itemFields[layout.key]
+                    ? { ...this.itemFields[layout.key] }
                     : null;
                 if(!options) {
                     console.error(`Show list field: unknown field "${layout.key}"`);
+                }
+                if(options.type === 'file') {
+                    options.collapsed = this.fileFieldsCollapsed;
                 }
                 return options;
             },
             fieldValue(item, layout) {
                 return item ? item[layout.key] : null;
-            }
+            },
+            allValuesOfType(fieldType) {
+                return (this.value || []).reduce((res, item) => [
+                    ...res,
+                    ...Object.entries(item)
+                        .filter(([key]) => {
+                            const options = this.itemFields[key];
+                            return options && options.type === fieldType;
+                        })
+                        .map(([key, value]) => value)
+                ], []);
+            },
         },
         created() {
             syncVisibility(this, () => this.isVisible);
