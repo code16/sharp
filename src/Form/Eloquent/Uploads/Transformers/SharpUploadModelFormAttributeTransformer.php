@@ -8,6 +8,26 @@ use Illuminate\Support\Arr;
 
 class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransformer
 {
+    /** @var bool */
+    protected bool $withThumbnails;
+    
+    /** @var int */
+    protected int $thumbnailWidth;
+    
+    /** @var int */
+    protected int $thumbnailHeight;
+
+    /**
+     * @param bool $withThumbnails
+     * @param int $thumbnailWidth
+     * @param int $thumbnailHeight
+     */
+    public function __construct(bool $withThumbnails = true, int $thumbnailWidth=1000, int $thumbnailHeight=400)
+    {
+        $this->withThumbnails = $withThumbnails;
+        $this->thumbnailWidth = $thumbnailWidth;
+        $this->thumbnailHeight = $thumbnailHeight;
+    }
 
     /**
      * Transform a model attribute to array (json-able).
@@ -52,7 +72,9 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
             $upload->file_name
                 ? [
                     "name" => $upload->file_name,
-                    "thumbnail" => $upload->thumbnail(1000, 400),
+                    "thumbnail" => $this->withThumbnails 
+                        ? $upload->thumbnail($this->thumbnailWidth, $this->thumbnailHeight)
+                        : null,
                     "size" => $upload->size,
                 ]
                 : [],

@@ -118,7 +118,7 @@ class SpaceshipSharpShow extends SharpShow
                 return $spaceship->name;
             })
             ->setCustomTransformer("picture", new SharpUploadModelThumbnailUrlTransformer(140))
-            ->setCustomTransformer("pictures", new SharpUploadModelFormAttributeTransformer())
+            ->setCustomTransformer("pictures", new SharpUploadModelFormAttributeTransformer(true, 200, 200))
             ->setCustomTransformer("pictures[legend]", function($value, $instance) {
                 return $instance->legend["en"] ?? "";
             })
