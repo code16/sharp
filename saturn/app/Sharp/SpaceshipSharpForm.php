@@ -281,9 +281,11 @@ class SpaceshipSharpForm extends SharpForm
             "corporation_id" => $this->context()->globalFilterFor("corporation")
         ]);
 
-        if(($data["name"] ?? "") == "error") {
+        if(($data["name"]["fr"] ?? "") == "error") {
             throw new SharpApplicativeException("Name can't be «error»");
         }
+        
+        $test = $data["test"];
 
         $this->setCustomTransformer("capacity", function($capacity) {
                 return $capacity * 1000;

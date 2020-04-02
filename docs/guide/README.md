@@ -13,7 +13,7 @@ Each `entity` in Sharp can be displayed:
 
 ## Installation
 
-Sharp 4 needs Laravel 5.5+ and PHP 7.1.3+.
+Sharp 5 needs Laravel 6.0+ and PHP 7.2.0+.
 
 - Add the package with composer: `composer require code16/sharp`
 - And then publish assets: `php artisan vendor:publish --provider="Code16\Sharp\SharpServiceProvider" --tag=assets`
