@@ -22,7 +22,7 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
      * @param int $thumbnailWidth
      * @param int $thumbnailHeight
      */
-    public function __construct(bool $withThumbnails = true, int $thumbnailWidth=1000, int $thumbnailHeight=400)
+    public function __construct($withThumbnails = true, $thumbnailWidth = 1000, $thumbnailHeight = 400)
     {
         $this->withThumbnails = $withThumbnails;
         $this->thumbnailWidth = $thumbnailWidth;
