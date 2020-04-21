@@ -1,5 +1,5 @@
 
-function formatMessage() {
+function formatMessage(str) {
     return `SHARP : ${str}`;
 }
 
