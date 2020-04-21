@@ -2,7 +2,7 @@
 
 exports[`fields-layout can mount "fieldset" fields layout 1`] = `
 <div class="GRID_MOCK">
-	<fieldset class="SharpForm__fieldset" style="display: none;">
+	<fieldset class="SharpForm__fieldset">
 		<div class="SharpModule__inner">
 			<div class="SharpModule__header">
 				<div class="SharpModule__title">Fieldset</div>
