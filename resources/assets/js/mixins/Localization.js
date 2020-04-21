@@ -1,4 +1,4 @@
-import { lang } from '../util/i18n';
+import { lang } from '../index';
 
 export default {
     computed: {

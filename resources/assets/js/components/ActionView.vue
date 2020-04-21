@@ -32,7 +32,6 @@
 </template>
 
 <script>
-    import axios from 'axios';
     import EventBus from './EventBus';
     import { api } from "../api";
     import { Modal } from 'sharp-ui';
