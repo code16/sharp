@@ -52,7 +52,7 @@
                 return !!fieldLayout.legend;
             },
             isFieldsetVisible(fieldsetLayout) {
-                return fieldsetLayout.fields
+                return (fieldsetLayout.fields || []).flat()
                     .some(fieldLayout => this.visible[fieldLayout.key]);
             }
         }
