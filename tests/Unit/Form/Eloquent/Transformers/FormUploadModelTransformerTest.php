@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Tests\Unit\Form\Eloquent\Transformers;
 
-use Code16\Sharp\Form\Eloquent\Transformers\FormUploadModelFormTransformer;
+use Code16\Sharp\Form\Eloquent\Transformers\FormUploadModelTransformer;
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\Utils\TestWithSharpUploadModel;
@@ -32,7 +32,7 @@ class FormUploadModelTransformerTest extends SharpFormEloquentBaseTest
         $picturable = Picturable::create();
         $upload = $this->createSharpUploadModel($this->createImage(), $picturable);
 
-        $transformer = new FormUploadModelFormTransformer();
+        $transformer = new FormUploadModelTransformer();
 
         $this->assertEquals([
             "id" => $upload->id,
@@ -49,7 +49,7 @@ class FormUploadModelTransformerTest extends SharpFormEloquentBaseTest
         $upload = $this->createSharpUploadModel($this->createImage(), $picturable);
         $upload2 = $this->createSharpUploadModel($this->createImage(), $picturable);
 
-        $transformer = new FormUploadModelFormTransformer();
+        $transformer = new FormUploadModelTransformer();
 
         $this->assertEquals([[
             "file" => [
