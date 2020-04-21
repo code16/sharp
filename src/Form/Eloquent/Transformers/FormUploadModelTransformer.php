@@ -7,7 +7,7 @@ use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttribut
 /**
  * @deprecated renamed to Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelAttributeTransformer
  */
-class FormUploadModelFormTransformer extends SharpUploadModelFormAttributeTransformer
+class FormUploadModelTransformer extends SharpUploadModelFormAttributeTransformer
 {
     
 }
