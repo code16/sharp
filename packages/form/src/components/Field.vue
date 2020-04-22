@@ -20,7 +20,7 @@
             fieldType: String,
             fieldProps: Object,
             fieldLayout: Object,
-            value: [String, Number, Boolean, Object, Array],
+            value: [String, Number, Boolean, Object, Array, Date],
             locale: String,
             uniqueIdentifier: String,
             fieldConfigIdentifier: String,

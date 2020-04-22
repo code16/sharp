@@ -23,7 +23,7 @@
             @ok="setOk"
             @clear="clear"
             @blur="handleBlur"
-            ref="field" 
+            ref="field"
         />
         <div class="SharpForm__form-requirement">{{stateMessage}}</div>
         <small class="SharpForm__help-message">{{helpMessage}}</small>
@@ -55,7 +55,7 @@
 
             label: String,
             helpMessage: String,
-            originalValue: [String, Number, Boolean, Object, Array],
+            originalValue: [String, Number, Boolean, Object, Array, Date],
         },
         data() {
             return {

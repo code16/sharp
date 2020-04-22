@@ -2,7 +2,6 @@
     <div class="SharpDate" :class="{'SharpDate--open':showPicker}">
         <div class="SharpDate__input-wrapper">
             <input
-                id="date"
                 class="SharpDate__input"
                 :placeholder="displayFormat"
                 :value="inputValue"
@@ -82,7 +81,7 @@
 
         props: {
             value: {
-                type:[Object, String]
+                type:[Date, String]
             },
             hasDate: {
                 type:Boolean,
@@ -113,22 +112,31 @@
             }
         },
         computed: {
-            moment() {
-                return this.value && moment(this.value, this.hasTime && !this.hasDate ? 'HH:mm' : null);
+            format() {
+                return this.hasTime && !this.hasDate
+                    ? 'HH:mm'
+                    : null;
             },
             dateObject() {
-                return this.moment ? this.moment.toDate() : null;
+                return this.value
+                    ? moment(this.value, this.format).toDate()
+                    : null;
             },
             timeObject() {
-                return this.moment ? {
-                    HH: this.moment.format('HH'),
-                    mm: this.moment.format('mm')
-                } : null;
+                return this.value
+                    ? {
+                        HH: moment(this.value, this.format).format('HH'),
+                        mm: moment(this.value, this.format).format('mm')
+                    }
+                    : null;
             },
             inputValue() {
-                return typeof this.localInputValue === 'string'
-                    ? this.localInputValue
-                    : (this.moment ? this.moment.format(this.displayFormat) : '');
+                if(typeof this.localInputValue === 'string') {
+                    return this.localInputValue;
+                }
+                return this.value
+                    ? moment(this.value, this.format).format(this.displayFormat)
+                    : '';
             },
             popoverBoundary() {
                 return document.querySelector('[data-popover-boundary]');
@@ -140,26 +148,31 @@
             },
 
             getMoment() {
-                return this.moment || moment();
+                return this.value
+                    ? moment(this.value, this.format)
+                    : moment();
             },
 
             handleDateSelect(date) {
                 let newMoment = this.getMoment();
                 newMoment.set({
-                    year:date.getFullYear(),
-                    month:date.getMonth(),
-                    date:date.getDate()
+                    year: date.getFullYear(),
+                    month: date.getMonth(),
+                    date: date.getDate()
                 });
-                this.$emit('input', newMoment);
+                this.$emit('input', newMoment.toDate());
             },
             handleTimeSelect({ data }) {
                 let newMoment = this.getMoment();
                 newMoment.set({
-                    hour:data.HH,
-                    minute:data.mm,
-                    second:data.ss,
+                    hour: data.HH,
+                    minute: data.mm,
+                    second: data.ss,
                 });
-                this.$emit('input', newMoment);
+                if(this.getMoment().format('HH:mm') === newMoment.format('HH:mm')) {
+                    return;
+                }
+                this.$emit('input', newMoment.toDate());
             },
             handleInput(e) {
                 let m = moment(e.target.value, this.displayFormat, true);
@@ -170,7 +183,7 @@
                 }
                 else {
                     this.rollback();
-                    this.$emit('input', m);
+                    this.$emit('input', m.toDate());
                     this.showPicker = true;
                 }
             },
@@ -181,19 +194,21 @@
             decrease(e) {
                 this.translate(e.target, -1)
             },
-            translate(input, amount) {
+            async translate(input, amount) {
                 let selection = this.changeOnArrowPressed(input.selectionStart, amount);
 
                 if(selection)  {
-                    this.$nextTick(_=>input.setSelectionRange(selection.start,selection.end));
+                    await this.$nextTick();
+                    input.setSelectionRange(selection.start, selection.end);
                 }
             },
-            add(amount, key) {
-                this.moment.add.apply(this.moment,arguments);
-                this.$emit('input',this.moment);
+            add(amount, unit) {
+                const date = this.getMoment();
+                date.add(amount, unit)
+                this.$emit('input', date.toDate());
             },
             nearestMinutesDist(dir) { //dir = 1 or -1
-                let curM = this.moment.minutes(); //current minutes
+                let curM = this.getMoment().minutes(); //current minutes
                 if(curM%this.stepTime === 0) {
                     return dir*this.stepTime;
                 }
@@ -201,7 +216,6 @@
                 return this.stepTime * Math[fn](curM/this.stepTime) - curM;
             },
             updateMoment(ch, amount) {
-                //console.log('add',ch,amount);
                 switch(ch) {
                     case 'H': this.add(amount,'hours'); break;
                     case 'm': this.add(this.nearestMinutesDist(amount),'minutes'); break;
@@ -214,16 +228,16 @@
                 return true;
             },
             changeOnArrowPressed(pos,amount) {
-                let lookupPos=  pos;
+                let lookupPos = pos;
                 if(!this.updateMoment(this.displayFormat[lookupPos],amount) && pos) {
                     lookupPos--;
                     if(!this.updateMoment(this.displayFormat[lookupPos],amount))
                         return null;
                 }
-                let ch=this.displayFormat[lookupPos];
+                let ch = this.displayFormat[lookupPos];
                 return {
-                    start:this.displayFormat.indexOf(ch),
-                    end:this.displayFormat.lastIndexOf(ch)+1
+                    start: this.displayFormat.indexOf(ch),
+                    end: this.displayFormat.lastIndexOf(ch)+1
                 };
             },
 
