@@ -6,7 +6,7 @@ exports[`DataListRow mount 1`] = `
 		<div class="row mx-n2 mx-md-n3"></div>
 		<!---->
 	</div>
-	<!---->
+	<div class="SharpDataList__row-spacer"></div>
 </div>
 `;
 
@@ -30,7 +30,7 @@ exports[`DataListRow mount cell slot 1`] = `
 		</div>
 		<!---->
 	</div>
-	<!---->
+	<div class="SharpDataList__row-spacer"></div>
 </div>
 `;
 
@@ -49,7 +49,7 @@ exports[`DataListRow mount columns 1`] = `
 		</div>
 		<!---->
 	</div>
-	<!---->
+	<div class="SharpDataList__row-spacer"></div>
 </div>
 `;
 
@@ -59,7 +59,7 @@ exports[`DataListRow mount header 1`] = `
 		<div class="row mx-n2 mx-md-n3"></div>
 		<!---->
 	</div>
-	<!---->
+	<div class="SharpDataList__row-spacer"></div>
 </div>
 `;
 
@@ -73,7 +73,7 @@ exports[`DataListRow mount header: columns 1`] = `
 		</div>
 		<!---->
 	</div>
-	<!---->
+	<div class="SharpDataList__row-spacer"></div>
 </div>
 `;
 
@@ -83,6 +83,6 @@ exports[`DataListRow mount with url 1`] = `
 		<div class="row mx-n2 mx-md-n3"></div>
 		<a class="SharpDataList__row-link" href="http://example.org"></a>
 	</div>
-	<!---->
+	<div class="SharpDataList__row-spacer"></div>
 </div>
 `;
