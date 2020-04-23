@@ -52,6 +52,10 @@
     //padding-right: 4em;
   }
 
+  &__row-spacer {
+    width: var(--append-width, auto);
+  }
+
   &__row {
     //display: table-row;
     display:flex;
@@ -66,7 +70,10 @@
       border: none;
       cursor: inherit;
       .SharpDataList__row-append {
-        width: auto;
+        display: none;
+        @include media-breakpoint-up(md) {
+          display: block;
+        }
       }
     }
 

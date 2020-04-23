@@ -28,39 +28,39 @@
                     <DataListRow :url="instanceUrl(item)" :columns="columns" :row="item">
                         <template v-if="hasActionsColumn" v-slot:append>
                             <div class="row justify-content-end justify-content-md-start mx-n2">
-                                    <template v-if="instanceHasState(item)">
-                                        <div class="col-auto col-md-12 my-1 px-2">
-                                            <Dropdown class="SharpEntityList__state-dropdown" :disabled="!instanceHasStateAuthorization(item)">
-                                                <template v-slot:text>
-                                                    <StateIcon :color="instanceStateIconColor(item)" />
-                                                    <span class="text-truncate">
-                                                        {{ instanceStateLabel(item) }}
-                                                    </span>
-                                                </template>
-                                                <DropdownItem
-                                                    v-for="stateOptions in config.state.values"
-                                                    @click="handleInstanceStateChanged(item, stateOptions.value)"
-                                                    :key="stateOptions.value"
-                                                >
-                                                    <StateIcon :color="stateOptions.color" />&nbsp;
-                                                    {{ stateOptions.label }}
-                                                </DropdownItem>
-                                            </Dropdown>
-                                        </div>
-                                    </template>
-                                    <template v-if="instanceHasCommands(item)">
-                                        <div class="col-auto col-md-12 my-1 px-2">
-                                            <CommandsDropdown
-                                                class="SharpEntityList__commands-dropdown"
-                                                :commands="instanceCommands(item)"
-                                                @select="handleInstanceCommandRequested(item, $event)"
+                                <template v-if="instanceHasState(item)">
+                                    <div class="col-auto col-md-12 my-1 px-2">
+                                        <Dropdown class="SharpEntityList__state-dropdown" :disabled="!instanceHasStateAuthorization(item)">
+                                            <template v-slot:text>
+                                                <StateIcon :color="instanceStateIconColor(item)" />
+                                                <span class="text-truncate">
+                                                    {{ instanceStateLabel(item) }}
+                                                </span>
+                                            </template>
+                                            <DropdownItem
+                                                v-for="stateOptions in config.state.values"
+                                                @click="handleInstanceStateChanged(item, stateOptions.value)"
+                                                :key="stateOptions.value"
                                             >
-                                                <template v-slot:text>
-                                                    {{ l('entity_list.commands.instance.label') }}
-                                                </template>
-                                            </CommandsDropdown>
-                                        </div>
-                                    </template>
+                                                <StateIcon :color="stateOptions.color" />&nbsp;
+                                                {{ stateOptions.label }}
+                                            </DropdownItem>
+                                        </Dropdown>
+                                    </div>
+                                </template>
+                                <template v-if="instanceHasCommands(item)">
+                                    <div class="col-auto col-md-12 my-1 px-2">
+                                        <CommandsDropdown
+                                            class="SharpEntityList__commands-dropdown"
+                                            :commands="instanceCommands(item)"
+                                            @select="handleInstanceCommandRequested(item, $event)"
+                                        >
+                                            <template v-slot:text>
+                                                {{ l('entity_list.commands.instance.label') }}
+                                            </template>
+                                        </CommandsDropdown>
+                                    </div>
+                                </template>
                                 </div>
                         </template>
                     </DataListRow>

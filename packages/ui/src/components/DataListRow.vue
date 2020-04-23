@@ -32,6 +32,9 @@
                 <slot name="append" />
             </div>
         </template>
+        <template v-else>
+            <div class="SharpDataList__row-spacer"></div>
+        </template>
     </div>
 </template>
 

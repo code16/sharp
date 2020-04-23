@@ -1,5 +1,5 @@
 <template>
-    <div class="SharpDataList" :class="{ 'SharpDataList--reordering': reorderActive }">
+    <div class="SharpDataList" :class="{ 'SharpDataList--reordering': reorderActive }" :style="styles">
         <template v-if="isEmpty">
             <div class="SharpDataList__empty p-3">
                 <slot name="empty" />
@@ -25,10 +25,8 @@
                                     <a class="SharpDataList__sort-link" @click.prevent="handleSortClicked(column.key)" href=""></a>
                                 </template>
                             </template>
-                            <template v-if="$slots['append-head'] || !!headerRowAppendWidth" v-slot:append>
-                                <div class="d-none d-md-block" :style="{ width: headerRowAppendWidth || 'auto' }">
-                                    <slot name="append-head" />
-                                </div>
+                            <template v-if="$slots['append-head']" v-slot:append>
+                                <slot name="append-head" />
                             </template>
                         </DataListRow>
                     </div>
@@ -91,7 +89,7 @@
                 reorderedItems: null,
 
                 //layout
-                headerRowAppendWidth: 0,
+                appendWidth: 0,
             }
         },
         watch: {
@@ -115,7 +113,12 @@
             },
             isEmpty() {
                 return (this.items||[]).length === 0;
-            }
+            },
+            styles() {
+                return {
+                    '--append-width': this.appendWidth ? `${this.appendWidth}px` : null,
+                }
+            },
         },
         methods: {
             handleItemsChanged(items) {
@@ -136,12 +139,19 @@
             handleReorderActiveChanged(active) {
                 this.reorderedItems = active ? [...this.items] : null;
             },
-            updateLayout() {
-                const body = this.$refs.body;
-                if(body) {
-                    const append = body.querySelector('.SharpDataList__row-append');
-                    this.headerRowAppendWidth = append ? `${append.offsetWidth}px` : 0;
+            getAppendWidth(el) {
+                if(!el) {
+                    return 0;
                 }
+                const append = el.querySelector('.SharpDataList__row-append');
+                return append ? append.offsetWidth : 0;
+            },
+            async updateLayout() {
+                this.appendWidth = 0;
+                await this.$nextTick();
+                const headAppendWidth = this.getAppendWidth(this.$refs.head)
+                const bodyAppendWidth = this.getAppendWidth(this.$refs.body);
+                this.appendWidth = Math.max(headAppendWidth, bodyAppendWidth);
             }
         },
         mounted() {
