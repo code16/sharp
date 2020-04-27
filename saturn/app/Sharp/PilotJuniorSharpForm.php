@@ -3,7 +3,7 @@
 namespace App\Sharp;
 
 use App\Pilot;
-use App\Sharp\CustomFormFields\SharpCustomFomFieldTextIcon;
+use App\Sharp\CustomFormFields\SharpCustomFormFieldTextIcon;
 use App\Spaceship;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
@@ -17,9 +17,9 @@ class PilotJuniorSharpForm extends SharpForm
     function buildFormFields()
     {
         $this->addField(
-            SharpCustomFomFieldTextIcon::make("name")
+            SharpCustomFormFieldTextIcon::make("name")
                 ->setLabel("Name")
-                ->setHelpMessage("This input is an example of a custom form field (SharpCustomFomFieldTextIcon)")
+                ->setHelpMessage("This input is an example of a custom form field (SharpCustomFormFieldTextIcon)")
                 ->setIcon("fa-user")
         );
     }
