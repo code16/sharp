@@ -5,7 +5,7 @@ namespace App\Sharp\CustomFormFields;
 use Code16\Sharp\Form\Fields\Formatters\TextFormatter;
 use Code16\Sharp\Form\Fields\SharpFormField;
 
-class SharpCustomFomFieldTextIcon extends SharpFormField
+class SharpCustomFormFieldTextIcon extends SharpFormField
 {
     const FIELD_TYPE = "custom-textIcon";
 
@@ -23,7 +23,7 @@ class SharpCustomFomFieldTextIcon extends SharpFormField
 
     /**
      * @param string $iconName
-     * @return SharpCustomFomFieldTextIcon
+     * @return SharpCustomFormFieldTextIcon
      */
     public function setIcon(string $iconName)
     {
