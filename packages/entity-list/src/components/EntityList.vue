@@ -78,7 +78,7 @@
 </template>
 
 <script>
-    import { formUrl, showUrl } from 'sharp';
+    import { formUrl, showUrl, lang } from 'sharp';
     import {
         DataList,
         DataListRow,
@@ -435,7 +435,7 @@
                         const { data } = error.response;
                         if(error.response.status === 422) {
                             this.actionsBus.$emit('showMainModal', {
-                                title: this.l('modals.state.422.title'),
+                                title: lang('modals.state.422.title'),
                                 text: data.message,
                                 isError: true,
                                 okCloseOnly: true
