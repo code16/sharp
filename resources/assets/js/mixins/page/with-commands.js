@@ -1,6 +1,9 @@
 import { parseBlobJSONContent, getFileName } from "../../util/request";
+import { lang } from "../../index";
 
 export default {
+    // TODO: refactoring: to remove
+    inject: ['actionsBus'],
     data() {
         return {
             commandCurrentForm: null,
@@ -54,7 +57,7 @@ export default {
             if(confirmation) {
                 await new Promise(resolve => {
                     this.actionsBus.$emit('showMainModal', {
-                        title: this.l('modals.command.confirm.title'),
+                        title: lang('modals.command.confirm.title'),
                         text: confirmation,
                         okCallback: resolve,
                     });
@@ -89,7 +92,7 @@ export default {
         },
         handleInfoCommand(data) {
             this.actionsBus.$emit('showMainModal', {
-                title: this.l('modals.command.info.title'),
+                title: lang('modals.command.info.title'),
                 text: data.message,
                 okCloseOnly: true
             });
