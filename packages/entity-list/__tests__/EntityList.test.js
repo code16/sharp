@@ -5,6 +5,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import SharpEntityList from '../src/components/EntityList.vue';
 import entityListModule from '../src/store/entity-list';
 import { formUrl, showUrl } from 'sharp';
+import { MockInjections } from "@sharp/test-utils";
 
 jest.mock('sharp/mixins/Localization');
 jest.mock('sharp/mixins/DynamicView');
@@ -17,6 +18,7 @@ describe('EntityList', () => {
         const localVue = createLocalVue();
         localVue.use(Vuex);
         const wrapper = shallowMount(SharpEntityList, {
+            provide: MockInjections.provide,
             // language=Vue
             stubs: {
                 DataList:

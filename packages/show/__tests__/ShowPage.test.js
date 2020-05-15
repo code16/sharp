@@ -4,6 +4,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import ShowPage from "../src/components/pages/ShowPage";
 import showModule from "../src/store/show";
 import { formUrl } from "sharp";
+import { MockInjections } from "@sharp/test-utils";
 
 jest.mock('../src/store/show');
 jest.mock('sharp/consts', () => ({
@@ -19,6 +20,7 @@ describe('show page', () => {
         localVue.use(Vuex);
 
         const wrapper = shallowMount(ShowPage, {
+            provide: MockInjections.provide,
             extends: {
                 computed: {
                     breadcrumb: () => [],
