@@ -1,9 +1,6 @@
 <script>
-    import Vue from 'vue';
-    import { log, logError } from 'sharp';
+    import { log, logError, isCustomField, resolveCustomField } from 'sharp';
     import Fields from './fields/index';
-
-    const customFieldRE = /^custom-(.+)$/;
 
     export default {
         name:'SharpField',
@@ -28,23 +25,20 @@
         },
         computed: {
             isCustom() {
-                return customFieldRE.test(this.fieldType);
+                return isCustomField(this.fieldType)
             },
             component() {
                 if(this.isCustom) {
-                    let [_, name] = this.fieldType.match(customFieldRE) || [];
-                    name = `SharpCustomField_${name}`;
-                    return Vue.options.components[name];
+                    return resolveCustomField(this.fieldType);
                 }
                 return Fields[this.fieldType];
             }
         },
         render(h) {
             if(!this.component) {
-                let message = this.isCustom
-                    ? `unknown custom field type '${this.fieldType}', make sure you register it correctly`
-                    : `unknown type '${this.fieldType}'`;
-                logError(`SharpField '${this.fieldKey}': ${message}`, this.fieldProps);
+                if(!this.custom) {
+                    logError(`Unknown field type '${this.fieldType}'`, this.fieldProps);
+                }
                 return null;
             }
 

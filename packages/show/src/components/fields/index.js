@@ -1,3 +1,4 @@
+import { isCustomField, resolveCustomField } from "sharp";
 import EntityList from "./entity-list/EntityList";
 import Text from './Text';
 import Picture from './Picture';
@@ -13,5 +14,8 @@ const map = {
 };
 
 export function getFieldByType(type) {
+    if(isCustomField(type)) {
+        return resolveCustomField(type);
+    }
     return map[type];
 }
