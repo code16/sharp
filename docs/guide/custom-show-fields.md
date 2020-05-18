@@ -1,4 +1,4 @@
-# Custom form field
+# Custom show field
 
 ## On the front side
 
@@ -108,27 +108,27 @@ You can `.version()` this JS file if you want to.
 ```
 
 
-### Write the form field class and formatter
+### Write the show field class and formatter
 
-Next step is to build your form field class. It must extend `Code16\Sharp\Form\Fields\SharpFormField`.
+Next step is to build your show field class. It must extend `Code16\Sharp\Show\Fields\SharpShowField`.
 
 Here's an example:
 
 ```php
-class SharpCustomFormFieldTextIcon extends SharpFormField
+class SharpCustomShowFieldTitle extends SharpShowField
 {
-    const FIELD_TYPE = "custom-textIcon";
+    const FIELD_TYPE = "custom-title";
 
-    protected $icon;
+    protected int $level = 1;
 
     public static function make(string $key)
     {
-        return new static($key, static::FIELD_TYPE, new TextFormatter);
+        return new static($key, static::FIELD_TYPE);
     }
 
-    public function setIcon(string $iconName)
+    public function setTitleLevel(int $level): self
     {
-        $this->icon = $iconName;
+        $this->level = $level;
 
         return $this;
     }
@@ -136,14 +136,14 @@ class SharpCustomFormFieldTextIcon extends SharpFormField
     protected function validationRules()
     {
         return [
-            "icon" => "required",
+            "level" => "required|integer|min:1|max:5",
         ];
     }
 
     public function toArray(): array
     {
         return parent::buildArray([
-            "icon" => $this->icon,
+            "level" => $this->level,
         ]);
     }
 }
@@ -152,24 +152,23 @@ class SharpCustomFormFieldTextIcon extends SharpFormField
 A few things to note:
 
 - The `FIELD_TYPE` const must be "custom-" + your custom field name, defined on the front side.
-- To respect the Sharp API, you must define a static `make` function with at least the field key; this function must call the parent constructor, passing the `$key`, the `FIELD_TYPE` and a Formatter, which can also be a custom one (see [documentation](building-entity-form.md#formatters) and `Code16\Sharp\Form\Fields\Formatters\SharpFieldFormatter` base class).
+- To respect the Sharp API, you must define a static `make` function with at least the field key; this function must call the parent constructor, passing the `$key` and the `FIELD_TYPE`.
 - `validationRules()` implementation is optional, but advised.
 - the `toArray()` function is mandatory, and must call `parent::buildArray()` with additional attributes.
 
 
 ### Use it
 
-Next step is using the new form field:
+Next step is using the new show field:
 
-*in some `Code16\Sharp\Form\SharpForm` subclass:*
+*in some `Code16\Sharp\Show\SharpShow` subclass:*
 
 ```php
-function buildFormFields()
+function buildShowFields()
 {
     $this->addField(
-        SharpCustomFormFieldTextIcon::make("name")
-            ->setLabel("Name")
-            ->setIcon("fa-user")
+        SharpCustomShowFieldTitle::make("name")
+            ->setLevel(2)
     );
 }
 ```

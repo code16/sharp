@@ -5,6 +5,7 @@ namespace App\Sharp;
 use App\Sharp\Commands\SpaceshipExternalLink;
 use App\Sharp\Commands\SpaceshipPreview;
 use App\Sharp\Commands\SpaceshipSendMessage;
+use App\Sharp\CustomShowFields\SharpShowTitleField;
 use App\Sharp\States\SpaceshipEntityState;
 use App\Spaceship;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
@@ -25,8 +26,8 @@ class SpaceshipSharpShow extends SharpShow
     {
         $this
             ->addField(
-                SharpShowTextField::make("name")
-                    ->setLabel("Ship name")
+                SharpShowTitleField::make("name")
+                    ->setTitleLevel(2)
             )->addField(
                 SharpShowTextField::make("type:label")
                     ->setLabel("Type")
@@ -112,7 +113,11 @@ class SpaceshipSharpShow extends SharpShow
     {
         return $this
             ->setCustomTransformer("brand", function($value, $spaceship) {
-                return sprintf("%s / %s", $spaceship->brand ?: '<em>no brand</em>', $spaceship->model ?: '<em>no model</em>');
+                return sprintf(
+                    "%s / %s", 
+                    $spaceship->brand ?: '<em>no brand</em>', 
+                    $spaceship->model ?: '<em>no model</em>'
+                );
             })
             ->setCustomTransformer("name", function($value, $spaceship) {
                 return $spaceship->name;
