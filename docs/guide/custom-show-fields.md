@@ -37,7 +37,7 @@ Example of custom sharp field:
 
 | Event           | Description                                 | Parameters |
 |-----------------|---------------------------------------------|------------|
-| visibility-change | Update the field visibility |  Boolean |
+| visible-change | Update the field visibility |  Boolean |
 
 
 ### Register the custom field
