@@ -9,7 +9,7 @@ Example of custom sharp field:
 ```vue
 <template>
     <div>
-        <input class="SharpText" :value="value" @change="handleChanged">
+        Name: {{ value }}
         <i class="fa" :class="icon"></i>
     </div>
 </template>
@@ -18,13 +18,8 @@ Example of custom sharp field:
     export default {
         props: {
             value: String, // field value
-            icon: String   // custom added props (given in field definition)
+            icon: String,   // custom added props (given in field definition)
         },
-        methods: {
-            handleChanged(e) {
-                this.$emit('input', e.target.value); // emit input when the value change, form data is updated
-            }
-        }
     }
 </script>
 ```
@@ -34,16 +29,15 @@ Example of custom sharp field:
 | Prop            | Description                                 |
 |-----------------|---------------------------------------------|
 | value           | value of the field, *required*                                            |
-| fieldKey        | field key in the form                       |
-| locale          | current locale, `undefined` if the form is not localized |
-| uniqueIdentifier| Global unique field identifier, corresponding to the laravel error key |
+| fieldKey        | field key in the show                       |
+| emptyVisible    | boolean determined by the [->setShowIfEmpty()](building-entity-show.md) method, true by default  |
 | ...             | *All other props given in the field definition* |
 
 #### Listened events
 
 | Event           | Description                                 | Parameters |
 |-----------------|---------------------------------------------|------------|
-|input            | Update the form data with the emitted value, <br>*the force option will change the value even if the field is read-only* | (value, { force: Boolean }) |
+| visibility-change | Update the field visibility |  Boolean |
 
 
 ### Register the custom field
