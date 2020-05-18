@@ -9,7 +9,7 @@ Example of custom sharp field:
 ```vue
 <template>
     <div>
-        Current icon: 
+        Name: {{ value }}
         <i class="fa" :class="icon"></i>
     </div>
 </template>
