@@ -11,6 +11,18 @@ return [
     // Optional. You can prevent Sharp version to be displayed in the page title. Default is true.
     "display_sharp_version_in_title" => true,
 
+    // Optional. Handle extensions.
+//    "extensions" => [
+//        "assets" => [
+//            "strategy" => "asset",
+//            "head" => [
+//                "/css/inject.css",
+//            ],
+//        ],
+//
+//        "activate_custom_fields" => false,
+//    ],
+
     // Required. Your entities list; each one must define a "list",
     // and can define "form", "validator", "policy" and "authorizations".
     "entities" => [

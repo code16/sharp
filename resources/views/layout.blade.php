@@ -20,7 +20,7 @@
     <script src="{{ mix('vendor.js', '/vendor/sharp') }}"></script>
     <script src="{{ mix('client-api.js', '/vendor/sharp') }}"></script>
 
-    {!! sharp_custom_form_fields() !!}
+    {!! sharp_custom_fields() !!}
 
     <script src="/vendor/sharp/lang.js?version={{ sharp_version() }}&locale={{ app()->getLocale() }}"></script>
     <script src="{{ mix('sharp.js', '/vendor/sharp') }}"></script>

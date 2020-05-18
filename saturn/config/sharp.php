@@ -15,7 +15,7 @@ return [
             ],
         ],
 
-        "activate_custom_form_fields" => env("SHARP_CUSTOM_FORM_FIELDS", true),
+        "activate_custom_fields" => env("SHARP_CUSTOM_FIELDS", true),
     ],
 
     "entities" => [
