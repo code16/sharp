@@ -19,7 +19,7 @@ const defaultOptions = {
 export function search(list, query, { searchKeys } = {}) {
     const fuse = new Fuse(list, {
         ...defaultOptions,
-        searchKeys,
+        keys: searchKeys,
     });
     return fuse.search(query);
 }
