@@ -18,11 +18,38 @@ class LinkToEntityTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_generate_a_link_to_an_entity_instance()
+    function we_can_generate_a_link_to_an_entity_form()
     {
         $this->assertEquals(
             '<a href="http://localhost/sharp/form/my-entity/23" title="">test</a>',
-            (new LinkToEntity("test", "my-entity"))->setInstanceId(23)->render()
+            (new LinkToEntity("test", "my-entity"))->toFormOfInstance(23)->render()
+        );
+    }
+
+    /** @test */
+    function we_can_generate_a_link_to_an_entity_show()
+    {
+        $this->assertEquals(
+            '<a href="http://localhost/sharp/show/my-entity/23" title="">test</a>',
+            (new LinkToEntity("test", "my-entity"))->toShowOfInstance(23)->render()
+        );
+    }
+
+    /** @test */
+    function we_can_generate_a_link_to_an_entity_single_form()
+    {
+        $this->assertEquals(
+            '<a href="http://localhost/sharp/form/my-entity" title="">test</a>',
+            (new LinkToEntity("test", "my-entity"))->toSingleForm()->render()
+        );
+    }
+
+    /** @test */
+    function we_can_generate_a_link_to_an_entity_single_show()
+    {
+        $this->assertEquals(
+            '<a href="http://localhost/sharp/show/my-entity" title="">test</a>',
+            (new LinkToEntity("test", "my-entity"))->toSingleShow()->render()
         );
     }
 
