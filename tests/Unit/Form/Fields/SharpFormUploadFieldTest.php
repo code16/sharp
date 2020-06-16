@@ -102,4 +102,24 @@ class SharpFormUploadFieldTest extends SharpTestCase
             $formField->toArray()
         );
     }
+
+    /** @test */
+    function we_can_define_shouldOptimizeImage()
+    {
+        $formField = SharpFormUploadField::make("text")
+            ->shouldOptimizeImage();
+
+        $this->assertArrayContainsSubset(
+            ["shouldOptimizeImage" => true],
+            $formField->toArray()
+        );
+
+        $formField2 = SharpFormUploadField::make("text")
+            ->shouldOptimizeImage(false);
+
+        $this->assertArrayContainsSubset(
+            ["shouldOptimizeImage" => false],
+            $formField2->toArray()
+        );
+    }
 }
