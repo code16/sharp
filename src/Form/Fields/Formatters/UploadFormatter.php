@@ -8,6 +8,7 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 use Code16\Sharp\Utils\FileUtil;
 use Illuminate\Filesystem\FilesystemManager;
 use Intervention\Image\ImageManager;
+use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 class UploadFormatter extends SharpFieldFormatter
 {
@@ -72,6 +73,11 @@ class UploadFormatter extends SharpFieldFormatter
             }
 
             $storage->put($storedFilePath, $fileContent);
+
+            if($field->getShouldOptimize()){
+                $optimizerChain = OptimizerChainFactory::create();
+                $optimizerChain->optimize($storage->path($storedFilePath));
+            }
 
             return [
                 "file_name" => $storedFilePath,

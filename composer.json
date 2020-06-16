@@ -12,7 +12,8 @@
     "php": ">=7.2.0",
     "laravel/framework": "^6.0|^7.0",
     "intervention/image": "^2.4",
-    "erusev/parsedown": "^1.7"
+    "erusev/parsedown": "^1.7",
+    "spatie/image-optimizer": "^1.2"
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4",
