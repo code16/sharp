@@ -74,7 +74,7 @@ class UploadFormatter extends SharpFieldFormatter
 
             $storage->put($storedFilePath, $fileContent);
 
-            if($field->getShouldOptimize()){
+            if($field->isShouldOptimize()){
                 $optimizerChain = OptimizerChainFactory::create();
                 $optimizerChain->optimize($storage->path($storedFilePath));
             }

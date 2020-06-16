@@ -76,7 +76,7 @@ trait SharpFormFieldWithUpload
      * @param bool $shouldOptimize
      * @return static
      */
-    public function setShouldOptimize($shouldOptimize = false)
+    public function shouldOptimizeImage($shouldOptimize = true)
     {
         $this->shouldOptimize = $shouldOptimize;
 
@@ -86,7 +86,7 @@ trait SharpFormFieldWithUpload
     /**
      * @return bool
      */
-    public function getShouldOptimize()
+    public function isShouldOptimize()
     {
         return $this->shouldOptimize;
     }
