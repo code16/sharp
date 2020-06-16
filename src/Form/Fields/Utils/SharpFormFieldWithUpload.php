@@ -35,6 +35,11 @@ trait SharpFormFieldWithUpload
     protected $compactThumbnail = false;
 
     /**
+     * @var bool
+     */
+    protected $shouldOptimize = false;
+
+    /**
      * @param float $maxFileSizeInMB
      * @return static
      */
@@ -65,6 +70,25 @@ trait SharpFormFieldWithUpload
         }
 
         return $this;
+    }
+
+    /**
+     * @param bool $shouldOptimize
+     * @return static
+     */
+    public function setShouldOptimize($shouldOptimize = false)
+    {
+        $this->shouldOptimize = $shouldOptimize;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getShouldOptimize()
+    {
+        return $this->shouldOptimize;
     }
 
     /**
