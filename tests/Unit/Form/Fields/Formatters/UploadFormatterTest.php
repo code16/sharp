@@ -142,7 +142,6 @@ class UploadFormatterTest extends SharpTestCase
 
         $this->assertArrayContainsSubset([
             "transformed" => true
-
         ], $formatter->fromFront(
             $field, "attribute", [
                 "name" => $filePath, "cropData" => [

@@ -58,7 +58,7 @@ Just a `setFileFilter([".jpg",".jpeg",".gif",".png"])` shorthand.
 
 If true and if the upload has a thumbnail, it is limited to 60px high (to compact in a list item, for instance).
 
-### `shouldOptimizeImage($shouldOptimize = true)`
+### `shouldOptimizeImage($shouldOptimizeImage = true)`
 
 If true, some optimization will be applied on the uploaded images (in order to reduce files weight). It relies on spatie's [image-optmizer](https://github.com/spatie/image-optimizer). Please note that you will need some of these packages on your system:
 - [JpegOptim](http://freecode.com/projects/jpegoptim)
