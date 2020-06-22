@@ -84,6 +84,8 @@ class UploadFormatter extends SharpFieldFormatter
 
             if($field->isShouldOptimizeImage()){
                 $optimizerChain = OptimizerChainFactory::create();
+                // we do not need to check for exception nor file format because:
+                // > By default the package will not throw any errors and just operate silently.
                 $optimizerChain->optimize($storage->path($storedFilePath));
             }
 
