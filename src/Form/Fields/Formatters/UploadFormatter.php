@@ -35,6 +35,14 @@ class UploadFormatter extends SharpFieldFormatter
     }
 
     /**
+     * @param $imageManager
+     */
+    public function setImageManager($imageManager): void
+    {
+        $this->imageManager = $imageManager;
+    }
+
+    /**
      * @param SharpFormField $field
      * @param $value
      * @return mixed
@@ -74,7 +82,7 @@ class UploadFormatter extends SharpFieldFormatter
 
             $storage->put($storedFilePath, $fileContent);
 
-            if($field->isShouldOptimize()){
+            if($field->isShouldOptimizeImage()){
                 $optimizerChain = OptimizerChainFactory::create();
                 $optimizerChain->optimize($storage->path($storedFilePath));
             }

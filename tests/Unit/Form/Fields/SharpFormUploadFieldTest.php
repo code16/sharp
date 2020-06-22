@@ -13,7 +13,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
         $formField = SharpFormUploadField::make("file");
 
         $this->assertEquals([
-                "key" => "file", "type" => "upload", "compactThumbnail" => false
+                "key" => "file", "type" => "upload", "compactThumbnail" => false, "shouldOptimizeImage" => false
             ], $formField->toArray()
         );
     }

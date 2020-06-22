@@ -6,8 +6,8 @@ use Code16\Sharp\Exceptions\Form\SharpFormFieldFormattingMustBeDelayedException;
 use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Tests\SharpTestCase;
-use Illuminate\Http\Testing\FileFactory;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
 
 class UploadFormatterTest extends SharpTestCase
 {
@@ -16,15 +16,7 @@ class UploadFormatterTest extends SharpTestCase
     {
         parent::setUp();
 
-        config(['sharp.uploads.tmp_dir' => 'tmp']);
-
-        config(['filesystems.disks.local' => [
-            'driver' => 'local',
-            'root' => storage_path('app'),
-        ]]);
-
-        File::deleteDirectory(storage_path("app/tmp"));
-        File::deleteDirectory(storage_path("app/data"));
+        Storage::fake("local");
     }
 
     /** @test */
@@ -33,134 +25,215 @@ class UploadFormatterTest extends SharpTestCase
         $formatter = new UploadFormatter;
 
         $field = SharpFormUploadField::make("upload");
-        $this->assertEquals(["name" => "test.png"], $formatter->toFront($field, ["name" => "test.png"]));
+        $this->assertEquals([
+            "name" => "test.png"
+        ], $formatter->toFront($field, [
+            "name" => "test.png"
+        ]));
     }
 
     /** @test */
-    function we_ignore_existing_file_from_front()
+    function we_ignore_not_existing_file_from_front()
     {
         $formatter = new UploadFormatter;
         $field = SharpFormUploadField::make("upload");
-        $attribute = "attribute";
 
         $this->assertEquals([], $formatter->fromFront(
-            $field, $attribute, ["name" => "test.png"])
+            $field, "attribute", [
+                "name" => "test.png"
+            ])
         );
     }
 
     /** @test */
     function we_store_newly_uploaded_file_from_front()
     {
+        Storage::disk('local')->put('tmp/toto', 'toto');
+
         $formatter = new UploadFormatter;
         $field = SharpFormUploadField::make("upload")
-            ->setStorageDisk("local")
-            ->setStorageBasePath("data/Test");
-        $attribute = "attribute";
-
-        $file = $this->uploadedFile();
+            ->setStorageDisk("local");
 
         $this->assertEquals([
-            "file_name" => "data/Test/{$file[0]}",
-            "size" => $file[1],
-            "mime_type" => "image/png",
+            "file_name" => "data/toto",
+            "size" => 4,
+            "mime_type" => 'text/plain',
             "disk" => "local",
             "transformed" => false
         ], $formatter->fromFront(
-            $field, $attribute, ["name" => $file[0], "uploaded" => true])
+            $field, "attribute", [
+                "name" => "toto",
+                "uploaded" => true
+            ])
         );
 
-        $this->assertFileExists(storage_path("app/data/Test/$file[0]"));
+        Storage::disk('local')->assertExists("data/toto");
     }
 
     /** @test */
     function we_delay_execution_if_the_storage_path_contains_instance_id_in_a_store_case()
     {
+        Storage::disk('local')->put('tmp/toto', 'toto');
+
         $formatter = new UploadFormatter;
         $field = SharpFormUploadField::make("upload")
             ->setStorageDisk("local")
             ->setStorageBasePath("data/Test/{id}");
 
-        $file = $this->uploadedFile();
-
         $this->expectException(SharpFormFieldFormattingMustBeDelayedException::class);
+
         $formatter->fromFront(
-            $field, "attribute", ["name" => $file[0], "uploaded" => true]
+            $field, "attribute", [
+                "name" => "toto",
+                "uploaded" => true
+            ]
         );
     }
 
     /** @test */
     function if_the_storage_path_contains_instance_id_in_an_update_case_we_replace_the_id_placeholder()
     {
+        Storage::disk('local')->put('tmp/toto', 'toto');
+
         $formatter = new UploadFormatter;
         $field = SharpFormUploadField::make("upload")
             ->setStorageDisk("local")
             ->setStorageBasePath("data/Test/{id}");
 
-        $file = $this->uploadedFile();
-
         $this->assertArrayContainsSubset([
-            "file_name" => "data/Test/50/{$file[0]}"
+            "file_name" => "data/Test/50/toto"
         ], $formatter->setInstanceId(50)->fromFront(
-            $field, "attribute", ["name" => $file[0], "uploaded" => true]
+            $field, "attribute", [
+                "name" => "toto",
+                "uploaded" => true
+            ]
         ));
+
+        Storage::disk('local')->assertExists("data/Test/50/toto");
     }
+
 
     /** @test */
     function we_handle_crop_transformation_on_upload_from_front()
     {
-        $file = $this->uploadedFile();
-        $formatter = new UploadFormatter;
-        $field = SharpFormUploadField::make("upload")
-            ->setStorageDisk("local")
-            ->setStorageBasePath("data/Test")
-            ->setCropRatio("16:9");
-        $attribute = "attribute";
-
-        $this->assertArrayContainsSubset([
-            "file_name" => "data/Test/{$file[0]}",
-            "transformed" => true
-
-        ], $formatter->fromFront(
-            $field, $attribute, [
-                "name" => $file[0], "cropData" => [
-                    "height" => .8, "width" => .6, "x" => 0, "y" => .1, "rotate" => 0
-                ], "uploaded" => true
-            ]
-        ));
-    }
-
-    /** @test */
-    function we_handle_crop_transformation_on_a_previously_upload_from_front()
-    {
-        $file = (new FileFactory)->image("image.png", 600, 600);
-        $filePath = $file->store("data/Test");
+        Storage::disk('local')->put('toto', 'toto');
 
         $formatter = new UploadFormatter;
+
+        $mock = \Mockery::mock(ImageManager::class);
+        $mock
+            ->shouldReceive('make')
+            ->once()
+            ->andReturn(new Class{
+                public function crop(){
+                    return true;
+                }
+                public function encode(){
+                    return true;
+                }
+                public function rotate(){
+                    return true;
+                }
+                public function width() {
+                        return true;
+                }
+                public function height() {
+                        return true;
+                }
+            });
+
+        $formatter->setImageManager($mock);
+
         $field = SharpFormUploadField::make("upload")
-            ->setStorageDisk("local")
-            ->setStorageBasePath("data/Test");
+            ->setStorageDisk("local");
 
         $this->assertArrayContainsSubset([
             "transformed" => true
         ], $formatter->fromFront(
             $field, "attribute", [
-                "name" => $filePath, "cropData" => [
-                    "height" => .8, "width" => .6, "x" => 0, "y" => .1, "rotate" => 0
-                ], "uploaded" => false
+                "name" => "toto",
+                "cropData" => [
+                    "height" => .8, "width" => .6, "x" => 0, "y" => .1, "rotate" => 1
+                ],
+                "uploaded" => false
             ]
         ));
     }
 
     /**
-     * @return array
+     * @test
      */
-    private function uploadedFile()
+    function we_handle_crop_transformation_on_a_previously_upload_from_front()
     {
-        $file = (new FileFactory)->image("image.png", 600, 600);
+        Storage::disk('local')->put('tmp/toto', 'toto');
 
-        return [
-            basename($file->store("tmp")),
-            $file->getSize()
-        ];
+        $formatter = new UploadFormatter;
+
+        $mock = \Mockery::mock(ImageManager::class);
+        $mock
+            ->shouldReceive('make')
+            ->once()
+            ->andReturn(new Class{
+                public function crop(){
+                    return true;
+                }
+                public function encode(){
+                    return true;
+                }
+                public function rotate(){
+                    return true;
+                }
+                public function width() {
+                    return true;
+                }
+                public function height() {
+                    return true;
+                }
+            });
+
+        $formatter->setImageManager($mock);
+
+        $field = SharpFormUploadField::make("upload")
+            ->setStorageDisk("local");
+
+        $this->assertArrayContainsSubset([
+            "transformed" => true
+        ], $formatter->fromFront(
+            $field, "attribute", [
+                "name" => "toto",
+                "cropData" => [
+                    "height" => .8, "width" => .6, "x" => 0, "y" => .1, "rotate" => 1
+                ],
+                "uploaded" => true
+            ]
+        ));
+    }
+
+    /**
+     * @test
+     */
+    public function we_should_optimize()
+    {
+        Storage::disk('local')->put('tmp/toto', 'toto');
+
+        \Mockery::mock('alias:\Spatie\ImageOptimizer\OptimizerChainFactory')
+            ->shouldReceive('create')
+            ->once()
+            ->andReturn(new class {
+                public function optimize()
+                {
+                    return true;
+                }
+            });
+
+        $formatter = new UploadFormatter;
+        $field = SharpFormUploadField::make("upload")
+            ->shouldOptimizeImage()
+            ->setStorageDisk("local");
+
+        $formatter->fromFront($field, "attribute", [
+            "name" => "toto",
+            "uploaded" => true
+        ]);
     }
 }
