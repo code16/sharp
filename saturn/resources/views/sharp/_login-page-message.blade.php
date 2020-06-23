@@ -2,10 +2,10 @@
 <div role="alert" class="SharpNotification SharpNotification--info">
     <div class="SharpNotification__details">
         <div class="SharpNotification__text-wrapper">
-            <div class="SharpNotification__title mb-2">
+            <div class="SharpNotification__title mb-3">
                 Use these accounts to login:
             </div>
-            <p class="SharpNotification__subtitle">
+            <div class="SharpNotification__subtitle">
                 <ul>
                     <li class="mb-2">
                         <input
@@ -25,7 +25,7 @@
                         <span style="font-style: italic">(has a few more permissions)</span>
                     </li>
                 </ul>
-            </p>
+            </div>
         </div>
     </div>
 </div>
