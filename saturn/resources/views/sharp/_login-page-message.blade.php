@@ -3,11 +3,7 @@
     <div class="SharpNotification__details">
         <div class="SharpNotification__text-wrapper">
             <p class="SharpNotification__subtitle">
-                Use these accounts to login:
-                <ul>
-                    <li>- admin@example.com / secret</li>
-                    <li>- boss@example.com / secret <span style="font-style: italic">(has a few more permissions)</span></li>
-                </ul>
+                Display a custom message to your users
             </p>
         </div>
     </div>
