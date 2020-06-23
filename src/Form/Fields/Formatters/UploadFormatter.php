@@ -35,14 +35,6 @@ class UploadFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param $imageManager
-     */
-    public function setImageManager($imageManager): void
-    {
-        $this->imageManager = $imageManager;
-    }
-
-    /**
      * @param SharpFormField $field
      * @param $value
      * @return mixed
