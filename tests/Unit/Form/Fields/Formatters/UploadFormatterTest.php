@@ -9,6 +9,8 @@ use Code16\Sharp\Tests\SharpTestCase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
+use Spatie\ImageOptimizer\OptimizerChain;
+use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 class UploadFormatterTest extends SharpTestCase
 {
@@ -186,7 +188,9 @@ class UploadFormatterTest extends SharpTestCase
     /** @test */
     public function we_optimize_uploaded_images_if_configured()
     {
-        Storage::disk('local')->put('tmp/toto', 'toto');
+        UploadedFile::fake()
+            ->image("image.jpg")
+            ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
 
         \Mockery::mock('alias:\Spatie\ImageOptimizer\OptimizerChainFactory')
             ->shouldReceive('create')
@@ -197,14 +201,13 @@ class UploadFormatterTest extends SharpTestCase
                     return true;
                 }
             });
-
-        $formatter = new UploadFormatter;
+        
         $field = SharpFormUploadField::make("upload")
             ->shouldOptimizeImage()
             ->setStorageDisk("local");
 
-        $formatter->fromFront($field, "attribute", [
-            "name" => "toto",
+        (new UploadFormatter)->fromFront($field, "attribute", [
+            "name" => "image.jpg",
             "uploaded" => true
         ]);
     }
