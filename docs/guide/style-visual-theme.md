@@ -6,9 +6,9 @@ By default, the `config('sharp.name')` is displayed on the login page and on top
 - `login-icon.png` is limited to 200 pixels in width and 100 pixels in height,
 - and `menu-icon.png` must fit in 150 pixels in width and 50 pixels in height.
 
-#### Display custom message on login page
+#### Display a custom message on login page
 
-You can display custom content under the form on login page. You can use it to display custom message to your users or any purpose:
+You can display a custom content under the form on login page:
 
 ![Example of a custom message on login](./img/message-login.png)
 
