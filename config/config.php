@@ -96,5 +96,8 @@ return [
 
         // Optional custom guard
 //        "guard" => "sharp",
-    ]
+    ],
+
+//    "login_page_message_blade_path" => env("SHARP_LOGIN_PAGE_MESSAGE_BLADE_PATH", "sharp/_login-page-message"),
+
 ];

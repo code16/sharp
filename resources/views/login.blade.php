@@ -54,6 +54,7 @@
                                 </div>
                             </div>
                         </div>
+                        @includeIf(config("sharp.login_page_message_blade_path"))
                         <p class="text-center mt-3 text-muted" style="font-size: .75em">powered by <a href="https://sharp.code16.fr/docs/">Sharp {{sharp_version()}}</a></p>
                     </div>
                 </div>
