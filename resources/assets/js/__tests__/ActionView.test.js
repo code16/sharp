@@ -1,6 +1,7 @@
 import Notifications from 'vue-notification';
 import { shallowMount, createLocalVue, config } from '@vue/test-utils';
 import ActionView from '../components/ActionView.vue';
+import { showAlert, showConfirm } from "../util/modal";
 
 config.stubs['transition-group'] = false;
 
@@ -60,15 +61,18 @@ describe('action-view', ()=>{
 
     test('can mount with multiple modals', ()=>{
         const wrapper = createWrapper();
-        wrapper.vm.showMainModal({ text: 'Modal 1' });
-        wrapper.vm.showMainModal({ text: 'Modal 2' });
+        showAlert('Modal 1');
+        showConfirm('Modal 2');
         expect(wrapper.html()).toMatchSnapshot();
     });
 
-    xtest('handle main modal events', ()=>{
+    xtest('handle main modal events', async ()=>{
         const wrapper = createWrapper();
-        const modalOptions = { text: 'Modal 1', okCallback:jest.fn(), hiddenCallback:jest.fn() };
-        wrapper.vm.showMainModal(modalOptions);
+        const modalOptions = { okCallback:jest.fn() };
+
+        showAlert('Modal 1', modalOptions);
+
+        await wrapper.vm.$nextTick();
 
         let modal = wrapper.find(ModalStub);
 

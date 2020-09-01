@@ -1,5 +1,6 @@
 import { parseBlobJSONContent } from "../util/request";
 import { lang } from '../util/i18n';
+import { showAlert } from "../util/modal";
 import { BASE_URL } from "../consts";
 
 export const withAxiosInterceptors = {
@@ -37,7 +38,7 @@ export const withAxiosInterceptors = {
 
                 switch(status) {
                     /// Unauthorized
-                    case 401: this.actionsBus.$emit('showMainModal', {
+                    case 401: showAlert({
                         ...modalOptions,
                         okCallback() {
                             location.href = `${BASE_URL}/login`;
@@ -51,10 +52,7 @@ export const withAxiosInterceptors = {
                     case 419:
                     case 500:
                         if(status !== 404 || method !== 'get')
-                            this.actionsBus.$emit('showMainModal', {
-                                ...modalOptions,
-                                okCloseOnly:true,
-                            });
+                            showAlert(modalOptions);
                         break;
                 }
                 return Promise.reject(error);

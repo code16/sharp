@@ -23,18 +23,24 @@
                     </div>
                 </template>
             </notifications>
-            <Modal v-for="(modal,id) in mainModalsData" :key="id"
-                v-bind="modal.props" @ok="modal.okCallback" @hidden="modal.hiddenCallback">
-                {{modal.text}}
-            </Modal>
+            <template v-for="modal in mainModals">
+                <Modal
+                    v-bind="modal.props"
+                    @ok="modal.okCallback"
+                    @hidden="modal.hiddenCallback"
+                    :key="modal.id"
+                >
+                    {{ modal.text }}
+                </Modal>
+            </template>
         </template>
     </div>
 </template>
 
 <script>
-    import EventBus from './EventBus';
     import { api } from "../api";
     import { Modal } from 'sharp-ui';
+    import { mainModals } from "../util/modal";
 
     const noop=()=>{};
 
@@ -46,7 +52,6 @@
 
         provide() {
             return {
-                actionsBus: new EventBus({name:'SharpActionsEventBus'}),
                 axiosInstance: api
             }
         },
@@ -60,36 +65,15 @@
 
         data() {
             return {
-                mainModalsData: {},
-                mainModalId: 0,
                 showErrorPage: false,
                 errorPageData: null
             }
         },
-        methods: {
-            showMainModal({ text, okCallback=noop, okCloseOnly, isError, ...sharedProps }) {
-                const curId = this.mainModalId;
-                const hiddenCallback = () => this.$delete(this.mainModalsData, curId);
-
-                this.$set(this.mainModalsData,curId,{
-                    props: {
-                        ...sharedProps,
-                        okOnly:okCloseOnly,
-                        noCloseOnBackdrop:okCloseOnly,
-                        noCloseOnEsc:okCloseOnly,
-                        visible: true,
-                        isError
-                    },
-                    okCallback, hiddenCallback,
-                    text,
-                });
-                this.mainModalId++;
-            }
+        computed: {
+            mainModals,
         },
         created() {
-            let { actionsBus, axiosInstance } = this._provided;
-
-            actionsBus.$on('showMainModal', this.showMainModal);
+            let { axiosInstance } = this._provided;
 
             axiosInstance.interceptors.response.use(c=>c, error=>{
                 let { response: {status, data}, config: { method } } = error;
