@@ -3,8 +3,6 @@ import { lang } from "../../index";
 import { showConfirm, showAlert } from "../../util/modal";
 
 export default {
-    // TODO: refactoring: to remove
-    inject: ['actionsBus'],
     data() {
         return {
             commandCurrentForm: null,
@@ -57,9 +55,8 @@ export default {
             }
             if(confirmation) {
                 await new Promise(resolve => {
-                    showConfirm({
+                    showConfirm(confirmation, {
                         title: lang('modals.command.confirm.title'),
-                        text: confirmation,
                         okCallback: resolve,
                     });
                 });
@@ -92,9 +89,8 @@ export default {
             this.init();
         },
         handleInfoCommand(data) {
-            showAlert({
+            showAlert(data.message, {
                 title: lang('modals.command.info.title'),
-                text: data.message,
             });
         },
         handleViewCommand(data) {

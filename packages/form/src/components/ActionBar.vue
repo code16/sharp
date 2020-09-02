@@ -1,62 +1,74 @@
 <template>
-    <ActionBar :ready="ready" container>
+    <ActionBar>
         <template v-slot:left>
-            <button class="SharpButton SharpButton--secondary-accent" @click="emitAction('cancel')">
-                {{ showBackButton ? label('back_button') : label('cancel_button') }}
-            </button>
+            <Button type="secondary-accent" @click="handleCancelClicked">
+                <template v-if="showBackButton">
+                    {{ l('action_bar.form.back_button') }}
+                </template>
+                <template v-else>
+                    {{ l('action_bar.form.cancel_button') }}
+                </template>
+            </Button>
 
-            <div v-if="showDeleteButton" class="w-100 h-100">
-                <Collapse transition-class="SharpButton__collapse-transition">
-                    <template v-slot:frame-0="{ next }">
-                        <button class="SharpButton SharpButton--danger" @click="next(focusDelete)">
-                            <svg  width='16' height='16' viewBox='0 0 16 24' fill-rule='evenodd'>
-                                <path d='M4 0h8v2H4zM0 3v4h1v17h14V7h1V3H0zm13 18H3V8h10v13z'></path>
-                                <path d='M5 10h2v9H5zm4 0h2v9H9z'></path>
-                            </svg>
-                        </button>
-                    </template>
-                    <template v-slot:frame-1="{ next }">
-                        <button @click="emitAction('delete')" @blur="next()" ref="openDelete" class="SharpButton SharpButton--danger">
-                            {{ label('delete_button') }}
-                        </button>
-                    </template>
-                </Collapse>
-            </div>
+            <template v-if="showDeleteButton">
+                <div class="w-100 h-100">
+                    <Collapse transition-class="SharpButton__collapse-transition">
+                        <template v-slot:frame-0="{ next }">
+                            <button class="SharpButton SharpButton--danger" @click="next(focusDelete)">
+                                <svg  width='16' height='16' viewBox='0 0 16 24' fill-rule='evenodd'>
+                                    <path d='M4 0h8v2H4zM0 3v4h1v17h14V7h1V3H0zm13 18H3V8h10v13z'></path>
+                                    <path d='M5 10h2v9H5zm4 0h2v9H9z'></path>
+                                </svg>
+                            </button>
+                        </template>
+                        <template v-slot:frame-1="{ next }">
+                            <Button type="danger" @click="handleDeleteClicked" @blur="next()" ref="openDelete">
+                                {{ l('action_bar.form.delete_button') }}
+                            </Button>
+                        </template>
+                    </Collapse>
+                </div>
+            </template>
         </template>
         <template v-slot:right>
-            <button v-if="showSubmitButton" class="SharpButton SharpButton--accent" @click="emitAction('submit')">
-                {{ label('submit_button',opType) }}
-            </button>
+            <template v-if="showSubmitButton">
+                <Button type="accent" :disabled="uploading" @click="handleSubmitClicked">
+                    {{ submitLabel }}
+                </Button>
+            </template>
         </template>
     </ActionBar>
 </template>
 
 <script>
     import { lang } from 'sharp';
-    import { ActionBar, Collapse } from 'sharp-ui';
-    import { ActionEvents } from 'sharp/mixins';
-
+    import { ActionBar, Collapse, Button } from 'sharp-ui';
+    import { Localization } from "sharp/mixins";
 
     export default {
         name: 'SharpActionBarForm',
-        mixins: [ActionEvents],
+        mixins: [Localization],
         components: {
             ActionBar,
-            Collapse
+            Collapse,
+            Button,
         },
-        data() {
-            return {
-                ready: false,
-
-                showSubmitButton: false,
-                showDeleteButton: false,
-                showBackButton: false,
-
-                deleteButtonOpened: false,
-
-                opType: 'create', // or 'update'
-                actionsState: null
-            }
+        props: {
+            showSubmitButton: Boolean,
+            showDeleteButton: Boolean,
+            showBackButton: Boolean,
+            create: Boolean,
+            uploading: Boolean,
+        },
+        computed: {
+            submitLabel() {
+                if(this.uploading) {
+                    return lang('action_bar.form.submit_button.pending.upload')
+                }
+                return this.create
+                    ? lang('action_bar.form.submit_button.create')
+                    : lang('action_bar.form.submit_button.update');
+            },
         },
         methods: {
             focusDelete() {
@@ -64,36 +76,15 @@
                     this.$refs.openDelete.focus();
                 }
             },
-            label(element, extra) {
-                let localeKey = `action_bar.form.${element}`, stateLabel;
-                if(this.actionsState) {
-                    let { state, modifier } = this.actionsState;
-                    stateLabel = lang(`${localeKey}.${state}.${modifier}`);
-                }
-                if(!stateLabel && extra) localeKey+=`.${extra}`;
-                return stateLabel || lang(localeKey);
+            handleSubmitClicked() {
+                this.$emit('submit');
             },
-            emitAction() {
-                this.actionsBus.$emit(...arguments);
-            }
-        },
-        mounted() {
-            this.actionsBus.$on('setup', () => {
-                this.ready = true;
-            });
-        },
-        actions: {
-            setup(config) {
-                let { showSubmitButton, showDeleteButton, showBackButton, opType } = config;
-
-                this.showSubmitButton = showSubmitButton;
-                this.showDeleteButton = showDeleteButton;
-                this.showBackButton = showBackButton;
-                this.opType = opType;
+            handleDeleteClicked() {
+                this.$emit('delete');
             },
-            updateActionsState(actionsState) {
-                this.actionsState = actionsState;
-            }
-        }
+            handleCancelClicked() {
+                this.$emit('cancel');
+            },
+        },
     }
 </script>

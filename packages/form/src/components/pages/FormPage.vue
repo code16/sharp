@@ -1,7 +1,12 @@
 <template>
     <div class="FormPage">
-        <ActionBarForm />
-        <Form :entity-key="entityKey" :instance-id="instanceId" />
+        <div class="container">
+            <Form :entity-key="entityKey" :instance-id="instanceId">
+                <template v-slot:action-bar="{ props, listeners }">
+                    <ActionBarForm v-bind="props" v-on="listeners" />
+                </template>
+            </Form>
+        </div>
     </div>
 </template>
 

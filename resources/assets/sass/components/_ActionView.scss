@@ -2,15 +2,17 @@
   transition: padding 300ms $bx--standard-easing;
   padding-left: rem(48px);
   padding-bottom: 3rem;
+  @include media-breakpoint-up(sm) {
+    padding-top: 5rem;
+  }
+  @include media-breakpoint-up($breakpoint-fixed-menu) {
+    padding-left: rem(200px);
+    overflow: visible;
+  }
   //overflow: auto;
 }
 
 @include media-breakpoint-up($breakpoint-fixed-menu) {
-  .SharpActionView {
-    padding-left: rem(200px);
-    padding-top: 5rem;
-    overflow: visible;
-  }
   #sharp-app.leftNav--collapsed {
     .SharpActionView {
       padding-left: rem(48px);

@@ -19,12 +19,17 @@ const injectedComponents = {
             downloadLinkBase:'',
             localized: false,
             locales: null,
-            pendingJobs: [],
-        })
+        }),
+        methods: {
+            setUploading() {},
+            hasUploadingFields() {}
+        },
+        created() {
+            this.setUploading = jest.fn();
+        },
     },
     $tab:{},
 
-    actionsBus:{},
     mainLoading:{}
 };
 

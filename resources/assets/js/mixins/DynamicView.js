@@ -4,7 +4,7 @@ import { showAlert } from "../util/modal";
 import { BASE_URL } from "../consts";
 
 export const withAxiosInterceptors = {
-    inject: ['mainLoading', 'axiosInstance', 'actionsBus'],
+    inject: ['mainLoading', 'axiosInstance'],
     methods: {
         installInterceptors() {
             this.axiosInstance.interceptors.request.use(config => {
@@ -26,35 +26,26 @@ export const withAxiosInterceptors = {
 
                 let { data, status } = response;
 
-                let modalOptions = {
-                    title: lang(`modals.${status}.title`) || lang(`modals.error.title`),
-                    text: data.message || lang(`modals.${status}.message`) || lang(`modals.error.message`),
-                    isError: true
-                };
+                const text = data.message || lang(`modals.${status}.message`) || lang(`modals.error.message`);
+                const title = lang(`modals.${status}.title`) || lang(`modals.error.title`);
 
-                if(status === 419) {
-                    modalOptions.okCallback = () => location.reload();
+                if(status === 404 && method === 'get' || status === 422) {
+                    return Promise.reject(error);
                 }
 
-                switch(status) {
-                    /// Unauthorized
-                    case 401: showAlert({
-                        ...modalOptions,
+                if(status === 401 || status === 419) {
+                    showAlert(text, {
+                        title,
+                        isError: true,
                         okCallback() {
-                            location.href = `${BASE_URL}/login`;
+                            location.reload();
                         },
                     });
-                        break;
-
-                    case 403:
-                    case 404:
-                    case 417:
-                    case 419:
-                    case 500:
-                        if(status !== 404 || method !== 'get')
-                            showAlert(modalOptions);
-                        break;
                 }
+                else {
+                    showAlert(text, { title, isError:true });
+                }
+
                 return Promise.reject(error);
             });
         },

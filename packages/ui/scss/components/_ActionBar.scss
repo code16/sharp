@@ -1,14 +1,4 @@
 @include media-breakpoint-up($breakpoint-fixed-menu) {
-  .SharpActionBar {
-    &__bar {
-      transition: left 300ms $bx--standard-easing;
-      position: fixed;
-      top:0;
-      right:0;
-      left: rem(200px);
-      z-index: z('actionBar');
-    }
-  }
   #sharp-app.leftNav--collapsed {
     .SharpActionBar__bar {
       left: rem(48px);
@@ -48,8 +38,22 @@
     padding-top: 1.25rem;
     padding-bottom: 1.25rem;
     background: $brand-01;
+    margin-left: -$grid-gutter-width/2;
+    margin-right: -$grid-gutter-width/2;
+    transition: left 300ms $bx--standard-easing;
     @include media-breakpoint-up(sm) {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 3rem;
       height: 5rem;
+      margin-left: 0;
+      margin-right: 0;
+    }
+    @include media-breakpoint-up($breakpoint-fixed-menu) {
+      position: fixed;
+      z-index: z('actionBar');
+      left: rem(200px);
     }
     & > .container {
       height: 100%;

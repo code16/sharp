@@ -32,6 +32,11 @@
             tag() {
                 return this.href ? 'a' : 'button';
             },
-        }
+        },
+        methods: {
+            focus() {
+                this.$el.focus();
+            },
+        },
     }
 </script>

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import DynamicView from '../../mixins/DynamicView';
-
+import { showAlert } from "../../util/modal";
 import {
     MockInjections,
     MockI18n,
@@ -12,6 +12,7 @@ import {
 
 import moxios from 'moxios';
 
+jest.mock('../../util/modal');
 
 describe('dynamic-view',()=>{
     Vue.component('sharp-dynamic-view', {
@@ -41,6 +42,7 @@ describe('dynamic-view',()=>{
 
     afterEach(()=>{
         moxios.uninstall();
+        showAlert.mockClear();
     });
 
     test('get success', async ()=>{
@@ -225,10 +227,6 @@ describe('dynamic-view',()=>{
         test('show error modal on 401 and redirect on login page when click OK', async ()=>{
             let $view = await createVm();
 
-            let showMainMoadlEmitted = jest.fn();
-
-            $view.actionsBus.$on('showMainModal', showMainMoadlEmitted);
-
             $view.axiosInstance.get('/').catch(e=>{
                 //console.log(e) //[debug]
             });
@@ -240,43 +238,36 @@ describe('dynamic-view',()=>{
                 }
             });
 
-            expect(showMainMoadlEmitted).toHaveBeenCalledTimes(1);
-            expect(showMainMoadlEmitted).toHaveBeenCalledWith({
+            expect(showAlert).toHaveBeenCalledTimes(1);
+            expect(showAlert).toHaveBeenCalledWith('unauthorized', {
                 title: expect.stringMatching(/.+/),
-                text: 'unauthorized',
                 isError: true,
                 okCallback: expect.any(Function)
             });
 
-            let { okCallback } = showMainMoadlEmitted.mock.calls[0][0];
+            let { okCallback } = showAlert.mock.calls[0][1];
 
-            mockProperty(location,'href');
+            location.reload = jest.fn();
 
             okCallback();
 
-            expect(setter(location,'href')).toHaveBeenCalledWith('/sharp/login');
+            expect(location.reload).toHaveBeenCalled();
 
-            unmockProperty(location,'href');
         });
 
         test('show error modal on else server response status', async () => {
             let $view = await createVm();
 
-            let showMainMoadlEmitted = jest.fn();
-
-            $view.actionsBus.$on('showMainModal', showMainMoadlEmitted);
 
             $view.axiosInstance.get('/').catch(e=>{});
             await nextRequestFulfilled({
                 status: 403,
                 response: {}
             });
-            expect(showMainMoadlEmitted).toHaveBeenCalledTimes(1);
-            expect(showMainMoadlEmitted).toHaveBeenLastCalledWith({
-                title: expect.stringMatching(/.+/),
-                text: expect.stringMatching(/.+/),
+            expect(showAlert).toHaveBeenCalledTimes(1);
+            expect(showAlert).toHaveBeenLastCalledWith("{{ modals.403.message }}", {
+                title: "{{ modals.403.title }}",
                 isError: true,
-                okCloseOnly: true
             });
 
             $view.axiosInstance.post('/').catch(e=>{});
@@ -286,12 +277,10 @@ describe('dynamic-view',()=>{
                     message: 'Not found'
                 }
             });
-            expect(showMainMoadlEmitted).toHaveBeenCalledTimes(2);
-            expect(showMainMoadlEmitted).toHaveBeenLastCalledWith({
-                title: expect.stringMatching(/.+/),
-                text: 'Not found',
+            expect(showAlert).toHaveBeenCalledTimes(2);
+            expect(showAlert).toHaveBeenLastCalledWith('Not found', {
+                title: "{{ modals.404.title }}",
                 isError: true,
-                okCloseOnly: true
             });
 
             $view.axiosInstance.get('/').catch(e=>{});
@@ -301,12 +290,10 @@ describe('dynamic-view',()=>{
                     message: 'custom error'
                 }
             });
-            expect(showMainMoadlEmitted).toHaveBeenCalledTimes(3);
-            expect(showMainMoadlEmitted).toHaveBeenLastCalledWith({
-                title: expect.stringMatching(/.+/),
-                text: 'custom error',
+            expect(showAlert).toHaveBeenCalledTimes(3);
+            expect(showAlert).toHaveBeenLastCalledWith('custom error', {
+                title: "{{ modals.417.title }}",
                 isError: true,
-                okCloseOnly: true
             });
 
             $view.axiosInstance.get('/').catch(e=>{});
@@ -314,12 +301,10 @@ describe('dynamic-view',()=>{
                 status: 500,
                 response: {}
             });
-            expect(showMainMoadlEmitted).toHaveBeenCalledTimes(4);
-            expect(showMainMoadlEmitted).toHaveBeenLastCalledWith({
-                title: expect.stringMatching(/.+/),
-                text: expect.stringMatching(/.+/),
+            expect(showAlert).toHaveBeenCalledTimes(4);
+            expect(showAlert).toHaveBeenLastCalledWith("{{ modals.500.message }}", {
+                title: "{{ modals.500.title }}",
                 isError: true,
-                okCloseOnly: true
             });
 
             $view.axiosInstance.get('/').catch(e=>{});
@@ -327,7 +312,7 @@ describe('dynamic-view',()=>{
                 status: 404,
                 response: {}
             });
-            expect(showMainMoadlEmitted).not.toHaveBeenCalledTimes(5);
+            expect(showAlert).not.toHaveBeenCalledTimes(5);
 
         });
     });

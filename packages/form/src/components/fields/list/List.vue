@@ -171,8 +171,7 @@
                 return Symbol('index');
             },
             hasPendingActions() {
-                const filteredPendingJobs = this.$form.pendingJobs.filter(key => key.startsWith(this.fieldKey));
-                return filteredPendingJobs.length > 0;
+                return this.$form?.hasUploadingFields(this.fieldKey);
             },
         },
         methods: {

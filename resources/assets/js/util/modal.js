@@ -39,7 +39,7 @@ export function showAlert(message, { title, ...props } = {}) {
     });
 }
 
-export function showConfirm(message, { title='Confirmation', ...props } = {}) {
+export function showConfirm(message, { title, ...props } = {}) {
     return showMainModal({
         text: message,
         title,

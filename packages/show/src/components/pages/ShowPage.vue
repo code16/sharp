@@ -59,7 +59,7 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import { formUrl, getBackUrl, lang } from 'sharp';
+    import { formUrl, getBackUrl, lang, showAlert } from 'sharp';
     import { CommandFormModal, CommandViewPanel } from 'sharp-commands';
     import { Grid } from 'sharp-ui';
     import { UnknownField } from 'sharp/components';
@@ -188,11 +188,9 @@
                     .catch(error => {
                         const data = error.response.data;
                         if(error.response.status === 422) {
-                            this.actionsBus.$emit('showMainModal', {
+                            showAlert(data.message, {
                                 title: lang('modals.state.422.title'),
-                                text: data.message,
                                 isError: true,
-                                okCloseOnly: true
                             });
                         }
                     });

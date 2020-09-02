@@ -27,7 +27,7 @@ exports[`action-view can mount with multiple modals 1`] = `
 	<modal-stub visible="true" okonly="true" nocloseonbackdrop="true" nocloseonesc="true">
 		Modal 1
 	</modal-stub>
-	<modal-stub visible="true" title="Confirmation">
+	<modal-stub visible="true">
 		Modal 2
 	</modal-stub>
 </div>

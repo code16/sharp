@@ -39,7 +39,6 @@ describe('modal', ()=>{
             propsData: {
                 static: true,
             },
-            sync:false,
         });
         wrapper.setProps({ visible:true });
         await wrapper.vm.$nextTick();
