@@ -322,7 +322,6 @@
                 this.redirectToParentPage();
             },
 
-            // todo refactor in store
             // Used by VueClip as injection
             setUploading(fieldKey, uploading) {
                 this.uploadingFields = {
@@ -330,7 +329,7 @@
                     [fieldKey]: uploading
                 }
             },
-            // todo refactor in store
+
             // Used by List field as injection
             hasUploadingFields(fieldKey) {
                 return Object.keys(this.uploadingFields)
