@@ -28,7 +28,7 @@ import {
     NavItem,
 } from 'sharp-ui';
 
-import storeModule from './store';
+import { store as getStore } from './store/store';
 import { router as getRouter } from "./router";
 
 locale.use(elLang());
@@ -41,8 +41,8 @@ Vue.use(VueGoogleMaps, {
 Vue.use(VueRouter);
 Vue.use(Vuex);
 
-const store = new Vuex.Store(storeModule);
 const router = getRouter();
+const store = getStore();
 
 Vue.use(SharpCommands, { store, router });
 Vue.use(SharpDashboard, { store, router });

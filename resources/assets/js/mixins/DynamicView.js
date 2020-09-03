@@ -1,6 +1,6 @@
 import { parseBlobJSONContent } from "../util/request";
 import { lang } from '../util/i18n';
-import { showAlert } from "../util/modal";
+import { showAlert } from "../util/dialogs";
 
 export const withAxiosInterceptors = {
     inject: ['axiosInstance'],

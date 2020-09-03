@@ -23,14 +23,14 @@
                     </div>
                 </template>
             </notifications>
-            <template v-for="modal in mainModals">
+            <template v-for="dialog in dialogs">
                 <Modal
-                    v-bind="modal.props"
-                    @ok="modal.okCallback"
-                    @hidden="modal.hiddenCallback"
-                    :key="modal.id"
+                    v-bind="dialog.props"
+                    @ok="dialog.okCallback"
+                    @hidden="dialog.hiddenCallback"
+                    :key="dialog.id"
                 >
-                    {{ modal.text }}
+                    {{ dialog.text }}
                 </Modal>
             </template>
         </template>
@@ -42,7 +42,6 @@
 <script>
     import { api } from "../api";
     import { Modal, LoadingOverlay } from 'sharp-ui';
-    import { mainModals } from "../util/modal";
 
     export default {
         name:'SharpActionView',
@@ -71,7 +70,9 @@
             }
         },
         computed: {
-            mainModals,
+            dialogs() {
+                return this.$store.state.dialogs;
+            },
             isLoading() {
                 return this.$store.getters.isLoading;
             },

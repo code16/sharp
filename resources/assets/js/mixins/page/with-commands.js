@@ -1,6 +1,6 @@
 import { parseBlobJSONContent, getFileName } from "../../util/request";
 import { lang } from "../../index";
-import { showConfirm, showAlert } from "../../util/modal";
+import { showConfirm, showAlert } from "../../util/dialogs";
 
 export default {
     data() {

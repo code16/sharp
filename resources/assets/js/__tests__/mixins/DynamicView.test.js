@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import DynamicView from '../../mixins/DynamicView';
-import { showAlert } from "../../util/modal";
+import { showAlert } from "../../util/dialogs";
 import {
     MockInjections,
     MockI18n,
@@ -9,7 +9,7 @@ import {
 
 import moxios from 'moxios';
 
-jest.mock('../../util/modal');
+jest.mock('../../util/dialogs');
 
 describe('dynamic-view',()=>{
     Vue.component('sharp-dynamic-view', {

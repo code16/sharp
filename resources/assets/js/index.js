@@ -6,7 +6,7 @@ export * from './util/querystring';
 export * from './util/log';
 export * from './util/file';
 export * from './consts';
-export { showAlert, showConfirm } from './util/modal';
+export { showAlert, showConfirm } from './util/dialogs';
 export { getBackUrl, getListBackUrl } from './util/url';
 export { isCustomField, resolveCustomField } from './util/fields';
 export { formUrl } from 'sharp-form/src/util/url';

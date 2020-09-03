@@ -1,10 +1,10 @@
 import Vue from 'vue';
+import Vuex from 'vuex';
 import axios from 'axios';
-import * as consts from 'sharp/consts';
 import Form from '../src/components/Form.vue';
+import store from 'sharp/store';
 
-
-import { wait, MockInjections, MockI18n, nextRequestFulfilled } from "@sharp/test-utils";
+import { wait, MockI18n, nextRequestFulfilled } from "@sharp/test-utils";
 import moxios from 'moxios';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 
@@ -15,6 +15,9 @@ describe('sharp-form', ()=>{
     Vue.use(MockI18n);
 
     function createWrapper({ propsData } = {}) {
+        const localVue = createLocalVue();
+        localVue.use(Vuex);
+
         return shallowMount(Form, {
             propsData: {
                 entityKey: 'spaceship',
@@ -25,6 +28,7 @@ describe('sharp-form', ()=>{
             provide: {
                 axiosInstance: axios.create(),
             },
+            store: new Vuex.Store(store),
             // language=Vue
             stubs: {
                 Grid:
@@ -44,7 +48,8 @@ describe('sharp-form', ()=>{
             created() {
                 moxios.install(this.axiosInstance);
                 moxios.uninstall = moxios.uninstall.bind(moxios, this.axiosInstance);
-            }
+            },
+            localVue
         });
     }
 

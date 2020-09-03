@@ -35,7 +35,7 @@
             </template>
             <template v-else>
                 <div class="d-flex align-items-center justify-content-center h-100">
-                    <Loading visible inline small />
+                    <Loading visible small />
                 </div>
             </template>
         </div>
