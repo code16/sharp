@@ -4,9 +4,6 @@ import { showAlert } from "../../util/modal";
 import {
     MockInjections,
     MockI18n,
-    mockProperty,
-    unmockProperty,
-    setter,
     nextRequestFulfilled
 } from "@sharp/test-utils";
 
@@ -16,7 +13,7 @@ jest.mock('../../util/modal');
 
 describe('dynamic-view',()=>{
     Vue.component('sharp-dynamic-view', {
-        mixins:[DynamicView],
+        mixins: [DynamicView],
         props: {
             apiPath: String,
             apiParams: Object,
@@ -24,6 +21,11 @@ describe('dynamic-view',()=>{
         },
         methods: {
             mount() {}
+        },
+        beforeCreate() {
+            this.$store = {
+                dispatch: jest.fn(),
+            }
         },
         created() {
             this.mount = jest.fn();
@@ -157,15 +159,11 @@ describe('dynamic-view',()=>{
 
         let { interceptors } = $view.axiosInstance;
 
-        let showLoadingEmitted = jest.fn();
-
-        $view.mainLoading.$on('show', showLoadingEmitted);
-
         interceptors.request.forEach(({ fulfilled }) => {
             fulfilled();
         });
 
-        expect(showLoadingEmitted).toHaveBeenCalled();
+        expect($view.$store.dispatch).toHaveBeenCalledWith('setLoading', true);
     });
 
     test('intercept response [success]: hide main loading', async ()=>{
@@ -173,15 +171,11 @@ describe('dynamic-view',()=>{
 
         let { interceptors } = $view.axiosInstance;
 
-        let hideLoadingEmitted = jest.fn();
-
-        $view.mainLoading.$on('hide', hideLoadingEmitted);
-
         interceptors.response.forEach(({ fulfilled }) => {
             fulfilled();
         });
 
-        expect(hideLoadingEmitted).toHaveBeenCalled();
+        expect($view.$store.dispatch).toHaveBeenCalledWith('setLoading', false);
     });
 
 
@@ -193,10 +187,6 @@ describe('dynamic-view',()=>{
         test('hide loading', async ()=>{
             let $view = await createVm();
 
-            let hideLoadingEmitted = jest.fn();
-
-            $view.mainLoading.$on('hide', hideLoadingEmitted);
-
             $view.post().catch(e=>{
                 // console.log(e) //[debug]
             });
@@ -206,7 +196,7 @@ describe('dynamic-view',()=>{
                 response: {}
             });
 
-            expect(hideLoadingEmitted).toHaveBeenCalled();
+            expect($view.$store.dispatch).toHaveBeenCalledWith('setLoading', false);
         });
 
         test('parse blob to json', async ()=>{
@@ -318,26 +308,17 @@ describe('dynamic-view',()=>{
     });
 
     test('show loading on created if asynchronous component', async () => {
-        let mainLoadingShowEmitted = jest.fn();
-        await createVm({
-            created() {
-                this._provided.mainLoading.$on('show',mainLoadingShowEmitted);
-            }
-        });
-        expect(mainLoadingShowEmitted).toHaveBeenCalledTimes(1);
+        const $view = await createVm();
+        expect($view.$store.dispatch).toHaveBeenCalledWith('setLoading', true);
     });
 
     test('should not show loading on created if synchronous component', async () => {
-        let mainLoadingShowEmitted = jest.fn();
-        await createVm({
+        const $view = await createVm({
             propsData: {
                 synchronous: true
             },
-            created() {
-                this._provided.mainLoading.$on('show',mainLoadingShowEmitted);
-            }
         });
-        expect(mainLoadingShowEmitted).toHaveBeenCalledTimes(0);
+        expect($view.$store.dispatch).not.toHaveBeenCalled();
     });
 
     test('notifications', async () => {

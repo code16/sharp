@@ -302,7 +302,7 @@
                         return response;
                     }
                     else if(response.data.ok) {
-                        this.mainLoading.$emit('show');
+                        this.$store.dispatch('setLoading', true);
                         this.redirectToParentPage();
                     }
                 }

@@ -24,11 +24,11 @@ import ActionView from './components/ActionView';
 import LeftNav from './components/LeftNav';
 import {
     ItemVisual,
-    Loading,
     CollapsibleItem,
     NavItem,
 } from 'sharp-ui';
 
+import storeModule from './store';
 import { router as getRouter } from "./router";
 
 locale.use(elLang());
@@ -41,7 +41,7 @@ Vue.use(VueGoogleMaps, {
 Vue.use(VueRouter);
 Vue.use(Vuex);
 
-const store = new Vuex.Store();
+const store = new Vuex.Store(storeModule);
 const router = getRouter();
 
 Vue.use(SharpCommands, { store, router });
@@ -55,13 +55,11 @@ Vue.use(SharpUI, { store, router });
 window.Trix = Trix;
 Vue.config.ignoredElements = [/^trix-/];
 
-const SharpLoading = Vue.extend(Loading);
 
 new Vue({
     el:"#sharp-app",
 
     provide: {
-        mainLoading: new SharpLoading({ el: '#glasspane' }),
         xsrfToken: cookies.read(axios.defaults.xsrfCookieName)
     },
 

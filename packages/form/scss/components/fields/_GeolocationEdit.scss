@@ -4,12 +4,12 @@
       padding-right: 2rem;
     }
   }
-  .SharpGeolocationEdit__loading {
+  &__loading {
     position: absolute;
-    top:0;
-    right:0;
-    bottom:0;
-    margin: auto;
+    top: 50%;
+    right: 0;
+    bottom: 0;
+    transform: translateY(-50%);
   }
   .leaflet-container {
     cursor: crosshair;

@@ -49,7 +49,7 @@
                     />
                 </template>
                 <template v-slot:loading>
-                    <Loading :visible="isLoading" inline small />
+                    <Loading :visible="isLoading" small />
                 </template>
                 <template v-slot:noResult>
                     {{ l('form.autocomplete.no_results_text') }}

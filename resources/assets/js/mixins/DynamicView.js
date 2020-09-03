@@ -1,24 +1,23 @@
 import { parseBlobJSONContent } from "../util/request";
 import { lang } from '../util/i18n';
 import { showAlert } from "../util/modal";
-import { BASE_URL } from "../consts";
 
 export const withAxiosInterceptors = {
-    inject: ['mainLoading', 'axiosInstance'],
+    inject: ['axiosInstance'],
     methods: {
         installInterceptors() {
             this.axiosInstance.interceptors.request.use(config => {
-                this.mainLoading.$emit('show');
+                this.$store.dispatch('setLoading', true);
                 //debugger
                 return config;
             }, error => Promise.reject(error));
 
             this.axiosInstance.interceptors.response.use(response => {
-                this.mainLoading.$emit('hide');
+                this.$store.dispatch('setLoading', false);
                 return response;
             }, async error => {
                 let { response, config: { method } } = error;
-                this.mainLoading.$emit('hide');
+                this.$store.dispatch('setLoading', false);
 
                 if(response.data instanceof Blob && response.data.type === 'application/json') {
                     response.data = await parseBlobJSONContent(response.data);
@@ -53,7 +52,7 @@ export const withAxiosInterceptors = {
     created() {
         if(!this.synchronous) {
             this.installInterceptors();
-            this.mainLoading.$emit('show');
+            this.$store.dispatch('setLoading', true);
         }
     }
 };
@@ -73,20 +72,20 @@ export default {
             return this.axiosInstance.get(this.apiPath, {
                     params : this.apiParams
                 })
-                .then(response=>{
+                .then(response => {
                     this.mount(response.data);
                     this.handleNotifications(response.data);
                     return Promise.resolve(response);
                 })
-                .catch(error=>{
+                .catch(error => {
                     return Promise.reject(error);
                 });
         },
         post(endpoint = this.apiPath, data = this.data, config) {
-            return this.axiosInstance.post(endpoint, data, config).then(response=>{
+            return this.axiosInstance.post(endpoint, data, config).then(response => {
                     return Promise.resolve(response);
                 })
-                .catch(error=>{
+                .catch(error => {
                     return Promise.reject(error);
                 });
         },

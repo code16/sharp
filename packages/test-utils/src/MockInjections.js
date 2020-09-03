@@ -29,8 +29,6 @@ const injectedComponents = {
         },
     },
     $tab:{},
-
-    mainLoading:{}
 };
 
 function resolveComponents(comps) {

@@ -1,4 +1,23 @@
 
-export { filters } from 'sharp-filters/src/store';
-export { commands } from 'sharp-commands/src/store';
-export { entityList } from 'sharp-entity-list/src/store';
+
+
+export default {
+    state: {
+        loading: false,
+    },
+    mutations: {
+        setLoading(state, loading) {
+            state.loading = !!loading;
+        },
+    },
+    getters: {
+        isLoading(state) {
+            return !!state.loading;
+        },
+    },
+    actions: {
+        setLoading({ commit }, loading) {
+            commit('setLoading', loading);
+        },
+    },
+}

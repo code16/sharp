@@ -24,7 +24,6 @@ describe('sharp-form', ()=>{
             },
             provide: {
                 axiosInstance: axios.create(),
-                mainLoading: new Vue(),
             },
             // language=Vue
             stubs: {

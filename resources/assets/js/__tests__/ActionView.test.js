@@ -1,7 +1,9 @@
+import Vuex from 'vuex';
 import Notifications from 'vue-notification';
 import { shallowMount, createLocalVue, config } from '@vue/test-utils';
 import ActionView from '../components/ActionView.vue';
 import { showAlert, showConfirm } from "../util/modal";
+import store from '../store';
 
 config.stubs['transition-group'] = false;
 
@@ -14,12 +16,7 @@ describe('action-view', ()=>{
 
     const localVue = createLocalVue();
     localVue.use(Notifications);
-
-    function notify(wrapper, ...args) {
-        wrapper.vm.$notify(...args);
-        // remove notification global data-id to preserve unit
-        wrapper.findAll('[data-id]').wrappers.forEach(wrapper=>wrapper.element.removeAttribute('data-id'));
-    }
+    localVue.use(Vuex);
 
     function createWrapper(options={}) {
         return shallowMount(ActionView, {
@@ -31,8 +28,15 @@ describe('action-view', ()=>{
             stubs: {
                 'SharpModal': ModalStub
             },
+            store: new Vuex.Store(store),
             localVue
         })
+    }
+
+    function notify(wrapper, ...args) {
+        wrapper.vm.$notify(...args);
+        // remove notification global data-id to preserve unit
+        wrapper.findAll('[data-id]').wrappers.forEach(wrapper=>wrapper.element.removeAttribute('data-id'));
     }
 
     test('can mount ActionView', ()=>{
@@ -63,6 +67,12 @@ describe('action-view', ()=>{
         const wrapper = createWrapper();
         showAlert('Modal 1');
         showConfirm('Modal 2');
+        expect(wrapper.html()).toMatchSnapshot();
+    });
+
+    test('loading', () => {
+        const wrapper = createWrapper();
+        wrapper.vm.$store.dispatch('setLoading', true);
         expect(wrapper.html()).toMatchSnapshot();
     });
 

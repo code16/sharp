@@ -34,20 +34,21 @@
                 </Modal>
             </template>
         </template>
+
+        <LoadingOverlay :visible="isLoading" />
     </div>
 </template>
 
 <script>
     import { api } from "../api";
-    import { Modal } from 'sharp-ui';
+    import { Modal, LoadingOverlay } from 'sharp-ui';
     import { mainModals } from "../util/modal";
-
-    const noop=()=>{};
 
     export default {
         name:'SharpActionView',
         components: {
-            Modal
+            Modal,
+            LoadingOverlay,
         },
 
         provide() {
@@ -71,6 +72,9 @@
         },
         computed: {
             mainModals,
+            isLoading() {
+                return this.$store.getters.isLoading;
+            },
         },
         created() {
             let { axiosInstance } = this._provided;
