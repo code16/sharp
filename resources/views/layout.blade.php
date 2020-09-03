@@ -11,9 +11,6 @@
     {!! \Illuminate\Support\Arr::get($injectedAssets ?? [], 'head') !!}
 </head>
 <body>
-    <div id="glasspane"></div>
-
-
     @yield('content')
 
     <script src="{{ mix('manifest.js', '/vendor/sharp') }}"></script>

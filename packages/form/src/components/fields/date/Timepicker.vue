@@ -7,10 +7,14 @@
         <div class="dropdown">
             <div class="select-list">
                 <ul class="hours" ref="hours">
-                    <li v-for="hr in croppedHours" v-text="hr" :class="{active: value && hour === hr}" @click.stop="select2('hour', hr)"></li>
+                    <template v-for="hr in croppedHours">
+                        <li :class="{ 'active': value && hour === hr }" @click.stop="select2('hour', hr)">{{ hr }}</li>
+                    </template>
                 </ul>
                 <ul class="minutes" ref="minutes">
-                    <li v-for="m in croppedMinutes" v-text="m" :class="{active: value && minute === m}" @click.stop="select2('minute', m)"></li>
+                    <template v-for="m in croppedMinutes">
+                        <li :class="{ 'active': value && minute === m }" @click.stop="select2('minute', m)">{{ m }}</li>
+                    </template>
                 </ul>
                 <!--<ul class="seconds" ref="seconds" v-if="secondType">-->
                     <!--<li class="hint" v-text="secondType"></li>-->
@@ -30,8 +34,6 @@
 
     import moment from 'moment';
 
-    import { AutoScroll } from 'sharp/mixins';
-
     const {
         methods: {
             renderFormat
@@ -40,7 +42,7 @@
 
     export default {
         name: 'SharpTimePicker',
-        mixins: [TimePicker, AutoScroll],
+        mixins: [TimePicker],
         props: {
             active:Boolean,
             min:String,
@@ -57,9 +59,13 @@
             }
         },
         watch: {
-            minute() { this.$nextTick(_=>this.updateScroll('minutes')); },
-            hour() { this.$nextTick(_=>this.updateScroll('hours')); },
-            active(a) { a && ['minutes','hours'].forEach(ref=>this.updateScroll(ref)); },
+            minute: 'layout',
+            hour: 'layout',
+            active(active) {
+                if(active) {
+                    this.layout(false);
+                }
+            },
         },
         computed: {
             minMoment() {
@@ -98,17 +104,6 @@
                 }
                 return this.minutes;
             },
-
-            autoScrollOptions() {
-                return listRef => {
-                    if(this.isSelection)
-                        return this.isSelection=false;
-                    return {
-                        list: this.$refs[listRef],
-                        item: () => this.$refs[listRef].querySelector('.active')
-                    };
-                }
-            }
         },
         methods: {
             select2(type, value) {
@@ -117,6 +112,12 @@
             },
             renderFormat() {
                 renderFormat.apply(this, arguments);
+            },
+            async layout(smooth = true) {
+                const behavior = smooth ? 'smooth' : 'auto';
+                await this.$nextTick();
+                this.$refs.minutes.querySelector('.active')?.scrollIntoView({ block:'center', behavior });
+                this.$refs.hours.querySelector('.active')?.scrollIntoView({ block:'center', behavior });
             },
         }
     }

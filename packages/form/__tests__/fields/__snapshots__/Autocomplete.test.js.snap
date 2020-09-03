@@ -9,9 +9,11 @@ exports[`autocomplete-field common & local can mount Autocomplete field as multi
 				<div class="multiselect__tags-wrap" style="display: none;"></div>
 				<!---->
 				<div class="SharpLoading SharpLoading--small" style="display: none;">
-					<svg viewBox="-75 -75 150 150" class="SharpLoading__svg">
-						<circle cx="0" cy="0" r="37.5"></circle>
-					</svg>
+					<div class="SharpLoading__content">
+						<svg viewBox="-75 -75 150 150" class="SharpLoading__svg">
+							<circle cx="0" cy="0" r="37.5"></circle>
+						</svg>
+					</div>
 				</div>
 				<input name="" type="text" autocomplete="off" placeholder="nom" tabindex="0" class="multiselect__input" style="width: 0px; position: absolute; padding: 0px;">
 				<!---->
@@ -68,9 +70,11 @@ exports[`autocomplete-field common & local can mount Autocomplete field as resul
 				<div class="multiselect__tags-wrap" style="display: none;"></div>
 				<!---->
 				<div class="SharpLoading SharpLoading--small" style="display: none;">
-					<svg viewBox="-75 -75 150 150" class="SharpLoading__svg">
-						<circle cx="0" cy="0" r="37.5"></circle>
-					</svg>
+					<div class="SharpLoading__content">
+						<svg viewBox="-75 -75 150 150" class="SharpLoading__svg">
+							<circle cx="0" cy="0" r="37.5"></circle>
+						</svg>
+					</div>
 				</div>
 				<input name="" type="text" autocomplete="off" placeholder="nom" tabindex="0" class="multiselect__input" style="width: 0px; position: absolute; padding: 0px;">
 				<span class="multiselect__single">

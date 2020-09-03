@@ -23,30 +23,35 @@
                     </div>
                 </template>
             </notifications>
-            <Modal v-for="(modal,id) in mainModalsData" :key="id"
-                v-bind="modal.props" @ok="modal.okCallback" @hidden="modal.hiddenCallback">
-                {{modal.text}}
-            </Modal>
+            <template v-for="dialog in dialogs">
+                <Modal
+                    v-bind="dialog.props"
+                    @ok="dialog.okCallback"
+                    @hidden="dialog.hiddenCallback"
+                    :key="dialog.id"
+                >
+                    {{ dialog.text }}
+                </Modal>
+            </template>
         </template>
+
+        <LoadingOverlay :visible="isLoading" />
     </div>
 </template>
 
 <script>
-    import EventBus from './EventBus';
     import { api } from "../api";
-    import { Modal } from 'sharp-ui';
-
-    const noop=()=>{};
+    import { Modal, LoadingOverlay } from 'sharp-ui';
 
     export default {
         name:'SharpActionView',
         components: {
-            Modal
+            Modal,
+            LoadingOverlay,
         },
 
         provide() {
             return {
-                actionsBus: new EventBus({name:'SharpActionsEventBus'}),
                 axiosInstance: api
             }
         },
@@ -60,36 +65,20 @@
 
         data() {
             return {
-                mainModalsData: {},
-                mainModalId: 0,
                 showErrorPage: false,
                 errorPageData: null
             }
         },
-        methods: {
-            showMainModal({ text, okCallback=noop, okCloseOnly, isError, ...sharedProps }) {
-                const curId = this.mainModalId;
-                const hiddenCallback = () => this.$delete(this.mainModalsData, curId);
-
-                this.$set(this.mainModalsData,curId,{
-                    props: {
-                        ...sharedProps,
-                        okOnly:okCloseOnly,
-                        noCloseOnBackdrop:okCloseOnly,
-                        noCloseOnEsc:okCloseOnly,
-                        visible: true,
-                        isError
-                    },
-                    okCallback, hiddenCallback,
-                    text,
-                });
-                this.mainModalId++;
-            }
+        computed: {
+            dialogs() {
+                return this.$store.state.dialogs;
+            },
+            isLoading() {
+                return this.$store.getters.isLoading;
+            },
         },
         created() {
-            let { actionsBus, axiosInstance } = this._provided;
-
-            actionsBus.$on('showMainModal', this.showMainModal);
+            let { axiosInstance } = this._provided;
 
             axiosInstance.interceptors.response.use(c=>c, error=>{
                 let { response: {status, data}, config: { method } } = error;

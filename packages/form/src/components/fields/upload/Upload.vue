@@ -17,10 +17,9 @@
 
 <script>
     import { UPLOAD_URL, lang } from 'sharp';
-    import { UploadXSRF } from 'sharp/mixins';
     import VueClip from './VueClip';
     import { UploadModifiers } from './modifiers';
-
+    import { defaultUploadOptions } from "../../../util/upload";
 
     export default {
         name: 'SharpUpload',
@@ -28,8 +27,8 @@
             VueClip
         },
 
-        mixins: [ UploadXSRF, UploadModifiers ],
-        inject: [ '$field', 'xsrfToken' ],
+        mixins: [ UploadModifiers ],
+        inject: ['$field'],
 
         props: {
             uniqueIdentifier: String,
@@ -48,7 +47,9 @@
         },
         computed: {
             options() {
-                let opt = {};
+                let opt = {
+                    ...defaultUploadOptions,
+                };
 
                 opt.url = UPLOAD_URL;
                 opt.uploadMultiple = false;
@@ -65,11 +66,8 @@
                         message: lang('form.upload.message.file_too_big')
                     }
                 }
-                this.patchXsrf(opt);
                 return opt;
             }
         },
-        methods:{
-        }
     };
 </script>

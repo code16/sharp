@@ -446,35 +446,20 @@ describe('vue-clip',() => {
             })
         });
 
-        let setPendingListener = jest.fn();
-
-        $vueClip.actionsBus.$on('setPendingJob', setPendingListener);
 
         $vueClip.onStatusAdded();
-        expect(setPendingListener).toHaveBeenCalledTimes(1);
-        expect(setPendingListener).toHaveBeenCalledWith({
-            key: 'my_upload.0',
-            origin: 'upload',
-            value: true
-        });
+        expect($vueClip.$form.setUploading).toHaveBeenCalledTimes(1);
+        expect($vueClip.$form.setUploading).toHaveBeenCalledWith('my_upload.0', true);
 
         $vueClip.file.xhrResponse = mockXhrResponse({});
 
         $vueClip.onStatusSuccess();
-        expect(setPendingListener).toHaveBeenCalledTimes(2);
-        expect(setPendingListener).toHaveBeenLastCalledWith({
-            key: 'my_upload.0',
-            origin: 'upload',
-            value: false
-        });
+        expect($vueClip.$form.setUploading).toHaveBeenCalledTimes(2);
+        expect($vueClip.$form.setUploading).toHaveBeenLastCalledWith('my_upload.0', false);
 
         $vueClip.onStatusError();
-        expect(setPendingListener).toHaveBeenCalledTimes(3);
-        expect(setPendingListener).toHaveBeenLastCalledWith({
-            key: 'my_upload.0',
-            origin: 'upload',
-            value: false
-        });
+        expect($vueClip.$form.setUploading).toHaveBeenCalledTimes(3);
+        expect($vueClip.$form.setUploading).toHaveBeenLastCalledWith('my_upload.0', false);
     });
 
     test('on status added', async () => {

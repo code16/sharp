@@ -27,11 +27,6 @@
     import FilterSelect from './filters/FilterSelect';
 
     export default {
-        inject: {
-            mainLoading: {
-                default: new Vue()
-            },
-        },
         components: {
             FilterSelect
         },
@@ -45,7 +40,7 @@
             handleFilterChanged(filter, value) {
                 this.$store.dispatch('global-filters/post', { filter, value })
                     .then(() => {
-                        this.mainLoading.$emit('show');
+                        this.$store.dispatch('setLoading', true);
                         location.href = BASE_URL;
                     });
             },

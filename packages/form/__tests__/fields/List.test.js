@@ -248,7 +248,8 @@ describe('list-field', () => {
             'context-fields': { name: { type:'text', readOnly:false, } },
             'context-data': expect.objectContaining({ id: 0, name: 'myName', _fieldsLocale: {} }),
             'config-identifier': 'name',
-            'update-data': 'update 0'
+            'update-data': 'update 0',
+            'read-only': false,
         });
     });
 

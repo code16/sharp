@@ -1,23 +1,23 @@
 import { parseBlobJSONContent } from "../util/request";
 import { lang } from '../util/i18n';
-import { BASE_URL } from "../consts";
+import { showAlert } from "../util/dialogs";
 
 export const withAxiosInterceptors = {
-    inject: ['mainLoading', 'axiosInstance', 'actionsBus'],
+    inject: ['axiosInstance'],
     methods: {
         installInterceptors() {
             this.axiosInstance.interceptors.request.use(config => {
-                this.mainLoading.$emit('show');
+                this.$store.dispatch('setLoading', true);
                 //debugger
                 return config;
             }, error => Promise.reject(error));
 
             this.axiosInstance.interceptors.response.use(response => {
-                this.mainLoading.$emit('hide');
+                this.$store.dispatch('setLoading', false);
                 return response;
             }, async error => {
                 let { response, config: { method } } = error;
-                this.mainLoading.$emit('hide');
+                this.$store.dispatch('setLoading', false);
 
                 if(response.data instanceof Blob && response.data.type === 'application/json') {
                     response.data = await parseBlobJSONContent(response.data);
@@ -25,38 +25,26 @@ export const withAxiosInterceptors = {
 
                 let { data, status } = response;
 
-                let modalOptions = {
-                    title: lang(`modals.${status}.title`) || lang(`modals.error.title`),
-                    text: data.message || lang(`modals.${status}.message`) || lang(`modals.error.message`),
-                    isError: true
-                };
+                const text = data.message || lang(`modals.${status}.message`) || lang(`modals.error.message`);
+                const title = lang(`modals.${status}.title`) || lang(`modals.error.title`);
 
-                if(status === 419) {
-                    modalOptions.okCallback = () => location.reload();
+                if(status === 404 && method === 'get' || status === 422) {
+                    return Promise.reject(error);
                 }
 
-                switch(status) {
-                    /// Unauthorized
-                    case 401: this.actionsBus.$emit('showMainModal', {
-                        ...modalOptions,
+                if(status === 401 || status === 419) {
+                    showAlert(text, {
+                        title,
+                        isError: true,
                         okCallback() {
-                            location.href = `${BASE_URL}/login`;
+                            location.reload();
                         },
                     });
-                        break;
-
-                    case 403:
-                    case 404:
-                    case 417:
-                    case 419:
-                    case 500:
-                        if(status !== 404 || method !== 'get')
-                            this.actionsBus.$emit('showMainModal', {
-                                ...modalOptions,
-                                okCloseOnly:true,
-                            });
-                        break;
                 }
+                else {
+                    showAlert(text, { title, isError:true });
+                }
+
                 return Promise.reject(error);
             });
         },
@@ -64,7 +52,7 @@ export const withAxiosInterceptors = {
     created() {
         if(!this.synchronous) {
             this.installInterceptors();
-            this.mainLoading.$emit('show');
+            this.$store.dispatch('setLoading', true);
         }
     }
 };
@@ -84,20 +72,20 @@ export default {
             return this.axiosInstance.get(this.apiPath, {
                     params : this.apiParams
                 })
-                .then(response=>{
+                .then(response => {
                     this.mount(response.data);
                     this.handleNotifications(response.data);
                     return Promise.resolve(response);
                 })
-                .catch(error=>{
+                .catch(error => {
                     return Promise.reject(error);
                 });
         },
         post(endpoint = this.apiPath, data = this.data, config) {
-            return this.axiosInstance.post(endpoint, data, config).then(response=>{
+            return this.axiosInstance.post(endpoint, data, config).then(response => {
                     return Promise.resolve(response);
                 })
-                .catch(error=>{
+                .catch(error => {
                     return Promise.reject(error);
                 });
         },

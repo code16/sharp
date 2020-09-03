@@ -8,9 +8,6 @@ import Notifications from 'vue-notification';
 import locale from 'element-ui/lib/locale';
 import { elLang } from './util/element-ui';
 
-import axios from 'axios';
-import cookies from 'axios/lib/helpers/cookies';
-
 
 import SharpCommands from 'sharp-commands';
 import SharpDashboard from 'sharp-dashboard';
@@ -24,11 +21,11 @@ import ActionView from './components/ActionView';
 import LeftNav from './components/LeftNav';
 import {
     ItemVisual,
-    Loading,
     CollapsibleItem,
     NavItem,
 } from 'sharp-ui';
 
+import { store as getStore } from './store/store';
 import { router as getRouter } from "./router";
 
 locale.use(elLang());
@@ -41,8 +38,8 @@ Vue.use(VueGoogleMaps, {
 Vue.use(VueRouter);
 Vue.use(Vuex);
 
-const store = new Vuex.Store();
 const router = getRouter();
+const store = getStore();
 
 Vue.use(SharpCommands, { store, router });
 Vue.use(SharpDashboard, { store, router });
@@ -55,15 +52,9 @@ Vue.use(SharpUI, { store, router });
 window.Trix = Trix;
 Vue.config.ignoredElements = [/^trix-/];
 
-const SharpLoading = Vue.extend(Loading);
 
 new Vue({
-    el:"#sharp-app",
-
-    provide: {
-        mainLoading: new SharpLoading({ el: '#glasspane' }),
-        xsrfToken: cookies.read(axios.defaults.xsrfCookieName)
-    },
+    el: "#sharp-app",
 
     components: {
         'sharp-action-view': ActionView,

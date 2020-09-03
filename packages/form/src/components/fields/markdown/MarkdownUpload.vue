@@ -24,20 +24,16 @@
 <script>
     import Vue from 'vue';
     import { UPLOAD_URL, lang } from 'sharp';
-    import { UploadXSRF } from 'sharp/mixins';
-
     import VueClip from '../upload/VueClip';
 
-    import { UploadModifiers } from '../upload/modifiers';   
+    import { UploadModifiers } from '../upload/modifiers';
+    import { defaultUploadOptions } from "../../../util/upload";
 
     const removeKeys = ['Backspace', 'Enter'];
     const escapeKeys = ['ArrowLeft', 'ArrowUp', 'ArrowDown', 'ArrowRight', 'Escape', 'Tab'];
 
     export default Vue.extend({
-
-        mixins: [ UploadXSRF, UploadModifiers ],
-
-        inject: [ 'xsrfToken'],
+        mixins: [ UploadModifiers ],
 
         components: {
             VueClip
@@ -55,7 +51,7 @@
             ratioY: Number,
             croppableFileTypes: Array,
         },
-        
+
         data() {
             return {
                 show: this.value,
@@ -64,7 +60,8 @@
         },
         computed: {
             options() {
-                return this.patchXsrf({
+                return {
+                    ...defaultUploadOptions,
                     url: UPLOAD_URL,
                     uploadMultiple: false,
                     acceptedFiles: {
@@ -74,8 +71,8 @@
                     maxFilesize: {
                         limit: this.maxImageSize,
                         message: lang('form.upload.message.file_too_big')
-                    }
-                });
+                    },
+                };
             },
             dropzone() {
                 return this.$refs.vueclip.uploader._uploader;

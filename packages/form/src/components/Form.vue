@@ -1,8 +1,14 @@
 <template>
     <div class="SharpForm" data-popover-boundary>
         <template v-if="ready">
-            <div class="container">
-                <div v-show="hasErrors" class="SharpNotification SharpNotification--error" role="alert">
+            <slot
+                name="action-bar"
+                :props="actionBarProps"
+                :listeners="actionBarListeners"
+            />
+
+            <template v-if="hasErrors">
+                <div class="SharpNotification SharpNotification--error" role="alert">
                     <div class="SharpNotification__details">
                         <div class="SharpNotification__text-wrapper">
                             <p class="SharpNotification__title">{{ l('form.validation_error.title') }}</p>
@@ -10,40 +16,42 @@
                         </div>
                     </div>
                 </div>
-                <TabbedLayout :layout="layout" ref="tabbedLayout">
-                    <template v-if="localized" v-slot:nav-prepend>
-                        <LocaleSelect
-                            :locale="currentLocale"
-                            :locales="locales"
-                            @change="handleLocaleChanged"
-                        />
-                    </template>
-                    <template v-slot:default="{ tab }">
-                        <Grid :rows="[tab.columns]" ref="columnsGrid" v-slot="{ itemLayout:column }">
-                            <FieldsLayout
-                                :layout="column.fields"
-                                :visible="fieldVisible"
-                                ref="fieldLayout"
-                                v-slot="{ fieldLayout }"
-                            >
-                                <FieldDisplay
-                                    :field-key="fieldLayout.key"
-                                    :context-fields="transformedFields"
-                                    :context-data="data"
-                                    :field-layout="fieldLayout"
-                                    :locale="fieldLocale[fieldLayout.key]"
-                                    :error-identifier="fieldLayout.key"
-                                    :config-identifier="fieldLayout.key"
-                                    :update-data="updateData"
-                                    :update-visibility="updateVisibility"
-                                    @locale-change="updateLocale"
-                                    ref="field"
-                                />
-                            </FieldsLayout>
-                        </Grid>
-                    </template>
-                </TabbedLayout>
-            </div>
+            </template>
+
+            <TabbedLayout :layout="layout" ref="tabbedLayout">
+                <template v-if="localized" v-slot:nav-prepend>
+                    <LocaleSelect
+                        :locale="currentLocale"
+                        :locales="locales"
+                        @change="handleLocaleChanged"
+                    />
+                </template>
+                <template v-slot:default="{ tab }">
+                    <Grid :rows="[tab.columns]" ref="columnsGrid" v-slot="{ itemLayout:column }">
+                        <FieldsLayout
+                            :layout="column.fields"
+                            :visible="fieldVisible"
+                            ref="fieldLayout"
+                            v-slot="{ fieldLayout }"
+                        >
+                            <FieldDisplay
+                                :field-key="fieldLayout.key"
+                                :context-fields="transformedFields"
+                                :context-data="data"
+                                :field-layout="fieldLayout"
+                                :locale="fieldLocale[fieldLayout.key]"
+                                :read-only="isReadOnly"
+                                :error-identifier="fieldLayout.key"
+                                :config-identifier="fieldLayout.key"
+                                :update-data="updateData"
+                                :update-visibility="updateVisibility"
+                                @locale-change="updateLocale"
+                                ref="field"
+                            />
+                        </FieldsLayout>
+                    </Grid>
+                </template>
+            </TabbedLayout>
         </template>
     </div>
 </template>
@@ -54,10 +62,11 @@
         getBackUrl,
         getListBackUrl,
         logError,
+        showAlert,
     } from "sharp";
 
     import { TabbedLayout, Grid, Dropdown, DropdownItem, } from 'sharp-ui';
-    import { ActionEvents, ReadOnlyFields, Localization, DynamicView } from 'sharp/mixins';
+    import { Localization, DynamicView } from 'sharp/mixins';
 
     import FieldsLayout from './ui/FieldsLayout';
     import LocaleSelect from './ui/LocaleSelect';
@@ -72,7 +81,7 @@
         name:'SharpForm',
         extends: DynamicView,
 
-        mixins: [ActionEvents, ReadOnlyFields('fields'), Localization, localize('fields')],
+        mixins: [ Localization, localize('fields')],
 
         components: {
             TabbedLayout,
@@ -82,7 +91,6 @@
             DropdownItem,
             LocaleSelect,
         },
-
 
         props:{
             entityKey: String,
@@ -96,8 +104,6 @@
             ignoreAuthorizations: Boolean,
             props: Object
         },
-
-        inject:['actionsBus'],
 
         provide() {
             return {
@@ -119,9 +125,8 @@
                 locales: null,
 
                 fieldVisible: {},
+                uploadingFields: {},
                 curFieldsetId:0,
-
-                pendingJobs: []
             }
         },
         computed: {
@@ -168,16 +173,35 @@
                 return `${BASE_URL}/list/${this.baseEntityKey}?restore-context=1`;
             },
             transformedFields() {
-                const fields = this.isReadOnly
-                    ? this.readOnlyFields
-                    : this.fields;
-                return transformFields(fields, this.data);
+                return transformFields(this.fields, this.data);
             },
 
             currentLocale() {
                 const locales = [...new Set(Object.values(this.fieldLocale))];
                 return locales.length === 1 ? locales[0] : null;
-            }
+            },
+            isUploading() {
+                return Object.values(this.uploadingFields)
+                    .some(uploading => !!uploading);
+            },
+            actionBarProps() {
+                return {
+                    showSubmitButton: this.isCreation
+                        ? !!this.authorizations.create
+                        : !!this.authorizations.update,
+                    showDeleteButton: !this.isCreation && !this.isSingle && !!this.authorizations.delete,
+                    showBackButton: this.isReadOnly,
+                    create: !!this.isCreation,
+                    uploading: this.isUploading,
+                }
+            },
+            actionBarListeners() {
+                return {
+                    'submit': this.handleSubmitClicked,
+                    'delete': this.handleDeleteClicked,
+                    'cancel': this.handleCancelClicked,
+                }
+            },
         },
         methods: {
             async updateData(key, value, { forced } = {}) {
@@ -218,11 +242,9 @@
             },
             validate() {
                 const localizedFields = Object.keys(this.fieldLocale);
-                const alert = text => this.actionsBus.$emit('showMainModal', {
+                const alert = text => showAlert(text, {
                     title: 'Data error',
-                    text,
                     isError: true,
-                    okCloseOnly: true,
                 });
                 if(localizedFields.length > 0 && !this.locales.length) {
                     alert("Some fields are localized but the form hasn't any locales configured");
@@ -256,22 +278,10 @@
                 else {
                     if(this.entityKey) {
                         await this.get();
-                        this.setupActionBar();
                         this.ready = true;
                     }
                     else logError('no entity key provided');
                 }
-            },
-
-            setupActionBar() {
-                this.actionsBus.$emit('setup', {
-                    showSubmitButton: this.isCreation
-                        ? this.authorizations.create
-                        : this.authorizations.update,
-                    showDeleteButton: !this.isCreation && !this.isSingle && this.authorizations.delete,
-                    showBackButton: this.isReadOnly,
-                    opType: this.isCreation ? 'create' : 'update'
-                });
             },
             redirectToList() {
                 location.href = getListBackUrl(this.breadcrumb);
@@ -280,7 +290,7 @@
                 location.href = getBackUrl(this.breadcrumb);
             },
             async submit({ postFn }={}) {
-                if(this.pendingJobs.length) {
+                if(this.isUploading) {
                     return;
                 }
                 try {
@@ -290,7 +300,7 @@
                         return response;
                     }
                     else if(response.data.ok) {
-                        this.mainLoading.$emit('show');
+                        this.$store.dispatch('setLoading', true);
                         this.redirectToParentPage();
                     }
                 }
@@ -298,47 +308,39 @@
                     this.handleError(error);
                     return Promise.reject(error);
                 }
-            }
-        },
-        actions: {
-            submit() {
+            },
+            handleSubmitClicked() {
                 this.submit().catch(()=>{});
             },
-            async 'delete'() {
-                try {
-                    await this.axiosInstance.delete(this.apiPath);
-                    this.redirectToList();
-                }
-                catch(error) {
-
-                }
+            handleDeleteClicked() {
+                this.axiosInstance.delete(this.apiPath)
+                    .then(() => {
+                        this.redirectToList();
+                    });
             },
-            cancel() {
+            handleCancelClicked() {
                 this.redirectToParentPage();
             },
 
-            setPendingJob({ key, origin, value:isPending }) {
-                if(isPending)
-                    this.pendingJobs.push(key);
-                else
-                    this.pendingJobs = this.pendingJobs.filter(jobKey => jobKey !== key);
+            // Used by VueClip as injection
+            setUploading(fieldKey, uploading) {
+                this.uploadingFields = {
+                    ...this.uploadingFields,
+                    [fieldKey]: uploading
+                }
+            },
 
-                if(this.pendingJobs.length) {
-                    this.actionsBus.$emit('updateActionsState', {
-                        state: 'pending',
-                        modifier: origin
-                    })
-                }
-                else {
-                    this.actionsBus.$emit('updateActionsState', null);
-                }
-            }
+            // Used by List field as injection
+            hasUploadingFields(fieldKey) {
+                return Object.keys(this.uploadingFields)
+                    .some(uploadingField => uploadingField.startsWith(`${fieldKey}.`));
+            },
         },
         created() {
             this.$on('error-cleared', errorId => {
                 if(this.errors[errorId])
                     this.$set(this.errors[errorId],'cleared',true);
-            })
+            });
         },
         mounted() {
             this.init();

@@ -49,7 +49,7 @@
                     />
                 </template>
                 <template v-slot:loading>
-                    <Loading :visible="isLoading" inline small />
+                    <Loading :visible="isLoading" small />
                 </template>
                 <template v-slot:noResult>
                     {{ l('form.autocomplete.no_results_text') }}
@@ -72,13 +72,12 @@
 </template>
 
 <script>
-
     import debounce from 'lodash/debounce';
     import Multiselect from 'vue-multiselect';
     import { warn, lang, search } from 'sharp';
     import { TemplateRenderer } from 'sharp/components';
     import { Loading } from 'sharp-ui';
-    import { Localization, Debounce } from 'sharp/mixins';
+    import { Localization } from 'sharp/mixins';
 
     import { getAutocompleteSuggestions } from "../../api";
     import localize from '../../mixins/localize/Autocomplete';
@@ -93,7 +92,7 @@
             Loading,
         },
 
-        mixins: [Localization, Debounce, localize],
+        mixins: [Localization, localize],
 
         props: {
             fieldKey: String,

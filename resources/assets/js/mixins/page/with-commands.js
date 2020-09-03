@@ -1,9 +1,8 @@
 import { parseBlobJSONContent, getFileName } from "../../util/request";
 import { lang } from "../../index";
+import { showConfirm, showAlert } from "../../util/dialogs";
 
 export default {
-    // TODO: refactoring: to remove
-    inject: ['actionsBus'],
     data() {
         return {
             commandCurrentForm: null,
@@ -56,9 +55,8 @@ export default {
             }
             if(confirmation) {
                 await new Promise(resolve => {
-                    this.actionsBus.$emit('showMainModal', {
+                    showConfirm(confirmation, {
                         title: lang('modals.command.confirm.title'),
-                        text: confirmation,
                         okCallback: resolve,
                     });
                 });
@@ -91,10 +89,8 @@ export default {
             this.init();
         },
         handleInfoCommand(data) {
-            this.actionsBus.$emit('showMainModal', {
+            showAlert(data.message, {
                 title: lang('modals.command.info.title'),
-                text: data.message,
-                okCloseOnly: true
             });
         },
         handleViewCommand(data) {

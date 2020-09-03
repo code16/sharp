@@ -105,7 +105,7 @@
             VueCropper
         },
 
-        inject : [ 'actionsBus', 'axiosInstance' ,'$form', '$field' ],
+        inject : [ 'axiosInstance' ,'$form', '$field' ],
 
         mixins: [ Localization, VueClipModifiers ],
 
@@ -214,11 +214,7 @@
         },
         methods: {
             setPending(value) {
-                this.actionsBus.$emit('setPendingJob', {
-                    key: this.pendingKey,
-                    origin: 'upload',
-                    value
-                });
+                this.$form?.setUploading(this.pendingKey, value);
             },
             // status callbacks
             onStatusAdded() {

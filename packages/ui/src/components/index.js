@@ -12,6 +12,7 @@ export { default as DropdownArrow } from './dropdown/Arrow';
 export { default as Grid } from './Grid';
 export { default as ItemVisual } from './ItemVisual';
 export { default as Loading } from './Loading';
+export { default as LoadingOverlay } from './LoadingOverlay';
 export { default as Modal } from './Modal';
 export { default as Multiselect } from './Multiselect';
 export { default as NavItem } from './nav/NavItem';

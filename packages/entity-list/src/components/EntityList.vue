@@ -78,7 +78,9 @@
 </template>
 
 <script>
-    import { formUrl, showUrl, lang } from 'sharp';
+    import { formUrl, showUrl, lang, showAlert } from 'sharp';
+    import { Localization, DynamicView, withCommands } from 'sharp/mixins';
+
     import {
         DataList,
         DataListRow,
@@ -92,9 +94,6 @@
         CommandFormModal,
         CommandViewPanel,
     } from 'sharp-commands';
-
-    import { Localization, DynamicView, withCommands } from 'sharp/mixins';
-
 
     export default {
         name: 'SharpEntityList',
@@ -434,11 +433,9 @@
                     .catch(error => {
                         const { data } = error.response;
                         if(error.response.status === 422) {
-                            this.actionsBus.$emit('showMainModal', {
+                            showAlert(data.message, {
                                 title: lang('modals.state.422.title'),
-                                text: data.message,
                                 isError: true,
-                                okCloseOnly: true
                             });
                         }
                     })

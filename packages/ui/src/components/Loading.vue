@@ -1,11 +1,6 @@
 <template>
-    <div v-if="inline" class="SharpLoading" :class="{'SharpLoading--small':small}" v-show="show">
-        <svg class="SharpLoading__svg" viewBox="-75 -75 150 150">
-            <circle cx="0" cy="0" r="37.5" />
-        </svg>
-    </div>
-    <div v-else class="SharpLoading__overlay" v-show="show">
-        <div class="SharpLoading" :class="{'SharpLoading--small':small}">
+    <div  class="SharpLoading" :class="classes" v-show="visible">
+        <div class="SharpLoading__content">
             <svg class="SharpLoading__svg" viewBox="-75 -75 150 150">
                 <circle cx="0" cy="0" r="37.5" />
             </svg>
@@ -14,29 +9,19 @@
 </template>
 
 
-
 <script>
-    import Vue from 'vue';
     export default {
         name: 'SharpLoading',
         props: {
             visible: Boolean,
-            inline: Boolean,
-            small: Boolean
+            small: Boolean,
         },
-        data() {
-            return {
-                show: this.visible
+        computed: {
+            classes() {
+                return {
+                    'SharpLoading--small': this.small,
+                }
             }
         },
-        watch: {
-            visible(v) {
-                this.show = v;
-            }
-        },
-        created() {
-            this.$on('show', _ => this.show = true);
-            this.$on('hide', _ => this.show = false);
-        }
     }
 </script>

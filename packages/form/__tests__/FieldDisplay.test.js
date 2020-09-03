@@ -3,7 +3,7 @@ import FieldContainer from '../src/components/ui/FieldContainer.vue';
 import FieldDisplay from '../src/components/FieldDisplay';
 import * as conditions from '../src/util/conditional-display';
 
-import { shallowMount } from '@vue/test-utils'; 
+import { shallowMount } from '@vue/test-utils';
 
 
 jest.mock('../src/components/ui/FieldContainer.vue', () => ({
@@ -33,21 +33,6 @@ describe('field-display', () => {
     let computeSelectCondition = ()=>{}, computeCondition = ()=>{};
 
     beforeEach(() => {
-        // document.body.innerHTML = `
-        //     <div id="app">
-        //         <sharp-field-display
-        //             field-key="title"
-        //             :context-data="contextData"
-        //             :context-fields="contextFields"
-        //             :update-visibility="updateVisibility"
-        //             :locale="locale"
-        //             config-identifier="title"
-        //             error-identifier="title"
-        //         >
-        //         </sharp-field-display> 
-        //     </div>
-        // `;
-
         computeSelectCondition = conditions.helpers.computeSelectCondition = jest.fn(conditions.helpers.computeSelectCondition);
         computeCondition = conditions.computeCondition = jest.fn(conditions.computeCondition);
     });
@@ -95,7 +80,7 @@ describe('field-display', () => {
             expect(wrapper.findAll(FieldContainer).length).toBe(1);
             expect(computeCondition)
                 .toHaveBeenCalledWith(contextFields, contextData, contextFields.title.conditionalDisplay);
-            
+
             wrapper = createWrapper({
                 propsData: {
                     contextData: {
@@ -255,7 +240,7 @@ describe('field-display', () => {
                     type: 'select'
                 }
             }
-            
+
             wrapper = createWrapper({
                 propsData: {
                     contextFields,
@@ -341,7 +326,7 @@ describe('field-display', () => {
                     type: 'select'
                 }
             }
-            
+
             wrapper = createWrapper({
                 propsData: {
                     contextFields,
@@ -464,21 +449,24 @@ describe('field-display', () => {
         });
     });
 
-    test('expose appropriate props', () => {
-        const wrapper = createWrapper({
-            propsData: {
-                contextData: {
-                    title: 'myTitle',
-                },
-                contextFields: {
-                    title: {
-                        type: 'text',
-                        placeholder: 'Title',
-                        label: 'Super title label',
-                        helpMessage: 'Super help message'
-                    }
+    test('expose appropriate props', async () => {
+        let wrapper = null;
+        const propsData = {
+            contextData: {
+                title: 'myTitle',
+            },
+            contextFields: {
+                title: {
+                    type: 'text',
+                    placeholder: 'Title',
+                    label: 'Super title label',
+                    helpMessage: 'Super help message'
                 }
             },
+        }
+
+        wrapper = createWrapper({
+            propsData,
         });
 
         expect(wrapper.find(FieldContainer).vm.$attrs).toMatchObject({
@@ -491,6 +479,21 @@ describe('field-display', () => {
             value: 'myTitle',
             label: 'Super title label',
             helpMessage: 'Super help message'
+        });
+
+        wrapper = createWrapper({
+            propsData: {
+                ...propsData,
+                readOnly: true,
+            },
+        })
+
+        expect(wrapper.find(FieldContainer).vm.$attrs).toMatchObject({
+            fieldProps: {
+                type: 'text',
+                placeholder: 'Title',
+                readOnly: true,
+            },
         });
     });
 
@@ -537,12 +540,12 @@ describe('field-display', () => {
 
     test('handle localized value', async () => {
 
-        function resolveValue({ 
+        function resolveValue({
             type,
             value,
             locale,
-            localized = true, 
-            $form = { localized: true } 
+            localized = true,
+            $form = { localized: true }
         }) {
             const wrapper = createWrapper({
                 propsData: {

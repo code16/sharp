@@ -9,9 +9,14 @@ $loading__end-duration: 300ms;
 
 .SharpLoading {
   @include reset;
-  @include animation__loading--spin;
   width: $loading__size;
   height: $loading__size;
+
+  &__content {
+    width: 100%;
+    height: 100%;
+    @include animation__loading--spin;
+  }
 
   &__svg {
     fill: transparent;
@@ -23,7 +28,9 @@ $loading__end-duration: 300ms;
   }
 
   &--stop {
-    @include animation__loading--stop;
+    .SharpLoading__content {
+      @include animation__loading--stop;
+    }
   }
 
   &--small {

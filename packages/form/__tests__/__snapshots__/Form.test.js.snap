@@ -2,20 +2,11 @@
 
 exports[`sharp-form can mount "independant" sharp-form 1`] = `
 <div data-popover-boundary="" class="SharpForm">
-	<div class="container">
-		<div role="alert" class="SharpNotification SharpNotification--error" style="display: none;">
-			<div class="SharpNotification__details">
-				<div class="SharpNotification__text-wrapper">
-					<p class="SharpNotification__title">{{ form.validation_error.title }}</p>
-					<p class="SharpNotification__subtitle">{{ form.validation_error.description }}</p>
-				</div>
-			</div>
-		</div>
-		<div id="MOCKED_TABBED_LAYOUT">
-			<div id="MOCKED_GRID">
-				<div id="MOCKED_FIELDS_LAYOUT">
-					<fielddisplay-stub field-key="title" context-fields="[object Object]" context-data="[object Object]" field-layout="[object Object]" error-identifier="title" config-identifier="title" update-data="function () { [native code] }" update-visibility="function () { [native code] }"></fielddisplay-stub>
-				</div>
+	<!---->
+	<div id="MOCKED_TABBED_LAYOUT">
+		<div id="MOCKED_GRID">
+			<div id="MOCKED_FIELDS_LAYOUT">
+				<fielddisplay-stub field-key="title" context-fields="[object Object]" context-data="[object Object]" field-layout="[object Object]" read-only="true" error-identifier="title" config-identifier="title" update-data="function () { [native code] }" update-visibility="function () { [native code] }"></fielddisplay-stub>
 			</div>
 		</div>
 	</div>
@@ -24,20 +15,11 @@ exports[`sharp-form can mount "independant" sharp-form 1`] = `
 
 exports[`sharp-form can mount sharp-form 1`] = `
 <div data-popover-boundary="" class="SharpForm">
-	<div class="container">
-		<div role="alert" class="SharpNotification SharpNotification--error" style="display: none;">
-			<div class="SharpNotification__details">
-				<div class="SharpNotification__text-wrapper">
-					<p class="SharpNotification__title">{{ form.validation_error.title }}</p>
-					<p class="SharpNotification__subtitle">{{ form.validation_error.description }}</p>
-				</div>
-			</div>
-		</div>
-		<div id="MOCKED_TABBED_LAYOUT">
-			<div id="MOCKED_GRID">
-				<div id="MOCKED_FIELDS_LAYOUT">
-					<fielddisplay-stub field-key="title" context-fields="[object Object]" context-data="[object Object]" field-layout="[object Object]" error-identifier="title" config-identifier="title" update-data="function () { [native code] }" update-visibility="function () { [native code] }"></fielddisplay-stub>
-				</div>
+	<!---->
+	<div id="MOCKED_TABBED_LAYOUT">
+		<div id="MOCKED_GRID">
+			<div id="MOCKED_FIELDS_LAYOUT">
+				<fielddisplay-stub field-key="title" context-fields="[object Object]" context-data="[object Object]" field-layout="[object Object]" read-only="true" error-identifier="title" config-identifier="title" update-data="function () { [native code] }" update-visibility="function () { [native code] }"></fielddisplay-stub>
 			</div>
 		</div>
 	</div>
@@ -46,20 +28,18 @@ exports[`sharp-form can mount sharp-form 1`] = `
 
 exports[`sharp-form can mount sharp-form with alert 1`] = `
 <div data-popover-boundary="" class="SharpForm">
-	<div class="container">
-		<div role="alert" class="SharpNotification SharpNotification--error" style="">
-			<div class="SharpNotification__details">
-				<div class="SharpNotification__text-wrapper">
-					<p class="SharpNotification__title">{{ form.validation_error.title }}</p>
-					<p class="SharpNotification__subtitle">{{ form.validation_error.description }}</p>
-				</div>
+	<div role="alert" class="SharpNotification SharpNotification--error">
+		<div class="SharpNotification__details">
+			<div class="SharpNotification__text-wrapper">
+				<p class="SharpNotification__title">{{ form.validation_error.title }}</p>
+				<p class="SharpNotification__subtitle">{{ form.validation_error.description }}</p>
 			</div>
 		</div>
-		<div id="MOCKED_TABBED_LAYOUT">
-			<div id="MOCKED_GRID">
-				<div id="MOCKED_FIELDS_LAYOUT">
-					<fielddisplay-stub field-key="title" context-fields="[object Object]" context-data="[object Object]" field-layout="[object Object]" error-identifier="title" config-identifier="title" update-data="function () { [native code] }" update-visibility="function () { [native code] }"></fielddisplay-stub>
-				</div>
+	</div>
+	<div id="MOCKED_TABBED_LAYOUT">
+		<div id="MOCKED_GRID">
+			<div id="MOCKED_FIELDS_LAYOUT">
+				<fielddisplay-stub field-key="title" context-fields="[object Object]" context-data="[object Object]" field-layout="[object Object]" read-only="true" error-identifier="title" config-identifier="title" update-data="function () { [native code] }" update-visibility="function () { [native code] }"></fielddisplay-stub>
 			</div>
 		</div>
 	</div>

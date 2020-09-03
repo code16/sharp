@@ -3,7 +3,6 @@ import axios from 'axios';
 
 
 const injectedCustoms = () => ({
-    xsrfToken: 'xsrfTest',
     axiosInstance: axios.create(),
     params: {}
 });
@@ -19,13 +18,16 @@ const injectedComponents = {
             downloadLinkBase:'',
             localized: false,
             locales: null,
-            pendingJobs: [],
-        })
+        }),
+        methods: {
+            setUploading() {},
+            hasUploadingFields() {}
+        },
+        created() {
+            this.setUploading = jest.fn();
+        },
     },
     $tab:{},
-
-    actionsBus:{},
-    mainLoading:{}
 };
 
 function resolveComponents(comps) {

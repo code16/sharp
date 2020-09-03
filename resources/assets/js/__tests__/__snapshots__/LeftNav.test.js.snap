@@ -13,9 +13,11 @@ exports[`left-nav can mount "not ready" LeftNav 1`] = `
 	<div class="flex-grow-1 position-relative" style="min-height: 0;">
 		<div class="d-flex align-items-center justify-content-center h-100">
 			<div class="SharpLoading SharpLoading--small">
-				<svg viewBox="-75 -75 150 150" class="SharpLoading__svg">
-					<circle cx="0" cy="0" r="37.5"></circle>
-				</svg>
+				<div class="SharpLoading__content">
+					<svg viewBox="-75 -75 150 150" class="SharpLoading__svg">
+						<circle cx="0" cy="0" r="37.5"></circle>
+					</svg>
+				</div>
 			</div>
 		</div>
 	</div>

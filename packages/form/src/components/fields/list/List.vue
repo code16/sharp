@@ -39,6 +39,7 @@
                                         :config-identifier="fieldLayout.key"
                                         :update-data="update(i)"
                                         :locale="listItemData._fieldsLocale[fieldLayout.key]"
+                                        :read-only="isReadOnly"
                                         @locale-change="(key, value)=>updateLocale(i, key, value)"
                                     />
                                 </ListItem>
@@ -76,7 +77,7 @@
 <script>
     import Draggable from 'vuedraggable';
     import { TemplateRenderer } from 'sharp/components';
-    import { Localization, ReadOnlyFields } from 'sharp/mixins';
+    import { Localization } from 'sharp/mixins';
     import ListItem from './ListItem';
 
     import localize from '../../../mixins/localize/form';
@@ -87,7 +88,7 @@
 
         inject: ['$form'],
 
-        mixins: [ Localization, ReadOnlyFields('itemFields'), localize('itemFields') ],
+        mixins: [ Localization,  localize('itemFields') ],
 
         components: {
             Draggable,
@@ -171,9 +172,11 @@
                 return Symbol('index');
             },
             hasPendingActions() {
-                const filteredPendingJobs = this.$form.pendingJobs.filter(key => key.startsWith(this.fieldKey));
-                return filteredPendingJobs.length > 0;
+                return this.$form?.hasUploadingFields(this.fieldKey);
             },
+            isReadOnly() {
+                return this.readOnly || this.dragActive;
+            }
         },
         methods: {
             itemData(item) {
@@ -183,10 +186,7 @@
             transformedFields(i) {
                 const item = this.list[i];
                 const data = this.itemData(item);
-                const fields = this.readOnly || this.dragActive
-                    ? this.readOnlyFields
-                    : this.itemFields;
-                return transformFields(fields, data);
+                return transformFields(this.itemFields, data);
             },
             indexedList() {
                 return (this.value||[]).map((v,i) => this.withLocale({

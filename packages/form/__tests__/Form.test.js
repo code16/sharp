@@ -1,10 +1,10 @@
 import Vue from 'vue';
+import Vuex from 'vuex';
 import axios from 'axios';
-import * as consts from 'sharp/consts';
 import Form from '../src/components/Form.vue';
+import store from 'sharp/store';
 
-
-import { wait, MockInjections, MockI18n, nextRequestFulfilled } from "@sharp/test-utils";
+import { wait, MockI18n, nextRequestFulfilled } from "@sharp/test-utils";
 import moxios from 'moxios';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 
@@ -15,6 +15,9 @@ describe('sharp-form', ()=>{
     Vue.use(MockI18n);
 
     function createWrapper({ propsData } = {}) {
+        const localVue = createLocalVue();
+        localVue.use(Vuex);
+
         return shallowMount(Form, {
             propsData: {
                 entityKey: 'spaceship',
@@ -24,9 +27,8 @@ describe('sharp-form', ()=>{
             },
             provide: {
                 axiosInstance: axios.create(),
-                actionsBus: new Vue(),
-                mainLoading: new Vue(),
             },
+            store: new Vuex.Store(store),
             // language=Vue
             stubs: {
                 Grid:
@@ -46,7 +48,8 @@ describe('sharp-form', ()=>{
             created() {
                 moxios.install(this.axiosInstance);
                 moxios.uninstall = moxios.uninstall.bind(moxios, this.axiosInstance);
-            }
+            },
+            localVue
         });
     }
 
@@ -287,16 +290,9 @@ describe('sharp-form', ()=>{
             'context-fields': {
                 title: {
                     type: 'text',
-                    readOnly: true
                 },
             },
         });
-
-        wrapper.setData({
-            authorizations: { create: true }
-        });
-
-        expect(field.$attrs['context-fields'].readOnly).toBeFalsy();
     });
 
     test('update data', () => {
@@ -390,7 +386,7 @@ describe('sharp-form', ()=>{
     test('handle 422', async () => {
         const wrapper = createWrapper();
 
-        wrapper.vm.actionsBus.$emit('submit');
+        wrapper.vm.submit().catch(() => {});
 
         await nextRequestFulfilled({
             status: 422,
@@ -436,41 +432,33 @@ describe('sharp-form', ()=>{
     test('setup action bar correctly', async () => {
         const wrapper = createWrapper();
 
-        let setupEmitted = jest.fn();
-        wrapper.vm.actionsBus.$on('setup', setupEmitted);
-        jest.spyOn(wrapper.vm, 'setupActionBar');
-
         await nextRequestFulfilled({
             status: 200,
             response: {
                 ...createForm(),
                 authorizations: {
                     create: false,
-                    update: false
+                    update: false,
+                    delete: false,
                 }
             }
         });
 
-        expect(wrapper.vm.setupActionBar).toHaveBeenCalledTimes(1);
-        expect(setupEmitted).toHaveBeenCalledTimes(1);
-        expect(setupEmitted.mock.calls[0][0]).toMatchObject({
+        expect(wrapper.vm.actionBarProps).toMatchObject({
             showSubmitButton: false,
             showDeleteButton: false,
             showBackButton: true,
-            opType: 'create'
+            create: true,
         });
 
 
         wrapper.vm.authorizations.create = true;
 
-        wrapper.vm.setupActionBar();
-
-        expect(setupEmitted).toHaveBeenCalledTimes(2);
-        expect(setupEmitted.mock.calls[1][0]).toMatchObject({
+        expect(wrapper.vm.actionBarProps).toMatchObject({
             showSubmitButton: true,
             showDeleteButton: false,
             showBackButton: false,
-            opType: 'create'
+            create: true,
         });
 
 
@@ -479,28 +467,21 @@ describe('sharp-form', ()=>{
         });
         wrapper.vm.authorizations.delete = true;
 
-        wrapper.vm.setupActionBar();
-
-        expect(setupEmitted).toHaveBeenCalledTimes(3);
-        expect(setupEmitted.mock.calls[2][0]).toMatchObject({
+        expect(wrapper.vm.actionBarProps).toMatchObject({
             showSubmitButton: false,
             showDeleteButton: true,
             showBackButton: true,
-            opType: 'update'
+            create: false,
         });
 
         wrapper.vm.authorizations.update = true;
 
-        wrapper.vm.setupActionBar();
-
-        expect(setupEmitted).toHaveBeenCalledTimes(4);
-        expect(setupEmitted.mock.calls[3][0]).toMatchObject({
+        expect(wrapper.vm.actionBarProps).toMatchObject({
             showSubmitButton: true,
             showDeleteButton: true,
             showBackButton: false,
-            opType: 'update'
+            create: false,
         });
-
     });
 
     test('redirect to list', async () => {
@@ -510,7 +491,7 @@ describe('sharp-form', ()=>{
 
         wrapper.vm.redirectToList = jest.fn();
 
-        wrapper.vm.actionsBus.$emit('delete');
+        wrapper.vm.handleDeleteClicked();
 
         await nextRequestFulfilled({
             status: 200
@@ -530,18 +511,16 @@ describe('sharp-form', ()=>{
 
         wrapper.vm.post = jest.fn(()=>Promise.resolve({ data: { ok: true } }));
 
-        wrapper.vm.pendingJobs.push('upload');
-        wrapper.vm.actionsBus.$emit('submit');
+        wrapper.vm.uploadingFields = { field:true };
+        wrapper.vm.submit();
 
         await wait(10);
 
         expect(wrapper.vm.post).not.toHaveBeenCalled();
 
 
-        let submittedEmmitted = jest.fn();
-        wrapper.vm.pendingJobs = [];
-
-        wrapper.vm.actionsBus.$emit('submit');
+        wrapper.vm.uploadingFields = {}
+        wrapper.vm.submit();
 
         await wait(10);
 
@@ -554,7 +533,7 @@ describe('sharp-form', ()=>{
         wrapper.vm.post = jest.fn(()=>Promise.resolve({ data: { ok: true } }));
         wrapper.vm.handleError = jest.fn();
 
-        wrapper.vm.actionsBus.$emit('submit');
+        wrapper.vm.submit().catch(() => {});
 
         await wait(10);
 
@@ -567,7 +546,7 @@ describe('sharp-form', ()=>{
 
         wrapper.vm.post = jest.fn(()=>Promise.reject({ error: true }));
 
-        wrapper.vm.actionsBus.$emit('submit');
+        wrapper.vm.submit().catch(() => {});
 
         await wait(10);
 
@@ -581,26 +560,6 @@ describe('sharp-form', ()=>{
 
     test('cancel', async ()=>{
         // refer 'redirect to list' test
-    });
-
-    test('pending jobs', async ()=> {
-        const wrapper = createWrapper();
-        let updateActionsStateEmitted = jest.fn();
-
-        wrapper.vm.actionsBus.$on('updateActionsState', updateActionsStateEmitted);
-
-        wrapper.vm.actionsBus.$emit('setPendingJob', { key:'myUpload', origin:'upload' ,value:true });
-
-        expect(wrapper.vm.pendingJobs).toEqual(['myUpload']);
-        expect(updateActionsStateEmitted).toHaveBeenLastCalledWith({
-            state: 'pending',
-            modifier: 'upload'
-        });
-
-        wrapper.vm.actionsBus.$emit('setPendingJob', { key:'myUpload', origin:'upload' ,value:false });
-
-        expect(wrapper.vm.pendingJobs).toEqual([]);
-        expect(updateActionsStateEmitted).toHaveBeenLastCalledWith(null);
     });
 
     test('has localize mixin with right fieldsProps', async () => {
