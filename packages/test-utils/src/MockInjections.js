@@ -3,7 +3,6 @@ import axios from 'axios';
 
 
 const injectedCustoms = () => ({
-    xsrfToken: 'xsrfTest',
     axiosInstance: axios.create(),
     params: {}
 });

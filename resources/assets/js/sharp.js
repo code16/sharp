@@ -8,9 +8,6 @@ import Notifications from 'vue-notification';
 import locale from 'element-ui/lib/locale';
 import { elLang } from './util/element-ui';
 
-import axios from 'axios';
-import cookies from 'axios/lib/helpers/cookies';
-
 
 import SharpCommands from 'sharp-commands';
 import SharpDashboard from 'sharp-dashboard';
@@ -57,11 +54,7 @@ Vue.config.ignoredElements = [/^trix-/];
 
 
 new Vue({
-    el:"#sharp-app",
-
-    provide: {
-        xsrfToken: cookies.read(axios.defaults.xsrfCookieName)
-    },
+    el: "#sharp-app",
 
     components: {
         'sharp-action-view': ActionView,
