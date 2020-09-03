@@ -41,6 +41,7 @@ export default {
             contextData,
             errorIdentifier,
             updateVisibility,
+            readOnly,
             ...sharedProps } = props;
 
         let { $form } = injections;
@@ -61,7 +62,10 @@ export default {
             ...data,
             attrs: {
                 fieldKey,
-                fieldProps: field,
+                fieldProps: {
+                    ...field,
+                    readOnly: readOnly || field.readOnly,
+                },
                 fieldType: field.type,
                 value: getValue($form, field, value, props.locale),
                 originalValue: value,

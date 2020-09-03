@@ -290,16 +290,9 @@ describe('sharp-form', ()=>{
             'context-fields': {
                 title: {
                     type: 'text',
-                    readOnly: true
                 },
             },
         });
-
-        wrapper.setData({
-            authorizations: { create: true }
-        });
-
-        expect(field.$attrs['context-fields'].readOnly).toBeFalsy();
     });
 
     test('update data', () => {

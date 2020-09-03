@@ -21,7 +21,8 @@
             locale: String,
             uniqueIdentifier: String,
             fieldConfigIdentifier: String,
-            updateData: Function
+            updateData: Function,
+            readOnly: Boolean,
         },
         computed: {
             isCustom() {
@@ -46,7 +47,7 @@
 
 
             return h(this.component, {
-                props : {
+                props: {
                     fieldKey: this.fieldKey,
                     fieldLayout: this.fieldLayout,
                     value: this.value,

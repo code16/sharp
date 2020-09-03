@@ -40,6 +40,7 @@
                                 :context-data="data"
                                 :field-layout="fieldLayout"
                                 :locale="fieldLocale[fieldLayout.key]"
+                                :read-only="isReadOnly"
                                 :error-identifier="fieldLayout.key"
                                 :config-identifier="fieldLayout.key"
                                 :update-data="updateData"
@@ -65,7 +66,7 @@
     } from "sharp";
 
     import { TabbedLayout, Grid, Dropdown, DropdownItem, } from 'sharp-ui';
-    import { ActionEvents, ReadOnlyFields, Localization, DynamicView } from 'sharp/mixins';
+    import { Localization, DynamicView } from 'sharp/mixins';
 
     import FieldsLayout from './ui/FieldsLayout';
     import LocaleSelect from './ui/LocaleSelect';
@@ -80,7 +81,7 @@
         name:'SharpForm',
         extends: DynamicView,
 
-        mixins: [ReadOnlyFields('fields'), Localization, localize('fields')],
+        mixins: [ Localization, localize('fields')],
 
         components: {
             TabbedLayout,
@@ -172,10 +173,7 @@
                 return `${BASE_URL}/list/${this.baseEntityKey}?restore-context=1`;
             },
             transformedFields() {
-                const fields = this.isReadOnly
-                    ? this.readOnlyFields
-                    : this.fields;
-                return transformFields(fields, this.data);
+                return transformFields(this.fields, this.data);
             },
 
             currentLocale() {
