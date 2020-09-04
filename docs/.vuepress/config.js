@@ -107,6 +107,8 @@ module.exports = {
                     children: [
                         'text',
                         'picture',
+                        'list',
+                        'file',
                         'embedded-entity-list',
                     ].map(page => `show-fields/${page}`),
                 },
