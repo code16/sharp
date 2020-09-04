@@ -1,35 +1,17 @@
 $css--reset:false;
 
+@import 'vars';
 @import 'vendors';
 
-@import '~carbon-components/scss/globals/scss/colors';
-@import '~carbon-components/scss/globals/scss/vars';
 @import 'mixins/typography';
-@import '~carbon-components/scss/globals/scss/css--reset';
-
-
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
-
-@import '~bootstrap/scss/mixins/hover';
-@import '~bootstrap/scss/mixins/grid';
-@import '~bootstrap/scss/mixins/grid-framework';
-@import '~bootstrap/scss/mixins/breakpoints';
-@import '~bootstrap/scss/mixins/visibility';
-
-
-@import "typography";
-
-@import 'components/loading/Loading';
-
-@import 'vars';
 @import 'mixins/layer';
 @import 'mixins/helper-mixins';
 @import 'mixins/layout';
 @import 'mixins/modifiers';
 @import 'mixins/close-button';
 
-@import "~leaflet/dist/leaflet.css";
+@import "typography";
+
 
 $small-breakpoint: sm;
 
@@ -40,90 +22,19 @@ $small-breakpoint: sm;
   font-family: $font-family-base;
 }
 
-@import '~bootstrap/scss/grid';
-@import '~bootstrap/scss/transitions';
-@import '~bootstrap/scss/utilities/flex';
-@import '~bootstrap/scss/utilities/visibility';
-@import '~bootstrap/scss/utilities/spacing';
-@import '~bootstrap-vue/src/utilities';
-
 @import "./transitions";
 
-@import "components/error";
 
-// from carbon design
-@import 'components/Button';
-@import 'components/Module';
-@import 'components/Dropdown';
-@import 'components/Tag';
-@import 'components/Notification';
+@import '~sharp-ui/scss/ui';
+@import '~sharp-commands/scss/commands';
+@import '~sharp-form/scss/form';
+@import '~sharp-entity-list/scss/entity-list';
+@import '~sharp-dashboard/scss/dashboard';
+@import '~sharp-show/scss/show';
+@import '~sharp-filters/scss/filters';
 
 
-// Action bar and viewer
 @import 'components/ActionView';
-@import 'components/ActionBar';
-@import 'components/Tabs';
-@import 'components/LocaleSelector';
-
-
-// overriding default vendor components style
-@import 'components/form/Multiselect';
-
-
-// Form components
-@import 'components/form/Text';
-@import 'components/form/Autocomplete';
-@import 'components/form/Upload';
-@import 'components/form/Form';
-@import 'components/form/Grid';
-@import 'components/form/List';
-@import 'components/form/date/Date';
-@import 'components/form/Markdown';
-@import 'components/form/MarkdownUpload';
-@import 'components/form/Select';
-@import 'components/Modal';
-@import 'components/form/FieldContainer';
-@import 'components/form/Tags';
-@import 'components/form/Check';
-@import 'components/form/Textarea';
-@import 'components/form/Radio';
-@import 'components/form/Geolocation';
-@import 'components/form/TrixEditor';
-@import 'components/form/FieldLocaleSelector';
-@import 'components/form/GeolocationEdit';
-@import 'components/form/DateRange';
-
-// List
-@import 'components/list/EntityList';
-@import 'components/Search';
-@import 'components/list/Pagination';
-@import 'components/list/FilterSelect';
-@import 'components/list/ViewPanel';
-@import 'components/list/CommandsDropdown';
-@import 'components/list/StateIcon';
-@import 'components/list/DataList';
-@import 'components/list/FilterDateRange';
-@import 'components/list/FilterControl';
-
-// Menu
-@import 'components/LeftNav';
-
-// Dashboard
-@import 'components/dashboard/Widget';
-@import 'components/dashboard/Chart';
-@import 'components/dashboard/Panel';
-@import 'components/dashboard/Dashboard';
-@import 'components/dashboard/Legend';
-@import 'components/dashboard/OrderedList';
-@import 'components/Card';
-
-@import 'components/show/EntityList';
-@import 'components/show/Picture';
-@import 'components/show/Text';
-
-@import 'components/GlobalFilters';
-
-@import "components/popover";
 
 input[type="number"].hide-controls {
   &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {

@@ -1,0 +1,126 @@
+.SharpUpload {
+  position: relative;
+  margin: 0;
+  padding: 0!important;
+
+  &:not(.SharpUpload--empty) {
+    @extend .SharpModule;
+    .SharpUpload__inner {
+      @extend .SharpModule__inner;
+      @include layer('raised');
+      background: $ui-01 !important;
+    }
+    .SharpUpload__content {
+      @extend .SharpModule__content;
+    }
+  }
+
+  &--empty {
+    .SharpModule__content {
+      padding:0 !important;
+    }
+  }
+
+  &--disabled {
+    cursor: default;
+    opacity: 0.7;
+    .SharpUpload__upload-button {
+      pointer-events: none;
+    }
+  }
+
+  .dropzone {
+    margin:0;
+  }
+
+  .dz-image-preview {
+    display:none;
+  }
+
+  &__close-button {
+    @include close-button;
+    position: absolute;
+    right:.5rem;
+    top:.5rem;
+    display: none;
+    background: transparent;
+  }
+
+  &__close-icon {
+    @include close-icon;
+  }
+
+  &__upload-button {
+    width: 100%;
+    background: rgba(255,255,255,.75);
+  }
+
+  &--compacted {
+    .SharpUpload__thumbnail img {
+      max-height: 60px !important;
+    }
+  }
+
+  &__container {
+
+    .SharpUpload__thumbnail {
+      align-self: center;
+      //margin-right: 1em;
+      img {
+        display:block;
+        margin:auto;
+        height:auto;
+        width:auto;
+        max-width:100%;
+        max-height:150px;
+      }
+    }
+
+    .SharpUpload__infos {
+      //flex:1;
+      .progress-bar {
+        transition: width .5s;
+      }
+      display:flex;
+      flex-flow: column;
+      justify-content: space-between;
+
+      .SharpUpload__info {
+        @include font-size('12');
+      }
+
+      .SharpUpload__download-link {
+        @include font-size('12');
+        text-decoration: none;
+      }
+
+      .SharpUpload__filename {
+        @include font-size('14');
+        font-weight: 500;
+      }
+    }
+  }
+
+  &__progress {
+    height: 3px;
+    background: $ui-02;
+    transition-delay: 500ms;
+    &-bar {
+      transition: width 500ms $bx--standard-easing;
+      height:100%;
+      background: $brand-02;
+    }
+  }
+  &__progress-leave-to {
+    .SharpUpload__progress-bar {
+      width: 100%;
+    }
+  }
+
+  &__modal-vue-cropper {
+    @include media-breakpoint-up(xs) { max-height: 250px; }
+    @include media-breakpoint-up(sm) { max-height: 300px; }
+    @include media-breakpoint-up(md) { max-height: 400px; }
+    @include media-breakpoint-up(md) { max-height: 500px; }
+  }
+}

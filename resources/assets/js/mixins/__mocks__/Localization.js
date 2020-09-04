@@ -6,4 +6,12 @@ export default {
     }
 }
 
-export const lang = mockLangImplementation;
+export function LocalizationBase(baseKey) {
+    return {
+        methods: {
+            lSub(key) {
+                return mockLangImplementation(`${baseKey}.${key}`)
+            }
+        }
+    }
+}

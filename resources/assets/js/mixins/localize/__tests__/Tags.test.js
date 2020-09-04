@@ -5,7 +5,7 @@ import { localeObject } from "../utils";
 import { mockInjections } from "./mock";
 
 
-jest.mock('../../Localization', ()=>({
+jest.mock('../../../util/i18n', ()=>({
     lang: jest.fn(key=>key)
 }));
 jest.mock('../utils', ()=>({

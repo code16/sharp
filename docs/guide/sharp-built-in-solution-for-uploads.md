@@ -182,7 +182,7 @@ function find($id): array
     return $this
         ->setCustomTransformer(
             "cover",
-            new FormUploadModelTransformer()
+            new SharpUploadModelFormAttributeTransformer()
         )
         ->transform(
             Book::with("cover")->findOrFail($id)
@@ -190,7 +190,7 @@ function find($id): array
 }
 ```
 
-The full path of this transformer is `Code16\Sharp\Form\Eloquent\Transformers\FormUploadModelTransformer`.
+The full path of this transformer is `Code16\Sharp\Form\Eloquent\Transformers\SharpUploadModelFormAttributeTransformer`.
 
 And finally, and this is a sad exception to the "don't touch the applicative code for Sharp", add this in your Model that declares an upload relationship (Book, in our example):
 

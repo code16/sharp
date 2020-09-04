@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`filter-select can mount "empty" FilterSelect 1`] = `
+<div tabindex="0" class="SharpFilterSelect SharpFilterSelect--empty" filterkey="job">
+	<autocomplete-stub mode="local" localvalues="[object Object],[object Object]" placeholder="{{ entity_list.filter.search_placeholder }}" remotesearchattribute="query" itemidattribute="id" searchminchars="1" searchkeys="value" noresultitem="true" allowempty="true"
+	    class="SharpFilterSelect__select"></autocomplete-stub>
+	<filtercontrol-stub label="Web job" nocaret="true">
+		<select-stub options="[object Object],[object Object]" display="dropdown" clearable="true" placeholder=" " class="SharpFilterSelect__select"></select-stub>
+	</filtercontrol-stub>
+</div>
+`;
+
+exports[`filter-select can mount "multiple empty" FilterSelect 1`] = `
+<div tabindex="0" class="SharpFilterSelect SharpFilterSelect--empty SharpFilterSelect--multiple" filterkey="job">
+	<autocomplete-stub value="" mode="local" localvalues="[object Object],[object Object]" placeholder="{{ entity_list.filter.search_placeholder }}" remotesearchattribute="query" itemidattribute="id" searchminchars="1" searchkeys="value" noresultitem="true"
+	    multiple="true" hideselected="true" allowempty="true" class="SharpFilterSelect__select"></autocomplete-stub>
+	<filtercontrol-stub label="Web job" nocaret="true">
+		<select-stub options="[object Object],[object Object]" multiple="true" display="dropdown" clearable="true" placeholder=" " class="SharpFilterSelect__select"></select-stub>
+	</filtercontrol-stub>
+</div>
+`;
+
+exports[`filter-select can mount "multiple valuated" FilterSelect 1`] = `
+<div tabindex="0" class="SharpFilterSelect SharpFilterSelect--multiple" filterkey="job">
+	<autocomplete-stub value="[object Object],[object Object]" mode="local" localvalues="[object Object],[object Object]" placeholder="{{ entity_list.filter.search_placeholder }}" remotesearchattribute="query" itemidattribute="id" searchminchars="1" searchkeys="value"
+	    noresultitem="true" multiple="true" hideselected="true" allowempty="true" class="SharpFilterSelect__select"></autocomplete-stub>
+	<filtercontrol-stub label="Web job" nocaret="true">
+		<select-stub value="1,2" options="[object Object],[object Object]" multiple="true" display="dropdown" clearable="true" placeholder=" " class="SharpFilterSelect__select"></select-stub>
+	</filtercontrol-stub>
+</div>
+`;
+
+exports[`filter-select can mount "valuated" FilterSelect 1`] = `
+<div tabindex="0" class="SharpFilterSelect" filterkey="job">
+	<autocomplete-stub value="[object Object]" mode="local" localvalues="[object Object],[object Object]" placeholder="{{ entity_list.filter.search_placeholder }}" remotesearchattribute="query" itemidattribute="id" searchminchars="1" searchkeys="value" noresultitem="true"
+	    allowempty="true" class="SharpFilterSelect__select"></autocomplete-stub>
+	<filtercontrol-stub label="Web job" nocaret="true">
+		<select-stub value="1" options="[object Object],[object Object]" display="dropdown" clearable="true" placeholder=" " class="SharpFilterSelect__select"></select-stub>
+	</filtercontrol-stub>
+</div>
+`;

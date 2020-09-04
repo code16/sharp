@@ -51,6 +51,7 @@ module.exports = {
                     children: [
                         'building-entity-show',
                         'single-show',
+                        'custom-show-fields'
                     ]
                 },
                 {

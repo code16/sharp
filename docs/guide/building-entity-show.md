@@ -41,11 +41,20 @@ function buildShowFields()
 }
 ```
 
+#### Common attributes to all show fields
+
+Each available Show field is detailed below; here are the attributes they all share:
+
+##### `setShowIfEmpty(bool $show = true)`
+
+By default, an empty field (meaning: with null or empty data) is not displayed at all in the Show UI. You can change this behaviour with this attribute.
 
 #### Available simple Show fields
 
 - [Text](show-fields/text.md)
-- [picture](show-fields/picture.md)
+- [Picture](show-fields/picture.md)
+- [File](show-fields/file.md)
+- [List](show-fields/list.md)
 
 
 #### Embedding an Entity List in a Show
@@ -93,9 +102,8 @@ function buildShowLayout()
         function(ShowLayoutSection $section) {
             ...
         }
-    )
+    );
 }
-
 ```
 
 
@@ -116,12 +124,41 @@ function buildShowLayout()
                 }
             );
         }
-    )
+    );
 }
-
 ```
 
 A `ShowLayoutColumn`, very much like a `FormLayoutColumn`, can declare single field rows and multi fields rows. Report to the [Form layout documentation](building-entity-form.md#buildformlayout) to find out how.
+
+#### `SharpShowListField`'s layout
+
+Like `SharpFormListField` in Forms, a `SharpShowListField` must declare its item layout, in order to describe how fields are displayed, like in this example:
+
+```php
+function(ShowLayoutSection $section) {
+    $section->addColumn(9, 
+        function(ShowLayoutColumn $column) {
+             $column->withSingleField("pictures", function(ShowLayoutColumn $listItem) {
+                  // Notice that the list item layout is just a ShowLayoutColumn
+                  $listItem
+                      ->withSingleField("file")
+                      ->withSingleField("legend");
+             });
+        }
+    );
+}
+```
+
+#### Embedded Entity Lists
+
+An embedded Entity List in treated as a special section; its label will be displayed as section title. 
+
+```php
+function buildShowLayout()
+{
+    $this->addEntityListSection('members');
+}
+```
 
 
 ### `find($id): array`

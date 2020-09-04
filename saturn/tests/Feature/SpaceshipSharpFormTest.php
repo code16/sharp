@@ -14,7 +14,7 @@ class SpaceshipSharpFormTest extends TestCase
 {
     use DatabaseMigrations, SharpAssertions;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -33,8 +33,7 @@ class SpaceshipSharpFormTest extends TestCase
             ->assertSharpFormHasFields([
                 "name", "picture", "picture:legend", "capacity", "type_id",
                 "construction_date", "pilots", "reviews", "features"
-            ])
-            ->assertSharpFormDataEquals("name", $spaceship->name);
+            ]);
     }
 
     /** @test */
@@ -80,14 +79,23 @@ class SpaceshipSharpFormTest extends TestCase
 
         $spaceship = factory(Spaceship::class)->create(["id" => 2, "name" => "old"]);
 
-        $this->updateSharpForm("spaceship", $spaceship->id, array_merge($spaceship->toArray(), [
-            "name" => "test",
-            "capacity" => 10
-        ]))->assertStatus(200);
+        $this
+            ->updateSharpForm(
+                "spaceship", 
+                $spaceship->id, 
+                array_merge(
+                    $spaceship->toArray(), 
+                    [
+                        "name" => ["fr" => "test"],
+                        "capacity" => 10
+                    ]
+                )
+            )
+            ->assertStatus(200);
 
         $this->assertDatabaseHas("spaceships", [
             "id" => 2,
-            "name" => "test",
+            "name" => json_encode(["fr" => "test"]),
             "capacity" => 10000
         ]);
     }
@@ -98,12 +106,12 @@ class SpaceshipSharpFormTest extends TestCase
         $this->loginAsSharpUser(factory(User::class)->create(["group" => "sharp"]));
 
         $this->storeSharpForm("spaceship", array_merge(factory(Spaceship::class)->make()->toArray(), [
-            "name" => "test_create",
+            "name" => ["fr" => "test_create"],
             "capacity" => 10
         ]))->assertStatus(200);
 
         $this->assertDatabaseHas("spaceships", [
-            "name" => "test_create",
+            "name" => json_encode(["fr" => "test_create"]),
             "capacity" => 10000
         ]);
     }

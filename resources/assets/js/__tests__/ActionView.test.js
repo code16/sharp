@@ -1,13 +1,11 @@
+import Vuex from 'vuex';
 import Notifications from 'vue-notification';
 import { shallowMount, createLocalVue, config } from '@vue/test-utils';
 import ActionView from '../components/ActionView.vue';
-import { createStub } from "./test-utils/vue-test-utils";
+import { showAlert, showConfirm } from "../util/dialogs";
+import store from '../store';
 
 config.stubs['transition-group'] = false;
-
-/* todo: fix tests on next release of vue-test-utils (1.0.0-beta.26)
-    dynamic component aren't currently stubbed ( <component :is="{ ... }" /> )
-*/
 
 describe('action-view', ()=>{
 
@@ -18,12 +16,7 @@ describe('action-view', ()=>{
 
     const localVue = createLocalVue();
     localVue.use(Notifications);
-
-    function notify(wrapper, ...args) {
-        wrapper.vm.$notify(...args);
-        // remove notification global data-id to preserve unit
-        wrapper.findAll('[data-id]').wrappers.forEach(wrapper=>wrapper.element.removeAttribute('data-id'));
-    }
+    localVue.use(Vuex);
 
     function createWrapper(options={}) {
         return shallowMount(ActionView, {
@@ -32,16 +25,18 @@ describe('action-view', ()=>{
                 context: 'form',
                 ...options.propsData
             },
-            computed: {
-                barComp() {
-                    return createStub(ActionView.computed.barComp.call(this));
-                }
-            },
             stubs: {
                 'SharpModal': ModalStub
             },
+            store: new Vuex.Store(store),
             localVue
         })
+    }
+
+    function notify(wrapper, ...args) {
+        wrapper.vm.$notify(...args);
+        // remove notification global data-id to preserve unit
+        wrapper.findAll('[data-id]').wrappers.forEach(wrapper=>wrapper.element.removeAttribute('data-id'));
     }
 
     test('can mount ActionView', ()=>{
@@ -70,15 +65,24 @@ describe('action-view', ()=>{
 
     test('can mount with multiple modals', ()=>{
         const wrapper = createWrapper();
-        wrapper.vm.showMainModal({ text: 'Modal 1' });
-        wrapper.vm.showMainModal({ text: 'Modal 2' });
+        showAlert('Modal 1');
+        showConfirm('Modal 2');
         expect(wrapper.html()).toMatchSnapshot();
     });
 
-    xtest('handle main modal events', ()=>{
+    test('loading', () => {
         const wrapper = createWrapper();
-        const modalOptions = { text: 'Modal 1', okCallback:jest.fn(), hiddenCallback:jest.fn() };
-        wrapper.vm.showMainModal(modalOptions);
+        wrapper.vm.$store.dispatch('setLoading', true);
+        expect(wrapper.html()).toMatchSnapshot();
+    });
+
+    xtest('handle main modal events', async ()=>{
+        const wrapper = createWrapper();
+        const modalOptions = { okCallback:jest.fn() };
+
+        showAlert('Modal 1', modalOptions);
+
+        await wrapper.vm.$nextTick();
 
         let modal = wrapper.find(ModalStub);
 

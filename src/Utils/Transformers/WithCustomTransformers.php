@@ -141,6 +141,15 @@ trait WithCustomTransformers
                 }
 
             } else {
+                if(!isset($attributes[$attribute])) {
+                    if(method_exists($transformer, 'applyIfAttributeIsMissing')
+                        && !$transformer->applyIfAttributeIsMissing()) {
+                        // The attribute is missing, and the transformer code specifically
+                        // decide to be ignored in this case
+                        continue;
+                    }
+                }
+                
                 $attributes[$attribute] = $transformer->apply(
                     $attributes[$attribute] ?? null, $model, $attribute
                 );

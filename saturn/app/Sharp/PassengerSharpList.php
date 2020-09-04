@@ -83,7 +83,7 @@ class PassengerSharpList extends SharpEntityList
 
                 $date = $travel->departure_date->format('Y-m-d (H:i)');
 
-                return '<i class="fa fa-space-shuttle"></i> ' . $travel->spaceship->name
+                return '<i class="fas fa-space-shuttle"></i> ' . $travel->spaceship->name
                     . "<br><em>{$travel->destination}</em>"
                     . "<br><small>{$date}</small>";
             })

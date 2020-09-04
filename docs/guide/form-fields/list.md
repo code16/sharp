@@ -6,7 +6,7 @@ A List is made of items, and each item is made of Form Fields.
 
 Let's review a simple use case: a museum with all kind of art pieces. In the DB it's a 1-N relationship. If we choose to define a ArtPiece Entity in Sharp, we'll end up with maybe a Select, or an Autocomplete, to designate the Museum. But here, we want to do the opposite: define a Museum Entity, with an ArtPiece list.
 
-Here how we can build this:
+Here's how we can build this:
 
 ```php
 function buildFormFields()
@@ -23,9 +23,7 @@ function buildFormFields()
                 SharpFormTextField::make("title")
                     ->setLabel("Title")
             )->addItemField(
-                SharpFormSelectField::make("artist_id", [
-                    ...
-                ])
+                SharpFormSelectField::make("artist_id", [...])
                     ->setLabel("Artist")
             )
     );
@@ -87,15 +85,12 @@ The template will be [interpreted by Vue.js](https://vuejs.org/v2/guide/syntax.h
 <div v-else>result is unknown</div>
 ```
 
-
 ### `setRemovable(bool $removable = true)`
 
 Defines if items can be removed by the user.
 Default: false.
 
 ### `setItemIdAttribute(string $itemIdAttribute)`
-
-
 
 ## Layout
 
@@ -106,9 +101,9 @@ Here's an example for the Museum List defined above:
 ```php
 $this->addColumn(6, function(FormLayoutColumn $column) {
      $column->withSingleField("pieces", function(FormLayoutColumn $listItem) {
-        $listItem->withSingleField("acquisition_date")
-                 ->withSingleField("title")
-                 ->withSingleField("artist_id")
+          $listItem->withSingleField("acquisition_date")
+              ->withSingleField("title")
+              ->withSingleField("artist_id");
      });
  });
 ```

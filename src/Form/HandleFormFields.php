@@ -63,7 +63,7 @@ trait HandleFormFields
 
             return $listField->findItemFormFieldByKey($itemKey);
         }
-
+        
         return $fields->where("key", $key)->first();
     }
 

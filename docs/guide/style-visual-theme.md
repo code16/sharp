@@ -6,6 +6,37 @@ By default, the `config('sharp.name')` is displayed on the login page and on top
 - `login-icon.png` is limited to 200 pixels in width and 100 pixels in height,
 - and `menu-icon.png` must fit in 150 pixels in width and 50 pixels in height.
 
+#### Display a custom message on login page
+
+You can display a custom content under the form on login page:
+
+![Example of a custom message on login](./img/message-login.png)
+
+You'll need to create a new template file:
+
+```php
+// resources/views/sharp/_login-page-message.blade.php
+
+<div role="alert" class="SharpNotification SharpNotification--info">
+    <div class="SharpNotification__details">
+        <div class="SharpNotification__text-wrapper">
+            <p class="SharpNotification__subtitle">
+                Display a custom message to your users
+            </p>
+        </div>
+    </div>
+</div>
+```
+
+And then you'll need to define the path to this custom blade in the `config/sharp.php` config file:
+
+```php
+// config/sharp.php
+
+"login_page_message_blade_path" => "sharp/_login-page-message",
+```
+
+
 ### Injecting Assets
 
 You may globally inject custom CSS files after the Sharp assets by defining their paths in the `config/sharp.php` config file.

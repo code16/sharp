@@ -8,6 +8,7 @@ use App\Spaceship;
 use App\SpaceshipType;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Eloquent\Transformers\FormUploadModelTransformer;
+use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
@@ -125,6 +126,7 @@ class SpaceshipSharpForm extends SharpForm
             SharpFormUploadField::make("picture")
                 ->setLabel("Picture")
                 ->setFileFilterImages()
+                ->shouldOptimizeImage()
                 ->setCropRatio("1:1", ["jpg","jpeg","png"])
                 ->setStorageDisk("local")
                 ->setStorageBasePath("data/Spaceship/{id}")
@@ -262,8 +264,8 @@ class SpaceshipSharpForm extends SharpForm
                     "serial" => str_pad($serial, 5, "0", STR_PAD_LEFT)
                 ] : null;
             })
-            ->setCustomTransformer("picture", new FormUploadModelTransformer())
-            ->setCustomTransformer("pictures", new FormUploadModelTransformer())
+            ->setCustomTransformer("picture", new SharpUploadModelFormAttributeTransformer())
+            ->setCustomTransformer("pictures", new SharpUploadModelFormAttributeTransformer())
             ->setCustomTransformer("html", function($html, Spaceship $spaceship){
                 return [
                     "nameFr" => $spaceship->getTranslation('name','fr'),
@@ -280,10 +282,10 @@ class SpaceshipSharpForm extends SharpForm
             "corporation_id" => $this->context()->globalFilterFor("corporation")
         ]);
 
-        if(($data["name"] ?? "") == "error") {
+        if(($data["name"]["fr"] ?? "") == "error") {
             throw new SharpApplicativeException("Name can't be «error»");
         }
-
+        
         $this->setCustomTransformer("capacity", function($capacity) {
                 return $capacity * 1000;
             })

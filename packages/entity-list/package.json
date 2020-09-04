@@ -1,0 +1,11 @@
+{
+    "name": "sharp-entity-list",
+    "private": true,
+    "version": "1.0.0",
+    "main": "src/index.js",
+    "dependencies": {
+        "sharp-commands": "file:../commands",
+        "sharp-filters": "file:../filters",
+        "sharp-ui": "file:../ui"
+    }
+}

@@ -10,6 +10,7 @@ use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
 {
@@ -85,9 +86,11 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
 
         $form = new WithCustomTransformersTestForm();
 
-        $this->assertArrayContainsSubset([
-            "elder_son" => ["id" => $son->id, "name" => $son->name],
-        ], $form->find($mother->id)
+        $this->assertArrayContainsSubset(
+            [
+                "elder_son" => ["id" => $son->id, "name" => $son->name],
+            ], 
+            $form->find($mother->id)
         );
     }
 
@@ -157,9 +160,11 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
 
         $form = new WithCustomTransformersTestForm();
 
-        $this->assertArrayContainsSubset([
+        $this->assertArrayContainsSubset(
+            [
                 "picture" => ["file" => "test.jpg"],
-            ], $form->find($person->id)
+            ], 
+            $form->find($person->id)
         );
     }
 
@@ -171,9 +176,11 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
 
         $form = new WithCustomTransformersTestForm();
 
-        $this->assertArrayContainsSubset([
+        $this->assertArrayContainsSubset(
+            [
                 "pictures" => [["file" => "test.jpg"]],
-            ], $form->find($person->id)
+            ], 
+            $form->find($person->id)
         );
     }
 
@@ -190,14 +197,18 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
             }
         };
 
-        $this->assertArrayContainsSubset([
+        $this->assertArrayContainsSubset(
+            [
                 "mother:name" => "Jane Wayne"
-            ], $form->find($son->id)
+            ], 
+            $form->find($son->id)
         );
 
-        $this->assertArrayContainsSubset([
+        $this->assertArrayContainsSubset(
+            [
                 "mother:name" => null
-            ], $form->find($person->id)
+            ], 
+            $form->find($person->id)
         );
     }
 
@@ -231,6 +242,29 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
 
         $this->assertArrayContainsSubset(
             ["name" => "JOHN WAYNE"],
+            $form->find($person->id)
+        );
+    }
+
+    /** @test */
+    function we_can_use_applyIfAttributeIsMissing_in_a_custom_transformer()
+    {
+        $person = Person::create([
+            "name" => "John Wayne",
+        ]);
+
+        $form = new WithCustomTransformersTestForm;
+        $form->setCustomTransformer("slug_name", SharpAttributeSlugNameWithoutMissingTransformer::class);
+
+        $this->assertArrayNotHasKey(
+            "slug_name",
+            $form->find($person->id)
+        );
+
+        $form->setCustomTransformer("slug_name", SharpAttributeSlugNameWithMissingTransformer::class);
+
+        $this->assertArrayHasKey(
+            "slug_name",
             $form->find($person->id)
         );
     }
@@ -290,5 +324,21 @@ class SharpAttributeUppercaseTransformer implements SharpAttributeTransformer
     function apply($value, $instance=null, $attribute=null)
     {
         return strtoupper($value);
+    }
+}
+
+class SharpAttributeSlugNameWithMissingTransformer implements SharpAttributeTransformer
+{
+    function apply($value, $instance=null, $attribute=null)
+    {
+        return Str::slug($instance->name);
+    }
+}
+
+class SharpAttributeSlugNameWithoutMissingTransformer extends SharpAttributeSlugNameWithMissingTransformer
+{
+    public function applyIfAttributeIsMissing()
+    {
+        return false;
     }
 }

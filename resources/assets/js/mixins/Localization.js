@@ -1,6 +1,4 @@
-export let lang = (key) => {
-    return window.i18n[key];
-};
+import { lang } from '../index';
 
 export default {
     computed: {
