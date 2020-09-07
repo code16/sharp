@@ -41,7 +41,7 @@ class SpaceshipSharpShow extends SharpShow
                 SharpShowFileField::make("manual")
                     ->setLabel("Manual")
                     ->setStorageDisk("local")
-//                    ->setStorageBasePath("data/Spaceship/{id}/Manual")
+                    ->setStorageBasePath("data/Spaceship/{id}/Manual")
             )->addField(
                 SharpShowPictureField::make("picture")
             )->addField(
