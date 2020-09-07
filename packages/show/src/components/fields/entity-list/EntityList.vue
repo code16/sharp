@@ -58,6 +58,7 @@
             hiddenFilters: Object,
             hiddenCommands: Object,
             label: String,
+            emptyVisible: Boolean,
         },
         data() {
             return {

@@ -78,6 +78,7 @@
 </template>
 
 <script>
+    import isEqual from 'lodash/isEqual';
     import { formUrl, showUrl, lang, showAlert } from 'sharp';
     import { Localization, DynamicView, withCommands } from 'sharp/mixins';
 
@@ -157,7 +158,11 @@
             }
         },
         watch: {
-            query: 'init',
+            query(query, oldQuery) {
+                if(!isEqual(query, oldQuery)) {
+                    this.init();
+                }
+            },
         },
         computed: {
             filters() {
@@ -231,7 +236,7 @@
             },
             visibleFilters() {
                 return this.hiddenFilters
-                    ? this.filters.filter(filter => !this.hiddenFilters[filter.key])
+                    ? this.filters.filter(filter => !(filter.key in this.hiddenFilters))
                     : this.filters;
             },
             multiforms() {
@@ -565,6 +570,7 @@
                 dir && (this.sortDir = dir);
             },
             async init() {
+                console.log(this.entityKey, this.query);
                 await this.storeDispatch('setEntityKey', this.entityKey);
                 // legacy
                 await this.get();

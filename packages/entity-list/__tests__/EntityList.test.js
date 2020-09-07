@@ -196,6 +196,13 @@ describe('EntityList', () => {
                 }
             });
             expect(wrapper.vm.visibleFilters).toEqual([]);
+
+            wrapper.setProps({
+                hiddenFilters: {
+                    type: null,
+                }
+            });
+            expect(wrapper.vm.visibleFilters).toEqual([]);
         });
 
         test('multiforms', () => {
