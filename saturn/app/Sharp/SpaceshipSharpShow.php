@@ -128,13 +128,7 @@ class SpaceshipSharpShow extends SharpShow
             ->setCustomTransformer("name", function($value, $spaceship) {
                 return "toto"; //$spaceship->name;
             })
-            ->setCustomTransformer("manual", function($value, $spaceship) {
-                return [
-                    "name" => $value['file_name'],
-                    "thumbnail" => null,
-                    "size" => 990,
-                ];
-            })
+            ->setCustomTransformer("manual", new SharpUploadModelFormAttributeTransformer(false))
             ->setCustomTransformer("picture", new SharpUploadModelThumbnailUrlTransformer(140))
             ->setCustomTransformer("pictures", new SharpUploadModelFormAttributeTransformer(true, 200, 200))
             ->setCustomTransformer("pictures[legend]", function($value, $instance) {
