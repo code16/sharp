@@ -96,8 +96,11 @@ class SpaceshipSharpForm extends SharpForm
         )->addField(
             SharpFormUploadField::make("manual")
                 ->setLabel("Manual")
+                ->setHelpMessage("Max file size: 20 Mb")
                 ->setStorageDisk("local")
                 ->setStorageBasePath("data/Spaceship/{id}/Manual")
+                ->setFileFilter("pdf")
+                ->setMaxFileSize(20)
         )->addField(
             SharpFormSelectField::make(
                 "model",
