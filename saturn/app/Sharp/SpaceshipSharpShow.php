@@ -126,7 +126,7 @@ class SpaceshipSharpShow extends SharpShow
                 );
             })
             ->setCustomTransformer("name", function($value, $spaceship) {
-                return "toto"; //$spaceship->name;
+                return $spaceship->name;
             })
             ->setCustomTransformer("manual", new SharpUploadModelFormAttributeTransformer(false))
             ->setCustomTransformer("picture", new SharpUploadModelThumbnailUrlTransformer(140))
