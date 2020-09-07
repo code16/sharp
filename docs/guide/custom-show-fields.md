@@ -56,16 +56,16 @@ Add a separated `.js` file in your project to register fields components :
 
 ```js
 import Sharp from 'sharp-plugin';
-import TextIcon from './components/TextIcon.vue';
+import ShowTitle from './components/ShowTitle.vue';
 
 
 Vue.use(Sharp, {
     customFields: {
-        'textIcon': TextIcon
+        'title': ShowTitle
     }
 })
 ```
-
+**Important**: The key must be `'title'` for `FIELD_TYPE = "custom-title"`
 
 Vue is exposed to the window scope, it's the current Vue version used by sharp (cf. package.json).
 ::: warning
