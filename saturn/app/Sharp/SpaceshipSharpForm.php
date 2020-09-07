@@ -94,6 +94,11 @@ class SpaceshipSharpForm extends SharpForm
                 ->setOptionsLinkedTo("type_id")
 
         )->addField(
+            SharpFormUploadField::make("manual")
+                ->setLabel("Manual")
+                ->setStorageDisk("local")
+                ->setStorageBasePath("data/Spaceship/{id}/Manual")
+        )->addField(
             SharpFormSelectField::make(
                 "model",
                 SpaceshipType::all()
@@ -208,6 +213,7 @@ class SpaceshipSharpForm extends SharpForm
                     ->withSingleField("type_id")
                     ->withSingleField("serial_number")
                     ->withFields("brand|6", "model|6")
+                    ->withSingleField("manual")
                     ->withSingleField("pilots")
                     ->withSingleField("reviews", function(FormLayoutColumn $listItem) {
                         $listItem->withSingleField("starts_at")
@@ -264,6 +270,7 @@ class SpaceshipSharpForm extends SharpForm
                     "serial" => str_pad($serial, 5, "0", STR_PAD_LEFT)
                 ] : null;
             })
+            ->setCustomTransformer("manual", new SharpUploadModelFormAttributeTransformer())
             ->setCustomTransformer("picture", new SharpUploadModelFormAttributeTransformer())
             ->setCustomTransformer("pictures", new SharpUploadModelFormAttributeTransformer())
             ->setCustomTransformer("html", function($html, Spaceship $spaceship){
@@ -272,7 +279,7 @@ class SpaceshipSharpForm extends SharpForm
                 ];
             })
             ->transform(
-                Spaceship::with("reviews", "pilots", "picture", "pictures", "features")->findOrFail($id)
+                Spaceship::with("reviews", "pilots", "manual", "picture", "pictures", "features")->findOrFail($id)
             );
     }
 
@@ -285,7 +292,7 @@ class SpaceshipSharpForm extends SharpForm
         if(($data["name"]["fr"] ?? "") == "error") {
             throw new SharpApplicativeException("Name can't be «error»");
         }
-        
+
         $this->setCustomTransformer("capacity", function($capacity) {
                 return $capacity * 1000;
             })

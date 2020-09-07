@@ -38,6 +38,11 @@ class SpaceshipSharpShow extends SharpShow
                 SharpShowTextField::make("brand")
                     ->setLabel("Brand / model")
             )->addField(
+                SharpShowFileField::make("manual")
+                    ->setLabel("Manual")
+                    ->setStorageDisk("local")
+//                    ->setStorageBasePath("data/Spaceship/{id}/Manual")
+            )->addField(
                 SharpShowPictureField::make("picture")
             )->addField(
                 SharpShowTextField::make("description")
@@ -88,7 +93,8 @@ class SpaceshipSharpShow extends SharpShow
                             ->withSingleField("name")
                             ->withSingleField("type:label")
                             ->withSingleField("serial_number")
-                            ->withSingleField("brand");
+                            ->withSingleField("brand")
+                            ->withSingleField("manual");
                     })
                     ->addColumn(5, function(ShowLayoutColumn $column) {
                         $column->withSingleField("picture");
@@ -114,13 +120,20 @@ class SpaceshipSharpShow extends SharpShow
         return $this
             ->setCustomTransformer("brand", function($value, $spaceship) {
                 return sprintf(
-                    "%s / %s", 
-                    $spaceship->brand ?: '<em>no brand</em>', 
+                    "%s / %s",
+                    $spaceship->brand ?: '<em>no brand</em>',
                     $spaceship->model ?: '<em>no model</em>'
                 );
             })
             ->setCustomTransformer("name", function($value, $spaceship) {
-                return $spaceship->name;
+                return "toto"; //$spaceship->name;
+            })
+            ->setCustomTransformer("manual", function($value, $spaceship) {
+                return [
+                    "name" => $value['file_name'],
+                    "thumbnail" => null,
+                    "size" => 990,
+                ];
             })
             ->setCustomTransformer("picture", new SharpUploadModelThumbnailUrlTransformer(140))
             ->setCustomTransformer("pictures", new SharpUploadModelFormAttributeTransformer(true, 200, 200))
@@ -128,6 +141,6 @@ class SpaceshipSharpShow extends SharpShow
                 return $instance->legend["en"] ?? "";
             })
             ->setCustomTransformer("description", (new MarkdownAttributeTransformer())->handleImages(200))
-            ->transform(Spaceship::with("pictures")->findOrFail($id));
+            ->transform(Spaceship::with("manual", "pictures")->findOrFail($id));
     }
 }
