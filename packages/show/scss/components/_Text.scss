@@ -1,11 +1,5 @@
 
 .ShowTextField {
-  &__label {
-    text-transform: uppercase;
-    font-size: .875em;
-    font-weight: 700;
-    margin-bottom: .5em;
-  }
   &__content {
     @mixin font-size($size) { font-size: $size }
     @import "~bootstrap/scss/reboot";
