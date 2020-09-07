@@ -1,8 +1,5 @@
 <template>
-    <div class="ShowListField" :class="classes">
-        <div class="ShowListField__label">
-            {{ label }}
-        </div>
+    <FieldLayout class="ShowListField" :class="classes" :label="label">
         <div class="ShowListField__content">
             <template v-if="isEmpty">
                 <em class="ShowListField__empty text-muted">{{ lang('show.list.empty') }}</em>
@@ -28,19 +25,21 @@
                 </div>
             </template>
         </div>
-    </div>
+    </FieldLayout>
 </template>
 
 <script>
+    import { lang } from 'sharp';
     import { Grid } from 'sharp-ui';
     import { UnknownField } from 'sharp/components';
-    import { lang } from 'sharp';
-    import {syncVisibility} from "../../util/fields/visiblity";
+    import { syncVisibility } from "../../util/fields/visiblity";
+    import FieldLayout from "../FieldLayout";
 
     export default {
         components: {
             Grid,
             UnknownField,
+            FieldLayout,
         },
         props: {
             value: Array,

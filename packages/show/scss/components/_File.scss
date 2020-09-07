@@ -5,8 +5,8 @@
     font-size: 1em;
     white-space: nowrap;
   }
-  &__size {
-    font-size: .875em;
+  &__info {
+    font-size: .75em;
   }
   &__download-container {
     &::before {
@@ -43,5 +43,11 @@
   &__placeholder {
     color: rgba(0,0,0,.25);
     font-size: 3rem;
+  }
+
+  &--has-label {
+    .show-field__content {
+      font-size: .875em;
+    }
   }
 }

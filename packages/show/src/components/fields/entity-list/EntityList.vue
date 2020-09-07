@@ -1,46 +1,49 @@
 <template>
-    <EntityList
-        class="ShowEntityListField"
-        :entity-key="entityListKey"
-        :module="storeModule"
-        :show-create-button="showCreateButton"
-        :show-reorder-button="showReorderButton"
-        :show-search-field="showSearchField"
-        :show-entity-state="showEntityState"
-        :hidden-commands="hiddenCommands"
-        :hidden-filters="hiddenFilters"
-        inline
-        @change="handleChanged"
-    >
-        <template v-slot:action-bar="{ props, listeners }">
-            <ActionBar class="ShowEntityListField__action-bar" v-bind="props" v-on="listeners">
-                <div class="ShowEntityListField__label">
-                     {{ label }}
-                </div>
-            </ActionBar>
-        </template>
-        <template v-slot:append-head="{ props: { commands }, listeners }">
-            <template v-if="hasCommands(commands)">
-                <CommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
-                    :commands="commands"
-                    @select="listeners['command']"
-                >
-                    <template v-slot:text>
-                        {{ l('entity_list.commands.entity.label') }}
-                    </template>
-                </CommandsDropdown>
+    <FieldLayout class="ShowEntityListField">
+        <EntityList
+            :entity-key="entityListKey"
+            :module="storeModule"
+            :show-create-button="showCreateButton"
+            :show-reorder-button="showReorderButton"
+            :show-search-field="showSearchField"
+            :show-entity-state="showEntityState"
+            :hidden-commands="hiddenCommands"
+            :hidden-filters="hiddenFilters"
+            inline
+            @change="handleChanged"
+        >
+            <template v-slot:action-bar="{ props, listeners }">
+                <ActionBar class="ShowEntityListField__action-bar" v-bind="props" v-on="listeners">
+                    <div class="ShowEntityListField__label show-field__label">
+                        {{ label }}
+                    </div>
+                </ActionBar>
             </template>
-        </template>
-    </EntityList>
+            <template v-slot:append-head="{ props: { commands }, listeners }">
+                <template v-if="hasCommands(commands)">
+                    <CommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
+                        :commands="commands"
+                        @select="listeners['command']"
+                    >
+                        <template v-slot:text>
+                            {{ l('entity_list.commands.entity.label') }}
+                        </template>
+                    </CommandsDropdown>
+                </template>
+            </template>
+        </EntityList>
+    </FieldLayout>
 </template>
 
 <script>
+    import { Localization } from "sharp/mixins";
     import { EntityList, entityListModule } from 'sharp-entity-list';
     import { CommandsDropdown } from 'sharp-commands';
-    import { Localization } from "sharp/mixins";
 
     import ActionBar from "./ActionBar";
+    import FieldLayout from "../../FieldLayout";
     import { syncVisibility } from "../../../util/fields/visiblity";
+
 
     export default {
         mixins: [Localization],
@@ -48,6 +51,7 @@
             EntityList,
             CommandsDropdown,
             ActionBar,
+            FieldLayout,
         },
         props: {
             entityListKey: String,

@@ -1,4 +1,9 @@
 .ShowEntityListField {
+  > .show-field__label {
+    font-size: 1em;
+    font-weight: 600;
+    margin-bottom: 0;
+  }
   .SharpDataList__row-append {
     width: 5.5rem;
   }
@@ -17,10 +22,5 @@
     .SharpButton--secondary-accent {
       border-color: $ui-04;
     }
-  }
-  &__label {
-    font-size: 1em;
-    font-weight: 600;
-    text-transform: uppercase;
   }
 }
