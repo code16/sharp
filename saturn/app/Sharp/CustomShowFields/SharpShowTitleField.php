@@ -8,7 +8,7 @@ class SharpShowTitleField extends SharpShowField
 {
     const FIELD_TYPE = "custom-title";
     
-    protected int $level = 1;
+    protected $level = 1;
 
     public static function make(string $key)
     {
