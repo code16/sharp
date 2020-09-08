@@ -174,3 +174,12 @@ function is_method_implemented_in_concrete_class($handler, string $methodName)
         return false;
     }
 }
+
+/**
+ * @return boolean
+ */
+function sharp_assets_out_of_date() {
+    $distManifest = file_get_contents(__DIR__ . '/../resources/assets/dist/mix-manifest.json');
+    $publicManifest = file_get_contents(public_path('vendor/sharp/mix-manifest.json'));
+    return $distManifest !== $publicManifest;
+}
