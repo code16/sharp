@@ -48,7 +48,9 @@ class MarkdownAttributeTransformer implements SharpAttributeTransformer
             return null;
         }
 
-        $html = (new \Parsedown())->parse($instance->$attribute);
+        $html = (new \Parsedown())
+            ->setBreaksEnabled(true)
+            ->parse($instance->$attribute);
 
         if($this->handleImages) {
             return sharp_markdown_thumbnails(
