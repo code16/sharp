@@ -7,20 +7,21 @@
   "license": "MIT",
   "type": "project",
   "require": {
-    "php": ">=7.2.5",
+    "php": ">=7.3",
     "erusev/parsedown": "^1.7",
     "fideloper/proxy": "^4.0",
     "intervention/image": "^2.3",
-    "laravel/framework": "^7.0",
+    "laravel/framework": "^8.0",
+    "laravel/legacy-factories": "^1.0",
     "laravel/tinker": "^2.0",
     "spatie/image-optimizer": "^1.2",
     "spatie/laravel-translatable": "^4.2"
   },
   "require-dev": {
-    "facade/ignition": "^2.0",
+    "facade/ignition": "^2.3.6",
     "fzaninotto/faker": "^1.4",
     "mockery/mockery": "^1.0",
-    "nunomaduro/collision": "^4.1",
+    "nunomaduro/collision": "^5.0",
     "phpunit/phpunit": "^8.5"
   },
   "autoload": {

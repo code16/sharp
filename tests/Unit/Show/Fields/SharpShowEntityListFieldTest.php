@@ -32,7 +32,7 @@ class SharpShowEntityListFieldTest extends SharpTestCase
         $field = SharpShowEntityListField::make("entityListField", "entityKey")
             ->hideFilterWithValue("f1", "value1");
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "hiddenFilters" => [
                 "f1" => "value1",
             ]
@@ -47,7 +47,7 @@ class SharpShowEntityListFieldTest extends SharpTestCase
                 return "computed";
             });
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "hiddenFilters" => [
                 "f1" => "computed",
             ]
@@ -60,7 +60,7 @@ class SharpShowEntityListFieldTest extends SharpTestCase
         $field = SharpShowEntityListField::make("entityListField", "entityKey")
             ->showEntityState(false);
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "showEntityState" => false
         ], $field->toArray());
     }
@@ -71,7 +71,7 @@ class SharpShowEntityListFieldTest extends SharpTestCase
         $field = SharpShowEntityListField::make("entityListField", "entityKey")
             ->showReorderButton(false);
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "showReorderButton" => false
         ], $field->toArray());
     }
@@ -82,7 +82,7 @@ class SharpShowEntityListFieldTest extends SharpTestCase
         $field = SharpShowEntityListField::make("entityListField", "entityKey")
             ->showCreateButton(false);
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "showCreateButton" => false
         ], $field->toArray());
     }
@@ -93,7 +93,7 @@ class SharpShowEntityListFieldTest extends SharpTestCase
         $field = SharpShowEntityListField::make("entityListField", "entityKey")
             ->showSearchField(false);
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "showSearchField" => false
         ], $field->toArray());
     }
@@ -105,7 +105,7 @@ class SharpShowEntityListFieldTest extends SharpTestCase
         $field = SharpShowEntityListField::make("entityListField", "entityKey")
             ->hideEntityCommand(["c1", "c2"]);
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "hiddenCommands" => [
                 "entity" => [
                     "c1", "c2"
@@ -115,7 +115,7 @@ class SharpShowEntityListFieldTest extends SharpTestCase
 
         $field->hideEntityCommand("c3");
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "hiddenCommands" => [
                 "entity" => [
                     "c1", "c2", "c3"
@@ -130,7 +130,7 @@ class SharpShowEntityListFieldTest extends SharpTestCase
         $field = SharpShowEntityListField::make("entityListField", "entityKey")
             ->hideInstanceCommand(["c1", "c2"]);
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "hiddenCommands" => [
                 "instance" => [
                     "c1", "c2"
@@ -140,7 +140,7 @@ class SharpShowEntityListFieldTest extends SharpTestCase
 
         $field->hideInstanceCommand("c3");
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "hiddenCommands" => [
                 "instance" => [
                     "c1", "c2", "c3"

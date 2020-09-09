@@ -114,7 +114,7 @@ class UploadFormatterTest extends SharpTestCase
             ->setStorageDisk("local")
             ->setStorageBasePath("data/Test/{id}");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["file_name" => "data/Test/50/image.jpg"], 
             (new UploadFormatter)->setInstanceId(50)->fromFront(
                 $field, 
@@ -142,7 +142,7 @@ class UploadFormatterTest extends SharpTestCase
             ->setCropRatio("16:9")
             ->setStorageDisk("local");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["transformed" => true],
             (new UploadFormatter)->fromFront(
                 $field, 
@@ -170,7 +170,7 @@ class UploadFormatterTest extends SharpTestCase
             ->setCropRatio("16:9")
             ->setStorageBasePath("data/test");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["transformed" => true], 
             (new UploadFormatter)->fromFront(
                 $field, 
