@@ -12,6 +12,7 @@
     "fideloper/proxy": "^4.0",
     "intervention/image": "^2.3",
     "laravel/framework": "^8.0",
+    "laravel/legacy-factories": "^1.0",
     "laravel/tinker": "^2.0",
     "spatie/image-optimizer": "^1.2",
     "spatie/laravel-translatable": "^4.2"
