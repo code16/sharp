@@ -14,7 +14,7 @@ class SharpPanelTest extends SharpTestCase
         $widget = SharpPanelWidget::make("name")
             ->setInlineTemplate('<b>test</b>');
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["template" => "<b>test</b>"],
             $widget->toArray()
         );
@@ -27,7 +27,7 @@ class SharpPanelTest extends SharpTestCase
             ->setInlineTemplate('<b>test</b>')
             ->setLink('entity');
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["link" => url("sharp/list/entity")],
             $widget->toArray()
         );
@@ -40,7 +40,7 @@ class SharpPanelTest extends SharpTestCase
             ->setInlineTemplate('<b>test</b>')
             ->setLink('entity', 1);
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["link" => url("sharp/form/entity/1")],
             $widget->toArray()
         );
@@ -53,7 +53,7 @@ class SharpPanelTest extends SharpTestCase
             ->setInlineTemplate('<b>test</b>')
             ->setLink('entity', null, ["page" => 1, "filter_one" => "something"]);
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["link" => url("sharp/list/entity") . "?page=1&filter_one=something"],
             $widget->toArray()
         );

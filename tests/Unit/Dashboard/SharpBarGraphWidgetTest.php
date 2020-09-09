@@ -13,7 +13,7 @@ class SharpBarGraphWidgetTest extends SharpTestCase
     {
         $widget = SharpBarGraphWidget::make("name");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["display" => "bar"],
             $widget->toArray()
         );
@@ -24,7 +24,7 @@ class SharpBarGraphWidgetTest extends SharpTestCase
     {
         $widget = SharpBarGraphWidget::make("name");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["ratioX" => 16, "ratioY" => 9],
             $widget->toArray()
         );
@@ -36,7 +36,7 @@ class SharpBarGraphWidgetTest extends SharpTestCase
         $widget = SharpBarGraphWidget::make("name")
             ->setRatio("2:3");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["ratioX" => 2, "ratioY" => 3],
             $widget->toArray()
         );

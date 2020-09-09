@@ -52,7 +52,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
             ->setRemoteEndpoint("endpoint")
             ->setRemoteSearchAttribute("attribute");
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
                 "remoteMethod" => "POST", "remoteEndpoint" => "endpoint",
                 "remoteSearchAttribute" => "attribute"
             ], $formField->toArray()
@@ -67,7 +67,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
             ["id" => 2, "label" => "Elem 2"],
         ]);
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["localValues" => [
                 ["id" => 1, "label" => "Elem 1"],
                 ["id" => 2, "label" => "Elem 2"],
@@ -84,7 +84,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
             (object)["id" => 2, "label" => "Elem 2"],
         ]);
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["localValues" => [
                 (object)["id" => 1, "label" => "Elem 1"],
                 (object)["id" => 2, "label" => "Elem 2"],
@@ -99,7 +99,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
         $formField = $this->getDefaultLocalAutocomplete()
             ->setSearchMinChars(3);
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
                 "searchMinChars" => 3
             ], $formField->toArray()
         );
@@ -112,7 +112,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
             ->setListItemInlineTemplate('<strong>LIT</strong>')
             ->setResultItemInlineTemplate('<strong>RIT</strong>');
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "listItemTemplate" => "<strong>LIT</strong>",
             "resultItemTemplate" => "<strong>RIT</strong>"
         ], $formField->toArray()
@@ -144,7 +144,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
             ]
         ])->setLocalValuesLinkedTo("master");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["localValues" => [
                 "A" => [
                     ["id" => "A1", "label" => "test A1"],
@@ -173,7 +173,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
             ]
         ])->setLocalValuesLinkedTo("master")->setLocalized();
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["localValues" => [
                 "A" => [
                     ["id" => "A1", "label" => ["fr" => "test A1 fr", "en" => "test A1 en"]],
@@ -210,7 +210,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
             ]
         ])->setLocalValuesLinkedTo("master", "master2");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["localValues" => [
                 "A" => [
                     "A1" => [
@@ -240,7 +240,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
             "autocomplete/{{master}}/endpoint"
         );
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
                 "remoteEndpoint" => "autocomplete/{{master}}/endpoint",
                 "dynamicAttributes" => [
                     [
@@ -264,7 +264,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
             ]
         );
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
                 "remoteEndpoint" => "autocomplete/{{master}}/endpoint",
                 "dynamicAttributes" => [
                     [
@@ -291,7 +291,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
             ]
         );
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
                 "remoteEndpoint" => "autocomplete/{{master}}/{{secondary}}/endpoint",
                 "dynamicAttributes" => [
                     [
