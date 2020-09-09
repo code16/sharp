@@ -3,11 +3,13 @@
 namespace Code16\Sharp\Tests;
 
 use Code16\Sharp\SharpServiceProvider;
+use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
 use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Constraint\ArraySubset;
 
 abstract class SharpTestCase extends TestCase
 {
+    use ArraySubsetAsserts;
 
     /**
      * @param \Illuminate\Foundation\Application $app
@@ -33,8 +35,6 @@ abstract class SharpTestCase extends TestCase
      */
     public static function assertArrayContainsSubset($subset, $array, bool $checkForObjectIdentity = false, string $message = ''): void
     {
-        $constraint = new ArraySubset($subset, $checkForObjectIdentity);
-
-        static::assertThat($array, $constraint, $message);
+        static::assertArraySubset($subset, $array, $checkForObjectIdentity, $message);
     }
 }
