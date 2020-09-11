@@ -48,4 +48,11 @@
       margin-bottom: 0;
     }
   }
+
+  &__more {
+    text-transform: lowercase;
+    text-decoration: none;
+    font-size: .875em;
+    font-weight: 600;
+  }
 }
