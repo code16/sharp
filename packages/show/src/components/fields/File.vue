@@ -107,7 +107,7 @@
                 return parts[parts.length - 1];
             },
             hasThumbnail() {
-                return  this.value.thumbnail;
+                return !!this.value?.thumbnail;
             },
             thumbnailUrl() {
                 return this.value ? this.value.thumbnail : null;
