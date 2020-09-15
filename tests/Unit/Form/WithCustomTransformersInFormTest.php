@@ -298,6 +298,42 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
             $form->find($mother->id)["sons"][1]
         );
     }
+
+    /** @test */
+    function we_can_apply_a_custom_transformer_to_a_field_in_a_list_on_an_array_model()
+    {
+
+        $form = new class extends WithCustomTransformersTestForm {
+            function find($id): array
+            {
+                return $this->transform([
+                    "name" => "Jane Wayne",
+                    "sons" => [
+                        [
+                            "id" => 12, 
+                            "name" => "aaa"
+                        ]
+                    ]
+                ]);
+            }
+
+            function buildFormFields() {
+                $this->addField(SharpFormListField::make("sons")
+                    ->addItemField(SharpFormTextField::make("name"))
+                );
+            }
+        };
+
+        $form
+            ->setCustomTransformer("sons[name]", function($name) {
+                return strtoupper($name);
+            });
+
+        $this->assertArraySubset(
+            ["name" => "AAA"],
+            $form->find(null)["sons"][0]
+        );
+    }
 }
 
 class WithCustomTransformersTestForm extends SharpForm
