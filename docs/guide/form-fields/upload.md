@@ -37,7 +37,7 @@ The second argument, `$croppableFileTypes`, provide a way to limit the crop conf
 
 Set the destination storage disk (as configured in Laravel's  `config/filesystem.php` config file).
 
-### `setStorageBasePath(string $storageBasePath)`
+### `setStorageBasePath(string|Closure $storageBasePath)`
 
 Set the destination base storage path. 
 

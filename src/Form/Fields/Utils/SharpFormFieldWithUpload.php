@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Form\Fields\Utils;
 
+use Closure;
+
 trait SharpFormFieldWithUpload
 {
     /**
@@ -114,10 +116,10 @@ trait SharpFormFieldWithUpload
     }
 
     /**
-     * @param string $storageBasePath
+     * @param string|Closure $storageBasePath
      * @return static
      */
-    public function setStorageBasePath(string $storageBasePath)
+    public function setStorageBasePath($storageBasePath)
     {
         $this->storageBasePath = $storageBasePath;
 
@@ -137,7 +139,7 @@ trait SharpFormFieldWithUpload
      */
     public function storageBasePath()
     {
-        return $this->storageBasePath;
+        return value($this->storageBasePath);
     }
 
     /**
