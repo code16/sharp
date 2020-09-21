@@ -42,6 +42,14 @@ class EntityListQueryParams
     }
 
     /**
+     * @return int|null
+     */
+    public function getPage()
+    {
+        return $this->page;
+    }
+
+    /**
      * @param string $defaultSortedBy
      * @param string $defaultSortedDir
      * @return $this
