@@ -40,6 +40,11 @@ Route::get('/api/sharp/clients')
 The attribute name sent to the remote endpoint as search key.
 Default: `"query"`
 
+### `setDataWrapper($dataWrapper)`
+
+Configure an optional dataWrapper to handle results sent in a wrapper, typically "data". 
+Default: empty string.
+
 ### `setRemoteMethodGET()`
 ### `setRemoteMethodPOST()`
 
