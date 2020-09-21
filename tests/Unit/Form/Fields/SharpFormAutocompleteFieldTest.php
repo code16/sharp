@@ -37,7 +37,8 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
                 "searchMinChars" => 1, "localValues" => [
                     ["id" => 1, "label" => "bob"]
                 ],
-                "remoteSearchAttribute" => "query"
+                "remoteSearchAttribute" => "query",
+                "dataWrapper" => ""
             ], $defaultFormField->toArray()
         );
     }
@@ -99,9 +100,25 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
         $formField = $this->getDefaultLocalAutocomplete()
             ->setSearchMinChars(3);
 
-        $this->assertArraySubset([
+        $this->assertArraySubset(
+            [
                 "searchMinChars" => 3
-            ], $formField->toArray()
+            ], 
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_setDataWrapper()
+    {
+        $formField = $this->getDefaultLocalAutocomplete()
+            ->setDataWrapper("test");
+
+        $this->assertArraySubset(
+            [
+                "dataWrapper" => "test"
+            ], 
+            $formField->toArray()
         );
     }
 
@@ -112,10 +129,12 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
             ->setListItemInlineTemplate('<strong>LIT</strong>')
             ->setResultItemInlineTemplate('<strong>RIT</strong>');
 
-        $this->assertArraySubset([
-            "listItemTemplate" => "<strong>LIT</strong>",
-            "resultItemTemplate" => "<strong>RIT</strong>"
-        ], $formField->toArray()
+        $this->assertArraySubset(
+            [
+                "listItemTemplate" => "<strong>LIT</strong>",
+                "resultItemTemplate" => "<strong>RIT</strong>"
+            ], 
+            $formField->toArray()
         );
     }
 
