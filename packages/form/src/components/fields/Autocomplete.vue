@@ -126,6 +126,7 @@
                 type: Array,
                 default:()=>['value']
             },
+            dataWrapper: String,
             readOnly: Boolean,
             listItemTemplate: String,
             resultItemTemplate: String,
@@ -217,6 +218,8 @@
                     method: this.remoteMethod,
                     locale: this.locale,
                     searchAttribute: this.remoteSearchAttribute,
+                    dataWrapper: this.dataWrapper,
+                    fieldKey: this.fieldKey,
                     query,
                 })
                 .then(suggestions => {
