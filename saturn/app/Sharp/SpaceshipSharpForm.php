@@ -125,6 +125,7 @@ class SpaceshipSharpForm extends SharpForm
 
         )->addField(
             SharpFormAutocompleteField::make("serial_number", "remote")
+                ->setDataWrapper("data")
                 ->setLabel("S/N")
                 ->setListItemInlineTemplate("{{serial}}")
                 ->setResultItemInlineTemplate("{{serial}}")
