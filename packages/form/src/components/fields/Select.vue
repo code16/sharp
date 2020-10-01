@@ -42,10 +42,10 @@
                     <template v-for="option in options">
                         <div class="SharpSelect__item" :class="itemClasses" :key="option.id">
                             <Check
-                                :value="checked(option.id)"
+                                :value="isChecked(option)"
                                 :text="optionsLabel[option.id]"
                                 :read-only="readOnly"
-                                @input="handleCheckboxChanged($event,option.id)"
+                                @input="handleCheckboxChanged($event, option)"
                             />
                         </div>
                     </template>
@@ -57,11 +57,11 @@
                                 class="SharpRadio"
                                 tabindex="0"
                                 :id="`${uniqueIdentifier}${index}`"
-                                :checked="value===option.id"
+                                :checked="isSelected(option)"
                                 :value="option.id"
                                 :disabled="readOnly"
                                 :name="uniqueIdentifier"
-                                @change="handleRadioChanged(option.id)"
+                                @change="handleRadioChanged(option)"
                             >
                             <label class="SharpRadio__label" :for="`${uniqueIdentifier}${index}`">
                                 <span class="SharpRadio__appearance"></span>
@@ -157,6 +157,15 @@
             },
         },
         methods: {
+            isSelected(option, value = this.value) {
+                if(option.id == null || value == null) {
+                    return false;
+                }
+                return `${option.id}` === `${value}`;
+            },
+            isChecked(option) {
+                return this.value?.some(value => this.isSelected(option, value));
+            },
             remove() {
                 this.$emit('input', null);
             },
@@ -166,22 +175,19 @@
             handleInput(val) {
                 this.$emit('input', val);
             },
-            checked(optId) {
-                return this.value.indexOf(optId) !== -1;
+            handleCheckboxChanged(checked, option) {
+                if (checked) {
+                    this.$emit('input', [...(this.value ?? []), option.id])
+                }
+                else {
+                    this.$emit('input', (this.value ?? []).filter(val => !this.isSelected(option, val)));
+                }
             },
-            handleCheckboxChanged(checked, optId) {
-                let newValue = this.value;
-                if (checked)
-                    newValue.push(optId);
-                else
-                    newValue = this.value.filter(val => val !== optId);
-                this.$emit('input', newValue);
-            },
-            handleRadioChanged(optId) {
-                this.$emit('input', optId);
+            handleRadioChanged(option) {
+                this.$emit('input', option.id);
             },
             setDefault() {
-                if(!this.clearable && this.value == null && this.options.length>0) {
+                if(!this.clearable && this.value == null && this.options.length > 0) {
                     this.$emit('input', this.options[0].id, { force:true });
                 }
             },
