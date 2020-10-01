@@ -45,6 +45,13 @@
     }
   }
 
+  &__links {
+    font-size: .75em;
+    a {
+      color: #314255;
+    }
+  }
+
   &--multiple {
     .multiselect__tags {
       padding-bottom: rem(9px) - .1875rem;

@@ -34,6 +34,9 @@ return [
 
     'tags.unknown_label' => 'Unknown',
 
+    'select.select_all' => 'Select all',
+    'select.unselect_all' => 'Unselect all',
+
     'autocomplete.no_results_text' => 'No result found',
 
     'date.validation_error.format' => 'Invalid date format',
