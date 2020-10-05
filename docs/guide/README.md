@@ -2,14 +2,21 @@
 
 ## Terminology, general concept
 
-In Sharp, we handle `entities`; and `entity` is simply a data structure which has a meaning in the applicative context. For instance, a `Person`, a `Post` or an `Order`. In the Eloquent world, for which Sharp is optimized, it's typically a Model — but it's not necessarily a 1-1 relationship, a Sharp `entity` can represent a portion of a Model, or several Models.
+In Sharp, one of the most important concepts are `entities`. An `entity` is simply a data structure which has a certain purpose in the applicative context. Here are some examples for an `entity`:
+ 
+ * `Person`
+ * `Post`
+ * `Order`
+ * `Article`
+ 
+In the Eloquent world, for which Sharp is optimized, it's typically a model — but it's not necessarily a 1-1 relationship. A Sharp `entity` can represent a portion of a Model or even several Models.
 
 Each instance of an `entity` is called... an `instance`.
 
 Each `entity` in Sharp can be displayed:
-- in an `Entity List`, which is the list of all the `instances` for this `entity`: with some configuration and code, the user can sort the data, add filters, and perform a search. From there we also gain access to applicative `commands` applied to an `instance` or the whole list, and to a simple `state` changer (the publish state of an Article, for instance). All of that is described below.
-- In a `Show`, optionally, to display an `instance` details.
-- And in a `Form`, either to update or create a new `instance`.
+- in an `Entity List`, which is the list of all the `instances` for this `entity` (with some configuration and code, the user can sort the data, add filters and perform a search. The `Entity List` also provides the possibilty tp provide applicative `commands` to be executed on an `instance`or the whole `Entity List` and additionally provides a simple `state` changer which can be used to change the publish state in case of an Article `entity`. All of that is described below.
+- in a `Show`, optionally, to display an `instance` details.
+- and in a `Form`, either to update or create a new `instance`.
 
 ## Installation
 
