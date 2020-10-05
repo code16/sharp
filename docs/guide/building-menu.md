@@ -45,7 +45,7 @@ The `entity` value must correspond to some entity key described in the same `sha
 ]
 ```
 
-The `single => true` attribute would mean Sharp will create a link towards a `SharpSingleShow` implementation for the entity `account`. See [doc related to Shows](TODO link). 
+The `single => true` attribute would mean Sharp will create a link towards a `SharpSingleShow` implementation for the entity `account`. See [SingleShow](single-show.md). 
 
 ## Link to a dashboard
 
