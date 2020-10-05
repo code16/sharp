@@ -83,7 +83,7 @@ It's not recommended to use other Vue plugins in this file because it may change
 *webpack.mix.js*
 
 ```js
-mix.js('/resources/assets/js/sharp-plugin.js', '/public/js')
+mix.js('resources/assets/js/sharp-plugin.js', '/public/js')
 ```
 
 ::: warning
