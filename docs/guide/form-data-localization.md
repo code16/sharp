@@ -131,4 +131,4 @@ public function rules()
 
 On the front side of the Form, here's how localized fields are displayed:
 
-\[TODO add screenshot\]
+![Translated fields](./img/sharp-form-translated-fields.png)
