@@ -8,6 +8,7 @@ use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
+use Illuminate\Support\Arr;
 
 class SpaceshipSendMessage extends InstanceCommand
 {
@@ -82,7 +83,7 @@ class SpaceshipSendMessage extends InstanceCommand
                 return sprintf("%s, message #%s", $instance->name, $instance->messages_sent_count);
             })
             ->setCustomTransformer("level", function($value, Spaceship $instance) {
-                return array_random(["l","m","h",null]);
+                return Arr::random(["l","m","h",null]);
             })
             ->transform(
                 Spaceship::findOrFail($instanceId)

@@ -41,9 +41,9 @@ abstract class SharpForm
 
         return [
             "tabbed" => $this->tabbed,
-            "tabs" => collect($this->tabs)->map(function($tab) {
-                return $tab->toArray();
-            })->all()
+            "tabs" => collect($this->tabs)
+                ->map->toArray()
+                ->all()
         ];
     }
 
@@ -92,6 +92,14 @@ abstract class SharpForm
      * @return array
      */
     public function getDataLocalizations()
+    {
+        return [];
+    }
+
+    /**
+     * @return array
+     */
+    public function formConfig()
     {
         return [];
     }

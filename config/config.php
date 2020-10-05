@@ -11,6 +11,18 @@ return [
     // Optional. You can prevent Sharp version to be displayed in the page title. Default is true.
     "display_sharp_version_in_title" => true,
 
+    // Optional. Handle extensions.
+//    "extensions" => [
+//        "assets" => [
+//            "strategy" => "asset",
+//            "head" => [
+//                "/css/inject.css",
+//            ],
+//        ],
+//
+//        "activate_custom_fields" => false,
+//    ],
+
     // Required. Your entities list; each one must define a "list",
     // and can define "form", "validator", "policy" and "authorizations".
     "entities" => [
@@ -35,7 +47,7 @@ return [
 //        "my_global_filter" => \App\Sharp\Filters\MyGlobalFilter::class
     ],
 
-    // Required. The main menu (left bar), which may contains links to entities, dashboards
+    // Required. The main menu (left bar), which may contain links to entities, dashboards
     // or external URLs, grouped in categories.
     "menu" => [
 //        [
@@ -84,5 +96,8 @@ return [
 
         // Optional custom guard
 //        "guard" => "sharp",
-    ]
+    ],
+
+//    "login_page_message_blade_path" => env("SHARP_LOGIN_PAGE_MESSAGE_BLADE_PATH", "sharp/_login-page-message"),
+
 ];

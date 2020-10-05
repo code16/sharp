@@ -1,11 +1,28 @@
-import dashboard from './modules/dashboard';
-import entityList from './modules/entity-list';
-import globalFilters from './modules/global-filters';
 
 export default {
-    modules: {
-        'dashboard': dashboard,
-        'entity-list': entityList,
-        'global-filters': globalFilters,
+    state: {
+        loading: false,
+        dialogs: [],
+    },
+    mutations: {
+        setLoading(state, loading) {
+            state.loading = !!loading;
+        },
+        setDialogs(state, dialogs) {
+            state.dialogs = dialogs;
+        },
+    },
+    getters: {
+        isLoading(state) {
+            return !!state.loading;
+        },
+    },
+    actions: {
+        setLoading({ commit }, loading) {
+            commit('setLoading', loading);
+        },
+        setDialogs({ commit }, dialogs) {
+            commit('setDialogs', dialogs);
+        },
     },
 }

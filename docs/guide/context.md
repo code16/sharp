@@ -42,3 +42,4 @@ For now, `SharpContext` allows to:
 These are useful in a Form situation to display or hide fields depending on the instance status (creation, update), or in a Validator to add an id exception in an unique rule.
 
 - get the value of a Global Filter, via `globalFilterFor($filterName)`: see the [Global Filter documentation](filters.md) to know more about this feature.
+- get the previous page in the breadcrumb, with `getPreviousPageFromBreadcrumb(string $type = null): array`, which returns a `[$type, $entityKey, $instanceId]` array. The type parameter can be use to filter the results (get the previous `show`, for instance).

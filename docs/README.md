@@ -122,8 +122,10 @@ Data of this demo is reset each hour.
 
 <br>
 
-![Dashboard](./img/dashboard.png)
+![Dashboard](./img/dashboard-4.2.png)
 
-![Entity form](./img/form.png)
+![Entity list](./img/list-4.2.png)
 
-![Entity list](./img/list.png)
+![Entity show](./img/show-4.2.png)
+
+![Entity form](./img/form-4.2.png)

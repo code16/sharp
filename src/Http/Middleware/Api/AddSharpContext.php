@@ -38,11 +38,14 @@ class AddSharpContext
                 $this->context->setIsForm();
 
                 if (count($segments) == 5) {
-                    $this->context->setIsUpdate($segments[4]);
+                    $this->context->setIsUpdate($segments[4] ?? null);
 
                 } else {
                     $this->context->setIsCreation();
                 }
+
+            } elseif($segments[2] == "show") {
+                $this->context->setIsShow($segments[4] ?? null);
 
             } elseif($segments[2] == "list") {
                 $this->context->setIsEntityList();

@@ -5,6 +5,7 @@ namespace Code16\Sharp\Utils\Transformers;
 use Closure;
 use Code16\Sharp\EntityList\Commands\Command;
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Show\SharpShow;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -50,6 +51,11 @@ trait WithCustomTransformers
             return $this->applyFormatters(
                 $this->applyTransformers($models)
             );
+        }
+
+        if($this instanceof SharpShow) {
+            // It's a Show, there's only one model.
+            return $this->applyTransformers($models, false);
         }
 
         // SharpEntityList case
@@ -102,16 +108,19 @@ trait WithCustomTransformers
         $attributes = ArrayConverter::modelToArray($model);
 
         if($forceFullObject) {
-            // Merge model attribute with form fields to be sure we have
+            // Merge model attributes with form fields to be sure we have
             // all attributes which the front code needed.
-            $attributes = array_merge(
-                collect($this->getDataKeys())->flip()->map(function () {
+            $attributes = collect($this->getDataKeys())
+                ->flip()
+                ->map(function () {
                     return null;
-                })->all(), $attributes);
+                })
+                ->merge($attributes)
+                ->all();
+        }
 
-            if (is_object($model)) {
-                $attributes = $this->handleAutoRelatedAttributes($attributes, $model);
-            }
+        if (is_object($model)) {
+            $attributes = $this->handleAutoRelatedAttributes($attributes, $model);
         }
 
         // Apply transformers
@@ -125,13 +134,22 @@ trait WithCustomTransformers
                     continue;
                 }
 
-                foreach ($model->$listAttribute as $k => $itemModel) {
+                foreach ($model[$listAttribute] as $k => $itemModel) {
                     $attributes[$listAttribute][$k][$itemAttribute] = $transformer->apply(
                         $attributes[$listAttribute][$k][$itemAttribute] ?? null, $itemModel, $itemAttribute
                     );
                 }
 
             } else {
+                if(!isset($attributes[$attribute])) {
+                    if(method_exists($transformer, 'applyIfAttributeIsMissing')
+                        && !$transformer->applyIfAttributeIsMissing()) {
+                        // The attribute is missing, and the transformer code specifically
+                        // decide to be ignored in this case
+                        continue;
+                    }
+                }
+                
                 $attributes[$attribute] = $transformer->apply(
                     $attributes[$attribute] ?? null, $model, $attribute
                 );
@@ -161,6 +179,7 @@ trait WithCustomTransformers
      * a hasOne or belongsTo relationship. Ex: with "mother:name",
      * we add a transformed mother:name attribute in the array
      *
+     * @param $attributes
      * @param $model
      * @return mixed
      */

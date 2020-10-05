@@ -98,6 +98,12 @@ class TestForm extends SharpForm
                 )->addItemField(
                     SharpFormCheckField::make("check", "check this")
                         ->setLabel('')
+                )->addItemField(SharpFormMarkdownField::make("markdown2")
+                    ->setLocalized()
+                    ->setLabel("Markdown")
+                    ->setToolbar([
+                        SharpFormMarkdownField::B, SharpFormMarkdownField::I, SharpFormMarkdownField::A,
+                    ])
                 )
 
         )->addField(
@@ -231,7 +237,8 @@ class TestForm extends SharpForm
                 });
             })->addColumn(6, function (FormLayoutColumn $column) {
                 $column->withSingleField("list", function (FormLayoutColumn $listItem) {
-                    $listItem->withFields("date|5", "check|7");
+                    $listItem->withFields("date|5", "check|7")
+                        ->withSingleField('markdown2');
                 });
             });
 

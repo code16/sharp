@@ -4,12 +4,17 @@
     :items="{{ json_encode($sharpMenu->menuItems) }}"
     :has-global-filters="{{ json_encode($hasGlobalFilters) }}"
 >
-    <ul role="menubar" class="SharpLeftNav__list" aria-hidden="false" v-cloak>
+    @if(file_exists(public_path('/sharp-assets/menu-icon.png')))
+        <template slot="title">
+            <img src="{{ asset('/sharp-assets/menu-icon.png') }}" alt="{{ $sharpMenu->name }}" width="150" class="w-auto h-auto" style="max-height: 50px;">
+        </template>
+    @endif
+    <ul role="menubar" class="SharpLeftNav__list" aria-hidden="false">
         <sharp-nav-item disabled>
             <span title="{{ $sharpMenu->user }}">
                 {{ $sharpMenu->user }}
             </span>
-            <a href="{{ route('code16.sharp.logout') }}"> <sharp-item-visual :item="{ icon:'fa-sign-out' }" icon-class="fa-fw"></sharp-item-visual></a>
+            <a href="{{ route('code16.sharp.logout') }}"> <sharp-item-visual :item="{ icon:'fas fa-sign-out-alt' }" icon-class="fa-fw"></sharp-item-visual></a>
         </sharp-nav-item>
 
         @foreach($sharpMenu->menuItems as $menuItem)

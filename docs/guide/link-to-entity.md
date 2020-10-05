@@ -4,7 +4,7 @@ You'll need, sometimes, to create a link to an entity, either a list or a form. 
 
 ## Link use case
 
-This can be use for instance in an custom transformer of an EntityList column; imagine we want to list the pilots of a spaceship in a column, and link each one to its form: 
+This can be use for instance in a custom transformer of an EntityList column; imagine we want to list the pilots of a spaceship in a column, and link each one to its form: 
 
 ```php
 // In an EntityList:
@@ -18,7 +18,7 @@ function getListData(EntityListQueryParams $params)
             return $spaceship->pilots->map(function($pilot) {
                 return (new LinkToEntity($pilot->name))
                     ->setEntityKey("pilot")
-                    ->setInstanceId($pilot->id)
+                    ->toFormOfInstance($pilot->id) // We could use instead toShowOfInstance() to link the Show Page
                     ->render(); // This will render a full <a...> tag
             })->implode("<br>");
         })
@@ -50,9 +50,21 @@ Set a filter and its value (only EntityList).
 
 Set a default sort (only EntityList).
 
-### `setInstanceId($instanceId)`
+### `toFormOfInstance($instanceId)`
 
-Set a instance id, and change the link destination to a Form.
+Set an instance id, and change the link destination to a Form.
+
+### `toShowOfInstance($instanceId)`
+
+Set an instance id, and change the link destination to a Show.
+
+### `toSingleForm()`
+
+Change the link destination to a Single Form.
+
+### `toSingleShow()`
+
+Change the link destination to a Single Show.
 
 ### `setTooltip(string $toltip)`
 

@@ -19,6 +19,6 @@ class AssetViewComposerTest extends BaseApiTest
 
         $this->get(route('code16.sharp.login'))
             ->assertViewHas('injectedAssets')
-            ->assertSee('<link rel="stylesheet" href="/path/to/asset.css">');
+            ->assertSee('<link rel="stylesheet" href="/path/to/asset.css">', false);
     }
 }

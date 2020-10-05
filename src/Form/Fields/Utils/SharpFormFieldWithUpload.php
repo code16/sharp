@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Form\Fields\Utils;
 
+use Closure;
+
 trait SharpFormFieldWithUpload
 {
     /**
@@ -33,6 +35,11 @@ trait SharpFormFieldWithUpload
      * @var bool
      */
     protected $compactThumbnail = false;
+
+    /**
+     * @var bool
+     */
+    protected $shouldOptimizeImage = false;
 
     /**
      * @param float $maxFileSizeInMB
@@ -68,6 +75,25 @@ trait SharpFormFieldWithUpload
     }
 
     /**
+     * @param bool $shouldOptimizeImage
+     * @return static
+     */
+    public function shouldOptimizeImage($shouldOptimizeImage = true)
+    {
+        $this->shouldOptimizeImage = $shouldOptimizeImage;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isShouldOptimizeImage()
+    {
+        return $this->shouldOptimizeImage;
+    }
+
+    /**
      * @param bool $compactThumbnail
      * @return static
      */
@@ -90,10 +116,10 @@ trait SharpFormFieldWithUpload
     }
 
     /**
-     * @param string $storageBasePath
+     * @param string|Closure $storageBasePath
      * @return static
      */
-    public function setStorageBasePath(string $storageBasePath)
+    public function setStorageBasePath($storageBasePath)
     {
         $this->storageBasePath = $storageBasePath;
 
@@ -113,7 +139,7 @@ trait SharpFormFieldWithUpload
      */
     public function storageBasePath()
     {
-        return $this->storageBasePath;
+        return value($this->storageBasePath);
     }
 
     /**

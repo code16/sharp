@@ -100,6 +100,38 @@ class ListFormatterTest extends SharpTestCase
         ]));
     }
 
+    /** @test */
+    function we_can_format_sub_value_to_front()
+    {
+        $formatter = new ListFormatter;
+        $field = SharpFormListField::make("list")
+            ->addItemField(SharpFormTextField::make("mother:name"));
+
+        $data = [
+            [
+                "id" => 1,
+                "mother" => [
+                    "name" => "Jane"
+                ],
+            ], [
+                "id" => 2,
+                "mother" => [
+                    "name" => "Alicia"
+                ],
+            ]
+        ];
+
+        $this->assertEquals([
+            [
+                "id" => 1,
+                "mother:name" => "Jane",
+            ], [
+                "id" => 2,
+                "mother:name" => "Alicia"
+            ]
+        ], $formatter->toFront($field, $data));
+    }
+
     /**
      * @return array
      */

@@ -36,7 +36,7 @@ function buildWidgetsData()
 }
 ```
 
-Pass there the widget `key` and an array with the data as an array. Each array of the item should be an associative array. The key `label` is mandatory as it defines the ordered list item main content. 
+Pass there the widget `key` and an array with the data as an array. Each item of the array should be an associative array. The key `label` is mandatory as it defines the ordered list item main content. 
 You can also optionally define a count with key `count` associated with a number, it will show a badge with given value.
 
 Here's a more realistic example with data fetched from a Model:

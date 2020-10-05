@@ -3,20 +3,23 @@
 namespace App\Sharp;
 
 use App\Pilot;
-use App\Sharp\CustomFormFields\SharpCustomFomFieldTextIcon;
+use App\Sharp\CustomFormFields\SharpCustomFormFieldTextIcon;
+use App\Spaceship;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Http\WithSharpContext;
 
 class PilotJuniorSharpForm extends SharpForm
 {
-    use WithSharpFormEloquentUpdater;
+    use WithSharpFormEloquentUpdater, WithSharpContext;
 
     function buildFormFields()
     {
         $this->addField(
-            SharpCustomFomFieldTextIcon::make("name")
+            SharpCustomFormFieldTextIcon::make("name")
                 ->setLabel("Name")
+                ->setHelpMessage("This input is an example of a custom form field (SharpCustomFormFieldTextIcon)")
                 ->setIcon("fa-user")
         );
     }
@@ -35,9 +38,18 @@ class PilotJuniorSharpForm extends SharpForm
 
     function update($id, array $data)
     {
-        $instance = $id ? Pilot::findOrFail($id) : new Pilot;
+        $pilot = $id ? Pilot::findOrFail($id) : new Pilot;
 
-        $this->save($instance, $data + ["role" => "jr"]);
+        $pilot = $this->save($pilot, $data + ["role" => "jr"]);
+
+        if($this->context()->isCreation()) {
+            if($breadcrumb = $this->context()->getPreviousPageFromBreadcrumb("show")) {
+                list($type, $entityKey, $instanceId) = $breadcrumb;
+                if ($entityKey == "spaceship") {
+                    Spaceship::findOrFail($instanceId)->pilots()->attach($pilot->id);
+                }
+            }
+        }
     }
 
     function delete($id)

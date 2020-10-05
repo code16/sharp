@@ -3,9 +3,9 @@
 namespace App\Sharp\Filters;
 
 use App\Spaceship;
-use Code16\Sharp\Dashboard\DashboardMultipleFilter;
+use Code16\Sharp\Dashboard\DashboardSelectMultipleFilter;
 
-class TravelsDashboardSpaceshipsFilter implements DashboardMultipleFilter
+class TravelsDashboardSpaceshipsFilter implements DashboardSelectMultipleFilter
 {
 
     public function values()

@@ -1,7 +1,6 @@
 import localizeSelect from './Select';
 import { localeObject } from "./utils";
-
-import { lang } from "../Localization";
+import { lang } from "../../index";
 
 export default {
     extends: localizeSelect,

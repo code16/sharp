@@ -119,9 +119,9 @@ function sharp_markdown_thumbnails(string $html, string $classNames, int $width 
  *
  * @return string
  */
-function sharp_custom_form_fields()
+function sharp_custom_fields()
 {
-    if(config("sharp.extensions.activate_custom_form_fields", false)) {
+    if(config("sharp.extensions.activate_custom_fields", false)) {
         try {
             return "<script src='" . mix('/js/sharp-plugin.js') . "'></script>";
         } catch (\Exception $forget) {}
@@ -173,4 +173,13 @@ function is_method_implemented_in_concrete_class($handler, string $methodName)
     } catch (\ReflectionException $e) {
         return false;
     }
+}
+
+/**
+ * @return boolean
+ */
+function sharp_assets_out_of_date() {
+    $distManifest = file_get_contents(__DIR__ . '/../resources/assets/dist/mix-manifest.json');
+    $publicManifest = file_get_contents(public_path('vendor/sharp/mix-manifest.json'));
+    return $distManifest !== $publicManifest;
 }

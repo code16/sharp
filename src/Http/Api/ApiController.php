@@ -7,6 +7,7 @@ use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Http\SharpProtectedController;
+use Code16\Sharp\Show\SharpShow;
 
 abstract class ApiController extends SharpProtectedController
 {
@@ -23,6 +24,28 @@ abstract class ApiController extends SharpProtectedController
         }
 
         return app($configKey);
+    }
+
+    /**
+     * @param string $entityKey
+     * @return SharpShow
+     * @throws SharpInvalidEntityKeyException
+     */
+    protected function getShowInstance(string $entityKey)
+    {
+        if($this->isSubEntity($entityKey)) {
+            list($entityKey, $subEntityKey) = explode(':', $entityKey);
+            $showClass = config("sharp.entities.{$entityKey}.shows.{$subEntityKey}.show");
+
+        } else {
+            $showClass = config("sharp.entities.{$entityKey}.show");
+        }
+
+        if(! $showClass) {
+            throw new SharpInvalidEntityKeyException("The entity [{$entityKey}] was not found.");
+        }
+
+        return app($showClass);
     }
 
     /**

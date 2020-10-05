@@ -4,6 +4,7 @@ namespace Code16\Sharp\Form;
 
 use Code16\Sharp\Exceptions\Form\SharpFormFieldFormattingMustBeDelayedException;
 use Code16\Sharp\Form\Fields\SharpFormField;
+use Code16\Sharp\Show\Fields\SharpShowField;
 
 trait HandleFormFields
 {
@@ -26,9 +27,10 @@ trait HandleFormFields
     {
         $this->checkFormIsBuilt();
 
-        return collect($this->fields)->map(function($field) {
-            return $field->toArray();
-        })->keyBy("key")->all();
+        return collect($this->fields)
+            ->map->toArray()
+            ->keyBy("key")
+            ->all();
     }
 
     /**
@@ -47,7 +49,7 @@ trait HandleFormFields
      * Find a field by its key.
      *
      * @param string $key
-     * @return SharpFormField
+     * @return SharpFormField|SharpShowField
      */
     function findFieldByKey(string $key)
     {
@@ -61,17 +63,17 @@ trait HandleFormFields
 
             return $listField->findItemFormFieldByKey($itemKey);
         }
-
+        
         return $fields->where("key", $key)->first();
     }
 
     /**
      * Add a field.
      *
-     * @param SharpFormField $field
+     * @param SharpFormField|SharpShowField $field
      * @return $this
      */
-    protected function addField(SharpFormField $field)
+    protected function addField($field)
     {
         $this->fields[] = $field;
         $this->formBuilt = false;
@@ -91,38 +93,42 @@ trait HandleFormFields
     {
         $delayedData = collect([]);
 
-        $formattedData = collect($data)->filter(function ($value, $key) {
-            // Filter only configured fields
-            return in_array($key, $this->getDataKeys());
+        $formattedData = collect($data)
+            ->filter(function ($value, $key) {
+                // Filter only configured fields
+                return in_array($key, $this->getDataKeys());
+            })
 
-        })->map(function($value, $key) use($handleDelayedData, $delayedData, $instanceId) {
-            if(!$field = $this->findFieldByKey($key)) {
-                return $value;
-            }
-
-            try {
-                // Apply formatter based on field configuration
-                return $field->formatter()
-                    ->setInstanceId($instanceId)
-                    ->fromFront($field, $key, $value);
-
-            } catch(SharpFormFieldFormattingMustBeDelayedException $exception) {
-                // The formatter needs to be executed in a second pass. We delay it.
-                if($handleDelayedData) {
-                    $delayedData[$key] = $value;
-                    return null;
+            ->map(function($value, $key) use($handleDelayedData, $delayedData, $instanceId) {
+                if(!$field = $this->findFieldByKey($key)) {
+                    return $value;
                 }
 
-                throw $exception;
-            }
+                try {
+                    // Apply formatter based on field configuration
+                    return $field
+                        ->formatter()
+                        ->setInstanceId($instanceId)
+                        ->fromFront($field, $key, $value);
 
-        });
+                } catch(SharpFormFieldFormattingMustBeDelayedException $exception) {
+                    // The formatter needs to be executed in a second pass. We delay it.
+                    if($handleDelayedData) {
+                        $delayedData[$key] = $value;
+                        return null;
+                    }
+
+                    throw $exception;
+                }
+            });
 
         if($handleDelayedData) {
             return [
-                $formattedData->filter(function ($value, $key) use ($delayedData) {
-                    return !$delayedData->has($key);
-                })->all(),
+                $formattedData
+                    ->filter(function ($value, $key) use ($delayedData) {
+                        return !$delayedData->has($key);
+                    })
+                    ->all(),
                 $delayedData->all()
             ];
         }

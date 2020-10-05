@@ -1,0 +1,12 @@
+{
+    "name": "sharp-show",
+    "private": true,
+    "version": "1.0.0",
+    "main": "src/index.js",
+    "dependencies": {
+        "sharp-commands": "file:../commands",
+        "sharp-entity-list": "file:../entity-list",
+        "sharp-filters": "file:../filters",
+        "sharp-ui": "file:../ui"
+    }
+}

@@ -35,7 +35,7 @@ class MultiFormEntityListControllerTest extends BaseApiTest
             ]]);
     }
 
-    protected function buildTheWorld()
+    protected function buildTheWorld($singleShow = false)
     {
         $this->app['config']->set(
             'sharp.entities.person.list',

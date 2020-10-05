@@ -41,32 +41,21 @@ module.exports = {
                         'building-entity-form',
                         'entity-authorizations',
                         'multiforms',
+                        'single-form',
                         'custom-form-fields'
                     ]
                 },
                 {
-                    title: 'Form fields',
+                    title: 'Entity Shows',
                     collapsable: false,
                     children: [
-                        'text',
-                        'textarea',
-                        'markdown',
-                        'wysiwyg',
-                        'number',
-                        'html',
-                        'check',
-                        'date',
-                        'upload',
-                        'select',
-                        'autocomplete',
-                        'tags',
-                        'list',
-                        'autocomplete-list',
-                        'geolocation',
-                    ].map(page => `form-fields/${page}`),
+                        'building-entity-show',
+                        'single-show',
+                        'custom-show-fields'
+                    ]
                 },
                 {
-                    title: 'Dashboard',
+                    title: 'Dashboards',
                     collapsable: false,
                     children: [
                         'dashboard',
@@ -92,15 +81,57 @@ module.exports = {
                     ]
                 },
                 {
+                    title: 'Form fields',
+                    collapsable: false,
+                    children: [
+                        'text',
+                        'textarea',
+                        'markdown',
+                        'wysiwyg',
+                        'number',
+                        'html',
+                        'check',
+                        'date',
+                        'upload',
+                        'select',
+                        'autocomplete',
+                        'tags',
+                        'list',
+                        'autocomplete-list',
+                        'geolocation',
+                    ].map(page => `form-fields/${page}`),
+                },
+                {
+                    title: 'Show fields',
+                    collapsable: false,
+                    children: [
+                        'text',
+                        'picture',
+                        'list',
+                        'file',
+                        'embedded-entity-list',
+                    ].map(page => `show-fields/${page}`),
+                },
+                {
                     title: 'Migrations guide',
                     collapsable: false,
                     children: [
-                        'upgrading/4.1',
+                        'upgrading/5.0',
+                        'upgrading/4.2',
                         'upgrading/4.1.3',
+                        'upgrading/4.1',
                     ],
                 },
             ]
         },
+        algolia: {
+            apiKey: 'd88cea985d718328d4b892ff6a05dba8',
+            indexName: 'code16_sharp',
+            // debug: true,
+            algoliaOptions: {
+                hitsPerPage: 5,
+            },
+        }
     },
     markdown: {
         extendMarkdown: md => {

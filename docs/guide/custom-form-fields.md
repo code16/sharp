@@ -71,7 +71,7 @@ Vue.use(Sharp, {
     }
 })
 ```
-
+**Important**: The key must be `'textIcon'` for `FIELD_TYPE = "custom-textIcon"`
 
 Vue is exposed to the window scope, it's the current Vue version used by sharp (cf. package.json).
 ::: warning
@@ -95,13 +95,13 @@ You can `.version()` this JS file if you want to.
 
 ## On the back side
 
-### Activate custom form fields in config
+### Activate custom fields in config
 
 ```php
 // config/sharp.php
 
 "extensions" => [
-   "activate_custom_form_fields" => true
+   "activate_custom_fields" => true
 ],
 
 // ...
@@ -115,7 +115,7 @@ Next step is to build your form field class. It must extend `Code16\Sharp\Form\F
 Here's an example:
 
 ```php
-class SharpCustomFomFieldTextIcon extends SharpFormField
+class SharpCustomFormFieldTextIcon extends SharpFormField
 {
     const FIELD_TYPE = "custom-textIcon";
 
@@ -151,15 +151,15 @@ class SharpCustomFomFieldTextIcon extends SharpFormField
 
 A few things to note:
 
-- The `FIELD_TYPE` const must be "custom-" + yout custom field name, defined on the front side.
+- The `FIELD_TYPE` const must be "custom-" + your custom field name, defined on the front side.
 - To respect the Sharp API, you must define a static `make` function with at least the field key; this function must call the parent constructor, passing the `$key`, the `FIELD_TYPE` and a Formatter, which can also be a custom one (see [documentation](building-entity-form.md#formatters) and `Code16\Sharp\Form\Fields\Formatters\SharpFieldFormatter` base class).
-- `validationRules()` implementation is optional, but adviced.
+- `validationRules()` implementation is optional, but advised.
 - the `toArray()` function is mandatory, and must call `parent::buildArray()` with additional attributes.
 
 
 ### Use it
 
-Next step is... using the new form field. Well, this should be the easiest part:
+Next step is using the new form field:
 
 *in some `Code16\Sharp\Form\SharpForm` subclass:*
 
@@ -167,7 +167,7 @@ Next step is... using the new form field. Well, this should be the easiest part:
 function buildFormFields()
 {
     $this->addField(
-        SharpCustomFomFieldTextIcon::make("name")
+        SharpCustomFormFieldTextIcon::make("name")
             ->setLabel("Name")
             ->setIcon("fa-user")
     );

@@ -25,7 +25,7 @@ class GlobalFiltersTest extends BaseApiTest
         $context = app(SharpContext::class);
 
         // First call without any value in session
-        $this->json('get', '/sharp/api/form/person/50');
+        $this->getJson('/sharp/api/form/person/50');
 
         $this->assertEquals("default", $context->globalFilterFor("req_test"));
 
@@ -33,7 +33,7 @@ class GlobalFiltersTest extends BaseApiTest
         $value = Str::random();
         session()->put("_sharp_retained_global_filter_req_test", $value);
 
-        $this->json('get', '/sharp/api/form/person/50');
+        $this->getJson('/sharp/api/form/person/50');
 
         $this->assertEquals($value, $context->globalFilterFor("req_test"));
     }
@@ -50,7 +50,7 @@ class GlobalFiltersTest extends BaseApiTest
             ->postJson('/sharp/api/filters/test', ["value" => 5])
             ->assertStatus(200);
 
-        $this->json('get', '/sharp/api/form/person/50');
+        $this->getJson('/sharp/api/form/person/50');
 
         $this->assertEquals(5, $context->globalFilterFor("test"));
 
@@ -58,7 +58,7 @@ class GlobalFiltersTest extends BaseApiTest
             ->postJson('/sharp/api/filters/test')
             ->assertStatus(200);
 
-        $this->json('get', '/sharp/api/form/person/50');
+        $this->getJson('/sharp/api/form/person/50');
 
         $this->assertEquals("default", $context->globalFilterFor("test"));
     }
@@ -75,7 +75,7 @@ class GlobalFiltersTest extends BaseApiTest
             ->postJson('/sharp/api/filters/test', ["value" => 20])
             ->assertStatus(200);
 
-        $this->json('get', '/sharp/api/form/person/50');
+        $this->getJson('/sharp/api/form/person/50');
 
         $this->assertEquals("default", $context->globalFilterFor("test"));
     }

@@ -5,7 +5,7 @@ Entity states are a little bit of sugar to easily propose a state management on 
 ## Generator
 
 ```bash
-php artisan sharp:make:state <class_name> [--model=<model_name>]
+php artisan sharp:make:entity-state <class_name> [--model=<model_name>]
 ```
 
 ## Write the Entity state class

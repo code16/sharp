@@ -10,6 +10,8 @@ use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormMarkdownField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Form\SharpSingleForm;
+use Code16\Sharp\Show\SharpSingleShow;
 use Code16\Sharp\Tests\SharpTestCase;
 
 class SharpFormTest extends SharpTestCase
@@ -30,9 +32,9 @@ class SharpFormTest extends SharpTestCase
         };
 
         $this->assertEquals([
-                "md" => ["text" => null],
-                "check" => false
-            ], $sharpForm->newInstance());
+            "md" => ["text" => null],
+            "check" => false
+        ], $sharpForm->newInstance());
     }
 
     /** @test */
@@ -139,6 +141,18 @@ class SharpFormTest extends SharpTestCase
             "delayed" => "abc",
         ]);
     }
+
+    /** @test */
+    function single_forms_have_are_declared_in_config()
+    {
+        $sharpForm = new class extends BaseSharpSingleForm
+        {
+        };
+
+        $this->assertEquals([
+            "isSingle" => true
+        ], $sharpForm->formConfig());
+    }
 }
 
 class BaseSharpForm extends SharpForm
@@ -156,6 +170,22 @@ class BaseSharpForm extends SharpForm
     {
     }
     function buildFormLayout()
+    {
+    }
+}
+
+class BaseSharpSingleForm extends SharpSingleForm
+{
+    function buildFormFields()
+    {
+    }
+    function buildFormLayout()
+    {
+    }
+    protected function findSingle()
+    {
+    }
+    protected function updateSingle(array $data)
     {
     }
 }

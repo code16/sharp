@@ -28,7 +28,7 @@ class EntityListFilterTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "filters" => [
                 [
                     "key" => "test",
@@ -56,7 +56,7 @@ class EntityListFilterTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "filters" => [
                 [
                     "key" => "test",
@@ -83,7 +83,7 @@ class EntityListFilterTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "filters" => [
                 [
                     "key" => "test",
@@ -106,7 +106,7 @@ class EntityListFilterTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "filters" => [
                 [
                     "key" => "test",
@@ -139,7 +139,7 @@ class EntityListFilterTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "filters" => [
                 [
                     "key" => "test",
@@ -165,7 +165,7 @@ class EntityListFilterTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "filters" => [
                 [
                     "key" => "test",
@@ -191,7 +191,7 @@ class EntityListFilterTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "filters" => [
                 [
                     "key" => "test",
@@ -221,7 +221,7 @@ class EntityListFilterTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "filters" => [
                 [
                     "key" => "test",
@@ -255,7 +255,7 @@ class EntityListFilterTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "filters" => [
                 [
                     "key" => "test",
@@ -288,7 +288,7 @@ class EntityListFilterTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "filters" => [
                 [
                     "key" => "test",
@@ -320,11 +320,43 @@ class EntityListFilterTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "filters" => [
                 [
                     "key" => "test",
                     "default" => 2,
+                ]
+            ]
+        ], $list->listConfig());
+    }
+
+    /** @test */
+    function date_range_filter_retained_value_is_formatted()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig()
+            {
+                $this->addFilter("test", new class extends SharpEntityListDateRangeTestFilter {
+                    function retainValueInSession() {
+                        return true;
+                    }
+                });
+            }
+        };
+
+        // Artificially put retained value in session
+        session()->put("_sharp_retained_filter_test", "20190922..20190925");
+
+        $list->buildListConfig();
+
+        $this->assertArraySubset([
+            "filters" => [
+                [
+                    "key" => "test",
+                    "default" => [
+                        "start" => "2019-09-22",
+                        "end" => "2019-09-25",
+                    ],
                 ]
             ]
         ], $list->listConfig());
@@ -342,7 +374,7 @@ class EntityListFilterTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "filters" => [
                 [
                     "key" => "test",
@@ -365,7 +397,7 @@ class EntityListFilterTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "filters" => [
                 [
                     "default" => [
@@ -394,7 +426,7 @@ class EntityListFilterTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "filters" => [
                 [
                     "key" => "test",
@@ -421,7 +453,7 @@ class EntityListFilterTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "filters" => [
                 [
                     "key" => "test",

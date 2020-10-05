@@ -39,7 +39,7 @@ class SpaceshipSharpList extends SharpEntityList
                 ->setHtml(false)
 
         )->addDataContainer(
-            EntityListDataContainer::make("type")
+            EntityListDataContainer::make("type:label")
                 ->setLabel("Type")
 
         )->addDataContainer(
@@ -77,7 +77,7 @@ class SpaceshipSharpList extends SharpEntityList
         $this->addColumn("picture", 1, 2)
             ->addColumn("name", 2, 4)
             ->addColumnLarge("capacity", 2)
-            ->addColumn("type", 2, 4)
+            ->addColumn("type:label", 2, 4)
             ->addColumnLarge("pilots", 3)
             ->addColumn("messages_sent_count", 2);
     }
@@ -124,9 +124,6 @@ class SpaceshipSharpList extends SharpEntityList
             })
             ->setCustomTransformer("capacity", function($capacity) {
                 return number_format($capacity / 1000, 0) . "k";
-            })
-            ->setCustomTransformer("type", function($type, $spaceship) {
-                return $spaceship->type->label;
             })
             ->setCustomTransformer("pilots", function($pilots, $spaceship) {
                 return $spaceship->pilots->map(function($pilot) {

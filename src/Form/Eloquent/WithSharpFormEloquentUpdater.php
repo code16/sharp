@@ -44,9 +44,11 @@ trait WithSharpFormEloquentUpdater
 
         // Then handle manually ignored attributes...
         if(count($this->ignoredAttributes)) {
-            $data = collect($data)->filter(function ($value, $attribute) {
-                return array_search($attribute, $this->ignoredAttributes) === false;
-            })->all();
+            $data = collect($data)
+                ->filter(function ($value, $attribute) {
+                    return array_search($attribute, $this->ignoredAttributes) === false;
+                })
+                ->all();
         }
 
         // Finally call updater
@@ -68,13 +70,13 @@ trait WithSharpFormEloquentUpdater
             ->filter(function($field) {
                 return $field instanceof SharpFormListField
                     && $field->isSortable();
-
-            })->map(function($listField) {
+            })
+            ->map(function($listField) {
                 return [
                     "key" => $listField->key(),
                     "orderAttribute" => $listField->orderAttribute()
                 ];
-
-            })->keyBy("key");
+            })
+            ->keyBy("key");
     }
 }

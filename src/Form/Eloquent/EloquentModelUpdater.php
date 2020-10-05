@@ -13,13 +13,13 @@ class EloquentModelUpdater
      * @param Model $instance
      * @param array $data
      * @return Model
+     * @throws \ReflectionException
      */
     function update($instance, array $data)
     {
         $relationships = [];
 
         foreach($data as $attribute => $value) {
-
             if($this->isRelationship($instance, $attribute)) {
                 $relationships[$attribute] = $value;
 

@@ -15,12 +15,13 @@ return [
             ],
         ],
 
-        "activate_custom_form_fields" => env("SHARP_CUSTOM_FORM_FIELDS", true),
+        "activate_custom_fields" => env("SHARP_CUSTOM_FIELDS", true),
     ],
 
     "entities" => [
         "spaceship" => [
             "list" => \App\Sharp\SpaceshipSharpList::class,
+            "show" => \App\Sharp\SpaceshipSharpShow::class,
             "form" => \App\Sharp\SpaceshipSharpForm::class,
             "validator" => \App\Sharp\SpaceshipSharpValidator::class,
             "policy" => \App\Sharp\Policies\SpaceshipPolicy::class,
@@ -29,13 +30,30 @@ return [
             "list" => \App\Sharp\PilotSharpList::class,
             "forms" => [
                 "junior" => [
-                    "icon" => "fa-user-o",
+                    "icon" => "far fa-user",
                     "label" => "Junior Pilot",
                     "form" => \App\Sharp\PilotJuniorSharpForm::class,
                     "validator" => \App\Sharp\PilotJuniorSharpValidator::class,
                 ],
                 "senior" => [
-                    "icon" => "fa-user",
+                    "icon" => "fas fa-user",
+                    "label" => "Senior Pilot",
+                    "form" => \App\Sharp\PilotSeniorSharpForm::class,
+                    "validator" => \App\Sharp\PilotSeniorSharpValidator::class,
+                ]
+            ],
+        ],
+        "spaceship_pilot" => [
+            "list" => \App\Sharp\EmbeddedEntityLists\SpaceshipPilotSharpList::class,
+            "forms" => [
+                "junior" => [
+                    "icon" => "far fa-user",
+                    "label" => "Junior Pilot",
+                    "form" => \App\Sharp\PilotJuniorSharpForm::class,
+                    "validator" => \App\Sharp\PilotJuniorSharpValidator::class,
+                ],
+                "senior" => [
+                    "icon" => "fas fa-user",
                     "label" => "Senior Pilot",
                     "form" => \App\Sharp\PilotSeniorSharpForm::class,
                     "validator" => \App\Sharp\PilotSeniorSharpValidator::class,
@@ -61,6 +79,10 @@ return [
                 "update" => false,
                 "view" => false
             ]
+        ],
+        "account" => [
+            "show" => \App\Sharp\AccountSharpShow::class,
+            "form" => \App\Sharp\AccountSharpForm::class,
         ],
         "feature" => [
             "list" => \App\Sharp\FeatureSharpList::class,
@@ -92,17 +114,17 @@ return [
             "entities" => [
                 [
                     "label" => "Dashboard",
-                    "icon" => "fa-dashboard",
+                    "icon" => "fas fa-tachometer-alt",
                     "dashboard" => "company_dashboard"
                 ],
                 [
                     "label" => "Spaceships",
-                    "icon" => "fa-space-shuttle",
+                    "icon" => "fas fa-space-shuttle",
                     "entity" => "spaceship"
                 ],
                 [
                     "label" => "Pilots",
-                    "icon" => "fa-user",
+                    "icon" => "fas fa-user",
                     "entity" => "pilot"
                 ]
             ]
@@ -111,22 +133,22 @@ return [
             "entities" => [
                 [
                     "label" => "Dashboard",
-                    "icon" => "fa-dashboard",
+                    "icon" => "fas fa-tachometer-alt",
                     "dashboard" => "travels_dashboard"
                 ],
                 [
                     "label" => "Passengers",
-                    "icon" => "fa-bed",
+                    "icon" => "fas fa-bed",
                     "entity" => "passenger"
                 ],
                 [
                     "label" => "Travel",
-                    "icon" => "fa-suitcase",
+                    "icon" => "fas fa-suitcase",
                     "entity" => "travel"
                 ],
                 [
                     "label" => "Some external link",
-                    "icon" => "fa-globe",
+                    "icon" => "fas fa-globe",
                     "url" => "https://google.com"
                 ],
             ]
@@ -134,20 +156,26 @@ return [
             "label" => "Admin",
             "entities" => [
                 [
+                    "label" => "My account",
+                    "icon" => "fas fa-user",
+                    "entity" => "account",
+                    "single" => true
+                ],
+                [
                     "label" => "Sharp users",
-                    "icon" => "fa-user-secret",
+                    "icon" => "fas fa-user-secret",
                     "entity" => "user"
                 ]
             ]
         ],
         [
             "label" => "Public website",
-            "icon" => "fa-globe",
+            "icon" => "fas fa-globe",
             "url" => "https://google.com"
         ],
         [
             "label" => "Some powerful Features",
-            "icon" => "fa-superpowers",
+            "icon" => "fab fa-superpowers",
             "entity" => "feature"
         ]
     ],
@@ -163,5 +191,7 @@ return [
         "login_attribute" => "email",
         "password_attribute" => "password",
         "display_attribute" => "name",
-    ]
+    ],
+
+    "login_page_message_blade_path" => env("SHARP_LOGIN_PAGE_MESSAGE_BLADE_PATH", "sharp/_login-page-message"),
 ];

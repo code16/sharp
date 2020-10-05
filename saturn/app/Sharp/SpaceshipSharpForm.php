@@ -8,6 +8,7 @@ use App\Spaceship;
 use App\SpaceshipType;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Eloquent\Transformers\FormUploadModelTransformer;
+use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
@@ -93,6 +94,14 @@ class SpaceshipSharpForm extends SharpForm
                 ->setOptionsLinkedTo("type_id")
 
         )->addField(
+            SharpFormUploadField::make("manual")
+                ->setLabel("Manual")
+                ->setHelpMessage("Max file size: 20 Mb")
+                ->setStorageDisk("local")
+                ->setStorageBasePath("data/Spaceship/{id}/Manual")
+                ->setFileFilter("pdf")
+                ->setMaxFileSize(20)
+        )->addField(
             SharpFormSelectField::make(
                 "model",
                 SpaceshipType::all()
@@ -116,6 +125,7 @@ class SpaceshipSharpForm extends SharpForm
 
         )->addField(
             SharpFormAutocompleteField::make("serial_number", "remote")
+                ->setDataWrapper("data")
                 ->setLabel("S/N")
                 ->setListItemInlineTemplate("{{serial}}")
                 ->setResultItemInlineTemplate("{{serial}}")
@@ -125,6 +135,7 @@ class SpaceshipSharpForm extends SharpForm
             SharpFormUploadField::make("picture")
                 ->setLabel("Picture")
                 ->setFileFilterImages()
+                ->shouldOptimizeImage()
                 ->setCropRatio("1:1", ["jpg","jpeg","png"])
                 ->setStorageDisk("local")
                 ->setStorageBasePath("data/Spaceship/{id}")
@@ -206,6 +217,7 @@ class SpaceshipSharpForm extends SharpForm
                     ->withSingleField("type_id")
                     ->withSingleField("serial_number")
                     ->withFields("brand|6", "model|6")
+                    ->withSingleField("manual")
                     ->withSingleField("pilots")
                     ->withSingleField("reviews", function(FormLayoutColumn $listItem) {
                         $listItem->withSingleField("starts_at")
@@ -262,15 +274,16 @@ class SpaceshipSharpForm extends SharpForm
                     "serial" => str_pad($serial, 5, "0", STR_PAD_LEFT)
                 ] : null;
             })
-            ->setCustomTransformer("picture", new FormUploadModelTransformer())
-            ->setCustomTransformer("pictures", new FormUploadModelTransformer())
+            ->setCustomTransformer("manual", new SharpUploadModelFormAttributeTransformer())
+            ->setCustomTransformer("picture", new SharpUploadModelFormAttributeTransformer())
+            ->setCustomTransformer("pictures", new SharpUploadModelFormAttributeTransformer())
             ->setCustomTransformer("html", function($html, Spaceship $spaceship){
                 return [
                     "nameFr" => $spaceship->getTranslation('name','fr'),
                 ];
             })
             ->transform(
-                Spaceship::with("reviews", "pilots", "picture", "pictures", "features")->findOrFail($id)
+                Spaceship::with("reviews", "pilots", "manual", "picture", "pictures", "features")->findOrFail($id)
             );
     }
 
@@ -280,7 +293,7 @@ class SpaceshipSharpForm extends SharpForm
             "corporation_id" => $this->context()->globalFilterFor("corporation")
         ]);
 
-        if(isset($data["name"]) && $data["name"] == "error") {
+        if(($data["name"]["fr"] ?? "") == "error") {
             throw new SharpApplicativeException("Name can't be «error»");
         }
 
@@ -290,12 +303,16 @@ class SpaceshipSharpForm extends SharpForm
             ->ignore("html")
             ->save($instance, $data);
 
-        $this->notify("Spaceship was updated with success!")
-            ->setDetail("Congratulations, this was not an easy thing to do.")
-            ->setLevelSuccess()
-            ->setAutoHide(false);
+        if(isset($data["name"])) {
+            // Workaround to display this only once, in case of a double pass in this method
+            // by Sharp, to handle relationships in a creation case.
+            $this->notify("Spaceship was updated with success!")
+                ->setDetail("Congratulations, this was not an easy thing to do.")
+                ->setLevelSuccess()
+                ->setAutoHide(false);
+        }
 
-        if($data["capacity"] >= 1000) {
+        if(($data["capacity"] ?? 0) >= 1000) {
             $this->notify("this is a huge spaceship, by the way!");
         }
 

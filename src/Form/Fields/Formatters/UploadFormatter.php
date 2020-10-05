@@ -8,6 +8,7 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 use Code16\Sharp\Utils\FileUtil;
 use Illuminate\Filesystem\FilesystemManager;
 use Intervention\Image\ImageManager;
+use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 class UploadFormatter extends SharpFieldFormatter
 {
@@ -25,7 +26,6 @@ class UploadFormatter extends SharpFieldFormatter
      * @var ImageManager
      */
     protected $imageManager;
-
 
     public function __construct()
     {
@@ -51,16 +51,16 @@ class UploadFormatter extends SharpFieldFormatter
      * @param SharpFormField $field
      * @param string $attribute
      * @param $value
-     * @throws SharpFormFieldFormattingMustBeDelayedException
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @return array|null
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws SharpFormFieldFormattingMustBeDelayedException
      */
     function fromFront(SharpFormField $field, string $attribute, $value)
     {
         $storage = $this->filesystem->disk($field->storageDisk());
 
         if($this->isUploaded($value)) {
-
             $fileContent = $this->filesystem->disk("local")->get(
                 config("sharp.uploads.tmp_dir", 'tmp') . '/' . $value["name"]
             );
@@ -73,6 +73,13 @@ class UploadFormatter extends SharpFieldFormatter
             }
 
             $storage->put($storedFilePath, $fileContent);
+
+            if($field->isShouldOptimizeImage()) {
+                $optimizerChain = OptimizerChainFactory::create();
+                // we do not need to check for exception nor file format because:
+                // > By default the package will not throw any errors and just operate silently.
+                $optimizerChain->optimize($storage->path($storedFilePath));
+            }
 
             return [
                 "file_name" => $storedFilePath,
@@ -154,6 +161,7 @@ class UploadFormatter extends SharpFieldFormatter
      * @param $fileContent
      * @param array $cropData
      * @return \Intervention\Image\Image
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     protected function handleImageTransformations($fileContent, array $cropData)
     {

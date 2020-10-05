@@ -1,0 +1,120 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`autocomplete-field common & local can mount Autocomplete field as multiselect 1`] = `
+<div id="app">
+	<div class="SharpAutocomplete">
+		<div tabindex="-1" class="multiselect SharpAutocomplete__multiselect">
+			<div class="multiselect__select"></div>
+			<div class="multiselect__tags">
+				<div class="multiselect__tags-wrap" style="display: none;"></div>
+				<!---->
+				<div class="SharpLoading SharpLoading--small" style="display: none;">
+					<div class="SharpLoading__content">
+						<svg viewBox="-75 -75 150 150" class="SharpLoading__svg">
+							<circle cx="0" cy="0" r="37.5"></circle>
+						</svg>
+					</div>
+				</div>
+				<input name="" type="text" autocomplete="off" placeholder="nom" tabindex="0" class="multiselect__input" style="width: 0px; position: absolute; padding: 0px;">
+				<!---->
+				<span class="multiselect__placeholder">
+					nom
+				</span>
+			</div>
+			<div tabindex="-1" class="multiselect__content-wrapper" style="max-height: 300px; display: none;">
+				<ul class="multiselect__content" style="display: inline-block;">
+					<!---->
+					<li class="multiselect__element">
+						<span data-select="Press enter to select" data-selected="Selected" data-deselect="Press enter to remove" class="multiselect__option multiselect__option--highlight">
+							<div class="SharpTemplate">
+								<em>Theodore Bagwell, T-Bag</em>
+							</div>
+						</span>
+						<!---->
+					</li>
+					<li class="multiselect__element">
+						<span data-select="Press enter to select" data-selected="Selected" data-deselect="Press enter to remove" class="multiselect__option">
+							<div class="SharpTemplate">
+								<em>Lincoln Burrows, Linc</em>
+							</div>
+						</span>
+						<!---->
+					</li>
+					<li style="display: none;">
+						<span class="multiselect__option">
+							{{ form.autocomplete.no_results_text }}
+						</span>
+					</li>
+					<li style="display: none;">
+						<span class="multiselect__option">List is empty.</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!---->
+	</div>
+</div>
+`;
+
+exports[`autocomplete-field common & local can mount Autocomplete field as result item 1`] = `
+<div id="app">
+	<div class="SharpAutocomplete">
+		<div tabindex="-1" class="multiselect SharpAutocomplete__multiselect">
+			<div class="multiselect__select"></div>
+			<button type="button" class="SharpAutocomplete__result-item__close-button">
+				<svg aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd" class="SharpAutocomplete__result-item__close-icon">
+					<path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
+				</svg>
+			</button>
+			<div class="multiselect__tags">
+				<div class="multiselect__tags-wrap" style="display: none;"></div>
+				<!---->
+				<div class="SharpLoading SharpLoading--small" style="display: none;">
+					<div class="SharpLoading__content">
+						<svg viewBox="-75 -75 150 150" class="SharpLoading__svg">
+							<circle cx="0" cy="0" r="37.5"></circle>
+						</svg>
+					</div>
+				</div>
+				<input name="" type="text" autocomplete="off" placeholder="nom" tabindex="0" class="multiselect__input" style="width: 0px; position: absolute; padding: 0px;">
+				<span class="multiselect__single">
+					<div class="SharpTemplate">
+						<b>Theodore Bagwell, T-Bag</b>
+					</div>
+				</span>
+				<!---->
+			</div>
+			<div tabindex="-1" class="multiselect__content-wrapper" style="max-height: 300px; display: none;">
+				<ul class="multiselect__content" style="display: inline-block;">
+					<!---->
+					<li class="multiselect__element">
+						<span data-select="Press enter to select" data-selected="Selected" data-deselect="Press enter to remove" class="multiselect__option multiselect__option--highlight multiselect__option--selected">
+							<div class="SharpTemplate">
+								<em>Theodore Bagwell, T-Bag</em>
+							</div>
+						</span>
+						<!---->
+					</li>
+					<li class="multiselect__element">
+						<span data-select="Press enter to select" data-selected="Selected" data-deselect="Press enter to remove" class="multiselect__option">
+							<div class="SharpTemplate">
+								<em>Lincoln Burrows, Linc</em>
+							</div>
+						</span>
+						<!---->
+					</li>
+					<li style="display: none;">
+						<span class="multiselect__option">
+							{{ form.autocomplete.no_results_text }}
+						</span>
+					</li>
+					<li style="display: none;">
+						<span class="multiselect__option">List is empty.</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!---->
+	</div>
+</div>
+`;

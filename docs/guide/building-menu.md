@@ -29,6 +29,24 @@ Links can be grouped in categories, like Company, Travels and Admin in this exam
 
 The `entity` value must correspond to some entity key described in the same `sharp.php` file.
 
+## Link to a single entity show
+
+```php
+// sharp.php
+
+[...]
+"menu" => [
+    [
+        "label" => "Account",
+        "icon" => "fa-user",
+        "entity" => "account",
+        "single" => true
+    ]
+]
+```
+
+The `single => true` attribute would mean Sharp will create a link towards a `SharpSingleShow` implementation for the entity `account`. See [doc related to Shows](TODO link). 
+
 ## Link to a dashboard
 
 Very similar to entity lists, except that `entity` is replaced by a `dashboard` attribute which must contain a valid dashboard key:

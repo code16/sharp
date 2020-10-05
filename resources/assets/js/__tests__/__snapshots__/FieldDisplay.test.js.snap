@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`field-display can mount field display 1`] = `
-<div id="app">
-	__MOCKED_SFC_SharpFieldContainer__
-</div>
-`;

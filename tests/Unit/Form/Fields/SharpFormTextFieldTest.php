@@ -18,17 +18,17 @@ class SharpFormTextFieldTest extends SharpTestCase
         $passwordFormField = SharpFormTextField::make("name")
             ->setInputTypePassword();
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["key" => "name", "type" => "text", "inputType" => "text"],
             $defaultFormField->toArray()
         );
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["key" => "name", "type" => "text", "inputType" => "text"],
             $textFormField->toArray()
         );
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["key" => "name", "type" => "text", "inputType" => "password"],
             $passwordFormField->toArray()
         );
@@ -40,7 +40,7 @@ class SharpFormTextFieldTest extends SharpTestCase
         $formField = SharpFormTextField::make("name")
             ->setPlaceholder("placeholder");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["key" => "name", "type" => "text", "placeholder" => "placeholder"],
             $formField->toArray()
         );
@@ -52,7 +52,7 @@ class SharpFormTextFieldTest extends SharpTestCase
         $formField = SharpFormTextField::make("text")
             ->setMaxLength(10);
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["maxLength" => 10],
             $formField->toArray()
         );

@@ -27,7 +27,7 @@ class SharpWidgetTest extends SharpTestCase
     {
         $widget = SomeTestWidget::make("name", "test");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["key" => "name", "type" => "test"],
             $widget->toArray()
         );
@@ -50,7 +50,7 @@ class SharpWidgetTest extends SharpTestCase
         $widget = SomeTestWidget::make("name")
             ->setTitle("title");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["title" => "title"],
             $widget->toArray()
         );
@@ -62,7 +62,7 @@ class SharpWidgetTest extends SharpTestCase
         $widget = SomeTestWidget::make("name")
             ->setLink("entity");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["link" => route("code16.sharp.list", "entity")],
             $widget->toArray()
         );
@@ -74,7 +74,7 @@ class SharpWidgetTest extends SharpTestCase
         $widget = SomeTestWidget::make("name")
             ->setLink("entity", 1);
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["link" => route("code16.sharp.edit", ["entity", 1])],
             $widget->toArray()
         );

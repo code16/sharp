@@ -3,26 +3,29 @@
 namespace Code16\Sharp\Http\Api;
 
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Form\SharpSingleForm;
 
 class FormController extends ApiController
 {
 
     /**
      * @param string $entityKey
-     * @param string $instanceId
+     * @param string|null $instanceId
      * @return \Illuminate\Http\JsonResponse
      * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
      * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
-    public function edit($entityKey, $instanceId)
+    public function edit($entityKey, $instanceId = null)
     {
         sharp_check_ability("view", $entityKey, $instanceId);
 
         $form = $this->getFormInstance($entityKey);
+        $this->checkFormImplementation($form, $instanceId);
 
         return response()->json([
             "fields" => $form->fields(),
             "layout" => $form->formLayout(),
+            "config" => $form->formConfig(),
             "data" => $form->instance($instanceId)
         ] + $this->dataLocalizations($form));
     }
@@ -35,32 +38,38 @@ class FormController extends ApiController
      */
     public function create($entityKey)
     {
-        sharp_check_ability("create", $entityKey);
-
         $form = $this->getFormInstance($entityKey);
+
+        if($form instanceof SharpSingleForm) {
+            return $this->edit($entityKey);
+        }
+
+        sharp_check_ability("create", $entityKey);
 
         return response()->json([
             "fields" => $form->fields(),
             "layout" => $form->formLayout(),
+            "config" => $form->formConfig(),
             "data" => $form->newInstance()
         ] + $this->dataLocalizations($form));
     }
 
     /**
      * @param string $entityKey
-     * @param string $instanceId
+     * @param string|null $instanceId
      * @return \Illuminate\Http\JsonResponse
      * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
      * @throws \Code16\Sharp\Exceptions\Form\SharpFormUpdateException
      * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
-    public function update($entityKey, $instanceId)
+    public function update($entityKey, $instanceId = null)
     {
         sharp_check_ability("update", $entityKey, $instanceId);
 
         $this->validateRequest($entityKey);
 
         $form = $this->getFormInstance($entityKey);
+        $this->checkFormImplementation($form, $instanceId);
 
         $form->updateInstance($instanceId, request()->all());
 
@@ -78,11 +87,16 @@ class FormController extends ApiController
      */
     public function store($entityKey)
     {
+        $form = $this->getFormInstance($entityKey);
+
+        if($form instanceof SharpSingleForm) {
+            // There is no creation in SingleForms
+            return $this->update($entityKey);
+        }
+
         sharp_check_ability("create", $entityKey);
 
         $this->validateRequest($entityKey);
-
-        $form = $this->getFormInstance($entityKey);
 
         $form->storeInstance(request()->all());
 
@@ -91,16 +105,17 @@ class FormController extends ApiController
 
     /**
      * @param string $entityKey
-     * @param string $instanceId
+     * @param string|null $instanceId
      * @return \Illuminate\Http\JsonResponse
      * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
      * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
-    public function delete($entityKey, $instanceId)
+    public function delete($entityKey, $instanceId = null)
     {
         sharp_check_ability("delete", $entityKey, $instanceId);
 
         $form = $this->getFormInstance($entityKey);
+        $this->checkFormImplementation($form, $instanceId);
 
         $form->delete($instanceId);
 
@@ -135,5 +150,20 @@ class FormController extends ApiController
         return $form->hasDataLocalizations()
             ? ["locales" => $form->getDataLocalizations()]
             : [];
+    }
+
+    /**
+     * @param SharpForm $form
+     * @param string|null $instanceId
+     */
+    protected function checkFormImplementation(SharpForm $form, ?string $instanceId)
+    {
+        if(!$instanceId && !$form instanceof SharpSingleForm) {
+            abort(404);
+        }
+
+        if($instanceId && $form instanceof SharpSingleForm) {
+            abort(404);
+        }
     }
 }

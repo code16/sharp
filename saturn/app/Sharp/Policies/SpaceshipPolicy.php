@@ -52,6 +52,6 @@ class SpaceshipPolicy
      */
     public function delete(User $user, $spaceshipId)
     {
-        return false;
+        return true;
     }
 }

@@ -47,12 +47,17 @@ function getListData(EntityListQueryParams $params)
         "capacity",
         function($capacity, $spaceship, $attribute) {
             return ($capacity/1000) . "k";
-        })
+        }
     )->transform($spaceships);
 }
 ```
 
 The `setCustomTransformer()` function takes the key of the attribute to transform, and either a `Closure`, an instance of a class which implements `Code16\Sharp\Utils\Transformers\SharpAttributeTransformer`, or even just the full class name of the latest.
+
+::: tip
+Note that a custom transformer defined on a missing attribute will add the attribute to the result array. It's a convenient way to add a computed attribute, like for instance a `full_name` built with a bunch of real attributes.  
+But if this isn't the wanted behaviour, the solution is to define in the `SharpAttributeTransformer` implementation a public `applyIfAttributeIsMissing()` function, which when returning `false` ensure that Sharp will ignore the attribute if it is missing.
+:::
 
 
 ## Transform attribute of a related model (hasMany relationship)
@@ -63,8 +68,8 @@ Sometimes (maybe more often in the Entity Form), you would like to transform an 
 return $this->setCustomTransformer(
         "sons[name]",
         function($son) {
-            return strtoupper($son->name)
-        })
+            return strtoupper($son->name);
+        }
     )->transform($father);
 ```
 
@@ -86,7 +91,7 @@ function buildListDataContainers()
 
 function buildListLayout()
 {
-    $this->addColumn("author:name", 6, 6)
+    $this->addColumn("author:name", 6, 6);
 }
 ```
 
@@ -103,3 +108,34 @@ function buildFormFields()
 ```
 
 The `:` separator used here will be interpreted in `transform()`, and the `$post->author->name` attribute will be used.
+
+
+## The built-in `MarkdownAttributeTransformer`
+
+Transforms a markdown formatted text into HTML. Example:
+
+```php
+function find($id): array
+{
+    return $this
+        ->setCustomTransformer(
+            "description", 
+            new MarkdownAttributeTransformer()
+        )
+        ->transform([...]);
+}
+```
+
+You can handle embedded images (see the [markdown form field documentation for details on that](form-fields/markdown.html)) if needed, with `handleImages(int $width = null, int $height = null, array $filters = [])`:
+
+```php
+function find($id): array
+{
+    return $this
+        ->setCustomTransformer(
+            "description", 
+            (new MarkdownAttributeTransformer())->handleImages(200)
+        )
+        ->transform([...]);
+}
+```

@@ -4,9 +4,7 @@ namespace Code16\Sharp\Form\Layout;
 
 class FormLayoutFieldset implements HasLayout
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $legend;
 
     use HasFieldRows;

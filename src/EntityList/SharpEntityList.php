@@ -14,7 +14,10 @@ use Illuminate\Support\Collection;
 
 abstract class SharpEntityList
 {
-    use HandleFilters, HandleEntityState, HandleCommands, WithCustomTransformers;
+    use HandleFilters,
+        HandleEntityState,
+        HandleCommands,
+        WithCustomTransformers;
 
     /** @var array */
     protected $containers = [];
@@ -33,9 +36,6 @@ abstract class SharpEntityList
 
     /** @var string */
     protected $multiformAttribute = null;
-
-    /** @var array */
-    protected $multiformEntityKeys = [];
 
     /** @var bool */
     protected $searchable = false;
@@ -61,9 +61,12 @@ abstract class SharpEntityList
     {
         $this->checkListIsBuilt();
 
-        return collect($this->containers)->map(function(EntityListDataContainer $container) {
-            return $container->toArray();
-        })->keyBy("key")->all();
+        return collect($this->containers)
+            ->map(function(EntityListDataContainer $container) {
+                return $container->toArray();
+            })
+            ->keyBy("key")
+            ->all();
     }
 
     /**
@@ -78,9 +81,11 @@ abstract class SharpEntityList
             $this->layoutBuilt = true;
         }
 
-        return collect($this->columns)->map(function(EntityListLayoutColumn $column) {
-            return $column->toArray();
-        })->all();
+        return collect($this->columns)
+            ->map(function(EntityListLayoutColumn $column) {
+                return $column->toArray();
+            })
+            ->all();
     }
 
     /**
@@ -116,24 +121,28 @@ abstract class SharpEntityList
                 collect($items)
                     ->map(function($row) use($keys) {
                         // Filter model attributes on actual form fields
-                        return collect($row)->only(
-                            array_merge(
-                                $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
-                                $this->multiformAttribute ? [$this->multiformAttribute] : [],
-                                [$this->instanceIdAttribute],
-                                $keys
+                        return collect($row)
+                            ->only(
+                                array_merge(
+                                    $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
+                                    $this->multiformAttribute ? [$this->multiformAttribute] : [],
+                                    [$this->instanceIdAttribute],
+                                    $keys
+                                )
                             )
-                        )->all();
-                    })->all()
+                            ->all();
+                    })
+                    ->all()
         ] + (isset($page) ? compact('page', 'totalCount', 'pageSize') : []);
     }
 
     /**
      * Return the data config values.
      *
+     * @param bool $hasShowPage
      * @return array
      */
-    function listConfig(): array
+    function listConfig(bool $hasShowPage = false): array
     {
         $config = [
             "instanceIdAttribute" => $this->instanceIdAttribute,
@@ -143,6 +152,7 @@ abstract class SharpEntityList
             "reorderable" => !is_null($this->reorderHandler),
             "defaultSort" => $this->defaultSort,
             "defaultSortDir" => $this->defaultSortDir,
+            "hasShowPage" => $hasShowPage,
         ];
 
         $this->appendFiltersToConfig($config);

@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Utils\Testing;
 
-use Illuminate\Foundation\Testing\TestResponse;
 use PHPUnit\Framework\Assert as PHPUnit;
 
 trait SharpAssertions
@@ -14,19 +13,26 @@ trait SharpAssertions
      */
     protected function initSharpAssertions()
     {
-        TestResponse::macro('assertSharpHasAuthorization', function ($authorization) {
+        // TestResponse was renamed in Laravel 7.0
+        if(class_exists("Illuminate\Testing\TestResponse")) {
+            $testResponseClass = "Illuminate\Testing\TestResponse";
+        } else {
+            $testResponseClass = "Illuminate\Foundation\Testing\TestResponse";
+        }
+        
+        $testResponseClass::macro('assertSharpHasAuthorization', function ($authorization) {
             return $this->assertJson(
                 ["authorizations" => [$authorization => true]]
             );
         });
 
-        TestResponse::macro('assertSharpHasNotAuthorization', function ($authorization) {
+        $testResponseClass::macro('assertSharpHasNotAuthorization', function ($authorization) {
             return $this->assertJson(
                 ["authorizations" => [$authorization => false]]
             );
         });
 
-        TestResponse::macro('assertSharpFormHasFieldOfType', function ($name, $formFieldClassName) {
+        $testResponseClass::macro('assertSharpFormHasFieldOfType', function ($name, $formFieldClassName) {
             $type = $formFieldClassName::FIELD_TYPE;
 
             $this->assertJson(
@@ -38,7 +44,7 @@ trait SharpAssertions
             return $this;
         });
 
-        TestResponse::macro('assertSharpFormHasFields', function ($names) {
+        $testResponseClass::macro('assertSharpFormHasFields', function ($names) {
 
             foreach((array)$names as $name) {
 
@@ -78,7 +84,7 @@ trait SharpAssertions
             return $this;
         });
 
-        TestResponse::macro('assertSharpFormDataEquals', function ($name, $value) {
+        $testResponseClass::macro('assertSharpFormDataEquals', function ($name, $value) {
             return $this->assertJson(
                 ["data" => [$name => $value]]
             );

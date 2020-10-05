@@ -1,4 +1,6 @@
-import { parseBlobJSONContent, getFileName } from "../../util";
+import { parseBlobJSONContent, getFileName } from "../../util/request";
+import { lang } from "../../index";
+import { showConfirm, showAlert } from "../../util/dialogs";
 
 export default {
     data() {
@@ -53,9 +55,8 @@ export default {
             }
             if(confirmation) {
                 await new Promise(resolve => {
-                    this.actionsBus.$emit('showMainModal', {
-                        title: this.l('modals.command.confirm.title'),
-                        text: confirmation,
+                    showConfirm(confirmation, {
+                        title: lang('modals.command.confirm.title'),
                         okCallback: resolve,
                     });
                 });
@@ -88,10 +89,8 @@ export default {
             this.init();
         },
         handleInfoCommand(data) {
-            this.actionsBus.$emit('showMainModal', {
-                title: this.l('modals.command.info.title'),
-                text: data.message,
-                okCloseOnly: true
+            showAlert(data.message, {
+                title: lang('modals.command.info.title'),
             });
         },
         handleViewCommand(data) {

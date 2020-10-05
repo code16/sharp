@@ -42,4 +42,9 @@ class PassengerBirthdateFilter implements EntityListDateRangeRequiredFilter
     {
         return false;
     }
+
+    public function retainValueInSession()
+    {
+        return true;
+    }
 }

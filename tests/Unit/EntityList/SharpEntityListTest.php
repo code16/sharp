@@ -136,6 +136,7 @@ class SharpEntityListTest extends SharpTestCase
             "searchable" => true,
             "paginated" => true,
             "reorderable" => false,
+            "hasShowPage" => false,
             "instanceIdAttribute" => "id",
             "multiformAttribute" => null,
             "defaultSort" => null,

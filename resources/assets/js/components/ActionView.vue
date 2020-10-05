@@ -7,7 +7,6 @@
             </div>
         </template>
         <template v-else>
-            <component v-if="barComp" :is="barComp" />
             <slot />
             <notifications position="top right" animation-name="slideRight" style="top:6rem" reverse>
                 <template slot="body" slot-scope="{ item, close }">
@@ -24,32 +23,35 @@
                     </div>
                 </template>
             </notifications>
-            <sharp-modal v-for="(modal,id) in mainModalsData" :key="id"
-                v-bind="modal.props" @ok="modal.okCallback" @hidden="modal.hiddenCallback">
-                {{modal.text}}
-            </sharp-modal>
+            <template v-for="dialog in dialogs">
+                <Modal
+                    v-bind="dialog.props"
+                    @ok="dialog.okCallback"
+                    @hidden="dialog.hiddenCallback"
+                    :key="dialog.id"
+                >
+                    {{ dialog.text }}
+                </Modal>
+            </template>
         </template>
+
+        <LoadingOverlay :visible="isLoading" />
     </div>
 </template>
 
 <script>
-    import axios from 'axios';
-    import { actionBarByContext } from './action-bar';
-    import EventBus from './EventBus';
     import { api } from "../api";
-    import SharpModal from './Modal';
-
-    const noop=()=>{};
+    import { Modal, LoadingOverlay } from 'sharp-ui';
 
     export default {
         name:'SharpActionView',
         components: {
-            SharpModal
+            Modal,
+            LoadingOverlay,
         },
 
         provide() {
             return {
-                actionsBus: new EventBus({name:'SharpActionsEventBus'}),
                 axiosInstance: api
             }
         },
@@ -63,41 +65,20 @@
 
         data() {
             return {
-                mainModalsData: {},
-                mainModalId: 0,
                 showErrorPage: false,
                 errorPageData: null
             }
         },
         computed: {
-            barComp() {
-                return actionBarByContext(this.context);
+            dialogs() {
+                return this.$store.state.dialogs;
+            },
+            isLoading() {
+                return this.$store.getters.isLoading;
             },
         },
-        methods: {
-            showMainModal({ text, okCallback=noop, okCloseOnly, isError, ...sharedProps }) {
-                const curId = this.mainModalId;
-                const hiddenCallback = () => this.$delete(this.mainModalsData, curId);
-
-                this.$set(this.mainModalsData,curId,{
-                    props: {
-                        ...sharedProps,
-                        okOnly:okCloseOnly,
-                        noCloseOnBackdrop:okCloseOnly,
-                        noCloseOnEsc:okCloseOnly,
-                        visible: true,
-                        isError
-                    },
-                    okCallback, hiddenCallback,
-                    text,
-                });
-                this.mainModalId++;
-            }
-        },
         created() {
-            let { actionsBus, axiosInstance } = this._provided;
-
-            actionsBus.$on('showMainModal', this.showMainModal);
+            let { axiosInstance } = this._provided;
 
             axiosInstance.interceptors.response.use(c=>c, error=>{
                 let { response: {status, data}, config: { method } } = error;

@@ -9,6 +9,8 @@ body {
 $css--reset: true;
 $css--typography: true;
 
+@import 'vars';
+
 @import '~carbon-components/scss/globals/scss/colors';
 @import '~carbon-components/scss/globals/scss/vars';
 
@@ -19,8 +21,6 @@ $css--typography: true;
 @import '~bootstrap/scss/variables';
 @import '~bootstrap/scss/mixins';
 @import '~bootstrap/scss/utilities';
-
-@import 'vars';
 
 ::before, ::after {
   box-sizing: border-box;
@@ -33,12 +33,13 @@ body {
   font-family: $font-family-base;
 }
 
+a {
+  color: $link-color;
+}
+
 small {
   font-size: smaller;
 }
 
 
 @import 'pages/LoginPage';
-@import 'pages/FormPage';
-@import 'pages/DashboardPage';
-@import 'pages/EntityListPage';

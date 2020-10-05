@@ -13,9 +13,7 @@ use Illuminate\Http\Request;
 class AppendFormAuthorizations
 {
 
-    /**
-     * @var Gate
-     */
+    /** @var Gate */
     protected $gate;
 
     /**
@@ -82,10 +80,8 @@ class AppendFormAuthorizations
 
     protected function determineEntityKeys()
     {
-        list($entityKey, $instanceId) = [
-            request()->segment(4),
-            request()->segment(5)
-        ];
+        $entityKey = request()->segment(4);
+        $instanceId = request()->segment(5) ?? null;
 
         if(($pos = strpos($entityKey, ':')) !== false) {
             $entityKey = substr($entityKey, 0, $pos);

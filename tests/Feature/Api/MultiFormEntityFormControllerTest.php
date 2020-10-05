@@ -29,13 +29,13 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->json('get', '/sharp/api/form/person:small/1')
+        $this->getJson('/sharp/api/form/person:small/1')
             ->assertStatus(200)
             ->assertJson(["data" => [
                 "name" => "Joe Pesci"
             ]]);
 
-        $this->json('get', '/sharp/api/form/person:big/1')
+        $this->getJson('/sharp/api/form/person:big/1')
             ->assertStatus(200)
             ->assertJson(["data" => [
                 "name" => "John Wayne",
@@ -48,12 +48,12 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->json('post', '/sharp/api/form/person:small/1', [
+        $this->postJson('/sharp/api/form/person:small/1', [
             "name" => "Jane Fonda"
         ])->assertStatus(200)
             ->assertJson(["ok" => true]);
 
-        $this->json('post', '/sharp/api/form/person:big/1', [
+        $this->postJson('/sharp/api/form/person:big/1', [
             "name" => "Jane Fonda"
         ])->assertStatus(200)
             ->assertJson(["ok" => true]);
@@ -69,7 +69,7 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
             BigPersonSharpValidator::class
         );
 
-        $this->json('post', '/sharp/api/form/person:big/1', [
+        $this->postJson('/sharp/api/form/person:big/1', [
             "name" => "Bob"
         ])->assertStatus(422)
             ->assertJson([
@@ -90,10 +90,10 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
             "view" => false
         ]);
 
-        $this->json('get', '/sharp/api/form/person:small/1')
+        $this->getJson('/sharp/api/form/person:small/1')
             ->assertStatus(403);
 
-        $this->json('get', '/sharp/api/form/person:big/1')
+        $this->getJson('/sharp/api/form/person:big/1')
             ->assertStatus(403);
     }
 
@@ -102,13 +102,13 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->json('get', '/sharp/api/form/person:small/3')
+        $this->getJson('/sharp/api/form/person:small/3')
             ->assertStatus(403);
 
-        $this->json('get', '/sharp/api/form/person:small/2')
+        $this->getJson('/sharp/api/form/person:small/2')
             ->assertStatus(200);
 
-        $this->json('get', '/sharp/api/form/person:big/3')
+        $this->getJson('/sharp/api/form/person:big/3')
             ->assertStatus(403);
     }
 
@@ -117,7 +117,7 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->json('get', '/sharp/api/form/person:small/4')->assertJson([
+        $this->getJson('/sharp/api/form/person:small/4')->assertJson([
             "authorizations" => [
                 "delete" => false,
                 "update" => false,
@@ -126,9 +126,9 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
         ]);
     }
 
-    protected function buildTheWorld()
+    protected function buildTheWorld($singleShow = false)
     {
-        parent::buildTheWorld();
+        parent::buildTheWorld($singleShow);
 
         $this->app['config']->set('sharp.entities.person.form', null);
 

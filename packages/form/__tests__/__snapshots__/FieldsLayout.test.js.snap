@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`fields-layout can mount "fieldset" fields layout 1`] = `
+<div class="GRID_MOCK">
+	<fieldset class="SharpForm__fieldset">
+		<div class="SharpModule__inner">
+			<div class="SharpModule__header">
+				<div class="SharpModule__title">Fieldset</div>
+			</div>
+			<div class="SharpModule__content">
+				<div class="FIELDS_LAYOUT_MOCK" layout="[object Object]">
+					<div class="FIELD_MOCK" data="[object Object]"></div>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+</div>
+`;
+
+exports[`fields-layout can mount "hidden fieldset" fields layout 1`] = `
+<div class="GRID_MOCK">
+	<fieldset class="SharpForm__fieldset" style="display: none;">
+		<div class="SharpModule__inner">
+			<div class="SharpModule__header">
+				<div class="SharpModule__title">Fieldset</div>
+			</div>
+			<div class="SharpModule__content">
+				<div class="FIELDS_LAYOUT_MOCK" layout="[object Object]">
+					<div class="FIELD_MOCK" data="[object Object]"></div>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+</div>
+`;
+
+exports[`fields-layout can mount fields layout 1`] = `
+<div class="GRID_MOCK">
+	<div class="FIELD_MOCK" data="[object Object]"></div>
+</div>
+`;
