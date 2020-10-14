@@ -39,6 +39,12 @@
  * Released under the MIT License.
  */
 
+/*!
+ * vuex v3.5.1
+ * (c) 2020 Evan You
+ * @license MIT
+ */
+
 /**
  * @license
  * Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
@@ -47,12 +53,6 @@
  * The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
  * Code distributed by Google as part of the polymer project is also
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
- */
-
-/**
- * vuex v3.0.1
- * (c) 2017 Evan You
- * @license MIT
  */
 
 /**!
