@@ -38,6 +38,7 @@
                                             :config-identifier="fieldLayout.key"
                                             :layout="fieldLayout"
                                             @visible-change="handleFieldVisibilityChanged(fieldLayout.key, $event)"
+                                            :key="refreshKey"
                                         />
                                     </template>
                                     <template v-else>
@@ -84,6 +85,7 @@
             return {
                 ready: false,
                 fieldsVisible: null,
+                refreshKey: 0,
             }
         },
 
@@ -209,6 +211,7 @@
                 await this.$store.dispatch('show/get');
 
                 this.ready = true;
+                this.refreshKey++;
             }
         },
 

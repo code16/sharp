@@ -100,7 +100,10 @@
             },
         },
         created() {
-            this.$store.registerModule(this.storeModule.split('/'), entityListModule);
+            const modulePath = this.storeModule.split('/');
+            if(!this.$store.hasModule(modulePath)) {
+                this.$store.registerModule(modulePath, entityListModule);
+            }
             this.$store.dispatch(`${this.storeModule}/setQuery`, this.getFiltersQueryParams(this.hiddenFilters));
 
             syncVisibility(this, () => this.isVisible, { lazy:true });
