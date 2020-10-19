@@ -66,6 +66,10 @@
       flex-flow: column;
     }
 
+    &:last-child {
+      border-bottom: 0;
+    }
+
     &--header {
       border: none;
       cursor: inherit;
