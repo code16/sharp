@@ -49,6 +49,18 @@
                             />
                         </div>
                     </template>
+                    <template v-if="showSelectAll">
+                        <div class="SharpSelect__links mt-3">
+                            <div class="row mx-n2">
+                                <div class="col-auto px-2">
+                                    <a href="#" @click.prevent="handleSelectAllClicked">{{ lang('form.select.select_all') }}</a>
+                                </div>
+                                <div class="col-auto px-2">
+                                    <a href="#" @click.prevent="handleUnselectAllClicked">{{ lang('form.select.unselect_all') }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
                 </template>
                 <template v-else>
                     <template v-for="(option, index) in options">
@@ -80,6 +92,7 @@
     import Check from './Check.vue';
     import localize from '../../mixins/localize/Select';
     import { setDefaultValue } from "../../util";
+    import { lang } from "sharp";
 
     export default {
         name: 'SharpSelect',
@@ -110,6 +123,10 @@
             clearable: {
                 type: Boolean,
                 default: false
+            },
+            showSelectAll: {
+                type: Boolean,
+                default: true,
             },
             placeholder: {
                 type: String,
@@ -157,6 +174,7 @@
             },
         },
         methods: {
+            lang,
             isSelected(option, value = this.value) {
                 if(option.id == null || value == null) {
                     return false;
@@ -185,6 +203,12 @@
             },
             handleRadioChanged(option) {
                 this.$emit('input', option.id);
+            },
+            handleSelectAllClicked() {
+                this.$emit('input', this.options.map(option => option.id));
+            },
+            handleUnselectAllClicked() {
+                this.$emit('input', []);
             },
             setDefault() {
                 if(!this.clearable && this.value == null && this.options.length > 0) {

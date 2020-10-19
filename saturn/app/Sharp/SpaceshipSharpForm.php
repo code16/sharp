@@ -161,6 +161,7 @@ class SpaceshipSharpForm extends SharpForm
                 ->setLabel("Features")
                 ->setMultiple()
                 ->setDisplayAsList()
+                ->allowSelectAll()
 
         )->addField(
             SharpFormListField::make("reviews")

@@ -18,12 +18,17 @@ class SharpFormSelectFieldTest extends SharpTestCase
         $formField = $this->getDefaultSelect($options);
 
         $this->assertEquals([
-                "key" => "field", "type" => "select",
+                "key" => "field", 
+                "type" => "select",
                 "options" => [
                     ["id" => "1", "label" => "Elem 1"],
                     ["id" => "2", "label" => "Elem 2"],
-                ], "multiple" => false,
-                "clearable" => false, "inline" => false, "display" => "list",
+                ], 
+                "multiple" => false,
+                "clearable" => false, 
+                "inline" => false, 
+                "showSelectAll" => false, 
+                "display" => "list",
             ], $formField->toArray()
         );
     }
@@ -96,6 +101,18 @@ class SharpFormSelectFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ["display" => "dropdown"],
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_showSelectAll()
+    {
+        $formField = $this->getDefaultSelect()
+            ->allowSelectAll();
+
+        $this->assertArraySubset(
+            ["showSelectAll" => true],
             $formField->toArray()
         );
     }
