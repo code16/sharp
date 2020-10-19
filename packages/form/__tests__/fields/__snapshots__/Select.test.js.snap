@@ -30,6 +30,16 @@ exports[`select-field can mount "read only" Select field as checkboxes list 1`] 
 					</label>
 				</div>
 			</div>
+			<div class="SharpSelect__links mt-3">
+				<div class="row mx-n2">
+					<div class="col-auto px-2">
+						<a href="#"></a>
+					</div>
+					<div class="col-auto px-2">
+						<a href="#"></a>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -131,6 +141,16 @@ exports[`select-field can mount Select field as checkboxes list 1`] = `
 						</span>
 						<span class="SharpCheck__label-text">BBB</span>
 					</label>
+				</div>
+			</div>
+			<div class="SharpSelect__links mt-3">
+				<div class="row mx-n2">
+					<div class="col-auto px-2">
+						<a href="#"></a>
+					</div>
+					<div class="col-auto px-2">
+						<a href="#"></a>
+					</div>
 				</div>
 			</div>
 		</div>

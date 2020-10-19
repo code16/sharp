@@ -33,7 +33,7 @@ describe('show page', () => {
             },
             store: new Vuex.Store({
                 modules: {
-                    'show': merge(showModule, storeModule),
+                    'show': merge({}, showModule, storeModule),
                 }
             }),
             // language=Vue

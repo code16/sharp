@@ -50,7 +50,7 @@ describe('EntityList', () => {
             },
             store: new Vuex.Store({
                 modules: {
-                    'entity-list': merge(entityListModule, storeModule),
+                    'entity-list': merge({}, entityListModule, storeModule),
                 }
             }),
             localVue,
@@ -247,17 +247,17 @@ describe('EntityList', () => {
             wrapper.setData(reorderableConfig);
             expect(wrapper.vm.canReorder).toBe(true);
 
-            wrapper.setData(merge(reorderableConfig, {
+            wrapper.setData(merge({}, reorderableConfig, {
                 config: { reorderable: false },
             }));
             expect(wrapper.vm.canReorder).toBe(false);
 
-            wrapper.setData(merge(reorderableConfig, {
+            wrapper.setData(merge({}, reorderableConfig, {
                 authorizations: { update: false },
             }));
             expect(wrapper.vm.canReorder).toBe(false);
 
-            wrapper.setData(merge(reorderableConfig, {
+            wrapper.setData(merge({}, reorderableConfig, {
                 data: {
                     items: [{ id:1 }]
                 }

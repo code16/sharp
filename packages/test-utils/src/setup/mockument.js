@@ -30,3 +30,5 @@ window.location = {
         return 'http://saturn.test';
     }
 };
+
+Element.prototype.scrollIntoView = jest.fn();
