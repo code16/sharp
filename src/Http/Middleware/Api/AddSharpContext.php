@@ -32,26 +32,32 @@ class AddSharpContext
         $segments = $request->segments();
 
         if(count($segments) > 3) {
-            $this->context->setEntityKey($segments[3]);
+            if(count($segments) == 7 && $segments[3] == "download") {
+                $this->context->setEntityKey($segments[5]);
+                $this->context->setIsUpdate($segments[6] ?? null);
 
-            if($segments[2] == "form") {
-                $this->context->setIsForm();
+            } else {
+                $this->context->setEntityKey($segments[3]);
 
-                if (count($segments) == 5) {
-                    $this->context->setIsUpdate($segments[4] ?? null);
+                if ($segments[2] == "form") {
+                    $this->context->setIsForm();
 
-                } else {
-                    $this->context->setIsCreation();
+                    if (count($segments) == 5) {
+                        $this->context->setIsUpdate($segments[4] ?? null);
+
+                    } else {
+                        $this->context->setIsCreation();
+                    }
+
+                } elseif ($segments[2] == "show") {
+                    $this->context->setIsShow($segments[4] ?? null);
+
+                } elseif ($segments[2] == "list") {
+                    $this->context->setIsEntityList();
+
+                } elseif ($segments[2] == "dashboard") {
+                    $this->context->setIsDashboard();
                 }
-
-            } elseif($segments[2] == "show") {
-                $this->context->setIsShow($segments[4] ?? null);
-
-            } elseif($segments[2] == "list") {
-                $this->context->setIsEntityList();
-
-            } elseif($segments[2] == "dashboard") {
-                $this->context->setIsDashboard();
             }
         }
 

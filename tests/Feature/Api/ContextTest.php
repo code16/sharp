@@ -75,6 +75,21 @@ class ContextTest extends BaseApiTest
     }
 
     /** @test */
+    public function context_is_set_on_a_download_case()
+    {
+        $this->buildTheWorld();
+        $this->configurePersonValidator();
+
+        $context = app(SharpContext::class);
+
+        $this->getJson('/sharp/api/form/download/attachment/person/50');
+
+        $this->assertTrue($context->isUpdate());
+        $this->assertEquals("50", $context->instanceId());
+        $this->assertEquals("person", $context->entityKey());
+    }
+
+    /** @test */
     public function context_is_set_in_the_validation()
     {
         $this->buildTheWorld();
