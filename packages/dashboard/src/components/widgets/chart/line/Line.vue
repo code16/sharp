@@ -1,49 +1,35 @@
 <template>
     <div>
-        <canvas ref="canvas"></canvas>
+        <ApexChart
+            type="line"
+            :series="chartData.series"
+            :options="options"
+        />
     </div>
 </template>
 
 <script>
-    import { Line, mixins } from 'vue-chartjs';
+    import ApexChart from 'vue-apexcharts';
 
     export default {
-        extends: Line,
-        mixins: [mixins.reactiveProp],
+        components: {
+            ApexChart,
+        },
         props: {
             chartData: Object,
         },
         computed: {
             options() {
                 return {
-                    title: {
-                        display: false,
+                    stroke: {
+                        curve: 'smooth'
                     },
-                    legend: {
-                        display: false,
+                    xaxis: {
+                        categories: this.chartData.labels,
                     },
-                    maintainAspectRatio: false,
-
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                suggestedMin: 0,
-                            },
-                            gridLines: {
-                                display: false
-                            }
-                        }],
-                        xAxes: [ {
-                            gridLines: {
-                                display: false
-                            }
-                        }]
-                    }
+                    colors: this.chartData.colors,
                 }
             }
-        },
-        mounted() {
-            this.renderChart(this.chartData, this.options);
         },
     }
 </script>
