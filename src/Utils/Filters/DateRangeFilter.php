@@ -6,18 +6,3 @@ interface DateRangeFilter extends Filter
 {
 }
 
-interface DateRangeRequiredFilter extends DateRangeFilter
-{
-    /**
-     * @return array
-     *
-     * awaited format:
-     *
-     *    [
-     *       "start" => Carbon::yesterday(),
-     *       "end" => Carbon::today(),
-     *    ]
-     *
-     */
-    public function defaultValue();
-}

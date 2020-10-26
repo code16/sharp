@@ -10,14 +10,3 @@ interface SelectFilter extends Filter
     public function values();
 }
 
-interface SelectMultipleFilter extends SelectFilter
-{
-}
-
-interface SelectRequiredFilter extends SelectFilter
-{
-    /**
-     * @return string|int
-     */
-    public function defaultValue();
-}
