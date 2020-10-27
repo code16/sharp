@@ -94,6 +94,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.12.1",
     "@sharp/test-utils": "file:packages/test-utils",
+    "apexcharts": "^3.22.0",
     "carbon-components": "^7.26.2",
     "element-ui": "^2.9.2",
     "filesize": "^6.1.0",
@@ -109,6 +110,7 @@
     "sharp-ui": "file:packages/ui",
     "trix": "^1.0.0",
     "vue": "^2.6.11",
+    "vue-apexcharts": "^1.6.0",
     "vue-router": "^3.0.2",
     "vue2-leaflet": "^2.0.2",
     "vuex": "^3.5.1"
