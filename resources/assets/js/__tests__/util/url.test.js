@@ -4,7 +4,7 @@ import {
     showUrl,
     listUrl,
     getBackUrl,
-    getListBackUrl,
+    getDeleteBackUrl,
 } from 'sharp';
 import { routeUrl } from 'sharp/router';
 import listRoutes from 'sharp-entity-list/src/routes';
@@ -46,12 +46,30 @@ describe('url', ()=>{
         ]))
         .toEqual('/show?x-access-from=ui');
     });
-    test('getListBackUrl', () => {
-        expect(getListBackUrl([
+    test('getDeleteBackUrl', () => {
+        router(true);
+        router().addRoutes(formRoutes);
+        router().addRoutes(showRoutes);
+        router().addRoutes(listRoutes);
+
+        expect(getDeleteBackUrl([
             { url:'/list', type: 'entityList' },
-            { url:'/show', type: 'show' },
-            { url:'/form', type: 'form' }
+            { url:'/show/spaceship/42', type: 'show' },
+            { url:'/form/spaceship/42', type: 'form' }
         ]))
         .toEqual('/list?x-access-from=ui');
+
+        expect(getDeleteBackUrl([
+            { url:'/list', type: 'entityList' },
+            { url:'/show/spaceship/42', type: 'show' },
+            { url:'/form/spaceship-pilot/42', type: 'form' }
+        ]))
+        .toEqual('/show/spaceship/42?x-access-from=ui');
+
+        expect(getDeleteBackUrl([
+            { url:'/show/single', type: 'show' },
+            { url:'/form/spaceship-pilot/42', type: 'form' }
+        ]))
+        .toEqual('/show/single?x-access-from=ui');
     });
 })

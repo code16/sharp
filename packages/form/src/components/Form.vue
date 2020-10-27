@@ -60,7 +60,7 @@
     import {
         BASE_URL,
         getBackUrl,
-        getListBackUrl,
+        getDeleteBackUrl,
         logError,
         showAlert,
     } from "sharp";
@@ -283,8 +283,8 @@
                     else logError('no entity key provided');
                 }
             },
-            redirectToList() {
-                location.href = getListBackUrl(this.breadcrumb);
+            redirectToClosestRoot() {
+                location.href = getDeleteBackUrl(this.breadcrumb);
             },
             redirectToParentPage() {
                 location.href = getBackUrl(this.breadcrumb);
@@ -315,7 +315,7 @@
             handleDeleteClicked() {
                 this.axiosInstance.delete(this.apiPath)
                     .then(() => {
-                        this.redirectToList();
+                        this.redirectToClosestRoot();
                     });
             },
             handleCancelClicked() {
