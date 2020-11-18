@@ -4,12 +4,14 @@
             type="line"
             :series="chartData.series"
             :options="options"
+            height="100%"
         />
     </div>
 </template>
 
 <script>
     import ApexChart from 'vue-apexcharts';
+    import { defaultChartOptions } from "../../../../util/chart";
 
     export default {
         components: {
@@ -21,6 +23,7 @@
         computed: {
             options() {
                 return {
+                    ...defaultChartOptions(),
                     stroke: {
                         curve: 'smooth'
                     },

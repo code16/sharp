@@ -3,7 +3,6 @@
         <template v-if="title">
             <h2 class="mb-2">{{title}}</h2>
         </template>
-        <ChartLegend :datasets="value.datasets" />
         <div :class="classes" :style="style">
             <component :is="chartComp" :chart-data="chartData" class="SharpWidgetChart__inner" />
         </div>
