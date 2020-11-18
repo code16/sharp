@@ -42,7 +42,7 @@
                 'query',
             ]),
             entityKey() {
-                return this.$route.params.id;
+                return this.$route.params.entityKey;
             },
         },
         methods: {

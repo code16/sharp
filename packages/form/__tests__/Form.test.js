@@ -489,7 +489,7 @@ describe('sharp-form', ()=>{
 
         expect(wrapper.vm.listUrl).toEqual('/sharp/list/spaceship?restore-context=1');
 
-        wrapper.vm.redirectToList = jest.fn();
+        wrapper.vm.redirectToClosestRoot = jest.fn();
 
         wrapper.vm.handleDeleteClicked();
 
@@ -497,7 +497,7 @@ describe('sharp-form', ()=>{
             status: 200
         }, 0);
 
-        expect(wrapper.vm.redirectToList).toHaveBeenCalledTimes(1);
+        expect(wrapper.vm.redirectToClosestRoot).toHaveBeenCalledTimes(1);
 
     });
 
