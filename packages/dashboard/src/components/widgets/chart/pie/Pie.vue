@@ -26,11 +26,6 @@
                     ...defaultChartOptions(),
                     colors: this.chartData.colors,
                     labels: this.chartData.labels,
-                    grid: {
-                        padding: {
-                            bottom: -30
-                        }
-                    }
                 }
             }
         },

@@ -1,51 +1,45 @@
 <template>
     <div>
-        <canvas ref="canvas"></canvas>
+        <ApexChart
+            type="bar"
+            :series="chartData.series"
+            :options="options"
+            height="100%"
+        />
     </div>
 </template>
 
 <script>
-    import { Bar, mixins } from 'vue-chartjs';
+    import ApexChart from 'vue-apexcharts';
+    import { defaultChartOptions } from "../../../../util/chart";
 
     export default {
-        extends: Bar,
-        mixins: [mixins.reactiveProp],
+        components: {
+            ApexChart,
+        },
         props: {
             chartData: Object,
         },
         computed: {
             options() {
                 return {
-                    title: {
-                        display: false,
-                    },
+                    ...defaultChartOptions(),
                     legend: {
-                        display: false,
+                        showForSingleSeries: true,
+                        position: 'bottom',
                     },
-                    maintainAspectRatio: false,
-
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                suggestedMin: 0,
-                            },
-                            gridLines: {
-                                display: false
-                            }
-                        }],
-                        xAxes: [{
-                            gridLines: {
-                                display: false
-                            },
-                            categoryPercentage: 0.5,
-                            barPercentage: 0.2
-                        }]
+                    xaxis: {
+                        categories: this.chartData.labels,
+                        // type: 'datetime',
+                    },
+                    colors: this.chartData.colors,
+                    plotOptions: {
+                        bar: {
+                            columnWidth: '100%',
+                        }
                     },
                 }
             }
-        },
-        mounted() {
-            this.renderChart(this.chartData, this.options);
         },
     }
 </script>

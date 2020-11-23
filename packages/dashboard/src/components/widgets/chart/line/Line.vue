@@ -1,7 +1,7 @@
 <template>
     <div>
         <ApexChart
-            type="line"
+            type="area"
             :series="chartData.series"
             :options="options"
             height="100%"
@@ -24,8 +24,14 @@
             options() {
                 return {
                     ...defaultChartOptions(),
+                    legend: {
+                        position: 'bottom',
+                    },
                     stroke: {
                         curve: 'smooth'
+                    },
+                    dataLabels: {
+                        enabled: false
                     },
                     xaxis: {
                         categories: this.chartData.labels,

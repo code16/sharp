@@ -1,13 +1,14 @@
+import { normalizeColors } from "../../../../util/chart";
 
 export function transformBarData(widgetValue) {
     const { datasets, labels } = widgetValue;
 
     return {
-        datasets: datasets.map(dataset => ({
+        series: datasets.map(dataset => ({
             data: dataset.data,
-            label: dataset.label,
-            backgroundColor: dataset.color,
+            name: dataset.label,
         })),
+        colors: normalizeColors(datasets.map(dataset => dataset.color)),
         labels,
     }
 }
