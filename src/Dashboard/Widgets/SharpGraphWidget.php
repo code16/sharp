@@ -16,6 +16,11 @@ abstract class SharpGraphWidget extends SharpWidget
     protected $ratio;
 
     /**
+     * @var array
+     */
+    protected $options;
+
+    /**
      * @param string $key
      * @param string $type
      */
@@ -37,6 +42,14 @@ abstract class SharpGraphWidget extends SharpWidget
         return $this;
     }
 
+
+    public function setOptions(array $options)
+    {
+        $this->options = $options;
+
+        return $this;
+    }
+
     /**
      * @return array
      */
@@ -46,6 +59,7 @@ abstract class SharpGraphWidget extends SharpWidget
             "display" => $this->display,
             "ratioX" => $this->ratio ? (int)$this->ratio[0] : null,
             "ratioY" => $this->ratio ? (int)$this->ratio[1] : null,
+            "options" => $this->options,
         ]);
     }
 

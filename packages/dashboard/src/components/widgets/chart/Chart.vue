@@ -1,10 +1,15 @@
 <template>
     <div>
         <template v-if="title">
-            <h2 class="mb-2">{{title}}</h2>
+            <h2 class="my-2">{{title}}</h2>
         </template>
         <div :class="classes" :style="style">
-            <component :is="chartComp" :chart-data="chartData" class="SharpWidgetChart__inner" />
+            <component
+                :is="chartComp"
+                :chart-data="chartData"
+                :options="chartOptions"
+                class="SharpWidgetChart__inner"
+            />
         </div>
     </div>
 </template>
@@ -27,6 +32,14 @@
 
             ratioX: Number,
             ratioY: Number,
+
+            options: Object,
+        },
+
+        data() {
+            return {
+                resizing: false,
+            }
         },
 
         computed: {
@@ -36,14 +49,62 @@
             chartData() {
                 return transformData(this.display, this.value);
             },
+            chartOptions() {
+                const options = this.options ?? {};
+                // apex chart options
+                return {
+                    chart: {
+                        height: options.height ?? '100%',
+                        sparkline: {
+                            enabled: options.minimal ?? false,
+                        },
+                        events: {
+                            updated:() => {
+                                console.log('updated');
+                                this.resizing = false;
+                            }
+                        },
+                        redrawOnWindowResize:() => {
+                            this.resizing = true;
+                            console.log('redraw');
+                            return true;
+                        },
+                    },
+                    legend: {
+                        show: options.showLegend ?? true,
+                    }
+                }
+            },
+            hasRatio() {
+                return !this.options?.height;
+            },
             classes() {
-                return `SharpWidgetChart SharpWidgetChart--${this.display}`;
+                return [
+                    `SharpWidgetChart SharpWidgetChart--${this.display}`,
+                    {
+                        'SharpWidgetChart--ratio': this.hasRatio,
+                        'SharpWidgetChart--resizing': this.resizing,
+                    }
+                ]
             },
             style() {
                 return {
-                    'padding-top': `${this.ratioY/this.ratioX*100}%`,
+                    'padding-top': this.hasRatio
+                        ? `${this.ratioY / this.ratioX * 100}%`
+                        : null,
                 }
             },
         },
+        methods: {
+            handleResize() {
+                this.resizing = true;
+            }
+        },
+        mounted() {
+            // window.addEventListener('resize', this.handleResize);
+        },
+        beforeDestroy() {
+            window.removeEventListener('resize', this.handleResize);
+        }
     }
 </script>

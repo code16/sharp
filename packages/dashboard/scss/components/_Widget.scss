@@ -7,20 +7,9 @@
     }
   }
 
-  &.SharpWidget--chart {
-    &.SharpCard {
-      display: block;
-      .SharpCard__overview {
-        display:block;
-        .SharpCard__overview-about {
-          display:block;
-        }
-      }
-    }
-  }
-
   &.SharpCard {
     height: 100%;
+    box-shadow: none;
 
     .SharpWidget__link {
       color: $color__blue-90;
@@ -38,6 +27,19 @@
       .SharpCard__overview-about {
         padding: 0;
         justify-content: center;
+      }
+    }
+  }
+
+  &.SharpWidget--chart {
+    &.SharpCard {
+      display: block;
+      .SharpCard__overview {
+        padding: 0;
+        display:block;
+        .SharpCard__overview-about {
+          display:block;
+        }
       }
     }
   }

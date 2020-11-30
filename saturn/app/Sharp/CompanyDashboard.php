@@ -25,6 +25,11 @@ class CompanyDashboard extends SharpDashboard
         )->addWidget(
             SharpLineGraphWidget::make("capacities")
                 ->setTitle("Spaceships by capacity")
+                ->setOptions([
+                    'height' => 200,
+                    'showLegend' => false,
+                    'minimal' => true,
+                ])
         )->addWidget(
             SharpPanelWidget::make("activeSpaceships")
                 ->setInlineTemplate("<h1>{{count}}</h1> spaceships in activity")
@@ -50,8 +55,10 @@ class CompanyDashboard extends SharpDashboard
     {
         $this
             ->addRow(function(DashboardLayoutRow $row) {
-                $row->addWidget(6, "capacities_pie")
-                    ->addWidget(6, "capacities");
+                $row->addWidget(6, "capacities_pie");
+            })
+            ->addRow(function(DashboardLayoutRow $row) {
+                $row->addWidget(12, "capacities");
             })
             ->addRow(function(DashboardLayoutRow $row) {
                 $row->addWidget(6, "activeSpaceships")

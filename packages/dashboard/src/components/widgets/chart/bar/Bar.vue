@@ -3,8 +3,8 @@
         <ApexChart
             type="bar"
             :series="chartData.series"
-            :options="resolvedOptions"
-            height="100%"
+            :options="chartOptions"
+            :height="options.chart.height"
             ref="chart"
         />
     </div>
@@ -21,18 +21,19 @@
         },
         props: {
             chartData: Object,
+            options: Object,
         },
         data() {
             return {
-                options: {
-                    dataLabels: {
-                        enabled: true,
-                    }
-                },
+                // options: {
+                //     dataLabels: {
+                //         enabled: true,
+                //     }
+                // },
             }
         },
         computed: {
-            resolvedOptions() {
+            chartOptions() {
                 return merge({},
                     defaultChartOptions(),
                     {

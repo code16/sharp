@@ -3,13 +3,14 @@
         <ApexChart
             type="pie"
             :series="chartData.series"
-            :options="options"
-            height="100%"
+            :options="chartOptions"
+            :height="options.chart.height"
         />
     </div>
 </template>
 
 <script>
+    import merge from 'lodash/merge';
     import ApexChart from "vue-apexcharts";
     import { defaultChartOptions } from "../../../../util/chart";
 
@@ -19,14 +20,23 @@
         },
         props: {
             chartData: Object,
+            options: Object,
         },
         computed: {
-            options() {
-                return {
-                    ...defaultChartOptions(),
-                    colors: this.chartData.colors,
-                    labels: this.chartData.labels,
-                }
+            chartOptions() {
+                return merge({},
+                    defaultChartOptions(),
+                    {
+                        chart: {
+                            sparkline: {
+                                enabled: true,
+                            }
+                        },
+                        colors: this.chartData.colors,
+                        labels: this.chartData.labels,
+                    },
+                    this.options,
+                )
             }
         },
     }
