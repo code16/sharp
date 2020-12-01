@@ -54,6 +54,7 @@
             FieldLayout,
         },
         props: {
+            fieldKey: String,
             entityListKey: String,
             showCreateButton: Boolean,
             showReorderButton: Boolean,
@@ -71,7 +72,7 @@
         },
         computed: {
             storeModule() {
-                return `show/entity-lists/${this.entityListKey}`;
+                return `show/entity-lists/${this.fieldKey}`;
             },
             getFiltersQueryParams() {
                 return this.storeGetter('filters/getQueryParams');
