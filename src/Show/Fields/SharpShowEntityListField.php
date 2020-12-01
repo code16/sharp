@@ -156,17 +156,19 @@ class SharpShowEntityListField extends SharpShowField
             "showReorderButton" => $this->showReorderButton,
             "showSearchField" => $this->showSearchField,
             "hiddenCommands" => $this->hiddenCommands,
-            "hiddenFilters" => collect($this->hiddenFilters)
-                ->map(function($value, $filter) {
-                    // Filter value can be a Closure
-                    if(is_callable($value)) {
-                        // Call it with current instanceId from Context
-                        return $value(app(SharpContext::class)->instanceId());
-                    }
-
-                    return $value;
-                })
-                ->all()
+            "hiddenFilters" => sizeof($this->hiddenFilters) 
+                ? collect($this->hiddenFilters)
+                    ->map(function($value, $filter) {
+                        // Filter value can be a Closure
+                        if(is_callable($value)) {
+                            // Call it with current instanceId from Context
+                            return $value(app(SharpContext::class)->instanceId());
+                        }
+    
+                        return $value;
+                    })
+                    ->all()
+                : null
         ]);
     }
 

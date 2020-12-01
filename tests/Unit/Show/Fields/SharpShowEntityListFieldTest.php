@@ -21,7 +21,6 @@ class SharpShowEntityListFieldTest extends SharpTestCase
             "showReorderButton" => true,
             "showSearchField" => true,
             "emptyVisible" => false,
-            "hiddenFilters" => [],
             "hiddenCommands" => ["entity" => [], "instance" => []],
         ], $field->toArray());
     }
