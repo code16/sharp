@@ -152,7 +152,7 @@ class Thumbnail
                     });
                 }
 
-                $sourceImg->save($thumbnailDisk->path($thumbName), $this->quality);
+                $thumbnailDisk->put($thumbName, $sourceImg->stream(null, $this->quality));
 
             } catch(FileNotFoundException $ex) {
                 return null;
@@ -162,7 +162,7 @@ class Thumbnail
             }
         }
 
-        return $thumbnailDisk->url($thumbName) . ($this->appendTimestamp ? "?" . filectime($thumbnailDisk->path($thumbName)) : "");
+        return $thumbnailDisk->url($thumbName) . ($this->appendTimestamp ? "?" . $thumbnailDisk->lastModified($thumbName) : "");
     }
 
     /**
