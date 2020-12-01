@@ -3,7 +3,8 @@
         <template v-if="title">
             <h2 class="my-2">{{title}}</h2>
         </template>
-        <div :class="classes" :style="style">
+        <div class="SharpWidgetChart" :class="classes" ref="chart">
+            <div class="SharpWidgetChart__sizer" :style="sizerStyle"></div>
             <component
                 :is="chartComp"
                 :chart-data="chartData"
@@ -33,6 +34,14 @@
             ratioX: Number,
             ratioY: Number,
 
+            height: Number,
+            minimal: Boolean,
+            showLegend: {
+                type: Boolean,
+                default: true,
+            },
+            dateValues: Boolean,
+
             options: Object,
         },
 
@@ -50,61 +59,58 @@
                 return transformData(this.display, this.value);
             },
             chartOptions() {
-                const options = this.options ?? {};
                 // apex chart options
                 return {
                     chart: {
-                        height: options.height ?? '100%',
+                        height: this.height ?? '100%',
                         sparkline: {
-                            enabled: options.minimal ?? false,
+                            enabled: this.minimal,
                         },
+                        parentHeightOffset: 14,
+                        redrawOnParentResize: false,
                         events: {
-                            updated:() => {
-                                console.log('updated');
+                            updated: () => {
                                 this.resizing = false;
                             }
                         },
-                        redrawOnWindowResize:() => {
+                        redrawOnWindowResize: () => {
                             this.resizing = true;
-                            console.log('redraw');
                             return true;
                         },
                     },
+                    xaxis: {
+                        type: !this.options?.horizontal && this.dateValues ? 'datetime' : 'numeric',
+                    },
+                    plotOptions: {
+                        bar: {
+                            horizontal: !!this.options?.horizontal,
+                        }
+                    },
                     legend: {
-                        show: options.showLegend ?? true,
-                    }
+                        show: this.showLegend && !this.minimal,
+                    },
+                    stroke: {
+                        curve: this.options?.curved ?? true ? 'smooth' : 'straight',
+                    },
                 }
             },
             hasRatio() {
-                return !this.options?.height;
+                return !this.height;
             },
             classes() {
                 return [
-                    `SharpWidgetChart SharpWidgetChart--${this.display}`,
+                    `SharpWidgetChart--${this.display}`,
                     {
-                        'SharpWidgetChart--ratio': this.hasRatio,
+                        'SharpWidgetChart--aspect-ratio': this.hasRatio,
                         'SharpWidgetChart--resizing': this.resizing,
                     }
                 ]
             },
-            style() {
+            sizerStyle() {
                 return {
-                    'padding-top': this.hasRatio
-                        ? `${this.ratioY / this.ratioX * 100}%`
-                        : null,
+                    'padding-bottom': `${this.ratioY / this.ratioX * 100}%`,
                 }
             },
         },
-        methods: {
-            handleResize() {
-                this.resizing = true;
-            }
-        },
-        mounted() {
-            // window.addEventListener('resize', this.handleResize);
-        },
-        beforeDestroy() {
-            window.removeEventListener('resize', this.handleResize);
-        }
     }
 </script>

@@ -27,8 +27,9 @@ class CompanyDashboard extends SharpDashboard
                 ->setTitle("Spaceships by capacity")
                 ->setOptions([
                     'height' => 200,
-                    'showLegend' => false,
+//                    'showLegend' => false,
                     'minimal' => true,
+                    'curved' => false,
                 ])
         )->addWidget(
             SharpPanelWidget::make("activeSpaceships")

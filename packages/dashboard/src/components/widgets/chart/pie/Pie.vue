@@ -27,11 +27,6 @@
                 return merge({},
                     defaultChartOptions(),
                     {
-                        chart: {
-                            sparkline: {
-                                enabled: true,
-                            }
-                        },
                         colors: this.chartData.colors,
                         labels: this.chartData.labels,
                     },

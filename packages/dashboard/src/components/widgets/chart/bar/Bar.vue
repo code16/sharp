@@ -1,11 +1,11 @@
 <template>
     <div>
         <ApexChart
+            class="apexchart"
             type="bar"
             :series="chartData.series"
             :options="chartOptions"
             :height="options.chart.height"
-            ref="chart"
         />
     </div>
 </template>
@@ -25,11 +25,6 @@
         },
         data() {
             return {
-                // options: {
-                //     dataLabels: {
-                //         enabled: true,
-                //     }
-                // },
             }
         },
         computed: {
@@ -38,39 +33,21 @@
                     defaultChartOptions(),
                     {
                         legend: {
-                            showForSingleSeries: true,
                             position: 'bottom',
                         },
                         xaxis: {
                             categories: this.chartData.labels,
-                            // type: 'datetime',
+                        },
+                        grid: {
+                            padding: {
+                                right: this.options.plotOptions?.bar?.horizontal ? 8 : 0,
+                            }
                         },
                         colors: this.chartData.colors,
-                        // stroke: {
-                        //     show: true,
-                        //     width: 1,
-                        //     colors: ['transparent']
-                        // },
-                        plotOptions: {
-                            bar: {
-                                // columnWidth: '90%',
-                            }
-                        },
-                        chart: {
-                            events: {
-                                mounted: this.handleChartRendered,
-                            }
-                        }
                     },
                     this.options
                 );
             }
-        },
-        methods: {
-            handleChartRendered(context) {
-                // const barWidth = parseFloat(context.el.querySelector('[barWidth]').getAttribute('barWidth'));
-                // this.options.dataLabels.enabled = barWidth > 20;
-            },
         },
     }
 </script>

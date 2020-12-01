@@ -7,6 +7,9 @@ export function defaultChartOptions() {
                 show: false,
             },
         },
+        legend: {
+            showForSingleSeries: true,
+        },
     }
 }
 

@@ -1,6 +1,7 @@
 <template>
-    <div>
+    <div class="mt-2">
         <ApexChart
+            class="apexchart"
             type="area"
             :series="chartData.series"
             :options="chartOptions"
@@ -35,10 +36,9 @@
                     {
                         legend: {
                             position: 'bottom',
-                            floating: false,
                         },
                         stroke: {
-                            curve: 'smooth'
+                            width: 4,
                         },
                         dataLabels: {
                             enabled: false

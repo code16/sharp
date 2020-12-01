@@ -19,6 +19,10 @@ class TravelsDashboard extends SharpDashboard
         $this->addWidget(
             SharpBarGraphWidget::make("travels")
                 ->setTitle("Travel counts")
+                ->setOptions([
+//                    'horizontal' => true,
+                    'dateValues' => true,
+                ])
         );
     }
 
@@ -54,6 +58,7 @@ class TravelsDashboard extends SharpDashboard
         }
 
         $data = $query
+            ->limit(10)
             ->get()
             ->pluck("value", "label");
 
