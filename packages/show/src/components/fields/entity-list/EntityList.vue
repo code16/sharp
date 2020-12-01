@@ -105,7 +105,9 @@
             if(!this.$store.hasModule(modulePath)) {
                 this.$store.registerModule(modulePath, entityListModule);
             }
-            this.$store.dispatch(`${this.storeModule}/setQuery`, this.getFiltersQueryParams(this.hiddenFilters));
+            if(this.hiddenFilters) {
+                this.$store.dispatch(`${this.storeModule}/setQuery`, this.getFiltersQueryParams(this.hiddenFilters));
+            }
 
             syncVisibility(this, () => this.isVisible, { lazy:true });
         },
