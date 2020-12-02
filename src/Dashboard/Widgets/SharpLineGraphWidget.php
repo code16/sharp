@@ -5,7 +5,7 @@ namespace Code16\Sharp\Dashboard\Widgets;
 class SharpLineGraphWidget extends SharpGraphWidget
 {
     /** @var bool */
-    protected $curvedLines = false;
+    protected $curvedLines = true;
 
     /**
      * @param string $key
