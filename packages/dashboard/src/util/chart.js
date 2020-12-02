@@ -1,3 +1,8 @@
+import fr from 'apexcharts/dist/locales/fr.json';
+import ru from 'apexcharts/dist/locales/ru.json';
+import es from 'apexcharts/dist/locales/es.json';
+import de from 'apexcharts/dist/locales/de.json';
+import en from 'apexcharts/dist/locales/en.json';
 
 
 export function defaultChartOptions() {
@@ -6,6 +11,10 @@ export function defaultChartOptions() {
             toolbar: {
                 show: false,
             },
+            locales: [
+                en, fr, ru, es, de,
+            ],
+            defaultLocale: document.documentElement.lang,
         },
         legend: {
             showForSingleSeries: true,
@@ -14,7 +23,7 @@ export function defaultChartOptions() {
             y: {
                 title: {
                     formatter: (seriesName, { seriesIndex }) =>
-                        seriesName === `series-${seriesIndex + 1}` ? '' : seriesName
+                        seriesName !== `series-${seriesIndex + 1}` ? `${seriesName}:` : ''
                 }
             }
         },
