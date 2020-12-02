@@ -6,20 +6,13 @@ use Illuminate\Support\Collection;
 
 class SharpGraphWidgetDataSet
 {
-
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $values;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $label;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $color;
 
     /**
@@ -38,9 +31,7 @@ class SharpGraphWidgetDataSet
      */
     public static function make($values)
     {
-        $instance = new static($values);
-
-        return $instance;
+        return new static($values);
     }
 
     /**
