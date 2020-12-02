@@ -1,12 +1,11 @@
 <template>
-    <div class="mt-2">
+    <div class="mt-2" :class="{ 'mb-2': hasLegends }">
         <ApexChart
             class="apexchart"
             type="area"
             :series="chartData.series"
             :options="chartOptions"
             :height="options.chart.height"
-            :style="style"
         />
     </div>
 </template>
@@ -14,7 +13,7 @@
 <script>
     import merge from 'lodash/merge';
     import ApexChart from 'vue-apexcharts';
-    import { defaultChartOptions } from "../../../../util/chart";
+    import { defaultChartOptions, hasLegends } from "../../../../util/chart";
 
     export default {
         components: {
@@ -25,15 +24,15 @@
             options: Object,
         },
         computed: {
-            style() {
-                return {
-                    // 'margin-bottom': !this.options.chart?.sparkline?.enabled ? '-15px' : null,
-                }
+            hasLegends() {
+                return hasLegends(this.chartOptions);
             },
             chartOptions() {
                 return merge({},
                     defaultChartOptions(),
                     {
+                        colors: this.chartData.colors,
+                        labels: this.chartData.labels,
                         legend: {
                             position: 'bottom',
                         },
@@ -43,7 +42,6 @@
                         dataLabels: {
                             enabled: false
                         },
-                        colors: this.chartData.colors,
                     },
                     this.options
                 );

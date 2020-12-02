@@ -13,6 +13,10 @@ export function defaultChartOptions() {
     }
 }
 
+export function hasLegends(options) {
+    return !!(options.legend?.show ?? true)
+}
+
 export function normalizeColors(colors) {
     const ctx = document.createElement('canvas').getContext('2d');
     return colors.map(color => {

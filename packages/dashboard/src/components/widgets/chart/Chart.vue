@@ -66,7 +66,7 @@
                         sparkline: {
                             enabled: this.minimal,
                         },
-                        parentHeightOffset: 14,
+                        parentHeightOffset: 0,
                         redrawOnParentResize: false,
                         events: {
                             updated: () => {

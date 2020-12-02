@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div :class="{ 'mb-2': hasLegends }">
         <ApexChart
             class="apexchart"
             type="bar"
@@ -12,7 +12,7 @@
 
 <script>
     import ApexChart from 'vue-apexcharts';
-    import { defaultChartOptions } from "../../../../util/chart";
+    import { defaultChartOptions, hasLegends } from "../../../../util/chart";
     import merge from 'lodash/merge';
 
     export default {
@@ -23,11 +23,12 @@
             chartData: Object,
             options: Object,
         },
-        data() {
-            return {
-            }
-        },
+
+
         computed: {
+            hasLegends() {
+                return hasLegends(this.chartOptions);
+            },
             chartOptions() {
                 return merge({},
                     defaultChartOptions(),
@@ -35,15 +36,13 @@
                         legend: {
                             position: 'bottom',
                         },
-                        xaxis: {
-                            categories: this.chartData.labels,
-                        },
+                        labels: this.chartData.labels,
+                        colors: this.chartData.colors,
                         grid: {
                             padding: {
                                 right: 8,
                             }
                         },
-                        colors: this.chartData.colors,
                     },
                     this.options
                 );

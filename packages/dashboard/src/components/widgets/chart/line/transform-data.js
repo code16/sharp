@@ -1,3 +1,4 @@
+import { normalizeColors } from "../../../../util/chart";
 
 export function transformLineData(widgetValue) {
     const { datasets, labels } = widgetValue;
@@ -7,7 +8,7 @@ export function transformLineData(widgetValue) {
             data: dataset.data,
             name: dataset.label,
         })),
-        colors: datasets.map(dataset => dataset.color),
+        colors: normalizeColors(datasets.map(dataset => dataset.color)),
         labels,
     }
 }
