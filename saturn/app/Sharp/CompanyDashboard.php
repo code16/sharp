@@ -39,7 +39,7 @@ class CompanyDashboard extends SharpDashboard
             ->addWidget(
                 SharpBarGraphWidget::make("features_bars")
                     ->setTitle("Spaceships by feature")
-//                    ->setHorizontal()
+                    ->setHorizontal()
             )->addWidget(
                 SharpPieGraphWidget::make("types_pie")
                     ->setTitle("Spaceships by type")
@@ -49,14 +49,7 @@ class CompanyDashboard extends SharpDashboard
                     ->setHeight(200)
                     ->setShowLegend()
                     ->setMinimal()
-//                    ->setDateValues()
-//                    ->setCurvedLines()
-//                    ->setOptions([
-//                        'height' => 200,
-//    //                    'showLegend' => true,
-//                        'minimal' => true,
-//                        'curved' => true,
-//                    ])
+                    ->setCurvedLines()
             )->addWidget(
                 SharpPanelWidget::make("activeSpaceships")
                     ->setInlineTemplate("<h1>{{count}}</h1> spaceships in activity")
@@ -99,9 +92,9 @@ class CompanyDashboard extends SharpDashboard
 
     function buildWidgetsData(DashboardQueryParams $params)
     {
-        $this->setLineGraphDataSet();
         $this->setPieGraphDataSet();
         $this->setBarsGraphDataSet();
+        $this->setLineGraphDataSet();
 
         $spaceships = DB::table('spaceships')
             ->select(DB::raw('state, count(*) as count'))
@@ -149,7 +142,7 @@ class CompanyDashboard extends SharpDashboard
         $this->addGraphDataSet(
             "capacities",
             SharpGraphWidgetDataSet::make($capacities)
-                ->setLabel("Capacities")
+                ->setLabel("Spaceships")
                 ->setColor(static::nextColor())
         );
 
@@ -213,5 +206,4 @@ class CompanyDashboard extends SharpDashboard
         
         return static::$colors[static::$colorsIndex++];
     }
-
 }

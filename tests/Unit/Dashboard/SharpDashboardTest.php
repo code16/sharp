@@ -34,6 +34,9 @@ class SharpDashboardTest extends SharpTestCase
             "ratioY" => 9,
             "minimal" => false,
             "showLegend" => true,
+            "options" => [
+                "horizontal" => false
+            ]
         ]], $dashboard->widgets());
     }
 

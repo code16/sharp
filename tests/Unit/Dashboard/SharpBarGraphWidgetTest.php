@@ -77,4 +77,20 @@ class SharpBarGraphWidgetTest extends SharpTestCase
             $widget->toArray()
         );
     }
+
+    /** @test */
+    function we_can_define_horizontal_option_attribute()
+    {
+        $widget = SharpBarGraphWidget::make("name")
+            ->setHorizontal();
+
+        $this->assertArraySubset(
+            [
+                "options" => [
+                    "horizontal" => true
+                ]
+            ],
+            $widget->toArray()
+        );
+    }
 }
