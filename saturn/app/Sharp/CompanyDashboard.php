@@ -32,7 +32,6 @@ class CompanyDashboard extends SharpDashboard
     ];
     
     private static $colorsIndex = 0;
-    
 
     function buildWidgets()
     {
@@ -47,17 +46,17 @@ class CompanyDashboard extends SharpDashboard
             )->addWidget(
                 SharpLineGraphWidget::make("capacities")
                     ->setTitle("Spaceships by capacity")
-//                    ->setHeight(200)
-//                    ->setShowLegend()
-//                    ->setMinimal()
+                    ->setHeight(200)
+                    ->setShowLegend()
+                    ->setMinimal()
 //                    ->setDateValues()
 //                    ->setCurvedLines()
-                    ->setOptions([
-                        'height' => 200,
-    //                    'showLegend' => true,
-                        'minimal' => true,
-                        'curved' => true,
-                    ])
+//                    ->setOptions([
+//                        'height' => 200,
+//    //                    'showLegend' => true,
+//                        'minimal' => true,
+//                        'curved' => true,
+//                    ])
             )->addWidget(
                 SharpPanelWidget::make("activeSpaceships")
                     ->setInlineTemplate("<h1>{{count}}</h1> spaceships in activity")
