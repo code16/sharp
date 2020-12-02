@@ -7,6 +7,9 @@ class SharpLineGraphWidget extends SharpGraphWidget
     /** @var bool */
     protected $curvedLines = true;
 
+    /** @var bool */
+    protected $displayHorizontalAxisAsTimeline = false;
+
     /**
      * @param string $key
      * @return static
@@ -26,10 +29,18 @@ class SharpLineGraphWidget extends SharpGraphWidget
         return $this;
     }
 
+    public function setDisplayHorizontalAxisAsTimeline(bool $displayAsTimeline = true): self
+    {
+        $this->displayHorizontalAxisAsTimeline = $displayAsTimeline;
+
+        return $this;
+    }
+
     public function toArray(): array
     {
         return array_merge(
             parent::toArray(), [
+                "dateValues" => $this->displayHorizontalAxisAsTimeline,
                 "options" => [
                     "curved" => $this->curvedLines
                 ]

@@ -38,7 +38,8 @@ class CompanyDashboard extends SharpDashboard
         $this
             ->addWidget(
                 SharpBarGraphWidget::make("features_bars")
-                    ->setTitle("Spaceships by feature")
+                    ->setTitle("Main features")
+                    ->setShowLegend(false)
                     ->setHorizontal()
             )->addWidget(
                 SharpPieGraphWidget::make("types_pie")
@@ -148,9 +149,11 @@ class CompanyDashboard extends SharpDashboard
 
         $this->addGraphDataSet(
             "capacities",
-            SharpGraphWidgetDataSet::make($capacities->map(function ($value) {
-                return $value * rand(1, 3);
-            }))
+            SharpGraphWidgetDataSet::make(
+                $capacities->map(function ($value) {
+                    return $value * rand(1, 3);
+                })
+            )
                 ->setLabel("Something else")
                 ->setColor(static::nextColor())
         );
@@ -185,17 +188,21 @@ class CompanyDashboard extends SharpDashboard
             ->limit(8)
             ->get();
         
-        Feature::whereIn("id", $counts->pluck("feature_id"))
-            ->each(function(Feature $feature) use($counts) {
-                $this->addGraphDataSet(
-                    "features_bars",
-                    SharpGraphWidgetDataSet::make([
-                        $counts->where("feature_id", $feature->id)->first()->count
-                    ])
-                        ->setLabel($feature->name)
-                        ->setColor(static::nextColor())
-                );
-            });
+        $data = Feature::whereIn("id", $counts->pluck("feature_id"))
+            ->get()
+            ->map(function(Feature $feature) use($counts) {
+                return [
+                    "value" => $counts->where("feature_id", $feature->id)->first()->count,
+                    "label" => $feature->name
+                ];
+            })
+            ->pluck("value", "label");
+
+        $this->addGraphDataSet(
+            "features_bars",
+            SharpGraphWidgetDataSet::make($data)
+                ->setColor(static::nextColor())
+        );
     }
 
     private static function nextColor(): string

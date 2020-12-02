@@ -19,9 +19,6 @@ abstract class SharpGraphWidget extends SharpWidget
     /** @var bool */
     protected $minimal = false;
     
-    /** @var bool */
-    protected $displayHorizontalAxisAsTimeline = false;
-
     /**
      * @param string $ratio 16:9, 1:1, ...
      * @return self
@@ -58,13 +55,6 @@ abstract class SharpGraphWidget extends SharpWidget
         return $this;
     }
 
-    public function setDisplayHorizontalAxisAsTimeline(bool $displayAsTimeline = true): self
-    {
-        $this->displayHorizontalAxisAsTimeline = $displayAsTimeline;
-
-        return $this;
-    }
-
     public function toArray(): array
     {
         return parent::buildArray([
@@ -74,7 +64,6 @@ abstract class SharpGraphWidget extends SharpWidget
             "height" => $this->height,
             "minimal" => $this->minimal,
             "showLegend" => $this->showLegend,
-            "dateValues" => $this->displayHorizontalAxisAsTimeline,
         ]);
     }
 
