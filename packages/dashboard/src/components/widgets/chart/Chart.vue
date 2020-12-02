@@ -79,7 +79,7 @@
                         },
                     },
                     xaxis: {
-                        type: !this.options?.horizontal && this.dateValues ? 'datetime' : 'numeric',
+                        type: !this.options?.horizontal && this.dateValues ? 'datetime' : 'category',
                     },
                     plotOptions: {
                         bar: {

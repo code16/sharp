@@ -40,7 +40,7 @@
                         },
                         grid: {
                             padding: {
-                                right: this.options.plotOptions?.bar?.horizontal ? 8 : 0,
+                                right: 8,
                             }
                         },
                         colors: this.chartData.colors,
