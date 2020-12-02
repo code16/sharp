@@ -6,8 +6,6 @@ export function transformPieData(widgetValue) {
     return {
         series: datasets.map(dataset => dataset.data[0]),
         colors: normalizeColors(datasets.map(dataset => dataset.color)),
-        labels: datasets.reduce((res, dataset) => [
-            ...res, dataset.label,
-        ], []),
+        labels: datasets.map(dataset => dataset.label),
     }
 }

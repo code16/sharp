@@ -40,7 +40,7 @@
                         colors: this.chartData.colors,
                         grid: {
                             padding: {
-                                right: 8,
+                                right: 12,
                             }
                         },
                     },

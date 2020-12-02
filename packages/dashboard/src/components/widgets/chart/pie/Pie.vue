@@ -29,6 +29,9 @@
                     {
                         colors: this.chartData.colors,
                         labels: this.chartData.labels,
+                        legend: {
+                            position: 'right'
+                        }
                     },
                     this.options,
                 )

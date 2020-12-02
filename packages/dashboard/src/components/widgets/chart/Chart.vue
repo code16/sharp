@@ -47,7 +47,7 @@
 
         data() {
             return {
-                resizing: false,
+                resizing: true,
             }
         },
 
@@ -112,5 +112,9 @@
                 }
             },
         },
+        async mounted() {
+            await this.$nextTick();
+            this.resizing = false;
+        }
     }
 </script>

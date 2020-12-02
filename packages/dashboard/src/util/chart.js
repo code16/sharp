@@ -10,6 +10,14 @@ export function defaultChartOptions() {
         legend: {
             showForSingleSeries: true,
         },
+        tooltip: {
+            y: {
+                title: {
+                    formatter: (seriesName, { seriesIndex }) =>
+                        seriesName === `series-${seriesIndex + 1}` ? '' : seriesName
+                }
+            }
+        },
     }
 }
 
