@@ -48,6 +48,7 @@
         data() {
             return {
                 resizing: true,
+                zoomed: false,
             }
         },
 
@@ -62,6 +63,9 @@
                 // apex chart options
                 return {
                     chart: {
+                        toolbar: {
+                            show: this.zoomed,
+                        },
                         height: this.height ?? '100%',
                         sparkline: {
                             enabled: this.minimal,
@@ -71,7 +75,10 @@
                         events: {
                             updated: () => {
                                 this.resizing = false;
-                            }
+                            },
+                            zoomed: () => {
+                                this.zoomed = true;
+                            },
                         },
                         redrawOnWindowResize: () => {
                             this.resizing = true;
@@ -81,6 +88,11 @@
                     xaxis: {
                         type: !this.options?.horizontal && this.dateValues ? 'datetime' : 'category',
                     },
+                    // yaxis: {
+                    //     tickAmount: Math.abs(maxY - minY),
+                    //     min: minY,
+                    //     max: maxY,
+                    // },
                     plotOptions: {
                         bar: {
                             horizontal: !!this.options?.horizontal,

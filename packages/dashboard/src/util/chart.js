@@ -10,6 +10,11 @@ export function defaultChartOptions() {
         chart: {
             toolbar: {
                 show: false,
+                tools: {
+                    pan: false,
+                    zoom: true,
+                    download: false,
+                },
             },
             locales: [
                 en, fr, ru, es, de,
