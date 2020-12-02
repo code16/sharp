@@ -18,6 +18,7 @@ class TravelsDashboard extends SharpDashboard
     {
         $this->addWidget(
             SharpBarGraphWidget::make("travels")
+                ->setDisplayHorizontalAxisAsTimeline()
                 ->setTitle("Travel counts")
         );
     }

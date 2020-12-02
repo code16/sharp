@@ -79,6 +79,18 @@ class SharpBarGraphWidgetTest extends SharpTestCase
     }
 
     /** @test */
+    function we_can_define_displayHorizontalAxisAsTimeline_attribute()
+    {
+        $widget = SharpBarGraphWidget::make("name")
+            ->setDisplayHorizontalAxisAsTimeline(true);
+
+        $this->assertArraySubset(
+            ["dateValues" => true],
+            $widget->toArray()
+        );
+    }
+
+    /** @test */
     function we_can_define_horizontal_option_attribute()
     {
         $widget = SharpBarGraphWidget::make("name")
