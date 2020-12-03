@@ -85,7 +85,7 @@ class SharpBarGraphWidgetTest extends SharpTestCase
             ->setDisplayHorizontalAxisAsTimeline(true);
 
         $this->assertArraySubset(
-            ["dateValues" => true],
+            ["dateLabels" => true],
             $widget->toArray()
         );
     }

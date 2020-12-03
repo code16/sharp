@@ -34,7 +34,7 @@ class SharpDashboardTest extends SharpTestCase
             "ratioY" => 9,
             "minimal" => false,
             "showLegend" => true,
-            "dateValues" => false,
+            "dateLabels" => false,
             "options" => [
                 "horizontal" => false
             ]

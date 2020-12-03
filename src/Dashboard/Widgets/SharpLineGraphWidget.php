@@ -25,7 +25,7 @@ class SharpLineGraphWidget extends SharpGraphWidget
     public function setCurvedLines(bool $curvedLines = true): self
     {
         $this->curvedLines = $curvedLines;
-        
+
         return $this;
     }
 
@@ -40,7 +40,7 @@ class SharpLineGraphWidget extends SharpGraphWidget
     {
         return array_merge(
             parent::toArray(), [
-                "dateValues" => $this->displayHorizontalAxisAsTimeline,
+                "dateLabels" => $this->displayHorizontalAxisAsTimeline,
                 "options" => [
                     "curved" => $this->curvedLines
                 ]

@@ -35,10 +35,11 @@
                 type: Boolean,
                 default: true,
             },
-            dateValues: Boolean,
+            dateLabels: Boolean,
+
             /**
-             * @property {?boolean} curved
-             * @property {?boolean} horizontal
+             * @property {?boolean} curved - [line graphs only]
+             * @property {?boolean} horizontal - [bar graphs only]
              */
             options: Object,
         },
@@ -84,7 +85,7 @@
                         },
                     },
                     xaxis: {
-                        type: !this.options?.horizontal && this.dateValues ? 'datetime' : 'category',
+                        type: !this.options?.horizontal && this.dateLabels ? 'datetime' : 'category',
                     },
                     // yaxis: {
                     //     tickAmount: Math.abs(maxY - minY),

@@ -25,7 +25,7 @@ class SharpBarGraphWidget extends SharpGraphWidget
     public function setHorizontal(bool $horizontal = true): self
     {
         $this->horizontal = $horizontal;
-        
+
         return $this;
     }
 
@@ -40,7 +40,7 @@ class SharpBarGraphWidget extends SharpGraphWidget
     {
         return array_merge(
             parent::toArray(), [
-                "dateValues" => $this->displayHorizontalAxisAsTimeline,
+                "dateLabels" => $this->displayHorizontalAxisAsTimeline,
                 "options" => [
                     "horizontal" => $this->horizontal
                 ]
