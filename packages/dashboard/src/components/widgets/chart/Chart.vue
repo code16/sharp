@@ -17,14 +17,9 @@
 
 <script>
     import { getChartByType, transformData } from './index';
-    import ChartLegend from './Legend';
 
     export default {
         name: 'SharpWidgetChart',
-
-        components: {
-            ChartLegend,
-        },
 
         props: {
             display: String,
@@ -41,7 +36,10 @@
                 default: true,
             },
             dateValues: Boolean,
-
+            /**
+             * @property {?boolean} curved
+             * @property {?boolean} horizontal
+             */
             options: Object,
         },
 
