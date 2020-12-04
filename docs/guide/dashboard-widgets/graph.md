@@ -36,7 +36,7 @@ $this->addWidget(
 
 This attribute is used to define the graph ratio, which will be consistent in responsive mode. The expected format is `width:height`, so for instance `16:9` (the default) or `4:3`.
 
-### `setHeigth(int $height)`
+### `setHeight(int $height)`
 
 Used to set an arbitrary height, in px; if set the ratio is ignored.
 
@@ -48,17 +48,17 @@ Display or not the graph legend. Default is `true`.
 
 If true, legend and axis are hidden. Default is `false`.
 
-### `setDisplayHorizontalAxisAsTimeline(bool $displayAsTimeline = true)` (**Line** and **Bar**)
+### `setDisplayHorizontalAxisAsTimeline(bool $displayAsTimeline = true)`
 
-If true, and if X axis values are valid dates, the graph will create a timeline repartition of dates, creating visual gaps between dates. Default is `false`. 
+**(Line and Bar)** If true, and if X axis values are valid dates, the graph will create a timeline repartition of dates, creating visual gaps between dates. Default is `false`. 
 
-### `setCurvedLines(bool $curvedLines = true)` (**Line** only)
+### `setCurvedLines(bool $curvedLines = true)`
 
-Display lines with curved angles. Default is `true`. 
+**(Line only)** Display lines with curved angles. Default is `true`. 
 
-### `setHorizontal(bool $horizontal = true)` (**Bar** only)
+### `setHorizontal(bool $horizontal = true)`
 
-Display horizontal bars instead of vertical ones. Default is `false`.
+**(Bar only)** Display horizontal bars instead of vertical ones. Default is `false`.
 
 ## Data valuation
 
