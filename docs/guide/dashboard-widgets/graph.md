@@ -36,7 +36,7 @@ $this->addWidget(
 
 This attribute is used to define the graph ratio, which will be consistent in responsive mode. The expected format is `width:height`, so for instance `16:9` (the default) or `4:3`.
 
-### `setHeigth(int $height)`
+### `setHeight(int $height)`
 
 Used to set an arbitrary height, in px; if set the ratio is ignored.
 
