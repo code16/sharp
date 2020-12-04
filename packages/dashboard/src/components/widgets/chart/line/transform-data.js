@@ -1,14 +1,15 @@
+import { normalizeColors } from "../../../../util/chart";
 
 export function transformLineData(widgetValue) {
-    const { datasets, labels } = widgetValue;
+    const datasets = widgetValue?.datasets ?? [];
+    const labels = widgetValue?.labels ?? [];
 
     return {
-        datasets: datasets.map(dataset => ({
+        series: datasets.map(dataset => ({
             data: dataset.data,
-            label: dataset.label,
-            borderColor: dataset.color,
-            fill: false,
+            name: dataset.label,
         })),
+        colors: normalizeColors(datasets.map(dataset => dataset.color)),
         labels,
     }
 }
