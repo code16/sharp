@@ -4,7 +4,9 @@
             <h2 class="my-2">{{title}}</h2>
         </template>
         <div class="SharpWidgetChart" :class="classes" ref="chart">
-            <div class="SharpWidgetChart__sizer" :style="sizerStyle"></div>
+            <template v-if="hasRatio">
+                <div class="SharpWidgetChart__sizer" :style="sizerStyle"></div>
+            </template>
             <component
                 :is="chartComp"
                 :chart-data="chartData"
