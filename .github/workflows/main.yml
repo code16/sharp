@@ -26,7 +26,7 @@ jobs:
           - php: 7.2
             env:
               LARAVEL: 6.*
-              TESTBENCH: 5.*
+              TESTBENCH: 4.*
           - php: 7.3
             env:
               LARAVEL: 7.*
@@ -38,11 +38,11 @@ jobs:
           - php: 7.3
             env:
               LARAVEL: 8.*
-              TESTBENCH: 5.*
+              TESTBENCH: 6.*
           - php: 7.4
             env:
               LARAVEL: 8.*
-              TESTBENCH: 5.*
+              TESTBENCH: 6.*
     env: ${{ matrix.env }}
     steps:
       - uses: actions/checkout@v2
@@ -63,7 +63,7 @@ jobs:
       - name: Install Composer dependencies
         run: |
           composer require "laravel/framework:${LARAVEL}" "orchestra/testbench:${TESTBENCH}" --no-interaction --no-update
-          composer update --prefer-stable --prefer-dist --no-interaction --no-suggest
+          composer update --prefer-stable --prefer-dist --no-interaction
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: ./vendor/bin/phpunit
 
