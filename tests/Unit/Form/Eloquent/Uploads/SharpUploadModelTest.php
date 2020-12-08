@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Tests\Unit\Form\Eloquent\Uploads;
 
+use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\Thumbnail;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\Utils\TestWithSharpUploadModel;
 use Illuminate\Support\Facades\Storage;
@@ -63,5 +64,29 @@ class SharpUploadModelTest extends SharpFormEloquentBaseTest
         $this->assertTrue(
             Storage::disk('public')->exists("thumbnails/data/-150/" . basename($file))
         );
+    }
+
+    /** @test */
+    function we_can_call_a_closure_after_a_thumbnail_creation()
+    {
+        $thumbWasCreated = null;
+        $thumbWasCreatedTwice = null;
+        $file = $this->createImage();
+        $upload = $this->createSharpUploadModel($file);
+
+        (new Thumbnail($upload))
+            ->setAfterClosure(function(bool $wasCreated, string $path, $disk) use(&$thumbWasCreated) {
+                $thumbWasCreated = $wasCreated;
+            })
+            ->make(150);
+
+        (new Thumbnail($upload))
+            ->setAfterClosure(function(bool $wasCreated, string $path, $disk) use(&$thumbWasCreatedTwice) {
+                $thumbWasCreatedTwice = $wasCreated;
+            })
+            ->make(150);
+
+        $this->assertTrue($thumbWasCreated);
+        $this->assertFalse($thumbWasCreatedTwice);
     }
 }

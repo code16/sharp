@@ -8,6 +8,7 @@ use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\Str;
 use Intervention\Image\Exception\NotReadableException;
 use Intervention\Image\ImageManager;
+use \Closure;
 
 class Thumbnail
 {
@@ -25,6 +26,9 @@ class Thumbnail
 
     /** @var bool */
     protected $appendTimestamp = false;
+    
+    /** @var Closure|null  */
+    protected $afterClosure = null;
 
     /**
      * @param SharpUploadModel $model
@@ -50,6 +54,17 @@ class Thumbnail
     }
 
     /**
+     * @param Closure $closure
+     * @return $this
+     */
+    public function setAfterClosure(Closure $closure)
+    {
+        $this->afterClosure = $closure;
+
+        return $this;
+    }
+
+    /**
      * @param bool $appendTimestamp
      * @return $this
      */
@@ -64,11 +79,10 @@ class Thumbnail
      * @param int $width
      * @param int|null $height
      * @param array $filters fit, grayscale, ...
-     * @param \Closure|null $afterClosure
      * @return null|string
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function make($width, $height=null, $filters=[], \Closure $afterClosure = null)
+    public function make($width, $height=null, $filters=[])
     {
         $thumbnailDisk = $this->storage->disk(config("sharp.uploads.thumbnails_disk", "public"));
 
@@ -87,8 +101,8 @@ class Thumbnail
             $width, $height, $filters
         );
 
-        if($afterClosure) {
-            $afterClosure($wasCreated, $thumbnailPath, $thumbnailDisk);
+        if($closure = $this->afterClosure) {
+            $closure($wasCreated, $thumbnailPath, $thumbnailDisk);
         }
 
         return $url;
