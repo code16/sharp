@@ -89,8 +89,8 @@ jobs:
         with:
           node-version: '12.x'
 
-#      - name: Install front dependencies
-#        run: npm ci
+      - name: Install front dependencies
+        run: npm ci
 
       - name: Run Front tests
         run: npm run test
