@@ -69,15 +69,6 @@ jobs:
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: ./vendor/bin/phpunit
 
-#      - uses: 8398a7/action-slack@v2.4.0
-##        if: failure()
-#        with:
-#          status: ${{ job.status }}
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-
-
   # Front tests (jest)
   front-tests:
     runs-on: ubuntu-latest
