@@ -2,7 +2,7 @@ name: Tests
 on:
   push:
     branches:
-      - feature/gh-actions
+      - master
 jobs:
 
 # Unit tests back (phpunit)
