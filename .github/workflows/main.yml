@@ -1,0 +1,87 @@
+name: Tests
+on:
+  push:
+    branches:
+      - master
+jobs:
+
+# Unit tests back (phpunit)
+  laravel-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - php: 7.2
+            env:
+              LARAVEL: 6.*
+              TESTBENCH: 4.*
+          - php: 7.3
+            env:
+              LARAVEL: 6.*
+              TESTBENCH: 4.*
+          - php: 7.4
+            env:
+              LARAVEL: 6.*
+              TESTBENCH: 4.*
+          - php: 7.2
+            env:
+              LARAVEL: 6.*
+              TESTBENCH: 4.*
+          - php: 7.3
+            env:
+              LARAVEL: 7.*
+              TESTBENCH: 5.*
+          - php: 7.4
+            env:
+              LARAVEL: 7.*
+              TESTBENCH: 5.*
+          - php: 7.3
+            env:
+              LARAVEL: 8.*
+              TESTBENCH: 6.*
+          - php: 7.4
+            env:
+              LARAVEL: 8.*
+              TESTBENCH: 6.*
+    env: ${{ matrix.env }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, dom, fileinfo, mysql
+      - name: Setup locales
+        run: sudo locale-gen fr_FR.UTF-8
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - name: Cache composer dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+      - name: Install Composer dependencies
+        run: |
+          composer require "laravel/framework:${LARAVEL}" "orchestra/testbench:${TESTBENCH}" --no-interaction --no-update
+          composer update --prefer-stable --prefer-dist --no-interaction
+      - name: Execute tests (Unit and Feature tests) via PHPUnit
+        run: ./vendor/bin/phpunit
+
+# Front tests (jest)
+  front-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - name: Install front dependencies
+        run: npm ci
+
+      - name: Run Front tests
+        run: npm run test
