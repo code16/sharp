@@ -12,21 +12,21 @@ jobs:
       matrix:
         include:
           - php: 7.2
-            env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-stable'
+            env: "LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-stable'"
           - php: 7.3
-            env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-stable'
+            env: "LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-stable'"
           - php: 7.4
-            env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-stable'
+            env: "LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-stable'"
           - php: 7.2
-            env: LARAVEL='7.*' TESTBENCH='5.*' COMPOSER_FLAGS='--prefer-stable'
+            env: "LARAVEL='7.*' TESTBENCH='5.*' COMPOSER_FLAGS='--prefer-stable'"
           - php: 7.3
-            env: LARAVEL='7.*' TESTBENCH='5.*' COMPOSER_FLAGS='--prefer-stable'
+            env: "LARAVEL='7.*' TESTBENCH='5.*' COMPOSER_FLAGS='--prefer-stable'"
           - php: 7.4
-            env: LARAVEL='7.*' TESTBENCH='5.*' COMPOSER_FLAGS='--prefer-stable'
+            env: "LARAVEL='7.*' TESTBENCH='5.*' COMPOSER_FLAGS='--prefer-stable'"
           - php: 7.3
-            env: LARAVEL='8.*' TESTBENCH='6.*' COMPOSER_FLAGS='--prefer-stable'
+            env: "LARAVEL='8.*' TESTBENCH='6.*' COMPOSER_FLAGS='--prefer-stable'"
           - php: 7.4
-            env: LARAVEL='8.*' TESTBENCH='6.*' COMPOSER_FLAGS='--prefer-stable'
+            env: "LARAVEL='8.*' TESTBENCH='6.*' COMPOSER_FLAGS='--prefer-stable'"
     env: ${{ matrix.env }}
     steps:
       - uses: actions/checkout@v2
