@@ -61,26 +61,26 @@ jobs:
           SLACK_WEBHOOK_URL: https://hooks.slack.com/services/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
 
 # Front tests (jest)
-  front-tests:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: '12.x'
-
-      - name: Install front dependencies
-        run: npm ci
-
-      - name: Run Front tests
-        run: npm run test
-
-      - uses: 8398a7/action-slack@v2.4.0
-        if: failure()
-        with:
-          status: failure
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SLACK_WEBHOOK_URL: https://hooks.slack.com/services/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
+#  front-tests:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#
+#      - name: Setup Node.js
+#        uses: actions/setup-node@v1
+#        with:
+#          node-version: '12.x'
+#
+#      - name: Install front dependencies
+#        run: npm ci
+#
+#      - name: Run Front tests
+#        run: npm run test
+#
+#      - uses: 8398a7/action-slack@v2.4.0
+#        if: failure()
+#        with:
+#          status: failure
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          SLACK_WEBHOOK_URL: https://hooks.slack.com/services/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
