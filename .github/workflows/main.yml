@@ -51,6 +51,8 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: mbstring, dom, fileinfo, mysql
+      - name: Setup locales
+        run: sudo locale-gen fr_FR.UTF-8
       - name: Get composer cache directory
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
