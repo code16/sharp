@@ -1,5 +1,5 @@
 <template>
-    <FieldLayout class="ShowEntityListField">
+    <FieldLayout class="ShowEntityListField" :class="classes">
         <EntityList
             :entity-key="entityListKey"
             :module="storeModule"
@@ -13,9 +13,22 @@
             @change="handleChanged"
         >
             <template v-slot:action-bar="{ props, listeners }">
-                <ActionBar class="ShowEntityListField__action-bar" v-bind="props" v-on="listeners">
+                <ActionBar class="ShowEntityListField__action-bar"
+                    v-bind="props"
+                    v-on="listeners"
+                    :collapsed="collapsed"
+                >
                     <div class="ShowEntityListField__label show-field__label">
-                        {{ label }}
+                        <template v-if="hasCollapse">
+                            <details @toggle="handleDetailsToggle">
+                                <summary class="py-1">
+                                    {{ label || ' ' }}
+                                </summary>
+                            </details>
+                        </template>
+                        <template v-else>
+                            {{ label }}
+                        </template>
                     </div>
                 </ActionBar>
             </template>
@@ -64,13 +77,20 @@
             hiddenCommands: Object,
             label: String,
             emptyVisible: Boolean,
+            collapsable: Boolean,
         },
         data() {
             return {
                 list: null,
+                collapsed: this.collapsable,
             }
         },
         computed: {
+            classes() {
+                return {
+                    'ShowEntityListField--collapsed': this.collapsed,
+                }
+            },
             storeModule() {
                 return `show/entity-lists/${this.fieldKey}`;
             },
@@ -88,6 +108,9 @@
                 }
                 return this.emptyVisible;
             },
+            hasCollapse() {
+                return this.collapsable;
+            },
         },
         methods: {
             hasCommands(commands) {
@@ -98,6 +121,9 @@
             },
             handleChanged(list) {
                 this.list = list;
+            },
+            handleDetailsToggle(e) {
+                this.collapsed = !e.target.open;
             },
         },
         created() {

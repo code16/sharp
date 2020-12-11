@@ -3,6 +3,7 @@
     font-size: 1em;
     font-weight: 600;
     margin-bottom: 0;
+    line-height: 1.25;
   }
   .SharpDataList__table {
     border: 0;
@@ -15,6 +16,7 @@
       height: 2rem;
     }
     .action-bar__row {
+      min-height: 2.5rem;
       @extend .mx-n1;
       @extend .mx-sm-n2;
     }
@@ -24,6 +26,12 @@
     }
     .SharpButton--secondary-accent {
       border-color: $ui-04;
+    }
+  }
+
+  &--collapsed {
+    .SharpDataList {
+      display: none;
     }
   }
 }
