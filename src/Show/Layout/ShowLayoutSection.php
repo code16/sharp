@@ -17,6 +17,11 @@ class ShowLayoutSection implements HasLayout
     protected $columns = [];
 
     /**
+     * @var bool
+     */
+    protected $collapsable = false;
+
+    /**
      * @param string $title
      */
     function __construct(string $title)
@@ -40,6 +45,13 @@ class ShowLayoutSection implements HasLayout
         return $this;
     }
 
+    public function setCollapsable(bool $collapsable = true)
+    {
+        $this->collapsable = $collapsable;
+
+        return $this;
+    }
+
     /**
      * @return array
      */
@@ -47,6 +59,7 @@ class ShowLayoutSection implements HasLayout
     {
         return [
             "title" => $this->title,
+            "collapsable" => $this->collapsable,
             "columns" => collect($this->columns)
                 ->map(function($column) {
                     return $column->toArray();
