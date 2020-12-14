@@ -47,6 +47,7 @@
     "test": "jest"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.19",
     "@vue/test-utils": "^1.0.0-beta.29",
     "axios": "^0.19.2",
     "babel-jest": "^24.1.0",
