@@ -1,11 +1,11 @@
 <template>
     <div class="action-bar">
-        <template v-if="hasLeftControls && $slots.default">
+        <template v-if="hasOuterTitle">
             <div class="mb-2">
                 <slot />
             </div>
         </template>
-        <template v-if="rowVisible">
+        <template v-if="ready && barVisible">
             <div class="row action-bar__row">
                 <template v-if="hasLeftControls">
                     <div class="col-sm action-bar__col">
@@ -115,8 +115,10 @@
             FilterDropdown,
         },
         props: {
+            ready: Boolean,
             count: Number,
             search: String,
+            hasSearchQuery: Boolean,
             filters: Array,
             filtersValues: Object,
             commands: Array,
@@ -141,13 +143,21 @@
                 return this.forms && this.forms.length > 0;
             },
             hasLeftControls() {
-                const filters = this.filters || [];
+                const filters = this.filters ?? [];
+                // has search filled of filter selected
+                if(this.hasSearchQuery || filters.some(key => this.filtersValues[key] != null)) {
+                    return true;
+                }
                 return this.count > 0 && (filters.length > 0 || this.canSearch);
             },
-            rowVisible() {
-                return this.collapsed
-                    ? !this.hasLeftControls
-                    : true;
+            hasOuterTitle() {
+                return this.$slots.default && (!this.ready || this.hasLeftControls);
+            },
+            barVisible() {
+                if(this.collapsed) {
+                    return !this.hasLeftControls;
+                }
+                return true;
             },
         },
         methods: {

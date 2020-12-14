@@ -42,6 +42,15 @@ $loading__end-duration: 300ms;
     }
   }
 
+  &--medium {
+    width: 3rem;
+    height: 3rem;
+
+    .SharpLoading__svg {
+      stroke: $ui-05;
+    }
+  }
+
   &__overlay {
     position: fixed;
     top: 0;
@@ -55,6 +64,10 @@ $loading__end-duration: 300ms;
     transition: background-color 2000ms $bx--standard-easing;
 
     z-index: 9999;
+
+    &--absolute {
+      position: absolute;
+    }
   }
 
   &__overlay--stop {
