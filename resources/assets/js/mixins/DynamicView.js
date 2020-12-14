@@ -5,19 +5,25 @@ import { showAlert } from "../util/dialogs";
 export const withAxiosInterceptors = {
     inject: ['axiosInstance'],
     methods: {
+        showLoading() {
+            this.$store.dispatch('setLoading', true);
+        },
+        hideLoading() {
+            this.$store.dispatch('setLoading', false);
+        },
         installInterceptors() {
             this.axiosInstance.interceptors.request.use(config => {
-                this.$store.dispatch('setLoading', true);
+                this.showLoading();
                 //debugger
                 return config;
             }, error => Promise.reject(error));
 
             this.axiosInstance.interceptors.response.use(response => {
-                this.$store.dispatch('setLoading', false);
+                this.hideLoading();
                 return response;
             }, async error => {
                 let { response, config: { method } } = error;
-                this.$store.dispatch('setLoading', false);
+                this.hideLoading();
 
                 if(response.data instanceof Blob && response.data.type === 'application/json') {
                     response.data = await parseBlobJSONContent(response.data);
@@ -52,7 +58,7 @@ export const withAxiosInterceptors = {
     created() {
         if(!this.synchronous) {
             this.installInterceptors();
-            this.$store.dispatch('setLoading', true);
+            this.showLoading();
         }
     }
 };

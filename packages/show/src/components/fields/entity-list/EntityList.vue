@@ -9,6 +9,7 @@
             :show-entity-state="showEntityState"
             :hidden-commands="hiddenCommands"
             :hidden-filters="hiddenFilters"
+            :visible="!collapsed"
             inline
             @change="handleChanged"
         >
@@ -20,7 +21,7 @@
                 >
                     <div class="ShowEntityListField__label show-field__label">
                         <template v-if="hasCollapse">
-                            <details @toggle="handleDetailsToggle">
+                            <details :open="!collapsed" @toggle="handleDetailsToggle">
                                 <summary class="py-1">
                                     {{ label || ' ' }}
                                 </summary>

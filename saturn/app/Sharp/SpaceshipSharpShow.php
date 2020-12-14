@@ -62,6 +62,10 @@ class SpaceshipSharpShow extends SharpShow
                     ->hideFilterWithValue("spaceship", function($instanceId) {
                         return $instanceId;
                     })
+//                    ->hideFilterWithValue("role", function($instanceId) {
+//                        return null;
+//                    })
+//                    ->showSearchField(false)
                     ->showEntityState(false)
 //                    ->hideEntityCommand("updateXP")
 //                    ->hideInstanceCommand("download")

@@ -18,6 +18,7 @@
     background: white;
     border: 1px solid $ui-04;
     border-bottom-width: 2px;
+    position: relative;
   }
 
   &__table {
@@ -43,6 +44,7 @@
   &__tbody {
     //display: table-row-group;
     vertical-align: middle;
+    position: relative;
   }
 
   &__thead {
