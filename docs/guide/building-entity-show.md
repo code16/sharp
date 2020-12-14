@@ -106,6 +106,19 @@ function buildShowLayout()
 }
 ```
 
+A section can be declared *collapsable*:
+
+```php
+function buildShowLayout()
+{
+    $this->addSection(
+        'Description', 
+        function(ShowLayoutSection $section) {
+            $section->setCollapsable();
+        }
+    );
+}
+```
 
 #### Columns and fields
 
@@ -160,6 +173,7 @@ function buildShowLayout()
 }
 ```
 
+Like regular sections, embedded Entity List can be declared *collapsable*.
 
 ### `find($id): array`
 
@@ -195,7 +209,7 @@ function find($id): array
 ```
 
 
-Transformers are explained in the detailled [How to transform data](how-to-transform-data.md) documentation.
+Transformers are explained in the detailed [How to transform data](how-to-transform-data.md) documentation.
 
 
 ### `buildShowConfig()`

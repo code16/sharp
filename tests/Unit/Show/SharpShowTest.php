@@ -3,6 +3,9 @@
 namespace Code16\Sharp\Tests\Unit\Show;
 
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
+use Code16\Sharp\Show\Fields\SharpShowTextField;
+use Code16\Sharp\Show\Layout\ShowLayoutColumn;
+use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Show\SharpShow;
 use Code16\Sharp\Show\SharpSingleShow;
 use Code16\Sharp\Tests\SharpTestCase;
@@ -20,7 +23,6 @@ class SharpShowTest extends SharpTestCase
                 $this->addField(
                     SharpShowEntityListField::make("entityList", "entityKey")
                         ->setLabel("Test")
-                    
                 );
             }
             function buildShowLayout()
@@ -32,6 +34,7 @@ class SharpShowTest extends SharpTestCase
         $this->assertEquals([
             "sections" => [
                 [
+                    "collapsable" => false,
                     "title" => "",
                     "columns" => [
                         [
@@ -40,6 +43,53 @@ class SharpShowTest extends SharpTestCase
                                 [
                                     [
                                         "key" => "entityList",
+                                        "size" => 12,
+                                        "sizeXS" => 12,
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+        ], $sharpShow->showLayout());
+    }
+
+    /** @test */
+    function we_can_declare_a_collapsable_section()
+    {
+        $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
+        {
+            function buildShowFields()
+            {
+                $this->addField(
+                    SharpShowTextField::make("test")
+                        ->setLabel("Test")
+                );
+            }
+            function buildShowLayout()
+            {
+                $this->addSection("test", function(ShowLayoutSection $section) {
+                    $section->setCollapsable()
+                        ->addColumn(12, function(ShowLayoutColumn $column) {
+                            $column->withSingleField("test");
+                        });
+                });
+            }
+        };
+
+        $this->assertEquals([
+            "sections" => [
+                [
+                    "collapsable" => true,
+                    "title" => "test",
+                    "columns" => [
+                        [
+                            "size" => 12,
+                            "fields" => [
+                                [
+                                    [
+                                        "key" => "test",
                                         "size" => 12,
                                         "sizeXS" => 12,
                                     ]
