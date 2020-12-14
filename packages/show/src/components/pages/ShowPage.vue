@@ -11,6 +11,7 @@
                     :can-edit="canEdit"
                     :can-change-state="canChangeState"
                     :show-back-button="showBackButton"
+                    :breadcrumb="breadcrumb"
                     @command="handleCommandRequested"
                     @state-change="handleStateChanged"
                 />

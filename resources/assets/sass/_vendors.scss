@@ -20,6 +20,7 @@
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
 
+@import '~bootstrap/scss/mixins/border-radius';
 @import '~bootstrap/scss/mixins/hover';
 @import '~bootstrap/scss/mixins/grid';
 @import '~bootstrap/scss/mixins/grid-framework';
@@ -32,4 +33,5 @@
 @import '~bootstrap/scss/utilities/flex';
 @import '~bootstrap/scss/utilities/visibility';
 @import '~bootstrap/scss/utilities/spacing';
+@import '~bootstrap/scss/breadcrumb';
 @import '~bootstrap-vue/src/utilities';

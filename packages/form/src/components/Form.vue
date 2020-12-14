@@ -193,6 +193,7 @@
                     showBackButton: this.isReadOnly,
                     create: !!this.isCreation,
                     uploading: this.isUploading,
+                    breadcrumb: this.breadcrumb,
                 }
             },
             actionBarListeners() {
