@@ -34,7 +34,7 @@ class ShowLayoutSection implements HasLayout
      * @param \Closure|null $callback
      * @return $this
      */
-    public function addColumn(int $size, \Closure $callback = null)
+    public function addColumn(int $size, \Closure $callback = null): self
     {
         $column = $this->addColumnLayout(new ShowLayoutColumn($size));
 
@@ -45,7 +45,7 @@ class ShowLayoutSection implements HasLayout
         return $this;
     }
 
-    public function setCollapsable(bool $collapsable = true)
+    public function setCollapsable(bool $collapsable = true): self
     {
         $this->collapsable = $collapsable;
 
