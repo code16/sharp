@@ -7,12 +7,14 @@ import store from 'sharp/store';
 import { wait, MockI18n, nextRequestFulfilled } from "@sharp/test-utils";
 import moxios from 'moxios';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { lang } from "sharp";
 
 jest.mock('sharp');
 
-
 describe('sharp-form', ()=>{
     Vue.use(MockI18n);
+
+    lang.mockImplementation(key => key);
 
     function createWrapper({ propsData } = {}) {
         const localVue = createLocalVue();
@@ -529,6 +531,16 @@ describe('sharp-form', ()=>{
 
     test('dependant submit', async () => {
         const wrapper = createWrapper();
+
+        await nextRequestFulfilled({
+            status: 200,
+            response: {
+                ...createForm(),
+                breadcrumb: {
+                    items: [{ type:'form', name:"Form" }]
+                },
+            }
+        });
 
         wrapper.vm.post = jest.fn(()=>Promise.resolve({ data: { ok: true } }));
         wrapper.vm.handleError = jest.fn();

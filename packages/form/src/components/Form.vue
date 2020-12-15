@@ -186,6 +186,9 @@
                     .some(uploading => !!uploading);
             },
             breadcrumbItems() {
+                if(!this.breadcrumb?.items) {
+                    return null;
+                }
                 const items = [...this.breadcrumb.items];
                 const formItem = items.pop();
                 formItem.name = this.isCreation
@@ -206,7 +209,7 @@
                     create: !!this.isCreation,
                     uploading: this.isUploading,
                     breadcrumb: this.breadcrumbItems,
-                    showBreadcrumb: this.breadcrumb.visible,
+                    showBreadcrumb: !!this.breadcrumb?.visible,
                 }
             },
             actionBarListeners() {
