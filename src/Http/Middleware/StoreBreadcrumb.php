@@ -25,7 +25,8 @@ class StoreBreadcrumb
             session()->put("sharp_breadcrumb", [
                 [
                     "type" => $this->getRequestType(),
-                    "url" => $this->getFullUrl($request)
+                    "url" => $this->getFullUrl($request),
+                    "name" => sprintf('%s %s', $this->determineEntityKey(), $this->getRequestType()),
                 ]
             ]);
 
@@ -60,7 +61,8 @@ class StoreBreadcrumb
 
                         $breadcrumb[] = [
                             "type" => $this->getRequestType(),
-                            "url" => $this->getFullUrl($request)
+                            "url" => $this->getFullUrl($request),
+                            "name" => sprintf('%s %s (%s)', $this->determineEntityKey(), $this->getRequestType(), $this->determineInstanceId()),
                         ];
                     }
 

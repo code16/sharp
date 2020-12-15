@@ -35,7 +35,10 @@ class AppendBreadcrumb
     protected function addBreadcrumbToJsonResponse(JsonResponse $jsonResponse)
     {
         $data = $jsonResponse->getData();
-        $data->breadcrumb = session("sharp_breadcrumb");
+        $data->breadcrumb = [
+            'items' => session("sharp_breadcrumb"),
+            'visible' => true,
+        ];
         $jsonResponse->setData($data);
 
         return $jsonResponse;
