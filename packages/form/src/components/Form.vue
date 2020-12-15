@@ -61,6 +61,7 @@
         BASE_URL,
         getBackUrl,
         getDeleteBackUrl,
+        lang,
         logError,
         showAlert,
     } from "sharp";
@@ -184,6 +185,17 @@
                 return Object.values(this.uploadingFields)
                     .some(uploading => !!uploading);
             },
+            breadcrumbItems() {
+                const items = [...this.breadcrumb.items];
+                const formItem = items.pop();
+                formItem.name = this.isCreation
+                    ? lang('form.breadcrumb.item_label.new').replace(':entity_name', formItem.name)
+                    : lang('form.breadcrumb.item_label.edit').replace(':instance_name', formItem.name);
+                return [
+                    ...items,
+                    formItem,
+                ]
+            },
             actionBarProps() {
                 return {
                     showSubmitButton: this.isCreation
@@ -193,7 +205,7 @@
                     showBackButton: this.isReadOnly,
                     create: !!this.isCreation,
                     uploading: this.isUploading,
-                    breadcrumb: this.breadcrumb.items,
+                    breadcrumb: this.breadcrumbItems,
                     showBreadcrumb: this.breadcrumb.visible,
                 }
             },
