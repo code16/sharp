@@ -26,7 +26,7 @@
         },
         methods: {
             itemLabel(item) {
-                return item.name ?? item.type;
+                return item.name;
             },
             isActive(i) {
                 return i === this.items.length - 1;

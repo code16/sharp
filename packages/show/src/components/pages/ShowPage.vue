@@ -11,7 +11,8 @@
                     :can-edit="canEdit"
                     :can-change-state="canChangeState"
                     :show-back-button="showBackButton"
-                    :breadcrumb="breadcrumb"
+                    :breadcrumb="breadcrumb.items"
+                    :show-breadcrumb="breadcrumb.visible"
                     @command="handleCommandRequested"
                     @state-change="handleStateChanged"
                 />
@@ -113,7 +114,7 @@
                 });
             },
             backUrl() {
-                return getBackUrl(this.breadcrumb);
+                return getBackUrl(this.breadcrumb.items);
             },
             showBackButton() {
                 return !!this.backUrl;

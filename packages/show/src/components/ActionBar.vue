@@ -92,6 +92,7 @@
             state: Object,
             stateValues: Array,
             breadcrumb: Array,
+            showBreadcrumb: Boolean,
         },
         computed: {
             hasCommands() {
@@ -99,9 +100,6 @@
             },
             hasState() {
                 return !!this.state;
-            },
-            showBreadcrumb() {
-                return this.breadcrumb?.length > 1;
             },
         },
         methods: {

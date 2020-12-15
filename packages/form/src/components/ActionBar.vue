@@ -66,6 +66,7 @@
             create: Boolean,
             uploading: Boolean,
             breadcrumb: Array,
+            showBreadcrumb: Boolean,
         },
         computed: {
             submitLabel() {
@@ -75,9 +76,6 @@
                 return this.create
                     ? lang('action_bar.form.submit_button.create')
                     : lang('action_bar.form.submit_button.update');
-            },
-            showBreadcrumb() {
-                return this.breadcrumb?.length > 1;
             },
         },
         methods: {
