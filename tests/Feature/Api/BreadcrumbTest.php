@@ -5,6 +5,7 @@ namespace Code16\Sharp\Tests\Feature\Api;
 use Code16\Sharp\Http\SharpContext;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
 use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
+use Code16\Sharp\Tests\Fixtures\PersonSharpShow;
 use Code16\Sharp\Tests\Fixtures\PersonSharpSingleShow;
 
 class BreadcrumbTest extends BaseApiTest
@@ -65,6 +66,39 @@ class BreadcrumbTest extends BaseApiTest
                     "type" => "form",
                     "url" => url('/sharp/form/person/1'),
                     "name" => "Edit",
+                ]
+            ],
+            session("sharp_breadcrumb")
+        );
+    }
+
+    /** @test */
+    public function shows_are_piled_up_in_breadcrumb()
+    {
+        $this->buildTheWorld();
+
+        $this->app['config']->set(
+            'sharp.entities.subperson.show',
+            PersonSharpShow::class
+        );
+
+        $this->get('/sharp/list/person');
+        $this->get('/sharp/show/person/1?x-access-from=ui');
+        $this->get('/sharp/show/subperson/1?x-access-from=ui');
+        $this->assertEquals(
+            [
+                [
+                    "type" => "entityList",
+                    "url" => url('/sharp/list/person'),
+                    "name" => "List",
+                ], [
+                    "type" => "show",
+                    "url" => url('/sharp/show/person/1'),
+                    "name" => "person",
+                ], [
+                    "type" => "show",
+                    "url" => url('/sharp/show/subperson/1'),
+                    "name" => "subperson",
                 ]
             ],
             session("sharp_breadcrumb")
