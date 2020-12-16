@@ -20,13 +20,15 @@ class StoreBreadcrumb
      */
     public function handle($request, Closure $next)
     {
+        $type = $this->getRequestType();
+        
         if($this->isListOrDashboardOrSingleShowRequest()) {
             // Simple: reset breadcrumb
             session()->put("sharp_breadcrumb", [
                 [
-                    "type" => $this->getRequestType(),
+                    "type" => $type,
                     "url" => $this->getFullUrl($request),
-                    "name" => sprintf('%s %s', $this->determineEntityKey(), $this->getRequestType()),
+                    "name" => $this->determineBreadcrumbItemName()
                 ]
             ]);
 
@@ -60,9 +62,9 @@ class StoreBreadcrumb
                         );
 
                         $breadcrumb[] = [
-                            "type" => $this->getRequestType(),
+                            "type" => $type,
                             "url" => $this->getFullUrl($request),
-                            "name" => sprintf('%s %s (%s)', $this->determineEntityKey(), $this->getRequestType(), $this->determineInstanceId()),
+                            "name" => $this->determineBreadcrumbItemName()
                         ];
                     }
 
@@ -75,10 +77,7 @@ class StoreBreadcrumb
         return $next($request);
     }
 
-    /**
-     * @return string
-     */
-    private function getRequestType()
+    private function getRequestType(): string
     {
         if($this->isListRequest()) {
             return "entityList";
@@ -99,60 +98,44 @@ class StoreBreadcrumb
         return "?";
     }
 
-    /**
-     * @return boolean
-     */
-    private function isShowRequest()
+    private function isShowRequest(): bool
     {
         return request()->is(sprintf('%s/show/*/*', sharp_base_url_segment()));
     }
 
-    /**
-     * @return boolean
-     */
-    private function isSingleShowRequest()
+    private function isSingleShowRequest(): bool
     {
         return request()->is(sprintf('%s/show/*', sharp_base_url_segment())) && !$this->isShowRequest();
     }
 
-    /**
-     * @return boolean
-     */
-    private function isFormRequest()
+    private function isFormRequest(): bool
     {
         return request()->is(sprintf('%s/form/*', sharp_base_url_segment()));
     }
 
-    /**
-     * @return boolean
-     */
-    private function isListRequest()
+    private function isSingleFormRequest(): bool
+    {
+        return request()->is(sprintf('%s/form/*', sharp_base_url_segment())) && !$this->isFormRequest();
+    }
+
+    private function isListRequest(): bool
     {
         return request()->is(sprintf('%s/list/*', sharp_base_url_segment()));
     }
 
-    /**
-     * @return boolean
-     */
-    private function isDashboardRequest()
+    private function isDashboardRequest(): bool
     {
         return request()->is(sprintf('%s/dashboard/*', sharp_base_url_segment()));
     }
 
-    /**
-     * @return boolean
-     */
-    private function isListOrDashboardOrSingleShowRequest()
+    private function isListOrDashboardOrSingleShowRequest(): bool
     {
         return $this->isListRequest()
             || $this->isDashboardRequest()
             || $this->isSingleShowRequest();
     }
 
-    /**
-     * @return string|null
-     */
-    protected function determineEntityKey()
+    protected function determineEntityKey(): ?string
     {
         $key = request()->segment(3);
 
@@ -161,19 +144,38 @@ class StoreBreadcrumb
             : $key;
     }
 
-    /**
-     * @return string|null
-     */
-    private function determineInstanceId()
+    private function determineInstanceId(): ?string
     {
         return request()->segment(4);
+    }
+
+    protected function determineBreadcrumbItemName(string $type = null): string
+    {
+        $type = $type ?: $this->getRequestType();
+        
+        switch ($type) {
+            case "entityList":
+                return trans("sharp::breadcrumb.entityList");
+            case "dashboard":
+                return trans("sharp::breadcrumb.dashboard");
+            case "show":
+                return trans("sharp::breadcrumb.show", ["entity" => $this->determineEntityKey()]);
+            case "form":
+                // We know it's a leaf: forms can't be piled upon
+                if($this->determineInstanceId() || $this->isSingleFormRequest()) {
+                    return trans("sharp::breadcrumb.form.edit");
+                }
+                return trans("sharp::breadcrumb.form.create", ["entity" => $this->determineEntityKey()]);
+        }
+        
+        return $this->determineEntityKey();
     }
 
     /**
      * We access through a direct link to Show or Form: we must build previous state,
      * from scratch, to handle future "Back" button calls.
      */
-    private function buildPreviousState()
+    private function buildPreviousState(): array
     {
         if($this->isShowRequest()) {
             // Build a List URL in previous history
@@ -183,10 +185,12 @@ class StoreBreadcrumb
                     "url" => url(sprintf('%s/list/%s',
                         sharp_base_url_segment(),
                         $this->determineEntityKey()
-                    ))
+                    )),
+                    "name" => $this->determineBreadcrumbItemName("entityList"),
                 ], [
                     "type" => "show",
-                    "url" => request()->fullUrl()
+                    "url" => request()->fullUrl(),
+                    "name" => $this->determineBreadcrumbItemName("show"),
                 ]
             ];
         }
@@ -200,7 +204,8 @@ class StoreBreadcrumb
                     "url" => url(sprintf('%s/list/%s',
                         sharp_base_url_segment(),
                         $this->determineEntityKey()
-                    ))
+                    )),
+                    "name" => $this->determineBreadcrumbItemName("entityList"),
                 ]
             ];
 
@@ -212,7 +217,8 @@ class StoreBreadcrumb
                         sharp_base_url_segment(),
                         $this->determineEntityKey(),
                         $this->determineInstanceId()
-                    ))
+                    )),
+                    "name" => $this->determineBreadcrumbItemName("show"),
                 ];
             }
 
@@ -224,14 +230,16 @@ class StoreBreadcrumb
                     "url" => url(sprintf('%s/show/%s',
                         sharp_base_url_segment(),
                         $this->determineEntityKey()
-                    ))
+                    )),
+                    "name" => $this->determineBreadcrumbItemName("show"),
                 ]
             ];
         }
 
         $breadcrumb[] = [
             "type" => $this->getRequestType(),
-            "url" => request()->fullUrl()
+            "url" => request()->fullUrl(),
+            "name" => $this->determineBreadcrumbItemName(),
         ];
 
         return $breadcrumb;
@@ -241,12 +249,8 @@ class StoreBreadcrumb
      * Replace the last breadcrumb item with $referer if both
      * URL are the same minus the querystring (which we
      * know to be OK in the $referer URL).
-     *
-     * @param array $breadcrumb
-     * @param string|null $referer
-     * @return array
      */
-    private function updatePreviousBreadcrumbItemWithReferer($breadcrumb, $referer)
+    private function updatePreviousBreadcrumbItemWithReferer($breadcrumb, $referer): array
     {
         if($referer && sizeof($breadcrumb)) {
             $lastItem = parse_url(Arr::last($breadcrumb)["url"]);
@@ -260,13 +264,7 @@ class StoreBreadcrumb
         return $breadcrumb;
     }
 
-    /**
-     * Return the current full URL.
-     *
-     * @param Request $request
-     * @return string
-     */
-    private function getFullUrl(Request $request)
+    private function getFullUrl(Request $request): string
     {
         if($value = $request->get("x-access-from")) {
             // we have to strip the  "x-access-from=ui" part since we don't want

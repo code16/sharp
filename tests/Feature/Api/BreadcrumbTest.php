@@ -27,7 +27,8 @@ class BreadcrumbTest extends BaseApiTest
             [
                 [
                     "type" => "entityList",
-                    "url" => url('/sharp/list/person')
+                    "url" => url('/sharp/list/person'),
+                    "name" => "List",
                 ]
             ],
             session("sharp_breadcrumb")
@@ -38,10 +39,12 @@ class BreadcrumbTest extends BaseApiTest
             [
                 [
                     "type" => "entityList",
-                    "url" => url('/sharp/list/person')
+                    "url" => url('/sharp/list/person'),
+                    "name" => "List",
                 ], [
                     "type" => "show",
-                    "url" => url('/sharp/show/person/1')
+                    "url" => url('/sharp/show/person/1'),
+                    "name" => "person",
                 ]
             ],
             session("sharp_breadcrumb")
@@ -52,13 +55,16 @@ class BreadcrumbTest extends BaseApiTest
             [
                 [
                     "type" => "entityList",
-                    "url" => url('/sharp/list/person')
+                    "url" => url('/sharp/list/person'),
+                    "name" => "List",
                 ], [
                     "type" => "show",
-                    "url" => url('/sharp/show/person/1')
+                    "url" => url('/sharp/show/person/1'),
+                    "name" => "person",
                 ], [
                     "type" => "form",
-                    "url" => url('/sharp/form/person/1')
+                    "url" => url('/sharp/form/person/1'),
+                    "name" => "Edit",
                 ]
             ],
             session("sharp_breadcrumb")
@@ -80,14 +86,14 @@ class BreadcrumbTest extends BaseApiTest
             [
                 [
                     "type" => "entityList",
-                    "url" => url('/sharp/list/person')
+                    "url" => url('/sharp/list/person'),
+                    "name" => "List",
                 ]
             ],
             session("sharp_breadcrumb")
         );
     }
-
-
+    
     /** @test */
     public function breadcrumb_path_is_updated_if_we_navigate_to_a_form_in_create_mode()
     {
@@ -100,10 +106,12 @@ class BreadcrumbTest extends BaseApiTest
             [
                 [
                     "type" => "entityList",
-                    "url" => url('/sharp/list/person')
+                    "url" => url('/sharp/list/person'),
+                    "name" => "List",
                 ], [
                     "type" => "form",
-                    "url" => url('/sharp/form/person')
+                    "url" => url('/sharp/form/person'),
+                    "name" => "New “person”",
                 ]
             ],
             session("sharp_breadcrumb")
@@ -125,7 +133,8 @@ class BreadcrumbTest extends BaseApiTest
             [
                 [
                     "type" => "dashboard",
-                    "url" => url('/sharp/dashboard/personal_dashboard')
+                    "url" => url('/sharp/dashboard/personal_dashboard'),
+                    "name" => "Dashboard",
                 ]
             ],
             session("sharp_breadcrumb")
@@ -146,7 +155,8 @@ class BreadcrumbTest extends BaseApiTest
             [
                 [
                     "type" => "show",
-                    "url" => url('/sharp/show/person')
+                    "url" => url('/sharp/show/person'),
+                    "name" => "person"
                 ]
             ],
             session("sharp_breadcrumb")
@@ -157,29 +167,39 @@ class BreadcrumbTest extends BaseApiTest
     public function breadcrumb_path_is_appended_to_json_responses()
     {
         $this->buildTheWorld();
+        config()->set("sharp.display_breadcrumb", true);
 
         $this->get('/sharp/list/person');
 
         $this->getJson('/sharp/api/list/person')->assertJson([
             "breadcrumb" => [
-                [
-                    "type" => "entityList",
-                    "url" => url('/sharp/list/person')
-                ]
+                "items" => [
+                    [
+                        "type" => "entityList",
+                        "url" => url('/sharp/list/person'),
+                        "name" => "List"
+                    ]
+                ],
+                "visible" => true
             ]
         ]);
 
         $this->get('/sharp/show/person/1?x-access-from=ui');
 
         $this->getJson('/sharp/api/show/person/1')->assertJson([
-            "breadcrumb" => [
-                [
-                    "type" => "entityList",
-                    "url" => url('/sharp/list/person')
-                ], [
-                    "type" => "show",
-                    "url" => url('/sharp/show/person/1')
-                ]
+            "breadcrumb" =>  [
+                "items" => [
+                    [
+                        "type" => "entityList",
+                        "url" => url('/sharp/list/person'),
+                        "name" => "List"
+                    ], [
+                        "type" => "show",
+                        "url" => url('/sharp/show/person/1'),
+                        "name" => "person"
+                    ]
+                ],
+                "visible" => true
             ]
         ]);
 
@@ -187,16 +207,22 @@ class BreadcrumbTest extends BaseApiTest
 
         $this->getJson('/sharp/api/form/person/1')->assertJson([
             "breadcrumb" => [
-                [
-                    "type" => "entityList",
-                    "url" => url('/sharp/list/person')
-                ], [
-                    "type" => "show",
-                    "url" => url('/sharp/show/person/1')
-                ], [
-                    "type" => "form",
-                    "url" => url('/sharp/form/person/1')
-                ]
+                "items" => [
+                    [
+                        "type" => "entityList",
+                        "url" => url('/sharp/list/person'),
+                        "name" => "List"
+                    ], [
+                        "type" => "show",
+                        "url" => url('/sharp/show/person/1'),
+                        "name" => "person"
+                    ], [
+                        "type" => "form",
+                        "url" => url('/sharp/form/person/1'),
+                        "name" => "Edit"
+                    ]
+                ],
+                "visible" => true
             ]
         ]);
 
@@ -204,10 +230,14 @@ class BreadcrumbTest extends BaseApiTest
 
         $this->getJson('/sharp/api/dashboard/personal_dashboard')->assertJson([
             "breadcrumb" => [
-                [
-                    "type" => "dashboard",
-                    "url" => url('/sharp/dashboard/personal_dashboard')
-                ]
+                "items" => [
+                    [
+                        "type" => "dashboard",
+                        "url" => url('/sharp/dashboard/personal_dashboard'),
+                        "name" => "Dashboard"
+                    ]
+                ],
+                "visible" => true
             ]
         ]);
     }
@@ -231,13 +261,16 @@ class BreadcrumbTest extends BaseApiTest
             [
                 [
                     "type" => "entityList",
-                    "url" => url('/sharp/list/person')
+                    "url" => url('/sharp/list/person'),
+                    "name" => "List"
                 ], [
                     "type" => "show",
-                    "url" => url('/sharp/show/person/1')
+                    "url" => url('/sharp/show/person/1'),
+                    "name" => "person"
                 ], [
                     "type" => "form",
-                    "url" => url('/sharp/form/person/1')
+                    "url" => url('/sharp/form/person/1'),
+                    "name" => "Edit"
                 ]
             ],
             session("sharp_breadcrumb")
@@ -249,10 +282,12 @@ class BreadcrumbTest extends BaseApiTest
             [
                 [
                     "type" => "entityList",
-                    "url" => url('/sharp/list/person')
+                    "url" => url('/sharp/list/person'),
+                    "name" => "List"
                 ], [
                     "type" => "show",
-                    "url" => url('/sharp/show/person/1')
+                    "url" => url('/sharp/show/person/1'),
+                    "name" => "person"
                 ]
             ],
             session("sharp_breadcrumb")
@@ -266,13 +301,16 @@ class BreadcrumbTest extends BaseApiTest
             [
                 [
                     "type" => "entityList",
-                    "url" => url('/sharp/list/person')
+                    "url" => url('/sharp/list/person'),
+                    "name" => "List"
                 ], [
                     "type" => "show",
-                    "url" => url('/sharp/show/person/1')
+                    "url" => url('/sharp/show/person/1'),
+                    "name" => "person"
                 ], [
                     "type" => "show",
-                    "url" => url('/sharp/show/person/2')
+                    "url" => url('/sharp/show/person/2'),
+                    "name" => "person"
                 ]
             ],
             session("sharp_breadcrumb")
@@ -284,13 +322,16 @@ class BreadcrumbTest extends BaseApiTest
             [
                 [
                     "type" => "entityList",
-                    "url" => url('/sharp/list/person')
+                    "url" => url('/sharp/list/person'),
+                    "name" => "List"
                 ], [
                     "type" => "show",
-                    "url" => url('/sharp/show/person/1')
+                    "url" => url('/sharp/show/person/1'),
+                    "name" => "person"
                 ], [
                     "type" => "show",
-                    "url" => url('/sharp/show/person/2')
+                    "url" => url('/sharp/show/person/2'),
+                    "name" => "person"
                 ]
             ],
             session("sharp_breadcrumb")
@@ -308,10 +349,12 @@ class BreadcrumbTest extends BaseApiTest
             [
                 [
                     "type" => "entityList",
-                    "url" => url('/sharp/list/person')
+                    "url" => url('/sharp/list/person'),
+                    "name" => "List"
                 ], [
                     "type" => "show",
-                    "url" => url('/sharp/show/person/1')
+                    "url" => url('/sharp/show/person/1'),
+                    "name" => "person"
                 ]
             ],
             session("sharp_breadcrumb")
@@ -329,13 +372,16 @@ class BreadcrumbTest extends BaseApiTest
             [
                 [
                     "type" => "entityList",
-                    "url" => url('/sharp/list/person')
+                    "url" => url('/sharp/list/person'),
+                    "name" => "List"
                 ], [
                     "type" => "show",
-                    "url" => url('/sharp/show/person/1')
+                    "url" => url('/sharp/show/person/1'),
+                    "name" => "person"
                 ], [
                     "type" => "form",
-                    "url" => url('/sharp/form/person/1')
+                    "url" => url('/sharp/form/person/1'),
+                    "name" => "Edit"
                 ]
             ],
             session("sharp_breadcrumb")
@@ -359,10 +405,12 @@ class BreadcrumbTest extends BaseApiTest
             [
                 [
                     "type" => "entityList",
-                    "url" => url('/sharp/list/person')
+                    "url" => url('/sharp/list/person'),
+                    "name" => "List"
                 ], [
                     "type" => "form",
-                    "url" => url('/sharp/form/person/1')
+                    "url" => url('/sharp/form/person/1'),
+                    "name" => "Edit"
                 ]
             ],
             session("sharp_breadcrumb")
@@ -386,10 +434,12 @@ class BreadcrumbTest extends BaseApiTest
             [
                 [
                     "type" => "show",
-                    "url" => url('/sharp/show/person')
+                    "url" => url('/sharp/show/person'),
+                    "name" => "person"
                 ], [
                     "type" => "form",
-                    "url" => url('/sharp/form/person/1')
+                    "url" => url('/sharp/form/person/1'),
+                    "name" => "Edit"
                 ]
             ],
             session("sharp_breadcrumb")
@@ -410,10 +460,12 @@ class BreadcrumbTest extends BaseApiTest
             [
                 [
                     "type" => "entityList",
-                    "url" => url('/sharp/list/person?filter_type=4&page=2')
+                    "url" => url('/sharp/list/person?filter_type=4&page=2'),
+                    "name" => "List"
                 ], [
                     "type" => "show",
-                    "url" => url('/sharp/show/person/1')
+                    "url" => url('/sharp/show/person/1'),
+                    "name" => "person"
                 ]
             ],
             session("sharp_breadcrumb")
@@ -429,10 +481,12 @@ class BreadcrumbTest extends BaseApiTest
             [
                 [
                     "type" => "entityList",
-                    "url" => url('/sharp/list/person')
+                    "url" => url('/sharp/list/person'),
+                    "name" => "List"
                 ], [
                     "type" => "show",
-                    "url" => url('/sharp/show/person/1')
+                    "url" => url('/sharp/show/person/1'),
+                    "name" => "person"
                 ]
             ],
             session("sharp_breadcrumb")
@@ -448,10 +502,12 @@ class BreadcrumbTest extends BaseApiTest
             [
                 [
                     "type" => "entityList",
-                    "url" => url('/sharp/list/person')
+                    "url" => url('/sharp/list/person'),
+                    "name" => "List"
                 ], [
                     "type" => "show",
-                    "url" => url('/sharp/show/person/1')
+                    "url" => url('/sharp/show/person/1'),
+                    "name" => "person"
                 ]
             ],
             session("sharp_breadcrumb")
@@ -525,10 +581,12 @@ class BreadcrumbTest extends BaseApiTest
             [
                 [
                     "type" => "entityList",
-                    "url" => url('/sharp/list/person')
+                    "url" => url('/sharp/list/person'),
+                    "name" => "List"
                 ], [
                     "type" => "show",
-                    "url" => url('/sharp/show/person/2')
+                    "url" => url('/sharp/show/person/2'),
+                    "name" => "person"
                 ]
             ],
             session("sharp_breadcrumb")
@@ -542,13 +600,16 @@ class BreadcrumbTest extends BaseApiTest
             [
                 [
                     "type" => "entityList",
-                    "url" => url('/sharp/list/person')
+                    "url" => url('/sharp/list/person'),
+                    "name" => "List"
                 ], [
                     "type" => "show",
-                    "url" => url('/sharp/show/person/2')
+                    "url" => url('/sharp/show/person/2'),
+                    "name" => "person"
                 ], [
                     "type" => "form",
-                    "url" => url('/sharp/form/person/2')
+                    "url" => url('/sharp/form/person/2'),
+                    "name" => "Edit"
                 ]
             ],
             session("sharp_breadcrumb")

@@ -5,9 +5,6 @@ return [
     'validation_error.title' => 'Your input is invalid.',
     'validation_error.description' => 'Please review your input, errors are detailed below each field.',
 
-    'breadcrumb.item_label.edit' => 'Edit of :entity_name «:instance_name»',
-    'breadcrumb.item_label.new' => 'New :entity_name',
-
     'list.remove_button' => 'Remove',
     'list.insert_button' => 'Insert',
     'list.sort_button.inactive' => 'Sort',
