@@ -70,7 +70,7 @@ new Vue({
         });
         if(this.$route.query['x-access-from']) {
             this.$router.replace({
-                ...this.$route,
+                path: this.$route.path,
                 query: {
                     ...this.$route.query,
                     'x-access-from': undefined

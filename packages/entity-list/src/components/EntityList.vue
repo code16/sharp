@@ -484,14 +484,14 @@
             formUrl({ formKey, instanceId }={}) {
                 return formUrl({
                     entityKey: formKey ? `${this.entityKey}:${formKey}` : this.entityKey,
-                    instanceId
-                });
+                    instanceId,
+                }, { append: this.inline });
             },
             showUrl({ instanceId }={}) {
                 return showUrl({
                     entityKey: this.entityKey,
                     instanceId,
-                });
+                }, { append: this.inline });
             },
             tryParseNumber(val) {
                 if(Array.isArray(val)) {

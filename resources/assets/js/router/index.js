@@ -19,7 +19,12 @@ export function router(fresh) {
     return currentRouter;
 }
 
-export function routeUrl(location, { normalized=true }={}) {
-    const { href } = router().resolve(location);
+export function routeUrl(location, { normalized=true, append }={}) {
+    let { href, route } = router().resolve(location);
+    if(append) {
+        const currentPath = router().currentRoute.path.replace(/\/$/, '');
+        const resolved = router().resolve(currentPath + route.path);
+        href = resolved.href;
+    }
     return normalized ? normalizeUrl(href) : href;
 }
