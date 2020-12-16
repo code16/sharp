@@ -2,6 +2,14 @@ import { normalizeUrl } from "./url";
 import { router } from "../router";
 import { BASE_URL } from "../consts";
 
+
+export function normalizeBreadcrumb(breadcrumb) {
+    return breadcrumb?.map(item => ({
+        ...item,
+        url: normalizeUrl(item.url),
+    }));
+}
+
 export function getBackUrl(breadcrumb) {
     const item = breadcrumb[breadcrumb.length - 2];
     return item ? normalizeUrl(item.url) : null;
