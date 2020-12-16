@@ -11,7 +11,7 @@
                     :can-edit="canEdit"
                     :can-change-state="canChangeState"
                     :show-back-button="showBackButton"
-                    :breadcrumb="breadcrumb.items"
+                    :breadcrumb="breadcrumbItems"
                     :show-breadcrumb="breadcrumb.visible"
                     @command="handleCommandRequested"
                     @state-change="handleStateChanged"
@@ -62,7 +62,7 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import { formUrl, getBackUrl, lang, showAlert } from 'sharp';
+    import { formUrl, getBackUrl, lang, showAlert, normalizeBreadcrumb } from 'sharp';
     import { CommandFormModal, CommandViewPanel } from 'sharp-commands';
     import { Grid } from 'sharp-ui';
     import { UnknownField } from 'sharp/components';
@@ -118,6 +118,9 @@
             },
             showBackButton() {
                 return !!this.backUrl;
+            },
+            breadcrumbItems() {
+                return normalizeBreadcrumb(this.breadcrumb.items);
             },
         },
 

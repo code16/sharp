@@ -61,9 +61,9 @@
         BASE_URL,
         getBackUrl,
         getDeleteBackUrl,
-        lang,
         logError,
         showAlert,
+        normalizeBreadcrumb
     } from "sharp";
 
     import { TabbedLayout, Grid, Dropdown, DropdownItem, } from 'sharp-ui';
@@ -194,7 +194,7 @@
                     showBackButton: this.isReadOnly,
                     create: !!this.isCreation,
                     uploading: this.isUploading,
-                    breadcrumb: this.breadcrumb?.items,
+                    breadcrumb: normalizeBreadcrumb(this.breadcrumb?.items),
                     showBreadcrumb: !!this.breadcrumb?.visible,
                 }
             },
