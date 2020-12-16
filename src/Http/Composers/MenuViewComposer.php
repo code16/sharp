@@ -29,9 +29,7 @@ class MenuViewComposer
             "name" => config("sharp.name", "Sharp"),
             "user" => sharp_user()->{config("sharp.auth.display_attribute", "name")},
             "menuItems" => $menuItems,
-            "currentEntity" => isset($view->entityKey)
-                ? explode(':', $view->entityKey)[0]
-                : ($view->dashboardKey ?? null)
+            "currentEntity" => (session("sharp_breadcrumb") ?? [])[0]["entity_key"] ?? null
         ]);
 
         $view->with('hasGlobalFilters', sizeof(config('sharp.global_filters') ?? []) > 0);
