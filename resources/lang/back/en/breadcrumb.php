@@ -6,8 +6,8 @@ return [
     'entityList' => 'List',
     'show' => ':entity',
     'form' => [
-        'edit' => 'Édition',
-        'edit_entity' => 'Édition “:entity”', // for sub entities: forms displayed from an EEL
-        'create' => 'Création “:entity”'
+        'edit' => 'Edit',
+        'edit_entity' => 'Edit “:entity”', // for sub entities: forms displayed from an EEL
+        'create' => 'New “:entity”'
     ],
 ];
