@@ -29,7 +29,8 @@ class StoreBreadcrumb
                 [
                     "type" => $type,
                     "url" => $this->getFullUrl($request),
-                    "name" => $this->determineBreadcrumbItemName()
+                    "name" => $this->determineBreadcrumbItemName(),
+                    "entity_key" => $this->determineEntityKey()
                 ]
             ]);
 
@@ -212,6 +213,7 @@ class StoreBreadcrumb
                         $this->determineEntityKey()
                     )),
                     "name" => $this->determineBreadcrumbItemName("entityList"),
+                    "entity_key" => $this->determineEntityKey()
                 ], [
                     "type" => "show",
                     "url" => request()->fullUrl(),
@@ -231,6 +233,7 @@ class StoreBreadcrumb
                         $this->determineEntityKey()
                     )),
                     "name" => $this->determineBreadcrumbItemName("entityList"),
+                    "entity_key" => $this->determineEntityKey()
                 ]
             ];
 
@@ -257,6 +260,7 @@ class StoreBreadcrumb
                         $this->determineEntityKey()
                     )),
                     "name" => $this->determineBreadcrumbItemName("show"),
+                    "entity_key" => $this->determineEntityKey()
                 ]
             ];
         }
