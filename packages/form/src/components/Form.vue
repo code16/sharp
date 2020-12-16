@@ -185,20 +185,6 @@
                 return Object.values(this.uploadingFields)
                     .some(uploading => !!uploading);
             },
-            breadcrumbItems() {
-                if(!this.breadcrumb?.items) {
-                    return null;
-                }
-                const items = [...this.breadcrumb.items];
-                const formItem = items.pop();
-                formItem.name = this.isCreation
-                    ? lang('form.breadcrumb.item_label.new').replace(':entity_name', formItem.name)
-                    : lang('form.breadcrumb.item_label.edit').replace(':instance_name', formItem.name);
-                return [
-                    ...items,
-                    formItem,
-                ]
-            },
             actionBarProps() {
                 return {
                     showSubmitButton: this.isCreation
@@ -208,7 +194,7 @@
                     showBackButton: this.isReadOnly,
                     create: !!this.isCreation,
                     uploading: this.isUploading,
-                    breadcrumb: this.breadcrumbItems,
+                    breadcrumb: this.breadcrumb?.items,
                     showBreadcrumb: !!this.breadcrumb?.visible,
                 }
             },
