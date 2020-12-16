@@ -7,7 +7,7 @@ import store from 'sharp/store';
 import { wait, MockI18n, nextRequestFulfilled } from "@sharp/test-utils";
 import moxios from 'moxios';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import { lang } from "sharp";
+import { lang, normalizeBreadcrumb } from "sharp";
 
 jest.mock('sharp');
 
@@ -434,6 +434,8 @@ describe('sharp-form', ()=>{
     test('setup action bar correctly', async () => {
         const wrapper = createWrapper();
 
+        normalizeBreadcrumb.mockImplementation(b => b);
+
         await nextRequestFulfilled({
             status: 200,
             response: {
@@ -442,6 +444,10 @@ describe('sharp-form', ()=>{
                     create: false,
                     update: false,
                     delete: false,
+                },
+                breadcrumb: {
+                    visible: true,
+                    items: [{ url:'/list' }]
                 }
             }
         });
@@ -451,6 +457,8 @@ describe('sharp-form', ()=>{
             showDeleteButton: false,
             showBackButton: true,
             create: true,
+            breadcrumb: [{ url:'/list' }],
+            showBreadcrumb: true,
         });
 
 
