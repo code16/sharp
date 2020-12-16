@@ -37,7 +37,7 @@ class AppendBreadcrumb
         $data = $jsonResponse->getData();
         $data->breadcrumb = [
             'items' => session("sharp_breadcrumb"),
-            'visible' => true,
+            'visible' => config("sharp.display_breadcrumb", false),
         ];
         $jsonResponse->setData($data);
 
