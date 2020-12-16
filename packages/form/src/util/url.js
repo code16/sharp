@@ -1,4 +1,4 @@
-import { routeUrl, router } from 'sharp/router';
+import { routeUrl } from 'sharp/router';
 
 export function formUrl({ entityKey, instanceId }, options) {
     return routeUrl({
