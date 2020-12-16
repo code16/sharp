@@ -682,4 +682,60 @@ class BreadcrumbTest extends BaseApiTest
             session("sharp_breadcrumb")
         );
     }
+
+    /** @test */
+    public function if_labels_are_defined_for_entities_in_the_config_they_are_used()
+    {
+        $this->buildTheWorld();
+
+        $this->app['config']->set(
+            'sharp.entities.person.label',
+            'Worker'
+        );
+
+        $this->app['config']->set(
+            'sharp.entities.subperson',
+            [
+                "label" => "Colleague",
+                "show" => PersonSharpShow::class
+            ]
+        );
+
+        $this->get('/sharp/list/person');
+        $this->get('/sharp/show/person/1?x-access-from=ui');
+        $this->assertEquals(
+            [
+                [
+                    "type" => "entityList",
+                    "url" => url('/sharp/list/person'),
+                    "name" => "List",
+                ], [
+                    "type" => "show",
+                    "url" => url('/sharp/show/person/1'),
+                    "name" => "Worker",
+                ]
+            ],
+            session("sharp_breadcrumb")
+        );
+
+        $this->get('/sharp/show/subperson/1?x-access-from=ui');
+        $this->assertEquals(
+            [
+                [
+                    "type" => "entityList",
+                    "url" => url('/sharp/list/person'),
+                    "name" => "List",
+                ], [
+                    "type" => "show",
+                    "url" => url('/sharp/show/person/1'),
+                    "name" => "Worker",
+                ], [
+                    "type" => "show",
+                    "url" => url('/sharp/show/subperson/1'),
+                    "name" => "Colleague",
+                ]
+            ],
+            session("sharp_breadcrumb")
+        );
+    }
 }

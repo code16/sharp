@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Http\Middleware;
 
 use Closure;
+use Code16\Sharp\Form\SharpSingleForm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -119,7 +120,14 @@ class StoreBreadcrumb
 
     private function isSingleFormRequest(): bool
     {
-        return request()->is(sprintf('%s/form/*', sharp_base_url_segment())) && !$this->isFormRequest();
+        if(!$this->isFormRequest() || $this->determineInstanceId() !== null) {
+            return false;
+        } 
+        
+        return is_subclass_of(
+            config("sharp.entities.{$this->determineEntityKey()}.form"), 
+            SharpSingleForm::class
+        );
     }
 
     private function isListRequest(): bool
@@ -164,19 +172,28 @@ class StoreBreadcrumb
             case "dashboard":
                 return trans("sharp::breadcrumb.dashboard");
             case "show":
-                return trans("sharp::breadcrumb.show", ["entity" => $currentEntityKey]);
+                return trans("sharp::breadcrumb.show", ["entity" => $this->determineEntityLabel($currentEntityKey)]);
             case "form":
-                // We know it's a leaf: forms can't be piled upon
+                // A Form is always a leaf
                 if($this->determineInstanceId() || $this->isSingleFormRequest()) {
                     if($previousEntityKey !== null && $previousEntityKey !== $currentEntityKey) {
-                        return trans("sharp::breadcrumb.form.edit_entity", ["entity" => $currentEntityKey]);
+                        // The form entityKey is different from the previous entityKey in the breadcrumb:
+                        // we are in a EEL case.
+                        return trans("sharp::breadcrumb.form.edit_entity", ["entity" => $this->determineEntityLabel($currentEntityKey)]);
                     }
                     return trans("sharp::breadcrumb.form.edit");
                 }
-                return trans("sharp::breadcrumb.form.create", ["entity" => $currentEntityKey]);
+                return trans("sharp::breadcrumb.form.create", ["entity" => $this->determineEntityLabel($currentEntityKey)]);
         }
         
-        return $currentEntityKey;
+        return $this->determineEntityLabel($currentEntityKey);
+    }
+
+    private function determineEntityLabel(?string $entityKey): string
+    {
+        return $entityKey 
+            ? config("sharp.entities.$entityKey.label", $entityKey) 
+            : "";
     }
 
     /**
