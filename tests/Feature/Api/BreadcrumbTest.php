@@ -106,6 +106,39 @@ class BreadcrumbTest extends BaseApiTest
     }
 
     /** @test */
+    public function we_can_pile_up_a_form_from_a_embedded_entity_list_of_a_show()
+    {
+        $this->buildTheWorld();
+
+        $this->app['config']->set(
+            'sharp.entities.subperson.form',
+            PersonSharpForm::class
+        );
+
+        $this->get('/sharp/list/person');
+        $this->get('/sharp/show/person/1?x-access-from=ui');
+        $this->get('/sharp/form/subperson/1?x-access-from=ui');
+        $this->assertEquals(
+            [
+                [
+                    "type" => "entityList",
+                    "url" => url('/sharp/list/person'),
+                    "name" => "List",
+                ], [
+                "type" => "show",
+                "url" => url('/sharp/show/person/1'),
+                "name" => "person",
+            ], [
+                    "type" => "form",
+                    "url" => url('/sharp/form/subperson/1'),
+                    "name" => "Edit “subperson”",
+                ]
+            ],
+            session("sharp_breadcrumb")
+        );
+    }
+
+    /** @test */
     public function breadcrumb_path_is_reset_if_we_navigate_to_a_list()
     {
         $this->buildTheWorld();

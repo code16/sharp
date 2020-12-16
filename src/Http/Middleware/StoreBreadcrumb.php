@@ -60,11 +60,15 @@ class StoreBreadcrumb
                             $breadcrumb,
                             $request->header("referer")
                         );
-
+                        
+                        $previousEntityKey = $this->determineEntityKey(
+                            explode("/", parse_url($breadcrumb[sizeof($breadcrumb)-1]["url"])["path"])[3]
+                        );
+                        
                         $breadcrumb[] = [
                             "type" => $type,
                             "url" => $this->getFullUrl($request),
-                            "name" => $this->determineBreadcrumbItemName()
+                            "name" => $this->determineBreadcrumbItemName($type, $previousEntityKey)
                         ];
                     }
 
@@ -135,9 +139,9 @@ class StoreBreadcrumb
             || $this->isSingleShowRequest();
     }
 
-    protected function determineEntityKey(): ?string
+    protected function determineEntityKey(string $key = null): ?string
     {
-        $key = request()->segment(3);
+        $key = $key ?: request()->segment(3);
 
         return strpos($key, ":") !== false
             ? explode(":", $key)[0]
@@ -149,9 +153,10 @@ class StoreBreadcrumb
         return request()->segment(4);
     }
 
-    protected function determineBreadcrumbItemName(string $type = null): string
+    protected function determineBreadcrumbItemName(string $type = null, string $previousEntityKey = null): string
     {
         $type = $type ?: $this->getRequestType();
+        $currentEntityKey = $this->determineEntityKey();
         
         switch ($type) {
             case "entityList":
@@ -159,16 +164,19 @@ class StoreBreadcrumb
             case "dashboard":
                 return trans("sharp::breadcrumb.dashboard");
             case "show":
-                return trans("sharp::breadcrumb.show", ["entity" => $this->determineEntityKey()]);
+                return trans("sharp::breadcrumb.show", ["entity" => $currentEntityKey]);
             case "form":
                 // We know it's a leaf: forms can't be piled upon
                 if($this->determineInstanceId() || $this->isSingleFormRequest()) {
+                    if($previousEntityKey !== null && $previousEntityKey !== $currentEntityKey) {
+                        return trans("sharp::breadcrumb.form.edit_entity", ["entity" => $currentEntityKey]);
+                    }
                     return trans("sharp::breadcrumb.form.edit");
                 }
-                return trans("sharp::breadcrumb.form.create", ["entity" => $this->determineEntityKey()]);
+                return trans("sharp::breadcrumb.form.create", ["entity" => $currentEntityKey]);
         }
         
-        return $this->determineEntityKey();
+        return $currentEntityKey;
     }
 
     /**
