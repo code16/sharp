@@ -22,6 +22,7 @@
 
     import localize from '../../../mixins/localize/editor';
     import { buttons } from './config';
+    import { handleMarkdownTables } from "./tables";
 
     const noop = ()=>{};
 
@@ -351,8 +352,7 @@
             },
 
             createSimpleMDE({ element, initialValue }) {
-                //console.log('initialValue',initialValue);
-                let simplemde = new SimpleMDE({
+                const simplemde = new SimpleMDE({
                     element,
                     initialValue,
                     placeholder: this.placeholder,
@@ -379,6 +379,8 @@
                 this.codemirrorOn(codemirror, 'cursorActivity', this.onCursorActivity, true);
                 this.codemirrorOn(codemirror, 'change', this.onChange);
                 this.codemirrorOn(codemirror, 'beforeChange',this.onBeforeChange);
+
+                handleMarkdownTables(codemirror);
             }
         },
         mounted() {
