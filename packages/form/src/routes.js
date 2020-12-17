@@ -1,9 +1,10 @@
 import FormPage from './components/pages/FormPage';
 
 export default [
+    /** New spec */
     {
         name: 'form',
-        path: '(.*)?/form/:entityKey/:instanceId?',
+        path: '(.*)?/s-form/:entityKey/:instanceId?',
         component: FormPage,
     }
 ]

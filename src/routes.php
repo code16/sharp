@@ -134,27 +134,27 @@ Route::group([
         ->name("code16.sharp.logout")
         ->uses('LoginController@destroy');
 
-    Route::get('/list/{entityKey}')
+    Route::get('/s-list/{entityKey}')
         ->name("code16.sharp.list")
         ->middleware('sharp_store_breadcrumb')
         ->uses('ListController@show');
 
-    Route::get('/show/{entityKey}/{instanceId?}')
+    Route::get('/s-show/{entityKey}/{instanceId?}')
         ->name("code16.sharp.show")
         ->middleware('sharp_store_breadcrumb')
         ->uses('ShowController@show');
 
-    Route::get('/form/{entityKey}/{instanceId}')
+    Route::get('/s-form/{entityKey}/{instanceId}')
         ->name("code16.sharp.edit")
         ->middleware('sharp_store_breadcrumb')
         ->uses('FormController@edit');
 
-    Route::get('/form/{entityKey}')
+    Route::get('/s-form/{entityKey}')
         ->name("code16.sharp.create")
         ->middleware('sharp_store_breadcrumb')
         ->uses('FormController@create');
 
-    Route::get('/dashboard/{dashboardKey}')
+    Route::get('/s-dashboard/{dashboardKey}')
         ->name("code16.sharp.dashboard")
         ->middleware('sharp_store_breadcrumb')
         ->uses('DashboardController@show');

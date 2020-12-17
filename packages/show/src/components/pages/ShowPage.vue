@@ -111,7 +111,7 @@
                 return formUrl({
                     entityKey: this.entityKey,
                     instanceId: this.instanceId,
-                });
+                }, { append: true });
             },
             backUrl() {
                 return getBackUrl(this.breadcrumb.items);

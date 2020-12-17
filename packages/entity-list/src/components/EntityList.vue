@@ -485,13 +485,13 @@
                 return formUrl({
                     entityKey: formKey ? `${this.entityKey}:${formKey}` : this.entityKey,
                     instanceId,
-                }, { append: this.inline });
+                }, { append: true });
             },
             showUrl({ instanceId }={}) {
                 return showUrl({
                     entityKey: this.entityKey,
                     instanceId,
-                }, { append: this.inline });
+                }, { append: true });
             },
             tryParseNumber(val) {
                 if(Array.isArray(val)) {
