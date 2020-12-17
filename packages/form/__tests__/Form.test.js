@@ -7,7 +7,7 @@ import store from 'sharp/store';
 import { wait, MockI18n, nextRequestFulfilled } from "@sharp/test-utils";
 import moxios from 'moxios';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import { lang, normalizeBreadcrumb } from "sharp";
+import { lang } from "sharp";
 
 jest.mock('sharp');
 
@@ -433,8 +433,6 @@ describe('sharp-form', ()=>{
 
     test('setup action bar correctly', async () => {
         const wrapper = createWrapper();
-
-        normalizeBreadcrumb.mockImplementation(b => b);
 
         await nextRequestFulfilled({
             status: 200,
