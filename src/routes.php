@@ -1,6 +1,14 @@
 <?php
 
 // API routes
+use Code16\Sharp\Http\Api\FormUploadController;
+use Code16\Sharp\Http\DashboardController;
+use Code16\Sharp\Http\HomeController;
+use Code16\Sharp\Http\ListController;
+use Code16\Sharp\Http\LoginController;
+use Code16\Sharp\Http\SingleShowController;
+use Code16\Sharp\Http\WebDispatchController;
+
 Route::group([
     'prefix' => '/' . sharp_base_url_segment() . '/api',
     'middleware' => ['sharp_web', 'sharp_api_errors', 'sharp_api_context', 'sharp_api_validation', 'sharp_locale'],
@@ -118,50 +126,35 @@ Route::group([
     'namespace' => 'Code16\Sharp\Http'
 ], function() {
 
-    Route::get('/login')
-        ->name("code16.sharp.login")
-        ->uses('LoginController@create');
+    Route::get('/login', [LoginController::class, "create"])
+        ->name("code16.sharp.login");
 
-    Route::post('/login')
-        ->name("code16.sharp.login.post")
-        ->uses('LoginController@store');
+    Route::post('/login', [LoginController::class, "store"])
+        ->name("code16.sharp.login.post");
 
-    Route::get('/')
-        ->name("code16.sharp.home")
-        ->uses('HomeController@index');
+    Route::get('/', [HomeController::class, "index"])
+        ->name("code16.sharp.home");
 
-    Route::get('/logout')
-        ->name("code16.sharp.logout")
-        ->uses('LoginController@destroy');
+    Route::get('/logout', [LoginController::class, "destroy"])
+        ->name("code16.sharp.logout");
 
-    Route::get('/s-list/{entityKey}')
-        ->name("code16.sharp.list")
-        ->middleware('sharp_store_breadcrumb')
-        ->uses('ListController@show');
+    Route::get('/s-list/{entityKey}', [ListController::class, "show"])
+        ->name("code16.sharp.list");
 
-    Route::get('/s-show/{entityKey}/{instanceId?}')
-        ->name("code16.sharp.show")
-        ->middleware('sharp_store_breadcrumb')
-        ->uses('ShowController@show');
+    Route::get('/s-show/{entityKey}', [SingleShowController::class, "show"])
+        ->name("code16.sharp.single-show");
 
-    Route::get('/s-form/{entityKey}/{instanceId}')
-        ->name("code16.sharp.edit")
-        ->middleware('sharp_store_breadcrumb')
-        ->uses('FormController@edit');
+    Route::get('/s-list/{entityKey}/{uri}', [WebDispatchController::class, "index"])
+        ->where("uri", ".*");
 
-    Route::get('/s-form/{entityKey}')
-        ->name("code16.sharp.create")
-        ->middleware('sharp_store_breadcrumb')
-        ->uses('FormController@create');
+    Route::get('/s-show/{entityKey}/{uri}', [WebDispatchController::class, "index"])
+        ->where("uri", ".*");
 
-    Route::get('/s-dashboard/{dashboardKey}')
-        ->name("code16.sharp.dashboard")
-        ->middleware('sharp_store_breadcrumb')
-        ->uses('DashboardController@show');
+    Route::get('/s-dashboard/{dashboardKey}', [DashboardController::class, "show"])
+        ->name("code16.sharp.dashboard");
 
-    Route::post('/api/upload')
-        ->name("code16.sharp.api.form.upload")
-        ->uses('Api\FormUploadController@store');
+    Route::post('/api/upload', [FormUploadController::class, "store"])
+        ->name("code16.sharp.api.form.upload");
 });
 
 // Localization

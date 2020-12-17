@@ -28,7 +28,7 @@ class SharpPanelTest extends SharpTestCase
             ->setLink('entity');
 
         $this->assertArraySubset(
-            ["link" => url("sharp/list/entity")],
+            ["link" => url("sharp/s-list/entity")],
             $widget->toArray()
         );
     }
@@ -54,7 +54,7 @@ class SharpPanelTest extends SharpTestCase
             ->setLink('entity', null, ["page" => 1, "filter_one" => "something"]);
 
         $this->assertArraySubset(
-            ["link" => url("sharp/list/entity") . "?page=1&filter_one=something"],
+            ["link" => url("sharp/s-list/entity") . "?page=1&filter_one=something"],
             $widget->toArray()
         );
     }

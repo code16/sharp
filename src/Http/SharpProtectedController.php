@@ -10,5 +10,4 @@ class SharpProtectedController extends Controller
     {
         $this->middleware('sharp_auth' . (config('sharp.auth.guard') ? ':' . config('sharp.auth.guard') : ''));
     }
-
 }

@@ -5,11 +5,7 @@ namespace Code16\Sharp\Http;
 class ListController extends SharpProtectedController
 {
 
-    /**
-     * @param string $entityKey
-     * @return \Illuminate\View\View
-     */
-    public function show($entityKey)
+    public function show(string $entityKey)
     {
         return view("sharp::list", compact('entityKey'));
     }
