@@ -21,13 +21,14 @@ class CustomUrlSegmentTest extends BaseApiTest
     public function we_can_define_a_custom_url_segment_for_http_routes()
     {
         $this->buildTheWorld();
+        $this->withoutExceptionHandling();
 
-        $this->get(route('code16.sharp.login'))->assertStatus(200);
+        $this->get(route('code16.sharp.login'))->assertOk();
         $this->assertEquals($this->baseUrl . '/test/login', request()->url());
 
         $this->login();
 
-        $this->get(route('code16.sharp.api.list', 'person'))->assertStatus(200);
+        $this->getJson(route('code16.sharp.api.list', 'person'))->assertOk();
         $this->assertEquals($this->baseUrl . '/test/api/list/person', request()->url());
     }
 }

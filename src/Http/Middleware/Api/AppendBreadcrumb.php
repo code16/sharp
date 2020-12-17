@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Http\Middleware\Api;
 
 use Closure;
+use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -12,56 +13,40 @@ use Illuminate\Http\Request;
  */
 class AppendBreadcrumb
 {
+    /** @var CurrentSharpRequest */
+    protected $currentSharpRequest;
+
+    public function __construct(CurrentSharpRequest $currentSharpRequest)
+    {
+        $this->currentSharpRequest = $currentSharpRequest;
+    }
+
     public function handle(Request $request, Closure $next)
     {
         $response = $next($request);
 
         return $response->isOk()
-            ? $this->addBreadcrumbToJsonResponse($request->header("referer"), $response)
+            ? $this->addBreadcrumbToJsonResponse($response)
             : $response;
     }
 
-    protected function addBreadcrumbToJsonResponse(string $referer, JsonResponse $jsonResponse): JsonResponse
+    protected function addBreadcrumbToJsonResponse(JsonResponse $jsonResponse): JsonResponse
     {
-        $segments = collect(explode("/", parse_url($referer)["path"]))
-            ->filter(function(string $segment) {
-                return strlen(trim($segment)) && $segment !== "sharp";
-            })
-            ->values();
-        
-        $groups[] = [
-            $segments[0], 
-            $segments[1]
-        ];
-
-        $segments = $segments->slice(2)->values();
-        
-        while($segments->count()) {
-            $newGroup = array_merge(
-                [$segments->shift()], // First segment is s-form or s-show
-                $segments->takeWhile(function(string $segment) {
-                    return !in_array($segment, ["s-show", "s-form"]); 
-                })
-                ->toArray()
-            );
-
-            $segments = $segments->slice(count($newGroup)-1)->values();
-
-            $groups[] = $newGroup;
-        }
-
         $url = sharp_base_url_segment();
         $data = $jsonResponse->getData();
         $data->breadcrumb = [
-            'items' => collect($groups)
-                ->map(function(array $group) use(&$url) {
+            "items" => $this->currentSharpRequest
+                ->breadcrumb()
+                ->map(function($item) use(&$url) {
                     $url = sprintf('%s/%s/%s', 
                         $url, 
-                        $group[0],
-                        count($group) === 2 ? $group[1] : "{$group[1]}/{$group[2]}"
+                        $item->type,
+                        isset($item->instance) ? "{$item->key}/{$item->instance}" : $item->key
                     );
                     return [
-                        "type" => $this->getTypeFrontNameFor($group[0]),
+                        "type" => $this->getFrontTypeNameFor($item->type),
+                        "name" => $this->getBreadcrumbLabelFor($item),
+                        "entityKey" => $item->key,
                         "url" => url($url)
                     ];
                 }),
@@ -72,7 +57,7 @@ class AppendBreadcrumb
         return $jsonResponse;
     }
 
-    private function getTypeFrontNameFor(string $type): string
+    private function getFrontTypeNameFor(string $type): string
     {
         return [
             "s-list" => "entityList",
@@ -80,5 +65,38 @@ class AppendBreadcrumb
             "s-show" => "show",
             "s-dashboard" => "dashboard"
         ][$type] ?? "";
+    }
+
+    private function getBreadcrumbLabelFor(object $item)
+    {
+        switch ($item->type) {
+            case "s-list":
+                return trans("sharp::breadcrumb.entityList");
+            case "s-dashboard":
+                return trans("sharp::breadcrumb.dashboard");
+            case "s-show":
+                return trans("sharp::breadcrumb.show", ["entity" => $this->getEntityLabel($item->key)]);
+            case "s-form":
+                // A Form is always a leaf
+                $previousItem = $this->currentSharpRequest->breadcrumb()[$item->depth-1];
+                if(isset($item->instance) || ($previousItem->type === "s-show" && !isset($previousItem->instance))) {
+                    if($previousItem->key !== $item->key) {
+                        // The form entityKey is different from the previous entityKey
+                        // in the breadcrumb: we are in a EEL case.
+                        return trans("sharp::breadcrumb.form.edit_entity", ["entity" => $this->getEntityLabel($item->key)]);
+                    }
+                    return trans("sharp::breadcrumb.form.edit");
+                }
+                return trans("sharp::breadcrumb.form.create", ["entity" => $this->getEntityLabel($item->key)]);
+        }
+        
+        return $item->key;
+    }
+
+    private function getEntityLabel(?string $entityKey): string
+    {
+        return $entityKey
+            ? config("sharp.entities.$entityKey.label", $entityKey)
+            : "";
     }
 }

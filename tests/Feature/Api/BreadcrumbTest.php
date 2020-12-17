@@ -19,60 +19,9 @@ class BreadcrumbTest extends BaseApiTest
     }
 
     /** @test */
-    public function breadcrumb_path_is_stored_as_we_navigate()
+    public function breadcrumb_is_built_depending_on_referer()
     {
-        $this->buildTheWorld();
-
-        $this->get('/sharp/s-list/person');
-        $this->assertEquals(
-            [
-                [
-                    "type" => "entityList",
-                    "url" => url('/sharp/s-list/person'),
-                    "name" => "List",
-                    "entity_key" => "person" 
-                ]
-            ],
-            session("sharp_breadcrumb")
-        );
-
-        $this->get('/sharp/show/person/1?x-access-from=ui');
-        $this->assertEquals(
-            [
-                [
-                    "type" => "entityList",
-                    "url" => url('/sharp/s-list/person'),
-                    "name" => "List",
-                    "entity_key" => "person"
-                ], [
-                    "type" => "show",
-                    "url" => url('/sharp/show/person/1'),
-                    "name" => "person",
-                ]
-            ],
-            session("sharp_breadcrumb")
-        );
-
-        $this->get('/sharp/form/person/1?x-access-from=ui');
-        $this->assertEquals(
-            [
-                [
-                    "type" => "entityList",
-                    "url" => url('/sharp/s-list/person'),
-                    "name" => "List",
-                    "entity_key" => "person"
-                ], [
-                    "type" => "show",
-                    "url" => url('/sharp/show/person/1'),
-                    "name" => "person",
-                ], [
-                    "type" => "form",
-                    "url" => url('/sharp/form/person/1'),
-                    "name" => "Edit",
-                ]
-            ],
-            session("sharp_breadcrumb")
-        );
+        
     }
 
     /** @test */

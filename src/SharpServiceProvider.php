@@ -2,10 +2,12 @@
 
 namespace Code16\Sharp;
 
+use App\Utils\CurrentCart;
 use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Composers\AssetViewComposer;
 use Code16\Sharp\Http\Composers\MenuViewComposer;
+use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Http\Middleware\Api\AddSharpContext;
 use Code16\Sharp\Http\Middleware\Api\AppendBreadcrumb;
 use Code16\Sharp\Http\Middleware\Api\AppendFormAuthorizations;
@@ -70,6 +72,10 @@ class SharpServiceProvider extends ServiceProvider
 
         $this->app->singleton(
             SharpAuthorizationManager::class, SharpAuthorizationManager::class
+        );
+
+        $this->app->singleton(
+            CurrentSharpRequest::class, CurrentSharpRequest::class
         );
 
         $this->commands([
