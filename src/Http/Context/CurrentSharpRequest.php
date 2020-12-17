@@ -44,15 +44,16 @@ class CurrentSharpRequest
     {
         $this->breadcrumb = new Collection();
         $segments = $this->getSegmentsFromRequest();
+        $depth = 0;
         
         if(count($segments) !== 0) {
             $this->breadcrumb->add(
-                (new BreadcrumbItem($segments[0], $segments[1]))->setDepth(0)
+                (new BreadcrumbItem($segments[0], $segments[1]))->setDepth($depth++)
             );
 
             $segments = $segments->slice(2)->values();
 
-            for ($k = 0; $k < $segments->count(); $k++) {
+            while ($segments->count() > 0) {
                 $type = $segments->shift();
                 $key = $instance = null;
                 $segments
@@ -72,7 +73,7 @@ class CurrentSharpRequest
 
                 $this->breadcrumb->add(
                     (new BreadcrumbItem($type, $key))
-                        ->setDepth($k + 1)
+                        ->setDepth($depth++)
                         ->setInstance($instance)
                 );
             }
