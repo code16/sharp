@@ -22,7 +22,7 @@ export function routeUrl(location, { append }={}) {
     let { href, route } = router().resolve(location);
     if(append) {
         const currentPath = router().currentRoute.path.replace(/\/$/, '');
-        const resolved = router().resolve(currentPath + route.path);
+        const resolved = router().resolve(currentPath + route.fullPath);
         href = resolved.href;
     }
     return href;
