@@ -18,7 +18,6 @@ use Code16\Sharp\Http\Middleware\Api\SetSharpLocale;
 use Code16\Sharp\Http\Middleware\InvalidateCache;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
-use Code16\Sharp\Http\Middleware\StoreBreadcrumb;
 use Code16\Sharp\Http\SharpContext;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -177,9 +176,6 @@ class SharpServiceProvider extends ServiceProvider
 
         )->aliasMiddleware(
             'sharp_guest', SharpRedirectIfAuthenticated::class
-
-        )->aliasMiddleware(
-            'sharp_store_breadcrumb', StoreBreadcrumb::class
 
         )->aliasMiddleware(
             'sharp_invalidate_cache', InvalidateCache::class
