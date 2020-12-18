@@ -131,9 +131,8 @@
             },
             getFocusedItem() {
                 const route = getReferrerRoute();
-                if(route
-                    && route.name
-                    && route.params.entityKey.replace(/:(.*)/, '') === this.entityListKey
+                if(route?.name
+                    && route.params.entityKey?.replace(/:(.*)/, '') === this.entityListKey
                     && route.params.instanceId
                 ) {
                     return Number(route.params.instanceId);
