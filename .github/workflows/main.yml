@@ -33,8 +33,8 @@ jobs:
               TESTBENCH: 4.*
           - php: 7.2
             env:
-              LARAVEL: 6.*
-              TESTBENCH: 4.*
+              LARAVEL: 7.*
+              TESTBENCH: 5.*
           - php: 7.3
             env:
               LARAVEL: 7.*
