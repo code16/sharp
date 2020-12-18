@@ -7,7 +7,6 @@ use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Composers\AssetViewComposer;
 use Code16\Sharp\Http\Composers\MenuViewComposer;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
-use Code16\Sharp\Http\Middleware\Api\AddSharpContext;
 use Code16\Sharp\Http\Middleware\Api\AppendBreadcrumb;
 use Code16\Sharp\Http\Middleware\Api\AppendFormAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendListAuthorizations;
@@ -19,7 +18,6 @@ use Code16\Sharp\Http\Middleware\Api\SetSharpLocale;
 use Code16\Sharp\Http\Middleware\InvalidateCache;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
-use Code16\Sharp\Http\SharpContext;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Intervention\Image\ImageServiceProviderLaravelRecent;
@@ -64,10 +62,6 @@ class SharpServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'sharp');
 
         $this->registerMiddleware();
-
-        $this->app->singleton(
-            SharpContext::class, SharpContext::class
-        );
 
         $this->app->singleton(
             SharpAuthorizationManager::class, SharpAuthorizationManager::class
@@ -163,9 +157,6 @@ class SharpServiceProvider extends ServiceProvider
 
         )->aliasMiddleware(
             'sharp_api_errors', HandleSharpApiErrors::class
-
-        )->aliasMiddleware(
-            'sharp_api_context', AddSharpContext::class
 
         )->aliasMiddleware(
             'sharp_api_validation', BindSharpValidationResolver::class

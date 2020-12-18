@@ -23,7 +23,7 @@ use Code16\Sharp\Http\WebDispatchController;
 // API routes
 Route::group([
     'prefix' => '/' . sharp_base_url_segment() . '/api',
-    'middleware' => ['sharp_web', 'sharp_api_errors', 'sharp_api_context', 'sharp_api_validation', 'sharp_locale'],
+    'middleware' => ['sharp_web', 'sharp_api_errors', 'sharp_api_validation', 'sharp_locale'],
 ], function() {
 
     Route::get("/dashboard/{dashboardKey}", [\Code16\Sharp\Http\Api\DashboardController::class, "show"])

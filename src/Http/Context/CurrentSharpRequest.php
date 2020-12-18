@@ -21,22 +21,43 @@ class CurrentSharpRequest
 
     public function isShow(): bool
     {
-        return $this->breadcrumb()->last()->isShow();
+        $last = $this->breadcrumb()->last();
+        return $last ? $last->isShow() : false;
     }
 
     public function isForm(): bool
     {
-        return $this->breadcrumb()->last()->isForm();
+        $last = $this->breadcrumb()->last();
+        return $last ? $last->isForm() : false;
     }
 
-    public function entityKey(): string
+    public function entityKey(): ?string
     {
-        return $this->breadcrumb()->last()->entityKey();
+        $last = $this->breadcrumb()->last();
+        return $last ? $last->entityKey() : null;
     }
 
     public function instanceId(): ?string
     {
-        return $this->breadcrumb()->last()->instanceId();
+        $last = $this->breadcrumb()->last();
+        return $last ? $last->instanceId() : null;
+    }
+
+    /**
+     * @param string $filterName
+     * @return array|string|null
+     */
+    public function globalFilterFor(string $filterName)
+    {
+        if(!$handlerClass = config("sharp.global_filters.$filterName")) {
+            return null;
+        }
+
+        if(session()->has("_sharp_retained_global_filter_$filterName")) {
+            return session()->get("_sharp_retained_global_filter_$filterName");
+        }
+
+        return app($handlerClass)->defaultValue();
     }
 
     private function buildBreadcrumb(): void
