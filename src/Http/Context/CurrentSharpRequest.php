@@ -19,28 +19,57 @@ class CurrentSharpRequest
         return $this->breadcrumb;
     }
 
+    public function getCurrentBreadcrumbItem(): ?BreadcrumbItem
+    {
+        return $this->breadcrumb()->last();
+    }
+
+    public function getPreviousShowFromBreadcrumbItems(): ?BreadcrumbItem
+    {
+        return $this->breadcrumb()
+            ->reverse()
+            ->filter->isShow()
+            ->first();
+    }
+
     public function isShow(): bool
     {
-        $last = $this->breadcrumb()->last();
-        return $last ? $last->isShow() : false;
+        $current = $this->getCurrentBreadcrumbItem();
+        return $current ? $current->isShow() : false;
     }
 
     public function isForm(): bool
     {
-        $last = $this->breadcrumb()->last();
-        return $last ? $last->isForm() : false;
+        $current = $this->getCurrentBreadcrumbItem();
+        return $current ? $current->isForm() : false;
+    }
+
+    public function isCreation(): bool
+    {
+        $current = $this->getCurrentBreadcrumbItem();
+        return $current 
+            ? $current->isForm() && !$current->isSingleForm() && $current->instanceId() === null 
+            : false;
+    }
+
+    public function isUpdate(): bool
+    {
+        $current = $this->getCurrentBreadcrumbItem();
+        return $current
+            ? $current->isForm() && ($current->isSingleForm() || $current->instanceId() !== null)
+            : false;
     }
 
     public function entityKey(): ?string
     {
-        $last = $this->breadcrumb()->last();
-        return $last ? $last->entityKey() : null;
+        $current = $this->getCurrentBreadcrumbItem();
+        return $current ? $current->entityKey() : null;
     }
 
     public function instanceId(): ?string
     {
-        $last = $this->breadcrumb()->last();
-        return $last ? $last->instanceId() : null;
+        $current = $this->getCurrentBreadcrumbItem();
+        return $current ? $current->instanceId() : null;
     }
 
     /**

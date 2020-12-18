@@ -24,11 +24,10 @@ use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
-use Code16\Sharp\Http\WithSharpContext;
 
 class SpaceshipSharpForm extends SharpForm
 {
-    use WithSharpFormEloquentUpdater, WithSharpContext;
+    use WithSharpFormEloquentUpdater;
 
     function buildFormFields()
     {
@@ -291,7 +290,7 @@ class SpaceshipSharpForm extends SharpForm
     function update($id, array $data)
     {
         $instance = $id ? Spaceship::findOrFail($id) : new Spaceship([
-            "corporation_id" => $this->context()->globalFilterFor("corporation")
+            "corporation_id" => currentSharpRequest()->globalFilterFor("corporation")
         ]);
 
         if(($data["name"]["fr"] ?? "") == "error") {

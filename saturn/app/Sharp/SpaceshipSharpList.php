@@ -15,13 +15,10 @@ use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\Eloquent\Transformers\SharpUploadModelAttributeTransformer;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
-use Code16\Sharp\Http\WithSharpContext;
-use Code16\Sharp\Utils\LinkToEntity;
+use Code16\Sharp\Utils\Links\LinkToEntityList;
 
 class SpaceshipSharpList extends SharpEntityList
 {
-    use WithSharpContext;
-
     function buildListDataContainers()
     {
         $this->addDataContainer(
@@ -85,7 +82,7 @@ class SpaceshipSharpList extends SharpEntityList
     function getListData(EntityListQueryParams $params)
     {
         $spaceships = Spaceship::select("spaceships.*")
-            ->where("corporation_id", $this->context()->globalFilterFor("corporation"))
+            ->where("corporation_id", currentSharpRequest()->globalFilterFor("corporation"))
             ->distinct();
 
         if($params->specificIds()) {
@@ -127,25 +124,10 @@ class SpaceshipSharpList extends SharpEntityList
             })
             ->setCustomTransformer("pilots", function($pilots, $spaceship) {
                 return $spaceship->pilots->map(function($pilot) {
-                    LinkToEntityList::createFor("pilot")
+                    return LinkToEntityList::make("pilot")
                         ->setSearch($pilot->name)
-                        ->addFilter("age", 27)
-                        ->renderAsText($pilot->name);
-                    
-                    LinkToShowPage::createFor("pilot", $pilot->id)
-                        ->renderAsText($pilot->name);
-
-                    LinkToSingleShowPage::createFor("pilot")
-                        ->renderAsText($pilot->name);
-
-                    LinkToForm::createFor("pilot", $pilot->id)
-                        ->throughShowPage()
-                        ->renderAsText($pilot->name);
-
-                    return (new LinkToEntity($pilot->name, "pilot"))
                         ->setTooltip("See related pilot")
-                        ->setSearch($pilot->name)
-                        ->render();
+                        ->renderAsText($pilot->name);
                 })->implode("<br>");
             })
             ->setCustomTransformer("picture", new SharpUploadModelAttributeTransformer(100))

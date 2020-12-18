@@ -2,6 +2,9 @@
 
 namespace Code16\Sharp\Http\Context\Util;
 
+use Code16\Sharp\Form\SharpSingleForm;
+use Code16\Sharp\Show\SharpSingleShow;
+
 class BreadcrumbItem
 {
     /** @var string */
@@ -39,9 +42,23 @@ class BreadcrumbItem
         return $this->type === "s-show";
     }
 
+    public function isSingleShow(): bool
+    {
+        return $this->isShow() 
+            && $this->instanceId() === null
+            && is_subclass_of(config("sharp.entities.{$this->entityKey()}.show"), SharpSingleShow::class);
+    }
+
     public function isForm(): bool
     {
         return $this->type === "s-form";
+    }
+
+    public function isSingleForm(): bool
+    {
+        return $this->isForm() 
+            && $this->instanceId() === null
+            && is_subclass_of(config("sharp.entities.{$this->entityKey()}.form"), SharpSingleForm::class);
     }
 
     public function entityKey(): string
