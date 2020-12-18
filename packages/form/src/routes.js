@@ -4,7 +4,7 @@ export default [
     /** New spec */
     {
         name: 'form',
-        path: '(.*)?/s-form/:entityKey/:instanceId?',
+        path: '/(.*)?/s-form/:entityKey/:instanceId?',
         component: FormPage,
     }
 ]
