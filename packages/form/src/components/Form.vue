@@ -193,6 +193,8 @@
                     showBackButton: this.isReadOnly,
                     create: !!this.isCreation,
                     uploading: this.isUploading,
+                    breadcrumb: this.breadcrumb?.items,
+                    showBreadcrumb: !!this.breadcrumb?.visible,
                 }
             },
             actionBarListeners() {
@@ -284,10 +286,10 @@
                 }
             },
             redirectToClosestRoot() {
-                location.href = getDeleteBackUrl(this.breadcrumb);
+                location.href = getDeleteBackUrl(this.breadcrumb.items);
             },
             redirectToParentPage() {
-                location.href = getBackUrl(this.breadcrumb);
+                location.href = getBackUrl(this.breadcrumb.items);
             },
             async submit({ postFn }={}) {
                 if(this.isUploading) {

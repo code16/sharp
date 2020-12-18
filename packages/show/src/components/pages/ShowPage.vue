@@ -11,6 +11,8 @@
                     :can-edit="canEdit"
                     :can-change-state="canChangeState"
                     :show-back-button="showBackButton"
+                    :breadcrumb="breadcrumbItems"
+                    :show-breadcrumb="breadcrumb.visible"
                     @command="handleCommandRequested"
                     @state-change="handleStateChanged"
                 />
@@ -102,13 +104,16 @@
                 return formUrl({
                     entityKey: this.entityKey,
                     instanceId: this.instanceId,
-                });
+                }, { append: true });
             },
             backUrl() {
-                return getBackUrl(this.breadcrumb);
+                return getBackUrl(this.breadcrumb.items);
             },
             showBackButton() {
                 return !!this.backUrl;
+            },
+            breadcrumbItems() {
+                return this.breadcrumb.items;
             },
         },
 

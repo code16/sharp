@@ -764,12 +764,12 @@ describe('EntityList', () => {
 
             formUrl.mockClear();
             wrapper.vm.formUrl({ instanceId:'instanceId' });
-            expect(formUrl).toHaveBeenCalledWith({ entityKey:'entityKey', instanceId:'instanceId' });
+            expect(formUrl).toHaveBeenCalledWith({ entityKey:'entityKey', instanceId:'instanceId' }, { append:true });
 
 
             formUrl.mockClear();
             wrapper.vm.formUrl({ instanceId:'instanceId', formKey:'formKey' });
-            expect(formUrl).toHaveBeenCalledWith({ entityKey:'entityKey:formKey', instanceId:'instanceId' });
+            expect(formUrl).toHaveBeenCalledWith({ entityKey:'entityKey:formKey', instanceId:'instanceId' }, { append:true });
         });
 
         test('showUrl', () => {
@@ -780,7 +780,7 @@ describe('EntityList', () => {
             });
             showUrl.mockClear();
             wrapper.vm.showUrl({ instanceId:'instanceId' })
-            expect(showUrl).toHaveBeenCalledWith({ entityKey:'entityKey', instanceId:'instanceId' });
+            expect(showUrl).toHaveBeenCalledWith({ entityKey:'entityKey', instanceId:'instanceId' }, { append:true });
         });
 
         test('handleCommandRequested', ()=>{

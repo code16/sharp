@@ -71,9 +71,11 @@
     padding-top: 1rem;
     //flex-flow: row wrap;
     align-items: center;
+    height: 100%;
     @include media-breakpoint-down(sm) {
       flex-flow: column;
       align-items: stretch;
+      height: auto;
     }
 
     .SharpFilterSelect {
@@ -188,6 +190,19 @@
     border-radius: $input-border-radius;
   }
 
+  .breadcrumb {
+    font-size: .75rem;
+    margin-bottom: .5rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    align-self: flex-end;
+    a {
+      text-decoration: none;
+      &:hover, &:focus {
+        text-decoration: underline;
+      }
+    }
+  }
 
   &.SharpActionBarList {
     @include media-breakpoint-down(sm) {

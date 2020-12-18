@@ -135,7 +135,7 @@ describe('show page', () => {
         expect(formUrl).toHaveBeenCalledWith({
             entityKey: 'entityKey',
             instanceId: 'instanceId',
-        });
+        }, { append:true });
     });
 
     test('fieldOptions', () => {

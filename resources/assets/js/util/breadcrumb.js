@@ -1,12 +1,11 @@
-import { normalizeUrl } from "./url";
 import { router } from "../router";
 import { BASE_URL } from "../consts";
 
+
 export function getBackUrl(breadcrumb) {
     const item = breadcrumb[breadcrumb.length - 2];
-    return item ? normalizeUrl(item.url) : null;
+    return item ? item.url : null;
 }
-
 
 function resolveRoute(breadcrumbUrl) {
     const parentUrl = new URL(breadcrumbUrl, location.origin);
@@ -21,8 +20,8 @@ export function getDeleteBackUrl(breadcrumb) {
 
     if(parentRoute.params.entityKey &&
         currentRoute.params.entityKey !== parentRoute.params.entityKey) {
-        return normalizeUrl(parentUrl);
+        return parentUrl;
     }
 
-    return normalizeUrl(breadcrumb[0].url);
+    return breadcrumb[0].url;
 }

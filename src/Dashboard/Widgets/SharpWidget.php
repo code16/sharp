@@ -3,88 +3,53 @@
 namespace Code16\Sharp\Dashboard\Widgets;
 
 use Code16\Sharp\Exceptions\Dashboard\SharpWidgetValidationException;
-use Code16\Sharp\Utils\LinkToEntity;
+use Code16\Sharp\Utils\Links\SharpLinkTo;
 use Illuminate\Support\Facades\Validator;
 
 abstract class SharpWidget
 {
-
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $key;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $type;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $title;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $link;
 
-    /**
-     * @param string $key
-     * @param string $type
-     */
     protected function __construct(string $key, string $type)
     {
         $this->key = $key;
         $this->type = $type;
     }
 
-    /**
-     * @param string $title
-     * @return $this
-     */
-    public function setTitle(string $title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
         return $this;
     }
 
-    /**
-     * @param string $entityKey
-     * @param string|null $instanceId
-     * @param array $querystring
-     * @return $this
-     */
-    public function setLink(string $entityKey, string $instanceId = null, array $querystring = [])
+    public function setLink(SharpLinkTo $sharpLinkTo): self
     {
-        $this->link = (new LinkToEntity("", $entityKey))
-            ->setInstanceId($instanceId)
-            ->setFullQuerystring($querystring)
-            ->renderAsUrl();
+        $this->link = $sharpLinkTo->renderAsUrl();
 
         return $this;
     }
 
-    public function unsetLink()
+    public function unsetLink(): void
     {
         $this->link = null;
     }
 
-    /**
-     * @return string
-     */
-    public function getKey()
+    public function getKey(): string
     {
         return $this->key;
     }
 
-    /**
-     * Throw an exception in case of invalid attribute value.
-     *
-     * @param array $properties
-     * @throws SharpWidgetValidationException
-     */
     protected function validate(array $properties)
     {
         $validator = Validator::make($properties, [
@@ -97,40 +62,29 @@ abstract class SharpWidget
         }
     }
 
-    /**
-     * @param array $childArray
-     * @return array
-     * @throws SharpWidgetValidationException
-     */
-    protected function buildArray(array $childArray)
+    protected function buildArray(array $childArray): array
     {
         $array = collect([
             "key" => $this->key,
             "type" => $this->type,
             "title" => $this->title,
             "link" => $this->link
-        ] + $childArray)
-        ->filter(function($value) {
-            return !is_null($value);
-        })->all();
+        ])
+            ->merge($childArray)
+            ->filter(function($value) {
+                return !is_null($value);
+            })
+            ->all();
 
         $this->validate($array);
 
         return $array;
     }
 
-    /**
-     * Return specific validation rules.
-     *
-     * @return array
-     */
-    protected function validationRules()
+    protected function validationRules(): array
     {
         return [];
     }
 
-    /**
-     * @return array
-     */
-    public abstract function toArray();
+    public abstract function toArray(): array;
 }

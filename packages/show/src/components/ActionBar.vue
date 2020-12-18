@@ -14,6 +14,11 @@
                 </a>
             </template>
         </template>
+        <template v-slot:extras>
+            <template v-if="showBreadcrumb">
+                <Breadcrumb :items="breadcrumb" />
+            </template>
+        </template>
         <template v-slot:extras-right>
             <div class="row mx-n1">
                 <template v-if="hasState">
@@ -58,6 +63,7 @@
         Dropdown,
         DropdownItem,
         StateIcon,
+        Breadcrumb,
     } from 'sharp-ui';
 
     import {
@@ -70,6 +76,7 @@
         mixins: [Localization],
         components: {
             ActionBar,
+            Breadcrumb,
             CommandsDropdown,
             Dropdown,
             DropdownItem,
@@ -84,6 +91,8 @@
             showBackButton: Boolean,
             state: Object,
             stateValues: Array,
+            breadcrumb: Array,
+            showBreadcrumb: Boolean,
         },
         computed: {
             hasCommands() {

@@ -517,14 +517,14 @@
             formUrl({ formKey, instanceId }={}) {
                 return formUrl({
                     entityKey: formKey ? `${this.entityKey}:${formKey}` : this.entityKey,
-                    instanceId
-                });
+                    instanceId,
+                }, { append: true });
             },
             showUrl({ instanceId }={}) {
                 return showUrl({
                     entityKey: this.entityKey,
                     instanceId,
-                });
+                }, { append: true });
             },
             tryParseNumber(val) {
                 if(Array.isArray(val)) {
