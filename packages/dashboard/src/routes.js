@@ -1,9 +1,10 @@
 import DashboardPage from './components/pages/DashboardPage';
 
 export default [
+    /** New spec */
     {
         name: 'dashboard',
-        path: '/dashboard/:id',
+        path: '/s-dashboard/:id',
         component: DashboardPage,
     },
 ]

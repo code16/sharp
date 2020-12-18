@@ -1,7 +1,6 @@
 import VueRouter from 'vue-router';
 import routes from "./routes";
 import { BASE_URL } from "../consts";
-import { normalizeUrl } from '../util/url';
 import { parseQuery, stringifyQuery } from '../util/querystring';
 
 let currentRouter = null;
@@ -19,7 +18,12 @@ export function router(fresh) {
     return currentRouter;
 }
 
-export function routeUrl(location, { normalized=true }={}) {
-    const { href } = router().resolve(location);
-    return normalized ? normalizeUrl(href) : href;
+export function routeUrl(location, { append }={}) {
+    let { href, route } = router().resolve(location);
+    if(append) {
+        const currentPath = router().currentRoute.path.replace(/\/$/, '');
+        const resolved = router().resolve(currentPath + route.fullPath);
+        href = resolved.href;
+    }
+    return href;
 }

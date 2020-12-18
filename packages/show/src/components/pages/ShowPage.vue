@@ -62,7 +62,7 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import { formUrl, getBackUrl, lang, showAlert, normalizeBreadcrumb } from 'sharp';
+    import { formUrl, getBackUrl, lang, showAlert } from 'sharp';
     import { CommandFormModal, CommandViewPanel } from 'sharp-commands';
     import { Grid } from 'sharp-ui';
     import { UnknownField } from 'sharp/components';
@@ -111,7 +111,7 @@
                 return formUrl({
                     entityKey: this.entityKey,
                     instanceId: this.instanceId,
-                });
+                }, { append: true });
             },
             backUrl() {
                 return getBackUrl(this.breadcrumb.items);
@@ -120,7 +120,7 @@
                 return !!this.backUrl;
             },
             breadcrumbItems() {
-                return normalizeBreadcrumb(this.breadcrumb.items);
+                return this.breadcrumb.items;
             },
         },
 

@@ -148,7 +148,7 @@ class MenuViewComposerTest extends BaseApiTest
             "label" => "people",
             "icon" => "fa-user",
             "type" => "entity",
-            "url" => route("code16.sharp.show", "person"),
+            "url" => route("code16.sharp.single-show", "person"),
         ], (array)$menu->menuItems[0]);
     }
 }

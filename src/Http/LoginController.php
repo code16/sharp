@@ -20,9 +20,6 @@ class LoginController extends Controller
             ->only('destroy');
     }
 
-    /**
-     * @return \Illuminate\View\View
-     */
     public function create()
     {
         if(config('sharp.auth.login_page_url')) {
@@ -32,9 +29,6 @@ class LoginController extends Controller
         return view("sharp::login");
     }
 
-    /**
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function store()
     {
         $this->validate(request(), [
@@ -52,9 +46,6 @@ class LoginController extends Controller
         return back()->with("invalid", true)->withInput();
     }
 
-    /**
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function destroy()
     {
         $this->guard()->logout();
@@ -64,25 +55,16 @@ class LoginController extends Controller
         );
     }
 
-    /**
-     * @return string
-     */
-    protected function getSharpLoginAttribute()
+    protected function getSharpLoginAttribute(): string
     {
         return config("sharp.auth.login_attribute", "email");
     }
 
-    /**
-     * @return string
-     */
-    protected function getSharpPasswordAttribute()
+    protected function getSharpPasswordAttribute(): string
     {
         return config("sharp.auth.password_attribute", "password");
     }
 
-    /**
-     * @return mixed
-     */
     protected function guard()
     {
         return auth()->guard(config('sharp.auth.guard'));

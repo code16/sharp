@@ -7,16 +7,10 @@ use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 class SharpPanelWidget extends SharpWidget
 {
 
-    /**
-     * @var SharpFormHtmlField
-     */
+    /** @var SharpFormHtmlField */
     protected $htmlFormField;
 
-    /**
-     * @param string $key
-     * @return static
-     */
-    public static function make(string $key)
+    public static function make(string $key): self
     {
         $widget = new static($key, 'panel');
         $widget->htmlFormField = SharpFormHtmlField::make('panel');
@@ -24,9 +18,6 @@ class SharpPanelWidget extends SharpWidget
         return $widget;
     }
 
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         return parent::buildArray([
@@ -34,38 +25,24 @@ class SharpPanelWidget extends SharpWidget
         ]);
     }
 
-    /**
-     * @param string $templatePath
-     * @return $this
-     */
-    public function setTemplatePath(string $templatePath)
+    public function setTemplatePath(string $templatePath): self
     {
         $this->htmlFormField->setTemplatePath($templatePath);
 
         return $this;
     }
 
-    /**
-     * @param string $template
-     * @return $this
-     */
-    public function setInlineTemplate(string $template)
+    public function setInlineTemplate(string $template): self
     {
         $this->htmlFormField->setInlineTemplate($template);
 
         return $this;
     }
 
-    /**
-     * Return specific validation rules.
-     *
-     * @return array
-     */
-    protected function validationRules()
+    protected function validationRules(): array
     {
         return [
             "template" => "required"
         ];
     }
-
 }

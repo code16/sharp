@@ -1,9 +1,11 @@
 <?php
 
-/**
- * @return string
- */
-function sharp_version()
+function currentSharpRequest(): \Code16\Sharp\Http\Context\CurrentSharpRequest
+{
+    return app(\Code16\Sharp\Http\Context\CurrentSharpRequest::class);
+}
+
+function sharp_version(): string
 {
     return \Code16\Sharp\SharpServiceProvider::VERSION;
 }
@@ -56,13 +58,7 @@ function sharp_user()
     return auth()->user();
 }
 
-/**
- * @param string $ability
- * @param string $entityKey
- * @param string|null $instanceId
- * @return bool
- */
-function sharp_has_ability(string $ability, string $entityKey, string $instanceId = null)
+function sharp_has_ability(string $ability, string $entityKey, string $instanceId = null): bool
 {
     try {
         sharp_check_ability($ability, $entityKey, $instanceId);
@@ -73,12 +69,6 @@ function sharp_has_ability(string $ability, string $entityKey, string $instanceI
     }
 }
 
-/**
- * @param string $ability
- * @param string $entityKey
- * @param string|null $instanceId
- * @throws Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
- */
 function sharp_check_ability(string $ability, string $entityKey, string $instanceId = null)
 {
     app(Code16\Sharp\Auth\SharpAuthorizationManager::class)
@@ -87,15 +77,8 @@ function sharp_check_ability(string $ability, string $entityKey, string $instanc
 
 /**
  * Replace embedded images with thumbnails in a SharpMarkdownField's markdown text.
- *
- * @param string $html
- * @param string $classNames
- * @param int|null $width
- * @param int|null $height
- * @param array $filters
- * @return string
  */
-function sharp_markdown_thumbnails(string $html, string $classNames, int $width = null, int $height = null, array $filters = [])
+function sharp_markdown_thumbnails(string $html, string $classNames, int $width = null, int $height = null, array $filters = []): string
 {
     preg_match_all('/<img src="(.*)".*>/U', $html, $matches, PREG_SET_ORDER);
 
@@ -119,7 +102,7 @@ function sharp_markdown_thumbnails(string $html, string $classNames, int $width 
  *
  * @return string
  */
-function sharp_custom_fields()
+function sharp_custom_fields(): string
 {
     if(config("sharp.extensions.activate_custom_fields", false)) {
         try {
@@ -133,11 +116,8 @@ function sharp_custom_fields()
 /**
  * Return true if current Laravel installation is newer than
  * given version (ex: 5.6).
- *
- * @param string $version
- * @return bool
  */
-function sharp_laravel_version_gte($version)
+function sharp_laravel_version_gte(string $version): bool
 {
     list($major, $minor) = explode(".", $version);
     list($laravelMajor, $laravelMinor, $bugfix) = explode(".", app()::VERSION);
@@ -146,10 +126,7 @@ function sharp_laravel_version_gte($version)
         || ($laravelMajor == $major && $laravelMinor >= $minor);
 }
 
-/**
- * @return string
- */
-function sharp_base_url_segment()
+function sharp_base_url_segment(): string
 {
     return config("sharp.custom_url_segment", "sharp");
 }
@@ -157,12 +134,8 @@ function sharp_base_url_segment()
 /**
  * Return true if the $handler class actually implements the $methodName method;
  * return false if the method is defined as concrete in a super class and not overridden.
- *
- * @param $handler
- * @param string $methodName
- * @return bool
  */
-function is_method_implemented_in_concrete_class($handler, string $methodName)
+function is_method_implemented_in_concrete_class($handler, string $methodName): bool
 {
     try {
         $foo = new \ReflectionMethod(get_class($handler), $methodName);
@@ -175,11 +148,10 @@ function is_method_implemented_in_concrete_class($handler, string $methodName)
     }
 }
 
-/**
- * @return boolean
- */
-function sharp_assets_out_of_date() {
+function sharp_assets_out_of_date(): bool
+{
     $distManifest = file_get_contents(__DIR__ . '/../resources/assets/dist/mix-manifest.json');
     $publicManifest = file_get_contents(public_path('vendor/sharp/mix-manifest.json'));
+    
     return $distManifest !== $publicManifest;
 }
