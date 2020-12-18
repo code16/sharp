@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 
 class LinkToSingleShowPage extends SharpLinkTo
 {
-    public static function createFor(string $entityKey): self
+    public static function make(string $entityKey): self
     {
         return new static($entityKey);
     }

@@ -17,7 +17,7 @@ class SharpLinkToTest extends SharpTestCase
     {
         $this->assertEquals(
             '<a href="http://localhost/sharp/s-list/my-entity" title="">test</a>',
-            LinkToEntityList::createFor("my-entity")
+            LinkToEntityList::make("my-entity")
                 ->renderAsText("test")
         );
     }
@@ -27,7 +27,7 @@ class SharpLinkToTest extends SharpTestCase
     {
         $this->assertEquals(
             '<a href="http://localhost/sharp/s-list/my-entity/s-form/my-entity/23" title="">test</a>',
-            LinkToForm::createFor("my-entity", 23)
+            LinkToForm::make("my-entity", 23)
                 ->renderAsText("test")
         );
     }
@@ -37,7 +37,7 @@ class SharpLinkToTest extends SharpTestCase
     {
         $this->assertEquals(
             '<a href="http://localhost/sharp/s-list/my-entity/s-show/my-entity/23/s-form/my-entity/23" title="">test</a>',
-            LinkToForm::createFor("my-entity", 23)
+            LinkToForm::make("my-entity", 23)
                 ->throughShowPage()
                 ->renderAsText("test")
         );
@@ -48,7 +48,7 @@ class SharpLinkToTest extends SharpTestCase
     {
         $this->assertEquals(
             '<a href="http://localhost/sharp/s-list/my-entity/s-show/my-entity/23" title="">test</a>',
-            LinkToShowPage::createFor("my-entity", 23)
+            LinkToShowPage::make("my-entity", 23)
                 ->renderAsText("test")
         );
     }
@@ -58,7 +58,7 @@ class SharpLinkToTest extends SharpTestCase
     {
         $this->assertEquals(
             '<a href="http://localhost/sharp/s-show/my-entity" title="">test</a>',
-            LinkToSingleShowPage::createFor("my-entity")
+            LinkToSingleShowPage::make("my-entity")
                 ->renderAsText("test")
         );
     }
@@ -68,7 +68,7 @@ class SharpLinkToTest extends SharpTestCase
     {
         $this->assertEquals(
             '<a href="http://localhost/sharp/s-show/my-entity/s-form/my-entity" title="">test</a>',
-            LinkToSingleForm::createFor("my-entity")
+            LinkToSingleForm::make("my-entity")
                 ->renderAsText("test")
         );
     }
@@ -78,7 +78,7 @@ class SharpLinkToTest extends SharpTestCase
     {
         $this->assertEquals(
             '<a href="http://localhost/sharp/s-list/my-entity?search=my-search" title="">test</a>',
-            LinkToEntityList::createFor("my-entity")
+            LinkToEntityList::make("my-entity")
                 ->setSearch("my-search")
                 ->renderAsText("test")
         );
@@ -89,7 +89,7 @@ class SharpLinkToTest extends SharpTestCase
     {
         $this->assertEquals(
             '<a href="http://localhost/sharp/s-list/my-entity?filter_country=France&filter_city=Paris" title="">test</a>',
-            LinkToEntityList::createFor("my-entity")
+            LinkToEntityList::make("my-entity")
                 ->addFilter("country", "France")
                 ->addFilter("city", "Paris")
                 ->renderAsText("test")
@@ -101,7 +101,7 @@ class SharpLinkToTest extends SharpTestCase
     {
         $this->assertEquals(
             '<a href="http://localhost/sharp/s-list/my-entity?sort=name&dir=desc" title="">test</a>',
-            LinkToEntityList::createFor("my-entity")
+            LinkToEntityList::make("my-entity")
                 ->setSort("name", "desc")
                 ->renderAsText("test")
         );
@@ -112,7 +112,7 @@ class SharpLinkToTest extends SharpTestCase
     {
         $this->assertEquals(
             '<a href="http://localhost/sharp/s-list/my-entity" title="tooltip">test</a>',
-            LinkToEntityList::createFor("my-entity")
+            LinkToEntityList::make("my-entity")
                 ->setTooltip("tooltip")
                 ->renderAsText("test")
         );
@@ -123,7 +123,7 @@ class SharpLinkToTest extends SharpTestCase
     {
         $this->assertEquals(
             'http://localhost/sharp/s-list/my-entity',
-            LinkToEntityList::createFor("my-entity")
+            LinkToEntityList::make("my-entity")
                 ->renderAsUrl()
         );
     }

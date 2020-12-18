@@ -10,6 +10,7 @@ use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpOrderedListWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\LinkToEntity;
 
 class SharpDashboardTest extends SharpTestCase
@@ -223,11 +224,10 @@ class SharpDashboardTest extends SharpTestCase
             {
                 $this->addWidget(
                     SharpOrderedListWidget::make("widget")
-                        ->buildItemLink(function(LinkToEntity $link, $item) {
+                        ->buildItemLink(function($item) {
                             return $item['id'] == 3
                                 ? null
-                                : $link
-                                    ->setEntityKey("my-entity")
+                                : LinkToEntityList::make("my-entity")
                                     ->addFilter("type", $item['id']);
                         })
                 );

@@ -21,7 +21,7 @@ class LinkToEntityList extends SharpLinkTo
     /** @var array */
     protected $fullQuerystring;
 
-    public static function createFor(string $entityKey): self
+    public static function make(string $entityKey): self
     {
         return new static($entityKey);
     }

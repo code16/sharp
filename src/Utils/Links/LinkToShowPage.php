@@ -9,7 +9,7 @@ class LinkToShowPage extends SharpLinkTo
     /** @var string */
     protected $instanceId;
 
-    public static function createFor(string $entityKey, string $instanceId): self
+    public static function make(string $entityKey, string $instanceId): self
     {
         $instance = new static($entityKey);
         $instance->instanceId = $instanceId;

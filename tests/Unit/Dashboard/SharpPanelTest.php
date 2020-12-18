@@ -4,6 +4,7 @@ namespace Code16\Sharp\Tests\Unit\Dashboard;
 
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Utils\Links\LinkToEntityList;
 
 class SharpPanelTest extends SharpTestCase
 {
@@ -21,40 +22,14 @@ class SharpPanelTest extends SharpTestCase
     }
 
     /** @test */
-    function returned_array_contains_entity_link()
+    function returned_array_contains_the_SharpLinkTo_link()
     {
         $widget = SharpPanelWidget::make("name")
             ->setInlineTemplate('<b>test</b>')
-            ->setLink('entity');
+            ->setLink(LinkToEntityList::make("entity"));
 
         $this->assertArraySubset(
             ["link" => url("sharp/s-list/entity")],
-            $widget->toArray()
-        );
-    }
-
-    /** @test */
-    function returned_array_contains_instance_link()
-    {
-        $widget = SharpPanelWidget::make("name")
-            ->setInlineTemplate('<b>test</b>')
-            ->setLink('entity', 1);
-
-        $this->assertArraySubset(
-            ["link" => url("sharp/form/entity/1")],
-            $widget->toArray()
-        );
-    }
-
-    /** @test */
-    function returned_array_contains_querystring_params()
-    {
-        $widget = SharpPanelWidget::make("name")
-            ->setInlineTemplate('<b>test</b>')
-            ->setLink('entity', null, ["page" => 1, "filter_one" => "something"]);
-
-        $this->assertArraySubset(
-            ["link" => url("sharp/s-list/entity") . "?page=1&filter_one=something"],
             $widget->toArray()
         );
     }
