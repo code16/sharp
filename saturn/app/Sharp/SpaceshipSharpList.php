@@ -127,6 +127,21 @@ class SpaceshipSharpList extends SharpEntityList
             })
             ->setCustomTransformer("pilots", function($pilots, $spaceship) {
                 return $spaceship->pilots->map(function($pilot) {
+                    LinkToEntityList::createFor("pilot")
+                        ->setSearch($pilot->name)
+                        ->addFilter("age", 27)
+                        ->renderAsText($pilot->name);
+                    
+                    LinkToShowPage::createFor("pilot", $pilot->id)
+                        ->renderAsText($pilot->name);
+
+                    LinkToSingleShowPage::createFor("pilot")
+                        ->renderAsText($pilot->name);
+
+                    LinkToForm::createFor("pilot", $pilot->id)
+                        ->throughShowPage()
+                        ->renderAsText($pilot->name);
+
                     return (new LinkToEntity($pilot->name, "pilot"))
                         ->setTooltip("See related pilot")
                         ->setSearch($pilot->name)

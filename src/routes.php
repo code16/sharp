@@ -131,10 +131,12 @@ Route::group([
         ->name("code16.sharp.single-show");
 
     Route::get('/s-list/{entityKey}/{uri}', [WebDispatchController::class, "index"])
-        ->where("uri", ".*");
+        ->where("uri", ".*")
+        ->name("code16.sharp.list.subpage");
 
     Route::get('/s-show/{entityKey}/{uri}', [WebDispatchController::class, "index"])
-        ->where("uri", ".*");
+        ->where("uri", ".*")
+        ->name("code16.sharp.single-show.subpage");
 
     Route::get('/s-dashboard/{dashboardKey}', [DashboardController::class, "show"])
         ->name("code16.sharp.dashboard");
