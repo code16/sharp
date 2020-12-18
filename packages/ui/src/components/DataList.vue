@@ -3,6 +3,7 @@
         <template v-if="isEmpty">
             <div class="SharpDataList__empty p-3">
                 <slot name="empty" />
+                <slot name="append-body" />
             </div>
         </template>
         <template v-else>
@@ -39,6 +40,7 @@
                             </slot>
                         </template>
                     </Draggable>
+                    <slot name="append-body" />
                 </div>
             </div>
         </template>

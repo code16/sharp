@@ -102,7 +102,7 @@ abstract class SharpShow
      * @param string $entityListKey
      * @return $this
      */
-    final protected function addEntityListSection(string $entityListKey)
+    final protected function addEntityListSection(string $entityListKey, \Closure $callback = null)
     {
         $this->layoutBuilt = false;
 
@@ -110,6 +110,10 @@ abstract class SharpShow
         $section->addColumn(12, function($column) use($entityListKey) {
             $column->withSingleField($entityListKey);
         });
+
+        if($callback) {
+            $callback($section);
+        }
 
         $this->sections[] = $section;
 

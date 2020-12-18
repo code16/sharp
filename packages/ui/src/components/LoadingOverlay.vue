@@ -1,6 +1,6 @@
 <template>
-    <div class="SharpLoading__overlay" v-show="visible">
-        <Loading visible v-bind="$attrs" />
+    <div class="SharpLoading__overlay" :class="classes" v-show="visible">
+        <Loading v-bind="$attrs" />
     </div>
 </template>
 
@@ -12,7 +12,18 @@
             Loading,
         },
         props: {
-            visible: Boolean,
+            visible: {
+                type: Boolean,
+                default: true,
+            },
+            absolute: Boolean,
         },
+        computed: {
+            classes() {
+                return {
+                    'SharpLoading__overlay--absolute': this.absolute,
+                }
+            },
+        }
     }
 </script>

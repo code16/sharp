@@ -17,6 +17,11 @@ class ShowLayoutSection implements HasLayout
     protected $columns = [];
 
     /**
+     * @var bool
+     */
+    protected $collapsable = false;
+
+    /**
      * @param string $title
      */
     function __construct(string $title)
@@ -29,13 +34,20 @@ class ShowLayoutSection implements HasLayout
      * @param \Closure|null $callback
      * @return $this
      */
-    public function addColumn(int $size, \Closure $callback = null)
+    public function addColumn(int $size, \Closure $callback = null): self
     {
         $column = $this->addColumnLayout(new ShowLayoutColumn($size));
 
         if($callback) {
             $callback($column);
         }
+
+        return $this;
+    }
+
+    public function setCollapsable(bool $collapsable = true): self
+    {
+        $this->collapsable = $collapsable;
 
         return $this;
     }
@@ -47,6 +59,7 @@ class ShowLayoutSection implements HasLayout
     {
         return [
             "title" => $this->title,
+            "collapsable" => $this->collapsable,
             "columns" => collect($this->columns)
                 ->map(function($column) {
                     return $column->toArray();

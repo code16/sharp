@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`show section can mount 1`] = `
+<div class="ShowSection ShowSection--layout-card">
+	<div>
+		<h2 class="ShowSection__title mb-2">Section title</h2>
+		<div class="ShowSection__content">
+			<div class="MOCKED_SharpGrid ShowSection__grid">
+				<div class="MOCKED_SharpGrid ShowPage__fields-grid row-class"></div>
+			</div>
+		</div>
+	</div>
+</div>
+`;
+
+exports[`show section can mount: collapsable + contents layout 1`] = `
+<div class="ShowSection ShowSection--layout-contents">
+	<details>
+		<summary class="py-1 mb-1">
+			<h2 class="ShowSection__title mb-0">Section title</h2>
+		</summary>
+		<div class="ShowSection__content">
+			<div class="MOCKED_SharpGrid ShowSection__grid">
+				<div class="MOCKED_SharpGrid ShowPage__fields-grid"></div>
+			</div>
+		</div>
+	</details>
+</div>
+`;

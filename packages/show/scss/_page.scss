@@ -1,27 +1,6 @@
 .ShowPage {
   &__section {
     margin-bottom: 2rem;
-    &--no-container {
-      .ShowPage__section-content {
-        background: transparent;
-        padding: 0;
-      }
-    }
-  }
-  &__section-content {
-    background: white;
-    padding: 1rem 1.25rem;
-  }
-  &__section-title {
-    font-size: 1em;
-    font-weight: 600;
-    text-transform: uppercase;
-  }
-  &__section-grid {
-    margin-bottom: -2rem;
-  }
-  &__section-col {
-    margin-bottom: 2rem;
   }
 
   &__fields-grid {

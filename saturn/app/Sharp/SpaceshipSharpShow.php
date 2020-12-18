@@ -62,6 +62,10 @@ class SpaceshipSharpShow extends SharpShow
                     ->hideFilterWithValue("spaceship", function($instanceId) {
                         return $instanceId;
                     })
+//                    ->hideFilterWithValue("role", function($instanceId) {
+//                        return null;
+//                    })
+//                    ->showSearchField(false)
                     ->showEntityState(false)
 //                    ->hideEntityCommand("updateXP")
 //                    ->hideInstanceCommand("download")
@@ -102,6 +106,7 @@ class SpaceshipSharpShow extends SharpShow
             })
             ->addSection('Description', function(ShowLayoutSection $section) {
                 $section
+                    ->setCollapsable()
                     ->addColumn(6, function(ShowLayoutColumn $column) {
                         $column->withSingleField("description");
                     })
@@ -112,7 +117,9 @@ class SpaceshipSharpShow extends SharpShow
                         });
                     });
             })
-            ->addEntityListSection("pilots");
+            ->addEntityListSection("pilots", function (ShowLayoutSection $section) {
+                $section->setCollapsable();
+            });
     }
 
     function find($id): array

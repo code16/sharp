@@ -1,0 +1,38 @@
+
+.ShowSection {
+  summary {
+    display: flex;
+    align-items: baseline;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color .125s ease-in-out;
+    &:hover, &:focus-visible {
+      background-color: rgba(0,0,0,.075);
+    }
+    &:focus:not(:focus-visible) {
+      outline: 0;
+    }
+  }
+
+  &__title {
+    font-size: 1em;
+    font-weight: 600;
+    text-transform: uppercase;
+    line-height: 1.25;
+  }
+
+  &__grid {
+    margin-bottom: -2rem;
+  }
+
+  &__col {
+    margin-bottom: 2rem;
+  }
+
+  &--layout-card {
+    .ShowSection__content {
+      background: white;
+      padding: 1rem 1.25rem;
+    }
+  }
+}

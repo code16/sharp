@@ -36,13 +36,6 @@ describe('show page', () => {
                     'show': merge({}, showModule, storeModule),
                 }
             }),
-            // language=Vue
-            stubs: {
-                Grid:
-                    `<div class="MOCKED_SharpGrid">
-                        <slot :item-layout="rows[0][0]" />
-                    </div>`,
-            },
             mocks: {
                 $route: { params: { } },
             },

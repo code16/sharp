@@ -1,75 +1,86 @@
 <template>
     <div class="SharpEntityList">
-        <template v-if="ready">
-            <slot
-                name="action-bar"
-                :props="actionBarProps"
-                :listeners="actionBarListeners"
-            />
+        <slot
+            name="action-bar"
+            :props="actionBarProps"
+            :listeners="actionBarListeners"
+        />
 
-            <DataList
-                :items="items"
-                :columns="columns"
-                :page="page"
-                :paginated="paginated"
-                :total-count="totalCount"
-                :page-size="pageSize"
-                :reorder-active="reorderActive"
-                :sort="sortedBy"
-                :dir="sortDir"
-                @change="handleReorderedItemsChanged"
-                @sort-change="handleSortChanged"
-                @page-change="handlePageChanged"
-            >
-                <template v-slot:empty>
-                    {{ l('entity_list.empty_text') }}
-                </template>
-                <template v-slot:item="{ item }">
-                    <DataListRow :url="instanceUrl(item)" :columns="columns" :row="item">
-                        <template v-if="hasActionsColumn" v-slot:append>
-                            <div class="row justify-content-end justify-content-md-start mx-n2">
-                                <template v-if="instanceHasState(item)">
-                                    <div class="col-auto col-md-12 my-1 px-2">
-                                        <Dropdown class="SharpEntityList__state-dropdown" :disabled="!instanceHasStateAuthorization(item)">
-                                            <template v-slot:text>
-                                                <StateIcon :color="instanceStateIconColor(item)" />
-                                                <span class="text-truncate">
-                                                    {{ instanceStateLabel(item) }}
-                                                </span>
-                                            </template>
-                                            <DropdownItem
-                                                v-for="stateOptions in config.state.values"
-                                                @click="handleInstanceStateChanged(item, stateOptions.value)"
-                                                :key="stateOptions.value"
+        <template v-if="visible">
+            <template v-if="ready">
+                <DataList
+                    :items="items"
+                    :columns="columns"
+                    :page="page"
+                    :paginated="paginated"
+                    :total-count="totalCount"
+                    :page-size="pageSize"
+                    :reorder-active="reorderActive"
+                    :sort="sortedBy"
+                    :dir="sortDir"
+                    @change="handleReorderedItemsChanged"
+                    @sort-change="handleSortChanged"
+                    @page-change="handlePageChanged"
+                >
+                    <template v-slot:empty>
+                        {{ l('entity_list.empty_text') }}
+                    </template>
+                    <template v-slot:item="{ item }">
+                        <DataListRow :url="instanceUrl(item)" :columns="columns" :row="item">
+                            <template v-if="hasActionsColumn" v-slot:append>
+                                <div class="row justify-content-end justify-content-md-start mx-n2">
+                                    <template v-if="instanceHasState(item)">
+                                        <div class="col-auto col-md-12 my-1 px-2">
+                                            <Dropdown class="SharpEntityList__state-dropdown" :disabled="!instanceHasStateAuthorization(item)">
+                                                <template v-slot:text>
+                                                    <StateIcon :color="instanceStateIconColor(item)" />
+                                                    <span class="text-truncate">
+                                                        {{ instanceStateLabel(item) }}
+                                                    </span>
+                                                </template>
+                                                <DropdownItem
+                                                    v-for="stateOptions in config.state.values"
+                                                    @click="handleInstanceStateChanged(item, stateOptions.value)"
+                                                    :key="stateOptions.value"
+                                                >
+                                                    <StateIcon :color="stateOptions.color" />&nbsp;
+                                                    {{ stateOptions.label }}
+                                                </DropdownItem>
+                                            </Dropdown>
+                                        </div>
+                                    </template>
+                                    <template v-if="instanceHasCommands(item)">
+                                        <div class="col-auto col-md-12 my-1 px-2">
+                                            <CommandsDropdown
+                                                class="SharpEntityList__commands-dropdown"
+                                                :commands="instanceCommands(item)"
+                                                @select="handleInstanceCommandRequested(item, $event)"
                                             >
-                                                <StateIcon :color="stateOptions.color" />&nbsp;
-                                                {{ stateOptions.label }}
-                                            </DropdownItem>
-                                        </Dropdown>
-                                    </div>
-                                </template>
-                                <template v-if="instanceHasCommands(item)">
-                                    <div class="col-auto col-md-12 my-1 px-2">
-                                        <CommandsDropdown
-                                            class="SharpEntityList__commands-dropdown"
-                                            :commands="instanceCommands(item)"
-                                            @select="handleInstanceCommandRequested(item, $event)"
-                                        >
-                                            <template v-slot:text>
-                                                {{ l('entity_list.commands.instance.label') }}
-                                            </template>
-                                        </CommandsDropdown>
-                                    </div>
-                                </template>
+                                                <template v-slot:text>
+                                                    {{ l('entity_list.commands.instance.label') }}
+                                                </template>
+                                            </CommandsDropdown>
+                                        </div>
+                                    </template>
                                 </div>
-                        </template>
-                    </DataListRow>
-                </template>
+                            </template>
+                        </DataListRow>
+                    </template>
 
-                <template v-slot:append-head>
-                    <slot name="append-head" :props="actionBarProps" :listeners="actionBarListeners" />
-                </template>
-            </DataList>
+                    <template v-slot:append-head>
+                        <slot name="append-head" :props="actionBarProps" :listeners="actionBarListeners" />
+                    </template>
+
+                    <template v-slot:append-body>
+                        <template v-if="inline && loading">
+                            <LoadingOverlay medium absolute />
+                        </template>
+                    </template>
+                </DataList>
+            </template>
+            <template v-else-if="inline">
+                <Loading medium />
+            </template>
         </template>
 
         <CommandFormModal :form="commandCurrentForm" ref="commandForm" />
@@ -81,13 +92,14 @@
     import isEqual from 'lodash/isEqual';
     import { formUrl, showUrl, lang, showAlert } from 'sharp';
     import { Localization, DynamicView, withCommands } from 'sharp/mixins';
-
     import {
         DataList,
         DataListRow,
         StateIcon,
         Dropdown,
         DropdownItem,
+        Loading,
+        LoadingOverlay,
     } from 'sharp-ui';
 
     import {
@@ -95,6 +107,7 @@
         CommandFormModal,
         CommandViewPanel,
     } from 'sharp-commands';
+
 
     export default {
         name: 'SharpEntityList',
@@ -111,6 +124,9 @@
 
             CommandFormModal,
             CommandViewPanel,
+
+            Loading,
+            LoadingOverlay,
         },
         props: {
             entityKey: String,
@@ -135,10 +151,15 @@
             },
             hiddenCommands: Object,
             hiddenFilters: Object,
+            visible: {
+                type: Boolean,
+                default: true,
+            }
         },
         data() {
             return {
                 ready: false,
+                loading: false,
 
                 page: 0,
                 search: '',
@@ -160,6 +181,11 @@
         watch: {
             query(query, oldQuery) {
                 if(!isEqual(query, oldQuery)) {
+                    this.init();
+                }
+            },
+            visible(visible) {
+                if(visible && !this.ready) {
                     this.init();
                 }
             },
@@ -202,9 +228,16 @@
             },
 
             actionBarProps() {
+                if(!this.ready) {
+                    return {
+                        ready: false,
+                    }
+                }
                 return {
+                    ready: true,
                     count: this.totalCount,
                     search: this.search,
+                    hasSearchQuery: !!this.query?.search,
                     filters: this.visibleFilters,
                     filtersValues: this.filtersValues,
                     commands: this.allowedEntityCommands,
@@ -505,6 +538,20 @@
             },
 
             /**
+             * Dynamic view overrides
+             */
+            showLoading() {
+                if(!this.inline) {
+                    this.$store.dispatch('setLoading', true);
+                }
+            },
+            hideLoading() {
+                if(!this.inline) {
+                    this.$store.dispatch('setLoading', false);
+                }
+            },
+
+            /**
              * Commands
              */
             initCommands() {
@@ -570,7 +617,10 @@
                 dir && (this.sortDir = dir);
             },
             async init() {
-                console.log(this.entityKey, this.query);
+                if(!this.visible) {
+                    return;
+                }
+                this.loading = true;
                 await this.storeDispatch('setEntityKey', this.entityKey);
                 // legacy
                 await this.get();
@@ -590,6 +640,7 @@
                     filtersValues: this.getFiltersValuesFromQuery(this.query),
                 });
                 this.ready = true;
+                this.loading = false;
             },
         },
         beforeMount() {
