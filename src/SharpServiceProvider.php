@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp;
 
-use App\Utils\CurrentCart;
 use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Composers\AssetViewComposer;

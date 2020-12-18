@@ -4,7 +4,6 @@ namespace Code16\Sharp\Http\Context;
 
 use Code16\Sharp\Http\Context\Util\BreadcrumbItem;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Facade;
 
 class CurrentSharpRequest
 {

@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
+use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Http\SharpContext;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
 use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
@@ -19,15 +20,57 @@ class BreadcrumbTest extends BaseApiTest
     }
 
     /** @test */
-    public function breadcrumb_is_built_depending_on_referer_for_API_calls()
+    public function breadcrumb_is_append_and_built_depending_on_referer_for_API_calls()
     {
+        $this->buildTheWorld();
         
+        $this
+            ->withHeaders([
+                "referer" => url('/sharp/s-list/person/s-show/person/1/s-form/person/1')
+            ])
+            ->getJson(route('code16.sharp.api.form.edit', ['person', '1']))
+            ->assertJson([
+                "breadcrumb" => [
+                    "visible" => config("sharp.display_breadcrumb"),
+                    "items" => [
+                        [
+                            "type" => "entityList",
+                            "url" => url('/sharp/s-list/person'),
+                            "name" => "List",
+                            "entityKey" => "person"
+                        ],
+                        [
+                            "type" => "show",
+                            "url" => url('/sharp/s-list/person/s-show/person/1'),
+                            "name" => "person",
+                            "entityKey" => "person"
+                        ],
+                        [
+                            "type" => "form",
+                            "url" => url('/sharp/s-list/person/s-show/person/1/s-form/person/1'),
+                            "name" => "Edit",
+                            "entityKey" => "person"
+                        ]
+                    ]
+                ]
+            ]);
+            
     }
 
     /** @test */
     public function breadcrumb_is_built_depending_on_current_url_for_web_calls()
     {
+        $this->buildTheWorld();
 
+        $this
+            ->get(route('code16.sharp.list.subpage', ['person', 's-show/person/1']))
+            ->assertOk();
+        
+        /** @var CurrentSharpRequest $request */
+        $request = app(CurrentSharpRequest::class);
+        
+        $this->assertTrue($request->isShow());
+        $this->assertCount(2, $request->breadcrumb());
     }
 
     /** @test */
