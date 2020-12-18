@@ -26,7 +26,7 @@
                         {{ l('entity_list.empty_text') }}
                     </template>
                     <template v-slot:item="{ item }">
-                        <DataListRow :url="instanceUrl(item)" :columns="columns" :row="item">
+                        <DataListRow :url="instanceUrl(item)" :columns="columns" :highlight="instanceIsFocused(item)" :row="item">
                             <template v-if="hasActionsColumn" v-slot:append>
                                 <div class="row justify-content-end justify-content-md-start mx-n2">
                                     <template v-if="instanceHasState(item)">
@@ -154,7 +154,8 @@
             visible: {
                 type: Boolean,
                 default: true,
-            }
+            },
+            focusedItem: Number,
         },
         data() {
             return {
@@ -448,6 +449,10 @@
                 return Array.isArray(viewAuthorizations)
                     ? viewAuthorizations.includes(instanceId)
                     : !!viewAuthorizations;
+            },
+            instanceIsFocused(instance) {
+                const instanceId = this.instanceId(instance);
+                return this.focusedItem && this.focusedItem === instanceId;
             },
 
 

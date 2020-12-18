@@ -10,6 +10,7 @@
             :hidden-commands="hiddenCommands"
             :hidden-filters="hiddenFilters"
             :visible="!collapsed"
+            :focused-item="focusedItem"
             inline
             @change="handleChanged"
         >
@@ -50,6 +51,7 @@
 </template>
 
 <script>
+    import { getReferrerRoute } from "sharp/router";
     import { Localization } from "sharp/mixins";
     import { EntityList, entityListModule } from 'sharp-entity-list';
     import { CommandsDropdown } from 'sharp-commands';
@@ -83,7 +85,8 @@
         data() {
             return {
                 list: null,
-                collapsed: this.collapsable,
+                collapsed: this.collapsable && !this.getFocusedItem(),
+                focusedItem: this.getFocusedItem(),
             }
         },
         computed: {
@@ -126,6 +129,16 @@
             handleDetailsToggle(e) {
                 this.collapsed = !e.target.open;
             },
+            getFocusedItem() {
+                const route = getReferrerRoute();
+                if(route
+                    && route.name
+                    && route.params.entityKey.replace(/:(.*)/, '') === this.entityListKey
+                    && route.params.instanceId
+                ) {
+                    return Number(route.params.instanceId);
+                }
+            },
         },
         created() {
             const modulePath = this.storeModule.split('/');
@@ -138,5 +151,10 @@
 
             syncVisibility(this, () => this.isVisible, { lazy:true });
         },
+        mounted() {
+            if(this.focusedItem) {
+                this.$el.scrollIntoView({ block:'center' });
+            }
+        }
     }
 </script>
