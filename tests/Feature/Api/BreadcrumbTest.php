@@ -123,4 +123,50 @@ class BreadcrumbTest extends BaseApiTest
                 ]
             ]);
     }
+
+    /** @test */
+    public function if_a_custom_label_is_defined_it_is_used_on_leaves()
+    {
+        $this->buildTheWorld();
+
+        $this->app['config']->set(
+            'sharp.entities.person.show',
+            PersonWithBreadcrumbConfigSharpShow::class
+        );
+
+        $this
+            ->withHeaders([
+                "referer" => url('/sharp/s-list/person/s-show/person/1')
+            ])
+            ->getJson(route('code16.sharp.api.show.show', ['person', '1']))
+            ->assertOk()
+            ->assertJson([
+                "breadcrumb" => [
+                    "visible" => config("sharp.display_breadcrumb"),
+                    "items" => [
+                        [
+                            "type" => "entityList",
+                            "url" => url('/sharp/s-list/person'),
+                            "name" => "List",
+                            "entityKey" => "person"
+                        ],
+                        [
+                            "type" => "show",
+                            "url" => url('/sharp/s-list/person/s-show/person/1'),
+                            "name" => "John Wayne",
+                            "entityKey" => "person"
+                        ]
+                    ]
+                ]
+            ]);
+    }
+}
+
+class PersonWithBreadcrumbConfigSharpShow extends PersonSharpShow
+{
+    function buildShowConfig(): void
+    {
+        parent::buildShowConfig();
+        $this->setBreadcrumbCustomLabelAttribute("name");
+    }
 }
