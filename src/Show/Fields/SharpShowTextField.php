@@ -6,47 +6,29 @@ class SharpShowTextField extends SharpShowField
 {
     const FIELD_TYPE = "text";
 
-    /** @var string */
-    protected $label = null;
+    protected ?string $label = null;
+    protected ?int $collapseToWordCount = null;
 
-    /** @var int */
-    protected $collapseToWordCount = null;
-
-    /**
-     * @param string $key
-     * @return static
-     */
-    public static function make(string $key)
+    public static function make(string $key): SharpShowTextField
     {
         return new static($key, static::FIELD_TYPE);
     }
 
-    /**
-     * @param string $label
-     * @return $this
-     */
-    public function setLabel(string $label)
+    public function setLabel(string $label): self
     {
         $this->label = $label;
 
         return $this;
     }
 
-    /**
-     * @param int $wordCount
-     * @return $this
-     */
-    public function collapseToWordCount(int $wordCount)
+    public function collapseToWordCount(int $wordCount): self
     {
         $this->collapseToWordCount = $wordCount;
 
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function doNotCollapse()
+    public function doNotCollapse(): self
     {
         $this->collapseToWordCount = null;
 
@@ -55,9 +37,6 @@ class SharpShowTextField extends SharpShowField
 
     /**
      * Create the properties array for the field, using parent::buildArray()
-     *
-     * @return array
-     * @throws \Code16\Sharp\Exceptions\Show\SharpShowFieldValidationException
      */
     public function toArray(): array
     {
@@ -67,10 +46,7 @@ class SharpShowTextField extends SharpShowField
         ]);
     }
 
-    /**
-     * @return array
-     */
-    protected function validationRules()
+    protected function validationRules(): array
     {
         return [
             "collapseToWordCount" => "int|nullable"

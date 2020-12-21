@@ -40,7 +40,7 @@ abstract class SharpShow
     /**
      * Return the entity instance, as an array.
      *
-     * @param $id
+     * @param mixed $id
      * @return array
      */
     final public function instance($id): array
@@ -59,7 +59,7 @@ abstract class SharpShow
     /**
      * Return the show config values (commands and state).
      *
-     * @param $instanceId
+     * @param mixed $instanceId
      * @param array $config
      * @return array
      */
@@ -129,8 +129,6 @@ abstract class SharpShow
 
     /**
      * Build show config using ->addInstanceCommand() and ->setEntityState()
-     *
-     * @return void
      */
     function buildShowConfig(): void
     {
@@ -140,22 +138,18 @@ abstract class SharpShow
     /**
      * Retrieve a Model for the form and pack all its data as JSON.
      *
-     * @param $id
+     * @param mixed $id
      * @return array
      */
     abstract function find($id): array;
 
     /**
      * Build form fields using ->addField()
-     *
-     * @return void
      */
     abstract function buildShowFields(): void;
 
     /**
      * Build form layout using ->addSection()
-     *
-     * @return void
      */
     abstract function buildShowLayout(): void;
 }

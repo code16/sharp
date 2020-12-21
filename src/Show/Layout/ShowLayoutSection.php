@@ -6,34 +6,15 @@ use Code16\Sharp\Form\Layout\HasLayout;
 
 class ShowLayoutSection implements HasLayout
 {
-    /**
-     * @var string
-     */
-    protected $title;
+    protected ?string $title = null;
+    protected array $columns = [];
+    protected bool $collapsable = false;
 
-    /**
-     * @var array
-     */
-    protected $columns = [];
-
-    /**
-     * @var bool
-     */
-    protected $collapsable = false;
-
-    /**
-     * @param string $title
-     */
     function __construct(string $title)
     {
         $this->title = $title;
     }
 
-    /**
-     * @param int $size
-     * @param \Closure|null $callback
-     * @return $this
-     */
     public function addColumn(int $size, \Closure $callback = null): self
     {
         $column = $this->addColumnLayout(new ShowLayoutColumn($size));
@@ -52,9 +33,6 @@ class ShowLayoutSection implements HasLayout
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         return [
@@ -68,10 +46,6 @@ class ShowLayoutSection implements HasLayout
         ];
     }
 
-    /**
-     * @param ShowLayoutColumn $column
-     * @return ShowLayoutColumn
-     */
     public function addColumnLayout(ShowLayoutColumn $column): ShowLayoutColumn
     {
         $this->columns[] = $column;
