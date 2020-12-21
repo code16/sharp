@@ -13,7 +13,7 @@ class DashboardFilterTest extends SharpTestCase
     function we_can_get_dashboard_filters_config()
     {
         $dashboard = new class extends SharpDashboardTestDashboard {
-            function buildDashboardConfig()
+            function buildDashboardConfig(): void
             {
                 $this->addFilter("test", new class implements DashboardFilter {
                     public function values() { return [1 => "A", 2 => "B"]; }
@@ -43,7 +43,7 @@ class DashboardFilterTest extends SharpTestCase
     function we_can_get_dashboard_date_range_filter_config()
     {
         $dashboard = new class extends SharpDashboardTestDashboard {
-            function buildDashboardConfig()
+            function buildDashboardConfig(): void
             {
                 $this->addFilter("test", new class implements DashboardDateRangeFilter {
                     public function values() { return []; }

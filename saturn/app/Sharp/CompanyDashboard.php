@@ -34,7 +34,7 @@ class CompanyDashboard extends SharpDashboard
     
     private static $colorsIndex = 0;
 
-    function buildWidgets()
+    function buildWidgets(): void
     {
         $this
             ->addWidget(
@@ -72,7 +72,7 @@ class CompanyDashboard extends SharpDashboard
             );
     }
 
-    function buildWidgetsLayout()
+    function buildWidgetsLayout(): void
     {
         $this
             ->addRow(function(DashboardLayoutRow $row) {
@@ -91,7 +91,7 @@ class CompanyDashboard extends SharpDashboard
             });
     }
 
-    function buildWidgetsData(DashboardQueryParams $params)
+    function buildWidgetsData(DashboardQueryParams $params): void
     {
         $this->setPieGraphDataSet();
         $this->setBarsGraphDataSet();

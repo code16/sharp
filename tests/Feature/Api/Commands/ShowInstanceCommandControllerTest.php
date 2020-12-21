@@ -114,7 +114,7 @@ class ShowInstanceCommandControllerTest extends BaseApiTest
 
 class ShowInstanceCommandPersonSharpShow extends PersonSharpShow {
 
-    function buildShowConfig()
+    function buildShowConfig(): void
     {
         $this
             ->addInstanceCommand("instance_info", new class() extends InstanceCommand {
@@ -142,7 +142,7 @@ class ShowInstanceCommandPersonSharpShow extends PersonSharpShow {
 
 class ShowInstanceCommandPersonSharpSingleShow extends PersonSharpSingleShow {
 
-    function buildShowConfig()
+    function buildShowConfig(): void
     {
         $this
             ->addInstanceCommand("instance_info", new class() extends SingleInstanceCommand {

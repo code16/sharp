@@ -5,6 +5,7 @@ namespace Code16\Sharp\Tests\Feature\Api;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpSingleForm;
+use Illuminate\Contracts\Support\Arrayable;
 
 class FormControllerTest extends BaseApiTest
 {
@@ -218,32 +219,24 @@ class FormControllerTest extends BaseApiTest
 class PersonSharpSingleForm extends SharpSingleForm
 {
 
-    function buildFormFields()
+    function buildFormFields(): void
     {
         $this->addField(SharpFormTextField::make("name"));
     }
 
-    function buildFormLayout()
+    function buildFormLayout(): void
     {
         $this->addColumn(6, function(FormLayoutColumn $column) {
             return $column->withSingleField("name");
         });
     }
 
-    /**
-     * @return array
-     */
     protected function findSingle()
     {
         return ["name" => "Single John Wayne", "job" => "actor"];
     }
 
-    /**
-     * @param array $data
-     * @return mixed
-     */
-    protected function updateSingle(array $data)
+    protected function updateSingle(array $data): void
     {
-        return true;
     }
 }

@@ -68,12 +68,12 @@ class DataLocalizationTest extends BaseApiTest
 
 class DataLocalizationTestForm extends PersonSharpForm
 {
-    function buildFormFields()
+    function buildFormFields(): void
     {
         $this->addField(SharpFormTextField::make("name")->setLocalized());
     }
 
-    function getDataLocalizations()
+    function getDataLocalizations(): array
     {
         return ["fr", "en"];
     }
@@ -81,8 +81,7 @@ class DataLocalizationTestForm extends PersonSharpForm
 
 class DataLocalizationWithoutLocalizedFieldTestForm extends PersonSharpForm
 {
-
-    function getDataLocalizations()
+    function getDataLocalizations(): array
     {
         return ["fr", "en"];
     }

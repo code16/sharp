@@ -14,7 +14,7 @@ class SharpEntityListStateTest extends SharpTestCase
     function we_can_get_list_entity_state_config_with_an_instance()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig()
+            function buildListConfig(): void
             {
                 $this->setEntityState("_state", new class extends EntityState {
                     protected function buildStates()
@@ -44,7 +44,7 @@ class SharpEntityListStateTest extends SharpTestCase
     function we_can_get_list_entity_state_config_with_a_class_name()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig()
+            function buildListConfig(): void
             {
                 $this->setEntityState("_state", SharpEntityListTestState::class);
             }
@@ -74,13 +74,13 @@ class SharpEntityListStateTest extends SharpTestCase
                     ["id" => 2, "name" => "Mary Wayne", "state" => false]
                 ];
             }
-            function buildListDataContainers()
+            function buildListDataContainers(): void
             {
                 $this->addDataContainer(
                     EntityListDataContainer::make("name")
                 );
             }
-            function buildListConfig()
+            function buildListConfig(): void
             {
                 $this->setEntityState("state", new class extends EntityState {
                     protected function buildStates()
@@ -107,7 +107,7 @@ class SharpEntityListStateTest extends SharpTestCase
     function we_can_handle_authorization_in_a_state()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig()
+            function buildListConfig(): void
             {
                 $this->setEntityState("_state", new class extends EntityState {
                     protected function buildStates()

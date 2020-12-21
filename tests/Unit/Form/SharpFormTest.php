@@ -21,7 +21,7 @@ class SharpFormTest extends SharpTestCase
     function we_get_formatted_data_in_creation_with_the_default_create_function()
     {
         $sharpForm = new class extends BaseSharpForm {
-            function buildFormFields()
+            function buildFormFields(): void
             {
                 $this->addField(
                     SharpFormMarkdownField::make("md")
@@ -41,7 +41,7 @@ class SharpFormTest extends SharpTestCase
     function we_get_formatted_data_in_creation_with_the_default_create_function_with_subclasses()
     {
         $sharpForm = new class extends BaseSharpForm {
-            function buildFormFields()
+            function buildFormFields(): void
             {
                 $this->addField(
                     SharpFormTextField::make("name")
@@ -64,7 +64,7 @@ class SharpFormTest extends SharpTestCase
         {
             public $instance;
 
-            function buildFormFields()
+            function buildFormFields(): void
             {
                 $this->addField(
                     SharpFormTextField::make("normal")
@@ -117,7 +117,7 @@ class SharpFormTest extends SharpTestCase
     {
         $sharpForm = new class extends BaseSharpForm
         {
-            function buildFormFields()
+            function buildFormFields(): void
             {
                 $this->addField(
                     SharpFormTextField::make("delayed")
@@ -163,23 +163,23 @@ class BaseSharpForm extends SharpForm
     function update($id, array $data)
     {
     }
-    function delete($id)
+    function delete($id): void
     {
     }
-    function buildFormFields()
+    function buildFormFields(): void
     {
     }
-    function buildFormLayout()
+    function buildFormLayout(): void
     {
     }
 }
 
 class BaseSharpSingleForm extends SharpSingleForm
 {
-    function buildFormFields()
+    function buildFormFields(): void
     {
     }
-    function buildFormLayout()
+    function buildFormLayout(): void
     {
     }
     protected function findSingle()

@@ -13,7 +13,7 @@ class UserSharpList extends SharpEntityList
 {
     use WithCustomTransformers;
 
-    function buildListDataContainers()
+    function buildListDataContainers(): void
     {
         $this->addDataContainer(
             EntityListDataContainer::make("name")
@@ -31,14 +31,14 @@ class UserSharpList extends SharpEntityList
         );
     }
 
-    function buildListConfig()
+    function buildListConfig(): void
     {
         $this->setInstanceIdAttribute("id")
             ->addEntityCommand("export_users", ExportUsersCommand::class)
             ->setDefaultSort("name", "asc");
     }
 
-    function buildListLayout()
+    function buildListLayout(): void
     {
         $this->addColumn("name", 4)
             ->addColumn("email", 4)

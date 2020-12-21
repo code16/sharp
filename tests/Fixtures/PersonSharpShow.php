@@ -11,17 +11,12 @@ use Code16\Sharp\Show\SharpShow;
 
 class PersonSharpShow extends SharpShow
 {
-    /**
-     * Build form fields using ->addField()
-     *
-     * @return void
-     */
-    function buildShowFields()
+    function buildShowFields(): void
     {
         $this->addField(SharpShowTextField::make("name"));
     }
 
-    function buildShowConfig()
+    function buildShowConfig(): void
     {
         $this
             ->addInstanceCommand("test_command", new class extends InstanceCommand {
@@ -52,12 +47,7 @@ class PersonSharpShow extends SharpShow
             });
     }
 
-    /**
-     * Build form layout using ->addSection()
-     *
-     * @return void
-     */
-    function buildShowLayout()
+    function buildShowLayout(): void
     {
         $this
             ->addSection("Identity", function(ShowLayoutSection $section) {

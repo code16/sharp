@@ -6,6 +6,7 @@ use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
+use Illuminate\Contracts\Support\Arrayable;
 
 class MultiFormEntityListControllerTest extends BaseApiTest
 {
@@ -77,19 +78,19 @@ class PersonWithMultiformSharpEntityList extends SharpEntityList
             ]);
     }
 
-    function buildListDataContainers()
+    function buildListDataContainers(): void
     {
         $this->addDataContainer(
             EntityListDataContainer::make("name")
         );
     }
 
-    function buildListLayout()
+    function buildListLayout(): void
     {
         $this->addColumn("name", 12);
     }
 
-    function buildListConfig()
+    function buildListConfig(): void
     {
         $this->setMultiformAttribute("type");
     }

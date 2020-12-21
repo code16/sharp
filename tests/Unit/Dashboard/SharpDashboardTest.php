@@ -19,7 +19,7 @@ class SharpDashboardTest extends SharpTestCase
     function we_can_get_widgets()
     {
         $dashboard = new class extends SharpDashboardTestDashboard {
-            protected function buildWidgets()
+            protected function buildWidgets(): void
             {
                 $this->addWidget(
                     SharpBarGraphWidget::make("widget")
@@ -46,13 +46,13 @@ class SharpDashboardTest extends SharpTestCase
     function we_can_get_widgets_layout()
     {
         $dashboard = new class extends SharpDashboardTestDashboard {
-            protected function buildWidgets()
+            protected function buildWidgets(): void
             {
                 $this->addWidget(SharpBarGraphWidget::make("widget"))
                     ->addWidget(SharpBarGraphWidget::make("widget2"))
                     ->addWidget(SharpBarGraphWidget::make("widget3"));
             }
-            protected function buildWidgetsLayout()
+            protected function buildWidgetsLayout(): void
             {
                 $this->addFullWidthWidget("widget")
                     ->addRow(function(DashboardLayoutRow $row) {
@@ -78,11 +78,11 @@ class SharpDashboardTest extends SharpTestCase
     function we_can_get_graph_widget_data()
     {
         $dashboard = new class extends SharpDashboardTestDashboard {
-            protected function buildWidgets()
+            protected function buildWidgets(): void
             {
                 $this->addWidget(SharpBarGraphWidget::make("widget"));
             }
-            protected function buildWidgetsData(DashboardQueryParams $params)
+            protected function buildWidgetsData(DashboardQueryParams $params): void
             {
                 $this->addGraphDataSet("widget", SharpGraphWidgetDataSet::make([
                     "a" => 10, "b" => 20, "c" => 30,
@@ -110,11 +110,11 @@ class SharpDashboardTest extends SharpTestCase
     function we_can_get_graph_widget_data_with_multiple_datasets()
     {
         $dashboard = new class extends SharpDashboardTestDashboard {
-            protected function buildWidgets()
+            protected function buildWidgets(): void
             {
                 $this->addWidget(SharpBarGraphWidget::make("widget"));
             }
-            protected function buildWidgetsData(DashboardQueryParams $params)
+            protected function buildWidgetsData(DashboardQueryParams $params): void
             {
                 $this->addGraphDataSet("widget", SharpGraphWidgetDataSet::make([
                     "a" => 10, "b" => 20, "c" => 30,
@@ -149,13 +149,13 @@ class SharpDashboardTest extends SharpTestCase
     function we_can_get_panel_widget_data()
     {
         $dashboard = new class extends SharpDashboardTestDashboard {
-            protected function buildWidgets()
+            protected function buildWidgets(): void
             {
                 $this->addWidget(
                     SharpPanelWidget::make("widget")->setInlineTemplate('<b>Hello {{user}}</b>')
                 );
             }
-            protected function buildWidgetsData(DashboardQueryParams $params)
+            protected function buildWidgetsData(DashboardQueryParams $params): void
             {
                 $this->setPanelData("widget", ["user" => "John Wayne"]);
             }
@@ -175,11 +175,11 @@ class SharpDashboardTest extends SharpTestCase
     function we_can_get_ordered_list_widget_data()
     {
         $dashboard = new class extends SharpDashboardTestDashboard {
-            protected function buildWidgets()
+            protected function buildWidgets(): void
             {
                 $this->addWidget(SharpOrderedListWidget::make("widget"));
             }
-            protected function buildWidgetsData(DashboardQueryParams $params)
+            protected function buildWidgetsData(DashboardQueryParams $params): void
             {
                 $this->setOrderedListData("widget", [
                     [
@@ -220,7 +220,7 @@ class SharpDashboardTest extends SharpTestCase
     function we_can_get_ordered_list_widget_item_url()
     {
         $dashboard = new class extends SharpDashboardTestDashboard {
-            protected function buildWidgets()
+            protected function buildWidgets(): void
             {
                 $this->addWidget(
                     SharpOrderedListWidget::make("widget")
@@ -232,7 +232,7 @@ class SharpDashboardTest extends SharpTestCase
                         })
                 );
             }
-            protected function buildWidgetsData(DashboardQueryParams $params)
+            protected function buildWidgetsData(DashboardQueryParams $params): void
             {
                 $this->setOrderedListData("widget", [
                     [
@@ -287,7 +287,7 @@ class SharpDashboardTest extends SharpTestCase
 
 class SharpDashboardTestDashboard extends SharpDashboard
 {
-    protected function buildWidgets() {}
-    protected function buildWidgetsLayout() {}
-    protected function buildWidgetsData(DashboardQueryParams $params) { }
+    protected function buildWidgets(): void {}
+    protected function buildWidgetsLayout(): void {}
+    protected function buildWidgetsData(DashboardQueryParams $params): void { }
 }

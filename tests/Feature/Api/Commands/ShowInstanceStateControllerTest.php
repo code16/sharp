@@ -76,7 +76,7 @@ class ShowInstanceStateControllerTest extends BaseApiTest
 
 class ShowInstanceStatePersonSharpShow extends PersonSharpShow {
 
-    function buildShowConfig()
+    function buildShowConfig(): void
     {
         $this->setEntityState("state", new class() extends EntityState {
             protected function buildStates()
@@ -102,7 +102,7 @@ class ShowInstanceStatePersonSharpShow extends PersonSharpShow {
 
 class ShowInstanceStatePersonSharpSingleShow extends PersonSharpSingleShow {
 
-    function buildShowConfig()
+    function buildShowConfig(): void
     {
         $this->setEntityState("state", new class() extends SingleEntityState {
             protected function buildStates()

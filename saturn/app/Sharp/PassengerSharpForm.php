@@ -15,7 +15,7 @@ class PassengerSharpForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
 
-    function buildFormFields()
+    function buildFormFields(): void
     {
         $this->addField(
             SharpFormTextField::make("name")
@@ -58,7 +58,7 @@ class PassengerSharpForm extends SharpForm
 
     }
 
-    function buildFormLayout()
+    function buildFormLayout(): void
     {
         $this->addColumn(6, function(FormLayoutColumn $column) {
             $column->withFields("gender|4", "name|8")
@@ -81,7 +81,7 @@ class PassengerSharpForm extends SharpForm
         $this->save($instance, $data);
     }
 
-    function delete($id)
+    function delete($id): void
     {
         Passenger::findOrFail($id)->delete();
     }

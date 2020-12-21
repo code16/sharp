@@ -17,16 +17,10 @@ abstract class SharpShow
         HandleEntityState,
         HandleCommands;
 
-    /** @var bool */
-    protected $layoutBuilt = false;
+    protected bool $layoutBuilt = false;
+    protected array $sections = [];
 
-    /** @var array */
-    protected $sections = [];
-
-    /**
-     * @return array
-     */
-    final public function showLayout()
+    final public function showLayout(): array
     {
         if(!$this->layoutBuilt) {
             $this->buildShowLayout();
@@ -74,17 +68,12 @@ abstract class SharpShow
         });
     }
 
-    private function buildFormFields()
+    private function buildFormFields(): void
     {
         $this->buildShowFields();
     }
 
-    /**
-     * @param string $label
-     * @param \Closure|null $callback
-     * @return $this
-     */
-    final protected function addSection(string $label, \Closure $callback = null)
+    final protected function addSection(string $label, \Closure $callback = null): self
     {
         $this->layoutBuilt = false;
 
@@ -98,11 +87,7 @@ abstract class SharpShow
         return $this;
     }
 
-    /**
-     * @param string $entityListKey
-     * @return $this
-     */
-    final protected function addEntityListSection(string $entityListKey, \Closure $callback = null)
+    final protected function addEntityListSection(string $entityListKey, \Closure $callback = null): self
     {
         $this->layoutBuilt = false;
 
@@ -120,12 +105,7 @@ abstract class SharpShow
         return $this;
     }
 
-    /**
-     * @param string $commandName
-     * @param string|EntityCommand $commandHandlerOrClassName
-     * @throws SharpException
-     */
-    final protected function addEntityCommand(string $commandName, $commandHandlerOrClassName)
+    final protected function addEntityCommand(string $commandName, $commandHandlerOrClassName): void
     {
         throw new SharpException("Entity commands are not allowed in Show view");
     }
@@ -135,7 +115,7 @@ abstract class SharpShow
      *
      * @return void
      */
-    function buildShowConfig()
+    function buildShowConfig(): void
     {
         // No default implementation
     }
@@ -153,12 +133,12 @@ abstract class SharpShow
      *
      * @return void
      */
-    abstract function buildShowFields();
+    abstract function buildShowFields(): void;
 
     /**
      * Build form layout using ->addSection()
      *
      * @return void
      */
-    abstract function buildShowLayout();
+    abstract function buildShowLayout(): void;
 }

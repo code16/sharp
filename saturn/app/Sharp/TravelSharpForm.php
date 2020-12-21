@@ -19,7 +19,7 @@ class TravelSharpForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
 
-    function buildFormFields()
+    function buildFormFields(): void
     {
         $this->addField(
             SharpFormDateField::make("departure_date")
@@ -82,7 +82,7 @@ class TravelSharpForm extends SharpForm
         );
     }
 
-    function buildFormLayout()
+    function buildFormLayout(): void
     {
         $this->addColumn(5, function(FormLayoutColumn $column) {
             $column->withSingleField("departure_date")
@@ -111,7 +111,7 @@ class TravelSharpForm extends SharpForm
         $this->save($instance, $data);
     }
 
-    function delete($id)
+    function delete($id): void
     {
         Travel::findOrFail($id)->delete();
     }

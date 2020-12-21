@@ -120,7 +120,7 @@ class EntityListInstanceStateControllerTest extends BaseApiTest
 
 class EntityListInstanceStatePersonSharpEntityList extends PersonSharpEntityList {
 
-    function buildListConfig()
+    function buildListConfig(): void
     {
         $this->setEntityState("state", new class() extends EntityState {
 

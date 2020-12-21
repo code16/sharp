@@ -233,7 +233,7 @@ class DownloadControllerTest extends BaseApiTest
 
 class DownloadControllerTestForm extends SharpForm
 {
-    function buildFormFields()
+    function buildFormFields(): void
     {
         $this
             ->addField(
@@ -250,16 +250,16 @@ class DownloadControllerTestForm extends SharpForm
                     )
             );
     }
-    function buildFormLayout()
+    function buildFormLayout(): void
     {
     }
     function find($id): array
     {
     }
-    function update($id, array $data): bool
+    function update($id, array $data): void
     {
     }
-    function delete($id): bool
+    function delete($id): void
     {
     }
     function create(): array
@@ -269,7 +269,7 @@ class DownloadControllerTestForm extends SharpForm
 
 class DownloadControllerTestShow extends SharpShow
 {
-    function buildShowFields()
+    function buildShowFields(): void
     {
         $this
             ->addField(
@@ -289,7 +289,7 @@ class DownloadControllerTestShow extends SharpShow
     function find($id): array
     {
     }
-    function buildShowLayout()
+    function buildShowLayout(): void
     {
     }
 }

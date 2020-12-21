@@ -12,7 +12,7 @@ use Code16\Sharp\Show\SharpSingleShow;
 
 class AccountSharpShow extends SharpSingleShow
 {
-    function buildShowFields()
+    function buildShowFields(): void
     {
         $this
             ->addField(
@@ -27,7 +27,7 @@ class AccountSharpShow extends SharpSingleShow
             );
     }
 
-    function buildShowLayout()
+    function buildShowLayout(): void
     {
         $this
             ->addSection('Identity', function(ShowLayoutSection $section) {
@@ -41,10 +41,7 @@ class AccountSharpShow extends SharpSingleShow
             });
     }
 
-    /**
-     * @throws \Code16\Sharp\Exceptions\SharpException
-     */
-    function buildShowConfig()
+    function buildShowConfig(): void
     {
         $this
             ->addInstanceCommand("rename", AccountUpdateName::class)

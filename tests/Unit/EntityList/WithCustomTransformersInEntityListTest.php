@@ -102,7 +102,7 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
 
         $list = new class extends WithCustomTransformersTestList
         {
-            function buildListDataContainers()
+            function buildListDataContainers(): void
             {
                 $this->addDataContainer(EntityListDataContainer::make("mother:name"));
             }
@@ -190,9 +190,9 @@ class WithCustomTransformersTestList extends SharpEntityList
         return $this->transform(Person::all());
     }
 
-    function buildListDataContainers() {}
-    function buildListLayout() {}
-    function buildListConfig() {}
+    function buildListDataContainers(): void {}
+    function buildListLayout(): void {}
+    function buildListConfig(): void {}
 }
 
 class UppercaseTransformer implements SharpAttributeTransformer

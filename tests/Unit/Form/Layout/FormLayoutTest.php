@@ -12,7 +12,7 @@ class FormLayoutTest extends SharpTestCase
     function we_can_add_a_tab()
     {
         $form = new class extends FormLayoutTestForm {
-            function buildFormLayout()
+            function buildFormLayout(): void
             {
                 $this->addTab("label");
             }
@@ -25,7 +25,7 @@ class FormLayoutTest extends SharpTestCase
     function we_can_add_a_column()
     {
         $form = new class extends FormLayoutTestForm {
-            function buildFormLayout()
+            function buildFormLayout(): void
             {
                 $this->addColumn(2);
             }
@@ -38,7 +38,7 @@ class FormLayoutTest extends SharpTestCase
     function we_can_see_layout_as_array()
     {
         $form = new class extends FormLayoutTestForm {
-            function buildFormLayout()
+            function buildFormLayout(): void
             {
                 $this->addTab("label");
             }
@@ -50,7 +50,7 @@ class FormLayoutTest extends SharpTestCase
         );
 
         $form2 = new class extends FormLayoutTestForm {
-            function buildFormLayout()
+            function buildFormLayout(): void
             {
                 $this->addColumn(2);
             }
@@ -68,7 +68,7 @@ class FormLayoutTest extends SharpTestCase
     function we_can_set_tabbed_to_false()
     {
         $form = new class extends FormLayoutTestForm {
-            function buildFormLayout()
+            function buildFormLayout(): void
             {
                 $this->addTab("label")->setTabbed(false);
             }
@@ -81,7 +81,7 @@ class FormLayoutTest extends SharpTestCase
 abstract class FormLayoutTestForm extends SharpForm
 {
     function find($id): array { return []; }
-    function update($id, array $data): bool { return false; }
-    function delete($id): bool { return false; }
-    function buildFormFields() {}
+    function update($id, array $data) { return false; }
+    function delete($id): void {}
+    function buildFormFields(): void {}
 }

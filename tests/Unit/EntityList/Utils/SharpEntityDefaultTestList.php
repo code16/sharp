@@ -7,8 +7,8 @@ use Code16\Sharp\EntityList\SharpEntityList;
 
 abstract class SharpEntityDefaultTestList extends SharpEntityList
 {
-    function buildListDataContainers() {}
-    function buildListLayout() {}
-    function buildListConfig() {}
+    function buildListDataContainers(): void {}
+    function buildListLayout(): void {}
+    function buildListConfig(): void {}
     function getListData(EntityListQueryParams $params) { return []; }
 }

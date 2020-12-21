@@ -11,7 +11,7 @@ use Code16\Sharp\EntityList\SharpEntityList;
 class FeatureSharpList extends SharpEntityList
 {
 
-    function buildListDataContainers()
+    function buildListDataContainers(): void
     {
         $this->addDataContainer(
             EntityListDataContainer::make("name")
@@ -22,12 +22,12 @@ class FeatureSharpList extends SharpEntityList
         );
     }
 
-    function buildListConfig()
+    function buildListConfig(): void
     {
         $this->setReorderable(new FeatureReorderHandler());
     }
 
-    function buildListLayout()
+    function buildListLayout(): void
     {
         $this
             ->addColumn("name", 6)
