@@ -52,6 +52,11 @@ class PilotJuniorSharpForm extends SharpForm
         }
     }
 
+    function buildFormConfig(): void
+    {
+        $this->setBreadcrumbCustomLabelAttribute("name");
+    }
+
     function delete($id): void
     {
         Pilot::findOrFail($id)->delete();

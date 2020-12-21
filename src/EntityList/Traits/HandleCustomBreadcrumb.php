@@ -1,0 +1,22 @@
+<?php
+
+namespace Code16\Sharp\EntityList\Traits;
+
+trait HandleCustomBreadcrumb
+{
+    protected ?string $breadcrumbAttribute = null;
+
+    public function setBreadcrumbCustomLabelAttribute(string $breadcrumbAttribute): self
+    {
+        $this->breadcrumbAttribute = $breadcrumbAttribute;
+        
+        return $this;
+    }
+
+    protected function appendBreadcrumbCustomLabelAttribute(array &$config): void
+    {
+        if($this->breadcrumbAttribute) {
+            $config["breadcrumbAttribute"] = $this->breadcrumbAttribute;
+        }
+    }
+}

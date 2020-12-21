@@ -22,6 +22,8 @@ class FormController extends ApiController
         $form = $this->getFormInstance($entityKey);
         $this->checkFormImplementation($form, $instanceId);
 
+        $form->buildFormConfig();
+
         return response()->json([
             "fields" => $form->fields(),
             "layout" => $form->formLayout(),
@@ -45,6 +47,8 @@ class FormController extends ApiController
         }
 
         sharp_check_ability("create", $entityKey);
+
+        $form->buildFormConfig();
 
         return response()->json([
             "fields" => $form->fields(),

@@ -4,6 +4,7 @@ namespace Code16\Sharp\Show;
 
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Traits\HandleCommands;
+use Code16\Sharp\EntityList\Traits\HandleCustomBreadcrumb;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\Exceptions\SharpException;
 use Code16\Sharp\Form\HandleFormFields;
@@ -15,7 +16,8 @@ abstract class SharpShow
     use WithCustomTransformers,
         HandleFormFields,
         HandleEntityState,
-        HandleCommands;
+        HandleCommands,
+        HandleCustomBreadcrumb;
 
     protected bool $layoutBuilt = false;
     protected array $sections = [];
@@ -70,6 +72,7 @@ abstract class SharpShow
             ->all();
         
         return tap($config, function(&$config) use($instanceId) {
+            $this->appendBreadcrumbCustomLabelAttribute($config);
             $this->appendEntityStateToConfig($config, $instanceId);
             $this->appendCommandsToConfig($config, $instanceId);
         });

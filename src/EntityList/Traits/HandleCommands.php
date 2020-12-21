@@ -5,29 +5,17 @@ namespace Code16\Sharp\EntityList\Traits;
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\Exceptions\SharpException;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 
 trait HandleCommands
 {
-    /** @var array */
-    protected $entityCommandHandlers = [];
+    protected array $entityCommandHandlers = [];
+    protected array $instanceCommandHandlers = [];
+    protected int $instanceCommandCurrentGroupNumber = 0;
+    protected int $entityCommandCurrentGroupNumber = 0;
 
-    /** @var array */
-    protected $instanceCommandHandlers = [];
-
-    /** @var int */
-    protected $instanceCommandCurrentGroupNumber = 0;
-
-    /** @var int */
-    protected $entityCommandCurrentGroupNumber = 0;
-
-    /**
-     * @param string $commandName
-     * @param string|EntityCommand $commandHandlerOrClassName
-     * @return $this
-     * @throws SharpException
-     */
-    protected function addEntityCommand(string $commandName, $commandHandlerOrClassName)
+    protected function addEntityCommand(string $commandName, $commandHandlerOrClassName): self
     {
         $commandHandler = is_string($commandHandlerOrClassName)
             ? app($commandHandlerOrClassName)
@@ -44,13 +32,7 @@ trait HandleCommands
         return $this;
     }
 
-    /**
-     * @param string $commandName
-     * @param string|InstanceCommand $commandHandlerOrClassName
-     * @return $this
-     * @throws SharpException
-     */
-    protected function addInstanceCommand(string $commandName, $commandHandlerOrClassName)
+    protected function addInstanceCommand(string $commandName, $commandHandlerOrClassName): self
     {
         $commandHandler = is_string($commandHandlerOrClassName)
             ? app($commandHandlerOrClassName)
@@ -67,20 +49,14 @@ trait HandleCommands
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    protected function addInstanceCommandSeparator()
+    protected function addInstanceCommandSeparator(): self
     {
         $this->instanceCommandCurrentGroupNumber++;
 
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    protected function addEntityCommandSeparator()
+    protected function addEntityCommandSeparator(): self
     {
         $this->entityCommandCurrentGroupNumber++;
 
@@ -126,7 +102,7 @@ trait HandleCommands
      * Set the value of authorization key for instance commands and entity state,
      * which is an array of ids from the $items collection.
      *
-     * @param Collection $items
+     * @param array|Arrayable $items
      */
     protected function addInstanceCommandsAuthorizationsToConfigForItems($items)
     {
@@ -151,22 +127,14 @@ trait HandleCommands
             });
     }
 
-    /**
-     * @param string $commandKey
-     * @return EntityCommand|null
-     */
-    public function entityCommandHandler(string $commandKey)
+    public function entityCommandHandler(string $commandKey): ?EntityCommand
     {
         return isset($this->entityCommandHandlers[$commandKey])
             ? $this->entityCommandHandlers[$commandKey]
             : null;
     }
 
-    /**
-     * @param string $commandKey
-     * @return InstanceCommand|null
-     */
-    public function instanceCommandHandler(string $commandKey)
+    public function instanceCommandHandler(string $commandKey): ?InstanceCommand
     {
         return isset($this->instanceCommandHandlers[$commandKey])
             ? $this->instanceCommandHandlers[$commandKey]

@@ -7,17 +7,10 @@ use Code16\Sharp\Show\SharpSingleShow;
 
 class BreadcrumbItem
 {
-    /** @var string */
-    public $type;
-    
-    /** @var string */
-    public $key;
-    
-    /** @var string */
-    public $instance;
-
-    /** @var int */
-    public $depth;
+    public string $type;
+    public string $key;
+    public ?string $instance = null;
+    public int $depth = 0;
 
     public function __construct(string $type, string $key)
     {

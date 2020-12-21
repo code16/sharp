@@ -39,6 +39,7 @@ class PilotSharpShow extends SharpShow
     function buildShowConfig(): void
     {
         $this
+            ->setBreadcrumbCustomLabelAttribute("name")
             ->setMultiformAttribute("role")
             ->setEntityState("state", PilotEntityState::class)
             ->addInstanceCommand("download", PilotDownloadPhoto::class);

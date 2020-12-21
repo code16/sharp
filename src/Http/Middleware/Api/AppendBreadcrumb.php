@@ -6,6 +6,8 @@ use Closure;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * This middleware is responsible for appending the breadcrumb array
@@ -13,8 +15,8 @@ use Illuminate\Http\Request;
  */
 class AppendBreadcrumb
 {
-    /** @var CurrentSharpRequest */
-    protected $currentSharpRequest;
+    protected CurrentSharpRequest $currentSharpRequest;
+    protected ?object $data = null;
 
     public function __construct(CurrentSharpRequest $currentSharpRequest)
     {
@@ -33,26 +35,31 @@ class AppendBreadcrumb
     protected function addBreadcrumbToJsonResponse(JsonResponse $jsonResponse): JsonResponse
     {
         $url = sharp_base_url_segment();
-        $data = $jsonResponse->getData();
-        $data->breadcrumb = [
-            "items" => $this->currentSharpRequest
-                ->breadcrumb()
-                ->map(function($item) use(&$url) {
-                    $url = sprintf('%s/%s/%s', 
-                        $url, 
+        $breadcrumb = $this->currentSharpRequest->breadcrumb();
+        $displayBreadcrumb = config("sharp.display_breadcrumb", false);
+        $this->data = $jsonResponse->getData();
+        
+        $this->data->breadcrumb = [
+            "items" => $breadcrumb
+                ->map(function($item, $index) use(&$url, $displayBreadcrumb, $breadcrumb) {
+                    $url = sprintf('%s/%s/%s',
+                        $url,
                         $item->type,
                         isset($item->instance) ? "{$item->key}/{$item->instance}" : $item->key
                     );
+                    
                     return [
                         "type" => $this->getFrontTypeNameFor($item->type),
-                        "name" => $this->getBreadcrumbLabelFor($item),
+                        "name" => $displayBreadcrumb 
+                            ? $this->getBreadcrumbLabelFor($item, $index === sizeof($breadcrumb)-1)
+                            : "",
                         "entityKey" => $item->key,
                         "url" => url($url)
                     ];
                 }),
-            'visible' => config("sharp.display_breadcrumb", false),
+            'visible' => $displayBreadcrumb,
         ];
-        $jsonResponse->setData($data);
+        $jsonResponse->setData($this->data);
 
         return $jsonResponse;
     }
@@ -67,7 +74,7 @@ class AppendBreadcrumb
         ][$type] ?? "";
     }
 
-    private function getBreadcrumbLabelFor(object $item)
+    private function getBreadcrumbLabelFor(object $item, bool $isLeaf)
     {
         switch ($item->type) {
             case "s-list":
@@ -75,7 +82,9 @@ class AppendBreadcrumb
             case "s-dashboard":
                 return trans("sharp::breadcrumb.dashboard");
             case "s-show":
-                return trans("sharp::breadcrumb.show", ["entity" => $this->getEntityLabel($item->key)]);
+                return trans("sharp::breadcrumb.show", [
+                    "entity" => $this->getEntityLabel($item, $isLeaf)
+                ]);
             case "s-form":
                 // A Form is always a leaf
                 $previousItem = $this->currentSharpRequest->breadcrumb()[$item->depth-1];
@@ -83,20 +92,54 @@ class AppendBreadcrumb
                     if($previousItem->key !== $item->key) {
                         // The form entityKey is different from the previous entityKey
                         // in the breadcrumb: we are in a EEL case.
-                        return trans("sharp::breadcrumb.form.edit_entity", ["entity" => $this->getEntityLabel($item->key)]);
+                        return trans("sharp::breadcrumb.form.edit_entity", [
+                            "entity" => $this->getEntityLabel($item, true)
+                        ]);
                     }
                     return trans("sharp::breadcrumb.form.edit");
                 }
-                return trans("sharp::breadcrumb.form.create", ["entity" => $this->getEntityLabel($item->key)]);
+                return trans("sharp::breadcrumb.form.create", [
+                    "entity" => $this->getEntityLabel($item, true)
+                ]);
         }
         
         return $item->key;
     }
 
-    private function getEntityLabel(?string $entityKey): string
+    /**
+     * Only for Shows and Forms.
+     * 
+     * @param object $item
+     * @param bool $isLeaf
+     * @return string
+     */
+    private function getEntityLabel(object $item, bool $isLeaf): string
     {
-        return $entityKey
-            ? config("sharp.entities.$entityKey.label", $entityKey)
-            : "";
+        $cacheKey = "sharp.breadcrumb.{$item->key}.{$item->type}.{$item->instance}";
+        
+        if($isLeaf && $breadcrumbAttribute =  $this->data->config->breadcrumbAttribute ?? null) {
+            if($value = Arr::get(json_decode(json_encode($this->data->data), true), $breadcrumbAttribute)) {
+                Cache::put($cacheKey, $value, now()->addMinutes(30));
+                return $value;
+            }
+        }
+        
+        if(!$isLeaf) {
+            // The breadcrumb custom label may have been cached on the way up
+            if($value = Cache::get("sharp.breadcrumb.{$item->key}.{$item->type}.{$item->instance}")) {
+                return $value;
+            }
+        }
+        
+        if(strpos($item->key, ':') !== false) {
+            list($itemKey, $itemSubKey) = explode(":", $item->key);
+            if($value = config("sharp.entities.{$itemKey}.forms.{$itemSubKey}.label")) {
+                return $value;
+            }
+
+            return config("sharp.entities.{$itemKey}.label", $itemKey);
+        }
+        
+        return config("sharp.entities.{$item->key}.label", $item->key);
     }
 }

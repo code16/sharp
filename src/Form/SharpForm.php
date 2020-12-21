@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Form;
 
+use Code16\Sharp\EntityList\Traits\HandleCustomBreadcrumb;
 use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
@@ -11,7 +12,8 @@ use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 abstract class SharpForm
 {
     use WithCustomTransformers, 
-        HandleFormFields;
+        HandleFormFields,
+        HandleCustomBreadcrumb;
 
     protected array $tabs = [];
     protected bool $tabbed = true;
@@ -75,9 +77,15 @@ abstract class SharpForm
         return [];
     }
 
+    public function buildFormConfig(): void
+    {
+    }
+
     public function formConfig(): array
     {
-        return [];
+        return tap([], function(&$config) {
+            $this->appendBreadcrumbCustomLabelAttribute($config);
+        });
     }
 
     protected function addTab(string $label, \Closure $callback = null): self
