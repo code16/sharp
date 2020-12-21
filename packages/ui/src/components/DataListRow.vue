@@ -1,10 +1,5 @@
 <template>
-    <div class="SharpDataList__row container"
-        :class="{
-            'SharpDataList__row--header': header,
-            'SharpDataList__row--disabled': !header && !hasLink,
-        }"
-    >
+    <div class="SharpDataList__row container" :class="classes">
         <div class="SharpDataList__cols">
             <div class="row mx-n2 mx-md-n3">
                 <template v-for="column in columns">
@@ -47,11 +42,19 @@
                 default: ()=>({})
             },
             url: String,
-            header: Boolean
+            header: Boolean,
+            highlight: Boolean,
         },
         computed: {
             hasLink() {
                 return !!this.url;
+            },
+            classes() {
+                return {
+                    'SharpDataList__row--header': this.header,
+                    'SharpDataList__row--disabled': !this.header && !this.hasLink,
+                    'SharpDataList__row--highlight': this.highlight
+                }
             }
         },
         methods: {

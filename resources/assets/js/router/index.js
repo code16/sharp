@@ -27,3 +27,15 @@ export function routeUrl(location, { append }={}) {
     }
     return href;
 }
+
+export function getReferrerRoute() {
+    if(!document.referrer) {
+        return;
+    }
+    const referrerUrl = new URL(document.referrer);
+    if(referrerUrl.origin !== location.origin) {
+        return;
+    }
+    const { route } = router().resolve(referrerUrl.pathname + referrerUrl.search);
+    return route;
+}
