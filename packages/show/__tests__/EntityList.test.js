@@ -58,7 +58,7 @@ describe('show entity list field', () => {
 
         /** default */
         wrapper = createWrapper();
-        expect(wrapper.vm.isVisible).toBe(false);
+        expect(wrapper.vm.isVisible).toBeUndefined();
 
         /** has empty visible enabled */
         wrapper = createWrapper({
