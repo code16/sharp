@@ -150,7 +150,6 @@
                 default: true,
             },
             hiddenCommands: Object,
-            hiddenFilters: Object,
             visible: {
                 type: Boolean,
                 default: true,
@@ -238,8 +237,7 @@
                     ready: true,
                     count: this.totalCount,
                     search: this.search,
-                    hasSearchQuery: !!this.query?.search,
-                    filters: this.visibleFilters,
+                    filters: this.filters,
                     filtersValues: this.filtersValues,
                     commands: this.allowedEntityCommands,
                     forms: this.multiforms,
@@ -267,11 +265,6 @@
             allowedEntityCommands() {
                 return (this.config.commands.entity || [])
                     .map(group => group.filter(command => this.isEntityCommandAllowed(command)))
-            },
-            visibleFilters() {
-                return this.hiddenFilters
-                    ? this.filters.filter(filter => !(filter.key in this.hiddenFilters))
-                    : this.filters;
             },
             multiforms() {
                 return this.forms ? Object.values(this.forms) : null;

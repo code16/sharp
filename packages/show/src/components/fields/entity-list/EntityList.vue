@@ -8,7 +8,6 @@
             :show-search-field="showSearchField"
             :show-entity-state="showEntityState"
             :hidden-commands="hiddenCommands"
-            :hidden-filters="hiddenFilters"
             :visible="!collapsed"
             :focused-item="focusedItem"
             inline
@@ -19,6 +18,8 @@
                     v-bind="props"
                     v-on="listeners"
                     :collapsed="collapsed"
+                    :filters="visibleFilters"
+                    :has-active-query="hasActiveQuery"
                 >
                     <div class="ShowEntityListField__label show-field__label">
                         <template v-if="hasCollapse">
@@ -98,19 +99,41 @@
             storeModule() {
                 return `show/entity-lists/${this.fieldKey}`;
             },
+            query() {
+                return this.storeGetter('query');
+            },
+            filters() {
+                return this.storeGetter('filters/filters');
+            },
             getFiltersQueryParams() {
                 return this.storeGetter('filters/getQueryParams');
             },
+            filtersValues() {
+                return this.storeGetter('filters/values');
+            },
             isVisible() {
+                if(this.hasCollapse || this.emptyVisible) {
+                    return true;
+                }
                 if(this.list) {
                     const { data, authorizations } = this.list;
                     return !!(
                         data.items && data.items.length > 0 ||
                         this.showCreateButton && authorizations.create ||
-                        this.emptyVisible
+                        this.hasActiveQuery
                     );
                 }
-                return this.emptyVisible;
+            },
+            visibleFilters() {
+                return this.hiddenFilters
+                    ? this.filters.filter(filter => !(filter.key in this.hiddenFilters))
+                    : this.filters;
+            },
+            hasActiveQuery() {
+                const hasActiveFilters = this.visibleFilters
+                    .some(filter => this.filtersValues[filter.key] != null);
+
+                return !!this.query.search || hasActiveFilters;
             },
             hasCollapse() {
                 return this.collapsable;

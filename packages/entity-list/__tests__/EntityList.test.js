@@ -182,28 +182,6 @@ describe('EntityList', () => {
             ]);
         });
 
-        test('visibleFilters', () => {
-            const wrapper = createWrapper({
-                computed: {
-                    filters: () => [{ id:1, key:'type' }]
-                }
-            });
-            expect(wrapper.vm.visibleFilters).toEqual([{ id:1, key:'type' }]);
-
-            wrapper.setProps({
-                hiddenFilters: {
-                    type: 3,
-                }
-            });
-            expect(wrapper.vm.visibleFilters).toEqual([]);
-
-            wrapper.setProps({
-                hiddenFilters: {
-                    type: null,
-                }
-            });
-            expect(wrapper.vm.visibleFilters).toEqual([]);
-        });
 
         test('multiforms', () => {
             const wrapper = createWrapper();

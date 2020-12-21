@@ -48,7 +48,7 @@
                     </div>
                 </template>
 
-                <template v-if="!collapsed">
+                <template v-if="hasRightControls && !collapsed">
                     <div class="col-sm-auto action-bar__col">
                         <div class="row flex-nowrap justify-content-end action-bar__row">
                             <template v-if="canReorder">
@@ -132,6 +132,7 @@
 
             // show field props
             collapsed: Boolean,
+            hasActiveQuery: Boolean,
         },
         data() {
             return {
@@ -143,12 +144,10 @@
                 return this.forms && this.forms.length > 0;
             },
             hasLeftControls() {
-                const filters = this.filters ?? [];
-                // has search filled of filter selected
-                if(this.hasSearchQuery || filters.some(key => this.filtersValues[key] != null)) {
-                    return true;
-                }
-                return this.count > 0 && (filters.length > 0 || this.canSearch);
+                return this.hasActiveQuery || this.count > 0 && (this.filters?.length > 0 || this.canSearch);
+            },
+            hasRightControls() {
+                return this.canReorder || this.canCreate && !this.reorderActive;
             },
             hasOuterTitle() {
                 return this.$slots.default && (!this.ready || this.hasLeftControls);
