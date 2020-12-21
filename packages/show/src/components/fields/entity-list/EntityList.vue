@@ -109,16 +109,17 @@
                 return this.storeGetter('filters/values');
             },
             isVisible() {
+                if(this.hasCollapse || this.emptyVisible) {
+                    return true;
+                }
                 if(this.list) {
                     const { data, authorizations } = this.list;
                     return !!(
                         data.items && data.items.length > 0 ||
                         this.showCreateButton && authorizations.create ||
-                        this.hasActiveQuery ||
-                        this.emptyVisible
+                        this.hasActiveQuery
                     );
                 }
-                return this.emptyVisible;
             },
             visibleFilters() {
                 return this.hiddenFilters

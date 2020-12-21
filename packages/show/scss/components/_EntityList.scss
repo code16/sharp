@@ -19,6 +19,9 @@
       min-height: 2.5rem;
       @extend .mx-n1;
       @extend .mx-sm-n2;
+      .action-bar__row {
+        min-height: auto;
+      }
     }
     .action-bar__col {
       @extend .px-1;

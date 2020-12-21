@@ -48,7 +48,7 @@
                     </div>
                 </template>
 
-                <template v-if="!collapsed">
+                <template v-if="hasRightControls && !collapsed">
                     <div class="col-sm-auto action-bar__col">
                         <div class="row flex-nowrap justify-content-end action-bar__row">
                             <template v-if="canReorder">
@@ -145,6 +145,9 @@
             },
             hasLeftControls() {
                 return this.hasActiveQuery || this.count > 0 && (this.filters?.length > 0 || this.canSearch);
+            },
+            hasRightControls() {
+                return this.canReorder || this.canCreate && !this.reorderActive;
             },
             hasOuterTitle() {
                 return this.$slots.default && (!this.ready || this.hasLeftControls);
