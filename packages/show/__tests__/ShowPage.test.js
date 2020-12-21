@@ -138,6 +138,31 @@ describe('show page', () => {
         }, { append:true });
     });
 
+    test('formUrl with multiform', () => {
+        formUrl.mockReturnValue('formUrl');
+        const wrapper = createWrapper({
+            storeModule: {
+                getters: {
+                    entityKey: () => 'entityKey',
+                    instanceId: () => 'instanceId',
+                }
+            },
+            computed: {
+                config: () => ({
+                    multiformAttribute: 'role',
+                }),
+                data: () => ({
+                    role: 'admin'
+                }),
+            }
+        });
+        expect(wrapper.vm.formUrl).toEqual('formUrl');
+        expect(formUrl).toHaveBeenCalledWith({
+            entityKey: 'entityKey:admin',
+            instanceId: 'instanceId',
+        }, { append:true });
+    });
+
     test('fieldOptions', () => {
         let wrapper;
         const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();

@@ -10,7 +10,7 @@ use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Http\Middleware\Api\AppendBreadcrumb;
 use Code16\Sharp\Http\Middleware\Api\AppendFormAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendListAuthorizations;
-use Code16\Sharp\Http\Middleware\Api\AppendListMultiform;
+use Code16\Sharp\Http\Middleware\Api\AppendMultiformInEntityList;
 use Code16\Sharp\Http\Middleware\Api\AppendNotifications;
 use Code16\Sharp\Http\Middleware\Api\BindSharpValidationResolver;
 use Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors;
@@ -145,7 +145,7 @@ class SharpServiceProvider extends ServiceProvider
             'sharp_api_append_list_authorizations', AppendListAuthorizations::class
 
         )->aliasMiddleware(
-            'sharp_api_append_list_multiform', AppendListMultiform::class
+            'sharp_api_append_multiform_in_list', AppendMultiformInEntityList::class
 
         )->aliasMiddleware(
             'sharp_api_append_notifications', AppendNotifications::class

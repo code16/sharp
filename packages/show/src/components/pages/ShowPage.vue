@@ -101,8 +101,15 @@
             ]),
 
             formUrl() {
+                const formKey = this.config.multiformAttribute
+                    ? this.data[this.config.multiformAttribute]
+                    : null;
+                const entityKey = formKey
+                    ? `${this.entityKey}:${formKey}`
+                    : this.entityKey
+
                 return formUrl({
-                    entityKey: this.entityKey,
+                    entityKey,
                     instanceId: this.instanceId,
                 }, { append: true });
             },
