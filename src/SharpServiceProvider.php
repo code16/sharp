@@ -25,7 +25,7 @@ use Intervention\Image\ImageServiceProviderLaravelRecent;
 class SharpServiceProvider extends ServiceProvider
 {
     /** @var string */
-    const VERSION = '5.4.1';
+    const VERSION = '6.0.0';
 
     public function boot()
     {
@@ -110,12 +110,7 @@ class SharpServiceProvider extends ServiceProvider
         }
     }
 
-    /**
-     * @param string $entityKey
-     * @param string $policy
-     * @param string $action
-     */
-    protected function definePolicy($entityKey, $policy, $action)
+    protected function definePolicy(string $entityKey, string $policy, string $action)
     {
         if(method_exists(app($policy), $action)) {
             Gate::define("sharp.{$entityKey}.{$action}", $policy . "@{$action}");

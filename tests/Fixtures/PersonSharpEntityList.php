@@ -8,6 +8,9 @@ use Code16\Sharp\EntityList\EntityListFilter;
 use Code16\Sharp\EntityList\EntityListMultipleFilter;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\EntityListRequiredFilter;
+use Code16\Sharp\EntityList\EntityListSelectFilter;
+use Code16\Sharp\EntityList\EntityListSelectMultipleFilter;
+use Code16\Sharp\EntityList\EntityListSelectRequiredFilter;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
@@ -115,7 +118,7 @@ class PersonSharpEntityList extends SharpEntityList
     }
 }
 
-class PersonSharpEntityListAgeFilter implements EntityListFilter
+class PersonSharpEntityListAgeFilter implements EntityListSelectFilter
 {
     /**
      * @return array
@@ -127,12 +130,12 @@ class PersonSharpEntityListAgeFilter implements EntityListFilter
 }
 
 class PersonSharpEntityListAgeMultipleFilter
-    extends PersonSharpEntityListAgeFilter implements EntityListMultipleFilter
+    extends PersonSharpEntityListAgeFilter implements EntityListSelectMultipleFilter
 {
 }
 
 class PersonSharpEntityListAgeRequiredFilter
-    extends PersonSharpEntityListAgeFilter implements EntityListRequiredFilter
+    extends PersonSharpEntityListAgeFilter implements EntityListSelectRequiredFilter
 {
     /**
      * @return string|int
