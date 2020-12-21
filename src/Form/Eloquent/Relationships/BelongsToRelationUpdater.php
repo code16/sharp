@@ -8,12 +8,7 @@ class BelongsToRelationUpdater
 {
     use CanCreateRelatedModel;
     
-    /**
-     * @param $instance
-     * @param string $attribute
-     * @param $value
-     */
-    public function update($instance, $attribute, $value)
+    public function update(object $instance, string $attribute, $value)
     {
         if(strpos($attribute, ":") !== false) {
             // This is a relation attribute update case (eg: mother:name)

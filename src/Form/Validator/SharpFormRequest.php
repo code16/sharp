@@ -13,7 +13,7 @@ abstract class SharpFormRequest extends FormRequest
      * @param  Validator $validator
      * @return void
      */
-    public function withValidator(Validator $validator)
+    public function withValidator(Validator $validator): void
     {
         // Find RTF (markdown, wysiwyg) based on their posted structure ($field["text"])
         $richTextFields = collect($this->all())->filter(function($value, $key) {

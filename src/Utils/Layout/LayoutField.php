@@ -4,22 +4,11 @@ namespace Code16\Sharp\Utils\Layout;
 
 abstract class LayoutField
 {
-    /** @var string */
-    protected $fieldKey;
+    protected string $fieldKey;
+    protected int $size = 12;
+    protected int $sizeXS = 12;
+    protected array $itemLayout = [];
 
-    /** @var int */
-    protected $size = 12;
-
-    /** @var int */
-    protected $sizeXS = 12;
-
-    /** @var array */
-    protected $itemLayout;
-
-    /**
-     * @param string $fieldKey
-     * @param \Closure|null $subLayoutCallback
-     */
     function __construct(string $fieldKey, \Closure $subLayoutCallback = null)
     {
         if(strpos($fieldKey, "|")) {
@@ -45,14 +34,8 @@ abstract class LayoutField
         }
     }
 
-    /**
-     * @return LayoutColumn
-     */
-    protected abstract function getLayoutColumn();
+    protected abstract function getLayoutColumn(): LayoutColumn;
 
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         return array_merge(

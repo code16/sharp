@@ -21,8 +21,6 @@ abstract class SharpForm
 
     /**
      * Return the form fields layout.
-     *
-     * @return array
      */
     function formLayout(): array
     {
@@ -42,7 +40,7 @@ abstract class SharpForm
     /**
      * Return the entity instance, as an array.
      *
-     * @param $id
+     * @param mixed $id
      * @return array
      */
     function instance($id): array
