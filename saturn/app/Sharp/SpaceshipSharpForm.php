@@ -24,11 +24,10 @@ use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
-use Code16\Sharp\Http\WithSharpContext;
 
 class SpaceshipSharpForm extends SharpForm
 {
-    use WithSharpFormEloquentUpdater, WithSharpContext;
+    use WithSharpFormEloquentUpdater;
 
     function buildFormFields()
     {
@@ -94,6 +93,14 @@ class SpaceshipSharpForm extends SharpForm
                 ->setOptionsLinkedTo("type_id")
 
         )->addField(
+            SharpFormUploadField::make("manual")
+                ->setLabel("Manual")
+                ->setHelpMessage("Max file size: 20 Mb")
+                ->setStorageDisk("local")
+                ->setStorageBasePath("data/Spaceship/{id}/Manual")
+                ->setFileFilter("pdf")
+                ->setMaxFileSize(20)
+        )->addField(
             SharpFormSelectField::make(
                 "model",
                 SpaceshipType::all()
@@ -117,6 +124,7 @@ class SpaceshipSharpForm extends SharpForm
 
         )->addField(
             SharpFormAutocompleteField::make("serial_number", "remote")
+                ->setDataWrapper("data")
                 ->setLabel("S/N")
                 ->setListItemInlineTemplate("{{serial}}")
                 ->setResultItemInlineTemplate("{{serial}}")
@@ -152,6 +160,7 @@ class SpaceshipSharpForm extends SharpForm
                 ->setLabel("Features")
                 ->setMultiple()
                 ->setDisplayAsList()
+                ->allowSelectAll()
 
         )->addField(
             SharpFormListField::make("reviews")
@@ -208,6 +217,7 @@ class SpaceshipSharpForm extends SharpForm
                     ->withSingleField("type_id")
                     ->withSingleField("serial_number")
                     ->withFields("brand|6", "model|6")
+                    ->withSingleField("manual")
                     ->withSingleField("pilots")
                     ->withSingleField("reviews", function(FormLayoutColumn $listItem) {
                         $listItem->withSingleField("starts_at")
@@ -264,6 +274,7 @@ class SpaceshipSharpForm extends SharpForm
                     "serial" => str_pad($serial, 5, "0", STR_PAD_LEFT)
                 ] : null;
             })
+            ->setCustomTransformer("manual", new SharpUploadModelFormAttributeTransformer())
             ->setCustomTransformer("picture", new SharpUploadModelFormAttributeTransformer())
             ->setCustomTransformer("pictures", new SharpUploadModelFormAttributeTransformer())
             ->setCustomTransformer("html", function($html, Spaceship $spaceship){
@@ -272,20 +283,20 @@ class SpaceshipSharpForm extends SharpForm
                 ];
             })
             ->transform(
-                Spaceship::with("reviews", "pilots", "picture", "pictures", "features")->findOrFail($id)
+                Spaceship::with("reviews", "pilots", "manual", "picture", "pictures", "features")->findOrFail($id)
             );
     }
 
     function update($id, array $data)
     {
         $instance = $id ? Spaceship::findOrFail($id) : new Spaceship([
-            "corporation_id" => $this->context()->globalFilterFor("corporation")
+            "corporation_id" => currentSharpRequest()->globalFilterFor("corporation")
         ]);
 
         if(($data["name"]["fr"] ?? "") == "error") {
             throw new SharpApplicativeException("Name can't be «error»");
         }
-        
+
         $this->setCustomTransformer("capacity", function($capacity) {
                 return $capacity * 1000;
             })

@@ -1,18 +1,27 @@
 import axios from 'axios';
 import { apiUrl } from "sharp";
+import { validateAutocompleteResponse } from "./util/autocomplete";
 
-export function getAutocompleteSuggestions({ url, method, locale, searchAttribute, query, }) {
+export function getAutocompleteSuggestions({ url, method, locale, searchAttribute, query, dataWrapper, fieldKey }) {
+    const isGet = method.toLowerCase() === 'get';
     const params = {
         locale,
         [searchAttribute]: query,
     };
-    if(method.toLowerCase() === 'get') {
-        return axios.get(url, { params})
-            .then(response => response.data);
-    } else {
-        return axios.post(url, params)
-            .then(response => response.data);
-    }
+    return axios({
+        url,
+        method,
+        params: isGet ? params : undefined,
+        data: !isGet ? params : undefined,
+    })
+    .then(response => {
+        if(!validateAutocompleteResponse({ results:response.data, dataWrapper, fieldKey, url })) {
+            return [];
+        }
+        return dataWrapper
+            ? response.data?.[dataWrapper] ?? []
+            : response.data ?? [];
+    });
 }
 
 export function downloadFileUrl({ entityKey, instanceId, fieldKey, fileName }) {

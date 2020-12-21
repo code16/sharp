@@ -37,7 +37,7 @@ class SharpFormListFieldTest extends SharpTestCase
             ->setSortable()
             ->setRemovable();
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["addable" => true, "removable" => true, "sortable" => true],
             $formField->toArray()
         );
@@ -49,7 +49,7 @@ class SharpFormListFieldTest extends SharpTestCase
         $formField = $this->getDefaultList()
             ->setAddText("Add");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["addText" => "Add"],
             $formField->toArray()
         );
@@ -61,7 +61,7 @@ class SharpFormListFieldTest extends SharpTestCase
         $formField = $this->getDefaultList()
             ->setItemIdAttribute("key");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["itemIdAttribute" => "key"],
             $formField->toArray()
         );
@@ -82,7 +82,7 @@ class SharpFormListFieldTest extends SharpTestCase
         $formField = $this->getDefaultList()
             ->setMaxItemCount(10);
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["maxItemCount" => 10],
             $formField->toArray()
         );
@@ -101,7 +101,7 @@ class SharpFormListFieldTest extends SharpTestCase
         $formField = $this->getDefaultList()
             ->setCollapsedItemInlineTemplate("template");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["collapsedItemTemplate" => "template"],
             $formField->toArray()
         );
@@ -115,7 +115,7 @@ class SharpFormListFieldTest extends SharpTestCase
                 SharpFormTextField::make("name")
             );
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "itemFields" => [
                 "text" => ["key" => "text", "type" => "text", "inputType" => "text"],
                 "name" => ["key" => "name", "type" => "text", "inputType" => "text"],

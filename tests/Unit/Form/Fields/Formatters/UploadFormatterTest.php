@@ -8,9 +8,6 @@ use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Tests\SharpTestCase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManager;
-use Spatie\ImageOptimizer\OptimizerChain;
-use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 class UploadFormatterTest extends SharpTestCase
 {
@@ -114,7 +111,7 @@ class UploadFormatterTest extends SharpTestCase
             ->setStorageDisk("local")
             ->setStorageBasePath("data/Test/{id}");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["file_name" => "data/Test/50/image.jpg"], 
             (new UploadFormatter)->setInstanceId(50)->fromFront(
                 $field, 
@@ -142,7 +139,7 @@ class UploadFormatterTest extends SharpTestCase
             ->setCropRatio("16:9")
             ->setStorageDisk("local");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["transformed" => true],
             (new UploadFormatter)->fromFront(
                 $field, 
@@ -170,7 +167,7 @@ class UploadFormatterTest extends SharpTestCase
             ->setCropRatio("16:9")
             ->setStorageBasePath("data/test");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["transformed" => true], 
             (new UploadFormatter)->fromFront(
                 $field, 
@@ -210,5 +207,36 @@ class UploadFormatterTest extends SharpTestCase
             "name" => "image.jpg",
             "uploaded" => true
         ]);
+    }
+
+    /** @test */
+    function we_get_use_a_closure_as_storageBasePath()
+    {
+        UploadedFile::fake()
+            ->image("image.jpg")
+            ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
+        
+        $path = "/some/path";
+
+        $field = SharpFormUploadField::make("upload")
+            ->setStorageBasePath(function() use(&$path) {
+                return $path;
+            })
+            ->setCropRatio("16:9")
+            ->setStorageDisk("local");
+        
+        $path = "/some/updated/path";
+
+        $this->assertArraySubset(
+            ["file_name" => "/some/updated/path/image.jpg"],
+            (new UploadFormatter)->fromFront(
+                $field,
+                "attribute",
+                [
+                    "name" => "/image.jpg",
+                    "uploaded" => true
+                ]
+            )
+        );
     }
 }

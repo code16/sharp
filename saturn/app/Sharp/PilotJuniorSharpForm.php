@@ -8,11 +8,10 @@ use App\Spaceship;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpForm;
-use Code16\Sharp\Http\WithSharpContext;
 
 class PilotJuniorSharpForm extends SharpForm
 {
-    use WithSharpFormEloquentUpdater, WithSharpContext;
+    use WithSharpFormEloquentUpdater;
 
     function buildFormFields()
     {
@@ -42,11 +41,12 @@ class PilotJuniorSharpForm extends SharpForm
 
         $pilot = $this->save($pilot, $data + ["role" => "jr"]);
 
-        if($this->context()->isCreation()) {
-            if($breadcrumb = $this->context()->getPreviousPageFromBreadcrumb("show")) {
-                list($type, $entityKey, $instanceId) = $breadcrumb;
-                if ($entityKey == "spaceship") {
-                    Spaceship::findOrFail($instanceId)->pilots()->attach($pilot->id);
+        if(currentSharpRequest()->isCreation()) {
+            if($breadcrumbItem = currentSharpRequest()->getPreviousShowFromBreadcrumbItems()) {
+                if ($breadcrumbItem->entityKey() === "spaceship") {
+                    Spaceship::findOrFail($breadcrumbItem->instanceId())
+                        ->pilots()
+                        ->attach($pilot->id);
                 }
             }
         }

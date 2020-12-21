@@ -39,6 +39,12 @@ class Spaceship extends Model
         return $this->belongsToMany(Feature::class);
     }
 
+    public function manual()
+    {
+        return $this->morphOne(Media::class, "model")
+            ->where("model_key", "manual");
+    }
+
     public function picture()
     {
         return $this->morphOne(Media::class, "model")
@@ -60,7 +66,7 @@ class Spaceship extends Model
 
     public function getDefaultAttributesFor($attribute)
     {
-        return in_array($attribute, ["picture", "pictures"])
+        return in_array($attribute, ["manual", "picture", "pictures"])
             ? ["model_key" => $attribute]
             : [];
     }

@@ -1,9 +1,10 @@
 import EntityListPage from './components/pages/EntityListPage';
 
 export default [
+    /** New spec */
     {
         name: 'entity-list',
-        path: '/list/:id',
+        path: '/s-list/:entityKey',
         component: EntityListPage,
     },
 ]

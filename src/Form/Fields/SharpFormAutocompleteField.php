@@ -61,6 +61,9 @@ class SharpFormAutocompleteField extends SharpFormField
      */
     protected $dynamicAttributes;
 
+    /** @var string */
+    protected $dataWrapper = "";
+
     /**
      * @param string $key
      * @param string $mode "local" or "remote"
@@ -187,7 +190,7 @@ class SharpFormAutocompleteField extends SharpFormField
      */
     public function setListItemTemplatePath(string $listItemTemplatePath)
     {
-         return $this->setTemplatePath($listItemTemplatePath, "list");
+        return $this->setTemplatePath($listItemTemplatePath, "list");
     }
 
     /**
@@ -224,6 +227,17 @@ class SharpFormAutocompleteField extends SharpFormField
     public function setSearchMinChars(int $searchMinChars)
     {
         $this->searchMinChars = $searchMinChars;
+
+        return $this;
+    }
+
+    /**
+     * @param ?string $dataWrapper
+     * @return $this
+     */
+    public function setDataWrapper(string $dataWrapper)
+    {
+        $this->dataWrapper = $dataWrapper;
 
         return $this;
     }
@@ -304,6 +318,7 @@ class SharpFormAutocompleteField extends SharpFormField
                 "itemIdAttribute" => $this->itemIdAttribute,
                 "searchKeys" => $this->localSearchKeys,
                 "remoteEndpoint" => $this->remoteEndpoint,
+                "dataWrapper" => $this->dataWrapper,
                 "remoteMethod" => $this->remoteMethod,
                 "remoteSearchAttribute" => $this->remoteSearchAttribute,
                 "listItemTemplate" => $this->template("list"),

@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\Tests\SharpTestCase;
 
-class EntitiesListQueryParamsTest extends SharpTestCase
+class EntityListQueryParamsTest extends SharpTestCase
 {
 
     /** @test */

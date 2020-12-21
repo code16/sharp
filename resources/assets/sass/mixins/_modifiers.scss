@@ -33,7 +33,7 @@
   .SharpDropdown__link:hover,
   .multiselect__option--highlight {
     background-color: lighten($brand-02, 25%)!important;
-    color: $text-01;
+    color: $text-01!important;
   }
 }
 

@@ -1,49 +1,51 @@
 <template>
-    <div>
-        <canvas ref="canvas"></canvas>
+    <div class="mt-2" :class="{ 'mb-2': hasLegends }">
+        <ApexChart
+            class="apexchart"
+            type="area"
+            :series="chartData.series"
+            :options="chartOptions"
+            :height="options.chart.height"
+        />
     </div>
 </template>
 
 <script>
-    import { Line, mixins } from 'vue-chartjs';
+    import merge from 'lodash/merge';
+    import ApexChart from 'vue-apexcharts';
+    import { defaultChartOptions, hasLegends } from "../../../../util/chart";
 
     export default {
-        extends: Line,
-        mixins: [mixins.reactiveProp],
+        components: {
+            ApexChart,
+        },
         props: {
             chartData: Object,
+            options: Object,
         },
         computed: {
-            options() {
-                return {
-                    title: {
-                        display: false,
+            hasLegends() {
+                return hasLegends(this.chartOptions);
+            },
+            chartOptions() {
+                return merge({},
+                    defaultChartOptions(),
+                    {
+                        colors: this.chartData.colors,
+                        labels: this.chartData.labels,
+                        legend: {
+                            position: 'bottom',
+                        },
+                        stroke: {
+                            width: 4,
+                        },
+                        dataLabels: {
+                            enabled: false
+                        },
                     },
-                    legend: {
-                        display: false,
-                    },
-                    maintainAspectRatio: false,
-
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                suggestedMin: 0,
-                            },
-                            gridLines: {
-                                display: false
-                            }
-                        }],
-                        xAxes: [ {
-                            gridLines: {
-                                display: false
-                            }
-                        }]
-                    }
-                }
+                    this.options
+                );
             }
-        },
-        mounted() {
-            this.renderChart(this.chartData, this.options);
         },
     }
 </script>

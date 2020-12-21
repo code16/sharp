@@ -8,38 +8,32 @@ use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\Str;
 use Intervention\Image\Exception\NotReadableException;
 use Intervention\Image\ImageManager;
+use \Closure;
 
 class Thumbnail
 {
-    /**
-     * @var ImageManager
-     */
+    /** @var ImageManager */
     protected $imageManager;
 
-    /**
-     * @var FilesystemManager
-     */
+    /** @var FilesystemManager */
     protected $storage;
 
-    /**
-     * @var SharpUploadModel
-     */
+    /** @var SharpUploadModel */
     protected $uploadModel;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $quality = 90;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $appendTimestamp = false;
+    
+    /** @var Closure|null  */
+    protected $afterClosure = null;
 
     /**
      * @param SharpUploadModel $model
-     * @param ImageManager $imageManager
-     * @param FilesystemManager $storage
+     * @param ImageManager|null $imageManager
+     * @param FilesystemManager|null $storage
      */
     public function __construct(SharpUploadModel $model, ImageManager $imageManager = null, FilesystemManager $storage = null)
     {
@@ -60,6 +54,17 @@ class Thumbnail
     }
 
     /**
+     * @param Closure $closure
+     * @return $this
+     */
+    public function setAfterClosure(Closure $closure)
+    {
+        $this->afterClosure = $closure;
+
+        return $this;
+    }
+
+    /**
      * @param bool $appendTimestamp
      * @return $this
      */
@@ -73,18 +78,34 @@ class Thumbnail
     /**
      * @param int $width
      * @param int|null $height
-     * @param array $filters: fit, grayscale, ...
+     * @param array $filters fit, grayscale, ...
      * @return null|string
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function make($width, $height=null, $filters=[])
     {
-        return $this->generateThumbnail(
+        $thumbnailDisk = $this->storage->disk(config("sharp.uploads.thumbnails_disk", "public"));
+
+        $thumbDirNameAppender = sizeof($filters) ? "_" . md5(serialize($filters)) : "";
+        $thumbnailPath = config("sharp.uploads.thumbnails_dir", "thumbnails")
+            . "/" . dirname($this->uploadModel->file_name)
+            . "/$width-$height" . $thumbDirNameAppender
+            . "/" . basename($this->uploadModel->file_name);
+
+        $wasCreated = !$thumbnailDisk->exists($thumbnailPath);
+
+        $url = $this->generateThumbnail(
             $this->uploadModel->disk,
             $this->uploadModel->file_name,
-            dirname($this->uploadModel->file_name),
-            basename($this->uploadModel->file_name),
+            $thumbnailPath,
             $width, $height, $filters
         );
+
+        if($closure = $this->afterClosure) {
+            $closure($wasCreated, $thumbnailPath, $thumbnailDisk);
+        }
+
+        return $url;
     }
 
     public function destroyAllThumbnails()
@@ -99,34 +120,26 @@ class Thumbnail
     /**
      * @param $sourceDisk
      * @param $sourceRelativeFilePath
-     * @param $destinationRelativeBasePath
-     * @param $destinationFileName
+     * @param $thumbnailPath
      * @param $width
      * @param $height
      * @param $filters
      * @return null|string
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     private function generateThumbnail(
         $sourceDisk, $sourceRelativeFilePath,
-        $destinationRelativeBasePath, $destinationFileName,
-        $width, $height, $filters)
+        $thumbnailPath, $width, $height, $filters)
     {
         if($width==0) $width=null;
         if($height==0) $height=null;
 
         $thumbnailDisk = $this->storage->disk(config("sharp.uploads.thumbnails_disk", "public"));
-        $thumbnailPath = config("sharp.uploads.thumbnails_dir", "thumbnails");
 
-        $thumbDirNameAppender = sizeof($filters) ? "_" . md5(serialize($filters)) : "";
-
-        $thumbName = "$thumbnailPath/$destinationRelativeBasePath/$width-$height"
-            . $thumbDirNameAppender . "/$destinationFileName";
-
-        if (!$thumbnailDisk->exists($thumbName)) {
-
+        if (!$thumbnailDisk->exists($thumbnailPath)) {
             // Create thumbnail directories if needed
-            if (!$thumbnailDisk->exists(dirname($thumbName))) {
-                $thumbnailDisk->makeDirectory(dirname($thumbName));
+            if (!$thumbnailDisk->exists(dirname($thumbnailPath))) {
+                $thumbnailDisk->makeDirectory(dirname($thumbnailPath));
             }
 
             try {
@@ -152,7 +165,7 @@ class Thumbnail
                     });
                 }
 
-                $sourceImg->save($thumbnailDisk->path($thumbName), $this->quality);
+                $sourceImg->save($thumbnailDisk->path($thumbnailPath), $this->quality);
 
             } catch(FileNotFoundException $ex) {
                 return null;
@@ -162,7 +175,7 @@ class Thumbnail
             }
         }
 
-        return $thumbnailDisk->url($thumbName) . ($this->appendTimestamp ? "?" . filectime($thumbnailDisk->path($thumbName)) : "");
+        return $thumbnailDisk->url($thumbnailPath) . ($this->appendTimestamp ? "?" . filectime($thumbnailDisk->path($thumbnailPath)) : "");
     }
 
     /**

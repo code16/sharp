@@ -1,5 +1,5 @@
 <template>
-    <div class="ShowFileField">
+    <FieldLayout class="ShowFileField" :class="classes" :label="label">
         <div class="row mx-n2">
             <div class="col-3 px-2 align-self-center ShowFileField__thumbnail-col" :class="thumbnailColClasses">
                 <template v-if="hasThumbnail">
@@ -20,53 +20,46 @@
                     </div>
                 </template>
             </div>
-            <div class="col px-2" style="min-width: 0">
-                <div class="d-flex flex-column h-100">
-                    <div class="ShowFileField__name text-truncate mb-2">
-                        {{ fileName }}
-                    </div>
-                    <div class="flex-fill">
-                        <div class="row mx-n2 h-100">
-                            <div class="col px-2">
-                                <div class="ShowFileField__size text-muted">
-                                    {{ sizeLabel }}
-                                </div>
+            <div class="col px-2 mt-1" style="min-width: 0">
+                <div class="ShowFileField__name text-truncate mb-2">
+                    {{ fileName }}
+                </div>
+                <div class="ShowFileField__info">
+                    <div class="row mx-n2 h-100">
+                        <div class="col-auto px-2">
+                            <div class="ShowFileField__size text-muted">
+                                {{ sizeLabel }}
                             </div>
-                            <div class="col-auto px-2 mt-2">
-                                <div class="ShowFileField__download-container h-100">
-                                    <Button
-                                        class="ShowFileField__download-button"
-                                        :href="downloadUrl"
-                                        :download="fileName"
-                                        type="primary"
-                                        outline
-                                        small
-                                    >
-                                        {{ lang('show.file.download') }}
-                                    </Button>
-                                </div>
+                        </div>
+                        <div class="col-auto px-2">
+                            <div class="text-muted">
+                                <i class="fa fas fa-download"></i>
+                                <a :href="downloadUrl" :download="fileName" style="color:inherit">
+                                    {{ lang('show.file.download') }}
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </FieldLayout>
 </template>
 
 <script>
     import { mapGetters } from 'vuex';
     import debounce from 'lodash/debounce';
-    import { Button } from "sharp-ui";
-    import { lang, filesizeLabel } from 'sharp';
-    import { downloadFileUrl } from "../../api";
     import { getClassNameForExtension } from 'font-awesome-filetypes';
-    import {syncVisibility} from "../../util/fields/visiblity";
-
+    import { lang, filesizeLabel } from 'sharp';
+    import { Button } from "sharp-ui";
+    import { downloadFileUrl } from "../../api";
+    import { syncVisibility } from "../../util/fields/visiblity";
+    import FieldLayout from "../FieldLayout";
 
     export default {
         components: {
             Button,
+            FieldLayout,
         },
         props: {
             fieldConfigIdentifier: String,
@@ -88,6 +81,11 @@
                 'entityKey',
                 'instanceId',
             ]),
+            classes() {
+                return {
+                    'ShowFileField--has-label': !!this.label,
+                }
+            },
             thumbnailColClasses() {
                 return {
                     'ShowFileField__thumbnail-col--collapsed': !this.hasThumbnail && this.collapsed,
@@ -109,7 +107,7 @@
                 return parts[parts.length - 1];
             },
             hasThumbnail() {
-                return  this.value.thumbnail;
+                return !!this.value?.thumbnail;
             },
             thumbnailUrl() {
                 return this.value ? this.value.thumbnail : null;

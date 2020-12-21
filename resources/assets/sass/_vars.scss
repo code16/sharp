@@ -35,5 +35,12 @@ $dropdown-hover-border-color: lighten($dropdown-focus-border-color, 25%);
 $dropdown-list-offset: 3px;
 $dropdown-btn-transition: all 100ms ease-in-out;
 $dropdown-item-transition: background 50ms ease-in-out;
+$breadcrumb-bg: transparent;
+$breadcrumb-padding-x: 0;
+$breadcrumb-padding-y: 0;
+$breadcrumb-margin-bottom: 0;
 
 $checkbox-inline-margin-bottom: .3rem;
+
+$link-color: #3d70b2;
+$link-decoration: underline;

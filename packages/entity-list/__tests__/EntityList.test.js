@@ -50,7 +50,7 @@ describe('EntityList', () => {
             },
             store: new Vuex.Store({
                 modules: {
-                    'entity-list': merge(entityListModule, storeModule),
+                    'entity-list': merge({}, entityListModule, storeModule),
                 }
             }),
             localVue,
@@ -196,6 +196,13 @@ describe('EntityList', () => {
                 }
             });
             expect(wrapper.vm.visibleFilters).toEqual([]);
+
+            wrapper.setProps({
+                hiddenFilters: {
+                    type: null,
+                }
+            });
+            expect(wrapper.vm.visibleFilters).toEqual([]);
         });
 
         test('multiforms', () => {
@@ -240,17 +247,17 @@ describe('EntityList', () => {
             wrapper.setData(reorderableConfig);
             expect(wrapper.vm.canReorder).toBe(true);
 
-            wrapper.setData(merge(reorderableConfig, {
+            wrapper.setData(merge({}, reorderableConfig, {
                 config: { reorderable: false },
             }));
             expect(wrapper.vm.canReorder).toBe(false);
 
-            wrapper.setData(merge(reorderableConfig, {
+            wrapper.setData(merge({}, reorderableConfig, {
                 authorizations: { update: false },
             }));
             expect(wrapper.vm.canReorder).toBe(false);
 
-            wrapper.setData(merge(reorderableConfig, {
+            wrapper.setData(merge({}, reorderableConfig, {
                 data: {
                     items: [{ id:1 }]
                 }
@@ -757,12 +764,12 @@ describe('EntityList', () => {
 
             formUrl.mockClear();
             wrapper.vm.formUrl({ instanceId:'instanceId' });
-            expect(formUrl).toHaveBeenCalledWith({ entityKey:'entityKey', instanceId:'instanceId' });
+            expect(formUrl).toHaveBeenCalledWith({ entityKey:'entityKey', instanceId:'instanceId' }, { append:true });
 
 
             formUrl.mockClear();
             wrapper.vm.formUrl({ instanceId:'instanceId', formKey:'formKey' });
-            expect(formUrl).toHaveBeenCalledWith({ entityKey:'entityKey:formKey', instanceId:'instanceId' });
+            expect(formUrl).toHaveBeenCalledWith({ entityKey:'entityKey:formKey', instanceId:'instanceId' }, { append:true });
         });
 
         test('showUrl', () => {
@@ -773,7 +780,7 @@ describe('EntityList', () => {
             });
             showUrl.mockClear();
             wrapper.vm.showUrl({ instanceId:'instanceId' })
-            expect(showUrl).toHaveBeenCalledWith({ entityKey:'entityKey', instanceId:'instanceId' });
+            expect(showUrl).toHaveBeenCalledWith({ entityKey:'entityKey', instanceId:'instanceId' }, { append:true });
         });
 
         test('handleCommandRequested', ()=>{

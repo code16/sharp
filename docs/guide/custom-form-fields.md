@@ -71,7 +71,7 @@ Vue.use(Sharp, {
     }
 })
 ```
-
+**Important**: The key must be `'textIcon'` for `FIELD_TYPE = "custom-textIcon"`
 
 Vue is exposed to the window scope, it's the current Vue version used by sharp (cf. package.json).
 ::: warning

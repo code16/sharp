@@ -13,7 +13,7 @@ class SharpBarGraphWidgetTest extends SharpTestCase
     {
         $widget = SharpBarGraphWidget::make("name");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["display" => "bar"],
             $widget->toArray()
         );
@@ -24,7 +24,7 @@ class SharpBarGraphWidgetTest extends SharpTestCase
     {
         $widget = SharpBarGraphWidget::make("name");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["ratioX" => 16, "ratioY" => 9],
             $widget->toArray()
         );
@@ -36,8 +36,72 @@ class SharpBarGraphWidgetTest extends SharpTestCase
         $widget = SharpBarGraphWidget::make("name")
             ->setRatio("2:3");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["ratioX" => 2, "ratioY" => 3],
+            $widget->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_minimal_attribute()
+    {
+        $widget = SharpBarGraphWidget::make("name")
+            ->setMinimal();
+
+        $this->assertArraySubset(
+            ["minimal" => true],
+            $widget->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_showLegend_attribute()
+    {
+        $widget = SharpBarGraphWidget::make("name")
+            ->setShowLegend(false);
+
+        $this->assertArraySubset(
+            ["showLegend" => false],
+            $widget->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_height_attribute()
+    {
+        $widget = SharpBarGraphWidget::make("name")
+            ->setHeight(150);
+
+        $this->assertArraySubset(
+            ["height" => 150],
+            $widget->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_displayHorizontalAxisAsTimeline_attribute()
+    {
+        $widget = SharpBarGraphWidget::make("name")
+            ->setDisplayHorizontalAxisAsTimeline(true);
+
+        $this->assertArraySubset(
+            ["dateLabels" => true],
+            $widget->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_horizontal_option_attribute()
+    {
+        $widget = SharpBarGraphWidget::make("name")
+            ->setHorizontal();
+
+        $this->assertArraySubset(
+            [
+                "options" => [
+                    "horizontal" => true
+                ]
+            ],
             $widget->toArray()
         );
     }

@@ -20,13 +20,6 @@ mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
         plugins: [
             new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
             new webpack.NormalModuleReplacementPlugin(/element-ui[\/\\]lib[\/\\]locale[\/\\]lang[\/\\]zh-CN/, 'element-ui/lib/locale/lang/en'),
-            // new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
-            new CircularDependencyPlugin({
-                exclude: /node_modules/,
-                failOnError: true,
-                allowAsyncCycles: false,
-                cwd: process.cwd(),
-              })
         ],
         // transpile vue-clip package
         module: {
@@ -59,5 +52,18 @@ mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
 
 if(mix.inProduction()) {
     mix.version();
+}
+else {
+    mix.webpackConfig({
+        plugins: [
+            new CircularDependencyPlugin({
+                exclude: /node_modules/,
+                failOnError: true,
+                allowAsyncCycles: false,
+                cwd: process.cwd(),
+            }),
+            // new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
+        ]
+    });
 }
 

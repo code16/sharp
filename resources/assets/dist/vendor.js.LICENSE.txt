@@ -10,10 +10,9 @@
   */
 
 /*!
- * Chart.js v2.8.0
- * https://www.chartjs.org
- * (c) 2019 Chart.js Contributors
- * Released under the MIT License
+ * ApexCharts v3.22.2
+ * (c) 2018-2020 Juned Chhipa
+ * Released under the MIT License.
  */
 
 /*!
@@ -39,6 +38,20 @@
  * Released under the MIT License.
  */
 
+/*!
+ * vuex v3.5.1
+ * (c) 2020 Evan You
+ * @license MIT
+ */
+
+/*! svg.draggable.js - v2.2.2 - 2019-01-08
+  * https://github.com/svgdotjs/svg.draggable.js
+  * Copyright (c) 2019 Wout Fierens; Licensed MIT */
+
+/*! svg.filter.js - v2.0.2 - 2016-02-24
+  * https://github.com/wout/svg.filter.js
+  * Copyright (c) 2016 Wout Fierens; Licensed MIT */
+
 /**
  * @license
  * Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
@@ -47,12 +60,6 @@
  * The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
  * Code distributed by Google as part of the polymer project is also
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
- */
-
-/**
- * vuex v3.0.1
- * (c) 2017 Evan You
- * @license MIT
  */
 
 /**!

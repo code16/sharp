@@ -7,12 +7,14 @@ import store from 'sharp/store';
 import { wait, MockI18n, nextRequestFulfilled } from "@sharp/test-utils";
 import moxios from 'moxios';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { lang } from "sharp";
 
 jest.mock('sharp');
 
-
 describe('sharp-form', ()=>{
     Vue.use(MockI18n);
+
+    lang.mockImplementation(key => key);
 
     function createWrapper({ propsData } = {}) {
         const localVue = createLocalVue();
@@ -440,6 +442,10 @@ describe('sharp-form', ()=>{
                     create: false,
                     update: false,
                     delete: false,
+                },
+                breadcrumb: {
+                    visible: true,
+                    items: [{ url:'/list' }]
                 }
             }
         });
@@ -449,6 +455,8 @@ describe('sharp-form', ()=>{
             showDeleteButton: false,
             showBackButton: true,
             create: true,
+            breadcrumb: [{ url:'/list' }],
+            showBreadcrumb: true,
         });
 
 
@@ -489,7 +497,7 @@ describe('sharp-form', ()=>{
 
         expect(wrapper.vm.listUrl).toEqual('/sharp/list/spaceship?restore-context=1');
 
-        wrapper.vm.redirectToList = jest.fn();
+        wrapper.vm.redirectToClosestRoot = jest.fn();
 
         wrapper.vm.handleDeleteClicked();
 
@@ -497,7 +505,7 @@ describe('sharp-form', ()=>{
             status: 200
         }, 0);
 
-        expect(wrapper.vm.redirectToList).toHaveBeenCalledTimes(1);
+        expect(wrapper.vm.redirectToClosestRoot).toHaveBeenCalledTimes(1);
 
     });
 
@@ -529,6 +537,16 @@ describe('sharp-form', ()=>{
 
     test('dependant submit', async () => {
         const wrapper = createWrapper();
+
+        await nextRequestFulfilled({
+            status: 200,
+            response: {
+                ...createForm(),
+                breadcrumb: {
+                    items: [{ type:'form', name:"Form" }]
+                },
+            }
+        });
 
         wrapper.vm.post = jest.fn(()=>Promise.resolve({ data: { ok: true } }));
         wrapper.vm.handleError = jest.fn();

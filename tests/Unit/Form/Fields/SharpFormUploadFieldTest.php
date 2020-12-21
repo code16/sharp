@@ -12,19 +12,24 @@ class SharpFormUploadFieldTest extends SharpTestCase
     {
         $formField = SharpFormUploadField::make("file");
 
-        $this->assertEquals([
-                "key" => "file", "type" => "upload", "compactThumbnail" => false, "shouldOptimizeImage" => false
-            ], $formField->toArray()
+        $this->assertEquals(
+            [
+                "key" => "file", 
+                "type" => "upload", 
+                "compactThumbnail" => false, 
+                "shouldOptimizeImage" => false
+            ], 
+            $formField->toArray()
         );
     }
 
     /** @test */
     function we_can_define_maxFileSize()
     {
-        $formField = SharpFormUploadField::make("text")
+        $formField = SharpFormUploadField::make("file")
             ->setMaxFileSize(.5);
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["maxFileSize" => 0.5],
             $formField->toArray()
         );
@@ -33,10 +38,10 @@ class SharpFormUploadFieldTest extends SharpTestCase
     /** @test */
     function we_can_define_compactThumbnail()
     {
-        $formField = SharpFormUploadField::make("text")
+        $formField = SharpFormUploadField::make("file")
             ->setCompactThumbnail();
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["compactThumbnail" => true],
             $formField->toArray()
         );
@@ -46,26 +51,26 @@ class SharpFormUploadFieldTest extends SharpTestCase
     /** @test */
     function we_can_define_fileFilter()
     {
-        $formField = SharpFormUploadField::make("text")
+        $formField = SharpFormUploadField::make("file")
             ->setFileFilter("jpg");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["fileFilter" => [".jpg"]],
             $formField->toArray()
         );
 
-        $formField = SharpFormUploadField::make("text")
+        $formField = SharpFormUploadField::make("file")
             ->setFileFilter("jpg, gif");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["fileFilter" => [".jpg", ".gif"]],
             $formField->toArray()
         );
 
-        $formField = SharpFormUploadField::make("text")
+        $formField = SharpFormUploadField::make("file")
             ->setFileFilter(["jpg", "gif "]);
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["fileFilter" => [".jpg", ".gif"]],
             $formField->toArray()
         );
@@ -74,10 +79,10 @@ class SharpFormUploadFieldTest extends SharpTestCase
     /** @test */
     function we_can_define_cropRatio()
     {
-        $formField = SharpFormUploadField::make("text")
+        $formField = SharpFormUploadField::make("file")
             ->setCropRatio("16:9");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["ratioX" => 16, "ratioY" => 9],
             $formField->toArray()
         );
@@ -86,18 +91,18 @@ class SharpFormUploadFieldTest extends SharpTestCase
     /** @test */
     function we_can_define_croppableFileTypes()
     {
-        $formField = SharpFormUploadField::make("text")
+        $formField = SharpFormUploadField::make("file")
             ->setCropRatio("16:9", ["jpg", "jpeg"]);
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["ratioX" => 16, "ratioY" => 9, "croppableFileTypes" => [".jpg", ".jpeg"]],
             $formField->toArray()
         );
 
-        $formField = SharpFormUploadField::make("text")
+        $formField = SharpFormUploadField::make("file")
             ->setCropRatio("16:9", [".jpg", ".jpeg"]);
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["ratioX" => 16, "ratioY" => 9, "croppableFileTypes" => [".jpg", ".jpeg"]],
             $formField->toArray()
         );
@@ -106,18 +111,18 @@ class SharpFormUploadFieldTest extends SharpTestCase
     /** @test */
     function we_can_define_shouldOptimizeImage()
     {
-        $formField = SharpFormUploadField::make("text")
+        $formField = SharpFormUploadField::make("file")
             ->shouldOptimizeImage();
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["shouldOptimizeImage" => true],
             $formField->toArray()
         );
 
-        $formField2 = SharpFormUploadField::make("text")
+        $formField2 = SharpFormUploadField::make("file")
             ->shouldOptimizeImage(false);
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["shouldOptimizeImage" => false],
             $formField2->toArray()
         );

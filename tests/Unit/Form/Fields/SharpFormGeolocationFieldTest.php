@@ -29,7 +29,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
         $formField = SharpFormGeolocationField::make("geo")
             ->setDisplayUnitDegreesMinutesSeconds();
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["displayUnit" => "DMS"],
             $formField->toArray()
         );
@@ -37,7 +37,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
         $formField = SharpFormGeolocationField::make("geo")
             ->setDisplayUnitDecimalDegrees();
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["displayUnit" => "DD"],
             $formField->toArray()
         );
@@ -49,7 +49,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
         $formField = SharpFormGeolocationField::make("geo")
             ->setGeocoding();
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["geocoding" => true],
             $formField->toArray()
         );
@@ -61,7 +61,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
         $formField = SharpFormGeolocationField::make("geo")
             ->setApiKey("my-key");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             [
                 "mapsProvider" => ["name" => "gmaps", "options" => ["apiKey" => "my-key"]],
                 "geocodingProvider" => ["name" => "gmaps", "options" => ["apiKey" => "my-key"]],
@@ -76,7 +76,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
         $formField = SharpFormGeolocationField::make("geo")
             ->setMapsApiKey("my-key");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             [
                 "mapsProvider" => ["name" => "gmaps", "options" => ["apiKey" => "my-key"]],
                 "geocodingProvider" => ["name" => "gmaps", "options" => []],
@@ -87,7 +87,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
         $formField = SharpFormGeolocationField::make("geo")
             ->setGeocodingApiKey("my-key");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             [
                 "mapsProvider" => ["name" => "gmaps", "options" => []],
                 "geocodingProvider" => ["name" => "gmaps", "options" => ["apiKey" => "my-key"]],
@@ -102,7 +102,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
         $formField = SharpFormGeolocationField::make("geo")
             ->setZoomLevel(15);
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["zoomLevel" => 15],
             $formField->toArray()
         );
@@ -114,7 +114,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
         $formField = SharpFormGeolocationField::make("geo")
             ->setInitialPosition(12.4, -3.461894989013672);
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             [
                 "initialPosition" => [
                     "lat" => 12.4, "lng" => -3.461894989013672
@@ -144,7 +144,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
         $formField = SharpFormGeolocationField::make("geo")
             ->setBoundaries(1, 2, 3, 4);
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             [
                 "boundaries" => [
                     "ne" => [
@@ -166,7 +166,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
             ->setMapsProvider("osm")
             ->setGeocodingProvider("osm");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             [
                 "mapsProvider" => ["name" => "osm", "options" => []],
                 "geocodingProvider" => ["name" => "osm", "options" => []],
@@ -183,7 +183,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
                 "tilesUrl" => "test"
             ]);
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             [
                 "mapsProvider" => [
                     "name" => "osm", "options" => [
@@ -196,7 +196,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
 
         $formField->setMapsApiKey("my-key");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             [
                 "mapsProvider" => [
                     "name" => "osm", "options" => [

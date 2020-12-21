@@ -42,11 +42,23 @@
                     <template v-for="option in options">
                         <div class="SharpSelect__item" :class="itemClasses" :key="option.id">
                             <Check
-                                :value="checked(option.id)"
+                                :value="isChecked(option)"
                                 :text="optionsLabel[option.id]"
                                 :read-only="readOnly"
-                                @input="handleCheckboxChanged($event,option.id)"
+                                @input="handleCheckboxChanged($event, option)"
                             />
+                        </div>
+                    </template>
+                    <template v-if="showSelectAll">
+                        <div class="SharpSelect__links mt-3">
+                            <div class="row mx-n2">
+                                <div class="col-auto px-2">
+                                    <a href="#" @click.prevent="handleSelectAllClicked">{{ lang('form.select.select_all') }}</a>
+                                </div>
+                                <div class="col-auto px-2">
+                                    <a href="#" @click.prevent="handleUnselectAllClicked">{{ lang('form.select.unselect_all') }}</a>
+                                </div>
+                            </div>
                         </div>
                     </template>
                 </template>
@@ -57,11 +69,11 @@
                                 class="SharpRadio"
                                 tabindex="0"
                                 :id="`${uniqueIdentifier}${index}`"
-                                :checked="value===option.id"
+                                :checked="isSelected(option)"
                                 :value="option.id"
                                 :disabled="readOnly"
                                 :name="uniqueIdentifier"
-                                @change="handleRadioChanged(option.id)"
+                                @change="handleRadioChanged(option)"
                             >
                             <label class="SharpRadio__label" :for="`${uniqueIdentifier}${index}`">
                                 <span class="SharpRadio__appearance"></span>
@@ -80,6 +92,7 @@
     import Check from './Check.vue';
     import localize from '../../mixins/localize/Select';
     import { setDefaultValue } from "../../util";
+    import { lang } from "sharp";
 
     export default {
         name: 'SharpSelect',
@@ -110,6 +123,10 @@
             clearable: {
                 type: Boolean,
                 default: false
+            },
+            showSelectAll: {
+                type: Boolean,
+                default: true,
             },
             placeholder: {
                 type: String,
@@ -157,6 +174,16 @@
             },
         },
         methods: {
+            lang,
+            isSelected(option, value = this.value) {
+                if(option.id == null || value == null) {
+                    return false;
+                }
+                return `${option.id}` === `${value}`;
+            },
+            isChecked(option) {
+                return this.value?.some(value => this.isSelected(option, value));
+            },
             remove() {
                 this.$emit('input', null);
             },
@@ -166,22 +193,25 @@
             handleInput(val) {
                 this.$emit('input', val);
             },
-            checked(optId) {
-                return this.value.indexOf(optId) !== -1;
+            handleCheckboxChanged(checked, option) {
+                if (checked) {
+                    this.$emit('input', [...(this.value ?? []), option.id])
+                }
+                else {
+                    this.$emit('input', (this.value ?? []).filter(val => !this.isSelected(option, val)));
+                }
             },
-            handleCheckboxChanged(checked, optId) {
-                let newValue = this.value;
-                if (checked)
-                    newValue.push(optId);
-                else
-                    newValue = this.value.filter(val => val !== optId);
-                this.$emit('input', newValue);
+            handleRadioChanged(option) {
+                this.$emit('input', option.id);
             },
-            handleRadioChanged(optId) {
-                this.$emit('input', optId);
+            handleSelectAllClicked() {
+                this.$emit('input', this.options.map(option => option.id));
+            },
+            handleUnselectAllClicked() {
+                this.$emit('input', []);
             },
             setDefault() {
-                if(!this.clearable && this.value == null && this.options.length>0) {
+                if(!this.clearable && this.value == null && this.options.length > 0) {
                     this.$emit('input', this.options[0].id, { force:true });
                 }
             },

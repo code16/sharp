@@ -26,7 +26,12 @@ global.window.document.createRange = function createRange() {
 delete window.location;
 window.location = {
     set href(href) {},
+    search: '',
+    hash: '',
+    pathname: '/',
     get origin() {
         return 'http://saturn.test';
     }
 };
+
+Element.prototype.scrollIntoView = jest.fn();

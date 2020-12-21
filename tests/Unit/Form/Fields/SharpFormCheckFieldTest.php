@@ -25,7 +25,7 @@ class SharpFormCheckFieldTest extends SharpTestCase
         $formField = SharpFormCheckField::make("check", "text")
             ->setText("text 2");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["text" => "text 2"],
             $formField->toArray()
         );

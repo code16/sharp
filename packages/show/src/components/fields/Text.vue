@@ -1,12 +1,9 @@
 <template>
-    <div class="ShowTextField">
-        <template v-if="label">
-            <div class="ShowTextField__label">{{ label }}</div>
-        </template>
+    <FieldLayout class="ShowTextField" :label="label">
         <div class="ShowTextField__content" v-html="currentContent" ref="content"></div>
         <template v-if="hasCollapsed">
             <div class="mt-2">
-                <a href="#" class="text-decoration-none text-lowercase" @click.prevent="handleToggleClicked">
+                <a href="#" class="ShowTextField__more" @click.prevent="handleToggleClicked">
                     <template v-if="expanded">
                         - {{ l('show.text.show_less') }}
                     </template>
@@ -16,29 +13,21 @@
                 </a>
             </div>
         </template>
-    </div>
+    </FieldLayout>
 </template>
 
 <script>
     import { Localization } from 'sharp/mixins';
     import clip from 'text-clipper';
     import { syncVisibility } from "../../util/fields/visiblity";
-
-    function stripTags(html) {
-        const el = document.createElement('div');
-        el.innerHTML = html;
-        return el.textContent;
-    }
-
-    function truncateToWords(text, count) {
-        const matches = [...text.matchAll(/\S+\s*/g)];
-        return matches.length > count
-            ? matches.slice(0, count).map(match => match[0]).join('')
-            : text;
-    }
+    import { truncateToWords, stripTags } from "../../util/fields/text";
+    import FieldLayout from "../FieldLayout";
 
     export default {
         mixins: [Localization],
+        components: {
+            FieldLayout,
+        },
         props: {
             value: String,
             collapseToWordCount: Number,

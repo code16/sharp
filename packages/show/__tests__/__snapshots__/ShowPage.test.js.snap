@@ -14,16 +14,7 @@ exports[`show page can mount with fields 1`] = `
 <div class="ShowPage">
 	<div class="container">
 		<actionbarshow-stub formurl="formUrl"></actionbarshow-stub>
-		<div class="ShowPage__section">
-			<h2 class="ShowPage__section-title mb-2">Section title</h2>
-			<div class="ShowPage__section-content">
-				<div class="MOCKED_SharpGrid ShowPage__section-grid">
-					<div class="MOCKED_SharpGrid ShowPage__fields-grid">
-						<showfield-stub configidentifier="name" value="[object Object]" options="[object Object]" layout="[object Object]"></showfield-stub>
-					</div>
-				</div>
-			</div>
-		</div>
+		<section-stub section="[object Object]" fieldsrowclass="function () { [native code] }" layout="card" class="ShowPage__section"></section-stub>
 	</div>
 	<commandformmodal-stub></commandformmodal-stub>
 	<commandviewpanel-stub></commandviewpanel-stub>
@@ -34,16 +25,7 @@ exports[`show page can mount with no container section 1`] = `
 <div class="ShowPage">
 	<div class="container">
 		<actionbarshow-stub formurl="formUrl"></actionbarshow-stub>
-		<div class="ShowPage__section ShowPage__section--no-container">
-			<h2 class="ShowPage__section-title mb-2">Section title</h2>
-			<div class="ShowPage__section-content">
-				<div class="MOCKED_SharpGrid ShowPage__section-grid">
-					<div class="MOCKED_SharpGrid ShowPage__fields-grid">
-						<showfield-stub configidentifier="name" options="[object Object]" layout="[object Object]"></showfield-stub>
-					</div>
-				</div>
-			</div>
-		</div>
+		<section-stub section="[object Object]" fieldsrowclass="function () { [native code] }" layout="contents" class="ShowPage__section"></section-stub>
 	</div>
 	<commandformmodal-stub></commandformmodal-stub>
 	<commandviewpanel-stub></commandviewpanel-stub>
@@ -54,16 +36,7 @@ exports[`show page can mount with unknown field 1`] = `
 <div class="ShowPage">
 	<div class="container">
 		<actionbarshow-stub formurl="formUrl"></actionbarshow-stub>
-		<div class="ShowPage__section">
-			<h2 class="ShowPage__section-title mb-2">Section title</h2>
-			<div class="ShowPage__section-content">
-				<div class="MOCKED_SharpGrid ShowPage__section-grid">
-					<div class="MOCKED_SharpGrid ShowPage__fields-grid">
-						<unknownfield-stub name="name"></unknownfield-stub>
-					</div>
-				</div>
-			</div>
-		</div>
+		<section-stub section="[object Object]" fieldsrowclass="function () { [native code] }" layout="card" class="ShowPage__section"></section-stub>
 	</div>
 	<commandformmodal-stub></commandformmodal-stub>
 	<commandviewpanel-stub></commandviewpanel-stub>

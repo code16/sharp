@@ -18,6 +18,7 @@
     background: white;
     border: 1px solid $ui-04;
     border-bottom-width: 2px;
+    position: relative;
   }
 
   &__table {
@@ -43,6 +44,7 @@
   &__tbody {
     //display: table-row-group;
     vertical-align: middle;
+    position: relative;
   }
 
   &__thead {
@@ -64,6 +66,10 @@
 
     @include media-breakpoint-down(sm) {
       flex-flow: column;
+    }
+
+    &:last-child {
+      border-bottom: 0;
     }
 
     &--header {
@@ -167,8 +173,10 @@
         font-style: italic !important;
       }
       a {
-        position: relative;
-        z-index: 1;
+        &, * {
+          position: relative;
+          z-index: 1;
+        }
         &:hover {
           color: darken($color__blue-51, 25%);
         }

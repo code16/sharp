@@ -114,8 +114,8 @@ class MenuItemEntity extends MenuItem
         $this->key = $config['entity'];
         $this->label = $config["label"] ?? "Unnamed entity";
         $this->icon = $config["icon"] ?? null;
-        $this->url = $config["single"] ?? false
-                ? route('code16.sharp.show', ["entityKey" => $this->key])
+        $this->url = $config["single"] ?? false 
+                ? route('code16.sharp.single-show', ["entityKey" => $this->key])
                 : route('code16.sharp.list', $this->key);
     }
 

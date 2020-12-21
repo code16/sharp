@@ -1,51 +1,52 @@
 <template>
-    <div>
-        <canvas ref="canvas"></canvas>
+    <div :class="{ 'mb-2': hasLegends }">
+        <ApexChart
+            class="apexchart"
+            type="bar"
+            :series="chartData.series"
+            :options="chartOptions"
+            :height="options.chart.height"
+        />
     </div>
 </template>
 
 <script>
-    import { Bar, mixins } from 'vue-chartjs';
+    import ApexChart from 'vue-apexcharts';
+    import { defaultChartOptions, hasLegends } from "../../../../util/chart";
+    import merge from 'lodash/merge';
 
     export default {
-        extends: Bar,
-        mixins: [mixins.reactiveProp],
+        components: {
+            ApexChart,
+        },
         props: {
             chartData: Object,
+            options: Object,
         },
-        computed: {
-            options() {
-                return {
-                    title: {
-                        display: false,
-                    },
-                    legend: {
-                        display: false,
-                    },
-                    maintainAspectRatio: false,
 
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                suggestedMin: 0,
-                            },
-                            gridLines: {
-                                display: false
+
+        computed: {
+            hasLegends() {
+                return hasLegends(this.chartOptions);
+            },
+            chartOptions() {
+                return merge({},
+                    defaultChartOptions(),
+                    {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        labels: this.chartData.labels,
+                        colors: this.chartData.colors,
+                        grid: {
+                            padding: {
+                                right: 12,
                             }
-                        }],
-                        xAxes: [{
-                            gridLines: {
-                                display: false
-                            },
-                            categoryPercentage: 0.5,
-                            barPercentage: 0.2
-                        }]
+                        },
                     },
-                }
+                    this.options
+                );
             }
-        },
-        mounted() {
-            this.renderChart(this.chartData, this.options);
         },
     }
 </script>

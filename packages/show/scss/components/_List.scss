@@ -1,11 +1,10 @@
 
 .ShowListField {
-  font-size: .875em;
-  &__label {
-    font-size: 1em;
-    font-weight: bold;
-    text-transform: uppercase;
-    margin-bottom: 1rem;
+  > .show-field__label {
+    margin-bottom: 1em;
+  }
+  > .show-field__content {
+    font-size: .875em;
   }
   &__list {
     border: 1px solid #dfe3e6;

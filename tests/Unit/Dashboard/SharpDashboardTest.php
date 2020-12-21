@@ -10,6 +10,7 @@ use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpOrderedListWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\LinkToEntity;
 
 class SharpDashboardTest extends SharpTestCase
@@ -32,6 +33,12 @@ class SharpDashboardTest extends SharpTestCase
             "display" => "bar",
             "ratioX" => 16,
             "ratioY" => 9,
+            "minimal" => false,
+            "showLegend" => true,
+            "dateLabels" => false,
+            "options" => [
+                "horizontal" => false
+            ]
         ]], $dashboard->widgets());
     }
 
@@ -217,11 +224,10 @@ class SharpDashboardTest extends SharpTestCase
             {
                 $this->addWidget(
                     SharpOrderedListWidget::make("widget")
-                        ->buildItemLink(function(LinkToEntity $link, $item) {
+                        ->buildItemLink(function($item) {
                             return $item['id'] == 3
                                 ? null
-                                : $link
-                                    ->setEntityKey("my-entity")
+                                : LinkToEntityList::make("my-entity")
                                     ->addFilter("type", $item['id']);
                         })
                 );
@@ -259,13 +265,13 @@ class SharpDashboardTest extends SharpTestCase
                         "id" => 1,
                         "label" => "John Wayne",
                         "count" => 888,
-                        "url" => "http://localhost/sharp/list/my-entity?filter_type=1"
+                        "url" => "http://localhost/sharp/s-list/my-entity?filter_type=1"
                     ],
                     [
                         "id" => 2,
                         "label" => "Jane Wayne",
                         "count" => 771,
-                        "url" => "http://localhost/sharp/list/my-entity?filter_type=2"
+                        "url" => "http://localhost/sharp/s-list/my-entity?filter_type=2"
                     ],
                     [
                         "id" => 3,

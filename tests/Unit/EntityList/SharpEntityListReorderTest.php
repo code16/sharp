@@ -23,7 +23,7 @@ class SharpEntityListReorderTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "reorderable" => true
         ], $list->listConfig());
 

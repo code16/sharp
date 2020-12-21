@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Show\Fields;
 
-use Code16\Sharp\Http\SharpContext;
+use Code16\Sharp\Http\Context\CurrentSharpRequest;
 
 class SharpShowEntityListField extends SharpShowField
 {
@@ -52,7 +52,7 @@ class SharpShowEntityListField extends SharpShowField
      * @param mixed $value
      * @return $this
      */
-    public function hideFilterWithValue(string $filterName, $value)
+    public function hideFilterWithValue(string $filterName, $value): self
     {
         $this->hiddenFilters[$filterName] = $value;
 
@@ -63,7 +63,7 @@ class SharpShowEntityListField extends SharpShowField
      * @param array|string $commands
      * @return $this
      */
-    public function hideEntityCommand($commands)
+    public function hideEntityCommand($commands): self
     {
         foreach((array)$commands as $command) {
             $this->hiddenCommands["entity"][] = $command;
@@ -76,7 +76,7 @@ class SharpShowEntityListField extends SharpShowField
      * @param array|string $commands
      * @return $this
      */
-    public function hideInstanceCommand($commands)
+    public function hideInstanceCommand($commands): self
     {
         foreach((array)$commands as $command) {
             $this->hiddenCommands["instance"][] = $command;
@@ -89,7 +89,7 @@ class SharpShowEntityListField extends SharpShowField
      * @param bool $showEntityState
      * @return $this
      */
-    public function showEntityState(bool $showEntityState = true)
+    public function showEntityState(bool $showEntityState = true): self
     {
         $this->showEntityState = $showEntityState;
 
@@ -100,7 +100,7 @@ class SharpShowEntityListField extends SharpShowField
      * @param bool $showCreateButton
      * @return $this
      */
-    public function showCreateButton(bool $showCreateButton = true)
+    public function showCreateButton(bool $showCreateButton = true): self
     {
         $this->showCreateButton = $showCreateButton;
 
@@ -111,7 +111,7 @@ class SharpShowEntityListField extends SharpShowField
      * @param bool $showReorderButton
      * @return $this
      */
-    public function showReorderButton(bool $showReorderButton = true)
+    public function showReorderButton(bool $showReorderButton = true): self
     {
         $this->showReorderButton = $showReorderButton;
 
@@ -122,7 +122,7 @@ class SharpShowEntityListField extends SharpShowField
      * @param bool $showSearchField
      * @return $this
      */
-    public function showSearchField(bool $showSearchField = true)
+    public function showSearchField(bool $showSearchField = true): self
     {
         $this->showSearchField = $showSearchField;
 
@@ -156,24 +156,23 @@ class SharpShowEntityListField extends SharpShowField
             "showReorderButton" => $this->showReorderButton,
             "showSearchField" => $this->showSearchField,
             "hiddenCommands" => $this->hiddenCommands,
-            "hiddenFilters" => collect($this->hiddenFilters)
-                ->map(function($value, $filter) {
-                    // Filter value can be a Closure
-                    if(is_callable($value)) {
-                        // Call it with current instanceId from Context
-                        return $value(app(SharpContext::class)->instanceId());
-                    }
-
-                    return $value;
-                })
-                ->all()
+            "hiddenFilters" => sizeof($this->hiddenFilters) 
+                ? collect($this->hiddenFilters)
+                    ->map(function($value, $filter) {
+                        // Filter value can be a Closure
+                        if(is_callable($value)) {
+                            // Call it with current instanceId
+                            return $value(currentSharpRequest()->instanceId());
+                        }
+    
+                        return $value;
+                    })
+                    ->all()
+                : null
         ]);
     }
 
-    /**
-     * @return array
-     */
-    protected function validationRules()
+    protected function validationRules(): array
     {
         return [
             "entityListKey" => "required",

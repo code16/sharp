@@ -38,6 +38,11 @@ class SpaceshipSharpShow extends SharpShow
                 SharpShowTextField::make("brand")
                     ->setLabel("Brand / model")
             )->addField(
+                SharpShowFileField::make("manual")
+                    ->setLabel("Manual")
+                    ->setStorageDisk("local")
+                    ->setStorageBasePath("data/Spaceship/{id}/Manual")
+            )->addField(
                 SharpShowPictureField::make("picture")
             )->addField(
                 SharpShowTextField::make("description")
@@ -57,6 +62,10 @@ class SpaceshipSharpShow extends SharpShow
                     ->hideFilterWithValue("spaceship", function($instanceId) {
                         return $instanceId;
                     })
+//                    ->hideFilterWithValue("role", function($instanceId) {
+//                        return null;
+//                    })
+//                    ->showSearchField(false)
                     ->showEntityState(false)
 //                    ->hideEntityCommand("updateXP")
 //                    ->hideInstanceCommand("download")
@@ -88,7 +97,8 @@ class SpaceshipSharpShow extends SharpShow
                             ->withSingleField("name")
                             ->withSingleField("type:label")
                             ->withSingleField("serial_number")
-                            ->withSingleField("brand");
+                            ->withSingleField("brand")
+                            ->withSingleField("manual");
                     })
                     ->addColumn(5, function(ShowLayoutColumn $column) {
                         $column->withSingleField("picture");
@@ -96,6 +106,7 @@ class SpaceshipSharpShow extends SharpShow
             })
             ->addSection('Description', function(ShowLayoutSection $section) {
                 $section
+                    ->setCollapsable()
                     ->addColumn(6, function(ShowLayoutColumn $column) {
                         $column->withSingleField("description");
                     })
@@ -106,7 +117,9 @@ class SpaceshipSharpShow extends SharpShow
                         });
                     });
             })
-            ->addEntityListSection("pilots");
+            ->addEntityListSection("pilots", function (ShowLayoutSection $section) {
+                $section->setCollapsable();
+            });
     }
 
     function find($id): array
@@ -114,20 +127,21 @@ class SpaceshipSharpShow extends SharpShow
         return $this
             ->setCustomTransformer("brand", function($value, $spaceship) {
                 return sprintf(
-                    "%s / %s", 
-                    $spaceship->brand ?: '<em>no brand</em>', 
+                    "%s / %s",
+                    $spaceship->brand ?: '<em>no brand</em>',
                     $spaceship->model ?: '<em>no model</em>'
                 );
             })
             ->setCustomTransformer("name", function($value, $spaceship) {
                 return $spaceship->name;
             })
+            ->setCustomTransformer("manual", new SharpUploadModelFormAttributeTransformer(false))
             ->setCustomTransformer("picture", new SharpUploadModelThumbnailUrlTransformer(140))
             ->setCustomTransformer("pictures", new SharpUploadModelFormAttributeTransformer(true, 200, 200))
             ->setCustomTransformer("pictures[legend]", function($value, $instance) {
                 return $instance->legend["en"] ?? "";
             })
             ->setCustomTransformer("description", (new MarkdownAttributeTransformer())->handleImages(200))
-            ->transform(Spaceship::with("pictures")->findOrFail($id));
+            ->transform(Spaceship::with("manual", "pictures")->findOrFail($id));
     }
 }

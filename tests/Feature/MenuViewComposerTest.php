@@ -31,7 +31,7 @@ class MenuViewComposerTest extends BaseApiTest
 
         $menu = $this->get('/sharp/')->getOriginalContent()["sharpMenu"];
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "label" => "external",
             "icon" => "fa-globe",
             "url" => "https://google.com",
@@ -56,7 +56,7 @@ class MenuViewComposerTest extends BaseApiTest
 
         $menu = $this->followingRedirects()->get('/sharp/')->getOriginalContent()["sharpMenu"];
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "key" => "person",
             "label" => "people",
             "icon" => "fa-user",
@@ -90,7 +90,7 @@ class MenuViewComposerTest extends BaseApiTest
         $this->assertEquals("Data", $menu->menuItems[0]->label);
         $this->assertEquals("category", $menu->menuItems[0]->type);
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "key" => "person",
             "label" => "people",
             "icon" => "fa-user",
@@ -116,7 +116,7 @@ class MenuViewComposerTest extends BaseApiTest
 
         $menu = $this->followingRedirects()->get('/sharp/')->getOriginalContent()["sharpMenu"];
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "key" => "personal_dashboard",
             "label" => "My Dashboard",
             "icon" => "fa-dashboard",
@@ -143,12 +143,12 @@ class MenuViewComposerTest extends BaseApiTest
 
         $menu = $this->followingRedirects()->get('/sharp/')->getOriginalContent()["sharpMenu"];
 
-        $this->assertArrayContainsSubset([
+        $this->assertArraySubset([
             "key" => "person",
             "label" => "people",
             "icon" => "fa-user",
             "type" => "entity",
-            "url" => route("code16.sharp.show", "person"),
+            "url" => route("code16.sharp.single-show", "person"),
         ], (array)$menu->menuItems[0]);
     }
 }

@@ -33,16 +33,9 @@ describe('show page', () => {
             },
             store: new Vuex.Store({
                 modules: {
-                    'show': merge(showModule, storeModule),
+                    'show': merge({}, showModule, storeModule),
                 }
             }),
-            // language=Vue
-            stubs: {
-                Grid:
-                    `<div class="MOCKED_SharpGrid">
-                        <slot :item-layout="rows[0][0]" />
-                    </div>`,
-            },
             mocks: {
                 $route: { params: { } },
             },
@@ -142,7 +135,7 @@ describe('show page', () => {
         expect(formUrl).toHaveBeenCalledWith({
             entityKey: 'entityKey',
             instanceId: 'instanceId',
-        });
+        }, { append:true });
     });
 
     test('fieldOptions', () => {

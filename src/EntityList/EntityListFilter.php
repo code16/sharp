@@ -15,36 +15,3 @@ interface EntityListFilter extends SelectFilter
 {
 }
 
-interface EntityListSelectFilter extends SelectFilter
-{
-}
-
-/**
- * @deprecated use EntityListSelectRequiredFilter instead
- */
-interface EntityListRequiredFilter extends SelectRequiredFilter
-{
-}
-
-interface EntityListSelectRequiredFilter extends SelectRequiredFilter
-{
-}
-
-/**
- * @deprecated use EntityListSelectMultipleFilter instead
- */
-interface EntityListMultipleFilter extends SelectMultipleFilter
-{
-}
-
-interface EntityListSelectMultipleFilter extends SelectMultipleFilter
-{
-}
-
-interface EntityListDateRangeFilter extends DateRangeFilter
-{
-}
-
-interface EntityListDateRangeRequiredFilter extends DateRangeRequiredFilter
-{
-}

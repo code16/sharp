@@ -37,12 +37,17 @@
                 </Button>
             </template>
         </template>
+        <template v-slot:extras>
+            <template v-if="showBreadcrumb">
+                <Breadcrumb :items="breadcrumb" />
+            </template>
+        </template>
     </ActionBar>
 </template>
 
 <script>
     import { lang } from 'sharp';
-    import { ActionBar, Collapse, Button } from 'sharp-ui';
+    import { ActionBar, Collapse, Button, Breadcrumb} from 'sharp-ui';
     import { Localization } from "sharp/mixins";
 
     export default {
@@ -52,6 +57,7 @@
             ActionBar,
             Collapse,
             Button,
+            Breadcrumb,
         },
         props: {
             showSubmitButton: Boolean,
@@ -59,6 +65,8 @@
             showBackButton: Boolean,
             create: Boolean,
             uploading: Boolean,
+            breadcrumb: Array,
+            showBreadcrumb: Boolean,
         },
         computed: {
             submitLabel() {

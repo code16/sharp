@@ -134,7 +134,7 @@ trait WithCustomTransformers
                     continue;
                 }
 
-                foreach ($model->$listAttribute as $k => $itemModel) {
+                foreach ($model[$listAttribute] as $k => $itemModel) {
                     $attributes[$listAttribute][$k][$itemAttribute] = $transformer->apply(
                         $attributes[$listAttribute][$k][$itemAttribute] ?? null, $itemModel, $itemAttribute
                     );

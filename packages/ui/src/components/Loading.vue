@@ -13,13 +13,18 @@
     export default {
         name: 'SharpLoading',
         props: {
-            visible: Boolean,
+            visible: {
+                type: Boolean,
+                default: true,
+            },
             small: Boolean,
+            medium: Boolean,
         },
         computed: {
             classes() {
                 return {
                     'SharpLoading--small': this.small,
+                    'SharpLoading--medium': this.medium,
                 }
             }
         },

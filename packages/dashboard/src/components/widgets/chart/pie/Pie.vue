@@ -1,34 +1,41 @@
 <template>
     <div>
-        <canvas ref="canvas"></canvas>
+        <ApexChart
+            type="pie"
+            :series="chartData.series"
+            :options="chartOptions"
+            :height="options.chart.height"
+        />
     </div>
 </template>
 
 <script>
-    import { Pie, mixins } from 'vue-chartjs';
+    import merge from 'lodash/merge';
+    import ApexChart from "vue-apexcharts";
+    import { defaultChartOptions } from "../../../../util/chart";
 
     export default {
-        extends: Pie,
-        mixins: [mixins.reactiveProp],
+        components: {
+            ApexChart,
+        },
         props: {
             chartData: Object,
+            options: Object,
         },
         computed: {
-            options() {
-                return {
-                    title: {
-                        display: false,
+            chartOptions() {
+                return merge({},
+                    defaultChartOptions(),
+                    {
+                        colors: this.chartData.colors,
+                        labels: this.chartData.labels,
+                        legend: {
+                            position: 'right'
+                        }
                     },
-                    legend: {
-                        display: false,
-                    },
-                    maintainAspectRatio: false,
-                    cutoutPercentage: 0,
-                }
+                    this.options,
+                )
             }
-        },
-        mounted() {
-            this.renderChart(this.chartData, this.options);
         },
     }
 </script>

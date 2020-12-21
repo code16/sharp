@@ -60,7 +60,7 @@
     import {
         BASE_URL,
         getBackUrl,
-        getListBackUrl,
+        getDeleteBackUrl,
         logError,
         showAlert,
     } from "sharp";
@@ -193,6 +193,8 @@
                     showBackButton: this.isReadOnly,
                     create: !!this.isCreation,
                     uploading: this.isUploading,
+                    breadcrumb: this.breadcrumb?.items,
+                    showBreadcrumb: !!this.breadcrumb?.visible,
                 }
             },
             actionBarListeners() {
@@ -283,11 +285,11 @@
                     else logError('no entity key provided');
                 }
             },
-            redirectToList() {
-                location.href = getListBackUrl(this.breadcrumb);
+            redirectToClosestRoot() {
+                location.href = getDeleteBackUrl(this.breadcrumb.items);
             },
             redirectToParentPage() {
-                location.href = getBackUrl(this.breadcrumb);
+                location.href = getBackUrl(this.breadcrumb.items);
             },
             async submit({ postFn }={}) {
                 if(this.isUploading) {
@@ -315,7 +317,7 @@
             handleDeleteClicked() {
                 this.axiosInstance.delete(this.apiPath)
                     .then(() => {
-                        this.redirectToList();
+                        this.redirectToClosestRoot();
                     });
             },
             handleCancelClicked() {

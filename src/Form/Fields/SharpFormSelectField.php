@@ -48,6 +48,11 @@ class SharpFormSelectField extends SharpFormField
     protected $inline = false;
 
     /**
+     * @var bool
+     */
+    protected $showSelectAll = false;
+
+    /**
      * @var array
      */
     protected $dynamicAttributes;
@@ -65,85 +70,63 @@ class SharpFormSelectField extends SharpFormField
         return $instance;
     }
 
-    /**
-     * @param bool $multiple
-     * @return $this
-     */
-    public function setMultiple(bool $multiple = true)
+    public function setMultiple(bool $multiple = true): self
     {
         $this->multiple = $multiple;
 
         return $this;
     }
 
-    /**
-     * @param bool $clearable
-     * @return $this
-     */
-    public function setClearable(bool $clearable = true)
+    public function allowSelectAll(bool $allowSelectAll = true): self
+    {
+        $this->showSelectAll = $allowSelectAll;
+        
+        return $this;
+    }
+
+    public function setClearable(bool $clearable = true): self
     {
         $this->clearable = $clearable;
 
         return $this;
     }
 
-    /**
-     * @param bool $inline
-     * @return $this
-     */
-    public function setInline(bool $inline = true)
+    public function setInline(bool $inline = true): self
     {
         $this->inline = $inline;
 
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function setDisplayAsList()
+    public function setDisplayAsList(): self
     {
         $this->display = "list";
 
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function setDisplayAsDropdown()
+    public function setDisplayAsDropdown(): self
     {
         $this->display = "dropdown";
 
         return $this;
     }
 
-    /**
-     * @param int $maxSelected
-     * @return $this
-     */
-    public function setMaxSelected(int $maxSelected)
+    public function setMaxSelected(int $maxSelected): self
     {
         $this->maxSelected = $maxSelected;
 
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function setMaxSelectedUnlimited()
+    public function setMaxSelectedUnlimited(): self
     {
         $this->maxSelected = null;
 
         return $this;
     }
 
-    /**
-     * @param string ...$fieldKeys
-     * @return $this
-     */
-    public function setOptionsLinkedTo(string ...$fieldKeys)
+    public function setOptionsLinkedTo(string ...$fieldKeys): self
     {
         $this->dynamicAttributes = [
             [
@@ -156,27 +139,17 @@ class SharpFormSelectField extends SharpFormField
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function multiple()
+    public function multiple(): bool
     {
         return $this->multiple;
     }
 
-    /**
-     * @return bool
-     */
-    public function idAttribute()
+    public function idAttribute(): string
     {
         return $this->idAttribute;
     }
 
-    /**
-     * @param string $idAttribute
-     * @return $this
-     */
-    public function setIdAttribute(string $idAttribute)
+    public function setIdAttribute(string $idAttribute): self
     {
         $this->idAttribute = $idAttribute;
 
@@ -191,6 +164,7 @@ class SharpFormSelectField extends SharpFormField
         return [
             "options" => "array",
             "multiple" => "boolean",
+            "showSelectAll" => "boolean",
             "inline" => "boolean",
             "clearable" => "boolean",
             "display" => "required|in:list,dropdown",
@@ -210,6 +184,7 @@ class SharpFormSelectField extends SharpFormField
                     ? self::formatDynamicOptions($this->options, count($this->dynamicAttributes[0]["path"]))
                     : self::formatOptions($this->options, $this->idAttribute),
                 "multiple" => $this->multiple,
+                "showSelectAll" => $this->showSelectAll,
                 "clearable" => $this->clearable,
                 "display" => $this->display,
                 "inline" => $this->inline,

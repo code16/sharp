@@ -13,6 +13,15 @@
 <body>
     @yield('content')
 
+    @if(sharp_assets_out_of_date())
+        <script>
+            window.prompt(
+                'Sharp assets are out of date. Please run the following command:',
+                'php artisan vendor:publish --provider=Code16\\\\Sharp\\\\SharpServiceProvider --tag=assets --force'
+            );
+        </script>
+    @endif
+
     <script src="{{ mix('manifest.js', '/vendor/sharp') }}"></script>
     <script src="{{ mix('vendor.js', '/vendor/sharp') }}"></script>
     <script src="{{ mix('client-api.js', '/vendor/sharp') }}"></script>

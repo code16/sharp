@@ -9,6 +9,8 @@ body {
 $css--reset: true;
 $css--typography: true;
 
+@import 'vars';
+
 @import '~carbon-components/scss/globals/scss/colors';
 @import '~carbon-components/scss/globals/scss/vars';
 
@@ -20,8 +22,6 @@ $css--typography: true;
 @import '~bootstrap/scss/mixins';
 @import '~bootstrap/scss/utilities';
 
-@import 'vars';
-
 ::before, ::after {
   box-sizing: border-box;
 }
@@ -31,6 +31,10 @@ body {
   color: $text-01;
   line-height: 1.15;
   font-family: $font-family-base;
+}
+
+a {
+  color: $link-color;
 }
 
 small {

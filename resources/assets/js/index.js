@@ -7,7 +7,7 @@ export * from './util/log';
 export * from './util/file';
 export * from './consts';
 export { showAlert, showConfirm } from './util/dialogs';
-export { getBackUrl, getListBackUrl } from './util/url';
+export { getBackUrl, getDeleteBackUrl} from './util/breadcrumb';
 export { isCustomField, resolveCustomField } from './util/fields';
 export { formUrl } from 'sharp-form/src/util/url';
 export { showUrl } from 'sharp-show/src/util/url';

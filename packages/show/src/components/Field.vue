@@ -6,6 +6,7 @@
             :field-config-identifier="mergedConfigIdentifier"
             :value="value"
             :layout="layout"
+            :collapsable="collapsable"
             v-bind="props"
             @visible-change="handleVisiblityChanged"
         />
@@ -15,7 +16,6 @@
 <script>
     import { getFieldByType } from "./fields";
     import { ConfigNode } from "sharp/mixins";
-    import {syncVisibility} from "../util/fields/visiblity";
 
     export default {
         mixins: [ConfigNode],
@@ -23,6 +23,7 @@
             value: {},
             options: Object,
             layout: Object,
+            collapsable: Boolean,
         },
         data() {
             return {

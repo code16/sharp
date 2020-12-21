@@ -5,6 +5,7 @@ namespace Code16\Sharp\Tests\Unit\Dashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpWidget;
 use Code16\Sharp\Exceptions\Dashboard\SharpWidgetValidationException;
 use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Utils\Links\LinkToEntityList;
 
 class SharpWidgetTest extends SharpTestCase
 {
@@ -27,7 +28,7 @@ class SharpWidgetTest extends SharpTestCase
     {
         $widget = SomeTestWidget::make("name", "test");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["key" => "name", "type" => "test"],
             $widget->toArray()
         );
@@ -50,36 +51,23 @@ class SharpWidgetTest extends SharpTestCase
         $widget = SomeTestWidget::make("name")
             ->setTitle("title");
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["title" => "title"],
             $widget->toArray()
         );
     }
 
     /** @test */
-    function we_can_define_an_entity_link()
+    function we_can_define_an_SharpLinkTo_link()
     {
         $widget = SomeTestWidget::make("name")
-            ->setLink("entity");
+            ->setLink(LinkToEntityList::make("entity"));
 
-        $this->assertArrayContainsSubset(
+        $this->assertArraySubset(
             ["link" => route("code16.sharp.list", "entity")],
             $widget->toArray()
         );
     }
-
-    /** @test */
-    function we_can_define_an_instance_link()
-    {
-        $widget = SomeTestWidget::make("name")
-            ->setLink("entity", 1);
-
-        $this->assertArrayContainsSubset(
-            ["link" => route("code16.sharp.edit", ["entity", 1])],
-            $widget->toArray()
-        );
-    }
-
 }
 
 class SomeTestWidget extends SharpWidget
