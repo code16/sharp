@@ -27,7 +27,7 @@ export default {
             return key => state.values[key];
         },
         filters(state) {
-            return state.filters || []
+            return state.filters || []
         },
         values(state) {
             return state.values;
