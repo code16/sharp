@@ -92,7 +92,11 @@
     }
 
     &:hover:not(.SharpDataList__row--header):not(.SharpDataList__row--disabled) {
-      box-shadow: inset 5px 0 0 lighten($brand-03, 25%);
+      box-shadow: inset 5px 0 0 rgba($brand-03, .5);
+    }
+
+    &--highlight {
+      box-shadow: inset 3px 0 0 rgba($brand-02, .25);
     }
 
     .SharpDataList__cols {
