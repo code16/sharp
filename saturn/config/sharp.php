@@ -30,6 +30,7 @@ return [
         ],
         "pilot" => [
             "list" => \App\Sharp\PilotSharpList::class,
+            "show" => \App\Sharp\PilotSharpShow::class,
             "forms" => [
                 "junior" => [
                     "icon" => "far fa-user",
@@ -48,6 +49,7 @@ return [
         ],
         "spaceship_pilot" => [
             "list" => \App\Sharp\EmbeddedEntityLists\SpaceshipPilotSharpList::class,
+            "show" => \App\Sharp\PilotSharpShow::class,
             "forms" => [
                 "junior" => [
                     "icon" => "far fa-user",
