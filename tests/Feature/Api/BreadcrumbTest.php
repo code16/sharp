@@ -15,7 +15,8 @@ class BreadcrumbTest extends BaseApiTest
     protected function setUp(): void
     {
         parent::setUp();
-
+        
+        config()->set("sharp.display_breadcrumb", true);
         $this->login();
     }
 
