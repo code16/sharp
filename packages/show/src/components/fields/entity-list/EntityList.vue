@@ -176,7 +176,8 @@
         },
         mounted() {
             if(this.focusedItem) {
-                this.$el.scrollIntoView({ block:'center' });
+                const rect = this.$el.getBoundingClientRect();
+                window.scrollBy(0, rect.top - 100);
             }
         }
     }
