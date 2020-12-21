@@ -22,7 +22,7 @@ use Code16\Sharp\Utils\Transformers\Attributes\MarkdownAttributeTransformer;
 
 class SpaceshipSharpShow extends SharpShow
 {
-    function buildShowFields()
+    function buildShowFields(): void
     {
         $this
             ->addField(
@@ -74,10 +74,7 @@ class SpaceshipSharpShow extends SharpShow
             );
     }
 
-    /**
-     * @throws \Code16\Sharp\Exceptions\SharpException
-     */
-    function buildShowConfig()
+    function buildShowConfig(): void
     {
         $this
             ->addInstanceCommand("message", SpaceshipSendMessage::class)
@@ -87,7 +84,7 @@ class SpaceshipSharpShow extends SharpShow
             ->setEntityState("state", SpaceshipEntityState::class);
     }
 
-    function buildShowLayout()
+    function buildShowLayout(): void
     {
         $this
             ->addSection('Identity', function(ShowLayoutSection $section) {

@@ -10,22 +10,12 @@ use Code16\Sharp\Show\SharpSingleShow;
 
 class PersonSharpSingleShow extends SharpSingleShow
 {
-    /**
-     * Build form fields using ->addField()
-     *
-     * @return void
-     */
-    function buildShowFields()
+    function buildShowFields(): void
     {
         $this->addField(SharpShowTextField::make("name"));
     }
 
-    /**
-     * Build form layout using ->addSection()
-     *
-     * @return void
-     */
-    function buildShowLayout()
+    function buildShowLayout(): void
     {
         $this
             ->addSection("Identity", function(ShowLayoutSection $section) {
@@ -36,11 +26,6 @@ class PersonSharpSingleShow extends SharpSingleShow
             });
     }
 
-    /**
-     * Retrieve a Model for the form and pack all its data as JSON.
-     *
-     * @return array
-     */
     function findSingle(): array
     {
         return ["name" => "John Wayne", "job" => "actor", "state" => "active"];

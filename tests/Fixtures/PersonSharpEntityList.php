@@ -12,18 +12,13 @@ use Code16\Sharp\EntityList\EntityListSelectFilter;
 use Code16\Sharp\EntityList\EntityListSelectMultipleFilter;
 use Code16\Sharp\EntityList\EntityListSelectRequiredFilter;
 use Code16\Sharp\EntityList\SharpEntityList;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
 
 class PersonSharpEntityList extends SharpEntityList
 {
 
-    /**
-     * Retrieve all rows data as array.
-     *
-     * @param EntityListQueryParams $params
-     * @return array|LengthAwarePaginator
-     */
     function getListData(EntityListQueryParams $params)
     {
         $items = [
@@ -67,12 +62,7 @@ class PersonSharpEntityList extends SharpEntityList
         return $this->transform($items);
     }
 
-    /**
-     * Build list containers using ->addDataContainer()
-     *
-     * @return void
-     */
-    function buildListDataContainers()
+    function buildListDataContainers(): void
     {
         $this->addDataContainer(
             EntityListDataContainer::make("name")
@@ -87,23 +77,13 @@ class PersonSharpEntityList extends SharpEntityList
         );
     }
 
-    /**
-     * Build list layout using ->addColumn()
-     *
-     * @return void
-     */
-    function buildListLayout()
+    function buildListLayout(): void
     {
         $this->addColumn("name", 6, 12)
             ->addColumnLarge("age", 6);
     }
 
-    /**
-     * Build list config
-     *
-     * @return void
-     */
-    function buildListConfig()
+    function buildListConfig(): void
     {
         $this->setSearchable()
             ->setReorderable(PersonSharpEntityListReorderHandler::class)
@@ -120,10 +100,7 @@ class PersonSharpEntityList extends SharpEntityList
 
 class PersonSharpEntityListAgeFilter implements EntityListSelectFilter
 {
-    /**
-     * @return array
-     */
-    public function values()
+    public function values(): array
     {
         return [22=>22, 23=>23, 24=>24, 25=>25, 26=>26];
     }

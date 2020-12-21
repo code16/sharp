@@ -14,7 +14,7 @@ class ShowLayoutTest extends SharpTestCase
     function we_can_add_a_section()
     {
         $show = new class extends ShowLayoutTestShow {
-            function buildShowLayout()
+            function buildShowLayout(): void
             {
                 $this->addSection("label");
             }
@@ -27,7 +27,7 @@ class ShowLayoutTest extends SharpTestCase
     function we_can_add_a_column_to_a_section()
     {
         $show = new class extends ShowLayoutTestShow {
-            function buildShowLayout()
+            function buildShowLayout(): void
             {
                 $this->addSection("label", function (ShowLayoutSection $section) {
                     $section->addColumn(7);
@@ -43,7 +43,7 @@ class ShowLayoutTest extends SharpTestCase
     function we_can_add_a_field_to_a_column()
     {
         $show = new class extends ShowLayoutTestShow {
-            function buildShowLayout()
+            function buildShowLayout(): void
             {
                 $this->addSection("label", function (ShowLayoutSection $section) {
                     $section->addColumn(7, function(ShowLayoutColumn $column) {
@@ -68,7 +68,7 @@ class ShowLayoutTest extends SharpTestCase
     function we_can_add_a_field_with_layout_to_a_column()
     {
         $show = new class extends ShowLayoutTestShow {
-            function buildShowLayout()
+            function buildShowLayout(): void
             {
                 $this->addSection("label", function (ShowLayoutSection $section) {
                     $section->addColumn(7, function(ShowLayoutColumn $column) {
@@ -104,6 +104,6 @@ class ShowLayoutTest extends SharpTestCase
 abstract class ShowLayoutTestShow extends SharpShow
 {
     function find($id): array { return []; }
-    function buildShowFields() {}
-    function buildShowLayout() {}
+    function buildShowFields(): void {}
+    function buildShowLayout(): void {}
 }

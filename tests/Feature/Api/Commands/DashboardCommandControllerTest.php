@@ -57,7 +57,7 @@ class DashboardCommandControllerTest extends BaseApiTest
 
 class EntityCommandTestSharpDashboard extends SharpDashboard
 {
-    function buildDashboardConfig()
+    function buildDashboardConfig(): void
     {
         $this
             ->addDashboardCommand("dashboard_info", new class() extends DashboardCommand {

@@ -13,7 +13,7 @@ class PilotJuniorSharpForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
 
-    function buildFormFields()
+    function buildFormFields(): void
     {
         $this->addField(
             SharpCustomFormFieldTextIcon::make("name")
@@ -23,7 +23,7 @@ class PilotJuniorSharpForm extends SharpForm
         );
     }
 
-    function buildFormLayout()
+    function buildFormLayout(): void
     {
         $this->addColumn(6, function(FormLayoutColumn $column) {
             $column->withSingleField("name");
@@ -52,7 +52,7 @@ class PilotJuniorSharpForm extends SharpForm
         }
     }
 
-    function delete($id)
+    function delete($id): void
     {
         Pilot::findOrFail($id)->delete();
     }

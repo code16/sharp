@@ -15,7 +15,7 @@ use Code16\Sharp\EntityList\SharpEntityList;
 class PilotSharpList extends SharpEntityList
 {
 
-    function buildListDataContainers()
+    function buildListDataContainers(): void
     {
         $this->addDataContainer(
             EntityListDataContainer::make("name")
@@ -30,7 +30,7 @@ class PilotSharpList extends SharpEntityList
         );
     }
 
-    function buildListConfig()
+    function buildListConfig(): void
     {
         $this->setSearchable()
             ->setDefaultSort("name", "asc")
@@ -43,7 +43,7 @@ class PilotSharpList extends SharpEntityList
             ->addInstanceCommand("download", PilotDownloadPhoto::class);
     }
 
-    function buildListLayout()
+    function buildListLayout(): void
     {
         $this->addColumn("name", 4)
             ->addColumn("role", 4)

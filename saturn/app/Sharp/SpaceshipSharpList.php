@@ -19,7 +19,7 @@ use Code16\Sharp\Utils\Links\LinkToEntityList;
 
 class SpaceshipSharpList extends SharpEntityList
 {
-    function buildListDataContainers()
+    function buildListDataContainers(): void
     {
         $this->addDataContainer(
             EntityListDataContainer::make("picture")
@@ -50,7 +50,7 @@ class SpaceshipSharpList extends SharpEntityList
         );
     }
 
-    function buildListConfig()
+    function buildListConfig(): void
     {
         $this->setInstanceIdAttribute("id")
             ->setSearchable()
@@ -69,7 +69,7 @@ class SpaceshipSharpList extends SharpEntityList
             ->setPaginated();
     }
 
-    function buildListLayout()
+    function buildListLayout(): void
     {
         $this->addColumn("picture", 1, 2)
             ->addColumn("name", 2, 4)

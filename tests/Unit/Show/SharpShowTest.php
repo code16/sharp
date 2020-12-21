@@ -18,14 +18,14 @@ class SharpShowTest extends SharpTestCase
     {
         $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
         {
-            function buildShowFields()
+            function buildShowFields(): void
             {
                 $this->addField(
                     SharpShowEntityListField::make("entityList", "entityKey")
                         ->setLabel("Test")
                 );
             }
-            function buildShowLayout()
+            function buildShowLayout(): void
             {
                 $this->addEntityListSection("entityList");
             }
@@ -60,14 +60,14 @@ class SharpShowTest extends SharpTestCase
     {
         $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
         {
-            function buildShowFields()
+            function buildShowFields(): void
             {
                 $this->addField(
                     SharpShowTextField::make("test")
                         ->setLabel("Test")
                 );
             }
-            function buildShowLayout()
+            function buildShowLayout(): void
             {
                 $this->addSection("test", function(ShowLayoutSection $section) {
                     $section->setCollapsable()
@@ -120,20 +120,20 @@ class BaseSharpShow extends SharpShow
     function find($id): array
     {
     }
-    function buildShowFields()
+    function buildShowFields(): void
     {
     }
-    function buildShowLayout()
+    function buildShowLayout(): void
     {
     }
 }
 
 class BaseSharpSingleShow extends SharpSingleShow
 {
-    function buildShowFields()
+    function buildShowFields(): void
     {
     }
-    function buildShowLayout()
+    function buildShowLayout(): void
     {
     }
     function findSingle(): array

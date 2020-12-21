@@ -109,7 +109,7 @@ class FiltersInRequestTest extends BaseApiTest
             PersonSharpEntityList::class,
             function() {
                 return new class() extends PersonSharpEntityList {
-                    function buildListConfig()
+                    function buildListConfig(): void
                     {
                         $this->addFilter(
                             "active",
@@ -154,7 +154,7 @@ class FiltersInRequestTest extends BaseApiTest
 
                         return $this->transform($items);
                     }
-                    function buildListConfig()
+                    function buildListConfig(): void
                     {
                         $this->addFilter(
                             "active",
@@ -222,7 +222,7 @@ class FiltersInRequestTest extends BaseApiTest
 
                         return $this->transform($items);
                     }
-                    function buildListConfig()
+                    function buildListConfig(): void
                     {
                         $this->addFilter(
                             "age",
@@ -281,7 +281,7 @@ class FiltersInRequestTest extends BaseApiTest
 
                         return $this->transform($items);
                     }
-                    function buildListConfig()
+                    function buildListConfig(): void
                     {
                         $this->addFilter(
                             "age",

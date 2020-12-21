@@ -12,12 +12,7 @@ class AccountSharpForm extends SharpSingleForm
 {
     use WithSharpFormEloquentUpdater;
 
-    /**
-     * Build form fields using ->addField()
-     *
-     * @return void
-     */
-    function buildFormFields()
+    function buildFormFields(): void
     {
         $this
             ->addField(
@@ -29,12 +24,7 @@ class AccountSharpForm extends SharpSingleForm
             );
     }
 
-    /**
-     * Build form layout using ->addTab() or ->addColumn()
-     *
-     * @return void
-     */
-    function buildFormLayout()
+    function buildFormLayout(): void
     {
         $this->addColumn(6, function(FormLayoutColumn $column) {
             return $column->withSingleField("name")
@@ -42,18 +32,11 @@ class AccountSharpForm extends SharpSingleForm
         });
     }
 
-    /**
-     * @return array
-     */
     protected function findSingle()
     {
         return $this->transform(User::findOrFail(auth()->id()));
     }
 
-    /**
-     * @param array $data
-     * @return mixed
-     */
     protected function updateSingle(array $data)
     {
         $this->save(User::findOrFail(auth()->id()), $data);

@@ -12,10 +12,7 @@ use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 class SharpDashboard extends AbstractSharpDashboard
 {
 
-    /**
-     * Build dashboard's widget using ->addWidget.
-     */
-    protected function buildWidgets()
+    protected function buildWidgets(): void
     {
         $this->addWidget(
             SharpBarGraphWidget::make("bars")
@@ -27,10 +24,7 @@ class SharpDashboard extends AbstractSharpDashboard
         );
     }
 
-    /**
-     * Build dashboard's widgets layout.
-     */
-    protected function buildWidgetsLayout()
+    protected function buildWidgetsLayout(): void
     {
         $this->addFullWidthWidget("bars")
             ->addRow(function(DashboardLayoutRow $row) {
@@ -39,7 +33,7 @@ class SharpDashboard extends AbstractSharpDashboard
             });
     }
 
-    protected function buildWidgetsData(DashboardQueryParams $params)
+    protected function buildWidgetsData(DashboardQueryParams $params): void
     {
         $this->addGraphDataSet(
             "bars1",

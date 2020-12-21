@@ -15,7 +15,7 @@ class DashboardCommandTest extends SharpTestCase
     function we_can_get_list_commands_config_of_a_dashboard()
     {
         $dashboard = new class extends SharpDashboardTestDashboard {
-            function buildDashboardConfig()
+            function buildDashboardConfig(): void
             {
                 $this->addDashboardCommand("dashboardCommand", new class extends DashboardCommand {
                     public function label(): string {
@@ -48,7 +48,7 @@ class DashboardCommandTest extends SharpTestCase
     function we_can_define_a_form_on_a_dashboard_command()
     {
         $list = new class extends SharpDashboardTestDashboard {
-            function buildDashboardConfig()
+            function buildDashboardConfig(): void
             {
                 $this->addDashboardCommand("dashboardCommand", new class extends DashboardCommand {
                     public function label(): string {

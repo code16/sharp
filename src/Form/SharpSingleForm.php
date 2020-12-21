@@ -3,13 +3,11 @@
 namespace Code16\Sharp\Form;
 
 use Code16\Sharp\Exceptions\SharpException;
+use Illuminate\Contracts\Support\Arrayable;
 
 abstract class SharpSingleForm extends SharpForm
 {
-    /**
-     * @return array
-     */
-    public function formConfig()
+    public function formConfig(): array
     {
         return array_merge(
             parent::formConfig(),
@@ -17,53 +15,26 @@ abstract class SharpSingleForm extends SharpForm
         );
     }
 
-    /**
-     * Retrieve a Model for the form and pack all its data as JSON.
-     *
-     * @param $id
-     * @return array
-     */
     final function find($id): array
     {
         return $this->findSingle();
     }
 
-    /**
-     * @param $id
-     * @param array $data
-     * @return mixed the instance id
-     */
     final function update($id, array $data)
     {
         return $this->updateSingle($data);
     }
 
-    /**
-     * @param $data
-     * @throws SharpException
-     */
-    final public function storeInstance($data)
+    final public function storeInstance($data): void
     {
         throw new SharpException("Store is not possible in a SingleSharpForm.");
     }
 
-    /**
-     * @param $id
-     * @throws SharpException
-     */
-    final function delete($id)
+    final function delete($id): void
     {
         throw new SharpException("Delete is not possible in a SingleSharpForm.");
     }
 
-    /**
-     * @return array
-     */
     abstract protected function findSingle();
-
-    /**
-     * @param array $data
-     * @return mixed
-     */
     abstract protected function updateSingle(array $data);
 }

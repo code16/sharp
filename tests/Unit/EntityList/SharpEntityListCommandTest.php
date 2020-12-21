@@ -17,7 +17,7 @@ class SharpEntityListCommandTest extends SharpTestCase
     function we_can_get_list_commands_config_with_an_instance()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig()
+            function buildListConfig(): void
             {
                 $this->addEntityCommand("entityCommand", new class extends EntityCommand {
                     public function label(): string {
@@ -65,7 +65,7 @@ class SharpEntityListCommandTest extends SharpTestCase
     function we_can_get_list_entity_command_config_with_a_class()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig()
+            function buildListConfig(): void
             {
                 $this->addEntityCommand("entityCommand", SharpEntityListCommandTestCommand::class);
             }
@@ -92,7 +92,7 @@ class SharpEntityListCommandTest extends SharpTestCase
     function we_can_ask_for_a_confirmation_on_a_command()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig()
+            function buildListConfig(): void
             {
                 $this->addEntityCommand("entityCommand", new class extends EntityCommand {
                     public function label(): string {
@@ -129,7 +129,7 @@ class SharpEntityListCommandTest extends SharpTestCase
     function we_can_define_a_form_on_a_command()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig()
+            function buildListConfig(): void
             {
                 $this->addEntityCommand("entityCommand", new class extends EntityCommand {
                     public function label(): string {
@@ -179,7 +179,7 @@ class SharpEntityListCommandTest extends SharpTestCase
     function if_no_form_layout_is_configured_a_default_is_provided()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig()
+            function buildListConfig(): void
             {
                 $this->addEntityCommand("entityCommand", new class extends EntityCommand {
                     public function label(): string {
@@ -218,7 +218,7 @@ class SharpEntityListCommandTest extends SharpTestCase
     function we_can_handle_authorization_in_an_entity_command()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig()
+            function buildListConfig(): void
             {
                 $this->addEntityCommand("entityCommand", new class extends EntityCommand {
                     public function label(): string {
@@ -254,7 +254,7 @@ class SharpEntityListCommandTest extends SharpTestCase
     function we_can_handle_authorization_in_an_instance_command()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig()
+            function buildListConfig(): void
             {
                 $this->addInstanceCommand("command", new class extends InstanceCommand {
                     public function label(): string {
@@ -294,7 +294,7 @@ class SharpEntityListCommandTest extends SharpTestCase
     function we_can_define_a_description_on_a_command()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig()
+            function buildListConfig(): void
             {
                 $this->addEntityCommand("entityCommand", new class extends EntityCommand {
                     public function label(): string {
@@ -330,7 +330,7 @@ class SharpEntityListCommandTest extends SharpTestCase
     function we_can_define_separators_in_instance_commands()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig()
+            function buildListConfig(): void
             {
                 $this
                     ->addInstanceCommand("command-1", new class extends InstanceCommand {
@@ -375,7 +375,7 @@ class SharpEntityListCommandTest extends SharpTestCase
     function we_can_define_separators_in_entity_commands()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig()
+            function buildListConfig(): void
             {
                 $this
                     ->addEntityCommand("command-1", new class extends EntityCommand {

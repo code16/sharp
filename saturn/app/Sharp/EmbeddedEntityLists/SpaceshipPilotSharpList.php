@@ -7,7 +7,7 @@ use App\Sharp\PilotSharpList;
 class SpaceshipPilotSharpList extends PilotSharpList
 {
 
-    function buildListConfig()
+    function buildListConfig(): void
     {
         parent::buildListConfig();
 

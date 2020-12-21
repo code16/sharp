@@ -13,7 +13,7 @@ use Code16\Sharp\Show\SharpShow;
 
 class PilotSharpShow extends SharpShow
 {
-    function buildShowFields()
+    function buildShowFields(): void
     {
         $this
             ->addField(
@@ -36,14 +36,15 @@ class PilotSharpShow extends SharpShow
             );
     }
 
-    function buildShowConfig()
+    function buildShowConfig(): void
     {
         $this
+//            ->setMultiformAttribute("role")
             ->setEntityState("state", PilotEntityState::class)
             ->addInstanceCommand("download", PilotDownloadPhoto::class);
     }
 
-    function buildShowLayout()
+    function buildShowLayout(): void
     {
         $this
             ->addSection('Identity', function(ShowLayoutSection $section) {

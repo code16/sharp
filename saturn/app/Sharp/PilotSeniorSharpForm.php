@@ -8,7 +8,7 @@ use Code16\Sharp\Form\Layout\FormLayoutColumn;
 
 class PilotSeniorSharpForm extends PilotJuniorSharpForm
 {
-    function buildFormFields()
+    function buildFormFields(): void
     {
         parent::buildFormFields();
 
@@ -18,7 +18,7 @@ class PilotSeniorSharpForm extends PilotJuniorSharpForm
         );
     }
 
-    function buildFormLayout()
+    function buildFormLayout(): void
     {
         parent::buildFormLayout();
 

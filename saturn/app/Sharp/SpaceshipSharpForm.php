@@ -29,7 +29,7 @@ class SpaceshipSharpForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
 
-    function buildFormFields()
+    function buildFormFields(): void
     {
         $this->addField(
             SharpFormTextField::make("name")
@@ -208,7 +208,7 @@ class SpaceshipSharpForm extends SharpForm
         );
     }
 
-    function buildFormLayout()
+    function buildFormLayout(): void
     {
         $this->addTab("General info", function(FormLayoutTab $tab) {
             $tab->addColumn(6, function(FormLayoutColumn $column) {
@@ -244,10 +244,7 @@ class SpaceshipSharpForm extends SharpForm
         });
     }
 
-    /**
-     * @return array
-     */
-    function getDataLocalizations()
+    function getDataLocalizations(): array
     {
         return ["fr", "en", "it"];
     }
@@ -319,7 +316,7 @@ class SpaceshipSharpForm extends SharpForm
         return $instance->id;
     }
 
-    function delete($id)
+    function delete($id): void
     {
         Spaceship::findOrFail($id)->delete();
     }
