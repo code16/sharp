@@ -6,22 +6,10 @@ use Code16\Sharp\EntityList\Commands\EntityState;
 
 trait HandleEntityState
 {
-    /**
-     * @var string
-     */
-    protected $entityStateAttribute;
+    protected ?string $entityStateAttribute = null;
+    protected ?EntityState $entityStateHandler = null;
 
-    /**
-     * @var EntityState
-     */
-    protected $entityStateHandler;
-
-    /**
-     * @param string $stateAttribute
-     * @param EntityState|string $stateHandlerOrClassName
-     * @return $this
-     */
-    protected function setEntityState(string $stateAttribute, $stateHandlerOrClassName)
+    protected function setEntityState(string $stateAttribute, $stateHandlerOrClassName): self
     {
         $this->entityStateAttribute = $stateAttribute;
 
@@ -32,19 +20,12 @@ trait HandleEntityState
         return $this;
     }
 
-    /**
-     * @return EntityState
-     */
-    public function entityStateHandler()
+    public function entityStateHandler(): EntityState
     {
         return $this->entityStateHandler;
     }
 
-    /**
-     * @param array $config
-     * @param null $instanceId
-     */
-    protected function appendEntityStateToConfig(array &$config, $instanceId = null)
+    protected function appendEntityStateToConfig(array &$config, $instanceId = null): void
     {
         if($this->entityStateAttribute) {
             $config["state"] = [

@@ -26,6 +26,11 @@ class PilotSeniorSharpForm extends PilotJuniorSharpForm
             $column->withSingleField("xp");
         });
     }
+    
+    function buildFormConfig(): void
+    {
+        $this->setBreadcrumbCustomLabelAttribute("name");
+    }
 
     function update($id, array $data)
     {

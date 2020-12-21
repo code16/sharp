@@ -7,7 +7,6 @@ use App\Pilot;
 use App\Spaceship;
 use App\SpaceshipType;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
-use Code16\Sharp\Form\Eloquent\Transformers\FormUploadModelTransformer;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
@@ -242,6 +241,11 @@ class SpaceshipSharpForm extends SharpForm
                 $column->withSingleField("description");
             });
         });
+    }
+    
+    function buildFormConfig(): void
+    {
+        $this->setBreadcrumbCustomLabelAttribute("name.en");
     }
 
     function getDataLocalizations(): array

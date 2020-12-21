@@ -36,13 +36,7 @@ abstract class SharpSingleShow extends SharpShow
         return $this->findSingle();
     }
 
-    /**
-     * @param string $commandName
-     * @param string|InstanceCommand $commandHandlerOrClassName
-     * @return SharpShow
-     * @throws SharpException
-     */
-    protected function addInstanceCommand(string $commandName, $commandHandlerOrClassName)
+    protected function addInstanceCommand(string $commandName, $commandHandlerOrClassName): self
     {
         $commandHandler = is_string($commandHandlerOrClassName)
             ? app($commandHandlerOrClassName)
@@ -61,13 +55,7 @@ abstract class SharpSingleShow extends SharpShow
         return parent::addInstanceCommand($commandName, $commandHandlerOrClassName);
     }
 
-    /**
-     * @param string $stateAttribute
-     * @param EntityState|string $stateHandlerOrClassName
-     * @return SharpShow
-     * @throws SharpException
-     */
-    protected function setEntityState(string $stateAttribute, $stateHandlerOrClassName)
+    protected function setEntityState(string $stateAttribute, $stateHandlerOrClassName): self
     {
         $entityStateHandler = is_string($stateHandlerOrClassName)
             ? app($stateHandlerOrClassName)

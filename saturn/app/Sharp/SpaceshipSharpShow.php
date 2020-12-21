@@ -77,6 +77,7 @@ class SpaceshipSharpShow extends SharpShow
     function buildShowConfig(): void
     {
         $this
+            ->setBreadcrumbCustomLabelAttribute("name")
             ->addInstanceCommand("message", SpaceshipSendMessage::class)
             ->addInstanceCommand("preview", SpaceshipPreview::class)
             ->addInstanceCommandSeparator()
