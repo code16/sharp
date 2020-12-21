@@ -157,6 +157,7 @@
                 if(route?.name
                     && route.params.entityKey?.replace(/:(.*)/, '') === this.entityListKey
                     && route.params.instanceId
+                    && route.path.length > this.$route.path.length
                 ) {
                     return Number(route.params.instanceId);
                 }
