@@ -19,6 +19,7 @@ abstract class SharpShow
 
     protected bool $layoutBuilt = false;
     protected array $sections = [];
+    protected ?string $multiformAttribute = null;
 
     final public function showLayout(): array
     {
@@ -62,10 +63,23 @@ abstract class SharpShow
      */
     public function showConfig($instanceId, $config = []): array
     {
+        $config = collect($config)
+            ->merge([
+                "multiformAttribute" => $this->multiformAttribute
+            ])
+            ->all();
+        
         return tap($config, function(&$config) use($instanceId) {
             $this->appendEntityStateToConfig($config, $instanceId);
             $this->appendCommandsToConfig($config, $instanceId);
         });
+    }
+
+    protected function setMultiformAttribute(string $attribute): self
+    {
+        $this->multiformAttribute = $attribute;
+
+        return $this;
     }
 
     private function buildFormFields(): void

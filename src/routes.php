@@ -38,7 +38,7 @@ Route::group([
 
     Route::get("/list/{entityKey}", [EntityListController::class, "show"])
         ->name("code16.sharp.api.list")
-        ->middleware(['sharp_api_append_list_authorizations', 'sharp_api_append_list_multiform', 'sharp_api_append_notifications', 'sharp_api_append_breadcrumb']);
+        ->middleware(['sharp_api_append_list_authorizations', 'sharp_api_append_multiform_in_list', 'sharp_api_append_notifications', 'sharp_api_append_breadcrumb']);
 
     Route::post("/list/{entityKey}/reorder", [EntityListController::class, "update"])
         ->name("code16.sharp.api.list.reorder");

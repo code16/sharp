@@ -103,15 +103,37 @@ class SharpShowTest extends SharpTestCase
     }
 
     /** @test */
+    function we_can_declare_a_multiformAttribute()
+    {
+        $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
+        {
+            public function buildShowConfig(): void
+            {
+                $this->setMultiformAttribute("role");
+            }
+        };
+
+        $sharpShow->buildShowConfig();
+
+        $this->assertEquals([
+            "multiformAttribute" => "role",
+        ], $sharpShow->showConfig(1));
+    }
+
+    /** @test */
     function single_shows_have_are_declared_in_config()
     {
         $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpSingleShow
         {
         };
 
-        $this->assertEquals([
-            "isSingle" => true
-        ], $sharpShow->showConfig(null));
+        $this->assertEquals(
+            [
+                "multiformAttribute" => null,
+                "isSingle" => true
+            ], 
+            $sharpShow->showConfig(null)
+        );
     }
 }
 
