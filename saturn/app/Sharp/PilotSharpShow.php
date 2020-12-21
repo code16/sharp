@@ -39,7 +39,7 @@ class PilotSharpShow extends SharpShow
     function buildShowConfig(): void
     {
         $this
-//            ->setMultiformAttribute("role")
+            ->setMultiformAttribute("role")
             ->setEntityState("state", PilotEntityState::class)
             ->addInstanceCommand("download", PilotDownloadPhoto::class);
     }

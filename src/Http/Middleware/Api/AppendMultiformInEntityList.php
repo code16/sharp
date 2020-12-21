@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class AppendListMultiform
+class AppendMultiformInEntityList
 {
 
     /**
@@ -26,12 +26,11 @@ class AppendListMultiform
 
     protected function addMultiformDataToJsonResponse(JsonResponse $jsonResponse)
     {
-        $multiformAttribute = $jsonResponse->getData()->config->multiformAttribute;
-        $instanceIdAttribute = $jsonResponse->getData()->config->instanceIdAttribute;
-
-        if(!$multiformAttribute) {
+        if(!$multiformAttribute = $jsonResponse->getData()->config->multiformAttribute) {
             return $jsonResponse;
         }
+
+        $instanceIdAttribute = $jsonResponse->getData()->config->instanceIdAttribute;
 
         $subFormKeys = collect($this->getMultiformKeys())
             ->map(function($value) use($instanceIdAttribute, $multiformAttribute, $jsonResponse) {
@@ -56,17 +55,11 @@ class AppendListMultiform
         return $jsonResponse;
     }
 
-    /**
-     * @return null|string
-     */
-    protected function determineEntityKey()
+    protected function determineEntityKey(): ?string
     {
         return request()->segment(4);
     }
 
-    /**
-     * @return array
-     */
     protected function getMultiformKeys(): array
     {
         $entityKey = $this->determineEntityKey();
@@ -76,22 +69,14 @@ class AppendListMultiform
         return $config ? array_keys($config) : [];
     }
 
-    /**
-     * @param string $formSubKey
-     * @return string|null
-     */
-    protected function getMultiformLabelFor(string $formSubKey)
+    protected function getMultiformLabelFor(string $formSubKey): ?string
     {
         $entityKey = $this->determineEntityKey();
 
         return config("sharp.entities.{$entityKey}.forms.{$formSubKey}.label");
     }
 
-    /**
-     * @param string $formSubKey
-     * @return array
-     */
-    protected function getIconConfigFor(string $formSubKey)
+    protected function getIconConfigFor(string $formSubKey): array
     {
         $entityKey = $this->determineEntityKey();
 
