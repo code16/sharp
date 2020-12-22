@@ -89,7 +89,7 @@ class AppendBreadcrumb
                 // A Form is always a leaf
                 $previousItem = $this->currentSharpRequest->breadcrumb()[$item->depth-1];
                 if(isset($item->instance) || ($previousItem->type === "s-show" && !isset($previousItem->instance))) {
-                    if($previousItem->key !== $item->key) {
+                    if(!$this->isSameEntityKeys($previousItem->key, $item->key, true)) {
                         // The form entityKey is different from the previous entityKey
                         // in the breadcrumb: we are in a EEL case.
                         return trans("sharp::breadcrumb.form.edit_entity", [
@@ -141,5 +141,15 @@ class AppendBreadcrumb
         }
         
         return config("sharp.entities.{$item->key}.label", $item->key);
+    }
+
+    private function isSameEntityKeys(string $key1, string $key2, bool $compareBaseEntities): bool
+    {
+        if($compareBaseEntities) {
+            $key1 = explode(":", $key1)[0];
+            $key2 = explode(":", $key2)[0];
+        }
+        
+        return $key1 === $key2;
     }
 }
