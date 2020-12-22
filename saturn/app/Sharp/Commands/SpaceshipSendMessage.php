@@ -12,10 +12,6 @@ use Illuminate\Support\Arr;
 
 class SpaceshipSendMessage extends InstanceCommand
 {
-
-    /**
-     * @return string
-     */
     public function label(): string
     {
         return "Send a text message";
@@ -26,13 +22,6 @@ class SpaceshipSendMessage extends InstanceCommand
         return "Will pretend to send a message and increment message count.";
     }
 
-    /**
-     * @param string $instanceId
-     * @param array $data
-     * @return array
-     * @throws \Illuminate\Validation\ValidationException
-     * @throws SharpApplicativeException
-     */
     public function execute($instanceId, array $data = []): array
     {
         $this->validate($data, [
@@ -49,7 +38,7 @@ class SpaceshipSendMessage extends InstanceCommand
         return $this->refresh($instanceId);
     }
 
-    function buildFormFields()
+    function buildFormFields(): void
     {
         $this->addField(
             SharpFormTextareaField::make("message")

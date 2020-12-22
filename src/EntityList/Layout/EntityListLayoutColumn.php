@@ -4,50 +4,24 @@ namespace Code16\Sharp\EntityList\Layout;
 
 class EntityListLayoutColumn
 {
-    /**
-     * @var string
-     */
-    protected $key;
+    protected string $key;
+    protected int $size;
+    protected ?int $sizeXS;
+    protected bool $largeOnly = false;
 
-    /**
-     * @var int
-     */
-    protected $size;
-
-    /**
-     * @var int|null
-     */
-    protected $sizeXS;
-
-    /**
-     * @var boolean
-     */
-    protected $largeOnly = false;
-
-    /**
-     * @param string $key
-     * @param int $size
-     * @param null $sizeXS
-     */
-    public function __construct(string $key, int $size, $sizeXS = null)
+    public function __construct(string $key, int $size, int $sizeXS = null)
     {
         $this->key = $key;
         $this->size = $size;
         $this->sizeXS = $sizeXS ?: $size;
     }
 
-    /**
-     * @param bool $largeOnly
-     */
-    public function setLargeOnly($largeOnly = true)
+    public function setLargeOnly(bool $largeOnly = true): void
     {
         $this->largeOnly = $largeOnly;
     }
 
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             "key" => $this->key,

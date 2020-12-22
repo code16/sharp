@@ -98,11 +98,10 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function label(): string {
                         return "My Entity Command";
                     }
-                    public function confirmationText() {
+                    public function confirmationText(): ?string {
                         return "Sure?";
                     }
                     public function execute(EntityListQueryParams $params, array $data = []): array {}
-
                 });
             }
         };
@@ -135,10 +134,10 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function label(): string {
                         return "My Entity Command";
                     }
-                    public function buildFormFields() {
+                    public function buildFormFields(): void {
                         $this->addField(SharpFormTextField::make("message"));
                     }
-                    public function buildFormLayout(FormLayoutColumn &$column) {
+                    public function buildFormLayout(FormLayoutColumn &$column): void {
                         $column->withSingleField("message");
                     }
                     public function execute(EntityListQueryParams $params, array $data = []): array {}
@@ -185,7 +184,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function label(): string {
                         return "My Entity Command";
                     }
-                    public function buildFormFields() {
+                    public function buildFormFields(): void {
                         $this->addField(SharpFormTextField::make("message"));
                         $this->addField(SharpFormTextField::make("message2"));
                     }

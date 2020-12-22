@@ -145,7 +145,7 @@ class EntityListInstanceCommandPersonSharpEntityList extends PersonSharpEntityLi
             })
             ->addInstanceCommand("instance_with_init_data", new class() extends InstanceCommand {
                 public function label(): string { return "label"; }
-                public function buildFormFields() {
+                public function buildFormFields(): void {
                     $this->addField(SharpFormTextField::make("name"));
                 }
                 protected function initialData($instanceId): array

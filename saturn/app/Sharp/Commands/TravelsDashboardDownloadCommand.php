@@ -9,20 +9,11 @@ use Illuminate\Support\Facades\Storage;
 
 class TravelsDashboardDownloadCommand extends DashboardCommand
 {
-
-    /**
-     * @return string
-     */
     public function label(): string
     {
         return "Export as PDF";
     }
 
-    /**
-     * @param DashboardQueryParams $params
-     * @param array $data
-     * @return array
-     */
     public function execute(DashboardQueryParams $params, array $data = []): array
     {
         if (!Storage::exists("pdf/travels-export.png")) {

@@ -4,17 +4,13 @@ namespace Code16\Sharp\EntityList\Commands;
 
 abstract class SingleInstanceCommand extends InstanceCommand
 {
-
-    /**
-     * @return string
-     */
     public function type(): string
     {
         return "instance";
     }
 
     /**
-     * @param $instanceId
+     * @param mixed $instanceId
      * @return array
      */
     protected final function initialData($instanceId): array
@@ -22,16 +18,13 @@ abstract class SingleInstanceCommand extends InstanceCommand
         return $this->initialSingleData();
     }
 
-    /**
-     * @return array
-     */
     protected function initialSingleData(): array
     {
         return [];
     }
 
     /**
-     * @param string $instanceId
+     * @param mixed $instanceId
      * @param array $data
      * @return array
      */
@@ -41,7 +34,7 @@ abstract class SingleInstanceCommand extends InstanceCommand
     }
 
     /**
-     * @param $instanceId
+     * @param mixed $instanceId
      * @return bool
      */
     public final function authorizeFor($instanceId): bool
@@ -57,9 +50,5 @@ abstract class SingleInstanceCommand extends InstanceCommand
         return $this->authorize();
     }
 
-    /**
-     * @param array $data
-     * @return array
-     */
-    protected abstract function executeSingle(array $data);
+    protected abstract function executeSingle(array $data): array;
 }

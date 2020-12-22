@@ -7,8 +7,7 @@ use Code16\Sharp\EntityList\Commands\EntityState;
 
 class SpaceshipEntityState extends EntityState
 {
-
-    protected function buildStates()
+    protected function buildStates(): void
     {
         $this->addState("active", "Active", "green")
             ->addState("inactive", "Retired", "orange")
@@ -16,7 +15,7 @@ class SpaceshipEntityState extends EntityState
             ->addState("conception", "Conception phase", static::DARKGRAY_COLOR);
     }
 
-    public function updateState($instanceId, $stateId)
+    public function updateState($instanceId, $stateId): array
     {
         Spaceship::findOrFail($instanceId)->update([
             "state" => $stateId

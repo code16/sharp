@@ -54,10 +54,10 @@ class DashboardCommandTest extends SharpTestCase
                     public function label(): string {
                         return "My Dashboard Command";
                     }
-                    public function buildFormFields() {
+                    public function buildFormFields(): void {
                         $this->addField(SharpFormTextField::make("message"));
                     }
-                    public function buildFormLayout(FormLayoutColumn &$column) {
+                    public function buildFormLayout(FormLayoutColumn &$column): void {
                         $column->withSingleField("message");
                     }
                     public function execute(DashboardQueryParams $params, array $data = []): array {}
