@@ -4,10 +4,7 @@ namespace Code16\Sharp\Tests\Fixtures;
 
 use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
-use Code16\Sharp\EntityList\EntityListFilter;
-use Code16\Sharp\EntityList\EntityListMultipleFilter;
 use Code16\Sharp\EntityList\EntityListQueryParams;
-use Code16\Sharp\EntityList\EntityListRequiredFilter;
 use Code16\Sharp\EntityList\EntityListSelectFilter;
 use Code16\Sharp\EntityList\EntityListSelectMultipleFilter;
 use Code16\Sharp\EntityList\EntityListSelectRequiredFilter;

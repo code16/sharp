@@ -72,6 +72,7 @@ module.exports = {
                     children: [
                         'building-menu',
                         'how-to-transform-data',
+                        'link-to',
                         'context',
                         'sharp-built-in-solution-for-uploads',
                         'form-data-localization',
@@ -116,6 +117,7 @@ module.exports = {
                     title: 'Migrations guide',
                     collapsable: false,
                     children: [
+                        'upgrading/6.0',
                         'upgrading/5.0',
                         'upgrading/4.2',
                         'upgrading/4.1.3',

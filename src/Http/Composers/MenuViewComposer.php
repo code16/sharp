@@ -9,8 +9,7 @@ use Illuminate\Support\Collection;
 
 class MenuViewComposer
 {
-    /** @var CurrentSharpRequest */
-    protected $currentSharpRequest;
+    protected CurrentSharpRequest $currentSharpRequest;
 
     public function __construct(CurrentSharpRequest $currentSharpRequest)
     {
