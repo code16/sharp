@@ -4,17 +4,9 @@ namespace Code16\Sharp\Form\Eloquent\Relationships;
 
 class BelongsToManyRelationUpdater
 {
-    /**
-     * @var array
-     */
-    protected $handledIds = [];
+    protected array $handledIds = [];
 
-    /**
-     * @param $instance
-     * @param string $attribute
-     * @param array $value
-     */
-    public function update($instance, $attribute, $value)
+    public function update(object $instance, string $attribute, array $value)
     {
         $collection = collect($value);
         $keyName = explode(".", $instance->$attribute()->getRelated()->getQualifiedKeyName())[1];

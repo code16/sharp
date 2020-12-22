@@ -8,17 +8,13 @@ use Illuminate\Support\Collection;
 
 trait WithSharpFormEloquentUpdater
 {
-
-    /**
-     * @var array
-     */
-    protected $ignoredAttributes = [];
+    protected array $ignoredAttributes = [];
 
     /**
      * @param string|array $attribute
      * @return $this
      */
-    function ignore($attribute)
+    function ignore($attribute): self
     {
         $this->ignoredAttributes = array_merge(
             $this->ignoredAttributes,
@@ -35,7 +31,7 @@ trait WithSharpFormEloquentUpdater
      * @param array $data
      * @return Model
      */
-    function save(Model $instance, array $data)
+    function save(Model $instance, array $data): Model
     {
         // First transform data, passing false as a second parameter to allow partial objects.
         // This is important: this save() can be the second one called in the same request
@@ -64,7 +60,7 @@ trait WithSharpFormEloquentUpdater
      *
      * @return Collection
      */
-    protected function getFormListFieldsConfiguration()
+    protected function getFormListFieldsConfiguration(): Collection
     {
         return collect($this->fields)
             ->filter(function($field) {

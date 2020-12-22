@@ -10,7 +10,7 @@ There are three graph types, and they mostly share the same API. To choose one o
 
 ```php
 $this->addWidget(
-    SharpLineGraphWidget::make("capacities");
+    SharpLineGraphWidget::make("capacities")
 );
 ```
 
@@ -18,7 +18,7 @@ $this->addWidget(
 
 ```php
 $this->addWidget(
-    SharpBarGraphWidget::make("capacities");
+    SharpBarGraphWidget::make("capacities")
 );
 ```
 
@@ -26,7 +26,7 @@ $this->addWidget(
 
 ```php
 $this->addWidget(
-    SharpPieGraphWidget::make("capacities");
+    SharpPieGraphWidget::make("capacities")
 );
 ```
 

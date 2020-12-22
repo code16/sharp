@@ -20,7 +20,7 @@ function getListData(EntityListQueryParams $params)
 {
     return $this->transform(
         Spaceship::with("picture", "type", "pilots")
-                ->paginate(10);
+                ->paginate(10)
     );
 }
 ```
@@ -43,12 +43,14 @@ In the process, it's easy to add some custom transformation with `setCustomTrans
 ```php
 function getListData(EntityListQueryParams $params)
 {
-    return $this->setCustomTransformer(
-        "capacity",
-        function($capacity, $spaceship, $attribute) {
-            return ($capacity/1000) . "k";
-        }
-    )->transform($spaceships);
+    return $this
+        ->setCustomTransformer(
+            "capacity",
+            function($capacity, $spaceship, $attribute) {
+                return ($capacity/1000) . "k";
+            }
+        )
+        ->transform($spaceships);
 }
 ```
 
@@ -65,12 +67,14 @@ But if this isn't the wanted behaviour, the solution is to define in the `SharpA
 Sometimes (maybe more often in the Entity Form), you would like to transform an attribute of a related model in a "has many" relationship. For instance let's say you want to display the names of the sons of a father in caps:
 
 ```php
-return $this->setCustomTransformer(
-        "sons[name]",
-        function($son) {
-            return strtoupper($son->name);
-        }
-    )->transform($father);
+return $this
+        ->setCustomTransformer(
+            "sons[name]",
+            function($son) {
+                return strtoupper($son->name);
+            }
+        )
+        ->transform($father);
 ```
 
 The convention in this case is to use an array notation, given that `$father->sons` is a collection of objects with a `name` attribute

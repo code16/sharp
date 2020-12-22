@@ -30,6 +30,11 @@ class BreadcrumbItem
         return $this;
     }
 
+    public function isEntityList(): bool
+    {
+        return $this->type === "s-list";
+    }
+
     public function isShow(): bool
     {
         return $this->type === "s-show";

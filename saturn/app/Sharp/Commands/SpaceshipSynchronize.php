@@ -7,10 +7,6 @@ use Code16\Sharp\EntityList\EntityListQueryParams;
 
 class SpaceshipSynchronize extends EntityCommand
 {
-
-    /**
-     * @return string
-     */
     public function label(): string
     {
         return "Synchronize the gamma-spectrum";
@@ -21,18 +17,13 @@ class SpaceshipSynchronize extends EntityCommand
         return "Let's be honest: this command is a fraud. It's just an empty command for test purpose.";
     }
 
-    /**
-     * @param EntityListQueryParams $params
-     * @param array $data
-     * @return array
-     */
     public function execute(EntityListQueryParams $params, array $data=[]): array
     {
         sleep(2);
         return $this->info("Gamma spectrum synchronized!");
     }
 
-    public function confirmationText()
+    public function confirmationText(): string
     {
         return "Sure, really?";
     }

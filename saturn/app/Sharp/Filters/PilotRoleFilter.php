@@ -6,13 +6,13 @@ use Code16\Sharp\EntityList\EntityListSelectFilter;
 
 class PilotRoleFilter implements EntityListSelectFilter
 {
-    public function values()
-    {
-        return ["jr" => "Junior", "sr" => "Senior"];
-    }
-
-    public function label()
+    public function label(): string
     {
         return "Role";
+    }
+
+    public function values(): array
+    {
+        return ["jr" => "Junior", "sr" => "Senior"];
     }
 }

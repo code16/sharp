@@ -2,13 +2,12 @@
 
 namespace Code16\Sharp\Show;
 
-use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Traits\HandleCommands;
-use Code16\Sharp\EntityList\Traits\HandleCustomBreadcrumb;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\Exceptions\SharpException;
 use Code16\Sharp\Form\HandleFormFields;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
+use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpShow
@@ -40,7 +39,7 @@ abstract class SharpShow
     /**
      * Return the entity instance, as an array.
      *
-     * @param $id
+     * @param mixed $id
      * @return array
      */
     final public function instance($id): array
@@ -59,7 +58,7 @@ abstract class SharpShow
     /**
      * Return the show config values (commands and state).
      *
-     * @param $instanceId
+     * @param mixed $instanceId
      * @param array $config
      * @return array
      */
@@ -129,8 +128,6 @@ abstract class SharpShow
 
     /**
      * Build show config using ->addInstanceCommand() and ->setEntityState()
-     *
-     * @return void
      */
     function buildShowConfig(): void
     {
@@ -140,22 +137,18 @@ abstract class SharpShow
     /**
      * Retrieve a Model for the form and pack all its data as JSON.
      *
-     * @param $id
+     * @param mixed $id
      * @return array
      */
     abstract function find($id): array;
 
     /**
      * Build form fields using ->addField()
-     *
-     * @return void
      */
     abstract function buildShowFields(): void;
 
     /**
      * Build form layout using ->addSection()
-     *
-     * @return void
      */
     abstract function buildShowLayout(): void;
 }

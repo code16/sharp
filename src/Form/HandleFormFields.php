@@ -8,20 +8,11 @@ use Code16\Sharp\Show\Fields\SharpShowField;
 
 trait HandleFormFields
 {
-    /**
-     * @var array
-     */
-    protected $fields = [];
-
-    /**
-     * @var bool
-     */
-    protected $formBuilt = false;
+    protected array $fields = [];
+    protected bool $formBuilt = false;
 
     /**
      * Get the SharpFormField array representation.
-     *
-     * @return array
      */
     function fields(): array
     {
@@ -35,8 +26,6 @@ trait HandleFormFields
 
     /**
      * Return the key attribute of all fields defined in the form.
-     *
-     * @return array
      */
     function getDataKeys(): array
     {
@@ -73,7 +62,7 @@ trait HandleFormFields
      * @param SharpFormField|SharpShowField $field
      * @return $this
      */
-    protected function addField($field)
+    protected function addField($field): self
     {
         $this->fields[] = $field;
         $this->formBuilt = false;
@@ -139,7 +128,7 @@ trait HandleFormFields
     /**
      * Check if the form was previously built, and build it if not.
      */
-    private function checkFormIsBuilt()
+    private function checkFormIsBuilt(): void
     {
         if (!$this->formBuilt) {
             $this->buildFormFields();

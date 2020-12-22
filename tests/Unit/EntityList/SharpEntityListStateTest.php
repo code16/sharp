@@ -17,12 +17,12 @@ class SharpEntityListStateTest extends SharpTestCase
             function buildListConfig(): void
             {
                 $this->setEntityState("_state", new class extends EntityState {
-                    protected function buildStates()
+                    protected function buildStates(): void
                     {
                         $this->addState("test1", "Test 1", "blue");
                         $this->addState("test2", "Test 2", "red");
                     }
-                    protected function updateState($instanceId, $stateId) {}
+                    protected function updateState($instanceId, $stateId): array {}
                 });
             }
         };
@@ -83,12 +83,12 @@ class SharpEntityListStateTest extends SharpTestCase
             function buildListConfig(): void
             {
                 $this->setEntityState("state", new class extends EntityState {
-                    protected function buildStates()
+                    protected function buildStates(): void
                     {
                         $this->addState(true, "Test 1", "blue");
                         $this->addState(false, "Test 2", "red");
                     }
-                    protected function updateState($instanceId, $stateId) {}
+                    protected function updateState($instanceId, $stateId): array {}
                 });
             }
         };
@@ -110,14 +110,14 @@ class SharpEntityListStateTest extends SharpTestCase
             function buildListConfig(): void
             {
                 $this->setEntityState("_state", new class extends EntityState {
-                    protected function buildStates()
+                    protected function buildStates(): void
                     {
                         $this->addState(1, "Test 1", "blue");
                     }
                     public function authorizeFor($instanceId): bool {
                         return $instanceId < 3;
                     }
-                    protected function updateState($instanceId, $stateId) {}
+                    protected function updateState($instanceId, $stateId): array {}
                 });
             }
         };
@@ -142,10 +142,10 @@ class SharpEntityListStateTest extends SharpTestCase
 
 class SharpEntityListTestState extends EntityState
 {
-    protected function buildStates()
+    protected function buildStates(): void
     {
         $this->addState("test1", "Test 1", "blue");
         $this->addState("test2", "Test 2", "red");
     }
-    protected function updateState($instanceId, $stateId) {}
+    protected function updateState($instanceId, $stateId): array {}
 }

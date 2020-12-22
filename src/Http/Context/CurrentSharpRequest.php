@@ -7,8 +7,7 @@ use Illuminate\Support\Collection;
 
 class CurrentSharpRequest
 {
-    /** @var Collection */
-    protected $breadcrumb = null;
+    protected ?Collection $breadcrumb = null;
 
     public function breadcrumb(): Collection
     {
@@ -30,6 +29,12 @@ class CurrentSharpRequest
             ->reverse()
             ->filter->isShow()
             ->first();
+    }
+
+    public function isEntityList(): bool
+    {
+        $current = $this->getCurrentBreadcrumbItem();
+        return $current ? $current->isEntityList() : false;
     }
 
     public function isShow(): bool

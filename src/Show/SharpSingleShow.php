@@ -25,7 +25,7 @@ abstract class SharpSingleShow extends SharpShow
         ]);
     }
 
-    /*
+    /**
      * Retrieve a Model for the form and pack all its data as JSON.
      *
      * @param $id
@@ -76,8 +76,6 @@ abstract class SharpSingleShow extends SharpShow
 
     /**
      * Retrieve a Model for the form and pack all its data as JSON.
-     *
-     * @return array
      */
     abstract function findSingle(): array;
 }

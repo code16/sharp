@@ -13,10 +13,7 @@ use Code16\Sharp\Utils\Layout\LayoutField;
 class FormLayoutField extends LayoutField implements HasLayout
 {
 
-    /**
-     * @inheritDoc
-     */
-    protected function getLayoutColumn()
+    protected function getLayoutColumn(): FormLayoutColumn
     {
         return new FormLayoutColumn(12);
     }

@@ -10,19 +10,11 @@ use Illuminate\Support\Facades\Storage;
 
 class ExportUsersCommand extends EntityCommand
 {
-    /**
-     * @return string
-     */
     public function label(): string
     {
         return "Export users as text file";
     }
 
-    /**
-     * @param EntityListQueryParams $params
-     * @param array $data
-     * @return array
-     */
     public function execute(EntityListQueryParams $params, array $data = []): array
     {
         $filePath = "tmp/users " . now()->format("YmdHis") . ".txt";
@@ -43,7 +35,7 @@ class ExportUsersCommand extends EntityCommand
         return $this->download($filePath, "users.txt", "local");
     }
 
-    function buildFormFields()
+    function buildFormFields(): void
     {
         $this->addField(
             SharpFormCheckField::make("sample", "Download a file sample")

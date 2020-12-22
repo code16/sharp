@@ -8,9 +8,9 @@ class SharpShowTitleField extends SharpShowField
 {
     const FIELD_TYPE = "custom-title";
     
-    protected $level = 1;
+    protected int $level = 1;
 
-    public static function make(string $key)
+    public static function make(string $key): SharpShowTitleField
     {
         return new static($key, static::FIELD_TYPE);
     }
@@ -22,7 +22,7 @@ class SharpShowTitleField extends SharpShowField
         return $this;
     }
 
-    protected function validationRules()
+    protected function validationRules(): array
     {
         return [
             "level" => "required|integer|min:1|max:5",

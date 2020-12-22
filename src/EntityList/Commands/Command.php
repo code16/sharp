@@ -12,21 +12,14 @@ use Illuminate\Validation\ValidationException;
 /**
  * Base class for Commands. Handle returns (info, refresh, reload...),
  * form creation, and validation.
- *
- * Class Command
- * @package Code16\Sharp\EntityList\Commands
  */
 abstract class Command
 {
     use HandleFormFields, WithCustomTransformers;
 
-    protected $groupIndex = 0;
+    protected int $groupIndex = 0;
 
-    /**
-     * @param string $message
-     * @return array
-     */
-    protected function info(string $message)
+    protected function info(string $message): array
     {
         return [
             "action" => "info",
@@ -34,11 +27,7 @@ abstract class Command
         ];
     }
 
-    /**
-     * @param string $link
-     * @return array
-     */
-    protected function link(string $link)
+    protected function link(string $link): array
     {
         return [
             "action" => "link",
@@ -46,21 +35,14 @@ abstract class Command
         ];
     }
 
-    /**
-     * @return array
-     */
-    protected function reload()
+    protected function reload(): array
     {
         return [
             "action" => "reload"
         ];
     }
 
-    /**
-     * @param mixed $ids
-     * @return array
-     */
-    protected function refresh($ids)
+    protected function refresh($ids): array
     {
         return [
             "action" => "refresh",
@@ -68,13 +50,7 @@ abstract class Command
         ];
     }
 
-    /**
-     * @param string $bladeView
-     * @param array $params
-     * @return array
-     * @throws \Throwable
-     */
-    protected function view(string $bladeView, array $params = [])
+    protected function view(string $bladeView, array $params = []): array
     {
         return [
             "action" => "view",
@@ -82,13 +58,7 @@ abstract class Command
         ];
     }
 
-    /**
-     * @param string $filePath
-     * @param null $fileName
-     * @param string|null $diskName
-     * @return array
-     */
-    protected function download(string $filePath, $fileName = null, $diskName = null)
+    protected function download(string $filePath, string $fileName = null, string $diskName = null): array
     {
         return [
             "action" => "download",
@@ -100,8 +70,6 @@ abstract class Command
 
     /**
      * Check if the current user is allowed to use this Command.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -109,17 +77,14 @@ abstract class Command
     }
 
     /**
-     * @return mixed
+     * @return array|bool
      */
     public function getGlobalAuthorization()
     {
         return $this->authorize();
     }
 
-    /**
-     * @return string|null
-     */
-    public function confirmationText()
+    public function confirmationText(): ?string
     {
         return null;
     }
@@ -127,31 +92,23 @@ abstract class Command
     /**
      * Build the optional Command form, calling ->addField()
      */
-    public function buildFormFields()
+    public function buildFormFields(): void
     {
     }
 
     /**
      * Build the optional Command form layout.
-     *
-     * @param FormLayoutColumn $column
      */
-    public function buildFormLayout(FormLayoutColumn &$column)
+    public function buildFormLayout(FormLayoutColumn &$column): void
     {
     }
 
-    /**
-     * @return array
-     */
-    public function form()
+    public function form(): array
     {
         return $this->fields();
     }
 
-    /**
-     * @return array|null
-     */
-    public function formLayout()
+    public function formLayout(): ?array
     {
         if(!$this->fields) {
             return null;
@@ -169,31 +126,17 @@ abstract class Command
         return $column->fieldsToArray()["fields"];
     }
 
-    /**
-     * @param $index
-     */
-    public function setGroupIndex($index)
+    public function setGroupIndex($index): void
     {
         $this->groupIndex = $index;
     }
 
-    /**
-     * @return int
-     */
-    public function groupIndex()
+    public function groupIndex(): int
     {
         return $this->groupIndex;
     }
 
-    /**
-     * Validates the request in a form case.
-     *
-     * @param array $params
-     * @param array $rules
-     * @param array $messages
-     * @throws ValidationException
-     */
-    public function validate(array $params, array $rules, array $messages = [])
+    public function validate(array $params, array $rules, array $messages = []): void
     {
         $validator = app(Validator::class)->make($params, $rules, $messages);
 
@@ -204,16 +147,10 @@ abstract class Command
         }
     }
 
-    /**
-     * @return string
-     */
     public function description(): string
     {
         return "";
     }
 
-    /**
-     * @return string
-     */
-    abstract public function label(): string;
+    abstract public function label(): ?string;
 }

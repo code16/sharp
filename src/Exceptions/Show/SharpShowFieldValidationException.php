@@ -7,10 +7,6 @@ use Illuminate\Support\MessageBag;
 
 class SharpShowFieldValidationException extends SharpException
 {
-
-    /**
-     * @param MessageBag $validationErrors
-     */
     function __construct(MessageBag $validationErrors)
     {
         parent::__construct("Invalid show label attributes : " . $validationErrors->toJson());

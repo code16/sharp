@@ -60,7 +60,7 @@ Route::group([
 
     Route::get("/show/{entityKey}/{instanceId?}", [ShowController::class, "show"])
         ->name("code16.sharp.api.show.show")
-        ->middleware(['sharp_api_append_form_authorizations', 'sharp_api_append_breadcrumb']);
+        ->middleware(['sharp_api_append_form_authorizations', 'sharp_api_append_notifications', 'sharp_api_append_breadcrumb']);
 
     Route::get("/show/download/{fieldKey}/{entityKey}/{instanceId?}", [DownloadController::class, "show"])
         ->name("code16.sharp.api.show.download");

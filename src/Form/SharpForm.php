@@ -2,11 +2,11 @@
 
 namespace Code16\Sharp\Form;
 
-use Code16\Sharp\EntityList\Traits\HandleCustomBreadcrumb;
 use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Utils\SharpNotification;
+use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpForm
@@ -21,8 +21,6 @@ abstract class SharpForm
 
     /**
      * Return the form fields layout.
-     *
-     * @return array
      */
     function formLayout(): array
     {
@@ -42,7 +40,7 @@ abstract class SharpForm
     /**
      * Return the entity instance, as an array.
      *
-     * @param $id
+     * @param mixed $id
      * @return array
      */
     function instance($id): array

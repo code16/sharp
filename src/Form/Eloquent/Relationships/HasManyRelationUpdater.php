@@ -6,18 +6,9 @@ use Code16\Sharp\Form\Eloquent\EloquentModelUpdater;
 
 class HasManyRelationUpdater
 {
-    /**
-     * @var array
-     */
-    protected $handledIds = [];
+    protected array $handledIds = [];
 
-    /**
-     * @param $instance
-     * @param string $attribute
-     * @param array $value
-     * @param array|null $sortConfiguration
-     */
-    public function update($instance, $attribute, $value, $sortConfiguration = null)
+    public function update(object $instance, string $attribute, array $value, ?array $sortConfiguration = null)
     {
         $relatedModel = $instance->$attribute()->getRelated();
         $relatedModelKeyName = $relatedModel->getKeyName();
@@ -60,12 +51,7 @@ class HasManyRelationUpdater
             });
     }
 
-    /**
-     * @param array $item
-     * @param $relatedModelKeyName
-     * @return mixed
-     */
-    private function findItemId($item, $relatedModelKeyName)
+    private function findItemId(array $item, string $relatedModelKeyName)
     {
         $id = $item[$relatedModelKeyName];
 

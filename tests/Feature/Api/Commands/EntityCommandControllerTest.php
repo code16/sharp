@@ -2,15 +2,12 @@
 
 namespace Code16\Sharp\Tests\Feature\Api\Commands;
 
-use Code16\Sharp\Dashboard\Commands\DashboardCommand;
-use Code16\Sharp\Dashboard\DashboardQueryParams;
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
-use Code16\Sharp\Tests\Fixtures\SharpDashboard;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -243,7 +240,7 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList {
             })
             ->addEntityCommand("entity_form", new class() extends EntityCommand {
                 public function label(): string { return "label"; }
-                public function buildFormFields() {
+                public function buildFormFields(): void {
                     $this->addField(SharpFormTextField::make("name"));
                 }
                 public function execute(EntityListQueryParams $params, array $data = []): array {
@@ -284,7 +281,7 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList {
             })
             ->addEntityCommand("entity_with_init_data", new class() extends EntityCommand {
                 public function label(): string { return "label"; }
-                public function buildFormFields() {
+                public function buildFormFields(): void {
                     $this->addField(SharpFormTextField::make("name"));
                 }
                 protected function initialData(): array

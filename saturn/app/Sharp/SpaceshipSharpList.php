@@ -16,6 +16,7 @@ use Code16\Sharp\EntityList\Eloquent\Transformers\SharpUploadModelAttributeTrans
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
+use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
 
 class SpaceshipSharpList extends SharpEntityList
 {
@@ -130,7 +131,8 @@ class SpaceshipSharpList extends SharpEntityList
                         ->renderAsText($pilot->name);
                 })->implode("<br>");
             })
-            ->setCustomTransformer("picture", new SharpUploadModelAttributeTransformer(100))
+//            ->setCustomTransformer("picture", new SharpUploadModelAttributeTransformer(100))
+            ->setCustomTransformer("picture", (new SharpUploadModelThumbnailUrlTransformer(100))->renderAsImageTag())
             ->transform(
                 $spaceships->with("picture", "type", "pilots")
                     ->paginate(10, ["spaceships.*"])

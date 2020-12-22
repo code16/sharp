@@ -4,15 +4,11 @@ namespace Code16\Sharp\Tests\Fixtures;
 
 use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
-use Code16\Sharp\EntityList\EntityListFilter;
-use Code16\Sharp\EntityList\EntityListMultipleFilter;
 use Code16\Sharp\EntityList\EntityListQueryParams;
-use Code16\Sharp\EntityList\EntityListRequiredFilter;
 use Code16\Sharp\EntityList\EntityListSelectFilter;
 use Code16\Sharp\EntityList\EntityListSelectMultipleFilter;
 use Code16\Sharp\EntityList\EntityListSelectRequiredFilter;
 use Code16\Sharp\EntityList\SharpEntityList;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
 
@@ -125,7 +121,7 @@ class PersonSharpEntityListAgeRequiredFilter
 
 class PersonSharpEntityListReorderHandler implements ReorderHandler
 {
-    function reorder(array $ids)
+    function reorder(array $ids): void
     {
     }
 }

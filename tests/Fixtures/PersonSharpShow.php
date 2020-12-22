@@ -33,11 +33,11 @@ class PersonSharpShow extends SharpShow
                 }
             })
             ->setEntityState("state", new class extends EntityState {
-                protected function buildStates()
+                protected function buildStates(): void
                 {
                     $this->addState("active", "Label", "blue");
                 }
-                protected function updateState($instanceId, $stateId)
+                protected function updateState($instanceId, $stateId): array
                 {
                 }
                 public function authorizeFor($instanceId): bool

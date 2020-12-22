@@ -8,39 +8,19 @@ class SharpShowEntityListField extends SharpShowField
 {
     const FIELD_TYPE = "entityList";
 
-    /** @var string */
-    protected $entityListKey;
-
-    /** @var array */
-    protected $hiddenFilters = [];
-
-    /** @var array */
-    protected $hiddenCommands = [
+    protected string $entityListKey;
+    protected array $hiddenFilters = [];
+    protected array $hiddenCommands = [
         "entity" => [],
         "instance" => []
     ];
+    protected bool $showEntityState = true;
+    protected bool $showReorderButton = true;
+    protected bool $showCreateButton = true;
+    protected bool $showSearchField = true;
+    protected ?string $label = null;
 
-    /** @var bool */
-    protected $showEntityState = true;
-
-    /** @var bool */
-    protected $showReorderButton = true;
-
-    /** @var bool */
-    protected $showCreateButton = true;
-
-    /** @var bool */
-    protected $showSearchField = true;
-
-    /** @var string */
-    protected $label = null;
-
-    /**
-     * @param string $key
-     * @param string $entityListKey
-     * @return static
-     */
-    public static function make(string $key, string $entityListKey)
+    public static function make(string $key, string $entityListKey): SharpShowEntityListField
     {
         return tap(new static($key, static::FIELD_TYPE), function($instance) use($entityListKey) {
             $instance->entityListKey = $entityListKey;
@@ -85,10 +65,6 @@ class SharpShowEntityListField extends SharpShowField
         return $this;
     }
 
-    /**
-     * @param bool $showEntityState
-     * @return $this
-     */
     public function showEntityState(bool $showEntityState = true): self
     {
         $this->showEntityState = $showEntityState;
@@ -96,10 +72,6 @@ class SharpShowEntityListField extends SharpShowField
         return $this;
     }
 
-    /**
-     * @param bool $showCreateButton
-     * @return $this
-     */
     public function showCreateButton(bool $showCreateButton = true): self
     {
         $this->showCreateButton = $showCreateButton;
@@ -107,10 +79,6 @@ class SharpShowEntityListField extends SharpShowField
         return $this;
     }
 
-    /**
-     * @param bool $showReorderButton
-     * @return $this
-     */
     public function showReorderButton(bool $showReorderButton = true): self
     {
         $this->showReorderButton = $showReorderButton;
@@ -118,10 +86,6 @@ class SharpShowEntityListField extends SharpShowField
         return $this;
     }
 
-    /**
-     * @param bool $showSearchField
-     * @return $this
-     */
     public function showSearchField(bool $showSearchField = true): self
     {
         $this->showSearchField = $showSearchField;
@@ -129,10 +93,6 @@ class SharpShowEntityListField extends SharpShowField
         return $this;
     }
 
-    /**
-     * @param string $label
-     * @return $this
-     */
     public function setLabel(string $label): self
     {
         $this->label = $label;
@@ -142,9 +102,6 @@ class SharpShowEntityListField extends SharpShowField
 
     /**
      * Create the properties array for the field, using parent::buildArray()
-     *
-     * @return array
-     * @throws \Code16\Sharp\Exceptions\Show\SharpShowFieldValidationException
      */
     public function toArray(): array
     {
