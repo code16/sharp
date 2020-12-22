@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Utils\Testing;
 
+use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Assert as PHPUnit;
 
 trait SharpAssertions
@@ -13,26 +14,19 @@ trait SharpAssertions
      */
     protected function initSharpAssertions()
     {
-        // TestResponse was renamed in Laravel 7.0
-        if(class_exists("Illuminate\Testing\TestResponse")) {
-            $testResponseClass = "Illuminate\Testing\TestResponse";
-        } else {
-            $testResponseClass = "Illuminate\Foundation\Testing\TestResponse";
-        }
-        
-        $testResponseClass::macro('assertSharpHasAuthorization', function ($authorization) {
+        TestResponse::macro('assertSharpHasAuthorization', function ($authorization) {
             return $this->assertJson(
                 ["authorizations" => [$authorization => true]]
             );
         });
 
-        $testResponseClass::macro('assertSharpHasNotAuthorization', function ($authorization) {
+        TestResponse::macro('assertSharpHasNotAuthorization', function ($authorization) {
             return $this->assertJson(
                 ["authorizations" => [$authorization => false]]
             );
         });
 
-        $testResponseClass::macro('assertSharpFormHasFieldOfType', function ($name, $formFieldClassName) {
+        TestResponse::macro('assertSharpFormHasFieldOfType', function ($name, $formFieldClassName) {
             $type = $formFieldClassName::FIELD_TYPE;
 
             $this->assertJson(
@@ -44,16 +38,13 @@ trait SharpAssertions
             return $this;
         });
 
-        $testResponseClass::macro('assertSharpFormHasFields', function ($names) {
-
+        TestResponse::macro('assertSharpFormHasFields', function ($names) {
             foreach((array)$names as $name) {
-
                 $this->assertJson(
                     ["fields" => [$name => ["key" => $name]]]
                 );
 
                 $found = false;
-
                 foreach ($this->decodeResponseJson()["layout"]["tabs"] as $tab) {
                     foreach ($tab["columns"] as $column) {
                         foreach ($column["fields"] as $fieldset) {
@@ -84,7 +75,7 @@ trait SharpAssertions
             return $this;
         });
 
-        $testResponseClass::macro('assertSharpFormDataEquals', function ($name, $value) {
+        TestResponse::macro('assertSharpFormDataEquals', function ($name, $value) {
             return $this->assertJson(
                 ["data" => [$name => $value]]
             );
@@ -176,9 +167,6 @@ trait SharpAssertions
         );
     }
 
-    /**
-     * @param $user
-     */
     protected function loginAsSharpUser($user)
     {
         $this->actingAs($user, config("sharp.auth.guard", config("auth.defaults.guard")));

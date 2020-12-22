@@ -4,11 +4,8 @@ namespace Code16\Sharp\Utils\Links;
 
 abstract class SharpLinkTo
 {
-    /** @var string */
-    protected $entityKey;
-
-    /** @var string */
-    protected $tooltip = "";
+    protected string $entityKey;
+    protected string $tooltip = "";
 
     protected function __construct(string $entityKey)
     {

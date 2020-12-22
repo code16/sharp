@@ -6,7 +6,6 @@ use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\Layout\EntityListLayoutColumn;
 use Code16\Sharp\EntityList\Traits\HandleCommands;
-use Code16\Sharp\EntityList\Traits\HandleCustomBreadcrumb;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\Utils\Filters\HandleFilters;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;

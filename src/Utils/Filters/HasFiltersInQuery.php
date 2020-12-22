@@ -7,10 +7,7 @@ use Illuminate\Support\Str;
 
 trait HasFiltersInQuery
 {
-    /**
-     * @var array
-     */
-    protected $filters;
+    protected array $filters;
 
     /**
      * @param string $filterName
@@ -42,45 +39,35 @@ trait HasFiltersInQuery
         return $this->filters[$filterName];
     }
 
-    /**
-     * @param array $filters
-     * @return $this
-     */
-    public function setDefaultFilters($filters)
+    public function setDefaultFilters(array $filters): self
     {
-        collect((array) $filters)->each(function($value, $filter) {
-            $this->setFilterValue($filter, $value);
-        });
+        collect($filters)
+            ->each(function($value, $filter) {
+                $this->setFilterValue($filter, $value);
+            });
 
         return $this;
     }
 
-    /**
-     * @param array $query
-     */
-    protected function fillFilterWithRequest(array $query = null)
+    protected function fillFilterWithRequest(array $query = null): void
     {
         collect($query)
             ->filter(function($value, $name) {
                 return Str::startsWith($name, "filter_");
-
-            })->each(function($value, $name) {
+            })
+            ->each(function($value, $name) {
                 $this->setFilterValue(substr($name, strlen("filter_")), $value);
             });
     }
 
-    /**
-     * @param string $filter
-     * @param string $value
-     */
-    public function forceFilterValue(string $filter, $value)
+    public function forceFilterValue(string $filter, string $value): void
     {
         $this->filters["/forced/$filter"] = $value;
     }
 
     /**
      * @param string $filter
-     * @param string $value
+     * @param string|array|null $value
      */
     protected function setFilterValue(string $filter, $value)
     {

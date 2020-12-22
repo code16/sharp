@@ -100,7 +100,7 @@ class GlobalFiltersTest extends BaseApiTest
 
 class GlobalFiltersTestGlobalRequiredFilter implements GlobalRequiredFilter
 {
-    public function values()
+    public function values(): array
     {
         return range(0, 10);
     }

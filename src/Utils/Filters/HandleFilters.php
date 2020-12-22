@@ -8,10 +8,7 @@ use Illuminate\Support\Facades\Event;
 
 trait HandleFilters
 {
-    /**
-     * @var array
-     */
-    protected $filterHandlers = [];
+    protected array $filterHandlers = [];
 
     /**
      * @param string $filterName
@@ -19,7 +16,7 @@ trait HandleFilters
      * @param Closure|null $callback
      * @return $this
      */
-    protected function addFilter(string $filterName, $filterHandler, Closure $callback = null)
+    protected function addFilter(string $filterName, $filterHandler, Closure $callback = null): self
     {
         $this->filterHandlers[$filterName] = $filterHandler instanceof Filter
             ? $filterHandler
@@ -37,7 +34,7 @@ trait HandleFilters
     /**
      * @param array $config
      */
-    protected function appendFiltersToConfig(array &$config)
+    protected function appendFiltersToConfig(array &$config): void
     {
         foreach($this->filterHandlers as $filterName => $handler) {
             $filterConfigData = [
@@ -73,27 +70,22 @@ trait HandleFilters
         }
     }
 
-    /**
-     * @param SelectFilter $handler
-     * @return array
-     */
-    protected function formatSelectFilterValues(SelectFilter $handler)
+    protected function formatSelectFilterValues(SelectFilter $handler): array
     {
         if(!method_exists($handler, "template")) {
-            return collect($handler->values())->map(function ($label, $id) {
-                return compact('id', 'label');
-            })->values()->all();
+            return collect($handler->values())
+                ->map(function ($label, $id) {
+                    return compact('id', 'label');
+                })
+                ->values()
+                ->all();
         }
 
         // There is a user-defined template: just return the raw values() is this case
         return $handler->values();
     }
 
-    /**
-     * @param SelectFilter $handler
-     * @return string
-     */
-    protected function formatSelectFilterTemplate(SelectFilter $handler)
+    protected function formatSelectFilterTemplate(SelectFilter $handler): string
     {
         if(!method_exists($handler, "template")) {
             return '{{label}}';
@@ -106,10 +98,7 @@ trait HandleFilters
         return $template;
     }
 
-    /**
-     * @return array
-     */
-    protected function getFilterDefaultValues()
+    protected function getFilterDefaultValues(): array
     {
         return collect($this->filterHandlers)
 
@@ -147,7 +136,7 @@ trait HandleFilters
      * are those whose handler is defining a retainValueInSession()
      * function which returns true.
      */
-    protected function putRetainedFilterValuesInSession()
+    protected function putRetainedFilterValuesInSession(): void
     {
         collect($this->filterHandlers)
             // Only filters sent which are declared "retained"
@@ -177,24 +166,14 @@ trait HandleFilters
         session()->save();
     }
 
-    /**
-     * @param $handler
-     * @param $attribute
-     * @param bool $onlyValued
-     * @return bool
-     */
-    protected function isRetainedFilter($handler, $attribute, $onlyValued = false)
+    protected function isRetainedFilter(Filter $handler, string $attribute, $onlyValued = false): bool
     {
         return method_exists($handler, "retainValueInSession")
             && $handler->retainValueInSession()
             && (!$onlyValued || session()->has("_sharp_retained_filter_$attribute"));
     }
 
-    /**
-     * @param $handler
-     * @return bool
-     */
-    protected function isGlobalFilter($handler)
+    protected function isGlobalFilter(Filter $handler): bool
     {
         return $handler instanceof GlobalRequiredFilter;
     }
@@ -209,7 +188,7 @@ trait HandleFilters
      * @param string $attribute
      * @return int|string|array|null
      */
-    protected function getFilterDefaultValue($handler, $attribute)
+    protected function getFilterDefaultValue(Filter $handler, string $attribute)
     {
         if($this->isGlobalFilter($handler)) {
             return session("_sharp_retained_global_filter_$attribute") ?: $handler->defaultValue();

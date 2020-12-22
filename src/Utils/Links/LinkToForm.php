@@ -2,12 +2,9 @@
 
 namespace Code16\Sharp\Utils\Links;
 
-use Illuminate\Support\Collection;
-
 class LinkToForm extends LinkToShowPage
 {
-    /** @var bool */
-    protected $throughShowPage = false;
+    protected bool $throughShowPage = false;
 
     public function throughShowPage($throughShowPage = true): self
     {

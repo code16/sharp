@@ -21,7 +21,7 @@ class EntityListFilterTest extends SharpTestCase
             function buildListConfig(): void
             {
                 $this->addFilter("test", new class implements EntityListSelectFilter {
-                    public function values() { return [1 => "A", 2 => "B"]; }
+                    public function values(): array { return [1 => "A", 2 => "B"]; }
                 });
             }
         };
@@ -239,7 +239,7 @@ class EntityListFilterTest extends SharpTestCase
             function buildListConfig(): void
             {
                 $this->addFilter("test", new class extends SharpEntityListTestFilter {
-                    public function values()
+                    public function values(): array
                     {
                         return [
                             ["id"=>1, "letter"=>"a", "maj"=>"A"],
@@ -466,7 +466,7 @@ class EntityListFilterTest extends SharpTestCase
 
 class SharpEntityListTestFilter implements EntityListSelectFilter
 {
-    public function values()
+    public function values(): array
     {
         return [1 => "A", 2 => "B"];
     }
@@ -474,7 +474,7 @@ class SharpEntityListTestFilter implements EntityListSelectFilter
 
 class SharpEntityListTestMultipleFilter implements EntityListSelectMultipleFilter
 {
-    public function values()
+    public function values(): array
     {
         return [1 => "A", 2 => "B"];
     }
@@ -482,10 +482,11 @@ class SharpEntityListTestMultipleFilter implements EntityListSelectMultipleFilte
 
 class SharpEntityListTestRequiredFilter implements EntityListSelectRequiredFilter
 {
-    public function values()
+    public function values(): array
     {
         return [1 => "A", 2 => "B"];
     }
+    
     public function defaultValue()
     {
         return 2;
@@ -498,7 +499,7 @@ class SharpEntityListDateRangeTestFilter implements EntityListDateRangeFilter
 
 class SharpEntityListDateRangeRequiredTestFilter implements EntityListDateRangeRequiredFilter
 {
-    public function defaultValue()
+    public function defaultValue(): array
     {
         return ["start" => Carbon::now()->subDay(), "end" => Carbon::now()];
     }

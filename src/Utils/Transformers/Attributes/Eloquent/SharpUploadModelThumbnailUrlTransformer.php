@@ -8,35 +8,27 @@ use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 
 /**
  * Transforms a SharpUploadModel instance in a thumbnail URL.
- * Used in SharpShow, meant to be used in SharpEntityList (should replace SharpUploadModelAttributeTransformer)
+ * Used in SharpShow, and SharpEntityList (with ->renderAsImageTag())
  */
 class SharpUploadModelThumbnailUrlTransformer implements SharpAttributeTransformer
 {
-    /**
-     * @var int
-     */
-    protected $width;
+    protected ?int $width;
+    protected ?int $height;
+    protected array $filters;
+    protected bool $renderAsImageTag = false;
 
-    /**
-     * @var int
-     */
-    protected $height;
-
-    /**
-     * @var array
-     */
-    protected $filters;
-
-    /**
-     * @param int|null $width
-     * @param int|null $height
-     * @param array $filters
-     */
     public function __construct(int $width = null, int $height = null, array $filters = [])
     {
         $this->width = $width;
         $this->height = $height;
         $this->filters = $filters;
+    }
+
+    public function renderAsImageTag(bool $renderAsImageTag = true): self
+    {
+        $this->renderAsImageTag = $renderAsImageTag;
+        
+        return $this;
     }
 
     /**
@@ -58,6 +50,10 @@ class SharpUploadModelThumbnailUrlTransformer implements SharpAttributeTransform
             throw new SharpException("[$attribute] must be an instance of SharpUploadModel");
         }
 
-        return $instance->$attribute->thumbnail($this->width, $this->height, $this->filters);
+        $url = $instance->$attribute->thumbnail($this->width, $this->height, $this->filters);
+        
+        return $this->renderAsImageTag
+            ? sprintf('<img src="%s" alt="" class="img-fluid">', $url)
+            : $url;
     }
 }

@@ -6,20 +6,11 @@ use Illuminate\Support\Collection;
 
 class LinkToEntityList extends SharpLinkTo
 {
-    /** @var array */
-    protected $filters = [];
-
-    /** @var string */
-    protected $searchText;
-    
-    /** @var string */
-    protected $sortAttribute;
-
-    /** @var string */
-    protected $sortDir;
-    
-    /** @var array */
-    protected $fullQuerystring;
+    protected array $filters = [];
+    protected ?string $searchText = null;
+    protected ?string $sortAttribute = null;
+    protected ?string $sortDir = null;
+    protected ?array $fullQuerystring = null;
 
     public static function make(string $entityKey): self
     {
@@ -29,6 +20,7 @@ class LinkToEntityList extends SharpLinkTo
     public function addFilter(string $name, string $value): self
     {
         $this->filters[$name] = $value;
+        
         return $this;
     }
 
@@ -50,6 +42,7 @@ class LinkToEntityList extends SharpLinkTo
     public function setFullQuerystring(array $querystring): self
     {
         $this->fullQuerystring = $querystring;
+        
         return $this;
     }
     

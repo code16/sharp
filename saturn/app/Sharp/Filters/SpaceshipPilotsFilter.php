@@ -7,17 +7,14 @@ use Code16\Sharp\EntityList\EntityListSelectMultipleFilter;
 
 class SpaceshipPilotsFilter implements EntityListSelectMultipleFilter
 {
-    /**
-     * @return array
-     */
-    public function values()
+    public function values(): array
     {
         return Pilot::orderBy("name")
             ->pluck("name", "id")
             ->all();
     }
 
-    public function retainValueInSession()
+    public function retainValueInSession(): bool
     {
         return true;
     }

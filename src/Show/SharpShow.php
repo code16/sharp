@@ -2,13 +2,12 @@
 
 namespace Code16\Sharp\Show;
 
-use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Traits\HandleCommands;
-use Code16\Sharp\EntityList\Traits\HandleCustomBreadcrumb;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\Exceptions\SharpException;
 use Code16\Sharp\Form\HandleFormFields;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
+use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpShow

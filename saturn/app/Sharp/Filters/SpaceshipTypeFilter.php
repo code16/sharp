@@ -7,7 +7,12 @@ use Code16\Sharp\EntityList\EntityListSelectRequiredFilter;
 
 class SpaceshipTypeFilter implements EntityListSelectRequiredFilter
 {
-    public function values()
+    public function label(): string
+    {
+        return "Ship type";
+    }
+
+    public function values(): array
     {
         return SpaceshipType::orderBy("label")
             ->pluck("label", "id")
@@ -19,12 +24,7 @@ class SpaceshipTypeFilter implements EntityListSelectRequiredFilter
         return SpaceshipType::orderBy("label")->first()->id;
     }
 
-    public function label()
-    {
-        return "Ship type";
-    }
-
-    public function retainValueInSession()
+    public function retainValueInSession(): bool
     {
         return true;
     }

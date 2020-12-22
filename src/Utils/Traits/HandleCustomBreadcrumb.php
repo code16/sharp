@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\EntityList\Traits;
+namespace Code16\Sharp\Utils\Traits;
 
 trait HandleCustomBreadcrumb
 {

@@ -2,12 +2,9 @@
 
 namespace Code16\Sharp\Utils\Links;
 
-use Illuminate\Support\Collection;
-
 class LinkToShowPage extends SharpLinkTo
 {
-    /** @var string */
-    protected $instanceId;
+    protected string $instanceId;
 
     public static function make(string $entityKey, string $instanceId): self
     {

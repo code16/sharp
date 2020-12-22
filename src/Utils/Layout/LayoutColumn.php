@@ -8,22 +8,13 @@ abstract class LayoutColumn
 {
     use HasFieldRows;
 
-    /**
-     * @var int
-     */
-    protected $size;
+    protected int $size;
 
-    /**
-     * @param int $size
-     */
     function __construct(int $size)
     {
         $this->size = $size;
     }
 
-    /**
-     * @inheritDoc
-     */
     function toArray(): array
     {
         return array_merge(
