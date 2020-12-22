@@ -2,21 +2,17 @@
 
 namespace Code16\Sharp\Dashboard\Widgets;
 
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 
 class SharpGraphWidgetDataSet
 {
-    /** @var array */
-    protected $values;
-
-    /** @var string */
-    protected $label;
-
-    /** @var string */
-    protected $color;
+    protected array $values;
+    protected ?string $label = null;
+    protected ?string $color = null;
 
     /**
-     * @param array|Collection $values
+     * @param array|Arrayable $values
      */
     protected function __construct($values)
     {
@@ -26,40 +22,29 @@ class SharpGraphWidgetDataSet
     }
 
     /**
-     * @param array|Collection $values
+     * @param array|Arrayable $values
      * @return static
      */
-    public static function make($values)
+    public static function make($values): SharpGraphWidgetDataSet
     {
         return new static($values);
     }
 
-    /**
-     * @param string $label
-     * @return $this
-     */
-    public function setLabel(string $label)
+    public function setLabel(string $label): self
     {
         $this->label = $label;
 
         return $this;
     }
 
-    /**
-     * @param string $color
-     * @return $this
-     */
-    public function setColor(string $color)
+    public function setColor(string $color): self
     {
         $this->color = $color;
 
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             "data" => array_values($this->values),

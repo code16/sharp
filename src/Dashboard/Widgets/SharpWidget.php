@@ -8,17 +8,10 @@ use Illuminate\Support\Facades\Validator;
 
 abstract class SharpWidget
 {
-    /** @var string */
-    protected $key;
-
-    /** @var string */
-    protected $type;
-
-    /** @var string */
-    protected $title;
-
-    /** @var string */
-    protected $link;
+    protected string $key;
+    protected string $type;
+    protected ?string $title = null;
+    protected ?string $link = null;
 
     protected function __construct(string $key, string $type)
     {
@@ -50,12 +43,18 @@ abstract class SharpWidget
         return $this->key;
     }
 
-    protected function validate(array $properties)
+    protected function validate(array $properties): void
     {
-        $validator = Validator::make($properties, [
-                'key' => 'required',
-                'type' => 'required',
-            ] + $this->validationRules());
+        $validator = Validator::make(
+            $properties, 
+            array_merge(
+                [
+                    'key' => 'required',
+                    'type' => 'required',
+                ],
+                $this->validationRules()
+            )
+        );
 
         if ($validator->fails()) {
             throw new SharpWidgetValidationException($validator->errors());

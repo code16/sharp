@@ -4,17 +4,10 @@ namespace Code16\Sharp\Dashboard\Widgets;
 
 class SharpBarGraphWidget extends SharpGraphWidget
 {
-    /** @var bool */
-    protected $horizontal = false;
+    protected bool $horizontal = false;
+    protected bool $displayHorizontalAxisAsTimeline = false;
 
-    /** @var bool */
-    protected $displayHorizontalAxisAsTimeline = false;
-
-    /**
-     * @param string $key
-     * @return static
-     */
-    public static function make(string $key)
+    public static function make(string $key): SharpBarGraphWidget
     {
         $widget = new static($key, 'graph');
         $widget->display = 'bar';

@@ -4,18 +4,9 @@ namespace Code16\Sharp\Dashboard\Layout;
 
 class DashboardLayoutRow
 {
+    protected array $widgets = [];
 
-    /**
-     * @var array
-     */
-    protected $widgets = [];
-
-    /**
-     * @param int $size
-     * @param string $widgetKey
-     * @return $this
-     */
-    public function addWidget(int $size, string $widgetKey)
+    public function addWidget(int $size, string $widgetKey): self
     {
         $this->widgets[] = [
             "size" => $size,
@@ -25,7 +16,7 @@ class DashboardLayoutRow
         return $this;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         return $this->widgets;
     }

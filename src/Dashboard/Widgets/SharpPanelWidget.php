@@ -6,9 +6,7 @@ use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 
 class SharpPanelWidget extends SharpWidget
 {
-
-    /** @var SharpFormHtmlField */
-    protected $htmlFormField;
+    protected SharpFormHtmlField $htmlFormField;
 
     public static function make(string $key): self
     {

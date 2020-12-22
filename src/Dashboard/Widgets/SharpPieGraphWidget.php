@@ -5,11 +5,7 @@ namespace Code16\Sharp\Dashboard\Widgets;
 class SharpPieGraphWidget extends SharpGraphWidget
 {
 
-    /**
-     * @param string $key
-     * @return static
-     */
-    public static function make(string $key)
+    public static function make(string $key): self
     {
         $widget = new static($key, 'graph');
         $widget->display = 'pie';
