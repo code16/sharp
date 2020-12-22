@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import DynamicView from '../../mixins/DynamicView';
 import { showAlert } from "../../util/dialogs";
+import { handleNotifications } from "../../util/notifications";
 import {
     MockInjections,
     MockI18n,
@@ -10,6 +11,7 @@ import {
 import moxios from 'moxios';
 
 jest.mock('../../util/dialogs');
+jest.mock('../../util/notifications');
 
 describe('dynamic-view',()=>{
     Vue.component('sharp-dynamic-view', {
@@ -48,18 +50,18 @@ describe('dynamic-view',()=>{
     });
 
     test('get success', async ()=>{
-        let $view = await createVm();
-
-        $view.handleNotifications = jest.fn();
-
-        let successCallback = jest.fn();
+        const $view = await createVm();
+        const successCallback = jest.fn();
 
         $view.get().then(successCallback);
-        let response = await nextRequestFulfilled({
+
+        const data = {
+            layout: {},
+            notifications: [{ title:'title' }]
+        };
+        const response = await nextRequestFulfilled({
             status: 200,
-            response: {
-                layout: {}
-            }
+            response: data,
         }, 10);
 
         expect(successCallback).toHaveBeenCalledWith(response);
@@ -71,9 +73,9 @@ describe('dynamic-view',()=>{
         });
 
         expect($view.mount).toHaveBeenCalledTimes(1);
-        expect($view.mount).toHaveBeenCalledWith({ layout: {} });
+        expect($view.mount).toHaveBeenCalledWith(data);
 
-        expect($view.handleNotifications).toHaveBeenCalledWith({ layout: {} });
+        expect(handleNotifications).toHaveBeenCalledWith([{ title:'title' }]);
     });
 
     test('get error', async ()=>{
@@ -319,33 +321,6 @@ describe('dynamic-view',()=>{
             },
         });
         expect($view.$store.dispatch).not.toHaveBeenCalled();
-    });
-
-    test('notifications', async () => {
-        let $view = await createVm();
-        $view.$notify = jest.fn();
-        jest.spyOn($view, 'showNotification');
-
-        jest.useFakeTimers();
-
-        $view.handleNotifications({ });
-        jest.runAllTimers();
-
-        $view.handleNotifications({ notifications:[] });
-        jest.runAllTimers();
-
-        let alert1 = { title:'title', message:'message', level:'danger', autoHide: true },
-            alert2 = { title:'alert2' };
-
-        $view.handleNotifications({ notifications:[alert1, alert2] });
-        jest.runAllTimers();
-
-        expect($view.showNotification).toHaveBeenCalledWith(alert1, expect.anything(), expect.anything());
-        expect($view.showNotification).toHaveBeenCalledWith(alert2, expect.anything(), expect.anything());
-
-        expect($view.$notify).toHaveBeenCalledWith(expect.objectContaining({ title:'title', text:'message', type:'danger', duration:4000 }));
-        expect($view.$notify).toHaveBeenCalledWith(expect.objectContaining({ duration:-1 }));
-
     });
 });
 

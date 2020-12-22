@@ -9,6 +9,7 @@ export * from './consts';
 export { showAlert, showConfirm } from './util/dialogs';
 export { getBackUrl, getDeleteBackUrl} from './util/breadcrumb';
 export { isCustomField, resolveCustomField } from './util/fields';
+export { handleNotifications } from './util/notifications';
 export { formUrl } from 'sharp-form/src/util/url';
 export { showUrl } from 'sharp-show/src/util/url';
 export { listUrl } from 'sharp-entity-list/src/util/url';
