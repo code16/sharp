@@ -5,12 +5,9 @@ namespace DummyNamespace;
 use Code16\Sharp\EntityList\EntityListRequiredFilter;
 use Code16\Sharp\EntityList\EntityListMultipleFilter;
 
-class DummyClassName implements EntityListRequiredFilter, EntityListMultipleFilter
+class DummyClassName implements EntityListSelectRequiredFilter, EntityListSelectMultipleFilter
 {
-    /**
-    * @return array
-    */
-    public function values()
+    public function values(): array
     {
         //
     }

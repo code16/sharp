@@ -11,10 +11,8 @@ class DummyClass extends SharpEntityList
 {
     /**
     * Build list containers using ->addDataContainer()
-    *
-    * @return void
     */
-    public function buildListDataContainers()
+    public function buildListDataContainers(): void
     {
         $this->addDataContainer(
             EntityListDataContainer::make('name')
@@ -26,21 +24,16 @@ class DummyClass extends SharpEntityList
 
     /**
     * Build list layout using ->addColumn()
-    *
-    * @return void
     */
-
-    public function buildListLayout()
+    public function buildListLayout(): void
     {
         $this->addColumn('name', 12);
     }
 
     /**
     * Build list config
-    *
-    * @return void
     */
-    public function buildListConfig()
+    public function buildListConfig(): void
     {
         $this->setInstanceIdAttribute('id')
             ->setSearchable()
@@ -50,11 +43,8 @@ class DummyClass extends SharpEntityList
 
     /**
     * Retrieve all rows data as array.
-    *
-    * @param EntityListQueryParams $params
-    * @return array
     */
-    public function getListData(EntityListQueryParams $params)
+    public function getListData(EntityListQueryParams $params): array
     {
         return $this->transform(DummyModelClass::all());
     }

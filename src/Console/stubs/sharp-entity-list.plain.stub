@@ -10,41 +10,32 @@ class DummyClass extends SharpEntityList
 {
     /**
     * Build list containers using ->addDataContainer()
-    *
-    * @return void
     */
-    public function buildListDataContainers()
+    public function buildListDataContainers(): void
     {
         //
     }
 
     /**
     * Build list layout using ->addColumn()
-    *
-    * @return void
     */
-    public function buildListLayout()
+    public function buildListLayout(): void
     {
         //
     }
 
     /**
     * Build list config
-    *
-    * @return void
     */
-    public function buildListConfig()
+    public function buildListConfig(): void
     {
         //
     }
 
 	/**
 	* Retrieve all rows data as array.
-	*
-	* @param EntityListQueryParams $params
-	* @return array
 	*/
-    public function getListData(EntityListQueryParams $params)
+    public function getListData(EntityListQueryParams $params): array
     {
         //
     }

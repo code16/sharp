@@ -10,7 +10,7 @@ class DummyClass extends SharpDashboard
     /**
      * Build dashboard's widget using ->addWidget.
      */
-    protected function buildWidgets()
+    protected function buildWidgets(): void
     {
         //
     }
@@ -18,7 +18,7 @@ class DummyClass extends SharpDashboard
     /**
      * Build dashboard's widgets layout.
      */
-    protected function buildWidgetsLayout()
+    protected function buildWidgetsLayout(): void
     {
         //
     }
@@ -28,7 +28,7 @@ class DummyClass extends SharpDashboard
      *
      * @param DashboardQueryParams $params
      */
-    protected function buildWidgetsData(DashboardQueryParams $params)
+    protected function buildWidgetsData(DashboardQueryParams $params): void
     {
         //
     }

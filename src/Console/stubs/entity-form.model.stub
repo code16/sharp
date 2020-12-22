@@ -39,17 +39,15 @@ class DummyClass extends SharpForm
     /**
      * @param $id
      */
-    public function delete($id)
+    public function delete($id): void
     {
         DummyModelClass::findOrFail($id)->find($id)->delete();
     }
 
     /**
      * Build form fields using ->addField()
-     *
-     * @return void
      */
-    public function buildFormFields()
+    public function buildFormFields(): void
     {
         $this->addField(
             SharpFormTextField::make('name')
@@ -59,10 +57,8 @@ class DummyClass extends SharpForm
 
     /**
      * Build form layout using ->addTab() or ->addColumn()
-     *
-     * @return void
      */
-    public function buildFormLayout()
+    public function buildFormLayout(): void
     {
         $this->addColumn(6, function(FormLayoutColumn $column) {
             $column->withSingleField('name');

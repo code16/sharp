@@ -6,7 +6,7 @@ use Code16\Sharp\EntityList\Commands\ReorderHandler;
 
 class DummyClass implements ReorderHandler
 {
-    public function reorder(array $ids)
+    public function reorder(array $ids): void
     {
         //
     }

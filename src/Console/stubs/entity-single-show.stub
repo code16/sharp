@@ -21,25 +21,21 @@ class DummyClass extends SharpSingleShow
 
     /**
      * Build show fields using ->addField()
-     *
-     * @return void
      */
-    public function buildShowFields()
+    public function buildShowFields(): void
     {
         //
     }
 
     /**
      * Build show layout using ->addTab() or ->addColumn()
-     *
-     * @return void
      */
-    public function buildShowLayout()
+    public function buildShowLayout(): void
     {
         //
     }
 
-    function buildShowConfig()
+    function buildShowConfig(): void
     {
         //
     }
