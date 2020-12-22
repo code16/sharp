@@ -53,7 +53,7 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import { formUrl, getBackUrl, lang, showAlert } from 'sharp';
+    import { formUrl, getBackUrl, lang, showAlert, handleNotifications } from 'sharp';
     import { CommandFormModal, CommandViewPanel } from 'sharp-commands';
     import { Grid } from 'sharp-ui';
     import { UnknownField } from 'sharp/components';
@@ -214,7 +214,9 @@
             async init() {
                 await this.$store.dispatch('show/setEntityKey', this.$route.params.entityKey);
                 await this.$store.dispatch('show/setInstanceId', this.$route.params.instanceId);
-                await this.$store.dispatch('show/get');
+                const show = await this.$store.dispatch('show/get');
+
+                handleNotifications(show.notifications);
 
                 this.ready = true;
                 this.refreshKey++;

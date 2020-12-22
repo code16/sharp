@@ -1,6 +1,7 @@
 import { parseBlobJSONContent } from "../util/request";
 import { lang } from '../util/i18n';
 import { showAlert } from "../util/dialogs";
+import { handleNotifications } from "../util/notifications";
 
 export const withAxiosInterceptors = {
     inject: ['axiosInstance'],
@@ -80,7 +81,7 @@ export default {
                 })
                 .then(response => {
                     this.mount(response.data);
-                    this.handleNotifications(response.data);
+                    handleNotifications(response.data.notifications);
                     return Promise.resolve(response);
                 })
                 .catch(error => {
@@ -94,19 +95,6 @@ export default {
                 .catch(error => {
                     return Promise.reject(error);
                 });
-        },
-        showNotification({ level, title, message, autoHide }) {
-            this.$notify({
-                title,
-                type: level,
-                text: message,
-                duration: autoHide ? 4000 : -1
-            });
-        },
-        handleNotifications(data={}) {
-            if(Array.isArray(data.notifications)) {
-                setTimeout(() => data.notifications.forEach(this.showNotification), 500);
-            }
         },
     }
 }
