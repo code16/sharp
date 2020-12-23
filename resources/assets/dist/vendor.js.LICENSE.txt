@@ -4,8 +4,8 @@
  */
 
 /*!
-  * vue-router v3.0.2
-  * (c) 2018 Evan You
+  * vue-router v3.4.9
+  * (c) 2020 Evan You
   * @license MIT
   */
 
