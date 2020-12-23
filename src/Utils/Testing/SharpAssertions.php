@@ -89,9 +89,14 @@ trait SharpAssertions
      */
     protected function deleteSharpForm(string $entityKey, $instanceId)
     {
-        return $this->deleteJson(
-            route("code16.sharp.api.form.delete", [$entityKey, $instanceId])
-        );
+        return $this
+            ->withHeader(
+                "referer",
+                url(sprintf('/%1$s/s-list/%2$s/s-form/%2$s/%3$s', sharp_base_url_segment(), $entityKey, $instanceId))
+            )
+            ->deleteJson(
+                route("code16.sharp.api.form.delete", [$entityKey, $instanceId])
+            );
     }
 
     /**
@@ -101,11 +106,16 @@ trait SharpAssertions
      */
     protected function getSharpForm(string $entityKey, $instanceId = null)
     {
-        return $this->getJson(
-            $instanceId
-                ? route("code16.sharp.api.form.edit", [$entityKey, $instanceId])
-                : route("code16.sharp.api.form.create", $entityKey)
-        );
+        return $this
+            ->withHeader(
+                "referer",
+                url(sprintf('/%1$s/s-list/%2$s/s-form/%2$s/%3$s', sharp_base_url_segment(), $entityKey, $instanceId))
+            )
+            ->getJson(
+                $instanceId
+                    ? route("code16.sharp.api.form.edit", [$entityKey, $instanceId])
+                    : route("code16.sharp.api.form.create", $entityKey)
+            );
     }
 
     /**
@@ -116,10 +126,15 @@ trait SharpAssertions
      */
     protected function updateSharpForm(string $entityKey, $instanceId, array $data)
     {
-        return $this->postJson(
-            route("code16.sharp.api.form.update", [$entityKey, $instanceId]),
-            $data
-        );
+        return $this
+            ->withHeader(
+                "referer",
+                url(sprintf('/%1$s/s-list/%2$s/s-form/%2$s/%3$s', sharp_base_url_segment(), $entityKey, $instanceId))
+            )
+            ->postJson(
+                route("code16.sharp.api.form.update", [$entityKey, $instanceId]),
+                $data
+            );
     }
 
     /**
@@ -129,10 +144,15 @@ trait SharpAssertions
      */
     protected function storeSharpForm(string $entityKey, array $data)
     {
-        return $this->postJson(
-            route("code16.sharp.api.form.store", $entityKey),
-            $data
-        );
+        return $this
+            ->withHeader(
+                "referer",
+                url(sprintf('/%1$s/s-list/%2$s/s-form/%2$s', sharp_base_url_segment(), $entityKey))
+            )
+            ->postJson(
+                route("code16.sharp.api.form.store", $entityKey),
+                $data
+            );
     }
 
     /**
