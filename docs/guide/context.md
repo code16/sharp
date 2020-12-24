@@ -64,7 +64,7 @@ Returns a Collection of `Code16\Sharp\Http\Context\Util\BreadcrumbItem`s
 
 Get the current breadcrumb item.
 
-### `getPreviousShowFromBreadcrumbItems(): ?BreadcrumbItem`
+### `getPreviousShowFromBreadcrumbItems(?string $entityKey = null): ?BreadcrumbItem`
 
 Get (if existing) the closest Show in the breadcrumb.
 
