@@ -47,7 +47,12 @@ abstract class SharpForm
     {
         return collect($this->find($id))
             // Filter model attributes on actual form fields
-            ->only($this->getDataKeys())
+            ->only(
+                array_merge(
+                    $this->breadcrumbAttribute ? [$this->breadcrumbAttribute] : [],
+                    $this->getDataKeys()
+                )
+            )
             ->all();
     }
 
@@ -55,7 +60,12 @@ abstract class SharpForm
     {
         $data = collect($this->create())
             // Filter model attributes on actual form fields
-            ->only($this->getDataKeys())
+            ->only(
+                array_merge(
+                    $this->breadcrumbAttribute ? [$this->breadcrumbAttribute] : [],
+                    $this->getDataKeys()
+                )
+            )
             ->all();
 
         return sizeof($data) ? $data : null;
