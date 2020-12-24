@@ -142,7 +142,7 @@ class CurrentSharpRequest
 
     protected function getSegmentsFromRequest(): Collection
     {
-        if(request()->wantsJson()) {
+        if(request()->wantsJson() || request()->segment(2) === "api") {
             // API case: we use the referer
             $urlToParse = request()->header("referer");
             

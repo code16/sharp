@@ -8,12 +8,8 @@ use Illuminate\Support\Str;
 
 class DownloadController extends ApiController
 {
-    /** @var FilesystemManager */
-    protected $filesystem;
+    protected FilesystemManager $filesystem;
 
-    /**
-     * @param FilesystemManager $filesystem
-     */
     public function __construct(FilesystemManager $filesystem)
     {
         parent::__construct();
@@ -21,16 +17,7 @@ class DownloadController extends ApiController
         $this->filesystem = $filesystem;
     }
 
-    /**
-     * @param string $fieldKey
-     * @param string $entityKey
-     * @param string|null $instanceId
-     * @return \Illuminate\Http\Response
-     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
-     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
-     * @throws SharpException
-     */
-    public function show(string $fieldKey, string $entityKey, string $instanceId = null)
+    public function show(string $fieldKey, string $entityKey, ?string $instanceId = null)
     {
         sharp_check_ability("view", $entityKey, $instanceId);
         
@@ -48,15 +35,6 @@ class DownloadController extends ApiController
         );
     }
 
-    /**
-     * @param string $fileName
-     * @param string $fieldKey
-     * @param string $entityKey
-     * @param null $instanceId
-     * @return array
-     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
-     * @throws SharpException
-     */
     protected function determineDiskAndFilePath(string $fileName, string $fieldKey, string $entityKey, string $instanceId = null): array
     {
         if(!$field = $this->getField($entityKey, $fieldKey)) {
@@ -84,12 +62,6 @@ class DownloadController extends ApiController
         return [$disk, "$basePath/$fileName"];
     }
 
-    /**
-     * @param string $entityKey
-     * @param string $fieldKey
-     * @return \Code16\Sharp\Form\Fields\SharpFormField|\Code16\Sharp\Show\Fields\SharpShowField
-     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
-     */
     protected function getField(string $entityKey, string $fieldKey)
     {
         $fieldContainer = $this->currentSharpRequest->isForm()
