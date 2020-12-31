@@ -5,7 +5,7 @@ heroText: null
 actionText: Get Started →
 actionLink: /guide/
 tagline: The Content Management Framework for Laravel
-footer: Code 16 — 2019
+footer: Code 16 — 2021
 pageClass: home-page
 ---
 
