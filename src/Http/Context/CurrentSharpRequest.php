@@ -23,11 +23,17 @@ class CurrentSharpRequest
         return $this->breadcrumb()->last();
     }
 
-    public function getPreviousShowFromBreadcrumbItems(): ?BreadcrumbItem
+    public function getPreviousShowFromBreadcrumbItems(?string $entityKey = null): ?BreadcrumbItem
     {
         return $this->breadcrumb()
             ->reverse()
             ->filter->isShow()
+            ->when($entityKey !== null, function($items) use($entityKey) {
+                return $items
+                    ->filter(function(BreadcrumbItem $breadcrumbItem) use($entityKey) {
+                        return $breadcrumbItem->entityKey() === $entityKey;
+                    });
+            })
             ->first();
     }
 
@@ -94,7 +100,7 @@ class CurrentSharpRequest
         return app($handlerClass)->defaultValue();
     }
 
-    private function buildBreadcrumb(): void
+    protected function buildBreadcrumb(): void
     {
         $this->breadcrumb = new Collection();
         $segments = $this->getSegmentsFromRequest();
@@ -134,9 +140,9 @@ class CurrentSharpRequest
         }
     }
 
-    private function getSegmentsFromRequest(): Collection
+    protected function getSegmentsFromRequest(): Collection
     {
-        if(request()->wantsJson()) {
+        if(request()->wantsJson() || request()->segment(2) === "api") {
             // API case: we use the referer
             $urlToParse = request()->header("referer");
             

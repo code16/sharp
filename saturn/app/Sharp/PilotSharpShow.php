@@ -39,7 +39,7 @@ class PilotSharpShow extends SharpShow
     function buildShowConfig(): void
     {
         $this
-            ->setBreadcrumbCustomLabelAttribute("name")
+            ->setBreadcrumbCustomLabelAttribute("breadcrumb_label")
             ->setMultiformAttribute("role")
             ->setEntityState("state", PilotEntityState::class)
             ->addInstanceCommand("download", PilotDownloadPhoto::class);
@@ -67,6 +67,9 @@ class PilotSharpShow extends SharpShow
             })
             ->setCustomTransformer("xp", function($xp, $pilot) {
                 return $pilot->role == "sr" ? $xp . "y" : null;
+            })
+            ->setCustomTransformer("breadcrumb_label", function($role, $pilot) {
+                return sprintf("Pilot %s", $pilot->name);
             })
             ->transform(Pilot::with("spaceships")->findOrFail($id));
     }

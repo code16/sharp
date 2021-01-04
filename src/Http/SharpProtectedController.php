@@ -6,8 +6,7 @@ use Illuminate\Routing\Controller;
 
 class SharpProtectedController extends Controller
 {
-    /** @var CurrentSharpRequest */
-    protected $currentSharpRequest;
+    protected CurrentSharpRequest $currentSharpRequest;
 
     public function __construct()
     {

@@ -4,10 +4,7 @@ namespace Code16\Sharp\Tests\Feature\Api;
 
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Http\SharpContext;
-use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
-use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
 use Code16\Sharp\Tests\Fixtures\PersonSharpShow;
-use Code16\Sharp\Tests\Fixtures\PersonSharpSingleShow;
 
 class BreadcrumbTest extends BaseApiTest
 {
@@ -21,7 +18,7 @@ class BreadcrumbTest extends BaseApiTest
     }
 
     /** @test */
-    public function breadcrumb_is_append_and_built_depending_on_referer_for_API_calls()
+    public function breadcrumb_is_appended_and_built_depending_on_referer_for_API_calls()
     {
         $this->buildTheWorld();
         

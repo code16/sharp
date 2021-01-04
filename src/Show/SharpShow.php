@@ -48,6 +48,7 @@ abstract class SharpShow
             // Filter model attributes on actual show labels
             ->only(
                 array_merge(
+                    $this->breadcrumbAttribute ? [$this->breadcrumbAttribute] : [],
                     $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
                     $this->getDataKeys()
                 )
