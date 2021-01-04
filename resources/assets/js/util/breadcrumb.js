@@ -18,10 +18,19 @@ export function getDeleteBackUrl(breadcrumb) {
     const parentUrl = breadcrumb[breadcrumb.length - 2].url;
     const parentRoute = resolveRoute(parentUrl);
 
-    if(parentRoute.params.entityKey &&
-        currentRoute.params.entityKey !== parentRoute.params.entityKey) {
-        return parentUrl;
+    if(entitiesMatch(currentRoute.params.entityKey, parentRoute.params.entityKey)
+        && currentRoute.params.instanceId === parentRoute.params.instanceId
+    ) {
+        const index = Math.max(0, breadcrumb.length - 3);
+        return breadcrumb[index].url;
     }
 
-    return breadcrumb[0].url;
+    return parentUrl;
+}
+
+export function entitiesMatch(entityKeyA, entityKeyB) {
+    if(!entityKeyA || !entityKeyB) {
+        return false;
+    }
+    return entityKeyA.replace(/:(.*)/, '') === entityKeyB.replace(/:(.*)/, '');
 }
