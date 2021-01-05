@@ -10,5 +10,4 @@ printf "\e[1mSharp release\e[0m\n"
 #  exit
 #fi
 
-read -p "Version: v" VERSION
-#sed -i '' -E "s/VERSION = '(.*)'/VERSION = '$VERSION'/g" ./src/SharpServiceProvider.php
+node $(dirname $0)/publish.js
