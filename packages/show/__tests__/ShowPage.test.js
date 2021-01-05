@@ -74,6 +74,35 @@ describe('show page', () => {
         expect(wrapper.html()).toMatchSnapshot();
     });
 
+    test('can mount hidden section', () => {
+        const wrapper = createWrapper({
+            computed: {
+                layout: () => ({
+                    sections: [
+                        {
+                            title: 'Section title',
+                            columns: [{
+                                fields: [[{ key:'name' }]]
+                            }]
+                        }
+                    ]
+                }),
+                formUrl: () => 'formUrl',
+            },
+        });
+        wrapper.setMethods({
+            fieldOptions: () => ({}),
+            fieldValue: () => ({}),
+        });
+        wrapper.setData({
+            ready: true,
+            fieldsVisible: {
+                name: false,
+            }
+        });
+        expect(wrapper.html()).toMatchSnapshot();
+    });
+
     test('can mount with unknown field', () => {
         const wrapper = createWrapper({
             computed: {
