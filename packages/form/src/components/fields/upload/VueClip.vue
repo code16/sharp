@@ -209,6 +209,9 @@
                 return !!(this.ratioX && this.ratioY) && this.isCroppable;
             },
             isCroppable() {
+                if(this.file?.type && !this.file.type.match(/^image\//)) {
+                    return false;
+                }
                 return !this.croppableFileTypes || this.croppableFileTypes.includes(this.fileExtension);
             }
         },

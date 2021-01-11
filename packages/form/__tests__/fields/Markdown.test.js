@@ -25,7 +25,7 @@ describe('markdown-field', () => {
                 readOnly: false,
                 placeholder: 'Champ md',
                 height: 310,
-                innerComponents: { upload:{ maxImageSize:3 } },
+                innerComponents: { upload:{ maxFileSize:3, fileFilter:['.jpg', '.pdf'] } },
                 fieldConfigIdentifier: 'my_markdown',
                 uniqueIdentifier: 'my_markdown',
                 toolbar: ['bold', 'italic'],
@@ -196,17 +196,17 @@ describe('markdown-field', () => {
         test('bound toolbar buttons custom action properly', async () =>{
             let wrapper = await createWrapper({
                 propsData: {
-                    toolbar: ['image']
+                    toolbar: ['image', 'document']
                 }
             });
 
             let { simplemde } = wrapper.vm;
             wrapper.vm.insertUploadImage = jest.fn();
 
-            expect(simplemde.toolbar[0].action).toBeInstanceOf(Function);
             simplemde.toolbar[0].action();
+            simplemde.toolbar[1].action();
 
-            expect(wrapper.vm.insertUploadImage).toHaveBeenCalled();
+            expect(wrapper.vm.insertUploadImage).toHaveBeenCalledTimes(2);
         });
 
         test('set read only properly', async () => {
@@ -466,7 +466,8 @@ describe('markdown-field', () => {
                     name:'cat.jpg',
                     size: 123
                 },
-                maxImageSize: 3,
+                maxFileSize: 3,
+                fileFilter: ['.jpg', '.pdf'],
                 downloadId: 'my_markdown',
                 pendingKey: 'my_markdown.upload.0'
             });
@@ -476,7 +477,8 @@ describe('markdown-field', () => {
             expect(wrapper.vm._recordedWidgets[1].$props).toMatchObject({
                 id: 1,
                 value: undefined,
-                maxImageSize: 3,
+                maxFileSize: 3,
+                fileFilter: ['.jpg', '.pdf'],
                 downloadId: 'my_markdown',
                 pendingKey: 'my_markdown.upload.1'
             });

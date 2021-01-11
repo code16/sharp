@@ -46,7 +46,8 @@
             id: Number,
             value: Object,
 
-            maxImageSize: Number,
+            maxFileSize: Number,
+            fileFilter: Array,
             ratioX: Number,
             ratioY: Number,
             croppableFileTypes: Array,
@@ -60,19 +61,26 @@
         },
         computed: {
             options() {
-                return {
+                let opt = {
                     ...defaultUploadOptions,
-                    url: UPLOAD_URL,
-                    uploadMultiple: false,
-                    acceptedFiles: {
-                        extensions: ['image/*'],
-                        message: lang('form.upload.message.bad_extension')
-                    },
-                    maxFilesize: {
-                        limit: this.maxImageSize,
-                        message: lang('form.upload.message.file_too_big')
-                    },
                 };
+
+                opt.url = UPLOAD_URL;
+                opt.uploadMultiple = false;
+
+                if (this.fileFilter) {
+                    opt.acceptedFiles = {
+                        extensions: this.fileFilter,
+                        message: lang('form.upload.message.bad_extension')
+                    }
+                }
+                if (this.maxFileSize) {
+                    opt.maxFilesize = {
+                        limit: this.maxFileSize,
+                        message: lang('form.upload.message.file_too_big')
+                    }
+                }
+                return opt;
             },
             dropzone() {
                 return this.$refs.vueclip.uploader._uploader;

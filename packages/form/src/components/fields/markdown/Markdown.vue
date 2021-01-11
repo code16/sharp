@@ -305,8 +305,12 @@
                 simplemde.toolbar.forEach(icon => typeof icon === 'object' && (icon.action = noop));
             },
             bindImageAction(simplemde) {
-                let imageBtn = simplemde.toolbar.find(btn => btn.name === 'image');
-                (imageBtn||{}).action = () => this.insertUploadImage({ isInsertion:true });
+                simplemde.toolbar = simplemde.toolbar.map(btn => ({
+                    ...btn,
+                    action: btn.name === 'image' || btn.name === 'document'
+                        ? () => this.insertUploadImage({ isInsertion:true })
+                        : btn.action
+                }));
             },
 
             parse() {

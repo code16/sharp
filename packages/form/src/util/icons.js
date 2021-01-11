@@ -18,6 +18,7 @@ const toolbarIcons = {
     'redo': 'fas fa-redo',
     'hr': 'fas fa-minus',
     'image': 'far fa-image',
+    'document': 'fas fa-file-upload icon--larger',
 };
 
 export function getToolbarIcon(key) {
