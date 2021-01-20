@@ -285,6 +285,10 @@
                 }
             },
 
+            onBlur() {
+                this.$emit('change', this.value);
+            },
+
             codemirrorOn(codemirror, eventName, callback, immediate) {
                 immediate && callback(codemirror);
                 codemirror.on(eventName, callback);
@@ -379,6 +383,7 @@
                 this.codemirrorOn(codemirror, 'cursorActivity', this.onCursorActivity, true);
                 this.codemirrorOn(codemirror, 'change', this.onChange);
                 this.codemirrorOn(codemirror, 'beforeChange',this.onBeforeChange);
+                this.codemirrorOn(codemirror, 'blur', this.onBlur);
             }
         },
         mounted() {

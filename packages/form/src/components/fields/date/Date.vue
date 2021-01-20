@@ -160,7 +160,9 @@
                     month: date.getMonth(),
                     date: date.getDate()
                 });
-                this.$emit('input', newMoment.toDate());
+                const value = newMoment.toDate();
+                this.$emit('input', value);
+                this.$emit('change', value);
             },
             handleTimeSelect({ data }) {
                 let newMoment = this.getMoment();
@@ -172,7 +174,8 @@
                 if(this.getMoment().format('HH:mm') === newMoment.format('HH:mm')) {
                     return;
                 }
-                this.$emit('input', newMoment.toDate());
+                const value = newMoment.toDate();
+                this.$emit('input', value);
             },
             handleInput(e) {
                 let m = moment(e.target.value, this.displayFormat, true);

@@ -45,7 +45,6 @@
 
             let { key, ...fieldProps } = this.fieldProps;
 
-
             return h(this.component, {
                 props: {
                     fieldKey: this.fieldKey,
@@ -60,6 +59,7 @@
                     dynamicAttributes: fieldProps.dynamicAttributes,
                 },
                 on: {
+                    ...this.$listeners,
                     input: (val, options={}) => {
                         if(this.fieldProps.readOnly && !options.force)
                             log(`SharpField '${this.fieldKey}', can't update because is readOnly`);
@@ -68,7 +68,7 @@
                     },
                     blur: () => {
                         this.fieldProps.focused = false;
-                    }
+                    },
                 }
             });
         }

@@ -1,11 +1,12 @@
 <template>
-    <textarea 
-        class="SharpTextarea" 
-        :rows="rows" 
-        :placeholder="placeholder" 
+    <textarea
+        class="SharpTextarea"
+        :rows="rows"
+        :placeholder="placeholder"
         :disabled="readOnly"
-        v-maxlength="maxLength" 
+        v-maxlength="maxLength"
         @input="handleInput"
+        @change="handleChanged"
     >{{ value }}</textarea>
 </template>
 
@@ -32,6 +33,9 @@
         methods: {
             handleInput(e) {
                 this.$emit('input', e.target.value);
+            },
+            handleChanged(e) {
+                this.$emit('change', e.target.value);
             }
         },
         directives: {

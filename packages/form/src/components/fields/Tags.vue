@@ -16,6 +16,8 @@
         :show-labels="false"
         @search-change="handleTextInput"
         @input="handleInput"
+        @select="handleChanged"
+        @remove="handleChanged"
         @tag="handleNewTag"
         ref="multiselect"
     />
@@ -103,6 +105,12 @@
             handleInput(val) {
                 this.tags = val;
             },
+            async handleChanged() {
+                await this.$nextTick();
+                if(this.value.every(tag => !!tag.id)) {
+                    this.$emit('change', this.value);
+                }
+            },
             handleTextInput(text) {
                 if (text.length > 0 && this.$refs.multiselect.filteredOptions.length > 1) {
                     this.$refs.multiselect.pointer = 1;
@@ -110,7 +118,8 @@
                 else this.$refs.multiselect.pointer = 0
             },
             onTagsChanged() {
-                this.$emit('input', this.tags.map(t => new Tag(t)));
+                const value = this.tags.map(t => new Tag(t));
+                this.$emit('input', value);
             }
         },
         created() {

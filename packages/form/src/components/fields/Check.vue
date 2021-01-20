@@ -23,6 +23,7 @@
         methods: {
             handleCheck(e) {
                 this.$emit('input', e.target.checked);
+                this.$emit('change', e.target.checked);
             }
         }
     }

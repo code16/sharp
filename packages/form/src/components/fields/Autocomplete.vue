@@ -232,6 +232,7 @@
 
             handleSelect(value) {
                 this.$emit('input', value);
+                this.$emit('change', value);
             },
             handleDropdownClose() {
                 this.opened = false;

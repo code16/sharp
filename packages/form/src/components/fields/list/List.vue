@@ -41,6 +41,7 @@
                                         :locale="listItemData._fieldsLocale[fieldLayout.key]"
                                         :read-only="isReadOnly"
                                         @locale-change="(key, value)=>updateLocale(i, key, value)"
+                                        @change="$emit('change')"
                                     />
                                 </ListItem>
                                 <template v-if="showRemoveButton">

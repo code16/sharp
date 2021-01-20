@@ -103,4 +103,6 @@ return [
 
 //    "login_page_message_blade_path" => env("SHARP_LOGIN_PAGE_MESSAGE_BLADE_PATH", "sharp/_login-page-message"),
 
+    "form_live_update" => env('SHARP_FORM_LIVE_UPDATE', false)
+
 ];

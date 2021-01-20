@@ -14,6 +14,7 @@
             :max="maxSelected"
             :allow-empty="clearable"
             @input="handleInput"
+            @select="handleSelected"
             @open="$emit('open')"
             @close="$emit('close')"
             ref="multiselect"
@@ -184,6 +185,10 @@
             isChecked(option) {
                 return this.value?.some(value => this.isSelected(option, value));
             },
+            update(value) {
+                this.$emit('input', value);
+                this.$emit('change', value);
+            },
             remove() {
                 this.$emit('input', null);
             },
@@ -193,25 +198,30 @@
             handleInput(val) {
                 this.$emit('input', val);
             },
+            async handleSelected() {
+                await this.$nextTick();
+                this.$emit('change', this.value);
+            },
             handleCheckboxChanged(checked, option) {
                 if (checked) {
-                    this.$emit('input', [...(this.value ?? []), option.id])
+                    this.update([...(this.value ?? []), option.id])
                 }
                 else {
-                    this.$emit('input', (this.value ?? []).filter(val => !this.isSelected(option, val)));
+                    this.update((this.value ?? []).filter(val => !this.isSelected(option, val)));
                 }
             },
             handleRadioChanged(option) {
-                this.$emit('input', option.id);
+                this.update(option.id);
             },
             handleSelectAllClicked() {
-                this.$emit('input', this.options.map(option => option.id));
+                this.update(this.options.map(option => option.id));
             },
             handleUnselectAllClicked() {
-                this.$emit('input', []);
+                this.update([]);
             },
             setDefault() {
                 if(!this.clearable && this.value == null && this.options.length > 0) {
+                    console.log('set default');
                     this.$emit('input', this.options[0].id, { force:true });
                 }
             },

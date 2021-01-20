@@ -1,7 +1,7 @@
 <template>
     <div class="FormPage">
         <div class="container">
-            <Form :entity-key="entityKey" :instance-id="instanceId">
+            <Form :entity-key="entityKey" :instance-id="instanceId" :live-update="liveUpdate">
                 <template v-slot:action-bar="{ props, listeners }">
                     <ActionBarForm v-bind="props" v-on="listeners" />
                 </template>
@@ -18,6 +18,9 @@
         components: {
             Form,
             ActionBarForm,
+        },
+        props: {
+            liveUpdate: Boolean,
         },
         computed: {
             entityKey() {

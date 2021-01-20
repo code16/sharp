@@ -11,6 +11,7 @@
                 :placeholder="placeholder"
                 :style="{ height: `${height}px`, maxHeight:`${height}px` }"
                 @trix-change="handleChanged"
+                @trix-blur="handleBlur"
                 ref="trix"
             ></trix-editor>
         </div>
@@ -61,7 +62,10 @@
         methods: {
             handleChanged(event) {
                 this.$emit('input', this.localizedValue(event.target.value));
-            }
+            },
+            handleBlur() {
+                this.$emit('change', this.value);
+            },
         },
         created() {
             window.Trix.config.toolbar.getDefaultHTML = () => '';

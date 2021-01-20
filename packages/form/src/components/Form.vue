@@ -46,6 +46,7 @@
                                 :update-data="updateData"
                                 :update-visibility="updateVisibility"
                                 @locale-change="updateLocale"
+                                @change="handleFieldChanged"
                                 ref="field"
                             />
                         </FieldsLayout>
@@ -57,6 +58,8 @@
 </template>
 
 <script>
+    import isEqual from 'lodash/isEqual';
+    import cloneDeep from 'lodash/cloneDeep';
     import {
         BASE_URL,
         getBackUrl,
@@ -102,7 +105,8 @@
                 default: false
             },
             ignoreAuthorizations: Boolean,
-            props: Object
+            props: Object,
+            liveUpdate: Boolean,
         },
 
         provide() {
@@ -191,6 +195,7 @@
                         : !!this.authorizations.update,
                     showDeleteButton: !this.isCreation && !this.isSingle && !!this.authorizations.delete,
                     showBackButton: this.isReadOnly,
+                    showLiveUpdateButton: this.liveUpdate,
                     create: !!this.isCreation,
                     uploading: this.isUploading,
                     breadcrumb: this.breadcrumb?.items,
@@ -202,6 +207,7 @@
                     'submit': this.handleSubmitClicked,
                     'delete': this.handleDeleteClicked,
                     'cancel': this.handleCancelClicked,
+                    'submit-live': this.handleSubmitLiveClicked,
                 }
             },
         },
@@ -223,6 +229,11 @@
             },
             handleLocaleChanged(locale) {
                 this.fieldLocale = this.defaultFieldLocaleMap({ fields: this.fields, locales: this.locales }, locale);
+            },
+            handleFieldChanged() {
+                if(this.liveUpdate && !this.isCreation) {
+                    this.submitLive(true);
+                }
             },
             mount({ fields, layout, data={}, authorizations={}, locales, breadcrumb, config }) {
                 this.fields = fields;
@@ -311,8 +322,19 @@
                     return Promise.reject(error);
                 }
             },
+            submitLive(checkDiff) {
+                if(checkDiff && isEqual(this.data, this.previousData)) {
+                    return;
+                }
+                this.previousData = cloneDeep(this.data);
+                this.post()
+                    .catch(error => this.handleError(error));
+            },
             handleSubmitClicked() {
                 this.submit().catch(()=>{});
+            },
+            handleSubmitLiveClicked() {
+                this.submitLive();
             },
             handleDeleteClicked() {
                 this.axiosInstance.delete(this.apiPath)

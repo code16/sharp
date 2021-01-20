@@ -5,7 +5,11 @@
     <div id="sharp-app" class="form">
         @include("sharp::partials._menu")
         <sharp-action-view context="form">
-            <router-view></router-view>
+            <router-view
+                @if(config('sharp.form_live_update'))
+                    live-update
+                @endif
+            ></router-view>
         </sharp-action-view>
     </div>
 

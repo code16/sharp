@@ -31,6 +31,11 @@
             </template>
         </template>
         <template v-slot:right>
+            <template v-if="showLiveUpdateButton">
+                <Button :disabled="uploading" @click="handleSubmitLiveClicked">
+                    Update live
+                </Button>
+            </template>
             <template v-if="showSubmitButton">
                 <Button type="accent" :disabled="uploading" @click="handleSubmitClicked">
                     {{ submitLabel }}
@@ -63,6 +68,7 @@
             showSubmitButton: Boolean,
             showDeleteButton: Boolean,
             showBackButton: Boolean,
+            showLiveUpdateButton: Boolean,
             create: Boolean,
             uploading: Boolean,
             breadcrumb: Array,
@@ -83,6 +89,9 @@
                 if(this.$refs.openDelete) {
                     this.$refs.openDelete.focus();
                 }
+            },
+            handleSubmitLiveClicked() {
+                this.$emit('submit-live');
             },
             handleSubmitClicked() {
                 this.$emit('submit');

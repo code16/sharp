@@ -1,12 +1,13 @@
 <template>
-    <input 
+    <input
         class="SharpText"
-        :type="inputType" 
+        :type="inputType"
         :value="value"
         :placeholder="placeholder"
         :disabled="readOnly"
         v-maxlength="maxLength"
         @input="handleInput"
+        @change="handleChanged"
         ref="input"
     >
 </template>
@@ -38,8 +39,11 @@
         },
         methods: {
             handleInput(e) {
-                this.$emit('input',e.target.value);
-            }
+                this.$emit('input', e.target.value);
+            },
+            handleChanged(e) {
+                this.$emit('change', e.target.value);
+            },
         },
 
         mounted() {
