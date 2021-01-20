@@ -50,6 +50,7 @@ class SpaceshipSharpForm extends SharpForm
                     SharpFormMarkdownField::B, SharpFormMarkdownField::I,
                     SharpFormMarkdownField::SEPARATOR,
                     SharpFormMarkdownField::IMG,
+                    SharpFormMarkdownField::DOC,
                     SharpFormMarkdownField::SEPARATOR,
                     SharpFormMarkdownField::A,
                 ])
