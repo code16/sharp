@@ -6,8 +6,8 @@ exports[`markdown-field basic tests can mount "localized" Markdown field 1`] = `
 		<div>
 			<textarea id="textarea_fr" style="display: none;"></textarea>
 			<div class="editor-toolbar">
-				<a title="{{ form.markdown.icons.bold.title }} (Ctrl-B)" tabindex="-1" class="fas fa-bold"></a>
-				<a title="{{ form.markdown.icons.italic.title }} (Ctrl-I)" tabindex="-1" class="fas fa-italic"></a>
+				<a title="{{ form.markdown.icons.bold.title }}" tabindex="-1" class="fas fa-bold"></a>
+				<a title="{{ form.markdown.icons.italic.title }}" tabindex="-1" class="fas fa-italic"></a>
 			</div>
 			<div class="CodeMirror cm-s-paper CodeMirror-wrap CodeMirror-empty" style="width: auto; height: 310px;">
 				<div style="overflow: hidden; position: relative; width: 3px; height: 0px;">
@@ -47,8 +47,8 @@ exports[`markdown-field basic tests can mount "localized" Markdown field 1`] = `
 		<div style="display: none;">
 			<textarea id="textarea_en" style="display: none;"></textarea>
 			<div class="editor-toolbar">
-				<a title="{{ form.markdown.icons.bold.title }} (Ctrl-B)" tabindex="-1" class="fas fa-bold"></a>
-				<a title="{{ form.markdown.icons.italic.title }} (Ctrl-I)" tabindex="-1" class="fas fa-italic"></a>
+				<a title="{{ form.markdown.icons.bold.title }}" tabindex="-1" class="fas fa-bold"></a>
+				<a title="{{ form.markdown.icons.italic.title }}" tabindex="-1" class="fas fa-italic"></a>
 			</div>
 			<div class="CodeMirror cm-s-paper CodeMirror-wrap CodeMirror-empty" style="width: auto; height: 310px;">
 				<div style="overflow: hidden; position: relative; width: 3px; height: 0px;">
