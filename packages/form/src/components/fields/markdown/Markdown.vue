@@ -289,28 +289,29 @@
                 immediate && callback(codemirror);
                 codemirror.on(eventName, callback);
             },
-
-            localizeToolbar(simplemde) {
-                simplemde.toolbar.forEach(icon => {
-                    if(typeof icon === 'object') {
-                        let lName = icon.name.replace(/-/g,'_');
-                        icon.title = lang(`form.markdown.icons.${lName}.title`);
-                    }
-                });
-                simplemde.gui.toolbar.remove();
-                simplemde.createToolbar();
-            },
             setReadOnly(simplemde) {
                 simplemde.codemirror.setOption('readOnly', true);
-                simplemde.toolbar.forEach(icon => typeof icon === 'object' && (icon.action = noop));
             },
-            bindImageAction(simplemde) {
-                simplemde.toolbar = simplemde.toolbar.map(btn => ({
-                    ...btn,
-                    action: btn.name === 'image' || btn.name === 'document'
-                        ? () => this.insertUploadImage({ isInsertion:true })
-                        : btn.action
-                }));
+            createToolbar(simplemde) {
+                const items = this.transformedToolbar.map(btn => {
+                    if(btn === '|') {
+                        return btn;
+                    }
+                    if(btn.name === 'image' || btn.name === 'document') {
+                        btn.action = () => this.insertUploadImage({ isInsertion:true });
+                    }
+                    return {
+                        ...btn,
+                        action: (simplemde) => {
+                            if(!this.readOnly) {
+                                btn.action(simplemde);
+                            }
+                        },
+                        title: lang(`form.markdown.icons.${btn.name.replace(/-/g,'_')}.title`),
+                    }
+                });
+                simplemde.options.toolbar = items;
+                simplemde.createToolbar();
             },
 
             parse() {
@@ -359,17 +360,16 @@
                 let simplemde = new SimpleMDE({
                     element,
                     initialValue,
+                    toolbar: false,
                     placeholder: this.placeholder,
                     spellChecker: false,
-                    toolbar: this.transformedToolbar,
                     autoDownloadFontAwesome: false,
                     status: false
                 });
                 if(this.readOnly) {
                     this.setReadOnly(simplemde);
                 }
-                this.localizeToolbar(simplemde);
-                this.bindImageAction(simplemde);
+                this.createToolbar(simplemde);
 
                 this.initCM(simplemde.codemirror);
 
