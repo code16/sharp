@@ -12,28 +12,12 @@ class SharpFormUploadField extends SharpFormField
     const FIELD_TYPE = "upload";
 
     /**
-     * @var string
-     */
-    protected $fileFilter = null;
-
-    /**
      * @param string $key
      * @return static
      */
     public static function make(string $key)
     {
         return new static($key, static::FIELD_TYPE, new UploadFormatter);
-    }
-
-    /**
-     * @param string|array $fileFilter
-     * @return static
-     */
-    public function setFileFilter($fileFilter)
-    {
-        $this->fileFilter = $this->formatFileExtension($fileFilter);
-
-        return $this;
     }
 
     /**
@@ -76,26 +60,5 @@ class SharpFormUploadField extends SharpFormField
             "compactThumbnail" => !!$this->compactThumbnail,
             "shouldOptimizeImage" => !!$this->shouldOptimizeImage
         ]);
-    }
-
-    /**
-     * @param $fileFilter
-     * @return array
-     */
-    private function formatFileExtension($fileFilter)
-    {
-        if(!is_array($fileFilter)) {
-            $fileFilter = explode(",", $fileFilter);
-        }
-
-        return collect($fileFilter)->map(function($filter) {
-            $filter = trim($filter);
-            if(substr($filter, 0, 1) != ".") {
-                $filter = ".$filter";
-            }
-
-            return $filter;
-
-        })->all();
     }
 }
