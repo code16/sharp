@@ -21,16 +21,6 @@ class SharpFormUploadField extends SharpFormField
     }
 
     /**
-     * @return static
-     */
-    public function setFileFilterImages()
-    {
-        $this->setFileFilter([".jpg",".jpeg",".gif",".png"]);
-
-        return $this;
-    }
-
-    /**
      * @return array
      */
     protected function validationRules()

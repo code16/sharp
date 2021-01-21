@@ -6,25 +6,12 @@ use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 
 class MarkdownAttributeTransformer implements SharpAttributeTransformer
 {
-    /** @var bool */
-    protected $handleImages = false;
+    protected bool $handleImages = false;
+    protected ?int $imageWidth;
+    protected ?int $imageHeight;
+    protected ?array $imageFilters;
 
-    /** @var int */
-    protected $imageWidth;
-
-    /** @var int */
-    protected $imageHeight;
-
-    /** @var array */
-    protected $imageFilters;
-
-    /**
-     * @param int|null $width
-     * @param int|null $height
-     * @param array $filters
-     * @return MarkdownAttributeTransformer
-     */
-    public function handleImages(int $width = null, int $height = null, array $filters = [])
+    public function handleImages(int $width = null, int $height = null, array $filters = []): self
     {
         $this->handleImages = true;
         $this->imageWidth = $width;
@@ -50,8 +37,8 @@ class MarkdownAttributeTransformer implements SharpAttributeTransformer
 
         $html = (new \Parsedown())
             ->setBreaksEnabled(true)
-            ->parse($instance->$attribute);
-
+            ->text($instance->$attribute);
+        
         if($this->handleImages) {
             return sharp_markdown_thumbnails(
                 $html, "", $this->imageWidth, $this->imageHeight, $this->imageFilters

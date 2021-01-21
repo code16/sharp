@@ -107,6 +107,13 @@ trait SharpFormFieldWithUpload
         return $this;
     }
 
+    public function setFileFilterImages(): self
+    {
+        $this->setFileFilter([".jpg",".jpeg",".gif",".png"]);
+
+        return $this;
+    }
+
     public function storageDisk(): string
     {
         return $this->storageDisk;

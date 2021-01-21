@@ -26,6 +26,7 @@ class SharpFormMarkdownField extends SharpFormField
     const H3 = "heading-3";
     const CODE = "code";
     const QUOTE = "quote";
+    /** @deprecated use DOC */
     const IMG = "image";
     const DOC = "document";
     const HR = "horizontal-rule";
@@ -110,9 +111,10 @@ class SharpFormMarkdownField extends SharpFormField
             $array["croppableFileTypes"] = $this->croppableFileTypes;
         }
         
-        if($this->fileFilter) {
-            $array["fileFilter"] = $this->fileFilter;
+        if(!$this->fileFilter) {
+            $this->setFileFilterImages();
         }
+        $array["fileFilter"] = $this->fileFilter;
 
         return $array;
     }

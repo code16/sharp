@@ -86,12 +86,15 @@ function sharp_markdown_thumbnails(string $html, string $classNames, int $width 
         list($disk, $file_name) = explode(":", $match[1]);
 
         $model = new Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel(compact('disk', 'file_name'));
-
-        $html = str_replace(
-            $match[0],
-            sprintf('<img src="%s" class="%s" alt="">', $model->thumbnail($width, $height, $filters), $classNames),
-            $html
-        );
+        
+        $disk = \Illuminate\Support\Facades\Storage::disk($model->disk);
+        if($disk->exists($model->file_name)) {
+            $html = str_replace(
+                $match[0],
+                sprintf('<img src="%s" class="%s" alt="">', $model->thumbnail($width, $height, $filters), $classNames),
+                $html
+            );
+        }
     }
 
     return $html;

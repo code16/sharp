@@ -157,7 +157,7 @@ class MarkdownFormatterTest extends SharpTestCase
         $formatter = new class extends MarkdownFormatter {
             public $thumbnailsDeleted = false;
 
-            protected function deleteThumbnails($fullFileName)
+            protected function deleteThumbnails(string $fullFileName): void
             {
                 $this->thumbnailsDeleted = true;
             }
