@@ -49,12 +49,13 @@ class SpaceshipSharpForm extends SharpForm
                 ->setToolbar([
                     SharpFormMarkdownField::B, SharpFormMarkdownField::I,
                     SharpFormMarkdownField::SEPARATOR,
-                    SharpFormMarkdownField::IMG,
                     SharpFormMarkdownField::DOC,
                     SharpFormMarkdownField::SEPARATOR,
                     SharpFormMarkdownField::A,
                 ])
                 ->setCropRatio("1:1")
+                ->setMaxFileSize(4)
+                ->setFileFilter(["jpg", "png", "pdf"])
                 ->setStorageDisk("local")
                 ->setStorageBasePath("data/Spaceship/{id}/markdown")
 
