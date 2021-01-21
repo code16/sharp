@@ -89,11 +89,25 @@ function sharp_markdown_thumbnails(string $html, string $classNames, int $width 
         
         $disk = \Illuminate\Support\Facades\Storage::disk($model->disk);
         if($disk->exists($model->file_name)) {
-            $html = str_replace(
-                $match[0],
-                sprintf('<img src="%s" class="%s" alt="">', $model->thumbnail($width, $height, $filters), $classNames),
-                $html
-            );
+            if(in_array($disk->mimeType($model->file_name), ['image/jpeg','image/gif','image/png','image/bmp'])) {
+                $html = str_replace(
+                    $match[0],
+                    sprintf('<img src="%s" class="%s" alt="">', 
+                        $model->thumbnail($width, $height, $filters),
+                        $classNames
+                    ),
+                    $html
+                );
+            } else {
+                $html = str_replace(
+                    $match[0],
+                    view('sharp::public.markdown-embedded-file', [
+                        "classes" => $classNames,
+                        "fileModel" => $model
+                    ]),
+                    $html
+                );
+            }
         }
     }
 

@@ -44,6 +44,10 @@ class SharpServiceProvider extends ServiceProvider
             __DIR__.'/../config/config.php' => config_path('sharp.php'),
         ], 'config');
 
+        $this->publishes([
+            __DIR__.'/../resources/views/public' => resource_path('views/vendor/sharp/public'),
+        ], 'views');
+
         $this->registerPolicies();
 
         view()->composer(
