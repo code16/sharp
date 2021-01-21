@@ -103,7 +103,7 @@ function sharp_markdown_embedded_files(
                 view("sharp::$viewName", [
                     "fileModel" => $model,
                     "isImage" => in_array($disk->mimeType($model->file_name), ['image/jpeg','image/gif','image/png','image/bmp']),
-                    "classeNames" => $classNames,
+                    "classNames" => $classNames,
                     "width" => $width,
                     "height" => $height,
                     "filters" => $filters,

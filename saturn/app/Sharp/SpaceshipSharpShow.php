@@ -104,7 +104,7 @@ class SpaceshipSharpShow extends SharpShow
             })
             ->addSection('Description', function(ShowLayoutSection $section) {
                 $section
-                    ->setCollapsable()
+//                    ->setCollapsable()
                     ->addColumn(6, function(ShowLayoutColumn $column) {
                         $column->withSingleField("description");
                     })
