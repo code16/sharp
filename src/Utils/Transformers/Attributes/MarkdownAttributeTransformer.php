@@ -40,7 +40,7 @@ class MarkdownAttributeTransformer implements SharpAttributeTransformer
             ->text($instance->$attribute);
         
         if($this->handleImages) {
-            return sharp_markdown_thumbnails(
+            return sharp_markdown_embedded_files(
                 $html, "", $this->imageWidth, $this->imageHeight, $this->imageFilters
             );
         }

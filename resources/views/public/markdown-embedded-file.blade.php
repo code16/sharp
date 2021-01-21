@@ -1,16 +1,17 @@
-@if(in_array(\Illuminate\Support\Facades\Storage::disk($fileModel->disk)->mimeType($fileModel->file_name), ['image/jpeg','image/gif','image/png','image/bmp']))
+@if($isImage)
     
-    <img src="{{ $model->thumbnail($width, $height, $filters) }}" class="{{ $class ?? "" }}" alt="">
-
+    <img src="{{ $fileModel->thumbnail($width, $height, $filters) }}" class="{{ $classNames ?? "" }}" alt="">
+    
 @else
     
-    <p class="{{ $class ?? "" }} sharp-markdown-file">
-        <svg width="1.5em" height="1.5em" style="vertical-align: -.125em" viewBox="0 0 1024 1024">
+    <p class="sharp-file {{ $classNames ?? '' }}">
+        <svg class="sharp-file__icon" width="1.5em" height="1.25em" viewBox="0 0 1024 1024" fill="currentColor" opacity=".75">
             <path d="M854.6 288.6L639.4 73.4c-6-6-14.1-9.4-22.6-9.4H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V311.3c0-8.5-3.4-16.7-9.4-22.7zM790.2 326H602V137.8L790.2 326zm1.8 562H232V136h302v216a42 42 0 0 0 42 42h216v494z" />
         </svg>
-        <span>
+        
+        <small class="sharp-file__name">
             {{ basename($fileModel->file_name) }}
-        </span>
+        </small>
     </p>
     
 @endif
