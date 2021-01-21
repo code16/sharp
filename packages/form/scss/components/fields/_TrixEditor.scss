@@ -11,11 +11,8 @@
   }
 
   .editor-toolbar {
-    border: none;
-    border-radius: 0;
     &:before { margin:0 }
     &:after { margin:0 }
-    padding:0;
 
     opacity: .8;
 
@@ -45,10 +42,6 @@
         opacity: .4;
         pointer-events: none;
       }
-    }
-
-    .icon--larger {
-      font-size: 1.125em;
     }
   }
 
