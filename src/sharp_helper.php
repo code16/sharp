@@ -93,7 +93,7 @@ function sharp_markdown_thumbnails(string $html, string $classNames, int $width 
                 $match[0],
                 view('sharp::public.markdown-embedded-file', [
                     "fileModel" => $model,
-                    "classes" => $classNames,
+                    "class" => $classNames,
                     "width" => $width,
                     "height" => $height,
                     "filters" => $filters,
