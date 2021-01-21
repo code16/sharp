@@ -21,7 +21,8 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
                 ], 
                 "innerComponents" => [
                     "upload" => [
-                        "maxFileSize" => 2
+                        "maxFileSize" => 2,
+                        "fileFilter" => [".jpg",".jpeg",".gif",".png"]
                     ]
                 ]
             ], 

@@ -1,6 +1,6 @@
-@if(in_array(\Illuminate\Support\Facades\Storage::disk($fileModel->disk)->mimeType($fileModel->file_name), ['image/jpeg','image/gif','image/png','image/bmp']))
+@if($isImage)
 
-    <img src="{{ $fileModel->thumbnail($width, $height, $filters) }}" class="{{ $classes ?? "" }}" alt="">
+    <img src="{{ $fileModel->thumbnail($width, $height, $filters) }}" class="{{ $classNames ?? "" }}" alt="">
 
 @else
 

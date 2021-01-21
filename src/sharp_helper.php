@@ -75,10 +75,16 @@ function sharp_check_ability(string $ability, string $entityKey, string $instanc
         ->check($ability, $entityKey, $instanceId);
 }
 
+/** @deprecated  */
+function sharp_markdown_thumbnails(string $html, string $classNames, int $width = null, int $height = null, array $filters = []): string
+{
+    return sharp_markdown_embedded_files($html, $classNames, $width, $height, $filters);
+}
+
 /**
  * Replace embedded images with thumbnails in a SharpMarkdownField's markdown text.
  */
-function sharp_markdown_thumbnails(string $html, string $classNames, int $width = null, int $height = null, array $filters = []): string
+function sharp_markdown_embedded_files(string $html, string $classNames, int $width = null, int $height = null, array $filters = []): string
 {
     preg_match_all('/<img src="(.*)".*>/U', $html, $matches, PREG_SET_ORDER);
 
@@ -93,7 +99,8 @@ function sharp_markdown_thumbnails(string $html, string $classNames, int $width 
                 $match[0],
                 view('sharp::public.markdown-embedded-file', [
                     "fileModel" => $model,
-                    "classes" => $classNames,
+                    "isImage" => in_array($disk->mimeType($model->file_name), ['image/jpeg','image/gif','image/png','image/bmp']),
+                    "classeNames" => $classNames,
                     "width" => $width,
                     "height" => $height,
                     "filters" => $filters,

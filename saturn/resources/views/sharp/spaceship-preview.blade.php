@@ -48,7 +48,7 @@
                 {{ $spaceship->name }}
             </div>
             
-            {!! sharp_markdown_thumbnails((new \Parsedown())->text($spaceship->description), "test", 200) !!}
+            {!! sharp_markdown_embedded_files((new \Parsedown())->text($spaceship->description), "test", 200) !!}
         </div>
     </div>
 </body>
