@@ -1,0 +1,19 @@
+
+.editor-toolbar {
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  background-color: $ui-03;
+
+  .fa-paperclip {
+    font-size: 1.2em;
+    -webkit-text-stroke: .03em $ui-03;
+    &:hover {
+      -webkit-text-stroke-color: #fcfcfc;
+    }
+    &::before {
+      display: inline-block;
+      transform: rotate(-45deg);
+    }
+  }
+}

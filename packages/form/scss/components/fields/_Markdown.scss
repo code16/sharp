@@ -6,11 +6,6 @@
 
   .editor-toolbar {
     @extend .SharpModule__header;
-    border: none;
-    border-radius: 0;
-    .icon--larger {
-      font-size: 1.125em;
-    }
   }
 
   &__upload-line {
