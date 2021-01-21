@@ -82,9 +82,12 @@ function sharp_markdown_thumbnails(string $html, string $classNames, int $width 
 }
 
 /**
- * Replace embedded images with thumbnails in a SharpMarkdownField's markdown text.
+ * Handle embedded images and files in a SharpMarkdownField's markdown text.
  */
-function sharp_markdown_embedded_files(string $html, string $classNames, int $width = null, int $height = null, array $filters = []): string
+function sharp_markdown_embedded_files(
+    string $html, string $classNames, 
+    int $width = null, int $height = null, array $filters = [], 
+    string $viewName = 'public.markdown-embedded-file'): string
 {
     preg_match_all('/<img src="(.*)".*>/U', $html, $matches, PREG_SET_ORDER);
 
@@ -97,7 +100,7 @@ function sharp_markdown_embedded_files(string $html, string $classNames, int $wi
         if($disk->exists($model->file_name)) {
             $html = str_replace(
                 $match[0],
-                view('sharp::public.markdown-embedded-file', [
+                view("sharp::$viewName", [
                     "fileModel" => $model,
                     "isImage" => in_array($disk->mimeType($model->file_name), ['image/jpeg','image/gif','image/png','image/bmp']),
                     "classeNames" => $classNames,

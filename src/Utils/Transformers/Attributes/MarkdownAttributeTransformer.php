@@ -41,7 +41,9 @@ class MarkdownAttributeTransformer implements SharpAttributeTransformer
         
         if($this->handleImages) {
             return sharp_markdown_embedded_files(
-                $html, "", $this->imageWidth, $this->imageHeight, $this->imageFilters
+                $html, "", $this->imageWidth, 
+                $this->imageHeight, $this->imageFilters,
+                'partials.markdown-embedded-file'
             );
         }
 
