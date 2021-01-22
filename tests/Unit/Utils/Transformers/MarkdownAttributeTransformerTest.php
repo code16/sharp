@@ -32,7 +32,7 @@ class MarkdownAttributeTransformerTest extends SharpTestCase
             ->storeAs("markdown", "test.jpg", "local");
 
         $object = (object)[
-            "text" => '<img src="local:markdown/test.jpg" alt="" />'
+            "text" => '<p><img src="local:markdown/test.jpg" alt="" /></p>'
         ];
 
         $this->assertStringStartsWith(
