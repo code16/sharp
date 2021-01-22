@@ -1,6 +1,8 @@
 @if($isImage)
     
-    <img src="{{ $fileModel->thumbnail($width, $height, $filters) }}" class="{{ $classNames ?? "" }}" alt="">
+    <p>
+        <img src="{{ $fileModel->thumbnail($width, $height, $filters) }}" class="{{ $classNames ?? "" }}" alt="">
+    </p>
     
 @else
     
