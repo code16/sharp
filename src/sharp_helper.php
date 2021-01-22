@@ -89,7 +89,7 @@ function sharp_markdown_embedded_files(
     int $width = null, int $height = null, array $filters = [], 
     string $viewName = 'public.markdown-embedded-file'): string
 {
-    preg_match_all('/<img src="(.*)".*>/U', $html, $matches, PREG_SET_ORDER);
+    preg_match_all('/<p><img src="(.*)".*><\/p>/U', $html, $matches, PREG_SET_ORDER);
 
     foreach($matches as $match) {
         list($disk, $file_name) = explode(":", $match[1]);

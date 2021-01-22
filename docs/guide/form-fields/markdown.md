@@ -92,7 +92,7 @@ Just a `setFileFilter([".jpg",".jpeg",".gif",".png"])` shorthand.
 
 ### Display embedded files in the public site
 
-You'll  want to display those embedded files in the public website. The idea here is to display embeddd images as thumbnails, and other files as... you need. Sharp provides a helper for that:
+You'll  want to display those embedded files in the public website. The idea here is to display embedded images as thumbnails, and other files as you need. Sharp provides a helper for that:
 
 `sharp_markdown_embedded_files(string $html, string $classNames, int $width = null, int $height = null, array $filters = [])`
 
@@ -115,6 +115,10 @@ Here are the parameters passed to the view:
 - `$fileModel`, which is a `SharpUploadModel` instance (see the [documentation](../sharp-built-in-solution-for-uploads.md))
 - `$isImage` (bool)
 - `$classNames`, `$width`, `$height`, `$filters`: whatever you pass to the helper function
+
+::: warning
+In order to make this parsing work, you have to ensure that embedded images and files are in a dedicated paragraph. This means, as we're using the Markdown norm here, that a file should have a blank row before and one after, in the text.
+:::
 
 ## Formatter
 
