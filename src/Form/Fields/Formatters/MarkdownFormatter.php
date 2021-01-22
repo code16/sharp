@@ -73,7 +73,7 @@ class MarkdownFormatter extends SharpFieldFormatter
             }
         }
         
-        $text = preg_replace('/\n?\n!\[/', "\n\n![", $text);
+        $text = preg_replace(['/\R/', '/[^\n]\n!\[/'], ["\n", "\n\n!["], $text);
 
         return $text;
     }
