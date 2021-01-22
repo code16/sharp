@@ -1,10 +1,11 @@
 <template>
-    <textarea 
-        class="SharpTextarea" 
-        :rows="rows" 
-        :placeholder="placeholder" 
+    <textarea
+        class="SharpTextarea"
+        :value="value"
+        :rows="rows"
+        :placeholder="placeholder"
         :disabled="readOnly"
-        v-maxlength="maxLength" 
+        v-maxlength="maxLength"
         @input="handleInput"
     >{{ value }}</textarea>
 </template>
