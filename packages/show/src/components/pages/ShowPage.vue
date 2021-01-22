@@ -20,6 +20,7 @@
                 <template v-for="section in layout.sections">
                     <Section
                         class="ShowPage__section"
+                        v-show="isSectionVisible(section)"
                         :section="section"
                         :layout="sectionLayout(section)"
                         :fields-row-class="fieldsRowClass"

@@ -52,6 +52,7 @@
 </template>
 
 <script>
+    import { entitiesMatch } from "sharp";
     import { getReferrerRoute } from "sharp/router";
     import { Localization } from "sharp/mixins";
     import { EntityList, entityListModule } from 'sharp-entity-list';
@@ -155,7 +156,7 @@
             getFocusedItem() {
                 const route = getReferrerRoute();
                 if(route?.name
-                    && route.params.entityKey?.replace(/:(.*)/, '') === this.entityListKey
+                    && entitiesMatch(route.params.entityKey, this.entityListKey)
                     && route.params.instanceId
                     && route.path.length > this.$route.path.length
                 ) {
