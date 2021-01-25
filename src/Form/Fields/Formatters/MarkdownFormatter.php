@@ -57,8 +57,7 @@ class MarkdownFormatter extends SharpFieldFormatter
                     ->fromFront($field, $attribute, $file);
 
                 if(isset($upload["file_name"])) {
-                    // New file was uploaded. We have to update
-                    // the name of the file in the markdown
+                    // New file was uploaded. We have to update the name of the file in the markdown
                     $text = str_replace(
                         "![]({$originalName})",
                         "![]({$field->storageDisk()}:{$upload["file_name"]})",
@@ -73,7 +72,13 @@ class MarkdownFormatter extends SharpFieldFormatter
             }
         }
         
-        $text = preg_replace(['/\R/', '/[^\n]\n!\[/'], ["\n", "\n\n!["], $text);
+        // Normalize \n
+        $text = preg_replace('/\R/', "\n", $text);
+        
+        // Ensure \n\n before file...
+        $text = preg_replace('/([^\n])\n!\[/', "$1\n\n![", $text);
+        // ... and \n\n after file.
+        $text = preg_replace('/(\[\]\(.*\))\n([^\n])/', "$1\n\n$2", $text);
 
         return $text;
     }

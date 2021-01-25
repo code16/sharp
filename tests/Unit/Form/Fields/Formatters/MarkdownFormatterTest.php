@@ -7,8 +7,8 @@ use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormMarkdownField;
 use Code16\Sharp\Tests\SharpTestCase;
-use Illuminate\Http\Testing\FileFactory;
-use Illuminate\Support\Facades\File;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class MarkdownFormatterTest extends SharpTestCase
@@ -17,21 +17,8 @@ class MarkdownFormatterTest extends SharpTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        config(['filesystems.disks.local' => [
-            'driver' => 'local',
-            'root' => storage_path('app'),
-        ]]);
-
-        config(['filesystems.disks.sharp_uploads' => [
-            'driver' => 'local',
-            'root' => storage_path('app/tmp'),
-        ]]);
-
-        config(['sharp.uploads.thumbnails_dir' => 'thumbnails']);
-
-        File::deleteDirectory(storage_path("app/data"));
-        File::deleteDirectory(public_path("thumbnails"));
+        
+        Storage::fake("local");
     }
 
     /** @test */
@@ -47,27 +34,30 @@ class MarkdownFormatterTest extends SharpTestCase
     /** @test */
     function when_text_has_an_embedded_upload_the_files_array_is_handled_to_front()
     {
-        $image = (new FileFactory)->image("test.png")->store("data");
+        UploadedFile::fake()
+            ->image("test.png")
+            ->storeAs("data", "test.png", "local");
 
         $formatter = new MarkdownFormatter;
         $field = SharpFormMarkdownField::make("md");
-        $value = "![](local:$image)";
+        $value = "![](local:data/test.png)";
 
         $this->assertEquals(
-            "local:$image",
-            $formatter->toFront($field, $value)["files"][0]["name"]);
+            "local:data/test.png",
+            $formatter->toFront($field, $value)["files"][0]["name"]
+        );
     }
 
     /** @test */
     function when_text_has_multiple_embedded_uploads_the_files_array_is_handled_to_front()
     {
-        $image1 = (new FileFactory)->image("test.png")->store("data");
-        $image2 = (new FileFactory)->image("test2.png")->store("data");
-        $image3 = (new FileFactory)->image("test3.png")->store("data");
+        UploadedFile::fake()->image("test.png")->storeAs("data", "test.png", "local");
+        UploadedFile::fake()->image("test2.png")->storeAs("data", "test2.png", "local");
+        UploadedFile::fake()->image("test3.png")->storeAs("data", "test3.png", "local");
 
         $formatter = new MarkdownFormatter;
         $field = SharpFormMarkdownField::make("md");
-        $value = "![](local:$image1)\n![](local:$image2)\n![](local:$image3)";
+        $value = "![](local:data/test.png)\n![](local:data/test2.png)\n![](local:data/test3.png)";
 
         $this->assertCount(3, $formatter->toFront($field, $value)["files"]);
     }
@@ -75,18 +65,17 @@ class MarkdownFormatterTest extends SharpTestCase
     /** @test */
     function we_send_the_file_size_and_thumbnail_to_front()
     {
-        $file = (new FileFactory)->image("test.png", 600, 600);
-        $image = $file->store("data");
+        UploadedFile::fake()->image("test.png", 600, 600)->storeAs("data", "test.png", "local");
 
         $formatter = new MarkdownFormatter;
         $field = SharpFormMarkdownField::make("md");
-        $value = "![](local:$image)";
+        $value = "![](local:data/test.png)";
 
         $toFrontArray = $formatter->toFront($field, $value)["files"][0];
 
-        $this->assertEquals("local:$image", $toFrontArray["name"]);
+        $this->assertEquals("local:data/test.png", $toFrontArray["name"]);
         $this->assertTrue($toFrontArray["size"] > 0);
-        $this->assertStringStartsWith("/storage/thumbnails/data/1000-400/" . basename($image), $toFrontArray["thumbnail"]);
+        $this->assertStringStartsWith("/storage/thumbnails/data/1000-400/test.png", $toFrontArray["thumbnail"]);
     }
 
     /** @test */
@@ -147,8 +136,7 @@ class MarkdownFormatterTest extends SharpTestCase
     /** @test */
     function we_apply_transformations_from_front_on_already_existing_files()
     {
-        $file = (new FileFactory)->image("image.png", 100, 100);
-        $filePath = $file->store("data/Test");
+        UploadedFile::fake()->image("image.png", 100, 100)->storeAs("data/Test", "image.png", "local");
 
         // We create an implementation where deleteThumbnails() is faked
         // in order to check that it's called without changing anything
@@ -156,7 +144,6 @@ class MarkdownFormatterTest extends SharpTestCase
         // is a proof that the image was transformed.
         $formatter = new class extends MarkdownFormatter {
             public $thumbnailsDeleted = false;
-
             protected function deleteThumbnails(string $fullFileName): void
             {
                 $this->thumbnailsDeleted = true;
@@ -168,11 +155,11 @@ class MarkdownFormatterTest extends SharpTestCase
             ->setStorageBasePath("data/Test");
 
         $this->assertEquals(
-            "![](local:$filePath)",
+            "![](local:data/Test/image.png)",
             $formatter->fromFront($field, "attribute", [
-                "text" => "![](local:$filePath)",
+                "text" => "![](local:data/Test/image.png)",
                 "files" => [[
-                    "name" => "local:$filePath",
+                    "name" => "local:data/Test/image.png",
                     "uploaded" => false,
                     "cropData" => [
                         "height" => .8, "width" => .6, "x" => 0, "y" => .1, "rotate" => 0
@@ -182,5 +169,23 @@ class MarkdownFormatterTest extends SharpTestCase
         );
 
         $this->assertTrue($formatter->thumbnailsDeleted);
+    }
+
+    /** @test */
+    function we_ensure_that_files_are_formatted_in_their_own_paragraph()
+    {
+        $formatter = new MarkdownFormatter;
+        $field = SharpFormMarkdownField::make("md");
+        
+        $this->assertEquals(
+            "before file\n\n![](local:test.png)\n\nafter file",
+            $formatter->fromFront($field, "attribute", [
+                "text" => "before file\n![](local:test.png)\nafter file",
+                "files" => [[
+                    "name" => "local:test.png",
+                    "uploaded" => false
+                ]]
+            ])
+        );
     }
 }
