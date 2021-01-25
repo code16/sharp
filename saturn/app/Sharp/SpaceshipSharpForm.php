@@ -32,7 +32,7 @@ class SpaceshipSharpForm extends SharpForm
     {
         $this->addField(
             SharpFormTextField::make("name")
-                ->setLocalized()
+//                ->setLocalized()
                 ->setLabel("Name")
 
         )->addField(
@@ -140,7 +140,7 @@ class SpaceshipSharpForm extends SharpForm
 
         )->addField(
             SharpFormTextField::make("picture:legend")
-                ->setLocalized()
+//                ->setLocalized()
                 ->setLabel("Legend")
 
         )->addField(
