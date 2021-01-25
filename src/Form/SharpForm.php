@@ -81,11 +81,21 @@ abstract class SharpForm
      */
     public function hasDataLocalizations()
     {
-        return collect($this->fields())
-                ->filter(function($field) {
-                    return $field["localized"] ?? false;
-                })
-                ->count() > 0;
+        foreach($this->fields() as $field) {
+            if($field["localized"] ?? false) {
+                return true;
+            }
+            
+            if($field["type"] === "list") {
+                foreach($field["itemFields"] as $itemField) {
+                    if($itemField["localized"] ?? false) {
+                        return true;
+                    }
+                }
+            }
+        }
+        
+        return false;
     }
 
     /**

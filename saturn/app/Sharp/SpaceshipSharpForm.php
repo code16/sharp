@@ -7,7 +7,6 @@ use App\Pilot;
 use App\Spaceship;
 use App\SpaceshipType;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
-use Code16\Sharp\Form\Eloquent\Transformers\FormUploadModelTransformer;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
@@ -34,7 +33,7 @@ class SpaceshipSharpForm extends SharpForm
     {
         $this->addField(
             SharpFormTextField::make("name")
-                ->setLocalized()
+//                ->setLocalized()
                 ->setLabel("Name")
 
         )->addField(
@@ -142,7 +141,7 @@ class SpaceshipSharpForm extends SharpForm
 
         )->addField(
             SharpFormTextField::make("picture:legend")
-                ->setLocalized()
+//                ->setLocalized()
                 ->setLabel("Legend")
 
         )->addField(
