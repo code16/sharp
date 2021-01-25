@@ -32,10 +32,10 @@ class MarkdownAttributeTransformerTest extends SharpTestCase
             ->storeAs("markdown", "test.jpg", "local");
 
         $object = (object)[
-            "text" => '<p><img src="local:markdown/test.jpg" alt="" /></p>'
+            "text" => "![](local:markdown/test.jpg)"
         ];
 
-        $this->assertStringStartsWith(
+        $this->assertStringContainsString(
             sprintf('<img src="/storage/%s/markdown/10-/test.jpg?', config("sharp.uploads.thumbnails_dir")),
             (new MarkdownAttributeTransformer())->handleImages(10)->apply($object->text, $object, "text")
         );
