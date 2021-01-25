@@ -126,9 +126,6 @@ class FormController extends ApiController
         return response()->json(["ok" => true]);
     }
 
-    /**
-     * @param string $entityKey
-     */
     protected function validateRequest(string $entityKey)
     {
         if($this->isSubEntity($entityKey)) {
@@ -145,21 +142,13 @@ class FormController extends ApiController
         }
     }
 
-    /**
-     * @param SharpForm $form
-     * @return array
-     */
-    protected function dataLocalizations(SharpForm $form)
+    protected function dataLocalizations(SharpForm $form): array
     {
         return $form->hasDataLocalizations()
             ? ["locales" => $form->getDataLocalizations()]
             : [];
     }
 
-    /**
-     * @param SharpForm $form
-     * @param string|null $instanceId
-     */
     protected function checkFormImplementation(SharpForm $form, ?string $instanceId)
     {
         if(!$instanceId && !$form instanceof SharpSingleForm) {
