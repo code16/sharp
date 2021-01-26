@@ -23,6 +23,7 @@
             @ok="setOk"
             @clear="clear"
             @blur="handleBlur"
+            @locale-change="handleLocaleChanged"
             ref="field"
         />
         <div class="SharpForm__form-requirement">{{stateMessage}}</div>

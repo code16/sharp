@@ -17,7 +17,12 @@ export default function (fieldsProp) {
             },
             defaultFieldLocaleMap({ fields, locales }, locale) {
                 return Object.values(fields)
-                    .filter(field => field.localized)
+                    .filter(field => {
+                        if(field.type === 'list') {
+                            return Object.values(field.itemFields ?? {}).some(field => field.localized);
+                        }
+                        return field.localized;
+                    })
                     .reduce((res, field) => ({
                         ...res,
                         [field.key]: locale || locales && locales[0],

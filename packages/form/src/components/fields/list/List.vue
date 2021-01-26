@@ -125,16 +125,19 @@
             maxItemCount: Number,
 
             itemIdAttribute: String,
-            readOnly:Boolean,
-            locale:String
+            readOnly: Boolean,
+            locale: [String, Array],
         },
         data() {
             return {
                 list: [],
-                itemFieldsLocale: [],
                 dragActive: false,
                 lastIndex: 0
             }
+        },
+        watch: {
+            'list': 'handleListChanged',
+            'locale': 'handleLocaleChanged',
         },
         computed: {
             classes() {
@@ -179,6 +182,16 @@
             }
         },
         methods: {
+            handleListChanged() {
+                this.$emit('locale-change', this.list.map(item => item._fieldsLocale));
+            },
+            handleLocaleChanged(locale) {
+                if(typeof locale === 'string') {
+                    this.list.forEach(item => {
+                        Object.assign(item, this.withLocale(null, locale));
+                    });
+                }
+            },
             itemData(item) {
                 const { id, _fieldsLocale, ...data } = item;
                 return data;
@@ -226,6 +239,7 @@
             },
             updateLocale(i, key, value) {
                 this.$set(this.list[i]._fieldsLocale, key, value);
+                this.handleListChanged();
             },
             collapsedItemData(itemData) {
                 return {$index:itemData[this.dragIndexSymbol], ...itemData};
@@ -234,12 +248,12 @@
                 this.dragActive = !this.dragActive;
                 this.list.forEach((item,i) => item[this.dragIndexSymbol] = i);
             },
-            withLocale(item) {
+            withLocale(item, locale) {
                 return {
                     ...item, _fieldsLocale: this.defaultFieldLocaleMap({
                         fields: this.itemFields,
                         locales: this.$form.locales
-                    })
+                    }, locale)
                 };
             },
 

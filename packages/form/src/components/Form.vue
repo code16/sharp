@@ -177,7 +177,15 @@
             },
 
             currentLocale() {
-                const locales = [...new Set(Object.values(this.fieldLocale))];
+                const flattened = Object.values(this.fieldLocale)
+                    .map(locale => Array.isArray(locale)
+                        ? locale.map(itemLocale => Object.values(itemLocale))
+                        : locale)
+                    .flat(2);
+                const locales = [...new Set(flattened)];
+                if(!locales.length) {
+                    return this.locales?.[0]
+                }
                 return locales.length === 1 ? locales[0] : null;
             },
             isUploading() {
