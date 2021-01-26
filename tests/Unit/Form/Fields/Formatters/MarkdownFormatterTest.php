@@ -178,9 +178,9 @@ class MarkdownFormatterTest extends SharpTestCase
         $field = SharpFormMarkdownField::make("md");
         
         $this->assertEquals(
-            "before file\n\n![](local:test.png)\n\nafter file",
+            "before file\n\n![](local:test.png)\n\nafter file with a [link](http://www.google.fr)",
             $formatter->fromFront($field, "attribute", [
-                "text" => "before file\n![](local:test.png)\nafter file",
+                "text" => "before file\n![](local:test.png)\nafter file with a [link](http://www.google.fr)",
                 "files" => [[
                     "name" => "local:test.png",
                     "uploaded" => false

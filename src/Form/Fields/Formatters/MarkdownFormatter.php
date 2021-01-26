@@ -78,7 +78,7 @@ class MarkdownFormatter extends SharpFieldFormatter
         // Ensure \n\n before file...
         $text = preg_replace('/([^\n])\n!\[/', "$1\n\n![", $text);
         // ... and \n\n after file.
-        $text = preg_replace('/(\[\]\(.*\))\n([^\n])/', "$1\n\n$2", $text);
+        $text = preg_replace('/(!\[\]\(.*\))\n([^\n])/', "$1\n\n$2", $text);
 
         return $text;
     }
