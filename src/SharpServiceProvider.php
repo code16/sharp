@@ -18,6 +18,7 @@ use Code16\Sharp\Http\Middleware\Api\SetSharpLocale;
 use Code16\Sharp\Http\Middleware\InvalidateCache;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
+use Code16\Sharp\View\Components\Field;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Intervention\Image\ImageServiceProviderLaravelRecent;
@@ -32,6 +33,9 @@ class SharpServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__.'/routes.php');
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'sharp');
+        $this->loadViewComponentsAs('sharp', [
+            Field::class,
+        ]);
 
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang/back', 'sharp');
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang/front', 'sharp-front');
