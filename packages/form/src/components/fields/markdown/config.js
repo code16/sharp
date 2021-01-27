@@ -68,6 +68,12 @@ export const buttons = {
         className: getToolbarIcon('image'),
         title: "Insert Image",
     },
+    "document": {
+        name: "document",
+        action: SimpleMDE.drawImage,
+        className: getToolbarIcon('document'),
+        title: "Insert Document",
+    },
     "horizontal-rule": {
         name: "horizontal-rule",
         action: SimpleMDE.drawHorizontalRule,

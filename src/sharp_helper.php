@@ -75,23 +75,42 @@ function sharp_check_ability(string $ability, string $entityKey, string $instanc
         ->check($ability, $entityKey, $instanceId);
 }
 
-/**
- * Replace embedded images with thumbnails in a SharpMarkdownField's markdown text.
- */
+/** @deprecated  */
 function sharp_markdown_thumbnails(string $html, string $classNames, int $width = null, int $height = null, array $filters = []): string
 {
-    preg_match_all('/<img src="(.*)".*>/U', $html, $matches, PREG_SET_ORDER);
+    return sharp_markdown_embedded_files($html, $classNames, $width, $height, $filters);
+}
+
+/**
+ * Handle embedded images and files in a SharpMarkdownField's markdown text.
+ */
+function sharp_markdown_embedded_files(
+    string $html, string $classNames, 
+    int $width = null, int $height = null, array $filters = [], 
+    string $viewName = 'public.markdown-embedded-file'): string
+{
+    preg_match_all('/<p><img src="(.*)".*><\/p>/U', $html, $matches, PREG_SET_ORDER);
 
     foreach($matches as $match) {
         list($disk, $file_name) = explode(":", $match[1]);
 
         $model = new Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel(compact('disk', 'file_name'));
-
-        $html = str_replace(
-            $match[0],
-            sprintf('<img src="%s" class="%s" alt="">', $model->thumbnail($width, $height, $filters), $classNames),
-            $html
-        );
+        
+        $disk = \Illuminate\Support\Facades\Storage::disk($model->disk);
+        if($disk->exists($model->file_name)) {
+            $html = str_replace(
+                $match[0],
+                view("sharp::$viewName", [
+                    "fileModel" => $model,
+                    "isImage" => in_array($disk->mimeType($model->file_name), ['image/jpeg','image/gif','image/png','image/bmp']),
+                    "classNames" => $classNames,
+                    "width" => $width,
+                    "height" => $height,
+                    "filters" => $filters,
+                ]),
+                $html
+            );
+        }
     }
 
     return $html;

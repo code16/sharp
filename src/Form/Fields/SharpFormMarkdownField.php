@@ -9,7 +9,9 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 
 class SharpFormMarkdownField extends SharpFormField
 {
-    use SharpFormFieldWithPlaceholder, SharpFormFieldWithUpload, SharpFormFieldWithDataLocalization;
+    use SharpFormFieldWithPlaceholder, 
+        SharpFormFieldWithUpload, 
+        SharpFormFieldWithDataLocalization;
 
     const FIELD_TYPE = "markdown";
 
@@ -24,18 +26,14 @@ class SharpFormMarkdownField extends SharpFormField
     const H3 = "heading-3";
     const CODE = "code";
     const QUOTE = "quote";
+    /** @deprecated use DOC */
     const IMG = "image";
+    const DOC = "document";
     const HR = "horizontal-rule";
 
-    /**
-     * @var int
-     */
-    protected $height;
+    protected ?int $height = null;
 
-    /**
-     * @var array
-     */
-    protected $toolbar = [
+    protected array $toolbar = [
         self::B, self::I,
         self::SEPARATOR,
         self::UL,
@@ -43,66 +41,42 @@ class SharpFormMarkdownField extends SharpFormField
         self::A,
     ];
 
-    /**
-     * @var bool
-     */
-    protected $showToolbar = true;
+    protected bool $showToolbar = true;
 
-    /**
-     * @param string $key
-     * @return static
-     */
-    public static function make(string $key)
+    public static function make(string $key): self
     {
         return new static($key, static::FIELD_TYPE, new MarkdownFormatter());
     }
 
-    /**
-     * @param int $height
-     * @return static
-     */
-    public function setHeight(int $height)
+    public function setHeight(int $height): self
     {
         $this->height = $height;
 
         return $this;
     }
 
-    /**
-     * @param array $toolbar
-     * @return static
-     */
-    public function setToolbar(array $toolbar)
+    public function setToolbar(array $toolbar): self
     {
         $this->toolbar = $toolbar;
 
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function hideToolbar()
+    public function hideToolbar(): self
     {
         $this->showToolbar = false;
 
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function showToolbar()
+    public function showToolbar(): self
     {
         $this->showToolbar = true;
 
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    protected function validationRules()
+    protected function validationRules(): array
     {
         return [
             "height" => "integer",
@@ -114,10 +88,6 @@ class SharpFormMarkdownField extends SharpFormField
         ];
     }
 
-    /**
-     * @return array
-     * @throws \Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException
-     */
     public function toArray(): array
     {
         return parent::buildArray([
@@ -131,18 +101,20 @@ class SharpFormMarkdownField extends SharpFormField
         ]);
     }
 
-    /**
-     * @return array
-     */
-    protected function innerComponentUploadConfiguration()
+    protected function innerComponentUploadConfiguration(): array
     {
-        $array = ["maxImageSize" => $this->maxFileSize ?: 2];
+        $array = ["maxFileSize" => $this->maxFileSize ?: 2];
 
         if($this->cropRatio) {
             $array["ratioX"] = (int)$this->cropRatio[0];
             $array["ratioY"] = (int)$this->cropRatio[1];
             $array["croppableFileTypes"] = $this->croppableFileTypes;
         }
+        
+        if(!$this->fileFilter) {
+            $this->setFileFilterImages();
+        }
+        $array["fileFilter"] = $this->fileFilter;
 
         return $array;
     }

@@ -12,16 +12,21 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
     {
         $formField = SharpFormMarkdownField::make("text");
 
-        $this->assertEquals([
-                "key" => "text", "type" => "markdown", "toolbar" => [
+        $this->assertEquals(
+            [
+                "key" => "text", "type" => "markdown", 
+                "toolbar" => [
                     SharpFormMarkdownField::B, SharpFormMarkdownField::I, SharpFormMarkdownField::SEPARATOR,
                     SharpFormMarkdownField::UL, SharpFormMarkdownField::SEPARATOR, SharpFormMarkdownField::A,
-                ], "innerComponents" => [
+                ], 
+                "innerComponents" => [
                     "upload" => [
-                        "maxImageSize" => 2
+                        "maxFileSize" => 2,
+                        "fileFilter" => [".jpg",".jpeg",".gif",".png"]
                     ]
                 ]
-            ], $formField->toArray()
+            ], 
+            $formField->toArray()
         );
     }
 
@@ -46,22 +51,41 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
         $this->assertArraySubset([
             "innerComponents" => [
                 "upload" => [
-                    "maxImageSize" => 50
+                    "maxFileSize" => 50
                 ]
             ]
         ], $formField->toArray());
 
         $formField->setCropRatio("16:9");
 
-        $this->assertArraySubset([
-            "innerComponents" => [
-                "upload" => [
-                    "maxImageSize" => 50,
-                    "ratioX" => 16,
-                    "ratioY" => 9
+        $this->assertArraySubset(
+            [
+                "innerComponents" => [
+                    "upload" => [
+                        "maxFileSize" => 50,
+                        "ratioX" => 16,
+                        "ratioY" => 9
+                    ]
                 ]
-            ]
-        ], $formField->toArray());
+            ], 
+            $formField->toArray()
+        );
+        
+        $formField->setFileFilter(["jpg", "pdf"]);
+
+        $this->assertArraySubset(
+            [
+                "innerComponents" => [
+                    "upload" => [
+                        "maxFileSize" => 50,
+                        "ratioX" => 16,
+                        "ratioY" => 9,
+                        "fileFilter" => [".jpg", ".pdf"]
+                    ]
+                ]
+            ],
+            $formField->toArray()
+        );
     }
 
     /** @test */

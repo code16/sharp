@@ -6,8 +6,6 @@
 
   .editor-toolbar {
     @extend .SharpModule__header;
-    border: none;
-    border-radius: 0;
   }
 
   &__upload-line {
