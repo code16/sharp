@@ -18,7 +18,7 @@
             fieldProps: Object,
             fieldLayout: Object,
             value: [String, Number, Boolean, Object, Array, Date],
-            locale: String,
+            locale: [Array, String],
             uniqueIdentifier: String,
             fieldConfigIdentifier: String,
             updateData: Function,
@@ -68,7 +68,8 @@
                     },
                     blur: () => {
                         this.fieldProps.focused = false;
-                    }
+                    },
+                    ...this.$listeners,
                 }
             });
         }
