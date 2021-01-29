@@ -33,7 +33,7 @@
 </template>
 
 <script>
-    import { logError } from 'sharp';
+    import { logError, lang } from 'sharp';
     import { Identifier, ConfigNode }  from 'sharp/mixins';
     import Field from '../Field';
     import FieldLocaleSelect from './FieldLocaleSelect';
@@ -134,7 +134,9 @@
                     this.setError(error[0]);
                 }
                 else if(this.errorsLocales.length > 0) {
-                    this.setError(`There is an error in : ${this.errorsLocales.join(', ').toUpperCase()}`);
+                    const locales = this.errorsLocales.join(', ').toUpperCase();
+                    const message = lang('form.validation_error.localized').replace(':locales', locales);
+                    this.setError(message);
                 }
                 else if(error == null) {
                     this.clear(false);
