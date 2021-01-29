@@ -136,7 +136,10 @@
                 else if(this.errorsLocales.length > 0) {
                     this.setError(`There is an error in : ${this.errorsLocales.join(', ').toUpperCase()}`);
                 }
-                else if(error != null) {
+                else if(error == null) {
+                    this.clear(false);
+                }
+                else {
                     logError(`FieldContainer : Not processable error "${this.mergedErrorIdentifier}" : `, error);
                 }
             },
@@ -149,7 +152,7 @@
                 this.state = 'ok';
                 this.stateMessage = '';
             },
-            clear(emits) {
+            clear(emits = true) {
                 this.state = 'default';
                 this.stateMessage = '';
                 if(emits) {
@@ -171,7 +174,7 @@
             },
             handleValueChanged() {
                 if(this.state === 'error') {
-                    this.clear(true);
+                    this.clear();
                 }
             },
             handleLocaleChanged(locale) {
