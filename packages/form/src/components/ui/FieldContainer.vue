@@ -13,6 +13,7 @@
                         :current-locale="locale"
                         :field-value="resolvedOriginalValue"
                         :is-locale-object="isLocaleObject"
+                        :errors="errorsLocales"
                         @change="handleLocaleChanged"
                     />
                 </div>
@@ -33,23 +34,23 @@
 
 <script>
     import { logError } from 'sharp';
-    import { ErrorNode, ConfigNode }  from 'sharp/mixins';
+    import { Identifier, ConfigNode }  from 'sharp/mixins';
     import Field from '../Field';
     import FieldLocaleSelect from './FieldLocaleSelect';
-    import { resolveTextValue, isLocalizableValueField } from '../../util/locale';
+    import { resolveTextValue, isLocalizableValueField } from '../../util';
 
 
     export default {
         name: 'SharpFieldContainer',
 
-        mixins: [ ErrorNode, ConfigNode ],
+        mixins: [ Identifier, ConfigNode ],
 
         components: {
             Field,
             FieldLocaleSelect,
         },
 
-        inject:['$tab', '$form'],
+        inject: ['$tab', '$form'],
 
         props : {
             ...Field.props,
@@ -57,17 +58,19 @@
             label: String,
             helpMessage: String,
             originalValue: [String, Number, Boolean, Object, Array, Date],
+            errorIdentifier: [String, Number],
+            localizedErrorIdentifier: String,
         },
         data() {
             return {
-                state:'classic',
-                stateMessage:''
+                state: 'default',
+                stateMessage: ''
             }
         },
         watch: {
-            value() {
-                if(this.state === 'error')
-                    this.clear();
+            originalValue: {
+                deep: true,
+                handler: 'handleValueChanged',
             },
             '$form.errors'(errors) {
                 this.updateError(errors);
@@ -81,7 +84,7 @@
                 return [
                     `SharpForm__form-item--type-${this.fieldType}`,
                     {
-                        'SharpForm__form-item--danger': this.state==='error',
+                        'SharpForm__form-item--danger': this.state==='error' || this.errorsLocales.length > 0,
                         'SharpForm__form-item--success': this.state==='ok',
                         'SharpForm__form-item--no-label': !this.showLabel,
                     }
@@ -105,45 +108,71 @@
             },
             isLocaleObject() {
                 return isLocalizableValueField(this.fieldProps);
-            }
+            },
+            mergedErrorIdentifier() {
+                return this.getMergedIdentifier('mergedErrorIdentifier', this.errorIdentifier);
+            },
+            mergedLocalizedErrorIdentifier() {
+                return this.localizedErrorIdentifier
+                    ? this.getMergedIdentifier('mergedErrorIdentifier', this.localizedErrorIdentifier)
+                    : null;
+            },
+            errorsLocales() {
+                return Object.entries(this.$form.errors)
+                    .filter(([key, value]) => !!value)
+                    .reduce((res, [key]) => {
+                        const match = key.match(new RegExp(`^${this.mergedErrorIdentifier}\\.([^.]+)$`));
+                        const locale = match?.[1];
+                        return locale ? [...res, locale] : res;
+                    }, []);
+            },
         },
         methods: {
             updateError(errors) {
-                let error = errors[this.mergedErrorIdentifier];
-                if(error == null) {
-                    this.clear();
-                }
-                else if(Array.isArray(error)) {
+                const error = errors[this.mergedLocalizedErrorIdentifier] ?? errors[this.mergedErrorIdentifier];
+                if(Array.isArray(error)) {
                     this.setError(error[0]);
                 }
-                else {
+                else if(this.errorsLocales.length > 0) {
+                    this.setError(`There is an error in : ${this.errorsLocales.join(', ').toUpperCase()}`);
+                }
+                else if(error != null) {
                     logError(`FieldContainer : Not processable error "${this.mergedErrorIdentifier}" : `, error);
                 }
             },
             setError(error) {
                 this.state = 'error';
                 this.stateMessage = error;
-                if(this.$tab) {
-                    this.$tab.$emit('error', this.mergedErrorIdentifier);
-                }
+                this.$tab?.$emit('error', this.mergedErrorIdentifier);
             },
             setOk() {
                 this.state = 'ok';
                 this.stateMessage = '';
             },
-            clear() {
-                this.state = 'classic';
+            clear(emits) {
+                this.state = 'default';
                 this.stateMessage = '';
-                if(this.$tab) {
-                    this.$tab.$emit('clear', this.mergedErrorIdentifier);
+                if(emits) {
+                    this.emitClear(this.mergedErrorIdentifier);
+                    if(this.mergedLocalizedErrorIdentifier) {
+                        this.emitClear(this.mergedLocalizedErrorIdentifier);
+                    }
                 }
-                this.$form.$emit('error-cleared', this.mergedErrorIdentifier);
+            },
+            emitClear(identifier) {
+                this.$tab?.$emit('clear', identifier);
+                this.$form.$emit('error-cleared', identifier);
             },
             triggerFocus() {
                 this.$set(this.fieldProps,'focused',true);
             },
             handleBlur() {
                 this.$set(this.fieldProps,'focused',false);
+            },
+            handleValueChanged() {
+                if(this.state === 'error') {
+                    this.clear(true);
+                }
             },
             handleLocaleChanged(locale) {
                 this.$emit('locale-change', this.fieldKey, locale);
