@@ -1,4 +1,4 @@
-import Identifier from './utils/Identifier';
+import Identifier from './Identifier';
 
 export default {
     mixins: [Identifier],

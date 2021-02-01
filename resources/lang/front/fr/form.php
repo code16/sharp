@@ -4,6 +4,7 @@ return [
 
     'validation_error.title' => 'Votre saisie est invalide.',
     'validation_error.description' => 'Veuillez contrôler votre saisie, les erreurs sont indiquées sous chaque champ.',
+    'validation_error.localized' => 'Il y a une erreur avec la/les langue(s) : :locales',
 
     'list.remove_button' => 'Supprimer',
     'list.insert_button' => 'Insérer',

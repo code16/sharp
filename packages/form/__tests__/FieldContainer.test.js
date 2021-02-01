@@ -107,7 +107,7 @@ describe('field-container', () => {
         $fieldContainer.$form.$on('error-cleared', formClearHandler);
         field.$emit('clear');
 
-        expect($fieldContainer.state).toBe('classic');
+        expect($fieldContainer.state).toBe('default');
         expect($fieldContainer.stateMessage).toBe('');
         expect(tabClearHandler).toHaveBeenCalledWith('error.title');
         expect(formClearHandler).toHaveBeenCalledWith('error.title');
