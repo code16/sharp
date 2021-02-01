@@ -90,7 +90,7 @@
 
   &__form-requirement {
     @include reset;
-    @include font-size('11');
+    font-size: .75rem;
     margin: .75rem 0 0;
     max-height: 0;
     overflow: hidden;
@@ -98,12 +98,14 @@
     line-height: 1.5;
 
     &:empty {
-      display:none;
+      display: none;
     }
 
     &::before {
       content: '*';
       display: inline-block;
+      margin-right: .25em;
+      margin-left: -.25em;
       color: $support-01;
     }
   }
