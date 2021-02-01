@@ -6,6 +6,7 @@
                 :class="{
                     'SharpFieldLocaleSelect__btn--active': isActive(locale),
                     'SharpFieldLocaleSelect__btn--empty': isEmpty(locale),
+                    'SharpFieldLocaleSelect__btn--error': hasError(locale),
                 }"
                 @click="handleButtonClicked(locale)"
             >
@@ -28,6 +29,7 @@
             },
             fieldValue: [String, Number, Boolean, Object, Array],
             isLocaleObject: Boolean,
+            errors: Array,
         },
         methods: {
             isActive(locale) {
@@ -36,6 +38,9 @@
             isEmpty(locale) {
                 const value = this.isLocaleObject ? (this.fieldValue || {})[locale] : this.fieldValue;
                 return Array.isArray(value) ? !value.length : !value;
+            },
+            hasError(locale) {
+                return this.errors?.includes(locale);
             },
             handleButtonClicked(locale) {
                 this.$emit('change', locale);

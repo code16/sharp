@@ -236,7 +236,7 @@ describe('sharp-form', ()=>{
 
         wrapper.setData({
             errors: {
-                field: { cleared:true },
+                field: null,
             }
         });
 

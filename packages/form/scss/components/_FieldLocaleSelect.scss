@@ -1,6 +1,8 @@
 .SharpFieldLocaleSelect {
   margin-bottom: 0.625rem;
   &__btn {
+    display: inline-flex;
+    align-items: center;
     text-transform: uppercase;
     background: $ui-01;
     border: 1px solid $ui-03;
@@ -9,17 +11,25 @@
     -webkit-appearance: none;
     outline: 0;
     cursor: pointer;
+    font-size: .75rem;
 
-    &:hover {
+    &--empty {
+      border: 1px dashed $brand-01;
+      background: transparent;
+    }
+    &--active {
+      background: $brand-01;
+      color: $inverse-01;
+    }
+    &--error {
+      @extend .error-dot;
+      &::after {
+        margin-left: .5em;
+      }
+    }
+
+    &:hover, &:focus {
       border: 1px solid $brand-01;
     }
-  }
-  &__btn--empty {
-    border: 1px dashed $brand-01;
-    background: transparent;
-  }
-  &__btn--active {
-    background: $brand-01;
-    color: $inverse-01;
   }
 }

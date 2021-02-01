@@ -159,7 +159,7 @@
                 return this.independant;
             },
             hasErrors() {
-                return Object.keys(this.errors).some(errorKey => !this.errors[errorKey].cleared);
+                return Object.values(this.errors).some(error => !!error);
             },
 
             baseEntityKey() {
@@ -348,8 +348,10 @@
         },
         created() {
             this.$on('error-cleared', errorId => {
-                if(this.errors[errorId])
-                    this.$set(this.errors[errorId],'cleared',true);
+                this.errors = {
+                    ...this.errors,
+                    [errorId]: null,
+                }
             });
         },
         mounted() {

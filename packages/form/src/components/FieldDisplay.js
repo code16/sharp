@@ -20,12 +20,6 @@ const getValue = (form, field, value, locale) => {
     return value;
 };
 
-const getIdentifier = (identifier, field, locale) => {
-    if(field.localized)
-        return `${identifier}.${locale}`;
-    return identifier;
-};
-
 
 export default {
     name: 'SharpFieldDisplay',
@@ -71,7 +65,10 @@ export default {
                 originalValue: value,
                 label: field.label,
                 helpMessage: field.helpMessage,
-                errorIdentifier: getIdentifier(errorIdentifier, field, props.locale),
+                errorIdentifier,
+                localizedErrorIdentifier: field.localized
+                    ? `${errorIdentifier}.${props.locale}`
+                    : null,
                 ...sharedProps
             }
         }) : null
