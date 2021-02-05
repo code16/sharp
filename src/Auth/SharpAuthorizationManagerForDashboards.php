@@ -13,7 +13,7 @@ class SharpAuthorizationManagerForDashboards
      * @param string $dashboardKey
      * @throws SharpAuthorizationException
      */
-    public function checkForDashboard(string $ability, string $dashboardKey)
+    public function checkForDashboard(string $ability, string $dashboardKey): void
     {
         if(!$this->hasPolicyFor($dashboardKey)) {
             return;
@@ -36,7 +36,7 @@ class SharpAuthorizationManagerForDashboards
      * @param string $entityKey
      * @return bool
      */
-    private function hasPolicyFor(string $entityKey)
+    private function hasPolicyFor(string $entityKey): bool
     {
         return config("sharp.dashboards.{$entityKey}.policy") != null;
     }

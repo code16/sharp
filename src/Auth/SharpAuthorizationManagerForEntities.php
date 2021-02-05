@@ -7,13 +7,7 @@ use Illuminate\Contracts\Auth\Access\Gate;
 
 class SharpAuthorizationManagerForEntities
 {
-    /**
-     * @param string $ability
-     * @param string $entityKey
-     * @param null $instanceId
-     * @throws SharpAuthorizationException
-     */
-    public function checkForEntity(string $ability, string $entityKey, $instanceId = null)
+    public function checkForEntity(string $ability, string $entityKey, ?string $instanceId = null): void
     {
         // Check entity-level policy authorization
         $this->checkEntityLevelAuthorization($entityKey);
@@ -33,7 +27,7 @@ class SharpAuthorizationManagerForEntities
      * @param string $entityKey
      * @throws SharpAuthorizationException
      */
-    protected function checkEntityLevelAuthorization(string $entityKey)
+    protected function checkEntityLevelAuthorization(string $entityKey): void
     {
         if($this->isSpecificallyForbidden("entity", $entityKey)) {
             $this->deny();
@@ -110,11 +104,7 @@ class SharpAuthorizationManagerForEntities
         throw new SharpAuthorizationException("Unauthorized action");
     }
 
-    /**
-     * @param string $entityKey
-     * @return bool
-     */
-    private function hasPolicyFor(string $entityKey)
+    private function hasPolicyFor(string $entityKey): bool
     {
         return config("sharp.entities.{$entityKey}.policy") != null;
     }
