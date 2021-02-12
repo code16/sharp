@@ -25,7 +25,7 @@ use Intervention\Image\ImageServiceProviderLaravelRecent;
 class SharpServiceProvider extends ServiceProvider
 {
     /** @var string */
-    const VERSION = '6.0.0-alpha.5';
+    const VERSION = '6.0.0-alpha.6';
 
     public function boot()
     {
