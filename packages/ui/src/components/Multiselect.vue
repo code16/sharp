@@ -3,11 +3,11 @@
     import DropdownArrow from './dropdown/Arrow';
 
     import { lang } from 'sharp';
-
+    import { multiselectUpdateScroll } from "../util";
 
     export default {
-        name:'SharpMultiselect',
-        functional:true,
+        name: 'SharpMultiselect',
+        functional: true,
         render(h, { data, children=[], slots ,props }) {
 
             if(!props.placeholder) {
@@ -20,6 +20,11 @@
 
             return h({
                 'extends': Multiselect,
+                watch: {
+                    isOpen(open) {
+                        open && multiselectUpdateScroll(this);
+                    }
+                },
                 computed: {
                     isSingleLabelVisible() {
                         // vue-multiselect #851

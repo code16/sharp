@@ -2,7 +2,7 @@ import axios from 'axios';
 import { apiUrl } from "sharp";
 import { validateAutocompleteResponse } from "./util/autocomplete";
 
-export function getAutocompleteSuggestions({ url, method, locale, searchAttribute, query, dataWrapper, fieldKey }) {
+export function getAutocompleteSuggestions({ url, method, locale, searchAttribute, query, dataWrapper, fieldKey, cancelToken, }) {
     const isGet = method.toLowerCase() === 'get';
     const params = {
         locale,
@@ -13,6 +13,7 @@ export function getAutocompleteSuggestions({ url, method, locale, searchAttribut
         method,
         params: isGet ? params : undefined,
         data: !isGet ? params : undefined,
+        cancelToken,
     })
     .then(response => {
         if(!validateAutocompleteResponse({ results:response.data, dataWrapper, fieldKey, url })) {

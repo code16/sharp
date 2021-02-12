@@ -74,9 +74,10 @@
 <script>
     import debounce from 'lodash/debounce';
     import Multiselect from 'vue-multiselect';
+    import { CancelToken } from 'axios';
     import { warn, lang, search } from 'sharp';
     import { TemplateRenderer } from 'sharp/components';
-    import { Loading } from 'sharp-ui';
+    import { Loading, multiselectUpdateScroll } from 'sharp-ui';
     import { Localization } from 'sharp/mixins';
 
     import { getAutocompleteSuggestions } from "../../api";
@@ -151,6 +152,10 @@
                 default:true
             },
             dynamicAttributes: Array,
+            debounceDelay: {
+                type: Number,
+                default: 400,
+            }
         },
         data() {
             return {
@@ -212,7 +217,9 @@
                     ? search(this.localValues, query, { searchKeys: this.searchKeys })
                     : this.localValues;
             },
-            updateRemoteSuggestions: debounce(function(query) {
+            updateRemoteSuggestions(query) {
+                this.cancelSource?.cancel();
+                this.cancelSource = CancelToken.source();
                 return getAutocompleteSuggestions({
                     url: this.remoteEndpoint,
                     method: this.remoteMethod,
@@ -221,15 +228,19 @@
                     dataWrapper: this.dataWrapper,
                     fieldKey: this.fieldKey,
                     query,
+                    cancelToken: this.cancelSource.token,
                 })
                 .then(suggestions => {
                     this.suggestions = suggestions;
+                    this.scroll();
                 })
                 .finally(() => {
                     this.isLoading = false;
                 });
-            }, 200),
-
+            },
+            scroll() {
+               multiselectUpdateScroll(this);
+            },
             handleSelect(value) {
                 this.$emit('input', value);
             },
@@ -240,6 +251,7 @@
             handleDropdownOpen() {
                 this.opened = true;
                 this.$emit('open');
+                this.scroll();
             },
             handleClearButtonClicked() {
                 this.$emit('input', null);
@@ -266,6 +278,8 @@
             }
         },
         created() {
+            this.updateRemoteSuggestions = debounce(this.updateRemoteSuggestions, this.debounceDelay);
+
             if(this.mode === 'local' && !this.searchKeys) {
                 warn(`Autocomplete (key: ${this.fieldKey}) has local mode but no searchKeys, default set to ['value']`);
             }
