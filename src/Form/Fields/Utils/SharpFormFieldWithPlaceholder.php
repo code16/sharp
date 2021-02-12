@@ -4,16 +4,9 @@ namespace Code16\Sharp\Form\Fields\Utils;
 
 trait SharpFormFieldWithPlaceholder
 {
-    /**
-     * @var string
-     */
-    protected $placeholder;
+    protected ?string $placeholder = null;
 
-    /**
-     * @param string $placeholder
-     * @return static
-     */
-    public function setPlaceholder(string $placeholder)
+    public function setPlaceholder(string $placeholder): self
     {
         $this->placeholder = $placeholder;
 

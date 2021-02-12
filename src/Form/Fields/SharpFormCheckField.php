@@ -9,17 +9,9 @@ class SharpFormCheckField extends SharpFormField
 {
     const FIELD_TYPE = "check";
 
-    /**
-     * @var string
-     */
-    protected $text;
+    protected string $text;
 
-    /**
-     * @param string $key
-     * @param string $text
-     * @return static
-     */
-    public static function make(string $key, string $text)
+    public static function make(string $key, string $text): self
     {
         $instance = new static($key, static::FIELD_TYPE, new CheckFormatter);
         $instance->text = $text;
@@ -27,31 +19,20 @@ class SharpFormCheckField extends SharpFormField
         return $instance;
     }
 
-    /**
-     * @param string $text
-     * @return $this
-     */
-    public function setText(string $text)
+    public function setText(string $text): self
     {
         $this->text = $text;
 
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    protected function validationRules()
+    protected function validationRules(): array
     {
         return [
             "text" => "required",
         ];
     }
 
-    /**
-     * @return array
-     * @throws \Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException
-     */
     public function toArray(): array
     {
         return parent::buildArray([

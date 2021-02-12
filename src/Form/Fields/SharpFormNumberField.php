@@ -11,84 +11,45 @@ class SharpFormNumberField extends SharpFormField
 
     const FIELD_TYPE = "number";
 
-    /**
-     * @var int
-     */
-    protected $min;
+    protected ?int $min = null;
+    protected ?int $max = null;
+    protected int $step = 1;
+    protected bool $showControls = false;
 
-    /**
-     * @var int
-     */
-    protected $max;
-
-    /**
-     * @var int
-     */
-    protected $step = 1;
-
-    /**
-     * @var bool
-     */
-    protected $showControls = false;
-
-    /**
-     * @param string $key
-     * @return static
-     */
-    public static function make(string $key)
+    public static function make(string $key): self
     {
         return new static($key, static::FIELD_TYPE, new NumberFormatter);
     }
 
-    /**
-     * @param int $min
-     * @return $this
-     */
-    public function setMin(int $min)
+    public function setMin(int $min): self
     {
         $this->min = $min;
 
         return $this;
     }
 
-    /**
-     * @param int $max
-     * @return $this
-     */
-    public function setMax(int $max)
+    public function setMax(int $max): self
     {
         $this->max = $max;
 
         return $this;
     }
 
-    /**
-     * @param int $step
-     * @return $this
-     */
-    public function setStep(int $step)
+    public function setStep(int $step): self
     {
         $this->step = $step;
 
         return $this;
     }
 
-    /**
-     * @param bool $showControls
-     * @return $this
-     */
-    public function setShowControls(bool $showControls = true)
+    public function setShowControls(bool $showControls = true): self
     {
         $this->showControls = $showControls;
 
         return $this;
     }
 
-
-    /**
-     * @return array
-     */
-    protected function validationRules()
+    protected function validationRules(): array
     {
         return [
             "min" => "integer",
@@ -98,10 +59,6 @@ class SharpFormNumberField extends SharpFormField
         ];
     }
 
-    /**
-     * @return array
-     * @throws \Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException
-     */
     public function toArray(): array
     {
         return parent::buildArray([

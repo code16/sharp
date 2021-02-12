@@ -4,17 +4,9 @@ namespace Code16\Sharp\Form\Fields\Utils;
 
 trait SharpFormFieldWithTemplates
 {
-    /**
-     * @var array
-     */
-    protected $templates = [];
+    protected array $templates = [];
 
-    /**
-     * @param string $templatePath
-     * @param string $key
-     * @return $this
-     */
-    protected function setTemplatePath(string $templatePath, string $key)
+    protected function setTemplatePath(string $templatePath, string $key): self
     {
         return $this->setInlineTemplate(
             file_get_contents(resource_path("views/" . $templatePath)),
@@ -22,25 +14,15 @@ trait SharpFormFieldWithTemplates
         );
     }
 
-    /**
-     * @param string $template
-     * @param string $key
-     * @return $this
-     */
-    protected function setInlineTemplate(string $template, string $key)
+    protected function setInlineTemplate(string $template, string $key): self
     {
         $this->templates[$key] = $template;
 
         return $this;
     }
 
-    /**
-     * @param string $key
-     * @return string|null
-     */
-    protected function template(string $key)
+    protected function template(string $key): ?string
     {
         return $this->templates[$key] ?? null;
     }
-
 }

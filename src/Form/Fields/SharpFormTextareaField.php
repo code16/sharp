@@ -13,45 +13,27 @@ class SharpFormTextareaField extends SharpFormField
 
     const FIELD_TYPE = "textarea";
 
-    /**
-     * @var int
-     */
-    protected $rows;
+    protected ?int $rows = null;
 
-    /**
-     * @param string $key
-     * @return static
-     */
-    public static function make(string $key)
+    public static function make(string $key): self
     {
         return new static($key, static::FIELD_TYPE, new TextareaFormatter);
     }
 
-    /**
-     * @param int $rows
-     * @return $this
-     */
-    public function setRowCount(int $rows)
+    public function setRowCount(int $rows): self
     {
         $this->rows = $rows;
 
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    protected function validationRules()
+    protected function validationRules(): array
     {
         return [
             "rows" => "integer|min:1",
         ];
     }
 
-    /**
-     * @return array
-     * @throws \Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException
-     */
     public function toArray(): array
     {
         return parent::buildArray([

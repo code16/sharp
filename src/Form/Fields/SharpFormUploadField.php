@@ -11,19 +11,12 @@ class SharpFormUploadField extends SharpFormField
 
     const FIELD_TYPE = "upload";
 
-    /**
-     * @param string $key
-     * @return static
-     */
-    public static function make(string $key)
+    public static function make(string $key): self
     {
         return new static($key, static::FIELD_TYPE, new UploadFormatter);
     }
 
-    /**
-     * @return array
-     */
-    protected function validationRules()
+    protected function validationRules(): array
     {
         return [
             "maxFileSize" => "numeric",
@@ -35,10 +28,6 @@ class SharpFormUploadField extends SharpFormField
         ];
     }
 
-    /**
-     * @return array
-     * @throws \Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException
-     */
     public function toArray(): array
     {
         return parent::buildArray([

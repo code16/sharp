@@ -11,99 +11,56 @@ class SharpFormListField extends SharpFormField
 
     const FIELD_TYPE = "list";
 
-    /** @var bool */
-    protected $addable = false;
+    protected bool $addable = false;
+    protected bool $sortable = false;
+    protected bool $removable = false;
+    protected string $addText = "Add an item";
+    protected string $itemIdAttribute = "id";
+    protected ?string $orderAttribute = null;
+    protected ?int $maxItemCount = null;
+    protected array $itemFields = [];
 
-    /** @var bool */
-    protected $sortable = false;
-
-    /** @var bool */
-    protected $removable = false;
-
-    /** @var string */
-    protected $addText = "Add an item";
-
-    /** @var string */
-    protected $itemIdAttribute = "id";
-
-    /** @var string */
-    protected $orderAttribute = null;
-
-    /** @var int */
-    protected $maxItemCount = null;
-
-    /** @var array */
-    protected $itemFields = [];
-
-    /**
-     * @param string $key
-     * @return static
-     */
-    public static function make(string $key)
+    public static function make(string $key): self
     {
         return new static($key, static::FIELD_TYPE, new ListFormatter);
     }
 
-    /**
-     * @param bool $addable
-     * @return static
-     */
-    public function setAddable(bool $addable = true)
+    public function setAddable(bool $addable = true): self
     {
         $this->addable = $addable;
 
         return $this;
     }
 
-    /**
-     * @param bool $sortable
-     * @return static
-     */
-    public function setSortable(bool $sortable = true)
+    public function setSortable(bool $sortable = true): self
     {
         $this->sortable = $sortable;
 
         return $this;
     }
 
-    /**
-     * @param bool $removable
-     * @return static
-     */
-    public function setRemovable(bool $removable = true)
+    public function setRemovable(bool $removable = true): self
     {
         $this->removable = $removable;
 
         return $this;
     }
 
-    /**
-     * @param string $addText
-     * @return static
-     */
-    public function setAddText(string $addText)
+    public function setAddText(string $addText): self
     {
         $this->addText = $addText;
 
         return $this;
     }
 
-    /**
-     * @param string $orderAttribute
-     * @return static
-     */
-    public function setOrderAttribute(string $orderAttribute)
+    public function setOrderAttribute(string $orderAttribute): self
     {
         $this->orderAttribute = $orderAttribute;
 
         return $this;
     }
 
-    /**
-     * @param int $maxItemCount
-     * @return static
-     */
-    public function setMaxItemCount(int $maxItemCount = null)
+    public function setMaxItemCount(int $maxItemCount = null): self
     {
         if($maxItemCount === null) {
             return $this->setMaxItemCountUnlimited();
@@ -114,105 +71,67 @@ class SharpFormListField extends SharpFormField
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function setMaxItemCountUnlimited()
+    public function setMaxItemCountUnlimited(): self
     {
         $this->maxItemCount = null;
 
         return $this;
     }
 
-    /**
-     * @param string $collapsedItemInlineTemplate
-     * @return static
-     */
-    public function setCollapsedItemInlineTemplate(string $collapsedItemInlineTemplate)
+    public function setCollapsedItemInlineTemplate(string $collapsedItemInlineTemplate): self
     {
         $this->setInlineTemplate($collapsedItemInlineTemplate, "item");
 
         return $this;
     }
 
-    /**
-     * @param string $collapsedItemTemplatePath
-     * @return static
-     */
-    public function setCollapsedItemTemplatePath(string $collapsedItemTemplatePath)
+    public function setCollapsedItemTemplatePath(string $collapsedItemTemplatePath): self
     {
         $this->setTemplatePath($collapsedItemTemplatePath, "item");
 
         return $this;
     }
 
-    /**
-     * @param SharpFormField $field
-     * @return static
-     */
-    public function addItemField(SharpFormField $field)
+    public function addItemField(SharpFormField $field): self
     {
         $this->itemFields[] = $field;
 
         return $this;
     }
 
-    /**
-     * @param string $itemIdAttribute
-     * @return static
-     */
-    public function setItemIdAttribute(string $itemIdAttribute)
+    public function setItemIdAttribute(string $itemIdAttribute): self
     {
         $this->itemIdAttribute = $itemIdAttribute;
 
         return $this;
     }
 
-    /**
-     * @return \Illuminate\Support\Collection
-     */
-    public function itemFields()
+    public function itemFields(): \Illuminate\Support\Collection
     {
         return collect($this->itemFields);
     }
 
-    /**
-     * @param string $key
-     * @return SharpFormField
-     */
-    public function findItemFormFieldByKey(string $key)
+    public function findItemFormFieldByKey(string $key): ?SharpFormField
     {
         return $this->itemFields()->where("key", $key)->first();
     }
 
-    /**
-     * @return string
-     */
-    public function orderAttribute()
+    public function orderAttribute(): ?string
     {
         return $this->orderAttribute;
     }
 
-    /**
-     * @return string
-     */
-    public function itemIdAttribute()
+    public function itemIdAttribute(): string
     {
         return $this->itemIdAttribute;
     }
 
-    /**
-     * @return bool
-     */
     public function isSortable(): bool
     {
         return $this->sortable;
     }
     
-    /**
-     * @return array
-     */
-    protected function validationRules()
+    protected function validationRules(): array
     {
         return [
             "itemFields" => "required|array",
@@ -224,10 +143,6 @@ class SharpFormListField extends SharpFormField
         ];
     }
 
-    /**
-     * @return array
-     * @throws \Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException
-     */
     public function toArray(): array
     {
         return parent::buildArray([

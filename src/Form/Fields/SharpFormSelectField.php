@@ -12,57 +12,17 @@ class SharpFormSelectField extends SharpFormField
 
     const FIELD_TYPE = "select";
 
-    /**
-     * @var array
-     */
-    protected $options;
+    protected array $options;
+    protected bool $multiple = false;
+    protected bool $clearable = false;
+    protected ?int $maxSelected = null;
+    protected string $display = "list";
+    protected string $idAttribute = "id";
+    protected bool $inline = false;
+    protected bool $showSelectAll = false;
+    protected ?array $dynamicAttributes = null;
 
-    /**
-     * @var bool
-     */
-    protected $multiple = false;
-
-    /**
-     * @var bool
-     */
-    protected $clearable = false;
-
-    /**
-     * @var int
-     */
-    protected $maxSelected = null;
-
-    /**
-     * @var string
-     */
-    protected $display = "list";
-
-    /**
-     * @var string
-     */
-    protected $idAttribute = "id";
-
-    /**
-     * @var bool
-     */
-    protected $inline = false;
-
-    /**
-     * @var bool
-     */
-    protected $showSelectAll = false;
-
-    /**
-     * @var array
-     */
-    protected $dynamicAttributes;
-
-    /**
-     * @param string $key
-     * @param array $options
-     * @return static
-     */
-    public static function make(string $key, array $options)
+    public static function make(string $key, array $options): self
     {
         $instance = new static($key, static::FIELD_TYPE, new SelectFormatter);
         $instance->options = $options;
@@ -155,11 +115,8 @@ class SharpFormSelectField extends SharpFormField
 
         return $this;
     }
-
-    /**
-     * @return array
-     */
-    protected function validationRules()
+    
+    protected function validationRules(): array
     {
         return [
             "options" => "array",
@@ -172,10 +129,6 @@ class SharpFormSelectField extends SharpFormField
         ];
     }
 
-    /**
-     * @return array
-     * @throws \Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException
-     */
     public function toArray(): array
     {
         return parent::buildArray(

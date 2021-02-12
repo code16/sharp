@@ -21,7 +21,6 @@ class SharpFormTest extends SharpTestCase
         $this->assertEquals(["name" => [
             "key" => "name",
             "type" => "text",
-            "maxLength" => 0,
             "inputType" => "text"
         ]], $form->fields());
     }

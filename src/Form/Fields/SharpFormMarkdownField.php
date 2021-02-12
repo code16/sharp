@@ -32,7 +32,6 @@ class SharpFormMarkdownField extends SharpFormField
     const HR = "horizontal-rule";
 
     protected ?int $height = null;
-
     protected array $toolbar = [
         self::B, self::I,
         self::SEPARATOR,
@@ -40,7 +39,6 @@ class SharpFormMarkdownField extends SharpFormField
         self::SEPARATOR,
         self::A,
     ];
-
     protected bool $showToolbar = true;
 
     public static function make(string $key): self

@@ -6,28 +6,15 @@ use Closure;
 
 trait SharpFormFieldWithUpload
 {
-    /** @var float */
-    protected $maxFileSize;
-
-    /** @var string */
-    protected $cropRatio;
-
-    /** @var array */
-    protected $croppableFileTypes;
-
-    /** @var string */
-    protected $storageDisk = "local";
-
-    /** @var string */
+    protected ?float $maxFileSize = null;
+    protected ?array $cropRatio = null;
+    protected ?array $croppableFileTypes = null;
+    protected string $storageDisk = "local";
+    /** @var string|Closure  */
     protected $storageBasePath = "data";
-
-    /** @var bool */
-    protected $compactThumbnail = false;
-
-    /** @var bool */
-    protected $shouldOptimizeImage = false;
-
-    /** @var string */
+    protected bool $compactThumbnail = false;
+    protected bool $shouldOptimizeImage = false;
+    /** @var string|array|null */
     protected $fileFilter = null;
 
     public function setMaxFileSize(float $maxFileSizeInMB): self
@@ -59,7 +46,7 @@ trait SharpFormFieldWithUpload
         return $this;
     }
 
-    public function shouldOptimizeImage(?bool $shouldOptimizeImage = true): self
+    public function shouldOptimizeImage(bool $shouldOptimizeImage = true): self
     {
         $this->shouldOptimizeImage = $shouldOptimizeImage;
 
@@ -71,7 +58,7 @@ trait SharpFormFieldWithUpload
         return $this->shouldOptimizeImage;
     }
 
-    public function setCompactThumbnail(?bool $compactThumbnail = true): self
+    public function setCompactThumbnail(bool $compactThumbnail = true): self
     {
         $this->compactThumbnail = $compactThumbnail;
 
@@ -130,7 +117,7 @@ trait SharpFormFieldWithUpload
     }
 
     /**
-     * @param $fileFilter
+     * @param string|array $fileFilter
      * @return array
      */
     private function formatFileExtension($fileFilter): array

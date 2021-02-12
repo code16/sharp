@@ -12,8 +12,9 @@ class SharpFormListFieldTest extends SharpTestCase
     function only_default_values_are_set()
     {
         $formField = $this->getDefaultList();
-
-        $this->assertEquals([
+        
+        $this->assertEquals(
+            [
                 "key" => "field", "type" => "list",
                 "addable" => false, "removable" => false, "sortable" => false,
                 "addText" => "Add an item", "itemIdAttribute" => "id",
@@ -22,10 +23,10 @@ class SharpFormListFieldTest extends SharpTestCase
                         "key" => "text",
                         "type" => "text",
                         "inputType" => "text",
-                        "maxLength" => 0
                     ]
                 ]
-            ], $formField->toArray()
+            ], 
+            $formField->toArray()
         );
     }
 

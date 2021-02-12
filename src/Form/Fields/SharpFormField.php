@@ -8,56 +8,16 @@ use Illuminate\Support\Facades\Validator;
 
 abstract class SharpFormField
 {
-    /**
-     * @var string
-     */
-    public $key;
+    public string $key;
+    protected ?string $label = null;
+    protected string $type;
+    protected ?string $helpMessage = null;
+    protected string $conditionalDisplayOperator = "and";
+    protected array $conditionalDisplayFields = [];
+    protected ?bool $readOnly = null;
+    protected ?string $extraStyle = null;
+    protected ?SharpFieldFormatter $formatter;
 
-    /**
-     * @var string
-     */
-    protected $label;
-
-    /**
-     * @var string
-     */
-    protected $type;
-
-    /**
-     * @var string
-     */
-    protected $helpMessage;
-
-    /**
-     * @var string
-     */
-    protected $conditionalDisplayOperator = "and";
-
-    /**
-     * @var array
-     */
-    protected $conditionalDisplayFields = [];
-
-    /**
-     * @var bool
-     */
-    protected $readOnly;
-
-    /**
-     * @var string
-     */
-    protected $extraStyle;
-
-    /**
-     * @var SharpFieldFormatter
-     */
-    protected $formatter;
-
-    /**
-     * @param string $key
-     * @param string $type
-     * @param SharpFieldFormatter|null $formatter
-     */
     protected function __construct(string $key, string $type, SharpFieldFormatter $formatter = null)
     {
         $this->key = $key;
@@ -65,22 +25,14 @@ abstract class SharpFormField
         $this->formatter = $formatter;
     }
 
-    /**
-     * @param string $label
-     * @return static
-     */
-    public function setLabel(string $label)
+    public function setLabel(string $label): self
     {
         $this->label = $label;
 
         return $this;
     }
 
-    /**
-     * @param string $helpMessage
-     * @return static
-     */
-    public function setHelpMessage(string $helpMessage)
+    public function setHelpMessage(string $helpMessage): self
     {
         $this->helpMessage = $helpMessage;
 
@@ -92,7 +44,7 @@ abstract class SharpFormField
      * @param array|string|boolean $values
      * @return static
      */
-    public function addConditionalDisplay(string $fieldKey, $values = true)
+    public function addConditionalDisplay(string $fieldKey, $values = true): self
     {
         if(substr($fieldKey, 0, 1) === "!") {
             $fieldKey = substr($fieldKey, 1);
@@ -107,53 +59,35 @@ abstract class SharpFormField
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function setConditionalDisplayOrOperator()
+    public function setConditionalDisplayOrOperator(): self
     {
         $this->conditionalDisplayOperator = "or";
 
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function setConditionalDisplayAndOperator()
+    public function setConditionalDisplayAndOperator(): self
     {
         $this->conditionalDisplayOperator = "and";
 
         return $this;
     }
 
-    /**
-     * @param bool $readOnly
-     * @return static
-     */
-    public function setReadOnly(bool $readOnly = true)
+    public function setReadOnly(bool $readOnly = true): self
     {
         $this->readOnly = $readOnly;
 
         return $this;
     }
 
-    /**
-     * @param string $style
-     * @return static
-     */
-    public function setExtraStyle(string $style)
+    public function setExtraStyle(string $style): self
     {
         $this->extraStyle = $style;
 
         return $this;
     }
 
-    /**
-     * @param SharpFieldFormatter $formatter
-     * @return static
-     */
-    public function setFormatter(SharpFieldFormatter $formatter)
+    public function setFormatter(SharpFieldFormatter $formatter): self
     {
         $this->formatter = $formatter;
 
@@ -167,36 +101,22 @@ abstract class SharpFormField
      */
     public abstract function toArray(): array;
 
-    /**
-     * @return string
-     */
     public function type(): string
     {
         return $this->type;
     }
 
-    /**
-     * @return string
-     */
     public function key(): string
     {
         return $this->key;
     }
 
-    /**
-     * @return SharpFieldFormatter
-     */
-    public function formatter()
+    public function formatter(): ?SharpFieldFormatter
     {
         return $this->formatter;
     }
 
-    /**
-     * Return specific validation rules.
-     *
-     * @return array
-     */
-    protected function validationRules()
+    protected function validationRules(): array
     {
         return [];
     }
@@ -219,35 +139,31 @@ abstract class SharpFormField
         }
     }
 
-    /**
-     * @param array $childArray
-     * @return array
-     * @throws SharpFormFieldValidationException
-     */
-    protected function buildArray(array $childArray)
+    protected function buildArray(array $childArray): array
     {
-        $array = collect([
-            "key" => $this->key,
-            "type" => $this->type,
-            "label" => $this->label,
-            "readOnly" => $this->readOnly,
-            "conditionalDisplay" => $this->buildConditionalDisplayArray(),
-            "helpMessage" => $this->helpMessage,
-            "extraStyle" => $this->extraStyle,
-        ] + $childArray)
+        $array = collect(
+            [
+                "key" => $this->key,
+                "type" => $this->type,
+                "label" => $this->label,
+                "readOnly" => $this->readOnly,
+                "conditionalDisplay" => $this->buildConditionalDisplayArray(),
+                "helpMessage" => $this->helpMessage,
+                "extraStyle" => $this->extraStyle,
+            ] 
+            + $childArray
+        )
             ->filter(function($value) {
-                return !is_null($value);
-            })->all();
+                return $value !== null;
+            })
+            ->all();
 
         $this->validate($array);
 
         return $array;
     }
 
-    /**
-     * @return array|null
-     */
-    private function buildConditionalDisplayArray()
+    private function buildConditionalDisplayArray(): ?array
     {
         if(!sizeof($this->conditionalDisplayFields)) {
             return null;
