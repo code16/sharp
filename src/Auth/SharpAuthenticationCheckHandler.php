@@ -10,5 +10,5 @@ interface SharpAuthenticationCheckHandler
      * @param Authenticatable $user
      * @return bool
      */
-    function check($user): bool;
+    function check(Authenticatable $user): bool;
 }

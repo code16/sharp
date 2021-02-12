@@ -71,6 +71,7 @@ module.exports = {
                     collapsable: false,
                     children: [
                         'building-menu',
+                        'sharp-breadcrumb',
                         'how-to-transform-data',
                         'link-to',
                         'context',
