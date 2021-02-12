@@ -9,6 +9,8 @@ jest.mock('sharp/util/search', ()=>({
     search: jest.fn(()=>[]),
 }));
 
+jest.mock('lodash/debounce', () => fn => (...args) => fn(...args));
+
 describe('autocomplete-field', ()=>{
     Vue.use(MockI18n);
 
