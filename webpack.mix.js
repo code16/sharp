@@ -12,6 +12,14 @@ mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
     .copy('node_modules/leaflet/dist/images/*', 'resources/assets/dist/images')
     .options({
         processCssUrls: false,
+        terser: {
+            terserOptions: {
+                format: {
+                    comments: false,
+                },
+            },
+            extractComments: false,
+        },
     })
     .extract()
     .setResourceRoot('/vendor/sharp')
