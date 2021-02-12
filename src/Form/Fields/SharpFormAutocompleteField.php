@@ -27,6 +27,7 @@ class SharpFormAutocompleteField extends SharpFormField
     protected int $searchMinChars = 1;
     protected ?array $dynamicAttributes = null;
     protected string $dataWrapper = "";
+    protected int $debounceDelay = 300;
 
     /**
      * @param string $key
@@ -123,12 +124,16 @@ class SharpFormAutocompleteField extends SharpFormField
 
     public function setListItemTemplatePath(string $listItemTemplatePath): self
     {
-        return $this->setTemplatePath($listItemTemplatePath, "list");
+        $this->setTemplatePath($listItemTemplatePath, "list");
+        
+        return $this;
     }
 
     public function setResultItemTemplatePath(string $resultItemTemplate): self
     {
-        return $this->setTemplatePath($resultItemTemplate, "result");
+        $this->setTemplatePath($resultItemTemplate, "result");
+        
+        return $this;
     }
 
     public function setListItemInlineTemplate(string $template): self
@@ -144,6 +149,13 @@ class SharpFormAutocompleteField extends SharpFormField
     public function setSearchMinChars(int $searchMinChars): self
     {
         $this->searchMinChars = $searchMinChars;
+
+        return $this;
+    }
+
+    public function setDebounceDelayInMilliseconds(int $debounceDelay): self
+    {
+        $this->debounceDelay = $debounceDelay;
 
         return $this;
     }
@@ -196,6 +208,7 @@ class SharpFormAutocompleteField extends SharpFormField
             "remoteEndpoint" => "required_if:mode,remote",
             "remoteMethod" => "required_if:mode,remote|in:GET,POST",
             "remoteSearchAttribute" => "required_if:mode,remote",
+            "debounceDelay" => "required|integer",
         ];
     }
 
@@ -215,6 +228,7 @@ class SharpFormAutocompleteField extends SharpFormField
                     "dataWrapper" => $this->dataWrapper,
                     "remoteMethod" => $this->remoteMethod,
                     "remoteSearchAttribute" => $this->remoteSearchAttribute,
+                    "debounceDelay" => $this->debounceDelay,
                     "listItemTemplate" => $this->template("list"),
                     "resultItemTemplate" => $this->template("result"),
                     "searchMinChars" => $this->searchMinChars,
