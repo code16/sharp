@@ -7,12 +7,13 @@ use PHPUnit\Framework\Assert as PHPUnit;
 
 trait SharpAssertions
 {
+    private ?array $currentBreadcrumb = null;
 
     /**
      * This function must be called before using Sharp's assertions
      * (in the setUp() for instance)
      */
-    protected function initSharpAssertions()
+    public function initSharpAssertions()
     {
         TestResponse::macro('assertSharpHasAuthorization', function ($authorization) {
             return $this->assertJson(
@@ -82,34 +83,22 @@ trait SharpAssertions
         });
     }
 
-    /**
-     * @param string $entityKey
-     * @param $instanceId
-     * @return mixed
-     */
-    protected function deleteSharpForm(string $entityKey, $instanceId)
+    public function withSharpCurrentBreadcrumb(array $breadcrumb): self
     {
-        return $this
-            ->withHeader(
-                "referer",
-                url(sprintf('/%1$s/s-list/%2$s/s-form/%2$s/%3$s', sharp_base_url_segment(), $entityKey, $instanceId))
-            )
-            ->deleteJson(
-                route("code16.sharp.api.form.delete", [$entityKey, $instanceId])
-            );
+        $this->currentBreadcrumb = $breadcrumb;
+
+        return $this;
     }
 
-    /**
-     * @param string $entityKey
-     * @param mixed|null $instanceId
-     * @return mixed
-     */
-    protected function getSharpForm(string $entityKey, $instanceId = null)
+    public function getSharpForm(string $entityKey, $instanceId = null)
     {
         return $this
             ->withHeader(
                 "referer",
-                url(sprintf('/%1$s/s-list/%2$s/s-form/%2$s/%3$s', sharp_base_url_segment(), $entityKey, $instanceId))
+                $this->buildRefererUrl([
+                    ["list", $entityKey],
+                    ["form", $entityKey, $instanceId],
+                ])
             )
             ->getJson(
                 $instanceId
@@ -118,18 +107,30 @@ trait SharpAssertions
             );
     }
 
-    /**
-     * @param string $entityKey
-     * @param $instanceId
-     * @param array $data
-     * @return mixed
-     */
-    protected function updateSharpForm(string $entityKey, $instanceId, array $data)
+    public function deleteSharpForm(string $entityKey, $instanceId)
     {
         return $this
             ->withHeader(
                 "referer",
-                url(sprintf('/%1$s/s-list/%2$s/s-form/%2$s/%3$s', sharp_base_url_segment(), $entityKey, $instanceId))
+                $this->buildRefererUrl([
+                    ["list", $entityKey],
+                    ["form", $entityKey, $instanceId],
+                ])
+            )
+            ->deleteJson(
+                route("code16.sharp.api.form.delete", [$entityKey, $instanceId])
+            );
+    }
+
+    public function updateSharpForm(string $entityKey, $instanceId, array $data)
+    {
+        return $this
+            ->withHeader(
+                "referer",
+                $this->buildRefererUrl([
+                    ["list", $entityKey],
+                    ["form", $entityKey, $instanceId],
+                ])
             )
             ->postJson(
                 route("code16.sharp.api.form.update", [$entityKey, $instanceId]),
@@ -137,17 +138,15 @@ trait SharpAssertions
             );
     }
 
-    /**
-     * @param string $entityKey
-     * @param array $data
-     * @return mixed
-     */
-    protected function storeSharpForm(string $entityKey, array $data)
+    public function storeSharpForm(string $entityKey, array $data)
     {
         return $this
             ->withHeader(
                 "referer",
-                url(sprintf('/%1$s/s-list/%2$s/s-form/%2$s', sharp_base_url_segment(), $entityKey))
+                $this->buildRefererUrl([
+                    ["list", $entityKey],
+                    ["form", $entityKey],
+                ])
             )
             ->postJson(
                 route("code16.sharp.api.form.store", $entityKey),
@@ -155,40 +154,96 @@ trait SharpAssertions
             );
     }
 
+    public function callSharpInstanceCommandFromList(string $entityKey, $instanceId, string $commandKey, array $data = [])
+    {
+        return $this
+            ->withHeader(
+                "referer",
+                $this->buildRefererUrl([
+                    ["list", $entityKey],
+                ])
+            )
+            ->postJson(
+                route(
+                    "code16.sharp.api.list.command.instance",
+                    compact('entityKey', 'instanceId', 'commandKey')
+                ),
+                ["data" => $data]
+            );
+    }
+
+    public function callSharpInstanceCommandFromShow(string $entityKey, $instanceId, string $commandKey, array $data = [])
+    {
+        return $this
+            ->withHeader(
+                "referer",
+                $this->buildRefererUrl([
+                    ["list", $entityKey],
+                    ["show", $entityKey, $instanceId],
+                ])
+            )
+            ->postJson(
+                route(
+                    "code16.sharp.api.show.command.instance",
+                    compact('entityKey', 'instanceId', 'commandKey')
+                ),
+                ["data" => $data]
+            );
+    }
+
+    public function callSharpEntityCommandFromList(string $entityKey, string $commandKey, array $data = [])
+    {
+        return $this
+            ->withHeader(
+                "referer",
+                $this->buildRefererUrl([
+                    ["list", $entityKey]
+                ])
+            )
+            ->postJson(
+                route("code16.sharp.api.list.command.entity", compact('entityKey', 'commandKey')),
+                ["data" => $data]
+            );
+    }
+
+    public function loginAsSharpUser($user)
+    {
+        $this->actingAs($user, config("sharp.auth.guard", config("auth.defaults.guard")));
+    }
+
+    protected function buildRefererUrl(array $segments): string
+    {
+        $segments = $this->currentBreadcrumb ?: $segments;
+        $this->currentBreadcrumb = null;
+        
+        $uri = collect($segments)
+            ->map(function(array $segment) {
+                if(count($segment) === 2) {
+                    return sprintf("s-%s/%s", $segment[0], $segment[1]);
+                } elseif(count($segment) === 3) {
+                    return sprintf("s-%s/%s/%s", $segment[0], $segment[1], $segment[2]);
+                }
+                return null;
+            })
+            ->filter()
+            ->implode("/");
+
+        return url(sprintf('/%s/%s', sharp_base_url_segment(), $uri));
+    }
+
     /**
-     * @param string $entityKey
-     * @param $instanceId
-     * @param string $commandKey
-     * @param array $data
-     * @return mixed
+     * @deprecated use callSharpInstanceCommandFromList or callSharpInstanceCommandFromShow
      */
     protected function callInstanceCommand(string $entityKey, $instanceId, string $commandKey, array $data = [])
     {
-        return $this->postJson(
-            route(
-                "code16.sharp.api.list.command.instance",
-                compact('entityKey', 'instanceId', 'commandKey')
-            ),
-            ["data" => $data]
-        );
+        return $this->callSharpInstanceCommandFromList($entityKey, $instanceId, $commandKey, $data);
     }
 
     /**
-     * @param string $entityKey
-     * @param string $commandKey
-     * @param array $data
-     * @return mixed
+     * @deprecated use callSharpEntityCommandFromList
      */
-    protected function callEntityCommand(string $entityKey, string $commandKey, array $data = [])
+    public function callEntityCommand(string $entityKey, string $commandKey, array $data = [])
     {
-        return $this->postJson(
-            route("code16.sharp.api.list.command.entity", compact('entityKey', 'commandKey')),
-            ["data" => $data]
-        );
-    }
-
-    protected function loginAsSharpUser($user)
-    {
-        $this->actingAs($user, config("sharp.auth.guard", config("auth.defaults.guard")));
+        return $this->callSharpInstanceCommandFromList($entityKey, $instanceId, $commandKey, $data);
     }
 }
