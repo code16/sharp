@@ -5,7 +5,7 @@ Sharp provides a few assertions and helpers to help you testing your Sharp code.
 
 ## The `SharpAssertions` trait
 
-The `Code16\Sharp\Utils\Testing\SharpAssertions` trait is intended to be used in a Feature test. It has to be intialized, like this:
+The `Code16\Sharp\Utils\Testing\SharpAssertions` trait is intended to be used in a Feature test. It has to be initialized, like this:
 
 ```php
 protected function setUp()
@@ -41,28 +41,55 @@ Call the Sharp API to update the Entity `$entityKey` of id `$instanceId`, with `
 Call the Sharp API to store a new Entity `$entityKey` with `$data`.
 
 
-#### `callEntityCommand(string $entityKey, string $commandKey, array $data)`
+#### `callSharpEntityCommandFromList(string $entityKey, string $commandKey, array $data)`
 
 Call the `$commandKey` Entity Command with the optional `$data`.
 
 
-#### `callInstanceCommand(string $entityKey, $instanceId, string $commandKey, array $data)`
+#### `callSharpInstanceCommandFromList(string $entityKey, $instanceId, string $commandKey, array $data)`
+
+Call the `$commandKey` Instance Command with the optional `$data`.
+
+#### `callSharpInstanceCommandFromShow(string $entityKey, $instanceId, string $commandKey, array $data)`
 
 Call the `$commandKey` Instance Command with the optional `$data`.
 
 
-### Assertions
+#### `withSharpCurrentBreadcrumb(array $breadcrumb): self`
 
-And of course, you can use regular assertions, for instance:
+It can be useful to fake a Sharp context before calling a Sharp endpoint, and that's the purpose of this method;  `$breadcrumb` is an array of arrays, each one containing, in this order:
+ - a Sharp page type: "list", "show" or "form"
+- an entityKey
+- (optional) an instanceId
+
+For instance:
 
 ```php
-$this->updateSharpForm(
+    $this
+        ->withSharpCurrentBreadcrumb([
+            ["list", "trees"],
+            ["show", "trees", 8],
+            ["show", "leaves", 16],
+            ["form", "leaves", 16],
+        ])
+        ->getSharpForm(...)
+        ->assertOk();
+```
+
+### Assertions
+
+You can use regular assertions, for instance:
+
+```php
+$this
+    ->updateSharpForm(
         "orders",
         $order->id,
         array_merge($order->toArray(), [
             "client" => "test",
             "payment_delay" => 10
-        ]))
+        ])
+    )
     ->assertStatus(200);
 ```
 
@@ -109,8 +136,3 @@ Example:
 $this->getSharpForm("orders", $order->id)
      ->assertSharpFormDataEquals("number", $order->number);
 ```
-
-
-## Browser testing (Laravel Dusk)
-
-TBD
