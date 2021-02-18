@@ -260,7 +260,7 @@
                 }
             },
             handleError(error) {
-                if(error.response.status === 422) {
+                if(error.response?.status === 422) {
                     this.errors = error.response.data.errors || {};
                 }
                 return Promise.reject(error);
