@@ -11,7 +11,7 @@
             </Button>
 
             <template v-if="showDeleteButton">
-                <div class="w-100 h-100">
+                <div class="w-100 h-100 ml-3">
                     <Collapse transition-class="SharpButton__collapse-transition">
                         <template v-slot:frame-0="{ next }">
                             <button class="SharpButton SharpButton--danger" @click="next(focusDelete)">
