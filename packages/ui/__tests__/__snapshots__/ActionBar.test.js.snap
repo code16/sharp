@@ -7,8 +7,8 @@ exports[`action-bar can mount ready ActionBar 1`] = `
 	<div class="SharpActionBar__bar">
 		<div class="container">
 			<div class="row mx-n2">
-				<div class="col left px-2 my-1 my-sm-0"></div>
-				<div class="col right px-2 my-1 my-sm-0"></div>
+				<div class="col-auto col-md left px-2 my-1 my-sm-0"></div>
+				<div class="col col-md-auto right px-2 my-1 my-sm-0"></div>
 			</div>
 		</div>
 	</div>
@@ -28,10 +28,10 @@ exports[`action-bar can mount with slots ActionBar 1`] = `
 	<div class="SharpActionBar__bar">
 		<div class="container">
 			<div class="row mx-n2">
-				<div class="col left px-2 my-1 my-sm-0">
+				<div class="col-auto col-md left px-2 my-1 my-sm-0">
 					<div>LEFT CONTENT</div>
 				</div>
-				<div class="col right px-2 my-1 my-sm-0">
+				<div class="col col-md-auto right px-2 my-1 my-sm-0">
 					<div>RIGHT CONTENT</div>
 				</div>
 			</div>
