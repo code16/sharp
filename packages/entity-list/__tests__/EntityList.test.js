@@ -849,6 +849,11 @@ describe('EntityList', () => {
             const wrapper = createWrapper({
                 propsData: {
                     entityKey: 'entityKey'
+                },
+                storeModule: {
+                    getters: {
+                        query: () => ({ }),
+                    }
                 }
             });
             wrapper.setData(withDefaults());

@@ -6,7 +6,7 @@ import store from 'sharp/store';
 
 import { wait, MockI18n, nextRequestFulfilled } from "@sharp/test-utils";
 import moxios from 'moxios';
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { lang } from "sharp";
 
 jest.mock('sharp');
@@ -80,6 +80,12 @@ describe('sharp-form', ()=>{
                 }
             },
             layout: createLayout([[{ key }]]),
+        }
+    }
+
+    function handleSubmitError(e) {
+        if(!e.response) {
+            throw e;
         }
     }
 
@@ -388,7 +394,7 @@ describe('sharp-form', ()=>{
     test('handle 422', async () => {
         const wrapper = createWrapper();
 
-        wrapper.vm.submit().catch(() => {});
+        wrapper.vm.submit().catch(handleSubmitError);
 
         await nextRequestFulfilled({
             status: 422,
@@ -432,6 +438,8 @@ describe('sharp-form', ()=>{
 
     test('serialize', () => {
         const wrapper = createWrapper();
+
+        expect(wrapper.vm.serialize()).toEqual({});
 
         wrapper.setData({
             fields: {
@@ -529,7 +537,7 @@ describe('sharp-form', ()=>{
     test('submit', async () => {
         const wrapper = createWrapper({
             propsData: {
-                independant:true,
+                independant: true,
                 props: createForm(),
             },
         });
@@ -542,7 +550,6 @@ describe('sharp-form', ()=>{
         await wait(10);
 
         expect(wrapper.vm.post).not.toHaveBeenCalled();
-
 
         wrapper.vm.uploadingFields = {}
         wrapper.vm.submit();
@@ -566,27 +573,27 @@ describe('sharp-form', ()=>{
         });
 
         wrapper.vm.post = jest.fn(()=>Promise.resolve({ data: { ok: true } }));
-        wrapper.vm.handleError = jest.fn();
+        jest.spyOn(wrapper.vm, 'handleError');
 
-        wrapper.vm.submit().catch(() => {});
+        wrapper.vm.submit().catch(handleSubmitError);
 
         await wait(10);
 
         expect(wrapper.vm.post).toHaveBeenCalledTimes(1);
-        expect(wrapper.vm.post.mock.calls[0][0]).toBeUndefined();
-        expect(wrapper.vm.post.mock.calls[0][1]).toBeUndefined();
+        expect(wrapper.vm.post.mock.calls[0][0]).toEqual('form/spaceship');
+        expect(wrapper.vm.post.mock.calls[0][1]).toEqual({ title: null });
 
 
         expect(wrapper.vm.handleError).not.toHaveBeenCalled();
 
-        wrapper.vm.post = jest.fn(()=>Promise.reject({ error: true }));
+        wrapper.vm.post = jest.fn(()=>Promise.reject({ response: { status:500 } }));
 
-        wrapper.vm.submit().catch(() => {});
+        wrapper.vm.submit().catch(handleSubmitError);
 
         await wait(10);
 
         expect(wrapper.vm.handleError).toHaveBeenCalledTimes(1);
-        expect(wrapper.vm.handleError).toHaveBeenCalledWith({ error: true });
+        expect(wrapper.vm.handleError).toHaveBeenCalledWith({ response: { status:500 } });
     });
 
     test('delete', async ()=>{

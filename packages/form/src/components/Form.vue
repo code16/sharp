@@ -259,9 +259,11 @@
                     alert("Some fields are localized but the form hasn't any locales configured");
                 }
             },
-            handleError({response}) {
-                if(response.status===422)
-                    this.errors = response.data.errors || {};
+            handleError(error) {
+                if(error.response.status === 422) {
+                    this.errors = error.response.data.errors || {};
+                }
+                return Promise.reject(error);
             },
 
             patchLayout(layout) {
@@ -281,7 +283,7 @@
 
             serialize(data = this.data) {
                 return Object.fromEntries(
-                    Object.entries(data)
+                    Object.entries(data ?? {})
                         .filter(([key]) => this.fields[key]?.type !== 'html')
                 );
             },
@@ -309,23 +311,20 @@
                 if(this.isUploading) {
                     return;
                 }
-                try {
-                    const data = this.serialize();
-                    const response = postFn
-                        ? await postFn(data)
-                        : await this.post(this.apiPath, data);
-                    if(this.independant) {
-                        this.$emit('submit', response);
-                        return response;
-                    }
-                    else if(response.data.ok) {
-                        this.$store.dispatch('setLoading', true);
-                        this.redirectToParentPage();
-                    }
+                const data = this.serialize();
+                const post = () => postFn
+                    ? postFn(data)
+                    : this.post(this.apiPath, data);
+
+                const response = await post().catch(this.handleError);
+
+                if(this.independant) {
+                    this.$emit('submit', response);
+                    return response;
                 }
-                catch(error) {
-                    this.handleError(error);
-                    return Promise.reject(error);
+                else if(response.data.ok) {
+                    this.$store.dispatch('setLoading', true);
+                    this.redirectToParentPage();
                 }
             },
             handleSubmitClicked() {
