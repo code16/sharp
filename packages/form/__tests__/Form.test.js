@@ -6,7 +6,7 @@ import store from 'sharp/store';
 
 import { wait, MockI18n, nextRequestFulfilled } from "@sharp/test-utils";
 import moxios from 'moxios';
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import { lang } from "sharp";
 
 jest.mock('sharp');
@@ -430,6 +430,23 @@ describe('sharp-form', ()=>{
         expect(fields[0][0].id).not.toEqual(fields[1][0].id)
     });
 
+    test('serialize', () => {
+        const wrapper = createWrapper();
+
+        wrapper.setData({
+            fields: {
+                html: { type:'html' }
+            },
+            data: {
+                field1: 'value',
+                html: '<b></b>'
+            }
+        })
+
+        expect(wrapper.vm.serialize()).toEqual({
+            field1: 'value',
+        });
+    });
 
     test('setup action bar correctly', async () => {
         const wrapper = createWrapper();

@@ -175,7 +175,6 @@
             transformedFields() {
                 return transformFields(this.fields, this.data);
             },
-
             currentLocale() {
                 const flattened = Object.values(this.fieldLocale)
                     .map(locale => Array.isArray(locale)
@@ -280,6 +279,13 @@
                 return layout;
             },
 
+            serialize(data = this.data) {
+                return Object.fromEntries(
+                    Object.entries(data)
+                        .filter(([key]) => this.fields[key]?.type !== 'html')
+                );
+            },
+
             async init() {
                 if(this.independant) {
                     this.mount(this.props);
@@ -304,7 +310,10 @@
                     return;
                 }
                 try {
-                    const response = postFn ? await postFn(this.data) : await this.post();
+                    const data = this.serialize();
+                    const response = postFn
+                        ? await postFn(data)
+                        : await this.post(this.apiPath, data);
                     if(this.independant) {
                         this.$emit('submit', response);
                         return response;
