@@ -3,10 +3,10 @@
         <div class="SharpActionBar__bar">
             <div class="container">
                 <div class="row mx-n2">
-                    <div class="col left px-2 my-1 my-sm-0">
+                    <div class="col-auto col-md left px-2 my-1 my-sm-0">
                         <slot name="left"></slot>
                     </div>
-                    <div class="col right px-2 my-1 my-sm-0" :class="rightClass">
+                    <div class="col col-md-auto right px-2 my-1 my-sm-0" :class="rightClass">
                         <slot name="right"></slot>
                     </div>
                 </div>

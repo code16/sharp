@@ -8,9 +8,9 @@
             <span class="text-content text-nowrap">{{ count }} {{ l('action_bar.list.items_count') }}</span>
         </template>
         <template v-slot:right>
-            <div class="row justify-content-end">
+            <div class="row justify-content-end flex-nowrap">
                 <template v-if="canSearch && !reorderActive">
-                    <div class="col col-lg-auto">
+                    <div class="col col-lg-auto" style="max-width: 300px">
                         <Search
                             class="h-100"
                             :value="search"
@@ -23,7 +23,7 @@
                 </template>
 
                 <template v-if="canReorder">
-                    <div class="col-auto">
+                    <div class="col-auto" :class="{ 'd-none d-sm-block': searchActive }">
                         <template v-if="reorderActive">
                             <button class="SharpButton SharpButton--secondary-accent h-100" @click="handleReorderButtonClicked">
                                 {{ l('action_bar.list.reorder_button.cancel') }}
@@ -41,7 +41,7 @@
                 </template>
 
                 <template v-if="canCreate && !reorderActive">
-                    <div class="col-auto">
+                    <div class="col-auto" :class="{ 'd-none d-sm-block': searchActive }">
                         <template v-if="hasForms">
                             <Dropdown class="SharpActionBar__forms-dropdown h-100" :text="l('action_bar.list.forms_dropdown')">
                                 <DropdownItem v-for="(form,key) in forms" @click="handleCreateFormSelected(form)" :key="key" >
