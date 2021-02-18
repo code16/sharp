@@ -21,18 +21,20 @@
                     :filters="visibleFilters"
                     :has-active-query="hasActiveQuery"
                 >
-                    <div class="ShowEntityListField__label show-field__label">
-                        <template v-if="hasCollapse">
-                            <details :open="!collapsed" @toggle="handleDetailsToggle">
-                                <summary class="py-1">
+                    <template v-if="hasCollapse">
+                        <details :open="!collapsed" @toggle="handleDetailsToggle">
+                            <summary class="py-1">
+                                <h2 class="ShowEntityListField__label show-field__label d-inline-block">
                                     {{ label || ' ' }}
-                                </summary>
-                            </details>
-                        </template>
-                        <template v-else>
+                                </h2>
+                            </summary>
+                        </details>
+                    </template>
+                    <template v-else>
+                        <div class="ShowEntityListField__label show-field__label">
                             {{ label }}
-                        </template>
-                    </div>
+                        </div>
+                    </template>
                 </ActionBar>
             </template>
             <template v-slot:append-head="{ props: { commands }, listeners }">
