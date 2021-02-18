@@ -96,37 +96,45 @@ class Thumbnail
             if (!$thumbnailDisk->exists(dirname($thumbnailPath))) {
                 $thumbnailDisk->makeDirectory(dirname($thumbnailPath));
             }
-
-            try {
-                $sourceImg = $this->imageManager->make(
+    
+            if($this->storage->disk($sourceDisk)->mimeType($sourceRelativeFilePath) === 'image/svg+xml') {
+                file_put_contents(
+                    $thumbnailDisk->path($thumbnailPath),
                     $this->storage->disk($sourceDisk)->get($sourceRelativeFilePath)
                 );
-
-                // Filters
-                $alreadyResized = false;
-                foreach ($filters as $filter => $params) {
-                    $filterInstance = $this->resolveFilterClass($filter, $params);
-                    if ($filterInstance) {
-                        $sourceImg->filter($filterInstance);
-                        $alreadyResized = $alreadyResized || $filterInstance->resized();
+            }
+            else {
+                try {
+                    $sourceImg = $this->imageManager->make(
+                        $this->storage->disk($sourceDisk)->get($sourceRelativeFilePath)
+                    );
+        
+                    // Filters
+                    $alreadyResized = false;
+                    foreach ($filters as $filter => $params) {
+                        $filterInstance = $this->resolveFilterClass($filter, $params);
+                        if ($filterInstance) {
+                            $sourceImg->filter($filterInstance);
+                            $alreadyResized = $alreadyResized || $filterInstance->resized();
+                        }
                     }
+        
+                    // Resize if needed
+                    if (!$alreadyResized) {
+                        $sourceImg->resize($width, $height, function ($constraint) {
+                            $constraint->aspectRatio();
+                            $constraint->upsize();
+                        });
+                    }
+        
+                    $sourceImg->save($thumbnailDisk->path($thumbnailPath), $this->quality);
+        
+                } catch(FileNotFoundException $ex) {
+                    return null;
+        
+                } catch(NotReadableException $ex) {
+                    return null;
                 }
-
-                // Resize if needed
-                if (!$alreadyResized) {
-                    $sourceImg->resize($width, $height, function ($constraint) {
-                        $constraint->aspectRatio();
-                        $constraint->upsize();
-                    });
-                }
-
-                $sourceImg->save($thumbnailDisk->path($thumbnailPath), $this->quality);
-
-            } catch(FileNotFoundException $ex) {
-                return null;
-
-            } catch(NotReadableException $ex) {
-                return null;
             }
         }
 
