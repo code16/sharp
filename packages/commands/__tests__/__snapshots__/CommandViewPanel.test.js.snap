@@ -5,7 +5,7 @@ exports[`view-panel mount "visible with content" ViewPanel 1`] = `
 	<div class="SharpViewPanel__glasspane" style=""></div>
 	<div class="SharpViewPanel" enter-class="SharpViewPanel--collapsed" enter-active-class="SharpViewPanel--expanding" enter-to-class="SharpViewPanel--expanded" leave-class="SharpViewPanel--expanded" leave-active-class="SharpViewPanel--collapsing"
 	    leave-to-class="SharpViewPanel--collapsed">
-		<iframe src="about:blank" sandbox="allow-forms allow-scripts allow-same-origin allow-popups"></iframe>
+		<iframe src="about:blank" sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-modals allow-downloads"></iframe>
 	</div>
 </div>
 `;
