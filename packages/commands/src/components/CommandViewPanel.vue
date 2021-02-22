@@ -11,7 +11,7 @@
         >
             <template v-if="visible">
                 <div class="SharpViewPanel">
-                    <iframe src="about:blank" v-srcdoc="content" sandbox="allow-forms allow-scripts allow-same-origin allow-popups"></iframe>
+                    <iframe src="about:blank" v-srcdoc="content" sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-modals allow-downloads"></iframe>
                 </div>
             </template>
         </transition>
@@ -19,8 +19,7 @@
 </template>
 
 <script>
-    import { srcDoc } from 'sharp/directives';
-    
+
     export default {
         name: 'SharpViewPanel',
         props: {
