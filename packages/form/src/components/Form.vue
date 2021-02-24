@@ -311,12 +311,18 @@
                 if(this.isUploading) {
                     return;
                 }
+                this.$emit('loading', true);
+
                 const data = this.serialize();
                 const post = () => postFn
                     ? postFn(data)
                     : this.post(this.apiPath, data);
 
-                const response = await post().catch(this.handleError);
+                const response = await post()
+                    .catch(this.handleError)
+                    .finally(() => {
+                        this.$emit('loading', false);
+                    });
 
                 if(this.independant) {
                     this.$emit('submit', response);
