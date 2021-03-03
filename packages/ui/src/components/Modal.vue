@@ -2,8 +2,6 @@
     <b-modal v-bind="$attrs"
         :title="title"
         :visible="visible"
-        :cancel-title="cancelTitle || l('modals.cancel_button')"
-        :ok-title="okTitle || l('modals.ok_button')"
         :ok-only="okOnly"
         :static="static"
         :modal-class="['SharpModal', {'SharpModal--error': isError}]"
@@ -24,19 +22,38 @@
                 </button>
             </div>
         </template>
+
         <slot />
+
+        <template v-slot:modal-footer="{ cancel, ok }">
+            <button class="btn btn-secondary" @click="cancel">
+                {{ cancelTitle || l('modals.cancel_button') }}
+            </button>
+            <button class="btn btn-primary position-relative" :disabled="loading" @click="ok">
+                <span :class="{ 'invisible': loading }">
+                    {{ okTitle || l('modals.ok_button') }}
+                </span>
+                <template v-if="loading">
+                    <LoadingOverlay class="bg-transparent" absolute small />
+                </template>
+            </button>
+        </template>
     </b-modal>
 </template>
 
 <script>
     import { Localization } from 'sharp/mixins';
     import { BModal } from 'bootstrap-vue';
+    import Loading from "./Loading";
+    import LoadingOverlay from "./LoadingOverlay";
 
     export default {
         name: 'SharpModal',
         mixins: [Localization],
 
         components: {
+            LoadingOverlay,
+            Loading,
             BModal
         },
         inheritAttrs: false,
@@ -48,10 +65,11 @@
             title: String,
             okTitle: String,
             okOnly: Boolean,
+            static: Boolean,
 
             // custom props
             isError: Boolean,
-            static: Boolean,
+            loading: Boolean,
         },
 
         methods: {

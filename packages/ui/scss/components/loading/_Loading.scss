@@ -19,7 +19,7 @@ $loading__end-duration: 300ms;
   }
 
   &__svg {
-    fill: transparent;
+    fill: transparent !important;
     stroke: $brand-03;
     stroke-width: 7;
     stroke-linecap: butt;

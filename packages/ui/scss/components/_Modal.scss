@@ -85,6 +85,10 @@
     }
 
     .modal-footer {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
       text-align: right;
       background-color: $ui-01;
       padding: 1.5rem;

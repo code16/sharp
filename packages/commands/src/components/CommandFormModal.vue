@@ -1,5 +1,10 @@
 <template>
-    <Modal :visible.sync="visible" :ok-disabled="loading" @ok="handleSubmitButtonClicked" @hidden="handleClosed">
+    <Modal
+        :visible.sync="visible"
+        :loading="loading"
+        @ok="handleSubmitButtonClicked"
+        @hidden="handleClosed"
+    >
         <transition>
             <Form
                 v-if="visible"
@@ -11,9 +16,6 @@
                 ref="form"
             />
         </transition>
-        <template v-if="loading">
-            <LoadingOverlay absolute />
-        </template>
     </Modal>
 </template>
 
