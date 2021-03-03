@@ -81,8 +81,6 @@ describe('modal', ()=>{
         expect(bModal(wrapper).props()).toMatchObject({
             id: 'modal-id',
             visible: false,
-            cancelTitle: '{{ modals.cancel_button }}',
-            okTitle: '{{ modals.ok_button }}',
             okOnly: false,
             title: '',
             noEnforceFocus: true,
@@ -96,8 +94,6 @@ describe('modal', ()=>{
         });
         expect(bModal(wrapper).props()).toMatchObject({
             visible: true,
-            cancelTitle: 'custom cancel title',
-            okTitle: 'custom ok title',
             okOnly: true,
             title: 'custom title',
         });

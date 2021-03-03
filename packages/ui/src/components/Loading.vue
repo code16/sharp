@@ -11,7 +11,6 @@
 
 <script>
     export default {
-        name: 'SharpLoading',
         props: {
             visible: {
                 type: Boolean,
