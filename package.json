@@ -51,7 +51,7 @@
     "@vue/test-utils": "^1.0.0-beta.29",
     "axios": "^0.19.2",
     "babel-jest": "^24.1.0",
-    "bootstrap": "^4.3.1",
+    "bootstrap": "^5.0.0-beta2",
     "bootstrap-vue": "^2.0.4",
     "circular-dependency-plugin": "^5.2.0",
     "core-js": "^3.0.0-beta.8",
