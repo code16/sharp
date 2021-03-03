@@ -9,18 +9,18 @@ body {
 $css--reset: true;
 $css--typography: true;
 
-@import 'vars';
+@import 'variables';
 
 @import '~carbon-components/scss/globals/scss/colors';
 @import '~carbon-components/scss/globals/scss/vars';
 
-@import '~carbon-components/scss/globals/scss/css--reset';
-@import '~carbon-components/scss/globals/scss/css--typography';
+//@import '~carbon-components/scss/globals/scss/css--reset';
+//@import '~carbon-components/scss/globals/scss/css--typography';
 
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
-@import '~bootstrap/scss/mixins';
-@import '~bootstrap/scss/utilities';
+@import '~bootstrap/scss/mixins/breakpoints';
+//@import '~bootstrap/scss/utilities';
 
 ::before, ::after {
   box-sizing: border-box;

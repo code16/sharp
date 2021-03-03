@@ -6,8 +6,8 @@
   position: relative;
 
   &__input {
-    @include reset;
-    @include font-size('14');
+    //@include reset;
+    font-size: .875rem;
     display: block;
     position: relative;
     height: rem(40px);
@@ -78,7 +78,7 @@
       width: 10em;
       min-height: 200px;
       padding: .875rem 0 .25rem;
-      @include font-size('12');
+      font-size: .75rem;
 
       header {
         width: 100%;
@@ -202,7 +202,7 @@
         }
 
         .up {
-          @include font-size('12');
+          font-size: .75rem;
           text-transform: uppercase;
           padding: 0;
           &:hover {
@@ -252,7 +252,7 @@
             margin-bottom: .325rem;
 
             .day-header {
-              @include font-size('12');
+              font-size: .75rem;
               font-weight: 700;
               color: $text-01;
             }
@@ -270,7 +270,7 @@
 
           .SharpDate__dayContainer {
             .day {
-              @include font-size('12');
+              font-size: .75rem;
               height: rem(25px);
               width: 1.8rem;
               line-height: rem(25px);

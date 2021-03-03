@@ -15,23 +15,25 @@
 
 @import '~carbon-components/scss/globals/scss/colors';
 @import '~carbon-components/scss/globals/scss/vars';
-@import '~carbon-components/scss/globals/scss/css--reset';
+//@import '~carbon-components/scss/globals/scss/css--reset';
+
+
 
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
 
-@import '~bootstrap/scss/mixins/border-radius';
-@import '~bootstrap/scss/mixins/hover';
-@import '~bootstrap/scss/mixins/grid';
-@import '~bootstrap/scss/mixins/grid-framework';
-@import '~bootstrap/scss/mixins/breakpoints';
-@import '~bootstrap/scss/mixins/transition';
-@import '~bootstrap/scss/mixins/visibility';
+@import '~bootstrap/scss/root';
+@import '~bootstrap/scss/reboot';
 
 @import '~bootstrap/scss/grid';
+@import '~bootstrap/scss/containers';
 @import '~bootstrap/scss/transitions';
-@import '~bootstrap/scss/utilities/flex';
-@import '~bootstrap/scss/utilities/visibility';
-@import '~bootstrap/scss/utilities/spacing';
+@import '~bootstrap/scss/utilities';
+
+@import '~bootstrap/scss/buttons';
 @import '~bootstrap/scss/breadcrumb';
+
+@import '~bootstrap/scss/utilities/api';
+
 @import '~bootstrap-vue/src/utilities';

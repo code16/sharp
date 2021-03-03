@@ -1,7 +1,7 @@
 <template>
     <component
         :is="tag"
-        class="SharpButton"
+        class="SharpButton btn"
         :class="classes"
         :href="href"
         v-on="$listeners"
@@ -13,19 +13,26 @@
 <script>
     export default {
         props: {
-            type: String,
+            type: {
+                type: String,
+                default: 'primary',
+            },
             outline: Boolean,
-            danger: Boolean,
             small: Boolean,
             href: String,
         },
         computed:{
             classes() {
+                let variantClass = 'btn';
+                if(this.outline) {
+                    variantClass = `${variantClass}-outline`;
+                }
+                variantClass = `${variantClass}-${this.type}`;
+
                 return [
-                    this.type ? `SharpButton--${this.type}` : '', {
-                        'SharpButton--secondary': this.outline,
-                        'SharpButton--danger': this.danger,
-                        'SharpButton--sm': this.small
+                    variantClass,
+                    {
+                        'btn-sm': this.small
                     }
                 ]
             },

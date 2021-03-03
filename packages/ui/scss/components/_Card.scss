@@ -1,7 +1,7 @@
 @import '../mixins/card';
 
 .SharpCard {
-  @include reset;
+  //@include reset;
   @include layer('raised');
   display: flex;
   flex-direction: column;
@@ -16,7 +16,7 @@
 
   .SharpCard {
     &__overview {
-      @include reset;
+      //@include reset;
       position: relative;
       display: flex;
       justify-content: $card-flex-align;
@@ -35,7 +35,7 @@
       }
 
       .SharpCard__overview-about {
-        @include reset;
+        //@include reset;
         display: flex;
         flex: 1;
         flex-direction: column;
@@ -47,7 +47,7 @@
           padding-top: 1.5rem;
 
           &--name {
-            @include font-size('18');
+            font-size: 1.125rem;
             @include text-overflow(rem(180px));
             font-weight: 400;
             margin: 0;
@@ -55,7 +55,7 @@
           }
 
           &--link {
-            @include font-size('12');
+            font-size: .75rem;
             @include text-overflow(rem(180px));
             display: inline;
             font-weight: 400;
@@ -63,7 +63,7 @@
           }
 
           &--additional-info {
-            @include font-size('12');
+            font-size: .75rem;
             @include text-overflow(rem(180px));
             display: inline;
             font-weight: 400;
@@ -78,7 +78,7 @@
         }
 
         .SharpCard__about-icon {
-          @include reset;
+          //@include reset;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -108,7 +108,7 @@
       padding-right: 1rem;
 
       &-link {
-        @include font-size('14');
+        font-size: .875rem;
 
         &:focus {
           @include focus-outline('border');
@@ -116,7 +116,7 @@
       }
 
       .SharpCard__app-status {
-        @include reset;
+        //@include reset;
 
         .active {
           display: flex;
@@ -143,7 +143,7 @@
         display: flex;
 
         .SharpCard__app-actions-button {
-          @include font-size('16');
+          font-size: 1rem;
           display: inline-block;
           padding: .125rem 0 0;
           margin: 0 .175rem;

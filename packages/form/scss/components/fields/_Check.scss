@@ -1,9 +1,8 @@
 .SharpCheck {
   height: 100%;
   &__label {
-    @include reset;
-    @include font-smoothing;
-    @include font-size('14');
+    //@include reset;
+    font-size: .875rem;
     display: flex;
     height: 100%;
     align-items: center;

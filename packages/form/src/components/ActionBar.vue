@@ -1,7 +1,7 @@
 <template>
     <ActionBar>
         <template v-slot:left>
-            <Button type="secondary-accent" @click="handleCancelClicked">
+            <Button type="light" outline @click="handleCancelClicked">
                 <template v-if="showBackButton">
                     {{ l('action_bar.form.back_button') }}
                 </template>
@@ -32,7 +32,7 @@
         </template>
         <template v-slot:right>
             <template v-if="showSubmitButton">
-                <Button type="accent" :disabled="uploading" @click="handleSubmitClicked">
+                <Button type="light" :disabled="uploading" @click="handleSubmitClicked">
                     {{ submitLabel }}
                 </Button>
             </template>

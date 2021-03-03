@@ -1,6 +1,6 @@
 .SharpText {
-  @include reset;
-  @include font-size('14');
+  //@include reset;
+  font-size: .875rem;
   display: block;
   width: 100%;
   height: rem(40px);

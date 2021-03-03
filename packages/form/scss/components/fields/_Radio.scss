@@ -1,14 +1,14 @@
 .SharpRadio {
   @include hidden;
   &__label {
-    @include font-size('14');
+    font-size: .875rem;
     display: flex;
     align-items: center;
     cursor: pointer;
   }
 
   &__appearance {
-    @include reset;
+    //@include reset;
     background-color: $inverse-01;
     border-radius: 50%;
     border: 2px solid $ui-05;
