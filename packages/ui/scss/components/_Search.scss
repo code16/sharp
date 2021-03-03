@@ -7,7 +7,7 @@
   }
 
   &__input {
-    @include reset;
+    //@include reset;
     appearance: none;
     border: none;
     background-color: $field-01;
@@ -32,12 +32,12 @@
   }
 
   &--sm .SharpSearch__input {
-    @include font-size('14');
+    font-size: .875rem;
     height: rem(32px);
   }
 
   &--lg .SharpSearch__input {
-    @include font-size('14');
+    font-size: .875rem;
     height: rem(40px);
   }
 
@@ -71,7 +71,7 @@
   }
 
   &__button {
-    @include reset;
+    //@include reset;
     border: 0;
     transition: $transition--base;
     height: rem(40px);

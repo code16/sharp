@@ -12,8 +12,8 @@
 }
 
 .SharpDropdown {
-  @include reset;
-  @include font-size('14');
+  //@include reset;
+  font-size: .875rem;
   position: relative;
   list-style: none;
   display: block;
@@ -79,7 +79,7 @@
   }
 
   &__list {
-    @include reset;
+    //@include reset;
     @include layer('overlay');
     width: 100%;
     max-width: 15rem;

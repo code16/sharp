@@ -67,7 +67,7 @@
     padding: 1rem !important;
     min-height: 0 !important;
     line-height: 1.5;
-    @include font-size('14');
+    font-size: .875rem;
 
     &[disabled] {
       pointer-events: none;

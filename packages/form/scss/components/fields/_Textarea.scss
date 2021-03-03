@@ -1,6 +1,6 @@
 .SharpTextarea {
-  @include reset;
-  @include font-size('14');
+  //@include reset;
+  font-size: .875rem;
   width: 100%;
   max-width: 100% !important;
   min-width: 10rem;

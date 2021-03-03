@@ -18,10 +18,10 @@
 // apply to SharpLeftNav__list
 @mixin enhanced-item-font-size() {
   .SharpLeftNav__item {
-    @include font-size('16');
+    font-size: 1rem;
     &--has-children {
       & > .SharpLeftNav__item-link {
-        @include font-size('12');
+        font-size: .75rem;
       }
     }
   }

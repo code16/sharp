@@ -65,7 +65,7 @@
 
     /// Contextual children modifiers
     .SharpForm--label {
-      @include font-size('12');
+      font-size: .75rem;
     }
 
     .SharpUpload {

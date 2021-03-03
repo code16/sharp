@@ -1,5 +1,5 @@
 .SharpPagination {
-  @include reset;
+  //@include reset;
   width: 100%;
   background-color: $ui-01;
   padding: .5rem 1rem;
@@ -24,10 +24,10 @@
 
       outline: none;
 
-      @include font-size('18');
+      font-size: 1.125rem;
 
       &[aria-posinset] {
-        @include font-size('14');
+        font-size: .875rem;
         font-weight: 700;
       }
 

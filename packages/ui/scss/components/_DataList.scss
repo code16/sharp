@@ -22,7 +22,7 @@
   }
 
   &__table {
-    @include reset;
+    //@include reset;
     //display: table;
     //overflow-x: auto;
     //overflow-y: hidden;
@@ -150,7 +150,7 @@
 
   &__td {
     //@include reset;
-    @include font-size('14');
+    font-size: .875rem;
     @include line-height('body');
     //@include padding-td;
     position: relative;

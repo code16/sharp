@@ -1,7 +1,7 @@
 @import "../mixins/left-nav";
 
 .SharpLeftNav {
-  @include reset;
+  //@include reset;
   width: rem(250px);
   position: fixed;
   top: 0;
@@ -35,7 +35,7 @@
   }
 
   &__title {
-    @include font-size('16');
+    font-size: 1rem;
     text-transform: uppercase;
     letter-spacing: 0;
     color: $inverse-01;
@@ -59,6 +59,8 @@
     flex-direction: column;
     background-color: $color__white;
     padding-top: 1rem;
+    padding-left: 0;
+    margin-bottom: 0;
 
     @include enhanced-item-border-and-spacing;
     @include enhanced-item-font-size;
@@ -95,7 +97,7 @@
       }
 
       &-link {
-        @include font-size('14');
+        font-size: .875rem;
         color: $color__blue-90;
         font-weight: 400;
         position: relative;
@@ -198,7 +200,7 @@
       opacity: 0;
 
       &-link {
-        @include font-size('14');
+        font-size: .875rem;
         color: $color__blue-90;
         padding: .75rem 1.35rem .75rem 4.5rem;
         font-weight: 400;

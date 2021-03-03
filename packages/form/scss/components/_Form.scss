@@ -7,7 +7,7 @@
   }
 
   &__fieldset {
-    @include reset;
+    //@include reset;
     //margin-bottom: 2rem;
 
     @extend .SharpModule;
@@ -62,8 +62,8 @@
   }
 
   &__label {
-    @include reset;
-    @include font-size('14');
+    //@include reset;
+    font-size: .875rem;
     font-weight: $input-label-weight;
     display: inline-block;
     vertical-align: baseline;
@@ -89,7 +89,7 @@
 
 
   &__form-requirement {
-    @include reset;
+    //@include reset;
     font-size: .75rem;
     margin: .75rem 0 0;
     max-height: 0;
@@ -111,7 +111,7 @@
   }
 
   &__help-message {
-    @include font-size('11');
+    font-size: .75rem;
     margin: .75rem 0 0;
     line-height: 1.5;
   }

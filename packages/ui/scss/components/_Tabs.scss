@@ -57,9 +57,6 @@
     margin-bottom: 1em;
 
     .SharpTabs__nav-link {
-      @include reset;
-      @include font-smoothing;
-      //@include font-size('14');
       background-color: $ui-01;
       display: flex;
       align-items: center;

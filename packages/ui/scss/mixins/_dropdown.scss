@@ -3,7 +3,7 @@
 }
 
 @mixin SharpDropdownOpenList {
-  @include font-size('14');
+  font-size: .875rem;
   display: flex;
   flex-direction: column;
 }

@@ -4,9 +4,8 @@
   // Inline notification style
   // http://carbondesignsystem.com/components/notification/code
 
-  @include reset;
-  @include font-smoothing;
-  @include font-size('14');
+  //@include reset;
+  font-size: .875rem;
   display: flex;
   justify-content: space-between;
   padding: .75rem 1rem;
@@ -53,14 +52,14 @@
   }
 
   &__title {
-    @include font-size('14');
+    font-size: .875rem;
     font-weight: 700;
     margin-right: .25rem;
     line-height: 1.125;
   }
 
   &__subtitle {
-    @include font-size('14');
+    font-size: .875rem;
     line-height: 1.125;
   }
 
@@ -89,8 +88,7 @@
 }
 
 .SharpToastNotification {
-  @include reset;
-  @include font-smoothing;
+  //@include reset;
   @include box-shadow('small');
   display: flex;
   justify-content: space-between;
@@ -149,21 +147,21 @@
   }
 
   &__title {
-    @include font-size('14');
+    font-size: .875rem;
     font-weight: 700;
     letter-spacing: 0;
     padding-bottom: .125rem;
   }
 
   &__subtitle {
-    @include font-size('12');
+    font-size: .75rem;
     color: $text-03;
     margin-top: 0;
     margin-bottom: 1rem;
   }
 
   &__caption {
-    @include font-size('12');
+    font-size: .75rem;
     color: $text-01;
   }
 }

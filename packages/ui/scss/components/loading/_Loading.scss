@@ -8,7 +8,7 @@ $loading__end-duration: 300ms;
 
 
 .SharpLoading {
-  @include reset;
+  //@include reset;
   width: $loading__size;
   height: $loading__size;
 
