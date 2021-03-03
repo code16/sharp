@@ -18,8 +18,15 @@ exports[`modal mount 1`] = `
 				</header>
 				<div id="modal-id___BV_modal_body_" class="modal-body"></div>
 				<footer id="modal-id___BV_modal_footer_" class="modal-footer">
-					<button type="button" class="btn btn-secondary">cancel title</button>
-					<button type="button" class="btn btn-primary">ok title</button>
+					<button class="btn btn-secondary">
+						cancel title
+					</button>
+					<button class="btn btn-primary position-relative">
+						<span class="">
+							ok title
+						</span>
+						<!---->
+					</button>
 				</footer>
 			</div>
 			<!---->
@@ -43,8 +50,15 @@ exports[`modal mount ok only 1`] = `
 				</header>
 				<div id="mocked___BV_modal_body_" class="modal-body"></div>
 				<footer id="mocked___BV_modal_footer_" class="modal-footer">
-					<!---->
-					<button type="button" class="btn btn-primary">{{ modals.ok_button }}</button>
+					<button class="btn btn-secondary">
+						{{ modals.cancel_button }}
+					</button>
+					<button class="btn btn-primary position-relative">
+						<span class="">
+							{{ modals.ok_button }}
+						</span>
+						<!---->
+					</button>
 				</footer>
 			</div>
 			<!---->
@@ -72,8 +86,15 @@ exports[`modal mount visible 1`] = `
 				</header>
 				<div id="mocked___BV_modal_body_" class="modal-body"></div>
 				<footer id="mocked___BV_modal_footer_" class="modal-footer">
-					<button type="button" class="btn btn-secondary">{{ modals.cancel_button }}</button>
-					<button type="button" class="btn btn-primary">{{ modals.ok_button }}</button>
+					<button class="btn btn-secondary">
+						{{ modals.cancel_button }}
+					</button>
+					<button class="btn btn-primary position-relative">
+						<span class="">
+							{{ modals.ok_button }}
+						</span>
+						<!---->
+					</button>
 				</footer>
 			</div>
 			<!---->

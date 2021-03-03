@@ -170,8 +170,15 @@ exports[`vue-clip can mount initially image VueClip component 1`] = `
 							</div>
 						</div>
 						<footer id="mocked___BV_modal_footer_" class="modal-footer">
-							<button type="button" class="btn btn-secondary">{{ modals.cancel_button }}</button>
-							<button type="button" class="btn btn-primary">{{ modals.ok_button }}</button>
+							<button class="btn btn-secondary">
+								{{ modals.cancel_button }}
+							</button>
+							<button class="btn btn-primary position-relative">
+								<span class="">
+									{{ modals.ok_button }}
+								</span>
+								<!---->
+							</button>
 						</footer>
 					</div>
 					<!---->
