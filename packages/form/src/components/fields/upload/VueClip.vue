@@ -3,9 +3,9 @@
         <div class="SharpUpload__inner">
             <div class="SharpUpload__content">
                 <form v-show="!file" class="dropzone">
-                    <button type="button" class="dz-message SharpButton SharpButton--ghost SharpUpload__upload-button" :disabled="readOnly">
+                    <Button type="button" text class="dz-message SharpUpload__upload-button" :disabled="readOnly">
                         {{ l('form.upload.browse_button') }}
-                    </button>
+                    </Button>
                 </form>
                 <template v-if="file">
                     <div class="SharpUpload__container" :class="{ row:showThumbnail }">
@@ -34,13 +34,12 @@
                                 </transition>
                             </div>
                             <div v-show="!readOnly">
-                                <button v-show="!!originalImageSrc && !inProgress" type="button" class="SharpButton SharpButton--sm SharpButton--secondary" :disabled="!isCroppable" @click="onEditButtonClick">
+                                <Button v-show="!!originalImageSrc && !inProgress" outline small :disabled="!isCroppable" @click="onEditButtonClick">
                                     {{ l('form.upload.edit_button') }}
-                                </button>
-                                <button type="button" class="SharpButton SharpButton--sm SharpButton--secondary SharpButton--danger SharpUpload__remove-button"
-                                        @click="remove()" :disabled="readOnly">
+                                </Button>
+                                <Button class="SharpUpload__remove-button" variant="danger" outline small :disabled="readOnly" @click="remove()">
                                     {{ l('form.upload.remove_button') }}
-                                </button>
+                                </Button>
                             </div>
                         </div>
                         <button class="SharpUpload__close-button" type="button" @click="remove()" v-show="!readOnly">
@@ -73,9 +72,9 @@
                              :ready="onCropperReady"
                              alt="Source image">
                 </vue-cropper>
-                <div>
-                    <button class="SharpButton SharpButton--primary" @click="rotate(-90)"><i class="fas fa-undo"></i></button>
-                    <button class="SharpButton SharpButton--primary" @click="rotate(90)"><i class="fas fa-redo"></i></button>
+                <div class="mt-3">
+                    <Button @click="rotate(-90)"><i class="fas fa-undo"></i></Button>
+                    <Button @click="rotate(90)"><i class="fas fa-redo"></i></Button>
                 </div>
             </Modal>
         </template>
@@ -87,7 +86,7 @@
     import VueClip from 'vue-clip/src/components/Clip';
     import VueCropper from 'vue-cropperjs';
 
-    import { Modal } from 'sharp-ui';
+    import { Modal, Button } from 'sharp-ui';
     import { Localization } from 'sharp/mixins';
     import { filesizeLabel } from 'sharp';
 
@@ -102,7 +101,8 @@
 
         components: {
             Modal,
-            VueCropper
+            VueCropper,
+            Button,
         },
 
         inject : [ 'axiosInstance' ,'$form', '$field' ],

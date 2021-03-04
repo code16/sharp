@@ -25,15 +25,15 @@
                 <template v-if="canReorder">
                     <div class="col-auto" :class="{ 'd-none d-sm-block': searchActive }">
                         <template v-if="reorderActive">
-                            <Button variant="light" outline @click="handleReorderButtonClicked">
+                            <Button variant="light" large outline @click="handleReorderButtonClicked">
                                 {{ l('action_bar.list.reorder_button.cancel') }}
                             </Button>
-                            <Button variant="light" @click="handleReorderSubmitButtonClicked">
+                            <Button variant="light" large @click="handleReorderSubmitButtonClicked">
                                 {{ l('action_bar.list.reorder_button.finish') }}
                             </Button>
                         </template>
                         <template v-else>
-                            <Button variant="light" outline @click="handleReorderButtonClicked">
+                            <Button variant="light" large outline @click="handleReorderButtonClicked">
                                 {{ l('action_bar.list.reorder_button') }}
                             </Button>
                         </template>
@@ -50,7 +50,7 @@
                             </Dropdown>
                         </template>
                         <template v-else>
-                            <Button variant="light" @click="handleCreateButtonClicked">
+                            <Button variant="light" large @click="handleCreateButtonClicked">
                                 {{ l('action_bar.list.create_button') }}
                             </Button>
                         </template>

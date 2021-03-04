@@ -33,7 +33,10 @@
 
 @import '~bootstrap/scss/buttons';
 @import '~bootstrap/scss/breadcrumb';
+@import '~bootstrap/scss/modal';
+@import '~bootstrap/scss/close';
 
 @import '~bootstrap/scss/utilities/api';
 
 @import '~bootstrap-vue/src/utilities';
+@import '~bootstrap-vue/src/components/modal/index';

@@ -1,4 +1,4 @@
-$css--reset:false;
+
 
 @import 'variables';
 @import 'vendors';
@@ -10,7 +10,8 @@ $css--reset:false;
 @import 'mixins/modifiers';
 @import 'mixins/close-button';
 
-@import "typography";
+@import "root";
+@import "bootstrap";
 
 
 $small-breakpoint: sm;

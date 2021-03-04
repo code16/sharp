@@ -56,21 +56,21 @@
                                     <template v-if="reorderActive">
                                         <div class="row action-bar__row">
                                             <div class="col-auto action-bar__col">
-                                                <button class="SharpButton SharpButton--secondary-accent" @click="handleReorderButtonClicked">
+                                                <Button variant="light" large outline @click="handleReorderButtonClicked">
                                                     {{ l('action_bar.list.reorder_button.cancel') }}
-                                                </button>
+                                                </Button>
                                             </div>
                                             <div class="col-auto action-bar__col">
-                                                <button class="SharpButton SharpButton--accent" @click="handleReorderSubmitButtonClicked">
+                                                <Button variant="light" large @click="handleReorderSubmitButtonClicked">
                                                     {{ l('action_bar.list.reorder_button.finish') }}
-                                                </button>
+                                                </Button>
                                             </div>
                                         </div>
                                     </template>
                                     <template v-else>
-                                        <button class="SharpButton SharpButton--secondary-accent" @click="handleReorderButtonClicked">
+                                        <Button variant="light" large outline @click="handleReorderButtonClicked">
                                             {{ l('action_bar.list.reorder_button') }}
-                                        </button>
+                                        </Button>
                                     </template>
                                 </div>
                             </template>
@@ -85,9 +85,9 @@
                                             </Dropdown>
                                         </template>
                                         <template v-else>
-                                            <button class="SharpButton SharpButton--accent" @click="handleCreateButtonClicked">
+                                            <Button variant="light" large @click="handleCreateButtonClicked">
                                                 {{ l('action_bar.list.create_button') }}
-                                            </button>
+                                            </Button>
                                         </template>
                                     </div>
                                 </div>
@@ -102,7 +102,7 @@
 
 <script>
     import { Localization } from 'sharp/mixins';
-    import { Search, ItemVisual, Dropdown, DropdownItem } from 'sharp-ui';
+    import { Search, ItemVisual, Dropdown, DropdownItem, Button } from 'sharp-ui';
     import { FilterDropdown } from 'sharp-filters';
 
     export default {
@@ -113,6 +113,7 @@
             Dropdown,
             DropdownItem,
             FilterDropdown,
+            Button,
         },
         props: {
             ready: Boolean,

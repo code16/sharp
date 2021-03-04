@@ -1,38 +1,39 @@
 <template>
     <ActionBar>
         <template v-slot:left>
-            <Button variant="light" outline @click="handleCancelClicked">
-                <template v-if="showBackButton">
-                    {{ l('action_bar.form.back_button') }}
-                </template>
-                <template v-else>
-                    {{ l('action_bar.form.cancel_button') }}
-                </template>
-            </Button>
-
-            <template v-if="showDeleteButton">
-                <div class="w-100 h-100 ml-3">
-                    <Collapse>
-                        <template v-slot:frame-0="{ next }">
-                            <button class="SharpButton SharpButton--danger" @click="next(focusDelete)">
-                                <svg  width='16' height='16' viewBox='0 0 16 24' fill-rule='evenodd'>
-                                    <path d='M4 0h8v2H4zM0 3v4h1v17h14V7h1V3H0zm13 18H3V8h10v13z'></path>
-                                    <path d='M5 10h2v9H5zm4 0h2v9H9z'></path>
-                                </svg>
-                            </button>
+            <div class="row gx-3">
+                <div class="col-auto">
+                    <Button variant="light" large outline @click="handleCancelClicked">
+                        <template v-if="showBackButton">
+                            {{ l('action_bar.form.back_button') }}
                         </template>
-                        <template v-slot:frame-1="{ next }">
-                            <Button variant="danger" @click="handleDeleteClicked" @blur="next()" ref="openDelete">
+                        <template v-else>
+                            {{ l('action_bar.form.cancel_button') }}
+                        </template>
+                    </Button>
+                </div>
+                <template v-if="showDeleteButton">
+                    <div class="col-auto">
+                        <template v-if="deleteFocused">
+                            <Button variant="danger" large @click="handleDeleteClicked" @blur="deleteFocused = false">
                                 {{ l('action_bar.form.delete_button') }}
                             </Button>
                         </template>
-                    </Collapse>
-                </div>
-            </template>
+                        <template v-else>
+                            <Button class="px-3" variant="light" large outline @click="deleteFocused = true">
+                                <svg width="1.125em" height="1.125em" viewBox="0 0 16 24" fill-rule="evenodd">
+                                    <path d="M4 0h8v2H4zM0 3v4h1v17h14V7h1V3H0zm13 18H3V8h10v13z"></path>
+                                    <path d="M5 10h2v9H5zm4 0h2v9H9z"></path>
+                                </svg>
+                            </Button>
+                        </template>
+                    </div>
+                </template>
+            </div>
         </template>
         <template v-slot:right>
             <template v-if="showSubmitButton">
-                <Button variant="light" :disabled="uploading" @click="handleSubmitClicked">
+                <Button variant="light" large :disabled="uploading" @click="handleSubmitClicked">
                     {{ submitLabel }}
                 </Button>
             </template>
@@ -47,7 +48,7 @@
 
 <script>
     import { lang } from 'sharp';
-    import { ActionBar, Collapse, Button, Breadcrumb} from 'sharp-ui';
+    import { ActionBar, Button, Breadcrumb } from 'sharp-ui';
     import { Localization } from "sharp/mixins";
 
     export default {
@@ -55,7 +56,6 @@
         mixins: [Localization],
         components: {
             ActionBar,
-            Collapse,
             Button,
             Breadcrumb,
         },
@@ -68,6 +68,11 @@
             breadcrumb: Array,
             showBreadcrumb: Boolean,
         },
+        data() {
+            return {
+                deleteFocused: false,
+            }
+        },
         computed: {
             submitLabel() {
                 if(this.uploading) {
@@ -79,11 +84,6 @@
             },
         },
         methods: {
-            focusDelete() {
-                if(this.$refs.openDelete) {
-                    this.$refs.openDelete.focus();
-                }
-            },
             handleSubmitClicked() {
                 this.$emit('submit');
             },

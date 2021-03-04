@@ -18,6 +18,13 @@ $primary: $brand-01;
 
 $enable-negative-margins: true;
 
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+);
+
 $breakpoint-fixed-menu: 'lg';
 $form-item-margin-bottom : 1.5rem;
 
@@ -31,9 +38,11 @@ $input-label-weight: 400;
 $border-radius: 3px;
 $btn-border-radius: $border-radius;
 $btn-border-width: 1px;
-$btn-font-weight: 600;
-$btn-font-size: .875rem;
+$btn-font-weight: 500;
 $btn-font-size-sm: .75rem;
+$btn-font-size: .875rem;
+$btn-font-size-lg: 1rem;
+$btn-line-height: 1.4;
 
 $input-border-radius: $border-radius;
 

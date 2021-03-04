@@ -15,7 +15,7 @@
     display: flex;
     align-items: center;
     & > *:not(.text-content) {
-      height: 100%
+      //height: 100%
     }
   }
 
@@ -169,8 +169,6 @@
 
   .SharpButton {
     border-radius: $btn-border-radius;
-    padding-top: .75em;
-    padding-bottom: .75em;
     &:focus {
       outline: none;
     }

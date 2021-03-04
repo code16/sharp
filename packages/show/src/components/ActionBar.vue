@@ -2,16 +2,16 @@
     <ActionBar>
         <template v-slot:left>
             <template v-if="showBackButton">
-                <a :href="backUrl" class="SharpButton SharpButton--secondary-accent">
+                <Button :href="backUrl" outline variant="light" large>
                     {{ l('action_bar.show.back_button') }}
-                </a>
+                </Button>
             </template>
         </template>
         <template v-slot:right>
             <template v-if="canEdit">
-                <a :href="formUrl" class="SharpButton SharpButton--accent">
+                <Button :href="formUrl" variant="light" large>
                     {{ l('action_bar.show.edit_button') }}
-                </a>
+                </Button>
             </template>
         </template>
         <template v-slot:extras>
@@ -64,6 +64,7 @@
         DropdownItem,
         StateIcon,
         Breadcrumb,
+        Button,
     } from 'sharp-ui';
 
     import {
@@ -81,6 +82,7 @@
             Dropdown,
             DropdownItem,
             StateIcon,
+            Button,
         },
         props: {
             commands: Array,

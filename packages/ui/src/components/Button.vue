@@ -20,18 +20,22 @@
             text: Boolean,
             outline: Boolean,
             small: Boolean,
+            large: Boolean,
             active: Boolean,
             href: String,
         },
         computed: {
             variantClass() {
-                return `btn${this.outline ? '-outline' : ''}-${this.variant}`;
+                return !this.text
+                    ? `btn${this.outline ? '-outline' : ''}-${this.variant}`
+                    : null;
             },
             classes() {
                 return [
                     this.variantClass,
                     {
                         'btn-sm': this.small,
+                        'btn-lg': this.large,
                         'btn-text': this.text,
                         'active': this.active,
                     }

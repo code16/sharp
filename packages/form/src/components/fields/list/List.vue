@@ -46,9 +46,11 @@
                                     />
                                 </ListItem>
                                 <template v-if="showRemoveButton">
-                                    <button class="SharpButton SharpButton--danger SharpButton--sm mt-3" @click="remove(i)">
-                                        {{ l('form.list.remove_button') }}
-                                    </button>
+                                    <div class="mt-3 text-center">
+                                        <Button  variant="danger" outline small @click="remove(i)">
+                                            {{ l('form.list.remove_button') }}
+                                        </Button>
+                                    </div>
                                 </template>
                             </template>
 
@@ -60,15 +62,17 @@
                     </div>
                     <template v-if="showInsertButton && i < list.length-1">
                         <div class="SharpList__new-item-zone">
-                            <button class="SharpButton SharpButton--sm" @click="insertNewItem(i, $event)">{{ l('form.list.insert_button') }}</button>
+                            <Button small @click="insertNewItem(i, $event)">
+                                {{ l('form.list.insert_button') }}
+                            </Button>
                         </div>
                     </template>
                 </div>
             </transition-group>
             <template v-if="showAddButton" v-slot:footer>
-                <button class="SharpButton SharpButton--ghost SharpList__add-button" type="button" @click="add" :key="-1">
-                    {{addText}}
-                </button>
+                <Button text class="SharpList__add-button" @click="add" :key="-1">
+                    {{ addText }}
+                </Button>
             </template>
         </Draggable>
         <template v-if="readOnly && !list.length">

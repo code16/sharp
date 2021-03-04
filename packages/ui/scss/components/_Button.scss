@@ -1,157 +1,60 @@
 @import '../mixins/button';
 
 
-.SharpButton {
-  overflow: hidden;
+
+.btn {
+  text-transform: uppercase;
 
   svg {
     fill: currentColor;
-  }
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  text-transform: uppercase;
-
-  &.btn-text {
-    @include button-variant(
-      $background: transparent,
-      $border: transparent,
-      $color: $primary,
-      $hover-background: white,
-      $hover-border: white,
-      $hover-color: $primary,
-      $active-background: $primary,
-      $active-border: $primary,
-      $active-color: white,
-      $disabled-background: transparent,
-      $disabled-border: transparent,
-      $disabled-color: $primary
-    );
-  }
-
-  &--primary {
-    @include sharp-button-theme(
-      $brand-01,   // bg-color
-      transparent, // border-color
-      $inverse-01, // font-color
-      $brand-02,   // hover-bg-color
-      $ui-01       // icon-color
-    );
-  }
-
-  &--accent {
-    @include sharp-button-theme(
-      $brand-03,   // bg-color
-      transparent, // border-color
-      $inverse-01, // font-color
-      lighten($brand-03, 10%),   // hover-bg-color
-      $ui-01       // icon-color
-    );
-  }
-
-  &--secondary {
-    @include sharp-button-theme(
-      $ui-01, // bg-color
-      $brand-01,   // border-color
-      $brand-01,   // font-color
-      $brand-01,   // hover-bg-color
-      $brand-01 // icon-color
-    );
-
-    &:hover,
-    &:focus {
-      color: $inverse-01;
-    }
-
-    &:hover > svg,
-    &:focus > svg {
-      fill: $inverse-01;
-    }
-
-    &:hover:disabled,
-    &:focus:disabled {
-      color: $brand-01;
-    }
-  }
-
-  &--secondary-accent {
-    @include sharp-button-theme(
-      $ui-01,   // bg-color
-      $brand-01, // border-color
-      $brand-03, // font-color
-      darken($ui-01, 10%),   // hover-bg-color
-      $brand-03       // icon-color
-    );
-  }
-
-  &--ghost {
-    @include sharp-button-theme(
-                    transparent, // bg-color
-                    transparent,   // border-color
-                    $brand-01,   // font-color
-                    $ui-01,   // hover-bg-color
-                    $brand-01 // icon-color
-    );
-    box-shadow: 0 3px 0 $ui-03;
-
-    //&:hover,
-    //&:focus {
-    //  color: $inverse-01;
-    //
-    //  svg {
-    //    fill: $inverse-01;
-    //  }
-    //}
-
-    svg {
-      margin-left: .275rem;
-    }
-
-    &:hover:disabled,
-    &:focus:disabled {
-      color: $brand-01;
-
-      svg {
-        fill: $brand-01;
-      }
-    }
-  }
-
-  &--danger {
-    @include sharp-button-theme(
-      $ui-01,  // bg-color
-      $support-01, // border-color
-      $support-01,  // font-color
-      $support-01,  // hover-bg-color
-      $brand-01       // icon-color
-    );
-
-    &:hover {
-      color: $inverse-01;
-      border: $button-border-width solid transparent;
-    }
-
-    &:focus {
-      color: $inverse-01;
-    }
-
-    &:hover:disabled,
-    &:focus:disabled {
-      color: $ui-05;
-      border: $button-border-width solid currentColor;
-    }
-
-    &:hover > svg,
-    &:focus > svg {
-      fill: $inverse-01;
-    }
+    vertical-align: -.125em;
   }
 
   &.active {
     &:focus:not(:focus-visible) {
       box-shadow: none;
     }
+  }
+}
+
+.btn-text {
+  @include button-variant(
+    $background: rgba(255, 255, 255, .5),
+    $border: transparent,
+    $color: $primary,
+    $hover-background: white,
+    $hover-border: white,
+    $hover-color: $primary,
+    $active-background: $primary,
+    $active-border: $primary,
+    $active-color: white,
+    $disabled-background: transparent,
+    $disabled-border: transparent,
+    $disabled-color: $primary
+  );
+}
+
+@mixin default {
+  &:not(:hover):not(:active):not(.active) {
+    @content;
+  }
+}
+
+.btn-outline-primary {
+  @include default {
+    border-color: rgba(var(--bs-primary-rgb), .375);
+  }
+}
+
+.btn-outline-light {
+  @include default {
+    border-color: rgba($light, .5);
+  }
+}
+
+.btn-outline-danger {
+  @include default {
+    background-color: white;
+    border-color: rgba($danger, .375);
   }
 }
