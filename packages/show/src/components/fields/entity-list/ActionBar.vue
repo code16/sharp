@@ -56,19 +56,19 @@
                                     <template v-if="reorderActive">
                                         <div class="row action-bar__row">
                                             <div class="col-auto action-bar__col">
-                                                <Button variant="light" large outline @click="handleReorderButtonClicked">
+                                                <Button text @click="handleReorderButtonClicked">
                                                     {{ l('action_bar.list.reorder_button.cancel') }}
                                                 </Button>
                                             </div>
                                             <div class="col-auto action-bar__col">
-                                                <Button variant="light" large @click="handleReorderSubmitButtonClicked">
+                                                <Button @click="handleReorderSubmitButtonClicked">
                                                     {{ l('action_bar.list.reorder_button.finish') }}
                                                 </Button>
                                             </div>
                                         </div>
                                     </template>
                                     <template v-else>
-                                        <Button variant="light" large outline @click="handleReorderButtonClicked">
+                                        <Button outline @click="handleReorderButtonClicked">
                                             {{ l('action_bar.list.reorder_button') }}
                                         </Button>
                                     </template>
@@ -85,7 +85,7 @@
                                             </Dropdown>
                                         </template>
                                         <template v-else>
-                                            <Button variant="light" large @click="handleCreateButtonClicked">
+                                            <Button variant="primary" @click="handleCreateButtonClicked">
                                                 {{ l('action_bar.list.create_button') }}
                                             </Button>
                                         </template>

@@ -4,7 +4,8 @@
         :visible="visible"
         :ok-only="okOnly"
         :static="static"
-        :modal-class="['SharpModal', {'SharpModal--error': isError}]"
+        modal-class="SharpModal"
+        :title-class="{ 'text-danger': isError }"
         no-enforce-focus
         v-on="$listeners"
         @change="handleVisiblityChanged"

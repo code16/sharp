@@ -3,7 +3,10 @@
         <template v-slot:text>
             <slot name="text" />
         </template>
-        <template v-for="group in commandGroups">
+        <template v-for="(group, i) in commandGroups">
+            <template v-if="i > 0">
+                <DropdownSeparator />
+            </template>
             <template v-for="command in group">
                 <DropdownItem @click="handleCommandClicked(command)" :key="command.key">
                     {{ command.label }}
@@ -14,7 +17,6 @@
                     </template>
                 </DropdownItem>
             </template>
-            <DropdownSeparator />
         </template>
     </Dropdown>
 </template>
