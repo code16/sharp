@@ -12,41 +12,10 @@
   }
 
   &__sort-button {
-    position:absolute;
-    right:0;
-    top:0;
-    z-index:1;
-    padding: 0;
-    height:auto;
-    background: $ui-02 !important;
-
-    &:before {
-      content: attr(data-inactive-text);
-    }
-
-    @mixin colorize($color) {
-      color: $color;
-      .SharpButton__icon {
-        fill: $color;
-      }
-    }
-
-    &:focus {
-      @include colorize($brand-01);
-      outline: 1px solid transparent;
-    }
-
-    &:hover {
-      @include colorize($brand-02);
-    }
-
-
-    &.SharpButton--active {
-      @include colorize($brand-03);
-      &:before {
-        content: attr(data-active-text);
-      }
-    }
+    position: absolute;
+    right: 0;
+    top: -.125rem;
+    z-index: 1;
   }
 
   //remove item button

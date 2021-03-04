@@ -33,7 +33,7 @@
                                 <div><small>Longitude : {{ latLngString.lng }}</small></div>
                             </div>
                             <div>
-                                <Button small outline type="danger" class="remove-button" :disabled="readOnly" @click="handleRemoveButtonClicked">
+                                <Button class="remove-button" variant="danger" small outline :disabled="readOnly" @click="handleRemoveButtonClicked">
                                     {{ l('form.geolocation.remove_button') }}
                                 </Button>
                                 <Button small outline :disabled="readOnly" @click="handleEditButtonClicked">

@@ -25,17 +25,17 @@
                 <template v-if="canReorder">
                     <div class="col-auto" :class="{ 'd-none d-sm-block': searchActive }">
                         <template v-if="reorderActive">
-                            <button class="SharpButton SharpButton--secondary-accent h-100" @click="handleReorderButtonClicked">
+                            <Button variant="light" outline @click="handleReorderButtonClicked">
                                 {{ l('action_bar.list.reorder_button.cancel') }}
-                            </button>
-                            <button class="SharpButton SharpButton--accent h-100" @click="handleReorderSubmitButtonClicked">
+                            </Button>
+                            <Button variant="light" @click="handleReorderSubmitButtonClicked">
                                 {{ l('action_bar.list.reorder_button.finish') }}
-                            </button>
+                            </Button>
                         </template>
                         <template v-else>
-                            <button class="SharpButton SharpButton--secondary-accent h-100" @click="handleReorderButtonClicked">
+                            <Button variant="light" outline @click="handleReorderButtonClicked">
                                 {{ l('action_bar.list.reorder_button') }}
-                            </button>
+                            </Button>
                         </template>
                     </div>
                 </template>
@@ -50,9 +50,9 @@
                             </Dropdown>
                         </template>
                         <template v-else>
-                            <button class="SharpButton SharpButton--accent h-100" @click="handleCreateButtonClicked">
+                            <Button variant="light" @click="handleCreateButtonClicked">
                                 {{ l('action_bar.list.create_button') }}
-                            </button>
+                            </Button>
                         </template>
                     </div>
                 </template>
@@ -88,7 +88,7 @@
 </template>
 
 <script>
-    import { ActionBar, Dropdown,  DropdownItem, ItemVisual, Search } from 'sharp-ui';
+    import { ActionBar, Dropdown,  DropdownItem, ItemVisual, Search, Button, } from 'sharp-ui';
     import { FilterDropdown } from 'sharp-filters';
     import { CommandsDropdown } from 'sharp-commands';
 
@@ -107,6 +107,7 @@
             CommandsDropdown,
             FilterDropdown,
             Search,
+            Button,
         },
 
         props: {

@@ -4,7 +4,7 @@
             <template v-if="hasNavOverflow">
                 <slot name="nav-prepend" />
             </template>
-            <button class="SharpTabs__collapse-btn SharpButton SharpButton--secondary mb-1"
+            <button class="SharpTabs__collapse-btn btn btn-outline-primary mb-1"
                 :class="{ 'd-none':!hasNavOverflow }"
                 @click="handleCollapseClicked"
             >

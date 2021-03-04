@@ -1,16 +1,18 @@
 <template>
     <div class="SharpList" :class="classes">
         <template v-if="showSortButton">
-            <button type="button"
-                    class="SharpButton SharpButton--ghost SharpList__sort-button"
-                    :class="{'SharpButton--active':dragActive}"
-                    :data-inactive-text="l('form.list.sort_button.inactive')"
-                    :data-active-text="l('form.list.sort_button.active')"
-                    @click="toggleDrag">
-                <svg class="SharpButton__icon" width='24' height='22' viewBox='0 0 24 22' fill-rule='evenodd'>
-                    <path d='M20 14V0h-4v14h-4l6 8 6-8zM4 8v14h4V8h4L6 0 0 8z'></path>
+            <Button
+                class="SharpList__sort-button"
+                text
+                small
+                :active="dragActive"
+                @click="toggleDrag"
+            >
+                {{ l('form.list.sort_button.inactive') }}
+                <svg style="margin-left: .5em" width="1.125em" height="1.125em" viewBox="0 0 24 22" fill-rule="evenodd">
+                    <path d="M20 14V0h-4v14h-4l6 8 6-8zM4 8v14h4V8h4L6 0 0 8z"></path>
                 </svg>
-            </button>
+            </Button>
         </template>
         <Draggable :options="dragOptions" :list="list" ref="draggable">
             <transition-group name="expand" tag="div">
@@ -78,6 +80,7 @@
     import Draggable from 'vuedraggable';
     import { TemplateRenderer } from 'sharp/components';
     import { Localization } from 'sharp/mixins';
+    import { Button } from "sharp-ui";
     import ListItem from './ListItem';
 
     import localize from '../../../mixins/localize/form';
@@ -93,6 +96,7 @@
         components: {
             Draggable,
             ListItem,
+            Button,
             TemplateRenderer,
         },
 

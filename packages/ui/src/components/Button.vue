@@ -13,23 +13,27 @@
 <script>
     export default {
         props: {
-            type: {
+            variant: {
                 type: String,
                 default: 'primary',
             },
+            text: Boolean,
             outline: Boolean,
             small: Boolean,
+            active: Boolean,
             href: String,
         },
         computed: {
             variantClass() {
-                return `btn${this.outline ? '-outline' : ''}-${this.type}`;
+                return `btn${this.outline ? '-outline' : ''}-${this.variant}`;
             },
             classes() {
                 return [
                     this.variantClass,
                     {
-                        'btn-sm': this.small
+                        'btn-sm': this.small,
+                        'btn-text': this.text,
+                        'active': this.active,
                     }
                 ]
             },

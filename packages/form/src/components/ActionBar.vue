@@ -1,7 +1,7 @@
 <template>
     <ActionBar>
         <template v-slot:left>
-            <Button type="light" outline @click="handleCancelClicked">
+            <Button variant="light" outline @click="handleCancelClicked">
                 <template v-if="showBackButton">
                     {{ l('action_bar.form.back_button') }}
                 </template>
@@ -12,7 +12,7 @@
 
             <template v-if="showDeleteButton">
                 <div class="w-100 h-100 ml-3">
-                    <Collapse transition-class="SharpButton__collapse-transition">
+                    <Collapse>
                         <template v-slot:frame-0="{ next }">
                             <button class="SharpButton SharpButton--danger" @click="next(focusDelete)">
                                 <svg  width='16' height='16' viewBox='0 0 16 24' fill-rule='evenodd'>
@@ -22,7 +22,7 @@
                             </button>
                         </template>
                         <template v-slot:frame-1="{ next }">
-                            <Button type="danger" @click="handleDeleteClicked" @blur="next()" ref="openDelete">
+                            <Button variant="danger" @click="handleDeleteClicked" @blur="next()" ref="openDelete">
                                 {{ l('action_bar.form.delete_button') }}
                             </Button>
                         </template>
@@ -32,7 +32,7 @@
         </template>
         <template v-slot:right>
             <template v-if="showSubmitButton">
-                <Button type="light" :disabled="uploading" @click="handleSubmitClicked">
+                <Button variant="light" :disabled="uploading" @click="handleSubmitClicked">
                     {{ submitLabel }}
                 </Button>
             </template>

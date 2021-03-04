@@ -1,9 +1,6 @@
 $fa-font-path: 'fonts';
 $--font-path: 'fonts';
 
-$input-label-weight: 400;
-$button-border-width: 1px;
-$button-border-radius: 3px;
 
 
 $brand-01: #314255;
@@ -21,17 +18,25 @@ $primary: $brand-01;
 
 $enable-negative-margins: true;
 
-$box-shadow: rgba(0,0,0,.1);
-
 $breakpoint-fixed-menu: 'lg';
-
 $form-item-margin-bottom : 1.5rem;
 
 $transition-collapse: height 300ms cubic-bezier(0.5, 0, 0.1, 1);
 
+//$box-shadow: rgba(0,0,0,.1);
+
+$input-label-weight: 400;
+
+
 $border-radius: 3px;
 $btn-border-radius: $border-radius;
+$btn-border-width: 1px;
+$btn-font-weight: 600;
+$btn-font-size: .875rem;
+$btn-font-size-sm: .75rem;
+
 $input-border-radius: $border-radius;
+
 $dropdown-list-border-radius: 3px;
 $dropdown-border: 2px solid $ui-04;
 $dropdown-focus-border-color: $brand-01-light;
