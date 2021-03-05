@@ -1,8 +1,9 @@
 .StateIcon {
   display: inline-block;
-  width: 7px;
-  height: 7px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .5);
 
   @mixin color($color) {
     background: $color;

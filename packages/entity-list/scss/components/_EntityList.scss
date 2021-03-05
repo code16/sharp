@@ -13,64 +13,54 @@
   }
 
   &__state-dropdown {
-    .SharpDropdown__text {
-      //color: $text-01!important;
-    }
-    .SharpDropdown__link {
-      display: flex;
-      align-items: center;
 
-      svg {
-        margin-right: .5rem;
-      }
-    }
   }
 
-  &__state-dropdown, &__commands-dropdown {
-    background:transparent;
-    width: 100%;
-
-    $bg-color: $ui-02;
-    $hover-bg-color: darken($bg-color, 5%);
-
-    @include nav-dropdown;
-
-    &.SharpDropdown--open {
-      .SharpDropdown__text {
-        border-color: $dropdown-focus-border-color;
-        background: $hover-bg-color;
-      }
-      //.SharpDropdown__arrow {fill: $brand-03}
-    }
-
-    &.SharpDropdown--disabled {
-      opacity: 1;
-      .SharpDropdown__arrow {
-        display: none;
-      }
-      .SharpDropdown__text {
-        padding-right: .25rem;
-        background: $bg-color!important;
-      }
-    }
-
-    .SharpDropdown__text {
-      padding: .25rem 1.25rem .25rem .35rem;
-      background: $ui-02;
-      border: 1px solid transparent;
-      font-size: .875em;
-      color: $text-02;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      &:hover {
-        background: $hover-bg-color;
-      }
-    }
-
-    .SharpDropdown__list {
-      //width:rem(200px);
-      right:0;
-    }
-  }
+  //&__state-dropdown, &__commands-dropdown {
+  //  background:transparent;
+  //  width: 100%;
+  //
+  //  $bg-color: $ui-02;
+  //  $hover-bg-color: darken($bg-color, 5%);
+  //
+  //  @include nav-dropdown;
+  //
+  //  &.SharpDropdown--open {
+  //    .SharpDropdown__text {
+  //      border-color: $dropdown-focus-border-color;
+  //      background: $hover-bg-color;
+  //    }
+  //    //.SharpDropdown__arrow {fill: $brand-03}
+  //  }
+  //
+  //  &.SharpDropdown--disabled {
+  //    opacity: 1;
+  //    .SharpDropdown__arrow {
+  //      display: none;
+  //    }
+  //    .SharpDropdown__text {
+  //      padding-right: .25rem;
+  //      background: $bg-color!important;
+  //    }
+  //  }
+  //
+  //  .SharpDropdown__text {
+  //    padding: .25rem 1.25rem .25rem .35rem;
+  //    background: $ui-02;
+  //    border: 1px solid transparent;
+  //    font-size: .875em;
+  //    color: $text-02;
+  //    overflow: hidden;
+  //    text-overflow: ellipsis;
+  //    white-space: nowrap;
+  //    &:hover {
+  //      background: $hover-bg-color;
+  //    }
+  //  }
+  //
+  //  .SharpDropdown__list {
+  //    //width:rem(200px);
+  //    right:0;
+  //  }
+  //}
 }

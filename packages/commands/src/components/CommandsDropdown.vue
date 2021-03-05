@@ -1,5 +1,5 @@
 <template>
-    <Dropdown class="SharpCommandsDropdown">
+    <Dropdown class="SharpCommandsDropdown" small outline>
         <template v-slot:text>
             <slot name="text" />
         </template>

@@ -28,29 +28,9 @@
                     <template v-slot:item="{ item }">
                         <DataListRow :url="instanceUrl(item)" :columns="columns" :highlight="instanceIsFocused(item)" :row="item">
                             <template v-if="hasActionsColumn" v-slot:append>
-                                <div class="row justify-content-end justify-content-md-start mx-n2">
-                                    <template v-if="instanceHasState(item)">
-                                        <div class="col-auto col-md-12 my-1 px-2">
-                                            <Dropdown class="SharpEntityList__state-dropdown" :disabled="!instanceHasStateAuthorization(item)">
-                                                <template v-slot:text>
-                                                    <StateIcon :color="instanceStateIconColor(item)" />
-                                                    <span class="text-truncate">
-                                                        {{ instanceStateLabel(item) }}
-                                                    </span>
-                                                </template>
-                                                <DropdownItem
-                                                    v-for="stateOptions in config.state.values"
-                                                    @click="handleInstanceStateChanged(item, stateOptions.value)"
-                                                    :key="stateOptions.value"
-                                                >
-                                                    <StateIcon :color="stateOptions.color" />&nbsp;
-                                                    {{ stateOptions.label }}
-                                                </DropdownItem>
-                                            </Dropdown>
-                                        </div>
-                                    </template>
+                                <div class="row justify-content-end align-items-center gx-0">
                                     <template v-if="instanceHasCommands(item)">
-                                        <div class="col-auto col-md-12 my-1 px-2">
+                                        <div class="col">
                                             <CommandsDropdown
                                                 class="SharpEntityList__commands-dropdown"
                                                 :commands="instanceCommands(item)"
@@ -60,6 +40,25 @@
                                                     {{ l('entity_list.commands.instance.label') }}
                                                 </template>
                                             </CommandsDropdown>
+                                        </div>
+                                    </template>
+                                    <template v-if="instanceHasState(item)">
+                                        <div class="col-auto">
+                                            <ModalSelect
+                                                :value="instanceState(item)"
+                                                :options="config.state.values"
+                                                @change="handleInstanceStateChanged(item, $event)"
+                                            >
+                                                <template v-slot="{ on }">
+                                                    <Button text small :disabled="!instanceHasStateAuthorization(item)" v-on="on">
+                                                        <StateIcon :color="instanceStateIconColor(item)" />
+                                                    </Button>
+                                                </template>
+
+                                                <template v-slot:item-prepend="{ option }">
+                                                    <StateIcon :color="option.color" />
+                                                </template>
+                                            </ModalSelect>
                                         </div>
                                     </template>
                                 </div>
@@ -96,10 +95,11 @@
         DataList,
         DataListRow,
         StateIcon,
-        Dropdown,
-        DropdownItem,
+        Button,
         Loading,
         LoadingOverlay,
+        Modal,
+        ModalSelect,
     } from 'sharp-ui';
 
     import {
@@ -119,8 +119,9 @@
             StateIcon,
             CommandsDropdown,
 
-            Dropdown,
-            DropdownItem,
+            Button,
+            Modal,
+            ModalSelect,
 
             CommandFormModal,
             CommandViewPanel,

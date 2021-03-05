@@ -14,6 +14,7 @@ export { default as ItemVisual } from './ItemVisual';
 export { default as Loading } from './Loading';
 export { default as LoadingOverlay } from './LoadingOverlay';
 export { default as Modal } from './Modal';
+export { default as ModalSelect } from './ModalSelect';
 export { default as Multiselect } from './Multiselect';
 export { default as NavItem } from './nav/NavItem';
 export { default as Pagination } from './Pagination';
