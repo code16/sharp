@@ -36,17 +36,17 @@
     margin-right: -$grid-gutter-width/2;
     transition: left 300ms $bx--standard-easing;
     @include media-breakpoint-up(sm) {
-      position: absolute;
+      position: absolute!important;
       top: 0;
       right: 0;
       left: 3rem;
       height: 5rem;
       margin-left: 0;
-      margin-right: 0;
+      margin-right: 0!important;
     }
     @include media-breakpoint-up($breakpoint-fixed-menu) {
-      position: fixed;
-      z-index: z('actionBar');
+      position: fixed!important;
+      z-index: z('actionBar')!important;
       left: rem(200px);
     }
     & > .container {
@@ -126,34 +126,8 @@
   }
 
   &__forms-dropdown {
-    width: auto;
-    @include nav-dropdown;
-
-    .SharpDropdown__text { z-index: auto }
-    @include overflow-dropdown-list;
-
-    &, .SharpDropdown__text {
-      //background: $brand-03;
-    }
-    .SharpDropdown__text {
-      &:hover {
-        border-color: lighten($brand-03, 20%);
-      }
-      border-color: $brand-03;
-      background: $brand-03;
-      color: $inverse-01;
-      font-weight: normal;
-      text-transform: uppercase;
-      display: inline-flex;
-      align-items: center;
-    }
-    &.SharpDropdown--open {
-      .SharpDropdown__text {
-        border-color: lighten($brand-03, 30%);
-      }
-    }
-    .SharpDropdown__arrow {
-      fill: $inverse-01;
+    .dropdown-menu {
+      margin-top: 1px;
     }
   }
 

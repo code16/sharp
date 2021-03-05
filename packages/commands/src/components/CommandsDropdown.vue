@@ -1,8 +1,9 @@
 <template>
-    <Dropdown class="SharpCommandsDropdown" small outline>
+    <Dropdown class="SharpCommandsDropdown" small right v-bind="$attrs">
         <template v-slot:text>
             <slot name="text" />
         </template>
+        <slot name="prepend" />
         <template v-for="(group, i) in commandGroups">
             <template v-if="i > 0">
                 <DropdownSeparator />

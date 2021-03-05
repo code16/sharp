@@ -26,7 +26,7 @@
         },
         computed: {
             variantClass() {
-                return !this.text
+                return !this.hasTextStyle
                     ? `btn${this.outline ? '-outline' : ''}-${this.variant}`
                     : null;
             },
@@ -36,10 +36,13 @@
                     {
                         'btn-sm': this.small,
                         'btn-lg': this.large,
-                        'btn-text': this.text,
+                        'btn-text': this.hasTextStyle,
                         'active': this.active,
                     }
                 ]
+            },
+            hasTextStyle() {
+                return this.text === true;
             },
             tag() {
                 return this.href ? 'a' : 'button';

@@ -2,17 +2,18 @@
     <div>
         <slot :on="{ click:handleButtonClicked }" />
 
-        <Modal :visible.sync="modalVisible" ok-only @ok="handleModalOkClicked">
+        <Modal :visible.sync="modalVisible" :title="title" :ok-title="okTitle" ok-only @ok="handleModalOkClicked">
             <div class="list-group" role="menu">
                 <template v-for="option in options">
                     <div class="list-group-item list-group-item-action"
                         :class="itemClass(option)"
-                        style="cursor: pointer"
+                        style="cursor: pointer; outline-offset: 3px"
                         role="menuitemradio"
                         tabindex="0"
                         :aria-checked="isSelected(option)"
                         @click="handleOptionSelected(option)"
                         @keydown.enter.space="handleOptionSelected(option)"
+                        :key="option.value"
                     >
                         <div class="overflow-hidden">
                             <div class="row align-items-center gx-3">
@@ -53,6 +54,8 @@
              * @type Array.<{{ value: string, label: string }}>
              */
             options: Array,
+            title: String,
+            okTitle: String,
         },
         data() {
             return {

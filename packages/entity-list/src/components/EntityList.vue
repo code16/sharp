@@ -25,49 +25,69 @@
                     <template v-slot:empty>
                         {{ l('entity_list.empty_text') }}
                     </template>
+
+                    <template v-slot:append-head>
+                        <div class="d-flex justify-content-end" :style="instanceHasState() ? 'padding-right: 1.3rem' : ''">
+                            <CommandsDropdown
+                                :commands="allowedEntityCommands"
+                                @select="handleEntityCommandRequested"
+                            >
+                                <template v-slot:text>
+                                    {{ l('entity_list.commands.entity.label') }}
+                                </template>
+                            </CommandsDropdown>
+                        </div>
+                    </template>
+
                     <template v-slot:item="{ item }">
                         <DataListRow :url="instanceUrl(item)" :columns="columns" :highlight="instanceIsFocused(item)" :row="item">
                             <template v-if="hasActionsColumn" v-slot:append>
                                 <div class="row justify-content-end align-items-center gx-0">
                                     <template v-if="instanceHasCommands(item)">
-                                        <div class="col">
+                                        <div class="col-auto">
                                             <CommandsDropdown
                                                 class="SharpEntityList__commands-dropdown"
+                                                outline
                                                 :commands="instanceCommands(item)"
                                                 @select="handleInstanceCommandRequested(item, $event)"
                                             >
                                                 <template v-slot:text>
                                                     {{ l('entity_list.commands.instance.label') }}
                                                 </template>
+                                                <template v-slot:prepend>
+                                                    <template v-if="instanceHasState(item)">
+                                                        <ModalSelect
+                                                            :title="l('entity_list.state.modal.title')"
+                                                            :ok-title="l('entity_list.state.modal.ok_button')"
+                                                            :value="instanceState(item)"
+                                                            :options="config.state.values"
+                                                            @change="handleInstanceStateChanged(item, $event)"
+                                                        >
+                                                            <template v-slot="{ on }">
+                                                                <DropdownItem :disabled="!instanceHasStateAuthorization(item)" v-on="on">
+                                                                    <StateIcon :color="instanceStateIconColor(item)" /> Modifier l'état
+                                                                </DropdownItem>
+                                                            </template>
+
+                                                            <template v-slot:item-prepend="{ option }">
+                                                                <StateIcon :color="option.color" />
+                                                            </template>
+                                                        </ModalSelect>
+                                                    </template>
+                                                </template>
                                             </CommandsDropdown>
                                         </div>
                                     </template>
                                     <template v-if="instanceHasState(item)">
-                                        <div class="col-auto">
-                                            <ModalSelect
-                                                :value="instanceState(item)"
-                                                :options="config.state.values"
-                                                @change="handleInstanceStateChanged(item, $event)"
-                                            >
-                                                <template v-slot="{ on }">
-                                                    <Button text small :disabled="!instanceHasStateAuthorization(item)" v-on="on">
-                                                        <StateIcon :color="instanceStateIconColor(item)" />
-                                                    </Button>
-                                                </template>
-
-                                                <template v-slot:item-prepend="{ option }">
-                                                    <StateIcon :color="option.color" />
-                                                </template>
-                                            </ModalSelect>
+                                        <div class="col-auto me-n2">
+                                            <Button text small :disabled="!instanceHasStateAuthorization(item)">
+                                                <StateIcon :color="instanceStateIconColor(item)" />
+                                            </Button>
                                         </div>
                                     </template>
                                 </div>
                             </template>
                         </DataListRow>
-                    </template>
-
-                    <template v-slot:append-head>
-                        <slot name="append-head" :props="actionBarProps" :listeners="actionBarListeners" />
                     </template>
 
                     <template v-slot:append-body>
@@ -100,6 +120,7 @@
         LoadingOverlay,
         Modal,
         ModalSelect,
+        DropdownItem,
     } from 'sharp-ui';
 
     import {
@@ -125,6 +146,8 @@
 
             CommandFormModal,
             CommandViewPanel,
+
+            DropdownItem,
 
             Loading,
             LoadingOverlay,
@@ -240,7 +263,6 @@
                     search: this.search,
                     filters: this.filters,
                     filtersValues: this.filtersValues,
-                    commands: this.allowedEntityCommands,
                     forms: this.multiforms,
                     reorderActive: this.reorderActive,
                     canCreate: this.canCreate,
@@ -255,7 +277,6 @@
                     'filter-change': this.handleFilterChanged,
                     'reorder-click': this.handleReorderButtonClicked,
                     'reorder-submit': this.handleReorderSubmitted,
-                    'command': this.handleEntityCommandRequested,
                     'create': this.handleCreateButtonClicked,
                 }
             },
@@ -266,6 +287,9 @@
             allowedEntityCommands() {
                 return (this.config.commands.entity || [])
                     .map(group => group.filter(command => this.isEntityCommandAllowed(command)))
+            },
+            hasEntityCommands() {
+                return this.allowedEntityCommands.flat().length > 0;
             },
             multiforms() {
                 return this.forms ? Object.values(this.forms) : null;

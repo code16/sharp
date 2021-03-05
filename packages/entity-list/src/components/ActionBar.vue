@@ -43,7 +43,7 @@
                 <template v-if="canCreate && !reorderActive">
                     <div class="col-auto" :class="{ 'd-none d-sm-block': searchActive }">
                         <template v-if="hasForms">
-                            <Dropdown class="SharpActionBar__forms-dropdown h-100" :text="l('action_bar.list.forms_dropdown')">
+                            <Dropdown class="SharpActionBar__forms-dropdown" variant="light" :text="l('action_bar.list.forms_dropdown')">
                                 <DropdownItem v-for="(form,key) in forms" @click="handleCreateFormSelected(form)" :key="key" >
                                     <ItemVisual :item="form" icon-class="fa-fw"/>{{ form.label }}
                                 </DropdownItem>
@@ -72,25 +72,12 @@
                 </template>
             </div>
         </template>
-        <template v-if="!reorderActive" v-slot:extras-right>
-            <template v-if="hasCommands">
-                <CommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
-                    :commands="commands"
-                    @select="handleCommandSelected"
-                >
-                    <template v-slot:text>
-                        {{ l('entity_list.commands.entity.label') }}
-                    </template>
-                </CommandsDropdown>
-            </template>
-        </template>
     </ActionBar>
 </template>
 
 <script>
     import { ActionBar, Dropdown,  DropdownItem, ItemVisual, Search, Button, } from 'sharp-ui';
     import { FilterDropdown } from 'sharp-filters';
-    import { CommandsDropdown } from 'sharp-commands';
 
     import { Localization } from 'sharp/mixins';
 
@@ -104,7 +91,6 @@
             Dropdown,
             DropdownItem,
             ItemVisual,
-            CommandsDropdown,
             FilterDropdown,
             Search,
             Button,
@@ -115,7 +101,6 @@
             search: String,
             filters: Array,
             filtersValues: Object,
-            commands: Array,
             forms: Array,
 
             canCreate: Boolean,
@@ -134,9 +119,6 @@
             hasForms() {
                 return this.forms && this.forms.length > 0;
             },
-            hasCommands() {
-                return this.commands && this.commands.some(group => group && group.length > 0);
-            },
         },
         methods: {
             handleSearchInput(search) {
@@ -154,9 +136,6 @@
             },
             handleReorderSubmitButtonClicked() {
                 this.$emit('reorder-submit');
-            },
-            handleCommandSelected(command) {
-                this.$emit('command', command);
             },
             handleCreateButtonClicked() {
                 this.$emit('create');

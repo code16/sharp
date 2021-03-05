@@ -4,7 +4,7 @@
     border: 1px solid transparent !important;
     box-shadow: 0 0 2px 0 $brand-01 !important;
     width: auto;
-    border-radius: $dropdown-list-border-radius;
+    border-radius: $dropdown-border-radius;
 
     @include media-breakpoint-down(sm) {
       min-width: 100%;

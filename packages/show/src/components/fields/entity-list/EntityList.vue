@@ -37,18 +37,6 @@
                     </template>
                 </ActionBar>
             </template>
-            <template v-slot:append-head="{ props: { commands }, listeners }">
-                <template v-if="hasCommands(commands)">
-                    <CommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
-                        :commands="commands"
-                        @select="listeners['command']"
-                    >
-                        <template v-slot:text>
-                            {{ l('entity_list.commands.entity.label') }}
-                        </template>
-                    </CommandsDropdown>
-                </template>
-            </template>
         </EntityList>
     </FieldLayout>
 </template>

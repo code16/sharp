@@ -3,6 +3,7 @@
         :toggle-class="classes"
         :disabled="disabled"
         :no-caret="!showCaret"
+        offset="1"
         variant="custom"
         v-bind="$attrs"
     >
@@ -26,13 +27,13 @@
             BDropdown,
         },
         props: {
-            text: String,
+            ...Button.props,
+            text: [Boolean, String],
             showCaret: {
                 type: Boolean,
                 default: true
             },
             disabled: Boolean,
-            ...Button.props,
         },
         computed: {
             ...Button.computed,

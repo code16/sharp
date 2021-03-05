@@ -1,19 +1,9 @@
 
 
-.modal-title {
-  font-size: 1.675rem;
-  font-weight: 300;
-  color: $text-02;
+.modal-header {
+  padding-bottom: .5rem;
 }
 
-.modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1040;
-  width: 100vw;
-  height: 100vh;
-  background-color: #000;
-  opacity: .7;
-  transition: opacity 200ms;
+.modal-footer {
+  padding-top: .5rem;
 }

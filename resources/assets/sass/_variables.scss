@@ -14,7 +14,7 @@ $text-03: #8c9ba5;
 
 $brand-01-light: #68829E;
 
-$primary: $brand-01;
+$primary: #004c9b;
 
 $enable-negative-margins: true;
 
@@ -42,17 +42,22 @@ $btn-font-weight: 500;
 $btn-font-size-sm: .75rem;
 $btn-font-size: .875rem;
 $btn-font-size-lg: 1rem;
-//$btn-line-height: 1.4;
+$btn-line-height: 1.45;
+$btn-padding-y: .5rem;
+$btn-padding-x: 1rem;
+
+$modal-content-border-width: 0;
 
 $input-border-radius: $border-radius;
 
-$dropdown-list-border-radius: 3px;
+$dropdown-list-border-radius: $border-radius;
 $dropdown-border: 2px solid $ui-04;
 $dropdown-focus-border-color: $brand-01-light;
 $dropdown-hover-border-color: lighten($dropdown-focus-border-color, 25%);
 $dropdown-list-offset: 3px;
 $dropdown-btn-transition: all 100ms ease-in-out;
 $dropdown-item-transition: background 50ms ease-in-out;
+
 $breadcrumb-bg: transparent;
 $breadcrumb-padding-x: 0;
 $breadcrumb-padding-y: 0;

@@ -14,9 +14,13 @@
         <slot />
 
         <template v-slot:modal-footer="{ cancel, ok }">
-            <button class="btn btn-outline-primary" @click="cancel">
-                {{ cancelTitle || l('modals.cancel_button') }}
-            </button>
+
+            <template v-if="!okOnly">
+                <button class="btn btn-outline-primary" @click="cancel">
+                    {{ cancelTitle || l('modals.cancel_button') }}
+                </button>
+            </template>
+
             <button class="btn btn-primary position-relative" :disabled="loading" @click="ok">
                 <span :class="{ 'invisible': loading }">
                     {{ okTitle || l('modals.ok_button') }}
@@ -25,6 +29,7 @@
                     <LoadingOverlay class="bg-transparent" absolute small />
                 </template>
             </button>
+
         </template>
     </b-modal>
 </template>

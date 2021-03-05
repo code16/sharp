@@ -1,6 +1,6 @@
 <template>
     <div class="SharpActionBar" v-if="ready">
-        <div class="SharpActionBar__bar">
+        <div class="SharpActionBar__bar sticky-top">
             <div class="container">
                 <div class="row mx-n2">
                     <div class="col-auto col-md left px-2 my-1 my-sm-0">
