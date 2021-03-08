@@ -6,10 +6,10 @@
                 Use these accounts to login:
             </div>
             <div class="SharpNotification__subtitle">
-                <ul>
+                <ul class="list-unstyled mb-0">
                     <li class="mb-2">
                         <input
-                            class="SharpButton SharpButton--sm SharpButton--secondary"
+                            class="btn btn-light btn-sm"
                             type="button"
                             onclick="this.form.elements.login.value='admin@example.com';this.form.elements.password.value='secret'"
                             value="Admin account"
@@ -17,7 +17,7 @@
                     </li>
                     <li>
                         <input
-                            class="SharpButton SharpButton--sm SharpButton--secondary"
+                            class="btn btn-light btn-sm"
                             type="button"
                             onclick="this.form.elements.login.value='boss@example.com';this.form.elements.password.value='secret'"
                             value="Boss account"

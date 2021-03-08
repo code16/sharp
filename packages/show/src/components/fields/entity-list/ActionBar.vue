@@ -1,18 +1,18 @@
 <template>
-    <div class="action-bar">
+    <div class="action-bar mb-2">
         <template v-if="hasOuterTitle">
             <div class="mb-2">
                 <slot />
             </div>
         </template>
         <template v-if="ready && barVisible">
-            <div class="row action-bar__row">
+            <div class="row">
                 <template v-if="hasLeftControls">
-                    <div class="col-sm action-bar__col">
+                    <div class="col-sm">
                         <template v-if="!reorderActive">
-                            <div class="row action-bar__row">
+                            <div class="row g-2 gx-md-3">
                                 <template v-for="filter in filters">
-                                    <div class="col-auto action-bar__col mb-2">
+                                    <div class="col-auto">
                                         <div class="action-bar__element">
                                             <FilterDropdown
                                                 class="h-100"
@@ -25,7 +25,7 @@
                                     </div>
                                 </template>
                                 <template v-if="canSearch">
-                                    <div class="col-auto action-bar__col mb-2">
+                                    <div class="col-auto">
                                         <div class="action-bar__element">
                                             <Search
                                                 class="h-100"
@@ -43,24 +43,24 @@
                     </div>
                 </template>
                 <template v-else>
-                    <div class="col-sm align-self-center action-bar__col mb-2">
+                    <div class="col-sm align-self-center">
                         <slot />
                     </div>
                 </template>
 
                 <template v-if="hasRightControls && !collapsed">
-                    <div class="col-sm-auto action-bar__col">
-                        <div class="row flex-nowrap justify-content-end action-bar__row">
+                    <div class="col-sm-auto">
+                        <div class="row flex-nowrap justify-content-end g-2 gx-md-3">
                             <template v-if="canReorder">
-                                <div class="col-auto action-bar__col mb-2">
+                                <div class="col-auto">
                                     <template v-if="reorderActive">
-                                        <div class="row action-bar__row">
-                                            <div class="col-auto action-bar__col">
+                                        <div class="row gx-3">
+                                            <div class="col-auto">
                                                 <Button text @click="handleReorderButtonClicked">
                                                     {{ l('action_bar.list.reorder_button.cancel') }}
                                                 </Button>
                                             </div>
-                                            <div class="col-auto action-bar__col">
+                                            <div class="col-auto">
                                                 <Button @click="handleReorderSubmitButtonClicked">
                                                     {{ l('action_bar.list.reorder_button.finish') }}
                                                 </Button>
@@ -75,7 +75,7 @@
                                 </div>
                             </template>
                             <template v-if="canCreate && !reorderActive">
-                                <div class="col-auto action-bar__col mb-2">
+                                <div class="col-auto">
                                     <div class="action-bar__element">
                                         <template v-if="hasForms">
                                             <Dropdown class="SharpActionBar__forms-dropdown h-100" :text="l('action_bar.list.forms_dropdown')">

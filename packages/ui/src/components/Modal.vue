@@ -21,7 +21,7 @@
                 </button>
             </template>
 
-            <button class="btn btn-primary position-relative" :disabled="loading" @click="ok">
+            <button class="btn btn-primary position-relative" :class="{ 'btn-lg': okOnly }" :disabled="loading" @click="ok">
                 <span :class="{ 'invisible': loading }">
                     {{ okTitle || l('modals.ok_button') }}
                 </span>

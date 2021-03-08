@@ -48,7 +48,7 @@
                                     <div class="SharpForm__form-item SharpForm__form-item--row">
                                         <input type="password" name="password" id="password" class="SharpText" placeholder="@lang('sharp::login.password_field')">
                                     </div>
-                                    <button type="submit" id="submit" class="SharpButton SharpButton--primary">
+                                    <button type="submit" id="submit" class="btn btn-primary">
                                         @lang('sharp::login.button')
                                     </button>
                                 </div>

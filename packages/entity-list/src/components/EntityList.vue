@@ -27,7 +27,7 @@
                     </template>
 
                     <template v-slot:append-head>
-                        <div class="d-flex justify-content-end" :style="instanceHasState() ? 'padding-right: 1.3rem' : ''">
+                        <div class="d-flex justify-content-end">
                             <CommandsDropdown
                                 :commands="allowedEntityCommands"
                                 @select="handleEntityCommandRequested"
@@ -42,7 +42,14 @@
                     <template v-slot:item="{ item }">
                         <DataListRow :url="instanceUrl(item)" :columns="columns" :highlight="instanceIsFocused(item)" :row="item">
                             <template v-if="hasActionsColumn" v-slot:append>
-                                <div class="row justify-content-end align-items-center gx-0">
+                                <div class="row justify-content-end align-items-center flex-nowrap gx-1">
+                                    <template v-if="instanceHasState(item)">
+                                        <div class="col-auto">
+                                            <Button text small :disabled="!instanceHasStateAuthorization(item)">
+                                                <StateIcon :color="instanceStateIconColor(item)" />
+                                            </Button>
+                                        </div>
+                                    </template>
                                     <template v-if="instanceHasCommands(item)">
                                         <div class="col-auto">
                                             <CommandsDropdown
@@ -76,13 +83,6 @@
                                                     </template>
                                                 </template>
                                             </CommandsDropdown>
-                                        </div>
-                                    </template>
-                                    <template v-if="instanceHasState(item)">
-                                        <div class="col-auto me-n2">
-                                            <Button text small :disabled="!instanceHasStateAuthorization(item)">
-                                                <StateIcon :color="instanceStateIconColor(item)" />
-                                            </Button>
                                         </div>
                                     </template>
                                 </div>
