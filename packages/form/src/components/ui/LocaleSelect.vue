@@ -5,7 +5,7 @@
             <template v-else>-</template>
         </template>
         <template v-for="locale in locales">
-            <DropdownItem @click="handleChanged(locale)" :key="locale">
+            <DropdownItem :active="isActive(locale)" @click="handleChanged(locale)" :key="locale">
                 {{ locale }}
             </DropdownItem>
         </template>
@@ -27,7 +27,10 @@
         methods: {
             handleChanged(locale) {
                 this.$emit('change', locale);
-            }
+            },
+            isActive(locale) {
+                return this.locale === locale;
+            },
         },
     }
 </script>

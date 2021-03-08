@@ -1,13 +1,11 @@
 
 .SharpFilterDateRange {
   &__field {
-    border: none;
-    height: 30px;
-    padding-top: 0!important;
-    padding-bottom: 0!important;
-    padding-left: .25rem!important;
-    padding-right: 0!important;
-    width: 220px!important;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: .25rem;
+    padding-right: 0;
+    max-width: 220px;
   }
 
   .el-input__icon:first-child {
@@ -35,8 +33,6 @@
       & > * {
         display: none;
       }
-      width: 0!important;
-      padding: 0!important;
     }
   }
 }

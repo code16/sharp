@@ -17,8 +17,8 @@
   position: absolute;
   height: 100%;
   width: 2rem;
-  right:0;
-  top:0;
+  right: 0;
+  top: 0;
 
   z-index: z('dropdownIcon');
 
@@ -31,6 +31,7 @@
   height: 10px;
   width: 10px;
   fill: $text-03;
+  color: $text-03;
   position: absolute;
   top: 3px;
   right: 1px;

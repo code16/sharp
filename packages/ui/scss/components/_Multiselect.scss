@@ -1,16 +1,24 @@
 @import '../mixins/dropdown';
 
 .multiselect {
-  @extend .SharpDropdown;
+  display: flex;
+  align-items: center;
+  position: relative;
 
+  ul {
+    padding: 0;
+    margin: 0;
+  }
+
+  padding-right: 2rem;
 
   &.multiselect--active {
-    @extend .SharpDropdown--open;
+    //@extend .SharpDropdown--open;
 
-    .multiselect__content {
-      @include SharpDropdownShadowBottom;
-      @include SharpDropdownOpenList
-    }
+    //.multiselect__content {
+    //  @include SharpDropdownShadowBottom;
+    //  @include SharpDropdownOpenList
+    //}
     .multiselect__select {
       @include SharpDropdownOpenArrow;
     }
@@ -27,19 +35,6 @@
     }
   }
 
-  &.multiselect--above {
-
-    &.multiselect--active {
-      @include SharpDropdownShadowBottom;
-
-      .multiselect__content {
-        @include SharpDropdownShadowTop;
-      }
-    }
-    .multiselect__content {
-      //bottom: 100%
-    }
-  }
 
   .multiselect__placeholder {
     color: $text-03;
@@ -50,16 +45,11 @@
   }
 
   .multiselect__tags {
-    @extend .SharpDropdown__text;
-
     display: flex;
     align-items: center;
     flex-wrap: wrap;
 
-    padding-top: rem(9px);
-    padding-bottom: rem(9px);
     cursor: default;
-    min-height: rem(40px);
 
     @include layer('raised');
 
@@ -84,7 +74,6 @@
   }
 
   .multiselect__input {
-    @extend .SharpText;
     box-shadow: none !important;
   }
 
@@ -92,22 +81,24 @@
     transition: border 0.1s ease;
   }
 
-
   .multiselect__content {
-    @extend .SharpDropdown__list;
-    overflow:auto;
-    li {
-      @extend .SharpDropdown__item;
-      .multiselect__option {
-        @extend .SharpDropdown__link;
+    @extend .dropdown-menu;
+    max-height: 20rem;
+    overflow: auto;
+    left: 0;
+  }
 
-        &--selected {
-          @extend %dropdown-link-focus;
-        }
-        &--highlight {
-          @extend %dropdown-link-hover;
-        }
+  &__option {
+    @extend .dropdown-item;
+    cursor: pointer;
+
+    &--selected {
+      &, &:hover {
+        @extend .dropdown-item.active;
       }
+    }
+    &--highlight {
+      @extend .dropdown-item:hover;
     }
   }
 

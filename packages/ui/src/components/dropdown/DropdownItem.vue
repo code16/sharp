@@ -1,5 +1,5 @@
 <template>
-    <b-dropdown-item @click="handleClick">
+    <b-dropdown-item :active="active" @click="handleClick">
         <slot />
     </b-dropdown-item>
 </template>
@@ -9,6 +9,10 @@
 
     export default {
         name: 'SharpDropdownItem',
+
+        props: {
+            active: Boolean,
+        },
 
         components: {
             BDropdownItem,

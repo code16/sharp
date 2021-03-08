@@ -43,10 +43,12 @@
                 <template v-if="canCreate && !reorderActive">
                     <div class="col-auto" :class="{ 'd-none d-sm-block': searchActive }">
                         <template v-if="hasForms">
-                            <Dropdown class="SharpActionBar__forms-dropdown" variant="light" :text="l('action_bar.list.forms_dropdown')">
-                                <DropdownItem v-for="(form,key) in forms" @click="handleCreateFormSelected(form)" :key="key" >
-                                    <ItemVisual :item="form" icon-class="fa-fw"/>{{ form.label }}
-                                </DropdownItem>
+                            <Dropdown variant="light" :text="l('action_bar.list.forms_dropdown')">
+                                <template v-for="(form, key) in forms">
+                                    <DropdownItem  @click="handleCreateFormSelected(form)" :key="key" >
+                                        <ItemVisual :item="form" icon-class="fa-fw"/>{{ form.label }}
+                                    </DropdownItem>
+                                </template>
                             </Dropdown>
                         </template>
                         <template v-else>

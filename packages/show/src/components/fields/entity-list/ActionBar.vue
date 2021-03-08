@@ -68,7 +68,7 @@
                                         </div>
                                     </template>
                                     <template v-else>
-                                        <Button outline @click="handleReorderButtonClicked">
+                                        <Button text @click="handleReorderButtonClicked">
                                             {{ l('action_bar.list.reorder_button') }}
                                         </Button>
                                     </template>
@@ -78,10 +78,12 @@
                                 <div class="col-auto">
                                     <div class="action-bar__element">
                                         <template v-if="hasForms">
-                                            <Dropdown class="SharpActionBar__forms-dropdown h-100" :text="l('action_bar.list.forms_dropdown')">
-                                                <DropdownItem v-for="(form,key) in forms" @click="handleCreateFormSelected(form)" :key="key" >
-                                                    <ItemVisual :item="form" icon-class="fa-fw"/>{{ form.label }}
-                                                </DropdownItem>
+                                            <Dropdown variant="primary" :text="l('action_bar.list.forms_dropdown')">
+                                                <template v-for="(form,key) in forms">
+                                                    <DropdownItem  @click="handleCreateFormSelected(form)" :key="key" >
+                                                        <ItemVisual :item="form" icon-class="fa-fw"/>{{ form.label }}
+                                                    </DropdownItem>
+                                                </template>
                                             </Dropdown>
                                         </template>
                                         <template v-else>

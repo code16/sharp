@@ -2,7 +2,7 @@
     <div class="SharpGlobalFilters">
         <template v-for="filter in filters">
             <FilterSelect
-                :label="filter.label"
+                :label="null"
                 :values="filter.values"
                 :value="filterValue(filter.key)"
                 :multiple="filter.multiple"
@@ -20,7 +20,6 @@
 </template>
 
 <script>
-    import Vue from 'vue';
     import debounce from 'lodash/debounce';
     import { mapGetters } from 'vuex';
     import { BASE_URL } from "sharp";

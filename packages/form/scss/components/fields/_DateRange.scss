@@ -1,4 +1,3 @@
-@import '~element-ui/packages/theme-chalk/src/date-picker';
 
 .SharpDateRange {
   .el-range__close-icon {
@@ -11,6 +10,11 @@
       content: '×';
     }
   }
+
+  &.is-active {
+    @extend .form-control:focus;
+  }
+
   &--clearable {
     .el-range__close-icon {
       display: inline-block;

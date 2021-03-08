@@ -6,8 +6,10 @@
     <meta name="base-url" content="{{ sharp_base_url_segment() }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{{ sharp_page_title($sharpMenu ?? null, $entityKey ?? $dashboardKey ?? null) }}</title>
+
+    <link rel="stylesheet" href="{{ mix('vendors.css', '/vendor/sharp') }}">
     <link rel="stylesheet" href="{{ mix('sharp.css', '/vendor/sharp') }}">
-    <link rel="stylesheet" href="{{ mix('sharp-cms.css', '/vendor/sharp') }}">
+
     {!! \Illuminate\Support\Arr::get($injectedAssets ?? [], 'head') !!}
 </head>
 <body>

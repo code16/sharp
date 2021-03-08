@@ -20,12 +20,12 @@
             </template>
         </template>
         <template v-slot:extras-right>
-            <div class="row mx-n1">
+            <div class="row gx-3">
                 <template v-if="hasState">
-                    <div class="col-auto px-1">
-                        <Dropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--state" :disabled="!canChangeState">
+                    <div class="col-auto">
+                        <Dropdown text small :disabled="!canChangeState">
                             <template v-slot:text>
-                                <StateIcon :color="state.color" />
+                                <StateIcon class="me-1" :color="state.color" />
                                 <span class="text-truncate">{{ state.label }}</span>
                             </template>
                             <template v-for="stateOptions in stateValues">
@@ -41,11 +41,8 @@
                     </div>
                 </template>
                 <template v-if="hasCommands">
-                    <div class="col-auto px-1">
-                        <CommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
-                            :commands="commands"
-                            @select="handleCommandSelected"
-                        >
+                    <div class="col-auto">
+                        <CommandsDropdown :commands="commands" @select="handleCommandSelected">
                             <template v-slot:text>
                                 {{ l('entity_list.commands.instance.label') }}
                             </template>

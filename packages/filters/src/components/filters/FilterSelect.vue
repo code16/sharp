@@ -25,6 +25,7 @@
             no-result-item
             mode="local"
             ref="autocomplete"
+            style="max-width: 0"
             @multiselect-input="handleAutocompleteInput"
             @close="close"
         />
@@ -50,7 +51,7 @@
     import { Autocomplete, Select } from 'sharp-form'
     import { Localization } from 'sharp/mixins';
     import FilterControl from '../FilterControl';
-    
+
     export default {
         name: 'SharpFilterSelect',
         mixins: [Localization],
@@ -60,10 +61,7 @@
             FilterControl,
         },
         props: {
-            label : {
-                type: String,
-                required: true
-            },
+            label: String,
             values: {
                 type: Array,
                 required: true
@@ -134,8 +132,7 @@
                 }
             },
             blur() {
-                let { select:{ $refs: { multiselect } } } = this.$refs;
-                multiselect.deactivate();
+                this.$refs.select.blur();
             },
         }
     }

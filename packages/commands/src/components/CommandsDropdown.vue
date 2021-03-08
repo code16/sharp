@@ -1,5 +1,5 @@
 <template>
-    <Dropdown class="SharpCommandsDropdown" small right v-bind="$attrs">
+    <Dropdown class="SharpCommandsDropdown" :small="small" right v-bind="$attrs">
         <template v-slot:text>
             <slot name="text" />
         </template>
@@ -38,6 +38,10 @@
             // 2D Array of command groups
             commands: {
                 type: Array,
+            },
+            small: {
+                type: Boolean,
+                default: true,
             }
         },
 

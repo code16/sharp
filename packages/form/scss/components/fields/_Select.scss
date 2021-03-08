@@ -15,10 +15,6 @@
     }
   }
 
-  .SharpSelect__clear-button ~ .multiselect__tags {
-    padding-right: 2rem;
-  }
-
   &__group {
     display: flex;
     flex-wrap: wrap;
@@ -49,12 +45,6 @@
     font-size: .75em;
     a {
       color: #314255;
-    }
-  }
-
-  &--multiple {
-    .multiselect__tags {
-      padding-bottom: rem(9px) - .1875rem;
     }
   }
 }

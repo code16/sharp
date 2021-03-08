@@ -8,7 +8,9 @@
         v-bind="$attrs"
     >
         <template v-slot:button-content>
-            <slot name="text">{{ text }}</slot>
+            <span class="d-inline-block">
+                <slot name="text">{{ text }}</slot>
+            </span>
         </template>
 
         <slot />

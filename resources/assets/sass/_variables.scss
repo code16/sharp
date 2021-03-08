@@ -14,6 +14,11 @@ $text-03: #8c9ba5;
 
 $brand-01-light: #68829E;
 
+
+/**
+  Bootstrap variables
+**/
+
 $primary: #004c9b;
 
 $enable-negative-margins: true;
@@ -25,15 +30,7 @@ $container-max-widths: (
   xl: 1140px,
 );
 
-$breakpoint-fixed-menu: 'lg';
-$form-item-margin-bottom : 1.5rem;
-
 $transition-collapse: height 300ms cubic-bezier(0.5, 0, 0.1, 1);
-
-//$box-shadow: rgba(0,0,0,.1);
-
-$input-label-weight: 400;
-
 
 $border-radius: 3px;
 $btn-border-radius: $border-radius;
@@ -43,12 +40,34 @@ $btn-font-size-sm: .75rem;
 $btn-font-size: .875rem;
 $btn-font-size-lg: 1rem;
 $btn-line-height: 1.45;
-//$btn-padding-y: .5rem;
-//$btn-padding-x: 1rem;
+
+$breadcrumb-bg: transparent;
+$breadcrumb-padding-x: 0;
+$breadcrumb-padding-y: 0;
+$breadcrumb-margin-bottom: 0;
+
+$caret-width: .3em;
+$caret-spacing: $caret-width * 1.5;
+
+$input-font-size: .875rem;
+$input-padding-y: .5rem;
+
+$link-color: #3d70b2;
+$link-decoration: underline;
+
+$input-border-radius: $border-radius;
 
 $modal-content-border-width: 0;
 
-$input-border-radius: $border-radius;
+
+/**
+  Custom variables
+**/
+
+$breakpoint-fixed-menu: 'lg';
+$form-item-margin-bottom : 1.5rem;
+
+$input-label-weight: 400;
 
 $dropdown-list-border-radius: $border-radius;
 $dropdown-border: 2px solid $ui-04;
@@ -58,12 +77,4 @@ $dropdown-list-offset: 3px;
 $dropdown-btn-transition: all 100ms ease-in-out;
 $dropdown-item-transition: background 50ms ease-in-out;
 
-$breadcrumb-bg: transparent;
-$breadcrumb-padding-x: 0;
-$breadcrumb-padding-y: 0;
-$breadcrumb-margin-bottom: 0;
-
 $checkbox-inline-margin-bottom: .3rem;
-
-$link-color: #3d70b2;
-$link-decoration: underline;

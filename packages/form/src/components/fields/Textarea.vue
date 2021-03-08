@@ -1,6 +1,6 @@
 <template>
     <textarea
-        class="SharpTextarea"
+        class="SharpTextarea form-control"
         :value="value"
         :rows="rows"
         :placeholder="placeholder"

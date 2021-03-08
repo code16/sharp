@@ -46,7 +46,7 @@
     }
     @include media-breakpoint-up($breakpoint-fixed-menu) {
       position: fixed!important;
-      z-index: z('actionBar')!important;
+      //z-index: z('actionBar')!important;
       left: rem(200px);
     }
     & > .container {

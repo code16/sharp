@@ -2,7 +2,7 @@
     <div class="SharpAutocomplete" :class="classes">
         <template v-if="ready">
             <Multiselect
-                class="SharpAutocomplete__multiselect"
+                class="SharpAutocomplete__multiselect form-control"
                 :class="{ 'SharpAutocomplete__multiselect--hide-dropdown':hideDropdown }"
                 :value="value"
                 :options="suggestions"
@@ -17,6 +17,7 @@
                 :preserve-search="preserveSearch"
                 :show-pointer="showPointer"
                 :searchable="searchable"
+                :readonly="readOnly"
                 @search-change="updateSuggestions($event)"
                 @select="handleSelect"
                 @input="$emit('multiselect-input',$event)"
@@ -57,7 +58,7 @@
             </multiselect>
 
             <template v-if="overlayVisible">
-                <div class="SharpAutocomplete__overlay multiselect">
+                <div class="SharpAutocomplete__overlay multiselect form-control" style="border-color: transparent">
                     <div class="multiselect__tags">
                         <TemplateRenderer
                             name="ResultItem"

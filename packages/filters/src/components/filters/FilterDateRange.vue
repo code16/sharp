@@ -2,7 +2,7 @@
     <div class="SharpFilterDateRange" :class="classes">
         <FilterControl :opened="opened" :label="label" :no-caret="noCaret" @click="handleClicked">
             <DateRange
-                class="SharpFilterDateRange__field"
+                class="SharpFilterDateRange__field form-control"
                 :value="value"
                 :display-format="displayFormat"
                 :monday-first="mondayFirst"

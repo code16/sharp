@@ -2,6 +2,10 @@
   $primary: $brand-01-light;
   $border-color: $ui-03;
 
+  .form-control {
+    padding: 0;
+  }
+
   .SharpFilterControl {
     width: 100%;
     border: none;

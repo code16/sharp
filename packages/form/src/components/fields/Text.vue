@@ -1,7 +1,7 @@
 <template>
-    <input 
-        class="SharpText"
-        :type="inputType" 
+    <input
+        class="SharpText form-control"
+        :type="inputType"
         :value="value"
         :placeholder="placeholder"
         :disabled="readOnly"

@@ -1,7 +1,11 @@
 
 
 @import 'variables';
-@import 'vendors';
+
+@import "bootstrap";
+
+@import '~carbon-components/scss/globals/scss/colors';
+@import '~carbon-components/scss/globals/scss/vars';
 
 @import 'mixins/typography';
 @import 'mixins/layer';
@@ -11,20 +15,6 @@
 @import 'mixins/close-button';
 
 @import "root";
-@import "bootstrap";
-
-
-$small-breakpoint: sm;
-
-#sharp-app {
-  color: $text-01;
-  //line-height: 1.15;
-
-  font-family: $font-family-base;
-}
-
-@import "./transitions";
-
 
 @import '~sharp-ui/scss/ui';
 @import '~sharp-commands/scss/commands';
@@ -34,8 +24,10 @@ $small-breakpoint: sm;
 @import '~sharp-show/scss/show';
 @import '~sharp-filters/scss/filters';
 
-
 @import 'components/ActionView';
+
+@import "cms";
+
 
 input[type="number"].hide-controls {
   &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
@@ -51,8 +43,4 @@ input[type="number"].hide-controls {
 
 .sortable-chosen {
   @include focus-outline('border');
-}
-
-.modal-open {
-  overflow-y: hidden;
 }

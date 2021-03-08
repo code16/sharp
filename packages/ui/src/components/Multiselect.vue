@@ -14,6 +14,8 @@
                 data.attrs.placeholder = lang('form.multiselect.placeholder');
             }
 
+            data.class = ['form-control', data.class]
+
             data.attrs.showPointer = false;
 
             let carretSlot = slots().caret;

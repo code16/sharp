@@ -1,14 +1,12 @@
 <template>
-    <div class="SharpFilterControl" :class="classes" @click="handleClicked">
-        <span class="SharpFilterControl__text">
-            {{ label }}
-        </span>
-        <slot />
-        <template v-if="!noCaret">
-            <span class="SharpFilterControl__caret-container">
-                <DropdownArrow class="SharpFilterControl__caret" />
-            </span>
+    <div class="input-group input-group-sm flex-nowrap SharpFilterControl" @click="handleClicked">
+        <template v-if="label">
+            <div class="input-group-text bg-white">
+                {{ label }}
+            </div>
         </template>
+
+        <slot />
     </div>
 </template>
 
@@ -28,7 +26,8 @@
         computed: {
             classes() {
                 return {
-                    'SharpFilterControl--open': this.opened,
+                    // 'SharpFilterControl--open': this.opened,
+                    // 'dropdown-toggle-no-caret': this.noCaret,
                 }
             },
         },
