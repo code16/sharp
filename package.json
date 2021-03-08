@@ -64,6 +64,7 @@
     "moment-timezone": "^0.5.13",
     "moxios": "^0.4.0",
     "node-sass": "^4.14.1",
+    "null-loader": "^4.0.1",
     "qs": "^6.6.0",
     "resolve-url-loader": "^3.1.0",
     "sass": "^1.16.0",
