@@ -6,7 +6,7 @@
     current="{{ $component->currentEntity }}"
     title="{{ $component->title }}"
     :items="{{ json_encode($component->items) }}"
-    :has-global-filters="{{ json_encode($hasGlobalFilters) }}"
+    :has-global-filters="{{ json_encode($component->hasGlobalFilters) }}"
 >
     @if(file_exists(public_path($icon = '/sharp-assets/menu-icon.png')))
         <template slot="title">
