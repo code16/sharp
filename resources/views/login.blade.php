@@ -9,9 +9,9 @@
                 <div class="row justify-content-center">
                     <div class="col-sm-9 col-md-6 col-lg-5 col-xl-4">
 
-                        @if(file_exists(public_path('/sharp-assets/login-icon.png')))
+                        @if(file_exists(public_path($icon = '/sharp-assets/login-icon.png')))
                             <div class="text-center">
-                                <img src="{{ asset('/sharp-assets/login-icon.png') }}" alt="{{config("sharp.name", "Sharp")}}" width="300" class="w-auto h-auto" style="max-height: 100px;max-width: 200px">
+                                <img src="{{ asset($icon) }}?{{ filemtime(public_path($icon)) }}" alt="{{config("sharp.name", "Sharp")}}" width="300" class="w-auto h-auto" style="max-height: 100px;max-width: 200px">
                             </div>
                         @else
                             <h1 class="text-center mb-3">{{config("sharp.name", "Sharp")}}</h1>
@@ -42,11 +42,11 @@
                             <div class="SharpModule__inner">
                                 <div class="SharpModule__content">
                                     <div class="SharpForm__form-item SharpForm__form-item--row">
-                                        <input type="text" name="login" id="login" class="SharpText" value="{{ old('login') }}" placeholder="@lang('sharp::login.login_field')">
+                                        <input type="text" name="login" id="login" class="form-control" value="{{ old('login') }}" placeholder="@lang('sharp::login.login_field')">
                                     </div>
 
                                     <div class="SharpForm__form-item SharpForm__form-item--row">
-                                        <input type="password" name="password" id="password" class="SharpText" placeholder="@lang('sharp::login.password_field')">
+                                        <input type="password" name="password" id="password" class="form-control" placeholder="@lang('sharp::login.password_field')">
                                     </div>
                                     <button type="submit" id="submit" class="btn btn-primary">
                                         @lang('sharp::login.button')

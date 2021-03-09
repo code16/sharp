@@ -18,6 +18,8 @@ use Code16\Sharp\Http\Middleware\Api\SetSharpLocale;
 use Code16\Sharp\Http\Middleware\InvalidateCache;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
+use Code16\Sharp\View\Components\Menu;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Intervention\Image\ImageServiceProviderLaravelRecent;
@@ -49,11 +51,8 @@ class SharpServiceProvider extends ServiceProvider
         ], 'views');
 
         $this->registerPolicies();
-
-        view()->composer(
-            ['sharp::form', 'sharp::show', 'sharp::list', 'sharp::dashboard', 'sharp::welcome'],
-            MenuViewComposer::class
-        );
+        
+        Blade::component('sharp-menu', Menu::class);
 
         view()->composer(
             ['sharp::form','sharp::show', 'sharp::list', 'sharp::dashboard', 'sharp::welcome', 'sharp::login', 'sharp::unauthorized'],
