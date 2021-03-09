@@ -7,38 +7,28 @@ use Code16\Sharp\Form\SharpSingleForm;
 
 class FormController extends ApiController
 {
-
-    /**
-     * @param string $entityKey
-     * @param string|null $instanceId
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
-     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
-     */
-    public function edit($entityKey, $instanceId = null)
+    public function edit(string $entityKey, $instanceId = null)
     {
         sharp_check_ability("view", $entityKey, $instanceId);
 
         $form = $this->getFormInstance($entityKey);
         $this->checkFormImplementation($form, $instanceId);
-
         $form->buildFormConfig();
 
-        return response()->json([
-            "fields" => $form->fields(),
-            "layout" => $form->formLayout(),
-            "config" => $form->formConfig(),
-            "data" => $form->instance($instanceId)
-        ] + $this->dataLocalizations($form));
+        return response()->json(
+            array_merge(
+                [
+                    "fields" => $form->fields(),
+                    "layout" => $form->formLayout(),
+                    "config" => $form->formConfig(),
+                    "data" => $form->instance($instanceId)
+                ],
+                $this->dataLocalizations($form)
+            )
+        );
     }
 
-    /**
-     * @param string $entityKey
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
-     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
-     */
-    public function create($entityKey)
+    public function create(string $entityKey)
     {
         $form = $this->getFormInstance($entityKey);
 
@@ -47,26 +37,22 @@ class FormController extends ApiController
         }
 
         sharp_check_ability("create", $entityKey);
-
         $form->buildFormConfig();
 
-        return response()->json([
-            "fields" => $form->fields(),
-            "layout" => $form->formLayout(),
-            "config" => $form->formConfig(),
-            "data" => $form->newInstance()
-        ] + $this->dataLocalizations($form));
+        return response()->json(
+            array_merge(
+                [
+                    "fields" => $form->fields(),
+                    "layout" => $form->formLayout(),
+                    "config" => $form->formConfig(),
+                    "data" => $form->newInstance()
+                ],
+                $this->dataLocalizations($form)
+            )
+        );
     }
 
-    /**
-     * @param string $entityKey
-     * @param string|null $instanceId
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
-     * @throws \Code16\Sharp\Exceptions\Form\SharpFormUpdateException
-     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
-     */
-    public function update($entityKey, $instanceId = null)
+    public function update(string $entityKey, $instanceId = null)
     {
         sharp_check_ability("update", $entityKey, $instanceId);
 
@@ -74,24 +60,18 @@ class FormController extends ApiController
 
         $form = $this->getFormInstance($entityKey);
         $this->checkFormImplementation($form, $instanceId);
-
-        $instanceId = $form->updateInstance($instanceId, request()->all());
-
-        return response()->json(["instanceId" => $instanceId]);
+        
+        $form->updateInstance($instanceId, request()->all());
+        
+        return response()->json([
+            "redirectUrl" => $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem()
+        ]);
     }
 
-    /**
-     * @param string $entityKey
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
-     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
-     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
-     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
-     * @throws \Code16\Sharp\Exceptions\Form\SharpFormUpdateException
-     */
-    public function store($entityKey)
+    public function store(string $entityKey)
     {
         $form = $this->getFormInstance($entityKey);
+        $form->buildFormConfig();
 
         if($form instanceof SharpSingleForm) {
             // There is no creation in SingleForms
@@ -99,22 +79,20 @@ class FormController extends ApiController
         }
 
         sharp_check_ability("create", $entityKey);
-
         $this->validateRequest($entityKey);
-
+        
         $instanceId = $form->storeInstance(request()->all());
-
-        return response()->json(["instanceId" => $instanceId]);
+        
+        $previousUrl = $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem();
+        
+        return response()->json([
+            "redirectUrl" => $form->isDisplayShowPageAfterCreation()
+                ? "{$previousUrl}/s-show/{$entityKey}/{$instanceId}"
+                : $previousUrl
+        ]);
     }
 
-    /**
-     * @param string $entityKey
-     * @param string|null $instanceId
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
-     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
-     */
-    public function delete($entityKey, $instanceId = null)
+    public function delete(string $entityKey, $instanceId = null)
     {
         sharp_check_ability("delete", $entityKey, $instanceId);
 
@@ -123,7 +101,9 @@ class FormController extends ApiController
 
         $form->delete($instanceId);
 
-        return response()->json(["ok" => true]);
+        return response()->json([
+            "redirectUrl" => $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem("s-list")
+        ]);
     }
 
     protected function validateRequest(string $entityKey)

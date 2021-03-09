@@ -40,11 +40,8 @@ abstract class SharpForm
 
     /**
      * Return the entity instance, as an array.
-     *
-     * @param mixed $id
-     * @return array
      */
-    function instance($id): array
+    public function instance($id): array
     {
         return collect($this->find($id))
             // Filter model attributes on actual form fields
@@ -117,6 +114,11 @@ abstract class SharpForm
         $this->displayShowPageAfterCreation = $displayShowPage;
         
         return $this;
+    }
+
+    public function isDisplayShowPageAfterCreation(): bool
+    {
+        return $this->displayShowPageAfterCreation;
     }
 
     protected function addTab(string $label, \Closure $callback = null): self
