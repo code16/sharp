@@ -6,10 +6,13 @@ use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Tests\Fixtures\User;
+use Code16\Sharp\Tests\Unit\Utils\WithCurrentSharpRequestFake;
 use Illuminate\Foundation\Http\FormRequest;
 
 class MultiFormEntityFormControllerTest extends BaseApiTest
 {
+    use WithCurrentSharpRequestFake;
+    
     protected function setUp(): void
     {
         parent::setUp();
@@ -47,23 +50,25 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
     public function we_can_update_an_sub_entity()
     {
         $this->buildTheWorld();
-
+        
+        $this->fakeCurrentSharpRequestWithUrl("/sharp/s-list/person/s-form/person:small/1");
         $this
             ->postJson('/sharp/api/form/person:small/1', [
                 "name" => "Jane Fonda"
             ])
             ->assertOk()
             ->assertJson([
-                "instanceId" => 1
+                "redirectUrl" => url("/sharp/s-list/person")
             ]);
 
+        $this->fakeCurrentSharpRequestWithUrl("/sharp/s-list/person/s-form/person:big/1");
         $this
             ->postJson('/sharp/api/form/person:big/1', [
                 "name" => "Jane Fonda"
             ])
             ->assertOk()
             ->assertJson([
-                "instanceId" => 1
+                "redirectUrl" => url("/sharp/s-list/person")
             ]);
     }
 
