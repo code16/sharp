@@ -8,7 +8,7 @@
     export default {
         name: 'SharpMultiselect',
         functional: true,
-        render(h, { data, children=[], slots ,props }) {
+        render(h, { data, children=[], slots, props }) {
 
             if(!props.placeholder) {
                 data.attrs.placeholder = lang('form.multiselect.placeholder');
@@ -17,6 +17,10 @@
             data.class = ['form-control', data.class]
 
             data.attrs.showPointer = false;
+
+            if(props.disabled) {
+                data.attrs.tabindex = -1;
+            }
 
             let carretSlot = slots().caret;
 

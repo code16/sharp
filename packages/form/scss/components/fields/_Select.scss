@@ -15,31 +15,16 @@
     }
   }
 
-  &__group {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    margin-bottom: -$checkbox-inline-margin-bottom;
-    &--block {
-      display: block;
-      margin-bottom: 0;
-    }
-  }
-
-  &__item {
-    margin-bottom: .3rem;
-    &:last-child {
-      margin-bottom: 0;
-    }
-    &--inline {
-      margin-right: 1rem;
-      margin-bottom: $checkbox-inline-margin-bottom;
-      &:last-child {
-        margin-right: 0;
-        margin-bottom: $checkbox-inline-margin-bottom;
-      }
-    }
-  }
+  //&__group {
+  //  display: flex;
+  //  flex-wrap: wrap;
+  //  align-items: center;
+  //  margin-bottom: -$checkbox-inline-margin-bottom;
+  //  &--block {
+  //    display: block;
+  //    margin-bottom: 0;
+  //  }
+  //}
 
   &__links {
     font-size: .75em;

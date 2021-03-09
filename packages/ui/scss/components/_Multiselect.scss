@@ -12,29 +12,6 @@
 
   padding-right: 2rem;
 
-  &.multiselect--active {
-    //@extend .SharpDropdown--open;
-
-    //.multiselect__content {
-    //  @include SharpDropdownShadowBottom;
-    //  @include SharpDropdownOpenList
-    //}
-    .multiselect__select {
-      @include SharpDropdownOpenArrow;
-    }
-  }
-
-  &--disabled {
-    opacity: .5;
-    cursor: not-allowed !important;
-    outline: none !important;
-    .multiselect__tags {
-      .multiselect__tag-icon {
-        cursor: not-allowed !important;
-      }
-    }
-  }
-
 
   .multiselect__placeholder {
     color: $text-03;
@@ -48,6 +25,7 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+    width: 100%;
 
     cursor: default;
 
@@ -142,6 +120,26 @@
     width: 40px;
     &:after, &:before {
       border-color:$brand-01 transparent transparent;
+    }
+  }
+
+  &.multiselect--active {
+    @extend .form-control:focus;
+
+    .multiselect__select {
+      @include SharpDropdownOpenArrow;
+    }
+  }
+
+  &--disabled {
+    opacity: .5;
+    cursor: not-allowed !important;
+    outline: none !important;
+    pointer-events: none;
+    .multiselect__tags {
+      .multiselect__tag-icon {
+        cursor: not-allowed !important;
+      }
     }
   }
 

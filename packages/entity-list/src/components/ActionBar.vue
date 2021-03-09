@@ -9,19 +9,6 @@
         </template>
         <template v-slot:right>
             <div class="row justify-content-end flex-nowrap">
-                <template v-if="canSearch && !reorderActive">
-                    <div class="col col-lg-auto" style="max-width: 300px">
-                        <Search
-                            class="h-100"
-                            :value="search"
-                            :active.sync="searchActive"
-                            :placeholder="l('action_bar.list.search.placeholder')"
-                            @input="handleSearchInput"
-                            @submit="handleSearchSubmitted"
-                        />
-                    </div>
-                </template>
-
                 <template v-if="canReorder">
                     <div class="col-auto" :class="{ 'd-none d-sm-block': searchActive }">
                         <template v-if="reorderActive">
@@ -72,6 +59,18 @@
                         />
                     </div>
                 </template>
+            </div>
+        </template>
+        <template v-if="canSearch && !reorderActive" v-slot:extras-right>
+            <div style="max-width: 300px">
+                <Search
+                    class="h-100"
+                    :value="search"
+                    :active.sync="searchActive"
+                    :placeholder="l('action_bar.list.search.placeholder')"
+                    @input="handleSearchInput"
+                    @submit="handleSearchSubmitted"
+                />
             </div>
         </template>
     </ActionBar>

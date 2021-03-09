@@ -106,9 +106,7 @@
         color: $color__blue-90;
         font-weight: 400;
         position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        display: block;
         text-decoration: none;
         transition: background-color $transition--base;
         padding: .75rem 1.5rem .75rem rem(59px);

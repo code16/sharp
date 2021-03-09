@@ -46,16 +46,6 @@
     }
   }
 
-  &__input-wrapper {
-    @include layer('raised');
-  }
-
-  &--open {
-    .SharpDate__picker, .SharpDate__input-wrapper {
-      @include focus-outline('layer');
-    }
-  }
-
   &__calendar {
     height: auto!important; // #auto-version
     min-height: 100%;

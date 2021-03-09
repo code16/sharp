@@ -27,16 +27,18 @@
                     </template>
 
                     <template v-slot:append-head>
-                        <div class="d-flex justify-content-end">
-                            <CommandsDropdown
-                                :commands="allowedEntityCommands"
-                                @select="handleEntityCommandRequested"
-                            >
-                                <template v-slot:text>
-                                    {{ l('entity_list.commands.entity.label') }}
-                                </template>
-                            </CommandsDropdown>
-                        </div>
+                        <template v-if="hasEntityCommands">
+                            <div class="d-flex justify-content-end">
+                                <CommandsDropdown
+                                    :commands="allowedEntityCommands"
+                                    @select="handleEntityCommandRequested"
+                                >
+                                    <template v-slot:text>
+                                        {{ l('entity_list.commands.entity.label') }}
+                                    </template>
+                                </CommandsDropdown>
+                            </div>
+                        </template>
                     </template>
 
                     <template v-slot:item="{ item }">

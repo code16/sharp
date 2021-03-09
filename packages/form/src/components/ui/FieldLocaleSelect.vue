@@ -1,18 +1,22 @@
 <template>
     <div class="SharpFieldLocaleSelect">
-        <template v-for="locale in locales">
-            <button
-                class="SharpFieldLocaleSelect__btn ml-2"
-                :class="{
-                    'SharpFieldLocaleSelect__btn--active': isActive(locale),
-                    'SharpFieldLocaleSelect__btn--empty': isEmpty(locale),
-                    'SharpFieldLocaleSelect__btn--error': hasError(locale),
-                }"
-                @click="handleButtonClicked(locale)"
-            >
-                {{ locale }}
-            </button>
-        </template>
+        <div class="row gx-1">
+            <template v-for="locale in locales">
+                <div class="col-auto">
+                    <button
+                        class="SharpFieldLocaleSelect__btn ml-2"
+                        :class="{
+                            'SharpFieldLocaleSelect__btn--active': isActive(locale),
+                            'SharpFieldLocaleSelect__btn--empty': isEmpty(locale),
+                            'SharpFieldLocaleSelect__btn--error': hasError(locale),
+                        }"
+                        @click="handleButtonClicked(locale)"
+                    >
+                        {{ locale }}
+                    </button>
+                </div>
+            </template>
+        </div>
     </div>
 </template>
 

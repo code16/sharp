@@ -1,22 +1,32 @@
+<template>
+    <b-tab :title-link-class="classes">
+        <template v-slot:title>
+            {{ title }}
+        </template>
+
+        <slot />
+    </b-tab>
+</template>
+
 <script>
     import { BTab } from 'bootstrap-vue';
 
     export default {
-        name: 'SharpBTab',
-        extends: BTab,
+        name: 'SharpTab',
+        components: {
+            BTab
+        },
         provide() {
-            return  {
-                $tab:this
+            return {
+                $tab: this
             }
+        },
+        props: {
+            title: String,
         },
         data() {
             return  {
                 errors: {}
-            }
-        },
-        computed: {
-            hasError() {
-                return Object.keys(this.errors).length > 0;
             }
         },
         watch: {
@@ -27,6 +37,16 @@
                         await this.$nextTick();
                         this.$emit('active');
                     }
+                }
+            }
+        },
+        computed: {
+            hasError() {
+                return Object.keys(this.errors).length > 0;
+            },
+            classes() {
+                return {
+                    'is-invalid': this.hasError,
                 }
             }
         },

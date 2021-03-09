@@ -4,7 +4,7 @@
             {{ l('form.geolocation.loading') }}
         </template>
         <template v-else-if="isEmpty">
-            <Button outline class="w-100" @click="handleShowModalButtonClicked">
+            <Button text class="w-100" @click="handleShowModalButtonClicked">
                 {{ l('form.geolocation.browse_button') }}
             </Button>
         </template>

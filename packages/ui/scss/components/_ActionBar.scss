@@ -49,6 +49,9 @@
       hsl(var(--bs-primary-h), var(--bs-primary-s), var(--bs-primary-l)) 70%
     );
 
+    position: relative;
+    z-index: 1;
+
     @include media-breakpoint-up(sm) {
       position: absolute!important;
       top: 0;
@@ -60,7 +63,7 @@
     }
     @include media-breakpoint-up($breakpoint-fixed-menu) {
       position: fixed!important;
-      //z-index: z('actionBar')!important;
+      z-index: $zindex-sticky;
       left: rem(200px);
     }
     & > .container {
@@ -180,52 +183,41 @@
     }
   }
 
-  &__search.SharpSearch {
-
-    .SharpSearch__close {
-      right: .5rem;
-    }
-    .SharpSearch__input {
-      box-shadow: unset;
-      &:focus {
-        box-shadow: 0 0 0 1px $brand-03;
-      }
-    }
-
-    @include media-breakpoint-down(sm) {
-      &.SharpSearch--active {
-        width: 100%;
-        .SharpSearch__input {
-          z-index: 101;
-          width: 100%;
-        }
-        .SharpSearch__magnifier {
-          z-index: 101;
-        }
-
-        .SharpSearch__overlay {
-          display:block;
-        }
-      }
-      .SharpSearch__overlay {
-        z-index: 100;
-        position: fixed;
-        left:0;
-        top:0;
-        height: 100%;
-        width: 100%;
-        background: rgba(0,0,0,.1);
-
-        display: none;
-      }
-      .SharpSearch__close {
-        display:none;
-      }
-      .SharpSearch__input {
-        padding-right: 0;
-        padding-top: .75em;
-        padding-bottom: .75em;
-      }
-    }
-  }
+  //&__search.SharpSearch {
+  //  @include media-breakpoint-down(sm) {
+  //    &.SharpSearch--active {
+  //      width: 100%;
+  //      .SharpSearch__input {
+  //        z-index: 101;
+  //        width: 100%;
+  //      }
+  //      .SharpSearch__magnifier {
+  //        z-index: 101;
+  //      }
+  //
+  //      .SharpSearch__overlay {
+  //        display:block;
+  //      }
+  //    }
+  //    .SharpSearch__overlay {
+  //      z-index: 100;
+  //      position: fixed;
+  //      left:0;
+  //      top:0;
+  //      height: 100%;
+  //      width: 100%;
+  //      background: rgba(0,0,0,.1);
+  //
+  //      display: none;
+  //    }
+  //    .SharpSearch__close {
+  //      display:none;
+  //    }
+  //    .SharpSearch__input {
+  //      padding-right: 0;
+  //      padding-top: .75em;
+  //      padding-bottom: .75em;
+  //    }
+  //  }
+  //}
 }

@@ -1,5 +1,7 @@
 
 .SharpDateRange {
+  height: auto;
+
   .el-range__close-icon {
     display: none;
     font-weight: normal;
@@ -9,6 +11,10 @@
     &::before {
       content: '×';
     }
+  }
+
+  .el-range-separator {
+    line-height: inherit;
   }
 
   &.is-active {

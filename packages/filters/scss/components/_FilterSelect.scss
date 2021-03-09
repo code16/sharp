@@ -10,6 +10,7 @@
 
   .form-control {
     font-size: inherit;
+    padding-right: 1.5rem;
   }
 
   .multiselect__tags-wrap {
@@ -103,7 +104,7 @@
 
         margin-bottom: 0;
         padding-top: 0;
-        padding-bottom: 0;    width: 1.5rem;
+        padding-bottom: 0;
 
         &:not(:first-child){
           border-left: 1px solid $ui-03;
