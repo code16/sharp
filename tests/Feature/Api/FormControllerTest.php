@@ -5,7 +5,6 @@ namespace Code16\Sharp\Tests\Feature\Api;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpSingleForm;
-use Illuminate\Contracts\Support\Arrayable;
 
 class FormControllerTest extends BaseApiTest
 {
@@ -96,10 +95,14 @@ class FormControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->postJson('/sharp/api/form/person/1', [
-            "name" => "Jane Fonda"
-        ])->assertStatus(200)
-            ->assertJson(["ok" => true]);
+        $this
+            ->postJson('/sharp/api/form/person/1', [
+                "name" => "Jane Fonda"
+            ])
+            ->assertOk()
+            ->assertJson([
+                "instanceId" => 1
+            ]);
     }
 
     /** @test */
@@ -135,10 +138,14 @@ class FormControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->postJson('/sharp/api/form/person', [
-            "name" => "Jane Fonda"
-        ])->assertStatus(200)
-            ->assertJson(["ok" => true]);
+        $this
+            ->postJson('/sharp/api/form/person', [
+                "name" => "Jane Fonda"
+            ])
+            ->assertOk()
+            ->assertJson([
+                "instanceId" => 1
+            ]);
     }
 
     /** @test */
@@ -186,10 +193,14 @@ class FormControllerTest extends BaseApiTest
             ->postJson('/sharp/api/form/person', [
                 "name" => "Jane Fonda"
             ])
-            ->assertStatus(200)
-            ->assertJson(["ok" => true]);
+            ->assertOk()
+            ->assertJson([
+                "instanceId" => 1
+            ]);
 
-        $this->postJson('/sharp/api/form/person/1', [])->assertStatus(404);
+        $this
+            ->postJson('/sharp/api/form/person/1', [])
+            ->assertStatus(404);
     }
 
     /** @test */
@@ -236,7 +247,8 @@ class PersonSharpSingleForm extends SharpSingleForm
         return ["name" => "Single John Wayne", "job" => "actor"];
     }
 
-    protected function updateSingle(array $data): void
+    protected function updateSingle(array $data)
     {
+        return 1;
     }
 }

@@ -157,7 +157,7 @@ abstract class SharpForm
         return $this->tabs[0];
     }
 
-    public function updateInstance($id, $data): void
+    public function updateInstance($id, $data)
     {
         list($formattedData, $delayedData) = $this->formatRequestData($data, $id, true);
 
@@ -175,11 +175,13 @@ abstract class SharpForm
 
             $this->update($id, $this->formatRequestData($delayedData, $id, false));
         }
+        
+        return $id;
     }
 
-    public function storeInstance($data): void
+    public function storeInstance($data)
     {
-        $this->updateInstance(null, $data);
+        return $this->updateInstance(null, $data);
     }
 
     /**

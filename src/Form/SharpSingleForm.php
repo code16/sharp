@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Form;
 
 use Code16\Sharp\Exceptions\SharpException;
-use Illuminate\Contracts\Support\Arrayable;
 
 abstract class SharpSingleForm extends SharpForm
 {
@@ -25,7 +24,7 @@ abstract class SharpSingleForm extends SharpForm
         return $this->updateSingle($data);
     }
 
-    final public function storeInstance($data): void
+    final public function storeInstance($data)
     {
         throw new SharpException("Store is not possible in a SingleSharpForm.");
     }

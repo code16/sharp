@@ -48,15 +48,23 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->postJson('/sharp/api/form/person:small/1', [
-            "name" => "Jane Fonda"
-        ])->assertStatus(200)
-            ->assertJson(["ok" => true]);
+        $this
+            ->postJson('/sharp/api/form/person:small/1', [
+                "name" => "Jane Fonda"
+            ])
+            ->assertOk()
+            ->assertJson([
+                "instanceId" => 1
+            ]);
 
-        $this->postJson('/sharp/api/form/person:big/1', [
-            "name" => "Jane Fonda"
-        ])->assertStatus(200)
-            ->assertJson(["ok" => true]);
+        $this
+            ->postJson('/sharp/api/form/person:big/1', [
+                "name" => "Jane Fonda"
+            ])
+            ->assertOk()
+            ->assertJson([
+                "instanceId" => 1
+            ]);
     }
 
     /** @test */
@@ -166,8 +174,9 @@ class SmallPersonSharpForm extends SharpForm
             ->transform(["name" => "Joe Pesci"]);
     }
 
-    function update($id, array $data): void
+    function update($id, array $data)
     {
+        return $id;
     }
 
     function delete($id): void

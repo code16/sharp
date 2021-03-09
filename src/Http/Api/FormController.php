@@ -75,9 +75,9 @@ class FormController extends ApiController
         $form = $this->getFormInstance($entityKey);
         $this->checkFormImplementation($form, $instanceId);
 
-        $form->updateInstance($instanceId, request()->all());
+        $instanceId = $form->updateInstance($instanceId, request()->all());
 
-        return response()->json(["ok" => true]);
+        return response()->json(["instanceId" => $instanceId]);
     }
 
     /**
@@ -102,9 +102,9 @@ class FormController extends ApiController
 
         $this->validateRequest($entityKey);
 
-        $form->storeInstance(request()->all());
+        $instanceId = $form->storeInstance(request()->all());
 
-        return response()->json(["ok" => true]);
+        return response()->json(["instanceId" => $instanceId]);
     }
 
     /**
