@@ -16,6 +16,7 @@ abstract class SharpForm
         HandleCustomBreadcrumb;
 
     protected array $tabs = [];
+    protected bool $displayShowPageAfterCreation = false;
     protected bool $tabbed = true;
     protected bool $layoutBuilt = false;
 
@@ -101,9 +102,21 @@ abstract class SharpForm
 
     public function formConfig(): array
     {
-        return tap([], function(&$config) {
-            $this->appendBreadcrumbCustomLabelAttribute($config);
-        });
+        return tap(
+            [
+                "hasShowPage" => $this->displayShowPageAfterCreation
+            ], 
+            function(&$config) {
+                $this->appendBreadcrumbCustomLabelAttribute($config);
+            }
+        );
+    }
+
+    protected function setDisplayShowPageAfterCreation(bool $displayShowPage = true): self
+    {
+        $this->displayShowPageAfterCreation = $displayShowPage;
+        
+        return $this;
     }
 
     protected function addTab(string $label, \Closure $callback = null): self
