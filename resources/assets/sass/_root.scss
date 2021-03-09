@@ -1,4 +1,11 @@
 
 :root {
   --bs-primary-rgb: #{red($primary)}, #{green($primary)}, #{blue($primary)};
+  --bs-primary-h: #{hue($primary)};
+  --bs-primary-s: #{saturation($primary)};
+  --bs-primary-l: #{lightness($primary)};
+
+  // lightened navbar color
+  --accent-bg-l: calc(var(--bs-primary-l) + 20%);
+  --accent-bg: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--accent-bg-l));
 }

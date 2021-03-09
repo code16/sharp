@@ -8,7 +8,7 @@
 }
 
 .SharpActionBar {
-  color: $inverse-01;
+
   margin-bottom: 1rem;
 
   .left, .right {
@@ -27,6 +27,7 @@
   }
 
   &__bar {
+
     display: flex;
     align-items: center;
     padding-top: 1.25rem;
@@ -35,6 +36,19 @@
     margin-left: -$grid-gutter-width/2;
     margin-right: -$grid-gutter-width/2;
     transition: left 300ms $bx--standard-easing;
+
+    --threshold: 80%;
+
+    color: white;
+    color: hsl(0, 0%, calc((var(--accent-bg-l) - var(--threshold)) * -100000));
+
+    background: $primary;
+    background: linear-gradient(
+      45deg,
+      hsl(var(--bs-primary-h), var(--bs-primary-s), var(--accent-bg-l)),
+      hsl(var(--bs-primary-h), var(--bs-primary-s), var(--bs-primary-l)) 70%
+    );
+
     @include media-breakpoint-up(sm) {
       position: absolute!important;
       top: 0;

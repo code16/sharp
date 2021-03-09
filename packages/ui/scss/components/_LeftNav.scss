@@ -27,7 +27,12 @@
 
   &__title-container {
     padding: .75rem 1.5rem;
-    background: $brand-01-light;
+    background-color: $primary;
+    background: linear-gradient(
+      0deg,
+      hsl(var(--bs-primary-h), var(--bs-primary-s), var(--accent-bg-l)),
+      hsl(var(--bs-primary-h), var(--bs-primary-s), calc(var(--accent-bg-l) - 1.5%))
+    );
     display: flex;
     align-items: center;
     min-height: 5rem;
