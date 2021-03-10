@@ -425,17 +425,17 @@ describe('EntityList', () => {
 
         test('handleCreateButtonClicked', () => {
             const wrapper = createWrapper();
-            const locationHrefSpy = jest.spyOn(window.location, 'href', 'set');
             wrapper.setMethods({
                 formUrl: jest.fn(()=>'formUrl')
             });
             wrapper.vm.handleCreateButtonClicked();
-            expect(locationHrefSpy).toHaveBeenCalledWith('formUrl');
+            expect(location.href).toEqual('formUrl')
 
-            locationHrefSpy.mockClear();
+
+            location.href = '';
             wrapper.vm.handleCreateButtonClicked({ key:'form' });
             expect(wrapper.vm.formUrl).toHaveBeenCalledWith({ formKey:'form' });
-            expect(locationHrefSpy).toHaveBeenCalledWith('formUrl');
+            expect(location.href).toEqual('formUrl');
         });
 
         test('instanceId', () => {

@@ -520,9 +520,7 @@ describe('sharp-form', ()=>{
     test('redirect to list', async () => {
         const wrapper = createWrapper();
 
-        expect(wrapper.vm.listUrl).toEqual('/sharp/list/spaceship?restore-context=1');
-
-        wrapper.vm.redirectToClosestRoot = jest.fn();
+        wrapper.vm.redirectForResponse = jest.fn();
 
         wrapper.vm.handleDeleteClicked();
 
@@ -530,7 +528,7 @@ describe('sharp-form', ()=>{
             status: 200
         }, 0);
 
-        expect(wrapper.vm.redirectToClosestRoot).toHaveBeenCalledTimes(1);
+        expect(wrapper.vm.redirectForResponse).toHaveBeenCalledTimes(1);
 
     });
 
@@ -572,7 +570,7 @@ describe('sharp-form', ()=>{
             }
         });
 
-        wrapper.vm.post = jest.fn(()=>Promise.resolve({ data: { ok: true } }));
+        wrapper.vm.post = jest.fn(()=>Promise.resolve({ data: { redirectUrl: '/test' } }));
         jest.spyOn(wrapper.vm, 'handleError');
 
         wrapper.vm.submit().catch(handleSubmitError);
@@ -582,6 +580,8 @@ describe('sharp-form', ()=>{
         expect(wrapper.vm.post).toHaveBeenCalledTimes(1);
         expect(wrapper.vm.post.mock.calls[0][0]).toEqual('form/spaceship');
         expect(wrapper.vm.post.mock.calls[0][1]).toEqual({ title: null });
+
+        expect(location.href).toEqual('/test');
 
 
         expect(wrapper.vm.handleError).not.toHaveBeenCalled();
