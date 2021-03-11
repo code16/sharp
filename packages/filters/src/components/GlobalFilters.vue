@@ -20,7 +20,6 @@
 </template>
 
 <script>
-    import Vue from 'vue';
     import debounce from 'lodash/debounce';
     import { mapGetters } from 'vuex';
     import { BASE_URL } from "sharp";
