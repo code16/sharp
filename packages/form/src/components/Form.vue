@@ -58,9 +58,7 @@
 
 <script>
     import {
-        BASE_URL,
         getBackUrl,
-        getDeleteBackUrl,
         logError,
         showAlert,
     } from "sharp";
