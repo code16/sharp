@@ -3,6 +3,21 @@
 namespace Code16\Sharp;
 
 use Code16\Sharp\Auth\SharpAuthorizationManager;
+use Code16\Sharp\Console\DashboardMakeCommand;
+use Code16\Sharp\Console\EntityCommandMakeCommand;
+use Code16\Sharp\Console\FormMakeCommand;
+use Code16\Sharp\Console\InstanceCommandMakeCommand;
+use Code16\Sharp\Console\ListFilterMakeCommand;
+use Code16\Sharp\Console\ListMakeCommand;
+use Code16\Sharp\Console\MediaMakeCommand;
+use Code16\Sharp\Console\ModelWizardCommand;
+use Code16\Sharp\Console\PolicyMakeCommand;
+use Code16\Sharp\Console\ReorderHandlerMakeCommand;
+use Code16\Sharp\Console\ShowMakeCommand;
+use Code16\Sharp\Console\SingleFormMakeCommand;
+use Code16\Sharp\Console\SingleShowMakeCommand;
+use Code16\Sharp\Console\StateMakeCommand;
+use Code16\Sharp\Console\ValidatorMakeCommand;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Composers\AssetViewComposer;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
@@ -25,7 +40,6 @@ use Intervention\Image\ImageServiceProviderLaravelRecent;
 
 class SharpServiceProvider extends ServiceProvider
 {
-    /** @var string */
     const VERSION = '6.0.0-alpha.7';
 
     public function boot()
@@ -66,36 +80,38 @@ class SharpServiceProvider extends ServiceProvider
         $this->registerMiddleware();
 
         $this->app->singleton(
-            SharpAuthorizationManager::class, SharpAuthorizationManager::class
+            SharpAuthorizationManager::class, 
+            SharpAuthorizationManager::class
         );
 
         $this->app->singleton(
-            CurrentSharpRequest::class, CurrentSharpRequest::class
+            CurrentSharpRequest::class, 
+            CurrentSharpRequest::class
         );
 
         $this->commands([
             CreateUploadsMigration::class,
-            \Code16\Sharp\Console\ListMakeCommand::class,
-            \Code16\Sharp\Console\FormMakeCommand::class,
-            \Code16\Sharp\Console\SingleFormMakeCommand::class,
-            \Code16\Sharp\Console\ShowMakeCommand::class,
-            \Code16\Sharp\Console\SingleShowMakeCommand::class,
-            \Code16\Sharp\Console\StateMakeCommand::class,
-            \Code16\Sharp\Console\MediaMakeCommand::class,
-            \Code16\Sharp\Console\PolicyMakeCommand::class,
-            \Code16\Sharp\Console\ModelWizardCommand::class,
-            \Code16\Sharp\Console\EntityCommandMakeCommand::class,
-            \Code16\Sharp\Console\InstanceCommandMakeCommand::class,
-            \Code16\Sharp\Console\DashboardMakeCommand::class,
-            \Code16\Sharp\Console\ValidatorMakeCommand::class,
-            \Code16\Sharp\Console\ListFilterMakeCommand::class,
-            \Code16\Sharp\Console\ReorderHandlerMakeCommand::class,
+            ListMakeCommand::class,
+            FormMakeCommand::class,
+            SingleFormMakeCommand::class,
+            ShowMakeCommand::class,
+            SingleShowMakeCommand::class,
+            StateMakeCommand::class,
+            MediaMakeCommand::class,
+            PolicyMakeCommand::class,
+            ModelWizardCommand::class,
+            EntityCommandMakeCommand::class,
+            InstanceCommandMakeCommand::class,
+            DashboardMakeCommand::class,
+            ValidatorMakeCommand::class,
+            ListFilterMakeCommand::class,
+            ReorderHandlerMakeCommand::class,
         ]);
 
         $this->app->register(ImageServiceProviderLaravelRecent::class);
     }
 
-    protected function registerPolicies()
+    protected function registerPolicies(): void
     {
         foreach((array)config("sharp.entities") as $entityKey => $config) {
             if(isset($config["policy"])) {
@@ -112,11 +128,10 @@ class SharpServiceProvider extends ServiceProvider
         }
     }
 
-    protected function definePolicy(string $entityKey, string $policy, string $action)
+    protected function definePolicy(string $entityKey, string $policy, string $action): void
     {
         if(method_exists(app($policy), $action)) {
             Gate::define("sharp.{$entityKey}.{$action}", $policy . "@{$action}");
-
         } else {
             // No policy = true by default
             Gate::define("sharp.{$entityKey}.{$action}", function () {
@@ -125,7 +140,7 @@ class SharpServiceProvider extends ServiceProvider
         }
     }
 
-    protected function registerMiddleware()
+    protected function registerMiddleware(): void
     {
         $this->app['router']->middlewareGroup("sharp_web", [
             \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
@@ -140,38 +155,50 @@ class SharpServiceProvider extends ServiceProvider
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ]);
 
-        $this->app['router']->aliasMiddleware(
-            'sharp_api_append_form_authorizations', AppendFormAuthorizations::class
-
-        )->aliasMiddleware(
-            'sharp_api_append_list_authorizations', AppendListAuthorizations::class
-
-        )->aliasMiddleware(
-            'sharp_api_append_multiform_in_list', AppendMultiformInEntityList::class
-
-        )->aliasMiddleware(
-            'sharp_api_append_notifications', AppendNotifications::class
-
-        )->aliasMiddleware(
-            'sharp_api_errors', HandleSharpApiErrors::class
-
-        )->aliasMiddleware(
-            'sharp_api_validation', BindSharpValidationResolver::class
-
-        )->aliasMiddleware(
-            'sharp_api_append_breadcrumb', AppendBreadcrumb::class
-
-        )->aliasMiddleware(
-            'sharp_locale', SetSharpLocale::class
-
-        )->aliasMiddleware(
-            'sharp_auth', SharpAuthenticate::class
-
-        )->aliasMiddleware(
-            'sharp_guest', SharpRedirectIfAuthenticated::class
-
-        )->aliasMiddleware(
-            'sharp_invalidate_cache', InvalidateCache::class
-        );
+        $this->app['router']
+            ->aliasMiddleware(
+                'sharp_api_append_form_authorizations', 
+                AppendFormAuthorizations::class
+            )
+            ->aliasMiddleware(
+                'sharp_api_append_list_authorizations', 
+                AppendListAuthorizations::class
+            )
+            ->aliasMiddleware(
+                'sharp_api_append_multiform_in_list', 
+                AppendMultiformInEntityList::class
+            )
+            ->aliasMiddleware(
+                'sharp_api_append_notifications', 
+                AppendNotifications::class
+            )
+            ->aliasMiddleware(
+                'sharp_api_errors', 
+                HandleSharpApiErrors::class
+            )
+            ->aliasMiddleware(
+                'sharp_api_validation', 
+                BindSharpValidationResolver::class
+            )
+            ->aliasMiddleware(
+                'sharp_api_append_breadcrumb', 
+                AppendBreadcrumb::class
+            )
+            ->aliasMiddleware(
+                'sharp_locale', 
+                SetSharpLocale::class
+            )
+            ->aliasMiddleware(
+                'sharp_auth', 
+                SharpAuthenticate::class
+            )
+            ->aliasMiddleware(
+                'sharp_guest', 
+                SharpRedirectIfAuthenticated::class
+            )
+            ->aliasMiddleware(
+                'sharp_invalidate_cache', 
+                InvalidateCache::class
+            );
     }
 }

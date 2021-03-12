@@ -18,16 +18,20 @@ class LangController extends Controller
         $version = sharp_version();
 
         $strings = Cache::rememberForever("sharp.lang.$lang.$version.js", function() {
-            $strings = [];
-
-            foreach(["action_bar", "form", "modals", "entity_list", "dashboard", "show"] as $filename) {
-                $strings += collect(trans("sharp-front::$filename"))
-                    ->mapWithKeys(function ($value, $key) use ($filename) {
-                        return ["$filename.$key" => $value];
-                    })->all();
-            }
-
-            return $strings;
+            $localizationStrings = [];
+            collect(["action_bar", "form", "modals", "entity_list", "dashboard", "show"])
+                ->map(function(string $filename) {
+                    return collect(trans("sharp-front::$filename"))
+                        ->mapWithKeys(function ($value, $key) use ($filename) {
+                            return ["$filename.$key" => $value];
+                        })
+                        ->toArray();
+                })
+                ->each(function(array $values) use(&$localizationStrings) {
+                    $localizationStrings += $values;
+                });
+            
+            return $localizationStrings;
         });
 
         return response('window.i18n = ' . json_encode($strings) . ';')

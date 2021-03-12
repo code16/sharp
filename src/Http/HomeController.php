@@ -2,40 +2,43 @@
 
 namespace Code16\Sharp\Http;
 
-use Code16\Sharp\Http\Composers\Utils\MenuItem;
+use Code16\Sharp\View\Components\Menu;
 
 class HomeController extends SharpProtectedController
 {
-
-    /**
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
-     */
     public function index()
     {
-        foreach (config("sharp.menu", []) as $menuItemConfig) {
-            if($menuItem = MenuItem::parse($menuItemConfig)) {
-                if($menuItem->isMenuItemCategory()) {
-                    foreach($menuItem->entities as $menuItemEntity) {
-                        if($menuItemEntity->isMenuItemEntity()) {
-                            return redirect()->route('code16.sharp.list', $menuItemEntity->key);
-                        }
-
-                        if($menuItemEntity->isMenuItemDashboard()) {
-                            return redirect()->route('code16.sharp.dashboard', $menuItemEntity->key);
-                        }
-                    }
-                }
-
-                if($menuItem->isMenuItemEntity()) {
-                    return redirect()->route('code16.sharp.list', $menuItem->key);
-                }
-
-                if($menuItem->isMenuItemDashboard()) {
-                    return redirect()->route('code16.sharp.dashboard', $menuItem->key);
-                }
-            }
+        if($firstEntityUrl = $this->getFirstConfiguredEntityUrl()) {
+            return redirect()->to($firstEntityUrl);
         }
 
         return view("sharp::welcome");
+    }
+
+    private function getFirstConfiguredEntityUrl(): ?string
+    {
+        if($menuItem = app(Menu::class)->getItems()[0] ?? null) {
+            if($menuItem->isMenuItemEntity()) {
+                return route('code16.sharp.list', $menuItem->key);
+            }
+
+            if($menuItem->isMenuItemDashboard()) {
+                return route('code16.sharp.dashboard', $menuItem->key);
+            }
+            
+            if($menuItem->isMenuItemCategory()) {
+                foreach($menuItem->entities as $menuItemEntity) {
+                    if($menuItemEntity->isMenuItemEntity()) {
+                        return route('code16.sharp.list', $menuItemEntity->key);
+                    }
+
+                    if($menuItemEntity->isMenuItemDashboard()) {
+                        return route('code16.sharp.dashboard', $menuItemEntity->key);
+                    }
+                }
+            }
+        }
+        
+        return null;
     }
 }
