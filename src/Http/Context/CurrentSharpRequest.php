@@ -37,6 +37,29 @@ class CurrentSharpRequest
             ->first();
     }
 
+    public function getUrlOfPreviousBreadcrumbItem(string $type = null): string
+    {
+        $breadcrumb = $this->breadcrumb()->slice(0, -1);
+        if($type) {
+            while($breadcrumb->count() && $type !== $breadcrumb->last()->type) {
+                $breadcrumb = $breadcrumb->slice(0, -1);
+            }
+        }
+        
+        return url(
+            sharp_base_url_segment()
+            . "/" 
+            . $breadcrumb
+                ->map(function(BreadcrumbItem $item) {
+                    return sprintf('%s/%s',
+                        $item->type,
+                        isset($item->instance) ? "{$item->key}/{$item->instance}" : $item->key
+                    );
+                })
+                ->implode("/")
+        );
+    }
+
     public function isEntityList(): bool
     {
         $current = $this->getCurrentBreadcrumbItem();

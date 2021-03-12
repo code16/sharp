@@ -9,43 +9,27 @@ class SharpCustomFormFieldTextIcon extends SharpFormField
 {
     const FIELD_TYPE = "custom-textIcon";
 
-    /** @var string */
-    protected $icon;
+    protected string $icon;
 
-    /**
-     * @param string $key
-     * @return static
-     */
-    public static function make(string $key)
+    public static function make(string $key): self
     {
         return new static($key, static::FIELD_TYPE, new TextFormatter);
     }
 
-    /**
-     * @param string $iconName
-     * @return SharpCustomFormFieldTextIcon
-     */
-    public function setIcon(string $iconName)
+    public function setIcon(string $iconName): self
     {
         $this->icon = $iconName;
 
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    protected function validationRules()
+    protected function validationRules(): array
     {
         return [
             "icon" => "required",
         ];
     }
 
-    /**
-     * @return array
-     * @throws \Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException
-     */
     public function toArray(): array
     {
         return parent::buildArray([

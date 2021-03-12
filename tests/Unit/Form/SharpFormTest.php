@@ -11,7 +11,6 @@ use Code16\Sharp\Form\Fields\SharpFormMarkdownField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpSingleForm;
-use Code16\Sharp\Show\SharpSingleShow;
 use Code16\Sharp\Tests\SharpTestCase;
 
 class SharpFormTest extends SharpTestCase
@@ -143,15 +142,40 @@ class SharpFormTest extends SharpTestCase
     }
 
     /** @test */
-    function single_forms_have_are_declared_in_config()
+    function single_forms_are_declared_in_config()
     {
         $sharpForm = new class extends BaseSharpSingleForm
         {
         };
+        
+        $sharpForm->buildFormConfig();
 
-        $this->assertEquals([
-            "isSingle" => true
-        ], $sharpForm->formConfig());
+        $this->assertEquals(
+            [
+                "isSingle" => true, 
+                "hasShowPage" => false
+            ], 
+            $sharpForm->formConfig()
+        );
+    }
+
+    /** @test */
+    function we_can_declare_setDisplayShowPageAfterCreation_in_config()
+    {
+        $sharpForm = new class extends BaseSharpForm
+        {
+            public function buildFormConfig(): void
+            {
+                $this->setDisplayShowPageAfterCreation(true);
+            }
+        };
+
+        $sharpForm->buildFormConfig();
+
+        $this->assertEquals(
+            ["hasShowPage" => true],
+            $sharpForm->formConfig()
+        );
     }
 }
 

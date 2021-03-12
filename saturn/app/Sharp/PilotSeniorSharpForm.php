@@ -37,5 +37,7 @@ class PilotSeniorSharpForm extends PilotJuniorSharpForm
         $instance = $id ? Pilot::findOrFail($id) : new Pilot;
 
         $this->save($instance, $data + ["role" => "sr"]);
+        
+        return $instance->id;
     }
 }

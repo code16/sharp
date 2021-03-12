@@ -244,7 +244,7 @@ If you are not using Eloquent (and maybe no database at all), you'll have to do 
 
 Remember: Sharp aims to be as permissive as possible. So just write the code to update the instance designated by `$id` with the values in the formatted `$data` array.
 
-#### Eloquent case (where the magic happens) — beta
+#### Eloquent case (where the magic happens)
 
 Sharp also aims to help the applicative code to be as small as possible, and if you're using Eloquent, you can import a dedicated trait: `Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater`. And then, write this kind of code:
 
@@ -253,8 +253,8 @@ function update($id, array $data)
 {
     $instance = $id ? Spaceship::findOrFail($id) : new Spaceship;
 
-
-    $this->setCustomTransformer("capacity", function($capacity) {
+    $this
+    	->setCustomTransformer("capacity", function($capacity) {
             return $capacity * 1000;
         })
         ->ignore("pilots")
@@ -262,12 +262,11 @@ function update($id, array $data)
 }
 ```
 
-We first define a custom transformer (see [detailled documentation](how-to-transform-data.md)).
+We first define a custom transformer (see [detailed documentation](how-to-transform-data.md)).
 
 Then we decide for some reason to bypass the automatic save process for the `pilots` attribute — because why not? This `ignore()` function can be called with an array as well. You'll probably do whatever is necessary for this field after the `save()` call.
 
-Finally we call `$this->save()` with the instance and the sent data. This kind of magical, heavily tested and almost-out-of-beta method will do all the persisting crap for you, handling if needed related models (for lists, tags, selects, ...), with any relation allowed by Eloquent (hasMany, belongsToMany, morphMany, ...).
-
+Finally, we call `$this->save()` with the instance and the sent data. This method will do all the persisting crap for you, handling if needed related models (for lists, tags, selects, ...), with any relation allowed by Eloquent (hasMany, belongsToMany, morphMany, ...).
 
 #### Handle applicative exceptions
 
@@ -289,7 +288,7 @@ The message will be displayed to the user.
 
 #### Return the instance id
 
-This is important for some cases (when a field formatter needs to de delayed): this method should return the id of the updated or stored instance.
+This method must return the id of the updated or stored instance.
 
 #### Display notifications
 
@@ -333,12 +332,29 @@ function create(): array
 
 ### `delete($id)`
 
-Finally (!), here you must write the code performed on a deletion of the instance. It can be anything, here's an Eloquent example:
+Here you might write the code performed on a deletion of the instance. It can be anything, here's an Eloquent example:
 
 ```php
 function delete($id)
 {
     Spaceship::findOrFail($id)->delete();
+}
+```
+
+### `buildFormConfig()`
+
+This method, entirely optional, is the place to configure 2 behaviours:
+
+- `setBreadcrumbCustomLabelAttribute(string $attribute)` to declare the attribute used by the breadcrumb (see [breadcrumb documentation](sharp-breadcrumb.md)).
+- `setDisplayShowPageAfterCreation(bool $displayShowPage = true)` to tell Sharp to redirect to the entity Show Page (instead of the EntityList) after the store. No existence check is done here, meaning if there is no Show Page configured it will end up in a 404.
+
+Example
+
+```php
+function buildFormConfig(): void
+{
+	$this->setBreadcrumbCustomLabelAttribute("name.en")
+		->setDisplayShowPageAfterCreation();
 }
 ```
 

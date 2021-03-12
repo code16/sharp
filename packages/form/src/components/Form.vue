@@ -58,9 +58,7 @@
 
 <script>
     import {
-        BASE_URL,
         getBackUrl,
-        getDeleteBackUrl,
         logError,
         showAlert,
     } from "sharp";
@@ -168,9 +166,6 @@
 
             downloadLinkBase() {
                 return `/download/${this.entityKey}/${this.instanceId}`;
-            },
-            listUrl() {
-                return `${BASE_URL}/list/${this.baseEntityKey}?restore-context=1`;
             },
             transformedFields() {
                 return transformFields(this.fields, this.data);
@@ -301,8 +296,8 @@
                     else logError('no entity key provided');
                 }
             },
-            redirectToClosestRoot() {
-                location.href = getDeleteBackUrl(this.breadcrumb.items);
+            redirectForResponse(response) {
+                location.href = response.data.redirectUrl;
             },
             redirectToParentPage() {
                 location.href = getBackUrl(this.breadcrumb.items);
@@ -328,18 +323,17 @@
                     this.$emit('submit', response);
                     return response;
                 }
-                else if(response.data.ok) {
-                    this.$store.dispatch('setLoading', true);
-                    this.redirectToParentPage();
-                }
+
+                this.$store.dispatch('setLoading', true);
+                this.redirectForResponse(response);
             },
             handleSubmitClicked() {
                 this.submit().catch(()=>{});
             },
             handleDeleteClicked() {
                 this.axiosInstance.delete(this.apiPath)
-                    .then(() => {
-                        this.redirectToClosestRoot();
+                    .then(response => {
+                        this.redirectForResponse(response);
                     });
             },
             handleCancelClicked() {

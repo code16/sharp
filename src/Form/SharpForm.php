@@ -16,6 +16,7 @@ abstract class SharpForm
         HandleCustomBreadcrumb;
 
     protected array $tabs = [];
+    protected bool $displayShowPageAfterCreation = false;
     protected bool $tabbed = true;
     protected bool $layoutBuilt = false;
 
@@ -39,11 +40,8 @@ abstract class SharpForm
 
     /**
      * Return the entity instance, as an array.
-     *
-     * @param mixed $id
-     * @return array
      */
-    function instance($id): array
+    public function instance($id): array
     {
         return collect($this->find($id))
             // Filter model attributes on actual form fields
@@ -101,9 +99,26 @@ abstract class SharpForm
 
     public function formConfig(): array
     {
-        return tap([], function(&$config) {
-            $this->appendBreadcrumbCustomLabelAttribute($config);
-        });
+        return tap(
+            [
+                "hasShowPage" => $this->displayShowPageAfterCreation
+            ], 
+            function(&$config) {
+                $this->appendBreadcrumbCustomLabelAttribute($config);
+            }
+        );
+    }
+
+    protected function setDisplayShowPageAfterCreation(bool $displayShowPage = true): self
+    {
+        $this->displayShowPageAfterCreation = $displayShowPage;
+        
+        return $this;
+    }
+
+    public function isDisplayShowPageAfterCreation(): bool
+    {
+        return $this->displayShowPageAfterCreation;
     }
 
     protected function addTab(string $label, \Closure $callback = null): self
@@ -157,7 +172,7 @@ abstract class SharpForm
         return $this->tabs[0];
     }
 
-    public function updateInstance($id, $data): void
+    public function updateInstance($id, $data)
     {
         list($formattedData, $delayedData) = $this->formatRequestData($data, $id, true);
 
@@ -175,11 +190,13 @@ abstract class SharpForm
 
             $this->update($id, $this->formatRequestData($delayedData, $id, false));
         }
+        
+        return $id;
     }
 
-    public function storeInstance($data): void
+    public function storeInstance($data)
     {
-        $this->updateInstance(null, $data);
+        return $this->updateInstance(null, $data);
     }
 
     /**

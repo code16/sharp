@@ -50,6 +50,8 @@ class PilotJuniorSharpForm extends SharpForm
                 }
             }
         }
+        
+        return $pilot->id;
     }
 
     function buildFormConfig(): void
