@@ -13,15 +13,19 @@ class FormController extends ApiController
 
         $form = $this->getFormInstance($entityKey);
         $this->checkFormImplementation($form, $instanceId);
-
         $form->buildFormConfig();
 
-        return response()->json([
-            "fields" => $form->fields(),
-            "layout" => $form->formLayout(),
-            "config" => $form->formConfig(),
-            "data" => $form->instance($instanceId)
-        ] + $this->dataLocalizations($form));
+        return response()->json(
+            array_merge(
+                [
+                    "fields" => $form->fields(),
+                    "layout" => $form->formLayout(),
+                    "config" => $form->formConfig(),
+                    "data" => $form->instance($instanceId)
+                ],
+                $this->dataLocalizations($form)
+            )
+        );
     }
 
     public function create(string $entityKey)
@@ -33,15 +37,19 @@ class FormController extends ApiController
         }
 
         sharp_check_ability("create", $entityKey);
-
         $form->buildFormConfig();
 
-        return response()->json([
-            "fields" => $form->fields(),
-            "layout" => $form->formLayout(),
-            "config" => $form->formConfig(),
-            "data" => $form->newInstance()
-        ] + $this->dataLocalizations($form));
+        return response()->json(
+            array_merge(
+                [
+                    "fields" => $form->fields(),
+                    "layout" => $form->formLayout(),
+                    "config" => $form->formConfig(),
+                    "data" => $form->newInstance()
+                ],
+                $this->dataLocalizations($form)
+            )
+        );
     }
 
     public function update(string $entityKey, string $instanceId = null)
@@ -52,15 +60,18 @@ class FormController extends ApiController
 
         $form = $this->getFormInstance($entityKey);
         $this->checkFormImplementation($form, $instanceId);
-
+        
         $form->updateInstance($instanceId, request()->all());
-
-        return response()->json(["ok" => true]);
+        
+        return response()->json([
+            "redirectUrl" => $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem()
+        ]);
     }
 
     public function store(string $entityKey)
     {
         $form = $this->getFormInstance($entityKey);
+        $form->buildFormConfig();
 
         if($form instanceof SharpSingleForm) {
             // There is no creation in SingleForms
@@ -68,12 +79,17 @@ class FormController extends ApiController
         }
 
         sharp_check_ability("create", $entityKey);
-
         $this->validateRequest($entityKey);
-
-        $form->storeInstance(request()->all());
-
-        return response()->json(["ok" => true]);
+        
+        $instanceId = $form->storeInstance(request()->all());
+        
+        $previousUrl = $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem();
+        
+        return response()->json([
+            "redirectUrl" => $form->isDisplayShowPageAfterCreation()
+                ? "{$previousUrl}/s-show/{$entityKey}/{$instanceId}"
+                : $previousUrl
+        ]);
     }
 
     public function delete(string $entityKey, string $instanceId = null)
@@ -85,7 +101,9 @@ class FormController extends ApiController
 
         $form->delete($instanceId);
 
-        return response()->json(["ok" => true]);
+        return response()->json([
+            "redirectUrl" => $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem("s-list")
+        ]);
     }
 
     protected function validateRequest(string $entityKey)

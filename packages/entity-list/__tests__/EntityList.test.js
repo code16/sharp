@@ -1,11 +1,11 @@
 import merge from 'lodash/merge';
 
 import Vuex from 'vuex';
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import {createLocalVue, shallowMount} from '@vue/test-utils';
 import SharpEntityList from '../src/components/EntityList.vue';
 import entityListModule from '../src/store/entity-list';
-import { formUrl, showUrl } from 'sharp';
-import { MockInjections } from "@sharp/test-utils";
+import {formUrl, showUrl} from 'sharp';
+import {MockInjections} from "@sharp/test-utils";
 
 jest.mock('sharp/mixins/Localization');
 jest.mock('sharp/mixins/DynamicView');
@@ -425,17 +425,17 @@ describe('EntityList', () => {
 
         test('handleCreateButtonClicked', () => {
             const wrapper = createWrapper();
-            const locationHrefSpy = jest.spyOn(window.location, 'href', 'set');
             wrapper.setMethods({
                 formUrl: jest.fn(()=>'formUrl')
             });
             wrapper.vm.handleCreateButtonClicked();
-            expect(locationHrefSpy).toHaveBeenCalledWith('formUrl');
+            expect(location.href).toEqual('formUrl')
 
-            locationHrefSpy.mockClear();
+
+            location.href = '';
             wrapper.vm.handleCreateButtonClicked({ key:'form' });
             expect(wrapper.vm.formUrl).toHaveBeenCalledWith({ formKey:'form' });
-            expect(locationHrefSpy).toHaveBeenCalledWith('formUrl');
+            expect(location.href).toEqual('formUrl');
         });
 
         test('instanceId', () => {

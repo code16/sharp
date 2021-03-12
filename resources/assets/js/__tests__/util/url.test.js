@@ -71,49 +71,4 @@ describe('url', ()=>{
         ]))
         .toEqual('/s-show');
     });
-    test('getDeleteBackUrl', () => {
-        router(true);
-        router().addRoutes(formRoutes);
-        router().addRoutes(showRoutes);
-        router().addRoutes(listRoutes);
-
-        // go to parent list
-        expect(getDeleteBackUrl([
-            { url:'/s-list/spaceship', type: 'entityList' },
-            { url:'/s-form/spaceship/42', type: 'form' }
-        ]))
-        .toEqual('/s-list/spaceship');
-
-        // go to parent show page
-        expect(getDeleteBackUrl([
-            { url:'/s-list/spaceship', type: 'entityList' },
-            { url:'/s-show/spaceship/42', type: 'show' },
-            { url:'/s-form/spaceship-pilot/42', type: 'form' }
-        ]))
-        .toEqual('/s-show/spaceship/42');
-
-        // go to parent show page if same entity but different instance id
-        expect(getDeleteBackUrl([
-            { url:'/s-list/spaceship', type: 'entityList' },
-            { url:'/s-show/spaceship/2', type: 'show' },
-            { url:'/s-form/spaceship/42', type: 'form' }
-        ]))
-        .toEqual('/s-show/spaceship/2');
-
-        // go to grand-parent show page if same entity / instance id
-        expect(getDeleteBackUrl([
-            { url:'/s-list/galaxy', type: 'entityList' },
-            { url:'/s-show/galaxy/1', type: 'show' },
-            { url:'/s-show/spaceship/42', type: 'show' },
-            { url:'/s-form/spaceship:senior/42', type: 'form' }
-        ]))
-        .toEqual('/s-show/galaxy/1');
-
-        // go to root single show
-        expect(getDeleteBackUrl([
-            { url:'/s-show/single', type: 'show' },
-            { url:'/s-form/spaceship-pilot/42', type: 'form' }
-        ]))
-        .toEqual('/s-show/single');
-    });
 })

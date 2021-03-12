@@ -11,6 +11,7 @@ use Code16\Sharp\Show\SharpShow;
 
 abstract class ApiController extends SharpProtectedController
 {
+
     protected function getListInstance(string $entityKey): SharpEntityList
     {
         if(! $configKey = config("sharp.entities.{$entityKey}.list")) {
@@ -35,7 +36,7 @@ abstract class ApiController extends SharpProtectedController
 
         return app($showClass);
     }
-
+    
     protected function getFormInstance(string $entityKey): SharpForm
     {
         if($this->isSubEntity($entityKey)) {
