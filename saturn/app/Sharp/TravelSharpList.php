@@ -57,6 +57,10 @@ class TravelSharpList extends SharpEntityList
 
         return $this
             ->setCustomTransformer("spaceship", function($value, $travel) {
+                if(!$travel->spaceship) {
+                    return "";
+                }
+                
                 return '<i class="fas fa-space-shuttle"></i> ' . $travel->spaceship->name;
             })
             ->transform($travels->with(["spaceship"])->paginate(30));
