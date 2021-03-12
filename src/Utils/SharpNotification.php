@@ -4,12 +4,8 @@ namespace Code16\Sharp\Utils;
 
 class SharpNotification
 {
-    /** @var string */
-    protected $id;
+    protected string $id;
 
-    /**
-     * @param string $title
-     */
     public function __construct(string $title)
     {
         $this->id = uniqid();
@@ -25,61 +21,49 @@ class SharpNotification
         session()->put("sharp_notifications", $notifications);
     }
 
-    /**
-     * @param string $detail
-     * @return SharpNotification
-     */
-    public function setDetail(string $detail)
+    public function setDetail(string $detail): self
     {
-        return $this->update(["message" => $detail]);
+        return $this->update([
+            "message" => $detail
+        ]);
     }
 
-    /**
-     * @return SharpNotification
-     */
-    public function setLevelSuccess()
+    public function setLevelSuccess(): self
     {
-        return $this->update(["level" => "success"]);
+        return $this->update([
+            "level" => "success"
+        ]);
     }
 
-    /**
-     * @return SharpNotification
-     */
-    public function setLevelInfo()
+    public function setLevelInfo(): self
     {
-        return $this->update(["level" => "info"]);
+        return $this->update([
+            "level" => "info"
+        ]);
     }
 
-    /**
-     * @return SharpNotification
-     */
-    public function setLevelWarning()
+    public function setLevelWarning(): self
     {
-        return $this->update(["level" => "warning"]);
+        return $this->update([
+            "level" => "warning"
+        ]);
     }
 
-    /**
-     * @return SharpNotification
-     */
-    public function setLevelDanger()
+    public function setLevelDanger(): self
     {
-        return $this->update(["level" => "danger"]);
+        return $this->update([
+            "level" => "danger"
+        ]);
     }
 
-    /**
-     * @param bool $autoHide
-     * @return SharpNotification
-     */
-    public function setAutoHide(bool $autoHide=true)
+    public function setAutoHide(bool $autoHide = true): self
     {
-        return $this->update(["autoHide" => $autoHide]);
+        return $this->update([
+            "autoHide" => $autoHide
+        ]);
     }
 
-    /**
-     * @param array $updatedArray
-     * @return SharpNotification
-     */
-    protected function update(array $updatedArray)
+    protected function update(array $updatedArray): self
     {
         $notifications = session("sharp_notifications");
         $notifications[$this->id] = array_merge($notifications[$this->id], $updatedArray);
