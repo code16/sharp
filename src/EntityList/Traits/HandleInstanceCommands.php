@@ -82,8 +82,6 @@ trait HandleInstanceCommands
 
     public function instanceCommandHandler(string $commandKey): ?InstanceCommand
     {
-        return isset($this->instanceCommandHandlers[$commandKey])
-            ? $this->instanceCommandHandlers[$commandKey]
-            : null;
+        return $this->instanceCommandHandlers[$commandKey] ?? null;
     }
 }

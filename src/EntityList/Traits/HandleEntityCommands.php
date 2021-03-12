@@ -9,6 +9,7 @@ trait HandleEntityCommands
 {
     protected array $entityCommandHandlers = [];
     protected int $entityCommandCurrentGroupNumber = 0;
+    protected ?string $primaryEntityCommandKey = null;
 
     protected function addEntityCommand(string $commandName, $commandHandlerOrClassName): self
     {
@@ -24,6 +25,14 @@ trait HandleEntityCommands
 
         $this->entityCommandHandlers[$commandName] = $commandHandler;
 
+        return $this;
+    }
+
+    protected function setPrimaryEntityCommand(string $commandName, $commandHandlerOrClassName): self
+    {
+        $this->addEntityCommand($commandName, $commandHandlerOrClassName);
+        $this->primaryEntityCommandKey = $commandName;
+        
         return $this;
     }
 
@@ -43,12 +52,20 @@ trait HandleEntityCommands
             collect($this->entityCommandHandlers),
             $config
         );
+        
+        // If a command is defined as [primary], we have to update its config for the front:
+        if($this->primaryEntityCommandKey && $handler = $this->entityCommandHandler($this->primaryEntityCommandKey)) {
+            foreach($config["commands"]["entity"][$handler->groupIndex()] as $index => $commandConfig) {
+                if($commandConfig["key"] === $this->primaryEntityCommandKey) {
+                    $config["commands"]["entity"][$handler->groupIndex()][$index]["primary"] = true;
+                    break;
+                }
+            }
+        }
     }
 
     public function entityCommandHandler(string $commandKey): ?EntityCommand
     {
-        return isset($this->entityCommandHandlers[$commandKey])
-            ? $this->entityCommandHandlers[$commandKey]
-            : null;
+        return $this->entityCommandHandlers[$commandKey] ?? null;
     }
 }

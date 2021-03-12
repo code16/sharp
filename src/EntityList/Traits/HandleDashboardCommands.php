@@ -45,8 +45,6 @@ trait HandleDashboardCommands
 
     public function dashboardCommandHandler(string $commandKey): ?DashboardCommand
     {
-        return isset($this->dashboardCommandHandlers[$commandKey])
-            ? $this->dashboardCommandHandlers[$commandKey]
-            : null;
+        return $this->dashboardCommandHandlers[$commandKey] ?? null;
     }
 }
