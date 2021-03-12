@@ -4,14 +4,7 @@ namespace Code16\Sharp\Http\Api;
 
 class EntityListController extends ApiController
 {
-
-    /**
-     * @param string $entityKey
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
-     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
-     */
-    public function show($entityKey)
+    public function show(string $entityKey)
     {
         sharp_check_ability("entity", $entityKey);
 
@@ -28,13 +21,8 @@ class EntityListController extends ApiController
 
     /**
      * Call for reorder instances.
-     *
-     * @param string $entityKey
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
-     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
-    public function update($entityKey)
+    public function update(string $entityKey)
     {
         sharp_check_ability("update", $entityKey);
 
