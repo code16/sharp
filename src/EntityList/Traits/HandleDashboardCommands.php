@@ -3,21 +3,16 @@
 namespace Code16\Sharp\EntityList\Traits;
 
 use Code16\Sharp\Dashboard\Commands\DashboardCommand;
+use Code16\Sharp\EntityList\Traits\Utils\CommonCommandUtils;
 
 trait HandleDashboardCommands
 {
-    /** @var array */
-    protected $dashboardCommandHandlers = [];
+    use CommonCommandUtils;
+    
+    protected array $dashboardCommandHandlers = [];
+    protected int $dashboardCommandCurrentGroupNumber = 0;
 
-    /** @var int */
-    protected $dashboardCommandCurrentGroupNumber = 0;
-
-    /**
-     * @param string $commandName
-     * @param string|DashboardCommand $commandHandlerOrClassName
-     * @return $this
-     */
-    protected function addDashboardCommand(string $commandName, $commandHandlerOrClassName)
+    protected function addDashboardCommand(string $commandName, $commandHandlerOrClassName): self
     {
         $commandHandler = is_string($commandHandlerOrClassName)
             ? app($commandHandlerOrClassName)
@@ -30,10 +25,7 @@ trait HandleDashboardCommands
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    protected function addDashboardCommandSeparator()
+    protected function addDashboardCommandSeparator(): self
     {
         $this->dashboardCommandCurrentGroupNumber++;
 
@@ -42,40 +34,16 @@ trait HandleDashboardCommands
 
     /**
      * Append the commands to the config returned to the front.
-     *
-     * @param array $config
      */
-    protected function appendCommandsToConfig(array &$config)
+    protected function appendDashboardCommandsToConfig(array &$config)
     {
-        collect($this->dashboardCommandHandlers)
-            ->each(function($handler, $commandName) use(&$config) {
-                $formFields = $handler->form();
-                $formLayout = $formFields ? $handler->formLayout() : null;
-                $hasFormInitialData = $formFields
-                    ? is_method_implemented_in_concrete_class($handler, 'initialData')
-                    : false;
-
-                $config["commands"][$handler->type()][$handler->groupIndex()][] = [
-                    "key" => $commandName,
-                    "label" => $handler->label(),
-                    "description" => $handler->description(),
-                    "type" => $handler->type(),
-                    "confirmation" => $handler->confirmationText() ?: null,
-                    "form" => $formFields ? [
-                        "fields" => $formFields,
-                        "layout" => $formLayout
-                    ] : null,
-                    "fetch_initial_data" => $hasFormInitialData,
-                    "authorization" => $handler->getGlobalAuthorization()
-                ];
-            });
+        $this->appendCommandsToConfig(
+            collect($this->dashboardCommandHandlers),
+            $config
+        );
     }
 
-    /**
-     * @param string $commandKey
-     * @return DashboardCommand|null
-     */
-    public function dashboardCommandHandler(string $commandKey)
+    public function dashboardCommandHandler(string $commandKey): ?DashboardCommand
     {
         return isset($this->dashboardCommandHandlers[$commandKey])
             ? $this->dashboardCommandHandlers[$commandKey]

@@ -110,7 +110,7 @@ abstract class SharpDashboard
     {
         return tap([], function(&$config) {
             $this->appendFiltersToConfig($config);
-            $this->appendCommandsToConfig($config);
+            $this->appendDashboardCommandsToConfig($config);
         });
     }
 

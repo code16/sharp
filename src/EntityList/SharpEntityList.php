@@ -5,8 +5,9 @@ namespace Code16\Sharp\EntityList;
 use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\Layout\EntityListLayoutColumn;
-use Code16\Sharp\EntityList\Traits\HandleCommands;
+use Code16\Sharp\EntityList\Traits\HandleEntityCommands;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
+use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
 use Code16\Sharp\Utils\Filters\HandleFilters;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Contracts\Support\Arrayable;
@@ -16,7 +17,8 @@ abstract class SharpEntityList
 {
     use HandleFilters,
         HandleEntityState,
-        HandleCommands,
+        HandleEntityCommands,
+        HandleInstanceCommands,
         WithCustomTransformers;
 
     protected array $containers = [];
@@ -114,7 +116,8 @@ abstract class SharpEntityList
         
         $this->appendFiltersToConfig($config);
         $this->appendEntityStateToConfig($config);
-        $this->appendCommandsToConfig($config);
+        $this->appendInstanceCommandsToConfig($config);
+        $this->appendEntityCommandsToConfig($config);
 
         return $config;
     }

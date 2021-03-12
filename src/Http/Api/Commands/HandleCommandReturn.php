@@ -4,7 +4,7 @@ namespace Code16\Sharp\Http\Api\Commands;
 
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
-use Code16\Sharp\EntityList\Traits\HandleCommands;
+use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Illuminate\Support\Facades\Storage;
 
@@ -12,7 +12,7 @@ trait HandleCommandReturn
 {
 
     /**
-     * @param HandleCommands $commandContainer
+     * @param HandleInstanceCommands $commandContainer
      * @param array $returnedValue
      * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\File\Stream
      */
@@ -41,7 +41,7 @@ trait HandleCommandReturn
     }
 
     /**
-     * @param HandleCommands $commandContainer
+     * @param HandleInstanceCommands $commandContainer
      * @param string $commandKey
      * @param $instanceId
      * @return \Code16\Sharp\EntityList\Commands\InstanceCommand|null
