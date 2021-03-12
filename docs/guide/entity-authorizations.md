@@ -1,6 +1,6 @@
 # Entity authorizations
 
-We'll already reviewed authorizations for [Commands](commands.md) or [Entity States](entity-states.md). Let's see how we can define authorizations for an entity.
+You can check documentation of authorizations for [Commands](commands.md) or [Entity States](entity-states.md). Here we are going to see how we can define authorizations for an entity.
 
 ## Available permissions
 
