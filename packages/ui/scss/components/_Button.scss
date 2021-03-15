@@ -46,7 +46,7 @@
   );
 
   color: hsl(0, 0%, var(--color-l));
-  border-color: var(--bs-primary);
+  border-color: var(--bs-primary-hsl);
 
   &:focus {
     box-shadow: 0 0 0 $btn-focus-width hsla(var(--bs-primary-h), var(--bs-primary-s), calc(var(--bs-primary-l) + clamp(-15%, var(--color-l), 15%)), .5)!important;
