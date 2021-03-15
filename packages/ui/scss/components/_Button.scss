@@ -15,32 +15,93 @@
   }
 }
 
+
+.btn-primary {
+  --threshold: var(--l-threshold);
+  --color-l: calc((var(--bs-primary-l) - var(--threshold)) * -100000);
+  --hover-bg-l: calc(var(--bs-primary-l) + clamp(-#{$btn-hover-bg-shade-amount}, var(--color-l), #{$btn-hover-bg-tint-amount}));
+  --active-bg-l: calc(var(--bs-primary-l) + clamp(-#{$btn-active-bg-shade-amount}, var(--color-l), #{$btn-active-bg-tint-amount}));
+
+  @include button-variant(
+    $background: var(--bs-primary-hsl),
+    $border: transparent,
+    $color: white,
+    $hover-background: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--hover-bg-l)),
+    $hover-border: hsl(
+        var(--bs-primary-h),
+        var(--bs-primary-s),
+        calc(var(--bs-primary-l) + clamp(-#{$btn-hover-border-shade-amount}, var(--color-l), #{$btn-hover-border-tint-amount}))
+    ),
+    $hover-color: hsl(0, 0%, calc((var(--hover-bg-l) - var(--threshold)) * -100000)),
+    $active-background: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--active-bg-l)),
+    $active-border: hsl(
+        var(--bs-primary-h),
+        var(--bs-primary-s),
+        calc(var(--bs-primary-l) + clamp(-#{$btn-active-bg-shade-amount}, var(--color-l), #{$btn-active-bg-tint-amount}))
+    ),
+    $active-color: hsl(0, 0%, calc((var(--active-bg-l) - var(--threshold)) * -100000)),
+    $disabled-background: var(--bs-primary),
+    $disabled-border: var(--bs-primary),
+    $disabled-color: white
+  );
+
+  color: hsl(0, 0%, var(--color-l));
+  border-color: var(--bs-primary);
+
+  &:focus {
+    box-shadow: 0 0 0 $btn-focus-width hsla(var(--bs-primary-h), var(--bs-primary-s), calc(var(--bs-primary-l) + clamp(-15%, var(--color-l), 15%)), .5)!important;
+  }
+}
+
+
+
 .btn-text {
+  --color-l: 30%;
+  --color: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--color-l));
+
   @include button-variant(
     $background: rgba(255, 255, 255, .5),
     $border: transparent,
     $color: $primary,
     $hover-background: white,
     $hover-border: $ui-02,
-    $hover-color: $primary,
-    $active-background: $primary,
-    $active-border: $primary,
-    $active-color: white,
+    $hover-color: var(--color),
+    $active-background: var(--color),
+    $active-border: var(--color),
+    $active-color:  hsl(0, 0%, calc((var(--color-l) - var(--l-threshold)) * -100000)),
     $disabled-background: transparent,
     $disabled-border: transparent,
-    $disabled-color: $primary
+    $disabled-color: var(--color)
   );
+
+  color: hsl(var(--bs-primary-h), var(--bs-primary-s), 30%);
+
+  &:focus {
+    box-shadow: 0 0 0 $btn-focus-width hsla(var(--bs-primary-h), var(--bs-primary-s), calc(var(--color-l) + clamp(-15%, var(--color-l), 15%)), .5)!important;
+  }
+}
+
+
+.btn-outline-primary {
+  @include button-outline-variant(
+    $color: black,
+    $color-hover: hsl(0, 0%, calc((var(--bs-primary-l) - var(--l-threshold)) * -100000)),
+    $active-background: var(--bs-primary-hsl),
+    $active-border: var(--bs-primary-hsl),
+    $active-color: hsl(0, 0%, calc((var(--bs-primary-l) - var(--l-threshold)) * -100000))
+  );
+
+  color: var(--bs-primary-hsl);
+  border-color: hsla(var(--bs-primary-h), var(--bs-primary-s), var(--bs-primary-l), .375);
+
+  &:focus {
+    box-shadow: 0 0 0 $btn-focus-width hsla(var(--bs-primary-h), var(--bs-primary-s), var(--bs-primary-l), .5)!important;
+  }
 }
 
 @mixin default {
   &:not(:hover):not(:active):not(.active) {
     @content;
-  }
-}
-
-.btn-outline-primary {
-  @include default {
-    border-color: rgba(var(--bs-primary-rgb), .375);
   }
 }
 
@@ -56,3 +117,4 @@
     border-color: rgba($danger, .375);
   }
 }
+

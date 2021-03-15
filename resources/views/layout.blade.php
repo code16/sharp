@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="{{ mix('vendors.css', '/vendor/sharp') }}">
     <link rel="stylesheet" href="{{ mix('sharp.css', '/vendor/sharp') }}">
 
+    <x-sharp-root-styles />
+
     {!! \Illuminate\Support\Arr::get($injectedAssets ?? [], 'head') !!}
 </head>
 <body>
