@@ -11,10 +11,6 @@ class MenuItemDashboard extends MenuItem
 
     public function __construct(array $config)
     {
-        if (!sharp_has_ability("view", $config['dashboard'])) {
-            return;
-        }
-
         $this->key = $config['dashboard'];
         $this->label = $config["label"] ?? "Unnamed dashboard";
         $this->icon = $config["icon"] ?? null;
@@ -23,7 +19,7 @@ class MenuItemDashboard extends MenuItem
 
     public function isValid(): bool
     {
-        return !is_null($this->key);
+        return sharp_has_ability("view", $this->key);
     }
 
     public function isMenuItemDashboard(): bool

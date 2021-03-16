@@ -11,21 +11,17 @@ class MenuItemEntity extends MenuItem
 
     public function __construct(array $config)
     {
-        if (!sharp_has_ability("entity", $config['entity'])) {
-            return;
-        }
-
         $this->key = $config['entity'];
         $this->label = $config["label"] ?? "Unnamed entity";
         $this->icon = $config["icon"] ?? null;
-        $this->url = $config["single"] ?? false 
+        $this->url = $config["single"] ?? false
                 ? route('code16.sharp.single-show', ["entityKey" => $this->key])
                 : route('code16.sharp.list', $this->key);
     }
 
     public function isValid(): bool
     {
-        return !is_null($this->key);
+        return sharp_has_ability("entity", $this->key);
     }
 
     public function isMenuItemEntity(): bool
