@@ -1,5 +1,5 @@
 <template>
-    <b-tab :title-link-class="classes">
+    <b-tab :title-link-class="classes" @update:active="handleActiveChanged">
         <template v-slot:title>
             {{ title }}
         </template>
@@ -26,18 +26,7 @@
         },
         data() {
             return  {
-                errors: {}
-            }
-        },
-        watch: {
-            localActive: {
-                immediate: true,
-                async handler(val) {
-                    if(val) {
-                        await this.$nextTick();
-                        this.$emit('active');
-                    }
-                }
+                errors: {},
             }
         },
         computed: {
@@ -56,7 +45,13 @@
             },
             clearError(fieldKey) {
                 this.$delete(this.errors,fieldKey);
-            }
+            },
+            async handleActiveChanged(active) {
+                if(active) {
+                    await this.$nextTick();
+                    this.$emit('active');
+                }
+            },
         },
         created() {
             this.$on('error', key=>this.setError(key));
