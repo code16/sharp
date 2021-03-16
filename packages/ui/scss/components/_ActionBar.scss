@@ -37,7 +37,7 @@
     margin-right: -$grid-gutter-width/2;
     transition: left 300ms $bx--standard-easing;
 
-    --threshold: 80%;
+    --threshold: var(--l-threshold);
 
     color: white;
     color: hsl(0, 0%, calc((var(--accent-bg-l) - var(--threshold)) * -100000));
@@ -134,7 +134,6 @@
       white-space: nowrap;
 
       .SharpDropdown__text {
-        //color: $brand-03;
         line-height:1;
       }
 

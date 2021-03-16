@@ -1,12 +1,8 @@
-@import '~sharp/scss/mixins/entity-list';
+
 
 .SharpEntityList {
 
   &__commands-dropdown {
-    //border: 1px solid $brand-03 !important;
-    .SharpDropdown__text {
-      //border: 1px solid $brand-03;
-    }
     &--placeholder {
       visibility: hidden;
     }
@@ -30,7 +26,6 @@
   //      border-color: $dropdown-focus-border-color;
   //      background: $hover-bg-color;
   //    }
-  //    //.SharpDropdown__arrow {fill: $brand-03}
   //  }
   //
   //  &.SharpDropdown--disabled {

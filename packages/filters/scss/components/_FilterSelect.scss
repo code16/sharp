@@ -103,8 +103,7 @@
         font-weight: bold;
 
         margin-bottom: 0;
-        padding-top: 0;
-        padding-bottom: 0;
+        padding-right: 23px!important;
 
         &:not(:first-child){
           border-left: 1px solid $ui-03;
@@ -113,21 +112,18 @@
           margin:0;
         }
 
-        &-icon:after {
-          color: $brand-03;
-          font-weight: normal;
-          font-size: 1rem;
+        &-icon {
+          color: var(--filter-close-icon-color);
+          &::after {
+            color: inherit;
+            font-weight: normal;
+            font-size: 1rem;
+          }
         }
       }
 
       &__single {
         font-weight: bold;
-      }
-
-      .SharpSelect__clear-button-icon {
-        fill: $brand-03;
-        width: 8px;
-        height: 8px;
       }
 
       &__tags {

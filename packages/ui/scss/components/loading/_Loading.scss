@@ -20,7 +20,7 @@ $loading__end-duration: 300ms;
 
   &__svg {
     fill: transparent !important;
-    stroke: $brand-03;
+    stroke: var(--bs-primary-hsl);
     stroke-width: 7;
     stroke-linecap: butt;
     stroke-dasharray: 240;

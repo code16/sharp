@@ -4,7 +4,6 @@ $--font-path: 'fonts';
 
 
 $brand-01: #314255;
-$brand-03: #FD7400;
 $ui-01: #FFFFFF;
 $ui-02: #EBF0F7;
 $ui-03: #DAE3EE;
@@ -58,6 +57,18 @@ $link-decoration: underline;
 $input-border-radius: $border-radius;
 
 $modal-content-border-width: 0;
+
+$nav-link-color: var(--bs-primary-hsl);
+$nav-link-hover-color: hsl(var(--bs-primary-h), var(--bs-primary-s), calc(var(--bs-primary-l) + 10%));
+
+$nav-pills-link-active-bg: var(--component-active-bg);
+$nav-pills-link-active-color: var(--component-active-color);
+
+$dropdown-link-active-bg: var(--component-active-bg);
+$dropdown-link-active-color: var(--component-active-color);
+
+$pagination-active-bg: var(--component-active-bg);
+$pagination-active-color: var(--component-active-color);
 
 
 /**
