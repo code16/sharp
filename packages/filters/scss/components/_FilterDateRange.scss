@@ -23,7 +23,7 @@
   }
 
   .el-range__close-icon {
-    color: $brand-03;
+    color: var(--filter-close-icon-color);
     line-height: 28px;
     width: 2rem;
   }

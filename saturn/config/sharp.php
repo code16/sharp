@@ -208,6 +208,6 @@ return [
     
     "theme" => [
 //        "primary_color" => "#004c9b",
-        "primary_color" => "#400f9b"
+        "primary_color" => "#004D40",
     ],
 ];

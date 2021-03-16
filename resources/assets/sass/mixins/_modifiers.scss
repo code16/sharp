@@ -1,6 +1,5 @@
 @mixin nav-dropdown() {
   .SharpDropdown__list, .multiselect__content {
-    //outline: 1px solid $brand-03 !important;
     border: 1px solid transparent !important;
     box-shadow: 0 0 2px 0 $brand-01 !important;
     width: auto;
