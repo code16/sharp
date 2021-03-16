@@ -1,5 +1,5 @@
 <template>
-    <span class="StateIcon" :class="className" :style="style"></span>
+    <span class="StateIcon" :style="style"></span>
 </template>
 
 <script>
@@ -12,14 +12,8 @@
             },
         },
         computed: {
-            isClass() {
-                return /^sharp_/.test(this.color);
-            },
-            className() {
-                return this.isClass ? this.color : null;
-            },
             style() {
-                return this.isClass ? null : {
+                return {
                     'background': this.color
                 }
             }

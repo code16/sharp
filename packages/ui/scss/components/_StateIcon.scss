@@ -4,13 +4,4 @@
   height: 10px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, .5);
-
-  @mixin color($color) {
-    background: $color;
-  }
-
-  &.sharp_primary { @include color($brand-02) }
-  &.sharp_gray { @include color($color__navy-gray-7) }
-  &.sharp_lightgray { @include color($color__navy-gray-9) }
-  &.sharp_darkgray { @include color($color__navy-gray-4) }
 }
