@@ -26,8 +26,8 @@ You can display a custom content under the form on login page:
 
 You'll need to create a new template file:
 
-```blade
-{{-- resources/views/sharp/_login-page-message.blade.php --}}
+```html
+<!-- resources/views/sharp/_login-page-message.blade.php -->
 
 <div role="alert" class="SharpNotification SharpNotification--info">
     <div class="SharpNotification__details">
