@@ -70,10 +70,13 @@ $dropdown-link-active-color: var(--component-active-color);
 $pagination-active-bg: var(--component-active-bg);
 $pagination-active-color: var(--component-active-color);
 
+$list-group-active-bg:  var(--component-active-bg);
+$list-group-active-color: var(--component-active-color);
 
-/**
-  Custom variables
-**/
+
+  /**
+    Custom variables
+  **/
 
 $breakpoint-fixed-menu: 'lg';
 $form-item-margin-bottom : 1.5rem;

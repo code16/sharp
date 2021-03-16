@@ -37,3 +37,9 @@
   @extend .btn-close;
   color: transparent!important;
 }
+
+.list-group-item-action {
+  &:focus:not(:focus-visible) {
+    outline: 0;
+  }
+}

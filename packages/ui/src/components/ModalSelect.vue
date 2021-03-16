@@ -7,7 +7,7 @@
                 <template v-for="option in options">
                     <div class="list-group-item list-group-item-action"
                         :class="itemClass(option)"
-                        style="cursor: pointer; outline-offset: 3px"
+                        style="cursor: pointer; outline-offset: 4px"
                         role="menuitemradio"
                         tabindex="0"
                         :aria-checked="isSelected(option)"
