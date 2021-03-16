@@ -70,7 +70,7 @@
                 </div>
             </transition-group>
             <template v-if="showAddButton" v-slot:footer>
-                <Button text class="SharpList__add-button" @click="add" :key="-1">
+                <Button class="SharpList__add-button" text block @click="add" :key="-1">
                     {{ addText }}
                 </Button>
             </template>

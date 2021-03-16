@@ -22,6 +22,7 @@
             small: Boolean,
             large: Boolean,
             active: Boolean,
+            block: Boolean,
             href: String,
         },
         computed: {
@@ -37,6 +38,7 @@
                         'btn-sm': this.small,
                         'btn-lg': this.large,
                         'btn-text': this.hasTextStyle,
+                        'btn-block': this.block,
                         'active': this.active,
                     }
                 ]

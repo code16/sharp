@@ -5,7 +5,7 @@
             <template v-else>-</template>
         </template>
         <template v-for="locale in locales">
-            <DropdownItem :active="isActive(locale)" @click="handleChanged(locale)" :key="locale">
+            <DropdownItem class="text-uppercase small" :active="isActive(locale)" @click="handleChanged(locale)" :key="locale">
                 {{ locale }}
             </DropdownItem>
         </template>

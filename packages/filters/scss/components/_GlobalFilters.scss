@@ -1,5 +1,5 @@
 .SharpGlobalFilters {
-  $primary: $brand-01-light;
+  $primary: var(--bs-primary-hsl);
   $border-color: $ui-03;
 
   .form-control {
@@ -19,7 +19,7 @@
   .SharpFilterSelect {
     &--open {
       .SharpSelect .multiselect__tags {
-        box-shadow: 0 2px 4px darken($primary, 10%);
+        //box-shadow: 0 2px 4px darken($primary, 10%);
       }
     }
     &--searchable {
@@ -47,19 +47,20 @@
     }
   }
   .SharpAutocomplete {
-    $input-border-color: lighten($primary, 15%);
+    --color-l: calc((var(--bs-primary-l) - var(--threshold)) * -100000);
+    --input-color: hsl(var(--bs-primary-h), var(--bs-primary-s), calc(var(--bs-primary-l) + clamp(-15%, var(--color-l), 15%)));
     .multiselect__tags {
       margin: .5rem 1rem 0 1rem !important;
       height: 2rem!important;
       padding: 0!important;
       width: calc(100% - 2rem)!important;
-      border-bottom: 2px solid $input-border-color;
+      border-bottom: 2px solid var(--input-color);
       border-radius: 0!important;
     }
     .multiselect__input {
-      color: $inverse-01;
+      color: hsl(0, 0%, var(--color-l));
       &::placeholder {
-        color: $input-border-color;
+        color: var(--input-color);
       }
     }
     .multiselect__content-wrapper {
@@ -78,7 +79,7 @@
     .multiselect__option {
       background: $primary!important;
       &--selected {
-        background: lighten($primary, 10%)!important;
+        background: hsl(var(--bs-primary-h), var(--bs-primary-s), calc(var(--bs-primary-l) + clamp(-10%, var(--color-l), 10%)))!important;
         font-weight: normal!important;
       }
     }

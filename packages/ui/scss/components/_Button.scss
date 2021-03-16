@@ -118,3 +118,12 @@
   }
 }
 
+
+.btn-block {
+  width: 100%;
+
+  &:not(.btn-sm):not(.btn-lg) {
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+  }
+}
