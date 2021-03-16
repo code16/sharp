@@ -13,7 +13,6 @@ abstract class EntityState extends InstanceCommand
     protected array $states = [];
 
     const PRIMARY_COLOR = "sharp_primary";
-    const SECONDARY_COLOR = "sharp_secondary";
     const GRAY_COLOR = "sharp_gray";
     const LIGHTGRAY_COLOR = "sharp_lightgray";
     const DARKGRAY_COLOR = "sharp_darkgray";

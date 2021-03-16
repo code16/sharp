@@ -147,27 +147,6 @@
     }
   }
 
-  .SharpButton--secondary {
-    &:hover, &:focus {
-      background: darken($ui-01, 10%);
-      color: $brand-01;
-    }
-  }
-  .SharpButton--secondary-accent, .SharpButton--danger {
-    border: 1px solid $ui-01;
-  }
-
-  .SharpButton {
-    border-radius: $btn-border-radius;
-    &:focus {
-      outline: none;
-    }
-  }
-
-  .SharpSearch__input {
-    border-radius: $input-border-radius;
-  }
-
   .breadcrumb {
     font-size: .75rem;
     margin-bottom: .5rem;
@@ -181,42 +160,4 @@
       }
     }
   }
-
-  //&__search.SharpSearch {
-  //  @include media-breakpoint-down(sm) {
-  //    &.SharpSearch--active {
-  //      width: 100%;
-  //      .SharpSearch__input {
-  //        z-index: 101;
-  //        width: 100%;
-  //      }
-  //      .SharpSearch__magnifier {
-  //        z-index: 101;
-  //      }
-  //
-  //      .SharpSearch__overlay {
-  //        display:block;
-  //      }
-  //    }
-  //    .SharpSearch__overlay {
-  //      z-index: 100;
-  //      position: fixed;
-  //      left:0;
-  //      top:0;
-  //      height: 100%;
-  //      width: 100%;
-  //      background: rgba(0,0,0,.1);
-  //
-  //      display: none;
-  //    }
-  //    .SharpSearch__close {
-  //      display:none;
-  //    }
-  //    .SharpSearch__input {
-  //      padding-right: 0;
-  //      padding-top: .75em;
-  //      padding-bottom: .75em;
-  //    }
-  //  }
-  //}
 }

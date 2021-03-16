@@ -30,7 +30,7 @@
                 <template v-if="canCreate && !reorderActive">
                     <div class="col-auto" :class="{ 'd-none d-sm-block': searchActive }">
                         <template v-if="hasForms">
-                            <Dropdown variant="light" :text="l('action_bar.list.forms_dropdown')">
+                            <Dropdown variant="light" large :text="l('action_bar.list.forms_dropdown')">
                                 <template v-for="(form, key) in forms">
                                     <DropdownItem  @click="handleCreateFormSelected(form)" :key="key" >
                                         <ItemVisual :item="form" icon-class="fa-fw"/>{{ form.label }}
