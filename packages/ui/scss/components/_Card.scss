@@ -1,11 +1,8 @@
-@import '../mixins/card';
 
 .SharpCard {
-  //@include reset;
   @include layer('raised');
   display: flex;
   flex-direction: column;
-  //width: rem(200px);
   height: rem(240px);
   background-color: $ui-01;
   border: 1px solid $ui-04;
@@ -16,7 +13,6 @@
 
   .SharpCard {
     &__overview {
-      //@include reset;
       position: relative;
       display: flex;
       justify-content: $card-flex-align;
@@ -78,7 +74,6 @@
         }
 
         .SharpCard__about-icon {
-          //@include reset;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -98,79 +93,5 @@
       }
     }
 
-    &__footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: rem(48px);
-      background-color: $ui-03;
-      padding-left: 1rem;
-      padding-right: 1rem;
-
-      &-link {
-        font-size: .875rem;
-
-        &:focus {
-          @include focus-outline('border');
-        }
-      }
-
-      .SharpCard__app-status {
-        //@include reset;
-
-        .active {
-          display: flex;
-        }
-
-        &--running {
-          @include app-status('running');
-        }
-
-        &--not-running {
-          @include app-status('not-running');
-        }
-
-        &--stopped {
-          @include app-status('stopped');
-        }
-
-        &--limited {
-          @include app-status('limited');
-        }
-      }
-
-      .SharpCard__app-actions {
-        display: flex;
-
-        .SharpCard__app-actions-button {
-          font-size: 1rem;
-          display: inline-block;
-          padding: .125rem 0 0;
-          margin: 0 .175rem;
-          cursor: pointer;
-          background: none;
-          border: none;
-
-          &:hover, &:focus {
-            .SharpCard__app-actions-icon {
-              fill: $brand-01;
-            }
-          }
-
-          &:focus {
-            @include focus-outline('border');
-          }
-        }
-
-        .SharpCard__app-actions-icon {
-          width: 1rem;
-          height: 1rem;
-          margin: 0 .125rem;
-          transition: 200ms;
-          fill: $ui-05;
-          cursor: pointer;
-        }
-      }
-    }
   }
 }

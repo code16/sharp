@@ -8,13 +8,9 @@
             />
 
             <template v-if="hasErrors">
-                <div class="SharpNotification SharpNotification--error" role="alert">
-                    <div class="SharpNotification__details">
-                        <div class="SharpNotification__text-wrapper">
-                            <p class="SharpNotification__title mb-0">{{ l('form.validation_error.title') }}</p>
-                            <p class="SharpNotification__subtitle mb-0">{{ l('form.validation_error.description') }}</p>
-                        </div>
-                    </div>
+                <div class="alert alert-danger SharpForm__alert" role="alert">
+                    <div class="fw-bold">{{ l('form.validation_error.title') }}</div>
+                    <div>{{ l('form.validation_error.description') }}</div>
                 </div>
             </template>
 

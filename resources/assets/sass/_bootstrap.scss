@@ -16,6 +16,7 @@
 @import '~bootstrap/scss/helpers/position';
 @import '~bootstrap/scss/helpers/visually-hidden';
 
+@import '~bootstrap/scss/alert';
 @import '~bootstrap/scss/buttons';
 @import '~bootstrap/scss/breadcrumb';
 @import '~bootstrap/scss/dropdown';
@@ -25,6 +26,7 @@
 @import '~bootstrap/scss/modal';
 @import '~bootstrap/scss/nav';
 @import '~bootstrap/scss/pagination';
+@import '~bootstrap/scss/toasts';
 
 @import '~bootstrap/scss/utilities/api';
 
@@ -41,5 +43,23 @@
 .list-group-item-action {
   &:focus:not(:focus-visible) {
     outline: 0;
+  }
+}
+
+.toast {
+  border-left-width: 6px;
+  border-top: 0;
+  border-bottom: 0;
+  border-right: 0;
+
+  .toast-header {
+    &:last-child {
+      border-bottom: 0;
+      @include border-bottom-radius(subtract($toast-border-radius, $toast-border-width));
+    }
+  }
+
+  .btn-close {
+    min-width: $btn-close-width;
   }
 }

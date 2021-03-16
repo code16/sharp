@@ -29,14 +29,8 @@ You'll need to create a new template file:
 ```html
 <!-- resources/views/sharp/_login-page-message.blade.php -->
 
-<div role="alert" class="SharpNotification SharpNotification--info">
-    <div class="SharpNotification__details">
-        <div class="SharpNotification__text-wrapper">
-            <p class="SharpNotification__subtitle">
-                Display a custom message to your users
-            </p>
-        </div>
-    </div>
+<div role="alert" class="alert alert-info">
+    Display a custom message to your users
 </div>
 ```
 

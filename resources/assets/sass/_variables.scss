@@ -13,12 +13,13 @@ $text-03: #8c9ba5;
 
 $brand-01-light: #68829E;
 
-
 /**
   Bootstrap variables
 **/
 
 $primary: #004c9b;
+$info: #5aaafa;
+$success: #3dc322;
 
 $enable-negative-margins: true;
 
@@ -31,7 +32,11 @@ $container-max-widths: (
 
 $transition-collapse: height 300ms cubic-bezier(0.5, 0, 0.1, 1);
 
-$border-radius: 3px;
+$border-radius: .25rem;
+
+
+$alert-padding-y: .75rem;
+
 $btn-border-radius: $border-radius;
 $btn-border-width: 1px;
 $btn-font-weight: 500;
@@ -72,6 +77,8 @@ $pagination-active-color: var(--component-active-color);
 
 $list-group-active-bg:  var(--component-active-bg);
 $list-group-active-color: var(--component-active-color);
+
+$toast-header-color: #444c55;
 
 
   /**

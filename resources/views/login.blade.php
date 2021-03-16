@@ -19,25 +19,18 @@
 
                         @if ($errors->any())
 
-                            <div role="alert" class="SharpNotification SharpNotification--error">
-                                <div class="SharpNotification__details">
-                                    <div class="SharpNotification__text-wrapper">
-                                        <p class="SharpNotification__subtitle">@lang('sharp::auth.validation_error')</p>
-                                    </div>
-                                </div>
+                            <div role="alert" class="alert alert-danger">
+                                @lang('sharp::auth.validation_error')
                             </div>
 
                         @elseif (session()->has('invalid'))
 
-                            <div role="alert" class="SharpNotification SharpNotification--error">
-                                <div class="SharpNotification__details">
-                                    <div class="SharpNotification__text-wrapper">
-                                        <p class="SharpNotification__subtitle">@lang('sharp::auth.invalid_credentials')</p>
-                                    </div>
-                                </div>
+                            <div role="alert" class="alert alert-danger">
+                                @lang('sharp::auth.invalid_credentials')
                             </div>
 
                         @endif
+
                         <div class="SharpModule">
                             <div class="SharpModule__inner">
                                 <div class="SharpModule__content">
