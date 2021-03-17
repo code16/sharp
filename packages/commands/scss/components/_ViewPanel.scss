@@ -1,25 +1,13 @@
 .SharpViewPanel {
-
-  &__glasspane {
-    position: fixed;
-    left:0;
-    top:0;
-    height: 100%;
-    width: 100%;
-    background: rgba(0,0,0,.1);
-
-    z-index: z('overlay');
-  }
+  box-shadow: $box-shadow;
 
   position: fixed;
-  left:0;
-  top:0;
+  left: 0;
+  top: 0;
   height: 100%;
   background: white;
   width: 90%;
-  @include layer(pop-out);
-
-  z-index: z('modal');
+  z-index: $zindex-modal;
 
   iframe {
     width: 100%;
@@ -41,5 +29,16 @@
 
   &--expanded {
     transform: translate3d(0,0,0);
+  }
+
+  &__glasspane {
+    position: fixed;
+    left:0;
+    top:0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0,0,0,.1);
+
+    z-index: $zindex-modal-backdrop;
   }
 }
