@@ -83,7 +83,11 @@ trait SharpAssertions
         });
     }
 
-    public function withSharpCurrentBreadcrumb(array $breadcrumb): self
+    /**
+     * @param array $breadcrumb
+     * @return $this
+     */
+    public function withSharpCurrentBreadcrumb(array $breadcrumb)
     {
         $this->currentBreadcrumb = $breadcrumb;
 
