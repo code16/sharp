@@ -6,8 +6,8 @@
     @if(request()->is(sharp_base_url_segment() . "/login"))
         {{ trans('sharp::login.login_page_title') }}
     @else
-        @if($component->label)
-            {{ config("sharp.name", "Sharp") }}, {{ $component->label }}
+        @if($currentEntityLabel = $component->currentEntityLabel())
+            {{ config("sharp.name", "Sharp") }}, {{ $currentEntityLabel }}
         @else
             {{ config("sharp.name", "Sharp") }}
         @endif

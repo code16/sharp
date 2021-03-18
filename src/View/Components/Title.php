@@ -2,23 +2,22 @@
 
 namespace Code16\Sharp\View\Components;
 
-use Code16\Sharp\View\Components\Utils\MenuItem;
-use Illuminate\Support\Collection;
 use Illuminate\View\Component;
 
 class Title extends Component
 {
-    public ?string $label;
-    
-    public function __construct()
-    {
-        $this->label = $this->currentEntityLabel();
-    }
-    
     public function currentEntityLabel(): ?string
     {
-        // todo
-        return null;
+        return collect(config("sharp.menu"))
+                ->mapWithKeys(function($itemOrCategory) {
+                    return isset($itemOrCategory["entities"])
+                        ? collect($itemOrCategory["entities"])
+                            ->mapWithKeys(function($item) {
+                                return $this->extractKeyAndLabel($item);
+                            })
+                        : $this->extractKeyAndLabel($itemOrCategory);
+                })
+                ->filter()[currentSharpRequest()->entityKey()] ?? null;
     }
 
     public function render()
@@ -26,5 +25,18 @@ class Title extends Component
         return view('sharp::components.title', [
             'component' => $this,
         ]);
+    }
+
+    private function extractKeyAndLabel(array $item): array
+    {
+        if(isset($item["entity"])) {
+            return [$item["entity"] => $item["label"] ?? ""];
+        }
+
+        if(isset($item["dashboard"])) {
+            return [$item["dashboard"] => $item["label"] ?? ""];
+        }
+        
+        return [];
     }
 }
