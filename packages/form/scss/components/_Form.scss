@@ -25,6 +25,10 @@
         background: $ui-03;
       }
     }
+
+    .SharpForm__label {
+      font-size: .75rem;
+    }
   }
 
   .SharpGrid__col--empty {
@@ -67,11 +71,10 @@
 
   &__label {
     font-size: .875rem;
-    font-weight: $input-label-weight;
     display: inline-block;
     vertical-align: baseline;
-    margin-bottom: rem(10px) !important;
     text-transform: uppercase;
+    margin-bottom: .375rem;
   }
 
   &__label--disabled {

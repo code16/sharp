@@ -4,7 +4,7 @@
             <fieldset class="SharpForm__fieldset" v-show="isFieldsetVisible(fieldLayout)">
                 <div class="SharpModule__inner">
                     <div class="SharpModule__header">
-                        <div class="SharpModule__title">{{fieldLayout.legend}}</div>
+                        <div class="SharpModule__title form-label">{{fieldLayout.legend}}</div>
                     </div>
                     <div class="SharpModule__content">
                         <FieldsLayout :layout="fieldLayout.fields" v-slot="{ fieldLayout }">

@@ -2,7 +2,7 @@
     <div class="SharpFieldContainer SharpForm__form-item" :class="formGroupClasses" :style="extraStyle">
         <div class="row">
             <div class="col">
-                <label v-if="showLabel" class="SharpForm__label" @click="triggerFocus">
+                <label v-if="showLabel" class="SharpForm__label form-label" @click="triggerFocus">
                     {{label}}
                 </label>
             </div>

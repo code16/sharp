@@ -68,3 +68,17 @@
 .input-group-sm > .form-select {
   padding-right: $form-select-padding-x + $form-select-indicator-padding - .5rem;
 }
+
+.btn,
+.nav-pills .nav-link,
+.breadcrumb,
+.form-label
+{
+  font-family: 'Karla', $font-family-sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.nav-pills .nav-link, {
+  font-size: .875rem;
+}
