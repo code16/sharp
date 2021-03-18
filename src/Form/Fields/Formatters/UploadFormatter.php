@@ -61,6 +61,18 @@ class UploadFormatter extends SharpFieldFormatter
         $storage = $this->filesystem->disk($field->storageDisk());
 
         if($this->isUploaded($value)) {
+
+            if($field->isShouldOptimizeImage()) {
+                $optimizerChain = OptimizerChainFactory::create();
+                // we do not need to check for exception nor file format because:
+                // > By default the package will not throw any errors and just operate silently.
+                $optimizerChain->optimize(
+                    $this->filesystem->disk("local")->path(
+                        config("sharp.uploads.tmp_dir", 'tmp') . '/' . $value["name"]
+                    )
+                );
+            }
+
             $fileContent = $this->filesystem->disk("local")->get(
                 config("sharp.uploads.tmp_dir", 'tmp') . '/' . $value["name"]
             );
@@ -73,13 +85,6 @@ class UploadFormatter extends SharpFieldFormatter
             }
 
             $storage->put($storedFilePath, $fileContent);
-
-            if($field->isShouldOptimizeImage()) {
-                $optimizerChain = OptimizerChainFactory::create();
-                // we do not need to check for exception nor file format because:
-                // > By default the package will not throw any errors and just operate silently.
-                $optimizerChain->optimize($storage->path($storedFilePath));
-            }
 
             return [
                 "file_name" => $storedFilePath,
