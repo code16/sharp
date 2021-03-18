@@ -34,6 +34,7 @@ use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
 use Code16\Sharp\View\Components\Menu;
 use Code16\Sharp\View\Components\RootStyles;
+use Code16\Sharp\View\Components\Title;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -68,6 +69,7 @@ class SharpServiceProvider extends ServiceProvider
         
         Blade::component('sharp-menu', Menu::class);
         Blade::component('sharp-root-styles', RootStyles::class);
+        Blade::component('sharp-title', Title::class);
 
         view()->composer(
             ['sharp::form','sharp::show', 'sharp::list', 'sharp::dashboard', 'sharp::welcome', 'sharp::login', 'sharp::unauthorized'],

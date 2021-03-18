@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="base-url" content="{{ sharp_base_url_segment() }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{{ sharp_page_title($sharpMenu ?? null, $entityKey ?? $dashboardKey ?? null) }}</title>
+
+    <x-sharp-title />
 
     <link rel="stylesheet" href="{{ mix('vendors.css', '/vendor/sharp') }}">
     <link rel="stylesheet" href="{{ mix('sharp.css', '/vendor/sharp') }}">
