@@ -11,46 +11,6 @@ function sharp_version(): string
 }
 
 /**
- * @param array $sharpMenu
- * @param string|null $entityKey
- * @return string
- */
-function sharp_page_title($sharpMenu, $entityKey)
-{
-    $title = "";
-
-    if(request()->is(sharp_base_url_segment() . "/login")) {
-        $title = trans('sharp::login.login_page_title');
-
-    } elseif ($sharpMenu) {
-        $menuItems = collect($sharpMenu->menuItems);
-
-        // Handle Multiforms
-        $entityKey = explode(':', $entityKey)[0];
-
-        $label = $menuItems
-                ->where('type', 'entity')
-                ->firstWhere('key', $entityKey)
-                ->label ?? "";
-
-        if(!$label) {
-            $label = $menuItems
-                    ->where('type', 'category')
-                    ->pluck('entities')
-                    ->flatten()
-                    ->firstWhere('key', $entityKey)
-                    ->label ?? "";
-        }
-
-        $title = $sharpMenu->name . ($label ? ', ' . $label : '');
-    }
-
-    return config("sharp.display_sharp_version_in_title", true)
-        ? "$title | Sharp " . sharp_version()
-        : $title;
-}
-
-/**
  * @return mixed
  */
 function sharp_user()
