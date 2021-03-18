@@ -207,6 +207,6 @@ return [
     "login_page_message_blade_path" => env("SHARP_LOGIN_PAGE_MESSAGE_BLADE_PATH", "sharp/_login-page-message"),
     
     "theme" => [
-        "primary_color" => "#004c9b",
+        "primary_color" => env('SHARP_PRIMARY_COLOR', "#004c9b"),
     ],
 ];
