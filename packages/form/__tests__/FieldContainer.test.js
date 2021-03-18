@@ -117,9 +117,10 @@ describe('field-container', () => {
         let $fieldContainer = await createVm();
 
         let { field } = $fieldContainer.$refs;
-        expect($fieldContainer.exposedProps).toMatchObject(field.$props);
-        expect(field.uniqueIdentifier).toBe('error.title');
-        expect(field.fieldConfigIdentifier).toBe('config.title');
+        const { uniqueIdentifier, fieldConfigIdentifier, ...props } = field.$props;
+        expect($fieldContainer.$props).toMatchObject(props);
+        expect(uniqueIdentifier).toBe('error.title');
+        expect(fieldConfigIdentifier).toBe('config.title');
     });
 
     test('responsive to $form.errors object', async () => {

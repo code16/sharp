@@ -7,7 +7,6 @@
     @extend .SharpModule;
     .SharpUpload__inner {
       @extend .SharpModule__inner;
-      @include layer('raised');
       background: $ui-01 !important;
     }
     .SharpUpload__content {

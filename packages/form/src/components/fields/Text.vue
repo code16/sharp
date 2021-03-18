@@ -26,7 +26,7 @@
             placeholder: String,
             readOnly: Boolean,
 
-            maxLength:Number,
+            maxLength: Number,
 
             inputType:  {
                 type:String,

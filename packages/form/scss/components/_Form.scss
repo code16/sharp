@@ -7,7 +7,6 @@
   }
 
   &__fieldset {
-    //@include reset;
     //margin-bottom: 2rem;
 
     @extend .SharpModule;
@@ -16,7 +15,6 @@
     &>.SharpModule__inner {
       background: transparent;
       border: 0;
-      @include layer('base');
       &>.SharpModule__header {
         padding: 0;
         .SharpModule__title {
@@ -25,7 +23,6 @@
       }
       &>.SharpModule__content {
         background: $ui-03;
-        @include layer('raised');
       }
     }
   }
@@ -36,6 +33,13 @@
 
   .SharpGrid__col:not(.SharpGrid__col--empty), &__form-item--row {
     margin-bottom: $form-item-margin-bottom;
+  }
+
+  .SharpSelect--dropdown, .SharpTags {
+    @extend .form-select;
+    .multiselect__select {
+      display: none;
+    }
   }
 
   &__form-item {
@@ -62,7 +66,6 @@
   }
 
   &__label {
-    //@include reset;
     font-size: .875rem;
     font-weight: $input-label-weight;
     display: inline-block;
@@ -76,8 +79,8 @@
   }
 
   &__form-item--danger {
-    input, textarea, select, .SharpDropdown__text {
-      //border-bottom: 2px solid $support-01;
+    .form-control {
+      @extend .is-invalid;
     }
     .SharpForm__form-requirement {
       max-height: rem(200px);
@@ -89,7 +92,6 @@
 
 
   &__form-requirement {
-    //@include reset;
     font-size: .75rem;
     margin: .75rem 0 0;
     max-height: 0;
@@ -127,11 +129,5 @@
         margin-right: 0;
       }
     }
-  }
-
-  /// reset multiselect new Design
-  .multiselect__tags {
-    border-radius: 0;
-    border: none;
   }
 }

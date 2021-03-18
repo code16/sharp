@@ -1,4 +1,3 @@
-@import '../mixins/dropdown';
 
 .multiselect {
   display: flex;
@@ -18,7 +17,19 @@
   }
 
   .multiselect__select {
-    @extend .SharpDropdown__arrow;
+    position: absolute;
+    z-index: 1;
+    fill: currentColor;
+    right: .5rem;
+    top: calc(50% - 2px);
+    pointer-events: none;
+    transform-origin: 50% 45%;
+  }
+
+  .multiselect__tags-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: -.125rem;
   }
 
   .multiselect__tags {
@@ -28,8 +39,6 @@
     width: 100%;
 
     cursor: default;
-
-    @include layer('raised');
 
     .multiselect__input {
       border: none;
@@ -103,7 +112,7 @@
   }
   .multiselect__tag-icon:after {
     content: "×";
-    color: $color__navy-gray-1;
+    color: #0F212E;
     font-size: 14px;
   }
   .multiselect__tag-icon:focus,
@@ -119,16 +128,12 @@
     right: 2px;
     width: 40px;
     &:after, &:before {
-      border-color:$brand-01 transparent transparent;
+      border-color: $brand-01 transparent transparent;
     }
   }
 
   &.multiselect--active {
     @extend .form-control:focus;
-
-    .multiselect__select {
-      @include SharpDropdownOpenArrow;
-    }
   }
 
   &--disabled {

@@ -1,7 +1,7 @@
 @include media-breakpoint-up($breakpoint-fixed-menu) {
   #sharp-app.leftNav--collapsed {
     .SharpActionBar__bar {
-      left: rem(48px);
+      left: 3rem;
       padding-left: 0;
     }
   }
@@ -14,9 +14,6 @@
   .left, .right {
     display: flex;
     align-items: center;
-    & > *:not(.text-content) {
-      //height: 100%
-    }
   }
 
   .left {
@@ -64,7 +61,7 @@
     @include media-breakpoint-up($breakpoint-fixed-menu) {
       position: fixed!important;
       z-index: $zindex-sticky;
-      left: rem(200px);
+      left: 12.5rem;
     }
     & > .container {
       height: 100%;
@@ -97,47 +94,6 @@
       &:first-child {
         margin: 0;
       }
-    }
-  }
-
-  @mixin overflow-dropdown-list {
-    .SharpDropdown__list {
-      width: auto;
-      right:0;
-    }
-  }
-
-  .SharpDropdown__text {
-    height: 100%;
-  }
-
-  &__actions-dropdown {
-    align-self: stretch;
-    //min-width: 2rem;
-    //max-width: 2rem;
-
-    @include overflow-dropdown-list;
-
-    .SharpDropdown__text {
-      //border: none;
-    }
-
-    .SharpDropdown__link {
-      padding-right: 1rem;
-    }
-
-    &--commands, &--state {
-      //width: 2.5rem;
-      //min-width: 2.5rem;
-      //max-width: 2.5rem;
-
-      white-space: nowrap;
-
-      .SharpDropdown__text {
-        line-height:1;
-      }
-
-      @include nav-dropdown;
     }
   }
 

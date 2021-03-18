@@ -22,7 +22,7 @@
   }
 
   &__table {
-    //@include reset;
+
     //display: table;
     //overflow-x: auto;
     //overflow-y: hidden;
@@ -121,7 +121,7 @@
   }
 
   &__th {
-    //@include reset;
+
     //@include padding-th;
     //display: table-cell;
     display: flex;
@@ -149,7 +149,7 @@
   }
 
   &__td {
-    //@include reset;
+
     font-size: .875rem;
     @include line-height('body');
     //@include padding-td;

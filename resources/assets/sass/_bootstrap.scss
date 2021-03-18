@@ -64,3 +64,7 @@
     min-width: $btn-close-width;
   }
 }
+
+.input-group-sm > .form-select {
+  padding-right: $form-select-padding-x + $form-select-indicator-padding - .5rem;
+}

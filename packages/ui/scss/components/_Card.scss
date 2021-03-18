@@ -1,6 +1,5 @@
 
 .SharpCard {
-  @include layer('raised');
   display: flex;
   flex-direction: column;
   height: rem(240px);
@@ -31,7 +30,7 @@
       }
 
       .SharpCard__overview-about {
-        //@include reset;
+
         display: flex;
         flex: 1;
         flex-direction: column;

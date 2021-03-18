@@ -19,7 +19,10 @@
                 </div>
             </template>
         </div>
-        <Field v-bind="exposedProps"
+        <Field
+            v-bind="$props"
+            :unique-identifier="mergedErrorIdentifier"
+            :field-config-identifier="mergedConfigIdentifier"
             @error="setError"
             @ok="setOk"
             @clear="clear"
@@ -27,8 +30,8 @@
             @locale-change="handleLocaleChanged"
             ref="field"
         />
-        <div class="SharpForm__form-requirement">{{stateMessage}}</div>
-        <small class="SharpForm__help-message">{{helpMessage}}</small>
+        <div class="SharpForm__form-requirement">{{ stateMessage }}</div>
+        <small class="SharpForm__help-message">{{ helpMessage }}</small>
     </div>
 </template>
 
@@ -84,8 +87,8 @@
                 return [
                     `SharpForm__form-item--type-${this.fieldType}`,
                     {
-                        'SharpForm__form-item--danger': this.state==='error' || this.errorsLocales.length > 0,
-                        'SharpForm__form-item--success': this.state==='ok',
+                        'SharpForm__form-item--danger': this.hasError,
+                        'SharpForm__form-item--success': this.state === 'ok',
                         'SharpForm__form-item--no-label': !this.showLabel,
                     }
                 ];
@@ -93,12 +96,8 @@
             extraStyle() {
                 return this.fieldProps.extraStyle;
             },
-            exposedProps() {
-                return {
-                    ...this.$props,
-                    uniqueIdentifier: this.mergedErrorIdentifier,
-                    fieldConfigIdentifier: this.mergedConfigIdentifier
-                };
+            hasError() {
+                return this.state === 'error' || this.errorsLocales.length > 0;
             },
             showLabel() {
                 return !!this.label || this.label === '';
@@ -183,8 +182,5 @@
                 this.$emit('locale-change', this.fieldKey, locale);
             }
         },
-        mounted() {
-            //console.log(this);
-        }
     }
 </script>
