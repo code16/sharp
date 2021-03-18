@@ -120,7 +120,7 @@ class Thumbnail
                     });
                 }
 
-                $sourceImg->save($thumbnailDisk->path($thumbnailPath), $this->quality);
+                $thumbnailDisk->put($thumbnailPath, $sourceImg->stream(null, $this->quality));
 
             } catch(FileNotFoundException $ex) {
                 return null;
@@ -130,7 +130,7 @@ class Thumbnail
             }
         }
 
-        return $thumbnailDisk->url($thumbnailPath) . ($this->appendTimestamp ? "?" . filectime($thumbnailDisk->path($thumbnailPath)) : "");
+        return $thumbnailDisk->url($thumbnailPath) . ($this->appendTimestamp ? "?" . $thumbnailDisk->lastModified($thumbnailPath) : "");
     }
 
     private function resolveFilterClass(string $class, array $params): ?ThumbnailFilter
