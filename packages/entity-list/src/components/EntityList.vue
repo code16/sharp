@@ -47,7 +47,7 @@
                                 <div class="row justify-content-end align-items-center flex-nowrap gx-1">
                                     <template v-if="instanceHasState(item)">
                                         <div class="col-auto">
-                                            <Button text small :disabled="!instanceHasStateAuthorization(item)">
+                                            <Button variant="light" small :disabled="!instanceHasStateAuthorization(item)">
                                                 <StateIcon :color="instanceStateIconColor(item)" />
                                             </Button>
                                         </div>
