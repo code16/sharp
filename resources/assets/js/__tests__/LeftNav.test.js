@@ -63,27 +63,18 @@ describe('left-nav', ()=>{
     describe('watch collapsed', ()=>{
         test('updating state for intermediate animations and set root class', async ()=>{
             const wrapper = createWrapper({ sync:false });
-            const collapsedClass = 'leftNav--collapsed';
-            const { $root } = wrapper.vm;
-
-            $root.$emit = jest.fn();
 
             await wrapper.vm.$nextTick();
-            expect($root.$emit).not.toHaveBeenCalledWith('setClass', collapsedClass, expect.anything());
 
-            $root.$emit.mockClear();
             wrapper.setData({ collapsed: true });
 
             await wrapper.vm.$nextTick();
-            expect($root.$emit).toHaveBeenCalledWith('setClass', collapsedClass, true);
             expect(setTimeout).toHaveBeenCalledWith(wrapper.vm.updateState, 250); // update state called at the end of the animation
             expect(wrapper.vm.state).toBe('collapsing');
 
-            $root.$emit.mockClear();
             wrapper.setData({ collapsed: false });
 
             await wrapper.vm.$nextTick();
-            expect($root.$emit).toHaveBeenCalledWith('setClass', collapsedClass, false);
             expect(wrapper.vm.state).toBe('expanding');
 
             jest.runOnlyPendingTimers();

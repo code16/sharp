@@ -332,6 +332,9 @@
             },
 
             hasActionsColumn() {
+                if(this.reorderActive) {
+                    return false;
+                }
                 return this.items.some(instance =>
                     this.instanceHasState(instance) ||
                     this.instanceHasCommands(instance)

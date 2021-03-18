@@ -7,7 +7,9 @@
             </div>
         </template>
         <template v-else>
+
             <slot />
+
             <notifications position="top right" animation-name="slideRight" style="top:6rem; right: 1rem" reverse>
                 <template slot="body" slot-scope="{ item, close }">
                     <div class="toast show mb-3" :class="`border-${item.type}`" role="alert" aria-live="assertive" aria-atomic="true" data-test="notification">
@@ -22,6 +24,7 @@
                     </div>
                 </template>
             </notifications>
+
             <template v-for="dialog in dialogs">
                 <Modal
                     v-bind="dialog.props"

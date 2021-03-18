@@ -53,22 +53,14 @@ window.Trix = Trix;
 Vue.config.ignoredElements = [/^trix-/];
 
 
+Vue.component('sharp-action-view', ActionView);
+Vue.component('sharp-left-nav', LeftNav);
+Vue.component('sharp-collapsible-item', CollapsibleItem);
+Vue.component('sharp-nav-item', NavItem);
+Vue.component('sharp-item-visual', ItemVisual);
+
 new Vue({
     el: "#sharp-app",
-
-    components: {
-        'sharp-action-view': ActionView,
-        'sharp-left-nav': LeftNav,
-        'sharp-collapsible-item': CollapsibleItem,
-        'sharp-nav-item': NavItem,
-        'sharp-item-visual': ItemVisual
-    },
-
-    created() {
-        this.$on('setClass',(className,active)=> {
-            this.$el.classList[active ? 'add' : 'remove'](className);
-        });
-    },
 
     store,
     router,

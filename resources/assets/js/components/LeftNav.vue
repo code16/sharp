@@ -79,7 +79,7 @@
         watch: {
             collapsed: {
                 handler(val) {
-                    this.$root.$emit('setClass', 'leftNav--collapsed', this.collapsed);
+                    document.body.classList.toggle('leftNav--collapsed', this.collapsed);
                     // apply transition
                     this.state = val ? 'collapsing' : 'expanding';
                     setTimeout(this.updateState, 250);
@@ -88,16 +88,18 @@
         },
         computed: {
             flattenedItems() {
-                return this.items.reduce((res, item) =>
-                    item.type==='category'
-                        ? [ ...res, ...item.entities ]
-                        : [ ...res, item ]
-                ,[]);
+                return this.items
+                    .map(item => item.type === 'category' ? item.entities : item)
+                    .flat();
+            },
+            currentEntity() {
+                return this.flattenedItems.find(entity => entity.key === this.current);
             },
             currentIcon() {
-                return this.current === 'dashboard'
-                    ? 'fas fa-tachometer-alt'
-                    : (this.flattenedItems.find(e => e.key===this.current)||{}).icon;
+                if(this.current === 'dashboard') {
+                    return 'fas fa-tachometer-alt';
+                }
+                return this.currentEntity?.icon;
             },
             classes() {
                 return [
@@ -128,6 +130,7 @@
                 if(this.hasGlobalFilters) {
                     await this.$store.dispatch('global-filters/get');
                 }
+                this.$store.dispatch('setCurrentEntity', this.currentEntity);
                 this.ready = true;
             },
         },

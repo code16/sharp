@@ -5,7 +5,20 @@
         right-class="d-block"
     >
         <template v-slot:left>
-            <span class="text-content text-nowrap">{{ count }} {{ l('action_bar.list.items_count') }}</span>
+            <div class="row gx-2">
+                <template v-if="currentEntity">
+                    <div class="col-auto">
+                        <i class="fa" :class="currentEntity.icon"></i>
+                    </div>
+                </template>
+
+                <div class="col">
+                    <template v-if="currentEntity">
+                        {{ currentEntity.label }} <span class="mx-1">&bull;</span>
+                    </template>
+                    <span class="text-content text-nowrap">{{ count }} {{ l('action_bar.list.items_count') }}</span>
+                </div>
+            </div>
         </template>
         <template v-slot:right>
             <div class="row justify-content-end flex-nowrap">
@@ -119,6 +132,9 @@
         computed: {
             hasForms() {
                 return this.forms && this.forms.length > 0;
+            },
+            currentEntity() {
+                return this.$store.state.currentEntity;
             },
         },
         methods: {
