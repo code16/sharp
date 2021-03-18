@@ -1,58 +1,56 @@
 <template>
     <div class="SharpUpload" :class="[{'SharpUpload--empty':!file, 'SharpUpload--disabled':readOnly}, modifiersClasses]">
-        <div class="SharpUpload__inner">
-            <div class="SharpUpload__content">
-                <form v-show="!file" class="dropzone">
-                    <Button class="dz-message" text block :disabled="readOnly" type="button">
-                        {{ l('form.upload.browse_button') }}
-                    </Button>
-                </form>
-                <template v-if="file">
-                    <div class="SharpUpload__container" :class="{ row:showThumbnail }">
-                        <div v-if="showThumbnail" class="SharpUpload__thumbnail" :class="[modifiers.compacted?'col-4 col-sm-3 col-xl-2':'col-4 col-md-4']">
-                            <img :src="imageSrc" @load="handleImageLoaded">
-                        </div>
-                        <div class="SharpUpload__infos" :class="{[modifiers.compacted?'col-8 col-sm-9 col-xl-10':'col-8 col-md-8']:showThumbnail}">
-                            <div class="mb-3 text-truncate">
-                                <label class="SharpUpload__filename">{{ fileName }}</label>
-                                <div class="SharpUpload__info mt-2">
-                                    <template v-if="size">
-                                        <span class="mr-2">{{ size }}</span>
-                                    </template>
-                                    <template v-if="canDownload">
-                                        <a class="SharpUpload__download-link" :href="downloadUrl" :download="fileName">
-                                            <i class="fas fa-download"></i>
-                                            {{ l('form.upload.download_link') }}
-                                        </a>
-                                    </template>
-                                </div>
-                                <transition name="SharpUpload__progress">
-                                    <div class="SharpUpload__progress mt-2" v-show="inProgress">
-                                        <div class="SharpUpload__progress-bar" role="progressbar" :style="{width:`${progress}%`}"
-                                             :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </transition>
-                            </div>
-                            <div v-show="!readOnly">
-                                <Button v-show="!!originalImageSrc && !inProgress" outline small :disabled="!isCroppable" @click="onEditButtonClick">
-                                    {{ l('form.upload.edit_button') }}
-                                </Button>
-                                <Button class="SharpUpload__remove-button" variant="danger" outline small :disabled="readOnly" @click="remove()">
-                                    {{ l('form.upload.remove_button') }}
-                                </Button>
-                            </div>
-                        </div>
-                        <button class="SharpUpload__close-button" type="button" @click="remove()" v-show="!readOnly">
-                            <svg class="SharpUpload__close-icon"
-                                 aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd">
-                                <path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
-                            </svg>
-                        </button>
+        <div :class="{ 'card card-body': root && file }">
+            <form v-show="!file" class="dropzone">
+                <Button class="dz-message" text block :disabled="readOnly" type="button">
+                    {{ l('form.upload.browse_button') }}
+                </Button>
+            </form>
+            <template v-if="file">
+                <div class="SharpUpload__container" :class="{ row:showThumbnail }">
+                    <div v-if="showThumbnail" class="SharpUpload__thumbnail" :class="[modifiers.compacted?'col-4 col-sm-3 col-xl-2':'col-4 col-md-4']">
+                        <img :src="imageSrc" @load="handleImageLoaded">
                     </div>
-                </template>
-                <div ref="clip-preview-template" class="clip-preview-template" style="display: none;">
-                    <div></div>
+                    <div class="SharpUpload__infos" :class="{[modifiers.compacted?'col-8 col-sm-9 col-xl-10':'col-8 col-md-8']:showThumbnail}">
+                        <div class="mb-3 text-truncate">
+                            <label class="SharpUpload__filename">{{ fileName }}</label>
+                            <div class="SharpUpload__info mt-2">
+                                <template v-if="size">
+                                    <span class="mr-2">{{ size }}</span>
+                                </template>
+                                <template v-if="canDownload">
+                                    <a class="SharpUpload__download-link" :href="downloadUrl" :download="fileName">
+                                        <i class="fas fa-download"></i>
+                                        {{ l('form.upload.download_link') }}
+                                    </a>
+                                </template>
+                            </div>
+                            <transition name="SharpUpload__progress">
+                                <div class="SharpUpload__progress mt-2" v-show="inProgress">
+                                    <div class="SharpUpload__progress-bar" role="progressbar" :style="{width:`${progress}%`}"
+                                         :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </transition>
+                        </div>
+                        <div v-show="!readOnly">
+                            <Button v-show="!!originalImageSrc && !inProgress" outline small :disabled="!isCroppable" @click="onEditButtonClick">
+                                {{ l('form.upload.edit_button') }}
+                            </Button>
+                            <Button class="SharpUpload__remove-button" variant="danger" outline small :disabled="readOnly" @click="remove()">
+                                {{ l('form.upload.remove_button') }}
+                            </Button>
+                        </div>
+                    </div>
+                    <button class="SharpUpload__close-button" type="button" @click="remove()" v-show="!readOnly">
+                        <svg class="SharpUpload__close-icon"
+                             aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd">
+                            <path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
+                        </svg>
+                    </button>
                 </div>
+            </template>
+            <div ref="clip-preview-template" class="clip-preview-template" style="display: none;">
+                <div></div>
             </div>
         </div>
         <template v-if="!!originalImageSrc && isCroppable">
@@ -117,7 +115,8 @@
             value: Object,
             croppableFileTypes:Array,
 
-            readOnly: Boolean
+            readOnly: Boolean,
+            root: Boolean,
         },
 
         data() {

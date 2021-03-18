@@ -70,11 +70,11 @@
   }
 
   &__label {
+    display: block;
     font-size: .875rem;
-    display: inline-block;
     vertical-align: baseline;
     text-transform: uppercase;
-    margin-bottom: .375rem;
+    //margin-bottom: .375rem;
   }
 
   &__label--disabled {

@@ -1,9 +1,9 @@
 <template>
     <div class="SharpFieldContainer SharpForm__form-item" :class="formGroupClasses" :style="extraStyle">
-        <div class="row">
+        <div class="row align-items-end">
             <div class="col">
                 <label v-if="showLabel" class="SharpForm__label form-label" @click="triggerFocus">
-                    {{label}}
+                    {{ label }}
                 </label>
             </div>
             <template v-if="fieldProps.localized">

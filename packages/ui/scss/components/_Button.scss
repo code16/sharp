@@ -60,11 +60,14 @@
   --color: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--color-l));
 
   @include button-variant(
-    $background: rgba(255, 255, 255, .5),
+    $background: hsla(var(--bs-primary-h), var(--bs-primary-s), var(--color-l), .1),
     $border: transparent,
     $color: $primary,
-    $hover-background: white,
-    $hover-border: $ui-02,
+    //$hover-background: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--bs-primary-l)),
+    //$hover-border: transparent,
+    //$hover-color: white,
+    $hover-background: hsla(var(--bs-primary-h), var(--bs-primary-s), var(--color-l), .15),
+    $hover-border: hsla(var(--bs-primary-h), var(--bs-primary-s), var(--color-l), .25),
     $hover-color: var(--color),
     $active-background: var(--color),
     $active-border: var(--color),
@@ -74,7 +77,7 @@
     $disabled-color: var(--color)
   );
 
-  color: hsl(var(--bs-primary-h), var(--bs-primary-s), 30%);
+  color: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--color-l));
 
   &:focus {
     box-shadow: 0 0 0 $btn-focus-width hsla(var(--bs-primary-h), var(--bs-primary-s), calc(var(--color-l) + clamp(-15%, var(--color-l), 15%)), .5)!important;
@@ -123,7 +126,8 @@
   width: 100%;
 
   &:not(.btn-sm):not(.btn-lg) {
-    padding-top: .5rem;
-    padding-bottom: .5rem;
+    border-radius: $border-radius-lg;
+    //padding-top: .5rem;
+    //padding-bottom: .5rem;
   }
 }

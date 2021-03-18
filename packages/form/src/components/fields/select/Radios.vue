@@ -1,26 +1,28 @@
 <template>
-    <div>
-        <div class="row gy-1 gx-3" :class="inline ? 'row-cols-auto' : 'row-cols-1'">
-            <template v-for="(option, index) in options">
-                <div class="col">
-                    <div class="SharpSelect__item" :key="option.id">
-                        <input type="radio"
-                            class="SharpRadio"
-                            tabindex="0"
-                            :id="`${uniqueIdentifier}${index}`"
-                            :checked="isSelected(option)"
-                            :value="option.id"
-                            :disabled="readOnly"
-                            :name="uniqueIdentifier"
-                            @change="handleRadioChanged(option)"
-                        >
-                        <label class="SharpRadio__label" :for="`${uniqueIdentifier}${index}`">
-                            <span class="SharpRadio__appearance"></span>
-                            {{ labels[option.id] }}
-                        </label>
+    <div :class="{ 'card':root }">
+        <div :class="{ 'card-body':root }">
+            <div class="row gy-1 gx-3" :class="inline ? 'row-cols-auto' : 'row-cols-1'">
+                <template v-for="(option, index) in options">
+                    <div class="col">
+                        <div class="SharpSelect__item" :key="option.id">
+                            <input type="radio"
+                                class="SharpRadio"
+                                tabindex="0"
+                                :id="`${uniqueIdentifier}${index}`"
+                                :checked="isSelected(option)"
+                                :value="option.id"
+                                :disabled="readOnly"
+                                :name="uniqueIdentifier"
+                                @change="handleRadioChanged(option)"
+                            >
+                            <label class="SharpRadio__label" :for="`${uniqueIdentifier}${index}`">
+                                <span class="SharpRadio__appearance"></span>
+                                {{ labels[option.id] }}
+                            </label>
+                        </div>
                     </div>
-                </div>
-            </template>
+                </template>
+            </div>
         </div>
     </div>
 </template>
@@ -36,6 +38,7 @@
             uniqueIdentifier: String,
             readOnly: Boolean,
             inline: Boolean,
+            root: Boolean,
         },
         methods: {
             isSelected(option) {

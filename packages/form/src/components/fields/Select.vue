@@ -58,6 +58,7 @@
                 type: Boolean,
                 default: true
             },
+            root: Boolean,
         },
         watch: {
             options() {

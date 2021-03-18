@@ -23,6 +23,7 @@
             fieldConfigIdentifier: String,
             updateData: Function,
             readOnly: Boolean,
+            root: Boolean,
         },
         computed: {
             isCustom() {
@@ -54,6 +55,7 @@
                     locale: this.locale,
                     uniqueIdentifier: this.uniqueIdentifier,
                     fieldConfigIdentifier: this.fieldConfigIdentifier,
+                    root: this.root,
                     ...fieldProps
                 },
                 attrs: {

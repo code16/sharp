@@ -20,6 +20,7 @@
 @import '~bootstrap/scss/buttons';
 @import '~bootstrap/scss/breadcrumb';
 @import '~bootstrap/scss/dropdown';
+@import '~bootstrap/scss/card';
 @import '~bootstrap/scss/close';
 @import '~bootstrap/scss/list-group';
 @import '~bootstrap/scss/forms';
@@ -77,6 +78,7 @@
   font-family: 'Karla', $font-family-sans-serif;
   font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: .025em;
 }
 
 .nav-pills .nav-link, {

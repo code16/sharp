@@ -23,13 +23,21 @@
   }
 
   &__item {
-    @extend .SharpModule;
+    position: relative;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 
     @include fix-module-fields-margin;
 
-    padding: 0;
-    margin-bottom: 4px;
-    position: relative;
+
+    // adjust button size
+    .btn-block {
+      font-size: .75rem;
+    }
+
+    .btn-sm, .SharpFieldLocaleSelect__btn {
+      font-size: .675rem;
+    }
 
     /// Contextual children modifiers
     .SharpForm--label {
@@ -70,10 +78,6 @@
 
     &.sortable-chosen {
       @include focus-outline('border');
-    }
-
-    &:last-of-type {
-      margin-bottom: rem(10px);
     }
 
     &.expand-enter-active {

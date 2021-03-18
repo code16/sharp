@@ -16,63 +16,64 @@
         </template>
         <Draggable :options="dragOptions" :list="list" ref="draggable">
             <transition-group name="expand" tag="div">
-                <div v-for="(listItemData, i) in list" :key="listItemData[indexSymbol]"
-                    class="SharpList__item"
-                    :class="{'SharpList__item--collapsed':dragActive}"
-                >
-                    <div class="SharpModule__inner">
-                        <div class="SharpModule__content">
+                <template v-for="(listItemData, i) in list">
+                    <div class="SharpList__item card card-body shadow-sm mb-3"
+                        :class="{'SharpList__item--collapsed': dragActive}"
+                        :key="listItemData[indexSymbol]"
+                    >
+                        <template v-if="dragActive && collapsedItemTemplate">
+                            <TemplateRenderer
+                                name="CollapsedItem"
+                                :template="collapsedItemTemplate"
+                                :template-data="collapsedItemData(listItemData)"
+                            />
+                        </template>
 
-                            <template v-if="dragActive && collapsedItemTemplate">
-                                <TemplateRenderer
-                                    name="CollapsedItem"
-                                    :template="collapsedItemTemplate"
-                                    :template-data="collapsedItemData(listItemData)"
+                        <template v-else>
+                            <ListItem :layout="fieldLayout.item" :error-identifier="i" v-slot="{ fieldLayout }">
+                                <FieldDisplay
+                                    :field-key="fieldLayout.key"
+                                    :context-fields="transformedFields(i)"
+                                    :context-data="listItemData"
+                                    :error-identifier="fieldLayout.key"
+                                    :config-identifier="fieldLayout.key"
+                                    :update-data="update(i)"
+                                    :locale="listItemData._fieldsLocale[fieldLayout.key]"
+                                    :read-only="isReadOnly"
+                                    :list="true"
+                                    @locale-change="(key, value)=>updateLocale(i, key, value)"
                                 />
+                            </ListItem>
+                            <template v-if="showRemoveButton">
+                                <div class="mt-3 text-center">
+                                    <Button variant="danger" outline small @click="remove(i)">
+                                        {{ l('form.list.remove_button') }}
+                                    </Button>
+                                </div>
                             </template>
+                        </template>
 
-                            <template v-else>
-                                <ListItem :layout="fieldLayout.item" :error-identifier="i" v-slot="{ fieldLayout }">
-                                    <FieldDisplay
-                                        :field-key="fieldLayout.key"
-                                        :context-fields="transformedFields(i)"
-                                        :context-data="listItemData"
-                                        :error-identifier="fieldLayout.key"
-                                        :config-identifier="fieldLayout.key"
-                                        :update-data="update(i)"
-                                        :locale="listItemData._fieldsLocale[fieldLayout.key]"
-                                        :read-only="isReadOnly"
-                                        @locale-change="(key, value)=>updateLocale(i, key, value)"
-                                    />
-                                </ListItem>
-                                <template v-if="showRemoveButton">
-                                    <div class="mt-3 text-center">
-                                        <Button  variant="danger" outline small @click="remove(i)">
-                                            {{ l('form.list.remove_button') }}
-                                        </Button>
-                                    </div>
-                                </template>
-                            </template>
-
-                            <!-- Full size div use to handle the item when drag n drop (c.f draggable options) -->
-                            <template v-if="dragActive">
-                                <div class="SharpList__overlay-handle"></div>
-                            </template>
-                        </div>
+                        <!-- Full size div use to handle the item when drag n drop (c.f draggable options) -->
+                        <template v-if="dragActive">
+                            <div class="SharpList__overlay-handle"></div>
+                        </template>
+                        <template v-if="showInsertButton && i < list.length-1">
+                            <div class="SharpList__new-item-zone">
+                                <Button small @click="insertNewItem(i, $event)">
+                                    {{ l('form.list.insert_button') }}
+                                </Button>
+                            </div>
+                        </template>
                     </div>
-                    <template v-if="showInsertButton && i < list.length-1">
-                        <div class="SharpList__new-item-zone">
-                            <Button small @click="insertNewItem(i, $event)">
-                                {{ l('form.list.insert_button') }}
-                            </Button>
-                        </div>
-                    </template>
-                </div>
+                </template>
             </transition-group>
+
             <template v-if="showAddButton" v-slot:footer>
-                <Button class="SharpList__add-button" text block @click="add" :key="-1">
-                    {{ addText }}
-                </Button>
+                <div :class="{ 'mt-3': list.length > 0 }">
+                    <Button class="SharpList__add-button" text block @click="add" :key="-1">
+                        ＋ {{ addText }}
+                    </Button>
+                </div>
             </template>
         </Draggable>
         <template v-if="readOnly && !list.length">

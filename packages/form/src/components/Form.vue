@@ -39,6 +39,7 @@
                                 :read-only="isReadOnly"
                                 :error-identifier="fieldLayout.key"
                                 :config-identifier="fieldLayout.key"
+                                root
                                 :update-data="updateData"
                                 :update-visibility="updateVisibility"
                                 @locale-change="updateLocale"

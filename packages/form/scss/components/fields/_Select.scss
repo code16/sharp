@@ -1,11 +1,5 @@
 .SharpSelect {
 
-  &--list {
-    background: $ui-03;
-    padding: 1rem;
-    overflow: hidden;
-  }
-
   &__clear-button {
     @extend %select-close-button;
 
