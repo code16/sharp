@@ -23,21 +23,25 @@
             <div class="row gx-3">
                 <template v-if="hasState">
                     <div class="col-auto">
-                        <Dropdown text small :disabled="!canChangeState">
-                            <template v-slot:text>
-                                <StateIcon class="me-1" :color="state.color" />
-                                <span class="text-truncate">{{ state.label }}</span>
+                        <ModalSelect
+                            :title="l('modals.entity_state.edit.title')"
+                            :ok-title="l('modals.entity_state.edit.ok_button')"
+                            :value="state.value"
+                            :options="stateValues"
+                            size="sm"
+                            @change="handleStateChanged"
+                        >
+                            <template v-slot="{ on }">
+                                <Button class="dropdown-toggle" text small :disabled="!canChangeState" v-on="on">
+                                    <StateIcon class="me-1" :color="state.color" style="vertical-align: -.125em" />
+                                    <span class="text-truncate">{{ state.label }}</span>
+                                </Button>
                             </template>
-                            <template v-for="stateOptions in stateValues">
-                                <DropdownItem
-                                    @click="handleStateChanged(stateOptions.value)"
-                                    :key="stateOptions.value"
-                                >
-                                    <StateIcon :color="stateOptions.color" />&nbsp;
-                                    {{ stateOptions.label }}
-                                </DropdownItem>
+
+                            <template v-slot:item-prepend="{ option }">
+                                <StateIcon :color="option.color" />
                             </template>
-                        </Dropdown>
+                        </ModalSelect>
                     </div>
                 </template>
                 <template v-if="hasCommands">
@@ -62,6 +66,7 @@
         StateIcon,
         Breadcrumb,
         Button,
+        ModalSelect,
     } from 'sharp-ui';
 
     import {
@@ -80,6 +85,7 @@
             DropdownItem,
             StateIcon,
             Button,
+            ModalSelect,
         },
         props: {
             commands: Array,

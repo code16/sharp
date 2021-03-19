@@ -37,8 +37,11 @@
   .CodeMirror {
     font-family: inherit;
     font-size: .875rem;
-    border: 0;
     cursor: text;
+  }
+
+  .CodeMirror-focused {
+    @extend .form-control:focus;
   }
 
   .CodeMirror, .CodeMirror-scroll {

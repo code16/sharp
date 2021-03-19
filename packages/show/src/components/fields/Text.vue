@@ -3,7 +3,7 @@
         <div class="ShowTextField__content" v-html="currentContent" ref="content"></div>
         <template v-if="hasCollapsed">
             <div class="mt-2">
-                <a href="#" class="ShowTextField__more" @click.prevent="handleToggleClicked">
+                <a href="#" class="ShowTextField__more btn btn-link btn-sm ms-n2" @click.prevent="handleToggleClicked">
                     <template v-if="expanded">
                         - {{ l('show.text.show_less') }}
                     </template>

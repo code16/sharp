@@ -52,7 +52,7 @@
                                             </Button>
                                         </div>
                                     </template>
-                                    <template v-if="instanceHasCommands(item)">
+                                    <template v-if="instanceHasCommands(item) || instanceHasState(item)">
                                         <div class="col-auto">
                                             <CommandsDropdown
                                                 class="SharpEntityList__commands-dropdown"
@@ -66,10 +66,11 @@
                                                 <template v-slot:prepend>
                                                     <template v-if="instanceHasState(item)">
                                                         <ModalSelect
-                                                            :title="l('entity_list.state.modal.title')"
-                                                            :ok-title="l('entity_list.state.modal.ok_button')"
+                                                            :title="l('modals.entity_state.edit.title')"
+                                                            :ok-title="l('modals.entity_state.edit.ok_button')"
                                                             :value="instanceState(item)"
                                                             :options="config.state.values"
+                                                            size="sm"
                                                             @change="handleInstanceStateChanged(item, $event)"
                                                         >
                                                             <template v-slot="{ on }">

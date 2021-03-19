@@ -8,13 +8,20 @@
     border-top-right-radius: $card-border-radius;
     border-top-left-radius: $card-border-radius;
     background: white;
-    padding-left: .5rem;
-    padding-right: .5rem;
+    padding: .75rem;
   }
 
   .card-body {
     border-bottom-right-radius: $card-border-radius;
     border-bottom-left-radius: $card-border-radius;
+
+    &.form-control {
+      margin: -1px;
+      width: auto;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      border-top-color: transparent;
+    }
   }
 
   &__toolbar {
@@ -42,7 +49,8 @@
 
     .btn-light {
       &:not(:hover):not(:focus):not(.active):not(.trix-active) {
-        color: rgba(0,0,0,.75)
+        //color: hsla(var(--bs-primary-h), var(--bs-primary-s), 20%, .75);
+        color: rgba(0,0,0,.675);
       }
     }
   }

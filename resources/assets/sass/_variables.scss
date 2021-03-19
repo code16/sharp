@@ -81,9 +81,11 @@ $list-group-active-color: var(--component-active-color);
 
 $toast-header-color: #444c55;
 
-$label-color: hsl(var(--bs-primary-h), var(--bs-primary-s), 30%);
+$label-color: hsl(var(--bs-primary-h), var(--bs-primary-s), 20%);
+$label-font-size: .9375rem;
+$label-line-height: 1.4;
 $form-label-color: $label-color;
-
+$form-label-font-size: $label-font-size;
 
   /**
     Custom variables

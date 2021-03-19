@@ -2,7 +2,7 @@
     <div>
         <slot :on="{ click:handleButtonClicked }" />
 
-        <Modal :visible.sync="modalVisible" :title="title" :ok-title="okTitle" ok-only @ok="handleModalOkClicked">
+        <Modal :visible.sync="modalVisible" :title="title" :ok-title="okTitle" ok-only :size="size" @ok="handleModalOkClicked">
             <div class="list-group" role="menu">
                 <template v-for="option in options">
                     <div class="list-group-item list-group-item-action"
@@ -23,12 +23,12 @@
                                     </div>
                                 </template>
 
-                                <div class="col py-2">
+                                <div class="col py-1">
                                     {{ option.label }}
                                 </div>
 
                                 <template v-if="isSelected(option)">
-                                    <div class="col-auto py-2">
+                                    <div class="col-auto py-1">
                                         <i class="fas fa-check"></i>
                                     </div>
                                 </template>
@@ -56,6 +56,7 @@
             options: Array,
             title: String,
             okTitle: String,
+            size: String,
         },
         data() {
             return {

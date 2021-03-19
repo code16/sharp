@@ -4,7 +4,7 @@
             <trix-toolbar v-if="toolbar" class="card-header editor__toolbar" :id="toolbarId">
                 <trix-custom-toolbar :toolbar="toolbar" />
             </trix-toolbar>
-            <trix-editor class="card-body"
+            <trix-editor class="card-body form-control"
                 :input="inputId"
                 :toolbar="toolbarId"
                 :placeholder="placeholder"

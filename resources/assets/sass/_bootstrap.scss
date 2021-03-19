@@ -79,9 +79,17 @@
   font-family: 'Karla', $font-family-sans-serif;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: .025em;
 }
 
 .nav-pills .nav-link, {
   font-size: .875rem;
+}
+
+.btn,
+.nav-pills .nav-link {
+  letter-spacing: .025em;
+}
+
+.form-label {
+  line-height: $label-line-height;
 }

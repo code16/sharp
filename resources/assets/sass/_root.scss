@@ -16,5 +16,5 @@
 
   --filter-close-icon-color: hsl(var(--bs-primary-h), var(--bs-primary-s), 35%);
 
-  --navbar-height: 5rem;
+  --navbar-height: calc(5rem + 1px);
 }

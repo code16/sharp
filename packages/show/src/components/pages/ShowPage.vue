@@ -17,33 +17,34 @@
                     @state-change="handleStateChanged"
                 />
 
-                <template v-for="section in layout.sections">
-                    <Section
-                        class="ShowPage__section"
-                        v-show="isSectionVisible(section)"
-                        :section="section"
-                        :layout="sectionLayout(section)"
-                        :fields-row-class="fieldsRowClass"
-                        :collapsable="isSectionCollapsable(section)"
-                        v-slot="{ fieldLayout }"
-                    >
-                        <template v-if="fieldOptions(fieldLayout)">
-                            <ShowField
-                                :options="fieldOptions(fieldLayout)"
-                                :value="fieldValue(fieldLayout)"
-                                :config-identifier="fieldLayout.key"
-                                :layout="fieldLayout"
-                                :collapsable="section.collapsable"
-                                @visible-change="handleFieldVisibilityChanged(fieldLayout.key, $event)"
-                                :key="refreshKey"
-                            />
-                        </template>
-                        <template v-else>
-                            <UnknownField :name="fieldLayout.key" />
-                        </template>
-                    </Section>
-                </template>
-
+                <div class="mt-4">
+                    <template v-for="section in layout.sections">
+                        <Section
+                            class="ShowPage__section"
+                            v-show="isSectionVisible(section)"
+                            :section="section"
+                            :layout="sectionLayout(section)"
+                            :fields-row-class="fieldsRowClass"
+                            :collapsable="isSectionCollapsable(section)"
+                            v-slot="{ fieldLayout }"
+                        >
+                            <template v-if="fieldOptions(fieldLayout)">
+                                <ShowField
+                                    :options="fieldOptions(fieldLayout)"
+                                    :value="fieldValue(fieldLayout)"
+                                    :config-identifier="fieldLayout.key"
+                                    :layout="fieldLayout"
+                                    :collapsable="section.collapsable"
+                                    @visible-change="handleFieldVisibilityChanged(fieldLayout.key, $event)"
+                                    :key="refreshKey"
+                                />
+                            </template>
+                            <template v-else>
+                                <UnknownField :name="fieldLayout.key" />
+                            </template>
+                        </Section>
+                    </template>
+                </div>
             </template>
         </div>
 

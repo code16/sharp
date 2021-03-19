@@ -29,13 +29,7 @@
 
   trix-editor {
     overflow: auto;
-    border:none;
-    border-radius: 0;
-    background: white;
-    padding: 1rem !important;
     min-height: 0 !important;
-    line-height: 1.5;
-    font-size: .875rem;
 
     &[disabled] {
       pointer-events: none;

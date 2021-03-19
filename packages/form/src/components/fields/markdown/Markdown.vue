@@ -2,13 +2,15 @@
     <div class="SharpMarkdown editor" :class="{'SharpMarkdown--read-only':readOnly}">
         <template v-if="isLocalized">
             <template v-for="loc in locales">
-                <div  v-show="locale === loc">
+                <div class="card" v-show="locale === loc">
                     <textarea :id="localizedTextareaRef(loc)" :ref="localizedTextareaRef(loc)"></textarea>
                 </div>
             </template>
         </template>
         <template v-else>
-            <textarea ref="textarea"></textarea>
+            <div class="card">
+                <textarea ref="textarea"></textarea>
+            </div>
         </template>
     </div>
 </template>
@@ -406,8 +408,8 @@
 
                 handleMarkdownTables(codemirror);
 
-                codemirror.getWrapperElement().parentNode.classList.add('card');
                 codemirror.getWrapperElement().classList.add('card-body');
+                codemirror.getWrapperElement().classList.add('form-control');
             }
         },
         mounted() {
