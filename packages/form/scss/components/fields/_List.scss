@@ -1,5 +1,4 @@
 @import "../../mixins/fix-module-fields-margin";
-@import "../../mixins/module";
 
 .SharpList {
   &__empty-alert {
@@ -13,19 +12,21 @@
   &__sort-button {
     position: absolute;
     right: 0;
-    top: -.125rem;
-    z-index: 1;
+    top: .675rem;
+    z-index: $zindex-field-header-sticky + 1;
   }
 
   &__remove-button {
     position: absolute;
-    top: .5rem;
-    //left: 50%;
-    right: .5rem;
-    //transform: translateX(-50%);
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity .375s ease-in-out;
+    top: .25rem;
+    right: .25rem;
+    padding: .5em;
+    transition: opacity .25s ease-in-out;
+    font-size: .875rem;
+
+    &:focus {
+      opacity: $btn-close-focus-opacity;
+    }
   }
 
   &__item {
@@ -46,6 +47,9 @@
 
     .SharpGrid__row:first-child > .col-md-12:first-child > .SharpForm__form-item--no-label {
       margin-top: .5rem;
+      .btn-block {
+        margin-top: .5rem;
+      }
     }
 
     // adjust button size
@@ -62,17 +66,28 @@
       font-size: .75rem;
     }
 
-    .SharpUpload {
-      &__inner {
-        box-shadow: none !important;
-      }
+    //.SharpUpload {
+    //  &__inner {
+    //    box-shadow: none !important;
+    //  }
+    //
+    //  &__remove-button {
+    //    display: none;
+    //  }
+    //
+    //  &__close-button {
+    //    display: initial;
+    //  }
+    //}
 
-      &__remove-button {
-        display: none;
+    .SharpField {
+      .SharpClearButton:not(:focus) {
+        opacity: 0;
       }
-
-      &__close-button {
-        display: initial;
+      &:hover {
+        .SharpClearButton {
+          opacity: 1;
+        }
       }
     }
 
@@ -81,7 +96,7 @@
       padding-right: 0 !important;
     }
 
-    @include module-contextual-close-button;
+    //@include module-contextual-close-button;
     ///
 
     .SharpList__overlay-handle {
@@ -113,13 +128,6 @@
 
     &--no-transition {
       transition: unset;
-    }
-
-    &:hover {
-      .SharpList__remove-button {
-        visibility: visible;
-        opacity: 1;
-      }
     }
   }
 

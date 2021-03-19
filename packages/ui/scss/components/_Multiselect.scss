@@ -9,8 +9,7 @@
     margin: 0;
   }
 
-  padding-right: 2rem;
-
+  padding-right: $form-control-clear-button-padding;
 
   .multiselect__placeholder {
     color: $text-03;

@@ -10,6 +10,10 @@
       &.is-invalid {
         @extend .error-dot;
       }
+      &.active {
+        position: relative;
+        z-index: 1;
+      }
     }
     .nav-item {
       &:not(:nth-child(2)) {
@@ -17,6 +21,7 @@
           border-top-left-radius: 0;
           border-bottom-left-radius: 0;
         }
+        margin-left: -1px;
       }
       &:not(:nth-last-child(2)) {
         .nav-link {

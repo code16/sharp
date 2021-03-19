@@ -2,7 +2,8 @@
     <div class="SharpDate" :class="{'SharpDate--open':showPicker}">
         <div class="SharpDate__input-wrapper">
             <input
-                class="form-control"
+                class="form-control clearable SharpDate__input"
+                :class="{ 'SharpDate__input--valuated': value }"
                 :placeholder="displayFormat"
                 :value="inputValue"
                 :disabled="readOnly"
@@ -14,12 +15,7 @@
                 ref="input"
             >
             <template v-if="value">
-                <button class="btn SharpDate__clear-button" type="button" @click="clear()" ref="clearButton">
-                    <svg class="SharpDate__clear-button-icon"
-                        aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd">
-                        <path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
-                    </svg>
-                </button>
+                <ClearButton @click="clear" ref="clearButton" />
             </template>
         </div>
         <b-popover
@@ -65,6 +61,7 @@
 
     import { lang } from 'sharp';
     import { Focusable, Localization } from 'sharp/mixins';
+    import { ClearButton } from "sharp-ui";
     import DatePicker from './Datepicker';
     import TimePicker from './Timepicker';
 
@@ -75,6 +72,7 @@
             DatePicker,
             TimePicker,
             BPopover,
+            ClearButton,
         },
 
         inject:['$field'],
@@ -251,6 +249,7 @@
             clear() {
                 this.rollback();
                 this.$emit('input', null);
+                this.$refs.input.focus();
             },
 
             handleBlur() {

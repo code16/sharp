@@ -45,6 +45,11 @@
                                 />
                             </ListItem>
                             <template v-if="showRemoveButton">
+                                <button
+                                    class="SharpList__remove-button btn-close"
+                                    @click="remove(i)"
+                                    :aria-label="l('form.list.remove_button')"
+                                ></button>
 <!--                                <div class="mt-3 text-center">-->
 <!--                                    <Button variant="danger" outline small @click="remove(i)">-->
 <!--                                        {{ l('form.list.remove_button') }}-->

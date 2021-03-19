@@ -1,16 +1,7 @@
 .SharpSelect {
 
   &__clear-button {
-    @extend %select-close-button;
     background: white;
-    border-top-right-radius: $form-select-border-radius;
-    border-bottom-right-radius: $form-select-border-radius;
-    width: $form-select-indicator-padding;
-
-    &-icon {
-      @extend %select-close-icon;
-      position: initial;
-    }
   }
 
   //&__group {

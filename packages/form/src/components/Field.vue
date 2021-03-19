@@ -48,6 +48,7 @@
 
 
             return h(this.component, {
+                class: 'SharpField',
                 props: {
                     fieldKey: this.fieldKey,
                     fieldLayout: this.fieldLayout,

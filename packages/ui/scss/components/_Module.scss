@@ -14,17 +14,6 @@
       background-color: $ui-01;
     }
   }
-  &__close-button {
-    @include close-button;
-    position: absolute;
-    right:.5rem;
-    top:.5rem;
-    display: none;
-    background: transparent;
-  }
-  &__close-icon {
-    @include close-icon;
-  }
   //
 
   &:first-of-type {

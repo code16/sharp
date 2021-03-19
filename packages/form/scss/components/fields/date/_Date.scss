@@ -6,42 +6,21 @@
   position: relative;
 
   &__input {
-    font-size: .875rem;
-    display: block;
-    position: relative;
-    height: rem(40px);
-    //max-width: 9rem;
-    padding: 0 1rem;
-    background-color: $field-01;
-    color: $text-01;
-    border: 1px solid transparent;
-
-    z-index: z('dropdownText');
-
-    width: 100%;
-
-    outline: 1px solid transparent;
-
-    &:disabled {
-      opacity: .5;
-      cursor: not-allowed;
-    }
-
-    &:disabled:hover {
-      border: 1px solid transparent;
-    }
-
-    &::-webkit-input-placeholder {
-      color: $text-03;
+    @if $enable-validation-icons {
+      &--valuated.is-invalid {
+        padding-right: $form-select-feedback-icon-padding-end;
+        background-image: escape-svg($form-feedback-icon-invalid);
+        background-position: $form-select-feedback-icon-position;
+        background-size: $form-select-feedback-icon-size;
+      }
     }
   }
 
-  &__clear-button {
-    @extend %select-close-button;
-
-    &-icon {
-      @extend %select-close-icon;
-      position: initial;
+  &__input-wrapper {
+    &:hover {
+      .SharpDate__clear-button {
+        opacity: 1;
+      }
     }
   }
 

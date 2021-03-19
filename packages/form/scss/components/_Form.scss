@@ -13,24 +13,7 @@
   }
 
   &__fieldset {
-    //margin-bottom: 2rem;
-
-    @extend .SharpModule;
     @include fix-module-fields-margin;
-
-    &>.SharpModule__inner {
-      background: transparent;
-      border: 0;
-      &>.SharpModule__header {
-        padding: 0;
-        .SharpModule__title {
-          @extend .SharpForm__label;
-        }
-      }
-      &>.SharpModule__content {
-        background: $ui-03;
-      }
-    }
 
     .SharpForm__label {
       font-size: .75rem;
