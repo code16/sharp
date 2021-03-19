@@ -108,6 +108,16 @@
   }
 }
 
+.btn-light {
+  &:hover, &:focus, &.active {
+    color: hsl(var(--bs-primary-h), var(--bs-primary-s), 30%);
+  }
+  &.active {
+    background-color: hsla(var(--bs-primary-h), var(--bs-primary-s), 30%, .1);
+    border-color: transparent;
+  }
+}
+
 .btn-outline-light {
   @include default {
     border-color: rgba($light, .5);

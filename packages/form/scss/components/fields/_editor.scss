@@ -1,19 +1,49 @@
 
-.editor-toolbar {
-  border: none;
-  border-radius: 0;
-  padding: 0;
-  background-color: $ui-03;
 
-  .fa-paperclip {
-    font-size: 1.2em;
-    -webkit-text-stroke: .03em $ui-03;
-    &:hover {
-      -webkit-text-stroke-color: #fcfcfc;
+.editor {
+  .card {
+    border-color: $input-border-color;
+  }
+  .card-header {
+    border-top-right-radius: $card-border-radius;
+    border-top-left-radius: $card-border-radius;
+    background: white;
+    padding-left: .5rem;
+    padding-right: .5rem;
+  }
+
+  .card-body {
+    border-bottom-right-radius: $card-border-radius;
+    border-bottom-left-radius: $card-border-radius;
+  }
+
+  &__toolbar {
+    .fa-paperclip {
+      -webkit-text-stroke: .03em $ui-03;
+      &:hover {
+        -webkit-text-stroke-color: $light;
+      }
+      &::before {
+        display: inline-block;
+        transform: rotate(-45deg);
+        font-size: 1.2em;
+      }
+      &.btn {
+        padding-top: calc(#{$btn-padding-y} - .12em);
+        padding-bottom: calc(#{$btn-padding-y} - .12em);
+      }
     }
-    &::before {
-      display: inline-block;
-      transform: rotate(-45deg);
+
+    .btn-group {
+      &:not(:first-child) {
+        margin-left: .5rem;
+      }
+    }
+
+    .btn-light {
+      &:not(:hover):not(:focus):not(.active):not(.trix-active) {
+        color: rgba(0,0,0,.75)
+      }
     }
   }
 }

@@ -2,7 +2,7 @@
     <div class="SharpFieldLocaleSelect">
         <div class="row gx-1">
             <template v-for="locale in locales">
-                <div class="col-auto">
+                <div class="col-auto d-flex">
                     <button
                         class="SharpFieldLocaleSelect__btn ml-2"
                         :class="{

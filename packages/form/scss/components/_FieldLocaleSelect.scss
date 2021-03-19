@@ -1,5 +1,5 @@
 .SharpFieldLocaleSelect {
-  margin-bottom: 0.625rem;
+  margin-bottom: $form-label-margin-bottom;
 
   &__btn {
     --primary: hsl(var(--bs-primary-h), var(--bs-primary-s), 30%);

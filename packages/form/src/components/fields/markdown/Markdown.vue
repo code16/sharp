@@ -1,15 +1,15 @@
 <template>
-    <div class="SharpMarkdown" :class="{'SharpMarkdown--read-only':readOnly}">
-        <div class="SharpModule__inner">
-            <template v-if="isLocalized">
-                <div v-for="loc in locales" v-show="locale === loc">
+    <div class="SharpMarkdown editor" :class="{'SharpMarkdown--read-only':readOnly}">
+        <template v-if="isLocalized">
+            <template v-for="loc in locales">
+                <div  v-show="locale === loc">
                     <textarea :id="localizedTextareaRef(loc)" :ref="localizedTextareaRef(loc)"></textarea>
                 </div>
             </template>
-            <template v-else>
-                <textarea ref="textarea"></textarea>
-            </template>
-        </div>
+        </template>
+        <template v-else>
+            <textarea ref="textarea"></textarea>
+        </template>
     </div>
 </template>
 
@@ -303,6 +303,7 @@
                     }
                     return {
                         ...btn,
+                        className: `btn btn-light ${btn.className}`,
                         action: (simplemde) => {
                             if(!this.readOnly) {
                                 btn.action(simplemde);
@@ -312,7 +313,26 @@
                     }
                 });
                 simplemde.options.toolbar = items;
-                simplemde.createToolbar();
+                const bar = simplemde.createToolbar();
+                bar.classList.remove('editor-toolbar');
+                bar.classList.add('card-header');
+                bar.classList.add('editor__toolbar');
+
+                [...bar.children]
+                    .reduce((res, el) => {
+                        if(el.matches('.separator')) {
+                            el.remove();
+                            return [...res, []];
+                        }
+                        res[res.length - 1].push(el);
+                        return res;
+                    }, [[]])
+                    .forEach(buttons => {
+                        const group = document.createElement('div');
+                        group.classList.add('btn-group');
+                        buttons.forEach(el => group.appendChild(el));
+                        bar.appendChild(group);
+                    });
             },
 
             parse() {
@@ -385,6 +405,9 @@
                 this.codemirrorOn(codemirror, 'beforeChange',this.onBeforeChange);
 
                 handleMarkdownTables(codemirror);
+
+                codemirror.getWrapperElement().parentNode.classList.add('card');
+                codemirror.getWrapperElement().classList.add('card-body');
             }
         },
         mounted() {

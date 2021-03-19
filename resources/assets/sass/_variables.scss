@@ -81,6 +81,9 @@ $list-group-active-color: var(--component-active-color);
 
 $toast-header-color: #444c55;
 
+$label-color: hsl(var(--bs-primary-h), var(--bs-primary-s), 30%);
+$form-label-color: $label-color;
+
 
   /**
     Custom variables
