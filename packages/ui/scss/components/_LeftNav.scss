@@ -1,8 +1,6 @@
 @import "../mixins/left-nav";
 
 .SharpLeftNav {
-
-  width: rem(250px);
   position: fixed;
   top: 0;
   height: 100vh;
@@ -35,7 +33,7 @@
     );
     display: flex;
     align-items: center;
-    min-height: 5rem;
+    min-height: var(--navbar-height);
     z-index: 1;
   }
 
@@ -131,8 +129,8 @@
 
         .SharpLeftNav__icon {
           fill: $color__blue-51;
-          width: rem(8px);
-          height: rem(8px);
+          width: .5rem;
+          height: .5rem;
           transition: $transition--base;
         }
       }
@@ -241,7 +239,7 @@
   &--collapseable {
     display: flex;
     flex-direction: column;
-    width: rem(200px);
+    width: $leftnav-width;
     transition: background-color 300ms $bx--standard-easing, width 300ms $bx--standard-easing;
 
     @include transition-elements {
@@ -253,8 +251,8 @@
     }
 
     .SharpLeftNav__item--expanded > .SharpLeftNav__list {
-      padding-top: rem(6px);
-      padding-bottom: rem(6px);
+      padding-top: .375rem;
+      padding-bottom: .375rem;
     }
 
     .SharpLeftNav__item--expanded > .SharpLeftNav__item-link {
@@ -262,7 +260,7 @@
     }
 
     .SharpLeftNav__line {
-      margin: rem(24px) rem(20px);
+      margin: 1.5rem 1.25rem;
       border: 1px solid $color__gray-1;
     }
 
@@ -289,16 +287,11 @@
     }
 
     .SharpLeftNav__item {
-      margin-bottom: rem(5px);
+      margin-bottom: .375rem;
     }
 
     .SharpLeftNav__item-link, .SharpLeftNav__list--nested .SharpLeftNav__item-link {
-      padding: rem(9px) rem(20px);
-    }
-
-    .SharpLeftNav__list--nested .SharpLeftNav__item-link {
-      //font-size: rem(12px);
-      //padding-left: rem(40px);
+      padding: .5rem 1.25rem;
     }
 
     .SharpLeftNav__collapse {
@@ -308,8 +301,7 @@
       justify-content: flex-end;
       align-items: center;
       margin-top: auto;
-      //margin-bottom: rem(90px);
-      padding: rem(14px) rem(16px);
+      padding: .875rem 1rem;
 
       z-index:1;
 
@@ -319,15 +311,15 @@
     }
 
     .SharpLeftNav__collapse-target {
-      margin-left: rem(10px);
-      margin-right: rem(10px);
+      margin-left: .625rem;
+      margin-right: .625rem;
     }
 
     .SharpLeftNav__collapse-link {
       display: flex;
       align-items: center;
       text-decoration: none;
-      font-size: rem(14px);
+      font-size: .875rem;
       padding: .25rem;
 
       &:focus {
@@ -347,7 +339,7 @@
     .SharpLeftNav__content {
       box-shadow: none;
     }
-    width: rem(48px);
+    width: $leftnav-collapsed-width;
     transition: background-color 300ms $bx--standard-easing,
                 width 300ms $bx--standard-easing;
     cursor: pointer;
@@ -385,7 +377,7 @@
 
   &--collapsed {
     height: 100%;
-    padding-top: rem(20px);
+    padding-top: 1.25rem;
     @include transition-elements {
       display: none;
     }
@@ -403,7 +395,7 @@
   }
 
   &--expanding {
-    width: rem(200px);
+    width: $leftnav-width;
     transition: width 300ms $bx--standard-easing;
     background-color: #fff;
 

@@ -19,14 +19,13 @@
 </template>
 
 <script>
-    import { BTabs, BTab } from 'bootstrap-vue';
+    import { BTabs } from 'bootstrap-vue';
 
     export default {
         name: 'SharpTabs',
 
         components: {
             BTabs,
-            BTab,
         },
 
         computed: {

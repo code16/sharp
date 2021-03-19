@@ -1,5 +1,5 @@
 <template>
-    <b-tab class="bg-white" style="padding: 1rem 1.25rem" :title-link-class="classes" @update:active="handleActiveChanged">
+    <b-tab :title-link-class="classes" @update:active="handleActiveChanged">
         <template v-slot:title>
             {{ title }}
         </template>

@@ -17,18 +17,36 @@
     z-index: 1;
   }
 
-  //remove item button
-  .SharpButton--danger {
-    align-self: center;
+  &__remove-button {
+    position: absolute;
+    top: .5rem;
+    //left: 50%;
+    right: .5rem;
+    //transform: translateX(-50%);
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .375s ease-in-out;
   }
 
   &__item {
     position: relative;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+    padding-top: 1.75rem;
+    padding-bottom: 2rem;
 
     @include fix-module-fields-margin;
 
+    &:first-child {
+      padding-top: 1.5rem;
+    }
+
+    &:not(:last-child) {
+      border-bottom-style: dashed;
+      border-bottom-color: rgba(0, 0, 0, 0.25);
+    }
+
+    .SharpGrid__row:first-child > .col-md-12:first-child > .SharpForm__form-item--no-label {
+      margin-top: .5rem;
+    }
 
     // adjust button size
     .btn-block {
@@ -95,6 +113,13 @@
 
     &--no-transition {
       transition: unset;
+    }
+
+    &:hover {
+      .SharpList__remove-button {
+        visibility: visible;
+        opacity: 1;
+      }
     }
   }
 

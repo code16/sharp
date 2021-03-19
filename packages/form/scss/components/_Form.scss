@@ -2,6 +2,12 @@
 
 .SharpForm {
 
+  .tab-pane {
+    min-height: #{'max(30vh, 200px)'};
+    background-color: white;
+    padding: 1rem 1.25rem;
+  }
+
   &__alert {
     font-size: .875rem;
   }
@@ -49,12 +55,6 @@
   &__form-item {
     flex: 1;
     height: 100%;
-    //margin-right: 1rem;
-
-    /*&:last-of-type {
-      margin-right: 0;
-      margin-bottom: 0;
-    }*/
 
     // For single check align with other field
     &--type-check {
@@ -65,6 +65,27 @@
       }
       .SharpCheck {
         height: 2.5rem;
+      }
+    }
+
+    &--type-list {
+      @include media-breakpoint-up(sm) {
+        margin-top: -1rem;
+        > .SharpForm__field-header {
+          position: sticky;
+          top: var(--navbar-height);
+          z-index: 20;
+          padding-top: 1rem;
+          background-color: white;
+          padding-left: .5rem;
+          padding-right: .5rem;
+          margin-left: -.5rem;
+          margin-right: -.5rem;
+          &.stuck {
+            box-shadow: $box-shadow-sm;
+            border-bottom: 1px solid $border-color;
+          }
+        }
       }
     }
   }
@@ -133,4 +154,5 @@
       }
     }
   }
+
 }

@@ -15,9 +15,9 @@
             </Button>
         </template>
         <Draggable :options="dragOptions" :list="list" ref="draggable">
-            <transition-group name="expand" tag="div">
+            <transition-group name="expand" tag="div" class="list-group shadow-sm">
                 <template v-for="(listItemData, i) in list">
-                    <div class="SharpList__item card card-body shadow-sm mb-3"
+                    <div class="SharpList__item list-group-item"
                         :class="{'SharpList__item--collapsed': dragActive}"
                         :key="listItemData[indexSymbol]"
                     >
@@ -45,11 +45,11 @@
                                 />
                             </ListItem>
                             <template v-if="showRemoveButton">
-                                <div class="mt-3 text-center">
-                                    <Button variant="danger" outline small @click="remove(i)">
-                                        {{ l('form.list.remove_button') }}
-                                    </Button>
-                                </div>
+<!--                                <div class="mt-3 text-center">-->
+<!--                                    <Button variant="danger" outline small @click="remove(i)">-->
+<!--                                        {{ l('form.list.remove_button') }}-->
+<!--                                    </Button>-->
+<!--                                </div>-->
                             </template>
                         </template>
 

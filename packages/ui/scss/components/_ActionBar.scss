@@ -1,7 +1,7 @@
 @include media-breakpoint-up($breakpoint-fixed-menu) {
-  #sharp-app.leftNav--collapsed {
+  .leftNav--collapsed {
     .SharpActionBar__bar {
-      left: 3rem;
+      left: $leftnav-collapsed-width;
       padding-left: 0;
     }
   }
@@ -53,15 +53,15 @@
       position: absolute!important;
       top: 0;
       right: 0;
-      left: 3rem;
-      height: 5rem;
+      left: $leftnav-collapsed-width;
+      min-height: 5rem;
       margin-left: 0;
       margin-right: 0!important;
     }
     @include media-breakpoint-up($breakpoint-fixed-menu) {
       position: fixed!important;
       z-index: $zindex-sticky;
-      left: 12.5rem;
+      left: $leftnav-width;
     }
     & > .container {
       height: 100%;

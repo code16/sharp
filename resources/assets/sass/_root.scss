@@ -15,4 +15,6 @@
   --component-active-color: hsl(0, 0%, calc((var(--bs-primary-l) - var(--l-threshold)) * -100000));
 
   --filter-close-icon-color: hsl(var(--bs-primary-h), var(--bs-primary-s), 35%);
+
+  --navbar-height: 5rem;
 }

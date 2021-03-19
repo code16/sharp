@@ -1,24 +1,27 @@
 <template>
     <div class="SharpFieldContainer SharpForm__form-item" :class="formGroupClasses" :style="extraStyle">
-        <div class="row align-items-end">
-            <div class="col">
-                <label v-if="showLabel" class="SharpForm__label form-label" @click="triggerFocus">
-                    {{ label }}
-                </label>
-            </div>
-            <template v-if="fieldProps.localized">
-                <div class="col-auto">
-                    <FieldLocaleSelect
-                        :locales="$form.locales"
-                        :current-locale="locale"
-                        :field-value="resolvedOriginalValue"
-                        :is-locale-object="isLocaleObject"
-                        :errors="errorsLocales"
-                        @change="handleLocaleChanged"
-                    />
+        <div class="SharpForm__field-header" v-sticky>
+            <div class="row align-items-end">
+                <div class="col">
+                    <label v-if="showLabel" class="SharpForm__label form-label" @click="triggerFocus">
+                        {{ label }}
+                    </label>
                 </div>
-            </template>
+                <template v-if="fieldProps.localized">
+                    <div class="col-auto">
+                        <FieldLocaleSelect
+                            :locales="$form.locales"
+                            :current-locale="locale"
+                            :field-value="resolvedOriginalValue"
+                            :is-locale-object="isLocaleObject"
+                            :errors="errorsLocales"
+                            @change="handleLocaleChanged"
+                        />
+                    </div>
+                </template>
+            </div>
         </div>
+
         <Field
             v-bind="$props"
             :unique-identifier="mergedErrorIdentifier"
@@ -41,6 +44,7 @@
     import Field from '../Field';
     import FieldLocaleSelect from './FieldLocaleSelect';
     import { resolveTextValue, isLocalizableValueField } from '../../util';
+    import { sticky } from "sharp/directives";
 
 
     export default {
@@ -181,6 +185,9 @@
             handleLocaleChanged(locale) {
                 this.$emit('locale-change', this.fieldKey, locale);
             }
+        },
+        directives: {
+            sticky,
         },
     }
 </script>
