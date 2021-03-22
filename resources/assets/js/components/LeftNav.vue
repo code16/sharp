@@ -1,5 +1,5 @@
 <template>
-    <nav class="SharpLeftNav"
+    <nav class="SharpLeftNav ui-font ui-font-size"
         :class="classes"
         role="navigation"
         aria-label="Menu Sharp"

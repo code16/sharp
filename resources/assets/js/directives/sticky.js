@@ -3,7 +3,6 @@
 export default {
     inserted(el) {
         const style =  window.getComputedStyle(el);
-        console.log(style.position, style.top);
         if(style.position === 'sticky') {
             const top = `${(parseInt(style.top) || 0) + 1}px`;
             const observer = new IntersectionObserver(

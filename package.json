@@ -90,6 +90,7 @@
     "@sharp/test-utils": "file:packages/test-utils",
     "apexcharts": "^3.22.2",
     "carbon-components": "^7.26.2",
+    "codemirror": "^5.60.0",
     "element-ui": "^2.9.2",
     "filesize": "^6.1.0",
     "font-awesome-filetypes": "^2.1.0",

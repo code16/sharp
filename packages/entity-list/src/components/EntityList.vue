@@ -44,51 +44,17 @@
                     <template v-slot:item="{ item }">
                         <DataListRow :url="instanceUrl(item)" :columns="columns" :highlight="instanceIsFocused(item)" :row="item">
                             <template v-if="hasActionsColumn" v-slot:append>
-                                <div class="row justify-content-end align-items-center flex-nowrap gx-1">
-                                    <template v-if="instanceHasState(item)">
-                                        <div class="col-auto">
-                                            <Button variant="light" small :disabled="!instanceHasStateAuthorization(item)">
-                                                <StateIcon :color="instanceStateIconColor(item)" />
-                                            </Button>
-                                        </div>
-                                    </template>
-                                    <template v-if="instanceHasCommands(item) || instanceHasState(item)">
-                                        <div class="col-auto">
-                                            <CommandsDropdown
-                                                class="SharpEntityList__commands-dropdown"
-                                                outline
-                                                :commands="instanceCommands(item)"
-                                                @select="handleInstanceCommandRequested(item, $event)"
-                                            >
-                                                <template v-slot:text>
-                                                    {{ l('entity_list.commands.instance.label') }}
-                                                </template>
-                                                <template v-slot:prepend>
-                                                    <template v-if="instanceHasState(item)">
-                                                        <ModalSelect
-                                                            :title="l('modals.entity_state.edit.title')"
-                                                            :ok-title="l('modals.entity_state.edit.ok_button')"
-                                                            :value="instanceState(item)"
-                                                            :options="config.state.values"
-                                                            size="sm"
-                                                            @change="handleInstanceStateChanged(item, $event)"
-                                                        >
-                                                            <template v-slot="{ on }">
-                                                                <DropdownItem :disabled="!instanceHasStateAuthorization(item)" v-on="on">
-                                                                    <StateIcon :color="instanceStateIconColor(item)" /> Modifier l'état
-                                                                </DropdownItem>
-                                                            </template>
-
-                                                            <template v-slot:item-prepend="{ option }">
-                                                                <StateIcon :color="option.color" />
-                                                            </template>
-                                                        </ModalSelect>
-                                                    </template>
-                                                </template>
-                                            </CommandsDropdown>
-                                        </div>
-                                    </template>
-                                </div>
+                                <EntityActions
+                                    :config="config"
+                                    :has-state="instanceHasState(item)"
+                                    :state="instanceState(item)"
+                                    :state-options="instanceStateOptions(item)"
+                                    :state-disabled="!instanceHasStateAuthorization(item)"
+                                    :has-commands="instanceHasCommands(item)"
+                                    :commands="instanceCommands(item)"
+                                    @command="handleInstanceCommandRequested(item, $event)"
+                                    @state-change="handleInstanceStateChanged(item, $event)"
+                                />
                             </template>
                         </DataListRow>
                     </template>
@@ -124,6 +90,7 @@
         Modal,
         ModalSelect,
         DropdownItem,
+        DropdownSeparator
     } from 'sharp-ui';
 
     import {
@@ -132,11 +99,15 @@
         CommandViewPanel,
     } from 'sharp-commands';
 
+    import EntityActions from "./EntityActions";
+
 
     export default {
         name: 'SharpEntityList',
         mixins: [DynamicView, Localization, withCommands],
         components: {
+            EntityActions,
+
             DataList,
             DataListRow,
 
@@ -151,6 +122,7 @@
             CommandViewPanel,
 
             DropdownItem,
+            DropdownSeparator,
 
             Loading,
             LoadingOverlay,
@@ -433,21 +405,12 @@
                     ...res, group.filter(command => this.isInstanceCommandAllowed(instance, command))
                 ], []);
             },
-            instanceStateIconColor(instance) {
-                const state = this.instanceState(instance);
-                const stateOptions = this.instanceStateOptions(state);
-                return stateOptions.color;
-            },
-            instanceStateLabel(instance) {
-                const state = this.instanceState(instance);
-                const stateOptions = this.instanceStateOptions(state);
-                return stateOptions.label;
-            },
-            instanceStateOptions(instanceState) {
+            instanceStateOptions(instance) {
                 if(!this.config.state) {
                     return null;
                 }
-                return this.config.state.values.find(stateValue => stateValue.value === instanceState);
+                const state = this.instanceState(instance);
+                return this.config.state.values.find(stateValue => stateValue.value === state);
             },
             instanceForm(instance) {
                 const instanceId = this.instanceId(instance);

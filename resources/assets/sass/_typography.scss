@@ -1,5 +1,4 @@
 
-
 @font-face {
   font-family: 'Karla';
   font-style: normal;
@@ -9,3 +8,12 @@
 }
 
 
+.ui-font {
+  font-family: 'Karla', $font-family-sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.ui-font-size {
+  font-size: $label-font-size;
+}

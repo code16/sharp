@@ -5,18 +5,20 @@
         right-class="d-block"
     >
         <template v-slot:left>
-            <div class="row gx-2">
-                <template v-if="currentEntity">
-                    <div class="col-auto">
-                        <i class="fa" :class="currentEntity.icon"></i>
-                    </div>
-                </template>
-
-                <div class="col">
+            <div class="ui-font ui-font-size" style="font-weight: 600">
+                <div class="row gx-2">
                     <template v-if="currentEntity">
-                        {{ currentEntity.label }} <span class="mx-1">&bull;</span>
+                        <div class="col-auto">
+                            <i class="fa" :class="currentEntity.icon"></i>
+                        </div>
                     </template>
-                    <span class="text-content text-nowrap">{{ count }} {{ l('action_bar.list.items_count') }}</span>
+
+                    <div class="col">
+                        <template v-if="currentEntity">
+                            {{ currentEntity.label }} <span class="mx-1">&bull;</span>
+                        </template>
+                        <span class="text-content text-nowrap">{{ count }} {{ l('action_bar.list.items_count') }}</span>
+                    </div>
                 </div>
             </div>
         </template>

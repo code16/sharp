@@ -53,17 +53,21 @@
                 return {
                     'SharpDataList__row--header': this.header,
                     'SharpDataList__row--disabled': !this.header && !this.hasLink,
-                    'SharpDataList__row--highlight': this.highlight
+                    'SharpDataList__row--highlight': this.highlight,
+                    'SharpDataList__row--full-width': this.isFullWidth,
                 }
-            }
+            },
+            isFullWidth() {
+                return !this.$slots.append;
+            },
         },
         methods: {
             colClasses(column) {
-                return [
-                    `col-${column.sizeXS}`,
-                    `col-md-${column.size}`,
-                    ...(column.hideOnXS ? ['d-none d-md-flex'] : [])
-                ];
+                return {
+                    [`col-${column.sizeXS}`]: true,
+                    [`col-md-${column.size}`]: true,
+                    'd-none d-md-flex': column.hideOnXS,
+                };
             },
         }
     }

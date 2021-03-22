@@ -78,7 +78,7 @@
   }
 
   &__form-item--danger {
-    .form-control {
+    .form-control, .card--field {
       @extend .is-invalid;
     }
     .SharpForm__form-requirement {
@@ -90,32 +90,14 @@
   }
 
 
-  &__form-requirement {
-    font-size: .75rem;
-    margin: .75rem 0 0;
-    max-height: 0;
-    overflow: hidden;
-    font-weight: 700;
-    line-height: 1.5;
-
-    &:empty {
-      display: none;
-    }
-
-    &::before {
-      content: '*';
-      display: inline-block;
-      margin-right: .25em;
-      margin-left: -.25em;
-      color: $support-01;
-    }
+  .invalid-feedback {
+    font-weight: 600;
   }
 
-  &__help-message {
-    font-size: .75rem;
-    margin: .75rem 0 0;
-    line-height: 1.5;
+  .form-text {
+    line-height: 1.4;
   }
+
 
   .SharpTabs {
     .SharpForm__locale-dropdown {

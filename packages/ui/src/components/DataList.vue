@@ -7,6 +7,11 @@
             </div>
         </template>
         <template v-else>
+            <template v-if="$slots['append-head']">
+                <div class="d-flex justify-content-end mb-3 d-sm-none">
+                    <slot name="append-head" />
+                </div>
+            </template>
             <div class="SharpDataList__table SharpDataList__table--border">
                 <template v-if="!hideHeader">
                     <div class="SharpDataList__thead" ref="head">

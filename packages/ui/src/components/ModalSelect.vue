@@ -2,10 +2,18 @@
     <div>
         <slot :on="{ click:handleButtonClicked }" />
 
-        <Modal :visible.sync="modalVisible" :title="title" :ok-title="okTitle" ok-only :size="size" @ok="handleModalOkClicked">
+        <Modal
+            :visible="modalVisible"
+            :title="title"
+            :ok-title="okTitle"
+            ok-only
+            :size="size"
+            @ok="handleModalOkClicked"
+            @change="handleVisibleChanged"
+        >
             <div class="list-group" role="menu">
                 <template v-for="option in options">
-                    <div class="list-group-item list-group-item-action"
+                    <div class="list-group-item list-group-item-action pe-2"
                         :class="itemClass(option)"
                         style="cursor: pointer; outline-offset: 4px"
                         role="menuitemradio"
@@ -15,7 +23,7 @@
                         @keydown.enter.space="handleOptionSelected(option)"
                         :key="option.value"
                     >
-                        <div class="overflow-hidden">
+                        <div class="py-1">
                             <div class="row align-items-center gx-3">
                                 <template v-if="$scopedSlots['item-prepend']">
                                     <div class="col-auto">
@@ -23,15 +31,15 @@
                                     </div>
                                 </template>
 
-                                <div class="col py-1">
+                                <div class="col">
                                     {{ option.label }}
                                 </div>
 
-                                <template v-if="isSelected(option)">
-                                    <div class="col-auto py-1">
-                                        <i class="fas fa-check"></i>
+                                    <div class="col-auto" :class="{ 'invisible': !isSelected(option) }">
+                                        <div class="bg-primary text-inverted d-inline-flex rounded-circle justify-content-center align-items-center" style="width: 1.5em; height: 1.5em">
+                                            <i class="fas fa-check fa-sm"></i>
+                                        </div>
                                     </div>
-                                </template>
                             </div>
                         </div>
                     </div>
@@ -50,6 +58,7 @@
         },
         props: {
             value: [Number, String],
+            visible: Boolean,
             /**
              * @type Array.<{{ value: string, label: string }}>
              */
@@ -60,14 +69,19 @@
         },
         data() {
             return {
-                modalVisible: false,
+                modalVisible: this.visible,
                 selected: this.value ?? null,
             }
+        },
+        watch: {
+            visible(visible) {
+                this.modalVisible = visible;
+            },
         },
         methods: {
             itemClass(option) {
                 return {
-                    'active': this.isSelected(option),
+                    'active bg-white text-primary': this.isSelected(option),
                 }
             },
             isSelected(option) {
@@ -79,6 +93,10 @@
             },
             handleButtonClicked() {
                 this.modalVisible = true;
+            },
+            handleVisibleChanged(visible) {
+                this.modalVisible = visible;
+                this.$emit('update:visible', visible);
             },
             handleModalOkClicked() {
                 this.$emit('input', this.selected);

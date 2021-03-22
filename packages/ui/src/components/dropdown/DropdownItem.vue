@@ -1,5 +1,5 @@
 <template>
-    <b-dropdown-item :active="active" @click="handleClick">
+    <b-dropdown-item :active="active" :disabled="disabled" @click="handleClick">
         <slot />
     </b-dropdown-item>
 </template>
@@ -12,6 +12,7 @@
 
         props: {
             active: Boolean,
+            disabled: Boolean,
         },
 
         components: {

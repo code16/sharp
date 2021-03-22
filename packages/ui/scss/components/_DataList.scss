@@ -77,7 +77,7 @@
       cursor: inherit;
       .SharpDataList__row-append {
         display: none;
-        @include media-breakpoint-up(md) {
+        @include media-breakpoint-up(sm) {
           display: block;
         }
       }
@@ -97,6 +97,14 @@
 
     &--highlight {
       box-shadow: inset 3px 0 0 rgba($brand-02, .25);
+    }
+
+    &--full-width {
+      .SharpDataList__td:last-child {
+        margin-right: calc(var(--append-width) * -1);
+        width: 100%;
+        flex: 1 0 0;
+      }
     }
 
     .SharpDataList__cols {
@@ -149,7 +157,6 @@
   }
 
   &__td {
-
     font-size: .875rem;
     @include line-height('body');
     //@include padding-td;

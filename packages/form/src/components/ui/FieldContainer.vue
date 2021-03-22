@@ -33,8 +33,11 @@
             @locale-change="handleLocaleChanged"
             ref="field"
         />
-        <div class="SharpForm__form-requirement">{{ stateMessage }}</div>
-        <small class="SharpForm__help-message">{{ helpMessage }}</small>
+        <template v-if="stateMessage">
+            <div class="invalid-feedback d-block">{{ stateMessage }}</div>
+        </template>
+
+        <div class="SharpForm__help-message form-text">{{ helpMessage }}</div>
     </div>
 </template>
 

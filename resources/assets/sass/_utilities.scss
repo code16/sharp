@@ -3,3 +3,16 @@
 $utilities: (
 
 );
+
+
+.text-inverted {
+  color: hsl(0, 0%, calc((var(--bs-primary-l) - var(--l-threshold)) * -100000));
+}
+
+.bg-primary {
+  background-color: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--bs-primary-l)) !important;
+}
+
+.text-primary {
+  color: hsl(var(--bs-primary-h), var(--bs-primary-s), 30%)!important;
+}

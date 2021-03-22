@@ -95,14 +95,13 @@
         & > .SharpLeftNav__item-link {
           background-color: $color__gray-2;
           color: $color__blue-51;
-          font-weight: 600;
+          font-weight: 700;
         }
       }
 
       &-link {
         font-size: .875rem;
         color: $color__blue-90;
-        font-weight: 400;
         position: relative;
         display: block;
         text-decoration: none;
@@ -171,7 +170,7 @@
 
     .SharpLeftNav__item--has-children {
       & > .SharpLeftNav__item-link {
-        text-transform: uppercase;
+        color: $text-muted;
       }
 
       .SharpLeftNav__item-link {
@@ -204,7 +203,6 @@
         font-size: .875rem;
         color: $color__blue-90;
         padding: .75rem 1.35rem .75rem 4.5rem;
-        font-weight: 400;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -219,7 +217,7 @@
         background-color: $color__gray-2;
 
         & > .SharpLeftNav__item-link {
-          font-weight: 600;
+          font-weight: 700;
           color: $color__blue-51;
         }
       }
@@ -256,7 +254,7 @@
     }
 
     .SharpLeftNav__item--expanded > .SharpLeftNav__item-link {
-      color: $color__blue-90;
+      color: $body-color;
     }
 
     .SharpLeftNav__line {

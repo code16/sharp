@@ -21,6 +21,10 @@
       border-top-left-radius: 0;
       border-top-right-radius: 0;
       border-top-color: transparent;
+      padding: $input-padding-y $input-padding-x;
+      &.is-invalid {
+        border-top-color: $form-feedback-invalid-color;
+      }
     }
   }
 

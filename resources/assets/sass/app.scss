@@ -28,6 +28,8 @@
 
 @import "cms";
 
+@import "utilities";
+
 
 input[type="number"].hide-controls {
   &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {

@@ -1,6 +1,13 @@
 
 
 .dropdown-menu {
+  min-width: 12rem;
   box-shadow: $box-shadow;
   border-color: rgba(0,0,0,.075);
+
+  > li:first-child, > li:last-child {
+    .dropdown-divider {
+      display: none;
+    }
+  }
 }

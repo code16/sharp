@@ -2,7 +2,7 @@
     <div class="SharpUpload" :class="[{'SharpUpload--empty':!file, 'SharpUpload--disabled':readOnly}, modifiersClasses]">
         <div :class="{ 'card card-body': file }">
             <form v-show="!file" class="dropzone">
-                <Button class="dz-message" text block :disabled="readOnly" type="button">
+                <Button class="dz-message" text block :disabled="readOnly" type="button" ref="button">
                     {{ l('form.upload.browse_button') }}
                 </Button>
             </form>
@@ -367,6 +367,13 @@
             this.addedFile({ ...this.value, upload: {} });
             this.file.thumbnail = this.value.thumbnail;
             this.file.status = 'exist';
+        },
+        mounted() {
+            const button = this.$refs.button.$el;
+            this.uploader._uploader.disable();
+            this.uploader._uploader.listeners.forEach(listener => listener.element = this.$refs.button.$el);
+            this.uploader._uploader.clickableElements = [button];
+            this.uploader._uploader.enable();
         },
         beforeDestroy() {
             this.setPending(false);

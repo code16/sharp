@@ -27,7 +27,7 @@
         },
         computed: {
             variantClass() {
-                return !this.hasTextStyle
+                return !this.hasTextStyle && this.variant
                     ? `btn${this.outline ? '-outline' : ''}-${this.variant}`
                     : null;
             },
