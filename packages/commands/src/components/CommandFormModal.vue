@@ -2,13 +2,14 @@
     <Modal
         :visible.sync="visible"
         :loading="loading"
+        :title="title"
         @ok="handleSubmitButtonClicked"
         @hidden="handleClosed"
     >
         <transition>
             <Form
                 v-if="visible"
-                :props="form"
+                :props="command.form"
                 independant
                 ignore-authorizations
                 @loading="handleLoadingChanged"
@@ -30,7 +31,7 @@
             LoadingOverlay,
         },
         props: {
-            form: Object,
+            command: Object,
         },
         data() {
             return {
@@ -39,9 +40,14 @@
             }
         },
         watch: {
-            form(form) {
-                this.visible = !!form;
+            command(command) {
+                this.visible = !!command?.form;
             }
+        },
+        computed: {
+            title() {
+                return this.command?.modal_title ?? this.command?.label;
+            },
         },
         methods: {
             submit(...args) {

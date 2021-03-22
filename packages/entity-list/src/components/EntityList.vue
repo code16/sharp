@@ -105,7 +105,7 @@
             </template>
         </template>
 
-        <CommandFormModal :form="commandCurrentForm" ref="commandForm" />
+        <CommandFormModal :command="currentCommand" ref="commandForm" />
         <CommandViewPanel :content="commandViewContent" @close="handleCommandViewPanelClosed" />
     </div>
 </template>

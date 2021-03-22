@@ -1,5 +1,3 @@
-@import "../../mixins/fix-module-fields-margin";
-
 .SharpList {
   &__empty-alert {
     opacity: .5;
@@ -10,22 +8,32 @@
   }
 
   &__sort-button {
-    position: absolute;
-    right: 0;
-    top: .675rem;
+    position: sticky;
+    top: calc(var(--navbar-height) + .675rem);
+    margin-top: .675rem;
     z-index: $zindex-field-header-sticky + 1;
+    pointer-events: auto;
+  }
+
+  &__sticky-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
   }
 
   &__remove-button {
     position: absolute;
-    top: .25rem;
+    top: .375rem;
     right: .25rem;
     padding: .5em;
     transition: opacity .25s ease-in-out;
-    font-size: .875rem;
+    font-size: .75rem;
 
-    &:focus {
-      opacity: $btn-close-focus-opacity;
+    &:not(:hover):not(:focus) {
+      opacity: .375;
     }
   }
 
@@ -33,8 +41,6 @@
     position: relative;
     padding-top: 1.5rem;
     padding-bottom: 2rem;
-
-    @include fix-module-fields-margin;
 
     &:first-child {
       padding-top: 1.5rem;
@@ -45,10 +51,14 @@
       border-bottom-color: rgba(0, 0, 0, 0.25);
     }
 
-    .SharpGrid__row:first-child > .col-md-12:first-child > .SharpForm__form-item--no-label {
-      margin-top: .5rem;
-      .btn-block {
-        margin-top: .5rem;
+    .SharpGrid__row:first-child {
+      > .col-md-12:first-child > .SharpForm__form-item--no-label {
+        margin-top: 1rem;
+      }
+      > .SharpGrid__col:last-child {
+        .SharpForm__label {
+          margin-right: 1rem;
+        }
       }
     }
 
@@ -57,28 +67,18 @@
       font-size: .75rem;
     }
 
-    .btn-sm, .SharpFieldLocaleSelect__btn {
-      font-size: .675rem;
+    .btn-sm {
+      font-size: .6875rem;
+    }
+
+    .SharpFieldLocaleSelect__btn {
+      font-size: .625rem;
     }
 
     /// Contextual children modifiers
-    .SharpForm--label {
-      font-size: .75rem;
+    .SharpForm__label {
+      font-size: $label-font-size * .875;
     }
-
-    //.SharpUpload {
-    //  &__inner {
-    //    box-shadow: none !important;
-    //  }
-    //
-    //  &__remove-button {
-    //    display: none;
-    //  }
-    //
-    //  &__close-button {
-    //    display: initial;
-    //  }
-    //}
 
     .SharpField {
       .SharpClearButton:not(:focus) {
@@ -132,15 +132,15 @@
   }
 
   &__new-item-zone {
-    z-index:3;
-    position:absolute;
+    position: absolute;
+    z-index: 3;
     //background: rgba(255,0,0,0.3);
-    height:2rem;
-    margin-bottom:-1rem;
+    height: 2rem;
+    margin-bottom: -1rem;
     bottom:0;
     left:0;
     right:0;
-    text-align: left;
+    text-align: center;
 
     &:hover  {
       button {

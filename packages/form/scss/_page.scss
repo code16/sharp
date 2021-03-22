@@ -6,5 +6,12 @@
   .SharpForm {
     min-height: calc(100vh - 5rem);
     padding-bottom: 3rem;
+
+    .tab-pane {
+      min-height: #{'max(30vh, 200px)'};
+      background-color: white;
+      padding: 1rem 1.25rem;
+      margin-top: 1.5rem;
+    }
   }
 }

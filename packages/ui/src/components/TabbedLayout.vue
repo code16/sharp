@@ -13,7 +13,7 @@
             </Tabs>
         </template>
         <template v-else>
-            <div class="tab-pane mt-4">
+            <div class="tab-pane">
                 <template v-if="$slots['nav-prepend']">
                     <div class="mb-3">
                         <slot name="nav-prepend" />

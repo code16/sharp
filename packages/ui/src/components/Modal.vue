@@ -6,6 +6,7 @@
         :static="static"
         modal-class="SharpModal"
         :title-class="{ 'text-danger': isError }"
+        :header-class="{ 'pb-0':!title }"
         no-enforce-focus
         v-on="$listeners"
         @change="handleVisiblityChanged"

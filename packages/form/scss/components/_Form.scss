@@ -1,30 +1,25 @@
-@import "../mixins/fix-module-fields-margin";
-
 .SharpForm {
-
-  .tab-pane {
-    min-height: #{'max(30vh, 200px)'};
-    background-color: white;
-    padding: 1rem 1.25rem;
-  }
 
   &__alert {
     font-size: .875rem;
   }
 
   &__fieldset {
-    @include fix-module-fields-margin;
 
     .SharpForm__label {
       font-size: .75rem;
     }
   }
 
+  .SharpGrid {
+    margin-bottom: -$form-item-margin-bottom;
+  }
+
   .SharpGrid__col--empty {
     display: none;
   }
 
-  .SharpGrid__col:not(.SharpGrid__col--empty), &__form-item--row {
+  .SharpGrid__col {
     margin-bottom: $form-item-margin-bottom;
   }
 
@@ -57,7 +52,7 @@
         > .SharpForm__field-header {
           position: sticky;
           top: var(--navbar-height);
-          z-index: 20;
+          z-index: $zindex-field-header-sticky;
           padding-top: 1rem;
           background-color: white;
           padding-left: .5rem;

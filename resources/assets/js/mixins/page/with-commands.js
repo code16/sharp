@@ -5,7 +5,7 @@ import { showConfirm, showAlert } from "../../util/dialogs";
 export default {
     data() {
         return {
-            commandCurrentForm: null,
+            currentCommand: null,
             commandViewContent: null,
         }
     },
@@ -34,18 +34,24 @@ export default {
         async postCommandForm({ postFn }) {
             const response = await this.$refs.commandForm.submit({ postFn });
             await this.handleCommandResponse(response);
-            this.commandCurrentForm = null;
+            this.currentCommand = null;
         },
         async showCommandForm(command, { postForm, getFormData }) {
             const data = command.fetch_initial_data ? await getFormData() : {};
             const post = () => this.postCommandForm({ postFn:postForm });
 
-            this.commandCurrentForm = this.transformCommandForm({ ...command.form, data });
+            this.currentCommand = {
+                ...command,
+                form: this.transformCommandForm({
+                    ...command.form,
+                    data,
+                }),
+            };
 
             this.$refs.commandForm.$on('submit', post);
             this.$refs.commandForm.$once('close', () => {
                 this.$refs.commandForm.$off('submit', post);
-                this.commandCurrentForm = null;
+                this.currentCommand = null;
             });
         },
         async sendCommand(command, { postCommand, getFormData, postForm }) {
