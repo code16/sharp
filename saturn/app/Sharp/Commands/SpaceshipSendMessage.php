@@ -14,6 +14,11 @@ class SpaceshipSendMessage extends InstanceCommand
 {
     public function label(): string
     {
+        return "Send a text message...";
+    }
+
+    public function formModalTitle(): string
+    {
         return "Send a text message";
     }
 

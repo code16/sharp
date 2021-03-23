@@ -152,5 +152,10 @@ abstract class Command
         return "";
     }
 
+    public function formModalTitle(): string
+    {
+        return "";
+    }
+
     abstract public function label(): ?string;
 }

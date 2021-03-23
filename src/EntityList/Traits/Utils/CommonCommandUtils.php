@@ -22,6 +22,7 @@ trait CommonCommandUtils
                     "description" => $handler->description(),
                     "type" => $handler->type(),
                     "confirmation" => $handler->confirmationText() ?: null,
+                    "modal_title" => $handler->formModalTitle() ?: null,
                     "form" => $formFields ? [
                         "fields" => $formFields,
                         "layout" => $formLayout
