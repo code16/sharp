@@ -214,6 +214,42 @@ class SharpEntityListCommandTest extends SharpTestCase
     }
 
     /** @test */
+    function we_can_define_a_form_modal_title_on_a_command()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig(): void
+            {
+                $this->addEntityCommand("entityCommand", new class extends EntityCommand {
+                    public function label(): string {
+                        return "My Entity Command";
+                    }
+                    public function formModalTitle(): string {
+                        return "My title";
+                    }
+                    public function execute(EntityListQueryParams $params, array $data = []): array {}
+                });
+            }
+        };
+
+        $list->buildListConfig();
+
+        $this->assertArraySubset([
+            "commands" => [
+                "entity" => [
+                    [
+                        [
+                            "key" => "entityCommand",
+                            "label" => "My Entity Command",
+                            "type" => "entity",
+                            "modal_title" => "My title"
+                        ]
+                    ]
+                ]
+            ]
+        ], $list->listConfig());
+    }
+
+    /** @test */
     function we_can_handle_authorization_in_an_entity_command()
     {
         $list = new class extends SharpEntityDefaultTestList {
