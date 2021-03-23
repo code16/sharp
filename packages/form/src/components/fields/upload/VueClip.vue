@@ -371,7 +371,7 @@
         mounted() {
             const button = this.$refs.button.$el;
             this.uploader._uploader.disable();
-            this.uploader._uploader.listeners.forEach(listener => listener.element = this.$refs.button.$el);
+            this.uploader._uploader.listeners.forEach(listener => listener.element = button);
             this.uploader._uploader.clickableElements = [button];
             this.uploader._uploader.enable();
         },

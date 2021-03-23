@@ -15,5 +15,9 @@
 }
 
 .ui-font-size {
-  font-size: $label-font-size;
+  font-size: $ui-font-size;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @extend .ui-font;
 }

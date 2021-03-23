@@ -1,5 +1,6 @@
 <template>
     <b-dropdown
+        class="SharpDropdown"
         :toggle-class="classes"
         :disabled="disabled"
         :no-caret="!showCaret"

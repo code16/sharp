@@ -1,0 +1,35 @@
+.login {
+  background: linear-gradient(
+      45deg,
+      hsl(var(--bs-primary-h), var(--bs-primary-s), var(--accent-bg-l)),
+      hsl(var(--bs-primary-h), var(--bs-primary-s), var(--bs-primary-l)) 80%
+  );
+
+  &__content {
+    display: flex;
+    height: 100vh;
+    padding: 20vh 0;
+  }
+
+  @include media-breakpoint-down(xs) {
+    .container {
+      width:100%
+    }
+  }
+
+  .alert {
+    font-size: .875rem;
+  }
+
+  .logo svg {
+    --width: 250px;
+    width: var(--width);
+    height: calc(var(--width) * 0.13);
+    fill: currentColor;
+    color: hsl(var(--bs-primary-h), var(--bs-primary-s), calc(var(--bs-primary-l) + 12.5%));
+  }
+
+  .card {
+    border-radius: .5rem;
+  }
+}

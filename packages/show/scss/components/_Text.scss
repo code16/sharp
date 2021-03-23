@@ -1,10 +1,6 @@
 
 .ShowTextField {
   &__content {
-    @mixin font-size($size) { font-size: $size }
-    @import "~bootstrap/scss/reboot";
-    @import "~bootstrap/scss/mixins/lists";
-    @import "~bootstrap/scss/type";
     h1, h2, h3, h4, h5, h6 {
       letter-spacing: normal;
     }

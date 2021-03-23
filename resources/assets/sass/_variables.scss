@@ -13,6 +13,17 @@ $text-03: #8c9ba5;
 
 $brand-01-light: #68829E;
 
+
+$ui-primary-color: hsl(var(--bs-primary-h), var(--bs-primary-s), 20%);
+$ui-font-size: .9375rem;
+
+$h1-font-size: 1.75rem;
+$h2-font-size: 1.5rem;
+$h3-font-size: 1.25rem;
+$h4-font-size: 1.125rem;
+$h5-font-size: 1rem;
+$h6-font-size: .875rem;
+
 /**
   Bootstrap variables
 **/
@@ -20,6 +31,9 @@ $brand-01-light: #68829E;
 $primary: #004c9b;
 $info: #5aaafa;
 $success: #3dc322;
+
+$body-bg: $ui-02;
+$body-color: #152935;
 
 $enable-negative-margins: true;
 
@@ -33,7 +47,7 @@ $container-max-widths: (
 $transition-collapse: height 300ms cubic-bezier(0.5, 0, 0.1, 1);
 
 $border-radius: .25rem;
-
+$box-shadow: 0 .5rem 1rem rgba(0,0,0, .15);
 
 $alert-padding-y: .75rem;
 
@@ -54,6 +68,9 @@ $caret-width: .3em;
 $caret-spacing: $caret-width * 1.5;
 $caret-vertical-align: .15em;
 
+$dropdown-min-width: 12rem;
+$dropdown-border-color: rgba(0,0,0,.075);
+
 $input-font-size: .875rem;
 $input-padding-y: .5rem;
 
@@ -66,11 +83,9 @@ $dropdown-item-padding-y: .375rem;
 
 $modal-content-border-width: 0;
 
-$label-color: hsl(var(--bs-primary-h), var(--bs-primary-s), 20%);
-$label-font-size: .9375rem;
 $label-line-height: 1.4;
-$form-label-color: $label-color;
-$form-label-font-size: $label-font-size;
+$form-label-color: $ui-primary-color;
+$form-label-font-size: $ui-font-size;
 
 $nav-link-color: var(--bs-primary-hsl);
 $nav-link-hover-color: hsl(var(--bs-primary-h), var(--bs-primary-s), calc(var(--bs-primary-l) + 10%));
@@ -80,9 +95,6 @@ $nav-pills-link-active-color: var(--component-active-color);
 
 $dropdown-link-active-bg: var(--component-active-bg);
 $dropdown-link-active-color: var(--component-active-color);
-
-$dropdown-link-color: $label-color;
-$dropdown-font-size: $label-font-size * .875;
 
 $pagination-active-bg: var(--component-active-bg);
 $pagination-active-color: var(--component-active-color);
@@ -95,27 +107,15 @@ $toast-header-color: #444c55;
 $form-text-font-size: .75rem;
 $form-text-margin-top: .5rem;
 
-  /**
-    Custom variables
-  **/
+/**
+  Custom variables
+**/
 
-$leftnav-width: 12.5rem;
+$leftnav-width: 14rem;
 $leftnav-collapsed-width: 3rem;
 
 $breakpoint-fixed-menu: 'lg';
 $form-item-margin-bottom : 1.5rem;
-
-$input-label-weight: 400;
-
-$dropdown-list-border-radius: $border-radius;
-$dropdown-border: 2px solid $ui-04;
-$dropdown-focus-border-color: $brand-01-light;
-$dropdown-hover-border-color: lighten($dropdown-focus-border-color, 25%);
-$dropdown-list-offset: 3px;
-$dropdown-btn-transition: all 100ms ease-in-out;
-$dropdown-item-transition: background 50ms ease-in-out;
-
-$checkbox-inline-margin-bottom: .3rem;
 
 $zindex-field-header-sticky: 50;
 

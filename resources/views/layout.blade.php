@@ -17,7 +17,7 @@
 
     {!! \Illuminate\Support\Arr::get($injectedAssets ?? [], 'head') !!}
 </head>
-<body>
+<body class="{{ $bodyClass ?? '' }}">
     @yield('content')
 
     @if(sharp_assets_out_of_date())

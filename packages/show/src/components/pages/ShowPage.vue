@@ -17,7 +17,7 @@
                     @state-change="handleStateChanged"
                 />
 
-                <div class="mt-4">
+                <div class="mt-4 pt-2">
                     <template v-for="section in layout.sections">
                         <Section
                             class="ShowPage__section"

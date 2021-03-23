@@ -1,13 +1,22 @@
 
 
-.dropdown-menu {
-  min-width: 12rem;
-  box-shadow: $box-shadow;
-  border-color: rgba(0,0,0,.075);
-
-  > li:first-child, > li:last-child {
-    .dropdown-divider {
-      display: none;
+.SharpDropdown {
+  .dropdown-menu {
+    @extend .ui-font;
+    > li:first-child, > li:last-child {
+      .dropdown-divider {
+        display: none;
+      }
+    }
+  }
+  .dropdown-item {
+    font-size: $ui-font-size * .875;
+    &:not(:hover):not(:focus):not(.active) {
+      color: $ui-primary-color;
+    }
+    &:disabled, &.disabled {
+      opacity: .5;
     }
   }
 }
+

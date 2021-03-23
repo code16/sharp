@@ -75,7 +75,7 @@
 .nav-pills .nav-link,
 .breadcrumb,
 .form-label,
-.dropdown-menu,
+.input-group-text
 {
   @extend .ui-font;
 }
@@ -98,4 +98,8 @@
   color: $body-color;
   line-height: $line-height-base;
   font-weight: $font-weight-base;
+}
+
+.dropdown-menu {
+  box-shadow: $box-shadow;
 }

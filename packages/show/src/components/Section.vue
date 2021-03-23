@@ -7,7 +7,7 @@
                 </summary>
             </template>
             <template v-else-if="section.title">
-                <h2 class="ShowSection__title mb-2">{{ section.title }}</h2>
+                <h2 class="ShowSection__title">{{ section.title }}</h2>
             </template>
             <div class="ShowSection__content">
                 <Grid class="ShowSection__grid"

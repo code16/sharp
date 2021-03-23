@@ -5,7 +5,7 @@
   border-radius: $input-border-radius;
   position: relative;
 
-  $list-offset: $dropdown-list-offset + 2px;
+  $list-offset: 5px;
   $search-input-height: 2.5rem;
 
   .form-control {

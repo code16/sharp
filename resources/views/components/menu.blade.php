@@ -15,10 +15,16 @@
     @endif
     <ul role="menubar" class="SharpLeftNav__list" aria-hidden="false">
         <sharp-nav-item disabled>
-            <span title="{{ $component->username }}">
-                {{ $component->username }}
-            </span>
-            <a href="{{ route('code16.sharp.logout') }}"> <sharp-item-visual :item="{ icon:'fas fa-sign-out-alt' }" icon-class="fa-fw"></sharp-item-visual></a>
+            <div class="row gx-2 flex-nowrap">
+                <div class="col" style="min-width: 0">
+                    <div class="text-truncate" title="{{ $component->username }}">
+                        {{ $component->username }}
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <a href="{{ route('code16.sharp.logout') }}"> <sharp-item-visual :item="{ icon:'fas fa-sign-out-alt' }" icon-class="fa-fw"></sharp-item-visual></a>
+                </div>
+            </div>
         </sharp-nav-item>
 
         @foreach($component->items as $menuItem)
