@@ -5,7 +5,7 @@
         right-class="d-block"
     >
         <template v-slot:left>
-            <div class="ui-font ui-font-size" style="font-weight: 600">
+            <div class="ui-title-font ui-font-size">
                 <div class="row gx-2">
                     <template v-if="currentEntity">
                         <div class="col-auto">
@@ -45,10 +45,17 @@
                 <template v-if="canCreate && !reorderActive">
                     <div class="col-auto" :class="{ 'd-none d-sm-block': searchActive }">
                         <template v-if="hasForms">
-                            <Dropdown variant="light" large :text="l('action_bar.list.forms_dropdown')">
+                            <Dropdown variant="light" large right :text="l('action_bar.list.forms_dropdown')">
                                 <template v-for="(form, key) in forms">
                                     <DropdownItem  @click="handleCreateFormSelected(form)" :key="key" >
-                                        <ItemVisual :item="form" icon-class="fa-fw"/>{{ form.label }}
+                                        <div class="row gx-2">
+                                            <div class="col-auto">
+                                                <ItemVisual :item="form" icon-class="fa-fw"/>
+                                            </div>
+                                            <div class="col">
+                                                {{ form.label }}
+                                            </div>
+                                        </div>
                                     </DropdownItem>
                                 </template>
                             </Dropdown>

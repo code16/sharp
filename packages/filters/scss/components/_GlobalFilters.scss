@@ -4,7 +4,7 @@
   $primary: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--accent-bg-l));
   $border-color: $ui-03;
 
-  --color-l: calc((var(--accent-bg-l) - var(--l-threshold) + 20%) * -100000);
+  --color-l: calc((var(--accent-bg-l) - var(--l-threshold) + var(--accent-bg-amount)) * -100000);
 
   .form-control {
     padding: 0;

@@ -29,11 +29,17 @@
 
         @foreach($component->items as $menuItem)
             @if($menuItem->type == 'category')
-                <sharp-collapsible-item label="{{ $menuItem->label }}">
+                <sharp-collapsible-item
+                    label="{{ $menuItem->label }}"
+                    @if(collect($menuItem->entities)->some(fn ($entity) => $entity->key === $currentEntity))
+                        opened
+                    @endif
+                >
                     @foreach($menuItem->entities as $entity)
                         <x-sharp::menu-item
                             :item="$entity"
                             :is-current="$currentEntity == $entity->key"
+                            nested
                         />
                     @endforeach
                 </sharp-collapsible-item>

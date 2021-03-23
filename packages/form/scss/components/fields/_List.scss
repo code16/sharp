@@ -31,6 +31,7 @@
     padding: .5em;
     transition: opacity .25s ease-in-out;
     font-size: .75rem;
+    z-index: 1;
 
     &:not(:hover):not(:focus) {
       opacity: .375;
@@ -105,12 +106,12 @@
       left:0;
       width: 100%;
       height: 100%;
-      z-index: z('listItemOverlay');
+      z-index: 40;
       cursor: move;
     }
 
     &.sortable-chosen {
-      @include focus-outline('border');
+      box-shadow: $box-shadow;
     }
 
     &.expand-enter-active {
@@ -133,7 +134,7 @@
 
   &__new-item-zone {
     position: absolute;
-    z-index: 3;
+    z-index: 1;
     //background: rgba(255,0,0,0.3);
     height: 2rem;
     margin-bottom: -1rem;

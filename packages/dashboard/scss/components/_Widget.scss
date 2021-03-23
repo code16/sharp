@@ -7,6 +7,11 @@
     }
   }
 
+  h1, h2, h3, h4, h5, h6 {
+    @extend .ui-title-font;
+    @extend .ui-heading-font-size;
+  }
+
   &.SharpCard {
     height: 100%;
     box-shadow: none;

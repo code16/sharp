@@ -52,15 +52,15 @@
         > .SharpForm__field-header {
           position: sticky;
           top: var(--navbar-height);
-          z-index: $zindex-field-header-sticky;
           padding-top: 1rem;
-          background-color: white;
           padding-left: .5rem;
           padding-right: .5rem;
           margin-left: -.5rem;
           margin-right: -.5rem;
           &.stuck {
+            z-index: $zindex-field-header-sticky;
             box-shadow: $box-shadow-sm;
+            background-color: white;
             border-bottom: 1px solid $border-color;
           }
         }

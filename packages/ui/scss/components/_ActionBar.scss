@@ -32,7 +32,9 @@
     background: $brand-01;
     margin-left: -$grid-gutter-width/2;
     margin-right: -$grid-gutter-width/2;
-    transition: left 300ms $bx--standard-easing;
+
+    transition: $transition-leftnav-collapse;
+    transition-property: left;
 
     --threshold: var(--l-threshold);
 
