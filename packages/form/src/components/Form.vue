@@ -7,7 +7,7 @@
                 :listeners="actionBarListeners"
             />
 
-            <template v-if="hasErrors">
+            <template v-if="hasErrors && showAlert">
                 <div class="alert alert-danger SharpForm__alert" role="alert">
                     <div class="fw-bold">{{ l('form.validation_error.title') }}</div>
                     <div>{{ l('form.validation_error.description') }}</div>
@@ -92,11 +92,12 @@
             instanceId: String,
 
             /// Extras props for customization
-            independant: {
-                type:Boolean,
-                default: false
-            },
+            independant: Boolean,
             ignoreAuthorizations: Boolean,
+            showAlert: {
+                type: Boolean,
+                default: true,
+            },
             props: Object
         },
 

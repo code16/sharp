@@ -42,6 +42,14 @@
                     </div>
                 </template>
 
+                <template v-if="primaryCommand && !reorderActive">
+                    <div class="col-auto" :class="{ 'd-none d-sm-block': searchActive }">
+                        <Button variant="light" large @click="handlePrimaryCommandClicked">
+                            {{ primaryCommand.label }}
+                        </Button>
+                    </div>
+                </template>
+
                 <template v-if="canCreate && !reorderActive">
                     <div class="col-auto" :class="{ 'd-none d-sm-block': searchActive }">
                         <template v-if="hasForms">
@@ -125,6 +133,7 @@
             filters: Array,
             filtersValues: Object,
             forms: Array,
+            primaryCommand: Object,
 
             canCreate: Boolean,
             canReorder: Boolean,
@@ -156,6 +165,9 @@
             handleFilterChanged(filter, value) {
                 this.$emit('filter-change', filter, value);
             },
+            handlePrimaryCommandClicked() {
+                this.$emit('command', this.primaryCommand);
+            },
             handleReorderButtonClicked() {
                 this.$emit('reorder-click');
                 document.activeElement.blur();
@@ -168,7 +180,7 @@
             },
             handleCreateFormSelected(form) {
                 this.$emit('create', form);
-            }
+            },
         }
     }
 </script>

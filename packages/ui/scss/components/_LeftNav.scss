@@ -20,7 +20,7 @@
   z-index: z('leftNav');
 
   &__content {
-    box-shadow: 2px 0 3px 0 $ui-03;
+    box-shadow: 2px 0 3px 0 hsla(var(--bs-primary-h), var(--bs-primary-s), 30%, 0.075);
     position: absolute;
     top: 0;
     bottom: 0;
@@ -33,7 +33,7 @@
   }
 
   &__title-container {
-    padding: .75rem 1.5rem;
+    padding: .75rem 1.25rem;
     background-color: $primary;
     background: linear-gradient(
       0deg,
@@ -55,7 +55,7 @@
 
   &__top-icon {
     opacity: 0;
-    color: $color__blue-51;
+    color: hsl(var(--bs-primary-h), var(--bs-primary-s), 30%);
     position: absolute;
     right:0;
     left:0;
@@ -119,6 +119,11 @@
         }
       }
 
+      &:not(.SharpLeftNav__item--disabled) {
+        @extend .ui-font;
+        font-weight: 600;
+      }
+
       &.SharpLeftNav__item--disabled {
         .SharpLeftNav__item-link {
           cursor: default;
@@ -138,9 +143,7 @@
   }
 
   &__item-link {
-    @extend .ui-font;
     font-size: $ui-font-size;
-    font-weight: 600;
     font-size: .875rem;
     position: relative;
     display: block;
@@ -239,7 +242,7 @@
 
     .SharpLeftNav__collapse-arrow {
       transform: rotate(0);
-      fill: $color__blue-51;
+      fill: currentColor;
       height: 12px;
       width: 12px;
     }

@@ -1,6 +1,6 @@
 <template>
     <div class="SharpWidgetOrderedList w-100">
-        <h2 class="mb-3">
+        <h2 class="SharpWidget__title mb-3">
             {{ title }}
         </h2>
         <DataList class="SharpWidgetOrderedList__list" :items="items" :columns="columns" hide-header>

@@ -78,20 +78,15 @@
   }
 
   &__form-item--danger {
-    .form-control, .card--field {
+    .form-control {
       @extend .is-invalid;
-    }
-    .SharpForm__form-requirement {
-      max-height: rem(200px);
-      background: rgba($support-01, .1);
-      margin: 0;
-      padding: .5rem 1rem;
     }
   }
 
-
   .invalid-feedback {
     font-weight: 600;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
   }
 
   .form-text {

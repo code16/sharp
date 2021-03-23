@@ -3,12 +3,6 @@
   margin: 0;
   padding: 0!important;
 
-  &--empty {
-    .SharpModule__content {
-      padding:0 !important;
-    }
-  }
-
   &--disabled {
     cursor: default;
     opacity: 0.7;

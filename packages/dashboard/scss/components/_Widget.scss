@@ -1,51 +1,23 @@
 .SharpWidget {
+  text-align: center;
+  border-width: 0;
+
   &--link {
-    &.SharpCard {
-      &:hover {
-        @include focus-outline('layer');
-      }
+    border-width: 1px;
+    text-decoration: none;
+    transition: $btn-transition;
+    &:hover {
+      border-color: hsla(var(--bs-primary-h), var(--bs-primary-s), 30%, .75);
     }
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    @extend .ui-title-font;
-    @extend .ui-heading-font-size;
-  }
-
-  &.SharpCard {
-    height: 100%;
-    box-shadow: none;
-
-    .SharpWidget__link {
-      color: $color__blue-90;
-      text-decoration: none;
-
-      &:focus {
-        @include focus-outline('border');
-      }
-    }
-
-    .SharpCard__overview {
-      height: 100%;
-      padding: 1rem;
-
-      .SharpCard__overview-about {
-        padding: 0;
-        justify-content: center;
-      }
-    }
+  &__title {
+    font-size: 1.375rem;
   }
 
   &.SharpWidget--chart {
-    &.SharpCard {
-      display: block;
-      .SharpCard__overview {
-        padding: 0;
-        display:block;
-        .SharpCard__overview-about {
-          display:block;
-        }
-      }
+    .card-body {
+      padding: 0;
     }
   }
 }
