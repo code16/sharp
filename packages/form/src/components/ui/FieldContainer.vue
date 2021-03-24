@@ -37,7 +37,9 @@
             <div class="invalid-feedback d-block">{{ stateMessage }}</div>
         </template>
 
-        <div class="SharpForm__help-message form-text">{{ helpMessage }}</div>
+        <template v-if="helpMessage">
+            <div class="SharpForm__help-message form-text">{{ helpMessage }}</div>
+        </template>
     </div>
 </template>
 

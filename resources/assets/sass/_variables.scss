@@ -64,6 +64,7 @@ $caret-spacing: $caret-width * 1.5;
 $caret-vertical-align: .15em;
 
 $dropdown-min-width: 10rem;
+$dropdown-font-size: .875rem;
 $dropdown-border-color: rgba(0,0,0,.075);
 
 $input-font-size: .875rem;
@@ -81,7 +82,7 @@ $modal-content-border-width: 0;
 
 $label-line-height: 1.4;
 $form-label-color: $ui-primary-color;
-$form-label-font-size: $ui-font-size;
+$form-label-font-size: .875rem;
 
 $nav-link-color: var(--bs-primary-hsl);
 $nav-link-hover-color: hsl(var(--bs-primary-h), var(--bs-primary-s), calc(var(--bs-primary-l) + 10%));
@@ -107,7 +108,7 @@ $form-text-margin-top: .5rem;
   Custom variables
 **/
 
-$leftnav-width: 14rem;
+$leftnav-width: 15rem;
 $leftnav-collapsed-width: 3.25rem;
 
 $breakpoint-fixed-menu: 'lg';

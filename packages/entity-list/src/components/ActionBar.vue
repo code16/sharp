@@ -77,13 +77,14 @@
                 </template>
             </div>
         </template>
-        <template v-if="!reorderActive" v-slot:extras>
+        <template v-slot:extras>
             <div class="row mx-n2">
                 <template v-for="filter in filters">
                     <div class="col-auto px-2">
                         <FilterDropdown
                             :filter="filter"
                             :value="filtersValues[filter.key]"
+                            :disabled="reorderActive"
                             @input="handleFilterChanged(filter, $event)"
                             :key="filter.id"
                         />
@@ -91,13 +92,14 @@
                 </template>
             </div>
         </template>
-        <template v-if="canSearch && !reorderActive" v-slot:extras-right>
+        <template v-if="canSearch" v-slot:extras-right>
             <div style="max-width: 300px">
                 <Search
                     class="h-100"
                     :value="search"
                     :active.sync="searchActive"
                     :placeholder="l('action_bar.list.search.placeholder')"
+                    :disabled="reorderActive"
                     @input="handleSearchInput"
                     @submit="handleSearchSubmitted"
                 />

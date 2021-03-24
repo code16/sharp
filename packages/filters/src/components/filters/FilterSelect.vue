@@ -6,7 +6,6 @@
               'SharpFilterSelect--multiple':multiple,
               'SharpFilterSelect--searchable':searchable
           }"
-          tabindex="0"
     >
         <!-- dropdown & search input -->
         <Autocomplete
@@ -22,6 +21,7 @@
             :preserve-search="false"
             :show-pointer="false"
             :searchable="searchable"
+            :read-only="disabled"
             no-result-item
             mode="local"
             ref="autocomplete"
@@ -38,6 +38,7 @@
                 :options="values"
                 :multiple="multiple"
                 :clearable="!required"
+                :read-only="disabled"
                 :inline="false"
                 placeholder=" "
                 ref="select"
@@ -74,6 +75,7 @@
             searchable: Boolean,
             searchKeys: Array,
             template: String,
+            disabled: Boolean,
         },
         data() {
             return {

@@ -53,7 +53,7 @@
     }
 
     .SharpGrid__row:first-child {
-      > .col-md-12:first-child > .SharpForm__form-item--no-label {
+      > .col-md-12:first-child > .SharpForm__form-item--no-label:not(.SharpForm__form-item--type-check) {
         margin-top: 1rem;
       }
       > .SharpGrid__col:last-child {

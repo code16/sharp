@@ -9,37 +9,37 @@
             <div class="row">
                 <template v-if="hasLeftControls">
                     <div class="col-sm mb-2">
-                        <template v-if="!reorderActive">
-                            <div class="row gy-1 gx-2 gx-md-3">
-                                <template v-for="filter in filters">
-                                    <div class="col-auto mb-1">
-                                        <div class="action-bar__element">
-                                            <FilterDropdown
-                                                class="h-100"
-                                                :filter="filter"
-                                                :value="filtersValues[filter.key]"
-                                                @input="handleFilterChanged(filter, $event)"
-                                                :key="filter.id"
-                                            />
-                                        </div>
+                        <div class="row gy-1 gx-2 gx-md-3">
+                            <template v-for="filter in filters">
+                                <div class="col-auto mb-1">
+                                    <div class="action-bar__element">
+                                        <FilterDropdown
+                                            class="h-100"
+                                            :filter="filter"
+                                            :value="filtersValues[filter.key]"
+                                            :disabled="reorderActive"
+                                            @input="handleFilterChanged(filter, $event)"
+                                            :key="filter.id"
+                                        />
                                     </div>
-                                </template>
-                                <template v-if="canSearch">
-                                    <div class="col-auto mb-1">
-                                        <div class="action-bar__element">
-                                            <Search
-                                                class="h-100"
-                                                :value="search"
-                                                :active.sync="searchActive"
-                                                :placeholder="l('action_bar.list.search.placeholder')"
-                                                @input="handleSearchInput"
-                                                @submit="handleSearchSubmitted"
-                                            />
-                                        </div>
+                                </div>
+                            </template>
+                            <template v-if="canSearch">
+                                <div class="col-auto mb-1">
+                                    <div class="action-bar__element">
+                                        <Search
+                                            class="h-100"
+                                            :value="search"
+                                            :active.sync="searchActive"
+                                            :placeholder="l('action_bar.list.search.placeholder')"
+                                            :disabled="reorderActive"
+                                            @input="handleSearchInput"
+                                            @submit="handleSearchSubmitted"
+                                        />
                                     </div>
-                                </template>
-                            </div>
-                        </template>
+                                </div>
+                            </template>
+                        </div>
                     </div>
                 </template>
                 <template v-else>
@@ -78,7 +78,7 @@
                                 <div class="col-auto">
                                     <div class="action-bar__element">
                                         <template v-if="hasForms">
-                                            <Dropdown variant="primary" :text="l('action_bar.list.forms_dropdown')">
+                                            <Dropdown variant="primary" right :text="l('action_bar.list.forms_dropdown')">
                                                 <template v-for="(form,key) in forms">
                                                     <DropdownItem  @click="handleCreateFormSelected(form)" :key="key" >
                                                         <ItemVisual :item="form" icon-class="fa-fw"/>{{ form.label }}

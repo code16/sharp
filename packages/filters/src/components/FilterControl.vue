@@ -18,7 +18,6 @@
         props: {
             opened: Boolean,
             label: String,
-            noCaret: Boolean,
         },
         components: {
             DropdownArrow,

@@ -11,6 +11,12 @@
       .SharpDataList__row-link {
         display: none;
       }
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+    .SharpDataList__tbody {
+      border: .25rem solid white;
     }
   }
 
@@ -62,7 +68,7 @@
     //display: table-row;
     display:flex;
     border-bottom: 1px solid $ui-04;
-    transition: $transition--base $bx--standard-easing;
+    transition: box-shadow .25s ease-in-out;
 
     @include media-breakpoint-down(sm) {
       flex-flow: column;
@@ -85,10 +91,6 @@
 
     .SharpDataList__cols, .SharpDataList__row-append  {
       padding: 1em 0;
-    }
-
-    &:focus:not(.SharpDataList__row--header) {
-      @include focus-outline('border');
     }
 
     &:hover:not(.SharpDataList__row--header):not(.SharpDataList__row--disabled) {

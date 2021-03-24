@@ -102,15 +102,13 @@
         background: $ui-01;
         height: auto;
         font-weight: bold;
+        color: $body-color;
+        margin-right: .125rem;
 
-        margin-bottom: 0;
         padding-right: 23px!important;
 
         &:not(:first-child){
           border-left: 1px solid $ui-03;
-        }
-        &:last-child {
-          margin:0;
         }
 
         &-icon {
@@ -125,6 +123,7 @@
 
       &__single {
         font-weight: bold;
+        font-size: .8125rem;
       }
 
       &__tags {

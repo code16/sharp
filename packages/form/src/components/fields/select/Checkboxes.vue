@@ -1,16 +1,17 @@
 <template>
     <div :class="{ 'card card-body form-control':root }">
         <div class="row gy-1 gx-3" :class="inline ? 'row-cols-auto' : 'row-cols-1'">
-            <template v-for="option in options">
+            <template v-for="(option, index) in options">
                 <div class="col">
-                    <div class="SharpSelect__item" :key="option.id">
-                        <Check
-                            :value="isChecked(option)"
-                            :text="labels[option.id]"
-                            :read-only="readOnly"
-                            @input="handleCheckboxChanged($event, option)"
-                        />
-                    </div>
+                    <Check
+                        class="mb-0"
+                        :id="checkboxId(index)"
+                        :value="isChecked(option)"
+                        :text="labels[option.id]"
+                        :read-only="readOnly"
+                        @input="handleCheckboxChanged($event, option)"
+                        :key="option.id"
+                    />
                 </div>
             </template>
         </div>
@@ -47,11 +48,15 @@
             showSelectAll: Boolean,
             inline: Boolean,
             root: Boolean,
+            uniqueIdentifier: String,
         },
         methods: {
             lang,
             isChecked(option) {
                 return this.value?.some(value => isSelected(option, value));
+            },
+            checkboxId(index) {
+                return `${this.uniqueIdentifier}.${index}`;
             },
             handleSelectAllClicked() {
                 this.$emit('input', this.options.map(option => option.id));

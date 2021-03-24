@@ -10,6 +10,7 @@
                 <input class="SharpSearch__input form-control form-control-sm"
                     :value="value"
                     :placeholder="placeholder"
+                    :disabled="disabled"
                     type="text"
                     id="ab-search-input"
                     role="search"
@@ -40,6 +41,7 @@
             value: String,
             placeholder: String,
             active: Boolean,
+            disabled: Boolean,
         },
         data() {
             return {

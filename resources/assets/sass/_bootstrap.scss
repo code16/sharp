@@ -92,7 +92,8 @@
 }
 
 .btn,
-.nav-pills .nav-link {
+.nav-pills .nav-link,
+.input-group-text {
   letter-spacing: .025em;
 }
 
@@ -109,4 +110,8 @@
 
 .dropdown-menu {
   box-shadow: $box-shadow;
+}
+
+.form-check-label {
+  font-size: .875rem;
 }

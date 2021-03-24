@@ -3,7 +3,7 @@
 .SharpLeftNav {
 
   --item-color-l: 30%;
-  $item-color: $body-color;
+  $item-color: hsl(var(--bs-primary-h), 10%, 20%);
   $item-hover-bg: hsla(var(--bs-primary-h), var(--bs-primary-s), var(--item-color-l), .05);
   $item-hover-color: inherit;
   $item-active-bg: hsla(var(--bs-primary-h), var(--bs-primary-s), var(--item-color-l), .1);
@@ -17,10 +17,10 @@
   //border-right: 1px solid $color__gray-1;
   max-height: 100vh;
 
-  z-index: z('leftNav');
+  z-index: 100;
 
   &__content {
-    box-shadow: 2px 0 3px 0 hsla(var(--bs-primary-h), var(--bs-primary-s), 30%, 0.075);
+    box-shadow: 1px 0 3px 0 hsla(var(--bs-primary-h), var(--bs-primary-s), 30%, 0.075);
     position: absolute;
     top: 0;
     bottom: 0;
@@ -72,69 +72,83 @@
     display: flex;
     flex-direction: column;
     background-color: $color__white;
-    padding-top: 1rem;
     padding-left: 0;
     margin-bottom: 0;
 
-    @include enhanced-item-border-and-spacing;
-    @include enhanced-item-font-size;
-
-    .SharpLeftNav__item {
-      width: 100%;
-      padding: 0;
-
-      &:focus:not(:focus-visible) {
-        outline: 0;
+    &.SharpLeftNav__list--nested {
+      .SharpLeftNav__item:last-child {
+        margin-bottom: 0;
       }
-
-      &.SharpLeftNav__item--active {
-        & > .SharpLeftNav__item-link {
-          background-color: $item-active-bg;
-          color: $item-active-color;
-          font-weight: 700;
-        }
-      }
-
-      &-icon {
-        display: flex;
-
-        .SharpLeftNav__icon {
-          fill: currentColor;
-          width: .5rem;
-          height: .5rem;
-          transition: $transition--base;
-        }
-      }
-
-      &--expanded {
-        .SharpLeftNav__item-icon .SharpLeftNav__icon {
-          transform: rotate(180deg);
-        }
-      }
-
-      &:not(.SharpLeftNav__item--active):not(.SharpLeftNav__item--disabled) {
-        & > .SharpLeftNav__item-link:hover {
-          color: $item-hover-color;
-          background-color: $item-hover-bg;
-        }
-      }
-
-      &:not(.SharpLeftNav__item--disabled) {
-        @extend .ui-font;
-        font-weight: 600;
-      }
-
-      &.SharpLeftNav__item--disabled {
-        .SharpLeftNav__item-link {
-          cursor: default;
-        }
+    }
+    &:not(.SharpLeftNav__list--nested) {
+      & > .SharpLeftNav__item {
+        border-bottom: 1px solid $ui-03;
+        padding-bottom: 1rem;
+        padding-top: 1rem;
       }
     }
 
-    .SharpLeftNav__item--has-children {
+    @include enhanced-item-font-size;
+  }
+
+  &__item {
+    width: 100%;
+    padding: 0;
+
+    &:focus:not(:focus-visible) {
+      outline: 0;
+    }
+
+    &.SharpLeftNav__item--active {
+      & > .SharpLeftNav__item-link {
+        background-color: $item-active-bg;
+        color: $item-active-color;
+        font-weight: 700;
+        letter-spacing: -.0125em;
+      }
+    }
+
+    &-icon {
+      display: flex;
+
+      .SharpLeftNav__icon {
+        fill: currentColor;
+        width: .5rem;
+        height: .5rem;
+        transition: $transition--base;
+      }
+    }
+
+    &--expanded {
+      .SharpLeftNav__item-icon .SharpLeftNav__icon {
+        transform: rotate(180deg);
+      }
+    }
+
+    &:not(.SharpLeftNav__item--active):not(.SharpLeftNav__item--disabled) {
+      & > .SharpLeftNav__item-link:hover {
+        color: $item-hover-color;
+        background-color: $item-hover-bg;
+      }
+    }
+
+    &:not(.SharpLeftNav__item--disabled) {
+      @extend .ui-font;
+      letter-spacing: -.025em;
+    }
+
+    &.SharpLeftNav__item--disabled {
+      .SharpLeftNav__item-link {
+        cursor: default;
+      }
+    }
+
+    &--has-children {
       & > .SharpLeftNav__item-link {
         color: $text-muted;
         font-weight: 700;
+        font-size: .875rem;
+        letter-spacing: 0;
         &:hover {
           color: $item-color;
         }
@@ -144,13 +158,19 @@
 
   &__item-link {
     font-size: $ui-font-size;
-    font-size: .875rem;
+    font-size: .8125rem;
     position: relative;
     display: block;
     text-decoration: none;
     transition: $nav-link-transition;
     cursor: pointer;
     color: $item-color;
+    line-height: 1.4;
+    padding: .5rem 1.25rem;
+
+    .fa, .fas, .far, .fab {
+      font-size: 1.125em;
+    }
 
     & > span {
       white-space: nowrap;
@@ -166,7 +186,11 @@
   }
 
   &__list--nested {
-    padding: 0;
+    padding-top: .625rem;
+    padding-bottom: .375rem;
+    .SharpLeftNav__item {
+      margin-bottom: .5rem;
+    }
   }
 
   // collapsed states
@@ -192,46 +216,8 @@
       background-color: inherit;
     }
 
-    .SharpLeftNav__list--nested {
-      padding-top: .375rem;
-      padding-bottom: .375rem;
-    }
-
     .SharpLeftNav__item--expanded > .SharpLeftNav__item-link {
       color: $item-expanded-color!important;
-    }
-
-    .SharpLeftNav__line {
-      margin: 1.5rem 1.25rem;
-      border: 1px solid $color__gray-1;
-    }
-
-    .SharpLeftNav__item--active > .SharpLeftNav__item-link {
-      position: relative;
-      background-color: #fff;
-
-      //&:before {
-      //  top: 0;
-      //  position: absolute;
-      //  background-color: $color__blue-51;
-      //  height: 100%;
-      //  left: 0;
-      //  width: 4px;
-      //  content: '';
-      //}
-    }
-
-    .SharpLeftNav__item {
-      margin-bottom: .375rem;
-    }
-
-    .SharpLeftNav__item-link, .SharpLeftNav__list--nested .SharpLeftNav__item-link {
-      padding: .5rem 1.25rem;
-    }
-
-    .SharpLeftNav__collapse-target {
-      margin-left: .625rem;
-      margin-right: .625rem;
     }
 
     .SharpLeftNav__collapse-button {

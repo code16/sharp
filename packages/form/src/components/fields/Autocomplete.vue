@@ -29,6 +29,7 @@
                 :show-pointer="showPointer"
                 :searchable="searchable"
                 :readonly="readOnly"
+                :tabindex="readOnly ? -1 : 0"
                 @search-change="updateSuggestions($event)"
                 @select="handleSelect"
                 @input="$emit('multiselect-input',$event)"

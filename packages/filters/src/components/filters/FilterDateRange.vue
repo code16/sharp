@@ -7,6 +7,7 @@
                 :display-format="displayFormat"
                 :monday-first="mondayFirst"
                 :clearable="!required"
+                :read-only="disabled"
                 @input="handleInput"
                 @focus="handlePickerFocused"
                 @blur="handlePickerBlur"
@@ -35,6 +36,7 @@
             required: Boolean,
             displayFormat: String,
             mondayFirst: Boolean,
+            disabled: Boolean,
             label: String,
         },
 

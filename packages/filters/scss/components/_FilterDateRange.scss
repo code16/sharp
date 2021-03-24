@@ -15,17 +15,18 @@
     color: $text-01;
     width: 50%;
     font-weight: bold;
-    font-size: 13px;
+    font-size: .75rem;
   }
   .el-range-separator {
     color: $text-01;
     padding: 0;
+    height: auto;
   }
 
   .el-range__close-icon {
     color: var(--filter-close-icon-color);
-    line-height: 28px;
-    width: 2rem;
+    line-height: 1.2;
+    width: 1.5rem;
   }
 
   &--empty {

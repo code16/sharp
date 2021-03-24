@@ -6,8 +6,8 @@
             :listeners="actionBarListeners"
         />
 
-        <template v-if="visible">
-            <template v-if="ready">
+        <template v-if="ready">
+            <div v-show="visible">
                 <DataList
                     :items="items"
                     :columns="columns"
@@ -31,6 +31,7 @@
                             <div class="d-flex justify-content-end">
                                 <CommandsDropdown
                                     :commands="dropdownEntityCommands"
+                                    :disabled="reorderActive"
                                     @select="handleEntityCommandRequested"
                                 >
                                     <template v-slot:text>
@@ -65,10 +66,10 @@
                         </template>
                     </template>
                 </DataList>
-            </template>
-            <template v-else-if="inline">
-                <Loading medium />
-            </template>
+            </div>
+        </template>
+        <template v-else-if="visible && inline">
+            <Loading medium />
         </template>
 
         <CommandFormModal :command="currentCommand" ref="commandForm" />

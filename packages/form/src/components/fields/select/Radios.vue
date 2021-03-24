@@ -2,20 +2,19 @@
     <div :class="{ 'card card-body form-control':root }">
         <div class="row gy-1 gx-3" :class="inline ? 'row-cols-auto' : 'row-cols-1'">
             <template v-for="(option, index) in options">
-                <div class="col">
-                    <div class="SharpSelect__item" :key="option.id">
+                <div class="col" :key="option.id">
+                    <div class="form-check mb-0">
                         <input type="radio"
-                            class="SharpRadio"
+                            class="form-check-input"
                             tabindex="0"
-                            :id="`${uniqueIdentifier}${index}`"
+                            :id="`${uniqueIdentifier}.${index}`"
                             :checked="isSelected(option)"
                             :value="option.id"
                             :disabled="readOnly"
                             :name="uniqueIdentifier"
                             @change="handleRadioChanged(option)"
                         >
-                        <label class="SharpRadio__label" :for="`${uniqueIdentifier}${index}`">
-                            <span class="SharpRadio__appearance"></span>
+                        <label class="form-check-label" :for="`${uniqueIdentifier}.${index}`">
                             {{ labels[option.id] }}
                         </label>
                     </div>

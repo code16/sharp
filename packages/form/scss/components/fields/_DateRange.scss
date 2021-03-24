@@ -5,16 +5,17 @@
   .el-range__close-icon {
     display: none;
     font-weight: normal;
-    font-size: 16px;
+    font-size: 1rem;
     -webkit-font-smoothing: subpixel-antialiased;
     font-family: inherit!important;
+    font-style: normal;
     &::before {
       content: '×';
     }
   }
 
   .el-range-separator {
-    line-height: inherit;
+    line-height: 1;
   }
 
   &.is-active {
