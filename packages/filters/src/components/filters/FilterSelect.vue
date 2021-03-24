@@ -30,10 +30,10 @@
             @close="close"
         />
 
-        <FilterControl :label="label" no-caret @click="handleClick">
+        <FilterControl :label="label" @click="handleClick">
             <!-- value text & tags -->
             <Select
-                class="SharpFilterSelect__select"
+                class="SharpFilterSelect__select dropdown-toggle text-wrap"
                 :value="value"
                 :options="values"
                 :multiple="multiple"

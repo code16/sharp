@@ -10,7 +10,6 @@
 
   .form-control {
     font-size: inherit;
-    padding-right: 1.5rem;
   }
 
   .multiselect__tags-wrap {
@@ -124,6 +123,7 @@
       &__single {
         font-weight: bold;
         font-size: .8125rem;
+        margin-right: 0.25rem;
       }
 
       &__tags {

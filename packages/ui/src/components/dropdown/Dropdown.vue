@@ -19,14 +19,12 @@
 </template>
 
 <script>
-    import DropdownArrow from './Arrow';
     import { BDropdown } from 'bootstrap-vue';
     import Button from "../Button"
 
     export default {
         name: 'SharpDropdown',
         components: {
-            DropdownArrow,
             BDropdown,
         },
         props: {
