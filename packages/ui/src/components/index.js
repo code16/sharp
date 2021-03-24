@@ -1,7 +1,6 @@
 export { default as ActionBar } from './ActionBar';
 export { default as Breadcrumb } from './Breadcrumb';
 export { default as Button } from './Button';
-export { default as Card } from './Card';
 export { default as ClearButton } from './ClearButton';
 export { default as CollapsibleItem } from './nav/CollapsibleItem';
 export { default as DataList } from './DataList';

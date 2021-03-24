@@ -3,7 +3,7 @@
         <div class="input-group input-group-sm">
             <template v-if="icon">
                 <div class="input-group-text">
-                    <i class="fa fa-sm" :class="icon" style="opacity: .75"></i>
+                    <i class="fa fa-sm" :class="icon" style="opacity: .75; font-size: .75rem"></i>
                 </div>
             </template>
 

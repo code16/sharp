@@ -1,5 +1,5 @@
 <template>
-    <div class="action-bar mb-2">
+    <div class="action-bar">
         <template v-if="hasOuterTitle">
             <div class="mb-2">
                 <slot />
@@ -8,11 +8,11 @@
         <template v-if="ready && barVisible">
             <div class="row">
                 <template v-if="hasLeftControls">
-                    <div class="col-sm">
+                    <div class="col-sm mb-2">
                         <template v-if="!reorderActive">
-                            <div class="row g-2 gx-md-3">
+                            <div class="row gy-1 gx-2 gx-md-3">
                                 <template v-for="filter in filters">
-                                    <div class="col-auto">
+                                    <div class="col-auto mb-1">
                                         <div class="action-bar__element">
                                             <FilterDropdown
                                                 class="h-100"
@@ -25,7 +25,7 @@
                                     </div>
                                 </template>
                                 <template v-if="canSearch">
-                                    <div class="col-auto">
+                                    <div class="col-auto mb-1">
                                         <div class="action-bar__element">
                                             <Search
                                                 class="h-100"
@@ -43,13 +43,13 @@
                     </div>
                 </template>
                 <template v-else>
-                    <div class="col-sm align-self-center">
+                    <div class="col-sm align-self-end">
                         <slot />
                     </div>
                 </template>
 
                 <template v-if="hasRightControls && !collapsed">
-                    <div class="col-sm-auto">
+                    <div class="col-sm-auto mb-2">
                         <div class="row flex-nowrap justify-content-end g-2 gx-md-3">
                             <template v-if="canReorder">
                                 <div class="col-auto">

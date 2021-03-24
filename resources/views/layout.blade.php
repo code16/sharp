@@ -11,8 +11,6 @@
     <link rel="stylesheet" href="{{ mix('vendors.css', '/vendor/sharp') }}">
     <link rel="stylesheet" href="{{ mix('sharp.css', '/vendor/sharp') }}">
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Karla:wght@600">
-
     <x-sharp-root-styles />
 
     {!! \Illuminate\Support\Arr::get($injectedAssets ?? [], 'head') !!}

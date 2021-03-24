@@ -52,15 +52,15 @@
         > .SharpForm__field-header {
           position: sticky;
           top: var(--navbar-height);
-          z-index: $zindex-field-header-sticky;
           padding-top: 1rem;
-          background-color: white;
           padding-left: .5rem;
           padding-right: .5rem;
           margin-left: -.5rem;
           margin-right: -.5rem;
           &.stuck {
+            z-index: $zindex-field-header-sticky;
             box-shadow: $box-shadow-sm;
+            background-color: white;
             border-bottom: 1px solid $border-color;
           }
         }
@@ -78,20 +78,15 @@
   }
 
   &__form-item--danger {
-    .form-control, .card--field {
+    .form-control {
       @extend .is-invalid;
-    }
-    .SharpForm__form-requirement {
-      max-height: rem(200px);
-      background: rgba($support-01, .1);
-      margin: 0;
-      padding: .5rem 1rem;
     }
   }
 
-
   .invalid-feedback {
     font-weight: 600;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
   }
 
   .form-text {

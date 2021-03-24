@@ -9,6 +9,10 @@
     margin-top: .125rem;
   }
 
+  .dropdown-menu {
+    min-width: 12rem;
+  }
+
   &--has-state {
     .dropdown-menu {
       min-width: 14rem;

@@ -67,9 +67,16 @@
   }
 }
 
-.input-group-sm > .form-select {
-  padding-right: $form-select-padding-x + $form-select-indicator-padding - .5rem;
+.input-group-sm {
+  > .form-select {
+    padding-right: $form-select-padding-x + $form-select-indicator-padding - .5rem;
+  }
+  > .input-group-text {
+    font-size: .75rem;
+    line-height: 1.7;
+  }
 }
+
 
 .btn,
 .nav-pills .nav-link,

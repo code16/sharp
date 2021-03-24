@@ -1,7 +1,11 @@
 <template>
-    <div class="d-flex align-items-center">
-        <i class="SharpTextIcon__icon fa" :class="icon"></i>
-        <input class="SharpText SharpTextIcon" :value="value" @change="handleChanged">
+    <div class="SharpTextIcon">
+        <div class="input-group">
+            <div class="input-group-text bg-transparent">
+                <i class="SharpTextIcon__icon fa" :class="icon"></i>
+            </div>
+            <input class="form-control" :value="value" @change="handleChanged">
+        </div>
     </div>
 </template>
 
@@ -19,11 +23,8 @@
     }
 </script>
 
-<style type="text/css" scoped>
-    .SharpTextIcon {
-        flex-grow: 1;
-    }
+<style scoped>
     .SharpTextIcon__icon {
-        margin-right: .5em;
+        font-size: 1.125em;
     }
 </style>

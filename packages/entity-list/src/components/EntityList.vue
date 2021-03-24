@@ -30,7 +30,7 @@
                         <template v-if="hasEntityCommands">
                             <div class="d-flex justify-content-end">
                                 <CommandsDropdown
-                                    :commands="allowedEntityCommands"
+                                    :commands="dropdownEntityCommands"
                                     @select="handleEntityCommandRequested"
                                 >
                                     <template v-slot:text>
@@ -239,6 +239,7 @@
                     filters: this.filters,
                     filtersValues: this.filtersValues,
                     forms: this.multiforms,
+                    primaryCommand: this.allowedEntityCommands.flat().find(command => command.primary),
                     reorderActive: this.reorderActive,
                     canCreate: this.canCreate,
                     canReorder: this.canReorder,
@@ -247,6 +248,7 @@
             },
             actionBarListeners() {
                 return {
+                    'command': this.handleEntityCommandRequested,
                     'search-change': this.handleSearchChanged,
                     'search-submit': this.handleSearchSubmitted,
                     'filter-change': this.handleFilterChanged,
@@ -263,8 +265,12 @@
                 return (this.config.commands.entity || [])
                     .map(group => group.filter(command => this.isEntityCommandAllowed(command)))
             },
+            dropdownEntityCommands() {
+                return this.allowedEntityCommands
+                    .map(group => group.filter(command => !command.primary))
+            },
             hasEntityCommands() {
-                return this.allowedEntityCommands.flat().length > 0;
+                return this.dropdownEntityCommands.flat().length > 0;
             },
             multiforms() {
                 return this.forms ? Object.values(this.forms) : null;

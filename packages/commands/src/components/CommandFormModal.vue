@@ -10,6 +10,7 @@
             <Form
                 v-if="visible"
                 :props="command.form"
+                :show-alert="false"
                 independant
                 ignore-authorizations
                 @loading="handleLoadingChanged"

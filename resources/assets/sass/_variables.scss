@@ -16,13 +16,7 @@ $brand-01-light: #68829E;
 
 $ui-primary-color: hsl(var(--bs-primary-h), var(--bs-primary-s), 20%);
 $ui-font-size: .9375rem;
-
-$h1-font-size: 1.75rem;
-$h2-font-size: 1.5rem;
-$h3-font-size: 1.25rem;
-$h4-font-size: 1.125rem;
-$h5-font-size: 1rem;
-$h6-font-size: .875rem;
+$ui-title-font-weight: 600;
 
 /**
   Bootstrap variables
@@ -32,7 +26,7 @@ $primary: #004c9b;
 $info: #5aaafa;
 $success: #3dc322;
 
-$body-bg: $ui-02;
+$body-bg: hsl(var(--bs-primary-h), 20%, 95%);
 $body-color: #152935;
 
 $enable-negative-margins: true;
@@ -56,8 +50,9 @@ $btn-border-width: 1px;
 $btn-font-weight: 500;
 $btn-font-size-sm: .75rem;
 $btn-font-size: .875rem;
-$btn-font-size-lg: 1rem;
+$btn-font-size-lg: .9375rem;
 $btn-line-height: 1.45;
+
 
 $breadcrumb-bg: transparent;
 $breadcrumb-padding-x: 0;
@@ -68,13 +63,14 @@ $caret-width: .3em;
 $caret-spacing: $caret-width * 1.5;
 $caret-vertical-align: .15em;
 
-$dropdown-min-width: 12rem;
+$dropdown-min-width: 10rem;
 $dropdown-border-color: rgba(0,0,0,.075);
 
 $input-font-size: .875rem;
 $input-padding-y: .5rem;
 
-$link-color: $primary;
+$link-color: hsl(var(--bs-primary-h), var(--bs-primary-s), 30%);
+$link-hover-color: hsl(var(--bs-primary-h), var(--bs-primary-s), 15%);
 $link-decoration: underline;
 
 $input-border-radius: $border-radius;
@@ -112,7 +108,7 @@ $form-text-margin-top: .5rem;
 **/
 
 $leftnav-width: 14rem;
-$leftnav-collapsed-width: 3rem;
+$leftnav-collapsed-width: 3.25rem;
 
 $breakpoint-fixed-menu: 'lg';
 $form-item-margin-bottom : 1.5rem;
@@ -120,3 +116,5 @@ $form-item-margin-bottom : 1.5rem;
 $zindex-field-header-sticky: 50;
 
 $form-control-clear-button-padding: 2rem;
+
+$transition-leftnav-collapse: width ease 300ms;

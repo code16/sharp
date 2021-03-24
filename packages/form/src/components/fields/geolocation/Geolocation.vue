@@ -9,10 +9,7 @@
             </Button>
         </template>
         <template v-else>
-            <Card light class="SharpModule--closeable"
-                :has-close="!readOnly"
-                @close-click="handleRemoveButtonClicked"
-            >
+            <div class="card card-body form-control">
                 <div class="row">
                     <div class="col-7">
                         <component
@@ -43,7 +40,7 @@
                         </div>
                     </div>
                 </div>
-            </Card>
+            </div>
         </template>
         <Modal
             :title="modalTitle"
@@ -72,7 +69,7 @@
 </template>
 
 <script>
-    import { Modal, Card, Button } from "sharp-ui";
+    import { Modal, Button } from "sharp-ui";
     import { Localization } from 'sharp/mixins';
 
     import { getMapByProvider, loadMapProvider } from "./maps";
@@ -93,7 +90,6 @@
 
         components: {
             GeolocationEdit,
-            Card,
             Button,
             Modal,
         },

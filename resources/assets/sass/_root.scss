@@ -6,7 +6,8 @@
   --bs-primary-hsl: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--bs-primary-l));
 
   // lightened navbar color
-  --accent-bg-l: calc(var(--bs-primary-l) + 20%);
+  --accent-bg-amount: 20%;
+  --accent-bg-l: calc(var(--bs-primary-l) + var(--accent-bg-amount));
   --accent-bg: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--accent-bg-l));
 
   --l-threshold: 80%;

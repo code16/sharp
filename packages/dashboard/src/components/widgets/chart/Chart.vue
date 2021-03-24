@@ -1,7 +1,7 @@
 <template>
     <div>
         <template v-if="title">
-            <h2 class="my-2">{{title}}</h2>
+            <h2 class="SharpWidget__title mb-2 mt-3">{{title}}</h2>
         </template>
         <div class="SharpWidgetChart" :class="classes" ref="chart">
             <template v-if="hasRatio">

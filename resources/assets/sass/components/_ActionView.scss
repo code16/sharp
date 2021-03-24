@@ -1,6 +1,7 @@
 .SharpActionView {
-  transition: padding 300ms $bx--standard-easing;
-  padding-left: 3rem;
+  transition: $transition-leftnav-collapse;
+  transition-property: padding-left;
+  padding-left: $leftnav-collapsed-width;
   padding-bottom: 3rem;
   min-height: 100vh;
 
@@ -16,7 +17,7 @@
 @include media-breakpoint-up($breakpoint-fixed-menu) {
   .leftNav--collapsed {
     .SharpActionView {
-      padding-left: 3rem;
+      padding-left: $leftnav-collapsed-width;
     }
   }
 }
