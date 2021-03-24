@@ -23,11 +23,8 @@
     margin-bottom: $form-item-margin-bottom;
   }
 
-  .SharpSelect--dropdown, .SharpTags {
+  .SharpSelect--dropdown {
     @extend .form-select;
-    .multiselect__select {
-      display: none;
-    }
   }
 
   &__form-item {

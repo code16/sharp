@@ -14,7 +14,10 @@
         <template v-else-if="ready">
             <Multiselect
                 class="SharpAutocomplete__multiselect form-control"
-                :class="{ 'SharpAutocomplete__multiselect--hide-dropdown':hideDropdown }"
+                :class="{
+                    'form-select': !this.isRemote,
+                    'SharpAutocomplete__multiselect--hide-dropdown': hideDropdown,
+                }"
                 :value="value"
                 :options="suggestions"
                 :track-by="itemIdAttribute"

@@ -1,6 +1,6 @@
 <template>
     <Multiselect
-        class="SharpTags"
+        class="SharpTags form-select"
         :value="tags"
         :options="indexedOptions"
         :placeholder="dynamicPlaceholder"

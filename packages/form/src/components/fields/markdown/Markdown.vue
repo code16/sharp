@@ -316,6 +316,11 @@
                 });
                 simplemde.options.toolbar = items;
                 const bar = simplemde.createToolbar();
+
+                if(!bar) {
+                    return;
+                }
+
                 bar.classList.remove('editor-toolbar');
                 bar.classList.add('card-header');
                 bar.classList.add('editor__toolbar');

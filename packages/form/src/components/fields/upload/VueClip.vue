@@ -12,18 +12,22 @@
                         <img :src="imageSrc" @load="handleImageLoaded">
                     </div>
                     <div class="SharpUpload__infos" :class="{[modifiers.compacted?'col-8 col-sm-9 col-xl-10':'col-8 col-md-8']:showThumbnail}">
-                        <div class="mb-3 text-truncate">
-                            <label class="SharpUpload__filename">{{ fileName }}</label>
+                        <div class="mb-3">
+                            <label class="SharpUpload__filename text-truncate d-block">{{ fileName }}</label>
                             <div class="SharpUpload__info mt-2">
-                                <template v-if="size">
-                                    <span class="mr-2">{{ size }}</span>
-                                </template>
-                                <template v-if="canDownload">
-                                    <a class="SharpUpload__download-link" :href="downloadUrl" :download="fileName">
-                                        <i class="fas fa-download"></i>
-                                        {{ l('form.upload.download_link') }}
-                                    </a>
-                                </template>
+                                <div class="row g-2">
+                                    <template v-if="size">
+                                        <div class="col-auto">{{ size }}</div>
+                                    </template>
+                                    <template v-if="canDownload">
+                                        <div class="col-auto">
+                                            <a class="SharpUpload__download-link" :href="downloadUrl" :download="fileName">
+                                                <i class="fas fa-download"></i>
+                                                {{ l('form.upload.download_link') }}
+                                            </a>
+                                        </div>
+                                    </template>
+                                </div>
                             </div>
                             <transition name="SharpUpload__progress">
                                 <div class="SharpUpload__progress mt-2" v-show="inProgress">

@@ -151,6 +151,7 @@
     button {
       opacity: 0;
       margin-left:-.95rem;
+      transition: opacity .25s ease-in-out;
       &:focus {
         opacity: 1;
       }
