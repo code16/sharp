@@ -1,11 +1,9 @@
 <template>
-    <div class="SharpCheck ">
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" :id="resolvedId" :checked="value" :disabled="readOnly" @change="handleCheck">
-            <label class="form-check-label" :for="resolvedId">
-                {{ text }}
-            </label>
-        </div>
+    <div class="SharpCheck form-check">
+        <input class="form-check-input" type="checkbox" :id="resolvedId" :checked="value" :disabled="readOnly" @change="handleCheck">
+        <label class="form-check-label" :for="resolvedId">
+            {{ text }}
+        </label>
     </div>
 </template>
 

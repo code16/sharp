@@ -22,17 +22,20 @@
             </div>
         </div>
 
-        <Field
-            v-bind="$props"
-            :unique-identifier="mergedErrorIdentifier"
-            :field-config-identifier="mergedConfigIdentifier"
-            @error="setError"
-            @ok="setOk"
-            @clear="clear"
-            @blur="handleBlur"
-            @locale-change="handleLocaleChanged"
-            ref="field"
-        />
+        <div class="SharpForm__field-content">
+            <Field
+                v-bind="$props"
+                :unique-identifier="mergedErrorIdentifier"
+                :field-config-identifier="mergedConfigIdentifier"
+                @error="setError"
+                @ok="setOk"
+                @clear="clear"
+                @blur="handleBlur"
+                @locale-change="handleLocaleChanged"
+                ref="field"
+            />
+        </div>
+
         <template v-if="stateMessage">
             <div class="invalid-feedback d-block">{{ stateMessage }}</div>
         </template>

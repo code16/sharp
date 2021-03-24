@@ -10,6 +10,7 @@
                     :options="config.state.values"
                     size="sm"
                     @change="handleStateChanged"
+                    @update:visible="handleSelecting"
                 >
                     <template v-slot="{ on }">
                         <Button variant="" small :disabled="stateDisabled" v-on="on">
@@ -36,7 +37,7 @@
                         {{ l('entity_list.commands.instance.label') }}
                     </template>
                     <template v-if="hasState" v-slot:prepend>
-                        <DropdownItem :disabled="stateDisabled" @click="stateModalVisible = true">
+                        <DropdownItem :disabled="stateDisabled" @click="handleStateDropdownClicked">
                             <div class="row align-items-center gx-2 flex-nowrap">
                                 <div class="col-auto">
                                     <StateIcon :color="stateOptions.color" />
@@ -99,6 +100,13 @@
             handleCommandRequested(command) {
                 this.$emit('command', command);
             },
+            handleSelecting(selecting) {
+                this.$emit('selecting', selecting);
+            },
+            handleStateDropdownClicked() {
+                this.$emit('selecting', true);
+                this.stateModalVisible = true;
+            }
         },
     }
 </script>

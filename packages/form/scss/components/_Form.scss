@@ -63,6 +63,15 @@
         }
       }
     }
+
+    &:not(&--type-check) {
+      > .SharpForm__field-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 2.5rem;
+      }
+    }
   }
 
   &__label {

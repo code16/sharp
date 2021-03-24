@@ -93,6 +93,7 @@
             },
             handleButtonClicked() {
                 this.modalVisible = true;
+                this.$emit('update:visible', true);
             },
             handleVisibleChanged(visible) {
                 this.modalVisible = visible;

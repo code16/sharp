@@ -22,9 +22,9 @@
                 <a class="SharpDataList__row-link" :href="url"></a>
             </template>
         </div>
-        <template v-if="$slots.append">
+        <template v-if="$scopedSlots.append">
             <div class="SharpDataList__row-append align-self-center">
-                <slot name="append" />
+                <slot name="append" v-bind="this" />
             </div>
         </template>
         <template v-else>
@@ -45,6 +45,16 @@
             header: Boolean,
             highlight: Boolean,
         },
+        data() {
+            return {
+                isHighlighted: this.highlight,
+            }
+        },
+        watch: {
+            highlight() {
+                this.isHighlighted = this.highlight;
+            }
+        },
         computed: {
             hasLink() {
                 return !!this.url;
@@ -53,7 +63,7 @@
                 return {
                     'SharpDataList__row--header': this.header,
                     'SharpDataList__row--disabled': !this.header && !this.hasLink,
-                    'SharpDataList__row--highlight': this.highlight,
+                    'SharpDataList__row--highlight': this.isHighlighted,
                     'SharpDataList__row--full-width': this.isFullWidth,
                 }
             },
@@ -69,6 +79,9 @@
                     'd-none d-md-flex': column.hideOnXS,
                 };
             },
+            toggleHighlight(highlight) {
+                this.isHighlighted = highlight;
+            }
         }
     }
 </script>

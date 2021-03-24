@@ -44,7 +44,7 @@
 
                     <template v-slot:item="{ item }">
                         <DataListRow :url="instanceUrl(item)" :columns="columns" :highlight="instanceIsFocused(item)" :row="item">
-                            <template v-if="hasActionsColumn" v-slot:append>
+                            <template v-if="hasActionsColumn" v-slot:append="props">
                                 <EntityActions
                                     :config="config"
                                     :has-state="instanceHasState(item)"
@@ -55,6 +55,7 @@
                                     :commands="instanceCommands(item)"
                                     @command="handleInstanceCommandRequested(item, $event)"
                                     @state-change="handleInstanceStateChanged(item, $event)"
+                                    @selecting="props.toggleHighlight($event)"
                                 />
                             </template>
                         </DataListRow>

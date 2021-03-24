@@ -79,7 +79,7 @@
 
             <template v-if="showAddButton" v-slot:footer>
                 <div :class="{ 'mt-3': list.length > 0 }">
-                    <Button class="SharpList__add-button" text block @click="add" :key="-1">
+                    <Button class="SharpList__add-button" :disabled="dragActive" text block @click="add" :key="-1">
                         ＋ {{ addText }}
                     </Button>
                 </div>
@@ -175,7 +175,7 @@
             showAddButton() {
                 return this.addable &&
                     (this.list.length < this.maxItemCount || !this.maxItemCount) &&
-                    !this.disabled;
+                    !this.readOnly;
             },
             showInsertButton() {
                 return this.showAddButton && this.sortable && !this.disabled;
