@@ -74,13 +74,13 @@ function buildListConfig()
 
 The first parameter is a key which should be the name of the attribute.
 
-
 ## Authorizations
 
 Entity states can declare an authorization check very much like Instance Commands:
 
 ```php
-public function authorizeFor($instanceId): bool {
+public function authorizeFor($instanceId): bool 
+{
     return Spaceship::findOrFail($instanceId)->owner_id == sharp_user()->id;
 }
 ```
