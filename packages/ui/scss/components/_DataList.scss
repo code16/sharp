@@ -53,6 +53,8 @@
     //display: table-row-group;
     vertical-align: middle;
     position: relative;
+
+    border-radius: $list-group-border-radius;
   }
 
   &__thead {

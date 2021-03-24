@@ -57,6 +57,7 @@ exports[`DataList mount header: sort selected 1`] = `
 
 exports[`DataList mount items 1`] = `
 <div class="SharpDataList">
+	<!---->
 	<div class="SharpDataList__table SharpDataList__table--border">
 		<div class="SharpDataList__thead">
 			<div row="[object Object]" header="true" class="MOCKED_SharpDataListRow"></div>
@@ -73,6 +74,7 @@ exports[`DataList mount items 1`] = `
 
 exports[`DataList mount items slot 1`] = `
 <div class="SharpDataList">
+	<!---->
 	<div class="SharpDataList__table SharpDataList__table--border">
 		<div class="SharpDataList__thead">
 			<div row="[object Object]" header="true" class="MOCKED_SharpDataListRow"></div>

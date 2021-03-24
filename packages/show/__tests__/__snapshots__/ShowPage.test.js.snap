@@ -3,7 +3,7 @@
 exports[`show page can mount 1`] = `
 <div class="ShowPage">
 	<div class="container">
-		<!---->
+		<actionbarshow-stub></actionbarshow-stub>
 	</div>
 	<commandformmodal-stub></commandformmodal-stub>
 	<commandviewpanel-stub></commandviewpanel-stub>
@@ -14,7 +14,9 @@ exports[`show page can mount hidden section 1`] = `
 <div class="ShowPage">
 	<div class="container">
 		<actionbarshow-stub formurl="formUrl"></actionbarshow-stub>
-		<section-stub section="[object Object]" fieldsrowclass="function () { [native code] }" layout="card" class="ShowPage__section" style="display: none;"></section-stub>
+		<div class="mt-4 pt-2">
+			<section-stub section="[object Object]" fieldsrowclass="function () { [native code] }" layout="card" class="ShowPage__section" style="display: none;"></section-stub>
+		</div>
 	</div>
 	<commandformmodal-stub></commandformmodal-stub>
 	<commandviewpanel-stub></commandviewpanel-stub>
@@ -25,7 +27,9 @@ exports[`show page can mount with fields 1`] = `
 <div class="ShowPage">
 	<div class="container">
 		<actionbarshow-stub formurl="formUrl"></actionbarshow-stub>
-		<section-stub section="[object Object]" fieldsrowclass="function () { [native code] }" layout="card" class="ShowPage__section"></section-stub>
+		<div class="mt-4 pt-2">
+			<section-stub section="[object Object]" fieldsrowclass="function () { [native code] }" layout="card" class="ShowPage__section"></section-stub>
+		</div>
 	</div>
 	<commandformmodal-stub></commandformmodal-stub>
 	<commandviewpanel-stub></commandviewpanel-stub>
@@ -36,7 +40,9 @@ exports[`show page can mount with no container section 1`] = `
 <div class="ShowPage">
 	<div class="container">
 		<actionbarshow-stub formurl="formUrl"></actionbarshow-stub>
-		<section-stub section="[object Object]" fieldsrowclass="function () { [native code] }" layout="contents" class="ShowPage__section"></section-stub>
+		<div class="mt-4 pt-2">
+			<section-stub section="[object Object]" fieldsrowclass="function () { [native code] }" layout="contents" class="ShowPage__section"></section-stub>
+		</div>
 	</div>
 	<commandformmodal-stub></commandformmodal-stub>
 	<commandviewpanel-stub></commandviewpanel-stub>
@@ -47,7 +53,9 @@ exports[`show page can mount with unknown field 1`] = `
 <div class="ShowPage">
 	<div class="container">
 		<actionbarshow-stub formurl="formUrl"></actionbarshow-stub>
-		<section-stub section="[object Object]" fieldsrowclass="function () { [native code] }" layout="card" class="ShowPage__section"></section-stub>
+		<div class="mt-4 pt-2">
+			<section-stub section="[object Object]" fieldsrowclass="function () { [native code] }" layout="card" class="ShowPage__section"></section-stub>
+		</div>
 	</div>
 	<commandformmodal-stub></commandformmodal-stub>
 	<commandviewpanel-stub></commandviewpanel-stub>

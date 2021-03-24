@@ -52,23 +52,7 @@ describe('modal', ()=>{
                 static: true,
             }
         });
-        wrapper.find('.modal').element.innerHTML = '';
         expect(wrapper.html()).toMatchSnapshot();
-    });
-
-    test('close', async () => {
-        const wrapper = mount(SharpModal, {
-            propsData: {
-                static: true,
-            },
-            sync:false,
-        });
-        wrapper.setMethods({
-            hide: jest.fn()
-        });
-        await wrapper.vm.$nextTick();
-        wrapper.find('.SharpModal__close').trigger('click');
-        expect(wrapper.vm.hide).toHaveBeenCalled();
     });
 
     test('pass props', () => {
@@ -82,7 +66,6 @@ describe('modal', ()=>{
             id: 'modal-id',
             visible: false,
             okOnly: false,
-            title: '',
             noEnforceFocus: true,
         });
         wrapper.setProps({

@@ -1,12 +1,12 @@
 <template>
     <div class="SharpForm" data-popover-boundary>
-        <template v-if="ready">
-            <slot
-                name="action-bar"
-                :props="actionBarProps"
-                :listeners="actionBarListeners"
-            />
+        <slot
+            name="action-bar"
+            :props="actionBarProps"
+            :listeners="actionBarListeners"
+        />
 
+        <template v-if="ready">
             <template v-if="hasErrors && showAlert">
                 <div class="alert alert-danger SharpForm__alert" role="alert">
                     <div class="fw-bold">{{ l('form.validation_error.title') }}</div>
@@ -185,6 +185,9 @@
                     .some(uploading => !!uploading);
             },
             actionBarProps() {
+                if(!this.ready) {
+                    return null;
+                }
                 return {
                     showSubmitButton: this.isCreation
                         ? !!this.authorizations.create

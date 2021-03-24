@@ -46,6 +46,9 @@
                     </template>
                 </div>
             </template>
+            <template v-else>
+                <ActionBarShow />
+            </template>
         </div>
 
         <CommandFormModal :command="currentCommand" ref="commandForm" />

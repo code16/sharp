@@ -1,5 +1,5 @@
 <template>
-    <div class="SharpActionBar" v-if="ready">
+    <div class="SharpActionBar">
         <div class="SharpActionBar__bar sticky-top" ref="bar">
             <div class="container">
                 <div class="row mx-n2">
@@ -35,10 +35,6 @@
     export default {
         name: 'SharpActionBar',
         props: {
-            ready: {
-                type: Boolean,
-                default: true,
-            },
             container: Boolean,
             rightClass: String,
         },
@@ -49,8 +45,6 @@
         },
         mounted() {
             this.layout(this.$refs.bar.getBoundingClientRect());
-
-            console.log(this.$refs.bar.getBoundingClientRect());
 
             if(window.ResizeObserver) {
                 (new ResizeObserver(entries => {

@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DataListRow mount 1`] = `
-<div class="SharpDataList__row container SharpDataList__row--disabled">
+<div class="SharpDataList__row container SharpDataList__row--disabled SharpDataList__row--full-width">
 	<div class="SharpDataList__cols">
 		<div class="row mx-n2 mx-md-n3"></div>
 		<!---->
@@ -21,7 +21,7 @@ exports[`DataListRow mount append 1`] = `
 `;
 
 exports[`DataListRow mount cell slot 1`] = `
-<div class="SharpDataList__row container SharpDataList__row--disabled">
+<div class="SharpDataList__row container SharpDataList__row--disabled SharpDataList__row--full-width">
 	<div class="SharpDataList__cols">
 		<div class="row mx-n2 mx-md-n3">
 			<div class="px-2 px-md-3 SharpDataList__td colClasses">
@@ -35,7 +35,7 @@ exports[`DataListRow mount cell slot 1`] = `
 `;
 
 exports[`DataListRow mount columns 1`] = `
-<div class="SharpDataList__row container SharpDataList__row--disabled">
+<div class="SharpDataList__row container SharpDataList__row--disabled SharpDataList__row--full-width">
 	<div class="SharpDataList__cols">
 		<div class="row mx-n2 mx-md-n3">
 			<div class="px-2 px-md-3 SharpDataList__td colClasses">
@@ -54,7 +54,7 @@ exports[`DataListRow mount columns 1`] = `
 `;
 
 exports[`DataListRow mount header 1`] = `
-<div class="SharpDataList__row container SharpDataList__row--header">
+<div class="SharpDataList__row container SharpDataList__row--header SharpDataList__row--full-width">
 	<div class="SharpDataList__cols">
 		<div class="row mx-n2 mx-md-n3"></div>
 		<!---->
@@ -64,7 +64,7 @@ exports[`DataListRow mount header 1`] = `
 `;
 
 exports[`DataListRow mount header: columns 1`] = `
-<div class="SharpDataList__row container SharpDataList__row--header">
+<div class="SharpDataList__row container SharpDataList__row--header SharpDataList__row--full-width">
 	<div class="SharpDataList__cols">
 		<div class="row mx-n2 mx-md-n3">
 			<div class="px-2 px-md-3 SharpDataList__th colClasses">
@@ -78,7 +78,7 @@ exports[`DataListRow mount header: columns 1`] = `
 `;
 
 exports[`DataListRow mount with url 1`] = `
-<div class="SharpDataList__row container">
+<div class="SharpDataList__row container SharpDataList__row--full-width">
 	<div class="SharpDataList__cols">
 		<div class="row mx-n2 mx-md-n3"></div>
 		<a class="SharpDataList__row-link" href="http://example.org"></a>

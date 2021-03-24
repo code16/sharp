@@ -3,7 +3,7 @@
 exports[`show section can mount 1`] = `
 <div class="ShowSection ShowSection--layout-card">
 	<div>
-		<h2 class="ShowSection__title mb-2">Section title</h2>
+		<h2 class="ShowSection__title">Section title</h2>
 		<div class="ShowSection__content">
 			<div class="MOCKED_SharpGrid ShowSection__grid">
 				<div class="MOCKED_SharpGrid ShowPage__fields-grid row-class"></div>

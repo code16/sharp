@@ -1,10 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`action-bar can mount non ready ActionBar 1`] = `undefined`;
-
-exports[`action-bar can mount ready ActionBar 1`] = `
+exports[`action-bar can mount ActionBar 1`] = `
 <div class="SharpActionBar">
-	<div class="SharpActionBar__bar">
+	<div class="SharpActionBar__bar sticky-top">
 		<div class="container">
 			<div class="row mx-n2">
 				<div class="col-auto col-md left px-2 my-1 my-sm-0"></div>
@@ -25,7 +23,7 @@ exports[`action-bar can mount ready ActionBar 1`] = `
 
 exports[`action-bar can mount with slots ActionBar 1`] = `
 <div class="SharpActionBar">
-	<div class="SharpActionBar__bar">
+	<div class="SharpActionBar__bar sticky-top">
 		<div class="container">
 			<div class="row mx-n2">
 				<div class="col-auto col-md left px-2 my-1 my-sm-0">

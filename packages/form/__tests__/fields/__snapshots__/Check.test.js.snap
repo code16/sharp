@@ -2,15 +2,10 @@
 
 exports[`check-field can mount "read only" Check field 1`] = `
 <div id="app">
-	<div class="SharpCheck">
-		<label class="SharpCheck__label">
-			<input type="checkbox" disabled="disabled" class="SharpCheck__input">
-			<span class="SharpCheck__appearance">
-				<svg width="12" height="9" viewBox="0 0 12 9" fill-rule="evenodd" class="SharpCheck__checkmark">
-					<path d="M4.1 6.1L1.4 3.4 0 4.9 4.1 9l7.6-7.6L10.3 0z"></path>
-				</svg>
-			</span>
-			<span class="SharpCheck__label-text"></span>
+	<div class="SharpCheck form-check">
+		<input type="checkbox" disabled="disabled" class="form-check-input">
+		<label class="form-check-label">
+
 		</label>
 	</div>
 </div>
@@ -18,15 +13,10 @@ exports[`check-field can mount "read only" Check field 1`] = `
 
 exports[`check-field can mount Check field 1`] = `
 <div id="app">
-	<div class="SharpCheck">
-		<label class="SharpCheck__label">
-			<input type="checkbox" class="SharpCheck__input">
-			<span class="SharpCheck__appearance">
-				<svg width="12" height="9" viewBox="0 0 12 9" fill-rule="evenodd" class="SharpCheck__checkmark">
-					<path d="M4.1 6.1L1.4 3.4 0 4.9 4.1 9l7.6-7.6L10.3 0z"></path>
-				</svg>
-			</span>
-			<span class="SharpCheck__label-text"></span>
+	<div class="SharpCheck form-check">
+		<input type="checkbox" class="form-check-input">
+		<label class="form-check-label">
+
 		</label>
 	</div>
 </div>

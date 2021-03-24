@@ -10,7 +10,15 @@ describe('left-nav', ()=>{
     function createWrapper(options) {
         const localVue = createLocalVue();
         localVue.use(Vuex);
-        let wrapper = mount(LeftNav, {
+
+        const store = new Vuex.Store({
+            modules: {
+                'global-filters': globalFiltersModule,
+            },
+        });
+        store.dispatch = jest.fn();
+
+        return mount(LeftNav, {
             slots: {
                 default: '<div>NAV CONTENT</div>'
             },
@@ -21,14 +29,9 @@ describe('left-nav', ()=>{
                 jest.spyOn(this, 'updateState');
             },
             localVue,
-            store: new Vuex.Store({
-                modules: {
-                    'global-filters': globalFiltersModule,
-                },
-            }),
+            store,
             ...options
         });
-        return wrapper;
     }
 
     test('can mount LeftNav', async ()=>{
