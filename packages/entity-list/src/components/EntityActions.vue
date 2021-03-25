@@ -13,7 +13,7 @@
                     @update:visible="handleSelecting"
                 >
                     <template v-slot="{ on }">
-                        <Button variant="" small :disabled="stateDisabled" v-on="on">
+                        <Button class="btn--outline-hover" variant="primary" small :disabled="stateDisabled" v-on="on">
                             <StateIcon :color="stateOptions.color" />
                         </Button>
                     </template>

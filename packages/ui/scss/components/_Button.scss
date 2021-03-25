@@ -131,13 +131,17 @@
   }
 }
 
-
 .btn-block {
   width: 100%;
 
   &:not(.btn-sm):not(.btn-lg) {
     border-radius: $border-radius-lg;
-    //padding-top: .5rem;
-    //padding-bottom: .5rem;
+  }
+}
+
+.btn--outline-hover {
+  background-color: transparent!important;
+  @include default {
+    border-color: transparent;
   }
 }

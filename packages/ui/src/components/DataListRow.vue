@@ -68,7 +68,7 @@
                 }
             },
             isFullWidth() {
-                return !this.$slots.append;
+                return !this.$scopedSlots.append;
             },
         },
         methods: {

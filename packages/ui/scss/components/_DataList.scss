@@ -102,7 +102,10 @@
     }
 
     &--highlight {
-      box-shadow: inset 3px 0 0 rgba($brand-02, .25);
+      box-shadow: inset 3px 0 0 hsla(var(--bs-primary-h), var(--bs-primary-s), 40%, .25);
+      .modal-open & {
+        box-shadow: inset 5px 0 0 hsla(var(--bs-primary-h), var(--bs-primary-s), 40%, .5);
+      }
     }
 
     &--full-width {
@@ -132,6 +135,10 @@
         width: 100%!important;
       }
     }
+  }
+
+  &__row-append {
+    position: relative;
   }
 
   &__th {
