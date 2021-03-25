@@ -66,23 +66,15 @@ div[class~="language-php"]:before {
 }
 
 a.sidebar-link {
-  &:hover {
-    color: $textColor !important;
-    background: $hoverColor;
-  }
   &.active {
-    color: $textColor!important;
-    background: $accentColor;
+    font-weight 700;
   }
 }
 
-.sidebar-sub-header {
+.sidebar-sub-headers {
   a.sidebar-link {
-    &:hover, &.active {
-      background: none;
-    }
-    &:hover {
-      color: darken($accentColor, 20%)!important;
+    &.active {
+      font-weight 600;
     }
   }
 }

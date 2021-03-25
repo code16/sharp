@@ -2,13 +2,15 @@
 
 .algolia-docsearch-suggestion {
   &--category-header {
-    background: $accentColor!important;
-    color: $textColor!important;
+    .algolia-docsearch-suggestion--highlight {
+      background-color: rgba(255, 255, 255, .375);
+      box-shadow: none;
+    }
   }
-  &--highlight {
-    color: $textColor!important;
-    background: lighten($accentColor, 85%)!important;
-  }
+}
+
+.algolia-search-wrapper .algolia-autocomplete .algolia-docsearch-suggestion--highlight {
+  color: $accentColor;
 }
 
 .aa-suggestion-title-separator {
