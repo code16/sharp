@@ -74,7 +74,7 @@
     import debounce from 'lodash/debounce';
     import Multiselect from 'vue-multiselect';
     import { CancelToken } from 'axios';
-    import { warn, lang, search } from 'sharp';
+    import { warn, lang, search, logError } from 'sharp';
     import { TemplateRenderer } from 'sharp/components';
     import { Loading, ClearButton,  multiselectUpdateScroll } from 'sharp-ui';
     import { Localization } from 'sharp/mixins';
@@ -266,7 +266,7 @@
             findLocalValue() {
                 if(!this.value || this.value[this.itemIdAttribute] == null) return null;
                 if(!this.localValues.some(this.itemMatchValue)) {
-                    error(`Autocomplete (key: ${this.fieldKey}) can't find local value matching : ${JSON.stringify(this.value)}`);
+                    logError(`Autocomplete (key: ${this.fieldKey}) can't find local value matching : ${JSON.stringify(this.value)}`);
                     return null;
                 }
                 return this.localValues.find(this.itemMatchValue);
