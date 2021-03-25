@@ -11,12 +11,17 @@ use Exception;
 abstract class EntityState extends InstanceCommand
 {
     protected array $states = [];
-
-    const PRIMARY_COLOR = "sharp_primary";
-    const SECONDARY_COLOR = "sharp_secondary";
-    const GRAY_COLOR = "sharp_gray";
-    const LIGHTGRAY_COLOR = "sharp_lightgray";
-    const DARKGRAY_COLOR = "sharp_darkgray";
+    
+    /** @deprecated  */
+    const PRIMARY_COLOR = "#5596E6";
+    /** @deprecated  */
+    const SECONDARY_COLOR = "#FD7400";
+    /** @deprecated  */
+    const GRAY_COLOR = "#8C9BA5";
+    /** @deprecated  */
+    const LIGHTGRAY_COLOR = "#EFF2F5";
+    /** @deprecated  */
+    const DARKGRAY_COLOR = "#394B54";
 
     public function states(): array
     {

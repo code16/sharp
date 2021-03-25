@@ -2,7 +2,7 @@
     <div class="SharpGlobalFilters">
         <template v-for="filter in filters">
             <FilterSelect
-                :label="filter.label"
+                :label="null"
                 :values="filter.values"
                 :value="filterValue(filter.key)"
                 :multiple="filter.multiple"

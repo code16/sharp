@@ -1,24 +1,27 @@
 <template>
-    <li class="SharpDropdown__item">
-        <a class="SharpDropdown__link" :class="customClass" href="" @mousedown.prevent="" @click.prevent="handleClick">
-            <slot></slot>
-        </a>
-    </li>
+    <b-dropdown-item :active="active" :disabled="disabled" @click="handleClick">
+        <slot />
+    </b-dropdown-item>
 </template>
 
 <script>
+    import { BDropdownItem } from 'bootstrap-vue';
+
     export default {
         name: 'SharpDropdownItem',
-        inject: ['$dropdown'],
 
         props: {
-            customClass: [String, Object]
+            active: Boolean,
+            disabled: Boolean,
+        },
+
+        components: {
+            BDropdownItem,
         },
 
         methods: {
             handleClick(e) {
-                this.$emit('click',e);
-                this.$dropdown.$el.blur();
+                this.$emit('click', e);
             }
         }
     }

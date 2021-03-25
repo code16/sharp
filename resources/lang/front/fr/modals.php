@@ -16,5 +16,8 @@ return [
     'error.message' => 'Une erreur est survenue',
 
     'ok_button' => 'Ok',
-    'cancel_button' => 'Annuler'
+    'cancel_button' => 'Annuler',
+    
+    'entity_state.edit.title' => 'Modifier l’état',
+    'entity_state.edit.ok_button' => 'Valider',
 ];

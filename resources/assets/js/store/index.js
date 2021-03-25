@@ -3,6 +3,7 @@ export default {
     state: {
         loading: false,
         dialogs: [],
+        currentEntity: null,
     },
     mutations: {
         setLoading(state, loading) {
@@ -11,6 +12,9 @@ export default {
         setDialogs(state, dialogs) {
             state.dialogs = dialogs;
         },
+        setCurrentEntity(state, entity) {
+            state.currentEntity = entity;
+        }
     },
     getters: {
         isLoading(state) {
@@ -24,5 +28,8 @@ export default {
         setDialogs({ commit }, dialogs) {
             commit('setDialogs', dialogs);
         },
+        setCurrentEntity({ commit }, entity) {
+            commit('setCurrentEntity', entity);
+        }
     },
 }

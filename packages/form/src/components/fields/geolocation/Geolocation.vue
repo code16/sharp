@@ -4,15 +4,12 @@
             {{ l('form.geolocation.loading') }}
         </template>
         <template v-else-if="isEmpty">
-            <Button outline class="w-100" @click="handleShowModalButtonClicked">
+            <Button text block @click="handleShowModalButtonClicked">
                 {{ l('form.geolocation.browse_button') }}
             </Button>
         </template>
         <template v-else>
-            <Card light class="SharpModule--closeable"
-                :has-close="!readOnly"
-                @close-click="handleRemoveButtonClicked"
-            >
+            <div class="card card-body form-control">
                 <div class="row">
                     <div class="col-7">
                         <component
@@ -33,7 +30,7 @@
                                 <div><small>Longitude : {{ latLngString.lng }}</small></div>
                             </div>
                             <div>
-                                <Button small outline type="danger" class="remove-button" :disabled="readOnly" @click="handleRemoveButtonClicked">
+                                <Button class="remove-button" variant="danger" small outline :disabled="readOnly" @click="handleRemoveButtonClicked">
                                     {{ l('form.geolocation.remove_button') }}
                                 </Button>
                                 <Button small outline :disabled="readOnly" @click="handleEditButtonClicked">
@@ -43,7 +40,7 @@
                         </div>
                     </div>
                 </div>
-            </Card>
+            </div>
         </template>
         <Modal
             :title="modalTitle"
@@ -72,7 +69,7 @@
 </template>
 
 <script>
-    import { Modal, Card, Button } from "sharp-ui";
+    import { Modal, Button } from "sharp-ui";
     import { Localization } from 'sharp/mixins';
 
     import { getMapByProvider, loadMapProvider } from "./maps";
@@ -93,7 +90,6 @@
 
         components: {
             GeolocationEdit,
-            Card,
             Button,
             Modal,
         },

@@ -181,7 +181,7 @@ describe('markdown-field', () => {
                 autoDownloadFontAwesome: false,
                 toolbar: [{
                     action: expect.any(Function),
-                    className: 'fas fa-bold',
+                    className: expect.stringContaining('fas fa-bold'),
                     name: 'bold',
                     title: '{{ form.markdown.icons.bold.title }}'
                 }],

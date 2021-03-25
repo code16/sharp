@@ -23,6 +23,7 @@
             fieldConfigIdentifier: String,
             updateData: Function,
             readOnly: Boolean,
+            root: Boolean,
         },
         computed: {
             isCustom() {
@@ -47,6 +48,7 @@
 
 
             return h(this.component, {
+                class: 'SharpField',
                 props: {
                     fieldKey: this.fieldKey,
                     fieldLayout: this.fieldLayout,
@@ -54,6 +56,7 @@
                     locale: this.locale,
                     uniqueIdentifier: this.uniqueIdentifier,
                     fieldConfigIdentifier: this.fieldConfigIdentifier,
+                    root: this.root,
                     ...fieldProps
                 },
                 attrs: {

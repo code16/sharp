@@ -250,6 +250,7 @@ describe('list-field', () => {
             'config-identifier': 'name',
             'update-data': 'update 0',
             'read-only': false,
+            'list': true
         });
     });
 

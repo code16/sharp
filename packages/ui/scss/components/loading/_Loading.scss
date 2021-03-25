@@ -8,7 +8,7 @@ $loading__end-duration: 300ms;
 
 
 .SharpLoading {
-  @include reset;
+
   width: $loading__size;
   height: $loading__size;
 
@@ -20,11 +20,13 @@ $loading__end-duration: 300ms;
 
   &__svg {
     fill: transparent !important;
-    stroke: $brand-03;
+    stroke: currentColor;
     stroke-width: 7;
     stroke-linecap: butt;
     stroke-dasharray: 240;
     stroke-dashoffset: $loading__gap;
+
+    color: hsl(var(--bs-primary-h), var(--bs-primary-s), 40%);
   }
 
   &--stop {

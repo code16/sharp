@@ -373,7 +373,7 @@ class SharpAttributeSlugNameWithMissingTransformer implements SharpAttributeTran
 
 class SharpAttributeSlugNameWithoutMissingTransformer extends SharpAttributeSlugNameWithMissingTransformer
 {
-    public function applyIfAttributeIsMissing()
+    public function applyIfAttributeIsMissing(): bool
     {
         return false;
     }

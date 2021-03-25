@@ -1,6 +1,6 @@
 <template>
-    <div class="SharpActionBar" v-if="ready">
-        <div class="SharpActionBar__bar">
+    <div class="SharpActionBar">
+        <div class="SharpActionBar__bar sticky-top" ref="bar">
             <div class="container">
                 <div class="row mx-n2">
                     <div class="col-auto col-md left px-2 my-1 my-sm-0">
@@ -35,12 +35,23 @@
     export default {
         name: 'SharpActionBar',
         props: {
-            ready: {
-                type: Boolean,
-                default: true,
-            },
             container: Boolean,
             rightClass: String,
+        },
+        methods: {
+            layout(rect) {
+                document.documentElement.style.setProperty('--navbar-height', `${rect.height}px`);
+            },
+        },
+        mounted() {
+            this.layout(this.$refs.bar.getBoundingClientRect());
+
+            if(window.ResizeObserver) {
+                (new ResizeObserver(entries => {
+                    this.layout(entries[0].target.getBoundingClientRect());
+                }))
+                .observe(this.$refs.bar);
+            }
         }
     }
 </script>

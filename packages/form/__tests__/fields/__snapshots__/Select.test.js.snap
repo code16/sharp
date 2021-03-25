@@ -2,42 +2,32 @@
 
 exports[`select-field can mount "read only" Select field as checkboxes list 1`] = `
 <div id="app">
-	<div class="SharpSelect SharpSelect--multiple SharpSelect--list">
-		<div class="SharpSelect__group">
-			<div class="SharpSelect__item SharpSelect__item--inline">
-				<div class="SharpCheck">
-					<label class="SharpCheck__label">
-						<input type="checkbox" disabled="disabled" class="SharpCheck__input">
-						<span class="SharpCheck__appearance">
-							<svg width="12" height="9" viewBox="0 0 12 9" fill-rule="evenodd" class="SharpCheck__checkmark">
-								<path d="M4.1 6.1L1.4 3.4 0 4.9 4.1 9l7.6-7.6L10.3 0z"></path>
-							</svg>
-						</span>
-						<span class="SharpCheck__label-text">AAA</span>
+	<div class="SharpSelect SharpSelect--list SharpSelect--multiple" multiple="multiple" display="list" clearable="true" placeholder="placeholder" maxselected="3">
+		<div class="row gy-1 gx-3 row-cols-auto">
+			<div class="col">
+				<div class="SharpCheck form-check mb-0">
+					<input type="checkbox" id="select.0" disabled="disabled" class="form-check-input">
+					<label for="select.0" class="form-check-label">
+						AAA
 					</label>
 				</div>
 			</div>
-			<div class="SharpSelect__item SharpSelect__item--inline">
-				<div class="SharpCheck">
-					<label class="SharpCheck__label">
-						<input type="checkbox" disabled="disabled" class="SharpCheck__input">
-						<span class="SharpCheck__appearance">
-							<svg width="12" height="9" viewBox="0 0 12 9" fill-rule="evenodd" class="SharpCheck__checkmark">
-								<path d="M4.1 6.1L1.4 3.4 0 4.9 4.1 9l7.6-7.6L10.3 0z"></path>
-							</svg>
-						</span>
-						<span class="SharpCheck__label-text">BBB</span>
+			<div class="col">
+				<div class="SharpCheck form-check mb-0">
+					<input type="checkbox" id="select.1" disabled="disabled" class="form-check-input">
+					<label for="select.1" class="form-check-label">
+						BBB
 					</label>
 				</div>
 			</div>
-			<div class="SharpSelect__links mt-3">
-				<div class="row mx-n2">
-					<div class="col-auto px-2">
-						<a href="#"></a>
-					</div>
-					<div class="col-auto px-2">
-						<a href="#"></a>
-					</div>
+		</div>
+		<div class="SharpSelect__links mt-3">
+			<div class="row gx-3">
+				<div class="col-auto">
+					<a href="#"></a>
+				</div>
+				<div class="col-auto">
+					<a href="#"></a>
 				</div>
 			</div>
 		</div>
@@ -47,21 +37,23 @@ exports[`select-field can mount "read only" Select field as checkboxes list 1`] 
 
 exports[`select-field can mount "read only" Select field as radios list 1`] = `
 <div id="app">
-	<div class="SharpSelect SharpSelect--list">
-		<div class="SharpSelect__group">
-			<div class="SharpSelect__item SharpSelect__item--inline">
-				<input type="radio" tabindex="0" id="select0" disabled="disabled" name="select" class="SharpRadio" value="3">
-				<label for="select0" class="SharpRadio__label">
-					<span class="SharpRadio__appearance"></span>
-					AAA
-				</label>
+	<div class="SharpSelect SharpSelect--list" display="list" clearable="true" showselectall="true" placeholder="placeholder">
+		<div class="row gy-1 gx-3 row-cols-auto">
+			<div class="col">
+				<div class="form-check mb-0">
+					<input type="radio" tabindex="0" id="select.0" disabled="disabled" name="select" class="form-check-input" value="3">
+					<label for="select.0" class="form-check-label">
+						AAA
+					</label>
+				</div>
 			</div>
-			<div class="SharpSelect__item SharpSelect__item--inline">
-				<input type="radio" tabindex="0" id="select1" disabled="disabled" name="select" class="SharpRadio" value="4">
-				<label for="select1" class="SharpRadio__label">
-					<span class="SharpRadio__appearance"></span>
-					BBB
-				</label>
+			<div class="col">
+				<div class="form-check mb-0">
+					<input type="radio" tabindex="0" id="select.1" disabled="disabled" name="select" class="form-check-input" value="4">
+					<label for="select.1" class="form-check-label">
+						BBB
+					</label>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -70,44 +62,40 @@ exports[`select-field can mount "read only" Select field as radios list 1`] = `
 
 exports[`select-field can mount Select field 1`] = `
 <div id="app">
-	<div class="SharpSelect SharpSelect--dropdown">
-		<div tabindex="0" class="multiselect">
-			<svg width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd" class="multiselect__select">
-				<path d="M10 0L5 5 0 0z"></path>
-			</svg>
-			<div class="multiselect__tags">
-				<div class="multiselect__tags-wrap" style="display: none;"></div>
+	<div tabindex="0" class="multiselect SharpSelect form-control SharpSelect--dropdown" uniqueidentifier="select" display="dropdown" showselectall="true" inline="true">
+		<div class="multiselect__select"></div>
+		<div class="multiselect__tags">
+			<div class="multiselect__tags-wrap" style="display: none;"></div>
+			<!---->
+			<div class="multiselect__spinner" style="display: none;"></div>
+			<!---->
+			<!---->
+			<span class="multiselect__placeholder">
+				placeholder
+			</span>
+		</div>
+		<div tabindex="-1" class="multiselect__content-wrapper" style="max-height: 300px; display: none;">
+			<ul class="multiselect__content" style="display: inline-block;">
 				<!---->
-				<div class="multiselect__spinner" style="display: none;"></div>
-				<!---->
-				<!---->
-				<span class="multiselect__placeholder">
-					placeholder
-				</span>
-			</div>
-			<div tabindex="-1" class="multiselect__content-wrapper" style="max-height: 300px; display: none;">
-				<ul class="multiselect__content" style="display: inline-block;">
+				<li class="multiselect__element">
+					<span data-select="Press enter to select" data-selected="Selected" data-deselect="Press enter to remove" class="multiselect__option">
+						<span>AAA</span>
+					</span>
 					<!---->
-					<li class="multiselect__element">
-						<span data-select="Press enter to select" data-selected="Selected" data-deselect="Press enter to remove" class="multiselect__option">
-							<span>AAA</span>
-						</span>
-						<!---->
-					</li>
-					<li class="multiselect__element">
-						<span data-select="Press enter to select" data-selected="Selected" data-deselect="Press enter to remove" class="multiselect__option">
-							<span>BBB</span>
-						</span>
-						<!---->
-					</li>
-					<li style="display: none;">
-						<span class="multiselect__option">No elements found. Consider changing the search query.</span>
-					</li>
-					<li style="display: none;">
-						<span class="multiselect__option">List is empty.</span>
-					</li>
-				</ul>
-			</div>
+				</li>
+				<li class="multiselect__element">
+					<span data-select="Press enter to select" data-selected="Selected" data-deselect="Press enter to remove" class="multiselect__option">
+						<span>BBB</span>
+					</span>
+					<!---->
+				</li>
+				<li style="display: none;">
+					<span class="multiselect__option">No elements found. Consider changing the search query.</span>
+				</li>
+				<li style="display: none;">
+					<span class="multiselect__option">List is empty.</span>
+				</li>
+			</ul>
 		</div>
 	</div>
 </div>
@@ -115,42 +103,32 @@ exports[`select-field can mount Select field 1`] = `
 
 exports[`select-field can mount Select field as checkboxes list 1`] = `
 <div id="app">
-	<div class="SharpSelect SharpSelect--multiple SharpSelect--list">
-		<div class="SharpSelect__group">
-			<div class="SharpSelect__item SharpSelect__item--inline">
-				<div class="SharpCheck">
-					<label class="SharpCheck__label">
-						<input type="checkbox" class="SharpCheck__input">
-						<span class="SharpCheck__appearance">
-							<svg width="12" height="9" viewBox="0 0 12 9" fill-rule="evenodd" class="SharpCheck__checkmark">
-								<path d="M4.1 6.1L1.4 3.4 0 4.9 4.1 9l7.6-7.6L10.3 0z"></path>
-							</svg>
-						</span>
-						<span class="SharpCheck__label-text">AAA</span>
+	<div class="SharpSelect SharpSelect--list SharpSelect--multiple" multiple="multiple" display="list" clearable="true" placeholder="placeholder" maxselected="3">
+		<div class="row gy-1 gx-3 row-cols-auto">
+			<div class="col">
+				<div class="SharpCheck form-check mb-0">
+					<input type="checkbox" id="select.0" class="form-check-input">
+					<label for="select.0" class="form-check-label">
+						AAA
 					</label>
 				</div>
 			</div>
-			<div class="SharpSelect__item SharpSelect__item--inline">
-				<div class="SharpCheck">
-					<label class="SharpCheck__label">
-						<input type="checkbox" class="SharpCheck__input">
-						<span class="SharpCheck__appearance">
-							<svg width="12" height="9" viewBox="0 0 12 9" fill-rule="evenodd" class="SharpCheck__checkmark">
-								<path d="M4.1 6.1L1.4 3.4 0 4.9 4.1 9l7.6-7.6L10.3 0z"></path>
-							</svg>
-						</span>
-						<span class="SharpCheck__label-text">BBB</span>
+			<div class="col">
+				<div class="SharpCheck form-check mb-0">
+					<input type="checkbox" id="select.1" class="form-check-input">
+					<label for="select.1" class="form-check-label">
+						BBB
 					</label>
 				</div>
 			</div>
-			<div class="SharpSelect__links mt-3">
-				<div class="row mx-n2">
-					<div class="col-auto px-2">
-						<a href="#"></a>
-					</div>
-					<div class="col-auto px-2">
-						<a href="#"></a>
-					</div>
+		</div>
+		<div class="SharpSelect__links mt-3">
+			<div class="row gx-3">
+				<div class="col-auto">
+					<a href="#"></a>
+				</div>
+				<div class="col-auto">
+					<a href="#"></a>
 				</div>
 			</div>
 		</div>
@@ -160,21 +138,23 @@ exports[`select-field can mount Select field as checkboxes list 1`] = `
 
 exports[`select-field can mount Select field as radios list 1`] = `
 <div id="app">
-	<div class="SharpSelect SharpSelect--list">
-		<div class="SharpSelect__group">
-			<div class="SharpSelect__item SharpSelect__item--inline">
-				<input type="radio" tabindex="0" id="select0" name="select" class="SharpRadio" value="3">
-				<label for="select0" class="SharpRadio__label">
-					<span class="SharpRadio__appearance"></span>
-					AAA
-				</label>
+	<div class="SharpSelect SharpSelect--list" display="list" clearable="true" showselectall="true" placeholder="placeholder">
+		<div class="row gy-1 gx-3 row-cols-auto">
+			<div class="col">
+				<div class="form-check mb-0">
+					<input type="radio" tabindex="0" id="select.0" name="select" class="form-check-input" value="3">
+					<label for="select.0" class="form-check-label">
+						AAA
+					</label>
+				</div>
 			</div>
-			<div class="SharpSelect__item SharpSelect__item--inline">
-				<input type="radio" tabindex="0" id="select1" name="select" class="SharpRadio" value="4">
-				<label for="select1" class="SharpRadio__label">
-					<span class="SharpRadio__appearance"></span>
-					BBB
-				</label>
+			<div class="col">
+				<div class="form-check mb-0">
+					<input type="radio" tabindex="0" id="select.1" name="select" class="form-check-input" value="4">
+					<label for="select.1" class="form-check-label">
+						BBB
+					</label>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -183,44 +163,42 @@ exports[`select-field can mount Select field as radios list 1`] = `
 
 exports[`select-field can mount Select field with clear button 1`] = `
 <div id="app">
-	<div class="SharpSelect SharpSelect--dropdown">
-		<div tabindex="0" class="multiselect">
-			<button type="button" class="SharpSelect__clear-button">
-				<svg aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd" class="SharpSelect__clear-button-icon">
-					<path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
-				</svg>
-			</button>
-			<div class="multiselect__tags">
-				<div class="multiselect__tags-wrap" style="display: none;"></div>
+	<div tabindex="0" class="multiselect SharpSelect form-control SharpSelect--dropdown" uniqueidentifier="select" display="dropdown" showselectall="true" inline="true">
+		<button type="button" class="SharpClearButton btn SharpSelect__clear-button SharpClearButton--form-control">
+			<svg aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd" class="SharpClearButton__icon">
+				<path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
+			</svg>
+		</button>
+		<div class="multiselect__tags">
+			<div class="multiselect__tags-wrap" style="display: none;"></div>
+			<!---->
+			<div class="multiselect__spinner" style="display: none;"></div>
+			<!---->
+			<span class="multiselect__single">AAA</span>
+			<!---->
+		</div>
+		<div tabindex="-1" class="multiselect__content-wrapper" style="max-height: 300px; display: none;">
+			<ul class="multiselect__content" style="display: inline-block;">
 				<!---->
-				<div class="multiselect__spinner" style="display: none;"></div>
-				<!---->
-				<span class="multiselect__single">AAA</span>
-				<!---->
-			</div>
-			<div tabindex="-1" class="multiselect__content-wrapper" style="max-height: 300px; display: none;">
-				<ul class="multiselect__content" style="display: inline-block;">
+				<li class="multiselect__element">
+					<span data-select="Press enter to select" data-selected="Selected" data-deselect="Press enter to remove" class="multiselect__option multiselect__option--selected">
+						<span>AAA</span>
+					</span>
 					<!---->
-					<li class="multiselect__element">
-						<span data-select="Press enter to select" data-selected="Selected" data-deselect="Press enter to remove" class="multiselect__option multiselect__option--selected">
-							<span>AAA</span>
-						</span>
-						<!---->
-					</li>
-					<li class="multiselect__element">
-						<span data-select="Press enter to select" data-selected="Selected" data-deselect="Press enter to remove" class="multiselect__option">
-							<span>BBB</span>
-						</span>
-						<!---->
-					</li>
-					<li style="display: none;">
-						<span class="multiselect__option">No elements found. Consider changing the search query.</span>
-					</li>
-					<li style="display: none;">
-						<span class="multiselect__option">List is empty.</span>
-					</li>
-				</ul>
-			</div>
+				</li>
+				<li class="multiselect__element">
+					<span data-select="Press enter to select" data-selected="Selected" data-deselect="Press enter to remove" class="multiselect__option">
+						<span>BBB</span>
+					</span>
+					<!---->
+				</li>
+				<li style="display: none;">
+					<span class="multiselect__option">No elements found. Consider changing the search query.</span>
+				</li>
+				<li style="display: none;">
+					<span class="multiselect__option">List is empty.</span>
+				</li>
+			</ul>
 		</div>
 	</div>
 </div>

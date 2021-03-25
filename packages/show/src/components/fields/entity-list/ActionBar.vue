@@ -6,88 +6,90 @@
             </div>
         </template>
         <template v-if="ready && barVisible">
-            <div class="row action-bar__row">
+            <div class="row">
                 <template v-if="hasLeftControls">
-                    <div class="col-sm action-bar__col">
-                        <template v-if="!reorderActive">
-                            <div class="row action-bar__row">
-                                <template v-for="filter in filters">
-                                    <div class="col-auto action-bar__col mb-2">
-                                        <div class="action-bar__element">
-                                            <FilterDropdown
-                                                class="h-100"
-                                                :filter="filter"
-                                                :value="filtersValues[filter.key]"
-                                                @input="handleFilterChanged(filter, $event)"
-                                                :key="filter.id"
-                                            />
-                                        </div>
+                    <div class="col-sm mb-2">
+                        <div class="row gy-1 gx-2 gx-md-3">
+                            <template v-for="filter in filters">
+                                <div class="col-auto mb-1">
+                                    <div class="action-bar__element">
+                                        <FilterDropdown
+                                            class="h-100"
+                                            :filter="filter"
+                                            :value="filtersValues[filter.key]"
+                                            :disabled="reorderActive"
+                                            @input="handleFilterChanged(filter, $event)"
+                                            :key="filter.id"
+                                        />
                                     </div>
-                                </template>
-                                <template v-if="canSearch">
-                                    <div class="col-auto action-bar__col mb-2">
-                                        <div class="action-bar__element">
-                                            <Search
-                                                class="h-100"
-                                                :value="search"
-                                                :active.sync="searchActive"
-                                                :placeholder="l('action_bar.list.search.placeholder')"
-                                                @input="handleSearchInput"
-                                                @submit="handleSearchSubmitted"
-                                            />
-                                        </div>
+                                </div>
+                            </template>
+                            <template v-if="canSearch">
+                                <div class="col-auto mb-1">
+                                    <div class="action-bar__element">
+                                        <Search
+                                            class="h-100"
+                                            :value="search"
+                                            :active.sync="searchActive"
+                                            :placeholder="l('action_bar.list.search.placeholder')"
+                                            :disabled="reorderActive"
+                                            @input="handleSearchInput"
+                                            @submit="handleSearchSubmitted"
+                                        />
                                     </div>
-                                </template>
-                            </div>
-                        </template>
+                                </div>
+                            </template>
+                        </div>
                     </div>
                 </template>
                 <template v-else>
-                    <div class="col-sm align-self-center action-bar__col mb-2">
+                    <div class="col-sm align-self-end">
                         <slot />
                     </div>
                 </template>
 
                 <template v-if="hasRightControls && !collapsed">
-                    <div class="col-sm-auto action-bar__col">
-                        <div class="row flex-nowrap justify-content-end action-bar__row">
+                    <div class="col-sm-auto mb-2">
+                        <div class="row flex-nowrap justify-content-end g-2 gx-md-3">
                             <template v-if="canReorder">
-                                <div class="col-auto action-bar__col mb-2">
+                                <div class="col-auto">
                                     <template v-if="reorderActive">
-                                        <div class="row action-bar__row">
-                                            <div class="col-auto action-bar__col">
-                                                <button class="SharpButton SharpButton--secondary-accent" @click="handleReorderButtonClicked">
+                                        <div class="row gx-3">
+                                            <div class="col-auto">
+                                                <Button text @click="handleReorderButtonClicked">
                                                     {{ l('action_bar.list.reorder_button.cancel') }}
-                                                </button>
+                                                </Button>
                                             </div>
-                                            <div class="col-auto action-bar__col">
-                                                <button class="SharpButton SharpButton--accent" @click="handleReorderSubmitButtonClicked">
+                                            <div class="col-auto">
+                                                <Button @click="handleReorderSubmitButtonClicked">
                                                     {{ l('action_bar.list.reorder_button.finish') }}
-                                                </button>
+                                                </Button>
                                             </div>
                                         </div>
                                     </template>
                                     <template v-else>
-                                        <button class="SharpButton SharpButton--secondary-accent" @click="handleReorderButtonClicked">
+                                        <Button text @click="handleReorderButtonClicked">
                                             {{ l('action_bar.list.reorder_button') }}
-                                        </button>
+                                        </Button>
                                     </template>
                                 </div>
                             </template>
                             <template v-if="canCreate && !reorderActive">
-                                <div class="col-auto action-bar__col mb-2">
+                                <div class="col-auto">
                                     <div class="action-bar__element">
                                         <template v-if="hasForms">
-                                            <Dropdown class="SharpActionBar__forms-dropdown h-100" :text="l('action_bar.list.forms_dropdown')">
-                                                <DropdownItem v-for="(form,key) in forms" @click="handleCreateFormSelected(form)" :key="key" >
-                                                    <ItemVisual :item="form" icon-class="fa-fw"/>{{ form.label }}
-                                                </DropdownItem>
+                                            <Dropdown variant="primary" right :text="l('action_bar.list.forms_dropdown')">
+                                                <template v-for="(form,key) in forms">
+                                                    <DropdownItem  @click="handleCreateFormSelected(form)" :key="key" >
+                                                        <ItemVisual :item="form" icon-class="fa-fw"/>{{ form.label }}
+                                                    </DropdownItem>
+                                                </template>
                                             </Dropdown>
                                         </template>
                                         <template v-else>
-                                            <button class="SharpButton SharpButton--accent" @click="handleCreateButtonClicked">
+                                            <Button variant="primary" @click="handleCreateButtonClicked">
                                                 {{ l('action_bar.list.create_button') }}
-                                            </button>
+                                            </Button>
                                         </template>
                                     </div>
                                 </div>
@@ -102,7 +104,7 @@
 
 <script>
     import { Localization } from 'sharp/mixins';
-    import { Search, ItemVisual, Dropdown, DropdownItem } from 'sharp-ui';
+    import { Search, ItemVisual, Dropdown, DropdownItem, Button } from 'sharp-ui';
     import { FilterDropdown } from 'sharp-filters';
 
     export default {
@@ -113,6 +115,7 @@
             Dropdown,
             DropdownItem,
             FilterDropdown,
+            Button,
         },
         props: {
             ready: Boolean,

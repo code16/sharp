@@ -39,7 +39,6 @@ module.exports = {
                     collapsable: false,
                     children: [
                         'building-entity-form',
-                        'entity-authorizations',
                         'multiforms',
                         'single-form',
                         'custom-form-fields'
@@ -72,6 +71,7 @@ module.exports = {
                     children: [
                         'building-menu',
                         'sharp-breadcrumb',
+                        'entity-authorizations',
                         'how-to-transform-data',
                         'link-to',
                         'context',

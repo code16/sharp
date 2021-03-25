@@ -1,11 +1,11 @@
 import merge from 'lodash/merge';
 
 import Vuex from 'vuex';
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import {createLocalVue, shallowMount} from '@vue/test-utils';
 import SharpEntityList from '../src/components/EntityList.vue';
 import entityListModule from '../src/store/entity-list';
-import { formUrl, showUrl } from 'sharp';
-import { MockInjections } from "@sharp/test-utils";
+import {formUrl, showUrl} from 'sharp';
+import {MockInjections} from "@sharp/test-utils";
 
 jest.mock('sharp/mixins/Localization');
 jest.mock('sharp/mixins/DynamicView');

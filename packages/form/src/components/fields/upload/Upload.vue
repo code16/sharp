@@ -9,6 +9,7 @@
         :croppable-file-types="croppableFileTypes"
         :read-only="readOnly"
         :modifiers="modifiers"
+        :root="root"
         @input="$emit('input',$event)"
         @error="$field.$emit('error',$event)"
         @reset="$field.$emit('clear')"
@@ -43,7 +44,8 @@
             ratioX:Number,
             ratioY:Number,
 
-            readOnly: Boolean
+            readOnly: Boolean,
+            root: Boolean,
         },
         computed: {
             options() {

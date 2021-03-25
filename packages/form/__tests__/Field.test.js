@@ -75,7 +75,8 @@ describe('sharp-field', () => {
             value: 'Hello',
             placeholder: 'Titre',
             uniqueIdentifier: 'list.0.title',
-            fieldConfigIdentifier: 'list.title'
+            fieldConfigIdentifier: 'list.title',
+            root: false,
         });
     });
 

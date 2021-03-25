@@ -6,7 +6,6 @@
               'SharpFilterSelect--multiple':multiple,
               'SharpFilterSelect--searchable':searchable
           }"
-          tabindex="0"
     >
         <!-- dropdown & search input -->
         <Autocomplete
@@ -22,21 +21,24 @@
             :preserve-search="false"
             :show-pointer="false"
             :searchable="searchable"
+            :read-only="disabled"
             no-result-item
             mode="local"
             ref="autocomplete"
+            style="max-width: 0"
             @multiselect-input="handleAutocompleteInput"
             @close="close"
         />
 
-        <FilterControl :label="label" no-caret @click="handleClick">
+        <FilterControl :label="label" @click="handleClick">
             <!-- value text & tags -->
             <Select
-                class="SharpFilterSelect__select"
+                class="SharpFilterSelect__select dropdown-toggle text-wrap"
                 :value="value"
                 :options="values"
                 :multiple="multiple"
                 :clearable="!required"
+                :read-only="disabled"
                 :inline="false"
                 placeholder=" "
                 ref="select"
@@ -50,7 +52,7 @@
     import { Autocomplete, Select } from 'sharp-form'
     import { Localization } from 'sharp/mixins';
     import FilterControl from '../FilterControl';
-    
+
     export default {
         name: 'SharpFilterSelect',
         mixins: [Localization],
@@ -60,10 +62,7 @@
             FilterControl,
         },
         props: {
-            label : {
-                type: String,
-                required: true
-            },
+            label: String,
             values: {
                 type: Array,
                 required: true
@@ -76,6 +75,7 @@
             searchable: Boolean,
             searchKeys: Array,
             template: String,
+            disabled: Boolean,
         },
         data() {
             return {
@@ -134,8 +134,7 @@
                 }
             },
             blur() {
-                let { select:{ $refs: { multiselect } } } = this.$refs;
-                multiselect.deactivate();
+                this.$refs.select.blur();
             },
         }
     }

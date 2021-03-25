@@ -1,5 +1,5 @@
 <template>
-    <component :is="tag" v-html="value">
+    <component :is="tag" v-html="value" style="margin-top: .25em">
     </component>
 </template>
 

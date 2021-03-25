@@ -24,30 +24,18 @@
                     <template v-if="hasCollapse">
                         <details :open="!collapsed" @toggle="handleDetailsToggle">
                             <summary class="py-1">
-                                <h2 class="ShowEntityListField__label show-field__label d-inline-block">
+                                <h2 class="ShowEntityListField__label ShowSection__title mb-0 d-inline-block">
                                     {{ label || ' ' }}
                                 </h2>
                             </summary>
                         </details>
                     </template>
                     <template v-else>
-                        <div class="ShowEntityListField__label show-field__label">
+                        <h2 class="ShowEntityListField__label ShowSection__title">
                             {{ label }}
-                        </div>
+                        </h2>
                     </template>
                 </ActionBar>
-            </template>
-            <template v-slot:append-head="{ props: { commands }, listeners }">
-                <template v-if="hasCommands(commands)">
-                    <CommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
-                        :commands="commands"
-                        @select="listeners['command']"
-                    >
-                        <template v-slot:text>
-                            {{ l('entity_list.commands.entity.label') }}
-                        </template>
-                    </CommandsDropdown>
-                </template>
             </template>
         </EntityList>
     </FieldLayout>

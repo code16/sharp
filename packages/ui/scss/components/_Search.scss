@@ -1,117 +1,30 @@
 .SharpSearch {
-  position: relative;
-  //width: 100%;
-
-  &__label {
-    @include hidden;
-  }
 
   &__input {
-    @include reset;
-    appearance: none;
-    border: none;
-    background-color: $field-01;
-    color: $text-01;
-    font-weight: 700;
-    padding: 0 2.5rem 0 2.5rem;
-    text-overflow: ellipsis;
-    width: 100%;
-
-    //Sharp specific
-    @include layer('raised');
-
-    &:focus {
-      @include focus-outline('layer');
-    }
+    font-weight: bold;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
 
     &::placeholder {
-      @include placeholder-colors;
-      font-style: italic;
       font-weight: 400;
     }
   }
 
-  &--sm .SharpSearch__input {
-    @include font-size('14');
-    height: rem(32px);
+  &__magnifier {
+    position: absolute;
+    width: 1rem;
+    height: 1rem;
+    top: calc(50% - .5rem);
   }
 
-  &--lg .SharpSearch__input {
-    @include font-size('14');
-    height: rem(40px);
-  }
-
-  &__magnifier,
   &__close {
     position: absolute;
-    height: 1rem;
-    width: 1rem;
-    top: calc(50% - .5rem);
+    top: 0;
+    right: 0;
   }
 
   &__magnifier {
     left: .75rem;
     fill: $ui-05;
-  }
-
-  &__close {
-    transition: $transition--base;
-    fill: $ui-05;
-    cursor: pointer;
-    visibility: visible;
-    opacity: 1;
-  }
-
-  &--sm .SharpSearch__close {
-    right: .75rem;
-  }
-
-  &--lg .SharpSearch__close {
-    right: rem(100px);
-  }
-
-  &__button {
-    @include reset;
-    border: 0;
-    transition: $transition--base;
-    height: rem(40px);
-    width: rem(40px);
-    min-width: rem(40px);
-    margin-left: .25rem;
-    background-color: $ui-01;
-    position: relative;
-    padding: 0;
-  }
-
-  &__button svg {
-    position: relative;
-    top: -1px;
-    box-sizing: border-box;
-    vertical-align: middle;
-    transition: $transition--base;
-    fill: $brand-01;
-    height: 1rem;
-    width: 1rem;
-  }
-
-  &__button:hover,
-  &__button:focus {
-    cursor: pointer;
-    background-color: $brand-01;
-    outline: 1px solid transparent;
-  }
-
-  &__button:hover svg,
-  &__button:focus svg {
-    fill: $ui-01;
-  }
-
-  &__close--hidden {
-    visibility: hidden;
-    opacity: 0;
-  }
-
-  &__view--hidden {
-    display: none;
   }
 }

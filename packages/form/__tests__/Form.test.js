@@ -4,10 +4,10 @@ import axios from 'axios';
 import Form from '../src/components/Form.vue';
 import store from 'sharp/store';
 
-import { wait, MockI18n, nextRequestFulfilled } from "@sharp/test-utils";
+import {MockI18n, nextRequestFulfilled, wait} from "@sharp/test-utils";
 import moxios from 'moxios';
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import { lang } from "sharp";
+import {createLocalVue, shallowMount} from '@vue/test-utils';
+import {lang} from "sharp";
 
 jest.mock('sharp');
 

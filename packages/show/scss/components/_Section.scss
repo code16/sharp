@@ -13,10 +13,9 @@
   }
 
   &__title {
-    font-size: 1em;
-    font-weight: 600;
-    text-transform: uppercase;
-    line-height: 1.25;
+    @extend .ui-font;
+    font-size: $ui-font-size + .125rem;
+    margin-bottom: .75rem;
   }
 
   &__grid {

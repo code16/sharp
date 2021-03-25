@@ -26,7 +26,6 @@ abstract class ApiController extends SharpProtectedController
         if($this->isSubEntity($entityKey)) {
             list($entityKey, $subEntityKey) = explode(':', $entityKey);
             $showClass = config("sharp.entities.{$entityKey}.shows.{$subEntityKey}.show");
-
         } else {
             $showClass = config("sharp.entities.{$entityKey}.show");
         }
@@ -37,13 +36,12 @@ abstract class ApiController extends SharpProtectedController
 
         return app($showClass);
     }
-
+    
     protected function getFormInstance(string $entityKey): SharpForm
     {
         if($this->isSubEntity($entityKey)) {
             list($entityKey, $subEntityKey) = explode(':', $entityKey);
             $formClass = config("sharp.entities.{$entityKey}.forms.{$subEntityKey}.form");
-
         } else {
             $formClass = config("sharp.entities.{$entityKey}.form");
         }

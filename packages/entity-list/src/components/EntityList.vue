@@ -6,8 +6,8 @@
             :listeners="actionBarListeners"
         />
 
-        <template v-if="visible">
-            <template v-if="ready">
+        <template v-if="ready">
+            <div v-show="visible">
                 <DataList
                     :items="items"
                     :columns="columns"
@@ -25,50 +25,40 @@
                     <template v-slot:empty>
                         {{ l('entity_list.empty_text') }}
                     </template>
-                    <template v-slot:item="{ item }">
-                        <DataListRow :url="instanceUrl(item)" :columns="columns" :highlight="instanceIsFocused(item)" :row="item">
-                            <template v-if="hasActionsColumn" v-slot:append>
-                                <div class="row justify-content-end justify-content-md-start mx-n2">
-                                    <template v-if="instanceHasState(item)">
-                                        <div class="col-auto col-md-12 my-1 px-2">
-                                            <Dropdown class="SharpEntityList__state-dropdown" :disabled="!instanceHasStateAuthorization(item)">
-                                                <template v-slot:text>
-                                                    <StateIcon :color="instanceStateIconColor(item)" />
-                                                    <span class="text-truncate">
-                                                        {{ instanceStateLabel(item) }}
-                                                    </span>
-                                                </template>
-                                                <DropdownItem
-                                                    v-for="stateOptions in config.state.values"
-                                                    @click="handleInstanceStateChanged(item, stateOptions.value)"
-                                                    :key="stateOptions.value"
-                                                >
-                                                    <StateIcon :color="stateOptions.color" />&nbsp;
-                                                    {{ stateOptions.label }}
-                                                </DropdownItem>
-                                            </Dropdown>
-                                        </div>
-                                    </template>
-                                    <template v-if="instanceHasCommands(item)">
-                                        <div class="col-auto col-md-12 my-1 px-2">
-                                            <CommandsDropdown
-                                                class="SharpEntityList__commands-dropdown"
-                                                :commands="instanceCommands(item)"
-                                                @select="handleInstanceCommandRequested(item, $event)"
-                                            >
-                                                <template v-slot:text>
-                                                    {{ l('entity_list.commands.instance.label') }}
-                                                </template>
-                                            </CommandsDropdown>
-                                        </div>
-                                    </template>
-                                </div>
-                            </template>
-                        </DataListRow>
-                    </template>
 
                     <template v-slot:append-head>
-                        <slot name="append-head" :props="actionBarProps" :listeners="actionBarListeners" />
+                        <template v-if="hasEntityCommands">
+                            <div class="d-flex justify-content-end">
+                                <CommandsDropdown
+                                    :commands="dropdownEntityCommands"
+                                    :disabled="reorderActive"
+                                    @select="handleEntityCommandRequested"
+                                >
+                                    <template v-slot:text>
+                                        {{ l('entity_list.commands.entity.label') }}
+                                    </template>
+                                </CommandsDropdown>
+                            </div>
+                        </template>
+                    </template>
+
+                    <template v-slot:item="{ item }">
+                        <DataListRow :url="instanceUrl(item)" :columns="columns" :highlight="instanceIsFocused(item)" :row="item">
+                            <template v-if="hasActionsColumn" v-slot:append="props">
+                                <EntityActions
+                                    :config="config"
+                                    :has-state="instanceHasState(item)"
+                                    :state="instanceState(item)"
+                                    :state-options="instanceStateOptions(item)"
+                                    :state-disabled="!instanceHasStateAuthorization(item)"
+                                    :has-commands="instanceHasCommands(item)"
+                                    :commands="instanceCommands(item)"
+                                    @command="handleInstanceCommandRequested(item, $event)"
+                                    @state-change="handleInstanceStateChanged(item, $event)"
+                                    @selecting="props.toggleHighlight($event)"
+                                />
+                            </template>
+                        </DataListRow>
                     </template>
 
                     <template v-slot:append-body>
@@ -77,13 +67,13 @@
                         </template>
                     </template>
                 </DataList>
-            </template>
-            <template v-else-if="inline">
-                <Loading medium />
-            </template>
+            </div>
+        </template>
+        <template v-else-if="visible && inline">
+            <Loading medium />
         </template>
 
-        <CommandFormModal :form="commandCurrentForm" ref="commandForm" />
+        <CommandFormModal :command="currentCommand" ref="commandForm" />
         <CommandViewPanel :content="commandViewContent" @close="handleCommandViewPanelClosed" />
     </div>
 </template>
@@ -96,10 +86,13 @@
         DataList,
         DataListRow,
         StateIcon,
-        Dropdown,
-        DropdownItem,
+        Button,
         Loading,
         LoadingOverlay,
+        Modal,
+        ModalSelect,
+        DropdownItem,
+        DropdownSeparator
     } from 'sharp-ui';
 
     import {
@@ -108,22 +101,30 @@
         CommandViewPanel,
     } from 'sharp-commands';
 
+    import EntityActions from "./EntityActions";
+
 
     export default {
         name: 'SharpEntityList',
         mixins: [DynamicView, Localization, withCommands],
         components: {
+            EntityActions,
+
             DataList,
             DataListRow,
 
             StateIcon,
             CommandsDropdown,
 
-            Dropdown,
-            DropdownItem,
+            Button,
+            Modal,
+            ModalSelect,
 
             CommandFormModal,
             CommandViewPanel,
+
+            DropdownItem,
+            DropdownSeparator,
 
             Loading,
             LoadingOverlay,
@@ -239,8 +240,8 @@
                     search: this.search,
                     filters: this.filters,
                     filtersValues: this.filtersValues,
-                    commands: this.allowedEntityCommands,
                     forms: this.multiforms,
+                    primaryCommand: this.allowedEntityCommands.flat().find(command => command.primary),
                     reorderActive: this.reorderActive,
                     canCreate: this.canCreate,
                     canReorder: this.canReorder,
@@ -249,12 +250,12 @@
             },
             actionBarListeners() {
                 return {
+                    'command': this.handleEntityCommandRequested,
                     'search-change': this.handleSearchChanged,
                     'search-submit': this.handleSearchSubmitted,
                     'filter-change': this.handleFilterChanged,
                     'reorder-click': this.handleReorderButtonClicked,
                     'reorder-submit': this.handleReorderSubmitted,
-                    'command': this.handleEntityCommandRequested,
                     'create': this.handleCreateButtonClicked,
                 }
             },
@@ -265,6 +266,13 @@
             allowedEntityCommands() {
                 return (this.config.commands.entity || [])
                     .map(group => group.filter(command => this.isEntityCommandAllowed(command)))
+            },
+            dropdownEntityCommands() {
+                return this.allowedEntityCommands
+                    .map(group => group.filter(command => !command.primary))
+            },
+            hasEntityCommands() {
+                return this.dropdownEntityCommands.flat().length > 0;
             },
             multiforms() {
                 return this.forms ? Object.values(this.forms) : null;
@@ -305,6 +313,9 @@
             },
 
             hasActionsColumn() {
+                if(this.reorderActive) {
+                    return false;
+                }
                 return this.items.some(instance =>
                     this.instanceHasState(instance) ||
                     this.instanceHasCommands(instance)
@@ -402,21 +413,12 @@
                     ...res, group.filter(command => this.isInstanceCommandAllowed(instance, command))
                 ], []);
             },
-            instanceStateIconColor(instance) {
-                const state = this.instanceState(instance);
-                const stateOptions = this.instanceStateOptions(state);
-                return stateOptions.color;
-            },
-            instanceStateLabel(instance) {
-                const state = this.instanceState(instance);
-                const stateOptions = this.instanceStateOptions(state);
-                return stateOptions.label;
-            },
-            instanceStateOptions(instanceState) {
+            instanceStateOptions(instance) {
                 if(!this.config.state) {
                     return null;
                 }
-                return this.config.state.values.find(stateValue => stateValue.value === instanceState);
+                const state = this.instanceState(instance);
+                return this.config.state.values.find(stateValue => stateValue.value === state);
             },
             instanceForm(instance) {
                 const instanceId = this.instanceId(instance);

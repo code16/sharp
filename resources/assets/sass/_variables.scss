@@ -1,0 +1,121 @@
+$fa-font-path: 'fonts';
+$--font-path: 'fonts';
+
+
+
+$brand-01: #314255;
+$ui-01: #FFFFFF;
+$ui-02: #EBF0F7;
+$ui-03: #DAE3EE;
+$ui-04: #dfe3e6;
+$field-01: #FFFFFF;
+$text-03: #8c9ba5;
+
+$brand-01-light: #68829E;
+
+
+$ui-primary-color: hsl(var(--bs-primary-h), var(--bs-primary-s), 20%);
+$ui-font-size: .9375rem;
+$ui-title-font-weight: 600;
+
+/**
+  Bootstrap variables
+**/
+
+$primary: #004c9b;
+$info: #5aaafa;
+$success: #3dc322;
+
+$body-bg: hsl(var(--bs-primary-h), 20%, 95%);
+$body-color: #152935;
+
+$enable-negative-margins: true;
+
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+);
+
+$transition-collapse: height 300ms cubic-bezier(0.5, 0, 0.1, 1);
+
+$border-radius: .25rem;
+$box-shadow: 0 .5rem 1rem rgba(0,0,0, .15);
+
+$alert-padding-y: .75rem;
+
+$btn-border-radius: $border-radius;
+$btn-border-width: 1px;
+$btn-font-weight: 500;
+$btn-font-size-sm: .75rem;
+$btn-font-size: .875rem;
+$btn-font-size-lg: .9375rem;
+$btn-line-height: 1.45;
+
+
+$breadcrumb-bg: transparent;
+$breadcrumb-padding-x: 0;
+$breadcrumb-padding-y: 0;
+$breadcrumb-margin-bottom: 0;
+
+$caret-width: .3em;
+$caret-spacing: $caret-width * 1.5;
+$caret-vertical-align: .15em;
+
+$dropdown-min-width: 10rem;
+$dropdown-font-size: .875rem;
+$dropdown-border-color: rgba(0,0,0,.075);
+
+$input-font-size: .875rem;
+$input-padding-y: .5rem;
+
+$link-color: hsl(var(--bs-primary-h), var(--bs-primary-s), 30%);
+$link-hover-color: hsl(var(--bs-primary-h), var(--bs-primary-s), 15%);
+$link-decoration: underline;
+
+$input-border-radius: $border-radius;
+
+$dropdown-item-padding-y: .375rem;
+
+$modal-content-border-width: 0;
+
+$label-line-height: 1.4;
+$form-label-color: $ui-primary-color;
+$form-label-font-size: .875rem;
+
+$nav-link-color: var(--bs-primary-hsl);
+$nav-link-hover-color: hsl(var(--bs-primary-h), var(--bs-primary-s), calc(var(--bs-primary-l) + 10%));
+
+$nav-pills-link-active-bg: var(--component-active-bg);
+$nav-pills-link-active-color: var(--component-active-color);
+
+$dropdown-link-active-bg: var(--component-active-bg);
+$dropdown-link-active-color: var(--component-active-color);
+
+$pagination-active-bg: var(--component-active-bg);
+$pagination-active-color: var(--component-active-color);
+
+$list-group-active-bg: var(--component-active-bg);
+$list-group-active-color: var(--component-active-color);
+
+$toast-header-color: #444c55;
+
+$form-text-font-size: .75rem;
+$form-text-margin-top: .5rem;
+
+/**
+  Custom variables
+**/
+
+$leftnav-width: 15rem;
+$leftnav-collapsed-width: 3.25rem;
+
+$breakpoint-fixed-menu: 'lg';
+$form-item-margin-bottom : 1.5rem;
+
+$zindex-field-header-sticky: 50;
+
+$form-control-clear-button-padding: 2rem;
+
+$transition-leftnav-collapse: width ease 300ms;

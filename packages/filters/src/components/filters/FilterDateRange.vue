@@ -1,12 +1,14 @@
 <template>
     <div class="SharpFilterDateRange" :class="classes">
-        <FilterControl :opened="opened" :label="label" :no-caret="noCaret" @click="handleClicked">
+        <FilterControl :opened="opened" :label="label" @click="handleClicked">
             <DateRange
-                class="SharpFilterDateRange__field"
+                class="SharpFilterDateRange__field form-control"
+                :class="{ 'dropdown-toggle': required || !value }"
                 :value="value"
                 :display-format="displayFormat"
                 :monday-first="mondayFirst"
                 :clearable="!required"
+                :read-only="disabled"
                 @input="handleInput"
                 @focus="handlePickerFocused"
                 @blur="handlePickerBlur"
@@ -35,6 +37,7 @@
             required: Boolean,
             displayFormat: String,
             mondayFirst: Boolean,
+            disabled: Boolean,
             label: String,
         },
 
@@ -47,9 +50,6 @@
         computed: {
             empty() {
                 return !this.value;
-            },
-            noCaret() {
-                return !!this.value && !this.required;
             },
             classes() {
                 return {

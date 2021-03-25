@@ -2,14 +2,23 @@
 
 exports[`trix-custom-toolbar can mount TrixCustomToolbar 1`] = `
 <div>
-	<div class="editor-toolbar">
-		<button tabindex="-1" class="fa fas fa-bold" data-trix-attribute="bold"></button>
-		<button tabindex="-1" class="fa fas fa-italic" data-trix-attribute="italic"></button>
-		<i class="separator">|</i>
-		<button tabindex="-1" class="fa fas fa-link" data-trix-attribute="href" data-trix-action="link"></button>
+	<div>
+		<div class="btn-group">
+			<button class="btn btn-light" data-trix-attribute="bold">
+				<i class="fas fa-bold"></i>
+			</button>
+			<button class="btn btn-light" data-trix-attribute="italic">
+				<i class="fas fa-italic"></i>
+			</button>
+		</div>
+		<div class="btn-group">
+			<button class="btn btn-light" data-trix-attribute="href" data-trix-action="link">
+				<i class="fas fa-link"></i>
+			</button>
+		</div>
 	</div>
 	<div data-trix-dialogs="" class="trix-dialogs">
-		<div data-trix-dialog="href" data-trix-dialog-attribute="href" class="trix-dialog trix-dialog--link">
+		<div data-trix-dialog="href" data-trix-dialog-attribute="href" class="trix-dialog trix-dialog--link border-0 shadow">
 			<div class="trix-dialog__link-fields">
 				<input type="url" name="href" placeholder="{{ form.wysiwyg.dialogs.add_link.input_placeholder }}" required="required" data-trix-input="" class="trix-input trix-input--dialog">
 				<div class="trix-button-group">

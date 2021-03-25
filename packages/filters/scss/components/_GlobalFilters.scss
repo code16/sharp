@@ -1,13 +1,25 @@
+
+
 .SharpGlobalFilters {
-  $primary: $brand-01-light;
+  $primary: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--accent-bg-l));
   $border-color: $ui-03;
+
+  --color-l: calc((var(--accent-bg-l) - var(--l-threshold) + var(--accent-bg-amount)) * -100000);
+
+  .form-control {
+    padding: 0;
+  }
+
+  .SharpSelect,
+  .SharpFilterSelect,
+  .SharpFilterControl {
+    border-radius: 0;
+    border: 0;
+  }
 
   .SharpFilterControl {
     width: 100%;
-    border: none;
-    border-radius: 0;
     border-top: 1px solid $border-color!important;
-
     &__text {
       display: none;
     }
@@ -15,47 +27,49 @@
   .SharpFilterSelect {
     &--open {
       .SharpSelect .multiselect__tags {
-        box-shadow: 0 2px 4px darken($primary, 10%);
+        //box-shadow: 0 2px 4px darken($primary, 10%);
       }
     }
     &--searchable {
       .SharpAutocomplete .multiselect__content {
-        padding-top: 3rem;
+        padding-top: 3.5rem;
       }
     }
   }
   .multiselect {
-    color: $inverse-01;
+    color: hsl(0, 0%, var(--color-l));
+    background-color: $primary;
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+
     &__single {
       font-weight: normal;
       padding-left: 0;
     }
-    &__select {
-      fill: $inverse-01;
-    }
     &__tags {
-      padding-top: 1rem;
-      padding-bottom: 1rem;
-      background: $primary;
       border-radius: 0;
-      padding-left: 1rem;
       cursor: pointer;
+      line-height: 1.3;
     }
   }
   .SharpAutocomplete {
-    $input-border-color: lighten($primary, 15%);
+    --input-color: hsla(var(--bs-primary-h), var(--bs-primary-s), var(--color-l), .75);
+
     .multiselect__tags {
       margin: .5rem 1rem 0 1rem !important;
       height: 2rem!important;
       padding: 0!important;
       width: calc(100% - 2rem)!important;
-      border-bottom: 2px solid $input-border-color;
+      border-bottom: 2px solid var(--input-color);
       border-radius: 0!important;
+      left: 0;
     }
     .multiselect__input {
-      color: $inverse-01;
+      color: hsl(0, 0%, var(--color-l));
       &::placeholder {
-        color: $input-border-color;
+        color: var(--input-color);
       }
     }
     .multiselect__content-wrapper {
@@ -73,8 +87,10 @@
     }
     .multiselect__option {
       background: $primary!important;
-      &--selected {
-        background: lighten($primary, 10%)!important;
+      color: hsla(0, 0%, var(--color-l), .675);
+      &--selected, &:hover {
+        color: hsl(0, 0%, var(--color-l));
+        background: hsla(var(--bs-primary-h), var(--bs-primary-s), var(--color-l), .15)!important;
         font-weight: normal!important;
       }
     }

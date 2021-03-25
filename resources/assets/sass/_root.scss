@@ -1,0 +1,21 @@
+
+:root {
+  --bs-primary-h: #{hue($primary)};
+  --bs-primary-s: #{saturation($primary)};
+  --bs-primary-l: #{lightness($primary)};
+  --bs-primary-hsl: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--bs-primary-l));
+
+  // lightened navbar color
+  --accent-bg-amount: 20%;
+  --accent-bg-l: calc(var(--bs-primary-l) + var(--accent-bg-amount));
+  --accent-bg: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--accent-bg-l));
+
+  --l-threshold: 80%;
+
+  --component-active-bg: var(--bs-primary-hsl);
+  --component-active-color: hsl(0, 0%, calc((var(--bs-primary-l) - var(--l-threshold)) * -100000));
+
+  --filter-close-icon-color: hsl(var(--bs-primary-h), var(--bs-primary-s), 35%);
+
+  --navbar-height: calc(5rem + 1px);
+}

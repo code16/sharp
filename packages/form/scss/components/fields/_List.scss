@@ -1,84 +1,94 @@
-@import "../../mixins/fix-module-fields-margin";
-@import "../../mixins/module";
-
 .SharpList {
   &__empty-alert {
     opacity: .5;
   }
 
   &__add-button {
-    width:100%;
-    background: rgba(255,255,255,.5);
+    position: relative;
   }
 
   &__sort-button {
-    position:absolute;
-    right:0;
-    top:0;
-    z-index:1;
-    padding: 0;
-    height:auto;
-    background: $ui-02 !important;
-
-    &:before {
-      content: attr(data-inactive-text);
-    }
-
-    @mixin colorize($color) {
-      color: $color;
-      .SharpButton__icon {
-        fill: $color;
-      }
-    }
-
-    &:focus {
-      @include colorize($brand-01);
-      outline: 1px solid transparent;
-    }
-
-    &:hover {
-      @include colorize($brand-02);
-    }
-
-
-    &.SharpButton--active {
-      @include colorize($brand-03);
-      &:before {
-        content: attr(data-active-text);
-      }
-    }
+    position: sticky;
+    top: calc(var(--navbar-height) + .675rem);
+    margin-top: .675rem;
+    z-index: $zindex-field-header-sticky + 1;
+    pointer-events: auto;
   }
 
-  //remove item button
-  .SharpButton--danger {
-    align-self: center;
+  &__sticky-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  &__remove-button {
+    position: absolute;
+    top: .375rem;
+    right: .25rem;
+    padding: .5em;
+    transition: opacity .25s ease-in-out;
+    font-size: .75rem;
+    z-index: 1;
+
+    &:not(:hover):not(:focus) {
+      opacity: .375;
+    }
   }
 
   &__item {
-    @extend .SharpModule;
-
-    @include fix-module-fields-margin;
-
-    padding: 0;
-    margin-bottom: 4px;
     position: relative;
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
 
-    /// Contextual children modifiers
-    .SharpForm--label {
-      @include font-size('12');
+    &:first-child {
+      padding-top: 1.5rem;
     }
 
-    .SharpUpload {
-      &__inner {
-        box-shadow: none !important;
-      }
+    &:not(:last-child) {
+      border-bottom-style: dashed;
+      border-bottom-color: rgba(0, 0, 0, 0.25);
+    }
 
-      &__remove-button {
-        display: none;
+    .SharpGrid__row:first-child {
+      > .col-md-12:first-child > .SharpForm__form-item--no-label:not(.SharpForm__form-item--type-check) {
+        margin-top: 1rem;
       }
+      > .SharpGrid__col:last-child {
+        .SharpForm__label {
+          margin-right: 1rem;
+        }
+      }
+    }
 
-      &__close-button {
-        display: initial;
+    // adjust button size
+    .btn-block {
+      font-size: .75rem;
+    }
+
+    .btn-sm {
+      font-size: .6875rem;
+    }
+
+    .SharpFieldLocaleSelect__btn {
+      font-size: .625rem;
+    }
+
+    /// Contextual children modifiers
+    .SharpForm__label {
+      font-size: $form-label-font-size * .875;
+    }
+
+    .SharpField {
+      .SharpClearButton:not(:focus) {
+        opacity: 0;
+      }
+      &:hover {
+        .SharpClearButton {
+          opacity: 1;
+        }
       }
     }
 
@@ -87,7 +97,7 @@
       padding-right: 0 !important;
     }
 
-    @include module-contextual-close-button;
+    //@include module-contextual-close-button;
     ///
 
     .SharpList__overlay-handle {
@@ -96,16 +106,12 @@
       left:0;
       width: 100%;
       height: 100%;
-      z-index: z('listItemOverlay');
+      z-index: 40;
       cursor: move;
     }
 
     &.sortable-chosen {
-      @include focus-outline('border');
-    }
-
-    &:last-of-type {
-      margin-bottom: rem(10px);
+      box-shadow: $box-shadow;
     }
 
     &.expand-enter-active {
@@ -127,15 +133,15 @@
   }
 
   &__new-item-zone {
-    z-index:3;
-    position:absolute;
+    position: absolute;
+    z-index: 1;
     //background: rgba(255,0,0,0.3);
-    height:2rem;
-    margin-bottom:-1rem;
+    height: 2rem;
+    margin-bottom: -1rem;
     bottom:0;
     left:0;
     right:0;
-    text-align: left;
+    text-align: center;
 
     &:hover  {
       button {
@@ -145,6 +151,7 @@
     button {
       opacity: 0;
       margin-left:-.95rem;
+      transition: opacity .25s ease-in-out;
       &:focus {
         opacity: 1;
       }

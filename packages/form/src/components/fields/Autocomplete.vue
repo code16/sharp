@@ -1,9 +1,23 @@
 <template>
     <div class="SharpAutocomplete" :class="classes">
-        <template v-if="ready">
+        <template v-if="overlayVisible">
+            <div class="form-control clearable">
+                <TemplateRenderer
+                    name="ResultItem"
+                    :template="resultItemTemplate"
+                    :template-data="localizedTemplateData(value)"
+                />
+
+                <ClearButton @click="handleClearButtonClicked" />
+            </div>
+        </template>
+        <template v-else-if="ready">
             <Multiselect
-                class="SharpAutocomplete__multiselect"
-                :class="{ 'SharpAutocomplete__multiselect--hide-dropdown':hideDropdown }"
+                class="SharpAutocomplete__multiselect form-control"
+                :class="{
+                    'form-select': !this.isRemote,
+                    'SharpAutocomplete__multiselect--hide-dropdown': hideDropdown,
+                }"
                 :value="value"
                 :options="suggestions"
                 :track-by="itemIdAttribute"
@@ -17,6 +31,8 @@
                 :preserve-search="preserveSearch"
                 :show-pointer="showPointer"
                 :searchable="searchable"
+                :readonly="readOnly"
+                :tabindex="readOnly ? -1 : 0"
                 @search-change="updateSuggestions($event)"
                 @select="handleSelect"
                 @input="$emit('multiselect-input',$event)"
@@ -26,12 +42,7 @@
             >
                 <template v-slot:clear>
                     <template v-if="clearButtonVisible">
-                        <button class="SharpAutocomplete__result-item__close-button" type="button" @click="handleClearButtonClicked">
-                            <svg class="SharpAutocomplete__result-item__close-icon"
-                                aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd">
-                                <path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
-                            </svg>
-                        </button>
+                        <ClearButton @click="handleClearButtonClicked" />
                     </template>
                 </template>
                 <template v-slot:singleLabel="{ option }">
@@ -55,18 +66,6 @@
                     {{ l('form.autocomplete.no_results_text') }}
                 </template>
             </multiselect>
-
-            <template v-if="overlayVisible">
-                <div class="SharpAutocomplete__overlay multiselect">
-                    <div class="multiselect__tags">
-                        <TemplateRenderer
-                            name="ResultItem"
-                            :template="resultItemTemplate"
-                            :template-data="localizedTemplateData(value)"
-                        />
-                    </div>
-                </div>
-            </template>
         </template>
     </div>
 </template>
@@ -77,7 +76,7 @@
     import { CancelToken } from 'axios';
     import { warn, lang, search } from 'sharp';
     import { TemplateRenderer } from 'sharp/components';
-    import { Loading, multiselectUpdateScroll } from 'sharp-ui';
+    import { Loading, ClearButton,  multiselectUpdateScroll } from 'sharp-ui';
     import { Localization } from 'sharp/mixins';
 
     import { getAutocompleteSuggestions } from "../../api";
@@ -86,11 +85,12 @@
 
 
     export default {
-        name:'SharpAutocomplete',
+        name: 'SharpAutocomplete',
         components: {
             Multiselect,
             TemplateRenderer,
             Loading,
+            ClearButton,
         },
 
         mixins: [Localization, localize],

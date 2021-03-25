@@ -1,32 +1,41 @@
+<template>
+    <b-tab :title-link-class="classes" @update:active="handleActiveChanged">
+        <template v-slot:title>
+            {{ title }}
+        </template>
+
+        <slot />
+    </b-tab>
+</template>
+
 <script>
     import { BTab } from 'bootstrap-vue';
 
     export default {
-        name: 'SharpBTab',
-        extends: BTab,
+        name: 'SharpTab',
+        components: {
+            BTab
+        },
         provide() {
-            return  {
-                $tab:this
+            return {
+                $tab: this
             }
+        },
+        props: {
+            title: String,
         },
         data() {
             return  {
-                errors: {}
+                errors: {},
             }
         },
         computed: {
             hasError() {
                 return Object.keys(this.errors).length > 0;
-            }
-        },
-        watch: {
-            localActive: {
-                immediate: true,
-                async handler(val) {
-                    if(val) {
-                        await this.$nextTick();
-                        this.$emit('active');
-                    }
+            },
+            classes() {
+                return {
+                    'is-invalid': this.hasError,
                 }
             }
         },
@@ -36,7 +45,13 @@
             },
             clearError(fieldKey) {
                 this.$delete(this.errors,fieldKey);
-            }
+            },
+            async handleActiveChanged(active) {
+                if(active) {
+                    await this.$nextTick();
+                    this.$emit('active');
+                }
+            },
         },
         created() {
             this.$on('error', key=>this.setError(key));

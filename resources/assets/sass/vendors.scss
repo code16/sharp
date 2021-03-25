@@ -1,0 +1,26 @@
+
+@import "variables";
+
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import '~@fortawesome/fontawesome-free/scss/regular';
+@import '~@fortawesome/fontawesome-free/scss/brands';
+@import '~@fortawesome/fontawesome-free/scss/v4-shims';
+
+
+@import '~simplemde/dist/simplemde.min.css';
+@import '~trix/dist/trix.css';
+@import "~leaflet/dist/leaflet.css";
+
+
+@import '~element-ui/packages/theme-chalk/src/icon';
+
+
+$animationDuration: 300ms;
+
+@import "~vue2-animate/src/sass/make-transitions";
+@import "~vue2-animate/src/sass/animations/sliding/all";
+
+
+// DateRange field
+@import '~element-ui/packages/theme-chalk/src/date-picker';

@@ -1,11 +1,10 @@
 <template>
-    <div class="SharpTrix" :class="{ 'SharpTrix--read-only': readOnly }">
-        <div class="SharpModule__inner">
-            <input :id="inputId" :value="text" type="hidden">
-            <trix-toolbar v-if="toolbar" class="SharpModule__header" :id="toolbarId">
+    <div class="SharpTrix editor" :class="{ 'SharpTrix--read-only': readOnly }">
+        <div class="card">
+            <trix-toolbar v-if="toolbar" class="card-header editor__toolbar" :id="toolbarId">
                 <trix-custom-toolbar :toolbar="toolbar" />
             </trix-toolbar>
-            <trix-editor class="SharpModule__content"
+            <trix-editor class="card-body form-control"
                 :input="inputId"
                 :toolbar="toolbarId"
                 :placeholder="placeholder"
@@ -14,6 +13,7 @@
                 ref="trix"
             ></trix-editor>
         </div>
+        <input :id="inputId" :value="text" type="hidden">
     </div>
 </template>
 

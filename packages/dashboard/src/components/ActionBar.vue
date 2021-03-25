@@ -15,10 +15,7 @@
             </div>
         </template>
         <template v-if="commands.length" v-slot:extras-right>
-            <CommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
-                :commands="commands"
-                @select="handleCommandSelected"
-            >
+            <CommandsDropdown :commands="commands" @select="handleCommandSelected">
                 <template v-slot:text>
                     {{ l('dashboard.commands.dashboard.label') }}
                 </template>

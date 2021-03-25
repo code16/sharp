@@ -7,7 +7,7 @@ use Code16\Sharp\Form\SharpSingleForm;
 
 class FormController extends ApiController
 {
-    public function edit(string $entityKey, $instanceId = null)
+    public function edit(string $entityKey, string $instanceId = null)
     {
         sharp_check_ability("view", $entityKey, $instanceId);
 
@@ -52,7 +52,7 @@ class FormController extends ApiController
         );
     }
 
-    public function update(string $entityKey, $instanceId = null)
+    public function update(string $entityKey, string $instanceId = null)
     {
         sharp_check_ability("update", $entityKey, $instanceId);
 
@@ -92,7 +92,7 @@ class FormController extends ApiController
         ]);
     }
 
-    public function delete(string $entityKey, $instanceId = null)
+    public function delete(string $entityKey, string $instanceId = null)
     {
         sharp_check_ability("delete", $entityKey, $instanceId);
 
@@ -111,7 +111,6 @@ class FormController extends ApiController
         if($this->isSubEntity($entityKey)) {
             list($entityKey, $subEntityKey) = explode(':', $entityKey);
             $validatorClass = config("sharp.entities.{$entityKey}.forms.{$subEntityKey}.validator");
-
         } else {
             $validatorClass = config("sharp.entities.{$entityKey}.validator");
         }

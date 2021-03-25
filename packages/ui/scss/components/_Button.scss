@@ -1,191 +1,147 @@
-@import '../mixins/button';
 
 
-.SharpButton {
-  font-family: inherit;
-
-  overflow: hidden;
-
-  &__collapse-transition {
-    transition: width 100ms $bx--standard-easing;
-  }
-
-  &::-moz-focus-inner {
-    padding: 0;
-    border: 0;
-  }
-  &__icon {
-    position: relative;
-    vertical-align: middle;
-    top: -1px;
-
-    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-      top: 0;
-    }
-
-    width: rem(16px);
-    height: rem(16px);
-    margin-left: .5rem;
-    //transition-duration: $transition--base;
-    //transition-timing-function: ease-in;
-  }
-
-  @include reset;
-  @include font-smoothing;
-  //@include letter-spacing;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  font-size: $button-font-size;
-  font-weight: $button-font-weight;
-  height: rem($button-height);
-  padding: $button-padding;
-  border-radius: $button-border-radius;
-  text-align: center;
-  text-decoration: none;
-  //transition-duration: $transition--base;
-  //transition-timing-function: ease-in;
-  white-space: nowrap;
-  line-height: 16px;
-
-  // Sharp specific
+.btn {
   text-transform: uppercase;
 
-  &:disabled {
-    cursor: not-allowed;
-    opacity: .5;
+  svg {
+    fill: currentColor;
+    vertical-align: -.125em;
   }
 
-
-  &--primary {
-    @include button-theme(
-      $brand-01,   // bg-color
-      transparent, // border-color
-      $inverse-01, // font-color
-      $brand-02,   // hover-bg-color
-      $ui-01       // icon-color
-    );
-  }
-
-  &--accent {
-    @include button-theme(
-      $brand-03,   // bg-color
-      transparent, // border-color
-      $inverse-01, // font-color
-      lighten($brand-03, 10%),   // hover-bg-color
-      $ui-01       // icon-color
-    );
-  }
-
-  &--secondary {
-    @include button-theme(
-      $ui-01, // bg-color
-      $brand-01,   // border-color
-      $brand-01,   // font-color
-      $brand-01,   // hover-bg-color
-      $brand-01 // icon-color
-    );
-
-    &:hover,
-    &:focus {
-      color: $inverse-01;
-    }
-
-    &:hover > svg,
-    &:focus > svg {
-      fill: $inverse-01;
-    }
-
-    &:hover:disabled,
-    &:focus:disabled {
-      color: $brand-01;
+  &.active {
+    &:focus:not(:focus-visible) {
+      box-shadow: none;
     }
   }
+}
 
-  &--secondary-accent {
-    @include button-theme(
-      $ui-01,   // bg-color
-      $brand-01, // border-color
-      $brand-03, // font-color
-      darken($ui-01, 10%),   // hover-bg-color
-      $brand-03       // icon-color
-    );
+
+.btn-primary {
+  --threshold: var(--l-threshold);
+  --color-l: calc((var(--bs-primary-l) - var(--threshold)) * -100000);
+  --hover-bg-l: calc(var(--bs-primary-l) + clamp(-#{$btn-hover-bg-shade-amount}, var(--color-l), #{$btn-hover-bg-tint-amount}));
+  --active-bg-l: calc(var(--bs-primary-l) + clamp(-#{$btn-active-bg-shade-amount}, var(--color-l), #{$btn-active-bg-tint-amount}));
+
+  @include button-variant(
+    $background: var(--bs-primary-hsl),
+    $border: transparent,
+    $color: white,
+    $hover-background: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--hover-bg-l)),
+    $hover-border: hsl(
+        var(--bs-primary-h),
+        var(--bs-primary-s),
+        calc(var(--bs-primary-l) + clamp(-#{$btn-hover-border-shade-amount}, var(--color-l), #{$btn-hover-border-tint-amount}))
+    ),
+    $hover-color: hsl(0, 0%, calc((var(--hover-bg-l) - var(--threshold)) * -100000)),
+    $active-background: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--active-bg-l)),
+    $active-border: hsl(
+        var(--bs-primary-h),
+        var(--bs-primary-s),
+        calc(var(--bs-primary-l) + clamp(-#{$btn-active-bg-shade-amount}, var(--color-l), #{$btn-active-bg-tint-amount}))
+    ),
+    $active-color: hsl(0, 0%, calc((var(--active-bg-l) - var(--threshold)) * -100000)),
+    $disabled-background: var(--bs-primary),
+    $disabled-border: var(--bs-primary),
+    $disabled-color: white
+  );
+
+  color: hsl(0, 0%, var(--color-l));
+  border-color: var(--bs-primary-hsl);
+
+  &:focus {
+    box-shadow: 0 0 0 $btn-focus-width hsla(var(--bs-primary-h), var(--bs-primary-s), calc(var(--bs-primary-l) + clamp(-15%, var(--color-l), 15%)), .5)!important;
   }
+}
 
-  &--ghost {
-    @include button-theme(
-                    transparent, // bg-color
-                    transparent,   // border-color
-                    $brand-01,   // font-color
-                    $ui-01,   // hover-bg-color
-                    $brand-01 // icon-color
-    );
-    box-shadow: 0 3px 0 $ui-03;
 
-    //&:hover,
-    //&:focus {
-    //  color: $inverse-01;
-    //
-    //  svg {
-    //    fill: $inverse-01;
-    //  }
-    //}
 
-    svg {
-      margin-left: .275rem;
-    }
+.btn-text {
+  --color-l: 30%;
+  --color: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--color-l));
 
-    &:hover:disabled,
-    &:focus:disabled {
-      color: $brand-01;
+  @include button-variant(
+    $background: hsla(var(--bs-primary-h), var(--bs-primary-s), var(--color-l), .1),
+    $border: transparent,
+    $color: $primary,
+    //$hover-background: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--bs-primary-l)),
+    //$hover-border: transparent,
+    //$hover-color: white,
+    $hover-background: hsla(var(--bs-primary-h), var(--bs-primary-s), var(--color-l), .15),
+    $hover-border: hsla(var(--bs-primary-h), var(--bs-primary-s), var(--color-l), .25),
+    $hover-color: var(--color),
+    $active-background: var(--color),
+    $active-border: var(--color),
+    $active-color:  hsl(0, 0%, calc((var(--color-l) - var(--l-threshold)) * -100000)),
+    $disabled-background: transparent,
+    $disabled-border: transparent,
+    $disabled-color: var(--color)
+  );
 
-      svg {
-        fill: $brand-01;
-      }
-    }
+  color: hsla(var(--bs-primary-h), var(--bs-primary-s), var(--color-l), .875);
+
+  &:focus {
+    box-shadow: 0 0 0 $btn-focus-width hsla(var(--bs-primary-h), var(--bs-primary-s), calc(var(--color-l) + clamp(-15%, var(--color-l), 15%)), .5)!important;
   }
+}
 
-  &--danger {
-    @include button-theme(
-      $ui-01,  // bg-color
-      $support-01, // border-color
-      $support-01,  // font-color
-      $support-01,  // hover-bg-color
-      $brand-01       // icon-color
-    );
 
-    &:hover {
-      color: $inverse-01;
-      border: $button-border-width solid transparent;
-    }
+.btn-outline-primary {
+  @include button-outline-variant(
+    $color: black,
+    $color-hover: hsl(0, 0%, calc((var(--bs-primary-l) - var(--l-threshold)) * -100000)),
+    $active-background: var(--bs-primary-hsl),
+    $active-border: var(--bs-primary-hsl),
+    $active-color: hsl(0, 0%, calc((var(--bs-primary-l) - var(--l-threshold)) * -100000))
+  );
 
-    &:focus {
-      color: $inverse-01;
-    }
+  color: var(--bs-primary-hsl);
+  border-color: hsla(var(--bs-primary-h), var(--bs-primary-s), var(--bs-primary-l), .375);
 
-    &:hover:disabled,
-    &:focus:disabled {
-      color: $ui-05;
-      border: $button-border-width solid currentColor;
-    }
-
-    &:hover > svg,
-    &:focus > svg {
-      fill: $inverse-01;
-    }
+  &:focus {
+    box-shadow: 0 0 0 $btn-focus-width hsla(var(--bs-primary-h), var(--bs-primary-s), var(--bs-primary-l), .5)!important;
   }
+}
 
-  &--sm {
-    height: 1.6rem;
-    font-size: .75rem;
-    padding: $button-padding-sm;
-    letter-spacing: 0;
+@mixin default {
+  &:not(:hover):not(:active):not(.active) {
+    @content;
   }
+}
 
-  &--secondary + &--primary {
-    margin-left: 1rem;
+.btn-light {
+  &:hover, &:focus, &.active {
+    color: hsl(var(--bs-primary-h), var(--bs-primary-s), 30%);
   }
+  &.active {
+    background-color: hsla(var(--bs-primary-h), var(--bs-primary-s), 30%, .1);
+    border-color: transparent;
+  }
+}
 
+.btn-outline-light {
+  @include default {
+    border-color: rgba($light, .5);
+  }
+}
+
+.btn-outline-danger {
+  @include default {
+    background-color: white;
+    border-color: rgba($danger, .375);
+  }
+}
+
+.btn-block {
+  width: 100%;
+
+  &:not(.btn-sm):not(.btn-lg) {
+    border-radius: $border-radius-lg;
+  }
+}
+
+.btn--outline-hover {
+  background-color: transparent!important;
+  @include default {
+    border-color: transparent;
+  }
 }

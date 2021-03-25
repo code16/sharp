@@ -10,7 +10,10 @@
     &__table {
       margin-bottom: 0;
       border-left: 0;
-      border-right :0;
+      border-right: 0;
+      border-bottom: 0;
+      border-bottom-left-radius: $card-border-radius;
+      border-bottom-right-radius: $card-border-radius;
     }
     &__row {
       &:last-of-type {

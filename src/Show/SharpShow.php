@@ -2,9 +2,8 @@
 
 namespace Code16\Sharp\Show;
 
-use Code16\Sharp\EntityList\Traits\HandleCommands;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
-use Code16\Sharp\Exceptions\SharpException;
+use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
 use Code16\Sharp\Form\HandleFormFields;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
@@ -15,7 +14,7 @@ abstract class SharpShow
     use WithCustomTransformers,
         HandleFormFields,
         HandleEntityState,
-        HandleCommands,
+        HandleInstanceCommands,
         HandleCustomBreadcrumb;
 
     protected bool $layoutBuilt = false;
@@ -74,7 +73,7 @@ abstract class SharpShow
         return tap($config, function(&$config) use($instanceId) {
             $this->appendBreadcrumbCustomLabelAttribute($config);
             $this->appendEntityStateToConfig($config, $instanceId);
-            $this->appendCommandsToConfig($config, $instanceId);
+            $this->appendInstanceCommandsToConfig($config, $instanceId);
         });
     }
 
@@ -120,11 +119,6 @@ abstract class SharpShow
         $this->sections[] = $section;
 
         return $this;
-    }
-
-    final protected function addEntityCommand(string $commandName, $commandHandlerOrClassName): void
-    {
-        throw new SharpException("Entity commands are not allowed in Show view");
     }
 
     /**

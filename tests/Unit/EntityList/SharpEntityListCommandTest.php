@@ -214,6 +214,42 @@ class SharpEntityListCommandTest extends SharpTestCase
     }
 
     /** @test */
+    function we_can_define_a_form_modal_title_on_a_command()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig(): void
+            {
+                $this->addEntityCommand("entityCommand", new class extends EntityCommand {
+                    public function label(): string {
+                        return "My Entity Command";
+                    }
+                    public function formModalTitle(): string {
+                        return "My title";
+                    }
+                    public function execute(EntityListQueryParams $params, array $data = []): array {}
+                });
+            }
+        };
+
+        $list->buildListConfig();
+
+        $this->assertArraySubset([
+            "commands" => [
+                "entity" => [
+                    [
+                        [
+                            "key" => "entityCommand",
+                            "label" => "My Entity Command",
+                            "type" => "entity",
+                            "modal_title" => "My title"
+                        ]
+                    ]
+                ]
+            ]
+        ], $list->listConfig());
+    }
+
+    /** @test */
     function we_can_handle_authorization_in_an_entity_command()
     {
         $list = new class extends SharpEntityDefaultTestList {
@@ -410,6 +446,51 @@ class SharpEntityListCommandTest extends SharpTestCase
                         ]
                     ]
 
+                ]
+            ]
+        ], $list->listConfig());
+    }
+
+    /** @test */
+    function we_can_declare_an_entity_command_as_primary()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig(): void
+            {
+                $this
+                    ->addEntityCommand("entity", new class extends EntityCommand {
+                        public function label(): string {
+                            return "My Entity Command";
+                        }
+                        public function execute(EntityListQueryParams $params, array $data = []): array {}
+                    })
+                    ->setPrimaryEntityCommand("primary-entity", new class extends EntityCommand {
+                        public function label(): string {
+                            return "My Primary Entity Command";
+                        }
+                        public function execute(EntityListQueryParams $params, array $data = []): array {}
+                    });
+            }
+        };
+
+        $list->buildListConfig();
+
+        $this->assertArraySubset([
+            "commands" => [
+                "entity" => [
+                    [
+                        [
+                            "key" => "entity",
+                            "label" => "My Entity Command",
+                            "type" => "entity",
+                        ],
+                        [
+                            "key" => "primary-entity",
+                            "label" => "My Primary Entity Command",
+                            "type" => "entity",
+                            "primary" => true,
+                        ]
+                    ]
                 ]
             ]
         ], $list->listConfig());
