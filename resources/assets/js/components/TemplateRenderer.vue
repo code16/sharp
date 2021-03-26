@@ -1,47 +1,33 @@
 <template>
-    <rendered-template
-        class="SharpTemplate"
-        :name="name"
-        :template="template"
-        :template-data="templateData"
-        :template-props="templateProps"
-    >
-    </rendered-template>
+    <component :is="component" v-bind="templateData" />
 </template>
 
 <script>
     export default {
         name: 'SharpTemplate',
 
-        components: {
-            RenderedTemplate: {
-                functional: true,
-                props: {
-                    name:String, template:String, templateProps:Array, templateData:Object
-                },
-                render(h, { props, data }) {
-                    const { name ,template, templateProps, templateData } = props;
-                    return h({
-                            name: `SharpTemplate${name}`,
-                            template:`<div>${template}</div>`,
-                            props: templateProps
-                        }, {
-                        ...data,
-                        props: templateData
-                    });
-                }
-            }
-        },
-
         props: {
             name: String,
             templateData: Object,
+            templateProps: Array,
             template: String,
         },
 
         computed: {
-            templateProps() {
-                return Object.keys(this.templateData||{});
+            component() {
+                return {
+                    name: `SharpTemplate${this.name}`,
+                    template: `<div class="SharpTemplate">${this.template}</div>`,
+                    props: [
+                        ...(this.templateProps || []),
+                        ...Object.keys(this.templateData ?? {}),
+                    ],
+                    mounted() {
+                        if(this.$el.children.length > 0) {
+                            this.$el.classList.add('SharpTemplate--has-children');
+                        }
+                    },
+                }
             },
         }
     }

@@ -19,15 +19,21 @@
         width: 100%!important;
       }
     }
-    .multiselect__option > .SharpTemplate {
-      overflow:hidden;
-      text-overflow: ellipsis;
+  }
+
+  .multiselect__option {
+    padding: 0;
+    .SharpTemplate {
+      padding: $dropdown-item-padding-y $dropdown-item-padding-x;
     }
-    .multiselect__single {
-      .SharpTemplate {
-        overflow:hidden;
-        text-overflow: ellipsis;
-      }
+  }
+
+  .SharpTemplate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &--has-children {
+      white-space: normal;
     }
   }
 

@@ -50,6 +50,7 @@
                         name="ResultItem"
                         :template="resultItemTemplate"
                         :template-data="localizedTemplateData(option)"
+                        :template-props="searchKeys"
                     />
                 </template>
                 <template v-slot:option="{ option }">
@@ -57,6 +58,7 @@
                         name="ListItem"
                         :template="listItemTemplate"
                         :template-data="localizedTemplateData(option)"
+                        :template-props="searchKeys"
                     />
                 </template>
                 <template v-slot:loading>
