@@ -1,7 +1,7 @@
 <template>
     <div class="SharpAutocomplete" :class="classes">
         <template v-if="overlayVisible">
-            <div class="form-control clearable">
+            <div class="form-control clearable SharpAutocomplete__result">
                 <TemplateRenderer
                     name="ResultItem"
                     :template="resultItemTemplate"

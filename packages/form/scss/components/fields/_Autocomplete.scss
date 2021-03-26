@@ -21,11 +21,12 @@
     }
   }
 
-  .multiselect__option {
-    padding: 0;
-    .SharpTemplate {
-      padding: $dropdown-item-padding-y $dropdown-item-padding-x;
-    }
+  &__result, .multiselect__option  {
+    overflow: hidden;
+  }
+
+  .SharpClearButton {
+    background-color: white;
   }
 
   .SharpTemplate {
@@ -33,6 +34,7 @@
     text-overflow: ellipsis;
 
     &--has-children {
+      overflow: visible;
       white-space: normal;
     }
   }

@@ -72,7 +72,7 @@
   .multiselect__content {
     @extend .dropdown-menu;
     max-height: 20rem;
-    max-width: 100%;
+    width: 100%;
     overflow: auto;
     left: 0;
   }
