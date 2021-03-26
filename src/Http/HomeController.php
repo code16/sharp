@@ -18,22 +18,14 @@ class HomeController extends SharpProtectedController
     private function getFirstConfiguredEntityUrl(): ?string
     {
         if($menuItem = app(Menu::class)->getItems()[0] ?? null) {
-            if($menuItem->isMenuItemEntity()) {
-                return route('code16.sharp.list', $menuItem->key);
-            }
-
-            if($menuItem->isMenuItemDashboard()) {
-                return route('code16.sharp.dashboard', $menuItem->key);
+            if($menuItem->isMenuItemEntity() || $menuItem->isMenuItemDashboard()) {
+                return $menuItem->url;
             }
             
             if($menuItem->isMenuItemCategory()) {
                 foreach($menuItem->entities as $menuItemEntity) {
-                    if($menuItemEntity->isMenuItemEntity()) {
-                        return route('code16.sharp.list', $menuItemEntity->key);
-                    }
-
-                    if($menuItemEntity->isMenuItemDashboard()) {
-                        return route('code16.sharp.dashboard', $menuItemEntity->key);
+                    if($menuItemEntity->isMenuItemEntity() || $menuItemEntity->isMenuItemDashboard()) {
+                        return $menuItemEntity->url;
                     }
                 }
             }
