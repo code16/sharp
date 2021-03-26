@@ -36,7 +36,7 @@ exports[`list-field can mount collapsed list field 1`] = `
 		<div>
 			<div class="list-group shadow-sm">
 				<div class="SharpList__item list-group-item SharpList__item--collapsed">
-					<div class="SharpTemplate">
+					<div class="SharpTemplate SharpTemplate--has-children">
 						<span> Antoine </span>
 					</div>
 					<div class="SharpList__overlay-handle"></div>

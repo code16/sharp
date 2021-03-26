@@ -2,7 +2,7 @@
 
 exports[`autocomplete-field common & local can mount Autocomplete field as multiselect 1`] = `
 <div id="app">
-	<div class="SharpAutocomplete">
+	<div class="SharpAutocomplete SharpAutocomplete--wrap">
 		<div tabindex="-1" class="multiselect SharpAutocomplete__multiselect form-control form-select">
 			<div class="multiselect__select"></div>
 			<div class="multiselect__tags">
@@ -26,7 +26,7 @@ exports[`autocomplete-field common & local can mount Autocomplete field as multi
 					<!---->
 					<li class="multiselect__element">
 						<span data-select="Press enter to select" data-selected="Selected" data-deselect="Press enter to remove" class="multiselect__option multiselect__option--highlight">
-							<div class="SharpTemplate">
+							<div class="SharpTemplate SharpTemplate--has-children">
 								<em>Theodore Bagwell, T-Bag</em>
 							</div>
 						</span>
@@ -34,7 +34,7 @@ exports[`autocomplete-field common & local can mount Autocomplete field as multi
 					</li>
 					<li class="multiselect__element">
 						<span data-select="Press enter to select" data-selected="Selected" data-deselect="Press enter to remove" class="multiselect__option">
-							<div class="SharpTemplate">
+							<div class="SharpTemplate SharpTemplate--has-children">
 								<em>Lincoln Burrows, Linc</em>
 							</div>
 						</span>
@@ -57,7 +57,7 @@ exports[`autocomplete-field common & local can mount Autocomplete field as multi
 
 exports[`autocomplete-field common & local can mount Autocomplete field as result item 1`] = `
 <div id="app">
-	<div class="SharpAutocomplete">
+	<div class="SharpAutocomplete SharpAutocomplete--wrap">
 		<div tabindex="-1" class="multiselect SharpAutocomplete__multiselect form-control form-select">
 			<div class="multiselect__select"></div>
 			<button type="button" class="SharpClearButton btn SharpClearButton--form-control">
@@ -77,7 +77,7 @@ exports[`autocomplete-field common & local can mount Autocomplete field as resul
 				</div>
 				<input name="" type="text" autocomplete="off" placeholder="nom" tabindex="0" class="multiselect__input" style="width: 0px; position: absolute; padding: 0px;">
 				<span class="multiselect__single">
-					<div class="SharpTemplate">
+					<div class="SharpTemplate SharpTemplate--has-children">
 						<b>Theodore Bagwell, T-Bag</b>
 					</div>
 				</span>
@@ -88,7 +88,7 @@ exports[`autocomplete-field common & local can mount Autocomplete field as resul
 					<!---->
 					<li class="multiselect__element">
 						<span data-select="Press enter to select" data-selected="Selected" data-deselect="Press enter to remove" class="multiselect__option multiselect__option--highlight multiselect__option--selected">
-							<div class="SharpTemplate">
+							<div class="SharpTemplate SharpTemplate--has-children">
 								<em>Theodore Bagwell, T-Bag</em>
 							</div>
 						</span>
@@ -96,7 +96,7 @@ exports[`autocomplete-field common & local can mount Autocomplete field as resul
 					</li>
 					<li class="multiselect__element">
 						<span data-select="Press enter to select" data-selected="Selected" data-deselect="Press enter to remove" class="multiselect__option">
-							<div class="SharpTemplate">
+							<div class="SharpTemplate SharpTemplate--has-children">
 								<em>Lincoln Burrows, Linc</em>
 							</div>
 						</span>

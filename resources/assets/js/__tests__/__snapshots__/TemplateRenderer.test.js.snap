@@ -2,7 +2,7 @@
 
 exports[`template-renderer can mount given template wrapped in div tag 1`] = `
 <div id="app">
-	<div class="SharpTemplate">
+	<div class="SharpTemplate SharpTemplate--has-children">
 		<em>Antoine</em>
 	</div>
 </div>
