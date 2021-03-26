@@ -22,6 +22,7 @@
             :show-pointer="false"
             :searchable="searchable"
             :read-only="disabled"
+            nowrap
             no-result-item
             mode="local"
             ref="autocomplete"

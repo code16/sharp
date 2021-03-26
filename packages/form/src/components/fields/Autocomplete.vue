@@ -157,7 +157,8 @@
             debounceDelay: {
                 type: Number,
                 default: 400,
-            }
+            },
+            nowrap: Boolean,
         },
         data() {
             return {
@@ -189,10 +190,11 @@
                 return !!this.value && !this.opened;
             },
             classes() {
-                return [
-                    { 'SharpAutocomplete--remote': this.isRemote },
-                    { 'SharpAutocomplete--disabled': this.readOnly }
-                ];
+                return {
+                    'SharpAutocomplete--remote': this.isRemote,
+                    'SharpAutocomplete--disabled': this.readOnly,
+                    'SharpAutocomplete--wrap': !this.nowrap,
+                };
             },
             overlayVisible() {
                 const isFormField = !!this.fieldKey;

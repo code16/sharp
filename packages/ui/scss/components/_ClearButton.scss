@@ -20,10 +20,10 @@
 
   &--form-control {
     position: absolute!important;
-    height: calc(100% - #{$input-border-width * 2});
+    height: 100%;
     width: 2rem;
-    right: $input-border-width;
-    top: $input-border-width;
+    right: 0;
+    top: 0;
 
     z-index: 12;
 

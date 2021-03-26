@@ -2,12 +2,6 @@
   position: relative;
   font-size: 1rem;
 
-  &--disabled {
-    opacity: .5;
-    cursor: not-allowed !important;
-    outline: none !important;
-  }
-
   &__multiselect {
     &--hide-dropdown.multiselect--active {
       .multiselect__content {
@@ -21,7 +15,8 @@
     }
   }
 
-  &__result, .multiselect__option  {
+  &__result {
+    position: relative;
     overflow: hidden;
   }
 
@@ -31,18 +26,21 @@
 
   .SharpTemplate {
     overflow: hidden;
+    white-space: nowrap;
     text-overflow: ellipsis;
+  }
 
-    &--has-children {
+  &--wrap {
+    .SharpTemplate--has-children {
       overflow: visible;
       white-space: normal;
     }
   }
 
-  &--remote {
-    .multiselect__tags {
-      padding-right: 1rem;
-    }
+  &--disabled {
+    opacity: .5;
+    cursor: not-allowed !important;
+    outline: none !important;
   }
 
   .SharpLoading {

@@ -95,6 +95,10 @@
       &__content {
         left: 0;
         min-width: 10rem;
+        @include media-breakpoint-up(md) {
+          width: auto;
+          max-width: 30rem;
+        }
       }
 
       &__tag {
