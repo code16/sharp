@@ -219,6 +219,13 @@ public function authorizeFor($instanceId): bool
 
 An EntityList can declare one (and only one) of its entity Commands as "primary". In this case, the command will appear at the top, right next to the creation button ("New..."). The idea is to provide more visibility to an important Command, but could also be to replace the creation button entirely (you need to remove the "create" authorization to achieve this). 
 
+```php
+function buildListConfig(): void
+{
+    $this->setPrimaryEntityCommand("invite_new_user", InviteUserCommand::class);
+}
+```
+
 A use case could be to provide a Command with a form for the "create" task, leaving the real Form only for update.
 
 ## Commands for Show Page
