@@ -1,10 +1,7 @@
 
 
 .SharpGlobalFilters {
-  $primary: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--accent-bg-l));
-  $border-color: $ui-03;
-
-  --color-l: calc((var(--accent-bg-l) - var(--l-threshold) + var(--accent-bg-amount)) * -100000);
+  $border-left-width: 6px;
 
   .form-control {
     padding: 0;
@@ -19,31 +16,21 @@
 
   .SharpFilterControl {
     width: 100%;
-    border-top: 1px solid $border-color!important;
+    border-bottom: 1px solid hsla(var(--bs-primary-h), var(--bs-primary-s), 30%, .375);
+    border-left: $border-left-width solid hsla(var(--bs-primary-h), var(--bs-primary-s), 40%, .5);
     &__text {
       display: none;
     }
   }
-  .SharpFilterSelect {
-    &--open {
-      .SharpSelect .multiselect__tags {
-        //box-shadow: 0 2px 4px darken($primary, 10%);
-      }
-    }
-    &--searchable {
-      .SharpAutocomplete .multiselect__content {
-        padding-top: 3.5rem;
-      }
-    }
-  }
   .multiselect {
-    color: hsl(0, 0%, var(--color-l));
-    background-color: $primary;
+    color: hsl(var(--bs-primary-h), var(--bs-primary-s), 30%);
     padding: 1.25rem;
+    padding-left: calc(1.25 - #{$border-left-width});
+    font-size: .9375rem;
 
     &__single {
-      font-weight: normal;
-      padding-left: 0;
+      @extend .ui-font;
+      font-size: .875rem;
       white-space: normal;
     }
     &__tags {
@@ -53,44 +40,12 @@
     }
   }
   .SharpAutocomplete {
-    --input-color: hsla(var(--bs-primary-h), var(--bs-primary-s), var(--color-l), .75);
-
-    .multiselect__tags {
-      margin: .5rem 1rem 0 1rem !important;
-      height: 2rem!important;
-      padding: 0!important;
-      width: calc(100% - 2rem)!important;
-      border-bottom: 2px solid var(--input-color);
-      border-radius: 0!important;
-      left: 0;
-    }
-    .multiselect__input {
-      color: hsl(0, 0%, var(--color-l));
-      &::placeholder {
-        color: var(--input-color);
-      }
-    }
-    .multiselect__content-wrapper {
-      max-height: none;
-    }
     .multiselect__content {
-      margin-top: 0;
       width: 100%;
-      border-radius: 0;
-      padding-top: .25rem;
-      box-shadow: none!important;
-      border: none!important;
-      background: $primary;
-      max-height: none;
-    }
-    .multiselect__option {
-      background: $primary!important;
-      color: hsla(0, 0%, var(--color-l), .675);
-      &--selected, &:hover {
-        color: hsl(0, 0%, var(--color-l));
-        background: hsla(var(--bs-primary-h), var(--bs-primary-s), var(--color-l), .15)!important;
-        font-weight: normal!important;
-      }
+      left: 0;
+      margin-top: -5px;
+      box-shadow: $box-shadow-lg;
+      padding-bottom: 1rem;
     }
   }
 }

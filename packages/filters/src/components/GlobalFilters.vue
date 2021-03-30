@@ -49,21 +49,6 @@
             handleClosed() {
                 this.$emit('close');
             },
-            updateLayout: debounce(function () {
-                [...this.$el.querySelectorAll('.SharpFilterSelect')].forEach(select => {
-                    const container = this.$el.parentElement;
-                    const height = (container.offsetHeight-select.offsetHeight) - (select.offsetTop-container.offsetTop);
-                    const dropdown = select.querySelector('.SharpAutocomplete .multiselect__content');
-                    dropdown.style.height = `${height}px`;
-                });
-            }, 300)
         },
-        mounted() {
-            this.updateLayout();
-            window.addEventListener('resize', this.updateLayout);
-        },
-        destroyed() {
-            window.removeEventListener('resize', this.updateLayout);
-        }
     }
 </script>
