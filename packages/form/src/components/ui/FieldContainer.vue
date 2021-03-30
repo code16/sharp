@@ -3,9 +3,14 @@
         <div class="SharpForm__field-header" v-sticky>
             <div class="row align-items-end">
                 <div class="col">
-                    <label v-if="showLabel" class="SharpForm__label form-label" @click="triggerFocus">
-                        {{ label }}
-                    </label>
+                    <template v-if="showLabel">
+                        <label class="SharpForm__label form-label" @click="triggerFocus">
+                            {{ label }}
+                        </label>
+                    </template>
+                    <template>
+                        <div class="SharpForm__label SharpForm__label--placeholder form-label"></div>
+                    </template>
                 </div>
                 <template v-if="fieldProps.localized">
                     <div class="col-auto">
@@ -101,6 +106,7 @@
                     {
                         'SharpForm__form-item--danger': this.hasError,
                         'SharpForm__form-item--success': this.state === 'ok',
+                        'SharpForm__form-item--has-label': this.showLabel,
                         'SharpForm__form-item--no-label': !this.showLabel,
                     }
                 ];

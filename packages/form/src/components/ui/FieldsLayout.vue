@@ -34,7 +34,7 @@
                 type: Array,
                 required: true
             },
-            visible : {
+            visible: {
                 type: Object,
                 default: () => ({})
             }
@@ -53,7 +53,20 @@
             isFieldsetVisible(fieldsetLayout) {
                 return (fieldsetLayout.fields || []).flat()
                     .some(fieldLayout => this.visible[fieldLayout.key]);
-            }
-        }
+            },
+            updateLayout() {
+                const rows = this.$el.querySelectorAll(':scope > .SharpGrid__row');
+                rows.forEach(row => {
+                    const hasLabel = !!row.querySelector(':scope > .SharpGrid__col > .SharpForm__form-item--has-label');
+                    row.classList.toggle('SharpGrid__row--has-label', hasLabel);
+                });
+            },
+        },
+        mounted() {
+            this.updateLayout();
+        },
+        updated() {
+            this.updateLayout();
+        },
     }
 </script>

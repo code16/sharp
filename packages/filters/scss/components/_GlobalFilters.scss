@@ -39,10 +39,7 @@
   .multiselect {
     color: hsl(0, 0%, var(--color-l));
     background-color: $primary;
-    padding-top: .75rem;
-    padding-bottom: .75rem;
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
+    padding: 1.25rem;
 
     &__single {
       font-weight: normal;

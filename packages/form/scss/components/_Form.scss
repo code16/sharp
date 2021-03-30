@@ -27,18 +27,16 @@
     @extend .form-select;
   }
 
+  &__label {
+    display: block;
+    &--placeholder {
+      display: none;
+    }
+  }
+
   &__form-item {
     flex: 1;
     height: 100%;
-
-    // For single check align with other field
-    &--type-check {
-      .SharpForm__label {
-        &::after {
-          content: "\a0\a0"
-        }
-      }
-    }
 
     &--type-list {
       @include media-breakpoint-up(sm) {
@@ -61,19 +59,41 @@
       }
     }
 
-    &:not(&--type-check) {
-      > .SharpForm__field-content {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        min-height: 2.5rem;
+    &--type-check {
+      .form-check {
+        margin-bottom: 0;
       }
+    }
+
+    > .SharpForm__field-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 2.5rem;
     }
   }
 
-  &__label {
-    display: block;
-    //margin-bottom: .375rem;
+  .SharpGrid__row {
+    &--has-label {
+      > .SharpGrid__col > .SharpForm__form-item--type-check {
+        .SharpForm__label {
+          display: block;
+          &::after {
+            content: "\a0\a0"
+          }
+        }
+      }
+    }
+    > .col-md-12 {
+      > .SharpForm__form-item--type-check {
+        .SharpForm__label {
+          display: none;
+        }
+        .SharpForm__field-content {
+          min-height: auto;
+        }
+      }
+    }
   }
 
   &__label--disabled {
