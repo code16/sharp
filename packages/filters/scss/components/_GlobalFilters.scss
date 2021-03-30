@@ -25,7 +25,6 @@
   .multiselect {
     color: hsl(var(--bs-primary-h), var(--bs-primary-s), 30%);
     padding: 1.25rem;
-    padding-left: calc(1.25 - #{$border-left-width});
     font-size: .9375rem;
 
     &__single {
