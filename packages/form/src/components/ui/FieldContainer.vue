@@ -8,7 +8,7 @@
                             {{ label }}
                         </label>
                     </template>
-                    <template>
+                    <template v-else>
                         <div class="SharpForm__label SharpForm__label--placeholder form-label"></div>
                     </template>
                 </div>

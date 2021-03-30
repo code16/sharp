@@ -2,7 +2,7 @@
 
 exports[`field-container can mount field container 1`] = `
 <div id="app">
-	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--type-test-field">
+	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--type-test-field SharpForm__form-item--has-label">
 		<div class="SharpForm__field-header">
 			<div class="row align-items-end">
 				<div class="col">
@@ -24,7 +24,7 @@ exports[`field-container can mount field container 1`] = `
 
 exports[`field-container can mount field container with error 1`] = `
 <div id="app">
-	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--type-test-field SharpForm__form-item--danger">
+	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--type-test-field SharpForm__form-item--danger SharpForm__form-item--has-label">
 		<div class="SharpForm__field-header">
 			<div class="row align-items-end">
 				<div class="col">
@@ -46,7 +46,7 @@ exports[`field-container can mount field container with error 1`] = `
 
 exports[`field-container can mount field container with extra style 1`] = `
 <div id="app">
-	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--type-test-field" style="background: red;">
+	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--type-test-field SharpForm__form-item--has-label" style="background: red;">
 		<div class="SharpForm__field-header">
 			<div class="row align-items-end">
 				<div class="col">
@@ -68,7 +68,7 @@ exports[`field-container can mount field container with extra style 1`] = `
 
 exports[`field-container can mount field container with success 1`] = `
 <div id="app">
-	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--type-test-field SharpForm__form-item--success">
+	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--type-test-field SharpForm__form-item--success SharpForm__form-item--has-label">
 		<div class="SharpForm__field-header">
 			<div class="row align-items-end">
 				<div class="col">
