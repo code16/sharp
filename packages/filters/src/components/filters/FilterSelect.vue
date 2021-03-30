@@ -34,7 +34,8 @@
         <FilterControl :label="label" @click="handleClick">
             <!-- value text & tags -->
             <Select
-                class="SharpFilterSelect__select dropdown-toggle text-wrap"
+                class="SharpFilterSelect__select text-wrap"
+                :class="formSelect ? 'form-select' : 'dropdown-toggle'"
                 :value="value"
                 :options="values"
                 :multiple="multiple"
@@ -77,6 +78,7 @@
             searchKeys: Array,
             template: String,
             disabled: Boolean,
+            formSelect: Boolean,
         },
         data() {
             return {

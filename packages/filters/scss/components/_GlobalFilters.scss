@@ -24,13 +24,16 @@
   }
   .multiselect {
     color: hsl(var(--bs-primary-h), var(--bs-primary-s), 30%);
-    padding: 1.25rem;
-    font-size: .9375rem;
+    padding: 1rem 1.25rem;
+    padding-right: $form-select-indicator-padding;
+    min-height: 4rem;
+    font-size: 1.125rem;
 
     &__single {
       @extend .ui-font;
       font-size: .875rem;
       white-space: normal;
+      margin-right: 0;
     }
     &__tags {
       border-radius: 0;
@@ -40,9 +43,9 @@
   }
   .SharpAutocomplete {
     .multiselect__content {
-      width: 100%;
-      left: 0;
-      margin-top: -5px;
+      width: calc(100% - 2px);
+      left: 1px;
+      margin-top: -1px;
       box-shadow: $box-shadow-lg;
       padding-bottom: 1rem;
     }

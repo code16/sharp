@@ -44,6 +44,7 @@
       }
       .SharpAutocomplete .multiselect__input {
         height: $search-input-height;
+        font-size: .875rem;
       }
     }
     .SharpAutocomplete .multiselect__content {
@@ -52,6 +53,10 @@
   }
 
   .SharpAutocomplete {
+    .multiselect {
+      background: none;
+      border: 0;
+    }
     .multiselect__tags {
       position: absolute;
       padding: 0;
