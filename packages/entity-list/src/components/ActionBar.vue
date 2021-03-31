@@ -1,9 +1,5 @@
 <template>
-    <ActionBar
-        class="SharpActionBarList"
-        :class="{'SharpActionBarList--search-active':searchActive}"
-        right-class="d-block"
-    >
+    <ActionBar class="SharpActionBarList" right-class="d-block">
         <template v-slot:left>
             <div class="ui-title-font ui-font-size">
                 <div class="row gx-2">
@@ -25,25 +21,29 @@
         <template v-slot:right>
             <div class="row justify-content-end flex-nowrap">
                 <template v-if="canReorder">
-                    <div class="col-auto" :class="{ 'd-none d-sm-block': searchActive }">
-                        <template v-if="reorderActive">
+                    <template v-if="reorderActive">
+                        <div class="col-auto">
                             <Button variant="light" large outline @click="handleReorderButtonClicked">
                                 {{ l('action_bar.list.reorder_button.cancel') }}
                             </Button>
+                        </div>
+                        <div class="col-auto">
                             <Button variant="light" large @click="handleReorderSubmitButtonClicked">
                                 {{ l('action_bar.list.reorder_button.finish') }}
                             </Button>
-                        </template>
-                        <template v-else>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <div class="col-auto">
                             <Button variant="light" large outline @click="handleReorderButtonClicked">
                                 {{ l('action_bar.list.reorder_button') }}
                             </Button>
-                        </template>
-                    </div>
+                        </div>
+                    </template>
                 </template>
 
                 <template v-if="primaryCommand && !reorderActive">
-                    <div class="col-auto" :class="{ 'd-none d-sm-block': searchActive }">
+                    <div class="col-auto">
                         <Button variant="light" large @click="handlePrimaryCommandClicked">
                             {{ primaryCommand.label }}
                         </Button>
@@ -51,7 +51,7 @@
                 </template>
 
                 <template v-if="canCreate && !reorderActive">
-                    <div class="col-auto" :class="{ 'd-none d-sm-block': searchActive }">
+                    <div class="col-auto">
                         <template v-if="hasForms">
                             <Dropdown variant="light" large right :text="l('action_bar.list.forms_dropdown')">
                                 <template v-for="(form, key) in forms">

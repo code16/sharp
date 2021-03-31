@@ -15,6 +15,7 @@
     width: 1rem;
     height: 1rem;
     top: calc(50% - .5rem);
+    pointer-events: none;
   }
 
   &__close {

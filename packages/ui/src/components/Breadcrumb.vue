@@ -1,6 +1,6 @@
 <template>
     <div class="d-flex">
-        <div class="input-group input-group-sm">
+        <div class="input-group input-group-sm w-auto">
             <template v-if="icon">
                 <div class="input-group-text">
                     <i class="fa fa-sm" :class="icon" style="opacity: .75; font-size: .75rem"></i>

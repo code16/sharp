@@ -2,7 +2,7 @@
     <div class="SharpActionBar">
         <div class="SharpActionBar__bar sticky-top" ref="bar">
             <div class="container">
-                <div class="row mx-n2">
+                <div class="row align-items-center mx-n2">
                     <div class="col-auto col-md left px-2 my-1 my-sm-0">
                         <slot name="left"></slot>
                     </div>

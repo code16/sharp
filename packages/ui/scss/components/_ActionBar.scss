@@ -11,22 +11,7 @@
 
   margin-bottom: 1rem;
 
-  .left, .right {
-    display: flex;
-    align-items: center;
-  }
-
-  .left {
-    justify-content: flex-start;
-  }
-  .right {
-    justify-content: flex-end;
-  }
-
   &__bar {
-
-    display: flex;
-    align-items: center;
     padding-top: 1.25rem;
     padding-bottom: 1.25rem;
     background: $brand-01;
@@ -56,7 +41,7 @@
       top: 0;
       right: 0;
       left: $leftnav-collapsed-width;
-      min-height: 5rem;
+      min-height: $navbar-min-height;
       margin-left: 0;
       margin-right: 0!important;
     }
@@ -66,28 +51,14 @@
       left: $leftnav-width;
     }
     & > .container {
-      height: 100%;
       & > .row {
-        height: 100%;
-        & > & .col {
-          height: 100%;
-        }
+        min-height: 2.5rem;
       }
     }
   }
 
   &__extras {
-    display:flex;
     padding-top: 1rem;
-    //flex-flow: row wrap;
-    align-items: center;
-    height: 100%;
-    @include media-breakpoint-down(sm) {
-      flex-flow: column;
-      align-items: stretch;
-      height: auto;
-    }
-
     .SharpFilterSelect {
       margin: 0 0 0 .5rem;
       @include media-breakpoint-down(sm) {
