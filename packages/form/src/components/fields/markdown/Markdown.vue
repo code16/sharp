@@ -55,7 +55,11 @@
             readOnly: Boolean,
         },
 
-        inject: ['$tab'],
+        inject: {
+            $tab: {
+                default: null,
+            },
+        },
 
         data() {
             return {

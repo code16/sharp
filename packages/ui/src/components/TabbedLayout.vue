@@ -37,11 +37,6 @@
         props : {
             layout: Object,
         },
-        provide() {
-            if(!this.showTabs) {
-                return { $tab: false }
-            }
-        },
         components: {
             Tabs,
             Tab,

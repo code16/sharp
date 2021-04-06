@@ -215,12 +215,10 @@
             this.init();
         },
         mounted() {
-            if(this.$tab) {
-                this.$tab.$once('active', () => {
-                    // force update maps components on tab active
-                    triggerResize();
-                });
-            }
+            this.$tab?.$once('active', () => {
+                // force update maps components on tab active
+                triggerResize();
+            });
         }
     }
 </script>

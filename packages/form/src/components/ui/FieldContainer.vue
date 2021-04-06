@@ -70,7 +70,12 @@
             FieldLocaleSelect,
         },
 
-        inject: ['$tab', '$form'],
+        inject: {
+            $form: {},
+            $tab: {
+                default: null,
+            },
+        },
 
         props : {
             ...Field.props,
