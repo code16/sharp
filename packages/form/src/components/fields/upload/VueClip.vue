@@ -52,22 +52,30 @@
             </div>
         </div>
         <template v-if="!!originalImageSrc && isCroppable">
-            <Modal :visible.sync="showEditModal" @ok="onEditModalOk" @shown="onEditModalShown" @hidden="onEditModalHidden" no-close-on-backdrop
-                         :title="l('modals.cropper.title')" static ref="modal">
-                <vue-cropper ref="cropper"
-                             class="SharpUpload__modal-vue-cropper"
-                             :view-mode="2"
-                             drag-mode="crop"
-                             :aspect-ratio="ratioX/ratioY"
-                             :auto-crop-area="1"
-                             :zoomable="false"
-                             :guides="false"
-                             :background="true"
-                             :rotatable="true"
-                             :src="originalImageSrc"
-                             :ready="onCropperReady"
-                             alt="Source image">
-                </vue-cropper>
+            <Modal :visible.sync="showEditModal"
+                @ok="onEditModalOk"
+                @shown="onEditModalShown"
+                @hidden="onEditModalHidden"
+                no-close-on-backdrop
+                :title="l('modals.cropper.title')"
+                static
+                ref="modal"
+            >
+                <vue-cropper
+                    class="SharpUpload__modal-vue-cropper"
+                    :view-mode="2"
+                    drag-mode="crop"
+                    :aspect-ratio="ratioX/ratioY"
+                    :auto-crop-area="1"
+                    :zoomable="false"
+                    :guides="false"
+                    :background="true"
+                    :rotatable="true"
+                    :src="originalImageSrc"
+                    :ready="onCropperReady"
+                    alt="Source image"
+                    ref="cropper"
+                />
                 <div class="mt-3">
                     <Button @click="rotate(-90)"><i class="fas fa-undo"></i></Button>
                     <Button @click="rotate(90)"><i class="fas fa-redo"></i></Button>
@@ -123,6 +131,7 @@
                 croppedImg: null,
                 resized: false,
                 allowCrop: false,
+                cropData: null,
 
                 isNew: !this.value,
                 canDownload: !!this.value,
@@ -264,6 +273,7 @@
             resetEdit() {
                 this.croppedImg = null;
                 this.resized = false;
+                this.cropData = null;
             },
 
             onEditButtonClick() {
@@ -279,20 +289,22 @@
             },
 
             onEditModalShown() {
+                const cropper = this.$refs.cropper.cropper;
                 if(!this.resized) {
-                    this.$nextTick(()=>{
-                        let cropper = this.$refs.cropper.cropper;
-
-                        cropper.resize();
-                        cropper.reset();
-                        this.resized=true;
-                    });
+                    cropper.resize();
+                    cropper.reset();
+                    this.resized = true;
                 }
             },
 
             onEditModalHidden() {
                 this.$emit('inactive');
-                setTimeout(()=>this.$refs.cropper.cropper.reset(), 300);
+                const cropper = this.$refs.cropper.cropper;
+                if(this.cropData) {
+                    cropper.setData(this.cropData);
+                } else {
+                    cropper.reset();
+                }
             },
 
             onEditModalOk() {
@@ -321,8 +333,7 @@
                     rw = imgData.naturalHeight;
                     rh = imgData.naturalWidth;
                 }
-                //console.log('img', rw, rh, imgData.naturalWidth, imgData.naturalHeight);
-                //console.log('crop', cropData.width, cropData.height);
+
                 let relativeData = {
                     width: cropData.width / rw,
                     height: cropData.height / rh,
@@ -330,6 +341,8 @@
                     y: cropData.y / rh,
                     rotate: cropData.rotate * -1 // counterclockwise
                 };
+
+                this.cropData = { ...cropData };
 
                 if(this.allowCrop) {
                     let data = {
