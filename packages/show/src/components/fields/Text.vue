@@ -1,14 +1,11 @@
 <template>
-    <FieldLayout class="ShowTextField" :label="label">
-        <div class="ShowTextField__content">
-            <template v-if="html">
-                <div v-html="currentContent"></div>
-            </template>
-            <template v-else>
-                {{ currentContent }}
-            </template>
-        </div>
-
+    <FieldLayout class="ShowTextField" :class="classes" :label="label">
+        <template v-if="html">
+            <div class="ShowTextField__content" v-html="currentContent"></div>
+        </template>
+        <template v-else>
+            <div class="ShowTextField__content">{{ currentContent }}</div>
+        </template>
         <template v-if="hasCollapsed">
             <div class="mt-2">
                 <a href="#" class="ShowTextField__more" @click.prevent="handleToggleClicked">
@@ -49,9 +46,20 @@
             }
         },
         computed: {
+            classes() {
+                return {
+                    'ShowTextField--html': this.html,
+                }
+            },
             currentContent() {
+                if(!this.value) {
+                    return null;
+                }
                 if(this.hasCollapsed && !this.expanded) {
                     return this.collapsedContent;
+                }
+                if(!this.html) {
+                    return stripTags(this.value).trim();
                 }
                 return this.value;
             },
@@ -62,11 +70,12 @@
                 if(!this.collapseToWordCount || !this.value) {
                     return null;
                 }
-                const html = this.value.trim();
-                const text = stripTags(html);
+                const value = this.value.trim();
+                const text = stripTags(value);
+                const content = this.html ? value : text;
                 const truncated = truncateToWords(text, this.collapseToWordCount);
                 return truncated.length < text.length
-                    ? clip(html, truncated.length + 2, { html: this.html })
+                    ? clip(content, truncated.length + 2, { html: this.html })
                     : null;
             },
             isVisible() {
