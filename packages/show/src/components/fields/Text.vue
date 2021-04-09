@@ -1,6 +1,14 @@
 <template>
     <FieldLayout class="ShowTextField" :label="label">
-        <div class="ShowTextField__content" v-html="currentContent" ref="content"></div>
+        <div class="ShowTextField__content">
+            <template v-if="html">
+                <div v-html="currentContent"></div>
+            </template>
+            <template v-else>
+                {{ currentContent }}
+            </template>
+        </div>
+
         <template v-if="hasCollapsed">
             <div class="mt-2">
                 <a href="#" class="ShowTextField__more" @click.prevent="handleToggleClicked">
@@ -33,6 +41,7 @@
             collapseToWordCount: Number,
             label: String,
             emptyVisible: Boolean,
+            html: Boolean,
         },
         data() {
             return {
@@ -57,7 +66,7 @@
                 const text = stripTags(html);
                 const truncated = truncateToWords(text, this.collapseToWordCount);
                 return truncated.length < text.length
-                    ? clip(html, truncated.length + 2, { html: true })
+                    ? clip(html, truncated.length + 2, { html: this.html })
                     : null;
             },
             isVisible() {
