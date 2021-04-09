@@ -52,7 +52,6 @@ class SpaceshipSharpShow extends SharpShow
             )
             ->addField(
                 SharpShowTextField::make("description")
-                    ->setHtml(false)
                     ->collapseToWordCount(50)
             )
             ->addField(
