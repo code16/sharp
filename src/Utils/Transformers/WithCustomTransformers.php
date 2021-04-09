@@ -18,7 +18,7 @@ trait WithCustomTransformers
 
     /**
      * @param string $attribute
-     * @param string|Closure $transformer
+     * @param string|Closure|SharpAttributeTransformer $transformer
      * @return $this
      */
     function setCustomTransformer(string $attribute, $transformer)

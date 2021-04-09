@@ -30,7 +30,8 @@ abstract class SharpShowField
                 "key" => $this->key,
                 "type" => $this->type,
                 "emptyVisible" => $this->emptyVisible
-            ] + $childArray)
+            ])
+            ->merge($childArray)
             ->filter(function($value) {
                 return !is_null($value);
             })

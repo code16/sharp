@@ -28,26 +28,34 @@ class SpaceshipSharpShow extends SharpShow
             ->addField(
                 SharpShowTitleField::make("name")
                     ->setTitleLevel(2)
-            )->addField(
+            )
+            ->addField(
                 SharpShowTextField::make("type:label")
                     ->setLabel("Type")
-            )->addField(
+            )
+            ->addField(
                 SharpShowTextField::make("serial_number")
                     ->setLabel("S/N")
-            )->addField(
+            )
+            ->addField(
                 SharpShowTextField::make("brand")
                     ->setLabel("Brand / model")
-            )->addField(
+            )
+            ->addField(
                 SharpShowFileField::make("manual")
                     ->setLabel("Manual")
                     ->setStorageDisk("local")
                     ->setStorageBasePath("data/Spaceship/{id}/Manual")
-            )->addField(
+            )
+            ->addField(
                 SharpShowPictureField::make("picture")
-            )->addField(
+            )
+            ->addField(
                 SharpShowTextField::make("description")
+                    ->setHtml(false)
                     ->collapseToWordCount(50)
-            )->addField(
+            )
+            ->addField(
                 SharpShowListField::make("pictures")
                     ->setLabel("additional pictures")
                     ->addItemField(
@@ -56,7 +64,8 @@ class SpaceshipSharpShow extends SharpShow
                             ->setStorageBasePath("data/Spaceship/{id}/Pictures")
                     )
                     ->addItemField(SharpShowTextField::make("legend")->setLabel("Legend"))
-            )->addField(
+            )
+            ->addField(
                 SharpShowEntityListField::make("pilots", "spaceship_pilot")
                     ->setLabel("Pilots")
                     ->hideFilterWithValue("spaceship", function($instanceId) {

@@ -25,6 +25,7 @@ class SharpShowListFieldTest extends SharpTestCase
                 "textField" => [
                     "key" => "textField",
                     "emptyVisible" => false,
+                    "html" => true,
                     "type" => "text",
                 ]
             ],

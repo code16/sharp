@@ -21,32 +21,33 @@ class SpaceshipSharpList extends SharpEntityList
 {
     function buildListDataContainers(): void
     {
-        $this->addDataContainer(
-            EntityListDataContainer::make("picture")
-
-        )->addDataContainer(
-            EntityListDataContainer::make("name")
-                ->setLabel("Name")
-                ->setSortable()
-
-        )->addDataContainer(
-            EntityListDataContainer::make("capacity")
-                ->setLabel("Capacity")
-                ->setSortable()
-                ->setHtml(false)
-
-        )->addDataContainer(
-            EntityListDataContainer::make("type:label")
-                ->setLabel("Type")
-
-        )->addDataContainer(
-            EntityListDataContainer::make("pilots")
-                ->setLabel("Pilots")
-                ->setHtml()
-
-        )->addDataContainer(
-            EntityListDataContainer::make("messages_sent_count")
-                ->setLabel("Messages sent")
+        $this
+            ->addDataContainer(
+                EntityListDataContainer::make("picture")
+            )
+            ->addDataContainer(
+                EntityListDataContainer::make("name")
+                    ->setLabel("Name")
+                    ->setSortable()
+            )
+            ->addDataContainer(
+                EntityListDataContainer::make("capacity")
+                    ->setLabel("Capacity")
+                    ->setSortable()
+                    ->setHtml(false)
+            )
+            ->addDataContainer(
+                EntityListDataContainer::make("type:label")
+                    ->setLabel("Type")
+            )
+            ->addDataContainer(
+                EntityListDataContainer::make("pilots")
+                    ->setLabel("Pilots")
+                    ->setHtml()
+            )
+            ->addDataContainer(
+                EntityListDataContainer::make("messages_sent_count")
+                    ->setLabel("Messages sent")
         );
     }
 
@@ -123,14 +124,15 @@ class SpaceshipSharpList extends SharpEntityList
                 return number_format($capacity / 1000, 0) . "k";
             })
             ->setCustomTransformer("pilots", function($pilots, $spaceship) {
-                return $spaceship->pilots->map(function($pilot) {
-                    return LinkToEntityList::make("pilot")
-                        ->setSearch($pilot->name)
-                        ->setTooltip("See related pilot")
-                        ->renderAsText($pilot->name);
-                })->implode("<br>");
+                return $spaceship->pilots
+                    ->map(function($pilot) {
+                        return LinkToEntityList::make("pilot")
+                            ->setSearch($pilot->name)
+                            ->setTooltip("See related pilot")
+                            ->renderAsText($pilot->name);
+                    })
+                    ->implode("<br>");
             })
-//            ->setCustomTransformer("picture", new SharpUploadModelAttributeTransformer(100))
             ->setCustomTransformer("picture", (new SharpUploadModelThumbnailUrlTransformer(100))->renderAsImageTag())
             ->transform(
                 $spaceships->with("picture", "type", "pilots")

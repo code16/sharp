@@ -8,6 +8,7 @@ class SharpShowTextField extends SharpShowField
 
     protected ?string $label = null;
     protected ?int $collapseToWordCount = null;
+    protected bool $html = true;
 
     public static function make(string $key): SharpShowTextField
     {
@@ -34,14 +35,19 @@ class SharpShowTextField extends SharpShowField
 
         return $this;
     }
+    
+    public function setHtml(bool $html = true): self
+    {
+        $this->html = $html;
 
-    /**
-     * Create the properties array for the field, using parent::buildArray()
-     */
+        return $this;
+    }
+
     public function toArray(): array
     {
         return parent::buildArray([
             "label" => $this->label,
+            "html" => $this->html,
             "collapseToWordCount" => $this->collapseToWordCount,
         ]);
     }
@@ -49,7 +55,8 @@ class SharpShowTextField extends SharpShowField
     protected function validationRules(): array
     {
         return [
-            "collapseToWordCount" => "int|nullable"
+            "collapseToWordCount" => "int|nullable",
+            "html" => "bool|required",
         ];
     }
 }
