@@ -4,7 +4,17 @@ A map-based field to pick a precise location and return its coordinates (latitud
 
 Class: `Code16\Sharp\Form\Fields\SharpFormGeolocationField`
 
-![Example](./geolocation.gif)
+
+<table>
+    <tr>
+        <td class="p-0">
+            <img src="./geolocation-1.png" alt="Global filters">
+        </td>
+        <td class="p-0">
+            <img src="./geolocation-2.png" alt="Global filters">
+        </td>
+    </tr>
+</table>
 
 ## Configuration
 

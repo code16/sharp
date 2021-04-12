@@ -5,6 +5,10 @@ loadLanguages(['php']);
 module.exports = {
     title: 'Sharp',
     base: '/docs/',
+    head: [
+        ['link', { rel: 'icon', type:'image/png', href: '/favicon.png' }],
+        ['link', { rel: 'icon', type:'image/svg+xml', href: '/favicon.svg' }],
+    ],
     themeConfig: {
         nav: [
             { text: 'Home', link: '/' },

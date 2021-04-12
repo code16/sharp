@@ -48,6 +48,21 @@
       }
     }
 
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      padding: .5rem .75rem;
+      line-height: 1.2;
+    }
+
+    .fa-sm {
+      font-size: .75rem;
+    }
+
+    .fa-xs {
+      font-size: .675rem;
+    }
+
     .btn-group {
       &:not(:first-child) {
         margin-left: .5rem;

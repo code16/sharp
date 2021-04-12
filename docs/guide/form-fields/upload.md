@@ -2,7 +2,7 @@
 
 Class: `Code16\Sharp\Form\Fields\SharpFormUploadField`
 
-![Example](./upload.gif)
+![Example](./upload.png)
 
 ## General configuration
 

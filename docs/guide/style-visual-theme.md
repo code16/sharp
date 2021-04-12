@@ -29,7 +29,7 @@ You'll need to create a new template file:
 ```html
 <!-- resources/views/sharp/_login-page-message.blade.php -->
 
-<div role="alert" class="alert alert-info">
+<div class="alert alert-info">
     Display a custom message to your users
 </div>
 ```

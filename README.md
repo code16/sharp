@@ -1,6 +1,6 @@
 <div align="center">
 
-![Sharp](./docs/img/logo2.png)
+![Sharp](./docs/img/logo.png)
 
 </div>
 

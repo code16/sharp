@@ -143,7 +143,7 @@ function buildShowLayout()
 
 A `ShowLayoutColumn`, very much like a `FormLayoutColumn`, can declare single field rows and multi fields rows. Report to the [Form layout documentation](building-entity-form.md#buildformlayout) to find out how.
 
-#### `SharpShowListField`'s layout
+#### SharpShowListField's layout
 
 Like `SharpFormListField` in Forms, a `SharpShowListField` must declare its item layout, in order to describe how fields are displayed, like in this example:
 

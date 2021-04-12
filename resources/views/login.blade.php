@@ -60,7 +60,10 @@
 
                         @includeIf(config("sharp.login_page_message_blade_path"))
 
-                        <p class="text-center mt-2 text-white" style="font-size: .75em">powered by <a class="text-reset" href="https://sharp.code16.fr/docs/">Sharp {{sharp_version()}}</a></p>
+                        <p class="text-center mt-2 text-white login__powered">
+                            <span>powered by</span>
+                            <a class="text-reset" href="https://sharp.code16.fr/docs/">Sharp {{sharp_version()}}</a>
+                        </p>
                     </div>
                 </div>
             </form>

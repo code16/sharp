@@ -1,6 +1,6 @@
 ---
 home: true
-heroImage: /img/logo2.png
+heroImage: /img/logo.png
 heroText: null
 actionText: Get Started →
 actionLink: /guide/
@@ -122,10 +122,10 @@ Data of this demo is reset each hour.
 
 <br>
 
-![Dashboard](./img/dashboard-4.2.png)
+![Dashboard](./img/dashboard.png)
 
-![Entity list](./img/list-4.2.png)
+![Entity list](./img/list.png)
 
-![Entity show](./img/show-4.2.png)
+![Entity show](./img/show.png)
 
-![Entity form](./img/form-4.2.png)
+![Entity form](./img/form.png)
