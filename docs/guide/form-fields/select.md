@@ -2,7 +2,7 @@
 
 Class: `Code16\Sharp\Form\Fields\SharpFormSelectField`
 
-![Example](./select1.gif)
+![Example](./select-dropdown.png)
 
 ## Configuration
 
