@@ -10,14 +10,7 @@ exports[`action-bar can mount ActionBar 1`] = `
 			</div>
 		</div>
 	</div>
-	<div class="">
-		<div class="row">
-			<div class="col">
-				<div class="SharpActionBar__extras"></div>
-			</div>
-			<!---->
-		</div>
-	</div>
+	<!---->
 </div>
 `;
 

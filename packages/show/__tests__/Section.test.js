@@ -7,7 +7,7 @@ describe('show section', () => {
             // language=Vue
             stubs: {
                 Grid:
-                    `<div class="MOCKED_SharpGrid" :class="rowClass()">
+                    `<div class="MOCKED_SharpGrid" :class="rowClass && rowClass()">
                         <slot :item-layout="rows[0][0]" />
                     </div>`,
             },
