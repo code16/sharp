@@ -1,6 +1,6 @@
 <template>
     <ActionBar>
-        <template v-slot:extras>
+        <template v-if="filters.length > 0" v-slot:extras>
             <div class="row mx-n2">
                 <template v-for="filter in filters">
                     <div class="col-auto px-2">

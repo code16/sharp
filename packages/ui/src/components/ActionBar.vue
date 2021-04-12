@@ -12,22 +12,24 @@
                 </div>
             </div>
         </div>
-        <div :class="{ 'container':container }">
-            <div class="row">
-                <div class="col">
-                    <div class="SharpActionBar__extras">
-                        <slot name="extras" />
-                    </div>
-                </div>
-                <template v-if="$slots['extras-right']">
-                    <div class="col-auto">
+        <template v-if="hasExtras">
+            <div :class="{ 'container':container }">
+                <div class="row">
+                    <div class="col">
                         <div class="SharpActionBar__extras">
-                            <slot name="extras-right" />
+                            <slot name="extras" />
                         </div>
                     </div>
-                </template>
+                    <template v-if="$slots['extras-right']">
+                        <div class="col-auto">
+                            <div class="SharpActionBar__extras">
+                                <slot name="extras-right" />
+                            </div>
+                        </div>
+                    </template>
+                </div>
             </div>
-        </div>
+        </template>
     </div>
 </template>
 
@@ -37,6 +39,11 @@
         props: {
             container: Boolean,
             rightClass: String,
+        },
+        computed: {
+            hasExtras() {
+                return this.$slots.extras || this.$slots['extras-right'];
+            },
         },
         methods: {
             layout(rect) {

@@ -1,7 +1,7 @@
 <template>
     <div class="SharpGrid">
         <template v-for="row in rows">
-            <div class="SharpGrid__row row" :class="rowClass(row)">
+            <div class="SharpGrid__row row" :class="rowClasses(row)">
                 <template v-for="col in row">
                     <div class="SharpGrid__col" :class="colClasses(col)" v-empty-class="'SharpGrid__col--empty'">
                         <slot :item-layout="col" />
@@ -23,10 +23,7 @@
                 type: Array,
                 required: true
             },
-            rowClass: {
-                type: Function,
-                default: () => null,
-            },
+            rowClass: [Function, String],
             colClass: {
                 type: Function,
                 default: () => null,
@@ -44,6 +41,12 @@
                     },
                     this.colClass(col),
                 ];
+            },
+            rowClasses(row) {
+                if(typeof this.rowClass === 'function') {
+                    return this.rowClass(row);
+                }
+                return this.rowClass;
             }
         },
         directives: {
