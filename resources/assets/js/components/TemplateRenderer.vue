@@ -17,7 +17,7 @@
             component() {
                 return {
                     name: `SharpTemplate${this.name}`,
-                    template: `<div class="SharpTemplate">${this.template}</div>`,
+                    template: `<div class="SharpTemplate">${this.template ?? ''}</div>`,
                     props: [
                         ...(this.templateProps || []),
                         ...Object.keys(this.templateData ?? {}),
