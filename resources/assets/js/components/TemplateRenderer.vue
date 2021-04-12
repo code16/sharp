@@ -23,7 +23,7 @@
                         ...Object.keys(this.templateData ?? {}),
                     ],
                     mounted() {
-                        if(this.$el.children.length > 0) {
+                        if(this.$el.children?.length > 0) {
                             this.$el.classList.add('SharpTemplate--has-children');
                         }
                     },

@@ -6,6 +6,7 @@
                     name="ResultItem"
                     :template="resultItemTemplate"
                     :template-data="localizedTemplateData(value)"
+                    :template-props="searchKeys"
                 />
 
                 <ClearButton @click="handleClearButtonClicked" />

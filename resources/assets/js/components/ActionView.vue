@@ -2,6 +2,7 @@
     <div class="SharpActionView">
         <template v-if="showErrorPage">
             <div class="container">
+                <ActionBar />
                 <h1>Error {{errorPageData.status}}</h1>
                 <p>{{errorPageData.message}}</p>
             </div>
@@ -43,14 +44,14 @@
 
 <script>
     import { api } from "../api";
-    import { Modal, LoadingOverlay } from 'sharp-ui';
-    import { showNotification } from "../util/notifications";
+    import { Modal, LoadingOverlay, ActionBar } from 'sharp-ui';
 
     export default {
         name:'SharpActionView',
         components: {
             Modal,
             LoadingOverlay,
+            ActionBar
         },
 
         provide() {

@@ -350,9 +350,11 @@
             },
 
             // Used by List field as injection
-            hasUploadingFields(fieldKey) {
-                return Object.keys(this.uploadingFields)
-                    .some(uploadingField => uploadingField.startsWith(`${fieldKey}.`));
+            hasUploadingFields(listKey) {
+                return Object.entries(this.uploadingFields)
+                    .some(([fieldKey, isUploading]) => {
+                        return fieldKey.startsWith(`${listKey}.`) && isUploading;
+                    });
             },
         },
         created() {

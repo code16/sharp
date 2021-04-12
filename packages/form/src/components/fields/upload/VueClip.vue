@@ -54,11 +54,9 @@
         <template v-if="!!originalImageSrc && isCroppable">
             <Modal :visible.sync="showEditModal"
                 @ok="onEditModalOk"
-                @shown="onEditModalShown"
                 @hidden="onEditModalHidden"
                 no-close-on-backdrop
                 :title="l('modals.cropper.title')"
-                static
                 ref="modal"
             >
                 <vue-cropper
@@ -72,15 +70,23 @@
                     :background="true"
                     :rotatable="true"
                     :src="originalImageSrc"
-                    :ready="onCropperReady"
+                    :data="cropData"
                     alt="Source image"
-                    ref="cropper"
+                    ref="modalCropper"
                 />
                 <div class="mt-3">
                     <Button @click="rotate(-90)"><i class="fas fa-undo"></i></Button>
                     <Button @click="rotate(90)"><i class="fas fa-redo"></i></Button>
                 </div>
             </Modal>
+            <vue-cropper
+                class="d-none"
+                :aspect-ratio="ratioX/ratioY"
+                :auto-crop-area="1"
+                :src="originalImageSrc"
+                :ready="onCropperReady"
+                ref="cropper"
+            />
         </template>
         <a style="display: none" ref="dlLink"></a>
     </div>
@@ -129,7 +135,6 @@
             return {
                 showEditModal: false,
                 croppedImg: null,
-                resized: false,
                 allowCrop: false,
                 cropData: null,
 
@@ -250,7 +255,7 @@
                 this.setPending(false);
 
                 this.allowCrop = true;
-                this.$nextTick(_=>{
+                this.$nextTick(() => {
                     this.isCropperReady() && this.onCropperReady();
                 });
             },
@@ -272,7 +277,6 @@
 
             resetEdit() {
                 this.croppedImg = null;
-                this.resized = false;
                 this.cropData = null;
             },
 
@@ -288,28 +292,13 @@
                 }
             },
 
-            onEditModalShown() {
-                const cropper = this.$refs.cropper.cropper;
-                if(!this.resized) {
-                    cropper.resize();
-                    cropper.reset();
-                    this.resized = true;
-                }
-            },
-
             onEditModalHidden() {
                 this.$emit('inactive');
-                const cropper = this.$refs.cropper.cropper;
-                if(this.cropData) {
-                    cropper.setData(this.cropData);
-                } else {
-                    cropper.reset();
-                }
             },
 
             onEditModalOk() {
-                this.updateCroppedImage();
-                this.updateCropData();
+                this.updateCroppedImage(this.$refs.modalCropper);
+                this.updateCropData(this.$refs.modalCropper);
             },
 
             isCropperReady() {
@@ -318,14 +307,14 @@
 
             onCropperReady() {
                 if(this.hasInitialCrop) {
-                    this.updateCroppedImage();
-                    this.updateCropData();
+                    this.updateCroppedImage(this.$refs.cropper);
+                    this.updateCropData(this.$refs.cropper);
                 }
             },
 
-            updateCropData() {
-                let cropData = this.getCropData();
-                let imgData = this.getImageData();
+            updateCropData(cropper) {
+                let cropData = cropper.getData(true);
+                let imgData = cropper.getImageData();
 
                 let rw=imgData.naturalWidth, rh=imgData.naturalHeight;
 
@@ -354,23 +343,15 @@
                 }
             },
 
-            updateCroppedImage() {
+            updateCroppedImage(cropper) {
                 if(this.allowCrop) {
                     this.isNew = true;
-                    this.croppedImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
+                    this.croppedImg = cropper.getCroppedCanvas().toDataURL();
                 }
             },
 
-            getCropData() {
-                return this.$refs.cropper.getData(true);
-            },
-
-            getImageData() {
-                return this.$refs.cropper.getImageData();
-            },
-
             rotate(degree) {
-                rotateResize(this.$refs.cropper.cropper, degree);
+                rotateResize(this.$refs.modalCropper.cropper, degree);
             },
         },
         created() {

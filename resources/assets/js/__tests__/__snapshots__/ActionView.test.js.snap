@@ -11,6 +11,7 @@ exports[`action-view can mount ActionView 1`] = `
 exports[`action-view can mount ActionView with error page 1`] = `
 <div class="SharpActionView">
 	<div class="container">
+		<actionbar-stub></actionbar-stub>
 		<h1>Error 404</h1>
 		<p>ERROR MESSAGE</p>
 	</div>
