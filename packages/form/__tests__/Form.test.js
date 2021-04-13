@@ -4,15 +4,17 @@ import axios from 'axios';
 import Form from '../src/components/Form.vue';
 import store from 'sharp/store';
 
-import { wait, MockI18n, nextRequestFulfilled } from "@sharp/test-utils";
+import {MockI18n, nextRequestFulfilled, wait} from "@sharp/test-utils";
 import moxios from 'moxios';
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import {createLocalVue, shallowMount} from '@vue/test-utils';
+import {lang} from "sharp";
 
 jest.mock('sharp');
 
-
 describe('sharp-form', ()=>{
     Vue.use(MockI18n);
+
+    lang.mockImplementation(key => key);
 
     function createWrapper({ propsData } = {}) {
         const localVue = createLocalVue();
@@ -78,6 +80,12 @@ describe('sharp-form', ()=>{
                 }
             },
             layout: createLayout([[{ key }]]),
+        }
+    }
+
+    function handleSubmitError(e) {
+        if(!e.response) {
+            throw e;
         }
     }
 
@@ -386,7 +394,7 @@ describe('sharp-form', ()=>{
     test('handle 422', async () => {
         const wrapper = createWrapper();
 
-        wrapper.vm.submit().catch(() => {});
+        wrapper.vm.submit().catch(handleSubmitError);
 
         await nextRequestFulfilled({
             status: 422,
@@ -428,6 +436,25 @@ describe('sharp-form', ()=>{
         expect(fields[0][0].id).not.toEqual(fields[1][0].id)
     });
 
+    test('serialize', () => {
+        const wrapper = createWrapper();
+
+        expect(wrapper.vm.serialize()).toEqual({});
+
+        wrapper.setData({
+            fields: {
+                html: { type:'html' }
+            },
+            data: {
+                field1: 'value',
+                html: '<b></b>'
+            }
+        })
+
+        expect(wrapper.vm.serialize()).toEqual({
+            field1: 'value',
+        });
+    });
 
     test('setup action bar correctly', async () => {
         const wrapper = createWrapper();
@@ -440,6 +467,10 @@ describe('sharp-form', ()=>{
                     create: false,
                     update: false,
                     delete: false,
+                },
+                breadcrumb: {
+                    visible: true,
+                    items: [{ url:'/list' }]
                 }
             }
         });
@@ -449,6 +480,8 @@ describe('sharp-form', ()=>{
             showDeleteButton: false,
             showBackButton: true,
             create: true,
+            breadcrumb: [{ url:'/list' }],
+            showBreadcrumb: true,
         });
 
 
@@ -487,9 +520,7 @@ describe('sharp-form', ()=>{
     test('redirect to list', async () => {
         const wrapper = createWrapper();
 
-        expect(wrapper.vm.listUrl).toEqual('/sharp/list/spaceship?restore-context=1');
-
-        wrapper.vm.redirectToClosestRoot = jest.fn();
+        wrapper.vm.redirectForResponse = jest.fn();
 
         wrapper.vm.handleDeleteClicked();
 
@@ -497,14 +528,14 @@ describe('sharp-form', ()=>{
             status: 200
         }, 0);
 
-        expect(wrapper.vm.redirectToClosestRoot).toHaveBeenCalledTimes(1);
+        expect(wrapper.vm.redirectForResponse).toHaveBeenCalledTimes(1);
 
     });
 
     test('submit', async () => {
         const wrapper = createWrapper({
             propsData: {
-                independant:true,
+                independant: true,
                 props: createForm(),
             },
         });
@@ -518,7 +549,6 @@ describe('sharp-form', ()=>{
 
         expect(wrapper.vm.post).not.toHaveBeenCalled();
 
-
         wrapper.vm.uploadingFields = {}
         wrapper.vm.submit();
 
@@ -530,28 +560,40 @@ describe('sharp-form', ()=>{
     test('dependant submit', async () => {
         const wrapper = createWrapper();
 
-        wrapper.vm.post = jest.fn(()=>Promise.resolve({ data: { ok: true } }));
-        wrapper.vm.handleError = jest.fn();
+        await nextRequestFulfilled({
+            status: 200,
+            response: {
+                ...createForm(),
+                breadcrumb: {
+                    items: [{ type:'form', name:"Form" }]
+                },
+            }
+        });
 
-        wrapper.vm.submit().catch(() => {});
+        wrapper.vm.post = jest.fn(()=>Promise.resolve({ data: { redirectUrl: '/test' } }));
+        jest.spyOn(wrapper.vm, 'handleError');
+
+        wrapper.vm.submit().catch(handleSubmitError);
 
         await wait(10);
 
         expect(wrapper.vm.post).toHaveBeenCalledTimes(1);
-        expect(wrapper.vm.post.mock.calls[0][0]).toBeUndefined();
-        expect(wrapper.vm.post.mock.calls[0][1]).toBeUndefined();
+        expect(wrapper.vm.post.mock.calls[0][0]).toEqual('form/spaceship');
+        expect(wrapper.vm.post.mock.calls[0][1]).toEqual({ title: null });
+
+        expect(location.href).toEqual('/test');
 
 
         expect(wrapper.vm.handleError).not.toHaveBeenCalled();
 
-        wrapper.vm.post = jest.fn(()=>Promise.reject({ error: true }));
+        wrapper.vm.post = jest.fn(()=>Promise.reject({ response: { status:500 } }));
 
-        wrapper.vm.submit().catch(() => {});
+        wrapper.vm.submit().catch(handleSubmitError);
 
         await wait(10);
 
         expect(wrapper.vm.handleError).toHaveBeenCalledTimes(1);
-        expect(wrapper.vm.handleError).toHaveBeenCalledWith({ error: true });
+        expect(wrapper.vm.handleError).toHaveBeenCalledWith({ response: { status:500 } });
     });
 
     test('delete', async ()=>{

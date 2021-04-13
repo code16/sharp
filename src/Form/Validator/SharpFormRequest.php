@@ -2,30 +2,18 @@
 
 namespace Code16\Sharp\Form\Validator;
 
-use Code16\Sharp\Http\WithSharpContext;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 abstract class SharpFormRequest extends FormRequest
 {
-    use WithSharpContext;
-
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
     /**
      * Handle RTF (markdown and wysiwyg) fields
      *
-     * @param  Validator  $validator
+     * @param  Validator $validator
      * @return void
      */
-    public function withValidator($validator)
+    public function withValidator(Validator $validator): void
     {
         // Find RTF (markdown, wysiwyg) based on their posted structure ($field["text"])
         $richTextFields = collect($this->all())->filter(function($value, $key) {
@@ -40,11 +28,13 @@ abstract class SharpFormRequest extends FormRequest
             ->all();
 
         // And then replace RTF rules with .text suffix
-        collect($validator->getRules())->filter(function($messages, $key) use($richTextFields) {
-            return in_array($key, $richTextFields);
-        })->each(function($messages, $key) use(&$newRules) {
-            $newRules["$key.text"] = $messages;
-        });
+        collect($validator->getRules())
+            ->filter(function($messages, $key) use($richTextFields) {
+                return in_array($key, $richTextFields);
+            })
+            ->each(function($messages, $key) use(&$newRules) {
+                $newRules["$key.text"] = $messages;
+            });
 
         $validator->setRules($newRules);
     }

@@ -11,7 +11,6 @@ use Code16\Sharp\Form\Fields\SharpFormMarkdownField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpSingleForm;
-use Code16\Sharp\Show\SharpSingleShow;
 use Code16\Sharp\Tests\SharpTestCase;
 
 class SharpFormTest extends SharpTestCase
@@ -21,7 +20,7 @@ class SharpFormTest extends SharpTestCase
     function we_get_formatted_data_in_creation_with_the_default_create_function()
     {
         $sharpForm = new class extends BaseSharpForm {
-            function buildFormFields()
+            function buildFormFields(): void
             {
                 $this->addField(
                     SharpFormMarkdownField::make("md")
@@ -41,7 +40,7 @@ class SharpFormTest extends SharpTestCase
     function we_get_formatted_data_in_creation_with_the_default_create_function_with_subclasses()
     {
         $sharpForm = new class extends BaseSharpForm {
-            function buildFormFields()
+            function buildFormFields(): void
             {
                 $this->addField(
                     SharpFormTextField::make("name")
@@ -64,7 +63,7 @@ class SharpFormTest extends SharpTestCase
         {
             public $instance;
 
-            function buildFormFields()
+            function buildFormFields(): void
             {
                 $this->addField(
                     SharpFormTextField::make("normal")
@@ -117,7 +116,7 @@ class SharpFormTest extends SharpTestCase
     {
         $sharpForm = new class extends BaseSharpForm
         {
-            function buildFormFields()
+            function buildFormFields(): void
             {
                 $this->addField(
                     SharpFormTextField::make("delayed")
@@ -143,15 +142,40 @@ class SharpFormTest extends SharpTestCase
     }
 
     /** @test */
-    function single_forms_have_are_declared_in_config()
+    function single_forms_are_declared_in_config()
     {
         $sharpForm = new class extends BaseSharpSingleForm
         {
         };
+        
+        $sharpForm->buildFormConfig();
 
-        $this->assertEquals([
-            "isSingle" => true
-        ], $sharpForm->formConfig());
+        $this->assertEquals(
+            [
+                "isSingle" => true, 
+                "hasShowPage" => false
+            ], 
+            $sharpForm->formConfig()
+        );
+    }
+
+    /** @test */
+    function we_can_declare_setDisplayShowPageAfterCreation_in_config()
+    {
+        $sharpForm = new class extends BaseSharpForm
+        {
+            public function buildFormConfig(): void
+            {
+                $this->setDisplayShowPageAfterCreation(true);
+            }
+        };
+
+        $sharpForm->buildFormConfig();
+
+        $this->assertEquals(
+            ["hasShowPage" => true],
+            $sharpForm->formConfig()
+        );
     }
 }
 
@@ -163,23 +187,23 @@ class BaseSharpForm extends SharpForm
     function update($id, array $data)
     {
     }
-    function delete($id)
+    function delete($id): void
     {
     }
-    function buildFormFields()
+    function buildFormFields(): void
     {
     }
-    function buildFormLayout()
+    function buildFormLayout(): void
     {
     }
 }
 
 class BaseSharpSingleForm extends SharpSingleForm
 {
-    function buildFormFields()
+    function buildFormFields(): void
     {
     }
-    function buildFormLayout()
+    function buildFormLayout(): void
     {
     }
     protected function findSingle()

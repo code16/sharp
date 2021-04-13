@@ -4,7 +4,7 @@ This form field is a markdown editor, with formatting and an optional toolbar.
 
 Class: `Code16\Sharp\Form\Fields\SharpFormMarkdownField`
 
-![Example](./markdown.gif)
+<img src="./markdown.png" width="500">
 
 
 ## Configuration
@@ -35,7 +35,7 @@ const H2 = "heading-2";
 const H3 = "heading-3";
 const CODE = "code";
 const QUOTE = "quote";
-const IMG = "image"; // special, see below
+const DOC = "document"; // special, see below
 const HR = "horizontal-rule";
 ```
 
@@ -46,20 +46,19 @@ SharpFormMarkdownField::make("description")
     ->setToolbar([
         SharpFormMarkdownField::B, SharpFormMarkdownField::I,
         SharpFormMarkdownField::SEPARATOR,
-        SharpFormMarkdownField::IMG,
+        SharpFormMarkdownField::DOC,
         SharpFormMarkdownField::SEPARATOR,
         SharpFormMarkdownField::A,
      ]);
 ```
 
-### Embed images in markdown
+### Embed images and files in markdown
 
-The markdown field allows image embedding, throught the `IMG` tool (from the toolbar). To use this feature, you'll have to add the `IMG` tool in the toolbar, and configure the environment (see below).
+The markdown field allows file embedding, with the `DOC` tool (from the toolbar). To use this feature, add the tool in the toolbar and configure the environment (see below).
 
-Sharp take care of copying the file on the right folder (after transformation, if wanted), based on the configuration.
+Sharp takes care of copying the file at the right place (after image transformation, if wanted), based on the configuration.
 
-
-#### `setMaxImageSize(float $sizeInMB)`
+#### `setMaxFileSize(float $sizeInMB)`
 
 Max file size allowed.
 
@@ -69,7 +68,7 @@ Set a ratio constraint to uploaded images, formatted like this: `width:height`. 
 
 When a crop ratio is set, any uploaded picture will be auto-cropped (centered).
 
-The second argument, `$croppableFileTypes`, provide a way to limit the crop configuration to a list of image files extensions. For instance, it can be useful to define a crop for jpg and png, but not for gif because it will destroy animation.
+The second argument, `$croppableFileTypes`, provide a way to limit the crop configuration to a list of image files extensions. For instance, it can be useful to define a crop for jpg and png, but not for gif because it would break animation.
 
 #### `setStorageDisk(string $storageDisk)`
 
@@ -82,20 +81,45 @@ Set the destination base storage path. You can use the `{id}` special placeholde
 For instance:
 `$field->setStorageBasePath('/users/{id}/markdown')`
 
-#### Display those images as thumbnail in the public site
+#### `setFileFilter($fileFilter)`
 
-Of course you'll want to display those emebedded images in the public website, as thumbnails. Sharp provides a helper for that:
+Set the allowed file extensions. You can pass either an array, or a comma-separated list.
 
-`sharp_markdown_thumbnails(string $html, string $classNames, int $width = null, int $height = null, array $filters = [])`
+#### `setFileFilterImages()`
+
+Just a `setFileFilter([".jpg",".jpeg",".gif",".png"])` shorthand.
+
+### Display embedded files in the public site
+
+You may need to display those embedded files in the public website. The idea here is to display embedded images as thumbnails, and other files as you need. Sharp provides a helper for that:
+
+`sharp_markdown_embedded_files(string $html, string $classNames, int $width = null, int $height = null, array $filters = [])`
 
 Where:
 
-- `$html` is the html-parsed markdown. Note that Sharp does not provide a markdown parser, mainly because you'll want to have the ability to choose yours. We think [this one](https://github.com/cebe/markdown) is pretty good, if you want some guidance.
-- `$classNames` will be set a `class` on the `<img>` tags.
+- `$html` is the html-parsed markdown. Note that Sharp includes a markdown parser, [Parsedown](https://github.com/erusev/parsedown), but you are free to choose yours.
+- `$classNames` will be set a `class` on the `<img>` or `<div>` tag.
+  
+And for images only:
 - `$width` and `$height` are constraints for the thumbnail.
-- and finally `$filters`, as [described in this documentation](../sharp-built-in-solution-for-uploads.md).
+- `$filters` [described in this documentation](../sharp-built-in-solution-for-uploads.md).
+
+This helper will make use of a special view, `public.markdown-embedded-file.blade.php`, for the render part. You can extend this view publishing it:
+
+```
+    php artisan vendor:publish --provider=Code16\\Sharp\\SharpServiceProvider --tag=views
+```
+
+Here are the parameters passed to the view:
+- `$fileModel` which is a `SharpUploadModel` instance (see the [documentation](../sharp-built-in-solution-for-uploads.md))
+- `$isImage` (bool)
+- `$classNames`, `$width`, `$height`, `$filters`: whatever you passed to the helper function
+
+::: warning
+In order to make this parsing work, you have to ensure that embedded images and files are in a dedicated paragraph. This means, as we're using the Markdown norm here, that a file should have a blank row before and one after, in the text. Sharp's Markdown filed will take care of that, by default, in its formatter. 
+:::
 
 ## Formatter
 
-- `toFront`: expects a markdown string; will extract embedded images for the front.
-- `fromFront`: returns a markdown string.
+- `toFront`: expects a markdown string; will extract embedded files for the front.
+- `fromFront`: returns a markdown string, handle files (format, transformation, copy).

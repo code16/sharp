@@ -2,7 +2,7 @@
 
 exports[`sharp-field can mount field 1`] = `
 <div id="app">
-	<div>Template field</div>
+	<div class="SharpField">Template field</div>
 </div>
 `;
 

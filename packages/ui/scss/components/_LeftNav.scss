@@ -1,8 +1,15 @@
 @import "../mixins/left-nav";
 
 .SharpLeftNav {
-  @include reset;
-  width: rem(250px);
+
+  --item-color-l: 30%;
+  $item-color: hsl(var(--bs-primary-h), 10%, 20%);
+  $item-hover-bg: hsla(var(--bs-primary-h), var(--bs-primary-s), var(--item-color-l), .05);
+  $item-hover-color: inherit;
+  $item-active-bg: hsla(var(--bs-primary-h), var(--bs-primary-s), var(--item-color-l), .1);
+  $item-active-color: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--item-color-l));
+  $item-expanded-color: hsl(var(--bs-primary-h), var(--bs-primary-s), 25%);
+
   position: fixed;
   top: 0;
   height: 100vh;
@@ -10,10 +17,10 @@
   //border-right: 1px solid $color__gray-1;
   max-height: 100vh;
 
-  z-index: z('leftNav');
+  z-index: 100;
 
   &__content {
-    box-shadow: 2px 0 3px 0 $ui-03;
+    box-shadow: 1px 0 3px 0 hsla(var(--bs-primary-h), var(--bs-primary-s), 30%, 0.075);
     position: absolute;
     top: 0;
     bottom: 0;
@@ -26,24 +33,29 @@
   }
 
   &__title-container {
-    padding: .75rem 1.5rem;
-    background: $brand-01-light;
+    padding: .75rem 1.25rem;
+    background-color: $primary;
+    background: linear-gradient(
+      0deg,
+      hsl(var(--bs-primary-h), var(--bs-primary-s), var(--accent-bg-l)),
+      hsl(var(--bs-primary-h), var(--bs-primary-s), calc(var(--accent-bg-l) - 1.4%))
+    );
     display: flex;
     align-items: center;
-    min-height: 5rem;
+    min-height: var(--navbar-height);
     z-index: 1;
   }
 
   &__title {
-    @include font-size('16');
-    text-transform: uppercase;
-    letter-spacing: 0;
-    color: $inverse-01;
+    @extend .ui-title-font;
+    --color-l: calc((var(--accent-bg-l) - var(--l-threshold) + var(--accent-bg-amount)) * -100000);
+    font-size: 1rem;
+    color: hsl(0, 0%, var(--color-l));
   }
 
   &__top-icon {
     opacity: 0;
-    color: $color__blue-51;
+    color: hsl(var(--bs-primary-h), var(--bs-primary-s), 30%);
     position: absolute;
     right:0;
     left:0;
@@ -53,175 +65,132 @@
     }
   }
 
+
+
   &__list {
     list-style: none;
     display: flex;
     flex-direction: column;
     background-color: $color__white;
-    padding-top: 1rem;
+    padding-left: 0;
+    margin-bottom: 0;
 
-    @include enhanced-item-border-and-spacing;
+    &.SharpLeftNav__list--nested {
+      .SharpLeftNav__item:last-child {
+        margin-bottom: 0;
+      }
+    }
+    &:not(.SharpLeftNav__list--nested) {
+      & > .SharpLeftNav__item {
+        border-bottom: 1px solid $ui-03;
+        padding-bottom: 1rem;
+        padding-top: 1rem;
+      }
+    }
+
     @include enhanced-item-font-size;
+  }
 
-    .SharpLeftNav__item {
-      cursor: pointer;
-      width: 100%;
-      padding: 0;
+  &__item {
+    width: 100%;
+    padding: 0;
 
-      &:focus {
-        outline: 1px solid transparent;
+    &:focus:not(:focus-visible) {
+      outline: 0;
+    }
 
-        &:not(.SharpLeftNav__item--disabled) {
-
-          &:not(.SharpLeftNav__item--has-children) {
-            background-color: $color__gray-2;
-            //text-decoration: underline;
-            color: $color__blue-51;
-          }
-
-          .SharpLeftNav__list--nested .SharpLeftNav__item-link {
-            color: $color__blue-90;
-            text-decoration: none;
-          }
-        }
+    &.SharpLeftNav__item--active {
+      & > .SharpLeftNav__item-link {
+        background-color: $item-active-bg;
+        color: $item-active-color;
+        font-weight: 700;
+        letter-spacing: -.0125em;
       }
+    }
 
-      &.SharpLeftNav__item--active {
-        & > .SharpLeftNav__item-link {
-          background-color: $color__gray-2;
-          color: $color__blue-51;
-          font-weight: 600;
-        }
+    &-icon {
+      display: flex;
+
+      .SharpLeftNav__icon {
+        fill: currentColor;
+        width: .5rem;
+        height: .5rem;
+        transition: $transition--base;
       }
+    }
 
-      &-link {
-        @include font-size('14');
-        color: $color__blue-90;
-        font-weight: 400;
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        text-decoration: none;
-        transition: background-color $transition--base;
-        padding: .75rem 1.5rem .75rem rem(59px);
-
-        & > span {
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          overflow: hidden;
-          width: 100%;
-        }
-
-        &:focus {
-          outline: 1px solid transparent;
-          background-color: $color__gray-2;
-          color: $color__blue-51;
-          //text-decoration: underline;
-        }
+    &--expanded {
+      .SharpLeftNav__item-icon .SharpLeftNav__icon {
+        transform: rotate(180deg);
       }
+    }
 
-      &-icon {
-        display: flex;
-
-        .SharpLeftNav__icon {
-          fill: $color__blue-51;
-          width: rem(8px);
-          height: rem(8px);
-          transition: $transition--base;
-        }
+    &:not(.SharpLeftNav__item--active):not(.SharpLeftNav__item--disabled) {
+      & > .SharpLeftNav__item-link:hover {
+        color: $item-hover-color;
+        background-color: $item-hover-bg;
       }
+    }
 
-      &--expanded {
-        .SharpLeftNav__list--nested {
-          max-height: 50rem;
-          transition: $transition--base;
-          overflow: inherit;
-          opacity: 1;
+    &:not(.SharpLeftNav__item--disabled) {
+      @extend .ui-font;
+      letter-spacing: -.025em;
+    }
 
-          .SharpLeftNav__item {
-            opacity: 1;
-          }
-        }
-
-        & > .SharpLeftNav__item-link {
-          color: $color__blue-51;
-          font-weight: bold;
-        }
-
-        .SharpLeftNav__item-icon .SharpLeftNav__icon {
-          transform: rotate(180deg);
-        }
-      }
-
-      &:not(.SharpLeftNav__item--has-children):not(.SharpLeftNav__item--disabled):hover {
-        & > .SharpLeftNav__item-link {
-          background-color: $color__gray-2;
-          color: $color__blue-51;
-        }
-      }
-
-      &.SharpLeftNav__item--disabled {
+    &.SharpLeftNav__item--disabled {
+      .SharpLeftNav__item-link {
         cursor: default;
       }
     }
 
-    .SharpLeftNav__item--has-children {
+    &--has-children {
       & > .SharpLeftNav__item-link {
-        text-transform: uppercase;
-      }
-
-      .SharpLeftNav__item-link {
-        padding-right: 1.5rem;
-      }
-
-      &:hover {
-        & > .SharpLeftNav__item-link {
-          //color: $color__blue-51;
+        color: $text-muted;
+        font-weight: 700;
+        font-size: .875rem;
+        letter-spacing: 0;
+        &:hover {
+          color: $item-color;
         }
       }
     }
   }
 
-  &__list--nested {
-    max-height: 0;
-    overflow: hidden;
-    transition: .3s ease-in-out;
-    padding: 0;
-    opacity: 0;
+  &__item-link {
+    font-size: $ui-font-size;
+    font-size: .8125rem;
+    position: relative;
+    display: block;
+    text-decoration: none;
+    transition: $nav-link-transition;
+    cursor: pointer;
+    color: $item-color;
+    line-height: 1.4;
+    padding: .5rem 1.25rem;
 
-    .SharpLeftNav__item {
-      width: 100%;
-      position: relative;
-      padding: 0;
-      transition: $transition--base;
-      opacity: 0;
-
-      &-link {
-        @include font-size('14');
-        color: $color__blue-90;
-        padding: .75rem 1.35rem .75rem 4.5rem;
-        font-weight: 400;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-
-      &:hover {
-        outline: none;
-      }
-
-      &--active {
-        color: $color__blue-51;
-        background-color: $color__gray-2;
-
-        & > .SharpLeftNav__item-link {
-          font-weight: 600;
-          color: $color__blue-51;
-        }
-      }
+    .fa, .fas, .far, .fab {
+      font-size: 1.125em;
     }
 
+    & > span {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    &:focus {
+      color: $item-hover-color;
+      background-color: $item-hover-bg;
+    }
+  }
+
+  &__list--nested {
+    padding-top: .625rem;
+    padding-bottom: .375rem;
+    .SharpLeftNav__item {
+      margin-bottom: .5rem;
+    }
   }
 
   // collapsed states
@@ -236,8 +205,8 @@
   &--collapseable {
     display: flex;
     flex-direction: column;
-    width: rem(200px);
-    transition: background-color 300ms $bx--standard-easing, width 300ms $bx--standard-easing;
+    width: $leftnav-width;
+    transition: background-color 300ms ease-in-out, $transition-leftnav-collapse;
 
     @include transition-elements {
       opacity: 1;
@@ -247,92 +216,19 @@
       background-color: inherit;
     }
 
-    .SharpLeftNav__item--expanded > .SharpLeftNav__list {
-      padding-top: rem(6px);
-      padding-bottom: rem(6px);
-    }
-
     .SharpLeftNav__item--expanded > .SharpLeftNav__item-link {
-      color: $color__blue-90;
+      color: $item-expanded-color!important;
     }
 
-    .SharpLeftNav__line {
-      margin: rem(24px) rem(20px);
-      border: 1px solid $color__gray-1;
-    }
-
-    .SharpLeftNav__list {
-
-      @include light-ui {
-        background-color: inherit;
-      }
-    }
-
-    .SharpLeftNav__item--active > .SharpLeftNav__item-link {
-      position: relative;
-      background-color: #fff;
-
-      //&:before {
-      //  top: 0;
-      //  position: absolute;
-      //  background-color: $color__blue-51;
-      //  height: 100%;
-      //  left: 0;
-      //  width: 4px;
-      //  content: '';
-      //}
-    }
-
-    .SharpLeftNav__item {
-      margin-bottom: rem(5px);
-    }
-
-    .SharpLeftNav__item-link, .SharpLeftNav__list--nested .SharpLeftNav__item-link {
-      padding: rem(9px) rem(20px);
-    }
-
-    .SharpLeftNav__list--nested .SharpLeftNav__item-link {
-      //font-size: rem(12px);
-      //padding-left: rem(40px);
-    }
-
-    .SharpLeftNav__collapse {
-      cursor: pointer;
-      background-color: rgba($color__blue-51, .10);
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      margin-top: auto;
-      //margin-bottom: rem(90px);
-      padding: rem(14px) rem(16px);
-
-      z-index:1;
-
-      &:hover, &:focus {
-        background-color: rgba($color__blue-51, .30);
-      }
-    }
-
-    .SharpLeftNav__collapse-target {
-      margin-left: rem(10px);
-      margin-right: rem(10px);
-    }
-
-    .SharpLeftNav__collapse-link {
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-      font-size: rem(14px);
-      padding: .25rem;
-
-      &:focus {
-        @include focus-outline('border');
-      }
+    .SharpLeftNav__collapse-button {
+      position: absolute;
+      bottom: .5rem;
+      right: .5rem;
     }
 
     .SharpLeftNav__collapse-arrow {
       transform: rotate(0);
-      fill: $color__blue-51;
+      fill: currentColor;
       height: 12px;
       width: 12px;
     }
@@ -342,20 +238,19 @@
     .SharpLeftNav__content {
       box-shadow: none;
     }
-    width: rem(48px);
-    transition: background-color 300ms $bx--standard-easing,
-                width 300ms $bx--standard-easing;
+    width: $leftnav-collapsed-width;
+    transition: background-color 300ms ease-in-out, $transition-leftnav-collapse;
     cursor: pointer;
-    background-color: rgba($color__blue-51, .10);
+    background-color: hsla(var(--bs-primary-h), var(--bs-primary-s), 30%, .1);
     //background: $brand-01-light;
 
     &:hover, &:focus {
-      background-color: rgba($color__blue-51, .30);
+      background-color: hsla(var(--bs-primary-h), var(--bs-primary-s), 30%, .15);
     }
 
     @include transition-elements {
       opacity: 0;
-      transition: opacity 300ms $bx--standard-easing;
+      transition: opacity 300ms ease-in-out;
       overflow: hidden;
       white-space: nowrap;
     }
@@ -370,17 +265,17 @@
 
     .SharpLeftNav__collapse-arrow {
       transform: rotate(180deg);
-      transition: transform 300ms $bx--standard-easing;
+      transition: transform 300ms ease-in-out;
     }
 
     .SharpLeftNav__top-icon {
-      transition: opacity 300ms $bx--standard-easing;
+      transition: opacity 300ms ease-in-out;
     }
   }
 
   &--collapsed {
     height: 100%;
-    padding-top: rem(20px);
+    padding-top: 1.25rem;
     @include transition-elements {
       display: none;
     }
@@ -398,8 +293,8 @@
   }
 
   &--expanding {
-    width: rem(200px);
-    transition: width 300ms $bx--standard-easing;
+    width: $leftnav-width;
+    transition: width 300ms ease;
     background-color: #fff;
 
     .SharpLeftNav__content {
@@ -408,14 +303,14 @@
 
     @include transition-elements {
       opacity: 1;
-      transition: opacity 300ms $bx--standard-easing;
+      transition: opacity 300ms ease-in-out;
       overflow: hidden;
       white-space: nowrap;
     }
 
     .SharpLeftNav__collapse-arrow {
       transform: rotate(0deg);
-      transition: transform 300ms $bx--standard-easing;
+      transition: transform 300ms ease-in-out;
     }
 
     .SharpLeftNav__top-icon {

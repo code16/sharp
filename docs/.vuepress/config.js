@@ -5,6 +5,10 @@ loadLanguages(['php']);
 module.exports = {
     title: 'Sharp',
     base: '/docs/',
+    head: [
+        ['link', { rel: 'icon', type:'image/png', href: '/favicon.png' }],
+        ['link', { rel: 'icon', type:'image/svg+xml', href: '/favicon.svg' }],
+    ],
     themeConfig: {
         nav: [
             { text: 'Home', link: '/' },
@@ -39,7 +43,6 @@ module.exports = {
                     collapsable: false,
                     children: [
                         'building-entity-form',
-                        'entity-authorizations',
                         'multiforms',
                         'single-form',
                         'custom-form-fields'
@@ -71,7 +74,10 @@ module.exports = {
                     collapsable: false,
                     children: [
                         'building-menu',
+                        'sharp-breadcrumb',
+                        'entity-authorizations',
                         'how-to-transform-data',
+                        'link-to',
                         'context',
                         'sharp-built-in-solution-for-uploads',
                         'form-data-localization',
@@ -116,6 +122,7 @@ module.exports = {
                     title: 'Migrations guide',
                     collapsable: false,
                     children: [
+                        'upgrading/6.0',
                         'upgrading/5.0',
                         'upgrading/4.2',
                         'upgrading/4.1.3',

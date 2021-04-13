@@ -6,31 +6,22 @@ use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Utils\SharpNotification;
+use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpForm
 {
-    use WithCustomTransformers, HandleFormFields;
+    use WithCustomTransformers, 
+        HandleFormFields,
+        HandleCustomBreadcrumb;
 
-    /**
-     * @var array
-     */
-    protected $tabs = [];
-
-    /**
-     * @var bool
-     */
-    protected $tabbed = true;
-
-    /**
-     * @var bool
-     */
-    protected $layoutBuilt = false;
+    protected array $tabs = [];
+    protected bool $displayShowPageAfterCreation = false;
+    protected bool $tabbed = true;
+    protected bool $layoutBuilt = false;
 
     /**
      * Return the form fields layout.
-     *
-     * @return array
      */
     function formLayout(): array
     {
@@ -49,37 +40,36 @@ abstract class SharpForm
 
     /**
      * Return the entity instance, as an array.
-     *
-     * @param $id
-     * @return array
      */
-    function instance($id): array
+    public function instance($id): array
     {
         return collect($this->find($id))
             // Filter model attributes on actual form fields
-            ->only($this->getDataKeys())
+            ->only(
+                array_merge(
+                    $this->breadcrumbAttribute ? [$this->breadcrumbAttribute] : [],
+                    $this->getDataKeys()
+                )
+            )
             ->all();
     }
 
-    /**
-     * Return a new entity instance, as an array.
-     *
-     * @return array
-     */
-    public function newInstance()
+    public function newInstance(): ?array
     {
         $data = collect($this->create())
             // Filter model attributes on actual form fields
-            ->only($this->getDataKeys())
+            ->only(
+                array_merge(
+                    $this->breadcrumbAttribute ? [$this->breadcrumbAttribute] : [],
+                    $this->getDataKeys()
+                )
+            )
             ->all();
 
         return sizeof($data) ? $data : null;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasDataLocalizations()
+    public function hasDataLocalizations(): bool
     {
         foreach($this->fields() as $field) {
             if($field["localized"] ?? false) {
@@ -98,28 +88,40 @@ abstract class SharpForm
         return false;
     }
 
-    /**
-     * @return array
-     */
-    public function getDataLocalizations()
+    public function getDataLocalizations(): array
     {
         return [];
     }
 
-    /**
-     * @return array
-     */
-    public function formConfig()
+    public function buildFormConfig(): void
     {
-        return [];
     }
 
-    /**
-     * @param string $label
-     * @param \Closure|null $callback
-     * @return $this
-     */
-    protected function addTab(string $label, \Closure $callback = null)
+    public function formConfig(): array
+    {
+        return tap(
+            [
+                "hasShowPage" => $this->displayShowPageAfterCreation
+            ], 
+            function(&$config) {
+                $this->appendBreadcrumbCustomLabelAttribute($config);
+            }
+        );
+    }
+
+    protected function setDisplayShowPageAfterCreation(bool $displayShowPage = true): self
+    {
+        $this->displayShowPageAfterCreation = $displayShowPage;
+        
+        return $this;
+    }
+
+    public function isDisplayShowPageAfterCreation(): bool
+    {
+        return $this->displayShowPageAfterCreation;
+    }
+
+    protected function addTab(string $label, \Closure $callback = null): self
     {
         $this->layoutBuilt = false;
 
@@ -132,12 +134,7 @@ abstract class SharpForm
         return $this;
     }
 
-    /**
-     * @param int $size
-     * @param \Closure|null $callback
-     * @return $this
-     */
-    protected function addColumn(int $size, \Closure $callback = null)
+    protected function addColumn(int $size, \Closure $callback = null): self
     {
         $this->layoutBuilt = false;
 
@@ -152,21 +149,13 @@ abstract class SharpForm
         return $this;
     }
 
-    /**
-     * @param bool $tabbed
-     * @return $this
-     */
-    protected function setTabbed(bool $tabbed = true)
+    protected function setTabbed(bool $tabbed = true): self
     {
         $this->tabbed = $tabbed;
 
         return $this;
     }
 
-    /**
-     * @param FormLayoutTab $tab
-     * @return FormLayoutTab
-     */
     private function addTabLayout(FormLayoutTab $tab): FormLayoutTab
     {
         $this->tabs[] = $tab;
@@ -174,10 +163,7 @@ abstract class SharpForm
         return $tab;
     }
 
-    /**
-     * @return FormLayoutTab
-     */
-    private function getLonelyTab()
+    private function getLonelyTab(): FormLayoutTab
     {
         if(!sizeof($this->tabs)) {
             $this->addTabLayout(new FormLayoutTab("one"));
@@ -186,11 +172,6 @@ abstract class SharpForm
         return $this->tabs[0];
     }
 
-    /**
-     * @param string|null $id
-     * @param array $data
-     * @throws SharpFormUpdateException
-     */
     public function updateInstance($id, $data)
     {
         list($formattedData, $delayedData) = $this->formatRequestData($data, $id, true);
@@ -209,15 +190,13 @@ abstract class SharpForm
 
             $this->update($id, $this->formatRequestData($delayedData, $id, false));
         }
+        
+        return $id;
     }
 
-    /**
-     * @param $data
-     * @throws SharpFormUpdateException
-     */
     public function storeInstance($data)
     {
-        $this->updateInstance(null, $data);
+        return $this->updateInstance(null, $data);
     }
 
     /**
@@ -280,19 +259,19 @@ abstract class SharpForm
     /**
      * @param $id
      */
-    abstract function delete($id);
+    abstract function delete($id): void;
 
     /**
      * Build form fields using ->addField()
      *
      * @return void
      */
-    abstract function buildFormFields();
+    abstract function buildFormFields(): void;
 
     /**
      * Build form layout using ->addTab() or ->addColumn()
      *
      * @return void
      */
-    abstract function buildFormLayout();
+    abstract function buildFormLayout(): void;
 }

@@ -6,28 +6,15 @@ class SharpShowFileField extends SharpShowField
 {
     const FIELD_TYPE = "file";
 
-    /** @var string */
-    protected $label = null;
+    protected ?string $label = null;
+    protected string $storageDisk = "local";
+    protected string $storageBasePath = "data";
 
-    /** @var string */
-    protected $storageDisk = "local";
-    
-    /** @var string */
-    protected $storageBasePath = "data";
-
-    /**
-     * @param string $key
-     * @return static
-     */
     public static function make(string $key): SharpShowFileField
     {
         return new static($key, static::FIELD_TYPE);
     }
 
-    /**
-     * @param string $label
-     * @return $this
-     */
     public function setLabel(string $label): self
     {
         $this->label = $label;
@@ -35,47 +22,30 @@ class SharpShowFileField extends SharpShowField
         return $this;
     }
 
-    /**
-     * @param string $storageDisk
-     * @return static
-     */
-    public function setStorageDisk(string $storageDisk)
+    public function setStorageDisk(string $storageDisk): self
     {
         $this->storageDisk = $storageDisk;
 
         return $this;
     }
 
-    /**
-     * @param string $storageBasePath
-     * @return static
-     */
-    public function setStorageBasePath(string $storageBasePath)
+    public function setStorageBasePath(string $storageBasePath): self
     {
         $this->storageBasePath = $storageBasePath;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function storageDisk()
+    public function storageDisk(): string
     {
         return $this->storageDisk;
     }
 
-    /**
-     * @return string
-     */
-    public function storageBasePath()
+    public function storageBasePath(): string
     {
         return $this->storageBasePath;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function toArray(): array
     {
         return parent::buildArray([

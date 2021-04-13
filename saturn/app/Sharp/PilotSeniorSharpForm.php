@@ -8,7 +8,7 @@ use Code16\Sharp\Form\Layout\FormLayoutColumn;
 
 class PilotSeniorSharpForm extends PilotJuniorSharpForm
 {
-    function buildFormFields()
+    function buildFormFields(): void
     {
         parent::buildFormFields();
 
@@ -18,7 +18,7 @@ class PilotSeniorSharpForm extends PilotJuniorSharpForm
         );
     }
 
-    function buildFormLayout()
+    function buildFormLayout(): void
     {
         parent::buildFormLayout();
 
@@ -26,11 +26,18 @@ class PilotSeniorSharpForm extends PilotJuniorSharpForm
             $column->withSingleField("xp");
         });
     }
+    
+    function buildFormConfig(): void
+    {
+        $this->setBreadcrumbCustomLabelAttribute("name");
+    }
 
     function update($id, array $data)
     {
         $instance = $id ? Pilot::findOrFail($id) : new Pilot;
 
         $this->save($instance, $data + ["role" => "sr"]);
+        
+        return $instance->id;
     }
 }

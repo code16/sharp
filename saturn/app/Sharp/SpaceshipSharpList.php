@@ -12,48 +12,46 @@ use App\Sharp\Filters\SpaceshipTypeFilter;
 use App\Sharp\States\SpaceshipEntityState;
 use App\Spaceship;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
-use Code16\Sharp\EntityList\Eloquent\Transformers\SharpUploadModelAttributeTransformer;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
-use Code16\Sharp\Http\WithSharpContext;
-use Code16\Sharp\Utils\LinkToEntity;
+use Code16\Sharp\Utils\Links\LinkToEntityList;
+use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
 
 class SpaceshipSharpList extends SharpEntityList
 {
-    use WithSharpContext;
-
-    function buildListDataContainers()
+    function buildListDataContainers(): void
     {
-        $this->addDataContainer(
-            EntityListDataContainer::make("picture")
-
-        )->addDataContainer(
-            EntityListDataContainer::make("name")
-                ->setLabel("Name")
-                ->setSortable()
-
-        )->addDataContainer(
-            EntityListDataContainer::make("capacity")
-                ->setLabel("Capacity")
-                ->setSortable()
-                ->setHtml(false)
-
-        )->addDataContainer(
-            EntityListDataContainer::make("type:label")
-                ->setLabel("Type")
-
-        )->addDataContainer(
-            EntityListDataContainer::make("pilots")
-                ->setLabel("Pilots")
-                ->setHtml()
-
-        )->addDataContainer(
-            EntityListDataContainer::make("messages_sent_count")
-                ->setLabel("Messages sent")
+        $this
+            ->addDataContainer(
+                EntityListDataContainer::make("picture")
+            )
+            ->addDataContainer(
+                EntityListDataContainer::make("name")
+                    ->setLabel("Name")
+                    ->setSortable()
+            )
+            ->addDataContainer(
+                EntityListDataContainer::make("capacity")
+                    ->setLabel("Capacity")
+                    ->setSortable()
+                    ->setHtml(false)
+            )
+            ->addDataContainer(
+                EntityListDataContainer::make("type:label")
+                    ->setLabel("Type")
+            )
+            ->addDataContainer(
+                EntityListDataContainer::make("pilots")
+                    ->setLabel("Pilots")
+                    ->setHtml()
+            )
+            ->addDataContainer(
+                EntityListDataContainer::make("messages_sent_count")
+                    ->setLabel("Messages sent")
         );
     }
 
-    function buildListConfig()
+    function buildListConfig(): void
     {
         $this->setInstanceIdAttribute("id")
             ->setSearchable()
@@ -72,7 +70,7 @@ class SpaceshipSharpList extends SharpEntityList
             ->setPaginated();
     }
 
-    function buildListLayout()
+    function buildListLayout(): void
     {
         $this->addColumn("picture", 1, 2)
             ->addColumn("name", 2, 4)
@@ -85,7 +83,7 @@ class SpaceshipSharpList extends SharpEntityList
     function getListData(EntityListQueryParams $params)
     {
         $spaceships = Spaceship::select("spaceships.*")
-            ->where("corporation_id", $this->context()->globalFilterFor("corporation"))
+            ->where("corporation_id", currentSharpRequest()->globalFilterFor("corporation"))
             ->distinct();
 
         if($params->specificIds()) {
@@ -126,14 +124,16 @@ class SpaceshipSharpList extends SharpEntityList
                 return number_format($capacity / 1000, 0) . "k";
             })
             ->setCustomTransformer("pilots", function($pilots, $spaceship) {
-                return $spaceship->pilots->map(function($pilot) {
-                    return (new LinkToEntity($pilot->name, "pilot"))
-                        ->setTooltip("See related pilot")
-                        ->setSearch($pilot->name)
-                        ->render();
-                })->implode("<br>");
+                return $spaceship->pilots
+                    ->map(function($pilot) {
+                        return LinkToEntityList::make("pilot")
+                            ->setSearch($pilot->name)
+                            ->setTooltip("See related pilot")
+                            ->renderAsText($pilot->name);
+                    })
+                    ->implode("<br>");
             })
-            ->setCustomTransformer("picture", new SharpUploadModelAttributeTransformer(100))
+            ->setCustomTransformer("picture", (new SharpUploadModelThumbnailUrlTransformer(100))->renderAsImageTag())
             ->transform(
                 $spaceships->with("picture", "type", "pilots")
                     ->paginate(10, ["spaceships.*"])

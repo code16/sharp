@@ -1,7 +1,8 @@
 <template>
     <component
-        :is="filterComp"
+        :is="filterComponent"
         :value="value"
+        :disabled="disabled"
         v-bind="filter"
         @input="handleInput"
     />
@@ -19,10 +20,11 @@
                 required: true,
             },
             value: [Object, Array, String, Number],
+            disabled: Boolean,
         },
 
         computed: {
-            filterComp() {
+            filterComponent() {
                 return filterByType(this.filter.type);
             },
         },

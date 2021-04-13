@@ -1,81 +1,64 @@
 @include media-breakpoint-up($breakpoint-fixed-menu) {
-  #sharp-app.leftNav--collapsed {
+  .leftNav--collapsed {
     .SharpActionBar__bar {
-      left: rem(48px);
+      left: $leftnav-collapsed-width;
       padding-left: 0;
     }
   }
 }
 
 .SharpActionBar {
-  color: $inverse-01;
+
   margin-bottom: 1rem;
 
-  .left, .right {
-    display: flex;
-    align-items: center;
-    & > *:not(.text-content) {
-      height: 100%
-    }
-    & > * {
-      margin-left:1.5rem;
-    }
-    & > *:first-child {
-      margin-left:0;
-    }
-  }
-
-  .left {
-    justify-content: flex-start;
-  }
-  .right {
-    justify-content: flex-end;
-  }
-
   &__bar {
-    display: flex;
-    align-items: center;
     padding-top: 1.25rem;
     padding-bottom: 1.25rem;
     background: $brand-01;
     margin-left: -$grid-gutter-width/2;
     margin-right: -$grid-gutter-width/2;
-    transition: left 300ms $bx--standard-easing;
+
+    transition: $transition-leftnav-collapse;
+    transition-property: left;
+
+    --threshold: var(--l-threshold);
+
+    color: white;
+    color: hsl(0, 0%, calc((var(--accent-bg-l) - var(--threshold)) * -100000));
+
+    background: $primary;
+    background: linear-gradient(
+      45deg,
+      hsl(var(--bs-primary-h), var(--bs-primary-s), var(--accent-bg-l)),
+      hsl(var(--bs-primary-h), var(--bs-primary-s), var(--bs-primary-l)) 70%
+    );
+
+    position: relative;
+    z-index: 1;
+
     @include media-breakpoint-up(sm) {
-      position: absolute;
+      position: absolute!important;
       top: 0;
       right: 0;
-      left: 3rem;
-      height: 5rem;
+      left: $leftnav-collapsed-width;
+      min-height: $navbar-min-height;
       margin-left: 0;
-      margin-right: 0;
+      margin-right: 0!important;
     }
     @include media-breakpoint-up($breakpoint-fixed-menu) {
-      position: fixed;
-      z-index: z('actionBar');
-      left: rem(200px);
+      position: fixed!important;
+      z-index: $zindex-sticky;
+      left: $leftnav-width;
     }
     & > .container {
-      height: 100%;
       & > .row {
-        height: 100%;
-        & > & .col {
-          height: 100%;
-        }
+        min-height: 2.5rem;
       }
     }
   }
 
   &__extras {
-    display:flex;
     padding-top: 1rem;
-    //flex-flow: row wrap;
-    align-items: center;
-    @include media-breakpoint-down(sm) {
-      flex-flow: column;
-      align-items: stretch;
-    }
-
     .SharpFilterSelect {
       margin: 0 0 0 .5rem;
       @include media-breakpoint-down(sm) {
@@ -87,170 +70,22 @@
     }
   }
 
-  @mixin overflow-dropdown-list {
-    .SharpDropdown__list {
-      width: auto;
-      right:0;
-    }
-  }
-
-  .SharpDropdown__text {
-    height: 100%;
-  }
-
-  &__actions-dropdown {
-    align-self: stretch;
-    //min-width: 2rem;
-    //max-width: 2rem;
-
-    @include overflow-dropdown-list;
-
-    .SharpDropdown__text {
-      //border: none;
-    }
-
-    .SharpDropdown__link {
-      padding-right: 1rem;
-    }
-
-    &--commands, &--state {
-      //width: 2.5rem;
-      //min-width: 2.5rem;
-      //max-width: 2.5rem;
-
-      white-space: nowrap;
-
-      .SharpDropdown__text {
-        //color: $brand-03;
-        line-height:1;
-      }
-
-      @include nav-dropdown;
-    }
-  }
-
   &__forms-dropdown {
-    width: auto;
-    @include nav-dropdown;
-
-    .SharpDropdown__text { z-index: auto }
-    @include overflow-dropdown-list;
-
-    &, .SharpDropdown__text {
-      //background: $brand-03;
-    }
-    .SharpDropdown__text {
-      &:hover {
-        border-color: lighten($brand-03, 20%);
-      }
-      border-color: $brand-03;
-      background: $brand-03;
-      color: $inverse-01;
-      font-weight: normal;
-      text-transform: uppercase;
-      display: inline-flex;
-      align-items: center;
-    }
-    &.SharpDropdown--open {
-      .SharpDropdown__text {
-        border-color: lighten($brand-03, 30%);
-      }
-    }
-    .SharpDropdown__arrow {
-      fill: $inverse-01;
+    .dropdown-menu {
+      margin-top: 1px;
     }
   }
 
-  .SharpButton--secondary {
-    &:hover, &:focus {
-      background: darken($ui-01, 10%);
-      color: $brand-01;
-    }
-  }
-  .SharpButton--secondary-accent, .SharpButton--danger {
-    border: 1px solid $ui-01;
-  }
-
-  .SharpButton {
-    border-radius: $btn-border-radius;
-    padding-top: .75em;
-    padding-bottom: .75em;
-    @include media-breakpoint-up(sm) {
-      padding-top: 0;
-      padding-bottom: 0;
-    }
-    &:focus {
-      outline: none;
-    }
-  }
-
-  .SharpSearch__input {
-    border-radius: $input-border-radius;
-  }
-
-
-  &.SharpActionBarList {
-    @include media-breakpoint-down(sm) {
-      .col.left {
-        flex: 0 !important;
-      }
-      .col.right {
-        flex: 1 !important;
-      }
-      &--search-active .SharpActionBar__bar{
-        .SharpButton, .SharpDropdown {
-          display: none;
-        }
-      }
-    }
-  }
-
-  &__search.SharpSearch {
-
-    .SharpSearch__close {
-      right: .5rem;
-    }
-    .SharpSearch__input {
-      box-shadow: unset;
-      height: 100%;
-      &:focus {
-        box-shadow: 0 0 0 1px $brand-03;
-      }
-    }
-
-    @include media-breakpoint-down(sm) {
-      &.SharpSearch--active {
-        width: 100%;
-        .SharpSearch__input {
-          z-index: 101;
-          width: 100%;
-        }
-        .SharpSearch__magnifier {
-          z-index: 101;
-        }
-
-        .SharpSearch__overlay {
-          display:block;
-        }
-      }
-      .SharpSearch__overlay {
-        z-index: 100;
-        position: fixed;
-        left:0;
-        top:0;
-        height: 100%;
-        width: 100%;
-        background: rgba(0,0,0,.1);
-
-        display: none;
-      }
-      .SharpSearch__close {
-        display:none;
-      }
-      .SharpSearch__input {
-        padding-right: 0;
-        padding-top: .75em;
-        padding-bottom: .75em;
+  .breadcrumb {
+    font-size: .75rem;
+    margin-bottom: .5rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    align-self: flex-end;
+    a {
+      text-decoration: none;
+      &:hover, &:focus {
+        text-decoration: underline;
       }
     }
   }

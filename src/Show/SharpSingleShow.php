@@ -2,8 +2,6 @@
 
 namespace Code16\Sharp\Show;
 
-use Code16\Sharp\EntityList\Commands\EntityState;
-use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\EntityList\Commands\SingleEntityState;
 use Code16\Sharp\EntityList\Commands\SingleInstanceCommand;
 use Code16\Sharp\Exceptions\SharpException;
@@ -25,7 +23,7 @@ abstract class SharpSingleShow extends SharpShow
         ]);
     }
 
-    /*
+    /**
      * Retrieve a Model for the form and pack all its data as JSON.
      *
      * @param $id
@@ -36,13 +34,7 @@ abstract class SharpSingleShow extends SharpShow
         return $this->findSingle();
     }
 
-    /**
-     * @param string $commandName
-     * @param string|InstanceCommand $commandHandlerOrClassName
-     * @return SharpShow
-     * @throws SharpException
-     */
-    protected function addInstanceCommand(string $commandName, $commandHandlerOrClassName)
+    protected function addInstanceCommand(string $commandName, $commandHandlerOrClassName): self
     {
         $commandHandler = is_string($commandHandlerOrClassName)
             ? app($commandHandlerOrClassName)
@@ -61,13 +53,7 @@ abstract class SharpSingleShow extends SharpShow
         return parent::addInstanceCommand($commandName, $commandHandlerOrClassName);
     }
 
-    /**
-     * @param string $stateAttribute
-     * @param EntityState|string $stateHandlerOrClassName
-     * @return SharpShow
-     * @throws SharpException
-     */
-    protected function setEntityState(string $stateAttribute, $stateHandlerOrClassName)
+    protected function setEntityState(string $stateAttribute, $stateHandlerOrClassName): self
     {
         $entityStateHandler = is_string($stateHandlerOrClassName)
             ? app($stateHandlerOrClassName)
@@ -88,8 +74,6 @@ abstract class SharpSingleShow extends SharpShow
 
     /**
      * Retrieve a Model for the form and pack all its data as JSON.
-     *
-     * @return array
      */
     abstract function findSingle(): array;
 }

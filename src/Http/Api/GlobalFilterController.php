@@ -8,9 +8,6 @@ class GlobalFilterController extends ApiController
 {
     use HandleFilters;
 
-    /**
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function index()
     {
         foreach(config("sharp.global_filters") as $filterName => $handlerClass) {
@@ -24,10 +21,6 @@ class GlobalFilterController extends ApiController
         );
     }
 
-    /**
-     * @param string $filterName
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function update(string $filterName)
     {
         abort_if(is_null($handlerClass = config("sharp.global_filters.$filterName")), 404);

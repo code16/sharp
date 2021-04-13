@@ -6,10 +6,13 @@ use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Tests\Fixtures\User;
+use Code16\Sharp\Tests\Unit\Utils\WithCurrentSharpRequestFake;
 use Illuminate\Foundation\Http\FormRequest;
 
 class MultiFormEntityFormControllerTest extends BaseApiTest
 {
+    use WithCurrentSharpRequestFake;
+    
     protected function setUp(): void
     {
         parent::setUp();
@@ -47,16 +50,26 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
     public function we_can_update_an_sub_entity()
     {
         $this->buildTheWorld();
+        
+        $this->fakeCurrentSharpRequestWithUrl("/sharp/s-list/person/s-form/person:small/1");
+        $this
+            ->postJson('/sharp/api/form/person:small/1', [
+                "name" => "Jane Fonda"
+            ])
+            ->assertOk()
+            ->assertJson([
+                "redirectUrl" => url("/sharp/s-list/person")
+            ]);
 
-        $this->postJson('/sharp/api/form/person:small/1', [
-            "name" => "Jane Fonda"
-        ])->assertStatus(200)
-            ->assertJson(["ok" => true]);
-
-        $this->postJson('/sharp/api/form/person:big/1', [
-            "name" => "Jane Fonda"
-        ])->assertStatus(200)
-            ->assertJson(["ok" => true]);
+        $this->fakeCurrentSharpRequestWithUrl("/sharp/s-list/person/s-form/person:big/1");
+        $this
+            ->postJson('/sharp/api/form/person:big/1', [
+                "name" => "Jane Fonda"
+            ])
+            ->assertOk()
+            ->assertJson([
+                "redirectUrl" => url("/sharp/s-list/person")
+            ]);
     }
 
     /** @test */
@@ -148,12 +161,12 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
 
 class SmallPersonSharpForm extends SharpForm
 {
-    function buildFormFields()
+    function buildFormFields(): void
     {
         $this->addField(SharpFormTextField::make("name"));
     }
 
-    function buildFormLayout()
+    function buildFormLayout(): void
     {
         $this->addColumn(6, function(FormLayoutColumn $column) {
             return $column->withSingleField("name");
@@ -166,20 +179,19 @@ class SmallPersonSharpForm extends SharpForm
             ->transform(["name" => "Joe Pesci"]);
     }
 
-    function update($id, array $data): bool
+    function update($id, array $data)
     {
-        return true;
+        return $id;
     }
 
-    function delete($id): bool
+    function delete($id): void
     {
-        return true;
     }
 }
 
 class BigPersonSharpForm extends SmallPersonSharpForm
 {
-    function buildFormFields()
+    function buildFormFields(): void
     {
         parent::buildFormFields();
         $this->addField(SharpFormTextField::make("height"));

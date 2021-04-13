@@ -8,7 +8,7 @@ $loading__end-duration: 300ms;
 
 
 .SharpLoading {
-  @include reset;
+
   width: $loading__size;
   height: $loading__size;
 
@@ -19,12 +19,14 @@ $loading__end-duration: 300ms;
   }
 
   &__svg {
-    fill: transparent;
-    stroke: $brand-03;
+    fill: transparent !important;
+    stroke: currentColor;
     stroke-width: 7;
     stroke-linecap: butt;
     stroke-dasharray: 240;
     stroke-dashoffset: $loading__gap;
+
+    color: hsl(var(--bs-primary-h), var(--bs-primary-s), 40%);
   }
 
   &--stop {
@@ -36,6 +38,15 @@ $loading__end-duration: 300ms;
   &--small {
     width: 2rem;
     height: 2rem;
+
+    .SharpLoading__svg {
+      stroke: $ui-05;
+    }
+  }
+
+  &--medium {
+    width: 3rem;
+    height: 3rem;
 
     .SharpLoading__svg {
       stroke: $ui-05;
@@ -55,6 +66,10 @@ $loading__end-duration: 300ms;
     transition: background-color 2000ms $bx--standard-easing;
 
     z-index: 9999;
+
+    &--absolute {
+      position: absolute;
+    }
   }
 
   &__overlay--stop {

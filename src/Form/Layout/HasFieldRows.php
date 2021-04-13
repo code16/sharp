@@ -2,17 +2,13 @@
 
 namespace Code16\Sharp\Form\Layout;
 
+use Code16\Sharp\Utils\Layout\LayoutField;
+
 trait HasFieldRows
 {
-    /** @var array */
-    protected $rows = [];
+    protected array $rows = [];
 
-    /**
-     * @param string $fieldKey
-     * @param \Closure|null $subLayoutCallback
-     * @return $this
-     */
-    public function withSingleField(string $fieldKey, \Closure $subLayoutCallback = null)
+    public function withSingleField(string $fieldKey, \Closure $subLayoutCallback = null): self
     {
         $this->addRowLayout([
             $this->newLayoutField($fieldKey, $subLayoutCallback)
@@ -21,11 +17,7 @@ trait HasFieldRows
         return $this;
     }
 
-    /**
-     * @param string ...$fieldKeys
-     * @return $this
-     */
-    public function withFields(string ...$fieldKeys)
+    public function withFields(string ...$fieldKeys): self
     {
         $this
             ->addRowLayout(
@@ -39,17 +31,11 @@ trait HasFieldRows
         return $this;
     }
 
-    /**
-     * @param array $fields
-     */
-    private function addRowLayout(array $fields)
+    private function addRowLayout(array $fields): void
     {
         $this->rows[] = $fields;
     }
 
-    /**
-     * @return array
-     */
     function fieldsToArray(): array
     {
         return [
@@ -65,7 +51,7 @@ trait HasFieldRows
         ];
     }
 
-    protected function newLayoutField(string $fieldKey, \Closure $subLayoutCallback = null)
+    protected function newLayoutField(string $fieldKey, \Closure $subLayoutCallback = null): LayoutField
     {
         return new FormLayoutField($fieldKey, $subLayoutCallback);
     }

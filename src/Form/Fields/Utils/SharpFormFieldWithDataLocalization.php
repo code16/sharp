@@ -4,16 +4,9 @@ namespace Code16\Sharp\Form\Fields\Utils;
 
 trait SharpFormFieldWithDataLocalization
 {
-    /**
-     * @var bool
-     */
-    protected $localized = null;
+    protected ?bool $localized = null;
 
-    /**
-     * @param bool $localized
-     * @return static
-     */
-    public function setLocalized(bool $localized = true)
+    public function setLocalized(bool $localized = true): self
     {
         $this->localized = $localized ?: null;
 

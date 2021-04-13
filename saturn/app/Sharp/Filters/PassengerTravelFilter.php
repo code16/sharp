@@ -8,10 +8,7 @@ use Code16\Sharp\EntityList\EntityListSelectFilter;
 class PassengerTravelFilter implements EntityListSelectFilter
 {
 
-    /**
-     * @return array
-     */
-    public function values()
+    public function values(): array
     {
         return Travel::orderBy("destination")
             ->get()
@@ -25,7 +22,7 @@ class PassengerTravelFilter implements EntityListSelectFilter
             ->all();
     }
 
-    public function label()
+    public function label(): string
     {
         return "Flies on";
     }

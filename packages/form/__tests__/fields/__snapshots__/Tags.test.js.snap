@@ -2,10 +2,8 @@
 
 exports[`tags-field can mout Tags field 1`] = `
 <div id="app">
-	<div tabindex="-1" class="multiselect SharpTags">
-		<svg width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd" class="multiselect__select">
-			<path d="M10 0L5 5 0 0z"></path>
-		</svg>
+	<div tabindex="-1" class="multiselect SharpTags form-select form-control">
+		<div class="multiselect__select"></div>
 		<div class="multiselect__tags">
 			<div class="multiselect__tags-wrap" style="display: none;"></div>
 			<!---->

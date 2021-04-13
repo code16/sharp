@@ -65,7 +65,7 @@ export default {
             return !!getters.config.state && getters.config.state.authorization;
         },
         authorizedCommands(state, getters) {
-            const commands = getters.config.commands || {};
+            const commands = getters.config.commands || {};
             return (commands.instance || [])
                 .map(group => group.filter(command => command.authorization));
         },
@@ -91,6 +91,7 @@ export default {
                 instanceId: state.instanceId,
             });
             commit(SET_SHOW, data);
+            return data;
         },
         postCommand({ state }, { command, data }) {
             return postShowCommand({

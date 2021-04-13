@@ -28,10 +28,16 @@ class DownloadControllerTest extends BaseApiTest
     /** @test */
     function we_can_download_a_file_from_a_form_field()
     {
+        $this->withoutExceptionHandling();
+        
         $file = UploadedFile::fake()->image('test.jpg', 600, 600);
         $file->storeAs('/files', 'test.jpg', ['disk' => 'local']);
 
         $response = $this
+            ->withHeader(
+                "referer",
+                url('/sharp/s-list/person/s-form/download/1')
+            )
             ->getJson(
                 route('code16.sharp.api.form.download', [
                     'fieldKey' => 'file',
@@ -55,6 +61,10 @@ class DownloadControllerTest extends BaseApiTest
         $file->storeAs('/files', 'test.jpg', ['disk' => 'local']);
 
         $response = $this
+            ->withHeader(
+                "referer",
+                url('/sharp/s-list/person/s-show/download/1')
+            )
             ->getJson(
                 route('code16.sharp.api.show.download', [
                     'fieldKey' => 'file',
@@ -78,6 +88,10 @@ class DownloadControllerTest extends BaseApiTest
         $file->storeAs('/files', 'test.jpg', ['disk' => 'local']);
 
         $response = $this
+            ->withHeader(
+                "referer",
+                url('/sharp/s-list/person/s-show/download/s-form/download')
+            )
             ->getJson(
                 route('code16.sharp.api.form.download', [
                     'fieldKey' => 'file',
@@ -100,6 +114,10 @@ class DownloadControllerTest extends BaseApiTest
         $file->storeAs('/files', 'test.jpg', ['disk' => 'local']);
 
         $response = $this
+            ->withHeader(
+                "referer",
+                url('/sharp/s-list/person/s-show/download')
+            )
             ->getJson(
                 route('code16.sharp.api.show.download', [
                     'fieldKey' => 'file',
@@ -122,6 +140,10 @@ class DownloadControllerTest extends BaseApiTest
         $file->storeAs('/files', 'test.jpg', ['disk' => 'local']);
 
         $this
+            ->withHeader(
+                "referer",
+                url('/sharp/s-list/person/s-form/download/1')
+            )
             ->getJson(
                 route('code16.sharp.api.form.download', [
                     'fieldKey' => 'file',
@@ -137,6 +159,10 @@ class DownloadControllerTest extends BaseApiTest
     function we_get_a_404_for_a_missing_file()
     {
         $this
+            ->withHeader(
+                "referer",
+                url('/sharp/s-list/person/s-form/download/1')
+            )
             ->getJson(
                 route('code16.sharp.api.form.download', [
                     'fieldKey' => 'file',
@@ -155,6 +181,10 @@ class DownloadControllerTest extends BaseApiTest
         $file->storeAs('/list-files', 'test.jpg', ['disk' => 'local']);
 
         $response = $this
+            ->withHeader(
+                "referer",
+                url('/sharp/s-list/person/s-form/download/1')
+            )
             ->getJson(
                 route('code16.sharp.api.form.download', [
                     'entityKey' => 'download',
@@ -180,6 +210,10 @@ class DownloadControllerTest extends BaseApiTest
         $file->storeAs('/list-files', 'test.jpg', ['disk' => 'local']);
 
         $response = $this
+            ->withHeader(
+                "referer",
+                url('/sharp/s-list/person/s-show/download/1')
+            )
             ->getJson(
                 route('code16.sharp.api.show.download', [
                     'entityKey' => 'download',
@@ -199,7 +233,7 @@ class DownloadControllerTest extends BaseApiTest
 
 class DownloadControllerTestForm extends SharpForm
 {
-    function buildFormFields()
+    function buildFormFields(): void
     {
         $this
             ->addField(
@@ -216,16 +250,16 @@ class DownloadControllerTestForm extends SharpForm
                     )
             );
     }
-    function buildFormLayout()
+    function buildFormLayout(): void
     {
     }
     function find($id): array
     {
     }
-    function update($id, array $data): bool
+    function update($id, array $data): void
     {
     }
-    function delete($id): bool
+    function delete($id): void
     {
     }
     function create(): array
@@ -235,7 +269,7 @@ class DownloadControllerTestForm extends SharpForm
 
 class DownloadControllerTestShow extends SharpShow
 {
-    function buildShowFields()
+    function buildShowFields(): void
     {
         $this
             ->addField(
@@ -255,7 +289,7 @@ class DownloadControllerTestShow extends SharpShow
     function find($id): array
     {
     }
-    function buildShowLayout()
+    function buildShowLayout(): void
     {
     }
 }

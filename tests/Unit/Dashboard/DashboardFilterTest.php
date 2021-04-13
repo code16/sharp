@@ -4,6 +4,7 @@ namespace Code16\Sharp\Tests\Unit\Dashboard;
 
 use Code16\Sharp\Dashboard\DashboardDateRangeFilter;
 use Code16\Sharp\Dashboard\DashboardFilter;
+use Code16\Sharp\Dashboard\DashboardSelectFilter;
 use Code16\Sharp\Tests\SharpTestCase;
 
 class DashboardFilterTest extends SharpTestCase
@@ -13,10 +14,10 @@ class DashboardFilterTest extends SharpTestCase
     function we_can_get_dashboard_filters_config()
     {
         $dashboard = new class extends SharpDashboardTestDashboard {
-            function buildDashboardConfig()
+            function buildDashboardConfig(): void
             {
-                $this->addFilter("test", new class implements DashboardFilter {
-                    public function values() { return [1 => "A", 2 => "B"]; }
+                $this->addFilter("test", new class implements DashboardSelectFilter {
+                    public function values(): array { return [1 => "A", 2 => "B"]; }
                 });
             }
         };
@@ -43,7 +44,7 @@ class DashboardFilterTest extends SharpTestCase
     function we_can_get_dashboard_date_range_filter_config()
     {
         $dashboard = new class extends SharpDashboardTestDashboard {
-            function buildDashboardConfig()
+            function buildDashboardConfig(): void
             {
                 $this->addFilter("test", new class implements DashboardDateRangeFilter {
                     public function values() { return []; }

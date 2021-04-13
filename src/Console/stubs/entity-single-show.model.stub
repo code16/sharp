@@ -24,10 +24,8 @@ class DummyClass extends SharpSingleShow
 
     /**
      * Build show fields using ->addField()
-     *
-     * @return void
      */
-    public function buildShowFields()
+    public function buildShowFields(): oid
     {
          $this->addField(
             SharpShowTextField::make("name")
@@ -37,10 +35,8 @@ class DummyClass extends SharpSingleShow
 
     /**
      * Build show layout using ->addTab() or ->addColumn()
-     *
-     * @return void
      */
-    public function buildShowLayout()
+    public function buildShowLayout(): void
     {
          $this->addSection('Section', function(ShowLayoutSection $section) {
               $section->addColumn(6, function(FormLayoutColumn $column) {
@@ -49,7 +45,7 @@ class DummyClass extends SharpSingleShow
          });
     }
 
-    function buildShowConfig()
+    function buildShowConfig(): void
     {
         //
     }

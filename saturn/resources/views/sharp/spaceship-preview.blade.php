@@ -7,22 +7,10 @@
 
     <title>Preview</title>
 
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
-
-    <!-- Styles -->
     <style>
         html, body {
-            background-color: #fff;
+            background-color: #ddd;
             color: #636b6f;
-            font-family: 'Raleway', sans-serif;
-            font-weight: 100;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .full-height {
-            height: 100vh;
         }
 
         .flex-center {
@@ -37,20 +25,14 @@
 
         .content {
             text-align: center;
+            max-width: 450px;
+            border: 2px solid #aaa;
+            padding: 30px;
+            background: #FFF;
         }
 
         .title {
-            font-size: 84px;
-        }
-
-        .links > a {
-            color: #636b6f;
-            padding: 0 25px;
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: .1rem;
-            text-decoration: none;
-            text-transform: uppercase;
+            font-size: 32px;
         }
 
         .m-b-md {
@@ -59,12 +41,14 @@
     </style>
 </head>
 <body>
-    <div class="flex-center position-ref full-height">
+    <div class="flex-center">
 
         <div class="content">
             <div class="title m-b-md">
                 {{ $spaceship->name }}
             </div>
+            
+            {!! sharp_markdown_embedded_files((new \Parsedown())->text($spaceship->description), "test", 200) !!}
         </div>
     </div>
 </body>

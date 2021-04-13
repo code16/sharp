@@ -6,46 +6,18 @@ use Closure;
 
 trait SharpFormFieldWithUpload
 {
-    /**
-     * @var float
-     */
-    protected $maxFileSize;
-
-    /**
-     * @var string
-     */
-    protected $cropRatio;
-
-    /**
-     * @var array
-     */
-    protected $croppableFileTypes;
-
-    /**
-     * @var string
-     */
-    protected $storageDisk = "local";
-
-    /**
-     * @var string
-     */
+    protected ?float $maxFileSize = null;
+    protected ?array $cropRatio = null;
+    protected ?array $croppableFileTypes = null;
+    protected string $storageDisk = "local";
+    /** @var string|Closure  */
     protected $storageBasePath = "data";
+    protected bool $compactThumbnail = false;
+    protected bool $shouldOptimizeImage = false;
+    /** @var string|array|null */
+    protected $fileFilter = null;
 
-    /**
-     * @var bool
-     */
-    protected $compactThumbnail = false;
-
-    /**
-     * @var bool
-     */
-    protected $shouldOptimizeImage = false;
-
-    /**
-     * @param float $maxFileSizeInMB
-     * @return static
-     */
-    public function setMaxFileSize(float $maxFileSizeInMB)
+    public function setMaxFileSize(float $maxFileSizeInMB): self
     {
         $this->maxFileSize = $maxFileSizeInMB;
 
@@ -57,7 +29,7 @@ trait SharpFormFieldWithUpload
      * @param array|null $croppableFileTypes
      * @return static
      */
-    public function setCropRatio(string $ratio = null, array $croppableFileTypes = null)
+    public function setCropRatio(string $ratio = null, array $croppableFileTypes = null): self
     {
         if($ratio) {
             $this->cropRatio = explode(":", $ratio);
@@ -74,41 +46,26 @@ trait SharpFormFieldWithUpload
         return $this;
     }
 
-    /**
-     * @param bool $shouldOptimizeImage
-     * @return static
-     */
-    public function shouldOptimizeImage($shouldOptimizeImage = true)
+    public function shouldOptimizeImage(bool $shouldOptimizeImage = true): self
     {
         $this->shouldOptimizeImage = $shouldOptimizeImage;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isShouldOptimizeImage()
+    public function isShouldOptimizeImage(): bool
     {
         return $this->shouldOptimizeImage;
     }
 
-    /**
-     * @param bool $compactThumbnail
-     * @return static
-     */
-    public function setCompactThumbnail($compactThumbnail = true)
+    public function setCompactThumbnail(bool $compactThumbnail = true): self
     {
         $this->compactThumbnail = $compactThumbnail;
 
         return $this;
     }
 
-    /**
-     * @param string $storageDisk
-     * @return static
-     */
-    public function setStorageDisk(string $storageDisk)
+    public function setStorageDisk(string $storageDisk): self
     {
         $this->storageDisk = $storageDisk;
 
@@ -119,7 +76,7 @@ trait SharpFormFieldWithUpload
      * @param string|Closure $storageBasePath
      * @return static
      */
-    public function setStorageBasePath($storageBasePath)
+    public function setStorageBasePath($storageBasePath): self
     {
         $this->storageBasePath = $storageBasePath;
 
@@ -127,26 +84,56 @@ trait SharpFormFieldWithUpload
     }
 
     /**
-     * @return string
+     * @param string|array $fileFilter
+     * @return static
      */
-    public function storageDisk()
+    public function setFileFilter($fileFilter): self
+    {
+        $this->fileFilter = $this->formatFileExtension($fileFilter);
+
+        return $this;
+    }
+
+    public function setFileFilterImages(): self
+    {
+        $this->setFileFilter([".jpg",".jpeg",".gif",".png"]);
+
+        return $this;
+    }
+
+    public function storageDisk(): string
     {
         return $this->storageDisk;
     }
 
-    /**
-     * @return string
-     */
-    public function storageBasePath()
+    public function storageBasePath(): string
     {
         return value($this->storageBasePath);
     }
 
-    /**
-     * @return string
-     */
-    public function cropRatio()
+    public function cropRatio(): string
     {
         return $this->cropRatio;
+    }
+
+    /**
+     * @param string|array $fileFilter
+     * @return array
+     */
+    private function formatFileExtension($fileFilter): array
+    {
+        if (!is_array($fileFilter)) {
+            $fileFilter = explode(",", $fileFilter);
+        }
+
+        return collect($fileFilter)
+            ->map(function ($filter) {
+                $filter = trim($filter);
+                if (substr($filter, 0, 1) != ".") {
+                    $filter = ".$filter";
+                }
+                return $filter;
+            })
+            ->all();
     }
 }

@@ -11,45 +11,12 @@ class SharpFormUploadField extends SharpFormField
 
     const FIELD_TYPE = "upload";
 
-    /**
-     * @var string
-     */
-    protected $fileFilter = null;
-
-    /**
-     * @param string $key
-     * @return static
-     */
-    public static function make(string $key)
+    public static function make(string $key): self
     {
         return new static($key, static::FIELD_TYPE, new UploadFormatter);
     }
 
-    /**
-     * @param string|array $fileFilter
-     * @return static
-     */
-    public function setFileFilter($fileFilter)
-    {
-        $this->fileFilter = $this->formatFileExtension($fileFilter);
-
-        return $this;
-    }
-
-    /**
-     * @return static
-     */
-    public function setFileFilterImages()
-    {
-        $this->setFileFilter([".jpg",".jpeg",".gif",".png"]);
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    protected function validationRules()
+    protected function validationRules(): array
     {
         return [
             "maxFileSize" => "numeric",
@@ -61,10 +28,6 @@ class SharpFormUploadField extends SharpFormField
         ];
     }
 
-    /**
-     * @return array
-     * @throws \Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException
-     */
     public function toArray(): array
     {
         return parent::buildArray([
@@ -76,26 +39,5 @@ class SharpFormUploadField extends SharpFormField
             "compactThumbnail" => !!$this->compactThumbnail,
             "shouldOptimizeImage" => !!$this->shouldOptimizeImage
         ]);
-    }
-
-    /**
-     * @param $fileFilter
-     * @return array
-     */
-    private function formatFileExtension($fileFilter)
-    {
-        if(!is_array($fileFilter)) {
-            $fileFilter = explode(",", $fileFilter);
-        }
-
-        return collect($fileFilter)->map(function($filter) {
-            $filter = trim($filter);
-            if(substr($filter, 0, 1) != ".") {
-                $filter = ".$filter";
-            }
-
-            return $filter;
-
-        })->all();
     }
 }

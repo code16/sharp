@@ -7,7 +7,7 @@ use Code16\Sharp\EntityList\Commands\ReorderHandler;
 
 class DummyClass implements ReorderHandler
 {
-    public function reorder(array $ids)
+    public function reorder(array $ids): void
     {
         DummyModelClass::whereIn('id', $ids)->get()->each(function ($DummyModelVariable) use ($ids) {
             $DummyModelVariable->order = array_search($DummyModelVariable->id, $ids) + 1;

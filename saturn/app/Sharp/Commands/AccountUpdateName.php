@@ -9,19 +9,11 @@ use Code16\Sharp\Form\Fields\SharpFormTextField;
 class AccountUpdateName extends SingleInstanceCommand
 {
 
-    /**
-     * @return string
-     */
     public function label(): string
     {
         return "Update your name";
     }
 
-    /**
-     * @param array $data
-     * @return array
-     * @throws \Illuminate\Validation\ValidationException
-     */
     public function executeSingle(array $data = []): array
     {
         $this->validate($data, [
@@ -35,7 +27,7 @@ class AccountUpdateName extends SingleInstanceCommand
         return $this->reload();
     }
 
-    function buildFormFields()
+    function buildFormFields(): void
     {
         $this->addField(
             SharpFormTextField::make("name")
@@ -43,17 +35,11 @@ class AccountUpdateName extends SingleInstanceCommand
         );
     }
 
-    /**
-     * @return array
-     */
     protected function initialSingleData(): array
     {
         return $this->transform(User::findOrFail(auth()->id()));
     }
 
-    /**
-     * @return bool
-     */
     public function authorize(): bool
     {
         return true;

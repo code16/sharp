@@ -1,72 +1,83 @@
 <template>
     <div class="SharpList" :class="classes">
-        <template v-if="showSortButton">
-            <button type="button"
-                    class="SharpButton SharpButton--ghost SharpList__sort-button"
-                    :class="{'SharpButton--active':dragActive}"
-                    :data-inactive-text="l('form.list.sort_button.inactive')"
-                    :data-active-text="l('form.list.sort_button.active')"
-                    @click="toggleDrag">
-                <svg class="SharpButton__icon" width='24' height='22' viewBox='0 0 24 22' fill-rule='evenodd'>
-                    <path d='M20 14V0h-4v14h-4l6 8 6-8zM4 8v14h4V8h4L6 0 0 8z'></path>
-                </svg>
-            </button>
-        </template>
-        <Draggable :options="dragOptions" :list="list" ref="draggable">
-            <transition-group name="expand" tag="div">
-                <div v-for="(listItemData, i) in list" :key="listItemData[indexSymbol]"
-                    class="SharpList__item"
-                    :class="{'SharpList__item--collapsed':dragActive}"
+        <div class="SharpList__sticky-wrapper text-end">
+            <template v-if="showSortButton">
+                <Button
+                    class="SharpList__sort-button"
+                    text
+                    small
+                    :active="dragActive"
+                    style="pointer-events: auto"
+                    @click="toggleDrag"
                 >
-                    <div class="SharpModule__inner">
-                        <div class="SharpModule__content">
+                    {{ l('form.list.sort_button.inactive') }}
+                    <svg style="margin-left: .5em" width="1.125em" height="1.125em" viewBox="0 0 24 22" fill-rule="evenodd">
+                        <path d="M20 14V0h-4v14h-4l6 8 6-8zM4 8v14h4V8h4L6 0 0 8z"></path>
+                    </svg>
+                </Button>
+            </template>
+        </div>
 
-                            <template v-if="dragActive && collapsedItemTemplate">
-                                <TemplateRenderer
-                                    name="CollapsedItem"
-                                    :template="collapsedItemTemplate"
-                                    :template-data="collapsedItemData(listItemData)"
+        <Draggable :options="dragOptions" :list="list" ref="draggable">
+            <transition-group name="expand" tag="div" class="list-group shadow-sm">
+                <template v-for="(listItemData, i) in list">
+                    <div class="SharpList__item list-group-item"
+                        :class="{'SharpList__item--collapsed': dragActive}"
+                        :key="listItemData[indexSymbol]"
+                    >
+                        <template v-if="dragActive && collapsedItemTemplate">
+                            <TemplateRenderer
+                                name="CollapsedItem"
+                                :template="collapsedItemTemplate"
+                                :template-data="collapsedItemData(listItemData)"
+                            />
+                        </template>
+
+                        <template v-else>
+                            <ListItem :layout="fieldLayout.item" :error-identifier="i" v-slot="{ fieldLayout }">
+                                <FieldDisplay
+                                    :field-key="fieldLayout.key"
+                                    :context-fields="transformedFields(i)"
+                                    :context-data="listItemData"
+                                    :error-identifier="fieldLayout.key"
+                                    :config-identifier="fieldLayout.key"
+                                    :update-data="update(i)"
+                                    :locale="listItemData._fieldsLocale[fieldLayout.key]"
+                                    :read-only="isReadOnly"
+                                    :list="true"
+                                    @locale-change="(key, value)=>updateLocale(i, key, value)"
                                 />
+                            </ListItem>
+                            <template v-if="showRemoveButton">
+                                <button
+                                    class="SharpList__remove-button btn-close"
+                                    @click="remove(i)"
+                                    :aria-label="l('form.list.remove_button')"
+                                ></button>
                             </template>
+                        </template>
 
-                            <template v-else>
-                                <ListItem :layout="fieldLayout.item" :error-identifier="i" v-slot="{ fieldLayout }">
-                                    <FieldDisplay
-                                        :field-key="fieldLayout.key"
-                                        :context-fields="transformedFields(i)"
-                                        :context-data="listItemData"
-                                        :error-identifier="fieldLayout.key"
-                                        :config-identifier="fieldLayout.key"
-                                        :update-data="update(i)"
-                                        :locale="listItemData._fieldsLocale[fieldLayout.key]"
-                                        :read-only="isReadOnly"
-                                        @locale-change="(key, value)=>updateLocale(i, key, value)"
-                                    />
-                                </ListItem>
-                                <template v-if="showRemoveButton">
-                                    <button class="SharpButton SharpButton--danger SharpButton--sm mt-3" @click="remove(i)">
-                                        {{ l('form.list.remove_button') }}
-                                    </button>
-                                </template>
-                            </template>
-
-                            <!-- Full size div use to handle the item when drag n drop (c.f draggable options) -->
-                            <template v-if="dragActive">
-                                <div class="SharpList__overlay-handle"></div>
-                            </template>
-                        </div>
+                        <!-- Full size div use to handle the item when drag n drop (c.f draggable options) -->
+                        <template v-if="dragActive">
+                            <div class="SharpList__overlay-handle"></div>
+                        </template>
+                        <template v-if="showInsertButton && i < list.length-1">
+                            <div class="SharpList__new-item-zone">
+                                <Button small @click="insertNewItem(i, $event)">
+                                    {{ l('form.list.insert_button') }}
+                                </Button>
+                            </div>
+                        </template>
                     </div>
-                    <template v-if="showInsertButton && i < list.length-1">
-                        <div class="SharpList__new-item-zone">
-                            <button class="SharpButton SharpButton--sm" @click="insertNewItem(i, $event)">{{ l('form.list.insert_button') }}</button>
-                        </div>
-                    </template>
-                </div>
+                </template>
             </transition-group>
+
             <template v-if="showAddButton" v-slot:footer>
-                <button class="SharpButton SharpButton--ghost SharpList__add-button" type="button" @click="add" :key="-1">
-                    {{addText}}
-                </button>
+                <div :class="{ 'mt-3': list.length > 0 }">
+                    <Button class="SharpList__add-button" :disabled="dragActive" text block @click="add" :key="-1">
+                        ＋ {{ addText }}
+                    </Button>
+                </div>
             </template>
         </Draggable>
         <template v-if="readOnly && !list.length">
@@ -78,6 +89,7 @@
     import Draggable from 'vuedraggable';
     import { TemplateRenderer } from 'sharp/components';
     import { Localization } from 'sharp/mixins';
+    import { Button } from "sharp-ui";
     import ListItem from './ListItem';
 
     import localize from '../../../mixins/localize/form';
@@ -93,6 +105,7 @@
         components: {
             Draggable,
             ListItem,
+            Button,
             TemplateRenderer,
         },
 
@@ -157,7 +170,7 @@
             showAddButton() {
                 return this.addable &&
                     (this.list.length < this.maxItemCount || !this.maxItemCount) &&
-                    !this.disabled;
+                    !this.readOnly;
             },
             showInsertButton() {
                 return this.showAddButton && this.sortable && !this.disabled;

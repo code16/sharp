@@ -11,6 +11,9 @@ return [
     // Optional. You can prevent Sharp version to be displayed in the page title. Default is true.
     "display_sharp_version_in_title" => true,
 
+    // Optional. You can display a breadcrumb on all Sharp pages. Default is false.
+    "display_breadcrumb" => false,
+
     // Optional. Handle extensions.
 //    "extensions" => [
 //        "assets" => [
@@ -99,5 +102,9 @@ return [
     ],
 
 //    "login_page_message_blade_path" => env("SHARP_LOGIN_PAGE_MESSAGE_BLADE_PATH", "sharp/_login-page-message"),
+
+    "theme" => [
+        "primary_color" => "#004c9b"
+    ],
 
 ];

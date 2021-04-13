@@ -7,8 +7,7 @@ use Code16\Sharp\Dashboard\DashboardSelectMultipleFilter;
 
 class TravelsDashboardSpaceshipsFilter implements DashboardSelectMultipleFilter
 {
-
-    public function values()
+    public function values(): array
     {
         return Spaceship::orderBy("name")
             ->pluck("name", "id")
@@ -19,5 +18,4 @@ class TravelsDashboardSpaceshipsFilter implements DashboardSelectMultipleFilter
     {
         return true;
     }
-
 }

@@ -99,7 +99,7 @@ describe('select-field',()=>{
             data: () => ({ value: [3] })
         });
 
-        let { multiselect } = $tags.$refs;
+        let { multiselect } = $tags.$children[0].$refs;
 
         expect(multiselect.$props).toMatchObject({
             value: [3],
@@ -123,7 +123,7 @@ describe('select-field',()=>{
             data: () => ({ value: null })
         });
 
-        let { multiselect } = $tags.$refs;
+        let { multiselect } = $tags.$children[0].$refs;
 
         expect(multiselect.$props).toMatchObject({
             // multiple dependant props
@@ -138,7 +138,7 @@ describe('select-field',()=>{
 
         await createVm({
             propsData: {
-                multiple: false
+                multiple: false,
             },
             methods: {
                 inputEmitted
@@ -147,9 +147,9 @@ describe('select-field',()=>{
         });
 
         let clearBtn = document.querySelector('.SharpSelect__clear-button');
-        clearBtn.dispatchEvent(new MouseEvent('mousedown'));
+        clearBtn.dispatchEvent(new MouseEvent('click'));
 
-        expect(inputEmitted.mock.calls[0][0]).toBe(null);
+        expect(inputEmitted).toHaveBeenCalledWith(null);
     });
 
     test('check correct checkboxes depending on value', async () => {
@@ -243,8 +243,8 @@ describe('select-field',()=>{
             data: () => ({ value: null })
         });
 
-        expect($select.multiselectLabel(3)).toBe('AAA');
-        expect($select.multiselectLabel(4)).toBe('BBB');
+        expect($select.$children[0].multiselectLabel(3)).toBe('AAA');
+        expect($select.$children[0].multiselectLabel(4)).toBe('BBB');
     });
 
     test('corresponding multiselect options ids', async () => {
@@ -252,7 +252,7 @@ describe('select-field',()=>{
             data: () => ({ value: null })
         });
 
-        expect($select.multiselectOptions).toEqual([3,4]);
+        expect($select.$children[0].multiselectOptions).toEqual([3,4]);
     });
 
     test('corresponding input id and label for', async () => {
@@ -267,8 +267,8 @@ describe('select-field',()=>{
         let radio = document.querySelector('input'),
             label = document.querySelector('label');
 
-        expect(radio.id).toBe('select0');
-        expect(label.htmlFor).toBe('select0');
+        expect(radio.id).toBe('select.0');
+        expect(label.htmlFor).toBe('select.0');
     });
 });
 

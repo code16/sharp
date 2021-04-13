@@ -99,12 +99,14 @@ describe('DataListRow', ()=>{
         test('colClasses', ()=>{
             const wrapper = createWrapper();
             expect(wrapper.vm.colClasses({ size:6, sizeXS:12 }))
-                .toEqual(expect.arrayContaining([
-                    'col-12',
-                    'col-md-6',
-                ]));
+                .toMatchObject({
+                    'col-12': true,
+                    'col-md-6': true,
+                });
             expect(wrapper.vm.colClasses({ hideOnXS:true }))
-                .toContain('d-none d-md-flex');
+                .toMatchObject({
+                    'd-none d-md-flex': true,
+                });
         });
     });
 });

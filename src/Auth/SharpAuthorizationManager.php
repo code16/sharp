@@ -2,18 +2,10 @@
 
 namespace Code16\Sharp\Auth;
 
-use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
-
 class SharpAuthorizationManager
 {
 
-    /**
-     * @param string $ability
-     * @param string $entityKey
-     * @param string|null $instanceId
-     * @throws SharpAuthorizationException
-     */
-    public function check(string $ability, string $entityKey, $instanceId = null)
+    public function check(string $ability, string $entityKey, ?string $instanceId = null): void
     {
         $entityKey = $this->getBaseEntityKey($entityKey);
 
@@ -28,7 +20,7 @@ class SharpAuthorizationManager
     }
 
     /**
-     * Return base entityKey in case of sub entity (for instance: returns car in car:hybrid)
+     * Return base entityKey in case of sub entity (for instance: returns "car" in car:hybrid)
      *
      * @param string $entityKey
      * @return string

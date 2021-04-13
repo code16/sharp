@@ -14,14 +14,11 @@ use Illuminate\Pagination\LengthAwarePaginator;
  */
 trait WithCustomTransformers
 {
-    /**
-     * @var array
-     */
-    protected $transformers = [];
+    protected array $transformers = [];
 
     /**
      * @param string $attribute
-     * @param string|Closure $transformer
+     * @param string|Closure|SharpAttributeTransformer $transformer
      * @return $this
      */
     function setCustomTransformer(string $attribute, $transformer)
@@ -76,11 +73,7 @@ trait WithCustomTransformers
             ->all();
     }
 
-    /**
-     * @param Closure $closure
-     * @return SharpAttributeTransformer
-     */
-    protected static function normalizeToSharpAttributeTransformer(Closure $closure)
+    protected static function normalizeToSharpAttributeTransformer(Closure $closure): SharpAttributeTransformer
     {
         return new class($closure) implements SharpAttributeTransformer
         {
@@ -103,7 +96,7 @@ trait WithCustomTransformers
      * @param bool $forceFullObject if true all data keys of the model will be force set
      * @return array
      */
-    protected function applyTransformers($model, bool $forceFullObject = true)
+    protected function applyTransformers($model, bool $forceFullObject = true): array
     {
         $attributes = ArrayConverter::modelToArray($model);
 
@@ -165,34 +158,32 @@ trait WithCustomTransformers
      */
     protected function applyFormatters($attributes): array
     {
-        return collect($attributes)->map(function ($value, $key) {
-            $field = $this->findFieldByKey($key);
-
-            return $field
-                ? $field->formatter()->toFront($field, $value)
-                : $value;
-        })->all();
+        return collect($attributes)
+            ->map(function ($value, $key) {
+                $field = $this->findFieldByKey($key);
+    
+                return $field
+                    ? $field->formatter()->toFront($field, $value)
+                    : $value;
+            })
+            ->all();
     }
 
     /**
      * Handle `:` separator: we want to transform a related attribute in
      * a hasOne or belongsTo relationship. Ex: with "mother:name",
      * we add a transformed mother:name attribute in the array
-     *
-     * @param $attributes
-     * @param $model
-     * @return mixed
      */
-    protected function handleAutoRelatedAttributes($attributes, $model)
+    protected function handleAutoRelatedAttributes(array $attributes, $model): array
     {
         collect($this->getDataKeys())
             ->filter(function ($key) {
                 return strpos($key, ':') !== false;
-
-            })->map(function ($key) {
+            })
+            ->map(function ($key) {
                 return array_merge([$key], explode(':', $key));
-
-            })->each(function ($key) use (&$attributes, $model) {
+            })
+            ->each(function ($key) use (&$attributes, $model) {
                 // For each one, we create a "relation:attribute" key
                 // in the returned array
                 $attributes[$key[0]] = $model->{$key[1]}->{$key[2]} ?? null;

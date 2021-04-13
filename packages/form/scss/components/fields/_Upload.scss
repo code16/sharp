@@ -3,24 +3,6 @@
   margin: 0;
   padding: 0!important;
 
-  &:not(.SharpUpload--empty) {
-    @extend .SharpModule;
-    .SharpUpload__inner {
-      @extend .SharpModule__inner;
-      @include layer('raised');
-      background: $ui-01 !important;
-    }
-    .SharpUpload__content {
-      @extend .SharpModule__content;
-    }
-  }
-
-  &--empty {
-    .SharpModule__content {
-      padding:0 !important;
-    }
-  }
-
   &--disabled {
     cursor: default;
     opacity: 0.7;
@@ -37,23 +19,18 @@
     display:none;
   }
 
-  &__close-button {
-    @include close-button;
-    position: absolute;
-    right:.5rem;
-    top:.5rem;
-    display: none;
-    background: transparent;
-  }
-
-  &__close-icon {
-    @include close-icon;
-  }
-
-  &__upload-button {
-    width: 100%;
-    background: rgba(255,255,255,.75);
-  }
+  //&__close-button {
+  //  @include close-button;
+  //  position: absolute;
+  //  right:.5rem;
+  //  top:.5rem;
+  //  display: none;
+  //  background: transparent;
+  //}
+  //
+  //&__close-icon {
+  //  @include close-icon;
+  //}
 
   &--compacted {
     .SharpUpload__thumbnail img {
@@ -86,16 +63,16 @@
       justify-content: space-between;
 
       .SharpUpload__info {
-        @include font-size('12');
+        font-size: .75rem;
       }
 
       .SharpUpload__download-link {
-        @include font-size('12');
+        font-size: .75rem;
         text-decoration: none;
       }
 
       .SharpUpload__filename {
-        @include font-size('14');
+        font-size: .875rem;
         font-weight: 500;
       }
     }

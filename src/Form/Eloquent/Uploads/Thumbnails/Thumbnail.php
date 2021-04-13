@@ -12,29 +12,13 @@ use \Closure;
 
 class Thumbnail
 {
-    /** @var ImageManager */
-    protected $imageManager;
+    protected ImageManager $imageManager;
+    protected FilesystemManager $storage;
+    protected SharpUploadModel $uploadModel;
+    protected int $quality = 90;
+    protected bool $appendTimestamp = false;
+    protected ?Closure $afterClosure = null;
 
-    /** @var FilesystemManager */
-    protected $storage;
-
-    /** @var SharpUploadModel */
-    protected $uploadModel;
-
-    /** @var int */
-    protected $quality = 90;
-
-    /** @var bool */
-    protected $appendTimestamp = false;
-    
-    /** @var Closure|null  */
-    protected $afterClosure = null;
-
-    /**
-     * @param SharpUploadModel $model
-     * @param ImageManager|null $imageManager
-     * @param FilesystemManager|null $storage
-     */
     public function __construct(SharpUploadModel $model, ImageManager $imageManager = null, FilesystemManager $storage = null)
     {
         $this->uploadModel = $model;
@@ -42,47 +26,28 @@ class Thumbnail
         $this->storage = $storage ?: app(FilesystemManager::class);
     }
 
-    /**
-     * @param int $quality
-     * @return $this
-     */
-    public function setQuality(int $quality)
+    public function setQuality(int $quality): self
     {
         $this->quality = $quality;
 
         return $this;
     }
 
-    /**
-     * @param Closure $closure
-     * @return $this
-     */
-    public function setAfterClosure(Closure $closure)
+    public function setAfterClosure(Closure $closure): self
     {
         $this->afterClosure = $closure;
 
         return $this;
     }
 
-    /**
-     * @param bool $appendTimestamp
-     * @return $this
-     */
-    public function setAppendTimestamp(bool $appendTimestamp = true)
+    public function setAppendTimestamp(bool $appendTimestamp = true): self
     {
         $this->appendTimestamp = $appendTimestamp;
 
         return $this;
     }
 
-    /**
-     * @param int $width
-     * @param int|null $height
-     * @param array $filters fit, grayscale, ...
-     * @return null|string
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
-     */
-    public function make($width, $height=null, $filters=[])
+    public function make($width, $height=null, $filters=[]): ?string
     {
         $thumbnailDisk = $this->storage->disk(config("sharp.uploads.thumbnails_disk", "public"));
 
@@ -108,7 +73,7 @@ class Thumbnail
         return $url;
     }
 
-    public function destroyAllThumbnails()
+    public function destroyAllThumbnails(): void
     {
         $thumbnailDisk = $this->storage->disk(config("sharp.uploads.thumbnails_disk", "public"));
         $thumbnailPath = config("sharp.uploads.thumbnails_dir", "thumbnails");
@@ -117,19 +82,9 @@ class Thumbnail
         $thumbnailDisk->deleteDirectory("$thumbnailPath/$destinationRelativeBasePath");
     }
 
-    /**
-     * @param $sourceDisk
-     * @param $sourceRelativeFilePath
-     * @param $thumbnailPath
-     * @param $width
-     * @param $height
-     * @param $filters
-     * @return null|string
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
-     */
     private function generateThumbnail(
         $sourceDisk, $sourceRelativeFilePath,
-        $thumbnailPath, $width, $height, $filters)
+        $thumbnailPath, $width, $height, $filters): ?string
     {
         if($width==0) $width=null;
         if($height==0) $height=null;
@@ -178,12 +133,7 @@ class Thumbnail
         return $thumbnailDisk->url($thumbnailPath) . ($this->appendTimestamp ? "?" . $thumbnailDisk->lastModified($thumbnailPath) : "");
     }
 
-    /**
-     * @param string $class
-     * @param array $params
-     * @return ThumbnailFilter|null
-     */
-    private function resolveFilterClass($class, array $params)
+    private function resolveFilterClass(string $class, array $params): ?ThumbnailFilter
     {
         if(! Str::contains($class, "\\")) {
             $class = 'Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\\' . ucfirst($class) . 'Filter';

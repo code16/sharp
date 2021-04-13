@@ -6,9 +6,6 @@ use Code16\Sharp\EntityList\Commands\InstanceCommand;
 
 class DummyClass extends InstanceCommand
 {
-    /**
-    * @return string
-    */
     public function label(): string
     {
         //

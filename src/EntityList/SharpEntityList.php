@@ -5,59 +5,35 @@ namespace Code16\Sharp\EntityList;
 use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\Layout\EntityListLayoutColumn;
-use Code16\Sharp\EntityList\Traits\HandleCommands;
+use Code16\Sharp\EntityList\Traits\HandleEntityCommands;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
+use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
 use Code16\Sharp\Utils\Filters\HandleFilters;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 
 abstract class SharpEntityList
 {
     use HandleFilters,
         HandleEntityState,
-        HandleCommands,
+        HandleEntityCommands,
+        HandleInstanceCommands,
         WithCustomTransformers;
 
-    /** @var array */
-    protected $containers = [];
+    protected array $containers = [];
+    protected array $columns = [];
+    protected bool $listBuilt = false;
+    protected bool $layoutBuilt = false;
+    protected string $instanceIdAttribute = "id";
+    protected ?string $multiformAttribute = null;
+    protected bool $searchable = false;
+    protected bool $paginated = false;
+    protected ?ReorderHandler $reorderHandler = null;
+    protected ?string $defaultSort= null;
+    protected ?string $defaultSortDir = null;
 
-    /** @var array */
-    protected $columns = [];
-
-    /** @var bool */
-    protected $listBuilt = false;
-
-    /** @var bool */
-    protected $layoutBuilt = false;
-
-    /** @var string */
-    protected $instanceIdAttribute = "id";
-
-    /** @var string */
-    protected $multiformAttribute = null;
-
-    /** @var bool */
-    protected $searchable = false;
-
-    /** @var bool */
-    protected $paginated = false;
-
-    /** @var ReorderHandler */
-    protected $reorderHandler = null;
-
-    /** @var string */
-    protected $defaultSort;
-
-    /** @var string */
-    protected $defaultSortDir;
-
-    /**
-     * Get the SharpListDataContainer array representation.
-     *
-     * @return array
-     */
-    function dataContainers(): array
+    public final function dataContainers(): array
     {
         $this->checkListIsBuilt();
 
@@ -69,12 +45,7 @@ abstract class SharpEntityList
             ->all();
     }
 
-    /**
-     * Return the list fields layout.
-     *
-     * @return array
-     */
-    function listLayout(): array
+    public final function listLayout(): array
     {
         if(!$this->layoutBuilt) {
             $this->buildListLayout();
@@ -88,13 +59,7 @@ abstract class SharpEntityList
             ->all();
     }
 
-    /**
-     * Return data, as an array.
-     *
-     * @param array|Collection|null $items
-     * @return array
-     */
-    function data($items = null): array
+    public final function data($items = null): array
     {
         $this->putRetainedFilterValuesInSession();
 
@@ -136,13 +101,7 @@ abstract class SharpEntityList
         ] + (isset($page) ? compact('page', 'totalCount', 'pageSize') : []);
     }
 
-    /**
-     * Return the data config values.
-     *
-     * @param bool $hasShowPage
-     * @return array
-     */
-    function listConfig(bool $hasShowPage = false): array
+    public final function listConfig(bool $hasShowPage = false): array
     {
         $config = [
             "instanceIdAttribute" => $this->instanceIdAttribute,
@@ -154,32 +113,23 @@ abstract class SharpEntityList
             "defaultSortDir" => $this->defaultSortDir,
             "hasShowPage" => $hasShowPage,
         ];
-
+        
         $this->appendFiltersToConfig($config);
-
         $this->appendEntityStateToConfig($config);
-
-        $this->appendCommandsToConfig($config);
+        $this->appendInstanceCommandsToConfig($config);
+        $this->appendEntityCommandsToConfig($config);
 
         return $config;
     }
 
-    /**
-     * @param string $instanceIdAttribute
-     * @return $this
-     */
-    public function setInstanceIdAttribute(string $instanceIdAttribute)
+    public function setInstanceIdAttribute(string $instanceIdAttribute): self
     {
         $this->instanceIdAttribute = $instanceIdAttribute;
 
         return $this;
     }
 
-    /**
-     * @param string|ReorderHandler $reorderHandler
-     * @return $this
-     */
-    public function setReorderable($reorderHandler)
+    public function setReorderable($reorderHandler): self
     {
         $this->reorderHandler = $reorderHandler instanceof ReorderHandler
             ? $reorderHandler
@@ -188,28 +138,21 @@ abstract class SharpEntityList
         return $this;
     }
 
-    public function setNotReorderable()
+    public function setNotReorderable(): self
     {
         $this->reorderHandler = null;
+
+        return $this;
     }
 
-    /**
-     * @param bool $searchable
-     * @return $this
-     */
-    public function setSearchable(bool $searchable = true)
+    public function setSearchable(bool $searchable = true): self
     {
         $this->searchable = $searchable;
 
         return $this;
     }
 
-    /**
-     * @param string $sortBy
-     * @param string $sortDir
-     * @return $this
-     */
-    public function setDefaultSort(string $sortBy, string $sortDir = "asc")
+    public function setDefaultSort(string $sortBy, string $sortDir = "asc"): self
     {
         $this->defaultSort = $sortBy;
         $this->defaultSortDir = $sortDir;
@@ -217,43 +160,26 @@ abstract class SharpEntityList
         return $this;
     }
 
-    /**
-     * @param bool $paginated
-     * @return $this
-     */
-    public function setPaginated(bool $paginated = true)
+    public function setPaginated(bool $paginated = true): self
     {
         $this->paginated = $paginated;
 
         return $this;
     }
 
-    /**
-     * @param string $attribute
-     * @return $this
-     */
-    protected function setMultiformAttribute(string $attribute)
+    protected function setMultiformAttribute(string $attribute): self
     {
         $this->multiformAttribute = $attribute;
 
         return $this;
     }
 
-    /**
-     * @return ReorderHandler
-     */
-    public function reorderHandler()
+    public function reorderHandler(): ?ReorderHandler
     {
         return $this->reorderHandler;
     }
 
-    /**
-     * Add a data container.
-     *
-     * @param EntityListDataContainer $container
-     * @return $this
-     */
-    protected function addDataContainer(EntityListDataContainer $container)
+    protected function addDataContainer(EntityListDataContainer $container): self
     {
         $this->containers[] = $container;
         $this->listBuilt = false;
@@ -261,13 +187,7 @@ abstract class SharpEntityList
         return $this;
     }
 
-    /**
-     * @param string $label
-     * @param int $size
-     * @param null $sizeXS
-     * @return $this
-     */
-    protected function addColumn(string $label, int $size, $sizeXS = null)
+    protected function addColumn(string $label, int $size, $sizeXS = null): self
     {
         $this->layoutBuilt = false;
 
@@ -276,12 +196,7 @@ abstract class SharpEntityList
         return $this;
     }
 
-    /**
-     * @param string $label
-     * @param int $size
-     * @return $this
-     */
-    protected function addColumnLarge(string $label, int $size)
+    protected function addColumnLarge(string $label, int $size): self
     {
         $this->layoutBuilt = false;
 
@@ -292,7 +207,7 @@ abstract class SharpEntityList
         return $this;
     }
 
-    private function checkListIsBuilt()
+    private function checkListIsBuilt(): void
     {
         if (!$this->listBuilt) {
             $this->buildListDataContainers();
@@ -300,7 +215,7 @@ abstract class SharpEntityList
         }
     }
 
-    protected function getDataKeys()
+    protected final function getDataKeys(): array
     {
         return collect($this->dataContainers())
             ->pluck("key")
@@ -311,7 +226,7 @@ abstract class SharpEntityList
      * Retrieve all rows data as array.
      *
      * @param EntityListQueryParams $params
-     * @return array
+     * @return array|Arrayable
      */
     abstract function getListData(EntityListQueryParams $params);
 
@@ -320,19 +235,19 @@ abstract class SharpEntityList
      *
      * @return void
      */
-    abstract function buildListDataContainers();
+    abstract function buildListDataContainers(): void;
 
     /**
      * Build list layout using ->addColumn()
      *
      * @return void
      */
-    abstract function buildListLayout();
+    abstract function buildListLayout(): void;
 
     /**
      * Build list config
      *
      * @return void
      */
-    abstract function buildListConfig();
+    abstract function buildListConfig(): void;
 }

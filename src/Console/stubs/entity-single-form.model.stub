@@ -41,10 +41,8 @@ class DummyClass extends SharpSingleForm
 
     /**
      * Build form fields using ->addField()
-     *
-     * @return void
      */
-    public function buildFormFields()
+    public function buildFormFields(): void
     {
         $this->addField(
             SharpFormTextField::make('name')
@@ -54,10 +52,8 @@ class DummyClass extends SharpSingleForm
 
     /**
      * Build form layout using ->addTab() or ->addColumn()
-     *
-     * @return void
      */
-    public function buildFormLayout()
+    public function buildFormLayout(): void
     {
         $this->addColumn(6, function(FormLayoutColumn $column) {
             $column->withSingleField('name');

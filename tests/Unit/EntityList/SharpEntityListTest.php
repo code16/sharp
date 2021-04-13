@@ -14,7 +14,7 @@ class SharpEntityListTest extends SharpTestCase
     function we_can_get_containers()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListDataContainers()
+            function buildListDataContainers(): void
             {
                 $this->addDataContainer(
                     EntityListDataContainer::make("name")
@@ -35,7 +35,7 @@ class SharpEntityListTest extends SharpTestCase
     function we_can_get_layout()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListDataContainers()
+            function buildListDataContainers(): void
             {
                 $this->addDataContainer(
                     EntityListDataContainer::make("name")
@@ -43,7 +43,7 @@ class SharpEntityListTest extends SharpTestCase
                     EntityListDataContainer::make("age")
                 );
             }
-            function buildListLayout()
+            function buildListLayout(): void
             {
                 $this->addColumn("name", 6, 12)
                     ->addColumnLarge("age", 6);
@@ -70,7 +70,7 @@ class SharpEntityListTest extends SharpTestCase
                     ["name" => "Mary Wayne", "age" => 26, "job" => "truck driver"]
                 ];
             }
-            function buildListDataContainers()
+            function buildListDataContainers(): void
             {
                 $this->addDataContainer(
                     EntityListDataContainer::make("name")
@@ -101,7 +101,7 @@ class SharpEntityListTest extends SharpTestCase
 
                 return new LengthAwarePaginator($data, 10, 2, 1);
             }
-            function buildListDataContainers()
+            function buildListDataContainers(): void
             {
                 $this->addDataContainer(
                     EntityListDataContainer::make("name")
@@ -123,7 +123,7 @@ class SharpEntityListTest extends SharpTestCase
     function we_can_get_list_config()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig()
+            function buildListConfig(): void
             {
                 $this->setSearchable()
                     ->setPaginated();

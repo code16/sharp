@@ -1,9 +1,24 @@
 <template>
     <div class="SharpAutocomplete" :class="classes">
-        <template v-if="ready">
+        <template v-if="overlayVisible">
+            <div class="form-control clearable SharpAutocomplete__result">
+                <TemplateRenderer
+                    name="ResultItem"
+                    :template="resultItemTemplate"
+                    :template-data="localizedTemplateData(value)"
+                    :template-props="searchKeys"
+                />
+
+                <ClearButton @click="handleClearButtonClicked" />
+            </div>
+        </template>
+        <template v-else-if="ready">
             <Multiselect
-                class="SharpAutocomplete__multiselect"
-                :class="{ 'SharpAutocomplete__multiselect--hide-dropdown':hideDropdown }"
+                class="SharpAutocomplete__multiselect form-control"
+                :class="{
+                    'form-select': !this.isRemote,
+                    'SharpAutocomplete__multiselect--hide-dropdown': hideDropdown,
+                }"
                 :value="value"
                 :options="suggestions"
                 :track-by="itemIdAttribute"
@@ -17,6 +32,8 @@
                 :preserve-search="preserveSearch"
                 :show-pointer="showPointer"
                 :searchable="searchable"
+                :readonly="readOnly"
+                :tabindex="readOnly ? -1 : 0"
                 @search-change="updateSuggestions($event)"
                 @select="handleSelect"
                 @input="$emit('multiselect-input',$event)"
@@ -26,12 +43,7 @@
             >
                 <template v-slot:clear>
                     <template v-if="clearButtonVisible">
-                        <button class="SharpAutocomplete__result-item__close-button" type="button" @click="handleClearButtonClicked">
-                            <svg class="SharpAutocomplete__result-item__close-icon"
-                                aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd">
-                                <path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
-                            </svg>
-                        </button>
+                        <ClearButton @click="handleClearButtonClicked" />
                     </template>
                 </template>
                 <template v-slot:singleLabel="{ option }">
@@ -39,6 +51,7 @@
                         name="ResultItem"
                         :template="resultItemTemplate"
                         :template-data="localizedTemplateData(option)"
+                        :template-props="searchKeys"
                     />
                 </template>
                 <template v-slot:option="{ option }">
@@ -46,6 +59,7 @@
                         name="ListItem"
                         :template="listItemTemplate"
                         :template-data="localizedTemplateData(option)"
+                        :template-props="searchKeys"
                     />
                 </template>
                 <template v-slot:loading>
@@ -55,18 +69,6 @@
                     {{ l('form.autocomplete.no_results_text') }}
                 </template>
             </multiselect>
-
-            <template v-if="overlayVisible">
-                <div class="SharpAutocomplete__overlay multiselect">
-                    <div class="multiselect__tags">
-                        <TemplateRenderer
-                            name="ResultItem"
-                            :template="resultItemTemplate"
-                            :template-data="localizedTemplateData(value)"
-                        />
-                    </div>
-                </div>
-            </template>
         </template>
     </div>
 </template>
@@ -74,9 +76,10 @@
 <script>
     import debounce from 'lodash/debounce';
     import Multiselect from 'vue-multiselect';
-    import { warn, lang, search } from 'sharp';
+    import { CancelToken } from 'axios';
+    import { warn, lang, search, logError } from 'sharp';
     import { TemplateRenderer } from 'sharp/components';
-    import { Loading } from 'sharp-ui';
+    import { Loading, ClearButton,  multiselectUpdateScroll } from 'sharp-ui';
     import { Localization } from 'sharp/mixins';
 
     import { getAutocompleteSuggestions } from "../../api";
@@ -85,11 +88,12 @@
 
 
     export default {
-        name:'SharpAutocomplete',
+        name: 'SharpAutocomplete',
         components: {
             Multiselect,
             TemplateRenderer,
             Loading,
+            ClearButton,
         },
 
         mixins: [Localization, localize],
@@ -151,6 +155,11 @@
                 default:true
             },
             dynamicAttributes: Array,
+            debounceDelay: {
+                type: Number,
+                default: 400,
+            },
+            nowrap: Boolean,
         },
         data() {
             return {
@@ -182,10 +191,11 @@
                 return !!this.value && !this.opened;
             },
             classes() {
-                return [
-                    { 'SharpAutocomplete--remote': this.isRemote },
-                    { 'SharpAutocomplete--disabled': this.readOnly }
-                ];
+                return {
+                    'SharpAutocomplete--remote': this.isRemote,
+                    'SharpAutocomplete--disabled': this.readOnly,
+                    'SharpAutocomplete--wrap': !this.nowrap,
+                };
             },
             overlayVisible() {
                 const isFormField = !!this.fieldKey;
@@ -212,7 +222,9 @@
                     ? search(this.localValues, query, { searchKeys: this.searchKeys })
                     : this.localValues;
             },
-            updateRemoteSuggestions: debounce(function(query) {
+            updateRemoteSuggestions(query) {
+                this.cancelSource?.cancel();
+                this.cancelSource = CancelToken.source();
                 return getAutocompleteSuggestions({
                     url: this.remoteEndpoint,
                     method: this.remoteMethod,
@@ -221,15 +233,19 @@
                     dataWrapper: this.dataWrapper,
                     fieldKey: this.fieldKey,
                     query,
+                    cancelToken: this.cancelSource.token,
                 })
                 .then(suggestions => {
                     this.suggestions = suggestions;
+                    this.scroll();
                 })
                 .finally(() => {
                     this.isLoading = false;
                 });
-            }, 200),
-
+            },
+            scroll() {
+               multiselectUpdateScroll(this);
+            },
             handleSelect(value) {
                 this.$emit('input', value);
             },
@@ -240,6 +256,7 @@
             handleDropdownOpen() {
                 this.opened = true;
                 this.$emit('open');
+                this.scroll();
             },
             handleClearButtonClicked() {
                 this.$emit('input', null);
@@ -254,7 +271,7 @@
             findLocalValue() {
                 if(!this.value || this.value[this.itemIdAttribute] == null) return null;
                 if(!this.localValues.some(this.itemMatchValue)) {
-                    error(`Autocomplete (key: ${this.fieldKey}) can't find local value matching : ${JSON.stringify(this.value)}`);
+                    logError(`Autocomplete (key: ${this.fieldKey}) can't find local value matching : ${JSON.stringify(this.value)}`);
                     return null;
                 }
                 return this.localValues.find(this.itemMatchValue);
@@ -266,6 +283,8 @@
             }
         },
         created() {
+            this.updateRemoteSuggestions = debounce(this.updateRemoteSuggestions, this.debounceDelay);
+
             if(this.mode === 'local' && !this.searchKeys) {
                 warn(`Autocomplete (key: ${this.fieldKey}) has local mode but no searchKeys, default set to ['value']`);
             }

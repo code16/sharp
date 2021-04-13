@@ -1,8 +1,21 @@
 .SharpCommandsDropdown {
   &__description {
+    font-family: $font-family-base;
+    text-transform: none;
     font-size: .875em;
-    color: $text-03;
+    color: $text-muted;
     white-space: normal;
     min-width: 15rem;
+    margin-top: .125rem;
+  }
+
+  .dropdown-menu {
+    min-width: 12rem;
+  }
+
+  &--has-state {
+    .dropdown-menu {
+      min-width: 14rem;
+    }
   }
 }

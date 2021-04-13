@@ -1,10 +1,7 @@
 
 .ShowTextField {
   &__content {
-    @mixin font-size($size) { font-size: $size }
-    @import "~bootstrap/scss/reboot";
-    @import "~bootstrap/scss/mixins/lists";
-    @import "~bootstrap/scss/type";
+    white-space: pre-line;
     h1, h2, h3, h4, h5, h6 {
       letter-spacing: normal;
     }
@@ -54,5 +51,11 @@
     text-decoration: none;
     font-size: .875em;
     font-weight: 600;
+  }
+
+  &--html {
+    .ShowTextField__content {
+      white-space: normal;
+    }
   }
 }

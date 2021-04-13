@@ -4,6 +4,10 @@
 
 $hoverColor = rgba($accentColor, .35);
 
+html {
+  scroll-behavior: smooth;
+}
+
 code {
   -webkit-font-smoothing: subpixel-antialiased;
 }
@@ -19,11 +23,10 @@ code.inline {
       padding-top: $navbarHeight;
     }
   }
+
   a {
-    text-decoration: underline;
-    color: $textColor;
     &:hover {
-      background: $hoverColor;
+      text-decoration: underline;
     }
   }
 
@@ -39,10 +42,16 @@ code.inline {
       margin-left: -1rem;
       background: #f3f4f4;
       color: #6996bf;
+      .token.function {
+        margin-right .25em;
+      }
     }
   }
   h3 + h3, h4 + h4 {
     margin-top: -1.5rem - $navbarHeight !important;
+  }
+  h5, h6 {
+    font-size 700;
   }
   ul, p {
     code * {
@@ -53,11 +62,17 @@ code.inline {
 
 a.header-anchor {
   text-decoration: none;
-  color: lighten($textColor, 50%);
+  color: $accentColor;
+  opacity: 0;
   position: relative;
   z-index: 1;
+}
+
+h1, h2, h3, h4, h5, h6 {
   &:hover {
-    background: none;
+    .header-anchor {
+      opacity .5;
+    }
   }
 }
 
@@ -66,23 +81,15 @@ div[class~="language-php"]:before {
 }
 
 a.sidebar-link {
-  &:hover {
-    color: $textColor !important;
-    background: $hoverColor;
-  }
   &.active {
-    color: $textColor!important;
-    background: $accentColor;
+    font-weight 700;
   }
 }
 
-.sidebar-sub-header {
+.sidebar-sub-headers {
   a.sidebar-link {
-    &:hover, &.active {
-      background: none;
-    }
-    &:hover {
-      color: darken($accentColor, 20%)!important;
+    &.active {
+      font-weight 600;
     }
   }
 }

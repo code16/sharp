@@ -1,3 +1,5 @@
+import VueRouter from "vue-router";
+import { createLocalVue } from "@vue/test-utils";
 import { router } from '../../router';
 import {
     formUrl,
@@ -19,57 +21,54 @@ describe('url', ()=>{
     test('formUrl', () => {
         router(true).addRoutes(formRoutes);
         expect(formUrl({ entityKey:'entityKey', instanceId:'instanceId' }))
-            .toEqual('/BASE_URL/form/entityKey/instanceId?x-access-from=ui');
+            .toEqual('/BASE_URL/s-form/entityKey/instanceId');
     });
     test('showUrl', () => {
         router(true).addRoutes(showRoutes);
         expect(showUrl({ entityKey:'entityKey', instanceId:'instanceId' }))
-            .toEqual('/BASE_URL/show/entityKey/instanceId?x-access-from=ui');
+            .toEqual('/BASE_URL/s-show/entityKey/instanceId');
     });
-    test('listUrl', () =>{
+    test('resolve nested show', () => {
+        router(true).addRoutes(showRoutes);
+        expect(router().resolve('/s-list/spaceship/s-show/spaceship/2/s-show/pilot/2').route).toMatchObject({
+            name: 'show',
+            params: {
+                entityKey: 'pilot',
+                instanceId: '2',
+            }
+        });
+    });
+    test('listUrl', () => {
         router(true).addRoutes(listRoutes);
         expect(listUrl('entityKey'))
-            .toEqual('/BASE_URL/list/entityKey?x-access-from=ui');
+            .toEqual('/BASE_URL/s-list/entityKey');
     });
     test('routeUrl', () => {
         router(true).addRoutes([{ path:'/test', name:'test' }]);
         const url = routeUrl({ name:'test', query: { q:'bbb' } });
         expect(url).toMatch('/BASE_URL/test');
         expect(url).toMatch('q=bbb');
-        expect(url).toMatch('x-access-from=ui');
+    });
+    test('routeUrl append', () => {
+        window.location.pathname = '/BASE_URL/test';
+        const $router = router(true)
+        const Vue = createLocalVue();
+        Vue.use(VueRouter);
+        new Vue({ router: $router });
+        $router.addRoutes([
+            { path:'/test', name: 'test' },
+            { path:'/foo', name: 'foo' }
+        ]);
+        const url = routeUrl({ name:'foo', query: { q:'bbb' } }, { append: true });
+        expect(url).toMatch('/BASE_URL/test/foo');
+        expect(url).toMatch('q=bbb');
     });
     test('getBackUrl', () => {
         expect(getBackUrl([
-            { url:'/list', type: 'entityList' },
-            { url:'/show', type: 'show' },
-            { url:'/form', type: 'form' }
+            { url:'/s-list', type: 'entityList' },
+            { url:'/s-show', type: 'show' },
+            { url:'/s-form', type: 'form' }
         ]))
-        .toEqual('/show?x-access-from=ui');
-    });
-    test('getDeleteBackUrl', () => {
-        router(true);
-        router().addRoutes(formRoutes);
-        router().addRoutes(showRoutes);
-        router().addRoutes(listRoutes);
-
-        expect(getDeleteBackUrl([
-            { url:'/list', type: 'entityList' },
-            { url:'/show/spaceship/42', type: 'show' },
-            { url:'/form/spaceship/42', type: 'form' }
-        ]))
-        .toEqual('/list?x-access-from=ui');
-
-        expect(getDeleteBackUrl([
-            { url:'/list', type: 'entityList' },
-            { url:'/show/spaceship/42', type: 'show' },
-            { url:'/form/spaceship-pilot/42', type: 'form' }
-        ]))
-        .toEqual('/show/spaceship/42?x-access-from=ui');
-
-        expect(getDeleteBackUrl([
-            { url:'/show/single', type: 'show' },
-            { url:'/form/spaceship-pilot/42', type: 'form' }
-        ]))
-        .toEqual('/show/single?x-access-from=ui');
+        .toEqual('/s-show');
     });
 })

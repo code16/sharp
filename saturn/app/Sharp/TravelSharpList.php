@@ -11,7 +11,7 @@ use Code16\Sharp\EntityList\SharpEntityList;
 class TravelSharpList extends SharpEntityList
 {
 
-    function buildListDataContainers()
+    function buildListDataContainers(): void
     {
         $this->addDataContainer(
             EntityListDataContainer::make("destination")
@@ -27,14 +27,14 @@ class TravelSharpList extends SharpEntityList
         );
     }
 
-    function buildListConfig()
+    function buildListConfig(): void
     {
         $this//->setSearchable()
             ->setDefaultSort("departure_date", "desc")
             ->setPaginated();
     }
 
-    function buildListLayout()
+    function buildListLayout(): void
     {
         $this->addColumn("destination", 4)
             ->addColumn("departure_date", 4)
@@ -57,6 +57,10 @@ class TravelSharpList extends SharpEntityList
 
         return $this
             ->setCustomTransformer("spaceship", function($value, $travel) {
+                if(!$travel->spaceship) {
+                    return "";
+                }
+                
                 return '<i class="fas fa-space-shuttle"></i> ' . $travel->spaceship->name;
             })
             ->transform($travels->with(["spaceship"])->paginate(30));

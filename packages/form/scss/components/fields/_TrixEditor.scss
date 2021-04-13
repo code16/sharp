@@ -1,5 +1,4 @@
 .SharpTrix {
-  @extend .SharpModule;
 
   &--read-only {
     trix-editor {
@@ -10,42 +9,8 @@
     opacity: 0.8;
   }
 
-  .editor-toolbar {
-    border: none;
-    border-radius: 0;
-    &:before { margin:0 }
-    &:after { margin:0 }
-    padding:0;
-
-    opacity: .8;
-
-    &:hover {
-      opacity: 1;
-    }
-
-    button {
-      display: inline-block;
-      text-align: center;
-      text-decoration: none!important;
-      color: #2c3e50!important;
-      width: 30px;
-      height: 30px;
-      margin: 0;
-      border: 1px solid transparent;
-      border-radius: 3px;
-      cursor: pointer;
-      background: none;
-      padding:0;
-      font-size: 1rem;
-      &:hover, &[data-trix-active]{
-        background: #fcfcfc;
-        border-color: #95a5a6;
-      }
-      &[disabled] {
-        opacity: .4;
-        pointer-events: none;
-      }
-    }
+  .btn.trix-active {
+    @extend .active;
   }
 
   .separator {
@@ -64,13 +29,7 @@
 
   trix-editor {
     overflow: auto;
-    border:none;
-    border-radius: 0;
-    background: white;
-    padding: 1rem !important;
     min-height: 0 !important;
-    line-height: 1.5;
-    @include font-size('14');
 
     &[disabled] {
       pointer-events: none;

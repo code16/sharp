@@ -4,7 +4,7 @@ This widget intends to display data as an ordered list of items
 
 ```php
 $this->addWidget(
-    SharpOrderedListWidget::make("topTravelledShipTypes");
+    SharpOrderedListWidget::make("topTravelledShipTypes")
 );
 ```
 
@@ -61,22 +61,29 @@ $this->setOrderedListData(
 
 ## Item URL
 
-You may want to add a link to a Sharp entity (list or form) on each row. To do that, use the `buildItemLink()` method on the widget creation:
+You may want to add a link on each row. To do that, use the `buildItemLink()` method on the widget creation:
 
 ```php
 $this->addWidget(
     SharpOrderedListWidget::make("topTravelledShipTypes")
-            ->buildItemLink(function(LinkToEntity $link, $item) {
-                  return $link
-                      ->setEntityKey("spaceship")
-                      ->addFilter("type", $item['id']);
+            ->buildItemLink(function($item) {
+                  return url("some-link");
             })
 );
 ```
 
-Note that we leverage Sharp's `LinkToEntity` class here, [documented here](../link-to-entity.md).
+In order to make a link to a Sharp EntityList, Show or Form, this method can also return a [LinkTo instance](../link-to.md):
 
-As you can see, the link is built for each row, and is therefore very data-dependant. 
+```php
+$this->addWidget(
+    SharpOrderedListWidget::make("topTravelledShipTypes")
+            ->buildItemLink(function($item) {
+                  return LinkToEntityList::make("spaceship")->addFilter("type", $item['id']); 
+            })
+);
+```
+
+As you can see, the link is built for each row, and is therefore data-dependant. 
 In this example, we intend to link each row toward the "spaceship" entity list, with the filter "type" set to the value of `$item['id']`. So with this data:
 
 ```php
@@ -94,4 +101,4 @@ function buildWidgetsData()
 }
 ```
 
-The item will be linked to `/sharp/list/spaceship?filter_type=12`. 
+The item will be linked to `/sharp/s-list/spaceship?filter_type=12`. 

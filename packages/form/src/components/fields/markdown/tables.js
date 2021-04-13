@@ -80,8 +80,43 @@ function columnText(column) {
     return text || noBreakSpace;
 }
 
+function findAlign(el) {
+    const align = el.align || el.style.textAlign;
+    if(align) {
+        return align;
+    }
+    if(el.firstElementChild) {
+        return findAlign(el.firstElementChild);
+    }
+}
+
+function columnAlign(table, cell) {
+    const index = Array.from(cell.parentElement.children).indexOf(cell);
+    const columnCells = Array.from(table.querySelectorAll(`td:nth-child(${index + 1}), th:nth-child(${index + 1})`))
+        .filter(cell => (cell.textContent || '').match(/\S/));
+    if(!columnCells.length) {
+        return null;
+    }
+    const headAlign = findAlign(columnCells[0]);
+    if(columnCells.every(cell => findAlign(cell) === headAlign)) {
+        return headAlign
+    }
+}
+
 function tableHeaders(row) {
     return Array.from(row.querySelectorAll('td, th')).map(columnText);
+}
+
+function tableSpacers(table, row) {
+    return Array.from(row.querySelectorAll('td, th')).map(cell => {
+        const align = columnAlign(table, cell);
+        if(align === 'right') {
+            return ' --:';
+        } else if(align === 'center') {
+            return ':--:';
+        }
+        return ' -- ';
+    });
 }
 
 function tableMarkdown(node) {
@@ -90,8 +125,8 @@ function tableMarkdown(node) {
     if (!firstRow)
         return '';
     const headers = tableHeaders(firstRow);
-    const spacers = headers.map(() => '--');
-    const header = `${headers.join(' | ')}\n${spacers.join(' | ')}\n`;
+    const spacers = tableSpacers(node, firstRow);
+    const header = `${headers.join(' | ')}\n${spacers.join('|')}\n`;
     const body = rows
         .map(row => {
             return Array.from(row.querySelectorAll('td')).map(columnText).join(' | ');

@@ -13,12 +13,16 @@ class SharpShowTextFieldTest extends SharpTestCase
         $field = SharpShowTextField::make("textfield")
             ->setLabel("Label");
 
-        $this->assertEquals([
-            "key" => "textfield",
-            "type" => "text",
-            "emptyVisible" => false,
-            "label" => "Label"
-        ], $field->toArray());
+        $this->assertEquals(
+            [
+                "key" => "textfield",
+                "type" => "text",
+                "emptyVisible" => false,
+                "html" => true,
+                "label" => "Label"
+            ], 
+            $field->toArray()
+        );
     }
 
     /** @test */
@@ -27,12 +31,16 @@ class SharpShowTextFieldTest extends SharpTestCase
         $field = SharpShowTextField::make("textfield")
             ->collapseToWordCount(15);
 
-        $this->assertEquals([
-            "key" => "textfield",
-            "type" => "text",
-            "emptyVisible" => false,
-            "collapseToWordCount" => 15
-        ], $field->toArray());
+        $this->assertEquals(
+            [
+                "key" => "textfield",
+                "type" => "text",
+                "emptyVisible" => false,
+                "html" => true,
+                "collapseToWordCount" => 15
+            ], 
+            $field->toArray()
+        );
     }
 
     /** @test */
@@ -41,11 +49,32 @@ class SharpShowTextFieldTest extends SharpTestCase
         $field = SharpShowTextField::make("textfield")
             ->setShowIfEmpty(true);
 
-        $this->assertEquals([
-            "key" => "textfield",
-            "type" => "text",
-            "emptyVisible" => true,
-        ], $field->toArray());
+        $this->assertEquals(
+            [
+                "key" => "textfield",
+                "type" => "text",
+                "emptyVisible" => true,
+                "html" => true,
+            ], 
+            $field->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_html()
+    {
+        $field = SharpShowTextField::make("textfield")
+            ->setHtml(false);
+
+        $this->assertEquals(
+            [
+                "key" => "textfield",
+                "type" => "text",
+                "emptyVisible" => false,
+                "html" => false,
+            ],
+            $field->toArray()
+        );
     }
 
     /** @test */
@@ -56,10 +85,14 @@ class SharpShowTextFieldTest extends SharpTestCase
 
         $field->doNotCollapse();
 
-        $this->assertEquals([
-            "key" => "textfield",
-            "type" => "text",
-            "emptyVisible" => false,
-        ], $field->toArray());
+        $this->assertEquals(
+            [
+                "key" => "textfield",
+                "type" => "text",
+                "emptyVisible" => false,
+                "html" => true,
+            ], 
+            $field->toArray()
+        );
     }
 }

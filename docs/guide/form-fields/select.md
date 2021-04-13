@@ -2,7 +2,7 @@
 
 Class: `Code16\Sharp\Form\Fields\SharpFormSelectField`
 
-![Example](./select1.gif)
+![Example](./select-dropdown.png)
 
 ## Configuration
 
@@ -38,7 +38,7 @@ SharpFormSelectField::make("travel_id",
 
 Allow multi-selection (default: false)
 
-![Example](./select3.gif)
+![Example](./select-checkboxes.png)
 
 
 ### `setClearable(bool $clearable = true)`
@@ -52,13 +52,13 @@ Display as a list (the default value):
 - radio if multiple=false
 - checkboxes if multiple=true
 
-![Example](./select2.gif)
+![Example](./select-radios.png)
 
 ### `setDisplayAsDropdown()`
 
 Display as a classic dropdown.
 
-![Example](./select1.gif)
+![Example](./select-dropdown.png)
 
 ### `setMaxSelected(int $maxSelected)`
 

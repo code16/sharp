@@ -2,20 +2,14 @@
 
 namespace Code16\Sharp\Form\Eloquent;
 
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 
 class EloquentModelUpdater
 {
-    /** @var array */
-    protected $relationshipsConfiguration;
+    protected array $relationshipsConfiguration = [];
 
-    /**
-     * @param Model $instance
-     * @param array $data
-     * @return Model
-     * @throws \ReflectionException
-     */
-    function update($instance, array $data)
+    function update(Model $instance, array $data): Model
     {
         $relationships = [];
 
@@ -39,12 +33,14 @@ class EloquentModelUpdater
     }
 
     /**
-     * @param array $configuration
+     * @param array|Arrayable $configuration
      * @return $this
      */
-    function initRelationshipsConfiguration($configuration)
+    function initRelationshipsConfiguration($configuration): self
     {
-        $this->relationshipsConfiguration = $configuration;
+        $this->relationshipsConfiguration = is_array($configuration) 
+            ? $configuration 
+            : $configuration->toArray();
 
         return $this;
     }
@@ -54,29 +50,19 @@ class EloquentModelUpdater
      *
      * @param Model $instance
      * @param string $attribute
-     * @param $value
+     * @param mixed $value
      */
-    protected function valuateAttribute($instance, string $attribute, $value)
+    protected function valuateAttribute(Model $instance, string $attribute, $value): void
     {
         $instance->setAttribute($attribute, $value);
     }
 
-    /**
-     * @param Model $instance
-     * @param string $attribute
-     * @return bool
-     */
-    protected function isRelationship($instance, $attribute): bool
+    protected function isRelationship(Model $instance, string $attribute): bool
     {
         return strpos($attribute, ":") !== false || method_exists($instance, $attribute);
     }
 
-    /**
-     * @param Model $instance
-     * @param array $relationships
-     * @throws \ReflectionException
-     */
-    protected function saveRelationships($instance, array $relationships)
+    protected function saveRelationships(Model $instance, array $relationships)
     {
         foreach ($relationships as $attribute => $value) {
             $relAttribute = explode(":", $attribute)[0];

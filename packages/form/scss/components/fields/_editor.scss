@@ -1,0 +1,79 @@
+
+
+.editor {
+  .card {
+    border-color: $input-border-color;
+  }
+  .card-header {
+    border-top-right-radius: $card-border-radius;
+    border-top-left-radius: $card-border-radius;
+    background: white;
+    padding: .75rem;
+  }
+
+  .card-body {
+    border-bottom-right-radius: $card-border-radius;
+    border-bottom-left-radius: $card-border-radius;
+
+    &.form-control {
+      margin: -1px;
+      width: auto;
+      padding: $input-padding-y $input-padding-x;
+    }
+  }
+
+  .card-header + .card-body.form-control {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top-color: transparent;
+    &.is-invalid {
+      border-top-color: $form-feedback-invalid-color;
+    }
+  }
+
+  &__toolbar {
+    .fa-paperclip {
+      -webkit-text-stroke: .03em $ui-03;
+      &:hover {
+        -webkit-text-stroke-color: $light;
+      }
+      &::before {
+        display: inline-block;
+        transform: rotate(-45deg);
+        font-size: 1.2em;
+      }
+      &.btn {
+        padding-top: calc(#{$btn-padding-y} - .12em);
+        padding-bottom: calc(#{$btn-padding-y} - .12em);
+      }
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      padding: .5rem .75rem;
+      line-height: 1.2;
+    }
+
+    .fa-sm {
+      font-size: .75rem;
+    }
+
+    .fa-xs {
+      font-size: .675rem;
+    }
+
+    .btn-group {
+      &:not(:first-child) {
+        margin-left: .5rem;
+      }
+    }
+
+    .btn-light {
+      &:not(:hover):not(:focus):not(.active):not(.trix-active) {
+        //color: hsla(var(--bs-primary-h), var(--bs-primary-s), 20%, .75);
+        color: rgba(0,0,0,.675);
+      }
+    }
+  }
+}

@@ -5,9 +5,13 @@ namespace Code16\Sharp\Tests\Feature\Api;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpSingleForm;
+use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
+use Code16\Sharp\Tests\Unit\Utils\WithCurrentSharpRequestFake;
 
 class FormControllerTest extends BaseApiTest
 {
+    use WithCurrentSharpRequestFake;
+    
     protected function setUp(): void
     {
         parent::setUp();
@@ -22,9 +26,11 @@ class FormControllerTest extends BaseApiTest
 
         $this->getJson('/sharp/api/form/person/1')
             ->assertStatus(200)
-            ->assertJson(["data" => [
-                "name" => "John Wayne"
-            ]]);
+            ->assertJson([
+                "data" => [
+                    "name" => "John Wayne"
+                ]
+            ]);
     }
 
     /** @test */
@@ -35,9 +41,11 @@ class FormControllerTest extends BaseApiTest
 
         $this->getJson('/sharp/api/form/person')
             ->assertStatus(200)
-            ->assertJson(["data" => [
-                "name" => "default name"
-            ]]);
+            ->assertJson([
+                "data" => [
+                    "name" => "default name"
+                ]
+            ]);
     }
 
     /** @test */
@@ -58,11 +66,13 @@ class FormControllerTest extends BaseApiTest
 
         $this->getJson('/sharp/api/form/person/1')
             ->assertStatus(200)
-            ->assertJson(["fields" => [
-                "name" => [
-                    "type" => "text"
+            ->assertJson([
+                "fields" => [
+                    "name" => [
+                        "type" => "text"
+                    ]
                 ]
-            ]]);
+            ]);
     }
 
     /** @test */
@@ -72,43 +82,60 @@ class FormControllerTest extends BaseApiTest
 
         $this->getJson('/sharp/api/form/person/1')
             ->assertStatus(200)
-            ->assertJson(["layout" => [
-                "tabbed" => true,
-                "tabs" => [[
-                    "title" => "one",
-                    "columns" => [
-                        [
-                            "size" => 6,
-                            "fields" => [
-                                [
-                                    ["key" => "name"]
+            ->assertJson([
+                "layout" => [
+                    "tabbed" => true,
+                    "tabs" => [[
+                        "title" => "one",
+                        "columns" => [
+                            [
+                                "size" => 6,
+                                "fields" => [
+                                    [
+                                        ["key" => "name"]
+                                    ]
                                 ]
                             ]
                         ]
-                    ]
-                ]]
-            ]]);
+                    ]]
+                ]
+            ]);
     }
 
     /** @test */
     public function we_can_update_an_entity()
     {
         $this->buildTheWorld();
+        $this->fakeCurrentSharpRequestWithUrl("/sharp/s-list/person/s-show/person/1/s-form/person/1");
 
-        $this->postJson('/sharp/api/form/person/1', [
-            "name" => "Jane Fonda"
-        ])->assertStatus(200)
-            ->assertJson(["ok" => true]);
+        $this
+            ->postJson('/sharp/api/form/person/1', [
+                "name" => "Jane Fonda"
+            ])
+            ->assertOk()
+            ->assertJson([
+                "redirectUrl" => url("/sharp/s-list/person/s-show/person/1")
+            ]);
     }
 
     /** @test */
     public function we_can_delete_an_entity()
     {
         $this->buildTheWorld();
-
+        
+        $this->fakeCurrentSharpRequestWithUrl("/sharp/s-list/person/s-form/person/1");
         $this->deleteJson('/sharp/api/form/person/1')
             ->assertStatus(200)
-            ->assertJson(["ok" => true]);
+            ->assertJson([
+                "redirectUrl" => url("/sharp/s-list/person")
+            ]);
+
+        $this->fakeCurrentSharpRequestWithUrl("/sharp/s-list/person/s-show/person/1/s-form/person/1");
+        $this->deleteJson('/sharp/api/form/person/1')
+            ->assertStatus(200)
+            ->assertJson([
+                "redirectUrl" => url("/sharp/s-list/person")
+            ]);
     }
 
     /** @test */
@@ -117,9 +144,11 @@ class FormControllerTest extends BaseApiTest
         $this->buildTheWorld();
         $this->configurePersonValidator();
 
-        $this->postJson('/sharp/api/form/person/1', [
-            "age" => 22
-        ])->assertStatus(422)
+        $this
+            ->postJson('/sharp/api/form/person/1', [
+                "age" => 22
+            ])
+            ->assertStatus(422)
             ->assertJson([
                 "errors" => [
                     "name" => [
@@ -133,11 +162,41 @@ class FormControllerTest extends BaseApiTest
     public function we_can_store_a_new_entity()
     {
         $this->buildTheWorld();
+        $this->fakeCurrentSharpRequestWithUrl("/sharp/s-list/person/s-form/person");
 
-        $this->postJson('/sharp/api/form/person', [
-            "name" => "Jane Fonda"
-        ])->assertStatus(200)
-            ->assertJson(["ok" => true]);
+        $this
+            ->postJson('/sharp/api/form/person', [
+                "name" => "Jane Fonda"
+            ])
+            ->assertOk()
+            ->assertJson([
+                "redirectUrl" => url("/sharp/s-list/person")
+            ]);
+    }
+
+    /** @test */
+    public function we_can_store_a_new_entity_and_redirect_to_the_show_page()
+    {
+        $this->buildTheWorld();
+
+        app()->bind(
+            PersonSharpForm::class,
+            function() {
+                return new class extends PersonSharpForm {
+                    protected bool $displayShowPageAfterCreation = true;
+                };
+            });
+        
+        $this->fakeCurrentSharpRequestWithUrl("/sharp/s-list/person/s-form/person");
+
+        $this
+            ->postJson('/sharp/api/form/person', [
+                "name" => "Jane Fonda"
+            ])
+            ->assertOk()
+            ->assertJson([
+                "redirectUrl" => url("/sharp/s-list/person/s-show/person/1")
+            ]);
     }
 
     /** @test */
@@ -154,9 +213,11 @@ class FormControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->postJson('/sharp/api/form/person/notanid', [
-            "name" => "Jane Fonda"
-        ])->assertStatus(417)
+        $this
+            ->postJson('/sharp/api/form/person/notanid', [
+                "name" => "Jane Fonda"
+            ])
+            ->assertStatus(417)
             ->assertJson([
                 "message" => "notanid is not a valid id"
             ]);
@@ -173,22 +234,28 @@ class FormControllerTest extends BaseApiTest
                 "name" => "Single John Wayne"
             ]]);
 
-        $this->getJson('/sharp/api/form/person/1')->assertStatus(404);
+        $this->getJson('/sharp/api/form/person/1')
+            ->assertStatus(404);
     }
 
     /** @test */
     public function we_can_update_an_entity_on_a_single_form_case()
     {
         $this->buildTheWorld(true);
+        $this->fakeCurrentSharpRequestWithUrl("/sharp/s-show/person/s-form/person");
 
         $this
             ->postJson('/sharp/api/form/person', [
                 "name" => "Jane Fonda"
             ])
-            ->assertStatus(200)
-            ->assertJson(["ok" => true]);
+            ->assertOk()
+            ->assertJson([
+                "redirectUrl" => url("/sharp/s-show/person")
+            ]);
 
-        $this->postJson('/sharp/api/form/person/1', [])->assertStatus(404);
+        $this
+            ->postJson('/sharp/api/form/person/1', [])
+            ->assertStatus(404);
     }
 
     /** @test */
@@ -199,7 +266,8 @@ class FormControllerTest extends BaseApiTest
         $this->deleteJson('/sharp/api/form/person')
             ->assertStatus(500);
 
-        $this->deleteJson('/sharp/api/form/person/1')->assertStatus(404);
+        $this->deleteJson('/sharp/api/form/person/1')
+            ->assertStatus(404);
     }
 
     protected function buildTheWorld($singleShow = false)
@@ -218,32 +286,25 @@ class FormControllerTest extends BaseApiTest
 class PersonSharpSingleForm extends SharpSingleForm
 {
 
-    function buildFormFields()
+    function buildFormFields(): void
     {
         $this->addField(SharpFormTextField::make("name"));
     }
 
-    function buildFormLayout()
+    function buildFormLayout(): void
     {
         $this->addColumn(6, function(FormLayoutColumn $column) {
             return $column->withSingleField("name");
         });
     }
 
-    /**
-     * @return array
-     */
     protected function findSingle()
     {
         return ["name" => "Single John Wayne", "job" => "actor"];
     }
 
-    /**
-     * @param array $data
-     * @return mixed
-     */
     protected function updateSingle(array $data)
     {
-        return true;
+        return 1;
     }
 }

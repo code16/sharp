@@ -109,7 +109,7 @@ class FiltersInRequestTest extends BaseApiTest
             PersonSharpEntityList::class,
             function() {
                 return new class() extends PersonSharpEntityList {
-                    function buildListConfig()
+                    function buildListConfig(): void
                     {
                         $this->addFilter(
                             "active",
@@ -133,6 +133,7 @@ class FiltersInRequestTest extends BaseApiTest
     /** @test */
     public function retained_filter_values_are_retrieved_from_the_session()
     {
+        $this->withoutExceptionHandling();
         app()->bind(
             PersonSharpEntityList::class,
             function() {
@@ -154,7 +155,7 @@ class FiltersInRequestTest extends BaseApiTest
 
                         return $this->transform($items);
                     }
-                    function buildListConfig()
+                    function buildListConfig(): void
                     {
                         $this->addFilter(
                             "active",
@@ -222,7 +223,7 @@ class FiltersInRequestTest extends BaseApiTest
 
                         return $this->transform($items);
                     }
-                    function buildListConfig()
+                    function buildListConfig(): void
                     {
                         $this->addFilter(
                             "age",
@@ -281,7 +282,7 @@ class FiltersInRequestTest extends BaseApiTest
 
                         return $this->transform($items);
                     }
-                    function buildListConfig()
+                    function buildListConfig(): void
                     {
                         $this->addFilter(
                             "age",
@@ -310,11 +311,11 @@ class FiltersInRequestTest extends BaseApiTest
 
 class FiltersInRequestTestRetainedActiveFilter implements EntityListSelectFilter
 {
-    public function values()
+    public function values(): array
     {
         return [0, 1];
     }
-    public function retainValueInSession()
+    public function retainValueInSession(): bool
     {
         return true;
     }
@@ -322,12 +323,12 @@ class FiltersInRequestTestRetainedActiveFilter implements EntityListSelectFilter
 
 class FiltersInRequestTestRetainedAgeMultipleFilter implements EntityListSelectMultipleFilter
 {
-    public function values()
+    public function values(): array
     {
         return range(0, 80);
     }
 
-    public function retainValueInSession()
+    public function retainValueInSession(): bool
     {
         return true;
     }
@@ -335,7 +336,7 @@ class FiltersInRequestTestRetainedAgeMultipleFilter implements EntityListSelectM
 
 class FiltersInRequestTestRetainedAgeRequiredFilter implements EntityListSelectRequiredFilter
 {
-    public function values()
+    public function values(): array
     {
         return range(0, 80);
     }
@@ -345,7 +346,7 @@ class FiltersInRequestTestRetainedAgeRequiredFilter implements EntityListSelectR
         return 2;
     }
 
-    public function retainValueInSession()
+    public function retainValueInSession(): bool
     {
         return true;
     }

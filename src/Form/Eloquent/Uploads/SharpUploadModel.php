@@ -4,6 +4,7 @@ namespace Code16\Sharp\Form\Eloquent\Uploads;
 
 use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\Thumbnail;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class SharpUploadModel extends Model
 {
@@ -17,14 +18,11 @@ class SharpUploadModel extends Model
         'size' => 'integer',
     ];
 
-    public function model()
+    public function model(): MorphTo
     {
         return $this->morphTo('model');
     }
 
-    /**
-     * @param $value
-     */
     public function setTransformedAttribute($value)
     {
         // The transformed attribute to true means there
@@ -34,14 +32,11 @@ class SharpUploadModel extends Model
         }
     }
 
-    public function deleteAllThumbnails()
+    public function deleteAllThumbnails(): void
     {
         (new Thumbnail($this))->destroyAllThumbnails();
     }
 
-    /**
-     * @param $value
-     */
     public function setFileAttribute($value)
     {
         // We use this magical "file" attribute to fill at the same time
@@ -78,12 +73,7 @@ class SharpUploadModel extends Model
         return parent::setAttribute($key, $value);
     }
 
-    /**
-     * @param $key
-     * @param $value
-     * @return $this
-     */
-    protected function updateCustomProperty($key, $value)
+    protected function updateCustomProperty(string $key, $value): self
     {
         $properties = $this->getAttribute("custom_properties");
         $properties[$key] = $value;
@@ -92,11 +82,7 @@ class SharpUploadModel extends Model
         return $this;
     }
 
-    /**
-     * @param string $name
-     * @return bool
-     */
-    protected function isRealAttribute(string $name)
+    protected function isRealAttribute(string $name): bool
     {
         return in_array($name, [
             "id", "model", "model_id", "model_type", "model_key", "file_name",
@@ -105,13 +91,7 @@ class SharpUploadModel extends Model
         ]);
     }
 
-    /**
-     * @param int|null $width
-     * @param int|null $height
-     * @param array $filters
-     * @return string
-     */
-    public function thumbnail($width=null, $height=null, $filters=[])
+    public function thumbnail(int $width=null, int $height=null, array $filters=[]): ?string
     {
         return (new Thumbnail($this))
             ->setAppendTimestamp()

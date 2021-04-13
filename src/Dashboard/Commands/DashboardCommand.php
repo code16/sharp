@@ -8,17 +8,11 @@ use Code16\Sharp\EntityList\Commands\Command;
 abstract class DashboardCommand extends Command
 {
 
-    /**
-     * @return string
-     */
     public function type(): string
     {
         return "dashboard";
     }
 
-    /**
-     * @return array
-     */
     public function formData(): array
     {
         return collect($this->initialData())
@@ -26,9 +20,6 @@ abstract class DashboardCommand extends Command
             ->all();
     }
 
-    /**
-     * @return array
-     */
     protected function initialData(): array
     {
         return [];
@@ -38,7 +29,7 @@ abstract class DashboardCommand extends Command
      * @param mixed $ids
      * @return array
      */
-    protected function refresh($ids)
+    protected function refresh($ids): array
     {
         // Refresh has no meaning in the Dashboard; we just do a classic reload.
         return $this->reload();

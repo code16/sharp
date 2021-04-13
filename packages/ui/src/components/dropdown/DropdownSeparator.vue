@@ -1,9 +1,14 @@
 <template>
-    <li class="SharpDropdown__separator"></li>
+    <b-dropdown-divider />
 </template>
 
 <script>
+    import { BDropdownDivider } from 'bootstrap-vue';
+
     export default {
-        name: 'SharpDropdownSeparator'
+        name: 'SharpDropdownSeparator',
+        components: {
+            BDropdownDivider,
+        }
     }
 </script>

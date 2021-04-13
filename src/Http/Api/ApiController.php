@@ -12,12 +12,7 @@ use Code16\Sharp\Show\SharpShow;
 abstract class ApiController extends SharpProtectedController
 {
 
-    /**
-     * @param string $entityKey
-     * @return SharpEntityList
-     * @throws SharpInvalidEntityKeyException
-     */
-    protected function getListInstance(string $entityKey)
+    protected function getListInstance(string $entityKey): SharpEntityList
     {
         if(! $configKey = config("sharp.entities.{$entityKey}.list")) {
             throw new SharpInvalidEntityKeyException("The entity [{$entityKey}] was not found.");
@@ -26,17 +21,11 @@ abstract class ApiController extends SharpProtectedController
         return app($configKey);
     }
 
-    /**
-     * @param string $entityKey
-     * @return SharpShow
-     * @throws SharpInvalidEntityKeyException
-     */
-    protected function getShowInstance(string $entityKey)
+    protected function getShowInstance(string $entityKey): SharpShow
     {
         if($this->isSubEntity($entityKey)) {
             list($entityKey, $subEntityKey) = explode(':', $entityKey);
             $showClass = config("sharp.entities.{$entityKey}.shows.{$subEntityKey}.show");
-
         } else {
             $showClass = config("sharp.entities.{$entityKey}.show");
         }
@@ -47,18 +36,12 @@ abstract class ApiController extends SharpProtectedController
 
         return app($showClass);
     }
-
-    /**
-     * @param string $entityKey
-     * @return SharpForm
-     * @throws SharpInvalidEntityKeyException
-     */
-    protected function getFormInstance(string $entityKey)
+    
+    protected function getFormInstance(string $entityKey): SharpForm
     {
         if($this->isSubEntity($entityKey)) {
             list($entityKey, $subEntityKey) = explode(':', $entityKey);
             $formClass = config("sharp.entities.{$entityKey}.forms.{$subEntityKey}.form");
-
         } else {
             $formClass = config("sharp.entities.{$entityKey}.form");
         }
@@ -70,21 +53,13 @@ abstract class ApiController extends SharpProtectedController
         return app($formClass);
     }
 
-    /**
-     * @param string $dashboardKey
-     * @return SharpDashboard|null
-     */
-    protected function getDashboardInstance(string $dashboardKey)
+    protected function getDashboardInstance(string $dashboardKey): ?SharpDashboard
     {
         $dashboardClass = config("sharp.dashboards.$dashboardKey.view");
 
         return $dashboardClass ? app($dashboardClass) : null;
     }
 
-    /**
-     * @param string $entityKey
-     * @return bool
-     */
     protected function isSubEntity(string $entityKey): bool
     {
         return strpos($entityKey, ':') !== false;

@@ -2,7 +2,7 @@
 
 The Sharp side menu can contain several links. Its organization is totally up to you, and is defined in the `sharp.php` config file.
 
-![Menu](./img/menu.png)
+<img width="150" src="./img/menu.png" alt="Menu">
 
 All links shares common things:
 

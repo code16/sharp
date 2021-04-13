@@ -11,42 +11,16 @@ use Illuminate\Support\Arr;
 
 abstract class SharpDashboard
 {
-    use HandleFilters, HandleDashboardCommands;
+    use HandleFilters, 
+        HandleDashboardCommands;
 
-    /**
-     * @var bool
-     */
-    protected $dashboardBuilt = false;
-
-    /**
-     * @var bool
-     */
-    protected $layoutBuilt = false;
-
-    /**
-     * @var array
-     */
-    protected $widgets = [];
-
-    /**
-     * @var array
-     */
-    protected $graphWidgetDataSets = [];
-
-    /**
-     * @var array
-     */
-    protected $panelWidgetsData = [];
-
-    /**
-     * @var array
-     */
-    protected $orderedListWidgetsData = [];
-
-    /**
-     * @var array
-     */
-    protected $rows = [];
+    protected bool $dashboardBuilt = false;
+    protected bool $layoutBuilt = false;
+    protected array $widgets = [];
+    protected array $graphWidgetDataSets = [];
+    protected array $panelWidgetsData = [];
+    protected array $orderedListWidgetsData = [];
+    protected array $rows = [];
 
     /**
      * Add a widget.
@@ -54,7 +28,7 @@ abstract class SharpDashboard
      * @param SharpWidget $widget
      * @return $this
      */
-    protected function addWidget(SharpWidget $widget)
+    protected function addWidget(SharpWidget $widget): self
     {
         $this->widgets[] = $widget;
         $this->dashboardBuilt = false;
@@ -68,7 +42,7 @@ abstract class SharpDashboard
      * @param string $widgetKey
      * @return $this
      */
-    protected function addFullWidthWidget(string $widgetKey)
+    protected function addFullWidthWidget(string $widgetKey): self
     {
         $this->layoutBuilt = false;
 
@@ -85,7 +59,7 @@ abstract class SharpDashboard
      * @param \Closure $callback
      * @return $this
      */
-    protected function addRow(\Closure $callback)
+    protected function addRow(\Closure $callback): self
     {
         $row = new DashboardLayoutRow();
 
@@ -96,7 +70,7 @@ abstract class SharpDashboard
         return $this;
     }
 
-    public function widgets()
+    public function widgets(): array
     {
         $this->checkDashboardIsBuilt();
 
@@ -128,18 +102,15 @@ abstract class SharpDashboard
     /**
      * Build config, meaning add filters, if necessary.
      */
-    public function buildDashboardConfig()
+    public function buildDashboardConfig(): void
     {
     }
 
-    /**
-     * @return array
-     */
-    public function dashboardConfig()
+    public function dashboardConfig(): array
     {
         return tap([], function(&$config) {
             $this->appendFiltersToConfig($config);
-            $this->appendCommandsToConfig($config);
+            $this->appendDashboardCommandsToConfig($config);
         });
     }
 
@@ -208,43 +179,28 @@ abstract class SharpDashboard
             ->all();
     }
 
-    /**
-     * @param string $graphWidgetKey
-     * @param SharpGraphWidgetDataSet $dataSet
-     * @return $this
-     */
-    protected function addGraphDataSet(string $graphWidgetKey, SharpGraphWidgetDataSet $dataSet)
+    protected function addGraphDataSet(string $graphWidgetKey, SharpGraphWidgetDataSet $dataSet): self
     {
         $this->graphWidgetDataSets[$graphWidgetKey][] = $dataSet;
 
         return $this;
     }
 
-    /**
-     * @param string $panelWidgetKey
-     * @param array $data
-     * @return $this
-     */
-    protected function setPanelData(string $panelWidgetKey, array $data)
+    protected function setPanelData(string $panelWidgetKey, array $data): self
     {
         $this->panelWidgetsData[$panelWidgetKey] = $data;
 
         return $this;
     }
 
-    /**
-     * @param string $panelWidgetKey
-     * @param array $data
-     * @return $this
-     */
-    protected function setOrderedListData(string $panelWidgetKey, array $data)
+    protected function setOrderedListData(string $panelWidgetKey, array $data): self
     {
         $this->orderedListWidgetsData[$panelWidgetKey] = $data;
 
         return $this;
     }
 
-    private function checkDashboardIsBuilt()
+    private function checkDashboardIsBuilt(): void
     {
         if (!$this->dashboardBuilt) {
             $this->buildWidgets();
@@ -252,11 +208,7 @@ abstract class SharpDashboard
         }
     }
 
-    /**
-     * @param string $key
-     * @return SharpWidget|null
-     */
-    private function findWidgetByKey($key)
+    private function findWidgetByKey(string $key): ?SharpWidget
     {
         return collect($this->widgets)
             ->filter(function($widget) use($key) {
@@ -268,17 +220,17 @@ abstract class SharpDashboard
     /**
      * Build dashboard's widget using ->addWidget.
      */
-    protected abstract function buildWidgets();
+    protected abstract function buildWidgets(): void;
 
     /**
      * Build dashboard's widgets layout.
      */
-    protected abstract function buildWidgetsLayout();
+    protected abstract function buildWidgetsLayout(): void;
 
     /**
      * Build dashboard's widgets data, using ->addGraphDataSet and ->setPanelData
      *
      * @param DashboardQueryParams $params
      */
-    protected abstract function buildWidgetsData(DashboardQueryParams $params);
+    protected abstract function buildWidgetsData(DashboardQueryParams $params): void;
 }

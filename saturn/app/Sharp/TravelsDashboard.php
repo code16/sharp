@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 class TravelsDashboard extends SharpDashboard
 {
 
-    function buildWidgets()
+    function buildWidgets(): void
     {
         $this->addWidget(
             SharpBarGraphWidget::make("travels")
@@ -23,7 +23,7 @@ class TravelsDashboard extends SharpDashboard
         );
     }
 
-    function buildDashboardConfig()
+    function buildDashboardConfig(): void
     {
         $this
             ->addFilter("spaceships", TravelsDashboardSpaceshipsFilter::class)
@@ -31,12 +31,12 @@ class TravelsDashboard extends SharpDashboard
             ->addDashboardCommand("download", TravelsDashboardDownloadCommand::class);
     }
 
-    function buildWidgetsLayout()
+    function buildWidgetsLayout(): void
     {
         $this->addFullWidthWidget("travels");
     }
 
-    function buildWidgetsData(DashboardQueryParams $params)
+    function buildWidgetsData(DashboardQueryParams $params): void
     {
         $query = DB::table('travels')
             ->select(DB::raw("DATE_FORMAT(departure_date,'%Y-%m') as label, count(*) as value"));

@@ -192,7 +192,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
         $person = Person::create(["name" => "BBB"]);
 
         $form = new class extends WithCustomTransformersTestForm {
-            function buildFormFields() {
+            function buildFormFields(): void {
                 $this->addField(SharpFormTextField::make("mother:name"));
             }
         };
@@ -277,7 +277,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
         Person::create(["name" => "bbb", "mother_id" => $mother->id]);
 
         $form = new class extends WithCustomTransformersTestForm {
-            function buildFormFields() {
+            function buildFormFields(): void {
                 $this->addField(SharpFormListField::make("sons")
                     ->addItemField(SharpFormTextField::make("name"))
                 );
@@ -317,7 +317,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
                 ]);
             }
 
-            function buildFormFields() {
+            function buildFormFields(): void {
                 $this->addField(SharpFormListField::make("sons")
                     ->addItemField(SharpFormTextField::make("name"))
                 );
@@ -350,9 +350,9 @@ class WithCustomTransformersTestForm extends SharpForm
     }
 
     function update($id, array $data): bool { return false; }
-    function delete($id): bool { return false; }
-    function buildFormLayout() {}
-    function buildFormFields() {}
+    function delete($id): void {}
+    function buildFormLayout(): void {}
+    function buildFormFields(): void {}
 }
 
 class SharpAttributeUppercaseTransformer implements SharpAttributeTransformer
@@ -373,7 +373,7 @@ class SharpAttributeSlugNameWithMissingTransformer implements SharpAttributeTran
 
 class SharpAttributeSlugNameWithoutMissingTransformer extends SharpAttributeSlugNameWithMissingTransformer
 {
-    public function applyIfAttributeIsMissing()
+    public function applyIfAttributeIsMissing(): bool
     {
         return false;
     }

@@ -4,22 +4,15 @@ namespace Code16\Sharp\EntityList\Commands;
 
 abstract class InstanceCommand extends Command
 {
+    protected array $authorizedInstances = [];
 
-    /**
-     * @var array
-     */
-    protected $authorizedInstances = [];
-
-    /**
-     * @return string
-     */
     public function type(): string
     {
         return "instance";
     }
 
     /**
-     * @param $instanceId
+     * @param mixed $instanceId
      * @return array
      */
     public function formData($instanceId): array
@@ -30,7 +23,7 @@ abstract class InstanceCommand extends Command
     }
 
     /**
-     * @param $instanceId
+     * @param mixed $instanceId
      * @return array
      */
     protected function initialData($instanceId): array
@@ -39,7 +32,7 @@ abstract class InstanceCommand extends Command
     }
 
     /**
-     * @param string $instanceId
+     * @param mixed $instanceId
      * @param array $data
      * @return array
      */
@@ -47,9 +40,7 @@ abstract class InstanceCommand extends Command
 
     /**
      * Check if the current user is allowed to use this Command for this instance
-     *
-     * @param $instanceId
-     * @return bool
+     * @param mixed $instanceId
      */
     public function authorizeFor($instanceId): bool
     {
@@ -57,7 +48,7 @@ abstract class InstanceCommand extends Command
     }
 
     /**
-     * @param $instanceId
+     * @param mixed $instanceId
      */
     public function checkAndStoreAuthorizationFor($instanceId)
     {

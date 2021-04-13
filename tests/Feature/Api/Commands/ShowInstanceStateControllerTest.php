@@ -76,16 +76,16 @@ class ShowInstanceStateControllerTest extends BaseApiTest
 
 class ShowInstanceStatePersonSharpShow extends PersonSharpShow {
 
-    function buildShowConfig()
+    function buildShowConfig(): void
     {
         $this->setEntityState("state", new class() extends EntityState {
-            protected function buildStates()
+            protected function buildStates(): void
             {
                 $this->addState("ok", "OK", "blue");
                 $this->addState("ko", "KO2", "red");
             }
 
-            protected function updateState($instanceId, $stateId)
+            protected function updateState($instanceId, $stateId): array
             {
                 if($stateId == "ok") {
                     return $this->refresh($instanceId);
@@ -102,16 +102,16 @@ class ShowInstanceStatePersonSharpShow extends PersonSharpShow {
 
 class ShowInstanceStatePersonSharpSingleShow extends PersonSharpSingleShow {
 
-    function buildShowConfig()
+    function buildShowConfig(): void
     {
         $this->setEntityState("state", new class() extends SingleEntityState {
-            protected function buildStates()
+            protected function buildStates(): void
             {
                 $this->addState("ok", "OK", "blue");
                 $this->addState("ko", "KO2", "red");
             }
 
-            protected function updateSingleState(string $stateId)
+            protected function updateSingleState(string $stateId): array
             {
                 if($stateId == "ok") {
                     return $this->reload();

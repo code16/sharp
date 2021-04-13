@@ -1,83 +1,92 @@
 <template>
     <div class="SharpUpload" :class="[{'SharpUpload--empty':!file, 'SharpUpload--disabled':readOnly}, modifiersClasses]">
-        <div class="SharpUpload__inner">
-            <div class="SharpUpload__content">
-                <form v-show="!file" class="dropzone">
-                    <button type="button" class="dz-message SharpButton SharpButton--ghost SharpUpload__upload-button" :disabled="readOnly">
-                        {{ l('form.upload.browse_button') }}
-                    </button>
-                </form>
-                <template v-if="file">
-                    <div class="SharpUpload__container" :class="{ row:showThumbnail }">
-                        <div v-if="showThumbnail" class="SharpUpload__thumbnail" :class="[modifiers.compacted?'col-4 col-sm-3 col-xl-2':'col-4 col-md-4']">
-                            <img :src="imageSrc" @load="handleImageLoaded">
-                        </div>
-                        <div class="SharpUpload__infos" :class="{[modifiers.compacted?'col-8 col-sm-9 col-xl-10':'col-8 col-md-8']:showThumbnail}">
-                            <div class="mb-3 text-truncate">
-                                <label class="SharpUpload__filename">{{ fileName }}</label>
-                                <div class="SharpUpload__info mt-2">
+        <div :class="{ 'card card-body': file }">
+            <form v-show="!file" class="dropzone">
+                <Button class="dz-message" text block :disabled="readOnly" type="button" ref="button">
+                    {{ l('form.upload.browse_button') }}
+                </Button>
+            </form>
+            <template v-if="file">
+                <div class="SharpUpload__container" :class="{ row:showThumbnail }">
+                    <div v-if="showThumbnail" class="SharpUpload__thumbnail" :class="[modifiers.compacted?'col-4 col-sm-3 col-xl-2':'col-4 col-md-4']">
+                        <img :src="imageSrc" @load="handleImageLoaded">
+                    </div>
+                    <div class="SharpUpload__infos" :class="{[modifiers.compacted?'col-8 col-sm-9 col-xl-10':'col-8 col-md-8']:showThumbnail}">
+                        <div class="mb-3">
+                            <label class="SharpUpload__filename text-truncate d-block">{{ fileName }}</label>
+                            <div class="SharpUpload__info mt-2">
+                                <div class="row g-2">
                                     <template v-if="size">
-                                        <span class="mr-2">{{ size }}</span>
+                                        <div class="col-auto">{{ size }}</div>
                                     </template>
                                     <template v-if="canDownload">
-                                        <a class="SharpUpload__download-link" :href="downloadUrl" :download="fileName">
-                                            <i class="fas fa-download"></i>
-                                            {{ l('form.upload.download_link') }}
-                                        </a>
+                                        <div class="col-auto">
+                                            <a class="SharpUpload__download-link" :href="downloadUrl" :download="fileName">
+                                                <i class="fas fa-download"></i>
+                                                {{ l('form.upload.download_link') }}
+                                            </a>
+                                        </div>
                                     </template>
                                 </div>
-                                <transition name="SharpUpload__progress">
-                                    <div class="SharpUpload__progress mt-2" v-show="inProgress">
-                                        <div class="SharpUpload__progress-bar" role="progressbar" :style="{width:`${progress}%`}"
-                                             :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </transition>
                             </div>
-                            <div v-show="!readOnly">
-                                <button v-show="!!originalImageSrc && !inProgress" type="button" class="SharpButton SharpButton--sm SharpButton--secondary" :disabled="!isCroppable" @click="onEditButtonClick">
-                                    {{ l('form.upload.edit_button') }}
-                                </button>
-                                <button type="button" class="SharpButton SharpButton--sm SharpButton--secondary SharpButton--danger SharpUpload__remove-button"
-                                        @click="remove()" :disabled="readOnly">
-                                    {{ l('form.upload.remove_button') }}
-                                </button>
-                            </div>
+                            <transition name="SharpUpload__progress">
+                                <div class="SharpUpload__progress mt-2" v-show="inProgress">
+                                    <div class="SharpUpload__progress-bar" role="progressbar" :style="{width:`${progress}%`}"
+                                         :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </transition>
                         </div>
-                        <button class="SharpUpload__close-button" type="button" @click="remove()" v-show="!readOnly">
-                            <svg class="SharpUpload__close-icon"
-                                 aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd">
-                                <path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
-                            </svg>
-                        </button>
+                        <div v-show="!readOnly">
+                            <Button v-show="!!originalImageSrc && !inProgress" outline small :disabled="!isCroppable" @click="onEditButtonClick">
+                                {{ l('form.upload.edit_button') }}
+                            </Button>
+                            <Button class="SharpUpload__remove-button" variant="danger" outline small :disabled="readOnly" @click="remove()">
+                                {{ l('form.upload.remove_button') }}
+                            </Button>
+                        </div>
                     </div>
-                </template>
-                <div ref="clip-preview-template" class="clip-preview-template" style="display: none;">
-                    <div></div>
                 </div>
+            </template>
+            <div ref="clip-preview-template" class="clip-preview-template" style="display: none;">
+                <div></div>
             </div>
         </div>
         <template v-if="!!originalImageSrc && isCroppable">
-            <Modal :visible.sync="showEditModal" @ok="onEditModalOk" @shown="onEditModalShown" @hidden="onEditModalHidden" no-close-on-backdrop
-                         :title="l('modals.cropper.title')" static ref="modal">
-                <vue-cropper ref="cropper"
-                             class="SharpUpload__modal-vue-cropper"
-                             :view-mode="2"
-                             drag-mode="crop"
-                             :aspect-ratio="ratioX/ratioY"
-                             :auto-crop-area="1"
-                             :zoomable="false"
-                             :guides="false"
-                             :background="true"
-                             :rotatable="true"
-                             :src="originalImageSrc"
-                             :ready="onCropperReady"
-                             alt="Source image">
-                </vue-cropper>
-                <div>
-                    <button class="SharpButton SharpButton--primary" @click="rotate(-90)"><i class="fas fa-undo"></i></button>
-                    <button class="SharpButton SharpButton--primary" @click="rotate(90)"><i class="fas fa-redo"></i></button>
+            <Modal :visible.sync="showEditModal"
+                @ok="onEditModalOk"
+                @hidden="onEditModalHidden"
+                no-close-on-backdrop
+                :title="l('modals.cropper.title')"
+                ref="modal"
+            >
+                <vue-cropper
+                    class="SharpUpload__modal-vue-cropper"
+                    :view-mode="2"
+                    drag-mode="crop"
+                    :aspect-ratio="ratioX/ratioY"
+                    :auto-crop-area="1"
+                    :zoomable="false"
+                    :guides="false"
+                    :background="true"
+                    :rotatable="true"
+                    :src="originalImageSrc"
+                    :data="cropData"
+                    alt="Source image"
+                    ref="modalCropper"
+                />
+                <div class="mt-3">
+                    <Button @click="rotate(-90)"><i class="fas fa-undo"></i></Button>
+                    <Button @click="rotate(90)"><i class="fas fa-redo"></i></Button>
                 </div>
             </Modal>
+            <vue-cropper
+                class="d-none"
+                :aspect-ratio="ratioX/ratioY"
+                :auto-crop-area="1"
+                :src="originalImageSrc"
+                :ready="onCropperReady"
+                ref="cropper"
+            />
         </template>
         <a style="display: none" ref="dlLink"></a>
     </div>
@@ -87,7 +96,7 @@
     import VueClip from 'vue-clip/src/components/Clip';
     import VueCropper from 'vue-cropperjs';
 
-    import { Modal } from 'sharp-ui';
+    import { Modal, Button } from 'sharp-ui';
     import { Localization } from 'sharp/mixins';
     import { filesizeLabel } from 'sharp';
 
@@ -102,7 +111,8 @@
 
         components: {
             Modal,
-            VueCropper
+            VueCropper,
+            Button,
         },
 
         inject : [ 'axiosInstance' ,'$form', '$field' ],
@@ -117,15 +127,16 @@
             value: Object,
             croppableFileTypes:Array,
 
-            readOnly: Boolean
+            readOnly: Boolean,
+            root: Boolean,
         },
 
         data() {
             return {
                 showEditModal: false,
                 croppedImg: null,
-                resized: false,
                 allowCrop: false,
+                cropData: null,
 
                 isNew: !this.value,
                 canDownload: !!this.value,
@@ -209,6 +220,9 @@
                 return !!(this.ratioX && this.ratioY) && this.isCroppable;
             },
             isCroppable() {
+                if(this.file?.type && !this.file.type.match(/^image\//)) {
+                    return false;
+                }
                 return !this.croppableFileTypes || this.croppableFileTypes.includes(this.fileExtension);
             }
         },
@@ -241,7 +255,7 @@
                 this.setPending(false);
 
                 this.allowCrop = true;
-                this.$nextTick(_=>{
+                this.$nextTick(() => {
                     this.isCropperReady() && this.onCropperReady();
                 });
             },
@@ -263,7 +277,7 @@
 
             resetEdit() {
                 this.croppedImg = null;
-                this.resized = false;
+                this.cropData = null;
             },
 
             onEditButtonClick() {
@@ -278,26 +292,13 @@
                 }
             },
 
-            onEditModalShown() {
-                if(!this.resized) {
-                    this.$nextTick(()=>{
-                        let cropper = this.$refs.cropper.cropper;
-
-                        cropper.resize();
-                        cropper.reset();
-                        this.resized=true;
-                    });
-                }
-            },
-
             onEditModalHidden() {
                 this.$emit('inactive');
-                setTimeout(()=>this.$refs.cropper.cropper.reset(), 300);
             },
 
             onEditModalOk() {
-                this.updateCroppedImage();
-                this.updateCropData();
+                this.updateCroppedImage(this.$refs.modalCropper);
+                this.updateCropData(this.$refs.modalCropper);
             },
 
             isCropperReady() {
@@ -306,14 +307,14 @@
 
             onCropperReady() {
                 if(this.hasInitialCrop) {
-                    this.updateCroppedImage();
-                    this.updateCropData();
+                    this.updateCroppedImage(this.$refs.cropper);
+                    this.updateCropData(this.$refs.cropper);
                 }
             },
 
-            updateCropData() {
-                let cropData = this.getCropData();
-                let imgData = this.getImageData();
+            updateCropData(cropper) {
+                let cropData = cropper.getData(true);
+                let imgData = cropper.getImageData();
 
                 let rw=imgData.naturalWidth, rh=imgData.naturalHeight;
 
@@ -321,8 +322,7 @@
                     rw = imgData.naturalHeight;
                     rh = imgData.naturalWidth;
                 }
-                //console.log('img', rw, rh, imgData.naturalWidth, imgData.naturalHeight);
-                //console.log('crop', cropData.width, cropData.height);
+
                 let relativeData = {
                     width: cropData.width / rw,
                     height: cropData.height / rh,
@@ -330,6 +330,8 @@
                     y: cropData.y / rh,
                     rotate: cropData.rotate * -1 // counterclockwise
                 };
+
+                this.cropData = { ...cropData };
 
                 if(this.allowCrop) {
                     let data = {
@@ -341,23 +343,15 @@
                 }
             },
 
-            updateCroppedImage() {
+            updateCroppedImage(cropper) {
                 if(this.allowCrop) {
                     this.isNew = true;
-                    this.croppedImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
+                    this.croppedImg = cropper.getCroppedCanvas().toDataURL();
                 }
             },
 
-            getCropData() {
-                return this.$refs.cropper.getData(true);
-            },
-
-            getImageData() {
-                return this.$refs.cropper.getImageData();
-            },
-
             rotate(degree) {
-                rotateResize(this.$refs.cropper.cropper, degree);
+                rotateResize(this.$refs.modalCropper.cropper, degree);
             },
         },
         created() {
@@ -371,6 +365,13 @@
             this.addedFile({ ...this.value, upload: {} });
             this.file.thumbnail = this.value.thumbnail;
             this.file.status = 'exist';
+        },
+        mounted() {
+            const button = this.$refs.button.$el;
+            this.uploader._uploader.disable();
+            this.uploader._uploader.listeners.forEach(listener => listener.element = button);
+            this.uploader._uploader.clickableElements = [button];
+            this.uploader._uploader.enable();
         },
         beforeDestroy() {
             this.setPending(false);

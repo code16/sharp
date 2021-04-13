@@ -2,72 +2,88 @@
 
 exports[`field-container can mount field container 1`] = `
 <div id="app">
-	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--type-test-field">
-		<div class="row">
-			<div class="col">
-				<label class="SharpForm__label">
-					My beautiful field
-				</label>
+	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--type-test-field SharpForm__form-item--has-label">
+		<div class="SharpForm__field-header">
+			<div class="row align-items-end">
+				<div class="col">
+					<label class="SharpForm__label form-label">
+						My beautiful field
+					</label>
+				</div>
+				<!---->
 			</div>
-			<!---->
 		</div>
-		<div>Template field</div>
-		<div class="SharpForm__form-requirement"></div>
-		<small class="SharpForm__help-message">Do not fill this field</small>
+		<div class="SharpForm__field-content">
+			<div class="SharpField">Template field</div>
+		</div>
+		<!---->
+		<div class="SharpForm__help-message form-text">Do not fill this field</div>
 	</div>
 </div>
 `;
 
 exports[`field-container can mount field container with error 1`] = `
 <div id="app">
-	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--type-test-field SharpForm__form-item--danger">
-		<div class="row">
-			<div class="col">
-				<label class="SharpForm__label">
-					My beautiful field
-				</label>
+	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--type-test-field SharpForm__form-item--danger SharpForm__form-item--has-label">
+		<div class="SharpForm__field-header">
+			<div class="row align-items-end">
+				<div class="col">
+					<label class="SharpForm__label form-label">
+						My beautiful field
+					</label>
+				</div>
+				<!---->
 			</div>
-			<!---->
 		</div>
-		<div>Template field</div>
-		<div class="SharpForm__form-requirement">Must be a number</div>
-		<small class="SharpForm__help-message">Do not fill this field</small>
+		<div class="SharpForm__field-content">
+			<div class="SharpField">Template field</div>
+		</div>
+		<div class="invalid-feedback d-block">Must be a number</div>
+		<div class="SharpForm__help-message form-text">Do not fill this field</div>
 	</div>
 </div>
 `;
 
 exports[`field-container can mount field container with extra style 1`] = `
 <div id="app">
-	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--type-test-field" style="background: red;">
-		<div class="row">
-			<div class="col">
-				<label class="SharpForm__label">
-					My beautiful field
-				</label>
+	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--type-test-field SharpForm__form-item--has-label" style="background: red;">
+		<div class="SharpForm__field-header">
+			<div class="row align-items-end">
+				<div class="col">
+					<label class="SharpForm__label form-label">
+						My beautiful field
+					</label>
+				</div>
+				<!---->
 			</div>
-			<!---->
 		</div>
-		<div>Template field</div>
-		<div class="SharpForm__form-requirement"></div>
-		<small class="SharpForm__help-message">Do not fill this field</small>
+		<div class="SharpForm__field-content">
+			<div class="SharpField">Template field</div>
+		</div>
+		<!---->
+		<div class="SharpForm__help-message form-text">Do not fill this field</div>
 	</div>
 </div>
 `;
 
 exports[`field-container can mount field container with success 1`] = `
 <div id="app">
-	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--type-test-field SharpForm__form-item--success">
-		<div class="row">
-			<div class="col">
-				<label class="SharpForm__label">
-					My beautiful field
-				</label>
+	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--type-test-field SharpForm__form-item--success SharpForm__form-item--has-label">
+		<div class="SharpForm__field-header">
+			<div class="row align-items-end">
+				<div class="col">
+					<label class="SharpForm__label form-label">
+						My beautiful field
+					</label>
+				</div>
+				<!---->
 			</div>
-			<!---->
 		</div>
-		<div>Template field</div>
-		<div class="SharpForm__form-requirement"></div>
-		<small class="SharpForm__help-message">Do not fill this field</small>
+		<div class="SharpForm__field-content">
+			<div class="SharpField">Template field</div>
+		</div>
+		<!---->
+		<div class="SharpForm__help-message form-text">Do not fill this field</div>
 	</div>
 </div>
 `;

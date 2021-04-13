@@ -16,60 +16,25 @@ class SharpFormAutocompleteField extends SharpFormField
 
     const FIELD_TYPE = "autocomplete";
 
-    /**
-     * @var string
-     */
-    protected $mode;
-
-    /**
-     * @var Collection|array
-     */
+    protected string $mode;
+    /** @var Collection|array */
     protected $localValues = [];
-
-    /**
-     * @var array
-     */
-    protected $localSearchKeys = ["value"];
-
-    /**
-     * @var string
-     */
-    protected $remoteMethod = "GET";
-
-    /**
-     * @var string
-     */
-    protected $remoteEndpoint;
-
-    /**
-     * @var string
-     */
-    protected $remoteSearchAttribute = "query";
-
-    /**
-     * @var string
-     */
-    protected $itemIdAttribute = "id";
-
-    /**
-     * @var int
-     */
-    protected $searchMinChars = 1;
-
-    /**
-     * @var array
-     */
-    protected $dynamicAttributes;
-
-    /** @var string */
-    protected $dataWrapper = "";
+    protected array $localSearchKeys = ["value"];
+    protected string $remoteMethod = "GET";
+    protected ?string $remoteEndpoint = null;
+    protected string $remoteSearchAttribute = "query";
+    protected string $itemIdAttribute = "id";
+    protected int $searchMinChars = 1;
+    protected ?array $dynamicAttributes = null;
+    protected string $dataWrapper = "";
+    protected int $debounceDelay = 300;
 
     /**
      * @param string $key
      * @param string $mode "local" or "remote"
      * @return static
      */
-    public static function make(string $key, string $mode)
+    public static function make(string $key, string $mode): self
     {
         $instance = new static($key, static::FIELD_TYPE, new AutocompleteFormatter());
         $instance->mode = $mode;
@@ -81,41 +46,28 @@ class SharpFormAutocompleteField extends SharpFormField
      * @param array|Collection $localValues
      * @return $this
      */
-    public function setLocalValues($localValues)
+    public function setLocalValues($localValues): self
     {
         $this->localValues = $localValues;
 
         return $this;
     }
 
-    /**
-     * @param array $localSearchKeys
-     * @return $this
-     */
-    public function setLocalSearchKeys(array $localSearchKeys)
+    public function setLocalSearchKeys(array $localSearchKeys): self
     {
         $this->localSearchKeys = $localSearchKeys;
 
         return $this;
     }
 
-    /**
-     * @param string $remoteEndpoint
-     * @return $this
-     */
-    public function setRemoteEndpoint(string $remoteEndpoint)
+    public function setRemoteEndpoint(string $remoteEndpoint): self
     {
         $this->remoteEndpoint = $remoteEndpoint;
 
         return $this;
     }
 
-    /**
-     * @param string $dynamicRemoteEndpoint
-     * @param array $defaultValues
-     * @return $this
-     */
-    public function setDynamicRemoteEndpoint(string $dynamicRemoteEndpoint, array $defaultValues = [])
+    public function setDynamicRemoteEndpoint(string $dynamicRemoteEndpoint, array $defaultValues = []): self
     {
         $this->remoteEndpoint = $dynamicRemoteEndpoint;
 
@@ -142,111 +94,80 @@ class SharpFormAutocompleteField extends SharpFormField
         return $this;
     }
 
-    /**
-     * @param string $remoteSearchAttribute
-     * @return $this
-     */
-    public function setRemoteSearchAttribute(string $remoteSearchAttribute)
+    public function setRemoteSearchAttribute(string $remoteSearchAttribute): self
     {
         $this->remoteSearchAttribute = $remoteSearchAttribute;
 
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function setRemoteMethodGET()
+    public function setRemoteMethodGET(): self
     {
         $this->remoteMethod = "GET";
 
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function setRemoteMethodPOST()
+    public function setRemoteMethodPOST(): self
     {
         $this->remoteMethod = "POST";
 
         return $this;
     }
 
-    /**
-     * @param string $itemIdAttribute
-     * @return $this
-     */
-    public function setItemIdAttribute(string $itemIdAttribute)
+    public function setItemIdAttribute(string $itemIdAttribute): self
     {
         $this->itemIdAttribute = $itemIdAttribute;
 
         return $this;
     }
 
-    /**
-     * @param string $listItemTemplatePath
-     * @return $this
-     */
-    public function setListItemTemplatePath(string $listItemTemplatePath)
+    public function setListItemTemplatePath(string $listItemTemplatePath): self
     {
-        return $this->setTemplatePath($listItemTemplatePath, "list");
+        $this->setTemplatePath($listItemTemplatePath, "list");
+        
+        return $this;
     }
 
-    /**
-     * @param string $resultItemTemplate
-     * @return $this
-     */
-    public function setResultItemTemplatePath(string $resultItemTemplate)
+    public function setResultItemTemplatePath(string $resultItemTemplate): self
     {
-        return $this->setTemplatePath($resultItemTemplate, "result");
+        $this->setTemplatePath($resultItemTemplate, "result");
+        
+        return $this;
     }
 
-    /**
-     * @param string $template
-     * @return $this
-     */
-    public function setListItemInlineTemplate(string $template)
+    public function setListItemInlineTemplate(string $template): self
     {
         return $this->setInlineTemplate($template, "list");
     }
 
-    /**
-     * @param string $template
-     * @return $this
-     */
-    public function setResultItemInlineTemplate(string $template)
+    public function setResultItemInlineTemplate(string $template): self
     {
         return $this->setInlineTemplate($template, "result");
     }
 
-    /**
-     * @param int $searchMinChars
-     * @return $this
-     */
-    public function setSearchMinChars(int $searchMinChars)
+    public function setSearchMinChars(int $searchMinChars): self
     {
         $this->searchMinChars = $searchMinChars;
 
         return $this;
     }
 
-    /**
-     * @param ?string $dataWrapper
-     * @return $this
-     */
-    public function setDataWrapper(string $dataWrapper)
+    public function setDebounceDelayInMilliseconds(int $debounceDelay): self
+    {
+        $this->debounceDelay = $debounceDelay;
+
+        return $this;
+    }
+
+    public function setDataWrapper(string $dataWrapper): self
     {
         $this->dataWrapper = $dataWrapper;
 
         return $this;
     }
 
-    /**
-     * @param string ...$fieldKeys
-     * @return $this
-     */
-    public function setLocalValuesLinkedTo(string ...$fieldKeys)
+    public function setLocalValuesLinkedTo(string ...$fieldKeys): self
     {
         $this->dynamicAttributes = [
             [
@@ -259,34 +180,22 @@ class SharpFormAutocompleteField extends SharpFormField
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isRemote()
+    public function isRemote(): bool
     {
         return $this->mode == "remote";
     }
 
-    /**
-     * @return bool
-     */
-    public function isLocal()
+    public function isLocal(): bool
     {
         return $this->mode == "local";
     }
 
-    /**
-     * @return string
-     */
-    public function itemIdAttribute()
+    public function itemIdAttribute(): string
     {
         return $this->itemIdAttribute;
     }
 
-    /**
-     * @return array
-     */
-    protected function validationRules()
+    protected function validationRules(): array
     {
         return [
             "mode" => "required|in:local,remote",
@@ -299,35 +208,35 @@ class SharpFormAutocompleteField extends SharpFormField
             "remoteEndpoint" => "required_if:mode,remote",
             "remoteMethod" => "required_if:mode,remote|in:GET,POST",
             "remoteSearchAttribute" => "required_if:mode,remote",
+            "debounceDelay" => "required|integer",
         ];
     }
 
-    /**
-     * @return array
-     * @throws \Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException
-     */
     public function toArray(): array
     {
         return parent::buildArray(
-            array_merge([
-                "mode" => $this->mode,
-                "placeholder" => $this->placeholder,
-                "localValues" => $this->isLocal() && $this->dynamicAttributes
-                    ? self::formatDynamicOptions($this->localValues, count($this->dynamicAttributes[0]["path"]))
-                    : ($this->isLocal() ? self::formatOptions($this->localValues, $this->itemIdAttribute) : []),
-                "itemIdAttribute" => $this->itemIdAttribute,
-                "searchKeys" => $this->localSearchKeys,
-                "remoteEndpoint" => $this->remoteEndpoint,
-                "dataWrapper" => $this->dataWrapper,
-                "remoteMethod" => $this->remoteMethod,
-                "remoteSearchAttribute" => $this->remoteSearchAttribute,
-                "listItemTemplate" => $this->template("list"),
-                "resultItemTemplate" => $this->template("result"),
-                "searchMinChars" => $this->searchMinChars,
-                "localized" => $this->localized,
-            ], $this->dynamicAttributes
-                ? ["dynamicAttributes" => $this->dynamicAttributes]
-                : []
+            array_merge(
+                [
+                    "mode" => $this->mode,
+                    "placeholder" => $this->placeholder,
+                    "localValues" => $this->isLocal() && $this->dynamicAttributes
+                        ? self::formatDynamicOptions($this->localValues, count($this->dynamicAttributes[0]["path"]))
+                        : ($this->isLocal() ? self::formatOptions($this->localValues, $this->itemIdAttribute) : []),
+                    "itemIdAttribute" => $this->itemIdAttribute,
+                    "searchKeys" => $this->localSearchKeys,
+                    "remoteEndpoint" => $this->remoteEndpoint,
+                    "dataWrapper" => $this->dataWrapper,
+                    "remoteMethod" => $this->remoteMethod,
+                    "remoteSearchAttribute" => $this->remoteSearchAttribute,
+                    "debounceDelay" => $this->debounceDelay,
+                    "listItemTemplate" => $this->template("list"),
+                    "resultItemTemplate" => $this->template("result"),
+                    "searchMinChars" => $this->searchMinChars,
+                    "localized" => $this->localized,
+                ], 
+                $this->dynamicAttributes
+                    ? ["dynamicAttributes" => $this->dynamicAttributes]
+                    : []
             )
         );
     }

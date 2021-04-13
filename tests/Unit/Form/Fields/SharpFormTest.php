@@ -12,7 +12,7 @@ class SharpFormTest extends SharpTestCase
     function we_can_get_fields()
     {
         $form = new class extends SharpFormTestForm {
-            function buildFormFields()
+            function buildFormFields(): void
             {
                 $this->addField(SharpFormTextField::make("name"));
             }
@@ -21,7 +21,6 @@ class SharpFormTest extends SharpTestCase
         $this->assertEquals(["name" => [
             "key" => "name",
             "type" => "text",
-            "maxLength" => 0,
             "inputType" => "text"
         ]], $form->fields());
     }
@@ -30,12 +29,12 @@ class SharpFormTest extends SharpTestCase
     function we_can_get_layout()
     {
         $form = new class extends SharpFormTestForm {
-            function buildFormFields()
+            function buildFormFields(): void
             {
                 $this->addField(SharpFormTextField::make("name"))
                     ->addField(SharpFormTextField::make("age"));
             }
-            function buildFormLayout()
+            function buildFormLayout(): void
             {
                 $this->addColumn(6, function($column) {
                     $column->withSingleField("name");
@@ -84,7 +83,7 @@ class SharpFormTest extends SharpTestCase
                     "job" => "actor"
                 ];
             }
-            function buildFormFields()
+            function buildFormFields(): void
             {
                 $this->addField(SharpFormTextField::make("name"))
                     ->addField(SharpFormTextField::make("age"));
@@ -102,7 +101,7 @@ abstract class SharpFormTestForm extends SharpForm
 {
     function find($id): array {}
     function update($id, array $data): bool {}
-    function delete($id): bool {}
-    function buildFormFields() {}
-    function buildFormLayout() {}
+    function delete($id): void {}
+    function buildFormFields(): void {}
+    function buildFormLayout(): void {}
 }

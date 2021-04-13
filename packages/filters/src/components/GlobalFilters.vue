@@ -2,7 +2,7 @@
     <div class="SharpGlobalFilters">
         <template v-for="filter in filters">
             <FilterSelect
-                :label="filter.label"
+                :label="null"
                 :values="filter.values"
                 :value="filterValue(filter.key)"
                 :multiple="filter.multiple"
@@ -11,6 +11,7 @@
                 :search-keys="filter.searchKeys"
                 :searchable="filter.searchable"
                 :key="filter.key"
+                form-select
                 @input="handleFilterChanged(filter, $event)"
                 @open="handleOpened(filter)"
                 @close="handleClosed(filter)"
@@ -20,7 +21,6 @@
 </template>
 
 <script>
-    import Vue from 'vue';
     import debounce from 'lodash/debounce';
     import { mapGetters } from 'vuex';
     import { BASE_URL } from "sharp";
@@ -50,21 +50,6 @@
             handleClosed() {
                 this.$emit('close');
             },
-            updateLayout: debounce(function () {
-                [...this.$el.querySelectorAll('.SharpFilterSelect')].forEach(select => {
-                    const container = this.$el.parentElement;
-                    const height = (container.offsetHeight-select.offsetHeight) - (select.offsetTop-container.offsetTop);
-                    const dropdown = select.querySelector('.SharpAutocomplete .multiselect__content');
-                    dropdown.style.height = `${height}px`;
-                });
-            }, 300)
         },
-        mounted() {
-            this.updateLayout();
-            window.addEventListener('resize', this.updateLayout);
-        },
-        destroyed() {
-            window.removeEventListener('resize', this.updateLayout);
-        }
     }
 </script>

@@ -7,10 +7,7 @@ use Code16\Sharp\EntityList\EntityListSelectFilter;
 
 class PilotSpaceshipFilter implements EntityListSelectFilter
 {
-    /**
-     * @return array
-     */
-    public function values()
+    public function values(): array
     {
         return Spaceship::orderBy("name")
             ->pluck("name", "id")

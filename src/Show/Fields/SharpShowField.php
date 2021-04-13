@@ -7,44 +7,31 @@ use Illuminate\Support\Facades\Validator;
 
 abstract class SharpShowField
 {
-    /** @var string */
-    public $key;
+    public string $key;
+    protected string $type;
+    protected bool $emptyVisible = false;
 
-    /** @var string */
-    protected $type;
-    
-    /** @var bool */
-    protected $emptyVisible = false;
-
-    /**
-     * @param string $key
-     * @param string $type
-     */
     protected function __construct(string $key, string $type)
     {
         $this->key = $key;
         $this->type = $type;
     }
 
-    public function setShowIfEmpty(bool $showIfEmpty = true)
+    public function setShowIfEmpty(bool $showIfEmpty = true): self
     {
         $this->emptyVisible = $showIfEmpty;
         
         return $this;
     }
 
-    /**
-     * @param array $childArray
-     * @return array
-     * @throws SharpShowFieldValidationException
-     */
-    protected function buildArray(array $childArray)
+    protected function buildArray(array $childArray): array
     {
         $array = collect([
                 "key" => $this->key,
                 "type" => $this->type,
                 "emptyVisible" => $this->emptyVisible
-            ] + $childArray)
+            ])
+            ->merge($childArray)
             ->filter(function($value) {
                 return !is_null($value);
             })
@@ -61,7 +48,7 @@ abstract class SharpShowField
      * @param array $properties
      * @throws SharpShowFieldValidationException
      */
-    protected function validate(array $properties)
+    protected function validate(array $properties): void
     {
         $validator = Validator::make($properties, 
             array_merge(
@@ -81,18 +68,14 @@ abstract class SharpShowField
 
     /**
      * Return specific validation rules.
-     *
-     * @return array
      */
-    protected function validationRules()
+    protected function validationRules(): array
     {
         return [];
     }
 
     /**
      * Create the properties array for the field, using parent::buildArray()
-     *
-     * @return array
      */
     public abstract function toArray(): array;
 }

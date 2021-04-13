@@ -1,9 +1,9 @@
 .popover {
   z-index: 80;
-  position: absolute;
-  top: 0;
-  left: 0;
-  @include focus-outline('layer');
+  box-shadow: $box-shadow;
+  border-color: rgba(0,0,0,.1);
+  max-width: none;
+
   .arrow {
     position: absolute;
     display: block;
@@ -20,4 +20,8 @@
       border-style: solid;
     }
   }
+}
+
+.popover-body {
+  padding: .5rem .5rem;
 }

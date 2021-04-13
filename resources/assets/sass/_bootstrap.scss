@@ -1,0 +1,117 @@
+
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+@import '~bootstrap/scss/utilities';
+
+@import '~bootstrap/scss/root';
+@import '~bootstrap/scss/reboot';
+
+@import '~bootstrap/scss/grid';
+@import '~bootstrap/scss/containers';
+@import '~bootstrap/scss/transitions';
+@import '~bootstrap/scss/type';
+
+@import '~bootstrap/scss/helpers/text-truncation';
+@import '~bootstrap/scss/helpers/position';
+@import '~bootstrap/scss/helpers/visually-hidden';
+
+@import '~bootstrap/scss/forms';
+@import '~bootstrap/scss/alert';
+@import '~bootstrap/scss/buttons';
+@import '~bootstrap/scss/button-group';
+@import '~bootstrap/scss/breadcrumb';
+@import '~bootstrap/scss/dropdown';
+@import '~bootstrap/scss/card';
+@import '~bootstrap/scss/close';
+@import '~bootstrap/scss/list-group';
+@import '~bootstrap/scss/modal';
+@import '~bootstrap/scss/nav';
+@import '~bootstrap/scss/pagination';
+@import '~bootstrap/scss/popover';
+@import '~bootstrap/scss/toasts';
+
+@import '~bootstrap/scss/utilities/api';
+
+@import '~bootstrap-vue/src/utilities';
+@import '~bootstrap-vue/src/components/dropdown/index';
+@import '~bootstrap-vue/src/components/modal/index';
+
+
+.close {
+  @extend .btn-close;
+  color: transparent!important;
+}
+
+.list-group-item-action {
+  &:focus:not(:focus-visible) {
+    outline: 0;
+  }
+}
+
+.toast {
+  border-left-width: 6px;
+  border-top: 0;
+  border-bottom: 0;
+  border-right: 0;
+
+  .toast-header {
+    &:last-child {
+      border-bottom: 0;
+      @include border-bottom-radius(subtract($toast-border-radius, $toast-border-width));
+    }
+  }
+
+  .btn-close {
+    min-width: $btn-close-width;
+  }
+}
+
+.input-group-sm {
+  > .form-select {
+    padding-right: $form-select-padding-x + $form-select-indicator-padding - .5rem;
+  }
+  > .input-group-text {
+    font-size: .75rem;
+    line-height: 1.7;
+  }
+}
+
+
+.btn,
+.nav-pills .nav-link,
+.breadcrumb,
+.form-label,
+.input-group-text
+{
+  @extend .ui-font;
+}
+
+.nav-pills .nav-link, {
+  font-size: .875rem;
+}
+
+.btn,
+.nav-pills .nav-link,
+.input-group-text {
+  letter-spacing: .025em;
+}
+
+.form-label {
+  line-height: $label-line-height;
+}
+
+.card.form-control {
+  font-size: 1rem;
+  color: $body-color;
+  line-height: $line-height-base;
+  font-weight: $font-weight-base;
+}
+
+.dropdown-menu {
+  box-shadow: $box-shadow;
+}
+
+.form-check-label {
+  font-size: .875rem;
+}

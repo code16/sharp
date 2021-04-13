@@ -23,7 +23,7 @@ use Code16\Sharp\Form\SharpForm;
 
 class TestForm extends SharpForm
 {
-    function buildFormFields()
+    function buildFormFields(): void
     {
         $this->addField(
             SharpFormTextField::make("text")
@@ -198,7 +198,7 @@ class TestForm extends SharpForm
         );
     }
 
-    function buildFormLayout()
+    function buildFormLayout(): void
     {
         $this->addTab("Simple", function(FormLayoutTab $tab) {
             $tab->addColumn(6, function (FormLayoutColumn $column) {
@@ -290,23 +290,16 @@ class TestForm extends SharpForm
         die();
     }
 
-    function delete($id)
+    function delete($id): void
     {
     }
 
-    /**
-     * @return array
-     */
-    function getDataLocalizations()
+    function getDataLocalizations(): array
     {
         return ["fr", "en"];
     }
 
-    /**
-     * @param bool $localized
-     * @return array
-     */
-    protected function options($localized = false)
+    protected function options(bool $localized = false): array
     {
         if(!$localized) {
             return [

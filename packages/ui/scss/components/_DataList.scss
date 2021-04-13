@@ -11,17 +11,24 @@
       .SharpDataList__row-link {
         display: none;
       }
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+    .SharpDataList__tbody {
+      border: .25rem solid white;
     }
   }
 
   &__empty {
     background: white;
     border: 1px solid $ui-04;
-    border-bottom-width: 2px;
+    position: relative;
+    border-radius: $list-group-border-radius;
   }
 
   &__table {
-    @include reset;
+
     //display: table;
     //overflow-x: auto;
     //overflow-y: hidden;
@@ -34,6 +41,8 @@
 
     //padding: 0 1em;
 
+    border-radius: $list-group-border-radius;
+
     &--border {
       border: 1px solid $ui-04;
       background-color: $ui-01;
@@ -43,6 +52,9 @@
   &__tbody {
     //display: table-row-group;
     vertical-align: middle;
+    position: relative;
+
+    border-radius: $list-group-border-radius;
   }
 
   &__thead {
@@ -60,7 +72,7 @@
     //display: table-row;
     display:flex;
     border-bottom: 1px solid $ui-04;
-    transition: $transition--base $bx--standard-easing;
+    transition: box-shadow .25s ease-in-out;
 
     @include media-breakpoint-down(sm) {
       flex-flow: column;
@@ -75,7 +87,7 @@
       cursor: inherit;
       .SharpDataList__row-append {
         display: none;
-        @include media-breakpoint-up(md) {
+        @include media-breakpoint-up(sm) {
           display: block;
         }
       }
@@ -85,12 +97,23 @@
       padding: 1em 0;
     }
 
-    &:focus:not(.SharpDataList__row--header) {
-      @include focus-outline('border');
+    &:hover:not(.SharpDataList__row--header):not(.SharpDataList__row--disabled) {
+      box-shadow: inset 5px 0 0 hsla(var(--bs-primary-h), var(--bs-primary-s), 40%, .5);
     }
 
-    &:hover:not(.SharpDataList__row--header):not(.SharpDataList__row--disabled) {
-      box-shadow: inset 5px 0 0 lighten($brand-03, 25%);
+    &--highlight {
+      box-shadow: inset 3px 0 0 hsla(var(--bs-primary-h), var(--bs-primary-s), 40%, .25);
+      .modal-open & {
+        box-shadow: inset 5px 0 0 hsla(var(--bs-primary-h), var(--bs-primary-s), 40%, .5);
+      }
+    }
+
+    &--full-width {
+      .SharpDataList__td:last-child {
+        margin-right: calc(var(--append-width) * -1);
+        width: 100%;
+        flex: 1 0 0;
+      }
     }
 
     .SharpDataList__cols {
@@ -114,18 +137,18 @@
     }
   }
 
+  &__row-append {
+    position: relative;
+  }
+
   &__th {
-    //@include reset;
-    //@include padding-th;
-    //display: table-cell;
+    @extend .ui-font;
     display: flex;
     align-items: center;
-    font-size: rem(12px);
+    font-size: .8125rem;
     font-weight: 700;
-    height: rem(40px);
-    letter-spacing: 1px;
+    height: 2.5rem;
     text-align: left;
-    text-transform: uppercase;
     vertical-align: middle;
     position: relative;
 
@@ -143,8 +166,7 @@
   }
 
   &__td {
-    //@include reset;
-    @include font-size('14');
+    font-size: .875rem;
     @include line-height('body');
     //@include padding-td;
     position: relative;

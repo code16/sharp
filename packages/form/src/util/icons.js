@@ -18,6 +18,7 @@ const toolbarIcons = {
     'redo': 'fas fa-redo',
     'hr': 'fas fa-minus',
     'image': 'far fa-image',
+    'document': 'fas fa-paperclip',
 };
 
 export function getToolbarIcon(key) {

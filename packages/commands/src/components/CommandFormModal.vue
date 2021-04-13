@@ -1,11 +1,19 @@
 <template>
-    <Modal :visible.sync="visible" @ok="handleSubmitButtonClicked" @hidden="handleClosed">
+    <Modal
+        :visible.sync="visible"
+        :loading="loading"
+        :title="title"
+        @ok="handleSubmitButtonClicked"
+        @hidden="handleClosed"
+    >
         <transition>
             <Form
                 v-if="visible"
-                :props="form"
+                :props="command.form"
+                :show-alert="false"
                 independant
                 ignore-authorizations
+                @loading="handleLoadingChanged"
                 style="transition-duration: 300ms"
                 ref="form"
             />
@@ -14,26 +22,33 @@
 </template>
 
 <script>
-    import { Modal } from 'sharp-ui';
+    import { Modal, LoadingOverlay } from 'sharp-ui';
     import { Form } from 'sharp-form';
 
     export default {
         components: {
             Modal,
             Form,
+            LoadingOverlay,
         },
         props: {
-            form: Object,
+            command: Object,
         },
         data() {
             return {
-                visible: false
+                visible: false,
+                loading: false,
             }
         },
         watch: {
-            form(form) {
-                this.visible = !!form;
+            command(command) {
+                this.visible = !!command?.form;
             }
+        },
+        computed: {
+            title() {
+                return this.command?.modal_title ?? this.command?.label;
+            },
         },
         methods: {
             submit(...args) {
@@ -45,6 +60,9 @@
             },
             handleClosed() {
                 this.$emit('close');
+            },
+            handleLoadingChanged(loading) {
+                this.loading = loading;
             }
         },
     }

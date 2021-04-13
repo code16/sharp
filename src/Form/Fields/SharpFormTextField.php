@@ -13,54 +13,34 @@ class SharpFormTextField extends SharpFormField
 
     const FIELD_TYPE = "text";
 
-    /**
-     * @var string
-     */
-    protected $inputType = "text";
+    protected string $inputType = "text";
 
-    /**
-     * @param string $key
-     * @return static
-     */
-    public static function make(string $key)
+    public static function make(string $key): self
     {
         return new static($key, static::FIELD_TYPE, new TextFormatter);
     }
 
-    /**
-     * @return $this
-     */
-    public function setInputTypeText()
+    public function setInputTypeText(): self
     {
         $this->inputType = "text";
 
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function setInputTypePassword()
+    public function setInputTypePassword(): self
     {
         $this->inputType = "password";
 
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    protected function validationRules()
+    protected function validationRules(): array
     {
         return [
             "inputType" => "required|in:text,password",
         ];
     }
 
-    /**
-     * @return array
-     * @throws \Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException
-     */
     public function toArray(): array
     {
         return parent::buildArray([

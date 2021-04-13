@@ -12,20 +12,9 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 class UploadFormatter extends SharpFieldFormatter
 {
-    /**
-     * @var FilesystemManager
-     */
-    protected $filesystem;
-
-    /**
-     * @var FileUtil
-     */
-    protected $fileUtil;
-
-    /**
-     * @var ImageManager
-     */
-    protected $imageManager;
+    protected FilesystemManager $filesystem;
+    protected FileUtil $fileUtil;
+    protected ImageManager $imageManager;
 
     public function __construct()
     {

@@ -1,0 +1,35 @@
+
+.ShowSection {
+  summary {
+    cursor: pointer;
+    user-select: none;
+    transition: background-color .125s ease-in-out;
+    &:hover, &:focus-visible {
+      background-color: rgba(0,0,0,.075);
+    }
+    &:focus:not(:focus-visible) {
+      outline: 0;
+    }
+  }
+
+  &__title {
+    @extend .ui-font;
+    font-size: $ui-font-size + .125rem;
+    margin-bottom: .75rem;
+  }
+
+  &__grid {
+    margin-bottom: -2rem;
+  }
+
+  &__col {
+    margin-bottom: 2rem;
+  }
+
+  &--layout-card {
+    .ShowSection__content {
+      background: white;
+      padding: 1rem 1.25rem;
+    }
+  }
+}

@@ -57,7 +57,7 @@ class DashboardCommandControllerTest extends BaseApiTest
 
 class EntityCommandTestSharpDashboard extends SharpDashboard
 {
-    function buildDashboardConfig()
+    function buildDashboardConfig(): void
     {
         $this
             ->addDashboardCommand("dashboard_info", new class() extends DashboardCommand {
@@ -68,7 +68,7 @@ class EntityCommandTestSharpDashboard extends SharpDashboard
             })
             ->addDashboardCommand("dashboard_form", new class() extends DashboardCommand {
                 public function label(): string { return "label"; }
-                public function buildFormFields() {
+                public function buildFormFields(): void {
                     $this->addField(SharpFormTextField::make("name"));
                 }
                 protected function initialData(): array

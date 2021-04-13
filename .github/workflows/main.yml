@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - next
   pull_request:
     branches:
       - master
@@ -15,30 +16,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - php: 7.2
-            env:
-              LARAVEL: 6.*
-              TESTBENCH: 4.*
-          - php: 7.3
-            env:
-              LARAVEL: 6.*
-              TESTBENCH: 4.*
-          - php: 7.4
-            env:
-              LARAVEL: 6.*
-              TESTBENCH: 4.*
-          - php: 8.0
-            env:
-              LARAVEL: 6.*
-              TESTBENCH: 4.*
-          - php: 7.2
-            env:
-              LARAVEL: 7.*
-              TESTBENCH: 5.*
-          - php: 7.3
-            env:
-              LARAVEL: 7.*
-              TESTBENCH: 5.*
           - php: 7.4
             env:
               LARAVEL: 7.*
@@ -47,10 +24,6 @@ jobs:
             env:
               LARAVEL: 7.*
               TESTBENCH: 5.*
-          - php: 7.3
-            env:
-              LARAVEL: 8.*
-              TESTBENCH: 6.*
           - php: 7.4
             env:
               LARAVEL: 8.*

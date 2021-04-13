@@ -57,8 +57,7 @@ class MarkdownFormatter extends SharpFieldFormatter
                     ->fromFront($field, $attribute, $file);
 
                 if(isset($upload["file_name"])) {
-                    // New file was uploaded. We have to update
-                    // the name of the file in the markdown
+                    // New file was uploaded. We have to update the name of the file in the markdown
                     $text = str_replace(
                         "![]({$originalName})",
                         "![]({$field->storageDisk()}:{$upload["file_name"]})",
@@ -72,6 +71,14 @@ class MarkdownFormatter extends SharpFieldFormatter
                 }
             }
         }
+        
+        // Normalize \n
+        $text = preg_replace('/\R/', "\n", $text);
+        
+        // Ensure \n\n before file...
+        $text = preg_replace('/([^\n])\n!\[/', "$1\n\n![", $text);
+        // ... and \n\n after file.
+        $text = preg_replace('/(!\[\]\(.*\))\n([^\n])/', "$1\n\n$2", $text);
 
         return $text;
     }
@@ -80,7 +87,7 @@ class MarkdownFormatter extends SharpFieldFormatter
      * @param string|array $texts
      * @return array
      */
-    protected function extractEmbeddedUploads($texts)
+    protected function extractEmbeddedUploads($texts): array
     {
         $matches = [];
 
@@ -93,16 +100,14 @@ class MarkdownFormatter extends SharpFieldFormatter
             $matches = array_merge($matches, $localeMatches);
         }
 
-        return collect($matches)->map(function($match) {
-            return trim($match["filename"]);
-        })->all();
+        return collect($matches)
+            ->map(function($match) {
+                return trim($match["filename"]);
+            })
+            ->all();
     }
 
-    /**
-     * @param string $fullFileName
-     * @return array
-     */
-    protected function getUpload($fullFileName)
+    protected function getUpload(string $fullFileName): array
     {
         list($disk, $filename) = explode(":", $fullFileName);
 
@@ -119,10 +124,7 @@ class MarkdownFormatter extends SharpFieldFormatter
         ];
     }
 
-    /**
-     * @param string $fullFileName
-     */
-    protected function deleteThumbnails($fullFileName)
+    protected function deleteThumbnails(string $fullFileName): void
     {
         list($disk, $filename) = explode(":", $fullFileName);
 
@@ -132,11 +134,7 @@ class MarkdownFormatter extends SharpFieldFormatter
         ]))->deleteAllThumbnails();
     }
 
-    /**
-     * @param string $fullFileName
-     * @return mixed
-     */
-    protected function getFileSize($fullFileName)
+    protected function getFileSize(string $fullFileName): ?int
     {
         try {
             list($disk, $filename) = explode(":", $fullFileName);

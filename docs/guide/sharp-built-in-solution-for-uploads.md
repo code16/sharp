@@ -190,7 +190,7 @@ function find($id): array
 }
 ```
 
-The full path of this transformer is `Code16\Sharp\Form\Eloquent\Transformers\SharpUploadModelFormAttributeTransformer`.
+The full path of this transformer is `Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer`.
 
 And finally, and this is a sad exception to the "don't touch the applicative code for Sharp", add this in your Model that declares an upload relationship (Book, in our example):
 
@@ -252,7 +252,7 @@ $this->addField(
 );
 ```
 
-Note that we use the a special `file` key for the SharpFormUploadField in the item.
+Note that we use the special `file` key for the SharpFormUploadField in the item.
 
 You'll have next to update your Model special `getDefaultAttributesFor()` function:
 
@@ -275,7 +275,8 @@ $this->addField(
         [...]
         ->addItemField(
             SharpFormUploadField::make("file")
-        )->addItemField(
+        )
+        ->addItemField(
             SharpFormTextField::make("legend")
         )
 );

@@ -4,5 +4,5 @@ namespace Code16\Sharp\EntityList\Commands;
 
 interface ReorderHandler
 {
-    function reorder(array $ids);
+    function reorder(array $ids): void;
 }

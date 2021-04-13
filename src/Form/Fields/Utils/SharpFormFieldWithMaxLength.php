@@ -4,28 +4,18 @@ namespace Code16\Sharp\Form\Fields\Utils;
 
 trait SharpFormFieldWithMaxLength
 {
-    /**
-     * @var int
-     */
-    protected $maxLength = 0;
+    protected ?int $maxLength = null;
 
-    /**
-     * @param int $maxLength
-     * @return static
-     */
-    public function setMaxLength(int $maxLength)
+    public function setMaxLength(int $maxLength): self
     {
         $this->maxLength = $maxLength;
 
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function setMaxLengthUnlimited()
+    public function setMaxLengthUnlimited(): self
     {
-        $this->maxLength = 0;
+        $this->maxLength = null;
 
         return $this;
     }

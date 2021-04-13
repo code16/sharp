@@ -4,10 +4,10 @@ namespace Code16\Sharp\Tests\Fixtures;
 
 use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
-use Code16\Sharp\EntityList\EntityListFilter;
-use Code16\Sharp\EntityList\EntityListMultipleFilter;
 use Code16\Sharp\EntityList\EntityListQueryParams;
-use Code16\Sharp\EntityList\EntityListRequiredFilter;
+use Code16\Sharp\EntityList\EntityListSelectFilter;
+use Code16\Sharp\EntityList\EntityListSelectMultipleFilter;
+use Code16\Sharp\EntityList\EntityListSelectRequiredFilter;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
@@ -15,12 +15,6 @@ use Illuminate\Support\Str;
 class PersonSharpEntityList extends SharpEntityList
 {
 
-    /**
-     * Retrieve all rows data as array.
-     *
-     * @param EntityListQueryParams $params
-     * @return array|LengthAwarePaginator
-     */
     function getListData(EntityListQueryParams $params)
     {
         $items = [
@@ -64,12 +58,7 @@ class PersonSharpEntityList extends SharpEntityList
         return $this->transform($items);
     }
 
-    /**
-     * Build list containers using ->addDataContainer()
-     *
-     * @return void
-     */
-    function buildListDataContainers()
+    function buildListDataContainers(): void
     {
         $this->addDataContainer(
             EntityListDataContainer::make("name")
@@ -84,23 +73,13 @@ class PersonSharpEntityList extends SharpEntityList
         );
     }
 
-    /**
-     * Build list layout using ->addColumn()
-     *
-     * @return void
-     */
-    function buildListLayout()
+    function buildListLayout(): void
     {
         $this->addColumn("name", 6, 12)
             ->addColumnLarge("age", 6);
     }
 
-    /**
-     * Build list config
-     *
-     * @return void
-     */
-    function buildListConfig()
+    function buildListConfig(): void
     {
         $this->setSearchable()
             ->setReorderable(PersonSharpEntityListReorderHandler::class)
@@ -115,24 +94,21 @@ class PersonSharpEntityList extends SharpEntityList
     }
 }
 
-class PersonSharpEntityListAgeFilter implements EntityListFilter
+class PersonSharpEntityListAgeFilter implements EntityListSelectFilter
 {
-    /**
-     * @return array
-     */
-    public function values()
+    public function values(): array
     {
         return [22=>22, 23=>23, 24=>24, 25=>25, 26=>26];
     }
 }
 
 class PersonSharpEntityListAgeMultipleFilter
-    extends PersonSharpEntityListAgeFilter implements EntityListMultipleFilter
+    extends PersonSharpEntityListAgeFilter implements EntityListSelectMultipleFilter
 {
 }
 
 class PersonSharpEntityListAgeRequiredFilter
-    extends PersonSharpEntityListAgeFilter implements EntityListRequiredFilter
+    extends PersonSharpEntityListAgeFilter implements EntityListSelectRequiredFilter
 {
     /**
      * @return string|int
@@ -145,7 +121,7 @@ class PersonSharpEntityListAgeRequiredFilter
 
 class PersonSharpEntityListReorderHandler implements ReorderHandler
 {
-    function reorder(array $ids)
+    function reorder(array $ids): void
     {
     }
 }

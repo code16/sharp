@@ -11,56 +11,54 @@
                     :can-edit="canEdit"
                     :can-change-state="canChangeState"
                     :show-back-button="showBackButton"
+                    :breadcrumb="breadcrumbItems"
+                    :show-breadcrumb="breadcrumb.visible"
                     @command="handleCommandRequested"
                     @state-change="handleStateChanged"
                 />
 
-                <template v-for="section in layout.sections">
-                    <div class="ShowPage__section" :class="sectionClasses(section)" v-show="isSectionVisible(section)">
-                        <template v-if="section.title">
-                            <h2 class="ShowPage__section-title mb-2">{{ section.title }}</h2>
-                        </template>
-                        <div class="ShowPage__section-content">
-                            <Grid class="ShowPage__section-grid"
-                                :rows="[section.columns]"
-                                :col-class="sectionColClass"
-                                v-slot="{ itemLayout:column }"
-                            >
-                                <Grid class="ShowPage__fields-grid"
-                                    :rows="column.fields"
-                                    :row-class="fieldsRowClass"
-                                    v-slot="{ itemLayout:fieldLayout }"
-                                >
-                                    <template v-if="fieldOptions(fieldLayout)">
-                                        <ShowField
-                                            :options="fieldOptions(fieldLayout)"
-                                            :value="fieldValue(fieldLayout)"
-                                            :config-identifier="fieldLayout.key"
-                                            :layout="fieldLayout"
-                                            @visible-change="handleFieldVisibilityChanged(fieldLayout.key, $event)"
-                                            :key="refreshKey"
-                                        />
-                                    </template>
-                                    <template v-else>
-                                        <UnknownField :name="fieldLayout.key" />
-                                    </template>
-                                </Grid>
-                            </Grid>
-                        </div>
-                    </div>
-                </template>
-
+                <div class="mt-4 pt-2">
+                    <template v-for="section in layout.sections">
+                        <Section
+                            class="ShowPage__section"
+                            v-show="isSectionVisible(section)"
+                            :section="section"
+                            :layout="sectionLayout(section)"
+                            :fields-row-class="fieldsRowClass"
+                            :collapsable="isSectionCollapsable(section)"
+                            v-slot="{ fieldLayout }"
+                        >
+                            <template v-if="fieldOptions(fieldLayout)">
+                                <ShowField
+                                    :options="fieldOptions(fieldLayout)"
+                                    :value="fieldValue(fieldLayout)"
+                                    :config-identifier="fieldLayout.key"
+                                    :layout="fieldLayout"
+                                    :collapsable="section.collapsable"
+                                    @visible-change="handleFieldVisibilityChanged(fieldLayout.key, $event)"
+                                    :key="refreshKey"
+                                />
+                            </template>
+                            <template v-else>
+                                <UnknownField :name="fieldLayout.key" />
+                            </template>
+                        </Section>
+                    </template>
+                </div>
+            </template>
+            <template v-else>
+                <ActionBarShow />
             </template>
         </div>
 
-        <CommandFormModal :form="commandCurrentForm" ref="commandForm" />
+        <CommandFormModal :command="currentCommand" ref="commandForm" />
         <CommandViewPanel :content="commandViewContent" @close="handleCommandViewPanelClosed" />
     </div>
 </template>
 
 <script>
     import { mapGetters } from 'vuex';
-    import { formUrl, getBackUrl, lang, showAlert } from 'sharp';
+    import { formUrl, getBackUrl, lang, showAlert, handleNotifications } from 'sharp';
     import { CommandFormModal, CommandViewPanel } from 'sharp-commands';
     import { Grid } from 'sharp-ui';
     import { UnknownField } from 'sharp/components';
@@ -68,11 +66,13 @@
     import ActionBarShow from "../ActionBar";
 
     import ShowField from '../Field';
+    import Section from "../Section";
 
     export default {
         mixins: [withCommands],
 
         components: {
+            Section,
             ActionBarShow,
             Grid,
             ShowField,
@@ -106,16 +106,26 @@
             ]),
 
             formUrl() {
+                const formKey = this.config.multiformAttribute
+                    ? this.data[this.config.multiformAttribute]
+                    : null;
+                const entityKey = formKey
+                    ? `${this.entityKey}:${formKey}`
+                    : this.entityKey
+
                 return formUrl({
-                    entityKey: this.entityKey,
+                    entityKey,
                     instanceId: this.instanceId,
-                });
+                }, { append: true });
             },
             backUrl() {
-                return getBackUrl(this.breadcrumb);
+                return getBackUrl(this.breadcrumb.items);
             },
             showBackButton() {
                 return !!this.backUrl;
+            },
+            breadcrumbItems() {
+                return this.breadcrumb.items;
             },
         },
 
@@ -137,6 +147,15 @@
             isFieldVisible(layout) {
                 return !this.fieldsVisible || this.fieldsVisible[layout.key] !== false;
             },
+            isSectionCollapsable(section) {
+                return section.collapsable && !this.sectionHasField(section, 'entityList');
+            },
+            sectionLayout(section) {
+                if(this.sectionHasField(section, 'entityList')) {
+                    return 'contents';
+                }
+                return 'card';
+            },
             fieldsRowClass(row) {
                 const fieldsTypeClasses = row.map(fieldLayout => {
                     const field = this.fieldOptions(fieldLayout);
@@ -146,14 +165,6 @@
                     'ShowPage__fields-row',
                     ...fieldsTypeClasses,
                 ]
-            },
-            sectionClasses(section) {
-                return {
-                    'ShowPage__section--no-container': this.sectionHasField(section, 'entityList'),
-                }
-            },
-            sectionColClass() {
-                return 'ShowPage__section-col';
             },
             sectionFields(section) {
                 return section.columns.reduce((res, column) => [...res, ...column.fields.flat()], []);
@@ -208,7 +219,9 @@
             async init() {
                 await this.$store.dispatch('show/setEntityKey', this.$route.params.entityKey);
                 await this.$store.dispatch('show/setInstanceId', this.$route.params.instanceId);
-                await this.$store.dispatch('show/get');
+                const show = await this.$store.dispatch('show/get');
+
+                handleNotifications(show.notifications);
 
                 this.ready = true;
                 this.refreshKey++;

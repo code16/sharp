@@ -7,69 +7,48 @@ use Exception;
 
 /**
  * Base class for applicative Entity States.
- *
- * Class EntityState
- * @package Code16\Sharp\EntityList\Commands
  */
 abstract class EntityState extends InstanceCommand
 {
-    /**
-     * @var array
-     */
-    protected $states = [];
+    protected array $states = [];
+    
+    /** @deprecated  */
+    const PRIMARY_COLOR = "#5596E6";
+    /** @deprecated  */
+    const SECONDARY_COLOR = "#FD7400";
+    /** @deprecated  */
+    const GRAY_COLOR = "#8C9BA5";
+    /** @deprecated  */
+    const LIGHTGRAY_COLOR = "#EFF2F5";
+    /** @deprecated  */
+    const DARKGRAY_COLOR = "#394B54";
 
-    const PRIMARY_COLOR = "sharp_primary";
-    const SECONDARY_COLOR = "sharp_secondary";
-    const GRAY_COLOR = "sharp_gray";
-    const LIGHTGRAY_COLOR = "sharp_lightgray";
-    const DARKGRAY_COLOR = "sharp_darkgray";
-
-    /**
-     * @return array
-     */
-    public function states()
+    public function states(): array
     {
         $this->buildStates();
 
         return $this->states;
     }
 
-    /**
-     * @param string $key
-     * @param string $label
-     * @param string|null $color
-     * @return $this
-     */
-    protected function addState(string $key, string $label, string $color = null)
+    protected function addState(string $key, string $label, string $color = null): self
     {
         $this->states[$key] = [$label, $color];
 
         return $this;
     }
 
-    /**
-     * @param string $bladeView
-     * @param array $params
-     * @return array|void
-     * @throws Exception
-     */
-    protected function view(string $bladeView, array $params = [])
+    protected function view(string $bladeView, array $params = []): array
     {
         throw new Exception("View return type is not supported for a state.");
     }
 
-    /**
-     * @param string $message
-     * @return array|void
-     * @throws Exception
-     */
-    protected function info(string $message)
+    protected function info(string $message): array
     {
         throw new Exception("Info return type is not supported for a state.");
     }
 
     /**
-     * @param string $instanceId
+     * @param mixed $instanceId
      * @param array $data
      * @return array
      * @throws SharpInvalidEntityStateException
@@ -86,23 +65,17 @@ abstract class EntityState extends InstanceCommand
         return $this->updateState($instanceId, $stateId) ?: $this->refresh($instanceId);
     }
 
-    /**
-     * @return string
-     */
-    public function label(): string
+    public function label(): ?string
     {
         return null;
     }
 
-    /**
-     * @return mixed
-     */
-    abstract protected function buildStates();
+    abstract protected function buildStates(): void;
 
     /**
-     * @param string $instanceId
+     * @param mixed $instanceId
      * @param string $stateId
      * @return mixed
      */
-    abstract protected function updateState($instanceId, $stateId);
+    abstract protected function updateState($instanceId, string $stateId): array;
 }

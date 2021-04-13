@@ -8,7 +8,7 @@ use Code16\Sharp\EntityList\Commands\ReorderHandler;
 class FeatureReorderHandler implements ReorderHandler
 {
 
-    function reorder(array $ids)
+    function reorder(array $ids): void
     {
         $features = Feature::whereIn("id", $ids)->get();
 

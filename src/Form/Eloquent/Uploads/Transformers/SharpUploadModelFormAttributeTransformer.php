@@ -2,27 +2,19 @@
 
 namespace Code16\Sharp\Form\Eloquent\Uploads\Transformers;
 
+use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransformer
 {
-    /** @var bool */
-    protected $withThumbnails;
-    
-    /** @var int */
-    protected $thumbnailWidth;
-    
-    /** @var int */
-    protected $thumbnailHeight;
+    protected bool $withThumbnails;
+    protected int $thumbnailWidth;
+    protected int $thumbnailHeight;
 
-    /**
-     * @param bool $withThumbnails
-     * @param int $thumbnailWidth
-     * @param int $thumbnailHeight
-     */
-    public function __construct($withThumbnails = true, $thumbnailWidth = 1000, $thumbnailHeight = 400)
+    public function __construct(bool $withThumbnails = true, int $thumbnailWidth = 1000, int $thumbnailHeight = 400)
     {
         $this->withThumbnails = $withThumbnails;
         $this->thumbnailWidth = $thumbnailWidth;
@@ -62,24 +54,32 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
         return $this->transformUpload($instance->$attribute);
     }
 
-    /**
-     * @param $upload
-     * @return array
-     */
-    protected function transformUpload($upload)
+    protected function transformUpload(SharpUploadModel $upload): array
     {
         return array_merge(
             $upload->file_name
                 ? [
                     "name" => $upload->file_name,
-                    "thumbnail" => $this->withThumbnails 
-                        ? $upload->thumbnail($this->thumbnailWidth, $this->thumbnailHeight)
-                        : null,
+                    "thumbnail" => $this->getThumbnailUrl($upload),
                     "size" => $upload->size,
                 ]
                 : [],
             $upload->custom_properties ?? [],
             ["id" => $upload->id]
         );
+    }
+
+    private function getThumbnailUrl(SharpUploadModel $upload): ?string
+    {
+        if(!$this->withThumbnails) {
+            return null;
+        }
+        
+        $url = $upload->thumbnail($this->thumbnailWidth, $this->thumbnailHeight);
+        
+        // Return relative URL if possible, to avoid CORS issues in multidomain case.
+        return Str::startsWith($url, config("app.url"))
+            ? Str::after($url, config("app.url"))
+            : $url;
     }
 }

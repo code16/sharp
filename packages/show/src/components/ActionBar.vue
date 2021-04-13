@@ -2,45 +2,51 @@
     <ActionBar>
         <template v-slot:left>
             <template v-if="showBackButton">
-                <a :href="backUrl" class="SharpButton SharpButton--secondary-accent">
+                <Button :href="backUrl" outline variant="light" large>
                     {{ l('action_bar.show.back_button') }}
-                </a>
+                </Button>
             </template>
         </template>
         <template v-slot:right>
             <template v-if="canEdit">
-                <a :href="formUrl" class="SharpButton SharpButton--accent">
+                <Button :href="formUrl" variant="light" large>
                     {{ l('action_bar.show.edit_button') }}
-                </a>
+                </Button>
+            </template>
+        </template>
+        <template v-slot:extras>
+            <template v-if="showBreadcrumb">
+                <Breadcrumb :items="breadcrumb" />
             </template>
         </template>
         <template v-slot:extras-right>
-            <div class="row mx-n1">
+            <div class="row gx-3">
                 <template v-if="hasState">
-                    <div class="col-auto px-1">
-                        <Dropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--state" :disabled="!canChangeState">
-                            <template v-slot:text>
-                                <StateIcon :color="state.color" />
-                                <span class="text-truncate">{{ state.label }}</span>
+                    <div class="col-auto">
+                        <ModalSelect
+                            :title="l('modals.entity_state.edit.title')"
+                            :ok-title="l('modals.entity_state.edit.ok_button')"
+                            :value="state.value"
+                            :options="stateValues"
+                            size="sm"
+                            @change="handleStateChanged"
+                        >
+                            <template v-slot="{ on }">
+                                <Button class="dropdown-toggle" text small :disabled="!canChangeState" v-on="on">
+                                    <StateIcon class="me-1" :color="state.color" style="vertical-align: -.125em" />
+                                    <span class="text-truncate">{{ state.label }}</span>
+                                </Button>
                             </template>
-                            <template v-for="stateOptions in stateValues">
-                                <DropdownItem
-                                    @click="handleStateChanged(stateOptions.value)"
-                                    :key="stateOptions.value"
-                                >
-                                    <StateIcon :color="stateOptions.color" />&nbsp;
-                                    {{ stateOptions.label }}
-                                </DropdownItem>
+
+                            <template v-slot:item-prepend="{ option }">
+                                <StateIcon :color="option.color" />
                             </template>
-                        </Dropdown>
+                        </ModalSelect>
                     </div>
                 </template>
                 <template v-if="hasCommands">
-                    <div class="col-auto px-1">
-                        <CommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
-                            :commands="commands"
-                            @select="handleCommandSelected"
-                        >
+                    <div class="col-auto">
+                        <CommandsDropdown :commands="commands" @select="handleCommandSelected">
                             <template v-slot:text>
                                 {{ l('entity_list.commands.instance.label') }}
                             </template>
@@ -58,6 +64,9 @@
         Dropdown,
         DropdownItem,
         StateIcon,
+        Breadcrumb,
+        Button,
+        ModalSelect,
     } from 'sharp-ui';
 
     import {
@@ -70,10 +79,13 @@
         mixins: [Localization],
         components: {
             ActionBar,
+            Breadcrumb,
             CommandsDropdown,
             Dropdown,
             DropdownItem,
             StateIcon,
+            Button,
+            ModalSelect,
         },
         props: {
             commands: Array,
@@ -84,6 +96,8 @@
             showBackButton: Boolean,
             state: Object,
             stateValues: Array,
+            breadcrumb: Array,
+            showBreadcrumb: Boolean,
         },
         computed: {
             hasCommands() {

@@ -1,15 +1,17 @@
 <template>
-    <div class="SharpMarkdown" :class="{'SharpMarkdown--read-only':readOnly}">
-        <div class="SharpModule__inner">
-            <template v-if="isLocalized">
-                <div v-for="loc in locales" v-show="locale === loc">
+    <div class="SharpMarkdown editor" :class="{'SharpMarkdown--read-only':readOnly}">
+        <template v-if="isLocalized">
+            <template v-for="loc in locales">
+                <div class="card" v-show="locale === loc">
                     <textarea :id="localizedTextareaRef(loc)" :ref="localizedTextareaRef(loc)"></textarea>
                 </div>
             </template>
-            <template v-else>
+        </template>
+        <template v-else>
+            <div class="card">
                 <textarea ref="textarea"></textarea>
-            </template>
-        </div>
+            </div>
+        </template>
     </div>
 </template>
 
@@ -53,7 +55,11 @@
             readOnly: Boolean,
         },
 
-        inject: ['$tab'],
+        inject: {
+            $tab: {
+                default: null,
+            },
+        },
 
         data() {
             return {
@@ -290,24 +296,54 @@
                 immediate && callback(codemirror);
                 codemirror.on(eventName, callback);
             },
-
-            localizeToolbar(simplemde) {
-                simplemde.toolbar.forEach(icon => {
-                    if(typeof icon === 'object') {
-                        let lName = icon.name.replace(/-/g,'_');
-                        icon.title = lang(`form.markdown.icons.${lName}.title`);
-                    }
-                });
-                simplemde.gui.toolbar.remove();
-                simplemde.createToolbar();
-            },
             setReadOnly(simplemde) {
                 simplemde.codemirror.setOption('readOnly', true);
-                simplemde.toolbar.forEach(icon => typeof icon === 'object' && (icon.action = noop));
             },
-            bindImageAction(simplemde) {
-                let imageBtn = simplemde.toolbar.find(btn => btn.name === 'image');
-                (imageBtn||{}).action = () => this.insertUploadImage({ isInsertion:true });
+            createToolbar(simplemde) {
+                const items = this.transformedToolbar.map(btn => {
+                    if(btn === '|') {
+                        return btn;
+                    }
+                    if(btn.name === 'image' || btn.name === 'document') {
+                        btn.action = () => this.insertUploadImage({ isInsertion:true });
+                    }
+                    return {
+                        ...btn,
+                        className: `btn btn-light ${btn.className}`,
+                        action: (simplemde) => {
+                            if(!this.readOnly) {
+                                btn.action(simplemde);
+                            }
+                        },
+                        title: lang(`form.markdown.icons.${btn.name.replace(/-/g,'_')}.title`),
+                    }
+                });
+                simplemde.options.toolbar = items;
+                const bar = simplemde.createToolbar();
+
+                if(!bar) {
+                    return;
+                }
+
+                bar.classList.remove('editor-toolbar');
+                bar.classList.add('card-header');
+                bar.classList.add('editor__toolbar');
+
+                [...bar.children]
+                    .reduce((res, el) => {
+                        if(el.matches('.separator')) {
+                            el.remove();
+                            return [...res, []];
+                        }
+                        res[res.length - 1].push(el);
+                        return res;
+                    }, [[]])
+                    .forEach(buttons => {
+                        const group = document.createElement('div');
+                        group.classList.add('btn-group');
+                        buttons.forEach(el => group.appendChild(el));
+                        bar.appendChild(group);
+                    });
             },
 
             parse() {
@@ -355,17 +391,16 @@
                 const simplemde = new SimpleMDE({
                     element,
                     initialValue,
+                    toolbar: false,
                     placeholder: this.placeholder,
                     spellChecker: false,
-                    toolbar: this.transformedToolbar,
                     autoDownloadFontAwesome: false,
                     status: false
                 });
                 if(this.readOnly) {
                     this.setReadOnly(simplemde);
                 }
-                this.localizeToolbar(simplemde);
-                this.bindImageAction(simplemde);
+                this.createToolbar(simplemde);
 
                 this.initCM(simplemde.codemirror);
 
@@ -381,6 +416,9 @@
                 this.codemirrorOn(codemirror, 'beforeChange',this.onBeforeChange);
 
                 handleMarkdownTables(codemirror);
+
+                codemirror.getWrapperElement().classList.add('card-body');
+                codemirror.getWrapperElement().classList.add('form-control');
             }
         },
         mounted() {

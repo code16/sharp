@@ -32,6 +32,7 @@
                 return createMapOptions({
                     ...defaultMapOptions,
                     maxBounds: this.maxBounds,
+                    controlSize: 32,
                 });
             },
         },

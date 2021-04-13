@@ -3,23 +3,21 @@
 exports[`list-field can mount "read only" filled list field 1`] = `
 <div id="app">
 	<div class="SharpList">
-		<!---->
+		<div class="SharpList__sticky-wrapper text-end">
+			<!---->
+		</div>
 		<div>
-			<div>
-				<div class="SharpList__item">
-					<div class="SharpModule__inner">
-						<div class="SharpModule__content">
-							<div class="SharpGrid">
-								<div class="SharpGrid__row row">
-									<div class="SharpGrid__col col-md">
-										<div> FIELD DISPLAY MOCK </div>
-									</div>
-								</div>
+			<div class="list-group shadow-sm">
+				<div class="SharpList__item list-group-item">
+					<div class="SharpGrid">
+						<div class="SharpGrid__row row">
+							<div class="SharpGrid__col col-md">
+								<div> FIELD DISPLAY MOCK </div>
 							</div>
-							<!---->
-							<!---->
 						</div>
 					</div>
+					<!---->
+					<!---->
 					<!---->
 				</div>
 			</div>
@@ -32,20 +30,23 @@ exports[`list-field can mount "read only" filled list field 1`] = `
 exports[`list-field can mount collapsed list field 1`] = `
 <div id="app">
 	<div class="SharpList">
-		<!---->
+		<div class="SharpList__sticky-wrapper text-end">
+			<!---->
+		</div>
 		<div>
-			<div>
-				<div class="SharpList__item SharpList__item--collapsed">
-					<div class="SharpModule__inner">
-						<div class="SharpModule__content">
-							<div class="SharpTemplate">
-								<span> Antoine </span>
-							</div>
-							<div class="SharpList__overlay-handle"></div>
-						</div>
+			<div class="list-group shadow-sm">
+				<div class="SharpList__item list-group-item SharpList__item--collapsed">
+					<div class="SharpTemplate SharpTemplate--has-children">
+						<span> Antoine </span>
 					</div>
+					<div class="SharpList__overlay-handle"></div>
 					<!---->
 				</div>
+			</div>
+			<div class="mt-3">
+				<button class="SharpButton btn SharpList__add-button btn-text btn-block" disabled="disabled">
+					＋ Ajouter un élément
+				</button>
 			</div>
 		</div>
 		<!---->
@@ -56,9 +57,11 @@ exports[`list-field can mount collapsed list field 1`] = `
 exports[`list-field can mount empty "read only" list field 1`] = `
 <div id="app">
 	<div class="SharpList">
-		<!---->
+		<div class="SharpList__sticky-wrapper text-end">
+			<!---->
+		</div>
 		<div>
-			<div></div>
+			<div class="list-group shadow-sm"></div>
 		</div>
 		<em class="SharpList__empty-alert">{{ form.list.empty }}</em>
 	</div>
@@ -68,12 +71,16 @@ exports[`list-field can mount empty "read only" list field 1`] = `
 exports[`list-field can mount empty list field 1`] = `
 <div id="app">
 	<div class="SharpList">
-		<!---->
+		<div class="SharpList__sticky-wrapper text-end">
+			<!---->
+		</div>
 		<div>
-			<div></div>
-			<button type="button" class="SharpButton SharpButton--ghost SharpList__add-button">
-				Ajouter un élément
-			</button>
+			<div class="list-group shadow-sm"></div>
+			<div class="">
+				<button class="SharpButton btn SharpList__add-button btn-text btn-block">
+					＋ Ajouter un élément
+				</button>
+			</div>
 		</div>
 		<!---->
 	</div>
@@ -83,55 +90,50 @@ exports[`list-field can mount empty list field 1`] = `
 exports[`list-field can mount filled list field 1`] = `
 <div id="app">
 	<div class="SharpList SharpList--can-sort">
-		<button type="button" data-inactive-text="{{ form.list.sort_button.inactive }}" data-active-text="{{ form.list.sort_button.active }}" class="SharpButton SharpButton--ghost SharpList__sort-button">
-			<svg width="24" height="22" viewBox="0 0 24 22" fill-rule="evenodd" class="SharpButton__icon">
-				<path d="M20 14V0h-4v14h-4l6 8 6-8zM4 8v14h4V8h4L6 0 0 8z"></path>
-			</svg>
-		</button>
+		<div class="SharpList__sticky-wrapper text-end">
+			<button class="SharpButton btn SharpList__sort-button btn-sm btn-text" style="pointer-events: auto;">
+				{{ form.list.sort_button.inactive }}
+				<svg width="1.125em" height="1.125em" viewBox="0 0 24 22" fill-rule="evenodd" style="margin-left: .5em;">
+					<path d="M20 14V0h-4v14h-4l6 8 6-8zM4 8v14h4V8h4L6 0 0 8z"></path>
+				</svg>
+			</button>
+		</div>
 		<div>
-			<div>
-				<div class="SharpList__item">
-					<div class="SharpModule__inner">
-						<div class="SharpModule__content">
-							<div class="SharpGrid">
-								<div class="SharpGrid__row row">
-									<div class="SharpGrid__col col-md">
-										<div> FIELD DISPLAY MOCK </div>
-									</div>
-								</div>
+			<div class="list-group shadow-sm">
+				<div class="SharpList__item list-group-item">
+					<div class="SharpGrid">
+						<div class="SharpGrid__row row">
+							<div class="SharpGrid__col col-md">
+								<div> FIELD DISPLAY MOCK </div>
 							</div>
-							<button class="SharpButton SharpButton--danger SharpButton--sm mt-3">
-								{{ form.list.remove_button }}
-							</button>
-							<!---->
 						</div>
 					</div>
+					<button aria-label="{{ form.list.remove_button }}" class="SharpList__remove-button btn-close"></button>
+					<!---->
 					<div class="SharpList__new-item-zone">
-						<button class="SharpButton SharpButton--sm">{{ form.list.insert_button }}</button>
+						<button class="SharpButton btn btn-primary btn-sm">
+							{{ form.list.insert_button }}
+						</button>
 					</div>
 				</div>
-				<div class="SharpList__item">
-					<div class="SharpModule__inner">
-						<div class="SharpModule__content">
-							<div class="SharpGrid">
-								<div class="SharpGrid__row row">
-									<div class="SharpGrid__col col-md">
-										<div> FIELD DISPLAY MOCK </div>
-									</div>
-								</div>
+				<div class="SharpList__item list-group-item">
+					<div class="SharpGrid">
+						<div class="SharpGrid__row row">
+							<div class="SharpGrid__col col-md">
+								<div> FIELD DISPLAY MOCK </div>
 							</div>
-							<button class="SharpButton SharpButton--danger SharpButton--sm mt-3">
-								{{ form.list.remove_button }}
-							</button>
-							<!---->
 						</div>
 					</div>
+					<button aria-label="{{ form.list.remove_button }}" class="SharpList__remove-button btn-close"></button>
+					<!---->
 					<!---->
 				</div>
 			</div>
-			<button type="button" class="SharpButton SharpButton--ghost SharpList__add-button">
-				Ajouter un élément
-			</button>
+			<div class="mt-3">
+				<button class="SharpButton btn SharpList__add-button btn-text btn-block">
+					＋ Ajouter un élément
+				</button>
+			</div>
 		</div>
 		<!---->
 	</div>
@@ -141,39 +143,33 @@ exports[`list-field can mount filled list field 1`] = `
 exports[`list-field can mount non addable, non removable, non sortable list field 1`] = `
 <div id="app">
 	<div class="SharpList">
-		<!---->
+		<div class="SharpList__sticky-wrapper text-end">
+			<!---->
+		</div>
 		<div>
-			<div>
-				<div class="SharpList__item">
-					<div class="SharpModule__inner">
-						<div class="SharpModule__content">
-							<div class="SharpGrid">
-								<div class="SharpGrid__row row">
-									<div class="SharpGrid__col col-md">
-										<div> FIELD DISPLAY MOCK </div>
-									</div>
-								</div>
+			<div class="list-group shadow-sm">
+				<div class="SharpList__item list-group-item">
+					<div class="SharpGrid">
+						<div class="SharpGrid__row row">
+							<div class="SharpGrid__col col-md">
+								<div> FIELD DISPLAY MOCK </div>
 							</div>
-							<!---->
-							<!---->
 						</div>
 					</div>
 					<!---->
+					<!---->
+					<!---->
 				</div>
-				<div class="SharpList__item">
-					<div class="SharpModule__inner">
-						<div class="SharpModule__content">
-							<div class="SharpGrid">
-								<div class="SharpGrid__row row">
-									<div class="SharpGrid__col col-md">
-										<div> FIELD DISPLAY MOCK </div>
-									</div>
-								</div>
+				<div class="SharpList__item list-group-item">
+					<div class="SharpGrid">
+						<div class="SharpGrid__row row">
+							<div class="SharpGrid__col col-md">
+								<div> FIELD DISPLAY MOCK </div>
 							</div>
-							<!---->
-							<!---->
 						</div>
 					</div>
+					<!---->
+					<!---->
 					<!---->
 				</div>
 			</div>
@@ -186,101 +182,74 @@ exports[`list-field can mount non addable, non removable, non sortable list fiel
 exports[`list-field can mount with full list 1`] = `
 <div id="app">
 	<div class="SharpList SharpList--can-sort">
-		<button type="button" data-inactive-text="{{ form.list.sort_button.inactive }}" data-active-text="{{ form.list.sort_button.active }}" class="SharpButton SharpButton--ghost SharpList__sort-button">
-			<svg width="24" height="22" viewBox="0 0 24 22" fill-rule="evenodd" class="SharpButton__icon">
-				<path d="M20 14V0h-4v14h-4l6 8 6-8zM4 8v14h4V8h4L6 0 0 8z"></path>
-			</svg>
-		</button>
+		<div class="SharpList__sticky-wrapper text-end">
+			<button class="SharpButton btn SharpList__sort-button btn-sm btn-text" style="pointer-events: auto;">
+				{{ form.list.sort_button.inactive }}
+				<svg width="1.125em" height="1.125em" viewBox="0 0 24 22" fill-rule="evenodd" style="margin-left: .5em;">
+					<path d="M20 14V0h-4v14h-4l6 8 6-8zM4 8v14h4V8h4L6 0 0 8z"></path>
+				</svg>
+			</button>
+		</div>
 		<div>
-			<div>
-				<div class="SharpList__item">
-					<div class="SharpModule__inner">
-						<div class="SharpModule__content">
-							<div class="SharpGrid">
-								<div class="SharpGrid__row row">
-									<div class="SharpGrid__col col-md">
-										<div> FIELD DISPLAY MOCK </div>
-									</div>
-								</div>
+			<div class="list-group shadow-sm">
+				<div class="SharpList__item list-group-item">
+					<div class="SharpGrid">
+						<div class="SharpGrid__row row">
+							<div class="SharpGrid__col col-md">
+								<div> FIELD DISPLAY MOCK </div>
 							</div>
-							<button class="SharpButton SharpButton--danger SharpButton--sm mt-3">
-								{{ form.list.remove_button }}
-							</button>
-							<!---->
 						</div>
 					</div>
+					<button aria-label="{{ form.list.remove_button }}" class="SharpList__remove-button btn-close"></button>
+					<!---->
 					<!---->
 				</div>
-				<div class="SharpList__item">
-					<div class="SharpModule__inner">
-						<div class="SharpModule__content">
-							<div class="SharpGrid">
-								<div class="SharpGrid__row row">
-									<div class="SharpGrid__col col-md">
-										<div> FIELD DISPLAY MOCK </div>
-									</div>
-								</div>
+				<div class="SharpList__item list-group-item">
+					<div class="SharpGrid">
+						<div class="SharpGrid__row row">
+							<div class="SharpGrid__col col-md">
+								<div> FIELD DISPLAY MOCK </div>
 							</div>
-							<button class="SharpButton SharpButton--danger SharpButton--sm mt-3">
-								{{ form.list.remove_button }}
-							</button>
-							<!---->
 						</div>
 					</div>
+					<button aria-label="{{ form.list.remove_button }}" class="SharpList__remove-button btn-close"></button>
+					<!---->
 					<!---->
 				</div>
-				<div class="SharpList__item">
-					<div class="SharpModule__inner">
-						<div class="SharpModule__content">
-							<div class="SharpGrid">
-								<div class="SharpGrid__row row">
-									<div class="SharpGrid__col col-md">
-										<div> FIELD DISPLAY MOCK </div>
-									</div>
-								</div>
+				<div class="SharpList__item list-group-item">
+					<div class="SharpGrid">
+						<div class="SharpGrid__row row">
+							<div class="SharpGrid__col col-md">
+								<div> FIELD DISPLAY MOCK </div>
 							</div>
-							<button class="SharpButton SharpButton--danger SharpButton--sm mt-3">
-								{{ form.list.remove_button }}
-							</button>
-							<!---->
 						</div>
 					</div>
+					<button aria-label="{{ form.list.remove_button }}" class="SharpList__remove-button btn-close"></button>
+					<!---->
 					<!---->
 				</div>
-				<div class="SharpList__item">
-					<div class="SharpModule__inner">
-						<div class="SharpModule__content">
-							<div class="SharpGrid">
-								<div class="SharpGrid__row row">
-									<div class="SharpGrid__col col-md">
-										<div> FIELD DISPLAY MOCK </div>
-									</div>
-								</div>
+				<div class="SharpList__item list-group-item">
+					<div class="SharpGrid">
+						<div class="SharpGrid__row row">
+							<div class="SharpGrid__col col-md">
+								<div> FIELD DISPLAY MOCK </div>
 							</div>
-							<button class="SharpButton SharpButton--danger SharpButton--sm mt-3">
-								{{ form.list.remove_button }}
-							</button>
-							<!---->
 						</div>
 					</div>
+					<button aria-label="{{ form.list.remove_button }}" class="SharpList__remove-button btn-close"></button>
+					<!---->
 					<!---->
 				</div>
-				<div class="SharpList__item">
-					<div class="SharpModule__inner">
-						<div class="SharpModule__content">
-							<div class="SharpGrid">
-								<div class="SharpGrid__row row">
-									<div class="SharpGrid__col col-md">
-										<div> FIELD DISPLAY MOCK </div>
-									</div>
-								</div>
+				<div class="SharpList__item list-group-item">
+					<div class="SharpGrid">
+						<div class="SharpGrid__row row">
+							<div class="SharpGrid__col col-md">
+								<div> FIELD DISPLAY MOCK </div>
 							</div>
-							<button class="SharpButton SharpButton--danger SharpButton--sm mt-3">
-								{{ form.list.remove_button }}
-							</button>
-							<!---->
 						</div>
 					</div>
+					<button aria-label="{{ form.list.remove_button }}" class="SharpList__remove-button btn-close"></button>
+					<!---->
 					<!---->
 				</div>
 			</div>

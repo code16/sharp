@@ -13,6 +13,7 @@ use Code16\Sharp\Dashboard\Widgets\SharpLineGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpOrderedListWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPieGraphWidget;
+use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\LinkToEntity;
 use Illuminate\Support\Facades\DB;
 
@@ -33,7 +34,7 @@ class CompanyDashboard extends SharpDashboard
     
     private static $colorsIndex = 0;
 
-    function buildWidgets()
+    function buildWidgets(): void
     {
         $this
             ->addWidget(
@@ -54,25 +55,24 @@ class CompanyDashboard extends SharpDashboard
             )->addWidget(
                 SharpPanelWidget::make("activeSpaceships")
                     ->setInlineTemplate("<h1>{{count}}</h1> spaceships in activity")
-                    ->setLink('spaceship')
+                    ->setLink(LinkToEntityList::make("spaceship"))
             )->addWidget(
                 SharpPanelWidget::make("inactiveSpaceships")
                     ->setInlineTemplate("<h1>{{count}}</h1> inactive spaceships")
             )->addWidget(
                 SharpOrderedListWidget::make("topTravelledSpaceshipModels")
                     ->setTitle("Top travelled spaceship types")
-                    ->buildItemLink(function(LinkToEntity $link, $item) {
+                    ->buildItemLink(function($item) {
                         if($item['id'] >= 5) {
                             return null;
                         }
-                        return $link
-                            ->setEntityKey("spaceship")
+                        return LinkToEntityList::make("spaceship")
                             ->addFilter("type", $item['id']);
                     })
             );
     }
 
-    function buildWidgetsLayout()
+    function buildWidgetsLayout(): void
     {
         $this
             ->addRow(function(DashboardLayoutRow $row) {
@@ -91,7 +91,7 @@ class CompanyDashboard extends SharpDashboard
             });
     }
 
-    function buildWidgetsData(DashboardQueryParams $params)
+    function buildWidgetsData(DashboardQueryParams $params): void
     {
         $this->setPieGraphDataSet();
         $this->setBarsGraphDataSet();

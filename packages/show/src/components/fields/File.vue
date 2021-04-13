@@ -16,7 +16,7 @@
                 </template>
                 <template v-else>
                     <div class="ShowFileField__placeholder text-center">
-                        <i class="fa far" :class="iconClass"></i>
+                        <i :class="iconClass"></i>
                     </div>
                 </template>
             </div>
@@ -129,7 +129,12 @@
             },
             iconClass() {
                 const extension = this.fileName.split('.').pop();
-                return getClassNameForExtension(extension);
+                const iconClass = getClassNameForExtension(extension);
+
+                if(iconClass === 'fa-file-csv') {
+                    return `fas ${iconClass}`;
+                }
+                return `far ${iconClass}`;
             },
             isVisible() {
                 return !!this.value;

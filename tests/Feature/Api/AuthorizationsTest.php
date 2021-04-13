@@ -115,6 +115,7 @@ class AuthorizationsTest extends BaseApiTest
     /** @test */
     public function global_authorizations_are_true_by_default()
     {
+        $this->withoutExceptionHandling();
         $this->buildTheWorld();
         $this->login();
 

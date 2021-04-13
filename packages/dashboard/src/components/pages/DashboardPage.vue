@@ -3,7 +3,7 @@
         <template v-if="ready">
             <div class="container">
                 <ActionBarDashboard :commands="commands" @command="handleCommandRequested" />
-                <Grid :rows="layout.rows" v-slot="{ itemLayout }">
+                <Grid :rows="layout.rows" row-class="gx-3" v-slot="{ itemLayout }">
                     <Widget
                         :widget-type="widgets[itemLayout.key].type"
                         :widget-props="widgets[itemLayout.key]"
@@ -13,7 +13,7 @@
             </div>
         </template>
 
-        <CommandFormModal :form="commandCurrentForm" ref="commandForm" />
+        <CommandFormModal :command="currentCommand" ref="commandForm" />
         <CommandViewPanel :content="commandViewContent" @close="handleCommandViewPanelClosed" />
     </div>
 </template>

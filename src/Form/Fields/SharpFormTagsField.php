@@ -11,179 +11,105 @@ class SharpFormTagsField extends SharpFormField
 
     const FIELD_TYPE = "tags";
 
-    /**
-     * @var bool
-     */
-    protected $creatable = false;
+    protected bool $creatable = false;
+    protected string $createText = "Create";
+    protected ?string $createAttribute = null;
+    protected string $idAttribute = "id";
+    protected ?int $maxTagCount = null;
+    protected array $options = [];
+    protected array $createAdditionalAttributes = [];
 
-    /**
-     * @var string
-     */
-    protected $createText = "Create";
-
-    /**
-     * @var string
-     */
-    protected $createAttribute = null;
-
-    /**
-     * @var string
-     */
-    protected $idAttribute = "id";
-
-    /**
-     * @var int
-     */
-    protected $maxTagCount = null;
-
-    /**
-     * @var array
-     */
-    protected $options = [];
-
-    /**
-     * @var array
-     */
-    protected $createAdditionalAttributes = [];
-
-    /**
-     * @param string $key
-     * @param array $options
-     * @return static
-     */
-    public static function make(string $key, array $options)
+    public static function make(string $key, array $options): self
     {
         $instance = new static($key, static::FIELD_TYPE, new TagsFormatter);
 
-        $instance->options = collect($options)->map(function($label, $id) {
-            return [
-                "id" => $id, "label" => $label
-            ];
-        })->values()->all();
+        $instance->options = collect($options)
+            ->map(function($label, $id) {
+                return [
+                    "id" => $id, "label" => $label
+                ];
+            })
+            ->values()
+            ->toArray();
 
         return $instance;
     }
 
-    /**
-     * @param bool $creatable
-     * @return static
-     */
-    public function setCreatable(bool $creatable = true)
+    public function setCreatable(bool $creatable = true): self
     {
         $this->creatable = $creatable;
 
         return $this;
     }
 
-    /**
-     * @param string $createText
-     * @return static
-     */
-    public function setCreateText(string $createText)
+    public function setCreateText(string $createText): self
     {
         $this->createText = $createText;
 
         return $this;
     }
 
-    /**
-     * @param string $attribute
-     * @return static
-     */
-    public function setCreateAttribute(string $attribute)
+    public function setCreateAttribute(string $attribute): self
     {
         $this->createAttribute = $attribute;
 
         return $this;
     }
 
-    /**
-     * @param array $attributes
-     * @return static
-     */
-    public function setCreateAdditionalAttributes(array $attributes)
+    public function setCreateAdditionalAttributes(array $attributes): self
     {
         $this->createAdditionalAttributes = $attributes;
 
         return $this;
     }
 
-    /**
-     * @param string $idAttribute
-     * @return static
-     */
-    public function setIdAttribute($idAttribute)
+    public function setIdAttribute($idAttribute): self
     {
         $this->idAttribute = $idAttribute;
 
         return $this;
     }
 
-    /**
-     * @param int $maxTagCount
-     * @return static
-     */
-    public function setMaxTagCount(int $maxTagCount)
+    public function setMaxTagCount(int $maxTagCount): self
     {
         $this->maxTagCount = $maxTagCount;
 
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function setMaxTagCountUnlimited()
+    public function setMaxTagCountUnlimited(): self
     {
         $this->maxTagCount = null;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function creatable()
+    public function creatable(): bool
     {
         return $this->creatable;
     }
 
-    /**
-     * @return string
-     */
-    public function createAttribute()
+    public function createAttribute(): ?string
     {
         return $this->createAttribute;
     }
 
-    /**
-     * @return array
-     */
-    public function createAdditionalAttributes()
+    public function createAdditionalAttributes(): array
     {
         return $this->createAdditionalAttributes;
     }
 
-    /**
-     * @return string
-     */
-    public function idAttribute()
+    public function idAttribute(): string
     {
         return $this->idAttribute;
     }
 
-    /**
-     * @return array
-     */
-    public function options()
+    public function options(): array
     {
         return $this->options;
     }
 
-    /**
-     * @return array
-     */
-    protected function validationRules()
+    protected function validationRules(): array
     {
         return [
             "options" => "array",
@@ -192,10 +118,6 @@ class SharpFormTagsField extends SharpFormField
         ];
     }
 
-    /**
-     * @return array
-     * @throws \Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException
-     */
     public function toArray(): array
     {
         return parent::buildArray([

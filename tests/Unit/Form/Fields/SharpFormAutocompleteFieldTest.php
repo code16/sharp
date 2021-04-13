@@ -28,7 +28,8 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
 
         $defaultFormField = $this->getDefaultLocalAutocomplete($localValues);
 
-        $this->assertEquals([
+        $this->assertEquals(
+            [
                 "key" => "field", "type" => "autocomplete",
                 "mode" => "local", "searchKeys" => ["value"],
                 "remoteMethod" => "GET", "itemIdAttribute" => "id",
@@ -38,8 +39,10 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
                     ["id" => 1, "label" => "bob"]
                 ],
                 "remoteSearchAttribute" => "query",
-                "dataWrapper" => ""
-            ], $defaultFormField->toArray()
+                "dataWrapper" => "",
+                "debounceDelay" => 300,
+            ], 
+            $defaultFormField->toArray()
         );
     }
 
@@ -53,10 +56,12 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
             ->setRemoteEndpoint("endpoint")
             ->setRemoteSearchAttribute("attribute");
 
-        $this->assertArraySubset([
+        $this->assertArraySubset(
+            [
                 "remoteMethod" => "POST", "remoteEndpoint" => "endpoint",
                 "remoteSearchAttribute" => "attribute"
-            ], $formField->toArray()
+            ], 
+            $formField->toArray()
         );
     }
 
@@ -104,6 +109,20 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
             [
                 "searchMinChars" => 3
             ], 
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_debounceDelay()
+    {
+        $formField = $this->getDefaultLocalAutocomplete()
+            ->setDebounceDelayInMilliseconds(500);
+
+        $this->assertArraySubset(
+            [
+                "debounceDelay" => 500
+            ],
             $formField->toArray()
         );
     }

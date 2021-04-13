@@ -3,8 +3,10 @@
 exports[`EntityList mount 1`] = `
 <div class="SharpEntityList">
 	<div>Action bar</div>
-	<div class="MOCKED_SharpDataList">
-		<div url="instanceUrl" class="MOCKED_SharpDataListRow"></div>
+	<div>
+		<div class="MOCKED_SharpDataList">
+			<div url="instanceUrl" class="MOCKED_SharpDataListRow"></div>
+		</div>
 	</div>
 	<commandformmodal-stub></commandformmodal-stub>
 	<commandviewpanel-stub></commandviewpanel-stub>
@@ -14,25 +16,10 @@ exports[`EntityList mount 1`] = `
 exports[`EntityList mount with row actions 1`] = `
 <div class="SharpEntityList">
 	<div>Action bar</div>
-	<div class="MOCKED_SharpDataList">
-		<div url="instanceUrl" class="MOCKED_SharpDataListRow">
-			<div class="row justify-content-end justify-content-md-start mx-n2">
-				<div class="col-auto col-md-12 my-1 px-2">
-					<div class="MOCKED_SharpDropdown SharpEntityList__state-dropdown">
-						<stateicon-stub color="instanceStateIconColor"></stateicon-stub>
-						<span class="text-truncate">
-							instanceStateLabel
-						</span>
-						<dropdownitem-stub>
-							<stateicon-stub color="#000"></stateicon-stub>&nbsp; state 1
-						</dropdownitem-stub>
-					</div>
-				</div>
-				<div class="col-auto col-md-12 my-1 px-2">
-					<div class="MOCKED_SharpCommandsDropdown SharpEntityList__commands-dropdown">
-						{{ entity_list.commands.instance.label }}
-					</div>
-				</div>
+	<div>
+		<div class="MOCKED_SharpDataList">
+			<div url="instanceUrl" class="MOCKED_SharpDataListRow">
+				<entityactions-stub config="[object Object]" hasstate="true" statedisabled="true" hascommands="true" commands=""></entityactions-stub>
 			</div>
 		</div>
 	</div>

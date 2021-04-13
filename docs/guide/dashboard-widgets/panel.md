@@ -1,6 +1,6 @@
 # Panel widget
 
-This widget is based on the HTML Form Entity field, and is intended to display any useful information to the user.
+This widget is based on the HTML Form field, and is intended to display any useful information to the user.
 
 ## Attributes (setters)
 
@@ -8,8 +8,10 @@ This widget is based on the HTML Form Entity field, and is intended to display a
 $this->addWidget(
     SharpPanelWidget::make("activeSpaceships")
         ->setInlineTemplate("<h1>{{count}}</h1> spaceships in activity")
-        ->setLink('spaceship');
+        ->setLink(LinkToEntityList::make("spaceship"));
 ```
+
+Note that the `setLink()` method is expecting a [LinkTo... instance](../link-to.md).
 
 The Panel needs a view template, that you can provide in two ways:
 
@@ -37,7 +39,6 @@ The template will be [interpreted by Vue.js](https://vuejs.org/v2/guide/syntax.h
 <div v-if="show">result is {{value}}</div>
 <div v-else>result is unknown</div>
 ```
-
 
 ## Data valuation
 

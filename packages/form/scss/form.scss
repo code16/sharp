@@ -1,4 +1,5 @@
 
+@import 'components/fields/editor';
 @import 'components/fields/Text';
 @import 'components/fields/Autocomplete';
 @import 'components/fields/Upload';
@@ -8,9 +9,7 @@
 @import 'components/fields/MarkdownUpload';
 @import 'components/fields/Select';
 @import 'components/fields/Tags';
-@import 'components/fields/Check';
 @import 'components/fields/Textarea';
-@import 'components/fields/Radio';
 @import 'components/fields/Geolocation';
 @import 'components/fields/TrixEditor';
 @import 'components/fields/GeolocationEdit';
@@ -19,3 +18,4 @@
 @import 'components/FieldContainer';
 @import 'components/Form';
 @import "page";
+@import "utilities";

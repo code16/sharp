@@ -6,25 +6,14 @@ class SharpShowListField extends SharpShowField
 {
     const FIELD_TYPE = "list";
 
-    /** @var string */
-    protected $label = null;
+    protected ?string $label = null;
+    protected array $itemFields = [];
 
-    /** @var array */
-    protected $itemFields = [];
-
-    /**
-     * @param string $key
-     * @return static
-     */
     public static function make(string $key): SharpShowListField
     {
         return new static($key, static::FIELD_TYPE);
     }
 
-    /**
-     * @param string $label
-     * @return $this
-     */
     public function setLabel(string $label): self
     {
         $this->label = $label;
@@ -39,30 +28,20 @@ class SharpShowListField extends SharpShowField
         return $this;
     }
 
-    /**
-     * @param string $key
-     * @return SharpShowField
-     */
-    public function findItemFormFieldByKey(string $key)
+    public function findItemFormFieldByKey(string $key): SharpShowField
     {
         return collect($this->itemFields)
             ->where("key", $key)
             ->first();
     }
 
-    /**
-     * @return array
-     */
-    protected function validationRules()
+    protected function validationRules(): array
     {
         return [
             "itemFields" => "required|array",
         ];
     }
 
-    /**
-     * @inheritDoc
-     */
     public function toArray(): array
     {
         return parent::buildArray([

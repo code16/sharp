@@ -45,6 +45,11 @@ Default: `"query"`
 Configure an optional dataWrapper to handle results sent in a wrapper, typically "data". 
 Default: empty string.
 
+### `setDebounceDelayInMilliseconds($debounceDelay)`
+
+Configure the debounce delay between each endpoint call
+Default: 300.
+
 ### `setRemoteMethodGET()`
 ### `setRemoteMethodPOST()`
 

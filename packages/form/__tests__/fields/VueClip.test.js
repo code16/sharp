@@ -1,8 +1,7 @@
 import Vue from 'vue';
 import VueClip from '../../src/components/fields/upload/VueClip';
 
-import { MockInjections, MockI18n, nextRequestFulfilled } from '@sharp/test-utils';
-import moxios from 'moxios';
+import { MockInjections, MockI18n } from '@sharp/test-utils';
 
 
 /** Vue clip native methods
@@ -634,7 +633,7 @@ describe('vue-clip',() => {
             width: 100, height: 200, x:20, y:40, rotate: -90
         }));
 
-        $vueClip.updateCropData();
+        $vueClip.updateCropData($vueClip.$refs.cropper);
 
         testEmit = handler => {
             expect(handler).toHaveBeenCalledTimes(2);

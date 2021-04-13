@@ -102,7 +102,7 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
 
         $list = new class extends WithCustomTransformersTestList
         {
-            function buildListDataContainers()
+            function buildListDataContainers(): void
             {
                 $this->addDataContainer(EntityListDataContainer::make("mother:name"));
             }
@@ -128,9 +128,11 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
         {
             function getListData(EntityListQueryParams $params)
             {
-                return $this->setCustomTransformer("name", function($name) {
-                    return strtoupper($name);
-                })->transform(Person::all());
+                return $this
+                    ->setCustomTransformer("name", function($name) {
+                        return strtoupper($name);
+                    })
+                    ->transform(Person::all());
             }
         };
 
@@ -149,7 +151,8 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
         {
             function getListData(EntityListQueryParams $params)
             {
-                return $this->setCustomTransformer("name", UppercaseTransformer::class)
+                return $this
+                    ->setCustomTransformer("name", UppercaseTransformer::class)
                     ->transform(Person::all());
             }
         };
@@ -169,7 +172,8 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
         {
             function getListData(EntityListQueryParams $params)
             {
-                return $this->setCustomTransformer("name", new UppercaseTransformer())
+                return $this
+                    ->setCustomTransformer("name", new UppercaseTransformer())
                     ->transform(Person::all());
             }
         };
@@ -190,9 +194,9 @@ class WithCustomTransformersTestList extends SharpEntityList
         return $this->transform(Person::all());
     }
 
-    function buildListDataContainers() {}
-    function buildListLayout() {}
-    function buildListConfig() {}
+    function buildListDataContainers(): void {}
+    function buildListLayout(): void {}
+    function buildListConfig(): void {}
 }
 
 class UppercaseTransformer implements SharpAttributeTransformer

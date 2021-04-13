@@ -3,44 +3,31 @@
 namespace Code16\Sharp\Dashboard\Widgets;
 
 use Closure;
-use Code16\Sharp\Utils\LinkToEntity;
+use Code16\Sharp\Utils\Links\SharpLinkTo;
 
 class SharpOrderedListWidget extends SharpWidget
 {
-    /** @var Closure */
-    protected $itemLinkBuilderClosure;
+    protected ?Closure $itemLinkBuilderClosure = null;
 
-    /**
-     * @param string $key
-     * @return static
-     */
-    public static function make(string $key)
+    public static function make(string $key): self
     {
-        $widget = new static($key, 'list');
-
-        return $widget;
+        return new static($key, 'list');
     }
 
-    /**
-     * @param Closure $itemLinkBuilderClosure
-     * @return $this
-     */
-    public function buildItemLink(Closure $itemLinkBuilderClosure)
+    public function buildItemLink(Closure $itemLinkBuilderClosure): self
     {
         $this->itemLinkBuilderClosure = $itemLinkBuilderClosure;
 
         return $this;
     }
 
-    /**
-     * @param array $item
-     * @return string
-     */
-    public function getItemUrl(array $item)
+    public function getItemUrl(array $item): ?string
     {
         if($closure = $this->itemLinkBuilderClosure) {
-            if($link = $closure(new LinkToEntity(), $item)) {
-                return $link->renderAsUrl();
+            if($link = $closure($item)) {
+                return $link instanceof SharpLinkTo
+                    ? $link->renderAsUrl()
+                    : $link;
             }
 
             return null;
@@ -49,10 +36,6 @@ class SharpOrderedListWidget extends SharpWidget
         return null;
     }
 
-    /**
-     * @return array
-     * @throws \Code16\Sharp\Exceptions\Dashboard\SharpWidgetValidationException
-     */
     public function toArray(): array
     {
         return parent::buildArray([]);

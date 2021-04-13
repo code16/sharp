@@ -29,82 +29,50 @@ class SharpFormWysiwygField extends SharpFormField
     const REDO = "redo";
     const SEPARATOR = "|";
 
-    /**
-     * @var int
-     */
-    protected $height;
-
-    /**
-     * @var array
-     */
-    protected $toolbar = [
+    protected ?int $height = null;
+    protected array $toolbar = [
         self::B, self::I,
         self::SEPARATOR,
         self::UL,
         self::SEPARATOR,
         self::A,
     ];
+    protected bool $showToolbar = true;
 
-    /**
-     * @var bool
-     */
-    protected $showToolbar = true;
-
-    /**
-     * @param string $key
-     * @return static
-     */
-    public static function make(string $key)
+    public static function make(string $key): self
     {
         return new static($key, static::FIELD_TYPE, new WysiwygFormatter());
     }
 
-    /**
-     * @param int $height
-     * @return static
-     */
-    public function setHeight(int $height)
+    public function setHeight(int $height): self
     {
         $this->height = $height;
 
         return $this;
     }
 
-    /**
-     * @param array $toolbar
-     * @return static
-     */
-    public function setToolbar(array $toolbar)
+    public function setToolbar(array $toolbar): self
     {
         $this->toolbar = $toolbar;
 
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function hideToolbar()
+    public function hideToolbar(): self
     {
         $this->showToolbar = false;
 
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function showToolbar()
+    public function showToolbar(): self
     {
         $this->showToolbar = true;
 
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    protected function validationRules()
+    protected function validationRules(): array
     {
         return [
             "height" => "integer|nullable",
@@ -112,10 +80,6 @@ class SharpFormWysiwygField extends SharpFormField
         ];
     }
 
-    /**
-     * @return array
-     * @throws \Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException
-     */
     public function toArray(): array
     {
         return parent::buildArray([

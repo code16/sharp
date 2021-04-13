@@ -36,13 +36,6 @@ describe('show page', () => {
                     'show': merge({}, showModule, storeModule),
                 }
             }),
-            // language=Vue
-            stubs: {
-                Grid:
-                    `<div class="MOCKED_SharpGrid">
-                        <slot :item-layout="rows[0][0]" />
-                    </div>`,
-            },
             mocks: {
                 $route: { params: { } },
             },
@@ -78,6 +71,35 @@ describe('show page', () => {
             fieldValue: () => ({}),
         });
         wrapper.setData({ ready: true });
+        expect(wrapper.html()).toMatchSnapshot();
+    });
+
+    test('can mount hidden section', () => {
+        const wrapper = createWrapper({
+            computed: {
+                layout: () => ({
+                    sections: [
+                        {
+                            title: 'Section title',
+                            columns: [{
+                                fields: [[{ key:'name' }]]
+                            }]
+                        }
+                    ]
+                }),
+                formUrl: () => 'formUrl',
+            },
+        });
+        wrapper.setMethods({
+            fieldOptions: () => ({}),
+            fieldValue: () => ({}),
+        });
+        wrapper.setData({
+            ready: true,
+            fieldsVisible: {
+                name: false,
+            }
+        });
         expect(wrapper.html()).toMatchSnapshot();
     });
 
@@ -142,7 +164,32 @@ describe('show page', () => {
         expect(formUrl).toHaveBeenCalledWith({
             entityKey: 'entityKey',
             instanceId: 'instanceId',
+        }, { append:true });
+    });
+
+    test('formUrl with multiform', () => {
+        formUrl.mockReturnValue('formUrl');
+        const wrapper = createWrapper({
+            storeModule: {
+                getters: {
+                    entityKey: () => 'entityKey',
+                    instanceId: () => 'instanceId',
+                }
+            },
+            computed: {
+                config: () => ({
+                    multiformAttribute: 'role',
+                }),
+                data: () => ({
+                    role: 'admin'
+                }),
+            }
         });
+        expect(wrapper.vm.formUrl).toEqual('formUrl');
+        expect(formUrl).toHaveBeenCalledWith({
+            entityKey: 'entityKey:admin',
+            instanceId: 'instanceId',
+        }, { append:true });
     });
 
     test('fieldOptions', () => {

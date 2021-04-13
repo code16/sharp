@@ -15,55 +15,33 @@ class SharpFormHtmlField extends SharpFormField
 
     const FIELD_TYPE = "html";
 
-    /**
-     * @param string $key
-     * @return static
-     */
-    public static function make(string $key)
+    public static function make(string $key): self
     {
         return new static($key, static::FIELD_TYPE, new HtmlFormatter);
     }
 
-    /**
-     * @param string $templatePath
-     * @return $this
-     */
-    public function setTemplatePath(string $templatePath)
+    public function setTemplatePath(string $templatePath): self
     {
         return $this->parentSetTemplatePath($templatePath, "html");
     }
 
-    /**
-     * @param string $template
-     * @return $this
-     */
-    public function setInlineTemplate(string $template)
+    public function setInlineTemplate(string $template): self
     {
         return $this->parentSetInlineTemplate($template, "html");
     }
 
-    /**
-     * @return string
-     */
-    public function template()
+    public function template(): ?string
     {
         return $this->parentTemplate("html");
     }
 
-    /**
-     * @return array
-     */
-    protected function validationRules()
+    protected function validationRules(): array
     {
         return [
             "template" => "required",
         ];
     }
 
-    /**
-     * @return array
-     * @throws \Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException
-     */
     public function toArray(): array
     {
         return parent::buildArray([

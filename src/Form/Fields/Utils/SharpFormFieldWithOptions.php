@@ -13,7 +13,7 @@ trait SharpFormFieldWithOptions
      * @param string $idAttribute
      * @return array
      */
-    protected static function formatOptions($options, $idAttribute = "id")
+    protected static function formatOptions($options, string $idAttribute = "id"): array
     {
         if(! sizeof($options)) {
             return [];
@@ -41,7 +41,7 @@ trait SharpFormFieldWithOptions
      * @param int $depth
      * @return array
      */
-    protected static function formatDynamicOptions(&$options, int $depth)
+    protected static function formatDynamicOptions(&$options, int $depth): array
     {
         if(! sizeof($options)) {
             return [];

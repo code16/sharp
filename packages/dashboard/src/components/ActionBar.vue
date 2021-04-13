@@ -1,6 +1,6 @@
 <template>
     <ActionBar>
-        <template v-slot:extras>
+        <template v-if="filters.length > 0" v-slot:extras>
             <div class="row mx-n2">
                 <template v-for="filter in filters">
                     <div class="col-auto px-2">
@@ -15,10 +15,7 @@
             </div>
         </template>
         <template v-if="commands.length" v-slot:extras-right>
-            <CommandsDropdown class="SharpActionBar__actions-dropdown SharpActionBar__actions-dropdown--commands"
-                :commands="commands"
-                @select="handleCommandSelected"
-            >
+            <CommandsDropdown :commands="commands" @select="handleCommandSelected">
                 <template v-slot:text>
                     {{ l('dashboard.commands.dashboard.label') }}
                 </template>

@@ -6,31 +6,19 @@ use Code16\Sharp\Form\Fields\Formatters\AutocompleteListFormatter;
 
 class SharpFormAutocompleteListField extends SharpFormListField
 {
-    /**
-     * @param string $key
-     * @return static
-     */
-    public static function make(string $key)
+    public static function make(string $key): self
     {
         return new static($key, static::FIELD_TYPE, new AutocompleteListFormatter);
     }
 
-    /**
-     * @param SharpFormAutocompleteField $field
-     * @return static
-     */
-    public function setItemField(SharpFormAutocompleteField $field)
+    public function setItemField(SharpFormAutocompleteField $field): self
     {
         $this->itemFields = [$field];
 
         return $this;
     }
 
-    /**
-     * @param SharpFormField $field
-     * @return static
-     */
-    public function addItemField(SharpFormField $field)
+    public function addItemField(SharpFormField $field): self
     {
         if(!$field instanceof SharpFormAutocompleteField) {
             throw new \InvalidArgumentException("AutocompleteList item can only contain one field, and it must be a SharpFormAutocompleteField");
@@ -39,10 +27,7 @@ class SharpFormAutocompleteListField extends SharpFormListField
         return $this->setItemField($field);
     }
 
-    /**
-     * @return SharpFormAutocompleteField
-     */
-    public function autocompleteField()
+    public function autocompleteField(): SharpFormAutocompleteField
     {
         return $this->itemFields()[0];
     }

@@ -8,19 +8,12 @@ class DashboardQueryParams
 {
     use HasFiltersInQuery;
 
-    /**
-     * @return DashboardQueryParams
-     */
-    public static function create()
+    public static function create(): self
     {
         return new static;
     }
 
-    /**
-     * @param string|null $queryPrefix
-     * @return $this
-     */
-    public function fillWithRequest(string $queryPrefix = null)
+    public function fillWithRequest(string $queryPrefix = null): self
     {
         $query = $queryPrefix ? request($queryPrefix) : request()->all();
 

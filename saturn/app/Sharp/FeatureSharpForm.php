@@ -13,7 +13,7 @@ class FeatureSharpForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
 
-    function buildFormFields()
+    function buildFormFields(): void
     {
         $this
             ->addField(
@@ -31,7 +31,7 @@ class FeatureSharpForm extends SharpForm
             );
     }
 
-    function buildFormLayout()
+    function buildFormLayout(): void
     {
         $this->addColumn(5, function(FormLayoutColumn $column) {
             $column->withSingleField("name")
@@ -53,7 +53,7 @@ class FeatureSharpForm extends SharpForm
         $this->save($instance, $data);
     }
 
-    function delete($id)
+    function delete($id): void
     {
         Feature::findOrFail($id)->delete();
     }

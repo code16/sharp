@@ -8,24 +8,12 @@ use Code16\Sharp\EntityList\EntityListDateRangeRequiredFilter;
 class PassengerBirthdateFilter implements EntityListDateRangeRequiredFilter
 {
 
-    public function label()
+    public function label(): string
     {
         return "Born between";
     }
 
-    /**
-     * @return array
-     *
-     * awaited format:
-     *
-     *    [
-     *       "start" => Carbon::yesterday(),
-     *       "end" => Carbon::today(),
-     *    ]
-     *
-     * @throws \Exception
-     */
-    public function defaultValue()
+    public function defaultValue(): array
     {
         return [
             "start" => (new Carbon())->setDate(2014,1,1),
@@ -33,17 +21,17 @@ class PassengerBirthdateFilter implements EntityListDateRangeRequiredFilter
         ];
     }
 
-    public function dateFormat()
+    public function dateFormat(): string
     {
         return "YYYY-MM-DD";
     }
 
-    public function isMondayFirst()
+    public function isMondayFirst(): bool
     {
         return false;
     }
 
-    public function retainValueInSession()
+    public function retainValueInSession(): bool
     {
         return true;
     }

@@ -2,27 +2,30 @@
     <div class="SharpActionView">
         <template v-if="showErrorPage">
             <div class="container">
+                <ActionBar />
                 <h1>Error {{errorPageData.status}}</h1>
                 <p>{{errorPageData.message}}</p>
             </div>
         </template>
         <template v-else>
+
             <slot />
-            <notifications position="top right" animation-name="slideRight" style="top:6rem" reverse>
+
+            <notifications position="top right" animation-name="slideRight" style="top:6rem; right: 1rem" reverse>
                 <template slot="body" slot-scope="{ item, close }">
-                    <div class="SharpToastNotification" :class="`SharpToastNotification--${item.type||'info'}`" role="alert" data-test="notification">
-                        <div class="SharpToastNotification__details">
-                            <h3 class="SharpToastNotification__title mb-2">{{ item.title }}</h3>
-                            <p v-if="!!item.text" class="SharpToastNotification__caption" v-html="item.text"></p>
+                    <div class="toast show mb-3" :class="`border-${item.type}`" role="alert" aria-live="assertive" aria-atomic="true" data-test="notification">
+                        <div class="toast-header">
+                            <strong class="me-auto">{{ item.title }}</strong>
+                            <button type="button" class="btn-close" data-test="close-notification" aria-label="Close" @click="close"></button>
                         </div>
-                        <button class="SharpToastNotification__close-button" type="button" @click="close" data-test="close-notification">
-                            <svg class="SharpToastNotification__icon" aria-label="close" width="10" height="10" viewBox="0 0 10 10" fill-rule="evenodd">
-                                <path d="M9.8 8.6L8.4 10 5 6.4 1.4 10 0 8.6 3.6 5 .1 1.4 1.5 0 5 3.6 8.6 0 10 1.4 6.4 5z"></path>
-                            </svg>
-                        </button>
+                        <template v-if="item.text">
+                            <div class="toast-body" v-html="item.text">
+                            </div>
+                        </template>
                     </div>
                 </template>
             </notifications>
+
             <template v-for="dialog in dialogs">
                 <Modal
                     v-bind="dialog.props"
@@ -41,13 +44,14 @@
 
 <script>
     import { api } from "../api";
-    import { Modal, LoadingOverlay } from 'sharp-ui';
+    import { Modal, LoadingOverlay, ActionBar } from 'sharp-ui';
 
     export default {
         name:'SharpActionView',
         components: {
             Modal,
             LoadingOverlay,
+            ActionBar
         },
 
         provide() {
@@ -83,7 +87,7 @@
             axiosInstance.interceptors.response.use(c=>c, error=>{
                 let { response: {status, data}, config: { method } } = error;
 
-                if(method==='get' && status === 404) {
+                if(method==='get' && status === 404 || status === 403) {
                     this.showErrorPage = true;
                     this.errorPageData = {
                         status, message: data.message
@@ -91,6 +95,6 @@
                 }
                 return Promise.reject(error);
             });
-        }
+        },
     }
 </script>

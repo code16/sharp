@@ -1,11 +1,11 @@
 import merge from 'lodash/merge';
 
 import Vuex from 'vuex';
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import {createLocalVue, shallowMount} from '@vue/test-utils';
 import SharpEntityList from '../src/components/EntityList.vue';
 import entityListModule from '../src/store/entity-list';
-import { formUrl, showUrl } from 'sharp';
-import { MockInjections } from "@sharp/test-utils";
+import {formUrl, showUrl} from 'sharp';
+import {MockInjections} from "@sharp/test-utils";
 
 jest.mock('sharp/mixins/Localization');
 jest.mock('sharp/mixins/DynamicView');
@@ -182,28 +182,6 @@ describe('EntityList', () => {
             ]);
         });
 
-        test('visibleFilters', () => {
-            const wrapper = createWrapper({
-                computed: {
-                    filters: () => [{ id:1, key:'type' }]
-                }
-            });
-            expect(wrapper.vm.visibleFilters).toEqual([{ id:1, key:'type' }]);
-
-            wrapper.setProps({
-                hiddenFilters: {
-                    type: 3,
-                }
-            });
-            expect(wrapper.vm.visibleFilters).toEqual([]);
-
-            wrapper.setProps({
-                hiddenFilters: {
-                    type: null,
-                }
-            });
-            expect(wrapper.vm.visibleFilters).toEqual([]);
-        });
 
         test('multiforms', () => {
             const wrapper = createWrapper();
@@ -447,17 +425,17 @@ describe('EntityList', () => {
 
         test('handleCreateButtonClicked', () => {
             const wrapper = createWrapper();
-            const locationHrefSpy = jest.spyOn(window.location, 'href', 'set');
             wrapper.setMethods({
                 formUrl: jest.fn(()=>'formUrl')
             });
             wrapper.vm.handleCreateButtonClicked();
-            expect(locationHrefSpy).toHaveBeenCalledWith('formUrl');
+            expect(location.href).toEqual('formUrl')
 
-            locationHrefSpy.mockClear();
+
+            location.href = '';
             wrapper.vm.handleCreateButtonClicked({ key:'form' });
             expect(wrapper.vm.formUrl).toHaveBeenCalledWith({ formKey:'form' });
-            expect(locationHrefSpy).toHaveBeenCalledWith('formUrl');
+            expect(location.href).toEqual('formUrl');
         });
 
         test('instanceId', () => {
@@ -764,12 +742,12 @@ describe('EntityList', () => {
 
             formUrl.mockClear();
             wrapper.vm.formUrl({ instanceId:'instanceId' });
-            expect(formUrl).toHaveBeenCalledWith({ entityKey:'entityKey', instanceId:'instanceId' });
+            expect(formUrl).toHaveBeenCalledWith({ entityKey:'entityKey', instanceId:'instanceId' }, { append:true });
 
 
             formUrl.mockClear();
             wrapper.vm.formUrl({ instanceId:'instanceId', formKey:'formKey' });
-            expect(formUrl).toHaveBeenCalledWith({ entityKey:'entityKey:formKey', instanceId:'instanceId' });
+            expect(formUrl).toHaveBeenCalledWith({ entityKey:'entityKey:formKey', instanceId:'instanceId' }, { append:true });
         });
 
         test('showUrl', () => {
@@ -780,7 +758,7 @@ describe('EntityList', () => {
             });
             showUrl.mockClear();
             wrapper.vm.showUrl({ instanceId:'instanceId' })
-            expect(showUrl).toHaveBeenCalledWith({ entityKey:'entityKey', instanceId:'instanceId' });
+            expect(showUrl).toHaveBeenCalledWith({ entityKey:'entityKey', instanceId:'instanceId' }, { append:true });
         });
 
         test('handleCommandRequested', ()=>{
@@ -871,6 +849,11 @@ describe('EntityList', () => {
             const wrapper = createWrapper({
                 propsData: {
                     entityKey: 'entityKey'
+                },
+                storeModule: {
+                    getters: {
+                        query: () => ({ }),
+                    }
                 }
             });
             wrapper.setData(withDefaults());

@@ -8,51 +8,16 @@ class SharpFormDateField extends SharpFormField
 {
     const FIELD_TYPE = "date";
 
-    /**
-     * @var bool
-     */
-    protected $hasDate = true;
+    protected bool $hasDate = true;
+    protected bool $hasTime = false;
+    protected bool $mondayFirst = true;
+    protected string $minTime = '00:00';
+    protected string $maxTime = '23:59';
+    protected int $stepTime = 30;
+    protected ?string $displayFormat = null;
+    protected ?string $language = null;
 
-    /**
-     * @var bool
-     */
-    protected $hasTime = false;
-
-    /**
-     * @var bool
-     */
-    protected $mondayFirst = true;
-
-    /**
-     * @var string
-     */
-    protected $minTime = '00:00';
-
-    /**
-     * @var string
-     */
-    protected $maxTime = '23:59';
-
-    /**
-     * @var int
-     */
-    protected $stepTime = 30;
-
-    /**
-     * @var string
-     */
-    protected $displayFormat = null;
-
-    /**
-     * @var string
-     */
-    protected $language = null;
-
-    /**
-     * @param string $key
-     * @return static
-     */
-    public static function make(string $key)
+    public static function make(string $key): self
     {
         $field = new static($key, static::FIELD_TYPE, new DateFormatter());
         $field->language = app()->getLocale();
@@ -60,114 +25,71 @@ class SharpFormDateField extends SharpFormField
         return $field;
     }
 
-    /**
-     * @param bool $hasDate
-     * @return $this
-     */
-    public function setHasDate($hasDate = true)
+    public function setHasDate($hasDate = true): self
     {
         $this->hasDate = $hasDate;
 
         return $this;
     }
 
-    /**
-     * @param bool $hasTime
-     * @return $this
-     */
-    public function setHasTime($hasTime = true)
+    public function setHasTime($hasTime = true): self
     {
         $this->hasTime = $hasTime;
 
         return $this;
     }
 
-    /**
-     * @param bool $mondayFirst
-     * @return $this
-     */
-    public function setMondayFirst(bool $mondayFirst = true)
+    public function setMondayFirst(bool $mondayFirst = true): self
     {
         $this->mondayFirst = $mondayFirst;
 
         return $this;
     }
 
-    /**
-     * @param bool $sundayFirst
-     * @return $this
-     */
-    public function setSundayFirst(bool $sundayFirst = true)
+    public function setSundayFirst(bool $sundayFirst = true): self
     {
         return $this->setMondayFirst(!$sundayFirst);
     }
 
-    /**
-     * @param int $hours
-     * @param int $minutes
-     * @return $this
-     */
-    public function setMinTime(int $hours, int $minutes = 0)
+    public function setMinTime(int $hours, int $minutes = 0): self
     {
         $this->minTime = $this->formatTime($hours, $minutes);
 
         return $this;
     }
 
-    /**
-     * @param int $hours
-     * @param int $minutes
-     * @return $this
-     */
-    public function setMaxTime(int $hours, int $minutes = 0)
+    public function setMaxTime(int $hours, int $minutes = 0): self
     {
         $this->maxTime = $this->formatTime($hours, $minutes);
 
         return $this;
     }
 
-    /**
-     * @param int $step
-     * @return $this
-     */
-    public function setStepTime(int $step)
+    public function setStepTime(int $step): self
     {
         $this->stepTime = $step;
 
         return $this;
     }
 
-    /**
-     * @param string $displayFormat
-     * @return $this
-     */
-    public function setDisplayFormat(string $displayFormat = null)
+    public function setDisplayFormat(string $displayFormat = null): self
     {
         $this->displayFormat = $displayFormat;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasDate()
+    public function hasDate(): bool
     {
         return $this->hasDate;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasTime()
+    public function hasTime(): bool
     {
         return $this->hasTime;
     }
 
-    /**
-     * @return array
-     */
-    protected function validationRules()
+    protected function validationRules(): array
     {
         return [
             "hasDate" => "required|boolean",
@@ -180,10 +102,6 @@ class SharpFormDateField extends SharpFormField
         ];
     }
 
-    /**
-     * @return array
-     * @throws \Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException
-     */
     public function toArray(): array
     {
         return parent::buildArray([
@@ -198,22 +116,14 @@ class SharpFormDateField extends SharpFormField
         ]);
     }
 
-    /**
-     * @param int $hours
-     * @param int $minutes
-     * @return string
-     */
-    private function formatTime(int $hours, int $minutes)
+    private function formatTime(int $hours, int $minutes): string
     {
         return str_pad($hours, 2, "0", STR_PAD_LEFT)
             . ":"
             . str_pad($minutes, 2, "0", STR_PAD_LEFT);
     }
 
-    /**
-     * @return string
-     */
-    protected function detectDisplayFormat()
+    protected function detectDisplayFormat(): string
     {
         if($this->hasDate()) {
             if($this->hasTime()) {

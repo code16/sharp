@@ -2,15 +2,12 @@
 
 namespace Code16\Sharp\Tests\Feature\Api\Commands;
 
-use Code16\Sharp\Dashboard\Commands\DashboardCommand;
-use Code16\Sharp\Dashboard\DashboardQueryParams;
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
-use Code16\Sharp\Tests\Fixtures\SharpDashboard;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -208,92 +205,93 @@ class EntityCommandControllerTest extends BaseApiTest
 
 class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList {
 
-    function buildListConfig()
+    function buildListConfig(): void
     {
-        $this->addEntityCommand("entity_info", new class() extends EntityCommand {
-            public function label(): string { return "label"; }
-            public function execute(EntityListQueryParams $params, array $data = []): array {
-                return $this->info("ok");
-            }
-
-        })->addEntityCommand("entity_reload", new class() extends EntityCommand {
-            public function label(): string { return "label"; }
-            public function execute(EntityListQueryParams $params, array $data = []): array {
-                return $this->reload();
-            }
-
-        })->addEntityCommand("entity_view", new class() extends EntityCommand {
-            public function label(): string { return "label"; }
-            public function execute(EntityListQueryParams $params, array $data = []): array {
-                return $this->view("welcome");
-            }
-
-        })->addEntityCommand("entity_refresh", new class() extends EntityCommand {
-            public function label(): string { return "label"; }
-            public function execute(EntityListQueryParams $params, array $data = []): array {
-                return $this->refresh([1, 2]);
-            }
-
-        })->addEntityCommand("entity_exception", new class() extends EntityCommand {
-            public function label(): string { return "label"; }
-            public function execute(EntityListQueryParams $params, array $data = []): array {
-                throw new SharpApplicativeException("error");
-            }
-
-        })->addEntityCommand("entity_form", new class() extends EntityCommand {
-            public function label(): string { return "label"; }
-            public function buildFormFields() {
-                $this->addField(SharpFormTextField::make("name"));
-            }
-            public function execute(EntityListQueryParams $params, array $data = []): array {
-                $this->validate($data, ["name"=>"required"]);
-                return $this->reload();
-            }
-
-        })->addEntityCommand("entity_download", new class() extends EntityCommand {
-            public function label(): string { return "label"; }
-            public function execute(EntityListQueryParams $params, array $data = []): array {
-                Storage::fake('files');
-                UploadedFile::fake()->create('account.pdf', 100)->storeAs('pdf', 'account.pdf', ['disk'=>'files']);
-                return $this->download("pdf/account.pdf", "account.pdf", "files");
-            }
-
-        })->addEntityCommand("entity_download_no_disk", new class() extends EntityCommand {
-            public function label(): string { return "label"; }
-            public function execute(EntityListQueryParams $params, array $data = []): array {
-                Storage::fake('local');
-                UploadedFile::fake()->create('account.pdf', 100)->storeAs('pdf', 'account.pdf');
-                return $this->download("pdf/account.pdf");
-            }
-
-        })->addEntityCommand("entity_unauthorized", new class() extends EntityCommand {
-            public function label(): string { return "label"; }
-            public function authorize(): bool { return false; }
-            public function execute(EntityListQueryParams $params, array $data = []): array {
-                return $this->reload();
-            }
-
-        })->addEntityCommand("entity_params", new class() extends EntityCommand
-        {
-            public function label(): string { return "label"; }
-            public function execute(EntityListQueryParams $params, array $data = []): array
-            {
-                return $this->info($params->sortedBy() . $params->sortedDir());
-            }
-
-        })->addEntityCommand("entity_with_init_data", new class() extends EntityCommand {
-            public function label(): string { return "label"; }
-            public function buildFormFields() {
-                $this->addField(SharpFormTextField::make("name"));
-            }
-            protected function initialData(): array
-            {
-                return [
-                    "name" => "John Wayne",
-                    "age" => 32
-                ];
-            }
-            public function execute(EntityListQueryParams $params, array $data = []): array {}
-        });
+        $this
+            ->addEntityCommand("entity_info", new class() extends EntityCommand {
+                public function label(): string { return "label"; }
+                public function execute(EntityListQueryParams $params, array $data = []): array {
+                    return $this->info("ok");
+                }
+            })
+            ->addEntityCommand("entity_reload", new class() extends EntityCommand {
+                public function label(): string { return "label"; }
+                public function execute(EntityListQueryParams $params, array $data = []): array {
+                    return $this->reload();
+                }
+            })
+            ->addEntityCommand("entity_view", new class() extends EntityCommand {
+                public function label(): string { return "label"; }
+                public function execute(EntityListQueryParams $params, array $data = []): array {
+                    return $this->view("welcome");
+                }
+            })
+            ->addEntityCommand("entity_refresh", new class() extends EntityCommand {
+                public function label(): string { return "label"; }
+                public function execute(EntityListQueryParams $params, array $data = []): array {
+                    return $this->refresh([1, 2]);
+                }
+            })
+            ->addEntityCommand("entity_exception", new class() extends EntityCommand {
+                public function label(): string { return "label"; }
+                public function execute(EntityListQueryParams $params, array $data = []): array {
+                    throw new SharpApplicativeException("error");
+                }
+            })
+            ->addEntityCommand("entity_form", new class() extends EntityCommand {
+                public function label(): string { return "label"; }
+                public function buildFormFields(): void {
+                    $this->addField(SharpFormTextField::make("name"));
+                }
+                public function execute(EntityListQueryParams $params, array $data = []): array {
+                    $this->validate($data, ["name"=>"required"]);
+                    return $this->reload();
+                }
+            })
+            ->addEntityCommand("entity_download", new class() extends EntityCommand {
+                public function label(): string { return "label"; }
+                public function execute(EntityListQueryParams $params, array $data = []): array {
+                    Storage::fake('files');
+                    UploadedFile::fake()->create('account.pdf', 100)->storeAs('pdf', 'account.pdf', ['disk'=>'files']);
+                    return $this->download("pdf/account.pdf", "account.pdf", "files");
+                }
+            })
+            ->addEntityCommand("entity_download_no_disk", new class() extends EntityCommand {
+                public function label(): string { return "label"; }
+                public function execute(EntityListQueryParams $params, array $data = []): array {
+                    Storage::fake('local');
+                    UploadedFile::fake()->create('account.pdf', 100)->storeAs('pdf', 'account.pdf');
+                    return $this->download("pdf/account.pdf");
+                }
+            })
+            ->addEntityCommand("entity_unauthorized", new class() extends EntityCommand {
+                public function label(): string { return "label"; }
+                public function authorize(): bool { return false; }
+                public function execute(EntityListQueryParams $params, array $data = []): array {
+                    return $this->reload();
+                }
+            })
+            ->addEntityCommand("entity_params", new class() extends EntityCommand {
+                public function label(): string { return "label"; }
+                public function execute(EntityListQueryParams $params, array $data = []): array
+                {
+                    return $this->info($params->sortedBy() . $params->sortedDir());
+                }
+    
+            })
+            ->addEntityCommand("entity_with_init_data", new class() extends EntityCommand {
+                public function label(): string { return "label"; }
+                public function buildFormFields(): void {
+                    $this->addField(SharpFormTextField::make("name"));
+                }
+                protected function initialData(): array
+                {
+                    return [
+                        "name" => "John Wayne",
+                        "age" => 32
+                    ];
+                }
+                public function execute(EntityListQueryParams $params, array $data = []): array {}
+            });
     }
 }

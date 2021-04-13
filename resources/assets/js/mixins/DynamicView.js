@@ -1,23 +1,30 @@
 import { parseBlobJSONContent } from "../util/request";
 import { lang } from '../util/i18n';
 import { showAlert } from "../util/dialogs";
+import { handleNotifications } from "../util/notifications";
 
 export const withAxiosInterceptors = {
     inject: ['axiosInstance'],
     methods: {
+        showLoading() {
+            this.$store.dispatch('setLoading', true);
+        },
+        hideLoading() {
+            this.$store.dispatch('setLoading', false);
+        },
         installInterceptors() {
             this.axiosInstance.interceptors.request.use(config => {
-                this.$store.dispatch('setLoading', true);
+                this.showLoading();
                 //debugger
                 return config;
             }, error => Promise.reject(error));
 
             this.axiosInstance.interceptors.response.use(response => {
-                this.$store.dispatch('setLoading', false);
+                this.hideLoading();
                 return response;
             }, async error => {
                 let { response, config: { method } } = error;
-                this.$store.dispatch('setLoading', false);
+                this.hideLoading();
 
                 if(response.data instanceof Blob && response.data.type === 'application/json') {
                     response.data = await parseBlobJSONContent(response.data);
@@ -52,7 +59,7 @@ export const withAxiosInterceptors = {
     created() {
         if(!this.synchronous) {
             this.installInterceptors();
-            this.$store.dispatch('setLoading', true);
+            this.showLoading();
         }
     }
 };
@@ -74,7 +81,7 @@ export default {
                 })
                 .then(response => {
                     this.mount(response.data);
-                    this.handleNotifications(response.data);
+                    handleNotifications(response.data.notifications);
                     return Promise.resolve(response);
                 })
                 .catch(error => {
@@ -88,19 +95,6 @@ export default {
                 .catch(error => {
                     return Promise.reject(error);
                 });
-        },
-        showNotification({ level, title, message, autoHide }) {
-            this.$notify({
-                title,
-                type: level,
-                text: message,
-                duration: autoHide ? 4000 : -1
-            });
-        },
-        handleNotifications(data={}) {
-            if(Array.isArray(data.notifications)) {
-                setTimeout(() => data.notifications.forEach(this.showNotification), 500);
-            }
         },
     }
 }

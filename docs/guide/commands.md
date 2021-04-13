@@ -2,7 +2,7 @@
 
 Commands in Sharp are a powerful way to integrate functional processes in the content management. They can be used for instance to re-send an order to the customer, on synchronize pictures of a product, or preview a page...
 
-Commands can be defined in an EntityList or in a Dashboard. This documentation will take the EntityList case, but the API is very similar in both cases, as explained at the end of this page.
+Commands can be defined in an EntityList, in a Show Page or in a Dashboard. This documentation will take the EntityList case, but the API is very similar in all cases, as explained at the end of this page.
 
 ## Generator for an 'EntityList' command
 
@@ -80,9 +80,9 @@ function buildFormFields()
 
 The API is the same as building a standard entity form (see [Building an Entity Form](building-entity-form.md)).
 
-Once this method has been declared, a form will be prompted to the user as he clicks on the Command.
+Once this method has been declared, a form will be prompted in a modal to the user as he clicks on the Command. The optional `public function formModalTitle(): string` method may return the custom title of this modal, if needed. 
 
-Then, is the `execute()` method, it's trivial to grab the entered value, and even to handle the validation:
+Then, is the `execute()` method, you can grab the entered value, and even to handle the validation:
 
 ```php
 public function execute($instanceId, array $data= []): array
@@ -185,8 +185,6 @@ function buildListConfig()
 }
 ```
 
-
-
 ## Handle authorizations
 
 Of course, it's often mandatory to add authorizations to a Command. Here's how to do that:
@@ -217,11 +215,31 @@ public function authorizeFor($instanceId): bool
 }
 ```
 
+### Define an entity Command as "primary"
+
+An EntityList can declare one (and only one) of its entity Commands as "primary". In this case, the command will appear at the top, right next to the creation button ("New..."). The idea is to provide more visibility to an important Command, but could also be to replace the creation button entirely (you need to remove the "create" authorization to achieve this). 
+
+```php
+function buildListConfig(): void
+{
+    $this->setPrimaryEntityCommand("invite_new_user", InviteUserCommand::class);
+}
+```
+
+A use case could be to provide a Command with a form for the "create" task, leaving the real Form only for update.
+
+## Commands for Show Page
+
+Show Page can only define instance commands (obviously); apart from that, the API is the same, and commands should be declared in the `buildShowConfig()` method.
+
+It's a common pattern to reuse the same instance commands in an EntityList and in a Show Page.
+One small difference is that `reload()` action is treated as a `refresh()`.
+
 ## Commands for Dashboard
 
-Dashboard can use the power of Commands too. The API is very similar, here's the differences:
+Dashboard can use the power of Commands too. The API is very similar, here are the differences:
 
-- There is no Instance or Entity distinction; a command handler must extend `Code16\Sharp\Dashboard\Commands\DashboardCommand` ans implements execute method such as:
+- There is no Instance or Entity distinction; a command handler must extend `Code16\Sharp\Dashboard\Commands\DashboardCommand` and implements execute method such as:
 
 ```php
 public function execute(
@@ -244,4 +262,4 @@ function buildDashboardConfig()
 }
 ```
 
-- And finally, a Dashboard Command can not return a `refresh()` action, since there is no Instance.
+- Finally, a Dashboard Command can not return a `refresh()` action, since there is no Instance.

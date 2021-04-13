@@ -13,9 +13,12 @@ class SharpFormTextareaFieldTest extends SharpTestCase
     {
         $formField = SharpFormTextareaField::make("text");
 
-        $this->assertEquals([
-                "key" => "text", "type" => "textarea", "maxLength" => 0
-            ], $formField->toArray()
+        $this->assertEquals(
+            [
+                "key" => "text", 
+                "type" => "textarea"
+            ], 
+            $formField->toArray()
         );
     }
 

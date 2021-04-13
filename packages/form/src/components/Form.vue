@@ -1,20 +1,16 @@
 <template>
     <div class="SharpForm" data-popover-boundary>
-        <template v-if="ready">
-            <slot
-                name="action-bar"
-                :props="actionBarProps"
-                :listeners="actionBarListeners"
-            />
+        <slot
+            name="action-bar"
+            :props="actionBarProps"
+            :listeners="actionBarListeners"
+        />
 
-            <template v-if="hasErrors">
-                <div class="SharpNotification SharpNotification--error" role="alert">
-                    <div class="SharpNotification__details">
-                        <div class="SharpNotification__text-wrapper">
-                            <p class="SharpNotification__title">{{ l('form.validation_error.title') }}</p>
-                            <p class="SharpNotification__subtitle">{{ l('form.validation_error.description') }}</p>
-                        </div>
-                    </div>
+        <template v-if="ready">
+            <template v-if="hasErrors && showAlert">
+                <div class="alert alert-danger SharpForm__alert" role="alert">
+                    <div class="fw-bold">{{ l('form.validation_error.title') }}</div>
+                    <div>{{ l('form.validation_error.description') }}</div>
                 </div>
             </template>
 
@@ -43,6 +39,7 @@
                                 :read-only="isReadOnly"
                                 :error-identifier="fieldLayout.key"
                                 :config-identifier="fieldLayout.key"
+                                root
                                 :update-data="updateData"
                                 :update-visibility="updateVisibility"
                                 @locale-change="updateLocale"
@@ -58,9 +55,7 @@
 
 <script>
     import {
-        BASE_URL,
         getBackUrl,
-        getDeleteBackUrl,
         logError,
         showAlert,
     } from "sharp";
@@ -97,11 +92,12 @@
             instanceId: String,
 
             /// Extras props for customization
-            independant: {
-                type:Boolean,
-                default: false
-            },
+            independant: Boolean,
             ignoreAuthorizations: Boolean,
+            showAlert: {
+                type: Boolean,
+                default: true,
+            },
             props: Object
         },
 
@@ -169,13 +165,9 @@
             downloadLinkBase() {
                 return `/download/${this.entityKey}/${this.instanceId}`;
             },
-            listUrl() {
-                return `${BASE_URL}/list/${this.baseEntityKey}?restore-context=1`;
-            },
             transformedFields() {
                 return transformFields(this.fields, this.data);
             },
-
             currentLocale() {
                 const flattened = Object.values(this.fieldLocale)
                     .map(locale => Array.isArray(locale)
@@ -193,6 +185,9 @@
                     .some(uploading => !!uploading);
             },
             actionBarProps() {
+                if(!this.ready) {
+                    return null;
+                }
                 return {
                     showSubmitButton: this.isCreation
                         ? !!this.authorizations.create
@@ -201,6 +196,8 @@
                     showBackButton: this.isReadOnly,
                     create: !!this.isCreation,
                     uploading: this.isUploading,
+                    breadcrumb: this.breadcrumb?.items,
+                    showBreadcrumb: !!this.breadcrumb?.visible,
                 }
             },
             actionBarListeners() {
@@ -258,9 +255,11 @@
                     alert("Some fields are localized but the form hasn't any locales configured");
                 }
             },
-            handleError({response}) {
-                if(response.status===422)
-                    this.errors = response.data.errors || {};
+            handleError(error) {
+                if(error.response?.status === 422) {
+                    this.errors = error.response.data.errors || {};
+                }
+                return Promise.reject(error);
             },
 
             patchLayout(layout) {
@@ -278,6 +277,13 @@
                 return layout;
             },
 
+            serialize(data = this.data) {
+                return Object.fromEntries(
+                    Object.entries(data ?? {})
+                        .filter(([key]) => this.fields[key]?.type !== 'html')
+                );
+            },
+
             async init() {
                 if(this.independant) {
                     this.mount(this.props);
@@ -291,39 +297,44 @@
                     else logError('no entity key provided');
                 }
             },
-            redirectToClosestRoot() {
-                location.href = getDeleteBackUrl(this.breadcrumb);
+            redirectForResponse(response) {
+                location.href = response.data.redirectUrl;
             },
             redirectToParentPage() {
-                location.href = getBackUrl(this.breadcrumb);
+                location.href = getBackUrl(this.breadcrumb.items);
             },
             async submit({ postFn }={}) {
                 if(this.isUploading) {
                     return;
                 }
-                try {
-                    const response = postFn ? await postFn(this.data) : await this.post();
-                    if(this.independant) {
-                        this.$emit('submit', response);
-                        return response;
-                    }
-                    else if(response.data.ok) {
-                        this.$store.dispatch('setLoading', true);
-                        this.redirectToParentPage();
-                    }
+                this.$emit('loading', true);
+
+                const data = this.serialize();
+                const post = () => postFn
+                    ? postFn(data)
+                    : this.post(this.apiPath, data);
+
+                const response = await post()
+                    .catch(this.handleError)
+                    .finally(() => {
+                        this.$emit('loading', false);
+                    });
+
+                if(this.independant) {
+                    this.$emit('submit', response);
+                    return response;
                 }
-                catch(error) {
-                    this.handleError(error);
-                    return Promise.reject(error);
-                }
+
+                this.$store.dispatch('setLoading', true);
+                this.redirectForResponse(response);
             },
             handleSubmitClicked() {
                 this.submit().catch(()=>{});
             },
             handleDeleteClicked() {
                 this.axiosInstance.delete(this.apiPath)
-                    .then(() => {
-                        this.redirectToClosestRoot();
+                    .then(response => {
+                        this.redirectForResponse(response);
                     });
             },
             handleCancelClicked() {
@@ -339,9 +350,11 @@
             },
 
             // Used by List field as injection
-            hasUploadingFields(fieldKey) {
-                return Object.keys(this.uploadingFields)
-                    .some(uploadingField => uploadingField.startsWith(`${fieldKey}.`));
+            hasUploadingFields(listKey) {
+                return Object.entries(this.uploadingFields)
+                    .some(([fieldKey, isUploading]) => {
+                        return fieldKey.startsWith(`${listKey}.`) && isUploading;
+                    });
             },
         },
         created() {

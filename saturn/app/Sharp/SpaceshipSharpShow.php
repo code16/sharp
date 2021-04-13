@@ -22,32 +22,39 @@ use Code16\Sharp\Utils\Transformers\Attributes\MarkdownAttributeTransformer;
 
 class SpaceshipSharpShow extends SharpShow
 {
-    function buildShowFields()
+    function buildShowFields(): void
     {
         $this
             ->addField(
                 SharpShowTitleField::make("name")
                     ->setTitleLevel(2)
-            )->addField(
+            )
+            ->addField(
                 SharpShowTextField::make("type:label")
                     ->setLabel("Type")
-            )->addField(
+            )
+            ->addField(
                 SharpShowTextField::make("serial_number")
                     ->setLabel("S/N")
-            )->addField(
+            )
+            ->addField(
                 SharpShowTextField::make("brand")
                     ->setLabel("Brand / model")
-            )->addField(
+            )
+            ->addField(
                 SharpShowFileField::make("manual")
                     ->setLabel("Manual")
                     ->setStorageDisk("local")
                     ->setStorageBasePath("data/Spaceship/{id}/Manual")
-            )->addField(
+            )
+            ->addField(
                 SharpShowPictureField::make("picture")
-            )->addField(
+            )
+            ->addField(
                 SharpShowTextField::make("description")
                     ->collapseToWordCount(50)
-            )->addField(
+            )
+            ->addField(
                 SharpShowListField::make("pictures")
                     ->setLabel("additional pictures")
                     ->addItemField(
@@ -56,12 +63,17 @@ class SpaceshipSharpShow extends SharpShow
                             ->setStorageBasePath("data/Spaceship/{id}/Pictures")
                     )
                     ->addItemField(SharpShowTextField::make("legend")->setLabel("Legend"))
-            )->addField(
+            )
+            ->addField(
                 SharpShowEntityListField::make("pilots", "spaceship_pilot")
                     ->setLabel("Pilots")
                     ->hideFilterWithValue("spaceship", function($instanceId) {
                         return $instanceId;
                     })
+//                    ->hideFilterWithValue("role", function($instanceId) {
+//                        return null;
+//                    })
+//                    ->showSearchField(false)
                     ->showEntityState(false)
 //                    ->hideEntityCommand("updateXP")
 //                    ->hideInstanceCommand("download")
@@ -70,12 +82,10 @@ class SpaceshipSharpShow extends SharpShow
             );
     }
 
-    /**
-     * @throws \Code16\Sharp\Exceptions\SharpException
-     */
-    function buildShowConfig()
+    function buildShowConfig(): void
     {
         $this
+            ->setBreadcrumbCustomLabelAttribute("name")
             ->addInstanceCommand("message", SpaceshipSendMessage::class)
             ->addInstanceCommand("preview", SpaceshipPreview::class)
             ->addInstanceCommandSeparator()
@@ -83,7 +93,7 @@ class SpaceshipSharpShow extends SharpShow
             ->setEntityState("state", SpaceshipEntityState::class);
     }
 
-    function buildShowLayout()
+    function buildShowLayout(): void
     {
         $this
             ->addSection('Identity', function(ShowLayoutSection $section) {
@@ -102,6 +112,7 @@ class SpaceshipSharpShow extends SharpShow
             })
             ->addSection('Description', function(ShowLayoutSection $section) {
                 $section
+//                    ->setCollapsable()
                     ->addColumn(6, function(ShowLayoutColumn $column) {
                         $column->withSingleField("description");
                     })
@@ -112,7 +123,9 @@ class SpaceshipSharpShow extends SharpShow
                         });
                     });
             })
-            ->addEntityListSection("pilots");
+            ->addEntityListSection("pilots", function (ShowLayoutSection $section) {
+                $section->setCollapsable();
+            });
     }
 
     function find($id): array

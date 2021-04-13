@@ -12,7 +12,7 @@ use Code16\Sharp\EntityList\SharpEntityList;
 class PassengerSharpList extends SharpEntityList
 {
 
-    function buildListDataContainers()
+    function buildListDataContainers(): void
     {
         $this->addDataContainer(
             EntityListDataContainer::make("name")
@@ -29,7 +29,7 @@ class PassengerSharpList extends SharpEntityList
         );
     }
 
-    function buildListConfig()
+    function buildListConfig(): void
     {
         $this->setSearchable()
             ->setDefaultSort("name", "asc")
@@ -38,7 +38,7 @@ class PassengerSharpList extends SharpEntityList
             ->setPaginated();
     }
 
-    function buildListLayout()
+    function buildListLayout(): void
     {
         $this->addColumn("name", 4)
             ->addColumn("birth_date", 4)
@@ -83,7 +83,8 @@ class PassengerSharpList extends SharpEntityList
 
                 $date = $travel->departure_date->format('Y-m-d (H:i)');
 
-                return '<i class="fas fa-space-shuttle"></i> ' . $travel->spaceship->name
+                return '<i class="fas fa-space-shuttle"></i> ' 
+                    . ($travel->spaceship->name ?? "")
                     . "<br><em>{$travel->destination}</em>"
                     . "<br><small>{$date}</small>";
             })

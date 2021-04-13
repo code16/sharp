@@ -2,12 +2,11 @@
 
 namespace Code16\Sharp\Show;
 
-use Code16\Sharp\EntityList\Commands\EntityCommand;
-use Code16\Sharp\EntityList\Traits\HandleCommands;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
-use Code16\Sharp\Exceptions\SharpException;
+use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
 use Code16\Sharp\Form\HandleFormFields;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
+use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpShow
@@ -15,18 +14,14 @@ abstract class SharpShow
     use WithCustomTransformers,
         HandleFormFields,
         HandleEntityState,
-        HandleCommands;
+        HandleInstanceCommands,
+        HandleCustomBreadcrumb;
 
-    /** @var bool */
-    protected $layoutBuilt = false;
+    protected bool $layoutBuilt = false;
+    protected array $sections = [];
+    protected ?string $multiformAttribute = null;
 
-    /** @var array */
-    protected $sections = [];
-
-    /**
-     * @return array
-     */
-    final public function showLayout()
+    final public function showLayout(): array
     {
         if(!$this->layoutBuilt) {
             $this->buildShowLayout();
@@ -43,7 +38,7 @@ abstract class SharpShow
     /**
      * Return the entity instance, as an array.
      *
-     * @param $id
+     * @param mixed $id
      * @return array
      */
     final public function instance($id): array
@@ -52,6 +47,7 @@ abstract class SharpShow
             // Filter model attributes on actual show labels
             ->only(
                 array_merge(
+                    $this->breadcrumbAttribute ? [$this->breadcrumbAttribute] : [],
                     $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
                     $this->getDataKeys()
                 )
@@ -62,29 +58,38 @@ abstract class SharpShow
     /**
      * Return the show config values (commands and state).
      *
-     * @param $instanceId
+     * @param mixed $instanceId
      * @param array $config
      * @return array
      */
     public function showConfig($instanceId, $config = []): array
     {
+        $config = collect($config)
+            ->merge([
+                "multiformAttribute" => $this->multiformAttribute
+            ])
+            ->all();
+        
         return tap($config, function(&$config) use($instanceId) {
+            $this->appendBreadcrumbCustomLabelAttribute($config);
             $this->appendEntityStateToConfig($config, $instanceId);
-            $this->appendCommandsToConfig($config, $instanceId);
+            $this->appendInstanceCommandsToConfig($config, $instanceId);
         });
     }
 
-    private function buildFormFields()
+    protected function setMultiformAttribute(string $attribute): self
+    {
+        $this->multiformAttribute = $attribute;
+
+        return $this;
+    }
+
+    private function buildFormFields(): void
     {
         $this->buildShowFields();
     }
 
-    /**
-     * @param string $label
-     * @param \Closure|null $callback
-     * @return $this
-     */
-    final protected function addSection(string $label, \Closure $callback = null)
+    final protected function addSection(string $label, \Closure $callback = null): self
     {
         $this->layoutBuilt = false;
 
@@ -98,11 +103,7 @@ abstract class SharpShow
         return $this;
     }
 
-    /**
-     * @param string $entityListKey
-     * @return $this
-     */
-    final protected function addEntityListSection(string $entityListKey)
+    final protected function addEntityListSection(string $entityListKey, \Closure $callback = null): self
     {
         $this->layoutBuilt = false;
 
@@ -111,27 +112,19 @@ abstract class SharpShow
             $column->withSingleField($entityListKey);
         });
 
+        if($callback) {
+            $callback($section);
+        }
+
         $this->sections[] = $section;
 
         return $this;
     }
 
     /**
-     * @param string $commandName
-     * @param string|EntityCommand $commandHandlerOrClassName
-     * @throws SharpException
-     */
-    final protected function addEntityCommand(string $commandName, $commandHandlerOrClassName)
-    {
-        throw new SharpException("Entity commands are not allowed in Show view");
-    }
-
-    /**
      * Build show config using ->addInstanceCommand() and ->setEntityState()
-     *
-     * @return void
      */
-    function buildShowConfig()
+    function buildShowConfig(): void
     {
         // No default implementation
     }
@@ -139,22 +132,18 @@ abstract class SharpShow
     /**
      * Retrieve a Model for the form and pack all its data as JSON.
      *
-     * @param $id
+     * @param mixed $id
      * @return array
      */
     abstract function find($id): array;
 
     /**
      * Build form fields using ->addField()
-     *
-     * @return void
      */
-    abstract function buildShowFields();
+    abstract function buildShowFields(): void;
 
     /**
      * Build form layout using ->addSection()
-     *
-     * @return void
      */
-    abstract function buildShowLayout();
+    abstract function buildShowLayout(): void;
 }

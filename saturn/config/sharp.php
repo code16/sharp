@@ -6,6 +6,7 @@ return [
 
 //    "custom_url_segment" => "admin",
     "display_sharp_version_in_title" => true,
+    "display_breadcrumb" => true,
 
     "extensions" => [
         "assets" => [
@@ -25,9 +26,11 @@ return [
             "form" => \App\Sharp\SpaceshipSharpForm::class,
             "validator" => \App\Sharp\SpaceshipSharpValidator::class,
             "policy" => \App\Sharp\Policies\SpaceshipPolicy::class,
+            "label" => "Spaceship"
         ],
         "pilot" => [
             "list" => \App\Sharp\PilotSharpList::class,
+            "show" => \App\Sharp\PilotSharpShow::class,
             "forms" => [
                 "junior" => [
                     "icon" => "far fa-user",
@@ -42,9 +45,11 @@ return [
                     "validator" => \App\Sharp\PilotSeniorSharpValidator::class,
                 ]
             ],
+            "label" => "Pilot"
         ],
         "spaceship_pilot" => [
             "list" => \App\Sharp\EmbeddedEntityLists\SpaceshipPilotSharpList::class,
+            "show" => \App\Sharp\PilotSharpShow::class,
             "forms" => [
                 "junior" => [
                     "icon" => "far fa-user",
@@ -59,16 +64,19 @@ return [
                     "validator" => \App\Sharp\PilotSeniorSharpValidator::class,
                 ]
             ],
+            "label" => "Pilot"
         ],
         "passenger" => [
             "list" => \App\Sharp\PassengerSharpList::class,
             "form" => \App\Sharp\PassengerSharpForm::class,
             "validator" => \App\Sharp\PassengerSharpValidator::class,
+            "label" => "Passenger"
         ],
         "travel" => [
             "list" => \App\Sharp\TravelSharpList::class,
             "form" => \App\Sharp\TravelSharpForm::class,
             "validator" => \App\Sharp\TravelSharpValidator::class,
+            "label" => "Travel"
         ],
         "user" => [
             "list" => \App\Sharp\UserSharpList::class,
@@ -78,16 +86,19 @@ return [
                 "create" => false,
                 "update" => false,
                 "view" => false
-            ]
+            ],
+            "label" => "Sharp user"
         ],
         "account" => [
             "show" => \App\Sharp\AccountSharpShow::class,
             "form" => \App\Sharp\AccountSharpForm::class,
+            "label" => "My account"
         ],
         "feature" => [
             "list" => \App\Sharp\FeatureSharpList::class,
             "form" => \App\Sharp\FeatureSharpForm::class,
             "validator" => \App\Sharp\FeatureSharpValidator::class,
+            "label" => "Feature"
         ],
         "test" => [
             "form" => \App\Sharp\TestForm\TestForm::class,
@@ -194,4 +205,8 @@ return [
     ],
 
     "login_page_message_blade_path" => env("SHARP_LOGIN_PAGE_MESSAGE_BLADE_PATH", "sharp/_login-page-message"),
+    
+    "theme" => [
+        "primary_color" => env('SHARP_PRIMARY_COLOR', "#004c9b"),
+    ],
 ];

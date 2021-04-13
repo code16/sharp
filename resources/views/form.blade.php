@@ -2,11 +2,10 @@
 
 @section("content")
 
-    <div id="sharp-app" class="form">
-        @include("sharp::partials._menu")
+    <x-sharp::page class="form">
         <sharp-action-view context="form">
             <router-view></router-view>
         </sharp-action-view>
-    </div>
+    </x-sharp::page>
 
 @endsection

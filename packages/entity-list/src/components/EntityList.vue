@@ -1,78 +1,79 @@
 <template>
     <div class="SharpEntityList">
+        <slot
+            name="action-bar"
+            :props="actionBarProps"
+            :listeners="actionBarListeners"
+        />
+
         <template v-if="ready">
-            <slot
-                name="action-bar"
-                :props="actionBarProps"
-                :listeners="actionBarListeners"
-            />
+            <div v-show="visible">
+                <DataList
+                    :items="items"
+                    :columns="columns"
+                    :page="page"
+                    :paginated="paginated"
+                    :total-count="totalCount"
+                    :page-size="pageSize"
+                    :reorder-active="reorderActive"
+                    :sort="sortedBy"
+                    :dir="sortDir"
+                    @change="handleReorderedItemsChanged"
+                    @sort-change="handleSortChanged"
+                    @page-change="handlePageChanged"
+                >
+                    <template v-slot:empty>
+                        {{ l('entity_list.empty_text') }}
+                    </template>
 
-            <DataList
-                :items="items"
-                :columns="columns"
-                :page="page"
-                :paginated="paginated"
-                :total-count="totalCount"
-                :page-size="pageSize"
-                :reorder-active="reorderActive"
-                :sort="sortedBy"
-                :dir="sortDir"
-                @change="handleReorderedItemsChanged"
-                @sort-change="handleSortChanged"
-                @page-change="handlePageChanged"
-            >
-                <template v-slot:empty>
-                    {{ l('entity_list.empty_text') }}
-                </template>
-                <template v-slot:item="{ item }">
-                    <DataListRow :url="instanceUrl(item)" :columns="columns" :row="item">
-                        <template v-if="hasActionsColumn" v-slot:append>
-                            <div class="row justify-content-end justify-content-md-start mx-n2">
-                                <template v-if="instanceHasState(item)">
-                                    <div class="col-auto col-md-12 my-1 px-2">
-                                        <Dropdown class="SharpEntityList__state-dropdown" :disabled="!instanceHasStateAuthorization(item)">
-                                            <template v-slot:text>
-                                                <StateIcon :color="instanceStateIconColor(item)" />
-                                                <span class="text-truncate">
-                                                    {{ instanceStateLabel(item) }}
-                                                </span>
-                                            </template>
-                                            <DropdownItem
-                                                v-for="stateOptions in config.state.values"
-                                                @click="handleInstanceStateChanged(item, stateOptions.value)"
-                                                :key="stateOptions.value"
-                                            >
-                                                <StateIcon :color="stateOptions.color" />&nbsp;
-                                                {{ stateOptions.label }}
-                                            </DropdownItem>
-                                        </Dropdown>
-                                    </div>
-                                </template>
-                                <template v-if="instanceHasCommands(item)">
-                                    <div class="col-auto col-md-12 my-1 px-2">
-                                        <CommandsDropdown
-                                            class="SharpEntityList__commands-dropdown"
-                                            :commands="instanceCommands(item)"
-                                            @select="handleInstanceCommandRequested(item, $event)"
-                                        >
-                                            <template v-slot:text>
-                                                {{ l('entity_list.commands.instance.label') }}
-                                            </template>
-                                        </CommandsDropdown>
-                                    </div>
-                                </template>
-                                </div>
+                    <template v-slot:append-head>
+                        <template v-if="hasEntityCommands">
+                            <div class="d-flex justify-content-end">
+                                <CommandsDropdown
+                                    :commands="dropdownEntityCommands"
+                                    :disabled="reorderActive"
+                                    @select="handleEntityCommandRequested"
+                                >
+                                    <template v-slot:text>
+                                        {{ l('entity_list.commands.entity.label') }}
+                                    </template>
+                                </CommandsDropdown>
+                            </div>
                         </template>
-                    </DataListRow>
-                </template>
+                    </template>
 
-                <template v-slot:append-head>
-                    <slot name="append-head" :props="actionBarProps" :listeners="actionBarListeners" />
-                </template>
-            </DataList>
+                    <template v-slot:item="{ item }">
+                        <DataListRow :url="instanceUrl(item)" :columns="columns" :highlight="instanceIsFocused(item)" :row="item">
+                            <template v-if="hasActionsColumn" v-slot:append="props">
+                                <EntityActions
+                                    :config="config"
+                                    :has-state="instanceHasState(item)"
+                                    :state="instanceState(item)"
+                                    :state-options="instanceStateOptions(item)"
+                                    :state-disabled="!instanceHasStateAuthorization(item)"
+                                    :has-commands="instanceHasCommands(item)"
+                                    :commands="instanceCommands(item)"
+                                    @command="handleInstanceCommandRequested(item, $event)"
+                                    @state-change="handleInstanceStateChanged(item, $event)"
+                                    @selecting="props.toggleHighlight($event)"
+                                />
+                            </template>
+                        </DataListRow>
+                    </template>
+
+                    <template v-slot:append-body>
+                        <template v-if="inline && loading">
+                            <LoadingOverlay medium absolute />
+                        </template>
+                    </template>
+                </DataList>
+            </div>
+        </template>
+        <template v-else-if="visible && inline">
+            <Loading medium />
         </template>
 
-        <CommandFormModal :form="commandCurrentForm" ref="commandForm" />
+        <CommandFormModal :command="currentCommand" ref="commandForm" />
         <CommandViewPanel :content="commandViewContent" @close="handleCommandViewPanelClosed" />
     </div>
 </template>
@@ -81,13 +82,17 @@
     import isEqual from 'lodash/isEqual';
     import { formUrl, showUrl, lang, showAlert } from 'sharp';
     import { Localization, DynamicView, withCommands } from 'sharp/mixins';
-
     import {
         DataList,
         DataListRow,
         StateIcon,
-        Dropdown,
+        Button,
+        Loading,
+        LoadingOverlay,
+        Modal,
+        ModalSelect,
         DropdownItem,
+        DropdownSeparator
     } from 'sharp-ui';
 
     import {
@@ -96,21 +101,33 @@
         CommandViewPanel,
     } from 'sharp-commands';
 
+    import EntityActions from "./EntityActions";
+
+
     export default {
         name: 'SharpEntityList',
         mixins: [DynamicView, Localization, withCommands],
         components: {
+            EntityActions,
+
             DataList,
             DataListRow,
 
             StateIcon,
             CommandsDropdown,
 
-            Dropdown,
-            DropdownItem,
+            Button,
+            Modal,
+            ModalSelect,
 
             CommandFormModal,
             CommandViewPanel,
+
+            DropdownItem,
+            DropdownSeparator,
+
+            Loading,
+            LoadingOverlay,
         },
         props: {
             entityKey: String,
@@ -134,11 +151,16 @@
                 default: true,
             },
             hiddenCommands: Object,
-            hiddenFilters: Object,
+            visible: {
+                type: Boolean,
+                default: true,
+            },
+            focusedItem: Number,
         },
         data() {
             return {
                 ready: false,
+                loading: false,
 
                 page: 0,
                 search: '',
@@ -160,6 +182,11 @@
         watch: {
             query(query, oldQuery) {
                 if(!isEqual(query, oldQuery)) {
+                    this.init();
+                }
+            },
+            visible(visible) {
+                if(visible && !this.ready) {
                     this.init();
                 }
             },
@@ -202,13 +229,19 @@
             },
 
             actionBarProps() {
+                if(!this.ready) {
+                    return {
+                        ready: false,
+                    }
+                }
                 return {
+                    ready: true,
                     count: this.totalCount,
                     search: this.search,
-                    filters: this.visibleFilters,
+                    filters: this.filters,
                     filtersValues: this.filtersValues,
-                    commands: this.allowedEntityCommands,
                     forms: this.multiforms,
+                    primaryCommand: this.allowedEntityCommands.flat().find(command => command.primary),
                     reorderActive: this.reorderActive,
                     canCreate: this.canCreate,
                     canReorder: this.canReorder,
@@ -217,12 +250,12 @@
             },
             actionBarListeners() {
                 return {
+                    'command': this.handleEntityCommandRequested,
                     'search-change': this.handleSearchChanged,
                     'search-submit': this.handleSearchSubmitted,
                     'filter-change': this.handleFilterChanged,
                     'reorder-click': this.handleReorderButtonClicked,
                     'reorder-submit': this.handleReorderSubmitted,
-                    'command': this.handleEntityCommandRequested,
                     'create': this.handleCreateButtonClicked,
                 }
             },
@@ -234,10 +267,12 @@
                 return (this.config.commands.entity || [])
                     .map(group => group.filter(command => this.isEntityCommandAllowed(command)))
             },
-            visibleFilters() {
-                return this.hiddenFilters
-                    ? this.filters.filter(filter => !(filter.key in this.hiddenFilters))
-                    : this.filters;
+            dropdownEntityCommands() {
+                return this.allowedEntityCommands
+                    .map(group => group.filter(command => !command.primary))
+            },
+            hasEntityCommands() {
+                return this.dropdownEntityCommands.flat().length > 0;
             },
             multiforms() {
                 return this.forms ? Object.values(this.forms) : null;
@@ -278,6 +313,9 @@
             },
 
             hasActionsColumn() {
+                if(this.reorderActive) {
+                    return false;
+                }
                 return this.items.some(instance =>
                     this.instanceHasState(instance) ||
                     this.instanceHasCommands(instance)
@@ -375,21 +413,12 @@
                     ...res, group.filter(command => this.isInstanceCommandAllowed(instance, command))
                 ], []);
             },
-            instanceStateIconColor(instance) {
-                const state = this.instanceState(instance);
-                const stateOptions = this.instanceStateOptions(state);
-                return stateOptions.color;
-            },
-            instanceStateLabel(instance) {
-                const state = this.instanceState(instance);
-                const stateOptions = this.instanceStateOptions(state);
-                return stateOptions.label;
-            },
-            instanceStateOptions(instanceState) {
+            instanceStateOptions(instance) {
                 if(!this.config.state) {
                     return null;
                 }
-                return this.config.state.values.find(stateValue => stateValue.value === instanceState);
+                const state = this.instanceState(instance);
+                return this.config.state.values.find(stateValue => stateValue.value === state);
             },
             instanceForm(instance) {
                 const instanceId = this.instanceId(instance);
@@ -415,6 +444,10 @@
                 return Array.isArray(viewAuthorizations)
                     ? viewAuthorizations.includes(instanceId)
                     : !!viewAuthorizations;
+            },
+            instanceIsFocused(instance) {
+                const instanceId = this.instanceId(instance);
+                return this.focusedItem && this.focusedItem === instanceId;
             },
 
 
@@ -484,14 +517,14 @@
             formUrl({ formKey, instanceId }={}) {
                 return formUrl({
                     entityKey: formKey ? `${this.entityKey}:${formKey}` : this.entityKey,
-                    instanceId
-                });
+                    instanceId,
+                }, { append: true });
             },
             showUrl({ instanceId }={}) {
                 return showUrl({
                     entityKey: this.entityKey,
                     instanceId,
-                });
+                }, { append: true });
             },
             tryParseNumber(val) {
                 if(Array.isArray(val)) {
@@ -502,6 +535,20 @@
             },
             filterValueOrDefault(val, filter) {
                 return val != null && val !== '' ? this.tryParseNumber(val) : (filter.default || (filter.multiple?[]:null));
+            },
+
+            /**
+             * Dynamic view overrides
+             */
+            showLoading() {
+                if(!this.inline) {
+                    this.$store.dispatch('setLoading', true);
+                }
+            },
+            hideLoading() {
+                if(!this.inline) {
+                    this.$store.dispatch('setLoading', false);
+                }
             },
 
             /**
@@ -570,7 +617,10 @@
                 dir && (this.sortDir = dir);
             },
             async init() {
-                console.log(this.entityKey, this.query);
+                if(!this.visible) {
+                    return;
+                }
+                this.loading = true;
                 await this.storeDispatch('setEntityKey', this.entityKey);
                 // legacy
                 await this.get();
@@ -590,6 +640,7 @@
                     filtersValues: this.getFiltersValuesFromQuery(this.query),
                 });
                 this.ready = true;
+                this.loading = false;
             },
         },
         beforeMount() {

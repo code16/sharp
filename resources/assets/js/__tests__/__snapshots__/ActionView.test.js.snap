@@ -2,7 +2,8 @@
 
 exports[`action-view can mount ActionView 1`] = `
 <div class="SharpActionView">
-	<notifications-stub group="" width="300" reverse="true" position="top right" classes="vue-notification" animationtype="css" animation="[object Object]" animationname="slideRight" speed="300" cooldown="0" duration="3000" delay="0" max="Infinity" style="top: 6rem;"></notifications-stub>
+	<notifications-stub group="" width="300" reverse="true" position="top right" classes="vue-notification" animationtype="css" animation="[object Object]" animationname="slideRight" speed="300" cooldown="0" duration="3000" delay="0" max="Infinity" closeonclick="true"
+	    style="top: 6rem; right: 1rem;"></notifications-stub>
 	<loadingoverlay-stub></loadingoverlay-stub>
 </div>
 `;
@@ -10,6 +11,7 @@ exports[`action-view can mount ActionView 1`] = `
 exports[`action-view can mount ActionView with error page 1`] = `
 <div class="SharpActionView">
 	<div class="container">
+		<actionbar-stub></actionbar-stub>
 		<h1>Error 404</h1>
 		<p>ERROR MESSAGE</p>
 	</div>
@@ -19,14 +21,16 @@ exports[`action-view can mount ActionView with error page 1`] = `
 
 exports[`action-view can mount ActionView with notification 1`] = `
 <div class="SharpActionView">
-	<notifications-stub group="" width="300" reverse="true" position="top right" classes="vue-notification" animationtype="css" animation="[object Object]" animationname="slideRight" speed="300" cooldown="0" duration="3000" delay="0" max="Infinity" style="top: 6rem;"></notifications-stub>
+	<notifications-stub group="" width="300" reverse="true" position="top right" classes="vue-notification" animationtype="css" animation="[object Object]" animationname="slideRight" speed="300" cooldown="0" duration="3000" delay="0" max="Infinity" closeonclick="true"
+	    style="top: 6rem; right: 1rem;"></notifications-stub>
 	<loadingoverlay-stub></loadingoverlay-stub>
 </div>
 `;
 
 exports[`action-view can mount with multiple modals 1`] = `
 <div class="SharpActionView">
-	<notifications-stub group="" width="300" reverse="true" position="top right" classes="vue-notification" animationtype="css" animation="[object Object]" animationname="slideRight" speed="300" cooldown="0" duration="3000" delay="0" max="Infinity" style="top: 6rem;"></notifications-stub>
+	<notifications-stub group="" width="300" reverse="true" position="top right" classes="vue-notification" animationtype="css" animation="[object Object]" animationname="slideRight" speed="300" cooldown="0" duration="3000" delay="0" max="Infinity" closeonclick="true"
+	    style="top: 6rem; right: 1rem;"></notifications-stub>
 	<modal-stub visible="true" okonly="true" nocloseonbackdrop="true" nocloseonesc="true">
 		Modal 1
 	</modal-stub>
@@ -39,7 +43,8 @@ exports[`action-view can mount with multiple modals 1`] = `
 
 exports[`action-view loading 1`] = `
 <div class="SharpActionView">
-	<notifications-stub group="" width="300" reverse="true" position="top right" classes="vue-notification" animationtype="css" animation="[object Object]" animationname="slideRight" speed="300" cooldown="0" duration="3000" delay="0" max="Infinity" style="top: 6rem;"></notifications-stub>
+	<notifications-stub group="" width="300" reverse="true" position="top right" classes="vue-notification" animationtype="css" animation="[object Object]" animationname="slideRight" speed="300" cooldown="0" duration="3000" delay="0" max="Infinity" closeonclick="true"
+	    style="top: 6rem; right: 1rem;"></notifications-stub>
 	<modal-stub visible="true" okonly="true" nocloseonbackdrop="true" nocloseonesc="true">
 		Modal 1
 	</modal-stub>

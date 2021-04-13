@@ -1,12 +1,11 @@
 <template>
     <Grid :rows="layout" v-slot="{ itemLayout:fieldLayout }">
         <template v-if="isFieldset(fieldLayout)">
-            <fieldset class="SharpForm__fieldset" v-show="isFieldsetVisible(fieldLayout)">
-                <div class="SharpModule__inner">
-                    <div class="SharpModule__header">
-                        <div class="SharpModule__title">{{fieldLayout.legend}}</div>
-                    </div>
-                    <div class="SharpModule__content">
+            <fieldset v-show="isFieldsetVisible(fieldLayout)">
+                <legend class="SharpForm__label form-label">{{ fieldLayout.legend }}</legend>
+
+                <div class="card SharpForm__fieldset shadow-sm">
+                    <div class="card-body">
                         <FieldsLayout :layout="fieldLayout.fields" v-slot="{ fieldLayout }">
                             <slot :field-layout="fieldLayout" />
                         </FieldsLayout>
@@ -35,7 +34,7 @@
                 type: Array,
                 required: true
             },
-            visible : {
+            visible: {
                 type: Object,
                 default: () => ({})
             }
@@ -54,7 +53,20 @@
             isFieldsetVisible(fieldsetLayout) {
                 return (fieldsetLayout.fields || []).flat()
                     .some(fieldLayout => this.visible[fieldLayout.key]);
-            }
-        }
+            },
+            updateLayout() {
+                const rows = this.$el.querySelectorAll(':scope > .SharpGrid__row');
+                rows.forEach(row => {
+                    const hasLabel = !!row.querySelector(':scope > .SharpGrid__col > .SharpForm__form-item--has-label');
+                    row.classList.toggle('SharpGrid__row--has-label', hasLabel);
+                });
+            },
+        },
+        mounted() {
+            this.updateLayout();
+        },
+        updated() {
+            this.updateLayout();
+        },
     }
 </script>

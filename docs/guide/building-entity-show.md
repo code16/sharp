@@ -106,6 +106,19 @@ function buildShowLayout()
 }
 ```
 
+A section can be declared *collapsable*:
+
+```php
+function buildShowLayout()
+{
+    $this->addSection(
+        'Description', 
+        function(ShowLayoutSection $section) {
+            $section->setCollapsable();
+        }
+    );
+}
+```
 
 #### Columns and fields
 
@@ -130,7 +143,7 @@ function buildShowLayout()
 
 A `ShowLayoutColumn`, very much like a `FormLayoutColumn`, can declare single field rows and multi fields rows. Report to the [Form layout documentation](building-entity-form.md#buildformlayout) to find out how.
 
-#### `SharpShowListField`'s layout
+#### SharpShowListField's layout
 
 Like `SharpFormListField` in Forms, a `SharpShowListField` must declare its item layout, in order to describe how fields are displayed, like in this example:
 
@@ -160,6 +173,7 @@ function buildShowLayout()
 }
 ```
 
+Like regular sections, embedded Entity List can be declared *collapsable*.
 
 ### `find($id): array`
 
@@ -195,7 +209,7 @@ function find($id): array
 ```
 
 
-Transformers are explained in the detailled [How to transform data](how-to-transform-data.md) documentation.
+Transformers are explained in the detailed [How to transform data](how-to-transform-data.md) documentation.
 
 
 ### `buildShowConfig()`

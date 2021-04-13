@@ -4,20 +4,11 @@ namespace Code16\Sharp\Dashboard\Widgets;
 
 abstract class SharpGraphWidget extends SharpWidget
 {
-    /** @var string */
-    protected $display = null;
-
-    /** @var string */
-    protected $ratio = [16,9];
-
-    /** @var int */
-    protected $height = null;
-
-    /** @var bool */
-    protected $showLegend = true;
-
-    /** @var bool */
-    protected $minimal = false;
+    protected ?string $display = null;
+    protected array $ratio = [16,9];
+    protected ?int $height = null;
+    protected bool $showLegend = true;
+    protected bool $minimal = false;
     
     /**
      * @param string $ratio 16:9, 1:1, ...

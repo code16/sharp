@@ -9,12 +9,12 @@ use Code16\Sharp\Form\SharpForm;
 
 class PersonSharpForm extends SharpForm
 {
-    function buildFormFields()
+    function buildFormFields(): void
     {
         $this->addField(SharpFormTextField::make("name"));
     }
 
-    function buildFormLayout()
+    function buildFormLayout(): void
     {
         $this->addColumn(6, function(FormLayoutColumn $column) {
             return $column->withSingleField("name");
@@ -36,9 +36,8 @@ class PersonSharpForm extends SharpForm
         return true;
     }
 
-    function delete($id): bool
+    function delete($id): void
     {
-        return true;
     }
 
     function create(): array

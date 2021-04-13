@@ -13,10 +13,10 @@ class SharpEntityListReorderTest extends SharpTestCase
     function we_can_configure_a_reorder_handler()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig()
+            function buildListConfig(): void
             {
                 $this->setReorderable(new class implements ReorderHandler {
-                    function reorder(array $ids) {}
+                    function reorder(array $ids): void {}
                 });
             }
         };
