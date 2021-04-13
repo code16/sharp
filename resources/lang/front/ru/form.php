@@ -4,6 +4,7 @@ return [
 
     'validation_error.title' => 'Ошибка заполнения формы.',
     'validation_error.description' => 'Пожалуйста, исправьте введенные данные, ошибки указаны под полями.',
+    'validation_error.localized' => 'Произошла ошибка в : :locales',
 
     'list.remove_button' => 'Удалить',
     'list.insert_button' => 'Вставить',
@@ -31,6 +32,11 @@ return [
 
     'multiselect.placeholder' => 'Выберите варианты',
     'multiselect.max_text' => 'Достигнут лимит вариантов',
+    
+    'tags.unknown_label' => 'Неизвестно',
+    
+    'select.select_all' => 'Выбрать всё',
+    'select.unselect_all' => 'Снять выделение',
 
     'autocomplete.no_results_text' => 'Ничего не найдено',
 
