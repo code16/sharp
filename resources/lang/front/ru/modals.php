@@ -16,5 +16,8 @@ return [
     'error.message' => 'Упс... что-то не так',
     
     'ok_button' => 'Ok',
-    'cancel_button' => 'Отмена'
+    'cancel_button' => 'Отмена',
+    
+    'entity_state.edit.title' => 'Обновить статус',
+    'entity_state.edit.ok_button' => 'Ok',
 ];
