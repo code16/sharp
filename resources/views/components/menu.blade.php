@@ -28,7 +28,7 @@
         </sharp-nav-item>
 
         @foreach($component->items as $menuItem)
-            @if($menuItem->type == 'category')
+            @if($menuItem->type === 'category')
                 <sharp-collapsible-item
                     label="{{ $menuItem->label }}"
                     @if(collect($menuItem->entities)->some(fn ($entity) => $entity->key === $currentEntity))
