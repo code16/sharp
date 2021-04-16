@@ -17,13 +17,25 @@ class MenuItemCategory extends MenuItem
             }
         }
         
-        $this->entities = collect($this->entities)
-            ->reverse()
-            ->skipWhile(fn ($entity) => $entity->type === 'separator')
-            ->reverse()
-            ->toArray();
+        $this->entities = $this->sanitizeItems($this->entities);
     }
 
+    public function sanitizeItems($items): array
+    {
+        $filtered = [];
+        
+        foreach (array_reverse($items) as $key => $item) {
+            if($item->type == 'separator') {
+                if(count($filtered) == 0 || end($filtered)->type == 'separator') {
+                    continue;
+                }
+            }
+            $filtered[] = $item;
+        }
+        
+        return array_reverse($filtered);
+    }
+    
     public function isValid(): bool
     {
         return count($this->entities) != 0;
