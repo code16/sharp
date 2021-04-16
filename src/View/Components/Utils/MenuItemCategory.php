@@ -16,6 +16,12 @@ class MenuItemCategory extends MenuItem
                 $this->entities[] = $menuEntity;
             }
         }
+        
+        $this->entities = collect($this->entities)
+            ->reverse()
+            ->skipWhile(fn ($entity) => $entity->type === 'separator')
+            ->reverse()
+            ->toArray();
     }
 
     public function isValid(): bool
