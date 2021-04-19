@@ -29,7 +29,8 @@ class Menu extends Component
             ->map(function($itemConfig) {
                 return MenuItem::parse($itemConfig);
             })
-            ->filter();
+            ->filter()
+            ->values();
     }
 
     public function render()
