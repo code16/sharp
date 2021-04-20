@@ -43,7 +43,7 @@
 </template>
 
 <script>
-    import { api } from "../api";
+    import { createApi } from "../api";
     import { Modal, LoadingOverlay, ActionBar } from 'sharp-ui';
 
     export default {
@@ -56,7 +56,7 @@
 
         provide() {
             return {
-                axiosInstance: api
+                axiosInstance: createApi(),
             }
         },
 

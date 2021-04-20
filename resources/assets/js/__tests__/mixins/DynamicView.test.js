@@ -180,134 +180,21 @@ describe('dynamic-view',()=>{
         expect($view.$store.dispatch).toHaveBeenCalledWith('setLoading', false);
     });
 
+    test('intercept response [error]: hide loading', async ()=>{
+        let $view = await createVm();
 
-    describe('intercept response [error]', ()=>{
-        let defaultDelay = moxios.delay;
-        beforeAll(()=>moxios.delay = 10);
-        afterAll(()=>moxios.delay = defaultDelay);
-
-        test('hide loading', async ()=>{
-            let $view = await createVm();
-
-            $view.post().catch(e=>{
-                // console.log(e) //[debug]
-            });
-
-            await nextRequestFulfilled({
-                status: 400,
-                response: {}
-            });
-
-            expect($view.$store.dispatch).toHaveBeenCalledWith('setLoading', false);
+        $view.post().catch(e=>{
+            // console.log(e) //[debug]
         });
 
-        test('parse blob to json', async ()=>{
-            let $view = await createVm();
-
-            $view.axiosInstance.get('/', { responseType: 'blob' }).catch(e=>{
-                //console.log(e) //[debug]
-            });
-
-            let response = await nextRequestFulfilled({
-                status: 400,
-                response: new Blob([JSON.stringify({ errors: {} })], { type: 'application/json' })
-            }, 100);
-
-            expect(response.data).toEqual({ errors: {} });
+        await nextRequestFulfilled({
+            status: 400,
+            response: {}
         });
 
-        test('show error modal on 401 and redirect on login page when click OK', async ()=>{
-            let $view = await createVm();
-
-            $view.axiosInstance.get('/').catch(e=>{
-                //console.log(e) //[debug]
-            });
-
-            await nextRequestFulfilled({
-                status: 401,
-                response: {
-                    message: 'unauthorized'
-                }
-            });
-
-            expect(showAlert).toHaveBeenCalledTimes(1);
-            expect(showAlert).toHaveBeenCalledWith('unauthorized', {
-                title: expect.stringMatching(/.+/),
-                isError: true,
-                okCallback: expect.any(Function)
-            });
-
-            let { okCallback } = showAlert.mock.calls[0][1];
-
-            location.reload = jest.fn();
-
-            okCallback();
-
-            expect(location.reload).toHaveBeenCalled();
-
-        });
-
-        test('show error modal on else server response status', async () => {
-            let $view = await createVm();
-
-
-            $view.axiosInstance.get('/').catch(e=>{});
-            await nextRequestFulfilled({
-                status: 403,
-                response: {}
-            });
-            expect(showAlert).toHaveBeenCalledTimes(1);
-            expect(showAlert).toHaveBeenLastCalledWith("{{ modals.403.message }}", {
-                title: "{{ modals.403.title }}",
-                isError: true,
-            });
-
-            $view.axiosInstance.post('/').catch(e=>{});
-            await nextRequestFulfilled({
-                status: 404,
-                response: {
-                    message: 'Not found'
-                }
-            });
-            expect(showAlert).toHaveBeenCalledTimes(2);
-            expect(showAlert).toHaveBeenLastCalledWith('Not found', {
-                title: "{{ modals.404.title }}",
-                isError: true,
-            });
-
-            $view.axiosInstance.get('/').catch(e=>{});
-            await nextRequestFulfilled({
-                status: 417,
-                response: {
-                    message: 'custom error'
-                }
-            });
-            expect(showAlert).toHaveBeenCalledTimes(3);
-            expect(showAlert).toHaveBeenLastCalledWith('custom error', {
-                title: "{{ modals.417.title }}",
-                isError: true,
-            });
-
-            $view.axiosInstance.get('/').catch(e=>{});
-            await nextRequestFulfilled({
-                status: 500,
-                response: {}
-            });
-            expect(showAlert).toHaveBeenCalledTimes(4);
-            expect(showAlert).toHaveBeenLastCalledWith("{{ modals.500.message }}", {
-                title: "{{ modals.500.title }}",
-                isError: true,
-            });
-
-            $view.axiosInstance.get('/').catch(e=>{});
-            await nextRequestFulfilled({
-                status: 404,
-                response: {}
-            });
-            expect(showAlert).not.toHaveBeenCalledTimes(5);
-
-        });
+        expect($view.$store.dispatch).toHaveBeenCalledWith('setLoading', false);
     });
+
 
     test('show loading on created if asynchronous component', async () => {
         const $view = await createVm();

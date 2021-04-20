@@ -219,7 +219,12 @@
             async init() {
                 await this.$store.dispatch('show/setEntityKey', this.$route.params.entityKey);
                 await this.$store.dispatch('show/setInstanceId', this.$route.params.instanceId);
-                const show = await this.$store.dispatch('show/get');
+                this.$store.dispatch('setLoading', true);
+
+                const show = await this.$store.dispatch('show/get')
+                    .finally(() => {
+                        this.$store.dispatch('setLoading', false);
+                    })
 
                 handleNotifications(show.notifications);
 

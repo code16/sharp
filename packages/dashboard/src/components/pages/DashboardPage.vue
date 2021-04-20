@@ -28,7 +28,7 @@
 
     export default {
         name:'SharpDashboardPage',
-        mixins: [withAxiosInterceptors, withCommands],
+        mixins: [withCommands],
 
         components: {
             Grid,
@@ -77,12 +77,18 @@
                     getFormData: () => this.$store.dispatch('dashboard/getCommandFormData', { command, query }),
                 });
             },
-            async init() {
-                await this.$store.dispatch('dashboard/setDashboardKey', this.$route.params.id);
-                await this.$store.dispatch('dashboard/get', {
+            init() {
+                this.$store.dispatch('dashboard/setDashboardKey', this.$route.params.id);
+                this.$store.dispatch('setLoading', true);
+                this.$store.dispatch('dashboard/get', {
                     filtersValues: this.getFiltersValuesFromQuery(this.$route.query)
-                });
-                this.ready = true;
+                })
+                .then(() => {
+                    this.ready = true;
+                })
+                .finally(() => {
+                    this.$store.dispatch('setLoading', false);
+                })
             },
         },
         created() {
