@@ -17,23 +17,24 @@ class MenuItemCategory extends MenuItem
             }
         }
         
-        $this->entities = $this->sanitizeItems($this->entities);
+        $this->sanitizeItems();
     }
 
-    public function sanitizeItems($items): array
+    private function sanitizeItems(): void
     {
         $filtered = [];
         
-        foreach (array_reverse($items) as $key => $item) {
-            if($item->type == 'separator') {
-                if(count($filtered) == 0 || end($filtered)->type == 'separator') {
+        foreach (array_reverse($this->entities) as $item) {
+            if($item->type === 'separator') {
+                // Prevent separators in last position or stacked
+                if(count($filtered) === 0 || end($filtered)->type === 'separator') {
                     continue;
                 }
             }
             $filtered[] = $item;
         }
         
-        return array_reverse($filtered);
+        $this->entities = array_reverse($filtered);
     }
     
     public function isValid(): bool
