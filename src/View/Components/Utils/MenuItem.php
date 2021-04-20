@@ -4,7 +4,7 @@ namespace Code16\Sharp\View\Components\Utils;
 
 abstract class MenuItem
 {
-    public string $label;
+    public ?string $label;
 
     public static function parse(array $config): ?MenuItem
     {
@@ -16,6 +16,8 @@ abstract class MenuItem
             $menuItem = new MenuItemUrl($config);
         } elseif (isset($config['dashboard'])) {
             $menuItem = new MenuItemDashboard($config);
+        } elseif (isset($config['separator'])) {
+            $menuItem = new MenuItemSeparator($config);
         }
 
         return ($menuItem ?? false) && $menuItem->isValid()

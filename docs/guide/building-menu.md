@@ -103,3 +103,32 @@ Categories are groups that can be collapsed
     ]
 ]
 ```
+
+## Add separators in categories
+
+You can add a simple labelled separator in categories, as sub-categories
+
+```php
+"menu" => [
+    [
+        "label" => "Company",
+        "entities" => [
+            [
+                "label" => "Dashboard",
+                "icon" => "fa-dashboard",
+                "dashboard" => "company_dashboard"
+            ],
+            [
+                "separator" => true,
+                "label" => "Separator",
+            ],
+            [
+                "label" => "Spaceships",
+                "icon" => "fa-space-shuttle",
+                "entity" => "spaceship"
+            ],
+            [...]
+        ]
+    ]
+]
+```

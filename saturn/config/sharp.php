@@ -158,6 +158,10 @@ return [
                     "entity" => "travel"
                 ],
                 [
+                    "separator" => true,
+                    "label" => "Utilities",
+                ],
+                [
                     "label" => "Some external link",
                     "icon" => "fas fa-globe",
                     "url" => "https://google.com"
