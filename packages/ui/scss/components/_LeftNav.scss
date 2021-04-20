@@ -91,6 +91,38 @@
     @include enhanced-item-font-size;
   }
 
+  &__separator {
+    position: relative;
+    padding-left: 3.5rem;
+    padding-right: 3rem;
+    margin-top: .75rem;
+    margin-bottom: 1.25rem;
+    color: hsl(var(--bs-primary-h), 10%, 60%);
+    font-size: .6875rem;
+    line-height: 1.2;
+    min-height: 1px;
+    cursor: default;
+    &::before {
+      content: "";
+      display: block;
+      border-bottom: 1px solid $ui-03;
+      position: absolute;
+      top: 50%;
+      left: 1.25rem;
+      right: 1.25rem;
+      transform: translateY(-50%);
+    }
+    > span {
+      position: relative;
+      max-width: 100%;
+      background-color: white;
+      padding: .125em .75em;
+      margin-left: -.75em;
+      margin-right: -.75em;
+      -webkit-box-decoration-break: clone;
+    }
+  }
+
   &__item {
     width: 100%;
     padding: 0;
