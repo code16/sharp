@@ -8,6 +8,7 @@ export function getAutocompleteSuggestions({ url, method, locale, searchAttribut
         locale,
         [searchAttribute]: query,
     };
+    // use default request because it can be external API call
     return axios({
         url,
         method,
