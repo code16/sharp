@@ -51,18 +51,10 @@ export default {
                     this.mount(response.data);
                     handleNotifications(response.data.notifications);
                     return Promise.resolve(response);
-                })
-                .catch(error => {
-                    return Promise.reject(error);
                 });
         },
         post(endpoint = this.apiPath, data = this.data, config) {
-            return this.axiosInstance.post(endpoint, data, config).then(response => {
-                    return Promise.resolve(response);
-                })
-                .catch(error => {
-                    return Promise.reject(error);
-                });
+            return this.axiosInstance.post(endpoint, data, config);
         },
     }
 }

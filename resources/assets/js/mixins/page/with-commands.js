@@ -1,5 +1,5 @@
 import { parseBlobJSONContent, getFileName } from "../../util/request";
-import { lang } from "../../index";
+import { lang, withLoadingOverlay } from "../../index";
 import { showConfirm, showAlert } from "../../util/dialogs";
 
 export default {
@@ -37,7 +37,9 @@ export default {
             this.currentCommand = null;
         },
         async showCommandForm(command, { postForm, getFormData }) {
-            const data = command.fetch_initial_data ? await getFormData() : {};
+            const data = command.fetch_initial_data
+                ? await withLoadingOverlay(getFormData())
+                : {};
             const post = () => this.postCommandForm({ postFn:postForm });
 
             this.currentCommand = {
@@ -68,7 +70,7 @@ export default {
                 });
             }
             try {
-                let response = await postCommand();
+                let response = await withLoadingOverlay(postCommand());
                 await this.handleCommandResponse(response);
             } catch(e) {
                 console.error(e);

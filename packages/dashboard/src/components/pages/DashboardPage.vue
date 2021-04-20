@@ -22,7 +22,8 @@
     import { mapState, mapGetters } from 'vuex';
     import { Grid } from 'sharp-ui';
     import { CommandFormModal, CommandViewPanel } from 'sharp-commands';
-    import { withAxiosInterceptors, withCommands } from "sharp/mixins";
+    import { withCommands } from "sharp/mixins";
+    import { withLoadingOverlay } from "sharp";
     import Widget from '../Widget';
     import ActionBarDashboard from '../ActionBar';
 
@@ -59,7 +60,7 @@
                 commandsForType: 'commands/forType',
             }),
             commands() {
-                return this.commandsForType('dashboard') || [];
+                return this.commandsForType('dashboard') || [];
             },
             commandsQuery() {
                 return {
@@ -77,18 +78,14 @@
                     getFormData: () => this.$store.dispatch('dashboard/getCommandFormData', { command, query }),
                 });
             },
-            init() {
-                this.$store.dispatch('dashboard/setDashboardKey', this.$route.params.id);
-                this.$store.dispatch('setLoading', true);
-                this.$store.dispatch('dashboard/get', {
-                    filtersValues: this.getFiltersValuesFromQuery(this.$route.query)
-                })
-                .then(() => {
-                    this.ready = true;
-                })
-                .finally(() => {
-                    this.$store.dispatch('setLoading', false);
-                })
+            async init() {
+                await this.$store.dispatch('dashboard/setDashboardKey', this.$route.params.id);
+                await withLoadingOverlay(
+                    this.$store.dispatch('dashboard/get', {
+                        filtersValues: this.getFiltersValuesFromQuery(this.$route.query)
+                    })
+                );
+                this.ready = true;
             },
         },
         created() {
