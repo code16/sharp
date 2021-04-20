@@ -94,13 +94,14 @@
   &__separator {
     position: relative;
     padding-left: 3.5rem;
-    padding-right: 1.25rem;
+    padding-right: 3rem;
     margin-top: .75rem;
     margin-bottom: 1.25rem;
     color: hsl(var(--bs-primary-h), 10%, 60%);
     font-size: .6875rem;
     line-height: 1.2;
     min-height: 1px;
+    cursor: default;
     &::before {
       content: "";
       display: block;
@@ -117,6 +118,7 @@
       background-color: white;
       padding: .125em .75em;
       margin-left: -.75em;
+      margin-right: -.75em;
       -webkit-box-decoration-break: clone;
     }
   }
