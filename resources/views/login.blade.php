@@ -11,7 +11,7 @@
                     <div class="col-sm-9 col-md-6 col-lg-5 col-xl-4">
 
 
-                        @if(file_exists(public_path($icon = '/sharp-assets/login-icon.png')))
+                        @if(file_exists(public_path($icon = config('sharp.theme.logos.login', 'sharp-assets/login-icon.png'))))
                             <div class="text-center mb-3">
                                 <img src="{{ asset($icon) }}?{{ filemtime(public_path($icon)) }}" alt="{{config("sharp.name", "Sharp")}}" width="300" class="w-auto h-auto" style="max-height: 100px;max-width: 200px">
                             </div>

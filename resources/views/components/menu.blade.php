@@ -8,7 +8,7 @@
     :items="{{ json_encode($component->items) }}"
     :has-global-filters="{{ json_encode($component->hasGlobalFilters) }}"
 >
-    @if(file_exists(public_path($icon = '/sharp-assets/menu-icon.png')))
+    @if(file_exists(public_path($icon = config('sharp.theme.logos.menu', 'sharp-assets/menu-icon.png'))))
         <template slot="title">
             <img src="{{ asset($icon) }}?{{ filemtime(public_path($icon)) }}" alt="{{ $component->title }}" width="150" class="w-auto h-auto" style="max-height: 50px;">
         </template>
