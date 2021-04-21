@@ -105,9 +105,9 @@ return [
 
     "theme" => [
         "primary_color" => "#004c9b",
-//        "logos" => [
-//            "menu" => "sharp-assets/menu-icon.png",
-//            "login" => "sharp-assets/login-icon.png",
+//        "logo_urls" => [
+//            "menu" => "/sharp-assets/menu-icon.png",
+//            "login" => "/sharp-assets/login-icon.png",
 //        ]
     ],
 

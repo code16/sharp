@@ -212,9 +212,9 @@ return [
     
     "theme" => [
         "primary_color" => env('SHARP_PRIMARY_COLOR', "#004c9b"),
-        "logos" => [
-            "menu" => "sharp/menu-saturn-icon.png",
-            "login" => "sharp/login-saturn-icon.png", // missing
+        "logo_urls" => [
+            "menu" => "/sharp/menu-saturn-icon.png",
+//            "login" => "/sharp/menu-saturn-icon.png",
         ]
     ],
 ];

@@ -18,16 +18,16 @@ By default, the `config('sharp.name')` is displayed on the login page and on top
 - `login-icon.png` is limited to 200 pixels in width and 100 pixels in height,
 - and `menu-icon.png` must fit in 150 pixels in width and 50 pixels in height.
 
-If you need to configure the image files paths, you can do it with this config (note: paths are relative to /public/ directory):
+If you need to configure the image files URLs, you can do it with this config:
 
 ```php
 // config/sharp.php
 
 "theme" => [
     "primary_color" => ...,
-    "logos" => [
-        "menu" => "sharp/subdir/my-custom-menu-icon.png",
-        "login" => "sharp/subdir/my-custom-login-icon.png",
+    "logo_urls" => [
+        "menu" => "/sharp/subdir/my-custom-menu-icon.png",
+        "login" => "/sharp/subdir/my-custom-login-icon.png",
     ]
 ]
 ```
