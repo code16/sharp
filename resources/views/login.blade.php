@@ -9,9 +9,11 @@
                 {{ csrf_field() }}
                 <div class="row justify-content-center">
                     <div class="col-sm-9 col-md-6 col-lg-5 col-xl-4">
-
-
-                        @if(file_exists(public_path($icon = '/sharp-assets/login-icon.png')))
+                        @if($icon = config('sharp.theme.logo_urls.login'))
+                            <div class="text-center mb-3">
+                                <img src="{{ url($icon) }}" alt="{{config("sharp.name", "Sharp")}}" width="300" class="w-auto h-auto" style="max-height: 100px;max-width: 200px">
+                            </div>
+                        @elseif(file_exists(public_path($icon = 'sharp-assets/login-icon.png')))
                             <div class="text-center mb-3">
                                 <img src="{{ asset($icon) }}?{{ filemtime(public_path($icon)) }}" alt="{{config("sharp.name", "Sharp")}}" width="300" class="w-auto h-auto" style="max-height: 100px;max-width: 200px">
                             </div>
