@@ -40,7 +40,7 @@
                             <Button v-show="!!originalImageSrc && !inProgress" outline small :disabled="!isCroppable" @click="onEditButtonClick">
                                 {{ l('form.upload.edit_button') }}
                             </Button>
-                            <Button class="SharpUpload__remove-button" variant="danger" outline small :disabled="readOnly" @click="remove()">
+                            <Button class="SharpUpload__remove-button" variant="danger" outline small :disabled="readOnly" @click="handleRemoveClicked">
                                 {{ l('form.upload.remove_button') }}
                             </Button>
                         </div>
@@ -236,9 +236,10 @@
 
                 this.setPending(true);
             },
-            onStatusError() {
-                let msg = this.file.errorMessage;
+            async onStatusError() {
+                const msg = this.file.errorMessage;
                 this.remove();
+                await this.$nextTick();
                 this.$emit('error', msg);
             },
             onStatusSuccess() {
@@ -272,7 +273,6 @@
 
                 this.$emit('input', null);
                 this.$emit('reset');
-                this.$emit('removed');
             },
 
             resetEdit() {
@@ -290,6 +290,11 @@
                 if(this.isNew) {
                     this.$emit('image-updated');
                 }
+            },
+
+            handleRemoveClicked() {
+                this.remove();
+                this.$emit('removed');
             },
 
             onEditModalHidden() {

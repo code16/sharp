@@ -27,7 +27,7 @@ return [
     'upload.remove_button' => 'Supprimer',
     'upload.edit_button' => 'Modifier',
     'upload.download_link' => 'Télécharger',
-    'upload.message.file_too_big' => 'Le fichier sélectionné est trop grand',
+    'upload.message.file_too_big' => 'Le fichier sélectionné est trop grand (max. :size)',
     'upload.message.bad_extension' => 'L\'extension du fichier est invalide',
 
     'multiselect.placeholder' => 'Choisir',

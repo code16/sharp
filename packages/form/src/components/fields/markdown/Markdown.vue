@@ -132,7 +132,10 @@
                 $uploader.$on('active', () => this.setMarkerActive($uploader));
                 $uploader.$on('inactive', () => this.setMarkerInactive($uploader));
                 $uploader.$on('escape', () => this.escapeMarker());
-                //console.log('create uploader', id, $uploader);
+                $uploader.$on('error', async () => {
+                    await this.$nextTick();
+                    this.removeMarker($uploader, removeOptions);
+                });
 
                 $uploader.$mount();
 

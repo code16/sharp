@@ -11,7 +11,8 @@
         :croppable-file-types="croppableFileTypes"
         :modifiers="modifiers"
         :on-added-file="handleAdded"
-        @success="$emit('success',$event)"
+        @error="handleError"
+        @success="$emit('success', $event)"
         @removed="$emit('remove')"
         @updated="$emit('update', $event)"
         @active="$emit('active')"
@@ -23,11 +24,11 @@
 
 <script>
     import Vue from 'vue';
-    import { UPLOAD_URL, lang } from 'sharp';
+    import { UPLOAD_URL, lang, showAlert } from 'sharp';
     import VueClip from '../upload/VueClip';
 
     import { UploadModifiers } from '../upload/modifiers';
-    import { defaultUploadOptions } from "../../../util/upload";
+    import { defaultUploadOptions, maxFileSizeMessage } from "../../../util/upload";
 
     const removeKeys = ['Backspace', 'Enter'];
     const escapeKeys = ['ArrowLeft', 'ArrowUp', 'ArrowDown', 'ArrowRight', 'Escape', 'Tab'];
@@ -77,7 +78,7 @@
                 if (this.maxFileSize) {
                     opt.maxFilesize = {
                         limit: this.maxFileSize,
-                        message: lang('form.upload.message.file_too_big')
+                        message: maxFileSizeMessage(this.maxFileSize),
                     }
                 }
                 return opt;
@@ -93,6 +94,13 @@
             handleAdded() {
                 this.show = true;
                 this.$emit('added');
+            },
+            handleError(message) {
+                showAlert(message, {
+                    isError: true,
+                    title: lang(`modals.error.title`),
+                });
+                this.$emit('error', message);
             },
             inputClick() {
                 this.fileInput.click();

@@ -20,7 +20,7 @@
     import { UPLOAD_URL, lang } from 'sharp';
     import VueClip from './VueClip';
     import { UploadModifiers } from './modifiers';
-    import { defaultUploadOptions } from "../../../util/upload";
+    import { defaultUploadOptions, maxFileSizeMessage } from "../../../util/upload";
 
     export default {
         name: 'SharpUpload',
@@ -65,7 +65,7 @@
                 if (this.maxFileSize) {
                     opt.maxFilesize = {
                         limit: this.maxFileSize,
-                        message: lang('form.upload.message.file_too_big')
+                        message: maxFileSizeMessage(this.maxFileSize),
                     }
                 }
                 return opt;
