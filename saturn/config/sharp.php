@@ -213,8 +213,8 @@ return [
     "theme" => [
         "primary_color" => env('SHARP_PRIMARY_COLOR', "#004c9b"),
         "logo_urls" => [
-            "menu" => "/sharp/menu-saturn-icon.png",
-//            "login" => "/sharp/menu-saturn-icon.png",
+            "menu" => "/sharp-img/menu-saturn-icon.png",
+//            "login" => "/sharp-img/menu-saturn-icon.png",
         ]
     ],
 ];
