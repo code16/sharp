@@ -489,6 +489,8 @@ describe('vue-clip',() => {
         $vueClip.$on('error', handleError);
         $vueClip.onStatusError();
 
+        await $vueClip.$nextTick();
+
         expect(handleError).toHaveBeenCalledTimes(1);
         expect(handleError).toHaveBeenCalledWith("Can't upload");
         expect($vueClip.remove).toHaveBeenCalled();
@@ -536,10 +538,9 @@ describe('vue-clip',() => {
             })
         });
 
-        let handleInput=jest.fn(), handleReset=jest.fn(), handleRemoved=jest.fn();
+        let handleInput=jest.fn(), handleReset=jest.fn();
         $vueClip.$on('input', handleInput);
         $vueClip.$on('reset', handleReset);
-        $vueClip.$on('removed', handleRemoved);
 
         $vueClip.remove();
 
@@ -547,7 +548,6 @@ describe('vue-clip',() => {
         expect(handleInput).toHaveBeenCalledWith(null);
 
         expect(handleReset).toHaveBeenCalledTimes(1);
-        expect(handleRemoved).toHaveBeenCalledTimes(1);
 
         expect($vueClip.files).toEqual([]);
         expect($vueClip.canDownload).toBe(false);
