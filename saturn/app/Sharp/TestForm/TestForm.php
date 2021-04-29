@@ -97,7 +97,6 @@ class TestForm extends SharpForm
                         ->setHasTime(false)
                 )->addItemField(
                     SharpFormCheckField::make("check", "check this")
-                        ->setLabel('')
                 )->addItemField(SharpFormMarkdownField::make("markdown2")
                     ->setLocalized()
                     ->setLabel("Markdown")

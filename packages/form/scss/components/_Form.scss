@@ -75,7 +75,7 @@
 
   .SharpGrid__row {
     &--has-label {
-      > .SharpGrid__col > .SharpForm__form-item--type-check {
+      > .SharpGrid__col > .SharpForm__form-item--no-label {
         .SharpForm__label {
           display: block;
           &::after {

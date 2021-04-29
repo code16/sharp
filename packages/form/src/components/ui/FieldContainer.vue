@@ -123,7 +123,7 @@
                 return this.state === 'error' || this.errorsLocales.length > 0;
             },
             showLabel() {
-                return !!this.label || this.label === '';
+                return !!this.label;
             },
             resolvedOriginalValue() {
                 return resolveTextValue({ field:this.fieldProps, value:this.originalValue });

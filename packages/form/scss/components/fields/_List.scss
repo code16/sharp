@@ -52,13 +52,21 @@
       border-bottom-color: rgba(0, 0, 0, 0.25);
     }
 
-    .SharpGrid__row:first-child {
-      > .col-md-12:first-child > .SharpForm__form-item--no-label:not(.SharpForm__form-item--type-check) {
-        margin-top: 1rem;
+    .SharpGrid__row {
+      &:first-child {
+        .SharpForm__form-item--no-label {
+          margin-top: 1rem;
+        }
+        > .SharpGrid__col:last-child {
+          .SharpForm__label {
+            margin-right: 1rem;
+          }
+        }
       }
-      > .SharpGrid__col:last-child {
-        .SharpForm__label {
-          margin-right: 1rem;
+
+      &--has-label:first-child {
+        .SharpForm__form-item--no-label {
+          margin-top: 0;
         }
       }
     }
