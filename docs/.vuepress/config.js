@@ -19,7 +19,7 @@ module.exports = {
                 text: 'Links',
                 items: [
                     { text: 'Medium', link:'https://medium.com/code16/tagged/sharp' },
-                    { text: 'Discord', link:'https://discord.gg/ymhEUCkp' },
+                    { text: 'Discord', link:'https://discord.com/invite/sFBT5c3XZz' },
                 ]
             }
         ],
