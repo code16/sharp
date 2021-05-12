@@ -2,7 +2,7 @@
     <div class="ShowSection" :class="classes">
         <component :is="wrapperElement">
             <template v-if="hasCollapse">
-                <summary class="py-1 mb-1">
+                <summary>
                     <h2 class="ShowSection__title d-inline-block mb-0">{{ section.title || ' ' }}</h2>
                 </summary>
             </template>

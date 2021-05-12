@@ -4,6 +4,7 @@
     cursor: pointer;
     user-select: none;
     transition: background-color .125s ease-in-out;
+    line-height: 1.2;
     &:hover, &:focus-visible {
       background-color: rgba(0,0,0,.075);
     }
@@ -15,7 +16,9 @@
   &__title {
     @extend .ui-font;
     font-size: $ui-font-size + .125rem;
-    margin-bottom: .75rem;
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    margin-bottom: 0;
   }
 
   &__grid {

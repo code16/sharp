@@ -23,7 +23,7 @@
                 >
                     <template v-if="hasCollapse">
                         <details :open="!collapsed" @toggle="handleDetailsToggle">
-                            <summary class="py-1">
+                            <summary>
                                 <h2 class="ShowEntityListField__label ShowSection__title mb-0 d-inline-block">
                                     {{ label || ' ' }}
                                 </h2>
@@ -31,7 +31,7 @@
                         </details>
                     </template>
                     <template v-else>
-                        <h2 class="ShowEntityListField__label ShowSection__title">
+                        <h2 class="ShowEntityListField__label ShowSection__title mb-0">
                             {{ label }}
                         </h2>
                     </template>

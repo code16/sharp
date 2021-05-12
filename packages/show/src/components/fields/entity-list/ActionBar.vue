@@ -6,7 +6,7 @@
             </div>
         </template>
         <template v-if="ready && barVisible">
-            <div class="row">
+            <div class="row align-items-end">
                 <template v-if="hasLeftControls">
                     <div class="col-sm mb-2">
                         <div class="row gy-1 gx-2 gx-md-3">
@@ -61,7 +61,7 @@
                                                 </Button>
                                             </div>
                                             <div class="col-auto">
-                                                <Button @click="handleReorderSubmitButtonClicked">
+                                                <Button variant="primary" @click="handleReorderSubmitButtonClicked">
                                                     {{ l('action_bar.list.reorder_button.finish') }}
                                                 </Button>
                                             </div>
@@ -74,6 +74,15 @@
                                     </template>
                                 </div>
                             </template>
+
+                            <template v-if="primaryCommand && !reorderActive">
+                                <div class="col-auto">
+                                    <Button variant="primary" @click="handlePrimaryCommandClicked">
+                                        {{ primaryCommand.label }}
+                                    </Button>
+                                </div>
+                            </template>
+
                             <template v-if="canCreate && !reorderActive">
                                 <div class="col-auto">
                                     <div class="action-bar__element">
@@ -124,7 +133,8 @@
             hasSearchQuery: Boolean,
             filters: Array,
             filtersValues: Object,
-            commands: Array,
+            primaryCommand: Object,
+
             forms: Array,
 
             canCreate: Boolean,
@@ -179,8 +189,8 @@
             handleReorderSubmitButtonClicked() {
                 this.$emit('reorder-submit');
             },
-            handleCommandSelected(command) {
-                this.$emit('command', command);
+            handlePrimaryCommandClicked() {
+                this.$emit('command', this.primaryCommand);
             },
             handleCreateButtonClicked() {
                 this.$emit('create');
