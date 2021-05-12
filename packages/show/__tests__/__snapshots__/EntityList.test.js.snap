@@ -4,7 +4,7 @@ exports[`show entity list field mount 1`] = `
 <fieldlayout-stub class="ShowEntityListField">
 	<entitylist-stub module="show/entity-lists/fieldKey" visible="true" inline="">
 		<actionbar-stub ready="true" filters="" class="ShowEntityListField__action-bar">
-			<h2 class="ShowEntityListField__label ShowSection__title">
+			<h2 class="ShowEntityListField__label ShowSection__title mb-0">
 				label
 			</h2>
 		</actionbar-stub>
@@ -17,7 +17,7 @@ exports[`show entity list field mount collapsed 1`] = `
 	<entitylist-stub module="show/entity-lists/fieldKey" inline="">
 		<actionbar-stub ready="true" filters="" collapsed="true" class="ShowEntityListField__action-bar">
 			<details>
-				<summary class="py-1">
+				<summary>
 					<h2 class="ShowEntityListField__label ShowSection__title mb-0 d-inline-block">
 						label
 					</h2>
