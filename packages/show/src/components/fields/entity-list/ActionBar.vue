@@ -160,7 +160,7 @@
                 return this.hasActiveQuery || this.count > 0 && (this.filters?.length > 0 || this.canSearch);
             },
             hasRightControls() {
-                return this.canReorder || this.canCreate && !this.reorderActive;
+                return this.canReorder || this.canCreate || this.primaryCommand;
             },
             hasOuterTitle() {
                 return this.$slots.default && (!this.ready || this.hasLeftControls);
