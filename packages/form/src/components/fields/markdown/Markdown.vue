@@ -83,7 +83,7 @@
                 return this.isLocalized ? this.simplemdeInstances[this.locale] : this.simplemdeInstances;
             },
             codemirror() {
-                return (this.simplemde||{}).codemirror;
+                return this.simplemde?.codemirror;
             },
             idSymbol() {
                 return fileIdSymbol;
@@ -104,7 +104,7 @@
                 return this.localizedText;
             },
             transformedToolbar() {
-                return (this.toolbar || []).map(key => key !== '|' ? buttons[key] : key);
+                return (this.toolbar || []).map(key => key !== '|' ? { ...buttons[key] } : key);
             },
         },
         methods : {
@@ -321,8 +321,7 @@
                         title: lang(`form.markdown.icons.${btn.name.replace(/-/g,'_')}.title`),
                     }
                 });
-                simplemde.options.toolbar = items;
-                const bar = simplemde.createToolbar();
+                const bar = simplemde.createToolbar(items);
 
                 if(!bar) {
                     return;
