@@ -321,7 +321,10 @@
                         title: lang(`form.markdown.icons.${btn.name.replace(/-/g,'_')}.title`),
                     }
                 });
-                const bar = simplemde.createToolbar(items);
+
+                // update options for testing
+                simplemde.options.toolbar = items;
+                const bar = simplemde.createToolbar();
 
                 if(!bar) {
                     return;
