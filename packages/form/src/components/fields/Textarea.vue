@@ -1,25 +1,22 @@
 <template>
     <textarea
         class="SharpTextarea form-control"
-        :value="value"
+        :value.prop="value"
         :rows="rows"
         :placeholder="placeholder"
         :disabled="readOnly"
-        v-maxlength="maxLength"
         @input="handleInput"
-    >{{ value }}</textarea>
+    ></textarea>
 </template>
 
 <script>
-    import { maxlength } from 'sharp/directives';
+    import { validateTextField } from "../../util/validation";
 
     export default {
         name:'SharpTextarea',
 
         props: {
-            value: {
-                type: String,
-            },
+            value: String,
             placeholder: String,
             readOnly: Boolean,
 
@@ -27,16 +24,17 @@
 
             rows: Number,
         },
-        data() {
-            return { }
-        },
         methods: {
+            validate(value) {
+                return validateTextField(value, {
+                    maxlength: this.maxLength,
+                });
+            },
             handleInput(e) {
-                this.$emit('input', e.target.value);
-            }
+                const value = e.target.value;
+                const error = this.validate(value);
+                this.$emit('input', value, { error });
+            },
         },
-        directives: {
-            maxlength
-        }
     }
 </script>

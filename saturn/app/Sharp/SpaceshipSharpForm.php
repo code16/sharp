@@ -34,6 +34,7 @@ class SpaceshipSharpForm extends SharpForm
             ->addField(
                 SharpFormTextField::make("name")
                     ->setLocalized()
+                    ->setMaxLength(30)
                     ->setLabel("Name")
             )
             ->addField(

@@ -1,5 +1,6 @@
 <template>
     <Multiselect
+        :id="id"
         :value="value"
         :searchable="false"
         :options="multiselectOptions"
@@ -33,6 +34,7 @@
 
 <script>
     import { Multiselect, ClearButton } from 'sharp-ui';
+    import { onLabelClicked } from "../../../util/accessibility";
 
     export default {
         components: {
@@ -40,6 +42,7 @@
             ClearButton,
         },
         props: {
+            id: String,
             value: [Array, String, Number],
             options: Array,
             labels: Object,
@@ -68,6 +71,11 @@
             handleInput(val) {
                 this.$emit('input', val);
             },
-        }
+        },
+        mounted() {
+            onLabelClicked(this, this.id, () => {
+                this.$el.focus();
+            });
+        },
     }
 </script>

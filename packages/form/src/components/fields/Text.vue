@@ -5,20 +5,16 @@
         :value="value"
         :placeholder="placeholder"
         :disabled="readOnly"
-        v-maxlength="maxLength"
         @input="handleInput"
         ref="input"
     >
 </template>
 
 <script>
-    import { Focusable } from 'sharp/mixins';
-    import { maxlength } from 'sharp/directives';
+    import { validateTextField } from "../../util/validation";
 
     export default {
         name:'SharpText',
-
-        mixins: [Focusable],
 
         props: {
             value: [String, Number],
@@ -33,21 +29,17 @@
                 default:'text'
             },
         },
-        data() {
-            return {}
-        },
         methods: {
+            validate(value) {
+                return validateTextField(value, {
+                    maxlength: this.maxLength,
+                });
+            },
             handleInput(e) {
-                this.$emit('input',e.target.value);
+                const value = e.target.value;
+                const error = this.validate(value);
+                this.$emit('input', value, { error });
             }
         },
-
-        mounted() {
-            this.setFocusable(this.$refs.input);
-        },
-
-        directives: {
-            maxlength
-        }
     }
 </script>

@@ -25,6 +25,7 @@
     import localize from '../../../mixins/localize/editor';
     import { buttons } from './config';
     import { handleMarkdownTables } from "./tables";
+    import { onLabelClicked } from "../../../util/accessibility";
 
     const noop = ()=>{};
 
@@ -36,8 +37,7 @@
         mixins: [ localize({ textProp:'text' }) ],
 
         props: {
-            uniqueIdentifier: String,
-            fieldConfigIdentifier: String,
+            id: String,
             value:{
                 type: Object,
                 default: ()=>({})
@@ -53,6 +53,8 @@
             innerComponents:Object,
 
             readOnly: Boolean,
+            uniqueIdentifier: String,
+            fieldConfigIdentifier: String,
         },
 
         inject: {
@@ -448,6 +450,10 @@
             else {
                 this.$nextTick(() => this.refreshOnExternalChange());
             }
+
+            onLabelClicked(this, this.id, () => {
+                this.codemirror.focus();
+            });
         }
     }
 </script>

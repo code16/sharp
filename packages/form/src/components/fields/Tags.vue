@@ -1,6 +1,7 @@
 <template>
     <Multiselect
         class="SharpTags form-select"
+        :id="id"
         :value="tags"
         :options="indexedOptions"
         :placeholder="dynamicPlaceholder"
@@ -52,6 +53,7 @@
             Multiselect
         },
         props: {
+            id: String,
             value: Array, // [{id:0, label: 'AAA'}, ...]
             options: Array, // [{id:0, label:'AAA'}, ...]
             placeholder: String,

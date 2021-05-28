@@ -3,6 +3,7 @@
         <div class="SharpDate__input-wrapper">
             <input
                 class="form-control clearable SharpDate__input"
+                :id="id"
                 :class="{ 'SharpDate__input--valuated': value }"
                 :placeholder="displayFormat"
                 :value="inputValue"
@@ -80,6 +81,7 @@
         mixins: [ Focusable, Localization ],
 
         props: {
+            id: String,
             value: {
                 type:[Date, String]
             },

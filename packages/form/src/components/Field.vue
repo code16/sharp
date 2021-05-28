@@ -60,19 +60,23 @@
                     ...fieldProps
                 },
                 attrs: {
+                    id: this.$attrs.id,
                     dynamicAttributes: fieldProps.dynamicAttributes,
                 },
                 on: {
-                    input: (val, options={}) => {
-                        if(this.fieldProps.readOnly && !options.force)
-                            log(`SharpField '${this.fieldKey}', can't update because is readOnly`);
-                        else
-                            this.updateData(this.fieldKey, val, { forced:options.force });
-                    },
-                    blur: () => {
-                        this.fieldProps.focused = false;
-                    },
                     ...this.$listeners,
+                    input: (val, options={}) => {
+                        if(this.fieldProps.readOnly && !options.force) {
+                            log(`SharpField '${this.fieldKey}', can't update because is readOnly`);
+                            return;
+                        }
+
+                        this.updateData(this.fieldKey, val, { forced:options.force });
+                        this.$emit('input', val, {
+                            force: options.force,
+                            error: options.error,
+                        });
+                    },
                 }
             });
         }

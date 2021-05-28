@@ -21,6 +21,7 @@
     import TrixCustomToolbar from './TrixCustomToolbar.vue';
 
     import localize from '../../../mixins/localize/editor';
+    import { onLabelClicked } from "../../../util/accessibility";
 
     export default {
         name:'SharpTrix',
@@ -31,6 +32,7 @@
             TrixCustomToolbar
         },
         props: {
+            id: String,
             value: Object,
             toolbar: Array,
             height: {
@@ -65,6 +67,11 @@
         },
         created() {
             window.Trix.config.toolbar.getDefaultHTML = () => '';
+        },
+        mounted() {
+            onLabelClicked(this, this.id, () => {
+                this.$refs.trix.focus();
+            });
         }
     }
 </script>

@@ -165,6 +165,7 @@ class TestForm extends SharpForm
             SharpFormTextareaField::make("textarea")
                 ->setLocalized()
                 ->setLabel("Textarea")
+                ->setMaxLength(50)
                 ->setRowCount(4)
 
         )->addField(
