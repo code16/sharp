@@ -44,6 +44,8 @@ return [
 
     'daterange.start_placeholder' => 'Date de début',
     'daterange.end_placeholder' => 'Date de fin',
+    
+    'text.validation.maxlength' => 'Le texte est trop long (:maxlength caractères max.)',
 
     'markdown.icons.bold.title' => 'Gras',
     'markdown.icons.italic.title' => 'Italique',
