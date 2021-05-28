@@ -61,7 +61,7 @@
     import { BPopover } from 'bootstrap-vue';
 
     import { lang } from 'sharp';
-    import { Focusable, Localization } from 'sharp/mixins';
+    import { Localization } from 'sharp/mixins';
     import { ClearButton } from "sharp-ui";
     import DatePicker from './Datepicker';
     import TimePicker from './Timepicker';
@@ -78,7 +78,7 @@
 
         inject:['$field'],
 
-        mixins: [ Focusable, Localization ],
+        mixins: [Localization],
 
         props: {
             id: String,
@@ -258,8 +258,5 @@
                 this.rollback();
             }
         },
-        mounted() {
-            this.setFocusable(this.$refs.input);
-        }
     }
 </script>
