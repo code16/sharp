@@ -5,8 +5,8 @@ exports[`field-container can mount field container 1`] = `
 	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--type-test-field SharpForm__form-item--has-label">
 		<div class="SharpForm__field-header">
 			<div class="row align-items-end">
-				<div class="col">
-					<label class="SharpForm__label form-label">
+				<div class="col d-flex">
+					<label for="form-field_error.title" class="SharpForm__label form-label">
 						My beautiful field
 					</label>
 				</div>
@@ -14,7 +14,7 @@ exports[`field-container can mount field container 1`] = `
 			</div>
 		</div>
 		<div class="SharpForm__field-content">
-			<div class="SharpField">Template field</div>
+			<div id="form-field_error.title" class="SharpField">Template field</div>
 		</div>
 		<!---->
 		<div class="SharpForm__help-message form-text">Do not fill this field</div>
@@ -27,8 +27,8 @@ exports[`field-container can mount field container with error 1`] = `
 	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--type-test-field SharpForm__form-item--danger SharpForm__form-item--has-label">
 		<div class="SharpForm__field-header">
 			<div class="row align-items-end">
-				<div class="col">
-					<label class="SharpForm__label form-label">
+				<div class="col d-flex">
+					<label for="form-field_error.title" class="SharpForm__label form-label">
 						My beautiful field
 					</label>
 				</div>
@@ -36,7 +36,7 @@ exports[`field-container can mount field container with error 1`] = `
 			</div>
 		</div>
 		<div class="SharpForm__field-content">
-			<div class="SharpField">Template field</div>
+			<div id="form-field_error.title" class="SharpField">Template field</div>
 		</div>
 		<div class="invalid-feedback d-block">Must be a number</div>
 		<div class="SharpForm__help-message form-text">Do not fill this field</div>
@@ -49,8 +49,8 @@ exports[`field-container can mount field container with extra style 1`] = `
 	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--type-test-field SharpForm__form-item--has-label" style="background: red;">
 		<div class="SharpForm__field-header">
 			<div class="row align-items-end">
-				<div class="col">
-					<label class="SharpForm__label form-label">
+				<div class="col d-flex">
+					<label for="form-field_error.title" class="SharpForm__label form-label">
 						My beautiful field
 					</label>
 				</div>
@@ -58,7 +58,7 @@ exports[`field-container can mount field container with extra style 1`] = `
 			</div>
 		</div>
 		<div class="SharpForm__field-content">
-			<div class="SharpField">Template field</div>
+			<div id="form-field_error.title" class="SharpField">Template field</div>
 		</div>
 		<!---->
 		<div class="SharpForm__help-message form-text">Do not fill this field</div>
@@ -71,8 +71,8 @@ exports[`field-container can mount field container with success 1`] = `
 	<div class="SharpFieldContainer SharpForm__form-item SharpForm__form-item--type-test-field SharpForm__form-item--success SharpForm__form-item--has-label">
 		<div class="SharpForm__field-header">
 			<div class="row align-items-end">
-				<div class="col">
-					<label class="SharpForm__label form-label">
+				<div class="col d-flex">
+					<label for="form-field_error.title" class="SharpForm__label form-label">
 						My beautiful field
 					</label>
 				</div>
@@ -80,7 +80,7 @@ exports[`field-container can mount field container with success 1`] = `
 			</div>
 		</div>
 		<div class="SharpForm__field-content">
-			<div class="SharpField">Template field</div>
+			<div id="form-field_error.title" class="SharpField">Template field</div>
 		</div>
 		<!---->
 		<div class="SharpForm__help-message form-text">Do not fill this field</div>
