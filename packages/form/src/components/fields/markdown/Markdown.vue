@@ -26,6 +26,7 @@
     import { buttons } from './config';
     import { handleMarkdownTables } from "./tables";
     import { onLabelClicked } from "../../../util/accessibility";
+    import { normalizeText } from "../../../util/text";
 
     const noop = ()=>{};
 
@@ -282,10 +283,8 @@
             },
 
             onBeforeChange(cm, change) {
-                //console.log(change);
                 if(change && change.origin && change.origin.includes('delete')) {
                     let markers = cm.findMarks(change.from, change.to);
-                    console.log(markers);
                     if(markers.length) {
                         markers.forEach(marker => {
                             if(marker.$component) {
@@ -295,6 +294,7 @@
                         });
                     }
                 }
+                change.text = change.text?.map(text => normalizeText(text));
             },
 
             codemirrorOn(codemirror, eventName, callback, immediate) {

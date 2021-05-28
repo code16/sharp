@@ -11,6 +11,7 @@
 
 <script>
     import { validateTextField } from "../../util/validation";
+    import { normalizeText } from "../../util/text";
 
     export default {
         name:'SharpTextarea',
@@ -31,7 +32,7 @@
                 });
             },
             handleInput(e) {
-                const value = e.target.value;
+                const value = normalizeText(e.target.value);
                 const error = this.validate(value);
                 this.$emit('input', value, { error });
             },
