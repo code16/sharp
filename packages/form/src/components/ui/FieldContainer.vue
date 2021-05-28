@@ -104,7 +104,7 @@
         },
         computed: {
             fieldId() {
-                return this.mergedErrorIdentifier;
+                return `form-field_${this.mergedErrorIdentifier}`;
             },
             formGroupClasses() {
                 return [
