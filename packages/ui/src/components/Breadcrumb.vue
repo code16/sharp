@@ -1,13 +1,24 @@
 <template>
     <div class="d-flex">
         <div class="input-group input-group-sm w-auto">
-            <template v-if="icon">
-                <div class="input-group-text">
-                    <i class="fa fa-sm" :class="icon" style="opacity: .75; font-size: .75rem"></i>
+            <template v-if="currentEntity">
+                <div class="input-group-text bg-white">
+                    <div class="row gx-2">
+                        <template v-if="currentEntity.icon">
+                            <div class="col-auto">
+                                <i class="fa fa-sm" :class="currentEntity.icon" style="opacity: .75; font-size: .75rem"></i>
+                            </div>
+                        </template>
+                        <template v-if="currentEntity.label">
+                            <div class="col-auto">
+                                {{ currentEntity.label }}
+                            </div>
+                        </template>
+                    </div>
                 </div>
             </template>
 
-            <div class="form-control">
+            <div class="form-control d-flex align-items-center">
                 <div class="breadcrumb p-0 m-0">
                     <template v-for="(item, i) in items">
                         <div class="breadcrumb-item" :class="{ 'active': isActive(i) }">
@@ -37,8 +48,8 @@
             items: Array
         },
         computed: {
-            icon() {
-                return this.$store.state.currentEntity?.icon;
+            currentEntity() {
+                return this.$store.state.currentEntity;
             },
         },
         methods: {
