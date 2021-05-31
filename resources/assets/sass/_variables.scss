@@ -67,6 +67,10 @@ $dropdown-min-width: 10rem;
 $dropdown-font-size: .875rem;
 $dropdown-border-color: rgba(0,0,0,.075);
 
+$dropdown-item-padding-y: .375rem;
+$dropdown-link-color: $ui-primary-color;
+$dropdown-link-disabled-color: hsla(var(--bs-primary-h), var(--bs-primary-s), 20%, .65);
+
 $input-font-size: .875rem;
 $input-padding-y: .5rem;
 
@@ -75,8 +79,6 @@ $link-hover-color: hsl(var(--bs-primary-h), var(--bs-primary-s), 15%);
 $link-decoration: underline;
 
 $input-border-radius: $border-radius;
-
-$dropdown-item-padding-y: .375rem;
 
 $modal-content-border-width: 0;
 
