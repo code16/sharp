@@ -30,20 +30,26 @@
                                 </div>
                             </div>
                             <transition name="SharpUpload__progress">
-                                <div class="SharpUpload__progress mt-2" v-show="inProgress">
-                                    <div class="SharpUpload__progress-bar" role="progressbar" :style="{width:`${progress}%`}"
-                                         :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
+                                <template v-if="inProgress">
+                                    <div class="SharpUpload__progress mt-2">
+                                        <div class="SharpUpload__progress-bar" role="progressbar" :style="{width:`${progress}%`}"
+                                            :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </template>
                             </transition>
                         </div>
-                        <div v-show="!readOnly">
-                            <Button v-show="!!originalImageSrc && !inProgress" outline small :disabled="!isCroppable" @click="onEditButtonClick">
-                                {{ l('form.upload.edit_button') }}
-                            </Button>
-                            <Button class="SharpUpload__remove-button" variant="danger" outline small :disabled="readOnly" @click="handleRemoveClicked">
-                                {{ l('form.upload.remove_button') }}
-                            </Button>
-                        </div>
+                        <template v-if="!readOnly">
+                            <div>
+                                <template v-if="hasEdit">
+                                    <Button outline small @click="onEditButtonClick">
+                                        {{ l('form.upload.edit_button') }}
+                                    </Button>
+                                </template>
+                                <Button class="SharpUpload__remove-button" variant="danger" outline small @click="handleRemoveClicked">
+                                    {{ l('form.upload.remove_button') }}
+                                </Button>
+                            </div>
+                        </template>
                     </div>
                 </div>
             </template>
@@ -51,7 +57,8 @@
                 <div></div>
             </div>
         </div>
-        <template v-if="!!originalImageSrc && isCroppable">
+
+        <template v-if="hasEdit">
             <Modal :visible.sync="showEditModal"
                 @ok="onEditModalOk"
                 @hidden="onEditModalHidden"
@@ -88,6 +95,7 @@
                 ref="cropper"
             />
         </template>
+
         <a style="display: none" ref="dlLink"></a>
     </div>
 </template>
@@ -125,7 +133,11 @@
             ratioX: Number,
             ratioY: Number,
             value: Object,
-            croppableFileTypes:Array,
+            croppable: {
+                type: Boolean,
+                default: true,
+            },
+            croppableFileTypes: Array,
 
             readOnly: Boolean,
             root: Boolean,
@@ -217,14 +229,20 @@
                 return this.imageSrc;
             },
             hasInitialCrop() {
-                return !!(this.ratioX && this.ratioY) && this.isCroppable;
+                return this.isCroppable && !!this.ratioX && !!this.ratioY;
             },
             isCroppable() {
+                if(!this.croppable) {
+                    return false;
+                }
                 if(this.file?.type && !this.file.type.match(/^image\//)) {
                     return false;
                 }
                 return !this.croppableFileTypes || this.croppableFileTypes.includes(this.fileExtension);
-            }
+            },
+            hasEdit() {
+                return this.isCroppable && !!this.originalImageSrc && !this.inProgress;
+            },
         },
         methods: {
             setPending(value) {
