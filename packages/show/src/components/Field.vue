@@ -1,5 +1,5 @@
 <template>
-    <div class="show-field" v-show="isVisible">
+    <div class="show-field" :class="classes" v-show="isVisible">
         <component
             :is="component"
             :field-key="options.key"
@@ -7,6 +7,7 @@
             :value="value"
             :layout="layout"
             :collapsable="collapsable"
+            :root="root"
             v-bind="props"
             @visible-change="handleVisiblityChanged"
         />
@@ -24,6 +25,10 @@
             options: Object,
             layout: Object,
             collapsable: Boolean,
+            root: {
+                type: Boolean,
+                default: true,
+            },
         },
         data() {
             return {
@@ -40,6 +45,11 @@
                 return {
                     ...this.options,
                 }
+            },
+            classes() {
+                return [
+                    `show-field--${this.options.type}`,
+                ];
             },
             isVisible() {
                 return !!this.component && this.visible;

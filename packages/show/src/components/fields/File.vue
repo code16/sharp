@@ -20,7 +20,7 @@
                     </div>
                 </template>
             </div>
-            <div class="col px-2 mt-1" style="min-width: 0">
+            <div class="col px-2" style="min-width: 0">
                 <div class="ShowFileField__name text-truncate mb-2">
                     {{ fileName }}
                 </div>
@@ -69,7 +69,10 @@
                 type: Boolean,
                 default: true,
             },
-            list: Boolean,
+            root: {
+                type: Boolean,
+                default: true,
+            },
         },
         data() {
             return {
@@ -84,6 +87,8 @@
             classes() {
                 return {
                     'ShowFileField--has-label': !!this.label,
+                    'ShowFileField--has-placeholder': !this.hasThumbnail,
+                    'ShowFileField--root': this.root,
                 }
             },
             thumbnailColClasses() {

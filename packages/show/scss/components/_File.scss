@@ -1,8 +1,8 @@
 
 .ShowFileField {
   &__name {
-    font-weight: 600;
     font-size: 1em;
+    font-weight: 600;
     white-space: nowrap;
   }
   &__info {
@@ -43,11 +43,25 @@
   &__placeholder {
     color: rgba(0,0,0,.25);
     font-size: 3rem;
+    line-height: 1;
+  }
+
+  &--root {
+    .show-field__content {
+      padding-bottom: .5rem;
+      font-size: .875em;
+    }
   }
 
   &--has-label {
-    .show-field__content {
-      font-size: .875em;
+    .ShowFileField__name {
+      font-weight: 400;
+    }
+  }
+
+  &--has-placeholder {
+    .ShowFileField__name {
+      margin-top: .25rem;
     }
   }
 }

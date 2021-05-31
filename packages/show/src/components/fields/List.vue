@@ -14,6 +14,7 @@
                                         :options="fieldOptions(fieldLayout)"
                                         :value="fieldValue(item, fieldLayout)"
                                         :config-identifier="fieldLayout.key"
+                                        :root="false"
                                     />
                                 </template>
                                 <template v-else>
