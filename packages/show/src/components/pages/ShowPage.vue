@@ -220,7 +220,13 @@
                 await this.$store.dispatch('show/setEntityKey', this.$route.params.entityKey);
                 await this.$store.dispatch('show/setInstanceId', this.$route.params.instanceId);
 
-                const show = await withLoadingOverlay(this.$store.dispatch('show/get'));
+                const show = await withLoadingOverlay(
+                    this.$store.dispatch('show/get')
+                        .catch(error => {
+                            this.$emit('error', error);
+                            return Promise.reject(error);
+                        })
+                );
 
                 handleNotifications(show.notifications);
 

@@ -623,7 +623,11 @@
                 this.loading = true;
                 await this.storeDispatch('setEntityKey', this.entityKey);
                 // legacy
-                await this.get();
+                await this.get()
+                    .catch(error => {
+                        this.$emit('error', error);
+                        return Promise.reject(error);
+                    });
                 this.bindParams(this.query);
 
                 this.$emit('change', {

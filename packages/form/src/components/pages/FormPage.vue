@@ -1,7 +1,11 @@
 <template>
     <div class="FormPage">
         <div class="container">
-            <Form :entity-key="entityKey" :instance-id="instanceId">
+            <Form
+                :entity-key="entityKey"
+                :instance-id="instanceId"
+                @error="handleError"
+            >
                 <template v-slot:action-bar="{ props, listeners }">
                     <ActionBarForm v-bind="props" v-on="listeners" />
                 </template>
@@ -27,5 +31,10 @@
                 return this.$route.params.instanceId;
             }
         },
+        methods: {
+            handleError(error) {
+                this.$emit('error', error);
+            },
+        }
     }
 </script>

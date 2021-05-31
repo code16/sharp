@@ -84,6 +84,10 @@
                     this.$store.dispatch('dashboard/get', {
                         filtersValues: this.getFiltersValuesFromQuery(this.$route.query)
                     })
+                    .catch(error => {
+                        this.$emit('error', error);
+                        return Promise.reject(error);
+                    })
                 );
                 this.ready = true;
             },

@@ -9,7 +9,7 @@
         </template>
         <template v-else>
 
-            <slot />
+            <router-view @error="handlePageError" />
 
             <notifications position="top right" animation-name="slideRight" style="top:6rem; right: 1rem" reverse>
                 <template slot="body" slot-scope="{ item, close }">
@@ -60,13 +60,6 @@
             }
         },
 
-        props: {
-            context: {
-                type: String,
-                required: true
-            }
-        },
-
         data() {
             return {
                 showErrorPage: false,
@@ -81,20 +74,17 @@
                 return this.$store.getters.isLoading;
             },
         },
-        created() {
-            let { axiosInstance } = this._provided;
+        methods: {
+            handlePageError(error) {
+                const { response: { status, data }, config: { method } } = error;
 
-            axiosInstance.interceptors.response.use(c=>c, error=>{
-                let { response: {status, data}, config: { method } } = error;
-
-                if(method==='get' && status === 404 || status === 403) {
+                if(method === 'get' && status === 404 || status === 403) {
                     this.showErrorPage = true;
                     this.errorPageData = {
                         status, message: data.message
                     }
                 }
-                return Promise.reject(error);
-            });
+            },
         },
     }
 </script>

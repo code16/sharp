@@ -6,6 +6,7 @@
                 <EntityList
                     :entity-key="entityKey"
                     module="entity-list"
+                    @error="handleError"
                 >
                     <template v-slot:action-bar="{ props, listeners }">
                         <ActionBarList v-bind="props" v-on="listeners" />
@@ -53,6 +54,9 @@
                 this.$router.push({
                     query: { ...query }
                 });
+            },
+            handleError(error) {
+                this.$emit('error', error);
             },
             async init() {
                 await this.$store.dispatch('entity-list/setQuery', { ...this.$route.query });

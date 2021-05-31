@@ -291,7 +291,11 @@
                 }
                 else {
                     if(this.entityKey) {
-                        await this.get();
+                        await this.get()
+                            .catch(error => {
+                                this.$emit('error', error);
+                                return Promise.reject(error);
+                            });
                         this.ready = true;
                     }
                     else logError('no entity key provided');

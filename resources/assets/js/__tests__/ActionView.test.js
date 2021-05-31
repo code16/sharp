@@ -22,11 +22,11 @@ describe('action-view', ()=>{
         return shallowMount(ActionView, {
             ...options,
             propsData: {
-                context: 'form',
                 ...options.propsData
             },
             stubs: {
-                'SharpModal': ModalStub
+                'SharpModal': ModalStub,
+                'router-view': true,
             },
             store: new Vuex.Store(store),
             localVue
