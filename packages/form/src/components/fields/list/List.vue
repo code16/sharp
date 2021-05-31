@@ -25,6 +25,14 @@
                         :class="{'SharpList__item--collapsed': dragActive}"
                         :key="listItemData[indexSymbol]"
                     >
+                        <template v-if="showInsertButton">
+                            <div class="SharpList__new-item-zone">
+                                <Button small @click="insertNewItem(i, $event)">
+                                    {{ l('form.list.insert_button') }}
+                                </Button>
+                            </div>
+                        </template>
+
                         <template v-if="dragActive && collapsedItemTemplate">
                             <TemplateRenderer
                                 name="CollapsedItem"
@@ -32,7 +40,6 @@
                                 :template-data="collapsedItemData(listItemData)"
                             />
                         </template>
-
                         <template v-else>
                             <ListItem :layout="fieldLayout.item" :error-identifier="i" v-slot="{ fieldLayout }">
                                 <FieldDisplay
@@ -60,13 +67,6 @@
                         <!-- Full size div use to handle the item when drag n drop (c.f draggable options) -->
                         <template v-if="dragActive">
                             <div class="SharpList__overlay-handle"></div>
-                        </template>
-                        <template v-if="showInsertButton && i < list.length-1">
-                            <div class="SharpList__new-item-zone">
-                                <Button small @click="insertNewItem(i, $event)">
-                                    {{ l('form.list.insert_button') }}
-                                </Button>
-                            </div>
                         </template>
                     </div>
                 </template>
@@ -230,7 +230,7 @@
             },
             insertNewItem(i, $event) {
                 $event.target && $event.target.blur();
-                this.list.splice(i+1, 0, this.createItem());
+                this.list.splice(i, 0, this.createItem());
             },
             add() {
                 this.list.push(this.createItem());
