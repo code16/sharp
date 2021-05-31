@@ -53,20 +53,13 @@
                 <template v-if="canCreate && !reorderActive">
                     <div class="col-auto">
                         <template v-if="hasForms">
-                            <Dropdown variant="light" large right :text="l('action_bar.list.forms_dropdown')">
-                                <template v-for="(form, key) in forms">
-                                    <DropdownItem  @click="handleCreateFormSelected(form)" :key="key" >
-                                        <div class="row gx-2">
-                                            <div class="col-auto">
-                                                <ItemVisual :item="form" icon-class="fa-fw"/>
-                                            </div>
-                                            <div class="col">
-                                                {{ form.label }}
-                                            </div>
-                                        </div>
-                                    </DropdownItem>
-                                </template>
-                            </Dropdown>
+                            <MultiformDropdown
+                                :forms="forms"
+                                variant="light"
+                                large
+                                right
+                                @select="handleCreateFormSelected"
+                            />
                         </template>
                         <template v-else>
                             <Button variant="light" large @click="handleCreateButtonClicked">
@@ -113,6 +106,7 @@
     import { FilterDropdown } from 'sharp-filters';
 
     import { Localization } from 'sharp/mixins';
+    import MultiformDropdown from "./MultiformDropdown";
 
     export default {
         name: 'SharpActionBarList',
@@ -120,6 +114,7 @@
         mixins: [Localization],
 
         components : {
+            MultiformDropdown,
             ActionBar,
             Dropdown,
             DropdownItem,

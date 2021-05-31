@@ -87,13 +87,12 @@
                                 <div class="col-auto">
                                     <div class="action-bar__element">
                                         <template v-if="hasForms">
-                                            <Dropdown variant="primary" right :text="l('action_bar.list.forms_dropdown')">
-                                                <template v-for="(form,key) in forms">
-                                                    <DropdownItem  @click="handleCreateFormSelected(form)" :key="key" >
-                                                        <ItemVisual :item="form" icon-class="fa-fw"/>{{ form.label }}
-                                                    </DropdownItem>
-                                                </template>
-                                            </Dropdown>
+                                            <MultiformDropdown
+                                                :forms="forms"
+                                                variant="primary"
+                                                right
+                                                @select="handleCreateFormSelected"
+                                            />
                                         </template>
                                         <template v-else>
                                             <Button variant="primary" @click="handleCreateButtonClicked">
@@ -113,17 +112,17 @@
 
 <script>
     import { Localization } from 'sharp/mixins';
-    import { Search, ItemVisual, Dropdown, DropdownItem, Button } from 'sharp-ui';
+    import { Search, ItemVisual, Button } from 'sharp-ui';
     import { FilterDropdown } from 'sharp-filters';
+    import { MultiformDropdown } from "sharp-entity-list";
 
     export default {
         mixins: [Localization],
         components: {
             ItemVisual,
             Search,
-            Dropdown,
-            DropdownItem,
             FilterDropdown,
+            MultiformDropdown,
             Button,
         },
         props: {
