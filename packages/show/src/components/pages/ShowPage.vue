@@ -216,6 +216,12 @@
                     'refresh': this.handleRefreshCommand,
                 });
             },
+            updateDocumentTitle(show) {
+                const breadcrumbLabel = show.breadcrumb?.items[show.breadcrumb.items.length - 1]?.name;
+                if(breadcrumbLabel && show.config.breadcrumbAttribute) {
+                    document.title = `${breadcrumbLabel}, ${document.title}`;
+                }
+            },
             async init() {
                 await this.$store.dispatch('show/setEntityKey', this.$route.params.entityKey);
                 await this.$store.dispatch('show/setInstanceId', this.$route.params.instanceId);
@@ -229,6 +235,7 @@
                 );
 
                 handleNotifications(show.notifications);
+                this.updateDocumentTitle(show);
 
                 this.ready = true;
                 this.refreshKey++;

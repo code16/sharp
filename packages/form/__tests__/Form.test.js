@@ -118,7 +118,7 @@ describe('sharp-form', ()=>{
         const wrapper = createWrapper({
             propsData:{
                 independant: true,
-                props: createForm()
+                form: createForm()
             }
         });
 
@@ -129,7 +129,7 @@ describe('sharp-form', ()=>{
         const wrapper = createWrapper({
             propsData:{
                 independant: true,
-                props: createForm()
+                form: createForm()
             }
         });
 
@@ -168,7 +168,7 @@ describe('sharp-form', ()=>{
         const wrapper = createWrapper({
             propsData:{
                 independant: true,
-                props: {
+                form: {
                     ...createForm(),
                     authorizations: {
                         create: false,
@@ -216,7 +216,7 @@ describe('sharp-form', ()=>{
         const wrapper = createWrapper({
             propsData:{
                 independant: true,
-                props: createForm(),
+                form: createForm(),
             }
         });
 
@@ -253,7 +253,7 @@ describe('sharp-form', ()=>{
         const wrapper = createWrapper({
             propsData: {
                 independant: true,
-                props: createForm()
+                form: createForm()
             }
         });
 
@@ -275,7 +275,7 @@ describe('sharp-form', ()=>{
         const wrapper = createWrapper({
             propsData:{
                 independant: true,
-                props: {
+                form: {
                     ...createForm({ localized: true }),
                     locales: ['fr', 'en']
                 }
@@ -307,7 +307,7 @@ describe('sharp-form', ()=>{
         const wrapper = createWrapper({
             propsData:{
                 independant: true,
-                props: createForm(),
+                form: createForm(),
             }
         });
         wrapper.vm.fieldLocalizedValue = jest.fn(()=>'fieldLocalizedValue');
@@ -323,7 +323,7 @@ describe('sharp-form', ()=>{
         const wrapper = createWrapper({
             propsData:{
                 independant: true,
-                props: createForm()
+                form: createForm()
             }
         });
 
@@ -338,7 +338,7 @@ describe('sharp-form', ()=>{
         const wrapper = createWrapper({
             propsData:{
                 independant: true,
-                props: {
+                form: {
                     ...createForm({ localized:true }),
                     authorizations: {
                         create: true,
@@ -414,7 +414,7 @@ describe('sharp-form', ()=>{
         const wrapper = createWrapper({
             propsData:{
                 independant: true,
-                props: {
+                form: {
                     ...createForm(),
                     layout: createLayout( [
                         [{ legend:'fieldset', fields: [[]] }],
@@ -536,7 +536,7 @@ describe('sharp-form', ()=>{
         const wrapper = createWrapper({
             propsData: {
                 independant: true,
-                props: createForm(),
+                form: createForm(),
             },
         });
 

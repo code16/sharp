@@ -98,7 +98,7 @@
                 type: Boolean,
                 default: true,
             },
-            props: Object
+            form: Object
         },
 
         provide() {
@@ -283,19 +283,28 @@
                         .filter(([key]) => this.fields[key]?.type !== 'html')
                 );
             },
-
+            get() {
+                return this.axiosInstance.get(this.apiPath, {
+                    params: this.apiParams
+                })
+                .then(response => {
+                    this.mount(response.data);
+                    this.$emit('update:form', response.data);
+                    return response;
+                })
+                .catch(error => {
+                    this.$emit('error', error);
+                    return Promise.reject(error);
+                });
+            },
             async init() {
                 if(this.independant) {
-                    this.mount(this.props);
+                    this.mount(this.form);
                     this.ready = true;
                 }
                 else {
                     if(this.entityKey) {
-                        await this.get()
-                            .catch(error => {
-                                this.$emit('error', error);
-                                return Promise.reject(error);
-                            });
+                        await this.get();
                         this.ready = true;
                     }
                     else logError('no entity key provided');

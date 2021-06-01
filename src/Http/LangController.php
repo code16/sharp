@@ -19,15 +19,24 @@ class LangController extends Controller
 
         $strings = Cache::rememberForever("sharp.lang.$lang.$version.js", function() {
             $localizationStrings = [];
-            collect(["action_bar", "form", "modals", "entity_list", "dashboard", "show"])
-                ->map(function(string $filename) {
+            $files = [
+                "action_bar",
+                "dashboard",
+                "entity_list",
+                "form",
+                "modals",
+                "show",
+            ];
+    
+            collect($files)
+                ->map(function (string $filename) {
                     return collect(trans("sharp-front::$filename"))
                         ->mapWithKeys(function ($value, $key) use ($filename) {
                             return ["$filename.$key" => $value];
                         })
                         ->toArray();
                 })
-                ->each(function(array $values) use(&$localizationStrings) {
+                ->each(function (array $values) use (&$localizationStrings) {
                     $localizationStrings += $values;
                 });
             

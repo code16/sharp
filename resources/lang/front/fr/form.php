@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'document_title' => 'Édition “:breadcrumb_label”',
 
     'validation_error.title' => 'Votre saisie est invalide.',
     'validation_error.description' => 'Veuillez contrôler votre saisie, les erreurs sont indiquées sous chaque champ.',

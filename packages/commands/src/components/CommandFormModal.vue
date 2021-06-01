@@ -9,7 +9,7 @@
         <transition>
             <Form
                 v-if="visible"
-                :props="command.form"
+                :form="command.form"
                 :show-alert="false"
                 independant
                 ignore-authorizations
