@@ -8,6 +8,9 @@ import en from 'apexcharts/dist/locales/en.json';
 export function defaultChartOptions() {
     return {
         chart: {
+            animations: {
+                enabled: false,
+            },
             toolbar: {
                 show: false,
                 tools: {
