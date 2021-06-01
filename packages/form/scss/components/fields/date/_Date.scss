@@ -33,7 +33,6 @@
   @at-root &__picker {
     position: absolute;
     display: flex;
-    //min-height: rem(215px);
     //height: auto!important; // #auto-version
     margin-top: -1px;
 
@@ -50,7 +49,7 @@
 
       header {
         width: 100%;
-        height: rem(28px);
+        height: 1.75rem;
         margin-bottom: 1rem;
         display: flex;
         align-items: center;
@@ -67,7 +66,7 @@
         top:0;
 
         .select-list {
-          height:100%;//rem(230px) - .875rem - rem(28px) - 1rem;
+          height: 100%;
           display: flex;
           overflow: hidden;
           flex-flow: row nowrap;
@@ -84,7 +83,7 @@
             margin: 0;
 
             li {
-              height: rem(25px);
+              height: 1.5rem;
 
               display: flex;
               align-items: center;
@@ -98,11 +97,10 @@
               }
 
               &.active {
-                background: $brand-01 !important;
-                color: $inverse-01;
+                background: var(--component-active-bg) !important;
+                color: var(--component-active-color);
                 border: 2px solid transparent;
               }
-
 
             }
 
@@ -118,8 +116,8 @@
       align-items: center;
       justify-content: flex-start;
       padding: .875rem 1rem;
-      width: rem(285px);
-      height: rem(230px);
+      width: 285px;
+      height: 230px;
       border-radius: 0;
       border: none;
       overflow: hidden;
@@ -130,10 +128,6 @@
       &:before,
       &:after {
         display: none;
-      }
-
-      &:focus {
-        outline: 1px solid $brand-01;
       }
 
       .up {
@@ -160,12 +154,16 @@
         width: 100%;
         margin-bottom: .2rem;
 
+        .prev, .next, .up {
+          &:hover, &:focus {
+            color: hsl(var(--bs-primary-h), var(--bs-primary-s), 30%);
+          }
+        }
+
         .prev, .next {
           padding: 0;
-          //line-height: rem(20px);
-
-          &:hover svg {
-            fill: $brand-01;
+          svg {
+            fill: currentColor!important;
           }
         }
 
@@ -173,10 +171,7 @@
           font-size: .75rem;
           text-transform: uppercase;
           padding: 0;
-          &:hover {
-            color: $brand-01;
-            cursor: pointer;
-          }
+          cursor: pointer;
         }
       }
 
@@ -203,8 +198,7 @@
       //
 
       .SharpDate__innerContainer, .SharpDate__rContainer {
-        width: rem(225px) !important;
-        //height: rem(168px) !important; // #auto-version
+        width: 225px !important;
       }
 
       .SharpDate__innerContainer {
@@ -216,7 +210,7 @@
           @extend .flatpickr-rContainer;
 
           .SharpDate__weekdays {
-            width: rem(225px);
+            width: 225px;
             margin-bottom: .325rem;
 
             .day-header {
@@ -229,21 +223,19 @@
           .SharpDate__dayContainer,
           .SharpDate__monthContainer,
           .SharpDate__yearContainer {
-            width: rem(225px);
-            min-width: rem(225px);
-            max-width: rem(225px);
-            //height: rem(132px);
+            width: 225px;
+            min-width: 225px;
+            max-width: 225px;
           }
 
 
           .SharpDate__dayContainer {
             .day {
               font-size: .75rem;
-              height: rem(25px);
+              height: 1.5rem;
               width: 1.8rem;
-              line-height: rem(25px);
               flex-basis: 1.8rem;
-              margin: rem(.5px) 0;
+              margin: .5px 0;
               display: flex;
               align-items: center;
               justify-content: center;
@@ -260,7 +252,7 @@
               }
 
               &.today {
-                border: 2px solid $brand-01;
+                border: 2px solid var(--bs-primary);
               }
 
               &.blank {
@@ -281,8 +273,8 @@
               }
 
               &.selected {
-                background: $brand-01;
-                color: $inverse-01;
+                background: var(--component-active-bg);
+                color: var(--component-active-color);
                 border: 2px solid transparent;
               }
             }
@@ -309,8 +301,8 @@
               }
 
               &.selected {
-                background: $brand-01;
-                color: $inverse-01;
+                background: var(--component-active-bg);
+                color: var(--component-active-color);
                 border: 2px solid transparent;
               }
             }
