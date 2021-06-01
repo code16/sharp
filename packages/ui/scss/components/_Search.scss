@@ -1,31 +1,30 @@
 .SharpSearch {
-
   &__input {
     font-weight: bold;
-    padding-left: 2.5rem;
     padding-right: 2.5rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
 
     &::placeholder {
       font-weight: 400;
     }
   }
 
-  &__magnifier {
-    position: absolute;
-    width: 1rem;
-    height: 1rem;
-    top: calc(50% - .5rem);
-    pointer-events: none;
+  .input-group {
+    border-radius: $input-border-radius-sm;
+    background: white;
   }
 
-  &__close {
+  &__clear {
     position: absolute;
     top: 0;
     right: 0;
+    color: #999;
   }
 
-  &__magnifier {
-    left: .75rem;
-    fill: $ui-05;
+  &__button {
+    @include media-breakpoint-up(md) {
+      min-width: 4em;
+    }
   }
 }
