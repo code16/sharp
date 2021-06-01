@@ -13,6 +13,8 @@
 
     <x-sharp-root-styles />
 
+    @include('sharp::public.head')
+
     {!! \Illuminate\Support\Arr::get($injectedAssets ?? [], 'head') !!}
 </head>
 <body class="{{ $bodyClass ?? '' }}">

@@ -105,10 +105,11 @@ return [
 
     "theme" => [
         "primary_color" => "#004c9b",
+//        "favicon_url" => "",
 //        "logo_urls" => [
 //            "menu" => "/sharp-assets/menu-icon.png",
 //            "login" => "/sharp-assets/login-icon.png",
-//        ]
+//        ],
     ],
 
 ];
