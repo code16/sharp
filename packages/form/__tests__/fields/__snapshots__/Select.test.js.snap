@@ -2,7 +2,7 @@
 
 exports[`select-field can mount "read only" Select field as checkboxes list 1`] = `
 <div id="app">
-	<div class="SharpSelect SharpSelect--list SharpSelect--multiple" multiple="multiple" display="list" clearable="true" placeholder="placeholder" maxselected="3">
+	<div class="SharpSelect SharpSelect--list SharpSelect--multiple" multiple="multiple" display="list" clearable="true" placeholder="placeholder">
 		<div class="row gy-1 gx-3 row-cols-auto">
 			<div class="col">
 				<div class="SharpCheck form-check mb-0">
@@ -103,7 +103,7 @@ exports[`select-field can mount Select field 1`] = `
 
 exports[`select-field can mount Select field as checkboxes list 1`] = `
 <div id="app">
-	<div class="SharpSelect SharpSelect--list SharpSelect--multiple" multiple="multiple" display="list" clearable="true" placeholder="placeholder" maxselected="3">
+	<div class="SharpSelect SharpSelect--list SharpSelect--multiple" multiple="multiple" display="list" clearable="true" placeholder="placeholder">
 		<div class="row gy-1 gx-3 row-cols-auto">
 			<div class="col">
 				<div class="SharpCheck form-check mb-0">
