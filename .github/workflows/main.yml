@@ -55,8 +55,8 @@ jobs:
         run: |
           composer require "laravel/framework:${LARAVEL}" "orchestra/testbench:${TESTBENCH}" --no-interaction --no-update
           composer update --prefer-stable --prefer-dist --no-interaction
-      - name: Execute tests
-        run: ./vendor/bin/testbench package:test --parallel
+      - name: Execute tests (Unit and Feature tests) via PHPUnit
+        run: ./vendor/bin/phpunit
 
   # Front tests (jest)
   front-tests:
