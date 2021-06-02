@@ -37,6 +37,7 @@ return [
 
     'select.select_all' => 'Tout sélectionner',
     'select.unselect_all' => 'Tout désélectionner',
+    'select.validation.max_selected' => "Trop d’éléments sélectionnés (:max_selected max.)",
 
     'autocomplete.no_results_text' => 'Pas de résultats',
 

@@ -152,6 +152,7 @@ class TestForm extends SharpForm
                 ->setLabel("Select list multiple")
                 ->setMultiple()
                 ->setDisplayAsList()
+                ->setMaxSelected(2)
 
         )->addField(
             SharpFormTagsField::make("tags", $this->options(true))

@@ -37,6 +37,7 @@ return [
 
     'select.select_all' => 'Select all',
     'select.unselect_all' => 'Unselect all',
+    'select.validation.max_selected' => "Too many items selected (:max_selected max.)",
 
     'autocomplete.no_results_text' => 'No result found',
 
