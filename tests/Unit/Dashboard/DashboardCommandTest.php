@@ -7,6 +7,7 @@ use Code16\Sharp\Dashboard\DashboardQueryParams;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Tests\Unit\Dashboard\Fakes\FakeSharpDashboard;
 
 class DashboardCommandTest extends SharpTestCase
 {
@@ -14,7 +15,7 @@ class DashboardCommandTest extends SharpTestCase
     /** @test */
     function we_can_get_list_commands_config_of_a_dashboard()
     {
-        $dashboard = new class extends SharpDashboardTestDashboard {
+        $dashboard = new class extends FakeSharpDashboard {
             function buildDashboardConfig(): void
             {
                 $this->addDashboardCommand("dashboardCommand", new class extends DashboardCommand {
@@ -47,7 +48,7 @@ class DashboardCommandTest extends SharpTestCase
     /** @test */
     function we_can_define_a_form_on_a_dashboard_command()
     {
-        $list = new class extends SharpDashboardTestDashboard {
+        $list = new class extends FakeSharpDashboard {
             function buildDashboardConfig(): void
             {
                 $this->addDashboardCommand("dashboardCommand", new class extends DashboardCommand {

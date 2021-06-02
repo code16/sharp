@@ -6,6 +6,7 @@ use Code16\Sharp\Dashboard\DashboardDateRangeFilter;
 use Code16\Sharp\Dashboard\DashboardFilter;
 use Code16\Sharp\Dashboard\DashboardSelectFilter;
 use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Tests\Unit\Dashboard\Fakes\FakeSharpDashboard;
 
 class DashboardFilterTest extends SharpTestCase
 {
@@ -13,7 +14,7 @@ class DashboardFilterTest extends SharpTestCase
     /** @test */
     function we_can_get_dashboard_filters_config()
     {
-        $dashboard = new class extends SharpDashboardTestDashboard {
+        $dashboard = new class extends FakeSharpDashboard {
             function buildDashboardConfig(): void
             {
                 $this->addFilter("test", new class implements DashboardSelectFilter {
@@ -43,7 +44,7 @@ class DashboardFilterTest extends SharpTestCase
     /** @test */
     function we_can_get_dashboard_date_range_filter_config()
     {
-        $dashboard = new class extends SharpDashboardTestDashboard {
+        $dashboard = new class extends FakeSharpDashboard {
             function buildDashboardConfig(): void
             {
                 $this->addFilter("test", new class implements DashboardDateRangeFilter {
