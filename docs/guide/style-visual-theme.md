@@ -56,6 +56,17 @@ And then you'll need to define the path to this custom blade in the `config/shar
 "login_page_message_blade_path" => "sharp/_login-page-message",
 ```
 
+### Favicon
+
+You can define an URL for a favicon that Sharp will use in the config:
+
+```php
+// config/sharp.php
+
+"theme" => [
+    "favicon_url" => "/sharp-img/favicon.png",
+]
+```
 
 ### Injecting Assets
 
