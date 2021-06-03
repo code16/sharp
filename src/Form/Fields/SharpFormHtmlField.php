@@ -44,6 +44,7 @@ class SharpFormHtmlField extends SharpFormField
     {
         return [
             "template" => "required",
+            "templateData" => "nullable|array",
         ];
     }
 

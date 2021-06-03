@@ -39,7 +39,6 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
                     ["id" => 1, "label" => "bob"]
                 ],
                 "remoteSearchAttribute" => "query",
-                "templateData" => [],
                 "dataWrapper" => "",
                 "debounceDelay" => 300,
             ], 
