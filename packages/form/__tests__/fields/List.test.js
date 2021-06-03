@@ -304,7 +304,7 @@ describe('list-field', () => {
         $list.insertNewItem(0, {});
 
         expect($list.list).toMatchObject([
-            {id:0, name:'Antoine'},{id: null, name: null},{id:2, name:'Solène'}
+            {id: null, name: null}, {id:0, name:'Antoine'}, {id:2, name:'Solène'}
         ])
     });
 

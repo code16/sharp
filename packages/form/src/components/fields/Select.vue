@@ -4,7 +4,7 @@
         class="SharpSelect"
         :class="classes"
         :labels="optionsLabel"
-        v-bind="$props"
+        v-bind="[$props, $attrs]"
         @input="handleInput"
         ref="component"
     >
@@ -90,8 +90,8 @@
             },
         },
         methods: {
-            handleInput(value) {
-                this.$emit('input', value);
+            handleInput(value, { error } = {}) {
+                this.$emit('input', value, { error });
             },
             setDefault() {
                 if(!this.clearable && this.value == null && this.options.length > 0) {

@@ -25,6 +25,8 @@
     import localize from '../../../mixins/localize/editor';
     import { buttons } from './config';
     import { handleMarkdownTables } from "./tables";
+    import { onLabelClicked } from "../../../util/accessibility";
+    import { normalizeText } from "../../../util/text";
 
     const noop = ()=>{};
 
@@ -36,8 +38,7 @@
         mixins: [ localize({ textProp:'text' }) ],
 
         props: {
-            uniqueIdentifier: String,
-            fieldConfigIdentifier: String,
+            id: String,
             value:{
                 type: Object,
                 default: ()=>({})
@@ -53,6 +54,8 @@
             innerComponents:Object,
 
             readOnly: Boolean,
+            uniqueIdentifier: String,
+            fieldConfigIdentifier: String,
         },
 
         inject: {
@@ -280,10 +283,8 @@
             },
 
             onBeforeChange(cm, change) {
-                //console.log(change);
                 if(change && change.origin && change.origin.includes('delete')) {
                     let markers = cm.findMarks(change.from, change.to);
-                    console.log(markers);
                     if(markers.length) {
                         markers.forEach(marker => {
                             if(marker.$component) {
@@ -293,6 +294,7 @@
                         });
                     }
                 }
+                change.text = change.text?.map(text => normalizeText(text));
             },
 
             codemirrorOn(codemirror, eventName, callback, immediate) {
@@ -448,6 +450,10 @@
             else {
                 this.$nextTick(() => this.refreshOnExternalChange());
             }
+
+            onLabelClicked(this, this.id, () => {
+                this.codemirror.focus();
+            });
         }
     }
 </script>

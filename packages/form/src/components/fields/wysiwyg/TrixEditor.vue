@@ -10,6 +10,7 @@
                 :placeholder="placeholder"
                 :style="{ height: `${height}px`, maxHeight:`${height}px` }"
                 @trix-change="handleChanged"
+                @trix-before-paste="handleBeforePaste"
                 ref="trix"
             ></trix-editor>
         </div>
@@ -21,6 +22,8 @@
     import TrixCustomToolbar from './TrixCustomToolbar.vue';
 
     import localize from '../../../mixins/localize/editor';
+    import { onLabelClicked } from "../../../util/accessibility";
+    import { normalizeText } from "../../../util/text";
 
     export default {
         name:'SharpTrix',
@@ -31,6 +34,7 @@
             TrixCustomToolbar
         },
         props: {
+            id: String,
             value: Object,
             toolbar: Array,
             height: {
@@ -61,10 +65,23 @@
         methods: {
             handleChanged(event) {
                 this.$emit('input', this.localizedValue(event.target.value));
-            }
+            },
+            handleBeforePaste(e) {
+                if(e.paste.string) {
+                    e.paste.string = normalizeText(e.paste.string);
+                }
+                if(e.paste.html) {
+                    e.paste.html = normalizeText(e.paste.html);
+                }
+            },
         },
         created() {
             window.Trix.config.toolbar.getDefaultHTML = () => '';
+        },
+        mounted() {
+            onLabelClicked(this, this.id, () => {
+                this.$refs.trix.focus();
+            });
         }
     }
 </script>

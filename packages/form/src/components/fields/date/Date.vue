@@ -3,6 +3,7 @@
         <div class="SharpDate__input-wrapper">
             <input
                 class="form-control clearable SharpDate__input"
+                :id="id"
                 :class="{ 'SharpDate__input--valuated': value }"
                 :placeholder="displayFormat"
                 :value="inputValue"
@@ -60,7 +61,7 @@
     import { BPopover } from 'bootstrap-vue';
 
     import { lang } from 'sharp';
-    import { Focusable, Localization } from 'sharp/mixins';
+    import { Localization } from 'sharp/mixins';
     import { ClearButton } from "sharp-ui";
     import DatePicker from './Datepicker';
     import TimePicker from './Timepicker';
@@ -77,9 +78,10 @@
 
         inject:['$field'],
 
-        mixins: [ Focusable, Localization ],
+        mixins: [Localization],
 
         props: {
+            id: String,
             value: {
                 type:[Date, String]
             },
@@ -256,8 +258,5 @@
                 this.rollback();
             }
         },
-        mounted() {
-            this.setFocusable(this.$refs.input);
-        }
     }
 </script>

@@ -2,9 +2,9 @@
     <div class="SharpFieldContainer SharpForm__form-item" :class="formGroupClasses" :style="extraStyle">
         <div class="SharpForm__field-header" v-sticky>
             <div class="row align-items-end">
-                <div class="col">
+                <div class="col d-flex">
                     <template v-if="showLabel">
-                        <label class="SharpForm__label form-label" @click="triggerFocus">
+                        <label :for="fieldId" class="SharpForm__label form-label">
                             {{ label }}
                         </label>
                     </template>
@@ -30,6 +30,7 @@
         <div class="SharpForm__field-content">
             <Field
                 v-bind="$props"
+                :id="fieldId"
                 :unique-identifier="mergedErrorIdentifier"
                 :field-config-identifier="mergedConfigIdentifier"
                 @error="setError"
@@ -37,6 +38,7 @@
                 @clear="clear"
                 @blur="handleBlur"
                 @locale-change="handleLocaleChanged"
+                @input="handleValueChanged"
                 ref="field"
             />
         </div>
@@ -93,10 +95,6 @@
             }
         },
         watch: {
-            originalValue: {
-                deep: true,
-                handler: 'handleValueChanged',
-            },
             '$form.errors'(errors) {
                 this.updateError(errors);
             },
@@ -105,6 +103,9 @@
             }
         },
         computed: {
+            fieldId() {
+                return `form-field_${this.mergedErrorIdentifier}`;
+            },
             formGroupClasses() {
                 return [
                     `SharpForm__form-item--type-${this.fieldType}`,
@@ -196,8 +197,10 @@
             handleBlur() {
                 this.$set(this.fieldProps,'focused',false);
             },
-            handleValueChanged() {
-                if(this.state === 'error') {
+            handleValueChanged(value, { error } = {}) {
+                if(error) {
+                    this.setError(error);
+                } else if(this.state === 'error') {
                     this.clear();
                 }
             },

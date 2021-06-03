@@ -46,6 +46,7 @@
             readOnly: Boolean,
             labels: Object,
             showSelectAll: Boolean,
+            maxSelected: Number,
             inline: Boolean,
             root: Boolean,
             uniqueIdentifier: String,
@@ -65,12 +66,19 @@
                 this.$emit('input', []);
             },
             handleCheckboxChanged(checked, option) {
-                if (checked) {
-                    this.$emit('input', [...(this.value ?? []), option.id])
+                const value = checked
+                    ? [...(this.value ?? []), option.id]
+                    : (this.value ?? []).filter(val => !isSelected(option, val));
+
+                const error = this.validate(value);
+                this.$emit('input', value, { error });
+            },
+            validate(value) {
+                if(this.maxSelected && value?.length > this.maxSelected) {
+                    return lang('form.select.validation.max_selected')
+                        .replace(':max_selected', this.maxSelected);
                 }
-                else {
-                    this.$emit('input', (this.value ?? []).filter(val => !isSelected(option, val)));
-                }
+                return null;
             },
         }
     }

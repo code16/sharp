@@ -152,6 +152,7 @@ class TestForm extends SharpForm
                 ->setLabel("Select list multiple")
                 ->setMultiple()
                 ->setDisplayAsList()
+                ->setMaxSelected(2)
 
         )->addField(
             SharpFormTagsField::make("tags", $this->options(true))
@@ -165,6 +166,7 @@ class TestForm extends SharpForm
             SharpFormTextareaField::make("textarea")
                 ->setLocalized()
                 ->setLabel("Textarea")
+                ->setMaxLength(50)
                 ->setRowCount(4)
 
         )->addField(

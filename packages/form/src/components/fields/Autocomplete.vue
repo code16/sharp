@@ -14,6 +14,7 @@
         </template>
         <template v-else-if="ready">
             <Multiselect
+                :id="id"
                 class="SharpAutocomplete__multiselect form-control"
                 :class="{
                     'form-select': !this.isRemote,
@@ -99,6 +100,7 @@
         mixins: [Localization, localize],
 
         props: {
+            id: String,
             fieldKey: String,
 
             value: [String, Number, Object, Array],
