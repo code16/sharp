@@ -30,20 +30,26 @@
                                 </div>
                             </div>
                             <transition name="SharpUpload__progress">
-                                <div class="SharpUpload__progress mt-2" v-show="inProgress">
-                                    <div class="SharpUpload__progress-bar" role="progressbar" :style="{width:`${progress}%`}"
-                                         :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
+                                <template v-if="inProgress">
+                                    <div class="SharpUpload__progress mt-2">
+                                        <div class="SharpUpload__progress-bar" role="progressbar" :style="{width:`${progress}%`}"
+                                            :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </template>
                             </transition>
                         </div>
-                        <div v-show="!readOnly">
-                            <Button v-show="!!originalImageSrc && !inProgress" outline small :disabled="!isCroppable" @click="onEditButtonClick">
-                                {{ l('form.upload.edit_button') }}
-                            </Button>
-                            <Button class="SharpUpload__remove-button" variant="danger" outline small :disabled="readOnly" @click="handleRemoveClicked">
-                                {{ l('form.upload.remove_button') }}
-                            </Button>
-                        </div>
+                        <template v-if="!readOnly">
+                            <div>
+                                <template v-if="hasEdit">
+                                    <Button outline small @click="onEditButtonClick">
+                                        {{ l('form.upload.edit_button') }}
+                                    </Button>
+                                </template>
+                                <Button class="SharpUpload__remove-button" variant="danger" outline small @click="handleRemoveClicked">
+                                    {{ l('form.upload.remove_button') }}
+                                </Button>
+                            </div>
+                        </template>
                     </div>
                 </div>
             </template>
@@ -51,34 +57,36 @@
                 <div></div>
             </div>
         </div>
-        <template v-if="!!originalImageSrc && isCroppable">
-            <Modal :visible.sync="showEditModal"
-                @ok="onEditModalOk"
-                @hidden="onEditModalHidden"
-                no-close-on-backdrop
-                :title="l('modals.cropper.title')"
-                ref="modal"
-            >
-                <vue-cropper
-                    class="SharpUpload__modal-vue-cropper"
-                    :view-mode="2"
-                    drag-mode="crop"
-                    :aspect-ratio="ratioX/ratioY"
-                    :auto-crop-area="1"
-                    :zoomable="false"
-                    :guides="false"
-                    :background="true"
-                    :rotatable="true"
-                    :src="originalImageSrc"
-                    :data="cropData"
-                    alt="Source image"
-                    ref="modalCropper"
-                />
-                <div class="mt-3">
-                    <Button @click="rotate(-90)"><i class="fas fa-undo"></i></Button>
-                    <Button @click="rotate(90)"><i class="fas fa-redo"></i></Button>
-                </div>
-            </Modal>
+
+        <Modal :visible.sync="showEditModal"
+            @ok="onEditModalOk"
+            @hidden="onEditModalHidden"
+            no-close-on-backdrop
+            :title="l('modals.cropper.title')"
+            ref="modal"
+        >
+            <vue-cropper
+                class="SharpUpload__modal-vue-cropper"
+                :view-mode="2"
+                drag-mode="crop"
+                :aspect-ratio="ratioX/ratioY"
+                :auto-crop-area="1"
+                :zoomable="false"
+                :guides="false"
+                :background="true"
+                :rotatable="true"
+                :src="originalImageSrc"
+                :data="cropData"
+                alt="Source image"
+                ref="modalCropper"
+            />
+            <div class="mt-3">
+                <Button @click="rotate(-90)"><i class="fas fa-undo"></i></Button>
+                <Button @click="rotate(90)"><i class="fas fa-redo"></i></Button>
+            </div>
+        </Modal>
+
+        <template v-if="hasInitialCrop">
             <vue-cropper
                 class="d-none"
                 :aspect-ratio="ratioX/ratioY"
@@ -88,6 +96,7 @@
                 ref="cropper"
             />
         </template>
+
         <a style="display: none" ref="dlLink"></a>
     </div>
 </template>
@@ -115,7 +124,7 @@
             Button,
         },
 
-        inject : [ 'axiosInstance' ,'$form', '$field' ],
+        inject : [ '$form' ],
 
         mixins: [ Localization, VueClipModifiers ],
 
@@ -125,7 +134,11 @@
             ratioX: Number,
             ratioY: Number,
             value: Object,
-            croppableFileTypes:Array,
+            croppable: {
+                type: Boolean,
+                default: true,
+            },
+            croppableFileTypes: Array,
 
             readOnly: Boolean,
             root: Boolean,
@@ -157,7 +170,7 @@
                 return this.files[0];
             },
             originalImageSrc() {
-                return this.file && (this.file.thumbnail || this.file.dataUrl);
+                return this.file?.thumbnail || this.file?.dataUrl;
             },
             imageSrc() {
                 return this.croppedImg || this.originalImageSrc;
@@ -216,15 +229,21 @@
             showThumbnail() {
                 return this.imageSrc;
             },
-            hasInitialCrop() {
-                return !!(this.ratioX && this.ratioY) && this.isCroppable;
-            },
             isCroppable() {
+                if(!this.croppable || !this.originalImageSrc) {
+                    return false;
+                }
                 if(this.file?.type && !this.file.type.match(/^image\//)) {
                     return false;
                 }
                 return !this.croppableFileTypes || this.croppableFileTypes.includes(this.fileExtension);
-            }
+            },
+            hasInitialCrop() {
+                return this.isCroppable && !!this.ratioX && !!this.ratioY;
+            },
+            hasEdit() {
+                return this.isCroppable && !this.inProgress;
+            },
         },
         methods: {
             setPending(value) {

@@ -150,9 +150,8 @@ abstract class SharpFormField
                 "conditionalDisplay" => $this->buildConditionalDisplayArray(),
                 "helpMessage" => $this->helpMessage,
                 "extraStyle" => $this->extraStyle,
-            ] 
-            + $childArray
-        )
+            ])
+            ->merge($childArray)
             ->filter(function($value) {
                 return $value !== null;
             })

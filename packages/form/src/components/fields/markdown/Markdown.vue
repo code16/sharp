@@ -115,7 +115,7 @@
                 return (this.value.files||[]).map( (file,i) => ({ [this.idSymbol]:i, ...file }) );
             },
             createUploader({ id, value, removeOptions }) {
-                let $uploader = new MarkdownUpload({
+                const $uploader = new MarkdownUpload({
                     mixins: [ Widget(this) ],
                     propsData: {
                         id, value,

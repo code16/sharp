@@ -15,6 +15,7 @@ exports[`vue-clip can mount "destroyed" VueClip component 1`] = `
 			</div>
 		</div>
 		<!---->
+		<!---->
 		<a style="display: none;"></a>
 	</div>
 </div>
@@ -45,9 +46,7 @@ exports[`vue-clip can mount "in progress" VueClip component 1`] = `
 						</div>
 					</div>
 					<div>
-						<button class="SharpButton btn btn-outline-primary btn-sm" style="display: none;">
-							{{ form.upload.edit_button }}
-						</button>
+						<!---->
 						<button class="SharpButton btn SharpUpload__remove-button btn-outline-danger btn-sm">
 							{{ form.upload.remove_button }}
 						</button>
@@ -58,6 +57,7 @@ exports[`vue-clip can mount "in progress" VueClip component 1`] = `
 				<div></div>
 			</div>
 		</div>
+		<!---->
 		<!---->
 		<a style="display: none;"></a>
 	</div>
@@ -79,6 +79,7 @@ exports[`vue-clip can mount VueClip component 1`] = `
 				<div></div>
 			</div>
 		</div>
+		<!---->
 		<!---->
 		<a style="display: none;"></a>
 	</div>
@@ -113,9 +114,7 @@ exports[`vue-clip can mount initially image VueClip component 1`] = `
 								</div>
 							</div>
 						</div>
-						<div class="SharpUpload__progress mt-2" style="display: none;">
-							<div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="SharpUpload__progress-bar" style="width: 0%;"></div>
-						</div>
+						<!---->
 					</div>
 					<div>
 						<button class="SharpButton btn btn-outline-primary btn-sm">
@@ -164,14 +163,10 @@ exports[`vue-clip can mount initially non image VueClip component 1`] = `
 								</div>
 							</div>
 						</div>
-						<div class="SharpUpload__progress mt-2" style="display: none;">
-							<div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="SharpUpload__progress-bar" style="width: 0%;"></div>
-						</div>
+						<!---->
 					</div>
 					<div>
-						<button class="SharpButton btn btn-outline-primary btn-sm" style="display: none;">
-							{{ form.upload.edit_button }}
-						</button>
+						<!---->
 						<button class="SharpButton btn SharpUpload__remove-button btn-outline-danger btn-sm">
 							{{ form.upload.remove_button }}
 						</button>
@@ -182,6 +177,7 @@ exports[`vue-clip can mount initially non image VueClip component 1`] = `
 				<div></div>
 			</div>
 		</div>
+		<!---->
 		<!---->
 		<a style="display: none;"></a>
 	</div>
@@ -216,14 +212,10 @@ exports[`vue-clip can mount non croppable image 1`] = `
 								</div>
 							</div>
 						</div>
-						<div class="SharpUpload__progress mt-2" style="display: none;">
-							<div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="SharpUpload__progress-bar" style="width: 0%;"></div>
-						</div>
+						<!---->
 					</div>
 					<div>
-						<button class="SharpButton btn btn-outline-primary btn-sm" disabled="disabled">
-							{{ form.upload.edit_button }}
-						</button>
+						<!---->
 						<button class="SharpButton btn SharpUpload__remove-button btn-outline-danger btn-sm">
 							{{ form.upload.remove_button }}
 						</button>
@@ -234,6 +226,7 @@ exports[`vue-clip can mount non croppable image 1`] = `
 				<div></div>
 			</div>
 		</div>
+		<!---->
 		<!---->
 		<a style="display: none;"></a>
 	</div>
@@ -255,6 +248,7 @@ exports[`vue-clip can mount read-only VueClip component 1`] = `
 				<div></div>
 			</div>
 		</div>
+		<!---->
 		<!---->
 		<a style="display: none;"></a>
 	</div>

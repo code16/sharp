@@ -374,6 +374,7 @@ describe('vue-clip',() => {
             data: ()=>({
                 value: {
                     name: 'Photo2.jpg',
+                    thumbnail: 'Photo2.jpg',
                 }
             })
         });

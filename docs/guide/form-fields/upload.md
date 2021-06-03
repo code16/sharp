@@ -25,6 +25,10 @@ This `tmp_dir` path is relative to the `local` filesystem defined in the Laravel
 
 Max file size allowed.
 
+### `setCroppable(bool $croppable = true)`
+
+Allow the user to crop (or rotate) the visual, after the upload.
+
 ### `setCropRatio(string $ratio, array $croppableFileTypes = null)`
 
 Set a ratio constraint to uploaded images, formatted like this: `width:height`. For instance: `16:9`, or `1:1`.
@@ -54,11 +58,11 @@ Set the allowed file extensions. You can pass either an array or a comma-separat
 
 Just a `setFileFilter([".jpg",".jpeg",".gif",".png"])` shorthand.
 
-### `setCompactThumbnail($compactThumbnail = true)`
+### `setCompactThumbnail(bool $compactThumbnail = true)`
 
 If true and if the upload has a thumbnail, it is limited to 60px high (to compact in a list item, for instance).
 
-### `shouldOptimizeImage($shouldOptimizeImage = true)`
+### `shouldOptimizeImage(bool $shouldOptimizeImage = true)`
 
 If true, some optimization will be applied on the uploaded images (in order to reduce files weight). It relies on spatie's [image-optmizer](https://github.com/spatie/image-optimizer). Please note that you will need some of these packages on your system:
 - [JpegOptim](http://freecode.com/projects/jpegoptim)
