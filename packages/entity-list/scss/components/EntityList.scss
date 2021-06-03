@@ -4,4 +4,16 @@
     width: 7.5rem;
     background: white;
   }
+
+  &__actions {
+    justify-content: flex-end;
+  }
+
+  &--has-state-only {
+    .SharpEntityList__actions {
+      @include media-breakpoint-up(sm) {
+        justify-content: flex-start;
+      }
+    }
+  }
 }

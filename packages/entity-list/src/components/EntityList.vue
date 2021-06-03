@@ -1,5 +1,5 @@
 <template>
-    <div class="SharpEntityList">
+    <div class="SharpEntityList" :class="classes">
         <slot
             name="action-bar"
             :props="actionBarProps"
@@ -45,18 +45,20 @@
                     <template v-slot:item="{ item }">
                         <DataListRow :url="instanceUrl(item)" :columns="columns" :highlight="instanceIsFocused(item)" :row="item">
                             <template v-if="hasActionsColumn" v-slot:append="props">
-                                <EntityActions
-                                    :config="config"
-                                    :has-state="instanceHasState(item)"
-                                    :state="instanceState(item)"
-                                    :state-options="instanceStateOptions(item)"
-                                    :state-disabled="!instanceHasStateAuthorization(item)"
-                                    :has-commands="instanceHasCommands(item)"
-                                    :commands="instanceCommands(item)"
-                                    @command="handleInstanceCommandRequested(item, $event)"
-                                    @state-change="handleInstanceStateChanged(item, $event)"
-                                    @selecting="props.toggleHighlight($event)"
-                                />
+                                <div class="SharpEntityList__actions d-flex">
+                                    <EntityActions
+                                        :config="config"
+                                        :has-state="instanceHasState(item)"
+                                        :state="instanceState(item)"
+                                        :state-options="instanceStateOptions(item)"
+                                        :state-disabled="!instanceHasStateAuthorization(item)"
+                                        :has-commands="instanceHasCommands(item)"
+                                        :commands="instanceCommands(item)"
+                                        @command="handleInstanceCommandRequested(item, $event)"
+                                        @state-change="handleInstanceStateChanged(item, $event)"
+                                        @selecting="props.toggleHighlight($event)"
+                                    />
+                                </div>
                             </template>
                         </DataListRow>
                     </template>
@@ -192,6 +194,11 @@
             },
         },
         computed: {
+            classes() {
+                return {
+                    'SharpEntityList--has-state-only': this.hasStateOnly,
+                }
+            },
             filters() {
                 return this.storeGetter('filters/filters');
             },
@@ -293,7 +300,7 @@
              * Data list props
              */
             items() {
-                return this.data.items || [];
+                return this.data?.items ?? [];
             },
             columns() {
                 return this.layout.map(columnLayout => ({
@@ -318,6 +325,12 @@
                 return this.items.some(instance =>
                     this.instanceHasState(instance) ||
                     this.instanceHasCommands(instance)
+                );
+            },
+            hasStateOnly() {
+                return this.items.some(instance =>
+                    !this.instanceHasCommands(instance) &&
+                    this.instanceHasState(instance) && !this.instanceHasStateAuthorization(instance)
                 );
             },
         },
