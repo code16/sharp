@@ -22,6 +22,7 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
                 "innerComponents" => [
                     "upload" => [
                         "maxFileSize" => 2,
+                        "croppable" => true,
                         "fileFilter" => [".jpg",".jpeg",".gif",".png"]
                     ]
                 ]
@@ -51,7 +52,8 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
         $this->assertArraySubset([
             "innerComponents" => [
                 "upload" => [
-                    "maxFileSize" => 50
+                    "maxFileSize" => 50,
+                    "croppable" => true,
                 ]
             ]
         ], $formField->toArray());
@@ -63,6 +65,7 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
                 "innerComponents" => [
                     "upload" => [
                         "maxFileSize" => 50,
+                        "croppable" => true,
                         "ratioX" => 16,
                         "ratioY" => 9
                     ]
@@ -80,6 +83,24 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
                         "maxFileSize" => 50,
                         "ratioX" => 16,
                         "ratioY" => 9,
+                        "croppable" => true,
+                        "fileFilter" => [".jpg", ".pdf"]
+                    ]
+                ]
+            ],
+            $formField->toArray()
+        );
+
+        $formField->setCroppable(false);
+
+        $this->assertArraySubset(
+            [
+                "innerComponents" => [
+                    "upload" => [
+                        "maxFileSize" => 50,
+                        "ratioX" => 16,
+                        "ratioY" => 9,
+                        "croppable" => false,
                         "fileFilter" => [".jpg", ".pdf"]
                     ]
                 ]

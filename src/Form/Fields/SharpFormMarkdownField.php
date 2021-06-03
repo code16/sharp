@@ -82,6 +82,7 @@ class SharpFormMarkdownField extends SharpFormField
             "maxImageSize" => "numeric",
             "ratioX" => "integer|nullable",
             "ratioY" => "integer|nullable",
+            "boolean" => "croppable",
             "croppableFileTypes" => "array|nullable",
         ];
     }
@@ -101,7 +102,10 @@ class SharpFormMarkdownField extends SharpFormField
 
     protected function innerComponentUploadConfiguration(): array
     {
-        $array = ["maxFileSize" => $this->maxFileSize ?: 2];
+        $array = [
+            "maxFileSize" => $this->maxFileSize ?: 2,
+            "croppable" => $this->croppable
+        ];
 
         if($this->cropRatio) {
             $array["ratioX"] = (int)$this->cropRatio[0];

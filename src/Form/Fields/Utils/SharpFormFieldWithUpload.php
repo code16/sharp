@@ -12,6 +12,7 @@ trait SharpFormFieldWithUpload
     protected string $storageDisk = "local";
     /** @var string|Closure  */
     protected $storageBasePath = "data";
+    protected bool $croppable = true;
     protected bool $compactThumbnail = false;
     protected bool $shouldOptimizeImage = false;
     /** @var string|array|null */
@@ -61,6 +62,13 @@ trait SharpFormFieldWithUpload
     public function setCompactThumbnail(bool $compactThumbnail = true): self
     {
         $this->compactThumbnail = $compactThumbnail;
+
+        return $this;
+    }
+
+    public function setCroppable(bool $croppable = true): self
+    {
+        $this->croppable = $croppable;
 
         return $this;
     }

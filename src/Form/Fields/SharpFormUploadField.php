@@ -22,6 +22,7 @@ class SharpFormUploadField extends SharpFormField
             "maxFileSize" => "numeric",
             "ratioX" => "integer|nullable",
             "ratioY" => "integer|nullable",
+            "croppable" => "boolean",
             "croppableFileTypes" => "array",
             "compactThumbnail" => "boolean",
             "shouldOptimizeImage" => "boolean"
@@ -35,6 +36,7 @@ class SharpFormUploadField extends SharpFormField
             "fileFilter" => $this->fileFilter,
             "ratioX" => $this->cropRatio ? (int)$this->cropRatio[0] : null,
             "ratioY" => $this->cropRatio ? (int)$this->cropRatio[1] : null,
+            "croppable" => $this->croppable,
             "croppableFileTypes" => $this->croppableFileTypes,
             "compactThumbnail" => !!$this->compactThumbnail,
             "shouldOptimizeImage" => !!$this->shouldOptimizeImage

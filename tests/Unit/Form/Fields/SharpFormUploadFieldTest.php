@@ -17,6 +17,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
                 "key" => "file", 
                 "type" => "upload", 
                 "compactThumbnail" => false, 
+                "croppable" => true, 
                 "shouldOptimizeImage" => false
             ], 
             $formField->toArray()
@@ -47,6 +48,17 @@ class SharpFormUploadFieldTest extends SharpTestCase
         );
     }
 
+    /** @test */
+    function we_can_define_croppable()
+    {
+        $formField = SharpFormUploadField::make("file")
+            ->setCroppable(false);
+
+        $this->assertArraySubset(
+            ["croppable" => false],
+            $formField->toArray()
+        );
+    }
 
     /** @test */
     function we_can_define_fileFilter()
