@@ -78,29 +78,31 @@ class AppendBreadcrumb
     {
         switch ($item->type) {
             case "s-list":
-                return trans("sharp::breadcrumb.entityList");
+                return currentSharpRequest()->getEntityMenuLabel($item->key) ?: trans("sharp::breadcrumb.entityList");
             case "s-dashboard":
-                return trans("sharp::breadcrumb.dashboard");
+                return currentSharpRequest()->getEntityMenuLabel($item->key) ?: trans("sharp::breadcrumb.dashboard");
             case "s-show":
                 return trans("sharp::breadcrumb.show", [
-                    "entity" => $this->getEntityLabel($item, $isLeaf)
+                    "entity" => $this->getEntityLabelForInstance($item, $isLeaf)
                 ]);
             case "s-form":
                 // A Form is always a leaf
                 $previousItem = $this->currentSharpRequest->breadcrumb()[$item->depth-1];
-                if(isset($item->instance) || ($previousItem->type === "s-show" && !isset($previousItem->instance))) {
-                    if(!$this->isSameEntityKeys($previousItem->key, $item->key, true)) {
-                        // The form entityKey is different from the previous entityKey
-                        // in the breadcrumb: we are in a EEL case.
-                        return trans("sharp::breadcrumb.form.edit_entity", [
-                            "entity" => $this->getEntityLabel($item, true)
+
+                if($previousItem->type === "s-show" /*&& isset($previousItem->instance)*/ && !$this->isSameEntityKeys($previousItem->key, $item->key, true)) {
+                    // The form entityKey is different from the previous entityKey in the breadcrumb: we are in a EEL case.
+                    return isset($item->instance)
+                        ? trans("sharp::breadcrumb.form.edit_entity", [
+                            "entity" => $this->getEntityLabelForInstance($item, true)
+                        ])
+                        : trans("sharp::breadcrumb.form.create_entity", [
+                            "entity" => $this->getEntityLabelForInstance($item, true)
                         ]);
-                    }
-                    return trans("sharp::breadcrumb.form.edit");
                 }
-                return trans("sharp::breadcrumb.form.create", [
-                    "entity" => $this->getEntityLabel($item, true)
-                ]);
+                
+                return isset($item->instance) || ($previousItem->type === "s-show" && !isset($previousItem->instance))
+                    ? trans("sharp::breadcrumb.form.edit")
+                    : trans("sharp::breadcrumb.form.create");
         }
         
         return $item->key;
@@ -108,12 +110,8 @@ class AppendBreadcrumb
 
     /**
      * Only for Shows and Forms.
-     * 
-     * @param object $item
-     * @param bool $isLeaf
-     * @return string
      */
-    private function getEntityLabel(object $item, bool $isLeaf): string
+    private function getEntityLabelForInstance(object $item, bool $isLeaf): string
     {
         $cacheKey = "sharp.breadcrumb.{$item->key}.{$item->type}.{$item->instance}";
         

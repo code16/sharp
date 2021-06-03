@@ -60,6 +60,25 @@ class CurrentSharpRequest
         );
     }
 
+    public function getCurrentEntityMenuLabel(): ?string
+    {
+        return $this->getEntityMenuLabel($this->entityKey());
+    }
+
+    public function getEntityMenuLabel(string $entityKey): ?string
+    {
+        return collect(config("sharp.menu"))
+                ->mapWithKeys(function($itemOrCategory) {
+                    return isset($itemOrCategory["entities"])
+                        ? collect($itemOrCategory["entities"])
+                            ->mapWithKeys(function($item) {
+                                return $this->extractMenuKeyAndLabel($item);
+                            })
+                        : $this->extractMenuKeyAndLabel($itemOrCategory);
+                })
+                ->filter()[$entityKey] ?? null;
+    }
+
     public function isEntityList(): bool
     {
         $current = $this->getCurrentBreadcrumbItem();
@@ -177,5 +196,18 @@ class CurrentSharpRequest
         }
         
         return collect(request()->segments())->slice(1)->values();
+    }
+
+    private function extractMenuKeyAndLabel(array $item): array
+    {
+        if(isset($item["entity"])) {
+            return [$item["entity"] => $item["label"] ?? ""];
+        }
+
+        if(isset($item["dashboard"])) {
+            return [$item["dashboard"] => $item["label"] ?? ""];
+        }
+
+        return [];
     }
 }
