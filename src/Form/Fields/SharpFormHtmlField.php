@@ -30,6 +30,11 @@ class SharpFormHtmlField extends SharpFormField
         return $this->parentSetInlineTemplate($template, "html");
     }
 
+    public function setAdditionalTemplateData(array $data): self
+    {
+        return $this->setTemplateData($data);
+    }
+
     public function template(): ?string
     {
         return $this->parentTemplate("html");
@@ -46,6 +51,7 @@ class SharpFormHtmlField extends SharpFormField
     {
         return parent::buildArray([
             "template" => $this->template(),
+            "templateData" => $this->additionalTemplateData,
         ]);
     }
 }
