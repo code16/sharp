@@ -383,7 +383,7 @@
             this.options.thumbnailHeight = null;
             this.options.maxFiles = 1;
 
-            if (!this.value)
+            if (!this.value || this.value.file)
                 return;
 
             this.addedFile({ ...this.value, upload: {} });
@@ -392,10 +392,16 @@
         },
         mounted() {
             const button = this.$refs.button.$el;
-            this.uploader._uploader.disable();
-            this.uploader._uploader.listeners.forEach(listener => listener.element = button);
-            this.uploader._uploader.clickableElements = [button];
-            this.uploader._uploader.enable();
+            const dropzone = this.uploader._uploader;
+            dropzone.disable();
+            dropzone.listeners.forEach(listener => listener.element = button);
+            dropzone.clickableElements = [button];
+            dropzone.enable();
+
+            if(this.value?.file) {
+                dropzone.addFile(this.value.file);
+                this.$emit('input', {});
+            }
         },
         beforeDestroy() {
             this.setPending(false);

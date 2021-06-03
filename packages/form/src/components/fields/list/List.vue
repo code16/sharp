@@ -74,6 +74,12 @@
 
             <template v-if="showAddButton" v-slot:footer>
                 <div :class="{ 'mt-3': list.length > 0 }">
+                    <template v-if="hasUpload">
+                        <div class="mb-3">
+                            <ListUpload @change="handleUploadChanged" />
+                        </div>
+                    </template>
+
                     <Button class="SharpList__add-button" :disabled="dragActive" text block @click="add" :key="-1">
                         ＋ {{ addText }}
                     </Button>
@@ -94,6 +100,7 @@
 
     import localize from '../../../mixins/localize/form';
     import { transformFields, getDependantFieldsResetData, fieldEmptyValue } from "../../../util";
+    import ListUpload from "./ListUpload";
 
     export default {
         name: 'SharpList',
@@ -103,6 +110,7 @@
         mixins: [ Localization,  localize('itemFields') ],
 
         components: {
+            ListUpload,
             Draggable,
             ListItem,
             Button,
@@ -136,6 +144,10 @@
             },
             collapsedItemTemplate: String,
             maxItemCount: Number,
+            uploadField: {
+                type: String,
+                default: 'file',
+            },
 
             itemIdAttribute: String,
             readOnly: Boolean,
@@ -192,7 +204,10 @@
             },
             isReadOnly() {
                 return this.readOnly || this.dragActive;
-            }
+            },
+            hasUpload() {
+                return !!this.uploadField && this.itemFields[this.uploadField]?.type === 'upload';
+            },
         },
         methods: {
             handleListChanged() {
@@ -268,6 +283,16 @@
                         locales: this.$form.locales
                     }, locale)
                 };
+            },
+
+            handleUploadChanged(e) {
+                [...e.target.files].forEach(file => {
+                    const item = this.createItem();
+                    item[this.uploadField] = {
+                        file,
+                    }
+                    this.list.push(item);
+                });
             },
 
             initList() {
