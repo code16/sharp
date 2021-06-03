@@ -58,34 +58,35 @@
             </div>
         </div>
 
-        <template v-if="hasEdit">
-            <Modal :visible.sync="showEditModal"
-                @ok="onEditModalOk"
-                @hidden="onEditModalHidden"
-                no-close-on-backdrop
-                :title="l('modals.cropper.title')"
-                ref="modal"
-            >
-                <vue-cropper
-                    class="SharpUpload__modal-vue-cropper"
-                    :view-mode="2"
-                    drag-mode="crop"
-                    :aspect-ratio="ratioX/ratioY"
-                    :auto-crop-area="1"
-                    :zoomable="false"
-                    :guides="false"
-                    :background="true"
-                    :rotatable="true"
-                    :src="originalImageSrc"
-                    :data="cropData"
-                    alt="Source image"
-                    ref="modalCropper"
-                />
-                <div class="mt-3">
-                    <Button @click="rotate(-90)"><i class="fas fa-undo"></i></Button>
-                    <Button @click="rotate(90)"><i class="fas fa-redo"></i></Button>
-                </div>
-            </Modal>
+        <Modal :visible.sync="showEditModal"
+            @ok="onEditModalOk"
+            @hidden="onEditModalHidden"
+            no-close-on-backdrop
+            :title="l('modals.cropper.title')"
+            ref="modal"
+        >
+            <vue-cropper
+                class="SharpUpload__modal-vue-cropper"
+                :view-mode="2"
+                drag-mode="crop"
+                :aspect-ratio="ratioX/ratioY"
+                :auto-crop-area="1"
+                :zoomable="false"
+                :guides="false"
+                :background="true"
+                :rotatable="true"
+                :src="originalImageSrc"
+                :data="cropData"
+                alt="Source image"
+                ref="modalCropper"
+            />
+            <div class="mt-3">
+                <Button @click="rotate(-90)"><i class="fas fa-undo"></i></Button>
+                <Button @click="rotate(90)"><i class="fas fa-redo"></i></Button>
+            </div>
+        </Modal>
+
+        <template v-if="hasInitialCrop">
             <vue-cropper
                 class="d-none"
                 :aspect-ratio="ratioX/ratioY"
@@ -123,7 +124,7 @@
             Button,
         },
 
-        inject : [ 'axiosInstance' ,'$form', '$field' ],
+        inject : [ '$form' ],
 
         mixins: [ Localization, VueClipModifiers ],
 
@@ -169,7 +170,7 @@
                 return this.files[0];
             },
             originalImageSrc() {
-                return this.file && (this.file.thumbnail || this.file.dataUrl);
+                return this.file?.thumbnail || this.file?.dataUrl;
             },
             imageSrc() {
                 return this.croppedImg || this.originalImageSrc;
@@ -228,11 +229,8 @@
             showThumbnail() {
                 return this.imageSrc;
             },
-            hasInitialCrop() {
-                return this.isCroppable && !!this.ratioX && !!this.ratioY;
-            },
             isCroppable() {
-                if(!this.croppable) {
+                if(!this.croppable || !this.originalImageSrc) {
                     return false;
                 }
                 if(this.file?.type && !this.file.type.match(/^image\//)) {
@@ -240,8 +238,11 @@
                 }
                 return !this.croppableFileTypes || this.croppableFileTypes.includes(this.fileExtension);
             },
+            hasInitialCrop() {
+                return this.isCroppable && !!this.ratioX && !!this.ratioY;
+            },
             hasEdit() {
-                return this.isCroppable && !!this.originalImageSrc && !this.inProgress;
+                return this.isCroppable && !this.inProgress;
             },
         },
         methods: {

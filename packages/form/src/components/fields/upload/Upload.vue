@@ -1,18 +1,15 @@
 <template>
     <VueClip
+        :value="value"
         :pending-key="uniqueIdentifier"
         :download-id="fieldConfigIdentifier"
         :options="options"
-        :value="value"
-        :ratioX="ratioX"
-        :ratioY="ratioY"
-        :croppable-file-types="croppableFileTypes"
-        :read-only="readOnly"
         :modifiers="modifiers"
         :root="root"
-        @input="$emit('input',$event)"
-        @error="$field.$emit('error',$event)"
-        @reset="$field.$emit('clear')"
+        v-bind="$props"
+        @input="$emit('input', $event)"
+        @error="$emit('error', $event)"
+        @reset="$emit('clear')"
     />
 </template>
 
@@ -29,22 +26,16 @@
         },
 
         mixins: [ UploadModifiers ],
-        inject: ['$field'],
 
         props: {
+            ...VueClip.props,
+
+            value: Object,
             uniqueIdentifier: String,
             fieldConfigIdentifier: String,
-            value: Object,
 
             fileFilter: Array,
             maxFileSize: Number,
-            thumbnail: String,
-            croppableFileTypes: Array,
-
-            ratioX:Number,
-            ratioY:Number,
-
-            readOnly: Boolean,
             root: Boolean,
         },
         computed: {

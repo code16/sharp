@@ -2,15 +2,13 @@
     <VueClip
         v-show="show"
         class="SharpMarkdownUpload"
+        :value="value"
         :pending-key="pendingKey"
         :download-id="downloadId"
         :options="options"
-        :value="value"
-        :ratioX="ratioX"
-        :ratioY="ratioY"
-        :croppable-file-types="croppableFileTypes"
         :modifiers="modifiers"
         :on-added-file="handleAdded"
+        v-bind="$props"
         @error="handleError"
         @success="$emit('success', $event)"
         @removed="$emit('remove')"
@@ -41,17 +39,16 @@
         },
 
         props: {
+            ...VueClip.props,
+
             downloadId: String,
             pendingKey: String,
 
-            id: Number,
+            id: Number, // needed in markdown component
             value: Object,
 
             maxFileSize: Number,
             fileFilter: Array,
-            ratioX: Number,
-            ratioY: Number,
-            croppableFileTypes: Array,
         },
 
         data() {

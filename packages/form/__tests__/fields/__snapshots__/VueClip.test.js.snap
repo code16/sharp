@@ -15,6 +15,7 @@ exports[`vue-clip can mount "destroyed" VueClip component 1`] = `
 			</div>
 		</div>
 		<!---->
+		<!---->
 		<a style="display: none;"></a>
 	</div>
 </div>
@@ -57,6 +58,7 @@ exports[`vue-clip can mount "in progress" VueClip component 1`] = `
 			</div>
 		</div>
 		<!---->
+		<!---->
 		<a style="display: none;"></a>
 	</div>
 </div>
@@ -77,6 +79,7 @@ exports[`vue-clip can mount VueClip component 1`] = `
 				<div></div>
 			</div>
 		</div>
+		<!---->
 		<!---->
 		<a style="display: none;"></a>
 	</div>
@@ -175,6 +178,7 @@ exports[`vue-clip can mount initially non image VueClip component 1`] = `
 			</div>
 		</div>
 		<!---->
+		<!---->
 		<a style="display: none;"></a>
 	</div>
 </div>
@@ -223,6 +227,7 @@ exports[`vue-clip can mount non croppable image 1`] = `
 			</div>
 		</div>
 		<!---->
+		<!---->
 		<a style="display: none;"></a>
 	</div>
 </div>
@@ -243,6 +248,7 @@ exports[`vue-clip can mount read-only VueClip component 1`] = `
 				<div></div>
 			</div>
 		</div>
+		<!---->
 		<!---->
 		<a style="display: none;"></a>
 	</div>
