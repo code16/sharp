@@ -22,3 +22,4 @@ export { default as StateIcon } from './StateIcon';
 export { default as Tab } from './Tab';
 export { default as TabbedLayout } from './TabbedLayout';
 export { default as Tabs } from './Tabs';
+export { default as Tooltip } from './Tooltip';

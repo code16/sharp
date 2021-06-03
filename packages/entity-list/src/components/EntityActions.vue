@@ -69,9 +69,12 @@
         </template>
         <template v-else-if="hasState">
             <div class="col" style="min-width: 0">
-                <div class="btn btn-sm disabled text-start text-truncate mw-100 px-0">
+                <div class="ui-font btn-sm text-muted text-start text-truncate mw-100 px-0" ref="stateLabel">
                     {{ stateOptions.label }}
                 </div>
+                <Tooltip :target="() => $refs.stateLabel" overflow-only>
+                    {{ stateOptions.label }}
+                </Tooltip>
             </div>
         </template>
     </div>
@@ -80,7 +83,7 @@
 <script>
     import { lang } from "sharp";
     import { CommandsDropdown } from "sharp-commands";
-    import { DropdownSeparator, DropdownItem, StateIcon, ModalSelect, Button } from "sharp-ui";
+    import { DropdownSeparator, DropdownItem, StateIcon, ModalSelect, Button, Tooltip } from "sharp-ui";
 
     export default {
         components: {
@@ -90,6 +93,7 @@
             StateIcon,
             ModalSelect,
             Button,
+            Tooltip,
         },
         props: {
             config: Object,
