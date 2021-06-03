@@ -5,7 +5,7 @@
                 <TemplateRenderer
                     name="ResultItem"
                     :template="resultItemTemplate"
-                    :template-data="localizedTemplateData(value)"
+                    :template-data="resolveTemplateData(value)"
                     :template-props="searchKeys"
                 />
 
@@ -50,7 +50,7 @@
                     <TemplateRenderer
                         name="ResultItem"
                         :template="resultItemTemplate"
-                        :template-data="localizedTemplateData(option)"
+                        :template-data="resolveTemplateData(option)"
                         :template-props="searchKeys"
                     />
                 </template>
@@ -58,7 +58,7 @@
                     <TemplateRenderer
                         name="ListItem"
                         :template="listItemTemplate"
-                        :template-data="localizedTemplateData(option)"
+                        :template-data="resolveTemplateData(option)"
                         :template-props="searchKeys"
                     />
                 </template>
@@ -134,6 +134,7 @@
             readOnly: Boolean,
             listItemTemplate: String,
             resultItemTemplate: String,
+            templateData: Object,
             noResultItem: Boolean,
             multiple: Boolean,
             hideSelected: Boolean,
@@ -263,6 +264,12 @@
                 this.$nextTick(() => {
                     this.$refs.multiselect.activate();
                 });
+            },
+            resolveTemplateData(option) {
+                return {
+                    ...this.templateData,
+                    ...this.localizedTemplateData(option),
+                }
             },
             itemMatchValue(localValue) {
                 // noinspection EqualityComparisonWithCoercionJS

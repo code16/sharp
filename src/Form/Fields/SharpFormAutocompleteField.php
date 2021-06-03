@@ -146,6 +146,11 @@ class SharpFormAutocompleteField extends SharpFormField
         return $this->setInlineTemplate($template, "result");
     }
 
+    public function setAdditionalTemplateData(array $data): self
+    {
+        return $this->setTemplateData($data);
+    }
+
     public function setSearchMinChars(int $searchMinChars): self
     {
         $this->searchMinChars = $searchMinChars;
@@ -204,6 +209,7 @@ class SharpFormAutocompleteField extends SharpFormField
             "resultItemTemplate" => "required",
             "searchMinChars" => "required|integer",
             "localValues" => "array",
+            "templateData" => "nullable|array",
             "searchKeys" => "required_if:mode,local|array",
             "remoteEndpoint" => "required_if:mode,remote",
             "remoteMethod" => "required_if:mode,remote|in:GET,POST",
@@ -229,6 +235,7 @@ class SharpFormAutocompleteField extends SharpFormField
                     "remoteMethod" => $this->remoteMethod,
                     "remoteSearchAttribute" => $this->remoteSearchAttribute,
                     "debounceDelay" => $this->debounceDelay,
+                    "templateData" => $this->additionalTemplateData,
                     "listItemTemplate" => $this->template("list"),
                     "resultItemTemplate" => $this->template("result"),
                     "searchMinChars" => $this->searchMinChars,

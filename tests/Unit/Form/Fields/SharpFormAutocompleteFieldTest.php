@@ -158,6 +158,24 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
     }
 
     /** @test */
+    function we_can_define_templateData()
+    {
+        $formField = $this->getDefaultLocalAutocomplete()
+            ->setAdditionalTemplateData([
+                "lang" => ["fr", "de"]
+            ]);
+
+        $this->assertArraySubset(
+            [
+                "templateData" => [
+                    "lang" => ["fr", "de"]
+                ]
+            ],
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
     function we_cant_define_a_remote_autocomplete_without_remoteEndpoint()
     {
         $this->expectException(SharpFormFieldValidationException::class);

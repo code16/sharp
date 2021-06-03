@@ -14,10 +14,13 @@ class SharpFormHtmlFieldTest extends SharpTestCase
         $defaultFormField = SharpFormHtmlField::make("html")
             ->setInlineTemplate("<b>test</b>");
 
-        $this->assertEquals([
-                "key" => "html", "type" => "html",
+        $this->assertEquals(
+            [
+                "key" => "html", 
+                "type" => "html",
                 "template" => "<b>test</b>"
-            ], $defaultFormField->toArray()
+            ], 
+            $defaultFormField->toArray()
         );
     }
 
@@ -30,4 +33,22 @@ class SharpFormHtmlFieldTest extends SharpTestCase
         $defaultFormField->toArray();
     }
 
+    /** @test */
+    function we_can_define_templateData()
+    {
+        $formField = SharpFormHtmlField::make("html")
+            ->setInlineTemplate("<b>test</b>")
+            ->setAdditionalTemplateData([
+                "lang" => ["fr", "de"]
+            ]);
+
+        $this->assertArraySubset(
+            [
+                "templateData" => [
+                    "lang" => ["fr", "de"]
+                ]
+            ],
+            $formField->toArray()
+        );
+    }
 }
