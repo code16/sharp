@@ -5,7 +5,7 @@
                 <TemplateRenderer
                     name="ResultItem"
                     :template="resultItemTemplate"
-                    :template-data="localizedTemplateData(value)"
+                    :template-data="resolveTemplateData(value)"
                     :template-props="searchKeys"
                 />
 
