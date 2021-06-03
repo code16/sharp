@@ -1,5 +1,5 @@
 <template>
-    <div class="row justify-content-end align-items-center flex-nowrap gx-1">
+    <div class="row align-items-center flex-nowrap gx-1">
         <template v-if="hasState">
             <div class="col-auto">
                 <ModalSelect
@@ -13,7 +13,13 @@
                     @update:visible="handleSelecting"
                 >
                     <template v-slot="{ on }">
-                        <Button class="btn--outline-hover" variant="primary" small :disabled="stateDisabled" v-on="on">
+                        <Button
+                            class="btn--opacity-1 btn--outline-hover"
+                            variant="primary"
+                            small
+                            :disabled="stateDisabled"
+                            v-on="on"
+                        >
                             <StateIcon :color="stateOptions.color" />
                         </Button>
                     </template>
@@ -24,7 +30,7 @@
                 </ModalSelect>
             </div>
         </template>
-        <template v-if="hasCommands || hasState">
+        <template v-if="hasActionsButton">
             <div class="col-auto">
                 <CommandsDropdown
                     class="SharpEntityList__commands-dropdown"
@@ -61,13 +67,23 @@
                 </CommandsDropdown>
             </div>
         </template>
+        <template v-else-if="hasState">
+            <div class="col" style="min-width: 0">
+                <div class="ui-font btn-sm text-muted text-start text-truncate mw-100 px-0" ref="stateLabel">
+                    {{ stateOptions.label }}
+                </div>
+                <Tooltip :target="() => $refs.stateLabel" overflow-only>
+                    {{ stateOptions.label }}
+                </Tooltip>
+            </div>
+        </template>
     </div>
 </template>
 
 <script>
     import { lang } from "sharp";
     import { CommandsDropdown } from "sharp-commands";
-    import { DropdownSeparator, DropdownItem, StateIcon, ModalSelect, Button } from "sharp-ui";
+    import { DropdownSeparator, DropdownItem, StateIcon, ModalSelect, Button, Tooltip } from "sharp-ui";
 
     export default {
         components: {
@@ -77,6 +93,7 @@
             StateIcon,
             ModalSelect,
             Button,
+            Tooltip,
         },
         props: {
             config: Object,
@@ -91,6 +108,11 @@
             return {
                 stateModalVisible: false,
             }
+        },
+        computed: {
+            hasActionsButton() {
+                return this.hasCommands || this.hasState && !this.stateDisabled;
+            },
         },
         methods: {
             l:lang,

@@ -30,12 +30,16 @@
 @import '~bootstrap/scss/pagination';
 @import '~bootstrap/scss/popover';
 @import '~bootstrap/scss/toasts';
+@import '~bootstrap/scss/tooltip';
 
 @import '~bootstrap/scss/utilities/api';
+
+$bv-enable-tooltip-variants: false;
 
 @import '~bootstrap-vue/src/utilities';
 @import '~bootstrap-vue/src/components/dropdown/index';
 @import '~bootstrap-vue/src/components/modal/index';
+@import '~bootstrap-vue/src/components/tooltip/index';
 
 
 .close {

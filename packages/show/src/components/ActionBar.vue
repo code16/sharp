@@ -32,7 +32,14 @@
                             @change="handleStateChanged"
                         >
                             <template v-slot="{ on }">
-                                <Button class="dropdown-toggle" text small :disabled="!canChangeState" v-on="on">
+                                <Button
+                                    class="btn--opacity-1"
+                                    :class="{ 'dropdown-toggle':canChangeState }"
+                                    :disabled="!canChangeState"
+                                    text
+                                    small
+                                    v-on="on"
+                                >
                                     <StateIcon class="me-1" :color="state.color" style="vertical-align: -.125em" />
                                     <span class="text-truncate">{{ state.label }}</span>
                                 </Button>

@@ -11,12 +11,6 @@
   }
   .dropdown-item {
     font-size: $ui-font-size * .875;
-    &:not(:hover):not(:focus):not(.active) {
-      color: $ui-primary-color;
-    }
-    &:disabled, &.disabled {
-      opacity: .5;
-    }
   }
 }
 
