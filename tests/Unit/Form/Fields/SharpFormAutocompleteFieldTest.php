@@ -39,6 +39,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
                     ["id" => 1, "label" => "bob"]
                 ],
                 "remoteSearchAttribute" => "query",
+                "templateData" => [],
                 "dataWrapper" => "",
                 "debounceDelay" => 300,
             ], 
@@ -153,6 +154,24 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
                 "listItemTemplate" => "<strong>LIT</strong>",
                 "resultItemTemplate" => "<strong>RIT</strong>"
             ], 
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_templateData()
+    {
+        $formField = $this->getDefaultLocalAutocomplete()
+            ->setAdditionalTemplateData([
+                "lang" => ["fr", "de"]
+            ]);
+
+        $this->assertArraySubset(
+            [
+                "templateData" => [
+                    "lang" => ["fr", "de"]
+                ]
+            ],
             $formField->toArray()
         );
     }
