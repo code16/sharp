@@ -5,7 +5,7 @@ namespace Code16\Sharp\Form\Fields\Utils;
 trait SharpFormFieldWithTemplates
 {
     protected array $templates = [];
-    protected array $additionalTemplateData = [];
+    protected ?array $additionalTemplateData = null;
 
     protected function setTemplatePath(string $templatePath, string $key): self
     {

@@ -209,6 +209,7 @@ class SharpFormAutocompleteField extends SharpFormField
             "resultItemTemplate" => "required",
             "searchMinChars" => "required|integer",
             "localValues" => "array",
+            "templateData" => "nullable|array",
             "searchKeys" => "required_if:mode,local|array",
             "remoteEndpoint" => "required_if:mode,remote",
             "remoteMethod" => "required_if:mode,remote|in:GET,POST",

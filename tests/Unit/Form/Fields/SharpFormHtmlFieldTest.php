@@ -18,7 +18,6 @@ class SharpFormHtmlFieldTest extends SharpTestCase
             [
                 "key" => "html", 
                 "type" => "html",
-                "templateData" => [],
                 "template" => "<b>test</b>"
             ], 
             $defaultFormField->toArray()
