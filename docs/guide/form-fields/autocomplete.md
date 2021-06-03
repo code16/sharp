@@ -97,6 +97,23 @@ The template will be use, depending on the function, to display either the list 
 
 Be aware that you'll need for this to work to pass a valuated object to the Autocomplete, as data.
 
+### `setAdditionalTemplateData(array $data)`
+
+Useful to add some static (or at least not instance-dependant) data to the template. For instance:
+
+```php
+SharpFormAutocompleteField::make("brand", "remote")
+    ->setAdditionalTemplateData([
+        "years" => [2020, 1018, 2017]
+    ]);
+```
+
+In the template, the provided data can be used as normal:
+
+```vue
+<div v-for="year in years"> {{ year }} </div>
+```
+
 ### `setLocalValuesLinkedTo(string ...$fieldKeys)`
 
 This method is useful to link the dataset of a local autocomplete (aka: the `localValues`) to another form field. Please refer to [the documentation of the select field's `setOptionsLinkedTo()` method](select.md), which is identical.
