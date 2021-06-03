@@ -47,8 +47,9 @@
             },
         },
         methods: {
-            handleQueryChanged(query, oldQuery) {
-                if(isEqual(query, oldQuery)) {
+            handleQueryChanged(query) {
+                const nextRoute = this.$router.resolve({ query }).route;
+                if(this.$route.fullPath === nextRoute.fullPath) {
                     return;
                 }
                 this.$router.push({

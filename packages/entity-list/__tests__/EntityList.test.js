@@ -344,22 +344,14 @@ describe('EntityList', () => {
             });
             expect(wrapper.vm.storeGetter('getter')).toBe('test');
         });
-        test('handleSearchChanged', ()=>{
-            const wrapper = createWrapper();
-            wrapper.vm.handleSearchChanged('search');
-            expect(wrapper.vm.search).toEqual('search');
-        });
-
         test('handleSearchSubmitted', ()=>{
             const wrapper = createWrapper();
-            wrapper.setData({
-                search: 'search'
-            });
-            wrapper.vm.handleSearchSubmitted();
+            wrapper.vm.handleSearchSubmitted('search');
             expect(wrapper.vm.$store.dispatch).toHaveBeenCalledWith('entity-list/setQuery', {
                 search:'search',
                 page: 1,
             });
+            expect(wrapper.vm.search).toEqual('search');
         });
 
         test('handleFilterChanged', ()=>{

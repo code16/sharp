@@ -30,10 +30,8 @@
                                         <Search
                                             class="h-100"
                                             :value="search"
-                                            :active.sync="searchActive"
                                             :placeholder="l('action_bar.list.search.placeholder')"
                                             :disabled="reorderActive"
-                                            @input="handleSearchInput"
                                             @submit="handleSearchSubmitted"
                                         />
                                     </div>
@@ -146,11 +144,6 @@
             collapsed: Boolean,
             hasActiveQuery: Boolean,
         },
-        data() {
-            return {
-                searchActive: false,
-            }
-        },
         computed: {
             hasForms() {
                 return this.forms && this.forms.length > 0;
@@ -172,11 +165,8 @@
             },
         },
         methods: {
-            handleSearchInput(search) {
-                this.$emit('search-change', search);
-            },
-            handleSearchSubmitted() {
-                this.$emit('search-submit');
+            handleSearchSubmitted(search) {
+                this.$emit('search-submit', search);
             },
             handleFilterChanged(filter, value) {
                 this.$emit('filter-change', filter, value);

@@ -251,7 +251,6 @@
             actionBarListeners() {
                 return {
                     'command': this.handleEntityCommandRequested,
-                    'search-change': this.handleSearchChanged,
                     'search-submit': this.handleSearchSubmitted,
                     'filter-change': this.handleFilterChanged,
                     'reorder-click': this.handleReorderButtonClicked,
@@ -333,13 +332,11 @@
             /**
              * [Action bar] events
              */
-            handleSearchChanged(search) {
+            handleSearchSubmitted(search) {
                 this.search = search;
-            },
-            handleSearchSubmitted() {
                 this.storeDispatch('setQuery', {
                     ...this.query,
-                    search: this.search,
+                    search,
                     page: 1,
                 });
             },
