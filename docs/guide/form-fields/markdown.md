@@ -62,6 +62,10 @@ Sharp takes care of copying the file at the right place (after image transformat
 
 Max file size allowed.
 
+#### `setCroppable(bool $croppable = true)`
+
+Allow the user to crop (or rotate) the visual, after the upload.
+
 #### `setCropRatio(string $ratio, array $croppableFileTypes = null)`
 
 Set a ratio constraint to uploaded images, formatted like this: `width:height`. For instance: `16:9`, or `1:1`.
