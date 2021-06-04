@@ -12,6 +12,9 @@ return [
     'list.sort_button.inactive' => 'Sort',
     'list.sort_button.active' => 'Finish',
     'list.empty' => 'Empty list',
+    'list.bulk_upload.text' => '[Browse]() or drag and drop files...',
+    'list.bulk_upload.help_text' => 'Maximum :limit file(s)',
+    'list.bulk_upload.validation.limit' => 'Too many files selected (:limit max.)',
 
     'geolocation.loading' => 'Google Maps is loading...',
     'geolocation.browse_button' => 'Pick a location...',

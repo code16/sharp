@@ -1,16 +1,14 @@
 <template>
     <div class="SharpUpload" :class="[{'SharpUpload--empty':!file, 'SharpUpload--disabled':readOnly}, modifiersClasses]">
-        <div :class="{ 'card card-body': file }">
-            <form v-show="!file" class="dropzone">
-                <Button class="dz-message" text block :disabled="readOnly" type="button" ref="button">
-                    {{ l('form.upload.browse_button') }}
-                </Button>
-            </form>
-            <template v-if="file">
-                <div class="SharpUpload__container" :class="{ row:showThumbnail }">
-                    <div v-if="showThumbnail" class="SharpUpload__thumbnail" :class="[modifiers.compacted?'col-4 col-sm-3 col-xl-2':'col-4 col-md-4']">
-                        <img :src="imageSrc" @load="handleImageLoaded">
-                    </div>
+        <template v-if="file">
+            <div class="card card-body" :class="{ 'border-danger': hasError }">
+                <div class="SharpUpload__container" :class="{ 'row': showThumbnail }">
+                    <template v-if="showThumbnail">
+                        <div class="SharpUpload__thumbnail" :class="[modifiers.compacted?'col-4 col-sm-3 col-xl-2':'col-4 col-md-4']">
+                            <img :src="imageSrc" @load="handleImageLoaded">
+                        </div>
+                    </template>
+
                     <div class="SharpUpload__infos" :class="{[modifiers.compacted?'col-8 col-sm-9 col-xl-10':'col-8 col-md-8']:showThumbnail}">
                         <div class="mb-3">
                             <label class="SharpUpload__filename text-truncate d-block">{{ fileName }}</label>
@@ -40,7 +38,7 @@
                         </div>
                         <template v-if="!readOnly">
                             <div>
-                                <template v-if="hasEdit">
+                                <template v-if="hasEdit && !hasError">
                                     <Button outline small @click="onEditButtonClick">
                                         {{ l('form.upload.edit_button') }}
                                     </Button>
@@ -52,17 +50,22 @@
                         </template>
                     </div>
                 </div>
-            </template>
-            <div ref="clip-preview-template" class="clip-preview-template" style="display: none;">
-                <div></div>
             </div>
+        </template>
+        <template v-else>
+            <Button class="dz-message" text block :disabled="readOnly" type="button" @click="handleClick">
+                {{ l('form.upload.browse_button') }}
+            </Button>
+        </template>
+        <div ref="clip-preview-template" class="clip-preview-template" style="display: none;">
+            <div></div>
         </div>
 
         <Modal :visible.sync="showEditModal"
+            :title="l('modals.cropper.title')"
+            no-close-on-backdrop
             @ok="onEditModalOk"
             @hidden="onEditModalHidden"
-            no-close-on-backdrop
-            :title="l('modals.cropper.title')"
             ref="modal"
         >
             <vue-cropper
@@ -203,12 +206,18 @@
                 return Math.floor(curProgress) * factor;
             },
             inProgress() {
-                return (this.file && this.file.status !== 'exist') && this.progress < 100;
+                if(this.file?.status === 'exist' || this.hasError) {
+                    return false;
+                }
+                return this.progress < 100;
             },
             statusFunction() {
                 return {
                     error:'onStatusError', success:'onStatusSuccess', added:'onStatusAdded'
                 }
+            },
+            hasError() {
+                return this.file?.status === 'error';
             },
             fileName() {
                 let splitted = this.file.name.split('/');
@@ -257,7 +266,6 @@
             },
             async onStatusError() {
                 const msg = this.file.errorMessage;
-                this.remove();
                 await this.$nextTick();
                 this.$emit('error', msg);
             },
@@ -314,6 +322,11 @@
             handleRemoveClicked() {
                 this.remove();
                 this.$emit('removed');
+            },
+
+            handleClick() {
+                const dropzone = this.uploader._uploader;
+                dropzone.hiddenFileInput.click();
             },
 
             onEditModalHidden() {
@@ -391,11 +404,10 @@
             this.file.status = 'exist';
         },
         mounted() {
-            const button = this.$refs.button.$el;
             const dropzone = this.uploader._uploader;
             dropzone.disable();
-            dropzone.listeners.forEach(listener => listener.element = button);
-            dropzone.clickableElements = [button];
+            dropzone.listeners = dropzone.listeners
+                .filter(listener => !listener.events.click);
             dropzone.enable();
 
             if(this.value?.file) {

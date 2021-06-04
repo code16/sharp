@@ -74,15 +74,17 @@
 
             <template v-if="showAddButton" v-slot:footer>
                 <div :class="{ 'mt-3': list.length > 0 }">
-                    <template v-if="hasUpload">
-                        <div class="mb-3">
-                            <ListUpload @change="handleUploadChanged" />
-                        </div>
-                    </template>
-
                     <Button class="SharpList__add-button" :disabled="dragActive" text block @click="add" :key="-1">
                         ＋ {{ addText }}
                     </Button>
+                    <template v-if="hasUpload">
+                        <div class="mt-2 pt-1">
+                            <ListUpload
+                                :limit="uploadLimit"
+                                @change="handleUploadChanged"
+                            />
+                        </div>
+                    </template>
                 </div>
             </template>
         </Draggable>
@@ -101,6 +103,7 @@
     import localize from '../../../mixins/localize/form';
     import { transformFields, getDependantFieldsResetData, fieldEmptyValue } from "../../../util";
     import ListUpload from "./ListUpload";
+    import { lang, showAlert } from "sharp";
 
     export default {
         name: 'SharpList',
@@ -144,9 +147,13 @@
             },
             collapsedItemTemplate: String,
             maxItemCount: Number,
-            uploadField: {
+            bulkUploadField: {
                 type: String,
                 default: 'file',
+            },
+            bulkUploadLimit: {
+                type: Number,
+                default: 10,
             },
 
             itemIdAttribute: String,
@@ -206,7 +213,15 @@
                 return this.readOnly || this.dragActive;
             },
             hasUpload() {
-                return !!this.uploadField && this.itemFields[this.uploadField]?.type === 'upload';
+                const uploadFieldKey = this.bulkUploadField;
+                return !!uploadFieldKey && this.itemFields[uploadFieldKey]?.type === 'upload';
+            },
+            uploadLimit() {
+                if(this.maxItemCount) {
+                    const remaining = this.maxItemCount - this.list.length;
+                    return Math.min(remaining, this.bulkUploadLimit);
+                }
+                return this.bulkUploadLimit;
             },
         },
         methods: {
@@ -286,9 +301,20 @@
             },
 
             handleUploadChanged(e) {
-                [...e.target.files].forEach(file => {
+                const files = [...e.target.files].slice(0, this.uploadLimit);
+
+                if(e.target.files.length > this.uploadLimit) {
+                    const message = lang('form.list.bulk_upload.validation.limit')
+                        .replace(':limit', this.uploadLimit);
+
+                    showAlert(message, {
+                        title: lang('modals.error.title'),
+                    });
+                }
+
+                files.forEach(file => {
                     const item = this.createItem();
-                    item[this.uploadField] = {
+                    item[this.bulkUploadField] = {
                         file,
                     }
                     this.list.push(item);
