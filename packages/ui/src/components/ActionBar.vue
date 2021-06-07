@@ -2,11 +2,11 @@
     <div class="SharpActionBar">
         <div class="SharpActionBar__bar sticky-top" ref="bar">
             <div class="container">
-                <div class="row align-items-center mx-n2">
-                    <div class="col-auto col-md left px-2 my-1 my-sm-0">
+                <div class="row align-items-center g-2">
+                    <div class="col SharpActionBar__col--left">
                         <slot name="left"></slot>
                     </div>
-                    <div class="col col-md-auto right px-2 my-1 my-sm-0" :class="rightClass">
+                    <div class="col-auto SharpActionBar__col--right">
                         <slot name="right"></slot>
                     </div>
                 </div>
@@ -38,7 +38,6 @@
         name: 'SharpActionBar',
         props: {
             container: Boolean,
-            rightClass: String,
         },
         computed: {
             hasExtras() {

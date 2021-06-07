@@ -14,6 +14,7 @@
                         aria-labelledby="ab-search-label"
                         @focus="handleFocused"
                         @blur="handleBlur"
+                        @focusout="handleFocusout"
                         ref="input"
                     >
                     <button class="btn btn-sm SharpSearch__clear h-100 d-inline-flex align-items-center position-absolute"
@@ -77,6 +78,11 @@
             },
             handleBlur() {
                 this.$emit('blur');
+            },
+            handleFocusout(e) {
+                if(!e.relatedTarget || !this.$el.contains(e.relatedTarget)) {
+                    this.search = this.value;
+                }
             },
             handleSubmitted() {
                 this.$emit('submit', this.search);

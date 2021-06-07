@@ -113,6 +113,7 @@
     import { Search, ItemVisual, Button } from 'sharp-ui';
     import { FilterDropdown } from 'sharp-filters';
     import { MultiformDropdown } from "sharp-entity-list";
+    import { lang } from "sharp";
 
     export default {
         mixins: [Localization],
@@ -162,6 +163,9 @@
                     return !this.hasLeftControls;
                 }
                 return true;
+            },
+            searchLabel() {
+                return lang('action_bar.list.search.title').replace(':search', this.search);
             },
         },
         methods: {
