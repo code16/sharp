@@ -1,7 +1,5 @@
 <template>
-    <div class="card position-relative SharpListUpload text-muted"
-        :class="{ 'SharpListUpload--active': dragActive }"
-    >
+    <div class="card text-muted SharpListUpload" :class="classes">
         <div class="card-body d-flex align-items-center justify-content-center">
             <div class="SharpListUpload__text">
                 <div class="row align-items-center gx-0">
@@ -23,6 +21,8 @@
             class="SharpListUpload__input"
             type="file"
             :aria-label="label"
+            :disabled="disabled"
+            :accept="accept"
             multiple
             @change="handleChanged"
             @dragenter="handleDragEnter"
@@ -38,7 +38,9 @@
 
     export default {
         props: {
+            field: Object,
             limit: Number,
+            disabled: Boolean,
         },
         data() {
             return {
@@ -46,15 +48,22 @@
             }
         },
         computed: {
+            classes() {
+                return {
+                    'SharpListUpload--active': this.dragActive,
+                    'SharpListUpload--disabled': this.disabled,
+                }
+            },
             text() {
                 return this.getText({
                     link: '<a href="#" class="text-reset" tabindex="-1">$1</a>',
                 });
             },
             label() {
-                return this.getText({
-                    link: '$1',
-                });
+                return this.getText();
+            },
+            accept() {
+                return this.field.fileFilter?.join(',');
             },
             helpText() {
                 return lang('form.list.bulk_upload.help_text')
@@ -62,9 +71,9 @@
             },
         },
         methods: {
-            getText({ link }) {
+            getText({ link } = {}) {
                 return lang('form.list.bulk_upload.text')
-                    .replace(/\[(.+?)]\(.*?\)/, link);
+                    .replace(/\[(.+?)]\(.*?\)/, link ?? '$1');
             },
             handleDragEnter() {
                 this.dragActive = true;

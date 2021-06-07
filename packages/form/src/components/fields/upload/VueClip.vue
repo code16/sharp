@@ -17,7 +17,7 @@
                                     <template v-if="size">
                                         <div class="col-auto">{{ size }}</div>
                                     </template>
-                                    <template v-if="canDownload">
+                                    <template v-if="hasDownload">
                                         <div class="col-auto">
                                             <a class="SharpUpload__download-link" :href="downloadUrl" :download="fileName">
                                                 <i class="fas fa-download"></i>
@@ -155,7 +155,6 @@
                 cropData: null,
 
                 isNew: !this.value,
-                canDownload: !!this.value,
             }
         },
         watch: {
@@ -253,6 +252,9 @@
             hasEdit() {
                 return this.isCroppable && !this.inProgress;
             },
+            hasDownload() {
+                return this.file?.status === 'exist';
+            },
         },
         methods: {
             setPending(value) {
@@ -290,7 +292,6 @@
 
             // actions
             remove() {
-                this.canDownload = false;
                 this.removeFile(this.file);
                 this.files.splice(0, 1);
 
@@ -396,8 +397,9 @@
             this.options.thumbnailHeight = null;
             this.options.maxFiles = 1;
 
-            if (!this.value || this.value.file)
+            if (!this.value || this.value.file) {
                 return;
+            }
 
             this.addedFile({ ...this.value, upload: {} });
             this.file.thumbnail = this.value.thumbnail;

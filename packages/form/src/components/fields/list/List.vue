@@ -74,13 +74,15 @@
 
             <template v-if="showAddButton" v-slot:footer>
                 <div :class="{ 'mt-3': list.length > 0 }">
-                    <Button class="SharpList__add-button" :disabled="dragActive" text block @click="add" :key="-1">
+                    <Button class="SharpList__add-button" :disabled="isReadOnly" text block @click="add" :key="-1">
                         ＋ {{ addText }}
                     </Button>
                     <template v-if="hasUpload">
                         <div class="mt-2 pt-1">
                             <ListUpload
+                                :field="uploadField"
                                 :limit="uploadLimit"
+                                :disabled="isReadOnly"
                                 @change="handleUploadChanged"
                             />
                         </div>
@@ -177,12 +179,9 @@
                     'SharpList--can-sort': this.showSortButton,
                 }
             },
-            disabled() {
-                return this.readOnly || this.dragActive;
-            },
             dragOptions() {
                 return {
-                    disabled:!this.dragActive,
+                    disabled: !this.dragActive,
                     handle: '.SharpList__overlay-handle',
                 };
             },
@@ -192,13 +191,13 @@
                     !this.readOnly;
             },
             showInsertButton() {
-                return this.showAddButton && this.sortable && !this.disabled;
+                return this.showAddButton && this.sortable && !this.isReadOnly;
             },
             showSortButton() {
                 return !this.hasPendingActions && this.sortable && this.list.length > 1;
             },
             showRemoveButton() {
-                return this.removable && !this.disabled;
+                return this.removable && !this.isReadOnly;
             },
             dragIndexSymbol() {
                 return Symbol('dragIndex');
@@ -213,8 +212,12 @@
                 return this.readOnly || this.dragActive;
             },
             hasUpload() {
-                const uploadFieldKey = this.bulkUploadField;
-                return !!uploadFieldKey && this.itemFields[uploadFieldKey]?.type === 'upload';
+                return this.uploadField?.type === 'upload';
+            },
+            uploadField() {
+                return this.bulkUploadField
+                    ? this.itemFields[this.bulkUploadField]
+                    : null;
             },
             uploadLimit() {
                 if(this.maxItemCount) {
