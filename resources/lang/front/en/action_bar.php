@@ -4,6 +4,7 @@ return [
 
     'list.items_count' => 'item(s)',
     'list.search.placeholder' => 'Search',
+    'list.search.title' => 'Results for “:search”',
     'list.create_button' => 'New...',
     'list.forms_dropdown' => 'New',
     'list.reorder_button' => 'Reorder',

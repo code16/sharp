@@ -1,25 +1,38 @@
 <template>
-    <ActionBar class="SharpActionBarList" right-class="d-block">
+    <ActionBar class="SharpActionBarList">
         <template v-slot:left>
-            <div class="ui-title-font ui-font-size">
-                <div class="row gx-2">
+            <div class="ui-font-size">
+                <div class="row align-items-center gx-1">
                     <template v-if="currentEntity">
-                        <div class="col-auto">
-                            <i class="fa" :class="currentEntity.icon"></i>
+                        <div class="col-sm-auto">
+                            <div class="ui-title-font">
+                                <div class="row flex-nowrap gx-2">
+                                    <div class="col-auto">
+                                        <i class="fa" :class="currentEntity.icon"></i>
+                                    </div>
+                                    <div class="col">
+                                        {{ currentEntity.label }}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </template>
-
                     <div class="col">
-                        <template v-if="currentEntity">
-                            {{ currentEntity.label }} <span class="mx-1">&bull;</span>
-                        </template>
-                        <span class="text-content text-nowrap">{{ count }} {{ l('action_bar.list.items_count') }}</span>
+                        <div class="small" style="opacity: .75">
+                            &bull;
+                            <span class="text-nowrap">{{ count }} {{ l('action_bar.list.items_count') }}</span>
+                            <template v-if="search">
+                                <span>
+                                    &bull; {{ searchLabel }}
+                                </span>
+                            </template>
+                        </div>
                     </div>
                 </div>
             </div>
         </template>
         <template v-slot:right>
-            <div class="row justify-content-end flex-nowrap">
+            <div class="row justify-content-end flex-nowrap gx-3 gx-md-4">
                 <template v-if="canReorder">
                     <template v-if="reorderActive">
                         <div class="col-auto">
@@ -100,6 +113,7 @@
 </template>
 
 <script>
+    import { lang } from 'sharp';
     import { ActionBar, Dropdown,  DropdownItem, ItemVisual, Search, Button, } from 'sharp-ui';
     import { FilterDropdown } from 'sharp-filters';
 
@@ -142,6 +156,9 @@
             },
             currentEntity() {
                 return this.$store.state.currentEntity;
+            },
+            searchLabel() {
+                return lang('action_bar.list.search.title').replace(':search', this.search);
             },
         },
         methods: {
