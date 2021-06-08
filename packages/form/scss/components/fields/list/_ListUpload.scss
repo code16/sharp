@@ -1,9 +1,12 @@
 
 .SharpListUpload {
   position: relative;
-  min-height: 100px;
-  border: 1px dashed hsl(hue($input-border-color), saturation($input-border-color), 75%);
-  transition: border .125s ease-in-out, box-shadow .125s ease-in-out;
+  //border: 1px dashed hsl(hue($input-border-color), saturation($input-border-color), 75%);
+  transition: border-color .125s ease-in-out, box-shadow .125s ease-in-out;
+
+  &__content {
+    min-height: 80px;
+  }
 
   &__text {
     font-size: .875rem;
@@ -52,6 +55,8 @@
   &:focus-within,
   &--active {
     border: 1px solid hsl(var(--bs-primary-h), var(--bs-primary-s), 30%);
+    border-top-width: 1px!important;
+    margin-top: -1px;
     box-shadow: $box-shadow;
   }
 }

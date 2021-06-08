@@ -1,6 +1,6 @@
 <template>
-    <div class="card text-muted SharpListUpload" :class="classes">
-        <div class="card-body d-flex align-items-center justify-content-center">
+    <div class="list-group-item text-muted SharpListUpload" :class="classes">
+        <div class="SharpListUpload__content d-flex align-items-center justify-content-center">
             <div class="SharpListUpload__text">
                 <div class="row align-items-center gx-0">
                     <div class="col-auto">

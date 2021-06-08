@@ -70,23 +70,22 @@
                         </template>
                     </div>
                 </template>
+                <template v-if="hasUpload">
+                    <ListUpload
+                        :field="uploadField"
+                        :limit="uploadLimit"
+                        :disabled="isReadOnly"
+                        @change="handleUploadChanged"
+                        key="upload"
+                    />
+                </template>
             </transition-group>
 
             <template v-if="showAddButton" v-slot:footer>
-                <div :class="{ 'mt-3': list.length > 0 }">
+                <div :class="{ 'mt-3': list.length > 0 || hasUpload }">
                     <Button class="SharpList__add-button" :disabled="isReadOnly" text block @click="add" :key="-1">
                         ＋ {{ addText }}
                     </Button>
-                    <template v-if="hasUpload">
-                        <div class="mt-2 pt-1">
-                            <ListUpload
-                                :field="uploadField"
-                                :limit="uploadLimit"
-                                :disabled="isReadOnly"
-                                @change="handleUploadChanged"
-                            />
-                        </div>
-                    </template>
                 </div>
             </template>
         </Draggable>
@@ -183,6 +182,7 @@
                 return {
                     disabled: !this.dragActive,
                     handle: '.SharpList__overlay-handle',
+                    filter: '.SharpListUpload',
                 };
             },
             showAddButton() {
