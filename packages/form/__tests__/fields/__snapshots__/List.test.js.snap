@@ -47,6 +47,7 @@ exports[`list-field can mount collapsed list field 1`] = `
 				<button class="SharpButton btn SharpList__add-button btn-text btn-block" disabled="disabled">
 					＋ Ajouter un élément
 				</button>
+				<!---->
 			</div>
 		</div>
 		<!---->
@@ -80,6 +81,7 @@ exports[`list-field can mount empty list field 1`] = `
 				<button class="SharpButton btn SharpList__add-button btn-text btn-block">
 					＋ Ajouter un élément
 				</button>
+				<!---->
 			</div>
 		</div>
 		<!---->
@@ -137,6 +139,7 @@ exports[`list-field can mount filled list field 1`] = `
 				<button class="SharpButton btn SharpList__add-button btn-text btn-block">
 					＋ Ajouter un élément
 				</button>
+				<!---->
 			</div>
 		</div>
 		<!---->
@@ -180,6 +183,26 @@ exports[`list-field can mount non addable, non removable, non sortable list fiel
 		</div>
 		<!---->
 	</div>
+</div>
+`;
+
+exports[`list-field can mount with bulk upload 1`] = `
+<div class="SharpList">
+	<div class="SharpList__sticky-wrapper text-end">
+		<!---->
+	</div>
+	<draggable-stub options="[object Object]" list="">
+		<span name="expand" tag="div" class="list-group shadow-sm"></span>
+		<div class="">
+			<button-stub variant="primary" text="true" block="true" class="SharpList__add-button">
+				＋ Ajouter un élément
+			</button-stub>
+			<div class="mt-2 pt-1">
+				<listupload-stub field="[object Object]" limit="10"></listupload-stub>
+			</div>
+		</div>
+	</draggable-stub>
+	<!---->
 </div>
 `;
 

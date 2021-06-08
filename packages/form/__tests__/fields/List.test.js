@@ -1,10 +1,10 @@
 import Vue from 'vue';
 import List from '../../src/components/fields/list/List.vue';
 
-import { MockInjections, MockTransitions, MockI18n, QueryComponent } from '@sharp/test-utils';
+import { MockInjections, MockTransitions, MockI18n, QueryComponent, createStub } from '@sharp/test-utils';
 import { ErrorNode } from 'sharp/mixins';
 
-import { mount } from '@vue/test-utils';
+import { mount, shallowMount } from '@vue/test-utils';
 
 describe('list-field', () => {
     Vue.use(MockTransitions);
@@ -134,6 +134,30 @@ describe('list-field', () => {
         });
 
         expect(document.body.innerHTML).toMatchSnapshot();
+    });
+
+    test('can mount with bulk upload', async () => {
+        const wrapper = shallowMount(List, {
+            propsData: {
+                bulkUploadField: 'file',
+                bulkUploadLimit: 10,
+                itemFields: {
+                    file: {
+                        type: 'upload',
+                    }
+                }
+            },
+            provide: {
+                $form: null,
+            },
+            stubs: {
+                Draggable: createStub({
+                    template: `<draggable-stub><slot /><slot name="footer" /></draggable-stub>`
+                }),
+            },
+        });
+
+        expect(wrapper.html()).toMatchSnapshot();
     });
 
     test('emit input on init to have list and value equals by reference (sync changes)', async () => {
@@ -336,7 +360,7 @@ async function createVm(customOptions={}, mock, { mockInjections=true }={}) {
         ],
 
         components: {
-            'sharp-list':mock||List
+            'sharp-list':mock||List,
         },
 
         props:['readOnly', 'addable', 'sortable', 'removable', 'itemFields'],

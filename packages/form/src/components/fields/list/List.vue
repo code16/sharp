@@ -298,7 +298,7 @@
                 return {
                     ...item, _fieldsLocale: this.defaultFieldLocaleMap({
                         fields: this.itemFields,
-                        locales: this.$form.locales
+                        locales: this.$form?.locales
                     }, locale)
                 };
             },
@@ -332,7 +332,7 @@
             },
         },
         created() {
-            this.localized = this.$form.localized;
+            this.localized = this.$form?.localized;
             this.initList();
         },
     }

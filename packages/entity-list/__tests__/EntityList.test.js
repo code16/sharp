@@ -40,6 +40,11 @@ describe('EntityList', () => {
                         <slot />
                     </div>`
             },
+            data() {
+                return withDefaults({
+
+                });
+            },
             propsData: {
                 entityKey: 'spaceship',
                 module: 'entity-list',
@@ -235,11 +240,9 @@ describe('EntityList', () => {
             }));
             expect(wrapper.vm.canReorder).toBe(false);
 
-            wrapper.setData(merge({}, reorderableConfig, {
-                data: {
-                    items: [{ id:1 }]
-                }
-            }));
+            wrapper.vm.data = {
+                items: [{ id:1 }]
+            }
             expect(wrapper.vm.canReorder).toBe(false);
 
             wrapper.setData(reorderableConfig);
