@@ -1,7 +1,6 @@
 
 .SharpListUpload {
   position: relative;
-  //border: 1px dashed hsl(hue($input-border-color), saturation($input-border-color), 75%);
   transition: border-color .125s ease-in-out, box-shadow .125s ease-in-out;
 
   &__content {
@@ -56,7 +55,9 @@
   &--active {
     border: 1px solid hsl(var(--bs-primary-h), var(--bs-primary-s), 30%);
     border-top-width: 1px!important;
-    margin-top: -1px;
     box-shadow: $box-shadow;
+    &:not(:first-child) {
+      margin-top: -1px;
+    }
   }
 }
