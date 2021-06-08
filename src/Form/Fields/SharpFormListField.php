@@ -96,7 +96,7 @@ class SharpFormListField extends SharpFormField
         return $this;
     }
 
-    public function setBulkUploadFileCountLimitAtOnce(int $limit)
+    public function setBulkUploadFileCountLimitAtOnce(int $limit): self
     {
         $this->bulkUploadFileCountLimit = $limit;
 
