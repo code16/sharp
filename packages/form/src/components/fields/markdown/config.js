@@ -1,95 +1,69 @@
-import { getToolbarIcon } from "../../../util/icons";
-import SimpleMDE from 'simplemde';
+import { getToolbarIcon } from '../../../util/icons';
+
 
 export const buttons = {
-    "bold": {
-        name: "bold",
-        action: SimpleMDE.toggleBold,
-        className: getToolbarIcon('bold'),
-        title: "Bold",
+    'bold': {
+        command: editor => editor.chain().focus().toggleBold().run(),
+        icon: getToolbarIcon('bold'),
     },
-    "italic": {
-        name: "italic",
-        action: SimpleMDE.toggleItalic,
-        className: getToolbarIcon('italic'),
-        title: "Italic",
+    'italic': {
+        command: editor => editor.chain().focus().toggleItalic().run(),
+        icon: getToolbarIcon('italic'),
     },
-    "heading-1": {
-        name: "heading-1",
-        action: SimpleMDE.toggleHeading1,
-        className: getToolbarIcon('h1'),
-        title: "Big Heading"
+    'heading-1': {
+        command: editor => editor.chain().focus().toggleHeading({ level: 1 }).run(),
+        icon: getToolbarIcon('h1'),
     },
-    "heading-2": {
-        name: "heading-2",
-        action: SimpleMDE.toggleHeading2,
-        className: getToolbarIcon('h2'),
-        title: "Medium Heading"
+    'heading-2': {
+        command: editor => editor.chain().focus().toggleHeading({ level: 2 }).run(),
+        icon: getToolbarIcon('h2'),
     },
-    "heading-3": {
-        name: "heading-3",
-        action: SimpleMDE.toggleHeading3,
-        className: getToolbarIcon('h3'),
-        title: "Small Heading"
+    'heading-3': {
+        command: editor => editor.chain().focus().toggleHeading({ level: 3 }).run(),
+        icon: getToolbarIcon('h3'),
     },
-    "code": {
-        name: "code",
-        action: SimpleMDE.toggleCodeBlock,
-        className: getToolbarIcon('code'),
-        title: "Code"
+    'code': {
+        command: editor => editor.chain().focus().toggleCode().run(),
+        icon: getToolbarIcon('code'),
     },
-    "quote": {
-        name: "quote",
-        action: SimpleMDE.toggleBlockquote,
-        className: getToolbarIcon('quote'),
-        title: "Quote",
+    'quote': {
+        command: editor => editor.chain().focus().toggleBlockquote().run(),
+        icon: getToolbarIcon('code'),
     },
-    "unordered-list": {
-        name: "unordered-list",
-        action: SimpleMDE.toggleUnorderedList,
-        className: getToolbarIcon('ul'),
-        title: "Generic List",
+    'unordered-list': {
+        command: editor => editor.chain().focus().toggleBulletList().run(),
+        icon: getToolbarIcon('ul'),
     },
-    "ordered-list": {
-        name: "ordered-list",
-        action: SimpleMDE.toggleOrderedList,
-        className: getToolbarIcon('ol'),
-        title: "Numbered List",
+    'ordered-list': {
+        command: editor => editor.chain().focus().toggleOrderedList().run(),
+        icon: getToolbarIcon('ol'),
     },
-    "link": {
-        name: "link",
-        action: SimpleMDE.drawLink,
-        className: getToolbarIcon('link'),
-        title: "Create Link",
+    'link': {
+        command: editor => editor.chain().focus().toggleLink().run(),
+        icon: getToolbarIcon('link'),
     },
-    "image": {
-        name: "image",
-        action: SimpleMDE.drawImage,
-        className: getToolbarIcon('image'),
-        title: "Insert Image",
+    'image': {
+        command: editor => {
+            // todo
+        },
+        icon: getToolbarIcon('image'),
     },
-    "document": {
-        name: "document",
-        action: SimpleMDE.drawImage,
-        className: getToolbarIcon('document'),
-        title: "Insert Document",
+    'document': {
+        command: editor => {
+            // todo
+        },
+        icon: getToolbarIcon('document'),
     },
-    "horizontal-rule": {
-        name: "horizontal-rule",
-        action: SimpleMDE.drawHorizontalRule,
-        className: getToolbarIcon('hr'),
-        title: "Insert Horizontal Line"
+    'horizontal-rule': {
+        command: editor => editor.chain().focus().setHorizontalRule().run(),
+        icon: getToolbarIcon('hr'),
     },
-    "undo": {
-        name: "undo",
-        action: SimpleMDE.undo,
-        className: getToolbarIcon('undo'),
-        title: "Undo"
+    'undo': {
+        command: editor => editor.chain().undo().run(),
+        icon: getToolbarIcon('undo'),
     },
-    "redo": {
-        name: "redo",
-        action: SimpleMDE.redo,
-        className: getToolbarIcon('redo'),
-        title: "Redo"
+    'redo': {
+        command: editor => editor.chain().redo().run(),
+        icon: getToolbarIcon('redo'),
     }
-};
+}

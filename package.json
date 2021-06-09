@@ -88,6 +88,11 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.12.1",
     "@sharp/test-utils": "file:packages/test-utils",
+    "@tiptap/core": "^2.0.0-beta.81",
+    "@tiptap/extension-image": "^2.0.0-beta.14",
+    "@tiptap/extension-link": "^2.0.0-beta.18",
+    "@tiptap/starter-kit": "^2.0.0-beta.77",
+    "@tiptap/vue-2": "^2.0.0-beta.35",
     "apexcharts": "^3.22.2",
     "carbon-components": "^7.26.2",
     "codemirror": "^5.60.0",
