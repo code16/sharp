@@ -1,9 +1,12 @@
 <template>
-    <div>
+    <div class="editor__toolbar">
         <template v-for="group in toolbarGroups">
             <div class="btn-group">
                 <template v-for="button in group">
-                    <button class="btn btn-light" @click="handleClicked(button)">
+                    <button class="btn btn-light"
+                        :class="{ 'active': isActive(button) }"
+                        @click="handleClicked(button)"
+                    >
                         <i :class="getIcon(button)"></i>
                     </button>
                 </template>
@@ -32,11 +35,14 @@
             },
         },
         methods: {
-            getIcon(buttonName) {
-                return buttons[buttonName]?.icon;
+            getIcon(button) {
+                return buttons[button]?.icon;
             },
-            handleClicked(buttonName) {
-                buttons[buttonName]?.command(this.editor);
+            isActive(button) {
+                return buttons[button]?.isActive(this.editor);
+            },
+            handleClicked(button) {
+                buttons[button]?.command(this.editor);
             },
         },
     }

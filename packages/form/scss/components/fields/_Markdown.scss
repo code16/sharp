@@ -1,60 +1,8 @@
 .SharpMarkdown {
   position: relative;
   z-index: 30;
-  padding: 0;
 
-  .fas {
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 700;
-  }
-
-  .far {
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 400;
-  }
-
-  &__upload-line {
-    .CodeMirror-line {
-      & > span {
-        padding-right: 0 !important;
-      }
-    }
-  }
-
-  &__line--active {
-    z-index: 3;
-  }
-
-  &--read-only {
-    .CodeMirror {
-      opacity: 0.8;
-    }
-    pointer-events: none;
-    cursor: default;
-    opacity: 0.8;
-  }
-
-  .CodeMirror {
-    font-family: inherit;
-    font-size: .875rem;
-    cursor: text;
-  }
-
-  .CodeMirror-focused {
-    @extend .form-control:focus;
-  }
-
-  .CodeMirror, .CodeMirror-scroll {
-    min-height: 0!important;
-  }
-
-  .CodeMirror-scroll {
-    margin-bottom: -50px;
-    padding-bottom: 50px;
-    margin-right: -50px;
-  }
-
-  .CodeMirror-code .cm-header {
-    line-height: inherit!important;
+  .form-control {
+    height: var(--height);
   }
 }
