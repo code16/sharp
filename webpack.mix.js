@@ -77,7 +77,7 @@ else {
         ],
         resolve: {
             alias: {
-                'tiptap-markdown': path.resolve(__dirname, '../tiptap-markdown'),
+                'tiptap-markdown': path.resolve(__dirname, '../packages/tiptap-markdown'),
             },
             modules: [path.resolve(__dirname, 'node_modules'), 'node_modules'],
         }
