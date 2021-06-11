@@ -1,57 +1,62 @@
 <template>
     <div class="SharpUpload" :class="[{'SharpUpload--empty':!file, 'SharpUpload--disabled':readOnly}, modifiersClasses]">
-        <div :class="{ 'card card-body': file }">
-            <form v-show="!file" class="dropzone">
-                <Button class="dz-message" text block :disabled="readOnly" type="button" ref="button">
-                    {{ l('form.upload.browse_button') }}
-                </Button>
-            </form>
+        <div> <!-- keep content div to allow dropzone events (vue-clip) -->
             <template v-if="file">
-                <div class="SharpUpload__container" :class="{ row:showThumbnail }">
-                    <div v-if="showThumbnail" class="SharpUpload__thumbnail" :class="[modifiers.compacted?'col-4 col-sm-3 col-xl-2':'col-4 col-md-4']">
-                        <img :src="imageSrc" @load="handleImageLoaded">
-                    </div>
-                    <div class="SharpUpload__infos" :class="{[modifiers.compacted?'col-8 col-sm-9 col-xl-10':'col-8 col-md-8']:showThumbnail}">
-                        <div class="mb-3">
-                            <label class="SharpUpload__filename text-truncate d-block">{{ fileName }}</label>
-                            <div class="SharpUpload__info mt-2">
-                                <div class="row g-2">
-                                    <template v-if="size">
-                                        <div class="col-auto">{{ size }}</div>
-                                    </template>
-                                    <template v-if="canDownload">
-                                        <div class="col-auto">
-                                            <a class="SharpUpload__download-link" :href="downloadUrl" :download="fileName">
-                                                <i class="fas fa-download"></i>
-                                                {{ l('form.upload.download_link') }}
-                                            </a>
-                                        </div>
-                                    </template>
-                                </div>
-                            </div>
-                            <transition name="SharpUpload__progress">
-                                <template v-if="inProgress">
-                                    <div class="SharpUpload__progress mt-2">
-                                        <div class="SharpUpload__progress-bar" role="progressbar" :style="{width:`${progress}%`}"
-                                            :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </template>
-                            </transition>
-                        </div>
-                        <template v-if="!readOnly">
-                            <div>
-                                <template v-if="hasEdit">
-                                    <Button outline small @click="onEditButtonClick">
-                                        {{ l('form.upload.edit_button') }}
-                                    </Button>
-                                </template>
-                                <Button class="SharpUpload__remove-button" variant="danger" outline small @click="handleRemoveClicked">
-                                    {{ l('form.upload.remove_button') }}
-                                </Button>
+                <div class="card card-body SharpUpload__card" :class="{ 'border-danger': hasError }">
+                    <div :class="{ 'row': showThumbnail }">
+                        <template v-if="showThumbnail">
+                            <div class="SharpUpload__thumbnail" :class="[modifiers.compacted?'col-4 col-sm-3 col-xl-2':'col-4 col-md-4']">
+                                <img :src="imageSrc" @load="handleImageLoaded">
                             </div>
                         </template>
+
+                        <div class="SharpUpload__infos" :class="{[modifiers.compacted?'col-8 col-sm-9 col-xl-10':'col-8 col-md-8']:showThumbnail}">
+                            <div class="mb-3">
+                                <label class="SharpUpload__filename text-truncate d-block">{{ fileName }}</label>
+                                <div class="SharpUpload__info mt-2">
+                                    <div class="row g-2">
+                                        <template v-if="size">
+                                            <div class="col-auto">{{ size }}</div>
+                                        </template>
+                                        <template v-if="hasDownload">
+                                            <div class="col-auto">
+                                                <a class="SharpUpload__download-link" :href="downloadUrl" :download="fileName">
+                                                    <i class="fas fa-download"></i>
+                                                    {{ l('form.upload.download_link') }}
+                                                </a>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                                <transition name="SharpUpload__progress">
+                                    <template v-if="inProgress">
+                                        <div class="SharpUpload__progress mt-2">
+                                            <div class="SharpUpload__progress-bar" role="progressbar" :style="{width:`${progress}%`}"
+                                                :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </template>
+                                </transition>
+                            </div>
+                            <template v-if="!readOnly">
+                                <div>
+                                    <template v-if="hasEdit && !hasError">
+                                        <Button outline small @click="onEditButtonClick">
+                                            {{ l('form.upload.edit_button') }}
+                                        </Button>
+                                    </template>
+                                    <Button class="SharpUpload__remove-button" variant="danger" outline small @click="handleRemoveClicked">
+                                        {{ l('form.upload.remove_button') }}
+                                    </Button>
+                                </div>
+                            </template>
+                        </div>
                     </div>
                 </div>
+            </template>
+            <template v-else>
+                <Button class="SharpUpload__browse dz-message" text block :disabled="readOnly" type="button" @click="handleClick">
+                    {{ l('form.upload.browse_button') }}
+                </Button>
             </template>
             <div ref="clip-preview-template" class="clip-preview-template" style="display: none;">
                 <div></div>
@@ -59,10 +64,10 @@
         </div>
 
         <Modal :visible.sync="showEditModal"
+            :title="l('modals.cropper.title')"
+            no-close-on-backdrop
             @ok="onEditModalOk"
             @hidden="onEditModalHidden"
-            no-close-on-backdrop
-            :title="l('modals.cropper.title')"
             ref="modal"
         >
             <vue-cropper
@@ -152,7 +157,6 @@
                 cropData: null,
 
                 isNew: !this.value,
-                canDownload: !!this.value,
             }
         },
         watch: {
@@ -203,12 +207,18 @@
                 return Math.floor(curProgress) * factor;
             },
             inProgress() {
-                return (this.file && this.file.status !== 'exist') && this.progress < 100;
+                if(this.file?.status === 'exist' || this.hasError) {
+                    return false;
+                }
+                return this.progress < 100;
             },
             statusFunction() {
                 return {
                     error:'onStatusError', success:'onStatusSuccess', added:'onStatusAdded'
                 }
+            },
+            hasError() {
+                return this.file?.status === 'error';
             },
             fileName() {
                 let splitted = this.file.name.split('/');
@@ -244,6 +254,9 @@
             hasEdit() {
                 return this.isCroppable && !this.inProgress;
             },
+            hasDownload() {
+                return this.file?.status === 'exist';
+            },
         },
         methods: {
             setPending(value) {
@@ -252,12 +265,11 @@
             // status callbacks
             onStatusAdded() {
                 this.$emit('reset');
-
                 this.setPending(true);
             },
             async onStatusError() {
                 const msg = this.file.errorMessage;
-                this.remove();
+                this.setPending(false);
                 await this.$nextTick();
                 this.$emit('error', msg);
             },
@@ -281,8 +293,7 @@
             },
 
             // actions
-            remove() {
-                this.canDownload = false;
+            remove(emits = true) {
                 this.removeFile(this.file);
                 this.files.splice(0, 1);
 
@@ -290,8 +301,10 @@
 
                 this.resetEdit();
 
-                this.$emit('input', null);
-                this.$emit('reset');
+                if(emits) {
+                    this.$emit('input', null);
+                    this.$emit('reset');
+                }
             },
 
             resetEdit() {
@@ -314,6 +327,17 @@
             handleRemoveClicked() {
                 this.remove();
                 this.$emit('removed');
+            },
+
+            handleClick() {
+                const dropzone = this.uploader._uploader;
+                dropzone.hiddenFileInput.click();
+            },
+
+            handleDrop() {
+                if(this.file) {
+                    this.remove(false);
+                }
             },
 
             onEditModalHidden() {
@@ -383,19 +407,27 @@
             this.options.thumbnailHeight = null;
             this.options.maxFiles = 1;
 
-            if (!this.value)
+            if (!this.value || this.value.file) {
                 return;
+            }
 
             this.addedFile({ ...this.value, upload: {} });
             this.file.thumbnail = this.value.thumbnail;
             this.file.status = 'exist';
         },
         mounted() {
-            const button = this.$refs.button.$el;
-            this.uploader._uploader.disable();
-            this.uploader._uploader.listeners.forEach(listener => listener.element = button);
-            this.uploader._uploader.clickableElements = [button];
-            this.uploader._uploader.enable();
+            const dropzone = this.uploader._uploader;
+            dropzone.disable();
+            dropzone.listeners = dropzone.listeners
+                .filter(listener => !listener.events.click);
+            dropzone.enable();
+
+            dropzone.on('drop', this.handleDrop);
+
+            if(this.value?.file) {
+                dropzone.addFile(this.value.file);
+                this.$emit('input', {});
+            }
         },
         beforeDestroy() {
             this.setPending(false);

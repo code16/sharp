@@ -197,6 +197,9 @@ class SpaceshipSharpForm extends SharpForm
                 SharpFormListField::make("pictures")
                     ->setLabel("Additional pictures")
                     ->setAddable()->setAddText("Add a picture")
+                    ->allowBulkUploadForField("file")
+                    ->setBulkUploadFileCountLimitAtOnce(6)
+//                    ->setMaxItemCount(2)
                     ->setRemovable()
                     ->setSortable()
                     ->setItemIdAttribute("id")
@@ -207,8 +210,10 @@ class SpaceshipSharpForm extends SharpForm
     //                        ->setCompactThumbnail()
                             ->setCropRatio("16:9")
                             ->setStorageDisk("local")
+//                            ->setMaxFileSize(.5)
                             ->setStorageBasePath("data/Spaceship/{id}/Pictures")
-                    )->addItemField(
+                    )
+                    ->addItemField(
                         SharpFormTextField::make("legend")
                             ->setLocalized()
                             ->setPlaceholder("Legend")

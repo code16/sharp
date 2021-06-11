@@ -2,7 +2,7 @@
 
 Class: `Code16\Sharp\Form\Fields\SharpFormListField`
 
-A List is made of items, and each item is made of Form Fields.
+A List is made of items, and each item contains form fields.
 
 Let's review a simple use case: a museum with all kind of art pieces. In the DB it's a 1-N relationship. If we choose to define a ArtPiece Entity in Sharp, we'll end up with maybe a Select, or an Autocomplete, to designate the Museum. But here, we want to do the opposite: define a Museum Entity, with an ArtPiece list.
 
@@ -19,10 +19,12 @@ function buildFormFields()
             ->addItemField(
                 SharpFormDateField::make("acquisition_date")
                     ->setLabel("Acquisition")
-            )->addItemField(
+            )
+            ->addItemField(
                 SharpFormTextField::make("title")
                     ->setLabel("Title")
-            )->addItemField(
+            )
+            ->addItemField(
                 SharpFormSelectField::make("artist_id", [...])
                     ->setLabel("Artist")
             )
@@ -91,6 +93,21 @@ Defines if items can be removed by the user.
 Default: false.
 
 ### `setItemIdAttribute(string $itemIdAttribute)`
+
+Defines the id attribute name for items.
+Default: id.
+
+### `allowBulkUploadForField(string $itemFieldKey)`
+### `doNotAllowBulkUpload()`
+
+If the list item contains an `UploadFormField` field, this option can be used to present a bulk upload area to the user.
+The `$itemFieldKey` must refer to the key of the `UploadFormField`.
+Default is false (do not allow bulk upload)
+
+### `setBulkUploadFileCountLimitAtOnce(int $limit)`
+
+Sets a file count limit to bulk upload (useful to prevent unwanted mass upload...).
+Default: 10
 
 ## Layout
 

@@ -12,6 +12,9 @@ return [
     'list.sort_button.inactive' => 'Trier',
     'list.sort_button.active' => 'Terminer',
     'list.empty' => 'Liste vide',
+    'list.bulk_upload.text' => '[Parcourir]() ou glisser-déposer des fichiers...',
+    'list.bulk_upload.help_text' => ':limit fichier(s) maximum',
+    'list.bulk_upload.validation.limit' => 'Trop de fichiers sélectionnés (:limit maximum)',
 
     'geolocation.loading' => 'Chargement de Google Maps...',
     'geolocation.browse_button' => 'Choisir un endroit...',

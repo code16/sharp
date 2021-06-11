@@ -1,0 +1,63 @@
+
+.SharpListUpload {
+  position: relative;
+  transition: border-color .125s ease-in-out, box-shadow .125s ease-in-out;
+
+  &__content {
+    min-height: 80px;
+  }
+
+  &__text {
+    font-size: .875rem;
+    a {
+      position: relative;
+      z-index: 1;
+    }
+  }
+
+  &__icon {
+    fill: currentColor;
+    opacity: .375;
+    margin-right: .75rem;
+  }
+
+  &__input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+  }
+
+  &__help {
+    font-size: .75rem;
+    position: absolute;
+    bottom: .25rem;
+    right: .5rem;
+    opacity: .675;
+  }
+
+  &--active {
+    .SharpListUpload__text {
+      a {
+        position: static;
+      }
+    }
+  }
+
+  &--disabled {
+    pointer-events: none;
+    opacity: .75;
+  }
+
+  &:focus-within,
+  &--active {
+    border: 1px solid hsl(var(--bs-primary-h), var(--bs-primary-s), 30%);
+    border-top-width: 1px!important;
+    box-shadow: $box-shadow;
+    &:not(:first-child) {
+      margin-top: -1px;
+    }
+  }
+}
