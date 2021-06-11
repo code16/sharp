@@ -2,3 +2,8 @@
 .clearable {
   padding-right: $form-control-clear-button-padding;
 }
+
+.input-group--clearable {
+  position: relative;
+  @extend .has-validation;
+}
