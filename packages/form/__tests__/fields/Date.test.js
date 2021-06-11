@@ -181,7 +181,7 @@ describe('date-field',()=>{
         expect(inputEmitted.mock.calls[0][0]).toEqual(date(1996, 7, 20, 13, 20));
     });
 
-    test('emit input on input changed and show picker', async () => {
+    test('emit input on input changed', async () => {
         let $date = await createVm({
             displayFormat: 'DD/MM/YYYY HH:mm'
         });
@@ -203,7 +203,7 @@ describe('date-field',()=>{
         expect(inputEmitted).toHaveBeenCalledTimes(1);
         expect(inputEmitted.mock.calls[0][0]).toBeInstanceOf(Date);
         expect(inputEmitted.mock.calls[0][0]).toEqual(date(1996, 7, 22, 13, 20));
-        expect($date.showPicker).toBe(true);
+        expect($date.showPicker).toBe(false);
     });
 
     test('emit error on input changed if invalid and hide picker', async () => {
