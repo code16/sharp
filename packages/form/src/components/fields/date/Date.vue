@@ -177,14 +177,13 @@
             handleInput(e) {
                 let m = moment(e.target.value, this.displayFormat, true);
                 this.localInputValue = e.target.value;
+                this.showPicker = false;
                 if(!m.isValid()) {
                     this.$field.$emit('error', `${lang('form.date.validation_error.format')} (${this.displayFormat})`);
-                    this.showPicker = false;
                 }
                 else {
                     this.rollback();
                     this.$emit('input', m.toDate());
-                    this.showPicker = true;
                 }
             },
 
