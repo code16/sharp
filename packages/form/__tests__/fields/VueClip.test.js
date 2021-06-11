@@ -494,7 +494,6 @@ describe('vue-clip',() => {
 
         expect(handleError).toHaveBeenCalledTimes(1);
         expect(handleError).toHaveBeenCalledWith("Can't upload");
-        expect($vueClip.remove).toHaveBeenCalled();
     });
 
     test('on status success', async () => {
@@ -551,7 +550,6 @@ describe('vue-clip',() => {
         expect(handleReset).toHaveBeenCalledTimes(1);
 
         expect($vueClip.files).toEqual([]);
-        expect($vueClip.canDownload).toBe(false);
     });
 
     function mockCropper() {

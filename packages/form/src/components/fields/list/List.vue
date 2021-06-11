@@ -70,11 +70,20 @@
                         </template>
                     </div>
                 </template>
+                <template v-if="hasUpload">
+                    <ListUpload
+                        :field="uploadField"
+                        :limit="uploadLimit"
+                        :disabled="isReadOnly"
+                        @change="handleUploadChanged"
+                        key="upload"
+                    />
+                </template>
             </transition-group>
 
             <template v-if="showAddButton" v-slot:footer>
-                <div :class="{ 'mt-3': list.length > 0 }">
-                    <Button class="SharpList__add-button" :disabled="dragActive" text block @click="add" :key="-1">
+                <div :class="{ 'mt-3': list.length > 0 || hasUpload }">
+                    <Button class="SharpList__add-button" :disabled="isReadOnly" text block @click="add" :key="-1">
                         ＋ {{ addText }}
                     </Button>
                 </div>
@@ -94,6 +103,8 @@
 
     import localize from '../../../mixins/localize/form';
     import { transformFields, getDependantFieldsResetData, fieldEmptyValue } from "../../../util";
+    import ListUpload from "./ListUpload";
+    import { lang, showAlert } from "sharp";
 
     export default {
         name: 'SharpList',
@@ -103,6 +114,7 @@
         mixins: [ Localization,  localize('itemFields') ],
 
         components: {
+            ListUpload,
             Draggable,
             ListItem,
             Button,
@@ -136,6 +148,14 @@
             },
             collapsedItemTemplate: String,
             maxItemCount: Number,
+            bulkUploadField: {
+                type: String,
+                default: 'file',
+            },
+            bulkUploadLimit: {
+                type: Number,
+                default: 10,
+            },
 
             itemIdAttribute: String,
             readOnly: Boolean,
@@ -158,13 +178,11 @@
                     'SharpList--can-sort': this.showSortButton,
                 }
             },
-            disabled() {
-                return this.readOnly || this.dragActive;
-            },
             dragOptions() {
                 return {
-                    disabled:!this.dragActive,
+                    disabled: !this.dragActive,
                     handle: '.SharpList__overlay-handle',
+                    filter: '.SharpListUpload',
                 };
             },
             showAddButton() {
@@ -173,13 +191,13 @@
                     !this.readOnly;
             },
             showInsertButton() {
-                return this.showAddButton && this.sortable && !this.disabled;
+                return this.showAddButton && this.sortable && !this.isReadOnly;
             },
             showSortButton() {
                 return !this.hasPendingActions && this.sortable && this.list.length > 1;
             },
             showRemoveButton() {
-                return this.removable && !this.disabled;
+                return this.removable && !this.isReadOnly;
             },
             dragIndexSymbol() {
                 return Symbol('dragIndex');
@@ -192,7 +210,22 @@
             },
             isReadOnly() {
                 return this.readOnly || this.dragActive;
-            }
+            },
+            hasUpload() {
+                return this.uploadField?.type === 'upload';
+            },
+            uploadField() {
+                return this.bulkUploadField
+                    ? this.itemFields[this.bulkUploadField]
+                    : null;
+            },
+            uploadLimit() {
+                if(this.maxItemCount) {
+                    const remaining = this.maxItemCount - this.list.length;
+                    return Math.min(remaining, this.bulkUploadLimit);
+                }
+                return this.bulkUploadLimit;
+            },
         },
         methods: {
             handleListChanged() {
@@ -265,9 +298,30 @@
                 return {
                     ...item, _fieldsLocale: this.defaultFieldLocaleMap({
                         fields: this.itemFields,
-                        locales: this.$form.locales
+                        locales: this.$form?.locales
                     }, locale)
                 };
+            },
+
+            handleUploadChanged(e) {
+                const files = [...e.target.files].slice(0, this.uploadLimit);
+
+                if(e.target.files.length > this.uploadLimit) {
+                    const message = lang('form.list.bulk_upload.validation.limit')
+                        .replace(':limit', this.uploadLimit);
+
+                    showAlert(message, {
+                        title: lang('modals.error.title'),
+                    });
+                }
+
+                files.forEach(file => {
+                    const item = this.createItem();
+                    item[this.bulkUploadField] = {
+                        file,
+                    }
+                    this.list.push(item);
+                });
             },
 
             initList() {
@@ -278,7 +332,7 @@
             },
         },
         created() {
-            this.localized = this.$form.localized;
+            this.localized = this.$form?.localized;
             this.initList();
         },
     }

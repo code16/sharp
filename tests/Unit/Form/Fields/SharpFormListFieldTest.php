@@ -18,6 +18,7 @@ class SharpFormListFieldTest extends SharpTestCase
                 "key" => "field", "type" => "list",
                 "addable" => false, "removable" => false, "sortable" => false,
                 "addText" => "Add an item", "itemIdAttribute" => "id",
+                "bulkUploadLimit" => 10,
                 "itemFields" => [
                     "text" => [
                         "key" => "text",
@@ -92,6 +93,37 @@ class SharpFormListFieldTest extends SharpTestCase
 
         $this->assertArrayNotHasKey(
             "maxItemCount",
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_allowBulkUploadForField()
+    {
+        $formField = $this->getDefaultList()
+            ->allowBulkUploadForField("itemFieldKey");
+
+        $this->assertArraySubset(
+            ["bulkUploadField" => "itemFieldKey"],
+            $formField->toArray()
+        );
+
+        $formField->doNotAllowBulkUpload();
+
+        $this->assertArrayNotHasKey(
+            "bulkUploadField",
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_setBulkUploadFileCountLimitAtOnce()
+    {
+        $formField = $this->getDefaultList()
+            ->setBulkUploadFileCountLimitAtOnce(8);
+
+        $this->assertArraySubset(
+            ["bulkUploadLimit" => 8],
             $formField->toArray()
         );
     }

@@ -183,6 +183,25 @@ exports[`list-field can mount non addable, non removable, non sortable list fiel
 </div>
 `;
 
+exports[`list-field can mount with bulk upload 1`] = `
+<div class="SharpList">
+	<div class="SharpList__sticky-wrapper text-end">
+		<!---->
+	</div>
+	<draggable-stub options="[object Object]" list="">
+		<span name="expand" tag="div" class="list-group shadow-sm">
+			<listupload-stub field="[object Object]" limit="10"></listupload-stub>
+		</span>
+		<div class="mt-3">
+			<button-stub variant="primary" text="true" block="true" class="SharpList__add-button">
+				＋ Ajouter un élément
+			</button-stub>
+		</div>
+	</draggable-stub>
+	<!---->
+</div>
+`;
+
 exports[`list-field can mount with full list 1`] = `
 <div id="app">
 	<div class="SharpList SharpList--can-sort">
