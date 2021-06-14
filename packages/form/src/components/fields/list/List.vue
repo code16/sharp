@@ -82,7 +82,7 @@
             </transition-group>
 
             <template v-if="showAddButton" v-slot:footer>
-                <div :class="{ 'mt-3': list.length > 0 }">
+                <div :class="{ 'mt-3': list.length > 0 || hasUpload }">
                     <Button class="SharpList__add-button" :disabled="isReadOnly" text block @click="add" :key="-1">
                         ＋ {{ addText }}
                     </Button>
