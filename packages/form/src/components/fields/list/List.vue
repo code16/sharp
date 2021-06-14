@@ -148,10 +148,7 @@
             },
             collapsedItemTemplate: String,
             maxItemCount: Number,
-            bulkUploadField: {
-                type: String,
-                default: 'file',
-            },
+            bulkUploadField: String,
             bulkUploadLimit: {
                 type: Number,
                 default: 10,
