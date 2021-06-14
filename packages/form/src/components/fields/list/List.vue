@@ -82,7 +82,7 @@
             </transition-group>
 
             <template v-if="showAddButton" v-slot:footer>
-                <div :class="{ 'mt-3': list.length > 0 || hasUpload }">
+                <div :class="{ 'mt-3': list.length > 0 }">
                     <Button class="SharpList__add-button" :disabled="isReadOnly" text block @click="add" :key="-1">
                         ＋ {{ addText }}
                     </Button>
@@ -185,13 +185,16 @@
                     filter: '.SharpListUpload',
                 };
             },
-            showAddButton() {
+            canAddItem() {
                 return this.addable &&
                     (this.list.length < this.maxItemCount || !this.maxItemCount) &&
                     !this.readOnly;
             },
+            showAddButton() {
+                return this.canAddItem;
+            },
             showInsertButton() {
-                return this.showAddButton && this.sortable && !this.isReadOnly;
+                return this.canAddItem && this.sortable && !this.isReadOnly;
             },
             showSortButton() {
                 return !this.hasPendingActions && this.sortable && this.list.length > 1;
@@ -212,7 +215,9 @@
                 return this.readOnly || this.dragActive;
             },
             hasUpload() {
-                return this.uploadField?.type === 'upload';
+                return this.uploadField?.type === 'upload'
+                    && this.canAddItem
+                    && this.uploadLimit > 0;
             },
             uploadField() {
                 return this.bulkUploadField
