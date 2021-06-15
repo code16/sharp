@@ -9,6 +9,7 @@
             v-bind="fieldProps"
             @updated="handleUpdate"
             @removed="handleRemoveClicked"
+            @success="handleSuccess"
             @error="handleError"
         />
     </NodeViewWrapper>

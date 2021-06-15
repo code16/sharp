@@ -16,7 +16,7 @@
 </template>
 
 <script>
-    import { createMarkdownEditor } from 'tiptap-markdown';
+    import { createMarkdownEditor, createMarkdownExtension } from 'tiptap-markdown';
     import { Editor, EditorContent } from '@tiptap/vue-2';
     import StarterKit from '@tiptap/starter-kit';
     import Table from '@tiptap/extension-table';
@@ -106,6 +106,7 @@
             },
             createEditor() {
                 const MarkdownEditor = createMarkdownEditor(Editor);
+                const markdownExtensions = [];
                 const extensions = [
                     StarterKit,
                     Table,
@@ -119,12 +120,22 @@
 
                 if(this.hasUpload) {
                     extensions.push(this.getUploadExtension());
+                    markdownExtensions.push(createMarkdownExtension(Upload, {
+                        serialize(state, node) {
+                            if(node.attrs.value?.name) {
+                                state.write("![](" + state.esc(node.attrs.value.name) + ")");
+                            }
+                        },
+                    }));
                 }
 
                 this.editor = new MarkdownEditor({
                     extensions,
                     content: this.localizedText,
                     onUpdate: this.handleUpdate,
+                    markdown: {
+                        extensions: markdownExtensions,
+                    }
                 });
 
                 this.editor.view.dom.classList.add('card-body', 'form-control');
