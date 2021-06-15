@@ -1,16 +1,16 @@
 <template>
-    <div class="SharpUpload" :class="[{'SharpUpload--empty':!file, 'SharpUpload--disabled':readOnly}, modifiersClasses]">
+    <div class="SharpUpload" :class="classes">
         <div> <!-- keep content div to allow dropzone events (vue-clip) -->
             <template v-if="file">
                 <div class="card card-body SharpUpload__card" :class="{ 'border-danger': hasError }">
                     <div :class="{ 'row': showThumbnail }">
                         <template v-if="showThumbnail">
-                            <div class="SharpUpload__thumbnail" :class="[modifiers.compacted?'col-4 col-sm-3 col-xl-2':'col-4 col-md-4']">
+                            <div class="SharpUpload__thumbnail" :class="[compactThumbnail?'col-4 col-sm-3 col-xl-2':'col-4 col-md-4']">
                                 <img :src="imageSrc" @load="handleImageLoaded">
                             </div>
                         </template>
 
-                        <div class="SharpUpload__infos" :class="{[modifiers.compacted?'col-8 col-sm-9 col-xl-10':'col-8 col-md-8']:showThumbnail}">
+                        <div class="SharpUpload__infos" :class="{[compactThumbnail?'col-8 col-sm-9 col-xl-10':'col-8 col-md-8']:showThumbnail}">
                             <div class="mb-3">
                                 <label class="SharpUpload__filename text-truncate d-block">{{ fileName }}</label>
                                 <div class="SharpUpload__info mt-2">
@@ -114,7 +114,6 @@
     import { Localization } from 'sharp/mixins';
     import { filesizeLabel } from 'sharp';
 
-    import { VueClipModifiers } from './modifiers';
     import rotateResize from './rotate';
     import { downloadFileUrl } from "../../../api";
 
@@ -131,7 +130,7 @@
 
         inject : [ '$form' ],
 
-        mixins: [ Localization, VueClipModifiers ],
+        mixins: [ Localization ],
 
         props: {
             downloadId: String,
@@ -147,6 +146,8 @@
 
             readOnly: Boolean,
             root: Boolean,
+            compactThumbnail: Boolean,
+            focused: Boolean,
         },
 
         data() {
@@ -170,6 +171,14 @@
             },
         },
         computed: {
+            classes() {
+                return {
+                    'SharpUpload--empty': !this.file,
+                    'SharpUpload--disabled': this.readOnly,
+                    'SharpUpload--compacted': this.compactThumbnail,
+                    'SharpUpload--focused': this.focused,
+                }
+            },
             file() {
                 return this.files[0];
             },
@@ -281,8 +290,9 @@
                 catch(e) { console.log(e); }
 
                 data.uploaded = true;
+                data.dataUrl = this.imageSrc;
                 this.$emit('success', data);
-                this.$emit('input',data);
+                this.$emit('input', data);
 
                 this.setPending(false);
 
@@ -426,7 +436,7 @@
 
             if(this.value?.file) {
                 dropzone.addFile(this.value.file);
-                this.$emit('input', {});
+                this.$emit('input', null);
             }
         },
         beforeDestroy() {

@@ -4,5 +4,6 @@
 
   .form-control {
     height: var(--height);
+    overflow-y: auto;
   }
 }

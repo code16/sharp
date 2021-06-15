@@ -7,6 +7,10 @@
                 </template>
             </div>
             <EditorContent :editor="editor" />
+
+            <template v-if="editor">
+                <UploadFileInput :editor="editor"/>
+            </template>
         </div>
     </div>
 </template>
@@ -23,12 +27,16 @@
     import Link from '@tiptap/extension-link';
     import MenuBar from "./MenuBar";
     import localize from '../../../mixins/localize/editor';
+    import { Upload } from "./extensions/upload/upload";
+    import { TrailingNode } from "./extensions/trailing-node";
+    import UploadFileInput from "./extensions/upload/UploadFileInput";
 
     export default {
         mixins: [ localize({ textProp:'text' }) ],
         components: {
-            MenuBar,
             EditorContent,
+            MenuBar,
+            UploadFileInput,
         },
         props: {
             id: String,
@@ -51,6 +59,7 @@
         data() {
             return {
                 editor: null,
+                currentFileId: 0,
             }
         },
         computed: {
@@ -58,18 +67,45 @@
                 return {
                     '--height': `${this.height}px`,
                 }
-            }
+            },
+            hasUpload() {
+                return !!this.innerComponents?.upload;
+            },
         },
         methods: {
             handleUpdate() {
                 const content = this.editor.getMarkdown();
                 this.$emit('input', this.localizedValue(content));
             },
-        },
-        mounted() {
-            const MarkdownEditor = createMarkdownEditor(Editor);
-            this.editor = new MarkdownEditor({
-                extensions: [
+            getUploadExtension() {
+                return Upload.configure({
+                    fieldProps: this.innerComponents.upload,
+                    getFileByName: (name) => {
+                        return this.value.files?.find(file => file.name === name);
+                    },
+                    onSuccess: (value) => {
+                        this.$emit('input', {
+                            ...this.value,
+                            files: [...(this.value?.files ?? []), value],
+                        });
+                    },
+                    onRemove: (value) => {
+                        this.$emit('input', {
+                            ...this.value,
+                            files: this.value.files?.filter(file => file.name !== value.name),
+                        });
+                    },
+                    onUpdate: (value) => {
+                        this.$emit('input', {
+                            ...this.value,
+                            files: this.value.files?.map(file => file.name === value.name ? value : file),
+                        });
+                    },
+                });
+            },
+            createEditor() {
+                const MarkdownEditor = createMarkdownEditor(Editor);
+                const extensions = [
                     StarterKit,
                     Table,
                     TableRow,
@@ -77,11 +113,24 @@
                     TableCell,
                     Image,
                     Link,
-                ],
-                content: this.localizedText,
-                onUpdate: this.handleUpdate,
-            });
-            this.editor.view.dom.classList.add('card-body', 'form-control');
+                    TrailingNode,
+                ]
+
+                if(this.hasUpload) {
+                    extensions.push(this.getUploadExtension());
+                }
+
+                this.editor = new MarkdownEditor({
+                    extensions,
+                    content: this.localizedText,
+                    onUpdate: this.handleUpdate,
+                });
+
+                this.editor.view.dom.classList.add('card-body', 'form-control');
+            },
+        },
+        mounted() {
+            this.createEditor();
         },
     }
 </script>

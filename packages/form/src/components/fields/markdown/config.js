@@ -53,17 +53,13 @@ export const buttons = {
         icon: getToolbarIcon('link'),
     },
     'image': {
-        command: editor => {
-            // todo
-        },
-        isActive: editor => false,
+        command: editor => editor.chain().focus().newUpload().run(),
+        isActive: editor => editor.isActive('upload') || editor.isActive('image'),
         icon: getToolbarIcon('image'),
     },
     'document': {
-        command: editor => {
-            // todo
-        },
-        isActive: editor => false,
+        command: editor => editor.chain().focus().newUpload().run(),
+        isActive: editor => editor.isActive('upload'),
         icon: getToolbarIcon('document'),
     },
     'horizontal-rule': {

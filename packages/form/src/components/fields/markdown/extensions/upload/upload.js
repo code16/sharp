@@ -1,20 +1,28 @@
-import { Node, mergeAttributes } from "@tiptap/core";
+import { Node } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-2";
 import MarkdownUpload from "./MarkdownUpload";
+import FileInput from "./UploadFileInput";
 
 export const Upload = Node.create({
     name: 'upload',
 
     group: 'block',
 
+    isolating: true,
+
+    priority: 150,
+
     defaultOptions: {
-        HTMLAttributes: {},
         fieldOptions: {},
+        onInput: () => {},
+        onRemove: () => {},
+        onUpdate: () => {},
+        getFileByName: () => {},
     },
 
     addAttributes() {
         return {
-            src: {
+            value: {
                 default: null,
             },
         }
@@ -23,26 +31,51 @@ export const Upload = Node.create({
     parseHTML() {
         return [
             {
-                tag: 'img[src]',
-                getAttrs: node => node.src.match(/^local:/) || null,
+                tag: 'img[src^="local:"]',
+                getAttrs: node => {
+                    return {
+                        value: this.options.getFileByName(node.src),
+                    }
+                }
             },
             {
                 tag: 'x-sharp-upload',
+                getAttrs: node => ({
+                    value: this.options.getFileByName(node.getAttribute('src')),
+                }),
             },
         ]
     },
 
+    /**
+     * <x-sharp-upload src="example.jpg">
+     * </x-sharp-upload>
+     */
     renderHTML({ HTMLAttributes }) {
-        return ['x-sharp-upload', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)];
+        const value = HTMLAttributes.value;
+        return [
+            'x-sharp-upload',
+            {
+                'src': value?.name,
+                'crop-data': value?.cropData,
+            }
+        ];
     },
 
     addCommands() {
         return {
-            setUpload: options => ({ commands }) => {
+            insertUpload: attrs => ({ commands, ...props }) => {
+                // debugger;
                 return commands.insertContent({
                     type: this.name,
-                    attrs: options,
-                })
+                    attrs,
+                });
+            },
+            newUpload: () => ({ editor }) => {
+                /**
+                 * @see FileInput
+                 */
+                editor.emit('new-upload');
             },
         }
     },

@@ -1,15 +1,28 @@
 <template>
-    <VueClip
-        class="SharpMarkdownUpload"
-        v-bind="fieldProps"
-    />
+    <NodeViewWrapper>
+        <VueClip
+            class="SharpMarkdownUpload"
+            :value="value"
+            :root="false"
+            :options="options"
+            :focused="selected"
+            v-bind="fieldProps"
+            @updated="handleUpdate"
+            @removed="handleRemoveClicked"
+            @error="handleError"
+        />
+    </NodeViewWrapper>
 </template>
 
 <script>
     import VueClip from "../../../upload/VueClip";
+    import { NodeViewWrapper } from '@tiptap/vue-2';
+    import { lang, showAlert } from "sharp";
+    import { getUploadOptions } from "../../../../../util/upload";
 
     export default {
         components: {
+            NodeViewWrapper,
             VueClip,
         },
         props: {
@@ -22,8 +35,38 @@
             deleteNode: Function,
         },
         computed: {
+            value() {
+                return this.node.attrs.value;
+            },
             fieldProps() {
                 return this.extension.options.fieldProps;
+            },
+            options() {
+                return getUploadOptions({
+                    fileFilter: this.fieldProps.fileFilter,
+                    maxFileSize: this.fieldProps.maxFileSize,
+                });
+            },
+        },
+        methods: {
+            handleRemoveClicked() {
+                this.deleteNode();
+                this.extension.options.onRemove(this.value);
+            },
+            handleError(message) {
+                showAlert(message, {
+                    isError: true,
+                    title: lang(`modals.error.title`),
+                });
+            },
+            handleUpdate(value) {
+                this.extension.options.onUpdate(value);
+            },
+            handleSuccess(value) {
+                this.updateAttributes({
+                    value,
+                });
+                this.extension.options.onSuccess(value);
             },
         },
     }
