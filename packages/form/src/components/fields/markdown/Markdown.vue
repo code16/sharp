@@ -73,7 +73,8 @@
             },
         },
         methods: {
-            handleUpdate() {
+            async handleUpdate() {
+                await this.$nextTick();
                 const content = this.editor.getMarkdown();
                 this.$emit('input', this.localizedValue(content));
             },

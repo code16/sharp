@@ -51,7 +51,9 @@
         methods: {
             handleRemoveClicked() {
                 this.deleteNode();
-                this.extension.options.onRemove(this.value);
+                setTimeout(() => {
+                    this.editor.commands.focus();
+                }, 0);
             },
             handleError(message) {
                 showAlert(message, {
@@ -68,6 +70,9 @@
                 });
                 this.extension.options.onSuccess(value);
             },
+        },
+        beforeDestroy() {
+            this.extension.options.onRemove(this.value);
         },
     }
 </script>
