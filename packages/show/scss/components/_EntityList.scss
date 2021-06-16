@@ -1,8 +1,11 @@
 .ShowEntityListField {
   .SharpDataList__table {
     border: 0;
-    margin-bottom: 0;
   }
+  .SharpPagination {
+    margin-top: 1.5rem;
+  }
+
   &__action-bar {
     .action-bar__row {
       min-height: 2.5rem;
