@@ -1,8 +1,6 @@
 <?php
 
 return [
-    'document_title' => 'Edit “:breadcrumb_label”',
-
     'validation_error.title' => 'Your input is invalid.',
     'validation_error.description' => 'Please review your input, errors are detailed below each field.',
     'validation_error.localized' => 'There is an error in : :locales',

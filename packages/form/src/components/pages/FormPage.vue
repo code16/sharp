@@ -19,7 +19,7 @@
 <script>
     import Form from '../Form';
     import ActionBarForm from '../ActionBar';
-    import { lang } from "sharp";
+    import { entitiesMatch, lang } from "sharp";
 
     export default {
         components: {
@@ -47,10 +47,9 @@
                 this.updateDocumentTitle(form);
             },
             updateDocumentTitle(form) {
-                const breadcrumbLabel = form.breadcrumb?.items[form.breadcrumb.items.length - 2]?.name;
-                if(breadcrumbLabel) {
-                    const title = lang('form.document_title').replace(':breadcrumb_label', breadcrumbLabel);
-                    document.title = `${title}, ${document.title}`;
+                const label = form.breadcrumb?.items[form.breadcrumb.items.length - 1]?.documentTitleLabel;
+                if(label) {
+                    document.title = `${label}, ${document.title}`;
                 }
             },
         }
