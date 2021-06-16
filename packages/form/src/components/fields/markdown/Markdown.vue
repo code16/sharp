@@ -120,6 +120,8 @@
 
                 if(this.hasUpload) {
                     extensions.push(this.getUploadExtension());
+
+                    // todo remove this when back handle <x-sharp-media>
                     markdownExtensions.push(createMarkdownExtension(Upload, {
                         serialize(state, node) {
                             if(node.attrs.value?.name) {
@@ -138,7 +140,7 @@
                     }
                 });
 
-                this.editor.view.dom.classList.add('card-body', 'form-control');
+                this.editor.view.dom.classList.add('card-body', 'form-control', 'editor__content');
             },
         },
         mounted() {

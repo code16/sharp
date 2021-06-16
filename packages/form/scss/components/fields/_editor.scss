@@ -31,6 +31,24 @@
     }
   }
 
+  &__content {
+    > img, > p > img {
+      display: inline-block;
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 200px;
+      border: 1px solid $card-border-color;
+      border-radius: $card-border-radius;
+      margin-bottom: 1rem;
+      transition: border .125s ease-in-out, box-shadow .125s ease-in-out;
+      &.ProseMirror-selectednode {
+        border-color: var(--bs-primary);
+        box-shadow: $box-shadow;
+      }
+    }
+  }
+
   &__toolbar {
     .fa-paperclip {
       -webkit-text-stroke: .03em $ui-03;

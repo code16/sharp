@@ -39,7 +39,7 @@ export const Upload = Node.create({
                 }
             },
             {
-                tag: 'x-sharp-upload',
+                tag: 'x-sharp-media',
                 getAttrs: node => ({
                     value: this.options.getFileByName(node.getAttribute('src')),
                 }),
@@ -54,10 +54,12 @@ export const Upload = Node.create({
     renderHTML({ HTMLAttributes }) {
         const value = HTMLAttributes.value;
         return [
-            'x-sharp-upload',
+            'x-sharp-media',
             {
-                'src': value?.name,
-                'crop-data': value?.cropData,
+                'disk': null, // todo
+                'path': value?.name,
+                'filter-crop': value?.cropData,
+                'filter-rotate': null, // todo
             }
         ];
     },
