@@ -64,8 +64,7 @@ export const Upload = Node.create({
 
     addCommands() {
         return {
-            insertUpload: attrs => ({ commands, ...props }) => {
-                // debugger;
+            insertUpload: attrs => ({ commands }) => {
                 return commands.insertContent({
                     type: this.name,
                     attrs,
