@@ -19,7 +19,6 @@
 <script>
     import Form from '../Form';
     import ActionBarForm from '../ActionBar';
-    import { entitiesMatch, lang } from "sharp";
 
     export default {
         components: {
