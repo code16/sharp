@@ -201,7 +201,15 @@ class TestForm extends SharpForm
 
     function buildFormLayout(): void
     {
-        $this->addTab("Simple", function(FormLayoutTab $tab) {
+        $this->addTab("Textarea", function(FormLayoutTab $tab) {
+            $tab->addColumn(6, function (FormLayoutColumn $column) {
+                $column->withSingleField("markdown")
+                    ->withSingleField("textarea");
+            })->addColumn(6, function (FormLayoutColumn $column) {
+                $column->withSingleField("wysiwyg");
+            });
+    
+        })->addTab("Simple", function(FormLayoutTab $tab) {
             $tab->addColumn(6, function (FormLayoutColumn $column) {
                 $column->withSingleField("text")
                     ->withSingleField("date")
@@ -209,14 +217,6 @@ class TestForm extends SharpForm
             })->addColumn(6, function (FormLayoutColumn $column) {
                 $column->withSingleField("number")
                     ->withSingleField("html");
-            });
-
-        })->addTab("Textarea", function(FormLayoutTab $tab) {
-            $tab->addColumn(6, function (FormLayoutColumn $column) {
-                $column->withSingleField("markdown")
-                    ->withSingleField("textarea");
-            })->addColumn(6, function (FormLayoutColumn $column) {
-                $column->withSingleField("wysiwyg");
             });
 
         })->addTab("Select", function(FormLayoutTab $tab) {
