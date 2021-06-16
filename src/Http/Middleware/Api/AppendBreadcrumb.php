@@ -122,11 +122,9 @@ class AppendBreadcrumb
         
         switch ($item->type) {
             case "s-show":
-                return ($this->data->config->breadcrumbAttribute ?? null)
-                    ? trans("sharp::breadcrumb.show", [
-                        "entity" => $this->getEntityLabelForInstance($item, $isLeaf)
-                    ])
-                    : null;
+                return trans("sharp::breadcrumb.show", [
+                    "entity" => $this->getEntityLabelForInstance($item, $isLeaf)
+                ]);
             case "s-form":
                 return isset($item->instance)
                     ? trans("sharp::breadcrumb.form.edit_entity", [
