@@ -47,14 +47,16 @@ class AppendBreadcrumb
                         $item->type,
                         isset($item->instance) ? "{$item->key}/{$item->instance}" : $item->key
                     );
+                    $isLeaf = $index === sizeof($breadcrumb) - 1;
                     
                     return [
                         "type" => $this->getFrontTypeNameFor($item->type),
-                        "name" => $displayBreadcrumb 
-                            ? $this->getBreadcrumbLabelFor($item, $index === sizeof($breadcrumb)-1)
+                        "name" => $displayBreadcrumb
+                            ? $this->getBreadcrumbLabelFor($item, $isLeaf)
                             : "",
+                        "documentTitleLabel" => $this->getDocumentTitleLabelFor($item, $isLeaf),
                         "entityKey" => $item->key,
-                        "url" => url($url)
+                        "url" => url($url),
                     ];
                 }),
             'visible' => $displayBreadcrumb,
@@ -106,6 +108,35 @@ class AppendBreadcrumb
         }
         
         return $item->key;
+    }
+    
+    /**
+     * Return first part of document title when needed :
+     * {documentTitleLabel}, {entityLabel} | {site}
+     */
+    private function getDocumentTitleLabelFor(object $item, bool $isLeaf)
+    {
+        if(!$isLeaf) {
+            return null;
+        }
+        
+        switch ($item->type) {
+            case "s-show":
+                return ($this->data->config->breadcrumbAttribute ?? null)
+                    ? trans("sharp::breadcrumb.show", [
+                        "entity" => $this->getEntityLabelForInstance($item, $isLeaf)
+                    ])
+                    : null;
+            case "s-form":
+                return isset($item->instance)
+                    ? trans("sharp::breadcrumb.form.edit_entity", [
+                        "entity" => $this->getEntityLabelForInstance($item, $isLeaf)
+                    ])
+                    : trans("sharp::breadcrumb.form.create_entity", [
+                        "entity" => $this->getEntityLabelForInstance($item, $isLeaf)
+                    ]);
+            
+        }
     }
 
     /**
