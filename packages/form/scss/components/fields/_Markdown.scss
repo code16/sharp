@@ -2,7 +2,7 @@
   position: relative;
   z-index: 30;
 
-  .form-control {
+  &__form-control {
     height: var(--height);
     overflow-y: auto;
   }

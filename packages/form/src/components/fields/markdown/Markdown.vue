@@ -9,6 +9,7 @@
             <EditorContent :editor="editor" />
 
             <template v-if="editor">
+                <BubbleMenu :editor="editor" :toolbar="toolbar" />
                 <UploadFileInput :editor="editor"/>
             </template>
         </div>
@@ -30,11 +31,13 @@
     import { Upload } from "./extensions/upload/upload";
     import { TrailingNode } from "./extensions/trailing-node";
     import UploadFileInput from "./extensions/upload/UploadFileInput";
+    import BubbleMenu from "./BubbleMenu";
 
     export default {
         mixins: [ localize({ textProp:'text' }) ],
         components: {
             EditorContent,
+            BubbleMenu,
             MenuBar,
             UploadFileInput,
         },
@@ -114,7 +117,9 @@
                     TableHeader,
                     TableCell,
                     Image,
-                    Link,
+                    Link.configure({
+                        openOnClick: false,
+                    }),
                     TrailingNode,
                 ]
 
@@ -140,11 +145,19 @@
                     }
                 });
 
-                this.editor.view.dom.classList.add('card-body', 'form-control', 'editor__content');
+                this.editor.view.dom.classList.add(
+                    'card-body',
+                    'form-control',
+                    'editor__content',
+                    'SharpMarkdown__form-control',
+                );
             },
         },
         mounted() {
             this.createEditor();
+        },
+        beforeDestroy() {
+            this.editor.destroy()
         },
     }
 </script>

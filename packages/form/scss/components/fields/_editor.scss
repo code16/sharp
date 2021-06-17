@@ -82,7 +82,7 @@
     }
 
     .btn-group {
-      &:not(:first-child) {
+      &:not(:first-child):not(.dropdown) {
         margin-left: .5rem;
       }
     }

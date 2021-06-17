@@ -8,6 +8,8 @@ export const Upload = Node.create({
 
     group: 'block',
 
+    atom: true,
+
     isolating: true,
 
     priority: 150,
