@@ -4,31 +4,46 @@
         variant="light"
         :active="active"
         :show-caret="false"
-        @show="handleLinkDropdownShow"
-        @shown="handleLinkDropdownShown"
+        v-bind="$attrs"
+        @show="handleDropdownShow"
+        @shown="handleDropdownShown"
+        @hide="handleDropdownHide"
     >
         <template v-slot:text>
             <slot />
         </template>
 
         <b-dropdown-form @submit.prevent="handleLinkSubmitted">
-            <b-form-group :id="`${id}-label`" class="mb-3" label="Label" v-slot="{ id }">
-                <TextInput :id="id" v-model="label" />
-            </b-form-group>
+            <template v-if="hasLabelInput">
+                <div class="mb-3">
+                    <label class="form-label" :for="fieldId('label')">
+                        Label
+                    </label>
+                    <TextInput :id="fieldId('label')" v-model="label" />
+                </div>
+            </template>
 
-            <b-form-group :id="`${id}-href`" class="mb-3" label="Address" v-slot="{ id }">
-                <TextInput :id="id" v-model="href" placeholder="https://example.org" ref="input" />
-            </b-form-group>
+            <div class="mb-3">
+                <label class="form-label" :for="fieldId('href')">
+                    URL Address
+                </label>
+                <TextInput :id="fieldId('href')" v-model="href" placeholder="https://example.org" ref="input" />
+            </div>
 
             <div class="mt-3">
-                <template v-if="active">
-                    <Button type="button" variant="primary" @click="handleRemoveClicked">
+                <Button type="submit" variant="primary">
+                    <template v-if="isEdit">
+                        Update
+                    </template>
+                    <template v-else>
+                        Insert
+                    </template>
+                </Button>
+                <template v-if="isEdit">
+                    <Button type="button" variant="danger" outline @click="handleRemoveClicked">
                         Remove
                     </Button>
                 </template>
-                <Button type="submit" variant="primary">
-                    Insert
-                </Button>
             </div>
         </b-dropdown-form>
     </Dropdown>
@@ -38,7 +53,6 @@
     import { BFormGroup, BDropdownForm } from 'bootstrap-vue';
     import { Button, Dropdown } from "sharp-ui";
     import TextInput from '../../Text';
-
 
     export default {
         components: {
@@ -57,31 +71,68 @@
             return {
                 label: null,
                 href: null,
+                hasSelectedText: false,
+                inserted: false,
+                selection: null,
             }
         },
+        computed: {
+            hasLabelInput() {
+                return !this.active && !this.hasSelectedText;
+            },
+            isEdit() {
+                return this.inserted;
+            },
+        },
         methods: {
-            fieldId() {
+            fieldId(name) {
+                return `${this.id}-${name}`;
+            },
+            handleDropdownShow() {
+                const selection = this.editor.state.selection;
 
-            },
-            handleLinkDropdownShow() {
-                if(this.active) {
-                    console.log(this.editor.getAttributes('link'));
-                }
                 this.href = null;
+                this.inserted = false;
+                this.hasSelectedText = !selection.empty;
+
+                if(this.active) {
+                    const attrs = this.editor.getAttributes('link');
+                    this.href = attrs?.href;
+                    this.inserted = true;
+                }
+
+                if(this.hasSelectedText) {
+                    this.editor.commands.setLink({ href:'#' });
+                    this.selection = {
+                        from: selection.from,
+                        to: selection.to,
+                    }
+                }
             },
-            handleLinkDropdownShown() {
+            handleDropdownShown() {
                 setTimeout(() => {
                     this.$refs.input.focus();
                 }, 0);
+            },
+            handleDropdownHide() {
+                if(!this.inserted && this.hasSelectedText) {
+                    const { from, to } = this.editor.state.selection;
+                    this.editor.chain()
+                        .setTextSelection(this.selection.from, this.selection.to)
+                        .unsetLink()
+                        .setTextSelection(from, to)
+                        .run();
+                }
             },
             handleLinkSubmitted() {
                 this.$emit('submit', {
                     href: this.href,
                     label: this.label,
                 });
+                this.inserted = true;
             },
             handleRemoveClicked() {
-
+                this.$emit('remove');
             },
         }
     }

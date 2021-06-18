@@ -7,7 +7,10 @@
                         <LinkDropdown
                             :id="id"
                             :active="isActive(button)"
+                            :editor="editor"
+                            :dropup="bubbleMenu"
                             @submit="handleLinkSubmitted"
+                            @remove="handleRemoveLinkClicked"
                         >
                             <i :class="getIcon(button)"></i>
                         </LinkDropdown>
@@ -75,6 +78,9 @@
             },
             handleLinkSubmitted({ href, label }) {
                 buttons.link.command(this.editor, { href, label });
+            },
+            handleRemoveLinkClicked() {
+                this.editor.chain().focus().unsetLink().run();
             },
         },
     }

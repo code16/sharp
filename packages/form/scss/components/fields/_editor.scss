@@ -47,11 +47,18 @@
         box-shadow: $box-shadow;
       }
     }
+    mark[data-color="selection"] {
+      background-color: #ACCEF7;
+      padding: 0;
+    }
   }
 
   &__link-dropdown {
     .dropdown-menu {
       width: 18rem;
+      &[x-placement^=top] {
+        bottom: auto;
+      }
     }
   }
 

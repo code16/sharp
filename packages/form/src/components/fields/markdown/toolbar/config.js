@@ -52,8 +52,8 @@ export const buttons = {
     'link': {
         command: (editor, { href, label }) => {
             const selection = editor.state.tr.selection;
-            if(selection.$from.pos === selection.$to.pos) {
-                editor.chain().focus().insertContent(`<a href="${href}">${label}</a>`).run();
+            if(selection.empty) {
+                editor.chain().focus().insertContent(`<a href="${href}">${label || href}</a>`).run();
             } else {
                 editor.chain().focus().toggleLink({ href }).run()
             }
