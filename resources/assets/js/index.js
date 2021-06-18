@@ -1,5 +1,5 @@
 
-export { api, apiUrl, getXsrfToken } from './api';
+export { api, apiUrl, getXsrfToken, handleErrorAlert, getErrorMessage } from './api';
 export { lang } from './util/i18n';
 export { search } from './util/search';
 export * from './util/querystring';
