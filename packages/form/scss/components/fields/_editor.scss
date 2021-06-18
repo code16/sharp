@@ -49,6 +49,12 @@
     }
   }
 
+  &__link-dropdown {
+    .dropdown-menu {
+      width: 18rem;
+    }
+  }
+
   &__toolbar {
     .fa-paperclip {
       -webkit-text-stroke: .03em $ui-03;
