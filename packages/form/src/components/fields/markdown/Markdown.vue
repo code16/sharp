@@ -38,6 +38,7 @@
     import { TrailingNode } from "./extensions/trailing-node";
     import UploadFileInput from "./extensions/upload/UploadFileInput";
     import BubbleMenu from "./BubbleMenu";
+    import { filesEquals } from "../../../util/upload";
 
     export default {
         mixins: [ localize({ textProp:'text' }) ],
@@ -95,8 +96,8 @@
             getUploadExtension() {
                 return Upload.configure({
                     fieldProps: this.innerComponents.upload,
-                    getFileByName: (name) => {
-                        return this.value.files?.find(file => file.name === name);
+                    findFile: attrs => {
+                        return this.value.files?.find(file => filesEquals(attrs, file));
                     },
                     onSuccess: (value) => {
                         this.$emit('input', {
@@ -107,13 +108,13 @@
                     onRemove: (value) => {
                         this.$emit('input', {
                             ...this.value,
-                            files: this.value.files?.filter(file => file.name !== value.name),
+                            files: this.value.files?.filter(file => !filesEquals(file, value)),
                         });
                     },
                     onUpdate: (value) => {
                         this.$emit('input', {
                             ...this.value,
-                            files: this.value.files?.map(file => file.name === value.name ? value : file),
+                            files: this.value.files?.map(file => filesEquals(file, value) ? value : file),
                         });
                     },
                 });
