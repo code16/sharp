@@ -50,7 +50,6 @@ class UploadFormatter extends SharpFieldFormatter
         $storage = $this->filesystem->disk($field->storageDisk());
 
         if($this->isUploaded($value)) {
-
             if($field->isShouldOptimizeImage()) {
                 $optimizerChain = OptimizerChainFactory::create();
                 // we do not need to check for exception nor file format because:
@@ -110,7 +109,7 @@ class UploadFormatter extends SharpFieldFormatter
      */
     protected function isUploaded($value): bool
     {
-        return isset($value["uploaded"]) && $value["uploaded"];
+        return $value["uploaded"] ?? false;
     }
 
     /**

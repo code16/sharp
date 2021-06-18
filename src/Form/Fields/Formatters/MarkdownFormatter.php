@@ -4,6 +4,9 @@ namespace Code16\Sharp\Form\Fields\Formatters;
 
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Form\Fields\SharpFormField;
+use DOMDocument;
+use DOMElement;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
 class MarkdownFormatter extends SharpFieldFormatter
@@ -16,19 +19,14 @@ class MarkdownFormatter extends SharpFieldFormatter
      */
     function toFront(SharpFormField $field, $value)
     {
-        $array = [
-            "text" => $value
+        return [
+            "text" => $value,
+            "files" => $this->extractEmbeddedUploads($value)
+                ->map(function(array $uploadAttributes) {
+                    return $this->getUpload($uploadAttributes);
+                })
+                ->toArray()
         ];
-
-        foreach($this->extractEmbeddedUploads($value) as $filename) {
-            $upload = $this->getUpload($filename);
-
-            if($upload) {
-                $array["files"][] = $upload;
-            }
-        }
-
-        return $array;
     }
 
     /**
@@ -41,105 +39,110 @@ class MarkdownFormatter extends SharpFieldFormatter
     {
         $text = $value['text'] ?? '';
 
-        if(isset($value["files"])) {
+        if(count($value["files"] ?? [])) {
+            $dom = $this->getDomDocument($text);
             $uploadFormatter = app(UploadFormatter::class);
 
             foreach($value["files"] as $file) {
-                // Fist we remove the disk from the file name in order to make
-                // the UploadFormatter fromFront code work properly
-                $originalName = $file["name"];
-                if(($pos = strpos($originalName, ':')) !== false) {
-                    $file["name"] = substr($originalName, $pos+1);
-                }
-
                 $upload = $uploadFormatter
                     ->setInstanceId($this->instanceId)
                     ->fromFront($field, $attribute, $file);
 
                 if(isset($upload["file_name"])) {
                     // New file was uploaded. We have to update the name of the file in the markdown
-                    $text = str_replace(
-                        "![]({$originalName})",
-                        "![]({$field->storageDisk()}:{$upload["file_name"]})",
-                        $text
-                    );
+                    
+                    /** @var DOMElement $domElement */
+                    $domElement = collect($dom->getElementsByTagName('x-sharp-media'))
+                        ->first(function(DOMElement $uploadElement) use ($file) {
+                            return $uploadElement->getAttribute("uploaded") === "true"
+                                && $uploadElement->getAttribute("name") === $file["name"];
+                        });
+                    
+                    $domElement->setAttribute("name", basename($upload["file_name"]));
+                    $domElement->setAttribute("path", $upload["file_name"]);
+                    $domElement->setAttribute("disk", $upload["disk"]);
 
                 } elseif($upload["transformed"] ?? false) {
                     // File was pre-existing and was transformed: we must
                     // refresh all its thumbnails (meaning delete them)
-                    $this->deleteThumbnails($originalName);
+                    $this->deleteThumbnails($file);
                 }
             }
+            
+            $text = $this->formatDomStringValue($dom);
         }
         
         // Normalize \n
-        $text = preg_replace('/\R/', "\n", $text);
-        
-        // Ensure \n\n before file...
-        $text = preg_replace('/([^\n])\n!\[/', "$1\n\n![", $text);
-        // ... and \n\n after file.
-        $text = preg_replace('/(!\[\]\(.*\))\n([^\n])/', "$1\n\n$2", $text);
-
-        return $text;
+        return preg_replace('/\R/', "\n", $text);
+    }
+    
+    protected function getDomDocument(string $content): DOMDocument
+    {
+        return tap(new DOMDocument(), function(DOMDocument $dom) use ($content) {
+            @$dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        });
     }
 
-    /**
-     * @param string|array $texts
-     * @return array
-     */
-    protected function extractEmbeddedUploads($texts): array
+    protected function extractEmbeddedUploads(string $content): Collection
     {
-        $matches = [];
+        return collect($this->getDomDocument($content)->getElementsByTagName('x-sharp-media'))
+            ->map(function(DOMElement $uploadElement) {
+                return collect($uploadElement->attributes)
+                    ->mapWithKeys(function($attr) {
+                        return [$attr->nodeName => $attr->nodeValue];
+                    })
+                    ->toArray();
+            });
+    }
 
-        foreach((array)$texts as $md) {
-            preg_match_all(
-                '/!\[[^\]]*\]\((?<filename>.*?)(?=\"|\))(?<optionalpart>\".*\")?\)/',
-                $md, $localeMatches, PREG_SET_ORDER, 0
+    protected function formatDomStringValue(DOMDocument $dom): string
+    {
+        $wrapperElement = $dom->firstChild;
+        $newParent = $wrapperElement->parentNode;
+        foreach ($wrapperElement->childNodes as $child) {
+            $newParent->insertBefore(
+                $child->cloneNode(true), 
+                $wrapperElement
             );
-
-            $matches = array_merge($matches, $localeMatches);
         }
-
-        return collect($matches)
-            ->map(function($match) {
-                return trim($match["filename"]);
-            })
-            ->all();
+        $newParent->removeChild($wrapperElement);
+        
+        return trim($dom->saveHTML());
     }
 
-    protected function getUpload(string $fullFileName): array
+    protected function getUpload(array $uploadAttributes): array
     {
-        list($disk, $filename) = explode(":", $fullFileName);
-
         $model = new SharpUploadModel([
-            "file_name" => $filename,
-            "disk" => $disk,
-            "size" => $this->getFileSize($fullFileName)
+            "file_name" => $uploadAttributes["path"],
+            "disk" => $uploadAttributes["disk"],
         ]);
 
-        return [
-            "name" => $fullFileName,
-            "size" => $model->size,
-            "thumbnail" => $model->thumbnail(1000, 400)
-        ];
+        return array_merge(
+            $uploadAttributes,
+            [
+                "size" => $this->getFileSize($uploadAttributes),
+                "thumbnail" => $model->thumbnail(1000, 400)
+            ]
+        );
     }
 
-    protected function deleteThumbnails(string $fullFileName): void
+    protected function deleteThumbnails(array $uploadAttributes): void
     {
-        list($disk, $filename) = explode(":", $fullFileName);
+        $uploadModel = new SharpUploadModel(
+            [
+                "file_name" => $uploadAttributes["path"],
+                "disk" => $uploadAttributes["disk"]
+            ]
+        );
 
-        (new SharpUploadModel([
-            "file_name" => $filename,
-            "disk" => $disk
-        ]))->deleteAllThumbnails();
+        $uploadModel->deleteAllThumbnails();
     }
 
-    protected function getFileSize(string $fullFileName): ?int
+    protected function getFileSize(array $uploadAttributes): ?int
     {
         try {
-            list($disk, $filename) = explode(":", $fullFileName);
-
-            return Storage::disk($disk)->size($filename);
+            return Storage::disk($uploadAttributes["disk"])
+                ->size($uploadAttributes["path"]);
 
         } catch(\Exception $ex) {
             return null;
