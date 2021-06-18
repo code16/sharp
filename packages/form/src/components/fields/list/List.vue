@@ -148,10 +148,7 @@
             },
             collapsedItemTemplate: String,
             maxItemCount: Number,
-            bulkUploadField: {
-                type: String,
-                default: 'file',
-            },
+            bulkUploadField: String,
             bulkUploadLimit: {
                 type: Number,
                 default: 10,
@@ -185,13 +182,16 @@
                     filter: '.SharpListUpload',
                 };
             },
-            showAddButton() {
+            canAddItem() {
                 return this.addable &&
                     (this.list.length < this.maxItemCount || !this.maxItemCount) &&
                     !this.readOnly;
             },
+            showAddButton() {
+                return this.canAddItem;
+            },
             showInsertButton() {
-                return this.showAddButton && this.sortable && !this.isReadOnly;
+                return this.canAddItem && this.sortable && !this.isReadOnly;
             },
             showSortButton() {
                 return !this.hasPendingActions && this.sortable && this.list.length > 1;
@@ -212,7 +212,9 @@
                 return this.readOnly || this.dragActive;
             },
             hasUpload() {
-                return this.uploadField?.type === 'upload';
+                return this.uploadField?.type === 'upload'
+                    && this.canAddItem
+                    && this.uploadLimit > 0;
             },
             uploadField() {
                 return this.bulkUploadField

@@ -112,7 +112,7 @@
 
     import { Modal, Button } from 'sharp-ui';
     import { Localization } from 'sharp/mixins';
-    import { filesizeLabel } from 'sharp';
+    import { filesizeLabel, getErrorMessage, handleErrorAlert } from 'sharp';
 
     import rotateResize from './rotate';
     import { downloadFileUrl } from "../../../api";
@@ -277,10 +277,27 @@
                 this.setPending(true);
             },
             async onStatusError() {
+                const xhr = this.file.xhrResponse;
                 const msg = this.file.errorMessage;
                 this.setPending(false);
                 await this.$nextTick();
-                this.$emit('error', msg);
+                if(!xhr?.statusCode) {
+                    this.$emit('error', msg);
+                } else {
+                   this.handleUploadError(xhr);
+                }
+            },
+            handleUploadError(xhr) {
+                const data = JSON.parse(xhr.responseText);
+                const status = xhr.statusCode;
+                if(status === 422) {
+                    const message = Object.values(data.errors ?? {}).join(', ');
+                    this.$emit('error', message);
+                } else {
+                    const message = getErrorMessage({ data, status });
+                    handleErrorAlert({ data, status });
+                    this.$emit('error', message);
+                }
             },
             onStatusSuccess() {
                 let data = {};
