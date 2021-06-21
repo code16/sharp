@@ -31,7 +31,6 @@
     import TableHeader from '@tiptap/extension-table-header';
     import Image from '@tiptap/extension-image';
     import Link from '@tiptap/extension-link';
-    import Underline from '@tiptap/extension-underline';
     import MenuBar from "./toolbar/MenuBar";
     import localize from '../../../mixins/localize/editor';
     import { Upload } from "./extensions/upload/upload";
@@ -132,7 +131,6 @@
                     Link.configure({
                         openOnClick: false,
                     }),
-                    Underline,
                     TrailingNode,
                 ]
 
