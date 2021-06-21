@@ -77,7 +77,9 @@ else {
         ],
         resolve: {
             alias: {
-                'tiptap-markdown': path.resolve(__dirname, '../packages/tiptap-markdown'),
+                ...require('fs').existsSync('../packages/tiptap-markdown') && {
+                    'tiptap-markdown': path.resolve(__dirname, '../packages/tiptap-markdown')
+                },
             },
             modules: [path.resolve(__dirname, 'node_modules'), 'node_modules'],
         }
