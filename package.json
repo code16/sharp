@@ -113,6 +113,7 @@
     "sharp-form": "file:packages/form",
     "sharp-show": "file:packages/show",
     "sharp-ui": "file:packages/ui",
+    "tiptap-markdown": "^0.2.0",
     "trix": "^1.0.0",
     "vue": "^2.6.11",
     "vue-apexcharts": "^1.6.0",
