@@ -217,9 +217,9 @@
                 });
             },
             updateDocumentTitle(show) {
-                const breadcrumbLabel = show.breadcrumb?.items[show.breadcrumb.items.length - 1]?.name;
-                if(breadcrumbLabel && show.config.breadcrumbAttribute) {
-                    document.title = `${breadcrumbLabel}, ${document.title}`;
+                const label = show.breadcrumb?.items[show.breadcrumb.items.length - 1]?.documentTitleLabel;
+                if(label) {
+                    document.title = `${label}, ${document.title}`;
                 }
             },
             async init() {

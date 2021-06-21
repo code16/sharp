@@ -4,24 +4,16 @@
             <div class="btn-group">
                 <template v-for="button in group">
                     <template v-if="button === 'link'">
-                        <Dropdown
-                            variant="light"
+                        <LinkDropdown
+                            :id="id"
                             :active="isActive(button)"
-                            :show-caret="false"
-                            @show="handleLinkDropdownShow"
-                            :key="button"
+                            :editor="editor"
+                            :dropup="bubbleMenu"
+                            @submit="handleLinkSubmitted"
+                            @remove="handleRemoveLinkClicked"
                         >
-                            <template v-slot:text>
-                                <i :class="getIcon(button)"></i>
-                            </template>
-
-                            <b-dropdown-form @submit.prevent="handleLinkSubmitted">
-                                <input v-model="href" type="text" class="form-control">
-                                <Button variant="primary">
-                                    Insert
-                                </Button>
-                            </b-dropdown-form>
-                        </Dropdown>
+                            <i :class="getIcon(button)"></i>
+                        </LinkDropdown>
                     </template>
                     <template v-else>
                         <Button
@@ -40,25 +32,21 @@
 </template>
 
 <script>
-    import { BDropdownForm } from 'bootstrap-vue';
     import { Button, Dropdown } from "sharp-ui";
     import { buttons } from './config';
+    import LinkDropdown from "./LinkDropdown";
 
     export default {
         components: {
+            LinkDropdown,
             Button,
             Dropdown,
-            BDropdownForm,
         },
         props: {
+            id: String,
             editor: Object,
             toolbar: Array,
             bubbleMenu: Boolean,
-        },
-        data() {
-            return {
-                href: null,
-            }
         },
         computed: {
             toolbarGroups() {
@@ -88,11 +76,11 @@
             handleClicked(button) {
                 buttons[button]?.command(this.editor);
             },
-            handleLinkDropdownShow() {
-                this.href = null;
+            handleLinkSubmitted({ href, label }) {
+                buttons.link.command(this.editor, { href, label });
             },
-            handleLinkSubmitted() {
-                buttons.link.command(this.editor, this.href);
+            handleRemoveLinkClicked() {
+                this.editor.chain().focus().unsetLink().run();
             },
         },
     }

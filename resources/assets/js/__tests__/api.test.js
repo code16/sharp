@@ -58,7 +58,7 @@ describe('api', () => {
             });
 
             expect(showAlert).toHaveBeenCalledTimes(1);
-            expect(showAlert).toHaveBeenCalledWith('unauthorized', {
+            expect(showAlert).toHaveBeenCalledWith('{{ modals.401.message }}', {
                 title: expect.stringMatching(/.+/),
                 isError: true,
                 okCallback: expect.any(Function)
@@ -97,7 +97,7 @@ describe('api', () => {
                 }
             });
             expect(showAlert).toHaveBeenCalledTimes(2);
-            expect(showAlert).toHaveBeenLastCalledWith('Not found', {
+            expect(showAlert).toHaveBeenLastCalledWith('{{ modals.404.message }}', {
                 title: "{{ modals.404.title }}",
                 isError: true,
             });
@@ -110,7 +110,7 @@ describe('api', () => {
                 }
             });
             expect(showAlert).toHaveBeenCalledTimes(3);
-            expect(showAlert).toHaveBeenLastCalledWith('custom error', {
+            expect(showAlert).toHaveBeenLastCalledWith('{{ modals.417.message }}', {
                 title: "{{ modals.417.title }}",
                 isError: true,
             });

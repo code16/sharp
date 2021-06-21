@@ -1,4 +1,4 @@
-import { getToolbarIcon } from '../../../util/icons';
+import { getToolbarIcon } from '../../../../util/icons';
 
 
 export const buttons = {
@@ -50,10 +50,10 @@ export const buttons = {
         icon: getToolbarIcon('ol'),
     },
     'link': {
-        command: (editor, href) => {
+        command: (editor, { href, label }) => {
             const selection = editor.state.tr.selection;
-            if(selection.$from.pos === selection.$to.pos) {
-                editor.chain().focus().insertContent(`<a href="${href}">${href}</a>`).run();
+            if(selection.empty) {
+                editor.chain().focus().insertContent(`<a href="${href}">${label || href}</a>`).run();
             } else {
                 editor.chain().focus().toggleLink({ href }).run()
             }

@@ -3,13 +3,18 @@
         <div class="card">
             <div class="card-header">
                 <template v-if="editor">
-                    <MenuBar :editor="editor" :toolbar="toolbar" />
+                    <MenuBar :id="uniqueIdentifier" :editor="editor" :toolbar="toolbar" />
                 </template>
             </div>
             <EditorContent :editor="editor" />
 
             <template v-if="editor">
-                <BubbleMenu :editor="editor" :toolbar="toolbar" />
+                <BubbleMenu
+                    :id="uniqueIdentifier"
+                    :editor="editor"
+                    :toolbar="toolbar"
+                    :ignored-extensions="bubbleMenuIgnoredExtensions"
+                />
                 <UploadFileInput :editor="editor"/>
             </template>
         </div>
@@ -26,12 +31,13 @@
     import TableHeader from '@tiptap/extension-table-header';
     import Image from '@tiptap/extension-image';
     import Link from '@tiptap/extension-link';
-    import MenuBar from "./MenuBar";
+    import MenuBar from "./toolbar/MenuBar";
     import localize from '../../../mixins/localize/editor';
     import { Upload } from "./extensions/upload/upload";
     import { TrailingNode } from "./extensions/trailing-node";
     import UploadFileInput from "./extensions/upload/UploadFileInput";
     import BubbleMenu from "./BubbleMenu";
+    import { filesEquals } from "../../../util/upload";
 
     export default {
         mixins: [ localize({ textProp:'text' }) ],
@@ -74,6 +80,11 @@
             hasUpload() {
                 return !!this.innerComponents?.upload;
             },
+            bubbleMenuIgnoredExtensions() {
+                return [
+                    Upload,
+                ]
+            },
         },
         methods: {
             async handleUpdate() {
@@ -84,8 +95,8 @@
             getUploadExtension() {
                 return Upload.configure({
                     fieldProps: this.innerComponents.upload,
-                    getFileByName: (name) => {
-                        return this.value.files?.find(file => file.name === name);
+                    findFile: attrs => {
+                        return this.value.files?.find(file => filesEquals(attrs, file));
                     },
                     onSuccess: (value) => {
                         this.$emit('input', {
@@ -96,13 +107,13 @@
                     onRemove: (value) => {
                         this.$emit('input', {
                             ...this.value,
-                            files: this.value.files?.filter(file => file.name !== value.name),
+                            files: this.value.files?.filter(file => !filesEquals(file, value)),
                         });
                     },
                     onUpdate: (value) => {
                         this.$emit('input', {
                             ...this.value,
-                            files: this.value.files?.map(file => file.name === value.name ? value : file),
+                            files: this.value.files?.map(file => filesEquals(file, value) ? value : file),
                         });
                     },
                 });
