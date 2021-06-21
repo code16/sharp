@@ -31,6 +31,7 @@
     import TableHeader from '@tiptap/extension-table-header';
     import Image from '@tiptap/extension-image';
     import Link from '@tiptap/extension-link';
+    import HardBreak from '@tiptap/extension-hard-break';
     import MenuBar from "./toolbar/MenuBar";
     import localize from '../../../mixins/localize/editor';
     import { Upload } from "./extensions/upload/upload";
@@ -83,6 +84,7 @@
             bubbleMenuIgnoredExtensions() {
                 return [
                     Upload,
+                    HardBreak,
                 ]
             },
         },
