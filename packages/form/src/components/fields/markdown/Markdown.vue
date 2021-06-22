@@ -31,7 +31,7 @@
     import TableHeader from '@tiptap/extension-table-header';
     import Image from '@tiptap/extension-image';
     import Link from '@tiptap/extension-link';
-    import HardBreak from '@tiptap/extension-hard-break';
+    import HorizontalRule from '@tiptap/extension-horizontal-rule';
     import MenuBar from "./toolbar/MenuBar";
     import localize from '../../../mixins/localize/editor';
     import { Upload } from "./extensions/upload/upload";
@@ -84,7 +84,7 @@
             bubbleMenuIgnoredExtensions() {
                 return [
                     Upload,
-                    HardBreak,
+                    HorizontalRule,
                 ]
             },
         },
@@ -124,12 +124,17 @@
                 const MarkdownEditor = createMarkdownEditor(Editor);
                 const markdownExtensions = [];
                 const extensions = [
-                    StarterKit,
+                    StarterKit.configure({
+                        horizontalRule: false,
+                    }),
                     Table,
                     TableRow,
                     TableHeader,
                     TableCell,
                     Image,
+                    HorizontalRule.extend({
+                        atom: true,
+                    }),
                     Link.configure({
                         openOnClick: false,
                     }),
