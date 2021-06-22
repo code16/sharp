@@ -17,19 +17,31 @@
                     <div class="SharpDataList__thead" ref="head">
                         <DataListRow :columns="columns" header>
                             <template v-slot:cell="{ column }">
-                                <span>{{ column.label }}</span>
-                                <template v-if="column.sortable">
-                                    <svg class="SharpDataList__caret"
-                                        :class="{
-                                          'SharpDataList__caret--selected': sort === column.key,
-                                          'SharpDataList__caret--ascending': sort === column.key && dir === 'asc'
-                                        }"
-                                        width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd"
-                                    >
-                                        <path d="M10 0L5 5 0 0z"></path>
-                                    </svg>
-                                    <a class="SharpDataList__sort-link" @click.prevent="handleSortClicked(column.key)" href=""></a>
-                                </template>
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <div class="row gx-2">
+                                            <div class="col" style="min-width: 0">
+                                                <div class="overflow-hidden">
+                                                    {{ column.label }}
+                                                </div>
+                                            </div>
+                                            <template v-if="column.sortable">
+                                                <div class="col-auto">
+                                                    <svg class="SharpDataList__caret"
+                                                        :class="{
+                                                            'SharpDataList__caret--selected': sort === column.key,
+                                                            'SharpDataList__caret--ascending': sort === column.key && dir === 'asc'
+                                                        }"
+                                                        width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd"
+                                                    >
+                                                        <path d="M10 0L5 5 0 0z"></path>
+                                                    </svg>
+                                                    <a class="SharpDataList__sort-link" @click.prevent="handleSortClicked(column.key)" href=""></a>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
                             </template>
                             <template v-if="$slots['append-head']" v-slot:append>
                                 <slot name="append-head" />
