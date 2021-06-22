@@ -10,13 +10,35 @@ exports[`DataList mount empty 1`] = `
 exports[`DataList mount header: columns 1`] = `
 <div class="SharpDataList__thead">
 	<div row="[object Object]" header="true" class="MOCKED_SharpDataListRow" columns="[object Object],[object Object]">
-		<span>col1</span>
-		<!---->
-		<span>col2</span>
-		<svg width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd" class="SharpDataList__caret">
-			<path d="M10 0L5 5 0 0z"></path>
-		</svg>
-		<a href="" class="SharpDataList__sort-link"></a>
+		<div class="row">
+			<div class="col-auto">
+				<div class="row gx-2">
+					<div class="col" style="min-width: 0;">
+						<div class="overflow-hidden">
+							col1
+						</div>
+					</div>
+					<!---->
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-auto">
+				<div class="row gx-2">
+					<div class="col" style="min-width: 0;">
+						<div class="overflow-hidden">
+							col2
+						</div>
+					</div>
+					<div class="col-auto">
+						<svg width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd" class="SharpDataList__caret">
+							<path d="M10 0L5 5 0 0z"></path>
+						</svg>
+						<a href="" class="SharpDataList__sort-link"></a>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 `;
@@ -30,13 +52,35 @@ exports[`DataList mount header: default 1`] = `
 exports[`DataList mount header: sort ascending 1`] = `
 <div class="SharpDataList__thead">
 	<div row="[object Object]" header="true" class="MOCKED_SharpDataListRow" columns="[object Object],[object Object]">
-		<span>col1</span>
-		<!---->
-		<span>col2</span>
-		<svg width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd" class="SharpDataList__caret SharpDataList__caret--selected SharpDataList__caret--ascending">
-			<path d="M10 0L5 5 0 0z"></path>
-		</svg>
-		<a href="" class="SharpDataList__sort-link"></a>
+		<div class="row">
+			<div class="col-auto">
+				<div class="row gx-2">
+					<div class="col" style="min-width: 0;">
+						<div class="overflow-hidden">
+							col1
+						</div>
+					</div>
+					<!---->
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-auto">
+				<div class="row gx-2">
+					<div class="col" style="min-width: 0;">
+						<div class="overflow-hidden">
+							col2
+						</div>
+					</div>
+					<div class="col-auto">
+						<svg width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd" class="SharpDataList__caret SharpDataList__caret--selected SharpDataList__caret--ascending">
+							<path d="M10 0L5 5 0 0z"></path>
+						</svg>
+						<a href="" class="SharpDataList__sort-link"></a>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 `;
@@ -44,13 +88,35 @@ exports[`DataList mount header: sort ascending 1`] = `
 exports[`DataList mount header: sort selected 1`] = `
 <div class="SharpDataList__thead">
 	<div row="[object Object]" header="true" class="MOCKED_SharpDataListRow" columns="[object Object],[object Object]">
-		<span>col1</span>
-		<!---->
-		<span>col2</span>
-		<svg width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd" class="SharpDataList__caret SharpDataList__caret--selected">
-			<path d="M10 0L5 5 0 0z"></path>
-		</svg>
-		<a href="" class="SharpDataList__sort-link"></a>
+		<div class="row">
+			<div class="col-auto">
+				<div class="row gx-2">
+					<div class="col" style="min-width: 0;">
+						<div class="overflow-hidden">
+							col1
+						</div>
+					</div>
+					<!---->
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-auto">
+				<div class="row gx-2">
+					<div class="col" style="min-width: 0;">
+						<div class="overflow-hidden">
+							col2
+						</div>
+					</div>
+					<div class="col-auto">
+						<svg width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd" class="SharpDataList__caret SharpDataList__caret--selected">
+							<path d="M10 0L5 5 0 0z"></path>
+						</svg>
+						<a href="" class="SharpDataList__sort-link"></a>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 `;

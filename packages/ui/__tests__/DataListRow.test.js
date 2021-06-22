@@ -105,7 +105,7 @@ describe('DataListRow', ()=>{
                 });
             expect(wrapper.vm.colClasses({ hideOnXS:true }))
                 .toMatchObject({
-                    'd-none d-md-flex': true,
+                    'd-none d-md-block': true,
                 });
         });
     });
