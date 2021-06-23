@@ -54,13 +54,14 @@ class MarkdownFormatter extends SharpFieldFormatter
                     /** @var DOMElement $domElement */
                     $domElement = collect($dom->getElementsByTagName('x-sharp-media'))
                         ->first(function(DOMElement $uploadElement) use ($file) {
-                            return $uploadElement->getAttribute("uploaded") === "true"
-                                && $uploadElement->getAttribute("name") === $file["name"];
+                            return $uploadElement->getAttribute("name") === $file["name"];
                         });
                     
-                    $domElement->setAttribute("name", basename($upload["file_name"]));
-                    $domElement->setAttribute("path", $upload["file_name"]);
-                    $domElement->setAttribute("disk", $upload["disk"]);
+                    if($domElement) {
+                        $domElement->setAttribute("name", basename($upload["file_name"]));
+                        $domElement->setAttribute("path", $upload["file_name"]);
+                        $domElement->setAttribute("disk", $upload["disk"]);
+                    }
                 }
             }
             
