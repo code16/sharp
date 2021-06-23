@@ -12,30 +12,9 @@ class SharpUploadModelTest extends SharpFormEloquentBaseTest
     use TestWithSharpUploadModel;
 
     /** @test */
-    function all_thumbnails_are_destroyed_if_we_set_transformed_to_true()
-    {
-        $file = $this->createImage();
-
-        $upload = $this->createSharpUploadModel($file);
-
-        $upload->thumbnail(100, 100);
-
-        $this->assertTrue(
-            Storage::disk('public')->exists("thumbnails/data/100-100/" . basename($file))
-        );
-
-        $upload->transformed = true;
-
-        $this->assertFalse(
-            Storage::disk('public')->exists("thumbnails/data/100-100/" . basename($file))
-        );
-    }
-
-    /** @test */
     function when_setting_the_magic_file_attribute_we_can_fill_several_attributes()
     {
         $file = $this->createImage();
-
         $upload = $this->createSharpUploadModel($file);
 
         $upload->file = [
@@ -53,7 +32,6 @@ class SharpUploadModelTest extends SharpFormEloquentBaseTest
     function a_thumbnail_is_created_when_asked()
     {
         $file = $this->createImage();
-
         $upload = $this->createSharpUploadModel($file);
 
         $this->assertStringStartsWith(
@@ -64,6 +42,35 @@ class SharpUploadModelTest extends SharpFormEloquentBaseTest
         $this->assertTrue(
             Storage::disk('public')->exists("thumbnails/data/-150/" . basename($file))
         );
+    }
+
+    /** @test */
+    function transformation_filters_are_considered_when_creating_a_thumbnail()
+    {
+        $filters = [
+            "crop" => [
+                "height" => .5,
+                "width" => .75,
+                "x" => .3,
+                "y" => .34,
+            ],
+            "rotate" => [
+                "angle" => 45
+            ]
+        ];
+        
+        $upload = $this->createSharpUploadModel($this->createImage());
+        $upload->filters = $filters;
+        $upload->save();
+        
+        $folderPath = "thumbnails/data/-150_" . md5(serialize($filters)); 
+
+        $this->assertStringStartsWith(
+            "/storage/{$folderPath}/" . basename($upload->file_name),
+            $upload->thumbnail(null, 150)
+        );
+
+        $this->assertTrue(Storage::disk('public')->exists("{$folderPath}/" . basename($upload->file_name)));
     }
 
     /** @test */

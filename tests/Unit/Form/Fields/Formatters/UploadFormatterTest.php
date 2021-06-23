@@ -25,11 +25,23 @@ class UploadFormatterTest extends SharpTestCase
         $formatter = new UploadFormatter;
 
         $field = SharpFormUploadField::make("upload");
-        $this->assertEquals([
-            "name" => "test.png"
-        ], $formatter->toFront($field, [
-            "name" => "test.png"
-        ]));
+        $this->assertEquals(
+            [
+                "name" => "test.png",
+                "path" => "files/test.png",
+                "disk" => "local",
+                "thumbnail" => "path/of/thumbnail.png",
+                "size" => 2000
+            ], 
+            $formatter
+                ->toFront($field, [
+                    "name" => "test.png",
+                    "path" => "files/test.png",
+                    "disk" => "local",
+                    "thumbnail" => "path/of/thumbnail.png",
+                    "size" => 2000
+                ])
+        );
     }
 
     /** @test */
@@ -38,11 +50,15 @@ class UploadFormatterTest extends SharpTestCase
         $formatter = new UploadFormatter;
         $field = SharpFormUploadField::make("upload");
 
-        $this->assertEquals([], $formatter->fromFront(
-            $field, "attribute", [
-                "name" => "test.png"
-            ])
-        );
+        $this->assertEquals(
+            [], 
+            $formatter->fromFront(
+                $field, 
+                "attribute", 
+                [
+                    "name" => "test.png"
+                ])
+            );
     }
 
     /** @test */
@@ -54,6 +70,7 @@ class UploadFormatterTest extends SharpTestCase
         $uploadedFile->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
 
         $field = SharpFormUploadField::make("upload")
+            ->setStorageBasePath("data")
             ->setStorageDisk("local");
         
         $this->assertEquals(
@@ -62,16 +79,17 @@ class UploadFormatterTest extends SharpTestCase
                 "size" => $uploadedFile->getSize(),
                 "mime_type" => 'image/jpeg',
                 "disk" => "local",
-                "transformed" => false
+                "filters" => null
             ], 
-            (new UploadFormatter)->fromFront(
-                $field, 
-                "attribute", 
-                [
-                    "name" => "/image.jpg",
-                    "uploaded" => true
-                ]
-            )
+            (new UploadFormatter)
+                ->fromFront(
+                    $field, 
+                    "attribute", 
+                    [
+                        "name" => "/image.jpg",
+                        "uploaded" => true
+                    ]
+                )
         );
 
         Storage::disk('local')->assertExists("data/image.jpg");
@@ -127,60 +145,60 @@ class UploadFormatterTest extends SharpTestCase
     }
 
 
-    /** @test */
-    function we_handle_crop_transformation_on_upload_from_front()
-    {
-        UploadedFile::fake()
-            ->image("image.jpg")
-            ->storeAs('/test', 'image.jpg', ['disk' => 'local']);
-
-        $field = SharpFormUploadField::make("upload")
-            ->setStorageBasePath("/test")
-            ->setCropRatio("16:9")
-            ->setStorageDisk("local");
-
-        $this->assertArraySubset(
-            ["transformed" => true],
-            (new UploadFormatter)->fromFront(
-                $field, 
-                "attribute", 
-                [
-                    "name" => "/test/image.jpg",
-                    "cropData" => [
-                        "height" => .8, "width" => .6, "x" => 0, "y" => .1, "rotate" => 1
-                    ],
-                    "uploaded" => false
-                ]
-            )
-        );
-    }
-
-    /** @test */
-    function we_handle_crop_transformation_on_a_previously_upload_from_front()
-    {
-        UploadedFile::fake()
-            ->image("image.jpg", 600, 600)
-            ->storeAs('/data/test', 'image.jpg', ['disk' => 'local']);
-
-        $field = SharpFormUploadField::make("upload")
-            ->setStorageDisk("local")
-            ->setCropRatio("16:9")
-            ->setStorageBasePath("data/test");
-
-        $this->assertArraySubset(
-            ["transformed" => true], 
-            (new UploadFormatter)->fromFront(
-                $field, 
-                "attribute", [
-                    "name" => "/data/test/image.jpg",
-                    "cropData" => [
-                        "height" => .8, "width" => .6, "x" => 0, "y" => .1, "rotate" => 1
-                    ],
-                    "uploaded" => false
-                ]
-            )
-        );
-    }
+//    /** @test */
+//    function we_handle_crop_transformation_on_upload_from_front()
+//    {
+//        UploadedFile::fake()
+//            ->image("image.jpg")
+//            ->storeAs('/test', 'image.jpg', ['disk' => 'local']);
+//
+//        $field = SharpFormUploadField::make("upload")
+//            ->setStorageBasePath("/test")
+//            ->setCropRatio("16:9")
+//            ->setStorageDisk("local");
+//
+//        $this->assertArraySubset(
+//            ["transformed" => true],
+//            (new UploadFormatter)->fromFront(
+//                $field, 
+//                "attribute", 
+//                [
+//                    "name" => "/test/image.jpg",
+//                    "cropData" => [
+//                        "height" => .8, "width" => .6, "x" => 0, "y" => .1, "rotate" => 1
+//                    ],
+//                    "uploaded" => false
+//                ]
+//            )
+//        );
+//    }
+//
+//    /** @test */
+//    function we_handle_crop_transformation_on_a_previously_upload_from_front()
+//    {
+//        UploadedFile::fake()
+//            ->image("image.jpg", 600, 600)
+//            ->storeAs('/data/test', 'image.jpg', ['disk' => 'local']);
+//
+//        $field = SharpFormUploadField::make("upload")
+//            ->setStorageDisk("local")
+//            ->setCropRatio("16:9")
+//            ->setStorageBasePath("data/test");
+//
+//        $this->assertArraySubset(
+//            ["transformed" => true], 
+//            (new UploadFormatter)->fromFront(
+//                $field, 
+//                "attribute", [
+//                    "name" => "/data/test/image.jpg",
+//                    "cropData" => [
+//                        "height" => .8, "width" => .6, "x" => 0, "y" => .1, "rotate" => 1
+//                    ],
+//                    "uploaded" => false
+//                ]
+//            )
+//        );
+//    }
 
     /** @test */
     public function we_optimize_uploaded_images_if_configured()
