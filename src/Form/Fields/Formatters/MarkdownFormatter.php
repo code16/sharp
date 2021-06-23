@@ -8,6 +8,7 @@ use DOMDocument;
 use DOMElement;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class MarkdownFormatter extends SharpFieldFormatter
 {
@@ -91,11 +92,36 @@ class MarkdownFormatter extends SharpFieldFormatter
             ->map(function($content) {
                 return collect($this->getDomDocument($content)->getElementsByTagName('x-sharp-media'))
                     ->map(function(DOMElement $uploadElement) {
-                        return collect($uploadElement->attributes)
+                        $hasFilterAttr = false;
+                        $uploadAttributes = collect($uploadElement->attributes)
+                            ->filter(function($attr) use (&$hasFilterAttr) {
+                                if(Str::startsWith($attr->nodeName, "filter-")) {
+                                    $hasFilterAttr = true;
+                                    return false;
+                                }
+                                return true;
+                            })
                             ->mapWithKeys(function($attr) {
                                 return [$attr->nodeName => $attr->nodeValue];
                             })
                             ->toArray();
+                        
+                        if($hasFilterAttr) {
+                            if($cropData = $uploadElement->attributes->getNamedItem("filter-crop")) {
+                                $cropValues = explode(",", $cropData->nodeValue);
+                                $uploadAttributes["filters"]["crop"] = [
+                                    "x" => $cropValues[0],
+                                    "y" => $cropValues[1],
+                                    "width" => $cropValues[2],
+                                    "height" => $cropValues[3],
+                                ];
+                            }
+                            if($rotateAngle = $uploadElement->attributes->getNamedItem("filter-rotate")) {
+                                $uploadAttributes["filters"]["rotate"]["angle"] = $rotateAngle->nodeValue;
+                            }
+                        }
+                        
+                        return $uploadAttributes;
                     });
             })
             ->flatten(1);
@@ -121,13 +147,14 @@ class MarkdownFormatter extends SharpFieldFormatter
         $model = new SharpUploadModel([
             "file_name" => $uploadAttributes["path"],
             "disk" => $uploadAttributes["disk"],
+            "filters" => $uploadAttributes["filters"] ?? null
         ]);
 
         return array_merge(
             $uploadAttributes,
             [
                 "size" => $this->getFileSize($uploadAttributes),
-                "thumbnail" => $model->thumbnail(1000, 400)
+                "thumbnail" => $model->thumbnail(200, 200)
             ]
         );
     }

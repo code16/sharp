@@ -75,7 +75,55 @@ class MarkdownFormatterTest extends SharpTestCase
             $result["files"][0]
         );
         $this->assertStringStartsWith(
-            "/storage/thumbnails/data/1000-400/test.png",
+            "/storage/thumbnails/data/200-200/test.png",
+            $result["files"][0]["thumbnail"]
+        );
+    }
+
+    /** @test */
+    function the_files_array_is_properly_handled_to_front_when_containing_filters()
+    {
+        UploadedFile::fake()
+            ->image("test.png")
+            ->storeAs("data", "test.png", "local");
+
+        $value = <<<EOT
+            <x-sharp-media 
+                disk="local"
+                path="data/test.png"
+                filter-crop=".1,.2,.3,.4"
+                filter-rotate="45"
+                name="test.png"
+            ></x-sharp-media>
+        EOT;
+
+        $result = (new MarkdownFormatter)
+            ->toFront(
+                SharpFormMarkdownField::make("md"),
+                $value
+            );
+
+        $filters = [
+            "crop" => [
+                "x" => 0.1,
+                "y" => 0.2,
+                "width" => 0.3,
+                "height" => 0.4,
+            ],
+            "rotate" => [
+                "angle" => 45
+            ]
+        ];
+        
+        $this->assertArraySubset(
+            [
+                "path" => "data/test.png",
+                "filters" => $filters
+            ],
+            $result["files"][0]
+        );
+        $this->assertMatchesRegularExpression(
+            "#/storage/thumbnails/data/200-200_.*/test.png#",
             $result["files"][0]["thumbnail"]
         );
     }
@@ -218,53 +266,4 @@ class MarkdownFormatterTest extends SharpTestCase
         $this->assertCount(3, $formatter->toFront($field, $value)["files"]);
     }
 
-//    /** @test */
-//    function we_store_file_transformations_from_front()
-//    {
-//        UploadedFile::fake()
-//            ->image("image.png", 100, 100)
-//            ->storeAs("data/Test", "image.png", "local");
-//
-//        $field = SharpFormMarkdownField::make("md")
-//            ->setStorageDisk("local")
-//            ->setStorageBasePath("data/Test");
-//
-//        $this->assertStringContainsString(
-//            '<x-sharp-media name="image.png" uploaded="true" path="data/Test/image.png" disk="local"></x-sharp-media>',
-//            (new MarkdownFormatter)
-//                ->fromFront(
-//                    $field, 
-//                    "attribute", 
-//                    [
-//                        "text" => <<<EOT
-//                            <x-sharp-media 
-//                                disk="local"
-//                                path="data/Test/image.png"
-//                                name="image.png"
-//                                filter-crop="10,10,50,50"
-//                                filter-rotate="45"
-//                            ></x-sharp-media>
-//                        EOT,
-//                        "files" => [
-//                            [
-//                                "name" => "image.png",
-//                                "path" => "data/Test/image.png",
-//                                "filters" => [
-//                                    "crop" => [
-//                                        "height" => 50, 
-//                                        "width" => 50, 
-//                                        "x" => 10, 
-//                                        "y" => 10, 
-//                                    ],
-//                                    "rotate" => [
-//                                        "angle" => 45
-//                                    ]
-//                                ]
-//                            ]
-//                        ]
-//                    ])
-//        );
-//
-//        $this->assertTrue($formatter->thumbnailsDeleted);
-//    }
 }
