@@ -19,6 +19,7 @@ class MarkdownFormatterTest extends SharpTestCase
         parent::setUp();
         
         Storage::fake("local");
+        Storage::fake("public");
     }
 
     /** @test */
@@ -26,9 +27,15 @@ class MarkdownFormatterTest extends SharpTestCase
     {
         $formatter = new MarkdownFormatter;
         $field = SharpFormMarkdownField::make("md");
-        $value = Str::random();
+        $value = Str::random() . "\n\n" . Str::random();
 
-        $this->assertEquals(["text" => $value], $formatter->toFront($field, $value));
+        $this->assertEquals(
+            [
+                "text" => $value, 
+                "files" => []
+            ], 
+            $formatter->toFront($field, $value)
+        );
     }
 
     /** @test */
@@ -37,14 +44,87 @@ class MarkdownFormatterTest extends SharpTestCase
         UploadedFile::fake()
             ->image("test.png")
             ->storeAs("data", "test.png", "local");
+        
+        $value = <<<EOT
+            Some content text before
+            
+            <x-sharp-media 
+                disk="local"
+                path="data/test.png"
+                name="test.png"
+            ></x-sharp-media>
 
-        $formatter = new MarkdownFormatter;
-        $field = SharpFormMarkdownField::make("md");
-        $value = "![](local:data/test.png)";
+            Some content text after
+        EOT;
 
-        $this->assertEquals(
-            "local:data/test.png",
-            $formatter->toFront($field, $value)["files"][0]["name"]
+        $result = (new MarkdownFormatter)
+            ->toFront(
+                SharpFormMarkdownField::make("md"), 
+                $value
+            );
+        
+        $this->assertEquals($value, $result["text"]);
+        $this->assertCount(1, $result["files"]);
+        $this->assertArraySubset(
+            [
+                "path" => "data/test.png",
+                "name" => "test.png",
+                "disk" => "local",
+                "size" => 91,
+            ], 
+            $result["files"][0]
+        );
+        $this->assertStringStartsWith(
+            "/storage/thumbnails/data/200-200/test.png",
+            $result["files"][0]["thumbnail"]
+        );
+    }
+
+    /** @test */
+    function the_files_array_is_properly_handled_to_front_when_containing_filters()
+    {
+        UploadedFile::fake()
+            ->image("test.png")
+            ->storeAs("data", "test.png", "local");
+
+        $value = <<<EOT
+            <x-sharp-media 
+                disk="local"
+                path="data/test.png"
+                filter-crop=".1,.2,.3,.4"
+                filter-rotate="45"
+                name="test.png"
+            ></x-sharp-media>
+        EOT;
+
+        $result = (new MarkdownFormatter)
+            ->toFront(
+                SharpFormMarkdownField::make("md"),
+                $value
+            );
+
+        $filters = [
+            "crop" => [
+                "x" => 0.1,
+                "y" => 0.2,
+                "width" => 0.3,
+                "height" => 0.4,
+            ],
+            "rotate" => [
+                "angle" => 45
+            ]
+        ];
+        
+        $this->assertArraySubset(
+            [
+                "path" => "data/test.png",
+                "filters" => $filters
+            ],
+            $result["files"][0]
+        );
+        $this->assertMatchesRegularExpression(
+            "#/storage/thumbnails/data/200-200_.*/test.png#",
+            $result["files"][0]["thumbnail"]
         );
     }
 
@@ -55,68 +135,104 @@ class MarkdownFormatterTest extends SharpTestCase
         UploadedFile::fake()->image("test2.png")->storeAs("data", "test2.png", "local");
         UploadedFile::fake()->image("test3.png")->storeAs("data", "test3.png", "local");
 
-        $formatter = new MarkdownFormatter;
-        $field = SharpFormMarkdownField::make("md");
-        $value = "![](local:data/test.png)\n![](local:data/test2.png)\n![](local:data/test3.png)";
+        $value = <<<EOT
+            <x-sharp-media 
+                disk="local"
+                path="data/test.png"
+                name="test.png"
+            ></x-sharp-media>
+            <x-sharp-media 
+                disk="local"
+                path="data/test2.png"
+                name="test2.png"
+            ></x-sharp-media>
+            <x-sharp-media 
+                disk="local"
+                path="data/test3.png"
+                name="test3.png"
+            ></x-sharp-media>
+        EOT;
 
-        $this->assertCount(3, $formatter->toFront($field, $value)["files"]);
-    }
-
-    /** @test */
-    function we_send_the_file_size_and_thumbnail_to_front()
-    {
-        UploadedFile::fake()->image("test.png", 600, 600)->storeAs("data", "test.png", "local");
-
-        $formatter = new MarkdownFormatter;
-        $field = SharpFormMarkdownField::make("md");
-        $value = "![](local:data/test.png)";
-
-        $toFrontArray = $formatter->toFront($field, $value)["files"][0];
-
-        $this->assertEquals("local:data/test.png", $toFrontArray["name"]);
-        $this->assertTrue($toFrontArray["size"] > 0);
-        $this->assertStringStartsWith("/storage/thumbnails/data/1000-400/test.png", $toFrontArray["thumbnail"]);
+        $this->assertCount(
+            3, 
+            (new MarkdownFormatter)->toFront(
+                SharpFormMarkdownField::make("md"), 
+                $value
+            )["files"]
+        );
     }
 
     /** @test */
     function we_can_format_a_text_value_from_front()
     {
-        $formatter = new MarkdownFormatter;
-        $field = SharpFormMarkdownField::make("md");
         $value = Str::random();
-        $attribute = "attribute";
 
-        $this->assertEquals($value, $formatter->fromFront($field, $attribute, ["text"=>$value]));
+        $this->assertEquals(
+            $value, 
+            (new MarkdownFormatter)->fromFront(
+                SharpFormMarkdownField::make("md"), 
+                "attribute", 
+                ["text" => $value]
+            )
+        );
     }
 
     /** @test */
     function we_store_newly_uploaded_files_from_front()
     {
-        $formatter = new MarkdownFormatter;
-        $field = SharpFormMarkdownField::make("md");
-        $value = "![](local:new_test.png)";
-        $attribute = "attribute";
-
         app()->bind(UploadFormatter::class, function() {
             return new class extends UploadFormatter {
                 function fromFront(SharpFormField $field, string $attribute, $value)
                 {
                     return [
-                        "file_name" => "uploaded_test.png"
+                        "file_name" => "data/uploaded_test.png",
+                        "disk" => "local"
                     ];
                 }
             };
         });
 
-        $this->assertEquals(
-            "![](local:uploaded_test.png)",
-            $formatter->fromFront($field, $attribute, [
-                "text" => $value,
-                "files" => [[
-                    "name" => "local:new_test.png",
-                    "uploaded" => true
-                ]]
-            ])
+        $value = <<<EOT
+            Some content text before
+            
+            <x-sharp-media 
+                name="test.png"
+                uploaded="true"
+            ></x-sharp-media>
+
+            Some content text after
+        EOT;
+        
+        $result = (new MarkdownFormatter)
+            ->fromFront(
+                SharpFormMarkdownField::make("md")
+                    ->setStorageDisk("local")
+                    ->setStorageBasePath("data"),
+                "attribute",
+                [
+                    "text" => $value,
+                    "files" => [
+                        [
+                            "name" => "test.png",
+                            "uploaded" => true
+                        ]
+                    ]
+                ]
+            );
+        
+        $this->assertStringContainsString(
+            "Some content text before",
+            $result
+        );
+
+        $this->assertStringContainsString(
+            "Some content text after",
+            $result
+        );
+
+        $this->assertStringContainsString(
+            '<x-sharp-media name="uploaded_test.png" uploaded="true" path="data/uploaded_test.png" disk="local"></x-sharp-media>',
+            $result
         );
     }
 
@@ -126,66 +242,28 @@ class MarkdownFormatterTest extends SharpTestCase
         $formatter = new MarkdownFormatter;
         $field = SharpFormMarkdownField::make("md")->setLocalized();
         $value = [
-            "fr" => "![](local:test_fr.png)\n![](local:test2_fr.png)",
-            "en" => "![](local:test_en.png)",
+            "fr" => <<<EOT
+                <x-sharp-media 
+                    disk="local"
+                    path="data/test_fr.png"
+                    name="test_fr.png"
+                ></x-sharp-media>
+                <x-sharp-media 
+                    disk="local"
+                    path="data/test2_fr.png"
+                    name="test2_fr.png"
+                ></x-sharp-media>
+            EOT,
+            "en" => <<<EOT
+                <x-sharp-media 
+                    disk="local"
+                    path="data/test_en.png"
+                    name="test_en.png"
+                ></x-sharp-media>
+            EOT
         ];
 
         $this->assertCount(3, $formatter->toFront($field, $value)["files"]);
     }
 
-    /** @test */
-    function we_apply_transformations_from_front_on_already_existing_files()
-    {
-        UploadedFile::fake()->image("image.png", 100, 100)->storeAs("data/Test", "image.png", "local");
-
-        // We create an implementation where deleteThumbnails() is faked
-        // in order to check that it's called without changing anything
-        // else in the class. The fact that deleteThumbnails() is called
-        // is a proof that the image was transformed.
-        $formatter = new class extends MarkdownFormatter {
-            public $thumbnailsDeleted = false;
-            protected function deleteThumbnails(string $fullFileName): void
-            {
-                $this->thumbnailsDeleted = true;
-            }
-        };
-
-        $field = SharpFormMarkdownField::make("md")
-            ->setStorageDisk("local")
-            ->setStorageBasePath("data/Test");
-
-        $this->assertEquals(
-            "![](local:data/Test/image.png)",
-            $formatter->fromFront($field, "attribute", [
-                "text" => "![](local:data/Test/image.png)",
-                "files" => [[
-                    "name" => "local:data/Test/image.png",
-                    "uploaded" => false,
-                    "cropData" => [
-                        "height" => .8, "width" => .6, "x" => 0, "y" => .1, "rotate" => 0
-                    ]
-                ]]
-            ])
-        );
-
-        $this->assertTrue($formatter->thumbnailsDeleted);
-    }
-
-    /** @test */
-    function we_ensure_that_files_are_formatted_in_their_own_paragraph()
-    {
-        $formatter = new MarkdownFormatter;
-        $field = SharpFormMarkdownField::make("md");
-        
-        $this->assertEquals(
-            "before file\n\n![](local:test.png)\n\nafter file with a [link](http://www.google.fr)",
-            $formatter->fromFront($field, "attribute", [
-                "text" => "before file\n![](local:test.png)\nafter file with a [link](http://www.google.fr)",
-                "files" => [[
-                    "name" => "local:test.png",
-                    "uploaded" => false
-                ]]
-            ])
-        );
-    }
 }
