@@ -12,6 +12,7 @@ use Code16\Sharp\Http\Api\FormController;
 use Code16\Sharp\Http\Api\FormUploadController;
 use Code16\Sharp\Http\Api\GlobalFilterController;
 use Code16\Sharp\Http\Api\ShowController;
+use Code16\Sharp\Http\Api\ThumbnailController;
 use Code16\Sharp\Http\DashboardController;
 use Code16\Sharp\Http\HomeController;
 use Code16\Sharp\Http\LangController;
