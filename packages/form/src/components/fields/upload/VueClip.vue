@@ -467,7 +467,7 @@
 
             if(this.value?.file) {
                 dropzone.addFile(this.value.file);
-                this.$emit('input', null);
+                this.$emit('input', {});
             }
         },
         beforeDestroy() {
