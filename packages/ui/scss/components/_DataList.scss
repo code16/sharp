@@ -36,7 +36,6 @@
     //min-width: 500px;
     border-collapse: collapse;
     border-spacing: 0;
-    margin-bottom: 3rem;
     background-color: transparent;
 
     //padding: 0 1em;
@@ -231,6 +230,8 @@
 
     .SharpPagination {
       width: auto;
+      margin-bottom: 0;
+      margin-top: 3rem;
     }
   }
 }

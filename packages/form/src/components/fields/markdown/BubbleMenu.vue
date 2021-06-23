@@ -1,28 +1,55 @@
 <template>
-    <BubbleMenu :editor="editor" :tippy-options="tippyOptions">
+    <div style="visibility: hidden">
         <div class="card shadow border-0">
             <div class="card-body" style="padding: .75rem">
-                <MenuBar :editor="editor" :toolbar="toolbar" bubble-menu />
+                <MenuBar
+                    :id="toolbarId"
+                    :editor="editor"
+                    :toolbar="toolbar"
+                    bubble-menu
+                />
             </div>
         </div>
-    </BubbleMenu>
+    </div>
 </template>
 
 <script>
-    import { BubbleMenu } from '@tiptap/vue-2';
-    import MenuBar from "./MenuBar";
+    import MenuBar from "./toolbar/MenuBar";
     import { getNavbarHeight } from "sharp-ui";
+    import { BubbleMenuPlugin } from "./plugins/bubble-menu-plugin";
+
 
     export default {
         components: {
             MenuBar,
-            BubbleMenu,
         },
         props: {
+            id: String,
             editor: Object,
             toolbar: Array,
+            ignoredExtensions: Array,
+        },
+        watch: {
+            editor: {
+                immediate: true,
+                async handler(editor) {
+                    if (!editor) {
+                        return
+                    }
+                    await this.$nextTick();
+                    editor.registerPlugin(BubbleMenuPlugin({
+                        editor,
+                        element: this.$el,
+                        tippyOptions: this.tippyOptions,
+                        ignoredExtensions: this.ignoredExtensions,
+                    }));
+                }
+            }
         },
         computed: {
+            toolbarId() {
+                return `${this.id}-bubble`;
+            },
             tippyOptions() {
                 return {
                     popperOptions: {

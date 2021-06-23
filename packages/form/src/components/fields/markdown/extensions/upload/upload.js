@@ -19,7 +19,7 @@ export const Upload = Node.create({
         onInput: () => {},
         onRemove: () => {},
         onUpdate: () => {},
-        getFileByName: () => {},
+        findFile: ({ disk, path, name }) => {},
     },
 
     addAttributes() {
@@ -36,14 +36,18 @@ export const Upload = Node.create({
                 tag: 'img[src^="local:"]',
                 getAttrs: node => {
                     return {
-                        value: this.options.getFileByName(node.src),
+                        value: this.options.findFile({ name: node.src }),
                     }
                 }
             },
             {
                 tag: 'x-sharp-media',
                 getAttrs: node => ({
-                    value: this.options.getFileByName(node.getAttribute('src')),
+                    value: this.options.findFile({
+                        disk: node.getAttribute('disk'),
+                        path: node.getAttribute('path'),
+                        name: node.getAttribute('name'),
+                    }),
                 }),
             },
         ]
@@ -58,9 +62,9 @@ export const Upload = Node.create({
         return [
             'x-sharp-media',
             {
-                'disk': null, // todo
-                'path': value?.name,
-                'filter-crop': value?.cropData,
+                'disk': value?.disk,
+                'path': value?.path,
+                'filter-crop': value?.cropData, // todo
                 'filter-rotate': null, // todo
             }
         ];
