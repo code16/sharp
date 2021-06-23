@@ -34,14 +34,6 @@ export const Upload = Node.create({
     parseHTML() {
         return [
             {
-                tag: 'img[src^="local:"]',
-                getAttrs: node => {
-                    return {
-                        value: this.options.findFile({ name: node.src }),
-                    }
-                }
-            },
-            {
                 tag: 'x-sharp-media',
                 getAttrs: node => ({
                     value: this.options.findFile({
