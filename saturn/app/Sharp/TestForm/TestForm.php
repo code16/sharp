@@ -252,10 +252,10 @@ class TestForm extends SharpForm
         });
     }
 
-    function find($id): array
+    public function create(): array
     {
         $faker = \Faker\Factory::create();
-
+    
         return $this->transform([
             "text" => [
                 "fr" => $faker->words(3, true),
@@ -283,6 +283,10 @@ class TestForm extends SharpForm
                 "en" => 'some <strong>html stuff</strong>',
             ]
         ]);
+    }
+    
+    function find($id): array
+    {
     }
 
     function update($id, array $data)

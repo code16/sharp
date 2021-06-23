@@ -63,6 +63,9 @@
                 });
             },
             handleUpdate(value) {
+                this.updateAttributes({
+                    value,
+                });
                 this.extension.options.onUpdate(value);
             },
             handleSuccess(value) {

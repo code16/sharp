@@ -4,6 +4,9 @@ on:
     branches:
       - master
       - next
+    # ignore this for now because tests are legacy
+    branches-ignore:
+      - tiptap
   pull_request:
     branches:
       - master

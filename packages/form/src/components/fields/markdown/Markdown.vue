@@ -31,6 +31,7 @@
     import TableHeader from '@tiptap/extension-table-header';
     import Image from '@tiptap/extension-image';
     import Link from '@tiptap/extension-link';
+    import HorizontalRule from '@tiptap/extension-horizontal-rule';
     import MenuBar from "./toolbar/MenuBar";
     import localize from '../../../mixins/localize/editor';
     import { Upload } from "./extensions/upload/upload";
@@ -83,6 +84,7 @@
             bubbleMenuIgnoredExtensions() {
                 return [
                     Upload,
+                    HorizontalRule,
                 ]
             },
         },
@@ -122,12 +124,17 @@
                 const MarkdownEditor = createMarkdownEditor(Editor);
                 const markdownExtensions = [];
                 const extensions = [
-                    StarterKit,
+                    StarterKit.configure({
+                        horizontalRule: false,
+                    }),
                     Table,
                     TableRow,
                     TableHeader,
                     TableCell,
                     Image,
+                    HorizontalRule.extend({
+                        atom: true,
+                    }),
                     Link.configure({
                         openOnClick: false,
                     }),
@@ -136,15 +143,6 @@
 
                 if(this.hasUpload) {
                     extensions.push(this.getUploadExtension());
-
-                    // todo remove this when back handle <x-sharp-media>
-                    markdownExtensions.push(createMarkdownExtension(Upload, {
-                        serialize(state, node) {
-                            if(node.attrs.value?.name) {
-                                state.write("![](" + state.esc(node.attrs.value.name) + ")");
-                            }
-                        },
-                    }));
                 }
 
                 this.editor = new MarkdownEditor({

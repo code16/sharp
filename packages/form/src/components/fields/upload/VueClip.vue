@@ -387,31 +387,45 @@
                 }
             },
 
-            updateCropData(cropper) {
-                let cropData = cropper.getData(true);
-                let imgData = cropper.getImageData();
+            getFiltersFromCropData({ cropData, imageWidth, imageHeight }) {
+                let rw = imageWidth, rh = imageHeight;
 
-                let rw=imgData.naturalWidth, rh=imgData.naturalHeight;
-
-                if(Math.abs(cropData.rotate)%180) {
-                    rw = imgData.naturalHeight;
-                    rh = imgData.naturalWidth;
+                if(Math.abs(cropData.rotate) % 180) {
+                    rw = imageHeight;
+                    rh = imageWidth;
                 }
 
-                let relativeData = {
-                    width: cropData.width / rw,
-                    height: cropData.height / rh,
-                    x: cropData.x / rw,
-                    y: cropData.y / rh,
-                    rotate: cropData.rotate * -1 // counterclockwise
-                };
+                return {
+                    crop: {
+                        width: cropData.width / rw,
+                        height: cropData.height / rh,
+                        x: cropData.x / rw,
+                        y: cropData.y / rh,
+                    },
+                    rotate: {
+                        angle: cropData.rotate * -1,
+                    },
+                }
+            },
+
+            updateCropData(cropper) {
+                const cropData = cropper.getData(true);
+                const imageData = cropper.getImageData();
 
                 this.cropData = { ...cropData };
 
                 if(this.allowCrop) {
                     let data = {
                         ...this.value,
-                        cropData: relativeData,
+                        transformed: true,
+                        filters: {
+                            ...this.value?.filters,
+                            ...this.getFiltersFromCropData({
+                                cropData,
+                                imageWidth: imageData.naturalWidth,
+                                imageHeight: imageData.naturalHeight,
+                            }),
+                        }
                     };
                     this.$emit('input', data);
                     this.$emit('updated', data);
@@ -453,7 +467,7 @@
 
             if(this.value?.file) {
                 dropzone.addFile(this.value.file);
-                this.$emit('input', null);
+                this.$emit('input', {});
             }
         },
         beforeDestroy() {
