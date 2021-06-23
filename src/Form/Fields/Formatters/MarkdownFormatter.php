@@ -83,8 +83,12 @@ class MarkdownFormatter extends SharpFieldFormatter
         });
     }
 
-    protected function extractEmbeddedUploads(string $content): Collection
+    protected function extractEmbeddedUploads(string $content = null): Collection
     {
+        if(!$content) {
+            return collect();
+        }
+        
         return collect($this->getDomDocument($content)->getElementsByTagName('x-sharp-media'))
             ->map(function(DOMElement $uploadElement) {
                 return collect($uploadElement->attributes)
