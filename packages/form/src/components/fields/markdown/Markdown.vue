@@ -137,7 +137,7 @@
                     TableCell,
                     Image,
                     HorizontalRule.extend({
-                        atom: true,
+                        selectable: false,
                     }),
                     Link.configure({
                         openOnClick: false,
