@@ -96,7 +96,11 @@
             },
             getUploadExtension() {
                 return Upload.configure({
-                    fieldProps: this.innerComponents.upload,
+                    fieldProps: {
+                        ...this.innerComponents.upload,
+                        uniqueIdentifier: this.uniqueIdentifier,
+                        fieldConfigIdentifier: this.fieldConfigIdentifier,
+                    },
                     findFile: attrs => {
                         return this.value.files?.find(file => filesEquals(attrs, file));
                     },

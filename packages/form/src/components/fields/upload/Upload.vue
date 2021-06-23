@@ -1,8 +1,6 @@
 <template>
     <VueClip
         :value="value"
-        :pending-key="uniqueIdentifier"
-        :download-id="fieldConfigIdentifier"
         :options="options"
         :root="root"
         v-bind="$props"
@@ -27,8 +25,6 @@
             ...VueClip.props,
 
             value: Object,
-            uniqueIdentifier: String,
-            fieldConfigIdentifier: String,
 
             fileFilter: Array,
             maxFileSize: Number,

@@ -133,8 +133,6 @@
         mixins: [ Localization ],
 
         props: {
-            downloadId: String,
-            pendingKey: String,
             ratioX: Number,
             ratioY: Number,
             value: Object,
@@ -148,6 +146,8 @@
             root: Boolean,
             compactThumbnail: Boolean,
             focused: Boolean,
+            uniqueIdentifier: String,
+            fieldConfigIdentifier: String,
         },
 
         data() {
@@ -241,12 +241,12 @@
                 return downloadFileUrl({
                     entityKey: this.$form.entityKey,
                     instanceId: this.$form.instanceId,
-                    fieldKey: this.downloadId,
+                    fieldKey: this.fieldConfigIdentifier,
                     fileName: this.fileName,
                 });
             },
             showThumbnail() {
-                return this.imageSrc;
+                return !!this.imageSrc;
             },
             isCroppable() {
                 if(!this.croppable || !this.originalImageSrc) {
@@ -269,7 +269,7 @@
         },
         methods: {
             setPending(value) {
-                this.$form?.setUploading(this.pendingKey, value);
+                this.$form?.setUploading(this.uniqueIdentifier, value);
             },
             // status callbacks
             onStatusAdded() {
@@ -307,7 +307,6 @@
                 catch(e) { console.log(e); }
 
                 data.uploaded = true;
-                data.dataUrl = this.imageSrc;
                 this.$emit('success', data);
                 this.$emit('input', data);
 
