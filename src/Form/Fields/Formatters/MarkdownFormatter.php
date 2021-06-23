@@ -61,11 +61,6 @@ class MarkdownFormatter extends SharpFieldFormatter
                     $domElement->setAttribute("name", basename($upload["file_name"]));
                     $domElement->setAttribute("path", $upload["file_name"]);
                     $domElement->setAttribute("disk", $upload["disk"]);
-
-                } elseif($upload["transformed"] ?? false) {
-                    // File was pre-existing and was transformed: we must
-                    // refresh all its thumbnails (meaning delete them)
-                    $this->deleteThumbnails($file);
                 }
             }
             
@@ -83,20 +78,26 @@ class MarkdownFormatter extends SharpFieldFormatter
         });
     }
 
-    protected function extractEmbeddedUploads(string $content = null): Collection
+    protected function extractEmbeddedUploads($contents = null): Collection
     {
-        if(!$content) {
+        if(!$contents) {
             return collect();
         }
         
-        return collect($this->getDomDocument($content)->getElementsByTagName('x-sharp-media'))
-            ->map(function(DOMElement $uploadElement) {
-                return collect($uploadElement->attributes)
-                    ->mapWithKeys(function($attr) {
-                        return [$attr->nodeName => $attr->nodeValue];
-                    })
-                    ->toArray();
-            });
+        return collect($contents)
+            // Generalize to a collection of contents to handle both regular case (where contents is a string)
+            // and localized case (where contents in an array of string)
+            ->map(function($content) {
+                return collect($this->getDomDocument($content)->getElementsByTagName('x-sharp-media'))
+                    ->map(function(DOMElement $uploadElement) {
+                        return collect($uploadElement->attributes)
+                            ->mapWithKeys(function($attr) {
+                                return [$attr->nodeName => $attr->nodeValue];
+                            })
+                            ->toArray();
+                    });
+            })
+            ->flatten(1);
     }
 
     protected function formatDomStringValue(DOMDocument $dom): string

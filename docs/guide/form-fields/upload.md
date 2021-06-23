@@ -76,13 +76,13 @@ Check their documentation for [more instructions](https://github.com/spatie/imag
 
 ## Formatter
 
-First, let's mention that Sharp provides an Eloquent built-in solution for uploads with the `SharpUploadModel` class, as [detailed here](../sharp-built-in-solution-for-uploads.md), which greatly simplify the work.
+First, let's mention that Sharp provides an Eloquent built-in solution for uploads with the `SharpUploadModel` class, as [detailed here](../sharp-built-in-solution-for-uploads.md), which greatly simplify the work (to be clear: it will handle everything from storage to image transformations).
 
 Here's the documentation for the not built-in solution:
 
 ### `toFront`
 
-The front expects an array with 5 keys:
+The front expects an array with these keys:
 
 ```php
 [
@@ -90,7 +90,18 @@ The front expects an array with 5 keys:
     "path" => "", // Relative file path
     "disk" => "", // Storage disk name
     "thumbnail" => "", // URL of the thumbnail (if image, obviously)
-    "size" => x // Size in bytes
+    "size" => x, // Size in bytes
+    "filters" => [ // Transformations applied to the (image) file
+        "crop" => [
+            "x" => x,
+            "y" => y,
+            "width" => w,
+            "height" => h,
+        ],
+        "rotate" => [
+            "angle" => a,
+        ]
+    ]
 ]
 ```
 
@@ -108,6 +119,7 @@ function find($id): array
                     "disk" => "s3",
                     "thumbnail" => [...],
                     "size" => $spaceship->picture->size,
+                    "filters" => $spaceship->picture->filters
                 ];
             }
         )
@@ -116,6 +128,8 @@ function find($id): array
         );
 }
 ```
+
+Do note that the thumbnail should comply to following rules: be at least 200x200 pixels, and more importantly it must apply the transformations defined by the filters if there is some. 
 
 ### `fromFront`
 

@@ -41,7 +41,7 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpFormEloquentBase
                 "path" => $upload->file_name,
                 "disk" => "local",
                 "size" => $upload->size,
-                "thumbnail" => $upload->thumbnail(1000, 400),
+                "thumbnail" => $upload->thumbnail(200, 200),
             ], 
             $transformer->apply("", $picturable, "picture")
         );
@@ -54,7 +54,10 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpFormEloquentBase
         $upload = $this->createSharpUploadModel($this->createImage(), $picturable);
         $upload->filters = [
             "crop" => [
-                "height" => 50, "width" => 50, "x" => 10, "y" => 10, 
+                "height" => .5,
+                "width" => .75,
+                "x" => .3,
+                "y" => .34,
             ],
             "rotate" => [
                 "angle" => 45
@@ -71,10 +74,13 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpFormEloquentBase
                 "path" => $upload->file_name,
                 "disk" => "local",
                 "size" => $upload->size,
-                "thumbnail" => $upload->thumbnail(1000, 400),
+                "thumbnail" => $upload->thumbnail(200, 200),
                 "filters" => [
                     "crop" => [
-                        "height" => 50, "width" => 50, "x" => 10, "y" => 10, 
+                        "height" => .5,
+                        "width" => .75,
+                        "x" => .3,
+                        "y" => .34,
                     ],
                     "rotate" => [
                         "angle" => 45
@@ -102,7 +108,7 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpFormEloquentBase
                         "path" => $upload->file_name,
                         "disk" => "local",
                         "size" => $upload->size,
-                        "thumbnail" => $upload->thumbnail(1000, 400)
+                        "thumbnail" => $upload->thumbnail(200, 200)
                     ],
                     "id" => $upload->id,
                 ], [
@@ -111,7 +117,7 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpFormEloquentBase
                         "path" => $upload2->file_name,
                         "disk" => "local",
                         "size" => $upload2->size,
-                        "thumbnail" => $upload2->thumbnail(1000, 400)
+                        "thumbnail" => $upload2->thumbnail(200, 200)
                     ],
                     "id" => $upload2->id,
                 ]

@@ -35,9 +35,6 @@ trait TestWithSharpUploadModel
 
         Storage::fake('local');
         Storage::fake('public');
-
-        File::deleteDirectory(storage_path("app/data"));
-        File::deleteDirectory(public_path("thumbnails"));
     }
 
     protected function createImage(): string

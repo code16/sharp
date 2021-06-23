@@ -64,16 +64,11 @@ class UploadFormatter extends SharpFieldFormatter
                 );
             }
 
-            $fileContent = $this->filesystem->disk("local")->get($uploadedFieldRelativePath);
-
             $storedFilePath = $this->getStoragePath($value["name"], $field);
-
-//            if($transformed = $this->isTransformed($value, $field)) {
-//                // Handle transformations on the uploads disk for performance
-//                $fileContent = $this->handleImageTransformations($fileContent, $value["cropData"]);
-//            }
-
-            $storage->put($storedFilePath, $fileContent);
+            $storage->put(
+                $storedFilePath,
+                $this->filesystem->disk("local")->get($uploadedFieldRelativePath)
+            );
 
             return [
                 "file_name" => $storedFilePath,
@@ -122,28 +117,4 @@ class UploadFormatter extends SharpFieldFormatter
 
         return "{$basePath}/{$fileName}";
     }
-
-//    /**
-//     * @param $fileContent
-//     * @param array $cropData
-//     * @return \Intervention\Image\Image
-//     * @throws \Illuminate\Contracts\Container\BindingResolutionException
-//     */
-//    protected function handleImageTransformations($fileContent, array $cropData)
-//    {
-//        $img = $this->imageManager->make($fileContent);
-//
-//        if($cropData["rotate"]) {
-//            $img->rotate($cropData["rotate"]);
-//        }
-//
-//        $img->crop(
-//            intval(round($img->width() * $cropData["width"])),
-//            intval(round($img->height() * $cropData["height"])),
-//            intval(round($img->width() * $cropData["x"])),
-//            intval(round($img->height() * $cropData["y"]))
-//        );
-//
-//        return $img->encode();
-//    }
 }
