@@ -104,6 +104,9 @@ Route::group([
 
     Route::post("/filters/{filterKey}", [GlobalFilterController::class, "update"])
         ->name("code16.sharp.api.filter.update");
+
+    Route::get("/thumbnail", [ThumbnailController::class, "show"])
+        ->name("code16.sharp.api.thumbnail.show");
 });
 
 // Web routes
