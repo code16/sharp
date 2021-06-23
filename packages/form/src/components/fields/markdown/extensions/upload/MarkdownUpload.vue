@@ -18,7 +18,7 @@
 <script>
     import VueClip from "../../../upload/VueClip";
     import { NodeViewWrapper } from '@tiptap/vue-2';
-    import { lang, showAlert } from "sharp";
+    import { lang, showAlert, getUniqueId } from "sharp";
     import { getUploadOptions } from "../../../../../util/upload";
 
     export default {
@@ -40,7 +40,11 @@
                 return this.node.attrs.value;
             },
             fieldProps() {
-                return this.extension.options.fieldProps;
+                const props = this.extension.options.fieldProps;
+                return {
+                    ...props,
+                    uniqueIdentifier: `${props.uniqueIdentifier}.upload.${getUniqueId(this)}`,
+                }
             },
             options() {
                 return getUploadOptions({
@@ -63,6 +67,9 @@
                 });
             },
             handleUpdate(value) {
+                this.updateAttributes({
+                    value,
+                });
                 this.extension.options.onUpdate(value);
             },
             handleSuccess(value) {
