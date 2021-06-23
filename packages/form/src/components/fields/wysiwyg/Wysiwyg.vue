@@ -1,6 +1,6 @@
 <template>
     <SharpEditor
-        class="SharpMarkdown"
+        class="SharpWysiwyg"
         :editor="editor"
         v-bind="$props"
     >
@@ -8,7 +8,6 @@
 </template>
 
 <script>
-    import { createMarkdownEditor } from 'tiptap-markdown';
     import { Editor } from '@tiptap/vue-2';
     import SharpEditor from '../editor/Editor';
     import { getDefaultExtensions, getUploadExtension } from "../editor";
@@ -47,12 +46,11 @@
         methods: {
             async handleUpdate() {
                 await this.$nextTick();
-                const content = this.editor.getMarkdown();
+                const content = this.editor.getHTML();
                 this.$emit('input', this.localizedValue(content));
             },
 
             createEditor() {
-                const MarkdownEditor = createMarkdownEditor(Editor);
                 const extensions = [
                     ...getDefaultExtensions({
                         placeholder: this.placeholder,
@@ -66,7 +64,7 @@
                     extensions.push(Upload);
                 }
 
-                return new MarkdownEditor({
+                return new Editor({
                     extensions,
                     content: this.localizedText,
                     onUpdate: this.handleUpdate,

@@ -9,6 +9,7 @@
                             :active="isActive(button)"
                             :editor="editor"
                             :dropup="bubbleMenu"
+                            :disabled="disabled"
                             @submit="handleLinkSubmitted"
                             @remove="handleRemoveLinkClicked"
                         >
@@ -19,6 +20,7 @@
                         <Button
                             variant="light"
                             :active="isActive(button)"
+                            :disabled="disabled"
                             @click="handleClicked(button)"
                             :key="button"
                         >
@@ -47,6 +49,7 @@
             editor: Object,
             toolbar: Array,
             bubbleMenu: Boolean,
+            disabled: Boolean,
         },
         computed: {
             toolbarGroups() {

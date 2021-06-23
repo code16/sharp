@@ -11,7 +11,7 @@ import List from './list/List.vue';
 import Select from './Select.vue';
 import Html from './Html.vue';
 import Geolocation from './geolocation/Geolocation';
-import Trix from './wysiwyg/TrixEditor.vue';
+import Wysiwyg from './wysiwyg/Wysiwyg';
 import DateRange from './date-range/DateRange';
 
 export default {
@@ -28,7 +28,7 @@ export default {
     'select'       : Select,
     'html'         : Html,
     'geolocation'  : Geolocation,
-    'wysiwyg'      : Trix,
+    'wysiwyg'      : Wysiwyg,
     'daterange'    : DateRange,
 };
 
@@ -46,6 +46,6 @@ export {
     Select,
     Html,
     Geolocation,
-    Trix,
+    Wysiwyg,
     DateRange,
 }
