@@ -615,12 +615,17 @@ describe('vue-clip',() => {
             expect(handler.mock.calls[0][0]).toEqual({
                 name: 'Image.jpg',
                 thumbnail: '/image.jpg',
-                cropData: {
-                    width: .5,
-                    height: .25,
-                    x: .1,
-                    y: .05,
-                    rotate: -0
+                transformed: true,
+                filters: {
+                    crop: {
+                        width: .5,
+                        height: .25,
+                        x: .1,
+                        y: .05,
+                    },
+                    rotate: {
+                        angle: -0,
+                    },
                 }
             })
         };
@@ -637,12 +642,17 @@ describe('vue-clip',() => {
         testEmit = handler => {
             expect(handler).toHaveBeenCalledTimes(2);
             expect(handler.mock.calls[1][0]).toMatchObject({
-                cropData: {
-                    width: 0.125,
-                    height: 1,
-                    x: 0.025,
-                    y: 0.2,
-                    rotate: 90
+                transformed: true,
+                filters: {
+                    crop: {
+                        width: 0.125,
+                        height: 1,
+                        x: 0.025,
+                        y: 0.2,
+                    },
+                    rotate: {
+                        angle: 90,
+                    },
                 }
             });
         };
