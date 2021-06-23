@@ -9,7 +9,7 @@
 
             <EditorContent :editor="editor" />
 
-            <template v-if="editor">
+            <template v-if="editor && !readOnly">
                 <BubbleMenu
                     :id="uniqueIdentifier"
                     :editor="editor"
