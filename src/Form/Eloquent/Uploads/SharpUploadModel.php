@@ -9,10 +9,6 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class SharpUploadModel extends Model
 {
     protected $guarded = [];
-
-    /**
-     * @var array
-     */
     protected $casts = [
         'custom_properties' => 'array',
         'size' => 'integer',
@@ -21,20 +17,6 @@ class SharpUploadModel extends Model
     public function model(): MorphTo
     {
         return $this->morphTo('model');
-    }
-
-    public function setTransformedAttribute($value)
-    {
-        // The transformed attribute to true means there
-        // was a transformation, we have to delete old thumbnails
-        if($value && $this->exists) {
-            $this->deleteAllThumbnails();
-        }
-    }
-
-    public function deleteAllThumbnails(): void
-    {
-        (new Thumbnail($this))->destroyAllThumbnails();
     }
 
     public function setFileAttribute($value)

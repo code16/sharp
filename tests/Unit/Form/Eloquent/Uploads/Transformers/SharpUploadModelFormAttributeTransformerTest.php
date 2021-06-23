@@ -37,10 +37,50 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpFormEloquentBase
         $this->assertEquals(
             [
                 "id" => $upload->id,
-                "name" => $upload->file_name,
-                "size" => (string)$upload->size,
-                "thumbnail" => $upload->thumbnail(1000, 400)
+                "name" => basename($upload->file_name),
+                "path" => $upload->file_name,
+                "disk" => "local",
+                "size" => $upload->size,
+                "thumbnail" => $upload->thumbnail(1000, 400),
             ], 
+            $transformer->apply("", $picturable, "picture")
+        );
+    }
+
+    /** @test */
+    function we_can_transform_a_single_upload_with_transformations()
+    {
+        $picturable = Picturable::create();
+        $upload = $this->createSharpUploadModel($this->createImage(), $picturable);
+        $upload->filters = [
+            "crop" => [
+                "height" => 50, "width" => 50, "x" => 10, "y" => 10, 
+            ],
+            "rotate" => [
+                "angle" => 45
+            ]
+        ];
+        $upload->save();
+
+        $transformer = new SharpUploadModelFormAttributeTransformer();
+
+        $this->assertEquals(
+            [
+                "id" => $upload->id,
+                "name" => basename($upload->file_name),
+                "path" => $upload->file_name,
+                "disk" => "local",
+                "size" => $upload->size,
+                "thumbnail" => $upload->thumbnail(1000, 400),
+                "filters" => [
+                    "crop" => [
+                        "height" => 50, "width" => 50, "x" => 10, "y" => 10, 
+                    ],
+                    "rotate" => [
+                        "angle" => 45
+                    ]
+                ]
+            ],
             $transformer->apply("", $picturable, "picture")
         );
     }
@@ -58,15 +98,19 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpFormEloquentBase
             [
                 [
                     "file" => [
-                        "name" => $upload->file_name,
-                        "size" => (string)$upload->size,
+                        "name" => basename($upload->file_name),
+                        "path" => $upload->file_name,
+                        "disk" => "local",
+                        "size" => $upload->size,
                         "thumbnail" => $upload->thumbnail(1000, 400)
                     ],
                     "id" => $upload->id,
                 ], [
                     "file" => [
-                        "name" => $upload2->file_name,
-                        "size" => (string)$upload2->size,
+                        "name" => basename($upload2->file_name),
+                        "path" => $upload2->file_name,
+                        "disk" => "local",
+                        "size" => $upload2->size,
                         "thumbnail" => $upload2->thumbnail(1000, 400)
                     ],
                     "id" => $upload2->id,

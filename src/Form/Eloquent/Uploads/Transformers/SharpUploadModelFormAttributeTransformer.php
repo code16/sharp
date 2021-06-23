@@ -41,11 +41,11 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
                 ->map(function($upload) {
                     $array = $this->transformUpload($upload);
 
-                    $file = Arr::only($array, ["name", "thumbnail", "size"]);
+                    $file = Arr::only($array, ["name", "path", "disk", "thumbnail", "size"]);
 
                     return array_merge(
                         ["file" => sizeof($file) ? $file : null],
-                        Arr::except($array, ["name", "thumbnail", "size"])
+                        Arr::except($array, ["name", "path", "disk", "thumbnail", "size"])
                     );
                 })
                 ->all();
@@ -59,7 +59,9 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
         return array_merge(
             $upload->file_name
                 ? [
-                    "name" => $upload->file_name,
+                    "name" => basename($upload->file_name),
+                    "path" => $upload->file_name,
+                    "disk" => $upload->disk,
                     "thumbnail" => $this->getThumbnailUrl($upload),
                     "size" => $upload->size,
                 ]

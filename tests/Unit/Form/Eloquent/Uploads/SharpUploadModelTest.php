@@ -12,26 +12,6 @@ class SharpUploadModelTest extends SharpFormEloquentBaseTest
     use TestWithSharpUploadModel;
 
     /** @test */
-    function all_thumbnails_are_destroyed_if_we_set_transformed_to_true()
-    {
-        $file = $this->createImage();
-
-        $upload = $this->createSharpUploadModel($file);
-
-        $upload->thumbnail(100, 100);
-
-        $this->assertTrue(
-            Storage::disk('public')->exists("thumbnails/data/100-100/" . basename($file))
-        );
-
-        $upload->transformed = true;
-
-        $this->assertFalse(
-            Storage::disk('public')->exists("thumbnails/data/100-100/" . basename($file))
-        );
-    }
-
-    /** @test */
     function when_setting_the_magic_file_attribute_we_can_fill_several_attributes()
     {
         $file = $this->createImage();
