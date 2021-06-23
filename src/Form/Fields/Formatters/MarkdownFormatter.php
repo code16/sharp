@@ -61,11 +61,6 @@ class MarkdownFormatter extends SharpFieldFormatter
                     $domElement->setAttribute("name", basename($upload["file_name"]));
                     $domElement->setAttribute("path", $upload["file_name"]);
                     $domElement->setAttribute("disk", $upload["disk"]);
-
-                } elseif($upload["transformed"] ?? false) {
-                    // File was pre-existing and was transformed: we must
-                    // refresh all its thumbnails (meaning delete them)
-                    $this->deleteThumbnails($file);
                 }
             }
             

@@ -73,10 +73,11 @@ class SharpUploadModel extends Model
         ]);
     }
 
-    public function thumbnail(int $width=null, int $height=null, array $filters=[]): ?string
+    public function thumbnail(int $width=null, int $height=null, array $customFilters=[]): ?string
     {
         return (new Thumbnail($this))
+            ->setTransformationFilters($this->filters ?: null)
             ->setAppendTimestamp()
-            ->make($width, $height, $filters);
+            ->make($width, $height, $customFilters);
     }
 }
