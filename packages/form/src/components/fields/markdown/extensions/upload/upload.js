@@ -2,6 +2,7 @@ import { Node } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-2";
 import MarkdownUpload from "./MarkdownUpload";
 import FileInput from "./UploadFileInput";
+import { serializeFilterCrop, serializeFilterRotate } from "./util";
 
 export const Upload = Node.create({
     name: 'upload',
@@ -54,18 +55,19 @@ export const Upload = Node.create({
     },
 
     /**
-     * <x-sharp-upload src="example.jpg">
-     * </x-sharp-upload>
+     * <x-sharp-media src="example.jpg">
+     * </x-sharp-media>
      */
     renderHTML({ HTMLAttributes }) {
         const value = HTMLAttributes.value;
         return [
             'x-sharp-media',
             {
+                'name': value?.name,
                 'disk': value?.disk,
                 'path': value?.path,
-                'filter-crop': value?.cropData, // todo
-                'filter-rotate': null, // todo
+                'filter-crop': serializeFilterCrop(value),
+                'filter-rotate': serializeFilterRotate(value),
             }
         ];
     },

@@ -143,15 +143,6 @@
 
                 if(this.hasUpload) {
                     extensions.push(this.getUploadExtension());
-
-                    // todo remove this when back handle <x-sharp-media>
-                    markdownExtensions.push(createMarkdownExtension(Upload, {
-                        serialize(state, node) {
-                            if(node.attrs.value?.name) {
-                                state.write("![](" + state.esc(node.attrs.value.name) + ")");
-                            }
-                        },
-                    }));
                 }
 
                 this.editor = new MarkdownEditor({
