@@ -11,9 +11,8 @@
 </template>
 
 <script>
-    import { UPLOAD_URL, lang } from 'sharp';
     import VueClip from './VueClip';
-    import { defaultUploadOptions, getUploadOptions, maxFileSizeMessage } from "../../../util/upload";
+    import { getUploadOptions } from "../../../util/upload";
 
     export default {
         name: 'SharpUpload',

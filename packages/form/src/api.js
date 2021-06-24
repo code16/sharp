@@ -44,11 +44,13 @@ export function downloadFileUrl({ entityKey, instanceId, fieldKey, fileName }) {
 }
 
 
-export function getOriginalThumbnail({ path, disk }) {
+export function getOriginalThumbnail({ path, disk, max_width, max_height }) {
     return api.get('/thumbnail', {
         params: {
             path,
             disk,
+            max_width,
+            max_height,
         }
     }).then(response => response.data.thumbnail);
 }

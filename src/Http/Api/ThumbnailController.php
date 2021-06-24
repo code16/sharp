@@ -17,9 +17,12 @@ class ThumbnailController extends Controller
             "file_name" => $path,
             "disk" => $disk
         ]);
+        
+        $width = request()->get('max_width', 800);
+        $height = request()->get('max_height', 800);
 
         return response()->json([
-            "thumbnail" => $model->thumbnail(800, 800)
+            "thumbnail" => $model->thumbnail($width, $height),
         ]);
     }
 }

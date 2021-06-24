@@ -6,7 +6,7 @@
                     <div :class="{ 'row': showThumbnail }">
                         <template v-if="showThumbnail">
                             <div class="SharpUpload__thumbnail" :class="[compactThumbnail?'col-4 col-sm-3 col-xl-2':'col-4 col-md-4']">
-                                <img :src="imageSrc" @load="handleImageLoaded">
+                                <img :src="imageSrc" alt="">
                             </div>
                         </template>
 
@@ -40,7 +40,7 @@
                             <template v-if="!readOnly">
                                 <div>
                                     <template v-if="hasEdit && !hasError">
-                                        <Button outline small @click="onEditButtonClick">
+                                        <Button outline small @click="handleEditButtonClick">
                                             {{ l('form.upload.edit_button') }}
                                         </Button>
                                     </template>
@@ -63,48 +63,23 @@
             </div>
         </div>
 
-        <Modal :visible.sync="showEditModal"
-            :title="l('modals.cropper.title')"
-            no-close-on-backdrop
-            @ok="onEditModalOk"
-            @hidden="onEditModalHidden"
+        <EditModal
+            :value="value"
+            :visible.sync="showEditModal"
+            :src="originalImageSrc"
+            :crop-original="cropOriginal"
+            :ratio-x="ratioX"
+            :ratio-y="ratioY"
+            @submit="handleEditSubmitted"
             ref="modal"
-        >
-            <template v-if="editModalLoading">
-                <div class="d-flex align-items-center justify-content-center" style="height: 300px">
-                    <Loading />
-                </div>
-            </template>
-            <template v-else>
-                <vue-cropper
-                    class="SharpUpload__modal-vue-cropper"
-                    :view-mode="2"
-                    drag-mode="crop"
-                    :aspect-ratio="ratioX/ratioY"
-                    :auto-crop-area="1"
-                    :zoomable="false"
-                    :guides="false"
-                    :background="true"
-                    :rotatable="true"
-                    :src="originalImageSrc"
-                    :data="cropData"
-                    alt="Source image"
-                    ref="modalCropper"
-                />
-            </template>
-
-            <div class="mt-3">
-                <Button @click="rotate(-90)"><i class="fas fa-undo"></i></Button>
-                <Button @click="rotate(90)"><i class="fas fa-redo"></i></Button>
-            </div>
-        </Modal>
+        />
 
         <template v-if="hasInitialCrop">
             <vue-cropper
                 class="d-none"
+                :src="originalImageSrc"
                 :aspect-ratio="ratioX/ratioY"
                 :auto-crop-area="1"
-                :src="originalImageSrc"
                 :ready="onCropperReady"
                 ref="cropper"
             />
@@ -118,12 +93,13 @@
     import VueClip from 'vue-clip/src/components/Clip';
     import VueCropper from 'vue-cropperjs';
 
-    import { Modal, Button, Loading } from 'sharp-ui';
+    import { Button } from 'sharp-ui';
     import { Localization } from 'sharp/mixins';
     import { filesizeLabel, getErrorMessage, handleErrorAlert } from 'sharp';
 
-    import rotateResize from './rotate';
-    import { downloadFileUrl, getOriginalThumbnail } from "../../../api";
+    import { downloadFileUrl } from "../../../api";
+    import { getFiltersFromCropData } from "./util/filters";
+    import EditModal from "./EditModal";
 
     export default {
         name: 'SharpVueClip',
@@ -131,10 +107,9 @@
         extends: VueClip,
 
         components: {
-            Modal,
+            EditModal,
             VueCropper,
             Button,
-            Loading,
         },
 
         inject : [ '$form' ],
@@ -150,10 +125,7 @@
                 default: true,
             },
             croppableFileTypes: Array,
-            cropOriginal: {
-                type: Boolean,
-                default: true,
-            },
+            cropOriginal: Boolean,
 
             readOnly: Boolean,
             root: Boolean,
@@ -166,11 +138,7 @@
         data() {
             return {
                 showEditModal: false,
-                editModalLoading: false,
                 croppedImg: null,
-                originalImg: null,
-                allowCrop: false,
-                cropData: null,
             }
         },
         watch: {
@@ -196,7 +164,7 @@
                 return this.files[0];
             },
             originalImageSrc() {
-                return this.originalImg || this.file?.thumbnail || this.file?.dataUrl;
+                return this.file?.thumbnail || this.file?.blobUrl;
             },
             imageSrc() {
                 return this.croppedImg || this.originalImageSrc;
@@ -271,6 +239,9 @@
                 return !this.croppableFileTypes || this.croppableFileTypes.includes(this.fileExtension);
             },
             hasInitialCrop() {
+                if(this.file?.status === 'exist') {
+                    return false;
+                }
                 return this.isCroppable && !!this.ratioX && !!this.ratioY;
             },
             hasEdit() {
@@ -325,10 +296,13 @@
 
                 this.setPending(false);
 
-                this.allowCrop = true;
                 this.$nextTick(() => {
                     this.isCropperReady() && this.onCropperReady();
                 });
+            },
+
+            onThumbnail() {
+                this.$set(this.file, 'blobUrl', URL.createObjectURL(this.file._file));
             },
 
             // actions
@@ -338,7 +312,8 @@
 
                 this.setPending(false);
 
-                this.resetEdit();
+                this.resetThumbnails();
+                this.croppedImg = null;
 
                 if(emits) {
                     this.$emit('input', null);
@@ -346,28 +321,8 @@
                 }
             },
 
-            resetEdit() {
-                this.croppedImg = null;
-                this.cropData = null;
-            },
-
-            async onEditButtonClick() {
-                this.$emit('active');
+            handleEditButtonClick() {
                 this.showEditModal = true;
-                this.allowCrop = true;
-
-                if(this.cropOriginal && this.value?.path) {
-                    this.editModalLoading = true;
-                    this.originalImg = await getOriginalThumbnail({
-                        path: this.value.path,
-                        disk: this.value.disk,
-                    });
-                    const image = new Image();
-                    image.onload = () => {
-
-                    }
-                    this.editModalLoading = false;
-                }
             },
 
             handleRemoveClicked() {
@@ -386,99 +341,62 @@
                 }
             },
 
-            onEditModalHidden() {
-                this.$emit('inactive');
-            },
-
-            onEditModalOk() {
-                this.updateCroppedImage(this.$refs.modalCropper);
-                this.updateCropData(this.$refs.modalCropper);
+            handleEditSubmitted(cropper) {
+                this.updateCroppedImage(cropper);
+                this.updateFilters(cropper);
             },
 
             isCropperReady() {
-                return this.$refs.cropper && this.$refs.cropper.cropper.ready;
+                return this.$refs.cropper?.cropper.ready;
             },
 
             onCropperReady() {
                 if(this.hasInitialCrop) {
                     this.updateCroppedImage(this.$refs.cropper);
-                    this.updateCropData(this.$refs.cropper);
+                    this.updateFilters(this.$refs.cropper);
                 }
             },
 
-            getFiltersFromCropData({ cropData, imageWidth, imageHeight }) {
-                let rw = imageWidth, rh = imageHeight;
-
-                if(Math.abs(cropData.rotate) % 180) {
-                    rw = imageHeight;
-                    rh = imageWidth;
-                }
-
-                return {
-                    crop: {
-                        width: cropData.width / rw,
-                        height: cropData.height / rh,
-                        x: cropData.x / rw,
-                        y: cropData.y / rh,
-                    },
-                    rotate: {
-                        angle: cropData.rotate * -1,
-                    },
-                }
-            },
-
-            getCropDataFromFilters({ filters, imageWidth, imageHeight }) {
-                let rw = imageWidth, rh = imageHeight;
-
-                if(Math.abs(filters.rotate) % 180) {
-                    rw = imageHeight;
-                    rh = imageWidth;
-                }
-
-                const { width, height, x, y } = filters?.crop ?? {};
-
-                return {
-                    width: (width ?? 1) * rw,
-                    height: (height ?? 1) * rh,
-                    x: (x ?? 0) * rw,
-                    y: (y ?? 0) * rh,
-                    rotate: (filters?.rotate?.angle ?? 0) * -1,
-                }
-            },
-
-            updateCropData(cropper) {
+            updateFilters(cropper) {
                 const cropData = cropper.getData(true);
                 const imageData = cropper.getImageData();
 
-                this.cropData = { ...cropData };
-
-                if(this.allowCrop) {
-                    let data = {
-                        ...this.value,
-                        transformed: true,
-                        filters: {
-                            ...this.value?.filters,
-                            ...this.getFiltersFromCropData({
-                                cropData,
-                                imageWidth: imageData.naturalWidth,
-                                imageHeight: imageData.naturalHeight,
-                            }),
-                        }
-                    };
-                    this.$emit('input', data);
-                    this.$emit('updated', data);
+                const value = {
+                    ...this.value,
+                    transformed: true,
+                    filters: {
+                        ...this.value?.filters,
+                        ...getFiltersFromCropData({
+                            cropData,
+                            imageWidth: imageData.naturalWidth,
+                            imageHeight: imageData.naturalHeight,
+                        }),
+                    }
                 }
+
+                this.$emit('input', value);
+                this.$emit('updated', value);
             },
 
             updateCroppedImage(cropper) {
-                if(this.allowCrop) {
-                    this.croppedImg = cropper.getCroppedCanvas().toDataURL();
+                this.resetCroppedImage();
+                cropper.getCroppedCanvas().toBlob(blob => {
+                    this.croppedImg = URL.createObjectURL(blob);
+                });
+            },
+
+            resetCroppedImage() {
+                if(this.croppedImg) {
+                    URL.revokeObjectURL(this.croppedImg);
                 }
             },
 
-            rotate(degree) {
-                rotateResize(this.$refs.modalCropper.cropper, degree);
-            },
+            resetThumbnails() {
+                if(this.file?.blobUrl) {
+                    URL.revokeObjectURL(this.file.blobUrl)
+                }
+                this.resetCroppedImage();
+            }
         },
         created() {
             this.options.thumbnailWidth = null;
@@ -501,6 +419,7 @@
             dropzone.enable();
 
             dropzone.on('drop', this.handleDrop);
+            dropzone.on('thumbnail', this.onThumbnail);
 
             if(this.value?.file) {
                 dropzone.addFile(this.value.file);
@@ -508,6 +427,7 @@
             }
         },
         beforeDestroy() {
+            this.resetThumbnails();
             this.setPending(false);
             this.uploader._uploader.destroy();
         },
