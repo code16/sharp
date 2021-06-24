@@ -70,21 +70,29 @@
             @hidden="onEditModalHidden"
             ref="modal"
         >
-            <vue-cropper
-                class="SharpUpload__modal-vue-cropper"
-                :view-mode="2"
-                drag-mode="crop"
-                :aspect-ratio="ratioX/ratioY"
-                :auto-crop-area="1"
-                :zoomable="false"
-                :guides="false"
-                :background="true"
-                :rotatable="true"
-                :src="originalImageSrc"
-                :data="cropData"
-                alt="Source image"
-                ref="modalCropper"
-            />
+            <template v-if="editModalLoading">
+                <div class="d-flex align-items-center justify-content-center" style="height: 300px">
+                    <Loading />
+                </div>
+            </template>
+            <template v-else>
+                <vue-cropper
+                    class="SharpUpload__modal-vue-cropper"
+                    :view-mode="2"
+                    drag-mode="crop"
+                    :aspect-ratio="ratioX/ratioY"
+                    :auto-crop-area="1"
+                    :zoomable="false"
+                    :guides="false"
+                    :background="true"
+                    :rotatable="true"
+                    :src="originalImageSrc"
+                    :data="cropData"
+                    alt="Source image"
+                    ref="modalCropper"
+                />
+            </template>
+
             <div class="mt-3">
                 <Button @click="rotate(-90)"><i class="fas fa-undo"></i></Button>
                 <Button @click="rotate(90)"><i class="fas fa-redo"></i></Button>
@@ -110,12 +118,12 @@
     import VueClip from 'vue-clip/src/components/Clip';
     import VueCropper from 'vue-cropperjs';
 
-    import { Modal, Button } from 'sharp-ui';
+    import { Modal, Button, Loading } from 'sharp-ui';
     import { Localization } from 'sharp/mixins';
     import { filesizeLabel, getErrorMessage, handleErrorAlert } from 'sharp';
 
     import rotateResize from './rotate';
-    import { downloadFileUrl } from "../../../api";
+    import { downloadFileUrl, getOriginalThumbnail } from "../../../api";
 
     export default {
         name: 'SharpVueClip',
@@ -126,6 +134,7 @@
             Modal,
             VueCropper,
             Button,
+            Loading,
         },
 
         inject : [ '$form' ],
@@ -141,6 +150,10 @@
                 default: true,
             },
             croppableFileTypes: Array,
+            cropOriginal: {
+                type: Boolean,
+                default: true,
+            },
 
             readOnly: Boolean,
             root: Boolean,
@@ -153,11 +166,11 @@
         data() {
             return {
                 showEditModal: false,
+                editModalLoading: false,
                 croppedImg: null,
+                originalImg: null,
                 allowCrop: false,
                 cropData: null,
-
-                isNew: !this.value,
             }
         },
         watch: {
@@ -183,7 +196,7 @@
                 return this.files[0];
             },
             originalImageSrc() {
-                return this.file?.thumbnail || this.file?.dataUrl;
+                return this.originalImg || this.file?.thumbnail || this.file?.dataUrl;
             },
             imageSrc() {
                 return this.croppedImg || this.originalImageSrc;
@@ -338,15 +351,22 @@
                 this.cropData = null;
             },
 
-            onEditButtonClick() {
+            async onEditButtonClick() {
                 this.$emit('active');
                 this.showEditModal = true;
                 this.allowCrop = true;
-            },
 
-            handleImageLoaded() {
-                if(this.isNew) {
-                    this.$emit('image-updated');
+                if(this.cropOriginal && this.value?.path) {
+                    this.editModalLoading = true;
+                    this.originalImg = await getOriginalThumbnail({
+                        path: this.value.path,
+                        disk: this.value.disk,
+                    });
+                    const image = new Image();
+                    image.onload = () => {
+
+                    }
+                    this.editModalLoading = false;
                 }
             },
 
@@ -407,6 +427,25 @@
                 }
             },
 
+            getCropDataFromFilters({ filters, imageWidth, imageHeight }) {
+                let rw = imageWidth, rh = imageHeight;
+
+                if(Math.abs(filters.rotate) % 180) {
+                    rw = imageHeight;
+                    rh = imageWidth;
+                }
+
+                const { width, height, x, y } = filters?.crop ?? {};
+
+                return {
+                    width: (width ?? 1) * rw,
+                    height: (height ?? 1) * rh,
+                    x: (x ?? 0) * rw,
+                    y: (y ?? 0) * rh,
+                    rotate: (filters?.rotate?.angle ?? 0) * -1,
+                }
+            },
+
             updateCropData(cropper) {
                 const cropData = cropper.getData(true);
                 const imageData = cropper.getImageData();
@@ -433,7 +472,6 @@
 
             updateCroppedImage(cropper) {
                 if(this.allowCrop) {
-                    this.isNew = true;
                     this.croppedImg = cropper.getCroppedCanvas().toDataURL();
                 }
             },
