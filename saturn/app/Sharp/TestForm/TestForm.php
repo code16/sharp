@@ -279,7 +279,7 @@ class TestForm extends SharpForm
                 "en" => $faker->paragraph(3),
             ],
             "wysiwyg" => [
-                "fr" => 'des <strong>trucs en html</strong>',
+                "fr" => '<div>des <strong>trucs en html</strong><br><br>dezfezezf</div>',
                 "en" => 'some <strong>html stuff</strong>',
             ]
         ]);
