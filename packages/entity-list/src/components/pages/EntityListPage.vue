@@ -18,7 +18,6 @@
 </template>
 
 <script>
-    import isEqual from 'lodash/isEqual';
     import { mapGetters } from 'vuex';
     import EntityList from '../EntityList';
     import ActionBarList from '../ActionBar';

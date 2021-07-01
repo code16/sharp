@@ -3,6 +3,9 @@
 .SharpGlobalFilters {
   $border-left-width: 6px;
 
+  // prevent nav items flickering
+  min-height: calc(4rem + 1px);
+
   .form-control {
     padding: 0;
   }

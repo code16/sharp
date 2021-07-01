@@ -21,7 +21,6 @@
 </template>
 
 <script>
-    import debounce from 'lodash/debounce';
     import { mapGetters } from 'vuex';
     import { BASE_URL } from "sharp";
     import FilterSelect from './filters/FilterSelect';

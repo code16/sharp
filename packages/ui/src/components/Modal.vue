@@ -38,8 +38,8 @@
 <script>
     import { Localization } from 'sharp/mixins';
     import { BModal } from 'bootstrap-vue';
-    import Loading from "./Loading";
-    import LoadingOverlay from "./LoadingOverlay";
+    import Loading from "./loading/Loading";
+    import LoadingOverlay from "./loading/LoadingOverlay";
 
     export default {
         name: 'SharpModal',

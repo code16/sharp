@@ -65,14 +65,14 @@
 
                     <template v-slot:append-body>
                         <template v-if="inline && loading">
-                            <LoadingOverlay medium absolute />
+                            <LoadingOverlay small absolute fade />
                         </template>
                     </template>
                 </DataList>
             </div>
         </template>
         <template v-else-if="visible && inline">
-            <Loading medium />
+            <Loading small fade />
         </template>
 
         <CommandFormModal :command="currentCommand" ref="commandForm" />

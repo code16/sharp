@@ -15,7 +15,7 @@
                 <template v-if="showDeleteButton">
                     <div class="col-auto">
                         <template v-if="deleteFocused">
-                            <Button variant="danger" large @click="handleDeleteClicked" @blur="deleteFocused = false">
+                            <Button variant="danger" :disabled="loading" large @click="handleDeleteClicked" @blur="deleteFocused = false">
                                 {{ l('action_bar.form.delete_button') }}
                             </Button>
                         </template>
@@ -33,7 +33,7 @@
         </template>
         <template v-slot:right>
             <template v-if="showSubmitButton">
-                <Button variant="light" large :disabled="uploading" @click="handleSubmitClicked">
+                <Button variant="light" large :disabled="uploading || loading" @click="handleSubmitClicked">
                     {{ submitLabel }}
                 </Button>
             </template>
@@ -65,6 +65,7 @@
             showBackButton: Boolean,
             create: Boolean,
             uploading: Boolean,
+            loading: Boolean,
             breadcrumb: Array,
             showBreadcrumb: Boolean,
         },

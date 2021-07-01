@@ -12,6 +12,9 @@
                 </Grid>
             </div>
         </template>
+        <template v-else>
+            <ActionBar />
+        </template>
 
         <CommandFormModal :command="currentCommand" ref="commandForm" />
         <CommandViewPanel :content="commandViewContent" @close="handleCommandViewPanelClosed" />
@@ -20,7 +23,7 @@
 
 <script>
     import { mapState, mapGetters } from 'vuex';
-    import { Grid } from 'sharp-ui';
+    import { Grid, ActionBar } from 'sharp-ui';
     import { CommandFormModal, CommandViewPanel } from 'sharp-commands';
     import { withCommands } from "sharp/mixins";
     import { withLoadingOverlay } from "sharp";
@@ -34,6 +37,7 @@
         components: {
             Grid,
             Widget,
+            ActionBar,
             ActionBarDashboard,
             CommandFormModal,
             CommandViewPanel,

@@ -1,23 +1,33 @@
 .SharpActionView {
+  --content-top: 0;
+  --content-left: #{$leftnav-collapsed-width};
+
+  position: relative;
   transition: $transition-leftnav-collapse;
   transition-property: padding-left;
-  padding-left: $leftnav-collapsed-width;
+  padding-top: var(--content-top);
+  padding-left: var(--content-left);
   padding-bottom: 3rem;
   min-height: 100vh;
 
   @include media-breakpoint-up(sm) {
-    padding-top: var(--navbar-height);
+    --content-top: var(--navbar-height);
   }
   @include media-breakpoint-up($breakpoint-fixed-menu) {
-    padding-left: $leftnav-width;
+    --content-left: #{$leftnav-width};
     overflow: visible;
+  }
+
+  &__loading {
+    top: var(--content-top, 0);
+    left: var(--content-left, 0);
   }
 }
 
 @include media-breakpoint-up($breakpoint-fixed-menu) {
   .leftNav--collapsed {
     .SharpActionView {
-      padding-left: $leftnav-collapsed-width;
+      --content-left: #{$leftnav-collapsed-width};
     }
   }
 }
