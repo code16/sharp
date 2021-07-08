@@ -74,7 +74,7 @@
                 return buttons[button]?.icon;
             },
             isActive(button) {
-                return buttons[button]?.isActive(this.editor);
+                return buttons[button]?.isActive?.(this.editor);
             },
             handleClicked(button) {
                 buttons[button]?.command(this.editor);

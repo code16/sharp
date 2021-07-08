@@ -37,6 +37,7 @@
     import MenuBar from "./toolbar/MenuBar";
     import BubbleMenu from "./BubbleMenu";
     import { onLabelClicked } from "../../../util/accessibility";
+    import { Image } from "@tiptap/extension-image";
 
     export default {
         components: {
@@ -80,6 +81,7 @@
             bubbleMenuIgnoredExtensions() {
                 return [
                     Upload,
+                    Image,
                     HorizontalRule,
                 ]
             },
