@@ -517,19 +517,21 @@ describe('sharp-form', ()=>{
         });
     });
 
-    test('redirect to list', async () => {
+    test('redirect on delete', async () => {
         const wrapper = createWrapper();
 
-        wrapper.vm.redirectForResponse = jest.fn();
+        jest.spyOn(window.location, 'replace')
 
         wrapper.vm.handleDeleteClicked();
 
         await nextRequestFulfilled({
-            status: 200
-        }, 0);
+            status: 200,
+            response: {
+                redirectUrl: '/test'
+            }
+        });
 
-        expect(wrapper.vm.redirectForResponse).toHaveBeenCalledTimes(1);
-
+        expect(window.location.replace).toHaveBeenCalledWith('/test');
     });
 
     test('submit', async () => {

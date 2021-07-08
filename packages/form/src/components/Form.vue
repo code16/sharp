@@ -317,8 +317,13 @@
                     else logError('no entity key provided');
                 }
             },
-            redirectForResponse(response) {
-                location.href = response.data.redirectUrl;
+            redirectForResponse(response, { replace } = {}) {
+                const url = response.data.redirectUrl;
+                if(replace) {
+                    location.replace(url);
+                } else {
+                    location.href = url;
+                }
             },
             redirectToParentPage() {
                 location.href = getBackUrl(this.breadcrumb.items);
@@ -356,7 +361,7 @@
             handleDeleteClicked() {
                 this.axiosInstance.delete(this.apiPath)
                     .then(response => {
-                        this.redirectForResponse(response);
+                        this.redirectForResponse(response, { replace:true });
                     });
             },
             handleCancelClicked() {

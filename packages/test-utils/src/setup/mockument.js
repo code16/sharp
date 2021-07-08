@@ -31,7 +31,9 @@ window.location = {
     pathname: '/',
     get origin() {
         return 'http://saturn.test';
-    }
+    },
+    assign() {},
+    replace() {},
 };
 
 Element.prototype.scrollIntoView = jest.fn();
