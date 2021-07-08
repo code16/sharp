@@ -1,7 +1,7 @@
 <template>
     <NodeViewWrapper>
         <VueClip
-            class="SharpMarkdownUpload"
+            class="editor__node"
             :value="value"
             :root="false"
             :options="options"

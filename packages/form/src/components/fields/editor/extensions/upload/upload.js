@@ -1,8 +1,8 @@
 import { Node } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-2";
-import MarkdownUpload from "./MarkdownUpload";
-import FileInput from "./UploadFileInput";
+import UploadNode from "./UploadNode";
 import { serializeFilterCrop, serializeFilterRotate } from "./util";
+
 
 export const Upload = Node.create({
     name: 'upload',
@@ -82,6 +82,6 @@ export const Upload = Node.create({
     },
 
     addNodeView() {
-        return VueNodeViewRenderer(MarkdownUpload);
+        return VueNodeViewRenderer(UploadNode);
     },
 });
