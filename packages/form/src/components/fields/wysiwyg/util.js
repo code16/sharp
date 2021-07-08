@@ -6,8 +6,28 @@ export function normalizeHTML(html) {
     const dom = document.createElement('div');
     dom.innerHTML = html;
 
-    [...dom.children]
-        .filter(el => el.matches('div') && !el.attributes.length)
+    normalizeAdjacentDivs(dom);
+    normalizeParagraphs(dom);
+
+    return dom.innerHTML;
+}
+
+function normalizeAdjacentDivs(dom) {
+    elementDivs(dom)
+        .forEach(div => {
+            if(div.previousElementSibling?.matches?.('div')) {
+                const previousDiv = div.previousElementSibling;
+                const lastChild = previousDiv.childNodes[previousDiv.childNodes.length - 1];
+                if(!lastChild?.matches?.('br')) {
+                    div.innerHTML = `${previousDiv.innerHTML}<br>${div.innerHTML}`;
+                    previousDiv.remove();
+                }
+            }
+        });
+}
+
+function normalizeParagraphs(dom) {
+    elementDivs(dom)
         .forEach(div => {
             trimNewLines(div);
             if(div.childNodes.length) {
@@ -18,8 +38,11 @@ export function normalizeHTML(html) {
                 div.remove();
             }
         });
+}
 
-    return dom.innerHTML;
+function elementDivs(el) {
+    return [...el.children]
+        .filter(el => el.matches('div') && !el.attributes.length)
 }
 
 function trimNewLines(div) {
