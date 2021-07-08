@@ -12,6 +12,7 @@
     import SharpEditor from '../editor/Editor';
     import { getDefaultExtensions, getUploadExtension } from "../editor";
     import localize from '../../../mixins/localize/editor';
+    import { normalizeHTML } from "./util";
 
     export default {
         mixins: [ localize({ textProp:'text' }) ],
@@ -66,7 +67,7 @@
 
                 return new Editor({
                     extensions,
-                    content: this.localizedText,
+                    content: normalizeHTML(this.localizedText),
                     onUpdate: this.handleUpdate,
                     editable: !this.readOnly,
                 });
