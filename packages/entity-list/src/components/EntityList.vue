@@ -479,8 +479,8 @@
                         this.handleCommandActionRequested(data.action, data);
                     })
                     .catch(error => {
-                        const { data } = error.response;
-                        if(error.response.status === 422) {
+                        const data = error.response?.data;
+                        if(error.response?.status === 422) {
                             showAlert(data.message, {
                                 title: lang('modals.state.422.title'),
                                 isError: true,
