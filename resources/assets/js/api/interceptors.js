@@ -31,7 +31,7 @@ function handleInvalidContentType(response) {
         && !response.headers['content-disposition']?.includes('attachment')
     ) {
         const { method, url } = response.config;
-        const message = `${method.toUpperCase()} ${url} : Invalid response content-type "${contentType}"`;
+        const message = `${method.toUpperCase()} ${url} : Invalid response content-type "${contentType}", expected JSON`;
         console.error(message);
         throw new Error(message);
     }
