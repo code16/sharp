@@ -119,6 +119,7 @@
                 errors:{},
                 fieldLocale: {},
                 locales: null,
+                loading: false,
 
                 fieldVisible: {},
                 uploadingFields: {},
@@ -196,6 +197,7 @@
                     showBackButton: this.isReadOnly,
                     create: !!this.isCreation,
                     uploading: this.isUploading,
+                    loading: this.loading,
                     breadcrumb: this.breadcrumb?.items,
                     showBreadcrumb: !!this.breadcrumb?.visible,
                 }
@@ -283,6 +285,11 @@
                         .filter(([key]) => this.fields[key]?.type !== 'html')
                 );
             },
+            setLoading(loading) {
+                this.$emit('loading', loading);
+                this.loading = loading;
+            },
+
             get() {
                 return this.axiosInstance.get(this.apiPath, {
                     params: this.apiParams
@@ -310,8 +317,13 @@
                     else logError('no entity key provided');
                 }
             },
-            redirectForResponse(response) {
-                location.href = response.data.redirectUrl;
+            redirectForResponse(response, { replace } = {}) {
+                const url = response.data.redirectUrl;
+                if(replace) {
+                    location.replace(url);
+                } else {
+                    location.href = url;
+                }
             },
             redirectToParentPage() {
                 location.href = getBackUrl(this.breadcrumb.items);
@@ -320,7 +332,8 @@
                 if(this.isUploading) {
                     return;
                 }
-                this.$emit('loading', true);
+
+                this.setLoading(true);
 
                 const data = this.serialize();
                 const post = () => postFn
@@ -330,7 +343,7 @@
                 const response = await post()
                     .catch(this.handleError)
                     .finally(() => {
-                        this.$emit('loading', false);
+                        this.setLoading(false);
                     });
 
                 if(this.independant) {
@@ -338,6 +351,7 @@
                     return response;
                 }
 
+                this.setLoading(true);
                 this.$store.dispatch('setLoading', true);
                 this.redirectForResponse(response);
             },
@@ -347,7 +361,7 @@
             handleDeleteClicked() {
                 this.axiosInstance.delete(this.apiPath)
                     .then(response => {
-                        this.redirectForResponse(response);
+                        this.redirectForResponse(response, { replace:true });
                     });
             },
             handleCancelClicked() {

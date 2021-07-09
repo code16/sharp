@@ -52,7 +52,7 @@
     }
     & > .container {
       & > .row {
-        min-height: 2.5rem;
+        min-height: calc(2.5rem + var(--bs-gutter-y));
       }
     }
   }

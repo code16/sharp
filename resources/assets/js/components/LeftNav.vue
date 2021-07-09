@@ -16,24 +16,17 @@
             </div>
         </div>
         <div class="flex-grow-1 position-relative" style="min-height: 0">
-            <template v-if="ready">
-                <div class="SharpLeftNav__content d-flex flex-column">
-                    <div class="SharpLeftNav__inner flex-grow-1 pb-5" style="min-height: 0">
-                        <GlobalFilters @open="handleGlobalFilterOpened" @close="handleGlobalFilterClosed" />
-                        <slot />
-                    </div>
-                    <a class="SharpLeftNav__collapse-button btn btn-text" href="#" @click.prevent.stop="collapsed = !collapsed">
-                        <svg class="SharpLeftNav__collapse-arrow" style="fill:currentColor" width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd">
-                            <path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path>
-                        </svg>
-                    </a>
+            <div class="SharpLeftNav__content d-flex flex-column">
+                <div class="SharpLeftNav__inner flex-grow-1 pb-5" style="min-height: 0">
+                    <GlobalFilters @open="handleGlobalFilterOpened" @close="handleGlobalFilterClosed" />
+                    <slot />
                 </div>
-            </template>
-            <template v-else>
-                <div class="d-flex align-items-center justify-content-center h-100">
-                    <Loading visible small />
-                </div>
-            </template>
+                <a class="SharpLeftNav__collapse-button btn btn-text" href="#" @click.prevent.stop="collapsed = !collapsed">
+                    <svg class="SharpLeftNav__collapse-arrow" style="fill:currentColor" width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd">
+                        <path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path>
+                    </svg>
+                </a>
+            </div>
         </div>
     </nav>
 </template>

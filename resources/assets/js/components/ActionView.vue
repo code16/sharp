@@ -38,7 +38,11 @@
             </template>
         </template>
 
-        <LoadingOverlay :visible="isLoading" />
+        <LoadingOverlay
+            class="SharpActionView__loading"
+            :visible="isLoading"
+            fade
+        />
     </div>
 </template>
 

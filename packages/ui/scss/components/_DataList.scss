@@ -72,6 +72,8 @@
     display:flex;
     border-bottom: 1px solid $ui-04;
     transition: box-shadow .25s ease-in-out;
+    padding-left: 1rem;
+    padding-right: 1rem;
 
     @include media-breakpoint-down(sm) {
       flex-flow: column;
@@ -79,6 +81,12 @@
 
     &:last-child {
       border-bottom: 0;
+    }
+
+    .SharpDataList__cols,
+    .SharpDataList__row-append  {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
     }
 
     &--header {
@@ -90,10 +98,6 @@
           display: block;
         }
       }
-    }
-
-    .SharpDataList__cols, .SharpDataList__row-append  {
-      padding: 1em 0;
     }
 
     &:hover:not(.SharpDataList__row--header):not(.SharpDataList__row--disabled) {
@@ -142,21 +146,16 @@
 
   &__th {
     @extend .ui-font;
-    display: flex;
-    align-items: center;
     font-size: .8125rem;
     font-weight: 700;
-    height: 2.5rem;
     text-align: left;
     vertical-align: middle;
     position: relative;
+    padding-top: .625rem;
+    padding-bottom: .625rem;
 
-    & > span {
-      //white-space: nowrap;
-      line-height: 2;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+    overflow-wrap: break-word;
+    word-break: break-word;
 
     .SharpDataList__sort-link {
       position: absolute;
@@ -204,6 +203,7 @@
   }
 
   &__caret {
+    display: block;
     fill: $ui-05;
     width: 8px;
     min-width: 8px;
@@ -211,7 +211,6 @@
     transform: rotate(0deg);
     transition: transform 200ms $bx--standard-easing;
 
-    margin-left: .5em;
     cursor: pointer;
 
     &--ascending  {

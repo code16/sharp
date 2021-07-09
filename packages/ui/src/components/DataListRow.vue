@@ -76,7 +76,7 @@
                 return {
                     [`col-${column.sizeXS}`]: true,
                     [`col-md-${column.size}`]: true,
-                    'd-none d-md-flex': column.hideOnXS,
+                    'd-none d-md-block': column.hideOnXS,
                 };
             },
             toggleHighlight(highlight) {
