@@ -7,6 +7,8 @@ use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 use Code16\Sharp\Utils\FileUtil;
 use Illuminate\Filesystem\FilesystemManager;
+use Illuminate\Support\Arr;
+use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
 
@@ -34,10 +36,7 @@ class UploadFormatter extends SharpFieldFormatter
     }
 
     /**
-     * Handle file operations on newly uploaded files
-     * + image transformations (crop, rotations) on transformed ones.
-     *
-     * @param SharpFormField $field
+     * @param SharpFormFieldWithUpload $field
      * @param string $attribute
      * @param $value
      * @return array|null
@@ -47,6 +46,7 @@ class UploadFormatter extends SharpFieldFormatter
     function fromFront(SharpFormField $field, string $attribute, $value)
     {
         $storage = $this->filesystem->disk($field->storageDisk());
+        $transformed = $value["transformed"] ?? false;
 
         if($value["uploaded"] ?? false) {
             $uploadedFieldRelativePath = sprintf(
@@ -65,10 +65,14 @@ class UploadFormatter extends SharpFieldFormatter
             }
 
             $storedFilePath = $this->getStoragePath($value["name"], $field);
-            $storage->put(
-                $storedFilePath,
-                $this->filesystem->disk("local")->get($uploadedFieldRelativePath)
-            );
+            $fileContent = $this->filesystem->disk("local")->get($uploadedFieldRelativePath);
+
+            if($transformed && $field->isTransformOriginal()) {
+                // Field was configured to handle transformation on the source image
+                $fileContent = $this->handleImageTransformations($fileContent, $value);
+            }
+            
+            $storage->put($storedFilePath, $fileContent);
 
             return [
                 "file_name" => $storedFilePath,
@@ -79,8 +83,16 @@ class UploadFormatter extends SharpFieldFormatter
             ];
         }
 
-        if($value["transformed"] ?? false) {
+        if($transformed) {
             // Existing image, but transformed (with filters)
+            if($field->isTransformOriginal()) {
+                // Field was configured to handle transformation on the source image
+                $storage->put(
+                    $value["name"], 
+                    $this->handleImageTransformations($storage->get($value["name"]), $value)
+                );
+            }
+            
             return [
                 "filters" => $value["filters"] ?? null
             ];
@@ -91,9 +103,7 @@ class UploadFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param string $fileName
      * @param SharpFormFieldWithUpload $field
-     * @return string
      * @throws SharpFormFieldFormattingMustBeDelayedException
      */
     protected function getStoragePath(string $fileName, $field): string
@@ -116,5 +126,27 @@ class UploadFormatter extends SharpFieldFormatter
         );
 
         return "{$basePath}/{$fileName}";
+    }
+
+    protected function handleImageTransformations($fileContent, array &$filters): Image
+    {
+        $img = $this->imageManager->make($fileContent);
+
+        if($rotate = Arr::get($filters, "filters.rotate.angle")) {
+            $img->rotate($rotate);
+            unset($filters["filters"]["rotate"]);
+        }
+
+        if($cropData = Arr::get($filters, "filters.crop")) {
+            $img->crop(
+                intval(round($img->width() * $cropData["width"])),
+                intval(round($img->height() * $cropData["height"])),
+                intval(round($img->width() * $cropData["x"])),
+                intval(round($img->height() * $cropData["y"]))
+            );
+            unset($filters["filters"]["crop"]);
+        }
+
+        return $img->encode();
     }
 }

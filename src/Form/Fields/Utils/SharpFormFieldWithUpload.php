@@ -83,6 +83,11 @@ trait SharpFormFieldWithUpload
         return $this;
     }
 
+    public function isTransformOriginal(): bool
+    {
+        return $this->transformable && $this->transformOriginal;
+    }
+
     public function setStorageDisk(string $storageDisk): self
     {
         $this->storageDisk = $storageDisk;
