@@ -109,13 +109,13 @@ class SharpFormMarkdownField extends SharpFormField
     {
         $array = [
             "maxFileSize" => $this->maxFileSize ?: 2,
-            "croppable" => $this->croppable
+            "croppable" => $this->transformable
         ];
 
         if($this->cropRatio) {
             $array["ratioX"] = (int)$this->cropRatio[0];
             $array["ratioY"] = (int)$this->cropRatio[1];
-            $array["croppableFileTypes"] = $this->croppableFileTypes;
+            $array["croppableFileTypes"] = $this->transformableFileTypes;
         }
         
         if(!$this->fileFilter) {
