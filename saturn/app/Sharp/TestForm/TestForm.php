@@ -187,11 +187,11 @@ class TestForm extends SharpForm
                     SharpFormWysiwygField::H1,
                     SharpFormWysiwygField::OL,
                     SharpFormWysiwygField::UL,
+                    SharpFormWysiwygField::UPLOAD,
+                    SharpFormWysiwygField::UPLOAD_IMAGE,
                     SharpFormWysiwygField::QUOTE,
                     SharpFormWysiwygField::CODE,
                     SharpFormWysiwygField::SEPARATOR,
-                    SharpFormWysiwygField::INCREASE_NESTING,
-                    SharpFormWysiwygField::DECREASE_NESTING,
                     SharpFormWysiwygField::UNDO,
                     SharpFormWysiwygField::REDO,
                 ])
