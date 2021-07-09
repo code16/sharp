@@ -18,14 +18,6 @@ jobs:
         include:
           - php: 7.4
             env:
-              LARAVEL: 7.*
-              TESTBENCH: 5.*
-          - php: 8.0
-            env:
-              LARAVEL: 7.*
-              TESTBENCH: 5.*
-          - php: 7.4
-            env:
               LARAVEL: 8.*
               TESTBENCH: 6.*
           - php: 8.0
