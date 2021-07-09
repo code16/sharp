@@ -59,6 +59,13 @@ class BreadcrumbItem
             && is_subclass_of(config("sharp.entities.{$this->entityKey()}.form"), SharpSingleForm::class);
     }
 
+    public function is(BreadcrumbItem $item): bool
+    {
+        return $this->type === $item->type
+            && $this->key === $item->key
+            && $this->instance === $item->instance;
+    }
+
     public function entityKey(): string
     {
         return $this->key;
