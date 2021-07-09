@@ -121,7 +121,7 @@ class TestForm extends SharpForm
                     SharpFormMarkdownField::UL,
                     SharpFormMarkdownField::QUOTE,
                     SharpFormMarkdownField::CODE,
-                    SharpFormMarkdownField::IMG,
+                    SharpFormMarkdownField::UPLOAD_IMAGE,
                 ])
                 ->setCropRatio("1:1")
                 ->setHeight(350)
