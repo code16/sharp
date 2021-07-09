@@ -29,8 +29,7 @@ class AuthorizationsTest extends BaseApiTest
 
         // Can't neither see the form, since view is false
         $this->getJson('/sharp/api/form/person/50')->assertStatus(403);
-
-
+        
         // We can still view the list
         $this->json('get', '/sharp/api/list/person')->assertStatus(200);
     }

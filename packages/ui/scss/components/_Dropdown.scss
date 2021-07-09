@@ -2,7 +2,6 @@
 
 .SharpDropdown {
   .dropdown-menu {
-    @extend .ui-font;
     > li:first-child, > li:last-child {
       .dropdown-divider {
         display: none;
@@ -10,6 +9,7 @@
     }
   }
   .dropdown-item {
+    @extend .ui-font;
     font-size: $ui-font-size * .875;
   }
 }

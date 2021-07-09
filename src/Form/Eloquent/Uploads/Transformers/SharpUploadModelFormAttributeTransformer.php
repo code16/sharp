@@ -14,7 +14,7 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
     protected int $thumbnailWidth;
     protected int $thumbnailHeight;
 
-    public function __construct(bool $withThumbnails = true, int $thumbnailWidth = 1000, int $thumbnailHeight = 400)
+    public function __construct(bool $withThumbnails = true, int $thumbnailWidth = 200, int $thumbnailHeight = 200)
     {
         $this->withThumbnails = $withThumbnails;
         $this->thumbnailWidth = $thumbnailWidth;
@@ -40,12 +40,11 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
             return $instance->$attribute
                 ->map(function($upload) {
                     $array = $this->transformUpload($upload);
-
-                    $file = Arr::only($array, ["name", "thumbnail", "size"]);
-
+                    $fileAttrs = ["name", "path", "disk", "thumbnail", "size", "filters"];
+                    
                     return array_merge(
-                        ["file" => sizeof($file) ? $file : null],
-                        Arr::except($array, ["name", "thumbnail", "size"])
+                        ["file" => Arr::only($array, $fileAttrs) ?: null],
+                        Arr::except($array, $fileAttrs)
                     );
                 })
                 ->all();
@@ -59,12 +58,14 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
         return array_merge(
             $upload->file_name
                 ? [
-                    "name" => $upload->file_name,
+                    "name" => basename($upload->file_name),
+                    "path" => $upload->file_name,
+                    "disk" => $upload->disk,
                     "thumbnail" => $this->getThumbnailUrl($upload),
                     "size" => $upload->size,
                 ]
                 : [],
-            $upload->custom_properties ?? [],
+            $upload->custom_properties ?? [], // Including filters
             ["id" => $upload->id]
         );
     }

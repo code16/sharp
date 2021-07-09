@@ -74,26 +74,34 @@ If true, some optimization will be applied on the uploaded images (in order to r
 
 Check their documentation for [more instructions](https://github.com/spatie/image-optimizer#optimization-tools) on how to install.
 
-
-
 ## Formatter
 
-This part is more complex for this field than others...
+First, let's mention that Sharp provides an Eloquent built-in solution for uploads with the `SharpUploadModel` class, as [detailed here](../sharp-built-in-solution-for-uploads.md), which greatly simplify the work (to be clear: it will handle everything from storage to image transformations).
 
-First, let's mention that Sharp provides an Eloquent built-in solution for uploads with the `SharpUploadModel` class, as [detailed here](../sharp-built-in-solution-for-uploads.md), which greatly simplify the work.
-
-Here's the documentation for the non built-in solution:
-
+Here's the documentation for the not built-in solution:
 
 ### `toFront`
 
-The front expects an array with three keys:
+The front expects an array with these keys:
 
 ```php
 [
-    "name" => "", // Relative file path
-    "thumbnail" => "", // 1000px w * 400px h thumbnail full url
+    "name" => "", // The file name
+    "path" => "", // Relative file path
+    "disk" => "", // Storage disk name
+    "thumbnail" => "", // URL of the thumbnail (if image, obviously)
     "size" => x, // Size in bytes
+    "filters" => [ // Transformations applied to the (image) file
+        "crop" => [
+            "x" => x,
+            "y" => y,
+            "width" => w,
+            "height" => h,
+        ],
+        "rotate" => [
+            "angle" => a,
+        ]
+    ]
 ]
 ```
 
@@ -106,9 +114,12 @@ function find($id): array
         ->setCustomTransformer("picture",
             function($value, $spaceship, $attribute) {
                 return [
-                    "name" => $spaceship->picture->name,
+                    "name" => basename($spaceship->picture->name),
+                    "path" => $spaceship->picture->name,
+                    "disk" => "s3",
                     "thumbnail" => [...],
                     "size" => $spaceship->picture->size,
+                    "filters" => $spaceship->picture->filters
                 ];
             }
         )
@@ -118,13 +129,15 @@ function find($id): array
 }
 ```
 
+Do note that the thumbnail should comply to following rules: be at least 200x200 pixels, and more importantly it must apply the transformations defined by the filters if there is some. 
+
 ### `fromFront`
 
 There are four cases:
 
 #### newly uploaded file
 
-The formatter will not perform any transformation, store the file on the configured location, and return an array like this:
+The formatter will store the file on the configured location, and return an array like this:
 
 ```php
 [
@@ -132,7 +145,17 @@ The formatter will not perform any transformation, store the file on the configu
     "size" => x, // File size in bytes
     "mime_type" => "", // File mime type
     "disk" => "", // Storage disk name
-    "transformed" => true // True if the file was transformed
+    "filters" => [ // Transformations applied to the (image) file
+        "crop" => [
+            "x" => x,
+            "y" => y,
+            "width" => w,
+            "height" => h,
+        ],
+        "rotate" => [
+            "angle" => a,
+        ]
+    ]
 ];
 ```
 
@@ -153,25 +176,33 @@ function update($id, array $data)
 
 #### existing transformed file
 
-In this case, the file was already stored, but was transformed (cropped, or rotated). The formatter will transform the file, store the result and simply return and array with one key:
+In this case, the file was already stored in a previous post, and was then transformed (cropped, or rotated). The formatter will simply return and array with one `filters` key:
 
 ```php
 [
-    "transformed" => true
+    "filters" => [
+        "crop" => [
+            "x" => x,
+            "y" => y,
+            "width" => w,
+            "height" => h,
+        ],
+        "rotate" => [
+            "angle" => a,
+        ]
+    ]
 ];
 ```
 
-Then you'll have to catch that if needed (to destroy all previous generated thumbnails for instance).
-
+Then you'll have to catch and store that if needed.
 
 #### deleted file
 
-The formatter will return null (note that the file **will not** be deleted from the storage).
-
+The formatter will return `null` (note that the file **will not** be deleted from the storage).
 
 #### existing and unchanged file
 
-The formatter will return an empty array.
+The formatter will return **an empty array**.
 
 ## Delayed creation
 
@@ -199,7 +230,7 @@ function update($id, array $data)
     return $instance->id;
 }
 ```
-Here we're using the `notify()` feature to display a message back to the user, and it's working, execpted in one case: on a Spaceship creation with a visual, Sharp will delay the upload handling and call this method twice. On the second pass (for the upload), PHP will crash on the `if(($data["capacity"]) >= 1000)` row because `$data["capacity"]` is not set (only the upload field would be set on this second pass). This has to be addressed, and a working solution could be to replace this line with:
+Here we're using the `notify()` feature to display a message back to the user, and it's working, excepted in one case: on a Spaceship creation with a visual, Sharp will delay the upload handling and call this method twice. On the second pass (for the upload), PHP will crash on the `if(($data["capacity"]) >= 1000)` row because `$data["capacity"]` is not set (only the upload field would be set on this second pass). This has to be addressed, and a working solution could be to replace this line with:
 
 ```php
 if(($data["capacity"] ?? 0) >= 1000) {

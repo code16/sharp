@@ -121,7 +121,7 @@ class TestForm extends SharpForm
                     SharpFormMarkdownField::UL,
                     SharpFormMarkdownField::QUOTE,
                     SharpFormMarkdownField::CODE,
-                    SharpFormMarkdownField::IMG,
+                    SharpFormMarkdownField::UPLOAD_IMAGE,
                 ])
                 ->setCropRatio("1:1")
                 ->setHeight(350)
@@ -187,21 +187,29 @@ class TestForm extends SharpForm
                     SharpFormWysiwygField::H1,
                     SharpFormWysiwygField::OL,
                     SharpFormWysiwygField::UL,
+                    SharpFormWysiwygField::UPLOAD,
+                    SharpFormWysiwygField::UPLOAD_IMAGE,
                     SharpFormWysiwygField::QUOTE,
                     SharpFormWysiwygField::CODE,
                     SharpFormWysiwygField::SEPARATOR,
-                    SharpFormWysiwygField::INCREASE_NESTING,
-                    SharpFormWysiwygField::DECREASE_NESTING,
                     SharpFormWysiwygField::UNDO,
                     SharpFormWysiwygField::REDO,
                 ])
-                ->setHeight(150)
+                ->setHeight(350)
         );
     }
 
     function buildFormLayout(): void
     {
-        $this->addTab("Simple", function(FormLayoutTab $tab) {
+        $this->addTab("Textarea", function(FormLayoutTab $tab) {
+            $tab->addColumn(6, function (FormLayoutColumn $column) {
+                $column->withSingleField("markdown")
+                    ->withSingleField("textarea");
+            })->addColumn(6, function (FormLayoutColumn $column) {
+                $column->withSingleField("wysiwyg");
+            });
+    
+        })->addTab("Simple", function(FormLayoutTab $tab) {
             $tab->addColumn(6, function (FormLayoutColumn $column) {
                 $column->withSingleField("text")
                     ->withSingleField("date")
@@ -209,14 +217,6 @@ class TestForm extends SharpForm
             })->addColumn(6, function (FormLayoutColumn $column) {
                 $column->withSingleField("number")
                     ->withSingleField("html");
-            });
-
-        })->addTab("Textarea", function(FormLayoutTab $tab) {
-            $tab->addColumn(6, function (FormLayoutColumn $column) {
-                $column->withSingleField("markdown")
-                    ->withSingleField("textarea");
-            })->addColumn(6, function (FormLayoutColumn $column) {
-                $column->withSingleField("wysiwyg");
             });
 
         })->addTab("Select", function(FormLayoutTab $tab) {
@@ -252,10 +252,10 @@ class TestForm extends SharpForm
         });
     }
 
-    function find($id): array
+    public function create(): array
     {
         $faker = \Faker\Factory::create();
-
+    
         return $this->transform([
             "text" => [
                 "fr" => $faker->words(3, true),
@@ -279,10 +279,14 @@ class TestForm extends SharpForm
                 "en" => $faker->paragraph(3),
             ],
             "wysiwyg" => [
-                "fr" => 'des <strong>trucs en html</strong>',
+                "fr" => '<div>des <strong>trucs en html</strong><br><br>dezfezezf</div>',
                 "en" => 'some <strong>html stuff</strong>',
             ]
         ]);
+    }
+    
+    function find($id): array
+    {
     }
 
     function update($id, array $data)

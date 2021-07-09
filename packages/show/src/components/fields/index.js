@@ -1,6 +1,6 @@
 import { isCustomField, resolveCustomField } from "sharp";
 import EntityList from "./entity-list/EntityList";
-import Text from './Text';
+import Text from './text/Text';
 import Picture from './Picture';
 import File from './File';
 import List from './List';
