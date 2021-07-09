@@ -195,7 +195,7 @@ class TestForm extends SharpForm
                     SharpFormWysiwygField::UNDO,
                     SharpFormWysiwygField::REDO,
                 ])
-                ->setHeight(150)
+                ->setHeight(350)
         );
     }
 
