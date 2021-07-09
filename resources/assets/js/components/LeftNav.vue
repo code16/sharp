@@ -18,7 +18,9 @@
         <div class="flex-grow-1 position-relative" style="min-height: 0">
             <div class="SharpLeftNav__content d-flex flex-column">
                 <div class="SharpLeftNav__inner flex-grow-1 pb-5" style="min-height: 0">
-                    <GlobalFilters @open="handleGlobalFilterOpened" @close="handleGlobalFilterClosed" />
+                    <template v-if="hasGlobalFilters">
+                        <GlobalFilters @open="handleGlobalFilterOpened" @close="handleGlobalFilterClosed" />
+                    </template>
                     <slot />
                 </div>
                 <a class="SharpLeftNav__collapse-button btn btn-text" href="#" @click.prevent.stop="collapsed = !collapsed">
