@@ -114,14 +114,14 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
     {
         $formField = SharpFormMarkdownField::make("text")
             ->setToolbar([
-                SharpFormMarkdownField::IMG,
+                SharpFormMarkdownField::UPLOAD,
                 SharpFormMarkdownField::SEPARATOR,
                 SharpFormMarkdownField::UL,
             ]);
 
         $this->assertArraySubset(
             ["toolbar" => [
-                SharpFormMarkdownField::IMG,
+                SharpFormMarkdownField::UPLOAD,
                 SharpFormMarkdownField::SEPARATOR,
                 SharpFormMarkdownField::UL,
             ]],

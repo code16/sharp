@@ -121,7 +121,7 @@ class TestForm extends SharpForm
                     SharpFormMarkdownField::UL,
                     SharpFormMarkdownField::QUOTE,
                     SharpFormMarkdownField::CODE,
-                    SharpFormMarkdownField::IMG,
+                    SharpFormMarkdownField::UPLOAD_IMAGE,
                 ])
                 ->setCropRatio("1:1")
                 ->setHeight(350)
@@ -187,15 +187,15 @@ class TestForm extends SharpForm
                     SharpFormWysiwygField::H1,
                     SharpFormWysiwygField::OL,
                     SharpFormWysiwygField::UL,
+                    SharpFormWysiwygField::UPLOAD,
+                    SharpFormWysiwygField::UPLOAD_IMAGE,
                     SharpFormWysiwygField::QUOTE,
                     SharpFormWysiwygField::CODE,
                     SharpFormWysiwygField::SEPARATOR,
-                    SharpFormWysiwygField::INCREASE_NESTING,
-                    SharpFormWysiwygField::DECREASE_NESTING,
                     SharpFormWysiwygField::UNDO,
                     SharpFormWysiwygField::REDO,
                 ])
-                ->setHeight(150)
+                ->setHeight(350)
         );
     }
 
