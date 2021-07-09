@@ -71,6 +71,9 @@ class Thumbnail
             $width, $height, $thumbDirNameAppender,
             basename($this->uploadModel->file_name)
         );
+        
+        // Strip double /
+        $thumbnailPath = Str::replace("//", "/", $thumbnailPath);
 
         $wasCreated = !$thumbnailDisk->exists($thumbnailPath);
 
