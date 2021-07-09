@@ -4,6 +4,7 @@ namespace Code16\Sharp\Http\Api;
 
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpSingleForm;
+use Code16\Sharp\Http\Context\Util\BreadcrumbItem;
 
 class FormController extends ApiController
 {
@@ -101,8 +102,13 @@ class FormController extends ApiController
 
         $form->delete($instanceId);
 
+        $entityKey = $this->isSubEntity($entityKey) ? explode(':', $entityKey)[0] : $entityKey;
+        if($previousShowOfAnotherEntity = $this->currentSharpRequest->getPreviousShowFromBreadcrumbItems("!$entityKey")) {
+            $redirectUrl = $this->currentSharpRequest->getUrlForBreadcrumbItem($previousShowOfAnotherEntity);
+        }
+        
         return response()->json([
-            "redirectUrl" => $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem("s-list")
+            "redirectUrl" => $redirectUrl ?? $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem("s-list")
         ]);
     }
 
