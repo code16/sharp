@@ -34,12 +34,12 @@ export const buttons = {
         isActive: editor => editor.isActive('code'),
         icon: getToolbarIcon('code'),
     },
-    'quote': {
+    'blockquote': {
         command: editor => editor.chain().focus().toggleBlockquote().run(),
         isActive: editor => editor.isActive('blockquote'),
         icon: getToolbarIcon('quote'),
     },
-    'unordered-list': {
+    'bullet-list': {
         command: editor => editor.chain().focus().toggleBulletList().run(),
         isActive: editor => editor.isActive('bulletList'),
         icon: getToolbarIcon('ul'),
@@ -62,12 +62,12 @@ export const buttons = {
         icon: getToolbarIcon('link'),
         bubbleMenu: true,
     },
-    'image': {
+    'upload-image': {
         command: editor => editor.chain().focus().newUpload().run(),
         isActive: editor => editor.isActive('upload') || editor.isActive('image'),
         icon: getToolbarIcon('image'),
     },
-    'document': {
+    'upload': {
         command: editor => editor.chain().focus().newUpload().run(),
         isActive: editor => editor.isActive('upload'),
         icon: getToolbarIcon('document'),

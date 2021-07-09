@@ -17,7 +17,8 @@ class SharpFormMarkdownField extends SharpFormField
 
     const B = "bold";
     const I = "italic";
-    const UL = "unordered-list";
+    const HIGHLIGHT = "highlight";
+    const UL = "bullet-list";
     const OL = "ordered-list";
     const SEPARATOR = "|";
     const A = "link";
@@ -25,11 +26,15 @@ class SharpFormMarkdownField extends SharpFormField
     const H2 = "heading-2";
     const H3 = "heading-3";
     const CODE = "code";
-    const QUOTE = "quote";
-    /** @deprecated use DOC */
-    const IMG = "image";
-    const DOC = "document";
+    const QUOTE = "blockquote";
+    const UPLOAD_IMAGE = "upload-image";
+    const UPLOAD = "upload";
     const HR = "horizontal-rule";
+    const TABLE = "table";
+    const UNDO = "undo";
+    const REDO = "redo";
+
+    /** @deprecated use UPLOAD */ const DOC = "upload";
 
     protected ?int $height = null;
     protected array $toolbar = [
