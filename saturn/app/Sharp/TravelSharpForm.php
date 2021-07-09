@@ -43,7 +43,6 @@ class TravelSharpForm extends SharpForm
                     SharpFormWysiwygField::B,
                     SharpFormWysiwygField::I,
                     SharpFormWysiwygField::A,
-                    SharpFormWysiwygField::S,
                     SharpFormWysiwygField::SEPARATOR,
                     SharpFormWysiwygField::H1,
                     SharpFormWysiwygField::UL,
