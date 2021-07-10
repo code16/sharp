@@ -35,24 +35,15 @@ trait TestWithSharpUploadModel
 
         Storage::fake('local');
         Storage::fake('public');
-
-        File::deleteDirectory(storage_path("app/data"));
-        File::deleteDirectory(public_path("thumbnails"));
     }
 
-    protected function createImage()
+    protected function createImage(): string
     {
         $file = UploadedFile::fake()->image('test.png', 600, 600);
         return $file->storeAs('data', 'test.png', ['disk' => 'local']);
     }
 
-    /**
-     * @param $file
-     * @param null $model
-     * @param string $modelKey
-     * @return $this|\Illuminate\Database\Eloquent\Model
-     */
-    protected function createSharpUploadModel($file, $model = null, $modelKey = "test")
+    protected function createSharpUploadModel(string $file, ?object $model = null, ?string $modelKey = "test"): SharpUploadModel
     {
         return SharpUploadModel::create([
             "file_name" => $file,

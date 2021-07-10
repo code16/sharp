@@ -1,8 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
-import TrixEditor from '../../src/components/fields/wysiwyg/TrixEditor.vue';
+// import TrixEditor from '../../src/components/fields/wysiwyg/TrixEditor.vue';
 
 
-describe('trix-editor',()=>{
+xdescribe('trix-editor',()=>{
     let wrapper;
 
     window.Trix = require('trix');

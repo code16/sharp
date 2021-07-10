@@ -12,6 +12,7 @@ use Code16\Sharp\Http\Api\FormController;
 use Code16\Sharp\Http\Api\FormUploadController;
 use Code16\Sharp\Http\Api\GlobalFilterController;
 use Code16\Sharp\Http\Api\ShowController;
+use Code16\Sharp\Http\Api\FilesController;
 use Code16\Sharp\Http\DashboardController;
 use Code16\Sharp\Http\HomeController;
 use Code16\Sharp\Http\LangController;
@@ -62,9 +63,6 @@ Route::group([
         ->name("code16.sharp.api.show.show")
         ->middleware(['sharp_api_append_form_authorizations', 'sharp_api_append_notifications', 'sharp_api_append_breadcrumb']);
 
-    Route::get("/show/download/{fieldKey}/{entityKey}/{instanceId?}", [DownloadController::class, "show"])
-        ->name("code16.sharp.api.show.download");
-
     Route::post("/show/{entityKey}/command/{commandKey}/{instanceId?}", [ShowInstanceCommandController::class, "update"])
         ->name("code16.sharp.api.show.command.instance");
 
@@ -96,14 +94,17 @@ Route::group([
     Route::delete("/form/{entityKey}/{instanceId?}", [FormController::class, "delete"])
         ->name("code16.sharp.api.form.delete");
 
-    Route::get("/form/download/{fieldKey}/{entityKey}/{instanceId?}", [DownloadController::class, "show"])
-        ->name("code16.sharp.api.form.download");
-
     Route::get("/filters", [GlobalFilterController::class, "index"])
         ->name("code16.sharp.api.filter.index");
 
     Route::post("/filters/{filterKey}", [GlobalFilterController::class, "update"])
         ->name("code16.sharp.api.filter.update");
+
+    Route::get("/download/{entityKey}/{instanceId?}", [DownloadController::class, "show"])
+        ->name("code16.sharp.api.download.show");
+
+    Route::post("/files/{entityKey}/{instanceId?}", [FilesController::class, "show"])
+        ->name("code16.sharp.api.files.show");
 });
 
 // Web routes

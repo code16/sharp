@@ -1,12 +1,13 @@
 <template>
     <b-dropdown
         class="SharpDropdown"
-        :toggle-class="classes"
+        :toggle-class="toggleClass"
         :disabled="disabled"
         :no-caret="!showCaret"
-        offset="1"
+        :offset="1"
         variant="custom"
         v-bind="$attrs"
+        v-on="$listeners"
     >
         <template v-slot:button-content>
             <span class="d-inline-block">
@@ -29,7 +30,7 @@
         },
         props: {
             ...Button.props,
-            text: [Boolean, String],
+            text: String,
             showCaret: {
                 type: Boolean,
                 default: true
@@ -38,6 +39,12 @@
         },
         computed: {
             ...Button.computed,
+            /**
+             * button variant is defined in classes
+             */
+            toggleClass() {
+                return this.classes;
+            },
         },
     }
 </script>

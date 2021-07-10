@@ -12,12 +12,23 @@ class SharpFormWysiwygFieldTest extends SharpTestCase
     {
         $formField = SharpFormWysiwygField::make("text");
 
-        $this->assertEquals([
-                "key" => "text", "type" => "wysiwyg", "toolbar" => [
+        $this->assertEquals(
+            [
+                "key" => "text", 
+                "type" => "wysiwyg", 
+                "toolbar" => [
                     SharpFormWysiwygField::B, SharpFormWysiwygField::I, SharpFormWysiwygField::SEPARATOR,
                     SharpFormWysiwygField::UL, SharpFormWysiwygField::SEPARATOR, SharpFormWysiwygField::A,
+                ],
+                "innerComponents" => [
+                    "upload" => [
+                        "maxFileSize" => 2,
+                        "croppable" => true,
+                        "fileFilter" => [".jpg",".jpeg",".gif",".png"]
+                    ]
                 ]
-            ], $formField->toArray()
+            ], 
+            $formField->toArray()
         );
     }
 
@@ -44,11 +55,13 @@ class SharpFormWysiwygFieldTest extends SharpTestCase
             ]);
 
         $this->assertArraySubset(
-            ["toolbar" => [
-                SharpFormWysiwygField::B,
-                SharpFormWysiwygField::SEPARATOR,
-                SharpFormWysiwygField::UL,
-            ]],
+            [
+                "toolbar" => [
+                    SharpFormWysiwygField::B,
+                    SharpFormWysiwygField::SEPARATOR,
+                    SharpFormWysiwygField::UL,
+                ]
+            ],
             $formField->toArray()
         );
     }
@@ -61,5 +74,4 @@ class SharpFormWysiwygFieldTest extends SharpTestCase
 
         $this->assertArrayNotHasKey("toolbar", $formField->toArray());
     }
-
 }

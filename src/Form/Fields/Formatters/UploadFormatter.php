@@ -7,6 +7,8 @@ use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 use Code16\Sharp\Utils\FileUtil;
 use Illuminate\Filesystem\FilesystemManager;
+use Illuminate\Support\Arr;
+use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
 
@@ -34,45 +36,42 @@ class UploadFormatter extends SharpFieldFormatter
     }
 
     /**
-     * Handle file operations on newly uploaded files
-     * + image transformations (crop, rotations) on transformed ones.
-     *
-     * @param SharpFormField $field
+     * @param SharpFormFieldWithUpload $field
      * @param string $attribute
      * @param $value
      * @return array|null
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      * @throws SharpFormFieldFormattingMustBeDelayedException
      */
     function fromFront(SharpFormField $field, string $attribute, $value)
     {
         $storage = $this->filesystem->disk($field->storageDisk());
+        $transformed = $value["transformed"] ?? false;
 
-        if($this->isUploaded($value)) {
-
+        if($value["uploaded"] ?? false) {
+            $uploadedFieldRelativePath = sprintf(
+                "%s/%s", 
+                config("sharp.uploads.tmp_dir", 'tmp'), 
+                $value["name"]
+            );
+            
             if($field->isShouldOptimizeImage()) {
                 $optimizerChain = OptimizerChainFactory::create();
                 // we do not need to check for exception nor file format because:
                 // > By default the package will not throw any errors and just operate silently.
                 $optimizerChain->optimize(
-                    $this->filesystem->disk("local")->path(
-                        config("sharp.uploads.tmp_dir", 'tmp') . '/' . $value["name"]
-                    )
+                    $this->filesystem->disk("local")->path($uploadedFieldRelativePath)
                 );
             }
 
-            $fileContent = $this->filesystem->disk("local")->get(
-                config("sharp.uploads.tmp_dir", 'tmp') . '/' . $value["name"]
-            );
-
             $storedFilePath = $this->getStoragePath($value["name"], $field);
+            $fileContent = $this->filesystem->disk("local")->get($uploadedFieldRelativePath);
 
-            if($transformed = $this->isTransformed($value, $field)) {
-                // Handle transformations on the uploads disk for performance
-                $fileContent = $this->handleImageTransformations($fileContent, $value["cropData"]);
+            if($transformed && $field->isTransformOriginal()) {
+                // Field was configured to handle transformation on the source image
+                $fileContent = $this->handleImageTransformations($fileContent, $value);
             }
-
+            
             $storage->put($storedFilePath, $fileContent);
 
             return [
@@ -80,23 +79,22 @@ class UploadFormatter extends SharpFieldFormatter
                 "size" => $storage->size($storedFilePath),
                 "mime_type" => $storage->mimeType($storedFilePath),
                 "disk" => $field->storageDisk(),
-                "transformed" => $transformed
+                "filters" => $value["filters"] ?? null
             ];
         }
 
-        if($this->isTransformed($value, $field)) {
-            // Just transform image, without updating value in DB
-            $fileContent = $storage->get(
-                $value["name"]
-            );
-
-            $storage->put(
-                $value["name"],
-                $this->handleImageTransformations($fileContent, $value["cropData"])
-            );
-
+        if($transformed) {
+            // Existing image, but transformed (with filters)
+            if($field->isTransformOriginal()) {
+                // Field was configured to handle transformation on the source image
+                $storage->put(
+                    $value["name"], 
+                    $this->handleImageTransformations($storage->get($value["name"]), $value)
+                );
+            }
+            
             return [
-                "transformed" => true
+                "filters" => $value["filters"] ?? null
             ];
         }
 
@@ -105,28 +103,7 @@ class UploadFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param array $value
-     * @return bool
-     */
-    protected function isUploaded($value): bool
-    {
-        return isset($value["uploaded"]) && $value["uploaded"];
-    }
-
-    /**
-     * @param array $value
      * @param SharpFormFieldWithUpload $field
-     * @return bool
-     */
-    protected function isTransformed($value, $field): bool
-    {
-        return isset($value["cropData"]);
-    }
-
-    /**
-     * @param string $fileName
-     * @param SharpFormFieldWithUpload $field
-     * @return string
      * @throws SharpFormFieldFormattingMustBeDelayedException
      */
     protected function getStoragePath(string $fileName, $field): string
@@ -151,26 +128,24 @@ class UploadFormatter extends SharpFieldFormatter
         return "{$basePath}/{$fileName}";
     }
 
-    /**
-     * @param $fileContent
-     * @param array $cropData
-     * @return \Intervention\Image\Image
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
-     */
-    protected function handleImageTransformations($fileContent, array $cropData)
+    protected function handleImageTransformations($fileContent, array &$filters): Image
     {
         $img = $this->imageManager->make($fileContent);
 
-        if($cropData["rotate"]) {
-            $img->rotate($cropData["rotate"]);
+        if($rotate = Arr::get($filters, "filters.rotate.angle")) {
+            $img->rotate($rotate);
+            unset($filters["filters"]["rotate"]);
         }
 
-        $img->crop(
-            intval(round($img->width() * $cropData["width"])),
-            intval(round($img->height() * $cropData["height"])),
-            intval(round($img->width() * $cropData["x"])),
-            intval(round($img->height() * $cropData["y"]))
-        );
+        if($cropData = Arr::get($filters, "filters.crop")) {
+            $img->crop(
+                intval(round($img->width() * $cropData["width"])),
+                intval(round($img->height() * $cropData["height"])),
+                intval(round($img->width() * $cropData["x"])),
+                intval(round($img->height() * $cropData["y"]))
+            );
+            unset($filters["filters"]["crop"]);
+        }
 
         return $img->encode();
     }

@@ -40,7 +40,10 @@
                 const value = normalizeText(e.target.value);
                 const error = this.validate(value);
                 this.$emit('input', value, { error });
-            }
+            },
+            focus() {
+                this.$refs.input.focus();
+            },
         },
     }
 </script>

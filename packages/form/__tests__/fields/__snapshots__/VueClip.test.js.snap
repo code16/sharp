@@ -85,7 +85,7 @@ exports[`vue-clip can mount initially image VueClip component 1`] = `
 			<div class="card card-body SharpUpload__card">
 				<div class="row">
 					<div class="SharpUpload__thumbnail col-4 col-md-4">
-						<img src="/image.jpg">
+						<img src="/image.jpg" alt="">
 					</div>
 					<div class="SharpUpload__infos col-8 col-md-8">
 						<div class="mb-3">
@@ -177,7 +177,7 @@ exports[`vue-clip can mount non croppable image 1`] = `
 			<div class="card card-body SharpUpload__card">
 				<div class="row">
 					<div class="SharpUpload__thumbnail col-4 col-md-4">
-						<img src="/image.jpg">
+						<img src="/image.jpg" alt="">
 					</div>
 					<div class="SharpUpload__infos col-8 col-md-8">
 						<div class="mb-3">

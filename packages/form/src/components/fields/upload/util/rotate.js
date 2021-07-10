@@ -1,6 +1,13 @@
-export default function rotate(cropper, degree) {
-    let data = cropper.getCropBoxData();
-    let contData = cropper.getContainerData();
+
+export function rotate(cropper, degree) {
+    const data = cropper.getData();
+
+    rotateTo(cropper, data.rotate + degree);
+}
+
+export function rotateTo(cropper, degree) {
+    const data = cropper.getCropBoxData();
+    const contData = cropper.getContainerData();
 
     //set data of cropbox to avoid unwanted behavior due to strict mode
     data.width = 2;
@@ -10,7 +17,7 @@ export default function rotate(cropper, degree) {
     data.left = leftNew;
     cropper.setCropBoxData(data);
     //rotate
-    cropper.rotate(degree);
+    cropper.rotateTo(degree);
     //get canvas data
     let canvData = cropper.getCanvasData();
     //calculate new height and width based on the container dimensions

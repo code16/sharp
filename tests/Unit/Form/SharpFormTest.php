@@ -22,16 +22,14 @@ class SharpFormTest extends SharpTestCase
         $sharpForm = new class extends BaseSharpForm {
             function buildFormFields(): void
             {
-                $this->addField(
-                    SharpFormMarkdownField::make("md")
-                )->addField(
-                    SharpFormCheckField::make("check", "text")
-                );
+                $this
+                    ->addField(SharpFormMarkdownField::make("md"))
+                    ->addField(SharpFormCheckField::make("check", "text"));
             }
         };
 
         $this->assertEquals([
-            "md" => ["text" => null],
+            "md" => ["text" => null, "files" => []],
             "check" => false
         ], $sharpForm->newInstance());
     }
@@ -42,17 +40,15 @@ class SharpFormTest extends SharpTestCase
         $sharpForm = new class extends BaseSharpForm {
             function buildFormFields(): void
             {
-                $this->addField(
-                    SharpFormTextField::make("name")
-                )->addField(
-                    SharpFormMarkdownField::make("subclass:company")
-                );
+                $this
+                    ->addField(SharpFormTextField::make("name"))
+                    ->addField(SharpFormMarkdownField::make("subclass:company"));
             }
         };
 
         $this->assertEquals([
             "name" => "",
-            "subclass:company" => ["text" => null],
+            "subclass:company" => ["text" => null, "files" => []],
         ], $sharpForm->newInstance());
     }
 
@@ -65,25 +61,26 @@ class SharpFormTest extends SharpTestCase
 
             function buildFormFields(): void
             {
-                $this->addField(
-                    SharpFormTextField::make("normal")
-                )->addField(
-                    SharpFormTextField::make("delayed")
-                        ->setFormatter(new class extends SharpFieldFormatter
-                        {
-                            function toFront(SharpFormField $field, $value)
-                            {
-                            }
-                            function fromFront(SharpFormField $field, string $attribute, $value)
-                            {
-                                if (!$this->instanceId) {
-                                    throw new SharpFormFieldFormattingMustBeDelayedException();
+                $this
+                    ->addField(
+                        SharpFormTextField::make("normal")
+                    )
+                    ->addField(
+                        SharpFormTextField::make("delayed")
+                            ->setFormatter(new class extends SharpFieldFormatter {
+                                function toFront(SharpFormField $field, $value)
+                                {
                                 }
-
-                                return $value . "-" . $this->instanceId;
-                            }
-                        })
-                );
+                                function fromFront(SharpFormField $field, string $attribute, $value)
+                                {
+                                    if (!$this->instanceId) {
+                                        throw new SharpFormFieldFormattingMustBeDelayedException();
+                                    }
+    
+                                    return $value . "-" . $this->instanceId;
+                                }
+                            })
+                    );
             }
 
             function update($id, array $data)

@@ -22,12 +22,50 @@
     }
   }
 
-  .card-header + .card-body.form-control {
+  .card-body.form-control {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     border-top-color: transparent;
     &.is-invalid {
       border-top-color: $form-feedback-invalid-color;
+    }
+  }
+
+  &__content {
+    height: var(--height, auto);
+    overflow-y: auto;
+
+    > img, > p > img {
+      display: inline-block;
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 200px;
+      border: 1px solid $card-border-color;
+      border-radius: $card-border-radius;
+      margin-bottom: 1rem;
+      transition: border .125s ease-in-out, box-shadow .125s ease-in-out;
+      &.ProseMirror-selectednode {
+        border-color: var(--bs-primary);
+        box-shadow: $box-shadow;
+      }
+    }
+    mark[data-color="selection"] {
+      background-color: #ACCEF7;
+      padding: 0;
+    }
+  }
+
+  &__node {
+    margin-bottom: 1rem;
+  }
+
+  &__link-dropdown {
+    .dropdown-menu {
+      width: 18rem;
+      &[x-placement^=top] {
+        bottom: auto;
+      }
     }
   }
 
@@ -64,7 +102,7 @@
     }
 
     .btn-group {
-      &:not(:first-child) {
+      &:not(:first-child):not(.dropdown) {
         margin-left: .5rem;
       }
     }
@@ -75,5 +113,11 @@
         color: rgba(0,0,0,.675);
       }
     }
+  }
+
+  &--disabled {
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.8;
   }
 }

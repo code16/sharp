@@ -7,6 +7,10 @@ use Code16\Sharp\Form\Fields\SharpFormWysiwygField;
 use Code16\Sharp\Tests\SharpTestCase;
 use Illuminate\Support\Str;
 
+/**
+ * WysiwygFormatter is just a MarkdownFormatter. 
+ * Here we only test the very basic stuff.
+ */
 class WysiwygFormatterTest extends SharpTestCase
 {
 
@@ -15,8 +19,10 @@ class WysiwygFormatterTest extends SharpTestCase
     {
         $value = Str::random();
 
-        $this->assertEquals(["text" => $value], (new WysiwygFormatter())
-            ->toFront(SharpFormWysiwygField::make("a"), $value));
+        $this->assertEquals(
+            ["text" => $value, "files" => []], 
+            (new WysiwygFormatter())->toFront(SharpFormWysiwygField::make("a"), $value)
+        );
     }
 
     /** @test */
@@ -26,7 +32,8 @@ class WysiwygFormatterTest extends SharpTestCase
 
         $this->assertEquals(
             $value,
-            (new WysiwygFormatter())->fromFront(SharpFormWysiwygField::make("a"), "attribute", ["text" => $value])
+            (new WysiwygFormatter())
+                ->fromFront(SharpFormWysiwygField::make("a"), "attribute", ["text" => $value])
         );
     }
 }

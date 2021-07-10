@@ -47,9 +47,8 @@ describe('vue-clip',() => {
             <div id="app">
                 <sharp-vue-clip :value="value"
                     :options="{ url:'/' }"
-                    download-id="my_upload" 
-                    pending-key="my_upload.0"
-                    :modifiers="{}"
+                    field-config-identifier="my_upload" 
+                    unique-identifier="my_upload.0"
                     :ratio-x="ratioX" 
                     :ratio-y="ratioY"
                     :read-only="readOnly"
@@ -152,28 +151,6 @@ describe('vue-clip',() => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    test('emit update on image loaded', async () => {
-        let $vueClip = await createVm({
-            data: () => ({
-                value: {
-                    name: 'Image.jpg',
-                    thumbnail: '/image.jpg',
-                    size: 15000
-                }
-            })
-        });
-
-        let $image = $vueClip.$el.querySelector('img');
-        let handleImageUpdated = jest.fn();
-
-        $vueClip.isNew = true; // simulate new loaded image
-        $vueClip.$on('image-updated', handleImageUpdated);
-
-        $image.dispatchEvent(new UIEvent('load'));
-
-        expect(handleImageUpdated).toHaveBeenCalledTimes(1);
-    });
-
     test('init files and reset on value null', async () => {
         let $vueClip = await createVm({
             data: ()=>({
@@ -253,15 +230,15 @@ describe('vue-clip',() => {
 
        $vueClip.addedFile(mockFile({
            name: 'Fic.pdf',
-           dataUrl:'data:image/jpeg,<<source image>>'
+           blobUrl: 'blob:<<source image>>'
        }));
 
         await Vue.nextTick();
 
-        expect($vueClip.originalImageSrc).toBe($vueClip.file.dataUrl);
-        expect($vueClip.imageSrc).toBe($vueClip.file.dataUrl);
+        expect($vueClip.originalImageSrc).toBe($vueClip.file.blobUrl);
+        expect($vueClip.imageSrc).toBe($vueClip.file.blobUrl);
 
-        $vueClip.croppedImg = 'data:image/jpeg,<<cropped image>>';
+        $vueClip.croppedImg = 'blob:<<cropped image>>';
 
         await Vue.nextTick();
 
@@ -299,8 +276,11 @@ describe('vue-clip',() => {
                     name: 'Image.jpg',
                     thumbnail: '/image.jpg'
                 }
-            })
+            }),
         });
+
+        // reset status to simulate new file
+        $vueClip.file.status = null;
 
         expect($vueClip.operationFinished).toEqual({
             crop: false
@@ -331,6 +311,9 @@ describe('vue-clip',() => {
                 }
             })
         });
+
+        // reset status to simulate new file
+        $vueClip.file.status = null;
 
         $vueClip.file.progress = 50;
 
@@ -381,7 +364,7 @@ describe('vue-clip',() => {
 
         let { $root:vm } = $vueClip;
 
-        expect($vueClip.hasInitialCrop).toBe(true);
+        expect($vueClip.hasInitialCrop).toBe(false);
         expect($vueClip.isCroppable).toBe(true);
 
         vm.ratioX = 0;
@@ -398,6 +381,7 @@ describe('vue-clip',() => {
         expect($vueClip.hasInitialCrop).toBe(false);
 
         vm.ratioX = 1;
+        $vueClip.file.status = null;
         await Vue.nextTick();
 
         expect($vueClip.hasInitialCrop).toBe(true);
@@ -569,7 +553,7 @@ describe('vue-clip',() => {
         }
     }
 
-    test('crop', async () => {
+    xtest('crop', async () => {
         let $vueClip = await createVm({
             propsData: {
                 ratioX: 1,
@@ -615,12 +599,17 @@ describe('vue-clip',() => {
             expect(handler.mock.calls[0][0]).toEqual({
                 name: 'Image.jpg',
                 thumbnail: '/image.jpg',
-                cropData: {
-                    width: .5,
-                    height: .25,
-                    x: .1,
-                    y: .05,
-                    rotate: -0
+                transformed: true,
+                filters: {
+                    crop: {
+                        width: .5,
+                        height: .25,
+                        x: .1,
+                        y: .05,
+                    },
+                    rotate: {
+                        angle: -0,
+                    },
                 }
             })
         };
@@ -637,12 +626,17 @@ describe('vue-clip',() => {
         testEmit = handler => {
             expect(handler).toHaveBeenCalledTimes(2);
             expect(handler.mock.calls[1][0]).toMatchObject({
-                cropData: {
-                    width: 0.125,
-                    height: 1,
-                    x: 0.025,
-                    y: 0.2,
-                    rotate: 90
+                transformed: true,
+                filters: {
+                    crop: {
+                        width: 0.125,
+                        height: 1,
+                        x: 0.025,
+                        y: 0.2,
+                    },
+                    rotate: {
+                        angle: 90,
+                    },
                 }
             });
         };
@@ -668,30 +662,19 @@ describe('vue-clip',() => {
             })
         });
 
-        let { modal } = $vueClip.$refs;
+        const modal = $vueClip.$refs.modal;
 
         $vueClip.updateCroppedImage = jest.fn();
-        $vueClip.updateCropData = jest.fn();
+        $vueClip.updateFilters = jest.fn();
 
-        modal.$emit('ok');
+        modal.$emit('submit');
 
         expect($vueClip.updateCroppedImage).toHaveBeenCalledTimes(1);
-        expect($vueClip.updateCropData).toHaveBeenCalledTimes(1);
+        expect($vueClip.updateFilters).toHaveBeenCalledTimes(1);
 
-        let handleInactive = jest.fn(), handleActive = jest.fn();
+        $vueClip.handleEditButtonClick();
 
-        $vueClip.$on('inactive', handleInactive);
-        $vueClip.$on('active', handleActive);
-
-        $vueClip.onEditButtonClick();
-
-        expect(handleActive).toHaveBeenCalledTimes(1);
         expect($vueClip.showEditModal).toBe(true);
-
-
-        modal.$emit('hidden');
-
-        expect(handleInactive).toHaveBeenCalledTimes(1);
     });
 });
 

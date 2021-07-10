@@ -34,6 +34,8 @@
 </template>
 
 <script>
+    import { getNavbarHeight } from "../util";
+
     export default {
         name: 'SharpActionBar',
         props: {
@@ -46,6 +48,7 @@
         },
         methods: {
             layout(rect) {
+                /** @see getNavbarHeight **/
                 document.documentElement.style.setProperty('--navbar-height', `${rect.height}px`);
             },
         },

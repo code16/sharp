@@ -1,7 +1,11 @@
 <template>
     <FieldLayout class="ShowTextField" :class="classes" :label="label">
         <template v-if="html">
-            <div class="ShowTextField__content" v-html="currentContent"></div>
+            <TextRenderer
+                class="ShowTextField__content"
+                :content="currentContent"
+                :field-config-identifier="fieldConfigIdentifier"
+            />
         </template>
         <template v-else>
             <div class="ShowTextField__content">{{ currentContent }}</div>
@@ -24,14 +28,16 @@
 <script>
     import { Localization } from 'sharp/mixins';
     import clip from 'text-clipper';
-    import { syncVisibility } from "../../util/fields/visiblity";
-    import { truncateToWords, stripTags } from "../../util/fields/text";
-    import FieldLayout from "../FieldLayout";
+    import { syncVisibility } from "../../../util/fields/visiblity";
+    import { truncateToWords, stripTags } from "../../../util/fields/text";
+    import FieldLayout from "../../FieldLayout";
+    import TextRenderer from "./TextRenderer";
 
     export default {
         mixins: [Localization],
         components: {
             FieldLayout,
+            TextRenderer,
         },
         props: {
             value: String,
@@ -39,6 +45,7 @@
             label: String,
             emptyVisible: Boolean,
             html: Boolean,
+            fieldConfigIdentifier: String,
         },
         data() {
             return {
