@@ -2,7 +2,14 @@
 
 ## Terminology, general concept
 
-In Sharp, we handle `entities`; and `entity` is simply a data structure which has a meaning in the applicative context. For instance, a `Person`, a `Post` or an `Order`. In the Eloquent world, for which Sharp is optimized, it's typically a Model — but it's not necessarily a 1-1 relationship, a Sharp `entity` can represent a portion of a Model, or several Models.
+In Sharp, one of the most important concepts are `entities`. An `entity` is simply a data structure which has a certain purpose in the applicative context. Here are some examples for an `entity`:
+ 
+ * `Person`
+ * `Post`
+ * `Order`
+ * `Article`
+ 
+In the Eloquent world, for which Sharp is optimized, it's typically a model — but it's not necessarily a 1-1 relationship. A Sharp `entity` can represent a portion of a Model or even several Models.
 
 Each instance of an `entity` is called... an `instance`.
 
