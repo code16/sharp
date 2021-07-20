@@ -17,7 +17,8 @@ class SharpFormUploadFieldTest extends SharpTestCase
                 "key" => "file", 
                 "type" => "upload", 
                 "compactThumbnail" => false, 
-                "croppable" => true, 
+                "transformable" => true, 
+                "transformOriginal" => false, 
                 "shouldOptimizeImage" => false
             ], 
             $formField->toArray()
@@ -49,13 +50,28 @@ class SharpFormUploadFieldTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_define_croppable()
+    function we_can_define_transformable()
     {
         $formField = SharpFormUploadField::make("file")
-            ->setCroppable(false);
+            ->setTransformable(false);
 
         $this->assertArraySubset(
-            ["croppable" => false],
+            ["transformable" => false],
+            $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_transformOriginal_with_transformable()
+    {
+        $formField = SharpFormUploadField::make("file")
+            ->setTransformable(true, true);
+
+        $this->assertArraySubset(
+            [
+                "transformable" => true, 
+                "transformOriginal" => true
+            ],
             $formField->toArray()
         );
     }
@@ -101,13 +117,17 @@ class SharpFormUploadFieldTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_define_croppableFileTypes()
+    function we_can_define_transformableFileTypes()
     {
         $formField = SharpFormUploadField::make("file")
             ->setCropRatio("16:9", ["jpg", "jpeg"]);
 
         $this->assertArraySubset(
-            ["ratioX" => 16, "ratioY" => 9, "croppableFileTypes" => [".jpg", ".jpeg"]],
+            [
+                "ratioX" => 16, 
+                "ratioY" => 9, 
+                "transformableFileTypes" => [".jpg", ".jpeg"]
+            ],
             $formField->toArray()
         );
 
@@ -115,7 +135,11 @@ class SharpFormUploadFieldTest extends SharpTestCase
             ->setCropRatio("16:9", [".jpg", ".jpeg"]);
 
         $this->assertArraySubset(
-            ["ratioX" => 16, "ratioY" => 9, "croppableFileTypes" => [".jpg", ".jpeg"]],
+            [
+                "ratioX" => 16, 
+                "ratioY" => 9, 
+                "transformableFileTypes" => [".jpg", ".jpeg"]
+            ],
             $formField->toArray()
         );
     }

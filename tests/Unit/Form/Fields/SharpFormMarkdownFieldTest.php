@@ -91,7 +91,7 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
             $formField->toArray()
         );
 
-        $formField->setCroppable(false);
+        $formField->setTransformable(false);
 
         $this->assertArraySubset(
             [

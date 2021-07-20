@@ -172,6 +172,84 @@ class UploadFormatterTest extends SharpTestCase
     }
 
     /** @test */
+    function we_transform_the_newly_uploaded_file_if_isTransformOriginal_is_configured()
+    {
+        $uploadedFile = UploadedFile::fake()->image("image.jpg", 600, 600);
+        $uploadedFile->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
+
+        $field = SharpFormUploadField::make("upload")
+            ->setStorageDisk("local")
+            ->setTransformable(true, true)
+            ->setStorageBasePath("data/Test");
+        
+        $result = (new UploadFormatter)
+            ->fromFront(
+                $field,
+                "attribute",
+                [
+                    "name" => "/image.jpg",
+                    "uploaded" => true,
+                    "transformed" => true,
+                    "filters" => [
+                        "crop" => [
+                            "height" => .5,
+                            "width" => .75,
+                            "x" => .3,
+                            "y" => .34,
+                        ],
+                        "rotate" => [
+                            "angle" => 45
+                        ]
+                    ]
+                ]
+            );
+
+        $this->assertEmpty($result["filters"]);
+        $this->assertNotEquals($uploadedFile->getSize(), $result["size"]);
+        Storage::disk('local')->assertExists("data/Test/image.jpg");
+    }
+
+    /** @test */
+    function we_transform_an_existing_file_if_isTransformOriginal_is_configured()
+    {
+        $existingFile = UploadedFile::fake()->image("image.jpg", 600, 600);
+        $existingFile->storeAs('/data/Test', 'image.jpg', ['disk' => 'local']);
+        $originalSize = $existingFile->getSize();
+
+        $field = SharpFormUploadField::make("upload")
+            ->setStorageDisk("local")
+            ->setTransformable(true, true)
+            ->setStorageBasePath("data/Test");
+
+        $this->assertEquals(
+            ["filters" => []],
+            (new UploadFormatter)
+                ->fromFront(
+                    $field,
+                    "attribute",
+                    [
+                        "name" => "data/Test/image.jpg",
+                        "uploaded" => false,
+                        "transformed" => true,
+                        "filters" => [
+                            "crop" => [
+                                "height" => .5,
+                                "width" => .75,
+                                "x" => .3,
+                                "y" => .34,
+                            ],
+                            "rotate" => [
+                                "angle" => 45
+                            ]
+                        ]
+                    ]
+                )
+        );
+
+        $this->assertNotEquals($originalSize, Storage::disk("local")->size("data/Test/image.jpg"));
+    }
+
+    /** @test */
     function we_get_use_a_closure_as_storageBasePath()
     {
         UploadedFile::fake()
