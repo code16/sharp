@@ -5,7 +5,9 @@ namespace Code16\Sharp\Tests\Feature\Api;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpSingleForm;
+use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
 use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
+use Code16\Sharp\Tests\Fixtures\PersonSharpShow;
 use Code16\Sharp\Tests\Unit\Utils\WithCurrentSharpRequestFake;
 
 class FormControllerTest extends BaseApiTest
@@ -129,12 +131,36 @@ class FormControllerTest extends BaseApiTest
             ->assertJson([
                 "redirectUrl" => url("/sharp/s-list/person")
             ]);
+    }
+
+    /** @test */
+    public function when_deleting_an_entity_with_a_show_we_are_redirected_to_the_entity_list()
+    {
+        $this->buildTheWorld();
 
         $this->fakeCurrentSharpRequestWithUrl("/sharp/s-list/person/s-show/person/1/s-form/person/1");
         $this->deleteJson('/sharp/api/form/person/1')
             ->assertStatus(200)
             ->assertJson([
                 "redirectUrl" => url("/sharp/s-list/person")
+            ]);
+    }
+
+    /** @test */
+    public function when_deleting_an_entity_with_multiple_shows_we_are_redirected_to_the_parent_show()
+    {
+        $this->withoutExceptionHandling();
+        $this->buildTheWorld();
+
+        // Some fake config to avoid 404
+        $this->app['config']->set('sharp.entities.car.form', PersonSharpForm::class);
+        $this->app['config']->set('sharp.entities.car.show', PersonSharpShow::class);
+
+        $this->fakeCurrentSharpRequestWithUrl("/sharp/s-list/person/s-show/person/1/s-show/car/2/s-form/car/2");
+        $this->deleteJson('/sharp/api/form/car/2')
+            ->assertOk()
+            ->assertJson([
+                "redirectUrl" => url("/sharp/s-list/person/s-show/person/1")
             ]);
     }
 

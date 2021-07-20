@@ -4,6 +4,7 @@ namespace Code16\Sharp\Http\Context;
 
 use Code16\Sharp\Http\Context\Util\BreadcrumbItem;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class CurrentSharpRequest
 {
@@ -25,16 +26,50 @@ class CurrentSharpRequest
 
     public function getPreviousShowFromBreadcrumbItems(?string $entityKey = null): ?BreadcrumbItem
     {
+        $modeNotEquals = false;
+        if($entityKey && Str::startsWith($entityKey, '!')) {
+            $entityKey = Str::substr($entityKey, 1);
+            $modeNotEquals = true;
+        }
+        
         return $this->breadcrumb()
             ->reverse()
             ->filter->isShow()
-            ->when($entityKey !== null, function($items) use($entityKey) {
+            ->when($entityKey !== null, function($items) use($entityKey, $modeNotEquals) {
                 return $items
-                    ->filter(function(BreadcrumbItem $breadcrumbItem) use($entityKey) {
-                        return $breadcrumbItem->entityKey() === $entityKey;
+                    ->filter(function(BreadcrumbItem $breadcrumbItem) use($entityKey, $modeNotEquals) {
+                        return $modeNotEquals
+                            ? $breadcrumbItem->entityKey() !== $entityKey
+                            : $breadcrumbItem->entityKey() === $entityKey;
                     });
             })
             ->first();
+    }
+
+    public function getUrlForBreadcrumbItem(BreadcrumbItem $item): string
+    {
+        $breadcrumb = $this->breadcrumb();
+        while($breadcrumb->count() && !$breadcrumb->last()->is($item)) {
+            $breadcrumb = $breadcrumb->slice(0, -1);
+        }
+        
+        return $this->getUrlForBreadcrumb($breadcrumb);
+    }
+
+    public function getUrlForBreadcrumb(Collection $breadcrumb): string
+    {
+        return url(
+            sharp_base_url_segment()
+            . "/"
+            . $breadcrumb
+                ->map(function(BreadcrumbItem $item) {
+                    return sprintf('%s/%s',
+                        $item->type,
+                        isset($item->instance) ? "{$item->key}/{$item->instance}" : $item->key
+                    );
+                })
+                ->implode("/")
+        );
     }
 
     public function getUrlOfPreviousBreadcrumbItem(string $type = null): string
@@ -46,18 +81,7 @@ class CurrentSharpRequest
             }
         }
         
-        return url(
-            sharp_base_url_segment()
-            . "/" 
-            . $breadcrumb
-                ->map(function(BreadcrumbItem $item) {
-                    return sprintf('%s/%s',
-                        $item->type,
-                        isset($item->instance) ? "{$item->key}/{$item->instance}" : $item->key
-                    );
-                })
-                ->implode("/")
-        );
+        return $this->getUrlForBreadcrumb($breadcrumb);
     }
 
     public function getCurrentEntityMenuLabel(): ?string
