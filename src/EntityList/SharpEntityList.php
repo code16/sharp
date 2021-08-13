@@ -200,11 +200,29 @@ abstract class SharpEntityList
         $this->layoutBuilt = false;
         
         $this->layoutType = self::LAYOUT_CARD;
-        $this->layoutOptions = [
+        $this->layoutOptions = array_merge($this->layoutOptions, [
             'itemsPerRow' => $cardsPerRow,
             'itemWidth' => $cardWidth,
-        ];
+        ]);
         
+        return $this;
+    }
+    
+    protected function setCardFirstColumnTopAligned(bool $align = true): self
+    {
+        $this->layoutOptions = array_merge($this->layoutOptions, [
+            'alignColumnHeader' => $align,
+        ]);
+        
+        return $this;
+    }
+    
+    protected function setCardsCollapsed(bool $collapsed = true): self
+    {
+        $this->layoutOptions = array_merge($this->layoutOptions, [
+            'collapsed' => $collapsed,
+        ]);
+    
         return $this;
     }
 

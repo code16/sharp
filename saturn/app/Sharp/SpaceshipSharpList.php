@@ -80,8 +80,9 @@ class SpaceshipSharpList extends SharpEntityList
 //            ->addColumn("messages_sent_count", 2);
         $this
             ->setLayoutTypeCard(4)
-            ->addColumn("picture", 12)
+            ->setCardFirstColumnTopAligned()
             ->addColumn("name", 12)
+            ->addColumn("picture", 12)
             ->addColumnLarge("capacity", 4)
             ->addColumn("type:label", 6)
             ->addColumnLarge("pilots", 8)

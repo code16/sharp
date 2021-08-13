@@ -1,5 +1,5 @@
 <template>
-    <div class="SharpEntityList" :class="classes">
+    <div class="SharpEntityList" :class="classes" :style="style">
         <slot
             name="action-bar"
             :props="actionBarProps"
@@ -9,32 +9,40 @@
         <template v-if="ready">
             <div v-show="visible">
                 <template v-if="layout.type === 'card'">
-                    <div class="row g-4">
-                        <template v-for="item in items">
-                            <div class="col-12 col-md-auto" :style="{ width: layout.itemsPerRow ? `${100 / layout.itemsPerRow}%` : null }">
-                                <DataCard
-                                    :data="item"
-                                    :columns="columns"
-                                    :url="instanceUrl(item)"
-                                    :style="{ width: layout.itemWidth }"
+                    <div class="mt-3">
+                        <div class="row gx-4" :class="{ 'gy-4': !layout.collapsed }">
+                            <template v-for="item in items">
+                                <div class="col-12 col-md-auto"
+                                    :style="{
+                                        width: layout.itemsPerRow ? `${100 / layout.itemsPerRow}%` : null,
+                                        'margin-top': layout.collapsed ? '-1px' : null
+                                    }"
                                 >
-                                    <template v-if="hasActionsColumn" v-slot:actions>
-                                        <EntityActions
-                                            :config="config"
-                                            :has-state="instanceHasState(item)"
-                                            :state="instanceState(item)"
-                                            :state-options="instanceStateOptions(item)"
-                                            :state-disabled="!instanceHasStateAuthorization(item)"
-                                            :has-commands="instanceHasCommands(item)"
-                                            :commands="instanceCommands(item)"
-                                            dropdown-left
-                                            @command="handleInstanceCommandRequested(item, $event)"
-                                            @state-change="handleInstanceStateChanged(item, $event)"
-                                        />
-                                    </template>
-                                </DataCard>
-                            </div>
-                        </template>
+                                    <DataCard
+                                        :data="item"
+                                        :columns="columns"
+                                        :align-column-header="layout.alignColumnHeader"
+                                        :url="instanceUrl(item)"
+                                        :style="{ width: layout.itemWidth }"
+                                    >
+                                        <template v-if="hasActionsColumn" v-slot:actions>
+                                            <EntityActions
+                                                :config="config"
+                                                :has-state="instanceHasState(item)"
+                                                :state="instanceState(item)"
+                                                :state-options="instanceStateOptions(item)"
+                                                :state-disabled="!instanceHasStateAuthorization(item)"
+                                                :has-commands="instanceHasCommands(item)"
+                                                :commands="instanceCommands(item)"
+                                                dropdown-left
+                                                @command="handleInstanceCommandRequested(item, $event)"
+                                                @state-change="handleInstanceStateChanged(item, $event)"
+                                            />
+                                        </template>
+                                    </DataCard>
+                                </div>
+                            </template>
+                        </div>
                     </div>
                 </template>
                 <template v-else>
@@ -230,6 +238,17 @@
             classes() {
                 return {
                     'SharpEntityList--has-state-only': this.hasStateOnly,
+                }
+            },
+            style() {
+                const hasFixedWidth = this.inline
+                    && this.layout
+                    && this.layout.type === 'card'
+                    && this.layout.itemsPerRow === 1
+                    && this.layout.itemWidth;
+
+                return {
+                    'width': hasFixedWidth ? this.layout.itemWidth : null,
                 }
             },
             filters() {
