@@ -55,6 +55,7 @@
                 const extensions = [
                     ...getDefaultExtensions({
                         placeholder: this.placeholder,
+                        toolbar: this.toolbar,
                     }),
                 ]
 

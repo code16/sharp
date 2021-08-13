@@ -8,6 +8,7 @@
         variant="custom"
         v-bind="$attrs"
         v-on="$listeners"
+        ref="dropdown"
     >
         <template v-slot:button-content>
             <span class="d-inline-block">
@@ -15,9 +16,7 @@
             </span>
         </template>
 
-        <template v-slot:default="props">
-            <slot v-bind="props" />
-        </template>
+        <slot :hide="hide" />
     </b-dropdown>
 </template>
 
@@ -46,6 +45,11 @@
              */
             toggleClass() {
                 return this.classes;
+            },
+        },
+        methods: {
+            hide() {
+                this.$refs.dropdown.hide();
             },
         },
     }

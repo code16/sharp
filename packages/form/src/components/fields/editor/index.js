@@ -9,18 +9,28 @@ import Image from "@tiptap/extension-image";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import Link from "@tiptap/extension-link";
 import Placeholder from '@tiptap/extension-placeholder';
+import Heading from "@tiptap/extension-heading";
 import { TrailingNode } from "./extensions/trailing-node";
+import { getAllowedHeadingLevels } from "./util";
 
-export function getDefaultExtensions({ placeholder } = {}) {
+export function getDefaultExtensions({ placeholder, toolbar } = {}) {
     const extensions = [
         StarterKit.configure({
             horizontalRule: false,
+            heading: false,
         }),
         Table,
         TableRow,
         TableHeader,
         TableCell,
-        Image,
+        Image.configure({
+            HTMLAttributes: {
+                class: 'editor__image',
+            },
+        }),
+        Heading.configure({
+            levels: getAllowedHeadingLevels(toolbar),
+        }),
         HorizontalRule.extend({
             selectable: false,
         }),

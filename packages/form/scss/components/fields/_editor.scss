@@ -35,7 +35,42 @@
     height: var(--height, auto);
     overflow-y: auto;
 
-    > img, > p > img {
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: bold;
+      b, strong {
+        font-weight: bold;
+      }
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    h3, h4, h5, h6 {
+      font-size: 1.125rem;
+    }
+
+    table {
+      width: 100%;
+      margin-bottom: 1rem;
+      vertical-align: top;
+      > tbody {
+        vertical-align: inherit;
+      }
+      td, th {
+        padding: 0.5rem 0.5rem;
+        border: 1px solid #dee2e6;
+      }
+      p {
+        margin-bottom: 0;
+      }
+    }
+
+    .editor__image {
       display: inline-block;
       width: auto;
       height: auto;
@@ -50,19 +85,26 @@
         box-shadow: $box-shadow;
       }
     }
+
     mark[data-color="selection"] {
       background-color: #ACCEF7;
       padding: 0;
     }
+
     blockquote {
-      border-left: 5px solid #eee;
-      padding: .375rem;
+      border-left: 5px solid #dee2e6;
+      padding: .25rem;
       padding-left: 1rem;
       color: $text-muted;
       p {
         &:last-child {
           margin-bottom: 0;
         }
+      }
+    }
+    li {
+      p {
+        margin-bottom: 0;
       }
     }
   }

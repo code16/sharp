@@ -20,7 +20,7 @@ export class NotSelectableBubbleMenuView extends BaseBubbleMenuView {
         setTimeout(() => this.update(this.editor.view));
     }
     update(view, oldState) {
-        if ((!view.hasFocus() || this.viewSelecting) && !this.preventHide) {
+        if (this.viewSelecting) {
             this.hide();
             return;
         }

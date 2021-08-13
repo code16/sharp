@@ -7,6 +7,7 @@
         @show="handleDropdownShow"
         @shown="handleDropdownShown"
         @hide="handleDropdownHide"
+        ref="dropdown"
     >
         <template v-slot:text>
             <slot />
@@ -131,6 +132,10 @@
                 }
             },
             handleLinkSubmitted() {
+                if(!this.href) {
+                    this.$refs.dropdown.hide();
+                    return;
+                }
                 this.$emit('submit', {
                     href: this.href,
                     label: this.label,
