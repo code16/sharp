@@ -188,12 +188,9 @@ class TestForm extends SharpForm
                     SharpFormWysiwygField::OL,
                     SharpFormWysiwygField::UL,
                     SharpFormWysiwygField::UPLOAD,
-                    SharpFormWysiwygField::UPLOAD_IMAGE,
                     SharpFormWysiwygField::QUOTE,
                     SharpFormWysiwygField::CODE,
                     SharpFormWysiwygField::SEPARATOR,
-                    SharpFormWysiwygField::UNDO,
-                    SharpFormWysiwygField::REDO,
                 ])
                 ->setHeight(350)
         );
@@ -279,7 +276,7 @@ class TestForm extends SharpForm
                 "en" => $faker->paragraph(3),
             ],
             "wysiwyg" => [
-                "fr" => '<div>des <strong>trucs en html</strong><br><br>dezfezezf</div>',
+                "fr" => '<p>fezfjklez fezjkflezjfkez fezjkflezjfklezjkflezj</p>',
                 "en" => 'some <strong>html stuff</strong>',
             ]
         ]);

@@ -54,6 +54,17 @@
       background-color: #ACCEF7;
       padding: 0;
     }
+    blockquote {
+      border-left: 5px solid #eee;
+      padding: .375rem;
+      padding-left: 1rem;
+      color: $text-muted;
+      p {
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
   }
 
   &__node {

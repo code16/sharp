@@ -16,7 +16,7 @@
 <script>
     import MenuBar from "./toolbar/MenuBar";
     import { getNavbarHeight } from "sharp-ui";
-    import { BubbleMenuPlugin } from "./plugins/bubble-menu-plugin";
+    import { BubbleMenuPlugin } from "./plugins/bubble-menu/bubble-menu-plugin";
 
 
     export default {

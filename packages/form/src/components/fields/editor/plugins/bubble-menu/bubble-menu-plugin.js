@@ -1,8 +1,12 @@
 import { Plugin } from "prosemirror-state";
 import { BubbleMenuView as BaseBubbleMenuView, BubbleMenuPluginKey } from "@tiptap/extension-bubble-menu";
+import { NotSelectableBubbleMenuView } from "./not-selectable-view";
 
-
-class BubbleMenuView extends BaseBubbleMenuView {
+/**
+ * allow to ignore some extension when selecting text
+ * todo replace NotSelectableBubbleMenuView with BaseBubbleMenuView
+ */
+class BubbleMenuView extends NotSelectableBubbleMenuView {
     constructor(props) {
         super(props);
         this.ignoredExtensions = props.ignoredExtensions;

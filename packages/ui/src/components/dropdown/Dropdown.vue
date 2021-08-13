@@ -15,7 +15,9 @@
             </span>
         </template>
 
-        <slot />
+        <template v-slot:default="props">
+            <slot v-bind="props" />
+        </template>
     </b-dropdown>
 </template>
 

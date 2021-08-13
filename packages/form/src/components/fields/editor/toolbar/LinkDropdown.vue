@@ -3,7 +3,6 @@
         class="editor__link-dropdown"
         variant="light"
         :active="active"
-        :show-caret="false"
         v-bind="$attrs"
         @show="handleDropdownShow"
         @shown="handleDropdownShown"
@@ -13,39 +12,46 @@
             <slot />
         </template>
 
-        <b-dropdown-form @submit.prevent="handleLinkSubmitted">
-            <template v-if="hasLabelInput">
+        <template v-slot:default="{ hide }">
+            <b-dropdown-form @submit.prevent="handleLinkSubmitted">
+                <template v-if="hasLabelInput">
+                    <div class="mb-3">
+                        <label class="form-label" :for="fieldId('label')">
+                            Label
+                        </label>
+                        <TextInput :id="fieldId('label')" v-model="label" />
+                    </div>
+                </template>
+
                 <div class="mb-3">
-                    <label class="form-label" :for="fieldId('label')">
-                        Label
+                    <label class="form-label" :for="fieldId('href')">
+                        URL Address
                     </label>
-                    <TextInput :id="fieldId('label')" v-model="label" />
+                    <TextInput :id="fieldId('href')" v-model="href" placeholder="https://example.org" ref="input" />
                 </div>
-            </template>
 
-            <div class="mb-3">
-                <label class="form-label" :for="fieldId('href')">
-                    URL Address
-                </label>
-                <TextInput :id="fieldId('href')" v-model="href" placeholder="https://example.org" ref="input" />
-            </div>
-
-            <div class="mt-3">
-                <Button type="submit" variant="primary">
+                <div class="mt-3">
+                    <Button type="submit" variant="primary">
+                        <template v-if="isEdit">
+                            Update
+                        </template>
+                        <template v-else>
+                            Insert
+                        </template>
+                    </Button>
                     <template v-if="isEdit">
-                        Update
+                        <Button type="button" variant="danger" outline @click="handleRemoveClicked">
+                            Remove
+                        </Button>
                     </template>
                     <template v-else>
-                        Insert
+                        <Button type="button" variant="light" @click="hide">
+                            Cancel
+                        </Button>
                     </template>
-                </Button>
-                <template v-if="isEdit">
-                    <Button type="button" variant="danger" outline @click="handleRemoveClicked">
-                        Remove
-                    </Button>
-                </template>
-            </div>
-        </b-dropdown-form>
+                </div>
+            </b-dropdown-form>
+        </template>
     </Dropdown>
 </template>
 
