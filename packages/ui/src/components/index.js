@@ -3,6 +3,7 @@ export { default as Breadcrumb } from './Breadcrumb';
 export { default as Button } from './Button';
 export { default as ClearButton } from './ClearButton';
 export { default as CollapsibleItem } from './nav/CollapsibleItem';
+export { default as DataCard } from './DataCard';
 export { default as DataList } from './DataList';
 export { default as DataListRow } from './DataListRow';
 export { default as Dropdown } from './dropdown/Dropdown';

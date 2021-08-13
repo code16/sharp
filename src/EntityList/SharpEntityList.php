@@ -20,11 +20,16 @@ abstract class SharpEntityList
         HandleEntityCommands,
         HandleInstanceCommands,
         WithCustomTransformers;
+    
+    const LAYOUT_LIST = "list";
+    const LAYOUT_CARD = "card";
 
     protected array $containers = [];
     protected array $columns = [];
     protected bool $listBuilt = false;
     protected bool $layoutBuilt = false;
+    protected string $layoutType = self::LAYOUT_LIST;
+    protected array $layoutOptions = [];
     protected string $instanceIdAttribute = "id";
     protected ?string $multiformAttribute = null;
     protected bool $searchable = false;
@@ -52,11 +57,14 @@ abstract class SharpEntityList
             $this->layoutBuilt = true;
         }
 
-        return collect($this->columns)
-            ->map(function(EntityListLayoutColumn $column) {
-                return $column->toArray();
-            })
-            ->all();
+        return array_merge([
+            "type" => $this->layoutType,
+            "columns" => collect($this->columns)
+                ->map(function(EntityListLayoutColumn $column) {
+                    return $column->toArray();
+                })
+                ->all()
+        ], $this->layoutOptions);
     }
 
     public final function data($items = null): array
@@ -184,6 +192,19 @@ abstract class SharpEntityList
         $this->containers[] = $container;
         $this->listBuilt = false;
 
+        return $this;
+    }
+    
+    protected function setLayoutTypeCard(?int $cardsPerRow, ?string $cardWidth = null): self
+    {
+        $this->layoutBuilt = false;
+        
+        $this->layoutType = self::LAYOUT_CARD;
+        $this->layoutOptions = [
+            'itemsPerRow' => $cardsPerRow,
+            'itemWidth' => $cardWidth,
+        ];
+        
         return $this;
     }
 

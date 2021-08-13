@@ -27,7 +27,7 @@ class SpaceshipSharpList extends SharpEntityList
             )
             ->addDataContainer(
                 EntityListDataContainer::make("name")
-                    ->setLabel("Name")
+//                    ->setLabel("Name")
                     ->setSortable()
             )
             ->addDataContainer(
@@ -72,12 +72,20 @@ class SpaceshipSharpList extends SharpEntityList
 
     function buildListLayout(): void
     {
-        $this->addColumn("picture", 1, 2)
-            ->addColumn("name", 2, 4)
-            ->addColumnLarge("capacity", 2)
-            ->addColumn("type:label", 2, 4)
-            ->addColumnLarge("pilots", 3)
-            ->addColumn("messages_sent_count", 2);
+//        $this->addColumn("picture", 1, 2)
+//            ->addColumn("name", 2, 4)
+//            ->addColumnLarge("capacity", 2)
+//            ->addColumn("type:label", 2, 4)
+//            ->addColumnLarge("pilots", 3)
+//            ->addColumn("messages_sent_count", 2);
+        $this
+            ->setLayoutTypeCard(4)
+            ->addColumn("picture", 12)
+            ->addColumn("name", 12)
+            ->addColumnLarge("capacity", 4)
+            ->addColumn("type:label", 6)
+            ->addColumnLarge("pilots", 8)
+            ->addColumn("messages_sent_count", 4);
     }
 
     function getListData(EntityListQueryParams $params)
@@ -118,7 +126,7 @@ class SpaceshipSharpList extends SharpEntityList
 
         return $this
             ->setCustomTransformer("name", function($name, $spaceship) {
-                return $spaceship->name;
+                return "<h4>" . $spaceship->name . "</h4>";
             })
             ->setCustomTransformer("capacity", function($capacity) {
                 return number_format($capacity / 1000, 0) . "k";

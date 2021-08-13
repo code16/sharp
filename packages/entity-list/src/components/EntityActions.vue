@@ -37,6 +37,7 @@
                     outline
                     :commands="commands"
                     :has-state="hasState"
+                    :right="!dropdownLeft"
                     @select="handleCommandRequested"
                 >
                     <template v-slot:text>
@@ -103,6 +104,7 @@
             stateOptions: Object,
             hasCommands: Boolean,
             commands: Array,
+            dropdownLeft: Boolean,
         },
         data() {
             return {

@@ -1,5 +1,5 @@
 <template>
-    <Dropdown class="SharpCommandsDropdown" :class="classes" :small="small" right v-bind="$attrs">
+    <Dropdown class="SharpCommandsDropdown" :class="classes" :small="small" :right="right" v-bind="$attrs">
         <template v-slot:text>
             <slot name="text" />
         </template>
@@ -44,6 +44,10 @@
                 default: true,
             },
             hasState: Boolean,
+            right: {
+                type: Boolean,
+                default: true,
+            }
         },
 
         computed: {

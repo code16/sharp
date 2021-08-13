@@ -8,67 +8,98 @@
 
         <template v-if="ready">
             <div v-show="visible">
-                <DataList
-                    :items="items"
-                    :columns="columns"
-                    :page="page"
-                    :paginated="paginated"
-                    :total-count="totalCount"
-                    :page-size="pageSize"
-                    :reorder-active="reorderActive"
-                    :sort="sortedBy"
-                    :dir="sortDir"
-                    @change="handleReorderedItemsChanged"
-                    @sort-change="handleSortChanged"
-                    @page-change="handlePageChanged"
-                >
-                    <template v-slot:empty>
-                        {{ l('entity_list.empty_text') }}
-                    </template>
-
-                    <template v-slot:append-head>
-                        <template v-if="hasEntityCommands">
-                            <div class="d-flex justify-content-end">
-                                <CommandsDropdown
-                                    :commands="dropdownEntityCommands"
-                                    :disabled="reorderActive"
-                                    @select="handleEntityCommandRequested"
+                <template v-if="layout.type === 'card'">
+                    <div class="row g-4">
+                        <template v-for="item in items">
+                            <div class="col-12 col-md-auto" :style="{ width: layout.itemsPerRow ? `${100 / layout.itemsPerRow}%` : null }">
+                                <DataCard
+                                    :data="item"
+                                    :columns="columns"
+                                    :url="instanceUrl(item)"
+                                    :style="{ width: layout.itemWidth }"
                                 >
-                                    <template v-slot:text>
-                                        {{ l('entity_list.commands.entity.label') }}
+                                    <template v-if="hasActionsColumn" v-slot:actions>
+                                        <EntityActions
+                                            :config="config"
+                                            :has-state="instanceHasState(item)"
+                                            :state="instanceState(item)"
+                                            :state-options="instanceStateOptions(item)"
+                                            :state-disabled="!instanceHasStateAuthorization(item)"
+                                            :has-commands="instanceHasCommands(item)"
+                                            :commands="instanceCommands(item)"
+                                            dropdown-left
+                                            @command="handleInstanceCommandRequested(item, $event)"
+                                            @state-change="handleInstanceStateChanged(item, $event)"
+                                        />
                                     </template>
-                                </CommandsDropdown>
+                                </DataCard>
                             </div>
                         </template>
-                    </template>
+                    </div>
+                </template>
+                <template v-else>
+                    <DataList
+                        :items="items"
+                        :columns="columns"
+                        :page="page"
+                        :paginated="paginated"
+                        :total-count="totalCount"
+                        :page-size="pageSize"
+                        :reorder-active="reorderActive"
+                        :sort="sortedBy"
+                        :dir="sortDir"
+                        @change="handleReorderedItemsChanged"
+                        @sort-change="handleSortChanged"
+                        @page-change="handlePageChanged"
+                    >
+                        <template v-slot:empty>
+                            {{ l('entity_list.empty_text') }}
+                        </template>
 
-                    <template v-slot:item="{ item }">
-                        <DataListRow :url="instanceUrl(item)" :columns="columns" :highlight="instanceIsFocused(item)" :row="item">
-                            <template v-if="hasActionsColumn" v-slot:append="props">
-                                <div class="SharpEntityList__actions d-flex">
-                                    <EntityActions
-                                        :config="config"
-                                        :has-state="instanceHasState(item)"
-                                        :state="instanceState(item)"
-                                        :state-options="instanceStateOptions(item)"
-                                        :state-disabled="!instanceHasStateAuthorization(item)"
-                                        :has-commands="instanceHasCommands(item)"
-                                        :commands="instanceCommands(item)"
-                                        @command="handleInstanceCommandRequested(item, $event)"
-                                        @state-change="handleInstanceStateChanged(item, $event)"
-                                        @selecting="props.toggleHighlight($event)"
-                                    />
+                        <template v-slot:append-head>
+                            <template v-if="hasEntityCommands">
+                                <div class="d-flex justify-content-end">
+                                    <CommandsDropdown
+                                        :commands="dropdownEntityCommands"
+                                        :disabled="reorderActive"
+                                        @select="handleEntityCommandRequested"
+                                    >
+                                        <template v-slot:text>
+                                            {{ l('entity_list.commands.entity.label') }}
+                                        </template>
+                                    </CommandsDropdown>
                                 </div>
                             </template>
-                        </DataListRow>
-                    </template>
-
-                    <template v-slot:append-body>
-                        <template v-if="inline && loading">
-                            <LoadingOverlay small absolute fade />
                         </template>
-                    </template>
-                </DataList>
+
+                        <template v-slot:item="{ item }">
+                            <DataListRow :url="instanceUrl(item)" :columns="columns" :highlight="instanceIsFocused(item)" :row="item">
+                                <template v-if="hasActionsColumn" v-slot:append="props">
+                                    <div class="SharpEntityList__actions d-flex">
+                                        <EntityActions
+                                            :config="config"
+                                            :has-state="instanceHasState(item)"
+                                            :state="instanceState(item)"
+                                            :state-options="instanceStateOptions(item)"
+                                            :state-disabled="!instanceHasStateAuthorization(item)"
+                                            :has-commands="instanceHasCommands(item)"
+                                            :commands="instanceCommands(item)"
+                                            @command="handleInstanceCommandRequested(item, $event)"
+                                            @state-change="handleInstanceStateChanged(item, $event)"
+                                            @selecting="props.toggleHighlight($event)"
+                                        />
+                                    </div>
+                                </template>
+                            </DataListRow>
+                        </template>
+
+                        <template v-slot:append-body>
+                            <template v-if="inline && loading">
+                                <LoadingOverlay small absolute fade />
+                            </template>
+                        </template>
+                    </DataList>
+                </template>
             </div>
         </template>
         <template v-else-if="visible && inline">
@@ -85,6 +116,7 @@
     import { formUrl, showUrl, lang, showAlert, api } from 'sharp';
     import { Localization, DynamicView, withCommands } from 'sharp/mixins';
     import {
+        DataCard,
         DataList,
         DataListRow,
         StateIcon,
@@ -112,6 +144,7 @@
         components: {
             EntityActions,
 
+            DataCard,
             DataList,
             DataListRow,
 
@@ -303,7 +336,7 @@
                 return this.data?.items ?? [];
             },
             columns() {
-                return this.layout.map(columnLayout => ({
+                return this.layout.columns.map(columnLayout => ({
                     ...columnLayout,
                     ...this.containers[columnLayout.key]
                 }));
