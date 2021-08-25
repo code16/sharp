@@ -27,7 +27,11 @@ export default function ({ textProp }) {
                 return {
                     ...this.value,
                     [textProp]: this.isLocalized
-                        ? localeObjectOrEmpty({ localeObject: this.value ? this.value[textProp]: '', locale:this.locale, value: text })
+                        ? localeObjectOrEmpty({
+                            localeObject: this.value ? this.value[textProp] : '',
+                            locale: this.locale,
+                            value: text
+                        })
                         : text
                 };
             }
