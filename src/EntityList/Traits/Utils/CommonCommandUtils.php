@@ -38,6 +38,4 @@ trait CommonCommandUtils
                 ];
             });
     }
-
-
 }
