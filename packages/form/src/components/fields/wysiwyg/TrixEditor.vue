@@ -59,7 +59,7 @@
                 return `trix-toolbar-${this.uniqueIdentifier}`;
             },
             text() {
-                return this.localized ? this.localizedText : this.value !== null ? this.value.text : '';
+                return this.localized ? this.localizedText : this.value ? this.value.text : '';
             }
         },
         methods: {

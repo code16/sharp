@@ -10,13 +10,13 @@ export default function ({ textProp }) {
         mixins: [localizeField],
         computed: {
             localizedText() {
-                if (this.value === null) {
+                if (!this.value) {
                     return '';
                 }
 
                 return (
                     this.isLocalized
-                    ? this.value[textProp] !== null ? this.value[textProp][this.locale] : ''
+                    ? this.value[textProp] ? this.value[textProp][this.locale] : ''
                     : this.value[textProp]
                 );
             }
