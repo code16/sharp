@@ -104,10 +104,6 @@ $factory->define(\App\TechnicalReview::class, function (Faker\Generator $faker) 
     $status = $faker->boolean ? "ok" : "ko";
 
     return [
-        'report' => [
-            "fr" => $faker->sentence,
-            "en" => $faker->sentence,
-        ],
         'status' => $status,
         'comment' => $status == "ko" ? $faker->sentence : null,
         'starts_at' => $faker->dateTimeThisYear

@@ -19,7 +19,6 @@ use Code16\Sharp\Form\Fields\SharpFormTagsField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
-use Code16\Sharp\Form\Fields\SharpFormWysiwygField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
@@ -183,10 +182,6 @@ class SpaceshipSharpForm extends SharpForm
                             ->setMinTime(8)
                             ->setHasTime(true)
                     )->addItemField(
-                        SharpFormWysiwygField::make("report")
-                            ->setLabel("Report")
-                            ->setLocalized()
-                    )->addItemField(
                         SharpFormSelectField::make("status", [
                             "ok" => "Passed", "ko" => "Failed"
                         ])->setLabel("Status")
@@ -242,7 +237,6 @@ class SpaceshipSharpForm extends SharpForm
                             ->withSingleField("pilots")
                             ->withSingleField("reviews", function(FormLayoutColumn $listItem) {
                                 $listItem->withSingleField("starts_at")
-                                    ->withSingleField('report')
                                     ->withFields("status|5", "comment|7");
                             });
                     })
