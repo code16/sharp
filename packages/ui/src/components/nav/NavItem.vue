@@ -9,7 +9,7 @@
              </span>
          </template>
          <template v-else>
-             <a class="SharpLeftNav__item-link abc" :href="link" :target="hrefTarget">
+             <a class="SharpLeftNav__item-link" :href="link" :target="hrefTarget">
                  <slot></slot>
              </a>
          </template>
