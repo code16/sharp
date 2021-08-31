@@ -188,7 +188,6 @@ return [
             "label" => "Public website",
             "icon" => "fas fa-globe",
             "url" => "https://google.com",
-            'new_window' => true
         ],
         [
             "label" => "Some powerful Features",
