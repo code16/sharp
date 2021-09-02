@@ -1,75 +1,77 @@
 <template>
     <div class="SharpAutocomplete" :class="classes">
-        <template v-if="overlayVisible">
-            <div class="form-control clearable SharpAutocomplete__result">
-                <TemplateRenderer
-                    name="ResultItem"
-                    :template="resultItemTemplate"
-                    :template-data="resolveTemplateData(value)"
-                    :template-props="searchKeys"
-                />
-
-                <ClearButton @click="handleClearButtonClicked" />
-            </div>
-        </template>
-        <template v-else-if="ready">
-            <Multiselect
-                :id="id"
-                class="SharpAutocomplete__multiselect form-control"
-                :class="{
-                    'form-select': !this.isRemote,
-                    'SharpAutocomplete__multiselect--hide-dropdown': hideDropdown,
-                }"
-                :value="value"
-                :options="suggestions"
-                :track-by="itemIdAttribute"
-                :internal-search="false"
-                :placeholder="placeholder"
-                :loading="isLoading"
-                :multiple="multiple"
-                :disabled="readOnly"
-                :hide-selected="hideSelected"
-                :allow-empty="allowEmpty"
-                :preserve-search="preserveSearch"
-                :show-pointer="showPointer"
-                :searchable="searchable"
-                :readonly="readOnly"
-                :tabindex="readOnly ? -1 : 0"
-                @search-change="updateSuggestions($event)"
-                @select="handleSelect"
-                @input="$emit('multiselect-input',$event)"
-                @close="handleDropdownClose"
-                @open="handleDropdownOpen"
-                ref="multiselect"
-            >
-                <template v-slot:clear>
-                    <template v-if="clearButtonVisible">
-                        <ClearButton @click="handleClearButtonClicked" />
-                    </template>
-                </template>
-                <template v-slot:singleLabel="{ option }">
+        <template v-if="ready">
+            <template v-if="overlayVisible">
+                <div class="form-control clearable SharpAutocomplete__result">
                     <TemplateRenderer
                         name="ResultItem"
                         :template="resultItemTemplate"
-                        :template-data="resolveTemplateData(option)"
+                        :template-data="resolveTemplateData(value)"
                         :template-props="searchKeys"
                     />
-                </template>
-                <template v-slot:option="{ option }">
-                    <TemplateRenderer
-                        name="ListItem"
-                        :template="listItemTemplate"
-                        :template-data="resolveTemplateData(option)"
-                        :template-props="searchKeys"
-                    />
-                </template>
-                <template v-slot:loading>
-                    <Loading :visible="isLoading" small />
-                </template>
-                <template v-slot:noResult>
-                    {{ l('form.autocomplete.no_results_text') }}
-                </template>
-            </multiselect>
+
+                    <ClearButton @click="handleClearButtonClicked" />
+                </div>
+            </template>
+            <template v-else>
+                <Multiselect
+                    :id="id"
+                    class="SharpAutocomplete__multiselect form-control"
+                    :class="{
+                    'form-select': !this.isRemote,
+                    'SharpAutocomplete__multiselect--hide-dropdown': hideDropdown,
+                }"
+                    :value="value"
+                    :options="suggestions"
+                    :track-by="itemIdAttribute"
+                    :internal-search="false"
+                    :placeholder="placeholder"
+                    :loading="isLoading"
+                    :multiple="multiple"
+                    :disabled="readOnly"
+                    :hide-selected="hideSelected"
+                    :allow-empty="allowEmpty"
+                    :preserve-search="preserveSearch"
+                    :show-pointer="showPointer"
+                    :searchable="searchable"
+                    :readonly="readOnly"
+                    :tabindex="readOnly ? -1 : 0"
+                    @search-change="updateSuggestions($event)"
+                    @select="handleSelect"
+                    @input="$emit('multiselect-input',$event)"
+                    @close="handleDropdownClose"
+                    @open="handleDropdownOpen"
+                    ref="multiselect"
+                >
+                    <template v-slot:clear>
+                        <template v-if="clearButtonVisible">
+                            <ClearButton @click="handleClearButtonClicked" />
+                        </template>
+                    </template>
+                    <template v-slot:singleLabel="{ option }">
+                        <TemplateRenderer
+                            name="ResultItem"
+                            :template="resultItemTemplate"
+                            :template-data="resolveTemplateData(option)"
+                            :template-props="searchKeys"
+                        />
+                    </template>
+                    <template v-slot:option="{ option }">
+                        <TemplateRenderer
+                            name="ListItem"
+                            :template="listItemTemplate"
+                            :template-data="resolveTemplateData(option)"
+                            :template-props="searchKeys"
+                        />
+                    </template>
+                    <template v-slot:loading>
+                        <Loading :visible="isLoading" small />
+                    </template>
+                    <template v-slot:noResult>
+                        {{ l('form.autocomplete.no_results_text') }}
+                    </template>
+                </multiselect>
+            </template>
         </template>
     </div>
 </template>
