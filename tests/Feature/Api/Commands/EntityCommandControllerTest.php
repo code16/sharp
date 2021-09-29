@@ -150,7 +150,9 @@ class EntityCommandControllerTest extends BaseApiTest
         $this->buildTheWorld();
         $this->withoutExceptionHandling();
 
-        $this->json('post', '/sharp/api/list/person/command/entity_params?sort=name&dir=desc')
+        $this->json('post', '/sharp/api/list/person/command/entity_params', [
+            "query" => ["sort" => "name", "dir" => "desc"]
+        ])
             ->assertStatus(200)
             ->assertJson([
                 "action" => "info",

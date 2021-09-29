@@ -7,10 +7,16 @@ use Code16\Sharp\EntityList\Commands\Command;
 
 abstract class DashboardCommand extends Command
 {
+    protected ?DashboardQueryParams $queryParams;
 
     public function type(): string
     {
         return "dashboard";
+    }
+
+    public final function initQueryParams(?DashboardQueryParams $queryParams): void
+    {
+        $this->queryParams = $queryParams;
     }
 
     public function formData(): array
@@ -36,9 +42,8 @@ abstract class DashboardCommand extends Command
     }
 
     /**
-     * @param DashboardQueryParams $params
      * @param array $data
      * @return array
      */
-    public abstract function execute(DashboardQueryParams $params, array $data = []): array;
+    public abstract function execute(array $data = []): array;
 }

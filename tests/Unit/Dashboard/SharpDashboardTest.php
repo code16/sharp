@@ -82,7 +82,7 @@ class SharpDashboardTest extends SharpTestCase
             {
                 $this->addWidget(SharpBarGraphWidget::make("widget"));
             }
-            protected function buildWidgetsData(DashboardQueryParams $params): void
+            protected function buildWidgetsData(): void
             {
                 $this->addGraphDataSet("widget", SharpGraphWidgetDataSet::make([
                     "a" => 10, "b" => 20, "c" => 30,
@@ -114,7 +114,7 @@ class SharpDashboardTest extends SharpTestCase
             {
                 $this->addWidget(SharpBarGraphWidget::make("widget"));
             }
-            protected function buildWidgetsData(DashboardQueryParams $params): void
+            protected function buildWidgetsData(): void
             {
                 $this->addGraphDataSet("widget", SharpGraphWidgetDataSet::make([
                     "a" => 10, "b" => 20, "c" => 30,
@@ -155,7 +155,7 @@ class SharpDashboardTest extends SharpTestCase
                     SharpPanelWidget::make("widget")->setInlineTemplate('<b>Hello {{user}}</b>')
                 );
             }
-            protected function buildWidgetsData(DashboardQueryParams $params): void
+            protected function buildWidgetsData(): void
             {
                 $this->setPanelData("widget", ["user" => "John Wayne"]);
             }
@@ -179,7 +179,7 @@ class SharpDashboardTest extends SharpTestCase
             {
                 $this->addWidget(SharpOrderedListWidget::make("widget"));
             }
-            protected function buildWidgetsData(DashboardQueryParams $params): void
+            protected function buildWidgetsData(): void
             {
                 $this->setOrderedListData("widget", [
                     [
@@ -232,7 +232,7 @@ class SharpDashboardTest extends SharpTestCase
                         })
                 );
             }
-            protected function buildWidgetsData(DashboardQueryParams $params): void
+            protected function buildWidgetsData(): void
             {
                 $this->setOrderedListData("widget", [
                     [

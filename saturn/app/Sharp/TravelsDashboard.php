@@ -5,7 +5,6 @@ namespace App\Sharp;
 use App\Sharp\Commands\TravelsDashboardDownloadCommand;
 use App\Sharp\Filters\TravelsDashboardPeriodFilter;
 use App\Sharp\Filters\TravelsDashboardSpaceshipsFilter;
-use Code16\Sharp\Dashboard\DashboardQueryParams;
 use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
@@ -19,7 +18,7 @@ class TravelsDashboard extends SharpDashboard
         $this->addWidget(
             SharpBarGraphWidget::make("travels")
                 ->setDisplayHorizontalAxisAsTimeline()
-                ->setTitle("Travel counts")
+                ->setTitle("Travel counts " . ($this->queryParams->filterFor("period") ? "(period filtered)" : ""))
         );
     }
 
@@ -36,18 +35,18 @@ class TravelsDashboard extends SharpDashboard
         $this->addFullWidthWidget("travels");
     }
 
-    function buildWidgetsData(DashboardQueryParams $params): void
+    function buildWidgetsData(): void
     {
         $query = DB::table('travels')
             ->select(DB::raw("DATE_FORMAT(departure_date,'%Y-%m') as label, count(*) as value"));
 
-        if($spaceships = $params->filterFor("spaceships")) {
+        if($spaceships = $this->queryParams->filterFor("spaceships")) {
             $query->whereIn("spaceship_id", (array)$spaceships);
         }
 
         $query->groupBy(DB::raw('label'));
 
-        if($departurePeriodRange = $params->filterFor("period")) {
+        if($departurePeriodRange = $this->queryParams->filterFor("period")) {
             $query->whereBetween("departure_date", [
                 $departurePeriodRange['start'],
                 $departurePeriodRange['end']

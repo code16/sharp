@@ -18,6 +18,7 @@ class DashboardCommandController extends ApiController
     {
         $dashboard = $this->getDashboardInstance($entityKey);
         $dashboard->buildDashboardConfig();
+        
         $commandHandler = $this->getCommandHandler($dashboard, $commandKey);
 
         return response()->json([
@@ -32,12 +33,12 @@ class DashboardCommandController extends ApiController
     {
         $dashboard = $this->getDashboardInstance($entityKey);
         $dashboard->buildDashboardConfig();
+        
         $commandHandler = $this->getCommandHandler($dashboard, $commandKey);
 
         return $this->returnCommandResult(
             $dashboard,
             $commandHandler->execute(
-                DashboardQueryParams::create()->fillWithRequest("query"),
                 $commandHandler->formatRequestData((array)request("data"))
             )
         );
@@ -49,12 +50,14 @@ class DashboardCommandController extends ApiController
      */
     protected function getCommandHandler(SharpDashboard $dashboard, string $commandKey)
     {
-        $commandHandler = $dashboard->dashboardCommandHandler($commandKey);
+        if($handler = $dashboard->dashboardCommandHandler($commandKey)) {
+            $handler->initQueryParams(DashboardQueryParams::create()->fillWithRequest("query"));
+        }
 
-        if(! $commandHandler->authorize()) {
+        if(! $handler->authorize()) {
             throw new SharpAuthorizationException();
         }
 
-        return $commandHandler;
+        return $handler;
     }
 }

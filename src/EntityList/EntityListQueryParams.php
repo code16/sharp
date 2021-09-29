@@ -32,18 +32,19 @@ class EntityListQueryParams
         return $this;
     }
 
-    public function fillWithRequest(): self
+    public function fillWithRequest(string $queryPrefix = null): self
     {
-        $this->search = request()->get("search") ? urldecode(request()->get("search")) : null;
-        $this->page = request()->get("page") ?? null;
-        if(request()->has("sort")) {
-            $this->sortedBy = request()->get("sort");
-        }
-        if(request()->has("dir")) {
-            $this->sortedDir = request()->get("dir");
+        $query = $queryPrefix ? request($queryPrefix) : request()->all();
+
+        $this->search = $query["search"] ?? null ? urldecode($query["search"]) : null;
+        $this->page = $query["page"] ?? null;
+
+        if(isset($query["sort"])) {
+            $this->sortedBy = $query["sort"];
+            $this->sortedDir = $query["dir"];
         }
 
-        $this->fillFilterWithRequest(request()->all());
+        $this->fillFilterWithRequest($query);
 
         return $this;
     }

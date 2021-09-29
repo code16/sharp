@@ -71,7 +71,9 @@ trait HandleEntityCommands
     public function entityCommandHandler(string $commandKey): ?EntityCommand
     {
         if($handler = $this->entityCommandHandlers[$commandKey] ?? null) {
-            $handler->initQueryParams($this->queryParams);
+            if(isset($this->queryParams)) {
+                $handler->initQueryParams($this->queryParams);
+            }
         }
         
         return $handler;

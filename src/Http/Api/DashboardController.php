@@ -13,6 +13,7 @@ class DashboardController extends ApiController
         }
 
         $dashboard->buildDashboardConfig();
+        $dashboard->init();
 
         return response()->json([
             "widgets" => $dashboard->widgets(),

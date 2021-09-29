@@ -62,7 +62,7 @@ class EntityCommandTestSharpDashboard extends SharpDashboard
         $this
             ->addDashboardCommand("dashboard_info", new class() extends DashboardCommand {
                 public function label(): string { return "label"; }
-                public function execute(DashboardQueryParams $params, array $data= []): array {
+                public function execute(array $data= []): array {
                     return $this->info("ok");
                 }
             })
@@ -78,7 +78,7 @@ class EntityCommandTestSharpDashboard extends SharpDashboard
                         "age" => 32
                     ];
                 }
-                public function execute(DashboardQueryParams $params, array $data = []): array {}
+                public function execute(array $data = []): array {}
             });
     }
 }
