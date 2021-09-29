@@ -15,10 +15,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - php: 7.4
-            env:
-              LARAVEL: 8.*
-              TESTBENCH: 6.*
           - php: 8.0
             env:
               LARAVEL: 8.*
