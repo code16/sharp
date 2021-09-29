@@ -175,6 +175,60 @@ class SharpEntityListCommandTest extends SharpTestCase
     }
 
     /** @test */
+    function we_can_define_a_localized_form_on_a_command()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig(): void
+            {
+                $this->addInstanceCommand("instanceCommand", new class extends InstanceCommand {
+                    public function label(): string {
+                        return "My Instance Command";
+                    }
+                    public function buildFormFields(): void {
+                        $this->addField(SharpFormTextField::make("message"));
+                    }
+                    public function buildFormLayout(FormLayoutColumn &$column): void {
+                        $column->withSingleField("message");
+                    }
+                    public function execute($instanceId , array $data = []): array {}
+                    public function getDataLocalizations(): array {
+                        return ["fr", "en", "it"];
+                    }
+                });
+            }
+        };
+
+        $list->buildListConfig();
+
+        $this->assertArraySubset([
+            "commands" => [
+                "instance" => [
+                    [
+                        [
+                            "key" => "instanceCommand",
+                            "label" => "My Instance Command",
+                            "type" => "instance",
+                            "form" => [
+                                "fields" => [
+                                    "message" => [
+                                        "key" => "message",
+                                        "type" => "text",
+                                        "inputType" => "text"
+                                    ]
+                                ],
+                                "layout" => [
+                                    [["key" => "message", "size" => 12, "sizeXS" => 12]]
+                                ],
+                                "locales" => ["fr", "en", "it"],
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ], $list->listConfig());
+    }
+
+    /** @test */
     function if_no_form_layout_is_configured_a_default_is_provided()
     {
         $list = new class extends SharpEntityDefaultTestList {

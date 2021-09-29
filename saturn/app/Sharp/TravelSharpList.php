@@ -3,6 +3,7 @@
 namespace App\Sharp;
 
 use App\Passenger;
+use App\Sharp\Commands\TravelSendEmail;
 use App\Travel;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\EntityListQueryParams;
@@ -31,7 +32,8 @@ class TravelSharpList extends SharpEntityList
     {
         $this//->setSearchable()
             ->setDefaultSort("departure_date", "desc")
-            ->setPaginated();
+            ->setPaginated()
+            ->addInstanceCommand('email', TravelSendEmail::class);
     }
 
     function buildListLayout(): void
