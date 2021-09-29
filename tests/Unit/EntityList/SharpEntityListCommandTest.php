@@ -175,7 +175,7 @@ class SharpEntityListCommandTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_define_a_form_on_a_instance_command()
+    function we_can_define_a_localized_form_on_a_command()
     {
         $list = new class extends SharpEntityDefaultTestList {
             function buildListConfig(): void
@@ -191,9 +191,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                         $column->withSingleField("message");
                     }
                     public function execute($instanceId , array $data = []): array {}
-
-                    public function getDataLocalizations(): array
-                    {
+                    public function getDataLocalizations(): array {
                         return ["fr", "en", "it"];
                     }
                 });
