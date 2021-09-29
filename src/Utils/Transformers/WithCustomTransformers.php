@@ -38,9 +38,8 @@ trait WithCustomTransformers
      * Transforms a model or a models collection into an array.
      *
      * @param $models
-     * @return array|LengthAwarePaginator
      */
-    function transform($models)
+    function transform($models): array|LengthAwarePaginator
     {
         if($this instanceof SharpForm || $this instanceof Command) {
             // It's a Form (full entity or from a Command), there's only one model.

@@ -9,11 +9,7 @@ trait HasFiltersInQuery
 {
     protected array $filters;
 
-    /**
-     * @param string $filterName
-     * @return mixed|null
-     */
-    public function filterFor(string $filterName)
+    public function filterFor(string $filterName): mixed
     {
         if(isset($this->filters["/forced/$filterName"])) {
             return $this->filterFor("/forced/$filterName");
@@ -65,11 +61,7 @@ trait HasFiltersInQuery
         $this->filters["/forced/$filter"] = $value;
     }
 
-    /**
-     * @param string $filter
-     * @param string|array|null $value
-     */
-    protected function setFilterValue(string $filter, $value)
+    protected function setFilterValue(string $filter, array|string|null $value): void
     {
         if(is_array($value)) {
             // Force all filter values to be string, to be consistent with all use cases

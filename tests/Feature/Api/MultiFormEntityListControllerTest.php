@@ -48,7 +48,8 @@ class MultiFormEntityListControllerTest extends BaseApiTest
                 "big" => [
                     "form" => PersonSharpForm::class,
                     "label" => "Big person"
-                ], "small" => [
+                ], 
+                "small" => [
                     "form" => PersonSharpForm::class,
                     "label" => "Small person"
                 ]
@@ -65,8 +66,7 @@ class MultiFormEntityListControllerTest extends BaseApiTest
 
 class PersonWithMultiformSharpEntityList extends SharpEntityList
 {
-
-    function getListData(EntityListQueryParams $params)
+    function getListData(): array|Arrayable
     {
         return $this
             ->setCustomTransformer("type", function($a, $person) {

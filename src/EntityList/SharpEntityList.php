@@ -32,6 +32,26 @@ abstract class SharpEntityList
     protected ?ReorderHandler $reorderHandler = null;
     protected ?string $defaultSort= null;
     protected ?string $defaultSortDir = null;
+    protected ?EntityListQueryParams $queryParams;
+
+    public final function init(): self
+    {
+        $this->putRetainedFilterValuesInSession();
+
+        $this->queryParams = EntityListQueryParams::create()
+            ->setDefaultSort($this->defaultSort, $this->defaultSortDir)
+            ->fillWithRequest()
+            ->setDefaultFilters($this->getFilterDefaultValues());
+        
+        return $this;
+    }
+
+    public final function initWith(EntityListQueryParams $customParams): self
+    {
+        $this->queryParams = $customParams;
+
+        return $this;
+    }
 
     public final function dataContainers(): array
     {
@@ -61,14 +81,7 @@ abstract class SharpEntityList
 
     public final function data($items = null): array
     {
-        $this->putRetainedFilterValuesInSession();
-
-        $items = $items ?: $this->getListData(
-            EntityListQueryParams::create()
-                ->setDefaultSort($this->defaultSort, $this->defaultSortDir)
-                ->fillWithRequest()
-                ->setDefaultFilters($this->getFilterDefaultValues())
-        );
+        $items = $items ?: $this->getListData();
 
         if($items instanceof LengthAwarePaginator) {
             $page = $items->currentPage();
@@ -80,25 +93,30 @@ abstract class SharpEntityList
         $this->addInstanceCommandsAuthorizationsToConfigForItems($items);
 
         $keys = $this->getDataKeys();
+        $items = collect($items)
+            ->map(function($row) use($keys) {
+                // Filter model attributes on actual form fields
+                return collect($row)
+                    ->only(
+                        array_merge(
+                            $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
+                            $this->multiformAttribute ? [$this->multiformAttribute] : [],
+                            [$this->instanceIdAttribute],
+                            $keys
+                        )
+                    )
+                    ->toArray();
+            })
+            ->toArray();
 
-        return [
-            "items" =>
-                collect($items)
-                    ->map(function($row) use($keys) {
-                        // Filter model attributes on actual form fields
-                        return collect($row)
-                            ->only(
-                                array_merge(
-                                    $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
-                                    $this->multiformAttribute ? [$this->multiformAttribute] : [],
-                                    [$this->instanceIdAttribute],
-                                    $keys
-                                )
-                            )
-                            ->all();
-                    })
-                    ->all()
-        ] + (isset($page) ? compact('page', 'totalCount', 'pageSize') : []);
+        return collect([
+            "items" => $items,
+            "page" => $page ?? null,
+            "totalCount" => $totalCount ?? null,
+            "pageSize" => $pageSize ?? null,
+        ])
+            ->filter()
+            ->toArray();
     }
 
     public final function listConfig(bool $hasShowPage = false): array
@@ -223,31 +241,22 @@ abstract class SharpEntityList
     }
 
     /**
-     * Retrieve all rows data as array.
-     *
-     * @param EntityListQueryParams $params
-     * @return array|Arrayable
+     * Retrieve all rows data as an array
      */
-    abstract function getListData(EntityListQueryParams $params);
+    abstract function getListData(): array|Arrayable;
 
     /**
      * Build list containers using ->addDataContainer()
-     *
-     * @return void
      */
     abstract function buildListDataContainers(): void;
 
     /**
      * Build list layout using ->addColumn()
-     *
-     * @return void
      */
     abstract function buildListLayout(): void;
 
     /**
      * Build list config
-     *
-     * @return void
      */
     abstract function buildListConfig(): void;
 }

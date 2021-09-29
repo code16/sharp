@@ -3,9 +3,9 @@
 namespace Code16\Sharp\Tests\Unit\EntityList;
 
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
-use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Tests\Unit\EntityList\Utils\SharpEntityDefaultTestList;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class SharpEntityListTest extends SharpTestCase
@@ -23,12 +23,17 @@ class SharpEntityListTest extends SharpTestCase
             }
         };
 
-        $this->assertEquals(["name" => [
-            "key" => "name",
-            "label" => "Name",
-            "sortable" => false,
-            "html" => true,
-        ]], $list->dataContainers());
+        $this->assertEquals(
+            [
+                "name" => [
+                    "key" => "name",
+                    "label" => "Name",
+                    "sortable" => false,
+                    "html" => true,
+                ]
+            ], 
+            $list->dataContainers()
+        );
     }
 
     /** @test */
@@ -37,11 +42,13 @@ class SharpEntityListTest extends SharpTestCase
         $list = new class extends SharpEntityDefaultTestList {
             function buildListDataContainers(): void
             {
-                $this->addDataContainer(
-                    EntityListDataContainer::make("name")
-                )->addDataContainer(
-                    EntityListDataContainer::make("age")
-                );
+                $this
+                    ->addDataContainer(
+                        EntityListDataContainer::make("name")
+                    )
+                    ->addDataContainer(
+                        EntityListDataContainer::make("age")
+                    );
             }
             function buildListLayout(): void
             {
@@ -50,20 +57,23 @@ class SharpEntityListTest extends SharpTestCase
             }
         };
 
-        $this->assertEquals([
+        $this->assertEquals(
             [
-                "key" => "name", "size" => 6, "sizeXS" => 12, "hideOnXS" => false,
-            ], [
-                "key" => "age", "size" => 6, "sizeXS" => 6, "hideOnXS" => true,
-            ]
-        ], $list->listLayout());
+                [
+                    "key" => "name", "size" => 6, "sizeXS" => 12, "hideOnXS" => false,
+                ], [
+                    "key" => "age", "size" => 6, "sizeXS" => 6, "hideOnXS" => true,
+                ]
+            ], 
+            $list->listLayout()
+        );
     }
 
     /** @test */
     function we_can_get_list_data()
     {
         $form = new class extends SharpEntityDefaultTestList {
-            function getListData(EntityListQueryParams $params): array
+            function getListData(): array
             {
                 return [
                     ["name" => "John Wayne", "age" => 22, "job" => "actor"],
@@ -72,27 +82,32 @@ class SharpEntityListTest extends SharpTestCase
             }
             function buildListDataContainers(): void
             {
-                $this->addDataContainer(
-                    EntityListDataContainer::make("name")
-                )->addDataContainer(
-                    EntityListDataContainer::make("age")
-                );
+                $this
+                    ->addDataContainer(
+                        EntityListDataContainer::make("name")
+                    )
+                    ->addDataContainer(
+                        EntityListDataContainer::make("age")
+                    );
             }
         };
 
-        $this->assertEquals([
-            "items" => [
-                ["name" => "John Wayne", "age" => 22],
-                ["name" => "Mary Wayne", "age" => 26],
-            ]
-        ], $form->data());
+        $this->assertEquals(
+            [
+                "items" => [
+                    ["name" => "John Wayne", "age" => 22],
+                    ["name" => "Mary Wayne", "age" => 26],
+                ]
+            ], 
+            $form->data()
+        );
     }
 
     /** @test */
     function we_can_get_paginated_list_data()
     {
         $form = new class extends SharpEntityDefaultTestList {
-            function getListData(EntityListQueryParams $params)
+            function getListData(): array|Arrayable
             {
                 $data = [
                     ["name" => "John Wayne", "age" => 22, "job" => "actor"],
@@ -103,20 +118,25 @@ class SharpEntityListTest extends SharpTestCase
             }
             function buildListDataContainers(): void
             {
-                $this->addDataContainer(
-                    EntityListDataContainer::make("name")
-                )->addDataContainer(
-                    EntityListDataContainer::make("age")
-                );
+                $this
+                    ->addDataContainer(
+                        EntityListDataContainer::make("name")
+                    )
+                    ->addDataContainer(
+                        EntityListDataContainer::make("age")
+                    );
             }
         };
 
-        $this->assertEquals([
-            "items" => [
-                ["name" => "John Wayne", "age" => 22],
-                ["name" => "Mary Wayne", "age" => 26],
-            ], "page" => 1, "pageSize" => 2, "totalCount" => 10
-        ], $form->data());
+        $this->assertEquals(
+            [
+                "items" => [
+                    ["name" => "John Wayne", "age" => 22],
+                    ["name" => "Mary Wayne", "age" => 26],
+                ], "page" => 1, "pageSize" => 2, "totalCount" => 10
+            ], 
+            $form->data()
+        );
     }
 
     /** @test */
@@ -132,15 +152,18 @@ class SharpEntityListTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertEquals([
-            "searchable" => true,
-            "paginated" => true,
-            "reorderable" => false,
-            "hasShowPage" => false,
-            "instanceIdAttribute" => "id",
-            "multiformAttribute" => null,
-            "defaultSort" => null,
-            "defaultSortDir" => null
-        ], $list->listConfig());
+        $this->assertEquals(
+            [
+                "searchable" => true,
+                "paginated" => true,
+                "reorderable" => false,
+                "hasShowPage" => false,
+                "instanceIdAttribute" => "id",
+                "multiformAttribute" => null,
+                "defaultSort" => null,
+                "defaultSortDir" => null
+            ], 
+            $list->listConfig()
+        );
     }
 }

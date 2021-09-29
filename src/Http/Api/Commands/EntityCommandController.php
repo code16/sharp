@@ -12,16 +12,15 @@ class EntityCommandController extends ApiController
     use HandleCommandReturn;
 
     /**
-     * @param string $entityKey
-     * @param string $commandKey
-     * @return \Illuminate\Http\JsonResponse
      * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
      * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
-    public function show($entityKey, $commandKey)
+    public function show(string $entityKey, string $commandKey)
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
+        $list->init();
+        
         $commandHandler = $this->getCommandHandler($list, $commandKey);
 
         return response()->json([
@@ -30,16 +29,15 @@ class EntityCommandController extends ApiController
     }
 
     /**
-     * @param string $entityKey
-     * @param string $commandKey
-     * @return \Illuminate\Http\JsonResponse
      * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
      * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
-    public function update($entityKey, $commandKey)
+    public function update(string $entityKey, string $commandKey)
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
+        $list->init();
+        
         $commandHandler = $this->getCommandHandler($list, $commandKey);
 
         return $this->returnCommandResult(
@@ -52,12 +50,10 @@ class EntityCommandController extends ApiController
     }
 
     /**
-     * @param SharpEntityList $list
-     * @param string $commandKey
      * @return \Code16\Sharp\EntityList\Commands\EntityCommand|null
      * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
      */
-    protected function getCommandHandler(SharpEntityList $list, $commandKey)
+    protected function getCommandHandler(SharpEntityList $list, string $commandKey)
     {
         $commandHandler = $list->entityCommandHandler($commandKey);
 

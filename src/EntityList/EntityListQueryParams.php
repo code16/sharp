@@ -8,53 +8,23 @@ class EntityListQueryParams
 {
     use HasFiltersInQuery;
 
-    /**
-     * @var int
-     */
-    protected $page;
+    protected ?int $page = null;
+    protected ?string $search = null;
+    protected ?string $sortedBy = null;
+    protected ?string $sortedDir = null;
+    protected array $specificIds = [];
 
-    /**
-     * @var string
-     */
-    protected $search;
-
-    /**
-     * @var string
-     */
-    protected $sortedBy;
-
-    /**
-     * @var string
-     */
-    protected $sortedDir;
-
-    /**
-     * @var array
-     */
-    protected $specificIds;
-
-    /**
-     * @return static
-     */
-    public static function create()
+    public static function create(): static
     {
         return new static;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getPage()
+    public function getPage(): ?int
     {
         return $this->page;
     }
 
-    /**
-     * @param string $defaultSortedBy
-     * @param string $defaultSortedDir
-     * @return $this
-     */
-    public function setDefaultSort($defaultSortedBy, $defaultSortedDir)
+    public function setDefaultSort(?string $defaultSortedBy, ?string $defaultSortedDir): self
     {
         $this->sortedBy = $defaultSortedBy;
         $this->sortedDir = $defaultSortedDir;
@@ -62,11 +32,7 @@ class EntityListQueryParams
         return $this;
     }
 
-    /**
-     * @param string|null $queryPrefix
-     * @return $this
-     */
-    public function fillWithRequest(string $queryPrefix = null)
+    public function fillWithRequest(string $queryPrefix = null): self
     {
         $query = $queryPrefix ? request($queryPrefix) : request()->all();
 
@@ -83,11 +49,7 @@ class EntityListQueryParams
         return $this;
     }
 
-    /**
-     * @param array $ids
-     * @return static
-     */
-    public static function createFromArrayOfIds(array $ids)
+    public static function createFromArrayOfIds(array $ids): self
     {
         $instance = new static;
         $instance->specificIds = $ids;
@@ -95,38 +57,22 @@ class EntityListQueryParams
         return $instance;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasSearch()
+    public function hasSearch(): bool
     {
-        return strlen(trim($this->search)) > 0;
+        return $this->search !== null && strlen(trim($this->search)) > 0;
     }
 
-    /**
-     * @return string
-     */
-    public function sortedBy()
+    public function sortedBy(): ?string
     {
         return $this->sortedBy;
     }
 
-    /**
-     * @return string
-     */
-    public function sortedDir()
+    public function sortedDir(): ?string
     {
         return $this->sortedDir;
     }
 
-    /**
-     * @param bool $isLike
-     * @param bool $handleStar
-     * @param string $noStarTermPrefix
-     * @param string $noStarTermSuffix
-     * @return array
-     */
-    public function searchWords($isLike = true, $handleStar = true, $noStarTermPrefix = '%', $noStarTermSuffix = '%')
+    public function searchWords(bool $isLike = true, bool $handleStar = true, string $noStarTermPrefix = '%', string $noStarTermSuffix = '%'): array
     {
         $terms = [];
 
@@ -137,7 +83,7 @@ class EntityListQueryParams
             }
 
             if ($isLike) {
-                if ($handleStar && strpos($term, '*') !== false) {
+                if ($handleStar && str_contains($term, '*')) {
                     $terms[] = str_replace('*', '%', $term);
                     continue;
                 }
@@ -152,11 +98,8 @@ class EntityListQueryParams
         return $terms;
     }
 
-    /**
-     * @return array
-     */
-    public function specificIds()
+    public function specificIds(): array
     {
-        return (array)$this->specificIds;
+        return $this->specificIds ?? [];
     }
 }

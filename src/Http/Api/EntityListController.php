@@ -4,12 +4,16 @@ namespace Code16\Sharp\Http\Api;
 
 class EntityListController extends ApiController
 {
+    /**
+     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
+     */
     public function show(string $entityKey)
     {
         sharp_check_ability("entity", $entityKey);
 
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
+        $list->init();
 
         return response()->json([
             "containers" => $list->dataContainers(),
@@ -21,6 +25,7 @@ class EntityListController extends ApiController
 
     /**
      * Call for reorder instances.
+     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
     public function update(string $entityKey)
     {
@@ -28,10 +33,10 @@ class EntityListController extends ApiController
 
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
+        $list->init();
 
-        $list->reorderHandler()->reorder(
-            request("instances")
-        );
+        $list->reorderHandler()
+            ->reorder(request("instances"));
 
         return response()->json([
             "ok" => true

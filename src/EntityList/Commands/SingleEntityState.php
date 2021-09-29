@@ -4,20 +4,12 @@ namespace Code16\Sharp\EntityList\Commands;
 
 abstract class SingleEntityState extends EntityState
 {
-    /**
-     * @return bool|array
-     */
-    public function getGlobalAuthorization()
+    public function getGlobalAuthorization(): bool|array
     {
         return $this->authorize();
     }
 
-    /**
-     * @param mixed $instanceId
-     * @param string $stateId
-     * @return array
-     */
-    final protected function updateState($instanceId, string $stateId): array
+    final protected function updateState(mixed $instanceId, string $stateId): array
     {
         return $this->updateSingleState($stateId);
     }
