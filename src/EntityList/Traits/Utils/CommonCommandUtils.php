@@ -27,7 +27,8 @@ trait CommonCommandUtils
                         [
                             "fields" => $formFields,
                             "layout" => $formLayout,
-                        ], method_exists($handler, 'getDataLocalizations')
+                        ], 
+                        method_exists($handler, 'getDataLocalizations')
                             ? ["locales" => $handler->getDataLocalizations()]
                             : []
                     ) : null,
