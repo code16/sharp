@@ -13,13 +13,15 @@ class FeatureSharpList extends SharpEntityList
 
     function buildListDataContainers(): void
     {
-        $this->addDataContainer(
-            EntityListDataContainer::make("name")
-                ->setLabel("Name")
-        )->addDataContainer(
-            EntityListDataContainer::make("type")
-                ->setLabel("Type")
-        );
+        $this
+            ->addDataContainer(
+                EntityListDataContainer::make("name")
+                    ->setLabel("Name")
+            )
+            ->addDataContainer(
+                EntityListDataContainer::make("type")
+                    ->setLabel("Type")
+            );
     }
 
     function buildListConfig(): void
@@ -34,7 +36,7 @@ class FeatureSharpList extends SharpEntityList
             ->addColumn("type", 6);
     }
 
-    function getListData(EntityListQueryParams $params)
+    function getListData(): array
     {
         return $this
             ->setCustomTransformer("type", function($value, $instance) {

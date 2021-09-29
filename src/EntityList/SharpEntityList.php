@@ -110,12 +110,14 @@ abstract class SharpEntityList
             ->toArray();
 
         return collect([
-            "items" => $items,
+            "items" => $items ?? [],
             "page" => $page ?? null,
             "totalCount" => $totalCount ?? null,
             "pageSize" => $pageSize ?? null,
         ])
-            ->filter()
+            ->filter(function($value) {
+                return $value !== null;
+            })
             ->toArray();
     }
 

@@ -12,10 +12,10 @@ use App\Sharp\Filters\SpaceshipTypeFilter;
 use App\Sharp\States\SpaceshipEntityState;
 use App\Spaceship;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
-use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
+use Illuminate\Contracts\Support\Arrayable;
 
 class SpaceshipSharpList extends SharpEntityList
 {
@@ -80,34 +80,34 @@ class SpaceshipSharpList extends SharpEntityList
             ->addColumn("messages_sent_count", 2);
     }
 
-    function getListData(EntityListQueryParams $params)
+    function getListData(): array|Arrayable
     {
         $spaceships = Spaceship::select("spaceships.*")
             ->where("corporation_id", currentSharpRequest()->globalFilterFor("corporation"))
             ->distinct();
 
-        if($params->specificIds()) {
-            $spaceships->whereIn("id", $params->specificIds());
+        if($this->queryParams->specificIds()) {
+            $spaceships->whereIn("id", $this->queryParams->specificIds());
         }
 
-        if($params->sortedBy()) {
-            $spaceships->orderBy($params->sortedBy(), $params->sortedDir());
+        if($this->queryParams->sortedBy()) {
+            $spaceships->orderBy($this->queryParams->sortedBy(), $this->queryParams->sortedDir());
         }
 
-        if($params->filterFor("type")) {
-            $spaceships->where("type_id", $params->filterFor("type"));
+        if($this->queryParams->filterFor("type")) {
+            $spaceships->where("type_id", $this->queryParams->filterFor("type"));
         }
 
-        if($params->hasSearch() || $params->filterFor("pilots")) {
+        if($this->queryParams->hasSearch() || $this->queryParams->filterFor("pilots")) {
             $spaceships->leftJoin("pilot_spaceship", "spaceships.id", "=", "pilot_spaceship.spaceship_id")
                 ->leftJoin("pilots", "pilots.id", "=", "pilot_spaceship.pilot_id");
 
-            if ($params->filterFor("pilots")) {
-                $spaceships->whereIn("pilots.id", (array)$params->filterFor("pilots"));
+            if ($this->queryParams->filterFor("pilots")) {
+                $spaceships->whereIn("pilots.id", (array)$this->queryParams->filterFor("pilots"));
             }
 
-            if ($params->hasSearch()) {
-                foreach ($params->searchWords() as $word) {
+            if ($this->queryParams->hasSearch()) {
+                foreach ($this->queryParams->searchWords() as $word) {
                     $spaceships->where(function ($query) use ($word) {
                         $query->orWhere("spaceships.name", "like", $word)
                             ->orWhere('pilots.name', 'like', $word);

@@ -48,14 +48,18 @@ class UserSharpList extends SharpEntityList
             ->addColumn("group", 4);
     }
 
-    function getListData(EntityListQueryParams $params)
+    function getListData(): array
     {
         return $this
             ->setCustomTransformer("group", function($group) {
                 return implode("<br>", explode(",", $group));
             })
             ->transform(
-                User::orderBy($params->sortedBy(), $params->sortedDir())->get()
+                User::orderBy(
+                    $this->queryParams->sortedBy(), 
+                    $this->queryParams->sortedDir()
+                )
+                    ->get()
             );
     }
 }

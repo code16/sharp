@@ -8,25 +8,29 @@ use App\Sharp\Filters\PassengerTravelFilter;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
+use Illuminate\Contracts\Support\Arrayable;
 
 class PassengerSharpList extends SharpEntityList
 {
 
     function buildListDataContainers(): void
     {
-        $this->addDataContainer(
-            EntityListDataContainer::make("name")
-                ->setSortable()
-                ->setLabel("Name")
-        )->addDataContainer(
-            EntityListDataContainer::make("birth_date")
-                ->setSortable()
-                ->setLabel("Birth date")
-        )->addDataContainer(
-            EntityListDataContainer::make("travel")
-                ->setSortable()
-                ->setLabel("Travel")
-        );
+        $this
+            ->addDataContainer(
+                EntityListDataContainer::make("name")
+                    ->setSortable()
+                    ->setLabel("Name")
+            )
+            ->addDataContainer(
+                EntityListDataContainer::make("birth_date")
+                    ->setSortable()
+                    ->setLabel("Birth date")
+            )
+            ->addDataContainer(
+                EntityListDataContainer::make("travel")
+                    ->setSortable()
+                    ->setLabel("Travel")
+            );
     }
 
     function buildListConfig(): void
@@ -45,27 +49,27 @@ class PassengerSharpList extends SharpEntityList
             ->addColumn("travel", 4);
     }
 
-    function getListData(EntityListQueryParams $params)
+    function getListData(): array|Arrayable
     {
-        $passengers = Passenger::distinct();
+        $passengers = Passenger::query();
 
-        if($params->sortedBy()) {
-            $passengers->orderBy($params->sortedBy(), $params->sortedDir());
+        if($this->queryParams->sortedBy()) {
+            $passengers->orderBy($this->queryParams->sortedBy(), $this->queryParams->sortedDir());
         }
 
-        if($travelFilter = $params->filterFor("travel")) {
+        if($travelFilter = $this->queryParams->filterFor("travel")) {
             $passengers->where("travel_id", $travelFilter);
         }
 
-        if($birthdateFilter = $params->filterFor("birthdate")) {
+        if($birthdateFilter = $this->queryParams->filterFor("birthdate")) {
             $passengers->whereBetween("birth_date", [
                 $birthdateFilter['start'],
                 $birthdateFilter['end'],
             ]);
         }
 
-        if ($params->hasSearch()) {
-            foreach ($params->searchWords() as $word) {
+        if ($this->queryParams->hasSearch()) {
+            foreach ($this->queryParams->searchWords() as $word) {
                 $passengers->where('name', 'like', $word);
             }
         }

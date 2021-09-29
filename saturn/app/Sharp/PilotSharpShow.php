@@ -19,13 +19,16 @@ class PilotSharpShow extends SharpShow
             ->addField(
                 SharpShowTextField::make("name")
                     ->setLabel("Name")
-            )->addField(
+            )
+            ->addField(
                 SharpShowTextField::make("role")
                     ->setLabel("Role")
-            )->addField(
+            )
+            ->addField(
                 SharpShowTextField::make("xp")
                     ->setLabel("Xp")
-            )->addField(
+            )
+            ->addField(
                 SharpShowEntityListField::make("spaceships", "spaceship")
                     ->setLabel("Spaceships")
                     ->hideFilterWithValue("pilots", function($instanceId) {
