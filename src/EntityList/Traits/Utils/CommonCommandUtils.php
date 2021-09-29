@@ -23,10 +23,14 @@ trait CommonCommandUtils
                     "type" => $handler->type(),
                     "confirmation" => $handler->confirmationText() ?: null,
                     "modal_title" => $handler->formModalTitle() ?: null,
-                    "form" => $formFields ? [
-                        "fields" => $formFields,
-                        "layout" => $formLayout
-                    ] : null,
+                    "form" => $formFields ? array_merge(
+                        [
+                            "fields" => $formFields,
+                            "layout" => $formLayout,
+                        ], method_exists($handler, 'getDataLocalizations')
+                            ? ["locales" => $handler->getDataLocalizations()]
+                            : []
+                    ) : null,
                     "fetch_initial_data" => $hasFormInitialData,
                     "authorization" => $instanceId
                         ? $handler->authorizeFor($instanceId)
