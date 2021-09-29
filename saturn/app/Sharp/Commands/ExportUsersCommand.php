@@ -15,7 +15,7 @@ class ExportUsersCommand extends EntityCommand
         return "Export users as text file";
     }
 
-    public function execute(EntityListQueryParams $params, array $data = []): array
+    public function execute(array $data = []): array
     {
         $filePath = "tmp/users " . now()->format("YmdHis") . ".txt";
 

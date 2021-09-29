@@ -52,7 +52,7 @@ trait HasFiltersInQuery
                 return Str::startsWith($name, "filter_");
             })
             ->each(function($value, $name) {
-                $this->setFilterValue(substr($name, strlen("filter_")), $value);
+                $this->setFilterValue(Str::after($name, "filter_"), $value);
             });
     }
 

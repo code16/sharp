@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Api\Commands;
 
+use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
@@ -43,17 +44,15 @@ class EntityCommandController extends ApiController
         return $this->returnCommandResult(
             $list,
             $commandHandler->execute(
-                EntityListQueryParams::create()->fillWithRequest("query"),
                 $commandHandler->formatRequestData((array)request("data"))
             )
         );
     }
 
     /**
-     * @return \Code16\Sharp\EntityList\Commands\EntityCommand|null
      * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
      */
-    protected function getCommandHandler(SharpEntityList $list, string $commandKey)
+    protected function getCommandHandler(SharpEntityList $list, string $commandKey): ?EntityCommand
     {
         $commandHandler = $list->entityCommandHandler($commandKey);
 

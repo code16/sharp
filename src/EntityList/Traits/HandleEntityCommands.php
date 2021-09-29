@@ -49,7 +49,11 @@ trait HandleEntityCommands
     protected function appendEntityCommandsToConfig(array &$config)
     {
         $this->appendCommandsToConfig(
-            collect($this->entityCommandHandlers),
+            collect($this->entityCommandHandlers)
+                ->each(function(EntityCommand $command) {
+                    // We have to init query params of the command
+                    $command->initQueryParams($this->queryParams);
+                }),
             $config
         );
         
@@ -66,6 +70,10 @@ trait HandleEntityCommands
 
     public function entityCommandHandler(string $commandKey): ?EntityCommand
     {
-        return $this->entityCommandHandlers[$commandKey] ?? null;
+        if($handler = $this->entityCommandHandlers[$commandKey] ?? null) {
+            $handler->initQueryParams($this->queryParams);
+        }
+        
+        return $handler;
     }
 }
