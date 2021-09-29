@@ -9,7 +9,7 @@
     "email": "antoine@code16.fr"
   }],
   "require": {
-    "php": ">=7.4.0",
+    "php": ">=8.0.0",
     "laravel/framework": "^8.0",
     "intervention/image": "^2.5",
     "erusev/parsedown": "^1.7",
