@@ -45,32 +45,29 @@ class SpaceshipSendMessage extends InstanceCommand
 
     function buildFormFields(): void
     {
-        $this->addField(
-            SharpFormTextareaField::make("message")
-                ->setLabel("Message")
-
-        )->addField(
+        $this
+            ->addField(
+                SharpFormTextareaField::make("message")
+                    ->setLabel("Message")
+            )
+            ->addField(
             SharpFormCheckField::make("now", "Send right now?")
                 ->setHelpMessage("Otherwise it will be sent next night.")
-
-        )->addField(
-            SharpFormAutocompleteField::make("level", "local")
-                ->setListItemInlineTemplate('{{label}}')
-                ->setResultItemInlineTemplate('{{label}}')
-                ->setLocalValues([
-                    "l" => "Low",
-                    "m" => "Medium",
-                    "h" => "High",
-                ])
-                ->setLabel("Level")
-        );
+            )
+            ->addField(
+                SharpFormAutocompleteField::make("level", "local")
+                    ->setListItemInlineTemplate('{{label}}')
+                    ->setResultItemInlineTemplate('{{label}}')
+                    ->setLocalValues([
+                        "l" => "Low",
+                        "m" => "Medium",
+                        "h" => "High",
+                    ])
+                    ->setLabel("Level")
+            );
     }
 
-    /**
-     * @param $instanceId
-     * @return array
-     */
-    protected function initialData($instanceId): array
+    protected function initialData(mixed $instanceId): array
     {
         return $this
             ->setCustomTransformer("message", function($value, Spaceship $instance) {
@@ -84,7 +81,7 @@ class SpaceshipSendMessage extends InstanceCommand
             );
     }
 
-    public function authorizeFor($instanceId): bool
+    public function authorizeFor(mixed $instanceId): bool
     {
         return $instanceId%2 == 0 && $instanceId > 10;
     }

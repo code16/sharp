@@ -49,9 +49,16 @@ class PilotSharpList extends SharpEntityList
 
     function buildListLayout(): void
     {
-        $this->addColumn("name", 4)
-            ->addColumn("role", 4)
-            ->addColumn("xp", 4);
+        if($role = $this->queryParams->filterFor("role")) {
+            $this->addColumn("name", 6);
+            if($role === "sr") {
+                $this->addColumn("xp", 6);
+            }
+        } else {
+            $this->addColumn("name", 4)
+                ->addColumn("role", 4)
+                ->addColumn("xp", 4);
+        }
     }
 
     function getListData(): array|Arrayable
