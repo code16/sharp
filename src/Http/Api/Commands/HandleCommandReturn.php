@@ -12,15 +12,21 @@ use Illuminate\Support\Facades\Storage;
 trait HandleCommandReturn
 {
 
-    /**
-     * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\File\Stream
-     */
     protected function returnCommandResult(SharpEntityList|SharpShow|SharpDashboard $commandContainer, array $returnedValue)
     {
         if($returnedValue["action"] == "download") {
-            // Download case is specific: we return a File Stream
-            return Storage::disk($returnedValue["disk"])->download(
-                $returnedValue["file"],
+            return Storage::disk($returnedValue["disk"])
+                ->download(
+                    $returnedValue["file"],
+                    $returnedValue["name"]
+                );
+        }
+
+        if($returnedValue["action"] == "streamDownload") {
+            return response()->streamDownload(
+                function () use($returnedValue) {
+                    echo $returnedValue["content"];
+                }, 
                 $returnedValue["name"]
             );
         }
@@ -47,8 +53,7 @@ trait HandleCommandReturn
     {
         $commandHandler = $commandContainer->instanceCommandHandler($commandKey);
 
-        if(!$commandHandler->authorize()
-            || !$commandHandler->authorizeFor($instanceId)) {
+        if(!$commandHandler->authorize() || !$commandHandler->authorizeFor($instanceId)) {
             throw new SharpAuthorizationException();
         }
 

@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Tests\Feature\Api\Commands;
 
 use Code16\Sharp\EntityList\Commands\EntityCommand;
-use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
@@ -28,7 +27,7 @@ class EntityCommandControllerTest extends BaseApiTest
         $this->withoutExceptionHandling();
 
         $this->json('post', '/sharp/api/list/person/command/entity_info')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson([
                 "action" => "info",
                 "message" => "ok",
@@ -42,7 +41,7 @@ class EntityCommandControllerTest extends BaseApiTest
         $this->withoutExceptionHandling();
 
         $this->json('post', '/sharp/api/list/person/command/entity_reload')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson([
                 "action" => "reload"
             ]);
@@ -55,7 +54,7 @@ class EntityCommandControllerTest extends BaseApiTest
         $this->withoutExceptionHandling();
 
         $this->json('post', '/sharp/api/list/person/command/entity_view')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson([
                 "action" => "view",
             ]);
@@ -68,7 +67,7 @@ class EntityCommandControllerTest extends BaseApiTest
         $this->withoutExceptionHandling();
 
         $this->json('post', '/sharp/api/list/person/command/entity_refresh')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson([
                 "action" => "refresh",
                 "items" => [
@@ -91,9 +90,11 @@ class EntityCommandControllerTest extends BaseApiTest
         $this->buildTheWorld();
         $this->withoutExceptionHandling();
 
-        $this->json('post', '/sharp/api/list/person/command/entity_form', [
-            "data" => ["name" => "John"]
-        ])->assertStatus(200);
+        $this
+            ->json('post', '/sharp/api/list/person/command/entity_form', [
+                "data" => ["name" => "John"]
+            ])
+            ->assertOk();
     }
 
     /** @test */
@@ -103,7 +104,7 @@ class EntityCommandControllerTest extends BaseApiTest
         $this->withoutExceptionHandling();
 
         $response = $this->json('post', '/sharp/api/list/person/command/entity_download')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertHeader("content-type", "application/pdf");
 
         $this->assertTrue(
@@ -113,7 +114,24 @@ class EntityCommandControllerTest extends BaseApiTest
         );
 
         $this->json('post', '/sharp/api/list/person/command/entity_download_no_disk')
-            ->assertStatus(200);
+            ->assertOk();
+    }
+
+    /** @test */
+    public function we_can_call_a_streamDownload_entity_command()
+    {
+        $this->buildTheWorld();
+        $this->withoutExceptionHandling();
+
+        $response = $this->json('post', '/sharp/api/list/person/command/entity_streamDownload')
+            ->assertOk()
+            ->assertHeader("content-type", "text/html; charset=UTF-8");
+
+        $this->assertTrue(
+            Str::contains(
+                $response->headers->get("content-disposition"), "stream.txt"
+            )
+        );
     }
 
     /** @test */
@@ -153,7 +171,7 @@ class EntityCommandControllerTest extends BaseApiTest
         $this->json('post', '/sharp/api/list/person/command/entity_params', [
             "query" => ["sort" => "name", "dir" => "desc"]
         ])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson([
                 "action" => "info",
                 "message" => "namedesc"
@@ -176,7 +194,7 @@ class EntityCommandControllerTest extends BaseApiTest
         $this->withoutExceptionHandling();
 
         $response = $this->getJson('/sharp/api/list/person')
-            ->assertStatus(200)
+            ->assertOk()
             ->json();
 
         $this->assertTrue(
@@ -184,7 +202,7 @@ class EntityCommandControllerTest extends BaseApiTest
         );
 
         $this->getJson('/sharp/api/list/person/command/entity_with_init_data/data')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertExactJson([
                 "data" => [
                     "name" => "John Wayne"
@@ -254,6 +272,12 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList {
                     Storage::fake('files');
                     UploadedFile::fake()->create('account.pdf', 100)->storeAs('pdf', 'account.pdf', ['disk'=>'files']);
                     return $this->download("pdf/account.pdf", "account.pdf", "files");
+                }
+            })
+            ->addEntityCommand("entity_streamDownload", new class() extends EntityCommand {
+                public function label(): string { return "label"; }
+                public function execute(array $data = []): array {
+                    return $this->streamDownload("content", "stream.txt");
                 }
             })
             ->addEntityCommand("entity_download_no_disk", new class() extends EntityCommand {

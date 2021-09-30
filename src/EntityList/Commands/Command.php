@@ -7,6 +7,7 @@ use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -64,6 +65,15 @@ abstract class Command
             "action" => "download",
             "file" => $filePath,
             "disk" => $diskName,
+            "name" => $fileName
+        ];
+    }
+
+    protected function streamDownload(string $fileContent, string $fileName): array
+    {
+        return [
+            "action" => "streamDownload",
+            "content" => $fileContent,
             "name" => $fileName
         ];
     }
