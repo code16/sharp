@@ -14,7 +14,6 @@ use Code16\Sharp\Dashboard\Widgets\SharpOrderedListWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPieGraphWidget;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
-use Code16\Sharp\Utils\LinkToEntity;
 use Illuminate\Support\Facades\DB;
 
 class CompanyDashboard extends SharpDashboard
@@ -42,24 +41,29 @@ class CompanyDashboard extends SharpDashboard
                     ->setTitle("Main features")
                     ->setShowLegend(false)
                     ->setHorizontal()
-            )->addWidget(
+            )
+            ->addWidget(
                 SharpPieGraphWidget::make("types_pie")
                     ->setTitle("Spaceships by type")
-            )->addWidget(
+            )
+            ->addWidget(
                 SharpLineGraphWidget::make("capacities")
                     ->setTitle("Spaceships by capacity")
                     ->setHeight(200)
                     ->setShowLegend()
                     ->setMinimal()
                     ->setCurvedLines()
-            )->addWidget(
+            )
+            ->addWidget(
                 SharpPanelWidget::make("activeSpaceships")
                     ->setInlineTemplate("<h1>{{count}}</h1> spaceships in activity")
                     ->setLink(LinkToEntityList::make("spaceship"))
-            )->addWidget(
+            )
+            ->addWidget(
                 SharpPanelWidget::make("inactiveSpaceships")
                     ->setInlineTemplate("<h1>{{count}}</h1> inactive spaceships")
-            )->addWidget(
+            )
+            ->addWidget(
                 SharpOrderedListWidget::make("topTravelledSpaceshipModels")
                     ->setTitle("Top travelled spaceship types")
                     ->buildItemLink(function($item) {
@@ -91,7 +95,7 @@ class CompanyDashboard extends SharpDashboard
             });
     }
 
-    function buildWidgetsData(DashboardQueryParams $params): void
+    function buildWidgetsData(): void
     {
         $this->setPieGraphDataSet();
         $this->setBarsGraphDataSet();

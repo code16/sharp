@@ -7,6 +7,7 @@ use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Tests\Unit\EntityList\Utils\SharpEntityDefaultTestList;
+use Illuminate\Contracts\Support\Arrayable;
 
 class SharpEntityListStateTest extends SharpTestCase
 {
@@ -67,7 +68,7 @@ class SharpEntityListStateTest extends SharpTestCase
     function entity_state_attribute_is_added_the_entity_data()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function getListData(EntityListQueryParams $params): array
+            function getListData(): array|Arrayable
             {
                 return [
                     ["id" => 1, "name" => "John Wayne", "state" => true],

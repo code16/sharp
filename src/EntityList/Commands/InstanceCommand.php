@@ -11,56 +11,36 @@ abstract class InstanceCommand extends Command
         return "instance";
     }
 
-    /**
-     * @param mixed $instanceId
-     * @return array
-     */
-    public function formData($instanceId): array
+    public function formData(mixed $instanceId): array
     {
         return collect($this->initialData($instanceId))
             ->only($this->getDataKeys())
             ->all();
     }
 
-    /**
-     * @param mixed $instanceId
-     * @return array
-     */
-    protected function initialData($instanceId): array
+    protected function initialData(mixed $instanceId): array
     {
         return [];
     }
 
-    /**
-     * @param mixed $instanceId
-     * @param array $data
-     * @return array
-     */
-    public abstract function execute($instanceId, array $data = []): array;
+    public abstract function execute(mixed $instanceId, array $data = []): array;
 
     /**
      * Check if the current user is allowed to use this Command for this instance
-     * @param mixed $instanceId
      */
-    public function authorizeFor($instanceId): bool
+    public function authorizeFor(mixed $instanceId): bool
     {
         return true;
     }
 
-    /**
-     * @param mixed $instanceId
-     */
-    public function checkAndStoreAuthorizationFor($instanceId)
+    public function checkAndStoreAuthorizationFor(mixed $instanceId)
     {
         if($this->authorizeFor($instanceId)) {
             $this->authorizedInstances[] = $instanceId;
         }
     }
 
-    /**
-     * @return bool|array
-     */
-    public function getGlobalAuthorization()
+    public function getGlobalAuthorization(): bool|array
     {
         if(!$this->authorize()) {
             return false;

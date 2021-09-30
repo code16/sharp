@@ -9,46 +9,60 @@ use Code16\Sharp\EntityList\EntityListSelectFilter;
 use Code16\Sharp\EntityList\EntityListSelectMultipleFilter;
 use Code16\Sharp\EntityList\EntityListSelectRequiredFilter;
 use Code16\Sharp\EntityList\SharpEntityList;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
 
 class PersonSharpEntityList extends SharpEntityList
 {
 
-    function getListData(EntityListQueryParams $params)
+    function getListData(): array|Arrayable
     {
         $items = [
             ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22, "job" => "actor"],
             ["id" => 2, "name" => "Mary <b>Wayne</b>", "age" => 26, "job" => "truck driver"],
         ];
 
-        if($params->hasSearch()) {
-            $items = collect($items)->filter(function($item) use($params) {
-                return Str::contains(strtolower($item["name"]), $params->searchWords(false));
-            })->all();
+        if($this->queryParams->hasSearch()) {
+            $items = collect($items)
+                ->filter(function($item) {
+                    return Str::contains(
+                        strtolower($item["name"]), 
+                        $this->queryParams->searchWords(false)
+                    );
+                })
+                ->toArray();
         }
 
-        if($params->filterFor("age")) {
-            $items = collect($items)->filter(function($item) use($params) {
-                return $item["age"] == $params->filterFor("age");
-            })->all();
+        if($this->queryParams->filterFor("age")) {
+            $items = collect($items)
+                ->filter(function($item) {
+                    return $item["age"] == $this->queryParams->filterFor("age");
+                })
+                ->toArray();
 
         } elseif(request()->has("default_age")) {
-            $items = collect($items)->filter(function($item) use($params) {
-                return $item["age"] == $params->filterFor("age_required");
-            })->all();
+            $items = collect($items)
+                ->filter(function($item) {
+                    return $item["age"] == $this->queryParams->filterFor("age_required");
+                })
+                ->toArray();
         }
 
-        if($params->filterFor("age_multiple")) {
-            $items = collect($items)->filter(function($item) use($params) {
-                return in_array($item["age"], (array)$params->filterFor("age_multiple"));
-            })->all();
+        if($this->queryParams->filterFor("age_multiple")) {
+            $items = collect($items)
+                ->filter(function($item) {
+                    return in_array($item["age"], (array)$this->queryParams->filterFor("age_multiple"));
+                })
+                ->toArray();
         }
 
-        if(count($params->specificIds())) {
-            $items = collect($items)->filter(function($item) use($params) {
-                return in_array($item["id"], $params->specificIds());
-            })->all();
+        if(count($this->queryParams->specificIds())) {
+            $items = collect($items)
+                ->filter(function($item) {
+                    return in_array($item["id"], $this->queryParams->specificIds());
+                })
+                ->toArray();
         }
 
         if(request()->has("paginated")) {
@@ -60,17 +74,18 @@ class PersonSharpEntityList extends SharpEntityList
 
     function buildListDataContainers(): void
     {
-        $this->addDataContainer(
-            EntityListDataContainer::make("name")
-                ->setLabel("Name")
-                ->setHtml()
-                ->setSortable()
-
-        )->addDataContainer(
-            EntityListDataContainer::make("age")
-                ->setLabel("Age")
-                ->setSortable()
-        );
+        $this
+            ->addDataContainer(
+                EntityListDataContainer::make("name")
+                    ->setLabel("Name")
+                    ->setHtml()
+                    ->setSortable()
+            )
+            ->addDataContainer(
+                EntityListDataContainer::make("age")
+                    ->setLabel("Age")
+                    ->setSortable()
+            );
     }
 
     function buildListLayout(): void
@@ -110,9 +125,6 @@ class PersonSharpEntityListAgeMultipleFilter
 class PersonSharpEntityListAgeRequiredFilter
     extends PersonSharpEntityListAgeFilter implements EntityListSelectRequiredFilter
 {
-    /**
-     * @return string|int
-     */
     public function defaultValue()
     {
         return 22;

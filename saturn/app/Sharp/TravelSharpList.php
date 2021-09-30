@@ -8,24 +8,28 @@ use App\Travel;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
+use Illuminate\Contracts\Support\Arrayable;
 
 class TravelSharpList extends SharpEntityList
 {
 
     function buildListDataContainers(): void
     {
-        $this->addDataContainer(
-            EntityListDataContainer::make("destination")
-                ->setSortable()
-                ->setLabel("Destination")
-        )->addDataContainer(
-            EntityListDataContainer::make("departure_date")
-                ->setSortable()
-                ->setLabel("Departure date")
-        )->addDataContainer(
-            EntityListDataContainer::make("spaceship")
-                ->setLabel("Spaceship")
-        );
+        $this
+            ->addDataContainer(
+                EntityListDataContainer::make("destination")
+                    ->setSortable()
+                    ->setLabel("Destination")
+            )
+            ->addDataContainer(
+                EntityListDataContainer::make("departure_date")
+                    ->setSortable()
+                    ->setLabel("Departure date")
+            )
+            ->addDataContainer(
+                EntityListDataContainer::make("spaceship")
+                    ->setLabel("Spaceship")
+            );
     }
 
     function buildListConfig(): void
@@ -33,7 +37,7 @@ class TravelSharpList extends SharpEntityList
         $this//->setSearchable()
             ->setDefaultSort("departure_date", "desc")
             ->setPaginated()
-            ->addInstanceCommand('email', TravelSendEmail::class);
+            ->addInstanceCommand('send-email', TravelSendEmail::class);
     }
 
     function buildListLayout(): void
@@ -43,16 +47,16 @@ class TravelSharpList extends SharpEntityList
             ->addColumn("spaceship", 4);
     }
 
-    function getListData(EntityListQueryParams $params)
+    function getListData(): array|Arrayable
     {
-        $travels = Travel::distinct();
+        $travels = Travel::query();
 
-        if($params->sortedBy()) {
-            $travels->orderBy($params->sortedBy(), $params->sortedDir());
+        if($this->queryParams->sortedBy()) {
+            $travels->orderBy($this->queryParams->sortedBy(), $this->queryParams->sortedDir());
         }
 
-        if ($params->hasSearch()) {
-            foreach ($params->searchWords() as $word) {
+        if ($this->queryParams->hasSearch()) {
+            foreach ($this->queryParams->searchWords() as $word) {
                 $travels->where('destination', 'like', $word);
             }
         }

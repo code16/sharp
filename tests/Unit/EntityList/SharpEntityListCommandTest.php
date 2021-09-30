@@ -4,7 +4,6 @@ namespace Code16\Sharp\Tests\Unit\EntityList;
 
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
-use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Tests\SharpTestCase;
@@ -19,22 +18,24 @@ class SharpEntityListCommandTest extends SharpTestCase
         $list = new class extends SharpEntityDefaultTestList {
             function buildListConfig(): void
             {
-                $this->addEntityCommand("entityCommand", new class extends EntityCommand {
-                    public function label(): string {
-                        return "My Entity Command";
-                    }
-                    public function execute(EntityListQueryParams $params, array $data = []): array {}
-                });
-                $this->addInstanceCommand("instanceCommand", new class extends InstanceCommand {
-                    public function label(): string {
-                        return "My Instance Command";
-                    }
-                    public function execute($instanceId, array $data = []): array {}
-                });
+                $this
+                    ->addEntityCommand("entityCommand", new class extends EntityCommand {
+                        public function label(): string {
+                            return "My Entity Command";
+                        }
+                        public function execute(array $data = []): array {}
+                    })
+                    ->addInstanceCommand("instanceCommand", new class extends InstanceCommand {
+                        public function label(): string {
+                            return "My Instance Command";
+                        }
+                        public function execute($instanceId, array $data = []): array {}
+                    });
             }
         };
 
         $list->buildListConfig();
+        $list->init();
 
         $this->assertArraySubset([
             "commands" => [
@@ -72,6 +73,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
+        $list->init();
 
         $this->assertArraySubset([
             "commands" => [
@@ -101,12 +103,13 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function confirmationText(): ?string {
                         return "Sure?";
                     }
-                    public function execute(EntityListQueryParams $params, array $data = []): array {}
+                    public function execute(array $data = []): array {}
                 });
             }
         };
 
         $list->buildListConfig();
+        $list->init();
 
         $this->assertArraySubset([
             "commands" => [
@@ -140,12 +143,13 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function buildFormLayout(FormLayoutColumn &$column): void {
                         $column->withSingleField("message");
                     }
-                    public function execute(EntityListQueryParams $params, array $data = []): array {}
+                    public function execute(array $data = []): array {}
                 });
             }
         };
 
         $list->buildListConfig();
+        $list->init();
 
         $this->assertArraySubset([
             "commands" => [
@@ -199,6 +203,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
+        $list->init();
 
         $this->assertArraySubset([
             "commands" => [
@@ -242,12 +247,13 @@ class SharpEntityListCommandTest extends SharpTestCase
                         $this->addField(SharpFormTextField::make("message"));
                         $this->addField(SharpFormTextField::make("message2"));
                     }
-                    public function execute(EntityListQueryParams $params, array $data = []): array {}
+                    public function execute(array $data = []): array {}
                 });
             }
         };
 
         $list->buildListConfig();
+        $list->init();
 
         $this->assertArraySubset([
             "commands" => [
@@ -280,12 +286,13 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function formModalTitle(): string {
                         return "My title";
                     }
-                    public function execute(EntityListQueryParams $params, array $data = []): array {}
+                    public function execute(array $data = []): array {}
                 });
             }
         };
 
         $list->buildListConfig();
+        $list->init();
 
         $this->assertArraySubset([
             "commands" => [
@@ -316,12 +323,13 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function authorize(): bool {
                         return false;
                     }
-                    public function execute(EntityListQueryParams $params, array $data = []): array {}
+                    public function execute(array $data = []): array {}
                 });
             }
         };
 
         $list->buildListConfig();
+        $list->init();
 
         $this->assertArraySubset([
             "commands" => [
@@ -358,6 +366,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
+        $list->init();
         $list->data([
             ["id" => 1], ["id" => 2], ["id" => 3],
             ["id" => 4], ["id" => 5], ["id" => 6],
@@ -392,12 +401,13 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function description(): string {
                         return "My Entity Command description";
                     }
-                    public function execute(EntityListQueryParams $params, array $data = []): array {}
+                    public function execute(array $data = []): array {}
                 });
             }
         };
 
         $list->buildListConfig();
+        $list->init();
 
         $this->assertArraySubset([
             "commands" => [
@@ -439,6 +449,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
+        $list->init();
 
         $this->assertArraySubset([
             "commands" => [
@@ -469,21 +480,22 @@ class SharpEntityListCommandTest extends SharpTestCase
                 $this
                     ->addEntityCommand("command-1", new class extends EntityCommand {
                         public function label(): string { return ""; }
-                        public function execute(EntityListQueryParams $params, array $data = []): array {}
+                        public function execute(array $data = []): array {}
                     })
                     ->addEntityCommandSeparator()
                     ->addEntityCommand("command-2", new class extends EntityCommand {
                         public function label(): string { return ""; }
-                        public function execute(EntityListQueryParams $params, array $data = []): array {}
+                        public function execute(array $data = []): array {}
                     })
                     ->addEntityCommand("command-3", new class extends EntityCommand {
                         public function label(): string { return ""; }
-                        public function execute(EntityListQueryParams $params, array $data = []): array {}
+                        public function execute(array $data = []): array {}
                     });
             }
         };
 
         $list->buildListConfig();
+        $list->init();
 
         $this->assertArraySubset([
             "commands" => [
@@ -516,18 +528,19 @@ class SharpEntityListCommandTest extends SharpTestCase
                         public function label(): string {
                             return "My Entity Command";
                         }
-                        public function execute(EntityListQueryParams $params, array $data = []): array {}
+                        public function execute(array $data = []): array {}
                     })
                     ->setPrimaryEntityCommand("primary-entity", new class extends EntityCommand {
                         public function label(): string {
                             return "My Primary Entity Command";
                         }
-                        public function execute(EntityListQueryParams $params, array $data = []): array {}
+                        public function execute(array $data = []): array {}
                     });
             }
         };
 
         $list->buildListConfig();
+        $list->init();
 
         $this->assertArraySubset([
             "commands" => [
@@ -560,5 +573,5 @@ class SharpEntityListCommandTestCommand extends EntityCommand
         return "My Entity Command";
     }
 
-    public function execute(EntityListQueryParams $params, array $data = []): array {}
+    public function execute(array $data = []): array {}
 }

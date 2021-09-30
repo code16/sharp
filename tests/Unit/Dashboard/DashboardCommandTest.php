@@ -22,7 +22,7 @@ class DashboardCommandTest extends SharpTestCase
                     public function label(): string {
                         return "My Dashboard Command";
                     }
-                    public function execute(DashboardQueryParams $params, array $data = []): array {}
+                    public function execute(array $data = []): array {}
                 });
             }
         };
@@ -61,7 +61,7 @@ class DashboardCommandTest extends SharpTestCase
                     public function buildFormLayout(FormLayoutColumn &$column): void {
                         $column->withSingleField("message");
                     }
-                    public function execute(DashboardQueryParams $params, array $data = []): array {}
+                    public function execute(array $data = []): array {}
                 });
             }
         };

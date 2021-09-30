@@ -9,5 +9,5 @@ class FakeSharpDashboard extends SharpDashboard
 {
     protected function buildWidgets(): void {}
     protected function buildWidgetsLayout(): void {}
-    protected function buildWidgetsData(DashboardQueryParams $params): void { }
+    protected function buildWidgetsData(): void { }
 }

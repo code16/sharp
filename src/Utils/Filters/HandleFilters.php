@@ -113,7 +113,7 @@ trait HandleFilters
                     || $handler instanceof DateRangeRequiredFilter
                     || $this->isRetainedFilter($handler, $attribute, true);
             })
-
+            
             ->map(function($handler, $attribute) {
                 if($this->isRetainedFilter($handler, $attribute, true)) {
                     return [

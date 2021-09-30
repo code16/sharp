@@ -13,7 +13,7 @@ class InviteUserCommand extends EntityCommand
         return "Invite new user...";
     }
 
-    public function execute(EntityListQueryParams $params, array $data = []): array
+    public function execute(array $data = []): array
     {
         $this->validate(
             $data, 

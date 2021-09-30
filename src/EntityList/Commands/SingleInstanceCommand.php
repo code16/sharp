@@ -42,10 +42,7 @@ abstract class SingleInstanceCommand extends InstanceCommand
         return $this->authorize();
     }
 
-    /**
-     * @return bool|array
-     */
-    public function getGlobalAuthorization()
+    public function getGlobalAuthorization(): bool|array
     {
         return $this->authorize();
     }

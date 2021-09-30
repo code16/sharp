@@ -21,6 +21,23 @@ abstract class SharpDashboard
     protected array $panelWidgetsData = [];
     protected array $orderedListWidgetsData = [];
     protected array $rows = [];
+    protected ?DashboardQueryParams $queryParams;
+
+    public final function init(): self
+    {
+        $this->putRetainedFilterValuesInSession();
+
+        $this->queryParams = DashboardQueryParams::create()
+            ->fillWithRequest()
+            ->setDefaultFilters($this->getFilterDefaultValues());
+        
+        return $this;
+    }
+
+    public function getQueryParams(): ?DashboardQueryParams
+    {
+        return $this->queryParams;
+    }
 
     /**
      * Add a widget.
@@ -95,7 +112,7 @@ abstract class SharpDashboard
         return [
             "rows" => collect($this->rows)
                 ->map->toArray()
-                ->all()
+                ->toArray()
         ];
     }
 
@@ -121,14 +138,8 @@ abstract class SharpDashboard
      */
     function data(): array
     {
-        $this->putRetainedFilterValuesInSession();
-
-        $this->buildWidgetsData(
-            DashboardQueryParams::create()
-                ->fillWithRequest()
-                ->setDefaultFilters($this->getFilterDefaultValues())
-        );
-
+        $this->buildWidgetsData();
+            
         // First, graph widgets dataSets
         $data = collect($this->graphWidgetDataSets)
             ->map(function(array $dataSets, string $key) {
@@ -229,8 +240,6 @@ abstract class SharpDashboard
 
     /**
      * Build dashboard's widgets data, using ->addGraphDataSet and ->setPanelData
-     *
-     * @param DashboardQueryParams $params
      */
-    protected abstract function buildWidgetsData(DashboardQueryParams $params): void;
+    protected abstract function buildWidgetsData(): void;
 }

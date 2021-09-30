@@ -12,6 +12,9 @@ use Code16\Sharp\Show\SharpShow;
 abstract class ApiController extends SharpProtectedController
 {
 
+    /**
+     * @throws SharpInvalidEntityKeyException
+     */
     protected function getListInstance(string $entityKey): SharpEntityList
     {
         if(! $configKey = config("sharp.entities.{$entityKey}.list")) {

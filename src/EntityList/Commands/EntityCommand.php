@@ -6,12 +6,19 @@ use Code16\Sharp\EntityList\EntityListQueryParams;
 
 abstract class EntityCommand extends Command
 {
-    public function type(): string
+    protected ?EntityListQueryParams $queryParams = null;
+    
+    public final function type(): string
     {
         return "entity";
     }
+    
+    public final function initQueryParams(EntityListQueryParams $params): void
+    {
+        $this->queryParams = $params;
+    }
 
-    public function formData(): array
+    public final function formData(): array
     {
         return collect($this->initialData())
             ->only($this->getDataKeys())
@@ -23,5 +30,5 @@ abstract class EntityCommand extends Command
         return [];
     }
 
-    public abstract function execute(EntityListQueryParams $params, array $data = []): array;
+    public abstract function execute(array $data = []): array;
 }

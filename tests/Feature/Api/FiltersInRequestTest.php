@@ -7,6 +7,7 @@ use Code16\Sharp\EntityList\EntityListSelectFilter;
 use Code16\Sharp\EntityList\EntityListSelectMultipleFilter;
 use Code16\Sharp\EntityList\EntityListSelectRequiredFilter;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
+use Illuminate\Contracts\Support\Arrayable;
 
 class FiltersInRequestTest extends BaseApiTest
 {
@@ -138,17 +139,17 @@ class FiltersInRequestTest extends BaseApiTest
             PersonSharpEntityList::class,
             function() {
                 return new class() extends PersonSharpEntityList {
-                    function getListData(EntityListQueryParams $params)
+                    function getListData(): array|Arrayable
                     {
                         $items = [
                             ["id" => 1, "name" => "John", "age" => 30, "active" => true],
                             ["id" => 2, "name" => "Baby", "age" => 2, "active" => false],
                         ];
 
-                        if ($params->filterFor("active") !== null) {
+                        if ($this->queryParams->filterFor("active") !== null) {
                             $items = collect($items)
-                                ->filter(function ($item) use ($params) {
-                                    return $item["active"] == $params->filterFor("active");
+                                ->filter(function ($item) {
+                                    return $item["active"] == $this->queryParams->filterFor("active");
                                 })
                                 ->values();
                         }
@@ -207,7 +208,7 @@ class FiltersInRequestTest extends BaseApiTest
             PersonSharpEntityList::class,
             function() {
                 return new class() extends PersonSharpEntityList {
-                    function getListData(EntityListQueryParams $params)
+                    function getListData(): array|Arrayable
                     {
                         $items = [
                             ["id" => 1, "name" => "John", "age" => 30],
@@ -215,9 +216,9 @@ class FiltersInRequestTest extends BaseApiTest
                             ["id" => 3, "name" => "Baby", "age" => 2],
                         ];
 
-                        if ($params->filterFor("age")) {
+                        if ($age = $this->queryParams->filterFor("age")) {
                             $items = collect($items)
-                                ->whereIn("age", $params->filterFor("age"))
+                                ->whereIn("age", $age)
                                 ->values();
                         }
 
@@ -268,7 +269,7 @@ class FiltersInRequestTest extends BaseApiTest
             PersonSharpEntityList::class,
             function() {
                 return new class() extends PersonSharpEntityList {
-                    function getListData(EntityListQueryParams $params)
+                    function getListData(): array|Arrayable
                     {
                         $items = [
                             ["id" => 1, "name" => "John", "age" => 30],
@@ -277,7 +278,7 @@ class FiltersInRequestTest extends BaseApiTest
                         ];
 
                         $items = collect($items)
-                            ->where("age", $params->filterFor("age"))
+                            ->where("age", $this->queryParams->filterFor("age"))
                             ->values();
 
                         return $this->transform($items);

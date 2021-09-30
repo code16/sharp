@@ -3,7 +3,6 @@
 namespace App\Sharp\Commands;
 
 use Code16\Sharp\EntityList\Commands\EntityCommand;
-use Code16\Sharp\EntityList\EntityListQueryParams;
 
 class SpaceshipReload extends EntityCommand
 {
@@ -12,7 +11,7 @@ class SpaceshipReload extends EntityCommand
         return "Reload full list";
     }
 
-    public function execute(EntityListQueryParams $params, array $data=[]): array
+    public function execute(array $data=[]): array
     {
         return $this->reload();
     }

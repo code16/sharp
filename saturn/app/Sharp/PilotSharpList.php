@@ -11,23 +11,27 @@ use App\Sharp\States\PilotEntityState;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
+use Illuminate\Contracts\Support\Arrayable;
 
 class PilotSharpList extends SharpEntityList
 {
 
     function buildListDataContainers(): void
     {
-        $this->addDataContainer(
-            EntityListDataContainer::make("name")
-                ->setSortable()
-                ->setLabel("Name")
-        )->addDataContainer(
-            EntityListDataContainer::make("role")
-                ->setLabel("Role")
-        )->addDataContainer(
-            EntityListDataContainer::make("xp")
-                ->setLabel("Xp")
-        );
+        $this
+            ->addDataContainer(
+                EntityListDataContainer::make("name")
+                    ->setSortable()
+                    ->setLabel("Name")
+            )
+            ->addDataContainer(
+                EntityListDataContainer::make("role")
+                    ->setLabel("Role")
+            )
+            ->addDataContainer(
+                EntityListDataContainer::make("xp")
+                    ->setLabel("Xp")
+            );
     }
 
     function buildListConfig(): void
@@ -45,35 +49,42 @@ class PilotSharpList extends SharpEntityList
 
     function buildListLayout(): void
     {
-        $this->addColumn("name", 4)
-            ->addColumn("role", 4)
-            ->addColumn("xp", 4);
+        if($role = $this->queryParams->filterFor("role")) {
+            $this->addColumn("name", 6);
+            if($role === "sr") {
+                $this->addColumn("xp", 6);
+            }
+        } else {
+            $this->addColumn("name", 4)
+                ->addColumn("role", 4)
+                ->addColumn("xp", 4);
+        }
     }
 
-    function getListData(EntityListQueryParams $params)
+    function getListData(): array|Arrayable
     {
         $pilots = Pilot::select("pilots.*")->distinct();
 
-        if($ids = $params->specificIds()) {
+        if($ids = $this->queryParams->specificIds()) {
             $pilots->whereIn("id", $ids);
 
         } else {
-            if ($spaceship = $params->filterFor("spaceship")) {
+            if ($spaceship = $this->queryParams->filterFor("spaceship")) {
                 $pilots->leftJoin("pilot_spaceship", "pilots.id", "=", "pilot_spaceship.pilot_id")
                     ->leftJoin("spaceships", "spaceships.id", "=", "pilot_spaceship.spaceship_id")
                     ->where("spaceships.id", $spaceship);
             }
 
-            if ($role = $params->filterFor("role")) {
+            if ($role = $this->queryParams->filterFor("role")) {
                 $pilots->where("role", $role);
             }
 
-            if ($params->sortedBy()) {
-                $pilots->orderBy($params->sortedBy(), $params->sortedDir());
+            if ($this->queryParams->sortedBy()) {
+                $pilots->orderBy($this->queryParams->sortedBy(), $this->queryParams->sortedDir());
             }
 
-            if ($params->hasSearch()) {
-                foreach ($params->searchWords() as $word) {
+            if ($this->queryParams->hasSearch()) {
+                foreach ($this->queryParams->searchWords() as $word) {
                     $pilots->where('pilots.name', 'like', $word);
                 }
             }

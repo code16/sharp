@@ -63,7 +63,7 @@ class EntityListInstanceCommandControllerTest extends BaseApiTest
                 ]
             ])
             ->decodeResponseJson();
-
+        
         $this->assertCount(1, $json["items"]);
     }
 

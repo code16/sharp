@@ -9,6 +9,7 @@ use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\DB;
 
 class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
@@ -23,7 +24,7 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
 
         $this->assertArraySubset(
             [["name" => "John Wayne"], ["name" => "Mary Wayne"]],
-            $list->getListData(new EntityListQueryParams())
+            $list->getListData()
         );
     }
     
@@ -35,7 +36,7 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
         
         $list = new class extends WithCustomTransformersTestList
         {
-            function getListData(EntityListQueryParams $params)
+            function getListData(): array|Arrayable
             {
                 return $this->transform(DB::table((new Person())->getTable())->get());
             }
@@ -43,7 +44,7 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
     
         $this->assertArraySubset(
             [["name" => "John Wayne"], ["name" => "Mary Wayne"]],
-            $list->getListData(new EntityListQueryParams())
+            $list->getListData()
         );
     }
     
@@ -58,7 +59,7 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
         
         $list = new class extends WithCustomTransformersTestList
         {
-            function getListData(EntityListQueryParams $params)
+            function getListData(): array|Arrayable
             {
                 return $this->transform(DB::table((new Person())->getTable())->paginate(2));
             }
@@ -66,7 +67,7 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
         
         $this->assertArraySubset(
             [["name" => "A"], ["name" => "B"]],
-            $list->getListData(new EntityListQueryParams())->items()
+            $list->getListData()->items()
         );
     }
 
@@ -81,7 +82,7 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
 
         $list = new class extends WithCustomTransformersTestList
         {
-            function getListData(EntityListQueryParams $params)
+            function getListData(): array|Arrayable
             {
                 return $this->transform(Person::paginate(2));
             }
@@ -89,7 +90,7 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
 
         $this->assertArraySubset(
             [["name" => "A"], ["name" => "B"]],
-            $list->getListData(new EntityListQueryParams())->items()
+            $list->getListData()->items()
         );
     }
 
@@ -110,12 +111,12 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
 
         $this->assertArraySubset(
             ["name" => "Mary Wayne", "mother:name" => "Jane Wayne"],
-            $list->getListData(new EntityListQueryParams())[1]
+            $list->getListData()[1]
         );
 
         $this->assertArraySubset(
             ["name" => "John Wayne", "mother:name" => null],
-            $list->getListData(new EntityListQueryParams())[2]
+            $list->getListData()[2]
         );
     }
 
@@ -126,7 +127,7 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
 
         $list = new class extends WithCustomTransformersTestList
         {
-            function getListData(EntityListQueryParams $params)
+            function getListData(): array|Arrayable
             {
                 return $this
                     ->setCustomTransformer("name", function($name) {
@@ -138,7 +139,7 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
 
         $this->assertArraySubset(
             ["name" => "JOHN WAYNE"],
-            $list->getListData(new EntityListQueryParams())[0]
+            $list->getListData()[0]
         );
     }
 
@@ -149,7 +150,7 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
 
         $list = new class extends WithCustomTransformersTestList
         {
-            function getListData(EntityListQueryParams $params)
+            function getListData(): array|Arrayable
             {
                 return $this
                     ->setCustomTransformer("name", UppercaseTransformer::class)
@@ -159,7 +160,7 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
 
         $this->assertArraySubset(
             ["name" => "JOHN WAYNE"],
-            $list->getListData(new EntityListQueryParams())[0]
+            $list->getListData()[0]
         );
     }
 
@@ -170,7 +171,7 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
 
         $list = new class extends WithCustomTransformersTestList
         {
-            function getListData(EntityListQueryParams $params)
+            function getListData(): array|Arrayable
             {
                 return $this
                     ->setCustomTransformer("name", new UppercaseTransformer())
@@ -180,7 +181,7 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
 
         $this->assertArraySubset(
             ["name" => "JOHN WAYNE"],
-            $list->getListData(new EntityListQueryParams())[0]
+            $list->getListData()[0]
         );
     }
 }
@@ -189,7 +190,7 @@ class WithCustomTransformersTestList extends SharpEntityList
 {
     use WithCustomTransformers;
 
-    function getListData(EntityListQueryParams $params)
+    function getListData(): array|Arrayable
     {
         return $this->transform(Person::all());
     }

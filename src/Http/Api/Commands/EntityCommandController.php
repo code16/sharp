@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Api\Commands;
 
+use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
@@ -12,16 +13,14 @@ class EntityCommandController extends ApiController
     use HandleCommandReturn;
 
     /**
-     * @param string $entityKey
-     * @param string $commandKey
-     * @return \Illuminate\Http\JsonResponse
      * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
      * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
-    public function show($entityKey, $commandKey)
+    public function show(string $entityKey, string $commandKey)
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
+        
         $commandHandler = $this->getCommandHandler($list, $commandKey);
 
         return response()->json([
@@ -30,36 +29,31 @@ class EntityCommandController extends ApiController
     }
 
     /**
-     * @param string $entityKey
-     * @param string $commandKey
-     * @return \Illuminate\Http\JsonResponse
      * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
      * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
-    public function update($entityKey, $commandKey)
+    public function update(string $entityKey, string $commandKey)
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
+        
         $commandHandler = $this->getCommandHandler($list, $commandKey);
 
         return $this->returnCommandResult(
             $list,
             $commandHandler->execute(
-                EntityListQueryParams::create()->fillWithRequest("query"),
                 $commandHandler->formatRequestData((array)request("data"))
             )
         );
     }
 
     /**
-     * @param SharpEntityList $list
-     * @param string $commandKey
-     * @return \Code16\Sharp\EntityList\Commands\EntityCommand|null
      * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
      */
-    protected function getCommandHandler(SharpEntityList $list, $commandKey)
+    protected function getCommandHandler(SharpEntityList $list, string $commandKey): ?EntityCommand
     {
         $commandHandler = $list->entityCommandHandler($commandKey);
+        $commandHandler->initQueryParams(EntityListQueryParams::create()->fillWithRequest("query"));
 
         if(! $commandHandler->authorize()) {
             throw new SharpAuthorizationException();
