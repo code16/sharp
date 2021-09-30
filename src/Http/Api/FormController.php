@@ -112,7 +112,7 @@ class FormController extends ApiController
         ]);
     }
 
-    protected function validateRequest(string $entityKey)
+    protected function validateRequest(string $entityKey): void
     {
         if($this->isSubEntity($entityKey)) {
             list($entityKey, $subEntityKey) = explode(':', $entityKey);
@@ -134,14 +134,9 @@ class FormController extends ApiController
             : [];
     }
 
-    protected function checkFormImplementation(SharpForm $form, ?string $instanceId)
+    protected function checkFormImplementation(SharpForm $form, ?string $instanceId): void
     {
-        if(!$instanceId && !$form instanceof SharpSingleForm) {
-            abort(404);
-        }
-
-        if($instanceId && $form instanceof SharpSingleForm) {
-            abort(404);
-        }
+        abort_if(!$instanceId && !$form instanceof SharpSingleForm, 404);
+        abort_if($instanceId && $form instanceof SharpSingleForm, 404);
     }
 }

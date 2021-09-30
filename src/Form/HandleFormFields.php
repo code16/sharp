@@ -36,11 +36,8 @@ trait HandleFormFields
 
     /**
      * Find a field by its key.
-     *
-     * @param string $key
-     * @return SharpFormField|SharpShowField
      */
-    function findFieldByKey(string $key)
+    function findFieldByKey(string $key): SharpFormField|SharpShowField|null
     {
         $this->checkFormIsBuilt();
 
@@ -58,11 +55,8 @@ trait HandleFormFields
 
     /**
      * Add a field.
-     *
-     * @param SharpFormField|SharpShowField $field
-     * @return $this
      */
-    protected function addField($field): self
+    protected function addField(SharpFormField|SharpShowField $field): self
     {
         $this->fields[] = $field;
         $this->formBuilt = false;
@@ -72,15 +66,10 @@ trait HandleFormFields
 
     /**
      * Applies Field Formatters on $data.
-     *
-     * @param array $data
-     * @param string|null $instanceId
-     * @param bool $handleDelayedData
-     * @return array
      */
-    public function formatRequestData(array $data, $instanceId = null, bool $handleDelayedData = false): array
+    public function formatRequestData(array $data, ?string $instanceId = null, bool $handleDelayedData = false): array
     {
-        $delayedData = collect([]);
+        $delayedData = collect();
 
         $formattedData = collect($data)
             ->filter(function ($value, $key) {

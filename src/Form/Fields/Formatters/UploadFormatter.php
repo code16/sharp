@@ -4,6 +4,8 @@ namespace Code16\Sharp\Form\Fields\Formatters;
 
 use Code16\Sharp\Exceptions\Form\SharpFormFieldFormattingMustBeDelayedException;
 use Code16\Sharp\Form\Fields\SharpFormField;
+use Code16\Sharp\Form\Fields\SharpFormMarkdownField;
+use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 use Code16\Sharp\Utils\FileUtil;
 use Illuminate\Filesystem\FilesystemManager;
@@ -37,13 +39,10 @@ class UploadFormatter extends SharpFieldFormatter
 
     /**
      * @param SharpFormFieldWithUpload $field
-     * @param string $attribute
-     * @param $value
-     * @return array|null
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws SharpFormFieldFormattingMustBeDelayedException
      */
-    function fromFront(SharpFormField $field, string $attribute, $value)
+    function fromFront(SharpFormField $field, string $attribute, $value): ?array
     {
         $storage = $this->filesystem->disk($field->storageDisk());
         $transformed = $value["transformed"] ?? false;
@@ -57,8 +56,8 @@ class UploadFormatter extends SharpFieldFormatter
             
             if($field->isShouldOptimizeImage()) {
                 $optimizerChain = OptimizerChainFactory::create();
-                // we do not need to check for exception nor file format because:
-                // > By default the package will not throw any errors and just operate silently.
+                // We do not need to check for exception nor file format because
+                // the package will not throw any errors and just operate silently.
                 $optimizerChain->optimize(
                     $this->filesystem->disk("local")->path($uploadedFieldRelativePath)
                 );
@@ -99,18 +98,17 @@ class UploadFormatter extends SharpFieldFormatter
         }
 
         // No change made
-        return is_null($value) ? null : [];
+        return $value === null ? null : [];
     }
 
     /**
-     * @param SharpFormFieldWithUpload $field
      * @throws SharpFormFieldFormattingMustBeDelayedException
      */
-    protected function getStoragePath(string $fileName, $field): string
+    protected function getStoragePath(string $fileName, SharpFormUploadField|SharpFormMarkdownField $field): string
     {
         $basePath = $field->storageBasePath();
 
-        if(strpos($basePath, '{id}') !== false) {
+        if(str_contains($basePath, '{id}')) {
             if(!$this->instanceId) {
                 // Well, we need the instance id for the storage path, and we are
                 // in a store() case. Let's delay this formatter, it will be

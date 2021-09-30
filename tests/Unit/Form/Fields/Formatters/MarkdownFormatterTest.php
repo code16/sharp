@@ -182,7 +182,7 @@ class MarkdownFormatterTest extends SharpTestCase
     {
         app()->bind(UploadFormatter::class, function() {
             return new class extends UploadFormatter {
-                function fromFront(SharpFormField $field, string $attribute, $value)
+                function fromFront(SharpFormField $field, string $attribute, $value): ?array
                 {
                     return [
                         "file_name" => "data/uploaded_test.png",
