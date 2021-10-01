@@ -61,7 +61,7 @@ We add columns giving:
 
 In this example, `picture` and `name` will be displayed respectively on 1/12 and 9/12 of the viewport width on large screens, and 2/12 and 10/12 on small screens. The third column, `capacity`, will only be shown on large screens, with a width of 2/12.
 
-### `getListData(EntityListQueryParams $params)`
+### `getListData()`
 
 Now the real work: grab and return the actual list data. This method must return an array of `instances` of our `entity`. You can do this however you want, so let's see a generic example:
 
@@ -73,7 +73,7 @@ The returned array is meant to be built with 2 rules:
 So for instance, if we defined 2 columns `name` and `capacity`:
 
 ```php
-function getListData(EntityListQueryParams $params)
+function getListData()
 {
     return [
         [
@@ -94,27 +94,29 @@ Of course, real code would imply some data request in a DB, or a file for instan
 
 #### Transformers
 
-In a more realistic project, you'll want to transform your data before sending it to the front code. Sharp can help with that, as explained in the detailled [How to transform data](how-to-transform-data.md) documentation.
+In a more realistic project, you'll want to transform your data before sending it to the front code. Sharp can help with that, as explained in the detailed [How to transform data](how-to-transform-data.md) documentation.
 
 #### Handle query params
 
-As you may have noticed, `getListData()` accepts as an argument a `EntityListQueryParams` instance. This object will be filled by Sharp with query params:
+The EntityList has a valued `$this->queryParams` property. This object will be filled by Sharp with query params:
 
-- sorting: `$params->sortedBy()` and `$params->sortedDir()`
-- search: `$params->hasSearch()` and `$params->searchWords()`
-- filters: `$params->filterFor($filter)`
+- sorting: `$this->queryParams->sortedBy()` and `$this->queryParams->sortedDir()`
+- search: `$this->queryParams->hasSearch()` and `$this->queryParams->searchWords()`
+- filters: `$this->queryParams->filterFor($filter)`
 
 If the Entity List was configured to handle sort, filters or search (see below to learn how), and if the user performed such an action, values will be accessible here.
 
+You can use the `queryParams` everywhere except in the `buildListConfig()` function. Use cases could be, apart from filtering data: organizing columns, or maybe hiding commands...
+
 ##### Sort
 
-`$params->sortedBy()` contains the name of the attribute, and `$params->sortedDir()` the direction: `asc` or `desc`.
+`$this->queryParams->sortedBy()` contains the name of the attribute, and `$this->queryParams->sortedDir()` the direction: `asc` or `desc`.
 
 Note that the ability of sorting a column is defined in `buildListDataContainers()`.
 
 ##### Search
 
-`$params->hasSearch()` returns true if the user entered a search, and `$params->searchWords()` returns an array of search terms. This last method can take parameters, here's its full signature:
+`$this->queryParams->hasSearch()` returns true if the user entered a search, and `$this->queryParams->searchWords()` returns an array of search terms. This last method can take parameters, here's its full signature:
 
 ```php
 public function searchWords(
@@ -132,8 +134,8 @@ public function searchWords(
 Here's a code sample with an Eloquent Model:
 
 ```php
-if ($params->hasSearch()) {
-    foreach ($params->searchWords() as $word) {
+if ($this->queryParams->hasSearch()) {
+    foreach ($this->queryParams->searchWords() as $word) {
         $spaceships->where(function ($query) use ($word) {
             $query->orWhere('name', 'like', $word)
                 ->orWhere('pilots.name', 'like', $word);
@@ -145,7 +147,7 @@ if ($params->hasSearch()) {
 
 ##### Filters
 
-We haven't see yet how we can build a `Filter`, but at this stage, a filter is a `key` and a `value`. So we can grab this calling `$filterValue = $params->filterFor($filterKey)`, and use the value in our query code.
+We haven't seen yet how we can build a `Filter`, but at this stage, a filter is a `key` and a `value`. So we can grab this calling `$filterValue = $this->queryParams->filterFor($filterKey)`, and use the value in our query code.
 
 #### Pagination
 
@@ -174,7 +176,7 @@ Here we declare that:
 - the list must be sorted by "name", meaning that the `EntityListQueryParams` instance will be filled with this default value;
 - and finally, the list is paginated, meaning that `getListData(EntityListQueryParams $params)` must return an instance of `LengthAwarePaginator` (see above) and that Sharp will display pagination links if needed.
 
-This config can also contain things related to Filters, Commands or State, and all of this is discussed in following chapters.
+This config can also contain things related to Filters and State, and all of this is discussed in following chapters.
 
 
 ## Configure the entity

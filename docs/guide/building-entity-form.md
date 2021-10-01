@@ -30,14 +30,15 @@ In short, this method is meant to host the code responsible for the declaration 
 ```php
 function buildFormFields()
 {
-    $this->addField(
-        SharpFormTextField::make("name")
-            ->setLabel("Name")
-
-    )->addField(
-        SharpFormTextField::make("capacity")
-            ->setLabel("Capacity (x1000)")
-    );
+    $this
+		->addField(
+			SharpFormTextField::make("name")
+				->setLabel("Name")
+		)
+		->addField(
+			SharpFormTextField::make("capacity")
+				->setLabel("Capacity (x1000)")
+		);
 }
 ```
 
@@ -118,12 +119,13 @@ Here's another possible layout, with two unequally large columns:
 ```php
 function buildFormLayout()
 {
-    $this->addColumn(7, function(FormLayoutColumn $column) {
-        $column->withSingleField("name");
-
-    })->addColumn(5, function(FormLayoutColumn $column) {
-        $column->withSingleField("capacity");
-    });
+    $this
+    	->addColumn(7, function(FormLayoutColumn $column) {
+        	$column->withSingleField("name");
+    	})
+    	->addColumn(5, function(FormLayoutColumn $column) {
+        	$column->withSingleField("capacity");
+    	});
 }
 ```
 
@@ -196,12 +198,14 @@ Notice we added a `Closure` on a `withSingleField()` call, meaning we define an 
 Finally, columns can be wrapped in tabs if the form needs to be in parts:
 
 ```php
-$this->addTab("tab 1", function(FormLayoutTab $tab) {
-    $tab->addColumn(6, function(FormLayoutColumn $column) {
-        $column->withSingleField("name");
-        [...]
-    });
-})->addTab([...])
+$this
+	->addTab("tab 1", function(FormLayoutTab $tab) {
+		$tab->addColumn(6, function(FormLayoutColumn $column) {
+			$column->withSingleField("name");
+			[...]
+		});
+	})
+	->addTab([...])
 ```
 
 The tab will here be labelled "tab1".

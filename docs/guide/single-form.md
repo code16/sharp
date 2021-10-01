@@ -39,7 +39,8 @@ class AccountSharpForm extends SharpSingleForm
             ->addField(
                 SharpFormTextField::make("name")
                     ->setLabel("Name")
-            )->addField(
+            )
+            ->addField(
                 SharpFormTextField::make("email")
                     ->setLabel("Email address")
             );

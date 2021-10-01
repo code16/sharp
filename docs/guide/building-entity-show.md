@@ -6,7 +6,7 @@ sidebarDepth: 3
 
 Between an Entity List and a Form, you might want to add a Show page to display a whole instance, and allow the user to interact with it through Commands.
 
-Note that building a Show is really optional: in fact, until Sharp 4.2, this concept didn't exist. But in some situations it could be really helpful to add this layer — and it can be even a must have when dealing with "single" resources, such as a personal account, or a configuration entity, for which it's weird to build an Entity List.
+Note that building a Show is really optional: in fact, until Sharp 4.2, this concept didn't exist. But in some situations it could be really helpful to add this layer — and it can be even a must-have when dealing with "single" resources, such as a personal account, or a configuration entity, for which it's weird to build an Entity List.
 
 ## Generator
 
@@ -31,13 +31,14 @@ Very much like Form's `buildFormFields()`, this method is meant to host the code
 ```php
 function buildShowFields()
 {
-    $this->addField(
-        SharpShowTextField::make("name")
-            ->setLabel("Name")
-
-    )->addField(
-        SharpShowPictureField::make("picture")
-    );
+    $this
+        ->addField(
+            SharpShowTextField::make("name")
+                ->setLabel("Name")
+        )
+        ->addField(
+            SharpShowPictureField::make("picture")
+        );
 }
 ```
 
@@ -214,20 +215,18 @@ Transformers are explained in the detailed [How to transform data](how-to-transf
 
 ### `buildShowConfig()`
 
-Very much like EntityLists, a Show can declare a config with (instance only) `Commands` and `EntityState` handlers:
+Very much like EntityLists, a Show can declare a config with `EntityState` handler, or Breadcrumb configuration:
 
 ```php
 function buildShowConfig()
 {
    $this
-        ->addInstanceCommand("message", SpaceshipSendMessage::class)
-        ->addInstanceCommandSeparator()
-        ->addInstanceCommand("external", SpaceshipExternalLink::class)
+        ->setBreadcrumbCustomLabelAttribute("name")
         ->setEntityState("state", SpaceshipEntityState::class);
 }
 ```
 
-Refer [to Commands](commands.md) (keep in mind only `InstanceCommand`s are possible in a Show) and [EntityState](entity-states.md) documentations.
+Refer [EntityState](entity-states.md) and [Breadcrumb](sharp-breadcrumb.md) documentations.
 
 
 ## Accessing the navigation breadcrumb
@@ -247,12 +246,11 @@ class PilotSharpForm extends SharpForm
     {
         $pilot = $id ? Pilot::findOrFail($id) : new Pilot;
         $pilot = $this->save($pilot, $data);
-
-        if($this->context()->isCreation()) {
-            if($breadcrumb = $this->context()->getPreviousPageFromBreadcrumb("show")) {
-                list($type, $entityKey, $instanceId) = $breadcrumb;
-                if ($entityKey == "spaceship") {
-                    Spaceship::findOrFail($instanceId)
+        
+        if(currentSharpRequest()->isCreation()) {
+            if($breadcrumbItem = currentSharpRequest()->getPreviousShowFromBreadcrumbItems()) {
+                if ($breadcrumbItem->entityKey() === "spaceship") {
+                    Spaceship::findOrFail($breadcrumbItem->instanceId())
                         ->pilots()
                         ->attach($pilot->id);
                 }
