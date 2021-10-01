@@ -196,7 +196,7 @@ class EntityCommandControllerTest extends BaseApiTest
         $response = $this->getJson('/sharp/api/list/person')
             ->assertOk()
             ->json();
-
+        
         $this->assertTrue(
             collect($response['config']['commands']['entity'][0])->where("key", "entity_with_init_data")->first()['fetch_initial_data']
         );
@@ -221,8 +221,8 @@ class EntityCommandControllerTest extends BaseApiTest
     }
 }
 
-class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList {
-
+class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList 
+{
     function buildListConfig(): void
     {
         $this

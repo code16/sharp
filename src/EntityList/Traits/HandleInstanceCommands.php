@@ -7,37 +7,13 @@ use Code16\Sharp\EntityList\Traits\Utils\CommonCommandUtils;
 use Code16\Sharp\Exceptions\SharpException;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 trait HandleInstanceCommands
 {
     use CommonCommandUtils;
     
-    protected array $instanceCommandHandlers = [];
-    protected int $instanceCommandCurrentGroupNumber = 0;
-
-    protected function addInstanceCommand(string $commandName, $commandHandlerOrClassName): self
-    {
-        $commandHandler = is_string($commandHandlerOrClassName)
-            ? app($commandHandlerOrClassName)
-            : $commandHandlerOrClassName;
-
-        if(!$commandHandler instanceof InstanceCommand) {
-            throw new SharpException("Handler class for instance command [{$commandName}] is not an subclass of " . InstanceCommand::class);
-        }
-
-        $commandHandler->setGroupIndex($this->instanceCommandCurrentGroupNumber);
-
-        $this->instanceCommandHandlers[$commandName] = $commandHandler;
-
-        return $this;
-    }
-
-    protected function addInstanceCommandSeparator(): self
-    {
-        $this->instanceCommandCurrentGroupNumber++;
-
-        return $this;
-    }
+    private ?Collection $instanceCommandHandlers = null;
 
     /**
      * Append the commands to the config returned to the front.
@@ -45,7 +21,7 @@ trait HandleInstanceCommands
     protected function appendInstanceCommandsToConfig(array &$config, $instanceId = null): void
     {
         $this->appendCommandsToConfig(
-            collect($this->instanceCommandHandlers), 
+            $this->getInstanceCommandsHandlers(),
             $config, 
             $instanceId
         );
@@ -59,11 +35,9 @@ trait HandleInstanceCommands
      */
     protected function addInstanceCommandsAuthorizationsToConfigForItems($items)
     {
-        collect($this->instanceCommandHandlers)
+        $this->getInstanceCommandsHandlers()
             // Take all authorized instance commands...
-            ->filter(function($instanceCommandHandler) {
-                return $instanceCommandHandler->authorize();
-            })
+            ->filter->authorize()
 
             // ... and Entity State if present...
             ->when($this->entityStateHandler, function(Collection $collection) {
@@ -80,8 +54,51 @@ trait HandleInstanceCommands
             });
     }
 
-    public function instanceCommandHandler(string $commandKey): ?InstanceCommand
+    public final function getInstanceCommandsHandlers(): Collection
     {
-        return $this->instanceCommandHandlers[$commandKey] ?? null;
+        if($this->instanceCommandHandlers === null) {
+            $groupIndex = 0;
+            $this->instanceCommandHandlers = collect($this->getInstanceCommands())
+                ->map(function($commandHandlerOrClassName, $commandKey) use (&$groupIndex) {
+                    if(is_string($commandHandlerOrClassName)) {
+                        if(Str::startsWith($commandHandlerOrClassName, "-")) {
+                            // It's a separator
+                            $groupIndex++;
+                            return null;
+                        }
+                        if(!class_exists($commandHandlerOrClassName)) {
+                            throw new SharpException("Handler for instance command [{$commandHandlerOrClassName}] is invalid");
+                        }
+                        $commandHandler = app($commandHandlerOrClassName);
+                    } else {
+                        $commandHandler = $commandHandlerOrClassName;
+                    }
+
+                    if(!$commandHandler instanceof InstanceCommand) {
+                        throw new SharpException("Handler class for instance command [{$commandHandlerOrClassName}] is not an subclass of " . InstanceCommand::class);
+                    }
+
+                    $commandHandler->setGroupIndex($groupIndex);
+                    if(is_string($commandKey)) {
+                        $commandHandler->setCommandKey($commandKey);
+                    }
+                    
+                    return $commandHandler;
+                })
+                ->filter()
+                ->values();
+        }
+        
+        return $this->instanceCommandHandlers;
+    }
+
+    public final function findInstanceCommandHandler(string $commandKey): ?InstanceCommand
+    {
+        return $this
+            ->getInstanceCommandsHandlers()
+            ->filter(function(InstanceCommand $command) use ($commandKey) {
+                return $command->getCommandKey() === $commandKey;
+            })
+            ->first();
     }
 }

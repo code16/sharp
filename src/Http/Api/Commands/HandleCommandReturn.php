@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Http\Api\Commands;
 
 use Code16\Sharp\Dashboard\SharpDashboard;
+use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
@@ -11,8 +12,7 @@ use Illuminate\Support\Facades\Storage;
 
 trait HandleCommandReturn
 {
-
-    protected function returnCommandResult(SharpEntityList|SharpShow|SharpDashboard $commandContainer, array $returnedValue)
+    protected function returnCommandResult(SharpEntityList|SharpShow|SharpDashboard $commandContainer, array $returnedValue): \Symfony\Component\HttpFoundation\StreamedResponse|\Illuminate\Http\JsonResponse
     {
         if($returnedValue["action"] == "download") {
             return Storage::disk($returnedValue["disk"])
@@ -45,13 +45,9 @@ trait HandleCommandReturn
         return response()->json($returnedValue);
     }
 
-    /**
-     * @return \Code16\Sharp\EntityList\Commands\InstanceCommand|null
-     * @throws SharpAuthorizationException
-     */
-    protected function getInstanceCommandHandler(SharpEntityList|SharpShow|SharpDashboard $commandContainer, string $commandKey, mixed $instanceId)
+    protected function getInstanceCommandHandler(SharpEntityList|SharpShow|SharpDashboard $commandContainer, string $commandKey, mixed $instanceId): ?InstanceCommand
     {
-        $commandHandler = $commandContainer->instanceCommandHandler($commandKey);
+        $commandHandler = $commandContainer->findInstanceCommandHandler($commandKey);
 
         if(!$commandHandler->authorize() || !$commandHandler->authorizeFor($instanceId)) {
             throw new SharpAuthorizationException();

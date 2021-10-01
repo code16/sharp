@@ -37,11 +37,8 @@ abstract class SharpShow
 
     /**
      * Return the entity instance, as an array.
-     *
-     * @param mixed $id
-     * @return array
      */
-    final public function instance($id): array
+    final public function instance(mixed $id): array
     {
         return collect($this->find($id))
             // Filter model attributes on actual show labels
@@ -57,12 +54,8 @@ abstract class SharpShow
 
     /**
      * Return the show config values (commands and state).
-     *
-     * @param mixed $instanceId
-     * @param array $config
-     * @return array
      */
-    public function showConfig($instanceId, $config = []): array
+    public function showConfig(mixed $instanceId, array $config = []): array
     {
         $config = collect($config)
             ->merge([
@@ -130,12 +123,17 @@ abstract class SharpShow
     }
 
     /**
-     * Retrieve a Model for the form and pack all its data as JSON.
-     *
-     * @param mixed $id
-     * @return array
+     * Return all instance commands in an array of class names or instances
      */
-    abstract function find($id): array;
+    function getInstanceCommands(): ?array
+    {
+        return null;
+    }
+
+    /**
+     * Retrieve a Model for the form and pack all its data as JSON.
+     */
+    abstract function find(mixed $id): array;
 
     /**
      * Build form fields using ->addField()

@@ -20,7 +20,7 @@ class EntityListInstanceCommandController extends ApiController
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
-        $list->init();
+        $list->initQueryParams();
         
         $commandHandler = $this->getInstanceCommandHandler($list, $commandKey, $instanceId);
 
@@ -40,7 +40,7 @@ class EntityListInstanceCommandController extends ApiController
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
-        $list->init();
+        $list->initQueryParams();
 
         $handler = $this->getInstanceCommandHandler($list, $commandKey, $instanceId);
 

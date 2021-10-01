@@ -35,7 +35,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        $list->init();
+        $list->initQueryParams();
 
         $this->assertArraySubset([
             "commands" => [
@@ -73,7 +73,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        $list->init();
+        $list->initQueryParams();
 
         $this->assertArraySubset([
             "commands" => [
@@ -109,7 +109,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        $list->init();
+        $list->initQueryParams();
 
         $this->assertArraySubset([
             "commands" => [
@@ -149,7 +149,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        $list->init();
+        $list->initQueryParams();
 
         $this->assertArraySubset([
             "commands" => [
@@ -203,7 +203,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        $list->init();
+        $list->initQueryParams();
 
         $this->assertArraySubset([
             "commands" => [
@@ -253,7 +253,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        $list->init();
+        $list->initQueryParams();
 
         $this->assertArraySubset([
             "commands" => [
@@ -292,7 +292,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        $list->init();
+        $list->initQueryParams();
 
         $this->assertArraySubset([
             "commands" => [
@@ -329,7 +329,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        $list->init();
+        $list->initQueryParams();
 
         $this->assertArraySubset([
             "commands" => [
@@ -366,7 +366,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        $list->init();
+        $list->initQueryParams();
         $list->data([
             ["id" => 1], ["id" => 2], ["id" => 3],
             ["id" => 4], ["id" => 5], ["id" => 6],
@@ -407,7 +407,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        $list->init();
+        $list->initQueryParams();
 
         $this->assertArraySubset([
             "commands" => [
@@ -449,7 +449,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        $list->init();
+        $list->initQueryParams();
 
         $this->assertArraySubset([
             "commands" => [
@@ -495,7 +495,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        $list->init();
+        $list->initQueryParams();
 
         $this->assertArraySubset([
             "commands" => [
@@ -540,7 +540,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        $list->init();
+        $list->initQueryParams();
 
         $this->assertArraySubset([
             "commands" => [

@@ -9,15 +9,13 @@ trait CommonCommandUtils
     protected function appendCommandsToConfig(Collection $commandHandlers, array &$config, $instanceId = null): void
     {
         $commandHandlers
-            ->each(function($handler, $commandName) use(&$config, $instanceId) {
+            ->each(function($handler) use(&$config, $instanceId) {
                 $formFields = $handler->form();
                 $formLayout = $formFields ? $handler->formLayout() : null;
-                $hasFormInitialData = $formFields
-                    ? is_method_implemented_in_concrete_class($handler, 'initialData')
-                    : false;
+                $hasFormInitialData = $formFields && is_method_implemented_in_concrete_class($handler, 'initialData');
 
                 $config["commands"][$handler->type()][$handler->groupIndex()][] = [
-                    "key" => $commandName,
+                    "key" => $handler->getCommandKey(),
                     "label" => $handler->label(),
                     "description" => $handler->description(),
                     "type" => $handler->type(),

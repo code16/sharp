@@ -11,6 +11,7 @@ use App\Sharp\Filters\SpaceshipPilotsFilter;
 use App\Sharp\Filters\SpaceshipTypeFilter;
 use App\Sharp\States\SpaceshipEntityState;
 use App\Spaceship;
+use Code16\Sharp\EntityList\Commands\EntityState;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
@@ -50,6 +51,24 @@ class SpaceshipSharpList extends SharpEntityList
                     ->setLabel("Messages sent")
         );
     }
+    
+    function getEntityCommands(): ?array
+    {
+        return [
+            new SpaceshipSynchronize(),
+            SpaceshipReload::class
+        ];
+    }
+
+    function getInstanceCommands(): ?array
+    {
+        return [
+            SpaceshipSendMessage::class,
+            new SpaceshipPreview(),
+            "---",
+            SpaceshipExternalLink::class
+        ];
+    }
 
     function buildListConfig(): void
     {
@@ -58,15 +77,7 @@ class SpaceshipSharpList extends SharpEntityList
             ->setDefaultSort("name", "asc")
             ->addFilter("type", SpaceshipTypeFilter::class)
             ->addFilter("pilots", SpaceshipPilotsFilter::class)
-
-            ->addEntityCommand("synchronize", SpaceshipSynchronize::class)
-            ->addEntityCommand("reload", SpaceshipReload::class)
-            ->addInstanceCommand("message", SpaceshipSendMessage::class)
-            ->addInstanceCommand("preview", SpaceshipPreview::class)
-            ->addInstanceCommandSeparator()
-            ->addInstanceCommand("external", SpaceshipExternalLink::class)
             ->setEntityState("state", SpaceshipEntityState::class)
-
             ->setPaginated();
     }
 

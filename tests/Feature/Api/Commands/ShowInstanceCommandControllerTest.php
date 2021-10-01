@@ -111,18 +111,18 @@ class ShowInstanceCommandControllerTest extends BaseApiTest
     }
 }
 
-class ShowInstanceCommandPersonSharpShow extends PersonSharpShow {
-
-    function buildShowConfig(): void
+class ShowInstanceCommandPersonSharpShow extends PersonSharpShow 
+{
+    public function getInstanceCommands(): ?array
     {
-        $this
-            ->addInstanceCommand("instance_info", new class() extends InstanceCommand {
+        return [
+            "instance_info" => new class() extends InstanceCommand {
                 public function label(): string { return "label"; }
                 public function execute($instanceId, array $params = []): array {
                     return $this->info("ok");
                 }
-            })
-            ->addInstanceCommand("instance_with_init_data", new class() extends InstanceCommand {
+            },
+            "instance_with_init_data" => new class() extends InstanceCommand {
                 public function label(): string { return "label"; }
                 public function buildFormFields(): void {
                     $this->addField(SharpFormTextField::make("name"));
@@ -135,22 +135,23 @@ class ShowInstanceCommandPersonSharpShow extends PersonSharpShow {
                     ];
                 }
                 public function execute($instanceId, array $data = []): array {}
-            });
+            }
+        ];
     }
 }
 
-class ShowInstanceCommandPersonSharpSingleShow extends PersonSharpSingleShow {
-
-    function buildShowConfig(): void
+class ShowInstanceCommandPersonSharpSingleShow extends PersonSharpSingleShow 
+{
+    public function getInstanceCommands(): ?array
     {
-        $this
-            ->addInstanceCommand("instance_info", new class() extends SingleInstanceCommand {
+        return [
+            "instance_info" => new class() extends SingleInstanceCommand {
                 public function label(): string { return "label"; }
                 public function executeSingle(array $params = []): array {
                     return $this->info("ok");
                 }
-            })
-            ->addInstanceCommand("instance_with_init_data", new class() extends SingleInstanceCommand {
+            },
+            "instance_with_init_data" => new class() extends SingleInstanceCommand {
                 public function label(): string { return "label"; }
                 public function buildFormFields(): void {
                     $this->addField(SharpFormTextField::make("name"));
@@ -163,6 +164,7 @@ class ShowInstanceCommandPersonSharpSingleShow extends PersonSharpSingleShow {
                     ];
                 }
                 public function executeSingle(array $data = []): array {}
-            });
+            }
+        ];
     }
 }
