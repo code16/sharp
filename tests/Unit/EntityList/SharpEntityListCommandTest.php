@@ -16,21 +16,32 @@ class SharpEntityListCommandTest extends SharpTestCase
     function we_can_get_list_commands_config_with_an_instance()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig(): void
+            function getEntityCommands(): ?array
             {
-                $this
-                    ->addEntityCommand("entityCommand", new class extends EntityCommand {
-                        public function label(): string {
+                return [
+                    "entityCommand" => new class extends EntityCommand {
+                        public function label(): string
+                        {
                             return "My Entity Command";
                         }
-                        public function execute(array $data = []): array {}
-                    })
-                    ->addInstanceCommand("instanceCommand", new class extends InstanceCommand {
+
+                        public function execute(array $data = []): array
+                        {
+                        }
+                    }
+                ];
+            }
+            
+            function getInstanceCommands(): ?array
+            {
+                return [
+                    "instanceCommand" => new class extends InstanceCommand {
                         public function label(): string {
                             return "My Instance Command";
                         }
                         public function execute($instanceId, array $data = []): array {}
-                    });
+                    }
+                ];
             }
         };
 
@@ -66,9 +77,11 @@ class SharpEntityListCommandTest extends SharpTestCase
     function we_can_get_list_entity_command_config_with_a_class()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig(): void
+            function getEntityCommands(): ?array
             {
-                $this->addEntityCommand("entityCommand", SharpEntityListCommandTestCommand::class);
+                return [
+                    "entityCommand" => SharpEntityListCommandTestCommand::class
+                ];
             }
         };
 
@@ -94,17 +107,19 @@ class SharpEntityListCommandTest extends SharpTestCase
     function we_can_ask_for_a_confirmation_on_a_command()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig(): void
+            function getEntityCommands(): ?array
             {
-                $this->addEntityCommand("entityCommand", new class extends EntityCommand {
-                    public function label(): string {
-                        return "My Entity Command";
+                return [
+                    "entityCommand" => new class extends EntityCommand {
+                        public function label(): string {
+                            return "My Entity Command";
+                        }
+                        public function confirmationText(): ?string {
+                            return "Sure?";
+                        }
+                        public function execute(array $data = []): array {}
                     }
-                    public function confirmationText(): ?string {
-                        return "Sure?";
-                    }
-                    public function execute(array $data = []): array {}
-                });
+                ];
             }
         };
 
@@ -131,20 +146,22 @@ class SharpEntityListCommandTest extends SharpTestCase
     function we_can_define_a_form_on_a_command()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig(): void
+            function getEntityCommands(): ?array
             {
-                $this->addEntityCommand("entityCommand", new class extends EntityCommand {
-                    public function label(): string {
-                        return "My Entity Command";
+                return [
+                    "entityCommand" => new class extends EntityCommand {
+                        public function label(): string {
+                            return "My Entity Command";
+                        }
+                        public function buildFormFields(): void {
+                            $this->addField(SharpFormTextField::make("message"));
+                        }
+                        public function buildFormLayout(FormLayoutColumn &$column): void {
+                            $column->withSingleField("message");
+                        }
+                        public function execute(array $data = []): array {}
                     }
-                    public function buildFormFields(): void {
-                        $this->addField(SharpFormTextField::make("message"));
-                    }
-                    public function buildFormLayout(FormLayoutColumn &$column): void {
-                        $column->withSingleField("message");
-                    }
-                    public function execute(array $data = []): array {}
-                });
+                ];
             }
         };
 
@@ -182,23 +199,25 @@ class SharpEntityListCommandTest extends SharpTestCase
     function we_can_define_a_localized_form_on_a_command()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig(): void
+            function getInstanceCommands(): ?array
             {
-                $this->addInstanceCommand("instanceCommand", new class extends InstanceCommand {
-                    public function label(): string {
-                        return "My Instance Command";
+                return [
+                    "instanceCommand" => new class extends InstanceCommand {
+                        public function label(): string {
+                            return "My Instance Command";
+                        }
+                        public function buildFormFields(): void {
+                            $this->addField(SharpFormTextField::make("message"));
+                        }
+                        public function buildFormLayout(FormLayoutColumn &$column): void {
+                            $column->withSingleField("message");
+                        }
+                        public function execute($instanceId , array $data = []): array {}
+                        public function getDataLocalizations(): array {
+                            return ["fr", "en", "it"];
+                        }
                     }
-                    public function buildFormFields(): void {
-                        $this->addField(SharpFormTextField::make("message"));
-                    }
-                    public function buildFormLayout(FormLayoutColumn &$column): void {
-                        $column->withSingleField("message");
-                    }
-                    public function execute($instanceId , array $data = []): array {}
-                    public function getDataLocalizations(): array {
-                        return ["fr", "en", "it"];
-                    }
-                });
+                ];
             }
         };
 
@@ -237,18 +256,20 @@ class SharpEntityListCommandTest extends SharpTestCase
     function if_no_form_layout_is_configured_a_default_is_provided()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig(): void
+            function getEntityCommands(): ?array
             {
-                $this->addEntityCommand("entityCommand", new class extends EntityCommand {
-                    public function label(): string {
-                        return "My Entity Command";
+                return [
+                    "entityCommand" => new class extends EntityCommand {
+                        public function label(): string {
+                            return "My Entity Command";
+                        }
+                        public function buildFormFields(): void {
+                            $this->addField(SharpFormTextField::make("message"));
+                            $this->addField(SharpFormTextField::make("message2"));
+                        }
+                        public function execute(array $data = []): array {}
                     }
-                    public function buildFormFields(): void {
-                        $this->addField(SharpFormTextField::make("message"));
-                        $this->addField(SharpFormTextField::make("message2"));
-                    }
-                    public function execute(array $data = []): array {}
-                });
+                ];
             }
         };
 
@@ -277,17 +298,19 @@ class SharpEntityListCommandTest extends SharpTestCase
     function we_can_define_a_form_modal_title_on_a_command()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig(): void
+            function getEntityCommands(): ?array
             {
-                $this->addEntityCommand("entityCommand", new class extends EntityCommand {
-                    public function label(): string {
-                        return "My Entity Command";
+                return [
+                    "entityCommand" => new class extends EntityCommand {
+                        public function label(): string {
+                            return "My Entity Command";
+                        }
+                        public function formModalTitle(): string {
+                            return "My title";
+                        }
+                        public function execute(array $data = []): array {}
                     }
-                    public function formModalTitle(): string {
-                        return "My title";
-                    }
-                    public function execute(array $data = []): array {}
-                });
+                ];
             }
         };
 
@@ -314,17 +337,19 @@ class SharpEntityListCommandTest extends SharpTestCase
     function we_can_handle_authorization_in_an_entity_command()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig(): void
+            function getEntityCommands(): ?array
             {
-                $this->addEntityCommand("entityCommand", new class extends EntityCommand {
-                    public function label(): string {
-                        return "My Entity Command";
+                return [
+                    "entityCommand" => new class extends EntityCommand {
+                        public function label(): string {
+                            return "My Entity Command";
+                        }
+                        public function authorize(): bool {
+                            return false;
+                        }
+                        public function execute(array $data = []): array {}
                     }
-                    public function authorize(): bool {
-                        return false;
-                    }
-                    public function execute(array $data = []): array {}
-                });
+                ];
             }
         };
 
@@ -351,17 +376,19 @@ class SharpEntityListCommandTest extends SharpTestCase
     function we_can_handle_authorization_in_an_instance_command()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig(): void
+            function getInstanceCommands(): ?array
             {
-                $this->addInstanceCommand("command", new class extends InstanceCommand {
-                    public function label(): string {
-                        return "My Instance Command";
+                return [
+                    "command" => new class extends InstanceCommand {
+                        public function label(): string {
+                            return "My Instance Command";
+                        }
+                        public function authorizeFor($instanceId): bool {
+                            return $instanceId < 3;
+                        }
+                        public function execute($instanceId, array $params = []): array {}
                     }
-                    public function authorizeFor($instanceId): bool {
-                        return $instanceId < 3;
-                    }
-                    public function execute($instanceId, array $params = []): array {}
-                });
+                ];
             }
         };
 
@@ -392,17 +419,19 @@ class SharpEntityListCommandTest extends SharpTestCase
     function we_can_define_a_description_on_a_command()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig(): void
+            function getEntityCommands(): ?array
             {
-                $this->addEntityCommand("entityCommand", new class extends EntityCommand {
-                    public function label(): string {
-                        return "My Entity Command";
+                return [
+                    "entityCommand" => new class extends EntityCommand {
+                        public function label(): string {
+                            return "My Entity Command";
+                        }
+                        public function description(): string {
+                            return "My Entity Command description";
+                        }
+                        public function execute(array $data = []): array {}
                     }
-                    public function description(): string {
-                        return "My Entity Command description";
-                    }
-                    public function execute(array $data = []): array {}
-                });
+                ];
             }
         };
 
@@ -429,22 +458,23 @@ class SharpEntityListCommandTest extends SharpTestCase
     function we_can_define_separators_in_instance_commands()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig(): void
+            function getInstanceCommands(): ?array
             {
-                $this
-                    ->addInstanceCommand("command-1", new class extends InstanceCommand {
+                return [
+                    "command-1" => new class extends InstanceCommand {
                         public function label(): string { return ""; }
                         public function execute($instanceId, array $data = []): array {}
-                    })
-                    ->addInstanceCommand("command-2", new class extends InstanceCommand {
+                    },
+                    "command-2" => new class extends InstanceCommand {
                         public function label(): string { return ""; }
                         public function execute($instanceId, array $data = []): array {}
-                    })
-                    ->addInstanceCommandSeparator()
-                    ->addInstanceCommand("command-3", new class extends InstanceCommand {
+                    },
+                    "---",
+                    "command-3" => new class extends InstanceCommand {
                         public function label(): string { return ""; }
                         public function execute($instanceId, array $data = []): array {}
-                    });
+                    }
+                ];
             }
         };
 
@@ -475,22 +505,23 @@ class SharpEntityListCommandTest extends SharpTestCase
     function we_can_define_separators_in_entity_commands()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig(): void
+            function getEntityCommands(): ?array
             {
-                $this
-                    ->addEntityCommand("command-1", new class extends EntityCommand {
+                return [
+                    "command-1" => new class extends EntityCommand {
                         public function label(): string { return ""; }
                         public function execute(array $data = []): array {}
-                    })
-                    ->addEntityCommandSeparator()
-                    ->addEntityCommand("command-2", new class extends EntityCommand {
+                    },
+                    "---",
+                    "command-2" => new class extends EntityCommand {
                         public function label(): string { return ""; }
                         public function execute(array $data = []): array {}
-                    })
-                    ->addEntityCommand("command-3", new class extends EntityCommand {
+                    },
+                    "command-3" => new class extends EntityCommand {
                         public function label(): string { return ""; }
                         public function execute(array $data = []): array {}
-                    });
+                    }
+                ];
             }
         };
 
@@ -521,21 +552,33 @@ class SharpEntityListCommandTest extends SharpTestCase
     function we_can_declare_an_entity_command_as_primary()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig(): void
+            function getEntityCommands(): ?array
             {
-                $this
-                    ->addEntityCommand("entity", new class extends EntityCommand {
-                        public function label(): string {
+                return [
+                    "entity" => new class extends EntityCommand {
+                        public function label(): string
+                        {
                             return "My Entity Command";
                         }
-                        public function execute(array $data = []): array {}
-                    })
-                    ->setPrimaryEntityCommand("primary-entity", new class extends EntityCommand {
-                        public function label(): string {
+                        public function execute(array $data = []): array
+                        {
+                        }
+                    },
+                    "primary-entity" => new class extends EntityCommand {
+                        public function label(): string
+                        {
                             return "My Primary Entity Command";
                         }
-                        public function execute(array $data = []): array {}
-                    });
+                        public function execute(array $data = []): array
+                        {
+                        }
+                    }
+                ];
+            }
+            
+            function buildListConfig(): void
+            {
+                $this->setPrimaryEntityCommand("primary-entity");
             }
         };
 
