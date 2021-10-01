@@ -30,12 +30,10 @@ public function label(): string
 }
 ```
 
-The second one, `execute(EntityListQueryParams $params, array $data=[]): array` handles the work of the Command itself:
+The second one, `execute(array $data=[]): array` handles the work of the Command itself:
 
 ```php
-public function execute(
-    EntityListQueryParams $params,
-    array $data=[]): array
+public function execute(array $data=[]): array
 {
     return $this->reload();
 }
@@ -46,9 +44,9 @@ More on this `return $this->reload();` below.
 
 ### Command scope: instance or entity
 
-The example above is an "entity" case: Command applies to a subset of entities, or all of them. The `EntityListQueryParams` object passed as a parameter (named `$params`) can be used to extract the context (search, page, filters, ...), just like in the `getListData()` of the EntityList.
+The example above is an "entity" case: Command applies to a subset of entities, or all of them. To get the EntityList context (search, page, filters...), you can check `$this->queryParams`, just like in the EntityList itself.
 
-To create an instance Command (relative to a specific instance), the Command class must extend `Code16\Sharp\EntityList\Commands\InstanceCommand`. The execute method signature is a little bit different:
+To create an instance Command (relative to a specific instance), the Command class must extend `Code16\Sharp\EntityList\Commands\InstanceCommand`. The execute method signature is a bit different:
 
 ```php
 public function execute($instanceId, array $params = []): array
@@ -57,7 +55,7 @@ public function execute($instanceId, array $params = []): array
 }
 ```
 
-Instead of an `EntityListQueryParams` object, we get an `$instanceId` parameter to identify the exact instance involved. The rest is the same, except for authorization detailed below.
+Here we get an `$instanceId` parameter to identify the exact instance involved. The rest is the same, except for authorization detailed below.
 
 
 ### Add a Command form
@@ -67,14 +65,15 @@ The second parameter in the `execute()` function is an array named `$data`, whic
 ```php
 function buildFormFields()
 {
-    $this->addField(
-        SharpFormTextareaField::make("message")
-            ->setLabel("Message")
-
-    )->addField(
-        SharpFormCheckField::make("now", "Send right now?")
-            ->setHelpMessage("Otherwise it will be sent next night.")
-    );
+    $this
+        ->addField(
+            SharpFormTextareaField::make("message")
+                ->setLabel("Message")
+        )
+        ->addField(
+            SharpFormCheckField::make("now", "Send right now?")
+                ->setHelpMessage("Otherwise it will be sent next night.")
+        );
 }
 ```
 
@@ -155,17 +154,18 @@ Finally, let's review the return possibilities. After a Command has been execute
 - `return $this->refresh(1)`*: refresh only the instance with an id on `1`. We can pass an id array also to refresh more than one instance.
 - `return $this->view("view.name", ["some"=>"params"])`: display a  view right in Sharp. Useful for page previews.
 - `return $this->link("/path/to/redirect")`: redirect to the given path
-- `return $this->download("path", "diskName")`: the browser will download (as a stream) the specified file.
+- `return $this->download("path", "diskName")`: the browser will download the specified file.
+- `return $this->streamDownload("path", "name")`: the browser will stream the specified file.
 
-\* In order for `refresh()` to work properly, your Entity List's  `getListData(EntityListQueryParams $params)` will be called, and `$params` will return all the wanted `id`s with `specificIds()`. Here's a code example:
+\* In order for `refresh()` to work properly, your Entity List's  `getListData()` will be called, and `$params` will return all the wanted `id`s with `specificIds()`. Here's a code example:
 
 ```php
-function getListData(EntityListQueryParams $params)
+function getListData()
 {
     $spaceships = Spaceship::distinct();
 
     if($params->specificIds()) {
-        $spaceships->whereIn("id", $params->specificIds());
+        $spaceships->whereIn("id", $this->queryParams->specificIds());
     }
 
     [...]
@@ -174,16 +174,25 @@ function getListData(EntityListQueryParams $params)
 
 ## Configure the Command
 
-Once the Command class is written, we must add it to the EntityList configuration. This is straightforward:
+Once the Command class is written, we must add it to the EntityList. This is straightforward:
 
 ```php
-function buildListConfig()
+function getInstanceCommands(): ?array
 {
-    $this->addEntityCommand("reload", SpaceshipReload::class)
-        ->addInstanceCommand("message", SpaceshipSendMessage::class)
-        [...]
+    return [
+        "message" => new SpaceshipSendMessage()
+    ];
+}
+
+function getEntityCommands(): ?array
+{
+    return [
+        SpaceshipReload::class
+    ];
 }
 ```
+
+You can optionally specify a command key (like "message" in the example); Sharp will use the command class name if it is missing. For the command itself, you can type a class name, a class instance or a Closure.
 
 ## Handle authorizations
 
@@ -222,7 +231,7 @@ An EntityList can declare one (and only one) of its entity Commands as "primary"
 ```php
 function buildListConfig(): void
 {
-    $this->setPrimaryEntityCommand("invite_new_user", InviteUserCommand::class);
+    $this->setPrimaryEntityCommand("invite_new_user");
 }
 ```
 
@@ -230,7 +239,7 @@ A use case could be to provide a Command with a form for the "create" task, leav
 
 ## Commands for Show Page
 
-Show Page can only define instance commands (obviously); apart from that, the API is the same, and commands should be declared in the `buildShowConfig()` method.
+Show Page can only define instance commands (obviously); apart from that, the API is the same.
 
 It's a common pattern to reuse the same instance commands in an EntityList and in a Show Page.
 One small difference is that `reload()` action is treated as a `refresh()`.
@@ -239,27 +248,5 @@ One small difference is that `reload()` action is treated as a `refresh()`.
 
 Dashboard can use the power of Commands too. The API is very similar, here are the differences:
 
-- There is no Instance or Entity distinction; a command handler must extend `Code16\Sharp\Dashboard\Commands\DashboardCommand` and implements execute method such as:
-
-```php
-public function execute(
-    DashboardQueryParams $params,
-    array $data=[]): array
-{
-    ...
-
-    return $this->download(...);
-}
-```
-
-- Commands must be declared in the `buildDashboardConfig()` method of the Dashboard.
-
-```php
-function buildDashboardConfig()
-{
-    $this->addDashboardCommand("download", DashboardDownload::class)
-        [...]
-}
-```
-
-- Finally, a Dashboard Command can not return a `refresh()` action, since there is no Instance.
+- There is no Instance or Entity distinction; a command handler must extend `Code16\Sharp\Dashboard\Commands\DashboardCommand`.
+- A Dashboard Command can not return a `refresh()` action, since there is no Instance.
