@@ -55,7 +55,7 @@ class SpaceshipSharpList extends SharpEntityList
     function getEntityCommands(): ?array
     {
         return [
-            new SpaceshipSynchronize(),
+            "synchronize" => new SpaceshipSynchronize(),
             SpaceshipReload::class
         ];
     }

@@ -32,12 +32,19 @@ class UserSharpList extends SharpEntityList
                     ->setLabel("Group")
             );
     }
+    
+    public function getEntityCommands(): ?array
+    {
+        return [
+            "invite_new_user" => InviteUserCommand::class,
+            ExportUsersCommand::class
+        ];
+    }
 
     function buildListConfig(): void
     {
         $this->setInstanceIdAttribute("id")
-            ->setPrimaryEntityCommand("invite_new_user", InviteUserCommand::class)
-            ->addEntityCommand("export_users", ExportUsersCommand::class)
+            ->setPrimaryEntityCommand("invite_new_user")
             ->setDefaultSort("name", "asc");
     }
 
