@@ -243,35 +243,26 @@ abstract class SharpForm
 
     /**
      * Retrieve a Model for the form and pack all its data as JSON.
-     *
-     * @param $id
-     * @return array
      */
-    abstract function find($id): array;
+    abstract function find(mixed $id): array;
 
     /**
-     * @param $id
-     * @param array $data
-     * @return mixed the instance id
+     * Update the Model of id $id with $data
      */
-    abstract function update($id, array $data);
+    abstract function update(mixed $id, array $data);
 
     /**
-     * @param $id
+     * Delete Model of id $id
      */
-    abstract function delete($id): void;
+    abstract function delete(mixed $id): void;
 
     /**
      * Build form fields using ->addField()
-     *
-     * @return void
      */
     abstract function buildFormFields(): void;
 
     /**
      * Build form layout using ->addTab() or ->addColumn()
-     *
-     * @return void
      */
     abstract function buildFormLayout(): void;
 }

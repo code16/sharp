@@ -57,16 +57,16 @@ class DashboardCommandControllerTest extends BaseApiTest
 
 class EntityCommandTestSharpDashboard extends SharpDashboard
 {
-    function buildDashboardConfig(): void
+    function getDashboardCommands(): ?array
     {
-        $this
-            ->addDashboardCommand("dashboard_info", new class() extends DashboardCommand {
+        return [
+            "dashboard_info" => new class() extends DashboardCommand {
                 public function label(): string { return "label"; }
                 public function execute(array $data= []): array {
                     return $this->info("ok");
                 }
-            })
-            ->addDashboardCommand("dashboard_form", new class() extends DashboardCommand {
+            },
+            "dashboard_form" => new class() extends DashboardCommand {
                 public function label(): string { return "label"; }
                 public function buildFormFields(): void {
                     $this->addField(SharpFormTextField::make("name"));
@@ -79,6 +79,7 @@ class EntityCommandTestSharpDashboard extends SharpDashboard
                     ];
                 }
                 public function execute(array $data = []): array {}
-            });
+            }
+        ];
     }
 }

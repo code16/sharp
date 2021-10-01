@@ -19,6 +19,7 @@ abstract class Command
     use HandleFormFields, WithCustomTransformers;
 
     protected int $groupIndex = 0;
+    protected ?string $commandKey = null;
 
     protected function info(string $message): array
     {
@@ -141,9 +142,19 @@ abstract class Command
         $this->groupIndex = $index;
     }
 
+    public function setCommandKey(string $key): void
+    {
+        $this->commandKey = $key;
+    }
+
     public function groupIndex(): int
     {
         return $this->groupIndex;
+    }
+
+    public function getCommandKey(): string
+    {
+        return $this->commandKey ?? class_basename($this::class);
     }
 
     public function validate(array $params, array $rules, array $messages = []): void

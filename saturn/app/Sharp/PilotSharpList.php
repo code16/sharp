@@ -33,6 +33,20 @@ class PilotSharpList extends SharpEntityList
                     ->setLabel("Xp")
             );
     }
+    
+    public function getInstanceCommands(): ?array
+    {
+        return [
+            PilotDownloadPhoto::class
+        ];
+    }
+
+    public function getEntityCommands(): ?array
+    {
+        return [
+            PilotUpdateXPCommand::class
+        ];
+    }
 
     function buildListConfig(): void
     {
@@ -42,9 +56,7 @@ class PilotSharpList extends SharpEntityList
             ->setPaginated()
             ->setEntityState("state", PilotEntityState::class)
             ->addFilter("spaceship", PilotSpaceshipFilter::class)
-            ->addFilter("role", PilotRoleFilter::class)
-            ->addEntityCommand("updateXP", PilotUpdateXPCommand::class)
-            ->addInstanceCommand("download", PilotDownloadPhoto::class);
+            ->addFilter("role", PilotRoleFilter::class);
     }
 
     function buildListLayout(): void

@@ -52,7 +52,7 @@ class EntityCommandController extends ApiController
      */
     protected function getCommandHandler(SharpEntityList $list, string $commandKey): ?EntityCommand
     {
-        $commandHandler = $list->entityCommandHandler($commandKey);
+        $commandHandler = $list->findEntityCommandHandler($commandKey);
         $commandHandler->initQueryParams(EntityListQueryParams::create()->fillWithRequest("query"));
 
         if(! $commandHandler->authorize()) {

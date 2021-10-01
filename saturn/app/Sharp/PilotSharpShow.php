@@ -38,14 +38,20 @@ class PilotSharpShow extends SharpShow
                     ->showCreateButton(false)
             );
     }
+    
+    public function getInstanceCommands(): ?array
+    {
+        return [
+            PilotDownloadPhoto::class
+        ];
+    }
 
     function buildShowConfig(): void
     {
         $this
             ->setBreadcrumbCustomLabelAttribute("breadcrumb_label")
             ->setMultiformAttribute("role")
-            ->setEntityState("state", PilotEntityState::class)
-            ->addInstanceCommand("download", PilotDownloadPhoto::class);
+            ->setEntityState("state", PilotEntityState::class);
     }
 
     function buildShowLayout(): void

@@ -13,7 +13,7 @@ class EntityListController extends ApiController
 
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
-        $list->init();
+        $list->initQueryParams();
 
         return response()->json([
             "containers" => $list->dataContainers(),
@@ -33,7 +33,7 @@ class EntityListController extends ApiController
 
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
-        $list->init();
+        $list->initQueryParams();
 
         $list->reorderHandler()
             ->reorder(request("instances"));

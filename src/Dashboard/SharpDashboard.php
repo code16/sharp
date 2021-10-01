@@ -123,6 +123,14 @@ abstract class SharpDashboard
     {
     }
 
+    /**
+     * Return all dashboard commands in an array of class names or instances
+     */
+    function getDashboardCommands(): ?array
+    {
+        return null;
+    }
+
     public function dashboardConfig(): array
     {
         return tap([], function(&$config) {

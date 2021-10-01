@@ -31,13 +31,19 @@ class TravelSharpList extends SharpEntityList
                     ->setLabel("Spaceship")
             );
     }
+    
+    public function getInstanceCommands(): ?array
+    {
+        return [
+            'send-email' => TravelSendEmail::class
+        ];
+    }
 
     function buildListConfig(): void
     {
         $this//->setSearchable()
             ->setDefaultSort("departure_date", "desc")
-            ->setPaginated()
-            ->addInstanceCommand('send-email', TravelSendEmail::class);
+            ->setPaginated();
     }
 
     function buildListLayout(): void

@@ -21,13 +21,19 @@ class TravelsDashboard extends SharpDashboard
                 ->setTitle("Travel counts " . ($this->queryParams->filterFor("period") ? "(period filtered)" : ""))
         );
     }
+    
+    function getDashboardCommands(): ?array
+    {
+        return [
+            TravelsDashboardDownloadCommand::class
+        ];
+    }
 
     function buildDashboardConfig(): void
     {
         $this
             ->addFilter("spaceships", TravelsDashboardSpaceshipsFilter::class)
-            ->addFilter("period", TravelsDashboardPeriodFilter::class)
-            ->addDashboardCommand("download", TravelsDashboardDownloadCommand::class);
+            ->addFilter("period", TravelsDashboardPeriodFilter::class);
     }
 
     function buildWidgetsLayout(): void

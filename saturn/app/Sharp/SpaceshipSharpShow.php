@@ -81,15 +81,21 @@ class SpaceshipSharpShow extends SharpShow
                     ->showCreateButton()
             );
     }
+    
+    public function getInstanceCommands(): ?array
+    {
+        return [
+            "message" => SpaceshipSendMessage::class,
+            "preview" => SpaceshipPreview::class,
+            "---",
+            "external" => SpaceshipExternalLink::class
+        ];
+    }
 
     function buildShowConfig(): void
     {
         $this
             ->setBreadcrumbCustomLabelAttribute("name")
-            ->addInstanceCommand("message", SpaceshipSendMessage::class)
-            ->addInstanceCommand("preview", SpaceshipPreview::class)
-            ->addInstanceCommandSeparator()
-            ->addInstanceCommand("external", SpaceshipExternalLink::class)
             ->setEntityState("state", SpaceshipEntityState::class);
     }
 

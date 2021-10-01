@@ -158,8 +158,12 @@ trait SharpAssertions
             );
     }
 
-    public function callSharpInstanceCommandFromList(string $entityKey, $instanceId, string $commandKey, array $data = [])
+    public function callSharpInstanceCommandFromList(string $entityKey, $instanceId, string $commandKeyOrClassName, array $data = [])
     {
+        $commandKey = class_exists($commandKeyOrClassName)
+            ? class_basename($commandKeyOrClassName)
+            : $commandKeyOrClassName;
+        
         return $this
             ->withHeader(
                 "referer",
@@ -176,8 +180,12 @@ trait SharpAssertions
             );
     }
 
-    public function callSharpInstanceCommandFromShow(string $entityKey, $instanceId, string $commandKey, array $data = [])
+    public function callSharpInstanceCommandFromShow(string $entityKey, $instanceId, string $commandKeyOrClassName, array $data = [])
     {
+        $commandKey = class_exists($commandKeyOrClassName)
+            ? class_basename($commandKeyOrClassName)
+            : $commandKeyOrClassName;
+        
         return $this
             ->withHeader(
                 "referer",
@@ -195,8 +203,12 @@ trait SharpAssertions
             );
     }
 
-    public function callSharpEntityCommandFromList(string $entityKey, string $commandKey, array $data = [])
+    public function callSharpEntityCommandFromList(string $entityKey, string $commandKeyOrClassName, array $data = [])
     {
+        $commandKey = class_exists($commandKeyOrClassName)
+            ? class_basename($commandKeyOrClassName)
+            : $commandKeyOrClassName;
+        
         return $this
             ->withHeader(
                 "referer",

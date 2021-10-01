@@ -15,11 +15,11 @@ class PersonSharpShow extends SharpShow
     {
         $this->addField(SharpShowTextField::make("name"));
     }
-
-    function buildShowConfig(): void
+    
+    function getInstanceCommands(): ?array
     {
-        $this
-            ->addInstanceCommand("test_command", new class extends InstanceCommand {
+        return [
+            "test_command" => new class extends InstanceCommand {
                 public function label(): string
                 {
                     return "Label";
@@ -31,7 +31,14 @@ class PersonSharpShow extends SharpShow
                 {
                     return $instanceId < 10;
                 }
-            })
+            },
+            
+        ];
+    }
+
+    function buildShowConfig(): void
+    {
+        $this
             ->setEntityState("state", new class extends EntityState {
                 protected function buildStates(): void
                 {

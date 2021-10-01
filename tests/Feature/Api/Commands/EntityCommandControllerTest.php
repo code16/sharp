@@ -196,7 +196,7 @@ class EntityCommandControllerTest extends BaseApiTest
         $response = $this->getJson('/sharp/api/list/person')
             ->assertOk()
             ->json();
-
+        
         $this->assertTrue(
             collect($response['config']['commands']['entity'][0])->where("key", "entity_with_init_data")->first()['fetch_initial_data']
         );
@@ -221,42 +221,42 @@ class EntityCommandControllerTest extends BaseApiTest
     }
 }
 
-class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList {
-
-    function buildListConfig(): void
+class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList 
+{
+    public function getEntityCommands(): ?array
     {
-        $this
-            ->addEntityCommand("entity_info", new class() extends EntityCommand {
+        return [
+            "entity_info" => new class() extends EntityCommand {
                 public function label(): string { return "label"; }
                 public function execute(array $data = []): array {
                     return $this->info("ok");
                 }
-            })
-            ->addEntityCommand("entity_reload", new class() extends EntityCommand {
+            },
+            "entity_reload" => new class() extends EntityCommand {
                 public function label(): string { return "label"; }
                 public function execute(array $data = []): array {
                     return $this->reload();
                 }
-            })
-            ->addEntityCommand("entity_view", new class() extends EntityCommand {
+            },
+            "entity_view" => new class() extends EntityCommand {
                 public function label(): string { return "label"; }
                 public function execute(array $data = []): array {
                     return $this->view("welcome");
                 }
-            })
-            ->addEntityCommand("entity_refresh", new class() extends EntityCommand {
+            },
+            "entity_refresh" => new class() extends EntityCommand {
                 public function label(): string { return "label"; }
                 public function execute(array $data = []): array {
                     return $this->refresh([1, 2]);
                 }
-            })
-            ->addEntityCommand("entity_exception", new class() extends EntityCommand {
+            },
+            "entity_exception" => new class() extends EntityCommand {
                 public function label(): string { return "label"; }
                 public function execute(array $data = []): array {
                     throw new SharpApplicativeException("error");
                 }
-            })
-            ->addEntityCommand("entity_form", new class() extends EntityCommand {
+            },
+            "entity_form" => new class() extends EntityCommand {
                 public function label(): string { return "label"; }
                 public function buildFormFields(): void {
                     $this->addField(SharpFormTextField::make("name"));
@@ -265,45 +265,44 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList {
                     $this->validate($data, ["name"=>"required"]);
                     return $this->reload();
                 }
-            })
-            ->addEntityCommand("entity_download", new class() extends EntityCommand {
+            },
+            "entity_download" => new class() extends EntityCommand {
                 public function label(): string { return "label"; }
                 public function execute(array $data = []): array {
                     Storage::fake('files');
                     UploadedFile::fake()->create('account.pdf', 100)->storeAs('pdf', 'account.pdf', ['disk'=>'files']);
                     return $this->download("pdf/account.pdf", "account.pdf", "files");
                 }
-            })
-            ->addEntityCommand("entity_streamDownload", new class() extends EntityCommand {
+            },
+            "entity_streamDownload" => new class() extends EntityCommand {
                 public function label(): string { return "label"; }
                 public function execute(array $data = []): array {
                     return $this->streamDownload("content", "stream.txt");
                 }
-            })
-            ->addEntityCommand("entity_download_no_disk", new class() extends EntityCommand {
+            },
+            "entity_download_no_disk" => new class() extends EntityCommand {
                 public function label(): string { return "label"; }
                 public function execute(array $data = []): array {
                     Storage::fake('local');
                     UploadedFile::fake()->create('account.pdf', 100)->storeAs('pdf', 'account.pdf');
                     return $this->download("pdf/account.pdf");
                 }
-            })
-            ->addEntityCommand("entity_unauthorized", new class() extends EntityCommand {
+            },
+            "entity_unauthorized" => new class() extends EntityCommand {
                 public function label(): string { return "label"; }
                 public function authorize(): bool { return false; }
                 public function execute(array $data = []): array {
                     return $this->reload();
                 }
-            })
-            ->addEntityCommand("entity_params", new class() extends EntityCommand {
+            },
+            "entity_params" => new class() extends EntityCommand {
                 public function label(): string { return "label"; }
                 public function execute(array $data = []): array
                 {
                     return $this->info($this->queryParams->sortedBy() . $this->queryParams->sortedDir());
                 }
-    
-            })
-            ->addEntityCommand("entity_with_init_data", new class() extends EntityCommand {
+            },
+            "entity_with_init_data" => new class() extends EntityCommand {
                 public function label(): string { return "label"; }
                 public function buildFormFields(): void {
                     $this->addField(SharpFormTextField::make("name"));
@@ -316,6 +315,7 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList {
                     ];
                 }
                 public function execute(array $data = []): array {}
-            });
+            },
+        ];
     }
 }

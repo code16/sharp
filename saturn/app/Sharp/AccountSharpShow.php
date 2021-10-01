@@ -18,10 +18,12 @@ class AccountSharpShow extends SharpSingleShow
             ->addField(
                 SharpShowTextField::make("name")
                     ->setLabel("Name:")
-            )->addField(
+            )
+            ->addField(
                 SharpShowTextField::make("email")
                     ->setLabel("Email:")
-            )->addField(
+            )
+            ->addField(
                 SharpShowTextField::make("groups")
                     ->setLabel("Groups:")
             );
@@ -40,12 +42,17 @@ class AccountSharpShow extends SharpSingleShow
                     });
             });
     }
+    
+    public function getInstanceCommands(): ?array
+    {
+        return [
+            AccountUpdateName::class
+        ];
+    }
 
     function buildShowConfig(): void
     {
-        $this
-            ->addInstanceCommand("rename", AccountUpdateName::class)
-            ->setEntityState("status", AccountStatusState::class);
+        $this->setEntityState("status", AccountStatusState::class);
     }
 
     function findSingle(): array
