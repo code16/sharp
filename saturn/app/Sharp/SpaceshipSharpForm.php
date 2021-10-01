@@ -229,9 +229,11 @@ class SpaceshipSharpForm extends SharpForm
             ->addTab("Details", function(FormLayoutTab $tab) {
                 $tab
                     ->addColumn(5, function(FormLayoutColumn $column) {
-                        $column->withFieldset("Technical details", function(FormLayoutFieldset $fieldset) {
-                            return $fieldset->withFields("capacity|4,6", "construction_date|8,6");
-                        })->withSingleField("features");
+                        $column
+                            ->withFieldset("Technical details", function(FormLayoutFieldset $fieldset) {
+                                return $fieldset->withFields("capacity|4,6", "construction_date|8,6");
+                            })
+                            ->withSingleField("features");
 
                     })
                     ->addColumn(7, function(FormLayoutColumn $column) {
@@ -250,7 +252,8 @@ class SpaceshipSharpForm extends SharpForm
                             ->withSingleField("manual")
                             ->withSingleField("pilots")
                             ->withSingleField("reviews", function(FormLayoutColumn $listItem) {
-                                $listItem->withSingleField("starts_at")
+                                $listItem
+                                    ->withSingleField("starts_at")
                                     ->withFields("status|5", "comment|7");
                             });
                     })
@@ -259,7 +262,8 @@ class SpaceshipSharpForm extends SharpForm
                             ->withSingleField("picture")
                             ->withSingleField("picture:legend")
                             ->withSingleField("pictures", function(FormLayoutColumn $listItem) {
-                                $listItem->withSingleField("file")
+                                $listItem
+                                    ->withSingleField("file")
                                     ->withSingleField("legend");
                             });
                     });
