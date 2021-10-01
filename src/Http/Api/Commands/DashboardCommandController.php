@@ -50,7 +50,7 @@ class DashboardCommandController extends ApiController
      */
     protected function getCommandHandler(SharpDashboard $dashboard, string $commandKey)
     {
-        if($handler = $dashboard->dashboardCommandHandler($commandKey)) {
+        if($handler = $dashboard->findDashboardCommandHandler($commandKey)) {
             $handler->initQueryParams(DashboardQueryParams::create()->fillWithRequest("query"));
         }
 

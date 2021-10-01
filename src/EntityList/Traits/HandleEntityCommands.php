@@ -91,11 +91,6 @@ trait HandleEntityCommands
             ->filter(function(EntityCommand $command) use ($commandKey) {
                 return $command->getCommandKey() === $commandKey;
             })
-            ->when(isset($this->queryParams), function(Collection $commands) {
-                return $commands->each(function(EntityCommand $command) {
-                    $command->initQueryParams($this->queryParams);
-                });
-            })
             ->first();
     }
 }
