@@ -5,20 +5,14 @@ namespace Code16\Sharp\EntityList\Layout;
 class EntityListLayoutColumn
 {
     protected string $key;
-    protected int $size;
-    protected ?int $sizeXS;
-    protected bool $largeOnly = false;
+    protected int|string $size;
+    protected int|string|null $sizeXS;
 
-    public function __construct(string $key, int $size, int $sizeXS = null)
+    public function __construct(string $key, int|string $size, int|string $sizeXS = null)
     {
         $this->key = $key;
         $this->size = $size;
-        $this->sizeXS = $sizeXS ?: $size;
-    }
-
-    public function setLargeOnly(bool $largeOnly = true): void
-    {
-        $this->largeOnly = $largeOnly;
+        $this->sizeXS = $sizeXS;
     }
 
     public function toArray(): array
@@ -27,7 +21,7 @@ class EntityListLayoutColumn
             "key" => $this->key,
             "size" => $this->size,
             "sizeXS" => $this->sizeXS,
-            "hideOnXS" => $this->largeOnly,
+            "hideOnXS" => $this->sizeXS === null,
         ];
     }
 }

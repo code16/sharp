@@ -8,10 +8,12 @@ use Code16\Sharp\EntityList\Layout\EntityListLayoutColumn;
 use Code16\Sharp\EntityList\Traits\HandleEntityCommands;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
+use Code16\Sharp\Exceptions\EntityList\SharpEntityListLayoutException;
 use Code16\Sharp\Utils\Filters\HandleFilters;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Arr;
 
 abstract class SharpEntityList
 {
@@ -68,15 +70,17 @@ abstract class SharpEntityList
     public final function listLayout(): array
     {
         if(!$this->layoutBuilt) {
-            $this->buildListLayout();
+            $this->buildListLayouts();
             $this->layoutBuilt = true;
         }
 
         return collect($this->columns)
-            ->map(function(EntityListLayoutColumn $column) {
-                return $column->toArray();
+            ->map(function($sizes, $key) {
+                return (new EntityListLayoutColumn($key, $sizes["size"], $sizes["sizeXS"] ?? null))
+                    ->toArray();
             })
-            ->all();
+            ->values()
+            ->toArray();
     }
 
     public final function data($items = null): array
@@ -207,24 +211,27 @@ abstract class SharpEntityList
         return $this;
     }
 
-    protected function addColumn(string $label, int $size, $sizeXS = null): self
+    protected function addColumn(string $label, int $size = null): self
     {
-        $this->layoutBuilt = false;
-
-        $this->columns[] = new EntityListLayoutColumn($label, $size, $sizeXS);
+        $sizeAttr = Arr::exists($this->columns, "{$label}.size")
+            ? "sizeXS"
+            : "size";
+        
+        if(Arr::exists($this->columns, "{$label}.{$sizeAttr}")) {
+            throw new SharpEntityListLayoutException("The $label column was defined twice for the $sizeAttr size");
+        }
+        
+        $this->columns[$label] = [
+            $sizeAttr => $size ?: "auto"
+        ];
 
         return $this;
     }
 
-    protected function addColumnLarge(string $label, int $size): self
+    private function buildListLayouts(): void
     {
-        $this->layoutBuilt = false;
-
-        $column = new EntityListLayoutColumn($label, $size);
-        $column->setLargeOnly(true);
-        $this->columns[] = $column;
-
-        return $this;
+        $this->buildListLayout();
+        $this->buildListLayoutForSmallScreens();
     }
 
     private function checkListIsBuilt(): void
@@ -256,6 +263,13 @@ abstract class SharpEntityList
     function getInstanceCommands(): ?array
     {
         return null;
+    }
+
+    /**
+     * Build layout for small screen. Optional, only if needed.
+     */
+    function buildListLayoutForSmallScreens(): void
+    {
     }
 
     /**
