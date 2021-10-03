@@ -213,17 +213,15 @@ abstract class SharpEntityList
 
     protected function addColumn(string $label, int $size = null): self
     {
-        $sizeAttr = Arr::exists($this->columns, "{$label}.size")
+        $sizeAttr = isset($this->columns[$label]["size"])
             ? "sizeXS"
             : "size";
         
-        if(Arr::exists($this->columns, "{$label}.{$sizeAttr}")) {
+        if(isset($this->columns[$label][$sizeAttr])) {
             throw new SharpEntityListLayoutException("The $label column was defined twice for the $sizeAttr size");
         }
         
-        $this->columns[$label] = [
-            $sizeAttr => $size ?: "auto"
-        ];
+        $this->columns[$label][$sizeAttr] = $size ?: "auto";
 
         return $this;
     }
