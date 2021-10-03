@@ -2,6 +2,7 @@
 
 namespace App\Sharp;
 
+use App\Pilot;
 use App\Sharp\Commands\SpaceshipExternalLink;
 use App\Sharp\Commands\SpaceshipPreview;
 use App\Sharp\Commands\SpaceshipReload;
@@ -11,9 +12,10 @@ use App\Sharp\Filters\SpaceshipPilotsFilter;
 use App\Sharp\Filters\SpaceshipTypeFilter;
 use App\Sharp\States\SpaceshipEntityState;
 use App\Spaceship;
-use Code16\Sharp\EntityList\Commands\EntityState;
+use App\SpaceshipType;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\SharpEntityList;
+use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
 use Illuminate\Contracts\Support\Arrayable;
@@ -78,6 +80,10 @@ class SpaceshipSharpList extends SharpEntityList
             ->addFilter("type", SpaceshipTypeFilter::class)
             ->addFilter("pilots", SpaceshipPilotsFilter::class)
             ->setEntityState("state", SpaceshipEntityState::class)
+            ->setGlobalHelpHtmlField(
+                SharpShowHtmlField::make("html")
+                    ->setInlineTemplate("Here are the spaceships of type <strong>{{type_label}}</strong><span v-if='pilots'>for pilots {{pilots}}</span>")
+            )
             ->setPaginated();
     }
 
@@ -89,6 +95,22 @@ class SpaceshipSharpList extends SharpEntityList
             ->addColumn("type:label", 2, 4)
             ->addColumnLarge("pilots", 3)
             ->addColumn("messages_sent_count", 2);
+    }
+    
+    function getListMetaData(): array
+    {
+        $pilots = $this->queryParams->filterFor('pilots');
+        
+        return [
+            "html" => [
+                "type_label" => SpaceshipType::findOrFail($this->queryParams->filterFor('type'))->label,
+                "pilots" => $pilots 
+                    ? Pilot::whereIn($pilots)
+                        ->pluck("name")
+                        ->implode(", ")
+                    : null
+            ]
+        ];
     }
 
     function getListData(): array|Arrayable
