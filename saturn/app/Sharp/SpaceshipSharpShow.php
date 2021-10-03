@@ -92,13 +92,6 @@ class SpaceshipSharpShow extends SharpShow
         ];
     }
 
-    function buildShowConfig(): void
-    {
-        $this
-            ->setBreadcrumbCustomLabelAttribute("name")
-            ->setEntityState("state", SpaceshipEntityState::class);
-    }
-
     function buildShowLayout(): void
     {
         $this
@@ -134,17 +127,33 @@ class SpaceshipSharpShow extends SharpShow
             });
     }
 
+    function buildShowConfig(): void
+    {
+        $this
+            ->setBreadcrumbCustomLabelAttribute("name")
+            ->setGlobalHelpHtmlField(
+                SharpShowHtmlField::make("html")
+                    ->setInlineTemplate("<span v-if='is_building'>Warning: this spaceship is still in conception or building phase.</span>")
+            )
+            ->setEntityState("state", SpaceshipEntityState::class);
+    }
+
     function find($id): array
     {
         return $this
-            ->setCustomTransformer("brand", function($value, $spaceship) {
+            ->setCustomTransformer("html", function($value, Spaceship $spaceship) {
+                return [
+                    "is_building" => in_array($spaceship->state, ["building", "conception"]) 
+                ];
+            })
+            ->setCustomTransformer("brand", function($value, Spaceship $spaceship) {
                 return sprintf(
                     "%s / %s",
                     $spaceship->brand ?: '<em>no brand</em>',
                     $spaceship->model ?: '<em>no model</em>'
                 );
             })
-            ->setCustomTransformer("name", function($value, $spaceship) {
+            ->setCustomTransformer("name", function($value, Spaceship $spaceship) {
                 return $spaceship->name;
             })
             ->setCustomTransformer("manual", new SharpUploadModelFormAttributeTransformer(false))
