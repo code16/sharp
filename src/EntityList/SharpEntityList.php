@@ -8,6 +8,8 @@ use Code16\Sharp\EntityList\Layout\EntityListLayoutColumn;
 use Code16\Sharp\EntityList\Traits\HandleEntityCommands;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
+use Code16\Sharp\Exceptions\EntityList\SharpEntityListConfigException;
+use Code16\Sharp\Show\Fields\SharpShowHtmlField;
 use Code16\Sharp\Utils\Filters\HandleFilters;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Contracts\Support\Arrayable;
@@ -32,6 +34,8 @@ abstract class SharpEntityList
     protected ?ReorderHandler $reorderHandler = null;
     protected ?string $defaultSort= null;
     protected ?string $defaultSortDir = null;
+    protected ?SharpShowHtmlField $globalMessageHtmlField = null;
+    protected string $globalMessageLevel = "info";
     protected ?EntityListQueryParams $queryParams;
 
     public final function initQueryParams(): self
@@ -109,12 +113,14 @@ abstract class SharpEntityList
             })
             ->toArray();
 
-        return collect([
-            "items" => $items ?? [],
-            "page" => $page ?? null,
-            "totalCount" => $totalCount ?? null,
-            "pageSize" => $pageSize ?? null,
-        ])
+        return collect(
+            [
+                "meta" => $this->getListMetaData(),
+                "items" => $items ?? [],
+                "page" => $page ?? null,
+                "totalCount" => $totalCount ?? null,
+                "pageSize" => $pageSize ?? null,
+            ])
             ->filter(function($value) {
                 return $value !== null;
             })
@@ -132,6 +138,13 @@ abstract class SharpEntityList
             "defaultSort" => $this->defaultSort,
             "defaultSortDir" => $this->defaultSortDir,
             "hasShowPage" => $hasShowPage,
+            "globalMessage" =>
+                $this->globalMessageHtmlField
+                ? [
+                    "field" => $this->globalMessageHtmlField->toArray(),
+                    "level" => $this->globalMessageLevel
+                ]
+                : null
         ];
         
         $this->appendFiltersToConfig($config);
@@ -191,6 +204,24 @@ abstract class SharpEntityList
     {
         $this->multiformAttribute = $attribute;
 
+        return $this;
+    }
+
+    protected function setGlobalMessageHtmlField(SharpShowHtmlField $field): self
+    {
+        $this->globalMessageHtmlField = $field;
+        
+        return $this;
+    }
+
+    protected function setGlobalMessageLevel(string $level): self
+    {
+        if(!in_array($level, ["info", "primary", "secondary", "warning", "danger", "success"])) {
+            throw new SharpEntityListConfigException("Level [$level] is invalid for global help: must be either info, primary, secondary, warning, danger or success");
+        }
+        
+        $this->globalMessageLevel = $level;
+        
         return $this;
     }
 
@@ -254,6 +285,14 @@ abstract class SharpEntityList
      * Return all instance commands in an array of class names or instances
      */
     function getInstanceCommands(): ?array
+    {
+        return null;
+    }
+
+    /**
+     * Return list's metadata if needed (possible use case: GlobalHelpHtmlField)
+     */
+    function getListMetaData(): ?array
     {
         return null;
     }

@@ -267,9 +267,7 @@ class SpaceshipSharpForm extends SharpForm
                                     ->withSingleField("legend");
                             });
                     });
-
-            })
-            ;
+            });
     }
 
     function buildFormConfig(): void
