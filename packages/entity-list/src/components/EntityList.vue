@@ -9,13 +9,11 @@
         <template v-if="ready">
             <div v-show="visible">
                 <template v-if="config.globalMessage">
-                    <div class="my-4">
-                        <GlobalMessage
-                            :options="config.globalMessage"
-                            :data="data"
-                            :fields="fields"
-                        />
-                    </div>
+                    <GlobalMessage
+                        :options="config.globalMessage"
+                        :data="data"
+                        :fields="fields"
+                    />
                 </template>
 
                 <DataList
