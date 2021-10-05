@@ -107,6 +107,7 @@ abstract class SharpForm
             ], 
             function(&$config) {
                 $this->appendBreadcrumbCustomLabelAttribute($config);
+                $this->appendGlobalMessageToConfig($config);
             }
         );
     }
