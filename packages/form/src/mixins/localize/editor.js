@@ -10,15 +10,11 @@ export default function ({ textProp }) {
         mixins: [localizeField],
         computed: {
             localizedText() {
-                if (!this.value) {
-                    return '';
+                if(this.isLocalized) {
+                    return this.value?.[textProp]?.[this.locale] ?? null;
                 }
 
-                return (
-                    this.isLocalized
-                    ? this.value[textProp] ? this.value[textProp][this.locale] : ''
-                    : this.value[textProp]
-                );
+                return this.value?.[textProp] ?? null;
             }
         },
 
@@ -28,7 +24,7 @@ export default function ({ textProp }) {
                     ...this.value,
                     [textProp]: this.isLocalized
                         ? localeObjectOrEmpty({
-                            localeObject: this.value ? this.value[textProp] : '',
+                            localeObject: this.value?.[textProp],
                             locale: this.locale,
                             value: text
                         })
