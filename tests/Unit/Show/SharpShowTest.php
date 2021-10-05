@@ -138,7 +138,7 @@ class SharpShowTest extends SharpTestCase
 
         $sharpShow->buildShowConfig();
 
-        $this->assertEquals("test-key", $sharpShow->showConfig(1)["globalMessageFieldKey"]);
+        $this->assertEquals("test-key", $sharpShow->showConfig(1)["globalMessage"]["fieldKey"]);
         $this->assertEquals(
             SharpShowHtmlField::make("test-key")->setInlineTemplate("template")->toArray(),
             $sharpShow->fields()["test-key"]

@@ -303,7 +303,10 @@ class SharpEntityListCommandTest extends SharpTestCase
                                 "type" => "entity",
                                 "form" => [
                                     "config" => [
-                                        "globalMessageFieldKey" => "global_message",
+                                        "globalMessage" => [
+                                            "fieldKey" => "global_message",
+                                            "alertLevel" => null
+                                        ]
                                     ],
                                     "fields" => [
                                         "global_message" => [

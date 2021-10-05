@@ -166,7 +166,6 @@ class SharpEntityListTest extends SharpTestCase
                 "multiformAttribute" => null,
                 "defaultSort" => null,
                 "defaultSortDir" => null,
-                "globalMessageFieldKey" => null
             ], 
             $list->listConfig()
         );
@@ -184,7 +183,7 @@ class SharpEntityListTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertEquals("test-key", $list->listConfig()["globalMessageFieldKey"]);
+        $this->assertEquals("test-key", $list->listConfig()["globalMessage"]["fieldKey"]);
         $this->assertEquals(
             SharpShowHtmlField::make("test-key")->setInlineTemplate("template")->toArray(), 
             $list->listFields()["test-key"]

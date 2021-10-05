@@ -26,6 +26,11 @@ trait HandleGlobalMessage
      */
     protected function appendGlobalMessageToConfig(array &$config): void
     {
-        $config["globalMessageFieldKey"] = $this->globalMessageHtmlField?->key;
+        if($this->globalMessageHtmlField) {
+            $config["globalMessage"] = [
+                "fieldKey" => $this->globalMessageHtmlField->key,
+                "alertLevel" => null
+            ];
+        }
     }
 }
