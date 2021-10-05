@@ -7,7 +7,6 @@ class MenuItemUrl extends MenuItem
     public string $type = "url";
     public string $url;
     public ?string $icon;
-    public bool $newWindow;
     public string $key;
 
     public function __construct(array $config)
@@ -15,7 +14,6 @@ class MenuItemUrl extends MenuItem
         $this->label = $config["label"] ?? "Unlabelled link";
         $this->icon = $config["icon"] ?? null;
         $this->url = $config["url"];
-        $this->newWindow = $config['new_window'] ?? false;
         $this->key = uniqid();
     }
 

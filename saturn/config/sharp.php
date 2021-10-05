@@ -165,7 +165,6 @@ return [
                     "label" => "Some external link",
                     "icon" => "fas fa-globe",
                     "url" => "https://google.com",
-                    'new_window' => true
                 ],
             ]
         ], [

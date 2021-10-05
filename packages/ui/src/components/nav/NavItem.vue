@@ -9,7 +9,7 @@
              </span>
          </template>
          <template v-else>
-             <a class="SharpLeftNav__item-link" :href="link" :target="hrefTarget">
+             <a class="SharpLeftNav__item-link" :href="href" target="_blank">
                  <slot></slot>
              </a>
          </template>
@@ -28,21 +28,7 @@
                 type: Boolean,
                 default: false
             },
-            link: String,
-            newWindow: {
-                type: Boolean,
-                default: false
-            }
+            href: String,
         },
-        data() {
-            return {
-
-            }
-        },
-        computed: {
-            hrefTarget() {
-                return (this.newWindow ? "_blank" : "_self")
-            }
-        }
     }
 </script>
