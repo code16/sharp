@@ -9,7 +9,7 @@
              </span>
          </template>
          <template v-else>
-             <a class="SharpLeftNav__item-link" :href="link">
+             <a class="SharpLeftNav__item-link" :href="href" :target="target">
                  <slot></slot>
              </a>
          </template>
@@ -28,12 +28,8 @@
                 type: Boolean,
                 default: false
             },
-            link: String
-        },
-        data() {
-            return {
-
-            }
+            href: String,
+            target: String,
         },
     }
 </script>

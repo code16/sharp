@@ -3,7 +3,13 @@
         {{ $item->label }}
     </x-sharp::menu-separator>
 @else
-    <sharp-nav-item :current="{{ json_encode($isCurrent) }}" link="{{ $item->url }}">
+    <sharp-nav-item
+        :current="{{ json_encode($isCurrent) }}"
+        href="{{ $item->url }}"
+        @if($item->target ?? null)
+            target="{{ $item->target }}"
+        @endif
+    >
         <div class="row flex-nowrap gx-3">
             @if($item->icon)
                 <div class="col-auto">
