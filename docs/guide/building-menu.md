@@ -75,7 +75,6 @@ Very similar to entity lists, except that `entity` is replaced by a `dashboard` 
         "label" => "Some external link",
         "icon" => "fa-globe",
         "url" => "https://google.com"
-        "new_window" => false,
     ]
 ]
 ```
