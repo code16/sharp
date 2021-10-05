@@ -221,7 +221,7 @@ abstract class SharpEntityList
             throw new SharpEntityListLayoutException("The $label column was defined twice for the $sizeAttr size");
         }
         
-        $this->columns[$label][$sizeAttr] = $size ?: "auto";
+        $this->columns[$label][$sizeAttr] = $size ?: "fill";
 
         return $this;
     }

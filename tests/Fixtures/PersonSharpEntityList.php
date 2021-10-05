@@ -90,8 +90,13 @@ class PersonSharpEntityList extends SharpEntityList
 
     function buildListLayout(): void
     {
-        $this->addColumn("name", 6, 12)
-            ->addColumnLarge("age", 6);
+        $this->addColumn("name", 6)
+            ->addColumn("age", 6);
+    }
+    
+    public function buildListLayoutForSmallScreens(): void
+    {
+        $this->addColumn("name");
     }
 
     function buildListConfig(): void

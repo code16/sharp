@@ -100,7 +100,7 @@ class EntityListControllerTest extends BaseApiTest
                 [
                     "key" => "name",
                     "size" => 6,
-                    "sizeXS" => 12
+                    "sizeXS" => 'fill'
                 ], [
                     "key" => "age",
                     "size" => 6,
