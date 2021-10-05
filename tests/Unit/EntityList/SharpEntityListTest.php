@@ -56,9 +56,9 @@ class SharpEntityListTest extends SharpTestCase
         $this->assertEquals(
             [
                 [
-                    "key" => "name", "size" => 6, "sizeXS" => null, "hideOnXS" => false,
+                    "key" => "name", "size" => 6, "sizeXS" => 6, "hideOnXS" => false,
                 ], [
-                    "key" => "age", "size" => 6, "sizeXS" => null, "hideOnXS" => false,
+                    "key" => "age", "size" => 6, "sizeXS" => 6, "hideOnXS" => false,
                 ]
             ], 
             $list->listLayout()
@@ -118,9 +118,9 @@ class SharpEntityListTest extends SharpTestCase
         $this->assertEquals(
             [
                 [
-                    "key" => "name", "size" => 4, "sizeXS" => null, "hideOnXS" => false,
+                    "key" => "name", "size" => 4, "sizeXS" => 4, "hideOnXS" => false,
                 ], [
-                    "key" => "age", "size" => 'fill', "sizeXS" => null, "hideOnXS" => false,
+                    "key" => "age", "size" => 'fill', "sizeXS" => 'fill', "hideOnXS" => false,
                 ]
             ],
             $list->listLayout()

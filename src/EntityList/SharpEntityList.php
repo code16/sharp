@@ -81,12 +81,22 @@ abstract class SharpEntityList
 
         return collect($this->columns)
             ->map(function($sizes, $key) use ($xsSizesWereDefined) {
-                return [
+                $data = [
                     "key" => $key,
                     "size" => $sizes["size"],
-                    "sizeXS" => $sizes["sizeXS"] ?? null,
-                    "hideOnXS" => $xsSizesWereDefined && ($sizes["sizeXS"] ?? null) === null,
                 ];
+                
+                if(!$xsSizesWereDefined) {
+                    $data["hideOnXS"] = false;
+                    $data["sizeXS"] = $sizes["size"];
+                } else {
+                    $data["hideOnXS"] = ($sizes["sizeXS"] ?? null) === null;
+                    $data["sizeXS"] = $data["hideOnXS"] 
+                        ? null 
+                        : (($sizes["sizeXS"] ?? null) ?: $sizes["size"]);
+                }
+                
+                return $data;
             })
             ->values()
             ->toArray();
