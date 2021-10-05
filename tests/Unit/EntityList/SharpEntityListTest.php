@@ -51,12 +51,41 @@ class SharpEntityListTest extends SharpTestCase
                 $this->addColumn("name", 6)
                     ->addColumn("age", 6);
             }
+        };
+        
+        $this->assertEquals(
+            [
+                [
+                    "key" => "name", "size" => 6, "sizeXS" => null, "hideOnXS" => false,
+                ], [
+                    "key" => "age", "size" => 6, "sizeXS" => null, "hideOnXS" => false,
+                ]
+            ], 
+            $list->listLayout()
+        );
+    }
+
+    /** @test */
+    function we_can_define_a_layout_for_small_screens()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListDataContainers(): void
+            {
+                $this
+                    ->addDataContainer(EntityListDataContainer::make("name"))
+                    ->addDataContainer(EntityListDataContainer::make("age"));
+            }
+            function buildListLayout(): void
+            {
+                $this->addColumn("name", 6)
+                    ->addColumn("age", 6);
+            }
             function buildListLayoutForSmallScreens(): void
             {
                 $this->addColumn("name", 12);
             }
         };
-        
+
         $this->assertEquals(
             [
                 [
@@ -64,7 +93,36 @@ class SharpEntityListTest extends SharpTestCase
                 ], [
                     "key" => "age", "size" => 6, "sizeXS" => null, "hideOnXS" => true,
                 ]
-            ], 
+            ],
+            $list->listLayout()
+        );
+    }
+
+    /** @test */
+    function we_can_configure_a_column_to_fill_left_space()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListDataContainers(): void
+            {
+                $this
+                    ->addDataContainer(EntityListDataContainer::make("name"))
+                    ->addDataContainer(EntityListDataContainer::make("age"));
+            }
+            function buildListLayout(): void
+            {
+                $this->addColumn("name", 4)
+                    ->addColumn("age");
+            }
+        };
+
+        $this->assertEquals(
+            [
+                [
+                    "key" => "name", "size" => 4, "sizeXS" => null, "hideOnXS" => false,
+                ], [
+                    "key" => "age", "size" => 'fill', "sizeXS" => null, "hideOnXS" => false,
+                ]
+            ],
             $list->listLayout()
         );
     }

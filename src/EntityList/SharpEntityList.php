@@ -4,7 +4,6 @@ namespace Code16\Sharp\EntityList;
 
 use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
-use Code16\Sharp\EntityList\Layout\EntityListLayoutColumn;
 use Code16\Sharp\EntityList\Traits\HandleEntityCommands;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
@@ -13,7 +12,6 @@ use Code16\Sharp\Utils\Filters\HandleFilters;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Arr;
 
 abstract class SharpEntityList
 {
@@ -73,11 +71,22 @@ abstract class SharpEntityList
             $this->buildListLayouts();
             $this->layoutBuilt = true;
         }
+        
+        // We need this to know if buildListLayoutForSmallScreens() was declared,
+        // in order to hide unset columns in XS size.
+        $xsSizesWereDefined = collect($this->columns)
+                ->pluck("sizeXS")
+                ->filter()
+                ->count() > 0;
 
         return collect($this->columns)
-            ->map(function($sizes, $key) {
-                return (new EntityListLayoutColumn($key, $sizes["size"], $sizes["sizeXS"] ?? null))
-                    ->toArray();
+            ->map(function($sizes, $key) use ($xsSizesWereDefined) {
+                return [
+                    "key" => $key,
+                    "size" => $sizes["size"],
+                    "sizeXS" => $sizes["sizeXS"] ?? null,
+                    "hideOnXS" => $xsSizesWereDefined && ($sizes["sizeXS"] ?? null) === null,
+                ];
             })
             ->values()
             ->toArray();
