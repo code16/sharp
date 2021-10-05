@@ -114,15 +114,12 @@ abstract class Command
     {
     }
 
-    /**
-     * Configure the command (optional).
-     */
-    public function buildCommandConfig(): void
+    public final function commandFormConfig(): ?array
     {
-    }
-
-    public final function commandConfig(): array
-    {
+        if($this->globalMessageHtmlField === null) {
+            return null;
+        }
+        
         return tap([], function(&$config) {
             $this->appendGlobalMessageToConfig($config);
         });

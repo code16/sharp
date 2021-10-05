@@ -22,7 +22,6 @@ class EntityCommandController extends ApiController
         $list->buildListConfig();
         
         $commandHandler = $this->getCommandHandler($list, $commandKey);
-        $commandHandler->buildCommandConfig();
 
         return response()->json([
             "data" => $commandHandler->formData()

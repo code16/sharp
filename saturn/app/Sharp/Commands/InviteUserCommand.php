@@ -16,15 +16,6 @@ class InviteUserCommand extends EntityCommand
     {
         return "Send an invitation to a new user";
     }
-
-    function buildCommandConfig(): void
-    {
-        $this
-            ->setGlobalMessage(
-                "The invitation will be automatically sent before {{day}}, 10 AM",
-                "globalHelp"
-            );
-    }
     
     public function execute(array $data = []): array
     {
@@ -40,10 +31,15 @@ class InviteUserCommand extends EntityCommand
 
     function buildFormFields(): void
     {
-        $this->addField(
-            SharpFormTextField::make("email")
-                ->setLabel("E-mail address")
-        );
+        $this
+            ->setGlobalMessage(
+                "The invitation will be automatically sent before {{day}}, 10 AM",
+                "globalHelp"
+            )
+            ->addField(
+                SharpFormTextField::make("email")
+                    ->setLabel("E-mail address")
+            );
     }
     
     protected function initialData(): array

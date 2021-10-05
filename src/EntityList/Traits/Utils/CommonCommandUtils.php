@@ -11,14 +11,12 @@ trait CommonCommandUtils
     {
         $commandHandlers
             ->each(function(Command $handler) use(&$config, $instanceId) {
-                $handler->buildCommandConfig();
                 $formFields = $handler->form();
                 $formLayout = $formFields ? $handler->formLayout() : null;
                 $hasFormInitialData = $formFields && is_method_implemented_in_concrete_class($handler, 'initialData');
 
                 $config["commands"][$handler->type()][$handler->groupIndex()][] = [
                     "key" => $handler->getCommandKey(),
-                    "config" => $handler->commandConfig(),
                     "label" => $handler->label(),
                     "description" => $handler->description(),
                     "type" => $handler->type(),
@@ -27,6 +25,7 @@ trait CommonCommandUtils
                     "form" => $formFields 
                         ? array_merge(
                             [
+                                "config" => $handler->commandFormConfig(),
                                 "fields" => $formFields,
                                 "layout" => $formLayout,
                             ], 

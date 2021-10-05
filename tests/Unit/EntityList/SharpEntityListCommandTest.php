@@ -279,8 +279,9 @@ class SharpEntityListCommandTest extends SharpTestCase
                         public function label(): string {
                             return "My Entity Command";
                         }
-                        public function buildCommandConfig(): void {
-                            $this->setGlobalMessage('template', 'global_message');
+                        function buildFormFields(): void
+                        {
+                            $this->setGlobalMessage("template", "global_message");
                         }
                         public function execute(array $data = []): array {}
                     }
@@ -300,10 +301,10 @@ class SharpEntityListCommandTest extends SharpTestCase
                                 "key" => "entityCommand",
                                 "label" => "My Entity Command",
                                 "type" => "entity",
-                                "config" => [
-                                    "globalMessageFieldKey" => "global_message",
-                                ],
                                 "form" => [
+                                    "config" => [
+                                        "globalMessageFieldKey" => "global_message",
+                                    ],
                                     "fields" => [
                                         "global_message" => [
                                             "key" => "global_message",
