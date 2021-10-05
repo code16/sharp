@@ -80,11 +80,9 @@ class SpaceshipSharpList extends SharpEntityList
             ->addFilter("type", SpaceshipTypeFilter::class)
             ->addFilter("pilots", SpaceshipPilotsFilter::class)
             ->setEntityState("state", SpaceshipEntityState::class)
-            ->setGlobalMessageHtmlField(
-                SharpShowHtmlField::make("html")
-                    ->setInlineTemplate("Here are the spaceships of type <strong>{{type_label}}</strong><span v-if='pilots'>for pilots {{pilots}}</span>")
+            ->setGlobalMessage(
+                "Here are the spaceships of type <strong>{{type_label}}</strong><span v-if='pilots'>for pilots {{pilots}}</span>",
             )
-            ->setGlobalMessageLevel("info")
             ->setPaginated();
     }
 
@@ -98,19 +96,17 @@ class SpaceshipSharpList extends SharpEntityList
             ->addColumn("messages_sent_count", 2);
     }
     
-    function getListMetaData(): ?array
+    function getGlobalMessageData(): ?array
     {
         $pilots = $this->queryParams->filterFor('pilots');
         
         return [
-            "html" => [
-                "type_label" => SpaceshipType::findOrFail($this->queryParams->filterFor('type'))->label,
-                "pilots" => $pilots 
-                    ? Pilot::whereIn($pilots)
-                        ->pluck("name")
-                        ->implode(", ")
-                    : null
-            ]
+            "type_label" => SpaceshipType::findOrFail($this->queryParams->filterFor('type'))->label,
+            "pilots" => $pilots 
+                ? Pilot::whereIn($pilots)
+                    ->pluck("name")
+                    ->implode(", ")
+                : null
         ];
     }
 

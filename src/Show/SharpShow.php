@@ -7,6 +7,7 @@ use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
 use Code16\Sharp\Form\HandleFormFields;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
+use Code16\Sharp\Utils\Traits\HandleGlobalMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpShow
@@ -15,6 +16,7 @@ abstract class SharpShow
         HandleFormFields,
         HandleEntityState,
         HandleInstanceCommands,
+        HandleGlobalMessage,
         HandleCustomBreadcrumb;
 
     protected bool $layoutBuilt = false;
@@ -46,6 +48,7 @@ abstract class SharpShow
                 array_merge(
                     $this->breadcrumbAttribute ? [$this->breadcrumbAttribute] : [],
                     $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
+//                    $this->globalMessageHtmlField ? [$this->globalMessageHtmlField->key] : [],
                     $this->getDataKeys()
                 )
             )
@@ -67,6 +70,7 @@ abstract class SharpShow
             $this->appendBreadcrumbCustomLabelAttribute($config);
             $this->appendEntityStateToConfig($config, $instanceId);
             $this->appendInstanceCommandsToConfig($config, $instanceId);
+            $this->appendGlobalMessageToConfig($config);
         });
     }
 

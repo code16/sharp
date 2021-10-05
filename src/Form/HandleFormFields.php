@@ -5,6 +5,7 @@ namespace Code16\Sharp\Form;
 use Code16\Sharp\Exceptions\Form\SharpFormFieldFormattingMustBeDelayedException;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Show\Fields\SharpShowField;
+use Illuminate\Support\Collection;
 
 trait HandleFormFields
 {
@@ -19,6 +20,9 @@ trait HandleFormFields
         $this->checkFormIsBuilt();
 
         return collect($this->fields)
+            ->when($this->globalMessageHtmlField, function(Collection $collection) {
+                return $collection->push($this->globalMessageHtmlField);
+            })
             ->map->toArray()
             ->keyBy("key")
             ->all();

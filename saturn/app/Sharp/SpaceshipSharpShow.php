@@ -131,9 +131,9 @@ class SpaceshipSharpShow extends SharpShow
     {
         $this
             ->setBreadcrumbCustomLabelAttribute("name")
-            ->setGlobalHelpHtmlField(
-                SharpShowHtmlField::make("html")
-                    ->setInlineTemplate("<span v-if='is_building'>Warning: this spaceship is still in conception or building phase.</span>")
+            ->setGlobalMessage(
+                "<span v-if='is_building'>Warning: this spaceship is still in conception or building phase.</span>",
+                "globalMessage"
             )
             ->setEntityState("state", SpaceshipEntityState::class);
     }
@@ -141,7 +141,7 @@ class SpaceshipSharpShow extends SharpShow
     function find($id): array
     {
         return $this
-            ->setCustomTransformer("html", function($value, Spaceship $spaceship) {
+            ->setCustomTransformer("globalMessage", function($value, Spaceship $spaceship) {
                 return [
                     "is_building" => in_array($spaceship->state, ["building", "conception"]) 
                 ];
