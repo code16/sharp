@@ -24,11 +24,15 @@ class FiltersInRequestTest extends BaseApiTest
 
         $this->json('get', '/sharp/api/list/person?filter_age=22')
             ->assertStatus(200)
-            ->assertJsonFragment(["data" => [
-                "items" => [
-                    ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22]
+            ->assertJsonFragment([
+                "data" => [
+                    "list" => [
+                        "items" => [
+                            ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22]
+                        ]
+                    ]
                 ]
-            ]]);
+            ]);
     }
 
     /** @test */
@@ -40,11 +44,15 @@ class FiltersInRequestTest extends BaseApiTest
         // to know that we should use default value in this case
         $this->json('get', '/sharp/api/list/person?default_age=true')
             ->assertStatus(200)
-            ->assertJsonFragment(["data" => [
-                "items" => [
-                    ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22]
+            ->assertJsonFragment([
+                "data" => [
+                    "list" => [
+                        "items" => [
+                            ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22]
+                        ]
+                    ]
                 ]
-            ]]);
+            ]);
     }
 
     /** @test */
@@ -54,12 +62,16 @@ class FiltersInRequestTest extends BaseApiTest
 
         $this->json('get', '/sharp/api/list/person?filter_age_multiple=22,26')
             ->assertStatus(200)
-            ->assertJsonFragment(["data" => [
-                "items" => [
-                    ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
-                    ["id" => 2, "name" => "Mary <b>Wayne</b>", "age" => 26]
+            ->assertJsonFragment([
+                "data" => [
+                    "list" => [
+                        "items" => [
+                            ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
+                            ["id" => 2, "name" => "Mary <b>Wayne</b>", "age" => 26]
+                        ]
+                    ]
                 ]
-            ]]);
+            ]);
     }
 
     /** @test */
@@ -69,11 +81,15 @@ class FiltersInRequestTest extends BaseApiTest
 
         $this->json('get', '/sharp/api/list/person?filter_age_multiple=22')
             ->assertStatus(200)
-            ->assertJsonFragment(["data" => [
-                "items" => [
-                    ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
+            ->assertJsonFragment([
+                "data" => [
+                    "list" => [
+                        "items" => [
+                            ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
+                        ]
+                    ]
                 ]
-            ]]);
+            ]);
     }
 
     /** @test */
@@ -96,11 +112,15 @@ class FiltersInRequestTest extends BaseApiTest
         // Filter `age` will be force set in the `age_forced` filter callback
         $this->json('get', '/sharp/api/list/person?filter_age_forced=22&filter_age=12')
             ->assertStatus(200)
-            ->assertJsonFragment(["data" => [
-                "items" => [
-                    ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
+            ->assertJsonFragment([
+                "data" => [
+                    "list" => [
+                        "items" => [
+                            ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
+                        ]
+                    ]
                 ]
-            ]]);
+            ]);
     }
 
     /** @test */
@@ -175,30 +195,34 @@ class FiltersInRequestTest extends BaseApiTest
         // Second call: filter should be valued to 1
         $this->json('get', '/sharp/api/list/person')
             ->assertStatus(200)
-            ->assertJsonFragment(["data" => [
-                "items" => [
-                    ["id" => 1, "name" => "John", "age" => 30],
+            ->assertJsonFragment([
+                "data" => [
+                    "list" => [
+                        "items" => [
+                            ["id" => 1, "name" => "John", "age" => 30],
+                        ]
+                    ]
                 ]
-            ]]);
+            ]);
 
         // Third call, change filter value
         $this->json('get', '/sharp/api/list/person?filter_active=0')
             ->assertStatus(200)
-            ->assertJsonFragment(["data" => [
+            ->assertJsonFragment([
                 "items" => [
                     ["id" => 2, "name" => "Baby", "age" => 2],
                 ]
-            ]]);
+            ]);
 
         // Fourth call, reset filter value (un-required filters)
         $this->json('get', '/sharp/api/list/person?filter_active=')
             ->assertStatus(200)
-            ->assertJsonFragment(["data" => [
+            ->assertJsonFragment([
                 "items" => [
                     ["id" => 1, "name" => "John", "age" => 30],
                     ["id" => 2, "name" => "Baby", "age" => 2],
                 ]
-            ]]);
+            ]);
     }
 
     /** @test */
@@ -243,23 +267,23 @@ class FiltersInRequestTest extends BaseApiTest
         // Second call: filter should be valued
         $this->json('get', '/sharp/api/list/person')
             ->assertStatus(200)
-            ->assertJsonFragment(["data" => [
+            ->assertJsonFragment([
                 "items" => [
                     ["id" => 1, "name" => "John", "age" => 30],
                     ["id" => 2, "name" => "Mary", "age" => 32],
                 ]
-            ]]);
+            ]);
 
         // Third call: filter should be reset
         $this->json('get', '/sharp/api/list/person?filter_age=')
             ->assertStatus(200)
-            ->assertJsonFragment(["data" => [
+            ->assertJsonFragment([
                 "items" => [
                     ["id" => 1, "name" => "John", "age" => 30],
                     ["id" => 2, "name" => "Mary", "age" => 32],
                     ["id" => 3, "name" => "Baby", "age" => 2],
                 ]
-            ]]);
+            ]);
     }
 
     /** @test */
@@ -302,11 +326,11 @@ class FiltersInRequestTest extends BaseApiTest
         // Second call: filter should be valued to 30
         $this->json('get', '/sharp/api/list/person')
             ->assertStatus(200)
-            ->assertJsonFragment(["data" => [
+            ->assertJsonFragment([
                 "items" => [
                     ["id" => 1, "name" => "John", "age" => 30],
                 ]
-            ]]);
+            ]);
     }
 }
 

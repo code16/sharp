@@ -96,12 +96,15 @@ class SharpEntityListStateTest extends SharpTestCase
 
         $list->buildListConfig();
 
-        $this->assertEquals([
-            "items" => [
-                ["id" => 1, "name" => "John Wayne", "state" => true],
-                ["id" => 2, "name" => "Mary Wayne", "state" => false],
-            ]
-        ], $list->data());
+        $this->assertEquals(
+            [
+                "items" => [
+                    ["id" => 1, "name" => "John Wayne", "state" => true],
+                    ["id" => 2, "name" => "Mary Wayne", "state" => false],
+                ]
+            ], 
+            $list->data()["list"]
+        );
     }
 
     /** @test */

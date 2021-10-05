@@ -73,7 +73,7 @@ class SharpEntityListTest extends SharpTestCase
     /** @test */
     function we_can_get_list_data()
     {
-        $form = new class extends SharpEntityDefaultTestList {
+        $list = new class extends SharpEntityDefaultTestList {
             function getListData(): array
             {
                 return [
@@ -100,14 +100,14 @@ class SharpEntityListTest extends SharpTestCase
                     ["name" => "Mary Wayne", "age" => 26],
                 ]
             ], 
-            $form->data()
+            $list->data()["list"]
         );
     }
 
     /** @test */
     function we_can_get_paginated_list_data()
     {
-        $form = new class extends SharpEntityDefaultTestList {
+        $list = new class extends SharpEntityDefaultTestList {
             function getListData(): array|Arrayable
             {
                 $data = [
@@ -135,13 +135,11 @@ class SharpEntityListTest extends SharpTestCase
                     ["name" => "John Wayne", "age" => 22],
                     ["name" => "Mary Wayne", "age" => 26],
                 ], 
-                "meta" => [
-                    "page" => 1, 
-                    "pageSize" => 2, 
-                    "totalCount" => 10
-                ]
+                "page" => 1, 
+                "pageSize" => 2, 
+                "totalCount" => 10
             ], 
-            $form->data()
+            $list->data()["list"]
         );
     }
 

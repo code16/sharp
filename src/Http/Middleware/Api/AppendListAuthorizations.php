@@ -9,26 +9,13 @@ use Illuminate\Http\Request;
 
 class AppendListAuthorizations
 {
-    /**
-     * The gate instance.
-     *
-     * @var Gate
-     */
-    protected $gate;
+    protected Gate $gate;
 
-    /**
-     * @param Gate $gate
-     */
     public function __construct(Gate $gate)
     {
         $this->gate = $gate;
     }
 
-    /**
-     * @param Request $request
-     * @param Closure $next
-     * @return JsonResponse
-     */
     public function handle(Request $request, Closure $next)
     {
         $response = $next($request);
@@ -39,10 +26,6 @@ class AppendListAuthorizations
             : $response;
     }
 
-    /**
-     * @param JsonResponse $jsonResponse
-     * @return JsonResponse
-     */
     protected function addAuthorizationsToJsonResponse(JsonResponse $jsonResponse)
     {
         $entityKey = $this->determineEntityKey();
@@ -59,7 +42,7 @@ class AppendListAuthorizations
 
             // Collect instanceIds from response
             $instanceIdAttribute = $jsonResponse->getData()->config->instanceIdAttribute;
-            $instanceIds = collect($jsonResponse->getData()->data->items)->pluck($instanceIdAttribute);
+            $instanceIds = collect($jsonResponse->getData()->data->list->items)->pluck($instanceIdAttribute);
 
             $missingAbilities = array_diff(["view", "update"], array_keys($authorizations));
 
@@ -96,28 +79,17 @@ class AppendListAuthorizations
         return $jsonResponse;
     }
 
-    /**
-     * @param $entityKey
-     * @return bool
-     */
-    protected function hasPolicyFor($entityKey)
+    protected function hasPolicyFor(string $entityKey): bool
     {
         return config("sharp.entities.{$entityKey}.policy") != null;
     }
 
-    /**
-     * @param string $entityKey
-     * @return \Illuminate\Config\Repository|mixed
-     */
-    protected function getGlobalAuthorizations(string $entityKey)
+    protected function getGlobalAuthorizations(string $entityKey): array
     {
         return config("sharp.entities.{$entityKey}.authorizations", []);
     }
 
-    /**
-     * @return string|null
-     */
-    protected function determineEntityKey()
+    protected function determineEntityKey(): ?string
     {
         return request()->segment(4);
     }

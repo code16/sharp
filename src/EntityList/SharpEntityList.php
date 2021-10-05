@@ -115,22 +115,18 @@ abstract class SharpEntityList
 
         return collect(
             [
-                "items" => $items ?? [],
+                "list" => collect(["items" => $items ?? []])
+                    ->when($page !== null, function(Collection $collection) use($page, $totalCount, $pageSize) {
+                        $collection["page"] = $page;
+                        $collection["totalCount"] = $totalCount;
+                        $collection["pageSize"] = $pageSize;
+                        return $collection;
+                    })
+                    ->toArray()
             ])
-            ->when($page !== null, function(Collection $collection) use($page, $totalCount, $pageSize) {
-                $collection["meta"] = [
-                    "page" => $page ?? null,
-                    "totalCount" => $totalCount ?? null,
-                    "pageSize" => $pageSize ?? null,
-                ];
-                return $collection;
-            })
             ->when($this->globalMessageHtmlField !== null, function(Collection $collection) {
                 $collection[$this->globalMessageHtmlField->key] = $this->getGlobalMessageData();
                 return $collection;
-            })
-            ->filter(function($value) {
-                return $value !== null;
             })
             ->toArray();
     }

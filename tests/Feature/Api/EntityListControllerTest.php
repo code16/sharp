@@ -20,12 +20,16 @@ class EntityListControllerTest extends BaseApiTest
 
         $this->json('get', '/sharp/api/list/person')
             ->assertStatus(200)
-            ->assertJson(["data" => [
-                "items" => [
-                    ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
-                    ["id" => 2, "name" => "Mary <b>Wayne</b>", "age" => 26],
+            ->assertJson([
+                "data" => [
+                    "list" => [
+                        "items" => [
+                            ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
+                            ["id" => 2, "name" => "Mary <b>Wayne</b>", "age" => 26],
+                        ]
+                    ]
                 ]
-            ]]);
+            ]);
     }
 
     /** @test */
@@ -36,10 +40,15 @@ class EntityListControllerTest extends BaseApiTest
         $this->json('get', '/sharp/api/list/person?paginated=1')
             ->assertStatus(200)
             ->assertJsonFragment(["data" => [
-                "items" => [
-                    ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
-                    ["id" => 2, "name" => "Mary <b>Wayne</b>", "age" => 26],
-                ], "page" => 1, "totalCount" => 20, "pageSize" => 2
+                "list" => [
+                    "items" => [
+                        ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
+                        ["id" => 2, "name" => "Mary <b>Wayne</b>", "age" => 26],
+                    ], 
+                    "page" => 1, 
+                    "totalCount" => 20, 
+                    "pageSize" => 2
+                ]
             ]]);
     }
 
@@ -51,11 +60,15 @@ class EntityListControllerTest extends BaseApiTest
 
         $this->json('get', '/sharp/api/list/person?search=john')
             ->assertStatus(200)
-            ->assertJsonFragment(["data" => [
-                "items" => [
-                    ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
+            ->assertJsonFragment([
+                "data" => [
+                    "list" => [
+                        "items" => [
+                            ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
+                        ]
+                    ]
                 ]
-            ]]);
+            ]);
     }
 
     /** @test */
@@ -65,7 +78,7 @@ class EntityListControllerTest extends BaseApiTest
 
         $result = $this->json('get', '/sharp/api/list/person');
 
-        $this->assertArrayNotHasKey("job", $result->json()["data"]["items"][0]);
+        $this->assertArrayNotHasKey("job", $result->json()["data"]["list"]["items"][0]);
     }
 
     /** @test */
