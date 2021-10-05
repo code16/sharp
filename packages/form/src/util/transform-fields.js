@@ -13,7 +13,9 @@ function serializeData(data, fields) {
         const field = fields[fieldKey];
         return {
             ...res,
-            [fieldKey]: serializeValue(field.type, value),
+            [fieldKey]: field
+                ? serializeValue(field.type, value)
+                : null,
         }
     }, {});
 }
