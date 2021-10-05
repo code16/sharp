@@ -34,7 +34,7 @@ describe('localize-editor', ()=>{
         wrapper.setProps({
             localized: true
         });
-        expect(wrapper.vm.localizedText).toEqual('');
+        expect(wrapper.vm.localizedText).toEqual(null);
         wrapper.setData({
             value: { text: { en:'english text' } }
         });
