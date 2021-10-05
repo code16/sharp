@@ -90,10 +90,7 @@ abstract class Command
         return true;
     }
 
-    /**
-     * @return array|bool
-     */
-    public function getGlobalAuthorization()
+    public function getGlobalAuthorization(): array|bool
     {
         return $this->authorize();
     }
@@ -117,12 +114,26 @@ abstract class Command
     {
     }
 
-    public function form(): array
+    /**
+     * Configure the command (optional).
+     */
+    public function buildCommandConfig(): void
+    {
+    }
+
+    public final function commandConfig(): array
+    {
+        return tap([], function(&$config) {
+            $this->appendGlobalMessageToConfig($config);
+        });
+    }
+
+    public final function form(): array
     {
         return $this->fields();
     }
 
-    public function formLayout(): ?array
+    public final function formLayout(): ?array
     {
         if(!$this->fields) {
             return null;
@@ -140,22 +151,22 @@ abstract class Command
         return $column->fieldsToArray()["fields"];
     }
 
-    public function setGroupIndex($index): void
+    public final function setGroupIndex($index): void
     {
         $this->groupIndex = $index;
     }
 
-    public function setCommandKey(string $key): void
+    public final function setCommandKey(string $key): void
     {
         $this->commandKey = $key;
     }
 
-    public function groupIndex(): int
+    public final function groupIndex(): int
     {
         return $this->groupIndex;
     }
 
-    public function getCommandKey(): string
+    public final function getCommandKey(): string
     {
         return $this->commandKey ?? class_basename($this::class);
     }

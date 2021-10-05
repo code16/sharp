@@ -48,7 +48,6 @@ abstract class SharpShow
                 array_merge(
                     $this->breadcrumbAttribute ? [$this->breadcrumbAttribute] : [],
                     $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
-//                    $this->globalMessageHtmlField ? [$this->globalMessageHtmlField->key] : [],
                     $this->getDataKeys()
                 )
             )
