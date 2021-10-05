@@ -3,7 +3,7 @@
         {{ $item->label }}
     </x-sharp::menu-separator>
 @else
-    <sharp-nav-item :current="{{ json_encode($isCurrent) }}" link="{{ $item->url }}" @if($item->type === 'url') :new-window="{{ $item->newWindow ?: 0 }}" @endif>
+    <sharp-nav-item :current="{{ json_encode($isCurrent) }}" href="{{ $item->url }}">
         <div class="row flex-nowrap gx-3">
             @if($item->icon)
                 <div class="col-auto">
