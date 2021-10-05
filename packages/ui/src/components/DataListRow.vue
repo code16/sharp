@@ -73,10 +73,13 @@
         },
         methods: {
             colClasses(column) {
+                const { size, sizeXS, hideOnXS } = column;
                 return {
-                    [`col-${column.sizeXS}`]: true,
-                    [`col-md-${column.size}`]: true,
-                    'd-none d-md-block': column.hideOnXS,
+                    'col': sizeXS === 'fill' && !hideOnXS,
+                    [`col-${sizeXS}`]: sizeXS !== 'fill' && !hideOnXS,
+                    'col-md': size === 'fill',
+                    [`col-md-${size}`]: size !== 'fill',
+                    'd-none d-md-block': hideOnXS,
                 };
             },
             toggleHighlight(highlight) {
