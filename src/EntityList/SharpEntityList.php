@@ -9,9 +9,11 @@ use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
 use Code16\Sharp\Exceptions\EntityList\SharpEntityListLayoutException;
 use Code16\Sharp\Utils\Filters\HandleFilters;
+use Code16\Sharp\Utils\Traits\HandleGlobalMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 abstract class SharpEntityList
 {
@@ -19,6 +21,7 @@ abstract class SharpEntityList
         HandleEntityState,
         HandleEntityCommands,
         HandleInstanceCommands,
+        HandleGlobalMessage,
         WithCustomTransformers;
 
     protected array $containers = [];
@@ -105,6 +108,7 @@ abstract class SharpEntityList
     public final function data($items = null): array
     {
         $items = $items ?: $this->getListData();
+        $page = $totalCount = $pageSize = null;
 
         if($items instanceof LengthAwarePaginator) {
             $page = $items->currentPage();
@@ -132,14 +136,20 @@ abstract class SharpEntityList
             })
             ->toArray();
 
-        return collect([
-            "items" => $items ?? [],
-            "page" => $page ?? null,
-            "totalCount" => $totalCount ?? null,
-            "pageSize" => $pageSize ?? null,
-        ])
-            ->filter(function($value) {
-                return $value !== null;
+        return collect(
+            [
+                "list" => collect(["items" => $items ?? []])
+                    ->when($page !== null, function(Collection $collection) use($page, $totalCount, $pageSize) {
+                        $collection["page"] = $page;
+                        $collection["totalCount"] = $totalCount;
+                        $collection["pageSize"] = $pageSize;
+                        return $collection;
+                    })
+                    ->toArray()
+            ])
+            ->when($this->globalMessageHtmlField !== null, function(Collection $collection) {
+                $collection[$this->globalMessageHtmlField->key] = $this->getGlobalMessageData();
+                return $collection;
             })
             ->toArray();
     }
@@ -157,12 +167,24 @@ abstract class SharpEntityList
             "hasShowPage" => $hasShowPage,
         ];
         
-        $this->appendFiltersToConfig($config);
-        $this->appendEntityStateToConfig($config);
-        $this->appendInstanceCommandsToConfig($config);
-        $this->appendEntityCommandsToConfig($config);
+        return tap($config, function(&$config) {
+            $this->appendFiltersToConfig($config);
+            $this->appendEntityStateToConfig($config);
+            $this->appendInstanceCommandsToConfig($config);
+            $this->appendEntityCommandsToConfig($config);
+            $this->appendGlobalMessageToConfig($config);
+        });
+    }
 
-        return $config;
+    public final function listFields(): array
+    {
+        if($this->globalMessageHtmlField) {
+            return [
+                $this->globalMessageHtmlField->key => $this->globalMessageHtmlField->toArray()
+            ];
+        }
+        
+        return [];
     }
 
     public function configureInstanceIdAttribute(string $instanceIdAttribute): self
@@ -278,6 +300,14 @@ abstract class SharpEntityList
      * Return all instance commands in an array of class names or instances
      */
     function getInstanceCommands(): ?array
+    {
+        return null;
+    }
+
+    /**
+     * Return global message data if needed.
+     */
+    function getGlobalMessageData(): ?array
     {
         return null;
     }

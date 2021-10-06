@@ -73,7 +73,9 @@ describe('EntityList', () => {
             layout: [],
             containers: {},
             data: {
-                totalCount: 0,
+                list: {
+                    totalCount: 0,
+                },
             },
             config: {
                 commands: {}
@@ -223,7 +225,9 @@ describe('EntityList', () => {
                 config: { reorderable: true, },
                 authorizations: { update: true },
                 data: {
-                    items: [{ id:1 }, { id: 2 }]
+                    list: {
+                        items: [{ id:1 }, { id: 2 }]
+                    },
                 }
             };
 
@@ -241,7 +245,9 @@ describe('EntityList', () => {
             expect(wrapper.vm.canReorder).toBe(false);
 
             wrapper.vm.data = {
-                items: [{ id:1 }]
+                list: {
+                    items: [{ id:1 }]
+                },
             }
             expect(wrapper.vm.canReorder).toBe(false);
 
@@ -274,7 +280,9 @@ describe('EntityList', () => {
             const wrapper = createWrapper();
             wrapper.setData({
                 data: {
-                    items: [{ id:1 }]
+                    list: {
+                        items: [{ id:1 }]
+                    },
                 }
             });
             expect(wrapper.vm.items).toEqual([{ id:1 }]);
@@ -311,15 +319,19 @@ describe('EntityList', () => {
             const wrapper = createWrapper();
             wrapper.setData({
                 data: {
-                    items: [],
-                    totalCount: 10
+                    list: {
+                        items: [],
+                        totalCount: 10
+                    },
                 }
             });
             expect(wrapper.vm.totalCount).toBe(10);
             wrapper.setData({
                 data: {
-                    items: [1, 2, 3],
-                    totalCount: null,
+                    list: {
+                        items: [1, 2, 3],
+                        totalCount: null,
+                    },
                 }
             });
             expect(wrapper.vm.totalCount).toBe(3);
@@ -329,7 +341,9 @@ describe('EntityList', () => {
             const wrapper = createWrapper();
             wrapper.setData({
                 data: {
-                    pageSize: 5
+                    list: {
+                        pageSize: 5
+                    }
                 }
             });
             expect(wrapper.vm.pageSize).toBe(5);
@@ -376,7 +390,9 @@ describe('EntityList', () => {
             const items = [{ id:1 }];
             wrapper.setData({
                 data: {
-                    items
+                    list: {
+                        items
+                    },
                 }
             });
             wrapper.vm.handleReorderButtonClicked();
@@ -400,7 +416,7 @@ describe('EntityList', () => {
             });
             await wrapper.vm.handleReorderSubmitted();
             expect(wrapper.vm.$store.dispatch).toHaveBeenCalledWith('entity-list/reorder', { instances:['id'] });
-            expect(wrapper.vm.data.items).toEqual([{ id:1 }]);
+            expect(wrapper.vm.data.list.items).toEqual([{ id:1 }]);
             expect(wrapper.vm.reorderedItems).toEqual(null);
             expect(wrapper.vm.reorderActive).toEqual(false);
         });

@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Tests\Unit\EntityList;
 
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
+use Code16\Sharp\Show\Fields\SharpShowHtmlField;
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Tests\Unit\EntityList\Utils\SharpEntityDefaultTestList;
 use Illuminate\Contracts\Support\Arrayable;
@@ -130,7 +131,7 @@ class SharpEntityListTest extends SharpTestCase
     /** @test */
     function we_can_get_list_data()
     {
-        $form = new class extends SharpEntityDefaultTestList {
+        $list = new class extends SharpEntityDefaultTestList {
             function getListData(): array
             {
                 return [
@@ -157,14 +158,14 @@ class SharpEntityListTest extends SharpTestCase
                     ["name" => "Mary Wayne", "age" => 26],
                 ]
             ], 
-            $form->data()
+            $list->data()["list"]
         );
     }
 
     /** @test */
     function we_can_get_paginated_list_data()
     {
-        $form = new class extends SharpEntityDefaultTestList {
+        $list = new class extends SharpEntityDefaultTestList {
             function getListData(): array|Arrayable
             {
                 $data = [
@@ -191,9 +192,12 @@ class SharpEntityListTest extends SharpTestCase
                 "items" => [
                     ["name" => "John Wayne", "age" => 22],
                     ["name" => "Mary Wayne", "age" => 26],
-                ], "page" => 1, "pageSize" => 2, "totalCount" => 10
+                ], 
+                "page" => 1, 
+                "pageSize" => 2, 
+                "totalCount" => 10
             ], 
-            $form->data()
+            $list->data()["list"]
         );
     }
 
@@ -219,9 +223,52 @@ class SharpEntityListTest extends SharpTestCase
                 "instanceIdAttribute" => "id",
                 "multiformAttribute" => null,
                 "defaultSort" => null,
-                "defaultSortDir" => null
+                "defaultSortDir" => null,
             ], 
             $list->listConfig()
+        );
+    }
+
+    /** @test */
+    function we_can_configure_a_global_message_field_without_data()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig(): void
+            {
+                $this->setGlobalMessage('template', 'test-key');
+            }
+        };
+
+        $list->buildListConfig();
+
+        $this->assertEquals("test-key", $list->listConfig()["globalMessage"]["fieldKey"]);
+        $this->assertEquals(
+            SharpShowHtmlField::make("test-key")->setInlineTemplate("template")->toArray(), 
+            $list->listFields()["test-key"]
+        );
+    }
+
+    /** @test */
+    function we_can_configure_a_global_message_field_with_template_data()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig(): void
+            {
+                $this->setGlobalMessage("Hello {{name}}", "test-key");
+            }
+            function getGlobalMessageData(): ?array
+            {
+                return [
+                    "name" => "Bob"
+                ];
+            }
+        };
+
+        $list->buildListConfig();
+        
+        $this->assertEquals(
+            ["name" => "Bob"], 
+            $list->data()["test-key"]
         );
     }
 }

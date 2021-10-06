@@ -2,7 +2,9 @@
 
 namespace Code16\Sharp\Tests\Unit\Show;
 
+use App\Spaceship;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
+use Code16\Sharp\Show\Fields\SharpShowHtmlField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
@@ -117,9 +119,58 @@ class SharpShowTest extends SharpTestCase
 
         $sharpShow->buildShowConfig();
 
-        $this->assertEquals(
-            ["multiformAttribute" => "role"], 
+        $this->assertArraySubset(
+            [
+                "multiformAttribute" => "role",
+            ], 
             $sharpShow->showConfig(1)
+        );
+    }
+
+    /** @test */
+    function we_can_declare_a_global_message_field()
+    {
+        $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
+        {
+            public function buildShowConfig(): void
+            {
+                $this->setGlobalMessage("template", "test-key");
+            }
+        };
+
+        $sharpShow->buildShowConfig();
+
+        $this->assertEquals("test-key", $sharpShow->showConfig(1)["globalMessage"]["fieldKey"]);
+        $this->assertEquals(
+            SharpShowHtmlField::make("test-key")->setInlineTemplate("template")->toArray(),
+            $sharpShow->fields()["test-key"]
+        );
+    }
+
+    /** @test */
+    function we_can_associate_data_to_a_global_message_field()
+    {
+        $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
+        {
+            public function buildShowConfig(): void
+            {
+                $this->setGlobalMessage("Hello {{name}}", "test-key");
+            }
+            function find($id): array
+            {
+                return [
+                    "test-key" => [
+                        "name" => "Bob"
+                    ]
+                ];
+            }
+        };
+
+        $sharpShow->buildShowConfig();
+
+        $this->assertEquals(
+            ["name" => "Bob"],
+            $sharpShow->instance(1)["test-key"]
         );
     }
 
@@ -130,9 +181,8 @@ class SharpShowTest extends SharpTestCase
         {
         };
 
-        $this->assertEquals(
+        $this->assertArraySubset(
             [
-                "multiformAttribute" => null,
                 "isSingle" => true
             ], 
             $sharpShow->showConfig(null)

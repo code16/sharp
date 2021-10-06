@@ -4,6 +4,7 @@ namespace Code16\Sharp\Utils\Fields;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Show\Fields\SharpShowField;
+use Illuminate\Support\Collection;
 
 trait HandleFields
 {
@@ -26,6 +27,9 @@ trait HandleFields
         $this->checkFormIsBuilt();
 
         return collect($this->fieldsContainer()->getFields())
+            ->when($this->globalMessageHtmlField, function(Collection $collection) {
+                return $collection->push($this->globalMessageHtmlField);
+            })
             ->map->toArray()
             ->keyBy("key")
             ->all();

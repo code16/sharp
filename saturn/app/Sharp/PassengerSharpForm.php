@@ -51,13 +51,21 @@ class PassengerSharpForm extends SharpForm
                         return [
                             "id" => $travel->id,
                             "label" => $travel->departure_date->format("Y-m-d (H:i)")
-                                . " — " . $travel->destination
-                        ];
-                    })->all()
+                                . " — " . $travel->destination];
+                        })
+                    ->all()
                 )
                     ->setLabel("Travel")
                     ->setDisplayAsList()
             );
+    }
+    
+    public function buildFormConfig(): void
+    {
+        $this->setGlobalMessage(
+            '<div class="alert alert-danger">Careful: editing a passenger in category {{category}} could lead to problems.</div>',
+            'html_help'
+        );
     }
 
     function buildFormLayout(FormLayout $formLayout): void
@@ -75,7 +83,13 @@ class PassengerSharpForm extends SharpForm
 
     function find($id): array
     {
-        return $this->transform(Passenger::with("travel")->findOrFail($id));
+        return $this
+            ->setCustomTransformer('html_help', function($value, Passenger $passenger) {
+                return [
+                    "category" => $passenger->travel_category
+                ];
+            })
+            ->transform(Passenger::with("travel")->findOrFail($id));
     }
 
     function update($id, array $data)

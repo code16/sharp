@@ -8,6 +8,14 @@
 
         <template v-if="ready">
             <div v-show="visible">
+                <template v-if="config.globalMessage">
+                    <GlobalMessage
+                        :options="config.globalMessage"
+                        :data="data"
+                        :fields="fields"
+                    />
+                </template>
+
                 <DataList
                     :items="items"
                     :columns="columns"
@@ -94,7 +102,8 @@
         Modal,
         ModalSelect,
         DropdownItem,
-        DropdownSeparator
+        DropdownSeparator,
+        GlobalMessage,
     } from 'sharp-ui';
 
     import {
@@ -124,6 +133,7 @@
 
             CommandFormModal,
             CommandViewPanel,
+            GlobalMessage,
 
             DropdownItem,
             DropdownSeparator,
@@ -176,6 +186,7 @@
                 containers: null,
                 layout: null,
                 data: null,
+                fields: null,
                 config: null,
                 authorizations: null,
                 forms: null,
@@ -290,7 +301,7 @@
                 return this.showReorderButton
                     && this.config.reorderable
                     && this.authorizations.update
-                    && this.data.items.length > 1;
+                    && this.items.length > 1;
             },
             canSearch() {
                 return this.showSearchField && !!this.config.searchable;
@@ -300,7 +311,7 @@
              * Data list props
              */
             items() {
-                return this.data?.items ?? [];
+                return this.data?.list.items ?? [];
             },
             columns() {
                 return this.layout.map(columnLayout => ({
@@ -312,10 +323,10 @@
                 return !!this.config.paginated;
             },
             totalCount() {
-                return this.data.totalCount || this.items.length;
+                return this.data?.list.totalCount ?? this.items.length;
             },
             pageSize() {
-                return this.data.pageSize;
+                return this.data?.list.pageSize;
             },
 
             hasActionsColumn() {
@@ -362,13 +373,13 @@
             },
             handleReorderButtonClicked() {
                 this.reorderActive = !this.reorderActive;
-                this.reorderedItems = this.reorderActive ? [ ...this.data.items ] : null;
+                this.reorderedItems = this.reorderActive ? [...this.items] : null;
             },
             handleReorderSubmitted() {
                 return this.storeDispatch('reorder', {
                     instances: this.reorderedItems.map(item => this.instanceId(item))
                 }).then(() => {
-                    this.$set(this.data, 'items', [ ...this.reorderedItems ]);
+                    this.data.list.items = [...this.reorderedItems];
                     this.reorderedItems = null;
                     this.reorderActive = false;
                 });
@@ -580,7 +591,7 @@
             },
             handleRefreshCommand(data) {
                 const findInstance = (list, instance) => list.find(item => this.instanceId(instance) === this.instanceId(item));
-                this.data.items = this.data.items.map(item =>
+                this.data.list.items = this.items.map(item =>
                     findInstance(data.items, item) || item
                 );
             },
@@ -603,18 +614,20 @@
             /**
              * Data
              */
-            mount({ containers, layout, data={}, config={}, authorizations, forms }) {
+            mount({ containers, layout, data, fields, config, authorizations, forms }) {
                 this.containers = containers;
                 this.layout = layout;
-                this.data = data;
-                this.config = config;
+                this.data = data ?? {};
+                this.fields = fields ?? {};
+                this.config = {
+                    ...config,
+                    commands: config?.commands ?? {},
+                    filters: config?.filters ?? [],
+                };
                 this.authorizations = authorizations;
                 this.forms = forms;
 
-                this.config.commands = config.commands || {};
-                this.config.filters = config.filters || [];
-
-                this.page = this.data.page;
+                this.page = this.data.list.page;
                 !this.sortDir && (this.sortDir = this.config.defaultSortDir);
                 !this.sortedBy && (this.sortedBy = this.config.defaultSort);
             },

@@ -8,6 +8,7 @@ use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Utils\Fields\HandleFields;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
+use Code16\Sharp\Utils\Traits\HandleGlobalMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpShow
@@ -16,6 +17,7 @@ abstract class SharpShow
         HandleFields,
         HandleEntityState,
         HandleInstanceCommands,
+        HandleGlobalMessage,
         HandleCustomBreadcrumb;
 
     protected ?ShowLayout $showLayout = null;
@@ -60,6 +62,7 @@ abstract class SharpShow
             $this->appendBreadcrumbCustomLabelAttribute($config);
             $this->appendEntityStateToConfig($config, $instanceId);
             $this->appendInstanceCommandsToConfig($config, $instanceId);
+            $this->appendGlobalMessageToConfig($config);
         });
     }
 

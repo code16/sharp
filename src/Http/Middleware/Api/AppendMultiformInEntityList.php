@@ -34,7 +34,7 @@ class AppendMultiformInEntityList
 
         $subFormKeys = collect($this->getMultiformKeys())
             ->map(function($value) use($instanceIdAttribute, $multiformAttribute, $jsonResponse) {
-                $instanceIds = collect($jsonResponse->getData()->data->items)
+                $instanceIds = collect($jsonResponse->getData()->data->list->items)
                     ->where($multiformAttribute, $value)
                     ->pluck($instanceIdAttribute);
 

@@ -8,12 +8,14 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFormFields;
 use Code16\Sharp\Utils\SharpNotification;
 use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
+use Code16\Sharp\Utils\Traits\HandleGlobalMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpForm
 {
     use WithCustomTransformers, 
         HandleFormFields,
+        HandleGlobalMessage,
         HandleCustomBreadcrumb;
 
     protected ?FormLayout $formLayout = null;
@@ -37,6 +39,7 @@ abstract class SharpForm
             ],
             function(&$config) {
                 $this->appendBreadcrumbCustomLabelAttribute($config);
+                $this->appendGlobalMessageToConfig($config);
             }
         );
     }
@@ -138,8 +141,6 @@ abstract class SharpForm
 
     /**
      * Pack new Model data as JSON.
-     *
-     * @return array
      */
     public function create(): array
     {
@@ -170,9 +171,6 @@ abstract class SharpForm
 
     /**
      * Display a notification next time entity list is shown.
-     *
-     * @param string $title
-     * @return SharpNotification
      */
     public function notify(string $title): SharpNotification
     {
