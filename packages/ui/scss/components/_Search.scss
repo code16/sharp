@@ -12,7 +12,7 @@
 
   .input-group {
     border-radius: $input-border-radius-sm;
-    background: white;
+    background: var(--theme-bg);
   }
 
   &__clear {

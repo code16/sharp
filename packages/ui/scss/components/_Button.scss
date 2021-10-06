@@ -77,7 +77,7 @@
     $disabled-color: var(--color)
   );
 
-  color: hsla(var(--primary-h), var(--primary-s), var(--color-l), .875);
+  color: var(--theme-color, hsla(var(--primary-h), var(--primary-s), var(--color-l), .875));
 
   &:focus {
     box-shadow: 0 0 0 $btn-focus-width hsla(var(--primary-h), var(--primary-s), calc(var(--color-l) + clamp(-15%, var(--color-l), 15%)), .5)!important;
@@ -94,8 +94,8 @@
     $active-color: hsl(0, 0%, calc((var(--primary-l) - var(--l-threshold)) * -100000))
   );
 
-  color: var(--primary-hsl);
-  border-color: hsla(var(--primary-h), var(--primary-s), var(--primary-l), .375);
+  color: var(--theme-color, var(--primary-hsl));
+  border-color: var(--theme-border-color, hsla(var(--primary-h), var(--primary-s), var(--primary-l), .375));
 
   &:focus {
     box-shadow: 0 0 0 $btn-focus-width hsla(var(--primary-h), var(--primary-s), var(--primary-l), .5)!important;

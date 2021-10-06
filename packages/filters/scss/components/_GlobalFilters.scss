@@ -26,7 +26,7 @@
     }
   }
   .multiselect {
-    color: hsl(var(--primary-h), var(--primary-s), 30%);
+    color: var(--theme-color, hsl(var(--primary-h), var(--primary-s), 30%));
     padding: .875rem 1.25rem;
     padding-right: $form-select-indicator-padding;
     min-height: 4rem;

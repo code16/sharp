@@ -3,17 +3,17 @@
 .SharpLeftNav {
 
   --item-color-l: 30%;
-  $item-color: hsl(var(--primary-h), 10%, 20%);
+  $item-color: var(--theme-color, hsl(var(--primary-h), 10%, 20%));
   $item-hover-bg: hsla(var(--primary-h), var(--primary-s), var(--item-color-l), .05);
   $item-hover-color: inherit;
   $item-active-bg: hsla(var(--primary-h), var(--primary-s), var(--item-color-l), .1);
-  $item-active-color: hsl(var(--primary-h), var(--primary-s), var(--item-color-l));
-  $item-expanded-color: hsl(var(--primary-h), var(--primary-s), 25%);
+  $item-active-color: var(--theme-color, hsl(var(--primary-h), var(--primary-s), var(--item-color-l)));
+  $item-expanded-color: var(--theme-color, hsl(var(--primary-h), var(--primary-s), 25%));
 
   position: fixed;
   top: 0;
   height: 100vh;
-  background-color: $color__white;
+  background-color: var(--theme-bg);
   //border-right: 1px solid $color__gray-1;
   max-height: 100vh;
 

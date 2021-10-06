@@ -14,6 +14,8 @@
 @import 'mixins/close-button';
 
 @import "root";
+@import "themes/light";
+@import "themes/dark";
 @import "typography";
 
 @import '~sharp-ui/scss/ui';
@@ -32,7 +34,7 @@
 
 
 body {
-  background-color: $body-bg-hsl;
+  background-color: var(--body-bg);
 }
 
 input[type="number"].hide-controls {

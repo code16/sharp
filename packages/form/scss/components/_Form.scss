@@ -52,7 +52,7 @@
           &.stuck {
             z-index: $zindex-field-header-sticky;
             box-shadow: $box-shadow-sm;
-            background-color: white;
+            background-color: var(--theme-bg);
             border-bottom: 1px solid $border-color;
           }
         }

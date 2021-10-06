@@ -11,8 +11,8 @@
     padding-bottom: 3rem;
 
     .tab-pane {
-      min-height: #{'max(30vh, 200px)'};
-      background-color: white;
+      min-height: calc(max(30vh, 200px));
+      background-color: var(--theme-bg);
       padding: 1rem 1.25rem;
       padding-bottom: 3rem;
       margin-top: 1.5rem;

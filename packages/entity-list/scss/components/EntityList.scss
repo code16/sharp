@@ -2,7 +2,7 @@
 .SharpEntityList {
   .SharpDataList__row-append {
     width: 7.5rem;
-    background: white;
+    background: var(--theme-bg);
   }
 
   &__actions {

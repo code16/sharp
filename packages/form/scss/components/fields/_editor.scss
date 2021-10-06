@@ -7,7 +7,7 @@
   .card-header {
     border-top-right-radius: $card-border-radius;
     border-top-left-radius: $card-border-radius;
-    background: white;
+    background: var(--theme-bg);
     padding: .75rem;
   }
 

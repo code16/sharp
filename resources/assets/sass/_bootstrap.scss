@@ -50,6 +50,10 @@ $bv-enable-tooltip-variants: false;
   color: hsl(var(--primary-h), var(--primary-s), 20%);
 }
 
+.btn-close {
+  background-image: var(--btn-close-bg-image, #{escape-svg($btn-close-bg)});
+}
+
 .close {
   @extend .btn-close;
   color: transparent!important;
@@ -96,6 +100,9 @@ $bv-enable-tooltip-variants: false;
   border-color: $input-group-addon-border-color;
 }
 
+.input-group-text {
+  background-color: var(--theme-bg);
+}
 
 .btn,
 .nav-pills .nav-link,
@@ -128,6 +135,7 @@ $bv-enable-tooltip-variants: false;
 }
 
 .dropdown-menu {
+  background-color: var(--theme-bg);
   box-shadow: $box-shadow;
 }
 

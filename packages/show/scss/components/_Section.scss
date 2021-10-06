@@ -31,7 +31,7 @@
 
   &--layout-card {
     .ShowSection__content {
-      background: white;
+      background-color: var(--theme-bg);
       padding: 1rem 1.25rem;
     }
   }
