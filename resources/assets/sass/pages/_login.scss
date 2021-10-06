@@ -1,8 +1,8 @@
 .login {
   background: linear-gradient(
       45deg,
-      hsl(var(--bs-primary-h), var(--bs-primary-s), var(--accent-bg-l)),
-      hsl(var(--bs-primary-h), var(--bs-primary-s), var(--bs-primary-l)) 80%
+      hsl(var(--primary-h), var(--primary-s), var(--accent-bg-l)),
+      hsl(var(--primary-h), var(--primary-s), var(--primary-l)) 80%
   );
 
   &__content {
@@ -41,7 +41,7 @@
     width: var(--width);
     height: calc(var(--width) * 0.13);
     fill: currentColor;
-    color: hsl(var(--bs-primary-h), var(--bs-primary-s), calc(var(--bs-primary-l) + 12.5%));
+    color: hsl(var(--primary-h), var(--primary-s), calc(var(--primary-l) + 12.5%));
   }
 
   .card {

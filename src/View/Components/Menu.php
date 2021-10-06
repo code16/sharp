@@ -36,7 +36,7 @@ class Menu extends Component
     public function render()
     {
         return view('sharp::components.menu', [
-            'component' => $this,
+            'self' => $this,
         ]);
     }
 }

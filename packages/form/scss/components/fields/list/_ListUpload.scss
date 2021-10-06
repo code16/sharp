@@ -53,7 +53,7 @@
 
   &:focus-within,
   &--active {
-    border: 1px solid hsl(var(--bs-primary-h), var(--bs-primary-s), 30%);
+    border: 1px solid hsl(var(--primary-h), var(--primary-s), 30%);
     border-top-width: 1px!important;
     box-shadow: $box-shadow;
     &:not(:first-child) {

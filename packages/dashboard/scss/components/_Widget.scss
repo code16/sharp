@@ -7,7 +7,7 @@
     text-decoration: none;
     transition: $btn-transition;
     &:hover {
-      border-color: hsla(var(--bs-primary-h), var(--bs-primary-s), 30%, .75);
+      border-color: hsla(var(--primary-h), var(--primary-s), 30%, .75);
     }
   }
 

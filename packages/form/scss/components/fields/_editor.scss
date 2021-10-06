@@ -81,7 +81,7 @@
       margin-bottom: 1rem;
       transition: border .125s ease-in-out, box-shadow .125s ease-in-out;
       &.ProseMirror-selectednode {
-        border-color: var(--bs-primary);
+        border-color: var(--primary);
         box-shadow: $box-shadow;
       }
     }
@@ -162,7 +162,7 @@
 
     .btn-light {
       &:not(:hover):not(:focus):not(.active):not(.trix-active) {
-        //color: hsla(var(--bs-primary-h), var(--bs-primary-s), 20%, .75);
+        //color: hsla(var(--primary-h), var(--primary-s), 20%, .75);
         color: rgba(0,0,0,.675);
       }
     }

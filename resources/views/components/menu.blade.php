@@ -1,27 +1,29 @@
 @php
-    /** @var \Code16\Sharp\View\Components\Menu $component */
+/**
+ * @var \Code16\Sharp\View\Components\Menu $self
+ */
 @endphp
 
 <sharp-left-nav
     class="SharpLeftNav"
-    current="{{ $component->currentEntity }}"
-    title="{{ $component->title }}"
-    :items="{{ json_encode($component->items) }}"
-    :has-global-filters="{{ json_encode($component->hasGlobalFilters) }}"
+    current="{{ $currentEntity }}"
+    title="{{ $title }}"
+    :items="{{ json_encode($items) }}"
+    :has-global-filters="{{ json_encode($hasGlobalFilters) }}"
 >
     <template v-slot:title>
         @if($icon = config('sharp.theme.logo_urls.menu'))
-            <img src="{{ url($icon) }}" alt="{{ $component->title }}" width="150" class="w-auto h-auto" style="max-height: 50px;">
+            <img src="{{ url($icon) }}" alt="{{ $title }}" width="150" class="w-auto h-auto" style="max-height: 50px;">
         @elseif(file_exists(public_path($icon = 'sharp-assets/menu-icon.png')))
-            <img src="{{ asset($icon) }}?{{ filemtime(public_path($icon)) }}" alt="{{ $component->title }}" width="150" class="w-auto h-auto" style="max-height: 50px;">
+            <img src="{{ asset($icon) }}?{{ filemtime(public_path($icon)) }}" alt="{{ $title }}" width="150" class="w-auto h-auto" style="max-height: 50px;">
         @endif
     </template>
     <ul role="menubar" class="SharpLeftNav__list" aria-hidden="false" v-cloak>
         <sharp-nav-item disabled>
             <div class="row gx-2 flex-nowrap">
                 <div class="col" style="min-width: 0">
-                    <div class="text-truncate" title="{{ $component->username }}">
-                        {{ $component->username }}
+                    <div class="text-truncate" title="{{ $username }}">
+                        {{ $username }}
                     </div>
                 </div>
                 <div class="col-auto">
@@ -30,7 +32,7 @@
             </div>
         </sharp-nav-item>
 
-        @foreach($component->items as $menuItem)
+        @foreach($items as $menuItem)
             @if($menuItem->type === 'category')
                 <sharp-collapsible-item
                     label="{{ $menuItem->label }}"

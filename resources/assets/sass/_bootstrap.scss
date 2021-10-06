@@ -45,9 +45,9 @@ $bv-enable-tooltip-variants: false;
 
 
 .alert-primary {
-  background-color: hsl(var(--bs-primary-h), var(--bs-primary-s), 92.5%);
-  border-color: hsla(var(--bs-primary-h), var(--bs-primary-s), 20%, 0.1);
-  color: hsl(var(--bs-primary-h), var(--bs-primary-s), 20%);
+  background-color: hsl(var(--primary-h), var(--primary-s), 92.5%);
+  border-color: hsla(var(--primary-h), var(--primary-s), 20%, 0.1);
+  color: hsl(var(--primary-h), var(--primary-s), 20%);
 }
 
 .close {

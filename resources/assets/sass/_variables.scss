@@ -14,7 +14,7 @@ $text-03: #8c9ba5;
 $brand-01-light: #68829E;
 
 
-$ui-primary-color: hsl(var(--bs-primary-h), var(--bs-primary-s), 20%);
+$ui-primary-color: hsl(var(--primary-h), var(--primary-s), 20%);
 $ui-font-size: .9375rem;
 $ui-title-font-weight: 600;
 
@@ -26,7 +26,7 @@ $primary: #004c9b;
 $info: #5aaafa;
 $success: #3dc322;
 
-$body-bg-hsl: hsl(var(--bs-primary-h), 20%, 95%); // we're not using $body-bg because it breaks bootstrap function
+$body-bg-hsl: hsl(var(--primary-h), 20%, 95%); // we're not using $body-bg because it breaks bootstrap function
 $body-color: #152935;
 
 $enable-negative-margins: true;
@@ -69,10 +69,10 @@ $dropdown-border-color: rgba(0,0,0,.075);
 
 $dropdown-item-padding-y: .375rem;
 $dropdown-link-color: $ui-primary-color;
-$dropdown-link-disabled-color: hsla(var(--bs-primary-h), var(--bs-primary-s), 20%, .65);
+$dropdown-link-disabled-color: hsla(var(--primary-h), var(--primary-s), 20%, .65);
 
-$link-color: hsl(var(--bs-primary-h), var(--bs-primary-s), 30%);
-$link-hover-color: hsl(var(--bs-primary-h), var(--bs-primary-s), 15%);
+$link-color: hsl(var(--primary-h), var(--primary-s), 30%);
+$link-hover-color: hsl(var(--primary-h), var(--primary-s), 15%);
 $link-decoration: underline;
 
 $input-font-size: .875rem;
@@ -85,8 +85,8 @@ $label-line-height: 1.4;
 $form-label-color: $ui-primary-color;
 $form-label-font-size: .875rem;
 
-$nav-link-color: var(--bs-primary-hsl);
-$nav-link-hover-color: hsl(var(--bs-primary-h), var(--bs-primary-s), calc(var(--bs-primary-l) + 10%));
+$nav-link-color: var(--primary-hsl);
+$nav-link-hover-color: hsl(var(--primary-h), var(--primary-s), calc(var(--primary-l) + 10%));
 
 $nav-pills-link-active-bg: var(--component-active-bg);
 $nav-pills-link-active-color: var(--component-active-color);

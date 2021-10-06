@@ -19,14 +19,14 @@
 
   .SharpFilterControl {
     width: 100%;
-    border-bottom: 1px solid hsla(var(--bs-primary-h), var(--bs-primary-s), 30%, .375);
-    border-left: $border-left-width solid hsla(var(--bs-primary-h), var(--bs-primary-s), 40%, .5);
+    border-bottom: 1px solid hsla(var(--primary-h), var(--primary-s), 30%, .375);
+    border-left: $border-left-width solid hsla(var(--primary-h), var(--primary-s), 40%, .5);
     &__text {
       display: none;
     }
   }
   .multiselect {
-    color: hsl(var(--bs-primary-h), var(--bs-primary-s), 30%);
+    color: hsl(var(--primary-h), var(--primary-s), 30%);
     padding: .875rem 1.25rem;
     padding-right: $form-select-indicator-padding;
     min-height: 4rem;

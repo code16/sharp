@@ -101,13 +101,13 @@
     }
 
     &:hover:not(.SharpDataList__row--header):not(.SharpDataList__row--disabled) {
-      box-shadow: inset 5px 0 0 hsla(var(--bs-primary-h), var(--bs-primary-s), 40%, .5);
+      box-shadow: inset 5px 0 0 hsla(var(--primary-h), var(--primary-s), 40%, .5);
     }
 
     &--highlight {
-      box-shadow: inset 3px 0 0 hsla(var(--bs-primary-h), var(--bs-primary-s), 40%, .25);
+      box-shadow: inset 3px 0 0 hsla(var(--primary-h), var(--primary-s), 40%, .25);
       .modal-open & {
-        box-shadow: inset 5px 0 0 hsla(var(--bs-primary-h), var(--bs-primary-s), 40%, .5);
+        box-shadow: inset 5px 0 0 hsla(var(--primary-h), var(--primary-s), 40%, .5);
       }
     }
 

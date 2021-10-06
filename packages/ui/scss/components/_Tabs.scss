@@ -3,7 +3,7 @@
     position: relative;
 
     .nav-link {
-      border: 1px solid hsla(var(--bs-primary-h), var(--bs-primary-s), var(--bs-primary-l), .375);
+      border: 1px solid hsla(var(--primary-h), var(--primary-s), var(--primary-l), .375);
       &:not(.active) {
         background: white;
       }

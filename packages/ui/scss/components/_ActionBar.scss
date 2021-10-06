@@ -29,8 +29,8 @@
     background: $primary;
     background: linear-gradient(
       45deg,
-      hsl(var(--bs-primary-h), var(--bs-primary-s), var(--accent-bg-l)),
-      hsl(var(--bs-primary-h), var(--bs-primary-s), var(--bs-primary-l)) 70%
+      hsl(var(--primary-h), var(--primary-s), var(--accent-bg-l)),
+      hsl(var(--primary-h), var(--primary-s), var(--primary-l)) 70%
     );
 
     position: relative;

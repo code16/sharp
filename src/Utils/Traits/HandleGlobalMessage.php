@@ -29,7 +29,7 @@ trait HandleGlobalMessage
         if($this->globalMessageHtmlField) {
             $config["globalMessage"] = [
                 "fieldKey" => $this->globalMessageHtmlField->key,
-                "alertLevel" => null
+                "alertLevel" => 'primary'
             ];
         }
     }

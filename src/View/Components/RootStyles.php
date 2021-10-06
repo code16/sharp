@@ -11,7 +11,7 @@ class RootStyles extends Component
 {
     
     public string $primaryColor;
-    
+    public string $primaryColorLuminosity;
     public array $primaryColorHSL;
     
     public function __construct()
@@ -33,7 +33,7 @@ class RootStyles extends Component
     public function render()
     {
         return view('sharp::components.root-styles', [
-            'component' => $this,
+            'self' => $this,
         ]);
     }
 }
