@@ -203,8 +203,8 @@ class SharpEntityListTest extends SharpTestCase
         $list = new class extends SharpEntityDefaultTestList {
             function buildListConfig(): void
             {
-                $this->setSearchable()
-                    ->setPaginated();
+                $this->configureSearchable()
+                    ->configurePaginated();
             }
         };
 

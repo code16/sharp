@@ -63,7 +63,7 @@ abstract class SharpShow
         });
     }
 
-    protected final function setMultiformAttribute(string $attribute): self
+    protected final function configureMultiformAttribute(string $attribute): self
     {
         $this->multiformAttribute = $attribute;
 

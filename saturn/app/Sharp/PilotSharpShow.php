@@ -49,9 +49,9 @@ class PilotSharpShow extends SharpShow
     function buildShowConfig(): void
     {
         $this
-            ->setBreadcrumbCustomLabelAttribute("breadcrumb_label")
-            ->setMultiformAttribute("role")
-            ->setEntityState("state", PilotEntityState::class);
+            ->configureBreadcrumbCustomLabelAttribute("breadcrumb_label")
+            ->configureMultiformAttribute("role")
+            ->configureEntityState("state", PilotEntityState::class);
     }
 
     function buildShowLayout(): void

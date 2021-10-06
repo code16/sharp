@@ -6,7 +6,7 @@ trait HandleCustomBreadcrumb
 {
     protected ?string $breadcrumbAttribute = null;
 
-    public function setBreadcrumbCustomLabelAttribute(string $breadcrumbAttribute): self
+    public function configureBreadcrumbCustomLabelAttribute(string $breadcrumbAttribute): self
     {
         $this->breadcrumbAttribute = $breadcrumbAttribute;
         

@@ -164,7 +164,7 @@ class SharpFormTest extends SharpTestCase
         {
             public function buildFormConfig(): void
             {
-                $this->setDisplayShowPageAfterCreation(true);
+                $this->configureDisplayShowPageAfterCreation(true);
             }
         };
 

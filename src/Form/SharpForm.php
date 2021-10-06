@@ -97,7 +97,7 @@ abstract class SharpForm
     {
     }
 
-    protected function setDisplayShowPageAfterCreation(bool $displayShowPage = true): self
+    protected function configureDisplayShowPageAfterCreation(bool $displayShowPage = true): self
     {
         $this->displayShowPageAfterCreation = $displayShowPage;
         

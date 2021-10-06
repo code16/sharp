@@ -56,7 +56,7 @@ class PilotJuniorSharpForm extends SharpForm
 
     function buildFormConfig(): void
     {
-        $this->setBreadcrumbCustomLabelAttribute("name");
+        $this->configureBreadcrumbCustomLabelAttribute("name");
     }
 
     function delete($id): void

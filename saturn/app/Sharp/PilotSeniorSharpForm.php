@@ -29,7 +29,7 @@ class PilotSeniorSharpForm extends PilotJuniorSharpForm
     
     function buildFormConfig(): void
     {
-        $this->setBreadcrumbCustomLabelAttribute("name");
+        $this->configureBreadcrumbCustomLabelAttribute("name");
     }
 
     function update($id, array $data)

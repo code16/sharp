@@ -110,7 +110,7 @@ class SharpShowTest extends SharpTestCase
         {
             public function buildShowConfig(): void
             {
-                $this->setMultiformAttribute("role");
+                $this->configureMultiformAttribute("role");
             }
         };
 

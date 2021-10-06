@@ -40,7 +40,7 @@ class PersonSharpShow extends SharpShow
     function buildShowConfig(): void
     {
         $this
-            ->setEntityState("state", new class extends EntityState {
+            ->configureEntityState("state", new class extends EntityState {
                 protected function buildStates(): void
                 {
                     $this->addState("active", "Label", "blue");

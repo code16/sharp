@@ -17,7 +17,7 @@ class SharpEntityListStateTest extends SharpTestCase
         $list = new class extends SharpEntityDefaultTestList {
             function buildListConfig(): void
             {
-                $this->setEntityState("_state", new class extends EntityState {
+                $this->configureEntityState("_state", new class extends EntityState {
                     protected function buildStates(): void
                     {
                         $this->addState("test1", "Test 1", "blue");
@@ -47,7 +47,7 @@ class SharpEntityListStateTest extends SharpTestCase
         $list = new class extends SharpEntityDefaultTestList {
             function buildListConfig(): void
             {
-                $this->setEntityState("_state", SharpEntityListTestState::class);
+                $this->configureEntityState("_state", SharpEntityListTestState::class);
             }
         };
 
@@ -83,7 +83,7 @@ class SharpEntityListStateTest extends SharpTestCase
             }
             function buildListConfig(): void
             {
-                $this->setEntityState("state", new class extends EntityState {
+                $this->configureEntityState("state", new class extends EntityState {
                     protected function buildStates(): void
                     {
                         $this->addState(true, "Test 1", "blue");
@@ -110,7 +110,7 @@ class SharpEntityListStateTest extends SharpTestCase
         $list = new class extends SharpEntityDefaultTestList {
             function buildListConfig(): void
             {
-                $this->setEntityState("_state", new class extends EntityState {
+                $this->configureEntityState("_state", new class extends EntityState {
                     protected function buildStates(): void
                     {
                         $this->addState(1, "Test 1", "blue");

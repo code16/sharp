@@ -50,11 +50,11 @@ class PilotSharpList extends SharpEntityList
 
     function buildListConfig(): void
     {
-        $this->setSearchable()
-            ->setDefaultSort("name", "asc")
+        $this->configureSearchable()
+            ->configureDefaultSort("name", "asc")
             ->setMultiformAttribute("role")
-            ->setPaginated()
-            ->setEntityState("state", PilotEntityState::class)
+            ->configurePaginated()
+            ->configureEntityState("state", PilotEntityState::class)
             ->addFilter("spaceship", PilotSpaceshipFilter::class)
             ->addFilter("role", PilotRoleFilter::class);
     }

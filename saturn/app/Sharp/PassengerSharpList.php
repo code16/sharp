@@ -35,11 +35,11 @@ class PassengerSharpList extends SharpEntityList
 
     function buildListConfig(): void
     {
-        $this->setSearchable()
-            ->setDefaultSort("name", "asc")
+        $this->configureSearchable()
+            ->configureDefaultSort("name", "asc")
             ->addFilter("travel", PassengerTravelFilter::class)
             ->addFilter("birthdate", PassengerBirthdateFilter::class)
-            ->setPaginated();
+            ->configurePaginated();
     }
 
     function buildListLayout(): void

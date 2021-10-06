@@ -35,7 +35,7 @@ abstract class SharpSingleShow extends SharpShow
             );
         }
 
-        return parent::setEntityState($stateAttribute, $stateHandlerOrClassName);
+        return parent::configureEntityState($stateAttribute, $stateHandlerOrClassName);
     }
 
     /**

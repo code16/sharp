@@ -277,8 +277,8 @@ class SpaceshipSharpForm extends SharpForm
 
     function buildFormConfig(): void
     {
-        $this->setBreadcrumbCustomLabelAttribute("name.en")
-            ->setDisplayShowPageAfterCreation();
+        $this->configureBreadcrumbCustomLabelAttribute("name.en")
+            ->configureDisplayShowPageAfterCreation();
     }
 
     function getDataLocalizations(): array

@@ -43,9 +43,9 @@ class UserSharpList extends SharpEntityList
 
     function buildListConfig(): void
     {
-        $this->setInstanceIdAttribute("id")
+        $this->configureInstanceIdAttribute("id")
             ->setPrimaryEntityCommand("invite_new_user")
-            ->setDefaultSort("name", "asc");
+            ->configureDefaultSort("name", "asc");
     }
 
     function buildListLayout(): void

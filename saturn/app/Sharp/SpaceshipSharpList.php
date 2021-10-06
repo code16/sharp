@@ -69,16 +69,24 @@ class SpaceshipSharpList extends SharpEntityList
             SpaceshipExternalLink::class
         ];
     }
+    
+//    function getFilters(): ?array
+//    {
+//        return [
+//            "type" => SpaceshipTypeFilter::class,
+//            new SpaceshipPilotsFilter()
+//        ];
+//    }
 
     function buildListConfig(): void
     {
-        $this->setInstanceIdAttribute("id")
-            ->setSearchable()
-            ->setDefaultSort("name", "asc")
+        $this->configureInstanceIdAttribute("id")
+            ->configureSearchable()
+            ->configureDefaultSort("name", "asc")
             ->addFilter("type", SpaceshipTypeFilter::class)
             ->addFilter("pilots", SpaceshipPilotsFilter::class)
-            ->setEntityState("state", SpaceshipEntityState::class)
-            ->setPaginated();
+            ->configureEntityState("state", SpaceshipEntityState::class)
+            ->configurePaginated();
     }
 
     function buildListLayout(): void

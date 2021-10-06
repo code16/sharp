@@ -97,8 +97,8 @@ class SpaceshipSharpShow extends SharpShow
     function buildShowConfig(): void
     {
         $this
-            ->setBreadcrumbCustomLabelAttribute("name")
-            ->setEntityState("state", SpaceshipEntityState::class);
+            ->configureBreadcrumbCustomLabelAttribute("name")
+            ->configureEntityState("state", SpaceshipEntityState::class);
     }
 
     function buildShowLayout(ShowLayout $showLayout): void

@@ -165,7 +165,7 @@ abstract class SharpEntityList
         return $config;
     }
 
-    public function setInstanceIdAttribute(string $instanceIdAttribute): self
+    public function configureInstanceIdAttribute(string $instanceIdAttribute): self
     {
         $this->instanceIdAttribute = $instanceIdAttribute;
 
@@ -188,14 +188,14 @@ abstract class SharpEntityList
         return $this;
     }
 
-    public function setSearchable(bool $searchable = true): self
+    public function configureSearchable(bool $searchable = true): self
     {
         $this->searchable = $searchable;
 
         return $this;
     }
 
-    public function setDefaultSort(string $sortBy, string $sortDir = "asc"): self
+    public function configureDefaultSort(string $sortBy, string $sortDir = "asc"): self
     {
         $this->defaultSort = $sortBy;
         $this->defaultSortDir = $sortDir;
@@ -203,7 +203,7 @@ abstract class SharpEntityList
         return $this;
     }
 
-    public function setPaginated(bool $paginated = true): self
+    public function configurePaginated(bool $paginated = true): self
     {
         $this->paginated = $paginated;
 
