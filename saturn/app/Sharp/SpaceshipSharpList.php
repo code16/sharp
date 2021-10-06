@@ -83,11 +83,19 @@ class SpaceshipSharpList extends SharpEntityList
 
     function buildListLayout(): void
     {
-        $this->addColumn("picture", 1, 2)
-            ->addColumn("name", 2, 4)
-            ->addColumnLarge("capacity", 2)
-            ->addColumn("type:label", 2, 4)
-            ->addColumnLarge("pilots", 3)
+        $this->addColumn("picture", 1)
+            ->addColumn("name", 2)
+            ->addColumn("capacity", 2)
+            ->addColumn("type:label", 2)
+            ->addColumn("pilots")
+            ->addColumn("messages_sent_count");
+    }
+
+    function buildListLayoutForSmallScreens(): void
+    {
+        $this->addColumn("picture", 2)
+            ->addColumn("name")
+            ->addColumn("type:label")
             ->addColumn("messages_sent_count", 2);
     }
 
