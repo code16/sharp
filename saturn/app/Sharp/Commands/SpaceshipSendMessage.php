@@ -52,8 +52,8 @@ class SpaceshipSendMessage extends InstanceCommand
                     ->setLabel("Message")
             )
             ->addField(
-            SharpFormCheckField::make("now", "Send right now?")
-                ->setHelpMessage("Otherwise it will be sent next night.")
+                SharpFormCheckField::make("now", "Send right now?")
+                    ->setHelpMessage("Otherwise it will be sent next night.")
             )
             ->addField(
                 SharpFormAutocompleteField::make("level", "local")

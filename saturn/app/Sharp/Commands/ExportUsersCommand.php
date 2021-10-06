@@ -6,6 +6,7 @@ use App\User;
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Support\Facades\Storage;
 
 class ExportUsersCommand extends EntityCommand
@@ -37,9 +38,9 @@ class ExportUsersCommand extends EntityCommand
         return $this->download($filePath, "users.txt", "local");
     }
 
-    function buildFormFields(): void
+    function buildFormFields(FieldsContainer $formFields): void
     {
-        $this
+        $formFields
             ->addField(
                 SharpFormCheckField::make("sample", "Download a file sample")
             )

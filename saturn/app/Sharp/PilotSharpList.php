@@ -15,7 +15,6 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class PilotSharpList extends SharpEntityList
 {
-
     function buildListDataContainers(): void
     {
         $this

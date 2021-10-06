@@ -6,16 +6,18 @@ use App\Pilot;
 use App\Sharp\CustomFormFields\SharpCustomFormFieldTextIcon;
 use App\Spaceship;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
+use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class PilotJuniorSharpForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
 
-    function buildFormFields(): void
+    function buildFormFields(FieldsContainer $formFields): void
     {
-        $this->addField(
+        $formFields->addField(
             SharpCustomFormFieldTextIcon::make("name")
                 ->setLabel("Name")
                 ->setHelpMessage("This input is an example of a custom form field (SharpCustomFormFieldTextIcon)")
@@ -23,9 +25,9 @@ class PilotJuniorSharpForm extends SharpForm
         );
     }
 
-    function buildFormLayout(): void
+    function buildFormLayout(FormLayout $formLayout): void
     {
-        $this->addColumn(6, function(FormLayoutColumn $column) {
+        $formLayout->addColumn(6, function(FormLayoutColumn $column) {
             $column->withSingleField("name");
         });
     }

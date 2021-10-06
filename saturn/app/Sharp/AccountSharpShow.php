@@ -6,15 +6,17 @@ use App\Sharp\Commands\AccountUpdateName;
 use App\Sharp\States\AccountStatusState;
 use App\User;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
+use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Show\SharpSingleShow;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class AccountSharpShow extends SharpSingleShow
 {
-    function buildShowFields(): void
+    function buildShowFields(FieldsContainer $showFields): void
     {
-        $this
+        $showFields
             ->addField(
                 SharpShowTextField::make("name")
                     ->setLabel("Name:")
@@ -29,9 +31,9 @@ class AccountSharpShow extends SharpSingleShow
             );
     }
 
-    function buildShowLayout(): void
+    function buildShowLayout(ShowLayout $showLayout): void
     {
-        $this
+        $showLayout
             ->addSection('Identity', function(ShowLayoutSection $section) {
                 $section
                     ->addColumn(7, function(ShowLayoutColumn $column) {

@@ -7,15 +7,17 @@ use App\Sharp\Commands\PilotDownloadPhoto;
 use App\Sharp\States\PilotEntityState;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
+use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Show\SharpShow;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class PilotSharpShow extends SharpShow
 {
-    function buildShowFields(): void
+    function buildShowFields(FieldsContainer $showFields): void
     {
-        $this
+        $showFields
             ->addField(
                 SharpShowTextField::make("name")
                     ->setLabel("Name")
@@ -54,9 +56,9 @@ class PilotSharpShow extends SharpShow
             ->configureEntityState("state", PilotEntityState::class);
     }
 
-    function buildShowLayout(): void
+    function buildShowLayout(ShowLayout $showLayout): void
     {
-        $this
+        $showLayout
             ->addSection('Identity', function(ShowLayoutSection $section) {
                 $section
                     ->addColumn(7, function(ShowLayoutColumn $column) {
