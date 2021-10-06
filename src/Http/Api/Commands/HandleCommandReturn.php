@@ -39,7 +39,7 @@ trait HandleCommandReturn
                         $returnedValue["items"]
                     )
                 )
-                ->data($commandContainer->getListData())["items"];
+                ->data($commandContainer->getListData())["list"]["items"];
         }
 
         return response()->json($returnedValue);

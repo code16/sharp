@@ -4,6 +4,7 @@ namespace Code16\Sharp\EntityList\Commands;
 
 use Code16\Sharp\Form\HandleFormFields;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Utils\Traits\HandleGlobalMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Http\JsonResponse;
@@ -16,7 +17,9 @@ use Illuminate\Validation\ValidationException;
  */
 abstract class Command
 {
-    use HandleFormFields, WithCustomTransformers;
+    use HandleFormFields,
+        HandleGlobalMessage,
+        WithCustomTransformers;
 
     protected int $groupIndex = 0;
     protected ?string $commandKey = null;
@@ -87,10 +90,7 @@ abstract class Command
         return true;
     }
 
-    /**
-     * @return array|bool
-     */
-    public function getGlobalAuthorization()
+    public function getGlobalAuthorization(): array|bool
     {
         return $this->authorize();
     }
@@ -114,12 +114,23 @@ abstract class Command
     {
     }
 
-    public function form(): array
+    public final function commandFormConfig(): ?array
+    {
+        if($this->globalMessageHtmlField === null) {
+            return null;
+        }
+        
+        return tap([], function(&$config) {
+            $this->appendGlobalMessageToConfig($config);
+        });
+    }
+
+    public final function form(): array
     {
         return $this->fields();
     }
 
-    public function formLayout(): ?array
+    public final function formLayout(): ?array
     {
         if(!$this->fields) {
             return null;
@@ -137,22 +148,22 @@ abstract class Command
         return $column->fieldsToArray()["fields"];
     }
 
-    public function setGroupIndex($index): void
+    public final function setGroupIndex($index): void
     {
         $this->groupIndex = $index;
     }
 
-    public function setCommandKey(string $key): void
+    public final function setCommandKey(string $key): void
     {
         $this->commandKey = $key;
     }
 
-    public function groupIndex(): int
+    public final function groupIndex(): int
     {
         return $this->groupIndex;
     }
 
-    public function getCommandKey(): string
+    public final function getCommandKey(): string
     {
         return $this->commandKey ?? class_basename($this::class);
     }

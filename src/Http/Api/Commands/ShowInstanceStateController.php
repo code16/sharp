@@ -10,15 +10,7 @@ class ShowInstanceStateController extends ApiController
 {
     use HandleCommandReturn;
 
-    /**
-     * @param string $entityKey
-     * @param string|null $instanceId
-     * @return \Illuminate\Http\JsonResponse
-     * @throws SharpAuthorizationException
-     * @throws \Code16\Sharp\Exceptions\EntityList\SharpInvalidEntityStateException
-     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
-     */
-    public function update($entityKey, $instanceId = null)
+    public function update(string $entityKey, mixed $instanceId = null)
     {
         $showPage = $this->getShowPage($entityKey, $instanceId);
         $stateHandler = $showPage->entityStateHandler();
@@ -37,14 +29,7 @@ class ShowInstanceStateController extends ApiController
         );
     }
 
-    /**
-     * @param string $entityKey
-     * @param string|null $instanceId
-     *
-     * @return \Code16\Sharp\Show\SharpShow
-     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
-     */
-    private function getShowPage(string $entityKey, $instanceId = null)
+    private function getShowPage(string $entityKey, mixed $instanceId = null)
     {
         $showPage = $this->getShowInstance($entityKey);
 

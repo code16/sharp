@@ -19,6 +19,7 @@ class EntityListController extends ApiController
             "containers" => $list->dataContainers(),
             "layout" => $list->listLayout(),
             "data" => $list->data(),
+            "fields" => $list->listFields(),
             "config" => $list->listConfig(config()->has("sharp.entities.{$entityKey}.show"))
         ]);
     }

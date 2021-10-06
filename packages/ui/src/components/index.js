@@ -8,6 +8,7 @@ export { default as DataListRow } from './DataListRow';
 export { default as Dropdown } from './dropdown/Dropdown';
 export { default as DropdownItem } from './dropdown/DropdownItem';
 export { default as DropdownSeparator } from './dropdown/DropdownSeparator';
+export { default as GlobalMessage } from './global-message/GlobalMessage';
 export { default as Grid } from './Grid';
 export { default as ItemVisual } from './ItemVisual';
 export { default as Loading } from './loading/Loading';

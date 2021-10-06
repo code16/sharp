@@ -4,6 +4,7 @@ exports[`EntityList mount 1`] = `
 <div class="SharpEntityList">
 	<div>Action bar</div>
 	<div>
+		<!---->
 		<div class="MOCKED_SharpDataList">
 			<div url="instanceUrl" class="MOCKED_SharpDataListRow"></div>
 		</div>
@@ -17,6 +18,7 @@ exports[`EntityList mount with row actions 1`] = `
 <div class="SharpEntityList">
 	<div>Action bar</div>
 	<div>
+		<!---->
 		<div class="MOCKED_SharpDataList">
 			<div url="instanceUrl" class="MOCKED_SharpDataListRow">
 				<div class="SharpEntityList__actions d-flex">
