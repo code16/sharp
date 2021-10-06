@@ -2,12 +2,12 @@
 
 namespace Code16\Sharp\EntityList\Commands;
 
-use Code16\Sharp\Form\HandleFormFields;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Utils\Fields\HandleFormFields;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -16,7 +16,8 @@ use Illuminate\Validation\ValidationException;
  */
 abstract class Command
 {
-    use HandleFormFields, WithCustomTransformers;
+    use HandleFormFields, 
+        WithCustomTransformers;
 
     protected int $groupIndex = 0;
     protected ?string $commandKey = null;
@@ -87,10 +88,7 @@ abstract class Command
         return true;
     }
 
-    /**
-     * @return array|bool
-     */
-    public function getGlobalAuthorization()
+    public function getGlobalAuthorization(): array|bool
     {
         return $this->authorize();
     }
@@ -101,9 +99,9 @@ abstract class Command
     }
 
     /**
-     * Build the optional Command form, calling ->addField()
+     * Build the optional Command form
      */
-    public function buildFormFields(): void
+    public function buildFormFields(FieldsContainer $formFields): void
     {
     }
 
@@ -114,50 +112,50 @@ abstract class Command
     {
     }
 
-    public function form(): array
+    public final function form(): array
     {
         return $this->fields();
     }
 
-    public function formLayout(): ?array
+    public final function formLayout(): ?array
     {
-        if(!$this->fields) {
-            return null;
-        }
+        if($fields = $this->fieldsContainer()->getFields()) {
+            $column = new FormLayoutColumn(12);
+            $this->buildFormLayout($column);
 
-        $column = new FormLayoutColumn(12);
-        $this->buildFormLayout($column);
-
-        if(empty($column->fieldsToArray()["fields"])) {
-            foreach($this->fields as $field) {
-                $column->withSingleField($field->key());
+            if (empty($column->fieldsToArray()["fields"])) {
+                foreach ($fields as $field) {
+                    $column->withSingleField($field->key());
+                }
             }
+
+            return $column->fieldsToArray()["fields"];
         }
 
-        return $column->fieldsToArray()["fields"];
+        return null;
     }
 
-    public function setGroupIndex($index): void
+    public final function setGroupIndex($index): void
     {
         $this->groupIndex = $index;
     }
 
-    public function setCommandKey(string $key): void
+    public final function setCommandKey(string $key): void
     {
         $this->commandKey = $key;
     }
 
-    public function groupIndex(): int
+    public final function groupIndex(): int
     {
         return $this->groupIndex;
     }
 
-    public function getCommandKey(): string
+    public final function getCommandKey(): string
     {
         return $this->commandKey ?? class_basename($this::class);
     }
 
-    public function validate(array $params, array $rules, array $messages = []): void
+    public final function validate(array $params, array $rules, array $messages = []): void
     {
         $validator = app(Validator::class)->make($params, $rules, $messages);
 

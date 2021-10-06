@@ -4,15 +4,16 @@ namespace Code16\Sharp\Show;
 
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
-use Code16\Sharp\Form\HandleFormFields;
+use Code16\Sharp\Utils\Fields\HandleFields;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpShow
 {
     use WithCustomTransformers,
-        HandleFormFields,
+        HandleFields,
         HandleEntityState,
         HandleInstanceCommands,
         HandleCustomBreadcrumb;
@@ -38,7 +39,7 @@ abstract class SharpShow
     /**
      * Return the entity instance, as an array.
      */
-    final public function instance(mixed $id): array
+    public final function instance(mixed $id): array
     {
         return collect($this->find($id))
             // Filter model attributes on actual show labels
@@ -55,7 +56,7 @@ abstract class SharpShow
     /**
      * Return the show config values (commands and state).
      */
-    public function showConfig(mixed $instanceId, array $config = []): array
+    public final function showConfig(mixed $instanceId, array $config = []): array
     {
         $config = collect($config)
             ->merge([
@@ -70,19 +71,19 @@ abstract class SharpShow
         });
     }
 
-    protected function setMultiformAttribute(string $attribute): self
+    protected final function setMultiformAttribute(string $attribute): self
     {
         $this->multiformAttribute = $attribute;
 
         return $this;
     }
 
-    private function buildFormFields(): void
+    private function buildFormFields(FieldsContainer $fields): void
     {
-        $this->buildShowFields();
+        $this->buildShowFields($fields);
     }
 
-    final protected function addSection(string $label, \Closure $callback = null): self
+    protected final function addSection(string $label, \Closure $callback = null): self
     {
         $this->layoutBuilt = false;
 
@@ -96,7 +97,7 @@ abstract class SharpShow
         return $this;
     }
 
-    final protected function addEntityListSection(string $entityListKey, \Closure $callback = null): self
+    protected final function addEntityListSection(string $entityListKey, \Closure $callback = null): self
     {
         $this->layoutBuilt = false;
 
@@ -138,7 +139,7 @@ abstract class SharpShow
     /**
      * Build form fields using ->addField()
      */
-    abstract function buildShowFields(): void;
+    abstract function buildShowFields(FieldsContainer $showFields): void;
 
     /**
      * Build form layout using ->addSection()

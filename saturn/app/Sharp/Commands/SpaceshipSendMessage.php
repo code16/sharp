@@ -8,6 +8,7 @@ use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Support\Arr;
 
 class SpaceshipSendMessage extends InstanceCommand
@@ -43,9 +44,9 @@ class SpaceshipSendMessage extends InstanceCommand
         return $this->refresh($instanceId);
     }
 
-    function buildFormFields(): void
+    function buildFormFields(FieldsContainer $formFields): void
     {
-        $this
+        $formFields
             ->addField(
                 SharpFormTextareaField::make("message")
                     ->setLabel("Message")

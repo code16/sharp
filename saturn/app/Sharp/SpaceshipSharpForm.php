@@ -23,14 +23,15 @@ use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class SpaceshipSharpForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
 
-    function buildFormFields(): void
+    function buildFormFields(FieldsContainer $formFields): void
     {
-        $this
+        $formFields
             ->addField(
                 SharpFormTextField::make("name")
                     ->setLocalized()

@@ -5,6 +5,9 @@ namespace Code16\Sharp\Form;
 use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Utils\Fields\HandleFields;
+use Code16\Sharp\Utils\Fields\HandleFormFields;
 use Code16\Sharp\Utils\SharpNotification;
 use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
@@ -257,9 +260,9 @@ abstract class SharpForm
     abstract function delete(mixed $id): void;
 
     /**
-     * Build form fields using ->addField()
+     * Build form fields
      */
-    abstract function buildFormFields(): void;
+    abstract function buildFormFields(FieldsContainer $formFields): void;
 
     /**
      * Build form layout using ->addTab() or ->addColumn()

@@ -17,14 +17,15 @@ use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Show\SharpShow;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
 use Code16\Sharp\Utils\Transformers\Attributes\MarkdownAttributeTransformer;
 
 class SpaceshipSharpShow extends SharpShow
 {
-    function buildShowFields(): void
+    function buildShowFields(FieldsContainer $showFields): void
     {
-        $this
+        $showFields
             ->addField(
                 SharpShowTitleField::make("name")
                     ->setTitleLevel(2)
