@@ -66,9 +66,8 @@ class SharpServiceProvider extends ServiceProvider
         ], 'views');
 
         $this->registerPolicies();
-
-        Blade::component('sharp-menu', Menu::class);
-        Blade::component('sharp-root-styles', RootStyles::class);
+        
+        Blade::componentNamespace('Code16\\Sharp\\View\\Components', 'sharp');
 
         view()->composer(
             ['sharp::form','sharp::show', 'sharp::list', 'sharp::dashboard', 'sharp::welcome', 'sharp::login', 'sharp::unauthorized'],

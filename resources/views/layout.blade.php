@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{{ mix('vendors.css', '/vendor/sharp') }}">
     <link rel="stylesheet" href="{{ mix('sharp.css', '/vendor/sharp') }}">
 
-    <x-sharp-root-styles />
+    <x-sharp::root-styles />
 
     @include('sharp::public.head')
 
