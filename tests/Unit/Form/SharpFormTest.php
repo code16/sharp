@@ -9,6 +9,7 @@ use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormMarkdownField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Tests\SharpTestCase;
@@ -191,7 +192,7 @@ class BaseSharpForm extends SharpForm
     function buildFormFields(FieldsContainer $formFields): void
     {
     }
-    function buildFormLayout(): void
+    function buildFormLayout(FormLayout $formLayout): void
     {
     }
 }
@@ -201,7 +202,7 @@ class BaseSharpSingleForm extends SharpSingleForm
     function buildFormFields(FieldsContainer $formFields): void
     {
     }
-    function buildFormLayout(): void
+    function buildFormLayout(FormLayout $formLayout): void
     {
     }
     protected function findSingle()

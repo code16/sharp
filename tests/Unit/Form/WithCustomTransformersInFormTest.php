@@ -4,6 +4,7 @@ namespace Code16\Sharp\Tests\Unit\Form;
 
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
@@ -352,7 +353,7 @@ class WithCustomTransformersTestForm extends SharpForm
 
     function update($id, array $data): bool { return false; }
     function delete($id): void {}
-    function buildFormLayout(): void {}
+    function buildFormLayout(FormLayout $formLayout): void {}
     function buildFormFields(FieldsContainer $formFields): void {}
 }
 

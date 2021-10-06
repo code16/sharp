@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Tests\Feature\Api;
 
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Tests\Fixtures\User;
@@ -167,9 +168,9 @@ class SmallPersonSharpForm extends SharpForm
         $formFields->addField(SharpFormTextField::make("name"));
     }
 
-    function buildFormLayout(): void
+    function buildFormLayout(FormLayout $formLayout): void
     {
-        $this->addColumn(6, function(FormLayoutColumn $column) {
+        $formLayout->addColumn(6, function(FormLayoutColumn $column) {
             return $column->withSingleField("name");
         });
     }

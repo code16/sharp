@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Tests\Unit\Form\Fields;
 
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
@@ -19,11 +20,16 @@ class SharpFormTest extends SharpTestCase
             }
         };
 
-        $this->assertEquals(["name" => [
-            "key" => "name",
-            "type" => "text",
-            "inputType" => "text"
-        ]], $form->fields());
+        $this->assertEquals(
+            [
+                "name" => [
+                    "key" => "name",
+                    "type" => "text",
+                    "inputType" => "text"
+                ]
+            ], 
+            $form->fields()
+        );
     }
 
     /** @test */
@@ -35,41 +41,46 @@ class SharpFormTest extends SharpTestCase
                 $formFields->addField(SharpFormTextField::make("name"))
                     ->addField(SharpFormTextField::make("age"));
             }
-            function buildFormLayout(): void
+            function buildFormLayout(FormLayout $formLayout): void
             {
-                $this->addColumn(6, function($column) {
-                    $column->withSingleField("name");
-                })->addColumn(6, function($column) {
-                    $column->withSingleField("age");
-                });
+                $formLayout
+                    ->addColumn(6, function($column) {
+                        $column->withSingleField("name");
+                    })
+                    ->addColumn(6, function($column) {
+                        $column->withSingleField("age");
+                    });
             }
         };
 
-        $this->assertEquals([
-            "tabbed" => true,
-            "tabs" => [[
-                "title" => "one",
-                "columns" => [[
-                    "size" => 6,
-                    "fields" => [[
-                        [
-                            "key" => "name",
-                            "size" => 12,
-                            "sizeXS" => 12
-                        ]
-                    ]]
-                ], [
-                    "size" => 6,
-                    "fields" => [[
-                        [
-                            "key" => "age",
-                            "size" => 12,
-                            "sizeXS" => 12
-                        ]
+        $this->assertEquals(
+            [
+                "tabbed" => true,
+                "tabs" => [[
+                    "title" => "one",
+                    "columns" => [[
+                        "size" => 6,
+                        "fields" => [[
+                            [
+                                "key" => "name",
+                                "size" => 12,
+                                "sizeXS" => 12
+                            ]
+                        ]]
+                    ], [
+                        "size" => 6,
+                        "fields" => [[
+                            [
+                                "key" => "age",
+                                "size" => 12,
+                                "sizeXS" => 12
+                            ]
+                        ]]
                     ]]
                 ]]
-            ]]
-        ], $form->formLayout());
+            ], 
+            $form->formLayout()
+        );
     }
 
     /** @test */
@@ -91,10 +102,13 @@ class SharpFormTest extends SharpTestCase
             }
         };
 
-        $this->assertEquals([
-            "name" => "John Wayne",
-            "age" => 22
-        ], $form->instance(1));
+        $this->assertEquals(
+            [
+                "name" => "John Wayne",
+                "age" => 22
+            ],
+            $form->instance(1)
+        );
     }
 }
 
@@ -104,5 +118,5 @@ abstract class SharpFormTestForm extends SharpForm
     function update($id, array $data): bool {}
     function delete($id): void {}
     function buildFormFields(FieldsContainer $formFields): void {}
-    function buildFormLayout(): void {}
+    function buildFormLayout(FormLayout $formLayout): void {}
 }

@@ -7,6 +7,7 @@ use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTagsField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
@@ -445,6 +446,6 @@ class WithSharpFormEloquentUpdaterTestForm extends SharpForm
         return $this->save($instance, $data);
     }
     function delete($id): void {}
-    function buildFormLayout(): void {}
+    function buildFormLayout(FormLayout $formLayout): void {}
     function buildFormFields(FieldsContainer $formFields): void {}
 }

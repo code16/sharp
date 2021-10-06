@@ -5,6 +5,7 @@ namespace Code16\Sharp\Tests\Fixtures;
 use Code16\Sharp\EntityList\Commands\EntityState;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
+use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Show\SharpShow;
@@ -55,9 +56,9 @@ class PersonSharpShow extends SharpShow
             });
     }
 
-    function buildShowLayout(): void
+    function buildShowLayout(ShowLayout $showLayout): void
     {
-        $this
+        $showLayout
             ->addSection("Identity", function(ShowLayoutSection $section) {
                 $section
                     ->addColumn(6, function(ShowLayoutColumn $column) {

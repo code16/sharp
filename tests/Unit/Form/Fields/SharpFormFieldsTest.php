@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Tests\Unit\Form\Fields;
 
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
@@ -51,5 +52,5 @@ abstract class FormFieldsTestForm extends SharpForm
     function find($id): array { return []; }
     function update($id, array $data) { return false; }
     function delete($id): void {}
-    function buildFormLayout(): void {}
+    function buildFormLayout(FormLayout $formLayout): void {}
 }

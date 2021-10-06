@@ -4,6 +4,7 @@ namespace Code16\Sharp\Tests\Unit\Show;
 
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
+use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Show\SharpShow;
@@ -26,9 +27,9 @@ class SharpShowTest extends SharpTestCase
                         ->setLabel("Test")
                 );
             }
-            function buildShowLayout(): void
+            function buildShowLayout(ShowLayout $showLayout): void
             {
-                $this->addEntityListSection("entityList");
+                $showLayout->addEntityListSection("entityList");
             }
         };
 
@@ -68,9 +69,9 @@ class SharpShowTest extends SharpTestCase
                         ->setLabel("Test")
                 );
             }
-            function buildShowLayout(): void
+            function buildShowLayout(ShowLayout $showLayout): void
             {
-                $this->addSection("test", function(ShowLayoutSection $section) {
+                $showLayout->addSection("test", function(ShowLayoutSection $section) {
                     $section->setCollapsable()
                         ->addColumn(12, function(ShowLayoutColumn $column) {
                             $column->withSingleField("test");
@@ -116,9 +117,10 @@ class SharpShowTest extends SharpTestCase
 
         $sharpShow->buildShowConfig();
 
-        $this->assertEquals([
-            "multiformAttribute" => "role",
-        ], $sharpShow->showConfig(1));
+        $this->assertEquals(
+            ["multiformAttribute" => "role"], 
+            $sharpShow->showConfig(1)
+        );
     }
 
     /** @test */
@@ -146,7 +148,7 @@ class BaseSharpShow extends SharpShow
     function buildShowFields(FieldsContainer $showFields): void
     {
     }
-    function buildShowLayout(): void
+    function buildShowLayout(ShowLayout $showLayout): void
     {
     }
 }
@@ -156,7 +158,7 @@ class BaseSharpSingleShow extends SharpSingleShow
     function buildShowFields(FieldsContainer $showFields): void
     {
     }
-    function buildShowLayout(): void
+    function buildShowLayout(ShowLayout $showLayout): void
     {
     }
     function findSingle(): array

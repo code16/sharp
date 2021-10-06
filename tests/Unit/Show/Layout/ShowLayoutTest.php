@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Tests\Unit\Show\Layout;
 
+use Code16\Sharp\Form\Layout\FormLayout;
+use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Show\SharpShow;
@@ -15,9 +17,9 @@ class ShowLayoutTest extends SharpTestCase
     function we_can_add_a_section()
     {
         $show = new class extends ShowLayoutTestShow {
-            function buildShowLayout(): void
+            function buildShowLayout(ShowLayout $showLayout): void
             {
-                $this->addSection("label");
+                $showLayout->addSection("label");
             }
         };
 
@@ -28,9 +30,9 @@ class ShowLayoutTest extends SharpTestCase
     function we_can_add_a_column_to_a_section()
     {
         $show = new class extends ShowLayoutTestShow {
-            function buildShowLayout(): void
+            function buildShowLayout(ShowLayout $showLayout): void
             {
-                $this->addSection("label", function (ShowLayoutSection $section) {
+                $showLayout->addSection("label", function (ShowLayoutSection $section) {
                     $section->addColumn(7);
                 });
             }
@@ -44,9 +46,9 @@ class ShowLayoutTest extends SharpTestCase
     function we_can_add_a_field_to_a_column()
     {
         $show = new class extends ShowLayoutTestShow {
-            function buildShowLayout(): void
+            function buildShowLayout(ShowLayout $showLayout): void
             {
-                $this->addSection("label", function (ShowLayoutSection $section) {
+                $showLayout->addSection("label", function (ShowLayoutSection $section) {
                     $section->addColumn(7, function(ShowLayoutColumn $column) {
                         $column->withSingleField("name");
                     });
@@ -69,9 +71,9 @@ class ShowLayoutTest extends SharpTestCase
     function we_can_add_a_field_with_layout_to_a_column()
     {
         $show = new class extends ShowLayoutTestShow {
-            function buildShowLayout(): void
+            function buildShowLayout(ShowLayout $showLayout): void
             {
-                $this->addSection("label", function (ShowLayoutSection $section) {
+                $showLayout->addSection("label", function (ShowLayoutSection $section) {
                     $section->addColumn(7, function(ShowLayoutColumn $column) {
                         $column->withSingleField("list", function(ShowLayoutColumn $listItem) {
                             $listItem->withSingleField("item");
@@ -106,5 +108,5 @@ abstract class ShowLayoutTestShow extends SharpShow
 {
     function find($id): array { return []; }
     function buildShowFields(FieldsContainer $showFields): void {}
-    function buildShowLayout(): void {}
+    function buildShowLayout(ShowLayout $showLayout): void {}
 }
