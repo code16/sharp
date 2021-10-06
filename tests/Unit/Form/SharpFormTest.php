@@ -12,6 +12,7 @@ use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class SharpFormTest extends SharpTestCase
 {
@@ -20,9 +21,9 @@ class SharpFormTest extends SharpTestCase
     function we_get_formatted_data_in_creation_with_the_default_create_function()
     {
         $sharpForm = new class extends BaseSharpForm {
-            function buildFormFields(): void
+            function buildFormFields(FieldsContainer $formFields): void
             {
-                $this
+                $formFields
                     ->addField(SharpFormMarkdownField::make("md"))
                     ->addField(SharpFormCheckField::make("check", "text"));
             }
@@ -38,9 +39,9 @@ class SharpFormTest extends SharpTestCase
     function we_get_formatted_data_in_creation_with_the_default_create_function_with_subclasses()
     {
         $sharpForm = new class extends BaseSharpForm {
-            function buildFormFields(): void
+            function buildFormFields(FieldsContainer $formFields): void
             {
-                $this
+                $formFields
                     ->addField(SharpFormTextField::make("name"))
                     ->addField(SharpFormMarkdownField::make("subclass:company"));
             }
@@ -59,9 +60,9 @@ class SharpFormTest extends SharpTestCase
         {
             public $instance;
 
-            function buildFormFields(): void
+            function buildFormFields(FieldsContainer $formFields): void
             {
-                $this
+                $formFields
                     ->addField(
                         SharpFormTextField::make("normal")
                     )
@@ -113,9 +114,9 @@ class SharpFormTest extends SharpTestCase
     {
         $sharpForm = new class extends BaseSharpForm
         {
-            function buildFormFields(): void
+            function buildFormFields(FieldsContainer $formFields): void
             {
-                $this->addField(
+                $formFields->addField(
                     SharpFormTextField::make("delayed")
                         ->setFormatter(new class extends SharpFieldFormatter
                         {
@@ -187,7 +188,7 @@ class BaseSharpForm extends SharpForm
     function delete($id): void
     {
     }
-    function buildFormFields(): void
+    function buildFormFields(FieldsContainer $formFields): void
     {
     }
     function buildFormLayout(): void
@@ -197,7 +198,7 @@ class BaseSharpForm extends SharpForm
 
 class BaseSharpSingleForm extends SharpSingleForm
 {
-    function buildFormFields(): void
+    function buildFormFields(FieldsContainer $formFields): void
     {
     }
     function buildFormLayout(): void

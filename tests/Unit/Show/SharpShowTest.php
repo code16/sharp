@@ -9,6 +9,7 @@ use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Show\SharpShow;
 use Code16\Sharp\Show\SharpSingleShow;
 use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class SharpShowTest extends SharpTestCase
 {
@@ -18,9 +19,9 @@ class SharpShowTest extends SharpTestCase
     {
         $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
         {
-            function buildShowFields(): void
+            function buildShowFields(FieldsContainer $showFields): void
             {
-                $this->addField(
+                $showFields->addField(
                     SharpShowEntityListField::make("entityList", "entityKey")
                         ->setLabel("Test")
                 );
@@ -60,9 +61,9 @@ class SharpShowTest extends SharpTestCase
     {
         $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
         {
-            function buildShowFields(): void
+            function buildShowFields(FieldsContainer $showFields): void
             {
-                $this->addField(
+                $showFields->addField(
                     SharpShowTextField::make("test")
                         ->setLabel("Test")
                 );
@@ -142,7 +143,7 @@ class BaseSharpShow extends SharpShow
     function find($id): array
     {
     }
-    function buildShowFields(): void
+    function buildShowFields(FieldsContainer $showFields): void
     {
     }
     function buildShowLayout(): void
@@ -152,7 +153,7 @@ class BaseSharpShow extends SharpShow
 
 class BaseSharpSingleShow extends SharpSingleShow
 {
-    function buildShowFields(): void
+    function buildShowFields(FieldsContainer $showFields): void
     {
     }
     function buildShowLayout(): void

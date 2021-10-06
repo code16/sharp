@@ -9,6 +9,7 @@ use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
 use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
 use Code16\Sharp\Tests\Fixtures\PersonSharpShow;
 use Code16\Sharp\Tests\Unit\Utils\WithCurrentSharpRequestFake;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class FormControllerTest extends BaseApiTest
 {
@@ -311,10 +312,9 @@ class FormControllerTest extends BaseApiTest
 
 class PersonSharpSingleForm extends SharpSingleForm
 {
-
-    function buildFormFields(): void
+    function buildFormFields(FieldsContainer $formFields): void
     {
-        $this->addField(SharpFormTextField::make("name"));
+        $formFields->addField(SharpFormTextField::make("name"));
     }
 
     function buildFormLayout(): void

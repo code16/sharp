@@ -6,12 +6,13 @@ use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Show\SharpSingleShow;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class PersonSharpSingleShow extends SharpSingleShow
 {
-    function buildShowFields(): void
+    function buildShowFields(FieldsContainer $showFields): void
     {
-        $this->addField(SharpShowTextField::make("name"));
+        $showFields->addField(SharpShowTextField::make("name"));
     }
 
     function buildShowLayout(): void

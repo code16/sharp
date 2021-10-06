@@ -3,10 +3,10 @@
 namespace Code16\Sharp\Tests\Feature\Api\Commands;
 
 use Code16\Sharp\Dashboard\Commands\DashboardCommand;
-use Code16\Sharp\Dashboard\DashboardQueryParams;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
 use Code16\Sharp\Tests\Fixtures\SharpDashboard;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class DashboardCommandControllerTest extends BaseApiTest
 {
@@ -68,8 +68,8 @@ class EntityCommandTestSharpDashboard extends SharpDashboard
             },
             "dashboard_form" => new class() extends DashboardCommand {
                 public function label(): string { return "label"; }
-                public function buildFormFields(): void {
-                    $this->addField(SharpFormTextField::make("name"));
+                public function buildFormFields(FieldsContainer $formFields): void {
+                    $formFields->addField(SharpFormTextField::make("name"));
                 }
                 protected function initialData(): array
                 {

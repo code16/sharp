@@ -7,6 +7,7 @@ use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Tests\Unit\Utils\WithCurrentSharpRequestFake;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Foundation\Http\FormRequest;
 
 class MultiFormEntityFormControllerTest extends BaseApiTest
@@ -161,9 +162,9 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
 
 class SmallPersonSharpForm extends SharpForm
 {
-    function buildFormFields(): void
+    function buildFormFields(FieldsContainer $formFields): void
     {
-        $this->addField(SharpFormTextField::make("name"));
+        $formFields->addField(SharpFormTextField::make("name"));
     }
 
     function buildFormLayout(): void
@@ -191,10 +192,10 @@ class SmallPersonSharpForm extends SharpForm
 
 class BigPersonSharpForm extends SmallPersonSharpForm
 {
-    function buildFormFields(): void
+    function buildFormFields(FieldsContainer $formFields): void
     {
-        parent::buildFormFields();
-        $this->addField(SharpFormTextField::make("height"));
+        parent::buildFormFields($formFields);
+        $formFields->addField(SharpFormTextField::make("height"));
     }
 
     function find($id): array

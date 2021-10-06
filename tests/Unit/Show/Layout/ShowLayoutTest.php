@@ -6,6 +6,7 @@ use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Show\SharpShow;
 use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class ShowLayoutTest extends SharpTestCase
 {
@@ -104,6 +105,6 @@ class ShowLayoutTest extends SharpTestCase
 abstract class ShowLayoutTestShow extends SharpShow
 {
     function find($id): array { return []; }
-    function buildShowFields(): void {}
+    function buildShowFields(FieldsContainer $showFields): void {}
     function buildShowLayout(): void {}
 }

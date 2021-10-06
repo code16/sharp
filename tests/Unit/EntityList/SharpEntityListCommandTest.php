@@ -8,6 +8,7 @@ use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Tests\Unit\EntityList\Utils\SharpEntityDefaultTestList;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class SharpEntityListCommandTest extends SharpTestCase
 {
@@ -153,8 +154,8 @@ class SharpEntityListCommandTest extends SharpTestCase
                         public function label(): string {
                             return "My Entity Command";
                         }
-                        public function buildFormFields(): void {
-                            $this->addField(SharpFormTextField::make("message"));
+                        public function buildFormFields(FieldsContainer $formFields): void {
+                            $formFields->addField(SharpFormTextField::make("message"));
                         }
                         public function buildFormLayout(FormLayoutColumn &$column): void {
                             $column->withSingleField("message");
@@ -206,8 +207,8 @@ class SharpEntityListCommandTest extends SharpTestCase
                         public function label(): string {
                             return "My Instance Command";
                         }
-                        public function buildFormFields(): void {
-                            $this->addField(SharpFormTextField::make("message"));
+                        public function buildFormFields(FieldsContainer $formFields): void {
+                            $formFields->addField(SharpFormTextField::make("message"));
                         }
                         public function buildFormLayout(FormLayoutColumn &$column): void {
                             $column->withSingleField("message");
@@ -263,9 +264,9 @@ class SharpEntityListCommandTest extends SharpTestCase
                         public function label(): string {
                             return "My Entity Command";
                         }
-                        public function buildFormFields(): void {
-                            $this->addField(SharpFormTextField::make("message"));
-                            $this->addField(SharpFormTextField::make("message2"));
+                        public function buildFormFields(FieldsContainer $formFields): void {
+                            $formFields->addField(SharpFormTextField::make("message"))
+                                ->addField(SharpFormTextField::make("message2"));
                         }
                         public function execute(array $data = []): array {}
                     }

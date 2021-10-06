@@ -5,6 +5,7 @@ namespace Code16\Sharp\Tests\Unit\Form\Fields;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class SharpFormFieldsTest extends SharpTestCase
 {
@@ -13,10 +14,10 @@ class SharpFormFieldsTest extends SharpTestCase
     function we_can_add_a_field()
     {
         $form = new class extends FormFieldsTestForm {
-            function buildFormFields(): void
+            function buildFormFields(FieldsContainer $formFields): void
             {
-                $this->addField(SharpFormTextField::make("name"));
-                $this->addField(SharpFormTextField::make("first_name"));
+                $formFields->addField(SharpFormTextField::make("name"))
+                    ->addField(SharpFormTextField::make("first_name"));
             }
         };
 
@@ -27,10 +28,10 @@ class SharpFormFieldsTest extends SharpTestCase
     function we_can_see_fields_as_array()
     {
         $form = new class extends FormFieldsTestForm {
-            function buildFormFields(): void
+            function buildFormFields(FieldsContainer $formFields): void
             {
-                $this->addField(SharpFormTextField::make("name"));
-                $this->addField(SharpFormTextField::make("first_name"));
+                $formFields->addField(SharpFormTextField::make("name"))
+                    ->addField(SharpFormTextField::make("first_name"));
             }
         };
 

@@ -4,6 +4,7 @@ namespace Code16\Sharp\Tests\Unit\Form\Layout;
 
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class FormLayoutTest extends SharpTestCase
 {
@@ -83,5 +84,5 @@ abstract class FormLayoutTestForm extends SharpForm
     function find($id): array { return []; }
     function update($id, array $data) { return false; }
     function delete($id): void {}
-    function buildFormFields(): void {}
+    function buildFormFields(FieldsContainer $formFields): void {}
 }

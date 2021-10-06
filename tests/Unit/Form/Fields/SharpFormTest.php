@@ -5,6 +5,7 @@ namespace Code16\Sharp\Tests\Unit\Form\Fields;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class SharpFormTest extends SharpTestCase
 {
@@ -12,9 +13,9 @@ class SharpFormTest extends SharpTestCase
     function we_can_get_fields()
     {
         $form = new class extends SharpFormTestForm {
-            function buildFormFields(): void
+            function buildFormFields(FieldsContainer $formFields): void
             {
-                $this->addField(SharpFormTextField::make("name"));
+                $formFields->addField(SharpFormTextField::make("name"));
             }
         };
 
@@ -29,9 +30,9 @@ class SharpFormTest extends SharpTestCase
     function we_can_get_layout()
     {
         $form = new class extends SharpFormTestForm {
-            function buildFormFields(): void
+            function buildFormFields(FieldsContainer $formFields): void
             {
-                $this->addField(SharpFormTextField::make("name"))
+                $formFields->addField(SharpFormTextField::make("name"))
                     ->addField(SharpFormTextField::make("age"));
             }
             function buildFormLayout(): void
@@ -83,9 +84,9 @@ class SharpFormTest extends SharpTestCase
                     "job" => "actor"
                 ];
             }
-            function buildFormFields(): void
+            function buildFormFields(FieldsContainer $formFields): void
             {
-                $this->addField(SharpFormTextField::make("name"))
+                $formFields->addField(SharpFormTextField::make("name"))
                     ->addField(SharpFormTextField::make("age"));
             }
         };
@@ -102,6 +103,6 @@ abstract class SharpFormTestForm extends SharpForm
     function find($id): array {}
     function update($id, array $data): bool {}
     function delete($id): void {}
-    function buildFormFields(): void {}
+    function buildFormFields(FieldsContainer $formFields): void {}
     function buildFormLayout(): void {}
 }

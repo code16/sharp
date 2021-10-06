@@ -56,7 +56,7 @@ abstract class SharpShow
     /**
      * Return the show config values (commands and state).
      */
-    public final function showConfig(mixed $instanceId, array $config = []): array
+    public function showConfig(mixed $instanceId, array $config = []): array
     {
         $config = collect($config)
             ->merge([
