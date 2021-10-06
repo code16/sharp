@@ -9,15 +9,7 @@ class EntityListInstanceStateController extends ApiController
 {
     use HandleCommandReturn;
 
-    /**
-     * @param string $entityKey
-     * @param string $instanceId
-     * @return \Illuminate\Http\JsonResponse
-     * @throws SharpAuthorizationException
-     * @throws \Code16\Sharp\Exceptions\EntityList\SharpInvalidEntityStateException
-     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
-     */
-    public function update($entityKey, $instanceId)
+    public function update(string $entityKey, mixed $instanceId)
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();

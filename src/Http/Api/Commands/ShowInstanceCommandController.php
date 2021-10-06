@@ -12,15 +12,8 @@ class ShowInstanceCommandController extends ApiController
 
     /**
      * Display the Command form.
-     *
-     * @param string $entityKey
-     * @param string $commandKey
-     * @param string|null $instanceId
-     * @return \Illuminate\Http\JsonResponse
-     * @throws SharpAuthorizationException
-     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
-    public function show($entityKey, $commandKey, $instanceId = null)
+    public function show(string $entityKey, string $commandKey, mixed $instanceId = null)
     {
         $showPage = $this->getShowPage($entityKey, $instanceId);
         $commandHandler = $this->getInstanceCommandHandler($showPage, $commandKey, $instanceId);
@@ -32,15 +25,8 @@ class ShowInstanceCommandController extends ApiController
 
     /**
      * Execute the Command.
-     *
-     * @param string $entityKey
-     * @param string $commandKey
-     * @param string|null $instanceId
-     * @return \Illuminate\Http\JsonResponse
-     * @throws SharpAuthorizationException
-     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
-    public function update($entityKey, $commandKey, $instanceId = null)
+    public function update(string $entityKey, string $commandKey, mixed $instanceId = null)
     {
         $showPage = $this->getShowPage($entityKey, $instanceId);
         $commandHandler = $this->getInstanceCommandHandler($showPage, $commandKey, $instanceId);
@@ -54,14 +40,7 @@ class ShowInstanceCommandController extends ApiController
         );
     }
 
-    /**
-     * @param string $entityKey
-     * @param string|null $instanceId
-     *
-     * @return \Code16\Sharp\Show\SharpShow
-     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
-     */
-    private function getShowPage(string $entityKey, $instanceId = null)
+    private function getShowPage(string $entityKey, mixed $instanceId = null)
     {
         $showPage = $this->getShowInstance($entityKey);
 

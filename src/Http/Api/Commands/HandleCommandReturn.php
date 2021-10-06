@@ -45,7 +45,7 @@ trait HandleCommandReturn
         return response()->json($returnedValue);
     }
 
-    protected function getInstanceCommandHandler(SharpEntityList|SharpShow|SharpDashboard $commandContainer, string $commandKey, mixed $instanceId): ?InstanceCommand
+    protected function getInstanceCommandHandler(SharpEntityList|SharpShow $commandContainer, string $commandKey, mixed $instanceId): ?InstanceCommand
     {
         $commandHandler = $commandContainer->findInstanceCommandHandler($commandKey);
 
