@@ -14,6 +14,7 @@ use Code16\Sharp\Show\Fields\SharpShowFileField;
 use Code16\Sharp\Show\Fields\SharpShowListField;
 use Code16\Sharp\Show\Fields\SharpShowPictureField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
+use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Show\SharpShow;
@@ -100,9 +101,9 @@ class SpaceshipSharpShow extends SharpShow
             ->setEntityState("state", SpaceshipEntityState::class);
     }
 
-    function buildShowLayout(): void
+    function buildShowLayout(ShowLayout $showLayout): void
     {
-        $this
+        $showLayout
             ->addSection('Identity', function(ShowLayoutSection $section) {
                 $section
                     ->addColumn(7, function(ShowLayoutColumn $column) {
