@@ -4,10 +4,10 @@ namespace Code16\Sharp\EntityList;
 
 use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
-use Code16\Sharp\EntityList\Layout\EntityListLayoutColumn;
 use Code16\Sharp\EntityList\Traits\HandleEntityCommands;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
+use Code16\Sharp\Exceptions\EntityList\SharpEntityListLayoutException;
 use Code16\Sharp\Utils\Filters\HandleFilters;
 use Code16\Sharp\Utils\Traits\HandleGlobalMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
@@ -71,15 +71,38 @@ abstract class SharpEntityList
     public final function listLayout(): array
     {
         if(!$this->layoutBuilt) {
-            $this->buildListLayout();
+            $this->buildListLayouts();
             $this->layoutBuilt = true;
         }
+        
+        // We need this to know if buildListLayoutForSmallScreens() was declared,
+        // in order to hide unset columns in XS size.
+        $xsSizesWereDefined = collect($this->columns)
+                ->pluck("sizeXS")
+                ->filter()
+                ->count() > 0;
 
         return collect($this->columns)
-            ->map(function(EntityListLayoutColumn $column) {
-                return $column->toArray();
+            ->map(function($sizes, $key) use ($xsSizesWereDefined) {
+                $data = [
+                    "key" => $key,
+                    "size" => $sizes["size"],
+                ];
+                
+                if(!$xsSizesWereDefined) {
+                    $data["hideOnXS"] = false;
+                    $data["sizeXS"] = $sizes["size"];
+                } else {
+                    $data["hideOnXS"] = ($sizes["sizeXS"] ?? null) === null;
+                    $data["sizeXS"] = $data["hideOnXS"] 
+                        ? null 
+                        : (($sizes["sizeXS"] ?? null) ?: $sizes["size"]);
+                }
+                
+                return $data;
             })
-            ->all();
+            ->values()
+            ->toArray();
     }
 
     public final function data($items = null): array
@@ -229,24 +252,25 @@ abstract class SharpEntityList
         return $this;
     }
 
-    protected function addColumn(string $label, int $size, $sizeXS = null): self
+    protected function addColumn(string $label, int $size = null): self
     {
-        $this->layoutBuilt = false;
-
-        $this->columns[] = new EntityListLayoutColumn($label, $size, $sizeXS);
+        $sizeAttr = isset($this->columns[$label]["size"])
+            ? "sizeXS"
+            : "size";
+        
+        if(isset($this->columns[$label][$sizeAttr])) {
+            throw new SharpEntityListLayoutException("The $label column was defined twice for the $sizeAttr size");
+        }
+        
+        $this->columns[$label][$sizeAttr] = $size ?: "fill";
 
         return $this;
     }
 
-    protected function addColumnLarge(string $label, int $size): self
+    private function buildListLayouts(): void
     {
-        $this->layoutBuilt = false;
-
-        $column = new EntityListLayoutColumn($label, $size);
-        $column->setLargeOnly(true);
-        $this->columns[] = $column;
-
-        return $this;
+        $this->buildListLayout();
+        $this->buildListLayoutForSmallScreens();
     }
 
     private function checkListIsBuilt(): void
@@ -286,6 +310,13 @@ abstract class SharpEntityList
     function getGlobalMessageData(): ?array
     {
         return null;
+    }
+
+    /**
+     * Build layout for small screen. Optional, only if needed.
+     */
+    function buildListLayoutForSmallScreens(): void
+    {
     }
 
     /**

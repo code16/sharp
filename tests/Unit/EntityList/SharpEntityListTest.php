@@ -44,17 +44,46 @@ class SharpEntityListTest extends SharpTestCase
             function buildListDataContainers(): void
             {
                 $this
-                    ->addDataContainer(
-                        EntityListDataContainer::make("name")
-                    )
-                    ->addDataContainer(
-                        EntityListDataContainer::make("age")
-                    );
+                    ->addDataContainer(EntityListDataContainer::make("name"))
+                    ->addDataContainer(EntityListDataContainer::make("age"));
             }
             function buildListLayout(): void
             {
-                $this->addColumn("name", 6, 12)
-                    ->addColumnLarge("age", 6);
+                $this->addColumn("name", 6)
+                    ->addColumn("age", 6);
+            }
+        };
+        
+        $this->assertEquals(
+            [
+                [
+                    "key" => "name", "size" => 6, "sizeXS" => 6, "hideOnXS" => false,
+                ], [
+                    "key" => "age", "size" => 6, "sizeXS" => 6, "hideOnXS" => false,
+                ]
+            ], 
+            $list->listLayout()
+        );
+    }
+
+    /** @test */
+    function we_can_define_a_layout_for_small_screens()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListDataContainers(): void
+            {
+                $this
+                    ->addDataContainer(EntityListDataContainer::make("name"))
+                    ->addDataContainer(EntityListDataContainer::make("age"));
+            }
+            function buildListLayout(): void
+            {
+                $this->addColumn("name", 6)
+                    ->addColumn("age", 6);
+            }
+            function buildListLayoutForSmallScreens(): void
+            {
+                $this->addColumn("name", 12);
             }
         };
 
@@ -63,9 +92,38 @@ class SharpEntityListTest extends SharpTestCase
                 [
                     "key" => "name", "size" => 6, "sizeXS" => 12, "hideOnXS" => false,
                 ], [
-                    "key" => "age", "size" => 6, "sizeXS" => 6, "hideOnXS" => true,
+                    "key" => "age", "size" => 6, "sizeXS" => null, "hideOnXS" => true,
                 ]
-            ], 
+            ],
+            $list->listLayout()
+        );
+    }
+
+    /** @test */
+    function we_can_configure_a_column_to_fill_left_space()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListDataContainers(): void
+            {
+                $this
+                    ->addDataContainer(EntityListDataContainer::make("name"))
+                    ->addDataContainer(EntityListDataContainer::make("age"));
+            }
+            function buildListLayout(): void
+            {
+                $this->addColumn("name", 4)
+                    ->addColumn("age");
+            }
+        };
+
+        $this->assertEquals(
+            [
+                [
+                    "key" => "name", "size" => 4, "sizeXS" => 4, "hideOnXS" => false,
+                ], [
+                    "key" => "age", "size" => 'fill', "sizeXS" => 'fill', "hideOnXS" => false,
+                ]
+            ],
             $list->listLayout()
         );
     }
