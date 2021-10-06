@@ -17,7 +17,7 @@ php artisan sharp:make:entity-list <class_name> [--model=<model_name>]
 First let's write the applicative class, and make it extend `Code16\Sharp\EntityList\SharpEntityList`. Therefore there are four abstract methods to implement:
 
 - `buildListDataContainers()` and `buildListLayout()` for the structure,
-- `getListData(EntityListQueryParams $params)` for the data,
+- `getListData()` for the data,
 - and `buildListConfig()` for... the list config.
 
 Each one is detailed here:
@@ -29,12 +29,14 @@ A "data container" is a column in the `Entity List`, named this way to abstract 
 ```php
 function buildListDataContainers()
 {
-    $this->addDataContainer(
-        EntityListDataContainer::make("name")
-            ->setLabel("Full name")
-            ->setSortable()
-            ->setHtml()
-    )->addDataContainer([...]);
+    $this
+        ->addDataContainer(
+            EntityListDataContainer::make("name")
+                ->setLabel("Full name")
+                ->setSortable()
+                ->setHtml()
+        )
+        ->addDataContainer([...]);
 }
 ```
 
@@ -47,8 +49,8 @@ Next step, define how those columns are displayed:
 ```php
 function buildListLayout()
 {
-    $this->addColumn("picture", 1, 2)
-        ->addColumn("name", 9, 10)
+    $this->addColumn("picture", 1)
+        ->addColumn("name")
         ->addColumnLarge("capacity", 2);
 }
 ```
@@ -56,10 +58,21 @@ function buildListLayout()
 We add columns giving:
 
 - the column key, which must match those defined in `buildListDataContainers()`,
-- the "width" of the column, as an integer on a 12-based grid,
-- and the 2nd integer in the width on small screen.
+- and the "width" of the column, as an integer on a 12-based grid. If missing, it will be deduced.
 
-In this example, `picture` and `name` will be displayed respectively on 1/12 and 9/12 of the viewport width on large screens, and 2/12 and 10/12 on small screens. The third column, `capacity`, will only be shown on large screens, with a width of 2/12.
+In this example, `picture` and `capacity` will be displayed respectively on 1/12 and 2/12 of the viewport width. The column `name` will fill the rest, 9/12.
+
+To handle small screens, you can declare an optional `buildListLayoutForSmallScreens()` function: 
+
+```php
+function buildListLayoutForSmallScreens()
+{
+    $this->addColumn("picture", 4)
+        ->addColumn("name");
+}
+```
+
+With this configuration, `picture` and `name` will have a width of 4/12 and 8/12 (respectively). The third column, `capacity`, will be hidden.
 
 ### `getListData()`
 
