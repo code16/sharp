@@ -1,0 +1,11 @@
+
+$theme-class: '';
+@import "themes/light";
+
+@media (prefers-color-scheme: dark) {
+  $theme-class: ':not(.light)';
+  @import "themes/dark";
+}
+
+$theme-class: '.dark';
+@import "themes/dark";
