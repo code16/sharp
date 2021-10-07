@@ -3,6 +3,7 @@ import { UnknownField } from "sharp/components";
 import FieldContainer from './ui/FieldContainer';
 import { isLocalizableValueField } from "../util/locale";
 import { computeCondition } from '../util/conditional-display';
+import { isArray } from "axios/lib/utils";
 
 
 export function acceptCondition (fields, data, condition) {
@@ -14,6 +15,10 @@ export function acceptCondition (fields, data, condition) {
 
 const getValue = (form, field, value, locale) => {
     if(form.localized && field.localized && value && isLocalizableValueField(field)) {
+        if(typeof value !== 'object' || isArray(value)) {
+            logError(`Localized field '${field.key}' value must be a object, given :`, JSON.stringify(value));
+            return value;
+        }
         return value[locale];
     }
 
