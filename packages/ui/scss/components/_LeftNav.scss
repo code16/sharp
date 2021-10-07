@@ -48,9 +48,11 @@
 
   &__title {
     @extend .ui-title-font;
-    --color-l: calc((var(--accent-bg-l) - var(--l-threshold) + var(--accent-bg-amount)) * -100000);
     font-size: 1rem;
-    color: hsl(0, 0%, var(--color-l));
+    color: var(--navbar-color);
+    //text-shadow:
+    //  0 0 0.25em hsla(var(--primary-h), var(--primary-s), 30%, .25),
+    //  0 0 2em hsla(var(--primary-h), var(--primary-s), 30%, 1);
   }
 
   &__top-icon {

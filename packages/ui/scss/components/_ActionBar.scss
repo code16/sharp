@@ -24,7 +24,7 @@
     --threshold: var(--l-threshold);
 
     color: white;
-    color: hsl(0, 0%, calc((var(--accent-bg-l) - var(--threshold)) * -100000));
+    color: var(--navbar-color);
 
     background: $primary;
     background: linear-gradient(
