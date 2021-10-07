@@ -241,7 +241,7 @@
                 }
             },
             itemData(item) {
-                const { id, _fieldsLocale, ...data } = item;
+                const { _fieldsLocale, ...data } = item;
                 return data;
             },
             transformedFields(i) {

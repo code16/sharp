@@ -95,7 +95,7 @@
 
     import { Button } from 'sharp-ui';
     import { Localization } from 'sharp/mixins';
-    import { filesizeLabel, getErrorMessage, handleErrorAlert } from 'sharp';
+    import { filesizeLabel, getErrorMessage, handleErrorAlert, logError } from 'sharp';
 
     import { downloadFileUrl } from "../../../api";
     import { getFiltersFromCropData } from "./util/filters";
@@ -396,14 +396,25 @@
                     URL.revokeObjectURL(this.file.blobUrl)
                 }
                 this.resetCroppedImage();
-            }
+            },
+
+            validateValue() {
+                if(!this.value.name) {
+                    return logError(`Upload field '${this.downloadId}' has an invalid value: expects to have a "name", given :`, JSON.parse(JSON.stringify(this.value)));
+                }
+                return true;
+            },
         },
         created() {
             this.options.thumbnailWidth = null;
             this.options.thumbnailHeight = null;
             this.options.maxFiles = 1;
 
-            if (!this.value || this.value.file) {
+            if(!this.value || this.value.file) {
+                return;
+            }
+
+            if(!this.validateValue()) {
                 return;
             }
 

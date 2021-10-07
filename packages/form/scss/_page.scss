@@ -11,11 +11,21 @@
     padding-bottom: 3rem;
 
     .tab-pane {
+      --tab-padding-x: 1.25rem;
       min-height: calc(max(30vh, 200px));
       background-color: var(--theme-bg);
-      padding: 1rem 1.25rem;
+      padding: 1rem var(--tab-padding-x);
       padding-bottom: 3rem;
       margin-top: 1.5rem;
+
+      > hr {
+        opacity: .125;
+        margin: 3rem calc(var(--tab-padding-x) * -1);
+        margin-bottom: 1.5rem;
+        &:last-child {
+          display: none;
+        }
+      }
     }
   }
 }

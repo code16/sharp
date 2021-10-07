@@ -13,15 +13,15 @@
             </Tabs>
         </template>
         <template v-else>
+            <template v-if="$slots['nav-prepend']">
+                <div class="my-4">
+                    <slot name="nav-prepend" />
+                </div>
+            </template>
             <div class="tab-pane">
-                <template v-if="$slots['nav-prepend']">
-                    <div class="mb-3">
-                        <slot name="nav-prepend" />
-                    </div>
-                </template>
-
                 <template v-for="tab in layout.tabs">
                     <slot :tab="tab" />
+                    <hr>
                 </template>
             </div>
         </template>
